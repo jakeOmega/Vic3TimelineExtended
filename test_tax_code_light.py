@@ -5,7 +5,8 @@ docs/systems/tax_code_schema.md, "Light code". Structural checks on the
 committed script and property checks on the generator's tables (no game install
 needed):
 
-- the bounds each law sets are its very-low and very-high rates in vanilla_parsed;
+- the ceiling each law sets is its very-high rate in vanilla_parsed, and the floor of a levied
+  tax is zero under every law (a rate below the very-low rate sits on the very-low step);
 - each rate's step and the tax level the code sets from them reproduce the
   base game for a code with every tax on one step, and never give a tax a
   negative relief;
@@ -17,9 +18,11 @@ needed):
 import importlib.util
 import itertools
 import json
+import math
 import re
 import unittest
 from decimal import Decimal
+from fractions import Fraction
 from pathlib import Path
 
 from paradox_file_parser import ParadoxFileParser
@@ -50,6 +53,7 @@ KEYS = [instrument.key for instrument in gen.INSTRUMENTS]
 BY_KEY = {instrument.key: instrument for instrument in gen.INSTRUMENTS}
 LEVELS = gen.NATIVE_LEVELS
 LAST = len(LEVELS) - 1
+FLOOR = gen.LIGHT_FLOOR
 VANILLA_MODIFIER = {instrument.key: instrument.modifier for instrument in gen.INSTRUMENTS}
 
 
@@ -112,7 +116,7 @@ def rung(ladder, idx):
 
 
 class BoundsTest(unittest.TestCase):
-    """The range of each tax is the law's own very-low to very-high rate."""
+    """The range of each tax is nothing up to the law's own very-high rate."""
 
     def test_ladders_are_the_vanilla_laws_rates(self):
         vanilla = json.loads(read("vanilla_parsed/common/laws.json"))
@@ -147,8 +151,16 @@ class BoundsTest(unittest.TestCase):
                             self.assertIn(f"limit = {{ has_law = law_type:{law} }} value = {value} }}", body)
                         else:
                             self.assertNotIn(f"law_type:{law}", body)
-            self.assertEqual(flat(block(text, f"te_tax_light_min_{key}")), f"value = te_tax_light_idx_{key}_0")
+            self.assertEqual(flat(block(text, f"te_tax_light_min_{key}")), f"value = {FLOOR}")
             self.assertEqual(flat(block(text, f"te_tax_light_max_{key}")), f"value = te_tax_light_idx_{key}_{LAST}")
+
+    def test_the_floor_is_zero_and_below_every_laws_very_low_rate(self):
+        self.assertEqual(FLOOR, 0)
+        for law, by_key in ladders().items():
+            for key, ladder in by_key.items():
+                if ladder[-1]:
+                    with self.subTest(law=law, key=key):
+                        self.assertLess(FLOOR, ladder[0])
 
     def test_levies_trigger_names_the_laws_that_levy_the_tax(self):
         text = read(TRIGGERS)
@@ -156,7 +168,17 @@ class BoundsTest(unittest.TestCase):
             laws = re.findall(r"has_law = law_type:(\w+)", block(text, f"te_tax_light_levies_{key}"))
             self.assertEqual(laws, [law for law, by_key in ladders().items() if by_key[key][-1]], key)
 
-    def test_range_text_is_the_ladders_ends(self):
+    def test_old_levies_trigger_names_the_ids_of_the_laws_that_levy_the_tax(self):
+        # The law id the last sync stored, not the law now enacted: a law change reads it before it
+        # stores the new one.
+        text = read(TRIGGERS)
+        for key in KEYS:
+            body = flat(block(text, f"te_tax_light_old_levies_{key}"))
+            ids = [int(n) for n in re.findall(r"var:te_tax_light_law = (\d+)", body)]
+            self.assertEqual(ids, [n for n, law in gen.light_laws() if ladders()[law][key][-1]], key)
+            self.assertTrue(body.startswith("has_variable = te_tax_light_law"), key)
+
+    def test_range_text_runs_from_nothing_to_the_very_high_rate(self):
         table = loc(GEN_LOC)
         for n, law in gen.light_laws():
             for key in KEYS:
@@ -166,7 +188,7 @@ class BoundsTest(unittest.TestCase):
                     if not ladder[-1]:
                         self.assertNotIn(name, table)
                         continue
-                    low, high = BY_KEY[key].step * ladder[0], BY_KEY[key].step * ladder[-1]
+                    low, high = BY_KEY[key].step * FLOOR, BY_KEY[key].step * ladder[-1]
                     if BY_KEY[key].percent:
                         self.assertEqual(table[name], f"#v {gen.fmt(low * 100)}–{gen.fmt(high * 100)}%#!")
                     else:
@@ -194,7 +216,7 @@ class StepTest(unittest.TestCase):
                 if not ladder[-1]:
                     self.assertNotIn(law, branches)
                     continue
-                for idx in range(ladder[0], ladder[-1] + 1):
+                for idx in range(FLOOR, ladder[-1] + 1):
                     value = LAST
                     for threshold, step in branches[law]:  # applied in order, the last true one wins
                         if idx <= threshold:
@@ -217,7 +239,7 @@ class StepTest(unittest.TestCase):
     def test_every_code_in_range_collects_its_own_rates_with_no_negative_relief(self):
         for law, by_key in ladders().items():
             levied = [key for key in KEYS if by_key[key][-1]]
-            ranges = [range(by_key[key][0], by_key[key][-1] + 1) for key in levied]
+            ranges = [range(FLOOR, by_key[key][-1] + 1) for key in levied]
             for combo in itertools.product(*ranges):
                 code = dict(zip(levied, combo))
                 level = max(rung(by_key[key], code[key]) for key in levied)
@@ -228,6 +250,19 @@ class StepTest(unittest.TestCase):
                     self.assertEqual(by_key[key][level] - relief, code[key])
                 # The level is the step of some tax: lowering every other tax never moves it.
                 self.assertIn(level, [rung(by_key[key], code[key]) for key in levied])
+
+    def test_a_tax_cut_below_the_very_low_rate_sits_on_the_very_low_step_and_is_all_relief(self):
+        for law, by_key in ladders().items():
+            levied = [key for key in KEYS if by_key[key][-1]]
+            for key in levied:
+                code = {k: by_key[k][0] for k in levied}  # everything else on the very-low step
+                code[key] = FLOOR
+                level = max(rung(by_key[k], code[k]) for k in levied)
+                with self.subTest(law=law, key=key):
+                    self.assertEqual(rung(by_key[key], FLOOR), 0)
+                    self.assertEqual(level, 0)
+                    # Collected at the law's very-low rate less the whole relief: nothing.
+                    self.assertEqual(by_key[key][level] - (by_key[key][level] - FLOOR), FLOOR)
 
     def test_the_tooltip_triggers_say_exactly_when_a_step_moves_the_level(self):
         text = read(TRIGGERS)
@@ -240,7 +275,7 @@ class StepTest(unittest.TestCase):
                     self.assertNotIn(f"law_type:{law}", up)
                     continue
                 for level in range(len(LEVELS)):
-                    for idx in range(ladder[0], ladder[-1]):
+                    for idx in range(FLOOR, ladder[-1]):
                         raises = rung(ladder, idx + 1) > level
                         # The generated literal: var:en >= ladder[level] under this law and level.
                         literal = level < LAST and idx >= ladder[level]
@@ -250,7 +285,7 @@ class StepTest(unittest.TestCase):
                         self.assertIn(f"has_law = law_type:{law} var:te_tax_light_level = {level} "
                                       f"var:te_tax_en_{key} >= {ladder[level]}", flat(up))
                 for level in range(1, len(LEVELS)):
-                    for idx in range(ladder[0] + 1, ladder[-1] + 1):
+                    for idx in range(FLOOR + 1, ladder[-1] + 1):
                         # This tax alone on the level: one step down leaves it iff its new step is lower.
                         if rung(ladder, idx) != level:
                             continue
@@ -261,6 +296,9 @@ class StepTest(unittest.TestCase):
                     self.assertIn(f"has_law = law_type:{law} var:te_tax_light_level = {level} "
                                   f"var:te_tax_light_rg_{key} = {level}", flat(down))
                     self.assertIn(f"var:te_tax_en_{key} <= {ladder[level - 1] + 1}", flat(down))
+            # A tax on the very-low step (any rate up to the law's very-low rate, so a tax cut to
+            # nothing too) never lowers the level by a step down: it has nowhere lower to take it.
+            self.assertNotIn(f"var:te_tax_light_rg_{key} = 0", flat(down))
             # Only when no other tax sits on the level or above.
             others = [k for k in KEYS if k != key]
             for other in others:
@@ -300,8 +338,9 @@ class GeneratedEffectsTest(unittest.TestCase):
 
     def test_a_law_change_never_raises_the_tax_level(self):
         # Clamped to at most the new law's rate at the stored level, every tax sits on that step or
-        # lower; a newly levied one starts on it. Without the cap, Proportional's 20% wage tax would
-        # sit on Graduated's very-high step and the next sync would set the tax level to very high.
+        # lower; a newly levied one starts on it, a tax cut to nothing stays at nothing. Without the
+        # cap, Proportional's 20% wage tax would sit on Graduated's very-high step and the next sync
+        # would set the tax level to very high.
         for old, old_ladders in ladders().items():
             for new, new_ladders in ladders().items():
                 for level in range(len(LEVELS)):
@@ -310,11 +349,11 @@ class GeneratedEffectsTest(unittest.TestCase):
                         if not new_ladder[-1]:
                             continue
                         old_ladder = old_ladders[key]
-                        for idx in (range(old_ladder[0], old_ladder[-1] + 1) if old_ladder[-1] else [0]):
-                            if idx == 0:
+                        for idx in (range(FLOOR, old_ladder[-1] + 1) if old_ladder[-1] else [0]):
+                            if not old_ladder[-1]:
                                 after = new_ladder[level]
                             else:
-                                after = min(max(idx, new_ladder[0]), new_ladder[level])
+                                after = min(max(idx, FLOOR), new_ladder[level])
                             with self.subTest(old=old, new=new, level=level, key=key, idx=idx):
                                 self.assertLessEqual(rung(new_ladder, after), level)
 
@@ -322,11 +361,15 @@ class GeneratedEffectsTest(unittest.TestCase):
         body = flat(block(self.text, "te_tax_light_gen_clamp"))
         for key in KEYS:
             en = f"te_tax_en_{key}"
+            # A tax is new when the law the code was last carried into did not levy it; its index
+            # says nothing, since a levied tax may sit at 0.
             self.assertIn(f"if = {{ limit = {{ NOT = {{ te_tax_light_levies_{key} = yes }} }} "
-                          f"set_variable = {{ name = {en} value = 0 }} }} else_if = {{ limit = {{ var:{en} = 0 }} "
+                          f"set_variable = {{ name = {en} value = 0 }} }} else_if = {{ limit = {{ NOT = {{ "
+                          f"te_tax_light_old_levies_{key} = yes }} }} "
                           f"set_variable = {{ name = {en} value = te_tax_light_idx_{key}_at_level }} }} else = {{ "
                           f"clamp_variable = {{ name = {en} min = te_tax_light_min_{key} max = te_tax_light_idx_{key}_at_level }} }}",
                           body)
+            self.assertNotIn(f"var:{en} = 0", body)
         # No reaction for a law change: its own approval covers it.
         self.assertNotIn("te_tax_light_gen_react", body)
 
@@ -380,10 +423,12 @@ class GeneratedEffectsTest(unittest.TestCase):
     def test_bands_read_the_relief_each_group_gets(self):
         # Thresholds less a tolerance: the weights are written to five places and a third rounds down.
         body = flat(block(self.text, "te_tax_light_gen_bands"))
+        two, one = (gen.fmt(Decimal(t) - gen.LIGHT_BAND_TOLERANCE) for t, _band in gen.LIGHT_BANDS)
+        self.assertEqual((two, one), ("1.9995", "0.9995"))
         for ig in gen.IGS:
             self.assertIn(f"set_variable = {{ name = te_tax_light_rlv value = te_tax_light_rlv_{ig} }} "
-                          f"if = {{ limit = {{ var:te_tax_light_rlv >= 1.9999 }} set_variable = {{ name = "
-                          f"te_tax_light_band_{ig} value = 2 }} }} else_if = {{ limit = {{ var:te_tax_light_rlv >= 0.9999 }} "
+                          f"if = {{ limit = {{ var:te_tax_light_rlv >= {two} }} set_variable = {{ name = "
+                          f"te_tax_light_band_{ig} value = 2 }} }} else_if = {{ limit = {{ var:te_tax_light_rlv >= {one} }} "
                           f"set_variable = {{ name = te_tax_light_band_{ig} value = 1 }} }} else = {{ set_variable = "
                           f"{{ name = te_tax_light_band_{ig} value = 0 }} }}", body)
             # The view-band modifiers, swapped from the persistent band; the m bands are the legislated code's.
@@ -393,14 +438,31 @@ class GeneratedEffectsTest(unittest.TestCase):
                 self.assertIn(f"if = {{ limit = {{ has_modifier = te_tax_ig_view_{ig}_m{band} }} remove_modifier = "
                               f"te_tax_ig_view_{ig}_m{band} }}", body)
         # The worst error the written weights can put into a group's relief (each weight's rounding
-        # times the most relief steps its tax can carry under the law) stays inside the tolerance.
+        # times the most relief steps its tax can carry under the law: its whole ladder, since a tax
+        # may be cut to nothing) stays inside the tolerance.
         for ig in gen.IGS:
             for law, by_key in ladders().items():
                 weights = gen.light_band_weights(ig, law)
-                worst = sum(abs(Decimal(gen._dec(w)) - w) * (by_key[key][-1] - by_key[key][0])
+                worst = sum(abs(Decimal(gen._dec(w)) - w) * (by_key[key][-1] - FLOOR)
                             for key, w in weights.items())
                 with self.subTest(ig=ig, law=law):
                     self.assertLess(worst, gen.LIGHT_BAND_TOLERANCE)
+
+    def test_the_band_tolerance_is_far_below_any_real_miss_of_a_threshold(self):
+        # A group's relief is a whole multiple of its weights' common unit, so a sum that misses a
+        # threshold misses it by at least that unit; the tolerance must stay well inside it, or a
+        # code a little short of a level would earn the band.
+        for ig in gen.IGS:
+            for law in ladders():
+                # Exact: exposure x one index step x 1 / (the tax's vanilla level step).
+                weights = [Fraction(gen.exposure(ig)[key]) * Fraction(BY_KEY[key].step) / Fraction(gen.LEVEL_STEPS[key])
+                           for key in gen.light_band_weights(ig, law)]
+                if not weights:
+                    continue
+                denominator = math.lcm(*(w.denominator for w in weights))
+                unit = Fraction(math.gcd(*(int(w * denominator) for w in weights)), denominator)
+                with self.subTest(ig=ig, law=law):
+                    self.assertLess(Fraction(gen.LIGHT_BAND_TOLERANCE) * 10, unit)
 
     def test_scratch_values_persist_for_the_tooltip_pass(self):
         init = flat(block(self.text, "te_tax_light_gen_init"))

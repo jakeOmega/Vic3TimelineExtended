@@ -19,6 +19,30 @@ te_tax_light_levies_cons = {
 	OR = { has_law = law_type:law_consumption_based_taxation has_law = law_type:law_land_based_taxation has_law = law_type:law_per_capita_based_taxation has_law = law_type:law_proportional_taxation has_law = law_type:law_graduated_taxation }
 }
 
+# The law the code was last carried into (te_tax_light_law, the id te_tax_light_law_id gives
+# it) levied the tax. A levied tax may sit at 0, so a law change tells a tax the new law
+# adds from a tax the player cut to nothing by this, not by the index.
+te_tax_light_old_levies_wage = {
+	has_variable = te_tax_light_law
+	OR = { var:te_tax_light_law = 3 var:te_tax_light_law = 4 var:te_tax_light_law = 5 }
+}
+te_tax_light_old_levies_div = {
+	has_variable = te_tax_light_law
+	OR = { var:te_tax_light_law = 4 var:te_tax_light_law = 5 }
+}
+te_tax_light_old_levies_land = {
+	has_variable = te_tax_light_law
+	OR = { var:te_tax_light_law = 2 var:te_tax_light_law = 3 }
+}
+te_tax_light_old_levies_head = {
+	has_variable = te_tax_light_law
+	OR = { var:te_tax_light_law = 3 }
+}
+te_tax_light_old_levies_cons = {
+	has_variable = te_tax_light_law
+	OR = { var:te_tax_light_law = 1 var:te_tax_light_law = 2 var:te_tax_light_law = 3 var:te_tax_light_law = 4 var:te_tax_light_law = 5 }
+}
+
 # A step's effect on the tax level, read before the step for its tooltip (the step itself
 # re-derives the level from the rates). te_tax_light_rg_<key> and te_tax_light_level are
 # what the last sync wrote.

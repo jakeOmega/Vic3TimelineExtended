@@ -126,26 +126,26 @@ te_tax_light_gen_uniform_scored = {
 }
 
 # The active law changed (a player's country): a tax it does not levy goes to 0; one it
-# newly levies (enacted index 0) starts at its rate for the tax level the code last set,
-# as enacting the law gives in the base game; every other tax is clamped between the new
-# law's floor and its rate at that tax level, so a law change never raises the tax level
-# (Proportional's 20% wage tax would sit on Graduated's very-high step). No reaction: the
-# law change's own approval covers it.
+# newly levies (the previous law, te_tax_light_law, did not) starts at its rate for the tax
+# level the code last set, as enacting the law gives in the base game; every other tax is
+# clamped between 0 (a tax cut to nothing stays at nothing) and its rate at that tax level,
+# so a law change never raises the tax level (Proportional's 20% wage tax would sit on
+# Graduated's very-high step). No reaction: the law change's own approval covers it.
 te_tax_light_gen_clamp = {
 	if = { limit = { NOT = { te_tax_light_levies_wage = yes } } set_variable = { name = te_tax_en_wage value = 0 } }
-	else_if = { limit = { var:te_tax_en_wage = 0 } set_variable = { name = te_tax_en_wage value = te_tax_light_idx_wage_at_level } }
+	else_if = { limit = { NOT = { te_tax_light_old_levies_wage = yes } } set_variable = { name = te_tax_en_wage value = te_tax_light_idx_wage_at_level } }
 	else = { clamp_variable = { name = te_tax_en_wage min = te_tax_light_min_wage max = te_tax_light_idx_wage_at_level } }
 	if = { limit = { NOT = { te_tax_light_levies_div = yes } } set_variable = { name = te_tax_en_div value = 0 } }
-	else_if = { limit = { var:te_tax_en_div = 0 } set_variable = { name = te_tax_en_div value = te_tax_light_idx_div_at_level } }
+	else_if = { limit = { NOT = { te_tax_light_old_levies_div = yes } } set_variable = { name = te_tax_en_div value = te_tax_light_idx_div_at_level } }
 	else = { clamp_variable = { name = te_tax_en_div min = te_tax_light_min_div max = te_tax_light_idx_div_at_level } }
 	if = { limit = { NOT = { te_tax_light_levies_land = yes } } set_variable = { name = te_tax_en_land value = 0 } }
-	else_if = { limit = { var:te_tax_en_land = 0 } set_variable = { name = te_tax_en_land value = te_tax_light_idx_land_at_level } }
+	else_if = { limit = { NOT = { te_tax_light_old_levies_land = yes } } set_variable = { name = te_tax_en_land value = te_tax_light_idx_land_at_level } }
 	else = { clamp_variable = { name = te_tax_en_land min = te_tax_light_min_land max = te_tax_light_idx_land_at_level } }
 	if = { limit = { NOT = { te_tax_light_levies_head = yes } } set_variable = { name = te_tax_en_head value = 0 } }
-	else_if = { limit = { var:te_tax_en_head = 0 } set_variable = { name = te_tax_en_head value = te_tax_light_idx_head_at_level } }
+	else_if = { limit = { NOT = { te_tax_light_old_levies_head = yes } } set_variable = { name = te_tax_en_head value = te_tax_light_idx_head_at_level } }
 	else = { clamp_variable = { name = te_tax_en_head min = te_tax_light_min_head max = te_tax_light_idx_head_at_level } }
 	if = { limit = { NOT = { te_tax_light_levies_cons = yes } } set_variable = { name = te_tax_en_cons value = 0 } }
-	else_if = { limit = { var:te_tax_en_cons = 0 } set_variable = { name = te_tax_en_cons value = te_tax_light_idx_cons_at_level } }
+	else_if = { limit = { NOT = { te_tax_light_old_levies_cons = yes } } set_variable = { name = te_tax_en_cons value = te_tax_light_idx_cons_at_level } }
 	else = { clamp_variable = { name = te_tax_en_cons min = te_tax_light_min_cons max = te_tax_light_idx_cons_at_level } }
 }
 
@@ -357,8 +357,8 @@ te_tax_light_gen_decay = {
 # persistent variables only, so a step button's tooltip pass reads nothing unset.
 te_tax_light_gen_bands = {
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_armed_forces }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_armed_forces value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_armed_forces value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_armed_forces value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_armed_forces value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_armed_forces value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_armed_forces_m2 } remove_modifier = te_tax_ig_view_armed_forces_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_armed_forces_m1 } remove_modifier = te_tax_ig_view_armed_forces_m1 }
@@ -367,8 +367,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_armed_forces = 2 NOT = { has_modifier = te_tax_ig_view_armed_forces_p2 } } add_modifier = { name = te_tax_ig_view_armed_forces_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_armed_forces = 2 } has_modifier = te_tax_ig_view_armed_forces_p2 } remove_modifier = te_tax_ig_view_armed_forces_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_devout }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_devout value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_devout value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_devout value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_devout value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_devout value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_devout_m2 } remove_modifier = te_tax_ig_view_devout_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_devout_m1 } remove_modifier = te_tax_ig_view_devout_m1 }
@@ -377,8 +377,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_devout = 2 NOT = { has_modifier = te_tax_ig_view_devout_p2 } } add_modifier = { name = te_tax_ig_view_devout_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_devout = 2 } has_modifier = te_tax_ig_view_devout_p2 } remove_modifier = te_tax_ig_view_devout_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_industrialists }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_industrialists value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_industrialists value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_industrialists value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_industrialists value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_industrialists value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_industrialists_m2 } remove_modifier = te_tax_ig_view_industrialists_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_industrialists_m1 } remove_modifier = te_tax_ig_view_industrialists_m1 }
@@ -387,8 +387,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_industrialists = 2 NOT = { has_modifier = te_tax_ig_view_industrialists_p2 } } add_modifier = { name = te_tax_ig_view_industrialists_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_industrialists = 2 } has_modifier = te_tax_ig_view_industrialists_p2 } remove_modifier = te_tax_ig_view_industrialists_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_intelligentsia }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_intelligentsia value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_intelligentsia value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_intelligentsia value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_intelligentsia value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_intelligentsia value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_intelligentsia_m2 } remove_modifier = te_tax_ig_view_intelligentsia_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_intelligentsia_m1 } remove_modifier = te_tax_ig_view_intelligentsia_m1 }
@@ -397,8 +397,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_intelligentsia = 2 NOT = { has_modifier = te_tax_ig_view_intelligentsia_p2 } } add_modifier = { name = te_tax_ig_view_intelligentsia_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_intelligentsia = 2 } has_modifier = te_tax_ig_view_intelligentsia_p2 } remove_modifier = te_tax_ig_view_intelligentsia_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_landowners }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_landowners value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_landowners value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_landowners value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_landowners value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_landowners value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_landowners_m2 } remove_modifier = te_tax_ig_view_landowners_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_landowners_m1 } remove_modifier = te_tax_ig_view_landowners_m1 }
@@ -407,8 +407,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_landowners = 2 NOT = { has_modifier = te_tax_ig_view_landowners_p2 } } add_modifier = { name = te_tax_ig_view_landowners_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_landowners = 2 } has_modifier = te_tax_ig_view_landowners_p2 } remove_modifier = te_tax_ig_view_landowners_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_petty_bourgeoisie }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_petty_bourgeoisie value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_petty_bourgeoisie value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_petty_bourgeoisie value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_petty_bourgeoisie value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_petty_bourgeoisie value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_petty_bourgeoisie_m2 } remove_modifier = te_tax_ig_view_petty_bourgeoisie_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_petty_bourgeoisie_m1 } remove_modifier = te_tax_ig_view_petty_bourgeoisie_m1 }
@@ -417,8 +417,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_petty_bourgeoisie = 2 NOT = { has_modifier = te_tax_ig_view_petty_bourgeoisie_p2 } } add_modifier = { name = te_tax_ig_view_petty_bourgeoisie_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_petty_bourgeoisie = 2 } has_modifier = te_tax_ig_view_petty_bourgeoisie_p2 } remove_modifier = te_tax_ig_view_petty_bourgeoisie_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_rural_folk }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_rural_folk value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_rural_folk value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_rural_folk value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_rural_folk value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_rural_folk value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_rural_folk_m2 } remove_modifier = te_tax_ig_view_rural_folk_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_rural_folk_m1 } remove_modifier = te_tax_ig_view_rural_folk_m1 }
@@ -427,8 +427,8 @@ te_tax_light_gen_bands = {
 	if = { limit = { var:te_tax_light_band_rural_folk = 2 NOT = { has_modifier = te_tax_ig_view_rural_folk_p2 } } add_modifier = { name = te_tax_ig_view_rural_folk_p2 } }
 	if = { limit = { NOT = { var:te_tax_light_band_rural_folk = 2 } has_modifier = te_tax_ig_view_rural_folk_p2 } remove_modifier = te_tax_ig_view_rural_folk_p2 }
 	set_variable = { name = te_tax_light_rlv value = te_tax_light_rlv_trade_unions }
-	if = { limit = { var:te_tax_light_rlv >= 1.9999 } set_variable = { name = te_tax_light_band_trade_unions value = 2 } }
-	else_if = { limit = { var:te_tax_light_rlv >= 0.9999 } set_variable = { name = te_tax_light_band_trade_unions value = 1 } }
+	if = { limit = { var:te_tax_light_rlv >= 1.9995 } set_variable = { name = te_tax_light_band_trade_unions value = 2 } }
+	else_if = { limit = { var:te_tax_light_rlv >= 0.9995 } set_variable = { name = te_tax_light_band_trade_unions value = 1 } }
 	else = { set_variable = { name = te_tax_light_band_trade_unions value = 0 } }
 	if = { limit = { has_modifier = te_tax_ig_view_trade_unions_m2 } remove_modifier = te_tax_ig_view_trade_unions_m2 }
 	if = { limit = { has_modifier = te_tax_ig_view_trade_unions_m1 } remove_modifier = te_tax_ig_view_trade_unions_m1 }
