@@ -1002,7 +1002,8 @@ The engine has no merge or split on-action, so a `TE_INFO` line reports when a s
 `test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
 `test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
 province count is the base game's own form (`occupation_values.txt` counts a state's provinces with `every_province` in
-a script value), Grand Monuments' `gm_occupation_read` checks the same read in game, and the line gives no verdict.
+a script value), Grand Monuments' `gm_occupation_read` is a self-check of the same read (not yet read OK), and the
+line gives no verdict.
 
 1. **The province line (Full or Display only; read `debug.log`).** Watch for `TE_INFO demog_province_change` after a
    war that splits or rejoins a state region: a peace that hands over part of a region, a revolt that takes part of a
