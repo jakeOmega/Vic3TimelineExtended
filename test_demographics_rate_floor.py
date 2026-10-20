@@ -448,7 +448,29 @@ class TestTheTextIsTrue(unittest.TestCase):
             self.assertNotIn(false, floor)
         self.assertIn("base death rate was left to take off", floor)
         measured = re.search(r'^ te_demog_st_ontop_tt_measured:0 "(.*)"$', loc, re.M).group(1)
-        self.assertIn("'te_demog_st_ontop_end_floor', 'te_demog_st_ontop_end' )]", measured)
+        self.assertIn("'te_demog_st_ontop_end_floor', 'te_demog_st_ontop_end' )", measured)
+        self.assertIn("'te_demog_st_ontop_end_floor_phi', 'te_demog_st_ontop_end_phi' )", measured)
+
+    def test_the_private_insurance_note(self):
+        """Private Health Insurance's wealth line can take the richest pops' deaths to 0; the walk leaves them out but
+        the split takes off their unfloored share, so the hover says so under that law (owner, 2026-10-20)."""
+        loc = _text(MISC_LOC)
+        get = {k: v for k, v in re.findall(r'(?m)^ (\w+):\d* "(.*)"$', loc)}
+        self.assertIn("te_demog_state_phi_note_sgui", get["te_demog_st_ontop_tt_measured"])
+        for key, base in (("te_demog_st_ontop_end_phi", "te_demog_st_ontop_end"),
+                          ("te_demog_st_ontop_end_floor_phi", "te_demog_st_ontop_end_floor")):
+            self.assertEqual(get[key], f"${base}$\\n$te_demog_st_ontop_phi$")
+        note = get["te_demog_st_ontop_phi"]
+        self.assertIn("$law_private_health_insurance$", note)
+        self.assertIn("stop dying altogether", note)
+        for row in ("Other effects on some of its people", "Effects on the whole state"):   # the rows the hover prints
+            self.assertIn(row, note)
+            self.assertIn(row, get["te_demog_st_ontop_tt_measured"])
+        self.assertTrue(note.startswith("#lore") and note.endswith("#!"))
+        sgui = " ".join(_block(_text(ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"),
+                               "te_demog_state_phi_note_sgui").split())
+        self.assertIn("scope = state", sgui)
+        self.assertIn("te_demog_effects_run = yes owner ?= { has_law = law_type:law_private_health_insurance }", sgui)
 
     def test_no_script_names_the_old_limits(self):
         for path in (RATE_EFFECTS, EFFECTS, ROOT / "common" / "script_values" / "te_demog_generated_values.txt"):

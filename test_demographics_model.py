@@ -332,8 +332,11 @@ class TestMedicine(unittest.TestCase):
         self.assertAlmostEqual(DM.totals(CARRIERS, late, (), {})[t], P.TREATMENT_CAP["chronic"])
         with_law = DM.totals(CARRIERS, late, {"law_medical_augmentation_only"}, {})
         self.assertAlmostEqual(M.medicine_targets(M.Inputs(mods=with_law))["chronic"], P.TREATMENT_CAP["chronic"])
-        # the health bill still counts its three technologies (owner: bills unchanged)
-        self.assertEqual(P.HEALTH_TECHS, ("modern_pharmaceuticals", "telemedicine", "personalized_medicine"))
+        # the health bill counts all six carriers (owner, 2026-10-20: up to +0.30 at full technology)
+        self.assertEqual(P.HEALTH_TECHS, ("modern_pharmaceuticals", "telemedicine", "personalized_medicine",
+                                          "genetic_engineering", "molecular_assemblers", "biological_immortality"))
+        self.assertEqual(set(P.HEALTH_TECHS), late)
+        self.assertAlmostEqual(M.health_term(1.0, frozenset(late)), 6 * P.HEALTH_TECH_STEP)
 
     def test_infection_treatment_reaches_its_cap_by_era_12(self):
         """#1045 (owner, 2026-10-18): the base game's carriers stop at 0.94 by era 7, the rich world of eras 9-10; era 11's

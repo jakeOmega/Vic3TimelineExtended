@@ -867,13 +867,15 @@ a war or crisis and fades after the controls come off.
 
 ### Hyperinflation and dollarization
 
-When inflation reaches 50%, Not Worth the Paper offers three answers:
+When inflation reaches 50%, Not Worth the Paper offers three answers. Bond
+fortunes vanish whichever you choose: every state's Wealth Concentration ([Who
+inherits](06-politics.md#who-inherits)) falls 5 when the crisis fires.
 
 | Option | Effect |
 |---|---|
-| Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
+| Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; Wealth Concentration falls 5 more; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
 | Dollarize: "Let them keep the foreign money. They already have." | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
-| Wait: "It will pass. Everything passes." | Nothing; the question returns in two years |
+| Wait: "It will pass. Everything passes." | Nothing; if inflation is still 50% or more in two years, the crisis fires again and takes another 5 |
 
 ### Monetary treaty articles
 

@@ -494,7 +494,7 @@ takes them out of the residual, which books only the rest:
 |---|---|
 | Land Grants, Organized Colonization | families (the family kind) |
 | Military Colonies | half the labour kind at 80% men, half families |
-| Penal Transportation | mostly 15–35, 85% men (Australia's convicts: 15.4% women, average age about 25, a fifth under 20): 12% aged 15–17, 78% 18–35, 10% 36–59 (the class split is the controller's proposal, 2026-10-20, not yet confirmed by the owner) |
+| Penal Transportation | mostly 15–35, 85% men (Australia's convicts: 15.4% women, average age about 25, a fifth under 20): 12% aged 15–17, 78% 18–35, 10% 36–59 (the class split is the controller's proposal, confirmed by the owner on 2026-10-20) |
 | Special Settlements | whole families, all ages: the refugee kind |
 | Development Program | 60% families, 40% labour, the labour kind's women's share set by the destination's jobs as the residual's is (before its balance ramp) |
 | Rustication | ages 15–24, both sexes evenly, booked by single year (15–24 straddles the classes) |
@@ -543,9 +543,12 @@ takes them out of the residual, which books only the rest:
     Missouri 128, Michigan 126, Arkansas 123 and Indiana 113; with no migration, 25 years on they sit at 98–105 and
     Wisconsin at 118. Under Full all seven start with Census: More Men (radicals from movements +10% in Wisconsin, +3–6%
     in the five between, +0.8% in Indiana) and a conscription term of +7% (Indiana) to +61% (Wisconsin), and Wisconsin's
-    20–29 share, 0.19, passes the youth bulge's 0.18 wherever work is short. The Old Southwest and Florida, as male
-    among their whites, are not the West and are left out (`demographics_params.FRONTIER_1836` takes a row each if
-    wanted).
+    20–29 share, 0.19, passes the youth bulge's 0.18 wherever work is short. **The Old Southwest and Florida were added
+    on 2026-10-20** (owner): every state the US holds in 1836 whose 1840 free white men per 100 women aged 15–49 were
+    110 or more, Mississippi (132), Alabama (116), Louisiana (156) and Florida Territory (177); the Compendium's rows
+    for every other state, read the same day, are all under 110 (Georgia 107 the highest). Their enslaved people make
+    the settlers' share lower, so they start at 144 (Florida), 134 (Louisiana), 127 (Mississippi) and 114 (Alabama) men
+    per 100 women aged 20–59, with More Men +1–9% and conscription +10–38%.
 - **A state with no variables** (a new state, a split state region, an old save) starts at its equilibrium. A split
   state could copy its sibling's cohorts instead, since it is the same people.
 - **Revolutions.** State variables stay on the states. The country's numbers are recomputed from them, so nothing is
@@ -623,7 +626,8 @@ state. The stock is the #822 score.
   the panel, plus two small effects:
   - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
     scale: set it afresh on the wealth-band figure when this is built). **Built 2026-10-19, under Full only** (owner):
-    radicals rise with the state's shown Gini above 0.45, by up to 10% at 0.65 (§7's Inequality row);
+    radicals rise with the state's shown Gini above 0.45, by 10% at 0.65 and on at that slope with no cap (owner,
+    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row);
   - an input to crime for the policing laws. **Dropped** (owner, 2026-10-19): the engine has no crime quantity.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
@@ -694,7 +698,9 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 - **Devastation and occupation** (the states hit): local capital is destroyed, scaled by devastation. Built (phase 2).
 - **Revolution** (every state, or the rebel states): a left revolution that wins, −20. Built (phase 2).
 - **Money** (every state): a hyperinflation or banking crisis from the monetary system, −5 to −10, since bond fortunes
-  vanish. The banking crash's −5 is built (phase 2); a hyperinflation's is not.
+  vanish. Built: the banking crash's −5 (phase 2), and the hyperinflation crisis's (owner, 2026-10-20): −5 when
+  `te_inflation.1` fires, and −5 more if the country reforms its currency; riding it out takes the −5 again each time
+  the crisis returns after its cooldown.
 - **Events** (the states named): land reform and nationalisation, −5 to −15. Built as the land-reform and ownership
   shocks below (2026-10-19), which catch every cause, not only events. Plague is dropped: the mod has no plague events.
 - **Upward:** privatisation waves and financial booms, +5. Built (2026-10-19): the ownership shock's privatisations and
@@ -862,7 +868,7 @@ state pulse and country effects from the country pulse. Sizes are starting propo
 | **Conscription** | `state_conscription_rate_mult` | men aged 20–39 ÷ the 1836 reference − 1 | ±0.25 |
 | **Youth bulge** | radicals from movements, turmoil effects | ages 20–29 above about 18% of the population (1836's share is about 17%), × the state's unemployment rate | small |
 | **Sex balance** | births, working-adult ratio, movements, radicals | §3 | small |
-| **Inequality** (built 2026-10-19, Full only) | `te_demog_census_inequality`: radicals from movements, state-wide (the engine has no lower-strata radicals type); crime dropped (no engine quantity) | §4.1: (the shown Gini − 0.45) / 0.20, 0–1, on +10% | +10%, at 0.65 |
+| **Inequality** (built 2026-10-19, Full only) | `te_demog_census_inequality`: radicals from movements, state-wide (the engine has no lower-strata radicals type); crime dropped (no engine quantity) | §4.1: (the shown Gini − 0.45) / 0.20, at least 0, on +10% | none since 2026-10-20 (owner: the same slope on, +27.5% at a Gini of 1; it was +10%, at 0.65) |
 | **Wealth Concentration** | clout, investment pools, mobility, radicals, rural migration | §4.2 | as now |
 | **National urban pattern** | throughput and migration pull in the primate state; pull and turmoil elsewhere | §5.1 | small |
 | **Settlement pattern** | crowding density, infrastructure from population, throughput, fertility, turmoil | §5.2 | small |

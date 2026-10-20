@@ -289,7 +289,9 @@ GLOBAL = {
 	}
 	# Demographics §2.6: the US frontier starts young and male. The states the US
 	# holds in the frontier's state regions (Michigan, Indiana, Illinois,
-	# Missouri, Arkansas, Iowa, Wisconsin; te_demog_frontier_listed) are marked,
+	# Missouri, Arkansas, Iowa, Wisconsin, and since 2026-10-20 the Old
+	# Southwest and Florida: Mississippi, Alabama, Louisiana, Florida;
+	# te_demog_frontier_listed) are marked,
 	# and their 1836 census seed gives them the 1840 census's men per 100 women
 	# by age (demographics_params.FRONTIER_1836, te_demog_resettle_effects.txt).
 	# Only the census reads the mark, and its seeds take it off.
