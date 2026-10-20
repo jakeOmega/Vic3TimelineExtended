@@ -2562,6 +2562,17 @@ def main(argv=None):
     p.set_defaults(fn=cmd_fl_replay)
     sub.add_parser("ch-drift", help="phase 3: Cultural Hegemony's drift on scenarios (its size)").set_defaults(
         fn=cmd_ch_drift)
+    # Internal Resettlement's known moves and the US frontier's 1836 seed (2026-10-19; demographics_resettle.py)
+    import demographics_resettle as RS
+    sub.add_parser("frontier", help="the US frontier's 1836 seed by region, then ageing").set_defaults(
+        fn=RS.cmd_frontier)
+    p = sub.add_parser("resettle", help="Internal Resettlement's programmes booked by their profiles: both ends' sex "
+                                        "balance and median age after years of moves")
+    p.add_argument("--years", type=int, default=10)
+    p.add_argument("--arrivals", type=float, default=10000.0, help="people moved a year")
+    p.add_argument("--destination", type=float, default=100000.0, help="the destination's people")
+    p.add_argument("--source", type=float, default=1000000.0, help="the source's people")
+    p.set_defaults(fn=RS.cmd_resettle)
     p = sub.add_parser("practices-fit", help="the practices' joint fit, #904's peacetime rates projected, the gate")
     p.add_argument("save", nargs="+")
     p.add_argument("--anchors", required=True, help="fetch_history_anchors.py's CSV")

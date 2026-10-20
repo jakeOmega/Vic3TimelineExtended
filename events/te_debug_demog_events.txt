@@ -74,6 +74,9 @@
 # Phase 3's event wave: .80, the console's chooser (option w; visible), and the hidden .81, the self-check
 # wave_timed_country_type's second half (te_debug_demog_wave_selfcheck_start, te_demog_wave_effects.txt), one line a
 # game under Full.
+# Internal Resettlement in the census (2026-10-19): .120, fired from the console only (`event te_debug_demog.120`):
+# each of the player's states' known-move counters (TE_DEMOG_RESETTLE). Its self-check, resettle_moves_booked, needs
+# no event: te_demog_rs_selfcheck writes it at the step.
 # An option's tooltip walks its effects each time the open event renders it, testing
 # the limits and writing nothing. Options a, c, d and e walk a census step, the walks
 # or every state and war, and their tooltips wrote about 1,200 error lines a second
@@ -1097,5 +1100,29 @@ te_debug_demog.81 = {
 			remove_variable = te_dg_wv_chk_m0
 			remove_variable = te_dg_wv_chk_owner
 		}
+	}
+}
+
+# Internal Resettlement in the census (2026-10-19; te_demog_resettle_effects.txt), fired only from the console:
+# `event te_debug_demog.120` on the player's country. One TE_DEMOG_RESETTLE line for each of its states holding
+# known-move counters since its last census step (people arrived, moved away and died in transit, by programme
+# profile) or history's US frontier mark, then a closing line. Hidden: nothing to choose, and no tooltip to walk.
+te_debug_demog.120 = { # REVIEWED 2026-10-19: console-only, fired by hand (`event te_debug_demog.120`)
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = {
+				OR = {
+					has_variable = te_dg_rs_in
+					has_variable = te_dg_rs_out
+					has_variable = te_dg_rs_dead
+					has_variable = te_dg_frontier
+				}
+			}
+			debug_log = "TE_DEMOG_RESETTLE state=[THIS.GetState.GetNameNoFormatting] arrived=[THIS.ScriptValue('te_demog_rs_dbg_in')|0] moved_away=[THIS.ScriptValue('te_demog_rs_dbg_out')|0] died_in_transit=[THIS.ScriptValue('te_demog_rs_dbg_dead')|0] frontier=[THIS.ScriptValue('te_demog_frontier_listed')|0] (since the state's last census step; frontier 1 = a listed US frontier region, its mark read by the 1836 seed) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log = "TE_DEMOG_RESETTLE done date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
