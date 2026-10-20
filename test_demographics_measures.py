@@ -207,6 +207,7 @@ class TestCatalogue(unittest.TestCase):
         self.assertIn("state_demog_womens_work_ratio_add = {", family)
         body = _block(_text(MS_VALUES), "te_demog_ms_women_at_work")
         self.assertIn("value = capital.te_demog_women_rate", body)
+        self.assertIn("divide = { value = te_demog_k_rate_max min = 0.01 }", body, "the rate over its ceiling: the upkeep's share runs 0 to 1")
         self.assertNotIn("has_law", body)
 
     def test_money_upkeep_sits_on_its_own_cost_modifier(self):
@@ -615,7 +616,8 @@ class TestUpkeep(unittest.TestCase):
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_child_allowance"), gdp * 0.005 * 0.5 / 52, places=2)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_family_housing"), gdp * 0.0025 * 0.8 / 52, places=2)
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_free_contraception"), gdp * 0.001 / 52, places=2)
-        eng.fixtures["capital.te_demog_women_rate"] = 0.6
+        # the women's rate is in the game's units (2026-10-20): 0.6 of the most a rate reaches, the upkeep as before
+        eng.fixtures["capital.te_demog_women_rate"] = 0.6 * P.RATE_MAX
         self.assertAlmostEqual(eng.sv("te_demog_ms_cost_parental_leave"), gdp * 0.003 * 0.6 / 52, places=2)
         eng.exists.clear()
         self.assertEqual(eng.sv("te_demog_ms_cost_parental_leave"), 0)

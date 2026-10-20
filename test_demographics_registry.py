@@ -1866,24 +1866,25 @@ class TestWorkforceLinesMoved(unittest.TestCase):
         ("law", "law_pro_capital_ministry_of_labor", "institution_modifier"): ("replaced", 0.02),
         ("law", "law_state_eugenics_program", "modifier"): ("replaced", 0.05),
     }
-    # call 3's participation inputs on laws (the design §1.7's inventory; starting sizes, call 11)
+    # call 3's participation inputs on laws (the design §1.7's inventory; starting sizes, call 11), in the game's units
+    # since 2026-10-20 as the rates they add to: the inventory's 0.02, 0.03, 0.005 and 0.01 x 0.7. Capacity multiplies.
     PARTICIPATION = {
-        ("law", "law_restorative_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.02,
-        ("law", "law_rehabilitation_focused_criminal_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.03,
-        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.005,
-        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.01,
+        ("law", "law_restorative_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.014,
+        ("law", "law_rehabilitation_focused_criminal_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.021,
+        ("law", "law_pro_labor_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.0035,
+        ("law", "law_pro_capital_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.007,
         ("law", "law_state_eugenics_program", "modifier", P.CAPACITY_TYPE): 0.1,
     }
     # the carriers no reader walks: (file, block) -> the lines its block must hold
     BLOCKS = {
         ("common/amendments/extra_amendments.txt", "amendment_community_service"):
-            (f"{P.REPLACED_TYPE} = 0.01", f"{P.MALE_PARTICIPATION_TYPE} = 0.01"),
+            (f"{P.REPLACED_TYPE} = 0.01", f"{P.MALE_PARTICIPATION_TYPE} = 0.007"),
         ("common/amendments/extra_amendments.txt", "amendment_mandatory_minimums"):
-            (f"{P.REPLACED_TYPE} = -0.01", f"{P.MALE_PARTICIPATION_TYPE} = -0.01"),
+            (f"{P.REPLACED_TYPE} = -0.01", f"{P.MALE_PARTICIPATION_TYPE} = -0.007"),
         ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_solidarity"):
-            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.014"),
         ("common/interest_group_traits/te_demog_workforce_injections.txt", "INJECT:ig_trait_bourse_du_travail"):
-            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.02"),
+            ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.014"),
         ("common/static_modifiers/te_demog_workforce_injections.txt", "INJECT:modifier_woman_soldiers"):
             ("state_working_adult_ratio_add = -0.05", f"{P.WOMENS_WORK_TYPE} = 0.05"),
         ("common/static_modifiers/extra_modifiers.txt", "INJECT:state_region_pollution_health"):
@@ -2095,7 +2096,7 @@ class TestWorkforceSelfChecks(unittest.TestCase):
 
     def test_the_ig_check_arms_only_at_the_traits_plain_size(self):
         """A marginal IG's traits are halved and a powerful one's doubled (the defines), and the Ministries of Labour
-        carry the same input: the check's expected 0.02 holds only without all three."""
+        carry the same input: the check's expected 0.014 holds only without all three."""
         trig = _block(_text(self.TRIGGERS), "te_debug_demog_wf_ig_trait_plain")
         for line in ("ig_approval >= define:NPolitics|APPROVAL_THRESHOLD_LOYAL",
                      "ig_clout > define:NPolitics|MARGINAL_IG_THRESHOLD",

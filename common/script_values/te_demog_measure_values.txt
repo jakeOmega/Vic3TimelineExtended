@@ -405,12 +405,14 @@ te_demog_ms_cost_free_contraception = {
 }
 
 # The share of women at work: phase 2 step 1's women's rate (te_demog_women_rate: the women's-work family's sum, with
-# the lower strata's floor) in the capital, every game. 0 without a capital.
+# the lower strata's floor) in the capital, every game, over the most a rate reaches (te_demog_k_rate_max): the rates
+# are in the game's units since 2026-10-20, and this keeps the upkeep where it was. 0 without a capital.
 te_demog_ms_women_at_work = {
 	value = 0
 	if = {
 		limit = { exists = capital }
 		value = capital.te_demog_women_rate
+		divide = { value = te_demog_k_rate_max min = 0.01 }
 	}
 }
 
