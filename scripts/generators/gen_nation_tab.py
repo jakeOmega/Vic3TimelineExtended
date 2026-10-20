@@ -233,6 +233,7 @@ NOT_ON_COUNTRY = {
     "inh_undivided_farm_rural": "states",
     "te_demog_census_*": "states", "te_demog_line_*": "states", "te_demog_lx_gap_labor": "states",
     "te_demog_primate_city": "states", "te_demog_provincial_neglect": "states",
+    "te_demog_mt_*": "states",
     "te_reserve_cadre_*": "states",
     "resettlement_*_destination": "states", "resettlement_arrivals": "the destination's buildings",
     "resettlement_transit_deaths": "the destination's buildings", "resettlement_recruits": "states",

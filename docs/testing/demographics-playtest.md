@@ -46,6 +46,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … wave_timed_country_type` | Full: once a game, `START` when the first of the event wave's four census-line options is chosen (Missing Girls' ban or payments, `code=1`; The Last Generation?'s licences or payments, `code=2`), the verdict a week later from the capital (`te_debug_demog.81`) | the capital's sum of the type (`state_sex_ratio_at_birth_add` or `state_desired_fertility_mult`) rose by the option's line plus any change in the Family Policy measures' lines of that type (`added` ≈ `expected`): a script-only state type on a timed country modifier reaches the state | `added` 0: the census never sees those four options' lines, so they change no birth, nor the women's-work lines the Baby Boom's and the Greying's options carry on the same kind of modifier; `NO_VERDICT` (a measure offset the line within the week) re-arms the check | add each of the four modifiers (and the three women's-work ones) without `days` and store its end date on the country (`te_dg_wv_<modifier>_until`); `te_demog_wave_yearly` removes it when the date passes and puts it back for a revolution's winner that holds the date (the measures' pattern, `te_demog_ms_keep_all`) |
 | `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit (the late sweep already counts its own this way: `te_demog_lx_cause_deaths`) |
 | `TE_SELF_CHECK … resettle_moves_booked` | Display only or Full: once a game, at the first census step of a state whose Internal Resettlement arrivals since its last step were 5% of its people or more and at least 1,000 (2026-10-19; `te_demog_rs_selfcheck`) | the residual left after the counted arrivals (`rest`) is not below minus a quarter of them: the walk's `move_partial_pop` moved the people it counts, and they are in the state's population change. A positive `rest` is the engine's own migration, or, on a save continued across this build, the year's months before the counters began (`residual` is the whole, arrivals included) | `rest` below −0.25 × `arrived`: about minus `arrived` means the counted moves aren't in the population change, about minus half that they are counted twice, so every destination books arrivals the engine didn't make | take the known moves back out of the residual's sum in `te_demog_flows` (the `te_dg_rk_on` block's two lines) and leave their booking off (`te_demog_rs_take` keeps `te_dg_rk_on` at 0), so the moves go back to the residual's booking, with only the transit dead kept as known kills |
+| `TE_SELF_CHECK … metro_world_market_hub` | any rule's census (Display only or Full), development builds only: once a game, at the first state's metropolitan-share count (its first yearly pulse; spec §5.2) | `is_world_market_hub` reads the market area's hub, which the base game creates where a market area has a Port: some states read yes (`hubs=`), every hub has a Port (`hubs_without_port=0`) and some Port states are not hubs (`ports_not_hub=` above 0); the line also gives `port_states=` and `countries=` | `hubs=0`: the trigger reads no in state scope, so no state takes the gateway term and New York and Buenos Aires read lower than intended; `hubs_without_port=` above 0: it reads something other than the hub; `ports_not_hub=0`: it reads "has a Port", so every port state takes +30 | in `te_demog_mt_t_gateway` (`te_demog_metro_values.txt`) read the gateway from a large port instead, `b:building_port ?= { level >= 5 }`, and say so in the Port or Finance bar's hover (`te_demog_mt_bar_gateway_tt`) |
 | `TE_SELF_CHECK … um_nexus_scaling` | Full: once a game, `START` when a Mind Upload Nexus's monthly refresh finds its country's hosting at 0.9 full or less with the advanced materials input figure at +100% or more (about a quarter full), the verdict a week later (`te_debug_demog.130`). No line means no country's hosting reached a quarter under Full (an observer run past 2100, or the harness's transition) | the building reads its digital assets output and advanced materials input axes at what the refresh expected (each good's other bonuses plus its own multiplier, (1 + those) × (utilisation × factor − 1)), within 0.05: the engine applies a building's runtime goods `_mult` axes from a state's pulse at the state's multiplier, the newly registered mod-good input axis too. It compares the building's read with itself, so it says nothing about the state's and country's lines (`um_nexus_cascade`) | a good reading only its other bonuses: digital assets so (an axis registered long ago, which companies use) means the modifier or its multiplier failed, so under Full every Nexus produces as outside Full; advanced materials alone so means the new registration failed; another figure: a source changed within the week (read the goods tooltip). A state that lost its Nexus within the week re-arms the check | digital assets: apply the modifiers from a building iterator in the state pulse (`every_scope_building = { limit = { is_building_type = building_mind_upload_nexus } … }`) instead of `b:`, and if that fails too, put each good's modifier on a ladder of static modifiers at tenths of its multiplier, as `family_limitation_scaled`'s fallback does; advanced materials: check `goods_input_advanced_materials_mult` and its two siblings in `mod_entity_modifier_types.txt` |
 | `TE_SELF_CHECK … um_nexus_cascade` | Full: once a game, `START` at a Nexus's monthly refresh in a state whose own tourism output read is +30% or more (airports, `tourism_output`), the verdict a week later (`te_debug_demog.131`). No line means no Nexus stood in such a state under Full | the building's other tourism (its read of the axis less the Nexus's own modifier) is the state's read, up to 0.25 more (a company's +0.2 is the only building-level tourism line) and at most 0.05 less: a building's goods read carries its state's lines (and through them the country's), which the refresh's offset rests on, so an empty Nexus makes nothing there | below the state's (at least 0.1 below, since the state reads 0.3 or more and a company at most 0.2): the building's read leaves the state's lines out, so an empty Nexus makes their share of its tourism and services (the airports' tourism, the financial cycle's services). `NO_VERDICT` (more than 0.25 above: a building-level line the check doesn't know) re-arms | read the state's and the country's axis too (`modifier:goods_<axis>_<good>_mult` on the state; the country's on `owner`) and add them to the other bonuses in `te_demog_um_nexus_good` |
 
@@ -891,6 +892,52 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
    (`TE_DEMOG_RESETTLE`); no errors from `te_demog_rs_*` or `te_demog_frontier_*`. On a save continued across this build,
    `resettle_moves_booked` reads OK with a positive `rest` (its first step's counters cover only the months since the
    load).
+
+## The metropolitan share (spec §5.2, 2026-10-19)
+
+A state's metropolitan share, 0-100: the share of its urban people living in its largest city, a modelled stock that
+starts at its target and moves a twentieth of the way there at each yearly count (mod_systems.md § Demographics, "The
+metropolitan share"). It is computed and shown under Display only and Full; its two modifiers and its fertility term act
+under Full only. `test_demographics_metro.py` holds the script's target to `demographics_metro.py` (its twin) term by
+term, the update, the refresh, the fertility term and the Overspill's trigger; `demographics_metro.py` prints the
+anchors. One new engine fact, the hub trigger, has a self-check (`metro_world_market_hub`, above). What only the game
+can show:
+
+1. **The row (Display only or Full, a new game).** Open a state's Demographics subtab: under Urban People, Settlement
+   reads a label and a share ("Metropolis, 72%") with an arrow toward its target, once the state has had its first
+   yearly count (before that the row is absent). A state with fewer than 5,000 urban people reads None, with the reason
+   on hover. No label or value cut short.
+2. **The hover's bars.** The tooltip gives the share, the target and the labels' edges, then the eight terms as bars
+   (Capital, Port or Finance, Area, Farms and Mines, Urbanization, Infrastructure, Crowding, Urban Planning), each with
+   its signed figure, then the effects paragraph. The bars add up with 40 to the target (within 5 and 95). Lock the
+   tooltip: each bar's own hover gives its reason. **If the bars don't draw** (an empty band under the text, or no
+   tooltip at all), the custom tooltip type failed: take the fallback in `gui/te_demographics_metro.gui`'s header (the
+   row's `tooltip = "te_demog_mt_st_tt_plain"`, which lists the terms as lines, and no `tooltipwidget`).
+3. **The anchors (Display only is enough; `event te_debug_demog.140` logs a `TE_DEMOG_METRO` line a state).** In 1836
+   Île-de-France, the Home Counties and Buenos Aires read Metropolis, New York Leading City, the Rhineland and
+   Brittany Several Cities, Texas and an agrarian Russian province Market Towns (`demographics_metro.py`'s reasoned
+   inputs). Note any that read far off, with the line's terms: the anchors were fitted by reasoning from the walk's
+   inputs, not on a save.
+4. **The effects (Full).** A Metropolis state (60% or more) carries Metropolis (the modifier: crowding sooner,
+   infrastructure from population +10%, Urban Center and Financial District throughput +5%, turmoil penalties +5%), a
+   Leading City state part of it, a Several Cities state nothing, and a Market Towns state under 20% the Dispersed
+   Towns modifier (infrastructure from population down to −10% at 5%). Hover the modifier: its figures are the full
+   sizes times the strength the row's hover gives. Under Display only no state carries either, and the hover's last
+   paragraph says what Full would do.
+5. **The crowding sign.** A Metropolis state's Migration Crowding should start sooner, not later: its
+   `state_migration_crowding_density_mult` in the modifier tooltip reads −10% at full strength (the type is the state's
+   capacity, so a negative value crowds sooner; owner, 2026-10-20).
+6. **Fertility (Full).** In a Metropolis state the children-per-woman hover's Urban life factor reads a little lower
+   than the same urban share elsewhere (the urban term raised by up to a tenth: ×0.84 becomes ×0.82 at 80% urban).
+7. **The Overspill (Full).** It now needs a census state whose share reads Metropolis and whose Migration Crowding is at
+   its ceiling; it lands on the most urban such state. A Primate country whose largest city is crowded but reads
+   Leading City no longer gets it.
+8. **The country line (Display only or Full).** Where People Live's Metropolises row reads "N of M", and its hover counts
+   each label; the counts match the states' subtabs.
+9. **Planning.** The Ministry of Urban Planning's tooltip shows Metropolitan Share Target −1 a level; a Settlement
+   Authority on Planned Towns lowers its state's Urban Planning bar by 2 a level; a Planned Capital by 10.
+10. `debug.log`: no error from `te_demog_metro_*`, `te_demog_mt_*` or `te_debug_demog.140`, and none while the subtab is
+    open.
 
 ## Uploaded minds (2026-10-19)
 

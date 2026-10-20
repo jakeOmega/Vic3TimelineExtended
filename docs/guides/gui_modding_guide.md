@@ -1746,7 +1746,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 46 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 19 additive files (marked below):
+Currently 47 GUI files at the top of `gui/`: 27 full-file replacements of vanilla panels plus 20 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1783,6 +1783,7 @@ Currently 46 GUI files at the top of `gui/`: 27 full-file replacements of vanill
 | `te_bulk_tariff_widgets.gui` | (additive, type library) | The Market panel Trade tab's All Goods rows: an import and an export level bar built from vanilla's `set_level_bar_item` and icons, each button a scripted GUI that sets its level on every tradeable good (`common/scripted_guis/te_bulk_tariff_sguis.txt`), with `te_tax_native_tariff_controls_sgui` ANDed into `enabled` as on the 14 per-good buttons |
 | `te_debug_tax_widgets.gui` | (additive, temporary) | The tax probe harness's panel (`te_tp_panel`), shown only under the armed-country tab of the Timeline Extended window; removed before release (`docs/testing/tax-code-probes.md`) |
 | `te_demographics_layout.gui` | (additive, type library) | The one order of the Demographics sections for both hosts (issue #1029, Banking's layout file): `te_demog_tab_sections` for the Population panel's tab and `te_state_demog_content` for the state panel's subtab; `test_demographics_layout.py` holds both orders, the collapse flags and the widths |
+| `te_demographics_metro.gui` | (additive, type library) | The metropolitan share's hover (phase 3, spec §5.2): `te_demog_mt_tooltip`, a type derived from vanilla's `TooltipWidgetType` whose `tooltip_content_after` holds the target's eight terms as bars, the state subtab's Settlement row's `tooltipwidget`. The first mod GUI to use vanilla's custom-tooltip form; the plain fallback is the row's `te_demog_mt_st_tt_plain` |
 | `te_demographics_widgets.gui` | (additive, type library) | The Demographics sections as types, one per section (issue #1029): the overview as an eight-cell icon grid, Causes of Death (a pie of last year's deaths by cause and its legend), the population pyramid (a row type a state's pyramid reuses through its range and value blocks), Work and Retirement, Longevity, Family Policy, History (eight charts with war, famine and event pips), Wealth, Where People Live, States (rows that open the state) and How Demographics Works; and the state subtab's from the same blocks with the state's figures. Every figure sits under a gate that asks script whether it exists (`common/scripted_guis/te_demog_sguis.txt`); placeholder icons in `docs/systems/demographics_gui_icons.md` |
 | `te_nation_generated.gui` | (additive, generated templates and types) | The Nation tab's name filters: `te_nation_hidden_filter` for the country panel's list, `te_nation_list_<section>` and `te_nation_row_<row>` for the tab; and each section's type rows, `te_nation_types_<section>`; regenerate with `scripts/generators/gen_nation_tab.py` |
 | `te_nation_tab.gui` | (additive, type library) | The Nation tab of the Timeline Extended window: the overview, five sections (each its score rows, then its type rows), Where These Come From (the country's own permanent modifiers, collapsed) and How the Nation Works, instanced from `te_systems_window.gui` |

@@ -27,22 +27,6 @@ te_demog_wave_yearly = {
 	if = {
 		limit = { te_demog_wave_runs = yes }
 		set_local_variable = { name = te_dg_wv_fired value = 0 }
-		# the largest city, by the census's urban people, for the Overspill: 1 when it is at Migration Crowding's ceiling
-		# (read in the iterator: te_demog_wave_cond_overspill reads the local)
-		set_local_variable = { name = te_dg_wv_city_crowded value = 0 }
-		ordered_scope_state = {
-			limit = {
-				te_demog_has_census = yes
-				has_variable = te_dg_urban
-			}
-			order_by = te_demog_wave_urban_people
-			max = 1
-			check_range_bounds = no
-			if = {
-				limit = { te_demog_wave_crowded_city = yes }
-				set_local_variable = { name = te_dg_wv_city_crowded value = 1 }
-			}
-		}
 		te_demog_wave_try_once = { EV = immortal EVENT = te_demog_wave.10 }
 		te_demog_wave_try = { EV = greying EVENT = te_demog_wave.4 }
 		te_demog_wave_try = { EV = youth EVENT = te_demog_wave.5 }
@@ -218,9 +202,26 @@ te_demog_wave_pick_village = {
 	}
 }
 
-# The Overspill: the largest city, the census state with the most urban people, else the capital.
+# The Overspill: the Metropolis at Migration Crowding's ceiling with the most urban people (te_demog_wave_overspill_state),
+# else, when the console fires the event, the census state with the most urban people, else the capital.
 te_demog_wave_pick_city = {
 	if = {
+		limit = {
+			any_scope_state = {
+				te_demog_wave_overspill_state = yes
+			}
+		}
+		ordered_scope_state = {
+			limit = {
+				te_demog_wave_overspill_state = yes
+			}
+			order_by = te_demog_wave_urban_people
+			max = 1
+			check_range_bounds = no
+			save_scope_as = te_wave_state
+		}
+	}
+	else_if = {
 		limit = {
 			any_scope_state = {
 				te_demog_has_census = yes

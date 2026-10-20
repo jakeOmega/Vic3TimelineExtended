@@ -5678,7 +5678,7 @@
  te_demog_wave.9.a:0 "Build new towns beyond the city, and send the newcomers there."
  te_demog_wave.9.b:0 "Draw a green belt around it, and hold the line."
  te_demog_wave.9.c:0 "Let it sprawl. The city will find its own shape."
- te_demog_wave.9.d:0 "[SCOPE.sState('te_wave_state').GetName] has outgrown itself. #v [SCOPE.GetRootScope.ScriptValue('te_demog_wave_primacy')|%0]#! of our city dwellers live there, crowded at ten times what its land can comfortably hold, and shanty districts creep along the railway lines and the river flats faster than the drains can follow them."
+ te_demog_wave.9.d:0 "[SCOPE.sState('te_wave_state').GetName] has outgrown itself. #v [SCOPE.sState('te_wave_state').MakeScope.ScriptValue('te_demog_mt_shown_share')|0]%#! of its city dwellers live in its one great city, crowded at ten times what its land can comfortably hold, and shanty districts creep along the railway lines and the river flats faster than the drains can follow them."
  te_demog_wave.9.f:0 "\"The map in your office is three years out of date, Minister.\"\n\n\"It was printed last spring.\"\n\n\"Then it is a year out of date. The district I grew up in had cabbage fields in it. Now it has eleven thousand people, two standpipes and a police post that closes at dusk.\"\n\n\"And what do you propose?\"\n\n\"Buy a new map. Then decide whether to draw a line on it, or to let the city keep drawing them for you.\""
  te_demog_wave.9.t:0 "The Overspill"
 
