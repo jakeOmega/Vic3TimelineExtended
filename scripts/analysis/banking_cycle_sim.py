@@ -57,7 +57,12 @@ with if a number here looks wrong.
   gdp                      1e7 at start, compounds at the sampled growth rate
   yearly GDP growth        AR(1), mean 2.0%, sd 1.2%  (feeds te_mon_growth_term)
   deficit as % of GDP      AR(1), mean 1.5%, sd 1.0%, x3 while at war
-  scaled_debt              integrates the deficit, clamped 0..1.5
+  scaled_debt              integrates the deficit, clamped 0..1.5. The deficit
+                           term's `in_default` gate (#1084) reads scaled_debt >= 1,
+                           which ANY steady deficit reaches within a few decades
+                           here (no GDP denominator, no AI budget response), so the
+                           term then stays off; compare the cap alone with
+                           `--tune deficit_gates=off`
   is_at_war                2-state Markov, ~8% of months, mean run 24 months
   basket index (prices)    AR(1) log walk, sd 1.2%/yr  (feeds cost-push)
   scaled_gold_reserves     0.6 flat (only seeds the bank's vault)
@@ -666,6 +671,24 @@ PRE_HOLIDAY = {
 PRE_ELIQ_BOUNDS = {
     "eliq_bounds": "off",
 }
+# The deficit term before #1084 (owner, 2026-10-20): uncapped, charged to a
+# dollarised or defaulting country too, and a dollarised country pulled to 0
+# rather than to the anchor. `--tune pre_deficit_cap`.
+PRE_DEFICIT_CAP = {
+    "deficit_cap": 1e9,
+    "deficit_gates": "off",
+    "dollar_pull": "zero",
+}
+# The dial's reach before #1084 (owner, 2026-10-20): a free dial's ceiling of
+# 25, a flat third of a point a month, and the stance term on the cycle's +4
+# tight clamp. `--tune pre_rate_reach`; with pre_deficit_cap's keys as well,
+# `--tune pre_1084`.
+PRE_RATE_REACH = {
+    "ceiling": 25.0,
+    "drift_share": 0.0,
+    "stance_pressure_tight": 4.0,
+}
+PRE_1084 = {**PRE_DEFICIT_CAP, **PRE_RATE_REACH}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -676,6 +699,9 @@ PRESETS = {
     "pre_hold": PRE_HOLD,
     "pre_holiday": PRE_HOLIDAY,
     "pre_eliq_bounds": PRE_ELIQ_BOUNDS,
+    "pre_deficit_cap": PRE_DEFICIT_CAP,
+    "pre_rate_reach": PRE_RATE_REACH,
+    "pre_1084": PRE_1084,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -1084,6 +1110,10 @@ def intervention_points(cfg: Config, state: State) -> float:
 
 # ── regime predicates (te_monetary_triggers.txt) ──────────────────────────────
 
+# te_mon_inflation_anchor off metal: the 2% target. A branched value (0 on metal,
+# an anchor's target when anchored), so a constant here rather than a K.sv read.
+INFLATION_ANCHOR = 2.0
+
 
 def has_dial(cfg: Config, state: State | None = None) -> bool:
     if state is not None and state.dollarised:
@@ -1142,13 +1172,14 @@ def in_external_crisis(cfg: Config, state: State) -> bool:
 
 
 def target_bounds(cfg: Config, state: State, world_rate: float) -> tuple[float, float]:
-    # te_mon_target_max
+    # te_mon_target_max. The free dial's ceiling is 60 since #1084 (it was 25);
+    # `--tune ceiling=25` restores the old one.
     if is_on_gold(cfg):
-        hi = 15.0
+        hi = K.sv("te_mon_target_ceiling_gold")
     elif has_narrow_dial(cfg, state):
         hi = max(0.0, state.commodity_centre + K.sv("te_mon_commodity_band_margin_up"))
     else:
-        hi = 25.0
+        hi = tuned("ceiling", K.sv("te_mon_target_ceiling_free"))
 
     # te_mon_target_min
     if state.peg_defend_months > 0 and is_on_gold(cfg):
@@ -1275,7 +1306,7 @@ def monetary_update_target(cfg: Config, state: State, world_rate: float) -> None
             state.policy_rate_target = math.ceil((want - 0.005) * 10) / 10
     else:
         # 1 price stability: r* + error + pi_core + 1.0 x (pi_core - anchor) + lean
-        anchor = 0.0 if is_metallic(cfg) else 2.0
+        anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
         work = state.neutral_rate + state.neutral_error + state.inflation_core
         work += (state.inflation_core - anchor) * K.sv("te_mon_mandate_inflation_weight")
         lean = cycle_lean(state)
@@ -1335,18 +1366,31 @@ def emergency_cuts(cfg: Config, state: State) -> bool:
 
 
 def drift_toward(cfg: Config, state: State, rate: float, target: float) -> float:
-    """te_monetary_drift_rate_toward — one month's step of `rate` toward `target`."""
+    """te_monetary_drift_rate_toward — one month's step of `rate` toward `target`.
+
+    The least step is te_mon_drift_step (a third of a point x the speed factor)
+    and a month's step is that or a sixth of the distance x the speed factor,
+    whichever is larger, never past the target (te_mon_drift_step_up_now /
+    _down_now, #1084). The distance counted is at most |headline - anchor|
+    (te_mon_inflation_gap_abs, last month's headline as step 3 sees it), so a
+    target set past where the rate should go buys nothing (PR #1086's review).
+    The emergency factor raises only a cut's least step. `--tune drift_share=0`
+    restores the flat third of a point (pre-#1084).
+    """
     speed = max(0.1, 1.0 + law_modifier_sum(cfg, "country_policy_rate_drift_speed_mult"))
     step = 0.3333 * speed
     down = step
     if emergency_cuts(cfg, state):
         # te_mon_drift_step_down (§12). `--tune emergency_cut=1` turns it off.
         down *= tuned("emergency_cut", K.sv("te_mon_emergency_cut_factor"))
+    share = tuned("drift_share", 1.0 / K.sv("te_mon_drift_gap_divisor")) * speed
+    anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
     gap = target - rate
+    distance = min(abs(gap), abs(state.inflation - anchor))
     if gap > step:
-        return rate + step
+        return rate + min(gap, max(step, distance * share))
     if gap < -down:
-        return rate - down
+        return rate - min(-gap, max(down, distance * share))
     return target
 
 
@@ -1402,9 +1446,14 @@ def monetary_update_inflation(
     state.inflation_core = max(-10.0, min(100.0, state.inflation_core + work))
     state.inflation = max(-10.0, min(100.0, state.inflation_core + cost_push))
 
-    anchor = 0.0 if is_metallic(cfg) else 2.0
+    anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
     if is_metallic(cfg):
         state.inflation_expected = 0.0
+    elif state.dollarised:
+        # owner decision K: a dollarised country's expectations are pinned at
+        # the anchor (te_monetary_update_inflation's expectations block). The
+        # simulator lacked this until #1084.
+        state.inflation_expected = INFLATION_ANCHOR
     else:
         # te_mon_expectation_target: credibility-weighted blend of realised and anchor
         gap_abs = abs(state.inflation - anchor)
@@ -1485,7 +1534,7 @@ def hyperinflation_crisis(cfg: Config, state: State, rng: random.Random) -> None
         state.inflation_expected = reset
         state.currency_reforms += 1
     elif roll < reform + dollarise:
-        anchor = 0.0 if is_metallic(cfg) else 2.0
+        anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
         state.dollarised = True
         state.inflation = anchor
         state.inflation_core = anchor
@@ -1565,12 +1614,35 @@ def bank_qe_pressure(cfg: Config, state: State, world_rate: float) -> float:
     return pressure * tuned("bank_qe", 1.0)
 
 
+def deficit_pressure(state: State) -> float:
+    """te_mon_pressure_deficit — min(cap, 0.3 x max(0, deficit - 1)), x2 at war.
+
+    The cap (te_mon_deficit_pressure_cap, 1.5pp) bounds the figure after the
+    coefficient and before the war doubling, so it is 3pp at war; and a country
+    that cannot borrow gets no term at all: dollarised, or in default
+    (`in_default`, which this simulation reads as scaled_debt >= 1, as the
+    alternate economies' reader does). Both from #1084 (owner, 2026-10-20).
+    `--tune deficit_cap=X` moves the cap (a large X removes it) and
+    `--tune deficit_gates=off` keeps the term for dollarised and defaulting
+    countries; `--tune pre_deficit_cap` does both, the script before #1084.
+    """
+    gated = TUNE.get("deficit_gates") != "off"
+    if gated and (state.dollarised or state.scaled_debt >= 1.0):
+        return 0.0
+    deficit = max(0.0, state.deficit_pct - K.sv("te_mon_deficit_tolerance"))
+    deficit *= K.sv("te_mon_deficit_coeff")
+    deficit = min(tuned("deficit_cap", K.sv("te_mon_deficit_pressure_cap")), deficit)
+    if state.at_war:
+        deficit *= 2
+    return deficit
+
+
 def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     """te_mon_pressure_total — the standing inflation pressure sum (§9.1)."""
     total = 0.0
 
     # stance: a tight rate is disinflationary
-    total += -K.sv("te_mon_stance_pressure_coeff") * clamped_gap(state)
+    total += -K.sv("te_mon_stance_pressure_coeff") * clamped_gap_pressure(state)
 
     # phase: te_mon_phase_pressure, read from the mod, whose slump side splits on
     # te_mon_targets_inflation (§16). `--tune pressure_<phase>=X` overrides one
@@ -1589,12 +1661,7 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     if state.bubble_pressure >= K.sv("te_mon_bubble_threshold"):
         total += K.sv("te_mon_bubble_pressure_term")
 
-    # deficit
-    deficit = max(0.0, state.deficit_pct - K.sv("te_mon_deficit_tolerance"))
-    deficit *= K.sv("te_mon_deficit_coeff")
-    if state.at_war:
-        deficit *= 2
-    total += deficit
+    total += deficit_pressure(state)
 
     # QE, while open market operations are running
     if "omo" in state.tools:
@@ -1623,16 +1690,21 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
 
     total += state.inflation_noise
 
-    # regime pull: metal drags core back toward zero. Fiat and digital have no
-    # such term in the shipped script, which is why an unsteered fiat dial has no
-    # fixed point (finding F4). `--tune fiat_pull=X` adds a proportional one, to
-    # measure what a "real balance" pull would be worth.
+    # regime pull: metal drags core back toward zero, a dollarised country
+    # toward the anchor (#1084; `--tune dollar_pull=zero` restores the pull to
+    # zero it had before). Fiat and digital have no such term in the shipped
+    # script, which is why an unsteered fiat dial has no fixed point (finding
+    # F4). `--tune fiat_pull=X` adds a proportional one, to measure what a
+    # "real balance" pull would be worth.
     if is_metallic(cfg):
         total -= state.inflation_core
+    elif state.dollarised:
+        anchor = 0.0 if TUNE.get("dollar_pull") == "zero" else INFLATION_ANCHOR
+        total -= state.inflation_core - anchor
     else:
         pull = tuned("fiat_pull", 0.0)
         if pull:
-            anchor = 2.0
+            anchor = INFLATION_ANCHOR
             total -= pull * max(0.0, state.inflation_core - anchor)
 
     # gold flow
@@ -1650,6 +1722,18 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
         total += max(K.sv("te_mon_commodity_specie_clamp"), specie)
 
     return total
+
+
+def clamped_gap_pressure(state: State) -> float:
+    """te_mon_stance_gap_clamped_pressure — the bounds the inflation term reads.
+
+    The cycle's loose bound, and a tight bound of its own
+    (te_mon_pressure_stance_clamp_tight, 10 since #1084; it shared the cycle's
+    +4 before). `--tune stance_pressure_tight=4` restores the shared bound.
+    """
+    lo = -tuned("gap_clamp_loose", -K.sv("te_mon_stance_gap_clamp_loose"))
+    hi = tuned("stance_pressure_tight", K.sv("te_mon_pressure_stance_clamp_tight"))
+    return max(lo, min(hi, state.stance_gap))
 
 
 def clamped_gap(state: State) -> float:
@@ -3801,7 +3885,10 @@ def main() -> int:
                          "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor, or "
                          "--tune pre_slump_pressure for the slump phases' inflation pull before §16, or "
                          "--tune pre_hold for the AI's lift weights before the hold gates of §18, or "
-                         "--tune pre_eliq_bounds for the Emergency Liquidity Program before §25.")
+                         "--tune pre_eliq_bounds for the Emergency Liquidity Program before §25, or "
+                         "--tune pre_deficit_cap for the uncapped deficit term before #1084, or "
+                         "--tune pre_rate_reach for the 25 ceiling, flat drift and shared stance clamp "
+                         "before #1084, or --tune pre_1084 for both.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")

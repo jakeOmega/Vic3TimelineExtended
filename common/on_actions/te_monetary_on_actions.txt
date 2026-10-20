@@ -255,7 +255,7 @@ on_secession_start = {
 # documents this at common/on_actions/00_code_on_actions.txt:3634, :5143, :5510)
 # — and the parent already pulses monthly like everyone else. Running the update
 # on it here would be a second non-idempotent call in the same month: it would
-# drift the parent's policy rate an extra third of a point toward its target and
+# drift the parent's policy rate an extra month's step toward its target and
 # draw both hidden random walks twice. The parent's GDP, debt load and rank do
 # move when it loses states, but the very next monthly pulse prices that in; a
 # one-month lag is the correct cost, a double pulse is not.

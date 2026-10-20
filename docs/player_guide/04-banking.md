@@ -568,8 +568,13 @@ anchor's.
 ### Rate target, delegation and mandates
 
 You choose a Rate Target, the stepper labelled Target beside your Policy Rate,
-and the policy rate moves toward it by a third of a point a month (two thirds
-under Digital Currency). Click the stepper for a point, Ctrl-click for a tenth,
+and each month the policy rate moves a sixth of the distance toward it, never
+less than a third of a point; Digital Currency doubles both. The distance it
+counts is at most how far inflation is from its target, so with inflation on
+target the rate moves a third of a point a month however far you set the
+target, and a small change of course takes months. A bank chasing a runaway
+inflation from 25 points off covers most of the way in about a year. Click the
+stepper for a point, Ctrl-click for a tenth,
 Shift-click for the limit of your currency law. Changes are free and have no
 cooldown.
 
@@ -584,8 +589,8 @@ free of charge.
 | Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
 | Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
-A mandate-run bank cuts three times as fast once the cycle falls into Stagnation
-or worse.
+A mandate-run bank cuts at least a point a month (two under Digital Currency)
+once the cycle falls into Stagnation or worse.
 
 A new mandate takes effect at the next monthly update, and is then fixed for a
 year. Lenders price a looser rule at once: for each step from Inflation
@@ -633,9 +638,10 @@ floor, and buys assets on its own account for the difference. Each point it
 would cut below the floor adds 1 point of inflation pressure, up to 5 points
 at 5 points below, on top of Open-Market Operations.
 
-The purchases grow and shrink at the speed the rate moves: a third of a point a
-month, two-thirds under Digital Currency, and three times as fast while the bank
-cuts with the cycle in Stagnation or worse. They never start or stop all at once. When the
+The purchases grow and shrink at the speed the rate moves: up to a sixth of
+the distance a month and at least a third of a point, doubled under Digital
+Currency, and at least a point a month while the bank cuts with the cycle in
+Stagnation or worse. They never start or stop all at once. When the
 bank's rule asks for a higher rate again, the purchases wind down first, and the
 rate leaves the floor only once they reach zero.
 
@@ -706,17 +712,20 @@ Inflation shows what prices did over the last year, and Expected Inflation what
 lenders and workers assume they will do. A loose stance, a boom, deficits, money
 printing, dearer goods and imports, and inflowing gold push it up, as do the
 Wage Pressure of your labor and welfare laws and any other standing Inflationary
-Pressure, such as a devaluation. Above 8% inflation, the wage pressure of your
-labor and welfare laws counts twice.
+Pressure, such as a devaluation. A deficit adds at most 1.5 points of pressure
+(3 at war), and none in default or once dollarized, when nobody lends to cover
+it. Above 8% inflation, the wage pressure of your labor and welfare laws counts
+twice.
 
 A slump pulls inflation down. Under Fiat Money or Digital Currency, Stagnation
 pulls it half a point below where it would otherwise settle, a Downturn 2 points
 and a Panic 4, and inflation closes most of that gap within a year. A Downturn
 alone outweighs the wage pressure of all your labor and welfare laws together, so
 prices slow through a recession and your bank can cut instead of holding its rate
-up against inflation. On metallic money, in a dollarized economy and under
-Decentralized Cryptocurrency, prices already rest near zero and the pulls are
-0.3, 0.8 and 1.5 points; more would hold them in Deflation.
+up against inflation. On metallic money and under Decentralized Cryptocurrency,
+prices already rest near zero and the pulls are 0.3, 0.8 and 1.5 points; more
+would hold them in Deflation. A dollarized economy takes the same smaller pulls,
+though its prices rest near the 2% target of the money it adopted.
 
 Every country starts on metallic money, Commodity Money or the Gold Standard,
 and there expected inflation is fixed at 0%: money redeemable in metal promises
@@ -773,8 +782,8 @@ Your Monetary Policy law sets the dial's range.
 |---|---|---|---|
 | Commodity Money | default | World rate −1 to +3, with a national bank | Prices that outrun the world's are pulled back down; fixed at par |
 | Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defence; fixed at par |
-| Fiat Money | Keynesian Economics, with National Bank Established | 0% to 25% | Open-Market Operations and money printing; floats |
-| Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 25% | As Fiat, and the rate moves twice as fast; floats |
+| Fiat Money | Keynesian Economics, with National Bank Established | 0% to 60% | Open-Market Operations and money printing; floats |
+| Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 60% | As Fiat, and the rate moves twice as fast; floats |
 | Decentralized Cryptocurrency | Cybersecurity | no dial | Borrows at the world rate plus a spread; floats |
 
 ### Gold reserves and the run on the vault

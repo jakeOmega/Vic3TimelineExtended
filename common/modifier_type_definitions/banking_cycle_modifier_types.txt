@@ -207,8 +207,9 @@ country_inflation_anchoring_add = {
 # te_mon_target_min, te_mon_standing_floor and te_mon_forecast_error_bound.
 # Nothing reads `modifier:` on these anywhere else.
 
-# How much faster than the baseline third of a point a month the policy rate
-# closes on its target. +100% under a digital currency: an economy with no cash
+# How much faster than the baseline the policy rate closes on its target: it
+# scales the whole step, the least third of a point and the sixth of the
+# distance alike (#1084). +100% under a digital currency: an economy with no cash
 # to hold transmits a rate change in weeks rather than seasons.
 country_policy_rate_drift_speed_mult = {
 	color = good
