@@ -1,6 +1,7 @@
 # Demographics: uploaded minds, a non-biological category — design (owner's calls applied)
 
-> **Status: approved 2026-10-19 (the owner's calls in §7); being built on `feat/demog-uploaded-minds`.** It answers the
+> **Status: approved 2026-10-19 (the owner's calls in §7); built 2026-10-19 on `feat/demog-uploaded-minds`**
+> (`docs/systems/mod_systems.md` § Uploaded minds; play-test list § Uploaded minds). It answers the
 > owner's request of 2026-10-16: "for countries with the Mind Upload Nexus megaproject / Mind Backups tech, explore
 > adding a Non-Biological / Uploaded category to the biological age display in the Demographics panel and longevity
 > calculations." Parent designs: the late game (`../archive/specs/2026-10-11-demographics-late-game-design.md`, cited as
@@ -95,7 +96,7 @@ as it is (the release precondition).
 Life expectancy reads as today: it is already "100+" by Mind Backups, and an upload counting as living would make it
 meaningless. Old age from stays biological: it says when a body is old, and an upload has none. The Causes of Death pie
 keeps the uploads in their causes: the bodies did die of them. The state subtab shows the state's own uploads last year
-under its Living to 100, since the pool is the country's.
+in its Longevity section, since the pool is the country's.
 
 ## 5. The Nexus's output under Full (call 6)
 

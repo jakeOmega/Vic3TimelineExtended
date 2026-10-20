@@ -45,6 +45,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … neighbouring_state_reads` | Full or Display only: once a game, at the first country census on 31 December | `every_neighbouring_state` from a state returns a land neighbour (Ulster sees Leinster): Late Marriage and Birth Spacing spread. `strait=1` says it crosses the Ulster–Lowlands strait too, so islands spread with their neighbours across the water; `strait=0`, only through their own conditions (the late-marriage spec 4.4 allows either) | `land=0`: the practices never spread | set `PRACTICE_SPREAD` to 0 in `demographics_params.py` and regenerate (`gen_demographics.py`), so the code says what the game does; with `strait=1`, run the harness's replays with `--straits` |
 | `TE_SELF_CHECK … wave_timed_country_type` | Full: once a game, `START` when the first of the event wave's four census-line options is chosen (Missing Girls' ban or payments, `code=1`; The Last Generation?'s licences or payments, `code=2`), the verdict a week later from the capital (`te_debug_demog.81`) | the capital's sum of the type (`state_sex_ratio_at_birth_add` or `state_desired_fertility_mult`) rose by the option's line plus any change in the Family Policy measures' lines of that type (`added` ≈ `expected`): a script-only state type on a timed country modifier reaches the state | `added` 0: the census never sees those four options' lines, so they change no birth, nor the women's-work lines the Baby Boom's and the Greying's options carry on the same kind of modifier; `NO_VERDICT` (a measure offset the line within the week) re-arms the check | add each of the four modifiers (and the three women's-work ones) without `days` and store its end date on the country (`te_dg_wv_<modifier>_until`); `te_demog_wave_yearly` removes it when the date passes and puts it back for a revolution's winner that holds the date (the measures' pattern, `te_demog_ms_keep_all`) |
 | `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit (the late sweep already counts its own this way: `te_demog_lx_cause_deaths`) |
+| `TE_SELF_CHECK … um_nexus_scaling` | Full: once a game, `START` when the first Mind Upload Nexus takes its uploaded-minds modifiers (on its state's yearly pulse) with its country's hosting at least 2/15 full, so the expected digital assets output modifier is +100% or more, the verdict a week later (`te_debug_demog.130`). No line means no country's hosting passed 2/15 under Full (an observer run past 2100, or the harness's transition) | the building reads its digital assets output modifier at the utilisation × 15 less 1 and its advanced materials input modifier at × 8 less 1, each within 0.3 (`digital_assets` ≈ `expected`): the engine applies a building's runtime goods `_mult` axes from a state's pulse at the state's multiplier, the newly registered mod-good input axis too | reads near 0: the modifiers never reached the building or an axis isn't registered, so under Full every Nexus produces as outside Full; near −1: the minds' multiplier read 0, so every Nexus makes nothing. A state that lost its Nexus within the week re-arms the check | reads near 0: check `goods_input_advanced_materials_mult` and its two siblings in `mod_entity_modifier_types.txt`, then apply both modifiers from a building iterator in the state pulse (`every_scope_building = { limit = { is_building_type = building_mind_upload_nexus } … }`) instead of `b:`; near −1: put the minds' modifier on a ladder of static modifiers at tenths of the utilisation (`te_demog_um_nexus_minds_<n>`), as `family_limitation_scaled`'s fallback does |
 
 No `unemployment_rate_read` line after a few years under the census means no census state counted more than 2% of its workforce idle: option t's `unemp=` is the capital's stored conversion and `unemp_walk=` the walk's own count (since 2026-10-17); compare them with the state panel's unemployed in a state with visibly idle workers.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -771,3 +772,35 @@ script value, as the other factors), so no self-check. What only the game can sh
    Leading Cause is Accidents and Violence, and infection is a sliver (the harness: 3% of deaths at 50 years).
 5. **The outline.** The Demographics tab's twenty-year outline moves with the state figures (the country's factor,
    `te_dg_inf_ad`, set at each count beside access).
+
+## Uploaded minds (2026-10-19)
+
+The uploaded-minds spec's build (`docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
+minds in `mod_systems.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
+restore to the model; `demographics_harness.py uploads` prints the calibration and the scenarios. One self-check,
+`um_nexus_scaling` (above). Everything here is under Full; a game needs Mind Backups (after Biological Immortality and
+Neural Lace) and a completed Nexus, so an observer run past 2100 or the console's research is the way in. What only the
+game can show:
+
+1. **The Nexus under Full.** Before any upload, a completed Nexus's building panel shows No Minds Hosted with every good
+   at −100% and makes nothing; a year after the country's first census with minds, Hosted Minds shows each good back at
+   its factor × the utilisation (digital assets +1500% × it), and the output follows. Outside Full neither modifier is
+   there and the Nexus makes what it always made.
+2. **Research.** The country's research speed tooltip shows Empty Hosting cancelling the Nexus's +5% a level down to the
+   utilisation's share; with the Nexus understaffed the cancel is smaller, never below the method's own line.
+3. **The rows.** The Longevity section shows Backed Up (the share in care) from Mind Backups, and Uploaded Minds once a
+   mind is hosted: the share of people, hosted against capacity, last year's uploads and chosen endings. Living to 100
+   rises above the bodies' figure, which its hover keeps; deaths per 1,000 fall by the uploads, and the Natural Change and
+   Deaths hovers say how many uploaded. The biological pyramid has its Non-biological line. Under Display only none of
+   the pool shows.
+4. **A lost Nexus.** Downsize a Nexus (or lose its state) with the hosting full: at the next 31 December the hover lists
+   the archived minds, and the remaining Nexuses make what the active minds over the smaller capacity give. Build the
+   levels back: the archived come back at the next census before anyone new uploads.
+5. **How fast it fills.** The harness's transition (Biological Immortality's first decades) fills one Nexus in about
+   seven years for a country of 100 million everyone in care; at immortality's steady state uploads fall to a trickle
+   (24-53 thousand a year) and a Nexus takes a century and more. Read a late save's `te_dg_um_util` against that: if
+   Nexuses sit empty for decades the owner may want a larger share of deaths eligible, or capacity per level lower.
+6. **The output's size.** A full level makes about £40M a week at base prices, most of it 300,000 digital assets. Watch
+   the digital assets price in a market with a full Nexus: a crash there says the factor is too large.
+7. **The Devout (switch off).** With `UM_POLITICS` on and regenerated, the Devout lose 3 approval while the minds pass 1%
+   of people and minds; off (the default) nothing shows.

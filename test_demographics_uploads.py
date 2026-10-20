@@ -71,7 +71,7 @@ class _UmEngine(_Engine):
         super().run(batch)
 
 
-def _engine(ring, inp, pop, owner_vars, full=True, real_multipliers=False):
+def _engine(ring, inp, pop, owner_vars, full=True, real_multipliers=False, truncate=False):
     """The late test's state (test_demographics_late._engine) with an owner and the rule at Full. The multipliers'
     fixtures take Mind Backups' restore at the ring's E, as the model's step does."""
     prof = M.migrant_profile(inp)
@@ -83,7 +83,8 @@ def _engine(ring, inp, pop, owner_vars, full=True, real_multipliers=False):
         [f"set_local_variable = {{ name = {k} value = {v!r} }}" for k, v in locals_.items()]
         + ["te_demog_migrant_rates = yes"])}
     eng = _engine_for(dataclasses.replace(inp, backup_elig=ring.lx_elig or 0.0), YEAR + 1, pop, effects=stub,
-                      engine=functools.partial(_UmEngine, owner_vars=owner_vars), real_multipliers=real_multipliers)
+                      engine=functools.partial(_UmEngine, owner_vars=owner_vars, truncate=truncate),
+                      real_multipliers=real_multipliers)
     eng.trigger_fixtures["te_demog_effects_run"] = full
     for k in range(N):
         if ring.f[k] or ring.m[k]:
@@ -182,6 +183,20 @@ class TestUploadStepScript(unittest.TestCase):
         eng.call("te_demog_step")
         self.assertNotIn("te_dg_um_new", eng.vars)
         self.assertEqual(eng.owner_vars, owner)
+
+    def test_fixed_point(self):
+        """In the engine's five decimals (test_demographics_late.test_fixed_point_births): each product multiplies before
+        it divides, so the uploads, the eligible and Living to 100 keep their digits."""
+        owner = _owner(free=1e9, phi=0.8)
+        inp = _inp()
+        ring = _ring(inp)
+        eng = _engine(ring, inp, ring.total * 1.004, dict(owner), truncate=True)
+        eng.call("te_demog_step")
+        out = M.step(ring, dataclasses.replace(inp, uploads={"phi": 0.8, "free": 1e9}), YEAR + 1,
+                     engine_pop=ring.total * 1.004)
+        for name, want in (("te_dg_um_new", out["um"]["uploads"]), ("te_dg_um_elig", out["um"]["eligible"]),
+                           ("te_dg_um_l100", out["um"]["l100"])):
+            self.close(eng.vars[name], want, 1e-3, name)
 
     def test_immortality(self):
         """Under Biological Immortality and the pull few treated bodies die of illness: few uploads."""

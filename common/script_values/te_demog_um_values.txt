@@ -158,17 +158,13 @@ te_debug_demog_um_chk_am_expected = {
 	multiply = te_demog_k_um_in_advanced_materials
 	subtract = 1
 }
-# 1 where the expected output modifier stands at least 0.8 from 0.2 (a company's prosperity bonus at most, what the
-# building would read without them), so OK can't be a false pass
+# 1 where the minds' modifier is on and puts the expected output modifier at 1 or more (the utilisation at least 2/15):
+# at least 0.8 from 0.2, a company's prosperity bonus at most and what the building would read without the two, and
+# from -1, what it would read with the minds' multiplier at 0, so OK can't be a false pass
 te_debug_demog_um_chk_clear = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				te_debug_demog_um_chk_da_expected <= -0.6
-				te_debug_demog_um_chk_da_expected >= 1
-			}
-		}
+		limit = { te_debug_demog_um_chk_da_expected >= 1 }
 		value = 1
 	}
 }

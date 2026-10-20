@@ -491,8 +491,9 @@ te_demog_um_nexus_refresh = {
 
 # THIS = ROOT = a state with a Nexus, just after te_demog_um_nexus_refresh applied its modifiers under Full: once a game,
 # the expected digital assets output and advanced materials input modifiers (the factors x the utilisation, less the
-# -100%) for te_debug_demog.130 to read off the building a week on. Only where they stand at least 0.8 away from what
-# the building would read without them (0.2, a company's prosperity bonus at most), so OK can't be a false pass.
+# -100%) for te_debug_demog.130 to read off the building a week on. Only once the utilisation puts the output modifier at
+# 1 or more (te_debug_demog_um_chk_clear), well away from what the building would read without the two (0.2 at most)
+# or with the minds' multiplier at 0 (-1), so OK can't be a false pass.
 te_debug_demog_um_selfcheck_start = {
 	if = {
 		limit = {
