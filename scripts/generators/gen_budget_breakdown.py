@@ -57,6 +57,7 @@ SOURCES = {
         )),
         "pensions": ("Old-Age Pensions", ("te_demog_pension_bill",)),
         "archaeology": ("Archaeological Digs", ("gm_arch_expense",)),
+        "climate": ("Climate Policy", ("renewable_investment_cost_modifier",)),
     },
     "income": {
         "un": ("United Nations", ("un_dev_fund_treasury_grant_modifier",)),

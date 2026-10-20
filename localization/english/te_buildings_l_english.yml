@@ -256,6 +256,8 @@
  building_group_bg_biotechnology_throughput_add_desc:0 "A bonus or penalty to both input and output of $bg_biotechnology$ buildings"
  building_group_bg_bureaucracy_throughput_add:0 "Government Administration [concept_throughput] Modifier"
  building_group_bg_bureaucracy_throughput_add_desc:0 "A bonus or penalty to both input and output of $bg_bureaucracy$ buildings"
+ building_group_bg_clean_power_construction_efficiency_add:0 "$bg_clean_power$ Construction Efficiency"
+ building_group_bg_clean_power_construction_efficiency_add_desc:0 "An increase or decrease to the weekly [concept_construction] progress for $bg_clean_power$ buildings: hydro, nuclear, fusion and renewable plants"
  building_group_bg_construction_throughput_add:0 "Construction Building [concept_throughput]"
  building_group_bg_construction_throughput_add_desc:0 "Increases the [concept_throughput] of all construction buildings"
  building_group_bg_heavy_industry_infrastructure_usage_mult:0 "[concept_infrastructure_usage] of $bg_heavy_industry$ buildings"

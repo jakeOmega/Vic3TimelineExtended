@@ -189,6 +189,10 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = renewable_investment_cost_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = resettlement_declaration_violation }
 		add = 1
 	}

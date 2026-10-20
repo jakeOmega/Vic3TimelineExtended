@@ -983,6 +983,9 @@ global_warming_events_on_action = {
 		# Tariff maintenance also runs with the rule off to restore prior settings.
 		# Emissions and threshold events remain gated on the climate rule.
 		gw_refresh_tariff_policies_effect = yes
+		# Policy running costs follow GDP, so they are re-applied every month
+		# (Renewable Investment's expense line); rule-independent, like the above.
+		gw_refresh_policy_costs_effect = yes
 		if = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes

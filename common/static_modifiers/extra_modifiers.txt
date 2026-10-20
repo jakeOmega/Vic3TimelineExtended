@@ -1385,11 +1385,23 @@ carbon_tax_modifier = {
 renewable_investment_modifier = {
 	country_household_greenhouse_gas_emissions_mult = -0.25 # Household heating transition
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_building_renewable_energy_plant_require_subsidies_bool = yes      # forces renewable plants to require subsidies, representing government support and market distortion
-	building_renewable_energy_plant_throughput_add = 0.10                     # direct boost to clean energy output
+	building_renewable_energy_plant_throughput_add = 0.20                     # direct boost to clean energy output
 	building_power_plant_throughput_add = -0.10                               # transition away from conventional power
-	building_group_bg_power_construction_efficiency_add = 0.25                # accelerates renewable construction, indirectly reducing emissions
+	building_group_bg_clean_power_construction_efficiency_add = 0.25          # hydro, nuclear, fusion and renewable plants only (bg_clean_power); the coal and oil plant is not sped up
 	country_greenhouse_gas_emissions_mult = -0.15                             # 15% direct emissions reduction
+}
+
+# Renewable Investment's running cost, in place of the forced plant subsidies it
+# used to carry (country_building_renewable_energy_plant_require_subsidies_bool,
+# retired 2026-10-20). Held on the country, not the journal entry, because the
+# multiplier reads gdp. Applied with multiplier = gw_renewable_investment_cost_value
+# (0.5% of GDP a year, per week) by gw_renewable_investment_cost_apply and
+# re-applied monthly by gw_refresh_policy_costs_effect, the single refresh site.
+# Budget Breakdown: Climate Policy.
+renewable_investment_cost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_climate_add = 1
 }
 
 climate_adaptation_modifier = {

@@ -1,10 +1,13 @@
 """National accounting and tariff lifecycle regressions using production scripts."""
 from decimal import Decimal
+import json
 import unittest
+from pathlib import Path
 
 from test_household_emissions import Values, state
 from test_tax_code_rule import load
 
+ROOT = Path(__file__).resolve().parent
 EFFECTS = "common/scripted_effects/global_warming_effects.txt"
 TRIGGERS = "common/scripted_triggers/global_warming_triggers.txt"
 
@@ -111,6 +114,86 @@ class NativeTariffPolicyTest(unittest.TestCase):
             "je:je_global_warming": {"remove_modifier": "fossil_fuel_tariffs_modifier"}})
         pulse = load("common/on_actions/extra_on_actions.txt")["global_warming_events_on_action"]["effect"]
         self.assertEqual(pulse["gw_refresh_tariff_policies_effect"], "yes")
+
+
+class RenewableInvestmentCostTest(unittest.TestCase):
+    """Renewable Investment pays 0.5% of GDP a year, not forced plant subsidies (2026-10-20)."""
+
+    COST = "renewable_investment_cost_modifier"
+
+    def test_policy_modifier_keeps_its_bonuses_and_forces_no_subsidies(self):
+        modifier = load("common/static_modifiers/extra_modifiers.txt")["renewable_investment_modifier"]
+        self.assertNotIn("require_subsidies", str(modifier))
+        self.assertEqual(modifier["building_renewable_energy_plant_throughput_add"], "0.20")
+        self.assertEqual(modifier["building_power_plant_throughput_add"], "-0.10")
+        # Construction speed targets the clean plants' own group, not all of bg_power.
+        self.assertEqual(modifier["building_group_bg_clean_power_construction_efficiency_add"], "0.25")
+        self.assertNotIn("building_group_bg_power_construction_efficiency_add", modifier)
+        self.assertNotIn("country_expenses_add", modifier)
+        # The retired bool has no definition and no loc left behind.
+        self.assertNotIn("country_building_renewable_energy_plant_require_subsidies_bool",
+                         load("common/modifier_type_definitions/global_warming_modifier_types.txt"))
+        from test_gw_top_emitters import _loc
+        with self.assertRaises(AssertionError):
+            _loc("country_building_renewable_energy_plant_require_subsidies_bool")
+
+    def test_clean_plants_sit_in_a_child_group_of_bg_power_and_the_coal_plant_does_not(self):
+        groups = load("common/building_groups/extra_building_groups.txt")
+        group = groups["REPLACE_OR_CREATE:bg_clean_power"]
+        self.assertEqual(group["parent_group"], "bg_power")
+        # Needed for building_group_bg_clean_power_construction_efficiency_add to exist.
+        self.assertEqual(group["construction_efficiency_modifier"], "yes")
+        # Restated at bg_power's vanilla values, as every vanilla child group restates them.
+        bg_power = json.loads((ROOT / "vanilla_parsed/common/building_groups.json").read_text(encoding="utf-8"))["bg_power"][1]
+        for key in ("lens", "urbanization", "economy_of_scale_ai_factor", "infrastructure_usage_per_level"):
+            self.assertEqual(group[key], bg_power[key][1], key)
+        buildings = load("common/buildings/extra_buildings.txt")
+        for name in ("hydro_plant", "nuclear_plant", "fusion_plant", "renewable_energy_plant"):
+            self.assertEqual(buildings[f"REPLACE_OR_CREATE:building_{name}"]["building_group"], "bg_clean_power", name)
+        # The mod leaves the coal and oil plant (and every other building) out of the child group,
+        # and puts nothing in bg_power itself that the group should hold.
+        self.assertEqual([name for name, block in buildings.items() if isinstance(block, dict)
+                          and block.get("building_group") == "bg_power"], [])
+        modifier_type = load("common/modifier_type_definitions/mod_entity_modifier_types.txt")
+        self.assertIn("building_group_bg_clean_power_construction_efficiency_add", modifier_type)
+        from test_gw_top_emitters import _loc
+        for key in ("bg_clean_power", "building_group_bg_clean_power_construction_efficiency_add",
+                    "building_group_bg_clean_power_construction_efficiency_add_desc"):
+            self.assertTrue(_loc(key), key)
+
+    def test_cost_is_a_gdp_scaled_expense_mirrored_into_the_budget_breakdown(self):
+        modifier = load("common/static_modifiers/extra_modifiers.txt")[self.COST]
+        self.assertEqual(modifier["country_expenses_add"], "1")
+        self.assertEqual(modifier["country_te_budget_expense_climate_add"], "1")
+        # 0.5% of a year's GDP, paid weekly.
+        self.assertEqual(load("common/script_values/global_warming_cost_values.txt")["gw_renewable_investment_cost_value"],
+                         {"value": "gdp", "multiply": "0.005", "divide": "52", "min": "0"})
+        from test_gw_top_emitters import _loc
+        for key in (self.COST, self.COST + "_desc", "renewable_investment_modifier_desc"):
+            self.assertTrue(_loc(key), key)
+
+    def test_cost_goes_on_and_off_with_the_policy(self):
+        effects = load(EFFECTS)
+        adopt = effects["gw_effect_renewable_investment"]["custom_tooltip"]
+        repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
+        self.assertEqual(adopt["gw_renewable_investment_cost_apply"], "yes")
+        self.assertEqual(repeal["remove_modifier"], self.COST)
+        self.assertEqual(effects["gw_renewable_investment_cost_apply"],
+                         {"add_modifier": {"name": self.COST, "multiplier": "gw_renewable_investment_cost_value"}})
+        treaty = load("common/treaty_articles/109_enforce_emissions_reduction.txt")["enforce_emissions_reduction"]
+        self.assertIn("gw_renewable_investment_cost_apply", str(treaty["on_entry_into_force"]))
+
+    def test_monthly_sweep_follows_the_policy_with_the_climate_rule_on_or_off(self):
+        effects = load(EFFECTS)
+        sync = effects["gw_renewable_investment_cost_sync"]
+        self.assertEqual(sync["if"]["limit"], {"gw_policy_renewable_investment_active": "yes"})
+        self.assertEqual(sync["if"]["gw_renewable_investment_cost_apply"], "yes")
+        self.assertEqual(sync["else_if"]["remove_modifier"], self.COST)
+        sweep = effects["gw_refresh_policy_costs_effect"]["every_country"]
+        self.assertEqual(sweep["gw_renewable_investment_cost_sync"], "yes")
+        self.assertEqual(sweep["limit"]["OR"], {"has_journal_entry": "je_global_warming", "has_modifier": self.COST})
+        pulse = load("common/on_actions/extra_on_actions.txt")["global_warming_events_on_action"]["effect"]
+        self.assertEqual(pulse["gw_refresh_policy_costs_effect"], "yes")
 
 
 if __name__ == "__main__":
