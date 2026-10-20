@@ -1658,7 +1658,7 @@ def constants(o):
         "child_work_age": P.CHILD_WORK_AGE, "working_age": P.WORKING_AGE,
         "after_pension_share": P.AFTER_PENSION_SHARE, "men_rate": P.MEN_RATE, "women_base": P.WOMEN_BASE,
         "women_lower": P.WOMEN_LOWER, "womens_work_full": P.WOMENS_WORK_FULL,
-        "workforce_scale": P.WORKFORCE_SCALE, "health_need_1836": P.HEALTH_NEED_1836,
+        "rate_max": P.RATE_MAX, "health_need_1836": P.HEALTH_NEED_1836,
         "need_newborn": M.band_value(P.HEALTH_NEED, 0), "pension_age_standard": P.PENSION_AGE["standard"],
     }
     for name, value in k.items():

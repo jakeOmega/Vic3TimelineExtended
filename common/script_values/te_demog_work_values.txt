@@ -255,8 +255,9 @@ te_demog_wk_share = {
 	multiply = var:te_dg_at_work
 }
 
-# The share of the working ages at work as shown: their own workers over their people, 0 to 1. The stored te_dg_at_work
-# also counts the workers past the end (te_dg_wk_past, of all people), so it passes 100% where they are many; the row
+# The share of the working ages at work as shown: their own workers over their people, 0 to 1 (at most
+# te_demog_k_rate_max: the rates are in the game's units). The stored te_dg_at_work also counts the workers past the end
+# (te_dg_wk_past, of all people), so it can pass the rates' ceiling where they are many; the row
 # adds them as a term of their own (te_demog_wk_past_pct), so working age x this + them = te_demog_wk_share.
 te_demog_wk_at_work_shown = {
 	value = var:te_dg_wa_share
@@ -312,19 +313,19 @@ te_demog_social_security_level = {
 	value = "institution_investment_level(institution_social_security)"
 }
 
-# State scope: men's and women's participation in the working ages with call 3's inputs, each 0 to 1 (te_demog_work_setup's
-# te_dg_wk_rm and te_dg_wk_rf, live).
+# State scope: men's and women's participation in the working ages with call 3's inputs, each 0 to te_demog_k_rate_max,
+# in the game's units (te_demog_work_setup's te_dg_wk_rm and te_dg_wk_rf, live).
 te_demog_wk_men_rate = {
 	value = te_demog_k_men_rate
 	add = modifier:state_male_labor_participation_add
 	add = modifier:state_labor_participation_add
-	max = 1
+	max = te_demog_k_rate_max
 	min = 0
 }
 te_demog_wk_women_rate = {
 	value = te_demog_women_rate
 	add = modifier:state_labor_participation_add
-	max = 1
+	max = te_demog_k_rate_max
 	min = 0
 }
 

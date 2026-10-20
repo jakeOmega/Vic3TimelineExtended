@@ -896,8 +896,9 @@ te_debug_demog_step3_selfchecks = {
 # held over the past year. Each check writes one TE_SELF_CHECK line a game, from a capital. They read only the engine's
 # own fields and the walk, so they run whatever te_debug_demog_selfchecks_run says, wherever the census's cohorts run.
 #   workforce_ratio_scale (the design §1.8's stop rule): before any W (Display only, or the capital's first step under
-#     Full), is the engine's figure the set ratio read as workforce over people (WORKFORCE_SCALE's assumption; about 0.25
-#     in 1836) or as workforce over dependents (about 0.20)? OK names the first, BROKEN the second.
+#     Full), is the engine's figure the set ratio read as workforce over people (about 0.25 in 1836: the reading the
+#     census's rates in the game's units and W rest on) or as workforce over dependents (about 0.20)? OK names the
+#     first, BROKEN the second.
 #   workforce_follows_target (§2.1's open fact, the pull's speed): once W has run five census years in a capital and
 #     the ratio its pops are set to now stands at least 0.03 from where the engine's figure stood at the landing, has
 #     the engine covered at least half of that move? (Not W's own move: W lands from the moved lines' pair, which the
@@ -919,10 +920,10 @@ te_debug_demog_wf_term_checks = {
 		set_global_variable = { name = te_demog_selfcheck_wf_scale_done value = yes }
 		if = {
 			limit = { te_debug_demog_wf_people_gap < te_debug_demog_wf_dependents_gap }
-			debug_log = "TE_SELF_CHECK OK workforce_ratio_scale wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] per_people=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] per_dependents=[THIS.ScriptValue('te_debug_demog_wf_per_dependents')|3] (near per_people: the engine's ratio is workforce over people, as WORKFORCE_SCALE assumes) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK workforce_ratio_scale wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] per_people=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] per_dependents=[THIS.ScriptValue('te_debug_demog_wf_per_dependents')|3] (near per_people: the engine's ratio is workforce over people, as the census's rates in the game's units assume) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN workforce_ratio_scale wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] per_people=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] per_dependents=[THIS.ScriptValue('te_debug_demog_wf_per_dependents')|3] (near per_dependents: the ratio is workforce over dependents; re-derive WORKFORCE_SCALE and W on that scale, the design §1.8) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN workforce_ratio_scale wf_engine=[THIS.ScriptValue('te_debug_demog_wf_engine_read')|3] per_people=[THIS.ScriptValue('te_debug_demog_wf_per_people')|3] per_dependents=[THIS.ScriptValue('te_debug_demog_wf_per_dependents')|3] (near per_dependents: the ratio is workforce over dependents; re-derive the census's rates and W on that scale, the design §1.8) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 	}

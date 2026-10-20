@@ -631,7 +631,7 @@ five years and can't return for ten.
 | Family Housing | Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing | Offsets half of city life's pull toward smaller families | 0.25% of GDP a year, by the share of people in cities |
 | Honours for Large Families | Traditional Family Structure, Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families want a few more children | 50 authority |
 | Restricted Contraception | Pro-Natalist Policy; Communal Child-Rearing under a Single-Party State or Autocracy with Outlawed Dissent | Families have less means to plan their children; more mothers die; the feminist movement gains support | 200 authority |
-| Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year, by the share of women at work |
+| Parental Leave | State-Sponsored Family Planning, Communal Child-Rearing | Families want more children, and more women work | 0.3% of GDP a year if every woman of working age worked, less as fewer do |
 | Free Contraception | State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Families have more means to plan their children | 0.1% of GDP a year |
 | Sex Education | State-Sponsored Family Planning, Population Control Measures; Communal Child-Rearing under a Council Republic or Anarchy | Knowing how to plan a family reaches people as if literacy were 20 points higher | The Ministry of Education costs 10% more bureaucracy |
 | Later, Longer, Fewer | State-Sponsored Family Planning, Population Control Measures | Families want fewer children | 150 authority |

@@ -657,30 +657,30 @@ te_debug_demog_wf_part_m_read = {
 	value = modifier:state_male_labor_participation_add
 }
 
-# What the laws alone put there: Restorative Justice 0.02, Rehabilitation 0.03 (test_demographics_registry pins the
+# What the laws alone put there: Restorative Justice 0.014, Rehabilitation 0.021 (test_demographics_registry pins the
 # sizes against the carriers). A state that doesn't sum an amendment's script-only type reads this.
 te_debug_demog_wf_amend_laws_only = {
 	value = 0
 	if = {
 		limit = { owner = { has_law = law_type:law_restorative_justice } }
-		add = 0.02
+		add = 0.014
 	}
 	if = {
 		limit = { owner = { has_law = law_type:law_rehabilitation_focused_criminal_justice } }
-		add = 0.03
+		add = 0.021
 	}
 }
 
-# What it should read: the laws' and the amendment's, Community Service +0.01, Mandatory Minimums -0.01.
+# What it should read: the laws' and the amendment's, Community Service +0.007, Mandatory Minimums -0.007.
 te_debug_demog_wf_amend_expected = {
 	value = te_debug_demog_wf_amend_laws_only
 	if = {
 		limit = { owner = { active_law:lawgroup_criminal_justice ?= { has_amendment = amendment_type:amendment_community_service } } }
-		add = 0.01
+		add = 0.007
 	}
 	if = {
 		limit = { owner = { active_law:lawgroup_criminal_justice ?= { has_amendment = amendment_type:amendment_mandatory_minimums } } }
-		add = -0.01
+		add = -0.007
 	}
 }
 
@@ -702,7 +702,7 @@ te_debug_demog_wf_part_read = {
 
 # What the trait should put there at its plain size (common/interest_group_traits/te_demog_workforce_injections.txt).
 te_debug_demog_wf_ig_expected = {
-	value = 0.02
+	value = 0.014
 }
 
 te_debug_demog_wf_ig_gap = {
@@ -848,6 +848,7 @@ te_debug_demog_mal_trait_read = { value = 0 if = { limit = { has_state_trait = s
 # (te_demog_wf_set: their own bases plus the state's working-adult read).
 # workforce_ratio_scale (the design §1.8's stop rule): the set ratio read as workforce over people, and the same read as
 # workforce over dependents (r / (1 + r): 0.25 of dependents is 0.20 of people), and how far the engine is from each.
+# The census's rates are in the game's units on the first reading (demographics_params.MEN_RATE).
 te_debug_demog_wf_per_people = {
 	value = te_demog_wf_set
 }
