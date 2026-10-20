@@ -13,8 +13,8 @@ gen_demographics.plan_outputs() writes these two files beside its own, so `gen_d
         te_demog_frontier_ratios        the US frontier's men per woman by age group, by state region
         te_demog_frontier_slot          one seed slot's men at its age group's ratio
     common/script_values/te_demog_resettle_generated_values.txt
-        te_demog_rs_labour_f, te_demog_rs_known_change, te_demog_rs_dbg_in/_out/_dead (the console's
-        te_debug_demog.120), te_demog_frontier_listed
+        te_demog_rs_labour_f, te_demog_rs_dbg_in/_out/_dead (the console's te_debug_demog.120),
+        te_demog_frontier_listed
 The hand-written logic is common/scripted_effects/te_demog_resettle_effects.txt; demographics_resettle.py is the twin.
 """
 
@@ -303,15 +303,6 @@ def render_rs_values():
     o("min = te_demog_k_labour_female_min")
     o("max = te_demog_k_labour_female_max")
     o("}")
-    o("}")
-    o("")
-    o("# State scope: the population change Internal Resettlement made since the state's last census step (arrivals less")
-    o("# departures and the transit dead; demographics_resettle.Counters.known_change). The re-seed test leaves it out:")
-    o("# a known move is migration, not a merge.")
-    o("te_demog_rs_known_change = {")
-    o("value = 0")
-    for n, op in (("te_dg_rs_in", "add"), ("te_dg_rs_out", "subtract"), ("te_dg_rs_dead", "subtract")):
-        o(f"if = {{ limit = {{ has_variable = {n} }} {op} = var:{n} }}")
     o("}")
     o("")
     o("# State scope, for the console's te_debug_demog.120: each total, 0 without it.")

@@ -19,16 +19,6 @@ te_demog_rs_labour_f = {
 	}
 }
 
-# State scope: the population change Internal Resettlement made since the state's last census step (arrivals less
-# departures and the transit dead; demographics_resettle.Counters.known_change). The re-seed test leaves it out:
-# a known move is migration, not a merge.
-te_demog_rs_known_change = {
-	value = 0
-	if = { limit = { has_variable = te_dg_rs_in } add = var:te_dg_rs_in }
-	if = { limit = { has_variable = te_dg_rs_out } subtract = var:te_dg_rs_out }
-	if = { limit = { has_variable = te_dg_rs_dead } subtract = var:te_dg_rs_dead }
-}
-
 # State scope, for the console's te_debug_demog.120: each total, 0 without it.
 te_demog_rs_dbg_in = {
 	value = 0

@@ -53,6 +53,8 @@
 #   te_dg_raw           the ring's total before te_dg_scale
 #   te_dg_people, te_dg_pop_last  the state's population at the census
 #   te_dg_year          the census's year (te_demog_has_census)
+#   te_dg_provinces     the state's provinces at its last census pulse (te_demog_state_census): a change
+#                       logs TE_INFO demog_province_change and moves no number
 #   te_dg_bf<b>, te_dg_bm<b>  people in band b (0-4 ... 80-84, 85+)
 #   te_dg_cf<c>, te_dg_cm<c>  people in migrant class c by age 0-148 (0-14,
 #                       15-17, 18-35, 36-59, 60-148): next step's flow shares
@@ -164,7 +166,7 @@
 #                       in the first step's after it, true from the second step on. A panel
 #                       draws an arrow only while it is 1. The prev copies are made only after
 #                       a step, so none is ever a seed's. A state re-seeded (a census gap, an
-#                       emptied ring, its people moving more than 25% in a year) starts again;
+#                       emptied ring, the console) starts again;
 #                       so does a country whose states are all fresh seeds, but not one that
 #                       takes a new state in.
 #   te_dg_prev_tfr, te_dg_prev_e0  a state's, copied by te_demog_prepare before it overwrites
@@ -421,44 +423,36 @@ te_demog_state_yearly = {
 te_demog_state_census = {
 	if = {
 		limit = { te_demog_cohorts_run = yes }
+		# the state's provinces now (te_demog_territory_values.txt), stored as te_dg_provinces after the census
+		set_local_variable = { name = te_dg_prov value = te_demog_state_provinces }
 		# No census yet: seed. te_demog_set_scale writes te_dg_year and te_dg_raw
 		# together, so the branches below never read a missing variable.
 		if = {
 			limit = { NOT = { te_demog_has_census = yes } }
 			te_demog_seed = yes
 		}
-		# A census more than a year old (under fast mode's clock, a step), a ring
-		# emptied while the state has people (no migrant settles an empty class),
-		# or people more than a quarter above or below the last census's
-		# (te_dg_pop_last, written with te_dg_year): seed again. A move that size is a state merged or split,
-		# not migration (one year's natural change is under 5%), and the step's
-		# residual would count it all as migrants. A seed made off this pulse
-		# (te_dg_reseed: game start, the console) is made again here, so the first
-		# step's population change and natural change cover the same year.
-		# The people's move is taken into locals first and the limits compare those
-		# with 0. Written as state_population > { value = var:te_dg_pop_last
-		# multiply = 1.25 }, the test held for every state with people, even 0.3%
-		# up, and its 0.75 twin for none, so every state seeded at every pulse and
-		# none ever stepped (observer tests of #830 and #833, 2026-10-09).
+		# A census more than a year old (under fast mode's clock, a step), or a ring
+		# emptied while the state has people (no migrant settles an empty class): seed
+		# again. A seed made off this pulse (te_dg_reseed: game start, the console) is
+		# made again here, so the first step's population change and natural change
+		# cover the same year. Nothing else seeds a state again, however far its people
+		# moved (owner, 2026-10-20): the step books any move as migration, up to
+		# MIGRANT_CAP_IN or _OUT of each class and sex by the profile and the rest at one
+		# flat rate over them all, whole families (te_demog_migrant_rates), and keeps the
+		# year's births and deaths. A same-owner merge's people arrive that way too, at
+		# the state's own structure; a split's new state has no census and seeds. Until
+		# then a move of more than a quarter seeded again, on the premise that it was a
+		# merge or a split; in the owner's 2057 game it fired only on migration. The
+		# limits compare a local and literals, never state_population with an inline
+		# block (#830, #833; scripting_best_practices.md).
 		else = {
 			set_local_variable = {
 				name = te_dg_gap
 				value = { value = te_demog_year subtract = var:te_dg_year }
 			}
-			# the people now less 1.25 and 0.75 times the last census's: above 0 and below 0
-			# are a move of more than a quarter up and down
-			set_local_variable = {
-				name = te_dg_over
-				value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 1.25 } }
-			}
-			set_local_variable = {
-				name = te_dg_under
-				value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }
-			}
-			# Internal Resettlement's moves since the last census are migration, not a merge: left out of the test
-			# (te_demog_rs_known_change, 0 without them; te_demog_resettle_effects.txt)
-			change_local_variable = { name = te_dg_over subtract = te_demog_rs_known_change }
-			change_local_variable = { name = te_dg_under subtract = te_demog_rs_known_change }
+			# a change in the state's provinces since the last census writes a TE_INFO line, and changes no number
+			# (te_debug_demog_effects.txt): does the engine merge or split states in a game?
+			te_debug_demog_province_change = yes
 			if = {
 				limit = {
 					OR = {
@@ -467,8 +461,6 @@ te_demog_state_census = {
 							var:te_dg_raw < 1
 							state_population > 0
 						}
-						local_var:te_dg_over > 0
-						local_var:te_dg_under < 0
 						has_variable = te_dg_reseed
 					}
 				}
@@ -480,6 +472,7 @@ te_demog_state_census = {
 				te_demog_step = yes
 			}
 		}
+		set_variable = { name = te_dg_provinces value = local_var:te_dg_prov }
 	}
 }
 
@@ -737,7 +730,7 @@ te_demog_seed = {
 	te_demog_cause_deaths_zero = yes
 	te_demog_um_clear_state = yes
 	# phase 2 step 4 (te_demog_rate_effects.txt): a seed starts the census's target over. The model's
-	# rates from before it are another state's (a merge, a split) or years stale (a census gap), and would
+	# rates from before it are years stale (a census gap) or an emptied ring's, and would
 	# scale the next step's births and deaths by their ratio to today's; without them that step takes no
 	# on-top scales. The seed's children per woman is the model's own (the projection reads it).
 	if = {

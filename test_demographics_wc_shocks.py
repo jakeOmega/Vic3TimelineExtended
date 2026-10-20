@@ -4,6 +4,7 @@ docs/superpowers/specs/2026-10-08-demographics-design.md §4.2, §7).
 The shocks and r > g run whatever the Demographics rule (Wealth Concentration is the Inheritance system's, #822); the
 Inequality effect runs under Full only. The script runs through test_demographics_registry's interpreter."""
 
+import math
 import re
 import sys
 import unittest
@@ -21,6 +22,7 @@ WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
 NATION_TAB = ROOT / "scripts" / "generators" / "gen_nation_tab.py"
 MISC_LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
 MARKET_TRIGGERS = ROOT / "common" / "scripted_triggers" / "market_triggers.txt"
+TERRITORY_VALUES = ROOT / "common" / "script_values" / "te_demog_territory_values.txt"
 TARGET_FIXTURES = {"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
                    "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0}
 
@@ -86,18 +88,20 @@ class TestOwnershipShock(unittest.TestCase):
         s = self.year(self.state(wc=4.0, ctry=60.0, priv=20.0, sown=0.1))
         self.assertEqual(s["te_dg_wc"], 0.0)
 
-    def test_no_shock_when_the_people_moved_a_quarter(self):
-        for pop, prev, shocked in ((1.26e6, 1e6, False), (0.74e6, 1e6, False), (1.25e6, 1e6, True),
-                                   (0.75e6, 1e6, True)):
+    def test_a_move_of_people_skips_nothing(self):
+        """Capital levels don't move with people, so a migration jump makes no share change spurious (owner,
+        2026-10-20): the census's old re-seed rule (a move of more than a quarter in the year) is gone here too."""
+        for pop in (5.74e6, 1.26e6, 0.74e6, 0.3e6, 1e6):
             with self.subTest(pop=pop):
-                s = self.year(self.state(ctry=40.0, priv=40.0, sown=0.2, pop=pop, prev=prev))
-                self.assertEqual(s["te_dg_wc"], 40.0 if shocked else 50.0)
-                self.assertAlmostEqual(s["te_dg_wc_sown"], 0.4, msg="the share is stored either way")
+                s = self.year(self.state(ctry=40.0, priv=40.0, sown=0.2, pop=pop, prev=1e6))
+                self.assertEqual(s["te_dg_wc"], 40.0)
+                self.assertAlmostEqual(s["te_dg_wc_sown"], 0.4)
+        self.assertNotIn("te_dg_walk_pop", _block(_text(WEALTH_EFFECTS), "te_demog_wc_ownership_shock"))
 
-    def test_no_shock_without_last_years_people(self):
+    def test_last_years_people_are_not_needed(self):
         s = self.state(ctry=40.0, priv=40.0, sown=0.2)
         del s["te_dg_walk_pop_prev"]
-        self.assertEqual(self.year(s)["te_dg_wc"], 50.0)
+        self.assertEqual(self.year(s)["te_dg_wc"], 40.0)
 
     def test_under_twenty_capital_levels_no_shock_and_no_share(self):
         s = self.year(self.state(priv=5.0, self_=4.0, ctry=10.0, sown=0.0))   # 19 levels, 53% state-owned
@@ -258,13 +262,20 @@ class TestLandReform(unittest.TestCase):
 
 # -- S1: r > g --------------------------------------------------------------------------------------------------------
 
+def _lp(r):
+    """A year's growth in log points: 100 x ln of its GDP ratio (te_demog_wc_log_growth)."""
+    return 100.0 * math.log(r)
+
+
 class TestReturnOnCapital(unittest.TestCase):
-    def year(self, country, gdp, running=True, truncate=False):
-        eng = _CountryEngine(fixtures={"te_mon_gdp_current": float(gdp)},
+    def year(self, country, gdp, running=True, truncate=False, states=5, engine=False):
+        """te_demog_wc_growth_update at the yearly pulse, the country holding `states` states (te_demog_wc_state_count).
+        engine=True returns the engine (its locals hold the year's sample, te_dg_wc_g_year, when one was taken)."""
+        eng = _CountryEngine(fixtures={"te_mon_gdp_current": float(gdp), "te_demog_wc_state_count": float(states)},
                              triggers={"te_banking_cycle_running": running}, truncate=truncate)
         eng.vars.update(country)
         eng.call("te_demog_wc_growth_update")
-        return eng.vars
+        return eng if engine else eng.vars
 
     def test_growth_averages_over_about_five_years(self):
         v = self.year({"te_policy_rate": 4.0}, 1000.0)
@@ -272,34 +283,153 @@ class TestReturnOnCapital(unittest.TestCase):
         self.assertNotIn("te_dg_wc_g", v, "no growth before a second year")
         self.assertNotIn("te_dg_wc_rg", v)
         v = self.year(v, 1030.0)
-        self.assertAlmostEqual(v["te_dg_wc_g"], 3.0)
-        self.assertAlmostEqual(v["te_dg_wc_rg"], 2.0, msg="2 x (4 - 3)")
+        g = _lp(1.03)
+        self.assertAlmostEqual(v["te_dg_wc_g"], g, places=3)
+        self.assertAlmostEqual(v["te_dg_wc_rg"], 2 * (4.0 - g), places=3)
         v = self.year(v, 1030.0 * 1.08)
-        self.assertAlmostEqual(v["te_dg_wc_g"], 3.0 + 0.2 * (8.0 - 3.0))
-        self.assertAlmostEqual(v["te_dg_wc_rg"], 0.0)
+        self.assertAlmostEqual(v["te_dg_wc_g"], g + 0.2 * (_lp(1.08) - g), places=3)
 
-    def test_a_years_growth_counts_ten_at_most(self):
-        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 1500.0)
-        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * 8.0, msg="a conquest's +50% counts +10")
-        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 500.0)
-        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 - 0.2 * 12.0)
+    def test_growth_is_in_log_points(self):
+        """The average takes 100 x ln of each year's GDP ratio (owner, 2026-10-20), as it came, however large: a real
+        boom past 10% counts in full, with no clamp."""
+        for ratio in (1.5, 0.5, 1.05, 0.95, 2.0):
+            with self.subTest(ratio=ratio):
+                v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0,
+                               "te_policy_rate": 4.0}, 1000.0 * ratio)
+                self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(ratio) - 2.0), places=3)
+        self.assertNotIn("min = -10", _block(_text(WEALTH_EFFECTS), "te_demog_wc_growth_update"))
+
+    def test_a_five_percent_year_reads_4_88(self):
+        for last in (1000.0, 7.0e11):
+            with self.subTest(last=last):
+                eng = self.year({"te_dg_wc_gdp": last, "te_dg_wc_states": 5.0}, last * 1.05, truncate=True,
+                                engine=True)
+                self.assertEqual(round(eng.locals["te_dg_wc_g_year"], 2), 4.88)
+                self.assertEqual(round(eng.vars["te_dg_wc_g"], 2), 4.88, "the first sample is the average")
+
+    def test_a_fall_and_its_recovery_cancel(self):
+        """-50% and then +100% back to the same GDP: the two samples net about 0 (in percent they were -50 and +100,
+        which averaged up)."""
+        eng = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0}, 500.0, truncate=True, engine=True)
+        fall = eng.locals["te_dg_wc_g_year"]
+        eng = self.year(eng.vars, 1000.0, truncate=True, engine=True)
+        rise = eng.locals["te_dg_wc_g_year"]
+        self.assertAlmostEqual(fall, -_lp(2.0), delta=0.001)
+        self.assertAlmostEqual(fall + rise, 0.0, delta=0.001)
+
+    def test_the_series_against_the_logarithm(self):
+        """te_demog_wc_log_growth (ln r = 2 atanh z to z^9, z = (r - 1) / (r + 1)) under the fixed point against
+        math.log, for r from 0.1 to 10 and GDP from 1,000 to the late game's 7 x 10^11: within 0.0002 log points from
+        0.5 to 2, 0.25% from 0.2 to 5, 2.5% from 0.1 to 10, and rising with r throughout."""
+        eng = _CountryEngine(fixtures={}, truncate=True)
+        for last in (1000.0, 1.234e6, 7.0e11):
+            prev = None
+            for i in range(0, 201):
+                r = 0.1 * 10 ** (i / 100)
+                now = round(last * r, 5)
+                eng.vars = eng.root_vars = {"te_dg_wc_gdp": last}
+                eng.locals = {"te_dg_wc_gdp_now": now}
+                eng.call("te_demog_wc_log_growth")
+                got, want = eng.locals["te_dg_wc_g_year"], _lp(now / last)
+                if 0.5 <= r <= 2.0:
+                    self.assertAlmostEqual(got, want, delta=0.0002, msg=(last, r))
+                elif 0.2 <= r <= 5.0:
+                    self.assertLessEqual(abs(got - want), 0.0025 * abs(want), (last, r))
+                else:
+                    self.assertLessEqual(abs(got - want), 0.025 * abs(want), (last, r))
+                if prev is not None:
+                    self.assertGreater(got, prev, (last, r))
+                prev = got
+
+    def test_a_change_of_territory_samples_unless_the_gdp_jumped(self):
+        """In a year the country gained or lost states the sample is taken unless the GDP moved more than a tenth
+        (the ratio under 0.9 or over 1.1, owner 2026-10-20): then the jump is the territory's, so the year takes no
+        sample and the GDP is re-based. A colony's year counts; a conquest's jump doesn't."""
+        for states in (6, 4):
+            for ratio, sampled in ((1.05, True), (0.95, True), (1.1, True), (0.9, True), (1.3, False),
+                                   (0.85, False), (1.11, False)):
+                with self.subTest(states=states, ratio=ratio):
+                    start = {"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0,
+                             "te_policy_rate": 4.0}
+                    v = self.year(dict(start), 1000.0 * ratio, states=states)
+                    want = 2.0 + 0.2 * (_lp(ratio) - 2.0) if sampled else 2.0
+                    self.assertAlmostEqual(v["te_dg_wc_g"], want, places=3)
+                    self.assertAlmostEqual(v["te_dg_wc_gdp"], 1000.0 * ratio, msg="re-based either way")
+                    self.assertEqual(v["te_dg_wc_states"], float(states))
+                    self.assertAlmostEqual(v["te_dg_wc_rg"], max(-5.0, min(5.0, 2 * (4.0 - v["te_dg_wc_g"]))), places=5)
+        # the year after a skipped jump: growth on the new territory
+        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0},
+                      1500.0, states=6)
+        v = self.year(v, 1500.0 * 1.07, states=6)
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(1.07) - 2.0), places=3)
+
+    def test_an_old_saves_first_year_reads_as_a_change(self):
+        """A save from before the state count holds a GDP and no count: that year is treated as a change of territory,
+        so it samples unless the GDP jumped, and stores both."""
+        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 1030.0)
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(1.03) - 2.0), places=3)
+        self.assertEqual((v["te_dg_wc_gdp"], v["te_dg_wc_states"]), (1030.0, 5.0))
+        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 1300.0)
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0)
+
+    def test_a_gdp_of_zero_or_below_takes_no_sample(self):
+        """A GDP of 0 or below, this year's or last, has no meaningful ratio (its sample would be about -357): no
+        sample, and the GDP is re-based, on the same territory too."""
+        for last, now in ((1000.0, 0.0), (1000.0, -5.0), (0.0, 1000.0), (-5.0, 1000.0)):
+            with self.subTest(last=last, now=now):
+                v = self.year({"te_dg_wc_gdp": last, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0,
+                               "te_policy_rate": 4.0}, now)
+                self.assertEqual(v["te_dg_wc_g"], 2.0)
+                self.assertEqual(v["te_dg_wc_gdp"], now)
+
+    def test_the_territory_guard_never_shares_a_not_with_its_read(self):
+        """scripting_best_practices.md: a multi-child NOT reads every child, so the stored count is read only inside
+        an if on has_variable (the local te_dg_wc_same)."""
+        body = re.sub(r"\s+", " ", re.sub(r"#[^\n]*", "", _block(_text(WEALTH_EFFECTS), "te_demog_wc_growth_update")))
+        self.assertNotIn("NOT = {", body)
+        self.assertIn("if = { limit = { has_variable = te_dg_wc_states } if = { limit = { var:te_dg_wc_states = "
+                      "local_var:te_dg_wc_states_now }", body)
+
+    def test_the_hover_shows_a_compound_annual_rate(self):
+        """te_demog_wc_g_shown = 100 x (e^(g/100) - 1) for the hovers, by series, under the fixed point: within 0.003
+        points of math.exp for |g| up to 100 and 0.1% up to 230. A halving's average reads -50 and a doubling's
+        +100; 0 with no average."""
+        eng = _CountryEngine(fixtures={}, truncate=True)
+        for i in range(-460, 461):
+            g = i / 2
+            eng.vars = eng.root_vars = {"te_dg_wc_g": g}
+            got, want = eng.value("te_demog_wc_g_shown"), 100.0 * (math.exp(g / 100) - 1)
+            if abs(g) <= 100:
+                self.assertAlmostEqual(got, want, delta=0.003, msg=g)
+            else:
+                self.assertLessEqual(abs(got - want), 0.001 * abs(want), g)
+        for g, shown in ((_lp(0.5), -50.0), (_lp(2.0), 100.0), (_lp(1.05), 5.0)):
+            eng.vars = eng.root_vars = {"te_dg_wc_g": g}
+            self.assertAlmostEqual(eng.value("te_demog_wc_g_shown"), shown, delta=0.001)
+        eng.vars = eng.root_vars = {}
+        self.assertEqual(eng.value("te_demog_wc_g_shown"), 0.0)
+
+    def test_the_state_count_iterates_the_countrys_states(self):
+        body = re.sub(r"\s+", " ", _block(_text(TERRITORY_VALUES), "te_demog_wc_state_count")).strip()
+        self.assertEqual(body, "value = 0 every_scope_state = { add = 1 }")
 
     def test_the_real_rate_and_the_cap(self):
         for rate, inflation, g, term in ((4.0, None, 1.0, 5.0), (4.0, 0.5, 1.0, 5.0), (5.0, 3.0, 1.0, 2.0),
                                          (10.0, 22.0, 3.0, -5.0), (3.0, 0.0, 4.0, -2.0)):
             with self.subTest(rate=rate, inflation=inflation):
-                country = {"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": g, "te_policy_rate": rate}
+                country = {"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0, "te_dg_wc_g": g, "te_policy_rate": rate}
                 if inflation is not None:
                     country["te_inflation"] = inflation
-                v = self.year(country, 1000.0 * (1 + g / 100))
+                # a year of g log points, so the average stays at g
+                v = self.year(country, 1000.0 * math.exp(g / 100))
                 self.assertAlmostEqual(v["te_dg_wc_r"], rate - (inflation or 0.0))
-                self.assertAlmostEqual(v["te_dg_wc_rg"], term)
+                self.assertAlmostEqual(v["te_dg_wc_rg"], term, places=3)
 
     def test_zero_until_the_cycle_runs(self):
-        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0, "te_dg_wc_rg": 3.0}, 1020.0,
-                      running=False)
+        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0,
+                       "te_dg_wc_rg": 3.0}, 1040.0, running=False)
         self.assertNotIn("te_dg_wc_rg", v)
-        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0, msg="the average is kept warm")
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(1.04) - 2.0), places=3, msg="the average is kept warm")
         self.assertAlmostEqual(v["te_dg_wc_r"], 4.0)
         eng = _CountryEngine(fixtures={})
         self.assertEqual(eng.value("te_demog_wc_rg_term"), 0.0)
@@ -307,10 +437,11 @@ class TestReturnOnCapital(unittest.TestCase):
         self.assertEqual(eng.value("te_demog_wc_rg_term"), -3.5)
 
     def test_no_policy_rate_no_term(self):
-        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0}, 1020.0)
+        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0}, 1040.0)
         self.assertNotIn("te_dg_wc_r", v)
         self.assertNotIn("te_dg_wc_rg", v, "a running cycle with no rate yet adds nothing")
-        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0, msg="the average still moves")
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(1.04) - 2.0), places=3,
+                               msg="the average still moves")
 
     def test_the_hover_gives_figures_only_while_the_term_is_in_force(self):
         eng = _CountryEngine(fixtures={})
@@ -323,17 +454,24 @@ class TestReturnOnCapital(unittest.TestCase):
             self.assertNotIn("te_dg_wc_r'", loc[key], "the figures sit in the named key")
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_rg_on')", loc[key])
             self.assertIn(f"'{figures}', 'te_demog_wc_t_rg_off'", loc[key])
-            self.assertIn(f"{scope}.MakeScope.Var('te_dg_wc_g')", loc[figures])
+            # the growth average as a compound annual rate (te_demog_wc_g_shown), not its log points
+            self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_g_shown')|1]%", loc[figures])
+            self.assertNotIn("te_dg_wc_g'", loc[figures])
         self.assertNotIn("[", loc["te_demog_wc_t_rg_off"].replace("[concept_banking_cycle]", ""))
 
     def test_a_won_revolution_continues_the_nations_growth(self):
         body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_civil_war_inherit")
-        for name in ("te_dg_wc_land", "te_dg_wc_gdp", "te_dg_wc_g"):
+        for name in ("te_dg_wc_land", "te_dg_wc_gdp", "te_dg_wc_g", "te_dg_wc_states"):
             self.assertIn(f"set_variable = {{ name = {name} value = scope:te_cw_loser.var:{name} }}", body)
+        # the GDP's state count goes with it: copied with the GDP, or removed when the loser held none (an old save)
+        gdp = body.index("name = te_dg_wc_gdp value")
+        self.assertLess(gdp, body.index("name = te_dg_wc_states value"))
+        self.assertLess(body.index("name = te_dg_wc_states value"), body.index("remove_variable = te_dg_wc_states"))
 
     def test_a_late_game_gdp_fits_the_fixed_point(self):
-        v = self.year({"te_dg_wc_gdp": 7.0e11, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 7.21e11, truncate=True)
-        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (3.0 - 2.0), places=4)
+        v = self.year({"te_dg_wc_gdp": 7.0e11, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0},
+                      7.21e11, truncate=True)
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(1.03) - 2.0), places=4)
 
     def test_the_target_takes_the_seventh_term(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5}
