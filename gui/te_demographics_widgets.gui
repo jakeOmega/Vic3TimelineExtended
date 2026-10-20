@@ -2536,6 +2536,21 @@ types te_demographics_widgets
 						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_econ_term')|+0]"
 					}
 				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_rg_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_rg"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term')|+0]"
+					}
+				}
 
 				te_demog_note = {
 					visible = "[GetScriptedGui('te_demog_wc_pinned_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -6446,8 +6461,8 @@ types te_demographics_widgets
 				### The state's target term by term, in the country tab's pillars
 				### (te_demog_term_row): land tenure, ownership and inequality are
 				### the state's own (te_demog_wc_target's state-scope terms), the law,
-				### tax and economic terms its owner's, so the six add up to the
-				### target above, less 50.
+				### tax, economic and r > g terms its owner's, so the seven add up to
+				### the target above, less 50.
 				te_demog_subheader = {
 					blockoverride "subheader_text" {
 						text = "te_demog_wc_terms_head"
@@ -6541,6 +6556,21 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "[State.GetOwner.MakeScope.ScriptValue('te_demog_wc_econ_term')|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_st_wc_t_rg_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_rg"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term')|+0]"
 					}
 				}
 				te_demog_note = {
