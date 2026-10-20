@@ -1,4 +1,4 @@
-"""Demographics: uploaded minds (docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md; the owner's calls
+"""Demographics: uploaded minds (docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md; the owner's calls
 of 2026-10-19).
 
 The model (scripts/analysis/demographics_uploads.py, its call sites in demographics_model.step) against the census script

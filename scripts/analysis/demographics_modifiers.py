@@ -1,6 +1,6 @@
 """The demographics modifier types' totals (mortality and fertility), resolved from the game files.
 
-Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md, Decision 2:
+Spec: docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md, Decision 2:
 the values sit beside the techs, laws and institutions that carry them, and the model takes
 modifier totals. load_carriers() reads every carrier from a narrow ModState (technologies,
 laws, institutions and amendments; vanilla from the committed vanilla_parsed/ snapshot, so no

@@ -1,6 +1,6 @@
 ﻿# demographics_modifier_types.txt
 #
-# Fertility: stage 2 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
+# Fertility: stage 2 of docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md.
 # Read only by the census (te_demog_means, with modifier: in state scope). The means to plan a
 # family = (0.4 + contraception, at most 1) x (0.3 + 0.7 x literacy) + the fertility-control
 # shift, at most 0.95. Contraception sits on the techs; the shift on laws, history (Family
@@ -26,7 +26,7 @@ state_natural_fertility_mult = {
 	script_only = yes
 }
 
-# Mortality: stage 1 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
+# Mortality: stage 1 of docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md.
 # Read only by the census (te_demog_mult_*, with modifier: in state scope); the engine never
 # applies them. Medicine is 1 - access x treatment; every other term is 1 + its type, floored.
 # Techs' and laws' modifier blocks reach every state the country owns; a law's institution_modifier
@@ -305,7 +305,7 @@ state_metro_share_add = {
 	script_only = yes
 }
 
-# Uploaded minds (2026-10-19; docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md §3, call 2): Mind
+# Uploaded minds (2026-10-19; docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md §3, call 2): Mind
 # Backups' restore, read only by the census (te_demog_cause_inputs_store), which adds each x the state's longevity care E
 # to accidents and violence and to work, so only those in care are restored:
 #   state_backup_external_mortality_mult  deaths from accidents and violence of those in care (Mind Backups -0.5)
