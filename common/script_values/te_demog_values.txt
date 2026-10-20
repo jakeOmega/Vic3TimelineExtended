@@ -652,7 +652,7 @@ te_demog_wc_g_shown = {
 		}
 		else = {
 			value = 10000
-			divide = te_demog_wc_g_exp100
+			divide = { value = te_demog_wc_g_exp100 min = 100 }
 			subtract = 100
 		}
 	}
