@@ -81,7 +81,9 @@ WEALTH_TFR_HIGH, WEALTH_TFR_HIGH_SOL = 3.5, 35   # what wealth alone does at SoL
 EDUCATION_WEIGHT = 0.4        # desired x (1 - 0.4 x literacy)
 SURVIVAL_WEIGHT = 0.4         # desired x (1 - 0.4 x (e0 - 30) / 50), clamped 0..1
 URBAN_WEIGHT = 0.2            # desired x (1 - 0.2 x urban share)
-MEANS_CAP = 0.95
+# The means' ceiling: 1, the natural bound of a share (owner, 2026-10-20; was 0.95, with no reason written): at 1
+# every couple reaches the family size it wants.
+MEANS_CAP = 1.0
 # Every other shift to the means comes through one modifier type, state_fertility_means_add
 # (common/modifier_type_definitions/demographics_modifier_types.txt), so history, events and
 # later measures can grant it to any country. Family Limitation (te_demog_family_limitation)
@@ -489,17 +491,21 @@ CH_BENCHMARK_MAX = 3.0   # cultural_hegemony_foreign_benchmark_max (cultural_heg
 # country_<cause>_treatment_add, at most its cap. The values of both live on their carriers in
 # the game files (demographics_modifiers.py); calibrated with `demographics_harness.py medicine`.
 BASE_ACCESS = 0.4
-# chronic 0.85: phase 2 step 4 (augmentation; the modifier-types design note). Headroom: it binds nowhere today, since
-# the most chronic treatment reachable is 0.80 (telemedicine 0.2, personalized_medicine 0.2, modern_pharmaceuticals 0.3,
-# Medical Augmentation Only 0.10), within the old 0.8 (final review m6, batch 3 m3).
+# chronic 0.99 (owner, 2026-10-20; was 0.85, phase 2 step 4's headroom): as infection's, the technologies alone reach
+# it in the last era. modern_pharmaceuticals 0.3 (era 8), telemedicine 0.2 (era 10) and personalized_medicine 0.2 (era 11)
+# make 0.70; genetic_engineering 0.05 (era 11), molecular_assemblers 0.12 and biological_immortality 0.12 (era 12) take
+# it to 0.99. The augmentation laws' flat lines (Medical Augmentation Only 0.10; Unrestricted, Regulated Market and
+# Mandatory 0.05) bring it there sooner and past it only cap. The health bill's HEALTH_TECHS still counts the first three.
 # infection 0.99 (#1045; was 0.95): the base game's carriers reach 0.94 by era 7 (medical_degrees 0.03, pharmaceuticals
 # 0.07, modern_nursing 0.08, antibiotics 0.4, modern_vaccines 0.25, antibiotic_mass_production 0.11), which matches the
 # rich world of eras 9-10; the late carriers take the rest (personalized_medicine 0.03 in era 11, advanced_nanofabrication
 # 0.02 in era 12), so infection's medicine halves by era 11 and falls to a sixth by era 12 (owner, 2026-10-18: match the
 # rich world in eras 9-10, well below it after).
-TREATMENT_CAP = {"infection": 0.99, "maternal": 0.99, "chronic": 0.85}
-# Every other law, technology or institution term is 1 + its types' sum, at least this.
-MORTALITY_MULT_FLOOR = 0.2
+TREATMENT_CAP = {"infection": 0.99, "maternal": 0.99, "chronic": 0.99}
+# Every other law, technology or institution term is 1 + its types' sum, at least this: 0, the natural bound, since a
+# negative rate would add people (owner, 2026-10-20; was 0.2, which held accidents and violence at 0.2 in every late
+# state whose lines sum to -0.9).
+MORTALITY_MULT_FLOOR = 0.0
 # Nutrition: SoL lowers infection from x1 at SoL 8 to x0.6 at SoL 35; chronic x1 to x0.85.
 SOL_INFECTION_AT_HIGH = 0.6
 # Poverty (phase 2 calibration, 2026-10-10): below SoL 9 infection rises, to x1.75 at SoL 5 and below.
@@ -532,8 +538,8 @@ INFECTION_ADULT_MEDICINE = 0.8
 # floor adds almost nothing, the 1837 median crowded person +4%, a state at ten times the floor +45%. The Ministry
 # of Urban Planning and Urban Engineering (sewerage, steel frames) lower it through the crowding itself.
 MIGRATION_CROWDING_PULL_PER_MULT = 0.1   # the modifier's pull penalty a unit of multiplier (a test pins it)
-CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls
-CROWDING_INFECTION_MAX = 0.5             # at most +50%, just past ten times the floor density (a guess)
+CROWDING_INFECTION_PER_PULL = 1.0        # infection rises by the share migration attraction falls, with no ceiling
+# (owner, 2026-10-20: the old +50% cap was a guess; Ile-de-France's pull 1.008 doubles its infection)
 
 # ---- Causes of Death (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md) ----
 # Each cause's multiplier is the product of these factors, in this order. The generator writes one script value per
@@ -1152,3 +1158,17 @@ MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.10}
 # Fertility: the census's urban term (URBAN_WEIGHT x urban x relief) is raised by MT_FERTILITY x the concentrated
 # side's strength, so at full strength by a tenth.
 MT_FERTILITY = 0.10
+
+# ---- The life table's open last interval (2026-10-20) ----
+# The life tables (demographics_model.life_table, te_demog_lt_finish) sum person-years over GROUPS, which end at 145-149;
+# the survivors at 150 live on at the death rate past 150, q a year (per 100,000): l150 x (1 - q/2) / q more person-years
+# (life_table's mid-year convention for an open interval), in e0 and in e65 (owner, 2026-10-20). q is the last group's
+# in the plain table and the untreated's; in the late game's treated and blended tables the rate the pool (150+) dies
+# at, its treated part at its biological rate age. LT_TAIL_RATE_MIN floors q: one per 100,000, the fixed point's
+# smallest step for a yearly probability, so the tail is at most about 100,000 years and stays inside the script's
+# range (survivors at a radix of 100,000 x 100,000 / q). The old-age threshold still reads the table to 150.
+LT_TAIL_RATE_MIN = 1.0
+# The panel shows life expectancy as it is up to this and "over" it past (owner, 2026-10-20); the stored figure stays
+# exact. The history chart's axis runs to the largest figure it holds, at least E0_AXIS_MIN, at most this.
+E0_SHOWN_MAX = 10000
+E0_AXIS_MIN = 100

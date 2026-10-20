@@ -456,7 +456,7 @@ Built 2026-10-12 from the late-game design (`docs/superpowers/archive/specs/2026
 2. **Who is reached.** Under Public Health Insurance with a large health system nearly everyone (`hs_cover=1.00`); under Private Health Insurance only the rich at first (`hs_cover=0.00`, `threshold=` falling about 2 a year from 80); under Human Purity nobody (`banned=1`, `elig=` drifting to 0 while bodies keep their age: `d5=` holds); under Mandatory Augmentation at least 0.9 (`floor=0.90`); under Unrestricted Augmentation `reach=20` and `threshold=` 20 lower.
 3. **Deaths fall under Full.** The capital's deaths per 1,000 (the overview) fall over the census years after v; option n's `md=` grows negative. Under immortality the census term goes down to the engine's own floor (2026-10-20: option n's read near −0.95, `clamped=0`), so deaths run at the census's rate, about 2.1 per 1,000, not the 2.4 a fifth of the bare curve gave while the mod held the read at −0.8. `clamped=1` now means mild hunger's deaths alone passed the census's rate, or a state line took the read past −1: the ring then follows the engine's (the on-top scales).
 4. **Rich pops die less (call 14).** A rich pop's mortality tooltip shows a larger "Census: Deaths by Wealth" line than a poor pop's in the same state (option u's `slope=` negative, `wealth_w=` the pair in force); the state's total deaths stay the census's.
-5. **The panel.** Life Expectancy reads "100+" past 100; Old Age From reads "None" under immortality, its hover with the untreated's figure; Living to 100 and Biological Age rows appear from the late game; the Longevity section (Longevity Care, Longevity Gap) shows, nothing cut short; children per woman's hover shows the mean age at childbirth and, under immortality, the births to women of 50 and over. The country tab and a state subtab.
+5. **The panel.** Life Expectancy reads "100+" past 100 (since 2026-10-20 the figure itself, "over 10,000" past 10,000: § The safeguards pass); Old Age From reads "None" under immortality, its hover with the untreated's figure; Living to 100 and Biological Age rows appear from the late game; the Longevity section (Longevity Care, Longevity Gap) shows, nothing cut short; children per woman's hover shows the mean age at childbirth and, under immortality, the births to women of 50 and over. The country tab and a state subtab.
 6. **The pyramid's toggle.** Shown only where biological bands exist; the biological pyramid moves the treated toward their biological ages (under immortality a tall column at 25-35); the bars stay inside the panel (the scale covers both). The toggle is a `default_button_action` button whose onclick is `GetVariableSystem.Toggle` (until now the mod toggled only section headers that way): it switches on one click and back on the next, on the tab and the subtab apart.
 7. **Pensions.** Under Old Age Pension, Linked to Common Longevity heads five years below the untreated's threshold, Linked to Average below the state's (option r's `link_target=`); an AI country with a gap over 20 points picks Linked to Common. The health bill's longevity term shows in option u's `health_lx=`.
 8. **Outside Full nothing changes.** Under Display only the late figures show but births and deaths follow the base game: Biological Immortality's, Mental Health Awareness's and Mind Backups' mortality lines show flat under Laws and Institutions as before.
@@ -825,8 +825,9 @@ banking triggers and the radicals type Concentrated Property carries, so no self
 2. **An ownership shock (any rule).** In a state of 20 capital levels or more, nationalise buildings holding a tenth or
    more of its capital (the building panel): at the state's next yearly pulse its score falls by half the points moved
    (a fifth of its capital nationalised: −10). Privatising them back raises it the same way. A state that changed hands
-   in the year, or whose people moved more than a quarter, takes none that year. The rule measures the state-owned
-   share, so a year of private building that dilutes a large state-owned share raises the score the same way.
+   in the year takes none that year; one whose people moved a lot takes it all the same (since 2026-10-20). The rule
+   measures the state-owned share, so a year of private building that dilutes a large state-owned share raises the
+   score the same way.
 3. **Land reform (any rule).** Enact Peasant Proprietorship (or Homesteading, or Collectivized Agriculture) from Serfdom
    or Tenant Farmers or a variant: within a month every state's score falls by 10 × its share of Peasants and Farmers
    (the state subtab's Land Tenure hover gives the share), and the national figure follows. From Commercialized
@@ -893,7 +894,8 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
    winter's (`resettlement.3`, second option) and the settlements' famine (`resettlement.6`, second option).
 6. **Net Migration.** A destination's Net Migration row counts its settlers (about the building's *Settlers arrived*
    over the year plus the engine's own migration). A frontier that grows by more than a quarter in a year by
-   resettlement keeps its census (no re-seed: its pyramid does not jump back to the equilibrium shape).
+   resettlement keeps its census (no re-seed: its pyramid does not jump back to the equilibrium shape; since
+   2026-10-20 no move of any size re-seeds a state).
 7. **Census off.** With the rule Disabled, `event te_debug_demog.120` logs only its closing line (no state holds a
    counter or a frontier mark).
 8. **`debug.log`:** `event te_debug_demog.120` lists the player's states' counters since their last step
@@ -1018,6 +1020,85 @@ the engine reads no new fact.
    the Pro-Capital Ministry of Labour "Census: People at Work +0.7%" a level; option p's self-checks
    `workforce_amendment_type` and `workforce_ig_trait_type` read `expected` at the new sizes (the laws' 0.014 or
    0.021, an amendment ±0.007) and 0.014, and still say OK.
+
+## No re-seed on a big move; the province line; Wealth Concentration's growth sample (2026-10-20)
+
+The owner's call of 2026-10-20: a census no longer seeds a state again when its people move more than a quarter in a
+year (in the 2057 EU game that rule fired 8 times in 4 months, every time on migration, and threw away each state's
+year). Any move now goes through the step's booking: up to 5% in or 3% out of each class and sex by the profile, the
+rest flat over everyone as whole families. Wealth Concentration's ownership shock drops the same rule, and r > g's
+growth average takes each year's growth in log points (a fall and its recovery cancel; the hovers show it as a
+compound annual rate) and replaces its ±10 clamp on each year with a skip: a year in which the country gained or lost
+states and its GDP moved more than a tenth, or a GDP of 0 or below, takes no growth sample and re-bases the GDP. Both
+Wealth Concentration changes run under every Demographics rule. The engine has no merge or split on-action, so a
+`TE_INFO` line reports when a state's provinces change.
+`test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
+`test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
+province count is the base game's own form (`occupation_values.txt` counts a state's provinces with `every_province` in
+a script value), Grand Monuments' `gm_occupation_read` is a self-check of the same read (not yet read OK), and the
+line gives no verdict.
+
+1. **The province line (Full or Display only; read `debug.log`).** Watch for `TE_INFO demog_province_change` after a
+   war that splits or rejoins a state region: a peace that hands over part of a region, a revolt that takes part of a
+   state, and the end of that revolt. Each line gives `provinces=old->new`, `people=` (the last census's -> now), the
+   owner's tag and the state's name. A merge reads as provinces and people rising together in the surviving state. A
+   split reads as provinces and people falling together in the state that keeps the old record, since the piece's
+   pops leave with it; the piece is a new state with no census and seeds. So a fall in both is a split to report, not
+   emigration. One province more in an unincorporated state (a colony growing) prints nothing; any other change
+   prints, so a colony that gains two provinces between counts shows a line with a small change in people: leave
+   those out. If merges happen, the census books the joined state's people as immigrants at the state's own structure
+   (flat beyond the caps) and keeps the year's births and deaths: report whether its pyramid looks plausible the year
+   after. If no line other than a colony's ever appears, the engine doesn't merge or split states in play. If none
+   appears even after a revolt that took part of a state, the count may read 0:
+   `scripts/analysis/save_country_probe.py --states` on a save shows each state's `te_dg_provinces`, which should be
+   its province count, not 0.
+2. **A big move keeps the year (Full or Display only).** A state whose people grow or fall by more than a quarter in a
+   year (the EU's Kars, Ecuador, Canary Islands in the 2057 game; a refugee wave) still shows births and deaths per
+   1,000 and its trend arrows the census after, and its Net Migration row is the move; its pyramid keeps its shape,
+   with the inflow spread over every age beyond the caps, rather than jumping to the equilibrium shape.
+3. **Return on Capital after a conquest (any rule, the banking rule on).** At the country's first yearly pulse after it
+   gains or loses a state and its GDP jumps more than 10% (or a GDP was 0), the growth figure in the Return on Capital
+   hover stays where it was; at the next, it moves by a fifth of that year's growth on the new territory. A year that
+   only founds a colony state moves it as any year does. The hover's figure is a compound annual rate. From an average
+   of 0, a same-territory +20% year shows about +3.7%, and a crash and its recovery to the same GDP nearly cancel: a
+   −50% year then a +100% year show about +2.8% (+12% before the log average).
+
+## The safeguards pass: medicine, floors and the life table's tail (2026-10-20)
+
+The owner's calls of 2026-10-20 (`docs/systems/mod_systems.md` § The safeguards pass): chronic treatment to 0.99 with
+Genetic Engineering (0.05), Molecular Assemblers and Biological Immortality (0.12 each); no floor on a cause's laws factor
+but 0 (was 0.2); no ceiling on crowding's infection term (was +50%); the means' cap 1 (was 0.95); the life tables' open
+last interval, so late e0 runs into the thousands; the display capped at "over 10,000". `test_demographics_life_tail`,
+`test_demographics_model`, `test_demographics_late` and the registry's twins hold script and model together. No new
+engine fact (script values and locals as the tables already use), so no self-check. What only the game can show:
+
+1. **Late e0 in the thousands (Full or Display only, a late save).** A state with Biological Immortality and its people
+   in care reads a life expectancy in the hundreds or thousands (the harness's rich state about 1,700; its women's and
+   men's figures and e65 alike), where it read 100+ before. A state before the late game reads what it read before, to
+   the decimal (its hover's last census figure is the check, after one count). The country's figure is the states'
+   average weighted by people, so one late state can lift it far: that is the figure, not a fault.
+2. **The display cap.** Where any figure passes 10,000 (`TE_DEMOG_CENSUS` lines' `e0=`; the pool must die at under 10
+   per 100,000 a year), the reading says "over 10,000", the states list "10K+", the hovers "over 10,000" for that
+   figure alone. Below 10,000 every one shows the number.
+3. **The states list's column.** The 56-pixel Life column shows a tenth of a year below 999.95, whole years from there
+   (1,709), and 10K+ from 9,999.5, so no figure rounds up past its branch: check a four-digit figure isn't cut
+   (`test_demographics_layout` holds the edges, 999.95 and 9,999.5, to the width).
+4. **The history chart (my call: the axis follows the data).** Until a figure past 100 is recorded the Life Expectancy
+   chart's axis is 0-100, as before; once one is, the axis runs to the largest bar (at most 10,000), so the years before
+   the late game shrink to slivers. The owner judges whether that reads well, against the alternative of a fixed 0-100
+   axis whose late bars are all full. A bar over 10,000 stops at the top and its hover says "Its bar stops at 10,000". On an
+   old save the axis reads 100 until the next census sets it (`te_demog_hist_e0_axis_shown` falls back while
+   `te_dg_h_e0_max` is missing), and `debug.log` has no variable-not-found line for it with the chart open.
+5. **Chronic deaths fall at era 12 (Full or Display only).** The technologies' tooltips show Treatment of Chronic Disease
+   +5% on Genetic Engineering and +12% on Molecular Assemblers and on Biological Immortality. Each lifts the target at
+   once; the state's chronic factor follows as medicine spreads. With all six a rich state's Chronic Illness hover reads
+   medicine ×(1 − access × 0.99), and the pie's chronic slice shrinks. A release build (the census inputs commented out)
+   shows none of the three lines.
+6. **Accidents and violence below 0.2 (Full or Display only).** In a late state with Mind Backups, Mental Health
+   Awareness and the police laws, the Accidents and Violence hover's laws factor reads about ×0.10 where it read ×0.20,
+   and its deaths fall a few percent; under Full the deaths floor (`RATE_TOTAL_MIN`) may bind a little more.
+7. **Crowding and the means.** Île-de-France's (or the most crowded state's) Infection and Hunger hover shows crowding
+   ×2.0 where it read ×1.5. A rich, literate state with the Pill and Family Limitation reads Means up to 100%.
 
 ## The census's rates down to the engine's floor (2026-10-20)
 

@@ -323,6 +323,8 @@ means" view of the fertility transition.
   spec's stage 2 (0.4 / 0.75 / 0.80 / 0.85 in research order).
   - **Access** multiplies the means: 0.3 + 0.7 × literacy.
   - **Laws and measures** shift it (§8.1) through `state_fertility_means_add`, after literacy. The cap is 0.95.
+    *(2026-10-20, owner: the cap is 1, the natural bound of a share; 0.95 had no reason written and held 221
+    states of the 2057 EU save. `docs/systems/mod_systems.md` § The safeguards pass.)*
 - **The fertility factor** = 1 − means × (1 − desired). Children per woman = wealth × natural × the fertility factor.
 
 **Age structure.** Births come from the cohorts of women aged 15–49 (§2.1), so the share of women of childbearing age
@@ -509,8 +511,8 @@ takes them out of the residual, which books only the rest:
   class and sex a step) and its balance ramps, which would keep a programme's states near 90–111 men per 100 women as
   the 2026-10-12 booking keeps every other state.
 - **The residual** is the change less natural change, war dead, kills and the known moves. The panel's net migration
-  counts the known moves; the re-seed test (a move over 25% in a year) leaves them out, since a frontier filling by
-  resettlement is migration, not a merge.
+  counts the known moves. A frontier filling by resettlement keeps its census however fast it grows: since 2026-10-20
+  (owner) no move re-seeds a state, so the old re-seed test's exclusion of the known moves went with it.
 - **Deaths in transit** (Penal Transportation, Special Settlements, Rustication) are known kills at the source
   (`te_demog_note_kills`, the nuclear strikes' path; they leaked into the residual before), and they leave by the
   programme's profile, not from every age.
@@ -709,16 +711,21 @@ every Demographics rule setting, like the rest of Wealth Concentration:
   up as the share falls (a privatisation), down as it rises (a nationalisation). It measures the share, so one side's
   capital growing faster than the other's moves it too (`te_demog_wc_ownership_shock`, on the state's pulse, keeping last
   year's share in `te_dg_wc_sown`). No shock in the first year a share is stored, after a change of owner (which clears
-  it), when the state's people moved more than 25% in the year, or under 20 capital levels (the build's guard: in 1849
-  most states held under 10, where one state-owned level is 10 points or more).
+  it), or under 20 capital levels (the build's guard, kept on the owner's call of 2026-10-20: in 1849 most states held
+  under 10, where one state-owned level is 10 points or more). A move of the state's people skips nothing (owner,
+  2026-10-20): capital levels don't move with people, so a migration jump makes no share change spurious.
 - **Land reform:** enacting Peasant Proprietorship or Collectivized Agriculture from Serfdom or Tenant Farmers (each
   with its variants) jumps each state's score by −10 × its agrarian share. Detected on the monthly pulse against last
   month's law (`te_demog_wc_land_reform_check`), so no vanilla law needs an `on_activate` and every way a law changes
   counts. A won revolution counts too: the winner continues the nation, so it takes the old government's law role
   (and r > g's GDP baseline and growth average) in `inh_repair_after_civil_war`, and the next month compares that with
   the rebels' law.
-- **r > g:** the target's seventh term (the table above), stored at the yearly country pulse (`te_demog_wc_growth_update`): growth
-  averaged at a weight of 0.2 a year, each year's clamped to ±10 so a conquest moves it by 2 at most.
+- **r > g:** the target's seventh term (the table above), stored at the yearly country pulse (`te_demog_wc_growth_update`):
+  growth averaged at a weight of 0.2 a year, each year's in log points (100 × ln of the GDP ratio, so a fall and its recovery
+  cancel) and as it came. A year in which the country gained or lost states and its GDP moved more than a tenth takes
+  no sample and re-bases the stored GDP, so a conquest's jump is never read as growth and the next year's growth is
+  measured on the new territory (owner, 2026-10-20, in place of a ±10 clamp on each year); a GDP of 0 or below takes
+  none either. The hovers show the average as a compound annual rate, 100 × (e^(g/100) − 1).
 
 **What it moves.** None of these effects repeats what pop wealth already does:
 
@@ -997,7 +1004,8 @@ cancels them, so nothing is counted twice; they stay on their carriers, so nothi
 - the Ministry of Consumer Protection's flat −1% mortality (now external causes);
 - the mod's medical techs' flat mortality and birth lines (vaccines, antibiotics: now the cause each one acts on);
 - the augmentation laws' mortality, carried by flat chronic-treatment lines beside it (Medical Only +0.10, the other
-  three +0.05; chronic treatment's cap 0.85), which reach only as far as health-care access does.
+  three +0.05; chronic treatment's cap 0.85, 0.99 since 2026-10-20 with three era 11-12 technologies reaching it),
+  which reach only as far as health-care access does.
 
 Still to come:
 - the other family-policy laws' birth lines (Pro-Natalist Subsidies, Population Control Measures, Communal

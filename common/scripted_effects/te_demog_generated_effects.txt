@@ -3995,7 +3995,7 @@ te_demog_life_table = {
 	set_local_variable = { name = te_dg_oal145m value = local_var:te_dg_lm }
 	set_local_variable = { name = te_dg_oapy145m value = local_var:te_dg_pym }
 	te_demog_lt_group = { N = 5 FERTILE = no }
-	te_demog_lt_finish = yes
+	te_demog_lt_finish = { QF = local_var:te_dg_qf QM = local_var:te_dg_qm }
 	te_demog_old_age_pass = yes
 }
 

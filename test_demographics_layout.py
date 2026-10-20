@@ -12,6 +12,7 @@ import json
 import os
 import re
 import unittest
+from decimal import ROUND_HALF_UP, Decimal
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui")
@@ -308,6 +309,11 @@ FORMAT_WIDEST = {"0": "100", "+0": "+100", "1": "99.9", "+1": "+99.9", "2": "9.9
 # the share aged 65 and over only in a state with nobody younger.
 DATA_WIDEST = {"te_dg_net_migration": "-999.9K", "te_dg_census_year": "2000", "te_dg_year": "2000",
                "te_demog_imr_share": "99%", "te_dg_old_share": "99%"}
+# Life expectancy is shown as it is up to 10,000 years, "over 10,000" past it (2026-10-20): its figures print up to
+# 9,999.9. The states list's narrow column shows it whole from 1,000 (te_demog_states_e0_cell's switch), so its two
+# branches print at most these.
+DATA_WIDEST.update(dict.fromkeys(("te_dg_e0", "te_dg_e0f", "te_dg_e0m", "te_dg_e65", "te_dg_prev_e0"), "9,999.9"))
+KEY_WIDEST = {"te_demog_states_e0_small": "999.9", "te_demog_states_e0_whole": "9,999"}
 
 
 class WidthTest(unittest.TestCase):
@@ -323,6 +329,8 @@ class WidthTest(unittest.TestCase):
         """The widest text a loc key can show: splices, concepts and SelectLocalization resolved, formatting stripped,
         each figure at its widest."""
         self.assertLess(depth, 8, key)
+        if key in KEY_WIDEST:
+            return KEY_WIDEST[key]
         value = self.loc.get(key)
         self.assertIsNotNone(value, f"no loc for {key}")
         value = re.sub(r"\$(\w+)\$", lambda m: self.shown(m.group(1), depth + 1), value)
@@ -433,6 +441,31 @@ class WidthTest(unittest.TestCase):
             with self.subTest(cell=text):
                 self.fits(self.markup(text), self.cell(box), text)
         self.assertEqual(4 + sum(self.cell(b)[0] for b in row) + 4 * (len(row) - 1), 478, "inside the 480 row")
+
+    def test_the_life_column_at_its_edges(self):
+        """Life expectancy in the states list (2026-10-20): a tenth of a year below the cell's first threshold, whole years
+        up to the GUI's 10K+ threshold. At each edge, the engine's figure (five decimals) rounded half up by its format
+        still fits the column, so no branch prints 1,000.0 or 10,000."""
+        row = _type_body(self.widgets, "te_demog_state_row")
+        e0 = r"State\.MakeScope\.Var\('te_dg_e0'\)\.GetValue"
+        over = re.search(rf"GreaterThanOrEqualTo_CFixedPoint\( {e0}, '\(CFixedPoint\)([\d.]+)' \), "
+                         r"'te_demog_states_e0_over', 'te_demog_states_e0_cell'", row)
+        small = re.search(rf"LessThan_CFixedPoint\( {e0}, '\(CFixedPoint\)([\d.]+)' \), 'te_demog_states_e0_small', "
+                          r"'te_demog_states_e0_whole'", self.loc["te_demog_states_e0_cell"])
+        self.assertTrue(over and small)
+        over, small = Decimal(over.group(1)), Decimal(small.group(1))
+        self.assertLessEqual(over, 10000, "10K+ never stands for a figure the panel shows below 10,000 elsewhere")
+        box = next(b for _, b in _textboxes(row) if "te_demog_states_e0_over" in b)
+        step = Decimal("0.00001")
+        for v in (Decimal(0), small - step, small, Decimal(1000), over - step, over, Decimal(10000), Decimal(100000)):
+            if v >= over:
+                text = self.shown("te_demog_states_e0_over")
+            elif v < small:
+                text = f"{v.quantize(Decimal('0.1'), ROUND_HALF_UP):,}"
+            else:
+                text = f"{v.quantize(Decimal('1'), ROUND_HALF_UP):,}"
+            with self.subTest(e0=str(v)):
+                self.fits(text, self.cell(box), f"life expectancy {v}")
 
     def test_the_show_all_button(self):
         body = _type_body(self.widgets, "te_demog_sec_states")

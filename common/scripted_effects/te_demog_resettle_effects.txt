@@ -168,7 +168,7 @@ te_demog_rs_selfcheck = {
 # History marks the states the US holds in 1836 in the frontier's state regions (te_dg_frontier,
 # common/history/extra_history.txt; demographics_params.FRONTIER_1836). Their 1836 seeds give each age group from 15
 # its 1840 census men per woman (te_demog_frontier_slot); the game start's seed and the first yearly pulse's (which
-# re-seeds it, te_dg_reseed) both do, and the second takes the mark off, so a later re-seed (a census gap, a merge)
+# re-seeds it, te_dg_reseed) both do, and the second takes the mark off, so a later re-seed (a census gap, an emptied ring)
 # starts at the state's own equilibrium. Census off: te_demog_country_game_start takes the mark off at once.
 
 # THIS = a state at the start of te_demog_seed, before it removes te_dg_reseed. Sets local te_dg_fr_on and the ratios.
