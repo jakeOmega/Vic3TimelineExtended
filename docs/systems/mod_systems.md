@@ -1816,7 +1816,8 @@ Each acts only through the census, so nothing changes outside Full; under Displa
   e0 runs to about 1,700 years on the harness's state.
 - **The display caps at 10,000** (owner: e0 shown raw). The panel, its hovers, the states list, the state row's hover
   and the history chart's hover show e0, its women's and men's figures, e65 and last census's e0 as they are up to
-  10,000 and "over 10,000" past it (the list's narrow column "10,000+"): a `GreaterThan_CFixedPoint` switch at each,
+  10,000 and "over 10,000" past it (the list's 56-pixel column whole years from 1,000 and "10K+"; the overview's reading
+  drops "years" to fit): a `GreaterThan_CFixedPoint` switch at each,
   between a key holding the figure and the "over" text. The stored figures and `debug_log` lines stay exact. Past 100 the
   hover's note says what so long a figure means. The Life Expectancy chart's axis runs to the largest figure its samples
   hold, at least 100 and at most 10,000 (`te_dg_h_e0_max`, `te_demog_history_e0_axis` in the history store), and a bar

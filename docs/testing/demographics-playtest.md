@@ -1003,10 +1003,10 @@ engine fact (script values and locals as the tables already use), so no self-che
    the decimal (its hover's last census figure is the check, after one count). The country's figure is the states'
    average weighted by people, so one late state can lift it far: that is the figure, not a fault.
 2. **The display cap.** Where any figure passes 10,000 (`TE_DEMOG_CENSUS` lines' `e0=`; the pool must die at under 10
-   per 100,000 a year), the reading says "over 10,000 years", the states list "10,000+", the hovers "over 10,000" for
-   that figure alone. Below 10,000 every one shows the number.
-3. **The states list's column.** A four-digit figure (1,708.9) fits the 56-pixel Life column; if it is cut, show whole
-   years from 1,000 (a third branch in the column's switch).
+   per 100,000 a year), the reading says "over 10,000", the states list "10K+", the hovers "over 10,000" for that
+   figure alone. Below 10,000 every one shows the number.
+3. **The states list's column.** The 56-pixel Life column shows a tenth of a year below 1,000 and whole years from
+   1,000 (1,709): check a four-digit figure isn't cut (`test_demographics_layout` holds 9,999 and 10K+ to the width).
 4. **The history chart (my call: the axis follows the data).** Until a figure past 100 is recorded the Life Expectancy
    chart's axis is 0-100, as before; once one is, the axis runs to the largest bar (at most 10,000), so the years before
    the late game shrink to slivers. The owner judges whether that reads well, against the alternative of a fixed 0-100

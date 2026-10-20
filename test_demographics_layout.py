@@ -308,6 +308,11 @@ FORMAT_WIDEST = {"0": "100", "+0": "+100", "1": "99.9", "+1": "+99.9", "2": "9.9
 # the share aged 65 and over only in a state with nobody younger.
 DATA_WIDEST = {"te_dg_net_migration": "-999.9K", "te_dg_census_year": "2000", "te_dg_year": "2000",
                "te_demog_imr_share": "99%", "te_dg_old_share": "99%"}
+# Life expectancy is shown as it is up to 10,000 years, "over 10,000" past it (2026-10-20): its figures print up to
+# 9,999.9. The states list's narrow column shows it whole from 1,000 (te_demog_states_e0_cell's switch), so its two
+# branches print at most these.
+DATA_WIDEST.update(dict.fromkeys(("te_dg_e0", "te_dg_e0f", "te_dg_e0m", "te_dg_e65", "te_dg_prev_e0"), "9,999.9"))
+KEY_WIDEST = {"te_demog_states_e0_small": "999.9", "te_demog_states_e0_whole": "9,999"}
 
 
 class WidthTest(unittest.TestCase):
@@ -323,6 +328,8 @@ class WidthTest(unittest.TestCase):
         """The widest text a loc key can show: splices, concepts and SelectLocalization resolved, formatting stripped,
         each figure at its widest."""
         self.assertLess(depth, 8, key)
+        if key in KEY_WIDEST:
+            return KEY_WIDEST[key]
         value = self.loc.get(key)
         self.assertIsNotNone(value, f"no loc for {key}")
         value = re.sub(r"\$(\w+)\$", lambda m: self.shown(m.group(1), depth + 1), value)

@@ -146,27 +146,35 @@ class TestE0DisplayCap(unittest.TestCase):
                     out[key] = m.group(1)
         return out
 
+    def guarded(self, key, read, corpus, depth=0):
+        """Every use of `key` sits behind the cap's switch on `read`, or inside a key every use of which does."""
+        self.assertLess(depth, 4, key)
+        uses = [(k, t) for k, t in corpus.items() if f"'{key}'" in t]
+        self.assertTrue(uses, f"{key} is never used")
+        for k, t in uses:
+            for m in re.finditer(re.escape(f"'{key}'"), t):
+                head = t[:m.start()]
+                switch = head[head.rindex("SelectLocalization("):]
+                if f"GreaterThan_CFixedPoint( {read}, {OVER} )" not in switch:
+                    self.assertNotEqual(k, "<gui>", f"{key} in the GUI with no cap")
+                    self.guarded(k, read, corpus, depth + 1)
+
     def test_every_shown_figure_is_switched(self):
         keys = self.number_keys()
         self.assertTrue(keys)
         corpus = {**self.loc, "<gui>": self.gui}
         for key, read in keys.items():
-            # the key holds only the figure (it is the switch's branch), and every use is behind the switch on that read
-            uses = [(k, t) for k, t in corpus.items() if f"'{key}'" in t]
-            self.assertTrue(uses, f"{key} is never used")
-            for k, t in uses:
-                for m in re.finditer(re.escape(f"'{key}'"), t):
-                    head = t[:m.start()]
-                    switch = head[head.rindex("SelectLocalization("):]
-                    self.assertIn(f"GreaterThan_CFixedPoint( {read}, {OVER} )", switch, (k, key))
+            # every use of a key that prints the figure is behind the switch on that read
+            self.guarded(key, read, corpus)
         # no figure formatted straight in the GUI
         for name in SHOWN:
             self.assertNotRegex(self.gui, rf"Var\('{name}'\)\.GetValue\|", name)
         self.assertNotIn("GetVariableValue('te_dg_h_e0')|", self.gui)
 
     def test_the_over_texts_say_the_cap(self):
-        for key in ("te_demog_e0_over", "te_demog_ov_e0_over", "te_demog_states_e0_over", "te_demog_hist_e0_over"):
-            self.assertIn(f"{P.E0_SHOWN_MAX:,}", self.loc[key], key)
+        for key in ("te_demog_e0_over", "te_demog_ov_e0_over", "te_demog_hist_e0_over"):
+            self.assertIn(f"over {P.E0_SHOWN_MAX:,}", self.loc[key], key)
+        self.assertEqual(self.loc["te_demog_states_e0_over"], f"{P.E0_SHOWN_MAX // 1000}K+")   # the list's 56 pixels
         self.assertNotIn("te_demog_ov_e0_100", self.loc)
         self.assertNotIn("stops at 150", self.loc["te_demog_lx_e0_100_note"])
 

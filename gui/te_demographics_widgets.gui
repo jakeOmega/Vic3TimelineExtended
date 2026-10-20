@@ -613,7 +613,7 @@ types te_demographics_widgets
 				align = right|nobaseline
 				using = te_demog_fontsize_row
 				default_format = "#v"
-				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)10000' ), 'te_demog_states_e0_over', 'te_demog_st_e0_n' )]"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)10000' ), 'te_demog_states_e0_over', 'te_demog_states_e0_cell' )]"
 			}
 			textbox = {
 				autoresize = yes
