@@ -469,7 +469,7 @@ and are tagged with the task that raised them.
 | **P1** | Implement the in-scope `(proposed)` items: §9.4 wage pressure + the real-wage dividend, §9.1's credibility `c` table including state-owned banking at 0.15, and §7.6's unanchored-expectations and monetisation premium terms | all are named in §19 row 2 or load-bearing for §10's tuning invariant | small terms to retune or remove |
 | **P2** | Still deferred: §9.1's gold-supply term, §5.1's minting axis, CBI's 12-month mandate delay (shipped with #799, §6), France's commodity dial, estimation error shrinking with finance techs | owner undecided or phase 3; the plain regime pull `−π_core` carries the metallic deflation bias meanwhile | later additions, nothing to undo |
 | **P3** | Monetisation is the **GDP-scaled `country_minting_add`** | §11 marks it chosen | swap to the `country_minting_mult` variant |
-| **P4** | The deficit term annualises through a named `te_mon_deficit_annualise_factor` = **52**, and the computed deficit-%-of-GDP is printed in the console read-out | §17 check 12 is unverified; the engine docs make `income` weekly and `gdp` yearly, so 52 is the documented reading | one-line flip to 1 — **checklist 15** |
+| **P4** | The deficit term annualises through a named `te_mon_deficit_annualise_factor` = **52**, and the computed deficit-%-of-GDP is printed in the console read-out | §17 check 12 is unverified; the engine docs make `income` weekly and `gdp` yearly, so 52 is the documented reading | one-line flip to 1 — **checklist 15**. **Settled at 52 (owner, 2026-10-20, #1084):** weekly flows; see checklist 15 |
 | **P5** | Step 6 (inflation) runs between steps 5 and 7 and reads **last month's** stance gap; step 8's real rate becomes `te_policy_rate − te_inflation` | forced by the step layout, and §16.3 already tolerates a one-month-old gap | one month of lag in two places — it is also why §10's war line comes out at 0.61% rather than 0.7% |
 | **P6** | Every country except a command economy runs inflation | §4 makes bankless / commodity / crypto countries pay `era_base + own expected + 1`, so they need expectations even with no dial | performance; could be restricted |
 | **P7** | A hidden mean-reverting walk `te_inflation_noise` (±0.1pp a month, bounded ±0.75pp) is added to the pressure sum, and core, noise, **`te_cost_push`** and the pressure **total** are never displayed | headline and expected are exact while `pressure` carries `−0.4 × stance_gap` with no random term — the same inversion §0.1 found for `bubble_pressure`. **Cost-push is hidden in practice and by rule** (final review, M1): nothing but `te_debug_monetary.1` prints it, and it must stay that way — headline is displayed and is core + cost-push, so with cost-push shown core becomes recoverable and the inversion opens | one term to delete |
@@ -598,6 +598,13 @@ still open and are inherited, not repeated.
     12's other half, whether the existing fiscal-policy input is live at all. **Do not flip
     `te_mon_weeks_per_year` with it** — that 52 is a fact about `country_minting_add` and is
     deliberately a separate constant.
+    **Settled (owner, 2026-10-20, #1084): keep 52.** Read from saves, the EU's income
+    annualises to 24–38% of GDP, a modern state's revenue, so the flows are weekly. The
+    "hundreds ⇒ flip to 1" rule predates countries in default: a microstate whose GDP has
+    collapsed under its building subsidies (#1050) reads 100–10,000% of GDP **legitimately**,
+    because its GDP is tiny. That is answered by capping the term
+    (`te_mon_deficit_pressure_cap`, §9.1) and dropping it for a dollarised or defaulting
+    country, not by this factor.
 16. **`mg:<good>` in a market that never traded the good (§17 check 10, §9.3).** The basket
     gates each of its eight goods on
     `market ?= { mg:<good> = { market_goods_sell_orders > 0 } }`, but `te_debug_monetary.1`'s
@@ -932,6 +939,14 @@ closes the item ruling T5 (§0.4) left open. It keeps the metallic pull and gain
 currency): imported credibility is the whole of what dollarising buys, and unpinned, a
 dollarised country with a large deficit drifted its own expectations up for a currency it
 does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expectations block.
+
+*Amended 2026-10-20 (owner, #1084).* The dollarised **regime pull** now pulls core to the same
+anchor, `−(π_core − te_mon_inflation_anchor)`, rather than to zero: K's own reason (2, not
+metal's 0 — the adopted money is somebody's managed currency) applies to where its prices are
+pulled as much as to what people expect. Core settles near **`2 + P/2`** (was `1 + P/2`), and
+the deficit term no longer feeds P for a dollarised country at all (§9.1). The expectations
+pin is unchanged. Two branches in `te_mon_pressure_regime_pull`, metal first, mirroring the
+expectations block.
 
 #### 0.5 rulings — deviations from, or bindings on, the sections below
 
@@ -2672,7 +2687,8 @@ pressure (pp) =
                                              target (fiat / digital, te_mon_targets_inflation; 2026-10-02);
                                              −0.3 · −0.8 · −1.5 on metal, dollarised or crypto money
     + 0.2 if bubble_pressure ≥ 65
-    + 0.3 × max(0, deficit % of GDP − 1)     ×2 at war
+    + min(1.5, 0.3 × max(0, deficit % of GDP − 1))   ×2 at war (so 3 at war); 0 while dollarised
+                                             or in default (#1084, owner 2026-10-20)
     + 2.5 × monetisation_level               §11
     + 1.0 if QE active                       §11
     + min(5, 1.0 × (floor − virtual rate))     §11, §0.12 — a mandate-run fiat/digital bank whose virtual rate is under its floor
@@ -2681,7 +2697,8 @@ pressure (pp) =
     − 2 × max(0, π_core − π_world − 1)       commodity money only, clamped at −6 — §0.6 R7, the
                                              price-specie channel a regime with no vault gets instead
     + gold-supply term                       metallic regimes only, see below
-    + regime pull                            gold / commodity: −π_core · crypto: −(π_core + 1)
+    + regime pull                            gold / commodity: −π_core · dollarised: −(π_core − anchor)
+                                             (#1084; was −π_core) · crypto: −(π_core + 1)
 
 π_core     += 0.10 × ( expected + pressure − π_core )        ~10-month adjustment
 π_headline  = π_core + cost_push                             §9.3 — a level term, clamped ±6
@@ -2763,7 +2780,19 @@ budget flows (`income`, `total_expenses`) appear to be **weekly** while `gdp` is
 which would make that expression 52× too small; its own comment, "was effectively dormant
 at typical 1–3% deficit levels", fits. VERIFY IN-GAME (§17 check 12); if confirmed this
 term needs ×52, and the existing fiscal-policy input has the same bug. Also **exclude
-minting from `income`** here, or monetisation suppresses its own deficit term.
+minting from `income`** here, or monetisation suppresses its own deficit term. *(Settled
+2026-10-20, #1084: the flows are weekly and the ×52 stays — checklist 15.)*
+
+**The cap and the gates (owner, 2026-10-20, #1084).** The term is capped at
+`te_mon_deficit_pressure_cap` = **1.5pp** before the war doubling (3 at war), which the
+coefficient reaches at a deficit of 6% of GDP, and it is **0 for a country that cannot
+borrow**: a dollarised one (no currency of its own to inflate; its deficit ends in default,
+which the risk premium and `declared_bankruptcy` price) and one `in_default` (debt past the
+credit limit, so nothing is bond-financed). Uncapped, about sixty bankrupt, dollarised
+microstates whose GDP had collapsed read deficits of 100–10,000% of GDP and sat at 45–57%
+inflation for good; the country-count median was 21–31% in every save from 2011 on. 1.5
+rather than 3: with a delegated fiat bank and a mean deficit of 8% of GDP the simulator ran
+a median of 7.7% (p90 11.8) under 1.5 against 12.8% (p90 35.4) under 3.
 
 ### 9.2 Bands and consequences
 
@@ -2918,6 +2947,13 @@ In *rate-paid* terms never disinflating is still cheaper than a Volcker disinfla
 make a standing 12–18% inflation worse overall**; they are the deterrent and must be sized
 for it. Test all of this on the accelerating path, not just at steady states (§19).
 
+**A default is priced by the premium, not by inflation (owner, 2026-10-20, #1084).** A
+country that cannot borrow — `in_default`, or dollarised — has no bond-financed deficit for
+§9.1's deficit term to charge, so that term is 0 for it: what its deficit costs is the
+debt-load premium (§7.6), `declared_bankruptcy` and the default itself. The invariant above
+is untouched: it rests on monetisation, the unanchored premium, the bands and the lenders'
+floor, none of which the cap or the gates change.
+
 ---
 
 ## 11. Monetisation and QE (phase 2)
@@ -2938,7 +2974,11 @@ digital currency, a national bank, **not** CBI.
   +0.5pp cyclical premium. (A first draft used 0.25%: half of what merely enacting fiat
   yields for free, so nobody would have pulled it for the revenue. WWI-scale money finance
   ran to several % of GDP; level 3 is 3%.) Per unit of financing it is ~8× as inflationary
-  as a bond-financed deficit — that ratio is the tuning knob.
+  as a bond-financed deficit — that ratio is the tuning knob. **Since 2026-10-20 (#1084) the ratio holds only
+  below the cap:** the bond-finance term stops at 1.5pp (3 at war), which it reaches at a
+  deficit of 6% of GDP, so past that a bigger bond-financed deficit buys no more inflation,
+  while monetisation keeps its 2.5pp a level. Monetisation and §10's invariant are
+  unchanged.
 - **Owner decision hiding here:** a GDP-scaled `_add` (chosen) grows with the economy and,
   past the 200M cap, to many times baseline minting. The alternative, `country_minting_mult`
   +0.2 per level, needs no GDP-scaled refresh and reads naturally in the budget tooltip
@@ -4608,7 +4648,9 @@ Later checks:
     unconfirmed — check the modifier's value on the JE while running a known deficit. The
     same observation settles the **weekly-vs-annual units** question (§9.1): a 1%-of-GDP
     annual deficit should read 1.0, not ~0.02. Either way, **do not copy that shape**:
-    §9.1's deficit term runs in country scope and caches to a variable.
+    §9.1's deficit term runs in country scope and caches to a variable. *(The units half is settled,
+    2026-10-20, #1084: `income` and `total_expenses` are weekly and §9.1's ×52 stays —
+    §0.4 checklist 15.)*
 
 Phases 4–5 (§15, §15A):
 
@@ -4907,6 +4949,7 @@ P6-1…13).
 | Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / **1.0** (was 0.5 until 2026-09-25) / 4% | 6 |
 | Cycle lean's outlook: momentum months | 4.69 × momentum (six months at 0.9 decay; `te_mon_outlook_momentum_factor`, 2026-09-25) | 6 |
 | Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / +0.3–1.5 up, −0.5 / −2 / −4 down under an inflation target (−0.3 / −0.8 / −1.5 on metal; was that everywhere until 2026-10-02) / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |
+| Deficit term cap (`te_mon_deficit_pressure_cap`) | 1.5pp before the war doubling (3 at war); none while dollarised or in default — since 2026-10-20, #1084 (was uncapped) | 9.1 |
 | Core adjustment speed | 0.10 per month | 9.1 |
 | Expectation α: manual, delegated (CBI) | 1/24 (1/12) | 9.1 |
 | Credibility anchor c: state-owned banking / manual / delegated / CBI / gold | 0.15 / 0.25 / 0.4 / 0.7 / 1 | 9.1 |

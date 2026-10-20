@@ -247,9 +247,12 @@ te_mon_is_metallic = {
 # above), and a currency anchored to one of those: inflation at rest sits around
 # the 2% anchor, three points above the Deflation band. NOT metallic money (the
 # anchor is 0 — te_mon_inflation_anchor is the test), a currency anchored to
-# metal (its anchor is the metal's 0), a dollarised country or decentralized
-# cryptocurrency (te_mon_pressure_regime_pull drags their core to zero or below):
-# their prices rest within a point of the Deflation band.
+# metal (its anchor is the metal's 0), or decentralized cryptocurrency
+# (te_mon_pressure_regime_pull drags its core below zero): their prices rest
+# within a point of the Deflation band. NOR a dollarised country, though since
+# #1084 its regime pull holds its prices near the anchor rather than near zero:
+# that pull halves every pressure, the slump's too, so it keeps the smaller
+# slump terms. Whether it should take the larger ones is open.
 #
 # READ BY te_mon_phase_pressure, whose slump terms are larger here and only
 # here. A slump's pull that brings a fiat economy's prices down toward zero puts

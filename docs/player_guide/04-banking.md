@@ -706,17 +706,20 @@ Inflation shows what prices did over the last year, and Expected Inflation what
 lenders and workers assume they will do. A loose stance, a boom, deficits, money
 printing, dearer goods and imports, and inflowing gold push it up, as do the
 Wage Pressure of your labor and welfare laws and any other standing Inflationary
-Pressure, such as a devaluation. Above 8% inflation, the wage pressure of your
-labor and welfare laws counts twice.
+Pressure, such as a devaluation. A deficit adds at most 1.5 points of pressure
+(3 at war), and none in default or once dollarized, when nobody lends to cover
+it. Above 8% inflation, the wage pressure of your labor and welfare laws counts
+twice.
 
 A slump pulls inflation down. Under Fiat Money or Digital Currency, Stagnation
 pulls it half a point below where it would otherwise settle, a Downturn 2 points
 and a Panic 4, and inflation closes most of that gap within a year. A Downturn
 alone outweighs the wage pressure of all your labor and welfare laws together, so
 prices slow through a recession and your bank can cut instead of holding its rate
-up against inflation. On metallic money, in a dollarized economy and under
-Decentralized Cryptocurrency, prices already rest near zero and the pulls are
-0.3, 0.8 and 1.5 points; more would hold them in Deflation.
+up against inflation. On metallic money and under Decentralized Cryptocurrency,
+prices already rest near zero and the pulls are 0.3, 0.8 and 1.5 points; more
+would hold them in Deflation. A dollarized economy takes the same smaller pulls,
+though its prices rest near the 2% target of the money it adopted.
 
 Every country starts on metallic money, Commodity Money or the Gold Standard,
 and there expected inflation is fixed at 0%: money redeemable in metal promises

@@ -231,10 +231,10 @@
 #                                                   floor of §10, before the premium
 #   te_mon_deficit_pct      +/- large               the deficit as a % of GDP a year,
 #                                                   cached for the §9.1 deficit term and
-#                                                   printed in the debug read-out so the
-#                                                   §17 check-12 units question can be
-#                                                   settled from a running game
-#   te_mon_mod_home         0 or 1                  where this country's MANAGED
+#                                                   printed in the debug read-out (§17
+#                                                   check 12, settled at 52 by #1084: a
+#                                                   country in default can read hundreds)
+#   te_mon_mod_home        0 or 1                  where this country's MANAGED
 #                                                   monetary modifiers live: 1 on
 #                                                   je_banking_cycle, 0 on the
 #                                                   country (it has no entry).
@@ -1378,14 +1378,33 @@ te_mon_deficit_coeff = {
 	value = 0.3
 }
 
+# The most a bond-financed deficit adds to pressure, in pp, before the war
+# doubling: 3pp at war (owner, 2026-10-20, #1084). The coefficient reaches it at
+# a deficit of 1 + 1.5 / 0.3 = 6% of GDP; past that, borrowing more buys no
+# more inflation. Uncapped, a defaulting microstate whose GDP had collapsed
+# under its building subsidies read deficits of 100-10,000% of GDP and tens to
+# thousands of points of pressure, and about sixty of them sat in
+# hyperinflation for good. 1.5 rather than 3: in the issue's simulations a
+# delegated fiat bank with a mean deficit of 8% of GDP ran a median of 7.7%
+# (p90 11.8) under 1.5 against 12.8% (p90 35.4) under 3, and 15% ran 8.1%
+# against 18.6%. §11's 8:1 ratio of money to bond finance now holds only
+# below the cap.
+te_mon_deficit_pressure_cap = {
+	value = 1.5
+}
+
 # Weeks in a year, as the conversion from a budget flow to a yearly one
-# (ruling P4). `income` and `total_expenses` appear to be WEEKLY while `gdp` is
-# ANNUAL — the mod's own sv_money_flow_event_small is commented "0.01% GDP /
-# week" — so the §9.1 deficit term needs the flows annualised before dividing
-# by GDP. §17 check 12 has not been read in a running game yet: the monthly
-# update caches the computed deficit-%-of-GDP in te_mon_deficit_pct and the
-# console read-out prints it, so if the flows turn out to be annual already
-# this value goes to 1 and nothing else changes.
+# (ruling P4). `income` and `total_expenses` are WEEKLY while `gdp` is ANNUAL —
+# the mod's own sv_money_flow_event_small is commented "0.01% GDP / week" — so
+# the §9.1 deficit term needs the flows annualised before dividing by GDP.
+#
+# SETTLED, KEEP IT AT 52 (#1084, owner 2026-10-20). §17 check 12 was read from
+# saves: the EU's income annualises to 24-38% of GDP, which is what a modern
+# state's revenue is. The old rule here ("a reading in the hundreds means the
+# flows were annual, set this to 1") predates countries in default: a
+# microstate whose GDP has collapsed reads hundreds legitimately, because its
+# GDP is tiny, not because the flows are annual. te_mon_deficit_pressure_cap is
+# the answer to those readings, not this value.
 te_mon_deficit_annualise_factor = {
 	value = 52
 }
@@ -1396,11 +1415,10 @@ te_mon_deficit_annualise_factor = {
 # divided by this before it can go in te_monetisation_minting's multiplier.
 #
 # IT IS DELIBERATELY NOT te_mon_deficit_annualise_factor, which is also 52.
-# That one is a HYPOTHESIS about `income` and `total_expenses` that ruling P4
-# expects to be settled from a running game and set to 1 if the budget flows
-# turn out to be annual after all. This one is a fact about country_minting_add
-# that no reading of the budget can change — sharing the constant would have
-# multiplied every monetised pound by 52 the moment the other was corrected.
+# That one is a reading of `income` and `total_expenses` (ruling P4, settled at
+# 52 by #1084); this one is a fact about country_minting_add that no reading of
+# the budget can change. Sharing the constant would tie the two together, so a
+# future correction to one would multiply every monetised pound by the other.
 te_mon_weeks_per_year = {
 	value = 52
 }
@@ -2261,21 +2279,44 @@ te_mon_deficit_pct_value = {
 	}
 }
 
-# 0.3 x max(0, deficit % of GDP - 1), doubled at war (§9.1). It reads the
-# CACHED te_mon_deficit_pct rather than recomputing te_mon_deficit_pct_value,
-# so the number the console prints is the number the pressure used.
+# min(1.5, 0.3 x max(0, deficit % of GDP - 1)), doubled at war (§9.1). It
+# reads the CACHED te_mon_deficit_pct rather than recomputing
+# te_mon_deficit_pct_value, so the number the console prints is the number the
+# pressure used.
+#
+# THE CAP COMES AFTER THE COEFFICIENT AND BEFORE THE WAR DOUBLING (#1084, owner
+# 2026-10-20). It bounds pp of pressure, so it has to see the figure in pp: a
+# `max` ahead of `multiply = te_mon_deficit_coeff` would cap the deficit at
+# 1.5% of GDP instead (see te_mon_stance_gap_clamped on bounds and multiplies).
+# The doubling after it makes the cap 3pp at war.
+#
+# NO TERM FOR A COUNTRY THAT CANNOT BORROW (#1084, owner 2026-10-20):
+#   * DOLLARISED: it has no currency of its own to inflate. Its deficit ends in
+#     default, which the risk premium and declared_bankruptcy already price.
+#     About sixty dollarised microstates sat at core = (2 + P) / 2 with this
+#     term P, at 45-57% inflation, until it went.
+#   * IN DEFAULT (in_default, the engine's own state: debt past the credit
+#     limit). Nobody lends to it, so no deficit is bond-financed; saves show
+#     the principal of such a country flat at its ceiling while its scheduled
+#     deficit would add many times its GDP a year. Monetisation is not this
+#     term and still counts (te_mon_pressure_monetisation).
 te_mon_pressure_deficit = {
 	value = 0
 	if = {
-		limit = { has_variable = te_mon_deficit_pct }
+		limit = {
+			has_variable = te_mon_deficit_pct
+			NOT = { te_mon_is_dollarised = yes }
+			in_default = no
+		}
 		add = var:te_mon_deficit_pct
-	}
-	subtract = te_mon_deficit_tolerance
-	min = 0
-	multiply = te_mon_deficit_coeff
-	if = {
-		limit = { is_at_war = yes }
-		multiply = 2
+		subtract = te_mon_deficit_tolerance
+		min = 0
+		multiply = te_mon_deficit_coeff
+		max = te_mon_deficit_pressure_cap
+		if = {
+			limit = { is_at_war = yes }
+			multiply = 2
+		}
 	}
 }
 
@@ -2491,15 +2532,25 @@ te_mon_pressure_noise = {
 # zero — that is the deflation bias of hard money, expressed as a pressure term
 # rather than a constant — and a currency nobody issues drags harder still.
 #
-#   gold / commodity money, and a DOLLARISED country (ruling P9: it now uses
-#   somebody else's metal-or-otherwise disciplined money)   -pi_core
+#   gold / commodity money                                  -pi_core
+#   a DOLLARISED country (ruling P9: it now uses somebody
+#   else's money)                                           -(pi_core - anchor)
 #   decentralized cryptocurrency                            -(pi_core + 1)
 #
-# Dollarisation is tested first so a dollarised crypto country gets the
-# metallic pull rather than the crypto one: the currency actually circulating
-# is the foreign one. The §9.1 gold-SUPPLY term is deliberately absent — it is
-# a phase-3 companion to gold flows (ruling P2), and this plain pull carries
-# the deflation bias until then.
+# THE DOLLARISED PULL IS TO THE ANCHOR, NOT TO ZERO (#1084, owner 2026-10-20).
+# Decision K pins a dollarised country's expectations at
+# te_mon_inflation_anchor (2) because the money it adopted is somebody's managed
+# currency, not specie; the same reason sets where its prices are pulled. With
+# expectations at the anchor and this pull, step 6's fixed point is
+# core = anchor + P / 2 (2 + P/2), where the old pull to zero gave 1 + P/2.
+# The two branches mirror step 6's expectations block (metal first, then
+# dollarisation), so a dollarised metallic country keeps metal's 0.
+#
+# Metal is tested before dollarisation, and dollarisation before crypto, so a
+# dollarised crypto country gets the dollarised pull rather than the crypto
+# one: the currency actually circulating is the foreign one. The §9.1
+# gold-SUPPLY term is deliberately absent — it is a phase-3 companion to gold
+# flows (ruling P2), and this plain pull carries the deflation bias until then.
 #
 # THE PULL IS A PROPORTION, NOT AN ANCHOR — and that distinction is the whole
 # of issue #351. It closes a fixed FRACTION of the gap every month and never
@@ -2513,16 +2564,13 @@ te_mon_pressure_noise = {
 te_mon_pressure_regime_pull = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				te_mon_is_metallic = yes
-				AND = {
-					has_variable = te_mon_dollarised
-					var:te_mon_dollarised = 1
-				}
-			}
-		}
+		limit = { te_mon_is_metallic = yes }
 		subtract = te_mon_inflation_core_read
+	}
+	else_if = {
+		limit = { te_mon_is_dollarised = yes }
+		subtract = te_mon_inflation_core_read
+		add = te_mon_inflation_anchor
 	}
 	else_if = {
 		limit = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
@@ -2626,8 +2674,9 @@ te_mon_commodity_specie_clamp = {
 # ...AND THE LAW IS NOT ENOUGH BY ITSELF. Dollarisation is a VARIABLE that
 # overrides what the laws still say (ruling P9), so the second line is the same
 # exclusion te_mon_has_gold_flows gets for free through te_mon_has_dial: a
-# country that abandoned its own currency keeps the metallic regime pull —
-# whatever it adopted is somebody else's hard money — but somebody else's
+# country that abandoned its own currency keeps a regime pull — whatever it
+# adopted is somebody else's disciplined money, and metal's pull is to zero
+# where the dollarised one is to the anchor (#1084) — but somebody else's
 # specie is not its to lose. Written in te_mon_has_dial's exact
 # `NOT = { te_mon_is_dollarised = yes }` form, which is the guarded read.
 #
