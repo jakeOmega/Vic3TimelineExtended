@@ -53,6 +53,15 @@
 #     the only answer for one that cannot afford to wipe out its investment pool
 #     in the middle of a war. The §9.2 band keeps biting in the meantime, which
 #     is the whole point of sizing those bands as a deterrent (§10).
+#
+# WEALTH CONCENTRATION (demographics spec §4.2, the "Money" bullet; owner,
+# 2026-10-20). Bond fortunes vanish in a hyperinflation: every state's score
+# falls 5 when the crisis fires (the `immediate` below), and 5 more if the
+# country reforms its currency, which wipes out what savings were left. Riding
+# it out takes the first 5 again each time the crisis comes back after its
+# cooldown, because the event fires again. Like all of Wealth Concentration it
+# runs whatever the Demographics rule. The options' tooltips say so: the shock
+# is a variable change, which prints nothing (silent_variable_audit).
 # ============================================================================
 namespace = te_inflation
 
@@ -69,6 +78,14 @@ te_inflation.1 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	duration = 3
+
+	# Bond fortunes vanish: every state's Wealth Concentration falls 5 (the
+	# header's WEALTH CONCENTRATION). ROOT is the country: every caller of the
+	# monthly update that fires this has a country ROOT, as
+	# te_inh_apply_concentration_modifiers needs.
+	immediate = {
+		te_demog_wc_shock = { AMOUNT = -5 }
+	}
 
 	# --- currency reform ----------------------------------------------------
 	# The reset and the ten-year premium are te_mon_effect_new_currency, shared
@@ -97,6 +114,13 @@ te_inflation.1 = {
 		custom_tooltip = te_inflation.1.a.tt
 
 		te_mon_effect_new_currency = yes
+
+		# The savers' wreckage takes Wealth Concentration down 5 more in every
+		# state, on top of the 5 the crisis took when it fired.
+		custom_tooltip = {
+			text = te_inflation.1.a.wc.tt
+			te_demog_wc_shock = { AMOUNT = -5 }
+		}
 
 		hidden_effect = {
 			set_variable = { name = te_monetisation_level value = 0 }

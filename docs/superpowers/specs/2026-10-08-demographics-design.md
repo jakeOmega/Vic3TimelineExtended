@@ -695,7 +695,9 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 - **Devastation and occupation** (the states hit): local capital is destroyed, scaled by devastation. Built (phase 2).
 - **Revolution** (every state, or the rebel states): a left revolution that wins, −20. Built (phase 2).
 - **Money** (every state): a hyperinflation or banking crisis from the monetary system, −5 to −10, since bond fortunes
-  vanish. The banking crash's −5 is built (phase 2); a hyperinflation's is not.
+  vanish. Built: the banking crash's −5 (phase 2), and the hyperinflation crisis's (owner, 2026-10-20): −5 when
+  `te_inflation.1` fires, and −5 more if the country reforms its currency; riding it out takes the −5 again each time
+  the crisis returns after its cooldown.
 - **Events** (the states named): land reform and nationalisation, −5 to −15. Built as the land-reform and ownership
   shocks below (2026-10-19), which catch every cause, not only events. Plague is dropped: the mod has no plague events.
 - **Upward:** privatisation waves and financial booms, +5. Built (2026-10-19): the ownership shock's privatisations and

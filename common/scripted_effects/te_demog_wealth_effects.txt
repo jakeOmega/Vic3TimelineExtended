@@ -53,7 +53,9 @@ te_demog_state_gini = {
 # (te_demog_wc_war_shock); a lost war that cost it a war goal -5 (on_lost_war,
 # te_demog_on_actions.txt);
 # a won left revolution -20 (te_demog_wc_civil_war_won); a banking crash -5
-# (banking_cycle_effects.txt); devastation, in the state hit, up to -10 a year
+# (banking_cycle_effects.txt); the hyperinflation crisis -5 when it fires and -5
+# more on a currency reform (te_inflation.1, te_inflation_events.txt); devastation,
+# in the state hit, up to -10 a year
 # (te_demog_wc_state_yearly); land reform, -10 x each state's agrarian share
 # (te_demog_wc_land_reform_check). Two raise them: the banking cycle's Frenzy
 # +5, once a cycle (te_demog_wc_boom_check), and a state's ownership shock, a
