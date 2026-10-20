@@ -1134,3 +1134,36 @@ game is the test: continue its last save on this build, run a year or two, and c
 8. **A state line of −100% deaths or more** (an event modifier; none in the base game; option n shows the read): the
    census adds nothing more, its term stays 0, and the state's next count keeps its last own death rate
    (`te_dg_cdr_model`), since the year's ring had too few deaths to read it back.
+
+## The owner's follow-ups (2026-10-20)
+
+The hyperinflation crisis's Wealth Concentration shock (every Demographics rule), no cap on the Inequality effect, the
+Old Southwest and Florida in the 1836 frontier, a note on the state's Deaths Added on Top hover under Private Health
+Insurance and all six chronic carriers in the health bill (the last four under Full only, the frontier also under
+Display only). `docs/systems/mod_systems.md` § Demographics. `test_demographics_wc_shocks.py`,
+`test_demographics_resettle.py`, `test_demographics_rate_floor.py` and `test_demographics_model.py` pin the script. No
+new engine fact, so no self-check: the shock is the banking crash's `te_demog_wc_shock` in an event's `immediate`, and
+the note's scripted GUI reads the owner's law as the panel's other state-scope GUIs do.
+
+1. **The hyperinflation shock (any rule, the banking rule on).** In the console, `event te_inflation.1` on your country
+   (or let a country's inflation reach 50%): every state's Wealth Concentration falls 5 at once (the state subtab's
+   score, the History chart's bars), and the national figure follows. Each option's tooltip says so: the reform's
+   "falls by 5 more", dollarisation's "takes nothing more", riding it out's "falls by 5 again" if the crisis returns.
+   Take the currency reform: every state falls 5 more. Ride it out with inflation still at 50% or more: 24 months later
+   the crisis fires again and takes another 5. Nothing in `debug.log` from `te_demog_wc_shock` or
+   `te_inh_apply_concentration_modifiers`.
+2. **The Inequality effect has no cap (Full).** A state whose shown Gini is above 0.65 lists Census: Inequality above
+   +10% radicals from movements: +15% at 0.75 (play-test item 6 of "Wealth Concentration's remaining shocks").
+3. **The Old Southwest and Florida (Display only or Full, a new 1836 game).** Mississippi, Alabama, Louisiana and the
+   US's Florida open with more men than women aged 20-59 (about 127, 114, 134 and 144 per 100) and, under Full, Census:
+   More Men; Georgia, Kentucky and Ohio open as before (item 1 of "Internal Resettlement in the census, and the US
+   frontier").
+4. **The Private Health Insurance note (Full).** Enact Private Health Insurance and wait for a state's next count: its
+   Demographics subtab's Deaths Added on Top hover ends with a line saying that under the law the richest can die at no
+   rate at all and then show as a negative line of their own. Without the law the line is gone. The Population panel's
+   Demographics tab's hover has no split and no note. In a rich late state under the law, the other effects on some of
+   its people can read below ×1 while the whole state's reads high by the same amount: that is the edge the note
+   describes, accepted by the owner.
+5. **The health bill's six technologies (Full).** A late-game country with Genetic Engineering, Molecular Assemblers or
+   Biological Immortality: the Health Need row's hover gives "treating chronic illness" 5% higher for each (up to +30%
+   with all six), and the Ministry of Health's institution cost moves by as much.

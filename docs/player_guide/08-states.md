@@ -307,9 +307,10 @@ under Old-Age Pensions. A rich country at Standard with a
 fifth of its people pensioned pays about a fifth of its revenue. Universal Basic
 Income and the Post-Scarcity Economy pay everyone already and have no pension bill. An older
 people also needs more care: the Ministry of Health costs more bureaucracy as the
-census's health need rises above 1836's, and more for each of three chronic-care
-technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
-two fifths more for a rich country today. Outside Full none of this changes
+census's health need rises above 1836's, and 5% more for each of six chronic-care
+technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine, Genetic
+Engineering, Molecular Assemblers, Biological Immortality): about two fifths more
+for a rich country today. Outside Full none of this changes
 anything, and the buttons are greyed.
 
 The census also counts each state's men of fighting age, 20 to 39, its young
@@ -334,7 +335,8 @@ state's yearly census:
   women and raises radicals from movements, by up to 10% at 150.
 
 Under Full the state's Gini sets one more: **Census: Inequality** appears where
-it is above 0.45 and raises radicals from movements, by up to 10% at 0.65.
+it is above 0.45 and raises radicals from movements by 5% for each 0.1 above
+that, with no cap.
 
 The census books migration as whole families once a state gains or loses many
 people in a year, so migration alone seldom carries a state's balance past 90
@@ -342,7 +344,7 @@ or 110. Internal resettlement is the exception: settlers arrive as their program
 recruits them, so a penal colony fills with young men and a Land Grants frontier
 with families. The American West of 1836, from Michigan and Wisconsin to
 Missouri and Arkansas, also starts with the surplus of men the 1840 census found
-there.
+there, and so do the Old Southwest and Florida.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled,
