@@ -8,7 +8,7 @@
 # -2% a level, Dedicated and Militarized -3% (Private Policing's -2% is in extra_laws.txt). The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
 # natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
-# Property's, which has no other INJECT. The health laws' longevity care lines (late game §4.2) and the
+# Property's, which is in this file; their women's work share (stage 3) is in this file too. The health laws' longevity care lines (late game §4.2) and the
 # church laws' weight on Family Limitation (phase 3) are at the end of this file; Child Labor Allowed and
 # Restricted Child Labor carry the 10-14s' share at work (phase 2 step 1) beside their other lines.
 # Primogeniture's and Undivided Farm Succession's Late Marriage lines sit in their own definitions
