@@ -806,7 +806,7 @@
    },
    "vars": {
     "te_dg_acc": 0.4,
-    "te_dg_at_work": 0.41443,
+    "te_dg_at_work": 0.2901,
     "te_dg_bf0": 20188.00919,
     "te_dg_bf1": 15020.89336,
     "te_dg_bf10": 4853.74866,
@@ -1212,7 +1212,7 @@
    },
    "vars": {
     "te_dg_acc": 0.9,
-    "te_dg_at_work": 0.53487,
+    "te_dg_at_work": 0.3744,
     "te_dg_bf0": 4120.16216,
     "te_dg_bf1": 4386.05337,
     "te_dg_bf10": 8312.25261,
@@ -1601,7 +1601,7 @@
     "te_dg_w": 0.0,
     "te_dg_w1549": 45074.90819,
     "te_dg_wa_share": 0.56625,
-    "te_dg_wk_past": 0.02866,
+    "te_dg_wk_past": 0.02006,
     "te_dg_working_share": 0.56625,
     "te_dg_wtfr": 3.5,
     "te_dg_year": 1837.0,

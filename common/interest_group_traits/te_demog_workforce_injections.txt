@@ -8,13 +8,13 @@ INJECT:ig_trait_solidarity = {
 	modifier = {
 		state_working_adult_ratio_add = -0.05
 		state_demog_replaced_ratio_add = 0.05
-		state_labor_participation_add = 0.02	# unions' mutual aid keeps the sick and jobless attached to work
+		state_labor_participation_add = 0.014	# unions' mutual aid keeps the sick and jobless attached to work
 	}
 }
 INJECT:ig_trait_bourse_du_travail = {
 	modifier = {
 		state_working_adult_ratio_add = -0.05
 		state_demog_replaced_ratio_add = 0.05
-		state_labor_participation_add = 0.02	# labour exchanges place workers
+		state_labor_participation_add = 0.014	# labour exchanges place workers
 	}
 }

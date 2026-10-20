@@ -652,11 +652,11 @@ def women_rate(inp):
 
 
 def sex_rates(inp):
-    """(women's, men's) rates in the working ages with call 3's participation inputs, each 0 to 1 (te_dg_wk_rf,
-    te_dg_wk_rm in te_demog_work_setup)."""
+    """(women's, men's) rates in the working ages with call 3's participation inputs, each 0 to P.RATE_MAX, in the
+    game's units (te_dg_wk_rf, te_dg_wk_rm in te_demog_work_setup)."""
     both = inp.mods.get(P.PARTICIPATION_TYPE, 0.0)
-    rf = min(max(women_rate(inp) + both, 0.0), 1.0)
-    rm = min(max(P.MEN_RATE + inp.mods.get(P.MALE_PARTICIPATION_TYPE, 0.0) + both, 0.0), 1.0)
+    rf = min(max(women_rate(inp) + both, 0.0), P.RATE_MAX)
+    rm = min(max(P.MEN_RATE + inp.mods.get(P.MALE_PARTICIPATION_TYPE, 0.0) + both, 0.0), P.RATE_MAX)
     return rf, rm
 
 
@@ -813,8 +813,9 @@ def work_figures(ring, inp, old_age):
 
 
 def wf_target(figures):
-    """The workforce share on the engine's scale (te_demog_wf_target; step 2's target less the pops' bases)."""
-    return P.WORKFORCE_SCALE * figures["wa_share"] * figures["at_work"]
+    """The workforce share, workers over people (te_demog_wf_target; step 2's target less the pops' bases). The rates are
+    in the game's units, so this is the engine's scale."""
+    return figures["wa_share"] * figures["at_work"]
 
 
 # ---- Phase 2 step 2: the workforce term, the pension setting and the bills (te_demog_work_effects.txt) ---------------

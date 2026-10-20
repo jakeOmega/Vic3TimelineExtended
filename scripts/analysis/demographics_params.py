@@ -176,11 +176,15 @@ WORKING_AGE = 15               # calendar: everyone from here
 CHILD_WORK_TYPE = "state_child_labor_participation_add"
 CAPACITY = {0: 1.0, 60: 1.0, 65: 0.95, 70: 0.85, 75: 0.7, 80: 0.5, 85: 0.2}   # by biological band start
 AFTER_PENSION_SHARE = 0.3      # the share of the eligible who keep working, x capacity
-MEN_RATE = 0.92
-WOMEN_BASE = 0.05              # the middle and upper strata's women under No Women's Rights
-WOMEN_LOWER = 0.2              # the lower strata's women under any law (Goldin's U-shape)
+# The sexes' rates are in the game's units (owner, 2026-10-20): the historical rates (men 0.92, women 0.05 to the men's,
+# the lower strata's women 0.2, a shortage of men +0.1) x 0.7, which step 2's fit set as the game's count of them (1836
+# 0.25 of the people at work, rich today 0.42), so the panel's rates and the workforce the pops are set to agree. The
+# carriers' participation lines are in the same units. RATE_MAX is the most a sex's rate reaches: 1 x 0.7.
+MEN_RATE = 0.644
+WOMEN_BASE = 0.035             # the middle and upper strata's women under No Women's Rights
+WOMEN_LOWER = 0.14             # the lower strata's women under any law (Goldin's U-shape)
 WOMENS_WORK_FULL = 0.35        # the women's-work family's sum at which women work at the men's rate
-WORKFORCE_SCALE = 0.7          # participation to the engine's ratio (step 2's fit: 1836 0.25, rich today 0.42)
+RATE_MAX = 0.7                 # a sex's rate in the working ages with call 3's inputs, at most (te_demog_k_rate_max)
 # Health need by biological band start (late-game §5.2), and 1836's people-weighted need (the figure's 1.0).
 HEALTH_NEED = {0: 1.0, 5: 0.5, 15: 0.8, 45: 1.4, 65: 2.4, 75: 3.4, 85: 4.5}
 HEALTH_NEED_1836 = 0.952      # step 2's fit: the 1836 save's world need, people-weighted (harness `workforce`)
@@ -340,7 +344,7 @@ SEX_BALANCE_EFFECTS = True
 SEX_FEWER_FROM = 90.0
 SEX_FEWER_FULL = 80.0
 SEX_BIRTHS_FLOOR = 0.8
-SEX_WOMEN_RATE = 0.1
+SEX_WOMEN_RATE = 0.07           # in the game's units, as MEN_RATE (0.1 x 0.7)
 SEX_FEMINIST = 0.10            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
 SEX_MORE_FROM = 110.0
 SEX_MORE_FULL = 150.0
