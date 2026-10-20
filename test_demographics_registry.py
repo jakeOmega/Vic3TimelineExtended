@@ -438,6 +438,9 @@ SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog
                     "te_debug_demog_province_change": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
 PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
+# 2026-10-20: the walk applies the state's wealth line per pop, and the refresh and the split read it beside te_dg_w_edw:
+# none unless a test says (the census's pair is off, and Private Health Insurance's line outside Full).
+WEALTH_LINE_DEFAULTS = {"modifier:state_mortality_wealth_mult": 0.0}
 # Issue #1029: the month a state's count is taken (te_dg_count_mi, the subtab's next count), te_history_month_index, which
 # reads the calendar's month: the start of 1836's year unless a test says.
 PANEL_DEFAULTS = {"te_history_month_index": 1836.0 * 12}
@@ -465,6 +468,9 @@ class _Engine:
         # its text reads (test_demographics_resettle.py)
         self.effects.update(_raw_blocks([RESETTLE_EFFECTS, RESETTLE_GEN_EFFECTS]))
         self.effects["te_demog_rs_selfcheck"] = ""
+        # the self-check rate_below_measured (2026-10-20) reads globals and writes debug_log lines:
+        # test_demographics_rate_floor runs it
+        self.effects.update({"te_demog_rbm_selfcheck_flows": "", "te_demog_rbm_selfcheck_arm": ""})
         # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
         # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
         self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
@@ -491,8 +497,11 @@ class _Engine:
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
         self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS,
-                         **TERRITORY_DEFAULTS, **fixtures}
+                         **WEALTH_LINE_DEFAULTS, **TERRITORY_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
+        # the walk's bare deaths x wealth (te_demog_absorbed_walk_init sets it in every walk, 0 outside Full): the refresh
+        # and the split read it beside the wealth line since 2026-10-20, and a stubbed walk need not give it
+        self.locals["te_dg_w_edw"] = 0.0
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
         self.removed = []     # remove_modifier's names, in order
@@ -1347,11 +1356,32 @@ class TestCohortScript(unittest.TestCase):
         self.assertEqual((eng.vars["te_dg_bz"], eng.vars["te_dg_dz"]), (0.0, 0.0))
         self.assertEqual((eng.vars["te_dg_eb_target"], eng.vars["te_dg_ed_target"]), (0.0, 0.0))
 
-    def test_on_top_scales_are_clamped(self):
+    def test_on_top_scales_have_only_their_natural_floor(self):
+        """Owner, 2026-10-20: no ceiling (it was +4) and a floor of -1, no events (it was -0.9)."""
         eng, ring, figures, pop = self.step_both(on_top=(9.0, -0.99), full=True)
         self.check_step(eng, ring, figures, pop)
-        self.assertEqual(eng.vars["te_dg_bz"], P.ON_TOP_SCALE_MAX)
-        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MIN)
+        self.assertAlmostEqual(eng.vars["te_dg_bz"], 9.0, places=4)
+        self.assertAlmostEqual(eng.vars["te_dg_dz"], -0.99, places=4)
+        self.close(eng.vars["te_dg_cbr_model"], figures["births_model"] * 1000 / pop, what="cbr_model")
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+
+    def test_no_events_keep_the_models_own_rate(self):
+        """1 + bz or 1 + dz under te_demog_k_on_top_factor_min (the engine gave no births or no deaths, a state line of
+        -1 or below): the ring's events can't give the model's rate back, so the target M aims at stays the last one
+        (demographics_model.step returns None), while the other kind's is read back as usual."""
+        eng, ring, figures, pop = self.step_both(on_top=(-1.0, 0.1), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual(eng.vars["te_dg_bz"], -1.0)
+        self.assertEqual(eng.vars["te_dg_births"], 0.0)
+        self.assertIsNone(figures["births_model"])
+        self.assertEqual(eng.vars["te_dg_cbr_model"], 40.0, "the last step's own rate stays")
+        self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
+        eng, ring, figures, pop = self.step_both(on_top=(0.1, -1.0), full=True)
+        self.check_step(eng, ring, figures, pop)
+        self.assertEqual(eng.vars["te_dg_dz"], -1.0)
+        self.assertIsNone(figures["deaths_model"])
+        self.assertEqual(eng.vars["te_dg_cdr_model"], 30.0, "the last step's own rate stays")
+        self.close(eng.vars["te_dg_cbr_model"], figures["births_model"] * 1000 / pop, what="cbr_model")
 
     def test_a_seed_clears_the_target_and_the_scales(self):
         """A seed (a merge, a split, a census gap) starts the census's target over: the model's rates from before it
@@ -1368,15 +1398,15 @@ class TestCohortScript(unittest.TestCase):
         self.assertEqual((eng.vars["te_dg_eb_target"], eng.vars["te_dg_ed_target"]), (0.0, 0.0))
         self.assertEqual(eng.vars["te_dg_tfr_model"], eng.vars["te_dg_tfr"])
 
-    def test_step_near_the_deaths_scales_ceiling_matches_the_model(self):
-        """dz at its ceiling (+4) pushes the old-age groups' rates past 100,000: the script scales the cause
-        multipliers before its cap, and so does the twin (demographics_model.step)."""
+    def test_step_with_a_large_deaths_scale_matches_the_model(self):
+        """dz at +9 (no ceiling since 2026-10-20) pushes the old-age groups' rates past 100,000: the script scales the
+        cause multipliers before its cap, and so does the twin (demographics_model.step)."""
         eng, ring, figures, pop = self.step_both(on_top=(0.0, 9.0), full=True)
         self.check_step(eng, ring, figures, pop)
-        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MAX)
+        self.assertAlmostEqual(eng.vars["te_dg_dz"], 9.0, places=4)
         self.close(eng.vars["te_dg_cdr_model"], figures["deaths_model"] * 1000 / pop, what="cdr_model")
         qf, qm, _mmr = demographics_model.group_rates(self.INP)
-        capped = sum(q * (1 + P.ON_TOP_SCALE_MAX) >= 100000.0 for q in qf + qm)
+        capped = sum(q * (1 + 9.0) >= 100000.0 for q in qf + qm)
         self.assertGreater(capped, 0, "the test must reach the cap")
 
     def test_the_replay_logs_the_scaled_rates(self):
@@ -2358,26 +2388,38 @@ class TestRatesScript(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_rep_b"], ebr / 475e6, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_rep_d"], edr / 430e6, places=5)
 
+    # mild hunger's deaths on half the bare deaths (absorbed: M nets them), enough to pass a low census rate alone
+    EDR_HUNGER = 0.1125 * 0.5 * 430e6
+
     def test_script_clamps_like_the_model(self):
-        eng = self._eng(cbr=2.0, cdr=400.0, read_b=-0.5)
+        """The floor is the engine's own -1 (owner, 2026-10-20): it binds where mild hunger's deaths, which M nets, alone
+        pass the census's rate, and the read then sits at -1. A births read of -0.5 no longer binds (it did at -0.8)."""
+        eng = self._eng(cbr=2.0, cdr=0.5, read_b=-0.5, edr=self.EDR_HUNGER)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(2.0, 400.0, 475e6, 430e6, self.EBR, -0.5, 0.04)
+        mb, md = self._want(2.0, 0.5, 475e6, 430e6, self.EBR, -0.5, 0.04, edr=self.EDR_HUNGER)
+        self.assertGreater(mb, P.RATE_TOTAL_FLOOR + 0.5, "births unclamped")
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
-        self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
+        self.assertAlmostEqual(md, P.RATE_TOTAL_FLOOR - 0.04)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
 
     def test_script_never_pushes_past_the_terms_on_top(self):
-        """Review Focus 5: the terms on top in the state read alone already past -0.8 (a plague event, a decree, an
-        event modifier; starvation is per pop and never enters the read). M stays at 0, as
-        demographics_model.rate_term's does, and an M of 0 takes neither modifier of the pair."""
-        eng = self._eng(cbr=2.0, read_b=-1.2)
+        """Review Focus 5: the terms on top in the state read alone already past -1 (a plague event, a decree, an
+        event modifier; starvation is per pop and never enters the read). The lines cut the census's rate to nothing;
+        M nets only literacy's -0.1, so the read stays past -1 and no plain pop's births come back. Deaths: M would net
+        mild hunger and can't, so it stays at 0, as demographics_model.rate_term's does, and an M of 0 takes neither
+        modifier of the pair."""
+        eng = self._eng(cbr=2.0, read_b=-1.2, read_d=-1.2, edr=self.EDR_HUNGER)
         eng.call("te_demog_rates_refresh")
-        mb, _ = self._want(2.0, 31.0, 475e6, 430e6, self.EBR, -1.2, 0.04)
-        self.assertEqual(mb, 0.0)
-        self.assertEqual(eng.vars["te_dg_mb"], 0.0)
+        mb, md = self._want(2.0, 31.0, 475e6, 430e6, self.EBR, -1.2, -1.2, edr=self.EDR_HUNGER)
+        self.assertAlmostEqual(mb, -self.EBR / 475e6)
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
+        self.assertLess(-1.2 + eng.vars["te_dg_mb"], P.RATE_TOTAL_FLOOR)
+        self.assertEqual(md, 0.0)
+        self.assertEqual(eng.vars["te_dg_md"], 0.0)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
-        self.assertNotIn("te_demog_census_births_up", eng.modifiers)
-        self.assertNotIn("te_demog_census_births_down", eng.modifiers)
+        self.assertNotIn("te_demog_census_deaths_up", eng.modifiers)
+        self.assertNotIn("te_demog_census_deaths_down", eng.modifiers)
 
     def test_the_prior_term_comes_off_the_read(self):
         """The state read holds last step's M: the clamp's 'other' takes it off."""
@@ -2481,34 +2523,37 @@ class TestRatesScript(unittest.TestCase):
     # -- batch 2 review (I1): the deaths half, fast mode, the up side, a change of sign ----------
 
     def test_the_deaths_floor_matches_the_model(self):
-        """The deaths half of the clamp's floor: the state read alone past -0.8 leaves M_d at 0 with no modifier; a
-        prior deaths term comes off the read before the floor is set."""
-        eng = self._eng(cdr=2.0, read_d=-1.2)
+        """The deaths half of the floor: the state read alone past -1 leaves M_d at 0 with no modifier; a prior deaths
+        term comes off the read before the floor is set."""
+        eng = self._eng(cdr=2.0, read_d=-1.2, edr=self.EDR_HUNGER)
         eng.call("te_demog_rates_refresh")
-        _, md = self._want(38.0, 2.0, 475e6, 430e6, self.EBR, 0.05, -1.2)
+        _, md = self._want(38.0, 2.0, 475e6, 430e6, self.EBR, 0.05, -1.2, edr=self.EDR_HUNGER)
         self.assertEqual(md, 0.0)
         self.assertEqual(eng.vars["te_dg_md"], 0.0)
         self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
         self.assertFalse({"te_demog_census_deaths_up", "te_demog_census_deaths_down"} & set(eng.modifiers))
-        eng = self._eng(cdr=2.0, read_d=-0.5)
+        eng = self._eng(cdr=2.0, read_d=-0.5, edr=self.EDR_HUNGER)
         eng.modifiers["te_demog_census_deaths_down"] = 0.3
         eng.vars["te_dg_md"] = -0.3
         eng.call("te_demog_rates_refresh")
-        _, md = self._want(38.0, 2.0, 475e6, 430e6, self.EBR, 0.05, -0.2)
-        self.assertAlmostEqual(md, -0.6)
+        _, md = self._want(38.0, 2.0, 475e6, 430e6, self.EBR, 0.05, -0.2, edr=self.EDR_HUNGER)
+        self.assertAlmostEqual(md, P.RATE_TOTAL_FLOOR + 0.2)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
         self.assertAlmostEqual(eng.locals["te_dg_rate_prev_d"], -0.3)
 
     def test_fast_modes_terms_come_off_the_read(self):
-        """Fast mode's +1 modifiers sit in the state read at (K - 1) x the average: both floors take them off, so
-        'other' is the read less the census's and fast mode's own terms. Only a binding floor shows it."""
-        eng = self._eng(cbr=2.0, cdr=2.0, read_b=2.5, read_d=2.5)
+        """Fast mode's +1 modifiers sit in the state read at (K - 1) x the average: the floors and the lines on top take
+        them off, so 'other' is the read less the census's and fast mode's own terms. The deaths floor binds here (mild
+        hunger's deaths pass the census's rate), so its -1 less 'other' shows it; births show it through the lines."""
+        eng = self._eng(cbr=2.0, cdr=2.0, read_b=2.5, read_d=2.5, edr=self.EDR_HUNGER)
         eng.modifiers.update(te_demog_fast_births=3.0, te_demog_fast_deaths=3.0)
         eng.vars.update(te_dg_fast_fb=3.0, te_dg_fast_fd=3.0)
         eng.call("te_demog_rates_refresh")
-        mb, md = self._want(2.0, 2.0, 475e6, 430e6, self.EBR, -0.5, -0.5)
-        self.assertAlmostEqual(mb, -0.3)
-        self.assertAlmostEqual(md, -0.3)
+        mb, md = self._want(2.0, 2.0, 475e6, 430e6, self.EBR, -0.5, -0.5, edr=self.EDR_HUNGER)
+        self.assertAlmostEqual(mb, demographics_model.rate_term(2.0 * self.POP * 100 / 12, 475e6, absorbed=self.EBR,
+                                                                other=-0.5, on_top=-0.5)[0])
+        self.assertGreater(mb, P.RATE_TOTAL_FLOOR + 0.5)
+        self.assertAlmostEqual(md, P.RATE_TOTAL_FLOOR + 0.5)
         self.assertAlmostEqual(eng.vars["te_dg_mb"], mb, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
 
@@ -2540,13 +2585,31 @@ class TestRatesScript(unittest.TestCase):
         self.assertEqual(eng.vars["te_dg_md"], 0.0)
         self.assertFalse({"te_demog_census_deaths_up", "te_demog_census_deaths_down"} & set(eng.modifiers))
 
-    def test_the_ceiling_alone_sets_the_flag(self):
+    def test_no_ceiling(self):
+        """No ceiling (owner, 2026-10-20; it was +3): a target past seven times the bare curve is met, unflagged."""
         eng = self._eng(cdr=400.0)
         eng.call("te_demog_rates_refresh")
-        mb, _ = self._want(38.0, 400.0, 475e6, 430e6, self.EBR, 0.05, 0.04)
-        self.assertGreater(mb, P.RATE_TOTAL_MIN - 0.05, "births unclamped")
-        self.assertEqual(eng.vars["te_dg_md"], P.RATE_TERM_MAX)
-        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1)
+        _, md = self._want(38.0, 400.0, 475e6, 430e6, self.EBR, 0.05, 0.04)
+        self.assertGreater(md, 3.0)
+        self.assertAlmostEqual(eng.vars["te_dg_md"], md, places=5)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 0)
+        self.assertEqual(eng.vars["te_dg_rate_clamp_d"], 0)
+
+    def test_a_walk_under_one_person_leaves_the_terms(self):
+        """The class-C guard that replaces the ceiling's one job: a walk under te_demog_k_rate_bare_min (less than one
+        person at the curves' lowest, in the walk's units: people x the curve per 100,000 a month) has nothing to fit
+        M to, so the terms stay as they were and no start rate is stored, as for a seed."""
+        for eb0, ed0 in ((79.0, 430e6), (475e6, 79.0)):
+            with self.subTest(eb0=eb0, ed0=ed0):
+                eng = self._eng(eb0=eb0, ed0=ed0)
+                eng.modifiers["te_demog_census_deaths_down"] = 0.3
+                eng.vars.update(te_dg_md=-0.3, te_dg_sr_d=1.0)
+                eng.call("te_demog_rates_refresh")
+                self.assertEqual(eng.vars["te_dg_md"], -0.3)
+                self.assertEqual(eng.modifiers, {"te_demog_census_deaths_down": 0.3})
+                self.assertNotIn("te_dg_sr_d", eng.vars)
+                self.assertAlmostEqual(eng.locals["te_dg_rate_new_d"], -0.3)
+        self.assertEqual(P.RATE_BARE_MIN, 80.0)   # the births curve's lowest, 80 a month per 100,000 (SoL 35 and above)
 
     # -- batch 2 review (m1, m5): the real seed path, and who calls the orchestrators ------------
 
@@ -2895,8 +2958,13 @@ class TestWindowEvents(unittest.TestCase):
         eng.modifiers.update(te_demog_census_births_down=0.3, te_demog_census_deaths_down=0.25)
         eng.locals.update(self.walk(self.STEADY, *self._set_reads(eng, 0.02, 0.05)))
         eng.call("te_demog_rates_refresh")
+        # the census's 0 births: the read goes to -1 plus literacy's netted -0.1, which then takes each pop to 0 itself
+        want, clamped = demographics_model.rate_term(0.0, eng.locals["te_dg_w_eb0"], absorbed=eng.locals["te_dg_w_ebr"],
+                                                     other=0.02, on_top=0.02)
+        self.assertFalse(clamped)
         self.assertLess(eng.vars["te_dg_mb"], -0.3)
-        self.assertEqual(eng.vars["te_dg_rate_clamped"], 1, "no births: the term is at its floor")
+        self.assertAlmostEqual(eng.vars["te_dg_mb"], want, places=5)
+        self.assertEqual(eng.vars["te_dg_rate_clamped"], 0)
         self.assertAlmostEqual(eng.modifiers["te_demog_census_births_down"], -eng.vars["te_dg_mb"])
 
     def test_a_lost_term_comes_back_within_a_month(self):
@@ -3084,9 +3152,11 @@ class TestOnTopSplitScript(unittest.TestCase):
 
     @staticmethod
     def walk(pops, read_b, read_d):
-        """The walk's sums for these pops (te_demog_walks, te_demog_absorbed_walk_pop)."""
+        """The walk's sums for these pops (te_demog_walks, te_demog_absorbed_walk_pop); no wealth line, so its bare deaths x
+        wealth (te_dg_w_edw) are 0."""
         w = dict(te_dg_w_eb0=0.0, te_dg_w_ed0=0.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=0.0, te_dg_w_ed=0.0,
-                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_pop=0.0)
+                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_pop=0.0,
+                 te_dg_w_edw=0.0)
         for bare_b, bare_d, abs_b, abs_d, top_b, top_d, sev_d, people in pops:
             mult_b, mult_d = max(0.0, 1 + read_b + abs_b + top_b), max(0.0, 1 + read_d + abs_d + top_d)
             w["te_dg_w_eb0"] += bare_b
@@ -3291,18 +3361,18 @@ class TestOnTopSplitScript(unittest.TestCase):
         for name in ("te_dg_ed_state", "te_dg_ed_sev", "te_dg_sev_share"):
             self.assertNotIn(name, eng.vars, name)
 
-    def test_where_dz_is_clamped_the_product_is_not(self):
-        """Deaths over five times the census's: dz stops at +4, the split still multiplies to the window over the
-        target (the hover's clamp text says why the row and the product differ, Task 8)."""
+    def test_far_above_the_census_the_product_is_the_row(self):
+        """Deaths over five times the census's: dz has no ceiling since 2026-10-20 (it stopped at +4), so the row,
+        1 + dz, and the split's product are both the window over the target."""
         pops = [self.SAFE, _SPop(175e6, 170e6, top_d=12.0, people=400e3)]
         eng, true = self.window(pops, pops)
         got = {k: eng.vars[v] for k, v in (("state", "te_dg_ed_state"), ("sev", "te_dg_ed_sev"))}
         self.assertAlmostEqual(got["state"], true["state"], delta=1e-6 * true["state"])
-        self.assertEqual(eng.vars["te_dg_dz"], P.ON_TOP_SCALE_MAX)
         product = (self.value(eng, "te_demog_deaths_whole_state") * self.value(eng, "te_demog_deaths_severe")
                    * self.value(eng, "te_demog_deaths_other"))
         self.assertAlmostEqual(product, eng.vars["te_dg_ed"] / eng.vars["te_dg_ed_target"], places=6)
-        self.assertGreater(product, 1 + P.ON_TOP_SCALE_MAX)
+        self.assertGreater(product, 5.0)
+        self.assertAlmostEqual(self.value(eng, "te_demog_deaths_on_top"), product, places=4)
 
     def test_the_start_parts_go_with_the_start_rate(self):
         """Wherever te_dg_sr_d goes, the start's parts go too: the refresh outside Full (te_demog_rates_clear), a
@@ -3335,8 +3405,9 @@ class TestOnTopSplitScript(unittest.TestCase):
 
 
 class TestOnTopClampSide(unittest.TestCase):
-    """Which clamp bit the census's deaths term (te_dg_rate_clamp_d), and its copy for the window dz measured
-    (te_dg_ed_clamp_d): the hover names the clamp that bit the window it describes (Task 6; Review Focus 3)."""
+    """Whether the floor bit the census's deaths term (te_dg_rate_clamp_d), and its copy for the window dz measured
+    (te_dg_ed_clamp_d): the hover names it for the window it describes (Task 6; Review Focus 3). Since 2026-10-20 there
+    is no cap, so the flag is 0 or 1."""
 
     def _eng(self, **kw):
         eng = TestRatesScript._eng(TestRatesScript(), **kw)
@@ -3344,9 +3415,11 @@ class TestOnTopClampSide(unittest.TestCase):
         return eng
 
     def test_the_deaths_clamp_records_its_side(self):
-        """1 at the floor, 2 at the cap, 0 when deaths weren't clamped; births clamped alone leave 0."""
-        for kw, side in ((dict(cdr=400.0), 2), (dict(cdr=0.5, read_d=-0.5), 1),
-                         (dict(cbr=2.0, read_b=-0.5), 0), ({}, 0)):
+        """1 at the floor, 0 when deaths weren't clamped (a target far above the bare curve too: no cap); births clamped
+        alone (the moved lines' on-top family past the rest of the read) leave 0."""
+        hunger = TestRatesScript.EDR_HUNGER
+        for kw, side in ((dict(cdr=400.0), 0), (dict(cdr=0.5, read_d=-0.5, edr=hunger), 1),
+                         (dict(cbr=2.0, ontop={"state_demog_ontop_birth_rate_mult": -2.0}), 0), ({}, 0)):
             eng = self._eng(**kw)
             eng.call("te_demog_rates_refresh")
             with self.subTest(kw=kw):
@@ -3358,9 +3431,9 @@ class TestOnTopClampSide(unittest.TestCase):
         """dz measures the window that ran on the last refresh's M: the step copies that refresh's flag before this
         step's refresh overwrites it; with none (the first Full step after Display only or a seed) the copy goes."""
         eng = _Engine({}, triggers={"te_demog_effects_run": True})
-        eng.vars["te_dg_rate_clamp_d"] = 2.0
+        eng.vars["te_dg_rate_clamp_d"] = 1.0
         eng.call("te_demog_on_top_clamp_copy")
-        self.assertEqual(eng.vars["te_dg_ed_clamp_d"], 2.0)
+        self.assertEqual(eng.vars["te_dg_ed_clamp_d"], 1.0)
         del eng.vars["te_dg_rate_clamp_d"]
         eng.call("te_demog_on_top_clamp_copy")
         self.assertNotIn("te_dg_ed_clamp_d", eng.vars)
@@ -3583,7 +3656,7 @@ class TestPopMultiplierScript(unittest.TestCase):
         field = "state_birth_rate_mult" if name == "te_demog_pop_birth_mult" else "state_mortality_mult"
         reads[f"state.modifier:{field}"] = read
         lo, hi = P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD, P.FOOD_SECURITY_STARVATION_THRESHOLD
-        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food, **reads}, pop_type="laborers",
+        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food, "wealth": 20.0, **reads}, pop_type="laborers",
                            triggers={"is_in_severe_starvation": food < lo, "is_in_mild_starvation": lo <= food < hi,
                                      "is_employed": False, "is_homeland_of_country_cultures": True})
         lit = P.LITERACY_BIRTH_PENALTY * literacy if field == "state_birth_rate_mult" else 0.0

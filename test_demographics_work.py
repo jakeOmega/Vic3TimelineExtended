@@ -3,7 +3,7 @@
 
 The script (te_demog_work_effects.txt, te_demog_work_values.txt and the hooks in te_demog_effects.txt) run by the
 census's interpreter (test_demographics_registry._Engine) against demographics_model's twins: the workforce term W with
-its ramp, guard and one refresh site; the pension setting's ages, term, interest groups and AI; the two bills; the work
+its landing on its target, guard and one refresh site; the pension setting's ages, term, interest groups and AI; the two bills; the work
 deaths' split by the census's own workers; and the wiring, the panel's gates and the self-checks' text."""
 
 import random
@@ -53,35 +53,48 @@ def _target(wa, at):
 
 
 class TestWorkforceTerm(unittest.TestCase):
-    """§2.1: W = te_demog_wf_target - 0.25 on a fixed-sign pair, from the moved lines' pair, a ramp a census step, the
-    0.05 guard, no cap; one refresh site."""
+    """§2.1: W = te_demog_wf_target - 0.25 on a fixed-sign pair, landing on its target at each census step (no ramp
+    since 2026-10-20: the engine's own pull phases the change in), the 0.05 guard, no cap; one refresh site."""
 
     def test_it_lands_from_the_pair_it_replaces(self):
-        """Women in the Fields' +0.30: W starts there and steps toward its target, so the state's workforce doesn't
-        jump; the pair comes off; the lines on top (Rosen's +0.03 here) are what the read holds beyond the pair."""
+        """Women in the Fields' +0.30: W replaces the pair and lands on its target at the first step; the pair comes off;
+        the lines on top (Rosen's +0.03 here) are what the read holds beyond the pair."""
         eng = _state(wa=0.75, at=0.525, read=0.33, pair=0.30, families=(0.30, 0.0))
         eng.call("te_demog_workforce_refresh")
-        want = M.workforce_term(_target(0.75, 0.525), 0.30, 0.03)
-        self.assertAlmostEqual(want, 0.30 - P.WF_RAMP_STEP)
+        want = M.workforce_term(_target(0.75, 0.525), 0.03)
+        self.assertAlmostEqual(want, _target(0.75, 0.525))
         self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=5)
         self.assertAlmostEqual(eng.modifiers["te_demog_census_workforce_up"], want, places=5)
         self.assertAlmostEqual(eng.vars["te_dg_wf_rem"], 0.03, places=5)
         self.assertNotIn("te_demog_line_working_adults_up", eng.modifiers)
         self.assertNotIn("te_dg_ln_working_adults", eng.vars)
 
-    def test_it_ramps_from_the_term_in_force(self):
+    def test_it_moves_from_the_term_in_force_to_the_target(self):
         eng = _state(wa=0.65, at=0.665, read=0.10, w=0.10)
         eng.call("te_demog_workforce_refresh")
-        self.assertAlmostEqual(eng.vars["te_dg_mw"], 0.10 + P.WF_RAMP_STEP, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], _target(0.65, 0.665), places=5)
         self.assertAlmostEqual(eng.vars["te_dg_wf_rem"], 0.0, places=5, msg="W isn't on top of itself")
 
-    def test_a_state_that_lost_its_modifier_ramps_from_its_variable(self):
+    def test_a_big_jump_in_the_target_lands_in_one_step(self):
+        """A target 0.35 away (a rich state's W at -0.10 when the women's rights laws and the pension age move it to
+        +0.25) is W after the next census step, both ways: no ramp spreads it over years (owner, 2026-10-20)."""
+        for w, wa, at in ((-0.10, 0.70, 0.714), (0.25, 0.60, 0.25)):
+            with self.subTest(w=w):
+                eng = _state(wa=wa, at=at, read=w, w=w)
+                eng.call("te_demog_workforce_refresh")
+                self.assertGreater(abs(_target(wa, at) - w), 0.3)
+                self.assertAlmostEqual(eng.vars["te_dg_mw"], _target(wa, at), places=5)
+                side = "up" if _target(wa, at) > 0 else "down"
+                self.assertAlmostEqual(eng.modifiers[f"te_demog_census_workforce_{side}"], abs(_target(wa, at)),
+                                       places=5)
+
+    def test_a_state_that_lost_its_modifier_goes_on_from_its_variable(self):
         """A revolution's winner keeps te_dg_mw but not the modifier: the read holds nothing of W, so the remainder
-        doesn't subtract it, and W goes on from the variable."""
+        doesn't subtract it, and W lands on its target."""
         eng = _state(wa=0.65, at=0.665, read=0.0, w=0.10)
         eng.modifiers.clear()
         eng.call("te_demog_workforce_refresh")
-        self.assertAlmostEqual(eng.vars["te_dg_mw"], 0.10 + P.WF_RAMP_STEP, places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], _target(0.65, 0.665), places=5)
         self.assertAlmostEqual(eng.vars["te_dg_wf_rem"], 0.0, places=5)
         self.assertIn("te_demog_census_workforce_up", eng.modifiers)
 
@@ -92,7 +105,7 @@ class TestWorkforceTerm(unittest.TestCase):
             w, extra = rng.uniform(-0.2, 0.3), rng.uniform(-0.3, 0.1)
             eng = _state(wa=wa, at=at, read=w + extra, w=w if w else None)
             eng.call("te_demog_workforce_refresh")
-            want = M.workforce_term(_target(wa, at), w, extra)
+            want = M.workforce_term(_target(wa, at), extra)
             self.assertAlmostEqual(eng.vars["te_dg_mw"], want, places=4, msg=(wa, at, w, extra))
             side = "up" if want > 0 else "down"
             self.assertAlmostEqual(eng.modifiers[f"te_demog_census_workforce_{side}"], abs(want), places=4)
@@ -128,7 +141,7 @@ class TestWorkforceTerm(unittest.TestCase):
         eng = _state(wa=0.75, at=0.525, read=0.30, pair=0.30, families=(0.30, 0.0))
         eng.region_vars["te_dg_mw_r"] = 0.18
         eng.call("te_demog_workforce_refresh")
-        self.assertAlmostEqual(eng.vars["te_dg_mw"], M.workforce_term(_target(0.75, 0.525), 0.18, 0.0), places=5)
+        self.assertAlmostEqual(eng.vars["te_dg_mw"], M.workforce_term(_target(0.75, 0.525), 0.0), places=5)
         self.assertAlmostEqual(eng.region_vars["te_dg_mw_r"], eng.vars["te_dg_mw"], places=5)
 
     def test_a_lost_modifier_comes_back_within_a_month(self):

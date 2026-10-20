@@ -1432,6 +1432,8 @@ te_demog_flows = {
 		change_local_variable = { name = te_dg_mig add = local_var:te_dg_rs_out }
 		te_demog_rs_selfcheck = yes
 	}
+	# the self-check rate_below_measured (te_demog_rate_effects.txt): an armed state's verdict, and a candidate
+	te_demog_rbm_selfcheck_flows = yes
 	# a residual inside the noise band is model error, not migration
 	set_local_variable = { name = te_dg_noise value = { value = var:te_dg_people multiply = te_demog_k_residual_noise_share } }
 	set_local_variable = { name = te_dg_neg_noise value = { value = local_var:te_dg_noise multiply = -1 } }
@@ -1795,7 +1797,13 @@ te_demog_step_begin = {
 	set_local_variable = { name = te_dg_rk_on value = 0 }
 	te_demog_flows = yes
 	te_demog_on_top_scales = yes
-	te_demog_cause_deaths_estimate = yes
+	# the calendar estimate of deaths by cause, which a late-game state's own count replaces (te_demog_lx_cause_deaths),
+	# so it runs only outside the late game: calendar ages put an immortal state's deaths fifty times too high, which a
+	# famine's deaths scale could take past the fixed-point range (te_demog_on_top_scales)
+	if = {
+		limit = { local_var:te_dg_lx_on = 0 }
+		te_demog_cause_deaths_estimate = yes
+	}
 }
 
 # The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
@@ -2079,25 +2087,36 @@ te_demog_step_finish = {
 	}
 	# the model's own rates without the on-top scales: what the census's births and deaths modifiers aim at
 	# next (te_demog_rates_refresh). Births: / (1 + bz). Deaths: the cause deaths / (1 + dz), the maternal
-	# deaths (which follow the births) / (1 + bz).
-	set_variable = {
-		name = te_dg_cbr_model
-		value = {
-			value = local_var:te_dg_births
-			divide = { value = local_var:te_dg_bz add = 1 min = 0.1 }
-			multiply = 1000
-			divide = { value = state_population min = 1 }
+	# deaths (which follow the births) / (1 + bz). Where 1 + bz or 1 + dz is under te_demog_k_on_top_factor_min (the
+	# engine gave under 1% of the model's events: a state line of -1 or below), the ring's events are too few to read
+	# the model's rate back from, so the last one stays (the realized rates are about 0, as te_dg_cbr / te_dg_cdr show);
+	# the maternal part then takes the floor, which counts the few births there were (demographics_model.step).
+	set_local_variable = { name = te_dg_bz1 value = { value = local_var:te_dg_bz add = 1 } }
+	set_local_variable = { name = te_dg_dz1 value = { value = local_var:te_dg_dz add = 1 } }
+	if = {
+		limit = { local_var:te_dg_bz1 >= te_demog_k_on_top_factor_min }
+		set_variable = {
+			name = te_dg_cbr_model
+			value = {
+				value = local_var:te_dg_births
+				divide = { value = local_var:te_dg_bz1 min = te_demog_k_on_top_factor_min }
+				multiply = 1000
+				divide = { value = state_population min = 1 }
+			}
 		}
 	}
-	set_variable = {
-		name = te_dg_cdr_model
-		value = {
-			value = local_var:te_dg_deaths
-			subtract = local_var:te_dg_mat
-			divide = { value = local_var:te_dg_dz add = 1 min = 0.1 }
-			add = { value = local_var:te_dg_mat divide = { value = local_var:te_dg_bz add = 1 min = 0.1 } }
-			multiply = 1000
-			divide = { value = state_population min = 1 }
+	if = {
+		limit = { local_var:te_dg_dz1 >= te_demog_k_on_top_factor_min }
+		set_variable = {
+			name = te_dg_cdr_model
+			value = {
+				value = local_var:te_dg_deaths
+				subtract = local_var:te_dg_mat
+				divide = { value = local_var:te_dg_dz1 min = te_demog_k_on_top_factor_min }
+				add = { value = local_var:te_dg_mat divide = { value = local_var:te_dg_bz1 min = te_demog_k_on_top_factor_min } }
+				multiply = 1000
+				divide = { value = state_population min = 1 }
+			}
 		}
 	}
 	# issue #1029: the year's deaths by cause, for the Causes of Death section

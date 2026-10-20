@@ -157,8 +157,12 @@ te_demog_pop_birth_mult = {
 # Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult
 # + its class's, its workplace's and its workplace's groups' mortality modifiers (the group reads carry
 # working_conditions at the building's scale, so the table is not added again: working_conditions_read)
-# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
-# left out: their scaling is unknown and the probe measured both at about 0.
+# + the starvation penalties (as births') + non-homeland mortality + the state's wealth line x the pop's wealth,
+# floored at 0. The wealth line is state_mortality_wealth_mult, which the engine scales by each pop's own wealth
+# (probe P6, owner, 2026-10-11): Private Health Insurance's outside Full; under Full the census's pair, which
+# carries that line at its rate and the late game's wealth slope (2026-10-20: until then the walk left it out, and
+# the window's deaths, dz and the residual ran high wherever the slope was on). Turmoil's mortality is left out: its
+# scaling is unknown and the probe measured it at about 0.
 te_demog_pop_death_mult = {
 	value = 1
 	add = state.modifier:state_mortality_mult
@@ -1278,6 +1282,7 @@ te_demog_pop_death_mult = {
 		limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }
 		add = state.modifier:state_non_homeland_mortality_mult
 	}
+	add = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }
 	min = 0
 }
 
@@ -1884,11 +1889,11 @@ te_demog_k_full_female_work_share = { value = 0.48 }
 te_demog_k_chain_step = { value = 0.02 }
 te_demog_k_chain_cap = { value = 0.2 }
 te_demog_k_crisis_at_war = { value = 0.3 }
-te_demog_k_on_top_scale_min = { value = -0.9 }
-te_demog_k_on_top_scale_max = { value = 4 }
+te_demog_k_on_top_scale_min = { value = -1 }
+te_demog_k_on_top_factor_min = { value = 0.01 }
 te_demog_k_window_start_weight = { value = 0.5 }
-te_demog_k_rate_total_min = { value = -0.8 }
-te_demog_k_rate_term_max = { value = 3 }
+te_demog_k_rate_total_floor = { value = -1 }
+te_demog_k_rate_bare_min = { value = 80 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }
 te_demog_k_wealth_line_floor = { value = -0.005 }
 te_demog_k_medicine_snap = { value = 0.005 }
@@ -1989,8 +1994,6 @@ te_demog_k_srb_base = { value = 105 }
 # Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the
 # workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
 te_demog_k_working_adult_base = { value = 0.25 }
-te_demog_k_wf_ramp_step = { value = 0.01 }
-te_demog_k_wf_ramp_step_neg = { value = -0.01 }
 te_demog_k_wf_pop_floor = { value = -0.15 }
 te_demog_k_pension_age_early = { value = 60 }
 te_demog_k_pension_age_raised = { value = 70 }

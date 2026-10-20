@@ -31,7 +31,7 @@
 #   te_dg_sp_d, te_dg_ss_d  the pops' own lines and severe starvation's part of them in that start rate, per head
 #                       (the Causes of Death section's split, te_demog_on_top_split): stored, moved and removed with
 #                       te_dg_sr_d
-#   te_dg_rate_clamp_d  which clamp bit the last refresh's deaths term: 0 none, 1 the floor, 2 the cap
+#   te_dg_rate_clamp_d  whether the floor bit the last refresh's deaths term: 0 no, 1 yes (the engine's own, -1)
 #   te_dg_ed_clamp_d    its copy for the window the step's dz measured (te_demog_on_top_clamp_copy)
 #   te_dg_ed_state, te_dg_ed_sev, te_dg_sev_share  the split of the window's deaths (te_demog_on_top_split; Full only)
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
@@ -123,14 +123,15 @@ te_demog_window_events = {
 #   te_dg_ed_sev    severe starvation's part of the pops' own lines over the window
 #   te_dg_sev_share the share of the state's people in severe starvation at the walk
 # Each end as te_demog_window_events weighs it. Today's from the walk: the engine's rate less what it would be without
-# any pop's own lines, w_ed - w_edr - (1 + read) x w_ed0 (a floored pop's own lines took its deaths to 0), and
-# te_dg_w_sevd. The start's from the refresh that stored te_dg_sr_d: te_dg_sp_d and te_dg_ss_d, per head. A start
+# any pop's own lines, w_ed - w_edr - (1 + read) x w_ed0 - the wealth read x w_edw (a floored pop's own lines took its
+# deaths to 0; the wealth line, which the walk applies per pop since 2026-10-20, is the census's own under Full, so it
+# stays in the whole state's part, beside the M that nets it), and te_dg_w_sevd. The start's from the refresh that stored te_dg_sr_d: te_dg_sp_d and te_dg_ss_d, per head. A start
 # rate without them (a save from before this build) leaves no split, so the row waits for the next count. Outside
 # Full the three go. The split multiplies back to te_dg_ed over the target (te_demog_deaths_whole_state, _severe,
 # _other) except where an end's read was below -1. Its whole-state part, which counts every pop unfloored, is then
 # negative, the deaths move into the other effects, and further down te_dg_ed_state floors at 0. M keeps the read at
-# or above -0.8 when it is fitted (unless the read without it is already below), so the end alone gets there: state-level
-# lines falling inside the window after M was fitted, or the read without M below te_demog_k_rate_total_min. Rare:
+# or above -1 when it is fitted (unless the read without it is already below), so the end alone gets there: state-level
+# lines falling inside the window after M was fitted, or the read without M below te_demog_k_rate_total_floor. Rare:
 # vanilla's largest negative state line is -0.5. Floor crossings from M's change cancel out of te_dg_ed_state, since
 # both of its parts count every pop, and reach the product only through te_dg_ed's own floor at 0. A second walk in a
 # year without a step (a state's second yearly pulse) rewrites te_dg_ed and the split but not dz or the target, so
@@ -146,6 +147,7 @@ te_demog_on_top_split = {
 				add = 1
 				multiply = local_var:te_dg_w_ed0
 				add = local_var:te_dg_w_edr
+				add = { value = modifier:state_mortality_wealth_mult multiply = local_var:te_dg_w_edw }
 				multiply = -1
 				add = local_var:te_dg_w_ed
 			}
@@ -265,6 +267,14 @@ te_demog_on_top_clamp_copy = {
 # the year's rates scaled by how far the engine's expected births and deaths over the window
 # (te_dg_eb, te_dg_ed, from this step's walk) ran from the model's rates that M aimed at, at
 # today's population. Under Full only, and only once a step has stored the model's rates.
+# Each scale is at least -1 (no events) and has no ceiling (owner, 2026-10-20; until then -0.9 and +4): the rates cap
+# each age's probability at 1 (te_demog_enter_group's max = 100000). With M free to reach -1, a late-game famine's
+# severe starvation (+0.56 to +0.94 at the bare curve's weight, where the census's rate is a fiftieth of it) can take
+# dz into the tens. Fixed point: every product a scale enters is the step's own events x at most 100,000 (people x a
+# rate per 100,000 x the multipliers), inside 9.2e13 while the events stay under 900 million. The exception is the
+# calendar estimate of deaths by cause in a late-game state: calendar ages put an immortal state's deaths fifty times
+# too high, so a 300-million state's famine could pass the range. The late sweep's own count replaces that estimate,
+# so the step skips it there (te_demog_step_begin).
 te_demog_on_top_scales = {
 	# the clamp that bit the window this step measures, for the Causes of Death section's hover
 	te_demog_on_top_clamp_copy = yes
@@ -290,7 +300,6 @@ te_demog_on_top_scales = {
 					divide = { value = var:te_dg_cbr_model multiply = state_population min = 1 }
 					subtract = 1
 					min = te_demog_k_on_top_scale_min
-					max = te_demog_k_on_top_scale_max
 				}
 			}
 		}
@@ -304,7 +313,6 @@ te_demog_on_top_scales = {
 					divide = { value = var:te_dg_cdr_model multiply = state_population min = 1 }
 					subtract = 1
 					min = te_demog_k_on_top_scale_min
-					max = te_demog_k_on_top_scale_max
 				}
 			}
 		}
@@ -327,8 +335,8 @@ te_demog_on_top_scales = {
 #   M = target / bare - 1 - replaced / bare - on_top x (1 - target / bare) + q x target / bare
 # q: the moved lines' on-top family (the engine-lines plan, 2026-10-11), script-only, which the census adds at its rate.
 # on_top: the state-level lines left on top (the read less the census's and fast mode's terms and
-# the moved lines' pairs, floored at te_demog_k_rate_total_min), so each acts on the census's
-# rate (owner, 2026-10-11); a pop's own lines on top stay on its bare curve.
+# the moved lines' pairs, floored at te_demog_k_rate_total_floor: past -1 the engine gives none), so each acts on the
+# census's rate (owner, 2026-10-11); a pop's own lines on top stay on its bare curve.
 # replaced: what the census absorbs per pop (owner amendment, 2026-10-10), at each pop's bare
 # curves: literacy's -0.1 and mild starvation's terms. The laws', technologies' and institutions'
 # lines are script-only (the engine-lines plan), so under Full the engine never applies the absorbed
@@ -336,8 +344,11 @@ te_demog_on_top_scales = {
 # every other term stay on top.
 # target = the model's rate (te_dg_cbr_model, per 1,000 a year) x today's people, a month x 100,000,
 # the walk's units (te_dg_w_eb0, te_dg_w_ed0). Clamped: the state read without the census's and
-# fast mode's own terms ("other") plus M stays at or above te_demog_k_rate_total_min, M is never
-# below 0 when other alone is past that, and M is at most te_demog_k_rate_term_max.
+# fast mode's own terms ("other") plus M stays at or above te_demog_k_rate_total_floor, the engine's own per-pop floor
+# (-1: a plain pop's events reach 0 there; owner, 2026-10-20), and M is never below 0 when other alone is past it. No
+# ceiling: target / bare is at most the model's rate over the curves' lowest, so M stays finite. A walk under
+# te_demog_k_rate_bare_min (less than one person at the curves' lowest, 80 births or 100 deaths a month per 100,000)
+# has nothing to fit M to, and leaves the terms as they are, as a seed does.
 # Always leaves two pairs of locals for fast mode, which runs next in the same effect:
 #   te_dg_rate_prev_b/_d  the terms the walk's window ran with (read through has_modifier
 #                         before anything here touches the modifiers)
@@ -368,8 +379,8 @@ te_demog_rates_refresh = {
 			has_variable = te_dg_stepped
 			has_variable = te_dg_cbr_model
 			has_variable = te_dg_cdr_model
-			local_var:te_dg_w_eb0 > 0
-			local_var:te_dg_w_ed0 > 0
+			local_var:te_dg_w_eb0 >= te_demog_k_rate_bare_min
+			local_var:te_dg_w_ed0 >= te_demog_k_rate_bare_min
 		}
 		if = {
 			limit = { var:te_dg_stepped > 0 }
@@ -394,7 +405,7 @@ te_demog_rates_refresh = {
 					subtract = local_var:te_dg_rate_prev_b
 					subtract = te_demog_fast_births_applied
 					subtract = te_demog_line_births_applied
-					min = te_demog_k_rate_total_min
+					min = te_demog_k_rate_total_floor
 				}
 			}
 			# the moved lines' on-top family (the engine-lines plan): script-only, so the census adds it at its rate
@@ -422,7 +433,7 @@ te_demog_rates_refresh = {
 			set_local_variable = {
 				name = te_dg_rate_lo
 				value = {
-					value = te_demog_k_rate_total_min
+					value = te_demog_k_rate_total_floor
 					subtract = modifier:state_birth_rate_mult
 					add = local_var:te_dg_rate_prev_b
 					add = te_demog_fast_births_applied
@@ -455,7 +466,7 @@ te_demog_rates_refresh = {
 					subtract = local_var:te_dg_rate_prev_d
 					subtract = te_demog_fast_deaths_applied
 					subtract = te_demog_line_deaths_applied
-					min = te_demog_k_rate_total_min
+					min = te_demog_k_rate_total_floor
 				}
 			}
 			# the moved lines' on-top family (the engine-lines plan): script-only, so the census adds it at its rate
@@ -487,7 +498,7 @@ te_demog_rates_refresh = {
 			set_local_variable = {
 				name = te_dg_rate_lo
 				value = {
-					value = te_demog_k_rate_total_min
+					value = te_demog_k_rate_total_floor
 					subtract = modifier:state_mortality_mult
 					add = local_var:te_dg_rate_prev_d
 					add = te_demog_fast_deaths_applied
@@ -496,7 +507,7 @@ te_demog_rates_refresh = {
 				}
 			}
 			te_demog_rate_clamp = yes
-			# which clamp bit deaths, for the next window: 0 none, 1 the floor, 2 the cap (te_demog_on_top_clamp_copy)
+			# whether the floor bit deaths, for the next window: 0 no, 1 yes (te_demog_on_top_clamp_copy)
 			set_variable = { name = te_dg_rate_clamp_d value = local_var:te_dg_rate_side }
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
@@ -523,7 +534,8 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_rep_d value = { value = local_var:te_dg_w_edr divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
 			# the engine's rate per head at the start of the window that begins here (the trapezoid,
 			# te_demog_window_events): the walk's, with this refresh's M for the last one and without the moved
-			# lines' pairs it clears, on the bare curves those reach. Fast mode, next in this effect, moves it by
+			# lines' pairs it clears, on the bare curves those reach; deaths swap the wealth line in force (the walk's read)
+			# for this refresh's te_dg_w, on the bare deaths x wealth it reaches. Fast mode, next in this effect, moves it by
 			# its own term's change
 			set_variable = {
 				name = te_dg_sr_b
@@ -544,12 +556,13 @@ te_demog_rates_refresh = {
 					subtract = local_var:te_dg_rate_lines_d
 					multiply = local_var:te_dg_w_ed0m
 					add = local_var:te_dg_w_ed
+					add = { value = var:te_dg_w subtract = modifier:state_mortality_wealth_mult multiply = local_var:te_dg_w_edw }
 					divide = { value = state_population min = 1 }
 				}
 			}
 			# the start's own lines and severe starvation's part, per head (te_demog_on_top_split): today's, less the
 			# change in the census's term on the pops the engine floors at 0, which it doesn't reach (te_dg_sr_d moves
-			# by it on the others)
+			# by it on the others), and less the wealth line, which the split counts in the whole state's part
 			set_variable = {
 				name = te_dg_sp_d
 				value = {
@@ -561,6 +574,7 @@ te_demog_rates_refresh = {
 					add = local_var:te_dg_w_ed
 					subtract = local_var:te_dg_w_edr
 					subtract = { value = modifier:state_mortality_mult add = 1 multiply = local_var:te_dg_w_ed0 }
+					subtract = { value = modifier:state_mortality_wealth_mult multiply = local_var:te_dg_w_edw }
 					divide = { value = state_population min = 1 }
 				}
 			}
@@ -592,10 +606,12 @@ te_demog_rates_refresh = {
 			remove_variable = te_dg_ss_d
 		}
 	}
+	# the self-check rate_below_measured: arms this step's candidate or drops it
+	te_demog_rbm_selfcheck_arm = yes
 }
 
-# local te_dg_rate_m into local_var:te_dg_rate_lo .. te_demog_k_rate_term_max, noting a clamp, and which side bit
-# this term in te_dg_rate_side (0 none, 1 the floor, 2 the cap; reset at each call, so deaths never keep births').
+# local te_dg_rate_m at least local_var:te_dg_rate_lo, noting a clamp, and whether the floor bit this term in
+# te_dg_rate_side (0 no, 1 yes; reset at each call, so deaths never keep births'). No ceiling (owner, 2026-10-20).
 te_demog_rate_clamp = {
 	set_local_variable = { name = te_dg_rate_side value = 0 }
 	if = {
@@ -603,12 +619,6 @@ te_demog_rate_clamp = {
 		set_local_variable = { name = te_dg_rate_m value = local_var:te_dg_rate_lo }
 		set_local_variable = { name = te_dg_rate_clamped value = 1 }
 		set_local_variable = { name = te_dg_rate_side value = 1 }
-	}
-	else_if = {
-		limit = { local_var:te_dg_rate_m > te_demog_k_rate_term_max }
-		set_local_variable = { name = te_dg_rate_m value = te_demog_k_rate_term_max }
-		set_local_variable = { name = te_dg_rate_clamped value = 1 }
-		set_local_variable = { name = te_dg_rate_side value = 2 }
 	}
 }
 
@@ -787,5 +797,195 @@ te_demog_rates_clear = {
 	if = {
 		limit = { has_variable = te_dg_ed_clamp_d }
 		remove_variable = te_dg_ed_clamp_d
+	}
+}
+
+# ---- The self-check rate_below_measured (owner, 2026-10-20) --------------------------------------------------------
+# The floor went from -0.8 to the engine's own -1, but the probes measured the engine's per-pop rate as linear only
+# down to -0.9 (Q7, the growth probe). The walk assumes that line, so te_dg_ed and dz can't see a bend below -0.9;
+# only the residual can. Once a game, under Full and at normal speed, a state whose deaths fall in one census step
+# from the measured range (the walk's average multiplier over the bare curve at least 0.1 at both ends of the window
+# just measured: an average total at or above -0.9) to -0.95 or below (the new window's start rate at most 0.05 of the
+# bare curve), with no war dead, kills or known moves and a residual within a quarter of the new window's deaths, is
+# armed; at its next step, if the window's end is at -0.95 or below too and nothing else moved people, the window's
+# residual is compared with its expected deaths (the walk applies the census's wealth line per pop, as the engine does:
+# te_demog_pop_death_mult). OK within half of them (the low side widened by a month of the old rate: a change of rate
+# shows within a month, Q7); BROKEN below that band. A stop at -0.9 only adds deaths, so it pushes the residual down: a
+# residual above the band is migration the baseline missed, which drops the arm with no line and leaves the check to a
+# later state. The baseline is taken in the measured range on purpose: a residual taken below -0.9 would already hold
+# the bend if there were one, and a state with that much migration would never arm. Why -0.95: if the engine stopped at
+# -0.9, a window at -0.95 would see twice the deaths the walk expects, a gap the size of its deaths, which half of them
+# catches; at -0.91 it would be a tenth. And the arm asks that gap to clear the band's low side (half the deaths and the
+# month's lag) by the quarter of the deaths the baseline allows for migration, so a stop at -0.9 can't read OK however
+# far the old rate stood above the new: an old window at 0.55 of the bare curve, a late medical leap, has a month's lag
+# that would swallow it (the review of #1082). The console's replay (option a) runs the flows with no walk: the hook
+# does nothing there. docs/testing/demographics-playtest.md.
+# State variables while armed: te_dg_rbm_r0 (the baseline residual; alone, a candidate the refresh resolves),
+# te_dg_rbm_s1 (the window's start multiplier) and te_dg_rbm_lag (a month at the old rate less the new, deaths).
+
+# THIS = a state, in te_demog_flows straight after the residual (te_dg_mig, after Internal Resettlement's known moves):
+# an armed state's verdict, then a candidate baseline from the window just measured.
+te_demog_rbm_selfcheck_flows = {
+	# the console's replay (te_debug_demog_replay) runs te_demog_flows with no walk: nothing to read, so nothing here
+	if = {
+		limit = { has_local_variable = te_dg_w_ed0 }
+		if = {
+			limit = { has_variable = te_dg_rbm_s1 }
+			if = {
+				limit = {
+					NOT = { has_global_variable = te_demog_rbm_selfcheck_done }
+					te_demog_effects_run = yes
+					NOT = { te_demog_clock_on = yes }
+					has_variable = te_dg_sr_d
+					local_var:te_dg_war = 0
+					local_var:te_dg_kills = 0
+					local_var:te_dg_rk_on = 0
+				}
+				set_local_variable = { name = te_dg_rbm_s value = { value = local_var:te_dg_w_ed divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
+				set_local_variable = { name = te_dg_rbm_hi value = { value = var:te_dg_ed multiply = 0.5 } }
+				set_local_variable = { name = te_dg_rbm_lo value = { value = local_var:te_dg_rbm_hi add = var:te_dg_rbm_lag multiply = -1 } }
+				# above the band: migration the baseline missed (a stop at -0.9 only pushes the residual down), so no
+				# verdict and no flag; a later state can arm
+				if = {
+					limit = {
+						local_var:te_dg_rbm_s <= 0.05
+						local_var:te_dg_mig <= local_var:te_dg_rbm_hi
+					}
+					set_global_variable = te_demog_rbm_selfcheck_done
+					set_variable = { name = te_dg_rbm_s2 value = local_var:te_dg_rbm_s }
+					set_variable = { name = te_dg_rbm_pop value = state_population }
+					set_variable = { name = te_dg_rbm_r value = local_var:te_dg_mig }
+					# the deaths the engine would have added had it stopped at -0.9 (the bare curve's tenth, less the expected)
+					set_variable = {
+						name = te_dg_rbm_gap
+						value = { value = local_var:te_dg_w_ed0 multiply = 0.1 multiply = te_demog_step_months divide = 100000 subtract = var:te_dg_ed }
+					}
+					if = {
+						limit = { var:te_dg_rbm_r >= local_var:te_dg_rbm_lo }
+						debug_log = "TE_SELF_CHECK OK rate_below_measured state=[THIS.GetState.GetNameNoFormatting] people=[THIS.Var('te_dg_rbm_pop').GetValue|0] start=[THIS.Var('te_dg_rbm_s1').GetValue|3] end=[THIS.Var('te_dg_rbm_s2').GetValue|3] expected_deaths=[THIS.Var('te_dg_ed').GetValue|0] residual=[THIS.Var('te_dg_rbm_r').GetValue|0] baseline=[THIS.Var('te_dg_rbm_r0').GetValue|0] lag=[THIS.Var('te_dg_rbm_lag').GetValue|0] if_stopped_at_0_9=[THIS.Var('te_dg_rbm_gap').GetValue|0] (a year with the deaths total below -0.95 ran as the walk's linear line expects: the residual is within half of the expected deaths, so the engine's per-pop rate holds its line below -0.9 and the census's floor at -1 stands) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN rate_below_measured state=[THIS.GetState.GetNameNoFormatting] people=[THIS.Var('te_dg_rbm_pop').GetValue|0] start=[THIS.Var('te_dg_rbm_s1').GetValue|3] end=[THIS.Var('te_dg_rbm_s2').GetValue|3] expected_deaths=[THIS.Var('te_dg_ed').GetValue|0] residual=[THIS.Var('te_dg_rbm_r').GetValue|0] baseline=[THIS.Var('te_dg_rbm_r0').GetValue|0] lag=[THIS.Var('te_dg_rbm_lag').GetValue|0] if_stopped_at_0_9=[THIS.Var('te_dg_rbm_gap').GetValue|0] (the residual is below the expected deaths' half and a month's lag: about minus if_stopped_at_0_9 means the engine stops at -0.9, and the census's floor goes back to -0.9; a figure far from it is emigration the baseline missed: see docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					remove_variable = te_dg_rbm_s2
+					remove_variable = te_dg_rbm_pop
+					remove_variable = te_dg_rbm_r
+					remove_variable = te_dg_rbm_gap
+				}
+			}
+			remove_variable = te_dg_rbm_s1
+			remove_variable = te_dg_rbm_lag
+			if = {
+				limit = { has_variable = te_dg_rbm_r0 }
+				remove_variable = te_dg_rbm_r0
+			}
+		}
+		else_if = {
+			limit = { has_variable = te_dg_rbm_r0 }
+			remove_variable = te_dg_rbm_r0
+		}
+		# a candidate: the window just measured sat in the measured range at both ends, and nothing but the engine's own
+		# migration moved people (the refresh arms it or drops it, te_demog_rbm_selfcheck_arm)
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_demog_rbm_selfcheck_done }
+				te_demog_effects_run = yes
+				NOT = { te_demog_clock_on = yes }
+				local_var:te_dg_war = 0
+				local_var:te_dg_kills = 0
+				local_var:te_dg_rk_on = 0
+				local_var:te_dg_w_ed0 > 0
+			}
+			set_local_variable = { name = te_dg_rbm_s value = { value = local_var:te_dg_w_ed divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
+			if = {
+				limit = { has_variable = te_dg_sr_d }
+				set_local_variable = {
+					name = te_dg_rbm_s
+					value = {
+						value = var:te_dg_sr_d
+						multiply = state_population
+						divide = { value = local_var:te_dg_w_ed0 min = 1 }
+						max = local_var:te_dg_rbm_s
+					}
+				}
+			}
+			if = {
+				limit = { local_var:te_dg_rbm_s >= 0.1 }
+				set_variable = { name = te_dg_rbm_r0 value = local_var:te_dg_mig }
+			}
+		}
+	}
+}
+
+# THIS = ROOT = a state, at the end of te_demog_rates_refresh: a candidate (te_demog_rbm_selfcheck_flows) is armed if this
+# refresh stored the next window's start rate (local te_dg_rate_sr), that rate is at -0.95 or below (at most 0.05 of the
+# bare curve), the window would hold at least 100 deaths a year, the candidate's residual is within a quarter of them,
+# and the deficit a stop at -0.9 would leave (the bare curve's tenth less those deaths) clears the OK band's low side
+# (half the deaths and a month's lag) by that quarter; otherwise it goes. A state already armed keeps its arm (a second
+# pulse in a year refits M mid-window).
+te_demog_rbm_selfcheck_arm = {
+	if = {
+		limit = {
+			has_variable = te_dg_rbm_r0
+			NOT = { has_variable = te_dg_rbm_s1 }
+		}
+		set_local_variable = { name = te_dg_rbm_ok value = 0 }
+		if = {
+			limit = {
+				local_var:te_dg_rate_sr > 0
+				has_variable = te_dg_sr_d
+			}
+			set_local_variable = {
+				name = te_dg_rbm_s
+				value = { value = var:te_dg_sr_d multiply = state_population divide = { value = local_var:te_dg_w_ed0 min = 1 } }
+			}
+			set_local_variable = {
+				name = te_dg_rbm_e1
+				value = { value = var:te_dg_sr_d multiply = state_population multiply = te_demog_step_months divide = 100000 }
+			}
+			set_local_variable = { name = te_dg_rbm_q value = { value = local_var:te_dg_rbm_e1 multiply = 0.25 } }
+			set_local_variable = { name = te_dg_rbm_qn value = { value = local_var:te_dg_rbm_q multiply = -1 } }
+			# a month at the old rate less the new (Q7: a change of rate shows within a month), deaths
+			set_local_variable = {
+				name = te_dg_rbm_lg
+				value = {
+					value = var:te_dg_sr_d
+					multiply = state_population
+					multiply = -1
+					add = local_var:te_dg_w_ed
+					divide = 100000
+					min = 0
+				}
+			}
+			# the deficit a stop at -0.9 would leave over the window, less what the OK band's low side and the baseline's
+			# migration could take: above 0, a stop at -0.9 reads BROKEN
+			set_local_variable = {
+				name = te_dg_rbm_room
+				value = {
+					value = local_var:te_dg_w_ed0
+					multiply = 0.1
+					multiply = te_demog_step_months
+					divide = 100000
+					subtract = { value = local_var:te_dg_rbm_e1 multiply = 1.75 }
+					subtract = local_var:te_dg_rbm_lg
+				}
+			}
+			if = {
+				limit = {
+					local_var:te_dg_rbm_s <= 0.05
+					local_var:te_dg_rbm_e1 >= 100
+					var:te_dg_rbm_r0 <= local_var:te_dg_rbm_q
+					var:te_dg_rbm_r0 >= local_var:te_dg_rbm_qn
+					local_var:te_dg_rbm_room > 0
+				}
+				set_local_variable = { name = te_dg_rbm_ok value = 1 }
+				set_variable = { name = te_dg_rbm_s1 value = local_var:te_dg_rbm_s }
+				set_variable = { name = te_dg_rbm_lag value = local_var:te_dg_rbm_lg }
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_rbm_ok = 0 }
+			remove_variable = te_dg_rbm_r0
+		}
 	}
 }

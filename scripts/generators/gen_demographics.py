@@ -1379,8 +1379,12 @@ def engine_rate_terms(o, root):
     o("# Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult")
     o("# + its class's, its workplace's and its workplace's groups' mortality modifiers (the group reads carry")
     o("# working_conditions at the building's scale, so the table is not added again: working_conditions_read)")
-    o("# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are")
-    o("# left out: their scaling is unknown and the probe measured both at about 0.")
+    o("# + the starvation penalties (as births') + non-homeland mortality + the state's wealth line x the pop's wealth,")
+    o("# floored at 0. The wealth line is state_mortality_wealth_mult, which the engine scales by each pop's own wealth")
+    o("# (probe P6, owner, 2026-10-11): Private Health Insurance's outside Full; under Full the census's pair, which")
+    o("# carries that line at its rate and the late game's wealth slope (2026-10-20: until then the walk left it out, and")
+    o("# the window's deaths, dz and the residual ran high wherever the slope was on). Turmoil's mortality is left out: its")
+    o("# scaling is unknown and the probe measured it at about 0.")
     o("te_demog_pop_death_mult = {")
     o("value = 1")
     o("add = state.modifier:state_mortality_mult")
@@ -1426,6 +1430,7 @@ def engine_rate_terms(o, root):
         o("limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }")
         o("add = state.modifier:state_non_homeland_mortality_mult")
         o("}")
+    o("add = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }")
     o("min = 0")
     o("}")
     o("")
@@ -1644,10 +1649,10 @@ def constants(o):
         "family_base": P.FAMILY_BASE, "family_rights_weight": P.FAMILY_RIGHTS_WEIGHT,
         "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
-        "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_scale_max": P.ON_TOP_SCALE_MAX,
+        "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_factor_min": P.ON_TOP_FACTOR_MIN,
         "window_start_weight": P.WINDOW_START_WEIGHT,
-        "rate_total_min": P.RATE_TOTAL_MIN,
-        "rate_term_max": P.RATE_TERM_MAX,
+        "rate_total_floor": P.RATE_TOTAL_FLOOR,
+        "rate_bare_min": P.RATE_BARE_MIN,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
         "wealth_line_floor": P.WEALTH_LINE_FLOOR,
         "medicine_snap": P.MEDICINE_SNAP, "medicine_snap_neg": -P.MEDICINE_SNAP,
@@ -1780,7 +1785,6 @@ def work_step2_values(o):
     o("# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).")
     k = {
         "working_adult_base": P.WORKING_ADULT_BASE,
-        "wf_ramp_step": P.WF_RAMP_STEP, "wf_ramp_step_neg": -P.WF_RAMP_STEP,
         # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
         # least this
         "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,

@@ -1207,7 +1207,7 @@
   },
   "rich_full": {
    "modifiers": {
-    "te_demog_census_births_down": 0.85,
+    "te_demog_census_births_down": 0.90763,
     "te_demog_census_deaths_down": 0.56066
    },
    "vars": {
@@ -1550,7 +1550,7 @@
     "te_dg_m_mat": 73.03,
     "te_dg_m_work": 1.0,
     "te_dg_mab": 30.92826,
-    "te_dg_mb": -0.85,
+    "te_dg_mb": -0.90763,
     "te_dg_md": -0.56066,
     "te_dg_means": 0.8381,
     "te_dg_median": 52.31635,
@@ -1576,7 +1576,7 @@
     "te_dg_q_b": 0.0,
     "te_dg_q_d": 0.0,
     "te_dg_rate_clamp_d": 0.0,
-    "te_dg_rate_clamped": 1.0,
+    "te_dg_rate_clamped": 0.0,
     "te_dg_raw": 245398.50378,
     "te_dg_rep_b": -0.02,
     "te_dg_rep_d": 0.0,
@@ -1584,7 +1584,7 @@
     "te_dg_sex_balance": 99.929,
     "te_dg_sol": 40.0,
     "te_dg_sp_d": -17.2,
-    "te_dg_sr_b": 71.25,
+    "te_dg_sr_b": 43.87575,
     "te_dg_sr_d": 188.9162,
     "te_dg_ss_d": 0.0,
     "te_dg_stepped": 1.0,

@@ -563,27 +563,41 @@ class TestRateTerm(unittest.TestCase):
         m, _ = M.rate_term(target=80.0, bare=100.0, absorbed=P.LITERACY_BIRTH_PENALTY * 40.0)
         self.assertAlmostEqual(100.0 * (1 + m) + P.LITERACY_BIRTH_PENALTY * 40.0, 80.0)
 
-    def test_the_clamp_keeps_the_state_total_in_the_measured_range(self):
-        m, clamped = M.rate_term(target=5.0, bare=100.0, other=0.1)
-        self.assertAlmostEqual(m, P.RATE_TOTAL_MIN - 0.1)
-        self.assertTrue(clamped)
-        m, clamped = M.rate_term(target=600.0, bare=100.0)
-        self.assertEqual(m, P.RATE_TERM_MAX)
+    def test_the_floor_is_the_engines_own(self):
+        """Owner, 2026-10-20: the state read with M in it goes down to -1, where a plain pop's events reach 0. A
+        target 5% of the bare curve is reached in full (the old -0.8 held the engine at a fifth of it)."""
+        m, clamped = M.rate_term(target=5.0, bare=100.0, other=0.1, on_top=0.1)
+        self.assertAlmostEqual(100.0 * (1 + m + 0.1), 5.0 * 1.1)
+        self.assertFalse(clamped)
+        self.assertLess(0.1 + m, -0.9)
+        # the floor binds only where the census's absorbed per-pop lines alone pass its rate: then the read sits at -1
+        m, clamped = M.rate_term(target=5.0, bare=100.0, absorbed=10.0, other=0.1, on_top=0.1)
+        self.assertAlmostEqual(m, P.RATE_TOTAL_FLOOR - 0.1)
         self.assertTrue(clamped)
 
+    def test_no_ceiling(self):
+        """No ceiling (until 2026-10-20 +3): a target six times the bare curve gets M = +5."""
+        m, clamped = M.rate_term(target=600.0, bare=100.0)
+        self.assertAlmostEqual(m, 5.0)
+        self.assertFalse(clamped)
+
     def test_the_clamp_never_pushes_past_the_terms_on_top(self):
-        """A plague event or a decree already past -0.8 in the state read (starvation is per pop, outside it): M may
-        not push further down."""
-        m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2)
+        """A plague event or a decree already past -1 in the state read (starvation is per pop, outside it): M may
+        not push further down, and the lines on top cut the census's rate to nothing."""
+        m, clamped = M.rate_term(target=5.0, bare=100.0, absorbed=1.0, other=-1.2, on_top=-1.2)
         self.assertEqual(m, 0.0)
         self.assertTrue(clamped)
+        m, clamped = M.rate_term(target=5.0, bare=100.0, other=-1.2, on_top=-1.2)
+        self.assertAlmostEqual(m, 0.0)
+        self.assertFalse(clamped)
 
     def test_nobody_gets_no_term(self):
         self.assertEqual(M.rate_term(target=0.0, bare=0.0), (0.0, False))
 
     def test_the_bounds(self):
-        self.assertEqual(P.RATE_TOTAL_MIN, -0.8)   # -0.9 measured, less literacy's -0.1
-        self.assertEqual(P.RATE_TERM_MAX, 3.0)     # a guard: linearity holds far above (the 12x fast run)
+        self.assertEqual(P.RATE_TOTAL_FLOOR, -1.0)   # the engine's own: Q7's -3 stopped births, the growth probe's -5 deaths
+        self.assertEqual(P.ON_TOP_SCALE_MIN, -1.0)   # no events
+        self.assertFalse(hasattr(P, "RATE_TOTAL_MIN") or hasattr(P, "RATE_TERM_MAX") or hasattr(P, "ON_TOP_SCALE_MAX"))
 
 
 class TestOnTopScales(unittest.TestCase):
@@ -592,8 +606,39 @@ class TestOnTopScales(unittest.TestCase):
     def test_scale_is_engine_over_target(self):
         self.assertAlmostEqual(M.on_top_scale(engine=105.0, target=100.0), 0.05)
         self.assertEqual(M.on_top_scale(engine=50.0, target=0.0), 0.0)
-        self.assertEqual(M.on_top_scale(engine=1.0, target=100.0), P.ON_TOP_SCALE_MIN)
-        self.assertEqual(M.on_top_scale(engine=1000.0, target=100.0), P.ON_TOP_SCALE_MAX)
+        # natural bounds only: -1 is no events, and there is no ceiling (owner, 2026-10-20)
+        self.assertAlmostEqual(M.on_top_scale(engine=1.0, target=100.0), -0.99)
+        self.assertEqual(M.on_top_scale(engine=0.0, target=100.0), -1.0)
+        self.assertAlmostEqual(M.on_top_scale(engine=10000.0, target=100.0), 99.0)
+
+    def test_no_events_keeps_the_models_own_rate_unread(self):
+        """1 + scale under ON_TOP_FACTOR_MIN: the step's events are too few to read the model's own back from, so the
+        step gives None (the script keeps the last rate); deaths' maternal part counts the births there were."""
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        a = M.step(M.seed(inp, 1836, 1e6), inp, 1837)
+        b = M.step(M.seed(inp, 1836, 1e6), inp, 1837, births_scale=-1.0, deaths_scale=0.2)
+        self.assertEqual(b["births"], 0.0)
+        self.assertIsNone(b["births_model"])
+        self.assertAlmostEqual(b["deaths_model"], a["deaths"] - a["maternal"], delta=a["deaths"] * 1e-9)
+        c = M.step(M.seed(inp, 1836, 1e6), inp, 1837, births_scale=0.1, deaths_scale=-1.0)
+        self.assertIsNone(c["deaths_model"])
+        self.assertAlmostEqual(c["births_model"], a["births"], places=6)
+        self.assertLess(c["deaths"], a["deaths"] * 0.05, "only childbirth's deaths are left")
+        # just above the threshold the model's own rates still come back
+        d = M.step(M.seed(inp, 1836, 1e6), inp, 1837, births_scale=-0.98, deaths_scale=-0.98)
+        self.assertAlmostEqual(d["births_model"], a["births"], delta=a["births"] * 1e-9)
+        self.assertAlmostEqual(d["deaths_model"], a["deaths"], delta=a["deaths"] * 1e-9)
+
+    def test_a_large_scale_kills_at_most_everyone(self):
+        """No ceiling on the deaths scale: each age's probability stops at 1 (the 100,000 cap)."""
+        inp = M.Inputs(sol=9.0, literacy=0.2)
+        ring = M.seed(inp, 1836, 1e6)
+        people = ring.people()
+        out = M.step(ring, inp, 1837, deaths_scale=500.0)
+        # childbirth's deaths come off the year's mothers on top of their own (the sweep's order), so they are left out
+        self.assertLessEqual(out["deaths"] - out["maternal"], people * (1 + 1e-9))
+        self.assertGreater(out["deaths"] - out["maternal"], people * 0.99)
+        self.assertAlmostEqual(ring.people(), out["births"], delta=out["births"] * 0.01 + 1.0)
 
     def test_scaled_step_gives_back_the_models_own_events(self):
         inp = M.Inputs(sol=9.0, literacy=0.2)
@@ -1218,19 +1263,20 @@ class TestPhase2Step2(unittest.TestCase):
     """Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the workforce
     term, the pension setting, the two bills and the work deaths' split."""
 
-    def test_the_term_ramps_toward_its_target(self):
-        step = P.WF_RAMP_STEP
-        self.assertAlmostEqual(M.workforce_term(0.2, 0.0, 0.0), step)
-        self.assertAlmostEqual(M.workforce_term(-0.2, 0.0, 0.0), -step)
-        self.assertAlmostEqual(M.workforce_term(0.003, 0.0, 0.0), 0.003, msg="within a step it lands")
-        self.assertAlmostEqual(M.workforce_term(0.15, 0.30, 0.0), 0.30 - step, msg="from the pair it replaces")
+    def test_the_term_lands_on_its_target(self):
+        """No ramp (owner, 2026-10-20): W is its target after a census step, however far the target moved; the engine's
+        own pull phases the change in."""
+        self.assertAlmostEqual(M.workforce_term(0.2, 0.0), 0.2)
+        self.assertAlmostEqual(M.workforce_term(-0.1, 0.0), -0.1)
+        self.assertAlmostEqual(M.workforce_term(0.15, 0.0), 0.15, msg="Women in the Fields' pair of +0.30 lands at once")
+        self.assertFalse(hasattr(P, "WF_RAMP_STEP"))
 
     def test_the_guard_keeps_every_pop_at_its_floor(self):
         """The lowest base (aristocrats' 0.2) + W + the lines on top stays at WF_POP_RATIO_MIN; no cap above."""
         floor = P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN
-        self.assertAlmostEqual(M.workforce_term(-0.5, floor, 0.0), floor)
-        self.assertAlmostEqual(M.workforce_term(-0.5, floor, -0.1), floor + 0.1, msg="a negative line on top")
-        self.assertAlmostEqual(M.workforce_term(5.0, 4.0, 0.0), 4.0 + P.WF_RAMP_STEP, msg="no cap")
+        self.assertAlmostEqual(M.workforce_term(-0.5, 0.0), floor)
+        self.assertAlmostEqual(M.workforce_term(-0.5, -0.1), floor + 0.1, msg="a negative line on top")
+        self.assertAlmostEqual(M.workforce_term(5.0, 0.0), 5.0, msg="no cap")
         self.assertEqual(P.POP_BASE_RATIO_MIN, 0.2)
 
     def test_the_term_nets_only_the_define(self):

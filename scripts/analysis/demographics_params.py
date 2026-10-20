@@ -224,17 +224,14 @@ DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 # ---- Phase 2 step 2: the workforce, pensions and health costs ------------------------------------------------------
 # docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
 # Full only (te_demog_work_effects.txt). The harness fits the numbers (demographics_harness.py workforce, pensions).
-# The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It moves toward
-# that target by at most WF_RAMP_STEP a census step: the engine's own pull toward a pop's ratio has not been measured
-# in game (the mod's WORKING_ADULT_RATIO_SKEW_MAXIMUM, extra_defines.txt, suggests it is instant; the saves suggest it
-# is slow: docs/testing/demographics-playtest.md, § Phase 2 step 2), and a pension change should reach the workforce as the
-# cohorts it frees or holds pass the age, over a few years, not in a week. At 0.01 a change of one position in a rich
-# state (Standard to Raised +0.020 on the engine's scale, Early to Standard +0.023: harness `workforce`) shows fully in
-# two to three census years, Early to Raised in about five; Women in the Fields' first landing (+0.30 of lines against a
-# target near +0.15) takes about fifteen. W starts at the moved lines' pair it replaces, so a state's workforce never
-# jumps when the census takes over. The self-check workforce_follows_target reads whether the engine keeps up.
+# The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It lands on that
+# target at each census step, and the engine's own pull toward a pop's ratio phases the change in (owner, 2026-10-20:
+# until then W moved at most 0.01 a step, so a pension position took two to three census years and Women in the
+# Fields' first landing about fifteen; it bound in 29% of the 2057 save's steps, 418M people, and the saves showed the
+# engine's pull already lagging, so the change was slowed twice over). When W first lands it replaces the moved lines'
+# pair, so a state's set ratio moves from the pair to the target at that step. The self-check workforce_follows_target
+# reads how fast the engine follows.
 WORKING_ADULT_BASE = 0.25      # the define WORKING_ADULT_RATIO_BASE (vanilla 00_defines.txt); the term nets only it
-WF_RAMP_STEP = 0.01
 WF_POP_RATIO_MIN = 0.05        # the guard: no pop's own ratio below this (W is raised instead; no cap above)
 POP_BASE_RATIO_MIN = min(min(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # aristocrats' 0.2
 # The pension setting (late-game §2.2): five positions, the country variable te_dg_pension_pos (absent = Standard).
@@ -647,10 +644,22 @@ STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this
 # into one (1 + total) per pop, linear from -0.9 (growth probe) to far above +1.0 (the 12x fast run), floored
 # at 0. Owner, 2026-10-10: the poverty term replaces the curve's starving slope below SoL 4, and deaths added
 # on top fall by the model's age pattern (the step's deaths scale).
-RATE_TOTAL_MIN = -0.8         # the state read with M in it stays at or above this (-0.9 less literacy's -0.1)
-RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measured limit
-ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
-ON_TOP_SCALE_MAX = 4.0
+# The engine's own per-pop floor (owner, 2026-10-20: the census's terms go down to it; until then -0.8, a precaution
+# that kept the read inside the probes' measured range and made the engine kill twice the census's target in the late
+# game). A plain pop's births or deaths reach 0 at a total of -1: Q7 stopped births at -3, and the growth probe's -5
+# gave no deaths at all. The state read with M in it stays at or above this, and when the lines left on top alone
+# are past it, M is 0. The self-check rate_below_measured watches the stretch from -0.9 down.
+RATE_TOTAL_FLOOR = -1.0
+# M has no ceiling (until 2026-10-20 +3, "a guard against a nonsense target"). target / bare is at most the model's rate
+# over the curves' lowest (80 births, 100 deaths a month per 100,000), so M stays finite; the script skips a state whose
+# walk found less than one person at the lowest curve (te_demog_k_rate_bare_min, the walk's units: people x the curve).
+RATE_BARE_MIN = 80.0
+# The step's births and deaths scales (the engine's events over the model's target, less 1) have only the natural
+# floor, -1 (no events), and no ceiling (until 2026-10-20 -0.9 and +4): each age's probability is already capped at 1.
+# Under 1 + scale = ON_TOP_FACTOR_MIN the ring's events are too few to read the model's own rate back from, so the step
+# keeps the last one (te_dg_cbr_model, te_dg_cdr_model; demographics_model.step returns None).
+ON_TOP_SCALE_MIN = -1.0
+ON_TOP_FACTOR_MIN = 0.01
 # The window's events (owner, 2026-10-11; #894; the review of #907): the walk is a snapshot on the step's day, and the
 # step books the whole window that ends that day. The window is booked at the engine's rate at its start (stored by the
 # last step's refresh) at this weight and today's at the rest: 0.5 is the trapezoid, which halves the misplacement when

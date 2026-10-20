@@ -179,6 +179,23 @@ UPLOADS_DIGESTS = {
     ("generated_effects", "te_demog_cause_inputs_store"):
         "78de3129ee4b205c97a61f0fce47c32c250be87511c0d5183d7b3b4d3176f508",
 }
+# The census's rates down to the engine's floor (owner, 2026-10-20): the floor's constant is the engine's own -1 under a new
+# name (te_demog_k_rate_total_floor, new and so free), M's and the step's scales' ceilings are gone, and the scales' floor
+# is -1. Of the cases only rich_full moves: its births term, held at -0.85 by the old floor of -0.8, reaches its own
+# rate at -0.90763, so its clamp flag goes to 0 and its next window's start births (te_dg_sr_b) from 71.25 to 43.876 a
+# head; those four figures were re-recorded on this tree. The farm cases' terms never reached the floor.
+RATE_FLOOR_REMOVED = {("generated_values", "te_demog_k_on_top_scale_max"),
+                      ("generated_values", "te_demog_k_rate_total_min"),
+                      ("generated_values", "te_demog_k_rate_term_max")}
+# The walk's per-pop death multiplier takes the state's wealth line x the pop's wealth, as the engine does (probe P6).
+# The interpreter doesn't walk pops (the docstring) and no case holds the line, so no recorded number moves;
+# test_demographics_rate_floor holds the multiplier to predict's.
+RATE_FLOOR_DIGESTS = {
+    ("generated_values", "te_demog_k_on_top_scale_min"):
+        "a13018ac187c2198739d13d444ccf28b6fe9db49d14e6cb7ec08602c6915197c",
+    ("generated_values", "te_demog_pop_death_mult"):
+        "58ceeec452f3b205b3f49a8d5e0fd16300684cdb251c6aef4a3b852593a880ea",
+}
 # The safeguards pass (owner, 2026-10-20): chronic treatment's cap 0.85 to 0.99, no floor but 0 on a cause's laws factor
 # (was 0.2), no ceiling on crowding's infection term (was +50%), the means' cap 1 (was 0.95), and the life table's open last
 # interval (te_demog_life_table passes its last group's rates to te_demog_lt_finish, whose survivors at 150 live on at
@@ -364,6 +381,9 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 if (key, name) in LAW_LINE_MOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
+                if (key, name) in RATE_FLOOR_REMOVED:
+                    self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
+                    continue
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
                 want = LAW_LINE_DIGESTS.get((key, name), SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get(
                     (key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))))
@@ -371,6 +391,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = ADULT_INFECTION_DIGESTS.get((key, name), want)
                 want = STAGE3_DIGESTS.get((key, name), want)
                 want = UPLOADS_DIGESTS.get((key, name), want)
+                want = RATE_FLOOR_DIGESTS.get((key, name), want)
                 want = SAFEGUARDS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 

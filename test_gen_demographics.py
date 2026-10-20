@@ -248,10 +248,13 @@ class TestGenerated(unittest.TestCase):
         self.assertIn("maternal deaths per 100,000 births", head)
 
     def test_phase2_constants_match_the_params(self):
-        for name, value in (("on_top_scale_min", P.ON_TOP_SCALE_MIN), ("on_top_scale_max", P.ON_TOP_SCALE_MAX),
-                            ("rate_total_min", P.RATE_TOTAL_MIN),
-                            ("rate_term_max", P.RATE_TERM_MAX), ("window_start_weight", P.WINDOW_START_WEIGHT)):
+        for name, value in (("on_top_scale_min", P.ON_TOP_SCALE_MIN), ("on_top_factor_min", P.ON_TOP_FACTOR_MIN),
+                            ("rate_total_floor", P.RATE_TOTAL_FLOOR), ("rate_bare_min", P.RATE_BARE_MIN),
+                            ("window_start_weight", P.WINDOW_START_WEIGHT)):
             self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(value)} }}", self.values, name)
+        # owner, 2026-10-20: the scales and M have no ceiling, and the floor is the engine's own
+        for gone in ("on_top_scale_max", "rate_term_max", "rate_total_min"):
+            self.assertNotIn(f"te_demog_k_{gone} ", self.values, gone)
 
     def test_the_absorbed_terms_follow_the_engine(self):
         """Owner amendment A and B (2026-10-10): literacy's penalty from literacy_penalty, mild starvation's in the
@@ -440,7 +443,11 @@ class TestEngineRateTerms(unittest.TestCase):
         self.assertIn("add = workplace.modifier:building_laborers_mortality_mult", laborers)  # production methods
         self.assertIn("exists = workplace", laborers)
         self.assertNotIn("state_mortality_turmoil_mult", self.death)   # scaling unknown, measured about 0
-        self.assertNotIn("state_mortality_wealth_mult", self.death)
+        # the wealth line x the pop's own wealth (probe P6; 2026-10-20), once, inside the floor at 0
+        line = "add = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }"
+        self.assertEqual(self.death.count("state_mortality_wealth_mult"), 1)
+        self.assertIn(line, self.death)
+        self.assertLess(self.death.index(line), self.death.rindex("min = 0"))
 
 
 class TestPhase2Generated(unittest.TestCase):
