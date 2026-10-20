@@ -32,12 +32,13 @@
 # step of fast mode's clock), so the pair's multipliers resolve against the state. The one refresh site of
 # te_demog_census_workforce_* (te_demog_workforce_apply; te_demog_workforce_heal only re-applies a lost one). Under Full:
 #   target = te_demog_wf_term_target (the census's target less the define's 0.25)
-#   W      = from + clamp(target - from, -step, step), at least te_demog_k_wf_pop_floor - the lines on top
-# from: W in force; when W first lands, its state region's copy (te_dg_mw_r: a state new to its owner, a conquest or a
-# revolution's winner, is a new state object with none of the old one's variables, and continues the term: "the winner
-# continues the nation"), else the moved lines' pair it replaces (so the state's workforce never jumps). step:
-# te_demog_k_wf_ramp_step after a census step (demographics_params.WF_RAMP_STEP says why); 0 at a seed, which only lands
-# W from the region's copy and otherwise leaves W as it is (as M). The floor keeps the lowest pop base (aristocrats'
+#   W      = the target after a census step, at least te_demog_k_wf_pop_floor - the lines on top
+# No ramp (owner, 2026-10-20): W lands on its target at each census step, and the engine's own pull toward a pop's ratio
+# phases the change in (demographics_params.WORKING_ADULT_BASE's comment). A seed doesn't move W (as M): it only lands W
+# from its state region's copy (te_dg_mw_r: a state new to its owner, a conquest or a revolution's winner, is a new state
+# object with none of the old one's variables, and continues the term: "the winner continues the nation") and otherwise
+# leaves W as it is. from: W in force, else the region's copy, else the moved lines' pair (the self-check's landing mark,
+# te_debug_demog_wf_term_landing, keeps where the set ratio stood). The floor keeps the lowest pop base (aristocrats'
 # 0.2) + W + the lines on top at 0.05 (no cap above: late-game call 10). The lines on top are the state's read less W and
 # the pair, read before anything here touches them. When W lands the moved lines' pair comes off
 # (te_demog_workforce_lines_apply no longer holds). Outside Full, or under Full in a state with no census, W goes and the
@@ -70,13 +71,6 @@ te_demog_workforce_refresh = {
 			}
 			set_local_variable = { name = te_dg_wf_landing value = 2 }
 		}
-		set_local_variable = { name = te_dg_wf_up value = 0 }
-		set_local_variable = { name = te_dg_wf_dn value = 0 }
-		if = {
-			limit = { var:te_dg_stepped > 0 }
-			set_local_variable = { name = te_dg_wf_up value = te_demog_k_wf_ramp_step }
-			set_local_variable = { name = te_dg_wf_dn value = te_demog_k_wf_ramp_step_neg }
-		}
 		if = {
 			limit = {
 				OR = {
@@ -96,14 +90,16 @@ te_demog_workforce_refresh = {
 				limit = { local_var:te_dg_wf_landing > 0 }
 				te_debug_demog_wf_term_landing = yes
 			}
+			# a census step lands W on its target; a seed lands the region's copy as it is
+			set_local_variable = { name = te_dg_wf_to value = local_var:te_dg_wf_from }
+			if = {
+				limit = { var:te_dg_stepped > 0 }
+				set_local_variable = { name = te_dg_wf_to value = te_demog_wf_term_target }
+			}
 			set_variable = {
 				name = te_dg_mw
 				value = {
-					value = te_demog_wf_term_target
-					subtract = local_var:te_dg_wf_from
-					min = local_var:te_dg_wf_dn
-					max = local_var:te_dg_wf_up
-					add = local_var:te_dg_wf_from
+					value = local_var:te_dg_wf_to
 					min = { value = te_demog_k_wf_pop_floor subtract = local_var:te_dg_wf_rem }
 				}
 			}

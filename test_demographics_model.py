@@ -1210,19 +1210,20 @@ class TestPhase2Step2(unittest.TestCase):
     """Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the workforce
     term, the pension setting, the two bills and the work deaths' split."""
 
-    def test_the_term_ramps_toward_its_target(self):
-        step = P.WF_RAMP_STEP
-        self.assertAlmostEqual(M.workforce_term(0.2, 0.0, 0.0), step)
-        self.assertAlmostEqual(M.workforce_term(-0.2, 0.0, 0.0), -step)
-        self.assertAlmostEqual(M.workforce_term(0.003, 0.0, 0.0), 0.003, msg="within a step it lands")
-        self.assertAlmostEqual(M.workforce_term(0.15, 0.30, 0.0), 0.30 - step, msg="from the pair it replaces")
+    def test_the_term_lands_on_its_target(self):
+        """No ramp (owner, 2026-10-20): W is its target after a census step, however far the target moved; the engine's
+        own pull phases the change in."""
+        self.assertAlmostEqual(M.workforce_term(0.2, 0.0), 0.2)
+        self.assertAlmostEqual(M.workforce_term(-0.1, 0.0), -0.1)
+        self.assertAlmostEqual(M.workforce_term(0.15, 0.0), 0.15, msg="Women in the Fields' pair of +0.30 lands at once")
+        self.assertFalse(hasattr(P, "WF_RAMP_STEP"))
 
     def test_the_guard_keeps_every_pop_at_its_floor(self):
         """The lowest base (aristocrats' 0.2) + W + the lines on top stays at WF_POP_RATIO_MIN; no cap above."""
         floor = P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN
-        self.assertAlmostEqual(M.workforce_term(-0.5, floor, 0.0), floor)
-        self.assertAlmostEqual(M.workforce_term(-0.5, floor, -0.1), floor + 0.1, msg="a negative line on top")
-        self.assertAlmostEqual(M.workforce_term(5.0, 4.0, 0.0), 4.0 + P.WF_RAMP_STEP, msg="no cap")
+        self.assertAlmostEqual(M.workforce_term(-0.5, 0.0), floor)
+        self.assertAlmostEqual(M.workforce_term(-0.5, -0.1), floor + 0.1, msg="a negative line on top")
+        self.assertAlmostEqual(M.workforce_term(5.0, 0.0), 5.0, msg="no cap")
         self.assertEqual(P.POP_BASE_RATIO_MIN, 0.2)
 
     def test_the_term_nets_only_the_define(self):

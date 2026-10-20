@@ -1785,7 +1785,6 @@ def work_step2_values(o):
     o("# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).")
     k = {
         "working_adult_base": P.WORKING_ADULT_BASE,
-        "wf_ramp_step": P.WF_RAMP_STEP, "wf_ramp_step_neg": -P.WF_RAMP_STEP,
         # the guard: the lowest pop base + W + the lines on top at least WF_POP_RATIO_MIN, so W + the lines on top at
         # least this
         "wf_pop_floor": P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN,

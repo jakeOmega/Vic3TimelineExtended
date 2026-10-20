@@ -1995,8 +1995,6 @@ te_demog_k_srb_base = { value = 105 }
 # Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the
 # workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).
 te_demog_k_working_adult_base = { value = 0.25 }
-te_demog_k_wf_ramp_step = { value = 0.01 }
-te_demog_k_wf_ramp_step_neg = { value = -0.01 }
 te_demog_k_wf_pop_floor = { value = -0.15 }
 te_demog_k_pension_age_early = { value = 60 }
 te_demog_k_pension_age_raised = { value = 70 }

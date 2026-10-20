@@ -813,12 +813,11 @@ def workforce_term_target(figures):
     return wf_target(figures) - P.WORKING_ADULT_BASE
 
 
-def workforce_term(target_w, prev_w, remainder):
-    """W after one census step (te_demog_workforce_refresh): prev_w moved toward target_w by at most P.WF_RAMP_STEP,
-    then raised so the lowest pop base plus W plus the remainder (the lines on top) stays at P.WF_POP_RATIO_MIN.
-    prev_w is the term in force, or the moved lines' pair it replaces when it first lands."""
-    w = prev_w + clamp(target_w - prev_w, -P.WF_RAMP_STEP, P.WF_RAMP_STEP)
-    return max(w, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
+def workforce_term(target_w, remainder):
+    """W after one census step (te_demog_workforce_refresh): its target, raised so the lowest pop base plus W plus the
+    remainder (the lines on top) stays at P.WF_POP_RATIO_MIN. No ramp (owner, 2026-10-20): the engine's own pull toward
+    a pop's ratio phases the change in."""
+    return max(target_w, P.WF_POP_RATIO_MIN - P.POP_BASE_RATIO_MIN - remainder)
 
 
 def engine_total(figures, wbase, remainder=0.0):

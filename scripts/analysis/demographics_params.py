@@ -222,17 +222,14 @@ DEMOG_TYPES = (DEMOG_MORTALITY_TYPES + DEMOG_FERTILITY_TYPES + (DIFFUSION_TYPE,)
 # ---- Phase 2 step 2: the workforce, pensions and health costs ------------------------------------------------------
 # docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2 and §5. Everything here acts under
 # Full only (te_demog_work_effects.txt). The harness fits the numbers (demographics_harness.py workforce, pensions).
-# The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It moves toward
-# that target by at most WF_RAMP_STEP a census step: the engine's own pull toward a pop's ratio has not been measured
-# in game (the mod's WORKING_ADULT_RATIO_SKEW_MAXIMUM, extra_defines.txt, suggests it is instant; the saves suggest it
-# is slow: docs/testing/demographics-playtest.md, § Phase 2 step 2), and a pension change should reach the workforce as the
-# cohorts it frees or holds pass the age, over a few years, not in a week. At 0.01 a change of one position in a rich
-# state (Standard to Raised +0.020 on the engine's scale, Early to Standard +0.023: harness `workforce`) shows fully in
-# two to three census years, Early to Raised in about five; Women in the Fields' first landing (+0.30 of lines against a
-# target near +0.15) takes about fifteen. W starts at the moved lines' pair it replaces, so a state's workforce never
-# jumps when the census takes over. The self-check workforce_follows_target reads whether the engine keeps up.
+# The workforce term W = te_demog_wf_target - the define's base (call 4), on a fixed-sign state pair. It lands on that
+# target at each census step, and the engine's own pull toward a pop's ratio phases the change in (owner, 2026-10-20:
+# until then W moved at most 0.01 a step, so a pension position took two to three census years and Women in the
+# Fields' first landing about fifteen; it bound in 29% of the 2057 save's steps, 418M people, and the saves showed the
+# engine's pull already lagging, so the change was slowed twice over). When W first lands it replaces the moved lines'
+# pair, so a state's set ratio moves from the pair to the target at that step. The self-check workforce_follows_target
+# reads how fast the engine follows.
 WORKING_ADULT_BASE = 0.25      # the define WORKING_ADULT_RATIO_BASE (vanilla 00_defines.txt); the term nets only it
-WF_RAMP_STEP = 0.01
 WF_POP_RATIO_MIN = 0.05        # the guard: no pop's own ratio below this (W is raised instead; no cap above)
 POP_BASE_RATIO_MIN = min(min(POP_BASE_RATIO.values()), POP_BASE_RATIO_DEFAULT)   # aristocrats' 0.2
 # The pension setting (late-game §2.2): five positions, the country variable te_dg_pension_pos (absent = Standard).
