@@ -186,7 +186,9 @@ class TestWalkCounters(unittest.TestCase):
         """Review M4: Hard Winter's and the settlements' famine's dead reach the census as kills, not emigrants."""
         events = squash(_text(ROOT / "events" / "resettlement_events.txt"))
         for value, kill in (("1000", "kill_population_in_state = { value = 1000 strata = lower }"),
-                            ("5000", "kill_population_in_state = { value = 5000 pop_type = farmers }")):
+                            # the famine can't kill more farmers than the state holds (re-review)
+                            ("{ value = 5000 max = resettlement_state_farmers }",
+                             "kill_population_in_state = { value = 5000 pop_type = farmers }")):
             self.assertIn(f"hidden_effect = {{ te_demog_note_kills = {{ VALUE = {value} }} }} {kill}", events)
 
     def test_the_transit_dead_are_known_kills(self):
