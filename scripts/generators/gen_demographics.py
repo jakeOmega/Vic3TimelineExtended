@@ -910,6 +910,8 @@ def medicine_effects(o):
     for cause, types in P.MORTALITY_TYPES.items():
         adds = " ".join(f"add = modifier:{t}" for t in types)
         o(f"set_variable = {{ name = te_dg_in_{P.CAUSE_SHORT[cause]} value = {{ value = 0 {adds} }} }}")
+    import gen_demographics_um as UM     # uploaded minds' call 2: Mind Backups' restore x longevity care
+    UM.backup_inputs(o)
     o("# turmoil as the 0-1 share te_demog_crisis reads")
     o("set_variable = { name = te_dg_in_turm value = { value = turmoil min = 0 max = 1 } }")
     o("# crowding: the migration penalty the crowding refresh applied (te_update_migration_crowding_modifier)")
@@ -2371,13 +2373,14 @@ def plan_outputs(root=ROOT):
     import gen_demographics_lx as LX
     # Internal Resettlement's known moves and the US frontier's 1836 seed (scripts/generators/gen_demographics_resettle.py)
     import gen_demographics_resettle as RSG
+    import gen_demographics_um as UM     # uploaded minds (2026-10-19): its own two generated files
     return {EFFECTS: render_effects(root), VALUES: render_values(root), LINE_MODIFIERS: render_line_modifiers(),
             LINE_VALUES: render_line_values(), LINE_EFFECTS: render_line_effects(),
             WORKFORCE_LINE_MODIFIERS: render_workforce_line_modifiers(),
             WORKFORCE_LINE_VALUES: render_workforce_line_values(),
             WORKFORCE_LINE_EFFECTS: render_workforce_line_effects(),
             SPREAD_VALUES: render_spread_values(), SPREAD_EFFECTS: render_spread_effects(),
-            **LX.plan_outputs(), **RSG.plan_outputs()}
+            **LX.plan_outputs(), **RSG.plan_outputs(), **UM.plan_outputs()}
 
 
 def regenerate(root=ROOT, dry_run=False):

@@ -1,0 +1,66 @@
+﻿# Demographics: uploaded minds (docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's
+# calls of 2026-10-19). Under Full only; outside Full nothing applies them and the Nexus produces as it does today. Each
+# field's size is demographics_params' (UM_RESEARCH_PER_LEVEL, UM_DEVOUT_APPROVAL; a test pins them). Their one refresh
+# effect each: te_demog_um_nexus_refresh (the monthly state pulse and a new level, ROOT the state) for the eight building
+# modifiers, te_demog_um_country_modifiers (the country's census and a revolution's winner, ROOT the country) for the
+# other two.
+
+# Building, under Full, one a good of the Nexus's production method: its axis at 1, applied by te_demog_um_nexus_good at
+# (1 + the building's other bonuses for that good) x (the country's utilisation x the good's factor - 1), from the state's
+# copy (root.var:te_dg_um_k_<out|in>_<good>), so the good comes to the method's line x the utilisation x the factor x (1 +
+# those bonuses): -100% with no minds. The factors (demographics_params.UM_OUTPUT_FACTORS, UM_INPUT_FACTORS: digital
+# assets lead, services stay at the line, inputs lean on the traded goods) are the generated te_demog_k_um_<out|in>_<good>.
+
+te_demog_um_nexus_out_digital_assets = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_digital_assets_mult = 1
+}
+
+te_demog_um_nexus_out_tourism = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_tourism_mult = 1
+}
+
+te_demog_um_nexus_out_fine_art = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_fine_art_mult = 1
+}
+
+te_demog_um_nexus_out_services = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_services_mult = 1
+}
+
+te_demog_um_nexus_in_electricity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_input_electricity_mult = 1
+}
+
+te_demog_um_nexus_in_electronic_components = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_input_electronic_components_mult = 1
+}
+
+te_demog_um_nexus_in_digital_access = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_input_digital_access_mult = 1
+}
+
+te_demog_um_nexus_in_advanced_materials = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_input_advanced_materials_mult = 1
+}
+
+# Country, under Full: the Nexus's research line (its production method's, a staffed level) at the utilisation. The
+# multiplier is the levels x their staffing x (1 - utilisation), so the line nets to its size x the utilisation.
+te_demog_um_research = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_tech_research_speed_mult = -0.05
+}
+
+# Country, under Full behind te_demog_k_um_politics (off by default, call 8): the Devout sour while the minds pass
+# te_demog_k_um_devout_share of the people.
+te_demog_um_devout = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	interest_group_ig_devout_approval_add = -3
+}

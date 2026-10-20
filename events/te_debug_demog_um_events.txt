@@ -1,0 +1,130 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — uploaded minds' self-checks (te_debug_demog.130-.139; the te_debug_demog namespace's other events are in
+# te_debug_demog_events.txt). docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md;
+# docs/testing/demographics-playtest.md, "Self-checks". Hidden and fired by script only.
+# ============================================================================
+
+namespace = te_debug_demog
+
+# .130: um_nexus_scaling. A week after the first Nexus's goods modifiers under Full at a utilisation of 0.9 or less with
+# its advanced materials figure at 1 or more (te_debug_demog_um_selfcheck_start, from te_demog_um_nexus_refresh): the
+# building's digital assets output and advanced materials input modifiers against what the refresh expected, everything
+# else on the good plus its own multiplier (1 + those) x (utilisation x factor - 1). OK: both within 0.05, so the engine
+# applies a building's runtime goods mult axes from a state's pulse at the state's multiplier, the registered mod-good
+# input axis too. It compares the building's read with itself, so it says nothing about whether that read carries the
+# state's and country's lines (.131 does). BROKEN with a good reading only its other bonuses: digital assets so (an axis
+# registered long ago, which companies use) means the modifier or its multiplier failed; advanced materials alone so
+# means the new registration failed. The fallback is in the play-test list's Self-checks table. A state that lost its
+# Nexus within the week clears the check for the next.
+te_debug_demog.130 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_um_chk_da
+				has_building = building_mind_upload_nexus
+			}
+			b:building_mind_upload_nexus = {
+				root = {
+					set_variable = { name = te_dg_um_chk_da_got value = prev.modifier:goods_output_digital_assets_mult }
+					set_variable = { name = te_dg_um_chk_am_got value = prev.modifier:goods_input_advanced_materials_mult }
+				}
+			}
+			if = {
+				limit = {
+					te_debug_demog_um_chk_da_gap < 0.05
+					te_debug_demog_um_chk_da_gap > -0.05
+					te_debug_demog_um_chk_am_gap < 0.05
+					te_debug_demog_um_chk_am_gap > -0.05
+				}
+				debug_log = "TE_SELF_CHECK OK um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] digital_assets=[THIS.Var('te_dg_um_chk_da_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_da').GetValue|3] advanced_materials=[THIS.Var('te_dg_um_chk_am_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_am').GetValue|3] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] digital_assets=[THIS.Var('te_dg_um_chk_da_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_da').GetValue|3] advanced_materials=[THIS.Var('te_dg_um_chk_am_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_am').GetValue|3] (digital assets at its other bonuses alone: the modifier or its multiplier failed; advanced materials alone so: the new registration failed; another figure: a source changed within the week, so read the building's goods tooltip. docs/testing/demographics-playtest.md, Self-checks) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_um_chk_da
+			remove_variable = te_dg_um_chk_am
+			remove_variable = te_dg_um_chk_util
+			remove_variable = te_dg_um_chk_da_got
+			remove_variable = te_dg_um_chk_am_got
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_um_done
+			if = {
+				limit = { has_variable = te_dg_um_chk_da }
+				remove_variable = te_dg_um_chk_da
+				remove_variable = te_dg_um_chk_am
+				remove_variable = te_dg_um_chk_util
+			}
+		}
+	}
+}
+
+# .131: um_nexus_cascade (review R1 of #1070). A week after the first Nexus refresh under Full in a state whose own tourism
+# read is at least 0.3 (te_debug_demog_um_selfcheck_start): the building's other tourism (its read of the axis less this
+# build's modifier) against the state's own read. The refresh offsets each good by the building's read, so an empty
+# Nexus makes nothing only if that read carries what the state and the country add (the airports' and tourism_output's
+# tourism, the financial cycle's services); that is the engine fact this checks. OK: the building's other tourism is the
+# state's, up to 0.25 more (a company's +0.2 is the only building-level tourism line) and at most 0.05 less, so the read
+# carries the state's lines (the country's reach the state's read). BROKEN: it reads less (with the state at 0.3 or more
+# and a company's 0.2 at most, at least 0.1 less): the building's read leaves the state's lines out, and an empty Nexus
+# there makes those bonuses' share of its goods. More than 0.25 above: NO_VERDICT (an unknown building-level line), and
+# the check re-arms. Fallback: read the state's and the country's axis too and add them to
+# the other bonuses (te_demog_um_nexus_good). A state that lost its Nexus within the week clears the check for the next.
+te_debug_demog.131 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_um_chk_st_tour
+				has_building = building_mind_upload_nexus
+			}
+			set_variable = { name = te_dg_um_chk_st_tour value = modifier:goods_output_tourism_mult }
+			b:building_mind_upload_nexus = {
+				root = {
+					set_variable = { name = te_dg_um_chk_bd_tour value = prev.modifier:goods_output_tourism_mult }
+				}
+			}
+			if = {
+				limit = {
+					has_variable = te_dg_um_k_out_tourism
+					b:building_mind_upload_nexus = { has_modifier = te_demog_um_nexus_out_tourism }
+				}
+				change_variable = { name = te_dg_um_chk_bd_tour subtract = var:te_dg_um_k_out_tourism }
+			}
+			if = {
+				limit = {
+					te_debug_demog_um_chk_tour_gap <= 0.25
+					te_debug_demog_um_chk_tour_gap >= -0.05
+				}
+				debug_log = "TE_SELF_CHECK OK um_nexus_cascade state_tourism=[THIS.Var('te_dg_um_chk_st_tour').GetValue|3] building_other_tourism=[THIS.Var('te_dg_um_chk_bd_tour').GetValue|3] (a building's goods read carries its state's lines, so an empty Nexus makes nothing there) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else_if = {
+				limit = { te_debug_demog_um_chk_tour_gap > 0.25 }
+				# more than a company's above the state's: a building-level tourism line the check doesn't know, which
+				# hides the answer either way; re-armed for the next Nexus refresh
+				debug_log = "TE_SELF_CHECK NO_VERDICT um_nexus_cascade state_tourism=[THIS.Var('te_dg_um_chk_st_tour').GetValue|3] building_other_tourism=[THIS.Var('te_dg_um_chk_bd_tour').GetValue|3] (more than a company's above the state's: a building-level tourism source the check doesn't know; re-armed) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+				remove_global_variable = te_demog_selfcheck_um_cascade_done
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN um_nexus_cascade state_tourism=[THIS.Var('te_dg_um_chk_st_tour').GetValue|3] building_other_tourism=[THIS.Var('te_dg_um_chk_bd_tour').GetValue|3] (below the state's: the building's read leaves the state's lines out, so an empty Nexus makes their share of its goods; read the state's and the country's axis too and add them to the other bonuses in te_demog_um_nexus_good. docs/testing/demographics-playtest.md, Self-checks) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_um_chk_st_tour
+			remove_variable = te_dg_um_chk_bd_tour
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_um_cascade_done
+			if = {
+				limit = { has_variable = te_dg_um_chk_st_tour }
+				remove_variable = te_dg_um_chk_st_tour
+				remove_variable = te_dg_um_chk_bd_tour
+			}
+		}
+	}
+}

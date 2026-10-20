@@ -76,6 +76,11 @@ UNEMP_VALUES = ROOT / "common" / "script_values" / "te_unemployment_values.txt"
 RESETTLE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_resettle_effects.txt"
 RESETTLE_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_resettle_generated_effects.txt"
 RESETTLE_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_resettle_generated_values.txt"
+# uploaded minds (2026-10-19; docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md)
+UM_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_um_effects.txt"
+UM_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_um_generated_effects.txt"
+UM_VALUES = ROOT / "common" / "script_values" / "te_demog_um_values.txt"
+UM_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_um_generated_values.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -206,7 +211,8 @@ class TestWalks(unittest.TestCase):
 
 def _parse_script(text):
     """Paradox script as an ordered tree: a list of (key, operator, value), value a str or a list. A bare item in a
-    list block (a decree's `unlocking_technologies = { medical_degrees }`) is (item, "", "")."""
+    list block (a decree's `unlocking_technologies = { medical_degrees }`) is (item, "", ""). It doesn't read `?=`: a
+    block a test runs writes `exists = owner` and `owner = { }` instead (te_demog_um_effects.txt)."""
     text = re.sub(r"#[^\n]*", "", text)
     tokens = re.findall(r"[{}]|[<>]=?|=|[^\s{}=<>]+", text)
     pos = 0
@@ -450,7 +456,8 @@ class _Engine:
         self.truncate = truncate
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
-                                    LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS])
+                                    LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS,
+                                    UM_EFFECTS, UM_GEN_EFFECTS])
         # Internal Resettlement's known moves (2026-10-19); its self-check reads globals and debug_log, which a test of
         # its text reads (test_demographics_resettle.py)
         self.effects.update(_raw_blocks([RESETTLE_EFFECTS, RESETTLE_GEN_EFFECTS]))
@@ -462,7 +469,7 @@ class _Engine:
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
                                    WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES,
-                                   UNEMP_VALUES])
+                                   UNEMP_VALUES, UM_VALUES, UM_GEN_VALUES])
         self.values.update(_raw_blocks([RESETTLE_GEN_VALUES]))
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's

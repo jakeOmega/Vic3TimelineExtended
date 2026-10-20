@@ -167,6 +167,13 @@ STAGE3_DIGESTS = {
     ("generated_values", "te_demog_family_transport"):
         "35e0649d63bd37d0d79808136ce9e150e43001f7238003f0f731cfb61ab29cb2",
 }
+# Uploaded minds (2026-10-19; the uploaded-minds spec §3, call 2): the inputs' store adds Mind Backups' restore x last
+# step's longevity care, only in a state that has it (te_dg_elig, the late game's). No golden case is in the late game,
+# so every recorded number stays as it was; test_demographics_uploads holds the restore to the model.
+UPLOADS_DIGESTS = {
+    ("generated_effects", "te_demog_cause_inputs_store"):
+        "78de3129ee4b205c97a61f0fce47c32c250be87511c0d5183d7b3b4d3176f508",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -341,6 +348,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = WORKING_CONDITIONS_DIGESTS.get((key, name), want)
                 want = ADULT_INFECTION_DIGESTS.get((key, name), want)
                 want = STAGE3_DIGESTS.get((key, name), want)
+                want = UPLOADS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

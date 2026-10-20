@@ -47,6 +47,8 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit (the late sweep already counts its own this way: `te_demog_lx_cause_deaths`) |
 | `TE_SELF_CHECK … resettle_moves_booked` | Display only or Full: once a game, at the first census step of a state whose Internal Resettlement arrivals since its last step were 5% of its people or more and at least 1,000 (2026-10-19; `te_demog_rs_selfcheck`) | the residual left after the counted arrivals (`rest`) is not below minus a quarter of them: the walk's `move_partial_pop` moved the people it counts, and they are in the state's population change. A positive `rest` is the engine's own migration, or, on a save continued across this build, the year's months before the counters began (`residual` is the whole, arrivals included) | `rest` below −0.25 × `arrived`: about minus `arrived` means the counted moves aren't in the population change, about minus half that they are counted twice, so every destination books arrivals the engine didn't make | take the known moves back out of the residual's sum in `te_demog_flows` (the `te_dg_rk_on` block's two lines) and leave their booking off (`te_demog_rs_take` keeps `te_dg_rk_on` at 0), so the moves go back to the residual's booking, with only the transit dead kept as known kills |
 | `TE_SELF_CHECK … metro_world_market_hub` | any rule's census (Display only or Full), development builds only: once a game, at the first state's metropolitan-share count (its first yearly pulse; spec §5.2) | `is_world_market_hub` reads the market area's hub, which the base game creates where a market area has a Port: some states read yes (`hubs=`), every hub has a Port (`hubs_without_port=0`) and some Port states are not hubs (`ports_not_hub=` above 0); the line also gives `port_states=` and `countries=` | `hubs=0`: the trigger reads no in state scope, so no state takes the gateway term and New York and Buenos Aires read lower than intended; `hubs_without_port=` above 0: it reads something other than the hub; `ports_not_hub=0`: it reads "has a Port", so every port state takes +30 | in `te_demog_mt_t_gateway` (`te_demog_metro_values.txt`) read the gateway from a large port instead, `b:building_port ?= { level >= 5 }`, and say so in the Port or Finance bar's hover (`te_demog_mt_bar_gateway_tt`) |
+| `TE_SELF_CHECK … um_nexus_scaling` | Full: once a game, `START` when a Mind Upload Nexus's monthly refresh finds its country's hosting at 0.9 full or less with the advanced materials input figure at +100% or more (about a quarter full), the verdict a week later (`te_debug_demog.130`). No line means no country's hosting reached a quarter under Full (an observer run past 2100, or the harness's transition) | the building reads its digital assets output and advanced materials input axes at what the refresh expected (each good's other bonuses plus its own multiplier, (1 + those) × (utilisation × factor − 1)), within 0.05: the engine applies a building's runtime goods `_mult` axes from a state's pulse at the state's multiplier, the newly registered mod-good input axis too. It compares the building's read with itself, so it says nothing about the state's and country's lines (`um_nexus_cascade`) | a good reading only its other bonuses: digital assets so (an axis registered long ago, which companies use) means the modifier or its multiplier failed, so under Full every Nexus produces as outside Full; advanced materials alone so means the new registration failed; another figure: a source changed within the week (read the goods tooltip). A state that lost its Nexus within the week re-arms the check | digital assets: apply the modifiers from a building iterator in the state pulse (`every_scope_building = { limit = { is_building_type = building_mind_upload_nexus } … }`) instead of `b:`, and if that fails too, put each good's modifier on a ladder of static modifiers at tenths of its multiplier, as `family_limitation_scaled`'s fallback does; advanced materials: check `goods_input_advanced_materials_mult` and its two siblings in `mod_entity_modifier_types.txt` |
+| `TE_SELF_CHECK … um_nexus_cascade` | Full: once a game, `START` at a Nexus's monthly refresh in a state whose own tourism output read is +30% or more (airports, `tourism_output`), the verdict a week later (`te_debug_demog.131`). No line means no Nexus stood in such a state under Full | the building's other tourism (its read of the axis less the Nexus's own modifier) is the state's read, up to 0.25 more (a company's +0.2 is the only building-level tourism line) and at most 0.05 less: a building's goods read carries its state's lines (and through them the country's), which the refresh's offset rests on, so an empty Nexus makes nothing there | below the state's (at least 0.1 below, since the state reads 0.3 or more and a company at most 0.2): the building's read leaves the state's lines out, so an empty Nexus makes their share of its tourism and services (the airports' tourism, the financial cycle's services). `NO_VERDICT` (more than 0.25 above: a building-level line the check doesn't know) re-arms | read the state's and the country's axis too (`modifier:goods_<axis>_<good>_mult` on the state; the country's on `owner`) and add them to the other bonuses in `te_demog_um_nexus_good` |
 
 No `unemployment_rate_read` line after a few years under the census means no census state counted more than 2% of its workforce idle: option t's `unemp=` is the capital's stored conversion and `unemp_walk=` the walk's own count (since 2026-10-17); compare them with the state panel's unemployed in a state with visibly idle workers.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -936,3 +938,52 @@ can show:
    Authority on Planned Towns lowers its state's Urban Planning bar by 2 a level; a Planned Capital by 10.
 10. `debug.log`: no error from `te_demog_metro_*`, `te_demog_mt_*` or `te_debug_demog.140`, and none while the subtab is
     open.
+
+## Uploaded minds (2026-10-19)
+
+The uploaded-minds spec's build (`docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
+minds in `mod_systems.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
+restore to the model; `demographics_harness.py uploads` prints the calibration and the scenarios. One self-check,
+`um_nexus_scaling` (above). Everything here is under Full; a game needs Mind Backups (after Biological Immortality and
+Neural Lace) and a completed Nexus, so an observer run past 2100 or the console's research is the way in. What only the
+game can show:
+
+1. **The Nexus under Full.** Before any upload, a completed Nexus's goods each show Output by Hosted Minds (or Inputs
+   by Hosted Minds) at −100% less whatever else lifts the good there (airports' tourism, a boom's services, a company's
+   digital assets), and it makes and uses nothing; within a month of the country's first census with minds each good
+   reads its factor × the utilisation × (1 + those bonuses) − 1 (digital assets +1400% at full with no other bonus), and
+   the output follows. A level a construction site just added is scaled the same month. Outside Full none of the eight
+   is there and the Nexus makes what it always made, within a month of a change of rule.
+2. **Research.** The country's research speed tooltip shows Empty Hosting cancelling the Nexus's +5% a level down to the
+   utilisation's share; with the Nexus understaffed the cancel is smaller, never below the method's own line.
+3. **The rows.** The Longevity section shows Backed Up (the share in care) from Mind Backups, and Uploaded Minds once a
+   mind is hosted: the share of people, hosted against capacity, last year's uploads and chosen endings. Living to 100
+   rises above the bodies' figure, which its hover keeps; deaths per 1,000 fall by the uploads, and the Natural Change and
+   Deaths hovers say how many uploaded. The biological pyramid has its Non-biological line. Under Display only none of
+   the pool shows.
+4. **A lost Nexus.** Downsize a Nexus (or lose its state) with the hosting full: at the country's next yearly census the hover lists
+   the archived minds, and the remaining Nexuses make what the active minds over the smaller capacity give. Build the
+   levels back: the archived come back at the next census before anyone new uploads.
+5. **How fast it fills.** The harness's transition (Biological Immortality's first decades) fills one Nexus in about
+   seven years for a country of 100 million everyone in care; at immortality's steady state uploads fall to a trickle
+   (24-53 thousand a year) and a Nexus takes a century and more. Read a late save's `te_dg_um_util` against that: if
+   Nexuses sit empty for decades the owner may want a larger share of deaths eligible, or capacity per level lower.
+6. **The output's size** (the owner's choice, 2026-10-20: a late-game wonder at full capacity, years to fill). A full
+   level makes about £40M a week at base prices, most of it 300,000 digital assets. Watch the digital assets price in a
+   market with a full Nexus: a crash there says the factor is too large.
+7. **The Devout (switch off).** With `UM_POLITICS` on and regenerated, the Devout lose 3 approval while the minds pass 1%
+   of people and minds; off (the default) nothing shows.
+8. **Who owns the levels (owner: read the line).** Once a game under Full, `debug.log` has `TE_INFO um_nexus_ownership`
+   with the `self`, `country` and `private` fractions of a Nexus's levels. The owner expects national ownership by
+   default; a high `self` or `private` share says the profit of a full Nexus goes to its staff or to investors instead.
+9. **Staff.** The method's staff are fixed: under Full an empty Nexus owes wages on no revenue, cuts pay and lays off
+   staff, 5% at a time, and when minds arrive re-hires slowly, so a filling Nexus runs below its output for a while.
+   Watch an empty Nexus's employment and its staff's radicals; scaling its employment with the minds would take the
+   engine's `building_employment_<type>_mult` (registered) at the utilisation − 1, a follow-up not built.
+10. **A civil war.** A Mind Backups country under Full whose rebels win: at its next yearly census the winner's Uploaded Minds
+    row shows the nation's pool (not an empty one), and Empty Hosting is on its research tooltip from the day of the win.
+11. **A level just built.** The construction hook refreshes a Nexus the site has just rebuilt; if the new building's
+    modifier sums don't exist yet in that block, it reads no other bonuses, and for up to a month the Nexus runs without
+    them offset (an empty one makes its bonuses' share of its goods) until the next monthly refresh corrects it.
+12. **Rebels' Nexus.** During a civil war a Nexus the rebels hold makes nothing (they host no minds), and its research line
+    runs uncancelled (they have no census of the pool) until the war ends.

@@ -3053,6 +3053,16 @@ mind_upload_nexus_on_action = {
 				has_building = building_mind_upload_nexus_construction_site
 			}
 			mind_upload_nexus_construction = yes
+			# demographics' uploaded minds: a level the site just added is a new building with none of the Nexus's
+			# modifiers; under Full scale it at once rather than at the next monthly refresh (te_demog_um_effects.txt)
+			if = {
+				limit = {
+					te_demog_effects_run = yes
+					has_building = building_mind_upload_nexus
+					b:building_mind_upload_nexus = { NOT = { has_modifier = te_demog_um_nexus_out_digital_assets } }
+				}
+				te_demog_um_nexus_refresh = yes
+			}
 			every_scope_building = {
 				limit = {
 					is_building_type = building_mind_upload_nexus_construction_site

@@ -120,7 +120,8 @@ TREATMENT_TYPE = {cause: f"state_{cause}_treatment_add" for cause in MEDICINE_CA
 # Local Police and Private Policing -0.02, Dedicated and Militarized -0.03), Restorative Justice -0.04,
 # Rehabilitation-Focused -0.08, the Ministry of Consumer Protection -0.08 a level, the Combustion Engine +0.30 and the
 # late-era lines (LATE_EXTERNAL_LINES). Work: Child Labor Allowed and Penal Labor Camps +0.10, Regulatory Bodies and
-# Worker Protections -0.10 a Workplace Safety level, Mind Backups.
+# Worker Protections -0.10 a Workplace Safety level. Mind Backups' restore of both is on BACKUP_TYPES (uploaded minds),
+# which plain_multiplier adds x last step's longevity care.
 MORTALITY_TYPES = {
     "external": ("state_external_mortality_mult",),
     "work": ("state_work_mortality_mult",),
@@ -884,11 +885,12 @@ LX_LIVING_TO = 100
 # stops at 150, so its threshold can't pass 135).
 LX_OLD_AGE_NONE = 130
 # The late-era lines (§8.4, call 19): under Full the census carries them; outside Full their flat lines stay (they sit on
-# the absorbed family since phase 3). Mental Health Awareness: accidents and violence -10% (suicide); Mind Backups:
-# accidents and violence and work deaths -50% (the backed-up are restored). autonomous_vehicles' -10% (traffic), §1.4's
-# proposal, is built as modern safety instead (SAFETY_TYPES, 2026-10-16).
-LATE_EXTERNAL_LINES = {"mental_health_awareness": -0.10, "mind_backups": -0.5}
-LATE_WORK_LINES = {"mind_backups": -0.5}
+# the absorbed family since phase 3). Mental Health Awareness: accidents and violence -10% (suicide). Mind Backups'
+# accidents, violence and work -50% (the backed-up are restored) sits on BACKUP_TYPES since uploaded minds' call 2
+# (2026-10-19), x the state's longevity care. autonomous_vehicles' -10% (traffic), §1.4's proposal, is built as modern
+# safety instead (SAFETY_TYPES, 2026-10-16).
+LATE_EXTERNAL_LINES = {"mental_health_awareness": -0.10}
+LATE_WORK_LINES = {}
 # Fertility (§3.1-§3.2, call 5): planned births follow the calendar for their timing and the body for whether it allows
 # them; unplanned births the body. Fecundity by biological age (after Leridon 2004), by five-year group start.
 FECUNDITY = {0: 1.0, 35: 0.9, 40: 0.7, 45: 0.35, 50: 0.0}
@@ -1039,6 +1041,36 @@ FRONTIER_1836 = {
     region: {"ratios": {ages: frontier_mix(m / f, FRONTIER_SETTLER_SHARE[region]) for ages, (m, f) in groups.items()}}
     for region, groups in FRONTIER_1840_WHITE.items()
 }
+
+# ---- Uploaded minds (2026-10-19) ----
+# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's calls of 2026-10-19 (§7); the model
+# is demographics_uploads.py, the script te_demog_um_effects.txt. Under Full only.
+# Mind Backups' restore (call 2): its two -0.5 lines sit on these census-only types, which the census adds x the state's
+# longevity care E (last step's), so the restore is 1 - 0.5 x E; outside Full the flat absorbed -5% stays.
+BACKUP_TYPES = {"external": "state_backup_external_mortality_mult", "work": "state_backup_work_mortality_mult"}
+DEMOG_TYPES = DEMOG_TYPES + tuple(BACKUP_TYPES.values())
+# Who uploads (call 1): those in longevity care facing death from infection or chronic illness (call 4) in a country with
+# UM_TECH and at least one level of UM_BUILDING. Capacity (call 3): UM_PER_LEVEL minds a level, country-wide.
+UM_TECH = "mind_backups"
+UM_BUILDING = "building_mind_upload_nexus"
+UM_PER_LEVEL = 1_000_000
+# The pool's loss (call 5): this share of the active minds a year choose to end; archived minds (call 7) don't.
+UM_END_RATE = 0.001
+# The Nexus's output under Full (call 6): each good's production-method line x the country's utilisation (active minds
+# over capacity) x its factor, so a full level makes about UM_MIND_OUTPUT a mind a week at base prices (the calibration in
+# the PR body: between an era-12 services worker and the top software method's 64). Digital assets lead (traded);
+# services stay at today's line (local: they flood their own state). Inputs lean on the traded goods; electricity and
+# digital access are local.
+UM_MIND_OUTPUT = 40
+UM_OUTPUT_FACTORS = {"digital_assets": 15, "tourism": 2, "fine_art": 2, "services": 1}
+UM_INPUT_FACTORS = {"electricity": 2, "electronic_components": 8, "digital_access": 2, "advanced_materials": 8}
+# its research speed a level, the production method's country line, which the census scales by utilisation
+UM_RESEARCH_PER_LEVEL = 0.05
+# The Devout's approval (call 8): while the pool is over UM_DEVOUT_SHARE of the people (minds and bodies), by
+# UM_DEVOUT_APPROVAL. Built behind the switch, off by default (generated te_demog_k_um_politics), like the gap's was.
+UM_POLITICS = False
+UM_DEVOUT_SHARE = 0.01
+UM_DEVOUT_APPROVAL = -3
 
 # ---- The metropolitan share (spec §5.2; 2026-10-19) ----
 # A state's metropolitan share, 0-100: the share of its urban people living in its largest city. A modelled stock

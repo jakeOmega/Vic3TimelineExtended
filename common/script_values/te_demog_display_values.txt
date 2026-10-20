@@ -544,9 +544,10 @@ te_demog_next_count_months = {
 }
 
 # Under Full, the country's deaths per 1,000 people against the census's own rate across its states (te_dg_cdr_model): the
-# Added on Top row's hover (read under te_demog_ontop_ready_sgui).
+# Added on Top row's hover (read under te_demog_ontop_ready_sgui). Every body's death, the uploaded minds' too
+# (te_demog_cdr_all), since the census's rate counts them.
 te_demog_country_deaths_on_top = {
-	value = var:te_dg_cdr
+	value = te_demog_cdr_all
 	divide = { value = var:te_dg_cdr_model min = 0.01 }
 }
 
