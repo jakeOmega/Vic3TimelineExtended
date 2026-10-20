@@ -681,11 +681,11 @@ te_demog_wave.8 = {
 }
 
 # ======================================================================
-#  9 – The Overspill (on the largest city)
-#  §9: new towns, a green belt, or let it sprawl. The spec's trigger is a Metropolis-pattern state (the per-state
-#  metropolitan share, §5.2), which isn't built yet: the national pattern (Primate or Dominant) and the largest city at
-#  Migration Crowding's ceiling stand in for it (te_demog_wave_cond_overspill). New towns also switch the country's
-#  Settlement Authorities to Planned Towns, where it runs any and knows Modern Urban Planning (Internal Resettlement).
+#  9 – The Overspill (on the metropolis)
+#  §9: new towns, a green belt, or let it sprawl. The trigger is the spec's: a Metropolis-pattern state (the per-state
+#  metropolitan share, §5.2, at 60 or more) at Migration Crowding's ceiling (te_demog_wave_cond_overspill); the event
+#  sits on the most urban such state. New towns also switch the country's Settlement Authorities to Planned Towns,
+#  where it runs any and knows Modern Urban Planning (Internal Resettlement).
 # ======================================================================
 te_demog_wave.9 = {
 	type = country_event

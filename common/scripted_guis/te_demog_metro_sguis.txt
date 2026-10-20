@@ -1,0 +1,31 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the metropolitan share's read-only display gates (phase 3; spec §5.2; te_demog_metro_values.txt)
+# Shown-only gates for the state subtab's Settlement row (gui/te_demographics_widgets.gui): no Scope in GUI can ask
+# whether a variable exists, and reading a missing one logs every frame (gui_modding_guide.md gotchas #14 and #23).
+# ============================================================================
+
+# State scope: the state has a metropolitan share (the census runs and it has enough urban people), so the row's
+# figures exist.
+te_demog_state_mt_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_cohorts_run = yes
+		has_variable = te_dg_mt
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# State scope: the census runs but the state has too few urban people for a settlement pattern (the row reads None).
+te_demog_state_mt_none_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_cohorts_run = yes
+		NOT = { has_variable = te_dg_mt }
+		te_demog_mt_too_few > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

@@ -64,6 +64,9 @@ class Inputs:
     ecto_levels: float = 0.0
     # phase 3: Cultural Hegemony's drift, the owner's factor on desired fertility (te_dg_ch_desired, under Full); 1 = none
     hegemon: float = 1.0
+    # phase 3: the metropolitan share's scale on the urban term (spec §5.2; demographics_metro.fertility_scale under Full,
+    # te_demog_mt_fertility_scale); 1 = none
+    metro_scale: float = 1.0
 
 
 def clamp(x, lo, hi):
@@ -356,9 +359,9 @@ def policy_term(inp):
 
 def urban_term(inp):
     """City life's pull on desired fertility, 1 - URBAN_WEIGHT x urban x (1 - the relief type within 0-1): Family
-    Housing (phase 2 step 3b; te_demog_tfr_urban)."""
+    Housing (phase 2 step 3b; te_demog_tfr_urban), x the metropolitan share's scale (phase 3; 1 outside Full)."""
     relief = clamp(inp.mods.get(P.URBAN_RELIEF_TYPE, 0.0), 0.0, 1.0)
-    return 1 - P.URBAN_WEIGHT * (inp.urban_share * (1 - relief))
+    return 1 - P.URBAN_WEIGHT * (inp.urban_share * (1 - relief)) * inp.metro_scale
 
 
 def newborn_split(inp):

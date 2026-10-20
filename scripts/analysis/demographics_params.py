@@ -1039,3 +1039,71 @@ FRONTIER_1836 = {
     region: {"ratios": {ages: frontier_mix(m / f, FRONTIER_SETTLER_SHARE[region]) for ages, (m, f) in groups.items()}}
     for region, groups in FRONTIER_1840_WHITE.items()
 }
+
+# ---- The metropolitan share (spec §5.2; 2026-10-19) ----
+# A state's metropolitan share, 0-100: the share of its urban people living in its largest city. A modelled stock
+# (a state has one city hub and no cities below it) that moves MT_DRIFT of the way to its target each year, at the
+# state's yearly count, and starts at its target. The target is MT_BASE plus eight terms, in share points, within
+# MT_MIN..MT_MAX (scripts/analysis/demographics_metro.py; te_demog_metro_values.txt, which
+# test_demographics_metro.py pins to these).
+MT_DRIFT = 0.05
+MT_BASE = 40
+MT_MIN = 5
+MT_MAX = 95
+# A state with fewer urban people than this has no settlement pattern (no share, no effects): one market town's worth.
+MT_MIN_URBAN = 5000
+# The labels (owner, 2026-10-08): Metropolis from 60, Leading City from 40, Several Cities from 20, Market Towns below.
+MT_LABELS = (60, 40, 20)
+# 1. The national capital: government, finance and the court draw one city (Paris, Moscow).
+MT_CAPITAL = 35
+# 2. A gateway: the market area's World Market Hub (one per market area, its port to the world: New York, Buenos
+# Aires), and a Financial District, a point a level up to MT_FINANCE_MAX.
+MT_HUB = 30
+MT_FINANCE_PER_LEVEL = 1
+MT_FINANCE_MAX = 10
+# 3. Area (the state region's, te_region_area_km2): MT_AREA_STEP points down for each doubling past MT_AREA_FREE km2,
+# MT_AREA_DOUBLINGS doublings at most (Texas, 536,000 km2, takes more than two: large enough for four metros; New York
+# and Ile-de-France none to speak of).
+MT_AREA_FREE = 100000
+MT_AREA_STEP = 5
+MT_AREA_DOUBLINGS = 3
+# 4. Farms and mines: MT_WORK points down at a wholly rural state, x the walk's rural share (1 - te_dg_urban_share).
+MT_WORK = 30
+# 5. Urbanisation, the inverted U (Williamson, 1965): the owner's national urban share (te_dg_urban_share at its
+# census), MT_URBAN_SIZE x (1 - ((N - MT_URBAN_PEAK) / MT_URBAN_WIDTH)^2): 0 at 10% and at 90% urban, MT_URBAN_SIZE at
+# half, and a little below 0 beyond them (-2.7 at 95%, -5.6 at 0% or 100%). The script's floor of -MT_URBAN_SIZE is a
+# guard that never binds on 0-1.
+MT_URBAN_PEAK = 0.5
+MT_URBAN_WIDTH = 0.4
+MT_URBAN_SIZE = 10
+# 6. Infrastructure surplus over usage: MT_INFRA points down at a surplus as large as the usage (the ratio within 0-1).
+MT_INFRA = 10
+# 7. Migration Crowding: MT_CROWD points down at its ceiling (the applied multiplier MT_CROWD_CEILING, ten times the
+# reference density), in proportion below it.
+MT_CROWD = 10
+MT_CROWD_CEILING = 4.5
+# 8. Planning: the Ministry of Urban Planning (MT_TYPE on the institution, MT_MINISTRY_PER_LEVEL a level), a Settlement
+# Authority on Planned Towns (MT_PLANNED_TOWNS_PER_LEVEL a level) and a Planned Capital (MT_PLANNED_CAPITAL), all down;
+# the term within MT_PLAN_MIN..0.
+MT_TYPE = "state_metro_share_add"
+MT_MINISTRY_PER_LEVEL = -1
+MT_PLANNED_TOWNS_PER_LEVEL = -2
+MT_PLANNED_CAPITAL = -10
+MT_PLAN_MIN = -30
+# The effects (Full only), each at most 10% (owner, 2026-10-19). The concentrated side grows in a straight line from
+# nothing at MT_EFFECT_FROM (Leading City's floor) to full at MT_EFFECT_FULL (Metropolis's); the dispersed side, the
+# infrastructure loss alone, from nothing at MT_DISPERSED_FROM (Market Towns' ceiling) to full at MT_DISPERSED_FULL (the
+# target's floor, MT_MIN).
+MT_EFFECT_FROM = 40
+MT_EFFECT_FULL = 60
+MT_DISPERSED_FROM = 20
+MT_DISPERSED_FULL = 5
+MT_EFFECTS = {"state_migration_crowding_density_mult": -0.10,     # crowds sooner (a positive value is capacity)
+              "state_infrastructure_from_population_mult": 0.10,  # a compact city is cheaper to serve
+              "building_urban_center_throughput_add": 0.05,       # agglomeration: the city's services
+              "building_financial_district_throughput_add": 0.05,  # and its finance
+              "state_turmoil_effects_mult": 0.05}                 # one city concentrates its radicals (a little)
+MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.10}
+# Fertility: the census's urban term (URBAN_WEIGHT x urban x relief) is raised by MT_FERTILITY x the concentrated
+# side's strength, so at full strength by a tenth.
+MT_FERTILITY = 0.10

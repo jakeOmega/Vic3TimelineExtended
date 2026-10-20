@@ -64,14 +64,21 @@ te_demog_wave_village_state = {
 	te_demog_wave_pop_change <= te_demog_wave_k_villages_shrink
 }
 
-# The Overspill: a Primate or Dominant urban pattern whose largest city (the census state with the most urban people) is
-# at Migration Crowding's ceiling: the dispatcher reads the city in its walk and sets the local te_dg_wv_city_crowded, so
-# this is only for te_demog_wave_yearly. The spec's "Metropolis-pattern state" is the per-state metropolitan share (§5.2),
-# which isn't built yet; the national pattern and the city's crowding stand in.
+# The Overspill: a Metropolis-pattern state with crowding active (§9): one of its census states reads the Metropolis
+# label on its metropolitan share (§5.2, te_demog_metro_values.txt; a share of 60 or more) and is at Migration Crowding's
+# ceiling. Until the share was built (2026-10-19) the national pattern and the largest city's crowding stood in.
 te_demog_wave_cond_overspill = {
-	has_variable = te_dg_urban_label
-	var:te_dg_urban_label <= 1
-	local_var:te_dg_wv_city_crowded = 1
+	any_scope_state = {
+		te_demog_wave_overspill_state = yes
+	}
+}
+
+# State: a Metropolis on its metropolitan share, crowded to Migration Crowding's ceiling (the event's state).
+te_demog_wave_overspill_state = {
+	te_demog_has_census = yes
+	has_variable = te_dg_mt
+	var:te_dg_mt >= te_demog_k_mt_metropolis
+	te_demog_wave_crowded_city = yes
 }
 
 # State: at Migration Crowding's ceiling or past it.

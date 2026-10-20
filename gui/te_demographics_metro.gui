@@ -1,0 +1,245 @@
+﻿### Demographics: the metropolitan share's hover (phase 3; docs/superpowers/specs/2026-10-08-demographics-design.md
+### §5.2; common/script_values/te_demog_metro_values.txt). The state subtab's Settlement row (te_state_demog_pyramid in
+### gui/te_demographics_widgets.gui) takes te_demog_mt_tooltip as its tooltipwidget: the row's own tooltip text (the
+### share, its label and its target) and then, by gui_style_guide.md rule 5 (the parts of a total are bars), the
+### target's eight terms as bars, a row each, with the effects beneath.
+###
+### The tooltip is vanilla's own custom-tooltip form: a type derived from TooltipWidgetType (game/gui/tooltip.gui) whose
+### "tooltip_content_after" block holds the extra widgets, as vanilla's graph tooltips do (graph_tooltips.gui,
+### GraphTooltip_GoodsPrice). The widgets read the row's datacontext (State). Each bar's own hover, its term's reason,
+### opens once the tooltip is locked. If the bars don't render in game, the fallback is a plain tooltip: give the row
+### tooltip = "te_demog_mt_st_tt_plain" (the same text with the terms as lines) and drop its tooltipwidget
+### (docs/testing/demographics-playtest.md, "The metropolitan share").
+###
+### Type sizes are te_demographics_widgets.gui's templates (te_demog_fontsize_overview, the tooltip face). The bar row's
+### fixed cells: 170 + 140 + 56 and two 6 px gaps = 378, inside the tooltip's 550.
+
+types te_demographics_metro
+{
+	type te_demog_mt_tooltip = TooltipWidgetType {
+		blockoverride "tooltip_content_after" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				margin_top = 6
+
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_capital_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_capital"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_capital'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_capital'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_capital')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_gateway_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_gateway"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_gateway'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_gateway'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_gateway')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_area_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_area"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_area'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_area'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_area')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_work_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_work"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_work'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_work'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_work')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_urban_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_urban"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_urban'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_urban'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_urban')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_infra_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_infra"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_infra'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_infra'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_infra')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_crowding_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_crowding"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_crowding'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_crowding'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_crowding')|+0]"
+					}
+				}
+				te_demog_mt_bar_row = {
+					tooltip = "te_demog_mt_bar_planning_tt"
+					blockoverride "bar_label" {
+						text = "te_demog_mt_bar_planning"
+					}
+					blockoverride "bar_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_planning'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_t_planning'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "bar_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_mt_t_planning')|+0]"
+					}
+				}
+				textbox = {
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 378 -1 }
+					maximumsize = { 378 -1 }
+					margin_top = 6
+					align = left|nobaseline
+					using = te_demog_fontsize_overview
+					text = "te_demog_mt_st_effects"
+				}
+			}
+		}
+	}
+
+	### One term of the metropolitan share's target as a bar either side of a centre line, on one shared scale of
+	### -35 .. +35 points (the capital's term fills its half; a larger figure runs past the end and the value carries
+	### it, rule 5), and its signed value. Neither direction is good or bad for the player in itself, so both halves take
+	### one neutral fill, as te_demog_term_row's do; the left half is the reverse hack. Blocks: "bar_label", "bar_left"
+	### (the value, clamped to 0 or below), "bar_right" (0 or above), "bar_value".
+	type te_demog_mt_bar_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 170 -1 }
+			maximumsize = { 170 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = te_demog_fontsize_overview
+			elide = right
+			block "bar_label" {}
+		}
+		widget = {
+			size = { 140 12 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.50 0.50 0.50 0.20 }
+			}
+			widget = {
+				size = { 70 12 }
+				parentanchor = left|vcenter
+
+				progressbar = {
+					size = { 70 12 }
+					direction = horizontal
+					progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					noprogresstexture = "gfx/interface/backgrounds/white.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.78 0.68 0.46 1.0 }
+					min = -35
+					max = 0
+					block "bar_left" {}
+				}
+			}
+			widget = {
+				size = { 70 12 }
+				parentanchor = right|vcenter
+
+				progressbar = {
+					size = { 70 12 }
+					direction = horizontal
+					progresstexture = "gfx/interface/backgrounds/white.dds"
+					noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.78 0.68 0.46 1.0 }
+					min = 0
+					max = 35
+					block "bar_right" {}
+				}
+			}
+			icon = {
+				size = { 2 16 }
+				parentanchor = center
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.96 0.90 0.72 0.80 }
+			}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 56 -1 }
+			maximumsize = { 56 -1 }
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = te_demog_fontsize_overview
+			default_format = "#v"
+			elide = right
+			block "bar_value" {}
+		}
+	}
+}

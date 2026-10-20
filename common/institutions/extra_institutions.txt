@@ -175,6 +175,8 @@ institution_ministry_of_urban_planning = {
 		state_urbanization_per_level_add = -5
 		state_devastation_decay_mult = 0.05
 		state_migration_crowding_density_mult = 0.1
+		# the census's metropolitan share, per level (demographics modifier types; te_demog_metro_values.txt)
+		state_metro_share_add = -1
 	}
 }
 

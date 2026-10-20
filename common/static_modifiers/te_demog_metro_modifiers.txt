@@ -1,0 +1,30 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the metropolitan share's effects (phase 3; spec docs/superpowers/specs/2026-10-08-demographics-design.md
+# §5.2). Logic: te_demog_metro_effects.txt; sizes: te_demog_metro_values.txt (test_demographics_metro.py pins each field
+# to its te_demog_k_mt_* value there, and that to demographics_params.py's MT_EFFECTS).
+# Each state's yearly count applies one or neither, under Full only, with its strength as the multiplier
+# (te_demog_mt_state_refresh: the concentrated side 0 at a share of 40, full at 60; the dispersed side 0 at 20, full at
+# 5). Each field at most 10% at full strength (owner, 2026-10-19).
+# ============================================================================
+
+# A metropolis: one city holds most of the state's urban people.
+# - Crowding: it is denser than the state's average, so the state crowds sooner (a negative value: the type is the
+#   state's capacity), and congestion then lowers the share's target: the loop that limits the metropolis.
+# - Infrastructure: a compact city is cheaper to serve, so its people give more infrastructure.
+# - Agglomeration: its services and its finance work at a larger scale.
+# - Unrest: one city concentrates its radicals (the Paris of 1848), a little.
+te_demog_mt_metropolis = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_migration_crowding_density_mult = -0.1
+	state_infrastructure_from_population_mult = 0.1
+	building_urban_center_throughput_add = 0.05
+	building_financial_district_throughput_add = 0.05
+	state_turmoil_effects_mult = 0.05
+}
+
+# Market towns: the urban people spread over many small towns, which are dearer to serve, so they give less
+# infrastructure; a shortfall slows further dispersal until railways catch up.
+te_demog_mt_dispersed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	state_infrastructure_from_population_mult = -0.1
+}

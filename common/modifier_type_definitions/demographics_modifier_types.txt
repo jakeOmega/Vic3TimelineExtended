@@ -294,3 +294,13 @@ state_family_migration_add = {
 	decimals = 0
 	script_only = yes
 }
+
+# The metropolitan share (phase 3, spec §5.2; 2026-10-19): points on the target of the share of a state's urban people
+# living in its largest city (te_demog_mt_t_planning, te_demog_metro_values.txt). On the Ministry of Urban Planning,
+# -1 a level: green belts and new towns.
+state_metro_share_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+}

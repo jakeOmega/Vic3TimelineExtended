@@ -172,7 +172,7 @@ COUNTRY_VARS = (("te_dg_census_year", "te_dg_stepped", "te_dg_working_share", "t
                  "te_dg_pensioners", "te_dg_sex_balance", "te_dg_urban_label", "te_dg_young_share")
                 + tuple(f"te_dg_cb{s}{b}" for s in "fm" for b in range(P.BANDS)))
 STATE_VARS = ("te_dg_people", "te_dg_urban", "migration_crowding_mult_applied", "te_dg_agr_share", "te_dg_median",
-              "te_dg_walk_pop", "te_dg_walk_pop_prev")
+              "te_dg_walk_pop", "te_dg_walk_pop_prev", "te_dg_mt", "te_dg_year")
 
 
 def save_rows(path, unemployment=True):
@@ -223,11 +223,10 @@ def save_rows(path, unemployment=True):
                     <= VILLAGES_SHRINK]
         if villages:
             due_now.append("villages")
-        cities = [sv for _sid, sv in own if "te_dg_urban" in sv]
-        if cities and v.get("te_dg_urban_label", 9) <= 1:
-            city = max(cities, key=lambda sv: sv["te_dg_urban"])
-            if city.get("migration_crowding_mult_applied", 0.0) >= CROWDING:
-                due_now.append("overspill")
+        # a Metropolis on its metropolitan share at Migration Crowding's ceiling (te_demog_wave_overspill_state)
+        if any(sv.get("te_dg_mt", 0.0) >= P.MT_LABELS[0] and sv.get("migration_crowding_mult_applied", 0.0) >= CROWDING
+               for _sid, sv in own if "te_dg_year" in sv):
+            due_now.append("overspill")
         out[c["tag"] or cid] = {"people": people, "due": due_now,
                                 "figures": {"working": v.get("te_dg_working_share", 0.0), "greying": greying,
                                             "pension": pension, "youth": youth, "unemployment": unemp,
