@@ -299,7 +299,7 @@ te_demog_history_e0_axis = {
 		variable = te_dg_hist
 		limit = { has_variable = te_dg_h_e0 }
 		if = {
-			limit = { var:te_dg_h_e0 > local_var:te_dg_h_ax }
+			limit = { local_var:te_dg_h_ax < var:te_dg_h_e0 }
 			set_local_variable = { name = te_dg_h_ax value = var:te_dg_h_e0 }
 		}
 	}

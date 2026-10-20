@@ -1011,7 +1011,8 @@ engine fact (script values and locals as the tables already use), so no self-che
    chart's axis is 0-100, as before; once one is, the axis runs to the largest bar (at most 10,000), so the years before
    the late game shrink to slivers. The owner judges whether that reads well, against the alternative of a fixed 0-100
    axis whose late bars are all full. A bar over 10,000 stops at the top and its hover says "Its bar stops at 10,000". On an
-   old save the axis arrives with the next census (until then 100).
+   old save the axis arrives with the next census (until then 100); check `debug.log` for a variable-not-found
+   line on `te_dg_h_e0_max` in that window, which would be the chart's read before the first census sets it.
 5. **Chronic deaths fall at era 12 (Full or Display only).** The technologies' tooltips show Treatment of Chronic Disease
    +5% on Genetic Engineering and +12% on Molecular Assemblers and on Biological Immortality. Each lifts the target at
    once; the state's chronic factor follows as medicine spreads. With all six a rich state's Chronic Illness hover reads
