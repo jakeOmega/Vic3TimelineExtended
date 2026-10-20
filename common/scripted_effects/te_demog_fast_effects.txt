@@ -85,7 +85,7 @@ te_demog_state_clock_step = {
 }
 
 # THIS = ROOT = a country, a day after a step of the clock (te_demog_events.3): its census,
-# as on 31 December without the clock, and the speed modifier, which countries formed or
+# as at the yearly pulse without the clock, and the speed modifier, which countries formed or
 # released since the switch take here.
 te_demog_country_clock_census = {
 	if = {

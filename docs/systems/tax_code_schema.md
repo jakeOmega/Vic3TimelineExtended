@@ -933,7 +933,7 @@ Three console events (`events/te_tax_debug_events.txt`, plan Task 22) drive the 
 
 ## Light code
 
-The rule's fourth setting, `te_tax_code_light` (design: `docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md`). The vanilla taxation law stays enacted and bounds each rate between its very-low and very-high values (`MIGRATION` in `gen_tax_code.py`); inside that range the country moves each rate one step at a time and the change applies at once. None of the legislated code runs: no carrier, amendments, bills, offers, promises, packages, relief provisions, history, estimates or customs, because every one of them is gated on `te_tax_code_full` or on `te_tax_code_in_force`, which needs it.
+The rule's fourth setting, `te_tax_code_light` (design: `docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md`). The vanilla taxation law stays enacted and caps each rate at its very-high value (`MIGRATION` in `gen_tax_code.py`); inside that range, from no tax at all (`LIGHT_FLOOR` = 0, under every law) up to the cap, the country moves each rate one step at a time and the change applies at once. None of the legislated code runs: no carrier, amendments, bills, offers, promises, packages, relief provisions, history, estimates or customs, because every one of them is gated on `te_tax_code_full` or on `te_tax_code_in_force`, which needs it.
 
 ### Gates
 
@@ -943,11 +943,11 @@ The rule's fourth setting, `te_tax_code_light` (design: `docs/superpowers/archiv
 
 | Variable | Meaning | Default |
 |---|---|---|
-| `te_tax_en_<key>` | the rate index, as in the legislated code's schema; 0 for a tax the law does not levy | 0 |
+| `te_tax_en_<key>` | the rate index, as in the legislated code's schema; 0 for a tax the law does not levy, and 0 is also a levied tax cut to nothing (tell them apart by the law, not the index: `te_tax_light_old_levies_<key>`) | 0 |
 | `te_tax_light_on` | 1 once the country is migrated | — |
-| `te_tax_light_law` | the law the code was last carried into: 1..5 in `MIGRATION` order (`te_tax_light_law_id`), 0 for any other | — |
+| `te_tax_light_law` | the law the code was last carried into: 1..5 in `MIGRATION` order (`te_tax_light_law_id`), 0 for any other; a law change reads it before the sync stores the new one, to tell a tax the new law adds from one the player cut to nothing | — |
 | `te_tax_light_level` | the native tax level the code last set or followed, 0 very low .. 4 very high | — |
-| `te_tax_light_rg_<key>` | the step the rate sits on: the lowest level whose rate under the law is at least it (`te_tax_light_rung_<key>`); -1 unlevied | -1 |
+| `te_tax_light_rg_<key>` | the step the rate sits on: the lowest level whose rate under the law is at least it (`te_tax_light_rung_<key>`), so very low for any rate up to the law's very-low rate, zero included; -1 unlevied | -1 |
 | `te_tax_light_rl_<key>` | relief steps: the law's index at the tax level less the enacted index, never below 0; the relief modifier's multiplier | 0 |
 | `te_tax_lr_<ig>` | the group's running reaction, approval points, ±10 | 0 |
 | `te_tax_lr_mag_<ig>` | its rounded size, the reaction modifier's multiplier | 0 |
@@ -964,7 +964,7 @@ The country collects the law's rate at the native level plus a relief: each tax 
 
 `te_tax_light_sync` (`te_tax_light_effects.txt`) writes the native state from the variables; every part is re-derived, so a second call changes nothing:
 
-1. If the law changed since the last sync (`te_tax_light_law` against `te_tax_light_law_id`): a player's code is clamped into the new range (`te_tax_light_gen_clamp`: an unlevied tax to 0, a newly levied one, index 0, to the new law's rate at the stored level, the rest clamped between the new law's floor and its rate at the stored level, so a law change never raises the tax level: Proportional's 20% wage tax would otherwise sit on Graduated's very-high step); an AI's code is set to the law's rates at its native level. No reaction.
+1. If the law changed since the last sync (`te_tax_light_law` against `te_tax_light_law_id`): a player's code is clamped into the new range (`te_tax_light_gen_clamp`: an unlevied tax to 0, a newly levied one, one the previous law did not levy (`te_tax_light_old_levies_<key>`), to the new law's rate at the stored level, the rest clamped between 0 and the new law's rate at the stored level, so a law change never raises the tax level, and a tax cut to nothing stays at nothing: Proportional's 20% wage tax would otherwise sit on Graduated's very-high step); an AI's code is set to the law's rates at its native level. No reaction.
 2. An AI country: every tax at the law's rate for its native level, each change scored (`te_tax_light_gen_uniform_scored`), and the level recorded; a level change logs `light_ai_level`. A player's: if the native level differs from the stored one (only script can move it), every levied tax moves by its law's difference between the two levels, clamped and scored (`te_tax_light_gen_shift`).
 3. Each tax's step and the highest (`te_tax_light_gen_steps`); for a player's country on a vanilla law the level is set to it (`te_tax_light_gen_set_level`).
 4. Relief (`te_tax_light_gen_relief`), the reaction modifiers (`te_tax_light_gen_apply_reactions`), and the bands with their view-band modifiers (`te_tax_light_gen_bands`).
@@ -979,13 +979,13 @@ Callers: the monthly processor `te_tax_light_process_month` (`te_tax_light.1`, f
 
 ### Steps
 
-`te_tax_light_step_<key>_sgui` (generated) runs `te_tax_light_cmd_step = { KEY DIR }`: DIR 0 one step down, 1 one step up, 2 to the very-low rate, 3 to the very-high rate, each behind `te_tax_light_can_step` (the code in force, the law levies the tax, the rate above its floor or below its ceiling, the variable on the left of each comparison). Its tooltip names the step and, from the generated triggers `te_tax_light_up_raises_<key>`, `_max_raises_`, `_down_lowers_`, `_min_lowers_` (literal per-law thresholds, read before the change), whether the tax level rises or falls; then the tax's payers (`te_tax_lt_tt_react_<key>`). The change, its reaction and the sync are in a `hidden_effect`. Right-click (op 4 of the shared row type) does nothing.
+`te_tax_light_step_<key>_sgui` (generated) runs `te_tax_light_cmd_step = { KEY DIR }`: DIR 0 one step down, 1 one step up, 2 to zero (`te_tax_light_min_<key>`), 3 to the very-high rate, each behind `te_tax_light_can_step` (the code in force, the law levies the tax, the rate above zero or below its ceiling, the variable on the left of each comparison). A step down from a rate on the very-low step, or a jump to zero from it, never moves the tax level. Its tooltip names the step and, from the generated triggers `te_tax_light_up_raises_<key>`, `_max_raises_`, `_down_lowers_`, `_min_lowers_` (literal per-law thresholds, read before the change), whether the tax level rises or falls; then the tax's payers (`te_tax_lt_tt_react_<key>`). The change, its reaction and the sync are in a `hidden_effect`. Right-click (op 4 of the shared row type) does nothing.
 
 ### Reactions and bands
 
-A change of `d` index steps in tax `<key>` scores `te_tax_light_rc_<key>_<ig> × d` per group: the support model's material reason (`MATERIAL_WEIGHT × exposure × levels`) plus its ideology reason (`IDEOLOGY_WEIGHT × levels × ±1 × te_tax_ideo_p_<ig>`, + for wages and dividends), levels = step ÷ `LEVEL_STEPS`. A score above zero counts half (owner ruling 2026-10-09). The running reaction moves by score ÷ 4 within ±10: sweeping one tax across its law's four levels costs a fully exposed group −10, vanilla's `IG_APPROVAL_FROM_RADICAL_LAW_CHANGE`. The monthly processor keeps 0.7 of it and clears it under 0.05. It shows as `te_tax_light_react_<ig>_pos` or `_neg` (`interest_group_ig_<ig>_approval_add` ±1 × the rounded size), only once it rounds to a whole point.
+A change of `d` index steps in tax `<key>` scores `te_tax_light_rc_<key>_<ig> × d` per group: the support model's material reason (`MATERIAL_WEIGHT × exposure × levels`) plus its ideology reason (`IDEOLOGY_WEIGHT × levels × ±1 × te_tax_ideo_p_<ig>`, + for wages and dividends), levels = step ÷ `LEVEL_STEPS`. A score above zero counts half (owner ruling 2026-10-09). The running reaction moves by score ÷ 4 within ±10: sweeping one tax across its law's four levels costs a fully exposed group −10, vanilla's `IG_APPROVAL_FROM_RADICAL_LAW_CHANGE`; a longer move, such as a cut to zero from the very-high rate, scores more but the running reaction stops at ±10. The monthly processor keeps 0.7 of it and clears it under 0.05. It shows as `te_tax_light_react_<ig>_pos` or `_neg` (`interest_group_ig_<ig>_approval_add` ±1 × the rounded size), only once it rounds to a whole point.
 
-The standing view: the engine already gives each group its stance on the enacted law, so the legislated code's law-equivalence bands would count it twice. Under the light setting `te_tax_ig_band_<ig>` reads `te_tax_light_band_<ig>` instead: the relief the group's members get, `te_tax_light_rlv_<ig>` = Σ exposure × relief steps × levels over the levied taxes, gives +1 from 1 level and +2 from 2 (less a tolerance of 0.0001: the weights are written to five places), carried by the legislated code's own `te_tax_ig_view_<ig>_p1/_p2` modifiers, swapped by `te_tax_light_gen_bands`. A code with every tax on one step gives no band, so an AI's never does.
+The standing view: the engine already gives each group its stance on the enacted law, so the legislated code's law-equivalence bands would count it twice. Under the light setting `te_tax_ig_band_<ig>` reads `te_tax_light_band_<ig>` instead: the relief the group's members get, `te_tax_light_rlv_<ig>` = Σ exposure × relief steps × levels over the levied taxes, gives +1 from 1 level and +2 from 2 (less a tolerance of 0.0005, `LIGHT_BAND_TOLERANCE`: the weights are written to five places, and a tax cut to nothing can carry its whole ladder of relief steps, 40 for the rural assessment; a group's relief is a whole multiple of 1/60 of a level, so the tolerance cannot admit a miss), carried by the legislated code's own `te_tax_ig_view_<ig>_p1/_p2` modifiers, swapped by `te_tax_light_gen_bands`. A code with every tax on one step gives no band, so an AI's never does.
 
 ### The AI under the light code
 
@@ -995,7 +995,8 @@ An AI country keeps choosing its native tax level as in the base game; its code 
 
 - The relief collects: Budget's wage line under Proportional at High, two steps of wage relief, reads 20% (the precedent is vanilla, the mod's first use).
 - A step's tooltip says when the level rises or falls; the Step column and the overview's Set By agree with it.
-- An enacted law change clamps the rates (`light_law_changed`) and a new tax starts at the level's rate.
+- An enacted law change clamps the rates (`light_law_changed`) and a new tax starts at the level's rate; a tax cut to zero is still zero afterwards.
+- A tax cut to zero (shift-click on its − button) collects nothing. It is the first use of relief deeper than the law's own ladder, so read Budget's wage line under Proportional at High with wages at zero (10 steps of wage relief): it should read 0%.
 - `te_tax_debug.10`, then `.9`: `light_level_adopted` and the reactions.
 - An observer run: `light_ai_level` lines, and AI approval after its level moves (an AI pays the change reaction its vanilla tax logic doesn't weigh: a one-level raise under Proportional costs Trade Unions about 4.5 before ideology, and the cut back earns half).
 - `set_tax_level` from the step lands at once: a `light_level_adopted` line every month for a player's country means it doesn't.

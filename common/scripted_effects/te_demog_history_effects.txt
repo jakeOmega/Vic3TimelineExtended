@@ -34,14 +34,15 @@
 #              te_dg_famine_year and te_dg_wv_year (the markers' years),
 #              te_dg_h_e0_max (the Life Expectancy chart's axis, 100-10,000)
 #
-# ONE SAMPLE A YEAR. The census runs twice in 1836, at game start and on
-# 31 December, so a container is created only when te_dg_hist_year is not the
+# ONE SAMPLE A YEAR. The census can run twice in the game's first year, at game
+# start and at the country's yearly pulse (each country on its own day), so a
+# container is created only when te_dg_hist_year is not the
 # current year, and te_dg_hist_year is set once the container is stored. The
-# figures are copied on every run: the 31 December run overwrites the game-start
+# figures are copied on every run: the yearly pulse's run overwrites the game-start
 # sample. The Gini and Wealth Concentration come from te_demog_wc_national,
 # which runs on the yearly pulse and at game start (te_inh_game_start, in
 # inheritance_events.1); the two game-start events run in either order, so the
-# game-start sample may lack te_dg_h_gini and te_dg_h_wc until 31 December. A
+# game-start sample may lack te_dg_h_gini and te_dg_h_wc until the yearly pulse. A
 # figure the country does not hold yet is left unset, never written as 0: a
 # chart reads an unset value as "no data".
 #
@@ -156,7 +157,7 @@ te_demog_history_share = {
 
 # Scope: a sample container, with scope:te_dg_hist_owner the country (issue #1029): the year's marker pips. War dead in
 # the states' last counts; a famine in a month of the year (te_demog_history_note_famine); a demographic event
-# (te_demog_history_note_event). A pip once set stays for the year: the 31 December run only adds.
+# (te_demog_history_note_event). A pip once set stays for the year: the yearly pulse's run only adds.
 te_demog_history_markers = {
 	if = {
 		limit = {
@@ -188,7 +189,9 @@ te_demog_history_markers = {
 }
 
 # Scope: a tracked country, on its monthly pulse (te_demog_country_monthly_on_action; issue #1029): a month with a
-# famine marks the year's history sample, which the census stores on 31 December.
+# famine marks the year's history sample, for the census's sample at the country's yearly pulse, and on this year's
+# sample at once where it is stored already. The pulse falls on the country's own day, so a famine month after it in
+# the calendar year would otherwise set a year whose sample is already stored (the event marker below does the same).
 te_demog_history_note_famine = {
 	if = {
 		limit = {
@@ -196,11 +199,19 @@ te_demog_history_note_famine = {
 			has_famine = yes
 		}
 		set_variable = { name = te_dg_famine_year value = te_demog_year }
+		if = {
+			limit = { has_variable_list = te_dg_hist }
+			every_in_list = {
+				variable = te_dg_hist
+				limit = { var:te_hist_i = te_demog_year }
+				set_variable = { name = te_dg_h_mk_famine value = 1 }
+			}
+		}
 	}
 }
 
 # Scope: a country, as one of the event wave's events fires (te_demog_wave_effects.txt; issue #1029): the year's marker,
-# for the census's sample on 31 December, and on this year's sample at once where it is stored already (the yearly
+# for the census's sample at the yearly pulse, and on this year's sample at once where it is stored already (the yearly
 # events fire after the census).
 te_demog_history_note_event = {
 	set_variable = { name = te_dg_wv_year value = te_demog_year }

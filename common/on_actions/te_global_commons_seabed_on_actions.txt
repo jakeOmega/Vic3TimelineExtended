@@ -11,8 +11,8 @@
 #                             every weight is computed before any pool is
 #                             shared, whatever order the country pulses run
 #                             in; and the follow-state self-check's second half
-#   on_yearly_pulse_country   the AI's policy (31 December: the sharing of the
-#                             new year, in January, reads it)
+#   on_yearly_pulse_country   the AI's policy (once a year, on each country's
+#                             own day: the next January sharing reads it)
 #   on_civil_war_won          a sharing next month, for the winner's shares
 # ============================================================================
 

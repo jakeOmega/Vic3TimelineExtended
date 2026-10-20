@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — uploaded minds' self-checks (te_debug_demog.130-.139; the te_debug_demog namespace's other events are in
-# te_debug_demog_events.txt). docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md;
+# te_debug_demog_events.txt). docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md;
 # docs/testing/demographics-playtest.md, "Self-checks". Hidden and fired by script only.
 # ============================================================================
 

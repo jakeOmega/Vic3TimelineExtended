@@ -21,8 +21,8 @@ legislated ones.
 ## Setting taxes within your taxation law
 
 Under *Light Tax Code* the five taxation laws stay, and you enact them as in the
-base game. Your law sets a range for every tax it levies: from its rate at a Very
-Low tax level to its rate at Very High. Within that range you set each tax
+base game. Your law sets a range for every tax it levies: from no tax at all up
+to its rate at a Very High tax level. Within that range you set each tax
 yourself on the Tax Code tab of the Budget panel, and a change applies at once.
 There are no drafts, bills, debate, offers or promises. At the start of the game
 every tax sits at your law's rate for your tax level, so you collect what the
@@ -30,15 +30,15 @@ base game would.
 
 | Taxation law | Wage Tax | Dividend Tax | Rural Assessment | Head Tax | Consumption Tax |
 |---|---|---|---|---|---|
-| Consumption-Based Taxation | not levied | not levied | not levied | not levied | 15–35% |
-| Land-Based Taxation | not levied | not levied | 0.4–1.0 | not levied | 15–35% |
-| Per-Capita Taxation | 5–15% | not levied | 0.2–0.5 | 0.4–1.0 | 15–35% |
-| Proportional Taxation | 10–30% | 2.5–20% | not levied | not levied | 15–35% |
-| Graduated Taxation | 10–20% | 10–30% | not levied | not levied | 15–35% |
+| Consumption-Based Taxation | not levied | not levied | not levied | not levied | 0–35% |
+| Land-Based Taxation | not levied | not levied | 0–1.0 | not levied | 0–35% |
+| Per-Capita Taxation | 0–15% | not levied | 0–0.5 | 0–1.0 | 0–35% |
+| Proportional Taxation | 0–30% | 0–20% | not levied | not levied | 0–35% |
+| Graduated Taxation | 0–20% | 0–30% | not levied | not levied | 0–35% |
 
 Wage and dividend taxes move in 2.5% steps, the consumption tax in 5% steps, the
 rural assessment in steps of 0.025 and the head tax in steps of 0.05. Click − or
-\+ on a tax's row to move it a step; shift-click sends it to the lowest or
+\+ on a tax's row to move it a step; shift-click sends it to zero or to the
 highest rate your law allows. You still choose which goods carry consumption
 tax, and tariffs and subsidies work as in the base game.
 
@@ -47,11 +47,13 @@ tax, and tariffs and subsidies work as in the base game.
 ### The tax level under the light code
 
 Each rate sits on a step: the lowest tax level whose rate, under your law, is at
-or above it. The Step column shows it. Your tax level is the highest step among
-your taxes, and the overview shows which tax sets it. The tax level buttons on
-the Budget panel are grayed, because your rates set the level, and the level's
-legitimacy, radicalism and expected standard of living effects apply as in the
-base game. A tax below that step is still collected at its own rate.
+or above it. A tax cut below your law's Very Low rate, to zero if you like,
+sits on the Very Low step. The Step column shows it. Your tax level is the
+highest step among your taxes, and the overview shows which tax sets it. The tax
+level buttons on the Budget panel are grayed, because your rates set the level,
+and the level's legitimacy, radicalism and expected standard of living effects
+apply as in the base game. A tax below that step is still collected at its own
+rate.
 
 So your heaviest tax sets the political price. Under Proportional Taxation, with
 wages taxed at 25% and dividends and consumption at their Medium rates (10% and
@@ -80,8 +82,9 @@ the base game.
 ### Changing taxation law under the light code
 
 When you enact another taxation law, every rate moves into the new law's range.
-A tax the new law doesn't levy stops, and a tax it adds starts at the new law's
-rate for your current tax level, as it would in the base game. No tax ends up
+A tax the new law doesn't levy stops, a tax you had cut to zero stays at zero,
+and a tax it adds starts at the new law's rate for your current tax level, as it
+would in the base game. No tax ends up
 above the new law's rate for your current tax level, so a change of law never
 raises your tax level: a 20% wage tax under Proportional Taxation at Medium
 becomes 15% under Graduated Taxation. The law change's own approval changes are

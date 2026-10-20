@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — display gates for uploaded minds' rows on the Demographics tab and subtab
-# (gui/te_demographics_widgets.gui; docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md §4)
+# (gui/te_demographics_widgets.gui; docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md §4)
 # ============================================================================
 # Shown-only gates, as te_demog_lx_sguis.txt's: a .gui read of a missing variable logs every frame. Country gates are
 # rooted at the player's country, state gates at the state the subtab shows. Under Display and Disabled nothing books

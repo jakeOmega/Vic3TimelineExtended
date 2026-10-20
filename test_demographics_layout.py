@@ -640,6 +640,17 @@ class HistoryTest(unittest.TestCase):
         wave = _read(os.path.join(REPO, "common", "scripted_effects", "te_demog_wave_effects.txt"))
         self.assertIn("te_demog_history_note_event = yes", wave)
 
+    def test_a_famine_after_the_pulse_marks_the_stored_sample(self):
+        """The yearly country pulse falls on each country's own day, so a famine month after it in the calendar year
+        marks this year's sample at once, as the event marker does (2026-10-20)."""
+        history = _read(HISTORY)
+        for name, marker in (("te_demog_history_note_famine", "te_dg_h_mk_famine"),
+                             ("te_demog_history_note_event", "te_dg_h_mk_event")):
+            body = history.split(f"{name} = {{", 1)[1].split("\n}", 1)[0]
+            self.assertIn("variable = te_dg_hist", body, name)
+            self.assertIn("limit = { var:te_hist_i = te_demog_year }", body, name)
+            self.assertIn(f"set_variable = {{ name = {marker} value = 1 }}", body, name)
+
 
 class StatesTest(unittest.TestCase):
     @classmethod

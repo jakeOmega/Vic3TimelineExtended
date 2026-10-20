@@ -607,7 +607,7 @@ te_demog_state_count_sgui = {
 }
 
 # The country's life expectancy for women and for men (te_dg_e0f, te_dg_e0m), written at every country census since
-# issue #1029: an older census waits until 31 December. A state's are written with its te_dg_e0, so need no gate.
+# issue #1029: an older census waits until the next yearly census. A state's are written with its te_dg_e0, so need no gate.
 te_demog_e0_sex_sgui = {
 	scope = country
 	is_shown = { has_variable = te_dg_e0f }
