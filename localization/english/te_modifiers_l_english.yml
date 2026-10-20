@@ -246,7 +246,7 @@
  country_participant_diplomatic_play_escalation_weekly_mult:0 "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined"
  country_participant_diplomatic_play_escalation_weekly_mult_desc:0 "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country has joined as a committed participant."
  country_policy_rate_drift_speed_mult:0 "Policy Rate Adjustment Speed"
- country_policy_rate_drift_speed_mult_desc:0 "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers a sixth of the distance a month and never less than about a third of a point, so a small change of course takes seasons rather than weeks, and a rate far from its target closes most of the way in a year."
+ country_policy_rate_drift_speed_mult_desc:0 "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers about a third of a point a month, so a small change of course takes seasons rather than weeks. While inflation is far from its target too, it covers up to a sixth of the distance a month, so a bank chasing a runaway inflation closes most of the way in about a year."
  country_policy_rate_floor_add:0 "Lowest Policy Rate"
  country_policy_rate_floor_add_desc:0 "The lowest rate your central bank is able to set. Normally nothing below zero: charge savers to keep money in a bank and they will keep it in cash instead. A currency with no cash to keep can be pushed past that point."
  country_rights_law_enactment_success_add:0 "Enactment Success of Rights Laws"

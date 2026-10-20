@@ -46,8 +46,9 @@ DIGITAL_STEP = 0.6667  # te_mon_drift_step, the least step, at that speed
 
 
 def drift_step(gap):
-    """A month's step at digital speed for a gap of `gap` (#1084): the least step, or
-    a sixth of the distance x the speed factor, whichever is larger."""
+    """The most a month's step can be at digital speed for a gap of `gap` (#1084): the
+    least step, or a sixth of the distance x the speed factor, whichever is larger. The
+    distance counted is also capped at |headline - anchor|, so this is an upper bound."""
     divisor = float(dict((k, v) for k, _, v in definitions(VALUES)['te_mon_drift_gap_divisor'])['value'])
     return max(DIGITAL_STEP, abs(gap) * DIGITAL_SPEED / divisor)
 
@@ -83,7 +84,7 @@ class Monetary(Script):
     def __init__(self, floor=DIGITAL_FLOOR, step=DIGITAL_STEP, **inputs):
         stubs = dict(
             te_mon_target_min=floor, te_mon_target_max=60.0,
-            te_mon_drift_speed_factor=DIGITAL_SPEED,
+            te_mon_drift_speed_factor=DIGITAL_SPEED, te_mon_inflation_anchor=2.0,
             te_mon_drift_step=step, te_mon_drift_step_threshold=step + 0.0067,
             te_mon_drift_step_down=step, te_mon_drift_step_down_threshold_neg=-(step + 0.0067),
             te_mon_bank_can_buy_assets=True, te_mon_bank_may_go_under_floor=True)
@@ -295,6 +296,7 @@ class Effects(unittest.TestCase):
     def test_a_year_down_and_back_moves_the_purchases_a_drift_step_at_a_time(self):
         per_pp, cap = constants()
         s = Monetary().seat(-3, -3)
+        s.vars['te_inflation'] = -6.6  # far enough from target that the drift's distance cap never binds
         path = [-12] * 8 + [-4.8] * 4 + [-1.0] * 10  # the mandate asks deep, then less, then off the floor
         prev, seen = 0.0, []
         for work in path:
@@ -312,12 +314,18 @@ class Effects(unittest.TestCase):
         deepest = DIGITAL_FLOOR - cap / per_pp
         s = Monetary().seat(-3, -3, deepest, deepest)
         s.inputs['te_mon_bank_may_go_under_floor'] = False  # prices back at target
+        s.vars['te_inflation'] = 2.0
         bought = [s.month(-12)[0] for _ in range(int(cap / (per_pp * DIGITAL_STEP)) + 2)]
         self.assertGreater(bought[0], 0)
-        # the first month closes a sixth of the distance at digital speed (#1084)
-        self.assertAlmostEqual(cap - bought[0], per_pp * drift_step(cap / per_pp), places=3)
-        self.assertGreater(drift_step(cap / per_pp), DIGITAL_STEP)
+        # with prices on target the drift counts no distance (#1084, PR #1086's review),
+        # so the purchases wind down a least step at a time, as before #1084
+        self.assertAlmostEqual(cap - bought[0], per_pp * DIGITAL_STEP, places=3)
         self.assertEqual(bought[-1], 0)
+        # with prices still well under target they wind down a sixth of the distance
+        s = Monetary().seat(-3, -3, deepest, deepest)
+        s.inputs['te_mon_bank_may_go_under_floor'] = False
+        s.vars['te_inflation'] = -6.6
+        self.assertAlmostEqual(cap - s.month(-12)[0], per_pp * drift_step(cap / per_pp), places=3)
 
 
 class SimulatorPort(unittest.TestCase):

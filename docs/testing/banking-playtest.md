@@ -179,11 +179,11 @@ the console event `te_debug_monetary.1` on the country in question.
     China's 2048 state, puts inflation under 30% in about two years, under 20% in about eight and under 10% in about
     fifteen, with no hyperinflation crisis; a deep recession on the way is expected (real rates in double digits).
 27. **The tooltips read the new drift.** The Policy Rate and Rate Target tooltips say the rate closes 17% of its
-    distance a month and never less than 0.33 of a point (33% and 0.67 under Digital Currency), and the delegated
-    mandate's read-out line says the same. The Rate Target tooltip's range reads 0% to 60% (−3% to 60% digital, 0% to
+    distance a month, or of how far inflation is from its target if that is less, and never less than 0.33 of a
+    point (33% and 0.67 under Digital Currency), and the delegated mandate's read-out line says the same. The Rate Target tooltip's range reads 0% to 60% (−3% to 60% digital, 0% to
     15% on gold). Shift-click on the stepper goes to 60.
-28. **Overshooting the target.** Note how it feels to step a manual target far past where you want the rate, then back:
-    the rate moves a sixth of the way to the far target that month. If players use it as a routine trick, the owner
-    may cap the step (design doc §5.1, "Open").
+28. **Overshooting the target gains nothing with inflation on target** (fixed in review, PR #1086). With inflation
+    near 2%, shift-click a manual target to 60 for a month: the rate moves 0.33 of a point, as it would toward any
+    target. With inflation well off target it moves up to a sixth of how far inflation is off, never of the 60.
 29. **Wealth Concentration's r > g.** The real rate it reads should now spread both ways: in the 2057 autosave 72 of
     91 countries sat at its −5 floor; at 3–4% inflation the investigation expected about 47 at −5 and 34 at +5.

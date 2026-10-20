@@ -4538,7 +4538,7 @@ Rules of thumb: keep a clamp in its own named script value when two consumers sc
 
 ## A Non-Idempotent Pulse Effect Needs an Explicit Call-Site Contract
 
-Most scripted effects are safe to call twice; one that **advances** state is not. `te_monetary_monthly_update` moves the policy rate a third of a point toward its target and draws two random walks *per call*, so a second call in the same month drifts twice as fast and ages the hidden state twice as quickly — no error, no log line, just a system running at double speed for that country.
+Most scripted effects are safe to call twice; one that **advances** state is not. `te_monetary_monthly_update` moves the policy rate one drift step toward its target and draws two random walks *per call*, so a second call in the same month drifts twice as fast and ages the hidden state twice as quickly — no error, no log line, just a system running at double speed for that country.
 
 When an effect is the single owner of a time-advancing quantity, put the contract in its header and be specific:
 

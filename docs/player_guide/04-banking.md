@@ -569,9 +569,12 @@ anchor's.
 
 You choose a Rate Target, the stepper labelled Target beside your Policy Rate,
 and each month the policy rate moves a sixth of the distance toward it, never
-less than a third of a point; Digital Currency doubles both. A small change of
-course takes months, while a rate 25 points off its target covers most of the
-way in about a year. Click the stepper for a point, Ctrl-click for a tenth,
+less than a third of a point; Digital Currency doubles both. The distance it
+counts is at most how far inflation is from its target, so with inflation on
+target the rate moves a third of a point a month however far you set the
+target, and a small change of course takes months. A bank chasing a runaway
+inflation from 25 points off covers most of the way in about a year. Click the
+stepper for a point, Ctrl-click for a tenth,
 Shift-click for the limit of your currency law. Changes are free and have no
 cooldown.
 
@@ -635,8 +638,8 @@ floor, and buys assets on its own account for the difference. Each point it
 would cut below the floor adds 1 point of inflation pressure, up to 5 points
 at 5 points below, on top of Open-Market Operations.
 
-The purchases grow and shrink at the speed the rate moves: a sixth of the
-distance a month and at least a third of a point, doubled under Digital
+The purchases grow and shrink at the speed the rate moves: up to a sixth of
+the distance a month and at least a third of a point, doubled under Digital
 Currency, and at least a point a month while the bank cuts with the cycle in
 Stagnation or worse. They never start or stop all at once. When the
 bank's rule asks for a higher rate again, the purchases wind down first, and the

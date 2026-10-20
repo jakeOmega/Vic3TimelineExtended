@@ -315,8 +315,9 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
 12a. **Releasing a subject does not move the parent's own rate.** The six release and uprising
     hooks update `scope:target`, the new tag, and deliberately *not* ROOT, which is the parent
     and already pulses monthly. Note a great power's policy rate, release a subject, and check
-    it has not jumped by about a third of a point that same month (the drift step's per-call
-    size) — that jump is the signature of a second, non-idempotent update in one month. The new
+    it has not jumped by a second drift step that same month (a third of a point close to its
+    target, more since #1084 when both it and inflation are far from target) — that jump is the
+    signature of a second, non-idempotent update in one month. The new
     tag should meanwhile open with a real rate rather than vanilla's ~20%.
 13. **Relative order of global `on_monthly_pulse`, `on_monthly_pulse_country` and the JE's own
     pulse** (§17 check 7) — the stance reaches the cycle through a variable written by the
@@ -2168,8 +2169,8 @@ tax level.
 ## 4. The rate stack
 
 ```
-policy_rate   drifts toward target, max(1/3 pp, gap/6)     has a dial: national bank on commodity money
-                                                            (narrowly, §0.6) / gold / fiat / digital
+policy_rate   drifts toward target, max(1/3, min(gap,      has a dial: national bank on commodity money
+              |π − anchor|) / 6) pp a month                 (narrowly, §0.6) / gold / fiat / digital
               = world_rate + expected_inflation + 1.0       no dial: no national bank, or crypto with or
                                                             without one
               = administered_rate                           command economy
@@ -2208,14 +2209,22 @@ leakage is visible.
   the way in a year where it took six. Small reversals are still slow by construction; a
   bank that has to chase a runaway inflation is no longer held to a point a quarter. The
   law's speed factor scales the whole step, so digital currency moves a third of the
-  distance and at least 2/3 pp.
+  distance and at least 2/3 pp. **The distance counted is at most how far headline
+  inflation is from its anchor** (`te_mon_inflation_gap_abs`, PR #1086's review): a target
+  has no fee and no cooldown, so a sixth of the bare distance let a player shift-click to 60
+  for one pulse and move the rate (60 − r)/6, 5 to 14 in one month against fifteen. A click
+  cannot move inflation, so with prices on target the drift is the flat third of a point,
+  however far the target. The cost: a rate stranded far above its target while inflation
+  sits on target comes down at the third of a point again (40 to 15 in 75 months), as before
+  #1084, until the tight stance moves inflation.
   A **delegated** target is the mandate formula rounded to the nearest integer, with
   hysteresis (it only moves when the formula differs from the current target by ≥ 0.75) so
   it never flaps.
 - **Emergency cuts (2026-09-25):** a bank running its mandate (delegated, AI or CBI —
   `te_mon_emergency_cuts`) **cuts** at `te_mon_emergency_cut_factor` × the step — 1pp a
   month, 2 under digital — while the financial cycle is in stagnation or worse
-  (`te_mon_drift_step_down`). Hikes, and a manual dial, keep the third of a point. Since
+  (`te_mon_drift_step_down`). Hikes, and a manual dial, keep the ordinary least step, a
+  third of a point. Since
   #1084 the factor raises only the *least* step: a cut far from its target already moves a
   sixth of the distance, and tripling that too would halve the gap in a month. Without
   it a bank caught at 12% by a crash stayed maximally tight for over a year of panic on the
@@ -2252,7 +2261,7 @@ India and the North American Union sat at 34–46% in a 2045–2058 run. The cei
 acts as fiat, §12.3); a convertible gold standard keeps 15 (`te_mon_target_ceiling_gold`)
 and commodity money its band. With the proportional drift (§4) and the stance term's own
 tight clamp (§9.1), the simulator brings a delegated fiat bank from China's 2048 state
-(core 36, expected 32, rate 25) under 10% in a median of 14.5 years (9.7 under independence on
+(core 36, expected 32, rate 25) under 10% in a median of 14.6 years (9.7 under independence on
 Inflation Targeting) with no run reaching 50% and an average of 25% over the first decade,
 where the shipped dial reached 50% in 98% of runs (40% on average) and got out only by a
 currency reform. The cost
@@ -2260,12 +2269,16 @@ is a stronger and dearer dial: real rates in double digits during a disinflation
 recession that comes with them. The rate-paid clamp of 60 (§4) can now bind, but only for a
 dial left at the ceiling while inflation is low, which no mandate does.
 
-**Open, for the owner: a proportional step rewards overshooting the target.** A player who
-wants the rate 6 points higher can shift-click the target to 60 for one month (the rate moves
-a sixth of the way there, several points) and then set the real target, rather than wait out
-the smaller steps toward it. It is a click a month, not a standing exploit, and the outcome is
-the same rate a little sooner; a cap on the step, or measuring a manual dial's distance to its
-own last target, would close it if play shows it matters.
+**Closed (PR #1086's review, 2026-10-20): overshooting the target bought speed.** As first
+built, a player who wanted the rate 9 points higher could shift-click the target to 60 for one
+pulse (the rate moved a sixth of the way there) and then set the real target: manual moves got
+10–15× faster, and on gold the §24 peg-slump study's convertibility crises rose 14–32% and its
+longest slumps stretched (price stability on gold: 42 / 44 / 48 months to 61 / 68 / 95).
+Capping the distance the step counts at |headline − anchor| closes it: with inflation on
+target an overshoot moves the rate no faster than an honest step (5 to 14 takes 27 months
+either way), the peg study is back at the flat-drift figures, and the trap escape above is
+unchanged. Far from target an overshoot still helps a little (inflation at 7%: 5 to 14 in 12
+months gamed against 16), but there the bank is meant to move.
 
 The existing volatility modifiers on these laws stay. **Minting is the missing fiscal axis
 (proposed — owner to decide).** Vanilla minting *is* seigniorage — roughly 5% of GDP a year
@@ -4965,7 +4978,7 @@ P6-1…13).
 
 | Constant | Start | § |
 |---|---|---|
-| Drift per month | max(1/3 pp, a sixth of the distance) × the speed factor (2× digital) since 2026-10-20, #1084 (was a flat 1/3); a mandate-run bank's **least cut** ×3 (`te_mon_emergency_cut_factor`) while the cycle is below 40, since 2026-09-25 | 4 |
+| Drift per month | max(1/3 pp, a sixth of the distance, counting at most \|headline − anchor\|) × the speed factor (2× digital) since 2026-10-20, #1084 (was a flat 1/3); a mandate-run bank's **least cut** ×3 (`te_mon_emergency_cut_factor`) while the cycle is below 40, since 2026-09-25 | 4 |
 | Target range: gold / fiat / digital | 0–15 / 0–60 / −3–60 (fiat and digital 25 until 2026-10-20, #1084) | 5 |
 | Target range: commodity money with a bank (`te_mon_commodity_band_margin_down` / `_up`; centre hysteresis `te_mon_commodity_centre_hysteresis`) | `centre − 1` to `centre + 3`, floored at 0; centre = `round(world)`, re-rounded at 0.75 | 5.1, 0.6 |
 | Commodity price-specie term (`te_mon_commodity_specie_tolerance` / `_per_pp` / `_clamp`) | tolerance 1pp of core above world inflation, then −2pp of pressure per pp, clamped at −6 | 9.1, 0.6 R7 |

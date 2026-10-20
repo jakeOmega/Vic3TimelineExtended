@@ -1371,8 +1371,11 @@ def drift_toward(cfg: Config, state: State, rate: float, target: float) -> float
     The least step is te_mon_drift_step (a third of a point x the speed factor)
     and a month's step is that or a sixth of the distance x the speed factor,
     whichever is larger, never past the target (te_mon_drift_step_up_now /
-    _down_now, #1084). The emergency factor raises only a cut's least step.
-    `--tune drift_share=0` restores the flat third of a point (pre-#1084).
+    _down_now, #1084). The distance counted is at most |headline - anchor|
+    (te_mon_inflation_gap_abs, last month's headline as step 3 sees it), so a
+    target set past where the rate should go buys nothing (PR #1086's review).
+    The emergency factor raises only a cut's least step. `--tune drift_share=0`
+    restores the flat third of a point (pre-#1084).
     """
     speed = max(0.1, 1.0 + law_modifier_sum(cfg, "country_policy_rate_drift_speed_mult"))
     step = 0.3333 * speed
@@ -1381,11 +1384,13 @@ def drift_toward(cfg: Config, state: State, rate: float, target: float) -> float
         # te_mon_drift_step_down (§12). `--tune emergency_cut=1` turns it off.
         down *= tuned("emergency_cut", K.sv("te_mon_emergency_cut_factor"))
     share = tuned("drift_share", 1.0 / K.sv("te_mon_drift_gap_divisor")) * speed
+    anchor = 0.0 if is_metallic(cfg) else INFLATION_ANCHOR
     gap = target - rate
+    distance = min(abs(gap), abs(state.inflation - anchor))
     if gap > step:
-        return rate + min(gap, max(step, gap * share))
+        return rate + min(gap, max(step, distance * share))
     if gap < -down:
-        return rate - min(-gap, max(down, -gap * share))
+        return rate - min(-gap, max(down, distance * share))
     return target
 
 

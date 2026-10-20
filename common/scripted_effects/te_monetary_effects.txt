@@ -1902,7 +1902,11 @@ te_monetary_update_virtual_target = {
 # (#1084, owner 2026-10-20; it was a flat 1/3 pp). Within two points of the
 # target the third of a point is the larger, so a small move is still a point
 # a quarter and reversals stay slow by construction (§4); a bank 25 points off
-# moves about 4 a month. The arithmetic is §16.2's: difference into a scratch
+# moves about 4 a month. THE DISTANCE COUNTED IS AT MOST HOW FAR INFLATION IS
+# FROM ITS ANCHOR (te_mon_inflation_gap_abs, PR #1086's review), so a target
+# set far past where the rate should go buys nothing a click could game: with
+# prices on target the drift is the flat third of a point. See
+# te_mon_drift_step. The arithmetic is §16.2's: difference into a scratch
 # variable, step if it is bigger than the least step, otherwise snap to the
 # target so the rate never oscillates around it by a third of a point
 # forever. The step itself is te_mon_drift_step_up_now / _down_now, which read
@@ -2410,10 +2414,10 @@ te_monetary_update_inflation = {
 		# te_mon_pressure_total.
 		#
 		# A DOLLARISED country IS PINNED TOO, AT THE ANCHOR (owner decision K,
-		# 2026-09-20, closing the item ruling T5 left open). It takes the
-		# metallic regime PULL because its money is somebody else's, and for
-		# the same reason nothing its own government does can move what people
-		# expect of that money: imported credibility is the whole of what
+		# 2026-09-20, closing the item ruling T5 left open). It takes a regime
+		# PULL because its money is somebody else's — since #1084 toward this
+		# same anchor, not metal's zero — and for the same reason nothing its
+		# own government does can move what people expect of that money: imported credibility is the whole of what
 		# dollarising buys. Unpinned, a dollarised country running a large
 		# deficit drifted its own expectations upward for a currency it does
 		# not issue. The pin is te_mon_inflation_anchor (2), not metal's 0 —

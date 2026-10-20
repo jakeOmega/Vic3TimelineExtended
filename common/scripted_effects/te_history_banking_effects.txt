@@ -10,7 +10,7 @@
 #   bank_value      finance_cycle_value      0..100
 #   bank_momentum   finance_cycle_momentum   signed, roughly -6..+6
 #   bank_bubble     bubble_pressure          0..100
-#   mon_policy      te_policy_rate           pp, -3..25 (regime range, §5.1)
+#   mon_policy      te_policy_rate           pp, -3..60 (regime range, §5.1)
 #   mon_rate_paid   te_rate_paid_pts         pp, 0.5..60 (§4)
 #   mon_inflation   te_inflation             pp, -10..100 (headline, §9.3)
 #   mon_fx          te_fx_index              50..150, 100 = par (§15.1; phase 4)

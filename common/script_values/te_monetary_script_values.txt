@@ -696,6 +696,19 @@ te_mon_drift_speed_factor = {
 # (te_mon_target_ceiling_free). Digital currency's +100% doubles the whole
 # step, the sixth as well as the third, so its edge over fiat stays a
 # doubling at every distance.
+#
+# THE DISTANCE COUNTED IS AT MOST HOW FAR INFLATION IS FROM ITS ANCHOR
+# (te_mon_inflation_gap_abs; PR #1086's review). A target has no fee and no
+# cooldown, so a sixth of the bare distance let a player shift-click to 60 for
+# one pulse and move the rate (60 - r) / 6 — 5 to 14 in a month where honest
+# steps take fifteen — and on gold it raised the §24 study's peg crises by
+# 14-32% and stretched its longest slumps.
+# A click cannot move inflation, so this cap can't be gamed: with prices on
+# target the drift is the flat third of a point it always was, and a bank
+# chasing a 36% inflation still closes a sixth of a 25-point gap. The cost: a
+# rate left far above its target while inflation sits on target comes down at
+# the third of a point again, as before #1084, until the tight stance has moved
+# inflation.
 te_mon_drift_step = {
 	value = 0.3333
 	multiply = te_mon_drift_speed_factor
@@ -710,7 +723,8 @@ te_mon_drift_gap_divisor = {
 }
 
 # The same share in percent, after the speed factor, for the tooltips: about
-# 17% a month at the baseline, 33% under digital currency.
+# 17% a month at the baseline, 33% under digital currency. Of the distance to
+# the target, or of how far inflation is from its anchor if that is less.
 te_mon_drift_gap_share_pct = {
 	value = 100
 	divide = te_mon_drift_gap_divisor
@@ -722,8 +736,13 @@ te_mon_drift_gap_share_pct = {
 # so they mean nothing anywhere else and must never be rendered: a tooltip
 # would read a scratch variable last written by some other step.
 #
-#   up    max(te_mon_drift_step,      gap x speed / 6), at most the gap
-#   down  max(te_mon_drift_step_down, |gap| x speed / 6), at most the gap
+#   up    max(te_mon_drift_step,      min(gap, infl) x speed / 6), at most the gap
+#   down  max(te_mon_drift_step_down, min(|gap|, infl) x speed / 6), at most the gap
+#
+# where infl is te_mon_inflation_gap_abs, |headline - anchor| as last month's
+# step 6 left it (step 3 runs first), 0 before any headline exists. The cap
+# is the second line of each, ahead of the divide, so it bounds the distance in
+# pp rather than the step.
 #
 # The emergency factor (te_mon_drift_step_down) raises only the LEAST step of
 # a cut, to a point a month: a mandate-run bank in a slump that is far above
@@ -733,6 +752,7 @@ te_mon_drift_gap_share_pct = {
 # and a sixth is less than the gap for any speed factor under 6.
 te_mon_drift_step_up_now = {
 	value = var:te_mon_work
+	max = te_mon_inflation_gap_abs
 	divide = te_mon_drift_gap_divisor
 	multiply = te_mon_drift_speed_factor
 	min = te_mon_drift_step
@@ -746,6 +766,7 @@ te_mon_drift_gap_down = {
 
 te_mon_drift_step_down_now = {
 	value = te_mon_drift_gap_down
+	max = te_mon_inflation_gap_abs
 	divide = te_mon_drift_gap_divisor
 	multiply = te_mon_drift_speed_factor
 	min = te_mon_drift_step_down

@@ -8,7 +8,10 @@ which at a 25% ceiling and a flat third of a point a month it could not:
   `te_mon_target_ceiling_gold` (15), and commodity money its band;
 * a month's drift is max(te_mon_drift_step, a sixth of the distance), both
   scaled by `te_mon_drift_speed_factor`, so digital currency stays twice as
-  fast at every distance; an emergency cut raises only the least step;
+  fast at every distance; an emergency cut raises only the least step. The
+  distance counted is at most |headline - anchor| (`te_mon_inflation_gap_abs`,
+  PR #1086's review), so a target set far past where the rate should go buys
+  nothing a click could game: with inflation on target the drift is flat;
 * `te_mon_pressure_stance` reads its own clamp, -2..+10, while the banking
   cycle's channel keeps the shared -2..+4 (the 2026-09-22 ruling).
 
@@ -66,14 +69,22 @@ class Ceiling(unittest.TestCase):
 
 
 class Drift:
-    """te_monetary_drift_rate_toward on the real step values, at a given speed."""
+    """te_monetary_drift_rate_toward on the real step values, at a given speed.
 
-    def __init__(self, speed=1.0, emergency=False):
+    `inflation` is last month's headline, which caps the distance the step
+    counts (|headline - anchor|, anchor 2). The default, 50, is far enough off
+    that the cap does not bind for any gap below 48; None leaves no headline.
+    """
+
+    def __init__(self, speed=1.0, emergency=False, inflation=50.0):
         harness = QeMonetary(te_mon_bank_can_buy_assets=False)
         for stub in ('te_mon_drift_step', 'te_mon_drift_step_threshold', 'te_mon_drift_step_down',
                      'te_mon_drift_step_down_threshold_neg'):
             harness.inputs.pop(stub)
-        harness.inputs.update(te_mon_drift_speed_factor=speed, te_mon_emergency_cuts=emergency)
+        harness.inputs.update(te_mon_drift_speed_factor=speed, te_mon_emergency_cuts=emergency,
+                              te_mon_inflation_anchor=2.0)
+        if inflation is not None:
+            harness.vars['te_inflation'] = inflation
         self.harness = harness
 
     def step(self, rate, target):
@@ -130,6 +141,36 @@ class DriftFormula(unittest.TestCase):
         self.assertLessEqual(first_within, 14)  # a flat third of a point took 68 months to get there
         self.assertEqual(months[-1], 50)
 
+    def test_the_distance_counted_is_at_most_how_far_inflation_is_from_target(self):
+        # 5 points of inflation off target: a sixth of 5, however far the target.
+        for target in (12, 30, 60):
+            self.assertAlmostEqual(Drift(inflation=7).step(5, target) - 5, 5 / 6, places=4, msg=target)
+            self.assertAlmostEqual(5 - Drift(inflation=-3).step(5 + target, 5) + target, 5 / 6, places=4)
+        # Digital doubles the capped step too.
+        self.assertAlmostEqual(Drift(speed=2, inflation=7).step(5, 60) - 5, 2 * 5 / 6, places=4)
+
+    def test_with_inflation_on_target_the_drift_is_flat(self):
+        for inflation in (2.0, 2.2, 1.5, None):
+            for rate, target in ((5, 14), (5, 60), (40, 15), (25, 0)):
+                moved = abs(Drift(inflation=inflation).step(rate, target) - rate)
+                self.assertAlmostEqual(moved, FLAT, places=4, msg=(inflation, rate, target))
+
+    def test_overshooting_the_target_buys_nothing_with_inflation_on_target(self):
+        # The review's exploit: shift-click to 60 for a pulse, then back. Each month
+        # the gamer takes whichever target lands the rate nearest 14 without passing it.
+        def months(gamed, inflation):
+            drift, rate, n = Drift(inflation=inflation), 5.0, 0
+            while abs(rate - 14) > 1e-6 and n < 200:
+                options = (14, 20, 30, 45, 60) if gamed else (14,)
+                landed = [drift.step(rate, t) for t in options]
+                rate = min((r for r in landed if r <= 14 + 1e-9), key=lambda r: 14 - r)
+                n += 1
+            return n
+        self.assertEqual(months(True, 2.0), months(False, 2.0))
+        self.assertEqual(months(False, 2.0), 27)  # 9 points at a third of a point
+        # far off target the bank is meant to move fast, honest or not
+        self.assertLessEqual(months(False, 36.0), 16)
+
     def test_the_step_values_are_only_read_inside_the_drift(self):
         # They read the scratch variable te_mon_work, so nothing may render them.
         shown = LOC.read_text(encoding='utf-8-sig') + ''.join(
@@ -137,8 +178,11 @@ class DriftFormula(unittest.TestCase):
         for name in ('te_mon_drift_step_up_now', 'te_mon_drift_step_down_now', 'te_mon_drift_gap_down'):
             self.assertNotIn(name, shown)
         for name in ('te_mon_drift_step_up_now', 'te_mon_drift_step_down_now'):
-            self.assertIn(('max', '=', 'var:te_mon_work' if 'up' in name else 'te_mon_drift_gap_down'),
-                          definitions(VALUES)[name])
+            body = definitions(VALUES)[name]
+            self.assertIn(('max', '=', 'var:te_mon_work' if 'up' in name else 'te_mon_drift_gap_down'), body)
+            # the inflation cap bounds the distance, ahead of the divide
+            self.assertEqual(body[1], ('max', '=', 'te_mon_inflation_gap_abs'), name)
+            self.assertEqual(body[2][0], 'divide', name)
 
 
 def stance(gap):
@@ -195,9 +239,46 @@ class Simulator(unittest.TestCase):
         sim = self.sim
         for currency, speed in (('fiat', 1), ('digital', 2)):
             cfg = sim.Config(currency=currency, mode=sim.MODE_NOTHING)
-            for rate, target in ((25, 50), (50, 25), (3, 4), (5, 4.5), (0, 60), (40, 2)):
-                got = sim.drift_toward(cfg, sim.State(), rate, target)
-                self.assertAlmostEqual(got, Drift(speed=speed).step(rate, target), places=3, msg=(currency, rate, target))
+            for inflation in (2.0, 7.0, 50.0):
+                for rate, target in ((25, 50), (50, 25), (3, 4), (5, 4.5), (0, 60), (40, 2)):
+                    got = sim.drift_toward(cfg, sim.State(inflation=inflation), rate, target)
+                    want = Drift(speed=speed, inflation=inflation).step(rate, target)
+                    self.assertAlmostEqual(got, want, places=3, msg=(currency, inflation, rate, target))
+
+    def trap(self, tune=None, runs=24):
+        """China's 2048 state (core 36, expected 32, rate and target 25), 30 years."""
+        sim = self.sim
+        sim.TUNE.clear()
+        sim.TUNE.update(tune or {})
+        original = sim.monetary_update
+
+        def seeded(cfg, st, rng, year):
+            if not getattr(st, '_trap', False):
+                st._trap = True
+                st.inflation_core = st.inflation = 36.0
+                st.inflation_expected = 32.0
+                st.policy_rate = st.policy_rate_target = st.virtual_rate = st.virtual_target = 25.0
+                st.stance_gap, st.inflation_band, st.inflation_band_applied = -10.0, 5, 5
+            original(cfg, st, rng, year)
+        sim.monetary_update = seeded
+        try:
+            cfg = sim.Config(currency='fiat', mode=sim.MODE_PRICE, points=0, years=30, wage_pressure=1.1,
+                             fin_law='law_universal_banking_light_prudence', deficit_mean=1.5)
+            series = [sim.run_once(cfg, seed).inflation_series for seed in range(5000, 5000 + runs)]
+        finally:
+            sim.monetary_update = original
+            sim.TUNE.clear()
+        reached = sum(max(s) >= 50 for s in series)
+        under10 = sorted(next((m / 12 for m, x in enumerate(s) if x < 10), 99) for s in series)
+        return reached, under10[len(under10) // 2]
+
+    def test_the_trap_escape_holds(self):
+        reached, median = self.trap()
+        self.assertEqual(reached, 0)
+        self.assertLess(median, 18)
+        # and it is #1084's dial that does it: the old one runs most of them into hyperinflation
+        reached_before, _ = self.trap(self.sim.PRESETS['pre_rate_reach'])
+        self.assertGreater(reached_before, 12)
 
     def test_stance_clamps(self):
         sim = self.sim
