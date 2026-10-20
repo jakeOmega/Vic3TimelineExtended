@@ -36,6 +36,9 @@ on_monthly_pulse_country = {
 te_demog_country_monthly_on_action = {
 	effect = {
 		te_demog_country_monthly = yes
+		# Wealth Concentration's financial boom and land reform, whatever the rule (te_demog_wealth_effects.txt)
+		te_demog_wc_boom_check = yes
+		te_demog_wc_land_reform_check = yes
 		# the Crash Campaign ends itself after five years, to the month (Full only)
 		te_demog_ms_monthly = yes
 		# phase 2 step 1's once-a-game self-checks (te_debug_demog_effects.txt; they gate on the census themselves)
@@ -77,6 +80,9 @@ on_yearly_pulse_country = {
 
 te_demog_country_yearly_on_action = {
 	effect = {
+		# Wealth Concentration's r > g inputs and term, before the national refresh in te_demog_country_yearly reads
+		# them, whatever the rule (te_demog_wealth_effects.txt)
+		te_demog_wc_growth_update = yes
 		te_demog_country_yearly = yes
 		# the Family Policy measures, after the census they cost by: kept, costed, the AI's choices (Full only;
 		# te_demog_measure_effects.txt)
@@ -141,6 +147,7 @@ on_monthly_pulse_state = {
 on_state_owner_change = {
 	on_actions = {
 		te_demog_lines_on_action
+		te_demog_wc_owner_change_on_action
 	}
 }
 on_state_incorporation = {
@@ -194,6 +201,15 @@ te_demog_lines_on_action = {
 		te_demog_workforce_heal = yes
 		# the census's births and deaths terms likewise (#937)
 		te_demog_rates_heal = yes
+	}
+}
+
+# ROOT = the state that changed hands. Wealth Concentration's ownership shock compares a state's state-owned share with
+# last year's; after a change of owner the next pulse stores the new owner's without a shock, whatever the rule
+# (te_demog_wealth_effects.txt).
+te_demog_wc_owner_change_on_action = {
+	effect = {
+		te_demog_wc_owner_change = yes
 	}
 }
 

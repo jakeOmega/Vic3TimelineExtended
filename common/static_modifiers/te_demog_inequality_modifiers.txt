@@ -1,0 +1,11 @@
+﻿# Demographics: the Inequality effect (docs/superpowers/specs/2026-10-08-demographics-design.md §4.1, §7; owner,
+# 2026-10-19). A state modifier under Full only, applied at a multiplier of 0 to 1 by te_demog_inequality_refresh
+# (te_demog_wealth_effects.txt): (the state's shown Gini - 0.45) / 0.20, so the full +10% at a Gini of 0.65. Relative
+# deprivation: where incomes spread wide, the poor compare themselves with the rich. The engine has no radicals type
+# for the lower strata alone (state_lower_strata_expected_sol_add moves a standard-of-living expectation, an integer),
+# so it takes the state-wide one Concentrated Property and the youth bulge carry. It shows in the state's modifier
+# list: an effect the player plans around.
+te_demog_census_inequality = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_radicals_from_political_movements_mult = 0.1
+}

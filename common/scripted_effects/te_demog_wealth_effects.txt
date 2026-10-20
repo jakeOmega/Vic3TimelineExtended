@@ -22,6 +22,11 @@ te_demog_state_gini = {
 #                       takes the shocks below
 #   te_dg_wc_target     its target (te_demog_wc_target, te_demog_values.txt), as
 #                       of the state's last yearly pulse
+#   te_dg_wc_sown       the state-owned share of its capital at the last pulse, 0-1
+#                       (the ownership shock; absent under 20 capital levels and
+#                       after a change of owner)
+#   te_dg_ineq          under Full, the Inequality effect's multiplier (the end of
+#                       this file)
 # Country variables (te_demog_wc_national, the one refresh site):
 #   te_inh_concentration  the national figure: the states' scores weighted by
 #                       where property is held. #822's name, so its loc,
@@ -31,13 +36,17 @@ te_demog_state_gini = {
 #                       te_demog_wc_shock move
 #   te_dg_wc_target     the states' targets, weighted the same way
 #   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq,
-#   te_dg_wc_t_tax, te_dg_wc_t_econ  the target's terms, signed around 50 and
-#                       weighted the same way, so they add up to the target (the
-#                       panel's bars)
+#   te_dg_wc_t_tax, te_dg_wc_t_econ, te_dg_wc_t_rg  the target's seven terms,
+#                       signed around 50 and weighted the same way, so they add up
+#                       to the target (the panel's bars)
 #   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
 #   te_dg_gini          the Gini over all the states' wealth bands
 #   te_dg_war_shock     the war shocks taken since the country was last at peace
 #                       on 31 December
+#   te_dg_wc_boom       the financial boom's shock taken in this cycle
+#   te_dg_wc_land       the land-tenure law's role last month (te_demog_wc_land_code)
+#   te_dg_wc_gdp, te_dg_wc_g, te_dg_wc_r, te_dg_wc_rg  r > g's inputs and term
+#                       (te_demog_wc_growth_update)
 #
 # Shocks jump the scores instead of moving the targets (Scheidel's levellers):
 # a year at war with heavy dead -1, at most -10 until a year ends in peace
@@ -45,7 +54,11 @@ te_demog_state_gini = {
 # te_demog_on_actions.txt);
 # a won left revolution -20 (te_demog_wc_civil_war_won); a banking crash -5
 # (banking_cycle_effects.txt); devastation, in the state hit, up to -10 a year
-# (te_demog_wc_state_yearly). Nothing here depends on the demographics rule.
+# (te_demog_wc_state_yearly); land reform, -10 x each state's agrarian share
+# (te_demog_wc_land_reform_check). Two raise them: the banking cycle's Frenzy
+# +5, once a cycle (te_demog_wc_boom_check), and a state's ownership shock, a
+# privatisation +5 to +10 or a nationalisation -5 to -10
+# (te_demog_wc_ownership_shock). Nothing here depends on the demographics rule.
 # ============================================================================
 
 # THIS = a state at game start, after its walk (te_inh_game_start): the score
@@ -58,8 +71,9 @@ te_demog_wc_seed_state = {
 # THIS = a state, on its yearly pulse after the walk (te_demog_state_yearly). A
 # state without a score (an old save, a state new to the game) starts at its
 # owner's current figure; otherwise it closes 3% of the gap to its target.
-# Devastation destroys local capital: the read is a 0-1 share, so a fully
-# devastated state (1) loses 10 a year.
+# Then the ownership shock (te_demog_wc_ownership_shock). Devastation destroys
+# local capital: the read is a 0-1 share, so a fully devastated state (1)
+# loses 10 a year.
 te_demog_wc_state_yearly = {
 	set_variable = { name = te_dg_wc_target value = te_demog_wc_target }
 	if = {
@@ -78,6 +92,8 @@ te_demog_wc_state_yearly = {
 			add = { value = var:te_dg_wc_target subtract = var:te_dg_wc multiply = 0.03 }
 		}
 	}
+	# who owns the state's capital, against last year (the ownership shock, below)
+	te_demog_wc_ownership_shock = yes
 	if = {
 		limit = { devastation > 0 }
 		change_variable = { name = te_dg_wc add = { value = devastation multiply = -10 } }
@@ -269,6 +285,7 @@ te_demog_wc_national = {
 		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
 		set_variable = { name = te_dg_wc_t_econ value = te_demog_wc_econ_term }
+		set_variable = { name = te_dg_wc_t_rg value = te_demog_wc_rg_term }
 		# only when a state has current bands: after loading an old save, before any state's pulse,
 		# the country keeps its last figure rather than showing 0
 		if = {
@@ -296,5 +313,256 @@ te_demog_wc_national = {
 	if = {
 		limit = { has_variable = te_inh_concentration }
 		te_inh_apply_concentration_modifiers = yes
+	}
+}
+
+# ============================================================================
+# The remaining shocks and the r > g term (owner, 2026-10-19; spec §4.2). Like the
+# others they run whatever the Demographics rule: Wealth Concentration is the
+# Inheritance system's (#822).
+# ============================================================================
+
+# THIS = a state, on its yearly pulse inside te_demog_wc_state_yearly, after its walk.
+# Ownership shocks, whatever the cause (a law, the building panel's nationalise or
+# privatise, decolonisation's nationalisations, a war goal): when the state-owned share
+# of the state's capital levels (te_demog_wc_state_owned_share, the ownership term's
+# walk and capital filter) moves 10 points or more since the last pulse, the score jumps
+# half a point per point moved, at most 10: a privatisation raises it, a nationalisation
+# lowers it. It measures the share (the owner's rule), so state or private capital
+# growing faster than the other moves it too. te_dg_wc_sown keeps last year's share. No shock in the first year a share is
+# stored; after a change of owner, which removes it (te_demog_wc_owner_change, on
+# on_state_owner_change); when the state's people moved more than a quarter in the year
+# (the census's re-seed rule, here on the walk's own people, kept under every rule); or
+# while the state holds under 20 capital levels, which also removes it: in 1849 most
+# states held under 10, where one state-owned level is 10 points or more.
+te_demog_wc_ownership_shock = {
+	if = {
+		limit = { has_variable = te_dg_lv_ctry }
+		if = {
+			limit = { te_demog_wc_capital_levels >= 20 }
+			set_local_variable = { name = te_dg_wc_so value = te_demog_wc_state_owned_share }
+			if = {
+				limit = {
+					has_variable = te_dg_wc_sown
+					has_variable = te_dg_walk_pop_prev
+				}
+				set_local_variable = { name = te_dg_wc_so_move value = { value = local_var:te_dg_wc_so subtract = var:te_dg_wc_sown } }
+				# the people now less 1.25 and 0.75 times last walk's, taken into locals first, as the census's rule
+				set_local_variable = {
+					name = te_dg_wc_so_over
+					value = { value = var:te_dg_walk_pop subtract = { value = var:te_dg_walk_pop_prev multiply = 1.25 } }
+				}
+				set_local_variable = {
+					name = te_dg_wc_so_under
+					value = { value = var:te_dg_walk_pop subtract = { value = var:te_dg_walk_pop_prev multiply = 0.75 } }
+				}
+				if = {
+					limit = {
+						OR = {
+							local_var:te_dg_wc_so_move >= 0.1
+							local_var:te_dg_wc_so_move <= -0.1
+						}
+						local_var:te_dg_wc_so_over <= 0
+						local_var:te_dg_wc_so_under >= 0
+					}
+					change_variable = {
+						name = te_dg_wc
+						add = { value = local_var:te_dg_wc_so_move multiply = -50 min = -10 max = 10 }
+					}
+					clamp_variable = { name = te_dg_wc min = 0 max = 100 }
+				}
+			}
+			set_variable = { name = te_dg_wc_sown value = local_var:te_dg_wc_so }
+		}
+		else_if = {
+			limit = { has_variable = te_dg_wc_sown }
+			remove_variable = te_dg_wc_sown
+		}
+	}
+}
+
+# THIS = ROOT = a state that changed hands (on_state_owner_change: conquest, cession,
+# release, annexation, a revolution's sides): its share is the old owner's, so the next
+# pulse stores the new owner's without a shock.
+te_demog_wc_owner_change = {
+	if = {
+		limit = { has_variable = te_dg_wc_sown }
+		remove_variable = te_dg_wc_sown
+	}
+}
+
+# THIS = ROOT = a country, monthly (te_demog_country_monthly_on_action), as
+# te_demog_wc_shock needs. The financial boom: +5 to every state once its banking cycle
+# reaches Frenzy, once a cycle. te_dg_wc_boom marks it taken and goes when the cycle falls
+# below Boom. Every crash lowers the cycle to 40 or less (banking_crash_lower_cycle_to)
+# once its event's option lands, so a crash re-arms it then; it isn't re-armed at the
+# crash itself, when the cycle can still read Frenzy until the option.
+te_demog_wc_boom_check = {
+	if = {
+		limit = { te_banking_cycle_running = yes }
+		if = {
+			limit = {
+				has_variable = te_dg_wc_boom
+				NOT = { banking_cycle_is_boom = yes }
+				NOT = { banking_cycle_is_frenzy = yes }
+			}
+			remove_variable = te_dg_wc_boom
+		}
+		else_if = {
+			limit = {
+				NOT = { has_variable = te_dg_wc_boom }
+				banking_cycle_is_frenzy = yes
+			}
+			set_variable = { name = te_dg_wc_boom value = 1 }
+			te_demog_wc_shock = { AMOUNT = 5 }
+		}
+	}
+}
+
+# THIS = ROOT = a country, monthly (te_demog_country_monthly_on_action). Land reform:
+# enacting Peasant Proprietorship or Collectivized Agriculture from Serfdom or Tenant
+# Farmers (each with its variants: te_demog_wc_land_code) jumps every scored state's score
+# by -10 x its agrarian share, and the national figure follows. The law is compared with
+# last month's (te_dg_wc_land), so every way a law changes counts (enactment, an event's
+# activate_law, a won revolution: te_demog_wc_civil_war_inherit gives the winner the old
+# government's role, so the next month compares it with the rebels' law) and no vanilla
+# law needs an on_activate. The first month only stores it. A move by way of Commercialized Agriculture is no land reform, and
+# a country with no scored state takes none: the jump is by each state's farmers.
+te_demog_wc_land_reform_check = {
+	set_local_variable = { name = te_dg_wc_land_now value = te_demog_wc_land_code }
+	if = {
+		limit = {
+			has_variable = te_dg_wc_land
+			var:te_dg_wc_land >= 1
+			var:te_dg_wc_land <= 2
+			local_var:te_dg_wc_land_now >= 4
+		}
+		every_scope_state = {
+			limit = {
+				has_variable = te_dg_wc
+				has_variable = te_dg_agr_share
+			}
+			change_variable = { name = te_dg_wc add = { value = var:te_dg_agr_share multiply = -10 } }
+			clamp_variable = { name = te_dg_wc min = 0 max = 100 }
+		}
+		te_demog_wc_national = yes
+	}
+	set_variable = { name = te_dg_wc_land value = local_var:te_dg_wc_land_now }
+}
+
+# THIS = ROOT = the winner of a civil war the rebels won, from inh_repair_after_civil_war
+# (scope:te_cw_loser the old government). The winner continues the nation, but its own
+# variables take precedence over the loser's, and the rebels kept their own through the
+# war. So it takes the loser's land-law role, and a revolution that brought in Peasant
+# Proprietorship or Collectivized Agriculture takes the land-reform shock at the next
+# monthly check, as the same law enacted in peace does; and r > g's GDP baseline and
+# growth average, so growth neither restarts nor reads the rebels' wartime GDP.
+te_demog_wc_civil_war_inherit = {
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_land } }
+		set_variable = { name = te_dg_wc_land value = scope:te_cw_loser.var:te_dg_wc_land }
+	}
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_gdp } }
+		set_variable = { name = te_dg_wc_gdp value = scope:te_cw_loser.var:te_dg_wc_gdp }
+	}
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_g } }
+		set_variable = { name = te_dg_wc_g value = scope:te_cw_loser.var:te_dg_wc_g }
+	}
+}
+
+# THIS = a country on 31 December, before te_demog_country_yearly (te_demog_country_yearly_on_action), so
+# its national refresh reads this year's figure. r > g's inputs and term (te_demog_wc_rg_term), in
+# percentage points:
+#   te_dg_wc_gdp  GDP on the last 31 December (te_mon_gdp_current). Its own copy: the monetary system's
+#                 te_mon_gdp_last_year is rewritten by an on_yearly_pulse_country entry of its own, in an
+#                 order against this one that is undefined
+#   te_dg_wc_g    growth averaged over about five years: each year's growth (clamped to -10..+10, so a
+#                 conquest or a lost province moves it by 2 at most) taken in at a weight of 0.2
+#   te_dg_wc_r    the real policy rate on 31 December (te_demog_wc_real_rate)
+#   te_dg_wc_rg   the term, 2 x (te_dg_wc_r - te_dg_wc_g), at most 5 either way; only while the banking
+#                 cycle runs (te_banking_cycle_running), removed otherwise
+# Every country keeps the average, so it is warm when a cycle starts. The growth is divided before it is
+# multiplied: GDP passes 7 x 10^11 in the late game.
+te_demog_wc_growth_update = {
+	set_local_variable = { name = te_dg_wc_gdp_now value = te_mon_gdp_current }
+	if = {
+		limit = {
+			has_variable = te_dg_wc_gdp
+			var:te_dg_wc_gdp > 0
+		}
+		set_local_variable = {
+			name = te_dg_wc_g_year
+			value = {
+				value = local_var:te_dg_wc_gdp_now
+				subtract = var:te_dg_wc_gdp
+				divide = { value = var:te_dg_wc_gdp min = 1 }
+				multiply = 100
+				min = -10
+				max = 10
+			}
+		}
+		if = {
+			limit = { has_variable = te_dg_wc_g }
+			change_variable = {
+				name = te_dg_wc_g
+				add = { value = local_var:te_dg_wc_g_year subtract = var:te_dg_wc_g multiply = 0.2 }
+			}
+		}
+		else = {
+			set_variable = { name = te_dg_wc_g value = local_var:te_dg_wc_g_year }
+		}
+	}
+	set_variable = { name = te_dg_wc_gdp value = local_var:te_dg_wc_gdp_now }
+	if = {
+		limit = { has_variable = te_policy_rate }
+		set_variable = { name = te_dg_wc_r value = te_demog_wc_real_rate }
+	}
+	if = {
+		limit = {
+			te_banking_cycle_running = yes
+			has_variable = te_dg_wc_r
+			has_variable = te_dg_wc_g
+		}
+		set_variable = { name = te_dg_wc_rg value = te_demog_wc_rg_now }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_wc_rg }
+		remove_variable = te_dg_wc_rg
+	}
+}
+
+# ============================================================================
+# The Inequality effect (spec §4.1, §7; owner, 2026-10-19), under Full only: relative
+# deprivation. The state's shown Gini above 0.45 raises its radicals, by up to 10% at
+# 0.65 and above: multiplier (Gini - 0.45) / 0.20, 0-1, on te_demog_census_inequality
+# (te_demog_inequality_modifiers.txt). The engine has no lower-strata radicals type, so it
+# takes the state-wide one inh_concentrated_property and the youth bulge carry.
+# ============================================================================
+
+# THIS = ROOT = a state, on its yearly pulse (te_demog_state_yearly, after Wealth
+# Concentration's refresh), so the multiplier reads the state's own variable: the one
+# refresh site, removed and re-applied by the dynamic-modifier pattern. Outside Full the
+# modifier and te_dg_ineq (its multiplier) go.
+te_demog_inequality_refresh = {
+	if = {
+		limit = { has_modifier = te_demog_census_inequality }
+		remove_modifier = te_demog_census_inequality
+	}
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_gini
+		}
+		set_variable = { name = te_dg_ineq value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 max = 1 } }
+		if = {
+			limit = { var:te_dg_ineq > 0.01 }
+			add_modifier = { name = te_demog_census_inequality multiplier = var:te_dg_ineq }
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_ineq }
+		remove_variable = te_dg_ineq # REVIEWED 2026-10-19: outside Full only, after the modifier came off at the top of this effect; nothing applies it there
 	}
 }

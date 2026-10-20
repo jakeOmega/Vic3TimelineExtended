@@ -439,7 +439,7 @@ def cmd_replay(args):
 
 
 WC_COUNTRY_VARS = ("te_inh_concentration", "te_dg_wc_target", "te_dg_wc_t_law", "te_dg_wc_t_land", "te_dg_wc_t_own",
-                   "te_dg_wc_t_ineq", "te_dg_wc_t_tax", "te_dg_wc_t_econ", "te_inh_great_fortunes_mult",
+                   "te_dg_wc_t_ineq", "te_dg_wc_t_tax", "te_dg_wc_t_econ", "te_dg_wc_t_rg", "te_inh_great_fortunes_mult",
                    "te_inh_dispersed_mult")
 WC_STATE_VARS = ("te_dg_wc", "te_dg_walk_pop")
 INHERITANCE_LAWS = ("law_primogeniture", "law_free_testation", "law_partible", "law_equal_inheritance",
@@ -469,7 +469,7 @@ def cmd_wc(args):
     rows = wc_rows(*S.read_variables(args.save, WC_COUNTRY_VARS, WC_STATE_VARS))
     if args.tag:
         rows = [r for r in rows if r[0] in args.tag]
-    terms = ("law", "land", "own", "ineq", "tax", "econ")
+    terms = ("law", "land", "own", "ineq", "tax", "econ", "rg")
     print(f"{'tag':5s} {'M ppl':>6s} {'WC':>5s} {'target':>6s} " + " ".join(f"{t:>5s}" for t in terms)
           + "    GF    DW  states>50  range   inheritance")
     for tag, ppl, v, wcs, law in rows[:args.top]:
