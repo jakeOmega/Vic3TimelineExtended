@@ -264,7 +264,7 @@ HEALTH_NEED_CAP = 1.0
 HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine")
 HEALTH_TECH_STEP = 0.05
 # Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
-# WORK_SPLIT_AGES (first, last), from the last count; the law table (FEMALE_WORK_SHARE) before one.
+# WORK_SPLIT_AGES (first, last), from the last count; the laws' share (female_work_share) before one.
 WORK_SPLIT_AGES = (15, 64)
 # The AI's yearly pulse (§2.2, §9): the same weights for every country; is_ai only decides whom the pulse acts for. A
 # bill over PENSION_AI_BILL_HIGH of revenue, or debt over PENSION_AI_DEBT of its ceiling, pushes toward the cheaper
@@ -609,11 +609,9 @@ MEDICINE_SNAP = 0.005
 MEDICAL_OUTREACH_DIFFUSION = 0.2   # decree_medical_outreach's line (a test pins the decree to it)
 DEATHS_ON_TOP_HIGH = 1.25          # 1 + te_dg_dz at or above this reads red on the state subtab
 
-# Women's share of the workforce by women's-rights law, for splitting work deaths (§2.4).
-FEMALE_WORK_SHARE = {
-    "law_no_womens_rights": 0.1, "law_women_in_the_fields": 0.25, "law_women_own_property": 0.3,
-    "law_women_in_the_workplace": 0.45, "law_womens_suffrage": 0.47, "law_protected_class": 0.48,
-}
+# Women's share of the workforce (§2.4, §2.5): this base plus the women's-rights laws' FEMALE_WORK_SHARE_TYPE line (stage 3
+# of the modifier-types design, 2026-10-19, below), for the migrant profile, Late Marriage's women's work and, outside
+# Full, splitting work deaths.
 FEMALE_WORK_SHARE_DEFAULT = 0.1
 
 # ---- War dead and migrants (§2.5) -------------------------------------------------
@@ -732,8 +730,7 @@ MIGRANT_PROFILE = {
     "refugee": {"weights": [0.27, 0.05, 0.3, 0.25, 0.13]},
 }
 LABOUR_FEMALE_SHARE_MIN, LABOUR_FEMALE_SHARE_MAX = 0.1, 0.6
-FAMILY_TRANSPORT_TECHS = {"paddle_steamer": 0.1, "railways": 0.1, "combustion_engine": 0.15}
-FAMILY_BASE = 0.2                 # families' weight before transport, rights and chain migration
+FAMILY_BASE = 0.2                 # families' weight before transport (FAMILY_MIGRATION_TYPE), rights and chain migration
 FAMILY_RIGHTS_WEIGHT = 0.2        # x women's work share / FULL_FEMALE_WORK_SHARE
 FULL_FEMALE_WORK_SHARE = 0.48     # Protected Class's share: women's rights at their fullest
 CHAIN_STEP, CHAIN_CAP = 0.02, 0.2  # per consecutive year of net inflow, at most
@@ -922,6 +919,20 @@ LX_POLITICS_LABOR = 0.10
 # Linked to Common Longevity, as the country's unions would; it goes back to Standard under PENSION_AI_GAP_LOW.
 PENSION_AI_GAP = 0.2
 PENSION_AI_GAP_LOW = 0.1
+
+# ---- The migrant profile's inputs as modifier types (modifier-types design, stage 3, 2026-10-19) ----
+# docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md. Two census-only state types
+# (demographics_modifier_types.txt) on their carriers in the game files, which demographics_modifiers.py resolves; they
+# replaced the FEMALE_WORK_SHARE law table and the FAMILY_TRANSPORT_TECHS table. Women's share of the workforce is
+# FEMALE_WORK_SHARE_DEFAULT + the women's-rights law's line, at most 1 (Women in the Fields 0.15, Women Own Property
+# 0.20, Women in the Workplace 0.35, Women's Suffrage 0.37, Protected Class 0.38: the old table less the base), so
+# FULL_FEMALE_WORK_SHARE is the base plus Protected Class's line. The family kind's weight takes the transport
+# technologies' line on top of FAMILY_BASE: Paddle Steamer and Railways 0.10, Combustion Engine 0.15, and the aviation
+# techs §2.5 names, Commercial Aviation and Jet Engine Technology 0.05 each (owner, 2026-10-19).
+FEMALE_WORK_SHARE_TYPE = "state_female_work_share_add"
+FAMILY_MIGRATION_TYPE = "state_family_migration_add"
+MIGRANT_PROFILE_TYPES = (FEMALE_WORK_SHARE_TYPE, FAMILY_MIGRATION_TYPE)
+DEMOG_TYPES = DEMOG_TYPES + MIGRANT_PROFILE_TYPES
 
 # ---- Internal Resettlement's known moves (2026-10-19) ----
 # Spec §2.5 "Known kills": the census books a Settlement Authority's moves with its programme's own age and sex profile,

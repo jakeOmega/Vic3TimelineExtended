@@ -1404,6 +1404,20 @@ class TestRebook(unittest.TestCase):
             self.assertAlmostEqual(med, booked["7"][last]["sb"] - 100.0, places=6)
             self.assertEqual(out_save, 0.0)
 
+    def test_the_profiles_carriers_reach_the_inputs(self):
+        # the rebook reads the women's work share and the families' line from the game files (modifier-types stage 3)
+        import demographics_rebook as RB
+        techs = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
+                           "jet_engine_technology"})
+        self.assertEqual(RB.transport_techs(), techs)
+        self.assertEqual(RB.women_laws(), frozenset({"law_women_in_the_fields", "law_women_own_property",
+                                                     "law_women_in_the_workplace", "law_womens_suffrage",
+                                                     "law_protected_class"}))
+        country = {"laws": frozenset({"law_protected_class"}), "techs": techs, "at_war": False}
+        inp = RB.inputs({"owner": "3", "vars": {}}, None, country, 1990, {})
+        self.assertAlmostEqual(M.female_work_share(inp), 0.48, places=9)
+        self.assertAlmostEqual(inp.mods[P.FAMILY_MIGRATION_TYPE], 0.45, places=9)
+
     def test_a_seed_in_the_save_seeds_the_walk(self):
         with tempfile.TemporaryDirectory() as tmp:
             RB, saves = self._run(tmp, years=12)

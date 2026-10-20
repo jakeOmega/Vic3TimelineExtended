@@ -1601,11 +1601,13 @@ def multipliers(o):
             o(f"add = {lit(1 - w)}")
             o("}")
             o("")
-    o("# State scope: women's share of the workforce by the owner's women's-rights law.")
+    o("# State scope: women's share of the workforce, the base plus the women's-rights laws' line (modifier-types")
+    o("# stage 3; demographics_model.female_work_share), within 0-1.")
     o("te_demog_female_work_share = {")
     o(f"value = {lit(P.FEMALE_WORK_SHARE_DEFAULT)}")
-    for law, share in P.FEMALE_WORK_SHARE.items():
-        o(f"if = {{ limit = {{ owner = {{ has_law = law_type:{law} }} }} value = {lit(share)} }}")
+    o(f"add = modifier:{P.FEMALE_WORK_SHARE_TYPE}")
+    o("min = 0")
+    o("max = 1")
     o("}")
     o("")
     o("# State scope: the share of the gap to desired fertility a population can close (spec 2.3;")
@@ -1659,11 +1661,10 @@ def constants(o):
     }
     for name, value in k.items():
         o(f"te_demog_k_{name} = {{ value = {lit(value)} }}")
-    o("# State scope: the family share's transport term (owner technology).")
+    o("# State scope: the family share's transport term, the transport technologies' line (modifier-types stage 3;")
+    o("# demographics_model.migrant_profile).")
     o("te_demog_family_transport = {")
-    o("value = 0")
-    for tech, v in P.FAMILY_TRANSPORT_TECHS.items():
-        o(f"if = {{ limit = {{ owner = {{ has_technology_researched = {tech} }} }} add = {lit(v)} }}")
+    o(f"value = modifier:{P.FAMILY_MIGRATION_TYPE}")
     o("}")
     o("")
 

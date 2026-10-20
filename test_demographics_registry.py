@@ -719,6 +719,19 @@ def _stored(inp):
     return out
 
 
+_MIGRANT_LINES = []
+
+
+def _with_migrant_lines(inp):
+    """inp with the migrant profile's two types (modifier-types stage 3, 2026-10-19: women's share at work and families
+    among migrants) totalled from the game files' carriers for its laws and techs, as demographics_modifiers resolves
+    them for a state."""
+    if not _MIGRANT_LINES:
+        _MIGRANT_LINES.extend(DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES))
+    return dataclasses.replace(inp, mods={**inp.mods, **DM.totals(_MIGRANT_LINES, inp.techs, inp.laws,
+                                                                   types=P.MIGRANT_PROFILE_TYPES)})
+
+
 def _mod_fixtures(inp):
     """The engine reads the step makes: every census type, turmoil."""
     out = {f"modifier:{t}": inp.mods.get(t, 0.0) for t in P.DEMOG_TYPES}
@@ -807,8 +820,9 @@ BANDS = [range(a, a + 5) for a in range(0, 85, 5)] + [range(85, P.RING_YEARS + 1
 class TestCohortScript(unittest.TestCase):
     """te_demog_seed and te_demog_step, run through _Engine, against demographics_model's seed and step."""
 
-    INP = demographics_model.Inputs(sol=14, literacy=0.35, urban_share=0.2, techs=frozenset({"medical_degrees"}),
-                                    laws=frozenset({"law_women_in_the_fields"}))
+    INP = _with_migrant_lines(demographics_model.Inputs(sol=14, literacy=0.35, urban_share=0.2,
+                                                        techs=frozenset({"medical_degrees"}),
+                                                        laws=frozenset({"law_women_in_the_fields"})))
     YEAR, POP = 1836, 250000.0
 
     def close(self, got, want, rel=1e-9, what=""):
@@ -960,16 +974,15 @@ class TestCohortScript(unittest.TestCase):
         fixtures = {}
         if flows is not None:
             stub_flows = False
-            inp = dataclasses.replace(
+            inp = _with_migrant_lines(dataclasses.replace(
                 base, techs=base.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
-                inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
+                inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"]))
             war_dead, kills = flows.get("war") or 0.0, flows.get("kills") or 0.0
             # the residual the script reads, and what the model is told: a residual inside the noise band is none
             pop = ring.total + flows["eb"] - flows["ed"] - war_dead - kills + flows["migration"]
             migration = 0.0 if abs(flows["migration"]) < P.RESIDUAL_NOISE_SHARE * ring.total else flows["migration"]
-            fixtures = {"te_demog_crisis": flows["crisis"],
-                        "te_demog_family_transport": sum(v for tech, v in P.FAMILY_TRANSPORT_TECHS.items()
-                                                         if tech in inp.techs)}
+            # the transport term is the script's own read of the techs' line (modifier:, from _mod_fixtures)
+            fixtures = {"te_demog_crisis": flows["crisis"]}
         stub = None
         if stub_flows:
             prof = demographics_model.migrant_profile(inp)
@@ -1129,9 +1142,9 @@ class TestCohortScript(unittest.TestCase):
     def check_flows(self, eng, flows, want_inflow_years):
         """The flow locals te_demog_flows set equal the model's war shares, kill share, migrant
         split and profile, and it consumed what was pending."""
-        inp = dataclasses.replace(
+        inp = _with_migrant_lines(dataclasses.replace(
             self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
-            inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"])
+            inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"]))
         sign = 1 if eng.locals["te_dg_mig_in"] > 0 else -1 if eng.locals["te_dg_mig_out"] > 0 else 0
         prof = demographics_model.migrant_profile(inp, eng.balance_before, sign)
         # the booking's rates (te_demog_migrant_rates, 2026-10-12): each class and sex's, plus the flat one
@@ -3716,22 +3729,26 @@ class TestPracticesScript(unittest.TestCase):
 
     def test_the_targets_match_the_model(self):
         """Impartible inheritance is the laws' Late Marriage line since 2026-10-17: Primogeniture's, or Undivided Farm
-        Succession's on Forced Heirship, from the game files."""
-        lines = DM.load_carriers(types=(P.LM_FARMS_TYPE,))
+        Succession's on Forced Heirship, from the game files; women's paid work reads the women's-rights laws' share at
+        work since 2026-10-19 (modifier-types stage 3)."""
+        types = (P.LM_FARMS_TYPE, P.FEMALE_WORK_SHARE_TYPE)
+        lines = DM.load_carriers(types=types)
         for laws, undivided, agr, fjob, lit, contra, access in (
                 ({"law_no_womens_rights"}, False, 0.6, 0.1, 0.2, 0.0, 0.0),
                 ({"law_primogeniture", "law_women_in_the_workplace"}, False, 0.5, 0.3, 0.6, 0.2, 0.18),
                 ({"law_equal_inheritance", "law_protected_class"}, True, 0.4, 0.4, 0.9, 0.35, 0.5),
                 ({"law_protected_class"}, False, 0.1, 0.5, 1.0, 0.45, 1.0)):
-            farms = DM.totals(lines, laws=laws, types=(P.LM_FARMS_TYPE,),
-                              amendments={"amendment_undivided_farm_succession"} if undivided else ())[P.LM_FARMS_TYPE]
+            got = DM.totals(lines, laws=laws, types=types,
+                            amendments={"amendment_undivided_farm_succession"} if undivided else ())
+            farms, women = got[P.LM_FARMS_TYPE], got[P.FEMALE_WORK_SHARE_TYPE]
             self.assertEqual(farms, 0.15 if undivided or "law_primogeniture" in laws else 0.0, sorted(laws))
             inp = demographics_model.Inputs(literacy=lit, laws=frozenset(laws), agrarian_share=agr,
                                             female_job_share=fjob,
                                             mods={P.CONTRACEPTION_TYPE: contra, P.ACCESS_TYPE: access,
-                                                  P.LM_FARMS_TYPE: farms})
+                                                  P.LM_FARMS_TYPE: farms, P.FEMALE_WORK_SHARE_TYPE: women})
             eng = _OwnerEngine({f"modifier:{P.CONTRACEPTION_TYPE}": contra, f"modifier:{P.ACCESS_TYPE}": access,
-                                f"modifier:{P.LM_FARMS_TYPE}": farms}, laws=laws)
+                                f"modifier:{P.LM_FARMS_TYPE}": farms, f"modifier:{P.FEMALE_WORK_SHARE_TYPE}": women},
+                               laws=laws)
             # the access medicine has reached, at its target here (a seed's): the model reads the same
             eng.vars.update(te_dg_lit=lit, te_dg_agr_share=agr, te_dg_fjob_share=fjob,
                             te_dg_acc=demographics_model.medicine_targets(inp)["access"])
@@ -6106,6 +6123,38 @@ class TestModifierTypes(unittest.TestCase):
         self.assertRegex(loc, rf"(?m)^ {P.DIFFUSION_TYPE}_desc:0 \"")
         self.assertNotIn(P.DIFFUSION_TYPE, engine)
 
+    def test_the_migrant_profiles_types_are_registered_named_and_read(self):
+        """Stage 3 (2026-10-19): women's share of the workforce and families among migrants are census-only state types,
+        and the generated values read them as the model does (the base plus the laws' line, at most 1; the techs' line),
+        never the laws or the techs."""
+        text, loc = _text(TYPES_FILE), _text(MODIFIERS_LOC)
+        engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
+        for name in P.MIGRANT_PROFILE_TYPES:
+            self.assertTrue(name.startswith("state_"), name)
+            body = _block(text, name)
+            for line in ("script_only = yes", "percent = yes", "decimals = 0"):
+                self.assertIn(line, body, name)
+            self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
+            self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \".*Used by the census on the Demographics tab\.\"$", name)
+            self.assertNotIn(name, engine, name)
+        # a typographic apostrophe: the engine pastes a modifier's name into a quoted tooltip argument (loc_render_audit)
+        self.assertIn(f"{P.FEMALE_WORK_SHARE_TYPE}:0 \"Women\u2019s Work Outside the Home\"", loc)
+        lines = DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES)
+        everything = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
+                                "jet_engine_technology"})
+        for laws, techs in ((frozenset(), frozenset()),
+                            (frozenset({"law_women_in_the_fields"}), frozenset({"railways"})),
+                            (frozenset({"law_protected_class"}), everything)):
+            with self.subTest(laws=sorted(laws), techs=sorted(techs)):
+                inp = demographics_model.Inputs(laws=laws, techs=techs, mods=DM.totals(
+                    lines, techs, laws, types=P.MIGRANT_PROFILE_TYPES))
+                eng = _Engine({f"modifier:{name}": inp.mods[name] for name in P.MIGRANT_PROFILE_TYPES})
+                self.assertAlmostEqual(eng.number("te_demog_female_work_share"),
+                                       demographics_model.female_work_share(inp))
+                self.assertAlmostEqual(eng.number("te_demog_family_transport"), inp.mods[P.FAMILY_MIGRATION_TYPE])
+        self.assertEqual(_Engine({f"modifier:{P.FEMALE_WORK_SHARE_TYPE}": 3.0}).number("te_demog_female_work_share"),
+                         1.0, "at most 1, as the model")
+
     def test_health_care_access_is_a_concept(self):
         self.assertIn("concept_health_care_access = {}",
                       _text(ROOT / "common" / "game_concepts" / "extra_concepts.txt"))
@@ -6138,7 +6187,9 @@ class TestModifierTypes(unittest.TestCase):
         for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
             self.assertIn(f"te_debug_demog_work_{name}", line, name)
         self.assertIn("te_debug_demog_work_wf_target", line)
+        # stage 3 of the modifier-types design (2026-10-19): the migrant profile's women at work and families
         for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work",
+                     "te_demog_female_work_share", "te_demog_family_transport",
                      "te_debug_demog_womens_mod", "te_debug_demog_replaced_mod", "te_debug_demog_part_m_mod",
                      "te_debug_demog_part_mod", "te_debug_demog_cap_mod", "te_demog_line_working_adults_applied"):
             self.assertIn(read, line)
@@ -6198,6 +6249,7 @@ class TestCausesInTheStep(unittest.TestCase):
 
     INP0 = TestCohortScript.INP
     INP1 = dataclasses.replace(TestCohortScript.INP, turmoil=0.4, mods={
+        **TestCohortScript.INP.mods,   # Women in the Fields' share at work (modifier-types stage 3)
         P.ACCESS_TYPE: 0.3, P.TREATMENT_TYPE["infection"]: 0.4, P.TREATMENT_TYPE["maternal"]: 0.35,
         "state_external_mortality_mult": -0.1, P.DIFFUSION_TYPE: 0.15})
 
