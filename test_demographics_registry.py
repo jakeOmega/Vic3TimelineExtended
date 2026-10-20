@@ -6128,7 +6128,8 @@ class TestModifierTypes(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
             self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \".*Used by the census on the Demographics tab\.\"$", name)
             self.assertNotIn(name, engine, name)
-        self.assertIn(f"{P.FEMALE_WORK_SHARE_TYPE}:0 \"Women's Work Outside the Home\"", loc)
+        # a typographic apostrophe: the engine pastes a modifier's name into a quoted tooltip argument (loc_render_audit)
+        self.assertIn(f"{P.FEMALE_WORK_SHARE_TYPE}:0 \"Women\u2019s Work Outside the Home\"", loc)
         lines = DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES)
         everything = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
                                 "jet_engine_technology"})

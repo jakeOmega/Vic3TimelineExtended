@@ -41,7 +41,7 @@ taxes and the economic laws as separate bars. They sit in `demographics_wealth_c
 design's census file: Wealth Concentration runs whatever the Demographics rule, and the release script comments out
 every type of the census file. The same day the childrens'-rights laws' 10-14s at work, impartible inheritance's Late
 Marriage (on Primogeniture and the Undivided Farm Succession amendment, check e's answer) and the church laws' weight on
-Family Limitation became census types. Not built: `FEMALE_WORK_SHARE` (since phase 2 step 2 the census's own count of
+Family Limitation became census types. Not built then: `FEMALE_WORK_SHARE` (since phase 2 step 2 the census's own count of
 women at work splits work deaths under Full, so a law line would state a share the census no longer uses there),
 `FAMILY_TRANSPORT_TECHS` (technologies, not laws) and #822's inheritance targets (the inheritance laws' own tooltips
 already give their target).
