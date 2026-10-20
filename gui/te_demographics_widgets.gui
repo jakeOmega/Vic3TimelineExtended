@@ -2640,6 +2640,17 @@ types te_demographics_widgets
 					text = "te_demog_pl_pattern_value"
 				}
 			}
+			### Phase 3: the states whose metropolitan share reads Metropolis (spec §5.2), of those with a share; the
+			### hover counts each label. Live script values (te_demog_metro_values.txt), no variable read.
+			te_demog_figure_row = {
+				tooltip = "te_demog_mt_pl_tt"
+				blockoverride "row_label" {
+					text = "te_demog_mt_pl"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_mt_pl_value"
+				}
+			}
 
 			te_demog_subheader = {
 				blockoverride "subheader_text" {
@@ -5344,6 +5355,45 @@ types te_demographics_widgets
 				}
 				blockoverride "row_value" {
 					text = "te_demog_st_urban_value"
+				}
+			}
+			### Phase 3: the metropolitan share (spec §5.2), beside Urban People: its label and share, an arrow toward
+			### its target, and on hover the target's eight terms as bars with the effects (te_demog_mt_tooltip,
+			### gui/te_demographics_metro.gui). None for a state with too few urban people; nothing before its first count.
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_state_mt_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_mt_st_tt"
+				tooltipwidget = {
+					te_demog_mt_tooltip = {}
+				}
+				blockoverride "row_label" {
+					text = "te_demog_mt_st"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_mt_st_value"
+				}
+				blockoverride "row_trend" {
+					te_demog_trend_neutral = {
+						blockoverride "trend_up" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_heading'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "trend_down" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_heading'), '(CFixedPoint)-1' )]"
+						}
+						blockoverride "trend_level" {
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_heading'), '(CFixedPoint)0' )]"
+						}
+					}
+				}
+			}
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_state_mt_none_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_mt_st_none_tt"
+				blockoverride "row_label" {
+					text = "te_demog_mt_st"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_mt_st_none_value"
 				}
 			}
 			### Phase 3: the Calendar / Biological toggle, where the biological bands exist (a GUI flag, no script state)

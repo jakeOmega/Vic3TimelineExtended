@@ -45,6 +45,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … neighbouring_state_reads` | Full or Display only: once a game, at the first country census on 31 December | `every_neighbouring_state` from a state returns a land neighbour (Ulster sees Leinster): Late Marriage and Birth Spacing spread. `strait=1` says it crosses the Ulster–Lowlands strait too, so islands spread with their neighbours across the water; `strait=0`, only through their own conditions (the late-marriage spec 4.4 allows either) | `land=0`: the practices never spread | set `PRACTICE_SPREAD` to 0 in `demographics_params.py` and regenerate (`gen_demographics.py`), so the code says what the game does; with `strait=1`, run the harness's replays with `--straits` |
 | `TE_SELF_CHECK … wave_timed_country_type` | Full: once a game, `START` when the first of the event wave's four census-line options is chosen (Missing Girls' ban or payments, `code=1`; The Last Generation?'s licences or payments, `code=2`), the verdict a week later from the capital (`te_debug_demog.81`) | the capital's sum of the type (`state_sex_ratio_at_birth_add` or `state_desired_fertility_mult`) rose by the option's line plus any change in the Family Policy measures' lines of that type (`added` ≈ `expected`): a script-only state type on a timed country modifier reaches the state | `added` 0: the census never sees those four options' lines, so they change no birth, nor the women's-work lines the Baby Boom's and the Greying's options carry on the same kind of modifier; `NO_VERDICT` (a measure offset the line within the week) re-arms the check | add each of the four modifiers (and the three women's-work ones) without `days` and store its end date on the country (`te_dg_wv_<modifier>_until`); `te_demog_wave_yearly` removes it when the date passes and puts it back for a revolution's winner that holds the date (the measures' pattern, `te_demog_ms_keep_all`) |
 | `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit (the late sweep already counts its own this way: `te_demog_lx_cause_deaths`) |
+| `TE_SELF_CHECK … metro_world_market_hub` | any rule's census (Display only or Full), development builds only: once a game, at the first state's metropolitan-share count (its first yearly pulse; spec §5.2) | `is_world_market_hub` reads a state's hub: some states read yes (`hubs=`, one a market area) and no more than a quarter of the world's (`states=`) | `hubs=0`: the trigger reads no in state scope, so no state takes the gateway term and New York and Buenos Aires read lower than intended; `hubs=` above a quarter: it reads yes almost everywhere, so every state takes it | in `te_demog_mt_t_gateway` (`te_demog_metro_values.txt`) read the gateway from a large port instead, `b:building_port ?= { level >= 5 }`, and say so in the Port or Finance bar's hover (`te_demog_mt_bar_gateway_tt`) |
 
 No `unemployment_rate_read` line after a few years under the census means no census state counted more than 2% of its workforce idle: option t's `unemp=` is the capital's stored conversion and `unemp_walk=` the walk's own count (since 2026-10-17); compare them with the state panel's unemployed in a state with visibly idle workers.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -771,3 +772,49 @@ script value, as the other factors), so no self-check. What only the game can sh
    Leading Cause is Accidents and Violence, and infection is a sliver (the harness: 3% of deaths at 50 years).
 5. **The outline.** The Demographics tab's twenty-year outline moves with the state figures (the country's factor,
    `te_dg_inf_ad`, set at each count beside access).
+
+## The metropolitan share (spec §5.2, 2026-10-19)
+
+A state's metropolitan share, 0-100: the share of its urban people living in its largest city, a modelled stock that
+starts at its target and moves a twentieth of the way there at each yearly count (mod_systems.md § Demographics, "The
+metropolitan share"). It is computed and shown under Display only and Full; its two modifiers and its fertility term act
+under Full only. `test_demographics_metro.py` holds the script's target to `demographics_metro.py` (its twin) term by
+term, the update, the refresh, the fertility term and the Overspill's trigger; `demographics_metro.py` prints the
+anchors. One new engine fact, the hub trigger, has a self-check (`metro_world_market_hub`, above). What only the game
+can show:
+
+1. **The row (Display only or Full, a new game).** Open a state's Demographics subtab: under Urban People, Settlement
+   reads a label and a share ("Metropolis, 72%") with an arrow toward its target, once the state has had its first
+   yearly count (before that the row is absent). A state with fewer than 5,000 urban people reads None, with the reason
+   on hover. No label or value cut short.
+2. **The hover's bars.** The tooltip gives the share, the target and the labels' edges, then the eight terms as bars
+   (Capital, Port or Finance, Area, Farms and Mines, Urbanization, Infrastructure, Crowding, Urban Planning), each with
+   its signed figure, then the effects paragraph. The bars add up with 40 to the target (within 5 and 95). Lock the
+   tooltip: each bar's own hover gives its reason. **If the bars don't draw** (an empty band under the text, or no
+   tooltip at all), the custom tooltip type failed: take the fallback in `gui/te_demographics_metro.gui`'s header (the
+   row's `tooltip = "te_demog_mt_st_tt_plain"`, which lists the terms as lines, and no `tooltipwidget`).
+3. **The anchors (Display only is enough; `event te_debug_demog.140` logs a `TE_DEMOG_METRO` line a state).** In 1836
+   Île-de-France, the Home Counties and Buenos Aires read Metropolis, New York Leading City, the Rhineland and
+   Brittany Several Cities, Texas and an agrarian Russian province Market Towns (`demographics_metro.py`'s reasoned
+   inputs). Note any that read far off, with the line's terms: the anchors were fitted by reasoning from the walk's
+   inputs, not on a save.
+4. **The effects (Full).** A Metropolis state (60% or more) carries Metropolis (the modifier: crowding sooner,
+   infrastructure from population +10%, Urban Center and Financial District throughput +5%, turmoil penalties +5%), a
+   Leading City state part of it, a Several Cities state nothing, and a Market Towns state under 20% the Dispersed
+   Towns modifier (infrastructure from population down to −10% at 5%). Hover the modifier: its figures are the full
+   sizes times the strength the row's hover gives. Under Display only no state carries either, and the hover's last
+   paragraph says what Full would do.
+5. **The crowding sign.** A Metropolis state's Migration Crowding should start sooner, not later: its
+   `state_migration_crowding_density_mult` in the modifier tooltip reads −10% at full strength (the type is the state's
+   capacity, so a negative value crowds sooner; the owner's brief said "up with the share", meaning the crowding).
+6. **Fertility (Full).** In a Metropolis state the children-per-woman hover's Urban life factor reads a little lower
+   than the same urban share elsewhere (the urban term raised by up to a tenth: ×0.84 becomes ×0.82 at 80% urban).
+7. **The Overspill (Full).** It now needs a census state whose share reads Metropolis and whose Migration Crowding is at
+   its ceiling; it lands on the most urban such state. A Primate country whose largest city is crowded but reads
+   Leading City no longer gets it.
+8. **The country line (Display only or Full).** Where People Live's Metropolises row reads "N of M", and its hover counts
+   each label; the counts match the states' subtabs.
+9. **Planning.** The Ministry of Urban Planning's tooltip shows Metropolitan Share Target −1 a level; a Settlement
+   Authority on Planned Towns lowers its state's Urban Planning bar by 2 a level; a Planned Capital by 10.
+10. `debug.log`: no error from `te_demog_metro_*`, `te_demog_mt_*` or `te_debug_demog.140`, and none while the subtab is
+    open.

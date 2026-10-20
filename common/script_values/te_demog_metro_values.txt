@@ -1,0 +1,475 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the metropolitan share (phase 3; spec docs/superpowers/specs/2026-10-08-demographics-design.md §5.2)
+# A state's metropolitan share, 0-100, is the share of its urban people living in its largest city. A Victoria state
+# has one city hub and no cities below it, so the share is a modelled stock (te_dg_mt): it starts at its target and
+# moves te_demog_k_mt_drift of the way there at each yearly count (te_demog_metro_effects.txt). The target is
+# te_demog_k_mt_base plus eight terms in share points (the owner's list, 2026-10-19). Python twin:
+# scripts/analysis/demographics_metro.py; test_demographics_metro.py pins every te_demog_k_mt_* here to
+# demographics_params.py's MT_* block and the modifiers' fields (te_demog_metro_modifiers.txt) to the sizes below.
+# The panel reads the values below, never a variable that may not exist, and only under te_demog_state_mt_sgui.
+# ============================================================================
+
+# ---- Constants ------------------------------------------------------------------------------------------------------
+te_demog_k_mt_drift = { value = 0.05 }
+te_demog_k_mt_base = { value = 40 }
+te_demog_k_mt_min = { value = 5 }
+te_demog_k_mt_max = { value = 95 }
+# fewer urban people than this: no settlement pattern (no share, no effects), one market town's worth
+te_demog_k_mt_min_urban = { value = 5000 }
+# the labels (owner, 2026-10-08): Metropolis from 60, Leading City from 40, Several Cities from 20, Market Towns below
+te_demog_k_mt_metropolis = { value = 60 }
+te_demog_k_mt_leading = { value = 40 }
+te_demog_k_mt_several = { value = 20 }
+# 1. the national capital
+te_demog_k_mt_capital = { value = 35 }
+# 2. a gateway: the market area's World Market Hub, and a point a Financial District level up to the max
+te_demog_k_mt_hub = { value = 30 }
+te_demog_k_mt_finance_per_level = { value = 1 }
+te_demog_k_mt_finance_max = { value = 10 }
+# 3. area: the step a doubling of the region's area past the free area, three doublings at most
+te_demog_k_mt_area_free = { value = 100000 }
+te_demog_k_mt_area_step = { value = 5 }
+# 4. farms and mines: the size at a wholly rural state
+te_demog_k_mt_work = { value = 30 }
+# 5. urbanisation, the inverted U on the owner's national urban share: the size at the peak, 0 at peak +- width
+te_demog_k_mt_urban_peak = { value = 0.5 }
+te_demog_k_mt_urban_width = { value = 0.4 }
+te_demog_k_mt_urban_size = { value = 10 }
+# 6. the infrastructure surplus over usage: the size at a surplus as large as the usage
+te_demog_k_mt_infra = { value = 10 }
+# 7. Migration Crowding: the size at its ceiling (the applied multiplier 4.5, ten times the reference density)
+te_demog_k_mt_crowd = { value = 10 }
+te_demog_k_mt_crowd_ceiling = { value = 4.5 }
+# 8. planning: Planned Towns a level, a Planned Capital (the Ministry of Urban Planning's -1 a level is
+# state_metro_share_add on the institution); the term within the min and 0
+te_demog_k_mt_planned_towns_per_level = { value = -2 }
+te_demog_k_mt_planned_capital = { value = -10 }
+te_demog_k_mt_plan_min = { value = -30 }
+# The effects' ramps: the concentrated side from nothing at Leading City's floor to full at Metropolis's; the dispersed
+# side (the infrastructure loss alone) from nothing at Market Towns' ceiling to full at the target's floor.
+te_demog_k_mt_effect_from = { value = 40 }
+te_demog_k_mt_effect_full = { value = 60 }
+te_demog_k_mt_dispersed_from = { value = 20 }
+te_demog_k_mt_dispersed_full = { value = 5 }
+# The effects' full sizes (Full only; each at most 10%, owner 2026-10-19), pinned to te_demog_metro_modifiers.txt.
+# Crowding: a negative value crowds sooner (state_population_density divides by 1 + the type: a positive value is
+# capacity, extra_script_values.txt).
+te_demog_k_mt_crowding = { value = -0.1 }
+te_demog_k_mt_infra_up = { value = 0.1 }
+te_demog_k_mt_services = { value = 0.05 }
+te_demog_k_mt_finance_tp = { value = 0.05 }
+te_demog_k_mt_turmoil = { value = 0.05 }
+te_demog_k_mt_infra_down = { value = -0.1 }
+# fertility: the census's urban term raised by this x the concentrated side's strength (te_demog_mt_fertility_scale,
+# te_demog_values.txt)
+te_demog_k_mt_fertility = { value = 0.1 }
+
+# ---- The eight terms (state scope), in share points -----------------------------------------------------------------
+# 1. The national capital: government, finance and the court draw one city (Paris, Moscow).
+te_demog_mt_t_capital = {
+	value = 0
+	if = {
+		limit = { is_capital = yes }
+		value = te_demog_k_mt_capital
+	}
+}
+
+# 2. A gateway: the market area's World Market Hub (its one port to the world market: New York, Buenos Aires) and a
+# Financial District.
+te_demog_mt_t_gateway = {
+	value = 0
+	if = {
+		limit = { is_world_market_hub = yes }
+		add = te_demog_k_mt_hub
+	}
+	if = {
+		limit = { has_building = building_financial_district }
+		add = {
+			value = b:building_financial_district.level
+			multiply = te_demog_k_mt_finance_per_level
+			max = te_demog_k_mt_finance_max
+		}
+	}
+}
+
+# 3. Area: the step down for each doubling of the state region's area past the free area, linear within a doubling,
+# three doublings at most (te_region_area_km2: 1 until the area table is written, so no term before it).
+te_demog_mt_area_2 = {
+	value = te_demog_k_mt_area_free
+	multiply = 2
+}
+te_demog_mt_area_4 = {
+	value = te_demog_k_mt_area_free
+	multiply = 4
+}
+te_demog_mt_area_8 = {
+	value = te_demog_k_mt_area_free
+	multiply = 8
+}
+te_demog_mt_t_area = {
+	value = 0
+	if = {
+		limit = { te_region_area_km2 > te_demog_mt_area_8 }
+		value = te_demog_k_mt_area_step
+		multiply = -3
+	}
+	else_if = {
+		limit = { te_region_area_km2 > te_demog_mt_area_4 }
+		value = te_region_area_km2
+		divide = {
+			value = te_demog_mt_area_4
+			min = 1
+		}
+		add = 1
+		multiply = te_demog_k_mt_area_step
+		multiply = -1
+	}
+	else_if = {
+		limit = { te_region_area_km2 > te_demog_mt_area_2 }
+		value = te_region_area_km2
+		divide = {
+			value = te_demog_mt_area_2
+			min = 1
+		}
+		multiply = te_demog_k_mt_area_step
+		multiply = -1
+	}
+	else_if = {
+		limit = { te_region_area_km2 > te_demog_k_mt_area_free }
+		value = te_region_area_km2
+		divide = {
+			value = te_demog_k_mt_area_free
+			min = 1
+		}
+		subtract = 1
+		multiply = te_demog_k_mt_area_step
+		multiply = -1
+	}
+}
+
+# 4. Farms and mines: the walk's rural share (everyone at a farm, plantation, ranch, mine, logging camp or other rural
+# workplace, Peasants counting as rural): mines, logging camps and market towns spread people out.
+te_demog_mt_t_work = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_urban_share }
+		value = 1
+		subtract = {
+			value = var:te_dg_urban_share
+			min = 0
+			max = 1
+		}
+		multiply = te_demog_k_mt_work
+		multiply = -1
+	}
+}
+
+# 5. Urbanisation, the inverted U (Williamson, 1965): concentration rises in early urbanisation and falls once
+# secondary cities mature. Read on the owner's national urban share from its last census (the state's own before one).
+te_demog_mt_national = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_urban_share }
+		value = var:te_dg_urban_share
+	}
+	if = {
+		limit = { owner ?= { has_variable = te_dg_urban_share } }
+		value = owner.var:te_dg_urban_share
+	}
+}
+te_demog_mt_urban_x = {
+	value = te_demog_mt_national
+	subtract = te_demog_k_mt_urban_peak
+	divide = {
+		value = te_demog_k_mt_urban_width
+		min = 0.01
+	}
+}
+te_demog_mt_urban_floor = {
+	value = te_demog_k_mt_urban_size
+	multiply = -1
+}
+te_demog_mt_t_urban = {
+	value = te_demog_mt_urban_x
+	multiply = te_demog_mt_urban_x
+	multiply = -1
+	add = 1
+	multiply = te_demog_k_mt_urban_size
+	min = te_demog_mt_urban_floor
+}
+
+# 6. The infrastructure surplus over usage, as a share of usage within 0-1: rail and roads make secondary cities viable.
+te_demog_mt_infra_surplus = {
+	value = infrastructure
+	subtract = infrastructure_usage
+	divide = {
+		value = infrastructure_usage
+		min = 1
+	}
+	min = 0
+	max = 1
+}
+te_demog_mt_t_infra = {
+	value = te_demog_mt_infra_surplus
+	multiply = te_demog_k_mt_infra
+	multiply = -1
+}
+
+# 7. Migration Crowding: congestion spills growth into satellite and secondary cities. In proportion to the multiplier
+# the crowding refresh applied (migration_crowding_mult_applied; absent when off), full at its ceiling.
+te_demog_mt_t_crowding = {
+	value = 0
+	if = {
+		limit = { has_variable = migration_crowding_mult_applied }
+		value = var:migration_crowding_mult_applied
+		divide = {
+			value = te_demog_k_mt_crowd_ceiling
+			min = 1
+		}
+		min = 0
+		max = 1
+		multiply = te_demog_k_mt_crowd
+		multiply = -1
+	}
+}
+
+# 8. Planning: green belts and new towns. The Ministry of Urban Planning's type, read like every census input from the
+# institution (a level each, incorporated states), a Settlement Authority on Planned Towns (a level each) and a
+# Planned Capital, within the min and 0.
+te_demog_mt_plan_ministry = {
+	value = modifier:state_metro_share_add
+}
+te_demog_mt_plan_towns = {
+	value = 0
+	if = {
+		limit = { b:building_resettlement_colony ?= { has_active_production_method = pm_resettlement_planned_towns } }
+		value = b:building_resettlement_colony.level
+		multiply = te_demog_k_mt_planned_towns_per_level
+	}
+}
+te_demog_mt_plan_capital = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_pc_new_capital }
+		value = te_demog_k_mt_planned_capital
+	}
+}
+te_demog_mt_t_planning = {
+	value = te_demog_mt_plan_ministry
+	add = te_demog_mt_plan_towns
+	add = te_demog_mt_plan_capital
+	min = te_demog_k_mt_plan_min
+	max = 0
+}
+
+# ---- The target, the drift and the label (state scope) --------------------------------------------------------------
+te_demog_mt_target = {
+	value = te_demog_k_mt_base
+	add = te_demog_mt_t_capital
+	add = te_demog_mt_t_gateway
+	add = te_demog_mt_t_area
+	add = te_demog_mt_t_work
+	add = te_demog_mt_t_urban
+	add = te_demog_mt_t_infra
+	add = te_demog_mt_t_crowding
+	add = te_demog_mt_t_planning
+	min = te_demog_k_mt_min
+	max = te_demog_k_mt_max
+}
+
+# A year's move: the drift's share of the way from the stored share to the target.
+te_demog_mt_step = {
+	value = te_demog_mt_target
+	subtract = var:te_dg_mt
+	multiply = te_demog_k_mt_drift
+}
+
+# 0 Metropolis, 1 Leading City, 2 Several Cities, 3 Market Towns (3 with no share: the panel shows no label then).
+te_demog_mt_label = {
+	value = 3
+	if = {
+		limit = { has_variable = te_dg_mt }
+		if = {
+			limit = { var:te_dg_mt >= te_demog_k_mt_metropolis }
+			value = 0
+		}
+		else_if = {
+			limit = { var:te_dg_mt >= te_demog_k_mt_leading }
+			value = 1
+		}
+		else_if = {
+			limit = { var:te_dg_mt >= te_demog_k_mt_several }
+			value = 2
+		}
+	}
+}
+
+# The effects' strengths, 0-1, from the stored share: the concentrated side (te_demog_mt_metropolis) and the dispersed
+# side (te_demog_mt_dispersed). The two never overlap.
+te_demog_mt_e_pos = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = var:te_dg_mt
+		subtract = te_demog_k_mt_effect_from
+		divide = {
+			value = te_demog_k_mt_effect_full
+			subtract = te_demog_k_mt_effect_from
+			min = 1
+		}
+		min = 0
+		max = 1
+	}
+}
+te_demog_mt_e_neg = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = te_demog_k_mt_dispersed_from
+		subtract = var:te_dg_mt
+		divide = {
+			value = te_demog_k_mt_dispersed_from
+			subtract = te_demog_k_mt_dispersed_full
+			min = 1
+		}
+		min = 0
+		max = 1
+	}
+}
+
+# ---- The panel (state scope, under te_demog_state_mt_sgui) ---------------------------------------------------------
+# Where the share is heading, as a trend code (te_demog_display_values.txt's: 1 up, -1 down, 0 level within a quarter
+# point, 2 none).
+te_demog_mt_heading = {
+	value = 2
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = te_demog_mt_target
+		subtract = var:te_dg_mt
+		divide = 0.5
+		min = -1
+		max = 1
+		round = yes
+	}
+}
+# 1 under the Full rule (the effects act only there).
+te_demog_mt_rule_full = {
+	value = 0
+	if = {
+		limit = { te_demog_effects_run = yes }
+		value = 1
+	}
+}
+# 1 when the state takes the concentrated side's effects, 2 the dispersed side's, 0 neither (the hover's paragraph).
+te_demog_mt_side = {
+	value = 0
+	if = {
+		limit = { te_demog_mt_e_pos > 0.01 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_demog_mt_e_neg > 0.01 }
+		value = 2
+	}
+}
+# Each field as it applies at the stored share (the strength x its full size), as a positive share for the hover.
+te_demog_mt_shown_crowding = {
+	value = te_demog_mt_e_pos
+	multiply = te_demog_k_mt_crowding
+	multiply = -1
+}
+te_demog_mt_shown_infra_up = {
+	value = te_demog_mt_e_pos
+	multiply = te_demog_k_mt_infra_up
+}
+te_demog_mt_shown_infra_down = {
+	value = te_demog_mt_e_neg
+	multiply = te_demog_k_mt_infra_down
+	multiply = -1
+}
+te_demog_mt_shown_services = {
+	value = te_demog_mt_e_pos
+	multiply = te_demog_k_mt_services
+}
+te_demog_mt_shown_finance = {
+	value = te_demog_mt_e_pos
+	multiply = te_demog_k_mt_finance_tp
+}
+te_demog_mt_shown_turmoil = {
+	value = te_demog_mt_e_pos
+	multiply = te_demog_k_mt_turmoil
+}
+te_demog_mt_shown_fertility = {
+	value = te_demog_mt_e_pos
+	multiply = te_demog_k_mt_fertility
+}
+# The state's urban people below the floor (the "None" row's gate and hover).
+te_demog_mt_too_few = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_urban
+			var:te_dg_urban < te_demog_k_mt_min_urban
+		}
+		value = 1
+	}
+}
+
+# ---- The country's line (country scope, the Where People Live section) ---------------------------------------------
+# Its states by label, counted live (a state without a share counts in none).
+te_demog_mt_count_all = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_dg_mt }
+		add = 1
+	}
+}
+te_demog_mt_count_metropolis = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = te_dg_mt
+			var:te_dg_mt >= te_demog_k_mt_metropolis
+		}
+		add = 1
+	}
+}
+te_demog_mt_count_leading = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = te_dg_mt
+			var:te_dg_mt >= te_demog_k_mt_leading
+			var:te_dg_mt < te_demog_k_mt_metropolis
+		}
+		add = 1
+	}
+}
+te_demog_mt_count_several = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = te_dg_mt
+			var:te_dg_mt >= te_demog_k_mt_several
+			var:te_dg_mt < te_demog_k_mt_leading
+		}
+		add = 1
+	}
+}
+te_demog_mt_count_towns = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_variable = te_dg_mt
+			var:te_dg_mt < te_demog_k_mt_several
+		}
+		add = 1
+	}
+}
+
+# ---- The self-check metro_world_market_hub (te_debug_demog_mt_hub_selfcheck, THIS = the state it ran in) -----------
+# The most hubs the world may hold: a quarter of its states.
+te_debug_demog_mt_hub_most = {
+	value = var:te_dg_mt_chk_states
+	multiply = 0.25
+}

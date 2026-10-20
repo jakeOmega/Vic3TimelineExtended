@@ -1099,3 +1099,21 @@ te_debug_demog.81 = {
 		}
 	}
 }
+
+# ============================================================================
+# The metropolitan share's terms (phase 3, spec §5.2; te_demog_metro_values.txt), console only: `event
+# te_debug_demog.140` on the player's country logs one TE_DEMOG_METRO line for each of its states with a share: the
+# share, its target, the eight terms and the effects' strength, to check the anchors in a running game (New York,
+# Buenos Aires and Paris high; Texas and Germany's states lower). It writes nothing.
+# ============================================================================
+te_debug_demog.140 = { # REVIEWED 2026-10-19: console-only test event (`event te_debug_demog.140`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		every_scope_state = {
+			limit = { has_variable = te_dg_mt }
+			debug_log = "TE_DEMOG_METRO tag=[ROOT.GetCountry.GetTagName] state=[THIS.GetState.GetNameNoFormatting] share=[THIS.Var('te_dg_mt').GetValue|1] target=[THIS.ScriptValue('te_demog_mt_target')|1] capital=[THIS.ScriptValue('te_demog_mt_t_capital')|1] gateway=[THIS.ScriptValue('te_demog_mt_t_gateway')|1] area=[THIS.ScriptValue('te_demog_mt_t_area')|1] work=[THIS.ScriptValue('te_demog_mt_t_work')|1] urban=[THIS.ScriptValue('te_demog_mt_t_urban')|1] infra=[THIS.ScriptValue('te_demog_mt_t_infra')|1] crowding=[THIS.ScriptValue('te_demog_mt_t_crowding')|1] planning=[THIS.ScriptValue('te_demog_mt_t_planning')|1] metropolis=[THIS.ScriptValue('te_demog_mt_e_pos')|2] dispersed=[THIS.ScriptValue('te_demog_mt_e_neg')|2] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}

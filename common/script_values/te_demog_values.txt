@@ -254,8 +254,27 @@ te_demog_tfr_urban = {
 	value = var:te_dg_urban_share
 	multiply = te_demog_urban_left_stored
 	multiply = te_demog_k_urban_weight
+	multiply = te_demog_mt_fertility_scale
 	multiply = -1
 	add = 1
+}
+
+# Phase 3, the metropolitan share (spec §5.2; te_demog_metro_values.txt): under Full, big-city housing raises the urban
+# term by te_demog_k_mt_fertility x the concentrated side's strength (0 at a share of 40, full at 60), so by a tenth in
+# a metropolis. Exactly 1 outside Full and in a state with no share. The share moves before the census step on the same
+# pulse (te_demog_mt_state_update), so the step and the tooltips read one figure.
+te_demog_mt_fertility_scale = {
+	value = 1
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_mt
+		}
+		add = {
+			value = te_demog_mt_e_pos
+			multiply = te_demog_k_mt_fertility
+		}
+	}
 }
 
 # Natural fertility, from women's legal standing (state_natural_fertility_mult on the women's-rights laws;

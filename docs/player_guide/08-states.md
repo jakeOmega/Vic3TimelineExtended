@@ -357,7 +357,7 @@ them, and some break the figure down for your capital.
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
 | How Demographics Works | A collapsed section that explains the method. |
 
@@ -483,6 +483,22 @@ the city, migration attraction −10% and turmoil penalties +10% for the rest. A
 country of fewer than three states gets neither. Each state takes the new figure
 at its yearly count, and the Urban Pattern tooltip names your largest city and
 shows the current figures. Under Display only it says what Full would do.
+
+Within a state, the metropolitan share is the share of the state's urban people
+who live in its largest city. It reads Metropolis at 60% or more, Leading City
+from 40%, Several Cities from 20% and Market Towns below that, on the
+Settlement row under Urban People on the state's subtab (a state with fewer than
+5,000 urban people has none). The share moves a twentieth of the way to its
+target each year. The national capital, a World Market Hub and a Financial
+District raise the target; a large region, a farming and mining economy,
+infrastructure to spare over what the state uses, Migration Crowding and urban
+planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
+lower it, and a country's urbanization raises it most at half its people in towns.
+Hover the row for each term as a bar. Under Full a share above 40% has effects,
+full at 60%: the state crowds 10% sooner, its people give 10% more infrastructure,
+its Urban Center and Financial District work at 5% more throughput, turmoil
+penalties rise 5% and families are a little smaller. Below 20% its towns give up
+to 10% less infrastructure. Where People Live counts your Metropolises.
 
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and
@@ -630,7 +646,7 @@ twentieth of the men of fighting age), the Greying of the Nation (pensioners at 
 fifth of the people), the Youth Bulge (a fifth of the people in their twenties
 while work is short), Missing Girls (110 boys born per 100 girls under Birth
 Limit), Bare Branches (110 men per 100 women), the Empty Villages (an old,
-shrinking farm state), the Overspill (a dominant city crowded to Migration
+shrinking farm state), the Overspill (a Metropolis state crowded to Migration
 Crowding's ceiling) and the Last Generation? (Biological Immortality). Each comes
 at most once in 25 years, and the Last Generation? once a game; at most one of the
 yearly ones arrives on a given 31 December. The Lost Generation and the Empty

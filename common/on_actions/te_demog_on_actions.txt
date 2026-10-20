@@ -16,12 +16,18 @@ on_yearly_pulse_state = {
 
 te_demog_state_yearly_on_action = {
 	effect = {
+		# the metropolitan share (phase 3, te_demog_metro_effects.txt; the census on): seeded or moved on last year's
+		# walk before the census step, so the step's urban fertility term reads this year's share
+		te_demog_mt_state_update = yes
 		te_demog_state_yearly = yes
 		# the national urban pattern's state modifiers, from the owner's last census (Full only; phase 3,
 		# te_demog_place_effects.txt): their one refresh site, with ROOT the state
 		te_demog_up_state_refresh = yes
 		# a planned capital's development ends once the state is no longer the capital
 		te_demog_pc_state_check = yes
+		# the metropolitan share's two modifiers (Full only; te_demog_metro_effects.txt): their one refresh site,
+		# with ROOT the state
+		te_demog_mt_state_refresh = yes
 	}
 }
 
