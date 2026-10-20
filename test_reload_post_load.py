@@ -110,10 +110,6 @@ class ReloadPostLoadTest(unittest.TestCase):
         )
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 # ---------------------------------------------------------------------------
 # #242 — crashing generators/audits must reach the reload `warnings` array,
 # writers that run after the parse must be reported (and trigger one re-parse),
@@ -461,3 +457,7 @@ class ParseFailureTests(_QuietServerLogMixin):
             status = mss.ModStateHandler._status(None)
         self.assertEqual(status["mod_path"], mss.mod_path)
         self.assertIsNone(_live_reload_skip_reason(status, mod_path))
+
+
+if __name__ == "__main__":
+    unittest.main()

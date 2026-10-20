@@ -1481,3 +1481,7 @@ class TestConsequences(unittest.TestCase):
             self.assertEqual((M.conscription_applied(0.009), M.conscription_applied(-0.009)), (0.0, 0.0))
             self.assertEqual((M.conscription_applied(0.01), M.youth_applied(0.019), M.youth_applied(0.02)),
                              (0.01, 0.0, 0.02))
+
+
+if __name__ == "__main__":
+    unittest.main()

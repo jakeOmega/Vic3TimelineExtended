@@ -476,10 +476,6 @@ class TestEngineRateLines(unittest.TestCase):
                          "law_regulated_augmentation_market", "law_mandatory_augmentation"}
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TestWorkforceReaders(unittest.TestCase):
     """Phase 2 step 1 (the design §1.7): the working-adult lines' readers, beside #892's."""
 
@@ -496,3 +492,7 @@ class TestWorkforceReaders(unittest.TestCase):
         self.assertEqual(by_key["law_pro_capital_ministry_of_labor"].kind, "law_institution")
         self.assertEqual(by_key["law_womens_suffrage"].kind, "law")
         self.assertEqual(by_key["contraceptive_pill"].kind, "technology")
+
+
+if __name__ == "__main__":
+    unittest.main()

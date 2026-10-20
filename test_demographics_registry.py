@@ -7520,3 +7520,6 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK BROKEN conscription_term_read", check)
         self.assertIn("name = te_debug_demog.1.t_opt", _block(events, "te_debug_demog.1"))
 
+
+if __name__ == "__main__":
+    unittest.main()

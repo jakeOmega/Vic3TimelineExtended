@@ -458,3 +458,7 @@ class TestCountryBudgets(unittest.TestCase):
             got = S.country_budgets(path)
         self.assertEqual(set(got), {"TST"}, "a country with no GDP record is left out")
         self.assertEqual(got["TST"], {"gdp": 300.0, "income": 30.5, "expenses": 6.0})
+
+
+if __name__ == "__main__":
+    unittest.main()

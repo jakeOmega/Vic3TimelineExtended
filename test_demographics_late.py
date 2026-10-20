@@ -764,10 +764,6 @@ class TestLateGameCountry(unittest.TestCase):
         self.assertIn("te_demog_pension_link_target_average", _block(_text(WORK_EFFECTS), "te_demog_pension_ai"))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TestLateReseedConsole(unittest.TestCase):
     """Console option c_world (te_debug_demog.1): every late state re-seeded, our census taken at once."""
 
@@ -780,3 +776,7 @@ class TestLateReseedConsole(unittest.TestCase):
         self.assertIn("te_demog_seed_off_pulse = yes", body)
         self.assertNotIn("te_demog_seed = yes", body)
         self.assertIn("has_variable = te_dg_elig", body)
+
+
+if __name__ == "__main__":
+    unittest.main()

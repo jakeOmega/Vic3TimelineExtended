@@ -290,3 +290,7 @@ class TestProjection(unittest.TestCase):
         self.assertEqual(DP.region_gate(quiet), [])
         shrinking = dict(quiet, tags={"CHI": (4e8, 6.5, -0.1)})
         self.assertEqual(len(DP.region_gate(shrinking)), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

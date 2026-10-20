@@ -50,3 +50,7 @@ class TestDefines(unittest.TestCase):
         for sol in (4, 7, 11):
             self.assertAlmostEqual(G.monthly_birthrate(sol, d), pre_slope * sol + d.max_birthrate)
         self.assertAlmostEqual(G.monthly_mortality(d.equilibrium_sol, d), rate_at_eq)
+
+
+if __name__ == "__main__":
+    unittest.main()
