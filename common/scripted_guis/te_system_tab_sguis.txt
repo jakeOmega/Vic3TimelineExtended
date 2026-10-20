@@ -276,7 +276,7 @@ te_market_strategic_reserve_tab_unlock_sgui = {
 # Demographics: Population panel (gui/pops_overview.gui, the fifth slot). The
 # system has no journal entry: the tab is on the strip whenever the rule runs
 # the census, and opens once the country has taken one (te_dg_census_year,
-# written by te_demog_country_census at game start and every 31 December), so
+# written by te_demog_country_census at game start and every yearly pulse), so
 # the census plays the entry's part. te_pops_demog_tab_sgui is the rule alone
 # (the state panel's Demographics subtab reads it too); the unlock gate's
 # is_valid is the census, and the tab's sections show only while it passes

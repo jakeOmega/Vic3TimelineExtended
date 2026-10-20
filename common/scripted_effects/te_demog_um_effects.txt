@@ -435,7 +435,7 @@ te_demog_um_country_modifiers = {
 # THIS = ROOT = a civil war's winner (te_civil_war_on_won, between resolve and clear): the winner continues the nation.
 # The rebels keep no pool (te_demog_um_country skips a revolutionary country), so a rebel winner holds the loser's
 # te_dg_um_* through the engine's variable merge; each is taken again from the loser where the winner holds none, and the
-# two country modifiers, which no winner inherits, come back at once rather than at the next 31 December.
+# two country modifiers, which no winner inherits, come back at once rather than at the country's next yearly census.
 te_demog_um_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -485,7 +485,7 @@ te_demog_um_move = {
 	set_variable = { name = $TO$m value = { value = var:$TO$m add = local_var:te_dg_um_xm } }
 }
 
-# THIS = a country: the two country modifiers off (outside Full; te_demog_country_yearly runs it every 31 December,
+# THIS = a country: the two country modifiers off (outside Full; te_demog_country_yearly runs it at every yearly pulse,
 # which Disabled reaches and the census doesn't, as te_demog_lx_politics_clear).
 te_demog_um_clear = {
 	if = {
@@ -498,7 +498,7 @@ te_demog_um_clear = {
 	}
 }
 
-# THIS = a country, on 31 December whatever the rule (te_demog_country_yearly): outside Full, its modifiers off.
+# THIS = a country, at its yearly pulse whatever the rule (te_demog_country_yearly): outside Full, its modifiers off.
 te_demog_um_clear_outside_full = {
 	if = {
 		limit = { NOT = { te_demog_effects_run = yes } }

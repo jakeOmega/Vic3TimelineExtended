@@ -6,7 +6,7 @@
 # fl_step, fl_line, ch_target, ch_drift. Constants and values: te_demog_spread_values_generated.txt.
 # ============================================================================
 # Both run under the Demographics rule's Full setting only (te_demog_effects_run), at the country's census: the yearly
-# one on 31 December, or fast mode's clock census once a clock year. Outside Full nothing here runs, so France keeps
+# one on the country's own day, or fast mode's clock census once a clock year. Outside Full nothing here runs, so France keeps
 # history's te_demog_family_limitation at its own 0.6, as before, and no desired fertility moves.
 #
 # Country variables (Full):

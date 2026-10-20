@@ -42,14 +42,14 @@ te_demog_state_gini = {
 #   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
 #   te_dg_gini          the Gini over all the states' wealth bands
 #   te_dg_war_shock     the war shocks taken since the country was last at peace
-#                       on 31 December
+#                       at its yearly pulse
 #   te_dg_wc_boom       the financial boom's shock taken in this cycle
 #   te_dg_wc_land       the land-tenure law's role last month (te_demog_wc_land_code)
 #   te_dg_wc_gdp, te_dg_wc_g, te_dg_wc_r, te_dg_wc_rg  r > g's inputs and term
 #                       (te_demog_wc_growth_update)
 #
 # Shocks jump the scores instead of moving the targets (Scheidel's levellers):
-# a year at war with heavy dead -1, at most -10 until a year ends in peace
+# a year at war with heavy dead -1, at most -10 until a yearly pulse finds peace
 # (te_demog_wc_war_shock); a lost war that cost it a war goal -5 (on_lost_war,
 # te_demog_on_actions.txt);
 # a won left revolution -20 (te_demog_wc_civil_war_won); a banking crash -5
@@ -132,11 +132,11 @@ te_demog_wc_shock = {
 	te_demog_wc_national = yes
 }
 
-# THIS = a country on 31 December (te_demog_country_yearly, before the year's
+# THIS = a country at its yearly pulse (te_demog_country_yearly, before the year's
 # war dead are shared out or cleared), whatever the rule. A year at war whose
 # dead (te_dg_war_year, the monthly snapshot's) pass 0.2% of the people levels
 # every state by 1: mass mobilisation. At most 10 such years count until a
-# 31 December finds the country at peace. 31 December's national figure follows.
+# yearly pulse finds the country at peace. That pulse's national figure follows.
 te_demog_wc_war_shock = {
 	if = {
 		limit = { is_at_war = yes }
@@ -187,7 +187,7 @@ te_demog_wc_civil_war_won = {
 
 # THIS = ROOT = a country (te_inh_apply_concentration_modifiers needs ROOT to
 # be it). The one refresh site of the national figure and #822's modifiers:
-# 31 December (te_demog_country_yearly, before the census reads it), game
+# the yearly pulse (te_demog_country_yearly, before the census reads it), game
 # start, the inheritance events' shifts, the shocks and the civil-war repair.
 #
 # The states weigh by where property is held (spec §4.2): each level of an
@@ -501,9 +501,9 @@ te_demog_wc_log_growth = {
 	change_local_variable = { name = te_dg_wc_g_year multiply = 2 }
 }
 
-# THIS = a country on 31 December, before te_demog_country_yearly (te_demog_country_yearly_on_action), so
+# THIS = a country at its yearly pulse, before te_demog_country_yearly (te_demog_country_yearly_on_action), so
 # its national refresh reads this year's figure. r > g's inputs and term (te_demog_wc_rg_term):
-#   te_dg_wc_gdp  GDP on the last 31 December (te_mon_gdp_current). Its own copy: the monetary system's
+#   te_dg_wc_gdp  GDP at the last yearly pulse (te_mon_gdp_current). Its own copy: the monetary system's
 #                 te_mon_gdp_last_year is rewritten by an on_yearly_pulse_country entry of its own, in an
 #                 order against this one that is undefined
 #   te_dg_wc_states  the states it held then (te_demog_wc_state_count), beside the GDP they made
@@ -514,7 +514,7 @@ te_demog_wc_log_growth = {
 #                 (the ratio under 0.9 or over 1.1): that jump is the territory's, so it takes no sample and the
 #                 GDP is re-based, and next year's growth is measured on the new territory (owner, 2026-10-20;
 #                 until then each year's percent growth was clamped to -10..+10)
-#   te_dg_wc_r    the real policy rate on 31 December (te_demog_wc_real_rate), in percent
+#   te_dg_wc_r    the real policy rate at the yearly pulse (te_demog_wc_real_rate), in percent
 #   te_dg_wc_rg   the term, 2 x (te_dg_wc_r - te_dg_wc_g), at most 5 either way; only while the banking
 #                 cycle runs (te_banking_cycle_running), removed otherwise
 # Every country keeps the average, so it is warm when a cycle starts.

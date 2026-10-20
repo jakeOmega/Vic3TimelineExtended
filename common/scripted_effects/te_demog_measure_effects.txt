@@ -286,7 +286,7 @@ te_demog_ms_keep = {
 	}
 }
 
-# Country, ROOT = the country, on 31 December (te_demog_country_yearly, after its census), Full only: the measures
+# Country, ROOT = the country, at its yearly pulse (te_demog_country_yearly, after its census), Full only: the measures
 # kept and costed, then the AI's choices.
 te_demog_ms_yearly = {
 	if = {
@@ -315,7 +315,7 @@ te_demog_ms_monthly = {
 # takes the old government's measures from scope:te_cw_loser explicitly, as inh_repair_after_civil_war does, rather than
 # trusting the engine to have copied the variables by this hook; its own value wins where both hold one. Then the
 # measures are back on at once, where the winner's law allows them, and the rest end with a notice; the yearly census
-# does the same each 31 December. A loyalist winner keeps its own modifiers and needs nothing.
+# does the same. A loyalist winner keeps its own modifiers and needs nothing.
 te_demog_ms_repair_after_civil_war = {
 	if = {
 		limit = { te_demog_effects_run = yes }

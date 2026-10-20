@@ -269,7 +269,7 @@ def _lp(r):
 
 class TestReturnOnCapital(unittest.TestCase):
     def year(self, country, gdp, running=True, truncate=False, states=5, engine=False):
-        """te_demog_wc_growth_update on 31 December, the country holding `states` states (te_demog_wc_state_count).
+        """te_demog_wc_growth_update at the yearly pulse, the country holding `states` states (te_demog_wc_state_count).
         engine=True returns the engine (its locals hold the year's sample, te_dg_wc_g_year, when one was taken)."""
         eng = _CountryEngine(fixtures={"te_mon_gdp_current": float(gdp), "te_demog_wc_state_count": float(states)},
                              triggers={"te_banking_cycle_running": running}, truncate=truncate)

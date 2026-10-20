@@ -13,7 +13,7 @@
 #        the model. A second run in the same year steps again (the census year goes
 #        back by one first) and folds this year's newborns into the over-150 pool:
 #        use a save you can throw away, or re-seed after (c)
-#   b    start or stop the census log: each 31 December a TE_DEMOG_CENSUS: line per
+#   b    start or stop the census log: at each yearly census a TE_DEMOG_CENSUS: line per
 #        country of a million people or more (scripts/analysis/
 #        demographics_observer_report.py reads them), and a TE_DEMOG_PULSE line at the
 #        player's capital's yearly state pulse (one step per calendar year?)

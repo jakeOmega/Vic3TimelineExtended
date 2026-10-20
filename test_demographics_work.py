@@ -324,7 +324,7 @@ class TestPensionSetting(unittest.TestCase):
         self.assertEqual(eng.vars["te_dg_pension_age"], P.PENSION_AGE["early"])
 
     def test_leaving_old_age_pension_clears_the_setting_and_the_bill(self):
-        """A repeal takes the bill off that day, not at the next 31 December (the review of 2026-10-12)."""
+        """A repeal takes the bill off that day, not at the next yearly census (the review of 2026-10-12)."""
         eng = self._country(oap=False, te_dg_pension_age=70.0, te_dg_pension_since=1948.0,
                             te_dg_pension_pos=float(P.PENSION_POSITION_ID["raised"]), te_dg_pension_bill=1234.0)
         eng.modifiers.update(te_demog_pension_pos_raised=1.0, te_demog_pension_bill=1234.0)

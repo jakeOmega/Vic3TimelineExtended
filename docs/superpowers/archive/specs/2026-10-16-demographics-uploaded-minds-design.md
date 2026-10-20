@@ -45,7 +45,7 @@ into true deaths and uploads, and books the uploads into a pool of minds. Upload
 - **Which deaths (call 4).** Infection and chronic: deaths that come with warning, so there is time to scan. Accidents,
   violence and work stay with Mind Backups' restore; maternal deaths stay deaths.
 - **Capacity (call 3).** Country-wide, since minds are hosted on the country's network: 1,000,000 minds a Nexus level,
-  summed over its states. The country's census sums the levels on 31 December.
+  summed over its states. The country's census sums the levels at its yearly pulse.
 - **The upload share.** The country's census sets the year's share of demand it can host, φ = min(1, free capacity ÷ last
   year's eligible deaths; 1 with none recorded yet). Each state's step books uploads = min(φ × its eligible deaths, the
   capacity still free), and the country's free capacity falls at once, so the year's uploads never pass it, whatever the

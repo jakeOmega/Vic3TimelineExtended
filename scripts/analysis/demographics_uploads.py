@@ -15,7 +15,7 @@ owner's year (Inputs.uploads). This module holds:
     ic_rates(inp)        each age group's infection and chronic death rate at the model's own multipliers
     Sums                 the late sweep's treated infection-and-chronic sums by age group (te_dg_uma_tic<f|m><g>)
     book(...)            a state's step: eligible deaths, uploads, the upload share, Living to 100 counting uploads
-    Pool, census(...)    the country's year on 31 December: endings, capacity, restore, archive, the year's share
+    Pool, census(...)    the country's year at its yearly pulse: endings, capacity, restore, archive, the year's share
     nexus_lines(), nexus_output(...)  the production method's lines and a Nexus's output at a utilisation
     scenario(...)        the harness's run (demographics_harness.py uploads)
 """
@@ -118,7 +118,7 @@ def book(lx, causes, inp, qf0, qm0):
             "l100": l100_counting(lx, sums, qf0, qm0, u)}
 
 
-# ---- The country's year (te_demog_um_country, on 31 December) -------------------------------------------------------
+# ---- The country's year (te_demog_um_country, at its yearly pulse) ---------------------------------------------------
 
 @dataclasses.dataclass
 class Pool:
