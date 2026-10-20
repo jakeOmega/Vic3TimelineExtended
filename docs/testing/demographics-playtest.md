@@ -817,8 +817,9 @@ banking triggers and the radicals type Concentrated Property carries, so no self
 2. **An ownership shock (any rule).** In a state of 20 capital levels or more, nationalise buildings holding a tenth or
    more of its capital (the building panel): at the state's next yearly pulse its score falls by half the points moved
    (a fifth of its capital nationalised: −10). Privatising them back raises it the same way. A state that changed hands
-   in the year, or whose people moved more than a quarter, takes none that year. The rule measures the state-owned
-   share, so a year of private building that dilutes a large state-owned share raises the score the same way.
+   in the year takes none that year; one whose people moved a lot takes it all the same (since 2026-10-20). The rule
+   measures the state-owned share, so a year of private building that dilutes a large state-owned share raises the
+   score the same way.
 3. **Land reform (any rule).** Enact Peasant Proprietorship (or Homesteading, or Collectivized Agriculture) from Serfdom
    or Tenant Farmers or a variant: within a month every state's score falls by 10 × its share of Peasants and Farmers
    (the state subtab's Land Tenure hover gives the share), and the national figure follows. From Commercialized
@@ -885,7 +886,8 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
    winter's (`resettlement.3`, second option) and the settlements' famine (`resettlement.6`, second option).
 6. **Net Migration.** A destination's Net Migration row counts its settlers (about the building's *Settlers arrived*
    over the year plus the engine's own migration). A frontier that grows by more than a quarter in a year by
-   resettlement keeps its census (no re-seed: its pyramid does not jump back to the equilibrium shape).
+   resettlement keeps its census (no re-seed: its pyramid does not jump back to the equilibrium shape; since
+   2026-10-20 no move of any size re-seeds a state).
 7. **Census off.** With the rule Disabled, `event te_debug_demog.120` logs only its closing line (no state holds a
    counter or a frontier mark).
 8. **`debug.log`:** `event te_debug_demog.120` lists the player's states' counters since their last step
@@ -987,3 +989,37 @@ game can show:
     them offset (an empty one makes its bonuses' share of its goods) until the next monthly refresh corrects it.
 12. **Rebels' Nexus.** During a civil war a Nexus the rebels hold makes nothing (they host no minds), and its research line
     runs uncancelled (they have no census of the pool) until the war ends.
+
+## No re-seed on a big move; the province line; Wealth Concentration's growth sample (2026-10-20)
+
+The owner's call of 2026-10-20: a census no longer seeds a state again when its people move more than a quarter in a
+year (in the 2057 EU game that rule fired 8 times in 4 months, every time on migration, and threw away each state's
+year). Any move now goes through the step's booking: up to 5% in or 3% out of each class and sex by the profile, the
+rest flat over everyone as whole families. Wealth Concentration's ownership shock drops the same rule, and r > g's
+growth average replaces its ±10 clamp on each year with a skip: a year in which the country gained or lost states
+takes no growth sample and re-bases the GDP. Both Wealth Concentration changes run under every Demographics rule.
+The engine has no merge or split on-action, so a `TE_INFO` line reports when a state's provinces change.
+`test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
+`test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
+province count is the base game's own form (`occupation_values.txt` counts a state's provinces with `every_province` in
+a script value), Grand Monuments' `gm_occupation_read` checks the same read in game, and the line gives no verdict.
+
+1. **The province line (Full or Display only; read `debug.log`).** Watch for `TE_INFO demog_province_change` after a
+   war that splits or rejoins a state region: a peace that hands over part of a region, a revolt that takes part of a
+   state, and the end of that revolt. Each line gives `provinces=old->new`, `people=` (the last census's -> now), the
+   owner's tag and the scope dump. A merge reads as provinces and people jumping together in the surviving state, a
+   split as provinces falling with the people kept (the new part has no census and seeds). Colonies growing province
+   by province print it too, with a small change in people; leave those out. If merges happen, the census books the
+   joined state's people as immigrants at the state's own structure (flat beyond the caps) and keeps the year's
+   births and deaths: report whether its pyramid looks plausible the year after. If no line other than a colony's
+   ever appears, the engine doesn't merge or split states in play. If no line at all appears in a game with
+   colonisation, the count may read 0: `scripts/analysis/save_country_probe.py --states` on a save shows each state's
+   `te_dg_provinces`, which should be its province count, not 0.
+2. **A big move keeps the year (Full or Display only).** A state whose people grow or fall by more than a quarter in a
+   year (the EU's Kars, Ecuador, Canary Islands in the 2057 game; a refugee wave) still shows births and deaths per
+   1,000 and its trend arrows the census after, and its Net Migration row is the move; its pyramid keeps its shape,
+   with the inflow spread over every age beyond the caps, rather than jumping to the equilibrium shape.
+3. **Return on Capital after a conquest (any rule, the banking rule on).** The 31 December after a country gains or
+   loses a state, the growth average in the Return on Capital hover stays where it was; the 31 December after that, it
+   moves by a fifth of that year's growth on the new territory. A same-territory boom year past 10% moves it by its
+   full fifth (a +20% year: +4 less a fifth of the old average).

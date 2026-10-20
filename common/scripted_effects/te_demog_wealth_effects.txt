@@ -331,10 +331,12 @@ te_demog_wc_national = {
 # lowers it. It measures the share (the owner's rule), so state or private capital
 # growing faster than the other moves it too. te_dg_wc_sown keeps last year's share. No shock in the first year a share is
 # stored; after a change of owner, which removes it (te_demog_wc_owner_change, on
-# on_state_owner_change); when the state's people moved more than a quarter in the year
-# (the census's re-seed rule, here on the walk's own people, kept under every rule); or
-# while the state holds under 20 capital levels, which also removes it: in 1849 most
-# states held under 10, where one state-owned level is 10 points or more.
+# on_state_owner_change); or while the state holds under 20 capital levels, which also
+# removes it: in 1849 most states held under 10, where one state-owned level is 10 points
+# or more (kept on the owner's call, 2026-10-20). A move of the state's people skips
+# nothing (owner, 2026-10-20): capital levels don't move with people, so a migration jump
+# makes no share change spurious. Until then a move of more than a quarter in the year
+# skipped it, the census's old re-seed rule.
 te_demog_wc_ownership_shock = {
 	if = {
 		limit = { has_variable = te_dg_lv_ctry }
@@ -342,28 +344,14 @@ te_demog_wc_ownership_shock = {
 			limit = { te_demog_wc_capital_levels >= 20 }
 			set_local_variable = { name = te_dg_wc_so value = te_demog_wc_state_owned_share }
 			if = {
-				limit = {
-					has_variable = te_dg_wc_sown
-					has_variable = te_dg_walk_pop_prev
-				}
+				limit = { has_variable = te_dg_wc_sown }
 				set_local_variable = { name = te_dg_wc_so_move value = { value = local_var:te_dg_wc_so subtract = var:te_dg_wc_sown } }
-				# the people now less 1.25 and 0.75 times last walk's, taken into locals first, as the census's rule
-				set_local_variable = {
-					name = te_dg_wc_so_over
-					value = { value = var:te_dg_walk_pop subtract = { value = var:te_dg_walk_pop_prev multiply = 1.25 } }
-				}
-				set_local_variable = {
-					name = te_dg_wc_so_under
-					value = { value = var:te_dg_walk_pop subtract = { value = var:te_dg_walk_pop_prev multiply = 0.75 } }
-				}
 				if = {
 					limit = {
 						OR = {
 							local_var:te_dg_wc_so_move >= 0.1
 							local_var:te_dg_wc_so_move <= -0.1
 						}
-						local_var:te_dg_wc_so_over <= 0
-						local_var:te_dg_wc_so_under >= 0
 					}
 					change_variable = {
 						name = te_dg_wc
@@ -456,7 +444,9 @@ te_demog_wc_land_reform_check = {
 # war. So it takes the loser's land-law role, and a revolution that brought in Peasant
 # Proprietorship or Collectivized Agriculture takes the land-reform shock at the next
 # monthly check, as the same law enacted in peace does; and r > g's GDP baseline and
-# growth average, so growth neither restarts nor reads the rebels' wartime GDP.
+# growth average, so growth neither restarts nor reads the rebels' wartime GDP. The
+# baseline's state count goes with it (te_demog_wc_growth_update), so the next sample is
+# taken only if the winner holds as many states as that GDP was measured on.
 te_demog_wc_civil_war_inherit = {
 	if = {
 		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_land } }
@@ -465,6 +455,14 @@ te_demog_wc_civil_war_inherit = {
 	if = {
 		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_gdp } }
 		set_variable = { name = te_dg_wc_gdp value = scope:te_cw_loser.var:te_dg_wc_gdp }
+		if = {
+			limit = { scope:te_cw_loser = { has_variable = te_dg_wc_states } }
+			set_variable = { name = te_dg_wc_states value = scope:te_cw_loser.var:te_dg_wc_states }
+		}
+		else_if = {
+			limit = { has_variable = te_dg_wc_states }
+			remove_variable = te_dg_wc_states
+		}
 	}
 	if = {
 		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_g } }
@@ -478,8 +476,13 @@ te_demog_wc_civil_war_inherit = {
 #   te_dg_wc_gdp  GDP on the last 31 December (te_mon_gdp_current). Its own copy: the monetary system's
 #                 te_mon_gdp_last_year is rewritten by an on_yearly_pulse_country entry of its own, in an
 #                 order against this one that is undefined
-#   te_dg_wc_g    growth averaged over about five years: each year's growth (clamped to -10..+10, so a
-#                 conquest or a lost province moves it by 2 at most) taken in at a weight of 0.2
+#   te_dg_wc_states  the states it held then (te_demog_wc_state_count), beside the GDP they made
+#   te_dg_wc_g    growth averaged over about five years: each year's growth taken in at a weight of 0.2,
+#                 as it came (a real boom past 10% counts), but only from a year on the same territory: when
+#                 the country gained or lost states since the last update (or the count is missing, an old
+#                 save's first year) the year takes no sample, and the GDP is re-based, so next year's growth
+#                 is measured on the new territory (owner, 2026-10-20; until then each year was clamped to
+#                 -10..+10, so a conquest moved the average by 2 at most)
 #   te_dg_wc_r    the real policy rate on 31 December (te_demog_wc_real_rate)
 #   te_dg_wc_rg   the term, 2 x (te_dg_wc_r - te_dg_wc_g), at most 5 either way; only while the banking
 #                 cycle runs (te_banking_cycle_running), removed otherwise
@@ -487,10 +490,13 @@ te_demog_wc_civil_war_inherit = {
 # multiplied: GDP passes 7 x 10^11 in the late game.
 te_demog_wc_growth_update = {
 	set_local_variable = { name = te_dg_wc_gdp_now value = te_mon_gdp_current }
+	set_local_variable = { name = te_dg_wc_states_now value = te_demog_wc_state_count }
 	if = {
 		limit = {
 			has_variable = te_dg_wc_gdp
 			var:te_dg_wc_gdp > 0
+			has_variable = te_dg_wc_states
+			var:te_dg_wc_states = local_var:te_dg_wc_states_now
 		}
 		set_local_variable = {
 			name = te_dg_wc_g_year
@@ -499,8 +505,6 @@ te_demog_wc_growth_update = {
 				subtract = var:te_dg_wc_gdp
 				divide = { value = var:te_dg_wc_gdp min = 1 }
 				multiply = 100
-				min = -10
-				max = 10
 			}
 		}
 		if = {
@@ -515,6 +519,7 @@ te_demog_wc_growth_update = {
 		}
 	}
 	set_variable = { name = te_dg_wc_gdp value = local_var:te_dg_wc_gdp_now }
+	set_variable = { name = te_dg_wc_states value = local_var:te_dg_wc_states_now }
 	if = {
 		limit = { has_variable = te_policy_rate }
 		set_variable = { name = te_dg_wc_r value = te_demog_wc_real_rate }

@@ -615,6 +615,12 @@ te_debug_demog_probe_owner_lm = {
 	}
 }
 
+# ---- The census's province line (te_debug_demog_province_change; owner, 2026-10-20) ---------------------------
+# THIS = a state: its people now, printed in full (the line's last census figure is te_dg_pop_last, read as a Var).
+te_debug_demog_province_people = {
+	value = state_population
+}
+
 # ---- The Primogeniture self-check (te_debug_demog_pr_selfcheck_start, te_debug_demog.5) ----------------------------
 # THIS = the state. What Primogeniture's line added to the absorbed births sum in the week since it went on.
 te_debug_demog_pr_chk_added = {

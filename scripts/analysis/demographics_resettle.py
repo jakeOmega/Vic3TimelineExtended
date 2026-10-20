@@ -83,10 +83,6 @@ class Counters:
     def any(self):
         return bool(self.moved_in or self.moved_out or self.dead)
 
-    def known_change(self):
-        """The population change the moves made (te_demog_rs_known_change): arrivals less departures and the dead."""
-        return self.moved_in - self.moved_out - self.dead
-
 
 def book(counters, programme, people, side, labour_f=P.LABOUR_FEMALE_SHARE_MIN, dead=False):
     """Add `people` of a programme's movers to a state's counters (te_demog_rs_note_move, te_demog_rs_note_dead):

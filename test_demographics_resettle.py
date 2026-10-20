@@ -316,14 +316,15 @@ class TestStepWithKnownMoves(unittest.TestCase):
         eng, model, *_ = self.run_both(c, rest=-900.0)
         self.check(eng, model)
 
-    def test_the_reseed_test_leaves_known_moves_out(self):
-        eng = _engine_for(INP, YEAR, POP)
-        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_rs_known_change")), 0.0)
-        eng.vars.update(te_dg_rs_in=60000.0, te_dg_rs_out=1000.0, te_dg_rs_dead=500.0)
-        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_rs_known_change")), 58500.0)
+    def test_a_frontier_filling_fast_keeps_its_census(self):
+        """The census has no size test any more (owner, 2026-10-20), so a frontier that grows by more than a quarter
+        in a year by resettlement steps like any other state, and the known moves still skip the residual's caps (the
+        step's te_demog_rs_take; TestStepWithKnownMoves). The value the old test subtracted had no other reader."""
         census = squash(_block(_text(EFFECTS), "te_demog_state_census"))
-        for name in ("te_dg_over", "te_dg_under"):
-            self.assertIn(f"change_local_variable = {{ name = {name} subtract = te_demog_rs_known_change }}", census)
+        for gone in ("te_demog_rs_known_change", "te_dg_over", "te_dg_under"):
+            self.assertNotIn(gone, census)
+        self.assertNotIn("te_demog_rs_known_change", _text(RS_VALUES))
+        self.assertIn("te_demog_rs_take = yes", _block(_text(EFFECTS), "te_demog_flows"))
 
     def test_a_seed_clears_the_counters(self):
         c = RS.Counters()

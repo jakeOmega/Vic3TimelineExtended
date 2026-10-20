@@ -294,9 +294,8 @@ class TestStateGini(unittest.TestCase):
 
 class TestStep(unittest.TestCase):
     def test_orchestrator_branches(self):
-        """Seed when there is no census, a gap of more than a year, an emptied ring or people more
-        than 25% off the last census's; step once a year; nothing on a second pulse in the same
-        year (Review Focus 3)."""
+        """Seed when there is no census, a gap of more than a year or an emptied ring; step once a year, however far
+        the people moved (owner, 2026-10-20); nothing on a second pulse in the same year (Review Focus 3)."""
         self.assertIn("te_demog_state_census = yes", _block(_text(EFFECTS), "te_demog_state_yearly"))
         body = _block(_text(EFFECTS), "te_demog_state_census")
         self.assertIn("te_demog_cohorts_run = yes", body)
@@ -304,19 +303,18 @@ class TestStep(unittest.TestCase):
         self.assertIn("te_demog_step = yes", body)
         self.assertIn("local_var:te_dg_gap > 1", body)
         self.assertIn("local_var:te_dg_gap = 1", body)
-        self.assertIn("value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 1.25 } }", body)
-        self.assertIn("value = { value = state_population subtract = { value = var:te_dg_pop_last multiply = 0.75 } }", body)
+        # no size test: the move goes to the step's booking, the known moves with it
+        code = re.sub(r"#[^\n]*", "", body)
+        for gone in ("te_dg_pop_last", "te_dg_over", "te_dg_under", "te_demog_rs_known_change", "1.25", "0.75"):
+            self.assertNotIn(gone, code)
 
     def test_the_branch_limits_compare_locals(self):
         """Observer tests of #830 and #833 (2026-10-09): state_population > { value =
         var:te_dg_pop_last multiply = 1.25 } held for every state with people, even 0.3% up, and its
-        0.75 twin for none, so every state seeded at every pulse and none stepped. The pulse takes
-        the move into locals, as people less 1.25 and 0.75 times the last census's, and its limits
-        compare those with 0."""
+        0.75 twin for none, so every state seeded at every pulse and none stepped. The size test went on
+        2026-10-20 (owner); the limits left compare a local (the gap) and literals."""
         body = re.sub(r"#[^\n]*", "", _block(_text(EFFECTS), "te_demog_state_census"))
         self.assertNotRegex(body, r"state_population [<>]=? \{")
-        self.assertIn("local_var:te_dg_over > 0", body)
-        self.assertIn("local_var:te_dg_under < 0", body)
         self.assertIn("value = { value = te_demog_year subtract = var:te_dg_year }", body)
         self.assertIn("set_variable = { name = te_dg_year value = te_demog_year }", _block(_text(EFFECTS), "te_demog_set_scale"))
 
@@ -435,12 +433,17 @@ SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog
                     "te_debug_demog_fl_selfcheck_start": "", "te_debug_demog_fl_neighbours_check": "",
                     "te_debug_demog_neighbours_selfcheck": "",
                     # issue #1029's (it reads debug_log and the state's name): TestCauseDeaths reads its text
-                    "te_debug_demog_cause_deaths_selfcheck": ""}
+                    "te_debug_demog_cause_deaths_selfcheck": "",
+                    # the census's province line (2026-10-20): a debug_log line; TestProvinceLine runs its text
+                    "te_debug_demog_province_change": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
 PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
 # Issue #1029: the month a state's count is taken (te_dg_count_mi, the subtab's next count), te_history_month_index, which
 # reads the calendar's month: the start of 1836's year unless a test says.
 PANEL_DEFAULTS = {"te_history_month_index": 1836.0 * 12}
+# The territory counts (te_demog_territory_values.txt, 2026-10-20) iterate provinces and states, which _ops can't: a
+# state's provinces and a country's states, constant unless a test says.
+TERRITORY_DEFAULTS = {"te_demog_state_provinces": 10.0, "te_demog_wc_state_count": 5.0}
 
 
 class _Engine:
@@ -487,7 +490,8 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS,
+                         **TERRITORY_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
@@ -1286,12 +1290,13 @@ class TestCohortScript(unittest.TestCase):
             ((1836, 0.5, 1000.0, 1000.0, True), 1),
             ((1836, 0.5, 0.0, 0.0, True), 2),
             ((None, None, 1000.0, None, False), None),
-            # a state merged or split: people more than a quarter off the last census's
-            ((1836, 900.0, 1251.0, 1000.0, True), 1),
-            ((1836, 900.0, 749.0, 1000.0, True), 1),
-            ((1836, 900.0, 1250.0, 1000.0, True), 2),
-            ((1836, 900.0, 750.0, 1000.0, True), 2),
-            ((1837, 900.0, 1400.0, 1000.0, True), 1),
+            # people far off the last census's: a step all the same (owner, 2026-10-20), which books the move as
+            # migration; until then a move of more than a quarter seeded again
+            ((1836, 900.0, 1251.0, 1000.0, True), 2),
+            ((1836, 900.0, 749.0, 1000.0, True), 2),
+            ((1836, 900.0, 5740.0, 1000.0, True), 2),
+            ((1836, 900.0, 250.0, 1000.0, True), 2),
+            ((1837, 900.0, 1400.0, 1000.0, True), None),
         ]
         for (census, raw, pop, pop_last, rule), want in cases:
             eng = _Engine({"year": 1837.0, "state_population": pop}, triggers={"te_demog_cohorts_run": rule},
@@ -1300,6 +1305,20 @@ class TestCohortScript(unittest.TestCase):
                 eng.vars.update(te_dg_year=float(census), te_dg_raw=raw, te_dg_pop_last=pop_last)
             eng.call("te_demog_state_yearly")
             self.assertEqual(eng.vars.get("did"), want, (census, raw, pop, pop_last, rule))
+
+    def test_a_big_move_is_stepped_and_booked_as_migration(self):
+        """No size test (owner, 2026-10-20): the census pulse steps a state whose people grew 5.7 times (Kars in the
+        owner's 2057 game) or fell by 70%, and the step books the move by the model's own rule (the profile up to
+        MIGRANT_CAP_IN or _OUT of each class and sex, the rest flat), keeping the year's births and deaths."""
+        for factor in (5.74, 0.3):
+            with self.subTest(factor=factor):
+                flows = dict(eb=1200.0, ed=900.0, crisis=0.0, fjob_share=0.3,
+                             migration=(factor - 1.0) * self.POP)
+                eng, ring, figures, pop = self.step_both(flows=flows, entry="te_demog_state_census")
+                self.assertEqual(eng.vars["te_dg_stepped"], 1, "a step, not a seed")
+                self.assertGreater(eng.vars["te_dg_births"], 0.0)
+                self.check_step(eng, ring, figures, pop)
+                self.close(eng.vars["te_dg_net_migration"], flows["migration"], what="net migration")
 
     # -- phase 2 step 4: the on-top scales (te_demog_on_top_scales) -----------------------------
 
@@ -6022,7 +6041,7 @@ class TestFastMode(unittest.TestCase):
     def test_a_clock_step_walks_steps_and_refreshes_the_rates(self):
         cases = [((1899.0, 1000.0), 2),   # a step on: the census steps
                  ((1898.0, 1000.0), 1),   # a step missed (no owner at it): seed again
-                 ((1899.0, 1300.0), 1)]   # a merge or split: seed again
+                 ((1899.0, 1300.0), 2)]   # people 30% up: a step all the same (owner, 2026-10-20)
         for (census, pop), want in cases:
             eng = self._eng(True, {"state_population": pop}, effects=self.STUBS)
             eng.vars.update(te_dg_year=census, te_dg_raw=900.0, te_dg_pop_last=1000.0)

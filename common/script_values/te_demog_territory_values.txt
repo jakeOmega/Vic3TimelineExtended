@@ -1,0 +1,29 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — territory counts (owner, 2026-10-20)
+# ============================================================================
+# Two counts of what a scope holds, read where a change of territory matters:
+# the census's province line (te_demog_state_census, te_dg_provinces) and Wealth
+# Concentration's growth sample (te_demog_wc_growth_update, te_dg_wc_states).
+# ============================================================================
+
+# State scope: the state's provinces. A script value's every_province reads a
+# state's provinces, as the base game counts them (occupation_values.txt,
+# provinces_with_hazardous_terrain, root = state) and gm_state_province_count
+# does. As an effect every_province is registered from a province, not a state,
+# so the count is only ever taken here, in a value block.
+te_demog_state_provinces = {
+	value = 0
+	every_province = {
+		add = 1
+	}
+}
+
+# Country scope: the states it holds. A year in which this changed takes no growth
+# sample into r > g's average (te_demog_wc_growth_update): its GDP is another
+# territory's.
+te_demog_wc_state_count = {
+	value = 0
+	every_scope_state = {
+		add = 1
+	}
+}
