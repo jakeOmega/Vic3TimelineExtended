@@ -28,6 +28,8 @@ Usage:
                                                         # calibration step 3: absorption, the malaria factor, the gate
     demographics_harness.py lategame [--years N]        # phase 3: a rich state to 2300 under each era ladder and
                                                         # immortality, judged against the late-game design's sketch
+    demographics_harness.py uploads [--years N]         # uploaded minds: the Nexus's calibration, one and three
+                                                        # full Nexuses at era 11, the transition and era 12
 
 SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
 The model is demographics_model.py with demographics_params.py; the generator writes the
@@ -107,6 +109,12 @@ def cmd_lategame(args):
     """Phase 3: the late game's scenarios (demographics_late.py)."""
     import demographics_late
     return demographics_late.main(args)
+
+
+def cmd_uploads(args):
+    """Uploaded minds (demographics_uploads.py): the calibration and the scenarios."""
+    import demographics_uploads
+    return demographics_uploads.main(args)
 
 
 def cmd_sketch(_args):
@@ -2470,6 +2478,10 @@ def main(argv=None):
                                         "late-game design's figures, the per-cohort truth and the adult-mortality check")
     p.add_argument("--years", type=int, default=280, help="years from 2020 (default 280: to 2300)")
     p.set_defaults(fn=cmd_lategame)
+    # uploaded minds (demographics_uploads.py)
+    p = sub.add_parser("uploads", help="uploaded minds: the Nexus's calibration and one and three full Nexuses")
+    p.add_argument("--years", type=int, default=60, help="years from the start (default 60)")
+    p.set_defaults(fn=cmd_uploads)
     p = sub.add_parser("inputs")
     p.add_argument("save")
     p.add_argument("--tag", action="append", default=[])

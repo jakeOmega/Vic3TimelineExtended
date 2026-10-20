@@ -1721,6 +1721,8 @@ te_demog_lx_group_flush = {
 	set_local_variable = { name = te_dg_lx_gtm value = 0 }
 	set_local_variable = { name = te_dg_lx_gtqf value = 0 }
 	set_local_variable = { name = te_dg_lx_gtqm value = 0 }
+	# uploaded minds (2026-10-19): the treated's infection-and-chronic sums, while this step books uploads
+	if = { limit = { local_var:te_dg_um_sums > 0 } te_demog_um_group_flush = yes }
 }
 
 # THIS = a state after the late sweep (te_demog_lx_sweep_run, after te_demog_lx_finish's last flush): each natural cause's

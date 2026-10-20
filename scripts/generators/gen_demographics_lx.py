@@ -160,6 +160,8 @@ def group_flush(o):
     for name in GROUP_SUMS:
         for s in "fm":
             o(f"set_local_variable = {{ name = te_dg_lx_g{name}{s} value = 0 }}")
+    o("# uploaded minds (2026-10-19): the treated's infection-and-chronic sums, while this step books uploads")
+    o("if = { limit = { local_var:te_dg_um_sums > 0 } te_demog_um_group_flush = yes }")
     o("}")
     o("")
 

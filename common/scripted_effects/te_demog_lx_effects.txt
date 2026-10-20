@@ -34,6 +34,9 @@
 # groups' rates at the model's own multipliers (before the step's on-top scales).
 te_demog_lx_begin = {
 	set_local_variable = { name = te_dg_lx_on value = 0 }
+	# uploaded minds (te_demog_um_effects.txt): whether this step books uploads, and keeps the sweep's sums for them
+	set_local_variable = { name = te_dg_um_on value = 0 }
+	set_local_variable = { name = te_dg_um_sums value = 0 }
 	set_local_variable = { name = te_dg_lx_lv value = te_demog_lx_ecto_levels }
 	if = {
 		limit = {
@@ -160,6 +163,8 @@ te_demog_lx_begin = {
 		set_variable = { name = te_dg_lx_pub value = local_var:te_dg_lx_pub }
 		# the age groups' rates at the model's own multipliers (generated), before te_demog_on_top_scales scales them
 		te_demog_lx_group_rates_unscaled = yes
+		# uploaded minds: under Full with the owner's capacity, the age groups' infection and chronic rates too
+		te_demog_um_begin = yes
 	}
 }
 
@@ -500,6 +505,11 @@ te_demog_lx_deaths = {
 		set_local_variable = { name = te_dg_lx_rb value = { value = local_var:te_dg_r subtract = local_var:te_dg_lx_bd } }
 		te_demog_lx_rates_at = yes
 		te_demog_lx_causes_at = yes
+		# uploaded minds: the treated part's infection and chronic deaths at its body's age (te_demog_um_effects.txt)
+		if = {
+			limit = { local_var:te_dg_um_sums > 0 }
+			te_demog_um_slot = yes
+		}
 		set_local_variable = {
 			name = te_dg_lx_t2f
 			value = {
@@ -712,6 +722,10 @@ te_demog_lx_fold_deaths = {
 		change_local_variable = { name = te_dg_lx_gtqf add = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_lx_uqf } }
 		change_local_variable = { name = te_dg_lx_gtqm add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_lx_uqm } }
 		te_demog_lx_causes_at = yes
+		if = {
+			limit = { local_var:te_dg_um_sums > 0 }
+			te_demog_um_slot = yes
+		}
 		set_local_variable = { name = te_dg_lx_alive value = { value = var:te_dg_pf add = var:te_dg_pm } }
 		set_variable = { name = te_dg_lx_ps value = 0 }
 		if = {

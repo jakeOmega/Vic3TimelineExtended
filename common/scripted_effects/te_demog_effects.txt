@@ -732,8 +732,9 @@ te_demog_seed = {
 	set_local_variable = { name = te_dg_raw value = state_population }
 	set_variable = { name = te_dg_births value = 0 }
 	set_variable = { name = te_dg_deaths value = 0 }
-	# and no deaths by cause (issue #1029; te_demog_cause_deaths_store)
+	# and no deaths by cause (issue #1029; te_demog_cause_deaths_store), and no uploads (te_demog_um_effects.txt)
 	te_demog_cause_deaths_zero = yes
+	te_demog_um_clear_state = yes
 	# phase 2 step 4 (te_demog_rate_effects.txt): a seed starts the census's target over. The model's
 	# rates from before it are another state's (a merge, a split) or years stale (a census gap), and would
 	# scale the next step's births and deaths by their ratio to today's; without them that step takes no
@@ -1703,6 +1704,8 @@ te_demog_country_yearly = {
 	te_demog_pension_ai = yes
 	# phase 3: the longevity gap's country modifier off outside Full, which the census's own refresh can't reach
 	te_demog_lx_politics_clear = yes
+	# uploaded minds: the research cancel and the Devout's approval off outside Full (te_demog_um_effects.txt)
+	te_demog_um_clear_outside_full = yes
 }
 
 # THIS = a country (phase 2 step 1; docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.2):
@@ -2079,6 +2082,8 @@ te_demog_step_finish = {
 	}
 	# issue #1029: the year's deaths by cause, for the Causes of Death section
 	te_demog_cause_deaths_store = yes
+	# uploaded minds (2026-10-19): which of the deaths uploaded, into the owner's pool (te_demog_um_effects.txt)
+	te_demog_um_step = yes
 	# a step's figures, whatever its births (te_demog_set_trend)
 	set_local_variable = { name = te_dg_from_step value = 1 }
 	te_demog_set_scale = yes
@@ -2247,7 +2252,8 @@ te_demog_state_figures = {
 	te_demog_store_figures = yes
 	# births and deaths per 1,000 people
 	set_variable = { name = te_dg_cbr value = { value = var:te_dg_births divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
-	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
+	# true deaths: less the uploads its last step booked (uploaded minds, call 6; te_demog_um_step)
+	set_variable = { name = te_dg_cdr value = { value = var:te_dg_deaths subtract = te_demog_um_state_uploads divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
 	# issue #1029: net migration per 1,000 people, the overview's third line (0 after a seed, which books none)
 	if = {
 		limit = { has_variable = te_dg_net_migration }
@@ -2361,6 +2367,8 @@ te_demog_country_census = {
 	set_local_variable = { name = te_dg_c_mat_w value = 0 }
 	set_local_variable = { name = te_dg_c_mat_p value = 0 }
 	te_demog_cause_deaths_country_init = yes
+	# uploaded minds: the year's uploads and eligible deaths (te_demog_um_effects.txt)
+	te_demog_um_country_init = yes
 	te_demog_practices_country_init = yes
 	# phase 3: Family Limitation's and Cultural Hegemony's inputs (te_demog_fl_effects.txt)
 	te_demog_fl_country_init = yes
@@ -2453,6 +2461,7 @@ te_demog_country_census = {
 			change_local_variable = { name = te_dg_c_cdrm_pm add = local_var:te_dg_c_s_pm }
 		}
 		te_demog_cause_deaths_country_add = yes
+		te_demog_um_country_add = yes
 	}
 	if = {
 		limit = { local_var:te_dg_seeded > 0 }
@@ -2520,6 +2529,9 @@ te_demog_country_census = {
 			set_variable = { name = te_dg_inf_ad value = 1 }
 		}
 		te_demog_cause_deaths_country_store = yes
+		# uploaded minds (2026-10-19): deaths per 1,000 less the uploads, then the pool's year under Full
+		# (te_demog_um_effects.txt)
+		te_demog_um_country = yes
 		# the census's own deaths per 1,000 people under Full (the Causes of Death section's Added on Top hover), by
 		# people over the states that hold one
 		if = {

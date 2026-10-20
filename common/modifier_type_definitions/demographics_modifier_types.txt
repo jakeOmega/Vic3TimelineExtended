@@ -304,3 +304,21 @@ state_metro_share_add = {
 	decimals = 0
 	script_only = yes
 }
+
+# Uploaded minds (2026-10-19; docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md §3, call 2): Mind
+# Backups' restore, read only by the census (te_demog_cause_inputs_store), which adds each x the state's longevity care E
+# to accidents and violence and to work, so only those in care are restored:
+#   state_backup_external_mortality_mult  deaths from accidents and violence of those in care (Mind Backups -0.5)
+#   state_backup_work_mortality_mult      deaths at work of those in care (Mind Backups -0.5)
+state_backup_external_mortality_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_backup_work_mortality_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

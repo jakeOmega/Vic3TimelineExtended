@@ -433,6 +433,14 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_demog_um_devout }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_um_research }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_fx_strong }
 		add = 1
 	}
@@ -1162,6 +1170,10 @@ te_nation_list_society_count = {
 		limit = { has_modifier = te_demog_pension_pos_raised }
 		add = 1
 	}
+	if = {
+		limit = { has_modifier = te_demog_um_devout }
+		add = 1
+	}
 }
 
 # Used by: the Nation tab's economy list (gui/te_nation_tab.gui)
@@ -1653,6 +1665,10 @@ te_nation_list_science_and_space_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_demog_um_research }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
@@ -2022,6 +2038,10 @@ te_nation_types_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = te_demog_pension_pos_raised }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_um_devout }
 		add = 1
 	}
 	if = {
@@ -2670,6 +2690,10 @@ te_nation_group_interest_groups_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_demog_um_devout }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_inflation_band_deflation }
 		add = 1
 	}
@@ -2981,6 +3005,10 @@ te_nation_type_interest_group_ig_devout_approval_add_count = {
 	}
 	if = {
 		limit = { has_modifier = te_demog_ms_sex_education }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_um_devout }
 		add = 1
 	}
 	if = {
@@ -5077,6 +5105,10 @@ te_nation_types_science_and_space_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_demog_um_research }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
@@ -5186,6 +5218,10 @@ te_nation_group_research_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_demog_um_research }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_membership_benefits_modifier }
 		add = 1
 	}
@@ -5256,6 +5292,10 @@ te_nation_type_country_tech_research_speed_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = te_antarctic_station_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_um_research }
 		add = 1
 	}
 	if = {
