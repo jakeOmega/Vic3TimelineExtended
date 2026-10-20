@@ -392,6 +392,8 @@ te_demog_state_yearly = {
 		te_demog_wc_state_yearly = yes
 	}
 	te_inh_refresh_wc_state_effects = yes
+	# the Inequality effect, under Full only (te_demog_wealth_effects.txt): on the latest walk's Gini
+	te_demog_inequality_refresh = yes
 	if = {
 		limit = { NOT = { te_demog_clock_on = yes } }
 		te_demog_state_census = yes

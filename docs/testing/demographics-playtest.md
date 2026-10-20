@@ -793,6 +793,46 @@ a census type is the Contraceptive Pill's. So no self-check. What only the game 
    change, unless its owner has an aviation tech: there the young-adult bulge of its arrivals or departures is a little
    flatter.
 
+## Wealth Concentration's remaining shocks, r > g and the Inequality effect (2026-10-19)
+
+The financial boom (+5 once a banking cycle reaches Frenzy), the ownership shocks (a state's state-owned share of its
+capital moving 10 points or more in a year: half a point a point, at most ±10), land reform (−10 × each state's
+agrarian share) and the target's seventh term, Return on Capital (2 × (the real policy rate − growth averaged over
+about five years), at most ±5, once the banking cycle has started), all under every Demographics rule; and the
+Inequality effect (`te_demog_census_inequality`, radicals from movements up to +10% from a shown Gini of 0.45 to 0.65)
+under Full only. `test_demographics_wc_shocks.py` runs each through the interpreter. No new engine fact: the reads are
+the ownership term's walk, `has_law_or_variant` (the monetary system's), `on_state_owner_change` (five systems'), the
+banking triggers and the radicals type Concentrated Property carries, so no self-check. What only the game can show:
+
+1. **The boom (any rule, the banking rule on).** A country whose cycle reaches Frenzy: every state's Wealth
+   Concentration jumps 5 that month (a step in the History chart's Wealth Concentration bars, the state subtab's
+   score). No second jump while the cycle stays in Boom or Frenzy; after it falls below Boom (a crash takes it to 40 or
+   less), the next Frenzy jumps again. Two cases that are by design, not bugs: a Frenzy pulled back below Boom
+   without a crash (a rescue with the cycle's tools) re-arms too, so its next Frenzy takes another +5 with no −5
+   between; and a save loaded while a country is already in Frenzy takes the +5 at that country's first monthly pulse,
+   since that frenzy was never counted.
+2. **An ownership shock (any rule).** In a state of 20 capital levels or more, nationalise buildings holding a tenth or
+   more of its capital (the building panel): at the state's next yearly pulse its score falls by half the points moved
+   (a fifth of its capital nationalised: −10). Privatising them back raises it the same way. A state that changed hands
+   in the year, or whose people moved more than a quarter, takes none that year. The rule measures the state-owned
+   share, so a year of private building that dilutes a large state-owned share raises the score the same way.
+3. **Land reform (any rule).** Enact Peasant Proprietorship (or Homesteading, or Collectivized Agriculture) from Serfdom
+   or Tenant Farmers or a variant: within a month every state's score falls by 10 × its share of Peasants and Farmers
+   (the state subtab's Land Tenure hover gives the share), and the national figure follows. From Commercialized
+   Agriculture nothing jumps.
+4. **Return on Capital (any rule).** The row reads 0 on both tabs until the cycle has started and a 31 December has
+   passed with a year's growth behind it. After that its hover gives the real rate (the policy rate less inflation) and
+   the growth average, the row is 2 × their difference within ±5, and 50 plus the seven rows is the target (unless it
+   is at 0 or 100, or Continuity of Title holds). Open a foreign state's subtab: the row and hover are its owner's.
+   Until the term is in force (the banking rule off, the cycle not started, or no 31 December with a year's growth
+   since), the hover gives no figures and says it adds nothing (`te_demog_wc_rg_on`).
+5. **A revolution's land reform (any rule).** A revolution for Peasant Proprietorship that overthrows a Serfdom or
+   Tenant Farmers government and wins: within a month of the win every state's score falls by 10 × its agrarian share,
+   as for the same law enacted in peace (`te_demog_wc_civil_war_inherit` gives the winner the old government's law
+   role). The winner's Return on Capital growth average carries on from the old government's.
+6. **The Inequality effect (Full).** A state whose shown Gini is above 0.45 lists Census: Inequality, with radicals
+   from movements +5% at 0.55 and +10% from 0.65; none under Display only or Disabled.
+
 ## Uploaded minds (2026-10-19)
 
 The uploaded-minds spec's build (`docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
