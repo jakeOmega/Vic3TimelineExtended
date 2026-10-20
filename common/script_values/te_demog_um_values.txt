@@ -172,3 +172,9 @@ te_demog_um_any_minds = {
 		add = var:te_dg_um_am
 	}
 }
+# State scope, in te_debug_demog.131: the building's other tourism (its read less this build's modifier) less the
+# state's own read
+te_debug_demog_um_chk_tour_gap = {
+	value = var:te_dg_um_chk_bd_tour
+	subtract = var:te_dg_um_chk_st_tour
+}

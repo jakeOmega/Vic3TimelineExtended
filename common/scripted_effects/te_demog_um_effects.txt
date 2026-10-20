@@ -32,8 +32,11 @@
 #   te_dg_um_util       active minds over capacity
 #   te_dg_um_share      minds (active and archived) over people and minds
 #   te_dg_um_rmult      the research cancel's multiplier (te_demog_um_research)
-# A revolutionary country keeps none of them, so a rebel winner inherits the nation's pool through the variable merge
-# (te_demog_um_repair_after_civil_war).
+# A revolutionary country keeps no pool, so a rebel winner inherits the nation's through the variable merge
+# (te_demog_um_repair_after_civil_war). The rebels can hold two of them: te_dg_um_rate and te_dg_um_l100, the yearly
+# figures their census writes, under any rule, from states that uploaded under the old owner. Both are inert, and the
+# next census recomputes them, so a rebel win that keeps the rebels' values for them is harmless. Likewise the monthly
+# refresh writes a Nexus state's te_dg_um_month under every rule, an inert script variable outside Full.
 # ============================================================================
 
 # THIS = a state, in te_demog_lx_begin after the age groups' own rates (te_demog_lx_group_rates_unscaled, the step's own
@@ -629,8 +632,9 @@ te_debug_demog_um_ownership_info = {
 # the building's expected digital assets output and advanced materials input modifiers, each everything else on the
 # good (the locals te_dg_um_oth_*) plus this build's (te_dg_um_k_*), for te_debug_demog.130 to read off the building a
 # week on. Only at a utilisation of 0.9 or less with the advanced materials figure at 1 or more: far from what either
-# axis reads without the modifier (its other bonuses), from a multiplier read as 0 (-1) and from one the engine took
-# at 1, so OK can't be a false pass.
+# axis reads without the modifier or with its multiplier read as 0 (its other bonuses alone) and from one the engine
+# took at 1, so OK can't be a false pass. It compares the building's read with itself, so it can't see whether that read
+# carries the state's and country's lines: te_debug_demog.131's um_nexus_cascade checks that.
 te_debug_demog_um_selfcheck_start = {
 	set_local_variable = {
 		name = te_dg_um_chk_da_l
@@ -653,5 +657,21 @@ te_debug_demog_um_selfcheck_start = {
 		debug_log = "TE_SELF_CHECK START um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] expected_digital_assets=[THIS.Var('te_dg_um_chk_da').GetValue|3] expected_advanced_materials=[THIS.Var('te_dg_um_chk_am').GetValue|3] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
 		trigger_event = { id = te_debug_demog.130 days = 7 }
+	}
+	# um_nexus_cascade (review R1 of #1070): once a game, whether a building's read of a goods axis carries what its
+	# state and country add (the airports' and tourism_output's tourism, the financial cycle's services), which the
+	# refresh's other bonuses rest on. Armed only where the state's own tourism read is at least 0.3, so 0 against 0
+	# can't pass; te_debug_demog.131 compares the two a week on.
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_selfcheck_um_cascade_done }
+			modifier:goods_output_tourism_mult >= 0.3
+		}
+		set_global_variable = { name = te_demog_selfcheck_um_cascade_done value = yes }
+		set_variable = { name = te_dg_um_chk_st_tour value = modifier:goods_output_tourism_mult }
+		set_variable = { name = te_dg_um_chk_bd_tour value = local_var:te_dg_um_oth_out_tourism }
+		debug_log = "TE_SELF_CHECK START um_nexus_cascade state_tourism=[THIS.Var('te_dg_um_chk_st_tour').GetValue|3] building_other_tourism=[THIS.Var('te_dg_um_chk_bd_tour').GetValue|3] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		trigger_event = { id = te_debug_demog.131 days = 7 }
 	}
 }

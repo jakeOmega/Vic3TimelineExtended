@@ -564,12 +564,13 @@ class _NexusEngine(_UmEngine):
         flush()
 
 
-def _nexus(util=0.5, other=None, full=True, owner=True):
+def _nexus(util=0.5, other=None, full=True, owner=True, state_tourism=0.0):
     """A state with a 3-level Nexus at 80% staffing, its owner's utilisation `util`, `other` the building's other bonuses
-    {field: sum}."""
+    {field: sum}, `state_tourism` the state's own read of the tourism output axis."""
     building = {"mods": {}, "other": dict(other or {}), "level": 3.0, "occupancy": 0.8, "self_ownership_fraction": 0.1,
                 "country_ownership_fraction": 0.7, "private_ownership_fraction": 0.2}
-    eng = _NexusEngine({"te_history_month_index": 2400.0}, building=building,
+    eng = _NexusEngine({"te_history_month_index": 2400.0, "modifier:goods_output_tourism_mult": state_tourism},
+                       building=building,
                        owner_vars={"te_dg_um_util": util} if owner else {},
                        triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
     return eng
@@ -637,6 +638,23 @@ class TestNexusRefreshScript(unittest.TestCase):
                     self.assertAlmostEqual(eng.vars["te_dg_um_chk_da"], eng.read_axis("goods_output_digital_assets_mult"))
                     self.assertAlmostEqual(eng.vars["te_dg_um_chk_am"], 8 * util - 1)
                     self.assertEqual(len(eng.events), 1)
+
+    def test_the_cascade_check_arms_where_the_state_lifts_tourism(self):
+        """Review R1: um_nexus_cascade compares the building's other tourism with the state's own read, armed only where
+        that read is at least 0.3 (0 against 0 can't pass), whatever the utilisation."""
+        for st, armed in ((0.1, False), (0.5, True)):
+            with self.subTest(state_tourism=st):
+                eng = _nexus(0.05, self.OTHER, state_tourism=st)
+                eng.call("te_demog_um_nexus_refresh")
+                self.assertEqual("te_dg_um_chk_st_tour" in eng.vars, armed)
+                if armed:
+                    self.assertEqual(eng.vars["te_dg_um_chk_st_tour"], 0.5)
+                    self.assertAlmostEqual(eng.vars["te_dg_um_chk_bd_tour"], self.OTHER["goods_output_tourism_mult"])
+                    self.assertIn("te_demog_selfcheck_um_cascade_done", eng.globals)
+        text = (ROOT / "events" / "te_debug_demog_um_events.txt").read_text(encoding="utf-8-sig")
+        verdict = text.split("te_debug_demog.131 = {")[1]
+        self.assertIn("te_debug_demog_um_chk_tour_gap <= 0.25", verdict)
+        self.assertIn("te_debug_demog_um_chk_tour_gap >= -0.05", verdict)
 
     def test_the_ownership_line_once(self):
         eng = _nexus(0.5)
