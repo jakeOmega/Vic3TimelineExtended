@@ -272,6 +272,29 @@ country_family_limitation_literacy_mult = {
 	script_only = yes
 }
 
+# The migrant profile's two law and technology inputs (modifier-types design, stage 3, 2026-10-19; they were a has_law
+# ladder and a has_technology_researched ladder). Read only by the census:
+#   state_female_work_share_add   women's share of the workforce, 0.1 + it, within 0-1 (te_demog_female_work_share): the
+#                                 women's-rights laws, Women in the Fields 0.15, Women Own Property 0.20, Women in the
+#                                 Workplace 0.35, Women's Suffrage 0.37, Protected Class 0.38. It sets the labour
+#                                 migrants' women's share, the family kind's weight and Late Marriage's women's-work
+#                                 term, and splits work deaths outside Full (under Full the census's own count does)
+#   state_family_migration_add    the family kind's weight in the migrant profile, + FAMILY_BASE (te_demog_family_transport):
+#                                 the transport technologies, Paddle Steamer and Railways 0.10, Combustion Engine 0.15,
+#                                 Commercial Aviation and Jet Engine Technology 0.05
+state_female_work_share_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_family_migration_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
 # The metropolitan share (phase 3, spec §5.2; 2026-10-19): points on the target of the share of a state's urban people
 # living in its largest city (te_demog_mt_t_planning, te_demog_metro_values.txt). On the Ministry of Urban Planning,
 # -1 a level: green belts and new towns.

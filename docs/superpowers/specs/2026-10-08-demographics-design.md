@@ -564,8 +564,9 @@ state. The stock is the #822 score.
 - **Effects, light on purpose.** Vanilla already turns wealth into clout. Inequality mainly feeds the stock (§4.2) and
   the panel, plus two small effects:
   - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
-    scale: set it afresh on the wealth-band figure when this is built);
-  - an input to crime for the policing laws.
+    scale: set it afresh on the wealth-band figure when this is built). **Built 2026-10-19, under Full only** (owner):
+    radicals rise with the state's shown Gini above 0.45, by up to 10% at 0.65 (§7's Inequality row);
+  - an input to crime for the policing laws. **Dropped** (owner, 2026-10-19): the engine has no crime quantity.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
 
@@ -625,19 +626,43 @@ The panel shows the target's terms as bars (style guide rule 5), and will show a
 | Income inequality | state | +40 × (the state's shown Gini − 0.40), at most +15 (from 0.775), at least −4 (owner, 2026-10-10; 28 × (computed − 0.143): centred on 1836's median state, capped near Britain's industrial peak, a shallow bottom) | fortunes grow from unequal flows: the rich save more; equal incomes stop them growing, and the inheritance laws and taxes break them up |
 | Taxes on wealth | national | Graduated Taxation −5; the tax code's dividend and estate settings when that rule is on | |
 | Economic laws (owner, 2026-10-09) | national | Laissez-Faire +10, Extraction Economy +5, Interventionism −5; Guilds and Chartered Monopolies and Freedom of Contract +5, Antitrust Enforcement (`law_trust_busting`) and Regulated Utilities −5; others 0; capped ±15 | how freely capital compounds and combines: top-decile wealth shares rose to about 1910 under laissez-faire and fell to the 1970s under regulation, which the other terms alone ran backwards |
-| Return on capital against growth (later phase) | national | from the banking system's policy rate against GDP growth | Piketty's r > g; only where the banking system runs |
+| Return on capital against growth (built 2026-10-19) | national | 2 × (the real policy rate − GDP growth averaged over about five years), in percentage points, at most ±5; 0 until the country's banking cycle has started (owner). The real rate is the policy rate less headline inflation, as the stance gap takes it: the engine has no nominal prices, so GDP grows in real terms | Piketty's r > g; only where the banking system runs |
 
 **Built as law modifiers (2026-10-17).** The land tenure, taxes on wealth and economic laws rows sit on the laws as script-only types (`state_wealth_concentration_land_add`, `country_wealth_concentration_tax_add`, `country_wealth_concentration_economy_add`), each variant carrying its parent's value, so a law's tooltip says what it does. They are not census inputs (Wealth Concentration runs whatever the Demographics rule), so a release keeps them. No group holds two of the laws, so no figure moves.
 
 **Shocks** jump the score instead of moving its target. They follow Scheidel's four levellers (*The Great Leveler*,
 2017):
-- **War** (every state): each year of total mobilisation −1, up to −10 a war; capitulation −5.
-- **Devastation and occupation** (the states hit): local capital is destroyed, scaled by devastation.
-- **Revolution** (every state, or the rebel states): a left revolution that wins, −20.
+- **War** (every state): each year of total mobilisation −1, up to −10 a war; capitulation −5. Built (phase 2).
+- **Devastation and occupation** (the states hit): local capital is destroyed, scaled by devastation. Built (phase 2).
+- **Revolution** (every state, or the rebel states): a left revolution that wins, −20. Built (phase 2).
 - **Money** (every state): a hyperinflation or banking crisis from the monetary system, −5 to −10, since bond fortunes
-  vanish.
-- **Events** (the states named): land reform, nationalisation and plague, −5 to −15.
-- **Upward:** privatisation waves and financial booms, +5.
+  vanish. The banking crash's −5 is built (phase 2); a hyperinflation's is not.
+- **Events** (the states named): land reform and nationalisation, −5 to −15. Built as the land-reform and ownership
+  shocks below (2026-10-19), which catch every cause, not only events. Plague is dropped: the mod has no plague events.
+- **Upward:** privatisation waves and financial booms, +5. Built (2026-10-19): the ownership shock's privatisations and
+  the banking cycle's Frenzy.
+
+**Built (2026-10-19), the remaining shocks and r > g** (owner's calls; `te_demog_wealth_effects.txt`). All run under
+every Demographics rule setting, like the rest of Wealth Concentration:
+- **Financial boom:** +5 to every state once the banking cycle reaches Frenzy, once a cycle (`te_demog_wc_boom_check`,
+  monthly). It re-arms when the cycle falls below Boom; every crash lowers the cycle to 40 or less once its option
+  lands, so a crash re-arms it.
+- **Ownership shocks, whatever the cause** (laws, the building panel's nationalise and privatise, decolonisation's
+  nationalisations, war goals): when the state-owned share of a state's capital levels (the ownership term's walk and
+  capital filter) moves 10 points or more in a year, its score jumps half a point per point moved, at most 10 either way:
+  up as the share falls (a privatisation), down as it rises (a nationalisation). It measures the share, so one side's
+  capital growing faster than the other's moves it too (`te_demog_wc_ownership_shock`, on the state's pulse, keeping last
+  year's share in `te_dg_wc_sown`). No shock in the first year a share is stored, after a change of owner (which clears
+  it), when the state's people moved more than 25% in the year, or under 20 capital levels (the build's guard: in 1849
+  most states held under 10, where one state-owned level is 10 points or more).
+- **Land reform:** enacting Peasant Proprietorship or Collectivized Agriculture from Serfdom or Tenant Farmers (each
+  with its variants) jumps each state's score by −10 × its agrarian share. Detected on the monthly pulse against last
+  month's law (`te_demog_wc_land_reform_check`), so no vanilla law needs an `on_activate` and every way a law changes
+  counts. A won revolution counts too: the winner continues the nation, so it takes the old government's law role
+  (and r > g's GDP baseline and growth average) in `inh_repair_after_civil_war`, and the next month compares that with
+  the rebels' law.
+- **r > g:** the target's seventh term (the table above), stored on 31 December (`te_demog_wc_growth_update`): growth
+  averaged at a weight of 0.2 a year, each year's clamped to ±10 so a conquest moves it by 2 at most.
 
 **What it moves.** None of these effects repeats what pop wealth already does:
 
@@ -774,7 +799,7 @@ state pulse and country effects from the country pulse. Sizes are starting propo
 | **Conscription** | `state_conscription_rate_mult` | men aged 20–39 ÷ the 1836 reference − 1 | ±0.25 |
 | **Youth bulge** | radicals from movements, turmoil effects | ages 20–29 above about 18% of the population (1836's share is about 17%), × the state's unemployment rate | small |
 | **Sex balance** | births, working-adult ratio, movements, radicals | §3 | small |
-| **Inequality** | lower-strata radicals; crime | §4.1 | small |
+| **Inequality** (built 2026-10-19, Full only) | `te_demog_census_inequality`: radicals from movements, state-wide (the engine has no lower-strata radicals type); crime dropped (no engine quantity) | §4.1: (the shown Gini − 0.45) / 0.20, 0–1, on +10% | +10%, at 0.65 |
 | **Wealth Concentration** | clout, investment pools, mobility, radicals, rural migration | §4.2 | as now |
 | **National urban pattern** | throughput and migration pull in the primate state; pull and turmoil elsewhere | §5.1 | small |
 | **Settlement pattern** | crowding density, infrastructure from population, throughput, fertility, turmoil | §5.2 | small |

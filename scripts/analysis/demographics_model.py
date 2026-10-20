@@ -84,10 +84,9 @@ def wealth_tfr(sol):
 
 
 def female_work_share(inp):
-    for law, share in P.FEMALE_WORK_SHARE.items():
-        if law in inp.laws:
-            return share
-    return P.FEMALE_WORK_SHARE_DEFAULT
+    """Women's share of the workforce (te_demog_female_work_share): the base plus the women's-rights laws'
+    P.FEMALE_WORK_SHARE_TYPE line, within 0-1 (modifier-types stage 3)."""
+    return clamp(P.FEMALE_WORK_SHARE_DEFAULT + inp.mods.get(P.FEMALE_WORK_SHARE_TYPE, 0.0), 0.0, 1.0)
 
 
 def plain_multiplier(inp, cause):
@@ -205,7 +204,7 @@ def rates_from_multipliers(mult, work_f, work_m, adult):
 
 def work_death_share(inp):
     """Women's share of work deaths (te_demog_work_death_share): under Full the census's own count of women among the
-    workers aged P.WORK_SPLIT_AGES at the last count (phase 2 step 2, §2.5), else the law table."""
+    workers aged P.WORK_SPLIT_AGES at the last count (phase 2 step 2, §2.5), else the laws' share (female_work_share)."""
     return female_work_share(inp) if inp.work_female_share is None else inp.work_female_share
 
 
@@ -901,7 +900,7 @@ def migrant_profile(inp, balance=None, sign=0):
     labour kind's women's share toward LABOUR_BALANCE_SHARE (labour_balance_weight)."""
     refugee = clamp(inp.crisis, 0.0, 1.0)
     rights = female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
-    family = P.FAMILY_BASE + sum(v for t, v in P.FAMILY_TRANSPORT_TECHS.items() if t in inp.techs)
+    family = P.FAMILY_BASE + inp.mods.get(P.FAMILY_MIGRATION_TYPE, 0.0)   # the transport technologies' line
     family += P.FAMILY_RIGHTS_WEIGHT * rights + min(P.CHAIN_CAP, P.CHAIN_STEP * inp.inflow_years)
     family = clamp(family, 0.0, 1.0 - refugee)
     labour = max(0.0, 1.0 - family - refugee)

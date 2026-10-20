@@ -339,7 +339,8 @@ te_inh_refresh_wc_state_effects = {
 
 # Country scope; ROOT the winner (te_civil_war_on_won). The winner
 # continues the nation: a revolution's winner takes the loser's score and
-# Posthumous Title answer. A left revolution that wins levels the great
+# Posthumous Title answer, and Wealth Concentration's land-law role and r > g
+# growth (te_demog_wc_civil_war_inherit). A left revolution that wins levels the great
 # fortunes (te_demog_wc_civil_war_won); then the national figure follows the
 # winner's states, which carry their scores, and the modifiers come back. The
 # census's state and city lists are variable lists, which the winner does not
@@ -360,6 +361,15 @@ inh_repair_after_civil_war = {
 			limit = { scope:te_cw_loser = { has_variable = te_inh_title_continuity } }
 			set_variable = te_inh_title_continuity
 		}
+	}
+	# the winner continues the nation: the loser's land-law role and r > g's growth (te_demog_wealth_effects.txt)
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			exists = scope:te_cw_loser
+		}
+		te_demog_wc_civil_war_inherit = yes
 	}
 	te_demog_wc_civil_war_won = yes
 	te_demog_wc_national = yes

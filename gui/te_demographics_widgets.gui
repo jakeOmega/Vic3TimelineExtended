@@ -22,15 +22,15 @@
 ###                             the measures other laws allow, dimmed (phase 2 step 3a)
 ###   te_demog_sec_history      open: eight charts by census year, with pips for war, famine and demographic events
 ###   te_demog_sec_wealth       open: the Gini beside the strata's incomes, Wealth Concentration as a bar heading for
-###                             its target, the target's six terms, the most and least concentrated states
+###                             its target, the target's seven terms, the most and least concentrated states
 ###   te_demog_sec_places       open: urban share, primacy, the effective number of cities, the pattern, the three
 ###                             largest cities
 ###   te_demog_sec_states       open: the ten largest states, a row each that opens the state, and Show All for the 40
 ###   te_demog_sec_how          collapsed: How Demographics Works
 ### The state's, from the same building blocks with the state's own figures (State.MakeScope.Var(...), never the
 ### player's): te_state_demog_overview, _causes, _pyramid (with the urban share), _work, _longevity, _wealth and _how.
-### The state's Wealth shows its target's six terms: three its own, the law, tax and economic ones its owner's
-### (State.GetOwner.MakeScope).
+### The state's Wealth shows its target's seven terms: three its own, the law, tax, economic and r > g ones its
+### owner's (State.GetOwner.MakeScope).
 ### A state has no outline, no history and no Family Policy.
 ###
 ### TYPE SIZES (rule 3; the owner's pass of 2026-10-17 on Banking): rows, values, buttons, column heads and notes in
@@ -2287,7 +2287,7 @@ types te_demographics_widgets
 
 	### Wealth: the Gini beside the strata's average incomes (vanilla's own
 	### figures and hovers), Wealth Concentration as a bar heading for its
-	### target, the target's six terms as pillars, and the most and least
+	### target, the target's seven terms as pillars, and the most and least
 	### concentrated states. Wealth Concentration's national figures exist once
 	### a state has a score (te_demog_wealth_ready_sgui); until then one line.
 	### The Gini cell has its own gate (te_demog_gini_ready_sgui) and shows a
@@ -2534,6 +2534,21 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_econ_term')|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_rg_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_rg"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term')|+0]"
 					}
 				}
 
@@ -6496,8 +6511,8 @@ types te_demographics_widgets
 				### The state's target term by term, in the country tab's pillars
 				### (te_demog_term_row): land tenure, ownership and inequality are
 				### the state's own (te_demog_wc_target's state-scope terms), the law,
-				### tax and economic terms its owner's, so the six add up to the
-				### target above, less 50.
+				### tax, economic and r > g terms its owner's, so the seven add up to
+				### the target above, less 50.
 				te_demog_subheader = {
 					blockoverride "subheader_text" {
 						text = "te_demog_wc_terms_head"
@@ -6591,6 +6606,21 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "[State.GetOwner.MakeScope.ScriptValue('te_demog_wc_econ_term')|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_st_wc_t_rg_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_rg"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term')|+0]"
 					}
 				}
 				te_demog_note = {
