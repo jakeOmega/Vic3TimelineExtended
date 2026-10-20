@@ -4124,7 +4124,7 @@ class TestFlows(unittest.TestCase):
 
     def test_each_months_dead_go_to_states_by_their_soldiers(self):
         """Codex review on #830: the states take the dead month by month, so a state's step (on its
-        own day) takes the dead of the same months as its population change; 31 December only
+        own day) takes the dead of the same months as its population change; the yearly pulse only
         clears the year's total after the war shock reads it."""
         states = self._states((300, 10000, True), (100, 30000, True), (600, 5000, False))
         states[0]["te_dg_war_in"] = 5.0   # an earlier share not yet taken is kept
@@ -4141,7 +4141,7 @@ class TestFlows(unittest.TestCase):
         eng.call("te_demog_country_yearly")
         self.assertEqual(eng.vars["te_dg_war_year"], 0.0)
         self.assertEqual((states[0]["te_dg_war_in"], states[1]["te_dg_war_in"]), (300.0, 250.0),
-                         "31 December shares nothing more")
+                         "the yearly pulse shares nothing more")
 
     def test_a_country_without_soldiers_shares_by_people(self):
         states = self._states((0, 10000, True), (0, 30000, True))
@@ -4373,7 +4373,7 @@ class TestCountry(unittest.TestCase):
     def test_a_revolutions_winner_gets_its_lists_back(self):
         """Review on #830: the winner inherits te_dg_census_year but no variable list, so the
         civil-war repair draws the lists again (behind the rule and a census) instead of leaving the
-        States table empty until 31 December."""
+        States table empty until its next yearly census."""
         body = _block(_text(INH_EFFECTS), "inh_repair_after_civil_war")
         call = body.index("te_demog_country_lists = yes")
         self.assertLess(body.rindex("te_demog_cohorts_run = yes", 0, call), call)
@@ -4655,7 +4655,7 @@ class TestCountry(unittest.TestCase):
         self.assertEqual({n: eng.vars[f"te_dg_prev_{n}"] for n in names}, first)
 
     def test_the_country_census_after_seeds_has_no_arrows(self):
-        """1836: the game-start census and 31 December's both read seeded states (0 births), and
+        """1836: the game-start census and the first yearly one both read seeded states (0 births), and
         the first stepped year's still has the seed's behind it."""
         seeds = self.three()
         for s in seeds:
@@ -4737,7 +4737,7 @@ class TestWealth(unittest.TestCase):
     # -- the wiring ---------------------------------------------------------------------------------
 
     def test_national_figure_is_derived(self):
-        """One effect on 31 December: the national figure, then the census reads it."""
+        """One effect at the yearly pulse: the national figure, then the census reads it."""
         yearly = _block(_text(EFFECTS), "te_demog_country_yearly")
         self.assertLess(yearly.index("te_demog_wc_national = yes"), yearly.index("te_demog_country_census = yes"))
         self.assertNotIn("te_demog_wc_national", _block(_text(INH_EFFECTS), "te_inh_yearly_update"))
@@ -4786,7 +4786,7 @@ class TestWealth(unittest.TestCase):
         self.assertNotIn("te_inh_title_continuity", laws, "the pin is the states' and the display's, not the law's")
 
     def test_the_shown_target_follows_a_law_change_at_once(self):
-        """Review on #830: the stored national target is summed on 31 December, but a law or a tax
+        """Review on #830: the stored national target is summed at the yearly pulse, but a law or a tax
         on wealth moves every state's target alike, so the shown target moves by the change since
         then; continuity of title still pins it at the score."""
         cases = (
@@ -5075,7 +5075,7 @@ class TestWealth(unittest.TestCase):
             self.assertEqual((eng.vars["te_inh_concentration"], eng.vars["applied"]), (after, after), before)
             self.assertNotIn("te_dg_wc", states[0])
 
-    # -- the war shock on 31 December -----------------------------------------------------------------
+    # -- the war shock at the yearly pulse -------------------------------------------------------------
 
     def war_year(self, states, at_war, dead, shocks=None, rule=False):
         eng = _CountryEngine(states=states, fixtures={"total_population": 1e6},
@@ -5448,7 +5448,7 @@ class TestHistory(unittest.TestCase):
         self.assertNotIn("hist_median", self.census(True, pending))
 
     def test_one_sample_a_year(self):
-        """The census runs twice in 1836 (game start, 31 December): the year is checked before a
+        """The census can run twice in a year (game start, the first yearly pulse): the year is checked before a
         container is created, and set only once the sample is stored."""
         body = self.block("te_demog_history_record")
         self.assertLess(body.index("te_dg_hist_year"), body.index("create_container"))
@@ -5485,7 +5485,7 @@ class TestHistory(unittest.TestCase):
         self.assertTrue(body.lstrip().startswith("hidden_effect"), "hidden: a store, not a tooltip")
 
     def test_this_years_container_is_refilled_every_run(self):
-        """The 31 December run overwrites the game-start sample's values. The game-start sample may
+        """The yearly pulse's run overwrites the game-start sample's values. The game-start sample may
         lack the Gini and Wealth Concentration: te_demog_wc_national runs on the yearly pulse and from
         te_inh_game_start, and the two game-start events run in either order."""
         body = self.block("te_demog_history_record")
@@ -6051,7 +6051,7 @@ class TestFastMode(unittest.TestCase):
         self.assertIn("te_demog_clock_on = yes", hook)
         self.assertIn("te_demog_clock_tick = yes", hook)
 
-    def test_the_31_december_census_waits_for_no_clock(self):
+    def test_the_yearly_census_waits_for_no_clock(self):
         body = _block(_text(EFFECTS), "te_demog_country_yearly")
         gate = body[body.index("limit = {", body.index("te_demog_wc_national = yes")):body.index("te_demog_country_census = yes")]
         self.assertIn("NOT = { te_demog_clock_on = yes }", gate)

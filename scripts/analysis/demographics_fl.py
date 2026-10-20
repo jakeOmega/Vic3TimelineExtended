@@ -79,7 +79,7 @@ def _neighbour_mean(borders, shares):
 def replay(loaded, adjacency):
     """{year: {tag: record}} for [(year, [PracticeState])], sorted: each country seeds at the first save that holds it
     (history's modifier: FAMILY_LIMITATION_MEANS, else 0), then steps once a census year with the conditions of the
-    latest save at or before it, every country from last year's shares (in game they step on 31 December in turn; the
+    latest save at or before it, every country from last year's shares (in game each steps on its own day of the year; the
     order moves a neighbour's mean by one year's rise at most). A record: share, target, neighbours' mean, line."""
     shares, out, prev = {}, {}, None
 

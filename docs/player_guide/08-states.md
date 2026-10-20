@@ -673,7 +673,7 @@ Limit), Bare Branches (110 men per 100 women), the Empty Villages (an old,
 shrinking farm state), the Overspill (a Metropolis state crowded to Migration
 Crowding's ceiling) and the Last Generation? (Biological Immortality). Each comes
 at most once in 25 years, and the Last Generation? once a game; at most one of the
-yearly ones arrives on a given 31 December. The Lost Generation and the Empty
+yearly ones arrives each year. The Lost Generation and the Empty
 Villages offer only harms: each choice spares one and pays its own cost. Some
 choices use the census's own levers: the pension age, Birth Limit and, for the
 Overspill, your Settlement Authorities' Planned Towns. Every event and choice is
