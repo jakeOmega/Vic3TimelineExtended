@@ -3133,9 +3133,11 @@ class TestOnTopSplitScript(unittest.TestCase):
 
     @staticmethod
     def walk(pops, read_b, read_d):
-        """The walk's sums for these pops (te_demog_walks, te_demog_absorbed_walk_pop)."""
+        """The walk's sums for these pops (te_demog_walks, te_demog_absorbed_walk_pop); no wealth line, so its bare deaths x
+        wealth (te_dg_w_edw) are 0."""
         w = dict(te_dg_w_eb0=0.0, te_dg_w_ed0=0.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=0.0, te_dg_w_ed=0.0,
-                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_pop=0.0)
+                 te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_pop=0.0,
+                 te_dg_w_edw=0.0)
         for bare_b, bare_d, abs_b, abs_d, top_b, top_d, sev_d, people in pops:
             mult_b, mult_d = max(0.0, 1 + read_b + abs_b + top_b), max(0.0, 1 + read_d + abs_d + top_d)
             w["te_dg_w_eb0"] += bare_b
