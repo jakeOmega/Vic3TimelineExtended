@@ -1594,7 +1594,7 @@ law_restorative_justice = {
 		country_institution_cost_institution_police_mult = 0.25
 		state_loyalists_from_political_movements_mult = 0.1
 		state_demog_replaced_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_male_labor_participation_add = 0.02	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
+		state_male_labor_participation_add = 0.014	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
 		state_external_mortality_mult = -0.04	# the census's deaths from violence: offenders who meet their victims reoffend less, violent ones most of all
 	}
 }
@@ -1615,7 +1615,7 @@ law_rehabilitation_focused_criminal_justice = {
 		country_institution_cost_institution_police_mult = 0.5
 		state_loyalists_from_political_movements_mult = 0.2
 		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_male_labor_participation_add = 0.03	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
+		state_male_labor_participation_add = 0.021	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
 		state_external_mortality_mult = -0.08	# the census's deaths from violence: treatment, schooling and work in prison cut violent reoffending
 	}
 }
@@ -3776,7 +3776,7 @@ law_pro_labor_ministry_of_labor = {
 	institution = institution_ministry_of_labor
 	institution_modifier = {
 		state_demog_replaced_ratio_add = 0.01	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_labor_participation_add = 0.005	# the census's participation input (phase 2 step 1; the design §1.7): placement and training bring the marginal into work
+		state_labor_participation_add = 0.0035	# the census's participation input (phase 2 step 1; the design §1.7): placement and training bring the marginal into work
 		building_company_worker_dividends_add = 0.01
 		state_political_strength_from_wealth_mult = -0.05
 	}
@@ -3800,7 +3800,7 @@ law_pro_capital_ministry_of_labor = {
 	institution = institution_ministry_of_labor
 	institution_modifier = {
 		state_demog_replaced_ratio_add = 0.02	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_labor_participation_add = 0.01	# the census's participation input (phase 2 step 1; the design §1.7): workfare and thin protections push more people into work
+		state_labor_participation_add = 0.007	# the census's participation input (phase 2 step 1; the design §1.7): workfare and thin protections push more people into work
 		state_political_strength_from_wealth_mult = 0.05
 		state_radicals_from_political_movements_mult = 0.05
 		building_minimum_wage_mult = -0.05

@@ -1906,11 +1906,11 @@ te_demog_k_practice_rate = { value = 0.025 }
 te_demog_k_child_work_age = { value = 10 }
 te_demog_k_working_age = { value = 15 }
 te_demog_k_after_pension_share = { value = 0.3 }
-te_demog_k_men_rate = { value = 0.92 }
-te_demog_k_women_base = { value = 0.05 }
-te_demog_k_women_lower = { value = 0.2 }
+te_demog_k_men_rate = { value = 0.644 }
+te_demog_k_women_base = { value = 0.035 }
+te_demog_k_women_lower = { value = 0.14 }
 te_demog_k_womens_work_full = { value = 0.35 }
-te_demog_k_workforce_scale = { value = 0.7 }
+te_demog_k_rate_max = { value = 0.7 }
 te_demog_k_health_need_1836 = { value = 0.952 }
 te_demog_k_need_newborn = { value = 1 }
 te_demog_k_pension_age_standard = { value = 65 }
@@ -2039,7 +2039,7 @@ te_demog_k_youth_unemployment_full = { value = 0.2 }
 te_demog_k_sex_fewer_from = { value = 90 }
 te_demog_k_sex_fewer_span = { value = 10 }
 te_demog_k_sex_births_floor = { value = 0.8 }
-te_demog_k_sex_women_rate = { value = 0.1 }
+te_demog_k_sex_women_rate = { value = 0.07 }
 te_demog_k_sex_more_from = { value = 110 }
 te_demog_k_sex_more_span = { value = 40 }
 te_demog_k_conscription_effects = { value = 1 }

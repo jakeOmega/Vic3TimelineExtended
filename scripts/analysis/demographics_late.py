@@ -191,7 +191,8 @@ STEADY = [  # (name, scenario, years, {figure: (lo, hi)})
 ]
 # The design's 60-year projections (Context's table; sketch), at 60 years: people, the calendar 65+ share, the mean
 # biological age, health need, the workforce with a pension at 65 and with none. Wide bands: the sketch's workforce used
-# a flat women's rate and capacity table that phase 2 step 2 fitted since, and its need weights a 0.97 reference.
+# a flat women's rate and capacity table that phase 2 step 2 fitted since, and its need weights a 0.97 reference. The
+# workforce is in the game's units since 2026-10-20 (demographics_params.MEN_RATE): the sketch's 0.65-0.85 x 0.7.
 PROJECTION = [  # (scenario, {figure: (lo, hi)})
     ("No change", {"people": (0.50, 0.65), "old65": (0.25, 0.37), "need": (1.5, 1.95)}),
     ("Era 11 medicine, no slowing", {"people": (0.60, 0.78), "old65": (0.35, 0.50), "need": (1.85, 2.40)}),
@@ -201,7 +202,7 @@ PROJECTION = [  # (scenario, {figure: (lo, hi)})
     # body (call 5), which §3.3 puts at x1.30 in 50 years: more children, so more people and a younger calendar structure
     # #1045's fewer deaths (STEADY's note) add about 0.06 to the people at 60 years and 0.05 at 50: the tops move with them
     ("Immortality (pull 3%) from today", {"people": (1.10, 1.60), "old65": (0.45, 0.75), "mean_bio": (26, 36),
-                                          "need": (0.65, 1.0), "wf_none": (0.65, 0.85)}),
+                                          "need": (0.65, 1.0), "wf_none": (0.455, 0.595)}),
 ]
 # §3.3: under immortality, everyone treated, 50 years from today's structure: people x1.17 (every birth by the calendar) to
 # x1.30 (the split at means 0.9); the women aged 100's children so far 1.6 to about 2.
