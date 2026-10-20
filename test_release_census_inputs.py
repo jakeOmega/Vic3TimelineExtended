@@ -196,6 +196,23 @@ class ReleaseCensusInputsTest(unittest.TestCase):
                 self.assertTrue(hits[0].startswith(TAG), hits[0])
                 self.assertTrue([line for line in body if kept in _code(line)], f"{entry} keeps {kept}")
 
+    def test_the_late_chronic_treatment_lines_go_and_their_technologies_stay(self):
+        """The safeguards pass (owner, 2026-10-20): chronic treatment on Genetic Engineering, Molecular Assemblers and
+        Biological Immortality. A release comments each line out and keeps every other line the technology carries."""
+        self.assertIn("state_chronic_treatment_add", self.types)
+        for rel, entry, kept in (
+                ("common/technology/technologies/era_11.txt", "genetic_engineering", "state_arable_land_mult = 0.50"),
+                ("common/technology/technologies/era_12.txt", "molecular_assemblers",
+                 "country_max_weekly_construction_progress_add = 200"),
+                ("common/technology/technologies/era_12.txt", "biological_immortality", "character_health_add = 100")):
+            with self.subTest(entry=entry):
+                lines = self._text(rel).split("\n")
+                body = [lines[i] for i in sorted(self._entry_lines(self._text(rel), entry))]
+                hits = [line for line in body if "state_chronic_treatment_add" in line]
+                self.assertEqual(len(hits), 1, entry)
+                self.assertTrue(hits[0].startswith(TAG), hits[0])
+                self.assertTrue([line for line in body if kept in _code(line)], f"{entry} keeps {kept}")
+
     def test_family_limitation_is_never_applied(self):
         # its only effect line is a census type, so applied it would show on France doing nothing
         for path in [*self.root.joinpath("common").rglob("*.txt"), *self.root.joinpath("events").rglob("*.txt")]:
