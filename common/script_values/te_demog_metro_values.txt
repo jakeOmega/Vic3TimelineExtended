@@ -340,7 +340,7 @@ te_demog_mt_e_neg = {
 # ---- The panel (state scope, under te_demog_state_mt_sgui) ---------------------------------------------------------
 # Where the share is heading, as a trend code (te_demog_display_values.txt's: 1 up, -1 down, 0 level within a quarter
 # point, 2 none).
-te_demog_mt_heading = {
+te_demog_trend_mt = {
 	value = 2
 	if = {
 		limit = { has_variable = te_dg_mt }

@@ -5375,13 +5375,13 @@ types te_demographics_widgets
 				blockoverride "row_trend" {
 					te_demog_trend_neutral = {
 						blockoverride "trend_up" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_heading'), '(CFixedPoint)1' )]"
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_mt'), '(CFixedPoint)1' )]"
 						}
 						blockoverride "trend_down" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_heading'), '(CFixedPoint)-1' )]"
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_mt'), '(CFixedPoint)-1' )]"
 						}
 						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_mt_heading'), '(CFixedPoint)0' )]"
+							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_mt'), '(CFixedPoint)0' )]"
 						}
 					}
 				}
