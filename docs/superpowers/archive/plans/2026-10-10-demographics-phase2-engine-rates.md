@@ -221,6 +221,12 @@ M never reads a term added on top. The engine applies O whatever its scaling, de
 
 ### The clamp
 
+> **2026-10-20 (owner):** the floor is now the engine's own, `RATE_TOTAL_FLOOR = −1` (a plain pop's events reach 0
+> there), and M and the step's scales have no ceiling (the scales keep only their natural floor, −1). −0.8 held about
+> 260 late states of the 2057 EU game at a fifth of the bare curve, so the engine killed 2.3 times the census's
+> target. The stretch from −0.9 to −1 is unmeasured; the self-check `rate_below_measured` watches it. The text below
+> is the plan as built on 2026-10-10. See `docs/systems/mod_systems.md` § Phase 2 step 4, "The floor".
+
 - **The floor:** `other + M ≥ RATE_TOTAL_MIN = −0.8`, where other = the state read − M_prev − F_prev. Q7 and the growth probe measured linearity down to −0.9; less literacy's −0.1 at full literacy, that keeps a literate, fed pop inside the measured range (E9–E10).
 - **When the terms on top alone are past −0.8** (a plague event, a decree or another state modifier), the floor is 0: M never pushes a state further down than they do. Starvation is per pop (E7), so it never enters the state read: a starving pop under a negative M floors at 0, the per-pop floor below.
 - **The ceiling:** `M ≤ RATE_TERM_MAX = +3.0`.

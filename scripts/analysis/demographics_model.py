@@ -1165,29 +1165,28 @@ def rate_term(target, bare, absorbed=0.0, other=0.0, on_top=0.0, added=0.0):
     warming, events): taking on_top x (1 - target / bare) off M as well makes each of them act on the census's
     rate, as its tooltip reads (owner, 2026-10-11), exactly for every pop. A pop's own lines on top (severe
     starvation, workplace lines) stay at the bare curve's weight: one state-wide M can't scale them without
-    moving the other pops' rates. A line past RATE_TOTAL_MIN scales as RATE_TOTAL_MIN: the engine's rate can't
+    moving the other pops' rates. A line past RATE_TOTAL_FLOOR scales as RATE_TOTAL_FLOOR: the engine's rate can't
     go lower. `added` is the moved lines' on-top family (owner, 2026-10-11; the engine-lines plan): script-only, so the
     engine doesn't apply it, and the census adds it at its own rate, + added x target / bare. `other` is the state read without the census's and fast mode's
-    terms: other + M stays at or above RATE_TOTAL_MIN, M never goes below 0 when other alone is
-    past it, and M stays at or below RATE_TERM_MAX.
+    terms: other + M stays at or above RATE_TOTAL_FLOOR, the engine's own per-pop floor, and M never goes below 0 when
+    other alone is past it. No ceiling (owner, 2026-10-20). The script also skips a walk under RATE_BARE_MIN, less than
+    one person at the curves' lowest, in its own units; callers here never pass one.
     """
     if bare <= 0:
         return 0.0, False
-    m = target / bare - 1 - absorbed / bare - max(on_top, P.RATE_TOTAL_MIN) * (1 - target / bare) + added * target / bare
-    lo = min(0.0, P.RATE_TOTAL_MIN - other)
+    m = target / bare - 1 - absorbed / bare - max(on_top, P.RATE_TOTAL_FLOOR) * (1 - target / bare) + added * target / bare
+    lo = min(0.0, P.RATE_TOTAL_FLOOR - other)
     if m < lo:
         return lo, True
-    if m > P.RATE_TERM_MAX:
-        return P.RATE_TERM_MAX, True
     return m, False
 
 
 def on_top_scale(engine, target):
     """How far the engine's births or deaths over a step ran from the model's target, as a scale for the
-    step's rates: engine / target - 1, clamped to ON_TOP_SCALE_MIN..ON_TOP_SCALE_MAX; 0 with no target."""
+    step's rates: engine / target - 1, at least ON_TOP_SCALE_MIN (no events), no ceiling; 0 with no target."""
     if target <= 0:
         return 0.0
-    return clamp(engine / target - 1, P.ON_TOP_SCALE_MIN, P.ON_TOP_SCALE_MAX)
+    return max(engine / target - 1, P.ON_TOP_SCALE_MIN)
 
 
 def window_events(end_rate, start_rate=None):
@@ -1425,8 +1424,11 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             "tfr_shown": tfr, "maternal": maternal,
             "causes": None if causes_raw is None else cause_deaths(causes_raw, deaths, maternal, deaths_scale,
                                                                    war_dead, kills),
-            "births_model": births / (1 + births_scale),
-            "deaths_model": (deaths - maternal) / (1 + deaths_scale) + maternal / (1 + births_scale)}
+            # the model's own events, None where the scale left too few to read them back (the script keeps the last)
+            "births_model": births / (1 + births_scale) if 1 + births_scale >= P.ON_TOP_FACTOR_MIN else None,
+            "deaths_model": ((deaths - maternal) / (1 + deaths_scale)
+                             + maternal / max(1 + births_scale, P.ON_TOP_FACTOR_MIN)
+                             if 1 + deaths_scale >= P.ON_TOP_FACTOR_MIN else None)}
     if lx is not None and lx.get("um") is not None and out["causes"] is not None:
         out["um"] = U.book(lx, out["causes"], inp, qf0, qm0)   # the step's uploads (te_demog_um_step)
     return out

@@ -174,6 +174,18 @@ UPLOADS_DIGESTS = {
     ("generated_effects", "te_demog_cause_inputs_store"):
         "78de3129ee4b205c97a61f0fce47c32c250be87511c0d5183d7b3b4d3176f508",
 }
+# The census's rates down to the engine's floor (owner, 2026-10-20): the floor's constant is the engine's own -1 under a new
+# name (te_demog_k_rate_total_floor, new and so free), M's and the step's scales' ceilings are gone, and the scales' floor
+# is -1. Of the cases only rich_full moves: its births term, held at -0.85 by the old floor of -0.8, reaches its own
+# rate at -0.90763, so its clamp flag goes to 0 and its next window's start births (te_dg_sr_b) from 71.25 to 43.876 a
+# head; those four figures were re-recorded on this tree. The farm cases' terms never reached the floor.
+RATE_FLOOR_REMOVED = {("generated_values", "te_demog_k_on_top_scale_max"),
+                      ("generated_values", "te_demog_k_rate_total_min"),
+                      ("generated_values", "te_demog_k_rate_term_max")}
+RATE_FLOOR_DIGESTS = {
+    ("generated_values", "te_demog_k_on_top_scale_min"):
+        "a13018ac187c2198739d13d444ccf28b6fe9db49d14e6cb7ec08602c6915197c",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -342,6 +354,9 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 if (key, name) in LAW_LINE_MOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
+                if (key, name) in RATE_FLOOR_REMOVED:
+                    self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
+                    continue
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
                 want = LAW_LINE_DIGESTS.get((key, name), SAFETY_DIGESTS.get((key, name), PHASE3_DIGESTS.get(
                     (key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))))
@@ -349,6 +364,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = ADULT_INFECTION_DIGESTS.get((key, name), want)
                 want = STAGE3_DIGESTS.get((key, name), want)
                 want = UPLOADS_DIGESTS.get((key, name), want)
+                want = RATE_FLOOR_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

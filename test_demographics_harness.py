@@ -148,9 +148,14 @@ class TestPredict(unittest.TestCase):
     def test_the_clamp_sees_the_lines_left_in_the_read(self):
         """The script's 'other' is the state read without the census's, fast mode's and the moved lines' terms: the
         engine's state lines left on top, as predict's on_top."""
-        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.8)], 2.0, 30.0, self.D, on_top_b=-0.5)
+        # mild hunger's deaths (absorbed) above a census rate of 2 per 1,000 under a -0.5 line: the read stops at -1
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.3)], 40.0, 2.0, self.D, on_top_d=-0.5)
         self.assertTrue(out["clamped"])
-        self.assertAlmostEqual(out["m_b"], H.P.RATE_TOTAL_MIN + 0.5)
+        self.assertAlmostEqual(out["m_d"], H.P.RATE_TOTAL_FLOOR + 0.5)
+        # a line past the engine's floor in the read: the census adds nothing more
+        out = H.predict_state([H.Pop(1e6, 9.0, 0.0, 0.3)], 40.0, 2.0, self.D, on_top_d=-1.2)
+        self.assertTrue(out["clamped"])
+        self.assertEqual(out["m_d"], 0.0)
 
     def test_predict_on_the_slice(self):
         """The command end to end on the test slice (Britain and Portugal, 1836; the slice has no game_date)."""

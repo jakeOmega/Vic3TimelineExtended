@@ -339,10 +339,13 @@ cancels them under Full only): literacy's −0.1 and mild starvation's (per pop)
 fertility above), the Pill's, State-Sponsored Family Planning's and the medical techs' (§8.4).
 - **Reading the rest.** A state's `modifier:state_birth_rate_mult` includes the country's modifiers (a test modifier on
   the country showed in every state's read), so the model reads the total at state scope and takes out its own term.
-- **The clamp.** At −0.9 Qing's births fell to about a tenth, as 1 + the total says. At −3 they stopped; they never
-  turn negative (Qing lost what its deaths alone would take). Where between −0.9 and −3 they reach zero wasn't
-  measured, presumably at −1. The clamp keeps the state's total at −0.8 or above (−0.9 less literacy's −0.1); when
-  the terms on top alone are past that, the census's term stays at 0.
+- **The floor.** At −0.9 Qing's births fell to about a tenth, as 1 + the total says. At −3 they stopped; they never
+  turn negative (Qing lost what its deaths alone would take). The growth probe's −5 gave no deaths at all. Where
+  between −0.9 and −3 they reach zero wasn't measured, presumably at −1, where 1 + the total reaches 0. The census
+  keeps the state's total at −1 or above, the engine's own floor (owner, 2026-10-20; until then −0.8, the measured
+  −0.9 less literacy's −0.1, which held the late game's deaths at twice the census's target); when the terms on top
+  alone are past that, the census's term stays at 0. The self-check `rate_below_measured` watches the stretch from
+  −0.9 to −1.
 - **The engine's births before the modifier** are taken to be each pop's SoL curve × its size × (1 + the other
   modifiers). Qing's births, worked out on that model, came to 0.44% a month against the curve's 0.475% for low-SoL
   pops: consistent, not proof. The world-wide check across all SoL bands is the harness's first step (§12).

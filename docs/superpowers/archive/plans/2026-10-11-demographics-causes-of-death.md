@@ -197,6 +197,7 @@ independent review (`review-905.md`) confirmed 1–4 against the code. The PR li
      `ED ÷ (ED_state + ED_sev)`.
    - **The product is `ED ÷ target`, which is `1 + dz` except in four cases** (corrected by the review of Task 6):
      - **dz hit either end of its range** (`ON_TOP_SCALE_MIN` −0.9, `ON_TOP_SCALE_MAX` +4).
+       (2026-10-20: no longer: dz has only its natural floor, −1, which is no deaths.)
      - **A display value's `min = 1` (one person) bites,** which only happens on a tiny state.
      - **An end's read is below −1 (`1 + read < 0`).** That end's whole-state part is then negative: it counts every
        pop unfloored, while the engine floors them. The split moves deaths into "other effects on some of its people",
@@ -229,6 +230,9 @@ independent review (`review-905.md`) confirmed 1–4 against the code. The PR li
 5. **`te_dg_rate_clamped` is one flag for births and deaths, and the refresh writes it after dz is measured.**
    - To say why deaths weren't set, the refresh also stores `te_dg_rate_clamp_d`: 0 none, 1 the floor (the game's rate
      can't fall below a fifth of its base), 2 the cap (+300%).
+     - **2026-10-20:** the cap is gone and the floor is the engine's own −1, so `te_dg_rate_clamp_d` is 0 or 1, and
+       "can't fall below a fifth of its base" was the mod's −0.8, never the engine's. The floor's hover now says the
+       census had no base rate left to take off (`te_demog_st_ontop_end_floor`).
    - That flag describes the next window's M, not the one dz measured. So `te_demog_on_top_scales` copies the last
      refresh's flag to `te_dg_ed_clamp_d` before the refresh runs, and removes the copy when there's no flag. The hover
      and the gate read the copy.

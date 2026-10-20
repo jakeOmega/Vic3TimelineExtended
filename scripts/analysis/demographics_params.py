@@ -637,10 +637,22 @@ STARVATION_BUCKET = 0.05   # both penalties are read in food-security steps this
 # into one (1 + total) per pop, linear from -0.9 (growth probe) to far above +1.0 (the 12x fast run), floored
 # at 0. Owner, 2026-10-10: the poverty term replaces the curve's starving slope below SoL 4, and deaths added
 # on top fall by the model's age pattern (the step's deaths scale).
-RATE_TOTAL_MIN = -0.8         # the state read with M in it stays at or above this (-0.9 less literacy's -0.1)
-RATE_TERM_MAX = 3.0           # a guard against a nonsense target, not a measured limit
-ON_TOP_SCALE_MIN = -0.9       # the step's births and deaths scales (the engine's events over the model's target)
-ON_TOP_SCALE_MAX = 4.0
+# The engine's own per-pop floor (owner, 2026-10-20: the census's terms go down to it; until then -0.8, a precaution
+# that kept the read inside the probes' measured range and made the engine kill twice the census's target in the late
+# game). A plain pop's births or deaths reach 0 at a total of -1: Q7 stopped births at -3, and the growth probe's -5
+# gave no deaths at all. The state read with M in it stays at or above this, and when the lines left on top alone
+# are past it, M is 0. The self-check rate_below_measured watches the stretch from -0.9 down.
+RATE_TOTAL_FLOOR = -1.0
+# M has no ceiling (until 2026-10-20 +3, "a guard against a nonsense target"). target / bare is at most the model's rate
+# over the curves' lowest (80 births, 100 deaths a month per 100,000), so M stays finite; the script skips a state whose
+# walk found less than one person at the lowest curve (te_demog_k_rate_bare_min, the walk's units: people x the curve).
+RATE_BARE_MIN = 80.0
+# The step's births and deaths scales (the engine's events over the model's target, less 1) have only the natural
+# floor, -1 (no events), and no ceiling (until 2026-10-20 -0.9 and +4): each age's probability is already capped at 1.
+# Under 1 + scale = ON_TOP_FACTOR_MIN the ring's events are too few to read the model's own rate back from, so the step
+# keeps the last one (te_dg_cbr_model, te_dg_cdr_model; demographics_model.step returns None).
+ON_TOP_SCALE_MIN = -1.0
+ON_TOP_FACTOR_MIN = 0.01
 # The window's events (owner, 2026-10-11; #894; the review of #907): the walk is a snapshot on the step's day, and the
 # step books the whole window that ends that day. The window is booked at the engine's rate at its start (stored by the
 # last step's refresh) at this weight and today's at the rest: 0.5 is the trapezoid, which halves the misplacement when
