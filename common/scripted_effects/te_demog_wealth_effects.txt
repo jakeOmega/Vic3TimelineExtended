@@ -331,10 +331,12 @@ te_demog_wc_national = {
 # lowers it. It measures the share (the owner's rule), so state or private capital
 # growing faster than the other moves it too. te_dg_wc_sown keeps last year's share. No shock in the first year a share is
 # stored; after a change of owner, which removes it (te_demog_wc_owner_change, on
-# on_state_owner_change); when the state's people moved more than a quarter in the year
-# (the census's re-seed rule, here on the walk's own people, kept under every rule); or
-# while the state holds under 20 capital levels, which also removes it: in 1849 most
-# states held under 10, where one state-owned level is 10 points or more.
+# on_state_owner_change); or while the state holds under 20 capital levels, which also
+# removes it: in 1849 most states held under 10, where one state-owned level is 10 points
+# or more (kept on the owner's call, 2026-10-20). A move of the state's people skips
+# nothing (owner, 2026-10-20): capital levels don't move with people, so a migration jump
+# makes no share change spurious. Until then a move of more than a quarter in the year
+# skipped it, the census's old re-seed rule.
 te_demog_wc_ownership_shock = {
 	if = {
 		limit = { has_variable = te_dg_lv_ctry }
@@ -342,28 +344,14 @@ te_demog_wc_ownership_shock = {
 			limit = { te_demog_wc_capital_levels >= 20 }
 			set_local_variable = { name = te_dg_wc_so value = te_demog_wc_state_owned_share }
 			if = {
-				limit = {
-					has_variable = te_dg_wc_sown
-					has_variable = te_dg_walk_pop_prev
-				}
+				limit = { has_variable = te_dg_wc_sown }
 				set_local_variable = { name = te_dg_wc_so_move value = { value = local_var:te_dg_wc_so subtract = var:te_dg_wc_sown } }
-				# the people now less 1.25 and 0.75 times last walk's, taken into locals first, as the census's rule
-				set_local_variable = {
-					name = te_dg_wc_so_over
-					value = { value = var:te_dg_walk_pop subtract = { value = var:te_dg_walk_pop_prev multiply = 1.25 } }
-				}
-				set_local_variable = {
-					name = te_dg_wc_so_under
-					value = { value = var:te_dg_walk_pop subtract = { value = var:te_dg_walk_pop_prev multiply = 0.75 } }
-				}
 				if = {
 					limit = {
 						OR = {
 							local_var:te_dg_wc_so_move >= 0.1
 							local_var:te_dg_wc_so_move <= -0.1
 						}
-						local_var:te_dg_wc_so_over <= 0
-						local_var:te_dg_wc_so_under >= 0
 					}
 					change_variable = {
 						name = te_dg_wc
@@ -456,7 +444,9 @@ te_demog_wc_land_reform_check = {
 # war. So it takes the loser's land-law role, and a revolution that brought in Peasant
 # Proprietorship or Collectivized Agriculture takes the land-reform shock at the next
 # monthly check, as the same law enacted in peace does; and r > g's GDP baseline and
-# growth average, so growth neither restarts nor reads the rebels' wartime GDP.
+# growth average, so growth neither restarts nor reads the rebels' wartime GDP. The
+# baseline's state count goes with it (te_demog_wc_growth_update), so the next sample is
+# taken only if the winner holds as many states as that GDP was measured on.
 te_demog_wc_civil_war_inherit = {
 	if = {
 		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_land } }
@@ -465,6 +455,14 @@ te_demog_wc_civil_war_inherit = {
 	if = {
 		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_gdp } }
 		set_variable = { name = te_dg_wc_gdp value = scope:te_cw_loser.var:te_dg_wc_gdp }
+		if = {
+			limit = { scope:te_cw_loser = { has_variable = te_dg_wc_states } }
+			set_variable = { name = te_dg_wc_states value = scope:te_cw_loser.var:te_dg_wc_states }
+		}
+		else_if = {
+			limit = { has_variable = te_dg_wc_states }
+			remove_variable = te_dg_wc_states
+		}
 	}
 	if = {
 		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_g } }
@@ -472,49 +470,118 @@ te_demog_wc_civil_war_inherit = {
 	}
 }
 
+# THIS = a country, in te_demog_wc_growth_update, with both GDPs above 0: the year's growth in log points,
+# 100 x ln(GDP now / GDP last year), into local te_dg_wc_g_year, so a fall and the recovery to the same GDP cancel
+# (owner, 2026-10-20). Script has no logarithm, so ln r = 2 atanh z = 2 (z + z^3/3 + z^5/5 + z^7/7 + z^9/9) with
+# z = (r - 1) / (r + 1): under the fixed point, within 0.0002 log points of 100 ln r for r from 0.5 to 2, 0.2%
+# short at r = 0.2 or 5 and 2% at 0.1 or 10, and rising with r throughout (test_demographics_wc_shocks). Each odd
+# power is kept as 100 z^k (te_dg_wc_t, within -100..100) and taken to the next by multiplying by 100 z^2 before
+# dividing by 100, so the five decimals keep their precision; 100 z itself divides the sum by 100 first, since GDP
+# passes 7 x 10^11 late.
+te_demog_wc_log_growth = {
+	set_local_variable = {
+		name = te_dg_wc_z
+		value = {
+			value = local_var:te_dg_wc_gdp_now
+			subtract = var:te_dg_wc_gdp
+			divide = { value = local_var:te_dg_wc_gdp_now add = var:te_dg_wc_gdp divide = 100 min = 0.00001 }
+		}
+	}
+	set_local_variable = { name = te_dg_wc_z2 value = { value = local_var:te_dg_wc_z multiply = local_var:te_dg_wc_z divide = 100 } }
+	set_local_variable = { name = te_dg_wc_t value = local_var:te_dg_wc_z }
+	set_local_variable = { name = te_dg_wc_g_year value = local_var:te_dg_wc_z }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 3 } }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 5 } }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 7 } }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 9 } }
+	change_local_variable = { name = te_dg_wc_g_year multiply = 2 }
+}
+
 # THIS = a country at its yearly pulse, before te_demog_country_yearly (te_demog_country_yearly_on_action), so
-# its national refresh reads this year's figure. r > g's inputs and term (te_demog_wc_rg_term), in
-# percentage points:
+# its national refresh reads this year's figure. r > g's inputs and term (te_demog_wc_rg_term):
 #   te_dg_wc_gdp  GDP at the last yearly pulse (te_mon_gdp_current). Its own copy: the monetary system's
 #                 te_mon_gdp_last_year is rewritten by an on_yearly_pulse_country entry of its own, in an
 #                 order against this one that is undefined
-#   te_dg_wc_g    growth averaged over about five years: each year's growth (clamped to -10..+10, so a
-#                 conquest or a lost province moves it by 2 at most) taken in at a weight of 0.2
-#   te_dg_wc_r    the real policy rate at the yearly pulse (te_demog_wc_real_rate)
+#   te_dg_wc_states  the states it held then (te_demog_wc_state_count), beside the GDP they made
+#   te_dg_wc_g    growth averaged over about five years, in log points (te_demog_wc_log_growth: 100 x ln of
+#                 the year's GDP ratio, which reads as percent in a normal year: 5% is 4.88), each year's taken
+#                 in at a weight of 0.2 whatever its size. A year in which the country gained or lost states (or
+#                 an old save's first, with no count) is taken too, unless its GDP moved more than a tenth
+#                 (the ratio under 0.9 or over 1.1): that jump is the territory's, so it takes no sample and the
+#                 GDP is re-based, and next year's growth is measured on the new territory (owner, 2026-10-20;
+#                 until then each year's percent growth was clamped to -10..+10). A GDP of 0 or below, this
+#                 year's or last, takes no sample either. Shown as a compound annual rate (te_demog_wc_g_shown)
+#   te_dg_wc_r    the real policy rate at the yearly pulse (te_demog_wc_real_rate), in percent
 #   te_dg_wc_rg   the term, 2 x (te_dg_wc_r - te_dg_wc_g), at most 5 either way; only while the banking
 #                 cycle runs (te_banking_cycle_running), removed otherwise
-# Every country keeps the average, so it is warm when a cycle starts. The growth is divided before it is
-# multiplied: GDP passes 7 x 10^11 in the late game.
+# Every country keeps the average, so it is warm when a cycle starts.
 te_demog_wc_growth_update = {
 	set_local_variable = { name = te_dg_wc_gdp_now value = te_mon_gdp_current }
+	set_local_variable = { name = te_dg_wc_states_now value = te_demog_wc_state_count }
 	if = {
-		limit = {
-			has_variable = te_dg_wc_gdp
-			var:te_dg_wc_gdp > 0
+		limit = { has_variable = te_dg_wc_gdp }
+		# a sample, unless a GDP is 0 or below (this year's or last: its ratio means nothing, and a sample of it
+		# would be about -357), or the territory changed and the GDP jumped by more than a tenth either way
+		set_local_variable = { name = te_dg_wc_take value = 1 }
+		if = {
+			limit = {
+				OR = {
+					var:te_dg_wc_gdp <= 0
+					local_var:te_dg_wc_gdp_now <= 0
+				}
+			}
+			set_local_variable = { name = te_dg_wc_take value = 0 }
 		}
-		set_local_variable = {
-			name = te_dg_wc_g_year
-			value = {
-				value = local_var:te_dg_wc_gdp_now
-				subtract = var:te_dg_wc_gdp
-				divide = { value = var:te_dg_wc_gdp min = 1 }
-				multiply = 100
-				min = -10
-				max = 10
+		# 1 on the territory the stored GDP was measured on; 0 when the states changed or none were stored (an old
+		# save). Set in an if, so the guard and the read never share a NOT (scripting_best_practices.md)
+		set_local_variable = { name = te_dg_wc_same value = 0 }
+		if = {
+			limit = { has_variable = te_dg_wc_states }
+			if = {
+				limit = { var:te_dg_wc_states = local_var:te_dg_wc_states_now }
+				set_local_variable = { name = te_dg_wc_same value = 1 }
 			}
 		}
 		if = {
-			limit = { has_variable = te_dg_wc_g }
-			change_variable = {
-				name = te_dg_wc_g
-				add = { value = local_var:te_dg_wc_g_year subtract = var:te_dg_wc_g multiply = 0.2 }
+			limit = {
+				local_var:te_dg_wc_take = 1
+				local_var:te_dg_wc_same = 0
+			}
+			set_local_variable = {
+				name = te_dg_wc_ratio
+				value = { value = local_var:te_dg_wc_gdp_now divide = { value = var:te_dg_wc_gdp min = 1 } }
+			}
+			if = {
+				limit = {
+					OR = {
+						local_var:te_dg_wc_ratio < 0.9
+						local_var:te_dg_wc_ratio > 1.1
+					}
+				}
+				set_local_variable = { name = te_dg_wc_take value = 0 }
 			}
 		}
-		else = {
-			set_variable = { name = te_dg_wc_g value = local_var:te_dg_wc_g_year }
+		if = {
+			limit = { local_var:te_dg_wc_take = 1 }
+			te_demog_wc_log_growth = yes
+			if = {
+				limit = { has_variable = te_dg_wc_g }
+				change_variable = {
+					name = te_dg_wc_g
+					add = { value = local_var:te_dg_wc_g_year subtract = var:te_dg_wc_g multiply = 0.2 }
+				}
+			}
+			else = {
+				set_variable = { name = te_dg_wc_g value = local_var:te_dg_wc_g_year }
+			}
 		}
 	}
 	set_variable = { name = te_dg_wc_gdp value = local_var:te_dg_wc_gdp_now }
+	set_variable = { name = te_dg_wc_states value = local_var:te_dg_wc_states_now }
 	if = {
 		limit = { has_variable = te_policy_rate }
 		set_variable = { name = te_dg_wc_r value = te_demog_wc_real_rate }
