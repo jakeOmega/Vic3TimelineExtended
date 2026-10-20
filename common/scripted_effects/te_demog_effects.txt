@@ -622,25 +622,50 @@ te_demog_lt_sex = {
 }
 
 # After the last group (demographics_model.life_table's return): e0, e65 (radix
-# 100,000), each the mean of the two sexes.
+# 100,000), each the mean of the two sexes. $QF$ and $QM$ are women's and men's death
+# rates past 150 (per 100,000): the survivors at 150 live on at them (te_demog_lt_tail),
+# in e0 and e65 alone; te_dg_py<SEX>, which the old-age threshold reads after, keeps
+# the table to 150 (the open last interval, 2026-10-20).
 te_demog_lt_finish = {
-	set_variable = { name = te_dg_e0f value = { value = local_var:te_dg_pyf divide = 100000 } }
-	set_variable = { name = te_dg_e0m value = { value = local_var:te_dg_pym divide = 100000 } }
+	te_demog_lt_tail = { SEX = f Q = $QF$ }
+	te_demog_lt_tail = { SEX = m Q = $QM$ }
+	set_variable = { name = te_dg_e0f value = { value = local_var:te_dg_pyf add = local_var:te_dg_pytf divide = 100000 } }
+	set_variable = { name = te_dg_e0m value = { value = local_var:te_dg_pym add = local_var:te_dg_pytm divide = 100000 } }
 	set_variable = { name = te_dg_e0 value = { value = var:te_dg_e0f add = var:te_dg_e0m multiply = 0.5 } }
 	set_variable = {
 		name = te_dg_e65
 		value = {
 			value = {
 				value = local_var:te_dg_pyf
+				add = local_var:te_dg_pytf
 				subtract = local_var:te_dg_py65f
 				divide = { value = local_var:te_dg_l65f min = 1 }
 			}
 			add = {
 				value = local_var:te_dg_pym
+				add = local_var:te_dg_pytm
 				subtract = local_var:te_dg_py65m
 				divide = { value = local_var:te_dg_l65m min = 1 }
 			}
 			multiply = 0.5
+		}
+	}
+}
+
+# The life table's open last interval for one sex (demographics_model.tail_years): the
+# survivors at 150 (te_dg_l$SEX$, radix 100,000) x (100000 - q / 2) / q person-years,
+# q = $Q$ per 100,000 at least te_demog_k_lt_tail_rate_min, into te_dg_pyt$SEX$. Multiplied
+# before the one division, so the product (at most 100,000 x 100,000) keeps its digits.
+te_demog_lt_tail = {
+	set_local_variable = { name = te_dg_ltq value = { value = $Q$ min = te_demog_k_lt_tail_rate_min } }
+	set_local_variable = {
+		name = te_dg_pyt$SEX$
+		value = {
+			value = local_var:te_dg_ltq
+			multiply = -0.5
+			add = 100000
+			multiply = local_var:te_dg_l$SEX$
+			divide = local_var:te_dg_ltq
 		}
 	}
 }

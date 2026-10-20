@@ -6669,18 +6669,31 @@ class TestCauseFactorsScript(unittest.TestCase):
         eng.call("te_demog_cause_inputs_store")
         self.assertEqual((eng.vars["te_dg_in_mal"], eng.vars["te_dg_in_malc"]), (1.0, 1.0), "the control is 0 to 1")
 
-    def test_the_safety_factor_cuts_work_and_accidents_past_the_laws_floor(self):
-        """Modern safety (2026-10-16): 1 - the stored share, at most SAFETY_MAX, multiplying below the laws factor's
-        floor; a step from before it stored no share and reads 1, so the hover still multiplies to the row."""
+    def test_the_safety_factor_cuts_work_and_accidents_past_the_laws_factor(self):
+        """Modern safety (2026-10-16): 1 - the stored share, at most SAFETY_MAX, multiplying the laws factor, which since
+        2026-10-20 has no floor but 0 (it was 0.2: the case's -0.9 read 0.2); a step from before it stored no share and
+        reads 1, so the hover still multiplies to the row."""
         inp = demographics_model.Inputs(sol=40, literacy=1.0, mods=dict(self.CASES[-1]))
         eng = self._eng(inp)
-        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_laws")), P.MORTALITY_MULT_FLOOR)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_laws")), 0.1)
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_safety")), 1 - P.SAFETY_MAX)
-        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_mult_work")),
-                               P.MORTALITY_MULT_FLOOR * (1 - P.SAFETY_MAX), places=9)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_mult_work")), 0.1 * (1 - P.SAFETY_MAX),
+                               places=9)
         del eng.vars["te_dg_in_saf_work"], eng.vars["te_dg_in_saf_ext"]
         self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_safety")), 1.0)
         self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_external_safety")), 1.0)
+
+    def test_a_laws_factor_stops_at_zero(self):
+        """The natural bound (owner, 2026-10-20): lines summing below -1 give a factor of 0, never a negative rate, in the
+        script as in the model."""
+        inp = demographics_model.Inputs(sol=40, literacy=1.0, mods={"state_work_mortality_mult": -1.4,
+                                                                    "state_external_mortality_mult": -0.95})
+        eng = self._eng(inp)
+        self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_f_work_laws")), 0.0)
+        self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_f_external_laws")), 0.05)
+        factors = demographics_model.cause_factors(inp)
+        self.assertEqual(factors["work"]["laws"], 0.0)
+        self.assertAlmostEqual(factors["external"]["laws"], 0.05)
 
     def test_the_store_takes_the_safety_shares(self):
         inp = demographics_model.Inputs(sol=40, literacy=1.0, mods=dict(self.CASES[-1]))

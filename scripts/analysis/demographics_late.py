@@ -175,19 +175,26 @@ def scenarios(carriers=None, lines=None):
 # Together about +2 years of e0 today and at eras 10-11 (Rich today 80.3, the rich world's 80-84), +3 at ageing 0.70,
 # and +0.05 of Living to 100 under immortality: the e0 bands move up 2 years, Ageing 0.70's 3, immortality's Living to
 # 100 0.05.
+# 2026-10-20 (owner): chronic treatment to 0.99, Genetic Engineering 0.05 in era 11 and 0.12 each on Molecular Assemblers
+# and Biological Immortality in era 12, and the life tables' open last interval. Era 11's chronic treatment rises from
+# 0.80 to 0.85 (with Medical Augmentation Only), a quarter fewer chronic deaths: era 11 medicine +4.4 years of e0 (92.5 to
+# 96.9), +0.10 of Living to 100, +7.5 years of Old age from; Ageing 0.70 +5.3 years (the tail 0.5 of them), +0.04;
+# immortality's Living to 100 +0.016 and e0 141 (cut at 150) to about 1,700 (1,280 of it the tail alone). The bands the
+# figures left move with them, their widths kept; immortality's e0 gains a band. The accidents floor's removal moves
+# nothing here (the rich state's lines stay above it).
 STEADY = [  # (name, scenario, years, {figure: (lo, hi)})
     ("Rich today", "No change", 60, {"e0": (77, 82), "l100": (0.05, 0.13), "old_age": (73, 77)}),
     ("Era 10, ageing 0.9, everyone treated", "Era 10 (ageing 0.9)", 280,
      {"e0": (81, 87), "l100": (0.17, 0.30), "old_age": (80, 85)}),
     ("Era 11 medicine, no slowing", "Era 11 medicine, no slowing", 280,
-     {"e0": (86, 94), "l100": (0.28, 0.42), "old_age": (86, 92)}),
+     {"e0": (90, 99), "l100": (0.38, 0.52), "old_age": (93, 100)}),
     # the sketch's bands were for 0.75 (e0 103, Living to 100 67%, old age 117/110); era 11 reaches 0.70 since 2026-10-16
     # (Synthetic Biology), which moves the census's own tables by about +4.5 years of e0, +0.04 and +6 years: the bands
     # move with them
     ("Ageing 0.70", "Era 10 for 20 years, then era 11 (0.70)", 280,
-     {"e0": (104, 118), "l100": (0.59, 0.79), "old_age": (113, 126)}),
+     {"e0": (109, 124), "l100": (0.62, 0.84), "old_age": (113, 126)}),
     ("Immortality", "Immortality (pull 3%) from today", 280,
-     {"l100": (0.77, 0.93), "old_age": (P.LX_OLD_AGE_NONE, 150)}),
+     {"e0": (1200, 2400), "l100": (0.79, 0.95), "old_age": (P.LX_OLD_AGE_NONE, 150)}),
 ]
 # The design's 60-year projections (Context's table; sketch), at 60 years: people, the calendar 65+ share, the mean
 # biological age, health need, the workforce with a pension at 65 and with none. Wide bands: the sketch's workforce used
@@ -196,16 +203,18 @@ PROJECTION = [  # (scenario, {figure: (lo, hi)})
     ("No change", {"people": (0.50, 0.65), "old65": (0.25, 0.37), "need": (1.5, 1.95)}),
     ("Era 11 medicine, no slowing", {"people": (0.60, 0.78), "old65": (0.35, 0.50), "need": (1.85, 2.40)}),
     ("Era 10 (ageing 0.9)", {"people": (0.54, 0.70), "old65": (0.30, 0.42), "need": (1.45, 1.95)}),
-    ("Era 10 for 20 years, then era 11 (0.70)", {"people": (0.65, 0.85), "old65": (0.40, 0.56), "need": (1.6, 2.15)}),
+    # 2026-10-20: era 11's chronic treatment (STEADY's note) adds 0.03 to the people at 60 years, immortality's era 12 lines
+    # 0.07 (0.06 at 50): the bands they left move with them
+    ("Era 10 for 20 years, then era 11 (0.70)", {"people": (0.68, 0.88), "old65": (0.40, 0.56), "need": (1.6, 2.15)}),
     # the sketch's row timed every birth by the calendar (x1.19, 67% over 65); the census times unplanned births by the
     # body (call 5), which §3.3 puts at x1.30 in 50 years: more children, so more people and a younger calendar structure
     # #1045's fewer deaths (STEADY's note) add about 0.06 to the people at 60 years and 0.05 at 50: the tops move with them
-    ("Immortality (pull 3%) from today", {"people": (1.10, 1.60), "old65": (0.45, 0.75), "mean_bio": (26, 36),
+    ("Immortality (pull 3%) from today", {"people": (1.17, 1.67), "old65": (0.45, 0.75), "mean_bio": (26, 36),
                                           "need": (0.65, 1.0), "wf_none": (0.65, 0.85)}),
 ]
 # §3.3: under immortality, everyone treated, 50 years from today's structure: people x1.17 (every birth by the calendar) to
 # x1.30 (the split at means 0.9); the women aged 100's children so far 1.6 to about 2.
-IMMORTAL_50 = {"people": (1.12, 1.45), "lifetime_100": (1.6, 2.1)}
+IMMORTAL_50 = {"people": (1.18, 1.51), "lifetime_100": (1.6, 2.1)}   # people: 2026-10-20's era 12 lines, +0.06
 
 
 def judge(name, row, bands):

@@ -144,7 +144,10 @@ class TestMeans(unittest.TestCase):
         self.assertEqual(M.means(self.inp(0.0, {P.MEANS_SHIFT_TYPE: -2.0})), 0.0)
 
     def test_cap(self):
-        self.assertEqual(M.means(self.inp(1.0, {P.CONTRACEPTION_TYPE: 1.0, P.MEANS_SHIFT_TYPE: 1.0})), P.MEANS_CAP)
+        # the natural bound of a share (owner, 2026-10-20; was 0.95)
+        self.assertEqual(P.MEANS_CAP, 1.0)
+        self.assertEqual(M.means(self.inp(1.0, {P.CONTRACEPTION_TYPE: 1.0, P.MEANS_SHIFT_TYPE: 1.0})), 1.0)
+        self.assertAlmostEqual(M.means(self.inp(1.0, {P.CONTRACEPTION_TYPE: 1.0, P.MEANS_SHIFT_TYPE: -0.03})), 0.97)
 
 
 class TestMortality(unittest.TestCase):
@@ -169,13 +172,15 @@ class TestMortality(unittest.TestCase):
 
     def test_crowding_raises_infection_by_its_migration_penalty(self):
         # owner, 2026-10-10: a function of how crowded the state is, not a switch. Infection rises by the same share
-        # migration attraction falls (Inputs.crowding: 0.1 x migration_crowding's multiplier), at most +50%
+        # migration attraction falls (Inputs.crowding: 0.1 x migration_crowding's multiplier), with no ceiling since
+        # 2026-10-20 (owner: the old +50% was a guess; Ile-de-France's pull 1.008 doubles its infection)
         def infection(**kw):
             return M.cause_multipliers(M.Inputs(sol=12, literacy=0.3, **kw))["infection"]
         plain = infection()
         self.assertAlmostEqual(infection(crowding=0.038) / plain, 1.038)
         self.assertAlmostEqual(infection(crowding=0.45) / plain, 1.45)
-        self.assertAlmostEqual(infection(crowding=1.45) / plain, 1 + P.CROWDING_INFECTION_MAX)
+        self.assertAlmostEqual(infection(crowding=1.45) / plain, 2.45)
+        self.assertFalse(hasattr(P, "CROWDING_INFECTION_MAX"))
         # the Ministry of Urban Planning works through crowding itself (+10% tolerance a level), not as a gate
         ministry = {"institution_ministry_of_urban_planning": 3}
         self.assertAlmostEqual(infection(crowding=0.1, institutions=ministry), infection(crowding=0.1))
@@ -229,8 +234,37 @@ class TestMortality(unittest.TestCase):
             gap = M.life_table(qf)["e0"] - M.life_table(qm)["e0"]
             self.assertTrue(3.0 <= gap <= 6.0, gap)
 
-    def test_no_deaths_lives_to_the_end_of_the_ring(self):
-        self.assertAlmostEqual(M.life_table([0.0] * len(P.GROUPS))["e0"], 150.0)
+    def test_no_deaths_lives_at_the_floor_rate_past_150(self):
+        # the open last interval (2026-10-20): with no deaths the survivors at 150 live on at the floor rate, one per
+        # 100,000 a year, (100000 - 0.5) / 1 more years; finite, and within the script's range
+        t = M.life_table([0.0] * len(P.GROUPS))
+        self.assertAlmostEqual(t["e0"], 150.0 + 99999.5)
+        self.assertAlmostEqual(t["e65"], 85.0 + 99999.5)
+        self.assertEqual(M.tail_years(0.0), M.tail_years(P.LT_TAIL_RATE_MIN))
+        self.assertEqual(M.tail_years(-5.0), 99999.5)
+
+    def test_the_tail_moves_no_table_before_the_late_game(self):
+        # the survivors at 150 of a table before longevity care are a few in ten million: the tail adds under a
+        # thousandth of a year to e0 and e65, so the life expectancy any pre-late state shows stays as it was
+        for inp in (BRITAIN_1836, WEST_1990):
+            for q in M.group_rates(inp)[:2]:
+                l150 = M.survivors_at(q, 150)
+                self.assertLess(l150, 1e-5)
+                with_tail = M.life_table(q)
+                with unittest.mock.patch.object(M, "tail_years", lambda rate: 0.0):
+                    cut = M.life_table(q)
+                self.assertLess(with_tail["e0"] - cut["e0"], 1e-3)
+                self.assertLess(with_tail["e65"] - cut["e65"], 1e-3)
+                self.assertAlmostEqual(with_tail["e0"] - cut["e0"], l150 * M.tail_years(q[-1]), places=12)
+
+    def test_a_near_immortal_table_lives_for_centuries(self):
+        # bodies held young: every group at 40 deaths per 100,000 a year (a rich state's 30-year-olds), the survivors at
+        # 150 living on at it. e0 is the closed form, large and finite: 1/q in years, less the half-year
+        t = M.life_table([40.0] * len(P.GROUPS))
+        q = 40.0 / 100000.0
+        self.assertAlmostEqual(t["e0"], (1 - q / 2) / q, delta=1e-9 * t["e0"])
+        self.assertTrue(1000 < t["e0"] < 100000 / P.LT_TAIL_RATE_MIN + 150, t["e0"])
+        self.assertAlmostEqual(t["e65"], t["e0"], delta=1e-9 * t["e0"])   # a constant rate has no memory
 
     def test_work_deaths_follow_the_workforce(self):
         before = M.group_rates(scenario(laws=frozenset({"law_no_womens_rights"})))[0]
@@ -286,6 +320,21 @@ class TestMedicine(unittest.TestCase):
         self.assertEqual(M.INFECTION_ADULT_GROUPS, frozenset(range(P.group_of(lo), P.group_of(hi))))
         self.assertEqual(M.INFECTION_ADULT_BANDS, frozenset(range(lo // 5, hi // 5)))
 
+    def test_chronic_treatment_reaches_its_cap_by_era_12(self):
+        """Owner, 2026-10-20: chronic treatment to 0.99, reached by technology alone in the last era, as infection's. Eras
+        8-11's carriers make 0.70; Genetic Engineering's 0.05 and era 12's two 0.12s take it to the cap, and the
+        augmentation laws' flat lines then only cap."""
+        t = P.TREATMENT_TYPE["chronic"]
+        early = {"modern_pharmaceuticals", "telemedicine", "personalized_medicine"}
+        late = early | {"genetic_engineering", "molecular_assemblers", "biological_immortality"}
+        self.assertEqual(P.TREATMENT_CAP["chronic"], 0.99)
+        self.assertAlmostEqual(DM.totals(CARRIERS, early, (), {})[t], 0.70)
+        self.assertAlmostEqual(DM.totals(CARRIERS, late, (), {})[t], P.TREATMENT_CAP["chronic"])
+        with_law = DM.totals(CARRIERS, late, {"law_medical_augmentation_only"}, {})
+        self.assertAlmostEqual(M.medicine_targets(M.Inputs(mods=with_law))["chronic"], P.TREATMENT_CAP["chronic"])
+        # the health bill still counts its three technologies (owner: bills unchanged)
+        self.assertEqual(P.HEALTH_TECHS, ("modern_pharmaceuticals", "telemedicine", "personalized_medicine"))
+
     def test_infection_treatment_reaches_its_cap_by_era_12(self):
         """#1045 (owner, 2026-10-18): the base game's carriers stop at 0.94 by era 7, the rich world of eras 9-10; era 11's
         and 12's lines take infection's treatment to the cap."""
@@ -297,9 +346,13 @@ class TestMedicine(unittest.TestCase):
         self.assertAlmostEqual(DM.totals(CARRIERS, late, (), {})[t], P.TREATMENT_CAP["infection"])
 
     def test_plain_terms_are_floored(self):
+        # 2026-10-20 (owner): no floor but the natural bound 0, below which a negative rate would add people
+        self.assertEqual(P.MORTALITY_MULT_FLOOR, 0.0)
         inp = M.Inputs(mods={"state_work_mortality_mult": -0.9})
-        self.assertEqual(M.plain_multiplier(inp, "work"), P.MORTALITY_MULT_FLOOR)
-        self.assertEqual(M.cause_multipliers(inp)["work"], P.MORTALITY_MULT_FLOOR)
+        self.assertAlmostEqual(M.plain_multiplier(inp, "work"), 0.1)
+        inp = M.Inputs(mods={"state_work_mortality_mult": -1.5})
+        self.assertEqual(M.plain_multiplier(inp, "work"), 0.0)
+        self.assertEqual(M.cause_multipliers(inp)["work"], 0.0)
 
     def test_an_unincorporated_state_gets_the_base_access_only(self):
         laws, levels = {"law_public_health_insurance"}, {"institution_health_system": 5}

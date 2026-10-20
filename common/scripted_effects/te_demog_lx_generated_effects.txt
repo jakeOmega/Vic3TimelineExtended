@@ -2888,7 +2888,21 @@ te_demog_lx_tables = {
 	te_demog_lx_old_age_pass = yes
 	set_variable = { name = te_dg_old_age value = local_var:te_dg_lx_oa }
 	set_variable = { name = te_dg_lx_l100 value = local_var:te_dg_lx_lt }
-	te_demog_lt_finish = yes
+	# the blend's death rate past 150 for its survivors at 150 (demographics_model.lx_tail_rate): the pool's, its parts
+	# weighted by their people (te_demog_lx_fold_deaths), or with no pool the last group's
+	set_local_variable = { name = te_dg_lt_tqf value = local_var:te_dg_qf }
+	if = {
+		limit = { has_local_variable = te_dg_lxp_uf }
+		set_local_variable = { name = te_dg_lx_n value = { value = local_var:te_dg_lxp_uf add = local_var:te_dg_lxp_tf } }
+		if = { limit = { local_var:te_dg_lx_n > 0 } set_local_variable = { name = te_dg_lt_tqf value = { value = local_var:te_dg_lxp_uf multiply = local_var:te_dg_lxu_qf30 add = { value = local_var:te_dg_lxp_tf multiply = local_var:te_dg_lxp_bqf } divide = { value = local_var:te_dg_lx_n min = 0.00001 } } } }
+	}
+	set_local_variable = { name = te_dg_lt_tqm value = local_var:te_dg_qm }
+	if = {
+		limit = { has_local_variable = te_dg_lxp_um }
+		set_local_variable = { name = te_dg_lx_n value = { value = local_var:te_dg_lxp_um add = local_var:te_dg_lxp_tm } }
+		if = { limit = { local_var:te_dg_lx_n > 0 } set_local_variable = { name = te_dg_lt_tqm value = { value = local_var:te_dg_lxp_um multiply = local_var:te_dg_lxu_qm30 add = { value = local_var:te_dg_lxp_tm multiply = local_var:te_dg_lxp_bqm } divide = { value = local_var:te_dg_lx_n min = 0.00001 } } } }
+	}
+	te_demog_lt_finish = { QF = local_var:te_dg_lt_tqf QM = local_var:te_dg_lt_tqm }
 	set_local_variable = { name = te_dg_lx_rtq value = 0 }
 	set_local_variable = { name = te_dg_lx_rtp value = 0 }
 	set_local_variable = { name = te_dg_lx_ruq value = 0 }

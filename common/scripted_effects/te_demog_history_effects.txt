@@ -31,7 +31,8 @@
 #              demographic event fired (te_dg_wv_year, te_demog_history_note_event,
 #              which marks a sample already stored too)
 #   country    te_dg_hist (the list), te_dg_hist_year (the year last recorded),
-#              te_dg_famine_year and te_dg_wv_year (the markers' years)
+#              te_dg_famine_year and te_dg_wv_year (the markers' years),
+#              te_dg_h_e0_max (the Life Expectancy chart's axis, 100-10,000)
 #
 # ONE SAMPLE A YEAR. The census runs twice in 1836, at game start and on
 # 31 December, so a container is created only when te_dg_hist_year is not the
@@ -114,6 +115,8 @@ te_demog_history_record = {
 				}
 				te_demog_history_markers = yes
 			}
+			# the Life Expectancy chart's axis (2026-10-20)
+			te_demog_history_e0_axis = yes
 		}
 	}
 }
@@ -284,4 +287,21 @@ te_demog_history_sort = {
 		limit = { has_variable_list = te_dg_hist_tmp }
 		clear_variable_list = te_dg_hist_tmp
 	}
+}
+
+# Scope: the country, after its samples are stored (te_demog_history_record; the life table's open last interval,
+# 2026-10-20): the Life Expectancy chart's axis, te_dg_h_e0_max, the largest figure its samples hold, at least
+# te_demog_k_e0_axis_min (100) and at most te_demog_k_e0_shown_max (10,000), where a bar stops. Read over every sample, so
+# it falls again once the long-lived years leave the chart.
+te_demog_history_e0_axis = {
+	set_local_variable = { name = te_dg_h_ax value = te_demog_k_e0_axis_min }
+	every_in_list = {
+		variable = te_dg_hist
+		limit = { has_variable = te_dg_h_e0 }
+		if = {
+			limit = { var:te_dg_h_e0 > local_var:te_dg_h_ax }
+			set_local_variable = { name = te_dg_h_ax value = var:te_dg_h_e0 }
+		}
+	}
+	set_variable = { name = te_dg_h_e0_max value = { value = local_var:te_dg_h_ax max = te_demog_k_e0_shown_max } }
 }
