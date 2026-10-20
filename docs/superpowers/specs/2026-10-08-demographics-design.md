@@ -494,7 +494,7 @@ takes them out of the residual, which books only the rest:
 |---|---|
 | Land Grants, Organized Colonization | families (the family kind) |
 | Military Colonies | half the labour kind at 80% men, half families |
-| Penal Transportation | mostly 15–35, 85% men (Australia's convicts: 15.4% women, average age about 25, a fifth under 20): 12% aged 15–17, 78% 18–35, 10% 36–59 (the class split is the controller's proposal, 2026-10-20, not yet confirmed by the owner) |
+| Penal Transportation | mostly 15–35, 85% men (Australia's convicts: 15.4% women, average age about 25, a fifth under 20): 12% aged 15–17, 78% 18–35, 10% 36–59 (the class split is the controller's proposal, confirmed by the owner on 2026-10-20) |
 | Special Settlements | whole families, all ages: the refugee kind |
 | Development Program | 60% families, 40% labour, the labour kind's women's share set by the destination's jobs as the residual's is (before its balance ramp) |
 | Rustication | ages 15–24, both sexes evenly, booked by single year (15–24 straddles the classes) |
@@ -623,7 +623,8 @@ state. The stock is the #822 score.
   the panel, plus two small effects:
   - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
     scale: set it afresh on the wealth-band figure when this is built). **Built 2026-10-19, under Full only** (owner):
-    radicals rise with the state's shown Gini above 0.45, by up to 10% at 0.65 (§7's Inequality row);
+    radicals rise with the state's shown Gini above 0.45, by 10% at 0.65 and on at that slope with no cap (owner,
+    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row);
   - an input to crime for the policing laws. **Dropped** (owner, 2026-10-19): the engine has no crime quantity.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
@@ -862,7 +863,7 @@ state pulse and country effects from the country pulse. Sizes are starting propo
 | **Conscription** | `state_conscription_rate_mult` | men aged 20–39 ÷ the 1836 reference − 1 | ±0.25 |
 | **Youth bulge** | radicals from movements, turmoil effects | ages 20–29 above about 18% of the population (1836's share is about 17%), × the state's unemployment rate | small |
 | **Sex balance** | births, working-adult ratio, movements, radicals | §3 | small |
-| **Inequality** (built 2026-10-19, Full only) | `te_demog_census_inequality`: radicals from movements, state-wide (the engine has no lower-strata radicals type); crime dropped (no engine quantity) | §4.1: (the shown Gini − 0.45) / 0.20, 0–1, on +10% | +10%, at 0.65 |
+| **Inequality** (built 2026-10-19, Full only) | `te_demog_census_inequality`: radicals from movements, state-wide (the engine has no lower-strata radicals type); crime dropped (no engine quantity) | §4.1: (the shown Gini − 0.45) / 0.20, at least 0, on +10% | none since 2026-10-20 (owner: the same slope on, +27.5% at a Gini of 1; it was +10%, at 0.65) |
 | **Wealth Concentration** | clout, investment pools, mobility, radicals, rural migration | §4.2 | as now |
 | **National urban pattern** | throughput and migration pull in the primate state; pull and turmoil elsewhere | §5.1 | small |
 | **Settlement pattern** | crowding density, infrastructure from population, throughput, fertility, turmoil | §5.2 | small |

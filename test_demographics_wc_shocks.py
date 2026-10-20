@@ -520,10 +520,11 @@ class TestInequality(unittest.TestCase):
         eng.call("te_demog_inequality_refresh")
         return eng
 
-    def test_from_045_to_the_cap_at_065(self):
+    def test_from_045_on_with_no_cap(self):
+        """The same slope past 0.65 (owner, 2026-10-20: the cap at 1 went): +27.5% at a Gini of 1."""
         # at or under 0.452 the multiplier is 0.01 or less, and no modifier is applied
         for gini, mult in ((0.30, None), (0.45, None), (0.452, None), (0.50, 0.25), (0.55, 0.5), (0.65, 1.0),
-                           (0.80, 1.0)):
+                           (0.80, 1.75), (1.0, 2.75)):
             with self.subTest(gini=gini):
                 eng = self.refresh(gini, had=0.4)
                 got = eng.modifiers.get("te_demog_census_inequality")
@@ -552,6 +553,12 @@ class TestInequality(unittest.TestCase):
                  if "add_modifier = { name = te_demog_census_inequality" in p.read_text(encoding="utf-8-sig")]
         self.assertEqual(sites, ["te_demog_wealth_effects.txt"])
         self.assertIn("te_demog_inequality_refresh = yes", _block(_text(EFFECTS), "te_demog_state_yearly"))
+
+    def test_no_max_on_the_multiplier(self):
+        body = _block(_text(WEALTH_EFFECTS), "te_demog_inequality_refresh")
+        self.assertIn("value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 } }", body)
+        self.assertNotIn("max =", body)
+        self.assertNotIn("up to 10%", _loc()["te_demog_census_inequality_desc"])
 
     def test_the_modifier(self):
         body = _block(_text(INEQ_MODIFIERS), "te_demog_census_inequality")

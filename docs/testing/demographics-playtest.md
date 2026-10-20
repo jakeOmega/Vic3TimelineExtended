@@ -810,7 +810,7 @@ The financial boom (+5 once a banking cycle reaches Frenzy), the ownership shock
 capital moving 10 points or more in a year: half a point a point, at most ±10), land reform (−10 × each state's
 agrarian share) and the target's seventh term, Return on Capital (2 × (the real policy rate − growth averaged over
 about five years), at most ±5, once the banking cycle has started), all under every Demographics rule; and the
-Inequality effect (`te_demog_census_inequality`, radicals from movements up to +10% from a shown Gini of 0.45 to 0.65)
+Inequality effect (`te_demog_census_inequality`, radicals from movements +10% for each 0.2 of shown Gini above 0.45, no cap since 2026-10-20)
 under Full only. `test_demographics_wc_shocks.py` runs each through the interpreter. No new engine fact: the reads are
 the ownership term's walk, `has_law_or_variant` (the monetary system's), `on_state_owner_change` (five systems'), the
 banking triggers and the radicals type Concentrated Property carries, so no self-check. What only the game can show:
@@ -843,7 +843,8 @@ banking triggers and the radicals type Concentrated Property carries, so no self
    as for the same law enacted in peace (`te_demog_wc_civil_war_inherit` gives the winner the old government's law
    role). The winner's Return on Capital growth average carries on from the old government's.
 6. **The Inequality effect (Full).** A state whose shown Gini is above 0.45 lists Census: Inequality, with radicals
-   from movements +5% at 0.55 and +10% from 0.65; none under Display only or Disabled.
+   from movements +5% at 0.55, +10% at 0.65 and +15% at 0.75, on at that slope with no cap (owner, 2026-10-20); none
+   under Display only or Disabled.
 
 ## Internal Resettlement in the census, and the US frontier (2026-10-19)
 

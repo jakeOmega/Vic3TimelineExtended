@@ -966,8 +966,8 @@ RESETTLE_PROGRAMMES = ("land_grants", "military_colonies", "penal_transportation
 # share, or (Rustication's youth) an age range booked by single year in proportion to each age's people.
 # - penal: mostly 15-35, 85% men. Of the ~162,000 convicts sent to Australia, ~25,000 were women (15.4%), their average
 #   age about 25 and a fifth under 20 (owner, 2026-10-19). Classes 15-17, 18-35, 36-59 at 12/78/10 (the controller's
-#   proposal after review, 2026-10-20, sent to the owner and not yet confirmed): a fifth under 20 is about 12% at 15-17,
-#   three of its five years; 18-19 sit in the 18-35 class; a tenth over 35.
+#   proposal after review, confirmed by the owner on 2026-10-20): a fifth under 20 is about 12% at 15-17, three of its
+#   five years; 18-19 sit in the 18-35 class; a tenth over 35.
 # - youth: China's sent-down youth, 15-24, both sexes evenly. 15-24 straddles the classes (15-17, 18-35), so it is booked
 #   over the single years 15-24 instead: one rate per sex over the people of those ages (the bands 15-19 and 20-24).
 # - retreat: Managed Retreat moves whole communities, weighted to the old: the refugee kind with its 60+ weight doubled,
@@ -983,7 +983,8 @@ RESETTLE_KINDS = {
 # split evenly (None: the kind's own share); the labour kind takes the women's share given, or "jobs": the destination's
 # jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's rights x the range; no
 # balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's class
-# split (above) and the Development Program's 60/40 were being confirmed as this was built: one edit here if they change.
+# split (above) was confirmed on 2026-10-20, and the Development Program's 60/40 was being confirmed as this was built:
+# one edit here if it changes.
 RESETTLE_PROFILES = {
     "land_grants": (("family", 1.0, None),),
     "military_colonies": (("labour", 0.5, 0.2), ("family", 0.5, None)),   # half the labour kind at 80% men, half families
