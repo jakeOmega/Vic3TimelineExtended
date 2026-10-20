@@ -233,8 +233,8 @@ class TestMortality(unittest.TestCase):
         self.assertAlmostEqual(M.life_table([0.0] * len(P.GROUPS))["e0"], 150.0)
 
     def test_work_deaths_follow_the_workforce(self):
-        before = M.group_rates(M.Inputs(laws=frozenset({"law_no_womens_rights"})))[0]
-        after = M.group_rates(M.Inputs(laws=frozenset({"law_women_in_the_workplace"})))[0]
+        before = M.group_rates(scenario(laws=frozenset({"law_no_womens_rights"})))[0]
+        after = M.group_rates(scenario(laws=frozenset({"law_women_in_the_workplace"})))[0]
         g = P.group_of(30)
         self.assertGreater(after[g], before[g])
 
@@ -660,6 +660,33 @@ class TestMigrantProfile(unittest.TestCase):
                 self.assertEqual(len(spec["weights"]), len(P.MIGRANT_CLASSES))
                 self.assertAlmostEqual(sum(spec["weights"]), 1.0)
 
+    def test_women_at_work_is_the_base_plus_the_laws_line(self):
+        """Modifier-types stage 3 (2026-10-19): the share was a law table; each women's-rights law now carries the old
+        table's figure less the 0.1 base, so every law reads what it did."""
+        old_table = {"law_no_womens_rights": 0.1, "law_women_in_the_fields": 0.25, "law_women_own_property": 0.3,
+                     "law_women_in_the_workplace": 0.45, "law_womens_suffrage": 0.47, "law_protected_class": 0.48}
+        for law, share in old_table.items():
+            self.assertAlmostEqual(M.female_work_share(scenario(laws=frozenset({law}))), share, msg=law)
+        self.assertEqual(M.female_work_share(M.Inputs()), P.FEMALE_WORK_SHARE_DEFAULT, "no law: the base")
+        self.assertEqual(M.female_work_share(M.Inputs(mods={P.FEMALE_WORK_SHARE_TYPE: 2.0})), 1.0, "at most 1")
+        self.assertEqual(M.female_work_share(M.Inputs(mods={P.FEMALE_WORK_SHARE_TYPE: -0.5})), 0.0, "at least 0")
+
+    def _family(self, inp):
+        """The family kind's weight, read back from the profile's under-15s (only families and refugees bring them)."""
+        prof = M.migrant_profile(inp)
+        return (prof[(0, "f")] + prof[(0, "m")]) / P.MIGRANT_PROFILE["family"]["weights"][0]
+
+    def test_cheaper_transport_brings_families(self):
+        """The transport technologies' line adds to FAMILY_BASE: Paddle Steamer, Railways and the Combustion Engine as
+        before, and the aviation techs §2.5 names (owner, 2026-10-19)."""
+        base = dict(laws=frozenset({"law_no_womens_rights"}))
+        steam = frozenset({"paddle_steamer", "railways", "combustion_engine"})
+        air = steam | {"commercial_aviation", "jet_engine_technology"}
+        rights = P.FAMILY_RIGHTS_WEIGHT * P.FEMALE_WORK_SHARE_DEFAULT / P.FULL_FEMALE_WORK_SHARE
+        self.assertAlmostEqual(self._family(scenario(**base)), P.FAMILY_BASE + rights)
+        self.assertAlmostEqual(self._family(scenario(techs=steam, **base)), P.FAMILY_BASE + 0.35 + rights)
+        self.assertAlmostEqual(self._family(scenario(techs=air, **base)), P.FAMILY_BASE + 0.45 + rights)
+
 
 class TestMigrantBooking(unittest.TestCase):
     """The residual's booking keeps the structure plausible (2026-10-12; docs/testing/demographics-migrant-booking-
@@ -986,7 +1013,7 @@ class TestPractices(unittest.TestCase):
         self.assertAlmostEqual(M.practice_seed("bs", M.Inputs(mods={P.ACCESS_TYPE: 0.25}), 1.0, []),
                                1 - P.PRACTICE_EROSION_ACCESS["bs"] * 0.5)
         drivers = M.Inputs(female_job_share=1.0, laws=frozenset({"law_protected_class"}), agrarian_share=1.0,
-                           mods={P.LM_FARMS_TYPE: 0.15})
+                           mods={P.LM_FARMS_TYPE: 0.15, P.FEMALE_WORK_SHARE_TYPE: 0.38})
         self.assertEqual(M.practice_seed("lm", drivers, 0.0, []), 0.0,
                          "the drivers stay out of the seed: Japan's Late Marriage starts at 0 (call 3)")
 
@@ -1182,8 +1209,8 @@ class TestPhase2Step2(unittest.TestCase):
                                P.HEALTH_TECH_STEP * len(P.HEALTH_TECHS))
 
     def test_work_deaths_split_by_the_census_under_full(self):
-        inp = M.Inputs(laws=frozenset({"law_protected_class"}))
-        self.assertEqual(M.work_death_share(inp), P.FEMALE_WORK_SHARE["law_protected_class"])
+        inp = scenario(laws=frozenset({"law_protected_class"}))
+        self.assertAlmostEqual(M.work_death_share(inp), P.FULL_FEMALE_WORK_SHARE, msg="the laws' share outside Full")
         full = dataclasses.replace(inp, work_female_share=0.3)
         self.assertEqual(M.work_death_share(full), 0.3)
         f, m = M.work_split(full, 2.0)

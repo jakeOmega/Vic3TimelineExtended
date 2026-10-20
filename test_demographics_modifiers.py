@@ -99,7 +99,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    # the laws' other terms (2026-10-17): the childrens'-rights laws' 10-14s at work, the church laws'
                    # weight on Family Limitation, impartible inheritance's Late Marriage (Undivided Farm Succession is
                    # an amendment)
-                   P.CHILD_WORK_TYPE: {"law"}, P.FL_LITERACY_TYPE: {"law"}, P.LM_FARMS_TYPE: {"law", "amendment"}}
+                   P.CHILD_WORK_TYPE: {"law"}, P.FL_LITERACY_TYPE: {"law"}, P.LM_FARMS_TYPE: {"law", "amendment"},
+                   # stage 3 (2026-10-19): the migrant profile's women's-rights laws and transport technologies
+                   P.FEMALE_WORK_SHARE_TYPE: {"law"}, P.FAMILY_MIGRATION_TYPE: {"technology"}}
         for c in self.carriers:
             self.assertIn(c.kind, allowed[c.type], c)
 
@@ -149,6 +151,26 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             P.LM_FARMS_TYPE: {"law_primogeniture": 0.15, "amendment_undivided_farm_succession": 0.15},
             P.FL_LITERACY_TYPE: {"law_state_religion": -0.5, "law_millet_system": -0.5, "law_people_of_the_book": -0.5,
                                  "law_total_separation": 0.5, "law_state_atheism": 0.5}})
+
+    def test_the_migrant_profiles_inputs_sit_on_the_laws_and_the_transport_techs(self):
+        """Stage 3 (2026-10-19): a law table and a technology ladder until then. The women's-rights laws carry the old
+        table less the 0.1 base (No Women's Rights none), the transport technologies their old figures plus the
+        aviation techs §2.5 names (owner, 2026-10-19). Protected Class's line sets the share at women's rights'
+        fullest, which the profile divides by."""
+        carried = {}
+        for c in self.carriers:
+            if c.type in P.MIGRANT_PROFILE_TYPES:
+                carried.setdefault(c.type, {})[c.key] = c.value
+        self.assertEqual(carried, {
+            P.FEMALE_WORK_SHARE_TYPE: {"law_women_in_the_fields": 0.15, "law_women_own_property": 0.2,
+                                       "law_women_in_the_workplace": 0.35, "law_womens_suffrage": 0.37,
+                                       "law_protected_class": 0.38},
+            P.FAMILY_MIGRATION_TYPE: {"paddle_steamer": 0.1, "railways": 0.1, "combustion_engine": 0.15,
+                                      "commercial_aviation": 0.05, "jet_engine_technology": 0.05}})
+        full = P.FEMALE_WORK_SHARE_DEFAULT + max(carried[P.FEMALE_WORK_SHARE_TYPE].values())
+        self.assertAlmostEqual(P.FULL_FEMALE_WORK_SHARE, full)
+        self.assertAlmostEqual(P.FULL_FEMALE_WORK_SHARE, P.FEMALE_WORK_SHARE_DEFAULT
+                               + carried[P.FEMALE_WORK_SHARE_TYPE]["law_protected_class"])
 
     def test_late_marriages_two_carriers_never_meet(self):
         """Primogeniture's and Undivided Farm Succession's lines add as modifiers do, where the script's OR counted them

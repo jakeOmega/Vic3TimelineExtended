@@ -155,6 +155,18 @@ ADULT_INFECTION_DIGESTS = {
     ("generated_values", "te_demog_treatment_target_infection"):
         "769e4f31ff67c155a4ad351600e12595bdf5fa59f06f7dc76f9d1ce8390947f0",
 }
+# The migrant profile's inputs as modifier types (modifier-types stage 3, 2026-10-19): women's share of the workforce
+# reads 0.1 + the women's-rights laws' state_female_work_share_add instead of testing the law, and the families'
+# transport term the transport technologies' state_family_migration_add instead of testing the technology. Each line is
+# the old table's value less the base, so the cases' No Women's Rights and Protected Class read the same 0.1 and 0.48
+# (the interpreter takes the share as a fixture from the model, which reads the lines), and no case steps with flows,
+# so the profile's new aviation lines move nothing here; test_demographics_registry holds both blocks to the carriers.
+STAGE3_DIGESTS = {
+    ("generated_values", "te_demog_female_work_share"):
+        "729fa3c32536d25089000d845551a49f523310bfe0647648326433bac947d2d2",
+    ("generated_values", "te_demog_family_transport"):
+        "35e0649d63bd37d0d79808136ce9e150e43001f7238003f0f731cfb61ab29cb2",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -328,6 +340,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                     (key, name), BOOKING_DIGESTS.get((key, name), STEP3_DIGESTS.get((key, name), digest)))))
                 want = WORKING_CONDITIONS_DIGESTS.get((key, name), want)
                 want = ADULT_INFECTION_DIGESTS.get((key, name), want)
+                want = STAGE3_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):
