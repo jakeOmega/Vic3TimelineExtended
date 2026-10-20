@@ -2,7 +2,7 @@
 """Write te_region_area_generated.txt: every land state region's area in km².
 
 Script cannot iterate a state's provinces, so the Settlement Authority's
-frontier test (docs/superpowers/specs/2026-09-26-internal-resettlement-design.md
+frontier test (docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md
 §6) reads an area stored on the state region. This counts each province's
 pixels in the game's map_data/provinces.png, weights every pixel by its map
 row, and sums each region's provinces.

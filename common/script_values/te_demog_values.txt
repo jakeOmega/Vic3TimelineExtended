@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — script values the yearly walks read
 # (docs/superpowers/specs/2026-10-08-demographics-design.md §11.3;
-# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Task 7)
+# docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md Task 7)
 # ============================================================================
 
 # Pop scope: literacy x size, SoL x size (the walk's sums).
@@ -303,7 +303,7 @@ te_demog_tfr = {
 	multiply = te_demog_tfr_sex
 }
 
-# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1). State scope.
+# Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1). State scope.
 # Planned and unplanned births (late-game §3.1): te_demog_tfr's parts, from the stored terms, so whatever multiplies
 # the factor (wealth, natural, the practices) scales both. No variable: the tooltips read them.
 te_demog_tfr_factor = {

@@ -572,7 +572,7 @@ def asfr_shape(rate_age):
     return P.ASFR_SHAPE_BY_GROUP[rate_age - rate_age % 5] / 5.0
 
 
-# ---- Phase 2 step 1: the interfaces (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1) -
+# ---- Phase 2 step 1: the interfaces (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1) -
 
 def asfr_planned(rate_age):
     """Planned births' share at a calendar rate age, per 100k (P.ASFR_PLANNED_SHAPE)."""
@@ -1438,7 +1438,7 @@ def run_constant(inp, years=400, year0=1836):
     return ring, last
 
 
-# ---- Phase 3: the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md) --------------------
+# ---- Phase 3: the late game (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md) --------------------
 # Biological age per five-year birth band (§1.2-§1.3), who gets life extension (§4.2), Biological Immortality's pull
 # (§1.4) and the late figures (§6). Inert before the first ageing carrier: step() takes none of this path until a state
 # has a carrier or a stored eligibility (ring.lx_elig), so every earlier number is the census's as before. The script

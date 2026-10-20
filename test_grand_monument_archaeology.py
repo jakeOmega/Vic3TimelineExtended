@@ -2,7 +2,7 @@
 them, the dig, and what a finished dig hands to the monument machinery, pinned
 against the landmark registry.
 
-Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md,
+Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md,
 reworked by 2026-10-16-grand-monument-archaeology-rework-design.md (costs by the
 site, sized digs, events that name the place, the find and its history, and
 foreign digs by treaty).

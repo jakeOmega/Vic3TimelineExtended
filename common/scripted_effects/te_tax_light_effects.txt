@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # LIGHT TAX CODE (te_tax_code_rule = te_tax_code_light)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-09-tax-code-light-design.md. Schema:
+# Design: docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md. Schema:
 # docs/systems/tax_code_schema.md, "Light code".
 #
 # The vanilla taxation law stays enacted and bounds each rate between the rate

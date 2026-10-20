@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md.
 
 # ---- The doubling curve (§2.2) ---------------------------------------------
 # Every effect a monument gives grows in steps of equal size, and each step

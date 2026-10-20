@@ -319,7 +319,7 @@ RESTORED = {
 
 
 class TestEngineRateLines(unittest.TestCase):
-    """Owner, 2026-10-11 (docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): every birth or
+    """Owner, 2026-10-11 (docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): every birth or
     mortality line a law, technology or institution carried now sits on a script-only type, in the absorbed family
     (the census models it under Full) or the on-top family (the census applies it at its rate). Vanilla's are moved by
     an INJECT that cancels the field and carries the type (te_demog_engine_line_injections.txt), the mod's in place."""

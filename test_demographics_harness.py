@@ -1260,7 +1260,7 @@ class TestPensionsCommand(unittest.TestCase):
         self.assertIn("The health bill", out.getvalue())
 
 class TestConsequences(unittest.TestCase):
-    """`consequences`: phase 2 step 4's bands (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-
+    """`consequences`: phase 2 step 4's bands (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-
     design.md §5) on the model's structures and on a census save."""
 
     def test_the_stable_structures(self):

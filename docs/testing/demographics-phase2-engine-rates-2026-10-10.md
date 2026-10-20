@@ -1,7 +1,7 @@
 # Demographics phase 2 step 4: probes and gate results (2026-10-10)
 
 The gate of phase 2 step 4: the census sets the engine's births and deaths
-(plan `docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md`, Task 12; PR #869). This records the
+(plan `docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md`, Task 12; PR #869). This records the
 offline half, run on this date, and leaves room for the in-game half, which needs the owner.
 
 **Status: the offline gate passes after the owner's retune (`WEALTH_TFR_LOW` 6.2 → 6.0, 2026-10-10): ×1.66, and no
@@ -313,7 +313,7 @@ console's lines are in `debug.log`.
 ## The moved lines (owner, 2026-10-11)
 
 Every birth and mortality line on a law, technology or institution now sits on a script-only type
-(`docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md`).
+(`docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md`).
 - **Without the census** (rule off, Display only, or Full before a state's first step), the lines reach each state as
   Laws and Institutions.
 - **Under Full,** the census models the absorbed family and applies the on-top family at its rate.

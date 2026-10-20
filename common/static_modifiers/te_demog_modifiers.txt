@@ -44,7 +44,7 @@ te_demog_census_wealth_down = {
 	state_mortality_wealth_mult = -1
 }
 
-# Phase 2 step 2 (te_demog_work_effects.txt; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md
+# Phase 2 step 2 (te_demog_work_effects.txt; docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md
 # §2): under Full only.
 # The workforce term W on the state: one of the pair at a time, multiplier |W|, the bookkeeping icon (hidden from the
 # state panel's rows like the births and deaths pairs; it shows by name in the workforce breakdown).

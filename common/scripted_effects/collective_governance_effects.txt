@@ -18,7 +18,7 @@
 # Amendments need a sponsor (vanilla land_ownership_law_events.txt). We use
 # the ruler's interest group; with no ruler the add waits for the next call.
 #
-# Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+# Spec: docs/superpowers/archive/specs/2026-09-26-collective-governance-design.md
 # Pinned by test_collective_governance.py.
 
 te_refresh_collective_governance_amendment = {

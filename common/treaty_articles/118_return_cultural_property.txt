@@ -2,7 +2,7 @@
 # TREATY ARTICLE: return_cultural_property
 # The source returns every Grand Monument trophy it holds whose origin the
 # target owns; each is rebuilt where it was taken from (gm_trophy_effects.txt,
-# docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §5).
+# docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md §5).
 # Historical: Article 131 of the Treaty of Versailles sent the observatory
 # instruments taken in 1900 back to Beijing; the 1947 peace treaty with Italy
 # ordered the Aksum stele returned.

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — several monuments in one state: scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md.
 
 # State scope. A secondary monument stands here beside the primary. Not
 # variable_list_size: its documented `target` key fails to load in 1.14, and a

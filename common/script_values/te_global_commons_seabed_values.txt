@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GLOBAL COMMONS — SEABED LICENCES: tuning and reads
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# Design: docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 2.
 # Mechanics: common/scripted_effects/te_global_commons_seabed_effects.txt,
 # which follows the Python model scripts/analysis/seabed_model.py step for
 # step (test_seabed_allocation.py). Every number the system uses is defined

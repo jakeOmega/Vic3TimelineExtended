@@ -1,4 +1,4 @@
-﻿### Light Tax Code — the panels (docs/superpowers/specs/2026-10-09-tax-code-light-design.md;
+﻿### Light Tax Code — the panels (docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md;
 ### docs/systems/tax_code_schema.md, "Light code"). The layout
 ### (te_tax_layout_widget.gui) and the overview (te_tax_overview_widget.gui)
 ### show these instead of the legislated code's sections when the country is

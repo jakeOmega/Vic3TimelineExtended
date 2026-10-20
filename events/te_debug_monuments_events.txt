@@ -91,7 +91,7 @@ te_debug_monuments.1 = { # REVIEWED 2026-09-27: console-only test event (`event 
 # offer (monument_events.21), past the rank and the once-per-game marks. The
 # last options close the open opportunity each way and print it. "Complete it
 # now" runs the gift (monument_events.26) and the boon as a real completion.
-# Docs: docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md.
+# Docs: docs/superpowers/archive/specs/2026-10-12-grand-monument-opportunities-design.md.
 te_debug_monuments.2 = { # REVIEWED 2026-10-12: console-only test event (`event te_debug_monuments.2`); never fired by script on purpose
 	type = country_event
 	placement = ROOT
@@ -410,7 +410,7 @@ te_debug_monuments.5 = { # REVIEWED 2026-10-11: console-only test event (`event 
 # ============================================================================
 # TROPHIES — console test event: `event te_debug_monuments.6`
 # ============================================================================
-# Docs: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md §9.
+# Docs: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md §9.
 # Option a carries off the tallest monument in the world that is not ours, as
 # if our armies held its state (no war or province test); option b our own
 # tallest, as if from an unincorporated state (no incorporation or builder
@@ -522,7 +522,7 @@ te_debug_monuments.6 = { # REVIEWED 2026-10-12: console-only test event (`event 
 # ============================================================================
 # ARCHAEOLOGY — console test event: `event te_debug_monuments.7`
 # ============================================================================
-# Docs: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+# Docs: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md.
 # Option a seeds the buried sites (for a save started before them; a site
 # already seeded is not made twice) and turns up every incidental site; b digs
 # the grandest site we may dig, by the best method we have; c brings every dig
@@ -644,7 +644,7 @@ te_debug_monuments.7 = { # REVIEWED 2026-10-14: console-only test event (`event 
 # ============================================================================
 # UNIQUE DEDICATIONS (signatures) — console test event: `event te_debug_monuments.8`
 # ============================================================================
-# Docs: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md §10.
+# Docs: docs/superpowers/archive/specs/2026-10-16-grand-monument-signatures-design.md §10.
 # Option a holds one of every special, so the next ceremony offers them; b runs
 # the landmark backfill now (states, monuments beside another, trophies); c
 # gives our tallest monument the next signature in turn, on its dedication now,

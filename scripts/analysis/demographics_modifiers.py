@@ -190,7 +190,7 @@ def is_engine_rate_field(field):
 
 def engine_lines(root=ROOT):
     """{(kind, key, block, engine field): (family, value)}: the engine's birth and mortality lines moved to script-only
-    types (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md), read back
+    types (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md), read back
     from the carriers. engine_rate_lines already sums every *_mult line, vanilla's and the mod's, so a type's line is
     found under its own name and mapped back to the field it replaces."""
     back = {name: fam_field for fam_field, name in P.ENGINE_LINE_TYPES.items()}

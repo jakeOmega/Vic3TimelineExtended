@@ -1965,7 +1965,7 @@ un_chamber_propose_intro_sgui = {
 }
 
 # ============================================================================
-# DELEGATIONS (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md §6)
+# DELEGATIONS (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md §6)
 # ============================================================================
 # The AI members' positions on the resolution in session, one GUI row per
 # member (the Missions in the Field pattern, gotcha #27): 24 rows, each

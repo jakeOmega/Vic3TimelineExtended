@@ -1,6 +1,6 @@
 """The banking entry for every country, its cycle dormant until it starts.
 
-docs/superpowers/specs/2026-10-17-banking-always-on-design.md. Every country
+docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md. Every country
 under the Banking System rule holds je_banking_cycle from the first weeks of a
 game; what starts later is the financial cycle (te_banking_cycle_unlocked:
 Stock Exchange and an Urban Center of level 5), latched by finance_cycle_value

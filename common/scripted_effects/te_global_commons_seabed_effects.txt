@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GLOBAL COMMONS — SEABED LICENCES: mechanics
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# Design: docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 2.
 # The script follows the Python model scripts/analysis/seabed_model.py step
 # for step; each effect names the model function it stands for
 # (test_seabed_allocation.py runs the model over random worlds;

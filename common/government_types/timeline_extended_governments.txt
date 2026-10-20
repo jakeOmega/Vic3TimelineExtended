@@ -4,7 +4,7 @@
 # is the catch-all (it shows only while a country holds the law under a
 # Distribution of Power the law does not allow, until the consistency cascade
 # replaces it). The two gov_direct_democracy* keys are kept for saves.
-# Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+# Spec: docs/superpowers/archive/specs/2026-09-26-collective-governance-design.md
 
 gov_collective_noble_commonwealth = {
 	transfer_of_power = parliamentary_elective

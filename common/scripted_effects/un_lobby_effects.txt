@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # RESOLUTION LOBBYING — pledges and campaigns
 # ============================================================================
-# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md. Any member may
+# docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md. Any member may
 # try to move another member's vote on the resolution in session, in either
 # direction, two ways:
 #

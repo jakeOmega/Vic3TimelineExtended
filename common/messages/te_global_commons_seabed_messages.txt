@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE SEABED RUSH — NOTIFICATIONS
 # ============================================================================
-# docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md § 7,
+# docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-panel-design.md § 7,
 # posted from te_global_commons_seabed_effects.txt; the rush itself is an event,
 # te_seabed.3 (events/te_seabed_events.txt). Loc:
 # notification_<message>_name/_desc/_tooltip, which organize_loc files in

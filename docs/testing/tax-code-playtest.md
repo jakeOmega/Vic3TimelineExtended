@@ -2,7 +2,7 @@
 
 The checks that decide whether the legislated tax code works in game, in the order to run
 them. The design is `docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md`
-(packages 1–5) and `docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md`
+(packages 1–5) and `docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md`
 (the AI and this release). The mechanics are in `docs/systems/tax_code_schema.md`, and
 `docs/testing/tax-code-capability-ledger.md` maps each check to a release scenario (its
 "Evidence matrix"). The structural tests only show that the script is wired as designed;

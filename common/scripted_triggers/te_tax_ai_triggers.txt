@@ -1,5 +1,5 @@
 ﻿# Legislated tax code: the AI's gates and fiscal signals (plan 2026-10-03,
-# Task 18; spec docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md
+# Task 18; spec docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md
 # §2.2-§2.4; docs/systems/tax_code_schema.md, "AI legislation").
 #
 # Country scope. The thresholds are the named values of te_tax_ai_values.txt.

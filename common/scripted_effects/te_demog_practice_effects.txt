@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the practices: Late Marriage (lm) and Birth Spacing (bs)
 # docs/superpowers/specs/2026-10-10-demographics-late-marriage-design.md (approved by the owner 2026-10-11);
-# docs/superpowers/plans/2026-10-11-demographics-late-marriage.md
+# docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md
 # ============================================================================
 # One machinery for every practice, parameterised by its short name $P$ (demographics_params.PRACTICES; the generated
 # te_demog_practices_* call each). Phase 3 adds the neighbour spread here (the late-marriage spec 4.4; one walk a step,

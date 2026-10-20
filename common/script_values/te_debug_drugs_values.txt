@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DRUGS WEALTH PROBE — read only by te_debug_drugs_measure (console-only)
 # ============================================================================
-# Measures for drugs phase 2 (docs/superpowers/plans/2026-10-02-drugs-phase-2-
+# Measures for drugs phase 2 (docs/superpowers/archive/plans/2026-10-02-drugs-phase-2-
 # healthcare-demand.md § 1): how many people live in pops at each wealth level,
 # and which production methods make the world's Drugs. Nothing in normal play
 # evaluates these.

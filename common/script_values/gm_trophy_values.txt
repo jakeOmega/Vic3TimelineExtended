@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — trophies: script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md
 # (§8 holds the numbers).
 
 # ---- What a taking carries off (spec §1), state scope ----------------------------

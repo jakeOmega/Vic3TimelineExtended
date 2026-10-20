@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md.
 # The state-held records are listed in monument_triggers.txt § "kind, fit and
 # status".
 #

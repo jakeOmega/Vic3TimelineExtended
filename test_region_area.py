@@ -1,7 +1,7 @@
 """The generated land-area table (te_region_area_generated.txt) against the map.
 
 The Settlement Authority's frontier test divides a region's population by its
-area in km² (docs/superpowers/specs/2026-09-26-internal-resettlement-design.md
+area in km² (docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md
 §6). Script cannot count provinces, so scripts/generators/gen_region_area.py
 writes the area of every land state region into a scripted effect. A region
 missing from it can never be a frontier; a stale version never re-runs in old

@@ -1,4 +1,4 @@
-﻿### Grand Monument trophies (docs/superpowers/specs/2026-10-12-grand-monument-
+﻿### Grand Monument trophies (docs/superpowers/archive/specs/2026-10-12-grand-monument-
 ### trophies-design.md §6). Types only, composed elsewhere:
 ###   te_gm_sec_trophies, te_gm_sec_abroad   the journal entry's Trophies and
 ###     Held Abroad sections, in te_gm_status_sections
@@ -11,7 +11,7 @@
 ###   te_state_gm_beside                     its row, and the section of the state
 ###     view's monument card (te_state_panel_widgets.gui) that lists the
 ###     monuments standing beside the state's primary
-###     (docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md §5)
+###     (docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md §5)
 ### A trophy is a script container (gm_trophy_effects.txt): its rows come from
 ### the country's gm_trophies_held / gm_trophies_abroad and the state's
 ### gm_trophies_here lists, rebuilt by the monthly pass, each item under

@@ -1,4 +1,4 @@
-﻿# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7, the owner's call 3):
+﻿# Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7, the owner's call 3):
 # the Trade Unions' two loyal traits' working-adult line, cancelled and carried on the replaced family at its old value
 # (te_demog_workforce_lines_refresh re-applies it while no workforce term is in force), with its participation input
 # for the census beside it. That the engine sums a script-only type from an IG trait into a state's read is unverified:

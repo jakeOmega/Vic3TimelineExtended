@@ -171,7 +171,7 @@ In-game checks don't gate a merge. A PR lands on the offline gate (CI, the audit
 - **Soft caps, not eligibility gates.** Where a rule decides who may take part (a rank, a coastline, a region), prefer a steep penalty that leaves everyone a way in over a ban. Physical prerequisites, such as the technology or the building that does the work, can stay hard gates.
 - **Avoid micromanagement.** By default, a wait or a limit shouldn't reward switching a setting off and back on: keep progress made while blocked for when the block lifts, rather than losing it or billing for nothing. It's a default, not a law. A toggle can be worth having for other reasons.
 
-Worked examples: distant seabed claims and off-window launches (soft caps), and launch-window staging (no micromanagement), in `docs/superpowers/specs/2026-10-16-global-commons-design.md` §§ 2.3, 5.2, 5.2a.
+Worked examples: distant seabed claims and off-window launches (soft caps), and launch-window staging (no micromanagement), in `docs/superpowers/archive/specs/2026-10-16-global-commons-design.md` §§ 2.3, 5.2, 5.2a.
 
 ### Play-testing unmerged work
 

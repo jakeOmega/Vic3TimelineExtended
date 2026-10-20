@@ -3,7 +3,7 @@
 # ============================================================================
 # INTERNAL RESETTLEMENT EVENTS
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §8.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md §8.
 # The logic is in common/scripted_effects/resettlement_effects.txt.
 #
 #   .1–.8  program events, rolled by resettlement_roll_events

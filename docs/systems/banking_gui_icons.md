@@ -8,7 +8,7 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 
 `BankingIconsTest` in `test_banking_layout.py` holds each code to its file and fails on any placeholder. `IconsDocTest` holds each row below to the code. `BandCodeTest` holds each code to its word.
 
-**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`), under the banking categories of `icon_prompts.py` that PR #586 added. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/archive/specs/2026-09-26-icon-pipeline-design.md`), under the banking categories of `icon_prompts.py` that PR #586 added. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
 
 **The rule for the set** is the UN's: simple and easy to recognize at 32 px, one bold object each, with the states of one reading sharing an emblem and differing by a mark or a colour. The phases are one bank front, and the bubble bands one stack of coins inside a bubble. The stances are one tap. The price bands are one price tag. The pairs across the cycle mirror each other: Panic and Frenzy, Downturn and Boom, Stagnation and Expansion.
 

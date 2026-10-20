@@ -1,6 +1,6 @@
 # Nation tab: play-test list
 
-The Nation tab (spec `docs/superpowers/specs/2026-10-17-national-modifiers-tab-design.md`) passed the offline gate
+The Nation tab (spec `docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md`) passed the offline gate
 only: `test_nation_tab.py`, `test_te_systems_window.py`, the GUI lint and the audits. What only the game can show is
 below, from the spec's § 8. In-game checks don't gate a merge (CLAUDE.md, "In-game checks"); work through these the
 next time the game is up.
@@ -35,7 +35,7 @@ next time the game is up.
 
 ## Phase 2: the state's Wealth Concentration tile
 
-The plan (`docs/superpowers/plans/2026-10-17-nation-tab.md`, Task 8) put the state's six `inh_` modifiers in the state
+The plan (`docs/superpowers/archive/plans/2026-10-17-nation-tab.md`, Task 8) put the state's six `inh_` modifiers in the state
 view's Demographics subtab. That subtab is gone while the Demographics rule is off, its default, and Wealth
 Concentration runs regardless, so the list became a tile of its own in the state panel's status grid, after Arable
 Land. Offline: `test_hidden_state_modifiers.py`, the GUI lint and the audits. Run these **with the Demographics rule

@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the census sets the engine's births and deaths (phase 2 step 4)
-# docs/superpowers/plans/2026-10-10-demographics-phase2-engine-rates.md §2
+# docs/superpowers/archive/plans/2026-10-10-demographics-phase2-engine-rates.md §2
 # ============================================================================
 # The engine gives every pop curve x max(0, 1 + total) births and deaths, adding every
 # term (docs/testing/demographics-growth-probe-results-2026-10-09.md). The census's term M
@@ -116,7 +116,7 @@ te_demog_window_events = {
 }
 
 # THIS = a state, the walk's tail, straight after te_demog_window_events: the Causes of Death section's split of the
-# window's deaths (docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md, Task 6). Under Full:
+# window's deaths (docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md, Task 6). Under Full:
 #   te_dg_ed_state  te_dg_ed less the pops' own lines over the window, at least 0: the state-level lines and the moved
 #                   lines' on-top family, the absorbed lines M nets, and the census's own lag (M a window old, the
 #                   model's rate drifting)

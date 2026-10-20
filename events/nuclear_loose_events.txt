@@ -3,7 +3,7 @@
 # ============================================================================
 # LOOSE WARHEADS
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-loose-warheads-design.md
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-loose-warheads-design.md
 # §3; what shipped is docs/systems/nuclear_crisis_design.md §0.10 step 5. The
 # logic is in common/scripted_effects/nuclear_loose_effects.txt.
 #

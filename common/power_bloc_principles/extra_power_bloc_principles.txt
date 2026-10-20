@@ -4215,7 +4215,7 @@ principle_shared_canon_5 = {
 # The UN-integration / rules-based-order build. Tiers cumulative (each restates prior).
 # Group gates on the intergovernmental_organizations tech (country_igo_pb_principles_bool).
 # Phase 2 (after un_authority becomes a global variable) adds the institutional-alignment
-# scaler to Tiers II-V: see docs/superpowers/plans/2026-07-06-*.md.
+# scaler to Tiers II-V: see docs/superpowers/archive/plans/2026-07-06-*.md.
 
 principle_multilateral_institutions_1 = {
 	icon = "gfx/interface/icons/principles_icons/principle_multilateral_institutions_1.dds"

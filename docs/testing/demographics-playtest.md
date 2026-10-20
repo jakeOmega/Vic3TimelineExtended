@@ -22,7 +22,7 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK … primogeniture_scaled` | once a game: `START` when the first state with a farm share between 0.1 and 0.9 takes Primogeniture's farm line fresh (a Primogeniture country's first yearly state pulse), the verdict a week later | the engine sums a script-only type on a state modifier scaled by its multiplier (`added` ≈ `expected`) | `added` reads 0.1 (the multiplier is ignored) or 0 (the type isn't summed): Primogeniture's farm births, and since phase 3 Forced Heirship's (outside Full), are wrong in every game | Plan B of `docs/superpowers/plans/2026-10-11-demographics-late-marriage.md`, Task 9, for both modifiers |
+| `TE_SELF_CHECK … primogeniture_scaled` | once a game: `START` when the first state with a farm share between 0.1 and 0.9 takes Primogeniture's farm line fresh (a Primogeniture country's first yearly state pulse), the verdict a week later | the engine sums a script-only type on a state modifier scaled by its multiplier (`added` ≈ `expected`) | `added` reads 0.1 (the multiplier is ignored) or 0 (the type isn't summed): Primogeniture's farm births, and since phase 3 Forced Heirship's (outside Full), are wrong in every game | Plan B of `docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md`, Task 9, for both modifiers |
 | `TE_SELF_CHECK … workforce_amendment_type` | any rule, development builds only (a release comments the inputs out and turns the check off): once a game, a week after a country first holds Community Service or Mandatory Minimums on its criminal-justice law | the engine sums a script-only type from an amendment into a state's read (`read` = `expected`) | `read` = `laws_only`: the two amendments' moved working-adult lines are lost in every game, and since 2026-10-17 so is Undivided Farm Succession's Late Marriage line | revert both amendments' blocks (`common/amendments/extra_amendments.txt`) to `state_working_adult_ratio_add` at their old values, list them in `P.LIVE_WORKFORCE_LINES` and take them out of `TestWorkforceLinesMoved.BLOCKS` (phase 2 step 1 plan, D12); for Undivided Farm Succession, take its `state_late_marriage_farms_add` off the amendment and have `te_demog_pr_target_lm` (`gen_demographics.py`) add 0.15 × the farm share again where the owner has `te_inh_has_undivided_farms` |
 | `TE_SELF_CHECK … workforce_ig_trait_type` | any rule, development builds only: once a game, a week after a country's Trade Unions are first loyal at the trait's plain size (clout neither marginal nor powerful) with no Ministry of Labour law | the engine sums a script-only type from an IG trait into a state's read (`read` = 0.02), and the INJECT added to vanilla's trait block (`remainder` about 0) | `read` 0: the type isn't summed; `remainder` about −0.05: the INJECT replaced vanilla's block. Either way the Trade Unions' two loyal traits' lines are lost in every game | delete `common/interest_group_traits/te_demog_workforce_injections.txt` (vanilla's +0.05 comes back on the engine field), list the two traits in `P.LIVE_WORKFORCE_LINES`, take them out of `TestWorkforceLinesMoved` and accept their two `vanilla_parsed` carriers as live |
 | `TE_SELF_CHECK … workforce_lines_net` | any rule, development builds only: once a game, a week after the first country's first monthly pulse, in its capital | the capital's working-adult field less the moved lines' pair is about 0: every vanilla carrier's INJECTed cancel nets out against its own line | `remainder` not 0: an INJECT replaced a vanilla block (a law, Woman Soldiers or a Trade Unions trait), so its cancel stands alone in every game (or the capital has Rosen's androids, which can't happen in 1836) | revert that carrier's INJECT and list it in `P.LIVE_WORKFORCE_LINES`; option l's `TE_DEMOG_MODS` lines show which carrier |
@@ -99,8 +99,8 @@ Unions' two traits, which the engine scales ×0.5 while the group is marginal an
 
 The census computes who works, the pensioners, health need and the old-age threshold, and every working-adult line
 moves to two script-only families re-applied by one "Laws and Institutions" pair. No birth, death or workforce number
-should move in any game. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §1.10;
-plan: `docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md`, Task 8. The three workforce self-checks
+should move in any game. Spec: `docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md` §1.10;
+plan: `docs/superpowers/archive/plans/2026-10-12-demographics-phase2-interfaces.md`, Task 8. The three workforce self-checks
 are in the table above.
 
 1. **Nothing moves (Disabled).** A Women's Suffrage country's state shows the same working-adult ratio as a game on
@@ -150,7 +150,7 @@ are in the table above.
 
 ## Calibration step 3: the regional mortality gap
 
-Spec: `docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md` (owner calls 1–3, 2026-10-12). Under
+Spec: `docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md` (owner calls 1–3, 2026-10-12). Under
 Full the census absorbs the Landowners' Famine Reserves per farm pop, and infection gains a malaria factor. The three
 self-checks are in the table above (`famine_reserves_absorbed`, `working_conditions_read`, `malaria_trait_read`).
 
@@ -178,7 +178,7 @@ self-checks are in the table above (`famine_reserves_absorbed`, `working_conditi
 
 ## Family Policy measures (step 3a)
 
-The measures and their panel (`docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §3.3-§3.7).
+The measures and their panel (`docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md` §3.3-§3.7).
 Until step 3b the census reads only Free and Restricted Contraception's means lines, so births don't move for the
 others; check the switching, the costs and the politics.
 
@@ -297,7 +297,7 @@ and a BROKEN there means no measure moves births here either.
 Under Full the census sets each state's workforce (a term W from who is of working age and who works, moving at most
 0.01 a census step), the country chooses a pension position, pays a pension bill and a health bill, and work deaths
 split by the census's own workers. Under Display only the figures and the section show and the buttons are greyed;
-outside Full nothing changes. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md` §2.
+outside Full nothing changes. Spec: `docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md` §2.
 The two self-checks are in the table above. None of these gates the merge.
 
 What the offline evidence already says (2026-10-12):
@@ -363,7 +363,7 @@ The census counts each state's men aged 20 to 39 (its conscription term against 
 (the youth bulge) and its sex balance, and takes the war dead from the men's ages, under Display only too. Step 4
 shipped the three effects held back (`demographics_params`' `CONSCRIPTION_EFFECTS`, `YOUTH_BULGE_EFFECTS`,
 `SEX_BALANCE_EFFECTS`); the migrant booking (2026-10-12, § The migrant booking below) turned them on, so the items
-below are written for them on. Spec: `docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md`
+below are written for them on. Spec: `docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md`
 §4; no plan document (owner, 2026-10-12). The two self-checks are in the table above.
 
 1. **The 1836 figures (Full, a new game).** Option t in the capital after its first count (`TE_DEMOG_CONSEQ`): `share`
@@ -441,7 +441,7 @@ judges their text and balance here (owner, 2026-10-12). No plan document; the se
 
 ## Phase 3: the late game
 
-Built 2026-10-12 from the late-game design (`docs/superpowers/specs/2026-10-11-demographics-late-game-design.md`; `docs/systems/mod_systems.md` § Phase 3: the late game). No new self-check: every engine fact it reads is proven (a script-only type on a technology reaching a state, #892; a pop's `wealth` as a value, the Gini walk; the wealth pair's per-pop scaling, probe P6; a building's active method in a state value, `te_state_railway_train_code`). Console option **v** researches the ageing ladder at once, so the items below run in an evening: a Full game, any year, then `observe` or fast mode (h) for some census years. Option **u** logs the capital's late figures (`TE_DEMOG_LATE`) and the country's.
+Built 2026-10-12 from the late-game design (`docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md`; `docs/systems/mod_systems.md` § Phase 3: the late game). No new self-check: every engine fact it reads is proven (a script-only type on a technology reaching a state, #892; a pop's `wealth` as a value, the Gini walk; the wealth pair's per-pop scaling, probe P6; a building's active method in a state value, `te_state_railway_train_code`). Console option **v** researches the ageing ladder at once, so the items below run in an evening: a Full game, any year, then `observe` or fast mode (h) for some census years. Option **u** logs the capital's late figures (`TE_DEMOG_LATE`) and the country's.
 
 1. **The ladder starts the late game.** After v, each state's next census holds `te_dg_elig` (option u's `elig=`), rising toward its target at the medical diffusion rate; `rate=` reads 0 (immortality's r) and `pull=` 0.03; `s5=`/`d5=` show a band's treated share and deficit. A country with no ladder logs `elig=-1`.
 2. **Who is reached.** Under Public Health Insurance with a large health system nearly everyone (`hs_cover=1.00`); under Private Health Insurance only the rich at first (`hs_cover=0.00`, `threshold=` falling about 2 a year from 80); under Human Purity nobody (`banned=1`, `elig=` drifting to 0 while bodies keep their age: `d5=` holds); under Mandatory Augmentation at least 0.9 (`floor=0.90`); under Unrestricted Augmentation `reach=20` and `threshold=` 20 lower.

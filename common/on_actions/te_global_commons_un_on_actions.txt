@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE GLOBAL COMMONS: THE UN LAYER — PULSES
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §3, §4 and §6.5.
 # The writers are in common/scripted_effects/te_global_commons_un_effects.txt.
 # The seabed regime is written once a year by the seabed allocation, which
 # calls te_seabed_un_update_regime (te_seabed_un_hooks.txt) before it shares

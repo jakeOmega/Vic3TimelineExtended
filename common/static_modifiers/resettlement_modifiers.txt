@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # INTERNAL RESETTLEMENT — static modifiers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md.
 
 # ---- Readouts (§2): re-applied monthly with the month's count as multiplier ----
 resettlement_arrivals = {

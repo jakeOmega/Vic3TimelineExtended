@@ -6,7 +6,7 @@ Usage:
     python3 scripts/generators/gen_demographics.py --check    # exit 1 if either is stale
 
 Spec: docs/superpowers/specs/2026-10-08-demographics-design.md; plan:
-docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md (Task 6). Inputs:
+docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md (Task 6). Inputs:
 scripts/analysis/demographics_params.py (every rate, weight and table),
 common/defines/extra_defines.txt (the engine's growth curves, through pop_growth.py),
 common/buy_packages/00_buy_packages.txt (spending per head by wealth) and the land-reform
@@ -1646,7 +1646,7 @@ def constants(o):
         "deaths_on_top_high": P.DEATHS_ON_TOP_HIGH, "base_access": P.BASE_ACCESS,
         "maternal_base": P.MATERNAL_PER_100K_BIRTHS,
         "practice_rate": P.PRACTICE_RATE,
-        # phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1)
+        # phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1)
         "child_work_age": P.CHILD_WORK_AGE, "working_age": P.WORKING_AGE,
         "after_pension_share": P.AFTER_PENSION_SHARE, "men_rate": P.MEN_RATE, "women_base": P.WOMEN_BASE,
         "women_lower": P.WOMEN_LOWER, "womens_work_full": P.WOMENS_WORK_FULL,
@@ -1693,7 +1693,7 @@ def youth_bands():
 
 
 def consequence_values(o):
-    """Phase 2 step 4's constants and band sums (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-
+    """Phase 2 step 4's constants and band sums (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-
     design.md §4), in a block of their own so step 2's and step 3's additions to the generator stay apart. The hand-
     written values that read them are in te_demog_consequence_values.txt."""
     o("# Phase 2 step 4: conscription, the youth bulge and sex balance (demographics_params.py).")
@@ -1769,7 +1769,7 @@ def work_values(o):
 def work_step2_values(o):
     """Phase 2 step 2's constants and generated values (te_demog_work_effects.txt, te_demog_work_values.txt): the
     workforce term, the pension setting and the two bills. Kept apart from the other steps' blocks."""
-    o("# Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the")
+    o("# Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the")
     o("# workforce term, the pension setting and the bills (demographics_params.py, its step 2 section).")
     k = {
         "working_adult_base": P.WORKING_ADULT_BASE,
@@ -1820,7 +1820,7 @@ def _start_entries(p):
 
 
 def practices(o):
-    """Late Marriage and Birth Spacing (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md): each
+    """Late Marriage and Birth Spacing (docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md): each
     practice's start ladder, target and term, from demographics_params.py. The machinery that reads them is
     te_demog_practice_effects.txt."""
     o("# State scope: each practice's start share (the late-marriage spec 3.2, 3.3; demographics_model.practice_start):")
@@ -1932,7 +1932,7 @@ def practice_loops(o):
 
 
 # ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.5. Sex Education's access sits in
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.5. Sex Education's access sits in
 # te_demog_means (multipliers) and Restricted Contraception's maternal deaths in the maternal cause's "laws" factor
 # (P.CAUSE_FACTORS); the rest is here.
 
@@ -2048,7 +2048,7 @@ def render_values(root):
 
 
 LINE_HEADER = ("# The engine's birth and mortality lines on laws, technologies and institutions, moved to script-only types\n"
-               "# (owner, 2026-10-11; docs/superpowers/plans/2026-10-11-demographics-engine-lines-script-only.md): a fixed-sign\n"
+               "# (owner, 2026-10-11; docs/superpowers/archive/plans/2026-10-11-demographics-engine-lines-script-only.md): a fixed-sign\n"
                "# pair per field (P.ENGINE_LINE_FIELDS), re-applied at the two families' sum while te_demog_lines_apply holds.\n"
                "# A release keeps these files (scripts/release/comment_out_census_inputs.py doesn't read them).")
 
@@ -2211,7 +2211,7 @@ def render_line_effects():
 
 
 WORKFORCE_LINE_HEADER = (
-    "# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7): the\n"
+    "# Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7): the\n"
     "# working-adult lines' women's-work and replaced families, re-applied by a fixed-sign pair while\n"
     "# te_demog_workforce_lines_apply holds (not Full, or no te_dg_mw: step 2's term). Their own files, gate and\n"
     "# refresh, so the census's births and deaths term never takes them off. A release keeps them.")

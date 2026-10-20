@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — phase 2 step 2: the workforce, pensions and health costs (script values)
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2; the effects are
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2; the effects are
 # te_demog_work_effects.txt, the constants te_demog_k_* in te_demog_generated_values.txt (demographics_params.py).
 # demographics_model.py is the twin: workforce_term, pension_position_age, pension_bill_gdp_share, health_term.
 # ============================================================================

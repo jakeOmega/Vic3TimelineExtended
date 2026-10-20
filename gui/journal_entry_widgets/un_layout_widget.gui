@@ -3,7 +3,7 @@
 ### the named roots at the foot of this file) and the Diplomacy panel's UN tab
 ### (gui/diplomatic_overview.gui instances the composers). The sections are
 ### types in un_chamber_widget.gui and un_authority_widget.gui; the overview is
-### un_overview_widget.gui. Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md.
+### un_overview_widget.gui. Spec: docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_un_layout.py).

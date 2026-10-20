@@ -1,5 +1,5 @@
 ﻿# Settlement Authority (common/buildings/resettlement.txt). Design:
-# docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §3–§5.
+# docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md §3–§5.
 # Order matters: the first PM of each group is the fallback when a law change
 # retires the running one. test_resettlement_programme_registry.py pins it.
 

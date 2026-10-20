@@ -3600,7 +3600,7 @@ def _obl_log_fields(n):
 
 def _ai_obligation_effects():
     """The promise lines and the AI's enactment of a kind-1 promise (plan 2026-10-03 Task 19;
-    spec docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md §2.4 step 2, §2.8),
+    spec docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md §2.4 step 2, §2.8),
     per obligation slot: debug_log cannot print a $PARAM$, so each slot has its own lines, which
     print the slot's guarded views (te_tax_view_o<n>_*, readable while the slot is on)."""
     lines = [
@@ -4450,7 +4450,7 @@ def localization():
 
 
 # ---------------------------------------------------------------------------
-# The light code (te_tax_code_light_on; docs/superpowers/specs/2026-10-09-tax-code-light-design.md,
+# The light code (te_tax_code_light_on; docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md,
 # docs/systems/tax_code_schema.md, "Light code"). The vanilla taxation law stays enacted and
 # bounds each rate between its very-low and very-high values (MIGRATION). Each rate sits on a
 # step of its law's ladder, the lowest native level whose rate is at least the code's; the

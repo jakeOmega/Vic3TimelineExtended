@@ -1,6 +1,6 @@
 """Generate the Nation tab's name filters and counts.
 
-Spec: docs/superpowers/specs/2026-10-17-national-modifiers-tab-design.md § 4.
+Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md § 4.
 
 A candidate is a static modifier the mod defines that script adds somewhere
 without a duration (`add_modifier = { name = X }` with no days, months or

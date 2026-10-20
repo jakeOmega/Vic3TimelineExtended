@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — conscription, the youth bulge and sex balance (phase 2 step 4)
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4; demographics_model's
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4; demographics_model's
 # sex_births, sex_women_add, sex_fewer_men, sex_more_men, conscription_term and youth_bulge are the twins.
 # The constants and band sums are generated (te_demog_k_*, te_demog_youth_share, te_demog_state_men and the country's;
 # gen_demographics.consequence_values); the effects are in te_demog_consequence_effects.txt.

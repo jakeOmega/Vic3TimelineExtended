@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the Family Policy measures' buttons (phase 2 step 3a)
-# (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3, §3.7; the panel:
+# (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.3, §3.7; the panel:
 # te_demog_sec_family in gui/te_demographics_widgets.gui)
 # ============================================================================
 # One scripted GUI a measure, rooted at the player's country (GuiScope.SetRoot( GetPlayer.MakeScope ).End):

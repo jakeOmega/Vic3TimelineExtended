@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — unique dedications (signatures): scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-grand-monument-signatures-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-16-grand-monument-signatures-design.md.
 # The records are listed in gm_signature_triggers.txt. A signature adds its
 # name (the custom localization, gm_signature_custom_loc.txt) and its effects to
 # its parent dedication, which does everything it does today: the production

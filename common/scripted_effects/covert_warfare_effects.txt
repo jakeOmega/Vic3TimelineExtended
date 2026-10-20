@@ -1565,7 +1565,7 @@ covert_op_apply_self_effect = {
 	}
 }
 
-# Technology theft (2026-10, docs/superpowers/specs/2026-10-06-covert-tech-theft-design.md):
+# Technology theft (2026-10, docs/superpowers/archive/specs/2026-10-06-covert-tech-theft-design.md):
 # every established industrial or military espionage operation adds progress to
 # a technology its target has and we lack, at the operation's own phase and
 # priority. Each operation steals on its own, from its own target. The

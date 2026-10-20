@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS PHASE 3 — display gates for the late game's rows on the Demographics tab and subtab
-# (gui/te_demographics_widgets.gui; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §6)
+# (gui/te_demographics_widgets.gui; docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md §6)
 # ============================================================================
 # A .gui read of a variable that does not exist logs "Failed to fetch variable" every frame (gui_modding_guide.md
 # gotchas #14 and #23), so every late figure is read under a gate that asks script, as te_demog_sguis.txt's are.

@@ -655,7 +655,7 @@ te_debug_demog_pr_selfcheck_start = {
 # ---- Call 3's carrier kinds and the walk's workforce read: once-a-game self-checks (phase 2 step 1; owner, 2026-10-12)
 # Instead of an in-game gate before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Two of call 3's
 # carrier kinds are unverified: whether the engine sums a script-only type from an amendment, and from an IG trait,
-# into a state's read (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7). Each check
+# into a state's read (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7). Each check
 # arms once a game, the first month a country holds such a carrier, and a week later (a day may come before the engine
 # re-sums a state's modifiers) its capital logs the census-only participation input that carrier holds beside its
 # moved line, against the line's size (te_debug_demog.6, .7; TE_SELF_CHECK). The moved line is on the same block, so
@@ -799,7 +799,7 @@ te_debug_demog_family_line = {
 	debug_log = "TE_DEMOG_FAMILY desired=[THIS.ScriptValue('te_debug_demog_mod_desired')|3] measures=[THIS.ScriptValue('te_debug_demog_ms_desired_owner')|3] urban_relief=[THIS.ScriptValue('te_debug_demog_mod_urban_relief')|3] means_lit=[THIS.ScriptValue('te_debug_demog_mod_means_lit')|3] maternal=[THIS.ScriptValue('te_debug_demog_mod_maternal')|3] bl_relief=[THIS.ScriptValue('te_debug_demog_mod_bl_relief')|3] srb=[THIS.ScriptValue('te_debug_demog_mod_srb')|1] policy=[THIS.ScriptValue('te_demog_tfr_policy')|3] st_policy=[THIS.ScriptValue('te_debug_demog_fam_policy')|3] st_urban_left=[THIS.ScriptValue('te_debug_demog_fam_urban_left')|3] bl_part=[THIS.ScriptValue('te_demog_ms_birth_limit_part')|2] agr=[THIS.ScriptValue('te_demog_agr_share')|3] urban_left=[THIS.ScriptValue('te_demog_urban_relief_left')|3] srb_add=[THIS.ScriptValue('te_demog_srb_add')|1] means_live=[THIS.ScriptValue('te_debug_demog_means')|3] st_desired=[THIS.ScriptValue('te_debug_demog_fam_desired')|3] st_means=[THIS.ScriptValue('te_debug_demog_fam_means')|3] st_tfr=[THIS.ScriptValue('te_debug_demog_fam_tfr')|3] planned=[THIS.ScriptValue('te_debug_demog_fam_planned')|3] unplanned=[THIS.ScriptValue('te_debug_demog_fam_unplanned')|3] in_mat=[THIS.ScriptValue('te_debug_demog_fam_in_mat')|3] mmr=[THIS.ScriptValue('te_debug_demog_fam_mmr')|0] sex_balance=[THIS.ScriptValue('te_debug_demog_fam_sex_balance')|1] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
-# ---- Calibration step 3's self-checks (owner, 2026-10-12; docs/superpowers/specs/2026-10-12-demographics-calibration-
+# ---- Calibration step 3's self-checks (owner, 2026-10-12; docs/superpowers/archive/specs/2026-10-12-demographics-calibration-
 # step3-design.md §6) -----------------------------------------------------------------------------------------------------
 # Instead of in-game checks before the merge (docs/testing/demographics-playtest.md, "Self-checks"). Three engine facts
 # the step rests on, each read once a game:
@@ -1154,7 +1154,7 @@ te_debug_demog_consequence_lines = {
 	debug_log = "TE_DEMOG_CONSEQ_COUNTRY fam_share=[THIS.ScriptValue('te_debug_demog_cq_c_share')|4] fam_men=[THIS.ScriptValue('te_debug_demog_cq_c_men')|3] term=[THIS.ScriptValue('te_demog_country_conscription')|3] youth=[THIS.ScriptValue('te_demog_country_youth_share')|3] yb_states=[THIS.ScriptValue('te_debug_demog_cq_c_yb_n')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 }
 
-# ---- Phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md) -------------------------
+# ---- Phase 3, the late game (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md) -------------------------
 # Option u: the capital's late figures (TE_DEMOG_LATE) and the country's (TE_DEMOG_LATE_COUNTRY). THIS = the country.
 te_debug_demog_late_lines = {
 	capital = { te_debug_demog_late_line = yes }

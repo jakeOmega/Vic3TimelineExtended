@@ -1,5 +1,5 @@
 """scripts/analysis/demographics_regions.py: the strategic-region snapshot the practices' start tables and the
-regional report read (docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Task 1)."""
+regional report read (docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md, Task 1)."""
 
 import re
 import sys

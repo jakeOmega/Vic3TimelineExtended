@@ -1,8 +1,8 @@
 # Grand Monuments: archaeology, play-test checklist
 
 What the next play-test should look at for the buried sites and the dig (spec
-`docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939, and the rework
-`docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md`: innovation the only cost, sized digs, the sites' events,
+`docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md`, issue #939, and the rework
+`docs/superpowers/archive/specs/2026-10-16-grand-monument-archaeology-rework-design.md`: innovation the only cost, sized digs, the sites' events,
 foreign digs by treaty). In-game checks do not gate a merge
 (CLAUDE.md, "In-game checks: self-checks and the play-test list"): the PR landed on the offline gate and this is what only the
 game can show. A fixed item is struck through with the commit that fixed it.

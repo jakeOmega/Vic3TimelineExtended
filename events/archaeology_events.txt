@@ -3,7 +3,7 @@
 # ============================================================================
 # GRAND MONUMENTS — archaeology (issue #939)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md,
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md,
 # reworked by 2026-10-16-grand-monument-archaeology-rework-design.md (§ 2).
 # .1 and .2 are the events a player reads: a site found or located, and a dig
 # finished. Each names its site, its place and state, the find and a

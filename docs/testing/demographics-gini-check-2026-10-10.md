@@ -1,7 +1,7 @@
 # Demographics: the census's Gini against the game's own (2026-10-10)
 
 An offline check of the census's income Gini (spec §4.1) against each pop as its own group. It led to the Gini by
-wealth band with no map (plan `docs/superpowers/plans/2026-10-10-demographics-gini-wealth-bands.md`).
+wealth band with no map (plan `docs/superpowers/archive/plans/2026-10-10-demographics-gini-wealth-bands.md`).
 - **Data:** 14 plain-text saves, run against main 526e370f. The full report, CSVs and scripts are archived at
   `/mnt/d/vic3te-data/gini-check-2026-10-10/` (`report.md`, `country_rows.csv`, `state_rows.csv`, `census_check.csv`).
 

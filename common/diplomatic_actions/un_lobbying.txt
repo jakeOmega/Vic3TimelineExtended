@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # RESOLUTION LOBBYING — pledges ("Seek a Vote Commitment", for or against)
 # ============================================================================
-# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md §4. Any member
+# docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md §4. Any member
 # may ask any other member with a vote to pledge its vote on the resolution in
 # session, for it or against it, and pays with an obligation owed to the
 # member that pledges. Two actions, one per direction, sharing every rule but

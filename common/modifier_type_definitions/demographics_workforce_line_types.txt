@@ -1,6 +1,6 @@
 ﻿# demographics_workforce_line_types.txt
 #
-# Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; late-game call
+# Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7; late-game call
 # 11; the owner's call 3): every engine working-adult line, as script-only types the engine sums but doesn't apply.
 # The mod re-applies both at their old flat values while no workforce term is in force
 # (te_demog_workforce_lines_refresh). From step 2, under Full, the participation model reads the women's-work family,

@@ -13366,7 +13366,7 @@ pm_ai_managed_fab = {
 			# Wage breakeven: 1.08
 		}
 
-		# Flat-staff prototype (docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md):
+		# Flat-staff prototype (docs/superpowers/archive/specs/2026-10-16-ai-managed-flat-staff-design.md):
 		# the cut cancels every fab base method's 4,500 a level exactly, and a fixed
 		# crew runs the building at any size. Self-check: ai_managed_flat_staff.
 		level_scaled = {
@@ -16041,7 +16041,7 @@ pm_space_colony_vacation = {
 	required_input_goods = digital_access
 }
 
-# Deep-Sea Mine (Global Commons § 1.1, docs/superpowers/specs/2026-10-16-global-commons-design.md).
+# Deep-Sea Mine (Global Commons § 1.1, docs/superpowers/archive/specs/2026-10-16-global-commons-design.md).
 # Seabed licences cap its levels, so each level must be worth claiming. Against the
 # Extraplanetary Base's era-11 method (pm_space_mine) every output is at least as large,
 # inputs are lower, the workforce is the same and construction is a quarter of the cost.

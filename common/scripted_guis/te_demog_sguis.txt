@@ -14,7 +14,7 @@
 # the only ones the player presses. The first eight are country scope, rooted at the player's
 # country; the six at the end are state scope, rooted at the state the panel
 # shows (the state panel's Demographics subtab, plan Task 14; the last three its
-# Causes of Death section, docs/superpowers/plans/2026-10-11-demographics-causes-of-death.md):
+# Causes of Death section, docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md):
 # GuiScope.SetRoot( State.MakeScope ).End. Phase 2 step 4's five come last, three country and two state.
 # ============================================================================
 
@@ -234,7 +234,7 @@ te_demog_state_on_top_sgui = {
 
 # ----------------------------------------------------------------------------
 # Phase 2 step 2: the Work and Retirement section (te_demog_sec_work, te_state_demog_work) and the overview's working
-# age and old age from. docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6.
+# age and old age from. docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6.
 # ----------------------------------------------------------------------------
 
 # The country's work figures: written together by te_demog_work_country_store once a census state holds step 1's
@@ -460,7 +460,7 @@ te_demog_state_wf_term_sgui = {
 }
 
 # ----------------------------------------------------------------------------
-# Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4.5): conscription,
+# Phase 2 step 4 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4.5): conscription,
 # the youth bulge and sex balance. Country scope first, rooted at the player's country, then state scope.
 # ----------------------------------------------------------------------------
 

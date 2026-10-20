@@ -1,4 +1,4 @@
-"""Demographics phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md).
+"""Demographics phase 3, the late game (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md).
 
 The model's late-game section (scripts/analysis/demographics_model.py) against the census script that mirrors it
 (common/scripted_effects/te_demog_lx_effects.txt with te_demog_lx_generated_effects.txt), through the registry test's

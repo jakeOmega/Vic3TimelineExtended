@@ -7,7 +7,7 @@
 # own variables only; the sweeps behind them run in un_authority_monthly_update.
 # Every read is guarded: a save from before the overview, or a UN before its
 # first monthly update, reads 0 (test_un_overview_data.py).
-# Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md.
+# Spec: docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md.
 # Scope: country (the viewer)
 # ============================================================================
 

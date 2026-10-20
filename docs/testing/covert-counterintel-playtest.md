@@ -1,7 +1,7 @@
 # Covert Warfare play-test checklist: watching, backlash, Counterintelligence Support
 
 What the next play-test should look at for the 2026-10-16 covert work (spec
-`docs/superpowers/specs/2026-10-16-covert-counterintel-backlash-design.md`). In-game checks do not gate a merge
+`docs/superpowers/archive/specs/2026-10-16-covert-counterintel-backlash-design.md`). In-game checks do not gate a merge
 (CLAUDE.md, "In-game checks: self-checks and the play-test list"): the branch landed on the offline gate, and these are
 the things only the game can show. Strike a fixed item through with the commit that fixed it.
 

@@ -6,7 +6,7 @@
 loading each save. Its `TE_DRUGS_PROBE` lines in `debug.log` were copied out as they were
 written; nothing was saved afterwards (see [Saving a pre-#500 save](#saving-a-pre-500-save)).
 
-Step 1 of the [phase 2 plan](../superpowers/plans/2026-10-02-drugs-phase-2-healthcare-demand.md).
+Step 1 of the [phase 2 plan](../superpowers/archive/plans/2026-10-02-drugs-phase-2-healthcare-demand.md).
 Its § 2 thresholds are chosen from these tables.
 
 **Read the numbers with these limits:**

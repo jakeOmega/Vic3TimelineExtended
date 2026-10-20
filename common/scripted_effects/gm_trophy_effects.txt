@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — trophies: scripted effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-12-grand-monument-trophies-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-12-grand-monument-trophies-design.md.
 #
 # A country can carry off a Grand Monument (or a piece of one) from a state it
 # occupies in a war, from its own unincorporated state if it did not raise the

@@ -13,7 +13,7 @@ test pins headroom (base plus cap) as well as the two numbers.
 The law's tooltip quotes the mandate's rate and cap by hand, and nothing in the
 engine checks that the loc and the script value agree. This pins them.
 
-Spec: docs/superpowers/specs/2026-10-01-bureaucracy-laws-design.md
+Spec: docs/superpowers/archive/specs/2026-10-01-bureaucracy-laws-design.md
 
 Run: python3 -m unittest test_algorithmic_mandate -v
 """

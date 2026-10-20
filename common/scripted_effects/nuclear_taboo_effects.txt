@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE NUCLEAR TABOO — effects
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; the
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md; the
 # numbers are in common/script_values/nuclear_taboo_values.txt.
 #
 # SINGLE WRITERS. Only the effects in this file write global_var:nd_taboo,

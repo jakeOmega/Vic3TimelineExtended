@@ -1,6 +1,6 @@
 ﻿### The Nation tab of the Timeline Extended window (gui/te_systems_window.gui
 ### instances te_nation_tab_sections): what the country carries for good, in
-### one place. Spec: docs/superpowers/specs/2026-10-17-national-modifiers-tab-design.md
+### one place. Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
 ### score rows and then its type rows (#1030); Where These Come From and How
 ### the Nation Works, collapsed. House style: docs/guides/gui_style_guide.md.

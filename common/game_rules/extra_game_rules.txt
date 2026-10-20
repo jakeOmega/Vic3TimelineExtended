@@ -359,7 +359,7 @@ free_market_construction_rule = {
 }
 
 # Internal resettlement: the Settlement Authority
-# (docs/superpowers/specs/2026-09-26-internal-resettlement-design.md). "AI
+# (docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md). "AI
 # voluntary only" keeps AI countries off the coercive programmes (Penal
 # Transportation, Special Settlements, Rustication); humans keep every programme
 # their laws allow. Disabled makes the building impossible and stops the pulse.
@@ -379,7 +379,7 @@ internal_resettlement_rule = {
 	}
 }
 
-# Grand Monuments (docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md
+# Grand Monuments (docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md
 # §7). Disabled makes the building unbuildable and stops the pulses, the
 # dedication ceremony and the Monuments journal entry. Every check is written
 # NOT = { has_game_rule = grand_monuments_disabled } (gm_system_enabled), so a
@@ -425,7 +425,7 @@ demographics_rule = {
 # enabled settings replace the five vanilla taxation laws with one carrier law,
 # law_te_tax_code, whose generated amendments hold the rates; the second also
 # puts customs and trade policy under legislation. The light setting
-# (docs/superpowers/specs/2026-10-09-tax-code-light-design.md) keeps the vanilla
+# (docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md) keeps the vanilla
 # taxation law, which bounds each rate, and lets the country set each rate at
 # once from the tax code's panel, with no bills.
 #
@@ -475,7 +475,7 @@ te_principle_slots_rule = {
 	}
 }
 
-# Global Commons (docs/superpowers/specs/2026-10-16-global-commons-design.md
+# Global Commons (docs/superpowers/archive/specs/2026-10-16-global-commons-design.md
 # § 2.9): the seabed licences that cap the Deep-Sea Mine, and the UN's Law of
 # the Sea and Antarctic Treaty terms built on them. Disabled, the Deep-Sea Mine
 # is uncapped as before. Launch windows and orbital debris belong to the space

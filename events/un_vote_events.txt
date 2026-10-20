@@ -15,7 +15,7 @@
 #          hidden un_vote.4 reaches every member from the day the resolution
 #          opens and every month after, and an AI member casts in its own at
 #          month 9, 10 or 11, or at the last call (un_vote.6) five days before
-#          the results (docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md).
+#          the results (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md).
 #          Votes go into the resolution's un_res_yes / un_res_no lists.
 # Phase 2: un_vote.2 fires to the proposer 365 days after opening. Its
 #          immediate closes the vote; its option applies the outcome.
@@ -2433,7 +2433,7 @@ un_vote.3 = {
 
 # ---- The ballot in script (redesign phase 3; late ballots 2026-09-27) ----
 # docs/systems/un_redesign_design.md §6.2 and
-# docs/superpowers/specs/2026-09-27-un-vote-lobbying-design.md §1. The AI never
+# docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md §1. The AI never
 # answers un_vote.1: it votes here, by the itemised lean
 # (common/script_values/un_dossier_values.txt), so the chamber's explanation
 # of a vote is the rule that decided it.

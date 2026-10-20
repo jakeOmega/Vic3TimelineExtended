@@ -1,6 +1,6 @@
 """The nuclear taboo: the tables and single-writer rules that must agree.
 
-The taboo (docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md) is one
+The taboo (docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md) is one
 world score moved by a monthly step and by writers scattered across the
 nuclear files. Nothing in the engine checks that the parts the step snapshots
 are the parts the target sums, that only the writers touch the score, or that

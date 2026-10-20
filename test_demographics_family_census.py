@@ -1,5 +1,5 @@
 """Demographics phase 2 step 3b: the census reads the Family Policy measures and laws
-(docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5, §3.7, §5).
+(docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5, §3.7, §5).
 
 The six measure types' reads in the script against their twins in demographics_model (test_demographics_registry's
 interpreter), a census step with measures on against the model's step, the family laws' births lines moved to the

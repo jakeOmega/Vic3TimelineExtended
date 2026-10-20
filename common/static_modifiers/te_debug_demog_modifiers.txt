@@ -31,7 +31,7 @@ te_demog_fast_speed = {
 	state_construction_mult = 1
 }
 
-# The engine-scaling probe (te_debug_demog.1 option o; docs/superpowers/plans/2026-10-11-demographics-late-marriage.md,
+# The engine-scaling probe (te_debug_demog.1 option o; docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md,
 # Task 9): does a script-only type on a state's add_modifier sum scaled by its multiplier? Primogeniture's farm births
 # would ride one. Console only; the probe removes it a day later.
 te_debug_demog_scaled_probe = {

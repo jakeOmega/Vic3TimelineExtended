@@ -4,7 +4,7 @@ The Timeline Extended window (`gui/te_systems_window.gui`) draws one icon of its
 
 **Where it is set.** The icon is a literal `texture = "…"` line in each of the launcher's two `sidepanel_button_small`s, the closed one and the lit one, and both draw the same file. No script reads the path. `IconsTest` in `test_te_systems_window.py` holds both lines to the file below. It fails on any other texture in the window, on a texture this page doesn't list, and on a tab that sets an icon.
 
-**Remaking it.** The art is the icon pipeline's `sidebar_button` category (`scripts/image_pipeline/icon_prompts.py`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`): change the entry, re-render, review, then `write`. The GUI needs no edit unless the file name changes. The sidebar's small buttons are 42 × 40, drawing vanilla's 76 px `main_hud/*_btn.dds` art, which the `sidepanel_button_small` frame surrounds.
+**Remaking it.** The art is the icon pipeline's `sidebar_button` category (`scripts/image_pipeline/icon_prompts.py`, spec `docs/superpowers/archive/specs/2026-09-26-icon-pipeline-design.md`): change the entry, re-render, review, then `write`. The GUI needs no edit unless the file name changes. The sidebar's small buttons are 42 × 40, drawing vanilla's 76 px `main_hud/*_btn.dds` art, which the `sidepanel_button_small` frame surrounds.
 
 ## The launcher
 

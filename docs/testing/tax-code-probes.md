@@ -159,7 +159,7 @@ selected feature's check before implementing it. Record missing setup as skipped
 
 ## Customs: lock or carrier (P09b, P09c)
 
-**Question** (spec `docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md` §2.9):
+**Question** (spec `docs/superpowers/archive/specs/2026-10-03-tax-code-ai-and-release-design.md` §2.9):
 - Can the tax code switch off the native tariff controls at their source and apply legislated tariffs itself?
 - Or must it keep re-asserting levels the native AI and treaties also write?
 

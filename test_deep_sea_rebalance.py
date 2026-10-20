@@ -1,5 +1,5 @@
 """The Deep-Sea Mine against the Extraplanetary Base at base prices (Global Commons § 1,
-docs/superpowers/specs/2026-10-16-global-commons-design.md).
+docs/superpowers/archive/specs/2026-10-16-global-commons-design.md).
 
 Seabed licences cap the Deep-Sea Mine (building_ocean_mine), so § 1.1 makes each level
 worth more than an Extraplanetary Base (building_space_mine) level until era 12's

@@ -1,4 +1,4 @@
-"""The late game's scenarios (demographics_harness.py lategame; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md).
+"""The late game's scenarios (demographics_harness.py lategame; docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md).
 
 One rich state from today's stable structure at 1.6 children per woman (the design's sketch, now the census's own model
 with phase 3's biological age), run to 2300 under each era ladder and under Biological Immortality, and judged against

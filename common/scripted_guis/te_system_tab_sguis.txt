@@ -25,7 +25,7 @@
 # ---------------------------------------------------------------------------
 # Banking: Budget panel (gui/budget_panel.gui), je_banking_cycle.
 # Every country under the rule holds the entry from the start of the game
-# (docs/superpowers/specs/2026-10-17-banking-always-on-design.md), so the tab is
+# (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md), so the tab is
 # greyed only before the entry's first activation (the game's first fortnight)
 # and for the rebels of a running revolution, who hold none. What the unlock
 # test now opens is the financial cycle: te_banking_cycle_unlocked is the

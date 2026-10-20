@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS PHASE 3 — display values for the late game's rows (gui/te_demographics_widgets.gui and their loc in
-# te_miscellaneous_l_english.yml; docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §6). Read only by
+# te_miscellaneous_l_english.yml; docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md §6). Read only by
 # the panel; the census never reads them.
 # ============================================================================
 

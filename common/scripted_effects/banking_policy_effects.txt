@@ -222,7 +222,7 @@ banking_effect_cb_disable_asset_relief_program = {
 }
 
 # ---- 2026-09-23 expansion --------------------------------------------------
-# docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md.
+# docs/superpowers/archive/specs/2026-09-23-banking-tools-expansion-design.md.
 # The four directed-credit sectors copy Infrastructure's pair above: the state's
 # co-financing share up front, a little discontent when the credit is pulled.
 

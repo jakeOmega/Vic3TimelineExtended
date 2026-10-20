@@ -6,7 +6,7 @@
 # (common/scripted_effects/te_tax_civil_war_effects.txt). ROOT is always the
 # country the event fires on, which the relief and reaction modifiers'
 # multipliers read. Logic: common/scripted_effects/te_tax_light_effects.txt;
-# design: docs/superpowers/specs/2026-10-09-tax-code-light-design.md.
+# design: docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md.
 # ============================================================================
 namespace = te_tax_light
 

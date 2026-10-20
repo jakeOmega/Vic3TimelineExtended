@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GLOBAL COMMONS — SEABED LICENCES: triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-16-global-commons-design.md § 2.
+# Design: docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 2.
 # The UN's side (who claims in the reserved half, who is an ITLOS party, who
 # the Antarctic Treaty bars) is in te_seabed_un_hooks.txt.
 # ============================================================================

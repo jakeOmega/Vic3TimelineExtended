@@ -1,5 +1,5 @@
 """scripts/analysis/demographics_practices.py: Late Marriage and Birth Spacing in the harness
-(docs/superpowers/plans/2026-10-11-demographics-late-marriage.md, Tasks 3-5)."""
+(docs/superpowers/archive/plans/2026-10-11-demographics-late-marriage.md, Tasks 3-5)."""
 
 import json
 import sys

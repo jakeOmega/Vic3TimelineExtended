@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-16, asked for by the owner ("audit our current list of 35 buried archaeological sites. Add Pompeii as a
 'discoverable' site already being excavated, review the existing list for gaps, and propose additional plausible fictional
-sites to add"). Pompeii is built (row 87, rework spec `docs/superpowers/specs/2026-10-16-grand-monument-archaeology-rework-design.md`
+sites to add"). Pompeii is built (row 87, rework spec `docs/superpowers/archive/specs/2026-10-16-grand-monument-archaeology-rework-design.md`
 § 5); everything else here is a proposal for the owner to pick from.
 
 Source of the list: issue #939 (14 candidates in its body) and its comment (the Gemini design: 30 historical sites, 8

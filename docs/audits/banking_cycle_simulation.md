@@ -964,7 +964,7 @@ banking) — so absolute rates in game will differ by law, though no direction a
 
 Four directed-credit sectors (heavy industry, agriculture, armaments, electrification & high tech) under a
 one-sector cap that the Directed Credit law raises to two, reserve requirements, a bank holiday and a bail-in
-regime — design and owner decisions in `docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md`.
+regime — design and owner decisions in `docs/superpowers/archive/specs/2026-09-23-banking-tools-expansion-design.md`.
 The sim ports all seven: their modifiers through `TOOL_MODIFIER_NAMES`, their `ai_chance` blocks by hand, the
 cap (`dc_slots_free`), the holiday's 3-month timer, 60-month cooldown and one-shot momentum halving
 (`on_tool_enabled`), the bail-in / asset-relief exclusion, and reserve requirements' −0.5 pp inflation line in

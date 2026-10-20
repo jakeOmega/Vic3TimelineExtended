@@ -19,7 +19,7 @@ docs/
 ├── data/                     (machine-readable inputs / baselines)
 ├── archive/                  (deferred / completed / orphaned reference)
 ├── testing/                  (probe runbooks, capability ledgers and play-test runbooks for in-game checks)
-└── superpowers/              (specs/ design specs and plans/ implementation plans from /writing-plans)
+└── superpowers/              (specs/ design specs and plans/ implementation plans; finished ones in archive/; index in README.md)
 ```
 
 ## Player Guide — `player_guide/`
@@ -210,11 +210,15 @@ Reference material kept for historical or design-rationale purposes. Not activel
 
 [`auto_generated_files.md`](auto_generated_files.md) — canonical map of generator scripts → output files (mod data, docs, GFX). Read before hand-editing anything.
 
-## Session Plans
+## Session Plans and Specs — `superpowers/`
+
+[`superpowers/README.md`](superpowers/README.md) is the index: every active spec and plan with what's left to build, and every archived one with the PRs that shipped it.
 
 | Path | Contents |
 |------|----------|
-| `superpowers/plans/` | Multi-step implementation plans authored by Claude Code via `/writing-plans`. Each plan is self-contained and dated. |
+| `superpowers/specs/` | Design specs still being built or awaiting the owner's calls |
+| `superpowers/plans/` | Multi-step implementation plans authored by Claude Code via `/writing-plans`, each self-contained and dated, still being built |
+| `superpowers/archive/` | Specs and plans whose work has all shipped, kept as design rationale. The living docs (`systems/`, `testing/`) describe the systems as they are now |
 
 ## Engine-Generated Logs (outside the repo)
 

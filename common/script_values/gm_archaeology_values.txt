@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md
 # (issue #939), reworked by 2026-10-16-grand-monument-archaeology-rework-design.md
 # (innovation the only cost, digs sized by the site, foreign digs). Container
 # scope unless a comment says country. Each value is defined before the values

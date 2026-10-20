@@ -1,7 +1,7 @@
 """The Grand Monument registry: every dedication, skin and IG alignment in one
 table, pinned against every site that lists them by hand.
 
-Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+Design: docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md.
 Adding a dedication touches its PM and the ratchet, the PM group, its kind and
 fit trigger, the IG alignment triggers, its local and national modifiers and
 their step mirrors, the ceremony option, the skin rules, its flavour event and
@@ -1848,7 +1848,7 @@ class DebugTests(unittest.TestCase):
 
 
 
-# ==== Opportunities (docs/superpowers/specs/2026-10-12-grand-monument-opportunities-design.md; v2 §2's commissions reworked) ====
+# ==== Opportunities (docs/superpowers/archive/specs/2026-10-12-grand-monument-opportunities-design.md; v2 §2's commissions reworked) ====
 COM_TRIGGERS = "common/scripted_triggers/gm_commission_triggers.txt"
 COM_EFFECTS = "common/scripted_effects/gm_commission_effects.txt"
 COM_VALUES = "common/script_values/gm_commission_values.txt"
@@ -1857,7 +1857,7 @@ NAME_EFFECTS = "common/scripted_effects/gm_name_effects.txt"
 HISTORY = "common/history/extra_history.txt"
 
 Source = namedtuple("Source", "key begins fixed boon_field boon_value boon_shown special", defaults=(None,))
-# One row per moment (docs/superpowers/specs/2026-10-12-grand-monument-
+# One row per moment (docs/superpowers/archive/specs/2026-10-12-grand-monument-
 # opportunities-design.md §1): what it asks for, how the monument would be
 # named, and its boon. A fixed source names the capital (gm_com_fix_to_capital),
 # falling back to anywhere when the capital holds a monument of another
@@ -4201,7 +4201,7 @@ class MultiMonumentSelfCheckTests(unittest.TestCase):
 
 class ReviewFixes20261016Tests(unittest.TestCase):
     """The review of several monuments in one state (2026-10-16; spec
-    docs/superpowers/specs/2026-10-16-grand-monument-ageing-design.md §0.5)."""
+    docs/superpowers/archive/specs/2026-10-16-grand-monument-ageing-design.md §0.5)."""
 
     TR = "common/scripted_effects/gm_trophy_effects.txt"
     ARCH = "common/scripted_effects/gm_archaeology_effects.txt"
@@ -4985,7 +4985,7 @@ if __name__ == "__main__":
 # ---- Unique dedications (signatures spec 2026-10-16) ----------------------------------
 
 Signature = namedtuple("Signature", "key kind family name national local ig parent source members")
-# The checklist for adding a signature (docs/superpowers/specs/2026-10-16-grand-
+# The checklist for adding a signature (docs/superpowers/archive/specs/2026-10-16-grand-
 # monument-signatures-design.md §10). kind: a family (§4.1), a one-off (§4.2: a
 # family of one with a flourish, counted in its family's sums too) or a special
 # (§5: given by completing its opportunity). national: (modifier suffix, field,

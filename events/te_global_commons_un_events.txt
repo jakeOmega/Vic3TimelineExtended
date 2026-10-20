@@ -3,7 +3,7 @@
 # ============================================================================
 # THE GLOBAL COMMONS: THE UN LAYER — HIDDEN EVENTS
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md §4. The UN's
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md §4. The UN's
 # Assembly business for the two new conventions (un_events.40 and .41) is in
 # events/un_events.txt beside every other convention's.
 # ============================================================================

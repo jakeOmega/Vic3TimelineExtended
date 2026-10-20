@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # INTERNAL RESETTLEMENT — scripted triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-26-internal-resettlement-design.md.
 # Culture and religion are never tested to choose who moves (Decisions table).
 
 # ---- The frontier (§6) -----------------------------------------------------

@@ -1,4 +1,4 @@
-﻿# Demographics phase 3 (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md §4.4, call 15): the longevity
+﻿# Demographics phase 3 (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md §4.4, call 15): the longevity
 # gap's politics. Built behind demographics_params.LONGEVITY_POLITICS (generated as te_demog_k_lx_politics), off until a
 # play-test sized them (owner, 2026-10-11) and on at the spec's sizes since 2026-10-16 (owner). Under Full only, at
 # multipliers from 0 to 1 (te_demog_lx_politics_refresh); each field's size is demographics_params' (a test pins them).

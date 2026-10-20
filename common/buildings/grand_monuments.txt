@@ -6,7 +6,7 @@
 # repeatable. Every effect grows with grandeur along the doubling curve, and
 # national effects come from national totals on the Monuments journal entry,
 # never from each building separately.
-# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md.
 #
 # The FINISHED monument (sites spec 2026-10-18 §3.1): always level 1, made only
 # by script, at dedication, on its dedication. Its size lives in its records

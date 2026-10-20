@@ -1,5 +1,5 @@
 ﻿# The banking entry for every country: the old-save safety net and its
-# once-a-game self-check (docs/superpowers/specs/2026-10-17-banking-always-on-design.md
+# once-a-game self-check (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md
 # § 5).
 #
 # Every country under the Banking System rule holds je_banking_cycle, dormant

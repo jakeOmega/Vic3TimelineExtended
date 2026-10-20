@@ -10,7 +10,7 @@ No script reads the paths. Two tests guard them:
 - `GwIconsTest` in `test_global_warming_layout.py` holds each tier code, role, policy and pie to its file.
 - `IconsDocTest` fails when a texture in the widget is missing from this page.
 
-**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`):
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/archive/specs/2026-09-26-icon-pipeline-design.md`):
 - The painted parts are the `gw` and `gw_part` categories in `icon_prompts.py`.
 - The tier and role states are the `gw_state` category: the thermometer is drawn by `_gw_tier`, and the roles are the crate part with a crown mark or a grey tint.
 - Each entry's `now` field names the vanilla placeholder the icon replaced.

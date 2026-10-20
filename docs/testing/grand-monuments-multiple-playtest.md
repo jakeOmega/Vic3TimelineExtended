@@ -1,8 +1,8 @@
 # Grand Monuments: several monuments in one state, play-test checklist
 
 What the next play-test should look at for monuments that share a state (spec
-`docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md`, plan
-`docs/superpowers/plans/2026-10-13-multiple-monuments-per-state.md`). In-game checks do not gate a merge (CLAUDE.md,
+`docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md`, plan
+`docs/superpowers/archive/plans/2026-10-13-multiple-monuments-per-state.md`). In-game checks do not gate a merge (CLAUDE.md,
 "In-game checks: self-checks and the play-test list"): the PR landed on the offline gate and this is what only the game
 can show. A fixed item is struck through with the commit that fixed it.
 

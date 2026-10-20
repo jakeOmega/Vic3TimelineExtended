@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — several monuments in one state: scripted GUIs
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-13-multiple-monuments-per-state-design.md §5.
+# Design: docs/superpowers/archive/specs/2026-10-13-multiple-monuments-per-state-design.md §5.
 # ROOT is the player's country; the monument travels as gm_mon (a secondary's
 # container, as gm_trophy_sguis.txt's gm_tr). The effect only orders the work,
 # and a hidden event does it (monument_trophy_events.10): a tooltip walks the

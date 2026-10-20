@@ -240,7 +240,7 @@ types diplomatic_panel
 				# Actions section (founding, joining and leaving the UN and most
 				# requests exist only as buttons), the chart, the record and the
 				# explanations, then a link back. Spec:
-				# docs/superpowers/specs/2026-09-28-un-gui-pass-design.md. The gate sits
+				# docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md. The gate sits
 				# on a parent of the GetPlayerJournalEntry datacontext, never on the
 				# widget carrying it (vanilla's shape: states_panel.gui, the Meiji
 				# faction button).

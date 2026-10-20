@@ -645,7 +645,7 @@ cb_disable_asset_relief_program = {
 }
 
 # ---- 2026-09-23 expansion ---------------------------------------------------
-# docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md.
+# docs/superpowers/archive/specs/2026-09-23-banking-tools-expansion-design.md.
 #
 # Directed-credit sectors. A sector's ai_chance is its share of the weight it
 # shares with Infrastructure, and only when the government favours it — see

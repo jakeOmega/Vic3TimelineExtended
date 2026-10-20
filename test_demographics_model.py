@@ -1006,7 +1006,7 @@ class TestPractices(unittest.TestCase):
 
 
 class TestPhase2Interfaces(unittest.TestCase):
-    """Phase 2 step 1 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1): the figures
+    """Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1): the figures
     the census stores and applies nowhere yet."""
 
     FARM = dict(sol=8, literacy=0.1, urban_share=0.05, laws=frozenset({"law_no_womens_rights",
@@ -1133,7 +1133,7 @@ class TestPhase2Interfaces(unittest.TestCase):
 
 
 class TestPhase2Step2(unittest.TestCase):
-    """Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the workforce
+    """Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2): the workforce
     term, the pension setting, the two bills and the work deaths' split."""
 
     def test_the_term_ramps_toward_its_target(self):
@@ -1228,7 +1228,7 @@ class TestMalariaFactor(unittest.TestCase):
 
 
 class TestConsequences(unittest.TestCase):
-    """Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the pool,
+    """Phase 2 step 4 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4): the pool,
     conscription, the war dead's window, the youth bulge and sex balance."""
 
     def test_the_pool_is_men_of_twenty_to_thirty_nine(self):

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the yearly state effects
 # (docs/superpowers/specs/2026-10-08-demographics-design.md;
-# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Tasks 7-12)
+# docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md Tasks 7-12)
 #
 # State variables the walk writes, every year, whatever the rule (Tasks 8-11
 # add theirs below as they land):
@@ -980,8 +980,8 @@ te_demog_close_accumulators = {
 }
 
 # ---- Phase 2 step 1: who works, the pensioners and health need ---------------------------------------------------
-# docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.1-1.4 and
-# docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md, Task 5. The census computes these at every seed
+# docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.1-1.4 and
+# docs/superpowers/archive/plans/2026-10-12-demographics-phase2-interfaces.md, Task 5. The census computes these at every seed
 # and step and applies none of them until step 2. demographics_model.work_figures is the twin.
 
 # THIS = a state, at the end of te_demog_prepare (phase 2 step 1; demographics_model.working_ages_end and women_rate):
@@ -1653,7 +1653,7 @@ te_demog_country_yearly = {
 	te_demog_lx_politics_clear = yes
 }
 
-# THIS = a country (phase 2 step 1; docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §1.2):
+# THIS = a country (phase 2 step 1; docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.2):
 # its pension age, the one number every reader takes through te_demog_pension_age. Under Old Age Pension the age its
 # position gives (phase 2 step 2, te_demog_pension_age_from_position: Standard's 65 outside Full or with none chosen);
 # otherwise none, and the setting goes, so a later return starts at Standard with no term running. A revolution's winner

@@ -1,6 +1,6 @@
 # AI-managed flat staff: play-test
 
-Prototype: `pm_ai_managed_fab` hires a flat crew of 1,000 engineers per building instead of 10 a level, so a building's level is no longer limited by the population that can staff it (`docs/superpowers/specs/2026-10-16-ai-managed-flat-staff-design.md`).
+Prototype: `pm_ai_managed_fab` hires a flat crew of 1,000 engineers per building instead of 10 a level, so a building's level is no longer limited by the population that can staff it (`docs/superpowers/archive/specs/2026-10-16-ai-managed-flat-staff-design.md`).
 
 The fab buildings are the Wired and Wireless Telecommunications, Consumer Appliance, Electronic Components and Semiconductor, and Robotics industries.
 

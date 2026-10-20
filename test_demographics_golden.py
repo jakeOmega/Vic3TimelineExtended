@@ -1,4 +1,4 @@
-"""Phase 2 step 1 changes no census number (docs/superpowers/plans/2026-10-12-demographics-phase2-interfaces.md).
+"""Phase 2 step 1 changes no census number (docs/superpowers/archive/plans/2026-10-12-demographics-phase2-interfaces.md).
 
 The golden (test_fixtures/demographics/phase2_step1_golden.json), recorded on the tree before step 1's first change
 (TE_RECORD_GOLDEN=1), holds:
@@ -17,13 +17,13 @@ come back once they are taken out; te_demog_cause_inputs_store, which calibratio
 STEP3_DIGESTS' digest with step 3b's line taken out. Its new variables are te_dg_in_mat (the maternal cause's input),
 te_dg_policy and te_dg_urban_left (what the step used, for the tooltips).
 
-Phase 2 step 2 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §2) changes the census under
+Phase 2 step 2 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2) changes the census under
 Full by design: work deaths split by the census's own count of women and men at work (§2.5). Its invariant is that
 nothing changes outside Full, which the Display-only, the lines' and the model's cases still pin. The two Full cases
 (FULL_CASES) were re-recorded on step 2's tree (TE_RECORD_GOLDEN_FULL=1, which rewrites them alone), so a later change
 under Full still shows; step 2's new names are STEP2_VARS.
 
-Phase 2 step 4 (docs/superpowers/specs/2026-10-12-demographics-phase2-consequences-design.md §4) changes two things here
+Phase 2 step 4 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4) changes two things here
 on purpose, and nothing else: the war dead's sums, the 18-40 te_dg_f1840 and te_dg_m1840, become the conscription
 pool's (te_dg_faw, te_dg_fam: calendar 20 and over, biological 39 and under), in the cases and in
 te_demog_normalize_bands (STEP4_RENAMED); and its new names (STEP4_NEW_VARS). Its sex-balance terms leave these cases
@@ -79,7 +79,7 @@ STEP4_NEW_VARS = {"te_dg_faw", "te_dg_fam", "te_dg_sxb", "te_dg_mc", "te_dg_yb"}
 WALK_CALLS = {"te_demog_work_walk_init = yes", "te_demog_work_walk_pop = yes", "te_demog_work_walk_store = yes"}
 # Task 3's lines in te_demog_life_table (the old-age threshold); nothing else in the generated files may change
 LIFE_TABLE_ADDED = re.compile(r"te_dg_oal\d|te_dg_oapy\d|^te_demog_old_age_pass = yes$")
-# Calibration step 3 (docs/superpowers/specs/2026-10-12-demographics-calibration-step3-design.md) changes these blocks on
+# Calibration step 3 (docs/superpowers/archive/specs/2026-10-12-demographics-calibration-step3-design.md) changes these blocks on
 # purpose: the country-scope absorbed lines join the absorbed deaths, the malaria factor joins infection's product and
 # the store keeps its two inputs. Each is held to its new digest instead (a later change to one still fails), and no
 # golden case has a farm pop, malaria or Malaria Prevention, so every recorded number stays as it was.
@@ -91,7 +91,7 @@ STEP3_DIGESTS = {
         "10a1a9f5fad0b5b475884d196e0ad597605b78ce05e48b30849d05431c3fa168",
 }
 STEP3_VARS = {"te_dg_in_mal", "te_dg_in_malc"}
-# Phase 3, the late game (docs/superpowers/specs/2026-10-11-demographics-late-game-design.md): a state with no ageing carrier
+# Phase 3, the late game (docs/superpowers/archive/specs/2026-10-11-demographics-late-game-design.md): a state with no ageing carrier
 # and no treated people takes the plain sweep and changes no number (these cases have none); every census step now
 # stores the mean age at childbirth (late-game §6.2), the one new name here. The walk's Full-only sums gain the bare
 # deaths x wealth and the richest pop the wealth slope reads (call 14: two locals, read only in a late state's refresh,

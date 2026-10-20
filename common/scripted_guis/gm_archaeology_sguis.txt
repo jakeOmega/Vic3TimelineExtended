@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: scripted GUIs
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md.
 # gui/gm_archaeology_widgets.gui (the journal entry's Archaeological
 # Expeditions section). ROOT is the player's country; the site travels as
 # gm_arch (a trophy's gm_tr shape). Each effect only orders the work, and a

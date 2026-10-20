@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — the yearly history store
-# (docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md, Task 12)
+# (docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md, Task 12)
 # ============================================================================
 # One sample container per calendar year for each tracked country
 # (te_history_country_is_tracked), at most 100, kept in the country's variable

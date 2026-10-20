@@ -1,7 +1,7 @@
 ﻿#==================================================
 # Grand Monument dedications
 #==================================================
-# Design: docs/superpowers/specs/2026-09-27-grand-monument-rework-design.md.
+# Design: docs/superpowers/archive/specs/2026-09-27-grand-monument-rework-design.md.
 #
 # THE RATCHET -- why every PM below lists itself in unlocking_production_methods.
 #

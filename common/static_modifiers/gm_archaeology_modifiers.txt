@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # GRAND MONUMENTS — archaeology: the digs' cost (issue #939)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-14-grand-monument-archaeology-design.md,
+# Design: docs/superpowers/archive/specs/2026-10-14-grand-monument-archaeology-design.md,
 # reworked by 2026-10-16-grand-monument-archaeology-rework-design.md.
 # gm_arch_diversion rides on je:je_grand_monuments, refreshed by
 # gm_apply_national_modifiers with a multiplier that is a country variable

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE ANTI-SATELLITE STRIKE (Global Commons § 6.3)
 # ============================================================================
-# docs/superpowers/specs/2026-10-16-global-commons-design.md § 6.3, on the
+# docs/superpowers/archive/specs/2026-10-16-global-commons-design.md § 6.3, on the
 # pattern of the nuclear strike actions (nuke.txt): a one-shot hostile action
 # with no pact and no approval, an AI that decides through a scripted trigger
 # in will_propose, and a low evaluation_chance.

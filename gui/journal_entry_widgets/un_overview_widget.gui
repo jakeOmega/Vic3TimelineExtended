@@ -5,7 +5,7 @@
 ### tooltip is the text it replaced, from a scripted GUI in un_chamber_sguis.txt.
 ### Icons are the UN's own (gfx/interface/icons/un_icons/, PR #572); what each
 ### shows is in docs/systems/un_gui_icons.md.
-### Spec: docs/superpowers/specs/2026-09-28-un-gui-pass-design.md §2.
+### Spec: docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md §2.
 
 types un_overview_widget_types
 {

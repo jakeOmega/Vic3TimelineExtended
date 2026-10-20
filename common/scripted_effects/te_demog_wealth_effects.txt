@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — wealth and the Gini
 # (docs/superpowers/specs/2026-10-08-demographics-design.md §4;
-# docs/superpowers/plans/2026-10-08-demographics-phases-0-1.md Tasks 7 and 11)
+# docs/superpowers/archive/plans/2026-10-08-demographics-phases-0-1.md Tasks 7 and 11)
 # ============================================================================
 
 # THIS = a state; reads the wealth-band sums te_demog_walks wrote a line earlier.

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # THE NUCLEAR TABOO — script values
 # ============================================================================
-# Design: docs/superpowers/specs/2026-09-26-nuclear-taboo-design.md; what
+# Design: docs/superpowers/archive/specs/2026-09-26-nuclear-taboo-design.md; what
 # shipped: docs/systems/nuclear_crisis_design.md §0.11.
 #
 # One world score, global_var:nd_taboo (0-100): how unthinkable nuclear weapons

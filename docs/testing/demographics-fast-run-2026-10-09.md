@@ -3,7 +3,7 @@
 The first fast-mode run (#848) and what it showed about the census's medicine. These are
 the findings behind stage 1 of the modifier-types design
 (`docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md`, plan
-`docs/superpowers/plans/2026-10-09-demographics-modifier-types-stage1.md`).
+`docs/superpowers/archive/plans/2026-10-09-demographics-modifier-types-stage1.md`).
 
 ## The run
 

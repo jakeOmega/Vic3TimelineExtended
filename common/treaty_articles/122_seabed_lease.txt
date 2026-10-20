@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # TREATY ARTICLES: Lease <Basin> Seabed Claims (seabed claims, phase 2)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-17-seabed-claims-and-panel-design.md
+# Design: docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-panel-design.md
 # § 4; model: scripts/analysis/seabed_model.py § LEASES. One directed article
 # per ocean basin: the source leases N of its own claims there to the target.
 # N is the lease's total: the licences the target builds on it plus its
