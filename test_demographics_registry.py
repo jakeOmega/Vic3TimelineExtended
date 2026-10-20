@@ -207,7 +207,8 @@ class TestWalks(unittest.TestCase):
 
 def _parse_script(text):
     """Paradox script as an ordered tree: a list of (key, operator, value), value a str or a list. A bare item in a
-    list block (a decree's `unlocking_technologies = { medical_degrees }`) is (item, "", "")."""
+    list block (a decree's `unlocking_technologies = { medical_degrees }`) is (item, "", ""). It doesn't read `?=`: a
+    block a test runs writes `exists = owner` and `owner = { }` instead (te_demog_um_effects.txt)."""
     text = re.sub(r"#[^\n]*", "", text)
     tokens = re.findall(r"[{}]|[<>]=?|=|[^\s{}=<>]+", text)
     pos = 0
