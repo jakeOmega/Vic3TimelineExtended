@@ -45,6 +45,7 @@ No `primogeniture_scaled` line at all after a game's first year means no state t
 | `TE_SELF_CHECK … neighbouring_state_reads` | Full or Display only: once a game, at the first country census on 31 December | `every_neighbouring_state` from a state returns a land neighbour (Ulster sees Leinster): Late Marriage and Birth Spacing spread. `strait=1` says it crosses the Ulster–Lowlands strait too, so islands spread with their neighbours across the water; `strait=0`, only through their own conditions (the late-marriage spec 4.4 allows either) | `land=0`: the practices never spread | set `PRACTICE_SPREAD` to 0 in `demographics_params.py` and regenerate (`gen_demographics.py`), so the code says what the game does; with `strait=1`, run the harness's replays with `--straits` |
 | `TE_SELF_CHECK … wave_timed_country_type` | Full: once a game, `START` when the first of the event wave's four census-line options is chosen (Missing Girls' ban or payments, `code=1`; The Last Generation?'s licences or payments, `code=2`), the verdict a week later from the capital (`te_debug_demog.81`) | the capital's sum of the type (`state_sex_ratio_at_birth_add` or `state_desired_fertility_mult`) rose by the option's line plus any change in the Family Policy measures' lines of that type (`added` ≈ `expected`): a script-only state type on a timed country modifier reaches the state | `added` 0: the census never sees those four options' lines, so they change no birth, nor the women's-work lines the Baby Boom's and the Greying's options carry on the same kind of modifier; `NO_VERDICT` (a measure offset the line within the week) re-arms the check | add each of the four modifiers (and the three women's-work ones) without `days` and store its end date on the country (`te_dg_wv_<modifier>_until`); `te_demog_wave_yearly` removes it when the date passes and puts it back for a revolution's winner that holds the date (the measures' pattern, `te_demog_ms_keep_all`) |
 | `TE_SELF_CHECK … cause_deaths_estimate` | Display only or Full: once a game, at the first census step of a state with at least 1,000 deaths from natural causes and no late game (issue #1029) | the estimate the pie's shares come from, the four causes' rates over the bands last counted, matches the sweep's own deaths (`fit` 0.9–1.1; the model's states read 0.97–1.00), and the slices add up to the deaths, the war dead and the killed (`slices` = `deaths` + `war` + `killed`) | `fit` outside 0.9–1.1: the bands at the step's start aren't the people the sweep killed, so every pie leans; slices that don't add up: a slice read a stale figure | count deaths by cause in the sweep itself (issue #1029's method b): each age group's deaths split by its own causes' rates in `te_demog_sweep` (generated), summed into the eight slices, and drop the estimate and its fit (the late sweep already counts its own this way: `te_demog_lx_cause_deaths`) |
+| `TE_SELF_CHECK … resettle_moves_booked` | Display only or Full: once a game, at the first census step of a state whose Internal Resettlement arrivals since its last step were 5% of its people or more and at least 1,000 (2026-10-19; `te_demog_rs_selfcheck`) | the residual left after the counted arrivals (`rest`) is at most half of them: the walk's `move_partial_pop` moved the people it counts, and they are in the state's population change, so the rest is the engine's own migration (`residual` is the whole, arrivals included) | `rest` about minus `arrived`: the counted moves aren't in the population change (or are counted twice), so every destination books arrivals the engine didn't make. A large engine immigration beside the programme can also read BROKEN: `rest` positive and `residual` well above `arrived` is that, not a fault | take the known moves back out of the residual's sum in `te_demog_flows` (the `te_dg_rk_on` block's two lines) and leave their booking off (`te_demog_rs_take` keeps `te_dg_rk_on` at 0), so the moves go back to the residual's booking, with only the transit dead kept as known kills |
 
 No `unemployment_rate_read` line after a few years under the census means no census state counted more than 2% of its workforce idle: option t's `unemp=` is the capital's stored conversion and `unemp_walk=` the walk's own count (since 2026-10-17); compare them with the state panel's unemployed in a state with visibly idle workers.
 The two workforce carrier checks may not fire in a short game: console option p (phase 2 step 1, below) sets up both
@@ -771,3 +772,37 @@ script value, as the other factors), so no self-check. What only the game can sh
    Leading Cause is Accidents and Violence, and infection is a sliver (the harness: 3% of deaths at 50 years).
 5. **The outline.** The Demographics tab's twenty-year outline moves with the state figures (the country's factor,
    `te_dg_inf_ad`, set at each count beside access).
+
+## Internal Resettlement in the census, and the US frontier (2026-10-19)
+
+A Settlement Authority's moves are booked by their programme's own profile at both ends and taken out of the migration
+residual, its transit dead are known kills, and the US frontier's 1836 seed starts young and male
+(`docs/systems/mod_systems.md` § Demographics, "Internal Resettlement in the census, and the US frontier").
+`test_demographics_resettle.py` holds the script to the model; `demographics_harness.py resettle` and `frontier` print
+what it should do. One self-check, `resettle_moves_booked` (table above). Census accounting only: nothing changes
+outside the census's own figures, under Display only or Full.
+
+1. **The frontier starts male (Display only or Full, a new 1836 game as or beside the US).** Open Wisconsin, Iowa and
+   Illinois on their Demographics subtab: men per 100 women aged 20-59 about 188 (Wisconsin), 134 (Iowa, Illinois),
+   126-129 (Michigan, Arkansas, Missouri) and 113 (Indiana), with a pyramid whose men aged 20-59 stand well past its
+   women; Ohio and Kentucky as before (about 95). The state's people are the game's. Under Full, Wisconsin's state
+   modifiers list "Census: More Men" (its radicals from movements: the sex-balance effect, at full from 150).
+2. **It fades as it ages.** Twenty-five years on, the frontier states sit near 100-120 (the residual's own arrivals
+   correct their sex split, `LABOUR_BALANCE_HIGH`), Wisconsin last.
+3. **A programme's destination (Display only or Full).** Run a Penal Transportation Authority for a few years: its
+   destination's men aged 18-35 grow far past its women (the harness's stand-in reaches 256 men per 100 women aged
+   20-59 in ten years at 10,000 a year into 100,000 people); a Land Grants destination stays near even and grows
+   younger. Rustication's destination gains people aged 15-24 (in the pyramid, the 15-19 and 20-24 bands; 25-29 not),
+   Managed Retreat's the old.
+4. **The source.** The states the walk takes from (the *Recruited for resettlement* readout) lose the programme's
+   profile: a Penal Transportation source's young men, a Rustication source's 15-24s.
+5. **Transit deaths in the pie (Display only or Full, a coercive programme).** A source of Special Settlements or
+   Penal Transportation shows its transit dead in the Causes of Death section's "Killed" slice the year after; its Net
+   Migration row is the people moved away, no longer the dead too.
+6. **Net Migration.** A destination's Net Migration row counts its settlers (about the building's *Settlers arrived*
+   over the year plus the engine's own migration). A frontier that grows by more than a quarter in a year by
+   resettlement keeps its census (no re-seed: its pyramid does not jump back to the equilibrium shape).
+7. **Census off.** With the rule Disabled, `event te_debug_demog.120` logs only its closing line (no state holds a
+   counter or a frontier mark).
+8. **`debug.log`:** `event te_debug_demog.120` lists the player's states' counters since their last step
+   (`TE_DEMOG_RESETTLE`); no errors from `te_demog_rs_*` or `te_demog_frontier_*`.

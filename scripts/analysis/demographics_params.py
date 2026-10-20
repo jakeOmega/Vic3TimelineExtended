@@ -922,3 +922,98 @@ LX_POLITICS_LABOR = 0.10
 # Linked to Common Longevity, as the country's unions would; it goes back to Standard under PENSION_AI_GAP_LOW.
 PENSION_AI_GAP = 0.2
 PENSION_AI_GAP_LOW = 0.1
+
+# ---- Internal Resettlement's known moves (2026-10-19) ----
+# Spec §2.5 "Known kills": the census books a Settlement Authority's moves with its programme's own age and sex profile,
+# the same at the source (departures) and the destination (arrivals), and takes them out of the migration residual
+# (demographics_resettle.py; common/scripted_effects/te_demog_resettle_effects.txt). The codes are var:rs_programme's
+# (resettlement_set_programme_code; test_resettlement_programme_registry.PROGRAMMES): the index here.
+RESETTLE_PROGRAMMES = ("land_grants", "military_colonies", "penal_transportation", "organized_colonization",
+                       "special_settlements", "development_program", "rustication", "managed_retreat")
+# The programmes' own kinds, beside MIGRANT_PROFILE's: each has weights over MIGRANT_CLASSES (summing to 1) and a women's
+# share, or (Rustication's youth) an age range booked by single year in proportion to each age's people.
+# - penal: ages 15-35, 85% men. Of the ~162,000 convicts sent to Australia, ~25,000 were women (15.4%), their average
+#   age about 25 and a fifth under 20 (owner, 2026-10-19). Classes 15-17, 18-35, 36-59 at 5/85/10.
+# - youth: China's sent-down youth, 15-24, both sexes evenly. 15-24 straddles the classes (15-17, 18-35), so it is booked
+#   over the single years 15-24 instead: one rate per sex over the people of those ages (the bands 15-19 and 20-24).
+# - retreat: Managed Retreat moves whole communities, weighted to the old: the refugee kind with its 60+ weight doubled,
+#   renormalised.
+_REFUGEE_W = MIGRANT_PROFILE["refugee"]["weights"]
+RESETTLE_KINDS = {
+    "penal": {"weights": [0.0, 0.05, 0.85, 0.10, 0.0], "women": 0.15},
+    "youth": {"ages": (15, 24), "women": 0.5},
+    "retreat": {"weights": [w / (sum(_REFUGEE_W) + _REFUGEE_W[-1]) * (2 if c == len(_REFUGEE_W) - 1 else 1)
+                            for c, w in enumerate(_REFUGEE_W)], "women": 0.5},
+}
+# Each programme's movers as (kind, weight, women's share) parts, the weights summing to 1. The family and refugee kinds
+# split evenly (None: the kind's own share); the labour kind takes the women's share given, or "jobs": the destination's
+# jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's rights x the range; no
+# balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's 15-35
+# and the Development Program's 60/40 were being confirmed as this was built: one edit here if they change.
+RESETTLE_PROFILES = {
+    "land_grants": (("family", 1.0, None),),
+    "military_colonies": (("labour", 0.5, 0.2), ("family", 0.5, None)),   # half the labour kind at 80% men, half families
+    "penal_transportation": (("penal", 1.0, None),),
+    "organized_colonization": (("family", 1.0, None),),
+    "special_settlements": (("refugee", 1.0, None),),                     # whole families, all ages
+    # FELDA and Transmigrasi moved households; the Virgin Lands began young and male, and the families followed
+    "development_program": (("family", 0.6, None), ("labour", 0.4, "jobs")),
+    "rustication": (("youth", 1.0, None),),
+    "managed_retreat": (("retreat", 1.0, None),),
+}
+# The booking (my call, 2026-10-19): a known move bypasses the residual's caps (MIGRANT_CAP_IN, _OUT) and its labour
+# balance ramps: it is a count, not an estimate. It keeps the sweep's own guard (a cohort gives at most half of what is
+# left of it), and a class or the youth's ages with under one person pass their share to one flat rate over every class
+# with people, as the residual's leftover does.
+
+# ---- The US frontier at the 1836 seed (2026-10-19) ----
+# Spec §2.6: "The US frontier states start young and male." History data, as France's Family Limitation is:
+# common/history/extra_history.txt marks the states the US holds in these state regions in 1836 (te_dg_frontier), and
+# their 1836 seed (te_demog_frontier_begin, te_demog_frontier_slot) sets each age group's men to its women x the
+# ratio below; the seed's normalisation keeps the state's people, and the ring then ages as any other.
+# Source: the Sixth Census, 1840: Compendium of the Enumeration of the Inhabitants and Statistics of the United States
+# (1841), each state's "Total in ..." rows of free white persons by sex and age
+# (https://www.census.gov/library/publications/1841/dec/1840c.html; the scans
+# https://www2.census.gov/library/publications/decennial/1840/1840v3/1840c-05.pdf (Indiana), 1840c-06.pdf (Illinois,
+# Missouri, Arkansas, Michigan) and 1840c-07.pdf (Wisconsin and Iowa Territories)), read 2026-10-19; every state's
+# cells sum to its official white total (Gibson and Jung, Census Bureau Working Paper 56, 2002, Table A-21).
+# Free white (men, women) by the census's age groups; 60+ sums its 60-69 ... 100+. Under 15 the census reads 104-108
+# men per 100 women, about the seed's own, so the seed's children stay as they are.
+FRONTIER_1840_WHITE = {
+    "STATE_MICHIGAN": {(15, 19): (10887, 10819), (20, 29): (22759, 18706), (30, 39): (16025, 11864),
+                       (40, 49): (8276, 6109), (50, 59): (4442, 3394), (60, 149): (2629, 1985)},
+    "STATE_INDIANA": {(15, 19): (36599, 36904), (20, 29): (60002, 55176), (30, 39): (37565, 32708),
+                      (40, 49): (21678, 19967), (50, 59): (13789, 10759), (60, 149): (9086, 7319)},
+    "STATE_ILLINOIS": {(15, 19): (24876, 24078), (20, 29): (52580, 38823), (30, 39): (31428, 22676),
+                       (40, 49): (15809, 12712), (50, 59): (8755, 6514), (60, 149): (5084, 4032)},
+    "STATE_MISSOURI": {(15, 19): (16784, 16952), (20, 29): (33772, 26330), (30, 39): (20568, 14889),
+                       (40, 49): (11384, 8580), (50, 59): (5620, 4259), (60, 149): (3469, 2808)},
+    "STATE_ARKANSAS": {(15, 19): (3863, 3911), (20, 29): (8532, 5881), (30, 39): (5129, 3317),
+                       (40, 49): (2751, 1715), (50, 59): (1194, 805), (60, 149): (727, 504)},
+    "STATE_IOWA": {(15, 19): (2179, 2064), (20, 29): (6207, 3789), (30, 39): (3310, 1865),             # Iowa Territory
+                   (40, 49): (1512, 979), (50, 59): (698, 494), (60, 149): (357, 245)},
+    "STATE_WISCONSIN": {(15, 19): (1344, 1200), (20, 29): (6328, 2713), (30, 39): (3348, 1423),        # Wisconsin Territory
+                        (40, 49): (1191, 612), (50, 59): (554, 360), (60, 149): (269, 175)},
+}
+# The census counts free whites; the game's 1836 state also holds enslaved and free Black people and Native nations
+# (Arkansas's state region takes in the Cherokee, Iowa's the Sauk and Meskwaki and the Dakota), whose numbers of men
+# and women were near even (Missouri's and Arkansas's slaves 97 and 103 men per 100 women in 1840). So the state's
+# ratio is 1 + (the settlers' ratio - 1) x the settlers' share of its 1836 pops (my call, 2026-10-19): the share of
+# region_state:USA's pops in game/common/history/pops/05_north_america.txt (1.14.5) of the settler cultures (yankee,
+# dixie, cajun, irish, north_german). Minnesota and the US's unincorporated western states hold no settlers in 1836,
+# and the Old Southwest (Mississippi 132, Alabama 116, Louisiana 156 men per 100 women aged 15-49 among whites) and
+# Florida Territory (177) are not the West: each could take a row here if wanted.
+FRONTIER_SETTLER_SHARE = {
+    "STATE_MICHIGAN": (128000 + 8000) / 152000,
+    "STATE_INDIANA": (631504 + 4004 + 20000) / 663508,
+    "STATE_ILLINOIS": 452400 / 456400,
+    "STATE_MISSOURI": (9642 + 142662 + 2000 + 165204 + 8000) / 367508,
+    "STATE_ARKANSAS": (12635 + 33857) / 92620,
+    "STATE_IOWA": 23992 / 43992,
+    "STATE_WISCONSIN": 28004 / 36004,
+}
+# {state region: {"ratios": {(first age, last age): men per woman at the seed}}}
+FRONTIER_1836 = {
+    region: {"ratios": {ages: 1 + (m / f - 1) * FRONTIER_SETTLER_SHARE[region] for ages, (m, f) in groups.items()}}
+    for region, groups in FRONTIER_1840_WHITE.items()
+}

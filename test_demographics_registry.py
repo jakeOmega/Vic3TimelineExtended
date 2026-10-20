@@ -72,6 +72,10 @@ SPREAD_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_spread_effects
 SPREAD_VALUES = ROOT / "common" / "script_values" / "te_demog_spread_values_generated.txt"
 # The shared unemployment conversion (te_state_unemployment_share), which the census stores at its walk (2026-10-17)
 UNEMP_VALUES = ROOT / "common" / "script_values" / "te_unemployment_values.txt"
+# Internal Resettlement's known moves and the US frontier's 1836 seed (2026-10-19; test_demographics_resettle.py)
+RESETTLE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_resettle_effects.txt"
+RESETTLE_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_resettle_generated_effects.txt"
+RESETTLE_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_resettle_generated_values.txt"
 DEMOG_FILES = sorted(p for d in ("common", "events") for p in (ROOT / d).rglob("te_demog*.txt"))
 
 
@@ -447,6 +451,10 @@ class _Engine:
         self.effects = _raw_blocks([EFFECTS, GENERATED_EFFECTS, WEALTH_EFFECTS, FAST_EFFECTS, RATE_EFFECTS, LINE_EFFECTS,
                                     PRACTICE_EFFECTS, WORKFORCE_LINE_EFFECTS, WORK_EFFECTS, CONSEQ_EFFECTS,
                                     LX_EFFECTS, LX_GEN_EFFECTS, FL_EFFECTS, SPREAD_EFFECTS, PLACE_EFFECTS])
+        # Internal Resettlement's known moves (2026-10-19); its self-check reads globals and debug_log, which a test of
+        # its text reads (test_demographics_resettle.py)
+        self.effects.update(_raw_blocks([RESETTLE_EFFECTS, RESETTLE_GEN_EFFECTS]))
+        self.effects["te_demog_rs_selfcheck"] = ""
         # phase 2 step 2's workforce self-checks write debug_log lines and read is_capital, which the interpreter
         # doesn't know: TestWorkTermSelfChecks reads their text, and a test that runs them gives them as effects
         self.effects.update({"te_debug_demog_wf_term_checks": "", "te_debug_demog_wf_term_landing": ""})
@@ -455,6 +463,7 @@ class _Engine:
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
                                    WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES,
                                    UNEMP_VALUES])
+        self.values.update(_raw_blocks([RESETTLE_GEN_VALUES]))
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
         # census log (te_demog_census_log_on) only writes debug_log lines: both off unless a test says;
