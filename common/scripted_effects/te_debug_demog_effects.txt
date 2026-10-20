@@ -11,7 +11,7 @@
 #                       defines the format, and test_demographics_harness.py checks
 #                       the head line below against it
 #   TE_DEMOG_CENSUS:    option b's log: one line per country of a million people or
-#                       more at each census (31 December), `key=value` pairs split by
+#                       more at each yearly census (each country's own day), `key=value` pairs split by
 #                       `;` (demographics_observer_report.py reads them)
 #   TE_DEMOG_PULSE      option b's log: the player's capital at each yearly state pulse,
 #                       its census year before the pulse reads it (one step per year?)
@@ -234,7 +234,7 @@ te_debug_demog_pulse_line = {
 # THIS = ROOT = the player. Every state of the world whose late game has started (te_dg_elig) starts its census
 # again at its own equilibrium, as option c does for ours: the walks first, then a seed off the state's pulse (so
 # it seeds again at its next one and steps a year after that), then our census at once. Other countries take their
-# figures at their own census on 31 December: te_demog_country_census writes its bands and lists to ROOT
+# figures at their own yearly census: te_demog_country_census writes its bands and lists to ROOT
 # (te_demog_add_bands_to_root, root = { }), so it runs for ROOT alone. The repair for the late sweep's lost births
 # (fixed 2026-10-16): until then a late state under a TFR of 2 recorded none, so its ring holds too few young
 # people, and once the census steers births again it would carry that gap forward for decades. A seed leaves the
@@ -332,8 +332,8 @@ te_debug_demog_bench_pass = {
 # then a line per war with its dead in that war (num_country_dead, read in the war and
 # copied to the player) and all sides' dead, the war named by debug_log_scopes; then a line
 # per state holding dead its next step will take (te_dg_war_in), the state named the same
-# way. The next monthly pulse adds the war lines' dead less war_seen to war_year; 31
-# December shares war_year out to the states.
+# way. The next monthly pulse adds the war lines' dead less war_seen to war_year; the
+# country's yearly pulse reads war_year for the war shock, then clears it.
 te_debug_demog_war_dead = {
 	set_local_variable = { name = te_dg_dbg_n value = 0 }
 	every_scope_war = {
@@ -1188,7 +1188,7 @@ te_debug_demog_late_ladder = {
 #   under Full, at the first Family Limitation step of a country with a foreign neighbour by the state-scope test.
 # - neighbouring_state_reads: every_neighbouring_state from state scope returns a land neighbour (the practices' spread
 #   rests on it), and whether it crosses a strait (Ulster to the Scottish Lowlands: the spec's open question). Once a game
-#   wherever the census runs, at the first country census on 31 December.
+#   wherever the census runs, at the first yearly country census.
 
 # THIS = ROOT = a country under Full, in te_demog_fl_apply before the line is swapped (te_dg_fl_line is the new line).
 te_debug_demog_fl_selfcheck_start = {
@@ -1242,7 +1242,7 @@ te_debug_demog_fl_neighbours_check = {
 	}
 }
 
-# THIS = a country at its 31 December census, wherever the census runs (te_demog_country_yearly).
+# THIS = a country at its yearly census, wherever the census runs (te_demog_country_yearly).
 te_debug_demog_neighbours_selfcheck = {
 	if = {
 		limit = {

@@ -590,7 +590,7 @@ te_demog_wc_econ_term = {
 
 # Country scope: the return on capital against growth (owner, 2026-10-19; Piketty's r > g), the target's seventh term.
 # 2 x (the real policy rate - the economy's growth averaged over about five years), in percentage points, at most 5
-# either way, and 0 until the country's banking cycle has started. Stored once a year with its inputs, on 31 December
+# either way, and 0 until the country's banking cycle has started. Stored once a year with its inputs, at its yearly pulse
 # before the national refresh (te_demog_wc_growth_update), so the panel's bar, the stored target and the states' targets
 # all read the same figure until the next.
 te_demog_wc_rg_term = {
@@ -603,7 +603,7 @@ te_demog_wc_rg_term = {
 
 # Country scope: 1 while the r > g term is in force (te_dg_wc_rg stored), else 0: the Return on Capital hovers give
 # the rate and growth only then, and say the term adds nothing otherwise (the banking rule off, a cycle not started,
-# or no 31 December since).
+# or no yearly pulse since).
 te_demog_wc_rg_on = {
 	value = 0
 	if = {

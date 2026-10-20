@@ -17,8 +17,9 @@ The world's multiple comes from the saves when --saves names plain-text saves (#
 (UNDECIDED when no save other than the first lies within a year of it). Only those two saves are read past their
 header, so a run's whole save folder can be passed. Normal-speed runs only: under fast mode the census year runs
 ahead of the calendar, so a save's date and the log's census year don't name the same year. Pass the run's first autosave (1 January after the first census year): the
-census log's figure runs from the first census year's line to --to-year's, both taken on 31 December, so the
-two cover the same years. The log's figure is still printed, as a second line: it sums the logged countries
+census log's figure runs from the first census year's line to --to-year's, each taken at a country's yearly census (on a
+day of its own, not 31 December), so the two cover the same years only to within that day. The log's figure is
+still printed, as a second line: it sums the logged countries
 of a million people or more, so land that comes under the census as it is colonized joins the total and
 inflates it (normal-speed Full run to 1901, 2026-10-11: x1.92 from the log against x1.77 from the saves,
 docs/testing/demographics-phase2-engine-rates-2026-10-10.md). Without --saves the gate judges the log's
@@ -49,7 +50,7 @@ cancel in it (a state's small loss is zeroed, a city's gain kept). Lines logged 
 leave the check undecided; the floored figures are still printed, weighted by people.
 
 The lines come from `event te_debug_demog.1` option b (the census log): one per country of a
-million people or more at each census, every 31 December, `key=value` pairs split by `;`
+million people or more at each yearly census, each country on its own day, `key=value` pairs split by `;`
 (te_debug_demog_census_line in common/scripted_effects/te_debug_demog_effects.txt). People
 counts are millions_thousands_units groups (demographics_harness._ungroup reads them).
 

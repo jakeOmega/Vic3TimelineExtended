@@ -218,7 +218,7 @@ te_debug_demog_war_seen_g3 = {
 	floor = yes
 }
 
-# THIS = the player: this year's war dead so far, until 31 December; 0 before the first pulse.
+# THIS = the player: the year's war dead so far, until its next yearly pulse; 0 before the first pulse.
 te_debug_demog_war_year_raw = {
 	value = 0
 	if = {
