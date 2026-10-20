@@ -263,9 +263,13 @@ PENSION_BILL_BAND = (0.15, 0.30)
 # The health bill (§2.4, bureaucracy): country_institution_cost_institution_health_system_mult = the need term
 # HEALTH_NEED_WEIGHT x (need - 1), at most HEALTH_NEED_CAP, plus HEALTH_TECH_STEP for each chronic-treatment technology.
 # Below 1836's need the term is negative (a young country's system costs a little less), on a fixed-sign pair.
+# HEALTH_TECHS are all six of chronic treatment's carriers (TREATMENT_CAP's comment), so full technology costs +0.30
+# (owner, 2026-10-20; the first three alone until then): molecular nanotech treats with expensive advanced materials, and
+# the bill is a good sink for an ultra-wealthy late-game country.
 HEALTH_NEED_WEIGHT = 0.8      # step 2's fit (0.5 proposed): rich today +0.35 to +0.5 with its technologies
 HEALTH_NEED_CAP = 1.0
-HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine")
+HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine", "genetic_engineering",
+                "molecular_assemblers", "biological_immortality")
 HEALTH_TECH_STEP = 0.05
 # Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
 # WORK_SPLIT_AGES (first, last), from the last count; the laws' share (female_work_share) before one.
@@ -495,7 +499,7 @@ BASE_ACCESS = 0.4
 # it in the last era. modern_pharmaceuticals 0.3 (era 8), telemedicine 0.2 (era 10) and personalized_medicine 0.2 (era 11)
 # make 0.70; genetic_engineering 0.05 (era 11), molecular_assemblers 0.12 and biological_immortality 0.12 (era 12) take
 # it to 0.99. The augmentation laws' flat lines (Medical Augmentation Only 0.10; Unrestricted, Regulated Market and
-# Mandatory 0.05) bring it there sooner and past it only cap. The health bill's HEALTH_TECHS still counts the first three.
+# Mandatory 0.05) bring it there sooner and past it only cap. The health bill's HEALTH_TECHS counts all six (2026-10-20).
 # infection 0.99 (#1045; was 0.95): the base game's carriers reach 0.94 by era 7 (medical_degrees 0.03, pharmaceuticals
 # 0.07, modern_nursing 0.08, antibiotics 0.4, modern_vaccines 0.25, antibiotic_mass_production 0.11), which matches the
 # rich world of eras 9-10; the late carriers take the rest (personalized_medicine 0.03 in era 11, advanced_nanofabrication

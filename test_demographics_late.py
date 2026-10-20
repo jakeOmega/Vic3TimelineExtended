@@ -700,13 +700,13 @@ class TestLateGameCountry(unittest.TestCase):
 
     def test_the_health_bill_pays_for_public_longevity_care(self):
         fixtures = {"gdp": 52_000_000.0, '"institution_investment_level(institution_social_security)"': 5.0,
-                    "te_demog_health_tech_term": 0.15, "income": 300_000.0}
+                    "te_demog_health_tech_term": P.HEALTH_TECH_STEP * len(P.HEALTH_TECHS), "income": 300_000.0}
         eng = _Engine(fixtures, triggers={"te_demog_effects_run": True, "te_demog_has_pension_law": False})
         eng.vars.update(te_dg_need=1.2, te_dg_lx_pub=0.9, te_dg_elig=0.6)
         eng.call("te_demog_bills_refresh")
         want = M.health_term(1.2, frozenset(P.HEALTH_TECHS), lx_public=0.9, lx_elig=0.6)
         self.assertAlmostEqual(eng.vars["te_dg_health_term"], want, places=5)
-        self.assertAlmostEqual(want, P.HEALTH_NEED_WEIGHT * 0.2 + 0.15 + 0.6 * P.LX_PUBLIC_HEALTH_WEIGHT)
+        self.assertAlmostEqual(want, P.HEALTH_NEED_WEIGHT * 0.2 + 0.30 + 0.6 * P.LX_PUBLIC_HEALTH_WEIGHT)
 
     def test_linked_to_common_follows_the_untreated(self):
         eng = _Engine({"te_demog_ms_now": 2100.0}, triggers={"te_demog_effects_run": True,
