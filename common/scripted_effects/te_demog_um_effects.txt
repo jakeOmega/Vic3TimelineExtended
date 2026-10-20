@@ -469,7 +469,8 @@ te_demog_um_nexus_refresh = {
 			# (st_res_refresh_hub_cache_effect): the levels whose research line the method gives
 			b:building_mind_upload_nexus = {
 				root = {
-					set_variable = { name = te_dg_um_lvo value = { value = prev.level multiply = prev.occupancy } }
+					set_variable = { name = te_dg_um_lvo value = prev.level }
+					change_variable = { name = te_dg_um_lvo multiply = prev.occupancy }
 				}
 			}
 			b:building_mind_upload_nexus = {
