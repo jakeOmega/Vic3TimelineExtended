@@ -26,11 +26,13 @@ STUBS = {"te_demog_seed": "set_variable = { name = did value = 1 }",
          "te_demog_step": "set_variable = { name = did value = 2 }"}
 
 
-def _pulse(provinces, stored=None, census=1836.0, pop=1000.0, pop_last=1000.0, engine=_Engine, effects=None):
+def _pulse(provinces, stored=None, census=1836.0, pop=1000.0, pop_last=1000.0, engine=_Engine, effects=None,
+           incorporated=True):
     """te_demog_state_census in 1837 for a state with `provinces` provinces now and `stored` at its last pulse (None:
     no stored count); census None: no census yet."""
     eng = engine({"year": 1837.0, "state_population": pop, "te_demog_state_provinces": float(provinces)},
-                 triggers={"te_demog_cohorts_run": True}, effects={**STUBS, **(effects or {})})
+                 triggers={"te_demog_cohorts_run": True, "is_incorporated": incorporated},
+                 effects={**STUBS, **(effects or {})})
     if census is not None:
         eng.vars.update(te_dg_year=census, te_dg_raw=900.0, te_dg_pop_last=pop_last)
     if stored is not None:
@@ -39,14 +41,17 @@ def _pulse(provinces, stored=None, census=1836.0, pop=1000.0, pop_last=1000.0, e
     return eng
 
 
-def _console(provinces, stored, pop=1000.0, pop_last=1000.0, census=1836.0):
+def _console(provinces, stored, pop=1000.0, pop_last=1000.0, census=1836.0, incorporated=True):
     """The same pulse with the line's own text run: _ConsoleEngine records each debug_log with the variables then."""
     def make(fixtures, triggers=None, effects=None):
         eng = _ConsoleEngine(fixtures, triggers=triggers, effects=effects)
         eng.effects.update(STUBS)
-        eng.effects["debug_log_scopes"] = ""
         return eng
-    return _pulse(provinces, stored, census=census, pop=pop, pop_last=pop_last, engine=make)
+    return _pulse(provinces, stored, census=census, pop=pop, pop_last=pop_last, engine=make, incorporated=incorporated)
+
+
+def _lines(eng):
+    return [(s, v) for s, v in eng.logs if s.startswith("TE_INFO demog_province_change")]
 
 
 def _effect_keys(items):
@@ -125,11 +130,25 @@ class TestProvinceLine(unittest.TestCase):
                     self.assertEqual(at["te_dg_pop_last"], 1000.0)
                     self.assertNotIn("did", at, "before the seed or step")
 
+    def test_a_colony_growing_a_province_is_not_logged(self):
+        """One province more in an unincorporated state is colonisation, province by province: no line. Every other
+        change is logged, in an unincorporated state too."""
+        for provinces, stored, incorporated, logged in ((11, 10, False, False), (11, 10, True, True),
+                                                       (12, 10, False, True), (9, 10, False, True),
+                                                       (10, 10, False, False)):
+            with self.subTest(provinces=provinces, stored=stored, incorporated=incorporated):
+                eng = _console(provinces, stored, incorporated=incorporated)
+                self.assertEqual(len(_lines(eng)), 1 if logged else 0)
+                self.assertEqual(eng.vars["te_dg_provinces"], float(provinces), "stored either way")
+
     def test_the_line_changes_no_number(self):
         """Its body only logs; and the census decides the same with or without a change of provinces."""
         # each debug_log string a token, as the console engine reads it
-        keys = _effect_keys(_parse_script(_console_blocks()[0][LINE]))
-        self.assertEqual(set(keys), {"if", "debug_log", "debug_log_scopes"})
+        body = _parse_script(_console_blocks()[0][LINE])
+        keys = _effect_keys(body)
+        self.assertEqual(set(keys), {"if", "else_if", "set_local_variable", "debug_log"})
+        locals_set = set(re.findall(r"set_local_variable = \{ name = (\w+)", _block(_text(CONSOLE_EFFECTS), LINE)))
+        self.assertEqual(locals_set, {"te_dg_prov_step", "te_dg_prov_log"}, "only its own locals")
         for pop in (1000.0, 5740.0, 250.0):
             with self.subTest(pop=pop):
                 same, changed = _console(10, 10, pop=pop), _console(13, 10, pop=pop)
@@ -147,7 +166,8 @@ class TestProvinceLine(unittest.TestCase):
                      "[THIS.ScriptValue('te_debug_demog_province_people')|0]", "[THIS.GetState.GetOwner.GetTag]"):
             self.assertIn(read, line)
         self.assertNotIn("local_var", line, "locals don't reach a debug_log line")
-        self.assertIn("debug_log_scopes = yes", _block(text, LINE))
+        self.assertNotIn("debug_log_scopes", _block(text, LINE), "no scope dump: the line names the state")
+        self.assertIn("[THIS.GetState.GetNameNoFormatting]", line)
         people = re.sub(r"\s+", " ", _block(_text(CONSOLE_VALUES), "te_debug_demog_province_people")).strip()
         self.assertEqual(people, "value = state_population")
 

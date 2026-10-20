@@ -4275,13 +4275,14 @@ class TestTrend(unittest.TestCase):
         self.assertEqual((eng.vars["te_dg_prev_tfr"], eng.vars["te_dg_prev_e0"]), (3.3, 44.0))
         self.assertNotEqual(eng.vars["te_dg_tfr"], 3.3)
 
-    def test_a_population_jump_reseeds(self):
-        """A state merged or split moves its people by far more than a year's natural change. Over 25%
-        since the last census the state's pulse seeds again (no migrants, the arrows start over)
-        instead of stepping and counting the move as migration; a 3% rise is a year's step."""
+    def test_a_population_jump_steps_and_keeps_the_arrows(self):
+        """No size test (owner, 2026-10-20): a state whose people moved far since the last census steps like any other,
+        books the move as migration and keeps its arrows. Until then a move of more than 25% seeded again (no migrants,
+        the arrows started over), on the premise that it was a state merged or split; in the 2057 game it fired only on
+        migration."""
         stubs = {"te_demog_walks": "", "te_inh_refresh_rural_effects": "", "te_demog_wc_state_yearly": "",
                  "te_inh_refresh_wc_state_effects": ""}
-        for growth, reseeded in ((1.4, True), (0.6, True), (1.03, False)):
+        for growth in (1.4, 0.6, 1.03, 5.0, 0.3):
             with self.subTest(growth=growth):
                 eng = _engine_for(self.INP, 1836, self.POP, effects=stubs)
                 eng.call("te_demog_seed")
@@ -4294,16 +4295,11 @@ class TestTrend(unittest.TestCase):
                 eng.fixtures.update(year=1839.0, state_population=people * growth)
                 eng.call("te_demog_state_yearly")
                 self.assertEqual(eng.vars["te_dg_year"], 1839.0)
+                self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
+                self.assertGreater(eng.vars["te_dg_births"], 0)
+                self.assertAlmostEqual(eng.vars["te_dg_net_migration"], (growth - 1) * people, delta=1.0)
                 self.assertAlmostEqual(eng.vars["te_dg_people"], people * growth)
                 self.assertAlmostEqual(eng.vars["te_dg_pop_last"], people * growth)
-                if reseeded:
-                    self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 0.0, "te_dg_stepped": 0.0})
-                    self.assertEqual(eng.vars["te_dg_births"], 0.0)
-                    self.assertEqual(eng.vars["te_dg_net_migration"], 0.0, "no migrants")
-                else:
-                    self.assertEqual(self.seen(eng)[0], {"te_dg_trend_ok": 1.0, "te_dg_stepped": 1.0})
-                    self.assertGreater(eng.vars["te_dg_births"], 0)
-                    self.assertAlmostEqual(eng.vars["te_dg_net_migration"], 0.03 * people, delta=1.0)
 
     def test_fast_mode_skips_wealth_concentration_for_a_state_not_yet_walked(self):
         """Fast mode moves the walk to the clock's steps, but the yearly pulse still updates Wealth

@@ -470,7 +470,7 @@ te_demog_wc_civil_war_inherit = {
 	}
 }
 
-# THIS = a country, in te_demog_wc_growth_update, with te_dg_wc_gdp above 0: the year's growth in log points,
+# THIS = a country, in te_demog_wc_growth_update, with both GDPs above 0: the year's growth in log points,
 # 100 x ln(GDP now / GDP last year), into local te_dg_wc_g_year, so a fall and the recovery to the same GDP cancel
 # (owner, 2026-10-20). Script has no logarithm, so ln r = 2 atanh z = 2 (z + z^3/3 + z^5/5 + z^7/7 + z^9/9) with
 # z = (r - 1) / (r + 1): under the fixed point, within 0.0002 log points of 100 ln r for r from 0.5 to 2, 0.2%
@@ -513,7 +513,8 @@ te_demog_wc_log_growth = {
 #                 an old save's first, with no count) is taken too, unless its GDP moved more than a tenth
 #                 (the ratio under 0.9 or over 1.1): that jump is the territory's, so it takes no sample and the
 #                 GDP is re-based, and next year's growth is measured on the new territory (owner, 2026-10-20;
-#                 until then each year's percent growth was clamped to -10..+10)
+#                 until then each year's percent growth was clamped to -10..+10). A GDP of 0 or below, this
+#                 year's or last, takes no sample either. Shown as a compound annual rate (te_demog_wc_g_shown)
 #   te_dg_wc_r    the real policy rate at the yearly pulse (te_demog_wc_real_rate), in percent
 #   te_dg_wc_rg   the term, 2 x (te_dg_wc_r - te_dg_wc_g), at most 5 either way; only while the banking
 #                 cycle runs (te_banking_cycle_running), removed otherwise
@@ -522,20 +523,33 @@ te_demog_wc_growth_update = {
 	set_local_variable = { name = te_dg_wc_gdp_now value = te_mon_gdp_current }
 	set_local_variable = { name = te_dg_wc_states_now value = te_demog_wc_state_count }
 	if = {
-		limit = {
-			has_variable = te_dg_wc_gdp
-			var:te_dg_wc_gdp > 0
-		}
-		# a sample, unless the territory changed and the GDP jumped by more than a tenth either way
+		limit = { has_variable = te_dg_wc_gdp }
+		# a sample, unless a GDP is 0 or below (this year's or last: its ratio means nothing, and a sample of it
+		# would be about -357), or the territory changed and the GDP jumped by more than a tenth either way
 		set_local_variable = { name = te_dg_wc_take value = 1 }
 		if = {
 			limit = {
-				NOT = {
-					AND = {
-						has_variable = te_dg_wc_states
-						var:te_dg_wc_states = local_var:te_dg_wc_states_now
-					}
+				OR = {
+					var:te_dg_wc_gdp <= 0
+					local_var:te_dg_wc_gdp_now <= 0
 				}
+			}
+			set_local_variable = { name = te_dg_wc_take value = 0 }
+		}
+		# 1 on the territory the stored GDP was measured on; 0 when the states changed or none were stored (an old
+		# save). Set in an if, so the guard and the read never share a NOT (scripting_best_practices.md)
+		set_local_variable = { name = te_dg_wc_same value = 0 }
+		if = {
+			limit = { has_variable = te_dg_wc_states }
+			if = {
+				limit = { var:te_dg_wc_states = local_var:te_dg_wc_states_now }
+				set_local_variable = { name = te_dg_wc_same value = 1 }
+			}
+		}
+		if = {
+			limit = {
+				local_var:te_dg_wc_take = 1
+				local_var:te_dg_wc_same = 0
 			}
 			set_local_variable = {
 				name = te_dg_wc_ratio

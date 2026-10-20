@@ -634,6 +634,90 @@ te_demog_wc_rg_now = {
 	max = 5
 }
 
+# Country scope, display only: the growth average as a compound annual rate in percent, 100 x (e^(g/100) - 1), for
+# the Return on Capital hovers (te_demog_wc_t_rg_figures, te_demog_st_wc_t_rg_figures). te_dg_wc_g is in log
+# points, where a halving reads -69 and a doubling +69; this reads -50 and +100. r > g compares the log figure. Script
+# has no exponential, so 100 e^(|g|/100) is the series 100 + A + A^2/(2 x 100) + ... to the eighth power (A = |g|,
+# te_demog_wc_g_exp100), every term positive; a negative g takes 100 x 100 / that. Each power is multiplied by A
+# before it is divided by 100, so the five decimals keep their precision: within 0.003 points of math.exp for |g| up
+# to 100 and 0.1% up to 230 (test_demographics_wc_shocks). 0 with no average.
+te_demog_wc_g_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wc_g }
+		if = {
+			limit = { var:te_dg_wc_g >= 0 }
+			value = te_demog_wc_g_exp100
+			subtract = 100
+		}
+		else = {
+			value = 10000
+			divide = te_demog_wc_g_exp100
+			subtract = 100
+		}
+	}
+}
+
+# Country scope: |te_dg_wc_g| (te_demog_wc_g_exp100's A), 0 with no average.
+te_demog_wc_g_abs = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wc_g }
+		value = var:te_dg_wc_g
+		if = {
+			limit = { var:te_dg_wc_g < 0 }
+			multiply = -1
+		}
+	}
+}
+
+# Country scope: 100 e^(A/100), A = te_demog_wc_g_abs: 100 + A + A^2/200 + ... + A^8/(8! x 100^7), each term
+# A^k / (k! x 100^(k-1)) built by multiplying by A and dividing by 100 k in turn.
+te_demog_wc_g_exp100 = {
+	value = 100
+	add = te_demog_wc_g_abs
+	add = { value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200 }
+	add = {
+		value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200
+		multiply = te_demog_wc_g_abs divide = 300
+	}
+	add = {
+		value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200
+		multiply = te_demog_wc_g_abs divide = 300
+		multiply = te_demog_wc_g_abs divide = 400
+	}
+	add = {
+		value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200
+		multiply = te_demog_wc_g_abs divide = 300
+		multiply = te_demog_wc_g_abs divide = 400
+		multiply = te_demog_wc_g_abs divide = 500
+	}
+	add = {
+		value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200
+		multiply = te_demog_wc_g_abs divide = 300
+		multiply = te_demog_wc_g_abs divide = 400
+		multiply = te_demog_wc_g_abs divide = 500
+		multiply = te_demog_wc_g_abs divide = 600
+	}
+	add = {
+		value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200
+		multiply = te_demog_wc_g_abs divide = 300
+		multiply = te_demog_wc_g_abs divide = 400
+		multiply = te_demog_wc_g_abs divide = 500
+		multiply = te_demog_wc_g_abs divide = 600
+		multiply = te_demog_wc_g_abs divide = 700
+	}
+	add = {
+		value = te_demog_wc_g_abs multiply = te_demog_wc_g_abs divide = 200
+		multiply = te_demog_wc_g_abs divide = 300
+		multiply = te_demog_wc_g_abs divide = 400
+		multiply = te_demog_wc_g_abs divide = 500
+		multiply = te_demog_wc_g_abs divide = 600
+		multiply = te_demog_wc_g_abs divide = 700
+		multiply = te_demog_wc_g_abs divide = 800
+	}
+}
+
 # State scope: the state-owned share of the walk's capital levels, 0-1, the ownership shock's input
 # (te_demog_wc_ownership_shock): the ownership term's walk and capital filter, so Manor Houses, Financial
 # Districts, Subsistence Farms and government buildings are left out. 0 under one level of capital.

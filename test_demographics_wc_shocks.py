@@ -372,6 +372,43 @@ class TestReturnOnCapital(unittest.TestCase):
         v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 1300.0)
         self.assertAlmostEqual(v["te_dg_wc_g"], 2.0)
 
+    def test_a_gdp_of_zero_or_below_takes_no_sample(self):
+        """A GDP of 0 or below, this year's or last, has no meaningful ratio (its sample would be about -357): no
+        sample, and the GDP is re-based, on the same territory too."""
+        for last, now in ((1000.0, 0.0), (1000.0, -5.0), (0.0, 1000.0), (-5.0, 1000.0)):
+            with self.subTest(last=last, now=now):
+                v = self.year({"te_dg_wc_gdp": last, "te_dg_wc_states": 5.0, "te_dg_wc_g": 2.0,
+                               "te_policy_rate": 4.0}, now)
+                self.assertEqual(v["te_dg_wc_g"], 2.0)
+                self.assertEqual(v["te_dg_wc_gdp"], now)
+
+    def test_the_territory_guard_never_shares_a_not_with_its_read(self):
+        """scripting_best_practices.md: a multi-child NOT reads every child, so the stored count is read only inside
+        an if on has_variable (the local te_dg_wc_same)."""
+        body = re.sub(r"\s+", " ", re.sub(r"#[^\n]*", "", _block(_text(WEALTH_EFFECTS), "te_demog_wc_growth_update")))
+        self.assertNotIn("NOT = {", body)
+        self.assertIn("if = { limit = { has_variable = te_dg_wc_states } if = { limit = { var:te_dg_wc_states = "
+                      "local_var:te_dg_wc_states_now }", body)
+
+    def test_the_hover_shows_a_compound_annual_rate(self):
+        """te_demog_wc_g_shown = 100 x (e^(g/100) - 1) for the hovers, by series, under the fixed point: within 0.003
+        points of math.exp for |g| up to 100 and 0.1% up to 230. A halving's average reads -50 and a doubling's
+        +100; 0 with no average."""
+        eng = _CountryEngine(fixtures={}, truncate=True)
+        for i in range(-460, 461):
+            g = i / 2
+            eng.vars = eng.root_vars = {"te_dg_wc_g": g}
+            got, want = eng.value("te_demog_wc_g_shown"), 100.0 * (math.exp(g / 100) - 1)
+            if abs(g) <= 100:
+                self.assertAlmostEqual(got, want, delta=0.003, msg=g)
+            else:
+                self.assertLessEqual(abs(got - want), 0.001 * abs(want), g)
+        for g, shown in ((_lp(0.5), -50.0), (_lp(2.0), 100.0), (_lp(1.05), 5.0)):
+            eng.vars = eng.root_vars = {"te_dg_wc_g": g}
+            self.assertAlmostEqual(eng.value("te_demog_wc_g_shown"), shown, delta=0.001)
+        eng.vars = eng.root_vars = {}
+        self.assertEqual(eng.value("te_demog_wc_g_shown"), 0.0)
+
     def test_the_state_count_iterates_the_countrys_states(self):
         body = re.sub(r"\s+", " ", _block(_text(TERRITORY_VALUES), "te_demog_wc_state_count")).strip()
         self.assertEqual(body, "value = 0 every_scope_state = { add = 1 }")
@@ -417,7 +454,9 @@ class TestReturnOnCapital(unittest.TestCase):
             self.assertNotIn("te_dg_wc_r'", loc[key], "the figures sit in the named key")
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_rg_on')", loc[key])
             self.assertIn(f"'{figures}', 'te_demog_wc_t_rg_off'", loc[key])
-            self.assertIn(f"{scope}.MakeScope.Var('te_dg_wc_g')", loc[figures])
+            # the growth average as a compound annual rate (te_demog_wc_g_shown), not its log points
+            self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_g_shown')|1]%", loc[figures])
+            self.assertNotIn("te_dg_wc_g'", loc[figures])
         self.assertNotIn("[", loc["te_demog_wc_t_rg_off"].replace("[concept_banking_cycle]", ""))
 
     def test_a_won_revolution_continues_the_nations_growth(self):

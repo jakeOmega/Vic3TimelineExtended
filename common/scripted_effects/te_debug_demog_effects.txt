@@ -629,17 +629,29 @@ te_debug_demog_probe_owner_hook = {
 # says whether either happens in a game: at a census pulse of a state with a census, when its provinces
 # (te_demog_state_provinces, the local te_dg_prov) differ from those its last pulse stored (te_dg_provinces), it
 # prints the old and new counts, the people at the last census and now, and the owner. An info line, no verdict, and
-# it changes no number. A colony growing province by province prints it too; a merge reads as provinces and people
-# jumping together, a revolt's split piece as provinces falling (docs/testing/demographics-playtest.md).
+# it changes no number. One province more in an unincorporated state is a colony growing, province by province, and
+# isn't logged; every other change is (docs/testing/demographics-playtest.md).
 # THIS = the state, in te_demog_state_census before its seed or step (so te_dg_pop_last is the last census's).
 te_debug_demog_province_change = {
 	if = {
-		limit = {
-			has_variable = te_dg_provinces
-			NOT = { var:te_dg_provinces = local_var:te_dg_prov }
+		limit = { has_variable = te_dg_provinces }
+		set_local_variable = { name = te_dg_prov_step value = { value = local_var:te_dg_prov subtract = var:te_dg_provinces } }
+		set_local_variable = { name = te_dg_prov_log value = 1 }
+		if = {
+			limit = { local_var:te_dg_prov_step = 0 }
+			set_local_variable = { name = te_dg_prov_log value = 0 }
 		}
-		debug_log = "TE_INFO demog_province_change provinces=[THIS.Var('te_dg_provinces').GetValue|0]->[THIS.ScriptValue('te_demog_state_provinces')|0] people=[THIS.Var('te_dg_pop_last').GetValue|0]->[THIS.ScriptValue('te_debug_demog_province_people')|0] owner=[THIS.GetState.GetOwner.GetTag] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
-		debug_log_scopes = yes
+		else_if = {
+			limit = {
+				local_var:te_dg_prov_step = 1
+				is_incorporated = no
+			}
+			set_local_variable = { name = te_dg_prov_log value = 0 }
+		}
+		if = {
+			limit = { local_var:te_dg_prov_log = 1 }
+			debug_log = "TE_INFO demog_province_change provinces=[THIS.Var('te_dg_provinces').GetValue|0]->[THIS.ScriptValue('te_demog_state_provinces')|0] people=[THIS.Var('te_dg_pop_last').GetValue|0]->[THIS.ScriptValue('te_debug_demog_province_people')|0] owner=[THIS.GetState.GetOwner.GetTag] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
 	}
 }
 

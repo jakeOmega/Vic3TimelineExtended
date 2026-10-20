@@ -719,7 +719,8 @@ every Demographics rule setting, like the rest of Wealth Concentration:
   growth averaged at a weight of 0.2 a year, each year's in log points (100 × ln of the GDP ratio, so a fall and its recovery
   cancel) and as it came. A year in which the country gained or lost states and its GDP moved more than a tenth takes
   no sample and re-bases the stored GDP, so a conquest's jump is never read as growth and the next year's growth is
-  measured on the new territory (owner, 2026-10-20, in place of a ±10 clamp on each year).
+  measured on the new territory (owner, 2026-10-20, in place of a ±10 clamp on each year); a GDP of 0 or below takes
+  none either. The hovers show the average as a compound annual rate, 100 × (e^(g/100) − 1).
 
 **What it moves.** None of these effects repeats what pop wealth already does:
 

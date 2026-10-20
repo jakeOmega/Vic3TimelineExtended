@@ -996,10 +996,11 @@ The owner's call of 2026-10-20: a census no longer seeds a state again when its 
 year (in the 2057 EU game that rule fired 8 times in 4 months, every time on migration, and threw away each state's
 year). Any move now goes through the step's booking: up to 5% in or 3% out of each class and sex by the profile, the
 rest flat over everyone as whole families. Wealth Concentration's ownership shock drops the same rule, and r > g's
-growth average takes each year's growth in log points (a fall and its recovery cancel) and replaces its ±10 clamp on
-each year with a skip: a year in which the country gained or lost states and its GDP moved more than a tenth takes no
-growth sample and re-bases the GDP. Both Wealth Concentration changes run under every Demographics rule.
-The engine has no merge or split on-action, so a `TE_INFO` line reports when a state's provinces change.
+growth average takes each year's growth in log points (a fall and its recovery cancel; the hovers show it as a
+compound annual rate) and replaces its ±10 clamp on each year with a skip: a year in which the country gained or lost
+states and its GDP moved more than a tenth, or a GDP of 0 or below, takes no growth sample and re-bases the GDP. Both
+Wealth Concentration changes run under every Demographics rule. The engine has no merge or split on-action, so a
+`TE_INFO` line reports when a state's provinces change.
 `test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
 `test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
 province count is the base game's own form (`occupation_values.txt` counts a state's provinces with `every_province` in
@@ -1009,21 +1010,24 @@ line gives no verdict.
 1. **The province line (Full or Display only; read `debug.log`).** Watch for `TE_INFO demog_province_change` after a
    war that splits or rejoins a state region: a peace that hands over part of a region, a revolt that takes part of a
    state, and the end of that revolt. Each line gives `provinces=old->new`, `people=` (the last census's -> now), the
-   owner's tag and the scope dump. A merge reads as provinces and people jumping together in the surviving state, a
-   split as provinces falling with the people kept (the new part has no census and seeds). Colonies growing province
-   by province print it too, with a small change in people; leave those out. If merges happen, the census books the
-   joined state's people as immigrants at the state's own structure (flat beyond the caps) and keeps the year's
-   births and deaths: report whether its pyramid looks plausible the year after. If no line other than a colony's
-   ever appears, the engine doesn't merge or split states in play. If no line at all appears in a game with
-   colonisation, the count may read 0: `scripts/analysis/save_country_probe.py --states` on a save shows each state's
-   `te_dg_provinces`, which should be its province count, not 0.
+   owner's tag and the state's name. A merge reads as provinces and people rising together in the surviving state. A
+   split reads as provinces and people falling together in the state that keeps the old record, since the piece's
+   pops leave with it; the piece is a new state with no census and seeds. So a fall in both is a split to report, not
+   emigration. One province more in an unincorporated state (a colony growing) prints nothing; any other change
+   prints, so a colony that gains two provinces between counts shows a line with a small change in people: leave
+   those out. If merges happen, the census books the joined state's people as immigrants at the state's own structure
+   (flat beyond the caps) and keeps the year's births and deaths: report whether its pyramid looks plausible the year
+   after. If no line other than a colony's ever appears, the engine doesn't merge or split states in play. If none
+   appears even after a revolt that took part of a state, the count may read 0:
+   `scripts/analysis/save_country_probe.py --states` on a save shows each state's `te_dg_provinces`, which should be
+   its province count, not 0.
 2. **A big move keeps the year (Full or Display only).** A state whose people grow or fall by more than a quarter in a
    year (the EU's Kars, Ecuador, Canary Islands in the 2057 game; a refugee wave) still shows births and deaths per
    1,000 and its trend arrows the census after, and its Net Migration row is the move; its pyramid keeps its shape,
    with the inflow spread over every age beyond the caps, rather than jumping to the equilibrium shape.
 3. **Return on Capital after a conquest (any rule, the banking rule on).** At the country's first yearly pulse after it
-   gains or loses a state and its GDP jumps more than 10%, the growth average in the Return on Capital hover stays where
-   it was; at the next, it moves by a fifth of that year's growth on the new territory. A year that only
-   founds a colony state moves it as any year does. A same-territory boom year past 10% moves it by its full fifth, in
-   log points (a +20% year is 18.2: +3.6 less a fifth of the old average). A crash and its recovery to the same GDP
-   nearly cancel: from 0, a −50% year and a +100% year leave it at about +2.8 (in percent it was +12).
+   gains or loses a state and its GDP jumps more than 10% (or a GDP was 0), the growth figure in the Return on Capital
+   hover stays where it was; at the next, it moves by a fifth of that year's growth on the new territory. A year that
+   only founds a colony state moves it as any year does. The hover's figure is a compound annual rate. From an average
+   of 0, a same-territory +20% year shows about +3.7%, and a crash and its recovery to the same GDP nearly cancel: a
+   −50% year then a +100% year show about +2.8% (+12% before the log average).
