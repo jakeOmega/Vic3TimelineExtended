@@ -945,7 +945,7 @@ can show:
 
 ## Uploaded minds (2026-10-19)
 
-The uploaded-minds spec's build (`docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
+The uploaded-minds spec's build (`docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md`; § Uploaded
 minds in `mod_systems.md`). `test_demographics_uploads.py` holds the step's uploads, the country's year and Mind Backups'
 restore to the model; `demographics_harness.py uploads` prints the calibration and the scenarios. One self-check,
 `um_nexus_scaling` (above). Everything here is under Full; a game needs Mind Backups (after Biological Immortality and

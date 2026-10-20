@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.11/3.12 (unittest), Paradox script (`common/`), the existing generator `scripts/generators/gen_demographics.py`.
 
-**Spec:** `docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md` (stage 1). Parent: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.4, §8.4.
+**Spec:** `docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md` (stage 1). Parent: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.4, §8.4.
 
 ## Owner rulings this plan builds on
 
@@ -169,7 +169,7 @@ class TestModifierTypes(unittest.TestCase):
 Types file, appended after `country_fertility_means_add`:
 
 ```
-# Mortality: stage 1 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
+# Mortality: stage 1 of docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md.
 # Read by the census only (te_demog_mult_*): the engine never applies them. Medicine is
 # 1 - access x treatment; the other terms are 1 + their types' sum, floored.
 # Country types sit in techs' and laws' modifier blocks; state types in a law's
@@ -233,7 +233,7 @@ Then run `python3 organize_loc.py` and keep what it moves.
 ```python
 """The demographics modifier types' totals, resolved from the game files.
 
-Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md, Decision 2:
+Spec: docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md, Decision 2:
 the values sit beside the techs, laws and institutions that carry them, and the model takes
 modifier totals. load_carriers() reads every carrier from a narrow ModState (technologies,
 laws and institutions; vanilla from the committed vanilla_parsed/ snapshot, so no game is
@@ -559,7 +559,7 @@ Tech INJECT file (header style as in `te_monetary_tech_injections.txt`, one BOM)
 
 ```
 # Demographics: the medical techs' treatment lines and the motor age's road deaths.
-# Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
+# Spec: docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
 # Read only by the census (te_demog_mult_*); the engine never applies them. Values are
 # calibrated in scripts/analysis/demographics_harness.py medicine (see
 # docs/testing/demographics-fast-run-2026-10-09.md). The mod's own medical techs carry
@@ -824,7 +824,7 @@ What the owner checks (into the PR body):
 ### Task 9: Docs and the player guide
 
 **Files:**
-- Modify: `docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md`:
+- Modify: `docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md`:
   - status line: owner calls accepted on 2026-10-09; stage 1 in this PR;
   - "What changes" table: the `country_*`/`state_*` names;
   - a short "Ruling: the country/state split" paragraph.

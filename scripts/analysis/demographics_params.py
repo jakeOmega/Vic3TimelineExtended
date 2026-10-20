@@ -927,7 +927,7 @@ PENSION_AI_GAP = 0.2
 PENSION_AI_GAP_LOW = 0.1
 
 # ---- The migrant profile's inputs as modifier types (modifier-types design, stage 3, 2026-10-19) ----
-# docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md. Two census-only state types
+# docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md. Two census-only state types
 # (demographics_modifier_types.txt) on their carriers in the game files, which demographics_modifiers.py resolves; they
 # replaced the FEMALE_WORK_SHARE law table and the FAMILY_TRANSPORT_TECHS table. Women's share of the workforce is
 # FEMALE_WORK_SHARE_DEFAULT + the women's-rights law's line, at most 1 (Women in the Fields 0.15, Women Own Property
@@ -1047,7 +1047,7 @@ FRONTIER_1836 = {
 }
 
 # ---- Uploaded minds (2026-10-19) ----
-# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's calls of 2026-10-19 (§7); the model
+# docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's calls of 2026-10-19 (§7); the model
 # is demographics_uploads.py, the script te_demog_um_effects.txt. Under Full only.
 # Mind Backups' restore (call 2): its two -0.5 lines sit on these census-only types, which the census adds x the state's
 # longevity care E (last step's), so the restore is 1 - 0.5 x E; outside Full the flat absorbed -5% stays.

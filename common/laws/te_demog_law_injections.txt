@@ -1,5 +1,5 @@
 ﻿# Demographics: law terms for the census's causes of death.
-# Spec: docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
+# Spec: docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md (stage 1).
 # Read only by the census (te_demog_mult_*); the engine never applies these types. A law's
 # modifier reaches every state the country owns; the Workplace Safety lines and the police lines
 # (institution_modifier) are per level of the institution and reach incorporated states only.

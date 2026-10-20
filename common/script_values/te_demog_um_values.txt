@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — uploaded minds' values (the owner's calls of 2026-10-19)
-# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md; the effects are te_demog_um_effects.txt, the
+# docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md; the effects are te_demog_um_effects.txt, the
 # twin demographics_uploads.py. The constants are generated (te_demog_um_generated_values.txt).
 # ============================================================================
 
