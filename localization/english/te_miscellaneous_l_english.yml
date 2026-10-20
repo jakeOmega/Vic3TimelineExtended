@@ -6557,7 +6557,7 @@
  te_demog_mt_bar_planning:0 "Urban Planning"
  te_demog_mt_bar_planning_tt:0 "#b Urban Planning#!\nGreen belts and new towns, at most #v -30#! together:\n $institution_ministry_of_urban_planning$: #v [State.MakeScope.ScriptValue('te_demog_mt_plan_ministry')|+0]#! (#v -1#! a level)\n A Settlement Authority on Planned Towns: #v [State.MakeScope.ScriptValue('te_demog_mt_plan_towns')|+0]#! (#v -2#! a level)\n A Planned Capital: #v [State.MakeScope.ScriptValue('te_demog_mt_plan_capital')|+0]#!"
  te_demog_mt_bar_urban:0 "Urbanization"
- te_demog_mt_bar_urban_tt:0 "#b Urbanization#!\nThe largest city's lead grows while a country urbanizes and shrinks once its secondary cities mature (Williamson, 1965): up to #v +10#! at half the country's people in towns, nothing at a tenth or nine tenths. Here: #v [State.MakeScope.ScriptValue('te_demog_mt_national')|%0]#! (the country's last census)."
+ te_demog_mt_bar_urban_tt:0 "#b Urbanization#!\nThe largest city's lead grows while a country urbanizes and shrinks once its secondary cities mature (Williamson, 1965): up to #v +10#! at half the country's people in towns, nothing at a tenth or nine tenths, and a little below nothing beyond them (#v -3#! at 95%, as low as #v -6#! at none or all). Here: #v [State.MakeScope.ScriptValue('te_demog_mt_national')|%0]#! (the country's last census)."
  te_demog_mt_bar_work:0 "Farms and Mines"
  te_demog_mt_bar_work_tt:0 "#b Farms and Mines#!\nMines, logging camps and market towns spread people out: #v -30#! in a state where everyone works the land or the mines, less as its towns grow. Here #v [State.MakeScope.Var('te_dg_urban_share').GetValue|%0]#! of the people live in towns."
  te_demog_mt_dispersed:0 "Dispersed Towns"

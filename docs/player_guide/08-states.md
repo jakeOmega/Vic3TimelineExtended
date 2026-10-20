@@ -496,7 +496,8 @@ target each year. The national capital, a World Market Hub and a Financial
 District raise the target; a large region, a farming and mining economy,
 infrastructure to spare over what the state uses, Migration Crowding and urban
 planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
-lower it, and a country's urbanization raises it most at half its people in towns.
+lower it, and a country's urbanization raises it most at half its people in towns
+and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
 full at 60%: the state crowds 10% sooner, its people give 10% more infrastructure,
 its Urban Center and Financial District work at 5% more throughput, turmoil

@@ -726,9 +726,9 @@ migration needs the score and the agrarian share, so it is its own modifier.
 
 **Built (2026-10-19)**, with the owner's calls of that day: all eight target terms and all five effects as written
 below, each effect at most 10% at the Metropolis label; the share computed and shown under Display only and Full, the
-effects under Full only; the Overspill (§9) on the real share. The weights, the sizes within the cap, the crowding
-effect's sign (a negative `state_migration_crowding_density_mult`, since the type is a state's capacity) and the
-panel's place are recorded in `docs/systems/mod_systems.md` § Demographics, "The metropolitan share", with the anchors
+effects under Full only; the Overspill (§9) on the real share. The crowding effect is a negative `state_migration_crowding_density_mult`,
+since the type is a state's capacity (owner, 2026-10-20: the metropolis crowds sooner). The weights, the sizes within
+the cap and the panel's place are recorded in `docs/systems/mod_systems.md` § Demographics, "The metropolitan share", with the anchors
 in `scripts/analysis/demographics_metro.py`.
 
 A Victoria state has one city hub and no cities below it, so this is a modelled stock. **Metropolitan share**, 0–100,

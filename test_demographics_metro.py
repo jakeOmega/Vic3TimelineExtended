@@ -151,14 +151,20 @@ def _engine(pl, full=True, census=True, share=None, urban=50000.0):
     return eng
 
 
+# Each input's values on the grid: the area takes every rung of its ladder (Texas, 536,486 km2, is the 4x-8x one), and
+# the ministry's 20 levels with Planned Towns and a Planned Capital pass the planning term's floor.
+GRID = {"urban_share": (0.05, 0.4, 0.95), "national": (0.08, 0.5, 0.92), "capital": (False, True),
+        "hub": (False, True), "finance_levels": (0, 4, 14), "area": (5000, 150000, 320000, 536486, 900000),
+        "infra_surplus": (-0.2, 0.4, 1.5), "crowding": (0.0, 2.0, 6.0), "ministry_levels": (0, 7, 20),
+        "planned_towns_levels": (0, 3), "planned_capital": (False, True)}
+
+
 def _grid():
-    for i, (us, nat, cap, hub, fin, area, infra, crowd, ministry, towns, pcap) in enumerate(itertools.product(
-            (0.05, 0.4, 0.95), (0.08, 0.5, 0.92), (False, True), (False, True), (0, 4, 14),
-            (5000, 150000, 320000, 900000), (-0.2, 0.4, 1.5), (0.0, 2.0, 6.0), (0, 7), (0, 3), (False, True))):
-        if i % 7:      # a seventh of the product, which still takes every value of each input
+    """A seventh of the product (7 is prime to every axis' length, so it still takes every value of each input)."""
+    for i, combo in enumerate(itertools.product(*GRID.values())):
+        if i % 7:
             continue
-        yield DMT.Place(us, nat, capital=cap, hub=hub, finance_levels=fin, area=area, infra_surplus=infra,
-                        crowding=crowd, ministry_levels=ministry, planned_towns_levels=towns, planned_capital=pcap)
+        yield DMT.Place(**dict(zip(GRID, combo)))
 
 
 class TestConstants(unittest.TestCase):
@@ -198,6 +204,19 @@ class TestTarget(unittest.TestCase):
             self.assertAlmostEqual(eng.number("te_demog_mt_target"), DMT.target(pl), places=6, msg=pl)
             n += 1
         self.assertGreater(n, 4000)
+
+    def test_the_grid_takes_every_value_and_every_branch(self):
+        cases = list(_grid())
+        for name, values in GRID.items():
+            self.assertEqual({getattr(pl, name) for pl in cases}, set(values), name)
+        free = P.MT_AREA_FREE
+        for lo, hi in ((0, free), (free, 2 * free), (2 * free, 4 * free), (4 * free, 8 * free), (8 * free, 1e9)):
+            self.assertTrue(any(lo < pl.area <= hi for pl in cases), (lo, hi))
+        raw = [P.MT_MINISTRY_PER_LEVEL * pl.ministry_levels + P.MT_PLANNED_TOWNS_PER_LEVEL * pl.planned_towns_levels
+               + (P.MT_PLANNED_CAPITAL if pl.planned_capital else 0) for pl in cases]
+        self.assertLess(min(raw), P.MT_PLAN_MIN, "the planning floor")
+        self.assertTrue(any(DMT.terms(pl)["planning"] == P.MT_PLAN_MIN and P.MT_MIN < DMT.target(pl) < P.MT_MAX
+                            for pl in cases), "the floor binds where the target isn't clamped")
 
     def test_the_area_term_is_continuous_and_capped(self):
         for a in (100000, 200000, 400000, 800000):
@@ -368,6 +387,21 @@ class TestModifiers(unittest.TestCase):
             for field in _modifier(name):
                 self.assertIn(field, known, f"{name}: {field}")
 
+    def test_every_field_has_a_name(self):
+        """The engine shows a raw key for a field with no loc line and logs nothing (review I1, 2026-10-20): each field
+        of both modifiers is named in vanilla's loc snapshot or the mod's."""
+        import json
+        names = dict(json.load(open(ROOT / "vanilla_parsed" / "localization_english.json", encoding="utf-8")))
+        for path in LOC_DIR.glob("*.yml"):
+            for line in _text(path).splitlines():
+                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+                if m:
+                    names[m.group(1)] = m.group(2)
+        for name in ("te_demog_mt_metropolis", "te_demog_mt_dispersed"):
+            for field in _modifier(name):
+                self.assertIn(field, names, f"{name}: {field}")
+                self.assertIn(f"{field}_desc", names, f"{name}: {field}_desc")
+
     def test_the_hover_shows_one_throughput_for_both_buildings(self):
         """te_demog_mt_eff_metro prints the services figure for the Urban Center and the Financial District alike."""
         self.assertEqual(P.MT_EFFECTS["building_urban_center_throughput_add"],
@@ -483,6 +517,11 @@ class TestSelfCheck(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK OK metro_world_market_hub", body)
         self.assertIn("TE_SELF_CHECK BROKEN metro_world_market_hub", body)
         self.assertIn("metro_world_market_hub", _text(PLAYTEST))
+        # review M1 (2026-10-20): OK needs hubs, every hub with a Port and some Port states that aren't hubs
+        for cond in ("var:te_dg_mt_chk_hubs > 0", "var:te_dg_mt_chk_hub_noport = 0", "var:te_dg_mt_chk_port_nohub > 0"):
+            self.assertIn(cond, body)
+        self.assertIn("b:building_port ?= { level > 0 }", body)
+        self.assertNotIn("te_debug_demog_mt_hub_most", body + _text(METRO_VALUES))
 
 
 if __name__ == "__main__":

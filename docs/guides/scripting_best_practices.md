@@ -407,7 +407,7 @@ The lock entries appear as red "Locks: …" lines in the modifier-block tooltip 
 
 ### `state_migration_crowding_density_mult` Is Capacity: More Crowding Is a Negative Value
 
-The mod's Migration Crowding measures density as people ÷ land ÷ (1 + `state_migration_crowding_density_mult`) (`state_population_density`, `extra_script_values.txt`), so a positive value lets a state hold more people before crowding starts, and a negative one makes it crowd sooner. "Raise crowding" is therefore a negative value: Green Belt is −0.1 ("fills up sooner"), Urban Sprawl +0.2 ("crowding later"), the Ministry of Urban Planning +0.1 a level, and the metropolitan share's Metropolis −0.1 (2026-10-19; the brief's "up with the share" meant the crowding, not the field). Check the sign against that division before writing a value that is meant to crowd a state.
+The mod's Migration Crowding measures density as people ÷ land ÷ (1 + `state_migration_crowding_density_mult`) (`state_population_density`, `extra_script_values.txt`), so a positive value lets a state hold more people before crowding starts, and a negative one makes it crowd sooner. "Raise crowding" is therefore a negative value: Green Belt is −0.1 ("fills up sooner"), Urban Sprawl +0.2 ("crowding later"), the Ministry of Urban Planning +0.1 a level, and the metropolitan share's Metropolis −0.1 (the brief's "up with the share" meant the crowding, not the field; owner, 2026-10-20). Check the sign against that division before writing a value that is meant to crowd a state.
 
 ### Mod-Added Political Movements Need Modifier Type Registration
 

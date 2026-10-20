@@ -81,10 +81,11 @@ te_demog_mt_state_refresh = {
 
 # THIS = ROOT = a state, in te_demog_mt_state_update. The metro_world_market_hub self-check, once a game in development
 # builds whatever the census's setting (docs/testing/demographics-playtest.md, Self-checks): the gateway term reads
-# is_world_market_hub, one hub a market area. The world's hubs are counted against its states: OK when some states read
-# yes and at most a quarter do (a market area holds many states), BROKEN when none do (the trigger reads no in state
-# scope, so no state takes the gateway term) or more than a quarter (it reads yes everywhere). Read at once: a trigger,
-# not a modifier sum.
+# is_world_market_hub, the market area's hub, which the base game creates where a market area has at least one Port
+# (concept_world_market_hub). So the world's hubs are counted against its Port states: OK when some states read yes,
+# every hub has a Port and at least one Port state is not a hub (a market area holds several); BROKEN otherwise, with
+# the counts: no hub (the trigger reads no in state scope, so no state takes the term), a hub without a Port (it reads
+# something else) or every Port state a hub (it reads "has a Port"). Read at once: a trigger, not a modifier sum.
 te_debug_demog_mt_hub_selfcheck = {
 	if = {
 		limit = {
@@ -93,28 +94,54 @@ te_debug_demog_mt_hub_selfcheck = {
 		}
 		set_global_variable = { name = te_demog_mt_hub_selfcheck_done value = yes }
 		set_local_variable = { name = te_dg_mt_chk_hubs value = 0 }
-		set_local_variable = { name = te_dg_mt_chk_states value = 0 }
+		set_local_variable = { name = te_dg_mt_chk_ports value = 0 }
+		set_local_variable = { name = te_dg_mt_chk_hub_noport value = 0 }
+		set_local_variable = { name = te_dg_mt_chk_port_nohub value = 0 }
+		set_local_variable = { name = te_dg_mt_chk_countries value = 0 }
 		every_state = {
-			change_local_variable = { name = te_dg_mt_chk_states add = 1 }
+			if = {
+				limit = { b:building_port ?= { level > 0 } }
+				change_local_variable = { name = te_dg_mt_chk_ports add = 1 }
+				if = {
+					limit = { is_world_market_hub = no }
+					change_local_variable = { name = te_dg_mt_chk_port_nohub add = 1 }
+				}
+			}
 			if = {
 				limit = { is_world_market_hub = yes }
 				change_local_variable = { name = te_dg_mt_chk_hubs add = 1 }
+				if = {
+					limit = {
+						NOT = { b:building_port ?= { level > 0 } }
+					}
+					change_local_variable = { name = te_dg_mt_chk_hub_noport add = 1 }
+				}
 			}
 		}
+		every_country = {
+			change_local_variable = { name = te_dg_mt_chk_countries add = 1 }
+		}
 		set_variable = { name = te_dg_mt_chk_hubs value = local_var:te_dg_mt_chk_hubs }
-		set_variable = { name = te_dg_mt_chk_states value = local_var:te_dg_mt_chk_states }
+		set_variable = { name = te_dg_mt_chk_ports value = local_var:te_dg_mt_chk_ports }
+		set_variable = { name = te_dg_mt_chk_hub_noport value = local_var:te_dg_mt_chk_hub_noport }
+		set_variable = { name = te_dg_mt_chk_port_nohub value = local_var:te_dg_mt_chk_port_nohub }
+		set_variable = { name = te_dg_mt_chk_countries value = local_var:te_dg_mt_chk_countries }
 		if = {
 			limit = {
 				var:te_dg_mt_chk_hubs > 0
-				var:te_dg_mt_chk_hubs <= te_debug_demog_mt_hub_most
+				var:te_dg_mt_chk_hub_noport = 0
+				var:te_dg_mt_chk_port_nohub > 0
 			}
-			debug_log = "TE_SELF_CHECK OK metro_world_market_hub hubs=[THIS.Var('te_dg_mt_chk_hubs').GetValue|0] states=[THIS.Var('te_dg_mt_chk_states').GetValue|0] first=[THIS.GetState.GetName] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK metro_world_market_hub hubs=[THIS.Var('te_dg_mt_chk_hubs').GetValue|0] port_states=[THIS.Var('te_dg_mt_chk_ports').GetValue|0] hubs_without_port=[THIS.Var('te_dg_mt_chk_hub_noport').GetValue|0] ports_not_hub=[THIS.Var('te_dg_mt_chk_port_nohub').GetValue|0] countries=[THIS.Var('te_dg_mt_chk_countries').GetValue|0] first=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN metro_world_market_hub hubs=[THIS.Var('te_dg_mt_chk_hubs').GetValue|0] states=[THIS.Var('te_dg_mt_chk_states').GetValue|0] (some hubs and at most a quarter of the states expected: is_world_market_hub doesn't read a state's hub; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN metro_world_market_hub hubs=[THIS.Var('te_dg_mt_chk_hubs').GetValue|0] port_states=[THIS.Var('te_dg_mt_chk_ports').GetValue|0] hubs_without_port=[THIS.Var('te_dg_mt_chk_hub_noport').GetValue|0] ports_not_hub=[THIS.Var('te_dg_mt_chk_port_nohub').GetValue|0] countries=[THIS.Var('te_dg_mt_chk_countries').GetValue|0] (expected hubs above 0, every hub with a Port and some Port states not hubs: is_world_market_hub doesn't read the market area's hub; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 		remove_variable = te_dg_mt_chk_hubs
-		remove_variable = te_dg_mt_chk_states
+		remove_variable = te_dg_mt_chk_ports
+		remove_variable = te_dg_mt_chk_hub_noport
+		remove_variable = te_dg_mt_chk_port_nohub
+		remove_variable = te_dg_mt_chk_countries
 	}
 }

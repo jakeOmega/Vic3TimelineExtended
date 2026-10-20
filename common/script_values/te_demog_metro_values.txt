@@ -185,6 +185,7 @@ te_demog_mt_urban_x = {
 		min = 0.01
 	}
 }
+# a guard: on a share within 0-1 the term never falls below -5.6 (at 0% or 100%), so this floor never binds
 te_demog_mt_urban_floor = {
 	value = te_demog_k_mt_urban_size
 	multiply = -1
@@ -474,11 +475,4 @@ te_demog_mt_count_towns = {
 		}
 		add = 1
 	}
-}
-
-# ---- The self-check metro_world_market_hub (te_debug_demog_mt_hub_selfcheck, THIS = the state it ran in) -----------
-# The most hubs the world may hold: a quarter of its states.
-te_debug_demog_mt_hub_most = {
-	value = var:te_dg_mt_chk_states
-	multiply = 0.25
 }

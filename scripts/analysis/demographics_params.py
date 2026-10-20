@@ -964,8 +964,9 @@ MT_AREA_DOUBLINGS = 3
 # 4. Farms and mines: MT_WORK points down at a wholly rural state, x the walk's rural share (1 - te_dg_urban_share).
 MT_WORK = 30
 # 5. Urbanisation, the inverted U (Williamson, 1965): the owner's national urban share (te_dg_urban_share at its
-# census), MT_URBAN_SIZE x (1 - ((N - MT_URBAN_PEAK) / MT_URBAN_WIDTH)^2), at least -MT_URBAN_SIZE: 0 at 10% and at
-# 90% urban, MT_URBAN_SIZE at half.
+# census), MT_URBAN_SIZE x (1 - ((N - MT_URBAN_PEAK) / MT_URBAN_WIDTH)^2): 0 at 10% and at 90% urban, MT_URBAN_SIZE at
+# half, and a little below 0 beyond them (-2.7 at 95%, -5.6 at 0% or 100%). The script's floor of -MT_URBAN_SIZE is a
+# guard that never binds on 0-1.
 MT_URBAN_PEAK = 0.5
 MT_URBAN_WIDTH = 0.4
 MT_URBAN_SIZE = 10
