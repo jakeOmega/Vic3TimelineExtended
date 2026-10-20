@@ -101,7 +101,8 @@
 #                       the next step (the trapezoid; te_demog_rate_effects.txt); a seed removes them
 #   te_dg_wa_share, te_dg_at_work, te_dg_pensioners, te_dg_need  phase 2 step 1 (te_demog_work_finish; the
 #                       design §1.3-1.4): the working-age share, the share of the working ages at work (all workers
-#                       over the working-age people; it can pass 1), the pensioners' share under Old Age Pension
+#                       over the working-age people, by the game's count: the rates are in its units; the workers past
+#                       the end can take it past the rates' ceiling), the pensioners' share under Old Age Pension
 #                       and the people-weighted health need over 1836's. Computed at every seed and step and
 #                       applied nowhere until step 2
 #   te_dg_old_age       the old-age threshold, the age with 15 years left, women's and men's averaged (generated
@@ -1020,21 +1021,22 @@ te_demog_close_accumulators = {
 # pensioners, the 10-14s' share, the sexes' rates and planned births' share.
 te_demog_work_setup = {
 	set_local_variable = { name = te_dg_child_work value = te_demog_child_work }
-	# the sexes' rates and capacity with call 3's participation inputs, each 0 to 1 (demographics_model.sex_rates,
-	# capacity_at); te_demog_enter_bio_band multiplies its capacity by te_dg_wk_capm
+	# the sexes' rates with call 3's participation inputs, each 0 to te_demog_k_rate_max (the game's units), and
+	# capacity's factor (demographics_model.sex_rates, capacity_at); te_demog_enter_bio_band multiplies its capacity
+	# by te_dg_wk_capm
 	set_local_variable = {
 		name = te_dg_wk_rm
 		value = {
 			value = te_demog_k_men_rate
 			add = modifier:state_male_labor_participation_add
 			add = modifier:state_labor_participation_add
-			max = 1
+			max = te_demog_k_rate_max
 			min = 0
 		}
 	}
 	set_local_variable = {
 		name = te_dg_wk_rf
-		value = { value = te_demog_women_rate add = modifier:state_labor_participation_add max = 1 min = 0 }
+		value = { value = te_demog_women_rate add = modifier:state_labor_participation_add max = te_demog_k_rate_max min = 0 }
 	}
 	set_local_variable = { name = te_dg_wk_capm value = { value = 1 add = modifier:state_work_capacity_mult min = 0 } }
 	# no pension law: the working ages run to capacity's end, which never comes (D10)

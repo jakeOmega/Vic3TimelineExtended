@@ -1075,7 +1075,7 @@ class TestPhase2Interfaces(unittest.TestCase):
         self.assertAlmostEqual(M.capacity_at(inp, 30), 0.9)
         self.assertAlmostEqual(M.capacity_at(inp, 62), P.CAPACITY[60] * 0.9)
         big = M.Inputs(mods={P.MALE_PARTICIPATION_TYPE: 0.5, P.CAPACITY_TYPE: 0.5})
-        self.assertEqual(M.sex_rates(big)[1], 1.0)
+        self.assertEqual(M.sex_rates(big)[1], P.RATE_MAX, "at most the game's count of everyone (2026-10-20)")
         self.assertEqual(M.capacity_at(big, 30), 1.0)
         self.assertAlmostEqual(M.capacity_at(big, 82), min(P.CAPACITY[80] * 1.5, 1.0))
 
@@ -1098,15 +1098,16 @@ class TestPhase2Interfaces(unittest.TestCase):
         got = M.work_figures(ring, inp, 60.0)
         total = 200 + 100 + 400 + 70 + 2
         wa = 100 + 400                                   # 12-year-olds at 0.3, 30-year-olds; 66 is past 65
-        workers = (50 * rf + 50 * 0.92) * 0.3 + (200 * rf + 200 * 0.92) \
-            + (40 * rf + 30 * 0.92) * P.CAPACITY[65] * P.AFTER_PENSION_SHARE \
-            + (rf + 0.92) * P.CAPACITY[85] * P.AFTER_PENSION_SHARE
+        rm = P.MEN_RATE
+        workers = (50 * rf + 50 * rm) * 0.3 + (200 * rf + 200 * rm) \
+            + (40 * rf + 30 * rm) * P.CAPACITY[65] * P.AFTER_PENSION_SHARE \
+            + (rf + rm) * P.CAPACITY[85] * P.AFTER_PENSION_SHARE
         need = 200 * 0.5 + 100 * 0.5 + 400 * 0.8 + 70 * 2.4 + 2 * 4.5
         self.assertAlmostEqual(got["wa_share"], wa / total)
         self.assertAlmostEqual(got["at_work"], workers / wa)
         self.assertAlmostEqual(got["pensioners"], 72 / total)
         self.assertAlmostEqual(got["need"], need / total / P.HEALTH_NEED_1836)
-        self.assertAlmostEqual(M.wf_target(got), P.WORKFORCE_SCALE * workers / total)
+        self.assertAlmostEqual(M.wf_target(got), workers / total, msg="the rates are in the game's units: no scale")
 
     def test_with_no_pension_law_the_pool_is_of_working_age(self):
         """D10: with no pension law the working ages have no end, so even the pool (150+) is in them, at capacity's
@@ -1119,7 +1120,8 @@ class TestPhase2Interfaces(unittest.TestCase):
         rf = M.women_rate(inp)
         got = M.work_figures(ring, inp, 60.0)
         self.assertAlmostEqual(got["wa_share"], 1.0)
-        self.assertAlmostEqual(got["at_work"], (200 * rf + 200 * 0.92 + (rf + 0.92) * P.CAPACITY[85]) / 402)
+        rm = P.MEN_RATE
+        self.assertAlmostEqual(got["at_work"], (200 * rf + 200 * rm + (rf + rm) * P.CAPACITY[85]) / 402)
         self.assertEqual(got["pensioners"], 0.0)
 
     def test_the_targets_at_the_starting_values(self):
@@ -1179,9 +1181,9 @@ class TestPhase2Step2(unittest.TestCase):
         self.assertEqual(P.POP_BASE_RATIO_MIN, 0.2)
 
     def test_the_term_nets_only_the_define(self):
-        fig = {"wa_share": 0.7, "at_work": 0.5}
-        self.assertAlmostEqual(M.workforce_term_target(fig), P.WORKFORCE_SCALE * 0.35 - 0.25)
-        self.assertAlmostEqual(M.engine_total(fig, 0.3, 0.05), P.WORKFORCE_SCALE * 0.35 + 0.05 + 0.05)
+        fig = {"wa_share": 0.7, "at_work": 0.35}
+        self.assertAlmostEqual(M.workforce_term_target(fig), 0.245 - 0.25)
+        self.assertAlmostEqual(M.engine_total(fig, 0.3, 0.05), 0.245 + 0.05 + 0.05)
 
     def test_fixed_positions_take_their_ages(self):
         for pos in ("early", "standard", "raised"):
@@ -1310,10 +1312,11 @@ class TestConsequences(unittest.TestCase):
                          (1.0, 0.0, 0.0, 0.0))
         for balance in (90.0, 95.0, 100.0, 110.0):
             self.assertEqual((M.sex_births(balance), M.sex_fewer_men(balance), M.sex_more_men(balance)), (1.0, 0.0, 0.0))
-        # the Soviet Union of 1959, 82 men per 100 women: births about -9%, women's rate about +0.09 (the design §4.4)
+        # the Soviet Union of 1959, 82 men per 100 women: births about -9%, women's rate about +0.09 (the design §4.4;
+        # x 0.7 in the game's units)
         self.assertAlmostEqual(M.sex_births(82.0), 82.0 / 90.0)
         self.assertLess(abs(M.sex_births(82.0) - 0.91), 0.01)
-        self.assertAlmostEqual(M.sex_women_add(82.0), 0.08)
+        self.assertAlmostEqual(M.sex_women_add(82.0), 0.8 * P.SEX_WOMEN_RATE)
         self.assertEqual(M.sex_births(60.0), P.SEX_BIRTHS_FLOOR)
         self.assertEqual((M.sex_fewer_men(80.0), M.sex_women_add(75.0)), (1.0, P.SEX_WOMEN_RATE))
         self.assertEqual((M.sex_more_men(150.0), M.sex_more_men(170.0)), (1.0, 1.0))
@@ -1325,7 +1328,7 @@ class TestConsequences(unittest.TestCase):
         fert, plain = M.fertility(inp, 40.0), M.fertility(BRITAIN_1836, 40.0)
         self.assertAlmostEqual(fert["tfr"], plain["tfr"] * 82.0 / 90.0)
         self.assertAlmostEqual(fert["planned"] + fert["unplanned"], fert["tfr"])
-        self.assertAlmostEqual(M.women_rate(inp), M.women_rate(BRITAIN_1836) + 0.08)
+        self.assertAlmostEqual(M.women_rate(inp), M.women_rate(BRITAIN_1836) + 0.8 * P.SEX_WOMEN_RATE)
 
     @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_step_reads_the_rings_balance_before_its_sweep(self):

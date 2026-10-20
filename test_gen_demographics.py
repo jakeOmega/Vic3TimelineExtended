@@ -476,7 +476,8 @@ class TestPhase2Generated(unittest.TestCase):
             self.assertEqual(stored, start >= P.OLD_AGE_FROM, start)
 
     def test_the_constants(self):
-        for name, v in (("men_rate", P.MEN_RATE), ("workforce_scale", P.WORKFORCE_SCALE),
+        self.assertNotIn("te_demog_k_workforce_scale", self.values, "the rates are in the game's units (2026-10-20)")
+        for name, v in (("men_rate", P.MEN_RATE), ("rate_max", P.RATE_MAX),
                         ("pension_age_standard", P.PENSION_AGE["standard"]),
                         ("health_need_1836", P.HEALTH_NEED_1836)):
             self.assertIn(f"te_demog_k_{name} = {{ value = {gen.lit(v)} }}", self.values)

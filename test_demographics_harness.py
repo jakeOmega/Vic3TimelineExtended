@@ -1189,7 +1189,8 @@ class TestWorkforceCommand(unittest.TestCase):
         farm = self.rows[0]
         self.assertAlmostEqual(farm["target"], 0.25, delta=0.02)
         for r in self.rows:
-            self.assertAlmostEqual(r["target"], P.WORKFORCE_SCALE * r["wa_share"] * r["at_work"], places=9)
+            # the rates are in the game's units (2026-10-20): the target is workers over people, with no scale
+            self.assertAlmostEqual(r["target"], r["wa_share"] * r["at_work"], places=9)
             self.assertAlmostEqual(r["w_target"], r["target"] - P.WORKING_ADULT_BASE, places=12)
 
     def test_rich_today_meets_the_bands(self):

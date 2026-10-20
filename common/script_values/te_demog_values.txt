@@ -354,9 +354,10 @@ te_demog_low_share = {
 		value = var:te_dg_low_share
 	}
 }
-# Women's participation (#894; demographics_model.women_rate_law and women_rate): the women's-work family's sum
-# takes it from the base to the men's rate; the lower strata's women work at least te_demog_k_women_lower; a shortage
-# of men adds up to te_demog_k_sex_women_rate (phase 2 step 4).
+# Women's participation (#894; demographics_model.women_rate_law and women_rate), in the game's units as every rate here
+# (demographics_params.MEN_RATE): the women's-work family's sum takes it from the base to the men's rate; the lower
+# strata's women work at least te_demog_k_women_lower; a shortage of men adds up to te_demog_k_sex_women_rate (phase 2
+# step 4).
 te_demog_women_rate_law = {
 	value = modifier:state_demog_womens_work_ratio_add
 	min = 0
@@ -374,11 +375,11 @@ te_demog_women_rate = {
 	# phase 2 step 4: where men are few more women work (te_demog_consequence_values.txt; 0 at a seed)
 	add = te_demog_sex_women_add
 }
-# The workforce share on the engine's scale: step 2's target, less the pops' own bases (the design §1.8).
+# The workforce share, workers over people: step 2's target, less the pops' own bases (the design §1.8). The rates are
+# in the game's units, so this is the engine's scale.
 te_demog_wf_target = {
 	value = var:te_dg_wa_share
 	multiply = var:te_dg_at_work
-	multiply = te_demog_k_workforce_scale
 }
 # The old-age threshold the two linked pension positions follow (late-game §2.2): one figure until phase 3 gives
 # the untreated their own.

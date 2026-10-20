@@ -702,14 +702,15 @@ WORKFORCE_TODAY_YEARS = 10
 WORKFORCE_TODAY_LOW = 0.4
 # §5's bands (the design, owner 2026-10-12): the engine's total (the census's target, the pops' bases' offset, the
 # lines on top) on the 1836 save's states, people-weighted, and four-fifths of states within the state band; a rich
-# state today; women's rate today at least 0.8 of men's; over-65s at work.
+# state today; women's rate today at least 0.8 of men's; over-65s at work. The rates are in the game's units since
+# 2026-10-20 (demographics_params.MEN_RATE), so the over-65s' historical bands are too: x 0.7 (RATE_MAX).
 BAND_1836_WORLD = (0.23, 0.27)
 BAND_1836_STATE = (0.21, 0.29)
 BAND_1836_STATE_SHARE = 0.8
 BAND_TODAY = (0.39, 0.45)
 BAND_WOMEN_TODAY = 0.8
-BAND_OLD_MEN_1836 = (0.6, 0.85)      # about three-quarters of men over 65 with no pension (1880)
-BAND_OLD_TODAY = (0.12, 0.28)        # about a fifth of over-65s today
+BAND_OLD_MEN_1836 = (0.42, 0.595)    # about three-quarters of men over 65 with no pension (1880): 0.6-0.85 x 0.7
+BAND_OLD_TODAY = (0.084, 0.196)      # about a fifth of over-65s today: 0.12-0.28 x 0.7
 BAND_NEED_1836 = (0.99, 1.01)
 
 
@@ -1005,8 +1006,9 @@ CONSEQ_TRANSITIONS = [
      dict(sol=30, literacy=0.95, urban_share=0.7, techs=MED_1990 | {"contraceptive_pill", "vulcanization", "feminism"},
           laws=frozenset({PHI}), institutions={HEALTH: 6}), 20),
 ]
-# The sex-balance anchors (the design §4.4): the Soviet Union of 1959 and a frontier state.
-SEX_ANCHORS = [("Soviet Union 1959", 82.0, {"births": (0.89, 0.93), "women": (0.07, 0.1)}),
+# The sex-balance anchors (the design §4.4): the Soviet Union of 1959 and a frontier state. The women's rate's gain is in
+# the game's units since 2026-10-20 (demographics_params.MEN_RATE): the design's 0.07-0.1 x 0.7.
+SEX_ANCHORS = [("Soviet Union 1959", 82.0, {"births": (0.89, 0.93), "women": (0.049, 0.07)}),
                ("frontier state", 150.0, {"more": (1.0, 1.0)})]
 # §5's bands for step 4
 BANDS_1836_TERM = 0.05            # the 1836 world's term within +-0.05
@@ -1420,7 +1422,8 @@ def money_shares(root=ROOT):
 
 def package_upkeep(shares, measures, young, urban, women):
     """The measures' money upkeep, a share of GDP a year, as te_demog_ms_cost_<measure> computes it: Child Allowance x
-    (the 0-14 share / 0.3), Family Housing x the urban share, Parental Leave x the women's rate."""
+    (the 0-14 share / 0.3), Family Housing x the urban share, Parental Leave x `women`, the women's rate over
+    P.RATE_MAX (te_demog_ms_women_at_work)."""
     factor = {"child_allowance": young / 0.3, "family_housing": urban, "parental_leave": women}
     return sum(shares[m] * factor.get(m, 1.0) for m in measures if m in shares)
 

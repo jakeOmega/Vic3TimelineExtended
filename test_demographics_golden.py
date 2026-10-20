@@ -34,7 +34,12 @@ The migrant booking (2026-10-12) rewrites te_demog_enter_class (BOOKING_DIGESTS)
 Adults' infection (#1045) changes the rich cases on purpose: medicine reaches infection at 15-64 a second time
 (te_demog_enter_group, ADULT_INFECTION_DIGESTS) and the infection treatment's cap rises to 0.99. The farm cases hold no
 medicine, so their factor is 1 and their numbers stay; the two rich cases, model_rich and rich_full, were re-recorded on
-#1045's tree, so a later change to them still shows."""
+#1045's tree, so a later change to them still shows.
+
+The participation rates in the game's units (2026-10-20: the old WORKFORCE_SCALE of 0.7 folded into the rates and the
+carriers' participation lines) move two figures of the Full cases on purpose, each x 0.7 within the interpreter's last
+place, and nothing else: te_dg_at_work (0.41443 to 0.2901, 0.53487 to 0.3744) and te_dg_wk_past (0.02866 to 0.02006).
+Those four numbers alone were rewritten; te_dg_fws_wk, which splits the work deaths, and every death and birth stay."""
 
 import functools
 import hashlib
