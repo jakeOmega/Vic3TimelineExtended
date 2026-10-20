@@ -1,6 +1,6 @@
 ﻿# ============================================================================
 # DEMOGRAPHICS — uploaded minds (the owner's calls of 2026-10-19)
-# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md. The twin is
+# docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md. The twin is
 # scripts/analysis/demographics_uploads.py; the generated half is te_demog_um_generated_effects.txt
 # (scripts/generators/gen_demographics_um.py); test_demographics_uploads.py runs this file against the model.
 #

@@ -4,7 +4,7 @@
 > (`docs/systems/mod_systems.md` § Uploaded minds; play-test list § Uploaded minds). It answers the
 > owner's request of 2026-10-16: "for countries with the Mind Upload Nexus megaproject / Mind Backups tech, explore
 > adding a Non-Biological / Uploaded category to the biological age display in the Demographics panel and longevity
-> calculations." Parent designs: the late game (`../archive/specs/2026-10-11-demographics-late-game-design.md`, cited as
+> calculations." Parent designs: the late game (`2026-10-11-demographics-late-game-design.md`, cited as
 > "late §n") and the census (`2026-10-08-demographics-design.md`). What is built today:
 > `docs/systems/mod_systems.md` § Phase 3: the late game. Anything past today is speculation.
 
