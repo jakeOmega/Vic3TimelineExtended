@@ -25,6 +25,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
 import demographics_model as M  # noqa: E402
+import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
 import demographics_resettle as RS  # noqa: E402
 import gen_demographics_resettle as RSG  # noqa: E402
@@ -37,6 +38,7 @@ RS_VALUES = ROOT / "common" / "script_values" / "te_demog_resettle_generated_val
 REGISTRY = ROOT / "test_resettlement_programme_registry.py"
 INP = M.Inputs(sol=12, literacy=0.3, urban_share=0.15, techs=frozenset({"railways"}),
                laws=frozenset({"law_women_in_the_fields"}))
+INP.mods = DM.totals(DM.load_carriers(), INP.techs, INP.laws, INP.institutions)
 YEAR, POP = 1850, 200000.0
 
 
@@ -94,10 +96,11 @@ class TestProfiles(unittest.TestCase):
         self.assertAlmostEqual(self.by_sex(sh, "m"), 0.65)
 
     def test_penal_transportation(self):
-        """15-35 (5% at 15-17, 85% at 18-35, 10% at 36-59), 85% men: Australia's convicts."""
+        """Mostly 15-35 (12% at 15-17, 78% at 18-35, 10% at 36-59: the controller's proposal, unconfirmed), 85% men:
+        Australia's convicts, a fifth under 20."""
         sh = self.shares("penal_transportation")
         self.assertAlmostEqual(self.by_sex(sh, "m"), 0.85)
-        for c, w in ((1, 0.05), (2, 0.85), (3, 0.10)):
+        for c, w in ((1, 0.12), (2, 0.78), (3, 0.10)):
             self.assertAlmostEqual(sh[(c, "f")] + sh[(c, "m")], w)
         self.assertNotIn((0, "f"), sh)
         self.assertNotIn((4, "m"), sh)
@@ -179,6 +182,13 @@ class TestWalkCounters(unittest.TestCase):
         self.assertIn("scope:rs_destination = { if = { limit = { te_demog_has_census = yes } te_demog_rs_add = { SIDE = i }",
                       note)
 
+    def test_the_events_kills_are_known_kills(self):
+        """Review M4: Hard Winter's and the settlements' famine's dead reach the census as kills, not emigrants."""
+        events = squash(_text(ROOT / "events" / "resettlement_events.txt"))
+        for value, kill in (("1000", "kill_population_in_state = { value = 1000 strata = lower }"),
+                            ("5000", "kill_population_in_state = { value = 5000 pop_type = farmers }")):
+            self.assertIn(f"hidden_effect = {{ te_demog_note_kills = {{ VALUE = {value} }} }} {kill}", events)
+
     def test_the_transit_dead_are_known_kills(self):
         """The 2026-10-09 gap: they reached the census through te_demog_note_kills, the strikes' path."""
         dead = squash(_block(_text(RESETTLE_EFFECTS), "te_demog_rs_note_dead"))
@@ -200,7 +210,8 @@ class TestStepWithKnownMoves(unittest.TestCase):
         # what the engine did: the change holds the moves, the transit dead and the other kills
         pop = ring.total + eb - ed - kills - counters.dead + residual
         eng = _engine_for(inp, YEAR + 1, pop)
-        eng.fixtures.update({"te_demog_crisis": 0.0, "te_demog_family_transport": P.FAMILY_TRANSPORT_TECHS["railways"]})
+        eng.fixtures.update({"te_demog_crisis": 0.0,
+                             "te_demog_family_transport": inp.mods.get(P.FAMILY_MIGRATION_TYPE, 0.0)})
         for k in range(P.RING_YEARS):
             if ring.f[k] or ring.m[k]:
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = ring.f[k] * ring.scale, ring.m[k] * ring.scale
@@ -245,6 +256,7 @@ class TestStepWithKnownMoves(unittest.TestCase):
         eng, model, _f, rest, net = self.run_both(RS.Counters())
         self.check(eng, model)
         self.assertAlmostEqual(eng.vars["te_dg_net_migration"], net)
+        self.assertNotIn("te_dg_rs_net", eng.vars)
 
     def test_land_grants_arrivals_by_the_family_profile(self):
         c = RS.Counters()
@@ -252,6 +264,10 @@ class TestStepWithKnownMoves(unittest.TestCase):
         eng, model, _f, rest, net = self.run_both(c, rest=2500.0)
         self.check(eng, model)
         self.assertAlmostEqual(rest, 2500.0)
+        # the known net is kept apart for the offline re-walk (demographics_rebook.booked_residual)
+        self.assertAlmostEqual(eng.vars["te_dg_rs_net"], 9000.0, places=3)
+        import demographics_rebook as RB
+        self.assertAlmostEqual(RB.booked_residual(eng.vars), 2500.0, places=3)
         self.assertAlmostEqual(eng.vars["te_dg_net_migration"], 2500.0 + 9000.0, places=3)
         self.assertAlmostEqual(eng.vars["te_dg_mig_raw"], 2500.0 + 9000.0, places=3)
 
@@ -312,8 +328,9 @@ class TestStepWithKnownMoves(unittest.TestCase):
         RS.book(c, "land_grants", 900.0, "in")
         eng = _engine_for(INP, YEAR, POP)
         eng.vars.update(_counter_vars(c))
+        eng.vars["te_dg_rs_net"] = 900.0
         eng.call("te_demog_seed")
-        for name in RSG.counter_names():
+        for name in RSG.counter_names() + ["te_dg_rs_net"]:
             self.assertNotIn(name, eng.vars)
 
     def test_the_census_gates_the_counters(self):
@@ -321,9 +338,15 @@ class TestStepWithKnownMoves(unittest.TestCase):
             self.assertIn("te_demog_cohorts_run = yes", squash(_block(_text(RESETTLE_EFFECTS), name)), name)
 
     def test_the_self_check_compares_the_rest_with_the_arrivals(self):
+        """One-sided (review, 2026-10-20): BROKEN only when the rest is below -0.25 x the arrivals, so a continued
+        save's partial-year counters and the engine's own immigration (both positive) read OK."""
         body = squash(_block(_text(RESETTLE_EFFECTS), "te_demog_rs_selfcheck"))
         self.assertIn("TE_SELF_CHECK OK resettle_moves_booked", body)
         self.assertIn("TE_SELF_CHECK BROKEN resettle_moves_booked", body)
+        self.assertIn("set_local_variable = { name = te_dg_rs_chk_floor value = { value = local_var:te_dg_rs_in "
+                      "multiply = -0.25 } }", body)
+        self.assertIn("limit = { local_var:te_dg_mig >= local_var:te_dg_rs_chk_floor }", body)
+        self.assertLess(body.index("TE_SELF_CHECK OK"), body.index("TE_SELF_CHECK BROKEN"))
         self.assertIn("NOT = { has_global_variable = te_demog_rs_selfcheck_done }", body)
         flows = squash(_block(_text(EFFECTS), "te_demog_flows"))
         self.assertLess(flows.index("te_demog_rs_take = yes"), flows.index("name = te_dg_kill value"))
@@ -366,9 +389,16 @@ class TestFrontierSeed(unittest.TestCase):
 
     def test_the_figures_are_the_censuss(self):
         """Wisconsin Territory's settlers aged 20-29: 6,328 men and 2,713 women (233 per 100); its 1836 pops are 78%
-        settlers, so the state starts at 204."""
-        self.assertAlmostEqual(P.FRONTIER_1836["STATE_WISCONSIN"]["ratios"][(20, 29)],
-                               1 + (6328 / 2713 - 1) * 28004 / 36004)
+        settlers and the rest near even, so the state starts at 190 (the exact mixture, review 2026-10-20)."""
+        r, s = 6328 / 2713, 28004 / 36004
+        mixed = (s * r / (1 + r) + (1 - s) / 2) / (s / (1 + r) + (1 - s) / 2)
+        self.assertAlmostEqual(P.FRONTIER_1836["STATE_WISCONSIN"]["ratios"][(20, 29)], mixed)
+        self.assertAlmostEqual(mixed, 1.903, places=3)
+        # the mixture: settlers' men and women over everyone's, at one to one for the rest
+        men, women = s * r / (1 + r), s / (1 + r)
+        self.assertAlmostEqual(P.frontier_mix(r, s), (men + (1 - s) / 2) / (women + (1 - s) / 2))
+        self.assertAlmostEqual(P.frontier_mix(r, 1.0), r)
+        self.assertAlmostEqual(P.frontier_mix(r, 0.0), 1.0)
         self.assertEqual(set(P.FRONTIER_1836), set(P.FRONTIER_1840_WHITE))
         self.assertEqual(set(P.FRONTIER_1836), {"STATE_MICHIGAN", "STATE_INDIANA", "STATE_ILLINOIS", "STATE_MISSOURI",
                                                 "STATE_ARKANSAS", "STATE_IOWA", "STATE_WISCONSIN"})

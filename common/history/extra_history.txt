@@ -282,8 +282,8 @@ GLOBAL = {
 	# any modern method, so it starts with Family Limitation. Under the
 	# Demographics rule's Full setting this is only its start: a general practice
 	# every country can gain from its own conditions and its neighbours'
-	# (te_demog_fl_effects.txt; phase 3). The only line in the demographics
-	# system that names a country.
+	# (te_demog_fl_effects.txt; phase 3). With the US frontier's mark below, one
+	# of the two lines in the demographics system that name a country.
 	c:FRA ?= {
 		add_modifier = { name = te_demog_family_limitation }
 	}

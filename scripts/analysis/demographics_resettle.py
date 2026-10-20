@@ -244,9 +244,18 @@ def _stand_in(**kw):
     return inp
 
 
+def full_effects(ring):
+    """Phase 2 step 4's Full-mode effects a ring's structure sets (demographics_model.consequence_figures): radicals from
+    movements from More Men (SEX_RADICALS x more), Fewer Men's children per woman, the conscription term, the share
+    aged 20-29 and the youth bulge's y at YOUTH_UNEMPLOYMENT_FULL (work short)."""
+    c = M.consequence_figures(ring, unemployment=P.YOUTH_UNEMPLOYMENT_FULL)
+    return {"more_radicals": P.SEX_RADICALS * c["more"], "fewer": c["fewer"], "births": c["births"],
+            "term": M.conscription_applied(c["term"]), "youth": c["youth"], "y": M.youth_applied(c["y"])}
+
+
 def frontier_rows(inp=None, years=(0, 10, 25, 50), people=100000.0):
-    """[(region, {years on: {"20-59": men per 100 women aged 20-59, "15-49", "all", "0-14"}})]: each frontier region's
-    1836 seed, then plain steps (no migration) as the ring ages."""
+    """[(region, {years on: {"20-59": men per 100 women aged 20-59, "15-49", "all", "0-14", "full": full_effects}})]:
+    each frontier region's 1836 seed, then plain steps (no migration) as the ring ages."""
     inp = inp or _stand_in()
     out = []
     for region in sorted(P.FRONTIER_1836):
@@ -257,7 +266,7 @@ def frontier_rows(inp=None, years=(0, 10, 25, 50), people=100000.0):
                 year += 1
                 M.step(ring, inp, year)
             figs[target] = {"20-59": men_per_100(ring, 20, 59), "15-49": men_per_100(ring, 15, 49),
-                            "all": men_per_100(ring), "0-14": men_per_100(ring, 0, 14)}
+                            "all": men_per_100(ring), "0-14": men_per_100(ring, 0, 14), "full": full_effects(ring)}
         out.append((region, figs))
     return out
 
@@ -283,17 +292,22 @@ def known_rows(inp=None, years=10, arrivals=10000.0, destination=100000.0, sourc
             # no engine population: the ring's own count carries the moves (the residual is all known)
             step(dest, inp, y, cd, kills=0.0, residual=moved)
             step(src, inp, y, cs, kills=dead, residual=-moved)
-        out.append((programme, M.structure(dest), M.structure(src)))
+        out.append((programme, {**M.structure(dest), **full_effects(dest)}, {**M.structure(src), **full_effects(src)}))
     return out
 
 
 def cmd_frontier(_args):
     print("The US frontier's 1836 seed: men per 100 women by age (demographics_params.FRONTIER_1836), then ageing")
     print("with no migration. A stand-in frontier state: SoL 10, literacy 0.5, No Women's Rights.")
-    print(f"{'region':18} {'years':>5} {'0-14':>6} {'15-49':>6} {'20-59':>6} {'all':>6}")
+    print("Under Full the census's consequence modifiers follow: More Men's radicals from movements, the conscription term")
+    print("(no ceiling) and the share aged 20-29 with the youth bulge's y where a fifth of the workforce has no work.")
+    print(f"{'region':18} {'years':>5} {'0-14':>6} {'15-49':>6} {'20-59':>6} {'all':>6} {'radicals':>8} {'consc':>7} "
+          f"{'20-29':>6} {'y':>5}")
     for region, figs in frontier_rows():
         for years, f in figs.items():
-            print(f"{region:18} {years:>5} {f['0-14']:6.1f} {f['15-49']:6.1f} {f['20-59']:6.1f} {f['all']:6.1f}")
+            e = f["full"]
+            print(f"{region:18} {years:>5} {f['0-14']:6.1f} {f['15-49']:6.1f} {f['20-59']:6.1f} {f['all']:6.1f} "
+                  f"{e['more_radicals']:+8.1%} {e['term']:+7.1%} {e['youth']:6.3f} {e['y']:5.2f}")
     return 0
 
 
@@ -301,9 +315,12 @@ def cmd_resettle(args):
     print(f"Internal Resettlement's known moves: {args.arrivals:,.0f} people a year for {args.years} years from a source")
     print(f"of {args.source:,.0f} to a destination of {args.destination:,.0f} (the stand-in state at equilibrium, no")
     print("other migration): men per 100 women aged 20-59 and the median age at both ends.")
-    print(f"{'programme':24} {'dest m/100f':>11} {'dest median':>11} {'src m/100f':>10} {'src median':>10}")
+    print("Under Full: the conscription term, More Men's radicals and Fewer Men's children-per-woman factor at each end.")
+    print(f"{'programme':24} {'dest m/100f':>11} {'median':>6} {'consc':>7} {'radicals':>8} | {'src m/100f':>10} "
+          f"{'median':>6} {'consc':>7} {'tfr x':>6}")
     for programme, d, s in known_rows(years=args.years, arrivals=args.arrivals, destination=args.destination,
                                       source=args.source):
-        print(f"{programme:24} {d['men_per_100_women']:11.1f} {d['median']:11.1f} {s['men_per_100_women']:10.1f} "
-              f"{s['median']:10.1f}")
+        print(f"{programme:24} {d['men_per_100_women']:11.1f} {d['median']:6.1f} {d['term']:+7.1%} "
+              f"{d['more_radicals']:+8.1%} | {s['men_per_100_women']:10.1f} {s['median']:6.1f} {s['term']:+7.1%} "
+              f"{s['births']:6.2f}")
     return 0

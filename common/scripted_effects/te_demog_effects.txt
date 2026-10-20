@@ -134,10 +134,13 @@
 #                       moves and transit dead since the last step, by programme profile, taken and removed
 #                       the same way (te_demog_resettle_effects.txt)
 #   te_dg_frontier      state: history's mark on the US frontier, read by its 1836 seeds (the same file)
-#   te_dg_net_migration state: last step's residual, people (signed; 0 inside the noise band)
+#   te_dg_net_migration state: last step's net migration, people (signed): the residual's rest after the noise
+#                       band (0 inside it) plus Internal Resettlement's known moves (since 2026-10-19)
+#   te_dg_rs_net        state: those known moves, arrivals less departures, from a step that had them (removed by a
+#                       step or seed without them; te_demog_resettle_effects.txt), so tools can take them out
 #   te_dg_mig_rate      state and country: te_dg_net_migration per 1,000 people (issue #1029, the overview's
 #                       Net Migration); a country's from its states' sums
-#   te_dg_mig_raw       state: the same residual before the noise band; the country's sum of it
+#   te_dg_mig_raw       state: the whole residual before the noise band, known moves included; the country's sum of it
 #                       (te_demog_country_census) is the census log's gate figure
 #   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
 #   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
@@ -1417,10 +1420,16 @@ te_demog_flows = {
 		set_local_variable = { name = te_dg_mig value = 0 }
 	}
 	set_variable = { name = te_dg_net_migration value = local_var:te_dg_mig }
-	# the panel's Net Migration counts the known moves too
+	# the panel's Net Migration counts the known moves too; te_dg_rs_net keeps them apart for the offline tools
+	# (demographics_rebook.py re-books only the rest)
 	if = {
 		limit = { local_var:te_dg_rk_on > 0 }
-		change_variable = { name = te_dg_net_migration add = { value = local_var:te_dg_rs_in subtract = local_var:te_dg_rs_out } }
+		set_variable = { name = te_dg_rs_net value = { value = local_var:te_dg_rs_in subtract = local_var:te_dg_rs_out } }
+		change_variable = { name = te_dg_net_migration add = var:te_dg_rs_net }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_rs_net }
+		remove_variable = te_dg_rs_net
 	}
 	set_local_variable = { name = te_dg_mig_in value = { value = local_var:te_dg_mig min = 0 } }
 	set_local_variable = { name = te_dg_mig_out value = { value = local_var:te_dg_mig multiply = -1 min = 0 } }

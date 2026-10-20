@@ -943,15 +943,17 @@ RESETTLE_PROGRAMMES = ("land_grants", "military_colonies", "penal_transportation
                        "special_settlements", "development_program", "rustication", "managed_retreat")
 # The programmes' own kinds, beside MIGRANT_PROFILE's: each has weights over MIGRANT_CLASSES (summing to 1) and a women's
 # share, or (Rustication's youth) an age range booked by single year in proportion to each age's people.
-# - penal: ages 15-35, 85% men. Of the ~162,000 convicts sent to Australia, ~25,000 were women (15.4%), their average
-#   age about 25 and a fifth under 20 (owner, 2026-10-19). Classes 15-17, 18-35, 36-59 at 5/85/10.
+# - penal: mostly 15-35, 85% men. Of the ~162,000 convicts sent to Australia, ~25,000 were women (15.4%), their average
+#   age about 25 and a fifth under 20 (owner, 2026-10-19). Classes 15-17, 18-35, 36-59 at 12/78/10 (the controller's
+#   proposal after review, 2026-10-20, sent to the owner and not yet confirmed): a fifth under 20 is about 12% at 15-17,
+#   three of its five years; 18-19 sit in the 18-35 class; a tenth over 35.
 # - youth: China's sent-down youth, 15-24, both sexes evenly. 15-24 straddles the classes (15-17, 18-35), so it is booked
 #   over the single years 15-24 instead: one rate per sex over the people of those ages (the bands 15-19 and 20-24).
 # - retreat: Managed Retreat moves whole communities, weighted to the old: the refugee kind with its 60+ weight doubled,
 #   renormalised.
 _REFUGEE_W = MIGRANT_PROFILE["refugee"]["weights"]
 RESETTLE_KINDS = {
-    "penal": {"weights": [0.0, 0.05, 0.85, 0.10, 0.0], "women": 0.15},
+    "penal": {"weights": [0.0, 0.12, 0.78, 0.10, 0.0], "women": 0.15},
     "youth": {"ages": (15, 24), "women": 0.5},
     "retreat": {"weights": [w / (sum(_REFUGEE_W) + _REFUGEE_W[-1]) * (2 if c == len(_REFUGEE_W) - 1 else 1)
                             for c, w in enumerate(_REFUGEE_W)], "women": 0.5},
@@ -959,8 +961,8 @@ RESETTLE_KINDS = {
 # Each programme's movers as (kind, weight, women's share) parts, the weights summing to 1. The family and refugee kinds
 # split evenly (None: the kind's own share); the labour kind takes the women's share given, or "jobs": the destination's
 # jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's rights x the range; no
-# balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's 15-35
-# and the Development Program's 60/40 were being confirmed as this was built: one edit here if they change.
+# balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's class
+# split (above) and the Development Program's 60/40 were being confirmed as this was built: one edit here if they change.
 RESETTLE_PROFILES = {
     "land_grants": (("family", 1.0, None),),
     "military_colonies": (("labour", 0.5, 0.2), ("family", 0.5, None)),   # half the labour kind at 80% men, half families
@@ -1008,8 +1010,9 @@ FRONTIER_1840_WHITE = {
 }
 # The census counts free whites; the game's 1836 state also holds enslaved and free Black people and Native nations
 # (Arkansas's state region takes in the Cherokee, Iowa's the Sauk and Meskwaki and the Dakota), whose numbers of men
-# and women were near even (Missouri's and Arkansas's slaves 97 and 103 men per 100 women in 1840). So the state's
-# ratio is 1 + (the settlers' ratio - 1) x the settlers' share of its 1836 pops (my call, 2026-10-19): the share of
+# and women were near even (Missouri's and Arkansas's slaves 97 and 103 men per 100 women in 1840). So each age group's
+# men per woman is the mixture of a settler share s of its people at the settlers' ratio r with the rest at one to one,
+# (s r/(1+r) + (1-s)/2) / (s/(1+r) + (1-s)/2) (frontier_mix; my call, 2026-10-19, the exact form since review): s is the share of
 # region_state:USA's pops in game/common/history/pops/05_north_america.txt (1.14.5) of the settler cultures (yankee,
 # dixie, cajun, irish, north_german). Minnesota and the US's unincorporated western states hold no settlers in 1836,
 # and the Old Southwest (Mississippi 132, Alabama 116, Louisiana 156 men per 100 women aged 15-49 among whites) and
@@ -1023,8 +1026,16 @@ FRONTIER_SETTLER_SHARE = {
     "STATE_IOWA": 23992 / 43992,
     "STATE_WISCONSIN": 28004 / 36004,
 }
+
+
+def frontier_mix(r, s):
+    """Men per woman of people a share s of whom are settlers at r men per woman, the rest at one to one."""
+    women = s / (1 + r) + (1 - s) / 2
+    return (s * r / (1 + r) + (1 - s) / 2) / women
+
+
 # {state region: {"ratios": {(first age, last age): men per woman at the seed}}}
 FRONTIER_1836 = {
-    region: {"ratios": {ages: 1 + (m / f - 1) * FRONTIER_SETTLER_SHARE[region] for ages, (m, f) in groups.items()}}
+    region: {"ratios": {ages: frontier_mix(m / f, FRONTIER_SETTLER_SHARE[region]) for ages, (m, f) in groups.items()}}
     for region, groups in FRONTIER_1840_WHITE.items()
 }

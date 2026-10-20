@@ -163,31 +163,31 @@ te_demog_rs_add = {
 				limit = { local_var:te_dg_rs_code <= 2 }
 				if = {
 					limit = { has_variable = te_dg_rs_$SIDE$_f1 }
-					change_variable = { name = te_dg_rs_$SIDE$_f1 add = { value = local_var:te_dg_rs_amt multiply = 0.0075 } }
+					change_variable = { name = te_dg_rs_$SIDE$_f1 add = { value = local_var:te_dg_rs_amt multiply = 0.018 } }
 				}
 				else = {
-					set_variable = { name = te_dg_rs_$SIDE$_f1 value = { value = local_var:te_dg_rs_amt multiply = 0.0075 } }
+					set_variable = { name = te_dg_rs_$SIDE$_f1 value = { value = local_var:te_dg_rs_amt multiply = 0.018 } }
 				}
 				if = {
 					limit = { has_variable = te_dg_rs_$SIDE$_m1 }
-					change_variable = { name = te_dg_rs_$SIDE$_m1 add = { value = local_var:te_dg_rs_amt multiply = 0.0425 } }
+					change_variable = { name = te_dg_rs_$SIDE$_m1 add = { value = local_var:te_dg_rs_amt multiply = 0.102 } }
 				}
 				else = {
-					set_variable = { name = te_dg_rs_$SIDE$_m1 value = { value = local_var:te_dg_rs_amt multiply = 0.0425 } }
+					set_variable = { name = te_dg_rs_$SIDE$_m1 value = { value = local_var:te_dg_rs_amt multiply = 0.102 } }
 				}
 				if = {
 					limit = { has_variable = te_dg_rs_$SIDE$_f2 }
-					change_variable = { name = te_dg_rs_$SIDE$_f2 add = { value = local_var:te_dg_rs_amt multiply = 0.1275 } }
+					change_variable = { name = te_dg_rs_$SIDE$_f2 add = { value = local_var:te_dg_rs_amt multiply = 0.117 } }
 				}
 				else = {
-					set_variable = { name = te_dg_rs_$SIDE$_f2 value = { value = local_var:te_dg_rs_amt multiply = 0.1275 } }
+					set_variable = { name = te_dg_rs_$SIDE$_f2 value = { value = local_var:te_dg_rs_amt multiply = 0.117 } }
 				}
 				if = {
 					limit = { has_variable = te_dg_rs_$SIDE$_m2 }
-					change_variable = { name = te_dg_rs_$SIDE$_m2 add = { value = local_var:te_dg_rs_amt multiply = 0.7225 } }
+					change_variable = { name = te_dg_rs_$SIDE$_m2 add = { value = local_var:te_dg_rs_amt multiply = 0.663 } }
 				}
 				else = {
-					set_variable = { name = te_dg_rs_$SIDE$_m2 value = { value = local_var:te_dg_rs_amt multiply = 0.7225 } }
+					set_variable = { name = te_dg_rs_$SIDE$_m2 value = { value = local_var:te_dg_rs_amt multiply = 0.663 } }
 				}
 				if = {
 					limit = { has_variable = te_dg_rs_$SIDE$_f3 }
@@ -938,7 +938,12 @@ te_demog_rs_youth_hook = {
 
 # THIS = a state: its known-move counters removed (te_demog_rs_take after the step reads them; te_demog_seed, which
 # counts the people as they are). Every add also raises one of the three totals, so a state with none has none.
+# And the last step's known net (te_dg_rs_net), which te_demog_flows writes again after the take.
 te_demog_rs_clear = {
+	if = {
+		limit = { has_variable = te_dg_rs_net }
+		remove_variable = te_dg_rs_net
+	}
 	if = {
 		limit = {
 			OR = {
@@ -1070,66 +1075,66 @@ te_demog_frontier_ratios = {
 	set_local_variable = { name = te_dg_fr_5 value = 0 }
 	if = {
 		limit = { state_region = s:STATE_ARKANSAS }
-		set_local_variable = { name = te_dg_fr_0 value = 0.99384 }
-		set_local_variable = { name = te_dg_fr_1 value = 1.22627 }
-		set_local_variable = { name = te_dg_fr_2 value = 1.27421 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.30323 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.24256 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.2221 }
+		set_local_variable = { name = te_dg_fr_0 value = 0.99382 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.20344 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.24138 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.26358 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.21651 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.20006 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ILLINOIS }
 		set_local_variable = { name = te_dg_fr_0 value = 1.03285 }
-		set_local_variable = { name = te_dg_fr_1 value = 1.35125 }
-		set_local_variable = { name = te_dg_fr_2 value = 1.38258 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.24149 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.34101 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.25863 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.3507 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.38193 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.24124 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.3405 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.25833 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_INDIANA }
 		set_local_variable = { name = te_dg_fr_0 value = 0.99183 }
-		set_local_variable = { name = te_dg_fr_1 value = 1.08641 }
-		set_local_variable = { name = te_dg_fr_2 value = 1.14671 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.08466 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.27823 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.23852 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.08637 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.14657 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.08461 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.27776 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.23817 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_IOWA }
-		set_local_variable = { name = te_dg_fr_0 value = 1.03039 }
-		set_local_variable = { name = te_dg_fr_1 value = 1.34804 }
-		set_local_variable = { name = te_dg_fr_2 value = 1.42255 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.29692 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.22521 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.24931 }
+		set_local_variable = { name = te_dg_fr_0 value = 1.03001 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.30394 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.35928 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.26422 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.20589 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.22584 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MICHIGAN }
 		set_local_variable = { name = te_dg_fr_0 value = 1.00562 }
-		set_local_variable = { name = te_dg_fr_1 value = 1.19386 }
-		set_local_variable = { name = te_dg_fr_2 value = 1.31381 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.31738 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.27628 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.29028 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.19168 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.30812 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.31157 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.27186 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.28541 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MISSOURI }
-		set_local_variable = { name = te_dg_fr_0 value = 0.99117 }
-		set_local_variable = { name = te_dg_fr_1 value = 1.25188 }
-		set_local_variable = { name = te_dg_fr_2 value = 1.33991 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.29124 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.28478 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.20978 }
+		set_local_variable = { name = te_dg_fr_0 value = 0.99116 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.24806 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.333 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.28615 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.27991 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.20712 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WISCONSIN }
-		set_local_variable = { name = te_dg_fr_0 value = 1.09334 }
-		set_local_variable = { name = te_dg_fr_1 value = 2.0364 }
-		set_local_variable = { name = te_dg_fr_2 value = 2.05219 }
-		set_local_variable = { name = te_dg_fr_3 value = 1.73586 }
-		set_local_variable = { name = te_dg_fr_4 value = 1.41915 }
-		set_local_variable = { name = te_dg_fr_5 value = 1.41779 }
+		set_local_variable = { name = te_dg_fr_0 value = 1.09211 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.90276 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.91472 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.66587 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.39547 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.39426 }
 	}
 }
 
