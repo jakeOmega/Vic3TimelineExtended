@@ -13,17 +13,6 @@ te_demog_um_state_levels = {
 	}
 }
 
-# State scope: its Nexus's levels x its staffing, 0-1: the levels whose research line the production method gives
-# (workforce-scaled), which the census's cancel takes back to the utilisation (te_demog_um_research).
-te_demog_um_state_staffed_levels = {
-	value = 0
-	if = {
-		limit = { has_building = building_mind_upload_nexus }
-		value = b:building_mind_upload_nexus.level
-		multiply = b:building_mind_upload_nexus.occupancy
-	}
-}
-
 # State scope: the people its last step uploaded (deaths per 1,000 leave them out; te_demog_state_figures).
 te_demog_um_state_uploads = {
 	value = 0

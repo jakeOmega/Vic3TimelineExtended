@@ -465,7 +465,13 @@ te_demog_um_nexus_refresh = {
 				}
 				set_variable = { name = te_dg_um_util value = owner.var:te_dg_um_util }
 			}
-			set_variable = { name = te_dg_um_lvo value = te_demog_um_state_staffed_levels }
+			# its levels x its staffing (0-1), read on the building as the Strategic Reserve reads its hub
+			# (st_res_refresh_hub_cache_effect): the levels whose research line the method gives
+			b:building_mind_upload_nexus = {
+				root = {
+					set_variable = { name = te_dg_um_lvo value = { value = prev.level multiply = prev.occupancy } }
+				}
+			}
 			b:building_mind_upload_nexus = {
 				add_modifier = { name = te_demog_um_nexus_off }
 			}
