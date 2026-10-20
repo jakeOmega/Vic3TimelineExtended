@@ -82,10 +82,15 @@ te_demog_um_hosted_share = {
 	}
 }
 
-# Country or state scope: last year's uploads per 1,000 people (bodies), for the deaths' hovers.
+# Country or state scope: last year's uploads per 1,000 people (bodies), for the deaths' hovers: the country's stored
+# figure (te_dg_um_rate, te_demog_um_country), a state's from its last step's uploads.
 te_demog_um_upload_rate = {
 	value = 0
 	if = {
+		limit = { has_variable = te_dg_um_rate }
+		value = var:te_dg_um_rate
+	}
+	else_if = {
 		limit = {
 			has_variable = te_dg_um_new
 			has_variable = te_dg_people
@@ -94,6 +99,14 @@ te_demog_um_upload_rate = {
 		divide = { value = var:te_dg_people min = 1 }
 		multiply = 1000
 	}
+}
+
+# Country or state scope: every body's death per 1,000 people last year, the uploads' too: deaths per 1,000 (true deaths,
+# te_dg_cdr) plus the uploads. The Added on Top figures compare it with the census's own rate (te_dg_cdr_model), which
+# counts the uploads, as the engine does.
+te_demog_cdr_all = {
+	value = var:te_dg_cdr
+	add = te_demog_um_upload_rate
 }
 
 # Country or state scope: Living to 100 with uploads counting as living, and the share of it that lives on as an upload
@@ -135,28 +148,6 @@ te_demog_um_restore_share = {
 
 # ---- The self-check (te_debug_demog_um_selfcheck_start, te_debug_demog.130) -------------------------------------------
 
-# State scope: the digital assets output and advanced materials input modifiers te_demog_um_nexus_refresh applies, less
-# the production method's own (the factors x the utilisation, less the -100%).
-te_debug_demog_um_chk_da_expected = {
-	value = var:te_dg_um_util
-	multiply = te_demog_k_um_out_digital_assets
-	subtract = 1
-}
-te_debug_demog_um_chk_am_expected = {
-	value = var:te_dg_um_util
-	multiply = te_demog_k_um_in_advanced_materials
-	subtract = 1
-}
-# 1 where the minds' modifier is on and puts the expected output modifier at 1 or more (the utilisation at least 2/15):
-# at least 0.8 from 0.2, a company's prosperity bonus at most and what the building would read without the two, and
-# from -1, what it would read with the minds' multiplier at 0, so OK can't be a false pass
-te_debug_demog_um_chk_clear = {
-	value = 0
-	if = {
-		limit = { te_debug_demog_um_chk_da_expected >= 1 }
-		value = 1
-	}
-}
 # State scope, in te_debug_demog.130: what the building reads, less what the check expects
 te_debug_demog_um_chk_da_gap = {
 	value = var:te_dg_um_chk_da_got

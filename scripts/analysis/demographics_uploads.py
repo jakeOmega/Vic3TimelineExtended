@@ -233,14 +233,27 @@ def goods_prices(root=ROOT):
     return prices
 
 
-def nexus_output(util, levels=1.0, lines=None, prices=None):
-    """A Nexus's goods a week at full staffing under Full: each line x the utilisation x its factor
-    (P.UM_OUTPUT_FACTORS, P.UM_INPUT_FACTORS); {"out": {good: units}, "in": {...}, "out_value", "in_value"} at base
+def nexus_multiplier(util, factor, other=0.0):
+    """One Nexus good's modifier multiplier under Full (te_demog_um_nexus_good): (1 + the building's other bonuses for the
+    good, at least 0) x (utilisation x factor - 1), so with them the good's axis sums to (1 + other) x utilisation x
+    factor - 1, and the good comes to the method's line x utilisation x factor x (1 + other): none with no minds."""
+    return max(0.0, 1 + other) * (util * factor - 1)
+
+
+def nexus_output(util, levels=1.0, lines=None, prices=None, other=None):
+    """A Nexus's goods a week at full staffing under Full: each line x the utilisation x its factor (P.UM_OUTPUT_FACTORS,
+    P.UM_INPUT_FACTORS) x (1 + the building's other bonuses for it, other {good: sum}, none by default), the line x (1 +
+    the axis's sum, other + nexus_multiplier); {"out": {good: units}, "in": {...}, "out_value", "in_value"} at base
     prices. Outside Full it is the lines as they are."""
     lines = lines or nexus_lines()
     prices = prices or goods_prices()
-    out = {g: n * util * P.UM_OUTPUT_FACTORS.get(g, 1) * levels for g, n in lines["out"].items()}
-    inp = {g: n * util * P.UM_INPUT_FACTORS.get(g, 1) * levels for g, n in lines["in"].items()}
+    other = other or {}
+
+    def good(g, n, factors):
+        o = other.get(g, 0.0)
+        return n * (1 + o + nexus_multiplier(util, factors.get(g, 1), o)) * levels
+    out = {g: good(g, n, P.UM_OUTPUT_FACTORS) for g, n in lines["out"].items()}
+    inp = {g: good(g, n, P.UM_INPUT_FACTORS) for g, n in lines["in"].items()}
     return {"out": out, "in": inp, "out_value": sum(n * prices[g] for g, n in out.items()),
             "in_value": sum(n * prices[g] for g, n in inp.items())}
 

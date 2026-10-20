@@ -22,9 +22,6 @@ te_demog_state_yearly_on_action = {
 		te_demog_up_state_refresh = yes
 		# a planned capital's development ends once the state is no longer the capital
 		te_demog_pc_state_check = yes
-		# uploaded minds (2026-10-19): a Mind Upload Nexus's output follows the owner's hosted minds under Full, its
-		# modifiers' one refresh site, with ROOT the state (te_demog_um_effects.txt)
-		te_demog_um_nexus_refresh = yes
 	}
 }
 
@@ -139,6 +136,31 @@ te_demog_lost_war = {
 on_monthly_pulse_state = {
 	on_actions = {
 		te_demog_lines_on_action
+		te_demog_um_monthly_on_action
+	}
+}
+
+# Uploaded minds (2026-10-19; te_demog_um_effects.txt): a Mind Upload Nexus's goods follow the owner's hosted minds under
+# Full, refreshed once a month with ROOT the state (and when a construction site adds a level, mind_upload_nexus_on_action),
+# so a new, rebuilt or conquered Nexus, or a change of rule, is scaled within the month. A state refreshed this month by
+# the construction's hook skips.
+te_demog_um_monthly_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_building = building_mind_upload_nexus
+					has_variable = te_dg_um_lvo
+				}
+				NOT = {
+					AND = {
+						has_variable = te_dg_um_month
+						var:te_dg_um_month = te_history_month_index
+					}
+				}
+			}
+			te_demog_um_nexus_refresh = yes
+		}
 	}
 }
 on_state_owner_change = {

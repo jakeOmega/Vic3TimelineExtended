@@ -66,8 +66,10 @@ into true deaths and uploads, and books the uploads into a pool of minds. Upload
   minds over capacity are **archived (frozen)**, not killed: they don't produce and don't choose to end. When capacity
   returns they are restored before any new uploads (the census restores them first, so the year's free capacity is what
   is left after them).
-- **A country that goes.** The pool is the country's variables, so a revolution's winner keeps it (the winner continues
-  the nation) and an annexed country's minds go with its variables.
+- **A country that goes.** The pool is the country's variables. A revolution's rebels keep none (the pool's year skips a
+  revolutionary country), so a rebel winner holds the nation's pool through the engine's variable merge, and the
+  civil war's repair puts its two country modifiers back at once (the winner continues the nation; review of #1070).
+  An annexed country's minds go with its variables.
 
 ## 3. Mind Backups' restore, scaled by care (call 2)
 
@@ -102,14 +104,18 @@ in its Longevity section, since the pool is the country's.
 
 - **Throughput follows the minds.** Every Nexus's output scales with the country's utilisation, u = active minds ÷
   capacity. An empty Nexus makes nothing; its inputs scale down with its output, and so does its research speed.
-- **The mechanism** is the Strategic Reserve's: a building-scope static modifier with `goods_output_<good>_mult = 1`
-  applied at −1 takes the production method's output away. Two modifiers on each Nexus: one with every output and input
-  at −1, applied as it is, and one with each good's factor, applied at u. Together each good's output is today's × u ×
-  its factor. `add_modifier { multiplier = var: }` resolves against ROOT, so the state stores u and its pulse applies
-  them with `multiplier = root.var:`.
+- **The mechanism** follows the Strategic Reserve's: a building-scope static modifier on a good's `_mult` axis, at a
+  runtime multiplier. One modifier a good of the method, each at (1 + the building's other bonuses for the good) ×
+  (u × its factor − 1), so each good is today's line × u × its factor × (1 + those bonuses): the minds' output takes the
+  building's bonuses as any building's would, and an empty Nexus makes nothing whatever lifts its goods (a flat −100%
+  alone cancels only the method's own line; review of #1070). The other bonuses are the building's read of the axis less
+  the multiplier stored when it was applied. `add_modifier { multiplier = var: }` resolves against ROOT, so the state
+  stores each multiplier and its pulse applies them with `multiplier = root.var:`, once a month and when a construction
+  site adds a level (a new building).
 - **Research speed** is a country line on the production method, which no building modifier reaches: under Full the
   country's census adds −5% × its Nexus levels × their staffing × (1 − u), so the line nets to +5% a level × u.
-- **Output per mind** (calibrated in the build from the mod's late production methods): about £40 a week, between an
+- **Output per mind** (calibrated in the build from the mod's late production methods; the owner kept it, 2026-10-20: a
+  late-game wonder at full capacity that takes years to fill): about £40 a week, between an
   era-12 services worker's few pounds and the top software method's £64 (Self-Improving AI Systems; the era-12 digital
   access method is £115). So a full level, 1,000,000 minds, makes about £40M a week, five times today's £8.1M.
 - **Lean toward digital assets**, which are traded; services are local and would flood their own state. A full level:

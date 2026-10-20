@@ -10,7 +10,7 @@ te_demog_k_um_research = { value = 0.05 }
 te_demog_k_um_politics = { value = 0 }
 te_demog_k_um_devout_share = { value = 0.01 }
 
-# The Nexus's factors under Full (te_demog_um_nexus_minds' fields; the self-check reads them).
+# The Nexus's factors under Full (te_demog_um_nexus_good: each good's line x utilisation x its factor).
 te_demog_k_um_out_digital_assets = { value = 15 }
 te_demog_k_um_out_tourism = { value = 2 }
 te_demog_k_um_out_fine_art = { value = 2 }

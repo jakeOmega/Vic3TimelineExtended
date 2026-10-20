@@ -263,9 +263,16 @@ class _UmCountryEngine(_CountryEngine):
     def number(self, tok):
         if tok == "te_demog_um_state_levels":
             return float(self.vars.get("_levels", 0.0))
+        if tok.startswith("scope:") and "." in tok:
+            name, rest = tok[6:].split(".", 1)
+            return self.value_in(self.scopes[name], rest)
         return super().number(tok)
 
     def _test(self, key, op, arg):
+        if key == "exists" and arg.startswith("scope:"):
+            return arg[6:] in self.scopes
+        if key.startswith("scope:"):
+            return self.holds_in(self.scopes[key[6:]], arg)
         if key == "has_technology_researched":
             return arg in self.techs
         if key == "has_building":
@@ -276,7 +283,8 @@ class _UmCountryEngine(_CountryEngine):
 
 def _country(pool, states, techs=(P.UM_TECH,), full=True):
     eng = _UmCountryEngine(techs=techs, states=states, fixtures={},
-                           triggers={"te_demog_cohorts_run": True, "te_demog_effects_run": full})
+                           triggers={"te_demog_cohorts_run": True, "te_demog_effects_run": full,
+                                     "is_revolutionary": False})
     for name in ("f", "m", "af", "am"):
         eng.vars[f"te_dg_um_{name}"] = getattr(pool, name)
     eng.vars["te_dg_um_cap"] = pool.cap
@@ -416,12 +424,14 @@ class TestNexus(unittest.TestCase):
         lines = U.nexus_lines()
         self.assertEqual(set(lines["out"]), set(P.UM_OUTPUT_FACTORS), "every output the method makes has a factor")
         self.assertEqual(set(lines["in"]), set(P.UM_INPUT_FACTORS), "every input it uses has a factor")
-        for good, k in P.UM_OUTPUT_FACTORS.items():
-            self.assertEqual(b["te_demog_um_nexus_off"][f"goods_output_{good}_mult"], -1)
-            self.assertEqual(b["te_demog_um_nexus_minds"][f"goods_output_{good}_mult"], k)
-        for good, k in P.UM_INPUT_FACTORS.items():
-            self.assertEqual(b["te_demog_um_nexus_off"][f"goods_input_{good}_mult"], -1)
-            self.assertEqual(b["te_demog_um_nexus_minds"][f"goods_input_{good}_mult"], k)
+        gen = (ROOT / "common" / "script_values" / "te_demog_um_generated_values.txt").read_text(encoding="utf-8-sig")
+        for kind, axis, factors in (("out", "output", P.UM_OUTPUT_FACTORS), ("in", "input", P.UM_INPUT_FACTORS)):
+            for good, k in factors.items():
+                # one unit modifier a good, its axis at 1; the refresh gives each its own multiplier
+                self.assertEqual(b[f"te_demog_um_nexus_{kind}_{good}"], {f"goods_{axis}_{good}_mult": 1.0})
+                self.assertIn(f"te_demog_k_um_{kind}_{good} = {{ value = {k} }}", gen)
+                self.assertIn(f"te_demog_um_nexus_good = {{ KIND = {kind} AXIS = {axis} GOOD = {good} }}",
+                              UM_EFFECTS.read_text(encoding="utf-8-sig"))
         self.assertEqual(b["te_demog_um_research"], {"country_tech_research_speed_mult": -P.UM_RESEARCH_PER_LEVEL})
         self.assertEqual(b["te_demog_um_devout"], {"interest_group_ig_devout_approval_add": P.UM_DEVOUT_APPROVAL})
 
@@ -449,13 +459,244 @@ class TestNexus(unittest.TestCase):
         self.assertGreater(da / full["out_value"], 0.7)
         self.assertLess(full["in_value"], 0.3 * full["out_value"])
         self.assertEqual(U.nexus_output(0.0)["out_value"], 0.0)
+        # the building's other bonuses multiply the minds' output, and an empty Nexus makes nothing whatever they are
+        other = {"tourism": 1.3, "services": 0.5, "digital_assets": 0.2}
+        lifted = U.nexus_output(0.5, other=other)
+        self.assertAlmostEqual(lifted["out"]["tourism"], U.nexus_output(0.5)["out"]["tourism"] * 2.3)
+        self.assertEqual(U.nexus_output(0.0, other=other)["out_value"], 0.0)
+        self.assertAlmostEqual(U.nexus_multiplier(0.0, 15, 1.3), -2.3)
+
+
+def _static_modifiers():
+    """{modifier: {field: value}} of te_demog_um_modifiers.txt."""
+    text = UM_MODIFIERS.read_text(encoding="utf-8-sig")
+    return {name: {k: float(v) for k, v in re.findall(r"^\t([a-z_]+) = (-?[\d.]+)", body, re.M)}
+            for name, body in re.findall(r"^([a-z_]+) = \{(.*?)^\}", text, re.S | re.M)}
+
+
+class _NexusEngine(_UmEngine):
+    """_UmEngine with the state's Mind Upload Nexus: b:building_mind_upload_nexus = { } runs on the building (its
+    has_modifier, add_modifier and remove_modifier), root = { } inside it back on the state with prev the building, whose
+    prev.modifier:<axis> reads what its modifiers put there plus `other` (every other bonus), and prev.level etc. its
+    fields; the globals, debug_log lines and trigger_event are recorded."""
+
+    MODS = _static_modifiers()
+
+    def __init__(self, fixtures, building=None, **kwargs):
+        super().__init__(fixtures, **kwargs)
+        # the parser reads no quoted string: a debug_log line becomes its first two words, joined
+        self.effects = {k: re.sub(r'"(\S+) (\S+)[^"\n]*"', r"\1_\2", v) for k, v in self.effects.items()}
+        self.building = building
+        self._in_building = self._prev_building = False
+        self.globals, self.logs, self.events = set(), [], []
+
+    def read_axis(self, field):
+        b = self.building
+        return b["other"].get(field, 0.0) + sum(m * self.MODS[n].get(field, 0.0) for n, m in b["mods"].items())
+
+    def number(self, tok):
+        if tok.startswith("root."):
+            saved, self._in_building = self._in_building, False
+            try:
+                return self.number(tok[5:])
+            finally:
+                self._in_building = saved
+        if tok.startswith("prev."):
+            assert self._prev_building, tok
+            key = tok[5:]
+            return self.read_axis(key[9:]) if key.startswith("modifier:") else float(self.building[key])
+        return super().number(tok)
+
+    def _test(self, key, op, arg):
+        if key == "has_modifier" and self._in_building:
+            return arg in self.building["mods"]
+        if key == "has_building":
+            return self.building is not None
+        if key == "has_global_variable":
+            return arg in self.globals
+        if key == "b:building_mind_upload_nexus":
+            saved, self._in_building = self._in_building, True
+            try:
+                return self.holds(arg)
+            finally:
+                self._in_building = saved
+        return super()._test(key, op, arg)
+
+    def run(self, items):
+        batch = []
+
+        def flush():
+            super(_NexusEngine, self).run(list(batch))
+            batch.clear()
+        for item in items:
+            key, _, arg = item
+            if key == "b:building_mind_upload_nexus":
+                flush()
+                saved, self._in_building = self._in_building, True
+                try:
+                    self.run(arg)
+                finally:
+                    self._in_building = saved
+            elif key == "root" and self._in_building:
+                flush()
+                saved = (self._in_building, self._prev_building)
+                self._in_building, self._prev_building = False, True
+                try:
+                    self.run(arg)
+                finally:
+                    self._in_building, self._prev_building = saved
+            elif key == "add_modifier" and self._in_building:
+                flush()
+                mult = next((v for k, _, v in arg if k == "multiplier"), None)
+                self.building["mods"][next(v for k, _, v in arg if k == "name")] = 1.0 if mult is None else self.value(mult)
+            elif key == "remove_modifier" and self._in_building:
+                flush()
+                del self.building["mods"][arg]
+            elif key == "set_global_variable":
+                flush()
+                self.globals.add(next(v for k, _, v in arg if k == "name"))
+            elif key in ("debug_log", "debug_log_scopes", "trigger_event"):
+                flush()
+                if key != "debug_log_scopes":
+                    (self.logs if key == "debug_log" else self.events).append(arg)
+            else:
+                batch.append(item)
+        flush()
+
+
+def _nexus(util=0.5, other=None, full=True, owner=True):
+    """A state with a 3-level Nexus at 80% staffing, its owner's utilisation `util`, `other` the building's other bonuses
+    {field: sum}."""
+    building = {"mods": {}, "other": dict(other or {}), "level": 3.0, "occupancy": 0.8, "self_ownership_fraction": 0.1,
+                "country_ownership_fraction": 0.7, "private_ownership_fraction": 0.2}
+    eng = _NexusEngine({"te_history_month_index": 2400.0}, building=building,
+                       owner_vars={"te_dg_um_util": util} if owner else {},
+                       triggers={"te_demog_effects_run": full, "te_demog_cohorts_run": True})
+    return eng
+
+
+GOODS = [("out", "output", g, f) for g, f in P.UM_OUTPUT_FACTORS.items()] + \
+        [("in", "input", g, f) for g, f in P.UM_INPUT_FACTORS.items()]
+
+
+class TestNexusRefreshScript(unittest.TestCase):
+    """te_demog_um_nexus_refresh against demographics_uploads.nexus_multiplier (review B-I1): each good's axis sums to
+    (1 + its other bonuses) x utilisation x factor - 1, so an empty Nexus makes nothing whatever else lifts its goods."""
+
+    OTHER = {"goods_output_tourism_mult": 1.3, "goods_output_services_mult": 0.5,
+             "goods_output_digital_assets_mult": 0.2, "goods_input_electricity_mult": -0.1}
+
+    def check(self, eng, util):
+        for kind, axis, good, factor in GOODS:
+            field = f"goods_{axis}_{good}_mult"
+            other = self.OTHER.get(field, 0.0)
+            self.assertAlmostEqual(eng.vars[f"te_dg_um_k_{kind}_{good}"], U.nexus_multiplier(util, factor, other), 9)
+            self.assertAlmostEqual(1 + eng.read_axis(field), (1 + other) * util * factor, 9, field)
+
+    def test_a_filling_nexus(self):
+        eng = _nexus(0.5, self.OTHER)
+        eng.call("te_demog_um_nexus_refresh")
+        self.check(eng, 0.5)
+        self.assertAlmostEqual(eng.vars["te_dg_um_lvo"], 3 * 0.8)
+        self.assertEqual(eng.vars["te_dg_um_month"], 2400.0)
+
+    def test_a_month_on_the_other_bonuses_are_recovered(self):
+        """The read includes last month's modifier; the stored multiplier takes it back out."""
+        eng = _nexus(0.5, self.OTHER)
+        eng.call("te_demog_um_nexus_refresh")
+        eng.owner_vars["te_dg_um_util"] = 0.7
+        eng.call("te_demog_um_nexus_refresh")
+        self.check(eng, 0.7)
+
+    def test_an_empty_nexus_makes_nothing(self):
+        eng = _nexus(0.0, self.OTHER)
+        eng.call("te_demog_um_nexus_refresh")
+        for kind, axis, good, _f in GOODS:
+            self.assertAlmostEqual(eng.read_axis(f"goods_{axis}_{good}_mult"), -1.0, 9, good)
+        no_owner = _nexus(0.5, self.OTHER, owner=False)
+        no_owner.call("te_demog_um_nexus_refresh")
+        self.assertAlmostEqual(no_owner.read_axis("goods_output_tourism_mult"), -1.0, 9)
+
+    def test_outside_full_the_nexus_is_as_today(self):
+        eng = _nexus(0.5, self.OTHER)
+        eng.call("te_demog_um_nexus_refresh")
+        eng.trigger_fixtures["te_demog_effects_run"] = False
+        eng.call("te_demog_um_nexus_refresh")
+        self.assertEqual(eng.building["mods"], {})
+        self.assertNotIn("te_dg_um_lvo", eng.vars)
+
+    def test_the_self_check_arms_only_in_its_window(self):
+        """Review A-I2, B-M1: the advanced materials figure at 1 or more (u at least 1/4 with no other bonus) and u at
+        most 0.9, with each good's other bonuses in its expectation."""
+        for util, armed in ((0.2, False), (0.3, True), (0.95, False)):
+            with self.subTest(util=util):
+                eng = _nexus(util, self.OTHER)
+                eng.call("te_demog_um_nexus_refresh")
+                self.assertEqual("te_dg_um_chk_da" in eng.vars, armed)
+                if armed:
+                    self.assertAlmostEqual(eng.vars["te_dg_um_chk_da"], eng.read_axis("goods_output_digital_assets_mult"))
+                    self.assertAlmostEqual(eng.vars["te_dg_um_chk_am"], 8 * util - 1)
+                    self.assertEqual(len(eng.events), 1)
+
+    def test_the_ownership_line_once(self):
+        eng = _nexus(0.5)
+        eng.call("te_demog_um_nexus_refresh")
+        eng.call("te_demog_um_nexus_refresh")
+        lines = [line for line in eng.logs if "um_nexus_ownership" in line]
+        self.assertEqual(len(lines), 1)
+        for name in ("te_dg_um_own_self", "te_dg_um_own_country", "te_dg_um_own_private"):
+            self.assertNotIn(name, eng.vars)
+
+
+class TestCivilWar(unittest.TestCase):
+    """Review A-C1: the rebels keep no pool, so a rebel winner continues the nation's; its modifiers come back at once."""
+
+    def test_a_revolution_keeps_no_pool(self):
+        eng = _country(U.Pool(), [{"_levels": 5.0}])
+        eng.trigger_fixtures["is_revolutionary"] = True
+        eng.locals.update(te_dg_c_um_new=0.0, te_dg_c_um_elig=0.0, te_dg_c_deaths=1.0, te_dg_c_people=1.0,
+                          te_dg_c_um_l100=0.0, te_dg_c_um_lpm=0.0)
+        for name in [k for k in eng.vars if k.startswith("te_dg_um_")]:
+            del eng.vars[name]
+        eng.call("te_demog_um_country")
+        self.assertEqual([k for k in eng.vars if k.startswith("te_dg_um_")], [])
+        self.assertEqual(eng.modifiers, {})
+
+    def test_the_winner_takes_the_losers_pool_and_modifiers(self):
+        loser = {"te_dg_um_f": 2e6, "te_dg_um_m": 1e6, "te_dg_um_af": 0.0, "te_dg_um_am": 0.0, "te_dg_um_cap": 5e6,
+                 "te_dg_um_rmult": 2.5, "te_dg_um_share": 0.03, "te_dg_um_util": 0.6, "te_dg_cw_role": 1.0}
+        eng = _country(U.Pool(), [])
+        for name in [k for k in eng.vars if k.startswith("te_dg_um_")]:
+            del eng.vars[name]
+        eng.vars.update(te_cw_rebels_won=1.0, te_dg_um_f=10.0)     # a value of the rebels' own stands (the merge's rule)
+        eng.scopes["te_cw_loser"] = loser
+        eng.call("te_demog_um_repair_after_civil_war")
+        self.assertEqual(eng.vars["te_dg_um_f"], 10.0)
+        self.assertEqual(eng.vars["te_dg_um_m"], 1e6)
+        self.assertEqual(eng.vars["te_dg_um_cap"], 5e6)
+        self.assertEqual(eng.modifiers, {"te_demog_um_research": 2.5})
+
+    def test_a_loyalist_win_changes_nothing(self):
+        eng = _country(U.Pool(f=1.0), [])
+        eng.vars["te_cw_rebels_won"] = 0.0
+        before = dict(eng.vars)
+        eng.call("te_demog_um_repair_after_civil_war")
+        self.assertEqual(eng.vars, before)
 
 
 class TestWiring(unittest.TestCase):
     def test_the_hooks(self):
         text = lambda rel: (ROOT / rel).read_text(encoding="utf-8-sig")  # noqa: E731
         on = text("common/on_actions/te_demog_on_actions.txt")
-        self.assertIn("te_demog_um_nexus_refresh = yes", on.split("te_demog_state_yearly_on_action = {")[1].split("\n}")[0])
+        # the Nexus's goods: once a month (review B-I2), not on the yearly pulse, and at once for a level just built
+        self.assertNotIn("te_demog_um_nexus_refresh", on.split("te_demog_state_yearly_on_action = {")[1].split("\n}")[0])
+        self.assertIn("te_demog_um_nexus_refresh = yes", on.split("te_demog_um_monthly_on_action = {")[1].split("\n}")[0])
+        self.assertIn("te_demog_um_monthly_on_action", on.split("on_monthly_pulse_state = {")[1].split("\n}")[0])
+        nexus = text("common/on_actions/extra_on_actions.txt").split("mind_upload_nexus_on_action = {")[1].split("\n}")[0]
+        self.assertLess(nexus.index("mind_upload_nexus_construction = yes"), nexus.index("te_demog_um_nexus_refresh = yes"))
+        # the civil war's repair (review A-C1)
+        won = text("common/on_actions/te_civil_war_on_actions.txt").split("te_civil_war_on_won = {")[1].split("\n}")[0]
+        self.assertIn("te_demog_um_repair_after_civil_war = yes", won)
         eff = text("common/scripted_effects/te_demog_effects.txt")
         finish = eff.split("te_demog_step_finish = {")[1].split("\n}")[0]
         self.assertLess(finish.index("te_demog_cause_deaths_store = yes"), finish.index("te_demog_um_step = yes"))
@@ -473,8 +714,9 @@ class TestWiring(unittest.TestCase):
         """add_modifier's multiplier resolves against ROOT (the state on its pulse), and buildings have no variables:
         the Nexus's modifier reads root.var:, the state's copy, which is never removed."""
         um = UM_EFFECTS.read_text(encoding="utf-8-sig")
-        self.assertIn("multiplier = root.var:te_dg_um_util", um)
+        self.assertIn("multiplier = root.var:te_dg_um_k_$KIND$_$GOOD$", um)
         self.assertNotIn("remove_variable = te_dg_um_util", um)
+        self.assertNotIn("remove_variable = te_dg_um_k_", um)
         self.assertNotIn("remove_variable = te_dg_um_rmult", um)
 
 

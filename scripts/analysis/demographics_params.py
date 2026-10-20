@@ -120,7 +120,8 @@ TREATMENT_TYPE = {cause: f"state_{cause}_treatment_add" for cause in MEDICINE_CA
 # Local Police and Private Policing -0.02, Dedicated and Militarized -0.03), Restorative Justice -0.04,
 # Rehabilitation-Focused -0.08, the Ministry of Consumer Protection -0.08 a level, the Combustion Engine +0.30 and the
 # late-era lines (LATE_EXTERNAL_LINES). Work: Child Labor Allowed and Penal Labor Camps +0.10, Regulatory Bodies and
-# Worker Protections -0.10 a Workplace Safety level, Mind Backups.
+# Worker Protections -0.10 a Workplace Safety level. Mind Backups' restore of both is on BACKUP_TYPES (uploaded minds),
+# which plain_multiplier adds x last step's longevity care.
 MORTALITY_TYPES = {
     "external": ("state_external_mortality_mult",),
     "work": ("state_work_mortality_mult",),
@@ -884,11 +885,12 @@ LX_LIVING_TO = 100
 # stops at 150, so its threshold can't pass 135).
 LX_OLD_AGE_NONE = 130
 # The late-era lines (§8.4, call 19): under Full the census carries them; outside Full their flat lines stay (they sit on
-# the absorbed family since phase 3). Mental Health Awareness: accidents and violence -10% (suicide); Mind Backups:
-# accidents and violence and work deaths -50% (the backed-up are restored). autonomous_vehicles' -10% (traffic), §1.4's
-# proposal, is built as modern safety instead (SAFETY_TYPES, 2026-10-16).
-LATE_EXTERNAL_LINES = {"mental_health_awareness": -0.10, "mind_backups": -0.5}
-LATE_WORK_LINES = {"mind_backups": -0.5}
+# the absorbed family since phase 3). Mental Health Awareness: accidents and violence -10% (suicide). Mind Backups'
+# accidents, violence and work -50% (the backed-up are restored) sits on BACKUP_TYPES since uploaded minds' call 2
+# (2026-10-19), x the state's longevity care. autonomous_vehicles' -10% (traffic), §1.4's proposal, is built as modern
+# safety instead (SAFETY_TYPES, 2026-10-16).
+LATE_EXTERNAL_LINES = {"mental_health_awareness": -0.10}
+LATE_WORK_LINES = {}
 # Fertility (§3.1-§3.2, call 5): planned births follow the calendar for their timing and the body for whether it allows
 # them; unplanned births the body. Fecundity by biological age (after Leridon 2004), by five-year group start.
 FECUNDITY = {0: 1.0, 35: 0.9, 40: 0.7, 45: 0.35, 50: 0.0}

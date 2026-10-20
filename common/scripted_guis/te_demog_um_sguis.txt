@@ -38,10 +38,12 @@ te_demog_um_archived_sgui = {
 	effect = { }
 }
 
-# Mind Backups and the country's longevity care E (te_demog_lx_country_store): the Backed Up row.
+# Mind Backups and the country's longevity care E (te_demog_lx_country_store), while the census runs (Full or Display
+# only: both show the restore): the Backed Up row.
 te_demog_um_backup_sgui = {
 	scope = country
 	is_shown = {
+		te_demog_cohorts_run = yes
 		has_technology_researched = mind_backups
 		has_variable = te_dg_elig
 	}
@@ -54,6 +56,7 @@ te_demog_um_backup_sgui = {
 te_demog_um_state_backup_sgui = {
 	scope = state
 	is_shown = {
+		te_demog_cohorts_run = yes
 		exists = owner
 		owner = { has_technology_researched = mind_backups }
 		has_variable = te_dg_elig
@@ -94,9 +97,8 @@ te_demog_um_uploads_sgui = {
 	scope = country
 	is_shown = {
 		te_demog_effects_run = yes
-		has_variable = te_dg_um_new
-		has_variable = te_dg_people
-		var:te_dg_um_new > 0
+		has_variable = te_dg_um_rate
+		var:te_dg_um_rate > 0
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }

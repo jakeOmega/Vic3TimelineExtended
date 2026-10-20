@@ -174,7 +174,7 @@ def render_um_values():
     for name, value in k.items():
         o(f"te_demog_k_um_{name} = {{ value = {_lit(value)} }}")
     o("")
-    o("# The Nexus's factors under Full (te_demog_um_nexus_minds' fields; the self-check reads them).")
+    o("# The Nexus's factors under Full (te_demog_um_nexus_good: each good's line x utilisation x its factor).")
     for good, f in P.UM_OUTPUT_FACTORS.items():
         o(f"te_demog_k_um_out_{good} = {{ value = {_lit(f)} }}")
     for good, f in P.UM_INPUT_FACTORS.items():

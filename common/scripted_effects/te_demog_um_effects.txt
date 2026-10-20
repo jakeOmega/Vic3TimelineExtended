@@ -16,9 +16,11 @@
 #   te_dg_um_elig       its eligible deaths at its last step: cover x the treated parts' infection and chronic deaths
 #   te_dg_um_l100       Living to 100 counting uploads (the blended table less the uploads)
 # State variables (a state with a Nexus, from its pulse under Full):
-#   te_dg_um_util       the owner's utilisation, the copy the Nexus's modifier multiplies by (never removed: a modifier
-#                       reads it)
+#   te_dg_um_util       the owner's utilisation (under Full; never removed)
+#   te_dg_um_k_<out|in>_<good>  each Nexus good's modifier multiplier, the one its te_demog_um_nexus_<out|in>_<good>
+#                       reads (never removed: a modifier reads it)
 #   te_dg_um_lvo        the Nexus's levels x its staffing (the research line's cancel)
+#   te_dg_um_month      the month index of its last refresh (one a month)
 # Country variables (from its first census under Full with Mind Backups, a Nexus or minds):
 #   te_dg_um_f, te_dg_um_m    active minds, women's and men's
 #   te_dg_um_af, te_dg_um_am  archived minds (call 7): over capacity, frozen; restored first when capacity returns
@@ -26,9 +28,12 @@
 #   te_dg_um_free       capacity still free this year (each state's step takes its uploads off it)
 #   te_dg_um_phi        the share of eligible deaths this year's free capacity hosts (1 with none recorded)
 #   te_dg_um_new, te_dg_um_end, te_dg_um_dem  last year's uploads, chosen endings (call 5) and eligible deaths
+#   te_dg_um_rate       last year's uploads per 1,000 people (bodies), while there were any
 #   te_dg_um_util       active minds over capacity
 #   te_dg_um_share      minds (active and archived) over people and minds
 #   te_dg_um_rmult      the research cancel's multiplier (te_demog_um_research)
+# A revolutionary country keeps none of them, so a rebel winner inherits the nation's pool through the variable merge
+# (te_demog_um_repair_after_civil_war).
 # ============================================================================
 
 # THIS = a state, in te_demog_lx_begin after the age groups' own rates (te_demog_lx_group_rates_unscaled, the step's own
@@ -231,8 +236,9 @@ te_demog_um_country_add = {
 
 # THIS = ROOT = a country, in te_demog_country_census after its deaths by cause (demographics_uploads.census): deaths per
 # 1,000 are true deaths, its states' deaths less their uploads (call 6), whatever the rule (a state keeps its last
-# step's uploads until its next step), and Living to 100 counting uploads, by people. Then, under Full, in a country with Mind Backups, a Nexus or minds, the pool's
-# year: 0.1% of the active minds choose to end (call 5); capacity is its Nexus levels x 1,000,000 with Mind Backups, else
+# step's uploads until its next step), and Living to 100 counting uploads, by people. Then, under Full, in a country with
+# Mind Backups, a Nexus or minds that isn't a revolution's rebels (call 6's civil-war rule: they keep no pool, so a rebel
+# winner inherits the nation's; te_demog_um_repair_after_civil_war), the pool's year: 0.1% of the active minds choose to end (call 5); capacity is its Nexus levels x 1,000,000 with Mind Backups, else
 # none (call 3); archived minds come back first, into the room, then active minds over capacity are archived (call 7);
 # the year's free capacity and its share of last year's eligible deaths; the utilisation and the minds' share of the
 # people; the research line's cancel and the Devout's approval. Outside Full the pool stays as it was and the two
@@ -250,6 +256,15 @@ te_demog_um_country = {
 				multiply = 1000
 			}
 		}
+		# the uploads per 1,000, the deaths' hovers and the Added on Top figures' (te_demog_cdr_all: all the bodies' deaths)
+		set_variable = {
+			name = te_dg_um_rate
+			value = { value = local_var:te_dg_c_um_new divide = { value = local_var:te_dg_c_people min = 1 } multiply = 1000 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_um_rate }
+		remove_variable = te_dg_um_rate
 	}
 	# Living to 100 counting uploads, while a state has booked some
 	if = {
@@ -269,6 +284,7 @@ te_demog_um_country = {
 	if = {
 		limit = {
 			te_demog_effects_run = yes
+			NOT = { is_revolutionary = yes }
 			OR = {
 				has_technology_researched = mind_backups
 				has_variable = te_dg_um_cap
@@ -371,34 +387,87 @@ te_demog_um_country = {
 				divide = { value = local_var:te_dg_um_minds add = local_var:te_dg_c_people min = 1 }
 			}
 		}
-		# the Nexus's research line at the utilisation (its one refresh site; ROOT is the country)
-		if = {
-			limit = { has_modifier = te_demog_um_research }
-			remove_modifier = te_demog_um_research
-		}
+		# the Nexus's research line at the utilisation
 		set_variable = {
 			name = te_dg_um_rmult
 			value = { value = 1 subtract = var:te_dg_um_util multiply = local_var:te_dg_um_lvo }
 		}
-		if = {
-			limit = { var:te_dg_um_rmult > 0 }
-			add_modifier = { name = te_demog_um_research multiplier = var:te_dg_um_rmult }
-		}
-		# call 8, behind the switch (off by default): the Devout, while the minds pass a share of the people
-		if = {
-			limit = { has_modifier = te_demog_um_devout }
-			remove_modifier = te_demog_um_devout
-		}
-		if = {
-			limit = {
-				te_demog_k_um_politics > 0
-				var:te_dg_um_share > te_demog_k_um_devout_share
-			}
-			add_modifier = { name = te_demog_um_devout }
-		}
+		te_demog_um_country_modifiers = yes
 	}
 	else = {
 		te_demog_um_clear = yes
+	}
+}
+
+# THIS = ROOT = a country under Full: the research cancel and the Devout's approval from its stored figures (te_dg_um_rmult,
+# te_dg_um_share), the two country modifiers' one refresh site: the census (te_demog_um_country) and, for a revolution's
+# winner, which inherits the figures but no modifier, te_demog_um_repair_after_civil_war.
+te_demog_um_country_modifiers = {
+	if = {
+		limit = { has_modifier = te_demog_um_research }
+		remove_modifier = te_demog_um_research
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_um_rmult
+			var:te_dg_um_rmult > 0
+		}
+		add_modifier = { name = te_demog_um_research multiplier = var:te_dg_um_rmult }
+	}
+	# call 8, behind the switch (off by default): the Devout, while the minds pass a share of the people
+	if = {
+		limit = { has_modifier = te_demog_um_devout }
+		remove_modifier = te_demog_um_devout
+	}
+	if = {
+		limit = {
+			te_demog_k_um_politics > 0
+			has_variable = te_dg_um_share
+			var:te_dg_um_share > te_demog_k_um_devout_share
+		}
+		add_modifier = { name = te_demog_um_devout }
+	}
+}
+
+# THIS = ROOT = a civil war's winner (te_civil_war_on_won, between resolve and clear): the winner continues the nation.
+# The rebels keep no pool (te_demog_um_country skips a revolutionary country), so a rebel winner holds the loser's
+# te_dg_um_* through the engine's variable merge; each is taken again from the loser where the winner holds none, and the
+# two country modifiers, which no winner inherits, come back at once rather than at the next 31 December.
+te_demog_um_repair_after_civil_war = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			exists = scope:te_cw_loser
+		}
+		te_demog_um_inherit = { NAME = te_dg_um_f }
+		te_demog_um_inherit = { NAME = te_dg_um_m }
+		te_demog_um_inherit = { NAME = te_dg_um_af }
+		te_demog_um_inherit = { NAME = te_dg_um_am }
+		te_demog_um_inherit = { NAME = te_dg_um_lv }
+		te_demog_um_inherit = { NAME = te_dg_um_cap }
+		te_demog_um_inherit = { NAME = te_dg_um_free }
+		te_demog_um_inherit = { NAME = te_dg_um_phi }
+		te_demog_um_inherit = { NAME = te_dg_um_new }
+		te_demog_um_inherit = { NAME = te_dg_um_end }
+		te_demog_um_inherit = { NAME = te_dg_um_dem }
+		te_demog_um_inherit = { NAME = te_dg_um_util }
+		te_demog_um_inherit = { NAME = te_dg_um_share }
+		te_demog_um_inherit = { NAME = te_dg_um_rmult }
+		te_demog_um_country_modifiers = yes
+	}
+}
+
+# Country, ROOT = a civil war's winner, scope:te_cw_loser existing: the loser's variable $NAME$, where the winner holds none
+# (te_demog_ms_inherit's rule, written without ?= for the test interpreter).
+te_demog_um_inherit = {
+	if = {
+		limit = {
+			NOT = { has_variable = $NAME$ }
+			scope:te_cw_loser = { has_variable = $NAME$ }
+		}
+		set_variable = { name = $NAME$ value = scope:te_cw_loser.var:$NAME$ }
 	}
 }
 
@@ -436,25 +505,18 @@ te_demog_um_clear_outside_full = {
 
 # ---- The Nexus (call 6) ----------------------------------------------------------------------------------------------
 
-# THIS = ROOT = a state, on its yearly pulse whatever the rule (te_demog_state_yearly_on_action): the two building
-# modifiers' one refresh site. Under Full every Nexus makes its production method's goods x the owner's utilisation x
-# each good's factor (te_demog_um_nexus_off takes the method's goods away, te_demog_um_nexus_minds gives them back at
-# the utilisation, read through the state's copy root.var:te_dg_um_util), and stores its levels x staffing for the
+# THIS = ROOT = a state, once a month (te_demog_um_monthly_on_action) and when a construction site adds a level
+# (mind_upload_nexus_on_action: each level is a new building): the Nexus's goods modifiers' one refresh effect, whatever
+# the rule. Under Full each good of the Nexus's method takes its own modifier, te_demog_um_nexus_<out|in>_<good> (its axis
+# at 1), at a multiplier (1 + the building's other bonuses for that good) x (the owner's utilisation x the good's factor
+# - 1), so the good comes to the method's line x the utilisation x the factor x (1 + those bonuses): an empty Nexus makes
+# and uses nothing, whatever else lifts its goods (te_demog_um_nexus_good). It stores its levels x staffing for the
 # research line's cancel. An owner with no minds (none yet, or no Mind Backups) has a Nexus that makes nothing. Outside
-# Full both come off and the Nexus produces as it does today.
+# Full every modifier comes off and the Nexus produces as it does today.
 te_demog_um_nexus_refresh = {
 	if = {
 		limit = { has_building = building_mind_upload_nexus }
-		b:building_mind_upload_nexus = {
-			if = {
-				limit = { has_modifier = te_demog_um_nexus_off }
-				remove_modifier = te_demog_um_nexus_off
-			}
-			if = {
-				limit = { has_modifier = te_demog_um_nexus_minds }
-				remove_modifier = te_demog_um_nexus_minds
-			}
-		}
+		set_variable = { name = te_dg_um_month value = te_history_month_index }
 		if = {
 			limit = { te_demog_effects_run = yes }
 			set_variable = { name = te_dg_um_util value = 0 }
@@ -473,21 +535,24 @@ te_demog_um_nexus_refresh = {
 					change_variable = { name = te_dg_um_lvo multiply = prev.occupancy }
 				}
 			}
-			b:building_mind_upload_nexus = {
-				add_modifier = { name = te_demog_um_nexus_off }
-			}
-			if = {
-				limit = { var:te_dg_um_util > 0 }
-				b:building_mind_upload_nexus = {
-					add_modifier = { name = te_demog_um_nexus_minds multiplier = root.var:te_dg_um_util }
-				}
-			}
-			# once a game: whether the engine applies the scaling (te_debug_demog.130 a week on)
-			te_debug_demog_um_selfcheck_start = yes
 		}
 		else_if = {
 			limit = { has_variable = te_dg_um_lvo }
 			remove_variable = te_dg_um_lvo
+		}
+		te_demog_um_nexus_good = { KIND = out AXIS = output GOOD = digital_assets }
+		te_demog_um_nexus_good = { KIND = out AXIS = output GOOD = tourism }
+		te_demog_um_nexus_good = { KIND = out AXIS = output GOOD = fine_art }
+		te_demog_um_nexus_good = { KIND = out AXIS = output GOOD = services }
+		te_demog_um_nexus_good = { KIND = in AXIS = input GOOD = electricity }
+		te_demog_um_nexus_good = { KIND = in AXIS = input GOOD = electronic_components }
+		te_demog_um_nexus_good = { KIND = in AXIS = input GOOD = digital_access }
+		te_demog_um_nexus_good = { KIND = in AXIS = input GOOD = advanced_materials }
+		if = {
+			limit = { te_demog_effects_run = yes }
+			# once a game: whether the engine applies the scaling (te_debug_demog.130 a week on), and who owns the levels
+			te_debug_demog_um_selfcheck_start = yes
+			te_debug_demog_um_ownership_info = yes
 		}
 	}
 	else_if = {
@@ -496,20 +561,94 @@ te_demog_um_nexus_refresh = {
 	}
 }
 
-# THIS = ROOT = a state with a Nexus, just after te_demog_um_nexus_refresh applied its modifiers under Full: once a game,
-# the expected digital assets output and advanced materials input modifiers (the factors x the utilisation, less the
-# -100%) for te_debug_demog.130 to read off the building a week on. Only once the utilisation puts the output modifier at
-# 1 or more (te_debug_demog_um_chk_clear), well away from what the building would read without the two (0.2 at most)
-# or with the minds' multiplier at 0 (-1), so OK can't be a false pass.
+# THIS = ROOT = a state with a Nexus, in te_demog_um_nexus_refresh: one good's modifier ($KIND$ out or in, $AXIS$ output or
+# input, $GOOD$ the good; demographics_uploads.nexus_multiplier). The building's read of the good's axis less what this
+# modifier put there (te_dg_um_k_$KIND$_$GOOD$, stored, since an add and a remove aren't visible in the block that makes
+# them) is everything else that lifts the good; local te_dg_um_oth_$KIND$_$GOOD$ keeps it for the self-check. Under Full
+# the modifier goes back on at (1 + that, at least 0) x (utilisation x factor - 1).
+te_demog_um_nexus_good = {
+	b:building_mind_upload_nexus = {
+		root = {
+			set_local_variable = { name = te_dg_um_oth_$KIND$_$GOOD$ value = prev.modifier:goods_$AXIS$_$GOOD$_mult }
+		}
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_um_k_$KIND$_$GOOD$
+			b:building_mind_upload_nexus = { has_modifier = te_demog_um_nexus_$KIND$_$GOOD$ }
+		}
+		change_local_variable = { name = te_dg_um_oth_$KIND$_$GOOD$ subtract = var:te_dg_um_k_$KIND$_$GOOD$ }
+	}
+	b:building_mind_upload_nexus = {
+		if = {
+			limit = { has_modifier = te_demog_um_nexus_$KIND$_$GOOD$ }
+			remove_modifier = te_demog_um_nexus_$KIND$_$GOOD$
+		}
+	}
+	if = {
+		limit = { te_demog_effects_run = yes }
+		set_variable = {
+			name = te_dg_um_k_$KIND$_$GOOD$
+			value = {
+				value = local_var:te_dg_um_oth_$KIND$_$GOOD$
+				add = 1
+				min = 0
+				multiply = { value = var:te_dg_um_util multiply = te_demog_k_um_$KIND$_$GOOD$ subtract = 1 }
+			}
+		}
+		b:building_mind_upload_nexus = {
+			add_modifier = { name = te_demog_um_nexus_$KIND$_$GOOD$ multiplier = root.var:te_dg_um_k_$KIND$_$GOOD$ }
+		}
+	}
+}
+
+# THIS = ROOT = a state with a Nexus, under Full in te_demog_um_nexus_refresh: once a game, who owns the Nexus's levels
+# (the owner expects national ownership; the play-test list asks for the line). An info line, no verdict.
+te_debug_demog_um_ownership_info = {
+	if = {
+		limit = { NOT = { has_global_variable = te_demog_info_um_ownership_done } }
+		set_global_variable = { name = te_demog_info_um_ownership_done value = yes }
+		b:building_mind_upload_nexus = {
+			root = {
+				set_variable = { name = te_dg_um_own_self value = prev.self_ownership_fraction }
+				set_variable = { name = te_dg_um_own_country value = prev.country_ownership_fraction }
+				set_variable = { name = te_dg_um_own_private value = prev.private_ownership_fraction }
+				set_variable = { name = te_dg_um_own_levels value = prev.level }
+			}
+		}
+		debug_log = "TE_INFO um_nexus_ownership levels=[THIS.Var('te_dg_um_own_levels').GetValue|0] self=[THIS.Var('te_dg_um_own_self').GetValue|3] country=[THIS.Var('te_dg_um_own_country').GetValue|3] private=[THIS.Var('te_dg_um_own_private').GetValue|3] util=[THIS.Var('te_dg_um_util').GetValue|3] (who holds the levels a construction site builds; the owner expects national ownership) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		remove_variable = te_dg_um_own_self
+		remove_variable = te_dg_um_own_country
+		remove_variable = te_dg_um_own_private
+		remove_variable = te_dg_um_own_levels
+	}
+}
+
+# THIS = ROOT = a state with a Nexus, under Full just after te_demog_um_nexus_refresh reapplied its modifiers: once a game,
+# the building's expected digital assets output and advanced materials input modifiers, each everything else on the
+# good (the locals te_dg_um_oth_*) plus this build's (te_dg_um_k_*), for te_debug_demog.130 to read off the building a
+# week on. Only at a utilisation of 0.9 or less with the advanced materials figure at 1 or more: far from what either
+# axis reads without the modifier (its other bonuses), from a multiplier read as 0 (-1) and from one the engine took
+# at 1, so OK can't be a false pass.
 te_debug_demog_um_selfcheck_start = {
+	set_local_variable = {
+		name = te_dg_um_chk_da_l
+		value = { value = local_var:te_dg_um_oth_out_digital_assets add = var:te_dg_um_k_out_digital_assets }
+	}
+	set_local_variable = {
+		name = te_dg_um_chk_am_l
+		value = { value = local_var:te_dg_um_oth_in_advanced_materials add = var:te_dg_um_k_in_advanced_materials }
+	}
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_demog_selfcheck_um_done }
-			te_debug_demog_um_chk_clear > 0
+			local_var:te_dg_um_chk_am_l >= 1
+			var:te_dg_um_util <= 0.9
 		}
 		set_global_variable = { name = te_demog_selfcheck_um_done value = yes }
-		set_variable = { name = te_dg_um_chk_da value = te_debug_demog_um_chk_da_expected }
-		set_variable = { name = te_dg_um_chk_am value = te_debug_demog_um_chk_am_expected }
+		set_variable = { name = te_dg_um_chk_da value = local_var:te_dg_um_chk_da_l }
+		set_variable = { name = te_dg_um_chk_am value = local_var:te_dg_um_chk_am_l }
 		set_variable = { name = te_dg_um_chk_util value = var:te_dg_um_util }
 		debug_log = "TE_SELF_CHECK START um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] expected_digital_assets=[THIS.Var('te_dg_um_chk_da').GetValue|3] expected_advanced_materials=[THIS.Var('te_dg_um_chk_am').GetValue|3] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
