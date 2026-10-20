@@ -26,8 +26,9 @@
 # te_mon_stance_band_applied).
 #
 #   te_policy_rate_target   regime range, integer   the dial's setting (§5)
-#   te_policy_rate          regime range, fractional  drifts toward the target
-#                                                   at 1/3 pp per month (2/3 digital)
+#   te_policy_rate          regime range, fractional  drifts toward the target by
+#                                                   max(1/3 pp, a sixth of the gap)
+#                                                   a month, x2 digital (#1084)
 #   te_mon_virtual_target   to 5 under the floor    §0.12: where a mandate bank would set its
 #   te_mon_virtual_rate     to 5 under the floor    target and rate without the floor; equal to
 #                                                   the real pair except while it buys assets
@@ -512,11 +513,11 @@ te_mon_era_base = {
 #   gold standard        0 to 15 (§5.1). What constrains the dial is no longer
 #                        a band but GOLD: a rate under the world rate bleeds
 #                        reserves and then peg confidence (§12.2-12.3, step 10)
-#   gold, suspended      0 to 25 — "acts as fiat" for the suspension (§12.3)
+#   gold, suspended      0 to 60 — "acts as fiat" for the suspension (§12.3)
 #   gold, defending      world rate + 4 to 15, for the twelve months §12.3's
 #                        Defend option forces
-#   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
-#   fiat currency        0 to 25
+#   digital currency     -3 to 60 (no cash to hoard, so negative rates bite)
+#   fiat currency        0 to 60 (25 until #1084, owner 2026-10-20)
 #
 # WHY COMMODITY MONEY GETS A BAND AND GOLD DOES NOT. Both promise metal, but
 # only a gold standard has the §12.2 machinery to make the promise bite: a
@@ -624,11 +625,31 @@ te_mon_floor_threshold = {
 	add = 0.01
 }
 
+# The ceiling of a FREE dial — fiat, digital, and a gold standard while
+# convertibility is suspended, which acts as fiat — in pp. 60 since #1084
+# (owner, 2026-10-20; it was 25). At 25 a big fiat bank that let inflation
+# past about 20% could not win it back: the mandate formula asks for about
+# twice core inflation, so it hit 25 at about 12%, and above about 21% the
+# real rate turned negative and the stance read loose while prices ran.
+# China, India and the North American Union all sat at 34-46% until the
+# hyperinflation crisis's currency reform. 60 lets a mandate answer a 30%
+# inflation with a real rate of its own.
+te_mon_target_ceiling_free = {
+	value = 60
+}
+
+# A convertible gold standard's ceiling, in pp (§5.1). Gold keeps its own
+# discipline — a high rate draws gold in and pays for it in a tight stance —
+# and #1084 left it here.
+te_mon_target_ceiling_gold = {
+	value = 15
+}
+
 te_mon_target_max = {
-	value = 25
+	value = te_mon_target_ceiling_free
 	if = {
 		limit = { te_mon_is_on_gold = yes }
-		value = 15
+		value = te_mon_target_ceiling_gold
 	}
 	else_if = {
 		limit = {
@@ -659,14 +680,76 @@ te_mon_drift_speed_factor = {
 	min = 0.1
 }
 
-# How far the policy rate moves toward its target in one month, in pp. A third
-# of a point at the baseline — a point a quarter, so a 5pp swing takes fifteen
-# months and reversals are slow by construction (§4). Rendered in the dashboard's
-# Policy Rate and Rate Target tooltips, so the player reads the real number
-# rather than prose about thirds.
+# The LEAST the policy rate moves toward its target in one month, in pp: a third
+# of a point at the baseline, scaled by te_mon_drift_speed_factor. Rendered in
+# the dashboard's Policy Rate and Rate Target tooltips, so the player reads the
+# real number rather than prose about thirds.
+#
+# A MONTH'S STEP IS THIS OR A SIXTH OF THE DISTANCE, WHICHEVER IS LARGER, BOTH
+# SCALED BY THE SPEED FACTOR (#1084, owner 2026-10-20) — te_mon_drift_step_up_now
+# and te_mon_drift_step_down_now below. Within two points of the target the
+# third of a point is the larger, so small moves are slow by construction (§4)
+# as they always were: a point a quarter. Further off, the step grows with the
+# gap, so a bank that has to go from 25 to 50 is not six years on the way:
+# about 1pp a month at 6 points off and 4pp at 25. A flat third of a point is
+# what trapped big fiat banks at the old 25 ceiling while inflation ran away
+# (te_mon_target_ceiling_free). Digital currency's +100% doubles the whole
+# step, the sixth as well as the third, so its edge over fiat stays a
+# doubling at every distance.
 te_mon_drift_step = {
 	value = 0.3333
 	multiply = te_mon_drift_speed_factor
+}
+
+# The share of the remaining distance a month's step covers when that is more
+# than te_mon_drift_step, as a divisor: a sixth (#1084). A divisor rather than
+# 0.1667, so the share is exact (and a literal of more than five decimals would
+# read as 0).
+te_mon_drift_gap_divisor = {
+	value = 6
+}
+
+# The same share in percent, after the speed factor, for the tooltips: about
+# 17% a month at the baseline, 33% under digital currency.
+te_mon_drift_gap_share_pct = {
+	value = 100
+	divide = te_mon_drift_gap_divisor
+	multiply = te_mon_drift_speed_factor
+}
+
+# THIS MONTH'S STEP UP and DOWN, in pp, for te_monetary_drift_rate_toward ONLY.
+# Both read var:te_mon_work, which that effect has just set to target - rate,
+# so they mean nothing anywhere else and must never be rendered: a tooltip
+# would read a scratch variable last written by some other step.
+#
+#   up    max(te_mon_drift_step,      gap x speed / 6), at most the gap
+#   down  max(te_mon_drift_step_down, |gap| x speed / 6), at most the gap
+#
+# The emergency factor (te_mon_drift_step_down) raises only the LEAST step of
+# a cut, to a point a month: a mandate-run bank in a slump that is far above
+# its target already cuts a sixth of the distance, and tripling that as well
+# would take half the gap in a month. "At most the gap" is a guard, not a
+# rule: the effect only steps when the gap is past te_mon_drift_step_threshold,
+# and a sixth is less than the gap for any speed factor under 6.
+te_mon_drift_step_up_now = {
+	value = var:te_mon_work
+	divide = te_mon_drift_gap_divisor
+	multiply = te_mon_drift_speed_factor
+	min = te_mon_drift_step
+	max = var:te_mon_work
+}
+
+te_mon_drift_gap_down = {
+	value = var:te_mon_work
+	multiply = -1
+}
+
+te_mon_drift_step_down_now = {
+	value = te_mon_drift_gap_down
+	divide = te_mon_drift_gap_divisor
+	multiply = te_mon_drift_speed_factor
+	min = te_mon_drift_step_down
+	max = te_mon_drift_gap_down
 }
 
 # The distance that has to remain before another step is worth taking, rather
@@ -691,13 +774,15 @@ te_mon_drift_step_threshold_neg = {
 	multiply = -1
 }
 
-# How far a CUT moves the rate in one month (2026-09-25): the ordinary step,
-# times te_mon_emergency_cut_factor while te_mon_emergency_cuts holds — a bank
-# running its mandate, with the financial cycle in stagnation or worse. A
+# The LEAST a CUT moves the rate in one month (2026-09-25): the ordinary least
+# step, times te_mon_emergency_cut_factor while te_mon_emergency_cuts holds — a
+# bank running its mandate, with the financial cycle in stagnation or worse. A
 # point a month at the baseline, two under digital currency. Hikes always use
 # te_mon_drift_step, so tightening stays slow and deliberate while a bank that
 # has just watched a boom break can get out of the way within a season rather
-# than a year (docs/audits/banking_cycle_simulation.md §12).
+# than a year (docs/audits/banking_cycle_simulation.md §12). Since #1084 a
+# month's cut is this or a sixth of the distance, whichever is larger
+# (te_mon_drift_step_down_now).
 te_mon_drift_step_down = {
 	value = te_mon_drift_step
 	if = {
@@ -971,8 +1056,11 @@ te_mon_forecast_error_bound_neg = {
 
 # --- The stance channel into the banking cycle (§8, §16.3) ------------------
 
-# The stance gap, clamped to -2..+4 for the purpose of pushing the cycle (and,
-# through te_mon_pressure_stance, of pushing inflation).
+# The stance gap, clamped to -2..+4 for the purpose of pushing the cycle.
+# te_mon_pressure_stance, which pushes inflation, read this too until #1084; it
+# now has its own value, te_mon_stance_gap_clamped_pressure, with the same loose
+# bound and a tight one of 10. This one is the cycle's alone, and its bounds
+# are the 2026-09-22 ruling's.
 #
 # The gap itself is clamped to +/-10 (§8); this tighter bound is the one the
 # cycle sees, so that a country parked at an extreme stance settles inside the
@@ -1250,10 +1338,11 @@ te_mon_deanchor_span = {
 # --- The §9.1 pressure terms ------------------------------------------------
 
 # Loose money, in pp of pressure per pp of stance gap: pressure takes
-# -0.4 x te_mon_stance_gap_clamped (the same -2..+4 clamp the cycle channel
-# uses — so loose money is worth at most +0.8pp of pressure and tight money
-# -1.6pp; the loose side was +1.6pp until the clamp's 2026-09-22 narrowing).
-# Positive here, negated by the consumer, so the sign lives in one place.
+# -0.4 x te_mon_stance_gap_clamped_pressure (-2..+10 — so loose money is worth at
+# most +0.8pp of pressure and tight money -4pp; the loose side was +1.6pp until
+# the shared clamp's 2026-09-22 narrowing, and the tight side -1.6pp until the
+# stance term got its own tight bound in #1084). Positive here, negated by the
+# consumer, so the sign lives in one place.
 te_mon_stance_pressure_coeff = {
 	value = 0.4
 }
@@ -2204,19 +2293,47 @@ te_mon_inflation_core_read = {
 # --- The §9.1 pressure terms, one script value each -------------------------
 # HIDDEN — printable only from te_debug_monetary.1 (see the section header).
 
-# Loose money: -0.4 x the clamped stance gap. te_mon_stance_gap_clamped is the
-# same -2..+4-clamped read the cycle channel uses, and it is 0 for every country
-# without a dial — so bankless, commodity-money, crypto and dollarised
-# countries simply drop this term, which is §9.1's intent.
+# Loose money: -0.4 x the clamped stance gap, -2..+10. The loose bound is the
+# cycle channel's (te_mon_stance_gap_clamp_loose); the TIGHT bound is this
+# term's own, te_mon_pressure_stance_clamp_tight (#1084, owner 2026-10-20). At
+# the cycle's +4 a tight stance took at most 1.6pp off inflation, less than a
+# labour code's wage pressure, so a bank that had let inflation past 20% could
+# hike to its ceiling and still not win it back. 10 is the gap's own clamp
+# (§8): a real rate ten points over neutral now takes 4pp off. The cycle keeps
+# +4, so a hard disinflation does not also drive momentum through its bar.
+# The gap is 0 for every country without a dial — so bankless,
+# commodity-money, crypto and dollarised countries simply drop this term, which
+# is §9.1's intent.
 #
 # IT IS LAST MONTH'S GAP (ruling P5). Step 8 rewrites te_mon_stance_gap later
 # in the same pulse; §16.3 already tolerates a one-month-old gap for the cycle
 # channel, and the alternative — moving the stance ahead of inflation — would
 # make the gap depend on an inflation figure computed from it.
 te_mon_pressure_stance = {
-	value = te_mon_stance_gap_clamped
+	value = te_mon_stance_gap_clamped_pressure
 	multiply = te_mon_stance_pressure_coeff
 	multiply = -1
+}
+
+# The stance term's own tight bound, in pp of stance gap (#1084).
+te_mon_pressure_stance_clamp_tight = {
+	value = 10
+}
+
+# The stance gap as the inflation term reads it: the cycle's loose bound, this
+# term's tight one. Guarded like te_mon_stance_gap_clamped, and kept apart from
+# it — and from the multiply in te_mon_pressure_stance — for the reason spelled
+# out there: a bound placed after a multiply guards the wrong quantity.
+te_mon_stance_gap_clamped_pressure = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_stance_gap }
+		add = {
+			value = var:te_mon_stance_gap
+			min = te_mon_stance_gap_clamp_loose
+			max = te_mon_pressure_stance_clamp_tight
+		}
+	}
 }
 
 # Speculative excess feeding prices once bubble_pressure reaches

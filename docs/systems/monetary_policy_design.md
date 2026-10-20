@@ -2168,7 +2168,7 @@ tax level.
 ## 4. The rate stack
 
 ```
-policy_rate   drifts toward target at 1/3 pp per month     has a dial: national bank on commodity money
+policy_rate   drifts toward target, max(1/3 pp, gap/6)     has a dial: national bank on commodity money
                                                             (narrowly, §0.6) / gold / fiat / digital
               = world_rate + expected_inflation + 1.0       no dial: no national bank, or crypto with or
                                                             without one
@@ -2202,15 +2202,22 @@ engine rate = ( 0.20 − 0.20 + 0.01 × rate_paid_pts + residual vanilla _add )
 leakage is visible.
 
 - **Dial:** integer target, 1pp steps, range by regime (§5) — five settings wide under
-  commodity money, 0–15 on gold, 26 or 29 under fiat / digital. Drift 1/3 pp per month
-  (1pp per quarter). A 5pp swing takes 15 months — reversals are slow by construction.
+  commodity money, 0–15 on gold, 61 or 64 under fiat / digital (26 or 29 until #1084).
+  Drift 1/3 pp per month (1pp per quarter) within two points of the target, and **a sixth
+  of the distance** further out (owner, 2026-10-20, #1084): a 25-point gap closes most of
+  the way in a year where it took six. Small reversals are still slow by construction; a
+  bank that has to chase a runaway inflation is no longer held to a point a quarter. The
+  law's speed factor scales the whole step, so digital currency moves a third of the
+  distance and at least 2/3 pp.
   A **delegated** target is the mandate formula rounded to the nearest integer, with
   hysteresis (it only moves when the formula differs from the current target by ≥ 0.75) so
   it never flaps.
 - **Emergency cuts (2026-09-25):** a bank running its mandate (delegated, AI or CBI —
   `te_mon_emergency_cuts`) **cuts** at `te_mon_emergency_cut_factor` × the step — 1pp a
   month, 2 under digital — while the financial cycle is in stagnation or worse
-  (`te_mon_drift_step_down`). Hikes, and a manual dial, keep the third of a point. Without
+  (`te_mon_drift_step_down`). Hikes, and a manual dial, keep the third of a point. Since
+  #1084 the factor raises only the *least* step: a cut far from its target already moves a
+  sixth of the distance, and tripling that too would halve the gap in a month. Without
   it a bank caught at 12% by a crash stayed maximally tight for over a year of panic on the
   way down (`docs/audits/banking_cycle_simulation.md` §12). **Owner decision:** it is
   scoped to mandate-run banks so the manual dial's "reversals are slow by construction"
@@ -2232,9 +2239,33 @@ Monetary policy is the intersection of four existing law groups. No new laws in 
 |---|---|---|---|
 | `law_commodity_money` | **`world_rate − 1` to `+ 3`** with a national bank (five settings); **none** without one | the world price of the metal — the band is the constraint, and there are no specie flows behind it (§0.6 R5) | no monetisation, no QE; expected inflation pinned to 0; the bankless spread only while bankless |
 | `law_gold_standard` | target 0–15 | **gold flows** (§12). Interim before P3: target clamped to `era_base` ±2pp | credibility: premium −1pp; expected inflation anchored at 0; deflation bias; **no QE** — its crisis tool is suspending convertibility (§12.3, phase 3) |
-| `law_fiat_currency` | target 0–25 | **inflation** (§9) | monetisation lever; QE at the floor; no credibility bonus — it must be earned |
-| `law_digital_currency` | target **−3**–25 | inflation | negative rates (no cash to hoard); drift twice as fast (better transmission) |
+| `law_fiat_currency` | target 0–60 (0–25 until #1084) | **inflation** (§9) | monetisation lever; QE at the floor; no credibility bonus — it must be earned |
+| `law_digital_currency` | target **−3**–60 (−3–25 until #1084) | inflation | negative rates (no cash to hoard); drift twice as fast (better transmission) |
 | `law_decentralized_cryptocurrency` | **none** | pays world rate + spread | fixed supply: inflation pulled toward −1%; no monetisation, no QE, no lender of last resort |
+
+**The free dial reaches 60 (owner, 2026-10-20, #1084).** At 25 a big fiat bank that let
+inflation past about 12% could not win it back: the mandate formula asks for about twice core
+inflation, so it hit the ceiling at about 12%; above about 21% the real rate turned negative,
+the stance read loose, and only the crisis event's currency reform at 50% ended it. China,
+India and the North American Union sat at 34–46% in a 2045–2058 run. The ceiling
+(`te_mon_target_ceiling_free`) is 60 for fiat, digital and a suspended gold standard (which
+acts as fiat, §12.3); a convertible gold standard keeps 15 (`te_mon_target_ceiling_gold`)
+and commodity money its band. With the proportional drift (§4) and the stance term's own
+tight clamp (§9.1), the simulator brings a delegated fiat bank from China's 2048 state
+(core 36, expected 32, rate 25) under 10% in a median of 14.5 years (9.7 under independence on
+Inflation Targeting) with no run reaching 50% and an average of 25% over the first decade,
+where the shipped dial reached 50% in 98% of runs (40% on average) and got out only by a
+currency reform. The cost
+is a stronger and dearer dial: real rates in double digits during a disinflation, and the
+recession that comes with them. The rate-paid clamp of 60 (§4) can now bind, but only for a
+dial left at the ceiling while inflation is low, which no mandate does.
+
+**Open, for the owner: a proportional step rewards overshooting the target.** A player who
+wants the rate 6 points higher can shift-click the target to 60 for one month (the rate moves
+a sixth of the way there, several points) and then set the real target, rather than wait out
+the smaller steps toward it. It is a click a month, not a standing exploit, and the outcome is
+the same rate a little sooner; a cap on the step, or measuring a manual dial's distance to its
+own last target, would close it if play shows it matters.
 
 The existing volatility modifiers on these laws stay. **Minting is the missing fiscal axis
 (proposed — owner to decide).** Vanilla minting *is* seigniorage — roughly 5% of GDP a year
@@ -2425,7 +2456,12 @@ country whose dial was never touched sat at its seeded whole point while inflati
 
 **AI.** AI countries are always delegated. Mandate by rule: gold standard → peg defence;
 at war, or `scaled_debt ≥ 0.5` → growth; otherwise the dual mandate. Since #799 the rule waits
-out the year's lock between two ordinary mandates, and under CBI an act replaces it. This runs inside the
+out the year's lock between two ordinary mandates, and under CBI an act replaces it. *#1084
+(2026-10-20):* the AI's target is the same mandate formula, clamped only by
+`te_mon_target_max`, so the 60 ceiling reaches it with nothing else to change; nothing in the
+rule or the formulas assumed 25. The investigation found the `scaled_debt ≥ 0.5` switch to
+growth helped push China into the trap (a 2045 deficit of 30% of GDP put it on growth at 13%
+inflation); it is left as it is, a clean-up for a later call. This runs inside the
 monthly update for `is_player = no` — a **documented exception** to
 `mod_systems.md` "Do not move AI logic out of the buttons". Precedent:
 `common/journal_entries/je_covert_warfare.txt:125-202`. That rule protects the discrete
@@ -2612,7 +2648,11 @@ the tight side keeps steady-state momentum inside the ±5 bar, the loose side wa
 −4 on 2026-09-22 because a dial left where it was seeded saturated it for ever, and at the
 bound the channel no longer told "somewhat loose" from "catastrophically loose" —
 `docs/audits/banking_cycle_simulation.md` F5) acts on the cycle **through the variable
-update, not through a visible modifier**:
+update, not through a visible modifier**. *The clamp is the cycle's alone since 2026-10-20
+(owner, #1084):* §9.1's stance term in the inflation sum reads its own value,
+`te_mon_stance_gap_clamped_pressure`, with this loose bound and a tight bound of 10
+(`te_mon_pressure_stance_clamp_tight`). The 2026-09-22 ruling stands for the cycle, whose
+momentum the +4 keeps inside the ±5 bar:
 
 | Effect | Per pp of **tight** gap | Calibration | Delivery |
 |---|---|---|---|
@@ -2681,7 +2721,10 @@ law accelerate inflation forever.)
 
 ```
 pressure (pp) =
-    − 0.4 × stance_gap (clamped −2…+4)       loose money (at most +0.8pp; the loose bound was −4, i.e. +1.6pp, until 2026-09-22 — the clamp is shared with the cycle channel, §8)
+    − 0.4 × stance_gap (clamped −2…+10)      loose money (at most +0.8pp; the loose bound was −4, i.e. +1.6pp, until 2026-09-22) and
+                                             tight money (at most −4pp). The tight bound is this term's own since #1084
+                                             (owner, 2026-10-20); it was the cycle's +4 (−1.6pp), which a labour code's
+                                             wage pressure outweighed, so a bank at its ceiling could not disinflate
     + phase term                             frenzy +1.5 · boom +0.8 · expansion +0.3 · stable 0
                                              stagnation −0.5 · downturn −2 · panic −4 under an inflation
                                              target (fiat / digital, te_mon_targets_inflation; 2026-10-02);
@@ -4922,8 +4965,8 @@ P6-1…13).
 
 | Constant | Start | § |
 |---|---|---|
-| Drift per month | 1/3 pp (2/3 digital); a mandate-run bank's **cuts** ×3 (`te_mon_emergency_cut_factor`) while the cycle is below 40, since 2026-09-25 | 4 |
-| Target range: gold / fiat / digital | 0–15 / 0–25 / −3–25 | 5 |
+| Drift per month | max(1/3 pp, a sixth of the distance) × the speed factor (2× digital) since 2026-10-20, #1084 (was a flat 1/3); a mandate-run bank's **least cut** ×3 (`te_mon_emergency_cut_factor`) while the cycle is below 40, since 2026-09-25 | 4 |
+| Target range: gold / fiat / digital | 0–15 / 0–60 / −3–60 (fiat and digital 25 until 2026-10-20, #1084) | 5 |
 | Target range: commodity money with a bank (`te_mon_commodity_band_margin_down` / `_up`; centre hysteresis `te_mon_commodity_centre_hysteresis`) | `centre − 1` to `centre + 3`, floored at 0; centre = `round(world)`, re-rounded at 0.75 | 5.1, 0.6 |
 | Commodity price-specie term (`te_mon_commodity_specie_tolerance` / `_per_pp` / `_clamp`) | tolerance 1pp of core above world inflation, then −2pp of pressure per pp, clamped at −6 | 9.1, 0.6 R7 |
 | Bankless spread | 1.0 | 5 |
@@ -4940,7 +4983,7 @@ P6-1…13).
 | Access base / techs / no exchange | +8 / −4, −2.5, then **−0.25, −0.5, −0.75** (eras 3–5; was −0.5 ×3 — back-loaded 2026-09-20; the first two cannot move without moving §7.4's 1836 rows) / +2 | 7.2 |
 | Rank table | 0.5 · 1 · 2 · 3 · 4 · 6 · 8 | 7.3 |
 | Debt-load premium | 0 → +4 over `scaled_debt` 0.25 → 1.0 | 7.6 |
-| Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp **−2**…+4 (loose side was −4 until 2026-09-22) | 8 |
+| Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp **−2**…+4 (loose side was −4 until 2026-09-22); the inflation term's own clamp −2…**+10** since 2026-10-20 (#1084; it shared the +4 before) | 8, 9.1 |
 | Neutral rate: era base / growth coeff / walk | 3 → 2 / 0.25 / ±0.1 | 8 |
 | Estimation error (CBI) | ±1.5 (±0.5) | 6 |
 | Dual Mandate (Price Stability until #799): inflation weight / target | 1.0 / 2% | 6 |

@@ -168,8 +168,8 @@ te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 	# The undo, and the cleanest test of the production path itself: zeroing the
 	# applied value forces step 9 past its 0.05 threshold, so the monthly update
 	# rewrites the modifier exactly as it would on any other month. Note that the
-	# update is not idempotent — it also drifts the policy rate a third of a
-	# point and draws both hidden random walks, same as any pulse.
+	# update is not idempotent — it also drifts the policy rate one drift step
+	# and draws both hidden random walks, same as any pulse.
 	option = {
 		name = te_debug_monetary.2.b
 		set_variable = { name = te_rate_paid_applied value = 0 }

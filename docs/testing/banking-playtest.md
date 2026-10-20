@@ -157,3 +157,33 @@ coloured word (`#green Expansion#!`).
     cost nothing, and a dollarised country shows Foreign money's minting penalty.
 23. **The Budget words.** "N used" names the total and sends the player to Active Policies; "N free" explains that an
     Enable button needs its cost to fit in the free points. The numbers equal the cell's.
+
+## Inflation's reach: the deficit cap and the 60% dial (2026-10-20, #1084)
+
+The bond-finance deficit term is capped at 1.5 points (3 at war) and is 0 while a country is dollarised or in default;
+a dollarised country's prices are pulled to the 2% anchor, not to 0. The free dial (fiat, digital, suspended gold)
+reaches 60, the rate drifts a sixth of the distance a month and never less than a third of a point, and the stance
+term in the inflation sum has its own tight clamp of 10. No engine fact here is new to the mod (`in_default` is read in
+several places, and every value is ordinary script-value arithmetic), so there is no self-check line. Read them with
+the console event `te_debug_monetary.1` on the country in question.
+
+24. **The late-game count-median falls.** In a save past 2040, count live tags with inflation at or above 50%. Before,
+    about a third of tags (31–36) sat there and the count-median was 21–31%; expect a handful at most, the median near
+    the 2–4% the big economies run. A tag in the hyperinflation band now should owe it to monetisation, cost-push or a
+    trap of its own, not to its deficit.
+25. **A dollarised or defaulting microstate prints Deficit 0.** `te_debug_monetary.1` on a bankrupt microstate (Brunei
+    or Kandahar in the 2058 autosave) shows `Deficit % of GDP` in the hundreds and `Deficit:` 0 in the pressure line.
+    A dollarised one settles near 2% plus half its other pressure (2–3% is typical), not 1% plus half.
+26. **A trapped giant gets out without a currency reform.** A fiat AI at 30% or more (China in the 2058 autosave) has
+    a target above 25 within a month or two, and its rate climbs several points a month toward it. The simulator, from
+    China's 2048 state, puts inflation under 30% in about two years, under 20% in about eight and under 10% in about
+    fifteen, with no hyperinflation crisis; a deep recession on the way is expected (real rates in double digits).
+27. **The tooltips read the new drift.** The Policy Rate and Rate Target tooltips say the rate closes 17% of its
+    distance a month and never less than 0.33 of a point (33% and 0.67 under Digital Currency), and the delegated
+    mandate's read-out line says the same. The Rate Target tooltip's range reads 0% to 60% (−3% to 60% digital, 0% to
+    15% on gold). Shift-click on the stepper goes to 60.
+28. **Overshooting the target.** Note how it feels to step a manual target far past where you want the rate, then back:
+    the rate moves a sixth of the way to the far target that month. If players use it as a routine trick, the owner
+    may cap the step (design doc §5.1, "Open").
+29. **Wealth Concentration's r > g.** The real rate it reads should now spread both ways: in the 2057 autosave 72 of
+    91 countries sat at its −5 floor; at 3–4% inflation the investigation expected about 47 at −5 and 34 at +5.

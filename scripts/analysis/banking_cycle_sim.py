@@ -57,7 +57,12 @@ with if a number here looks wrong.
   gdp                      1e7 at start, compounds at the sampled growth rate
   yearly GDP growth        AR(1), mean 2.0%, sd 1.2%  (feeds te_mon_growth_term)
   deficit as % of GDP      AR(1), mean 1.5%, sd 1.0%, x3 while at war
-  scaled_debt              integrates the deficit, clamped 0..1.5
+  scaled_debt              integrates the deficit, clamped 0..1.5. The deficit
+                           term's `in_default` gate (#1084) reads scaled_debt >= 1,
+                           which ANY steady deficit reaches within a few decades
+                           here (no GDP denominator, no AI budget response), so the
+                           term then stays off; compare the cap alone with
+                           `--tune deficit_gates=off`
   is_at_war                2-state Markov, ~8% of months, mean run 24 months
   basket index (prices)    AR(1) log walk, sd 1.2%/yr  (feeds cost-push)
   scaled_gold_reserves     0.6 flat (only seeds the bank's vault)
@@ -674,6 +679,16 @@ PRE_DEFICIT_CAP = {
     "deficit_gates": "off",
     "dollar_pull": "zero",
 }
+# The dial's reach before #1084 (owner, 2026-10-20): a free dial's ceiling of
+# 25, a flat third of a point a month, and the stance term on the cycle's +4
+# tight clamp. `--tune pre_rate_reach`; with pre_deficit_cap's keys as well,
+# `--tune pre_1084`.
+PRE_RATE_REACH = {
+    "ceiling": 25.0,
+    "drift_share": 0.0,
+    "stance_pressure_tight": 4.0,
+}
+PRE_1084 = {**PRE_DEFICIT_CAP, **PRE_RATE_REACH}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
@@ -685,6 +700,8 @@ PRESETS = {
     "pre_holiday": PRE_HOLIDAY,
     "pre_eliq_bounds": PRE_ELIQ_BOUNDS,
     "pre_deficit_cap": PRE_DEFICIT_CAP,
+    "pre_rate_reach": PRE_RATE_REACH,
+    "pre_1084": PRE_1084,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -1155,13 +1172,14 @@ def in_external_crisis(cfg: Config, state: State) -> bool:
 
 
 def target_bounds(cfg: Config, state: State, world_rate: float) -> tuple[float, float]:
-    # te_mon_target_max
+    # te_mon_target_max. The free dial's ceiling is 60 since #1084 (it was 25);
+    # `--tune ceiling=25` restores the old one.
     if is_on_gold(cfg):
-        hi = 15.0
+        hi = K.sv("te_mon_target_ceiling_gold")
     elif has_narrow_dial(cfg, state):
         hi = max(0.0, state.commodity_centre + K.sv("te_mon_commodity_band_margin_up"))
     else:
-        hi = 25.0
+        hi = tuned("ceiling", K.sv("te_mon_target_ceiling_free"))
 
     # te_mon_target_min
     if state.peg_defend_months > 0 and is_on_gold(cfg):
@@ -1348,18 +1366,26 @@ def emergency_cuts(cfg: Config, state: State) -> bool:
 
 
 def drift_toward(cfg: Config, state: State, rate: float, target: float) -> float:
-    """te_monetary_drift_rate_toward — one month's step of `rate` toward `target`."""
+    """te_monetary_drift_rate_toward — one month's step of `rate` toward `target`.
+
+    The least step is te_mon_drift_step (a third of a point x the speed factor)
+    and a month's step is that or a sixth of the distance x the speed factor,
+    whichever is larger, never past the target (te_mon_drift_step_up_now /
+    _down_now, #1084). The emergency factor raises only a cut's least step.
+    `--tune drift_share=0` restores the flat third of a point (pre-#1084).
+    """
     speed = max(0.1, 1.0 + law_modifier_sum(cfg, "country_policy_rate_drift_speed_mult"))
     step = 0.3333 * speed
     down = step
     if emergency_cuts(cfg, state):
         # te_mon_drift_step_down (§12). `--tune emergency_cut=1` turns it off.
         down *= tuned("emergency_cut", K.sv("te_mon_emergency_cut_factor"))
+    share = tuned("drift_share", 1.0 / K.sv("te_mon_drift_gap_divisor")) * speed
     gap = target - rate
     if gap > step:
-        return rate + step
+        return rate + min(gap, max(step, gap * share))
     if gap < -down:
-        return rate - down
+        return rate - min(-gap, max(down, -gap * share))
     return target
 
 
@@ -1611,7 +1637,7 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     total = 0.0
 
     # stance: a tight rate is disinflationary
-    total += -K.sv("te_mon_stance_pressure_coeff") * clamped_gap(state)
+    total += -K.sv("te_mon_stance_pressure_coeff") * clamped_gap_pressure(state)
 
     # phase: te_mon_phase_pressure, read from the mod, whose slump side splits on
     # te_mon_targets_inflation (§16). `--tune pressure_<phase>=X` overrides one
@@ -1691,6 +1717,18 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
         total += max(K.sv("te_mon_commodity_specie_clamp"), specie)
 
     return total
+
+
+def clamped_gap_pressure(state: State) -> float:
+    """te_mon_stance_gap_clamped_pressure — the bounds the inflation term reads.
+
+    The cycle's loose bound, and a tight bound of its own
+    (te_mon_pressure_stance_clamp_tight, 10 since #1084; it shared the cycle's
+    +4 before). `--tune stance_pressure_tight=4` restores the shared bound.
+    """
+    lo = -tuned("gap_clamp_loose", -K.sv("te_mon_stance_gap_clamp_loose"))
+    hi = tuned("stance_pressure_tight", K.sv("te_mon_pressure_stance_clamp_tight"))
+    return max(lo, min(hi, state.stance_gap))
 
 
 def clamped_gap(state: State) -> float:
@@ -3843,7 +3881,9 @@ def main() -> int:
                          "--tune pre_slump_pressure for the slump phases' inflation pull before §16, or "
                          "--tune pre_hold for the AI's lift weights before the hold gates of §18, or "
                          "--tune pre_eliq_bounds for the Emergency Liquidity Program before §25, or "
-                         "--tune pre_deficit_cap for the uncapped deficit term before #1084.")
+                         "--tune pre_deficit_cap for the uncapped deficit term before #1084, or "
+                         "--tune pre_rate_reach for the 25 ceiling, flat drift and shared stance clamp "
+                         "before #1084, or --tune pre_1084 for both.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")

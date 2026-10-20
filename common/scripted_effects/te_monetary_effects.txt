@@ -96,8 +96,8 @@ te_monetary_refresh_world_era_base = {
 # IT READS WHAT THE COUNTRIES' LAST PULSE LEFT. The relative order of the global
 # on_monthly_pulse and on_monthly_pulse_country is unknown (§17 check 7), so the
 # inputs may be this month's or last month's, and every consumer reads the
-# per-country copy step 0 takes (te_mon_world_rate_now). The policy rate moves a
-# third of a point a month and expectations slower, so the lag is immaterial.
+# per-country copy step 0 takes (te_mon_world_rate_now). The policy rate moves one
+# drift step a month and expectations slower, so the lag is immaterial.
 #
 # TWO ACCUMULATORS, reset here every call: sum of weight x real rate, and sum
 # of weight, with weight = GDP in millions (fixed-point headroom, §12.1).
@@ -195,7 +195,7 @@ te_monetary_refresh_world_rate = {
 # marker is the net if one does not.
 #
 # NOT IDEMPOTENT WITHIN A MONTH. Step 3 advances the policy rate toward the
-# target by a third of a point per call, step 6 draws the inflation noise walk
+# target by one drift step per call, step 6 draws the inflation noise walk
 # and advances core inflation, its trailing basket average and expectations by
 # one month's worth per call, step 8 draws both of the neutral rate's random
 # walks per call, and step 1b's AI rule walks the monetisation level one step
@@ -1768,8 +1768,8 @@ te_monetary_mandate_loosened = {
 #
 #   commodity money      band centre -1 to band centre +3 (§0.6, 2026-09-21)
 #   gold standard        0-15; what binds the dial is gold, not a band (§12.2)
-#   fiat currency        0-25
-#   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
+#   fiat currency        0-60 (25 until #1084, owner 2026-10-20)
+#   digital currency     -3 to 60 (no cash to hoard, so negative rates bite)
 #
 # A world-relative band is taken to whole numbers so the target stays an integer
 # the stepper can move without ever sitting outside it: the commodity band
@@ -1780,7 +1780,7 @@ te_monetary_mandate_loosened = {
 # money keeps whatever target it last held, and this step pulls it into the new
 # band on the first pulse after enactment — so an 8% fiat target becomes the top
 # of the band rather than anything the player has to go and fix by hand. The rate
-# itself then drifts there at a third of a point a month like any other move.
+# itself then drifts there at the ordinary drift like any other move.
 #
 # The band itself lives in te_mon_target_min / te_mon_target_max
 # (common/script_values/te_monetary_script_values.txt), not here, because the
@@ -1898,16 +1898,21 @@ te_monetary_update_virtual_target = {
 # ----------------------------------------------------------------------------
 # Scope: country, dial countries only.
 #
-# 1/3 pp a month, i.e. 1pp a quarter. A 5pp swing therefore takes 15 months —
-# reversals are slow by construction (§4). The arithmetic is §16.2's: difference
-# into a scratch variable, step if it is bigger than one step, otherwise snap to
-# the target so the rate never oscillates around it by a third of a point
-# forever.
+# A sixth of the distance to the target a month, and never less than 1/3 pp
+# (#1084, owner 2026-10-20; it was a flat 1/3 pp). Within two points of the
+# target the third of a point is the larger, so a small move is still a point
+# a quarter and reversals stay slow by construction (§4); a bank 25 points off
+# moves about 4 a month. The arithmetic is §16.2's: difference into a scratch
+# variable, step if it is bigger than the least step, otherwise snap to the
+# target so the rate never oscillates around it by a third of a point
+# forever. The step itself is te_mon_drift_step_up_now / _down_now, which read
+# that scratch variable.
 #
 # THE SPEED IS DECLARATIVE. There is no law check here any more: the step comes
-# from te_mon_drift_step, which is the baseline third of a point scaled by
-# country_policy_rate_drift_speed_mult. law_digital_currency carries +1.0, so a
-# digital regime still moves at 2/3 a month — but the rule now reads off that
+# from te_mon_drift_speed_factor, country_policy_rate_drift_speed_mult plus one,
+# which scales the whole step — the third of a point and the sixth of the
+# distance alike. law_digital_currency carries +1.0, so a digital regime moves
+# at least 2/3 a month and a third of the distance — but the rule reads off that
 # law's own tooltip ("Policy Rate Adjustment Speed +100%") instead of out of a
 # sentence of localization, and a future law or principle can move it without
 # editing this effect.
@@ -1918,10 +1923,12 @@ te_monetary_update_virtual_target = {
 # itself buys a fourth month that moves the rate 0.3333 to land 0.0001 short. The
 # threshold's 0.0067 epsilon reproduces the old 0.34 exactly, and a 1pp move is
 # three months at the baseline as it always was. te_mon_work2 carries the step
-# (not the threshold) because it is what actually gets added.
+# (not the threshold) because it is what actually gets added. The threshold
+# stays on the LEAST step: the sixth of the distance only exceeds it more than
+# two points out, far from where the snap is decided.
 #
-# EMERGENCY CUTS (2026-09-25). A cut moves at te_mon_drift_step_down, which is
-# te_mon_emergency_cut_factor (3x) the ordinary step while
+# EMERGENCY CUTS (2026-09-25). A cut's least step is te_mon_drift_step_down,
+# which is te_mon_emergency_cut_factor (3x) the ordinary least step while
 # te_mon_emergency_cuts holds: a bank running its mandate, with the financial
 # cycle in stagnation or worse. Hikes, and every manual dial, keep the ordinary
 # speed. Without it a delegated bank caught at 12% by a crash spent more than
@@ -1955,14 +1962,14 @@ te_monetary_drift_policy_rate = {
 te_monetary_drift_rate_toward = {
 	set_variable = { name = te_mon_work value = var:$TARGET$ }
 	change_variable = { name = te_mon_work subtract = var:$RATE$ }
-	set_variable = { name = te_mon_work2 value = te_mon_drift_step }
 	if = {
 		limit = { var:te_mon_work > te_mon_drift_step_threshold }
+		set_variable = { name = te_mon_work2 value = te_mon_drift_step_up_now }
 		change_variable = { name = $RATE$ add = var:te_mon_work2 }
 	}
 	else_if = {
 		limit = { var:te_mon_work < te_mon_drift_step_down_threshold_neg }
-		set_variable = { name = te_mon_work2 value = te_mon_drift_step_down }
+		set_variable = { name = te_mon_work2 value = te_mon_drift_step_down_now }
 		change_variable = { name = $RATE$ subtract = var:te_mon_work2 }
 	}
 	else = {

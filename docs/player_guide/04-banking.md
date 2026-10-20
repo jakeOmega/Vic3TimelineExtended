@@ -568,8 +568,10 @@ anchor's.
 ### Rate target, delegation and mandates
 
 You choose a Rate Target, the stepper labelled Target beside your Policy Rate,
-and the policy rate moves toward it by a third of a point a month (two thirds
-under Digital Currency). Click the stepper for a point, Ctrl-click for a tenth,
+and each month the policy rate moves a sixth of the distance toward it, never
+less than a third of a point; Digital Currency doubles both. A small change of
+course takes months, while a rate 25 points off its target covers most of the
+way in about a year. Click the stepper for a point, Ctrl-click for a tenth,
 Shift-click for the limit of your currency law. Changes are free and have no
 cooldown.
 
@@ -584,8 +586,8 @@ free of charge.
 | Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
 | Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
-A mandate-run bank cuts three times as fast once the cycle falls into Stagnation
-or worse.
+A mandate-run bank cuts at least a point a month (two under Digital Currency)
+once the cycle falls into Stagnation or worse.
 
 A new mandate takes effect at the next monthly update, and is then fixed for a
 year. Lenders price a looser rule at once: for each step from Inflation
@@ -633,9 +635,10 @@ floor, and buys assets on its own account for the difference. Each point it
 would cut below the floor adds 1 point of inflation pressure, up to 5 points
 at 5 points below, on top of Open-Market Operations.
 
-The purchases grow and shrink at the speed the rate moves: a third of a point a
-month, two-thirds under Digital Currency, and three times as fast while the bank
-cuts with the cycle in Stagnation or worse. They never start or stop all at once. When the
+The purchases grow and shrink at the speed the rate moves: a sixth of the
+distance a month and at least a third of a point, doubled under Digital
+Currency, and at least a point a month while the bank cuts with the cycle in
+Stagnation or worse. They never start or stop all at once. When the
 bank's rule asks for a higher rate again, the purchases wind down first, and the
 rate leaves the floor only once they reach zero.
 
@@ -776,8 +779,8 @@ Your Monetary Policy law sets the dial's range.
 |---|---|---|---|
 | Commodity Money | default | World rate −1 to +3, with a national bank | Prices that outrun the world's are pulled back down; fixed at par |
 | Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defence; fixed at par |
-| Fiat Money | Keynesian Economics, with National Bank Established | 0% to 25% | Open-Market Operations and money printing; floats |
-| Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 25% | As Fiat, and the rate moves twice as fast; floats |
+| Fiat Money | Keynesian Economics, with National Bank Established | 0% to 60% | Open-Market Operations and money printing; floats |
+| Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 60% | As Fiat, and the rate moves twice as fast; floats |
 | Decentralized Cryptocurrency | Cybersecurity | no dial | Borrows at the world rate plus a spread; floats |
 
 ### Gold reserves and the run on the vault

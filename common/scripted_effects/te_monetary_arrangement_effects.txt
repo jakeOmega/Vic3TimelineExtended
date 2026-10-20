@@ -255,7 +255,7 @@ te_monetary_update_anchor = {
 	# guarded: an anchor that has never pulsed leaves last month's copy alone.
 	# Whether this sees the anchor's figure for this month or last depends on
 	# country iteration order (§17 check 18); both are tolerated, the policy
-	# rate moves a third of a point a month.
+	# rate moves one drift step a month.
 	if = {
 		limit = {
 			te_mon_is_anchored = yes
