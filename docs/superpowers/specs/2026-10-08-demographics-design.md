@@ -714,7 +714,7 @@ every Demographics rule setting, like the rest of Wealth Concentration:
   counts. A won revolution counts too: the winner continues the nation, so it takes the old government's law role
   (and r > g's GDP baseline and growth average) in `inh_repair_after_civil_war`, and the next month compares that with
   the rebels' law.
-- **r > g:** the target's seventh term (the table above), stored on 31 December (`te_demog_wc_growth_update`): growth
+- **r > g:** the target's seventh term (the table above), stored at the yearly country pulse (`te_demog_wc_growth_update`): growth
   averaged at a weight of 0.2 a year, each year's clamped to ±10 so a conquest moves it by 2 at most.
 
 **What it moves.** None of these effects repeats what pop wealth already does:

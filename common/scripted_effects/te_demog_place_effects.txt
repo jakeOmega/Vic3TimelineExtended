@@ -20,7 +20,7 @@
 # ============================================================================
 
 # THIS = ROOT = a country, at the end of its census's urban pattern (te_demog_country_census, so at game start, each
-# 31 December and fast mode's country census alike). Names its largest city, counts its census states and sets the
+# yearly pulse and fast mode's country census alike). Names its largest city, counts its census states and sets the
 # strength the states' pulses apply. Whatever the rule: under Display only the panel shows what the pattern would do.
 # The largest city carries the country in te_dg_primate_of (te_demog_up_is_primate reads owner = var:te_dg_primate_of,
 # vanilla's comparison form): cleared from every state of the country first, so a state that changed hands since keeps a

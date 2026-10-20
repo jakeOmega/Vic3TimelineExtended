@@ -2693,7 +2693,7 @@ types te_demographics_widgets
 
 	### States: the ten largest by people (te_dg_states_top), and under Show All the 40 the census lists
 	### (te_dg_states); each list is stored largest first and a datamodel draws it in its stored order. A country whose
-	### last census came before the ten-row list (an old save, until 31 December) shows the 40. The button sits centred
+	### last census came before the ten-row list (an old save, until its next yearly census) shows the 40. The button sits centred
 	### under the rows (rule 6) and shows only while there are more than ten (te_demog_states_more_sgui).
 	type te_demog_sec_states = flowcontainer {
 		direction = vertical

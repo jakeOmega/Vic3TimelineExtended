@@ -76,7 +76,7 @@ te_demog_clock_on_action = {
 	}
 }
 
-# Root = Country, on 31 December. The war shock and Wealth Concentration's national
+# Root = Country, once a year on its own day. The war shock and Wealth Concentration's national
 # figure run whatever the rule; the census gates itself on it.
 on_yearly_pulse_country = {
 	on_actions = {
