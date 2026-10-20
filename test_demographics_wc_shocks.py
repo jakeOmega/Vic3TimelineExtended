@@ -13,12 +13,14 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 from test_demographics_registry import (  # noqa: E402  (helpers and paths only: no TestCase)
-    APPLIED, DEMOG_ON_ACTIONS, EFFECTS, VALUES, WEALTH_EFFECTS, _block, _CountryEngine, _parse_script, _text)
+    APPLIED, DEMOG_ON_ACTIONS, EFFECTS, INH_EFFECTS, VALUES, WEALTH_EFFECTS, _block, _CountryEngine, _parse_script,
+    _raw_blocks, _text)
 
 INEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_inequality_modifiers.txt"
 WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
 NATION_TAB = ROOT / "scripts" / "generators" / "gen_nation_tab.py"
 MISC_LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
+MARKET_TRIGGERS = ROOT / "common" / "scripted_triggers" / "market_triggers.txt"
 TARGET_FIXTURES = {"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
                    "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0}
 
@@ -32,6 +34,10 @@ def _scored(wc):
 
 def _loc_keys():
     return set(re.findall(r"(?m)^ (\w+):\d* ", _text(MISC_LOC)))
+
+
+def _loc():
+    return dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _text(MISC_LOC)))
 
 
 # -- W2: ownership shocks ---------------------------------------------------------------------------------------------
@@ -156,6 +162,29 @@ class TestBoomShock(unittest.TestCase):
         v = self.month(states, v, frenzy=True)
         self.assertEqual(states[0]["te_dg_wc"], 60.0)
 
+    def test_a_crash_value_re_arms_it(self):
+        """The banking triggers themselves on the cycle's value: Frenzy from 88, Boom from 75. A crash lowers the cycle
+        to 40 or less once its option lands (banking_crash_lower_cycle_to)."""
+        states = [_scored(50.0)]
+        country = {}
+        for value, score, marked in ((90.0, 55.0, True),    # Frenzy: +5
+                                     (95.0, 55.0, True),    # still Frenzy: nothing
+                                     (80.0, 55.0, True),    # Boom: still this cycle
+                                     (90.0, 55.0, True),    # back to Frenzy from Boom: nothing
+                                     (40.0, 55.0, False),   # the crash's ceiling: re-armed
+                                     (74.0, 55.0, False),
+                                     (88.0, 60.0, True)):   # the next Frenzy: +5
+            eng = _CountryEngine(states=states, effects=APPLIED, fixtures=TARGET_FIXTURES,
+                                 triggers={"te_banking_cycle_running": True})
+            eng.triggers.update(_raw_blocks([MARKET_TRIGGERS]))
+            eng.vars.update(country)
+            eng.vars["finance_cycle_value"] = value
+            eng.call("te_demog_wc_boom_check")
+            country = eng.vars
+            with self.subTest(value=value):
+                self.assertEqual(states[0]["te_dg_wc"], score)
+                self.assertEqual("te_dg_wc_boom" in country, marked)
+
     def test_nothing_without_a_running_cycle(self):
         states = [{"te_dg_wc": 50.0}]
         v = self.month(states, {}, running=False, frenzy=True)
@@ -201,6 +230,19 @@ class TestLandReform(unittest.TestCase):
         states = [{"te_dg_wc": 4.0, "te_dg_agr_share": 0.9}]
         self.month(states, 1, 5)
         self.assertEqual(states[0]["te_dg_wc"], 0.0)
+
+    def test_a_won_revolution_takes_the_old_governments_law(self):
+        """The rebels store their own law through the war and a winner's variables take precedence, so the repair gives
+        the winner the loser's role; the next month compares it with the rebels' law."""
+        repair = _block(_text(INH_EFFECTS), "inh_repair_after_civil_war")
+        call = repair.index("te_demog_wc_civil_war_inherit = yes")
+        guard = repair.rfind("if = {", 0, call)
+        self.assertIn("var:te_cw_rebels_won = 1", repair[guard:call])
+        self.assertLess(call, repair.index("te_demog_wc_national = yes"))
+        # the old government's Serfdom against the rebels' Peasant Proprietorship
+        states = [{"te_dg_wc": 60.0, "te_dg_agr_share": 0.5}]
+        self.month(states, 1, 4)
+        self.assertEqual(states[0]["te_dg_wc"], 55.0)
 
     def test_the_codes_follow_the_parents(self):
         body = _block(_text(VALUES), "te_demog_wc_land_code")
@@ -263,6 +305,31 @@ class TestReturnOnCapital(unittest.TestCase):
         self.assertEqual(eng.value("te_demog_wc_rg_term"), 0.0)
         eng.vars["te_dg_wc_rg"] = -3.5
         self.assertEqual(eng.value("te_demog_wc_rg_term"), -3.5)
+
+    def test_no_policy_rate_no_term(self):
+        v = self.year({"te_dg_wc_gdp": 1000.0, "te_dg_wc_g": 2.0}, 1020.0)
+        self.assertNotIn("te_dg_wc_r", v)
+        self.assertNotIn("te_dg_wc_rg", v, "a running cycle with no rate yet adds nothing")
+        self.assertAlmostEqual(v["te_dg_wc_g"], 2.0, msg="the average still moves")
+
+    def test_the_hover_gives_figures_only_while_the_term_is_in_force(self):
+        eng = _CountryEngine(fixtures={})
+        self.assertEqual(eng.value("te_demog_wc_rg_on"), 0.0)
+        eng.vars["te_dg_wc_rg"] = 0.0
+        self.assertEqual(eng.value("te_demog_wc_rg_on"), 1.0)
+        loc = _loc()
+        for key, scope, figures in (("te_demog_wc_t_rg_tt", "GetPlayer", "te_demog_wc_t_rg_figures"),
+                                    ("te_demog_st_wc_t_rg_tt", "State.GetOwner", "te_demog_st_wc_t_rg_figures")):
+            self.assertNotIn("te_dg_wc_r'", loc[key], "the figures sit in the named key")
+            self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_rg_on')", loc[key])
+            self.assertIn(f"'{figures}', 'te_demog_wc_t_rg_off'", loc[key])
+            self.assertIn(f"{scope}.MakeScope.Var('te_dg_wc_g')", loc[figures])
+        self.assertNotIn("[", loc["te_demog_wc_t_rg_off"].replace("[concept_banking_cycle]", ""))
+
+    def test_a_won_revolution_continues_the_nations_growth(self):
+        body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_civil_war_inherit")
+        for name in ("te_dg_wc_land", "te_dg_wc_gdp", "te_dg_wc_g"):
+            self.assertIn(f"set_variable = {{ name = {name} value = scope:te_cw_loser.var:{name} }}", body)
 
     def test_a_late_game_gdp_fits_the_fixed_point(self):
         v = self.year({"te_dg_wc_gdp": 7.0e11, "te_dg_wc_g": 2.0, "te_policy_rate": 4.0}, 7.21e11, truncate=True)
@@ -333,6 +400,14 @@ class TestInequality(unittest.TestCase):
         self.assertEqual(eng.modifiers, {})
         self.assertNotIn("te_dg_ineq", eng.vars)
         self.assertEqual(self.refresh(None, had=0.4).modifiers, {}, "no Gini yet: nothing")
+
+    def test_the_help_and_the_state_hover_name_seven_terms(self):
+        loc = _loc()
+        self.assertIn("50 plus seven terms", loc["te_demog_how_wc"])
+        for key in ("te_demog_how_wc", "te_demog_st_wc_tt"):
+            self.assertIn("the return on capital against growth", loc[key], key)
+        for shock in ("land reform", "banking frenzy", "state-owned share"):
+            self.assertIn(shock, loc["te_demog_how_wc"])
 
     def test_one_refresh_site_on_the_state_pulse(self):
         sites = [p.name for p in (ROOT / "common").rglob("*.txt")

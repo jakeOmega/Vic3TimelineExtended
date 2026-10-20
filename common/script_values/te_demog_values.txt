@@ -581,6 +581,17 @@ te_demog_wc_rg_term = {
 	}
 }
 
+# Country scope: 1 while the r > g term is in force (te_dg_wc_rg stored), else 0: the Return on Capital hovers give
+# the rate and growth only then, and say the term adds nothing otherwise (the banking rule off, a cycle not started,
+# or no 31 December since).
+te_demog_wc_rg_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wc_rg }
+		value = 1
+	}
+}
+
 # Country scope: the real policy rate, the policy rate less headline inflation, as the stance gap takes it
 # (te_monetary_effects.txt step 8). The policy rate is nominal and the engine has no nominal prices, so GDP grows in
 # real terms (monetary_policy_design.md §2, §12.1); a nominal rate against real growth would put most of a late-game,

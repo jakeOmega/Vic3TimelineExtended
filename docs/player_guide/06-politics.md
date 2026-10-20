@@ -351,9 +351,10 @@ cost you a war goal, a winning revolution of the left, a banking crash and land
 reform knock scores down at once. Land reform is Peasant Proprietorship or
 Collectivized Agriculture replacing Serfdom or Tenant Farmers, and takes up to 10
 from a farming state. A banking cycle's Frenzy raises every score by 5, once a
-cycle. A state whose capital passes a tenth or more into state hands in a year
-loses half a point for each point of its capital that moved, up to 10, and one
-privatised as fast gains the same. Devastation lowers a state's score every year
+cycle. When the state-owned share of a state's capital rises 10 points or more
+in a year, whether the state takes buildings over or builds faster than private
+owners do, the state loses half a point for each point, up to 10; when the share
+falls as far, it gains the same. Devastation lowers a state's score every year
 it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great
 houses twenty years later.

@@ -328,7 +328,8 @@ te_demog_wc_national = {
 # of the state's capital levels (te_demog_wc_state_owned_share, the ownership term's
 # walk and capital filter) moves 10 points or more since the last pulse, the score jumps
 # half a point per point moved, at most 10: a privatisation raises it, a nationalisation
-# lowers it. te_dg_wc_sown keeps last year's share. No shock in the first year a share is
+# lowers it. It measures the share (the owner's rule), so state or private capital
+# growing faster than the other moves it too. te_dg_wc_sown keeps last year's share. No shock in the first year a share is
 # stored; after a change of owner, which removes it (te_demog_wc_owner_change, on
 # on_state_owner_change); when the state's people moved more than a quarter in the year
 # (the census's re-seed rule, here on the walk's own people, kept under every rule); or
@@ -422,9 +423,10 @@ te_demog_wc_boom_check = {
 # enacting Peasant Proprietorship or Collectivized Agriculture from Serfdom or Tenant
 # Farmers (each with its variants: te_demog_wc_land_code) jumps every scored state's score
 # by -10 x its agrarian share, and the national figure follows. The law is compared with
-# last month's (te_dg_wc_land), so every way a law changes counts (enactment, a
-# revolution, an event's activate_law) and no vanilla law needs an on_activate. The first
-# month only stores it. A move by way of Commercialized Agriculture is no land reform, and
+# last month's (te_dg_wc_land), so every way a law changes counts (enactment, an event's
+# activate_law, a won revolution: te_demog_wc_civil_war_inherit gives the winner the old
+# government's role, so the next month compares it with the rebels' law) and no vanilla
+# law needs an on_activate. The first month only stores it. A move by way of Commercialized Agriculture is no land reform, and
 # a country with no scored state takes none: the jump is by each state's farmers.
 te_demog_wc_land_reform_check = {
 	set_local_variable = { name = te_dg_wc_land_now value = te_demog_wc_land_code }
@@ -446,6 +448,28 @@ te_demog_wc_land_reform_check = {
 		te_demog_wc_national = yes
 	}
 	set_variable = { name = te_dg_wc_land value = local_var:te_dg_wc_land_now }
+}
+
+# THIS = ROOT = the winner of a civil war the rebels won, from inh_repair_after_civil_war
+# (scope:te_cw_loser the old government). The winner continues the nation, but its own
+# variables take precedence over the loser's, and the rebels kept their own through the
+# war. So it takes the loser's land-law role, and a revolution that brought in Peasant
+# Proprietorship or Collectivized Agriculture takes the land-reform shock at the next
+# monthly check, as the same law enacted in peace does; and r > g's GDP baseline and
+# growth average, so growth neither restarts nor reads the rebels' wartime GDP.
+te_demog_wc_civil_war_inherit = {
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_land } }
+		set_variable = { name = te_dg_wc_land value = scope:te_cw_loser.var:te_dg_wc_land }
+	}
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_gdp } }
+		set_variable = { name = te_dg_wc_gdp value = scope:te_cw_loser.var:te_dg_wc_gdp }
+	}
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = te_dg_wc_g } }
+		set_variable = { name = te_dg_wc_g value = scope:te_cw_loser.var:te_dg_wc_g }
+	}
 }
 
 # THIS = a country on 31 December, before te_demog_country_yearly (te_demog_country_yearly_on_action), so
