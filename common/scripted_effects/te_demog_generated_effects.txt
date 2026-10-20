@@ -7541,6 +7541,13 @@ te_demog_cause_inputs_store = {
 	set_variable = { name = te_dg_in_work value = { value = 0 add = modifier:state_work_mortality_mult } }
 	set_variable = { name = te_dg_in_chr value = { value = 0 add = modifier:state_chronic_mortality_mult } }
 	set_variable = { name = te_dg_in_mat value = { value = 0 add = modifier:state_maternal_mortality_mult } }
+	# uploaded minds' call 2 (2026-10-19): Mind Backups' restore only for those in longevity care, its lines x last
+	# step's share in care (te_dg_elig; demographics_model.plain_multiplier)
+	if = {
+		limit = { has_variable = te_dg_elig }
+		set_variable = { name = te_dg_in_ext value = { value = var:te_dg_in_ext add = { value = 0 add = modifier:state_backup_external_mortality_mult multiply = var:te_dg_elig } } }
+		set_variable = { name = te_dg_in_work value = { value = var:te_dg_in_work add = { value = 0 add = modifier:state_backup_work_mortality_mult multiply = var:te_dg_elig } } }
+	}
 	# turmoil as the 0-1 share te_demog_crisis reads
 	set_variable = { name = te_dg_in_turm value = { value = turmoil min = 0 max = 1 } }
 	# crowding: the migration penalty the crowding refresh applied (te_update_migration_crowding_modifier)

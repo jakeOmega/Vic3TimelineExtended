@@ -1,0 +1,49 @@
+﻿# Demographics: uploaded minds (docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's
+# calls of 2026-10-19). Under Full only; outside Full nothing applies them and the Nexus produces as it does today. Each
+# field's size is demographics_params' (UM_OUTPUT_FACTORS, UM_INPUT_FACTORS, UM_RESEARCH_PER_LEVEL, UM_DEVOUT_APPROVAL; a
+# test pins them). Their one refresh site each: te_demog_um_nexus_refresh (the state pulse, ROOT the state) for the two
+# building modifiers, te_demog_um_country (the country's census, ROOT the country) for the other two.
+
+# Building, on every Mind Upload Nexus under Full: its production method's goods taken away (the Strategic Reserve's
+# -100%, st_res_<good>_store_flow at -1), so a Nexus with no minds makes nothing and uses nothing.
+te_demog_um_nexus_off = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	goods_output_digital_assets_mult = -1
+	goods_output_tourism_mult = -1
+	goods_output_fine_art_mult = -1
+	goods_output_services_mult = -1
+	goods_input_electricity_mult = -1
+	goods_input_electronic_components_mult = -1
+	goods_input_digital_access_mult = -1
+	goods_input_advanced_materials_mult = -1
+}
+
+# Building, under Full at the country's utilisation (its active minds over its capacity; multiplier root.var:te_dg_um_util,
+# the state's copy): each good back at its factor, so a full Nexus makes the production method's line x the factor. Digital
+# assets lead (traded); services stay at the line (local); inputs lean on the traded goods (electricity and digital
+# access are local).
+te_demog_um_nexus_minds = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_digital_assets_mult = 15
+	goods_output_tourism_mult = 2
+	goods_output_fine_art_mult = 2
+	goods_output_services_mult = 1
+	goods_input_electricity_mult = 2
+	goods_input_electronic_components_mult = 8
+	goods_input_digital_access_mult = 2
+	goods_input_advanced_materials_mult = 8
+}
+
+# Country, under Full: the Nexus's research line (its production method's, a staffed level) at the utilisation. The
+# multiplier is the levels x their staffing x (1 - utilisation), so the line nets to its size x the utilisation.
+te_demog_um_research = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_tech_research_speed_mult = -0.05
+}
+
+# Country, under Full behind te_demog_k_um_politics (off by default, call 8): the Devout sour while the minds pass
+# te_demog_k_um_devout_share of the people.
+te_demog_um_devout = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	interest_group_ig_devout_approval_add = -3
+}

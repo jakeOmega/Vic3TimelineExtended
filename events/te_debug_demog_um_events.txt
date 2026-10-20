@@ -1,0 +1,61 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — uploaded minds' self-checks (te_debug_demog.130-.139; the te_debug_demog namespace's other events are in
+# te_debug_demog_events.txt). docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md;
+# docs/testing/demographics-playtest.md, "Self-checks". Hidden and fired by script only.
+# ============================================================================
+
+namespace = te_debug_demog
+
+# .130: um_nexus_scaling. A week after the first Nexus's modifiers under Full (te_debug_demog_um_selfcheck_start, from
+# te_demog_um_nexus_refresh on the state's pulse): the building's digital assets output and advanced materials input
+# modifiers against the utilisation x the factors less the -100%. OK: both within 0.3 (a company's prosperity bonus on
+# digital assets is at most 0.2), so the engine applies a building's runtime goods mult axes from a state's pulse at
+# the state's multiplier, the registered mod-good input axis too. BROKEN with the reads near 0: the modifiers didn't
+# reach the building (or an axis isn't registered); near -1: the minds' modifier was taken at 0. The fallback is in the
+# play-test list's Self-checks table. A state that lost its Nexus within the week clears the check for the next.
+te_debug_demog.130 = {
+	type = state_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_dg_um_chk_da
+				has_building = building_mind_upload_nexus
+			}
+			b:building_mind_upload_nexus = {
+				root = {
+					set_variable = { name = te_dg_um_chk_da_got value = prev.modifier:goods_output_digital_assets_mult }
+					set_variable = { name = te_dg_um_chk_am_got value = prev.modifier:goods_input_advanced_materials_mult }
+				}
+			}
+			if = {
+				limit = {
+					te_debug_demog_um_chk_da_gap < 0.3
+					te_debug_demog_um_chk_da_gap > -0.3
+					te_debug_demog_um_chk_am_gap < 0.3
+					te_debug_demog_um_chk_am_gap > -0.3
+				}
+				debug_log = "TE_SELF_CHECK OK um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] digital_assets=[THIS.Var('te_dg_um_chk_da_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_da').GetValue|3] advanced_materials=[THIS.Var('te_dg_um_chk_am_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_am').GetValue|3] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] digital_assets=[THIS.Var('te_dg_um_chk_da_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_da').GetValue|3] advanced_materials=[THIS.Var('te_dg_um_chk_am_got').GetValue|3] expected=[THIS.Var('te_dg_um_chk_am').GetValue|3] (reads near 0: the Nexus's modifiers didn't reach the building, or the axis isn't registered; near -1: the minds' multiplier read 0. docs/testing/demographics-playtest.md, Self-checks) state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_variable = te_dg_um_chk_da
+			remove_variable = te_dg_um_chk_am
+			remove_variable = te_dg_um_chk_util
+			remove_variable = te_dg_um_chk_da_got
+			remove_variable = te_dg_um_chk_am_got
+		}
+		else = {
+			remove_global_variable = te_demog_selfcheck_um_done
+			if = {
+				limit = { has_variable = te_dg_um_chk_da }
+				remove_variable = te_dg_um_chk_da
+				remove_variable = te_dg_um_chk_am
+				remove_variable = te_dg_um_chk_util
+			}
+		}
+	}
+}

@@ -521,6 +521,36 @@ goods_input_electricity_mult = {
 	}
 }
 
+# uploaded minds (2026-10-19): the Mind Upload Nexus's inputs follow its hosted minds under Full (te_demog_um_nexus_*)
+goods_input_electronic_components_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+# uploaded minds (2026-10-19): the Mind Upload Nexus's inputs follow its hosted minds under Full (te_demog_um_nexus_*)
+goods_input_digital_access_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+# uploaded minds (2026-10-19): the Mind Upload Nexus's inputs follow its hosted minds under Full (te_demog_um_nexus_*)
+goods_input_advanced_materials_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
 goods_input_construction_mult = {
 	color = bad
 	percent = yes

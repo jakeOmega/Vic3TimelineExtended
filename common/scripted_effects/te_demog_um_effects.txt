@@ -1,0 +1,510 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — uploaded minds (the owner's calls of 2026-10-19)
+# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md. The twin is
+# scripts/analysis/demographics_uploads.py; the generated half is te_demog_um_generated_effects.txt
+# (scripts/generators/gen_demographics_um.py); test_demographics_uploads.py runs this file against the model.
+#
+# Under Full only. In a country with Mind Backups and at least one Mind Upload Nexus level, a person in longevity care
+# who faces death from infection or chronic illness uploads instead, within the country's capacity (1,000,000 minds a
+# level). The engine counts the death and the ring loses the person, as before (M still aims at the census's deaths
+# with the uploads in them); the step books the uploads into the country's pool of minds. Nothing here touches the
+# ring, the 150+ pool or the migration residual. Under Display and Disabled nothing books and the Nexus produces as
+# it does today; a pool kept from Full stays as it was.
+#
+# State variables (a census state of a country that hosts minds, from its first step under Full):
+#   te_dg_um_new        people uploaded at its last step (the country's census sums them; deaths per 1,000 leave them out)
+#   te_dg_um_elig       its eligible deaths at its last step: cover x the treated parts' infection and chronic deaths
+#   te_dg_um_l100       Living to 100 counting uploads (the blended table less the uploads)
+# State variables (a state with a Nexus, from its pulse under Full):
+#   te_dg_um_util       the owner's utilisation, the copy the Nexus's modifier multiplies by (never removed: a modifier
+#                       reads it)
+#   te_dg_um_lvo        the Nexus's levels x its staffing (the research line's cancel)
+# Country variables (from its first census under Full with Mind Backups, a Nexus or minds):
+#   te_dg_um_f, te_dg_um_m    active minds, women's and men's
+#   te_dg_um_af, te_dg_um_am  archived minds (call 7): over capacity, frozen; restored first when capacity returns
+#   te_dg_um_lv, te_dg_um_cap  Nexus levels; minds it can host (with Mind Backups)
+#   te_dg_um_free       capacity still free this year (each state's step takes its uploads off it)
+#   te_dg_um_phi        the share of eligible deaths this year's free capacity hosts (1 with none recorded)
+#   te_dg_um_new, te_dg_um_end, te_dg_um_dem  last year's uploads, chosen endings (call 5) and eligible deaths
+#   te_dg_um_util       active minds over capacity
+#   te_dg_um_share      minds (active and archived) over people and minds
+#   te_dg_um_rmult      the research cancel's multiplier (te_demog_um_research)
+# ============================================================================
+
+# THIS = a state, in te_demog_lx_begin after the age groups' own rates (te_demog_lx_group_rates_unscaled, the step's own
+# multipliers): whether this step books uploads (local te_dg_um_on: Full, and the owner's census left it capacity), the
+# owner's year (te_dg_um_phi, te_dg_um_free), and while capacity is free the sweep's treated infection-and-chronic sums
+# (local te_dg_um_sums; demographics_uploads.Sums). te_demog_lx_begin set both flags to 0 first.
+te_demog_um_begin = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			exists = owner
+			owner = {
+				has_variable = te_dg_um_cap
+				var:te_dg_um_cap > 0
+			}
+		}
+		set_local_variable = { name = te_dg_um_on value = 1 }
+		owner = {
+			set_local_variable = { name = te_dg_um_phi value = var:te_dg_um_phi }
+			set_local_variable = { name = te_dg_um_free value = var:te_dg_um_free }
+		}
+		if = {
+			limit = { local_var:te_dg_um_free > 0 }
+			set_local_variable = { name = te_dg_um_sums value = 1 }
+			set_local_variable = { name = te_dg_um_gticf value = 0 }
+			set_local_variable = { name = te_dg_um_gticm value = 0 }
+			te_demog_um_group_ic = yes
+		}
+	}
+}
+
+# THIS = a state, in the late sweep for a treated part while te_dg_um_sums (te_demog_lx_deaths, te_demog_lx_fold_deaths;
+# demographics_uploads.Sums.slot): its people x its infection-and-chronic rate at its biological rate age te_dg_lx_rb
+# into the age group's running sums.
+te_demog_um_slot = {
+	te_demog_um_ic_at = yes
+	change_local_variable = { name = te_dg_um_gticf add = { value = local_var:te_dg_lx_ft multiply = local_var:te_dg_um_icf } }
+	change_local_variable = { name = te_dg_um_gticm add = { value = local_var:te_dg_lx_mt multiply = local_var:te_dg_um_icm } }
+}
+
+# THIS = a state, in te_demog_step_finish after te_demog_cause_deaths_store (demographics_uploads.book): the step's
+# uploads. The treated parts' share of the sweep's infection and of its chronic deaths (the late sweep's own sums,
+# te_demog_lx_cause_deaths'), so the treated's deaths from each, people; x cover, the share still in care: the eligible.
+# Uploads are the owner's share phi of them, at most its free capacity, and go into its pool by the treated's sexes;
+# the free capacity falls at once, so a year's uploads never pass it. Then Living to 100 counting uploads. A step that
+# books none (not Full, no capacity, no late game) leaves no figures.
+te_demog_um_step = {
+	if = {
+		limit = { local_var:te_dg_um_on > 0 }
+		set_local_variable = { name = te_dg_um_sinf value = 0 }
+		if = {
+			limit = { local_var:te_dg_ce_inf > 0 }
+			set_local_variable = {
+				name = te_dg_um_sinf
+				value = {
+					value = local_var:te_dg_lx_ce_infa
+					multiply = local_var:te_dg_inf_ad
+					add = local_var:te_dg_lx_ce_inf
+					multiply = local_var:te_dg_m_inf
+					divide = 100000
+					divide = { value = local_var:te_dg_ce_inf min = 0.00001 }
+					max = 1
+				}
+			}
+		}
+		set_local_variable = { name = te_dg_um_schr value = 0 }
+		if = {
+			limit = { local_var:te_dg_ce_chr > 0 }
+			set_local_variable = {
+				name = te_dg_um_schr
+				value = {
+					value = local_var:te_dg_lx_ce_chr
+					multiply = local_var:te_dg_m_chr
+					divide = 100000
+					divide = { value = local_var:te_dg_ce_chr min = 0.00001 }
+					max = 1
+				}
+			}
+		}
+		set_local_variable = {
+			name = te_dg_um_td
+			value = {
+				value = var:te_dg_dc_inf
+				multiply = local_var:te_dg_um_sinf
+				add = { value = var:te_dg_dc_chr multiply = local_var:te_dg_um_schr }
+			}
+		}
+		set_variable = { name = te_dg_um_elig value = { value = local_var:te_dg_um_td multiply = local_var:te_dg_lx_c } }
+		set_local_variable = {
+			name = te_dg_um_up
+			value = {
+				value = var:te_dg_um_elig
+				multiply = local_var:te_dg_um_phi
+				max = local_var:te_dg_um_free
+				min = 0
+			}
+		}
+		set_variable = { name = te_dg_um_new value = local_var:te_dg_um_up }
+		if = {
+			limit = { local_var:te_dg_um_up > 0 }
+			# the share of the treated's infection and chronic deaths that uploaded, for the table
+			set_local_variable = {
+				name = te_dg_um_u
+				value = { value = local_var:te_dg_um_up divide = { value = local_var:te_dg_um_td min = 0.00001 } max = 1 }
+			}
+			te_demog_um_l100 = yes
+			# the women's share of the uploads: of the treated's infection-and-chronic deaths
+			te_demog_um_sex_sums = yes
+			set_local_variable = { name = te_dg_um_w value = 0.5 }
+			set_local_variable = { name = te_dg_um_sfm value = { value = local_var:te_dg_um_sf add = local_var:te_dg_um_sm } }
+			if = {
+				limit = { local_var:te_dg_um_sfm > 0 }
+				set_local_variable = {
+					name = te_dg_um_w
+					value = { value = local_var:te_dg_um_sf divide = { value = local_var:te_dg_um_sfm min = 0.00001 } }
+				}
+			}
+			owner = {
+				set_variable = {
+					name = te_dg_um_f
+					value = { value = local_var:te_dg_um_up multiply = local_var:te_dg_um_w add = var:te_dg_um_f }
+				}
+				set_variable = {
+					name = te_dg_um_m
+					value = {
+						value = 1
+						subtract = local_var:te_dg_um_w
+						multiply = local_var:te_dg_um_up
+						add = var:te_dg_um_m
+					}
+				}
+				set_variable = {
+					name = te_dg_um_free
+					value = { value = var:te_dg_um_free subtract = local_var:te_dg_um_up min = 0 }
+				}
+			}
+		}
+		else = {
+			set_variable = { name = te_dg_um_l100 value = var:te_dg_lx_l100 }
+		}
+	}
+	else = {
+		te_demog_um_clear_state = yes
+	}
+}
+
+# THIS = a state: no uploads booked (a seed; a step outside Full or with no capacity).
+te_demog_um_clear_state = {
+	if = {
+		limit = { has_variable = te_dg_um_new }
+		remove_variable = te_dg_um_new
+	}
+	if = {
+		limit = { has_variable = te_dg_um_elig }
+		remove_variable = te_dg_um_elig
+	}
+	if = {
+		limit = { has_variable = te_dg_um_l100 }
+		remove_variable = te_dg_um_l100
+	}
+}
+
+# ---- The country -------------------------------------------------------------------------------------------------
+
+# THIS = a country, in te_demog_country_census before its walk: the year's sums of its states' uploads and eligible
+# deaths (locals te_dg_c_um_new, te_dg_c_um_elig).
+te_demog_um_country_init = {
+	set_local_variable = { name = te_dg_c_um_new value = 0 }
+	set_local_variable = { name = te_dg_c_um_elig value = 0 }
+	# Living to 100 counting uploads, by people over the late states (te_demog_lx_country_add's weights)
+	set_local_variable = { name = te_dg_c_um_l100 value = 0 }
+	set_local_variable = { name = te_dg_c_um_lpm value = 0 }
+}
+
+# THIS = a census state, in te_demog_country_census's walk (the locals are the country's effect's).
+te_demog_um_country_add = {
+	if = {
+		limit = { has_variable = te_dg_um_new }
+		change_local_variable = { name = te_dg_c_um_new add = var:te_dg_um_new }
+	}
+	if = {
+		limit = { has_variable = te_dg_um_elig }
+		change_local_variable = { name = te_dg_c_um_elig add = var:te_dg_um_elig }
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_elig
+			has_variable = te_dg_lx_l100
+		}
+		change_local_variable = { name = te_dg_c_um_lpm add = local_var:te_dg_c_s_pm }
+		if = {
+			limit = { has_variable = te_dg_um_l100 }
+			change_local_variable = { name = te_dg_c_um_l100 add = { value = var:te_dg_um_l100 multiply = local_var:te_dg_c_s_pm } }
+		}
+		else = {
+			change_local_variable = { name = te_dg_c_um_l100 add = { value = var:te_dg_lx_l100 multiply = local_var:te_dg_c_s_pm } }
+		}
+	}
+}
+
+# THIS = ROOT = a country, in te_demog_country_census after its deaths by cause (demographics_uploads.census): deaths per
+# 1,000 are true deaths, its states' deaths less their uploads (call 6), whatever the rule (a state keeps its last
+# step's uploads until its next step), and Living to 100 counting uploads, by people. Then, under Full, in a country with Mind Backups, a Nexus or minds, the pool's
+# year: 0.1% of the active minds choose to end (call 5); capacity is its Nexus levels x 1,000,000 with Mind Backups, else
+# none (call 3); archived minds come back first, into the room, then active minds over capacity are archived (call 7);
+# the year's free capacity and its share of last year's eligible deaths; the utilisation and the minds' share of the
+# people; the research line's cancel and the Devout's approval. Outside Full the pool stays as it was and the two
+# country modifiers come off.
+te_demog_um_country = {
+	if = {
+		limit = { local_var:te_dg_c_um_new > 0 }
+		set_variable = {
+			name = te_dg_cdr
+			value = {
+				value = local_var:te_dg_c_deaths
+				subtract = local_var:te_dg_c_um_new
+				min = 0
+				divide = { value = local_var:te_dg_c_people min = 1 }
+				multiply = 1000
+			}
+		}
+	}
+	# Living to 100 counting uploads, while a state has booked some
+	if = {
+		limit = {
+			local_var:te_dg_c_um_new > 0
+			local_var:te_dg_c_um_lpm > 0
+		}
+		set_variable = {
+			name = te_dg_um_l100
+			value = { value = local_var:te_dg_c_um_l100 divide = { value = local_var:te_dg_c_um_lpm min = 0.00001 } }
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_um_l100 }
+		remove_variable = te_dg_um_l100
+	}
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			OR = {
+				has_technology_researched = mind_backups
+				has_variable = te_dg_um_cap
+				any_scope_state = { has_building = building_mind_upload_nexus }
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = te_dg_um_f } }
+			set_variable = { name = te_dg_um_f value = 0 }
+			set_variable = { name = te_dg_um_m value = 0 }
+			set_variable = { name = te_dg_um_af value = 0 }
+			set_variable = { name = te_dg_um_am value = 0 }
+		}
+		# the minds that choose to end, of the active ones
+		set_variable = { name = te_dg_um_end value = { value = var:te_dg_um_f add = var:te_dg_um_m multiply = te_demog_k_um_end_rate } }
+		set_variable = { name = te_dg_um_f value = { value = var:te_dg_um_f multiply = te_demog_k_um_keep_rate } }
+		set_variable = { name = te_dg_um_m value = { value = var:te_dg_um_m multiply = te_demog_k_um_keep_rate } }
+		# capacity: the Nexus levels in its states, and their staffing for the research line
+		set_local_variable = { name = te_dg_um_lv value = 0 }
+		set_local_variable = { name = te_dg_um_lvo value = 0 }
+		every_scope_state = {
+			limit = { has_building = building_mind_upload_nexus }
+			change_local_variable = { name = te_dg_um_lv add = te_demog_um_state_levels }
+			if = {
+				limit = { has_variable = te_dg_um_lvo }
+				change_local_variable = { name = te_dg_um_lvo add = var:te_dg_um_lvo }
+			}
+		}
+		set_variable = { name = te_dg_um_lv value = local_var:te_dg_um_lv }
+		set_variable = { name = te_dg_um_cap value = 0 }
+		if = {
+			limit = { has_technology_researched = mind_backups }
+			set_variable = { name = te_dg_um_cap value = { value = local_var:te_dg_um_lv multiply = te_demog_k_um_per_level } }
+		}
+		# archived minds come back first, into the room capacity leaves
+		set_local_variable = {
+			name = te_dg_um_room
+			value = { value = var:te_dg_um_cap subtract = var:te_dg_um_f subtract = var:te_dg_um_m min = 0 }
+		}
+		set_local_variable = { name = te_dg_um_arch value = { value = var:te_dg_um_af add = var:te_dg_um_am } }
+		if = {
+			limit = {
+				local_var:te_dg_um_room > 0
+				local_var:te_dg_um_arch > 0
+			}
+			set_local_variable = {
+				name = te_dg_um_k
+				value = { value = local_var:te_dg_um_room divide = { value = local_var:te_dg_um_arch min = 0.00001 } max = 1 }
+			}
+			te_demog_um_move = { FROM = te_dg_um_a TO = te_dg_um_ }
+		}
+		# active minds over capacity are archived
+		set_local_variable = {
+			name = te_dg_um_over
+			value = { value = var:te_dg_um_f add = var:te_dg_um_m subtract = var:te_dg_um_cap }
+		}
+		if = {
+			limit = { local_var:te_dg_um_over > 0 }
+			set_local_variable = {
+				name = te_dg_um_k
+				value = {
+					value = local_var:te_dg_um_over
+					divide = { value = var:te_dg_um_f add = var:te_dg_um_m min = 0.00001 }
+					max = 1
+				}
+			}
+			te_demog_um_move = { FROM = te_dg_um_ TO = te_dg_um_a }
+		}
+		# this year's free capacity and its share of last year's eligible deaths
+		set_variable = {
+			name = te_dg_um_free
+			value = { value = var:te_dg_um_cap subtract = var:te_dg_um_f subtract = var:te_dg_um_m min = 0 }
+		}
+		set_variable = { name = te_dg_um_new value = local_var:te_dg_c_um_new }
+		set_variable = { name = te_dg_um_dem value = local_var:te_dg_c_um_elig }
+		set_variable = { name = te_dg_um_phi value = 1 }
+		if = {
+			limit = { local_var:te_dg_c_um_elig > 0 }
+			set_variable = {
+				name = te_dg_um_phi
+				value = { value = var:te_dg_um_free divide = { value = local_var:te_dg_c_um_elig min = 0.00001 } max = 1 }
+			}
+		}
+		set_variable = { name = te_dg_um_util value = 0 }
+		if = {
+			limit = { var:te_dg_um_cap > 0 }
+			set_variable = {
+				name = te_dg_um_util
+				value = { value = var:te_dg_um_f add = var:te_dg_um_m divide = { value = var:te_dg_um_cap min = 0.00001 } max = 1 }
+			}
+		}
+		set_local_variable = {
+			name = te_dg_um_minds
+			value = { value = var:te_dg_um_f add = var:te_dg_um_m add = var:te_dg_um_af add = var:te_dg_um_am }
+		}
+		set_variable = {
+			name = te_dg_um_share
+			value = {
+				value = local_var:te_dg_um_minds
+				divide = { value = local_var:te_dg_um_minds add = local_var:te_dg_c_people min = 1 }
+			}
+		}
+		# the Nexus's research line at the utilisation (its one refresh site; ROOT is the country)
+		if = {
+			limit = { has_modifier = te_demog_um_research }
+			remove_modifier = te_demog_um_research
+		}
+		set_variable = {
+			name = te_dg_um_rmult
+			value = { value = 1 subtract = var:te_dg_um_util multiply = local_var:te_dg_um_lvo }
+		}
+		if = {
+			limit = { var:te_dg_um_rmult > 0 }
+			add_modifier = { name = te_demog_um_research multiplier = var:te_dg_um_rmult }
+		}
+		# call 8, behind the switch (off by default): the Devout, while the minds pass a share of the people
+		if = {
+			limit = { has_modifier = te_demog_um_devout }
+			remove_modifier = te_demog_um_devout
+		}
+		if = {
+			limit = {
+				te_demog_k_um_politics > 0
+				var:te_dg_um_share > te_demog_k_um_devout_share
+			}
+			add_modifier = { name = te_demog_um_devout }
+		}
+	}
+	else = {
+		te_demog_um_clear = yes
+	}
+}
+
+# THIS = a country: the share local te_dg_um_k of each sex's minds moves from one pair to the other, $FROM$ and $TO$ the
+# pairs' prefixes: te_dg_um_ the active (te_dg_um_f, te_dg_um_m), te_dg_um_a the archived (demographics_uploads._move).
+te_demog_um_move = {
+	set_local_variable = { name = te_dg_um_xf value = { value = var:$FROM$f multiply = local_var:te_dg_um_k } }
+	set_local_variable = { name = te_dg_um_xm value = { value = var:$FROM$m multiply = local_var:te_dg_um_k } }
+	set_variable = { name = $FROM$f value = { value = var:$FROM$f subtract = local_var:te_dg_um_xf } }
+	set_variable = { name = $FROM$m value = { value = var:$FROM$m subtract = local_var:te_dg_um_xm } }
+	set_variable = { name = $TO$f value = { value = var:$TO$f add = local_var:te_dg_um_xf } }
+	set_variable = { name = $TO$m value = { value = var:$TO$m add = local_var:te_dg_um_xm } }
+}
+
+# THIS = a country: the two country modifiers off (outside Full; te_demog_country_yearly runs it every 31 December,
+# which Disabled reaches and the census doesn't, as te_demog_lx_politics_clear).
+te_demog_um_clear = {
+	if = {
+		limit = { has_modifier = te_demog_um_research }
+		remove_modifier = te_demog_um_research
+	}
+	if = {
+		limit = { has_modifier = te_demog_um_devout }
+		remove_modifier = te_demog_um_devout
+	}
+}
+
+# THIS = a country, on 31 December whatever the rule (te_demog_country_yearly): outside Full, its modifiers off.
+te_demog_um_clear_outside_full = {
+	if = {
+		limit = { NOT = { te_demog_effects_run = yes } }
+		te_demog_um_clear = yes
+	}
+}
+
+# ---- The Nexus (call 6) ----------------------------------------------------------------------------------------------
+
+# THIS = ROOT = a state, on its yearly pulse whatever the rule (te_demog_state_yearly_on_action): the two building
+# modifiers' one refresh site. Under Full every Nexus makes its production method's goods x the owner's utilisation x
+# each good's factor (te_demog_um_nexus_off takes the method's goods away, te_demog_um_nexus_minds gives them back at
+# the utilisation, read through the state's copy root.var:te_dg_um_util), and stores its levels x staffing for the
+# research line's cancel. An owner with no minds (none yet, or no Mind Backups) has a Nexus that makes nothing. Outside
+# Full both come off and the Nexus produces as it does today.
+te_demog_um_nexus_refresh = {
+	if = {
+		limit = { has_building = building_mind_upload_nexus }
+		b:building_mind_upload_nexus = {
+			if = {
+				limit = { has_modifier = te_demog_um_nexus_off }
+				remove_modifier = te_demog_um_nexus_off
+			}
+			if = {
+				limit = { has_modifier = te_demog_um_nexus_minds }
+				remove_modifier = te_demog_um_nexus_minds
+			}
+		}
+		if = {
+			limit = { te_demog_effects_run = yes }
+			set_variable = { name = te_dg_um_util value = 0 }
+			if = {
+				limit = {
+					exists = owner
+					owner = { has_variable = te_dg_um_util }
+				}
+				set_variable = { name = te_dg_um_util value = owner.var:te_dg_um_util }
+			}
+			set_variable = { name = te_dg_um_lvo value = te_demog_um_state_staffed_levels }
+			b:building_mind_upload_nexus = {
+				add_modifier = { name = te_demog_um_nexus_off }
+			}
+			if = {
+				limit = { var:te_dg_um_util > 0 }
+				b:building_mind_upload_nexus = {
+					add_modifier = { name = te_demog_um_nexus_minds multiplier = root.var:te_dg_um_util }
+				}
+			}
+			# once a game: whether the engine applies the scaling (te_debug_demog.130 a week on)
+			te_debug_demog_um_selfcheck_start = yes
+		}
+		else_if = {
+			limit = { has_variable = te_dg_um_lvo }
+			remove_variable = te_dg_um_lvo
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_um_lvo }
+		remove_variable = te_dg_um_lvo
+	}
+}
+
+# THIS = ROOT = a state with a Nexus, just after te_demog_um_nexus_refresh applied its modifiers under Full: once a game,
+# the expected digital assets output and advanced materials input modifiers (the factors x the utilisation, less the
+# -100%) for te_debug_demog.130 to read off the building a week on. Only where they stand at least 0.8 away from what
+# the building would read without them (0.2, a company's prosperity bonus at most), so OK can't be a false pass.
+te_debug_demog_um_selfcheck_start = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_demog_selfcheck_um_done }
+			te_debug_demog_um_chk_clear > 0
+		}
+		set_global_variable = { name = te_demog_selfcheck_um_done value = yes }
+		set_variable = { name = te_dg_um_chk_da value = te_debug_demog_um_chk_da_expected }
+		set_variable = { name = te_dg_um_chk_am value = te_debug_demog_um_chk_am_expected }
+		set_variable = { name = te_dg_um_chk_util value = var:te_dg_um_util }
+		debug_log = "TE_SELF_CHECK START um_nexus_scaling util=[THIS.Var('te_dg_um_chk_util').GetValue|3] expected_digital_assets=[THIS.Var('te_dg_um_chk_da').GetValue|3] expected_advanced_materials=[THIS.Var('te_dg_um_chk_am').GetValue|3] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+		trigger_event = { id = te_debug_demog.130 days = 7 }
+	}
+}

@@ -1,0 +1,118 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — display gates for uploaded minds' rows on the Demographics tab and subtab
+# (gui/te_demographics_widgets.gui; docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md §4)
+# ============================================================================
+# Shown-only gates, as te_demog_lx_sguis.txt's: a .gui read of a missing variable logs every frame. Country gates are
+# rooted at the player's country, state gates at the state the subtab shows. Under Display and Disabled nothing books
+# uploads and the rows that read the pool are hidden (Display shows no pool: the spec's §6).
+# ============================================================================
+
+# Under Full, the country hosts or keeps archived minds (te_demog_um_country writes these together).
+te_demog_um_shown_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_um_f
+		has_variable = te_dg_um_af
+		has_variable = te_dg_um_cap
+		has_variable = te_dg_um_util
+		has_variable = te_dg_um_new
+		has_variable = te_dg_um_end
+		has_variable = te_dg_um_share
+		te_demog_um_any_minds > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Minds archived for want of capacity (call 7).
+te_demog_um_archived_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = te_dg_um_af
+		te_demog_um_archived_m > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Mind Backups and the country's longevity care E (te_demog_lx_country_store): the Backed Up row.
+te_demog_um_backup_sgui = {
+	scope = country
+	is_shown = {
+		has_technology_researched = mind_backups
+		has_variable = te_dg_elig
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's Backed Up row: its owner has Mind Backups, and the state its E.
+te_demog_um_state_backup_sgui = {
+	scope = state
+	is_shown = {
+		exists = owner
+		owner = { has_technology_researched = mind_backups }
+		has_variable = te_dg_elig
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Living to 100 counting uploads (te_demog_um_country, the states' te_demog_um_step).
+te_demog_um_l100_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_um_l100
+		has_variable = te_dg_lx_l100
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's.
+te_demog_um_state_l100_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_um_l100
+		has_variable = te_dg_lx_l100
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Uploads last year: the deaths' hovers say how many of the bodies' deaths uploaded.
+te_demog_um_uploads_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_um_new
+		has_variable = te_dg_people
+		var:te_dg_um_new > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The state's, at its last step.
+te_demog_um_state_uploads_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_effects_run = yes
+		has_variable = te_dg_um_new
+		has_variable = te_dg_people
+		var:te_dg_um_new > 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

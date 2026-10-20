@@ -86,6 +86,8 @@ SECTIONS = {
         # Demographic policies: measures, pensions, the health bill, family limitation
         "te_demog_ms_*", "te_demog_pension_pos_*", "te_demog_health_bill_*",
         "te_demog_family_limitation", "te_demog_lx_gap_politics",
+        # uploaded minds: the Devout's approval while the minds pass a share (behind its switch, off by default)
+        "te_demog_um_devout",
         # Living-standard expectations by strata
         "sol_expectations_*",
         # Civil rights strategies
@@ -126,6 +128,8 @@ SECTIONS = {
         "te_antarctic_station_modifier", "un_antarctic_*", "un_regime_antarctic_station_modifier",
         # Seabed policy
         "te_seabed_policy_*", "te_seabed_long_haul",
+        # The Mind Upload Nexus's research at its hosted minds (the Demographics rule's uploaded minds, under Full)
+        "te_demog_um_research",
     ),
     "international": (
         # UN conventions a country is bound by outside the organisation's entry
@@ -233,6 +237,7 @@ NOT_ON_COUNTRY = {
     "resettlement_*_destination": "states", "resettlement_arrivals": "the destination's buildings",
     "resettlement_transit_deaths": "the destination's buildings", "resettlement_recruits": "states",
     "st_res_*_flow": "the reserve hub's building",
+    "te_demog_um_nexus_*": "the Mind Upload Nexus's building",
     "te_construction_market_capacity_modifier": "construction sites",
 }
 

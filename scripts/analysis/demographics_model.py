@@ -64,6 +64,11 @@ class Inputs:
     ecto_levels: float = 0.0
     # phase 3: Cultural Hegemony's drift, the owner's factor on desired fertility (te_dg_ch_desired, under Full); 1 = none
     hegemon: float = 1.0
+    # uploaded minds (2026-10-19; demographics_uploads.py): last step's longevity care E, which Mind Backups' restore
+    # (P.BACKUP_TYPES) scales by (step() fills it from the ring), and under Full with a Nexus the owner's year {"phi",
+    # "free"}: the share of eligible deaths it can host and the capacity still free (None: no uploads)
+    backup_elig: float = 0.0
+    uploads: dict | None = None
 
 
 def clamp(x, lo, hi):
@@ -88,8 +93,10 @@ def female_work_share(inp):
 
 
 def plain_multiplier(inp, cause):
-    """1 + the cause's types' sum (P.MORTALITY_TYPES), at least P.MORTALITY_MULT_FLOOR."""
-    return max(P.MORTALITY_MULT_FLOOR, 1 + sum(inp.mods.get(t, 0.0) for t in P.MORTALITY_TYPES.get(cause, ())))
+    """1 + the cause's types' sum (P.MORTALITY_TYPES) + Mind Backups' restore x last step's longevity care (P.BACKUP_TYPES,
+    uploaded minds call 2), at least P.MORTALITY_MULT_FLOOR."""
+    backup = inp.mods.get(P.BACKUP_TYPES[cause], 0.0) * inp.backup_elig if cause in P.BACKUP_TYPES else 0.0
+    return max(P.MORTALITY_MULT_FLOOR, 1 + sum(inp.mods.get(t, 0.0) for t in P.MORTALITY_TYPES.get(cause, ())) + backup)
 
 
 def medicine_targets(inp):
@@ -1260,6 +1267,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         # the sex balance the step's fertility and women's rate read (te_demog_sex_births_store): the ring's before its
         # sweep, which is the census's last figure (phase 2 step 4)
         inp = replace(inp, sex_balance=structure(ring)["men_per_100_women"])
+        # uploaded minds' call 2: Mind Backups' restore at last step's longevity care (te_demog_cause_inputs_store)
+        inp = replace(inp, backup_elig=ring.lx_elig or 0.0)
         # medicine spreads (the Causes of Death plan): the drifted values move, then the year's rates use them
         ring.medicine = medicine_drift(ring.medicine, inp)
         inp = replace(inp, medicine=ring.medicine)
@@ -1285,6 +1294,9 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     qf0, qm0 = list(qf), list(qm)        # the model's own rates (phase 3's life tables)
     # phase 3, the late game: None until the state has a carrier or treated people (te_demog_lx_begin)
     lx = lx_begin(ring, inp) if rates is None else None
+    if lx is not None and inp.uploads is not None:
+        import demographics_uploads as U       # uploaded minds (2026-10-19): the sweep's sums for them
+        lx["um"] = U.Sums(inp)
     ring.lx_slot = {}
     tfr = tfr * (1 + births_scale)
     # the people the sweep takes its dead from, by band (issue #1029's estimate, cause_deaths_estimate below)
@@ -1392,7 +1404,7 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             ring.lx_out["b50"] = lx["b50"] / births
     else:
         ring.lx_out = {}
-    return {"lx": ring.lx_out, "mab": birth_age / births + 0.5 if births > 0 else None, "births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
+    out = {"lx": ring.lx_out, "mab": birth_age / births + 0.5 if births > 0 else None, "births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
             "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
             "fertility": fert, "raw": raw,
             "tfr_shown": tfr, "maternal": maternal,
@@ -1400,6 +1412,9 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
                                                                    war_dead, kills),
             "births_model": births / (1 + births_scale),
             "deaths_model": (deaths - maternal) / (1 + deaths_scale) + maternal / (1 + births_scale)}
+    if lx is not None and lx.get("um") is not None and out["causes"] is not None:
+        out["um"] = U.book(lx, out["causes"], inp, qf0, qm0)   # the step's uploads (te_demog_um_step)
+    return out
 
 
 def structure(ring):
@@ -1689,6 +1704,8 @@ def lx_slot(lx, ring, k, r, g, f, m, bm, mmr, qf, qm, qf0, qm0, war_f, war_m):
         lx["T_m"][g] += mt
         lx["TQ_f"][g] += ft * qf0[gt]
         lx["TQ_m"][g] += mt * qm0[gt]
+        if lx.get("um") is not None:            # uploaded minds: the treated's infection and chronic part
+            lx["um"].slot(g, gt, ft, mt)
         alive = t2f + t2m + u2f + u2m
         if alive > 0:
             ring.lx_slot[k] = (clamp((t2f + t2m) / max(alive, 0.00001), 0.0, 1.0),
@@ -1728,6 +1745,8 @@ def lx_pool_deaths(ring, lx, qf, qm, qf0, qm0):
         lx["T_m"][last] += tm
         lx["TQ_f"][last] += tf * qf0[gt]
         lx["TQ_m"][last] += tm * qm0[gt]
+        if lx.get("um") is not None:
+            lx["um"].slot(last, gt, tf, tm)
         lx_causes_at(lx, tf, tm, gt)
     ring.pool_f, ring.pool_m = tf2 + uf2, tm2 + um2
     if ps > 0:

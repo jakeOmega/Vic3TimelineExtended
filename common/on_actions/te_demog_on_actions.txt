@@ -22,6 +22,9 @@ te_demog_state_yearly_on_action = {
 		te_demog_up_state_refresh = yes
 		# a planned capital's development ends once the state is no longer the capital
 		te_demog_pc_state_check = yes
+		# uploaded minds (2026-10-19): a Mind Upload Nexus's output follows the owner's hosted minds under Full, its
+		# modifiers' one refresh site, with ROOT the state (te_demog_um_effects.txt)
+		te_demog_um_nexus_refresh = yes
 	}
 }
 

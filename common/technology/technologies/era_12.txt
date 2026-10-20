@@ -361,10 +361,12 @@ mind_backups = {
 		building_economy_of_scale_level_cap_add = 10
 		country_max_weekly_construction_progress_add = 50
 		# demographics phase 3 (the late-game design §8.4, call 19): under Full the census carries this line as half the
-		# deaths from accidents, violence and work (the backed-up are restored); outside Full the flat line stays
+		# deaths from accidents, violence and work (the backed-up are restored); outside Full the flat line stays.
+		# Uploaded minds (call 2, 2026-10-19): only those in longevity care are backed up, so the two restore lines are
+		# their own census-only types, which the census takes x the state's share in care (1 - 0.5 x E)
 		state_demog_absorbed_mortality_mult = -0.05
-		state_external_mortality_mult = -0.5
-		state_work_mortality_mult = -0.5
+		state_backup_external_mortality_mult = -0.5
+		state_backup_work_mortality_mult = -0.5
 		character_health_add = 10000
 		state_literacy_growth_add = 0.0001
 	}

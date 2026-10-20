@@ -922,3 +922,33 @@ LX_POLITICS_LABOR = 0.10
 # Linked to Common Longevity, as the country's unions would; it goes back to Standard under PENSION_AI_GAP_LOW.
 PENSION_AI_GAP = 0.2
 PENSION_AI_GAP_LOW = 0.1
+
+# ---- Uploaded minds (2026-10-19) ----
+# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's calls of 2026-10-19 (§7); the model
+# is demographics_uploads.py, the script te_demog_um_effects.txt. Under Full only.
+# Mind Backups' restore (call 2): its two -0.5 lines sit on these census-only types, which the census adds x the state's
+# longevity care E (last step's), so the restore is 1 - 0.5 x E; outside Full the flat absorbed -5% stays.
+BACKUP_TYPES = {"external": "state_backup_external_mortality_mult", "work": "state_backup_work_mortality_mult"}
+DEMOG_TYPES = DEMOG_TYPES + tuple(BACKUP_TYPES.values())
+# Who uploads (call 1): those in longevity care facing death from infection or chronic illness (call 4) in a country with
+# UM_TECH and at least one level of UM_BUILDING. Capacity (call 3): UM_PER_LEVEL minds a level, country-wide.
+UM_TECH = "mind_backups"
+UM_BUILDING = "building_mind_upload_nexus"
+UM_PER_LEVEL = 1_000_000
+# The pool's loss (call 5): this share of the active minds a year choose to end; archived minds (call 7) don't.
+UM_END_RATE = 0.001
+# The Nexus's output under Full (call 6): each good's production-method line x the country's utilisation (active minds
+# over capacity) x its factor, so a full level makes about UM_MIND_OUTPUT a mind a week at base prices (the calibration in
+# the PR body: between an era-12 services worker and the top software method's 64). Digital assets lead (traded);
+# services stay at today's line (local: they flood their own state). Inputs lean on the traded goods; electricity and
+# digital access are local.
+UM_MIND_OUTPUT = 40
+UM_OUTPUT_FACTORS = {"digital_assets": 15, "tourism": 2, "fine_art": 2, "services": 1}
+UM_INPUT_FACTORS = {"electricity": 2, "electronic_components": 8, "digital_access": 2, "advanced_materials": 8}
+# its research speed a level, the production method's country line, which the census scales by utilisation
+UM_RESEARCH_PER_LEVEL = 0.05
+# The Devout's approval (call 8): while the pool is over UM_DEVOUT_SHARE of the people (minds and bodies), by
+# UM_DEVOUT_APPROVAL. Built behind the switch, off by default (generated te_demog_k_um_politics), like the gap's was.
+UM_POLITICS = False
+UM_DEVOUT_SHARE = 0.01
+UM_DEVOUT_APPROVAL = -3

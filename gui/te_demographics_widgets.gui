@@ -2282,6 +2282,11 @@ types te_demographics_widgets
 				visible = "[And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_lx_bio_pyr_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				text = "te_demog_pyr_legend_bio"
 			}
+			### uploaded minds: the minds with no body, so no band (the uploaded-minds spec §4)
+			te_demog_note = {
+				visible = "[And( GetVariableSystem.Exists('te_demog_pyr_bio_open'), GetScriptedGui('te_demog_um_shown_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "te_demog_um_pyr_line"
+			}
 		}
 	}
 
@@ -4625,8 +4630,9 @@ types te_demographics_widgets
 				blockoverride "row_label" {
 					text = "te_demog_lx_l100"
 				}
+				### uploaded minds: an upload counts as living (te_dg_um_l100, under Full)
 				blockoverride "row_value" {
-					text = "te_demog_ov_lx_l100_value"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_um_l100_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_um_l100_value', 'te_demog_ov_lx_l100_value' )]"
 				}
 			}
 			te_demog_figure_row = {
@@ -4654,6 +4660,28 @@ types te_demographics_widgets
 				}
 				blockoverride "row_value" {
 					text = "te_demog_ov_lx_gap_value"
+				}
+			}
+			### uploaded minds (2026-10-19; the uploaded-minds spec §4): those backed up by Mind Backups (E), and the minds
+			### the country hosts on its Mind Upload Nexuses, once it hosts or archives one (Full only)
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_um_backup_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_um_backup_tt"
+				blockoverride "row_label" {
+					text = "te_demog_um_backup"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_um_backup_value"
+				}
+			}
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_um_shown_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "te_demog_ov_um_tt"
+				blockoverride "row_label" {
+					text = "te_demog_um_row"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_um_value"
 				}
 			}
 		}
@@ -5251,8 +5279,9 @@ types te_demographics_widgets
 				blockoverride "row_label" {
 					text = "te_demog_lx_l100"
 				}
+				### uploaded minds: an upload counts as living (te_dg_um_l100, under Full)
 				blockoverride "row_value" {
-					text = "te_demog_st_lx_l100_value"
+					text = "[SelectLocalization( GetScriptedGui('te_demog_um_state_l100_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_um_l100_value', 'te_demog_st_lx_l100_value' )]"
 				}
 			}
 			te_demog_figure_row = {
@@ -5280,6 +5309,28 @@ types te_demographics_widgets
 				}
 				blockoverride "row_value" {
 					text = "te_demog_st_lx_gap_value"
+				}
+			}
+			### uploaded minds (the uploaded-minds spec §4): the state's backed-up share, and its uploads at its last census
+			### (the pool is the country's, on the Demographics tab)
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_um_state_backup_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_um_backup_tt"
+				blockoverride "row_label" {
+					text = "te_demog_um_backup"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_um_backup_value"
+				}
+			}
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+				tooltip = "te_demog_st_um_tt"
+				blockoverride "row_label" {
+					text = "te_demog_um_row_state"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_st_um_value"
 				}
 			}
 		}

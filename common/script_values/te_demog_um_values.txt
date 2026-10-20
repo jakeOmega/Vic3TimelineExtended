@@ -1,0 +1,198 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — uploaded minds' values (the owner's calls of 2026-10-19)
+# docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md; the effects are te_demog_um_effects.txt, the
+# twin demographics_uploads.py. The constants are generated (te_demog_um_generated_values.txt).
+# ============================================================================
+
+# State scope: its Mind Upload Nexus's levels (the country's capacity sums them; te_demog_um_country).
+te_demog_um_state_levels = {
+	value = 0
+	if = {
+		limit = { has_building = building_mind_upload_nexus }
+		value = b:building_mind_upload_nexus.level
+	}
+}
+
+# State scope: its Nexus's levels x its staffing, 0-1: the levels whose research line the production method gives
+# (workforce-scaled), which the census's cancel takes back to the utilisation (te_demog_um_research).
+te_demog_um_state_staffed_levels = {
+	value = 0
+	if = {
+		limit = { has_building = building_mind_upload_nexus }
+		value = b:building_mind_upload_nexus.level
+		multiply = b:building_mind_upload_nexus.occupancy
+	}
+}
+
+# State scope: the people its last step uploaded (deaths per 1,000 leave them out; te_demog_state_figures).
+te_demog_um_state_uploads = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_new }
+		value = var:te_dg_um_new
+	}
+}
+
+# ---- The panel (the country: GetPlayer; the state: State) -------------------------------------------------------
+
+# Country scope: active minds, archived minds and capacity, in millions; last year's uploads and chosen endings.
+te_demog_um_minds_m = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_f }
+		value = var:te_dg_um_f
+		add = var:te_dg_um_m
+		divide = 1000000
+	}
+}
+te_demog_um_archived_m = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_af }
+		value = var:te_dg_um_af
+		add = var:te_dg_um_am
+		divide = 1000000
+	}
+}
+te_demog_um_cap_m = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_cap }
+		value = var:te_dg_um_cap
+		divide = 1000000
+	}
+}
+te_demog_um_women = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_f }
+		value = var:te_dg_um_f
+		add = var:te_dg_um_af
+	}
+}
+te_demog_um_men = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_m }
+		value = var:te_dg_um_m
+		add = var:te_dg_um_am
+	}
+}
+
+# Country scope: the share of last year's eligible deaths that became uploads (0 with none).
+te_demog_um_hosted_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_um_dem
+			var:te_dg_um_dem > 0
+		}
+		value = var:te_dg_um_new
+		divide = { value = var:te_dg_um_dem min = 0.00001 }
+		max = 1
+	}
+}
+
+# Country or state scope: last year's uploads per 1,000 people (bodies), for the deaths' hovers.
+te_demog_um_upload_rate = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_um_new
+			has_variable = te_dg_people
+		}
+		value = var:te_dg_um_new
+		divide = { value = var:te_dg_people min = 1 }
+		multiply = 1000
+	}
+}
+
+# Country or state scope: Living to 100 with uploads counting as living, and the share of it that lives on as an upload
+# (Living to 100's hover).
+te_demog_um_l100 = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_um_l100 }
+		value = var:te_dg_um_l100
+	}
+	else_if = {
+		limit = { has_variable = te_dg_lx_l100 }
+		value = var:te_dg_lx_l100
+	}
+}
+te_demog_um_l100_as_upload = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_um_l100
+			has_variable = te_dg_lx_l100
+		}
+		value = var:te_dg_um_l100
+		subtract = var:te_dg_lx_l100
+		min = 0
+	}
+}
+
+# Country or state scope: the restore's share of deaths from accidents, violence and work: 0.5 x the share in care E
+# (the Backed Up row's hover).
+te_demog_um_restore_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_elig }
+		value = var:te_dg_elig
+		multiply = 0.5
+	}
+}
+
+# ---- The self-check (te_debug_demog_um_selfcheck_start, te_debug_demog.130) -------------------------------------------
+
+# State scope: the digital assets output and advanced materials input modifiers te_demog_um_nexus_refresh applies, less
+# the production method's own (the factors x the utilisation, less the -100%).
+te_debug_demog_um_chk_da_expected = {
+	value = var:te_dg_um_util
+	multiply = te_demog_k_um_out_digital_assets
+	subtract = 1
+}
+te_debug_demog_um_chk_am_expected = {
+	value = var:te_dg_um_util
+	multiply = te_demog_k_um_in_advanced_materials
+	subtract = 1
+}
+# 1 where the expected output modifier stands at least 0.8 from 0.2 (a company's prosperity bonus at most, what the
+# building would read without them), so OK can't be a false pass
+te_debug_demog_um_chk_clear = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_debug_demog_um_chk_da_expected <= -0.6
+				te_debug_demog_um_chk_da_expected >= 1
+			}
+		}
+		value = 1
+	}
+}
+# State scope, in te_debug_demog.130: what the building reads, less what the check expects
+te_debug_demog_um_chk_da_gap = {
+	value = var:te_dg_um_chk_da_got
+	subtract = var:te_dg_um_chk_da
+}
+te_debug_demog_um_chk_am_gap = {
+	value = var:te_dg_um_chk_am_got
+	subtract = var:te_dg_um_chk_am
+}
+
+# Country scope: minds of either kind, active or archived (the Uploaded Minds row's gate).
+te_demog_um_any_minds = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_um_f
+			has_variable = te_dg_um_af
+		}
+		value = var:te_dg_um_f
+		add = var:te_dg_um_m
+		add = var:te_dg_um_af
+		add = var:te_dg_um_am
+	}
+}

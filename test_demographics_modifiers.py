@@ -79,7 +79,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    P.TREATMENT_TYPE["chronic"]: {"technology", "law"},
                    # the police laws' lines are per level of the Ministry of Public Safety (2026-10-16)
                    "state_external_mortality_mult": {"technology", "law", "law_institution", "institution"},
-                   "state_work_mortality_mult": {"law", "law_institution", "technology"},   # phase 3: Mind Backups
+                   "state_work_mortality_mult": {"law", "law_institution"},
+                   # uploaded minds' call 2 (2026-10-19): Mind Backups' restore, x the state's longevity care
+                   **{t: {"technology"} for t in P.BACKUP_TYPES.values()},
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
                    P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"},
