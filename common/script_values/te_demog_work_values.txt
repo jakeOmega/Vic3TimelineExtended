@@ -64,8 +64,9 @@ te_demog_wf_engine_target = {
 }
 
 # Women's share of work deaths (§2.5; demographics_model.work_death_share): under Full the census's own count of women
-# among the workers at the work deaths' ages at the last count (te_dg_fws_wk, te_demog_work_finish_step2), else the law
-# table (te_demog_female_work_share, generated). te_demog_prepare reads it; the flows keep the law's share.
+# among the workers at the work deaths' ages at the last count (te_dg_fws_wk, te_demog_work_finish_step2), else the laws'
+# share (te_demog_female_work_share, generated: 0.1 + state_female_work_share_add). te_demog_prepare reads it; the flows
+# keep the laws' share.
 te_demog_work_death_share = {
 	value = te_demog_female_work_share
 	if = {

@@ -20,10 +20,12 @@ Saves: plain text (read with demographics_save_inputs; two passes) or extract_al
 weight's transport technologies then come from whichever plain-text saves are given (each year the nearest earlier).
 """
 
+import functools
 import json
 from pathlib import Path
 
 import demographics_model as M
+import demographics_modifiers as DM
 import demographics_params as P
 import demographics_save_inputs as S
 
@@ -33,8 +35,23 @@ STEP_VARS = ("te_dg_year", "te_dg_stepped", "te_dg_people", "te_dg_net_migration
 BAND_VARS = tuple(f"te_dg_b{s}{b}" for s in "fm" for b in range(P.BANDS))
 RING_VARS = (("te_dg_scale", "te_dg_pf", "te_dg_pm", "te_dg_pa")
              + tuple(f"te_dg_{s}{k}" for s in "fm" for k in range(P.RING_YEARS)))
-WOMEN_LAWS = frozenset(P.FEMALE_WORK_SHARE)
-TRANSPORT = frozenset(P.FAMILY_TRANSPORT_TECHS)
+
+
+@functools.lru_cache(maxsize=None)
+def migrant_lines():
+    """The migrant profile's two types' carriers in the game files (modifier-types stage 3): the women's-rights laws'
+    share of women at work and the transport technologies' families, read once."""
+    return tuple(DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES))
+
+
+def women_laws():
+    """The laws a save's countries keep: those carrying the women's work share."""
+    return frozenset(c.key for c in migrant_lines() if c.type == P.FEMALE_WORK_SHARE_TYPE)
+
+
+def transport_techs():
+    """The technologies carrying the families' line (Paddle Steamer to Jet Engine Technology)."""
+    return frozenset(c.key for c in migrant_lines() if c.type == P.FAMILY_MIGRATION_TYPE)
 
 
 def _year_of_date(date):
@@ -50,7 +67,7 @@ def read_save(path, year_of=None, ring=False):
         data = json.loads(Path(path).read_text(encoding="utf-8"))
         at_war = {cid for w in data.get("wars", []) for cid in w.get("participants", [])}
         laws, techs = data.get("laws", {}), data.get("techs", {})
-        countries = {cid: {"tag": c.get("tag", ""), "laws": frozenset(laws.get(cid, ())) & WOMEN_LAWS,
+        countries = {cid: {"tag": c.get("tag", ""), "laws": frozenset(laws.get(cid, ())) & women_laws(),
                            "techs": frozenset(techs.get(cid, ())), "at_war": cid in at_war}
                      for cid, c in data.get("countries", {}).items()}
         states = {}
@@ -69,7 +86,7 @@ def read_save(path, year_of=None, ring=False):
     for rec in sections["technology"].values():
         techs = rec.get("acquired_technologies", "").strip("{} ").split()
         acquired[rec.get("country")] = frozenset(techs)
-    countries = {cid: {"tag": c["tag"], "laws": frozenset(c["laws"]) & WOMEN_LAWS,
+    countries = {cid: {"tag": c["tag"], "laws": frozenset(c["laws"]) & women_laws(),
                        "techs": acquired.get(cid, frozenset()), "at_war": False}
                  for cid, c in raw_countries.items()}
     states = {}
@@ -107,7 +124,7 @@ def merge_years(saves):
 
 def _transport_by_year(saves):
     """{year: {cid: transport techs}} from the saves that hold every technology."""
-    return {s["year"]: {cid: c["techs"] & TRANSPORT for cid, c in s["countries"].items()}
+    return {s["year"]: {cid: c["techs"] & transport_techs() for cid, c in s["countries"].items()}
             for s in saves if s["techs_known"]}
 
 
@@ -118,14 +135,16 @@ def _transport(known, cid, year):
 
 def inputs(rec, prev, country, year, known):
     """The model's Inputs for a state's step from its stored walk (and the step before's chain-migration count, which
-    the profile read before the step counted this year)."""
+    the profile read before the step counted this year). The profile's two types are the totals the laws' and
+    technologies' lines give (migrant_lines)."""
     v = rec["vars"]
     laws = country["laws"] if country else frozenset()
     techs = (country["techs"] | _transport(known, rec["owner"], year)) if country else frozenset()
+    mods = DM.totals(migrant_lines(), techs, laws, types=P.MIGRANT_PROFILE_TYPES)
     crisis = (rec.get("devastation", 0.0) / 100.0 + v.get("te_dg_in_turm", 0.0)
               + (P.CRISIS_AT_WAR if country and country["at_war"] else 0.0))
     return M.Inputs(sol=v.get("te_dg_sol", 8.0), literacy=v.get("te_dg_lit", 0.2),
-                    urban_share=v.get("te_dg_urban_share", 0.1), laws=laws, techs=techs,
+                    urban_share=v.get("te_dg_urban_share", 0.1), laws=laws, techs=techs, mods=mods,
                     female_job_share=v.get("te_dg_fjob_share", 0.0), crisis=M.clamp(crisis, 0.0, 1.0),
                     inflow_years=int((prev or {}).get("vars", {}).get("te_dg_inflow_years", 0)),
                     wealth_tfr=v.get("te_dg_wtfr"), agrarian_share=v.get("te_dg_agr_share", 0.0))

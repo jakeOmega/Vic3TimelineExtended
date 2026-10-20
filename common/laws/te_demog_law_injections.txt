@@ -8,12 +8,13 @@
 # -2% a level, Dedicated and Militarized -3% (Private Policing's -2% is in extra_laws.txt). The health laws' access
 # lines sit inside their existing blocks in modified_health_system.txt; the women's-rights laws'
 # natural fertility (phase 2 step 4) inside their INJECTs in extra_laws.txt, except Women Own
-# Property's, which has no other INJECT. The health laws' longevity care lines (late game §4.2) and the
+# Property's, which is in this file; their women's work share (stage 3) is in this file too. The health laws' longevity care lines (late game §4.2) and the
 # church laws' weight on Family Limitation (phase 3) are at the end of this file; Child Labor Allowed and
 # Restricted Child Labor carry the 10-14s' share at work (phase 2 step 1) beside their other lines.
 # Primogeniture's and Undivided Farm Succession's Late Marriage lines sit in their own definitions
-# (extra_laws.txt, extra_amendments.txt). Wealth Concentration's law lines are not census inputs:
-# te_demog_wealth_law_injections.txt.
+# (extra_laws.txt, extra_amendments.txt). The women's-rights laws' share of women at work (stage 3, 2026-10-19), which
+# the migrant profile and Late Marriage read, follows Women Own Property's block (Protected Class's is in
+# extra_laws.txt). Wealth Concentration's law lines are not census inputs: te_demog_wealth_law_injections.txt.
 
 INJECT:law_local_police = {
 	institution_modifier = {
@@ -49,6 +50,28 @@ INJECT:law_restricted_child_labor = {
 INJECT:law_women_own_property = {
 	modifier = {
 		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
+		state_female_work_share_add = 0.2	# the census's women at work: 0.1 + it (modifier-types stage 3)
+	}
+}
+
+# Women's share of the workforce (modifier-types design, stage 3, 2026-10-19): the census reads 0.1 + the law's line,
+# for the labour migrants' women, the family migrants' weight and Late Marriage's women's work; outside Full it also
+# splits deaths at work. No Women's Rights carries none.
+INJECT:law_women_in_the_fields = {
+	modifier = {
+		state_female_work_share_add = 0.15
+	}
+}
+
+INJECT:law_women_in_the_workplace = {
+	modifier = {
+		state_female_work_share_add = 0.35
+	}
+}
+
+INJECT:law_womens_suffrage = {
+	modifier = {
+		state_female_work_share_add = 0.37
 	}
 }
 

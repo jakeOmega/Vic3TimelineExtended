@@ -173,6 +173,29 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             code = [_code(line).strip() for line in self._text(rel).split("\n")]
             self.assertFalse([c for c in code if c], rel)
 
+    def test_the_migrant_profiles_inputs_go_and_their_carriers_stay(self):
+        """Stage 3 of the modifier-types design (2026-10-19): women's share of the workforce and families among migrants
+        are census-only types. A release comments their lines out on the mod's own carriers too (Protected Class, the
+        two aviation techs), and keeps every other line those carry; the vanilla carriers' INJECTs go whole
+        (test_the_injection_files_are_inert)."""
+        for name in ("state_female_work_share_add", "state_family_migration_add"):
+            self.assertIn(name, self.types)
+        for rel, entry, typ, kept in (
+                ("common/laws/extra_laws.txt", "law_protected_class", "state_female_work_share_add",
+                 "state_dependent_political_participation_add = 0.5"),
+                ("common/technology/technologies/era_6.txt", "commercial_aviation", "state_family_migration_add",
+                 "state_building_airport_max_level_add = 1"),
+                ("common/technology/technologies/era_7.txt", "jet_engine_technology", "state_family_migration_add",
+                 "state_building_airport_max_level_add = 1")):
+            with self.subTest(entry=entry):
+                lines = self._text(rel).split("\n")
+                body = [lines[i] for i in sorted(self._entry_lines(self._text(rel), entry))]
+                self.assertTrue(body, entry)
+                hits = [line for line in body if typ in line]
+                self.assertEqual(len(hits), 1, entry)
+                self.assertTrue(hits[0].startswith(TAG), hits[0])
+                self.assertTrue([line for line in body if kept in _code(line)], f"{entry} keeps {kept}")
+
     def test_family_limitation_is_never_applied(self):
         # its only effect line is a census type, so applied it would show on France doing nothing
         for path in [*self.root.joinpath("common").rglob("*.txt"), *self.root.joinpath("events").rglob("*.txt")]:
