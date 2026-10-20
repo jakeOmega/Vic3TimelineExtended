@@ -969,7 +969,7 @@ Common undocumented-but-real triggers worth knowing: `has_treaty_defensive_pact_
 - **`Var('X')` can chain type-specific accessors** to navigate to the stored scope:
   - `.GetState.GetStateRegion.GetName` — state stored in variable (PROVEN in vanilla)
   - `.GetState.GetCountry.GetName` — state stored in variable → owner country name (PROVEN chain)
-  - `.GetCharacter.GetFullName` — character stored in variable (PROVEN in vanilla)
+  - `.GetCharacter.GetFullName` — character stored in variable (PROVEN in vanilla). The engine never clears a variable whose character is deleted (a namesake who died), and `exists = var:X` is then false, so a custom-loc branch guarded by it falls through. Verified 2026-10-20: a Grand Monument whose namesake had been gone for three game years printed its year name, behind `gm_monument_name_row`'s `exists` guard, with no error and no crash.
   - `.GetInterestGroup.GetName` — IG stored in variable (PROVEN in vanilla)
   - `.GetLaw.GetName` — law stored in variable (PROVEN in vanilla)
   - `.GetBuildingType.GetName` — building type in variable (PROVEN in vanilla)
