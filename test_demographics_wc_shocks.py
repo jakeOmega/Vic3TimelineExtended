@@ -14,8 +14,8 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 from test_demographics_registry import (  # noqa: E402  (helpers and paths only: no TestCase)
-    APPLIED, DEMOG_ON_ACTIONS, EFFECTS, INH_EFFECTS, VALUES, WEALTH_EFFECTS, _block, _CountryEngine, _parse_script,
-    _raw_blocks, _text)
+    APPLIED, DEMOG_ON_ACTIONS, EFFECTS, INH_EFFECTS, VALUES, WEALTH_EFFECTS, _block, _CountryEngine, _find,
+    _parse_script, _raw_blocks, _text)
 
 INEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_inequality_modifiers.txt"
 WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
@@ -23,6 +23,9 @@ NATION_TAB = ROOT / "scripts" / "generators" / "gen_nation_tab.py"
 MISC_LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
 MARKET_TRIGGERS = ROOT / "common" / "scripted_triggers" / "market_triggers.txt"
 TERRITORY_VALUES = ROOT / "common" / "script_values" / "te_demog_territory_values.txt"
+INFLATION_EVENTS = ROOT / "events" / "te_inflation_events.txt"
+EVENTS_LOC = ROOT / "localization" / "english" / "te_events_l_english.yml"
+CONCEPTS_LOC = ROOT / "localization" / "english" / "te_concepts_l_english.yml"
 TARGET_FIXTURES = {"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
                    "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0}
 
@@ -199,6 +202,66 @@ class TestBoomShock(unittest.TestCase):
         body = _block(_text(DEMOG_ON_ACTIONS), "te_demog_country_monthly_on_action")
         self.assertIn("te_demog_wc_boom_check = yes", body)
         self.assertIn("te_demog_wc_shock = { AMOUNT = 5 }", _block(_text(WEALTH_EFFECTS), "te_demog_wc_boom_check"))
+
+
+# -- Money: the hyperinflation crisis (owner, 2026-10-20) --------------------------------------------------------------
+
+class TestHyperinflationShock(unittest.TestCase):
+    """§4.2's Money bullet: bond fortunes vanish. -5 to every state when te_inflation.1 fires (its immediate, so riding
+    it out takes it again each time the crisis returns after its cooldown) and -5 more on a currency reform, whatever
+    the Demographics rule."""
+
+    @staticmethod
+    def event():
+        return _parse_script(_block(_text(INFLATION_EVENTS), "te_inflation.1"))
+
+    def options(self):
+        return [v for k, _, v in self.event() if k == "option"]
+
+    @staticmethod
+    def run_body(body, states):
+        eng = _CountryEngine(states=states, effects=APPLIED, fixtures=TARGET_FIXTURES)
+        eng.run(body)
+        return eng.vars
+
+    def test_minus_five_when_the_crisis_fires(self):
+        states = [_scored(50.0), _scored(3.0), {}]
+        v = self.run_body(_find(self.event(), "immediate"), states)
+        self.assertEqual([s.get("te_dg_wc") for s in states], [45.0, 0.0, None])
+        self.assertIn("applied", v, "the national figure and its modifiers follow")
+
+    def test_five_more_on_a_currency_reform_only(self):
+        reform, dollarise, ride = self.options()
+        self.assertEqual([_find(o, "name") for o in (reform, dollarise, ride)],
+                         ["te_inflation.1.a", "te_inflation.1.b", "te_inflation.1.c"])
+        blocks = [v for k, _, v in reform if k == "custom_tooltip" and isinstance(v, list)]
+        self.assertEqual(len(blocks), 1, "the reform's shock sits in a tooltip that says so")
+        self.assertEqual(_find(blocks[0], "text"), "te_inflation.1.a.wc.tt")
+        states = [_scored(45.0)]
+        self.run_body([item for item in blocks[0] if item[0] != "text"], states)
+        self.assertEqual(states[0]["te_dg_wc"], 40.0)
+        for option in (dollarise, ride):
+            self.assertNotIn("te_demog_wc_shock", repr(option))
+
+    def test_the_crisis_is_the_one_site(self):
+        sites = [p.name for p in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").rglob("*.txt"))
+                 if "te_inflation" in p.name or "te_monetary" in p.name
+                 if "te_demog_wc_shock" in p.read_text(encoding="utf-8-sig")]
+        self.assertEqual(sites, ["te_inflation_events.txt"])
+        body = _block(_text(INFLATION_EVENTS), "te_inflation.1")
+        self.assertEqual(body.count("te_demog_wc_shock = { AMOUNT = -5 }"), 2)
+        self.assertNotIn("te_demog_effects_run", body, "every Demographics rule")
+
+    def test_each_options_tooltip_says_so(self):
+        loc = dict(re.findall(r'(?m)^ ([\w.]+):\d* "(.*)"$', _text(EVENTS_LOC) + "\n" + _text(MISC_LOC)))
+        self.assertIn("[concept_inheritance_concentration] fell by #v 5#! when the crisis broke",
+                      loc["te_inflation_wc_fired"])
+        for key in ("te_inflation.1.a.wc.tt", "te_inflation.1.b.tt", "te_inflation.1.c.tt"):
+            self.assertIn("$te_inflation_wc_fired$", loc[key], key)
+        self.assertIn("#v 5#! more", loc["te_inflation.1.a.wc.tt"])
+        self.assertIn("#v 5#! again", loc["te_inflation.1.c.tt"])
+        for path, key in ((CONCEPTS_LOC, "concept_inheritance_concentration_desc"), (MISC_LOC, "te_demog_how_wc")):
+            self.assertIn("a hyperinflation crisis", dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _text(path)))[key])
 
 
 # -- W3: land reform --------------------------------------------------------------------------------------------------
@@ -520,10 +583,11 @@ class TestInequality(unittest.TestCase):
         eng.call("te_demog_inequality_refresh")
         return eng
 
-    def test_from_045_to_the_cap_at_065(self):
+    def test_from_045_on_with_no_cap(self):
+        """The same slope past 0.65 (owner, 2026-10-20: the cap at 1 went): +27.5% at a Gini of 1."""
         # at or under 0.452 the multiplier is 0.01 or less, and no modifier is applied
         for gini, mult in ((0.30, None), (0.45, None), (0.452, None), (0.50, 0.25), (0.55, 0.5), (0.65, 1.0),
-                           (0.80, 1.0)):
+                           (0.80, 1.75), (1.0, 2.75)):
             with self.subTest(gini=gini):
                 eng = self.refresh(gini, had=0.4)
                 got = eng.modifiers.get("te_demog_census_inequality")
@@ -544,7 +608,7 @@ class TestInequality(unittest.TestCase):
         self.assertIn("50 plus seven terms", loc["te_demog_how_wc"])
         for key in ("te_demog_how_wc", "te_demog_st_wc_tt"):
             self.assertIn("the return on capital against growth", loc[key], key)
-        for shock in ("land reform", "banking frenzy", "state-owned share"):
+        for shock in ("land reform", "banking frenzy", "state-owned share", "hyperinflation crisis"):
             self.assertIn(shock, loc["te_demog_how_wc"])
 
     def test_one_refresh_site_on_the_state_pulse(self):
@@ -552,6 +616,12 @@ class TestInequality(unittest.TestCase):
                  if "add_modifier = { name = te_demog_census_inequality" in p.read_text(encoding="utf-8-sig")]
         self.assertEqual(sites, ["te_demog_wealth_effects.txt"])
         self.assertIn("te_demog_inequality_refresh = yes", _block(_text(EFFECTS), "te_demog_state_yearly"))
+
+    def test_no_max_on_the_multiplier(self):
+        body = _block(_text(WEALTH_EFFECTS), "te_demog_inequality_refresh")
+        self.assertIn("value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 } }", body)
+        self.assertNotIn("max =", body)
+        self.assertNotIn("up to 10%", _loc()["te_demog_census_inequality_desc"])
 
     def test_the_modifier(self):
         body = _block(_text(INEQ_MODIFIERS), "te_demog_census_inequality")

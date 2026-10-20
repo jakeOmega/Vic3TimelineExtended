@@ -810,7 +810,7 @@ The financial boom (+5 once a banking cycle reaches Frenzy), the ownership shock
 capital moving 10 points or more in a year: half a point a point, at most ±10), land reform (−10 × each state's
 agrarian share) and the target's seventh term, Return on Capital (2 × (the real policy rate − growth averaged over
 about five years), at most ±5, once the banking cycle has started), all under every Demographics rule; and the
-Inequality effect (`te_demog_census_inequality`, radicals from movements up to +10% from a shown Gini of 0.45 to 0.65)
+Inequality effect (`te_demog_census_inequality`, radicals from movements +10% for each 0.2 of shown Gini above 0.45, no cap since 2026-10-20)
 under Full only. `test_demographics_wc_shocks.py` runs each through the interpreter. No new engine fact: the reads are
 the ownership term's walk, `has_law_or_variant` (the monetary system's), `on_state_owner_change` (five systems'), the
 banking triggers and the radicals type Concentrated Property carries, so no self-check. What only the game can show:
@@ -843,7 +843,8 @@ banking triggers and the radicals type Concentrated Property carries, so no self
    as for the same law enacted in peace (`te_demog_wc_civil_war_inherit` gives the winner the old government's law
    role). The winner's Return on Capital growth average carries on from the old government's.
 6. **The Inequality effect (Full).** A state whose shown Gini is above 0.45 lists Census: Inequality, with radicals
-   from movements +5% at 0.55 and +10% from 0.65; none under Display only or Disabled.
+   from movements +5% at 0.55, +10% at 0.65 and +15% at 0.75, on at that slope with no cap (owner, 2026-10-20); none
+   under Display only or Disabled.
 
 ## Internal Resettlement in the census, and the US frontier (2026-10-19)
 
@@ -856,10 +857,12 @@ only nothing changes outside the census's own figures. **Under Full the census's
 structures** (phase 2 step 4: Census: More Men and Fewer Men, the conscription term, which has no ceiling by the owner's
 ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto what follows:
 
-- **The frontier at the 1836 seed** (harness stand-in): all seven states start with Census: More Men, radicals from
-  movements +10% in Wisconsin (178 men per 100 women aged 20-59, past the full 150), +5.9% Illinois (134), +4.9% Iowa
-  (130), +4.6% Missouri (128), +4.0% Michigan (126), +3.2% Arkansas (123) and +0.8% Indiana (113). Conscription +61%
-  Wisconsin, +26% Illinois, +24% Iowa, +20% Missouri, +16% Michigan and Arkansas, +7% Indiana. Wisconsin's 20-29
+- **The frontier at the 1836 seed** (harness stand-in): all eleven states (the Old Southwest and Florida since
+  2026-10-20) start with Census: More Men, radicals from movements +10% in Wisconsin (178 men per 100 women aged
+  20-59, past the full 150), +8.6% Florida (144), +6.1% Louisiana (134), +5.9% Illinois (134), +4.9% Iowa (130), +4.6%
+  Missouri (128), +4.3% Mississippi (127), +4.0% Michigan (126), +3.2% Arkansas (123), +1.1% Alabama (114) and +0.8%
+  Indiana (113). Conscription +61% Wisconsin, +38% Florida, +26% Illinois, +24% Iowa and Louisiana, +20% Missouri and
+  Mississippi, +16% Michigan and Arkansas, +10% Alabama, +7% Indiana. Wisconsin's 20-29
   share, 0.19, passes the youth bulge's 0.18: a youth bulge of 0.2 where a fifth of its workforce has no work. Ten
   years on Wisconsin still has full More Men and +25% conscription; after 25 years only Wisconsin keeps a little
   (+2% radicals).
@@ -873,11 +876,12 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
   call, put to the owner: the alternative books them through the caps).
 
 1. **The frontier starts male (Display only or Full, a new 1836 game as or beside the US).** Open Wisconsin, Iowa and
-   Illinois on their Demographics subtab: men per 100 women aged 20-59 about 178 (Wisconsin), 134 (Illinois), 130
-   (Iowa), 123-128 (Arkansas, Michigan, Missouri) and 113 (Indiana), with a pyramid whose men aged 20-59 stand well
-   past its women; Ohio and Kentucky as before (about 95). The state's people are the game's. Under Full, all seven
-   states' modifiers list "Census: More Men" (radicals from movements: at full from 150, Wisconsin) and their
-   conscription tooltips "Census: Fighting-Age Men" above ×1.
+   Illinois on their Demographics subtab: men per 100 women aged 20-59 about 178 (Wisconsin), 144 (Florida), 134
+   (Illinois, Louisiana), 130 (Iowa), 123-128 (Arkansas, Michigan, Mississippi, Missouri) and 113-114 (Indiana,
+   Alabama), with a pyramid whose men aged 20-59 stand well past its women; Ohio, Kentucky and Georgia as before
+   (about 95). The state's people are the game's. Under Full, all eleven states' modifiers list "Census: More Men"
+   (radicals from movements: at full from 150, Wisconsin) and their conscription tooltips "Census: Fighting-Age Men"
+   above ×1.
 2. **It fades as it ages.** Twenty-five years on, the frontier states sit near 98-105 and Wisconsin about 118 (the
    residual's own arrivals correct their sex split, `LABOUR_BALANCE_HIGH`).
 3. **A programme's destination (Display only or Full).** Run a Penal Transportation Authority for a few years: its
@@ -1130,3 +1134,36 @@ game is the test: continue its last save on this build, run a year or two, and c
 8. **A state line of −100% deaths or more** (an event modifier; none in the base game; option n shows the read): the
    census adds nothing more, its term stays 0, and the state's next count keeps its last own death rate
    (`te_dg_cdr_model`), since the year's ring had too few deaths to read it back.
+
+## The owner's follow-ups (2026-10-20)
+
+The hyperinflation crisis's Wealth Concentration shock (every Demographics rule), no cap on the Inequality effect, the
+Old Southwest and Florida in the 1836 frontier, a note on the state's Deaths Added on Top hover under Private Health
+Insurance and all six chronic carriers in the health bill (the last four under Full only, the frontier also under
+Display only). `docs/systems/mod_systems.md` § Demographics. `test_demographics_wc_shocks.py`,
+`test_demographics_resettle.py`, `test_demographics_rate_floor.py` and `test_demographics_model.py` pin the script. No
+new engine fact, so no self-check: the shock is the banking crash's `te_demog_wc_shock` in an event's `immediate`, and
+the note's scripted GUI reads the owner's law as the panel's other state-scope GUIs do.
+
+1. **The hyperinflation shock (any rule, the banking rule on).** In the console, `event te_inflation.1` on your country
+   (or let a country's inflation reach 50%): every state's Wealth Concentration falls 5 at once (the state subtab's
+   score, the History chart's bars), and the national figure follows. Each option's tooltip says so: the reform's
+   "falls by 5 more", dollarisation's "takes nothing more", riding it out's "falls by 5 again" if the crisis returns.
+   Take the currency reform: every state falls 5 more. Ride it out with inflation still at 50% or more: 24 months later
+   the crisis fires again and takes another 5. Nothing in `debug.log` from `te_demog_wc_shock` or
+   `te_inh_apply_concentration_modifiers`.
+2. **The Inequality effect has no cap (Full).** A state whose shown Gini is above 0.65 lists Census: Inequality above
+   +10% radicals from movements: +15% at 0.75 (play-test item 6 of "Wealth Concentration's remaining shocks").
+3. **The Old Southwest and Florida (Display only or Full, a new 1836 game).** Mississippi, Alabama, Louisiana and the
+   US's Florida open with more men than women aged 20-59 (about 127, 114, 134 and 144 per 100) and, under Full, Census:
+   More Men; Georgia, Kentucky and Ohio open as before (item 1 of "Internal Resettlement in the census, and the US
+   frontier").
+4. **The Private Health Insurance note (Full).** Enact Private Health Insurance and wait for a state's next count: its
+   Demographics subtab's Deaths Added on Top hover ends with a line saying that under the law the richest can die at no
+   rate at all and then show as a negative line of their own. Without the law the line is gone. The Population panel's
+   Demographics tab's hover has no split and no note. In a rich late state under the law, the other effects on some of
+   its people can read below ×1 while the whole state's reads high by the same amount: that is the edge the note
+   describes, accepted by the owner.
+5. **The health bill's six technologies (Full).** A late-game country with Genetic Engineering, Molecular Assemblers or
+   Biological Immortality: the Health Need row's hover gives "treating chronic illness" 5% higher for each (up to +30%
+   with all six), and the Ministry of Health's institution cost moves by as much.

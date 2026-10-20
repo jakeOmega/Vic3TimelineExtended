@@ -263,9 +263,13 @@ PENSION_BILL_BAND = (0.15, 0.30)
 # The health bill (§2.4, bureaucracy): country_institution_cost_institution_health_system_mult = the need term
 # HEALTH_NEED_WEIGHT x (need - 1), at most HEALTH_NEED_CAP, plus HEALTH_TECH_STEP for each chronic-treatment technology.
 # Below 1836's need the term is negative (a young country's system costs a little less), on a fixed-sign pair.
+# HEALTH_TECHS are all six of chronic treatment's carriers (TREATMENT_CAP's comment), so full technology costs +0.30
+# (owner, 2026-10-20; the first three alone until then): molecular nanotech treats with expensive advanced materials, and
+# the bill is a good sink for an ultra-wealthy late-game country.
 HEALTH_NEED_WEIGHT = 0.8      # step 2's fit (0.5 proposed): rich today +0.35 to +0.5 with its technologies
 HEALTH_NEED_CAP = 1.0
-HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine")
+HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine", "genetic_engineering",
+                "molecular_assemblers", "biological_immortality")
 HEALTH_TECH_STEP = 0.05
 # Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
 # WORK_SPLIT_AGES (first, last), from the last count; the laws' share (female_work_share) before one.
@@ -495,7 +499,7 @@ BASE_ACCESS = 0.4
 # it in the last era. modern_pharmaceuticals 0.3 (era 8), telemedicine 0.2 (era 10) and personalized_medicine 0.2 (era 11)
 # make 0.70; genetic_engineering 0.05 (era 11), molecular_assemblers 0.12 and biological_immortality 0.12 (era 12) take
 # it to 0.99. The augmentation laws' flat lines (Medical Augmentation Only 0.10; Unrestricted, Regulated Market and
-# Mandatory 0.05) bring it there sooner and past it only cap. The health bill's HEALTH_TECHS still counts the first three.
+# Mandatory 0.05) bring it there sooner and past it only cap. The health bill's HEALTH_TECHS counts all six (2026-10-20).
 # infection 0.99 (#1045; was 0.95): the base game's carriers reach 0.94 by era 7 (medical_degrees 0.03, pharmaceuticals
 # 0.07, modern_nursing 0.08, antibiotics 0.4, modern_vaccines 0.25, antibiotic_mass_production 0.11), which matches the
 # rich world of eras 9-10; the late carriers take the rest (personalized_medicine 0.03 in era 11, advanced_nanofabrication
@@ -966,8 +970,8 @@ RESETTLE_PROGRAMMES = ("land_grants", "military_colonies", "penal_transportation
 # share, or (Rustication's youth) an age range booked by single year in proportion to each age's people.
 # - penal: mostly 15-35, 85% men. Of the ~162,000 convicts sent to Australia, ~25,000 were women (15.4%), their average
 #   age about 25 and a fifth under 20 (owner, 2026-10-19). Classes 15-17, 18-35, 36-59 at 12/78/10 (the controller's
-#   proposal after review, 2026-10-20, sent to the owner and not yet confirmed): a fifth under 20 is about 12% at 15-17,
-#   three of its five years; 18-19 sit in the 18-35 class; a tenth over 35.
+#   proposal after review, confirmed by the owner on 2026-10-20): a fifth under 20 is about 12% at 15-17, three of its
+#   five years; 18-19 sit in the 18-35 class; a tenth over 35.
 # - youth: China's sent-down youth, 15-24, both sexes evenly. 15-24 straddles the classes (15-17, 18-35), so it is booked
 #   over the single years 15-24 instead: one rate per sex over the people of those ages (the bands 15-19 and 20-24).
 # - retreat: Managed Retreat moves whole communities, weighted to the old: the refugee kind with its 60+ weight doubled,
@@ -983,7 +987,8 @@ RESETTLE_KINDS = {
 # split evenly (None: the kind's own share); the labour kind takes the women's share given, or "jobs": the destination's
 # jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's rights x the range; no
 # balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's class
-# split (above) and the Development Program's 60/40 were being confirmed as this was built: one edit here if they change.
+# split (above) was confirmed on 2026-10-20, and the Development Program's 60/40 was being confirmed as this was built:
+# one edit here if it changes.
 RESETTLE_PROFILES = {
     "land_grants": (("family", 1.0, None),),
     "military_colonies": (("labour", 0.5, 0.2), ("family", 0.5, None)),   # half the labour kind at 80% men, half families
@@ -1008,11 +1013,21 @@ RESETTLE_PROFILES = {
 # Source: the Sixth Census, 1840: Compendium of the Enumeration of the Inhabitants and Statistics of the United States
 # (1841), each state's "Total in ..." rows of free white persons by sex and age
 # (https://www.census.gov/library/publications/1841/dec/1840c.html; the scans
-# https://www2.census.gov/library/publications/decennial/1840/1840v3/1840c-05.pdf (Indiana), 1840c-06.pdf (Illinois,
-# Missouri, Arkansas, Michigan) and 1840c-07.pdf (Wisconsin and Iowa Territories)), read 2026-10-19; every state's
-# cells sum to its official white total (Gibson and Jung, Census Bureau Working Paper 56, 2002, Table A-21).
-# Free white (men, women) by the census's age groups; 60+ sums its 60-69 ... 100+. Under 15 the census reads 104-108
+# https://www2.census.gov/library/publications/decennial/1840/1840v3/1840c-04.pdf (Alabama, Mississippi, Louisiana),
+# 1840c-05.pdf (Indiana), 1840c-06.pdf (Illinois, Missouri, Arkansas, Michigan, Florida Territory) and 1840c-07.pdf
+# (Wisconsin and Iowa Territories)), read 2026-10-19; every state's cells sum to its official white total (Gibson and
+# Jung, Census Bureau Working Paper 56, 2002, Table A-21).
+# Free white (men, women) by the census's age groups; 60+ sums its 60-69 ... 100+. Under 15 the census reads 102-109
 # men per 100 women, about the seed's own, so the seed's children stay as they are.
+# Which states (owner, 2026-10-20): the West the first build chose (Michigan, Indiana, Illinois, Missouri, Arkansas,
+# Iowa, Wisconsin), and every other state or territory the US holds in 1836 whose free white men per 100 women aged
+# 15-49 were 110 or more in 1840: the Old Southwest and Florida, Mississippi 131.6, Alabama 116.2, Louisiana 155.7,
+# Florida Territory 177.3. Every other state's row was read from the same scans (1840c-02 to -07) on 2026-10-20 and
+# each sums to its Table A-21 white total (A-21 counts Alexandria County, then in the District of Columbia, in Virginia,
+# so those two sum once it is moved back): Maine 100.5, New Hampshire 93.0, Vermont 99.3, Massachusetts 99.4, Rhode Island 92.7, Connecticut 95.7,
+# New York 103.0, New Jersey 100.1, Pennsylvania 100.5, Delaware 98.7, Maryland 98.0, the District of Columbia 91.8,
+# Virginia 97.1 (Western District 102.0), North Carolina 91.7, South Carolina 99.0, Georgia 106.6, Kentucky 108.0,
+# Tennessee 98.8, Ohio 107.2. Indiana (107.7) stays as one of the first build's West: the 110 rule is for additions.
 FRONTIER_1840_WHITE = {
     "STATE_MICHIGAN": {(15, 19): (10887, 10819), (20, 29): (22759, 18706), (30, 39): (16025, 11864),
                        (40, 49): (8276, 6109), (50, 59): (4442, 3394), (60, 149): (2629, 1985)},
@@ -1028,6 +1043,16 @@ FRONTIER_1840_WHITE = {
                    (40, 49): (1512, 979), (50, 59): (698, 494), (60, 149): (357, 245)},
     "STATE_WISCONSIN": {(15, 19): (1344, 1200), (20, 29): (6328, 2713), (30, 39): (3348, 1423),        # Wisconsin Territory
                         (40, 49): (1191, 612), (50, 59): (554, 360), (60, 149): (269, 175)},
+    # the Old Southwest and Florida (owner, 2026-10-20): 1840c-04.pdf PDF pp.5-6, 9-10, 13-14 (Compendium pp.52-61) and
+    # 1840c-06.pdf pp.13-14 (pp.96-97)
+    "STATE_MISSISSIPPI": {(15, 19): (8662, 8911), (20, 29): (20084, 14464), (30, 39): (11995, 7847),
+                          (40, 49): (6001, 4284), (50, 59): (3289, 2250), (60, 149): (2044, 1580)},
+    "STATE_ALABAMA": {(15, 19): (16222, 17911), (20, 29): (31455, 25574), (30, 39): (19340, 15152),
+                      (40, 49): (11783, 9184), (50, 59): (6024, 4647), (60, 149): (4223, 3518)},
+    "STATE_LOUISIANA": {(15, 19): (7218, 7947), (20, 29): (20795, 13602), (30, 39): (16304, 7907),
+                        (40, 49): (7940, 4099), (50, 59): (3309, 1967), (60, 149): (1762, 1315)},
+    "STATE_FLORIDA": {(15, 19): (1305, 1322), (20, 29): (4388, 2220), (30, 39): (2801, 1219),         # Florida Territory
+                      (40, 49): (1193, 704), (50, 59): (530, 354), (60, 149): (317, 218)},
 }
 # The census counts free whites; the game's 1836 state also holds enslaved and free Black people and Native nations
 # (Arkansas's state region takes in the Cherokee, Iowa's the Sauk and Meskwaki and the Dakota), whose numbers of men
@@ -1035,9 +1060,11 @@ FRONTIER_1840_WHITE = {
 # men per woman is the mixture of a settler share s of its people at the settlers' ratio r with the rest at one to one,
 # (s r/(1+r) + (1-s)/2) / (s/(1+r) + (1-s)/2) (frontier_mix; my call, 2026-10-19, the exact form since review): s is the share of
 # region_state:USA's pops in game/common/history/pops/05_north_america.txt (1.14.5) of the settler cultures (yankee,
-# dixie, cajun, irish, north_german). Minnesota and the US's unincorporated western states hold no settlers in 1836,
-# and the Old Southwest (Mississippi 132, Alabama 116, Louisiana 156 men per 100 women aged 15-49 among whites) and
-# Florida Territory (177) are not the West: each could take a row here if wanted.
+# dixie, cajun, irish, north_german; dixie of every religion). Minnesota and the US's unincorporated western states hold
+# no settlers in 1836. In the Old Southwest the enslaved are a third to nearly half of the people, so the settler share
+# is low there and frontier_mix pulls the census's ratio most of the way to one to one. Louisiana's French settlers are
+# the game's cajun pops, already in the list; it has no other white culture. Florida's share is the US's state alone
+# (the Seminole hold the rest of the region).
 FRONTIER_SETTLER_SHARE = {
     "STATE_MICHIGAN": (128000 + 8000) / 152000,
     "STATE_INDIANA": (631504 + 4004 + 20000) / 663508,
@@ -1046,6 +1073,10 @@ FRONTIER_SETTLER_SHARE = {
     "STATE_ARKANSAS": (12635 + 33857) / 92620,
     "STATE_IOWA": 23992 / 43992,
     "STATE_WISCONSIN": 28004 / 36004,
+    "STATE_MISSISSIPPI": 172804 / 260804,
+    "STATE_ALABAMA": (329008 + 16004) / 600480,
+    "STATE_LOUISIANA": (35992 + 118392 + 200) / 294684,
+    "STATE_FLORIDA": 47996 / 82996,
 }
 
 

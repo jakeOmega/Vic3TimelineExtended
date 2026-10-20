@@ -2023,6 +2023,9 @@ te_demog_health_tech_term = {
 	if = { limit = { has_technology_researched = modern_pharmaceuticals } add = 0.05 }
 	if = { limit = { has_technology_researched = telemedicine } add = 0.05 }
 	if = { limit = { has_technology_researched = personalized_medicine } add = 0.05 }
+	if = { limit = { has_technology_researched = genetic_engineering } add = 0.05 }
+	if = { limit = { has_technology_researched = molecular_assemblers } add = 0.05 }
+	if = { limit = { has_technology_researched = biological_immortality } add = 0.05 }
 }
 
 # Phase 2 step 4: conscription, the youth bulge and sex balance (demographics_params.py).

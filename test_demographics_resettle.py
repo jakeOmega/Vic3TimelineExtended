@@ -404,7 +404,34 @@ class TestFrontierSeed(unittest.TestCase):
         self.assertAlmostEqual(P.frontier_mix(r, 0.0), 1.0)
         self.assertEqual(set(P.FRONTIER_1836), set(P.FRONTIER_1840_WHITE))
         self.assertEqual(set(P.FRONTIER_1836), {"STATE_MICHIGAN", "STATE_INDIANA", "STATE_ILLINOIS", "STATE_MISSOURI",
-                                                "STATE_ARKANSAS", "STATE_IOWA", "STATE_WISCONSIN"})
+                                                "STATE_ARKANSAS", "STATE_IOWA", "STATE_WISCONSIN", "STATE_MISSISSIPPI",
+                                                "STATE_ALABAMA", "STATE_LOUISIANA", "STATE_FLORIDA"})
+
+    def test_the_old_southwest_and_florida(self):
+        """Added 2026-10-20 (owner): every state the US holds in 1836 whose 1840 free white men per 100 women aged 15-49
+        were 110 or more. Their rows sum, with the under-15s the seed leaves alone, to each state's official white total
+        (Gibson and Jung, Table A-21); the settlers are dixie of every religion and Louisiana's cajun."""
+        under_15 = {"STATE_MISSISSIPPI": (19542 + 14164 + 11475, 18235 + 13328 + 10919),
+                    "STATE_ALABAMA": (36611 + 28215 + 22819, 33917 + 26804 + 21786),
+                    "STATE_LOUISIANA": (13835 + 10736 + 7848, 13718 + 10395 + 7760),
+                    "STATE_FLORIDA": (2455 + 1947 + 1520, 2241 + 1761 + 1448)}
+        official = {"STATE_MISSISSIPPI": 179074, "STATE_ALABAMA": 335185, "STATE_LOUISIANA": 158457,
+                    "STATE_FLORIDA": 27943}
+        ratio_15_49 = {"STATE_MISSISSIPPI": 131.6, "STATE_ALABAMA": 116.2, "STATE_LOUISIANA": 155.7,
+                       "STATE_FLORIDA": 177.3}
+        for region, total in official.items():
+            with self.subTest(region=region):
+                rows = P.FRONTIER_1840_WHITE[region]
+                self.assertEqual(sum(m + f for m, f in rows.values()) + sum(under_15[region]), total)
+                m = sum(rows[a][0] for a in ((15, 19), (20, 29), (30, 39), (40, 49)))
+                f = sum(rows[a][1] for a in ((15, 19), (20, 29), (30, 39), (40, 49)))
+                self.assertAlmostEqual(100 * m / f, ratio_15_49[region], places=1)
+                self.assertGreaterEqual(100 * m / f, 110)
+        self.assertAlmostEqual(P.FRONTIER_SETTLER_SHARE["STATE_LOUISIANA"], (35992 + 118392 + 200) / 294684)
+        self.assertAlmostEqual(P.FRONTIER_SETTLER_SHARE["STATE_MISSISSIPPI"], 172804 / 260804)
+        # Mississippi's settlers aged 20-29, 20,084 men and 14,464 women, mixed with a third of its people enslaved
+        r, s = 20084 / 14464, 172804 / 260804
+        self.assertAlmostEqual(P.FRONTIER_1836["STATE_MISSISSIPPI"]["ratios"][(20, 29)], P.frontier_mix(r, s))
 
     def test_an_unlisted_region_seeds_as_before(self):
         eng = _engine_for(INP, 1836, POP, place=("STATE_OHIO", None))

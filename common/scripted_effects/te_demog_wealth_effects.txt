@@ -53,7 +53,9 @@ te_demog_state_gini = {
 # (te_demog_wc_war_shock); a lost war that cost it a war goal -5 (on_lost_war,
 # te_demog_on_actions.txt);
 # a won left revolution -20 (te_demog_wc_civil_war_won); a banking crash -5
-# (banking_cycle_effects.txt); devastation, in the state hit, up to -10 a year
+# (banking_cycle_effects.txt); the hyperinflation crisis -5 when it fires and -5
+# more on a currency reform (te_inflation.1, te_inflation_events.txt); devastation,
+# in the state hit, up to -10 a year
 # (te_demog_wc_state_yearly); land reform, -10 x each state's agrarian share
 # (te_demog_wc_land_reform_check). Two raise them: the banking cycle's Frenzy
 # +5, once a cycle (te_demog_wc_boom_check), and a state's ownership shock, a
@@ -602,8 +604,9 @@ te_demog_wc_growth_update = {
 
 # ============================================================================
 # The Inequality effect (spec §4.1, §7; owner, 2026-10-19), under Full only: relative
-# deprivation. The state's shown Gini above 0.45 raises its radicals, by up to 10% at
-# 0.65 and above: multiplier (Gini - 0.45) / 0.20, 0-1, on te_demog_census_inequality
+# deprivation. The state's shown Gini above 0.45 raises its radicals, by 10% at 0.65 and
+# on at the same slope, with no cap (owner, 2026-10-20): +27.5% at a Gini of 1.
+# Multiplier (Gini - 0.45) / 0.20, at least 0, on te_demog_census_inequality
 # (te_demog_inequality_modifiers.txt). The engine has no lower-strata radicals type, so it
 # takes the state-wide one inh_concentrated_property and the youth bulge carry.
 # ============================================================================
@@ -622,7 +625,7 @@ te_demog_inequality_refresh = {
 			te_demog_effects_run = yes
 			has_variable = te_dg_gini
 		}
-		set_variable = { name = te_dg_ineq value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 max = 1 } }
+		set_variable = { name = te_dg_ineq value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 } }
 		if = {
 			limit = { var:te_dg_ineq > 0.01 }
 			add_modifier = { name = te_demog_census_inequality multiplier = var:te_dg_ineq }

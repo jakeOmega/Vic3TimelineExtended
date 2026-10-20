@@ -1074,6 +1074,15 @@ te_demog_frontier_ratios = {
 	set_local_variable = { name = te_dg_fr_4 value = 0 }
 	set_local_variable = { name = te_dg_fr_5 value = 0 }
 	if = {
+		limit = { state_region = s:STATE_ALABAMA }
+		set_local_variable = { name = te_dg_fr_0 value = 0.94471 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.12596 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.14999 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.15336 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.16016 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.11043 }
+	}
+	else_if = {
 		limit = { state_region = s:STATE_ARKANSAS }
 		set_local_variable = { name = te_dg_fr_0 value = 0.99382 }
 		set_local_variable = { name = te_dg_fr_1 value = 1.20344 }
@@ -1081,6 +1090,15 @@ te_demog_frontier_ratios = {
 		set_local_variable = { name = te_dg_fr_3 value = 1.26358 }
 		set_local_variable = { name = te_dg_fr_4 value = 1.21651 }
 		set_local_variable = { name = te_dg_fr_5 value = 1.20006 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_FLORIDA }
+		set_local_variable = { name = te_dg_fr_0 value = 0.99254 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.46831 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.58925 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.35037 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.26023 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.23967 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ILLINOIS }
@@ -1110,6 +1128,15 @@ te_demog_frontier_ratios = {
 		set_local_variable = { name = te_dg_fr_5 value = 1.22584 }
 	}
 	else_if = {
+		limit = { state_region = s:STATE_LOUISIANA }
+		set_local_variable = { name = te_dg_fr_0 value = 0.95081 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.24643 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.4448 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.40201 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.30795 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.16498 }
+	}
+	else_if = {
 		limit = { state_region = s:STATE_MICHIGAN }
 		set_local_variable = { name = te_dg_fr_0 value = 1.00562 }
 		set_local_variable = { name = te_dg_fr_1 value = 1.19168 }
@@ -1117,6 +1144,15 @@ te_demog_frontier_ratios = {
 		set_local_variable = { name = te_dg_fr_3 value = 1.31157 }
 		set_local_variable = { name = te_dg_fr_4 value = 1.27186 }
 		set_local_variable = { name = te_dg_fr_5 value = 1.28541 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MISSISSIPPI }
+		set_local_variable = { name = te_dg_fr_0 value = 0.9814 }
+		set_local_variable = { name = te_dg_fr_1 value = 1.24161 }
+		set_local_variable = { name = te_dg_fr_2 value = 1.32157 }
+		set_local_variable = { name = te_dg_fr_3 value = 1.24874 }
+		set_local_variable = { name = te_dg_fr_4 value = 1.28385 }
+		set_local_variable = { name = te_dg_fr_5 value = 1.1854 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MISSOURI }

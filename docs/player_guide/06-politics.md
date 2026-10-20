@@ -347,8 +347,10 @@ moves it lists its part among its modifiers. Once your banking cycle has
 started, the return on capital against growth moves it too: twice the gap
 between your policy rate less inflation and your economy's growth over about
 five years, at most 5 either way. War losses, a lost war that
-cost you a war goal, a winning revolution of the left, a banking crash and land
-reform knock scores down at once. Land reform is Peasant Proprietorship or
+cost you a war goal, a winning revolution of the left, a banking crash, a
+hyperinflation crisis and land reform knock scores down at once. The
+hyperinflation crisis takes 5 each time it fires and 5 more if you reform the
+currency. Land reform is Peasant Proprietorship or
 Collectivized Agriculture replacing Serfdom or Tenant Farmers, and takes up to 10
 from a farming state. A banking cycle's Frenzy raises every score by 5, once a
 cycle. When the state-owned share of a state's capital rises 10 points or more
