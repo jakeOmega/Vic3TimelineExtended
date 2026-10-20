@@ -623,7 +623,9 @@ te_demog_wc_real_rate = {
 	}
 }
 
-# Country scope: the term from the stored inputs (te_dg_wc_r, te_dg_wc_g), for te_demog_wc_growth_update.
+# Country scope: the term from the stored inputs (te_dg_wc_r, te_dg_wc_g), for te_demog_wc_growth_update. The rate
+# is in percent and the growth average in log points (100 x ln of each year's GDP ratio, since 2026-10-20), which
+# read as percent in a normal year (5% growth is 4.88).
 te_demog_wc_rg_now = {
 	value = var:te_dg_wc_r
 	subtract = var:te_dg_wc_g

@@ -470,24 +470,54 @@ te_demog_wc_civil_war_inherit = {
 	}
 }
 
+# THIS = a country, in te_demog_wc_growth_update, with te_dg_wc_gdp above 0: the year's growth in log points,
+# 100 x ln(GDP now / GDP last year), into local te_dg_wc_g_year, so a fall and the recovery to the same GDP cancel
+# (owner, 2026-10-20). Script has no logarithm, so ln r = 2 atanh z = 2 (z + z^3/3 + z^5/5 + z^7/7 + z^9/9) with
+# z = (r - 1) / (r + 1): under the fixed point, within 0.0002 log points of 100 ln r for r from 0.5 to 2, 0.2%
+# short at r = 0.2 or 5 and 2% at 0.1 or 10, and rising with r throughout (test_demographics_wc_shocks). Each odd
+# power is kept as 100 z^k (te_dg_wc_t, within -100..100) and taken to the next by multiplying by 100 z^2 before
+# dividing by 100, so the five decimals keep their precision; 100 z itself divides the sum by 100 first, since GDP
+# passes 7 x 10^11 late.
+te_demog_wc_log_growth = {
+	set_local_variable = {
+		name = te_dg_wc_z
+		value = {
+			value = local_var:te_dg_wc_gdp_now
+			subtract = var:te_dg_wc_gdp
+			divide = { value = local_var:te_dg_wc_gdp_now add = var:te_dg_wc_gdp divide = 100 min = 0.00001 }
+		}
+	}
+	set_local_variable = { name = te_dg_wc_z2 value = { value = local_var:te_dg_wc_z multiply = local_var:te_dg_wc_z divide = 100 } }
+	set_local_variable = { name = te_dg_wc_t value = local_var:te_dg_wc_z }
+	set_local_variable = { name = te_dg_wc_g_year value = local_var:te_dg_wc_z }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 3 } }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 5 } }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 7 } }
+	set_local_variable = { name = te_dg_wc_t value = { value = local_var:te_dg_wc_t multiply = local_var:te_dg_wc_z2 divide = 100 } }
+	change_local_variable = { name = te_dg_wc_g_year add = { value = local_var:te_dg_wc_t divide = 9 } }
+	change_local_variable = { name = te_dg_wc_g_year multiply = 2 }
+}
+
 # THIS = a country on 31 December, before te_demog_country_yearly (te_demog_country_yearly_on_action), so
-# its national refresh reads this year's figure. r > g's inputs and term (te_demog_wc_rg_term), in
-# percentage points:
+# its national refresh reads this year's figure. r > g's inputs and term (te_demog_wc_rg_term):
 #   te_dg_wc_gdp  GDP on the last 31 December (te_mon_gdp_current). Its own copy: the monetary system's
 #                 te_mon_gdp_last_year is rewritten by an on_yearly_pulse_country entry of its own, in an
 #                 order against this one that is undefined
 #   te_dg_wc_states  the states it held then (te_demog_wc_state_count), beside the GDP they made
-#   te_dg_wc_g    growth averaged over about five years: each year's growth taken in at a weight of 0.2,
-#                 as it came (a real boom past 10% counts), but only from a year on the same territory: when
-#                 the country gained or lost states since the last update (or the count is missing, an old
-#                 save's first year) the year takes no sample, and the GDP is re-based, so next year's growth
-#                 is measured on the new territory (owner, 2026-10-20; until then each year was clamped to
-#                 -10..+10, so a conquest moved the average by 2 at most)
-#   te_dg_wc_r    the real policy rate on 31 December (te_demog_wc_real_rate)
+#   te_dg_wc_g    growth averaged over about five years, in log points (te_demog_wc_log_growth: 100 x ln of
+#                 the year's GDP ratio, which reads as percent in a normal year: 5% is 4.88), each year's taken
+#                 in at a weight of 0.2 whatever its size. A year in which the country gained or lost states (or
+#                 an old save's first, with no count) is taken too, unless its GDP moved more than a tenth
+#                 (the ratio under 0.9 or over 1.1): that jump is the territory's, so it takes no sample and the
+#                 GDP is re-based, and next year's growth is measured on the new territory (owner, 2026-10-20;
+#                 until then each year's percent growth was clamped to -10..+10)
+#   te_dg_wc_r    the real policy rate on 31 December (te_demog_wc_real_rate), in percent
 #   te_dg_wc_rg   the term, 2 x (te_dg_wc_r - te_dg_wc_g), at most 5 either way; only while the banking
 #                 cycle runs (te_banking_cycle_running), removed otherwise
-# Every country keeps the average, so it is warm when a cycle starts. The growth is divided before it is
-# multiplied: GDP passes 7 x 10^11 in the late game.
+# Every country keeps the average, so it is warm when a cycle starts.
 te_demog_wc_growth_update = {
 	set_local_variable = { name = te_dg_wc_gdp_now value = te_mon_gdp_current }
 	set_local_variable = { name = te_dg_wc_states_now value = te_demog_wc_state_count }
@@ -495,27 +525,45 @@ te_demog_wc_growth_update = {
 		limit = {
 			has_variable = te_dg_wc_gdp
 			var:te_dg_wc_gdp > 0
-			has_variable = te_dg_wc_states
-			var:te_dg_wc_states = local_var:te_dg_wc_states_now
 		}
-		set_local_variable = {
-			name = te_dg_wc_g_year
-			value = {
-				value = local_var:te_dg_wc_gdp_now
-				subtract = var:te_dg_wc_gdp
-				divide = { value = var:te_dg_wc_gdp min = 1 }
-				multiply = 100
+		# a sample, unless the territory changed and the GDP jumped by more than a tenth either way
+		set_local_variable = { name = te_dg_wc_take value = 1 }
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_variable = te_dg_wc_states
+						var:te_dg_wc_states = local_var:te_dg_wc_states_now
+					}
+				}
+			}
+			set_local_variable = {
+				name = te_dg_wc_ratio
+				value = { value = local_var:te_dg_wc_gdp_now divide = { value = var:te_dg_wc_gdp min = 1 } }
+			}
+			if = {
+				limit = {
+					OR = {
+						local_var:te_dg_wc_ratio < 0.9
+						local_var:te_dg_wc_ratio > 1.1
+					}
+				}
+				set_local_variable = { name = te_dg_wc_take value = 0 }
 			}
 		}
 		if = {
-			limit = { has_variable = te_dg_wc_g }
-			change_variable = {
-				name = te_dg_wc_g
-				add = { value = local_var:te_dg_wc_g_year subtract = var:te_dg_wc_g multiply = 0.2 }
+			limit = { local_var:te_dg_wc_take = 1 }
+			te_demog_wc_log_growth = yes
+			if = {
+				limit = { has_variable = te_dg_wc_g }
+				change_variable = {
+					name = te_dg_wc_g
+					add = { value = local_var:te_dg_wc_g_year subtract = var:te_dg_wc_g multiply = 0.2 }
+				}
 			}
-		}
-		else = {
-			set_variable = { name = te_dg_wc_g value = local_var:te_dg_wc_g_year }
+			else = {
+				set_variable = { name = te_dg_wc_g value = local_var:te_dg_wc_g_year }
+			}
 		}
 	}
 	set_variable = { name = te_dg_wc_gdp value = local_var:te_dg_wc_gdp_now }

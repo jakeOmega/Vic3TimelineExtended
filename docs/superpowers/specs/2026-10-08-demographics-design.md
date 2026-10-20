@@ -716,9 +716,10 @@ every Demographics rule setting, like the rest of Wealth Concentration:
   (and r > g's GDP baseline and growth average) in `inh_repair_after_civil_war`, and the next month compares that with
   the rebels' law.
 - **r > g:** the target's seventh term (the table above), stored on 31 December (`te_demog_wc_growth_update`): growth
-  averaged at a weight of 0.2 a year, each year's as it came. A year in which the country gained or lost states takes
-  no sample and re-bases the stored GDP, so a conquest is never read as growth and the next year's growth is measured
-  on the new territory (owner, 2026-10-20, in place of a ±10 clamp on each year).
+  averaged at a weight of 0.2 a year, each year's in log points (100 × ln of the GDP ratio, so a fall and its recovery
+  cancel) and as it came. A year in which the country gained or lost states and its GDP moved more than a tenth takes
+  no sample and re-bases the stored GDP, so a conquest's jump is never read as growth and the next year's growth is
+  measured on the new territory (owner, 2026-10-20, in place of a ±10 clamp on each year).
 
 **What it moves.** None of these effects repeats what pop wealth already does:
 

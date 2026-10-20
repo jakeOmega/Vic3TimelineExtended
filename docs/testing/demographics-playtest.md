@@ -996,8 +996,9 @@ The owner's call of 2026-10-20: a census no longer seeds a state again when its 
 year (in the 2057 EU game that rule fired 8 times in 4 months, every time on migration, and threw away each state's
 year). Any move now goes through the step's booking: up to 5% in or 3% out of each class and sex by the profile, the
 rest flat over everyone as whole families. Wealth Concentration's ownership shock drops the same rule, and r > g's
-growth average replaces its ±10 clamp on each year with a skip: a year in which the country gained or lost states
-takes no growth sample and re-bases the GDP. Both Wealth Concentration changes run under every Demographics rule.
+growth average takes each year's growth in log points (a fall and its recovery cancel) and replaces its ±10 clamp on
+each year with a skip: a year in which the country gained or lost states and its GDP moved more than a tenth takes no
+growth sample and re-bases the GDP. Both Wealth Concentration changes run under every Demographics rule.
 The engine has no merge or split on-action, so a `TE_INFO` line reports when a state's provinces change.
 `test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
 `test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
@@ -1021,6 +1022,8 @@ line gives no verdict.
    1,000 and its trend arrows the census after, and its Net Migration row is the move; its pyramid keeps its shape,
    with the inflow spread over every age beyond the caps, rather than jumping to the equilibrium shape.
 3. **Return on Capital after a conquest (any rule, the banking rule on).** The 31 December after a country gains or
-   loses a state, the growth average in the Return on Capital hover stays where it was; the 31 December after that, it
-   moves by a fifth of that year's growth on the new territory. A same-territory boom year past 10% moves it by its
-   full fifth (a +20% year: +4 less a fifth of the old average).
+   loses a state and its GDP jumps more than 10%, the growth average in the Return on Capital hover stays where it
+   was; the 31 December after that, it moves by a fifth of that year's growth on the new territory. A year that only
+   founds a colony state moves it as any year does. A same-territory boom year past 10% moves it by its full fifth, in
+   log points (a +20% year is 18.2: +3.6 less a fifth of the old average). A crash and its recovery to the same GDP
+   nearly cancel: from 0, a −50% year and a +100% year leave it at about +2.8 (in percent it was +12).
