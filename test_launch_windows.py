@@ -342,10 +342,6 @@ class GeneratedFilesTest(unittest.TestCase):
         self.assertLess(size, 400_000)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 # ---------------------------------------------------------------------------
 # The gate's script
 # ---------------------------------------------------------------------------
@@ -560,3 +556,7 @@ class StagedBankTest(unittest.TestCase):
         restore = _block(self.windows, "sr_launch_restore_banked_fleets")
         self.assertIn("change_local_variable = { name = sr_launch_restored multiply = sr_solar_colonization_goal }", restore)
         self.assertIn("remove_variable = sr_launch_banked_fleets", restore)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1447,3 +1447,7 @@ class TestRebook(unittest.TestCase):
             self.assertIn("booked        1 states", text)
             self.assertIn("band under 2%: ok", text)
             self.assertIn("Great powers' conscription terms by decade (booked)", text)
+
+
+if __name__ == "__main__":
+    unittest.main()

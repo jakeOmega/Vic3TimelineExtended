@@ -559,3 +559,7 @@ class TestCalibrationStep3Generated(unittest.TestCase):
         level = values.split("\nte_demog_malaria_level = {", 1)[1].split("\n}\n", 1)[0]
         self.assertIn("value = te_demog_malaria_level_listed", level)
         self.assertNotIn("has_state_trait", level)
+
+
+if __name__ == "__main__":
+    unittest.main()

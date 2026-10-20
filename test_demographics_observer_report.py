@@ -544,10 +544,6 @@ class TestPhase2Saves(unittest.TestCase):
                 self._main(tmp, "--band", "1.7", "1.3")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TestWork(unittest.TestCase):
     """Phase 2 step 2's work line (te_debug_demog_work_census_line) and --work's checks (the design §2.6)."""
 
@@ -590,3 +586,7 @@ class TestWork(unittest.TestCase):
             with redirect_stdout(out):
                 self.assertEqual(R.main([str(log), "--work"]), 1)
             self.assertIn("Work and retirement", out.getvalue())
+
+
+if __name__ == "__main__":
+    unittest.main()
