@@ -155,7 +155,10 @@ class TestE0DisplayCap(unittest.TestCase):
             for m in re.finditer(re.escape(f"'{key}'"), t):
                 head = t[:m.start()]
                 switch = head[head.rindex("SelectLocalization("):]
-                if f"GreaterThan_CFixedPoint( {read}, {OVER} )" not in switch:
+                # the cap, or the states list's column, which goes to 10K+ from 9,999.5 so its whole years never round
+                # up to 10,000 (test_demographics_layout's edges)
+                if (f"GreaterThan_CFixedPoint( {read}, {OVER} )" not in switch
+                        and f"GreaterThanOrEqualTo_CFixedPoint( {read}, '(CFixedPoint)9999.5' )" not in switch):
                     self.assertNotEqual(k, "<gui>", f"{key} in the GUI with no cap")
                     self.guarded(k, read, corpus, depth + 1)
 
@@ -195,10 +198,20 @@ class TestE0ChartAxis(unittest.TestCase):
         gui = _text(GUI)
         start = gui.index('text = "te_demog_hist_e0_title"')
         chart = gui[start:gui.index('blockoverride "plot_size"', start)]
-        axis = "Max_CFixedPoint( '(CFixedPoint)100', GetPlayer.MakeScope.Var('te_dg_h_e0_max').GetValue )"
+        axis = "GetPlayer.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')"
         self.assertEqual(chart.count(f'max = "[FixedPointToFloat( {axis} )]"'), 2)
+        self.assertEqual(chart.count(axis), 4)
         self.assertEqual(chart.count(f"Min_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), {OVER} )"), 2)
         self.assertNotIn("max = 100", chart)
+        # the variable itself is never read in the GUI: an old save holds none until its next census
+        self.assertNotIn("te_dg_h_e0_max", _text(GUI))
+
+    def test_the_axis_falls_back_where_no_census_has_set_it(self):
+        eng = _Engine({})
+        value = eng._tree(eng.values, "te_demog_hist_e0_axis_shown")
+        self.assertEqual(eng.value(value), P.E0_AXIS_MIN)          # a save from before: no te_dg_h_e0_max
+        eng.vars["te_dg_h_e0_max"] = 1708.9
+        self.assertEqual(eng.value(value), 1708.9)
 
     def test_the_store_sets_the_axis_after_the_samples(self):
         text = _text(HISTORY_EFFECTS)

@@ -1032,14 +1032,15 @@ engine fact (script values and locals as the tables already use), so no self-che
 2. **The display cap.** Where any figure passes 10,000 (`TE_DEMOG_CENSUS` lines' `e0=`; the pool must die at under 10
    per 100,000 a year), the reading says "over 10,000", the states list "10K+", the hovers "over 10,000" for that
    figure alone. Below 10,000 every one shows the number.
-3. **The states list's column.** The 56-pixel Life column shows a tenth of a year below 1,000 and whole years from
-   1,000 (1,709): check a four-digit figure isn't cut (`test_demographics_layout` holds 9,999 and 10K+ to the width).
+3. **The states list's column.** The 56-pixel Life column shows a tenth of a year below 999.95, whole years from there
+   (1,709), and 10K+ from 9,999.5, so no figure rounds up past its branch: check a four-digit figure isn't cut
+   (`test_demographics_layout` holds the edges, 999.95 and 9,999.5, to the width).
 4. **The history chart (my call: the axis follows the data).** Until a figure past 100 is recorded the Life Expectancy
    chart's axis is 0-100, as before; once one is, the axis runs to the largest bar (at most 10,000), so the years before
    the late game shrink to slivers. The owner judges whether that reads well, against the alternative of a fixed 0-100
    axis whose late bars are all full. A bar over 10,000 stops at the top and its hover says "Its bar stops at 10,000". On an
-   old save the axis arrives with the next census (until then 100); check `debug.log` for a variable-not-found
-   line on `te_dg_h_e0_max` in that window, which would be the chart's read before the first census sets it.
+   old save the axis reads 100 until the next census sets it (`te_demog_hist_e0_axis_shown` falls back while
+   `te_dg_h_e0_max` is missing), and `debug.log` has no variable-not-found line for it with the chart open.
 5. **Chronic deaths fall at era 12 (Full or Display only).** The technologies' tooltips show Treatment of Chronic Disease
    +5% on Genetic Engineering and +12% on Molecular Assemblers and on Biological Immortality. Each lifts the target at
    once; the state's chronic factor follows as medicine spreads. With all six a rich state's Chronic Illness hover reads

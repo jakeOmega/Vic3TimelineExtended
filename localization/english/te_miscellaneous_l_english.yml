@@ -7044,7 +7044,7 @@
  te_demog_st_youth_value:0 "#v [State.MakeScope.ScriptValue('te_demog_youth_share')|%0]#! aged 20–29"
  te_demog_state_row_tt:0 "#b [State.GetName]#!\nUnder 15: #v [State.MakeScope.Var('te_dg_young_share').GetValue|%0]#!\n15 to 64: #v [State.MakeScope.Var('te_dg_working_share').GetValue|%0]#!\n65 and over: #v [State.MakeScope.Var('te_dg_old_share').GetValue|%0]#!\nLife expectancy: #v [SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)10000' ), 'te_demog_e0_over', 'te_demog_st_e0_n' )]#! years\nMen per 100 women aged 20 to 59: #v [State.MakeScope.Var('te_dg_sex_balance').GetValue|0]#!\n[concept_inheritance_concentration]: [SelectLocalization( GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_state_row_wc', 'te_demog_st_next' )]\n#lore Click to open the state on its Demographics subtab.#!"
  te_demog_state_row_wc:0 "#v [State.MakeScope.Var('te_dg_wc').GetValue|0]#! → #v [State.MakeScope.ScriptValue('te_demog_wc_target')|0]#!"
- te_demog_states_e0_cell:0 "[SelectLocalization( LessThan_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)1000' ), 'te_demog_states_e0_small', 'te_demog_states_e0_whole' )]"
+ te_demog_states_e0_cell:0 "[SelectLocalization( LessThan_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)999.95' ), 'te_demog_states_e0_small', 'te_demog_states_e0_whole' )]"
  te_demog_states_e0_over:0 "10K+"
  te_demog_states_e0_small:0 "[State.MakeScope.Var('te_dg_e0').GetValue|1]"
  te_demog_states_e0_whole:0 "[State.MakeScope.Var('te_dg_e0').GetValue|0]"
