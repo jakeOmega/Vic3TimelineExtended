@@ -741,7 +741,7 @@ te_mon_peg_suspension_note = {
 # and became wrong the moment commodity money got a band of its own.
 #
 # ORDER. Suspended gold is tested before gold, because a suspension is exactly
-# the case where the printed range (0-25) contradicts the law's name. Commodity
+# the case where the printed range (0-60) contradicts the law's name. Commodity
 # money is next, then gold, then the two flat-range regimes share the
 # fall-through: a fiat or digital player is told the range is theirs to use,
 # which is the whole difference the ladder is selling.

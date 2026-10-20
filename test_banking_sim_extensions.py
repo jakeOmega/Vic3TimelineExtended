@@ -326,11 +326,16 @@ class Extensions(unittest.TestCase):
         # Cells added since then are dropped too: the inflation-targeting
         # mandate (#799) adds a mode, and leaves every older cell unchanged.
         modes_added_since_capture = ('inflation',)
+        # #1084 moved the dial on purpose (a 60 ceiling, a step of a sixth of
+        # the distance, the stance term's own tight clamp, the deficit cap);
+        # its pre_1084 preset restores the script as captured, so the
+        # extensions are still measured against the same baseline.
         with tempfile.TemporaryDirectory() as temp:
             result = Path(temp) / 'baseline.json'
             subprocess.run([sys.executable, str(ROOT / 'scripts/analysis/banking_cycle_sim.py'),
                             '--runs', '2', '--years', '10', '--only', 'fiat',
-                            '--points', '0,4,8', '--jobs', '1', '--json', str(result)],
+                            '--points', '0,4,8', '--jobs', '1', '--tune', 'pre_1084',
+                            '--json', str(result)],
                            env={**os.environ, 'PYTHONHASHSEED': '0'}, check=True,
                            capture_output=True)
             rows = [row for row in json.loads(result.read_text(encoding='utf-8'))

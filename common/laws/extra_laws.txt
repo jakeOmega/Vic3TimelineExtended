@@ -1226,7 +1226,7 @@ law_gold_standard = {
 		# Convertibility credibility (§5.1, §21): a promise to redeem in gold is
 		# the strongest one a 19th-century sovereign can make, so lenders shave
 		# 1pp off the structural tier. Paid for by the loss of the dial's range
-		# (the target runs 0-15 instead of fiat's 0-25, te_mon_target_max, and
+		# (the target runs 0-15 instead of fiat's 0-60, te_mon_target_max, and
 		# while a peg defence is in force its floor rises to about the world
 		# rate + 4, te_mon_target_min) and by the deflation bias that comes
 		# with it.
