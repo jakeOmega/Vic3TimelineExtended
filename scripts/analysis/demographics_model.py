@@ -149,7 +149,7 @@ def cause_factors(inp):
         if factor == "literacy":
             return 1 - P.LITERACY_INFECTION_WEIGHT * inp.literacy
         if factor == "crowding":
-            return 1 + min(P.CROWDING_INFECTION_PER_PULL * inp.crowding, P.CROWDING_INFECTION_MAX)
+            return 1 + P.CROWDING_INFECTION_PER_PULL * inp.crowding
         if factor == "laws":
             return plain_multiplier(inp, cause)
         if factor == "turmoil":
@@ -229,11 +229,20 @@ def group_rates(inp):
     return qf, qm, m["maternal"] * P.MATERNAL_PER_100K_BIRTHS
 
 
-def life_table(q):
+def tail_years(rate):
+    """Person-years a survivor at 150 lives on at the yearly death rate `rate` (per 100,000) past 150, floored at
+    P.LT_TAIL_RATE_MIN: (1 - q/2) / q, life_table's mid-year convention for an open interval (te_demog_lt_tail)."""
+    rate = max(rate, P.LT_TAIL_RATE_MIN)
+    return (100000.0 - rate * 0.5) / rate
+
+
+def life_table(q, tail=None):
     """e0, e65 and infant mortality from group rates, closed form per group.
 
     In a group of width n with constant yearly probability q, survivors fall by (1-q)
     a year, and person-years are counted at mid-year. The script computes the same.
+    The survivors at 150 live on at `tail`, the death rate past 150 (per 100,000; the last group's by default), and
+    their person-years count in e0 and e65 (tail_years; the open last interval, 2026-10-20).
     """
     l, e_total, l65, py_from_65 = 1.0, 0.0, None, 0.0
     for g, (start, n) in enumerate(P.GROUPS):
@@ -247,6 +256,9 @@ def life_table(q):
             py_from_65 += person_years
         e_total += person_years
         l *= pn
+    rest = l * tail_years(q[-1] if tail is None else tail)
+    e_total += rest
+    py_from_65 += rest
     return {"e0": e_total, "e65": py_from_65 / l65 if l65 else 0.0, "q0_per_1000": q[0] / 100.0}
 
 
@@ -1754,6 +1766,8 @@ def lx_pool_deaths(ring, lx, qf, qm, qf0, qm0):
     dead = (uf * qf[last] + um * qm[last] + tf * qf[gt] + tm * qm[gt]) / 100000.0
     tf2, tm2 = tf * (1 - qf[gt] / 100000.0), tm * (1 - qm[gt] / 100000.0)
     uf2, um2 = uf * (1 - qf[last] / 100000.0), um * (1 - qm[last] / 100000.0)
+    # the life tables' open last interval (lx_finish): each sex's pool by part, at the model's own rates
+    lx["pool"] = {"f": (uf, tf, qf0[last], qf0[gt]), "m": (um, tm, qm0[last], qm0[gt])}
     lx["U_f"][last] += uf
     lx["U_m"][last] += um
     if ps > 0:
@@ -1874,6 +1888,22 @@ def lx_wealth_term(slope, mbar, rho, w_bar, w_top):
     return slope
 
 
+def lx_tail_rate(lx, table, sx):
+    """The death rate past 150 a late life table's survivors at 150 live on at (life_table's tail; 2026-10-20): the rate
+    the pool dies at this step (lx_pool_deaths), at the model's own rates. The untreated's is the last group's; the
+    treated's their pool part's at its biological rate age; the blend's the pool's own, its parts weighted by their
+    people (te_demog_lx_tables). None, the table's last group's, where the part or the pool is empty."""
+    pool = lx.get("pool")
+    if pool is None:
+        return None
+    u, t, q_last, q_bio = pool[sx]
+    if table == "untreated":
+        return q_last
+    if table == "treated":
+        return q_bio if t > 0 else None
+    return (u * q_last + t * q_bio) / max(u + t, 0.00001) if u + t > 0 else None
+
+
 def lx_finish(ring, lx, qf0, qm0, inp=None):
     """After the sweep (te_demog_lx_finish): the bands close, the tables and the late figures (ring.lx_out)."""
     ring.lx_sbar = lx_close_bands(ring, lx)
@@ -1881,7 +1911,7 @@ def lx_finish(ring, lx, qf0, qm0, inp=None):
     out = {"elig": lx["e"], "cover": lx["c"], "target": lx["target"], "pub": lx["pub"], "rr": lx["rr"],
            "pull": lx["pull"], "phi": lx["phi"], "sbar": ring.lx_sbar, "ecto": lx["ecto"]}
     for name, (qf, qm) in tables.items():
-        lt_f, lt_m = life_table(qf), life_table(qm)
+        lt_f, lt_m = (life_table(q, lx_tail_rate(lx, name, sx)) for q, sx in ((qf, "f"), (qm, "m")))
         out[name] = {"e0_f": lt_f["e0"], "e0_m": lt_m["e0"], "e0": (lt_f["e0"] + lt_m["e0"]) / 2,
                      "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "old_age": old_age(qf, qm),
                      "l100": (survivors_at(qf, P.LX_LIVING_TO) + survivors_at(qm, P.LX_LIVING_TO)) / 2}

@@ -1409,7 +1409,7 @@ te_demog_treatment_target_maternal = {
 te_demog_treatment_target_chronic = {
 	value = modifier:state_chronic_treatment_add
 	min = 0
-	max = 0.85
+	max = 0.99
 }
 te_demog_medical_diffusion = {
 	value = modifier:state_medical_diffusion_add
@@ -1454,8 +1454,7 @@ te_demog_f_infection_literacy = {
 }
 # State scope: infection's crowding factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_crowding = {
-	value = var:te_dg_in_crowd multiply = 1
-	max = 0.5 add = 1
+	value = var:te_dg_in_crowd multiply = 1 add = 1
 }
 # State scope: infection's malaria factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_infection_malaria = {
@@ -1497,7 +1496,7 @@ te_demog_infection_adult = {
 
 # State scope: work's laws factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_work_laws = {
-	value = 1 add = var:te_dg_in_work min = 0.2
+	value = 1 add = var:te_dg_in_work min = 0
 }
 # State scope: work's safety factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_work_safety = {
@@ -1515,7 +1514,7 @@ te_demog_mult_work = {
 
 # State scope: external's laws factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_external_laws = {
-	value = 1 add = var:te_dg_in_ext min = 0.2
+	value = 1 add = var:te_dg_in_ext min = 0
 }
 # State scope: external's safety factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_external_safety = {
@@ -1543,7 +1542,7 @@ te_demog_f_maternal_medicine = {
 }
 # State scope: maternal's laws factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_maternal_laws = {
-	value = 1 add = var:te_dg_in_mat min = 0.2
+	value = 1 add = var:te_dg_in_mat min = 0
 }
 # State scope: maternal deaths per 100,000 births (an MMR, not a multiplier): the base rate
 # times the cause's factors (demographics_model.cause_multipliers, group_rates).
@@ -1560,7 +1559,7 @@ te_demog_f_chronic_medicine = {
 }
 # State scope: chronic's laws factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_chronic_laws = {
-	value = 1 add = var:te_dg_in_chr min = 0.2
+	value = 1 add = var:te_dg_in_chr min = 0
 }
 # State scope: chronic's sol factor (demographics_model.cause_factors), on the step's stored inputs.
 te_demog_f_chronic_sol = {
@@ -1597,7 +1596,7 @@ te_demog_means = {
 	multiply = { value = var:te_dg_lit add = modifier:state_means_literacy_add max = 1 multiply = 0.7 add = 0.3 }
 	# laws, history, events and measures: Family Limitation and its kin (state_fertility_means_add)
 	add = modifier:state_fertility_means_add
-	max = 0.95
+	max = 1
 	min = 0
 }
 
@@ -2458,3 +2457,10 @@ te_demog_dbg_m148 = { value = 0 if = { limit = { has_variable = te_dg_m148 } val
 te_demog_dbg_m149 = { value = 0 if = { limit = { has_variable = te_dg_m149 } value = var:te_dg_m149 multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
 te_demog_dbg_pool_f = { value = 0 if = { limit = { has_variable = te_dg_pf } value = var:te_dg_pf multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
 te_demog_dbg_pool_m = { value = 0 if = { limit = { has_variable = te_dg_pm } value = var:te_dg_pm multiply = var:te_dg_scale multiply = 1000 divide = { value = var:te_dg_people min = 1 } } }
+
+# The life tables' death rate past 150 is at least this, per 100,000 (te_demog_lt_tail; demographics_model.tail_years).
+te_demog_k_lt_tail_rate_min = { value = 1 }
+# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first, at most the second, where
+# the panel's figures read over (te_demog_history_e0_axis; the GUI's comparisons hold the same 10,000).
+te_demog_k_e0_axis_min = { value = 100 }
+te_demog_k_e0_shown_max = { value = 10000 }

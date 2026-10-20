@@ -306,8 +306,8 @@ under Old-Age Pensions. A rich country at Standard with a
 fifth of its people pensioned pays about a fifth of its revenue. Universal Basic
 Income and the Post-Scarcity Economy pay everyone already and have no pension bill. An older
 people also needs more care: the Ministry of Health costs more bureaucracy as the
-census's health need rises above 1836's, and more for each chronic-care
-technology (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
+census's health need rises above 1836's, and more for each of three chronic-care
+technologies (Modern Pharmaceuticals, Telemedicine, Personalized Medicine): about
 two fifths more for a rich country today. Outside Full none of this changes
 anything, and the buttons are greyed.
 
@@ -356,7 +356,7 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (100+ past 100; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
+| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
 | Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
 | Population pyramid | Men per 100 women, then people by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short. |
@@ -434,7 +434,8 @@ cuts adults' deaths from infection by more than children's, since it cures the
 tuberculosis and pneumonia that killed adults in 1836, so in a rich country
 adults die of infection about as rarely as in the rich world today; Personalized
 Medicine and Advanced Nanofabrication cut deaths from infection to about a sixth
-of that. Life
+of that. Genetic Engineering, Molecular Assemblers and Biological Immortality
+let medicine prevent nearly every death from chronic disease where it reaches. Life
 expectancy and infant mortality are the census's own figures, before famine, war
 and disasters.
 

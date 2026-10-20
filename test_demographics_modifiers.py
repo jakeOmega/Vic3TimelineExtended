@@ -467,7 +467,7 @@ class TestEngineRateLines(unittest.TestCase):
         self.assertEqual(chronic.get(("law_regulated_augmentation_market", "law")), 0.05)
         self.assertEqual(chronic.get(("law_mandatory_augmentation", "law")), 0.05)   # owner, 2026-10-10
         self.assertFalse(any(kind == "law_institution" and "augmentation" in key for key, kind in chronic))
-        self.assertEqual(P.TREATMENT_CAP["chronic"], 0.85)
+        self.assertEqual(P.TREATMENT_CAP["chronic"], 0.99)   # owner, 2026-10-20 (was 0.85)
         absorbed = {k[1] for k, (family, v) in self.moved.items()
                     if family == "absorbed" and k[3] == "state_mortality_mult"}
         self.assertTrue(self.AUGMENTATION_LAWS <= absorbed)

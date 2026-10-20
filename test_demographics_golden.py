@@ -179,6 +179,23 @@ UPLOADS_DIGESTS = {
     ("generated_effects", "te_demog_cause_inputs_store"):
         "78de3129ee4b205c97a61f0fce47c32c250be87511c0d5183d7b3b4d3176f508",
 }
+# The safeguards pass (owner, 2026-10-20): chronic treatment's cap 0.85 to 0.99, no floor but 0 on a cause's laws factor
+# (was 0.2), no ceiling on crowding's infection term (was +50%), the means' cap 1 (was 0.95), and the life table's open last
+# interval (te_demog_life_table passes its last group's rates to te_demog_lt_finish, whose survivors at 150 live on at
+# them). No case's chronic treatment, laws terms, crowding or means reach an old bound, and its survivors at 150 are a few
+# in ten million, so the interpreter's cases keep every recorded figure; the model's rich case moved in the tenth digit
+# (e0 +1.7e-10 years, births -1.1e-8) and was re-recorded alone.
+SAFEGUARDS_DIGESTS = {
+    ("generated_effects", "te_demog_life_table"): "292d244a05f14bdb1964f71de30c68710efc30d5e39bc0bbaa58910f32f016e8",
+    ("generated_values", "te_demog_f_chronic_laws"): "a841c328bec91f6a32bf17b9674984a95339d2680b7d56e66a3f272a532b33f2",
+    ("generated_values", "te_demog_f_external_laws"): "2d3f2d311f16527615bd8d7093c43f88c090c8d41b316ad96adffdd7bc3336e1",
+    ("generated_values", "te_demog_f_infection_crowding"):
+        "3d3738da66b1220a24167021345273a85d3a1c0ca07bfb33ac8741173b4e66ce",
+    ("generated_values", "te_demog_f_work_laws"): "1b315c20ac4690af689b3826307479ebc9bfb1849a27c1c46fbcde126b98a600",
+    ("generated_values", "te_demog_means"): "af0d55a0594f706deee6ed1b5fea95c6f5944ff8608761bebb695fb05823f78e",
+    ("generated_values", "te_demog_treatment_target_chronic"):
+        "41fdf5c92606c931702efb29e240f2e378966a156fd3c442ec4236c04ceaa310",
+}
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -354,6 +371,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = ADULT_INFECTION_DIGESTS.get((key, name), want)
                 want = STAGE3_DIGESTS.get((key, name), want)
                 want = UPLOADS_DIGESTS.get((key, name), want)
+                want = SAFEGUARDS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

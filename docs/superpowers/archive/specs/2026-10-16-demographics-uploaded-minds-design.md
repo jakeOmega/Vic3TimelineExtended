@@ -96,7 +96,8 @@ as it is (the release precondition).
 | Pyramid, biological view | Pyramid | with a pool | a "Non-biological: N women, N men" line under the pyramid | |
 
 Life expectancy reads as today: it is already "100+" by Mind Backups, and an upload counting as living would make it
-meaningless. Old age from stays biological: it says when a body is old, and an upload has none. The Causes of Death pie
+meaningless. (Since 2026-10-20 the panel shows the figure itself, into the thousands, "over 10,000" past that; the
+uploads still don't count in it.) Old age from stays biological: it says when a body is old, and an upload has none. The Causes of Death pie
 keeps the uploads in their causes: the bodies did die of them. The state subtab shows the state's own uploads last year
 in its Longevity section, since the pool is the country's.
 

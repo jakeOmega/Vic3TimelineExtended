@@ -61,6 +61,7 @@ molecular_assemblers = {
 		country_max_weekly_construction_progress_add = 200
 		country_st_res_small_arms_decay_add = -0.002
 		country_st_res_fertilizer_decay_add = -0.0015
+		state_chronic_treatment_add = 0.12	# the census's chronic treatment (owner, 2026-10-20: the technologies take it to 0.99 by era 12)
 	}
 
 	ai_weight = {
@@ -288,6 +289,7 @@ biological_immortality = {
 		# the late-game design's calls 3 and 4; -0.75 until 2026-10-16, when Synthetic Biology took 0.05 of it)
 		state_ageing_rate_add = -0.70
 		state_rejuvenation_add = 0.03
+		state_chronic_treatment_add = 0.12	# the census's chronic treatment (owner, 2026-10-20: the technologies take it to 0.99 by era 12)
 		character_health_add = 100
 		state_arable_land_mult = 0.25
 	}

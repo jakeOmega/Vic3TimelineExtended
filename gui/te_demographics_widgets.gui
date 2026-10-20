@@ -613,7 +613,7 @@ types te_demographics_widgets
 				align = right|nobaseline
 				using = te_demog_fontsize_row
 				default_format = "#v"
-				text = "[State.MakeScope.Var('te_dg_e0').GetValue|1]"
+				text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)9999.5' ), 'te_demog_states_e0_over', 'te_demog_states_e0_cell' )]"
 			}
 			textbox = {
 				autoresize = yes
@@ -1044,7 +1044,7 @@ types te_demographics_widgets
 						text = "te_demog_ov_e0"
 					}
 					blockoverride "word" {
-						text = "[SelectLocalization( GetScriptedGui('te_demog_lx_e0_over_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_e0_100', 'te_demog_ov_e0_value' )]"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)10000' ), 'te_demog_ov_e0_over', 'te_demog_ov_e0_value' )]"
 					}
 					blockoverride "third_line" {
 						text = "te_demog_ov_e0_third"
@@ -3221,15 +3221,17 @@ types te_demographics_widgets
 				blockoverride "bar_body" {
 					te_history_bar_unsigned = {
 						visible = "[ScriptContainer.HasVariable('te_dg_h_e0')]"
+						### the axis runs to the largest figure the samples hold, 100 to 10,000 (te_demog_hist_e0_axis_shown), and a bar
+						### stops at 10,000; the cap is 4% of the axis, as 4 was of 100
 						blockoverride "values" {
 							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue('te_dg_h_e0') ) )]"
+							max = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown') )]"
+							value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown'), '(CFixedPoint)0.02' ), Min_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), '(CFixedPoint)10000' ) ) )]"
 						}
 						blockoverride "cover_values" {
 							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), '(CFixedPoint)4' ) ) )]"
+							max = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown') )]"
+							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( Min_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), '(CFixedPoint)10000' ), Multiply_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown'), '(CFixedPoint)0.04' ) ) ) )]"
 						}
 						blockoverride "color" {
 							color = { 0.42 0.70 0.48 1.0 }
@@ -4818,7 +4820,7 @@ types te_demographics_widgets
 						text = "te_demog_ov_e0"
 					}
 					blockoverride "word" {
-						text = "[SelectLocalization( GetScriptedGui('te_demog_lx_state_e0_over_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_ov_e0_100', 'te_demog_st_e0_value' )]"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.Var('te_dg_e0').GetValue, '(CFixedPoint)10000' ), 'te_demog_ov_e0_over', 'te_demog_st_e0_value' )]"
 					}
 					blockoverride "third_line" {
 						text = "te_demog_st_e0_third"

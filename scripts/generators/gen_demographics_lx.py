@@ -340,7 +340,8 @@ def tables(o):
     _table_pass(o, "blend")
     o("set_variable = { name = te_dg_old_age value = local_var:te_dg_lx_oa }")
     o("set_variable = { name = te_dg_lx_l100 value = local_var:te_dg_lx_lt }")
-    o("te_demog_lt_finish = yes")
+    blend_tail(o)
+    o("te_demog_lt_finish = { QF = local_var:te_dg_lt_tqf QM = local_var:te_dg_lt_tqm }")
     for name in ("tq", "tp", "uq", "up"):
         o(f"set_local_variable = {{ name = te_dg_lx_r{name} value = 0 }}")
     for g in range(first_adult, len(P.GROUPS)):
@@ -363,6 +364,27 @@ def tables(o):
     o("}")
     o("}")
     o("")
+
+
+def blend_tail(o):
+    """The blend's death rate past 150 (demographics_model.lx_tail_rate; the open last interval, 2026-10-20): the rate the
+    pool died at this step, its untreated part at the last group's rate and its treated part at its biological one, both
+    the model's own (te_demog_lx_fold_deaths' te_dg_lxp_*), weighted by their people; with no pool, the blend's last
+    group's rate, still in te_dg_q<f|m>."""
+    last = len(P.GROUPS) - 1
+    o("# the blend's death rate past 150 for its survivors at 150 (demographics_model.lx_tail_rate): the pool's, its parts")
+    o("# weighted by their people (te_demog_lx_fold_deaths), or with no pool the last group's")
+    for s in "fm":
+        o(f"set_local_variable = {{ name = te_dg_lt_tq{s} value = local_var:te_dg_q{s} }}")
+        o("if = {")
+        o(f"limit = {{ has_local_variable = te_dg_lxp_u{s} }}")
+        o(f"set_local_variable = {{ name = te_dg_lx_n value = {{ value = local_var:te_dg_lxp_u{s} "
+          f"add = local_var:te_dg_lxp_t{s} }} }}")
+        o(f"if = {{ limit = {{ local_var:te_dg_lx_n > 0 }} set_local_variable = {{ name = te_dg_lt_tq{s} value = {{ "
+          f"value = local_var:te_dg_lxp_u{s} multiply = local_var:te_dg_lxu_q{s}{last} add = {{ value = "
+          f"local_var:te_dg_lxp_t{s} multiply = local_var:te_dg_lxp_bq{s} }} divide = {{ value = local_var:te_dg_lx_n "
+          f"min = 0.00001 }} }} }} }}")
+        o("}")
 
 
 def access(o):

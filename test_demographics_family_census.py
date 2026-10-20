@@ -183,7 +183,7 @@ class TestMaternal(unittest.TestCase):
     """Restricted Contraception's maternal deaths: the maternal cause's "laws" factor, on the step's stored input."""
 
     def test_the_stored_input_and_the_factor_match_the_model(self):
-        for line in (0.0, 0.25, -0.9):
+        for line in (0.0, 0.25, -0.9, -1.2):   # -1.2: the factor's bound at 0 (2026-10-20)
             inp = M.Inputs(mods={P.MATERNAL_TYPE: line})
             eng = _Engine(R._mod_fixtures(inp))   # every read the store makes (calibration step 3's malaria too)
             eng.vars.update(te_dg_sol=8.0, te_dg_lit=0.0)

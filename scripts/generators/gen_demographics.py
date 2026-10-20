@@ -342,7 +342,8 @@ def life_table(o):
               "divide = 200 } }")
         fertile = 15 <= start <= 45
         o(f"te_demog_lt_group = {{ N = {width} FERTILE = {'yes' if fertile else 'no'} }}")
-    o("te_demog_lt_finish = yes")
+    # the open last interval (2026-10-20): the survivors at 150 live on at the last group's rates, still in te_dg_q<f|m>
+    o("te_demog_lt_finish = { QF = local_var:te_dg_qf QM = local_var:te_dg_qm }")
     o("te_demog_old_age_pass = yes")
     o("}")
     o("")
@@ -1463,8 +1464,7 @@ def _factor_body(o, cause, factor):
     elif factor == "literacy":
         o(f"value = var:te_dg_in_lit multiply = {lit(-P.LITERACY_INFECTION_WEIGHT)} add = 1")
     elif factor == "crowding":
-        o(f"value = var:te_dg_in_crowd multiply = {lit(P.CROWDING_INFECTION_PER_PULL)}")
-        o(f"max = {lit(P.CROWDING_INFECTION_MAX)} add = 1")
+        o(f"value = var:te_dg_in_crowd multiply = {lit(P.CROWDING_INFECTION_PER_PULL)} add = 1")
     elif factor == "laws":
         o(f"value = 1 add = var:te_dg_in_{s} min = {lit(P.MORTALITY_MULT_FLOOR)}")
     elif factor == "turmoil":
@@ -2051,7 +2051,18 @@ def render_values(root):
     work_step2_values(o)
     consequence_values(o)
     debug_values(o)
+    tail_values(o)
     return o.text()
+
+
+def tail_values(o):
+    """The life table's open last interval (2026-10-20; demographics_params.LT_TAIL_RATE_MIN)."""
+    o("# The life tables' death rate past 150 is at least this, per 100,000 (te_demog_lt_tail; demographics_model.tail_years).")
+    o(f"te_demog_k_lt_tail_rate_min = {{ value = {lit(P.LT_TAIL_RATE_MIN)} }}")
+    o("# The Life Expectancy chart's axis: the largest figure its samples hold, at least the first, at most the second, where")
+    o("# the panel's figures read over (te_demog_history_e0_axis; the GUI's comparisons hold the same 10,000).")
+    o(f"te_demog_k_e0_axis_min = {{ value = {lit(P.E0_AXIS_MIN)} }}")
+    o(f"te_demog_k_e0_shown_max = {{ value = {lit(P.E0_SHOWN_MAX)} }}")
 
 
 LINE_HEADER = ("# The engine's birth and mortality lines on laws, technologies and institutions, moved to script-only types\n"

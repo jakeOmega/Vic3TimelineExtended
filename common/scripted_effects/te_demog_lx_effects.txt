@@ -680,6 +680,14 @@ te_demog_lx_fold_deaths = {
 	set_local_variable = { name = te_dg_lx_mt value = { value = var:te_dg_pm multiply = local_var:te_dg_lx_ps } }
 	set_local_variable = { name = te_dg_lx_fu value = { value = var:te_dg_pf subtract = local_var:te_dg_lx_ft } }
 	set_local_variable = { name = te_dg_lx_mu value = { value = var:te_dg_pm subtract = local_var:te_dg_lx_mt } }
+	# the life tables' open last interval (te_demog_lx_tables; 2026-10-20): the pool by part and its treated part's rate at
+	# its biological age, the model's own (0 with none treated)
+	set_local_variable = { name = te_dg_lxp_uf value = local_var:te_dg_lx_fu }
+	set_local_variable = { name = te_dg_lxp_um value = local_var:te_dg_lx_mu }
+	set_local_variable = { name = te_dg_lxp_tf value = local_var:te_dg_lx_ft }
+	set_local_variable = { name = te_dg_lxp_tm value = local_var:te_dg_lx_mt }
+	set_local_variable = { name = te_dg_lxp_bqf value = local_var:te_dg_lx_uqf }
+	set_local_variable = { name = te_dg_lxp_bqm value = local_var:te_dg_lx_uqm }
 	change_local_variable = {
 		name = te_dg_deaths
 		add = {
