@@ -232,6 +232,21 @@ te_demog_state_on_top_sgui = {
 	effect = { }
 }
 
+# The note under that hover's split (te_demog_st_ontop_phi): under Full, Private Health Insurance's wealth line
+# (demographics_params.WEALTH_LINE_FLOOR) can take the richest pops' deaths to 0. The walk then leaves them out, but the
+# split still takes off their unfloored share, so the other effects on some of its people read below x1 and the whole
+# state's high by as much (owner, 2026-10-20: the edge is accepted, and the hover says so). The state's owner's law.
+te_demog_state_phi_note_sgui = {
+	scope = state
+	is_shown = {
+		te_demog_effects_run = yes
+		owner ?= { has_law = law_type:law_private_health_insurance }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ----------------------------------------------------------------------------
 # Phase 2 step 2: the Work and Retirement section (te_demog_sec_work, te_state_demog_work) and the overview's working
 # age and old age from. docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §2.6.
