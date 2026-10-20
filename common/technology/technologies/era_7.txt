@@ -72,6 +72,7 @@ jet_engine_technology = {
 
 	modifier = {
 		state_building_airport_max_level_add = 1
+		state_family_migration_add = 0.05	# the census's families among migrants (modifier-types stage 3)
 	}
 
 	ai_weight = {

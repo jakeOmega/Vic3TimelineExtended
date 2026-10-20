@@ -1574,15 +1574,13 @@ te_demog_mult_chronic = {
 	multiply = te_demog_f_chronic_sol
 }
 
-# State scope: women's share of the workforce by the owner's women's-rights law.
+# State scope: women's share of the workforce, the base plus the women's-rights laws' line (modifier-types
+# stage 3; demographics_model.female_work_share), within 0-1.
 te_demog_female_work_share = {
 	value = 0.1
-	if = { limit = { owner = { has_law = law_type:law_no_womens_rights } } value = 0.1 }
-	if = { limit = { owner = { has_law = law_type:law_women_in_the_fields } } value = 0.25 }
-	if = { limit = { owner = { has_law = law_type:law_women_own_property } } value = 0.3 }
-	if = { limit = { owner = { has_law = law_type:law_women_in_the_workplace } } value = 0.45 }
-	if = { limit = { owner = { has_law = law_type:law_womens_suffrage } } value = 0.47 }
-	if = { limit = { owner = { has_law = law_type:law_protected_class } } value = 0.48 }
+	add = modifier:state_female_work_share_add
+	min = 0
+	max = 1
 }
 
 # State scope: the share of the gap to desired fertility a population can close (spec 2.3;
@@ -1911,12 +1909,10 @@ te_demog_k_workforce_scale = { value = 0.7 }
 te_demog_k_health_need_1836 = { value = 0.952 }
 te_demog_k_need_newborn = { value = 1 }
 te_demog_k_pension_age_standard = { value = 65 }
-# State scope: the family share's transport term (owner technology).
+# State scope: the family share's transport term, the transport technologies' line (modifier-types stage 3;
+# demographics_model.migrant_profile).
 te_demog_family_transport = {
-	value = 0
-	if = { limit = { owner = { has_technology_researched = paddle_steamer } } add = 0.1 }
-	if = { limit = { owner = { has_technology_researched = railways } } add = 0.1 }
-	if = { limit = { owner = { has_technology_researched = combustion_engine } } add = 0.15 }
+	value = modifier:state_family_migration_add
 }
 
 # The migrant booking (2026-10-12): the cap on each class and sex (te_demog_migrant_rates) and the labour

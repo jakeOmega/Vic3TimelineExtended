@@ -348,7 +348,7 @@ What the offline evidence already says (2026-10-12):
     largest economies). Keep a plain-text save of a rich country around 2000-2020 (debug mode) and run
     `demographics_harness.py workforce SAVE`-style checks on it; `pensions SAVE` reads its revenue over GDP.
 11. **Work deaths' split.** Under Full, option r's `fws_wk=` (the census's women among workers 15-64) replaces
-    `fws_law=` in the split at the next step: about 0.17 in a 1836 farming state (the law table's 0.1), about 0.46
+    `fws_law=` in the split at the next step: about 0.17 in a 1836 farming state (No Women's Rights' 0.1), about 0.46
     under Protected Class (0.48). The Causes of Death section's work row still adds up.
 12. **A revolution that wins** under Full, the old government holding Raised and a bill: at once the winner shows the
     same pension age and position, the Trade Unions' −2 modifier, the Old-Age Pensions expense and the health bill; its
@@ -772,6 +772,26 @@ script value, as the other factors), so no self-check. What only the game can sh
    Leading Cause is Accidents and Violence, and infection is a sliver (the harness: 3% of deaths at 50 years).
 5. **The outline.** The Demographics tab's twenty-year outline moves with the state figures (the country's factor,
    `te_dg_inf_ad`, set at each count beside access).
+
+## Women at work and families among migrants on their carriers (modifier-types stage 3, 2026-10-19)
+
+The migrant profile's two inputs were a `has_law` ladder and a `has_technology_researched` ladder; they are now
+census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems.md`
+§ The census, Flows). The values are the old tables', so no figure moves, except that Commercial Aviation and Jet Engine
+Technology now add families too, which moves a late-game state's migrant profile toward families. No new engine fact: a
+state type on a tech's or law's `modifier` read in state scope is check a (option l, 2026-10-10), and a mod tech carrying
+a census type is the Contraceptive Pill's. So no self-check. What only the game can show:
+
+1. **The tooltips.** Women in the Fields "Women's Work Outside the Home +15%", Women Own Property +20%, Women in the
+   Workplace +35%, Women's Suffrage +37%, Protected Class +38%; No Women's Rights shows no such line. Paddle Steamer and
+   Railways "Families Among Migrants +10%", Combustion Engine +15% (beside its Deaths from Violence and Accidents line),
+   Commercial Aviation and Jet Engine Technology +5%. None shows a raw key, each hover gives its description, and
+   `debug.log` holds no `Unknown modifier type` for them.
+2. **The capital's reads (option l, any rule).** `TE_DEMOG_WORK` logs `fws=` (0.10 under No Women's Rights, 0.48 under
+   Protected Class) and `fam_mig=` (0.20 with Paddle Steamer and Railways, 0.45 with all five: the techs' lines alone, without the families' 0.2 base).
+3. **The census reads them (Full or Display only).** A state with net migration keeps the profile it had before the
+   change, unless its owner has an aviation tech: there the young-adult bulge of its arrivals or departures is a little
+   flatter.
 
 ## Uploaded minds (2026-10-19)
 

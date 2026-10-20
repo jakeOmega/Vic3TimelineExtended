@@ -521,7 +521,7 @@ te_demog_prepare = {
 	set_local_variable = { name = te_dg_mmr value = te_demog_mult_maternal }
 	set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
 	# demographics_model.work_split: the work multiplier x 2 x each sex's share; under Full the census's own count of
-	# women among the workers at the last count (phase 2 step 2, §2.5; te_demog_work_death_share), the flows keep the law's
+	# women among the workers at the last count (phase 2 step 2, §2.5; te_demog_work_death_share), the flows keep the laws'
 	set_local_variable = { name = te_dg_fws_d value = te_demog_work_death_share }
 	set_local_variable = { name = te_dg_m_work_f value = { value = te_demog_mult_work multiply = local_var:te_dg_fws_d multiply = 2 } }
 	set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws_d multiply = te_demog_mult_work multiply = 2 } }
@@ -2318,7 +2318,7 @@ te_demog_country_census = {
 		te_demog_lx_country_add = yes
 		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
 		change_local_variable = { name = te_dg_seeded add = 1 }
-		# the women's share of the workforce depends on the owner's law only: any state gives it
+		# the women's share of the workforce is the owner's law's line, which every state reads alike: any state gives it
 		if = {
 			limit = { local_var:te_dg_seeded = 1 }
 			set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
