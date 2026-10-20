@@ -80,9 +80,8 @@ te_inflation.1 = {
 	duration = 3
 
 	# Bond fortunes vanish: every state's Wealth Concentration falls 5 (the
-	# header's WEALTH CONCENTRATION). ROOT is the country: every caller of the
-	# monthly update that fires this has a country ROOT, as
-	# te_inh_apply_concentration_modifiers needs.
+	# header's WEALTH CONCENTRATION). ROOT is the country this country_event
+	# fired for, as te_inh_apply_concentration_modifiers needs.
 	immediate = {
 		te_demog_wc_shock = { AMOUNT = -5 }
 	}
