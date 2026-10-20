@@ -4,8 +4,8 @@
 # Design: docs/superpowers/archive/specs/2026-10-09-tax-code-light-design.md. Schema:
 # docs/systems/tax_code_schema.md, "Light code".
 #
-# The vanilla taxation law stays enacted and bounds each rate between the rate
-# it sets at a very low and at a very high tax level. The code is five enacted
+# The vanilla taxation law stays enacted and caps each rate at the rate it sets
+# at a very high tax level; a tax it levies may go down to nothing. The code is five enacted
 # indices, te_tax_en_<key> (rate = index x te_tax_step_<key>, the full code's
 # own schema), which the player moves one step at a time from the tax code's
 # panel; a change applies at once. There are no bills.
@@ -73,7 +73,9 @@ te_tax_light_migrate_country = {
 #   1. the active law changed since the last sync (on_law_activated raises
 #      te_tax_light.3; the 1st catches anything else): a player's code is
 #      clamped into the new law's range, at most the law's rate at the tax
-#      level, so the change never raises the level (te_tax_light_gen_clamp);
+#      level, so the change never raises the level (te_tax_light_gen_clamp; a
+#      tax cut to nothing stays at nothing, a tax the old law did not levy
+#      starts at the level's rate);
 #      an AI's follows the native level; no reaction, the law change's own
 #      approval covers it;
 #   2. an AI country: every tax at the law's rate for its native level, each
@@ -164,7 +166,7 @@ te_tax_light_process_month = {
 # ---------------------------------------------------------------------------
 # The step command (te_tax_light_step_<key>_sgui, te_tax_light_generated_sguis.txt).
 # KEY: wage, div, land, head or cons. DIR: 0 one step down, 1 one step up, 2 to
-# the law's very-low rate, 3 to its very-high rate. Runs only when
+# zero (te_tax_light_min_<key>), 3 to the law's very-high rate. Runs only when
 # te_tax_light_can_step holds, which is also the button's is_valid. The
 # tooltip lines come first and read the state before the change; the change,
 # its reaction and the sync are hidden, since the panel shows their result.
