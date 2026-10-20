@@ -157,8 +157,12 @@ te_demog_pop_birth_mult = {
 # Pop scope: the engine's mortality multiplier for this pop: 1 + its state's state_mortality_mult
 # + its class's, its workplace's and its workplace's groups' mortality modifiers (the group reads carry
 # working_conditions at the building's scale, so the table is not added again: working_conditions_read)
-# + the starvation penalties (as births') + non-homeland mortality, floored at 0. Turmoil and wealth mortality are
-# left out: their scaling is unknown and the probe measured both at about 0.
+# + the starvation penalties (as births') + non-homeland mortality + the state's wealth line x the pop's wealth,
+# floored at 0. The wealth line is state_mortality_wealth_mult, which the engine scales by each pop's own wealth
+# (probe P6, owner, 2026-10-11): Private Health Insurance's outside Full; under Full the census's pair, which
+# carries that line at its rate and the late game's wealth slope (2026-10-20: until then the walk left it out, and
+# the window's deaths, dz and the residual ran high wherever the slope was on). Turmoil's mortality is left out: its
+# scaling is unknown and the probe measured it at about 0.
 te_demog_pop_death_mult = {
 	value = 1
 	add = state.modifier:state_mortality_mult
@@ -1278,6 +1282,7 @@ te_demog_pop_death_mult = {
 		limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }
 		add = state.modifier:state_non_homeland_mortality_mult
 	}
+	add = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }
 	min = 0
 }
 

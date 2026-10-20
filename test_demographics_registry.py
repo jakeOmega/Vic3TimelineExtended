@@ -438,6 +438,9 @@ SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog
                     "te_debug_demog_cause_deaths_selfcheck": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
 PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
+# 2026-10-20: the walk applies the state's wealth line per pop, and the refresh and the split read it beside te_dg_w_edw:
+# none unless a test says (the census's pair is off, and Private Health Insurance's line outside Full).
+WEALTH_LINE_DEFAULTS = {"modifier:state_mortality_wealth_mult": 0.0}
 # Issue #1029: the month a state's count is taken (te_dg_count_mi, the subtab's next count), te_history_month_index, which
 # reads the calendar's month: the start of 1836's year unless a test says.
 PANEL_DEFAULTS = {"te_history_month_index": 1836.0 * 12}
@@ -490,8 +493,12 @@ class _Engine:
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
-        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS, **fixtures}
+        self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS,
+                         **WEALTH_LINE_DEFAULTS, **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
+        # the walk's bare deaths x wealth (te_demog_absorbed_walk_init sets it in every walk, 0 outside Full): the refresh
+        # and the split read it beside the wealth line since 2026-10-20, and a stubbed walk need not give it
+        self.locals["te_dg_w_edw"] = 0.0
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
         self.removed = []     # remove_modifier's names, in order
@@ -3628,7 +3635,7 @@ class TestPopMultiplierScript(unittest.TestCase):
         field = "state_birth_rate_mult" if name == "te_demog_pop_birth_mult" else "state_mortality_mult"
         reads[f"state.modifier:{field}"] = read
         lo, hi = P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD, P.FOOD_SECURITY_STARVATION_THRESHOLD
-        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food, **reads}, pop_type="laborers",
+        eng = _OwnerEngine({"literacy_rate": literacy, "food_security": food, "wealth": 20.0, **reads}, pop_type="laborers",
                            triggers={"is_in_severe_starvation": food < lo, "is_in_mild_starvation": lo <= food < hi,
                                      "is_employed": False, "is_homeland_of_country_cultures": True})
         lit = P.LITERACY_BIRTH_PENALTY * literacy if field == "state_birth_rate_mult" else 0.0

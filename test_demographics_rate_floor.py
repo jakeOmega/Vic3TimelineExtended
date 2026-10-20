@@ -6,6 +6,8 @@ interpreter can't run as it stands, and the checks the change rests on:
 - the self-check rate_below_measured (te_demog_rate_effects.txt), which reads globals and writes debug_log lines;
 - the late game's wealth slope at a state total near -0.95: its bound is fitted to this refresh's census rate and reads
   no M, so the richest pop stays at the treated's rate whatever M was;
+- the walk's per-pop death multiplier with the state's wealth line x the pop's wealth, as the engine applies it (probe
+  P6), and the two places that read the walk beside the line: the window's start rate and the Causes of Death split;
 - the loc that named the mod's clamps as the game's limits;
 - the calendar estimate of deaths by cause, which a late-game state skips (its own count replaces it).
 """
@@ -18,10 +20,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
+import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_params as P  # noqa: E402
 from test_demographics_registry import (  # noqa: E402  (helpers only: no TestCase)
-    EFFECTS, MISC_LOC, RATE_EFFECTS, _block, _Engine, _find, _raw_blocks, _text)
+    EFFECTS, GENERATED_VALUES, MISC_LOC, RATE_EFFECTS, _block, _Engine, _find, _OwnerEngine, _raw_blocks, _text)
 
 CHECK = ("te_demog_rbm_selfcheck_flows", "te_demog_rbm_selfcheck_arm")
 REAL = _raw_blocks([RATE_EFFECTS])
@@ -84,8 +87,6 @@ class TestRateBelowMeasured(unittest.TestCase):
 
     POP = 1_000_000.0
     ED0 = 100.0 * POP
-    W = -0.0002          # the census's wealth line a wealth level (te_dg_w)
-    EDW = ED0 * 40.0     # the bare deaths x wealth the line reaches: a mean wealth of 40
 
     def engine(self):
         eng = _CheckEngine({"state_population": self.POP}, triggers={"te_demog_effects_run": True})
@@ -102,17 +103,14 @@ class TestRateBelowMeasured(unittest.TestCase):
         eng.locals["te_dg_rate_sr"] = 1.0
         eng.call("te_demog_rbm_selfcheck_arm")
 
-    def read(self, eng, mig, mult_end=0.04, w=W, start=0.04):
-        """Step N+1: the window at start .. mult_end of the bare curve, the engine's own residual `mig` (the walk
-        expects the window's deaths at its linear line, te_dg_ed, and leaves the census's wealth line out)."""
+    def read(self, eng, mig, mult_end=0.04, start=0.04):
+        """Step N+1: the window at start .. mult_end of the bare curve, the residual `mig` against the walk's expected
+        deaths at its linear line (te_dg_ed, which holds the census's wealth line per pop since 2026-10-20)."""
         ed = (start + mult_end) / 2 * self.ED0 * 12 / 1e5
-        eng.vars.update(te_dg_ed=ed, te_dg_w=w)
-        eng.locals.update(te_dg_w_ed0=self.ED0, te_dg_w_ed=mult_end * self.ED0, te_dg_w_edw=self.EDW, te_dg_mig=mig)
+        eng.vars.update(te_dg_ed=ed)
+        eng.locals.update(te_dg_w_ed0=self.ED0, te_dg_w_ed=mult_end * self.ED0, te_dg_mig=mig)
         eng.call("te_demog_rbm_selfcheck_flows")
         return ed
-
-    def wealth(self, w=W):
-        return w * self.EDW * 12 / 1e5
 
     def verdict(self, eng):
         lines = [x for x in eng.logs if "rate_below_measured" in x]
@@ -128,14 +126,14 @@ class TestRateBelowMeasured(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_rbm_lag"], 160.0)
 
     def test_ok_when_the_year_runs_on_the_line(self):
-        """The engine linear to -1: the residual is the engine's own migration (10) plus the census's wealth line the
-        walk left out; less that line, 10 is well inside half the expected deaths."""
+        """The engine linear to -1: the residual is the engine's own migration, 10, well inside half the expected
+        deaths."""
         eng = self.engine()
         self.arm(eng)
-        self.read(eng, mig=10.0 - self.wealth())
+        self.read(eng, mig=10.0)
         self.assertEqual(self.verdict(eng), "OK")
         self.assertIn("te_demog_rbm_selfcheck_done", eng.globals)
-        for name in ("te_dg_rbm_r0", "te_dg_rbm_s1", "te_dg_rbm_lag", "te_dg_rbm_u", "te_dg_rbm_gap"):
+        for name in ("te_dg_rbm_r0", "te_dg_rbm_s1", "te_dg_rbm_lag", "te_dg_rbm_r", "te_dg_rbm_gap"):
             self.assertNotIn(name, eng.vars, name)
 
     def test_broken_when_the_engine_stops_at_minus_0_9(self):
@@ -144,28 +142,18 @@ class TestRateBelowMeasured(unittest.TestCase):
         eng = self.engine()
         self.arm(eng)
         gap = 0.1 * self.ED0 * 12 / 1e5 - 0.04 * self.ED0 * 12 / 1e5
-        self.read(eng, mig=10.0 - self.wealth() - gap)
+        self.read(eng, mig=10.0 - gap)
         self.assertEqual(self.verdict(eng), "BROKEN")
-
-    def test_the_wealth_line_is_taken_out(self):
-        """A steep wealth line (four times the default here) puts the residual past half the deaths on its own; the
-        check takes it out, so a linear engine reads OK."""
-        eng = self.engine()
-        self.arm(eng)
-        w = 4 * self.W
-        self.assertGreater(-self.wealth(w), 0.5 * 480)
-        self.read(eng, mig=-self.wealth(w), w=w)
-        self.assertEqual(self.verdict(eng), "OK")
 
     def test_the_first_month_may_run_at_the_old_rate(self):
         """Q7: a change of rate shows within a month, so the low side takes a month of the old rate on top."""
         eng = self.engine()
         self.arm(eng)
-        self.read(eng, mig=-0.5 * 480 - 150.0 - self.wealth())
+        self.read(eng, mig=-0.5 * 480 - 150.0)
         self.assertEqual(self.verdict(eng), "OK")
         eng = self.engine()
         self.arm(eng)
-        self.read(eng, mig=-0.5 * 480 - 170.0 - self.wealth())
+        self.read(eng, mig=-0.5 * 480 - 170.0)
         self.assertEqual(self.verdict(eng), "BROKEN")
 
     def test_no_arm_where_the_baseline_is_loud(self):
@@ -271,16 +259,18 @@ class TestTheWealthSlopeAtTheFloor(unittest.TestCase):
     CDR = 0.385                          # the census's: a total of about -0.95 with the +0.04 line on top
     READ = 0.04
 
-    def refresh(self, slope, prior=0.0, mbar=0.6, rho=0.1, wbar=40.0, wtop=150.0):
+    def refresh(self, slope, prior=0.0, mbar=0.6, rho=0.1, wbar=40.0, wtop=150.0, wealth_read=0.0):
         families = {f"modifier:{n}": 0.0 for n in P.ENGINE_LINE_TYPES.values()}
         eng = _Engine({"state_population": self.POP, "modifier:state_birth_rate_mult": 0.05,
-                       "modifier:state_mortality_mult": self.READ + prior, **families},
+                       "modifier:state_mortality_mult": self.READ + prior,
+                       "modifier:state_mortality_wealth_mult": wealth_read, **families},
                       triggers={"te_demog_effects_run": True, "te_demog_cohorts_run": True})
         if prior:
             eng.modifiers["te_demog_census_deaths_down"] = -prior
             eng.vars["te_dg_md"] = prior
         eng.locals.update(te_dg_w_eb0=475e6, te_dg_w_ed0=self.ED0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=475e6,
-                          te_dg_w_ed=self.ED0 * (1 + self.READ + prior), te_dg_w_eb0m=475e6, te_dg_w_ed0m=self.ED0,
+                          te_dg_w_ed=self.ED0 * (1 + self.READ + prior) + wealth_read * wbar * self.ED0,
+                          te_dg_w_eb0m=475e6, te_dg_w_ed0m=self.ED0,
                           te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_edw=wbar * self.ED0, te_dg_w_wtop=wtop)
         eng.vars.update(te_dg_stepped=1.0, te_dg_cbr_model=10.0, te_dg_cdr_model=self.CDR, te_dg_lx_slope=slope,
                         te_dg_lx_mbar=mbar, te_dg_lx_rho=rho)
@@ -314,6 +304,75 @@ class TestTheWealthSlopeAtTheFloor(unittest.TestCase):
                 self.assertAlmostEqual(eng.vars["te_dg_w"], base.vars["te_dg_w"], places=9)
                 self.assertAlmostEqual(eng.vars["te_dg_md"], base.vars["te_dg_md"], places=9)
                 self.assertAlmostEqual(eng.locals["te_dg_rate_new_d"], eng.vars["te_dg_md"], places=9)
+
+
+class TestTheWalkAppliesTheWealthLine(unittest.TestCase):
+    """2026-10-20: te_demog_pop_death_mult adds the state's state_mortality_wealth_mult x the pop's wealth, inside the
+    per-pop floor at 0, as the engine does (probe P6: proportional to each pop's own wealth). Under Full the read is the
+    census's pair (Private Health Insurance's line at the census's rate and the late slope), so the window's deaths, dz
+    and the residual now see the deaths the line takes away; before, they ran high by |the line| x the mean wealth."""
+
+    D = H.G.read_defines()
+
+    def multiplier(self, read, wealth_read, wealth, food=0.8):
+        text = _block(_text(GENERATED_VALUES), "te_demog_pop_death_mult")
+        reads = dict.fromkeys(re.findall(r"(?:state|workplace)\.modifier:\w+", text), 0.0)
+        reads.update({"state.modifier:state_mortality_mult": read,
+                      "state.modifier:state_mortality_wealth_mult": wealth_read})
+        lo, hi = P.FOOD_SECURITY_SEVERE_STARVATION_THRESHOLD, P.FOOD_SECURITY_STARVATION_THRESHOLD
+        eng = _OwnerEngine({"literacy_rate": 0.9, "food_security": food, "wealth": wealth, **reads}, pop_type="clerks",
+                           triggers={"is_in_severe_starvation": food < lo, "is_in_mild_starvation": lo <= food < hi,
+                                     "is_employed": False, "is_homeland_of_country_cultures": True})
+        return eng.value(eng._tree(eng.values, "te_demog_pop_death_mult"))
+
+    def test_the_line_scales_by_the_pops_wealth(self):
+        self.assertAlmostEqual(self.multiplier(-0.9, 0.0, 60.0), 0.1, places=5)
+        self.assertAlmostEqual(self.multiplier(-0.9, -0.001, 60.0), 0.04, places=5)
+        self.assertAlmostEqual(self.multiplier(0.0, -0.002, 99.0), 1 - 0.198, places=5)
+        # past the floor the pop's deaths are 0, never negative
+        self.assertEqual(self.multiplier(-0.9, -0.002, 99.0), 0.0)
+
+    def test_predict_and_the_walk_agree(self):
+        """predict (demographics_harness.predict_state) gives each pop bare x max(0, 1 + M + the lines on top + its own
+        + the wealth line x its wealth), the line at the census's rate. The walk's multiplier on the same read gives the
+        same deaths, a late rate where the floor is near."""
+        for cdr, line, wealth in ((1.0, -0.004, 50.0), (30.0, -0.002, 80.0), (0.4, -0.005, 99.0)):
+            with self.subTest(cdr=cdr, line=line, wealth=wealth):
+                pop = H.Pop(1e6, 30.0, 0.9, 0.8, wealth=wealth)
+                out = H.predict_state([pop], cbr=10.0, cdr=cdr, d=self.D, on_top_d=0.04, wealth=line)
+                bare_d = 1e6 * H.G.monthly_mortality(30.0, self.D) * 12
+                wealth_read = max(line, P.WEALTH_LINE_FLOOR) * (cdr / 1000 * 1e6) / bare_d
+                mult = self.multiplier(out["m_d"] + 0.04, wealth_read, wealth)
+                self.assertAlmostEqual(out["deaths"], bare_d * mult, delta=out["deaths"] * 1e-4 + 1e-3)
+
+    def test_the_split_keeps_the_line_in_the_whole_state(self):
+        """The census's wealth line is the census's own: M nets it, so the Causes of Death split counts it in the whole
+        state's part, with that M, not as a line on some of its people."""
+        eng = _Engine({"state_population": 1e6, "modifier:state_mortality_mult": -0.5,
+                       "modifier:state_mortality_wealth_mult": -0.002},
+                      triggers={"te_demog_effects_run": True})
+        ed0, edw = 100.0 * 1e6, 100.0 * 1e6 * 40.0
+        w_ed = ed0 * 0.5 + (-0.002) * edw            # every pop unfloored, no line of its own
+        eng.locals.update(te_dg_w_ed0=ed0, te_dg_w_edr=0.0, te_dg_w_ed=w_ed, te_dg_w_edw=edw, te_dg_w_sevd=0.0,
+                          te_dg_w_sev=0.0, te_dg_w_pop=1e6)
+        eng.vars.update(te_dg_ed=w_ed * 12 / 1e5)
+        eng.call("te_demog_on_top_split")
+        self.assertAlmostEqual(eng.vars["te_dg_ed_state"], eng.vars["te_dg_ed"], places=3)
+        self.assertEqual(eng.vars["te_dg_ed_sev"], 0.0)
+
+    def test_the_start_rate_swaps_in_the_new_line(self):
+        """The window that starts at the refresh runs on its new te_dg_w: the start rate takes the walk's line in force
+        off the bare deaths x wealth it reaches and puts the new one on, as it does for M."""
+        case = TestTheWealthSlopeAtTheFloor()
+        old_line = -0.0001
+        eng = case.refresh(-0.004, wealth_read=old_line)
+        md, w = eng.vars["te_dg_md"], eng.vars["te_dg_w"]
+        ed0, edw = case.ED0, 40.0 * case.ED0
+        walk_ed = ed0 * (1 + case.READ) + old_line * edw
+        want = (md * ed0 + walk_ed + (w - old_line) * edw) / case.POP
+        self.assertAlmostEqual(eng.vars["te_dg_sr_d"], want, places=4)
+        # the start's own lines leave the line out: none of the pops has a line of its own here
+        self.assertAlmostEqual(eng.vars["te_dg_sp_d"], 0.0, places=4)
 
 
 class TestTheTextIsTrue(unittest.TestCase):

@@ -182,9 +182,14 @@ UPLOADS_DIGESTS = {
 RATE_FLOOR_REMOVED = {("generated_values", "te_demog_k_on_top_scale_max"),
                       ("generated_values", "te_demog_k_rate_total_min"),
                       ("generated_values", "te_demog_k_rate_term_max")}
+# The walk's per-pop death multiplier takes the state's wealth line x the pop's wealth, as the engine does (probe P6).
+# The interpreter doesn't walk pops (the docstring) and no case holds the line, so no recorded number moves;
+# test_demographics_rate_floor holds the multiplier to predict's.
 RATE_FLOOR_DIGESTS = {
     ("generated_values", "te_demog_k_on_top_scale_min"):
         "a13018ac187c2198739d13d444ccf28b6fe9db49d14e6cb7ec08602c6915197c",
+    ("generated_values", "te_demog_pop_death_mult"):
+        "58ceeec452f3b205b3f49a8d5e0fd16300684cdb251c6aef4a3b852593a880ea",
 }
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}

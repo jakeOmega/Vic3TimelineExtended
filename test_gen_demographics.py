@@ -440,7 +440,11 @@ class TestEngineRateTerms(unittest.TestCase):
         self.assertIn("add = workplace.modifier:building_laborers_mortality_mult", laborers)  # production methods
         self.assertIn("exists = workplace", laborers)
         self.assertNotIn("state_mortality_turmoil_mult", self.death)   # scaling unknown, measured about 0
-        self.assertNotIn("state_mortality_wealth_mult", self.death)
+        # the wealth line x the pop's own wealth (probe P6; 2026-10-20), once, inside the floor at 0
+        line = "add = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }"
+        self.assertEqual(self.death.count("state_mortality_wealth_mult"), 1)
+        self.assertIn(line, self.death)
+        self.assertLess(self.death.index(line), self.death.rindex("min = 0"))
 
 
 class TestPhase2Generated(unittest.TestCase):
