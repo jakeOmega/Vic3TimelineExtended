@@ -717,7 +717,7 @@ every Demographics rule setting, like the rest of Wealth Concentration:
   counts. A won revolution counts too: the winner continues the nation, so it takes the old government's law role
   (and r > g's GDP baseline and growth average) in `inh_repair_after_civil_war`, and the next month compares that with
   the rebels' law.
-- **r > g:** the target's seventh term (the table above), stored on 31 December (`te_demog_wc_growth_update`): growth
+- **r > g:** the target's seventh term (the table above), stored at the yearly country pulse (`te_demog_wc_growth_update`): growth
   averaged at a weight of 0.2 a year, each year's clamped to ±10 so a conquest moves it by 2 at most.
 
 **What it moves.** None of these effects repeats what pop wealth already does:
@@ -1016,7 +1016,7 @@ The mod's modifiers for women's and children's work stay inputs.
 
 The model's own law, technology and institution terms (its cause multipliers, means tiers and Wealth Concentration law
 terms) become registered modifier types the census reads, so each shows on its law or technology: owner, 2026-10-09;
-design in `2026-10-09-demographics-modifier-types-design.md`.
+design in `../archive/specs/2026-10-09-demographics-modifier-types-design.md`.
 
 ## 9. Events and milestones
 
@@ -1163,7 +1163,7 @@ from before the rule keeps the system (Grand Monuments' pattern).
 |---|---|---|
 | 0. Probes and harness | §14's remaining checks (most ran on 2026-10-08); the offline calibration harness (§11.1) with the retuned defines (dropped since: phase 2's step 5), the fertility terms and the five causes of death, first checked against the engine's monthly change world-wide (§14 Q10) | the harness meets §2.3's targets |
 | 1. Census | the cohort model, Gini, per-state Wealth Concentration (its targets and shocks), the national urban pattern, both panels, history, the rule. Internal Resettlement's moves stay in the migration residual until phase 3. The model runs on today's defines and applies nothing yet | an observer run to 2100: the pyramids, fertility, life expectancy and Gini look right against the anchors |
-| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **nothing changes outside Full** (owner, 2026-10-10): the absorbed lines stay on their carriers and M cancels them under Full; the retuned defines, step 5, are dropped); the model's law, technology and institution inputs as modifier types (`2026-10-09-demographics-modifier-types-design.md`, before the rest); the births and deaths modifiers (the retuned defines dropped, owner, 2026-10-10); workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's absorptions (built, step 4); Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
+| 2. Consequences | the calibration first (`docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`: poverty, fertility and the gap the inputs can't see, then how the census sets the engine's rates: step 4, built, `2026-10-10-demographics-phase2-engine-rates.md`; **nothing changes outside Full** (owner, 2026-10-10): the absorbed lines stay on their carriers and M cancels them under Full; the retuned defines, step 5, are dropped); the model's law, technology and institution inputs as modifier types (`../archive/specs/2026-10-09-demographics-modifier-types-design.md`, before the rest); the births and deaths modifiers (the retuned defines dropped, owner, 2026-10-10); workforce, pension and health bill, conscription, youth bulge; the Family & Reproductive Policy laws and measures; the pension-age setting; §8.4's absorptions (built, step 4); Wealth Concentration's effects split by scope (built, §4.2); AI weights | population paths within the harness's tolerance |
 | 3. Place and colour | the settlement pattern (§5.2), the national urban pattern's effects and Planned Capital; sex-balance effects; the event wave; Ectogenesis and Immortality; Cultural Hegemony's fertility drift | |
 
 **Phase 3's calls (owner, 2026-10-12):**

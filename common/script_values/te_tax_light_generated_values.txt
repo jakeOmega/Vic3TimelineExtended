@@ -24,7 +24,9 @@ te_tax_light_native_level = {
 }
 
 # te_tax_light_idx_<key>_<n>: the index the active law sets at native level n (0 very low
-# .. 4 very high); 0 for a tax it does not levy. _min_ and _max_ are its bounds.
+# .. 4 very high); 0 for a tax it does not levy. _max_ is the law's ceiling for the tax,
+# its very-high rate; _min_ is its floor, which is zero under every law: a levied tax may
+# be cut to nothing (the law's very-low rate is only the bottom step of its ladder).
 te_tax_light_idx_wage_0 = {
 	value = 0
 	if = { limit = { has_law = law_type:law_per_capita_based_taxation } value = 2 }
@@ -55,7 +57,7 @@ te_tax_light_idx_wage_4 = {
 	else_if = { limit = { has_law = law_type:law_proportional_taxation } value = 12 }
 	else_if = { limit = { has_law = law_type:law_graduated_taxation } value = 8 }
 }
-te_tax_light_min_wage = { value = te_tax_light_idx_wage_0 }
+te_tax_light_min_wage = { value = 0 }
 te_tax_light_max_wage = { value = te_tax_light_idx_wage_4 }
 te_tax_light_idx_div_0 = {
 	value = 0
@@ -82,7 +84,7 @@ te_tax_light_idx_div_4 = {
 	if = { limit = { has_law = law_type:law_proportional_taxation } value = 8 }
 	else_if = { limit = { has_law = law_type:law_graduated_taxation } value = 12 }
 }
-te_tax_light_min_div = { value = te_tax_light_idx_div_0 }
+te_tax_light_min_div = { value = 0 }
 te_tax_light_max_div = { value = te_tax_light_idx_div_4 }
 te_tax_light_idx_land_0 = {
 	value = 0
@@ -109,7 +111,7 @@ te_tax_light_idx_land_4 = {
 	if = { limit = { has_law = law_type:law_land_based_taxation } value = 40 }
 	else_if = { limit = { has_law = law_type:law_per_capita_based_taxation } value = 20 }
 }
-te_tax_light_min_land = { value = te_tax_light_idx_land_0 }
+te_tax_light_min_land = { value = 0 }
 te_tax_light_max_land = { value = te_tax_light_idx_land_4 }
 te_tax_light_idx_head_0 = {
 	value = 0
@@ -131,7 +133,7 @@ te_tax_light_idx_head_4 = {
 	value = 0
 	if = { limit = { has_law = law_type:law_per_capita_based_taxation } value = 20 }
 }
-te_tax_light_min_head = { value = te_tax_light_idx_head_0 }
+te_tax_light_min_head = { value = 0 }
 te_tax_light_max_head = { value = te_tax_light_idx_head_4 }
 te_tax_light_idx_cons_0 = {
 	value = 0
@@ -173,7 +175,7 @@ te_tax_light_idx_cons_4 = {
 	else_if = { limit = { has_law = law_type:law_proportional_taxation } value = 7 }
 	else_if = { limit = { has_law = law_type:law_graduated_taxation } value = 7 }
 }
-te_tax_light_min_cons = { value = te_tax_light_idx_cons_0 }
+te_tax_light_min_cons = { value = 0 }
 te_tax_light_max_cons = { value = te_tax_light_idx_cons_4 }
 
 # te_tax_light_idx_<key>_native: the law's index at the country's native tax level.

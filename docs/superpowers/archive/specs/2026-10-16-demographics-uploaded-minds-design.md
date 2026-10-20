@@ -4,7 +4,7 @@
 > (`docs/systems/mod_systems.md` § Uploaded minds; play-test list § Uploaded minds). It answers the
 > owner's request of 2026-10-16: "for countries with the Mind Upload Nexus megaproject / Mind Backups tech, explore
 > adding a Non-Biological / Uploaded category to the biological age display in the Demographics panel and longevity
-> calculations." Parent designs: the late game (`../archive/specs/2026-10-11-demographics-late-game-design.md`, cited as
+> calculations." Parent designs: the late game (`2026-10-11-demographics-late-game-design.md`, cited as
 > "late §n") and the census (`2026-10-08-demographics-design.md`). What is built today:
 > `docs/systems/mod_systems.md` § Phase 3: the late game. Anything past today is speculation.
 
@@ -45,7 +45,7 @@ into true deaths and uploads, and books the uploads into a pool of minds. Upload
 - **Which deaths (call 4).** Infection and chronic: deaths that come with warning, so there is time to scan. Accidents,
   violence and work stay with Mind Backups' restore; maternal deaths stay deaths.
 - **Capacity (call 3).** Country-wide, since minds are hosted on the country's network: 1,000,000 minds a Nexus level,
-  summed over its states. The country's census sums the levels on 31 December.
+  summed over its states. The country's census sums the levels at its yearly pulse.
 - **The upload share.** The country's census sets the year's share of demand it can host, φ = min(1, free capacity ÷ last
   year's eligible deaths; 1 with none recorded yet). Each state's step books uploads = min(φ × its eligible deaths, the
   capacity still free), and the country's free capacity falls at once, so the year's uploads never pass it, whatever the

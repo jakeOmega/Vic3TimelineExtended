@@ -16,12 +16,12 @@
 #   te_dg_wv_war_men      the men of fighting age when it began (the census's pool, te_dg_fam), the dead's yardstick
 #
 # One yearly event at most a year a country, in the order below, so two thresholds crossed in one year don't arrive as
-# two popups on 31 December; the next one is still due the year after. The war's two events are monthly and apart.
+# two popups on one day; the next one is still due the year after. The war's two events are monthly and apart.
 # The events carry no trigger of their own (a trigger is evaluated on trigger_event and would block the console's
 # test firing): every condition is here, and each event's immediate picks its state itself.
 # ============================================================================
 
-# THIS = ROOT = a country on 31 December, after its census (te_demog_country_yearly_on_action), so the figures are this
+# THIS = ROOT = a country at its yearly pulse, after its census (te_demog_country_yearly_on_action), so the figures are this
 # year's.
 te_demog_wave_yearly = {
 	if = {
@@ -80,7 +80,7 @@ te_demog_wave_hold = {
 }
 
 # THIS = ROOT = a country that acquired a technology (on_acquired_technology): The Last Generation? fires at once rather
-# than on 31 December. The yearly check stays as the fallback (a technology granted by history or an event).
+# than at the yearly pulse. The yearly check stays as the fallback (a technology granted by history or an event).
 te_demog_wave_technology = {
 	if = {
 		limit = {
@@ -97,7 +97,7 @@ te_demog_wave_technology = {
 # ---- The war tracker (The Lost Generation, The Baby Boom) ---------------------------------------------------------
 # THIS = ROOT = a country, monthly (te_demog_country_monthly_on_action). A war period runs from the first month the
 # country is at war to the first month it isn't. Its dead are the rise in the dead of all its wars, month by month,
-# counted here from its own snapshot (the census's monthly snapshot is reset on 31 December, and the on-actions' order
+# counted here from its own snapshot (the census's monthly snapshot is reset at the yearly pulse, and the on-actions' order
 # is not guaranteed), against the men of fighting age when the period began. The Lost Generation fires the month the
 # dead pass a twentieth of them; the Baby Boom the month the period ends, when it ran two years or more and its dead
 # passed a hundredth (mass mobilisation). Outside Full nothing is kept.

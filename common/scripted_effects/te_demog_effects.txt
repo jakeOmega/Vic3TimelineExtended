@@ -144,7 +144,7 @@
 #                       (te_demog_country_census) is the census log's gate figure
 #   te_dg_inflow_years  state: consecutive steps of net inflow (chain migration)
 #   te_dg_war_seen      country: the dead of all its wars at the last monthly pulse
-#   te_dg_war_year      country: the year's rise in war dead, until 31 December (read by the
+#   te_dg_war_year      country: the year's rise in war dead, until its yearly pulse (read by the
 #                       Wealth Concentration war shock; the states take theirs monthly)
 #   te_dg_reseed        state: set by a seed made off the state's own pulse (game start, the
 #                       console) and by fast mode's first switch; its next pulse (or the
@@ -169,7 +169,7 @@
 #   te_dg_prev_tfr, te_dg_prev_e0  a state's, copied by te_demog_prepare before it overwrites
 #                       them
 #
-# The country's census (Task 10, te_demog_country_census), every 31 December and at game start
+# The country's census (Task 10, te_demog_country_census), at its yearly pulse and at game start
 # (under fast mode's clock, a day after each of its steps instead):
 #   te_dg_census_year   the year of the country's last census (absent = census pending)
 #   te_dg_cbf<b>, te_dg_cbm<b>  people in band b, the sum of its states' te_dg_bf<b>, te_dg_bm<b>
@@ -1554,8 +1554,8 @@ te_demog_note_kills = {
 }
 
 # THIS = a country, monthly. The dead of every war it is in, summed; the month's
-# rise goes to the year's total (the Wealth Concentration war shock reads it on
-# 31 December, whatever the rule) and, while the census runs, at once to the
+# rise goes to the year's total (the Wealth Concentration war shock reads it at
+# the yearly pulse, whatever the rule) and, while the census runs, at once to the
 # states (te_demog_share_war_dead), so each state's step takes the dead of the
 # same months as its population change. A war that ends drops out of the sum, so
 # the change is floored at zero and loses at most that month of any other war's
@@ -1672,7 +1672,7 @@ te_demog_country_lists = {
 	}
 }
 
-# THIS = a country on 31 December (the yearly country pulse, ROOT = the country). Task 12 adds to it.
+# THIS = a country at the yearly country pulse, on its own day (ROOT = the country). Task 12 adds to it.
 # The war shock reads the year's war dead, which the monthly snapshot keeps whatever the rule, and
 # then they are cleared: the states took theirs month by month while the census ran
 # (te_demog_country_monthly), and dead from months with the census off are never shared out later.
@@ -1732,7 +1732,7 @@ te_demog_pension_age_refresh = {
 			remove_variable = te_dg_pension_age
 		}
 		te_demog_pension_setting_clear = yes
-		# the bill stops with the law, the day it goes (the census would take it off only on 31 December); never
+		# the bill stops with the law, the day it goes (the census would take it off only at its yearly pulse); never
 		# re-applied here
 		if = {
 			limit = { has_modifier = te_demog_pension_bill }

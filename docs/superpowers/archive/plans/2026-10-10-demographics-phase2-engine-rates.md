@@ -2684,7 +2684,7 @@ git commit -m "Demographics harness: predict, the engine's growth once the censu
     - Pro-Natalist's −0.05 working-adult goes with the workforce effects, not step 4.
   - §13: the shown TFR is the realized one.
   - §12's phase-2 row: step 4 built, with the release precondition.
-- Modify: `docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md` § "Not decided here":
+- Modify: `docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md` § "Not decided here":
   - the augmentation laws: decided as flat lines at the note's values (Mandatory +0.05 pending the owner);
   - "Phase 2's double counting": decided (inverse INJECT).
 - Modify: `docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md`:
@@ -2716,7 +2716,7 @@ Expected:
 - [ ] **Step 3: Commit**
 
 ```bash
-git add docs/systems/mod_systems.md docs/superpowers/specs/2026-10-08-demographics-design.md docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md docs/guides/vanilla_patch_runbook.md docs/player_guide/08-states.md docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf
+git add docs/systems/mod_systems.md docs/superpowers/specs/2026-10-08-demographics-design.md docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md docs/superpowers/plans/2026-10-10-demographics-phase2-calibration.md docs/guides/vanilla_patch_runbook.md docs/player_guide/08-states.md docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf
 git commit -m "Demographics phase 2 step 4: docs, the player guide and the release precondition"
 ```
 

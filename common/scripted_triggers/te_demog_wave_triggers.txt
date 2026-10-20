@@ -5,7 +5,8 @@
 # ============================================================================
 
 # Country: the wave runs here: Full (census mechanics change nothing outside it; a release reads always = no), and a
-# census taken from steps, not seeds (an 1836 game's first stepped census is the one of 31 December 1837).
+# census taken from steps, not seeds (an 1836 game's first stepped census is its first yearly census after a state's first step,
+# a year or more after the start).
 te_demog_wave_runs = {
 	te_demog_effects_run = yes
 	has_variable = te_dg_census_year
