@@ -690,7 +690,7 @@ The candidates, in existing groups:
 
 - **Recommended:** a registered modifier type that raises Late Marriage's target, `state_late_marriage_target_add`,
   carried by those laws' `modifier` blocks.
-  - This is the modifier-types rule (`2026-10-09-demographics-modifier-types-design.md`): the law's tooltip shows the
+  - This is the modifier-types rule (`../archive/specs/2026-10-09-demographics-modifier-types-design.md`): the law's tooltip shows the
     line, and the census reads it with `modifier:`.
   - Population Control Measures and the measure carry the largest lines.
 - **Rejected:**

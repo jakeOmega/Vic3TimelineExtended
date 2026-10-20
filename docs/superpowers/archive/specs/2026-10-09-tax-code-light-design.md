@@ -72,6 +72,12 @@ bounds are generated from `MIGRATION` in `gen_tax_code.py` as
 `te_tax_light_min/max_<key>` per law (`test_tax_code_migration.py` already pins that table to
 `vanilla_parsed`).
 
+As changed 2026-10-20, the floor is no longer the law's very-low rate: a levied tax may be cut to
+nothing under every law (`te_tax_light_min_<key>` = 0, `LIGHT_FLOOR`). A rate below the very-low rate
+sits on the very-low step and is collected through relief like any rate below the tax level, so the
+level, the relief and the bands need nothing else. A tax newly levied by a law change is now the one
+the previous law did not levy (`te_tax_light_old_levies_<key>`), no longer the one at index 0.
+
 ## 3. Scope: consumption rate in, goods and customs out
 
 - **In:** the consumption *rate*. All five laws levy it on the same 15–35% ladder.

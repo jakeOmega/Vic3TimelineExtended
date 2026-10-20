@@ -76,7 +76,7 @@ UNEMP_VALUES = ROOT / "common" / "script_values" / "te_unemployment_values.txt"
 RESETTLE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_resettle_effects.txt"
 RESETTLE_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_resettle_generated_effects.txt"
 RESETTLE_GEN_VALUES = ROOT / "common" / "script_values" / "te_demog_resettle_generated_values.txt"
-# uploaded minds (2026-10-19; docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md)
+# uploaded minds (2026-10-19; docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md)
 UM_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_um_effects.txt"
 UM_GEN_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_um_generated_effects.txt"
 UM_VALUES = ROOT / "common" / "script_values" / "te_demog_um_values.txt"

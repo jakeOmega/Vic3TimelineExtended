@@ -29,9 +29,9 @@ jobs:
   checks:
     name: Checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    # The whole job is ~2 minutes today; 20 caps a hung step instead of burning
-    # the default 6-hour allowance.
-    timeout-minutes: 20
+    # The whole job takes 11-20 minutes (October 2026; 3.12 is the slower one);
+    # 30 caps a hung step instead of burning the default 6-hour allowance.
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:

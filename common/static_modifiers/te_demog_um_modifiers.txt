@@ -1,4 +1,4 @@
-﻿# Demographics: uploaded minds (docs/superpowers/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's
+﻿# Demographics: uploaded minds (docs/superpowers/archive/specs/2026-10-16-demographics-uploaded-minds-design.md, the owner's
 # calls of 2026-10-19). Under Full only; outside Full nothing applies them and the Nexus produces as it does today. Each
 # field's size is demographics_params' (UM_RESEARCH_PER_LEVEL, UM_DEVOUT_APPROVAL; a test pins them). Their one refresh
 # effect each: te_demog_um_nexus_refresh (the monthly state pulse and a new level, ROOT the state) for the eight building

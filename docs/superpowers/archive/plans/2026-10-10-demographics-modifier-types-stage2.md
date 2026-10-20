@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.11/3.12 (unittest), Paradox script (`common/`), the generator `scripts/generators/gen_demographics.py`.
 
-**Spec:** `docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md` (stage 2). Parent: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.3. Stage 1's plan (`2026-10-09-demographics-modifier-types-stage1.md`) is the pattern.
+**Spec:** `docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md` (stage 2). Parent: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.3. Stage 1's plan (`2026-10-09-demographics-modifier-types-stage1.md`) is the pattern.
 
 ## Owner rulings this plan builds on
 
@@ -141,7 +141,7 @@ and in the comment above `FAMILY_LIMITATION_MEANS` replace `country_fertility_me
 - [ ] **Step 4: The type definitions.** In `demographics_modifier_types.txt`, replace the `country_fertility_means_add` block (and its header comment) with:
 
 ```
-# Fertility: stage 2 of docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md.
+# Fertility: stage 2 of docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md.
 # Read only by the census (te_demog_means, with modifier: in state scope). The means to plan a
 # family = (0.4 + contraception, at most 1) x (0.3 + 0.7 x literacy) + the fertility-control
 # shift, at most 0.95. Contraception sits on the techs; the shift on laws, history (Family
@@ -487,7 +487,7 @@ Built by the controller.
 Built by the controller.
 
 **Files:**
-- Modify: `docs/superpowers/specs/2026-10-09-demographics-modifier-types-design.md` (status line; the table's two fertility rows with the `state_` names and carriers; a "Stage 2 fit" paragraph with the fitted values and the before/after table; out-of-order research)
+- Modify: `docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md` (status line; the table's two fertility rows with the `state_` names and carriers; a "Stage 2 fit" paragraph with the fitted values and the before/after table; out-of-order research)
 - Modify: `docs/superpowers/specs/2026-10-08-demographics-design.md` §2.3 (the means table: values now on the carriers, the tiers add, feminism; point to the modifier-types spec) and §13 (two open questions: Family Limitation as a general practice — starts from history, drifts toward conditions such as Forced Heirship × the agrarian share, literacy and the church law, spreads from neighbours; the Forced Heirship rural birth cut telling the same story twice — and, for phase 2, whether the panel's children per woman should include the engine's other birth modifiers, which it reads no part of today)
 - Modify: `docs/systems/mod_systems.md` (the `country_fertility_means_add` paragraph → `state_fertility_means_add` and `state_contraception_add`, carriers, the rule)
 - Modify: `docs/guides/python_tools.md` (the harness row: ten commands, `fertility`)
