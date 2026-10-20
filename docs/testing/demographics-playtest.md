@@ -799,5 +799,8 @@ banking triggers and the radicals type Concentrated Property carries, so no self
    passed with a year's growth behind it. After that its hover gives the real rate (the policy rate less inflation) and
    the growth average, the row is 2 × their difference within ±5, and 50 plus the seven rows is the target (unless it
    is at 0 or 100, or Continuity of Title holds). Open a foreign state's subtab: the row and hover are its owner's.
+   Known and harmless: the hover reads the stored figures raw, so in a new game it shows 0.0% for both until they
+   exist (the rate after the first 31 December, the growth after the second), and a country whose cycle hasn't started
+   shows real figures beside a row of 0. If that reads badly, gate the figures on the term.
 5. **The Inequality effect (Full).** A state whose shown Gini is above 0.45 lists Census: Inequality, with radicals
    from movements +5% at 0.55 and +10% from 0.65; none under Display only or Disabled.
