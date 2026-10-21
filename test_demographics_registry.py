@@ -6594,12 +6594,13 @@ class TestCausesSection(unittest.TestCase):
 
     def test_it_sits_after_the_overview(self):
         # issue #1029: the subtab takes the country tab's order (te_demographics_layout.gui), the pyramid after Causes
-        # of Death, then Work and Retirement and phase 3's Longevity (late-game §6.2)
+        # of Death, then Work and Retirement and phase 3's Longevity (late-game §6.2); the state's own Modifiers section
+        # follows Wealth (#1091) and How it works stays at the foot
         content = _gui_type(_text(ROOT / "gui" / "te_demographics_layout.gui"), "te_state_demog_content")
         order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
         self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid",
                                  "te_state_demog_work", "te_state_demog_longevity", "te_state_demog_wealth",
-                                 "te_state_demog_how"])
+                                 "te_state_demog_modifiers", "te_state_demog_how"])
 
     def test_open_by_default(self):
         # rule 7: a section that starts open names its flag _closed
