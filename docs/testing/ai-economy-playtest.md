@@ -55,7 +55,7 @@ budget figures aren't #933's alone. The full figures are in #933's comment of th
 
 `building_power_plant = should_remove` (the coal and oil plant; nuclear, fusion and renewable plants are their own
 buildings, which no strategy subsidizes) in every vanilla administrative strategy, by INJECT
-(`common/ai_strategies/te_power_plant_subsidy_strategies.txt`; `test_power_plant_subsidy_strategies.py` keeps the list
+(`common/ai_strategies/te_ai_subsidy_strategies.txt`; `test_ai_subsidy_strategies.py` keeps the list
 complete). A strategy's value overrides the default's. The default strategy's own INJECT (`edited_default_strategy.txt`)
 is inert: an INJECT can't change a key vanilla's `subsidies` block already holds, though it adds a new one
 (`scripting_best_practices.md`). AI countries running no administrative strategy keep the default's `must_have`.
@@ -75,7 +75,7 @@ slow stripping: 3 of 313 AI plants were subsidized in 2036.5.20, and none from 2
 | Check | Expect | If it fails |
 |---|---|---|
 | ~~**Subsidies.**~~ (read 2026-10-18, below) A few years after the change, count AI power plants with `subsidized=yes` in a plain-text save (or read big AI countries' power plants in game). | Near none outside countries with no administrative strategy; the 19% left after 3½ months has fallen. Railways and ports unchanged (about 99%). | A share that stays near 19%: find which countries keep the subsidy and what they share (strategy, budget, electricity shortage). |
-| ~~**Plants without a subsidy.**~~ (read 2026-10-18, below) The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: drop `te_power_plant_subsidy_strategies.txt` and lean on the base group's `most_productive` alone. |
+| ~~**Plants without a subsidy.**~~ (read 2026-10-18, below) The same save: power plants' `staffing` against `previous_staffing`, `cash_reserves`, and the electricity price where plants lost their subsidy. | Retooling or loss-making plants cut wages and shed some staff; electricity's price rises until plants cover their costs. No state left without power. | Plants emptying out and electricity shortages spreading to factories mean the AI needs the subsidy: drop `te_ai_subsidy_strategies.txt` and lean on the base group's `most_productive` alone. |
 | **Budgets.** Subsidies as a share of income and the bankrupt share of people (the fast-mode note's §4), against the section above. | Lower than with `most_productive` alone. | No change, with power plants still a large share of the bill, means the subsidy flag wasn't the bill: keep `most_productive`, and reconsider the strategies. No change with their share at 0 means the bill moved to other buildings: rank `balance_subsidies` by building type and country. |
 
 **Read 2026-10-18**, in the same saves as the section above.

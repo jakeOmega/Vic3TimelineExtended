@@ -1,12 +1,12 @@
-"""The AI doesn't subsidize its coal and oil power plants (#933).
+"""The AI doesn't subsidize its coal and oil power plants (#933), its railways
+or its ports (#1050).
 
-An INJECT into ai_strategy_default can't change building_power_plant, which
+An INJECT into ai_strategy_default can't change these buildings, which
 vanilla's subsidies block already holds (must_have), but a strategy's value
 overrides the default's, and an INJECT adds a new key to a strategy's
-subsidies block (read in game 2026-10-16). So
-te_power_plant_subsidy_strategies.txt sets building_power_plant =
-should_remove in every vanilla administrative strategy; one it misses leaves
-its countries on the default's must_have.
+subsidies block (read in game 2026-10-16). So te_ai_subsidy_strategies.txt
+sets each to should_remove in every vanilla administrative strategy; one it
+misses leaves its countries on the default's must_have.
 """
 
 import re
@@ -25,6 +25,7 @@ ADMIN_STRATEGIES = (
     "ai_strategy_colonial_extraction",
     "ai_strategy_montenegro_admin",
 )
+UNSUBSIDIZED = ("building_power_plant", "building_railway", "building_port")
 
 
 def _strip_comments(text):
@@ -40,11 +41,11 @@ def _block(text, name):
     return text[m.end():i - 1]
 
 
-class TestPowerPlantSubsidyStrategies(unittest.TestCase):
+class TestAISubsidyStrategies(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.strategies = _strip_comments(
-            (ROOT / "common/ai_strategies/te_power_plant_subsidy_strategies.txt").read_text(encoding="utf-8-sig"))
+            (ROOT / "common/ai_strategies/te_ai_subsidy_strategies.txt").read_text(encoding="utf-8-sig"))
         cls.injected = re.findall(r"(?m)^INJECT:(ai_strategy_\w+)\s*=\s*\{", cls.strategies)
 
     def test_every_administrative_strategy_is_injected_once(self):
@@ -52,8 +53,9 @@ class TestPowerPlantSubsidyStrategies(unittest.TestCase):
 
     def test_each_inject_sets_should_remove(self):
         for name in self.injected:
-            with self.subTest(strategy=name):
-                self.assertRegex(_block(self.strategies, name), r"\bbuilding_power_plant\s*=\s*should_remove\b")
+            for building in UNSUBSIDIZED:
+                with self.subTest(strategy=name, building=building):
+                    self.assertRegex(_block(self.strategies, name), r"\b" + building + r"\s*=\s*should_remove\b")
 
     def test_matches_the_game_files(self):
         try:

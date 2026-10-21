@@ -322,7 +322,7 @@
 	# holds, so the engine keeps vanilla's must_have here (read in game
 	# 2026-10-16, #933; scripting_best_practices.md). The setting that works is
 	# in the countries' administrative strategies
-	# (te_power_plant_subsidy_strategies.txt): a strategy's value overrides the
+	# (te_ai_subsidy_strategies.txt): a strategy's value overrides the
 	# default's. This line would take effect only if vanilla's block stopped
 	# naming power plants.
 	subsidies = {
