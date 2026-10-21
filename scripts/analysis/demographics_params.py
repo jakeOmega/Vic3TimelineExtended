@@ -103,8 +103,8 @@ FAMILY_LIMITATION_MEANS = 0.6
 # Extraction Economy +5, Interventionism -5, Guilds and Chartered Monopolies and Freedom of
 # Contract +5, Antitrust Enforcement and Regulated Utilities -5. Public goods (2026-10-21): Private Health
 # Insurance, Private Schools, Terakoya and Traditional IP Protection +5, Strict IP Protection +10, Public Health
-# Insurance and Public Schools -5. Slavery (2026-10-21): Colonial Slavery and Legacy Slavery +5, Debt Slavery and Slave
-# Trade +10.
+# Insurance and Public Schools -5. Slavery (2026-10-21): Colonial Slavery, Legacy Slavery and Debt Slavery +10, Slave
+# Trade +5.
 WC_LAND_TYPE = "state_wealth_concentration_land_add"
 WC_TAX_TYPE = "country_wealth_concentration_tax_add"
 WC_ECONOMY_TYPE = "country_wealth_concentration_economy_add"

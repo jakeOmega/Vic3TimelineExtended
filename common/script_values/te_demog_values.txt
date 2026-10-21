@@ -600,8 +600,9 @@ te_demog_wc_public_term = {
 	value = modifier:country_wealth_concentration_public_goods_add
 }
 
-# Country scope: the slavery term (owner, 2026-10-21). Property in people: Colonial Slavery and Legacy Slavery +5, Debt
-# Slavery and Slave Trade +10, Slavery Banned 0, each the law's own line (country_wealth_concentration_slavery_add).
+# Country scope: the slavery term (owner, 2026-10-21). Property in people: Colonial Slavery, Legacy Slavery and Debt
+# Slavery +10, Slave Trade +5 (an open trade keeps slaves cheap and ownership wide), Slavery Banned 0, each the law's own
+# line (country_wealth_concentration_slavery_add).
 # A flat national line, not weighted by a state's slaves (the census walk does not count them). One law from a group
 # of five, so 0 to +10 and no clamp.
 te_demog_wc_slavery_term = {

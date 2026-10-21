@@ -5492,10 +5492,11 @@ class TestInheritanceBalance(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["shown"], 60.0, msg="a save from before the term: nothing to compare with")
 
     def test_the_slavery_term_reads_the_laws_lines(self):
-        """Owner, 2026-10-21: property in people. Colonial and Legacy Slavery +5, Debt Slavery and Slave Trade +10; Slavery
-        Banned, the usual law, carries nothing, and the term counts the law in force, not the enslaved."""
-        for law, want in (("law_slavery_banned", 0), ("law_colonial_slavery", 5), ("law_legacy_slavery", 5),
-                          ("law_debt_slavery", 10), ("law_slave_trade", 10)):
+        """Owner, 2026-10-21: property in people. Colonial, Legacy and Debt Slavery +10; Slave Trade +5, since an open
+        supply keeps slaves cheap and ownership wide; Slavery Banned, the usual law, carries nothing, and the term counts
+        the law in force, not the enslaved."""
+        for law, want in (("law_slavery_banned", 0), ("law_colonial_slavery", 10), ("law_legacy_slavery", 10),
+                          ("law_debt_slavery", 10), ("law_slave_trade", 5)):
             eng = _LawEngine((law,), fixtures=self._wc_lines({law}))
             self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_wc_slavery_term")), want, law)
         self.assertNotIn("has_law", _block(_text(VALUES), "te_demog_wc_slavery_term"))
@@ -5514,7 +5515,7 @@ class TestInheritanceBalance(unittest.TestCase):
         eng.vars.update(te_dg_wc_target=60.0, te_dg_wc_t_law=25.0, te_dg_wc_t_tax=-5.0, te_dg_wc_t_slavery=0.0,
                         te_inh_concentration=33.0)
         eng.run(_parse_script("set_variable = { name = shown value = te_inh_concentration_target }"))
-        self.assertAlmostEqual(eng.vars["shown"], 70.0, msg="the Slave Trade enacted since the refresh: +10")
+        self.assertAlmostEqual(eng.vars["shown"], 70.0, msg="Debt Slavery enacted since the refresh: +10")
         del eng.vars["te_dg_wc_t_slavery"]
         eng.run(_parse_script("set_variable = { name = shown value = te_inh_concentration_target }"))
         self.assertAlmostEqual(eng.vars["shown"], 60.0, msg="a save from before the term: nothing to compare with")

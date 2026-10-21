@@ -1222,17 +1222,18 @@ term, so no engine fact is new. Offline the sums and the wiring are tested; the 
 
 ## Slavery's Wealth Concentration line (2026-10-21)
 
-A ninth term on the target: Colonial Slavery and Legacy Slavery +5, Debt Slavery and Slave Trade +10, Slavery Banned 0
+A ninth term on the target: Colonial Slavery, Legacy Slavery and Debt Slavery +10, Slave Trade +5, Slavery Banned 0
 (`docs/systems/mod_systems.md` § Wealth Concentration, "Slavery"). The same wiring as Public Goods (above), so no new
 engine fact; the line is flat and national, so it counts the law in force and not the slaves.
 
 1. **The tooltips.** The four laws show "Wealth Concentration: Slavery" with +5 or +10, and Slavery Banned shows nothing.
    `debug.log` holds no `Unknown modifier type` for it.
 2. **The bar (any rule).** The Demographics tab's Wealth section and a state's Wealth subtab list a Slavery bar between Public
-   Goods and Return on Capital, and its hover names the four laws. Enact Slave Trade (the console): +10; Slavery Banned: the
-   bar reads 0.
+   Goods and Return on Capital, and its hover names the four laws. Enact Debt Slavery (the console): +10; Slave Trade: +5;
+   Slavery Banned: the bar reads 0.
 3. **1836's start.** Countries that open under a slavery law (read an 1836 save; the USA, Brazil and several others do) show a
    Slavery bar of +5 or +10, and their national figure should not have moved by more than that. If it looks too heavy for a
    country with few slaves, the line wants weighting by the state's slaves (`mod_systems.md` says what that takes).
-4. **Abolition.** A country that moves from Slave Trade to Slavery Banned loses 10 from every state's target at once (the
-   "heading for" figure), and the scores follow by 3% of the gap a year.
+4. **Closing the trade and abolition.** A country that moves from Slave Trade to Legacy Slavery gains 5 on every state's
+   target at once (the "heading for" figure), and one that then moves to Slavery Banned loses 10; the scores follow by 3% of
+   the gap a year.

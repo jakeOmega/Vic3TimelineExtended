@@ -7223,7 +7223,7 @@
  te_demog_wc_t_rg_off:0 " It adds nothing here: it counts from the first yearly update after the [concept_banking_cycle] has started."
  te_demog_wc_t_rg_tt:0 "#b Return on Capital#!\nWhere fortunes earn more than the economy grows, they outgrow everyone else's wealth: twice the gap between the real [concept_banking_policy_rate] and growth, at most 5 either way.[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_on'), '(CFixedPoint)1' ), 'te_demog_wc_t_rg_figures', 'te_demog_wc_t_rg_off' )]"
  te_demog_wc_t_slavery:0 "Slavery"
- te_demog_wc_t_slavery_tt:0 "#b Slavery#!\nProperty in people, the largest single asset a planter class held: $law_debt_slavery$ and $law_slave_trade$ +10, $law_colonial_slavery$ and $law_legacy_slavery$ +5. $law_slavery_banned$ adds nothing. It counts the law in force, not how many people are enslaved."
+ te_demog_wc_t_slavery_tt:0 "#b Slavery#!\nProperty in people, the largest single asset a planter class held: $law_colonial_slavery$, $law_legacy_slavery$ and $law_debt_slavery$ +10, $law_slave_trade$ +5, since an open supply keeps slaves cheap and ownership wide, while a closed one prices small owners out. $law_slavery_banned$ adds nothing. It counts the law in force, not how many people are enslaved."
  te_demog_wc_t_tax:0 "Taxes on Wealth"
  te_demog_wc_t_tax_tt:0 "#b Taxes on Wealth#!\n$law_graduated_taxation$ −5; under the legislated tax code, the dividend tax at 20 times its rate; at most −10 together."
  te_demog_wc_terms_head:0 "What Sets the Target"

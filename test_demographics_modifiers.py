@@ -204,7 +204,7 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             "law_traditional_ip_protection": 5.0, "law_strict_ip_protection": 10.0})
         # slavery (owner, 2026-10-21): property in people; Slavery Banned carries nothing
         self.assertEqual(carried[P.WC_SLAVERY_TYPE], {
-            "law_colonial_slavery": 5.0, "law_legacy_slavery": 5.0, "law_debt_slavery": 10.0, "law_slave_trade": 10.0})
+            "law_colonial_slavery": 10.0, "law_legacy_slavery": 10.0, "law_debt_slavery": 10.0, "law_slave_trade": 5.0})
         base = {"law_serfdom": 15.0, "law_tenant_farmers": 5.0, "law_peasant_proprietorship": -10.0,
                 "law_collectivized_agriculture": -20.0}
         land = carried[P.WC_LAND_TYPE]
