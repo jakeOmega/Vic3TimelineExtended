@@ -7,7 +7,7 @@ and most industry uses a little of it as upkeep. It runs from the first day of
 the game under the Free Market Construction game rule, which also offers four
 alternative settings. The rest of the chapter covers what construction costs in rich
 countries, how living-standard expectations adapt, what wealthy pops buy, the
-Bulk Transportation good, setting tariffs for all goods at once, the Strategic
+transport goods, setting tariffs for all goods at once, the Strategic
 Reserve journal entry, wartime demand for ammunition and the mod's new mineral
 deposits.
 
@@ -339,7 +339,7 @@ Four new needs appear as pops grow rich:
 | Convenience | 20 | Services, Consumer Appliances, Digital Access, Software |
 | Healthcare | 16 | Drugs |
 | Art | 25 | Art and Entertainment, some Services |
-| Tourism | 25 | Tourism, some Personal Transportation |
+| Tourism | 25 | Tourism, some Transportation |
 
 Healthcare takes about 3% of what a pop spends from wealth 29 to 50. Past
 wealth 50 it grows by the same amount at each level, so a richer pop buys more
@@ -355,45 +355,49 @@ of spending around wealth 30 and then fade.
 
 Tourism as an industry is covered in [State tourism](08-states.md#state-tourism), and the new goods in
 [The extended timeline](02-timeline.md), which also lists the base-game goods
-the mod renames. In the table above, Personal Transportation is the base game's
-Transportation and Art and Entertainment its Fine Art. Chemicals, in the
-Strategic Reserve below, is its Fertilizer.
+the mod renames. In the table above, Art and Entertainment is the base game's
+Fine Art. Chemicals, in the Strategic Reserve below, is its Fertilizer.
 
-## Bulk Transportation and freight
+## Transportation and shipping
 
-The base game's Merchant Marine good is renamed Bulk Transportation, and it now
-stands for freight of every kind, by rail, road, sea and air.
+The mod splits moving things the way the base game splits its goods, by
+distance:
 
-It is produced by transport infrastructure:
+- **Transportation** is all movement inside a state, of people and of goods.
+Like Electricity it is only available in the state that produces it.
+- **Merchant Marine** is shipping between markets. It is traded across the
+market as in the base game.
 
-- Ports, as in the base game, and their later methods: Container Ports, Global
-Ports and Magnetic Drive Ports.
-- Railways, on their train methods and on their Centralized Traffic Control,
-Containerized Cargo, Automated Loading and Unloading and Autonomous Trains
-methods. In a power bloc with tier III or higher of the Transportation
-Infrastructure principle, each railway switches its steam, electric or diesel
-trains to a stronger version on its own, which carries 20–28% more freight and
-adds more infrastructure. That switch costs no retooling.
-- Highways, on every method.
-- Airports, including their Spaceport method.
-- Company buildings such as trading houses, logistics hubs, docks, shipyards
-and canal companies.
+Transportation is produced by:
 
-It is consumed across the industrial economy:
+- Railways, on every train method. In a power bloc with tier III or higher of
+the Transportation Infrastructure principle, each railway switches its steam,
+electric or diesel trains to a stronger version on its own, which carries
+20–28% more and adds more infrastructure. That switch costs no retooling.
+- Railways' Rolling Stock (passenger carriages up to Maglev Trains) and ports'
+Passenger Ships, which add more Transportation for a few more inputs.
+- Highways and Airports, and Urban Centers' public transit.
+- Railway, logistics and fulfilment company buildings.
 
-- Trade Centers, as in the base game.
-- Construction Sectors from Iron-Frame Buildings onward.
-- The rail-transport and tanker-car methods of logging camps, mines,
-plantations and oil rigs, and the refrigerated rail car and flash-freezing
-methods of fishing wharves, whaling stations and ranches.
-- Later mining methods, such as dragline excavators and geophysical surveys, and
-the deeper oil-well methods.
-- Many late-game factory and retail methods, from advanced assembly lines and
-AI-managed production to e-commerce, department stores and shopping malls.
+Pops buy it to travel, and industry buys it to move its own goods:
+Construction Sectors from Iron-Frame Buildings onward, the rail-transport and
+tanker-car methods of logging camps, mines, plantations and oil rigs, the cold
+chain of fishing wharves, whaling stations and ranches, later mining and
+oil-well methods, and many late-game factory and retail methods.
 
-An agrarian economy barely touches it. An industrial one needs railways, ports
-and highways to keep up, and a Bulk Transportation shortage raises costs across
-construction, mining and industry at once.
+Merchant Marine is produced by Ports, by Airports in a small amount, and by
+shipping and trading company buildings. Trade Centers buy it, and the base game
+spends it on port connections for overseas states and on convoys.
+
+Railways and ports add infrastructure for every level, whether or not the
+level is staffed. The AI doesn't subsidize either: a state that needs more of
+them has dear Transportation, and they pay their way there.
+
+Because Transportation can't be imported from another state, a state that buys
+a lot of it needs railways or highways of its own. The largest buyer is
+construction: a state with a large Construction Sector needs railways beside
+it, and its Transportation price shows when it is short. An agrarian economy
+barely touches the good.
 
 ## Tariffs for all goods at once
 
