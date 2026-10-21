@@ -234,7 +234,7 @@ class SpaceEspionageTests(unittest.TestCase):
         self.assertIn("country_space_race_progress_mult = 0.10", own)
         self.assertIn("country_space_race_risk_mult = -0.10", own)
         marker = _top_level_block(static, "covert_space_espionage_detected = {")
-        self.assertIn("country_authority_add = -3", marker)
+        self.assertIn("country_authority_cost_add = 3", marker)
 
     def test_self_effect_from_the_strongest_operation(self):
         block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")

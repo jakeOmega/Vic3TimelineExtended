@@ -152,7 +152,7 @@ resettlement_orderly_survey = {
 
 resettlement_land_office_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 resettlement_speculators = {
@@ -194,5 +194,5 @@ resettlement_reserves = {
 
 resettlement_negotiation_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }

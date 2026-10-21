@@ -457,7 +457,7 @@ te_demog_ms_birth_limit_part = {
 }
 
 # ---- Each measure's upkeep, for the AI pulse's budget (te_demog_ms_ai_spent) -------------------------------------
-# te_demog_ms_authority_<measure>: its country_authority_add, as a cost (Birth Limit's at two children; the one child's
+# te_demog_ms_authority_<measure>: its country_authority_cost_add (Birth Limit's at two children; the one child's
 # is te_demog_ms_authority_birth_limit_one); te_demog_ms_paid_<measure>: 1 for a money
 # upkeep. test_demographics_measures.py pins both to te_demog_measure_modifiers.txt.
 te_demog_ms_authority_child_allowance = { value = 0 }

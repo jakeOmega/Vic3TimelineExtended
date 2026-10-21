@@ -2379,30 +2379,6 @@ te_nation_group_authority_count = {
 te_nation_type_country_authority_add_count = {
 	value = 0
 	if = {
-		limit = { has_modifier = te_demog_ms_birth_limit }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_demog_ms_birth_limit_one }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_demog_ms_crash_campaign }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_demog_ms_honours }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_demog_ms_later_longer_fewer }
-		add = 1
-	}
-	if = {
-		limit = { has_modifier = te_demog_ms_restricted_contraception }
-		add = 1
-	}
-	if = {
 		limit = { has_modifier = te_jud_unelected_authority }
 		add = 1
 	}
@@ -2450,6 +2426,30 @@ te_nation_type_country_authority_cost_add_count = {
 	}
 	if = {
 		limit = { has_modifier = heir_ed_trait_focus_active }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_birth_limit }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_birth_limit_one }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_crash_campaign }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_honours }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_later_longer_fewer }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_ms_restricted_contraception }
 		add = 1
 	}
 }

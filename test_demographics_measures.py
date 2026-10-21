@@ -49,11 +49,11 @@ CATALOGUE = {
         "state_urban_fertility_relief_add": 0.5, "interest_group_ig_trade_unions_approval_add": 1}),
     "honours": ({TRADITIONAL, PN}, {
         "state_desired_fertility_mult": 0.05, "interest_group_ig_devout_approval_add": 1,   # the fit (+3%)
-        "country_authority_add": -50}),   # the authority upkeeps: the rebalance of 2026-10-16 (owner)
+        "country_authority_cost_add": 50}),   # the authority upkeeps: the rebalance of 2026-10-16 (owner)
     "restricted_contraception": ({PN}, {
         "state_fertility_means_add": -0.2, "state_maternal_mortality_mult": 0.25,
         "interest_group_ig_devout_approval_add": 2, "interest_group_ig_intelligentsia_approval_add": -2,
-        "state_pop_support_movement_feminist_mult": 0.1, "country_authority_add": -200}),
+        "state_pop_support_movement_feminist_mult": 0.1, "country_authority_cost_add": 200}),
     "parental_leave": ({FP, COMMUNAL}, {
         "state_desired_fertility_mult": 0.05, "state_demog_womens_work_ratio_add": 0.02,
         "interest_group_ig_trade_unions_approval_add": 1, "interest_group_ig_industrialists_approval_add": -1}),
@@ -65,23 +65,23 @@ CATALOGUE = {
         "country_institution_cost_institution_schools_mult": 0.1}),
     "later_longer_fewer": ({FP, PC}, {
         "state_desired_fertility_mult": -0.1, "interest_group_ig_devout_approval_add": -1,
-        "interest_group_ig_rural_folk_approval_add": -1, "country_authority_add": -150}),
+        "interest_group_ig_rural_folk_approval_add": -1, "country_authority_cost_add": 150}),
     "birth_limit": ({PC}, {
         "state_desired_fertility_mult": -0.3, "state_sex_ratio_at_birth_add": 5,
         "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
-        "country_authority_add": -300}),
+        "country_authority_cost_add": 300}),
     "rural_exemption": ({PC}, {
         "state_birth_limit_relief_add": 0.5, "interest_group_ig_rural_folk_approval_add": 1}),
     "crash_campaign": ({PC}, {
         "state_desired_fertility_mult": -0.2, "country_legitimacy_base_add": -10,
         "state_radicals_from_political_movements_mult": 0.25, "interest_group_ig_rural_folk_approval_add": -3,
         "interest_group_ig_devout_approval_add": -3, "interest_group_ig_intelligentsia_approval_add": -2,
-        "interest_group_ig_trade_unions_approval_add": -2, "country_authority_add": -300}),
+        "interest_group_ig_trade_unions_approval_add": -2, "country_authority_cost_add": 300}),
 }
 BIRTH_LIMIT_ONE = {
     "state_desired_fertility_mult": -0.45, "state_sex_ratio_at_birth_add": 10,
     "interest_group_ig_rural_folk_approval_add": -3, "interest_group_ig_devout_approval_add": -2,
-    "country_authority_add": -400}
+    "country_authority_cost_add": 400}
 MONEY = {"child_allowance": 0.005, "family_housing": 0.0025, "parental_leave": 0.003, "free_contraception": 0.001}
 NEW_TYPES = ("state_desired_fertility_mult", "state_urban_fertility_relief_add", "state_means_literacy_add",
              "state_maternal_mortality_mult", "state_birth_limit_relief_add", "state_sex_ratio_at_birth_add")
@@ -410,8 +410,8 @@ class TestButtons(unittest.TestCase):
     def test_a_measure_needs_its_authority_upkeep_free_to_start(self):
         """The review of #989 (owner, 2026-10-16): as a decree does, a measure with an authority upkeep greys its Start
         until that much authority is free, with the reason; once on, it can still end with none free."""
-        authority = {key: -lines["country_authority_add"] for key, (_, lines) in CATALOGUE.items()
-                     if "country_authority_add" in lines}
+        authority = {key: lines["country_authority_cost_add"] for key, (_, lines) in CATALOGUE.items()
+                     if "country_authority_cost_add" in lines}
         self.assertEqual(set(authority), {"honours", "restricted_contraception", "later_longer_fewer", "birth_limit",
                                           "crash_campaign"})
         loc = "".join(_text(p) for p in sorted(LOC_DIR.glob("*.yml")))
@@ -679,16 +679,16 @@ class TestAI(unittest.TestCase):
         self.assertIn("te_demog_ms_birth_limit", eng.modifiers)
         self.assertNotIn("te_demog_ms_later_longer_fewer", eng.modifiers)
         self.assertNotIn("te_demog_ms_crash_campaign", eng.modifiers)
-        spent = sum(-v for k, (_, lines) in CATALOGUE.items() if f"te_demog_ms_{k}" in eng.modifiers
-                    for f, v in lines.items() if f == "country_authority_add")
+        spent = sum(v for k, (_, lines) in CATALOGUE.items() if f"te_demog_ms_{k}" in eng.modifiers
+                    for f, v in lines.items() if f == "country_authority_cost_add")
         self.assertLessEqual(spent, 330)
 
     def test_the_upkeep_constants_match_the_modifiers(self):
         eng = _MeasureEngine()
         for key, (_, lines) in CATALOGUE.items():
-            self.assertEqual(eng.sv(f"te_demog_ms_authority_{key}"), -lines.get("country_authority_add", 0), key)
+            self.assertEqual(eng.sv(f"te_demog_ms_authority_{key}"), lines.get("country_authority_cost_add", 0), key)
             self.assertEqual(eng.sv(f"te_demog_ms_paid_{key}"), 1 if key in MONEY else 0, key)
-        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_one"), -BIRTH_LIMIT_ONE["country_authority_add"])
+        self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_one"), BIRTH_LIMIT_ONE["country_authority_cost_add"])
         # the row shows what Birth Limit costs at its setting: two children's, then the one child's
         eng = _MeasureEngine(law=PC)
         self.assertEqual(eng.sv("te_demog_ms_authority_birth_limit_shown"), 300)
@@ -700,8 +700,8 @@ class TestAI(unittest.TestCase):
     def test_authority_upkeep_rises_with_the_enforcement_a_measure_needs(self):
         """The rebalance (owner, 2026-10-16): a measure acts on every state where a decree costs 100 for one, so every
         coercive measure costs more than a decree, and the costs rise with the enforcement each needs."""
-        cost = {key: -lines.get("country_authority_add", 0) for key, (_, lines) in CATALOGUE.items()}
-        cost["birth_limit_one"] = -BIRTH_LIMIT_ONE["country_authority_add"]
+        cost = {key: lines.get("country_authority_cost_add", 0) for key, (_, lines) in CATALOGUE.items()}
+        cost["birth_limit_one"] = BIRTH_LIMIT_ONE["country_authority_cost_add"]
         for key in ("restricted_contraception", "later_longer_fewer", "birth_limit", "birth_limit_one", "crash_campaign"):
             self.assertGreater(cost[key], 100, key)
         self.assertLess(cost["honours"], cost["later_longer_fewer"])
