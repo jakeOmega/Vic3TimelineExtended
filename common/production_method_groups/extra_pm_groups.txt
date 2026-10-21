@@ -1377,6 +1377,11 @@ REPLACE_OR_CREATE:pmg_construction_automation = {
 # ports in four months of a 2016 observer game, each one five years of
 # pm_retooling. most_productive takes the highest unlocked tier and stays on
 # it; an input shortage still steers it off (NAI output-penalty factor).
+# Kept for #1050: the tiers' inputs now cost about 40% of their output at
+# base prices, so a tier that floods its state loses little, while every
+# switch still costs years of retooling (up to 43% of India's 2048 port
+# subsidy). Railways now supply most of a state's transportation, so a port
+# is rarely its only supplier.
 REPLACE_OR_CREATE:pmg_water_personal_transport = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive

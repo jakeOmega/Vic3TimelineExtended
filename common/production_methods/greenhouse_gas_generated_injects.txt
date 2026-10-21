@@ -276,14 +276,6 @@ INJECT:pm_houseware_plastics = {
 	}
 }
 
-INJECT:pm_industrial_port = {
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 1.00
-		}
-	}
-}
-
 INJECT:pm_mechanized_slaughtering = {
 	state_modifiers = {
 		workforce_scaled = {
@@ -296,14 +288,6 @@ INJECT:pm_metal_shipbuilding = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-}
-
-INJECT:pm_modern_port = {
-	state_modifiers = {
-		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 1.74
 		}
 	}
 }

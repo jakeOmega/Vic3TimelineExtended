@@ -21,6 +21,25 @@ def _pm(name, body):
     return f"{name} = {{\n\tbuilding_modifiers = {{\n\t\tworkforce_scaled = {{\n{body}\t\t}}\n\t}}\n}}\n"
 
 
+INFRASTRUCTURE_PMS = ctg.RAILWAY_BASE_PMS | {
+    "pm_bullet_trains", "pm_maglev_trains",
+    "pm_basic_port", "pm_industrial_port", "pm_modern_port",
+    "pm_container_ports", "pm_global_ports", "pm_magnetic_drive_ports",
+}
+
+
+def _sub(text, key):
+    """The body of the first `key = { ... }` block in `text`, or "" if none."""
+    m = re.search(r"\b" + key + r"\s*=\s*\{", text)
+    if not m:
+        return ""
+    depth, i = 1, m.end()
+    while depth:
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return text[m.end():i - 1]
+
+
 def _blocks(rel):
     text = (ROOT / rel).read_text(encoding="utf-8-sig")
     lines = text.split("\n")
@@ -86,6 +105,15 @@ class TestLiveFiles(unittest.TestCase):
         for name in sorted(ctg.CONSTRUCTION_PMS):
             with self.subTest(pm=name):
                 self.assertIn(f"goods_input_{ctg.CONSTRUCTION_GOOD}_add", self.blocks[name])
+
+    def test_infrastructure_per_level(self):
+        # An unstaffed or loss-making railway or port still supplies its
+        # network, so no AI subsidy is needed to keep infrastructure up.
+        for name in sorted(INFRASTRUCTURE_PMS):
+            with self.subTest(pm=name):
+                state = _sub(self.blocks[name], "state_modifiers")
+                self.assertNotIn("state_infrastructure_add", _sub(state, "workforce_scaled"))
+                self.assertIn("state_infrastructure_add", _sub(state, "level_scaled"))
 
     def test_converted_producers(self):
         for name in sorted(ctg.MM_OUTPUT_TO_TRANSPORTATION):
