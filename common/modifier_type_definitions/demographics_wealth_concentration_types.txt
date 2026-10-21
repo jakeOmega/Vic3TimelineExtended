@@ -11,6 +11,10 @@
 #   country_wealth_concentration_economy_add  the economic laws term (te_demog_wc_econ_term: Laissez-Faire +10, Extraction
 #                                              Economy +5, Interventionism -5, Guilds and Chartered Monopolies and Freedom
 #                                              of Contract +5, Antitrust Enforcement and Regulated Utilities -5)
+#   country_wealth_concentration_public_goods_add  the public goods term (te_demog_wc_public_term, 2026-10-21): whether
+#                                              health, schooling and ideas are provided by the state or sold. Private Health
+#                                              Insurance, Private Schools and Terakoya +5, Public Health Insurance and
+#                                              Public Schools -5, Traditional IP Protection +5, Strict IP Protection +10
 # Wealth Concentration runs whatever the Demographics rule (te_demog_state_yearly), so these are not census inputs. A
 # release keeps this file: scripts/release/comment_out_census_inputs.py comments out demographics_modifier_types.txt's
 # types only.
@@ -27,6 +31,12 @@ country_wealth_concentration_tax_add = {
 	script_only = yes
 }
 country_wealth_concentration_economy_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+}
+country_wealth_concentration_public_goods_add = {
 	color = neutral
 	percent = no
 	decimals = 0

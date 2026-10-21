@@ -1197,3 +1197,25 @@ game shows is below.
 5. **The one edge.** Under Full with Inequality showing on a state, switch the rule to Disabled in game: the subtab goes,
    and the modifier stays on the state, hidden from the rows, until its next yearly pulse takes it off (the effect still
    applies for up to a year). Display only keeps the subtab, so there the section just reads "none" after the pulse.
+
+## Public goods: the health, school and IP laws' Wealth Concentration lines (2026-10-21)
+
+An eighth term on Wealth Concentration's target (`docs/systems/mod_systems.md` § Wealth Concentration, "Public goods"):
+Private Health Insurance, Private Schools, Terakoya and Traditional IP Protection +5, Strict IP Protection +10, Public
+Health Insurance and Public Schools −5. It is a script-only country type read with `modifier:`, like the economic laws'
+term, so no engine fact is new. Offline the sums and the wiring are tested; the game shows the rest.
+
+1. **The tooltips.** Each of the seven laws shows "Wealth Concentration: Public Goods" with its value (+5, +10 or −5),
+   the type's hover gives its description, and `debug.log` holds no `Unknown modifier type` for it. Terakoya, Japan's
+   variant of Private Schools, reads +5 like its parent.
+2. **The bar (any rule).** The Demographics tab's Wealth section lists a Public Goods bar between Economic Laws and Return
+   on Capital, and a state's Wealth subtab lists the same. Enact Private Health Insurance, Private Schools and Strict IP
+   Protection (the console): +20; Public Health Insurance and Public Schools: −10. The hover names the laws.
+3. **The shown target.** With the three private laws enacted, the Inheritance group's "heading for" figure rises at once
+   by the term's change since the last yearly refresh (Traditional IP Protection to Strict: +5), and a state's score drifts
+   toward it by 3% of the gap a year.
+4. **1836's start.** Read an 1836 save: any country that opens on a private or public health or school law should read a
+   Public Goods bar of ±5 or ±10, and the national figure should have moved no more than that from before this change.
+   This is the one thing nobody has measured (the repository holds no start history); if many countries sit at the same
+   sign, re-centre the values rather than the start.
+5. **`debug.log`:** no error from `te_demog_wc_public_term` or `te_demog_wc_national`.

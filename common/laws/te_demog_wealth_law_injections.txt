@@ -1,5 +1,6 @@
 ﻿# Wealth Concentration's law terms on vanilla's laws (spec §4.2; on the laws since 2026-10-17, so each law's tooltip
-# says what it does). Read by te_demog_values.txt (te_demog_wc_land_term, te_demog_wc_tax_term, te_demog_wc_econ_term);
+# says what it does). Read by te_demog_values.txt (te_demog_wc_land_term, te_demog_wc_tax_term, te_demog_wc_econ_term,
+# te_demog_wc_public_term);
 # the types are in demographics_wealth_concentration_types.txt. The mod's antitrust laws carry theirs in extra_laws.txt,
 # and Graduated Taxation's -5 sits in te_tax_vanilla_law_gates.txt, the one file the tax code lets INJECT the vanilla
 # taxation laws (test_tax_code_rule).
@@ -72,5 +73,39 @@ INJECT:law_extraction_economy = {
 INJECT:law_interventionism = {
 	modifier = {
 		country_wealth_concentration_economy_add = -5
+	}
+}
+
+# The public goods term (2026-10-21): whether health care and schooling are bought or provided. A fortune buys the
+# private kind and the public kind spreads it; no health system, no schools and church schools none (nothing yet
+# sold, nothing yet provided), and Charity Hospitals none. Terakoya, a variant of Private Schools, takes its
+# parent's value. The IP laws' lines (Traditional +5, Strict +10) sit in extra_laws.txt.
+INJECT:law_private_health_insurance = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = 5
+	}
+}
+
+INJECT:law_public_health_insurance = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = -5
+	}
+}
+
+INJECT:law_private_schools = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = 5
+	}
+}
+
+INJECT:law_terakoya = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = 5
+	}
+}
+
+INJECT:law_public_schools = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = -5
 	}
 }

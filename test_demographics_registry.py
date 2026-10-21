@@ -4978,10 +4978,11 @@ class TestWealth(unittest.TestCase):
         eng._in(state, _parse_script("te_demog_wc_seed_state = yes"))
         self.assertEqual((state["te_dg_wc"], state["te_dg_wc_target"]), (55.0, 55.0))
 
-    def target(self, state, owner=None, law=80.0, land=6.0, tax=-5.0, econ=0.0):
+    def target(self, state, owner=None, law=80.0, land=6.0, tax=-5.0, econ=0.0, public=0.0):
         eng = _CountryEngine(states=[state], fixtures={"te_inh_law_amendment_target": law,
                                                        "te_demog_wc_land_term": land, "te_demog_wc_tax_term": tax,
-                                                       "te_demog_wc_econ_term": econ})
+                                                       "te_demog_wc_econ_term": econ,
+                                                       "te_demog_wc_public_term": public})
         eng.vars.update(owner or {})
         return eng.value_in(state, "te_demog_wc_target")
 
@@ -4990,6 +4991,9 @@ class TestWealth(unittest.TestCase):
         # law 80, land 6, ownership (30/40 - 0.65) x 40 = 4, inequality (0.5 - 0.40) x 40 = 4, taxes -5
         self.assertAlmostEqual(self.target(state), 89.0)
         self.assertAlmostEqual(self.target(state, econ=-10.0), 79.0, msg="the economic laws add in")
+        self.assertAlmostEqual(self.target(state, public=5.0), 94.0, msg="the public goods laws add in")
+        self.assertAlmostEqual(self.target(state, public=-10.0), 79.0, msg="and take off")
+        self.assertEqual(self.target(state, public=20.0), 100.0, msg="to the 100 cap")
         self.assertEqual(self.target(state, law=100.0, land=15.0), 100.0)
         self.assertEqual(self.target(state, law=0.0, land=-20.0), 0.0)
 
@@ -5039,7 +5043,8 @@ class TestWealth(unittest.TestCase):
     def national(states, **country):
         eng = _CountryEngine(states=states, effects=APPLIED,
                              fixtures={"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
-                                       "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0})
+                                       "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0,
+                                       "te_demog_wc_public_term": -5.0})
         eng.vars.update(country)
         eng.call("te_demog_wc_national")
         return eng.vars
@@ -5068,8 +5073,9 @@ class TestWealth(unittest.TestCase):
         self.assertAlmostEqual(v["te_dg_wc_t_ineq"], mean(4, -4))
         self.assertAlmostEqual(v["te_dg_wc_t_tax"], -5.0)
         self.assertAlmostEqual(v["te_dg_wc_t_econ"], 5.0)
-        # with no state clamped, the six bars add up to the target above them
-        bars = sum(v[f"te_dg_wc_t_{t}"] for t in ("law", "land", "own", "ineq", "tax", "econ"))
+        self.assertAlmostEqual(v["te_dg_wc_t_public"], -5.0)
+        # with no state clamped, the seven bars add up to the target above them
+        bars = sum(v[f"te_dg_wc_t_{t}"] for t in ("law", "land", "own", "ineq", "tax", "econ", "public"))
         self.assertAlmostEqual(v["te_dg_wc_target"], 50 + bars)
         self.assertIs(v["te_dg_wc_top"], a)
         self.assertIs(v["te_dg_wc_bottom"], b)
@@ -5147,7 +5153,8 @@ class TestWealth(unittest.TestCase):
         a, b = self.scored(80, 70, own=10), self.scored(3, 50, own=10)
         eng = _CountryEngine(states=[a, b, {}], effects=APPLIED,
                              fixtures={"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
-                                       "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0})
+                                       "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0,
+                                       "te_demog_wc_public_term": 0.0})
         eng.run(_parse_script("te_demog_wc_shock = { AMOUNT = -5 }"))
         self.assertEqual((a["te_dg_wc"], b["te_dg_wc"]), (75.0, 0.0))
         self.assertAlmostEqual(eng.vars["te_inh_concentration"], 37.5)
@@ -5443,6 +5450,43 @@ class TestInheritanceBalance(unittest.TestCase):
                         te_inh_concentration=33.0)
         eng.run(_parse_script("set_variable = { name = shown value = te_inh_concentration_target }"))
         self.assertAlmostEqual(eng.vars["shown"], 70.0, msg="Laissez-Faire enacted since the refresh: +10")
+
+    def test_the_public_goods_term_reads_the_laws_lines(self):
+        """Owner, 2026-10-21: whether health care, schooling and ideas are provided or sold. Private provision and
+        strict IP raise the target and public provision lowers it; the none and church laws and the other IP laws carry
+        nothing, so 1836's defaults leave the start where it was."""
+        cases = (
+            ((), 0),
+            (("law_no_health_system", "law_no_schools", "law_no_ip_protection"), 0),
+            (("law_charitable_health_system", "law_religious_schools", "law_state_intellectual_property"), 0),
+            (("law_private_health_insurance", "law_private_schools", "law_strict_ip_protection"), 20),   # the most
+            (("law_private_health_insurance", "law_terakoya", "law_traditional_ip_protection"), 15),     # a variant at its parent's
+            (("law_public_health_insurance", "law_public_schools", "law_creative_commons"), -10),         # the least
+            (("law_public_health_insurance", "law_private_schools", "law_open_source_innovation"), 0),
+        )
+        for laws, want in cases:
+            eng = _LawEngine(laws, fixtures=self._wc_lines(laws))
+            self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_wc_public_term")), want, laws)
+        self.assertNotIn("has_law", _block(_text(VALUES), "te_demog_wc_public_term"))
+
+    def test_the_public_goods_term_is_wired_like_the_economic_term(self):
+        self.assertIn("add = owner.te_demog_wc_public_term", _block(_text(VALUES), "te_demog_wc_target"))
+        self.assertIn("set_variable = { name = te_dg_wc_t_public value = te_demog_wc_public_term }",
+                      _block(_text(WEALTH_EFFECTS), "te_demog_wc_national"))
+        for scope in ("GetPlayer", "State.GetOwner"):
+            self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_public_term')", _text(DEMOG_GUI), scope)
+
+    def test_the_shown_target_follows_a_public_goods_law_at_once(self):
+        eng = _CountryEngine(fixtures={"te_inh_law_amendment_target": 75.0, "te_demog_wc_tax_term": -5.0,
+                                       "te_demog_wc_public_term": 10.0})
+        eng.values.update(_raw_blocks([INH_VALUES]))
+        eng.vars.update(te_dg_wc_target=60.0, te_dg_wc_t_law=25.0, te_dg_wc_t_tax=-5.0, te_dg_wc_t_public=5.0,
+                        te_inh_concentration=33.0)
+        eng.run(_parse_script("set_variable = { name = shown value = te_inh_concentration_target }"))
+        self.assertAlmostEqual(eng.vars["shown"], 65.0, msg="Strict IP enacted over Traditional since the refresh: +5")
+        del eng.vars["te_dg_wc_t_public"]
+        eng.run(_parse_script("set_variable = { name = shown value = te_inh_concentration_target }"))
+        self.assertAlmostEqual(eng.vars["shown"], 60.0, msg="a save from before the term: nothing to compare with")
 
     def test_the_ownership_term_is_centred_on_1836s_measured_share(self):
         body = _block(_text(VALUES), "te_demog_wc_ownership_term")
