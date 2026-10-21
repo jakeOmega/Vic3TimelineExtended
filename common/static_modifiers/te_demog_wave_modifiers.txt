@@ -200,7 +200,7 @@ te_demog_wave_srb_ban = {
 # Its enforcement: inspectors in the clinics for five years.
 te_demog_wave_srb_ban_enforcement = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 # Payments to families who raise daughters: three fewer boys per 100 girls for twenty years.
@@ -235,7 +235,7 @@ te_demog_wave_branches_service = {
 te_demog_wave_branches_police = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_turmoil_effects_mult = -0.1
-	country_authority_add = -25
+	country_authority_cost_add = 25
 	interest_group_ig_intelligentsia_approval_add = -2
 }
 
@@ -267,7 +267,7 @@ te_demog_wave_villages_alone = {
 # Keeping the school and the clinic open: five years of authority (a country modifier).
 te_demog_wave_villages_upkeep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 # The old moved into the market town: the countryside resents it (a country modifier, five years, decaying).
@@ -317,7 +317,7 @@ te_demog_wave_overspill_sprawl_politics = {
 te_demog_wave_immortal_licences = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_desired_fertility_mult = -0.3
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	interest_group_ig_devout_approval_add = -3
 	interest_group_ig_intelligentsia_approval_add = -2
 }

@@ -1891,7 +1891,7 @@ summit_attendee_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.1
 	country_influence_mult = 0.1
-	country_authority_add = -100
+	country_authority_cost_add = 100
 }
 
 # Event 3c: Boycott summit (isolationist, but retain authority)
@@ -1992,7 +1992,7 @@ arms_race_rival_pressure_modifier = {
 proxy_conflict_destabilized_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.05
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 # Event 4a bilateral: Rival's propaganda campaign backfires from our counter-campaign
@@ -2062,7 +2062,7 @@ peaceful_decolonization_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.15
 	country_influence_add = 50
-	country_authority_add = -200
+	country_authority_cost_add = 200
 }
 
 colonial_war_exhaustion_modifier = {
@@ -2115,14 +2115,14 @@ post_colonial_self_reliance_modifier = {
 independence_nationalization_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -100
+	country_authority_cost_add = 100
 	building_throughput_add = -0.05
 }
 
 selective_nationalization_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 foreign_property_protected_modifier = {
@@ -2249,7 +2249,7 @@ mandate_system_modifier = {
 # (the shape of peaceful_decolonization_modifier's -200).
 mandate_system_transition_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_authority_add = -100
+	country_authority_cost_add = 100
 }
 
 # Phase modifiers (applied automatically by JE pulse based on stability level).
@@ -2331,7 +2331,7 @@ negotiated_withdrawal_modifier = {
 # parent's path (set in apply_decolonization_path).
 bloody_decolonization_legacy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	state_radicals_from_political_movements_mult = 0.10
 	country_prestige_add = 25
 	character_loyalty_add = -2
@@ -2819,7 +2819,7 @@ civil_disobedience_crackdown_modifier = {
 civil_disobedience_concessions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_acceptance_not_homeland_add = 5
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 civil_disobedience_movement_galvanized = {
@@ -3084,7 +3084,7 @@ monopoly_broken_modifier = {
 
 monopoly_nationalized_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_authority_add = -100
+	country_authority_cost_add = 100
 	building_throughput_add = -0.05
 	state_standard_of_living_add = 1
 	country_sol_expectations_shift_add = 0.02
@@ -3101,14 +3101,14 @@ police_defended_modifier = {
 
 police_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_authority_add = -100
+	country_authority_cost_add = 100
 	country_acceptance_no_shared_tradition_trait_add = 10
 	country_sol_expectations_lower_offset_add = 0.5
 }
 
 police_accountability_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_authority_add = -150
+	country_authority_cost_add = 150
 	country_acceptance_no_shared_tradition_trait_add = 15
 	country_bureaucracy_mult = -0.03
 	country_sol_expectations_lower_offset_add = 0.5
@@ -3130,7 +3130,7 @@ riot_curfew_modifier = {
 riot_concessions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_standard_of_living_add = 0.5
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	country_sol_expectations_shift_add = 0.03
 	country_sol_expectations_lower_offset_add = 0.5
 }
@@ -3165,7 +3165,7 @@ war_crime_scandal_modifier = {
 war_crime_tribunal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
@@ -3206,7 +3206,7 @@ campaign_scandal_investigation_modifier = {
 campaign_scandal_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
-	country_authority_add = -25
+	country_authority_cost_add = 25
 	country_sol_expectations_shift_add = 0.02
 }
 
@@ -3273,7 +3273,7 @@ nativist_dialogue_modifier = {
 revival_embraced_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.15
-	country_authority_add = -25
+	country_authority_cost_add = 25
 	country_sol_expectation_adaptation_rate_mult = -0.1
 }
 
@@ -3614,7 +3614,7 @@ un_self_corrected_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.10
 	country_infamy_generation_mult = 0.15
-	country_authority_add = -100
+	country_authority_cost_add = 100
 }
 
 # ---- Human Rights Modifiers ----
@@ -4011,7 +4011,7 @@ un_sovereignty_welcome_ig_modifier = {
 # demand to leave the UN (five years, decaying).
 un_sovereignty_concession_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -75
+	country_authority_cost_add = 75
 	country_influence_mult = -0.05
 }
 
@@ -4382,7 +4382,7 @@ un_loan_repayment_modifier = {
 un_loan_conditions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_legitimacy_base_add = -5
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 # un_events.2 option E: the aggrieved party let the matter rest.
@@ -4605,7 +4605,7 @@ ww_defeated_modifier = {
 # Regime change imposed on defeated nation
 ww_regime_change_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_authority_add = -100
+	country_authority_cost_add = 100
 	political_movement_radicalism_add = 0.35
 	state_radicals_from_political_movements_mult = 0.5
 }
@@ -5005,7 +5005,7 @@ construction_private_allocation = {
 radical_law_backlash = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -10
-	country_authority_add = -100
+	country_authority_cost_add = 100
 	state_radicals_from_political_movements_mult = 0.50
 }
 
@@ -5013,7 +5013,7 @@ radical_law_backlash = {
 radical_law_retreat = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.05
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 
@@ -5447,7 +5447,7 @@ intelligence_tip_off_modifier = {
 # Intelligence Sharing Pact - failure
 intelligence_failure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	country_prestige_mult = -0.02
 }
 
@@ -5479,14 +5479,14 @@ nationalist_backlash_modifier = {
 # Nuclear Disarmament - military anger
 military_disarmament_anger_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -75
+	country_authority_cost_add = 75
 	country_prestige_mult = -0.005
 }
 
 # Nuclear Disarmament - purge aftermath
 military_disarmament_purge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	unit_morale_loss_mult = 0.1
 }
 
@@ -5515,14 +5515,14 @@ education_technical_focus_modifier = {
 # Nuclear Freeze - domestic tensions
 nuclear_freeze_tension_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -50
+	country_authority_cost_add = 50
 	country_legitimacy_base_add = -5
 }
 
 # Security Aid - dependency
 security_dependency_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -25
+	country_authority_cost_add = 25
 	country_prestige_mult = -0.02
 }
 
@@ -5949,7 +5949,7 @@ digital_rights_stagnation_modifier = {
 whistleblower_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 whistleblower_prosecuted_modifier = {
@@ -5983,7 +5983,7 @@ security_state_established_modifier = {
 hacker_collaboration_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_weekly_innovation_mult = 0.03
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 hacker_manhunt_modifier = {
@@ -6380,7 +6380,7 @@ rre_religious_right_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	interest_group_ig_devout_pol_str_mult = 0.35
 	interest_group_ig_devout_pop_attraction_mult = 0.30
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 rre_religious_engagement_modifier = {
@@ -6497,13 +6497,13 @@ me_deepfake_exposed_modifier = {
 me_ai_content_ban_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 me_climate_pledge_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 me_data_regulation_modifier = {
@@ -6553,7 +6553,7 @@ me_space_program_pledge_modifier = {
 me_pollution_cleanup_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 me_genetics_ethics_commission_modifier = {
@@ -6571,7 +6571,7 @@ me_security_crackdown_modifier = {
 me_transparency_act_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_legitimacy_govt_total_clout_add = 10
-	country_authority_add = -25
+	country_authority_cost_add = 25
 	country_sol_expectation_adaptation_rate_mult = 0.05
 }
 
@@ -6589,7 +6589,7 @@ me_election_infrastructure_hardened_modifier = {
 me_colonial_representation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
-	country_authority_add = -25
+	country_authority_cost_add = 25
 	country_sol_expectations_lower_offset_add = 0.5
 }
 
@@ -6810,14 +6810,14 @@ covert_destabilization_resist = {
 # Counter-intel investigation costs administrative focus while the leak is plugged.
 covert_industrial_espionage_detected = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_authority_add = -3
+	country_authority_cost_add = 3
 }
 
 # Applied to TARGET when military espionage operation is detected against them.
 # Counter-intel sweep of military command consumes administrative focus.
 covert_military_espionage_detected = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_authority_add = -3
+	country_authority_cost_add = 3
 }
 
 # Applied to TARGET while a regime-change operation runs (covert slice 6),
@@ -6856,7 +6856,7 @@ covert_space_espionage = {
 # event reads covert_op_burn's exposure record instead.)
 covert_space_espionage_detected = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_authority_add = -3
+	country_authority_cost_add = 3
 }
 
 # Counterintelligence Support (2026-10-16): applied to the TARGET, a friend,
@@ -7110,7 +7110,7 @@ ch_model_orphaned = {
 # Event 20 (Domino) option A: the cost of policing a neighbour's example.
 ch_ideological_cordon = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 # Baseline pressure on an aligned fallback movement, when the model's own
@@ -7156,7 +7156,7 @@ ch_touring_exhibition = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.10
 	country_prestige_mult = 0.08
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 # Event 10 Option B: Commercialize art - cash from art sales, reduced cultural pull
@@ -7171,7 +7171,7 @@ ch_tourism_infrastructure = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	building_tourism_industry_throughput_add = 0.25
 	country_cultural_pull_mult = 0.05
-	country_authority_add = -50
+	country_authority_cost_add = 50
 }
 
 # Event 11 Option B: Exploit tourists - quick cash, prestige and cultural damage
@@ -7203,7 +7203,7 @@ ch_language_academies = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_cultural_pull_mult = 0.15
 	country_influence_add = 50
-	country_authority_add = -75
+	country_authority_cost_add = 75
 }
 
 # Event 13 Option B: Natural lingua franca - slower cultural spread, trade advantage
@@ -7239,7 +7239,7 @@ ch_adopted_education = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_tech_research_speed_mult = 0.08
 	state_education_access_add = 0.05
-	country_authority_add = -25
+	country_authority_cost_add = 25
 }
 
 # Event 15 Option B: Resist foreign education - domestic solidarity
