@@ -1988,10 +1988,16 @@ class CommissionSourceTests(unittest.TestCase):
 
     def test_a_new_reign(self):
         """A ruler who is not last month's begins a reign: the Crown when
-        crowned, else the Leader; nothing on a game's first pass."""
+        crowned, else the Leader; nothing on a game's first pass, and nothing
+        for a regent, appointed or replaced (has_gov_regency)."""
         track = squash(block(self.e, "gm_com_track_ruler"))
         self.assertIn("else = { if = { limit = { has_variable = gm_ruler NOT = { AND = { exists = var:gm_ruler "
-                      "var:gm_ruler = scope:gm_com_tracked_ruler } } } gm_com_try_reign = yes }", track)
+                      "var:gm_ruler = scope:gm_com_tracked_ruler } } has_gov_regency = no } gm_com_try_reign = yes }",
+                      track)
+        # The regent is still recorded, so the monarch who takes over when the
+        # regency ends is seen as the new ruler.
+        self.assertLess(track.find("gm_com_try_reign = yes"),
+                        track.find("set_variable = { name = gm_ruler value = scope:gm_com_tracked_ruler }"))
         reign = squash(block(self.e, "gm_com_try_reign"))
         self.assertLess(reign.find("gm_country_can_raise_crown = yes"), reign.find("gm_country_can_raise_leader = yes"))
         self.assertIn("set_variable = { name = gm_com_ig value = flag:landowners }", reign)

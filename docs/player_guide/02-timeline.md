@@ -915,7 +915,7 @@ year before time runs out, a notice reminds you.
 
 | Moment | Who asks | For | Where | Boon for ten years, and unique dedication |
 |---|---|---|---|---|
-| A New Reign: a new ruler takes power | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader under Autocracy or a Single-Party State, named for the new ruler; under any other government, such as a democratic republic electing its president, none | Anywhere | +10% authority |
+| A New Reign: a new ruler takes power, but not a regent | Landowners, or the new leader's own group | To the Crown when the ruler is crowned, otherwise To the Leader under Autocracy or a Single-Party State, named for the new ruler; under any other government, such as a democratic republic electing its president, none | Anywhere | +10% authority |
 | A New Order: a new crown, republic or revolution that has no fitting monument | Landowners, Intelligentsia or Trade Unions | To the Crown, To the Republic or To the Revolution | Anywhere | +25% loyalists from high legitimacy |
 | Among the Great Powers: you become a great power for the first time | Petty Bourgeoisie, or the strongest group in government if they are marginal | A column To the Nation | The capital | +10% influence; To the Concert of Nations |
 | Victory: you end a war of a year or more as a war leader, having enforced a war goal | Armed Forces | A War Memorial, named for the victory | Anywhere | +10% prestige; To Victory |
