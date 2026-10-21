@@ -5,8 +5,9 @@
 ### (the overview, Causes of Death, the pyramid), then the levers (Work and Retirement, Longevity, Family Policy), then
 ### the record (History), with the per-state detail last (Wealth, Where People Live, States) and How Demographics Works
 ### collapsed at the foot. The state subtab takes the same order, less the sections a state has no figures for (Family
-### Policy, History, Where People Live, States). test_demographics_layout.py holds both orders, the flags and the
-### widths.
+### Policy, History, Where People Live, States), and with one of its own after Wealth: the state's Modifiers, the nine
+### standing modifiers the census gives it, which its modifier rows leave out. test_demographics_layout.py holds both
+### orders, the flags and the widths.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed, *_open ones collapsed until opened. The
 ### state's flags are its own (te_demog_st_*), so collapsing a section on one host leaves the other alone. Neither host
@@ -86,6 +87,7 @@ types te_demographics_layout
 			### phase 3: shown once the state has had a late step
 			te_state_demog_longevity = {}
 			te_state_demog_wealth = {}
+			te_state_demog_modifiers = {}
 		}
 
 		te_state_demog_how = {}

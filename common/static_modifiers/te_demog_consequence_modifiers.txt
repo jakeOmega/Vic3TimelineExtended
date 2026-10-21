@@ -1,7 +1,8 @@
 ﻿# Demographics phase 2 step 4 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §4):
 # conscription, the youth bulge and sex balance. State modifiers, under Full only, applied by the census at multipliers
 # from 0 to 1 (te_demog_consequence_effects.txt); each field's size is demographics_params' (a test pins them). The
-# youth bulge and the sex balance's pair show in a state's modifier list: they are effects the player plans around.
+# youth bulge and the sex balance's pair are effects the player plans around: the Demographics subtab's Modifiers
+# section lists them (te_state_demog_modifiers), and the state's modifier rows leave them out by name (owner, 2026-10-21).
 # The conscription pair does not (owner, 2026-10-16): like the census's births and deaths terms it takes the mod's
 # invisible icon, and its multiplier is the census's term T with no ceiling (demographics_params.CONSCRIPTION_MIN
 # only), so a state rich in young men would otherwise list a different figure every year. Its name still heads the
