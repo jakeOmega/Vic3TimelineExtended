@@ -2053,7 +2053,6 @@ company_sap = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
-		prestige_good_integrated_logistics
 	}
 	ai_will_do = {
 		has_technology_researched = computer_networks
@@ -3588,7 +3587,6 @@ company_shopify = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
-		prestige_good_integrated_logistics
 	}
 	ai_will_do = {
 		has_technology_researched = e-commerce

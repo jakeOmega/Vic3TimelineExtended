@@ -1668,7 +1668,7 @@ te_ai_decentralized_absorption_effect = {
 # run to the ends of PRICE_RANGE (0.999 in extra_defines.txt): a good it lacks
 # costs twice base, a good it has in surplus sells for a thousandth of base.
 # A port takes both ends at once: it cannot import its Steamers and Coal, whose
-# shortage cuts its output, or export the Bulk Transportation it makes.
+# shortage cuts its output, or export the Merchant Marine it makes.
 # AI Jamaica in 1969 paid £22.5K a week in port subsidies on £1.8K of income.
 # The construction AI does not reliably build a market's first Trade Center,
 # so an AI country that leads a market with none gets a government-owned

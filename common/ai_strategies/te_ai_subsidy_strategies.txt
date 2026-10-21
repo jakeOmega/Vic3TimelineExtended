@@ -1,4 +1,15 @@
-﻿# The AI doesn't subsidize its coal and oil power plants (#933).
+﻿# The AI doesn't subsidize its coal and oil power plants (#933), its railways
+# or its ports (#1050).
+#
+# Railways and ports: vanilla's default strategy pins both must_have, because a
+# loss-making railway that shed workers took the state's infrastructure with
+# it. Since #1050 their infrastructure counts per level, not per worker, and
+# industry buys its freight as local transportation, so a state short of
+# railways has dear transport and they pay their way. Their subsidy bill in
+# the late-game saves #1050 read (£24-55M a week on ports, £27-48M on
+# railways) came from passenger methods flooding their own state, not from
+# freight.
+#
 # building_power_plant is the coal and oil plant; nuclear, fusion and renewable
 # plants are their own buildings, which no strategy subsidizes. Vanilla's
 # default strategy pins it must_have, so the AI's treasury paid every plant's
@@ -20,18 +31,24 @@
 INJECT:ai_strategy_agricultural_expansion = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }
 
 INJECT:ai_strategy_plantation_economy = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }
 
 INJECT:ai_strategy_placate_population = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }
 
@@ -40,23 +57,31 @@ INJECT:ai_strategy_placate_population = {
 INJECT:ai_strategy_resource_expansion = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }
 
 INJECT:ai_strategy_industrial_expansion = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }
 
 INJECT:ai_strategy_colonial_extraction = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }
 
 INJECT:ai_strategy_montenegro_admin = {
 	subsidies = {
 		building_power_plant = should_remove
+		building_railway = should_remove
+		building_port = should_remove
 	}
 }

@@ -109,8 +109,8 @@ class TestLadders(unittest.TestCase):
         tier = D.pm_figures(MS, N, "pm_steam_donkey_building_coal_mine")
         self.assertAlmostEqual(D.breakeven(tier), 0.15)
 
-    def test_dragline_breakeven(self):              # (345 - 180) / 2000
-        self.assertAlmostEqual(D.breakeven(D.pm_figures(MS, N, "pm_dragline_excavators_coal_mine")), 0.0825)
+    def test_dragline_breakeven(self):              # (350 - 180) / 2000
+        self.assertAlmostEqual(D.breakeven(D.pm_figures(MS, N, "pm_dragline_excavators_coal_mine")), 0.085)
 
     def test_crew_only_tier_has_no_breakeven(self):
         self.assertIsNone(D.breakeven(D.PMFigures("x", 12, 0.0, 1000.0, 10.0, 0.0, 0.0)))

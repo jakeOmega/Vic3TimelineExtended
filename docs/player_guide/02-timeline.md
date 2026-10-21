@@ -200,7 +200,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Electronic Components | Industrial | Electronic Components and Semiconductor Industry | The most widely used modern input: over a hundred buildings take it in their later production methods |
 | Industrial Robotics | Industrial | Robotics Industry | Automation production methods in factories and mines |
 | Software | Luxury | Software Industry | The Convenience need; digital and automation production methods |
-| Digital Access | Luxury, local | Network Infrastructure | The Convenience need and many modern production methods; like Personal Transportation it is only available in the state that produces it |
+| Digital Access | Luxury, local | Network Infrastructure | The Convenience need and many modern production methods; like Transportation it is only available in the state that produces it |
 | Launch Capacity | Industrial | Aerospace Industry (with rocket production methods), Space Elevator, Antimatter Engine | Space programs, satellites, orbital production methods and megaprojects |
 | Advanced Materials | Industrial | Advanced Material Fabricator, Nanofabrication Center | Late-game production methods and megaproject construction; base price 4,000, the most expensive good in the game |
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
@@ -230,13 +230,9 @@ the same goods underneath, so base-game buildings still make and use them.
 | Telephones | Wired Telecommunication Gear |
 | Radios | Wireless Telecommunication Gear |
 | Fine Art | Art and Entertainment |
-| Transportation | Personal Transportation |
-| Merchant Marine | Bulk Transportation |
 
 Chemicals is the base game's fertilizer. Farms and plantations still take it,
-and dozens of modern industrial production methods now take it too. Bulk
-Transportation is explained in [Bulk Transportation and
-freight](03-economy.md#bulk-transportation-and-freight). Four buildings are
+and dozens of modern industrial production methods now take it too. Four buildings are
 renamed to match: Fertilizer Plants are Chemical Plants, Electrics Industries
 are Wired Telecommunications Industries, Synthetics Plants are Synthetic Dyes
 Industries, and the Arts Academy is Creative Industry.
@@ -428,7 +424,7 @@ too.
 | Electrics | The base game's Electrics Industries split into Wired Telecommunications Industries, Wireless Telecommunications Industries and Consumer Appliance Industries. |
 | High technology | Electronic Components and Semiconductor Industry, Robotics Industry, Software Industry, Network Infrastructure, Advanced Material Fabricator, Aerospace Industry. |
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
-| Transport | Airport and Highway, both producing Personal and Bulk Transportation. |
+| Transport | Airport and Highway, both producing Transportation, and airports some Merchant Marine too ([Transportation and shipping](03-economy.md#transportation-and-shipping)). |
 | Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
 | Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
 

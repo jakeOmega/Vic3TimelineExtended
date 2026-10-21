@@ -124,7 +124,7 @@ pm_te_direct_construction_iron_frame = {
 			goods_input_fabric_add = 8
 			goods_input_iron_add = 20
 			goods_input_tools_add = 4
-			goods_input_merchant_marine_add = 0.50
+			goods_input_transportation_add = 1
 		}
 
 		level_scaled = {
@@ -166,7 +166,7 @@ pm_te_direct_construction_steel_frame = {
 			goods_input_glass_add = 16
 			goods_input_explosives_add = 4
 			goods_input_tools_add = 8
-			goods_input_merchant_marine_add = 10
+			goods_input_transportation_add = 16.5
 		}
 
 		level_scaled = {
@@ -209,7 +209,7 @@ pm_te_direct_construction_arc_welded = {
 			goods_input_explosives_add = 8
 			goods_input_tools_add = 16
 			goods_input_electricity_add = 16
-			goods_input_merchant_marine_add = 20
+			goods_input_transportation_add = 33.5
 		}
 
 		level_scaled = {
@@ -255,7 +255,7 @@ pm_te_direct_construction_reinforced_concrete = {
 			goods_input_explosives_add = 8
 			goods_input_tools_add = 16
 			goods_input_electricity_add = 16
-			goods_input_merchant_marine_add = 25
+			goods_input_transportation_add = 41.5
 			goods_input_engines_add = 2
 		}
 
@@ -303,7 +303,7 @@ pm_te_direct_construction_advanced = {
 			goods_input_explosives_add = 8
 			goods_input_tools_add = 16
 			goods_input_electricity_add = 20
-			goods_input_merchant_marine_add = 25
+			goods_input_transportation_add = 41.5
 			goods_input_engines_add = 4
 			goods_input_digital_assets_add = 20
 		}
@@ -347,7 +347,7 @@ pm_te_direct_construction_nanomaterial = {
 			goods_input_explosives_add = 8
 			goods_input_tools_add = 16
 			goods_input_electricity_add = 20
-			goods_input_merchant_marine_add = 25
+			goods_input_transportation_add = 41.5
 			goods_input_engines_add = 4
 			goods_input_digital_assets_add = 20
 			goods_input_advanced_materials_add = 1

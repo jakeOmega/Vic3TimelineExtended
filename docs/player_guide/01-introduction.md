@@ -181,7 +181,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | Chapter | Covers |
 |---|---|
 | [The extended timeline](02-timeline.md) | The seven new eras, their technologies, new goods and buildings, company buildings, wonders and megaprojects. |
-| [Economy and construction](03-economy.md) | The construction market, construction costs, living-standard expectations, Bulk Transportation, the Strategic Reserve and wartime demand for munitions. |
+| [Economy and construction](03-economy.md) | The construction market, construction costs, living-standard expectations, transport goods, the Strategic Reserve and wartime demand for munitions. |
 | [Banking and monetary policy](04-banking.md) | The banking cycle, crashes and contagion, the policy rate, inflation, exchange rates and international monetary arrangements. |
 | [Taxation (experimental)](05-tax-code.md) | The Legislated Tax Code rule: the Light Tax Code's rates within your taxation law; drafting tax bills, winning interest groups over, promises, passed bills and legislated customs. |
 | [Government, laws and characters](06-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
