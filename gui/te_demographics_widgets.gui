@@ -28,9 +28,10 @@
 ###   te_demog_sec_states       open: the ten largest states, a row each that opens the state, and Show All for the 40
 ###   te_demog_sec_how          collapsed: How Demographics Works
 ### The state's, from the same building blocks with the state's own figures (State.MakeScope.Var(...), never the
-### player's): te_state_demog_overview, _causes, _pyramid (with the urban share), _work, _longevity, _wealth and _how.
+### player's): te_state_demog_overview, _causes, _pyramid (with the urban share), _work, _longevity, _wealth, _modifiers and _how.
 ### The state's Wealth shows its target's seven terms: three its own, the law, tax, economic and r > g ones its
-### owner's (State.GetOwner.MakeScope).
+### owner's (State.GetOwner.MakeScope). Its Modifiers lists the nine standing modifiers the census gives it, which the
+### state panel's modifier rows leave out (the country has none to list).
 ### A state has no outline, no history and no Family Policy.
 ###
 ### TYPE SIZES (rule 3; the owner's pass of 2026-10-17 on Banking): rows, values, buttons, column heads and notes in
@@ -6684,6 +6685,84 @@ types te_demographics_widgets
 		}
 	}
 
+	### The state's Modifiers: the nine standing modifiers the census gives it
+	### (Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis,
+	### Dispersed Towns, Primate City and Provincial Neglect), one row each: its icon,
+	### its name, and its own tooltip (effects at the strength the state has now).
+	### The state's modifier rows leave all nine out, as they do the Wealth
+	### Concentration tile's six, because they are semi-permanent: the yearly
+	### pulses recompute them (owner, 2026-10-21).
+	### Open by default (rule 1: it is what the state has now); until a state has
+	### one, one line says so. Like the tile, the rows pick the nine out by name
+	### (GetName against Localize of the modifier's key: a timed modifier has no
+	### GetKey, gotcha #40) in a container that ignores invisible items;
+	### gui_state_demog_modifier_count (gui_chart_script_values.txt) is the "none"
+	### line's gate. test_hidden_state_modifiers.py holds the nine, both rows' filters
+	### and both counts to the static modifiers.
+	type te_state_demog_modifiers = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_demog_section_header = {
+			blockoverride "left_text" {
+				text = "te_demog_sec_modifiers"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_demog_st_modifiers_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_demog_st_modifiers_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_demog_st_modifiers_closed'))]"
+			}
+		}
+
+		te_demog_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_demog_st_modifiers_closed'))]"
+
+			te_demog_text = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('gui_state_demog_modifier_count'), '(CFixedPoint)0')]"
+				text = "te_demog_st_modifiers_none"
+			}
+
+			### Names wrap rather than elide (rule 3): the longest is "Census: Inequality"
+			### beside its icon, well inside the 480 column, but a translation may not be.
+			flowcontainer = {
+				datamodel = "[State.GetTimedModifiers]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				item = {
+					flowcontainer = {
+						visible = "[Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_fewer_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_inequality')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_more_men')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_census_youth_bulge')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_lx_gap_labor')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_dispersed')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_metropolis')), Or(EqualTo_string(TimedModifier.GetName, Localize('te_demog_primate_city')), EqualTo_string(TimedModifier.GetName, Localize('te_demog_provincial_neglect'))))))))))]"
+						spacing = 8
+						tooltip = "[TimedModifier.GetTooltip]"
+
+						icon = {
+							texture = "[TimedModifier.GetIcon]"
+							size = { 24 24 }
+							parentanchor = vcenter
+						}
+						textbox = {
+							text = "[TimedModifier.GetName]"
+							autoresize = yes
+							multiline = yes
+							maximumsize = { 440 -1 }
+							align = left|nobaseline
+							parentanchor = vcenter
+							using = te_demog_fontsize_row
+							default_format = "#tooltippable"
+						}
+					}
+				}
+			}
+		}
+	}
+
 	### How Demographics Works on the state panel: the country tab's topics that
 	### apply to one state (the outline and the national urban pattern do not),
 	### from the same loc, collapsed by default (its own flag, te_demog_st_how_open).
@@ -6765,6 +6844,14 @@ types te_demographics_widgets
 			}
 			te_demog_note = {
 				text = "te_demog_how_wc"
+			}
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_how_sub_modifiers"
+				}
+			}
+			te_demog_note = {
+				text = "te_demog_how_modifiers"
 			}
 			te_demog_subheader = {
 				blockoverride "subheader_text" {

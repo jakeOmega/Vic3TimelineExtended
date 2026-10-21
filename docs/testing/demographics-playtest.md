@@ -1167,3 +1167,33 @@ the note's scripted GUI reads the owner's law as the panel's other state-scope G
 5. **The health bill's six technologies (Full).** A late-game country with Genetic Engineering, Molecular Assemblers or
    Biological Immortality: the Health Need row's hover gives "treating chronic illness" 5% higher for each (up to +30%
    with all six), and the Ministry of Health's institution cost moves by as much.
+
+## The state's Modifiers section (2026-10-21)
+
+The owner's request: the standing modifiers the census gives a state move out of the state panel's modifier rows and into
+a Modifiers section on the state's Demographics subtab, as the Wealth Concentration six moved to their tile. Nine of
+them: Census: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City
+and Provincial Neglect. `docs/systems/mod_systems.md`, item 6 of its opening list. `test_hidden_state_modifiers.py`
+and `test_demographics_layout.py` pin the script and the markup. No new engine fact, so no self-check; what only the
+game shows is below.
+
+1. **The section (Full).** Open a state's Demographics subtab: Modifiers follows Wealth and comes before How Demographics
+   Works, open by default. A state with none reads "The census has put no modifiers on this state." A rich industrial
+   state (Gini above 0.45) lists Census: Inequality with its icon; the country's largest city lists Primate City and the
+   other states Provincial Neglect (a country of three states or more, a primate share above 25%); a state whose largest
+   city holds more than 40% of its urban people lists Metropolis, and one below 20% lists Dispersed Towns. Hover a row:
+   the tooltip is the modifier's own, with its effects at the strength the state has now.
+2. **Gone from the rows (Full).** The same state's modifier row over its picture, and the condensed view's box, show none
+   of the nine. Tourism and pollution still hide as before. Check the condensed view with a state that has Inequality and
+   no modifier the rows show: the box must fade out, not leave an empty frame; with one the rows do show, the box stays. Each
+   row's name filter is now a 65-deep `Or` chain (it was 56); if a row shows every modifier again, or `debug.log`
+   logs a GUI parse error for `states_panel.gui`, the depth is the first suspect.
+3. **What stays in the rows.** Plan a New Capital (Full): the new capital's Planned Capital modifier is in the state's
+   modifier row with its time left, and not in the Modifiers section. An event wave's option modifier (The Demographic
+   Dividend) is in the rows too.
+4. **Rows and counts agree.** Add or remove one (let a state's Gini cross 0.45, or its young adults fall below 18% of
+   its people): at the next yearly count the row appears in or goes from the Modifiers section, and "none" shows when
+   the last goes. `debug.log` has no `FetchData failed` from `TimedModifier` or `gui_state_demog_modifier_count`.
+5. **The one edge.** Under Full with Inequality showing on a state, switch the rule to Disabled in game: the subtab goes,
+   and the modifier stays on the state, hidden from the rows, until its next yearly pulse takes it off (the effect still
+   applies for up to a year). Display only keeps the subtab, so there the section just reads "none" after the pulse.

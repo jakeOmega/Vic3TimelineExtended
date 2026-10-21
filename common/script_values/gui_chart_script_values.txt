@@ -115,7 +115,9 @@ te_tp_imports_from_current = {
 # icon (gfx/interface/icons/timed_modifier_icons/modifier_system.dds) and every
 # modifier a card of the state panel already shows (the Grand Monument card's
 # gm_local_*, the Wealth Concentration tile's six inh_ modifiers, counted again
-# below for the tile's gate), and fades the condensed view's box when the state carries no
+# below for the tile's gate, and the nine census modifiers the Demographics subtab's
+# Modifiers section lists, counted again for its "none" line), and fades the condensed
+# view's box when the state carries no
 # other: when its modifier count is not above this. A GUI can't count the
 # modifiers it hides, so the box needs them named here: one term per hidden
 # static modifier. test_hidden_state_modifiers.py fails when one has no term.
@@ -348,6 +350,42 @@ gui_state_hidden_modifier_count = {
 		limit = { has_modifier = inh_undivided_farm_rural }
 		add = 1
 	}
+	if = {
+		limit = { has_modifier = te_demog_census_inequality }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_youth_bulge }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_fewer_men }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_more_men }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_lx_gap_labor }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_mt_metropolis }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_mt_dispersed }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_primate_city }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_provincial_neglect }
+		add = 1
+	}
 }
 
 # How many of the six state modifiers wealth concentration and the inheritance
@@ -382,6 +420,53 @@ gui_state_wealth_modifier_count = {
 	}
 	if = {
 		limit = { has_modifier = inh_undivided_farm_rural }
+		add = 1
+	}
+}
+
+# How many of the nine state modifiers the Demographics census gives the state it carries (Inequality, Youth Bulge,
+# Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect: standing
+# conditions the yearly pulses recompute, Full only). The state Demographics subtab's Modifiers section
+# (te_state_demog_modifiers) lists them by name and reads "none" at 0; both modifier rows leave them out, as they do the
+# wealth six. The timed ones the census does not recompute (Planned Capital, the event wave's options) stay in the
+# rows, with their time left. test_hidden_state_modifiers.py holds this to its SHOWN_ON_THE_DEMOGRAPHICS_TAB_NAMES.
+# Used by: State.MakeScope.ScriptValue('gui_state_demog_modifier_count')
+gui_state_demog_modifier_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_demog_census_inequality }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_youth_bulge }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_fewer_men }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_census_more_men }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_lx_gap_labor }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_mt_metropolis }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_mt_dispersed }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_primate_city }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_demog_provincial_neglect }
 		add = 1
 	}
 }

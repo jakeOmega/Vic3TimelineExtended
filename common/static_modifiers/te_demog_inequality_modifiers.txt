@@ -4,8 +4,9 @@
 # (owner, 2026-10-20: "Doesn't seem unreasonable to have people be mad at inequality"), +27.5% at 1. Relative
 # deprivation: where incomes spread wide, the poor compare themselves with the rich. The engine has no radicals type
 # for the lower strata alone (state_lower_strata_expected_sol_add moves a standard-of-living expectation, an integer),
-# so it takes the state-wide one Concentrated Property and the youth bulge carry. It shows in the state's modifier
-# list: an effect the player plans around.
+# so it takes the state-wide one Concentrated Property and the youth bulge carry. It is an effect the player plans
+# around, listed in the Demographics subtab's Modifiers section (te_state_demog_modifiers) and left out of the state's
+# modifier rows by name (owner, 2026-10-21; test_hidden_state_modifiers.py).
 te_demog_census_inequality = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
 	state_radicals_from_political_movements_mult = 0.1

@@ -7,7 +7,10 @@ mod's blank icon, modifier_system.dds. Others are shown by a card of their own
 in the state panel and keep their icon: a Grand Monument's tourism and local
 effect (gm_local_*), which its card lists, and the six modifiers wealth
 concentration and the inheritance law give a state, which the Wealth
-Concentration tile lists. Both kinds are hidden from the rows.
+Concentration tile lists, and the nine standing modifiers the Demographics
+census gives it (Inequality, Primate City, Metropolis ...), which the
+Demographics subtab's Modifiers section lists. All three kinds are hidden from
+the rows.
 A GUI can't read a timed modifier's key
 (`TimedModifier` has no GetKey), and its icon can't be compared:
 `EqualTo_string(TimedModifier.GetIcon, ...)` fails at runtime with "FetchData
@@ -63,6 +66,22 @@ SHOWN_ON_A_CARD_NAMES = (
     "inh_forced_heirship_rural", "inh_primogeniture_rural", "inh_undivided_farm_rural",
 )
 WEALTH_COUNT = "gui_state_wealth_modifier_count"
+
+# State modifiers the Demographics subtab's Modifiers section lists by name
+# (te_state_demog_modifiers, gui/te_demographics_widgets.gui; owner, 2026-10-21):
+# the standing conditions the census's yearly pulses recompute, under Full only.
+# The timed ones a choice grants stay in the rows with their time left: the
+# Planned Capital decision (te_demog_pc_new_capital) and the event wave's options
+# (te_demog_wave_*). The subtab is there whenever the modifiers are (Full runs
+# the census), except for the pulse after the rule leaves Full, which takes them
+# off: gui_state_demog_modifier_count gates the section's "none" line.
+SHOWN_ON_THE_DEMOGRAPHICS_TAB_NAMES = (
+    "te_demog_census_fewer_men", "te_demog_census_inequality", "te_demog_census_more_men",
+    "te_demog_census_youth_bulge", "te_demog_lx_gap_labor", "te_demog_mt_dispersed",
+    "te_demog_mt_metropolis", "te_demog_primate_city", "te_demog_provincial_neglect",
+)
+DEMOG_COUNT = "gui_state_demog_modifier_count"
+DEMOG_SECTION = "te_state_demog_modifiers"
 
 DATAMODEL = 'datamodel = "[State.GetTimedModifiers]"'
 
@@ -187,7 +206,8 @@ def _hidden_modifiers():
     ones a card already shows."""
     return {name for name, icons in _static_modifiers().items()
             if any(icon in HIDDEN_ICONS for icon in icons)
-            or name.startswith(SHOWN_ON_A_CARD_PREFIXES) or name in SHOWN_ON_A_CARD_NAMES}
+            or name.startswith(SHOWN_ON_A_CARD_PREFIXES) or name in SHOWN_ON_A_CARD_NAMES
+            or name in SHOWN_ON_THE_DEMOGRAPHICS_TAB_NAMES}
 
 
 def _count_terms(count=COUNT):
@@ -224,23 +244,52 @@ class HiddenStateModifierTest(unittest.TestCase):
                 self.assertTrue([name for name in hidden if name.startswith(prefix)])
         self.assertIn("gm_local_tourism", hidden)
         statics = _static_modifiers()
-        for name in SHOWN_ON_A_CARD_NAMES:
+        for name in SHOWN_ON_A_CARD_NAMES + SHOWN_ON_THE_DEMOGRAPHICS_TAB_NAMES:
             self.assertIn(name, statics)
             self.assertIn(name, hidden)
 
+    def test_the_demographics_tab_keeps_the_choice_granted_timed_modifiers_out(self):
+        # A modifier a decision or an event option grants has an end date: the rows
+        # keep it so its time left shows. The Modifiers section lists only the
+        # standing conditions the census recomputes.
+        statics = _static_modifiers()
+        for name in ("te_demog_pc_new_capital", "te_demog_wave_baby_boom", "te_demog_wave_dividend_schools"):
+            self.assertIn(name, statics)
+            self.assertNotIn(name, _hidden_modifiers(), name)
+
     def test_card_lists_pick_out_only_card_modifiers(self):
-        # te_state_wealth_tile lists the six by name, and takes no space for the rest
-        self.assertEqual(len(self.cards), 1, [s["where"] for s in self.cards])
+        # te_state_wealth_tile lists the six by name and te_state_demog_modifiers
+        # the nine, each taking no space for the rest
+        expected = {
+            "gui/te_state_panel_widgets.gui": set(SHOWN_ON_A_CARD_NAMES),
+            "gui/te_demographics_widgets.gui": set(SHOWN_ON_THE_DEMOGRAPHICS_TAB_NAMES),
+        }
+        self.assertEqual(sorted(s["where"].split(":")[0] for s in self.cards), sorted(expected),
+                         [s["where"] for s in self.cards])
         for site in self.cards:
             with self.subTest(site=site["where"]):
-                self.assertTrue(site["where"].startswith("gui/te_state_panel_widgets.gui:"))
                 visible = re.findall(r'visible\s*=\s*"([^"]*)"', site["item"])
                 self.assertEqual(len(visible), 1)
                 self.assertTrue(visible[0].startswith("[Or("))
                 named = set(re.findall(r"EqualTo_string\(TimedModifier\.GetName, Localize\('(\w+)'\)\)", visible[0]))
-                self.assertEqual(named, set(SHOWN_ON_A_CARD_NAMES))
+                self.assertEqual(named, expected[site["where"].split(":")[0]])
+                self.assertEqual(visible[0].count("("), visible[0].count(")"), "the Or chain's parentheses balance")
                 self.assertEqual(site["container"], "flowcontainer")
                 self.assertRegex(site["own"], r"\bignoreinvisible\s*=\s*yes\b")
+
+    def test_the_demographics_section_counts_exactly_the_nine(self):
+        # Its "none" line reads gui_state_demog_modifier_count, which names the nine
+        # and no others, one each.
+        terms = _count_terms(DEMOG_COUNT)
+        self.assertEqual(set(terms), set(SHOWN_ON_THE_DEMOGRAPHICS_TAB_NAMES))
+        self.assertEqual(set(terms.values()), {"1"})
+        with open(os.path.join(GUI, "te_demographics_widgets.gui"), encoding="utf-8-sig") as f:
+            widgets = _strip_comments(f.read())
+        m = re.search(rf"type {DEMOG_SECTION} = \w+ \{{", widgets)
+        self.assertTrue(m, f"no type {DEMOG_SECTION}")
+        _, start, end = _block_around(widgets, m.end() - 1)
+        body = widgets[start:end]
+        self.assertIn(f"EqualTo_CFixedPoint(State.MakeScope.ScriptValue('{DEMOG_COUNT}'), '(CFixedPoint)0')", body)
 
     def test_the_wealth_tile_shows_whenever_a_card_modifier_is_there(self):
         # Hidden from the rows, so the tile must show whenever the state has one,

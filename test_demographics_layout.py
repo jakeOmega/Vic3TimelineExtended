@@ -33,9 +33,11 @@ ICONS_DOC = os.path.join(REPO, "docs", "systems", "demographics_gui_icons.md")
 COUNTRY = ["te_demog_overview", "te_demog_sec_causes", "te_demog_sec_pyramid", "te_demog_sec_work",
            "te_demog_sec_longevity", "te_demog_sec_family", "te_demog_sec_history", "te_demog_sec_wealth",
            "te_demog_sec_places", "te_demog_sec_states"]
-# The state's, the same order less the sections a state has no figures for.
+# The state's, the same order less the sections a state has no figures for, and its own Modifiers after Wealth (the
+# nine standing census modifiers its modifier rows leave out; the country has none).
 STATE = ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid", "te_state_demog_work",
-         "te_state_demog_longevity", "te_state_demog_wealth"]
+         "te_state_demog_longevity", "te_state_demog_wealth", "te_state_demog_modifiers"]
+STATE_ONLY = ["te_state_demog_modifiers"]
 HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
 
 # The pie's slices, clockwise from 12 o'clock (te_dg_dc_lead's codes 1-8): the loc and variable name, the texture.
@@ -135,7 +137,8 @@ class OrderTest(unittest.TestCase):
         listed, outer = self.sections("te_state_demog_content")
         self.assertEqual(listed, STATE)
         self.assertEqual(outer[-1], HOW["te_state_demog_content"])
-        as_country = [s.replace("te_state_demog_", "te_demog_sec_").replace("sec_overview", "overview") for s in STATE]
+        as_country = [s.replace("te_state_demog_", "te_demog_sec_").replace("sec_overview", "overview")
+                      for s in STATE if s not in STATE_ONLY]
         self.assertEqual(as_country, [s for s in COUNTRY if s in as_country], "the state keeps the country's order")
 
     def test_the_layout_file_holds_only_the_two_composers(self):

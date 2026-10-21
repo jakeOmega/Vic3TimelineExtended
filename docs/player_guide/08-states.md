@@ -372,8 +372,14 @@ them, and some break the figure down for your capital.
 | How Demographics Works | A collapsed section that explains the method. |
 
 The subtab shows one state's overview, causes of death, pyramid, work and
-retirement (without the buttons), longevity and wealth, in the tab's order, for
-any state you open, and says when the state is next counted. The first count of a state comes from the age structure its own birth and
+retirement (without the buttons), longevity, wealth and modifiers, in the tab's
+order, for any state you open, and says when the state is next counted. Its
+Modifiers section lists the standing modifiers the census gives the state, each
+with its tooltip: Census: Inequality, Youth Bulge, Fewer Men and More Men, the
+Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect.
+The state's own modifier list leaves them out, because the yearly count works
+each one out again; the Planned Capital, and the modifiers your choices in a
+demographic event give, stay in the list with their time left. The first count of a state comes from the age structure its own birth and
 death rates would settle into, so 1836 opens with a settled population, not a
 baby boom or a gap.
 
