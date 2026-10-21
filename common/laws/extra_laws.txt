@@ -493,10 +493,13 @@ law_strong_privacy_rights = {
 
 # =================================================================
 #  INHERITANCE — who inherits
-#  Six laws answer one question: who inherits an estate. The group's
-#  systemic effects come from script rather than from these blocks: the
-#  wealth-concentration score (te_inh_concentration), rural-scaled birth and
-#  migration effects, generation events and four amendments. See
+#  Six laws answer one question: who inherits an estate. Each law's
+#  country_wealth_concentration_inheritance_add line moves the wealth-
+#  concentration target from Customary Inheritance's 50 (2026-10-21, so the
+#  tooltip says it; te_inh_law_amendment_target reads it). The rest of the
+#  group's systemic effects come from script rather than from these blocks:
+#  the score (te_inh_concentration), rural-scaled birth and migration
+#  effects, generation events and four amendments. See
 #  te_inheritance_effects.txt and docs/systems/mod_systems.md § Inheritance.
 #  Keys stay where a law keeps its meaning, so saves keep their laws; only
 #  the display names changed. The two new laws come after the old four in
@@ -542,6 +545,7 @@ law_primogeniture = {
 		state_tax_capacity_mult = -0.1
 		state_bureaucracy_population_base_cost_factor_mult = -0.1
 		state_late_marriage_farms_add = 0.15	# the census's Late Marriage: the heirs who don't inherit marry late (late-marriage spec call 6)
+		country_wealth_concentration_inheritance_add = 30	# Wealth Concentration's inheritance term: the law's target 80
 	}
 }
 
@@ -606,6 +610,7 @@ law_equal_inheritance = {
 		interest_group_ig_rural_folk_pol_str_mult = 0.1
 		state_tax_capacity_mult = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
+		country_wealth_concentration_inheritance_add = -25	# Wealth Concentration's inheritance term: the law's target 25
 	}
 }
 
@@ -653,6 +658,7 @@ law_non_inheritable_usage_rights = {
 		state_officers_investment_pool_efficiency_mult = -0.1
 		state_bureaucrats_investment_pool_efficiency_mult = -0.1
 		state_clerks_investment_pool_efficiency_mult = -0.1
+		country_wealth_concentration_inheritance_add = -50	# Wealth Concentration's inheritance term: the law's target 0
 	}
 }
 
@@ -683,6 +689,7 @@ law_free_testation = {
 		state_capitalists_investment_pool_efficiency_mult = 0.1
 		# Wills are contested in court.
 		country_bureaucracy_investment_cost_factor_mult = 0.05
+		country_wealth_concentration_inheritance_add = 10	# Wealth Concentration's inheritance term: the law's target 60
 	}
 }
 
@@ -730,6 +737,7 @@ law_state_universal_heir = {
 		state_officers_investment_pool_efficiency_mult = -0.1
 		state_bureaucrats_investment_pool_efficiency_mult = -0.1
 		state_clerks_investment_pool_efficiency_mult = -0.1
+		country_wealth_concentration_inheritance_add = -50	# Wealth Concentration's inheritance term: the law's target 0
 	}
 }
 

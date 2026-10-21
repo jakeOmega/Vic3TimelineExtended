@@ -1237,3 +1237,23 @@ engine fact; the line is flat and national, so it counts the law in force and no
 4. **Closing the trade and abolition.** A country that moves from Slave Trade to Legacy Slavery gains 5 on every state's
    target at once (the "heading for" figure), and one that then moves to Slavery Banned loses 10; the scores follow by 3% of
    the gap a year.
+
+## The inheritance laws' Wealth Concentration line (2026-10-21)
+
+The inheritance law and its amendments now carry their part of the target as a line,
+`country_wealth_concentration_inheritance_add`, where #822 read them with `has_law` and `has_amendment`; until now only
+each law's on-enact text named its figure (`docs/systems/mod_systems.md` § Inheritance). The values are the old targets less 50, so no figure moves. A
+script-only country type on an amendment read with `modifier:` is vanilla's own pattern (Reinstated Fueros'
+`country_two_spains_conservative_drift_add`, Tradition of Free Elections' `country_forbid_electoral_fraud_bool`), so no
+engine fact is new.
+
+1. **The tooltips.** Primogeniture & Entail shows "Wealth Concentration: Inheritance Law +30", Freedom of Testation +10,
+   Forced Heirship −25, State as Universal Heir and Possession by Use −50; Customary Inheritance shows nothing. The
+   amendments show it too: Estate Duties −30, the Birthright Endowment −20, Perpetual Dynastic Trusts +30, Undivided Farm
+   Succession +10. The type's hover gives its description, the laws' on-enact texts no longer name a number, and
+   `debug.log` holds no `Unknown modifier type` for it.
+2. **No figure moves (any rule).** The Inheritance group's "heading for" figure and the Demographics tab's Inheritance Law
+   bar read as before: a Primogeniture country +30, with Estate Duties 0; a Forced Heirship country with Estate Duties
+   −50, not −55 (the term is held to 50 either way). Take Estate Duties through its petition (`event amendment_petition_events.17` on a Primogeniture country with
+   Political Agitation): the bar and the "heading for" figure fall by 30 within a day.
+3. **`debug.log`:** no error from `te_inh_law_amendment_target`.

@@ -318,14 +318,14 @@ The Inheritance group decides who inherits an estate. Interest groups judge
 the inheritance law in force for as long as it stands, so a group that dislikes
 yours loses approval the whole time.
 
-| Law | Available | Law's Wealth Concentration target | Also |
+| Law | Available | Wealth Concentration target | Also |
 |---|---|---|---|
-| Primogeniture & Entail | From the start | 80 | In farming states, birth rate (outside the Demographics rule's Full setting) and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
-| Customary Inheritance | From the start | 50 | Tax capacity −5%; local administration costs 5% less bureaucracy |
-| Forced Heirship | Egalitarianism | 25 | In farming states, birth rate and migration down; tax capacity +10%, Rural Folk +10% political strength |
-| Freedom of Testation | From the start | 60 | Capitalists invest 10% more |
-| State as Universal Heir | Command Economy | 0 | +200 authority, Bureaucrats +10% political strength; the upper and middle strata invest less |
-| Possession by Use | Cooperative Ownership | 0 | Rural Folk and Trade Unions +10% political strength; the upper and middle strata invest less |
+| Primogeniture & Entail | From the start | +30 | In farming states, birth rate (outside the Demographics rule's Full setting) and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
+| Customary Inheritance | From the start | 0 | Tax capacity −5%; local administration costs 5% less bureaucracy |
+| Forced Heirship | Egalitarianism | −25 | In farming states, birth rate and migration down; tax capacity +10%, Rural Folk +10% political strength |
+| Freedom of Testation | From the start | +10 | Capitalists invest 10% more |
+| State as Universal Heir | Command Economy | −50 | +200 authority, Bureaucrats +10% political strength; the upper and middle strata invest less |
+| Possession by Use | Cooperative Ownership | −50 | Rural Folk and Trade Unions +10% political strength; the upper and middle strata invest less |
 
 France starts with Forced Heirship, Britain and Japan with Primogeniture &
 Entail, the United States with Freedom of Testation and every other country
@@ -337,8 +337,9 @@ Customary Inheritance; Possession by Use falls the same way.
 **Wealth Concentration** measures, from 0 to 100, how much of your wealth sits
 in great family fortunes. Each state keeps its own score, which moves 3% of the
 way to its own target each year, and your country's figure is the states'
-average, weighted by where property is held. The law and its amendments set where
-a state's target starts. Land tenure, who owns the state's capital, how unequal
+average, weighted by where property is held. A state's target starts at 50, and
+the law (the table above) and its amendments move it, together at most 50 either
+way. Land tenure, who owns the state's capital, how unequal
 incomes are, taxes on wealth, your economic laws, whether health care,
 schooling and ideas are provided or sold, and your slavery law move it from there.
 Laissez-Faire (+10), Extraction Economy (+5), Freedom of Contract and Guilds and
@@ -348,9 +349,9 @@ Schools, Terakoya and Traditional IP Protection (+5 each) and Strict IP
 Protection (+10) raise it; Public Health Insurance and Public Schools (−5 each)
 lower it. Colonial Slavery, Legacy Slavery and Debt Slavery (+10 each) and
 Slave Trade (+5) raise it too, whatever the number of slaves; an open trade keeps
-slaves cheap and ownership wide. Each land, tax,
+slaves cheap and ownership wide. Each inheritance, land, tax,
 economic, health, school, IP and slavery law that moves it lists its part among
-its modifiers. Once your banking cycle has
+its modifiers, and so does each inheritance amendment. Once your banking cycle has
 started, the return on capital against growth moves it too: twice the gap
 between your policy rate less inflation and your economy's growth over about
 five years, at most 5 either way. War losses, a lost war that

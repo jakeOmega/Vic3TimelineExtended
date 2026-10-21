@@ -1641,9 +1641,10 @@ amendment_collective_algorithmic_commons = {
 #  No inheritance law stands for taxing estates, so each amendment takes
 #  its interest-group stances from the law elsewhere whose supporters
 #  backed it in history (vanilla does this for 18 of its 67). Most work
-#  through the wealth-concentration score: its target reads them
-#  (te_inh_concentration_target, te_inheritance_values.txt), so their
-#  _desc loc is where that effect is told. Ways in: the debate events
+#  through the wealth-concentration score: each carries a
+#  country_wealth_concentration_inheritance_add line, which the target reads
+#  (te_inh_law_amendment_target, te_inheritance_values.txt), so the
+#  amendment's tooltip lists it beside its _desc. Ways in: the debate events
 #  inheritance_events.10-.13 and the petitions amendment_petition_events
 #  .17-.20. A law's amendments leave with it; the debate events offer to
 #  carry one over to the incoming law.
@@ -1664,6 +1665,10 @@ amendment_estate_duties = {
 		law_partible
 		law_equal_inheritance
 		law_free_testation
+	}
+
+	modifier = {
+		country_wealth_concentration_inheritance_add = -30	# Wealth Concentration's inheritance term
 	}
 
 	possible = {
@@ -1720,6 +1725,7 @@ amendment_perpetual_trusts = {
 
 	modifier = {
 		state_capitalists_investment_pool_efficiency_mult = 0.1
+		country_wealth_concentration_inheritance_add = 30	# Wealth Concentration's inheritance term
 	}
 
 	possible = {
@@ -1784,6 +1790,7 @@ amendment_birthright_endowment = {
 		state_laborers_investment_pool_efficiency_mult = 0.1
 		state_farmers_investment_pool_efficiency_mult = 0.1
 		state_shopkeepers_investment_pool_efficiency_mult = 0.1
+		country_wealth_concentration_inheritance_add = -20	# Wealth Concentration's inheritance term
 	}
 
 	# Deliberately silent on Estate Duties: the swap
@@ -1841,6 +1848,7 @@ amendment_undivided_farm_succession = {
 
 	modifier = {
 		state_late_marriage_farms_add = 0.15	# the census's Late Marriage, as Primogeniture's: one heir takes the farm (late-marriage spec call 6)
+		country_wealth_concentration_inheritance_add = 10	# Wealth Concentration's inheritance term
 	}
 
 	possible = {

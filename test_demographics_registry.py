@@ -4871,7 +4871,7 @@ class TestWealth(unittest.TestCase):
         self.assertIn("value = te_inh_law_amendment_target", body)
         self.assertIn("value = var:te_dg_wc_target", body)
         laws = _block(text, "te_inh_law_amendment_target")
-        self.assertIn("amendment_perpetual_trusts", laws)
+        self.assertIn("add = modifier:country_wealth_concentration_inheritance_add", laws)
         self.assertNotIn("te_inh_title_continuity", laws, "the pin is the states' and the display's, not the law's")
 
     def test_the_shown_target_follows_a_law_change_at_once(self):
@@ -5404,11 +5404,12 @@ class TestInheritanceBalance(unittest.TestCase):
     ownership term, the amendments, the laws and The Great Estates for Sale."""
 
     @staticmethod
-    def _wc_lines(laws):
-        """The Wealth Concentration lines `laws` carry in the game files (on the laws since 2026-10-17), as the
-        modifier: reads the interpreter takes."""
+    def _wc_lines(laws, amendments=()):
+        """The Wealth Concentration lines `laws` and `amendments` carry in the game files (on the laws since
+        2026-10-17, the inheritance amendments since 2026-10-21), as the modifier: reads the interpreter takes."""
         lines = DM.load_carriers(types=P.WC_LAW_TYPES)
-        return {f"modifier:{t}": v for t, v in DM.totals(lines, laws=laws, types=P.WC_LAW_TYPES).items()}
+        totals = DM.totals(lines, laws=laws, amendments=amendments, types=P.WC_LAW_TYPES)
+        return {f"modifier:{t}": v for t, v in totals.items()}
 
     def test_the_economic_laws_term(self):
         cases = (
@@ -5524,11 +5525,33 @@ class TestInheritanceBalance(unittest.TestCase):
         body = _block(_text(VALUES), "te_demog_wc_ownership_term")
         self.assertIn("subtract = 0.65", body)
 
-    def test_the_amendments_move_the_law_target(self):
+    def test_the_law_and_amendments_move_the_law_target(self):
+        """#822's targets, read from the lines the inheritance laws and amendments carry since 2026-10-21 (has_law and
+        has_amendment lookups until then), so the law's and the amendment's tooltips say what they do. The same
+        figures as before: 50 plus the lines, held to 0-100."""
+        cases = (
+            ((), (), 50),                                                            # no inheritance law
+            (("law_partible",), (), 50),
+            (("law_primogeniture",), (), 80),
+            (("law_free_testation",), (), 60),
+            (("law_equal_inheritance",), (), 25),
+            (("law_state_universal_heir",), (), 0),
+            (("law_non_inheritable_usage_rights",), (), 0),
+            (("law_primogeniture",), ("amendment_estate_duties",), 50),
+            (("law_primogeniture",), ("amendment_birthright_endowment",), 60),
+            (("law_free_testation",), ("amendment_perpetual_trusts",), 90),
+            (("law_free_testation",), ("amendment_perpetual_trusts", "amendment_estate_duties"), 60),
+            (("law_partible",), ("amendment_undivided_farm_succession",), 60),
+            (("law_equal_inheritance",), ("amendment_undivided_farm_succession",), 35),
+            (("law_equal_inheritance",), ("amendment_estate_duties",), 0),           # -5, held at 0
+            (("law_equal_inheritance",), ("amendment_estate_duties", "amendment_undivided_farm_succession"), 5),
+        )
+        for laws, amendments, want in cases:
+            eng = _LawEngine(laws, fixtures=self._wc_lines(laws, amendments))
+            self.assertEqual(eng.value(eng._tree(eng.values, "te_inh_law_amendment_target")), want, (laws, amendments))
         body = _block(_text(INH_VALUES), "te_inh_law_amendment_target")
-        shifts = dict(re.findall(r"amendment_type:(amendment_\w+)\s*\}\s*\}\s*add = (-?\d+)", body))
-        self.assertEqual(shifts, {"amendment_estate_duties": "-30", "amendment_birthright_endowment": "-20",
-                                  "amendment_perpetual_trusts": "30", "amendment_undivided_farm_succession": "10"})
+        for lookup in ("has_law", "has_amendment"):
+            self.assertNotIn(lookup, body)
         endowment = _raw_blocks([ROOT / "common" / "amendments" / "extra_amendments.txt"])["amendment_birthright_endowment"]
         self.assertIn("country_bureaucracy_investment_cost_factor_mult = 0.05", endowment, "the stakes' cost")
 
