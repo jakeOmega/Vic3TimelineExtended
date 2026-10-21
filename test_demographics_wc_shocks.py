@@ -27,7 +27,8 @@ INFLATION_EVENTS = ROOT / "events" / "te_inflation_events.txt"
 EVENTS_LOC = ROOT / "localization" / "english" / "te_events_l_english.yml"
 CONCEPTS_LOC = ROOT / "localization" / "english" / "te_concepts_l_english.yml"
 TARGET_FIXTURES = {"te_inh_law_amendment_target": 75.0, "te_demog_wc_land_term": 4.0,
-                   "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0}
+                   "te_demog_wc_tax_term": -5.0, "te_demog_wc_econ_term": 5.0, "te_demog_wc_public_term": 0.0,
+                   "te_demog_wc_slavery_term": 0.0}
 
 
 def _scored(wc):
@@ -536,24 +537,26 @@ class TestReturnOnCapital(unittest.TestCase):
                       7.21e11, truncate=True)
         self.assertAlmostEqual(v["te_dg_wc_g"], 2.0 + 0.2 * (_lp(1.03) - 2.0), places=4)
 
-    def test_the_target_takes_the_seventh_term(self):
+    def test_the_target_takes_the_r_g_term(self):
         state = {"te_dg_lv_priv": 30.0, "te_dg_lv_self": 10.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.5}
         for rg, want in ((0.0, 89.0), (5.0, 94.0), (-5.0, 84.0)):
             eng = _CountryEngine(states=[state], fixtures={"te_inh_law_amendment_target": 80.0,
                                                            "te_demog_wc_land_term": 6.0, "te_demog_wc_tax_term": -5.0,
-                                                           "te_demog_wc_econ_term": 0.0})
+                                                           "te_demog_wc_econ_term": 0.0,
+                                                           "te_demog_wc_public_term": 0.0,
+                                                           "te_demog_wc_slavery_term": 0.0})
             if rg:
                 eng.vars["te_dg_wc_rg"] = rg
             self.assertAlmostEqual(eng.value_in(state, "te_demog_wc_target"), want)
 
-    def test_the_national_refresh_stores_the_bar_and_the_seven_add_up(self):
+    def test_the_national_refresh_stores_the_bar_and_the_nine_add_up(self):
         a = _scored(60.0)
         eng = _CountryEngine(states=[a], effects=APPLIED, fixtures=TARGET_FIXTURES)
         eng.vars["te_dg_wc_rg"] = 3.0
         eng.call("te_demog_wc_national")
         v = eng.vars
         self.assertEqual(v["te_dg_wc_t_rg"], 3.0)
-        bars = sum(v[f"te_dg_wc_t_{t}"] for t in ("law", "land", "own", "ineq", "tax", "econ", "rg"))
+        bars = sum(v[f"te_dg_wc_t_{t}"] for t in ("law", "land", "own", "ineq", "tax", "econ", "public", "slavery", "rg"))
         self.assertAlmostEqual(v["te_dg_wc_target"], 50 + bars)
 
     def test_hooked_before_the_yearly_refresh(self):
@@ -603,9 +606,9 @@ class TestInequality(unittest.TestCase):
         self.assertNotIn("te_dg_ineq", eng.vars)
         self.assertEqual(self.refresh(None, had=0.4).modifiers, {}, "no Gini yet: nothing")
 
-    def test_the_help_and_the_state_hover_name_seven_terms(self):
+    def test_the_help_and_the_state_hover_name_nine_terms(self):
         loc = _loc()
-        self.assertIn("50 plus seven terms", loc["te_demog_how_wc"])
+        self.assertIn("50 plus nine terms", loc["te_demog_how_wc"])
         for key in ("te_demog_how_wc", "te_demog_st_wc_tt"):
             self.assertIn("the return on capital against growth", loc[key], key)
         for shock in ("land reform", "banking frenzy", "state-owned share", "hyperinflation crisis"):

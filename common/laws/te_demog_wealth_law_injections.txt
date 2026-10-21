@@ -1,5 +1,6 @@
 ﻿# Wealth Concentration's law terms on vanilla's laws (spec §4.2; on the laws since 2026-10-17, so each law's tooltip
-# says what it does). Read by te_demog_values.txt (te_demog_wc_land_term, te_demog_wc_tax_term, te_demog_wc_econ_term);
+# says what it does). Read by te_demog_values.txt (te_demog_wc_land_term, te_demog_wc_tax_term, te_demog_wc_econ_term,
+# te_demog_wc_public_term, te_demog_wc_slavery_term);
 # the types are in demographics_wealth_concentration_types.txt. The mod's antitrust laws carry theirs in extra_laws.txt,
 # and Graduated Taxation's -5 sits in te_tax_vanilla_law_gates.txt, the one file the tax code lets INJECT the vanilla
 # taxation laws (test_tax_code_rule).
@@ -72,5 +73,70 @@ INJECT:law_extraction_economy = {
 INJECT:law_interventionism = {
 	modifier = {
 		country_wealth_concentration_economy_add = -5
+	}
+}
+
+# The public goods term (2026-10-21): whether health care and schooling are bought or provided. A fortune buys the
+# private kind and the public kind spreads it; no health system, no schools and church schools none (nothing yet
+# sold, nothing yet provided), and Charity Hospitals none. Terakoya, a variant of Private Schools, takes its
+# parent's value. The IP laws' lines (Traditional +5, Strict +10) sit in extra_laws.txt.
+INJECT:law_private_health_insurance = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = 5
+	}
+}
+
+INJECT:law_public_health_insurance = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = -5
+	}
+}
+
+INJECT:law_private_schools = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = 5
+	}
+}
+
+INJECT:law_terakoya = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = 5
+	}
+}
+
+INJECT:law_public_schools = {
+	modifier = {
+		country_wealth_concentration_public_goods_add = -5
+	}
+}
+
+# The slavery term (2026-10-21, ordered by the owner): property in people, the largest single asset a planter class held.
+# What matters is how wide the ownership is, which the supply sets. An open trade keeps slaves cheap, so artisans and
+# small farmers own a few and the stock is wide (Slave Trade +5); a closed supply turns the stock into an appreciating
+# asset that prices the small owner out (Legacy Slavery +10); debt bondage hands people to creditors (Debt Slavery +10);
+# and colonial export plantations, run for absentee owners, were the most concentrated of all (Colonial Slavery +10).
+# Slavery Banned none. A flat line, like the tax and economic terms: it is not weighted by a state's slaves, which the
+# census walk does not count.
+INJECT:law_colonial_slavery = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 10
+	}
+}
+
+INJECT:law_legacy_slavery = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 10
+	}
+}
+
+INJECT:law_debt_slavery = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 10
+	}
+}
+
+INJECT:law_slave_trade = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 5
 	}
 }

@@ -732,16 +732,16 @@ class StateWealthTermsTest(unittest.TestCase):
         return set(re.findall(r"(State(?:\.GetOwner)?)\.MakeScope\.ScriptValue\('(\w+)'\)", row))
 
     def test_one_row_for_each_of_the_targets_terms(self):
-        # the law term is the owner's law target less 50 (te_demog_wc_law_term), so the seven add up to the target less
-        # 50 (the seventh, r > g, since 2026-10-19)
+        # the law term is the owner's law target less 50 (te_demog_wc_law_term), so the nine add up to the target less
+        # 50 (r > g since 2026-10-19; public goods and slavery since 2026-10-21)
         want = {("State.GetOwner" if owner else "State",
                  "te_demog_wc_law_term" if name == "te_inh_law_amendment_target" else name)
                 for owner, name in self.addends}
-        self.assertEqual(len(want), 7)
+        self.assertEqual(len(want), 9)
         got = [self._reads(row) for row in self.rows]
         self.assertTrue(all(len(reads) == 1 for reads in got), got)
         self.assertEqual({next(iter(reads)) for reads in got}, want)
-        self.assertEqual(len(got), 7)
+        self.assertEqual(len(got), 9)
 
     def test_never_the_players_figures(self):
         for row in self.rows:

@@ -196,6 +196,15 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             "law_laissez_faire": 10.0, "law_extraction_economy": 5.0, "law_interventionism": -5.0,
             "law_guilds_chartered_monopolies": 5.0, "law_freedom_of_contract": 5.0, "law_trust_busting": -5.0,
             "law_regulated_utilities": -5.0})
+        # public goods (owner, 2026-10-21): private health care and schooling and strict IP up, public provision down;
+        # Terakoya, a variant, at its parent's value (Private Schools); the none, church and open IP laws carry nothing
+        self.assertEqual(carried[P.WC_PUBLIC_TYPE], {
+            "law_private_health_insurance": 5.0, "law_public_health_insurance": -5.0,
+            "law_private_schools": 5.0, "law_terakoya": 5.0, "law_public_schools": -5.0,
+            "law_traditional_ip_protection": 5.0, "law_strict_ip_protection": 10.0})
+        # slavery (owner, 2026-10-21): property in people; Slavery Banned carries nothing
+        self.assertEqual(carried[P.WC_SLAVERY_TYPE], {
+            "law_colonial_slavery": 10.0, "law_legacy_slavery": 10.0, "law_debt_slavery": 10.0, "law_slave_trade": 5.0})
         base = {"law_serfdom": 15.0, "law_tenant_farmers": 5.0, "law_peasant_proprietorship": -10.0,
                 "law_collectivized_agriculture": -20.0}
         land = carried[P.WC_LAND_TYPE]
