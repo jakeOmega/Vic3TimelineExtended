@@ -1041,7 +1041,10 @@ gm_com_see_space_if_won = {
 
 # The ruler and how many months they have reigned, for a ruler's death (15
 # years). A ruler already reigning in 1836 counts from the game's start. A
-# ruler who is not last month's begins A New Reign.
+# ruler who is not last month's begins A New Reign, unless a regency is in
+# force: a regent, appointed or replaced, is not a reign (vanilla's regency.1
+# adds the regency modifier and makes the regent the ruler in one block, so
+# has_gov_regency is already true when this pass first sees the regent).
 gm_com_track_ruler = {
 	if = {
 		limit = { exists = ruler }
@@ -1062,6 +1065,8 @@ gm_com_track_ruler = {
 		else = {
 			# A ruler was recorded before, and it is not this one: a new reign.
 			# On a game's first pass nothing was recorded, so nothing is offered.
+			# The regent is recorded all the same, so the monarch who takes over
+			# when the regency ends is seen as the new ruler.
 			if = {
 				limit = {
 					has_variable = gm_ruler
@@ -1071,6 +1076,7 @@ gm_com_track_ruler = {
 							var:gm_ruler = scope:gm_com_tracked_ruler
 						}
 					}
+					has_gov_regency = no
 				}
 				gm_com_try_reign = yes
 			}
