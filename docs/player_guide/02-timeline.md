@@ -424,7 +424,7 @@ too.
 | Electrics | The base game's Electrics Industries split into Wired Telecommunications Industries, Wireless Telecommunications Industries and Consumer Appliance Industries. |
 | High technology | Electronic Components and Semiconductor Industry, Robotics Industry, Software Industry, Network Infrastructure, Advanced Material Fabricator, Aerospace Industry. |
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
-| Transport | Airport and Highway, both producing Transportation ([Transportation and shipping](03-economy.md#transportation-and-shipping)). |
+| Transport | Airport and Highway, both producing Transportation, and airports some Merchant Marine too ([Transportation and shipping](03-economy.md#transportation-and-shipping)). |
 | Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
 | Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
 

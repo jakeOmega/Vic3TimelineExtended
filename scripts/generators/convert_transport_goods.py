@@ -171,7 +171,7 @@ def convert(text, construction_good=CONSTRUCTION_GOOD):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--construction-good", choices=sorted(PRICE), default="transportation")
+    ap.add_argument("--construction-good", choices=sorted(PRICE), default=CONSTRUCTION_GOOD)
     args = ap.parse_args(argv)
     for rel in FILES:
         path = ROOT / rel

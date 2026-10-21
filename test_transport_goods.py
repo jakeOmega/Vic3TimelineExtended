@@ -101,6 +101,26 @@ class TestLiveFiles(unittest.TestCase):
         stray = sorted(n for n, b in self.blocks.items() if "goods_input_merchant_marine_add" in b and n not in allowed)
         self.assertEqual(stray, [])
 
+    def test_no_merchant_marine_input_in_other_pm_files(self):
+        # The converter and the test above only see FILES, and only blocks
+        # pm_blocks parses; a raw scan catches a consumer anywhere else.
+        for path in sorted((ROOT / "common" / "production_methods").glob("*.txt")):
+            if path.relative_to(ROOT).as_posix() in ctg.FILES:
+                continue
+            with self.subTest(file=path.name):
+                text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+                self.assertNotIn("goods_input_merchant_marine_add", text)
+
+    def test_raw_count_matches_parsed_blocks(self):
+        # Every merchant marine input line in FILES sits in a block pm_blocks
+        # found, so none escaped the conversion unparsed.
+        for rel in ctg.FILES:
+            with self.subTest(file=rel):
+                text = re.sub(r"#[^\n]*", "", (ROOT / rel).read_text(encoding="utf-8-sig"))
+                raw = len(re.findall(r"\bgoods_input_merchant_marine_add\b", text))
+                parsed = sum(re.sub(r"#[^\n]*", "", b).count("goods_input_merchant_marine_add") for b in _blocks(rel).values())
+                self.assertEqual(raw, parsed)
+
     def test_construction_buys_the_configured_good(self):
         for name in sorted(ctg.CONSTRUCTION_PMS):
             with self.subTest(pm=name):
