@@ -43,7 +43,7 @@ Ordered by player impact. "Confirmed" means a reviewer traced it through the scr
    - The high-acceptance block looks for the conceding country's cultures in the receiver's states, so it blocks whenever the receiver hosts none.
    - The Universal Citizenship check sits on the conceding side, though the comment says the proposer.
 9. **Strategic Reserve silo.** `common/production_methods/strategic_reserve_pms.txt:79` puts `building_employment_bureaucrats_add = 1000` in `country_modifiers`, so every silo level may add bureaucrat jobs to every building in the country.
-10. **Railways stop producing Bulk Transportation under Transport principle tier 3.** The base game's `pm_steam/electric/diesel_trains_principle_transport_3` aren't overridden, so they still output Personal Transportation.
+10. ~~**Railways stop producing Bulk Transportation under Transport principle tier 3.**~~ Resolved: `extra_pms.txt` REPLACEs all three `pm_*_trains_principle_transport_3`, and since #1050 every railway method produces Transportation.
 11. **Global warming:**
     - `common/script_values/extra_script_values.txt:863` (`gw_emission_multiplier_script_value`) has no floor. Policies, a level-9 ministry and principle tier 5 together pass −100%, so burning fossil fuels would remove carbon.
     - `common/on_actions/extra_on_actions.txt:719`: a country joining a market keeps its own market-wide policies and can't repeal them, because repeal needs market leadership.

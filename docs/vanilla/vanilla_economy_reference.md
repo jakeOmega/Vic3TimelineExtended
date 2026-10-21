@@ -608,7 +608,7 @@ Pre-1.5 manual trade routes are gone. In 1.13, trade between *separate* markets 
 - **Consume Merchant Marine** at a rate that scales with their PM tier.
 - Stack additively per state, gated by trade laws.
 
-Trade Centers don't pick routes themselves; they make a state *eligible* to host routes the engine creates autonomously. A market with none can neither import nor export, so its prices settle on domestic supply and demand alone. Where they may be built is the state-scope trigger `trade_center_construction_allowed` (the buildings' `can_build_government`/`can_build_private`). Isolationism forbids them (`country_disallow_trade_bool`), and the Canton System and Sakoku confine them to Guangdong and Kyushu (`country_disallow_trade_outside_canton_bool`, `country_disallow_trade_outside_kyushu_bool`). This mod seeds a level-1 Trade Center for AI market leaders that have none (`docs/systems/mod_systems.md` § "Bulk Transportation").
+Trade Centers don't pick routes themselves; they make a state *eligible* to host routes the engine creates autonomously. A market with none can neither import nor export, so its prices settle on domestic supply and demand alone. Where they may be built is the state-scope trigger `trade_center_construction_allowed` (the buildings' `can_build_government`/`can_build_private`). Isolationism forbids them (`country_disallow_trade_bool`), and the Canton System and Sakoku confine them to Guangdong and Kyushu (`country_disallow_trade_outside_canton_bool`, `country_disallow_trade_outside_kyushu_bool`). This mod seeds a level-1 Trade Center for AI market leaders that have none (`docs/systems/mod_systems.md` § "Transport goods").
 
 **Tolls and strait access** were reworked in 1.13.7: toll rates were halved, changing a toll/strait-access setting now starts a 6-month cooldown (with a 7-day grace window to revert), and tolls apply per trade center rather than only at the world-market-hub state. Port-connection Merchant Marine costs were also reworked — each country pays a share of shipping-lane costs proportional to what its market areas actually purchase from other market areas, paid to the market owner.
 
@@ -740,11 +740,11 @@ In "The Great Wave" the navy was integrated into the economic loop. **Convoys ar
 | **Ship Construction** | Market good | Shipyards | Building new ship instances |
 | **Supply Ships** | Military asset | Military budget | Overseas formations' supply line |
 
-### 17.1 Merchant Marine (Bulk Transportation in this mod)
+### 17.1 Merchant Marine
 
 In vanilla, **Merchant Marine** is a market good produced by Ports and consumed by Trade Centers and overseas market access. Running short doesn't cause a discrete cliff: the shortage **raises the good's price**, which makes Trade Centers less profitable, which causes them to **downsize their trade routes** and reduce consumption. The system rebalances via the standard supply-and-demand price loop, not a hard cap.
 
-This **mod** relocalizes Merchant Marine to **"Bulk Transportation"** (per `localization/english/replace/timeline_extended_override_l_english.yml`) and broadens **production**: in addition to vanilla Ports, the good is now produced by Railways (all train tiers), Motorways/Highways (all road tiers), Airports, Spaceports, and a handful of trade/logistics flavored company buildings (trading houses, fulfillment centers, shipyards, logistics hubs). Construction sectors and rail-transport extraction PMs (logging, mines, oil rigs, refrigerated agriculture, etc.) **consume** it — they don't produce it. The mod-side rationale is that overseas merchant shipping isn't conceptually separate from rail- and road-haul logistics; the same good models both. The underlying engine ID is still `merchant_marine`. Cross-references: `docs/systems/mod_systems.md` § "Bulk Transportation" for the full producer/consumer inventory.
+This **mod** keeps Merchant Marine as shipping between markets: its only production-method consumers are Trade Centers, and its producers are Ports, airports (air cargo) and shipping and trading company buildings. Freight inside a state is the local **Transportation** good, which Railways, Highways, Airports and land logistics companies produce and most industry consumes (rail and road tiers, cold chain, construction, automation, retail). Cross-references: `docs/systems/mod_systems.md` § "Transport goods" for the model and the classification.
 
 There's a prestige-good variant (`prestige_good_generic_merchant_marine`) that select shipping companies emit at full Prosperity.
 
@@ -790,7 +790,7 @@ This is the canonical pre-war coercion path for naval-heavy nations.
 
 - **Concrete IDs** (laws, buildings, goods, modifiers): query `mod_state_server` (`/buildings`, `/laws`, `/goods`, `/modifier-search?q=`).
 - **Engine syntax & validation rules:** `docs/guides/scripting_best_practices.md`.
-- **Mod systems that hook these vanilla mechanics:** `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md`. Banking cycle (IP/dividend pressure), construction-as-a-good (mod's market-mediated construction layer over the vanilla two-FCFS queues), tourism (state-scope dynamic modifiers), wonder buildings (long-build construction-good drains), migration crowding (per-state pull modifiers), Bulk Transportation (Merchant Marine relocalization + broadened production).
+- **Mod systems that hook these vanilla mechanics:** `docs/systems/mod_systems.md`, `docs/systems/journal_entry_systems.md`. Banking cycle (IP/dividend pressure), construction-as-a-good (mod's market-mediated construction layer over the vanilla two-FCFS queues), tourism (state-scope dynamic modifiers), wonder buildings (long-build construction-good drains), migration crowding (per-state pull modifiers), transport goods (Transportation inside a state, Merchant Marine between markets, infrastructure per level).
 - **Vanilla company / charter implementations:** `docs/vanilla/vanilla_company_buildings_reference.md`.
 - **What changed at the last vanilla bump:** `docs/guides/vanilla_patch_runbook.md` § "Engine-doc diff" and § "Known vanilla renames".
 
