@@ -11,6 +11,12 @@ call can't be trusted to run:
     `PostValidate of trigger '<callee>' returned false` instead.
   * A `$X$` the call doesn't pass: `... failed for missing arguments: X`.
     `helper = yes` and the positional `helper = ROOT` pass nothing.
+  * An argument whose value is a `{ }` block (#1096). An argument takes one
+    token; the engine reads the block's keys as more arguments (`failed for
+    unknown arguments: value, max`) and its parser loses the file's brace
+    count, so every entity after the call is dropped (resettlement.6.b's
+    `VALUE = { value = 5000 max = ... }` lost events .7, .8, .9 and .20).
+    Pass a script value, or a variable set just before the call.
 
 Both log at every load and nothing else catches them. `st_res_policy_set_by_hand_base`
 took an unused `SETTING` from both Strategic Reserve steppers for weeks (64
@@ -106,6 +112,7 @@ class Flag:
     unknown: list[str] = field(default_factory=list)
     missing: list[str] = field(default_factory=list)
     no_params_block: bool = False  # block call to a callee with no `$X$`
+    block_args: list[str] = field(default_factory=list)  # arguments given a `{ }` block
     target_missing: bool = False  # dispatcher expansion that names no helper
     exemption: dict | None = None
 
@@ -242,11 +249,18 @@ def _best_signature(call: Call, defs: list[Definition]) -> tuple[list[str], list
     return best[1:]
 
 
+def _block_args(call: Call) -> list[str]:
+    """Arguments given a `{ }` block: whatever the callee names, the engine
+    reads the block's keys as more arguments and loses the brace count."""
+    return sorted(k for k, v in call.args.items() if v is None and "$" not in k)
+
+
 def _check(call: Call, callee: str, defs: list[Definition]) -> Flag | None:
     unknown, missing, no_params = _best_signature(call, defs)
-    if not unknown and not missing and not no_params:
+    blocks = _block_args(call)
+    if not unknown and not missing and not no_params and not blocks:
         return None
-    return Flag(call.file, call.line, call.name, callee, unknown, missing, no_params)
+    return Flag(call.file, call.line, call.name, callee, unknown, missing, no_params, blocks)
 
 
 def _param_values(helper: str, param: str, calls_by_name: dict[str, list[Call]],
@@ -424,6 +438,7 @@ def helper_callers(result: AuditResult, name: str) -> dict | None:
         callers.append({
             "file": c.file, "line": c.line, "call": c.name, "form": c.form,
             "args": sorted(c.args), "unknown": unknown, "missing": missing,
+            "block_args": _block_args(c),
         })
     return {
         "helper": name,
@@ -443,6 +458,7 @@ def flag_dict(f: Flag) -> dict:
         "file": f.file, "line": f.line, "call": f.call, "callee": f.callee,
         "unknown": f.unknown, "missing": f.missing,
         "no_params_block": f.no_params_block, "target_missing": f.target_missing,
+        "block_args": f.block_args,
         "description": describe(f), "reviewed": f.exemption,
     }
 
@@ -459,6 +475,9 @@ def describe(f: Flag) -> str:
         parts.append(f"passes {', '.join(f.unknown)}, which the callee never names")
     if f.missing:
         parts.append(f"doesn't pass {', '.join(f.missing)}, which the callee names")
+    if f.block_args:
+        parts.append(f"passes {', '.join(f.block_args)} as a `{{ }}` block, which the engine reads as more "
+                     "argument names, losing the file's brace count")
     return f"{head}: " + "; ".join(parts)
 
 
@@ -475,13 +494,17 @@ def render_report(result: AuditResult) -> str:
         "the callee's body never names (`Compiling source for <callee> failed for",
         "unknown arguments`; for a callee with no `$X$`, `should have no",
         "arguments`), or doesn't pass a `$X$` the body names (`failed for missing",
-        "arguments`). A dispatcher call (`helper_$KIND$ = { ... }`) is checked",
+        "arguments`), or passes a `{ }` block as an argument's value (the engine",
+        "reads its keys as more arguments and loses the file's brace count, so",
+        "every entity after the call is dropped). A dispatcher call",
+        "(`helper_$KIND$ = { ... }`) is checked",
         "against each helper it can reach. Vanilla callees are checked only when",
         "the game files are on disk.",
         "",
         "Fix: drop the argument at the call, or, where a uniform dispatcher must",
         "pass it, name it in the callee where it never runs",
-        "(`trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }`).",
+        "(`trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }`). For a",
+        "block, pass a script value or a variable set just before the call.",
         "",
         "Suppress a deliberate case on the call's line:",
         "`# REVIEWED YYYY-MM-DD (script_argument): why`",

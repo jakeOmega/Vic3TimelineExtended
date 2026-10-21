@@ -1192,7 +1192,6 @@ MT_DISPERSED_FULL = 5
 MT_EFFECTS = {"state_migration_crowding_density_mult": -0.10,     # crowds sooner (a positive value is capacity)
               "state_infrastructure_from_population_mult": 0.10,  # a compact city is cheaper to serve
               "building_urban_center_throughput_add": 0.05,       # agglomeration: the city's services
-              "building_financial_district_throughput_add": 0.05,  # and its finance
               "state_turmoil_effects_mult": 0.05}                 # one city concentrates its radicals (a little)
 MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.10}
 # Fertility: the census's urban term (URBAN_WEIGHT x urban x relief) is raised by MT_FERTILITY x the concentrated

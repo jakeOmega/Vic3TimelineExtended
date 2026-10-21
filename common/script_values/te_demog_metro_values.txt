@@ -57,7 +57,6 @@ te_demog_k_mt_dispersed_full = { value = 5 }
 te_demog_k_mt_crowding = { value = -0.1 }
 te_demog_k_mt_infra_up = { value = 0.1 }
 te_demog_k_mt_services = { value = 0.05 }
-te_demog_k_mt_finance_tp = { value = 0.05 }
 te_demog_k_mt_turmoil = { value = 0.05 }
 te_demog_k_mt_infra_down = { value = -0.1 }
 # fertility: the census's urban term raised by this x the concentrated side's strength (te_demog_mt_fertility_scale,
@@ -400,10 +399,6 @@ te_demog_mt_shown_infra_down = {
 te_demog_mt_shown_services = {
 	value = te_demog_mt_e_pos
 	multiply = te_demog_k_mt_services
-}
-te_demog_mt_shown_finance = {
-	value = te_demog_mt_e_pos
-	multiply = te_demog_k_mt_finance_tp
 }
 te_demog_mt_shown_turmoil = {
 	value = te_demog_mt_e_pos

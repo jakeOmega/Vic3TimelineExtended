@@ -7,13 +7,17 @@ Flagged: a call to a scripted effect or trigger that passes an argument
 the callee's body never names (`Compiling source for <callee> failed for
 unknown arguments`; for a callee with no `$X$`, `should have no
 arguments`), or doesn't pass a `$X$` the body names (`failed for missing
-arguments`). A dispatcher call (`helper_$KIND$ = { ... }`) is checked
+arguments`), or passes a `{ }` block as an argument's value (the engine
+reads its keys as more arguments and loses the file's brace count, so
+every entity after the call is dropped). A dispatcher call
+(`helper_$KIND$ = { ... }`) is checked
 against each helper it can reach. Vanilla callees are checked only when
 the game files are on disk.
 
 Fix: drop the argument at the call, or, where a uniform dispatcher must
 pass it, name it in the callee where it never runs
-(`trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }`).
+(`trigger_if = { limit = { always = no } $TARGET$ >= $ARG$ }`). For a
+block, pass a script value or a variable set just before the call.
 
 Suppress a deliberate case on the call's line:
 `# REVIEWED YYYY-MM-DD (script_argument): why`

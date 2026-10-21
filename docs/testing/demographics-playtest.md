@@ -933,7 +933,7 @@ can show:
    inputs). Note any that read far off, with the line's terms: the anchors were fitted by reasoning from the walk's
    inputs, not on a save.
 4. **The effects (Full).** A Metropolis state (60% or more) carries Metropolis (the modifier: crowding sooner,
-   infrastructure from population +10%, Urban Center and Financial District throughput +5%, turmoil penalties +5%), a
+   infrastructure from population +10%, Urban Center throughput +5%, turmoil penalties +5%), a
    Leading City state part of it, a Several Cities state nothing, and a Market Towns state under 20% the Dispersed
    Towns modifier (infrastructure from population down to −10% at 5%). Hover the modifier: its figures are the full
    sizes times the strength the row's hover gives. Under Display only no state carries either, and the hover's last
@@ -1257,3 +1257,21 @@ engine fact is new.
    −50, not −55 (the term is held to 50 either way). Take Estate Duties through its petition (`event amendment_petition_events.17` on a Primogeniture country with
    Political Agitation): the bar and the "heading for" figure fall by 30 within a day.
 3. **`debug.log`:** no error from `te_inh_law_amendment_target`.
+
+## Resettlement events load again; Metropolis without the Financial District (#1096, 2026-10-21)
+
+`resettlement.6`'s second option passed a `{ }` block as `te_demog_note_kills`'s argument, which the engine can't
+take: it lost the file's brace count and dropped every event after it (`resettlement.7`, `.8`, `.9`, `.20`). The
+argument is now a script value, `resettlement_famine_dead`. The Metropolis modifier's Financial District throughput
+is gone: the type isn't registered, and a Financial District produces nothing for throughput to scale.
+
+1. **`error.log` at load:** no `te_demog_note_kills failed for unknown arguments: value, max`, no `Unexpected token`
+   or `Inconsistent effect scopes` in `events/resettlement_events.txt`, no `Event } is orphaned` in `debug.log`, and no
+   `Unknown modifier type: building_financial_district_throughput_add`.
+2. **The events fire.** No `Event not found!` for `resettlement.7`, `.8`, `.9` or `.20` (`resettlement_effects.txt`
+   lines 596, 720, 802 and 806). A coercive programme five years old rolls A Petition to Return (`resettlement.7`).
+3. **The famine's dead (Display only or Full).** Item 5 of *Internal Resettlement in the census* above: the settlements'
+   famine (`resettlement.6`, second option) shows its 5,000 farmers, or the state's farmers if fewer, in the Killed
+   slice the year after.
+4. **The Metropolis hover (Full).** A Metropolis state's modifier and the urban pattern's hover name the Urban Center's
+   throughput alone.

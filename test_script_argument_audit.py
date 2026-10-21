@@ -150,6 +150,25 @@ class DetectionTests(unittest.TestCase):
         self.assertEqual([(f.line, f.missing) for f in r.flags],
                          [(2, ["TARGET"]), (3, ["TARGET"]), (4, ["TARGET"])])
 
+    def test_reproduces_block_valued_argument(self):
+        # resettlement.6.b before #1096. The engine reads the block's keys as
+        # more arguments (`failed for unknown arguments: value, max`) and loses
+        # the file's brace count, so every event after the call is dropped.
+        r = _run({
+            EFFECTS: "note_kills = { change_variable = { name = k add = $VALUE$ } }\n",
+            EVENTS: (
+                "x.1 = {\n"
+                "\timmediate = {\n"
+                "\t\tnote_kills = { VALUE = { value = 5000 max = farmers } }\n"
+                "\t\tnote_kills = { VALUE = farmers_capped }\n"
+                "\t}\n"
+                "}\n"
+            ),
+        })
+        self.assertEqual([(f.line, f.block_args, f.unknown, f.missing) for f in r.flags],
+                         [(3, ["VALUE"], [], [])])
+        self.assertIn("passes VALUE as a `{ }` block", describe(r.flags[0]))
+
     def test_matching_calls_do_not_flag(self):
         r = _run({
             EFFECTS: "two = { set_variable = { name = $A$ value = $B$ } }\nnone = { add_prestige = 1 }\n",
@@ -242,9 +261,13 @@ class DispatcherTests(unittest.TestCase):
         self.assertEqual([(f.callee, f.no_params_block) for f in r.flags], [("is_kind_y", True)])
 
     def test_a_whole_parameter_scope_switch_is_not_flagged(self):
-        # `$TARGET$ = { ... }` with TARGET a scope: no helper family to miss.
+        # `$TARGET$ = { ... }` with TARGET a scope: no helper family to miss,
+        # and the blocks inside it are its effects, not arguments.
         r = _run({
-            EFFECTS: "on_target = { $TARGET$ = { add_prestige = 1 } }\nadd_prestige_to = { add = $X$ }\n",
+            EFFECTS: (
+                "on_target = { $TARGET$ = { add_prestige = 1 every_scope_state = { add_x = 1 } } }\n"
+                "add_prestige_to = { add = $X$ }\n"
+            ),
             EVENTS: (
                 "x.1 = { immediate = { on_target = { TARGET = ROOT } } }\n"
                 "x.2 = { immediate = { on_target = { TARGET = scope:other } } }\n"
@@ -321,7 +344,7 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(info["params"], ["A", "B"])
         self.assertEqual(info["callers"], [{
             "file": EVENTS, "line": 1, "call": "two", "form": "block",
-            "args": ["A", "C"], "unknown": ["C"], "missing": ["B"],
+            "args": ["A", "C"], "unknown": ["C"], "missing": ["B"], "block_args": [],
         }])
         self.assertIsNone(helper_callers(r, "nope"))
 
