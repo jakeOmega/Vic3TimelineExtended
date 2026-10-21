@@ -295,7 +295,7 @@ resettlement.6 = {
 			# census accounting, kept out of the option's tooltip
 			hidden_effect = {
 				# the kill can't take more farmers than the state holds
-				te_demog_note_kills = { VALUE = { value = 5000 max = resettlement_state_farmers } }
+				te_demog_note_kills = { VALUE = resettlement_famine_dead }
 			}
 			kill_population_in_state = { value = 5000 pop_type = farmers }
 			add_radicals_in_state = { value = large_radicals pop_type = farmers }

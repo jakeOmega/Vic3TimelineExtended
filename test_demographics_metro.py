@@ -34,6 +34,8 @@ DEMOG_ON_ACTIONS = ROOT / "common" / "on_actions" / "te_demog_on_actions.txt"
 WAVE_TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_demog_wave_triggers.txt"
 WAVE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_wave_effects.txt"
 ENGINE_MODIFIERS = ROOT / "docs" / "engine" / "modifiers_summary.txt"
+VANILLA_MODIFIER_TYPES = ROOT / "vanilla_parsed" / "common" / "modifier_types.json"
+MOD_MODIFIER_TYPES = ROOT / "common" / "modifier_type_definitions"
 PLAYTEST = ROOT / "docs" / "testing" / "demographics-playtest.md"
 LOC_DIR = ROOT / "localization" / "english"
 
@@ -56,7 +58,6 @@ PINNED = {
     "te_demog_k_mt_crowding": P.MT_EFFECTS["state_migration_crowding_density_mult"],
     "te_demog_k_mt_infra_up": P.MT_EFFECTS["state_infrastructure_from_population_mult"],
     "te_demog_k_mt_services": P.MT_EFFECTS["building_urban_center_throughput_add"],
-    "te_demog_k_mt_finance_tp": P.MT_EFFECTS["building_financial_district_throughput_add"],
     "te_demog_k_mt_turmoil": P.MT_EFFECTS["state_turmoil_effects_mult"],
     "te_demog_k_mt_infra_down": P.MT_DISPERSED_EFFECTS["state_infrastructure_from_population_mult"],
     "te_demog_k_mt_fertility": P.MT_FERTILITY,
@@ -361,7 +362,6 @@ class TestModifiers(unittest.TestCase):
             "state_migration_crowding_density_mult": k["te_demog_k_mt_crowding"],
             "state_infrastructure_from_population_mult": k["te_demog_k_mt_infra_up"],
             "building_urban_center_throughput_add": k["te_demog_k_mt_services"],
-            "building_financial_district_throughput_add": k["te_demog_k_mt_finance_tp"],
             "state_turmoil_effects_mult": k["te_demog_k_mt_turmoil"]})
         self.assertEqual(_modifier("te_demog_mt_dispersed"), {
             "state_infrastructure_from_population_mult": k["te_demog_k_mt_infra_down"]})
@@ -382,10 +382,18 @@ class TestModifiers(unittest.TestCase):
         self.assertLess(P.MT_EFFECTS["state_migration_crowding_density_mult"], 0)
 
     def test_every_field_is_an_engine_modifier(self):
+        """modifiers.log lists a throughput type for every building, but a static modifier can use only a type that
+        vanilla's or the mod's modifier_type_definitions registers: building_financial_district_throughput_add was in
+        the log and the game dropped it as unknown (#1096)."""
+        import json
         known = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
+        registered = set(json.load(open(VANILLA_MODIFIER_TYPES, encoding="utf-8")))
+        for path in MOD_MODIFIER_TYPES.glob("*.txt"):
+            registered |= set(re.findall(r"^(?:INJECT:|REPLACE:)?(\w+)\s*=\s*\{", _text(path), re.M))
         for name in ("te_demog_mt_metropolis", "te_demog_mt_dispersed"):
             for field in _modifier(name):
                 self.assertIn(field, known, f"{name}: {field}")
+                self.assertIn(field, registered, f"{name}: {field} is not a registered modifier type")
 
     def test_every_field_has_a_name(self):
         """The engine shows a raw key for a field with no loc line and logs nothing (review I1, 2026-10-20): each field
@@ -401,11 +409,6 @@ class TestModifiers(unittest.TestCase):
             for field in _modifier(name):
                 self.assertIn(field, names, f"{name}: {field}")
                 self.assertIn(f"{field}_desc", names, f"{name}: {field}_desc")
-
-    def test_the_hover_shows_one_throughput_for_both_buildings(self):
-        """te_demog_mt_eff_metro prints the services figure for the Urban Center and the Financial District alike."""
-        self.assertEqual(P.MT_EFFECTS["building_urban_center_throughput_add"],
-                         P.MT_EFFECTS["building_financial_district_throughput_add"])
 
     def test_the_nation_tab_places_them_on_states(self):
         spec = importlib.util.spec_from_file_location("gen_nation_tab",

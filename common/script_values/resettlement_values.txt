@@ -134,6 +134,15 @@ resettlement_urban_unrest_share = {
 	max = 0.1
 }
 
+# resettlement.6.b's dead, as the census books them (te_demog_note_kills): the
+# option's kill_population_in_state of 5,000 farmers, which can't take more than
+# the state holds. A script value because a scripted effect's argument is one
+# token: a `{ }` block there broke the file's parse (#1096).
+resettlement_famine_dead = {
+	value = 5000
+	max = resettlement_state_farmers
+}
+
 # ---- Land pressure at the destination (§7.3) -------------------------------
 # Destination state after the walk. 5 × this month's arrivals ÷ its
 # population, capped at 0.05.

@@ -11,14 +11,14 @@
 # - Crowding: it is denser than the state's average, so the state crowds sooner (a negative value: the type is the
 #   state's capacity), and congestion then lowers the share's target: the loop that limits the metropolis.
 # - Infrastructure: a compact city is cheaper to serve, so its people give more infrastructure.
-# - Agglomeration: its services and its finance work at a larger scale.
+# - Agglomeration: its services work at a larger scale. (Not the Financial District's: it produces nothing, so
+#   throughput has nothing to scale, #1096.)
 # - Unrest: one city concentrates its radicals (the Paris of 1848), a little.
 te_demog_mt_metropolis = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	state_migration_crowding_density_mult = -0.1
 	state_infrastructure_from_population_mult = 0.1
 	building_urban_center_throughput_add = 0.05
-	building_financial_district_throughput_add = 0.05
 	state_turmoil_effects_mult = 0.05
 }
 

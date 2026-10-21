@@ -514,9 +514,9 @@ lower it, and a country's urbanization raises it most at half its people in town
 and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
 full at 60%: the state crowds 10% sooner, its people give 10% more infrastructure,
-its Urban Center and Financial District work at 5% more throughput, turmoil
-penalties rise 5% and families are a little smaller. Below 20% its towns give up
-to 10% less infrastructure. Where People Live counts your Metropolises.
+its Urban Center works at 5% more throughput, turmoil penalties rise 5% and
+families are a little smaller. Below 20% its towns give up to 10% less
+infrastructure. Where People Live counts your Metropolises.
 
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and
