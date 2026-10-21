@@ -104,13 +104,17 @@ FAMILY_LIMITATION_MEANS = 0.6
 # Contract +5, Antitrust Enforcement and Regulated Utilities -5. Public goods (2026-10-21): Private Health
 # Insurance, Private Schools, Terakoya and Traditional IP Protection +5, Strict IP Protection +10, Public Health
 # Insurance and Public Schools -5. Slavery (2026-10-21): Colonial Slavery, Legacy Slavery and Debt Slavery +10, Slave
-# Trade +5.
+# Trade +5. Inheritance (2026-10-21, #822's has_law lookups until then; on the mod's laws and amendments in
+# extra_laws.txt and extra_amendments.txt, from 50): Primogeniture & Entail +30, Freedom of Testation +10, Customary
+# Inheritance none, Forced Heirship -25, State as Universal Heir and Possession by Use -50; Estate Duties -30, the
+# Birthright Endowment -20, Perpetual Dynastic Trusts +30, Undivided Farm Succession +10.
+WC_INHERITANCE_TYPE = "country_wealth_concentration_inheritance_add"
 WC_LAND_TYPE = "state_wealth_concentration_land_add"
 WC_TAX_TYPE = "country_wealth_concentration_tax_add"
 WC_ECONOMY_TYPE = "country_wealth_concentration_economy_add"
 WC_PUBLIC_TYPE = "country_wealth_concentration_public_goods_add"
 WC_SLAVERY_TYPE = "country_wealth_concentration_slavery_add"
-WC_LAW_TYPES = (WC_LAND_TYPE, WC_TAX_TYPE, WC_ECONOMY_TYPE, WC_PUBLIC_TYPE, WC_SLAVERY_TYPE)
+WC_LAW_TYPES = (WC_INHERITANCE_TYPE, WC_LAND_TYPE, WC_TAX_TYPE, WC_ECONOMY_TYPE, WC_PUBLIC_TYPE, WC_SLAVERY_TYPE)
 
 # ---- Mortality inputs as modifier types (modifier-types design, stage 1) -----------
 # Laws, technology and institutions reach the census's causes of death only through these

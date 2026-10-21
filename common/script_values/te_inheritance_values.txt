@@ -17,69 +17,18 @@
 #  state yet keeps this file's own drift (te_inh_yearly_update).
 # ----------------------------------------------------------------------
 
-# The law's own target, before amendments. Customary Inheritance (and a
-# country with no inheritance law) is the 50 baseline.
-te_inh_law_target = {
-	value = 50
-	if = {
-		limit = { has_law = law_type:law_primogeniture }
-		value = 80
-	}
-	else_if = {
-		limit = { has_law = law_type:law_free_testation }
-		value = 60
-	}
-	else_if = {
-		limit = { has_law = law_type:law_equal_inheritance }
-		value = 25
-	}
-	else_if = {
-		limit = {
-			OR = {
-				has_law = law_type:law_state_universal_heir
-				has_law = law_type:law_non_inheritable_usage_rights
-			}
-		}
-		value = 0
-	}
-}
-
 # The law's target with amendments, 0-100: the law and amendment term of
-# each state's target (te_demog_wc_target), centred on 50.
+# each state's target (te_demog_wc_target), centred on 50. Each law and
+# amendment carries its line (country_wealth_concentration_inheritance_add,
+# 2026-10-21, so its tooltip says it): Primogeniture & Entail +30, Freedom of
+# Testation +10, Customary Inheritance (and a country with no inheritance
+# law) none, Forced Heirship -25, State as Universal Heir and Possession by
+# Use -50; Estate Duties -30, the Birthright Endowment -20, Perpetual
+# Dynastic Trusts +30, Undivided Farm Succession +10. The clamp holds Forced
+# Heirship with Estate Duties at 0.
 te_inh_law_amendment_target = {
-	value = te_inh_law_target
-	if = {
-		limit = {
-			active_law:lawgroup_inheritance ?= {
-				has_amendment = amendment_type:amendment_estate_duties
-			}
-		}
-		add = -30
-	}
-	if = {
-		limit = {
-			active_law:lawgroup_inheritance ?= {
-				has_amendment = amendment_type:amendment_birthright_endowment
-			}
-		}
-		add = -20
-	}
-	if = {
-		limit = {
-			active_law:lawgroup_inheritance ?= {
-				has_amendment = amendment_type:amendment_perpetual_trusts
-			}
-		}
-		add = 30
-	}
-	if = {
-		limit = {
-			active_law:lawgroup_inheritance ?= {
-				has_amendment = amendment_type:amendment_undivided_farm_succession
-			}
-		}
-		add = 10
-	}
+	value = 50
+	add = modifier:country_wealth_concentration_inheritance_add
 	min = 0
 	max = 100
 }

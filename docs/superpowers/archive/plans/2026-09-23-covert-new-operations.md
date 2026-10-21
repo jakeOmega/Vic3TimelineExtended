@@ -48,7 +48,7 @@
 - **Lens icons** (user decision, 2026-09-23): each action gets a copy of the nearest existing covert icon — regime change ← destabilization, nuclear sabotage ← infrastructure sabotage, space espionage ← industrial espionage, cultivate assets ← influence campaign. The engine auto-loads `gfx/interface/icons/lens_toolbar_icons/<action>.dds` for any action without `show_in_lens = no`; a missing one is a `VFSOpen` error every session (#324 cleaned exactly that).
 - **Pre-existing bug fixed in Task 1:** `covert_warfare.2`'s trigger lists `has_modifier = covert_infrastructure_sabotage`, which is applied to *states* (`random_scope_state` in `covert_ops_apply_all_phase_effects`), never to the country, so a burned infrastructure-sabotage operation never tells the defender. The country-scope modifier that type leaves is `covert_infra_sabotage_morale`. The registry test pins "each type's defender-event marker is the modifier it applies to the target country", which is what surfaces this. One line.
 - **`country_covert_defense_military_add_desc`** gains nuclear sabotage and the missing military espionage; the economic and ideological descriptions gain their new operations.
-- **Two modifier fields are `script_only`** (`country_coup_resistance_add`, vanilla; `country_nuclear_program_progress_mult`, this mod) and so, as far as we know, do not render in modifier tooltips. The descriptions `covert_regime_change_desc` and `covert_nuclear_sabotage_desc` state them, with the strongest-operation factor read from `covert_op_mult_p3_pri3` rather than written as a literal. (`modifier_visibility_audit` checks values too small to render at their decimals, not `script_only`; it should not flag these.)
+- **Two modifier fields are `script_only`** (`country_coup_resistance_add`, vanilla; `country_nuclear_program_progress_mult`, this mod) and so, as far as we know, do not render in modifier tooltips. *(Wrong, corrected 2026-10-21: `script_only` fields render in tooltips like any other; #543 dropped the launch preview's "Not listed above" lines that rested on this. `scripting_best_practices.md` § Key Properties.)* The descriptions `covert_regime_change_desc` and `covert_nuclear_sabotage_desc` state them, with the strongest-operation factor read from `covert_op_mult_p3_pri3` rather than written as a literal. (`modifier_visibility_audit` checks values too small to render at their decimals, not `script_only`; it should not flag these.)
 - **The nuclear programme's rate tooltip** attributes the whole `country_nuclear_program_progress_mult` to foreign assistance (`nuclear_program_display_aid_bonus`, `nuclear_program_aid_note`). Task 3 adds sabotage-aware branches so an aided-and-sabotaged programme reads as a net figure. The space-race multipliers need no such fix: principles and production methods already feed them, and their descriptions do not claim a single source.
 - **Console harness** gets its own event `te_debug_covert.4` rather than more options on `.2` (already ten) or `.3`.
 - **Known behaviour, documented not changed:** the AI will rarely launch the two severe operations. `possible` binds the AI, so it needs Seasoned (60) Tradecraft; slice 5's own table puts one moderate operation at 10 % detection at a long-run average of 57.
@@ -1252,6 +1252,8 @@ covert_nuclear_sabotage = {
 	country_nuclear_program_progress_mult = -0.25
 }
 ```
+
+*(Corrected 2026-10-21: the tooltip does list a `script_only` field; the comment in `extra_modifiers.txt` now says so.)*
 
 - [ ] **Step 5: The diplomatic action**
 

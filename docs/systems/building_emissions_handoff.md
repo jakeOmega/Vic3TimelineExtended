@@ -365,7 +365,7 @@ emissions before the market leader's cut; only DAC writes atmospheric removal.
 The Carbon Captured dashboard row now reads atmospheric removal only, and its
 tooltip names Direct Air Capture. Carbon Removal Support's coal-works throughput
 modifier is registered. All three state accounting types have names/descriptions
-in localization; script-only does not guarantee hiding from tooltips.
+in localization, since a script-only type still renders in tooltips.
 
 Inline comments addressed: 4175604053, 4175604258, 4175604463. Numerical
 regressions cover synthetic fuel production/combustion at 0/50/75/100% policy

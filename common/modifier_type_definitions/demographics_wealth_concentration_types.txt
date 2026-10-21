@@ -2,7 +2,14 @@
 #
 # Wealth Concentration's law terms (spec §4.2; docs/superpowers/specs/2026-10-08-demographics-design.md), on the laws
 # since 2026-10-17 so each law's tooltip says what it does; they were has_law lookups. Read only by the Wealth
-# Concentration script (te_demog_values.txt), with modifier:. Points on the 0-100 target, not percentages:
+# Concentration script (te_demog_values.txt, te_inheritance_values.txt), with modifier:. Points on the 0-100 target,
+# not percentages:
+#   country_wealth_concentration_inheritance_add  the inheritance law and its amendments (te_inh_law_amendment_target,
+#                                              2026-10-21; #822's has_law lookups until then): Primogeniture & Entail
+#                                              +30, Freedom of Testation +10, Forced Heirship -25, State as Universal
+#                                              Heir and Possession by Use -50, Customary Inheritance none; Estate Duties
+#                                              -30, Birthright Endowment -20, Perpetual Dynastic Trusts +30, Undivided
+#                                              Farm Succession +10. From 50, held to 0-100
 #   state_wealth_concentration_land_add       the land-tenure term, x the state's agrarian share (te_demog_wc_land_term:
 #                                              Serfdom and Manorialism +15, Tenant Farmers and its two Latifundias +5,
 #                                              Peasant Proprietorship and Homesteading -10, Collectivized Agriculture
@@ -20,6 +27,12 @@
 # Wealth Concentration runs whatever the Demographics rule (te_demog_state_yearly), so these are not census inputs. A
 # release keeps this file: scripts/release/comment_out_census_inputs.py comments out demographics_modifier_types.txt's
 # types only.
+country_wealth_concentration_inheritance_add = {
+	color = neutral
+	percent = no
+	decimals = 0
+	script_only = yes
+}
 state_wealth_concentration_land_add = {
 	color = neutral
 	percent = no

@@ -187,10 +187,18 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
         """Spec §4.2's law terms (on the laws since 2026-10-17; not census inputs, so not in P.DEMOG_TYPES). Every
         land-reform law carries its line, a variant at its parent's value, Commercialized Agriculture none."""
         lines = DM.load_carriers(types=P.WC_LAW_TYPES)
-        self.assertTrue(all(c.kind == "law" for c in lines), lines)
+        self.assertTrue(all(c.kind == "law" or (c.kind, c.type) == ("amendment", P.WC_INHERITANCE_TYPE) for c in lines),
+                        lines)
         carried = {}
         for c in lines:
             carried.setdefault(c.type, {})[c.key] = c.value
+        # the inheritance law and its amendments (2026-10-21; #822's has_law lookups until then), from 50: the old
+        # targets less 50, Customary Inheritance none
+        self.assertEqual(carried[P.WC_INHERITANCE_TYPE], {
+            "law_primogeniture": 30.0, "law_free_testation": 10.0, "law_equal_inheritance": -25.0,
+            "law_state_universal_heir": -50.0, "law_non_inheritable_usage_rights": -50.0,
+            "amendment_estate_duties": -30.0, "amendment_birthright_endowment": -20.0,
+            "amendment_perpetual_trusts": 30.0, "amendment_undivided_farm_succession": 10.0})
         self.assertEqual(carried[P.WC_TAX_TYPE], {"law_graduated_taxation": -5.0})
         self.assertEqual(carried[P.WC_ECONOMY_TYPE], {
             "law_laissez_faire": 10.0, "law_extraction_economy": 5.0, "law_interventionism": -5.0,
