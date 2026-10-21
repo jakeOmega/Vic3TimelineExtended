@@ -36,7 +36,7 @@ te_demog_state_gini = {
 #                       te_demog_wc_shock move
 #   te_dg_wc_target     the states' targets, weighted the same way
 #   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq,
-#   te_dg_wc_t_tax, te_dg_wc_t_econ, te_dg_wc_t_public, te_dg_wc_t_rg  the target's eight terms,
+#   te_dg_wc_t_tax, te_dg_wc_t_econ, te_dg_wc_t_public, te_dg_wc_t_slavery, te_dg_wc_t_rg  the target's nine terms,
 #                       signed around 50 and weighted the same way, so they add up
 #                       to the target (the panel's bars)
 #   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
@@ -288,6 +288,7 @@ te_demog_wc_national = {
 		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
 		set_variable = { name = te_dg_wc_t_econ value = te_demog_wc_econ_term }
 		set_variable = { name = te_dg_wc_t_public value = te_demog_wc_public_term }
+		set_variable = { name = te_dg_wc_t_slavery value = te_demog_wc_slavery_term }
 		set_variable = { name = te_dg_wc_t_rg value = te_demog_wc_rg_term }
 		# only when a state has current bands: after loading an old save, before any state's pulse,
 		# the country keeps its last figure rather than showing 0

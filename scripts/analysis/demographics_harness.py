@@ -447,8 +447,8 @@ def cmd_replay(args):
 
 
 WC_COUNTRY_VARS = ("te_inh_concentration", "te_dg_wc_target", "te_dg_wc_t_law", "te_dg_wc_t_land", "te_dg_wc_t_own",
-                   "te_dg_wc_t_ineq", "te_dg_wc_t_tax", "te_dg_wc_t_econ", "te_dg_wc_t_public", "te_dg_wc_t_rg",
-                   "te_inh_great_fortunes_mult", "te_inh_dispersed_mult")
+                   "te_dg_wc_t_ineq", "te_dg_wc_t_tax", "te_dg_wc_t_econ", "te_dg_wc_t_public", "te_dg_wc_t_slavery",
+                   "te_dg_wc_t_rg", "te_inh_great_fortunes_mult", "te_inh_dispersed_mult")
 WC_STATE_VARS = ("te_dg_wc", "te_dg_walk_pop")
 INHERITANCE_LAWS = ("law_primogeniture", "law_free_testation", "law_partible", "law_equal_inheritance",
                     "law_state_universal_heir", "law_non_inheritable_usage_rights")

@@ -1,6 +1,6 @@
 ﻿# Wealth Concentration's law terms on vanilla's laws (spec §4.2; on the laws since 2026-10-17, so each law's tooltip
 # says what it does). Read by te_demog_values.txt (te_demog_wc_land_term, te_demog_wc_tax_term, te_demog_wc_econ_term,
-# te_demog_wc_public_term);
+# te_demog_wc_public_term, te_demog_wc_slavery_term);
 # the types are in demographics_wealth_concentration_types.txt. The mod's antitrust laws carry theirs in extra_laws.txt,
 # and Graduated Taxation's -5 sits in te_tax_vanilla_law_gates.txt, the one file the tax code lets INJECT the vanilla
 # taxation laws (test_tax_code_rule).
@@ -107,5 +107,33 @@ INJECT:law_terakoya = {
 INJECT:law_public_schools = {
 	modifier = {
 		country_wealth_concentration_public_goods_add = -5
+	}
+}
+
+# The slavery term (2026-10-21): property in people, the largest single asset a planter class held. Slavery Banned none.
+# Colonial Slavery (slavery in the colonies only) and Legacy Slavery (the slaves already held, none added) +5; Debt Slavery
+# and Slave Trade, the two vanilla puts at -50 progressiveness, +10. A flat line, like the tax and economic terms: it
+# is not weighted by a state's slaves, which the census walk does not count.
+INJECT:law_colonial_slavery = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 5
+	}
+}
+
+INJECT:law_legacy_slavery = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 5
+	}
+}
+
+INJECT:law_debt_slavery = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 10
+	}
+}
+
+INJECT:law_slave_trade = {
+	modifier = {
+		country_wealth_concentration_slavery_add = 10
 	}
 }

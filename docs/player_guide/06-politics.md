@@ -339,15 +339,17 @@ in great family fortunes. Each state keeps its own score, which moves 3% of the
 way to its own target each year, and your country's figure is the states'
 average, weighted by where property is held. The law and its amendments set where
 a state's target starts. Land tenure, who owns the state's capital, how unequal
-incomes are, taxes on wealth, your economic laws and whether health care,
-schooling and ideas are provided or sold move it from there.
+incomes are, taxes on wealth, your economic laws, whether health care,
+schooling and ideas are provided or sold, and your slavery law move it from there.
 Laissez-Faire (+10), Extraction Economy (+5), Freedom of Contract and Guilds and
 Chartered Monopolies (+5) raise it; Interventionism, Antitrust Enforcement and
 Regulated Utilities (−5 each) lower it. Private Health Insurance, Private
 Schools, Terakoya and Traditional IP Protection (+5 each) and Strict IP
 Protection (+10) raise it; Public Health Insurance and Public Schools (−5 each)
-lower it. Each land, tax, economic, health, school and IP law that
-moves it lists its part among its modifiers. Once your banking cycle has
+lower it. Colonial Slavery and Legacy Slavery (+5 each) and Debt Slavery and
+Slave Trade (+10 each) raise it too, whatever the number of slaves. Each land, tax,
+economic, health, school, IP and slavery law that moves it lists its part among
+its modifiers. Once your banking cycle has
 started, the return on capital against growth moves it too: twice the gap
 between your policy rate less inflation and your economy's growth over about
 five years, at most 5 either way. War losses, a lost war that
