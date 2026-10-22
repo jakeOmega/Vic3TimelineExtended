@@ -9,10 +9,13 @@
 # Resolves Against ROOT"):
 #   te_demog_census_conscription_up / _down  state_conscription_rate_mult +1 / -1 at |T| (te_dg_mc): the pool's share
 #                                            of people against the 1836 world's, -1 to +0.25 (§4.1)
-#   te_demog_census_youth_bulge              radicals from movements +15%, turmoil effects +10% at y (te_dg_yb): young
+#   te_demog_census_youth_bulge              radicals from movements +25%, turmoil effects +15% at y (te_dg_yb): young
 #                                            adults above 18% of the people, with unemployment (§4.3)
-#   te_demog_census_fewer_men                feminist movement support +10% at the fewer-men share (§4.4)
-#   te_demog_census_more_men                 radicals from movements +10% at the more-men share (§4.4)
+#   te_demog_census_fewer_men                feminist movement support +25% at the fewer-men strength (§4.4)
+#   te_demog_census_more_men                 radicals from movements +15%, turmoil effects +15% at the more-men
+#                                            strength, full at a balance of 130 (§4.4)
+# Sizes from the 2026-10-22 effects design (docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md):
+# each strength keeps rising past full, to at most twice.
 # Each has a switch (demographics_params' three, generated as te_demog_k_conscription_effects, _youth_effects and
 # _sex_effects): step 4 shipped all three at 0, held back because the census's booking of the residual distorted the
 # men they read, and the migrant booking (2026-10-12; te_demog_migrant_rates, te_demog_labour_balance) turned them on.
@@ -88,13 +91,14 @@ te_demog_consequences_apply = {
 		limit = { te_demog_youth_applied > 0 }
 		add_modifier = { name = te_demog_census_youth_bulge multiplier = te_demog_youth_applied }
 	}
+	# the strengths, extended past full (the 2026-10-22 effects design); the 0-1 ramps stay for the model terms
 	if = {
-		limit = { te_demog_sex_fewer_men > 0 }
-		add_modifier = { name = te_demog_census_fewer_men multiplier = te_demog_sex_fewer_men }
+		limit = { te_demog_sex_fewer_men_strength > 0 }
+		add_modifier = { name = te_demog_census_fewer_men multiplier = te_demog_sex_fewer_men_strength }
 	}
 	if = {
-		limit = { te_demog_sex_more_men > 0 }
-		add_modifier = { name = te_demog_census_more_men multiplier = te_demog_sex_more_men }
+		limit = { te_demog_sex_more_men_strength > 0 }
+		add_modifier = { name = te_demog_census_more_men multiplier = te_demog_sex_more_men_strength }
 	}
 }
 

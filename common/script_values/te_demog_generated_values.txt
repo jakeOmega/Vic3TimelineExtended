@@ -2042,7 +2042,7 @@ te_demog_k_sex_fewer_span = { value = 10 }
 te_demog_k_sex_births_floor = { value = 0.8 }
 te_demog_k_sex_women_rate = { value = 0.07 }
 te_demog_k_sex_more_from = { value = 110 }
-te_demog_k_sex_more_span = { value = 40 }
+te_demog_k_sex_more_span = { value = 20 }
 te_demog_k_conscription_effects = { value = 1 }
 te_demog_k_conscription_cut = { value = 0.01 }
 te_demog_k_youth_effects = { value = 1 }

@@ -134,7 +134,10 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
    - Ones that stand for women's or children's work stay.
 4. **Slow clocks with visible momentum.** Each number moves over a generation, and the panel shows where it is heading.
    The fun is in seeing a window open twenty years ahead (§9, §10).
-5. **Effects are deviations from a stated reference, and capped.** The reference structure is the 1836 equilibrium.
+5. **Effects are deviations from a stated reference, and capped.** (Revised 2026-10-22 for the effect sizes: a strong
+   condition is worth about one vanilla law on its main effect, and the reference point is a size, not a ceiling; see
+   `2026-10-22-demographic-effects-impact-design.md`. The census's own model terms keep this rule.) The reference
+   structure is the 1836 equilibrium.
    Every state starts at the equilibrium of its own 1836 inputs, so nothing jumps on day one. A save from before the
    system starts each state at its equilibrium (the #822 pattern).
 6. **Every number has a real meaning and an anchor value.** The sources are UN World Population Prospects (WPP) for
@@ -630,7 +633,8 @@ state. The stock is the #822 score.
   - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
     scale: set it afresh on the wealth-band figure when this is built). **Built 2026-10-19, under Full only** (owner):
     radicals rise with the state's shown Gini above 0.45, by 10% at 0.65 and on at that slope with no cap (owner,
-    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row);
+    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row); since 2026-10-22 twice
+    as steep above 0.70, with socialist and labor support (+42.5% at 1; `2026-10-22-demographic-effects-impact-design.md`);
   - an input to crime for the policing laws. **Dropped** (owner, 2026-10-19): the engine has no crime quantity.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
@@ -859,6 +863,9 @@ Market Towns (< 20).
 | Capital, ports, area, industry, infrastructure, crowding, urban planning | settlement pattern | §5.2 |
 
 ## 7. What it feeds
+
+> **Sizes revised 2026-10-22** (`2026-10-22-demographic-effects-impact-design.md`): the effects below are now worth
+> about one vanilla law at their reference, and keep rising past it; that spec's tables are the current sizes.
 
 All effects are refreshed once a year by the dynamic-modifier pattern, each from one site. State effects run from the
 state pulse and country effects from the country pulse. Sizes are starting proposals.

@@ -75,6 +75,55 @@ te_demog_sex_more_men = {
 	}
 }
 
+# The modifiers' strengths (the 2026-10-22 effects design): each ramp without its ceiling (the reach), then
+# (x + min(x, 1)) / 2, at most 2 (demographics_params.EFFECT_CAP): 70 or 150 men give 1.5, 60 or 170 give 2. The
+# ramps above stay 0-1 for the women's rate and the panel's model figures (demographics_model.sex_fewer_men_strength,
+# sex_more_men_strength).
+te_demog_sex_fewer_men_reach = {
+	value = 0
+	if = {
+		limit = {
+			te_demog_k_sex_effects > 0
+			has_variable = te_dg_sex_balance
+		}
+		value = te_demog_k_sex_fewer_from
+		subtract = var:te_dg_sex_balance
+		divide = { value = te_demog_k_sex_fewer_span min = 1 }
+		min = 0
+	}
+}
+te_demog_sex_fewer_men_strength = {
+	value = te_demog_sex_fewer_men_reach
+	add = {
+		value = te_demog_sex_fewer_men_reach
+		max = 1
+	}
+	divide = 2
+	max = 2
+}
+te_demog_sex_more_men_reach = {
+	value = 0
+	if = {
+		limit = {
+			te_demog_k_sex_effects > 0
+			has_variable = te_dg_sex_balance
+		}
+		value = var:te_dg_sex_balance
+		subtract = te_demog_k_sex_more_from
+		divide = { value = te_demog_k_sex_more_span min = 1 }
+		min = 0
+	}
+}
+te_demog_sex_more_men_strength = {
+	value = te_demog_sex_more_men_reach
+	add = {
+		value = te_demog_sex_more_men_reach
+		max = 1
+	}
+	divide = 2
+	max = 2
+}
+
 # State or country scope: the children-per-woman term the latest balance would give (the panel's hover; the census reads
 # te_demog_tfr_sex, the balance its step began with).
 te_demog_sex_births_shown = {
@@ -207,20 +256,14 @@ te_demog_unemployment_census = {
 	value = te_demog_unemployment
 }
 
-# State scope: the youth bulge's multiplier now, y = clamp((the share aged 20-29 - te_demog_k_youth_from) / the span,
-# 0, 1) x clamp(unemployment / te_demog_k_youth_unemployment_full, 0, 1) (demographics_model.youth_bulge).
+# State scope: the youth bulge's multiplier now, y = the share factor x the unemployment factor, at most 2
+# (demographics_model.youth_bulge; the 2026-10-22 effects design): each factor is its ramp, (the share aged 20-29 -
+# te_demog_k_youth_from) / the span and unemployment / te_demog_k_youth_unemployment_full, extended past 1 at half the
+# slope (te_demog_youth_share_part, te_demog_youth_unemployment_part, below).
 te_demog_youth_bulge_now = {
-	value = te_demog_youth_share
-	subtract = te_demog_k_youth_from
-	divide = { value = te_demog_k_youth_span min = 0.001 }
-	min = 0
-	max = 1
-	multiply = {
-		value = te_demog_unemployment
-		divide = { value = te_demog_k_youth_unemployment_full min = 0.001 }
-		min = 0
-		max = 1
-	}
+	value = te_demog_youth_share_part
+	multiply = te_demog_youth_unemployment_part
+	max = 2
 }
 
 # State scope: the youth-bulge modifier's multiplier (te_demog_consequences_apply): te_dg_yb, 0 while
@@ -244,25 +287,40 @@ te_demog_youth_applied = {
 te_demog_youth_bulge_shown = {
 	value = te_demog_youth_share_part
 	multiply = te_demog_youth_unemployment_part
+	max = 2
 	if = {
 		limit = { has_variable = te_dg_yb }
 		value = var:te_dg_yb
 	}
 }
 
-# State scope: the youth-bulge share of its full size, either factor alone, from the last census.
-te_demog_youth_share_part = {
+# State scope: the youth bulge's two factors, from the last census: each ramp's reach, then (x + min(x, 1)) / 2.
+te_demog_youth_share_reach = {
 	value = te_demog_youth_share
 	subtract = te_demog_k_youth_from
 	divide = { value = te_demog_k_youth_span min = 0.001 }
 	min = 0
-	max = 1
 }
-te_demog_youth_unemployment_part = {
+te_demog_youth_share_part = {
+	value = te_demog_youth_share_reach
+	add = {
+		value = te_demog_youth_share_reach
+		max = 1
+	}
+	divide = 2
+}
+te_demog_youth_unemployment_reach = {
 	value = te_demog_unemployment_census
 	divide = { value = te_demog_k_youth_unemployment_full min = 0.001 }
 	min = 0
-	max = 1
+}
+te_demog_youth_unemployment_part = {
+	value = te_demog_youth_unemployment_reach
+	add = {
+		value = te_demog_youth_unemployment_reach
+		max = 1
+	}
+	divide = 2
 }
 
 # ---- The panel (gui/te_demographics_widgets.gui) ----------------------------------------------------------------------
@@ -279,22 +337,26 @@ te_demog_country_conscription_mult = {
 	add = 1
 }
 
-# State or country scope: the two movement fields the sex balance moves, at the latest balance (the hovers).
+# State or country scope: the three fields the sex balance moves, at the latest balance (the hovers).
 te_demog_sex_feminist_shown = {
-	value = te_demog_sex_fewer_men
-	multiply = 0.1
+	value = te_demog_sex_fewer_men_strength
+	multiply = 0.25
 }
 te_demog_sex_radicals_shown = {
-	value = te_demog_sex_more_men
-	multiply = 0.1
+	value = te_demog_sex_more_men_strength
+	multiply = 0.15
+}
+te_demog_sex_turmoil_shown = {
+	value = te_demog_sex_more_men_strength
+	multiply = 0.15
 }
 
 # State scope: the youth bulge's two fields at the strength the panel shows (the Youth row's hover).
 te_demog_youth_radicals_shown = {
 	value = te_demog_youth_bulge_shown
-	multiply = 0.15
+	multiply = 0.25
 }
 te_demog_youth_turmoil_shown = {
 	value = te_demog_youth_bulge_shown
-	multiply = 0.1
+	multiply = 0.15
 }

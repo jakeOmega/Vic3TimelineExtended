@@ -371,19 +371,23 @@ it lasts. A new law therefore takes
 about a generation to show: a country that abolishes entail still has great
 houses twenty years later.
 
-Your country's figure sets the political weight of great fortunes. Above 50,
-Great Family Fortunes strengthens the Aristocrats and Capitalists; below 50,
-Dispersed Wealth weakens the Aristocrats. Each state's own score does the rest
-in that state:
+Your country's figure sets the political weight of great fortunes and how
+fast speculation builds. Above 50, Great Family Fortunes strengthens the
+Aristocrats and Capitalists and adds bubble pressure to the banking cycle, by
+20% and 0.3 a month at 80; below 50, Dispersed Wealth weakens both and takes
+bubble pressure off, by 20% and 0.4 a month at 20. Concentrated wealth grows faster but crashes more often; dispersed
+wealth grows slower but steadier. Each state's own score does the rest in that
+state:
 
-| A state's score | Modifier | Effect at 100 or 0 |
+| A state's score | Modifier | Effect at 80 (or 20) |
 |---|---|---|
-| Above 50 | Concentrated Property | Aristocrats and Capitalists invest 10% more; radicals +10%; qualifications −10%; education access −5% |
-| Above 50, in farming states | Land Hunger | Migration +20%, scaled by the state's share of Peasants and Farmers |
-| Below 50 | Dispersed Property | Farmers and Shopkeepers invest 10% more |
+| Above 50 | Concentrated Property | Aristocrats and Capitalists invest 20% more; political strength from wealth +20%; qualifications −20%; education access −10% |
+| Above 50, in farming states | Land Hunger | Migration +30%, Land Reform movement support +25%, radicals +10%, scaled by the state's share of Peasants and Farmers |
+| Below 50 | Dispersed Property | Political strength from wealth −10%; qualifications +10%; education access +10%; radicals −10% |
 
-Every effect grows with the distance from 50, so a state at 75 gets half of
-it. A state's modifiers update with its yearly count, so a war loss or an event
+Every effect reaches its full size at 80 or 20, so a state at 65 gets half of
+it, and keeps growing beyond: the concentrated side to two thirds more at 100,
+the dispersed side to a third more at 0. A state's modifiers update with its yearly count, so a war loss or an event
 that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is

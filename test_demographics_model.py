@@ -1421,8 +1421,12 @@ class TestConsequences(unittest.TestCase):
         self.assertAlmostEqual(M.sex_women_add(82.0), 0.8 * P.SEX_WOMEN_RATE)
         self.assertEqual(M.sex_births(60.0), P.SEX_BIRTHS_FLOOR)
         self.assertEqual((M.sex_fewer_men(80.0), M.sex_women_add(75.0)), (1.0, P.SEX_WOMEN_RATE))
-        self.assertEqual((M.sex_more_men(150.0), M.sex_more_men(170.0)), (1.0, 1.0))
-        self.assertAlmostEqual(M.sex_more_men(130.0), 0.5)
+        # More Men full at 130 since the 2026-10-22 effects design; the modifiers' strengths keep rising past full at
+        # half the slope, at most 2, while these ramps stay 0-1
+        self.assertEqual((M.sex_more_men(130.0), M.sex_more_men(170.0)), (1.0, 1.0))
+        self.assertAlmostEqual(M.sex_more_men(120.0), 0.5)
+        self.assertEqual((M.sex_more_men_strength(150.0), M.sex_more_men_strength(170.0)), (1.5, 2.0))
+        self.assertEqual((M.sex_fewer_men_strength(70.0), M.sex_fewer_men_strength(40.0)), (1.5, 2.0))
 
     @unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True)   # judged as if on (held back: the switch)
     def test_the_fertility_term_scales_planned_and_unplanned_alike(self):
