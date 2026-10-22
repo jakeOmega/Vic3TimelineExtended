@@ -1359,7 +1359,8 @@ icon, one for each of the pie's seven causes (`demographics_gui_icons.md`). The 
 bowl in place of vanilla's goods-shortage box.
 
 1. **Before the first count.** A new game, on the country tab and a state's subtab: the cell shows the headstone and
-   reads Next count.
+   reads Next count, and `error.log` and `debug.log` have no line about `te_dg_dc_lead` (the hidden cause icons read
+   it; their container's visible waits for the count).
 2. **The cause's icon.** After the first count, on both: the icon is the cause the reading names (Infection beside the
    virus, and so on). A state whose leading cause differs from its country's shows its own.
 3. **No overlap.** At most one icon in the cell at once, never the headstone under a cause's icon.

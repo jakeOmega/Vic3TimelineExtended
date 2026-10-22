@@ -98,7 +98,11 @@ defaults (September 2026, ~350 icons):
 - Some objects read as something else at icon size: a laser turret as a
   camera (make it fire at a target), a landing craft as a ferry, a flight
   simulator pod as a lunar lander, a parachute as a hot-air balloon, a
-  helmet seen from the front as a face.
+  helmet seen from the front as a face, a blue spark over a brass pipe
+  fitting as a gas flame (draw a zigzag lightning bolt), a knobbly green
+  germ as a cabbage (give a virus spaced stalks with red tips).
+- A lattice pylon or tower is all thin lines and vanishes at a goods text
+  icon's 25 px: give it thick girders and something solid in front.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
