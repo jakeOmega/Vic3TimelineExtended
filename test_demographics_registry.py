@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
+import demographics_effects as DE  # noqa: E402
 import demographics_model  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
@@ -5435,6 +5436,66 @@ class _StateModifierEngine(_Engine):
             super().run(items)
 
 
+def _modifier_fields(path, name):
+    """{field: value} of a static modifier, its icon left out."""
+    body = _raw_blocks([path])[name]
+    return {k: float(v) for k, v in re.findall(r"^\s*(\w+) = (-?[\d.]+)\s*$", body, re.M)}
+
+
+class TestWealthSizes(unittest.TestCase):
+    """The 2026-10-22 effects design's Wealth Concentration sizes: concentration grows faster and crashes more often,
+    dispersal grows slower and steadier (demographics_effects.SIZES)."""
+
+    NAMES = ("inh_great_fortunes", "inh_dispersed_wealth") + STATE_WC_MODIFIERS
+
+    def test_each_modifier_is_the_spec(self):
+        for name in self.NAMES:
+            self.assertEqual(_modifier_fields(INH_MODIFIERS, name), DE.SIZES[name], name)
+
+    def test_bubble_pressure_only_on_the_national_pair(self):
+        """A country field on a state modifier would count once per state; the national pair is read by
+        banking_cycle_advance_variables only while a country's cycle runs."""
+        mods = _raw_blocks([INH_MODIFIERS])
+        for name, body in mods.items():
+            has = "country_bubble_pressure_monthly_add" in body
+            self.assertEqual(has, name in ("inh_great_fortunes", "inh_dispersed_wealth"), name)
+
+    def test_the_national_pair_follows_the_curve(self):
+        for score in (80, 100, 65, 50, 20, 0, 35):
+            eng = _StateModifierEngine()
+            eng.vars.update(te_inh_concentration=float(score))
+            eng.call("te_inh_apply_concentration_modifiers")
+            for name, want in (("inh_great_fortunes", DE.wc_high(score)), ("inh_dispersed_wealth", DE.wc_low(score))):
+                if want > 0.01:
+                    self.assertAlmostEqual(eng.modifiers.get(name), want, places=4, msg=(name, score))
+                else:
+                    self.assertNotIn(name, eng.modifiers, (name, score))
+
+    def test_dispersed_side_has_no_investment_line(self):
+        self.assertFalse([f for f in _modifier_fields(INH_MODIFIERS, "inh_dispersed_property") if "investment" in f])
+
+    def test_the_law_tooltips_describe_the_new_effects(self):
+        """The inheritance laws' custom tooltips (extra_laws.txt) restate what the score does: the dispersed side has no
+        Farmers' and Shopkeepers' investment line and weakens the Capitalists too, Concentrated Property's radicals
+        moved to Land Hunger, and both sides move bubble pressure (review of #1101)."""
+        loc = {}
+        for line in (ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml").read_text(
+                encoding="utf-8-sig").splitlines():
+            m = re.match(r'\s+(LAW_\w+_INHERITANCE_TT):\d*\s*"(.*)"\s*$', line)
+            if m:
+                loc[m.group(1)] = m.group(2)
+        lowering = ("LAW_EQUAL_INHERITANCE_INHERITANCE_TT", "LAW_NON_INHERITABLE_USAGE_RIGHTS_INHERITANCE_TT",
+                    "LAW_STATE_UNIVERSAL_HEIR_INHERITANCE_TT")
+        for key in lowering:
+            self.assertNotIn("Farmers and Shopkeepers invest", loc[key], key)
+            self.assertIn("Capitalists", loc[key], key)
+            self.assertIn("bubble", loc[key], key)
+        primo = loc["LAW_PRIMOGENITURE_INHERITANCE_TT"]
+        self.assertNotIn("radicals gather", primo)
+        self.assertIn("bubble", primo)
+        self.assertIn("clout", primo)
+
+
 class TestWealthStateModifiers(unittest.TestCase):
     """Spec 4.2's split (phase 2): two country modifiers from the national figure, three state
     modifiers from each state's own score, each with one refresh site."""
@@ -5448,14 +5509,16 @@ class TestWealthStateModifiers(unittest.TestCase):
 
     def test_the_state_modifiers_follow_the_states_own_score(self):
         cases = (
-            # score, agrarian share -> concentrated, dispersed, land hunger
-            (80, 0.5, 0.6, None, 0.3),
-            (100, 1.0, 1.0, None, 1.0),
-            (100, 0.0, 1.0, None, None),   # a city: no land hunger
+            # score, agrarian share -> concentrated, dispersed, land hunger (2026-10-22 effects design: full at 80
+            # and 20, the high side straight to 5/3 at 100, the low side half the slope past 20 to 4/3 at 0)
+            (80, 0.5, 1.0, None, 0.5),
+            (100, 1.0, 5 / 3, None, 5 / 3),
+            (100, 0.0, 5 / 3, None, None),   # a city: no land hunger
             (50, 0.8, None, None, None),
-            (50.4, 0.8, None, None, None),  # under 0.01: not applied
-            (20, 0.8, None, 0.6, None),
-            (0, 0.3, None, 1.0, None),
+            (50.2, 0.8, None, None, None),  # under 0.01: not applied
+            (20, 0.8, None, 1.0, None),
+            (10, 0.8, None, 7 / 6, None),
+            (0, 0.3, None, 4 / 3, None),
         )
         for wc, agr, high, low, hunger in cases:
             eng = self.refresh(wc, agr, before=STATE_WC_MODIFIERS)
@@ -5464,7 +5527,11 @@ class TestWealthStateModifiers(unittest.TestCase):
                 if want is None:
                     self.assertIsNone(g, (wc, agr))
                 else:
-                    self.assertAlmostEqual(g, want, msg=(wc, agr))
+                    self.assertAlmostEqual(g, want, places=4, msg=(wc, agr))
+            if high is not None:
+                self.assertAlmostEqual(high, DE.wc_high(wc), places=4)
+            if low is not None:
+                self.assertAlmostEqual(low, DE.wc_low(wc), places=4)
             for name in STATE_WC_MULTS:
                 self.assertIn(name, eng.vars, "the multipliers stay set, even at 0")
 
@@ -7489,7 +7556,8 @@ class TestConsequencesScript(unittest.TestCase):
     def _full_cases(self, on):
         cases = [dict(), dict(fam=7000.0, balance=82.0, unemployment=0.12),
                  dict(fam=16000.0, balance=135.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.25),
-                 dict(fam=0.0, balance=150.0), dict(fam=50000.0, balance=60.0)]
+                 dict(fam=0.0, balance=150.0), dict(fam=50000.0, balance=60.0), dict(balance=72.0),
+                 dict(balance=180.0, youth=(7500.0, 7500.0, 7500.0, 7500.0), unemployment=0.3)]
         for kw in cases:
             with self.subTest(on=on, **{k: v for k, v in kw.items() if k != "youth"}):
                 eng = self._state(**kw)
@@ -7508,8 +7576,13 @@ class TestConsequencesScript(unittest.TestCase):
                     want["te_demog_census_conscription_down"] = -applied
                 if bulge > 0:
                     want["te_demog_census_youth_bulge"] = bulge
-                fewer = demographics_model.sex_fewer_men(v["te_dg_sex_balance"])
-                more = demographics_model.sex_more_men(v["te_dg_sex_balance"])
+                # the modifiers' strengths: the extended curve past the reference (the 2026-10-22 effects design)
+                fewer = demographics_model.sex_fewer_men_strength(v["te_dg_sex_balance"])
+                more = demographics_model.sex_more_men_strength(v["te_dg_sex_balance"])
+                if on:
+                    self.assertAlmostEqual(fewer, DE.fewer_men(v["te_dg_sex_balance"]), places=9)
+                    self.assertAlmostEqual(more, DE.more_men(v["te_dg_sex_balance"]), places=9)
+                    self.assertAlmostEqual(y, DE.youth(share, kw.get("unemployment", 0.0)), places=9)
                 if fewer > 0:
                     want["te_demog_census_fewer_men"] = fewer
                 if more > 0:
@@ -7650,7 +7723,8 @@ class TestConsequencesScript(unittest.TestCase):
         y 0.02; the figures are still stored."""
         fam = P.CONSCRIPTION_REF * 100000.0 * (1 - P.CONSCRIPTION_CUT / 2)   # T = -0.005
         youth = 100000.0 * (P.YOUTH_FROM + P.YOUTH_SPAN * P.YOUTH_CUT / 2) / 4   # y = 0.01 at full unemployment
-        eng = self._state(fam=fam, youth=(youth,) * 4, unemployment=0.3)
+        # exactly full unemployment: past it the factor keeps rising (the 2026-10-22 effects design)
+        eng = self._state(fam=fam, youth=(youth,) * 4, unemployment=P.YOUTH_UNEMPLOYMENT_FULL)
         eng.call("te_demog_consequences_refresh")
         self.assertAlmostEqual(eng.vars["te_dg_mc"], -P.CONSCRIPTION_CUT / 2, places=4)
         self.assertAlmostEqual(eng.vars["te_dg_yb"], P.YOUTH_CUT / 2, places=4)
@@ -7682,16 +7756,28 @@ class TestConsequencesScript(unittest.TestCase):
                 "te_demog_census_youth_bulge": {"state_radicals_from_political_movements_mult": P.YOUTH_RADICALS,
                                                 "state_turmoil_effects_mult": P.YOUTH_TURMOIL},
                 "te_demog_census_fewer_men": {"state_pop_support_movement_feminist_mult": P.SEX_FEMINIST},
-                "te_demog_census_more_men": {"state_radicals_from_political_movements_mult": P.SEX_RADICALS}}
+                "te_demog_census_more_men": {"state_radicals_from_political_movements_mult": P.SEX_RADICALS,
+                                             "state_turmoil_effects_mult": P.SEX_MORE_TURMOIL}}
         self.assertEqual(set(mods), set(want))
         for name, fields in want.items():
             got = {k: float(v) for k, v in re.findall(r"(state_\w+) = (-?[\d.]+)", mods[name])}
             self.assertEqual(got, fields, name)
+            if name in DE.SIZES:
+                self.assertEqual(got, DE.SIZES[name], name)
         values = _raw_blocks([CONSEQ_VALUES])
         for name, size in (("te_demog_sex_feminist_shown", P.SEX_FEMINIST), ("te_demog_sex_radicals_shown",
-                           P.SEX_RADICALS), ("te_demog_youth_radicals_shown", P.YOUTH_RADICALS),
+                           P.SEX_RADICALS), ("te_demog_sex_turmoil_shown", P.SEX_MORE_TURMOIL),
+                           ("te_demog_youth_radicals_shown", P.YOUTH_RADICALS),
                            ("te_demog_youth_turmoil_shown", P.YOUTH_TURMOIL)):
             self.assertEqual(float(re.search(r"multiply = ([\d.]+)", values[name]).group(1)), size, name)
+
+    def test_the_model_ramps_stay_on_0_1(self):
+        """The women's rate and the panel read te_demog_sex_fewer_men: a model term, so it keeps its 0-1 clamp; only the
+        modifiers read the extended strengths."""
+        self.assertIn("max = 1", _raw_blocks([CONSEQ_VALUES])["te_demog_sex_fewer_men"])
+        with unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True):
+            self.assertAlmostEqual(demographics_model.sex_women_add(60.0), P.SEX_WOMEN_RATE)
+            self.assertAlmostEqual(demographics_model.sex_fewer_men_strength(60.0), 2.0)
 
     def test_one_refresh_site_after_the_births_and_deaths_terms(self):
         effects = _raw_blocks([EFFECTS, FAST_EFFECTS, CONSEQ_EFFECTS])

@@ -693,6 +693,27 @@ def sex_more_men(balance):
     return clamp((balance - P.SEX_MORE_FROM) / (P.SEX_MORE_FULL - P.SEX_MORE_FROM), 0.0, 1.0)
 
 
+def _extended(x):
+    """The 2026-10-22 effects design's curve: x up to 1, then half the slope, at most P.EFFECT_CAP."""
+    x = max(x, 0.0)
+    return min((x + min(x, 1.0)) / 2, P.EFFECT_CAP)
+
+
+def sex_fewer_men_strength(balance):
+    """te_demog_census_fewer_men's multiplier (te_demog_sex_fewer_men_strength): the Fewer Men ramp without its
+    ceiling, extended past full; 0 with no balance or while P.SEX_BALANCE_EFFECTS is off."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 0.0
+    return _extended((P.SEX_FEWER_FROM - balance) / (P.SEX_FEWER_FROM - P.SEX_FEWER_FULL))
+
+
+def sex_more_men_strength(balance):
+    """te_demog_census_more_men's multiplier (te_demog_sex_more_men_strength)."""
+    if balance is None or not P.SEX_BALANCE_EFFECTS:
+        return 0.0
+    return _extended((balance - P.SEX_MORE_FROM) / (P.SEX_MORE_FULL - P.SEX_MORE_FROM))
+
+
 def sex_births(balance):
     """Children per woman's sex-balance term (te_demog_tfr_sex): the balance / SEX_FEWER_FROM, at most 1 and at least
     SEX_BIRTHS_FLOOR; 1 with no balance, or while P.SEX_BALANCE_EFFECTS is off."""
@@ -732,9 +753,10 @@ def youth_share(ring):
 
 
 def youth_bulge(share, unemployment):
-    """y, the youth-bulge modifier's multiplier (te_demog_youth_bulge_now)."""
-    return (clamp((share - P.YOUTH_FROM) / P.YOUTH_SPAN, 0.0, 1.0)
-            * clamp(unemployment / P.YOUTH_UNEMPLOYMENT_FULL, 0.0, 1.0))
+    """y, the youth-bulge modifier's multiplier (te_demog_youth_bulge_now): each factor extended past 1 at half the
+    slope, the product at most P.EFFECT_CAP (the 2026-10-22 effects design)."""
+    return min(_extended((share - P.YOUTH_FROM) / P.YOUTH_SPAN)
+               * _extended(unemployment / P.YOUTH_UNEMPLOYMENT_FULL), P.EFFECT_CAP)
 
 
 def consequence_figures(ring, unemployment=0.0):

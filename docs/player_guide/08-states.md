@@ -326,17 +326,21 @@ state's yearly census:
   Men row on the Demographics tab shows the figure.
 - **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
   18% of the people while work is short. At full strength (24% young adults and
-  a fifth of the workforce without work) radicals from movements rise by 15% and
-  the effects of turmoil by 10%.
+  a fifth of the workforce without work) radicals from movements rise by 25% and
+  the effects of turmoil by 15%. Past that each factor keeps adding at half the
+  pace, up to twice the full size.
 - **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
   many dead. Fewer women marry, so children per woman fall with the balance (by
   at most a fifth), more women work, and support for women's rights movements
-  rises, by up to 10% at 80. **Census: More Men** appears from 110 men per 100
-  women and raises radicals from movements, by up to 10% at 150.
+  rises, by 25% at 80. **Census: More Men** appears from 110 men per 100
+  women and raises radicals from movements and the effects of turmoil, by 15%
+  each at 130. Past those marks both keep growing at half the pace, up to twice
+  their size at 60 or 170.
 
 Under Full the state's Gini sets one more: **Census: Inequality** appears where
-it is above 0.45 and raises radicals from movements by 5% for each 0.1 above
-that, with no cap.
+it is above 0.45 and raises radicals from movements, and support for the
+socialist and labor movements, by 5% for each 0.1 above that, twice as fast
+above 0.70, with no cap.
 
 The census books migration as whole families once a state gains or loses many
 people in a year, so migration alone seldom carries a state's balance past 90
@@ -499,12 +503,16 @@ Dominant from 25%, Balanced from 10% and Dispersed below that.
 
 Under the Full setting a Dominant or Primate pattern has effects; Balanced and
 Dispersed are the baseline. Your largest city gets Primate City, with more Urban
-Center throughput and migration attraction. Every other state gets Provincial
-Neglect, with less migration attraction and higher penalties from turmoil. Both
-grow with the largest city's share of urban people, from nothing at 25% to their
-full size at 60%: Urban Center throughput +10% and migration attraction +15% for
-the city, migration attraction −10% and turmoil penalties +10% for the rest. A
-country of fewer than three states gets neither. Each state takes the new figure
+Center and University throughput and migration attraction. Every other state gets
+Provincial Neglect, with less migration attraction, higher penalties from turmoil
+and, where the state has a culture of its own, more support for its Cultural
+Minority Movement. Both grow with the largest city's share of urban people, from
+nothing at 25% to their full size at 50%: Urban Center throughput +20%,
+University throughput +10% and migration attraction +25% for the city, migration
+attraction −15%, turmoil penalties +15% and cultural minority support +15% for
+the rest. Past 50% they keep growing at half the pace, to twice their full size
+when one city holds all the urban people. A country of fewer than three states
+gets neither. Each state takes the new figure
 at its yearly count, and the Urban Pattern tooltip names your largest city and
 shows the current figures. Under Display only it says what Full would do.
 
@@ -520,10 +528,11 @@ planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
 lower it, and a country's urbanization raises it most at half its people in towns
 and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
-full at 60%: the state crowds 10% sooner, its people give 10% more infrastructure,
-its Urban Center works at 5% more throughput, turmoil penalties rise 5% and
-families are a little smaller. Below 20% its towns give up to 10% less
-infrastructure. Where People Live counts your Metropolises.
+full at 60%: the state crowds 10% sooner, its people give 20% more infrastructure,
+its Urban Center works at 10% more throughput, turmoil penalties rise 10% and
+families are a little smaller. Past 60% all but the crowding keep growing at half
+the pace, to nearly twice their size at the highest shares. Below 20% its towns
+give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and
@@ -545,7 +554,7 @@ lapse. A site you lose, or a war that starts, while the choice is open takes
 that site off the list. A planned capital draws migrants and building to a
 region your largest city leaves behind, so over the years it can lower that
 city's share and with it Provincial Neglect. The AI plans one only with a
-Primate pattern of 45% or more, eight states or more, a largest city crowded to
+Primate pattern of 42.5% or more, eight states or more, a largest city crowded to
 Migration Crowding's ceiling (ten times the reference density), and the money
 in its treasury.
 

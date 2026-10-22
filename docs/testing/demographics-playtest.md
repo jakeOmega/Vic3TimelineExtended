@@ -1313,3 +1313,41 @@ join the war dead, civilians of every age. The self-check `cause_tags_read` is i
    pollution line's value.
 7. **The history chart.** A save from before this build: its older years keep their Added on Top layer (and the
    year's hover lists it); the years after show none.
+
+## Stronger demographic effects (2026-10-22)
+
+The effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`): Wealth Concentration
+(every rule setting) and the census's Inequality, urban pattern, metropolitan share, sex balance and youth bulge (Full),
+now worth about one vanilla law at their reference and rising past it. No self-check: every field is a registered type
+on a modifier with a multiplier, and the bubble line rests on the banking cycle's own scaled script-only modifiers
+(`scripting_best_practices.md`).
+
+1. **The tooltips show the new figures.** Any rule: a state's Wealth Concentration tile lists Concentrated Property at
+   up to +20% investment, political strength from wealth +20%, qualifications −20%, education access −10% (at a score
+   of 80); a Forced Heirship country (France) shows Dispersed Property with no investment line. Full: the Urban
+   Pattern, Settlement, sex balance and Youth hovers give the new sizes.
+2. **Past the reference.** A state at a score of 90 or more carries Concentrated Property at more than its full size
+   (the multiplier above 100%); a primate country past 50% primacy shows Primate City above 100%.
+3. **The bubble line.** A country whose banking cycle runs, with a national figure of 80: the Banking dashboard's
+   next-month bubble range reads about 0.3 more than its other sources (Dispersed Wealth at 20: 0.4 less).
+4. **Land Reform.** A land-hungry farm state with the Land Reform movement present: the movement's support breakdown
+   names Land Hunger, and the field's description reads (not a raw key).
+5. **Socialist and labor support.** Full, a late state with a Gini above 0.70: the socialist and labor movements'
+   support names Census: Inequality.
+6. **Cultural minority support.** Full, a primate country with a minority-culture province: Provincial Neglect there
+   lifts its Cultural Minority Movement.
+7. **Metropolitan Crowding.** Full, a Metropolis state: the new modifier stays out of the state's rows but shows in
+   Migration Crowding's breakdown at 10% at a share of 60; Metropolis itself shows the other three lines.
+8. **Fewer Men after a great war.** Full, a country that lost a twentieth of its men: the women's rights movement's
+   support rises in the hardest-hit states, by up to 25% at 80 men per 100 women.
+9. **Primate City's fade** (Phase 0): in a late game, the primate city's Migration Crowding hover. Crowding near its
+   ceiling would argue for fading Primate City's upside with development (the spec's Phase 3).
+10. **Primate countries past full strength.** Full, 1836: the save readout (`puerto rico_1836_01_20.v3`) puts 41 of
+    the 66 countries with an urban pattern past full primacy strength (23 at 1–1.5×, 18 at 1.5–2×; about 93 M
+    people), where the old curve capped 47 of them at 1×. The worst (Kandy, Chile, Tidore, Brunei) give their
+    provinces Provincial Neglect turmoil of about +28% and their capital about +37% Urban Center throughput. Check
+    those countries stay governable; the levers are a lower cap than 2 on the primacy strength, or the reference back
+    toward 60%.
+11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
+    reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
+    stacks (`demographics_harness.py effects SAVE`; an ordinary save works).

@@ -14,6 +14,8 @@ import test_demographics_registry as R
 from test_demographics_registry import (ROOT, PLACE_EFFECTS, PLACE_TRIGGERS, PLACE_VALUES, _block, _Engine, _find,
                                         _parse_script, _text)
 
+import demographics_effects as DE  # noqa: E402  (test_demographics_registry puts scripts/analysis on the path)
+
 PLACE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_place_modifiers.txt"
 DECISIONS = ROOT / "common" / "decisions" / "te_demog_decisions.txt"
 CAPITAL_EVENTS = ROOT / "events" / "te_demog_capital_events.txt"
@@ -77,15 +79,18 @@ class TestStrength(unittest.TestCase):
     def setUpClass(cls):
         R.TestCountry.setUpClass()
 
-    def test_strength_is_linear_from_the_dominant_floor_to_sixty_percent(self):
+    def test_strength_follows_the_extended_curve(self):
+        """The 2026-10-22 effects design: full at 50% primacy, then half the slope, 2 at 100%."""
         cases = (((1, 1, 1, 1), 0.0),            # 25%: the floor
                  ((2, 1, 1, 1, 1, 1, 1, 1, 1), 0.0),   # 20%, Balanced
-                 ((4, 3, 3), (0.4 - 0.25) / 0.35),     # 40%: the Primate label's floor
-                 ((6, 2, 2), 1.0),                     # 60%
-                 ((9, 1, 1), 1.0))                     # 82%: capped
+                 ((4, 3, 3), 0.6),                     # 40%: the Primate label's floor
+                 ((2, 1, 1), 1.0),                     # 50%: the reference
+                 ((6, 2, 2), 1.2),                     # 60%
+                 ((9, 1, 1), 0.5 + 0.5 * (9 / 11 - 0.25) / 0.25))   # 82%: past the reference at half the slope
         for urbans, want in cases:
             eng, _ = self.census(urbans)
-            self.assertAlmostEqual(eng.vars["te_dg_up_s"], want, places=5, msg=urbans)
+            self.assertAlmostEqual(eng.vars["te_dg_up_s"], want, places=4, msg=urbans)
+            self.assertAlmostEqual(DE.primacy(max(urbans) / sum(urbans)), want, places=4, msg=urbans)
 
     def test_the_largest_city_is_named_and_the_states_counted(self):
         eng, states = self.census((2, 5, 1))
@@ -200,10 +205,14 @@ class TestModifiers(unittest.TestCase):
     def test_the_fields_are_the_values(self):
         self.assertEqual(_modifier("te_demog_primate_city"), {
             "building_urban_center_throughput_add": K["te_demog_k_up_uc"],
-            "state_migration_pull_mult": K["te_demog_k_up_pull"]})
+            "state_migration_pull_mult": K["te_demog_k_up_pull"],
+            "building_university_throughput_add": K["te_demog_k_up_university"]})
         self.assertEqual(_modifier("te_demog_provincial_neglect"), {
             "state_migration_pull_mult": K["te_demog_k_up_rest_pull"],
-            "state_turmoil_effects_mult": K["te_demog_k_up_rest_turmoil"]})
+            "state_turmoil_effects_mult": K["te_demog_k_up_rest_turmoil"],
+            "state_pop_support_movement_cultural_minority_mult": K["te_demog_k_up_rest_minority"]})
+        for name in ("te_demog_primate_city", "te_demog_provincial_neglect"):
+            self.assertEqual(_modifier(name), DE.SIZES[name], name)
         self.assertEqual(_modifier("te_demog_pc_works"), {"country_authority_cost_add": K["te_demog_k_pc_authority"]})
 
     def test_every_field_is_an_engine_modifier(self):
@@ -213,11 +222,12 @@ class TestModifiers(unittest.TestCase):
             for field in _modifier(name):
                 self.assertIn(field, known, f"{name}: {field}")
 
-    def test_every_effect_is_small(self):
-        """§5.1: every effect small (a tenth or so of a decree's)."""
+    def test_every_effect_is_at_most_a_quarter(self):
+        """The 2026-10-22 effects design: a strong condition is worth one vanilla law (monument rewards give Urban
+        Center throughput +25%)."""
         for name in ("te_demog_primate_city", "te_demog_provincial_neglect"):
             for field, size in _modifier(name).items():
-                self.assertLessEqual(abs(size), 0.15, f"{name}: {field}")
+                self.assertLessEqual(abs(size), 0.25, f"{name}: {field}")
 
     def test_the_timed_modifiers_run_in_days(self):
         self.assertEqual(K["te_demog_k_pc_works_days"], K["te_demog_k_pc_build_years"] * 365)
@@ -271,6 +281,9 @@ class TestDecision(unittest.TestCase):
             self.assertIn(rule, body, rule)
         self.assertGreaterEqual(K["te_demog_k_pc_ai_strength"], (0.4 - K["te_demog_k_up_floor"]) / K["te_demog_k_up_span"],
                                 "the AI needs a Primate pattern")
+        self.assertAlmostEqual(K["te_demog_k_up_floor"] + K["te_demog_k_pc_ai_strength"] * K["te_demog_k_up_span"], 0.425,
+                               msg="the AI's threshold, 42.5% primacy, didn't move with the span (below 1 the curve "
+                                   "is a straight line)")
         self.assertEqual(K["te_demog_k_pc_ai_crowding"], 4.5, "Migration Crowding's ceiling, the measures' mark")
         self.assertNotIn("has_modifier = migration_crowding", body, "some crowding is on almost everywhere")
 

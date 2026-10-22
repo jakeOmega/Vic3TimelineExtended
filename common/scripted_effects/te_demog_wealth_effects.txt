@@ -606,11 +606,13 @@ te_demog_wc_growth_update = {
 
 # ============================================================================
 # The Inequality effect (spec §4.1, §7; owner, 2026-10-19), under Full only: relative
-# deprivation. The state's shown Gini above 0.45 raises its radicals, by 10% at 0.65 and
-# on at the same slope, with no cap (owner, 2026-10-20): +27.5% at a Gini of 1.
-# Multiplier (Gini - 0.45) / 0.20, at least 0, on te_demog_census_inequality
-# (te_demog_inequality_modifiers.txt). The engine has no lower-strata radicals type, so it
-# takes the state-wide one inh_concentrated_property and the youth bulge carry.
+# deprivation. The state's shown Gini above 0.45 raises its radicals and socialist and
+# labor support, by 10% at 0.65, with no cap (owner, 2026-10-20), and twice as steeply
+# above 0.70 (the 2026-10-22 effects design): +42.5% at a Gini of 1. Multiplier
+# (Gini - 0.45) / 0.20 + max(Gini - 0.70, 0) / 0.20, on te_demog_census_inequality
+# (te_demog_inequality_modifiers.txt; Python twin demographics_effects.inequality). The
+# engine has no lower-strata radicals type, so it takes the state-wide one Land Hunger
+# and the youth bulge carry.
 # ============================================================================
 
 # THIS = ROOT = a state, on its yearly pulse (te_demog_state_yearly, after Wealth
@@ -627,7 +629,7 @@ te_demog_inequality_refresh = {
 			te_demog_effects_run = yes
 			has_variable = te_dg_gini
 		}
-		set_variable = { name = te_dg_ineq value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 } }
+		set_variable = { name = te_dg_ineq value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 add = { value = var:te_dg_gini subtract = 0.70 multiply = 5 min = 0 } } }
 		if = {
 			limit = { var:te_dg_ineq > 0.01 }
 			add_modifier = { name = te_demog_census_inequality multiplier = var:te_dg_ineq }
