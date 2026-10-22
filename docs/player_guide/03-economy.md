@@ -422,9 +422,10 @@ Transmission Efficiency is the share that arrives:
 |---|---|---|
 | Electrical Capacitors | 4 | 60% |
 | Rural Electrification | 6 | 80% |
-| Transistors | 7 | 87% |
-| Clean Energy Technologies | 9 | 95% |
-| Smart Grids | 11 | 100% |
+| Transistors | 7 | 85% |
+| Clean Energy Technologies | 9 | 90% |
+| Smart Grids | 11 | 95% |
+| Modern Material Science | 11 | 100% |
 
 Losses make sharing cost the senders more than the receivers gain, so an early
 grid evens out less than a late one.
@@ -454,8 +455,9 @@ countries' stations where they border, and their interconnectors across the
 sea. It breaks if the two stop sharing a market.
 
 The state panel shows a Power Grid tile on a state with a station: whether its
-station is sending or receiving, the Electricity it moves a week, how many
-states its grid has and your transmission efficiency. Its hover has the grid's
+station is sending or receiving, the grid's hub (its largest producer, which
+names the grid), the Electricity the station moves a week, how many states
+its grid has and your transmission efficiency. Its hover has the grid's
 supply against its demand.
 
 A station is worth building where power plants make more than the state uses,

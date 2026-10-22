@@ -12,6 +12,7 @@
 	modifier = {
 		country_institution_ministry_of_science_max_investment_add = 1
 		country_st_res_small_arms_decay_add = -0.002
+		country_grid_transmission_efficiency_add = 0.05
 	}
 
 	unlocking_technologies = {

@@ -279,17 +279,19 @@ class EfficiencyTest(unittest.TestCase):
         base = _code(_top_level(_read(EXTRA_MODIFIERS), "INJECT:base_values"))
         self.assertRegex(base, r"\bcountry_grid_transmission_efficiency_add = 0\.6\b")
 
-    def test_four_technologies_raise_it_to_one(self):
-        total = 0.6
+    STEPS = {"rural_electrification": 0.2, "transistors": 0.05, "clean_energy_technologies": 0.05,
+             "smart_grids": 0.05, "modern_material_science": 0.05}
+
+    def test_five_technologies_raise_it_to_one(self):
         found = {}
         for name in sorted(os.listdir(TECH_DIR)):
             text = _code(_read(os.path.join(TECH_DIR, name)))
-            for tech in ("rural_electrification", "transistors", "clean_energy_technologies", "smart_grids"):
+            for tech in self.STEPS:
                 if re.search(rf"(?m)^{tech} = \{{", text):
                     m = re.search(r"country_grid_transmission_efficiency_add = ([\d.]+)", _top_level(text, tech))
                     found[tech] = float(m.group(1))
-        self.assertEqual(set(found), {"rural_electrification", "transistors", "clean_energy_technologies", "smart_grids"})
-        self.assertAlmostEqual(total + sum(found.values()), 1.0)
+        self.assertEqual(found, self.STEPS)
+        self.assertAlmostEqual(0.6 + sum(found.values()), 1.0)
 
 
 class TreatyAndTileTest(unittest.TestCase):
@@ -299,6 +301,16 @@ class TreatyAndTileTest(unittest.TestCase):
         self.assertIn("market = scope:other_country.market", _sub(article, "possible"))
         # A root-only proposal chance (treaty_evaluation_scope_audit).
         self.assertNotIn("scope:", _sub(article, "evaluation_chance"))
+
+    def test_hub_is_stored_and_shown_only_when_set(self):
+        balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
+        self.assertIn("save_scope_as = te_grid_hub_state", balance)
+        self.assertIn("set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }", balance)
+        hub = _code(_top_level(_read(VALUES), "te_grid_hub_disp"))
+        self.assertIn("exists = var:te_grid_hub", hub)
+        panel = _read(STATES_PANEL)
+        tile = panel[panel.index("### POWER GRID"):panel.index("### UN MISSION", panel.index("### POWER GRID"))]
+        self.assertIn("te_grid_hub_disp", tile)
 
     def test_tile_reads_only_guarded_values(self):
         panel = _read(STATES_PANEL)

@@ -1615,8 +1615,9 @@ state_building_grid_transfer_station_max_level_add = {
 }
 
 # The share of downloaded Grid Power a Grid Transfer Station turns back into
-# Electricity: 0.6 in base_values, raised by Rural Electrification, Transistors,
-# Clean Energy Technologies and Smart Grids to 1. Read by script only
+# Electricity: 0.6 in base_values, raised by Rural Electrification (+0.2),
+# Transistors, Clean Energy Technologies, Smart Grids and Modern Material
+# Science (+0.05 each) to 1. Read by script only
 # (te_grid_state_efficiency_value).
 country_grid_transmission_efficiency_add = {
 	decimals = 0

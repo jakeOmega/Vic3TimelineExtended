@@ -34,8 +34,9 @@
 #   te_grid_upload_electricity_mult / te_grid_download_electricity_mult
 #                    the Electricity modifiers' multipliers as applied, net of
 #                    the station's other Electricity bonuses
-#   te_grid_region_size / te_grid_region_ratio  the grid's stations and its
-#                    supply-to-demand ratio, for the state panel tile
+#   te_grid_region_size / te_grid_region_ratio / te_grid_hub  the grid's
+#                    stations, its supply-to-demand ratio and its hub (largest
+#                    producer, a state), for the state panel tile
 #   te_grid_pending, te_grid_member, te_grid_frontier  marks during a run
 # Global lists during a run: te_grid_pending_states (online stations not yet
 # in a grid), te_grid_region (the grid being built and balanced) and
@@ -332,6 +333,22 @@ te_grid_balance_region_effect = {
 		change_local_variable = { name = te_grid_members add = 1 }
 	}
 
+	# The grid's hub, named on the state panel tile: its largest producer of
+	# Electricity without the stations.
+	random_in_global_list = {
+		variable = te_grid_region
+		save_scope_as = te_grid_hub_state
+	}
+	set_local_variable = { name = te_grid_hub_production value = -1 }
+	every_in_global_list = {
+		variable = te_grid_region
+		if = {
+			limit = { var:te_grid_local_production > local_var:te_grid_hub_production }
+			set_local_variable = { name = te_grid_hub_production value = var:te_grid_local_production }
+			save_scope_as = te_grid_hub_state
+		}
+	}
+
 	# The grid's ratio: lossless P / C first, then four passes of the
 	# loss-aware formula, each on the split into uploaders and downloaders the
 	# last ratio gives.
@@ -409,6 +426,7 @@ te_grid_balance_region_effect = {
 		remove_variable = te_grid_next_flow
 		set_variable = { name = te_grid_region_size value = local_var:te_grid_members }
 		set_variable = { name = te_grid_region_ratio value = global_var:te_grid_ratio }
+		set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }
 		te_grid_set_station_flow_effect = yes
 	}
 }
@@ -441,6 +459,10 @@ te_grid_idle_station_effect = {
 	if = {
 		limit = { has_variable = te_grid_region_ratio }
 		remove_variable = te_grid_region_ratio
+	}
+	if = {
+		limit = { has_variable = te_grid_hub }
+		remove_variable = te_grid_hub
 	}
 	set_local_variable = { name = te_grid_upload_mult value = -1 }
 	set_local_variable = { name = te_grid_download_mult value = -1 }
@@ -599,6 +621,10 @@ te_grid_clear_state_effect = {
 	if = {
 		limit = { has_variable = te_grid_region_ratio }
 		remove_variable = te_grid_region_ratio
+	}
+	if = {
+		limit = { has_variable = te_grid_hub }
+		remove_variable = te_grid_hub
 	}
 }
 

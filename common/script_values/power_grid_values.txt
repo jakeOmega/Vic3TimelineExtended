@@ -88,8 +88,8 @@ te_grid_local_consumption_value = {
 }
 
 # The state's grid transmission efficiency: its owner's
-# country_grid_transmission_efficiency_add (0.6 in base_values, 1 with Smart
-# Grids), between 0.1 and 1.
+# country_grid_transmission_efficiency_add (0.6 in base_values, 1 with all
+# five technologies that raise it), between 0.1 and 1.
 te_grid_state_efficiency_value = {
 	value = 1
 	if = {
@@ -320,6 +320,20 @@ te_grid_region_ratio_disp = {
 	if = {
 		limit = { has_variable = te_grid_region_ratio }
 		value = var:te_grid_region_ratio
+	}
+}
+
+# 1 while the state has its grid's hub, the grid's largest producer of
+# Electricity, stored by the balancing (te_grid_hub, a state). The tile names
+# it with Var('te_grid_hub').GetState.GetName.
+te_grid_hub_disp = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_grid_hub
+			exists = var:te_grid_hub
+		}
+		value = 1
 	}
 }
 

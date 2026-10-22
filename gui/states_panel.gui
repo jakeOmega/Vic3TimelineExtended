@@ -2540,6 +2540,23 @@ types state_panel_types
 							}
 						}
 
+						### The grid's hub, its largest producer, read from the
+						### state reference the balancing stores (te_grid_hub).
+						te_state_tile_word_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_HUB_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_HUB"
+							}
+							blockoverride "row_value" {
+								text = "TE_STATE_GRID_ROW_HUB_VALUE"
+							}
+						}
+
 						te_state_tile_row = {
 							blockoverride "row_visible" {
 								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_region_size_disp'), '(CFixedPoint)0')]"
