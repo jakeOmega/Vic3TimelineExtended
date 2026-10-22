@@ -187,3 +187,36 @@ the console event `te_debug_monetary.1` on the country in question.
     target. With inflation well off target it moves up to a sixth of how far inflation is off, never of the 60.
 29. **Wealth Concentration's r > g.** The real rate it reads should now spread both ways: in the 2057 autosave 72 of
     91 countries sat at its −5 floor; at 3–4% inflation the investigation expected about 47 at −5 and 34 at +5.
+
+## A scare is shown once in two years (2026-10-22)
+
+The owner's call: "if a spread happens and it does not trigger a crash, do not fire the relevant event unless it has
+been at least 2 years since the last time it fired." The crash-or-scare roll moved out of the popup's `immediate`, which
+is too late to hold a popup back, into a hidden event (`minor_events_timelineextended.9`) that the spread now sends six
+days out. It sends the popup a day later, so it still lands a week after the reach, for a crash, and for a scare the
+country has not been shown in 730 days
+(`banking_contagion_scare_cooldown`, set when the scare is sent). A scare inside the cooldown ends there: no popup, no
+cycle drop, no radicals. Every engine fact it rests on is used elsewhere in the mod (a hidden event, a delayed
+`trigger_event`, a timed country variable, saved scopes riding into a triggered event), so there is no self-check line.
+
+30. **One scare popup in two years.** In a long game, a country the player runs that is reached by several spreads
+    that roll scares gets "Contagion from Abroad" (or "Financial Contagion" after a severe crash) at most once in 730 days.
+    `save_country_probe.py --var '^banking_contagion_'` shows `banking_contagion_scare_cooldown` after the first.
+    *Fallback if a second one still opens inside the window:* the variable is not surviving, or `banking_contagion_decide`
+    is not the one sending the popup; look for `minor_events_timelineextended.7` in a `trigger_event` anywhere else.
+31. **A held-back scare leaves nothing behind.** After a spread whose scare is held back, the country shows
+    `banking_crisis_wave_scared` and `banking_crisis_wave_hit` but no `banking_contagion_pending`, `contagion_crash` or
+    `banking_contagion_turned_away`, and its cycle value is unchanged by it. The next wave can reach it again.
+32. **A crash is never held back.** A contagion crash inside the cooldown still opens its popup, and does not move the
+    cooldown's date. *Watch the title:* the popup is queued after the roll now, with `contagion_crashed` already
+    saved, so a crash should open as "Cascading Financial Collapse". If it reads "Financial Contagion" or "Contagion
+    from Abroad" instead, the engine takes the title it reads at queue time from before that save
+    (`scripting_best_practices.md`, "An event's `title` is read when `trigger_event` queues it"); the options and
+    text below it still follow the crash, so that is cosmetic.
+33. **The text still follows the origin's severity.** The popup now has a hidden event before it, so the saved scope
+    for the crash that started the wave (`banking_crash_origin_country`) rides two delayed hops. After a systemic
+    crash (severity 80+), a reached country's popup should read the "systemic" description, and "panic" at 60+, not
+    the plain one. *Fallback if it reads the plain text, with `Failed to resolve scope` lines in `error.log`:* save
+    the scope again in `banking_contagion_decide` before it sends the popup, as the spread does.
+34. **The Great Depression still counts the survivors.** A country that held back a scare reads the survivor text in
+    `minor_events_timelineextended.8` (`banking_crisis_wave_scared`) like one that was shown it.
