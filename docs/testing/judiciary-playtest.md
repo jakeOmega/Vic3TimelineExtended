@@ -52,8 +52,8 @@ fallback.
    one Court Overhaul (a smaller gap adds nothing).
 7. **Secularizing.** As the Ottoman Empire with Rationalism, enact Total Separation: the courts become Statutory
    Courts. Without Rationalism, Executive Tribunals.
-8. **Old save.** Load a save from before the group. Within a month each country holds its rule-based court, and
-   within two a score at half its ceiling. No country gets Court Overhaul.
+8. **Old save.** A repair ran until 2026-10-22 (#1022); it is gone. A save from before the group now gives every
+   country Executive Tribunals and no score. Nothing to test.
 9. **Algorithmic capture.** With Algorithmic Governance and Algorithmic Jurisprudence, the country's modifiers show
    Captured Court (+2 override capacity) and the ceiling reads 30.
 10. **Revolution.** Let a revolution win in a country with a built-up score (Britain at 70): the winner's concept

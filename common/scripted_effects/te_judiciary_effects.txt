@@ -160,9 +160,8 @@ te_jud_refresh = {
 	}
 }
 
-# The starting court by rule (spec § 5): history, and an old save's one-time
-# seeding (te_repair_judiciary_seed). activate_law ignores unlock
-# technologies, as history does.
+# The starting court by rule (spec § 5), run by history. activate_law ignores
+# unlock technologies, as history does.
 te_jud_assign_court_by_rule = {
 	if = {
 		limit = {

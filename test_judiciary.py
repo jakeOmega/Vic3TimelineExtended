@@ -318,7 +318,6 @@ class ScoreDefinitionsTest(unittest.TestCase):
 
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_judiciary_effects.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_judiciary_on_actions.txt")
-REPAIRS = os.path.join(REPO, "common", "on_actions", "te_old_save_repairs.txt")
 HISTORY = os.path.join(REPO, "common", "history", "extra_history.txt")
 SCALED = ("te_judicial_independence", "te_jud_votes_legitimacy", "te_jud_unelected_authority",
           "te_jud_algorithmic_capture")
@@ -387,17 +386,6 @@ class ScoreScriptTest(unittest.TestCase):
         # modifier sums aren't in place yet (a first pulse on 1 January).
         limit = _block(_read(ON_ACTIONS), "te_jud_monthly").split("te_jud_seed_score = yes")[0]
         self.assertIn("te_jud_ceiling > 0", limit)
-
-    def test_old_save_seeding_is_a_marked_repair(self):
-        text = _read(REPAIRS)
-        self.assertIn("te_repair_judiciary_seed", _block(text, "on_monthly_pulse"))
-        block = _block(text, "te_repair_judiciary_seed")
-        self.assertIn("NOT = { has_global_variable = te_jud_world_seeded }", block)
-        self.assertIn("te_jud_assign_court_by_rule = yes", block)
-        # The score is released a month after the courts change, once their
-        # modifiers are in place.
-        self.assertIn("has_global_variable = te_jud_courts_assigned", block)
-        self.assertRegex(text, r"# OLD-SAVE REPAIR \(#\d+\): remove after \d{4}-\d{2}-\d{2}[^\n]*\n(#[^\n]*\n)*te_repair_judiciary_seed")
 
     def test_history(self):
         text = _read(HISTORY)

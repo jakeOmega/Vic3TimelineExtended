@@ -14,7 +14,6 @@ on_monthly_pulse = {
 	on_actions = {
 		te_repair_double_criminal_justice_law
 		te_repair_double_inheritance_law
-		te_repair_judiciary_seed
 	}
 }
 
@@ -241,34 +240,6 @@ te_repair_double_inheritance_law = {
 			else = {
 				activate_law = law_type:law_state_universal_heir
 				debug_log = "TE_INH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] held two inheritance laws; kept State as Universal Heir"
-			}
-		}
-	}
-}
-
-# OLD-SAVE REPAIR (#1022): remove after 2026-10-22 or at vanilla 1.15, whichever comes first.
-#
-# The Judiciary group (docs/superpowers/specs/2026-10-17-judiciary-design.md
-# § 6) is new, so a save from before it gives every country Executive
-# Tribunals, the first law in te_judiciary_laws.txt, and no score. First
-# month: the starting court by rule. Second month: te_jud_world_seeded, which
-# lets te_jud_monthly seed each score from the new law's ceiling, its
-# modifier sums by then in place. A new game sets te_jud_world_seeded at
-# on_game_started and never runs this. The laws it activates never shock:
-# te_judiciary_events.1 needs te_jud_seeded.
-te_repair_judiciary_seed = {
-	effect = {
-		if = {
-			limit = { NOT = { has_global_variable = te_jud_world_seeded } }
-			if = {
-				limit = { has_global_variable = te_jud_courts_assigned }
-				set_global_variable = te_jud_world_seeded
-			}
-			else = {
-				every_country = {
-					te_jud_assign_court_by_rule = yes
-				}
-				set_global_variable = te_jud_courts_assigned
 			}
 		}
 	}
