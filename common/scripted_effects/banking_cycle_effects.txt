@@ -1583,7 +1583,7 @@ banking_crash_check_overdrawn_interventions = {
 # A banking crash is decided here: the next year's contagion rolls are scares
 # (banking_contagion_scare_only). Called where each crash is decided, beside
 # banking_recent_crash: the origin roll in banking_cycle_check_and_execute_crash
-# (the monthly pulse) and the contagion roll below (event .7's immediate). Not in
+# (the monthly pulse) and the contagion roll below (banking_contagion_decide, event .9). Not in
 # apply_banking_crash_origin_effects, which zeroes the bubble: it runs in the
 # crash events' options, up to their three-month duration later, so a contagion
 # event could still roll a second crash in between, and option effects are also
@@ -1592,7 +1592,8 @@ banking_mark_crashed_last_year = {
 	set_variable = { name = banking_crashed_last_year value = 1 days = 365 }
 }
 
-# Run contagion crash check in event .7 immediate block.
+# Run the contagion crash check: banking_contagion_decide runs it (hidden event .9) six days after a spread
+# reaches a country, and event .7's immediate runs it for a copy an older build sent, which has not rolled.
 # Probability based on TARGET's own bubble pressure, elevated by origin crash severity.
 # Countries with low bubble pressure are mostly immune; high bubble = very vulnerable.
 # Sets contagion_crash = 1 (crash) or 0 (scare).
@@ -1649,7 +1650,7 @@ banking_contagion_crash_check = {
 		# Depression event (minor_events_timelineextended.8) reads it (#428).
 		set_variable = { name = banking_crisis_wave_crashed value = 1 }
 		# Bond fortunes vanish in a crash: every state's Wealth Concentration
-		# falls 5 (demographics spec §4.2). ROOT is the country (event .7).
+		# falls 5 (demographics spec §4.2). ROOT is the country (event .9).
 		te_demog_wc_shock = { AMOUNT = -5 }
 		# Five years of "recent banking failures" (banking_had_recent_crash).
 		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
@@ -1758,11 +1759,50 @@ banking_contagion_reach = {
 	}
 	else = {
 		banking_contagion_clear_stale = yes
-		# Reached, not crashed: whether it crashes is the contagion event's to decide
-		# (banking_contagion_crash_check sets _crashed or _scared).
+		# Reached, not crashed: whether it crashes is decided six days on (banking_contagion_decide,
+		# run by the hidden event .9, which sets _crashed or _scared), and the popup, event .7,
+		# follows a day later if the roll or the scare cooldown calls for one: a week after the
+		# reach, as it always has.
 		set_variable = { name = banking_crisis_wave_hit value = 1 }
 		banking_contagion_mark_pending = yes
-		trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
+		trigger_event = { id = minor_events_timelineextended.9 days = 6 }
+	}
+}
+
+# THE ROLL AND THE SCARE COOLDOWN (owner, 2026-10-22: "if a spread happens and it does not trigger a crash,
+# do not fire the relevant event unless it has been at least 2 years since the last time it fired").
+# The hidden event minor_events_timelineextended.9 runs this six days after the spread reaches a country.
+# The crash roll used to be event .7's own `immediate`, which is too late to hold the popup back: once an
+# event is open, the player is looking at it. So the roll moves here, ahead of it, and .7 is sent on only
+# when something is to be shown:
+#   - a crash: always. The country's saved scope contagion_crashed is set before .7 is queued, so the text
+#     the engine reads at queue time is already the crash's.
+#   - a scare, when the country has not been shown one for two years (banking_contagion_scare_cooling):
+#     the popup is sent and starts the cooldown (730 days, from the send, not the answer).
+#   - a scare inside the cooldown: nothing is shown and nothing applies (no cycle drop, no radicals). The
+#     roll still marked the country banking_crisis_wave_scared, so the Great Depression event counts it a
+#     survivor. It is freed for the next spread here too: with no .7 to answer, nothing else would remove
+#     banking_contagion_pending or the roll's leftovers.
+# Both sends wait a day, which is why the spread sends .9 six days out and not seven: a trigger_event with
+# no delay would run .7's immediate inside this effect, and the popup still lands a week after the reach.
+banking_contagion_decide = {
+	banking_contagion_crash_check = yes
+	if = {
+		limit = { var:contagion_crash > 0 }
+		save_scope_as = contagion_crashed
+		trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 1 }
+	}
+	else_if = {
+		limit = { NOT = { banking_contagion_scare_cooling = yes } }
+		set_variable = { name = banking_contagion_scare_cooldown value = 1 days = 730 }
+		trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 1 }
+	}
+	else = {
+		banking_contagion_clear_stale = yes
+		if = {
+			limit = { has_variable = banking_contagion_pending }
+			remove_variable = banking_contagion_pending
+		}
 	}
 }
 

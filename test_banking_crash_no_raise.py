@@ -669,9 +669,12 @@ class ContagionSelfCheckTest(unittest.TestCase):
 
     def test_the_event_counts_before_its_roll_and_judges_before_its_cascade(self):
         event = MINOR_EVENTS[self.EVENT]
-        immediate = [key for key, _, _ in field(event, "immediate")]
-        self.assertLess(immediate.index("banking_contagion_selfcheck_open"),
-                        immediate.index("banking_contagion_crash_check"))
+        body = field(event, "immediate")
+        immediate = [key for key, _, _ in body]
+        # the roll is only a fallback here now (the hidden event .9 made it), so it sits in an `if`
+        roll = next(i for i, (key, _, val) in enumerate(body)
+                    if key == "if" and "banking_contagion_crash_check" in repr(val))
+        self.assertLess(immediate.index("banking_contagion_selfcheck_open"), roll)
         after = field(event, "after")
         keys = [key for key, _, _ in after]
         self.assertEqual(keys[0], "banking_contagion_selfcheck_close")
@@ -810,14 +813,18 @@ else = {
 
 
 class Country:
-    """One country a contagion wave keeps reaching: the real reach, wave init, immediate and after.
+    """One country a contagion wave keeps reaching: the real reach, wave init, the hidden roll event,
+    the popup's immediate and after.
 
     Run by Interp with only the roll (CRASH_ROLL) and the after's cascade internals (its own spread,
     the Great Depression check, the post-event refresh) replaced; ``mutations`` replaces more, for
     the tests that show the checks bite. A wave usually starts elsewhere (``new_wave``); in
-    ``become_origin`` the country's own crash starts one.
+    ``become_origin`` the country's own crash starts one. The hidden event's week and the popup's day
+    are one step here (``fire``): nothing else in the model happens between them.
     """
     EVENT = "minor_events_timelineextended.7"
+    DECIDER = "minor_events_timelineextended.9"
+    COOLDOWN = "banking_contagion_scare_cooldown"
     STUBS = {"banking_cycle_spread_contagion": None,
              "banking_crisis_wave_check_great_depression": None,
              "banking_cycle_post_event_refresh": None}
@@ -828,9 +835,12 @@ class Country:
         self.origin = False       # the wave now running is this country's own crash
         self.queued, self.open = [], []  # the copies of the event, each its saved scopes
         self.overrides = {**self.STUBS, **(mutations or {})}
+        self.decider = field(MINOR_EVENTS[self.DECIDER], "immediate")
         self.immediate = immediate if immediate is not None else field(MINOR_EVENTS[self.EVENT], "immediate")
         self.after = after if after is not None else field(MINOR_EVENTS[self.EVENT], "after")
         self.sent = self.rolls = self.cascades = 0
+        self.silent = 0           # copies the hidden event ended without a popup
+        self.broken = []          # cooldown rules a fire broke, in words
         self.turned_away = 0      # reaches turned away since the copy now held was sent
         self.lost = False         # a copy was lost since the last one was sent: its leftovers wait
         self.owed_ok = False      # a copy closed alone with a reach turned away for it
@@ -869,7 +879,7 @@ class Country:
             return "passed by"
         it = self.run([("banking_contagion_reach", "=", "yes")])
         for event in it.events:
-            assert event["id"] == self.EVENT and event.get("days"), event
+            assert event["id"] == self.DECIDER and event.get("days"), event
             self.queued.append({})
             self.sent += 1
             self.turned_away = 0
@@ -879,6 +889,39 @@ class Country:
         return {0: "turned away", 1: "sent"}.get(len(it.events), "sent twice")
 
     def fire(self, crashed):
+        """A queued copy's week is up. The hidden event rolls and either ends, or sends the popup,
+        which opens a day later. Returns "silent" or "popup"; breaks of the cooldown rule are kept in
+        ``broken`` (a crash always shows, a scare shows once in two years and starts the cooldown)."""
+        scopes = self.queued.pop(0)
+        cooling = self.COOLDOWN in self.vars
+        roll = substitute(copy.deepcopy(CRASH_ROLL), {"ROLL": int(crashed), "SEVERITY": 40 + self.sent})
+        decided = self.run(self.decider, scopes, {"banking_contagion_crash_check": roll})
+        self.rolls += decided.ran.count("banking_contagion_crash_check")
+        shown = bool(decided.events)
+        if shown:
+            assert [(e["id"], e.get("days")) for e in decided.events] == [(self.EVENT, "1")], decided.events
+        if bool(crashed) and not shown:
+            self.broken.append("a crash was kept from its popup")
+        if not crashed and shown and cooling:
+            self.broken.append("a scare was shown inside the cooldown")
+        if not crashed and not shown and not cooling:
+            self.broken.append("a scare was held back with no cooldown running")
+        if not crashed and shown and not cooling and self.COOLDOWN not in self.vars:
+            self.broken.append("a shown scare did not start the cooldown")
+        if crashed and shown and cooling != (self.COOLDOWN in self.vars):
+            self.broken.append("a crash changed the cooldown")
+        if not shown:
+            self.silent += 1
+            self.turned_away = 0
+            return "silent"
+        it = self.run(self.immediate, decided.scopes)
+        self.rolls += it.ran.count("banking_contagion_crash_check")
+        self.open.append({"scopes": it.scopes, "severity": 40 + self.sent if crashed else None})
+        return "popup"
+
+    def fire_legacy(self, crashed):
+        """A popup an older build sent straight to .7, with no hidden event before it: it has not
+        rolled, so its own immediate does."""
         scopes = self.queued.pop(0)
         roll = substitute(copy.deepcopy(CRASH_ROLL), {"ROLL": int(crashed), "SEVERITY": 40 + self.sent})
         it = self.run(self.immediate, scopes, {"banking_contagion_crash_check": roll})
@@ -929,6 +972,7 @@ class Country:
                 found.append(f"options read crash_severity {read}, not their own {own}")
         if self.lines("BROKEN", "contagion_one_open") + self.lines("BROKEN", "contagion_roll_scope"):
             found.append("a BROKEN line")
+        found.extend(self.broken)
         if len(self.lines("OK", "contagion_one_open")) != int(self.owed_ok):
             found.append("contagion_one_open OK without a turned-away reach, or missing after one")
         return found
@@ -1023,7 +1067,7 @@ class ContagionBlockTest(unittest.TestCase):
         c.vars["banking_crisis_wave_hit"] = 1
         c.queued.append({})  # sent before the block: no mark
         c.sent = 1
-        c.fire(1)
+        c.fire_legacy(1)
         c.new_wave()
         self.assertEqual(c.spread(), "turned away")
         c.close()
@@ -1035,7 +1079,7 @@ class ContagionBlockTest(unittest.TestCase):
         c.new_wave()
         c.queued.append({})
         c.sent = 1
-        c.fire(1)
+        c.fire_legacy(1)
         c.new_wave()
         self.assertEqual(c.spread(), "sent")
 
@@ -1069,9 +1113,10 @@ class ContagionBlockTest(unittest.TestCase):
         """Every sequence of up to ``depth`` steps from a first wave reaching the country: another
         wave reaching it, a wave starting elsewhere (init only), its own crash starting one, a later
         tier of the wave reaching it,
-        the copy held firing (a crash or a scare), answering, or being lost; then each copy still held
+        the copy held firing (a crash or a scare), answering, or being lost, or the scare cooldown
+        running out; then each copy still held
         fires and answers. Returns (sequences run, the problems found with their steps)."""
-        actions = ("wave", "elsewhere", "origin", "tier", "crash", "scare", "close", "lose")
+        actions = ("wave", "elsewhere", "origin", "tier", "crash", "scare", "close", "lose", "years")
         found, runs = [], 0
 
         def step(c, action):
@@ -1088,6 +1133,8 @@ class ContagionBlockTest(unittest.TestCase):
                 c.fire(action == "crash")
             elif action == "close":
                 c.close()
+            elif action == "years":
+                del c.vars[c.COOLDOWN]  # two years pass: the timed variable runs out
             else:
                 c.lose()
 
@@ -1096,6 +1143,8 @@ class ContagionBlockTest(unittest.TestCase):
                 return bool(c.queued)
             if action in ("close", "lose"):
                 return bool(c.open)
+            if action == "years":
+                return c.COOLDOWN in c.vars
             return True
 
         def walk(c, seq):
@@ -1147,8 +1196,20 @@ class ContagionBlockTest(unittest.TestCase):
         after = field(MINOR_EVENTS[self.EVENT], "after")
         no_release = [item for item in after if "banking_contagion_pending" not in repr(item)]
         self.assertEqual(len(no_release), len(after) - 1)
+        decide = EFFECTS["banking_contagion_decide"]
+        scare_branch = next(i for i, (key, _, _) in enumerate(decide) if key == "else_if")
+        no_cooldown = copy.deepcopy(decide)  # a shown scare starts no cooldown
+        no_cooldown[scare_branch][2][:] = [i for i in no_cooldown[scare_branch][2] if i[0] != "set_variable"]
+        always_shown = copy.deepcopy(decide)  # the cooldown never holds a scare back
+        always_shown[scare_branch][2][0] = ("limit", "=", [("has_variable", "=", "contagion_crash")])
+        keeps_mark = copy.deepcopy(decide)  # a held-back scare leaves the country marked
+        keeps_mark[-1][2][:] = [i for i in keeps_mark[-1][2] if i[0] != "if"]
         mutations = {
             "the spread ignores the mark": {"mutations": {"banking_contagion_reach": send_always}},
+            # a scare held back is the fifth step: a wave, its scare, the answer, a second wave, its scare
+            "a shown scare starts no cooldown": {"depth": 5, "mutations": {"banking_contagion_decide": no_cooldown}},
+            "the cooldown holds nothing back": {"depth": 5, "mutations": {"banking_contagion_decide": always_shown}},
+            "a held-back scare keeps the mark": {"depth": 5, "mutations": {"banking_contagion_decide": keeps_mark}},
             "a turned-away reach records no outcome": {"mutations": {"banking_contagion_reach": no_outcome}},
             "a new copy keeps a lost one's leftovers": {"mutations": {"banking_contagion_reach": no_clear}},
             "after keeps the mark": {"after": no_release},
@@ -1158,7 +1219,7 @@ class ContagionBlockTest(unittest.TestCase):
         }
         for name, mutation in mutations.items():
             with self.subTest(mutation=name):
-                runs, found = self.explore(depth=4, **mutation)
+                runs, found = self.explore(**{"depth": 4, **mutation})
                 self.assertTrue(found, f"{name}: {runs} sequences, nothing caught")
         # The self-check is what catches the first in game: two copies open, BROKEN once.
         c = Country(mutations={"banking_contagion_reach": send_always})
@@ -1192,13 +1253,15 @@ class ContagionBlockTest(unittest.TestCase):
         days = int(field(mark, "days"))
         event = MINOR_EVENTS[self.EVENT]
         months = int(field(event, "duration"))
-        self.assertGreater(days, 7 + 31 * months)
+        decide = [val for key, _, val in field(EFFECTS["banking_contagion_decide"], "if") if key == "trigger_event"]
+        send_on = int(field(decide[0], "days"))  # the hidden event sends the popup a day on
         immediate = [key for key, _, _ in field(event, "immediate")]
-        self.assertLess(immediate.index("banking_contagion_crash_check"),
-                        immediate.index("banking_contagion_mark_pending"))
+        self.assertIn("banking_contagion_mark_pending", immediate)
         send = field(EFFECTS["banking_contagion_reach"], "else")
         self.assertIn(("banking_contagion_mark_pending", "=", "yes"), send)
-        self.assertEqual(int(field(field(send, "trigger_event"), "days")), 7)
+        wait = int(field(field(send, "trigger_event"), "days")) + send_on
+        self.assertEqual(wait, 7)  # the popup lands a week after the reach, with or without the hidden event
+        self.assertGreater(days, wait + 31 * months)
 
     def test_nothing_in_after_fires_an_event_at_once(self):
         # A trigger_event with no delay runs the event inside the calling effect; inside .7's `after` it
@@ -1236,6 +1299,144 @@ class ContagionBlockTest(unittest.TestCase):
                  if key == "if" and field(val, "limit") == [("has_variable", "=", "banking_contagion_pending")]]
         self.assertEqual(len(clear), 1)
         self.assertIn(("remove_variable", "=", "banking_contagion_pending"), clear[0])
+
+
+class ContagionScareCooldownTest(unittest.TestCase):
+    """A scare is shown once in two years (owner, 2026-10-22): "if a spread happens and it does not
+    trigger a crash, do not fire the relevant event unless it has been at least 2 years since the
+    last time it fired."
+
+    The roll used to be event .7's own immediate, too late to keep the popup from opening, so the
+    hidden event .9 rolls first (banking_contagion_decide) and sends .7 on only when a crash, or a
+    scare out of its cooldown, is to be shown. These run that effect, with the roll replaced by its
+    outcome (CRASH_ROLL) or, where a test says so, the real one.
+    """
+    EVENT = "minor_events_timelineextended.7"
+    DECIDER = "minor_events_timelineextended.9"
+    COOLDOWN = "banking_contagion_scare_cooldown"
+    # a country mid-wave: reached, with the mark the spread set when it sent the hidden event
+    SENT = {"banking_crisis_wave_hit": 1, "banking_contagion_pending": 1}
+
+    def decide(self, crashed, variables=None):
+        roll = substitute(copy.deepcopy(CRASH_ROLL), {"ROLL": int(crashed), "SEVERITY": 40})
+        it = Interp({**self.SENT, **(variables or {})}, overrides={"banking_contagion_crash_check": roll})
+        it.execute(copy.deepcopy(EFFECTS["banking_contagion_decide"]))
+        return it
+
+    def popups(self, it):
+        return [(e["id"], e["popup"], e["days"]) for e in it.events]
+
+    def test_a_crash_is_always_shown_and_does_not_touch_the_cooldown(self):
+        for cooling in (False, True):
+            with self.subTest(cooling=cooling):
+                it = self.decide(1, {self.COOLDOWN: 1} if cooling else None)
+                self.assertEqual(self.popups(it), [(self.EVENT, "yes", "1")])
+                self.assertEqual(it.scopes, {"contagion_crashed": "ROOT"})  # the title reads it when queued
+                self.assertEqual(self.COOLDOWN in it.vars, cooling)
+                self.assertIn("banking_contagion_pending", it.vars)  # the popup answers for the country
+
+    def test_a_scare_out_of_cooldown_is_shown_and_starts_it(self):
+        it = self.decide(0)
+        self.assertEqual(self.popups(it), [(self.EVENT, "yes", "1")])
+        self.assertIn(self.COOLDOWN, it.vars)
+        self.assertNotIn("contagion_crashed", it.scopes)
+        self.assertIn("banking_contagion_pending", it.vars)
+
+    def test_a_scare_in_the_cooldown_is_not_shown_and_frees_the_country(self):
+        it = self.decide(0, {self.COOLDOWN: 1, "contagion_crash": 0, "banking_contagion_turned_away": 2})
+        self.assertEqual(it.events, [])
+        self.assertIn(self.COOLDOWN, it.vars)  # it only runs out; a held-back scare does not restart it
+        self.assertIn("banking_crisis_wave_scared", it.vars)  # a survivor, for the Great Depression
+        self.assertIn("banking_crisis_wave_hit", it.vars)
+        for name in ("banking_contagion_pending", "contagion_crash", "banking_contagion_turned_away"):
+            self.assertNotIn(name, it.vars)
+        self.assertEqual(it.scopes, {})
+
+    def test_two_years_is_730_days_on_a_country_variable(self):
+        decide = EFFECTS["banking_contagion_decide"]
+        sets = [val for key, _, val in field(decide, "else_if") if key == "set_variable"]
+        self.assertEqual(len(sets), 1)
+        self.assertEqual((field(sets[0], "name"), field(sets[0], "days")), (self.COOLDOWN, "730"))
+        self.assertEqual(TRIGGERS["banking_contagion_scare_cooling"], [("has_variable", "=", self.COOLDOWN)])
+
+    def test_the_cooldown_is_set_where_a_scare_is_sent_and_nowhere_else(self):
+        for path in sorted((ROOT / "common").rglob("*.txt")) + sorted((ROOT / "events").glob("*.txt")):
+            text = path.read_text(encoding="utf-8-sig")
+            if self.COOLDOWN in text:
+                self.assertIn(path.name, ("banking_cycle_effects.txt", "banking_policy_triggers.txt"), path)
+        self.assertEqual((ROOT / "common/scripted_effects/banking_cycle_effects.txt").read_text(
+            encoding="utf-8-sig").count(f"name = {self.COOLDOWN}"), 1)
+
+    def test_a_forced_scare_is_held_to_the_same_rule(self):
+        # The real roll, for a country that crashed within the year (banking_contagion_scare_only): its
+        # first contagion scare is shown, the next one inside two years is not.
+        def decide(variables):
+            it = Interp({**self.SENT, "bubble_pressure": 90, "banking_crashed_last_year": 1, **variables},
+                        values=ContagionScareOnlyTest.VALUES, picks=[], others=ContagionScareOnlyTest.ORIGIN,
+                        trigger_values=ContagionScareOnlyTest.PINNED,
+                        overrides=ContagionScareOnlyTest.ASIDE)
+            it.execute(copy.deepcopy(EFFECTS["banking_contagion_decide"]))
+            return it
+        first = decide({})
+        self.assertEqual(self.popups(first), [(self.EVENT, "yes", "1")])
+        self.assertEqual(first.vars["contagion_crash"], 0)
+        self.assertNotIn("crash_severity", first.vars)
+        second = decide({self.COOLDOWN: 1})
+        self.assertEqual(second.events, [])
+        self.assertNotIn("contagion_crash", second.vars)
+
+    def test_the_spread_sends_the_hidden_event_and_only_it_sends_the_popup(self):
+        hidden = MINOR_EVENTS[self.DECIDER]
+        self.assertEqual(field(hidden, "hidden"), "yes")
+        self.assertEqual(field(hidden, "immediate"), [("banking_contagion_decide", "=", "yes")])
+        send = field(EFFECTS["banking_contagion_reach"], "else")
+        self.assertEqual(field(field(send, "trigger_event"), "id"), self.DECIDER)
+        self.assertEqual(field(field(send, "trigger_event"), "days"), "6")  # and the popup's day makes the week
+        sent = []
+        for path in sorted((ROOT / "common").rglob("*.txt")) + sorted((ROOT / "events").glob("*.txt")):
+            text = path.read_text(encoding="utf-8-sig")
+            for match in re.finditer(r"trigger_event\s*=\s*\{[^}]*?id\s*=\s*minor_events_timelineextended\.7\b", text):
+                sent.append(path.name)
+        self.assertEqual(sent, ["banking_cycle_effects.txt", "banking_cycle_effects.txt"])  # a crash, a scare
+
+    def test_the_popup_rolls_only_for_a_copy_nobody_rolled_for(self):
+        immediate = field(MINOR_EVENTS[self.EVENT], "immediate")
+        stub = parse_body("set_variable = { name = contagion_crash value = 1 }")
+        # sent by the hidden event: contagion_crash is set, and the popup keeps that roll
+        rolled = Interp({"contagion_crash": 0}, overrides={"banking_contagion_crash_check": stub})
+        rolled.execute(copy.deepcopy(immediate))
+        self.assertNotIn("banking_contagion_crash_check", rolled.ran)
+        self.assertEqual(rolled.vars["contagion_crash"], 0)
+        # sent by an older build: no roll yet, so it rolls
+        legacy = Interp({}, overrides={"banking_contagion_crash_check": stub})
+        legacy.execute(copy.deepcopy(immediate))
+        self.assertEqual(legacy.ran.count("banking_contagion_crash_check"), 1)
+        self.assertEqual(legacy.scopes, {"contagion_crashed": "ROOT"})
+
+    def test_the_exploration_covers_the_cooldown_running_out(self):
+        # A scare, the cooldown, another scare held back, then two years and the scare shows again.
+        c = Country()
+        c.new_wave()
+        c.spread()
+        self.assertEqual(c.fire(False), "popup")
+        c.close()
+        self.assertIn(self.COOLDOWN, c.vars)
+        c.new_wave()
+        self.assertEqual(c.spread(), "sent")
+        self.assertEqual(c.fire(False), "silent")
+        self.assertEqual(c.problems(), [])
+        for name in ContagionBlockTest.LEFTOVERS:
+            self.assertNotIn(name, c.vars)
+        c.new_wave()
+        self.assertEqual(c.spread(), "sent")  # freed: the held-back scare left no mark
+        self.assertEqual(c.fire(True), "popup")  # a crash is shown inside the cooldown
+        c.close()
+        del c.vars[self.COOLDOWN]
+        c.new_wave()
+        c.spread()
+        self.assertEqual(c.fire(False), "popup")
+        self.assertEqual(c.problems(), [])
+        self.assertIn(self.COOLDOWN, c.vars)
 
 
 class LocTest(unittest.TestCase):

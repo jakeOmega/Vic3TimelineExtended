@@ -1102,6 +1102,17 @@ banking_contagion_scare_only = {
 	has_variable = banking_crashed_last_year
 }
 
+# Was this country shown a contagion scare, the minor-shock version of
+# minor_events_timelineextended.7, in the last two years? Then the next scare
+# is not shown (owner, 2026-10-22: a spread that does not crash a country sends
+# it the popup only once every two years). banking_contagion_scare_cooldown is a
+# timed variable (730 days) set where the scare's popup is sent
+# (banking_contagion_decide). A crash is never held back by it, and a crash's
+# popup does not start it.
+banking_contagion_scare_cooling = {
+	has_variable = banking_contagion_scare_cooldown
+}
+
 # banking_cycle_events.16 (market branch: the central bank governor pushes back
 # on politicians who want cheaper money). There has to be a central bank whose
 # rate is not the government's to set. Under the full monetary system that is a

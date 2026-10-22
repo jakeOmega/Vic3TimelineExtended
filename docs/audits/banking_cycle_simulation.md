@@ -2050,6 +2050,21 @@ command at 0 points from 1.20 to 1.17. An imported arrival seldom lands within a
 at a 10-year mean interval; the rule matters most to a country a wave reaches again soon after it
 crashed, which this channel does not model.
 
+**A scare once in two years (2026-10-22).** A scare that arrives within two years of the last scare the
+country was shown is not shown and changes nothing (`scare_cooling`, the script's
+`banking_contagion_scare_cooling`; `SCARE_COOLDOWN_MONTHS` = 24 for the 730-day
+`banking_contagion_scare_cooldown`). Only a shown scare starts the clock; a crash is never held back
+and starts nothing. `State.silenced_scares` counts the held-back arrivals, kept out of
+`imported_scares`, and the printed table gains a `held/100y` column. Rerun on the price-stability
+cells (seed 20260922, 100 × 100 years, 10-year arrivals, the simulator before and after on the same
+checkout), crashes stay where they were and about one scare a century is held back: market at 0
+points goes from 2.23 to 2.21 imported crashes a century and from 7.97 to 7.01 shown scares (1.22
+held), at 8 points from 2.43 to 2.15 and from 8.22 to 6.80 (1.16 held); cooperative at 0 points from
+2.38 to 2.35 and from 7.70 to 6.76 (1.03 held), at 8 points from 1.86 to 1.87 and from 8.03 to 6.95
+(1.07 held). A 10-year mean puts an arrival inside two years of the last shown scare about one time
+in six, which is what is held back. The command cell cannot be rerun here: the reader behind
+`--economy command` stops on `has_journal_entry`, before or after this change.
+
 `State.imported_crashes` and `imported_scares` record arrival month, foreign severity, local severity,
 prior state, tier and actual drops. They never enter `State.crashes` or start an origin recovery
 clock. The extra summary reports both populations' counts per century and mean drops, plus the

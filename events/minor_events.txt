@@ -580,10 +580,11 @@ minor_events_timelineextended.7 = {
 
 	# The text reads this event's own roll, as the options do (banking_contagion_own_roll_crashed), not the
 	# country variable contagion_crash: a second copy open at once overwrites that with its own roll. The
-	# engine reads the title when banking_cycle_spread_contagion queues the event, before the roll: the
-	# event then holds no saved scope, or the upstream country's, which is never ROOT, so it reads the
-	# plain title. If the engine also keeps that early title, a crash shows the plain title (the roll stays
-	# at fire time: #428's undecided window between reached and decided depends on it).
+	# engine reads the title when the event is queued, before its `immediate`. Since the roll moved ahead of
+	# it (the hidden event .9, banking_contagion_decide), a crash has saved contagion_crashed by then and
+	# the title reads right; a copy an older build sent holds no saved scope, or the upstream country's,
+	# which is never ROOT, so it reads the plain title. If the engine also keeps that early title there, a
+	# crash shows the plain title.
 	title = {
 		first_valid = {
 			triggered_desc = { trigger = { banking_contagion_own_roll_crashed = yes } desc = minor_events_timelineextended.7.t_cascade }
@@ -613,7 +614,13 @@ minor_events_timelineextended.7 = {
 	immediate = {
 		# For the self-check in `after` (banking_cycle_effects.txt): one more copy open, and did a roll come in?
 		banking_contagion_selfcheck_open = yes
-		banking_contagion_crash_check = yes
+		# The roll was made ahead of this event, by the hidden event .9 that sent it
+		# (banking_contagion_decide), so a scare inside the two-year cooldown never opens. A copy an
+		# older build sent has not rolled (no contagion_crash): it rolls here, as before.
+		if = {
+			limit = { NOT = { has_variable = contagion_crash } }
+			banking_contagion_crash_check = yes
+		}
 		# The roll, kept for this event alone. Two contagion events can be open for one country at once (a second
 		# origin's crash in the same pulse re-runs banking_crisis_wave_init, which clears the reached marks), and the
 		# first one's `after` removes contagion_crash before the second resolves, so the text, options and `after`
@@ -974,6 +981,21 @@ minor_events_timelineextended.8 = {
 
 	after = {
 		banking_cycle_post_event_refresh = yes
+	}
+}
+
+# Hidden country event: the contagion roll, and the scare cooldown ahead of the popup.
+# banking_contagion_reach sends it six days after a spread reaches a country. It rolls crash or scare
+# (banking_contagion_crash_check) and sends event .7, the popup, a day later (a week after the reach, as
+# before) for a crash, or for a scare the country has not been shown in two years; a scare inside the
+# cooldown ends here, silently (banking_contagion_decide, owner, 2026-10-22). The roll used to be .7's
+# own `immediate`, which is too late to keep a popup from opening.
+minor_events_timelineextended.9 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		banking_contagion_decide = yes
 	}
 }
 
