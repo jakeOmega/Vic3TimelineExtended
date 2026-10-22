@@ -93,9 +93,17 @@ class BuildingTest(unittest.TestCase):
 
     def test_possible_allows_the_own_state_a_neighbour_and_a_first_station(self):
         possible = _sub(self.building, "possible")
-        self.assertIn("has_building = building_grid_transfer_station", possible)
         self.assertIn("any_neighbouring_state", possible)
         self.assertIn("is_in_same_market_area = ROOT", possible)
+        # Every branch counts a queued station, which has_building misses until it is built.
+        self.assertNotIn("has_building", possible)
+        self.assertEqual(possible.count("te_grid_state_has_station = yes"), 3)
+        trigger = _code(_top_level(_read(TRIGGERS), "te_grid_state_has_station"))
+        self.assertIn("any_scope_building", trigger)
+        self.assertIn("is_building_type = building_grid_transfer_station", trigger)
+
+    def test_has_a_panel_background(self):
+        self.assertRegex(self.building, r'background = "gfx/interface/icons/building_icons/backgrounds/\w+\.dds"')
 
 
 class MethodTest(unittest.TestCase):
@@ -107,16 +115,19 @@ class MethodTest(unittest.TestCase):
 
 
 class FlowModifierTest(unittest.TestCase):
-    PAIRS = {
-        "modifier_grid_station_upload": {"goods_input_electricity_mult", "goods_output_grid_power_mult"},
-        "modifier_grid_station_download": {"goods_input_grid_power_mult", "goods_output_electricity_mult"},
+    # One line each, so the Electricity lines can be netted of other bonuses.
+    LINES = {
+        "modifier_grid_station_upload": "goods_output_grid_power_mult",
+        "modifier_grid_station_upload_electricity": "goods_input_electricity_mult",
+        "modifier_grid_station_download": "goods_input_grid_power_mult",
+        "modifier_grid_station_download_electricity": "goods_output_electricity_mult",
     }
 
-    def test_each_modifier_scales_one_direction_at_unit_strength(self):
+    def test_each_modifier_scales_one_line_at_unit_strength(self):
         text = _code(_read(MODIFIERS))
-        for name, pair in self.PAIRS.items():
+        for name, line in self.LINES.items():
             lines = dict(re.findall(r"\b(goods_\w+) = (\S+)", _top_level(text, name)))
-            self.assertEqual(lines, {line: "1" for line in pair}, name)
+            self.assertEqual(lines, {line: "1"}, name)
 
     def test_every_grid_power_goods_modifier_is_registered(self):
         types = _read(TYPES)
@@ -133,14 +144,28 @@ class FlowModifierTest(unittest.TestCase):
         self.assertRegex(base, r"\bcountry_building_grid_transfer_station_require_subsidies_bool = yes\b")
 
     def test_modifiers_are_applied_with_local_variable_multipliers(self):
-        apply = _code(_top_level(_read(EFFECTS), "te_grid_apply_station_modifiers_effect"))
+        apply = _code(_top_level(_read(EFFECTS), "te_grid_set_station_modifiers_effect"))
         multipliers = re.findall(r"multiplier = (\S+)", apply)
-        self.assertEqual(len(multipliers), 2)
+        self.assertEqual(len(multipliers), 4)
         for value in multipliers:
             self.assertTrue(value.startswith("local_var:"), value)
-        for name in self.PAIRS:
+        for name in self.LINES:
             # A same-name add_modifier stacks: the old copy goes first.
-            self.assertLess(apply.index(f"remove_modifier = {name}"), apply.index(f"name = {name}"))
+            self.assertLess(apply.index(f"remove_modifier = {name}\n"), apply.index(f"name = {name}\n"))
+
+    def test_electricity_lines_are_netted_of_other_bonuses(self):
+        effects = _code(_read(EFFECTS))
+        apply = _top_level(effects, "te_grid_apply_station_modifiers_effect")
+        self.assertIn("subtract = local_var:te_grid_other_input", apply)
+        self.assertIn("subtract = local_var:te_grid_other_output", apply)
+        # The netting reads last month's total before overwriting what was applied.
+        self.assertLess(apply.index("te_grid_read_other_electricity_effect = yes"),
+                        apply.index("name = te_grid_upload_electricity_mult value"))
+        read = _top_level(effects, "te_grid_read_other_electricity_effect")
+        self.assertIn("prev.modifier:goods_input_electricity_mult", read)
+        self.assertIn("prev.modifier:goods_output_electricity_mult", read)
+        self.assertIn("subtract = var:te_grid_upload_electricity_mult", read)
+        self.assertIn("subtract = var:te_grid_download_electricity_mult", read)
 
 
 class BalancingTest(unittest.TestCase):
@@ -184,6 +209,7 @@ class LocalizationTest(unittest.TestCase):
         for key in ("grid_power", "building_grid_transfer_station", "building_grid_transfer_station_desc",
                     "pmg_grid_transfer_station", "pm_grid_transfer_base",
                     "modifier_grid_station_upload", "modifier_grid_station_download",
+                    "modifier_grid_station_upload_electricity", "modifier_grid_station_download_electricity",
                     "te_grid_station_adjacent_tt"):
             self.assertIn(key, keys)
 

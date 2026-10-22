@@ -2,6 +2,14 @@
 # Power Grid scripted triggers (te_grid_*)
 # ============================================================================
 
+# State scope. The state has a Grid Transfer Station, built, under construction
+# or queued. A queued building exists at level 0 (the Solar Power Receiver and
+# the seabed licences count queued levels the same way), but has_building only
+# sees it once it is built.
+te_grid_state_has_station = {
+	any_scope_building = { is_building_type = building_grid_transfer_station }
+}
+
 # State scope. The state's Grid Transfer Station is built and at least a
 # quarter staffed, so it takes part in its grid's balancing this month. A
 # station still under construction or barely staffed is set idle instead: it

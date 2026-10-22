@@ -16,6 +16,9 @@
 #   te_grid_command  the quantity asked of the station's method (0 idle)
 #   te_grid_factor   share of the order the station moved last time measured
 #   te_grid_pending  marks a station not yet balanced this pulse
+#   te_grid_upload_electricity_mult / te_grid_download_electricity_mult
+#                    the Electricity modifiers' multipliers as applied, net of
+#                    the station's other Electricity bonuses
 # Country variables te_grid_region_production / _consumption hold the grid
 # being balanced's sums for te_grid_target_value, and are cleared afterwards.
 #
@@ -107,10 +110,7 @@ te_grid_set_station_flow_effect = {
 	}
 	set_local_variable = { name = te_grid_upload_mult value = te_grid_upload_mult_value }
 	set_local_variable = { name = te_grid_download_mult value = te_grid_download_mult_value }
-	random_scope_building = {
-		limit = { is_building_type = building_grid_transfer_station }
-		te_grid_apply_station_modifiers_effect = yes
-	}
+	te_grid_apply_station_modifiers_effect = yes
 }
 
 # State scope. A station that can't take part this month moves nothing. Its
@@ -120,31 +120,106 @@ te_grid_idle_station_effect = {
 	set_variable = { name = te_grid_command value = 0 }
 	set_local_variable = { name = te_grid_upload_mult value = -1 }
 	set_local_variable = { name = te_grid_download_mult value = -1 }
+	te_grid_apply_station_modifiers_effect = yes
+}
+
+# State scope, a state with a station. Reads local_var:te_grid_upload_mult and
+# local_var:te_grid_download_mult, the multiplier each direction's lines should
+# carry in all (Q - 1 active, -1 off). The Grid Power lines take it as it is.
+# The Electricity lines take it less every other modifier on them, so a state
+# trait like Niagara Falls (+20% Electricity output, added to the 1-unit line)
+# neither makes Electricity at an uploading station nor adds to a downloading
+# one's. What was applied is stored (te_grid_upload_electricity_mult,
+# te_grid_download_electricity_mult), since next month's read includes it.
+te_grid_apply_station_modifiers_effect = {
+	te_grid_read_other_electricity_effect = yes
+	set_variable = { name = te_grid_upload_electricity_mult value = local_var:te_grid_upload_mult }
+	change_variable = { name = te_grid_upload_electricity_mult subtract = local_var:te_grid_other_input }
+	set_variable = { name = te_grid_download_electricity_mult value = local_var:te_grid_download_mult }
+	change_variable = { name = te_grid_download_electricity_mult subtract = local_var:te_grid_other_output }
+	set_local_variable = { name = te_grid_upload_electricity_mult value = var:te_grid_upload_electricity_mult }
+	set_local_variable = { name = te_grid_download_electricity_mult value = var:te_grid_download_electricity_mult }
+	te_grid_cascade_selfcheck_effect = yes
 	random_scope_building = {
 		limit = { is_building_type = building_grid_transfer_station }
-		te_grid_apply_station_modifiers_effect = yes
+		te_grid_set_station_modifiers_effect = yes
 	}
 }
 
-# Building scope, a Grid Transfer Station. Reads local_var:te_grid_upload_mult
-# and local_var:te_grid_download_mult. A same-name add_modifier stacks, so the
-# old copies go first.
-te_grid_apply_station_modifiers_effect = {
+# State scope. Sets local_var:te_grid_other_input / _other_output: everything on
+# the station's Electricity input and output lines but its own flow modifiers.
+# The building's read of each axis is the sum of every source; take out what
+# the station's modifier put there last month (an add and a remove aren't
+# visible in the block that makes them). The Uploaded Minds Nexus nets its
+# goods the same way (te_demog_um_nexus_good). Whether a building's read carries
+# its state's and country's lines is TE_SELF_CHECK grid_station_cascade.
+te_grid_read_other_electricity_effect = {
+	set_local_variable = { name = te_grid_other_input value = 0 }
+	set_local_variable = { name = te_grid_other_output value = 0 }
+	random_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		root = {
+			set_local_variable = { name = te_grid_other_input value = prev.modifier:goods_input_electricity_mult }
+			set_local_variable = { name = te_grid_other_output value = prev.modifier:goods_output_electricity_mult }
+		}
+	}
+	if = {
+		limit = {
+			has_variable = te_grid_upload_electricity_mult
+			any_scope_building = {
+				is_building_type = building_grid_transfer_station
+				has_modifier = modifier_grid_station_upload_electricity
+			}
+		}
+		change_local_variable = { name = te_grid_other_input subtract = var:te_grid_upload_electricity_mult }
+	}
+	if = {
+		limit = {
+			has_variable = te_grid_download_electricity_mult
+			any_scope_building = {
+				is_building_type = building_grid_transfer_station
+				has_modifier = modifier_grid_station_download_electricity
+			}
+		}
+		change_local_variable = { name = te_grid_other_output subtract = var:te_grid_download_electricity_mult }
+	}
+}
+
+# Building scope, a Grid Transfer Station. Reads the four local multipliers set
+# by te_grid_apply_station_modifiers_effect. A same-name add_modifier stacks, so
+# the old copies go first.
+te_grid_set_station_modifiers_effect = {
 	if = {
 		limit = { has_modifier = modifier_grid_station_upload }
 		remove_modifier = modifier_grid_station_upload
 	}
 	if = {
+		limit = { has_modifier = modifier_grid_station_upload_electricity }
+		remove_modifier = modifier_grid_station_upload_electricity
+	}
+	if = {
 		limit = { has_modifier = modifier_grid_station_download }
 		remove_modifier = modifier_grid_station_download
+	}
+	if = {
+		limit = { has_modifier = modifier_grid_station_download_electricity }
+		remove_modifier = modifier_grid_station_download_electricity
 	}
 	add_modifier = {
 		name = modifier_grid_station_upload
 		multiplier = local_var:te_grid_upload_mult
 	}
 	add_modifier = {
+		name = modifier_grid_station_upload_electricity
+		multiplier = local_var:te_grid_upload_electricity_mult
+	}
+	add_modifier = {
 		name = modifier_grid_station_download
 		multiplier = local_var:te_grid_download_mult
+	}
+	add_modifier = {
+		name = modifier_grid_station_download_electricity
+		multiplier = local_var:te_grid_download_electricity_mult
 	}
 }
 
@@ -169,6 +244,50 @@ te_grid_clear_state_effect = {
 	if = {
 		limit = { has_variable = te_grid_local_consumption }
 		remove_variable = te_grid_local_consumption
+	}
+	if = {
+		limit = { has_variable = te_grid_upload_electricity_mult }
+		remove_variable = te_grid_upload_electricity_mult
+	}
+	if = {
+		limit = { has_variable = te_grid_download_electricity_mult }
+		remove_variable = te_grid_download_electricity_mult
+	}
+}
+
+# State scope, in te_grid_apply_station_modifiers_effect. TE_SELF_CHECK
+# grid_station_cascade, once a game: at the first station whose state reads a
+# non-zero Electricity output bonus of its own (a state trait such as Niagara
+# Falls, or a country line, which a state's read is known to carry), does the
+# building's read, less the station's own modifier, carry the same bonus?
+#   OK      the two agree within 0.001: the netting cancels state and country
+#           lines.
+#   BROKEN  they differ: a building's read doesn't carry its state's lines, so
+#           the station still adds them. Fallback: add the state's read
+#           (modifier:goods_<axis>_electricity_mult in state scope) to
+#           te_grid_other_input / _output in te_grid_read_other_electricity_effect.
+te_grid_cascade_selfcheck_effect = {
+	if = {
+		limit = { NOT = { has_global_variable = te_grid_cascade_checked } }
+		set_local_variable = { name = te_grid_state_output value = modifier:goods_output_electricity_mult }
+		if = {
+			limit = {
+				OR = {
+					local_var:te_grid_state_output > 0.001
+					local_var:te_grid_state_output < -0.001
+				}
+			}
+			set_global_variable = te_grid_cascade_checked
+			set_global_variable = { name = te_grid_chk_state_output value = local_var:te_grid_state_output }
+			set_global_variable = { name = te_grid_chk_building_output value = local_var:te_grid_other_output }
+			if = {
+				limit = { te_grid_chk_cascade_gap_g <= 0.001 }
+				debug_log = "TE_SELF_CHECK OK grid_station_cascade (state Electricity output bonus=[SCOPE.ScriptValue('te_grid_chk_state_output_g')|3], the station's read less its own=[SCOPE.ScriptValue('te_grid_chk_building_output_g')|3]: the netting cancels a state's bonus)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_station_cascade (state Electricity output bonus=[SCOPE.ScriptValue('te_grid_chk_state_output_g')|3], the station's read less its own=[SCOPE.ScriptValue('te_grid_chk_building_output_g')|3]: a building's read doesn't carry its state's lines; see docs/testing/power-grid-playtest.md)"
+			}
+		}
 	}
 }
 

@@ -2,21 +2,40 @@
 # Power Grid: the Grid Transfer Station's flow modifiers
 # ============================================================================
 # Building scope, on a Grid Transfer Station, re-applied every month by
-# te_grid_apply_station_modifiers_effect. Each scales one direction of
-# pm_grid_transfer_base's 1-unit lines: applied with multiplier Q - 1 the
-# station moves Q units a week that way (before staffing and throughput,
-# which te_grid_station_factor_value measures and corrects for); applied with
-# multiplier -1 that direction is off.
+# te_grid_apply_station_modifiers_effect. Each scales one of
+# pm_grid_transfer_base's four 1-unit lines: applied with multiplier Q - 1 the
+# line moves Q a week (before staffing and throughput, which
+# te_grid_station_factor_value measures and corrects for); applied with
+# multiplier -1 it is off.
+#
+# One line each, so each can take its own multiplier: other modifiers on a
+# station's Electricity lines (a state trait such as Niagara Falls'
+# goods_output_electricity_mult +0.2) add to the line's multiplier, and the
+# Electricity modifiers are applied net of them
+# (te_grid_read_other_electricity_effect). Grid Power is the mod's own good,
+# and nothing else touches its lines.
 # ============================================================================
 
+# Upload: Grid Power out.
 modifier_grid_station_upload = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	goods_input_electricity_mult = 1
 	goods_output_grid_power_mult = 1
 }
 
+# Upload: Electricity in.
+modifier_grid_station_upload_electricity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_input_electricity_mult = 1
+}
+
+# Download: Grid Power in.
 modifier_grid_station_download = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_input_grid_power_mult = 1
+}
+
+# Download: Electricity out.
+modifier_grid_station_download_electricity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_electricity_mult = 1
 }

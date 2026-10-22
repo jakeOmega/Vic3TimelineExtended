@@ -242,6 +242,20 @@ te_grid_chk_uploaded_g = { value = global_var:te_grid_chk_uploaded }
 te_grid_chk_downloaded_g = { value = global_var:te_grid_chk_downloaded }
 te_grid_chk_stations_g = { value = global_var:te_grid_chk_stations }
 
+te_grid_chk_state_output_g = { value = global_var:te_grid_chk_state_output }
+te_grid_chk_building_output_g = { value = global_var:te_grid_chk_building_output }
+
+# |the station's read less its own - its state's read| of the Electricity
+# output bonus, for TE_SELF_CHECK grid_station_cascade.
+te_grid_chk_cascade_gap_g = {
+	value = global_var:te_grid_chk_building_output
+	subtract = global_var:te_grid_chk_state_output
+	if = {
+		limit = { global_var:te_grid_chk_state_output > global_var:te_grid_chk_building_output }
+		multiply = -1
+	}
+}
+
 # |uploaded - downloaded| over the larger of the two: 0 when the country's
 # grids balance exactly.
 te_grid_chk_imbalance_g = {
