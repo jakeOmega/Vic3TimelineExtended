@@ -405,23 +405,55 @@ Electricity is only available in the state that produces it, as in the base
 game. A Grid Transfer Station, unlocked by Electrical Capacitors, joins its
 state to a power grid so that states can share it.
 
-A grid is your stations in one market area. Once a month it shares Electricity
-so that every state on it has the same supply against its demand. A state with
-power to spare sells it to the grid as Grid Power, and a short state buys Grid
-Power and turns it back into Electricity. When the whole grid is short, every
-state on it is short by the same share. A grid takes out what it puts in, so
-power never crosses to another grid: a colony across the sea runs its own grid
-even when it shares your market, and Grid Power can't be traded between
-markets. Its price stays near its base of 30. After a change, such as a new
-power plant or a new station, the grid takes a few months to settle.
+A grid starts as your stations in one market area. Once a month it shares
+Electricity so that every state on it has the same supply against its demand.
+A state with power to spare sells it to the grid as Grid Power, and a short
+state buys Grid Power and turns it back into Electricity. When the whole grid
+is short, every state on it is short by the same share. A grid takes out what
+it puts in, so power never crosses to a grid it isn't joined to, and Grid
+Power can't be traded between markets. Its price stays near its base of 30.
+After a change, such as a new power plant or a new station, the grid takes a
+few months to settle.
+
+Some of the power a short state receives is lost on the way. Grid
+Transmission Efficiency is the share that arrives:
+
+| Technology | Era | Efficiency |
+|---|---|---|
+| Electrical Capacitors | 4 | 60% |
+| Rural Electrification | 6 | 80% |
+| Transistors | 7 | 87% |
+| Clean Energy Technologies | 9 | 95% |
+| Smart Grids | 11 | 100% |
+
+Losses make sharing cost the senders more than the receivers gain, so an early
+grid evens out less than a late one.
 
 You can build one station per state. Your first station in a market area can
 go in any of your states there, and every later one must border a state of
-yours that has a station, so a grid grows outward from where it starts. A
-station joins its grid once it is a quarter staffed. Stations are private
-infrastructure that is always subsidized: a station buys and sells both goods
-at market prices, and your government pays whatever its wages cost beyond what
-it earns.
+yours that has a station, built or queued, so a grid grows outward from where
+it starts. A station joins its grid once it is a quarter staffed. Stations are
+private infrastructure that is always subsidized: a station buys and sells
+both goods at market prices, and your government pays whatever its wages cost
+beyond what it earns.
+
+Two things join grids that don't touch:
+
+- With Clean Energy Technologies, a station can switch to the HVDC Undersea
+Interconnector method. It costs Electronic Components and more engineers.
+Two interconnector stations in states that share a sea join their grids: your
+own across the sea, such as a mainland and a colony in your market, or a
+partner's under a Grid Interconnection Agreement in your market. The AI
+switches a coastal station when it has a grid of its own across the sea.
+- The Grid Interconnection Agreement treaty article (from Intergovernmental
+Organizations, between two countries in one market that share a border, such
+as a customs union or a subject in its overlord's market) joins both
+countries' stations where they border.
+
+The state panel shows a Power Grid tile on a state with a station: whether its
+station is sending or receiving, the Electricity it moves a week, how many
+states its grid has and your transmission efficiency. Its hover has the grid's
+supply against its demand.
 
 A station is worth building where power plants make more than the state uses,
 and where Electricity is dear. A state with neither gains little from joining.
