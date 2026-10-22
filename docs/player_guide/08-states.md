@@ -450,11 +450,13 @@ and disasters.
 
 Medicine also takes time to arrive. A new medical technology, health law or
 Ministry of Health level moves a state's medicine part of the way at each yearly
-count: a tenth of the gap at first, and up to two fifths once the Electric
-Telegraph, Modern Nursing, Radio, Intergovernmental Organizations, the World
-Wide Web and Telemedicine are researched. Under Full, the Medical Outreach
-decree closes a further fifth of the gap at each count in one state, and it
-ends once the state has caught up. Turmoil raises deaths from accidents and
+count: a tenth of the gap at first, and up to just over a third once the
+Electric Telegraph, Modern Nursing, Radio, the World Wide Web and Telemedicine
+are researched. A party to the Global Pandemic Response, the convention that
+founds the World Health Organization, closes a further share, larger as the
+UN's enforcement rises. Under Full, the Medical Outreach decree closes a
+further fifth of the gap at each count in one state, and it ends once the
+state has caught up. Turmoil raises deaths from accidents and
 violence, by half at full turmoil. Where the map marks a state with malaria
 (most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
 from infection run higher, more so with severe malaria, until Malaria

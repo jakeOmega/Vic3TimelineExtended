@@ -41,16 +41,22 @@ te_demog_lx_country_carrier = {
 	}
 }
 
-# Country scope: the medical diffusion type's technologies, which speed the market threshold's fall (the decree,
-# one state's, is left out).
+# Country scope: the medical diffusion type's technologies and the World Health Organization's convention (at the
+# strength its modifier carries), which speed the market threshold's fall (the decree, one state's, is left out).
 te_demog_lx_market_diffusion = {
 	value = 0
 	if = { limit = { has_technology_researched = electric_telegraph } add = 0.05 }
-	if = { limit = { has_technology_researched = intergovernmental_organizations } add = 0.05 }
 	if = { limit = { has_technology_researched = modern_nursing } add = 0.05 }
 	if = { limit = { has_technology_researched = radio } add = 0.05 }
 	if = { limit = { has_technology_researched = telemedicine } add = 0.05 }
 	if = { limit = { has_technology_researched = world_wide_web } add = 0.05 }
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+		add = {
+			value = 0.05
+			multiply = un_convention_multiplier
+		}
+	}
 }
 
 # State scope (late-game §3.5): State Youth Centers' levels on the ectogenesis method, once the owner has its

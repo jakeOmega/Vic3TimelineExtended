@@ -279,13 +279,25 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_medicine_spreads_from_a_tenth_to_two_fifths(self):
         """The Causes of Death plan: communication and medical-training techs carry the spread of medicine, +0.05 each,
-        so a state closes 10% of the gap a year in 1836 and 40% with all six."""
+        so a state closes 10% of the gap a year in 1836 and 35% with all five. A party to the World Health
+        Organization's convention adds its own +0.05, scaled by the UN's enforcement (40% at an enforcement of 1)."""
         carried = {c.key: c.value for c in self.carriers if c.type == P.DIFFUSION_TYPE}
-        self.assertEqual(set(carried), {"electric_telegraph", "modern_nursing", "radio",
-                                        "intergovernmental_organizations", "world_wide_web", "telemedicine"})
+        self.assertEqual(set(carried), {"electric_telegraph", "modern_nursing", "radio", "world_wide_web",
+                                        "telemedicine"})
+        self.assertNotIn("intergovernmental_organizations", carried, "the WHO carries that line now")
         t = DM.totals(self.carriers, techs=set(carried))
-        self.assertAlmostEqual(P.DIFFUSION_BASE + t[P.DIFFUSION_TYPE], 0.4)
+        self.assertAlmostEqual(P.DIFFUSION_BASE + t[P.DIFFUSION_TYPE], 0.35)
+        self.assertAlmostEqual(P.DIFFUSION_BASE + t[P.DIFFUSION_TYPE] + P.WHO_DIFFUSION, 0.4)
         self.assertAlmostEqual(P.DIFFUSION_BASE + DM.totals(self.carriers)[P.DIFFUSION_TYPE], P.DIFFUSION_BASE)
+
+    def test_the_who_convention_carries_its_line(self):
+        """The line sits on the convention's static modifier (a static modifier, so load_carriers doesn't walk it), at
+        the value the late game's market threshold adds for a party (P.WHO_DIFFUSION)."""
+        text = (ROOT / "common" / "static_modifiers" / "extra_modifiers.txt").read_text(encoding="utf-8-sig")
+        block = re.search(r"(?ms)^un_pandemic_cooperation_modifier = \{(.*?)^\}", text)
+        self.assertIsNotNone(block, "un_pandemic_cooperation_modifier")
+        lines = re.findall(rf"(?m)^\t{P.DIFFUSION_TYPE} = ([\d.]+)\s*$", block.group(1))
+        self.assertEqual([float(v) for v in lines], [P.WHO_DIFFUSION])
 
     def test_health_laws_carry_access_on_the_health_institution(self):
         access = {c.key: c for c in self.carriers if c.type == P.ACCESS_TYPE}
