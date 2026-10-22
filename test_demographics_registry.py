@@ -7535,7 +7535,8 @@ class TestConsequencesScript(unittest.TestCase):
     def _full_cases(self, on):
         cases = [dict(), dict(fam=7000.0, balance=82.0, unemployment=0.12),
                  dict(fam=16000.0, balance=135.0, youth=(11000.0, 11500.0, 11000.0, 11200.0), unemployment=0.25),
-                 dict(fam=0.0, balance=150.0), dict(fam=50000.0, balance=60.0)]
+                 dict(fam=0.0, balance=150.0), dict(fam=50000.0, balance=60.0), dict(balance=72.0),
+                 dict(balance=180.0, youth=(7500.0, 7500.0, 7500.0, 7500.0), unemployment=0.3)]
         for kw in cases:
             with self.subTest(on=on, **{k: v for k, v in kw.items() if k != "youth"}):
                 eng = self._state(**kw)
@@ -7554,8 +7555,13 @@ class TestConsequencesScript(unittest.TestCase):
                     want["te_demog_census_conscription_down"] = -applied
                 if bulge > 0:
                     want["te_demog_census_youth_bulge"] = bulge
-                fewer = demographics_model.sex_fewer_men(v["te_dg_sex_balance"])
-                more = demographics_model.sex_more_men(v["te_dg_sex_balance"])
+                # the modifiers' strengths: the extended curve past the reference (the 2026-10-22 effects design)
+                fewer = demographics_model.sex_fewer_men_strength(v["te_dg_sex_balance"])
+                more = demographics_model.sex_more_men_strength(v["te_dg_sex_balance"])
+                if on:
+                    self.assertAlmostEqual(fewer, DE.fewer_men(v["te_dg_sex_balance"]), places=9)
+                    self.assertAlmostEqual(more, DE.more_men(v["te_dg_sex_balance"]), places=9)
+                    self.assertAlmostEqual(y, DE.youth(share, kw.get("unemployment", 0.0)), places=9)
                 if fewer > 0:
                     want["te_demog_census_fewer_men"] = fewer
                 if more > 0:
@@ -7696,7 +7702,8 @@ class TestConsequencesScript(unittest.TestCase):
         y 0.02; the figures are still stored."""
         fam = P.CONSCRIPTION_REF * 100000.0 * (1 - P.CONSCRIPTION_CUT / 2)   # T = -0.005
         youth = 100000.0 * (P.YOUTH_FROM + P.YOUTH_SPAN * P.YOUTH_CUT / 2) / 4   # y = 0.01 at full unemployment
-        eng = self._state(fam=fam, youth=(youth,) * 4, unemployment=0.3)
+        # exactly full unemployment: past it the factor keeps rising (the 2026-10-22 effects design)
+        eng = self._state(fam=fam, youth=(youth,) * 4, unemployment=P.YOUTH_UNEMPLOYMENT_FULL)
         eng.call("te_demog_consequences_refresh")
         self.assertAlmostEqual(eng.vars["te_dg_mc"], -P.CONSCRIPTION_CUT / 2, places=4)
         self.assertAlmostEqual(eng.vars["te_dg_yb"], P.YOUTH_CUT / 2, places=4)
@@ -7728,16 +7735,28 @@ class TestConsequencesScript(unittest.TestCase):
                 "te_demog_census_youth_bulge": {"state_radicals_from_political_movements_mult": P.YOUTH_RADICALS,
                                                 "state_turmoil_effects_mult": P.YOUTH_TURMOIL},
                 "te_demog_census_fewer_men": {"state_pop_support_movement_feminist_mult": P.SEX_FEMINIST},
-                "te_demog_census_more_men": {"state_radicals_from_political_movements_mult": P.SEX_RADICALS}}
+                "te_demog_census_more_men": {"state_radicals_from_political_movements_mult": P.SEX_RADICALS,
+                                             "state_turmoil_effects_mult": P.SEX_MORE_TURMOIL}}
         self.assertEqual(set(mods), set(want))
         for name, fields in want.items():
             got = {k: float(v) for k, v in re.findall(r"(state_\w+) = (-?[\d.]+)", mods[name])}
             self.assertEqual(got, fields, name)
+            if name in DE.SIZES:
+                self.assertEqual(got, DE.SIZES[name], name)
         values = _raw_blocks([CONSEQ_VALUES])
         for name, size in (("te_demog_sex_feminist_shown", P.SEX_FEMINIST), ("te_demog_sex_radicals_shown",
-                           P.SEX_RADICALS), ("te_demog_youth_radicals_shown", P.YOUTH_RADICALS),
+                           P.SEX_RADICALS), ("te_demog_sex_turmoil_shown", P.SEX_MORE_TURMOIL),
+                           ("te_demog_youth_radicals_shown", P.YOUTH_RADICALS),
                            ("te_demog_youth_turmoil_shown", P.YOUTH_TURMOIL)):
             self.assertEqual(float(re.search(r"multiply = ([\d.]+)", values[name]).group(1)), size, name)
+
+    def test_the_model_ramps_stay_on_0_1(self):
+        """The women's rate and the panel read te_demog_sex_fewer_men: a model term, so it keeps its 0-1 clamp; only the
+        modifiers read the extended strengths."""
+        self.assertIn("max = 1", _raw_blocks([CONSEQ_VALUES])["te_demog_sex_fewer_men"])
+        with unittest.mock.patch.object(P, "SEX_BALANCE_EFFECTS", True):
+            self.assertAlmostEqual(demographics_model.sex_women_add(60.0), P.SEX_WOMEN_RATE)
+            self.assertAlmostEqual(demographics_model.sex_fewer_men_strength(60.0), 2.0)
 
     def test_one_refresh_site_after_the_births_and_deaths_terms(self):
         effects = _raw_blocks([EFFECTS, FAST_EFFECTS, CONSEQ_EFFECTS])

@@ -88,13 +88,14 @@ te_demog_consequences_apply = {
 		limit = { te_demog_youth_applied > 0 }
 		add_modifier = { name = te_demog_census_youth_bulge multiplier = te_demog_youth_applied }
 	}
+	# the strengths, extended past full (the 2026-10-22 effects design); the 0-1 ramps stay for the model terms
 	if = {
-		limit = { te_demog_sex_fewer_men > 0 }
-		add_modifier = { name = te_demog_census_fewer_men multiplier = te_demog_sex_fewer_men }
+		limit = { te_demog_sex_fewer_men_strength > 0 }
+		add_modifier = { name = te_demog_census_fewer_men multiplier = te_demog_sex_fewer_men_strength }
 	}
 	if = {
-		limit = { te_demog_sex_more_men > 0 }
-		add_modifier = { name = te_demog_census_more_men multiplier = te_demog_sex_more_men }
+		limit = { te_demog_sex_more_men_strength > 0 }
+		add_modifier = { name = te_demog_census_more_men multiplier = te_demog_sex_more_men_strength }
 	}
 }
 

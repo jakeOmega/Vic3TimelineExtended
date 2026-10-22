@@ -334,8 +334,10 @@ YOUTH_AGES = (20, 29)          # calendar (life stage)
 YOUTH_FROM = 0.18
 YOUTH_SPAN = 0.06
 YOUTH_UNEMPLOYMENT_FULL = 0.2
-YOUTH_RADICALS = 0.15          # state_radicals_from_political_movements_mult at y = 1
-YOUTH_TURMOIL = 0.10           # state_turmoil_effects_mult at y = 1
+# The 2026-10-22 effects design: the main demographic source of general unrest, and each factor keeps rising past 1 at
+# half the slope, the product at most EFFECT_CAP (demographics_effects.youth).
+YOUTH_RADICALS = 0.25          # state_radicals_from_political_movements_mult at y = 1
+YOUTH_TURMOIL = 0.15           # state_turmoil_effects_mult at y = 1
 # On with conscription (above): step 4 held it back because 73% of the 1898 save's bulge states sat outside 90-110 men
 # per 100 women, the booking's young men; re-walked with the booking, no state's 20-29 share passes 0.183 to 1901.
 # Written as te_demog_k_youth_effects.
@@ -359,10 +361,16 @@ SEX_FEWER_FROM = 90.0
 SEX_FEWER_FULL = 80.0
 SEX_BIRTHS_FLOOR = 0.8
 SEX_WOMEN_RATE = 0.07           # in the game's units, as MEN_RATE (0.1 x 0.7)
-SEX_FEMINIST = 0.10            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
+# The 2026-10-22 effects design: the modifiers' strengths keep rising past full at half the slope, at most EFFECT_CAP
+# (70 or 150 men give 1.5, 60 or 170 give 2); the model terms (births, the women's rate) keep the 0-1 ramps. More Men
+# is full at 130 (was 150) and brings turmoil, standing in for the crime and violence of a surplus of young men.
+SEX_FEMINIST = 0.25            # state_pop_support_movement_feminist_mult (a percentage; the _add form is not one)
 SEX_MORE_FROM = 110.0
-SEX_MORE_FULL = 150.0
-SEX_RADICALS = 0.10            # state_radicals_from_political_movements_mult at full
+SEX_MORE_FULL = 130.0
+SEX_RADICALS = 0.15            # state_radicals_from_political_movements_mult at full
+SEX_MORE_TURMOIL = 0.15        # state_turmoil_effects_mult at full
+# The extended strengths' cap where a scale has no natural end (the sex balance, the youth bulge).
+EFFECT_CAP = 2.0
 
 
 # ---- Late Marriage and Birth Spacing ---------------------------------------------------------------------------

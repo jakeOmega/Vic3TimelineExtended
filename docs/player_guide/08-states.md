@@ -326,13 +326,16 @@ state's yearly census:
   Men row on the Demographics tab shows the figure.
 - **Census: Youth Bulge** appears where young adults aged 20 to 29 are more than
   18% of the people while work is short. At full strength (24% young adults and
-  a fifth of the workforce without work) radicals from movements rise by 15% and
-  the effects of turmoil by 10%.
+  a fifth of the workforce without work) radicals from movements rise by 25% and
+  the effects of turmoil by 15%. Past that each factor keeps adding at half the
+  pace, up to twice the full size.
 - **Census: Fewer Men** appears below 90 men per 100 women, as after a war with
   many dead. Fewer women marry, so children per woman fall with the balance (by
   at most a fifth), more women work, and support for women's rights movements
-  rises, by up to 10% at 80. **Census: More Men** appears from 110 men per 100
-  women and raises radicals from movements, by up to 10% at 150.
+  rises, by 25% at 80. **Census: More Men** appears from 110 men per 100
+  women and raises radicals from movements and the effects of turmoil, by 15%
+  each at 130. Past those marks both keep growing at half the pace, up to twice
+  their size at 60 or 170.
 
 Under Full the state's Gini sets one more: **Census: Inequality** appears where
 it is above 0.45 and raises radicals from movements, and support for the

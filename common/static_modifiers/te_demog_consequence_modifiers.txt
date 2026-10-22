@@ -20,21 +20,25 @@ te_demog_census_conscription_down = {
 	state_conscription_rate_mult = -1
 }
 
-# Young adults above 18% of the people while work is short (P.YOUTH_RADICALS, P.YOUTH_TURMOIL at full).
+# Young adults above 18% of the people while work is short (P.YOUTH_RADICALS, P.YOUTH_TURMOIL at full: 24% and a fifth
+# out of work; up to twice that beyond). The main demographic source of general unrest (Urdal 2006).
 te_demog_census_youth_bulge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
-	state_radicals_from_political_movements_mult = 0.15
-	state_turmoil_effects_mult = 0.1
+	state_radicals_from_political_movements_mult = 0.25
+	state_turmoil_effects_mult = 0.15
 }
 
-# Fewer men than women aged 20-59 (P.SEX_FEMINIST at full, 80 men per 100 women).
+# Fewer men than women aged 20-59 (P.SEX_FEMINIST at full, 80 men per 100 women; up to twice that at 60). The women's
+# rights movement presses for Women's Suffrage itself, so there is no national suffrage line.
 te_demog_census_fewer_men = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds
-	state_pop_support_movement_feminist_mult = 0.1
+	state_pop_support_movement_feminist_mult = 0.25
 }
 
-# More men than women aged 20-59 (P.SEX_RADICALS at full, 150 men per 100 women).
+# More men than women aged 20-59 (P.SEX_RADICALS, P.SEX_MORE_TURMOIL at full, 130 men per 100 women; up to twice that at
+# 170). Turmoil stands in for the crime and violence of a surplus of young men (Hudson and den Boer, Bare Branches).
 te_demog_census_more_men = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
-	state_radicals_from_political_movements_mult = 0.1
+	state_radicals_from_political_movements_mult = 0.15
+	state_turmoil_effects_mult = 0.15
 }
