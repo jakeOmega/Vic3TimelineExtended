@@ -17,7 +17,7 @@ Simulates a realistic financial cycle with boom/bust mechanics, including specul
 - **7-tier economy phases:** panic → downturn → stagnation → stable → expansion → boom → frenzy
 - **Momentum system:** Monthly momentum decays (90% retention), modifiers add/subtract momentum, random nudge with bias
 - **Crash detection:** Asymmetric — higher probability in frenzy/boom when bubble pressure is high
-- **Contagion:** Crash spreads via trade agreements, customs unions, adjacency, economic dependence, market share, to countries no more than 20 times the crashing economy's GDP (`banking_contagion_min_source_gdp`, 5% of the target's GDP). Event `minor_events_timelineextended.7` fires to connected countries.
+- **Contagion:** Crash spreads via trade agreements, customs unions, adjacency, economic dependence, market share, to countries no more than 20 times the crashing economy's GDP (`banking_contagion_min_source_gdp`, 5% of the target's GDP). Event `minor_events_timelineextended.7` fires to connected countries, after the hidden `.9` has rolled for them (a scare is shown only once in two years).
 - **Fiscal policy:** `financial_cycle_government_fiscal_policy_effect` recalculated monthly based on budget
 - **Text by economy:** the title and the description follow the economic system law (command economy, cooperative ownership, anything else). Both are customizable localization in `common/customizable_localization/zzz_extra_custom_loc.txt`: `te_banking_cycle_title` behind `je_banking_cycle`, and `te_banking_cycle_reason` behind the engine's implicit `je_banking_cycle_reason`, which picks `je_banking_cycle_reason_command_economy` / `_cooperative_ownership` / `_market`. The two variants had been unreferenced since `be165ed6` and were wired back on 2026-09-26. `progress_desc` branches on the same two laws with `triggered_desc`. `status_desc` is empty while the entry is active and keeps one line (`banking_cycle_status_not_started`) for an entry shown before it starts: the phase, momentum and bubble paragraphs repeated the overview and went in play-test round 2 (2026-09-29), and the three monthly modifier totals with their breakdowns (`BANKING_CURR_MODIFIERS`) moved into the tooltips of the overview's next-month ranges (2026-10-07; see `mod_systems.md` § Policy Dashboard).
 
@@ -116,6 +116,7 @@ Part of the reference sections in `custom_widget_container_3`, open by default i
 ### Events
 - `minor_events_timelineextended.6` — crash announcement (origin country)
 - `minor_events_timelineextended.7` — contagion to connected countries
+- `minor_events_timelineextended.9` — hidden: rolls crash or scare for a reached country and sends `.7` for a crash, or for a scare not shown in two years
 - `banking_cycle_events.txt` — 83 event blocks (counted 2026-09-26): `.1`–`.69` (no `.12` or `.49`) plus the sixteen `_command` / `_coop` variants `.101`–`.120` and `.151`–`.170`
   - Events 1, 4, 6, 10, 15, 16, 17, 20 have dedicated `_command` / `_coop` variants
   - Events 2, 5, 7–9, 11, 18, 21–26, 28, 30–33, 35–37, 40–44 are **market-economy gated** (`trigger = { banking_is_market_economy = yes }` in dispatch block in `banking_cycle_effects.txt`)

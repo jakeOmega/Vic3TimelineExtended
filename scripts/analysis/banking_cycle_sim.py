@@ -836,6 +836,8 @@ class State:
     economy: str = "market"
     imported_crashes: list[ImportedEvent] = field(default_factory=list)
     imported_scares: list[ImportedEvent] = field(default_factory=list)
+    silenced_scares: int = 0  # arrivals that rolled a scare inside the cooldown: no popup, no effect
+    last_scare_month: int | None = None  # the month the last scare popup was shown
     pool_balance: float = 24.0  # units of weekly gross income
     treasury_balance: float = 0.0  # same units; initialized from gold_reserves
     pool_balance_add: float = 0.0  # monthly command net-income calibration
@@ -2191,12 +2193,23 @@ def crashed_last_year(state: State, month: int) -> bool:
             or any(month - event.month < 12 for event in state.imported_crashes))
 
 
+# banking_contagion_scare_cooldown: a scare is shown once in two years, 730 days (owner, 2026-10-22).
+SCARE_COOLDOWN_MONTHS = 24
+
+
+def scare_cooling(state: State, month: int) -> bool:
+    """banking_contagion_scare_cooling: a scare popup was shown within the last two years. Only a
+    shown scare starts the cooldown; a crash neither starts it nor waits for it."""
+    return state.last_scare_month is not None and month - state.last_scare_month < SCARE_COOLDOWN_MONTHS
+
+
 def imported_crash(cfg: Config, state: State, rng: random.Random, month: int) -> bool:
     """An arrival has already reached the country; roll crash versus scare.
 
     Fixed uniform foreign tier mix avoids coupling imports to local tuning.
     Backstop and decaying contagion event options are deliberately omitted.
     Within a year of a crash the arrival is a scare, with no roll (banking_contagion_scare_only).
+    A scare inside the scare cooldown is not shown and changes nothing (banking_contagion_decide).
     """
     foreign = rng.choice((10.0, 30.0, 50.0, 70.0, 90.0))
     boost, severity_boost = (30, 20) if foreign >= 80 else (20, 15) if foreign >= 60 else (10, 10) if foreign >= 40 else (5, 5)
@@ -2205,6 +2218,11 @@ def imported_crash(cfg: Config, state: State, rng: random.Random, month: int) ->
     weight = (state.bubble_pressure + boost) * chance_mult
     weight *= ECONOMY_CRASH_MULT["banking_contagion_chance_economy_mult"][cfg.economy]
     crashed = not crashed_last_year(state, month) and rng.random() < weight / (weight + 100)
+    if not crashed and scare_cooling(state, month):
+        state.silenced_scares += 1
+        return False
+    if not crashed:
+        state.last_scare_month = month
     severity = 0.0
     if crashed:
         severity = state.bubble_pressure * tuned("sev_scale", K.sv("banking_crash_severity_scale_value")) + severity_boost
@@ -3181,6 +3199,7 @@ def extension_summary(cfg: Config, states: list[State]) -> dict:
         out["hold_tools"] = list(cfg.hold_tools)
     if cfg.imported_crash_years:
         out["imported_crash_years"] = cfg.imported_crash_years
+        out["silenced_scares_per_century"] = sum(s.silenced_scares for s in states) / len(states) / cfg.years * 100
         for attr in ("imported_crashes", "imported_scares"):
             events = [event for state in states for event in getattr(state, attr)]
             out[attr] = {
@@ -3214,14 +3233,16 @@ def print_extensions(rows: list[dict], args) -> None:
         print("\nA player opens the Emergency Liquidity Program whenever it can and never closes it (§25).")
     if args.imported_crash_years:
         print(f"\nImported arrivals: mean {args.imported_crash_years:g} years; origin counts above exclude imports")
-        print(f"{'cell':<32} {'crash/100y':>10} {'scare/100y':>10} {'under%':>7} {'crash dV':>9} {'dM':>7} {'scare dV':>9} {'dM':>7}")
+        print(f"{'cell':<32} {'crash/100y':>10} {'scare/100y':>10} {'held/100y':>10} {'under%':>7} {'crash dV':>9} {'dM':>7} {'scare dV':>9} {'dM':>7}")
         for row in rows:
             crash, scare = row["imported_crashes"], row["imported_scares"]
             print(f"{row['label']:<32} {crash['per_century']:10.2f} {scare['per_century']:10.2f} "
+                  f"{row['silenced_scares_per_century']:10.2f} "
                   f"{100 * (crash['already_below_tier_share'] or 0):7.1f} "
                   f"{crash['value_drop_mean']:9.2f} {crash['momentum_drop_mean']:7.2f} "
                   f"{scare['value_drop_mean']:9.2f} {scare['momentum_drop_mean']:7.2f}")
-        print("under% = imported crashes arriving below their tier ceiling; dV/dM = mean drops")
+        print("under% = imported crashes arriving below their tier ceiling; dV/dM = mean drops; "
+              "held = scares inside the two-year cooldown (not shown, no effect)")
     if args.pool:
         print("\nToy pool: peak/trough relative to settled balance (24 weeks of baseline income)")
         print(f"{'cell':<32} {'peak':>7} {'trough':>7} {'>1.5%':>7} {'treasury':>10} {'inject':>7} {'withdraw':>8}")

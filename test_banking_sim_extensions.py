@@ -194,13 +194,47 @@ class Extensions(unittest.TestCase):
                 else:
                     self.assertTrue(S.imported_crash(cfg, state, Draws(90.0, 0.0, .95), 40))
 
+    def test_a_scare_is_shown_once_in_two_years(self):
+        # banking_contagion_scare_cooldown (730 days) is set where a scare popup is sent, and while it
+        # runs a scare is neither shown nor applied (banking_contagion_decide); a crash is unaffected,
+        # and a held-back scare does not restart the clock.
+        decide = definitions('common/scripted_effects/banking_cycle_effects.txt')['banking_contagion_decide']
+        mark = Script.field(Script.field(decide, 'else_if'), 'set_variable')
+        self.assertEqual(Script.field(mark, 'days'), '730')
+        self.assertEqual(S.SCARE_COOLDOWN_MONTHS * 365 / 12, 730)
+        cfg = S.Config()
+        state = S.State(finance_cycle_value=50, finance_cycle_momentum=0, bubble_pressure=0)
+        outcomes = []
+        for month in (0, 10, 23, 24, 30, 47, 48):
+            before = state.finance_cycle_value
+            # the draw .99 misses the crash weight: a scare
+            self.assertFalse(S.imported_crash(cfg, state, Draws(10.0, .99), month))
+            outcomes.append((month, state.finance_cycle_value < before))
+        # shown at 0, 24 and 48; held back at 10, 23, 30 and 47 (24 months after the last one shown)
+        self.assertEqual(outcomes, [(0, True), (10, False), (23, False), (24, True), (30, False),
+                                    (47, False), (48, True)])
+        self.assertEqual((len(state.imported_scares), state.silenced_scares), (3, 4))
+        self.assertEqual(state.last_scare_month, 48)
+        # a certain crash inside the cooldown is shown, and starts no cooldown of its own
+        state = S.State(finance_cycle_value=90, finance_cycle_momentum=0, bubble_pressure=100)
+        S.imported_crash(cfg, state, Draws(10.0, .99), 0)
+        self.assertTrue(S.scare_cooling(state, 1))
+        self.assertTrue(S.imported_crash(cfg, state, Draws(90.0, 0.0, .95), 1))
+        self.assertEqual((len(state.imported_crashes), state.last_scare_month), (1, 0))
+        self.assertTrue(S.scare_cooling(state, 23))
+        self.assertFalse(S.scare_cooling(state, 24))
+        # the summary reports the held-back scares apart from the shown ones
+        run = S.run_once(S.Config(years=2, imported_crash_years=1 / 12), 42)
+        summary = S.extension_summary(S.Config(years=2, imported_crash_years=1 / 12), [run])
+        self.assertEqual(summary['silenced_scares_per_century'], run.silenced_scares / 2 * 100)
+
     def test_import_rate_and_separate_summary(self):
         cfg = S.Config(years=100, imported_crash_years=10)
         # Arrival draws alone: annualized expectation 10 per century.
         arrivals = sum(random.Random(i).random() < 1 / 120 for i in range(120000))
         self.assertAlmostEqual(arrivals / 100, 10, delta=1)
         state = S.run_once(S.Config(years=2, imported_crash_years=1 / 12), 42)
-        self.assertEqual(len(state.imported_crashes) + len(state.imported_scares), 24)
+        self.assertEqual(len(state.imported_crashes) + len(state.imported_scares) + state.silenced_scares, 24)
         summary = S.extension_summary(cfg, [state])
         self.assertEqual(summary['imported_crashes']['per_century'], len(state.imported_crashes))
 
