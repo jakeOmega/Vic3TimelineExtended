@@ -13447,6 +13447,14 @@ REPLACE:ideology_socialist_movement = {
 		law_pro_labor_ministry_of_labor = strongly_approve
 		law_pro_capital_ministry_of_labor = strongly_disapprove
 	}
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = neutral
+		law_equal_inheritance = approve
+		law_free_testation = disapprove
+		law_state_universal_heir = approve
+		law_non_inheritable_usage_rights = neutral
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = neutral
 		law_neocameralism = strongly_disapprove
@@ -14058,6 +14066,14 @@ REPLACE:ideology_liberal_movement = {
 		law_central_bank_independence = strongly_approve
 		law_state_owned_banking = disapprove
 	}
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = neutral
+		law_equal_inheritance = neutral
+		law_free_testation = approve
+		law_state_universal_heir = disapprove
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_internal_security = {
 		law_national_guard = approve
 		law_guaranteed_liberties = approve
@@ -14176,6 +14192,14 @@ REPLACE:ideology_radical_movement = {
 		law_minority_rights_protection = approve
 		law_minority_rights_affirmative_action = strongly_approve
 	}
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = neutral
+		law_equal_inheritance = approve
+		law_free_testation = disapprove
+		law_state_universal_heir = neutral
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = strongly_approve
 		law_neocameralism = disapprove
@@ -14235,6 +14259,14 @@ REPLACE:ideology_liberal_republican_movement = {
 		law_rehabilitation_focused_criminal_justice = strongly_approve
 		law_restorative_justice = neutral
 		law_penal_labor_camps = strongly_disapprove
+	}
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = neutral
+		law_equal_inheritance = neutral
+		law_free_testation = approve
+		law_state_universal_heir = disapprove
+		law_non_inheritable_usage_rights = disapprove
 	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = neutral
@@ -14298,6 +14330,14 @@ REPLACE:ideology_national_liberal_movement = {
 		law_restorative_justice = approve
 		law_penal_labor_camps = strongly_disapprove
 	}
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = neutral
+		law_equal_inheritance = neutral
+		law_free_testation = approve
+		law_state_universal_heir = disapprove
+		law_non_inheritable_usage_rights = disapprove
+	}
 	lawgroup_internal_security = {
 		law_national_guard = approve
 		law_guaranteed_liberties = approve
@@ -14343,6 +14383,17 @@ REPLACE:ideology_national_liberal_movement = {
 		law_cultural_exclusion = disapprove
 		law_multicultural = strongly_disapprove
 		law_subjecthood = strongly_disapprove
+	}
+}
+
+INJECT:ideology_land_reformer_movement = {
+	lawgroup_inheritance = {
+		law_primogeniture = strongly_disapprove
+		law_partible = approve
+		law_equal_inheritance = approve
+		law_free_testation = neutral
+		law_state_universal_heir = disapprove
+		law_non_inheritable_usage_rights = neutral
 	}
 }
 

@@ -152,6 +152,49 @@ anarchist_inheritance = [
     ("law_state_universal_heir", "disapprove"),
     ("law_non_inheritable_usage_rights", "strongly_approve"),
 ]
+# The reform movements (2026-10-22): the AI weighs a law change by the movements that want it
+# (CHANGE_LAW_POLITICAL_MOVEMENT_FACTOR), and with no stance here nothing pressed a country to leave
+# Primogeniture & Entail while the traditionalist movements pressed it to stay. Each strongly disapproves
+# of entail. The liberal movements wanted land free to sell and bequeath: the Frankfurt constitution of
+# 1849 abolished entails (§170), and Cobden and Bright's "free trade in land" campaign ended in the 1882
+# and 1925 Settled Land Acts.
+liberal_movement_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "neutral"),
+    ("law_free_testation", "approve"),
+    ("law_state_universal_heir", "disapprove"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
+]
+# The radicals wanted equal shares, so a father can't make one heir: the Convention's law of 17 Nivose
+# Year II (1794) split every estate equally among the children.
+radical_movement_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "approve"),
+    ("law_free_testation", "disapprove"),
+    ("law_state_universal_heir", "neutral"),
+    ("law_non_inheritable_usage_rights", "disapprove"),
+]
+# The socialists split: the Saint-Simonians and the Communist Manifesto (1848) would abolish inheritance,
+# the social democrats would divide it and tax it.
+socialist_movement_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "neutral"),
+    ("law_equal_inheritance", "approve"),
+    ("law_free_testation", "disapprove"),
+    ("law_state_universal_heir", "approve"),
+    ("law_non_inheritable_usage_rights", "neutral"),
+]
+# Land reformers want the great estates broken up and farms passed to the children who work them.
+land_reform_movement_inheritance = [
+    ("law_primogeniture", "strongly_disapprove"),
+    ("law_partible", "approve"),
+    ("law_equal_inheritance", "approve"),
+    ("law_free_testation", "neutral"),
+    ("law_state_universal_heir", "disapprove"),
+    ("law_non_inheritable_usage_rights", "neutral"),
+]
 aggressive_rules_of_war = [
     ("law_traditional_rules_of_war", "approve"),
     ("law_war_crimes_forbidden", "neutral"),
@@ -2914,6 +2957,7 @@ modifications = {
         ],
     },
     "ideology_socialist_movement": {
+        "lawgroup_inheritance": socialist_movement_inheritance,
         "lawgroup_welfare": [
             ("law_no_social_security", "strongly_disapprove"),
             ("law_poor_laws", "strongly_disapprove"),
@@ -3118,6 +3162,7 @@ modifications = {
         ],
     },
     "ideology_liberal_movement": {
+        "lawgroup_inheritance": liberal_movement_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
@@ -3132,6 +3177,7 @@ modifications = {
         ],
     },
     "ideology_radical_movement": {
+        "lawgroup_inheritance": radical_movement_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
         ],
@@ -3174,6 +3220,7 @@ modifications = {
         ],
     },
     "ideology_liberal_republican_movement": {
+        "lawgroup_inheritance": liberal_movement_inheritance,
         "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
@@ -3189,10 +3236,14 @@ modifications = {
         ],
     },
     "ideology_national_liberal_movement": {
+        "lawgroup_inheritance": liberal_movement_inheritance,
         "lawgroup_criminal_justice": moderate_criminal_justice,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+    },
+    "ideology_land_reformer_movement": {
+        "lawgroup_inheritance": land_reform_movement_inheritance,
     },
     "ideology_nihilist_movement": {
         "lawgroup_governance_principles": [
