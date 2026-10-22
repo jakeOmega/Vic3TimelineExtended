@@ -495,11 +495,13 @@ class WidthTest(unittest.TestCase):
                 self.fits(self.shown(key), (width, "heading"), key)
 
 
-def _doc_tables():
-    """Each table row of the icon doc, as its cells."""
-    rows = []
+def _doc_tables(heading):
+    """Each table row of the icon doc under `heading` (its nearest heading of any level), as its cells."""
+    rows, under = [], None
     for line in _read(ICONS_DOC).splitlines():
-        if line.startswith("| ") and not line.startswith("|---") and "`" in line:
+        if line.startswith("#"):
+            under = line.lstrip("#").strip()
+        elif under == heading and line.startswith("| ") and not line.startswith("|---") and "`" in line:
             rows.append([c.strip() for c in line.strip("|").split("|")])
     return rows
 
@@ -510,9 +512,9 @@ class IconsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.widgets = _read(WIDGETS)
-        rows = _doc_tables()
-        cls.cells = [(r[0], r[1].strip("`"), r[3].strip("`")) for r in rows if len(r) == 4]
-        cls.pips = [(r[0], r[1].strip("`"), r[2], r[4].strip("`")) for r in rows if len(r) == 5]
+        cls.cells = [(r[0], r[1].strip("`"), r[3].strip("`")) for r in _doc_tables("Overview cells")]
+        cls.causes = [(int(r[0]), r[3].strip("`")) for r in _doc_tables("The leading cause's icons")]
+        cls.pips = [(r[0], r[1].strip("`"), r[2], r[4].strip("`")) for r in _doc_tables("History pips")]
 
     def cell_icons(self, overview):
         body = _type_body(self.widgets, overview)
@@ -525,6 +527,27 @@ class IconsTest(unittest.TestCase):
         for overview in ("te_demog_overview", "te_state_demog_overview"):
             with self.subTest(overview=overview):
                 self.assertEqual(self.cell_icons(overview), listed)
+
+    def test_the_lead_cells_draw_each_causes_icon(self):
+        """The Leading Cause cell's headstone shows until deaths by cause are counted, then its cause's icon, by code;
+        War also takes the old code 6, as the reading's text does."""
+        self.assertEqual([code for code, _ in self.causes], PIE_CODES + [8])
+        headstone = PIE_DIR + "ov_leading_cause.dds"
+        for overview, ready in (("te_demog_overview", "te_demog_dc_ready_sgui"),
+                                ("te_state_demog_overview", "te_demog_state_dc_sgui")):
+            with self.subTest(overview=overview):
+                cells = [c for c in _instances(_type_body(self.widgets, overview), "te_demog_ov_cell")
+                         if headstone in (_override(c, "icon") or "")]
+                self.assertEqual(len(cells), 1)
+                icon, layers = _override(cells[0], "icon"), _override(cells[0], "icon_layers")
+                self.assertIn(f"Not( GetScriptedGui('{ready}')", icon)
+                self.assertIn(f"visible = \"[GetScriptedGui('{ready}')", layers)
+                drawn = []
+                for layer in _instances(layers, "icon"):
+                    codes = sorted(int(c) for c in re.findall(r"'\(CFixedPoint\)(\d+)'", layer))
+                    drawn.append((codes, re.search(r'texture = "([^"]+)"', layer).group(1)))
+                self.assertEqual(drawn, [([code], tex) for code, tex in self.causes[:-1]]
+                                 + [([6, 8], self.causes[-1][1])])
 
     def test_the_cells_name_their_captions(self):
         captions = [self.shown_caption(c) for c in _instances(_type_body(self.widgets, "te_demog_overview"),

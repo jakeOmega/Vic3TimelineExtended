@@ -711,7 +711,9 @@ types te_demographics_widgets
 	### caption, reading and third line is held to it (test_demographics_layout's WidthTest). A reading with an arrow
 	### carries it over the icon box's top-right corner ("trend", a te_demog_trend_* type), where Banking's crash badge
 	### sits. The instance sets the cell's tooltip (the old row's hover, rule 2), "icon" (a texture), "caption", "word"
-	### and "third_line" (texts) and, where the reading has one, "trend".
+	### and "third_line" (texts) and, where the reading has one, "trend". A cell whose icon changes with its reading
+	### (the Leading Cause of Death) also sets "icon_layers": icons 44 square over the same spot, each with its own
+	### visible, and its "icon" a visible of its own.
 	type te_demog_ov_cell = widget {
 		size = { 238 70 }
 
@@ -735,6 +737,7 @@ types te_demographics_widgets
 				parentanchor = center
 				block "icon" {}
 			}
+			block "icon_layers" {}
 		}
 		textbox = {
 			position = { 78 2 }
@@ -1058,8 +1061,54 @@ types te_demographics_widgets
 				}
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_lead_tt', 'te_demog_ov_lead_pending_tt' )]"
+					### The headstone until the first count of deaths by cause, then the leading cause's icon.
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						visible = "[Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+						texture = "gfx/interface/icons/demographics_icons/ov_leading_cause.dds"
+					}
+					blockoverride "icon_layers" {
+						### The leading cause's own icon, by te_dg_dc_lead (the pie's codes; the reading's text falls
+						### through to War for any other, as the old code 6 of a save from before 2026-10-22 would).
+						widget = {
+							size = { 44 44 }
+							parentanchor = center
+							visible = "[GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_infection.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_chronic.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_external.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_work.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_maternal.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)7' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_killed.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)8' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)6' ) )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_war.dds"
+							}
+						}
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_lead"
@@ -2798,7 +2847,7 @@ types te_demographics_widgets
 			position = { 0 14 }
 			alwaystransparent = yes
 			size = { 10 10 }
-			texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
+			texture = "gfx/interface/icons/demographics_icons/pip_famine.dds"
 		}
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_event' )]"
@@ -2849,7 +2898,7 @@ types te_demographics_widgets
 				parentanchor = vcenter
 				alwaystransparent = yes
 				size = { 10 10 }
-				texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
+				texture = "gfx/interface/icons/demographics_icons/pip_famine.dds"
 			}
 			textbox = {
 				parentanchor = vcenter
@@ -4846,8 +4895,54 @@ types te_demographics_widgets
 				}
 				te_demog_ov_cell = {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_lead_tt', 'te_demog_st_lead_pending_tt' )]"
+					### The headstone until the first count of deaths by cause, then the leading cause's icon.
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						visible = "[Not( GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+						texture = "gfx/interface/icons/demographics_icons/ov_leading_cause.dds"
+					}
+					blockoverride "icon_layers" {
+						### The leading cause's own icon, by te_dg_dc_lead (the pie's codes; the reading's text falls
+						### through to War for any other, as the old code 6 of a save from before 2026-10-22 would).
+						widget = {
+							size = { 44 44 }
+							parentanchor = center
+							visible = "[GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_infection.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_chronic.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_external.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_work.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_maternal.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)7' )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_killed.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)8' ), EqualTo_CFixedPoint( State.MakeScope.Var('te_dg_dc_lead').GetValue, '(CFixedPoint)6' ) )]"
+								texture = "gfx/interface/icons/demographics_icons/cause_war.dds"
+							}
+						}
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_lead"
