@@ -1,10 +1,10 @@
 # Demographics GUI: Icons
 
-The Demographics tab's overview and the state subtab's draw eight icon cells each, two to a row, the way Banking's overview does (issue #1029; `gui_style_guide.md` rule 4). The History section marks its census years with three pips. The Leading Cause of Death cell and the Famine pip have their own icons (2026-10-22); the other nine are vanilla placeholders for now, chosen to read at their size. Rule 10 asks for this list: what each icon stands for, what the final art should show and where it goes. The pie's slice colours and the trend arrows are not placeholders (below).
+The Demographics tab's overview and the state subtab's draw eight icon cells each, two to a row, the way Banking's overview does (issue #1029; `gui_style_guide.md` rule 4). The History section marks its census years with three pips. The Leading Cause of Death cell and the three pips have their own icons (2026-10-22); the other seven cells are vanilla placeholders for now, chosen to read at their size. Rule 10 asks for this list: what each icon stands for, what the final art should show and where it goes. The pie's slice colours and the trend arrows are not placeholders (below).
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/te_demographics_widgets.gui`: the cells in `te_demog_overview` (the country) and `te_state_demog_overview` (a state), each in its cell's `icon` block, and the pips in `te_demog_hist_pips` and its key, `te_demog_hist_pip_legend`. No script reads the paths. Each cell has one icon, but for the Leading Cause of Death, whose `icon_layers` block draws the leading cause's own icon over the same spot once deaths by cause are counted (below); the trend arrow beside a reading changes too, picked by a `te_demog_trend_*` code. `IconsTest` in `test_demographics_layout.py` holds each row below to the markup, both overviews alike, and fails on a cell, cause or pip whose texture the doc doesn't list.
 
-**Replacing one.** Make the icon through the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/archive/specs/2026-09-26-icon-pipeline-design.md`) in `icon_prompts.py`'s `demog` category (`demog_pip` for a pip, embossed in one colour), with the entry's `now` field naming the placeholder below. Write it to the file named here, change the texture line in both overviews (or the pip type and its key), and put that file in the row's Icon column. `IconsTest` reads the tables, so the test follows the doc.
+**Replacing one.** Make the icon through the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/archive/specs/2026-09-26-icon-pipeline-design.md`) in `icon_prompts.py`'s `demog` category (`demog_pip` for a pip, embossed in one colour under a dark rim; an entry may set its own colours), with the entry's `now` field naming the placeholder below. Write it to the file named here, change the texture line in both overviews (or the pip type and its key), and put that file in the row's Icon column. `IconsTest` reads the tables, so the test follows the doc.
 
 **The rule for the set** is the UN's and Banking's: simple and easy to recognize at the size drawn, one bold object each. The cells are 44 px inside a 52 px box. The pips are 9–10 px, where only a flat mark in one colour reads, so they want a disc or a glyph rather than a picture.
 
@@ -41,13 +41,13 @@ Once deaths by cause are counted (the cell's ready scripted GUI, `te_demog_dc_re
 
 ## History pips
 
-Drawn over a census year's bars in every History chart, top to bottom, and again in the key under the charts.
+Drawn above a census year's bars in every History chart, top to bottom, and again in the key above the charts. Each chart keeps a 36 px lane for them over its bars (its frame 132 tall, the bars' 96 px at its foot), so a pip never covers the top of a bar (owner, 2026-10-22). War and Famine are FLUX silhouettes embossed in their colour; the event's disc is drawn.
 
 | Pip | Icon | Size | Final art | File |
 |---|---|---|---|---|
-| War | `gfx/interface/icons/generic_icons/battalions.dds` | 10 px | two crossed swords, red, flat | `gfx/interface/icons/demographics_icons/pip_war.dds` |
+| War | `gfx/interface/icons/demographics_icons/pip_war.dds` | 10 px | two crossed swords, red, flat | `gfx/interface/icons/demographics_icons/pip_war.dds` |
 | Famine | `gfx/interface/icons/demographics_icons/pip_famine.dds` | 10 px | an empty bowl, amber, flat | `gfx/interface/icons/demographics_icons/pip_famine.dds` |
-| Demographic event | `gfx/interface/icons/generic_icons/information.dds` | 9 px | a blue disc with a white dot | `gfx/interface/icons/demographics_icons/pip_event.dds` |
+| Demographic event | `gfx/interface/icons/demographics_icons/pip_event.dds` | 9 px | a blue disc with a white dot | `gfx/interface/icons/demographics_icons/pip_event.dds` |
 
 ## Not placeholders
 

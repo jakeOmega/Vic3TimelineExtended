@@ -75,4 +75,5 @@ The balancing now runs once a month for every grid in the world, from a hidden c
 |---|---|---|
 | **Station.** The build menu, a station's building panel, the state's Power Grid tile and the Power Grid concept's tooltip. | The substation picture, not the Power Plants' one, in all four. | A blank or magenta square: the DDS isn't deployed (`gfx/interface/icons/building_icons/building_grid_transfer_station.dds`). |
 | **Grid Power.** The market panel's goods list, a station's goods, and a tooltip that names the good (`@grid_power!`). | The pylon with a lightning bolt, not Electricity's coil, in each, the text icon at the size of its neighbours'. | The text icon only: `gui/zzz_extra_goods_texticons.gui`'s `grid_power` entry. |
+| **HVDC method.** A station's production methods with Clean Energy Technologies researched. | HVDC Undersea Interconnector shows its own bronze cable-and-sea icon, not vanilla's electric engines, in the method list and on the method group. | — |
 | **Agreement.** A treaty draft offering the Grid Interconnection Agreement. | A red and a blue cable joined under a lightning bolt, not Transit Rights' crates. | — |

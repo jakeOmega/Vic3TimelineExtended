@@ -501,15 +501,28 @@ CATEGORIES = {
     **{sys_: dict(folder=folder, size=150, mode="cutout", fill=0.92, grade_strength=0.5,
                   grade_folder="alert_icons", neighbours="alert_icons", gui=(_GUI_FILES[sys_],), style=UN_STYLE)
        for sys_, folder in _GUI_SYSTEMS.items()},
-    # The Demographics History charts' pips (10 px over a census year's bars):
-    # at that size only a flat one-colour shape reads, so a silhouette is
-    # embossed in one colour with the dark outline, as the mobilization
-    # options are. Written at 120 px, the size of the generic_icons they replace.
+    # The Demographics History charts' pips (9-10 px, in a lane above a census
+    # year's bars): at that size only a flat one-colour shape reads, so a
+    # silhouette is embossed in one colour, as the mobilization options are,
+    # with a dark rim (`outline`, 8 px here, under 1 px in game) that `fill`
+    # leaves room for. Written at 120 px, the size of the generic_icons they
+    # replace. Amber by default; an entry sets its own colours. The emboss's
+    # lighting has a median of about 0.6, so colours are set above the target.
     "demog_pip": dict(
-        folder="demographics_icons", size=120, mode="emboss", fill=0.9,
-        # Amber: the emboss's lighting has a median of about 0.6, so the colours are set above the target.
+        folder="demographics_icons", size=120, mode="emboss", fill=0.84, outline=8,
         color=(372, 268, 74), color_bottom=(338, 206, 50),
         neighbours="generic_icons", gui=("gui/te_demographics_widgets.gui",), style=SILHOUETTE),
+    # Production methods (PM.GetTexture, `texture =`): vanilla's are embossed
+    # tan-bronze silhouettes, 205 at 104 px and 86 at 208. Measured on all of
+    # them: the shape spans 0.865 of the side (median), its top quarter
+    # (173,159,134) and its bottom quarter (116,87,63), which `color` and
+    # `color_bottom` are fitted to. Vanilla shares PM art widely, so only a
+    # method whose borrowed icon says something wrong gets one here; the older
+    # mod PM icons are gen_pm_icons.py's drawn glyphs.
+    "production_method": dict(
+        folder="production_method_icons", size=208, mode="emboss", fill=0.865,
+        entity_dir="common/production_methods", field="texture",
+        color=(259, 238, 201), color_bottom=(211, 158, 115), style=SILHOUETTE),
 }
 
 
@@ -2069,6 +2082,11 @@ ICONS: dict[str, dict[str, dict]] = {
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
     },
+    # Power grids (#1109): the station's HVDC Undersea Interconnector, on vanilla's electric engines until now.
+    # A cable bent under the waves with a bolt over it read as a life ring or a hook.
+    "production_method": {
+        "pm_grid_hvdc_interconnector": {"subject": "the cut end of a fat round undersea power cable showing three round cores inside it, lying above three thick wavy lines of sea water", "seed": 1},
+    },
     # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
     # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.
     # The keys follow the pie's textures (pie_<cause>.dds).
@@ -2098,6 +2116,14 @@ ICONS: dict[str, dict[str, dict]] = {
                       "now": f"{_GI}/generic_icons/red_cross.dds"},
     },
     "demog_pip": {
+        # s0 came out broken.
+        "pip_war": {"subject": "two crossed swords with broad straight blades and thick crossguards", "seed": 3,
+                    "color": (342, 108, 92), "color_bottom": (300, 70, 58),
+                    "now": f"{_GI}/generic_icons/battalions.dds"},
+        # The doc's blue disc with a white dot, drawn outright: nothing for FLUX to add.
+        "pip_event": {"drawn": True, "marks": [{"draw": "disc", "colour": "blue", "scale": 0.9, "at": (0.5, 0.5)},
+                                               {"draw": "disc", "colour": "white", "scale": 0.34, "at": (0.5, 0.5)}],
+                      "now": f"{_GI}/generic_icons/information.dds"},
         "pip_famine": {"subject": "an empty round bowl seen from the side with a spoon resting across its rim", "seed": 2,
                        "now": f"{_GI}/generic_icons/goods_shortage.dds"},
     },

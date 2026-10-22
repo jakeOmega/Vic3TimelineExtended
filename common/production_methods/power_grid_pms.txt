@@ -33,7 +33,7 @@ pm_grid_no_interconnector = {
 # electronics and the engineers. The AI switches to it where it has a grid of
 # its own across the sea (te_grid_ai_interconnectors_effect).
 pm_grid_hvdc_interconnector = {
-	texture = "gfx/interface/icons/production_method_icons/electric_engines.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
 	unlocking_technologies = {
 		clean_energy_technologies
 	}
