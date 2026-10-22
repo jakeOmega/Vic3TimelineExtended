@@ -443,12 +443,15 @@ Two things join grids that don't touch:
 Interconnector method. It costs Electronic Components and more engineers.
 Two interconnector stations in states that share a sea join their grids: your
 own across the sea, such as a mainland and a colony in your market, or a
-partner's under a Grid Interconnection Agreement in your market. The AI
-switches a coastal station when it has a grid of its own across the sea.
+partner's under a Grid Interconnection Agreement in your market. The method
+does nothing in a state with no coast. The AI switches a coastal station when
+it has a grid of its own, or a partner's, across the sea, and back when it
+has none.
 - The Grid Interconnection Agreement treaty article (from Intergovernmental
-Organizations, between two countries in one market that share a border, such
-as a customs union or a subject in its overlord's market) joins both
-countries' stations where they border.
+Organizations, between two countries in one market that share a border or a
+sea, such as a customs union or a subject in its overlord's market) joins both
+countries' stations where they border, and their interconnectors across the
+sea. It breaks if the two stop sharing a market.
 
 The state panel shows a Power Grid tile on a state with a station: whether its
 station is sending or receiving, the Electricity it moves a week, how many

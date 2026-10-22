@@ -178,10 +178,11 @@ te_grid_refresh_partners_effect = {
 }
 
 # Country scope, an AI country. The AI never picks a method that only costs,
-# so an AI station that could reach another of its own grids across the sea
-# switches to the HVDC Undersea Interconnector: a coastal online station with a
-# station of the same country in another market area across a shared sea node.
-# The station across the sea switches the same way when its state comes up.
+# so script runs its interconnectors: a coastal online station switches to the
+# HVDC Undersea Interconnector when a station across a shared sea would join
+# it to another grid (te_grid_ai_interconnector_wanted), and back when none
+# would. A switch retools the station, so one is tried at most once a year
+# (te_grid_ai_hvdc_tried), in case the engine's own method choice undoes it.
 te_grid_ai_interconnectors_effect = {
 	if = {
 		limit = { has_technology_researched = clean_energy_technologies }
@@ -189,20 +190,29 @@ te_grid_ai_interconnectors_effect = {
 			limit = {
 				is_coastal = yes
 				te_grid_station_online = yes
-				NOT = { te_grid_has_interconnector = yes }
+				NOT = { has_variable = te_grid_ai_hvdc_tried }
 			}
 			save_scope_as = te_grid_ai_end
 			if = {
 				limit = {
-					any_sea_node_adjacent_state = {
-						owner = scope:te_grid_ai_end.owner
-						te_grid_state_has_station = yes
-						NOT = { is_in_same_market_area = scope:te_grid_ai_end }
-					}
+					NOT = { te_grid_has_interconnector = yes }
+					te_grid_ai_interconnector_wanted = yes
 				}
+				set_variable = { name = te_grid_ai_hvdc_tried value = yes days = 365 }
 				activate_production_method = {
 					building_type = building_grid_transfer_station
 					production_method = pm_grid_hvdc_interconnector
+				}
+			}
+			else_if = {
+				limit = {
+					te_grid_has_interconnector = yes
+					NOT = { te_grid_ai_interconnector_wanted = yes }
+				}
+				set_variable = { name = te_grid_ai_hvdc_tried value = yes days = 365 }
+				activate_production_method = {
+					building_type = building_grid_transfer_station
+					production_method = pm_grid_no_interconnector
 				}
 			}
 		}
@@ -423,6 +433,15 @@ te_grid_set_station_flow_effect = {
 te_grid_idle_station_effect = {
 	set_variable = { name = te_grid_flow value = 0 }
 	set_variable = { name = te_grid_command value = 0 }
+	# On no grid this month: the tile shows no grid figures.
+	if = {
+		limit = { has_variable = te_grid_region_size }
+		remove_variable = te_grid_region_size
+	}
+	if = {
+		limit = { has_variable = te_grid_region_ratio }
+		remove_variable = te_grid_region_ratio
+	}
 	set_local_variable = { name = te_grid_upload_mult value = -1 }
 	set_local_variable = { name = te_grid_download_mult value = -1 }
 	set_local_variable = { name = te_grid_download_supply_mult value = -1 }
@@ -630,30 +649,57 @@ te_grid_conservation_selfcheck_effect = {
 				var:te_grid_command >= 100
 			}
 		}
-		set_global_variable = te_grid_conservation_checked_v2
-		set_global_variable = { name = te_grid_chk_uploaded value = 0 }
-		set_global_variable = { name = te_grid_chk_downloaded value = 0 }
-		set_global_variable = { name = te_grid_chk_stations value = 0 }
+		# Last week's flows balance only within last month's grid: skip a grid
+		# that gained or lost a station since (every member's stored size must
+		# be this run's member count).
+		set_local_variable = { name = te_grid_chk_members value = 0 }
 		every_in_global_list = {
 			variable = te_grid_region
-			change_global_variable = { name = te_grid_chk_uploaded add = te_grid_uploaded }
-			change_global_variable = { name = te_grid_chk_downloaded add = te_grid_downloaded }
-			change_global_variable = { name = te_grid_chk_stations add = 1 }
+			change_local_variable = { name = te_grid_chk_members add = 1 }
 		}
 		if = {
 			limit = {
-				global_var:te_grid_chk_uploaded <= 0
-				global_var:te_grid_chk_downloaded <= 0
+				NOT = {
+					any_in_global_list = {
+						variable = te_grid_region
+						OR = {
+							NOT = { has_variable = te_grid_region_size }
+							NOT = { var:te_grid_region_size = local_var:te_grid_chk_members }
+						}
+					}
+				}
 			}
-			debug_log = "TE_SELF_CHECK BROKEN grid_readback (uploaded=0 downloaded=0 across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0] while two were ordered to move 100 or more: sg:grid_power reports nothing in a station's state, so the balancing cannot see its own flows; see docs/testing/power-grid-playtest.md)"
+			te_grid_conservation_verdict_effect = yes
 		}
-		else_if = {
-			limit = { te_grid_chk_imbalance_g <= 0.1 }
-			debug_log = "TE_SELF_CHECK OK grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0]: a grid uploads what it downloads)"
+	}
+}
+
+# Country scope, from te_grid_conservation_selfcheck_effect: the grid in
+# te_grid_region is unchanged since last month, so judge it.
+te_grid_conservation_verdict_effect = {
+	set_global_variable = te_grid_conservation_checked_v2
+	set_global_variable = { name = te_grid_chk_uploaded value = 0 }
+	set_global_variable = { name = te_grid_chk_downloaded value = 0 }
+	set_global_variable = { name = te_grid_chk_stations value = 0 }
+	every_in_global_list = {
+		variable = te_grid_region
+		change_global_variable = { name = te_grid_chk_uploaded add = te_grid_uploaded }
+		change_global_variable = { name = te_grid_chk_downloaded add = te_grid_downloaded }
+		change_global_variable = { name = te_grid_chk_stations add = 1 }
+	}
+	if = {
+		limit = {
+			global_var:te_grid_chk_uploaded <= 0
+			global_var:te_grid_chk_downloaded <= 0
 		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0], more than 10% apart: the staffing correction does not hold or something else trades Grid Power; see docs/testing/power-grid-playtest.md)"
-		}
+		debug_log = "TE_SELF_CHECK BROKEN grid_readback (uploaded=0 downloaded=0 across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0] while two were ordered to move 100 or more: sg:grid_power reports nothing in a station's state, so the balancing cannot see its own flows; see docs/testing/power-grid-playtest.md)"
+	}
+	else_if = {
+		limit = { te_grid_chk_imbalance_g <= 0.1 }
+		debug_log = "TE_SELF_CHECK OK grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0]: a grid uploads what it downloads)"
+	}
+	else = {
+		debug_log = "TE_SELF_CHECK BROKEN grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0], more than 10% apart: the staffing correction does not hold or something else trades Grid Power; see docs/testing/power-grid-playtest.md)"
 	}
 }
 

@@ -71,3 +71,24 @@ te_grid_land_link = {
 	is_in_same_market_area = $FROM$
 	te_grid_owners_interconnected = { FROM = $FROM$ }
 }
+
+# State scope (an AI's coastal station, saved as scope:te_grid_ai_end), in
+# te_grid_ai_interconnectors_effect. A station across a shared sea would join
+# it to another grid through an interconnector: one of the same country in
+# another market area, or an agreement partner's in the same market.
+te_grid_ai_interconnector_wanted = {
+	any_sea_node_adjacent_state = {
+		te_grid_state_has_station = yes
+		OR = {
+			AND = {
+				owner = scope:te_grid_ai_end.owner
+				NOT = { is_in_same_market_area = scope:te_grid_ai_end }
+			}
+			AND = {
+				NOT = { owner = scope:te_grid_ai_end.owner }
+				market = scope:te_grid_ai_end.market
+				te_grid_owners_interconnected = { FROM = scope:te_grid_ai_end }
+			}
+		}
+	}
+}

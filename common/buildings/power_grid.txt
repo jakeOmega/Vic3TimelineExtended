@@ -4,7 +4,7 @@
 # One station per state. It turns the state's spare Electricity into Grid
 # Power for the market, or Grid Power from the market into Electricity where
 # the state is short. Its method carries a 1-unit input and output of both
-# goods; te_grid_monthly_update_effect (power_grid_effects.txt) picks the
+# goods; te_grid_world_update_effect (power_grid_effects.txt) picks the
 # direction every month and scales that side with the upload or download
 # modifier (power_grid_modifiers.txt), the Strategic Reserve Hub's pattern.
 #
@@ -41,9 +41,10 @@ building_grid_transfer_station = {
 
 	# A grid grows from one station. The first station a country builds in a
 	# market area may go in any of its states there; every later one in that
-	# market area must border a state of the same country that has one. A grid
-	# is the country's stations in one market area (te_grid_monthly_update_effect),
-	# so France and French Algeria run separate grids. A queued station counts
+	# market area must border a state of the same country that has one. A
+	# country's stations in one market area are one group of a grid
+	# (te_grid_add_group_effect); interconnectors and agreements join groups.
+	# A queued station counts
 	# (te_grid_state_has_station): has_building misses one until it is built,
 	# which let a second first station be queued beside it.
 	possible = {

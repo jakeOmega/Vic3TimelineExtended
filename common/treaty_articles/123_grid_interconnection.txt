@@ -52,10 +52,30 @@ grid_interconnection_agreement = {
 			text = te_grid_interconnection_same_market_tt
 			market = scope:other_country.market
 		}
+		# A land border, or a sea between them: an agreement across the sea
+		# joins stations running an HVDC Undersea Interconnector
+		# (te_grid_sea_link).
 		custom_tooltip = {
 			text = te_grid_interconnection_border_tt
 			any_scope_state = {
-				any_neighbouring_state = { owner = scope:other_country }
+				OR = {
+					any_neighbouring_state = { owner = scope:other_country }
+					any_sea_node_adjacent_state = { owner = scope:other_country }
+				}
+			}
+		}
+	}
+
+	# One market: Grid Power is priced per market, so an agreement between
+	# countries that have left each other's market joins nothing. It breaks
+	# rather than charging both sides for nothing.
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_grid_interconnection_same_market_tt
+				scope:first_country = {
+					market = scope:second_country.market
+				}
 			}
 		}
 	}
@@ -126,15 +146,21 @@ grid_interconnection_agreement = {
 					value = -1000
 				}
 			}
-			# The agreement joins grids at once where both have a station across
-			# the border.
+			# The agreement joins grids where both have a station across the
+			# border, or across a sea for interconnectors.
 			if = {
 				limit = {
 					any_scope_state = {
 						has_building = building_grid_transfer_station
-						any_neighbouring_state = {
-							owner = scope:te_treaty_partner
-							has_building = building_grid_transfer_station
+						OR = {
+							any_neighbouring_state = {
+								owner = scope:te_treaty_partner
+								has_building = building_grid_transfer_station
+							}
+							any_sea_node_adjacent_state = {
+								owner = scope:te_treaty_partner
+								has_building = building_grid_transfer_station
+							}
 						}
 					}
 				}

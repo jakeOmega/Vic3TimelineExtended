@@ -1169,7 +1169,7 @@
  pm_great_indian_railway_jamalpur_works:0 "Great Indian Railway Jamalpur Works"
  pm_green_assembly:0 "Green Assembly"
  pm_grid_hvdc_interconnector:0 "HVDC Undersea Interconnector"
- pm_grid_hvdc_interconnector_desc:0 "A high-voltage direct-current cable joins this station to any station running one across the sea, in a state that shares a sea with this one: our own, or a country we have a $grid_interconnection_agreement$ with in our [concept_market]. Their grids become one."
+ pm_grid_hvdc_interconnector_desc:0 "A high-voltage direct-current cable joins this station to any station running one across the sea, in a state that shares a sea with this one: our own, or a country we have a $grid_interconnection_agreement$ with in our [concept_market]. Their grids become one. It does nothing in a state with no coast."
  pm_grid_no_interconnector:0 "No Interconnector"
  pm_grid_no_interconnector_desc:0 "The station joins only the grid it is connected to by land."
  pm_grid_transfer_base:0 "Substation"
