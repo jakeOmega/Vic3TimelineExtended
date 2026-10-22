@@ -248,6 +248,8 @@
  building_graphite_mine_throughput_add:0 "$building_graphite_mine$ building [concept_throughput]"
  building_graphite_mine_throughput_add_desc:0 "$building_graphite_mine$ building [concept_throughput]"
  building_great_indian_railway_jamalpur_works:0 "Great Indian Railway Jamalpur Works"
+ building_grid_transfer_station:0 "Grid Transfer Station"
+ building_grid_transfer_station_desc:0 "Joins this state to its power grid: our other stations in the same market area. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$. A grid takes out what it puts in, so no power crosses to another grid. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized."
  building_group_bg_arts_standard_of_living_add:0 "$bg_arts$ Employee [concept_sol]"
  building_group_bg_arts_standard_of_living_add_desc:0 "A bonus or penalty to the [concept_sol] of employees in $bg_arts$"
  building_group_bg_biotechnology_throughput_add:0 "Biotechnology [concept_throughput]"

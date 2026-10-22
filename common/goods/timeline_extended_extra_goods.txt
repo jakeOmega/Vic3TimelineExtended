@@ -161,3 +161,14 @@ magnetic_drive_ships = {
 	prestige_factor = 12
 	traded_quantity = 3
 }
+
+# High-voltage power that Grid Transfer Stations move between the states of one
+# grid (power_grid_effects.txt). A market good so the market prices it, but the
+# monthly balancing keeps each grid's uploads equal to its downloads, and
+# tradeable = no keeps it off trade routes between markets.
+grid_power = {
+	texture = "gfx/interface/icons/goods_icons/electricity.dds"
+	cost = 30
+	category = industrial
+	tradeable = no
+}

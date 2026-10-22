@@ -1,0 +1,21 @@
+﻿# ============================================================================
+# Power Grid: the monthly balancing of every country's grids
+# ============================================================================
+# See power_grid_effects.txt. Runs only for a country that has a Grid Transfer
+# Station; one that has lost its last station keeps no flow to reset.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_grid_monthly_pulse
+	}
+}
+
+te_grid_monthly_pulse = {
+	trigger = {
+		any_scope_state = { has_building = building_grid_transfer_station }
+	}
+	effect = {
+		te_grid_monthly_update_effect = yes
+	}
+}

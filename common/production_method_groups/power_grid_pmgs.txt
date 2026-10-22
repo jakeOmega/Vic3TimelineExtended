@@ -1,0 +1,10 @@
+﻿# ============================================================================
+# Power Grid Production Method Groups
+# ============================================================================
+
+pmg_grid_transfer_station = {
+	texture = "gfx/interface/icons/goods_icons/electricity.dds"
+	production_methods = {
+		pm_grid_transfer_base
+	}
+}

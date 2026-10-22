@@ -138,3 +138,13 @@ texticon = {
 		fontsize = 91
 	}
 }
+
+texticon = {
+	icon = grid_power
+	iconsize = {
+		texture = "gfx/interface/icons/goods_icons/electricity.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}

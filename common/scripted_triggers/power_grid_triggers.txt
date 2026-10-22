@@ -1,0 +1,26 @@
+﻿# ============================================================================
+# Power Grid scripted triggers (te_grid_*)
+# ============================================================================
+
+# State scope. The state's Grid Transfer Station is built and at least a
+# quarter staffed, so it takes part in its grid's balancing this month. A
+# station still under construction or barely staffed is set idle instead: it
+# could move little of what the balance would ask of it.
+te_grid_station_online = {
+	any_scope_building = {
+		is_building_type = building_grid_transfer_station
+		level >= 1
+		occupancy >= 0.25
+	}
+}
+
+# State scope, during te_grid_monthly_update_effect. The state is waiting to be
+# balanced and lies in the grid being balanced: the owner's states in the same
+# market area as scope:te_grid_seed.
+te_grid_in_seed_region = {
+	has_variable = te_grid_pending
+	OR = {
+		this = scope:te_grid_seed
+		is_in_same_market_area = scope:te_grid_seed
+	}
+}

@@ -238,6 +238,7 @@ NOT_ON_COUNTRY = {
     "resettlement_*_destination": "states", "resettlement_arrivals": "the destination's buildings",
     "resettlement_transit_deaths": "the destination's buildings", "resettlement_recruits": "states",
     "st_res_*_flow": "the reserve hub's building",
+    "modifier_grid_station_*": "the grid transfer station's building",
     "te_demog_um_nexus_*": "the Mind Upload Nexus's building",
     "te_construction_market_capacity_modifier": "construction sites",
 }
