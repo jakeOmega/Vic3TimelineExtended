@@ -43,7 +43,7 @@ not from which pop type holds the property (§ Wealth Concentration below).
 | Wealth Concentration's upper end | **Straight line**, no kink: 1.67× at a score of 100 |
 | Wealth Concentration's lower end | **The kink**: 1.17× at 10, 1.33× at 0 |
 | A national suffrage line for Fewer Men | **Dropped**: the women's rights movement already presses for the laws it wants (§ Sex balance) |
-| The dispersed side | **Steadier, not slower** (second round): concentrated property grows faster but crashes more often, dispersed property grows slower but steadier. Dispersed Property loses the owners' efficiency cut; the national pair carries bubble pressure, +0.3 a month at 1× on Great Fortunes and −0.4 on Dispersed Wealth (−0.3 until the simulator's readout, raised on the PR review: `banking_cycle_simulation.md` §27); education access becomes ±0.10 (§ Wealth Concentration) |
+| The dispersed side | **Steadier, not slower** (second round): concentrated property grows faster but crashes more often, dispersed property grows slower but steadier. Dispersed Property loses the owners' efficiency cut; the national pair carries bubble pressure, +0.3 a month at 1× on Great Fortunes and −0.4 on Dispersed Wealth (−0.3 until the owner's review of #1101: `banking_cycle_simulation.md` §27); education access becomes ±0.10 (§ Wealth Concentration) |
 | Wealth Concentration under every rule | **The full increase.** If it proves a problem, it moves behind the rule |
 | Wealth Concentration's neutral point | **50**, so 1836 starts fairly concentrated and the 20th century's levelling shows |
 | One effect per condition | **A default**, kept only where it doesn't cost realism or fun. Land Hunger and the Youth Bulge keep a radicals line |
@@ -374,7 +374,7 @@ first, since it reaches every game.
 Settled 2026-10-22, second round: the lower end's kink, and the dispersed side (§ Decisions). Left to Phase 0:
 
 1. The steep Gini slope's size: doubling above 0.70 is the starting point.
-2. The bubble line's size: ±0.3 a month at 1× is the starting point; the simulator sets it. Settled on the PR review:
-   +0.3 and −0.4 (`banking_cycle_simulation.md` §27).
+2. The bubble line's size: ±0.3 a month at 1× is the starting point; the simulator sets it. Settled on the owner's review of
+   #1101: +0.3 and −0.4 (`banking_cycle_simulation.md` §27).
 3. Primate City's fade with development: settled by the crowding read.
 4. The sizes as a whole are proposals until Phase 0 and the observer run.
