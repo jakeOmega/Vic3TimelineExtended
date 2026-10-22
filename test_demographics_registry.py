@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 
+import demographics_effects as DE  # noqa: E402
 import demographics_model  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
 import demographics_params as P  # noqa: E402
@@ -5435,6 +5436,45 @@ class _StateModifierEngine(_Engine):
             super().run(items)
 
 
+def _modifier_fields(path, name):
+    """{field: value} of a static modifier, its icon left out."""
+    body = _raw_blocks([path])[name]
+    return {k: float(v) for k, v in re.findall(r"^\s*(\w+) = (-?[\d.]+)\s*$", body, re.M)}
+
+
+class TestWealthSizes(unittest.TestCase):
+    """The 2026-10-22 effects design's Wealth Concentration sizes: concentration grows faster and crashes more often,
+    dispersal grows slower and steadier (demographics_effects.SIZES)."""
+
+    NAMES = ("inh_great_fortunes", "inh_dispersed_wealth") + STATE_WC_MODIFIERS
+
+    def test_each_modifier_is_the_spec(self):
+        for name in self.NAMES:
+            self.assertEqual(_modifier_fields(INH_MODIFIERS, name), DE.SIZES[name], name)
+
+    def test_bubble_pressure_only_on_the_national_pair(self):
+        """A country field on a state modifier would count once per state; the national pair is read by
+        banking_cycle_advance_variables only while a country's cycle runs."""
+        mods = _raw_blocks([INH_MODIFIERS])
+        for name, body in mods.items():
+            has = "country_bubble_pressure_monthly_add" in body
+            self.assertEqual(has, name in ("inh_great_fortunes", "inh_dispersed_wealth"), name)
+
+    def test_the_national_pair_follows_the_curve(self):
+        for score in (80, 100, 65, 50, 20, 0, 35):
+            eng = _StateModifierEngine()
+            eng.vars.update(te_inh_concentration=float(score))
+            eng.call("te_inh_apply_concentration_modifiers")
+            for name, want in (("inh_great_fortunes", DE.wc_high(score)), ("inh_dispersed_wealth", DE.wc_low(score))):
+                if want > 0.01:
+                    self.assertAlmostEqual(eng.modifiers.get(name), want, places=4, msg=(name, score))
+                else:
+                    self.assertNotIn(name, eng.modifiers, (name, score))
+
+    def test_dispersed_side_has_no_investment_line(self):
+        self.assertFalse([f for f in _modifier_fields(INH_MODIFIERS, "inh_dispersed_property") if "investment" in f])
+
+
 class TestWealthStateModifiers(unittest.TestCase):
     """Spec 4.2's split (phase 2): two country modifiers from the national figure, three state
     modifiers from each state's own score, each with one refresh site."""
@@ -5448,14 +5488,16 @@ class TestWealthStateModifiers(unittest.TestCase):
 
     def test_the_state_modifiers_follow_the_states_own_score(self):
         cases = (
-            # score, agrarian share -> concentrated, dispersed, land hunger
-            (80, 0.5, 0.6, None, 0.3),
-            (100, 1.0, 1.0, None, 1.0),
-            (100, 0.0, 1.0, None, None),   # a city: no land hunger
+            # score, agrarian share -> concentrated, dispersed, land hunger (2026-10-22 effects design: full at 80
+            # and 20, the high side straight to 5/3 at 100, the low side half the slope past 20 to 4/3 at 0)
+            (80, 0.5, 1.0, None, 0.5),
+            (100, 1.0, 5 / 3, None, 5 / 3),
+            (100, 0.0, 5 / 3, None, None),   # a city: no land hunger
             (50, 0.8, None, None, None),
-            (50.4, 0.8, None, None, None),  # under 0.01: not applied
-            (20, 0.8, None, 0.6, None),
-            (0, 0.3, None, 1.0, None),
+            (50.2, 0.8, None, None, None),  # under 0.01: not applied
+            (20, 0.8, None, 1.0, None),
+            (10, 0.8, None, 7 / 6, None),
+            (0, 0.3, None, 4 / 3, None),
         )
         for wc, agr, high, low, hunger in cases:
             eng = self.refresh(wc, agr, before=STATE_WC_MODIFIERS)
@@ -5464,7 +5506,11 @@ class TestWealthStateModifiers(unittest.TestCase):
                 if want is None:
                     self.assertIsNone(g, (wc, agr))
                 else:
-                    self.assertAlmostEqual(g, want, msg=(wc, agr))
+                    self.assertAlmostEqual(g, want, places=4, msg=(wc, agr))
+            if high is not None:
+                self.assertAlmostEqual(high, DE.wc_high(wc), places=4)
+            if low is not None:
+                self.assertAlmostEqual(low, DE.wc_low(wc), places=4)
             for name in STATE_WC_MULTS:
                 self.assertIn(name, eng.vars, "the multipliers stay set, even at 0")
 

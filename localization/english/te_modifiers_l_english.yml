@@ -1433,6 +1433,7 @@
  state_pop_support_movement_anti_war_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_anti_war_name$."
  state_pop_support_movement_civil_rights_mult:0 "$movement_civil_rights_name$ [concept_pop] Attraction"
  state_pop_support_movement_civil_rights_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_civil_rights_name$."
+ state_pop_support_movement_land_reform_mult_desc:0 "$political_movement_pop_attraction_mult_desc$"
  state_pop_support_movement_transhumanist_mult:0 "$movement_transhumanist_name$ [concept_pop] Attraction"
  state_pop_support_movement_transhumanist_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_transhumanist_name$."
  state_rejuvenation_add:0 "Rejuvenation"
