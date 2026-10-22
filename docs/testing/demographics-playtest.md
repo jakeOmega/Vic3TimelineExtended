@@ -1366,3 +1366,18 @@ bowl in place of vanilla's goods-shortage box.
 3. **No overlap.** At most one icon in the cell at once, never the headstone under a cause's icon.
 4. **The Famine pip.** A country that had a famine year: its pip over the year's bars and in the key reads as an amber
    bowl at 10 px, distinct from the War and event pips.
+
+## The History pips' lane and the War and event pips (2026-10-22)
+
+Each History chart keeps a 36 px lane above its bars for the pips (the frame 132 tall, the bars' 96 px at its foot),
+so a pip no longer covers the top of a bar. The War pip is a pair of red crossed swords, the event pip a blue disc with
+a white dot; all three pips have a dark rim.
+
+1. **The lane.** A census history with war, famine and event years, at 5, 20 and 100 years: the pips sit above the
+   bars, never on them, in their three rows, and a bar at the chart's maximum reaches the top of the bars' area, not the
+   frame's.
+2. **Labels and axis.** Each chart's top and bottom axis labels still line up with the bars' top and foot, and Net
+   Migration's zero line still runs through the middle of its bars.
+3. **Drawn outside the column.** The pips are placed above their column (negative positions); if they don't show at
+   all, the engine clips a child to its parent, and the lane needs the pips moved into the plot's own box.
+4. **The key.** The key above the charts shows the same three pips at the same sizes.

@@ -2826,9 +2826,11 @@ types te_demographics_widgets
 		}
 	}
 
-	### The pips over a year's bar in every History chart (issue #1029), each on a row of its own so two never hide each
+	### The pips above a year's bar in every History chart (issue #1029), each on a row of its own so two never hide each
 	### other: the war dead the states' counts took (te_dg_h_mk_war), a month of famine (te_dg_h_mk_famine), a demographic
-	### event (te_dg_h_mk_event; te_demog_history_effects.txt). Mouse-through: the bar's tooltip names them.
+	### event (te_dg_h_mk_event; te_demog_history_effects.txt). They sit in the 36 px lane each chart keeps over its bars
+	### (its frame is 132 tall, the bars' 96 at its foot), at negative positions from the column's top, so they never
+	### cover the top of a bar (owner, 2026-10-22). Mouse-through: the bar's tooltip names them.
 	type te_demog_hist_pips = widget {
 		size = { 100% 100% }
 		alwaystransparent = yes
@@ -2836,15 +2838,15 @@ types te_demographics_widgets
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_war' )]"
 			parentanchor = hcenter
-			position = { 0 2 }
+			position = { 0 -38 }
 			alwaystransparent = yes
 			size = { 10 10 }
-			texture = "gfx/interface/icons/generic_icons/battalions.dds"
+			texture = "gfx/interface/icons/demographics_icons/pip_war.dds"
 		}
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_famine' )]"
 			parentanchor = hcenter
-			position = { 0 14 }
+			position = { 0 -26 }
 			alwaystransparent = yes
 			size = { 10 10 }
 			texture = "gfx/interface/icons/demographics_icons/pip_famine.dds"
@@ -2852,10 +2854,10 @@ types te_demographics_widgets
 		icon = {
 			visible = "[ScriptContainer.HasVariable( 'te_dg_h_mk_event' )]"
 			parentanchor = hcenter
-			position = { 0 26 }
+			position = { 0 -14 }
 			alwaystransparent = yes
 			size = { 9 9 }
-			texture = "gfx/interface/icons/generic_icons/information.dds"
+			texture = "gfx/interface/icons/demographics_icons/pip_event.dds"
 		}
 	}
 
@@ -2877,7 +2879,7 @@ types te_demographics_widgets
 				parentanchor = vcenter
 				alwaystransparent = yes
 				size = { 10 10 }
-				texture = "gfx/interface/icons/generic_icons/battalions.dds"
+				texture = "gfx/interface/icons/demographics_icons/pip_war.dds"
 			}
 			textbox = {
 				parentanchor = vcenter
@@ -2919,7 +2921,7 @@ types te_demographics_widgets
 				parentanchor = vcenter
 				alwaystransparent = yes
 				size = { 9 9 }
-				texture = "gfx/interface/icons/generic_icons/information.dds"
+				texture = "gfx/interface/icons/demographics_icons/pip_event.dds"
 			}
 			textbox = {
 				parentanchor = vcenter
@@ -2941,8 +2943,10 @@ types te_demographics_widgets
 	### Hegemony's annual chart does: 5 / 20 / 100 years at 80 / 20 / 4 px are 400 px of bars, in a frame of 48 px for the
 	### axis labels + 400 + the plots' 8 px right margin. A sample that lacks a figure draws an empty slot, not a zero (a
 	### seed year has no births or deaths; a year before #1029 no causes). Titles take the panel's heading type, legends
-	### and axis labels the tooltip face's medium, as Banking's charts do. Over each bar the year's pips
-	### (te_demog_hist_pips): war dead, a famine, a demographic event, with their key above the charts.
+	### and axis labels the tooltip face's medium, as Banking's charts do. Above each bar the year's pips
+	### (te_demog_hist_pips): war dead, a famine, a demographic event, with their key above the charts. They have a lane
+	### of their own: the frame is 132 tall and each "plot_layouts" (and the zero axis) sits in a 96 px box at its foot,
+	### as te_history_chart's 96 px frame holds them, so the bars and their labels keep their places.
 	type te_demog_sec_history = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3015,7 +3019,7 @@ types te_demographics_widgets
 				}
 			}
 
-			### What the pips over a bar mean (the year's war dead, a famine, a demographic event)
+			### What the pips above a bar mean (the year's war dead, a famine, a demographic event)
 			te_demog_hist_pip_legend = {
 				visible = "[Not( IsDataModelEmpty( GetPlayer.MakeScope.GetList('te_dg_hist') ) )]"
 			}
@@ -3090,40 +3094,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "60"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "60"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3160,14 +3170,21 @@ types te_demographics_widgets
 					te_demog_hist_pips = {}
 				}
 				blockoverride "zero_axis" {
+					### Centred on the bars, not on the frame, which the pips' lane makes taller.
 					widget = {
-						size = { 100% 2 }
-						parentanchor = vcenter
+						size = { 100% 96 }
+						parentanchor = bottom
 						alwaystransparent = yes
 
-						background = {
-							using = dark_area
-							alpha = 0.7
+						widget = {
+							size = { 100% 2 }
+							parentanchor = vcenter
+							alwaystransparent = yes
+
+							background = {
+								using = dark_area
+								alpha = 0.7
+							}
 						}
 					}
 				}
@@ -3203,40 +3220,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "+20"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "-20"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "+20"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "-20"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3293,40 +3316,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "100"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "100"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3381,40 +3410,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "8"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "8"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3469,40 +3504,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "60"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "60"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3650,40 +3691,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "100%"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "100%"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3738,40 +3785,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "1"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "1"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {
@@ -3826,40 +3879,46 @@ types te_demographics_widgets
 					}
 				}
 				blockoverride "plot_size" {
-					size = { 456 96 }
+					size = { 456 132 }
 				}
 				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-						blockoverride "bar_size" {
-							size = { 80 84 }
+					### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+					widget = {
+						size = { 100% 96 }
+						parentanchor = bottom
+
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+							blockoverride "bar_size" {
+								size = { 80 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-						blockoverride "bar_size" {
-							size = { 20 84 }
+						te_history_plot = {
+							visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+							blockoverride "bar_size" {
+								size = { 20 84 }
+							}
 						}
-					}
-					te_history_plot = {
-						visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-						blockoverride "bar_size" {
-							size = { 4 84 }
+						te_history_plot = {
+							visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+							blockoverride "bar_size" {
+								size = { 4 84 }
+							}
 						}
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "100"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						using = fontsize_medium
-						raw_text = "0"
+						textbox = {
+							parentanchor = left|top
+							position = { 8 6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "100"
+						}
+						textbox = {
+							parentanchor = left|bottom
+							position = { 8 -6 }
+							autoresize = yes
+							using = fontsize_medium
+							raw_text = "0"
+						}
 					}
 				}
 				blockoverride "empty_visible" {

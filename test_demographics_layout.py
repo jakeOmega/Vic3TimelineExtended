@@ -677,6 +677,24 @@ class HistoryTest(unittest.TestCase):
             self.assertEqual(_override(chart, "marker_pips").strip(), "te_demog_hist_pips = {}")
         self.assertEqual(len(_instances(self.history, "te_demog_hist_pip_legend")), 1, "one key under the charts")
 
+    def test_the_pips_have_a_lane_above_the_bars(self):
+        """Each frame is 132 tall with its plots (and the zero axis) in a 96 px box at its foot, as te_history_chart's
+        96 px frame holds them; the pips sit in the 36 px over them, never on a bar (owner, 2026-10-22)."""
+        lane = re.compile(r"^### [^\n]*\n\s*widget = \{\s*size = \{ 100% 96 \}\s*parentanchor = bottom")
+        for chart in self.charts:
+            self.assertIn("size = { 456 132 }", _override(chart, "plot_size"))
+            self.assertRegex(_override(chart, "plot_layouts").strip(), lane)
+            if _override(chart, "zero_axis") is not None:
+                self.assertRegex(_override(chart, "zero_axis").strip(), lane)
+        pips = re.findall(r"position = \{ 0 (-?\d+) \}\s*alwaystransparent = yes\s*size = \{ (\d+) \d+ \}",
+                          _type_body(self.widgets, "te_demog_hist_pips"))
+        self.assertEqual(len(pips), 3)
+        column_top = 36 + 6     # the lane, then the 96 px box's margin above its 84 px bars
+        for y, size in pips:
+            top = column_top + int(y)
+            self.assertGreaterEqual(top, 0, "inside the frame")
+            self.assertLessEqual(top + int(size), column_top - 2, "clear of the bars")
+
     def test_every_sample_variable_read_is_recorded(self):
         recorded = set(re.findall(r"name = (te_dg_h_\w+)", _read(HISTORY)))
         recorded |= set(re.findall(r"TO = (te_dg_h_\w+)", _read(HISTORY)))
