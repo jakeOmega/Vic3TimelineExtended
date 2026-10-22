@@ -10,8 +10,8 @@ only the game shows. In-game checks don't gate a merge (CLAUDE.md, "In-game chec
 ## How to run
 
 - **Deploy** per CLAUDE.md, "Play-testing unmerged work" (or from `main` once merged).
-- **Count the laws** in a save with `python3 scripts/analysis/demographics_harness.py wc SAVE`. It reads ordinary
-  binary saves once #1101 is in, and its last table gives each inheritance law's countries.
+- **Count the laws** in a save with `python3 scripts/analysis/demographics_harness.py wc SAVE` (an ordinary save
+  works); its last table gives each inheritance law's countries.
 
 | # | Check | What to look for | If it fails |
 |---|---|---|---|
