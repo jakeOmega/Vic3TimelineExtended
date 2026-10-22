@@ -332,9 +332,14 @@ first, since it reaches every game.
   still moves the modifiers; Land Reform support appears in a land-hungry state with the movement present; Fewer Men's
   women's rights support after a war that kills a twentieth of the men; an observer run to about 1950 for AI stability and
   law paths (AI Britain's reforms will be slower under more aristocratic clout, which is historically right until 1911).
-- **Self-checks:** none expected. Every field is a registered type (vanilla's, or the mod's own bubble pressure, which
-  the banking cycle's script reads) on a state or country static modifier with a multiplier, a pattern the mod already
-  relies on.
+- **Self-checks:** none expected. Every field is a registered type on a state or country static modifier with a
+  multiplier, a pattern the mod already relies on. Bubble pressure is the one script-only type: the banking cycle reads
+  it back as `modifier:country_bubble_pressure_monthly_add`. Whether the engine scales a script-only type by its
+  multiplier is what `primogeniture_scaled` checks, and no verdict is recorded. But the banking cycle's own Speculative
+  Inertia modifiers (`bubble_inertia_*`, `extra_modifiers.txt`) carry the same family's
+  `country_finance_momentum_monthly_add` at a script-value multiplier (`bubble_inertia_multiplier_script_value`), and
+  have been play-tested since 2026-09-22. So the play-test list checks the dashboard's next-month range instead of a
+  log line.
 
 ## Phase 3: later
 

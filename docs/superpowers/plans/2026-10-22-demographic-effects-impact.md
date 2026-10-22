@@ -177,7 +177,7 @@ class TestSizes(unittest.TestCase):
 - Consumes: `DE.CONDITIONS`, `DE.youth`, `DE.youth_old`, `DE.SIZES` (Task 2); `census_figures(path)`, `S.state_unemployment(sections)` (existing).
 - Produces: `S.read_variables(path, country_vars, state_vars, raw=())`: names in `raw` keep `identity=` as the raw string (a scope reference such as `te_dg_primate_state`); `strength_bins(pairs: list[tuple[float, float]]) -> list[tuple[str, int, float]]` (bins `0`, `0–0.5`, `0.5–1`, `1–1.5`, `1.5–2`, `>2`: label, states, people); `effects_rows(countries, states, census, idle) -> dict`; CLI `effects SAVE [--top N]`.
 
-- [ ] **Step 1: Write the failing tests.** Extend `WC_SAVE` with state variables `te_dg_gini`, `te_dg_mt`, `te_dg_sex_balance`, `te_dg_agr_share` and the country's `te_dg_primacy` and `te_dg_primate_state` (written `type=state`, `identity=5`). Then:
+- [ ] **Step 1: Write the failing tests.** Extend `WC_SAVE` with state variables `te_dg_gini`, `te_dg_mt`, `te_dg_sex_balance`, `te_dg_agr_share` and the country's `te_dg_primacy` and `te_dg_primate_state`. A save writes a state reference as `data={ type=state identity=<state id> }` (checked 2026-10-22 in the plain-text `puerto rico_1836_01_20.v3`, which has `te_dg_primate_state` with `identity=5`, 990 and 456). Then:
 
 `run(argv)` is a module helper: it calls `H.main(argv)` under `redirect_stdout`, asserts it returned 0, and returns the text. `path` is the extended `WC_SAVE` written in `setUp`, as `TestWealthConcentrationReader` does.
 
@@ -357,6 +357,7 @@ The spec's late-primate crowding read (`migration_crowding_mult_applied`) is not
 - Modify: `common/script_values/te_demog_metro_values.txt` (57-61 constants; after 323 the new reach and strength; 385-410 shown values)
 - Modify: `common/scripted_effects/te_demog_metro_effects.txt` (`te_demog_mt_state_refresh` 49-80)
 - Modify: `common/script_values/gui_chart_script_values.txt` (`gui_state_hidden_modifier_count` ~125: a `has_modifier = te_demog_mt_crowding` term)
+- Modify: `gui/states_panel.gui` (both modifier-row sites: add `EqualTo_string(TimedModifier.GetName, Localize('te_demog_mt_crowding'))` to each row's `[Not(Or(…))]` name filter; `test_hidden_state_modifiers.test_every_row_hides_every_hidden_modifier_by_name` checks it)
 - Modify: `localization/english/te_miscellaneous_l_english.yml` (`te_demog_mt_metropolis_desc` 6593, `te_demog_mt_dispersed_desc` 6583, `te_demog_mt_eff_metro` 6586, `te_demog_mt_eff_dispersed` 6584, `te_demog_mt_eff_display` 6585, `te_demog_mt_eff_none` 6587; new `te_demog_mt_crowding`, `te_demog_mt_crowding_desc`)
 - Modify: `docs/player_guide/08-states.md` (511-526), `docs/systems/mod_systems.md` (1864-1873)
 - Test: `test_demographics_metro.py`
@@ -387,7 +388,7 @@ The spec's late-primate crowding read (`migration_crowding_mult_applied`) is not
   - `te_demog_mt_metropolis` loses its crowding field; `te_demog_mt_crowding` carries it with `modifier_system.dds` and a header comment: "a model term: it feeds the share's target, so it keeps the 0–1 strength".
   - The refresh removes both, then under the same gate sets `te_dg_mt_mult = te_demog_mt_e_pos_strength` and `te_dg_mt_crowd_mult = te_demog_mt_e_pos` and adds both.
   - The shown values for infrastructure, services and turmoil read `te_demog_mt_e_pos_strength`; crowding keeps `te_demog_mt_e_pos`.
-  - Add the hidden count term.
+  - Add the hidden count term and the two `states_panel.gui` name filters.
 
 - [ ] **Step 4: Loc and docs.**
   - "from nothing at 40% to its full size at 60%" becomes "full at 60%, and stronger beyond".
@@ -469,7 +470,7 @@ The spec's late-primate crowding read (`migration_crowding_mult_applied`) is not
     - a score past 80 still moves the modifiers;
     - Land Reform support in a land-hungry state with the movement present, and the field's description reads right;
     - Fewer Men's support after a great war;
-    - the bubble line in the Banking dashboard's next-month range;
+    - the bubble line in the Banking dashboard's next-month range: a country at a national score of 80 reads 0.3 more than its other sources;
     - Metropolitan Crowding stays out of the state's rows but shows in Migration Crowding's breakdown;
     - the primate city's Migration Crowding hover in a late game, for Primate City's fade;
     - an observer run to about 1950.
@@ -488,7 +489,7 @@ The spec's late-primate crowding read (`migration_crowding_mult_applied`) is not
 
 - [ ] **Step 4: Commit** the docs, guide sources and PDF.
 
-- [ ] **Step 5: Open the PR** to `main` (push the branch `demog-effects-impact`):
+- [ ] **Step 5: Open the PR** to `main`. Push with `git push -u origin demog-effects-impact`: the worktree's branch tracks the owner's cloud branch `origin/ccr-831ee6ed-sbah5x`, so a bare `git push` would land there.
   - The body lists the five areas.
   - It includes Task 1's simulator table and the spec's tests for when a size moves.
   - It asks the owner for plain-text saves at about 1836, 1880, 1936 and a late year, to run `wc`, `gini` and `effects`.
