@@ -3445,6 +3445,10 @@ on_complete = {
 
 **Repo example:** `je_colonial_empire` in `common/journal_entries/je_colonial_empire.txt` dispatches across 5 resolution events (200/202/203/204/205) based on policy-time counters.
 
+## `has_building` Doesn't See a Queued Building; `any_scope_building` Does
+
+A building queued in a state exists at once as a level-0 building (its `level_after_queued_constructions` counts the queued levels), but `has_building` only reports it once a level is built. A `possible` that limits a building per area with `has_building` therefore lets the player queue a second copy before the first finishes: the power grid's "first station in a market area" rule did (2026-10-22, play-test). Test `any_scope_building = { is_building_type = <type> }` instead, as the Solar Power Receiver and the seabed licences do when they count queued levels (`te_grid_state_has_station`). It's a per-building scan, so keep cheap engine checks first in the trigger (`is_in_same_market_area` before the scan in the power grid's version).
+
 ## Per-State-Limit-1 Buildings: `NOT has_building` AI Clauses Are Noise
 
 If a building has `has_max_level = yes` and `levels_per_mesh = -1` (single-level, single-instance per state), then a clause like:

@@ -162,7 +162,7 @@ The goods a code can put on its taxed-goods list, derived by `gen_tax_code.py` (
 
 **Catalog (41 goods):** `aeroplanes`, `automobiles`, `clippers`, `clothes`, `coal`, `coffee`, `consumer_appliances`, `digital_access`, `digital_assets`, `electricity`, `fabric`, `fine_art`, `fish`, `fruit`, `furniture`, `glass`, `grain`, `groceries`, `liquor`, `luxury_clothes`, `luxury_furniture`, `magnetic_drive_ships`, `meat`, `motor_ships`, `oil`, `opium`, `paper`, `porcelain`, `radios`, `services`, `silk`, `small_arms`, `steamers`, `sugar`, `tea`, `telephones`, `tobacco`, `tourism`, `transportation`, `wine`, `wood`.
 
-**Outside the catalog (24 goods, removed by the sync if natively taxed):** `advanced_materials`, `ammunition`, `artillery`, `construction`, `dye`, `electronic_components`, `engines`, `explosives`, `fertilizer`, `gold`, `hardwood`, `iron`, `ironclads`, `launch_capacity`, `lead`, `manowars`, `merchant_marine`, `robotics`, `rubber`, `steel`, `sulfur`, `tanks`, `tech_metals`, `tools`.
+**Outside the catalog (25 goods, removed by the sync if natively taxed):** `advanced_materials`, `ammunition`, `artillery`, `construction`, `dye`, `electronic_components`, `engines`, `explosives`, `fertilizer`, `gold`, `grid_power`, `hardwood`, `iron`, `ironclads`, `launch_capacity`, `lead`, `manowars`, `merchant_marine`, `robotics`, `rubber`, `steel`, `sulfur`, `tanks`, `tech_metals`, `tools`.
 
 No pop need buys a good outside the catalog (`construction`, consumption-tax cost 400, is bought only by buildings), so a code never taxes one.
 

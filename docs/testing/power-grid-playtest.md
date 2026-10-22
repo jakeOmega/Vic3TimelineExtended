@@ -20,6 +20,8 @@ show here. Each PR adds its own section, newest last, and a fixed item is struck
 |---|---|---|
 | `TE_SELF_CHECK OK grid_conservation` | A country's stations uploaded within 10% of what they downloaded, a week after the balancing ordered both sides to move 100 or more. | — |
 | `TE_SELF_CHECK BROKEN grid_conservation` | Uploads and downloads more than 10% apart: the staffing correction (`te_grid_station_factor_value`) isn't holding, or something else trades Grid Power. | Compare each station's ordered quantity (`te_grid_command`) with what its panel shows. If the factor is stuck at its 0.2 or 2 clamp, widen it or drop the correction and accept per-station staffing as capacity. |
+| `TE_SELF_CHECK OK grid_station_cascade` | At a station whose state carries an Electricity output bonus (New York's Niagara Falls), the building's read less its own modifier equals the state's bonus: the netting cancels state and country lines. | — |
+| `TE_SELF_CHECK BROKEN grid_station_cascade` | The two differ: a building's read doesn't carry its state's lines, so an uploading station there still makes a little Electricity. | Add the state's read (`modifier:goods_<axis>_electricity_mult` in state scope) to `te_grid_other_input` / `te_grid_other_output` in `te_grid_read_other_electricity_effect`. |
 | `TE_SELF_CHECK BROKEN grid_readback` | Both totals read 0 while two stations were ordered to move 100 or more: `sg:grid_power` reports nothing in a station's state. | Read the station's flows from its own orders instead (`te_grid_command` × factor 1) in `te_grid_local_production_value` / `te_grid_local_consumption_value`, and drop the factor. |
 
 ## Phase 1: the Grid Transfer Station and the balancing (2026-10-22)
@@ -38,3 +40,11 @@ show here. Each PR adds its own section, newest last, and a fixed item is struck
 | **Captured station.** Lose a station's state in a war. | The new owner's next monthly pulse takes it over: idle, or in that owner's own grid. | — |
 | **AI.** An observer run to the 1920s. | AI countries with Electrical Capacitors build some stations, mostly in states where Electricity is dear or cheap. | None built: `te_grid_station_ai_value` is too low, or the AI won't build private infrastructure with government construction. Consider a spawn decision (the Strategic Reserve and Space Program pattern). |
 | **Display.** Hover the station, its method and its modifiers; open the Grid Power good. | Names and descriptions read as text. The texticon shows the Electricity icon (a placeholder until Grid Power has its own art). | A raw key: missing loc. |
+
+## Fixes after the first play-test (2026-10-22)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Background.** Open a station's building panel and the build menu. | The station shows the Power Plants' panel background, and `error.log` no longer logs `building_grid_transfer_station has missing texture` at load. | — |
+| **Niagara Falls.** A station in New York (or another state with an Electricity output trait): let it upload, then download. | Uploading, it makes no Electricity; downloading, it makes as much Electricity as the Grid Power it buys (before any shortage). The modifier list shows Grid Upload Intake / Grid Download Supply netting the trait. | 0.2 Electricity while uploading: the netting didn't apply; see `grid_station_cascade`. |
+| **Queued first station.** In a market area with no station, queue one, then open the build menu in a state that doesn't border it. | The second state can't take a station until it borders one (built or queued). | Still allowed: the queued building isn't found by `any_scope_building` either. |
