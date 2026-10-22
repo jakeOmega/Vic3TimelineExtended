@@ -42,6 +42,7 @@ not from which pop type holds the property (§ Wealth Concentration below).
 | Where full strength sits | **At the historical case, as a reference size, not a ceiling.** Going past it still counts (§ The curve) |
 | Wealth Concentration's upper end | **Straight line**, no kink: 1.67× at a score of 100 |
 | Wealth Concentration's lower end | **The kink**: 1.17× at 10, 1.33× at 0 |
+| A national suffrage line for Fewer Men | **Dropped**: the women's rights movement already presses for the laws it wants (§ Sex balance) |
 | The dispersed side | **Steadier, not slower** (second round): concentrated property grows faster but crashes more often, dispersed property grows slower but steadier. Dispersed Property loses the owners' efficiency cut; the national pair carries bubble pressure, +0.3 a month at 1× on Great Fortunes and −0.3 on Dispersed Wealth; education access becomes ±0.10 (§ Wealth Concentration) |
 | Wealth Concentration under every rule | **The full increase.** If it proves a problem, it moves behind the rule |
 | Wealth Concentration's neutral point | **50**, so 1836 starts fairly concentrated and the 20th century's levelling shows |
@@ -66,7 +67,7 @@ Every size here is a proposal until Phase 0 and the observer run; the questions 
    | Inequality | the Socialist and Labor movements, on top of its radicals |
    | Youth Bulge | general unrest: radicals and turmoil |
    | More Men | turmoil and radicals |
-   | Fewer Men | the women's rights movement and Women's Suffrage |
+   | Fewer Men | the women's rights movement (which presses for Women's Suffrage itself) |
    | Primate City and Provincial Neglect | big-city growth against regional resentment |
    | Metropolis and Dispersed Towns | infrastructure and agglomeration |
 
@@ -232,13 +233,13 @@ Acceptable for the most extreme city in the game; Phase 0 checks how many states
 | Modifier | Now | Proposed, at the reference |
 |---|---|---|
 | Fewer Men (state; 0 at 90, 1× at 80) | women's rights movement support +10% | **+25%** |
-| Fewer Men, national (country, new) | none | **Women's Suffrage enactment success +10%** (`country_enactment_success_chance_law_womens_suffrage_add`; the mod's other enactment lines run ±0.05–0.10) |
 | More Men (state; 0 at 110, 1× at 130, was 150) | radicals +10% | radicals +15%, **turmoil effects +15%** |
 
-- The national modifier echoes the suffrage wave after the First World War (Britain 1918, Germany 1918, the US 1920).
-  It reads the country's balance at its census, on the same curve, and needs a refresh site of its own at the country
-  census plus a line in `scripts/generators/gen_nation_tab.py`'s registry; a revolution's winner gets it back at its
-  next census (the variable carries over, the modifier does not).
+- **No national suffrage line** (owner, 2026-10-22). The first draft added a country modifier, Women's Suffrage
+  enactment success +10%, for the suffrage wave after the First World War. Dropped: the women's rights movement
+  already raises the enactment chance of the laws it wants once its activism is high enough, so the movement support
+  above reaches Women's Suffrage on its own and a second line would count the same push twice. (Its field,
+  `country_enactment_success_chance_law_womens_suffrage_add`, is registered by neither vanilla nor the mod either.)
 - Turmoil stands in for the crime and violence of a surplus of young men (Hudson and den Boer, *Bare Branches*); the
   engine has no crime.
 - No conscription line: the census's conscription term already raises conscripts where young men are many.
@@ -308,9 +309,6 @@ first, since it reaches every game.
   (`MT_EFFECTS`, `YOUTH_*`, `SEX_*`), then the generator for the `te_demog_k_*` constants, `te_demog_metro_modifiers.txt`,
   `te_demog_consequence_modifiers.txt` and `te_demog_consequence_values.txt` (new effect-strength values beside the
   model's 0–1 ramps).
-- **New country modifier:** Fewer Men's national line, with its refresh, its clear outside Full, its civil-war
-  rebuild and its `gen_nation_tab.py` registry line. Don't name it `te_demog_census_*`: `NOT_ON_COUNTRY` files that
-  prefix under "states". It reads the country-scope `te_dg_sex_balance`.
 - **Builder's notes:** `te_demog_k_up_span` 0.35 → 0.25 moves the primacy strength the Planned Capital AI reads from
   `te_dg_up_s`; hold its threshold where it is with a constant. `state_pop_support_movement_land_reform_mult` has only
   a placeholder description in the engine catalogue, so check its label in game and add mod localization if it shows
@@ -331,11 +329,12 @@ first, since it reaches every game.
   pattern, metropolitan share and phase 2 step 4 subsections); the master spec's design rule 5 and §7 table, pointing
   here.
 - **Play-test list** (`docs/testing/demographics-playtest.md`): the tooltips show the new figures; a score past 80
-  still moves the modifiers; Land Reform support appears in a land-hungry state with the movement present; the national
-  Fewer Men modifier after a war that kills a twentieth of the men; an observer run to about 1950 for AI stability and
+  still moves the modifiers; Land Reform support appears in a land-hungry state with the movement present; Fewer Men's
+  women's rights support after a war that kills a twentieth of the men; an observer run to about 1950 for AI stability and
   law paths (AI Britain's reforms will be slower under more aristocratic clout, which is historically right until 1911).
-- **Self-checks:** none expected. Every field is a vanilla type on a state or country static modifier with a
-  multiplier, a pattern the mod already relies on.
+- **Self-checks:** none expected. Every field is a registered type (vanilla's, or the mod's own bubble pressure, which
+  the banking cycle's script reads) on a state or country static modifier with a multiplier, a pattern the mod already
+  relies on.
 
 ## Phase 3: later
 
