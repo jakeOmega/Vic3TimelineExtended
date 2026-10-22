@@ -380,6 +380,32 @@ The two goods are cut by geography, as vanilla cuts them:
 - A building that moves goods within its state (extraction tiers, cold chain, automation, retail) takes `goods_input_transportation_add`. Only trade between markets takes `goods_input_merchant_marine_add`; add a new such method to `KEEP_MM_INPUT` in the conversion script, or `test_transport_goods.py` fails.
 - A land transport building produces `goods_output_transportation_add`; a shipping or trading one produces `goods_output_merchant_marine_add`. A railway or port method's `state_infrastructure_add` goes under `level_scaled`.
 
+## Power Grids (`building_grid_transfer_station`, phase 1)
+
+Electricity stays local (vanilla's `local = yes`), and power plants are unchanged. A **Grid Transfer Station** (one per state, from Electrical Capacitors) joins its state to a grid, and a monthly balancing moves Electricity between the grid's states through a market good, **Grid Power** (`grid_power`, base 30 like Electricity, `tradeable = no`, not local).
+
+**Files.** `common/buildings/power_grid.txt`, `common/production_method_groups/power_grid_pmgs.txt`, `common/production_methods/power_grid_pms.txt`, `common/static_modifiers/power_grid_modifiers.txt`, `common/script_values/power_grid_values.txt`, `common/scripted_triggers/power_grid_triggers.txt`, `common/scripted_effects/power_grid_effects.txt`, `common/on_actions/power_grid_on_actions.txt`; the good in `timeline_extended_extra_goods.txt`; `base_values` lines and modifier registrations; `test_power_grid.py`. Play-test list: `docs/testing/power-grid-playtest.md`.
+
+**What a grid is.** One country's online stations in one market area (`is_in_same_market_area`): France and French Algeria share a market but run separate grids. The building's `possible` keeps a grid contiguous: a country's first station in a market area may go in any of its states there, and each later one must border a state of the same country that has one (`any_neighbouring_state`). The balancing doesn't check adjacency itself. Phase 1 has no cross-border grids.
+
+**The station.** `bg_private_infrastructure` with `ignore_stateregion_max_level` (that group counts levels per state region, which would let only one owner of a split region build one), capped at one level by `state_building_grid_transfer_station_max_level_add = 1` in `base_values`, always subsidized by `country_building_grid_transfer_station_require_subsidies_bool = yes` there (Interventionism's highway and airport pattern). It buys and sells both goods at market prices like any private building, so no script books its trade. `pm_grid_transfer_base` carries a 1-unit input and output of both goods (`workforce_scaled`), 500 engineers and 500 clerks, and `pmg_maintenance_heavy`. `modifier_grid_station_upload` (`goods_input_electricity_mult` and `goods_output_grid_power_mult` = 1) and `modifier_grid_station_download` (the other pair) scale those lines: with multiplier Q − 1 a direction moves Q a week, with −1 it is off. This is the Strategic Reserve Hub's mechanism (`goods_*_add` move goods only from a method block, never from a runtime `add_modifier`).
+
+**The balancing** (`te_grid_monthly_update_effect`, `on_monthly_pulse_country`, only for a country with a station). A station is online when built and at least 25% staffed (`te_grid_station_online`); any other is set idle. Each grid is balanced in turn:
+
+1. For each member state, Electricity without its station: `LP = production − downloaded`, `LC = consumption − uploaded`, where the station's own flows are read back from the state's Grid Power (`sg:grid_power`: its production is what the station uploaded last week, its consumption what it downloaded). Nothing else makes or buys Grid Power, and it's untradeable, so there is no trade-centre inflation.
+2. The grid's sums `P` and `C`, held on the country while the grid is balanced.
+3. Each state's target `LP − LC × P / C` (Method B of the design: every state ends with the grid's supply-to-demand ratio). The targets sum to zero over a grid, so uploads equal downloads and no Grid Power leaves the grid it was made in.
+4. Damping: the flow moves 70% of the way from last month's to the target. A grid's old flows also sum to zero, so the blend does too.
+5. Staffing correction: `te_grid_factor` is what the station moved last time over what it was asked (`te_grid_command`), read back the same way, clamped to 0.2–2. The order is the flow over the factor, so a station still hiring, or with a throughput modifier, still moves what the balance needs. Without it, a half-staffed uploader would move half its share while full downloaders took all of theirs, and the grid would draw Grid Power that wasn't uploaded.
+
+The flow modifiers are applied on the building with `local_var:` multipliers (a `var:` or script value would resolve against ROOT, the country: #500).
+
+**Self-check.** `TE_SELF_CHECK OK|BROKEN grid_conservation` once a game, the first time a country has an uploader and a downloader each ordered 100 or more: the country's stations' uploads against their downloads last week, within 10%. `BROKEN grid_readback` if both read 0 (`sg:grid_power` reports nothing). Fallbacks are in the play-test list.
+
+**AI.** `ai_value = te_grid_station_ai_value`: 5000 × how far the state's Electricity sits from its base price either way (20% off is 1000, capped at 2500), so the AI builds where power is dear or cheap. The investment pool won't fund a station (it earns about what it pays), so the AI's grid comes from government construction.
+
+**Later phases** (the design spec, not built): transmission efficiency, metal and electronics upkeep scaled by throughput, covert sabotage, a Grid Interconnection treaty article, undersea interconnectors, a state-panel indicator, principle and banking hooks.
+
 ## Migration Crowding
 
 - **Purpose:** Reduces migration pull to heavily populated states. Prevents unrealistic population concentrations.

@@ -7,7 +7,7 @@ and most industry uses a little of it as upkeep. It runs from the first day of
 the game under the Free Market Construction game rule, which also offers four
 alternative settings. The rest of the chapter covers what construction costs in rich
 countries, how living-standard expectations adapt, what wealthy pops buy, the
-transport goods, setting tariffs for all goods at once, the Strategic
+transport goods, power grids, setting tariffs for all goods at once, the Strategic
 Reserve journal entry, wartime demand for ammunition and the mod's new mineral
 deposits.
 
@@ -77,7 +77,7 @@ building:
 |---|---|
 | 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the modern mines (bauxite, chromium, copper, graphite, lithium and the like) and the coal, iron, lead, sulfur and gold mines once they run a mechanized pump |
 | 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries |
-| 0.15 | Railways, Highways, Airports, Ports, Network Infrastructure, Power Plants, Hydro Plants, Renewable Energy Plants, Oil Rigs |
+| 0.15 | Railways, Highways, Airports, Ports, Network Infrastructure, Power Plants, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, Oil Rigs |
 | 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
 
 Farms, plantations and urban centers pay none. The coal, iron, lead, sulfur and
@@ -398,6 +398,34 @@ a lot of it needs railways or highways of its own. The largest buyer is
 construction: a state with a large Construction Sector needs railways beside
 it, and its Transportation price shows when it is short. An agrarian economy
 barely touches the good.
+
+## Power grids
+
+Electricity is only available in the state that produces it, as in the base
+game. A Grid Transfer Station, unlocked by Electrical Capacitors, joins its
+state to a power grid so that states can share it.
+
+A grid is your stations in one market area. Once a month it shares Electricity
+so that every state on it has the same supply against its demand. A state with
+power to spare sells it to the grid as Grid Power, and a short state buys Grid
+Power and turns it back into Electricity. When the whole grid is short, every
+state on it is short by the same share. A grid takes out what it puts in, so
+power never crosses to another grid: a colony across the sea runs its own grid
+even when it shares your market, and Grid Power can't be traded between
+markets. Its price stays near its base of 30. After a change, such as a new
+power plant or a new station, the grid takes a few months to settle.
+
+You can build one station per state. Your first station in a market area can
+go in any of your states there, and every later one must border a state of
+yours that has a station, so a grid grows outward from where it starts. A
+station joins its grid once it is a quarter staffed. Stations are private
+infrastructure that is always subsidized: a station buys and sells both goods
+at market prices, and your government pays whatever its wages cost beyond what
+it earns.
+
+A station is worth building where power plants make more than the state uses,
+and where Electricity is dear. A state with neither gains little from joining.
+The AI builds stations in states where Electricity is far from its base price.
 
 ## Tariffs for all goods at once
 

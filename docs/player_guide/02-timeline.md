@@ -189,7 +189,7 @@ movements](07-social-movements.md).
 
 ## New goods
 
-The new industries trade in twelve goods the base game doesn't have, and the mod
+The new industries trade in thirteen goods the base game doesn't have, and the mod
 renames twelve base-game goods to fit a longer timeline.
 
 ### Goods the mod adds
@@ -208,6 +208,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
 | Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations, and the Deep-Sea Mine's tenders; the pops' Leisure need, as Steamers |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods; the Leisure need too |
+| Grid Power | Industrial | Grid Transfer Stations, from a state's spare Electricity | Grid Transfer Stations, which turn it back into Electricity in short states of the same power grid ([Economy and construction](03-economy.md#power-grids)) |
 
 The Convenience and Tourism needs, which wealthier pops fill with these goods,
 are covered in [Pop consumption at high
