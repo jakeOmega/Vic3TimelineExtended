@@ -76,7 +76,8 @@ state_chronic_mortality_mult = {
 }
 # Medicine spreads (the Causes of Death plan, owner 2026-10-11): the share of the gap between a state's health-care
 # access and treatments and their targets that each census step closes, on top of 10% everywhere
-# (te_demog_medical_diffusion). On communication and medical-training techs and the Medical Outreach decree.
+# (te_demog_medical_diffusion). On communication and medical-training techs, the World Health Organization's convention
+# and the Medical Outreach decree.
 # Read only by the census; a release comments its carriers out (scripts/release/comment_out_census_inputs.py).
 state_medical_diffusion_add = {
 	color = good

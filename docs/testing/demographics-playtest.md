@@ -101,6 +101,18 @@ Unions' two traits, which the engine scales ×0.5 while the group is marginal an
 2. **Full, an observer run of a few decades:** AI countries issue it in states behind and let it lapse; few states
    hold it once caught up.
 
+## The WHO's spread of medicine
+
+The line moved from Intergovernmental Organizations to the Global Pandemic Response's convention modifier
+(`un_pandemic_cooperation_modifier`, held on the United Nations journal entry and scaled by the UN's enforcement).
+
+1. **Full.** In a country that has researched Intergovernmental Organizations but is not a party, a state's
+   `TE_DEMOG_MODS` line reads `diff=` 0.10 plus the communication techs' lines, with none from the technology. Once the
+   country is a party (the Global Pandemic Response carried, the modifier on its entry), `diff=` is higher by 0.05 times
+   the UN's enforcement. If it doesn't rise, a state's read doesn't see a state-type line on a journal-entry modifier:
+   hold the modifier on the country instead, as the Law of the Sea's is (the list at the head of
+   `common/scripted_effects/un_state_effects.txt`).
+
 ## Phase 2 step 1: the interfaces
 
 The census computes who works, the pensioners, health need and the old-age threshold, and every working-adult line

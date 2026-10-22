@@ -4190,6 +4190,9 @@ un_pandemic_cooperation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_institution_cost_institution_health_system_mult = -0.10
 	country_prestige_mult = 0.05
+	# the census's spread of medicine (the Causes of Death plan): the WHO's share of the 5% a communication or
+	# medical-training technology adds, scaled by the UN's enforcement like the rest (un_convention_multiplier)
+	state_medical_diffusion_add = 0.05
 }
 
 # Redesign phase 4: authority 100 -> 50, and going it alone now costs prestige.

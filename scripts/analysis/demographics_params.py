@@ -164,6 +164,10 @@ DEMOG_FERTILITY_TYPES = (CONTRACEPTION_TYPE, MEANS_SHIFT_TYPE, NATURAL_FERTILITY
 # The spread of medicine (the Causes of Death plan): the share of the gap health-care access and treatments close at a
 # census step, beyond DIFFUSION_BASE (below, with the rest of the drift's numbers).
 DIFFUSION_TYPE = "state_medical_diffusion_add"
+# The World Health Organization's convention carries a line of the same type (un_pandemic_cooperation_modifier, a static
+# modifier, so load_carriers doesn't walk it), scaled by the UN's enforcement like the rest of that modifier. The late
+# game's market threshold adds it for a party (gen_demographics_lx.py); test_demographics_modifiers pins it to the file.
+WHO_DIFFUSION = 0.05
 # DEMOG_TYPES, every census input type, is defined after phase 2 step 1's participation inputs (below).
 # The means to plan a family (§2.3): (TRADITIONAL_MEANS + state_contraception_add, at most 1) x
 # (MEANS_ACCESS_BASE + (1 - MEANS_ACCESS_BASE) x literacy) + state_fertility_means_add, within

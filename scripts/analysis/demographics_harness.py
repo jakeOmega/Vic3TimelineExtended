@@ -610,10 +610,12 @@ def cmd_medicine(_args):
 
 # ---- lag: how far life expectancy trails its target while medicine spreads (the Causes of Death plan) -------------
 # (label, before, after): a state's inputs before a change and after it, the communication techs of the era included
-# (they set the spread's rate). At year 0 the change has just happened; each year is one census step.
+# (they set the spread's rate). At year 0 the change has just happened; each year is one census step. The rates are for
+# a country outside the World Health Organization's convention, whose line (P.WHO_DIFFUSION x the UN's enforcement) a
+# party adds on top.
 COMMS_1870 = frozenset({"electric_telegraph"})
 COMMS_1950 = COMMS_1870 | {"radio"}
-COMMS_TODAY = COMMS_1950 | {"intergovernmental_organizations", "world_wide_web"}
+COMMS_TODAY = COMMS_1950 | {"world_wide_web"}
 LAG_SCENARIOS = [
     ("1840s: Charitable Health System, Ministry of Health 1 to 3",
      dict(sol=10, literacy=0.25, techs=MED_1836, laws={CHS}, institutions={HEALTH: 1}),

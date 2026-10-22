@@ -778,7 +778,7 @@ a year.
 | International Criminal Court (ICC), binding | Authority 40; the Declaration in force (a great-power war's end can raise it sooner); a major-power proposer with Human Rights | Less infamy generation, faster relations | The court indicts rulers. |
 | Nuclear Non-Proliferation Treaty (IAEA) | Authority 40; a proposer with Nuclear Weapons | Faster infamy decay, prestige | Programs without a bomb run 25% slower; countries with neither a bomb nor a program defend better against strikes. |
 | Climate Accord (UNEP) | Authority 30; Environmental Movement; the Global Warming rule | Environment ministry impact, prestige | Market leaders with 10%+ of world emissions cut emissions and heavy industry; low emitters get adaptation aid. |
-| Global Pandemic Response (WHO) | Authority 20; a major-power proposer with Antibiotics | Cheaper health system, prestige | None. |
+| Global Pandemic Response (WHO) | Authority 20; a major-power proposer with Antibiotics | Cheaper health system, prestige, faster spread of medicine | None. |
 | International Refugee Resolution (UNHCR) | Authority 20; a country at war or with a state below 6 standard of living | Refugee ministry impact, prestige, migration pull | The 20 richest countries per head take in migrants and turmoil; the poorest gain standard of living. |
 | Cultural Heritage Program (UNESCO) | Authority 40 | Prestige, research speed | Countries with a monument (any building in the Monuments group, the Space Program included, but not a Grand Monument) gain cultural pull and tourism, and build slower in every state. |
 | Decolonization Resolution | Authority 30; Decolonization; a country holding a subject | Binds every member | Colonial powers lose colonial stability; members' colonies gain liberty desire. |

@@ -775,8 +775,6 @@ intergovernmental_organizations = {
 		country_igo_pb_principles_bool = yes
 		country_te_pb_principle_slots_add = 1
 		country_can_join_united_nations_bool = yes
-		# the census's spread of medicine (the Causes of Death plan)
-		state_medical_diffusion_add = 0.05
 	}
 
 	unlocking_technologies = {

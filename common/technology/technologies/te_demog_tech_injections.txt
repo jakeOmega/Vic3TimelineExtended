@@ -23,7 +23,8 @@ INJECT:modern_nursing = {
 
 # Medicine spreads faster with communication and medical training (the Causes of Death plan): the census's share of the
 # gap closed each year, 10% everywhere plus 5% for each of Electric Telegraph, Modern Nursing, Radio (modified.txt),
-# Intergovernmental Organizations, World Wide Web and Telemedicine (in their own definitions).
+# World Wide Web and Telemedicine (in their own definitions), and for the World Health Organization's convention
+# (un_pandemic_cooperation_modifier, scaled by the UN's enforcement).
 INJECT:electric_telegraph = {
 	modifier = {
 		state_medical_diffusion_add = 0.05
