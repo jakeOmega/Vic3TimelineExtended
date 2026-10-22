@@ -39,7 +39,15 @@ medicine, so their factor is 1 and their numbers stay; the two rich cases, model
 The participation rates in the game's units (2026-10-20: the old WORKFORCE_SCALE of 0.7 folded into the rates and the
 carriers' participation lines) move two figures of the Full cases on purpose, each x 0.7 within the interpreter's last
 place, and nothing else: te_dg_at_work (0.41443 to 0.2901, 0.53487 to 0.3744) and te_dg_wk_past (0.02866 to 0.02006).
-Those three numbers alone were rewritten; te_dg_fws_wk, which splits the work deaths, and every death and birth stay."""
+Those three numbers alone were rewritten; te_dg_fws_wk, which splits the work deaths, and every death and birth stay.
+
+The deaths added on top count under their causes (owner, 2026-10-22). The walk's Full-only sums gain the pops' own lines
+by cause (CAUSES_ON_TOP_DIGESTS), the refresh stores each cause's start part and tag read (te_dg_sc_<c>, te_dg_st_<c>),
+the panel each cause's deaths on top (te_dg_dc_<c>_top), and te_dg_dc_ontop and the hover's red threshold go. Of the
+recorded numbers only rich_full's Causes of Death slices move: its window ran above the census's rate with no split by
+cause, so what was its Added on Top slice now spreads over the four natural causes by the estimate (and the fit moves
+in its last place). Its ring, births and deaths, which the scales reach, are as they were: with no split, one scale.
+rich_full alone was re-recorded on this tree."""
 
 import functools
 import hashlib
@@ -131,8 +139,18 @@ SAFETY_VARS = {"te_dg_in_saf_work", "te_dg_in_saf_ext"}
 # Deaths by cause (issue #1029): every count stores last year's deaths split by cause for the Causes of Death section
 # (te_demog_cause_deaths_store; a seed's are 0), from a new generated block (te_demog_cause_deaths_estimate) that reads the
 # step's rates and changes none of them, so every recorded number stays as it was
-CAUSE_DEATH_VARS = {f"te_dg_dc_{s}" for s in ("inf", "ext", "chr", "work", "mat", "ontop", "war", "kill", "total", "fit",
-                                               "lead")}
+CAUSE_DEATH_VARS = {f"te_dg_dc_{s}" for s in ("inf", "ext", "chr", "work", "mat", "war", "kill", "total", "fit", "lead")}
+# The deaths on top by cause (owner, 2026-10-22; the docstring): each cause's on the panel, and the start's parts by cause
+CAUSE_DEATH_VARS |= {f"te_dg_{k}_{c}" for k in ("sc", "st") for c in P.DEATH_CAUSES}
+CAUSE_DEATH_VARS |= {f"te_dg_dc_{c}_top" for c in P.DEATH_CAUSES}
+CAUSES_ON_TOP_GONE = {"te_dg_dc_ontop"}
+CAUSES_ON_TOP_DIGESTS = {
+    ("generated_effects", "te_demog_absorbed_walk_init"):
+        "286e98235f792531c966d9df006e03b33dfcec1c15d0c53f4143a089b3474073",
+    ("generated_effects", "te_demog_absorbed_walk_pop"):
+        "d9dd290e45c61b673752ca82ed4eb631c8dbaf5301c591a25733273d2f6dfc32",
+}
+CAUSES_ON_TOP_REMOVED = {("generated_values", "te_demog_k_deaths_on_top_high")}
 # and two of the panel's figures: net migration per 1,000 people and the month of the count
 CAUSE_DEATH_VARS |= {"te_dg_mig_rate", "te_dg_count_mi"}
 # The laws' terms as modifier lines (2026-10-17, so each law's tooltip says what the census does with it): Late
@@ -342,6 +360,9 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                         self.assertNotIn(name, self.now["cases"][case][kind], f"{case}: {name} is still there")
                         self.assertIn(STEP4_RENAMED[name], self.now["cases"][case][kind], case)
                         continue
+                    if name in CAUSES_ON_TOP_GONE:
+                        self.assertNotIn(name, self.now["cases"][case][kind], f"{case}: {name} is back")
+                        continue
                     self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
                     now = self.now["cases"][case][kind][name]
                     if isinstance(value, float) and isinstance(now, float):
@@ -381,7 +402,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 if (key, name) in LAW_LINE_MOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
-                if (key, name) in RATE_FLOOR_REMOVED:
+                if (key, name) in RATE_FLOOR_REMOVED | CAUSES_ON_TOP_REMOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
@@ -393,6 +414,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = UPLOADS_DIGESTS.get((key, name), want)
                 want = RATE_FLOOR_DIGESTS.get((key, name), want)
                 want = SAFEGUARDS_DIGESTS.get((key, name), want)
+                want = CAUSES_ON_TOP_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

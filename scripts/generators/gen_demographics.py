@@ -353,16 +353,17 @@ def cause_deaths_estimate(o):
     """Issue #1029's estimate (demographics_model.cause_deaths_estimate, method a): each natural cause's deaths at the
     step's rates, from the bands at the start of the step, at demographics_model.band_cause_rates' table."""
     r = M.band_cause_rates()
-    o("# THIS = a state at its step, after te_demog_on_top_scales and before the sweep writes this count's bands (issue")
-    o("# #1029; demographics_model.cause_deaths_estimate): each natural cause's deaths over the year at the step's rates,")
+    o("# THIS = a state at its step, before te_demog_on_top_scales and the sweep, which writes this count's bands (issue")
+    o("# #1029; demographics_model.cause_deaths_estimate): each natural cause's deaths over the year at the model's rates,")
     o("# from the people the sweep takes its dead from, by the band they had at the last count (te_dg_bf<b>, te_dg_bm<b>,")
     o("# whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at")
     o("# a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at")
     o("# the base rates) x the step's multiplier, work's by sex, and infection's at the adults' ages x te_dg_inf_ad too.")
     o("# Exact in the bands of one age group; approximate in 0-4")
-    o("# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work, which")
-    o("# te_demog_cause_deaths_store scales to the census's deaths; a state in the late game replaces them with the late")
-    o("# sweep's own count, its treated at their biological ages (te_demog_lx_cause_deaths).")
+    o("# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work: te_demog_on_top_scales")
+    o("# places each cause's deaths on top by them, then scales each with its multiplier, and te_demog_cause_deaths_store")
+    o("# scales them to the census's deaths; a state in the late game replaces them with the late sweep's own count, its")
+    o("# treated at their biological ages (te_demog_lx_cause_deaths).")
     o("te_demog_cause_deaths_estimate = {")
 
     def band_sum(terms):
@@ -1268,6 +1269,7 @@ def absorbed_walk(o, root):
     """The walk's replaced sums (phase 2 step 4, owner amendment): each pop's bare curves x the terms absorbed per pop;
     and severe starvation's people and deaths for the Causes of Death section's split (Task 6)."""
     severe = static_modifier(root, "severe_starvation_penalty")
+    reg = registered_modifier_types(root)
     o("# THIS = a state, before its pop walk (te_demog_walks): the replaced sums, the bare curves the census's")
     o("# term reaches and severe starvation's people and deaths start at 0; under Full only (the refresh and the")
     o("# split read them nowhere else) te_dg_w_rep turns the per-pop sums on.")
@@ -1281,6 +1283,9 @@ def absorbed_walk(o, root):
     # phase 3 (late-game §4.3, call 14): the bare deaths x wealth the census's wealth slope reaches, and the richest pop
     o("set_local_variable = { name = te_dg_w_edw value = 0 }")
     o("set_local_variable = { name = te_dg_w_wtop value = 0 }")
+    # Causes of Death (owner, 2026-10-22): the pops' other own lines by the cause their deaths count under
+    for name in ("te_dg_w_odh", "te_dg_w_odx", "te_dg_w_odq", "te_dg_w_odw"):
+        o(f"set_local_variable = {{ name = {name} value = 0 }}")
     o("set_local_variable = { name = te_dg_w_rep value = 0 }")
     o("if = {")
     o("limit = { te_demog_effects_run = yes }")
@@ -1294,12 +1299,18 @@ def absorbed_walk(o, root):
     o("# multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a")
     o("# change in the census's term then doesn't reach (the trapezoid's start rate); and severe starvation's people")
     o("# and deaths (te_dg_w_sev, te_dg_w_sevd: the Causes of Death section's split); the bare deaths x wealth the")
-    o("# census's wealth slope reaches and the richest pop's wealth (te_dg_w_edw, te_dg_w_wtop; phase 3). Full only.")
+    o("# census's wealth slope reaches and the richest pop's wealth (te_dg_w_edw, te_dg_w_wtop; phase 3); and its other")
+    o("# own lines by the cause their deaths count under (owner, 2026-10-22), where the engine doesn't floor it:")
+    o("# non-homeland mortality (te_dg_w_odh, infection), its class's line (te_dg_w_odq for soldiers and officers, war;")
+    o("# te_dg_w_odx for the rest, accidents and violence) and the rest of its own lines, its workplace's (te_dg_w_odw,")
+    o("# work): its multiplier less 1, the state's read, what the census absorbs for it, the wealth line, severe")
+    o("# starvation's term and those two. Full only.")
     o("te_demog_absorbed_walk_pop = {")
     o("if = {")
     o("limit = { local_var:te_dg_w_rep > 0 }")
+    o("set_local_variable = { name = te_dg_p_ad value = te_demog_pop_absorbed_deaths }")
     o("change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_absorbed_births } }")
-    o("change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_absorbed_deaths } }")
+    o("change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_ad } }")
     o("if = {")
     o("limit = { local_var:te_dg_p_mb > 0 }")
     o("change_local_variable = { name = te_dg_w_eb0m add = local_var:te_dg_p_eb }")
@@ -1315,20 +1326,56 @@ def absorbed_walk(o, root):
     o("}")
     o("# severe starvation's people, and its part of the pop's deaths where the engine doesn't floor them (the Causes")
     o("# of Death section's split, te_demog_on_top_split): the severe ladder te_demog_pop_death_mult holds")
+    o("set_local_variable = { name = te_dg_p_sv value = 0 }")
     o("if = {")
     o("limit = { is_in_severe_starvation = yes }")
     o("change_local_variable = { name = te_dg_w_sev add = total_size }")
     o("if = {")
     o("limit = { local_var:te_dg_p_md > 0 }")
-    o("change_local_variable = {")
-    o("name = te_dg_w_sevd")
-    o("add = {")
-    o("value = local_var:te_dg_p_ed")
-    o("multiply = {")
+    o("set_local_variable = {")
+    o("name = te_dg_p_sv")
+    o("value = {")
     o("value = 0")
     _starvation_ladder(o, severe["state_mortality_mult"], _starvation_buckets(severe=True))
     o("}")
     o("}")
+    o("change_local_variable = { name = te_dg_w_sevd add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_sv } }")
+    o("}")
+    o("}")
+    o("# its other own lines by cause (owner, 2026-10-22), where the engine doesn't floor it")
+    o("if = {")
+    o("limit = { local_var:te_dg_p_md > 0 }")
+    o("set_local_variable = { name = te_dg_p_oh value = 0 }")
+    if "state_non_homeland_mortality_mult" in reg:
+        o("if = {")
+        o("limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }")
+        o("set_local_variable = { name = te_dg_p_oh value = state.modifier:state_non_homeland_mortality_mult }")
+        o("change_local_variable = { name = te_dg_w_odh add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oh } }")
+        o("}")
+    o("set_local_variable = { name = te_dg_p_oc value = 0 }")
+    classes = [t for t in sorted(_snapshot(root, "pop_types")) if f"state_{t}_mortality_mult" in reg]
+    for i, t in enumerate(classes):
+        o(f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ is_pop_type = {t} }} "
+          f"set_local_variable = {{ name = te_dg_p_oc value = state.modifier:state_{t}_mortality_mult }} }}")
+    o("if = {")
+    o("limit = { OR = { " + " ".join(f"is_pop_type = {t}" for t in P.DEATH_CAUSE_WAR_CLASSES) + " } }")
+    o("change_local_variable = { name = te_dg_w_odq add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }")
+    o("}")
+    o("else = {")
+    o("change_local_variable = { name = te_dg_w_odx add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }")
+    o("}")
+    o("change_local_variable = {")
+    o("name = te_dg_w_odw")
+    o("add = {")
+    o("value = local_var:te_dg_p_md")
+    o("subtract = 1")
+    o("subtract = state.modifier:state_mortality_mult")
+    o("subtract = local_var:te_dg_p_ad")
+    o("subtract = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }")
+    o("subtract = local_var:te_dg_p_sv")
+    o("subtract = local_var:te_dg_p_oh")
+    o("subtract = local_var:te_dg_p_oc")
+    o("multiply = local_var:te_dg_p_ed")
     o("}")
     o("}")
     o("}")
@@ -1651,12 +1698,13 @@ def constants(o):
         "crisis_at_war": P.CRISIS_AT_WAR,
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_factor_min": P.ON_TOP_FACTOR_MIN,
         "window_start_weight": P.WINDOW_START_WEIGHT,
+        "cause_scale_min_deaths": P.CAUSE_SCALE_MIN_DEATHS, "cause_scale_min": P.CAUSE_SCALE_MIN,
         "rate_total_floor": P.RATE_TOTAL_FLOOR,
         "rate_bare_min": P.RATE_BARE_MIN,
         "natural_fertility_floor": P.NATURAL_FERTILITY_FLOOR,
         "wealth_line_floor": P.WEALTH_LINE_FLOOR,
         "medicine_snap": P.MEDICINE_SNAP, "medicine_snap_neg": -P.MEDICINE_SNAP,
-        "deaths_on_top_high": P.DEATHS_ON_TOP_HIGH, "base_access": P.BASE_ACCESS,
+        "base_access": P.BASE_ACCESS,
         "maternal_base": P.MATERNAL_PER_100K_BIRTHS,
         "practice_rate": P.PRACTICE_RATE,
         # phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1)
@@ -2232,6 +2280,61 @@ def render_line_effects():
         stale_m=True)
 
 
+CAUSE_TAGS_HEADER = (
+    "# Causes of Death (owner, 2026-10-22): each vanilla mortality line the census leaves on top, tagged with the cause its\n"
+    "# deaths count under (demographics_params.DEATH_CAUSE_TAGS): a script-only copy of its value beside it, which the\n"
+    "# engine sums and scales with the line and the census reads at both ends of its window (te_demog_on_top_split). The\n"
+    "# mod's own carriers, and vanilla's the mod already INJECTs or REPLACEs, carry their tag by hand. A release without\n"
+    "# the census comments these out (scripts/release/comment_out_census_inputs.py).")
+
+
+def cause_tag_lines(root=ROOT):
+    """{database: [(entity, block or None, cause, value)]}: every vanilla carrier of state_mortality_mult in
+    P.DEATH_CAUSE_TAG_DATABASES that the generated INJECTs tag. Raises on a carrier neither tagged nor untagged, so a
+    vanilla patch's new line can't go unclassified."""
+    from paradox_file_parser import ParadoxFileParser
+    out = {}
+    for db, (folder, block) in P.DEATH_CAUSE_TAG_DATABASES.items():
+        mod = set()     # what the mod defines, REPLACEs or INJECTs, outside these generated files
+        for path in sorted((root / "common" / folder).glob("*.txt")):
+            if path.name != CAUSE_TAGS_FILE:
+                parser = ParadoxFileParser()
+                parser.parse_file(str(path), apply_directives=False)
+                mod |= {key.rpartition(":")[2] for key in parser.data}
+        rows = []
+        for name, body in sorted(_snapshot(root, db).items()):
+            holder = _field(body, block) if block else body
+            value = _field(holder, "state_mortality_mult") if isinstance(holder, dict) else None
+            if value is None or name in P.DEATH_CAUSE_UNTAGGED:
+                continue
+            assert name in P.DEATH_CAUSE_OF, f"{db} {name}: a mortality line with no cause (DEATH_CAUSE_TAGS)"
+            if name in mod:
+                continue    # the mod's own INJECT or REPLACE carries the tag
+            rows.append((name, block, P.DEATH_CAUSE_OF[name], float(value)))
+        out[folder] = rows
+    return out
+
+
+def render_cause_tags(folder, root=ROOT):
+    o = Out()
+    o(HEADER.rstrip("\n"))
+    o(CAUSE_TAGS_HEADER)
+    o("")
+    for name, block, cause, value in cause_tag_lines(root)[folder]:
+        o(f"INJECT:{name} = {{")
+        if block:
+            o(f"{block} = {{")
+        o(f"{P.DEATH_CAUSE_TYPES[cause]} = {lit(value)}")
+        if block:
+            o("}")
+        o("}")
+    return o.text()
+
+
+CAUSE_TAGS_FILE = "te_demog_cause_tags_generated.txt"
+CAUSE_TAGS = {folder: Path("common", folder, CAUSE_TAGS_FILE) for folder, _block in P.DEATH_CAUSE_TAG_DATABASES.values()}
+
+
 WORKFORCE_LINE_HEADER = (
     "# Phase 2 step 1 (docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §1.7): the\n"
     "# working-adult lines' women's-work and replaced families, re-applied by a fixed-sign pair while\n"
@@ -2395,6 +2498,7 @@ def plan_outputs(root=ROOT):
             WORKFORCE_LINE_VALUES: render_workforce_line_values(),
             WORKFORCE_LINE_EFFECTS: render_workforce_line_effects(),
             SPREAD_VALUES: render_spread_values(), SPREAD_EFFECTS: render_spread_effects(),
+            **{path: render_cause_tags(folder, root) for folder, path in CAUSE_TAGS.items()},
             **LX.plan_outputs(), **RSG.plan_outputs(), **UM.plan_outputs()}
 
 

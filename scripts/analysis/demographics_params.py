@@ -628,7 +628,6 @@ DIFFUSION_BASE = 0.1
 DIFFUSION_MAX = 1.0
 MEDICINE_SNAP = 0.005
 MEDICAL_OUTREACH_DIFFUSION = 0.2   # decree_medical_outreach's line (a test pins the decree to it)
-DEATHS_ON_TOP_HIGH = 1.25          # 1 + te_dg_dz at or above this reads red on the state subtab
 
 # Women's share of the workforce (§2.4, §2.5): this base plus the women's-rights laws' FEMALE_WORK_SHARE_TYPE line (stage 3
 # of the modifier-types design, 2026-10-19, below), for the migrant profile, Late Marriage's women's work and, outside
@@ -738,6 +737,104 @@ ENGINE_LINES_ON_TOP = frozenset({
 # level, France would lose about a fifth of its deaths (results doc, phase 2 step 4). Absorbing it per pop under Full,
 # as mild starvation, is proposed.
 ENGINE_FIELDS_ON_TOP = frozenset({"state_mortality_wealth_mult"})
+# Causes of Death (owner, 2026-10-22): the deaths the engine adds on top of the census count under their own causes, not
+# as a slice of their own. Every state-level mortality line the census leaves on top carries a tag: a script-only copy
+# of its value on the type of the cause its deaths count under (demographics_modifier_types.txt), which the engine sums
+# and scales with the line and the census reads at both ends of its window (te_demog_on_top_split). War and Devastation
+# is the war dead's slice; devastation's dead are civilians of all ages (owner: devastation's usual cause is war, with
+# natural disasters also a cause). Pops' own lines are read in the walk instead (te_demog_absorbed_walk_pop): severe
+# starvation and non-homeland mortality count as infection and hunger, soldiers' and officers' lines as war, other
+# classes' as accidents and violence, and the rest of a pop's own lines (its workplace's) as work.
+DEATH_CAUSES = ("inf", "chr", "ext", "work", "war")
+DEATH_CAUSE_TYPES = {c: f"state_death_cause_{c}_mult" for c in DEATH_CAUSES}
+# the pop types whose class line counts under war (the rest: accidents and violence)
+DEATH_CAUSE_WAR_CLASSES = ("officers", "soldiers")
+# The step places each natural cause's deaths on top on its own ages (demographics_model.cause_scales): a cause the
+# model gives under CAUSE_SCALE_MIN_DEATHS deaths a step can't take its own, which join the rest; and the panel divides
+# each cause's estimate by its scale, at least CAUSE_SCALE_MIN, to recover the model's own deaths.
+CAUSE_SCALE_MIN_DEATHS = 1.0
+CAUSE_SCALE_MIN = 0.0001
+# Vanilla's carriers, tagged by generated INJECTs (gen_demographics.py, te_demog_cause_tags_generated.txt): {database:
+# (folder, the block that holds the line, or None for the entity itself)}. Static modifiers the mod already INJECTs or
+# REPLACEs carry their tag in that block, by hand.
+DEATH_CAUSE_TAG_DATABASES = {
+    "modifiers": ("static_modifiers", None),
+    "interest_group_traits": ("interest_group_traits", "modifier"),
+    "character_traits": ("character_traits", "country_modifier"),
+}
+DEATH_CAUSE_TAGS = {
+    # infection and hunger: epidemics, famines, food relief, medicine and nursing
+    "inf": (
+        "plague_modifier", "cholera_modifier", "disease_outbreak_mod", "outbreak_without_aid_mod",
+        "aided_for_outbreak_mod", "aided_directly_by_the_ruler_mod", "epidemic_control_effect_modifier",
+        "improved_epidemic_control_effect_modifier", "vaccinations_prg_modifier", "modifier_rabies_vaccine",
+        "medical_hygiene_local", "modern_nursing", "modifier_nightingale_soldiers", "missionary_schools_hospitals",
+        "modifier_chi_missionary_hospitals", "lands_of_anarchy_tribe_received_medicine_mod",
+        "lands_of_anarchy_refused_medicine_mod", "miraculous_healing",
+        "portugal_single_fire_events_zoo_worm_women_free_state_mod", "railway_famine", "great_famine_modifier",
+        "emergency_famine_modifier", "a_mild_but_lean_year", "risky_food_substitutes", "temporary_switch_to_food_crops",
+        "no_taxation_due_to_famine", "food_crop_system_modifier", "tax_breaks_for_warehouses",
+        "relief_kitchens_effect_modifier", "improved_relief_kitchens_effect_modifier", "charitable_slums_state_modifier",
+        "rejected_charitable_slums_state_modifier",
+        # the mod's: climate-borne disease and hunger, aid, crowding
+        "crop_failure_modifier", "water_crisis_rationing_modifier", "tropical_disease_spread_modifier",
+        "tropical_disease_research_modifier", "tropical_disease_public_health_modifier", "un_mission_aid_state_modifier",
+        "un_humanitarian_aid_received_modifier", "un_aid_received_modifier", "un_food_reserve_relief_state_modifier",
+        "reproductive_rights_progressive_modifier", "te_demog_wave_overspill_sprawl", "healthcare_aid",
+        "company_pfizer", "company_biontech", "pm_pfizer_rd_campus", "pm_biontech_mainz_campus",
+    ),
+    # chronic illness and old age: pollution, the climate's heat, drugs and addiction, radiation, care of the old
+    "chr": (
+        "state_region_pollution_health", "modifier_radio_opium", "opium_wars_lost", "opium_wars_addiction_modifier",
+        "opium_health_focus", "opium_addiction_state_mod", "china_welfare", "ig_trait_the_best_revenge",
+        "global_warming", "climate_adaptation_modifier", "emergency_climate_spending_modifier",
+        "climate_crisis_emergency_modifier", "climate_fortress_modifier", "climate_carrying_on_modifier",
+        "arctic_melting_modifier", "un_regime_climate_adaptation_modifier", "ste_reactor_leak_coverup",
+        "drugs_shortage_rationing", "addiction_public_health_modifier", "institutional_reform_modifier",
+        "gm_national_sig_olympic", "gm_boon_tech_athletic", "augment_health_panic", "nd_weapons_accident_contamination",
+        "te_demog_wave_almshouses", "te_demog_wave_villages_alone",
+        "company_roche", "company_cochlear", "company_novo_nordisk", "company_biocon",
+        "pm_roche_tower", "pm_cochlear_global_hq", "pm_novo_nordisk_kalundborg_plant", "pm_biocon_park",
+    ),
+    # accidents and violence: disasters, massacres, crackdowns, ordeals, suicide
+    "ext": (
+        "modifier_tangena_ordeal", "modifier_cineorama_fire", "krakatoa_eruption_help_modifier",
+        "krakatoa_eruption_no_help_modifier", "modifier_terror_cell_crackdown_state", "decree_put_the_riot_down",
+        "harbingers_of_order_modifier", "modifier_slaughter_with_decrees", "congo_massacre_mortality_modifier",
+        "modifier_kazakh_ungovernable_provinces", "sweden_law_birth_two",
+        "mental_health_crisis_active_modifier", "mental_health_infrastructure_modifier", "mental_health_neglect_modifier",
+        "mental_health_leave_modifier", "youth_mental_health_funding_modifier", "mental_health_crisis_ignored_modifier",
+        "veteran_mental_health_modifier",
+    ),
+    # work: forced labour and extraction
+    "work": (
+        "work_camps_effect_modifier", "improved_work_camps_effect_modifier", "resource_extraction_colony_modifier",
+        "free_state_mort", "special_character_colonial_extraction", "resettlement_penal_transportation_destination",
+        "resettlement_special_settlements_destination",
+    ),
+    # war and devastation: devastation, raids, sieges, gas, the nuclear aftermath
+    "war": (
+        "state_region_devastation", "caucasus_war_attacker", "modifier_milyutin_memorandum", "modifier_villages_burned",
+        "modifier_frontier_raids", "algerian_state_raided", "crushing_the_cabaganem_modifier",
+        "thus_unto_tyrants_modifier", "thus_unto_tyrants_capture_modifier", "mustard_gas",
+        "war_wounded_civilian_assistance", "modifier_rebellion_horrific_reprisals", "zone_rouge",
+        "quilombo_destroyed_modifier", "nuclear_strike_aftermath", "tactical_nuke_aftermath",
+        "ww_prolonged_war_exhaustion_modifier", "ww_devastation_modifier", "ww_ground_offensive_modifier",
+    ),
+}
+DEATH_CAUSE_OF = {name: c for c, names in DEATH_CAUSE_TAGS.items() for name in names}
+assert len(DEATH_CAUSE_OF) == sum(len(v) for v in DEATH_CAUSE_TAGS.values()), "a carrier tagged under two causes"
+# Lines that stay untagged (their deaths spread over the census's own causes, as the census's lag does): the census's own
+# terms and pairs, the engine's per-pop starvation penalties (the walk reads them), the moved laws' cancels, and vanilla
+# databases whose INJECT into a nested modifier block no read has shown to add rather than replace (companies'
+# prosperity_modifier, amendments' and harvest conditions' modifier: five lines of at most 5%).
+DEATH_CAUSE_UNTAGGED = frozenset({
+    "starvation_penalty", "severe_starvation_penalty",
+    "te_demog_census_deaths_up", "te_demog_census_deaths_down", "te_demog_line_deaths_up", "te_demog_line_deaths_down",
+    "te_demog_fast_deaths", "law_charitable_health_system", "law_public_health_insurance",
+    "company_oriental_consolidated_mining", "company_noda_shoyu", "company_ingolstadt_electrical_company",
+    "amendment_draconian_blasphemy_laws", "tsunami", "earthquake",
+})
 # Phase 2 step 1 (the design §1.7; late-game call 11; the owner's call 3, 2026-10-12): every working-adult line on two
 # script-only families (demographics_workforce_line_types.txt), each at its old flat value, re-applied by their own pair
 # while no workforce term is in force (te_demog_workforce_lines_apply: not Full, or no te_dg_mw, step 2's term). Their

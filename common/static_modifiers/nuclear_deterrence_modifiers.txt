@@ -243,5 +243,6 @@ nd_incident_coverup_exposed = {
 nd_weapons_accident_contamination = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_chr_mult = 0.05
 	state_standard_of_living_add = -1
 }

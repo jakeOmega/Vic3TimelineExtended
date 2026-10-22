@@ -779,12 +779,13 @@ types te_demographics_widgets
 	}
 
 	### The Causes of Death pie (gui_style_guide.md rule 5: a share is a pie, framed with a ring; Colonial Empire's
-	### te_ce_ov_pie): 104 square, the ring behind and eight stacked progresspie layers inside it, each filled to the
+	### te_ce_ov_pie): 104 square, the ring behind and seven stacked progresspie layers inside it, each filled to the
 	### shares summed through its slice and the largest first, so slice n shows between the sums through n - 1 and n
 	### (gui_modding_guide.md, "Pie charts of script-held data"). Clockwise from 12 o'clock: infection and hunger, chronic
-	### illness and old age, accidents and violence, work, childbirth, added on top, killed by events, war (the codes of
-	### te_dg_dc_lead; the textures are gen_ch_model_pie_textures.py's, frame 1 transparent and frame 2 the colour). The
-	### instance sets "cum_1" .. "cum_7", each a value 0-1 (te_demog_dc_cum_<n>); the eighth layer is the whole disc.
+	### illness and old age, accidents and violence, work, childbirth, killed by events, war and devastation (the codes of
+	### te_dg_dc_lead, 1-5, 7 and 8: 6 was the deaths added on top, which count under their causes since 2026-10-22; the
+	### textures are gen_ch_model_pie_textures.py's, frame 1 transparent and frame 2 the colour). The instance sets
+	### "cum_1" .. "cum_5" and "cum_7", each a value 0-1 (te_demog_dc_cum_<n>); the seventh layer is the whole disc.
 	### Hover is per widget rectangle, so the pie has the section's one tooltip and the legend beside it names the slices.
 	type te_demog_cause_pie = widget {
 		size = { 104 104 }
@@ -813,15 +814,6 @@ types te_demographics_widgets
 				max = 1
 				block "cum_7" {}
 				texture = "gfx/interface/icons/demographics_icons/pie_killed.dds"
-				framesize = { 128 128 }
-				frame = 2
-			}
-			progresspie = {
-				size = { 100% 100% }
-				min = 0
-				max = 1
-				block "cum_6" {}
-				texture = "gfx/interface/icons/demographics_icons/pie_on_top.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -1177,9 +1169,10 @@ types te_demographics_widgets
 
 	### Causes of Death (issue #1029; the state subtab's since the owner's 2026-10-11 design): the country's, its states' deaths summed. First
 	### last year's deaths per 1,000 people, then the pie of those deaths by cause and its legend (rule 5): the
-	### census's own deaths split by an estimate over its bands (te_demog_cause_deaths_estimate), childbirth's, the
-	### deaths added on top under Full, the war dead and the people killed by events as counted. Each legend row's
-	### hover gives its cause's rate against a poor country's and what sets it (by people across our states, and the capital's).
+	### census's own deaths split by an estimate over its bands (te_demog_cause_deaths_estimate), with the deaths the game
+	### added on top under Full under their own causes (owner, 2026-10-22), childbirth's, the war dead and the people killed
+	### by events as counted. Each legend row's hover gives its cause's rate against a poor country's and what sets it (by
+	### people across our states, and the capital's).
 	### Then Health Care Access, people-weighted. Open by default (rule 1), its own flag.
 	### The pie waits for a count with deaths by cause (te_demog_dc_ready_sgui); until then one line.
 	type te_demog_sec_causes = flowcontainer {
@@ -1244,9 +1237,6 @@ types te_demographics_widgets
 					}
 					blockoverride "cum_5" {
 						value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_dc_cum_5') )]"
-					}
-					blockoverride "cum_6" {
-						value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_dc_cum_6') )]"
 					}
 					blockoverride "cum_7" {
 						value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_demog_dc_cum_7') )]"
@@ -1332,22 +1322,6 @@ types te_demographics_widgets
 						}
 						blockoverride "share" {
 							text = "[GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]"
-						}
-					}
-					te_demog_cause_row = {
-						visible = "[GetScriptedGui('te_demog_full_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						tooltip = "te_demog_cd_dc_ontop_tt"
-						blockoverride "swatch" {
-							texture = "gfx/interface/icons/demographics_icons/pie_on_top.dds"
-						}
-						blockoverride "cause" {
-							text = "te_demog_dc_ontop"
-						}
-						blockoverride "deaths" {
-							text = "[GetPlayer.MakeScope.Var('te_dg_dc_ontop').GetValue|K]"
-						}
-						blockoverride "share" {
-							text = "[GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_ontop')|%0]"
 						}
 					}
 					te_demog_cause_row = {
@@ -4983,9 +4957,10 @@ types te_demographics_widgets
 
 	### Causes of Death (issue #1029; the state subtab's since the owner's 2026-10-11 design): the state's. First
 	### last year's deaths per 1,000 people, then the pie of those deaths by cause and its legend (rule 5): the
-	### census's own deaths split by an estimate over its bands (te_demog_cause_deaths_estimate), childbirth's, the
-	### deaths added on top under Full, the war dead and the people killed by events as counted. Each legend row's
-	### hover gives its cause's rate against a poor country's and what sets it, the factors the census multiplies.
+	### census's own deaths split by an estimate over its bands (te_demog_cause_deaths_estimate), with the deaths the game
+	### added on top under Full under their own causes (owner, 2026-10-22), childbirth's, the war dead and the people killed
+	### by events as counted. Each legend row's hover gives its cause's rate against a poor country's and what sets it, the
+	### factors the census multiplies.
 	### Then Health Care Access with where it is heading. Open by default (rule 1), its own flag.
 	### The pie waits for a count with deaths by cause (te_demog_state_dc_sgui); until then one line.
 	type te_state_demog_causes = flowcontainer {
@@ -5050,9 +5025,6 @@ types te_demographics_widgets
 					}
 					blockoverride "cum_5" {
 						value = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_dc_cum_5') )]"
-					}
-					blockoverride "cum_6" {
-						value = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_dc_cum_6') )]"
 					}
 					blockoverride "cum_7" {
 						value = "[FixedPointToFloat( State.MakeScope.ScriptValue('te_demog_dc_cum_7') )]"
@@ -5138,22 +5110,6 @@ types te_demographics_widgets
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]"
-						}
-					}
-					te_demog_cause_row = {
-						visible = "[GetScriptedGui('te_demog_state_full_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
-						tooltip = "te_demog_st_dc_ontop_tt"
-						blockoverride "swatch" {
-							texture = "gfx/interface/icons/demographics_icons/pie_on_top.dds"
-						}
-						blockoverride "cause" {
-							text = "te_demog_dc_ontop"
-						}
-						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_ontop').GetValue|K]"
-						}
-						blockoverride "share" {
-							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_ontop')|%0]"
 						}
 					}
 					te_demog_cause_row = {

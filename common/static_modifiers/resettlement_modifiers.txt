@@ -40,6 +40,7 @@ resettlement_military_colonies_destination = {
 resettlement_penal_transportation_destination = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_mortality_mult = 0.03
+	state_death_cause_work_mult = 0.03
 	state_incorporation_speed_mult = 0.10
 	state_colony_growth_speed_mult = 0.10
 }
@@ -53,6 +54,7 @@ resettlement_organized_colonization_destination = {
 resettlement_special_settlements_destination = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_work_mult = 0.05
 	state_incorporation_speed_mult = 0.10
 	state_colony_growth_speed_mult = 0.10
 }

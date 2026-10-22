@@ -2748,6 +2748,7 @@ company_roche = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
+		state_death_cause_chr_mult = -0.05
 		country_society_tech_research_speed_mult = 0.1
 		state_building_roche_tower_max_level_add = 1
 	}
@@ -2819,6 +2820,7 @@ company_pfizer = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
+		state_death_cause_inf_mult = -0.05
 		country_weekly_innovation_mult = 0.05
 		country_society_tech_research_speed_mult = 0.1
 		state_building_pfizer_rd_campus_max_level_add = 1
@@ -3758,6 +3760,7 @@ company_cochlear = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
+		state_death_cause_chr_mult = -0.05
 		country_society_tech_research_speed_mult = 0.1
 		state_building_cochlear_global_hq_max_level_add = 1
 	}
@@ -5638,6 +5641,7 @@ company_novo_nordisk = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
+		state_death_cause_chr_mult = -0.05
 		building_synthetics_plant_opium_throughput_add = 0.10
 		building_synthetics_plant_biomass_throughput_add = 0.20
 		state_pollution_generation_mult = -0.15
@@ -5784,6 +5788,7 @@ company_biocon = {
 	prosperity_modifier = {
 		country_tech_spread_mult = 0.20
 		state_mortality_mult = -0.05
+		state_death_cause_chr_mult = -0.05
 		building_synthetics_plant_opium_throughput_add = 0.10
 		state_building_biocon_park_max_level_add = 1
 	}
@@ -5926,6 +5931,7 @@ company_biontech = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.10
+		state_death_cause_inf_mult = -0.10
 		building_synthetics_plant_opium_throughput_add = 0.15
 		country_society_tech_research_speed_mult = 0.10
 		state_building_biontech_mainz_campus_max_level_add = 1

@@ -434,6 +434,8 @@ SELF_CHECK_STUBS = {"te_debug_demog_unemployment_selfcheck": "", "te_debug_demog
                     "te_debug_demog_neighbours_selfcheck": "",
                     # issue #1029's (it reads debug_log and the state's name): TestCauseDeaths reads its text
                     "te_debug_demog_cause_deaths_selfcheck": "",
+                    # Causes of Death's tags (owner, 2026-10-22): test_demographics_cause_tags reads its text
+                    "te_debug_demog_cause_tags_selfcheck": "",
                     # the census's province line (2026-10-20): a debug_log line; TestProvinceLine runs its text
                     "te_debug_demog_province_change": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
@@ -441,6 +443,15 @@ PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
 # 2026-10-20: the walk applies the state's wealth line per pop, and the refresh and the split read it beside te_dg_w_edw:
 # none unless a test says (the census's pair is off, and Private Health Insurance's line outside Full).
 WEALTH_LINE_DEFAULTS = {"modifier:state_mortality_wealth_mult": 0.0}
+# Causes of Death's tags (owner, 2026-10-22): no tagged line on top unless a test says
+CAUSE_TAG_DEFAULTS = {f"modifier:{t}": 0.0 for t in P.DEATH_CAUSE_TYPES.values()}
+WALK_CAUSE_DEFAULTS = {"te_dg_w_odh": 0.0, "te_dg_w_odx": 0.0, "te_dg_w_odq": 0.0, "te_dg_w_odw": 0.0}
+# the pop's own lines the walk reads by cause: non-homeland mortality and its class's line, none unless a test says (nor a
+# state line on everyone); a pop's wealth (the wealth line's), 0
+POP_LINE_DEFAULTS = {"modifier:state_non_homeland_mortality_mult": 0.0, "wealth": 0.0, "modifier:state_mortality_mult": 0.0,
+                     **{f"modifier:state_{t}_mortality_mult": 0.0
+                        for t in ("academics", "aristocrats", "farmers", "laborers", "machinists", "peasants", "slaves",
+                                  "soldiers")}}
 # Issue #1029: the month a state's count is taken (te_dg_count_mi, the subtab's next count), te_history_month_index, which
 # reads the calendar's month: the start of 1836's year unless a test says.
 PANEL_DEFAULTS = {"te_history_month_index": 1836.0 * 12}
@@ -493,15 +504,20 @@ class _Engine:
         self.trigger_fixtures = {"te_history_country_is_tracked": False, "te_demog_census_log_on": False,
                                  "te_demog_clock_on": False, "te_demog_effects_run": False,
                                  "te_demog_has_pension_law": False, "is_employed": False,
+                                 # a pop lives in its homeland unless a test says (the walk's non-homeland line)
+                                 "is_homeland_of_country_cultures": True,
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
                                  "is_ai": False, **(triggers or {})}
         self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS,
-                         **WEALTH_LINE_DEFAULTS, **TERRITORY_DEFAULTS, **fixtures}
+                         **WEALTH_LINE_DEFAULTS, **CAUSE_TAG_DEFAULTS, **POP_LINE_DEFAULTS, **TERRITORY_DEFAULTS,
+                         **fixtures}
         self.vars, self.locals, self._trees = {}, {}, {}
         # the walk's bare deaths x wealth (te_demog_absorbed_walk_init sets it in every walk, 0 outside Full): the refresh
-        # and the split read it beside the wealth line since 2026-10-20, and a stubbed walk need not give it
+        # and the split read it beside the wealth line since 2026-10-20, and a stubbed walk need not give it; nor the
+        # pops' own lines by cause (owner, 2026-10-22), which the refresh and the split read beside severe starvation's
         self.locals["te_dg_w_edw"] = 0.0
+        self.locals.update(WALK_CAUSE_DEFAULTS)
         self.modifiers = {}   # add_modifier's name -> its multiplier
         self.decrees = set()  # has_decree's decrees in force (the state's)
         self.removed = []     # remove_modifier's names, in order
@@ -540,6 +556,9 @@ class _Engine:
             return self.fixtures[tok]
         if tok in self.values:
             return self.value(self._tree(self.values, tok))
+        if tok.startswith("state.modifier:"):
+            # one state: a pop's state reads the state's own modifiers
+            return self.number(tok[6:])
         return float(tok)
 
     def value(self, v):
@@ -614,6 +633,14 @@ class _Engine:
             return self.holds([item for item in arg if item[0] != "text"])
         if key == "has_variable":
             return arg in self.vars
+        if key in ("owner", "state") and isinstance(arg, list):
+            # one state, one owner (_OwnerEngine reads their laws and institutions too)
+            return self.holds(arg)
+        if key == "is_pop_type":
+            return arg == getattr(self, "pop_type", None)
+        if key == "is_homeland_of_country_cultures":
+            # its argument is a scope (owner), not yes or no: the fixture says whether it holds
+            return self.trigger_fixtures["is_homeland_of_country_cultures"]
         if key == "has_local_variable":
             return arg in self.locals
         if key == "has_modifier":
@@ -952,7 +979,7 @@ class TestCohortScript(unittest.TestCase):
 
     def step_both(self, war_dead=0.0, kills=0.0, migration=0.0, stub_flows=True, scale=1.03, empty_from=None,
                   flows=None, entry="te_demog_step", engine=None, on_top=None, full=False, inp=None,
-                  pool=(12.0, 7.0), men_factor=None, old_census=False):
+                  pool=(12.0, 7.0), men_factor=None, old_census=False, causes=None):
         """One step from the same state on both sides: the model's seed at a scale off 1, with
         people in the two oldest cohorts and in the pool. The flows reach the script one of two ways:
         stub_flows feeds war_dead, kills and migration through a te_demog_flows built from the
@@ -968,7 +995,9 @@ class TestCohortScript(unittest.TestCase):
         alone the step takes those as its on-top scales. inp: the inputs (default INP); pool: (women, men) in the pool
         (phase 2 step 1's figures count it). men_factor scales the men aged 20-59 (phase 2 step 4's sex balance: the
         census's te_dg_sex_balance is the ring's, as its last census stored it); old_census gives the script a census
-        from before step 4, with the 18-40 sums' names (te_dg_m1840, te_dg_f1840) holding the pool's sums."""
+        from before step 4, with the 18-40 sums' names (te_dg_m1840, te_dg_f1840) holding the pool's sums. causes (Causes
+        of Death, owner 2026-10-22; with on_top under Full): {cause: its deaths on top over the window}, the walk's split
+        (te_dg_ot_<c>), which the model takes as its shares of the target."""
         base = inp or self.INP
         ring = demographics_model.seed(base, self.YEAR, self.POP)
         ring.f = [x * ring.scale / scale for x in ring.f]
@@ -1027,6 +1056,7 @@ class TestCohortScript(unittest.TestCase):
         eng.balance_before = balance
         eng.ring_before = copy.deepcopy(ring)
         bz = dz = 0.0
+        shares = None
         if full:
             eng.trigger_fixtures["te_demog_effects_run"] = True
         if on_top is not None:
@@ -1038,6 +1068,11 @@ class TestCohortScript(unittest.TestCase):
             if full:
                 bz = demographics_model.on_top_scale(want_b * (1 + on_top[0]), want_b)
                 dz = demographics_model.on_top_scale(want_d * (1 + on_top[1]), want_d)
+            if causes is not None:
+                assert full, "the split by cause is Full's"
+                for c, v in causes.items():
+                    eng.vars[f"te_dg_ot_{c}"] = v
+                shares = demographics_model.on_top_shares(causes, want_d)
         for k in range(P.RING_YEARS):
             if before[0][k] or before[1][k]:
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
@@ -1062,7 +1097,8 @@ class TestCohortScript(unittest.TestCase):
                     eng.vars[name] = float(flows[key])
         eng.call(entry)
         figures = demographics_model.step(ring, inp, self.YEAR + 1, engine_pop=pop, war_dead=war_dead,
-                                          kills=kills, migration=migration, births_scale=bz, deaths_scale=dz)
+                                          kills=kills, migration=migration, births_scale=bz, deaths_scale=dz,
+                                          deaths_shares=shares)
         return eng, ring, figures, pop
 
     def check_step(self, eng, ring, figures, pop):
@@ -3156,8 +3192,10 @@ class TestOnTopSplitScript(unittest.TestCase):
         wealth (te_dg_w_edw) are 0."""
         w = dict(te_dg_w_eb0=0.0, te_dg_w_ed0=0.0, te_dg_w_ebr=0.0, te_dg_w_edr=0.0, te_dg_w_eb=0.0, te_dg_w_ed=0.0,
                  te_dg_w_eb0m=0.0, te_dg_w_ed0m=0.0, te_dg_w_sev=0.0, te_dg_w_sevd=0.0, te_dg_w_pop=0.0,
-                 te_dg_w_edw=0.0)
+                 te_dg_w_edw=0.0, **WALK_CAUSE_DEFAULTS)
         for bare_b, bare_d, abs_b, abs_d, top_b, top_d, sev_d, people in pops:
+            # a pop's own lines but severe starvation's are its workplace's here (Causes of Death, owner 2026-10-22)
+            w["te_dg_w_odw"] += bare_d * (top_d - sev_d) if 1 + read_d + abs_d + top_d > 0 else 0.0
             mult_b, mult_d = max(0.0, 1 + read_b + abs_b + top_b), max(0.0, 1 + read_d + abs_d + top_d)
             w["te_dg_w_eb0"] += bare_b
             w["te_dg_w_ed0"] += bare_d
@@ -3182,11 +3220,17 @@ class TestOnTopSplitScript(unittest.TestCase):
         return total, whole, sev
 
     def window(self, start_pops, end_pops, os_start=(0.02, 0.05), os_end=(0.02, 0.05), m_prev=(-0.3, -0.25),
-               months=12, fast_k=None, lines=(0.0, 0.0), full=True, refresh=True, drop_start_parts=False):
+               months=12, fast_k=None, lines=(0.0, 0.0), full=True, refresh=True, drop_start_parts=False,
+               tags_start=None, tags_end=None):
         """TestWindowEvents.window, then the split and the step's scales. refresh False: no step at the start (the
-        first step after a seed: the window takes the snapshot). Returns the engine and the window's truth: {ed,
-        state, sev} in people and the end's severe share of people."""
+        first step after a seed: the window takes the snapshot). tags_start, tags_end: {cause: the tagged state lines'
+        sum} at each end (state_death_cause_<c>_mult; owner, 2026-10-22), each a part of that end's deaths read. Returns
+        the engine and the window's truth: {ed, state, sev} in people and the end's severe share of people."""
         eng = self._engine(full)
+
+        def tags(sums):
+            for c, name in P.DEATH_CAUSE_TYPES.items():
+                eng.fixtures[f"modifier:{name}"] = (sums or {}).get(c, 0.0)
         mb, md = m_prev
         eng.modifiers.update({"te_demog_census_births_down" if mb < 0 else "te_demog_census_births_up": abs(mb),
                               "te_demog_census_deaths_down" if md < 0 else "te_demog_census_deaths_up": abs(md)})
@@ -3200,6 +3244,7 @@ class TestOnTopSplitScript(unittest.TestCase):
             eng.fixtures["global_var:te_demog_months_per_step"] = 12.0 / fast_k
             eng.fixtures["global_var:te_demog_window_months"] = 12.0 / fast_k
         if refresh:
+            tags(tags_start)
             read = self._set_reads(eng, *os_start, lines=lines)
             eng.locals.update(self.walk(start_pops, *read))
             eng.call("te_demog_rates_refresh")
@@ -3209,19 +3254,21 @@ class TestOnTopSplitScript(unittest.TestCase):
         if fast_k is not None:
             eng.fixtures["global_var:te_demog_window_months"] = float(months)
         if drop_start_parts:
-            for name in ("te_dg_sp_d", "te_dg_ss_d"):
+            for name in ("te_dg_sp_d", "te_dg_ss_d", *(f"te_dg_s{k}_{c}" for k in "ct" for c in P.DEATH_CAUSES)):
                 eng.vars.pop(name, None)
         read_start = self._set_reads(eng, *os_start)
         start = self.truth(start_pops, read_start[1])
         read_end = self._set_reads(eng, *os_end)
+        tags(tags_end)
         end_sums = self.walk(end_pops, *read_end)
         end = self.truth(end_pops, read_end[1])
         eng.locals.update(end_sums)
         eng.vars.update(te_dg_eb=end_sums["te_dg_w_eb"] * months / 1e5, te_dg_ed=end_sums["te_dg_w_ed"] * months / 1e5)
         eng.call("te_demog_window_events")
         eng.call("te_demog_on_top_split")
+        # te_dg_lx_on 1: no estimate to place the deaths on top by cause, so one scale (TestOnTopCauseScales has them)
         eng.locals.update(te_dg_tfr=1.0, te_dg_m_inf=1.0, te_dg_m_ext=1.0, te_dg_m_chr=1.0, te_dg_m_work_f=1.0,
-                          te_dg_m_work_m=1.0)
+                          te_dg_m_work_m=1.0, te_dg_lx_on=1.0)
         eng.call("te_demog_on_top_scales")
         if refresh and "te_dg_sr_d" in eng.vars:
             ends = [(a + b) / 2 * months / 1e5 for a, b in zip(start, end)]
@@ -3231,9 +3278,18 @@ class TestOnTopSplitScript(unittest.TestCase):
         return eng, dict(ed=ends[0], state=ends[1], sev=ends[2], share=share)
 
     def value(self, eng, name):
+        if name == "te_demog_deaths_whole_state":
+            return eng.vars["te_dg_ed_state"] / max(eng.vars["te_dg_ed_target"], 1.0)
+        if name == "te_demog_deaths_severe":
+            return (eng.vars["te_dg_ed_state"] + eng.vars["te_dg_ed_sev"]) / max(eng.vars["te_dg_ed_state"], 1.0)
+        if name == "te_demog_deaths_other":
+            return eng.vars["te_dg_ed"] / max(eng.vars["te_dg_ed_state"] + eng.vars["te_dg_ed_sev"], 1.0)
         return eng.value(eng._tree(eng.values, name))
 
     def assert_split(self, eng, true, rel=1e-6):
+        """The split's variables against the truth. Its three factors (the whole state's, severe starvation's, the other
+        lines on some people: the hover's until the deaths on top counted under their causes, owner 2026-10-22; the
+        harness's ontop-fit reads the variables) multiply back to 1 + dz."""
         got = {"ed": eng.vars["te_dg_ed"], "state": eng.vars["te_dg_ed_state"], "sev": eng.vars["te_dg_ed_sev"],
                "share": eng.vars["te_dg_sev_share"]}
         for k, want in true.items():
@@ -3312,6 +3368,64 @@ class TestOnTopSplitScript(unittest.TestCase):
         self.assertIn("te_demog_fast_deaths", eng.modifiers)
         self.assert_split(eng, true)
 
+    # ---- by cause (owner, 2026-10-22): te_demog_on_top_causes, te_dg_ot_<c> --------------------------------------------
+
+    def causes(self, eng):
+        return {c: eng.vars[f"te_dg_ot_{c}"] for c in P.DEATH_CAUSES}
+
+    def test_a_famine_counts_under_infection_and_hunger(self):
+        """Severe starvation's part of the window is infection and hunger's, and nothing else is on top by cause."""
+        eng, true = self.window([self.SAFE, _s_mild(175e6, 170e6, 400e3)], [self.SAFE, _s_severe(175e6, 170e6, 400e3)])
+        got = self.causes(eng)
+        self.assertAlmostEqual(got["inf"], true["sev"], delta=1e-3)
+        for c in ("chr", "ext", "work", "war"):
+            self.assertAlmostEqual(got[c], 0.0, delta=1e-3, msg=c)
+
+    def test_a_dangerous_workplace_counts_under_work(self):
+        pops = [self.SAFE, _SPop(175e6, 170e6, top_d=0.2, people=400e3)]
+        eng, _true = self.window(pops, pops)
+        got = self.causes(eng)
+        self.assertAlmostEqual(got["work"], 170e6 * 0.2 * 12 / 1e5, delta=1e-3)
+        self.assertAlmostEqual(got["inf"], 0.0, delta=1e-3)
+
+    def test_a_tagged_line_through_the_window_acts_on_the_census_rate(self):
+        """Pollution's +5% on the whole state at both ends, tagged chronic: M took (1 - target / bare) of it off, so its
+        deaths are 5% of the census's own, the target's."""
+        steady = [self.SAFE, self.LABORERS]
+        eng, _true = self.window(steady, steady, os_start=(0.0, 0.05), os_end=(0.0, 0.05), tags_start={"chr": 0.05},
+                                 tags_end={"chr": 0.05})
+        got = self.causes(eng)
+        self.assertAlmostEqual(got["chr"], 0.05 * eng.vars["te_dg_ed_target"], delta=1e-4 * eng.vars["te_dg_ed_target"])
+        self.assertAlmostEqual(eng.vars["te_dg_st_chr"], 0.05, places=6)
+        for c in ("inf", "ext", "work", "war"):
+            self.assertAlmostEqual(got[c], 0.0, delta=1e-3, msg=c)
+
+    def test_devastation_arriving_inside_the_window_kills_at_the_bare_curve(self):
+        """Devastation from nothing to +0.3 after the refresh, tagged war: M took none of it off, so at the window's end
+        it adds 0.3 of the bare deaths, half of that over the window."""
+        steady = [self.SAFE, self.LABORERS]
+        eng, _true = self.window(steady, steady, os_start=(0.0, 0.0), os_end=(-0.1, 0.3), tags_end={"war": 0.3})
+        got = self.causes(eng)
+        self.assertAlmostEqual(got["war"], 0.5 * 0.3 * (260e6 + 170e6) * 12 / 1e5, delta=1e-3)
+        self.assertGreater(got["war"], 0.3 * eng.vars["te_dg_ed_target"] / 2, "more than at the census's rate")
+
+    def test_no_split_by_cause_without_its_start_parts(self):
+        """A save from before the split by cause: the window took a start with no parts by cause, so none (the step then
+        spreads all of dz, as before)."""
+        pops = [self.SAFE, _SPop(175e6, 170e6, top_d=0.2, people=400e3)]
+        eng, _true = self.window(pops, pops, drop_start_parts=True)
+        for c in P.DEATH_CAUSES:
+            self.assertNotIn(f"te_dg_ot_{c}", eng.vars)
+        eng, _true = self.window([], pops, refresh=False)
+        self.assertNotIn("te_dg_ot_work", eng.vars, "nor on a snapshot")
+
+    def test_the_refresh_stores_the_start_parts_by_cause(self):
+        pops = [self.SAFE, self.LABORERS]
+        eng, _true = self.window(pops, pops, tags_start={"inf": 0.02})
+        self.assertAlmostEqual(eng.vars["te_dg_st_inf"], 0.02, places=6)
+        for c in P.DEATH_CAUSES:
+            self.assertIn(f"te_dg_sc_{c}", eng.vars)
+
     def test_no_start_rate_splits_the_snapshot(self):
         """The first step after a seed (or a new state, an old save): the window is the snapshot, and so is the split."""
         eng, true = self.window([], [self.SAFE, _s_severe(175e6, 170e6, 400e3)], refresh=False)
@@ -3377,7 +3491,9 @@ class TestOnTopSplitScript(unittest.TestCase):
     def test_the_start_parts_go_with_the_start_rate(self):
         """Wherever te_dg_sr_d goes, the start's parts go too: the refresh outside Full (te_demog_rates_clear), a
         refresh that stores no start (a seed's), te_demog_seed, and fast mode's clear."""
-        parts = dict(te_dg_sr_b=1.0, te_dg_sr_d=1.0, te_dg_sp_d=0.1, te_dg_ss_d=0.05)
+        # and each cause's (owner, 2026-10-22)
+        parts = dict(te_dg_sr_b=1.0, te_dg_sr_d=1.0, te_dg_sp_d=0.1, te_dg_ss_d=0.05,
+                     **{f"te_dg_s{k}_{c}": 0.01 for k in "ct" for c in P.DEATH_CAUSES})
         cases = {}
         eng = TestRatesScript._eng(TestRatesScript(), full=False)
         eng.locals.update(te_dg_w_sev=0.0, te_dg_w_sevd=0.0)
@@ -3511,6 +3627,34 @@ class TestAbsorbedScript(unittest.TestCase):
         eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED, te_dg_p_mb=1.0, te_dg_p_md=1.0)
         eng.call("te_demog_absorbed_walk_pop")
         return eng.locals["te_dg_w_ebr"] / self.P_EB, eng.locals["te_dg_w_edr"] / self.P_ED
+
+    def test_the_walk_sums_the_pops_own_lines_by_cause(self):
+        """Causes of Death (owner, 2026-10-22): where the engine doesn't floor a pop, the walk sums its own lines by the
+        cause they count under: non-homeland mortality (infection and hunger), its class's line (war for soldiers and
+        officers, accidents and violence for the rest) and the rest of its multiplier less the state's read, what the
+        census absorbs, the wealth line and severe starvation's term: its workplace's (work)."""
+        def run(pop_type, md, homeland=True, cls=0.0, hom=0.0, read=0.0, food=1.0):
+            eng = _OwnerEngine({"food_security": food, "total_size": 1000.0, "literacy_rate": 0.0,
+                                "modifier:state_mortality_mult": read,
+                                "modifier:state_non_homeland_mortality_mult": hom,
+                                f"modifier:state_{pop_type}_mortality_mult": cls}, pop_type=pop_type,
+                               triggers={"is_in_severe_starvation": food < 0.2, "is_in_mild_starvation": 0.2 <= food < 0.4,
+                                         "te_demog_effects_run": True, "is_homeland_of_country_cultures": homeland})
+            eng.call("te_demog_absorbed_walk_init")
+            eng.locals.update(te_dg_p_eb=self.P_EB, te_dg_p_ed=self.P_ED, te_dg_p_mb=1.0, te_dg_p_md=md)
+            eng.call("te_demog_absorbed_walk_pop")
+            return {k: eng.locals[f"te_dg_w_od{k}"] / self.P_ED for k in "hxqw"}
+        # a soldier abroad: the homeland line, his class's and his workplace's, over a state read of +0.05
+        got = run("soldiers", md=1 + 0.05 + 0.3 + 0.15 + 0.1, homeland=False, cls=0.15, hom=0.3, read=0.05)
+        for k, want in {"h": 0.3, "q": 0.15, "x": 0.0, "w": 0.1}.items():
+            self.assertAlmostEqual(got[k], want, places=9, msg=k)
+        got = run("laborers", md=1.2, cls=0.2)
+        self.assertAlmostEqual(got["x"], 0.2, places=9)
+        self.assertAlmostEqual(got["w"], 0.0, places=9)
+        self.assertEqual(run("soldiers", md=1.3, homeland=True, hom=0.3, cls=0.0)["h"], 0.0, "at home, no homeland line")
+        self.assertEqual(run("laborers", md=0.0, cls=-3.0), {"h": 0.0, "x": 0.0, "q": 0.0, "w": 0.0}, "floored: none")
+        severe = demographics_model.starvation_terms(0.125)[1]
+        self.assertAlmostEqual(run("clerks", md=1 + severe, food=0.125)["w"], 0.0, places=9, msg="severe isn't work's")
 
     def _want(self, laws=(), techs=(), levels=None, incorporated=True, pop_type="clerks", carriers=None):
         carriers = self.absorbed if carriers is None else carriers
@@ -6601,12 +6745,11 @@ class TestCausesDisplay(unittest.TestCase):
 
     def test_the_on_top_gate_needs_a_measured_window(self):
         # Review Focus 2: the first Full step after a seed writes dz 0 against no target; the first after Display only
-        # has a target but its window ran with no M, so no refresh's clamp flag was there to copy (te_dg_ed_clamp_d);
-        # a save from #907 before this build has no split (te_dg_ed_state) until its next count
-        base = dict(te_dg_ed_target=1000.0, te_dg_ed_state=900.0, te_dg_ed_sev=0.0, te_dg_sev_share=0.0, te_dg_dz=0.0,
-                    te_dg_ed_clamp_d=0.0)
+        # has a target but its window ran with no M, so no refresh's clamp flag was there to copy (te_dg_ed_clamp_d),
+        # which the deaths row's floor note reads (since the deaths on top count under their causes, owner 2026-10-22)
+        base = dict(te_dg_ed_target=1000.0, te_dg_dz=0.0, te_dg_cdr_model=12.0, te_dg_ed_clamp_d=0.0)
         for full, change, shown in ((True, {}, True), (True, {"te_dg_ed_target": 0.0}, False),
-                                    (True, {"te_dg_ed_clamp_d": None}, False), (True, {"te_dg_ed_state": None}, False),
+                                    (True, {"te_dg_ed_clamp_d": None}, False), (True, {"te_dg_cdr_model": None}, False),
                                     (False, {}, False)):
             eng = _Engine({}, triggers={"te_demog_effects_run": full})
             eng.vars.update(base)
@@ -6624,12 +6767,17 @@ class TestCausesDisplay(unittest.TestCase):
         eng.vars.update(_stored(demographics_model.Inputs()))
         self.assertTrue(self._shown("te_demog_state_causes_sgui", eng))
 
-    def test_red_from_the_threshold(self):
-        for dz, code in ((0.0, 0), (P.DEATHS_ON_TOP_HIGH - 1 - 0.01, 0), (P.DEATHS_ON_TOP_HIGH - 1, 1), (0.8, 1)):
+    def test_each_causes_deaths_on_top_read_as_added_or_spared(self):
+        """Owner, 2026-10-22: each cause's legend hover says how many of its deaths the game's effects added on top of
+        the census (or spared): the signed figure, its size and a code, 1 added and 2 spared from one death, 0 without
+        a figure (not Full, a first count, an old save)."""
+        for top, code in ((None, 0), (0.4, 0), (1.0, 1), (5200.0, 1), (-0.9, 0), (-1.0, 2), (-300.0, 2)):
             eng = _Engine({})
-            eng.vars["te_dg_dz"] = dz
-            with self.subTest(dz=dz):
-                self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_deaths_on_top_code")), code)
+            if top is not None:
+                eng.vars["te_dg_dc_chr_top"] = top
+            with self.subTest(top=top):
+                self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_dc_top_code_chr")), code)
+                self.assertEqual(eng.value(eng._tree(eng.values, "te_demog_dc_top_abs_chr")), abs(top or 0.0))
 
     def test_the_arrow_shows_while_medicine_moves(self):
         inp = demographics_model.Inputs(mods={P.ACCESS_TYPE: 0.3})
@@ -6660,10 +6808,14 @@ class TestCausesDisplay(unittest.TestCase):
         # in any English file: organize_loc files a key no .gui names yet (until Task 9) in te_unused_l_english.yml
         loc = "\n".join(_text(p) for p in sorted((ROOT / "localization" / "english").glob("*_l_english.yml")))
         # issue #1029: the pie's legend rows, a name a slice (shared with the country tab) and a hover each
-        slices = ("inf", "ext", "chr", "work", "mat", "ontop", "kill", "war")
+        slices = ("inf", "ext", "chr", "work", "mat", "kill", "war")
         keys = ["te_demog_sec_causes", "te_demog_st_dc_pending", "te_demog_st_acc", "te_demog_st_acc_value",
-                "te_demog_st_acc_tt", "te_demog_st_pie_tt", "te_demog_st_cdr_tt", "te_demog_st_cdr_value"]
+                "te_demog_st_acc_tt", "te_demog_st_pie_tt", "te_demog_st_cdr_tt", "te_demog_st_cdr_value",
+                "te_demog_st_ontop_rate", "te_demog_st_ontop_floor"]
         keys += [f"te_demog_dc_{r}" for r in slices] + [f"te_demog_st_dc_{r}_tt" for r in slices]
+        # each cause's deaths on top (owner, 2026-10-22): added or spared, and what adds them
+        keys += [f"te_demog_{s}_dc_{c}_top_{k}" for s in ("st", "cd") for c in P.DEATH_CAUSES for k in ("more", "less")]
+        keys += [f"te_demog_dc_top_{c}_what" for c in P.DEATH_CAUSES]
         for key in keys:
             self.assertRegex(loc, rf"(?m)^ {key}:0 \"", key)
 
@@ -6718,15 +6870,24 @@ class TestCausesSection(unittest.TestCase):
             self.assertNotIn(key, outer, key)
         acc = self.section[self.section.index("te_demog_state_causes_sgui"):]
         self.assertIn('tooltip = "te_demog_st_acc_tt"', acc)
+        # the measured window's figures only through the deaths row's SelectLocalization on the on-top gate
         split = re.compile(r"te_dg_ed_state|te_dg_ed_sev|te_dg_sev_share|te_dg_ed_clamp_d|te_demog_deaths_")
-        self.assertIsNone(split.search(self.loc["te_demog_st_dc_ontop_tt"]))
-        self.assertIn("te_demog_state_on_top_sgui", self.loc["te_demog_st_dc_ontop_tt"])
+        self.assertIsNone(split.search(self.loc["te_demog_st_cdr_tt"]))
+        self.assertIn("GetScriptedGui('te_demog_state_on_top_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), "
+                      "'te_demog_st_ontop_rate', 'te_tt_blank'", self.loc["te_demog_st_cdr_tt"])
+        self.assertIsNotNone(split.search(self.loc["te_demog_st_ontop_rate"]))
 
-    def test_the_on_top_row_is_full_only(self):
-        label = self.section.index('"te_demog_dc_ontop"')
-        row = self.section[self.section.rindex("te_demog_cause_row", 0, label):label]
-        self.assertIn("te_demog_state_full_sgui", row)
-        self.assertEqual(self.section.count("te_demog_state_full_sgui"), 1, "only the on-top row is Full-only")
+    def test_the_deaths_on_top_count_under_their_causes(self):
+        """Owner, 2026-10-22: no slice of their own, so every legend row shows in every setting, and each cause's row
+        says how many of its deaths the game added on top (or spared) through its own code."""
+        self.assertNotIn("te_demog_dc_ontop", self.section)
+        self.assertNotIn("te_demog_state_full_sgui", self.section)
+        for c in P.DEATH_CAUSES:
+            deaths = self.loc[f"te_demog_st_dc_{c}_deaths"]
+            self.assertIn(f"ScriptValue('te_demog_dc_top_code_{c}')", deaths)
+            self.assertIn(f"'te_demog_st_dc_{c}_top_more'", deaths)
+            self.assertIn(f"'te_demog_st_dc_{c}_top_less'", deaths)
+            self.assertIn(f"te_demog_dc_top_abs_{c}", self.loc[f"te_demog_st_dc_{c}_top_more"])
 
     def test_names_are_spliced(self):
         """The review of #916 (panel I1): laws, institutions and techs by their loc keys, never typed (the game says

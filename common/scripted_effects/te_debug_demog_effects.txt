@@ -1168,10 +1168,62 @@ te_debug_demog_cause_deaths_selfcheck = {
 				local_var:te_dg_dc_chk_gap <= local_var:te_dg_dc_chk_tol
 				local_var:te_dg_dc_chk_gap >= local_var:te_dg_dc_chk_neg
 			}
-			debug_log = "TE_SELF_CHECK OK cause_deaths_estimate state=[THIS.GetState.GetNameNoFormatting] fit=[THIS.Var('te_dg_dc_fit').GetValue|3] deaths=[THIS.Var('te_dg_deaths').GetValue|0] childbirth=[THIS.Var('te_dg_dc_mat').GetValue|0] on_top=[THIS.Var('te_dg_dc_ontop').GetValue|0] war=[THIS.Var('te_dg_dc_war').GetValue|0] killed=[THIS.Var('te_dg_dc_kill').GetValue|0] slices=[THIS.Var('te_dg_dc_total').GetValue|0] (the estimate over last count's bands matches the sweep's deaths, and the slices add up) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK cause_deaths_estimate state=[THIS.GetState.GetNameNoFormatting] fit=[THIS.Var('te_dg_dc_fit').GetValue|3] deaths=[THIS.Var('te_dg_deaths').GetValue|0] childbirth=[THIS.Var('te_dg_dc_mat').GetValue|0] war=[THIS.Var('te_dg_dc_war').GetValue|0] killed=[THIS.Var('te_dg_dc_kill').GetValue|0] slices=[THIS.Var('te_dg_dc_total').GetValue|0] (the estimate over last count's bands matches the sweep's deaths, and the slices add up) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN cause_deaths_estimate state=[THIS.GetState.GetNameNoFormatting] fit=[THIS.Var('te_dg_dc_fit').GetValue|3] deaths=[THIS.Var('te_dg_deaths').GetValue|0] childbirth=[THIS.Var('te_dg_dc_mat').GetValue|0] on_top=[THIS.Var('te_dg_dc_ontop').GetValue|0] war=[THIS.Var('te_dg_dc_war').GetValue|0] killed=[THIS.Var('te_dg_dc_kill').GetValue|0] slices=[THIS.Var('te_dg_dc_total').GetValue|0] (fit outside 0.9-1.1, or the slices don't add up to deaths + war + killed: count the deaths by age group in the sweep instead, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN cause_deaths_estimate state=[THIS.GetState.GetNameNoFormatting] fit=[THIS.Var('te_dg_dc_fit').GetValue|3] deaths=[THIS.Var('te_dg_deaths').GetValue|0] childbirth=[THIS.Var('te_dg_dc_mat').GetValue|0] war=[THIS.Var('te_dg_dc_war').GetValue|0] killed=[THIS.Var('te_dg_dc_kill').GetValue|0] slices=[THIS.Var('te_dg_dc_total').GetValue|0] (fit outside 0.9-1.1, or the slices don't add up to deaths + war + killed: count the deaths by age group in the sweep instead, docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		debug_log_scopes = yes
+	}
+}
+
+# THIS = a state, in the census's refresh of its deaths term under Full, once its state-level lines on top are read
+# (local te_dg_rate_os): TE_SELF_CHECK cause_tags_read, once a game (Causes of Death, owner 2026-10-22). Every engine
+# mortality line on top carries a tag at its value on its cause's script-only type (demographics_params.DEATH_CAUSE_TAGS),
+# so the five tags' sum is the lines on top, if the engine scales a tag with the line beside it: in a code static
+# modifier the engine scales itself (pollution, devastation), under a multiplier and as an event modifier decays. The
+# first state whose lines on top come to a tenth or more either way. A few untagged vanilla lines (five, at most 5%:
+# demographics_params.DEATH_CAUSE_UNTAGGED) and other mods' can open a small gap, so the tolerance is 0.03 and a
+# twentieth of the read.
+te_debug_demog_cause_tags_selfcheck = {
+	if = {
+		limit = {
+			te_debug_demog_selfchecks_run = yes
+			NOT = { has_global_variable = te_demog_selfcheck_tags_done }
+			OR = {
+				local_var:te_dg_rate_os >= 0.1
+				local_var:te_dg_rate_os <= -0.1
+			}
+		}
+		set_global_variable = { name = te_demog_selfcheck_tags_done value = yes }
+		set_local_variable = {
+			name = te_dg_tag_chk_sum
+			value = {
+				value = modifier:state_death_cause_inf_mult
+				add = modifier:state_death_cause_chr_mult
+				add = modifier:state_death_cause_ext_mult
+				add = modifier:state_death_cause_work_mult
+				add = modifier:state_death_cause_war_mult
+			}
+		}
+		set_local_variable = { name = te_dg_tag_chk_gap value = { value = local_var:te_dg_rate_os subtract = local_var:te_dg_tag_chk_sum } }
+		# the tolerance either side as locals (a comparison with an inline value block held for every state)
+		set_local_variable = { name = te_dg_tag_chk_tol value = { value = local_var:te_dg_rate_os multiply = 0.05 } }
+		if = {
+			limit = { local_var:te_dg_tag_chk_tol < 0 }
+			change_local_variable = { name = te_dg_tag_chk_tol multiply = -1 }
+		}
+		change_local_variable = { name = te_dg_tag_chk_tol add = 0.03 }
+		set_local_variable = { name = te_dg_tag_chk_neg value = { value = local_var:te_dg_tag_chk_tol multiply = -1 } }
+		if = {
+			limit = {
+				local_var:te_dg_tag_chk_gap <= local_var:te_dg_tag_chk_tol
+				local_var:te_dg_tag_chk_gap >= local_var:te_dg_tag_chk_neg
+			}
+			debug_log = "TE_SELF_CHECK OK cause_tags_read state=[THIS.GetState.GetNameNoFormatting] on_top=[THIS.Var('te_dg_os_d').GetValue|3] tags=[THIS.ScriptValue('te_debug_demog_cause_tag_sum')|3] devastation=[THIS.ScriptValue('te_debug_demog_devastation')|3] (the engine scales each tag with the line beside it: the tags add up to the lines on top) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cause_tags_read state=[THIS.GetState.GetNameNoFormatting] on_top=[THIS.Var('te_dg_os_d').GetValue|3] tags=[THIS.ScriptValue('te_debug_demog_cause_tag_sum')|3] devastation=[THIS.ScriptValue('te_debug_demog_devastation')|3] (the tags don't add up to the lines on top: a tag isn't scaled with its line, or a line has no tag) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 	}

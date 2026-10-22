@@ -37,7 +37,7 @@ LATE = {P.AGEING_RATE_TYPE: -0.25, P.REJUVENATION_TYPE: 0.0, P.ACCESS_TYPE: 0.3,
 PHI, PRIVATE = "law_public_health_insurance", "law_private_health_insurance"
 # the Causes of Death slices (te_dg_dc_<short>) and the model's keys (test_demographics_cause_deaths.MODEL_KEY)
 DC_SLICES = {"inf": "infection", "ext": "external", "chr": "chronic", "work": "work", "mat": "maternal",
-             "ontop": "on_top", "war": "war", "kill": "kills"}
+             "war": "war", "kill": "kills"}
 
 
 def _inp(**mods):

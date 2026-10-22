@@ -464,15 +464,20 @@ changes nothing here.
 The Causes of Death section, on the tab for your country and on the subtab for
 one state, splits last year's deaths in a pie: infection and hunger, chronic
 illness and old age, accidents and violence, work, childbirth, people killed by
-events and the war dead, and under Full the deaths added on top of the census's
-own. The census counts deaths, not causes, so the five causes share out its own
-deaths by each cause's rate in each age band, at the body's age for people in
-longevity care; the rest are counted as they are.
+events, and war and devastation. The census counts deaths, not causes, so the
+five causes share out its own deaths by each cause's rate in each age band, at
+the body's age for people in longevity care; the rest are counted as they are.
+Under Full the game also adds deaths on top of the census's own (famine,
+pollution, devastation, dangerous work, decrees and events), and each counts
+under its own cause: severe starvation and epidemics under infection and
+hunger, pollution and the climate's heat under chronic illness, dangerous
+workplaces under work, and devastation's dead, people of every age, beside the
+war dead. Each of those effects' tooltips names the cause it counts under.
 Hover a cause for its rate against a poor country's without modern medicine,
-what makes it up and where medicine is heading. Below the pie is health care
-access. Under Full the Added on Top row's tooltip gives the deaths against the
-census's own rate, in red from a quarter above it, split into effects on the
-whole state and effects on some of its people, such as severe starvation. The Landowners' Famine Reserves
+what makes it up, where medicine is heading and, under Full, how many of its
+deaths the game added on top. Below the pie is health care access. Under Full
+the Deaths row's tooltip gives the census's own death rate against the game's.
+The Landowners' Famine Reserves
 is the exception: under Full the census sets the farm workers' saved lives
 against the rest of the state, so it moves deaths within a state without
 lowering them.

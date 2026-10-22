@@ -38,4 +38,5 @@ un_food_reserve_relief_state_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_food_security_add = 0.15
 	state_mortality_mult = -0.05
+	state_death_cause_inf_mult = -0.05
 }

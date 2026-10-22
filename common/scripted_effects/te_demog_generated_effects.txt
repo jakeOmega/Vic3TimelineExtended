@@ -7473,6 +7473,10 @@ te_demog_absorbed_walk_init = {
 	set_local_variable = { name = te_dg_w_sevd value = 0 }
 	set_local_variable = { name = te_dg_w_edw value = 0 }
 	set_local_variable = { name = te_dg_w_wtop value = 0 }
+	set_local_variable = { name = te_dg_w_odh value = 0 }
+	set_local_variable = { name = te_dg_w_odx value = 0 }
+	set_local_variable = { name = te_dg_w_odq value = 0 }
+	set_local_variable = { name = te_dg_w_odw value = 0 }
 	set_local_variable = { name = te_dg_w_rep value = 0 }
 	if = {
 		limit = { te_demog_effects_run = yes }
@@ -7486,12 +7490,18 @@ te_demog_absorbed_walk_init = {
 # multiplier at 0 (severe starvation's births, in its lower food-security steps or under a low term), which a
 # change in the census's term then doesn't reach (the trapezoid's start rate); and severe starvation's people
 # and deaths (te_dg_w_sev, te_dg_w_sevd: the Causes of Death section's split); the bare deaths x wealth the
-# census's wealth slope reaches and the richest pop's wealth (te_dg_w_edw, te_dg_w_wtop; phase 3). Full only.
+# census's wealth slope reaches and the richest pop's wealth (te_dg_w_edw, te_dg_w_wtop; phase 3); and its other
+# own lines by the cause their deaths count under (owner, 2026-10-22), where the engine doesn't floor it:
+# non-homeland mortality (te_dg_w_odh, infection), its class's line (te_dg_w_odq for soldiers and officers, war;
+# te_dg_w_odx for the rest, accidents and violence) and the rest of its own lines, its workplace's (te_dg_w_odw,
+# work): its multiplier less 1, the state's read, what the census absorbs for it, the wealth line, severe
+# starvation's term and those two. Full only.
 te_demog_absorbed_walk_pop = {
 	if = {
 		limit = { local_var:te_dg_w_rep > 0 }
+		set_local_variable = { name = te_dg_p_ad value = te_demog_pop_absorbed_deaths }
 		change_local_variable = { name = te_dg_w_ebr add = { value = local_var:te_dg_p_eb multiply = te_demog_pop_absorbed_births } }
-		change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = te_demog_pop_absorbed_deaths } }
+		change_local_variable = { name = te_dg_w_edr add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_ad } }
 		if = {
 			limit = { local_var:te_dg_p_mb > 0 }
 			change_local_variable = { name = te_dg_w_eb0m add = local_var:te_dg_p_eb }
@@ -7507,23 +7517,62 @@ te_demog_absorbed_walk_pop = {
 		}
 		# severe starvation's people, and its part of the pop's deaths where the engine doesn't floor them (the Causes
 		# of Death section's split, te_demog_on_top_split): the severe ladder te_demog_pop_death_mult holds
+		set_local_variable = { name = te_dg_p_sv value = 0 }
 		if = {
 			limit = { is_in_severe_starvation = yes }
 			change_local_variable = { name = te_dg_w_sev add = total_size }
 			if = {
 				limit = { local_var:te_dg_p_md > 0 }
-				change_local_variable = {
-					name = te_dg_w_sevd
-					add = {
-						value = local_var:te_dg_p_ed
-						multiply = {
-							value = 0
-							if = { limit = { food_security >= 0.15 } add = 0.5625 }
-							else_if = { limit = { food_security >= 0.1 } add = 0.6875 }
-							else_if = { limit = { food_security >= 0.05 } add = 0.8125 }
-							else = { add = 0.9375 }
-						}
+				set_local_variable = {
+					name = te_dg_p_sv
+					value = {
+						value = 0
+						if = { limit = { food_security >= 0.15 } add = 0.5625 }
+						else_if = { limit = { food_security >= 0.1 } add = 0.6875 }
+						else_if = { limit = { food_security >= 0.05 } add = 0.8125 }
+						else = { add = 0.9375 }
 					}
+				}
+				change_local_variable = { name = te_dg_w_sevd add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_sv } }
+			}
+		}
+		# its other own lines by cause (owner, 2026-10-22), where the engine doesn't floor it
+		if = {
+			limit = { local_var:te_dg_p_md > 0 }
+			set_local_variable = { name = te_dg_p_oh value = 0 }
+			if = {
+				limit = { state = { NOT = { is_homeland_of_country_cultures = owner } } }
+				set_local_variable = { name = te_dg_p_oh value = state.modifier:state_non_homeland_mortality_mult }
+				change_local_variable = { name = te_dg_w_odh add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oh } }
+			}
+			set_local_variable = { name = te_dg_p_oc value = 0 }
+			if = { limit = { is_pop_type = academics } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_academics_mortality_mult } }
+			else_if = { limit = { is_pop_type = aristocrats } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_aristocrats_mortality_mult } }
+			else_if = { limit = { is_pop_type = farmers } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_farmers_mortality_mult } }
+			else_if = { limit = { is_pop_type = laborers } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_laborers_mortality_mult } }
+			else_if = { limit = { is_pop_type = machinists } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_machinists_mortality_mult } }
+			else_if = { limit = { is_pop_type = peasants } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_peasants_mortality_mult } }
+			else_if = { limit = { is_pop_type = slaves } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_slaves_mortality_mult } }
+			else_if = { limit = { is_pop_type = soldiers } set_local_variable = { name = te_dg_p_oc value = state.modifier:state_soldiers_mortality_mult } }
+			if = {
+				limit = { OR = { is_pop_type = officers is_pop_type = soldiers } }
+				change_local_variable = { name = te_dg_w_odq add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }
+			}
+			else = {
+				change_local_variable = { name = te_dg_w_odx add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }
+			}
+			change_local_variable = {
+				name = te_dg_w_odw
+				add = {
+					value = local_var:te_dg_p_md
+					subtract = 1
+					subtract = state.modifier:state_mortality_mult
+					subtract = local_var:te_dg_p_ad
+					subtract = { value = state.modifier:state_mortality_wealth_mult multiply = wealth }
+					subtract = local_var:te_dg_p_sv
+					subtract = local_var:te_dg_p_oh
+					subtract = local_var:te_dg_p_oc
+					multiply = local_var:te_dg_p_ed
 				}
 			}
 		}
@@ -7668,16 +7717,17 @@ te_demog_newborn_split = {
 	}
 }
 
-# THIS = a state at its step, after te_demog_on_top_scales and before the sweep writes this count's bands (issue
-# #1029; demographics_model.cause_deaths_estimate): each natural cause's deaths over the year at the step's rates,
+# THIS = a state at its step, before te_demog_on_top_scales and the sweep, which writes this count's bands (issue
+# #1029; demographics_model.cause_deaths_estimate): each natural cause's deaths over the year at the model's rates,
 # from the people the sweep takes its dead from, by the band they had at the last count (te_dg_bf<b>, te_dg_bm<b>,
 # whose ages are the rate ages they die at now): the band's people x the cause's yearly deaths per 100,000 there at
 # a multiplier of 1 (demographics_model.band_cause_rates: its age groups' rates, weighted by their person-years at
 # the base rates) x the step's multiplier, work's by sex, and infection's at the adults' ages x te_dg_inf_ad too.
 # Exact in the bands of one age group; approximate in 0-4
-# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work, which
-# te_demog_cause_deaths_store scales to the census's deaths; a state in the late game replaces them with the late
-# sweep's own count, its treated at their biological ages (te_demog_lx_cause_deaths).
+# and 85+. Sets the locals te_dg_ce_inf, te_dg_ce_ext, te_dg_ce_chr and te_dg_ce_work: te_demog_on_top_scales
+# places each cause's deaths on top by them, then scales each with its multiplier, and te_demog_cause_deaths_store
+# scales them to the census's deaths; a state in the late game replaces them with the late sweep's own count, its
+# treated at their biological ages (te_demog_lx_cause_deaths).
 te_demog_cause_deaths_estimate = {
 	set_local_variable = {
 		name = te_dg_ce_inf
