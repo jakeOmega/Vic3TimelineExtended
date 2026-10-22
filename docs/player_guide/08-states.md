@@ -525,10 +525,11 @@ planning (the Ministry of Urban Planning, Planned Towns and a Planned Capital)
 lower it, and a country's urbanization raises it most at half its people in towns
 and lowers it a little below a tenth or past nine tenths.
 Hover the row for each term as a bar. Under Full a share above 40% has effects,
-full at 60%: the state crowds 10% sooner, its people give 10% more infrastructure,
-its Urban Center works at 5% more throughput, turmoil penalties rise 5% and
-families are a little smaller. Below 20% its towns give up to 10% less
-infrastructure. Where People Live counts your Metropolises.
+full at 60%: the state crowds 10% sooner, its people give 20% more infrastructure,
+its Urban Center works at 10% more throughput, turmoil penalties rise 10% and
+families are a little smaller. Past 60% all but the crowding keep growing at half
+the pace, to nearly twice their size at the highest shares. Below 20% its towns
+give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and

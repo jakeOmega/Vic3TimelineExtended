@@ -43,13 +43,18 @@ te_demog_mt_state_update = {
 }
 
 # THIS = ROOT = a state, on its yearly pulse (te_demog_state_yearly_on_action, after the census), the one refresh site of
-# both modifiers: ROOT is the state, so the multiplier reads its own variable. Under Full, a share above Leading City's
-# floor takes te_demog_mt_metropolis and one below Market Towns' ceiling te_demog_mt_dispersed, each scaled by its
-# strength; below 0.01 neither. Outside Full both come off at the next pulse.
+# the three modifiers: ROOT is the state, so the multiplier reads its own variable. Under Full, a share above Leading
+# City's floor takes te_demog_mt_metropolis (its extended strength) and te_demog_mt_crowding (the 0-1 ramp: crowding
+# feeds the share's target, a model term), and one below Market Towns' ceiling te_demog_mt_dispersed; below 0.01
+# none. Outside Full all come off at the next pulse.
 te_demog_mt_state_refresh = {
 	if = {
 		limit = { has_modifier = te_demog_mt_metropolis }
 		remove_modifier = te_demog_mt_metropolis
+	}
+	if = {
+		limit = { has_modifier = te_demog_mt_crowding }
+		remove_modifier = te_demog_mt_crowding
 	}
 	if = {
 		limit = { has_modifier = te_demog_mt_dispersed }
@@ -62,10 +67,15 @@ te_demog_mt_state_refresh = {
 		}
 		if = {
 			limit = { te_demog_mt_e_pos > 0.01 }
-			set_variable = { name = te_dg_mt_mult value = te_demog_mt_e_pos }
+			set_variable = { name = te_dg_mt_mult value = te_demog_mt_e_pos_strength }
 			add_modifier = {
 				name = te_demog_mt_metropolis
 				multiplier = var:te_dg_mt_mult
+			}
+			set_variable = { name = te_dg_mt_crowd_mult value = te_demog_mt_e_pos }
+			add_modifier = {
+				name = te_demog_mt_crowding
+				multiplier = var:te_dg_mt_crowd_mult
 			}
 		}
 		else_if = {

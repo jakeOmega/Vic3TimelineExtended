@@ -141,6 +141,10 @@ gui_state_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_demog_mt_crowding }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = free_port_state_modifier }
 		add = 1
 	}

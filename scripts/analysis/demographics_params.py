@@ -1282,19 +1282,21 @@ MT_MINISTRY_PER_LEVEL = -1
 MT_PLANNED_TOWNS_PER_LEVEL = -2
 MT_PLANNED_CAPITAL = -10
 MT_PLAN_MIN = -30
-# The effects (Full only), each at most 10% (owner, 2026-10-19). The concentrated side grows in a straight line from
-# nothing at MT_EFFECT_FROM (Leading City's floor) to full at MT_EFFECT_FULL (Metropolis's); the dispersed side, the
-# infrastructure loss alone, from nothing at MT_DISPERSED_FROM (Market Towns' ceiling) to full at MT_DISPERSED_FULL (the
-# target's floor, MT_MIN).
+# The effects (Full only), about 20% on the main line (the 2026-10-22 effects design lifted the owner's 10% cap of
+# 2026-10-19). The concentrated side grows in a straight line from nothing at MT_EFFECT_FROM (Leading City's floor) to
+# full at MT_EFFECT_FULL (Metropolis's) and on at half the slope (1.5 at 80, 1.875 at the target's ceiling of 95); the
+# dispersed side, the infrastructure loss alone, from nothing at MT_DISPERSED_FROM (Market Towns' ceiling) to full at
+# MT_DISPERSED_FULL (the target's floor, MT_MIN). Crowding is a model term (it feeds the share's target), so it keeps
+# the 0-1 ramp on a modifier of its own (te_demog_mt_crowding).
 MT_EFFECT_FROM = 40
 MT_EFFECT_FULL = 60
 MT_DISPERSED_FROM = 20
 MT_DISPERSED_FULL = 5
-MT_EFFECTS = {"state_migration_crowding_density_mult": -0.10,     # crowds sooner (a positive value is capacity)
-              "state_infrastructure_from_population_mult": 0.10,  # a compact city is cheaper to serve
-              "building_urban_center_throughput_add": 0.05,       # agglomeration: the city's services
-              "state_turmoil_effects_mult": 0.05}                 # one city concentrates its radicals (a little)
-MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.10}
+MT_EFFECTS = {"state_infrastructure_from_population_mult": 0.20,  # a compact city is cheaper to serve
+              "building_urban_center_throughput_add": 0.10,       # agglomeration: the city's services
+              "state_turmoil_effects_mult": 0.10}                 # one city concentrates its radicals
+MT_CROWDING = {"state_migration_crowding_density_mult": -0.10}    # crowds sooner (a positive value is capacity)
+MT_DISPERSED_EFFECTS = {"state_infrastructure_from_population_mult": -0.20}
 # Fertility: the census's urban term (URBAN_WEIGHT x urban x relief) is raised by MT_FERTILITY x the concentrated
 # side's strength, so at full strength by a tenth.
 MT_FERTILITY = 0.10
