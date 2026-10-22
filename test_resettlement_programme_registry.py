@@ -409,7 +409,9 @@ class DestinationBonusTests(unittest.TestCase):
         for key, effects in DESTINATION_EFFECTS.items():
             body = destination_modifier(key)
             self.assertIsNotNone(body, key)
-            found = {k: float(v) for k, v in re.findall(r"(\w+)\s*=\s*(-?\d+(?:\.\d+)?)\s", body + "\n")}
+            # a mortality line's Causes of Death tag is a label beside it (owner, 2026-10-22)
+            found = {k: float(v) for k, v in re.findall(r"(\w+)\s*=\s*(-?\d+(?:\.\d+)?)\s", body + "\n")
+                     if not k.startswith("state_death_cause_")}
             self.assertEqual(found, {k: float(v) for k, v in effects.items()}, key)
             self.assertIn(f"resettlement_{key}_destination", L)
             self.assertIn(f"resettlement_{key}_destination_desc", L)

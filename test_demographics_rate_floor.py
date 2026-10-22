@@ -440,37 +440,21 @@ class TestTheTextIsTrue(unittest.TestCase):
     four times its base"). The cap is gone; the floor is the engine's own, and its text says what binds it."""
 
     def test_the_loc(self):
+        """Since the deaths on top count under their causes (owner, 2026-10-22), the floor's note sits on the state's
+        deaths row, beside the census's own rate against the game's."""
         loc = _text(MISC_LOC)
-        for gone in ("te_demog_st_ontop_end_cap:", "te_demog_st_ontop_end_rest:"):
+        for gone in ("te_demog_st_ontop_end_cap:", "te_demog_st_ontop_end_rest:", "te_demog_st_ontop_tt_measured:",
+                     "te_demog_st_ontop_phi:"):
             self.assertNotIn(gone, loc)
-        floor = re.search(r'^ te_demog_st_ontop_end_floor:0 "(.*)"$', loc, re.M).group(1)
+        floor = re.search(r'^ te_demog_st_ontop_floor:0 "(.*)"$', loc, re.M).group(1)
         for false in ("a fifth", "four times", "can't fall"):
             self.assertNotIn(false, floor)
         self.assertIn("base death rate was left to take off", floor)
-        measured = re.search(r'^ te_demog_st_ontop_tt_measured:0 "(.*)"$', loc, re.M).group(1)
-        self.assertIn("'te_demog_st_ontop_end_floor', 'te_demog_st_ontop_end' )", measured)
-        self.assertIn("'te_demog_st_ontop_end_floor_phi', 'te_demog_st_ontop_end_phi' )", measured)
-
-    def test_the_private_insurance_note(self):
-        """Private Health Insurance's wealth line can take the richest pops' deaths to 0; the walk leaves them out but
-        the split takes off their unfloored share, so the hover says so under that law (owner, 2026-10-20)."""
-        loc = _text(MISC_LOC)
-        get = {k: v for k, v in re.findall(r'(?m)^ (\w+):\d* "(.*)"$', loc)}
-        self.assertIn("te_demog_state_phi_note_sgui", get["te_demog_st_ontop_tt_measured"])
-        for key, base in (("te_demog_st_ontop_end_phi", "te_demog_st_ontop_end"),
-                          ("te_demog_st_ontop_end_floor_phi", "te_demog_st_ontop_end_floor")):
-            self.assertEqual(get[key], f"${base}$\\n$te_demog_st_ontop_phi$")
-        note = get["te_demog_st_ontop_phi"]
-        self.assertIn("$law_private_health_insurance$", note)
-        self.assertIn("stop dying altogether", note)
-        for row in ("Other effects on some of its people", "Effects on the whole state"):   # the rows the hover prints
-            self.assertIn(row, note)
-            self.assertIn(row, get["te_demog_st_ontop_tt_measured"])
-        self.assertTrue(note.startswith("#lore") and note.endswith("#!"))
-        sgui = " ".join(_block(_text(ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"),
-                               "te_demog_state_phi_note_sgui").split())
-        self.assertIn("scope = state", sgui)
-        self.assertIn("te_demog_effects_run = yes owner ?= { has_law = law_type:law_private_health_insurance }", sgui)
+        rate = re.search(r'^ te_demog_st_ontop_rate:0 "(.*)"$', loc, re.M).group(1)
+        self.assertIn("Var('te_dg_ed_clamp_d')", rate)
+        self.assertIn("'te_demog_st_ontop_floor', 'te_tt_blank' )", rate)
+        sgui = _block(_text(ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"), "te_demog_state_on_top_sgui")
+        self.assertIn("has_variable = te_dg_ed_clamp_d", sgui, "the note reads the clamp only where it was written")
 
     def test_no_script_names_the_old_limits(self):
         for path in (RATE_EFFECTS, EFFECTS, ROOT / "common" / "script_values" / "te_demog_generated_values.txt"):

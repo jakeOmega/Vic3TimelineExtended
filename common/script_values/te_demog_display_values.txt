@@ -283,8 +283,7 @@ te_demog_state_pyramid_max = {
 
 # ============================================================================
 # Causes of Death (the state subtab; docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md). State scope,
-# read under te_demog_state_causes_sgui (the step's inputs exist) or te_demog_state_on_top_sgui (a measured scale
-# under Full). The factors themselves are generated (te_demog_f_<cause>_<factor>, te_demog_generated_values.txt).
+# read under te_demog_state_causes_sgui (the step's inputs exist). The factors themselves are generated (te_demog_f_<cause>_<factor>, te_demog_generated_values.txt).
 # ============================================================================
 
 # The health law's share of health-care access, read live (the hover's breakdown under the base).
@@ -370,42 +369,142 @@ te_demog_medicine_moving_chronic = {
 }
 
 # ============================================================================
-# Deaths Added on Top (the Causes of Death section, the state subtab; docs/superpowers/plans/
-# 2026-10-11-demographics-causes-of-death.md, Task 6). State scope, under Full, read under the row's gate (Task 8).
+# The deaths on top of the census (the Causes of Death section; owner, 2026-10-22). Under Full.
 # ============================================================================
-# 1 + te_dg_dz: how far the engine's deaths over the last step ran from the census's own (te_demog_on_top_scales).
+# 1 + te_dg_dz: how far the engine's deaths over the last step ran from the census's own (te_demog_on_top_scales): the
+# state's deaths row's hover, under te_demog_state_on_top_sgui. The pie counts those deaths under their causes.
 te_demog_deaths_on_top = {
 	value = var:te_dg_dz
 	add = 1
 }
-# 1 at or above te_demog_k_deaths_on_top_high (the row reads red), else 0: the threshold is script's (gotcha #23).
-te_demog_deaths_on_top_code = {
+
+# Each cause's deaths on top of the census, signed (te_dg_dc_<c>_top: aid and relief lines save deaths), 0 where none
+# were measured (not Full, a first count, an old save); then their size and a code, 1 added and 2 spared, 0 under one
+# death, for the legend's hovers (te_demog_cd_dc_<c>_top_more and _less). A state and a country keep the same names.
+te_demog_dc_top_inf = {
 	value = 0
 	if = {
-		limit = { te_demog_deaths_on_top >= te_demog_k_deaths_on_top_high }
-		value = 1
+		limit = { has_variable = te_dg_dc_inf_top }
+		value = var:te_dg_dc_inf_top
 	}
 }
-# Its split over the same window (te_demog_on_top_split, Full only): the whole state's part (the state-level lines, the
-# moved lines' on-top family, the census's own lag since its last count), severe starvation's, and the other lines on
-# some of its people. Their product is te_dg_ed / te_dg_ed_target, which is te_demog_deaths_on_top (dz has no ceiling,
-# and its floor of -1 is no deaths: owner, 2026-10-20) except: where a division's min = 1 (a person) bites, on a tiny
-# state; where an end's read was below
-# -1 (state-level lines falling inside the window after M was fitted, or the read without M already below the floor),
-# which moves deaths into the other effects and can floor te_dg_ed_state at 0; and after a second walk in a year
-# without a step, which rewrites te_dg_ed and the split but not dz or the target until the next step.
-te_demog_deaths_whole_state = {
-	value = var:te_dg_ed_state
-	divide = { value = var:te_dg_ed_target min = 1 }
+te_demog_dc_top_abs_inf = {
+	value = te_demog_dc_top_inf
+	if = {
+		limit = { te_demog_dc_top_inf < 0 }
+		multiply = -1
+	}
 }
-te_demog_deaths_severe = {
-	value = var:te_dg_ed_state
-	add = var:te_dg_ed_sev
-	divide = { value = var:te_dg_ed_state min = 1 }
+te_demog_dc_top_code_inf = {
+	value = 0
+	if = {
+		limit = { te_demog_dc_top_inf >= 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_demog_dc_top_inf <= -1 }
+		value = 2
+	}
 }
-te_demog_deaths_other = {
-	value = var:te_dg_ed
-	divide = { value = var:te_dg_ed_state add = var:te_dg_ed_sev min = 1 }
+te_demog_dc_top_chr = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_chr_top }
+		value = var:te_dg_dc_chr_top
+	}
+}
+te_demog_dc_top_abs_chr = {
+	value = te_demog_dc_top_chr
+	if = {
+		limit = { te_demog_dc_top_chr < 0 }
+		multiply = -1
+	}
+}
+te_demog_dc_top_code_chr = {
+	value = 0
+	if = {
+		limit = { te_demog_dc_top_chr >= 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_demog_dc_top_chr <= -1 }
+		value = 2
+	}
+}
+te_demog_dc_top_ext = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_ext_top }
+		value = var:te_dg_dc_ext_top
+	}
+}
+te_demog_dc_top_abs_ext = {
+	value = te_demog_dc_top_ext
+	if = {
+		limit = { te_demog_dc_top_ext < 0 }
+		multiply = -1
+	}
+}
+te_demog_dc_top_code_ext = {
+	value = 0
+	if = {
+		limit = { te_demog_dc_top_ext >= 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_demog_dc_top_ext <= -1 }
+		value = 2
+	}
+}
+te_demog_dc_top_work = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_work_top }
+		value = var:te_dg_dc_work_top
+	}
+}
+te_demog_dc_top_abs_work = {
+	value = te_demog_dc_top_work
+	if = {
+		limit = { te_demog_dc_top_work < 0 }
+		multiply = -1
+	}
+}
+te_demog_dc_top_code_work = {
+	value = 0
+	if = {
+		limit = { te_demog_dc_top_work >= 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_demog_dc_top_work <= -1 }
+		value = 2
+	}
+}
+te_demog_dc_top_war = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_dc_war_top }
+		value = var:te_dg_dc_war_top
+	}
+}
+te_demog_dc_top_abs_war = {
+	value = te_demog_dc_top_war
+	if = {
+		limit = { te_demog_dc_top_war < 0 }
+		multiply = -1
+	}
+}
+te_demog_dc_top_code_war = {
+	value = 0
+	if = {
+		limit = { te_demog_dc_top_war >= 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_demog_dc_top_war <= -1 }
+		value = 2
+	}
 }
 
 # ============================================================================
@@ -434,10 +533,6 @@ te_demog_dc_share_mat = {
 	value = var:te_dg_dc_mat
 	divide = { value = var:te_dg_dc_total min = 1 }
 }
-te_demog_dc_share_ontop = {
-	value = var:te_dg_dc_ontop
-	divide = { value = var:te_dg_dc_total min = 1 }
-}
 te_demog_dc_share_kill = {
 	value = var:te_dg_dc_kill
 	divide = { value = var:te_dg_dc_total min = 1 }
@@ -448,9 +543,11 @@ te_demog_dc_share_war = {
 }
 
 # The pie's layers: the shares summed through each slice, in its clockwise order from 12 o'clock (te_dg_dc_lead's
-# codes): infection and hunger, chronic illness and old age, accidents and violence, work, childbirth, added on top,
-# killed by events, war. The eighth layer is the whole disc (1). A slice the uploaded-minds design adds (its §4) is a
-# share, a layer here, a texture and a legend row.
+# codes): infection and hunger, chronic illness and old age, accidents and violence, work, childbirth, killed by
+# events, war and devastation. The seventh layer is the whole disc (1). The deaths added on top were a slice between
+# childbirth and the killed until 2026-10-22, when they began to count under their causes (owner); te_demog_dc_cum_6
+# went with them. A slice the uploaded-minds design adds (its §4) is a share, a layer here, a texture and a legend
+# row.
 te_demog_dc_cum_1 = {
 	value = te_demog_dc_share_inf
 }
@@ -470,12 +567,8 @@ te_demog_dc_cum_5 = {
 	value = te_demog_dc_cum_4
 	add = te_demog_dc_share_mat
 }
-te_demog_dc_cum_6 = {
-	value = te_demog_dc_cum_5
-	add = te_demog_dc_share_ontop
-}
 te_demog_dc_cum_7 = {
-	value = te_demog_dc_cum_6
+	value = te_demog_dc_cum_5
 	add = te_demog_dc_share_kill
 }
 
@@ -501,10 +594,6 @@ te_demog_dc_lead_share = {
 	else_if = {
 		limit = { var:te_dg_dc_lead = 5 }
 		value = te_demog_dc_share_mat
-	}
-	else_if = {
-		limit = { var:te_dg_dc_lead = 6 }
-		value = te_demog_dc_share_ontop
 	}
 	else_if = {
 		limit = { var:te_dg_dc_lead = 7 }
@@ -556,7 +645,7 @@ te_demog_next_count_months = {
 }
 
 # Under Full, the country's deaths per 1,000 people against the census's own rate across its states (te_dg_cdr_model): the
-# Added on Top row's hover (read under te_demog_ontop_ready_sgui). Every body's death, the uploaded minds' too
+# deaths row's hover (read under te_demog_ontop_ready_sgui). Every body's death, the uploaded minds' too
 # (te_demog_cdr_all), since the census's rate counts them.
 te_demog_country_deaths_on_top = {
 	value = te_demog_cdr_all

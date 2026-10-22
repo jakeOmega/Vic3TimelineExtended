@@ -131,7 +131,9 @@ te_demog_history_causes = {
 	te_demog_history_share = { K = 3 SLICE = ext }
 	te_demog_history_share = { K = 4 SLICE = work }
 	te_demog_history_share = { K = 5 SLICE = mat }
-	te_demog_history_share = { K = 6 SLICE = ontop }
+	# slot 6 held the deaths added on top, which count under their causes since 2026-10-22: a save's older samples keep
+	# theirs, so the chart's layers keep their colours
+	set_variable = { name = te_dg_h_s6 value = 0 }
 	te_demog_history_share = { K = 7 SLICE = kill }
 	te_demog_history_share = { K = 8 SLICE = war }
 	set_variable = { name = te_dg_h_c1 value = var:te_dg_h_s1 }

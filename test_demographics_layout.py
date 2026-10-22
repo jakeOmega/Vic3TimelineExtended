@@ -40,9 +40,13 @@ STATE = ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyr
 STATE_ONLY = ["te_state_demog_modifiers"]
 HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
 
-# The pie's slices, clockwise from 12 o'clock (te_dg_dc_lead's codes 1-8): the loc and variable name, the texture.
+# The history chart's slices, from the foot (te_dg_dc_lead's codes 1-8): the loc and variable name, the texture. The
+# pie's are the same less the deaths added on top (code 6), which count under their causes since 2026-10-22 (owner); the
+# chart keeps their layer, so a save's older years keep their colours.
 SLICES = [("inf", "infection"), ("chr", "chronic"), ("ext", "external"), ("work", "work"), ("mat", "maternal"),
           ("ontop", "on_top"), ("kill", "killed"), ("war", "war")]
+PIE_SLICES = [s for s in SLICES if s[0] != "ontop"]
+PIE_CODES = [1, 2, 3, 4, 5, 7]     # the cumulative sums the pie's layers read (te_demog_dc_cum_<n>), the last disc whole
 PIE_DIR = "gfx/interface/icons/demographics_icons/"
 
 
@@ -419,7 +423,7 @@ class WidthTest(unittest.TestCase):
 
     def test_the_cause_legend(self):
         bodies = [_type_body(self.widgets, s) for s in ("te_demog_sec_causes", "te_state_demog_causes")]
-        self.check_type("te_demog_cause_row", ("cause", "deaths", "share"), bodies, 48)
+        self.check_type("te_demog_cause_row", ("cause", "deaths", "share"), bodies, 42)
         head = _type_body(self.widgets, "te_demog_cause_head")
         for _, box in _textboxes(head):
             key = re.search(r'text = "(\w+)"', box).group(1)
@@ -571,12 +575,12 @@ class PieTest(unittest.TestCase):
     def test_the_layers(self):
         pie = _type_body(self.widgets, "te_demog_cause_pie")
         layers = _instances(pie, "progresspie")
-        self.assertEqual(len(layers), 8)
+        self.assertEqual(len(layers), 7)
         textures = [re.search(r'texture = "([^"]+)"', b).group(1) for b in layers]
-        self.assertEqual(textures, [f"{PIE_DIR}pie_{tex}.dds" for _, tex in reversed(SLICES)])
+        self.assertEqual(textures, [f"{PIE_DIR}pie_{tex}.dds" for _, tex in reversed(PIE_SLICES)])
         self.assertIn("value = 1", layers[0], "the last slice is the whole disc")
         self.assertEqual([re.search(r'block "(cum_\d)"', b).group(1) for b in layers[1:]],
-                         [f"cum_{n}" for n in range(7, 0, -1)])
+                         [f"cum_{n}" for n in reversed(PIE_CODES)])
         for layer in layers:
             self.assertIn("frame = 2", layer)
 
@@ -588,24 +592,25 @@ class PieTest(unittest.TestCase):
                               ("te_state_demog_causes", "State.MakeScope")):
             pies = _instances(_type_body(self.widgets, section), "te_demog_cause_pie")
             self.assertEqual(len(pies), 1, section)
-            for n in range(1, 8):
+            for n in PIE_CODES:
                 with self.subTest(section=section, n=n):
                     self.assertIn(f"{root}.ScriptValue('te_demog_dc_cum_{n}')", _override(pies[0], f"cum_{n}"))
 
     def test_the_sums_run_in_the_slices_order(self):
         display = _read(DISPLAY)
-        for n in range(2, 8):
+        for prev, n, (name, _tex) in zip(PIE_CODES, PIE_CODES[1:], PIE_SLICES[1:]):
             body = _block_from(display, display.index(f"te_demog_dc_cum_{n} = {{"))
-            self.assertIn(f"value = te_demog_dc_cum_{n - 1}", body)
-            self.assertIn(f"add = te_demog_dc_share_{SLICES[n - 1][0]}", body)
+            self.assertIn(f"value = te_demog_dc_cum_{prev}", body)
+            self.assertIn(f"add = te_demog_dc_share_{name}", body)
+        self.assertNotIn("te_demog_dc_cum_6 = {", display)
         first = _block_from(display, display.index("te_demog_dc_cum_1 = {"))
         self.assertIn(f"value = te_demog_dc_share_{SLICES[0][0]}", first)
 
     def test_each_legend_names_the_slices_in_order(self):
         for section, root in (("te_demog_sec_causes", "GetPlayer"), ("te_state_demog_causes", "State")):
             rows = _instances(_type_body(self.widgets, section), "te_demog_cause_row")
-            self.assertEqual(len(rows), 8, section)
-            for row, (name, tex) in zip(rows, SLICES):
+            self.assertEqual(len(rows), 7, section)
+            for row, (name, tex) in zip(rows, PIE_SLICES):
                 with self.subTest(section=section, slice=name):
                     self.assertIn(f'texture = "{PIE_DIR}pie_{tex}.dds"', _override(row, "swatch"))
                     self.assertIn(f'text = "te_demog_dc_{name}"', _override(row, "cause"))

@@ -138,8 +138,12 @@ class ReleaseCensusInputsTest(unittest.TestCase):
         # outside the census's lines: the entries they leave empty, Family Limitation's application, Medical Outreach
         # (its only effect was a census type), the gates' old bodies and the rule
         census = re.compile(rf"^\s*({'|'.join(self.types)})\s*=")
+        # Causes of Death's tags on vanilla's mortality lines (owner, 2026-10-22): INJECTs that carry only a tag
         whole_entries = {"common/laws/te_demog_law_injections.txt",
-                         "common/technology/technologies/te_demog_tech_injections.txt"}
+                         "common/technology/technologies/te_demog_tech_injections.txt",
+                         "common/static_modifiers/te_demog_cause_tags_generated.txt",
+                         "common/interest_group_traits/te_demog_cause_tags_generated.txt",
+                         "common/character_traits/te_demog_cause_tags_generated.txt"}
         decrees = "common/decrees/extra_decrees.txt"
         outreach = self._entry_lines(self.before[self.root / decrees].decode("utf-8-sig"), "decree_medical_outreach")
         self.assertTrue(outreach, "decree_medical_outreach found")

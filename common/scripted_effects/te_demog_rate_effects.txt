@@ -34,6 +34,10 @@
 #   te_dg_rate_clamp_d  whether the floor bit the last refresh's deaths term: 0 no, 1 yes (the engine's own, -1)
 #   te_dg_ed_clamp_d    its copy for the window the step's dz measured (te_demog_on_top_clamp_copy)
 #   te_dg_ed_state, te_dg_ed_sev, te_dg_sev_share  the split of the window's deaths (te_demog_on_top_split; Full only)
+#   te_dg_sc_<c>, te_dg_st_<c>  each cause's part of the start rate per head and its tag's read there (inf, chr, ext, work,
+#                       war; Causes of Death, owner 2026-10-22): stored by the refresh with te_dg_ss_d, removed with it
+#   te_dg_ot_<c>        each cause's deaths on top over the window (te_demog_on_top_causes; Full only), which the step's
+#                       scales place on its ages (te_demog_on_top_cause_scales) and the section counts under it
 # The walk's locals the refresh reads (te_demog_walks, same effect): te_dg_w_eb0 and te_dg_w_ed0,
 # bare births and deaths a month x 100,000; te_dg_w_ebr and te_dg_w_edr, the replaced sums: each
 # pop's bare curves x what the census absorbs for it (te_demog_absorbed_walk_pop, generated);
@@ -115,8 +119,10 @@ te_demog_window_events = {
 	}
 }
 
-# THIS = a state, the walk's tail, straight after te_demog_window_events: the Causes of Death section's split of the
-# window's deaths (docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-death.md, Task 6). Under Full:
+# THIS = a state, the walk's tail, straight after te_demog_window_events: the split of the window's deaths the Causes of
+# Death section's Added on Top row showed until 2026-10-22 (docs/superpowers/archive/plans/2026-10-11-demographics-causes-of-
+# death.md, Task 6), which the harness's ontop-fit still reads (scripts/analysis/demographics_ontop.py); the section now
+# counts the deaths on top by cause (te_demog_on_top_causes, which this calls last). Under Full:
 #   te_dg_ed_state  te_dg_ed less the pops' own lines over the window, at least 0: the state-level lines and the moved
 #                   lines' on-top family, the absorbed lines M nets, and the census's own lag (M a window old, the
 #                   model's rate drifting)
@@ -126,9 +132,9 @@ te_demog_window_events = {
 # any pop's own lines, w_ed - w_edr - (1 + read) x w_ed0 - the wealth read x w_edw (a floored pop's own lines took its
 # deaths to 0; the wealth line, which the walk applies per pop since 2026-10-20, is the census's own under Full, so it
 # stays in the whole state's part, beside the M that nets it), and te_dg_w_sevd. The start's from the refresh that stored te_dg_sr_d: te_dg_sp_d and te_dg_ss_d, per head. A start
-# rate without them (a save from before this build) leaves no split, so the row waits for the next count. Outside
-# Full the three go. The split multiplies back to te_dg_ed over the target (te_demog_deaths_whole_state, _severe,
-# _other) except where an end's read was below -1. Its whole-state part, which counts every pop unfloored, is then
+# rate without them (a save from before this build) leaves no split until the next count. Outside Full the three go.
+# The split's three factors (the whole state's part over the target, severe starvation's over it, the rest) multiply
+# back to te_dg_ed over the target except where an end's read was below -1. Its whole-state part, which counts every pop unfloored, is then
 # negative, the deaths move into the other effects, and further down te_dg_ed_state floors at 0. M keeps the read at
 # or above -1 when it is fitted (unless the read without it is already below), so the end alone gets there: state-level
 # lines falling inside the window after M was fitted, or the read without M below te_demog_k_rate_total_floor. Rare:
@@ -228,6 +234,8 @@ te_demog_on_top_split = {
 	else = {
 		te_demog_on_top_split_clear = yes
 	}
+	# and by cause (owner, 2026-10-22)
+	te_demog_on_top_causes = yes
 }
 
 te_demog_on_top_split_clear = {
@@ -242,6 +250,149 @@ te_demog_on_top_split_clear = {
 	if = {
 		limit = { has_variable = te_dg_sev_share }
 		remove_variable = te_dg_sev_share
+	}
+}
+
+# ---- The window's deaths on top by cause (Causes of Death; owner, 2026-10-22) ------------------------------------------
+# The deaths the engine adds on top of the census count under their own causes (demographics_params.DEATH_CAUSES: inf,
+# chr, ext, work, war), not as a slice of their own. Each cause's part of the window's deaths is the trapezoid of its
+# part of the engine's rate at the window's two ends, as te_demog_window_events weighs the rate:
+# - the pops' own lines by cause, from the walk's Full-only sums (te_demog_absorbed_walk_pop): severe starvation and
+#   non-homeland mortality as infection and hunger, soldiers' and officers' class lines as war, other classes' as
+#   accidents and violence, and the rest of a pop's own lines, its workplace's, as work;
+# - the state-level lines, by their tags (state_death_cause_<c>_mult, at each line's value beside it). M makes the
+#   lines it was fitted to act on the census's rate: it takes (1 - target / bare) x each off. So at the window's start,
+#   when the refresh has just fitted it, a tagged line's part is its tag x te_dg_tb_d x the bare deaths it reaches
+#   (te_dg_w_ed0m); at its end, the tag now less (1 - te_dg_tb_d) x the tag the refresh read, on the same bare deaths:
+#   a line that arrived inside the window kills at the bare curve's weight until the next refresh.
+# What none of them names (the census's own lag, a line no tag names, a floored pop's own lines) is the rest of dz, which
+# the step spreads over the census's own causes (te_demog_on_top_scales).
+#   te_dg_sc_<c>  the start's part per head, walk units (stored by the refresh beside te_dg_ss_d, removed with it)
+#   te_dg_st_<c>  the tag's read at the start
+#   te_dg_ot_<c>  the cause's deaths on top over the window, people (signed: aid and relief lines are negative); written
+#                 by te_demog_on_top_split under Full where the window took a start with these parts, else removed
+
+# THIS = a state, in the walk's tail or the refresh (the walk's locals): the pops' own lines by cause over the walk,
+# locals te_dg_oo_<c>, the engine's rate a month x 100,000.
+te_demog_on_top_own_parts = {
+	set_local_variable = { name = te_dg_oo_inf value = { value = local_var:te_dg_w_sevd add = local_var:te_dg_w_odh } }
+	set_local_variable = { name = te_dg_oo_chr value = 0 }
+	set_local_variable = { name = te_dg_oo_ext value = local_var:te_dg_w_odx }
+	set_local_variable = { name = te_dg_oo_work value = local_var:te_dg_w_odw }
+	set_local_variable = { name = te_dg_oo_war value = local_var:te_dg_w_odq }
+}
+
+# THIS = a state, in te_demog_rates_refresh beside te_dg_ss_d (its locals; te_dg_tb_d already this refresh's).
+te_demog_on_top_start_store = {
+	te_demog_on_top_own_parts = yes
+	te_demog_on_top_start_part = { C = inf }
+	te_demog_on_top_start_part = { C = chr }
+	te_demog_on_top_start_part = { C = ext }
+	te_demog_on_top_start_part = { C = work }
+	te_demog_on_top_start_part = { C = war }
+}
+
+te_demog_on_top_start_part = {
+	set_variable = { name = te_dg_st_$C$ value = { value = 0 add = modifier:state_death_cause_$C$_mult } }
+	set_variable = {
+		name = te_dg_sc_$C$
+		value = {
+			value = var:te_dg_st_$C$
+			multiply = var:te_dg_tb_d
+			multiply = local_var:te_dg_w_ed0m
+			add = local_var:te_dg_oo_$C$
+			divide = { value = state_population min = 1 }
+		}
+	}
+}
+
+# THIS = a state: every start part and tag read off (each site that removes te_dg_ss_d).
+te_demog_on_top_start_clear = {
+	te_demog_on_top_start_clear_one = { C = inf }
+	te_demog_on_top_start_clear_one = { C = chr }
+	te_demog_on_top_start_clear_one = { C = ext }
+	te_demog_on_top_start_clear_one = { C = work }
+	te_demog_on_top_start_clear_one = { C = war }
+}
+
+te_demog_on_top_start_clear_one = {
+	if = {
+		limit = { has_variable = te_dg_sc_$C$ }
+		remove_variable = te_dg_sc_$C$
+	}
+	if = {
+		limit = { has_variable = te_dg_st_$C$ }
+		remove_variable = te_dg_st_$C$
+	}
+}
+
+# THIS = a state, the walk's tail, straight after te_demog_on_top_split: each cause's deaths on top over the window
+# (te_dg_ot_<c>), under Full where the window took a start that stored its parts by cause; otherwise none, and the
+# step spreads all of dz over the census's own causes, as before the causes were split.
+te_demog_on_top_causes = {
+	if = {
+		limit = {
+			te_demog_effects_run = yes
+			has_variable = te_dg_sr_d
+			has_variable = te_dg_tb_d
+			has_variable = te_dg_sc_inf
+			has_variable = te_dg_sc_chr
+			has_variable = te_dg_sc_ext
+			has_variable = te_dg_sc_work
+			has_variable = te_dg_sc_war
+		}
+		te_demog_on_top_own_parts = yes
+		te_demog_on_top_cause = { C = inf }
+		te_demog_on_top_cause = { C = chr }
+		te_demog_on_top_cause = { C = ext }
+		te_demog_on_top_cause = { C = work }
+		te_demog_on_top_cause = { C = war }
+	}
+	else = {
+		te_demog_on_top_causes_clear = yes
+	}
+}
+
+# One cause's window: the end's part from the walk, then the trapezoid with the start's.
+te_demog_on_top_cause = {
+	set_local_variable = {
+		name = te_dg_oe_$C$
+		value = {
+			value = 1
+			subtract = var:te_dg_tb_d
+			multiply = var:te_dg_st_$C$
+			multiply = -1
+			add = modifier:state_death_cause_$C$_mult
+			multiply = local_var:te_dg_w_ed0m
+			add = local_var:te_dg_oo_$C$
+		}
+	}
+	set_variable = {
+		name = te_dg_ot_$C$
+		value = {
+			value = var:te_dg_sc_$C$
+			multiply = state_population
+			subtract = local_var:te_dg_oe_$C$
+			multiply = te_demog_k_window_start_weight
+			add = local_var:te_dg_oe_$C$
+			multiply = te_demog_step_months
+			divide = 100000
+		}
+	}
+}
+
+te_demog_on_top_causes_clear = {
+	te_demog_on_top_causes_clear_one = { C = inf }
+	te_demog_on_top_causes_clear_one = { C = chr }
+	te_demog_on_top_causes_clear_one = { C = ext }
+	te_demog_on_top_causes_clear_one = { C = work }
+	te_demog_on_top_causes_clear_one = { C = war }
+}
+
+te_demog_on_top_causes_clear_one = {
+	if = {
+		limit = { has_variable = te_dg_ot_$C$ }
+		remove_variable = te_dg_ot_$C$
 	}
 }
 
@@ -263,8 +414,8 @@ te_demog_on_top_clamp_copy = {
 	}
 }
 
-# THIS = a state at the start of its step, straight after te_demog_prepare and te_demog_flows:
-# the year's rates scaled by how far the engine's expected births and deaths over the window
+# THIS = a state at the start of its step, straight after te_demog_prepare, te_demog_flows and the estimate of deaths by
+# cause: the year's rates scaled by how far the engine's expected births and deaths over the window
 # (te_dg_eb, te_dg_ed, from this step's walk) ran from the model's rates that M aimed at, at
 # today's population. Under Full only, and only once a step has stored the model's rates.
 # Each scale is at least -1 (no events) and has no ceiling (owner, 2026-10-20; until then -0.9 and +4): the rates cap
@@ -323,11 +474,93 @@ te_demog_on_top_scales = {
 	set_variable = { name = te_dg_tfr_model value = local_var:te_dg_tfr }
 	change_local_variable = { name = te_dg_tfr multiply = { value = local_var:te_dg_bz add = 1 } }
 	set_variable = { name = te_dg_tfr value = local_var:te_dg_tfr }
-	change_local_variable = { name = te_dg_m_inf multiply = { value = local_var:te_dg_dz add = 1 } }
-	change_local_variable = { name = te_dg_m_ext multiply = { value = local_var:te_dg_dz add = 1 } }
-	change_local_variable = { name = te_dg_m_chr multiply = { value = local_var:te_dg_dz add = 1 } }
-	change_local_variable = { name = te_dg_m_work_f multiply = { value = local_var:te_dg_dz add = 1 } }
-	change_local_variable = { name = te_dg_m_work_m multiply = { value = local_var:te_dg_dz add = 1 } }
+	# each natural cause's multiplier takes its own scale (Causes of Death, owner 2026-10-22), and so does the estimate
+	# of its deaths, which is linear in it, so the panel reads the estimate at the step's rates
+	te_demog_on_top_cause_scales = yes
+	change_local_variable = { name = te_dg_m_inf multiply = local_var:te_dg_sg_inf }
+	change_local_variable = { name = te_dg_m_ext multiply = local_var:te_dg_sg_ext }
+	change_local_variable = { name = te_dg_m_chr multiply = local_var:te_dg_sg_chr }
+	change_local_variable = { name = te_dg_m_work_f multiply = local_var:te_dg_sg_work }
+	change_local_variable = { name = te_dg_m_work_m multiply = local_var:te_dg_sg_work }
+	if = {
+		limit = { local_var:te_dg_lx_on = 0 }
+		change_local_variable = { name = te_dg_ce_inf multiply = local_var:te_dg_sg_inf }
+		change_local_variable = { name = te_dg_ce_ext multiply = local_var:te_dg_sg_ext }
+		change_local_variable = { name = te_dg_ce_chr multiply = local_var:te_dg_sg_chr }
+		change_local_variable = { name = te_dg_ce_work multiply = local_var:te_dg_sg_work }
+	}
+}
+
+# THIS = a state, in te_demog_on_top_scales with its dz (Causes of Death, owner 2026-10-22; demographics_model
+# .cause_scales): the scale each natural cause's multiplier takes, locals te_dg_sg_<c> (inf, ext, chr, work). A cause
+# takes the deaths on top its tags and the pops' own lines name (te_dg_ot_<c>, te_demog_on_top_causes) on its own ages:
+# te_dg_ot_<c> / the target x E / its own deaths at the model's rates (the estimate te_demog_step_begin made before the
+# scales, te_dg_ce_<c>; E their sum). The rest of dz (war and devastation, whose civilians die at every age, the census's
+# lag, anything no tag names, and a cause the model gives under te_demog_k_cause_scale_min_deaths) spreads over all four
+# at the model's age pattern. The four then add E x (1 + dz) deaths, as one scale did. One scale, 1 + dz, where there is
+# no split by cause (not Full, a first count, an old save) or no estimate (a late-game state, whose calendar ages can't
+# place deaths by age). Each at least 0.
+te_demog_on_top_cause_scales = {
+	set_local_variable = { name = te_dg_sg_rest value = local_var:te_dg_dz }
+	set_local_variable = { name = te_dg_sg_k value = 0 }
+	if = {
+		limit = {
+			local_var:te_dg_lx_on = 0
+			var:te_dg_ed_target > 0
+			has_variable = te_dg_ot_inf
+			has_variable = te_dg_ot_chr
+			has_variable = te_dg_ot_ext
+			has_variable = te_dg_ot_work
+			has_variable = te_dg_ot_war
+		}
+		set_local_variable = {
+			name = te_dg_sg_k
+			value = {
+				value = local_var:te_dg_ce_inf
+				add = local_var:te_dg_ce_ext
+				add = local_var:te_dg_ce_chr
+				add = local_var:te_dg_ce_work
+				divide = { value = var:te_dg_ed_target min = 1 }
+			}
+		}
+	}
+	te_demog_on_top_cause_scale_own = { C = inf }
+	te_demog_on_top_cause_scale_own = { C = ext }
+	te_demog_on_top_cause_scale_own = { C = chr }
+	te_demog_on_top_cause_scale_own = { C = work }
+	te_demog_on_top_cause_scale = { C = inf }
+	te_demog_on_top_cause_scale = { C = ext }
+	te_demog_on_top_cause_scale = { C = chr }
+	te_demog_on_top_cause_scale = { C = work }
+}
+
+# One cause's own deaths on top, as a scale on its multiplier, where the split exists (te_dg_sg_k above 0); they leave
+# the rest.
+te_demog_on_top_cause_scale_own = {
+	set_local_variable = { name = te_dg_sg_own_$C$ value = 0 }
+	if = {
+		limit = {
+			local_var:te_dg_sg_k > 0
+			local_var:te_dg_ce_$C$ >= te_demog_k_cause_scale_min_deaths
+		}
+		set_local_variable = {
+			name = te_dg_sg_own_$C$
+			value = { value = var:te_dg_ot_$C$ multiply = local_var:te_dg_sg_k divide = { value = local_var:te_dg_ce_$C$ min = 1 } }
+		}
+		change_local_variable = { name = te_dg_sg_rest subtract = { value = var:te_dg_ot_$C$ divide = { value = var:te_dg_ed_target min = 1 } } }
+	}
+}
+
+te_demog_on_top_cause_scale = {
+	set_local_variable = {
+		name = te_dg_sg_$C$
+		value = {
+			value = 1
+			add = local_var:te_dg_sg_rest
+			add = local_var:te_dg_sg_own_$C$
+			min = 0
+		}
+	}
 }
 
 # THIS = ROOT = a state, straight after te_demog_state_census in the effect that ran its walks (its
@@ -512,6 +745,8 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_md value = local_var:te_dg_rate_m }
 			set_variable = { name = te_dg_tb_d value = local_var:te_dg_rate_tb }
 			set_variable = { name = te_dg_os_d value = local_var:te_dg_rate_os }
+			# once a game: the tags against the lines on top (Causes of Death; te_debug_demog_effects.txt)
+			te_debug_demog_cause_tags_selfcheck = yes
 			set_variable = { name = te_dg_q_d value = local_var:te_dg_rate_q }
 			# Private Health Insurance's wealth line (the on-top family's wealth field; owner, 2026-10-11, option b):
 			# at the census's share of the bare curve, at least te_demog_k_wealth_line_floor a wealth level first
@@ -579,6 +814,8 @@ te_demog_rates_refresh = {
 				}
 			}
 			set_variable = { name = te_dg_ss_d value = { value = local_var:te_dg_w_sevd divide = { value = state_population min = 1 } } }
+			# each cause's part of that start rate, and the tags' reads (Causes of Death, owner 2026-10-22)
+			te_demog_on_top_start_store = yes
 			set_local_variable = { name = te_dg_rate_sr value = 1 }
 			te_demog_rates_apply = yes
 			set_local_variable = { name = te_dg_rate_new_b value = var:te_dg_mb }
@@ -605,6 +842,8 @@ te_demog_rates_refresh = {
 			limit = { has_variable = te_dg_ss_d }
 			remove_variable = te_dg_ss_d
 		}
+		# Causes of Death's start parts by cause (owner, 2026-10-22)
+		te_demog_on_top_start_clear = yes
 	}
 	# the self-check rate_below_measured: arms this step's candidate or drops it
 	te_demog_rbm_selfcheck_arm = yes
@@ -790,6 +1029,8 @@ te_demog_rates_clear = {
 		limit = { has_variable = te_dg_ss_d }
 		remove_variable = te_dg_ss_d
 	}
+	# Causes of Death's start parts by cause (owner, 2026-10-22)
+	te_demog_on_top_start_clear = yes
 	if = {
 		limit = { has_variable = te_dg_rate_clamp_d }
 		remove_variable = te_dg_rate_clamp_d
