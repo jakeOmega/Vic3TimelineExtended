@@ -6,9 +6,9 @@ Usage:
     demographics_save_inputs.py slice SAVE --tag GBR [--tag POR] [--max-pops 300] -o OUT
 
 A plain-text save is what the game writes in debug mode (it starts `SAV0…` and then
-`meta_data={`). Binary saves aren't read here (read_sections raises NotPlainText, and the
-commands print the message and exit 1); `save_country_probe.py` covers those for
-variables and laws but not pops. Spec: docs/superpowers/specs/2026-10-08-demographics-design.md
+`meta_data={`). read_sections reads only those (it raises NotPlainText, and the commands
+print the message and exit 1); read_save_variables also reads an ordinary binary save's
+script variables and laws, through `save_country_probe.py`'s decoder, which has no pops. Spec: docs/superpowers/specs/2026-10-08-demographics-design.md
 §11.1 (the harness is driven by SoL, literacy, technology and law read from saves).
 
 Layout, as written by 1.14.5 (checked on an 1836 save, 2026-10-08): top-level sections
@@ -27,6 +27,7 @@ A pop with no workforce or dependents field is empty (size 0).
 """
 
 import argparse
+import functools
 import re
 import sys
 from collections import defaultdict
@@ -74,6 +75,13 @@ class NotPlainText(ValueError):
     """The file is not a plain-text save (a binary or zipped one, or not a save at all)."""
 
 
+def is_plain_text(path):
+    """Whether the save's second line is `meta_data={` (check_plain_text's test)."""
+    with open(path, "rb") as fh:
+        fh.readline(256)
+        return fh.readline(64).rstrip(b"\r\n") == b"meta_data={"
+
+
 def check_plain_text(path):
     """Raise NotPlainText unless the save's second line is `meta_data={`.
 
@@ -81,10 +89,7 @@ def check_plain_text(path):
     save has binary bytes there, and scanning it for sections finds none, so without this
     check it reads as an empty save and the commands print plausible zeros.
     """
-    with open(path, "rb") as fh:
-        fh.readline(256)
-        second = fh.readline(64).rstrip(b"\r\n")
-    if second != b"meta_data={":
+    if not is_plain_text(path):
         raise NotPlainText(f"{path} is not a plain-text save (its second line is not `meta_data={{`); "
                            "save in debug mode for plain text, or unzip/convert it first")
 
@@ -486,6 +491,53 @@ def read_variables(path, country_vars, state_vars, raw=()):
         if cid in countries:
             countries[cid]["laws"] = laws
     return countries, states
+
+
+def read_save_variables(path, country_vars, state_vars, raw=()):
+    """read_variables' (countries, states) from a plain-text save or an ordinary binary one.
+
+    A binary save (a non-ironman .v3: a header, then a zip) is decoded by save_country_probe.py into the same shape,
+    ids as strings. Its values come rounded to 3 decimals (the probe's), and a scope reference reads as the id it
+    names, a string, as a variable in raw does in plain text. Anything else raises NotPlainText.
+    """
+    if is_plain_text(path):
+        return read_variables(path, country_vars, state_vars, raw)
+    all_countries, all_states = _binary_variables(str(path), Path(path).stat().st_mtime_ns)
+    countries = {cid: {"tag": c["tag"], "laws": set(c["laws"]),
+                       "vars": {k: v for k, v in c["vars"].items() if k in country_vars}}
+                 for cid, c in all_countries.items()}
+    states = {sid: {"owner": st["owner"], "vars": {k: v for k, v in st["vars"].items() if k in state_vars}}
+              for sid, st in all_states.items()}
+    return countries, states
+
+
+def _binary_reference(value):
+    """A decoded variable as read_variables gives it: a reference ("state#5", ("country", 5)) as its id."""
+    if isinstance(value, tuple):
+        return str(value[1])
+    if isinstance(value, str) and "#" in value:
+        return value.split("#", 1)[1]
+    return value
+
+
+@functools.lru_cache(maxsize=2)
+def _binary_variables(path, _mtime):
+    """Every country's and state's variables and active laws in a binary save, decoded once per file version."""
+    import zipfile
+
+    import save_country_probe as SCP   # its decoder needs only the save; imported here, as only binary saves use it
+    try:
+        countries = SCP.Save(path, SCP.Filters(), groups={})
+        states = SCP.StateSave(path, SCP.StateFilters())
+    except (ValueError, KeyError, zipfile.BadZipFile) as e:   # ironman, corrupt or not a save: nothing to decode
+        raise NotPlainText(f"{path} is neither a plain-text save nor a binary one this reader can open ({e})") from e
+    out_c = {str(cid): {"tag": rec["tag"], "laws": frozenset(x["law"] for x in rec["laws"]),
+                        "vars": {k: _binary_reference(v) for k, v in rec["vars"].items()}}
+             for cid, rec in countries.select().items()}
+    out_s = {str(sid): {"owner": None if rec["owner"] is None else str(rec["owner"]),
+                        "vars": {k: _binary_reference(v) for k, v in rec["vars"].items()}}
+             for sid, rec in states.select().items()}
+    return out_c, out_s
 
 
 def write_slice(sections, tags, max_pops, out_path):

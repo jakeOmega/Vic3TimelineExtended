@@ -31,7 +31,9 @@ Usage:
     demographics_harness.py uploads [--years N]         # uploaded minds: the Nexus's calibration, one and three
                                                         # full Nexuses at era 11, the transition and era 12
 
-SAVE is a plain-text save (debug mode; a binary or zipped one is refused with exit 1).
+SAVE is a plain-text save (debug mode). wc, effects and gini's census line also read an ordinary binary save
+(save_country_probe.py's decoder: script variables and laws, no pops); every other SAVE command refuses a binary
+one with exit 1.
 The model is demographics_model.py with demographics_params.py; the generator writes the
 script from the same two files, so a parameter tuned here reaches the game by
 `python3 scripts/generators/gen_demographics.py`.
@@ -158,7 +160,27 @@ def grouped_by(pops, key):
 def cmd_gini(args):
     """The panel's Gini per country (§4.1: 1 - X (1 - the wealth bands' Gini)), then the bands' own figure,
     each pop as its own group and the three strata the census used before 2026-10-10 (all computed).
-    --shift N makes every pop N wealth levels richer: a late game no save has yet."""
+    --shift N makes every pop N wealth levels richer: a late game no save has yet. A binary save has no pops, so it
+    prints the census's line alone."""
+    # The census's own Gini per state (te_dg_gini, Full only): how many states the Inequality effect's steep
+    # part reaches (the 2026-10-22 effects design). Read first, so a save neither reader opens prints nothing.
+    _countries, census = S.read_save_variables(args.save, (), ("te_dg_gini", "te_dg_walk_pop"))
+    if S.is_plain_text(args.save):
+        out = gini_by_pops(args)
+    else:
+        out = 0
+        print("a binary save has no pops: the census's own Ginis only (the pop-by-pop figures need a plain-text save)")
+    ginis = [(st["vars"]["te_dg_gini"], st["vars"].get("te_dg_walk_pop", 0.0))
+             for st in census.values() if "te_dg_gini" in st["vars"]]
+    if ginis:
+        above = [p for g, p in ginis if g > DE.GINI_STEEP]
+        share = sum(above) / (sum(p for _, p in ginis) or 1.0)
+        print(f"census Ginis above 0.70: {len(above)} of {len(ginis)} states ({share:.0%} of people)")
+    return out
+
+
+def gini_by_pops(args):
+    """cmd_gini's pop-by-pop part, for a plain-text save: 1 when a country named has no pops."""
     sections = S.read_sections(args.save)
     costs = buy_package_costs()
     inputs = S.country_inputs(sections)
@@ -176,15 +198,6 @@ def cmd_gini(args):
         each = M.grouped_gini([(p[0], p[3]) for p in pops])
         strata = M.grouped_gini(grouped_by(pops, lambda p: p[2]))
         print(f"{t:4s} shown {M.shown_gini(bands):.3f}  bands {bands:.3f}  pop by pop {each:.3f}  strata {strata:.3f}")
-    # The census's own Gini per state (te_dg_gini, Full only): how many states the Inequality effect's steep
-    # part reaches (the 2026-10-22 effects design).
-    _countries, census = S.read_variables(args.save, (), ("te_dg_gini", "te_dg_walk_pop"))
-    ginis = [(st["vars"]["te_dg_gini"], st["vars"].get("te_dg_walk_pop", 0.0))
-             for st in census.values() if "te_dg_gini" in st["vars"]]
-    if ginis:
-        above = [p for g, p in ginis if g > DE.GINI_STEEP]
-        share = sum(above) / (sum(p for _, p in ginis) or 1.0)
-        print(f"census Ginis above 0.70: {len(above)} of {len(ginis)} states ({share:.0%} of people)")
     return out
 
 
@@ -484,7 +497,7 @@ def wc_rows(countries, states):
 def cmd_wc(args):
     """Each country's national figure, the target's terms and modifier multipliers, and its states'
     range, read from the save's script variables (spec 4.2). A balance pass's in-game check."""
-    countries, states = S.read_variables(args.save, WC_COUNTRY_VARS, WC_STATE_VARS)
+    countries, states = S.read_save_variables(args.save, WC_COUNTRY_VARS, WC_STATE_VARS)
     rows = wc_rows(countries, states)
     if args.tag:
         rows = [r for r in rows if r[0] in args.tag]
@@ -521,7 +534,8 @@ def cmd_wc(args):
 # before the build reads the same.
 
 EFFECT_COUNTRY_VARS = ("te_inh_concentration", "te_dg_primacy", "te_dg_up_states", "te_dg_primate_state")
-EFFECT_STATE_VARS = ("te_dg_wc", "te_dg_walk_pop", "te_dg_gini", "te_dg_mt", "te_dg_sex_balance", "te_dg_agr_share")
+EFFECT_STATE_VARS = ("te_dg_wc", "te_dg_walk_pop", "te_dg_gini", "te_dg_mt", "te_dg_sex_balance", "te_dg_agr_share",
+                     "te_dg_unemp")
 EFFECT_RAW_VARS = ("te_dg_primate_state",)
 COUNTRY_CONDITIONS = ("wc_high (national)", "wc_low (national)", "primacy")
 UP_MIN_STATES = 3  # te_demog_k_up_min_states: a country with fewer census states has no urban pattern
@@ -530,10 +544,10 @@ STRENGTH_BINS = (("0", None, 0.01), ("0-0.5", 0.01, 0.5), ("0.5-1", 0.5, 1.0), (
 
 
 def strength_bins(pairs):
-    """[(label, states, people)] for (strength, people) pairs: "0" is under 0.01 (no modifier applies), then
-    each bin takes its upper edge."""
+    """[(label, states, people)] for (strength, people) pairs: "0" is 0.01 or less (no modifier applies: each refresh
+    adds its modifier only above 0.01), then each bin takes its upper edge."""
     def inside(x, lo, hi):
-        return x < hi if lo is None else x > lo and (hi is None or x <= hi)
+        return x <= hi if lo is None else x > lo and (hi is None or x <= hi)
 
     out = []
     for label, lo, hi in STRENGTH_BINS:
@@ -647,11 +661,19 @@ def effects_rows(countries, states, census, idle):
 def cmd_effects(args):
     """Phase 0 of the 2026-10-22 effects design: each condition's states and people at each strength, the curve
     before the design against the new one, then the new sizes' worst radicals and turmoil stacks and each primate
-    country's Urban Center stack. Reads a plain-text save's census figures (te_dg_*); the youth bulge needs the
-    census bands (a Display only or Full save)."""
-    countries, states = S.read_variables(args.save, EFFECT_COUNTRY_VARS, EFFECT_STATE_VARS, raw=EFFECT_RAW_VARS)
+    country's Urban Center stack. Reads a save's census figures (te_dg_*), plain text or binary; the youth bulge needs
+    the census bands (a Display only or Full save) and unemployment: the census's own (te_dg_unemp), else a plain-text
+    save's pops."""
+    countries, states = S.read_save_variables(args.save, EFFECT_COUNTRY_VARS, EFFECT_STATE_VARS,
+                                              raw=EFFECT_RAW_VARS)
     census = census_figures(args.save)
-    idle = S.state_unemployment(S.read_sections(args.save, wanted=("pops",))) if census else {}
+    idle = {sid: (1.0, st["vars"]["te_dg_unemp"]) for sid, st in states.items() if "te_dg_unemp" in st["vars"]}
+    missing = len(set(census) - set(idle))
+    if missing and S.is_plain_text(args.save):
+        idle = {**S.state_unemployment(S.read_sections(args.save, wanted=("pops",))), **idle}
+    elif missing:
+        print(f"note: {missing} census states have no stored unemployment (te_dg_unemp), and a binary save has no "
+              "pops, so their youth bulge reads 0\n")
     rows = effects_rows(countries, states, census, idle)
     for label, table in rows["conditions"].items():
         print_strength_table(label, table)
@@ -1192,7 +1214,7 @@ def census_figures(path):
     lo, hi = P.POOL_FROM // P.BAND_WIDTH, (P.POOL_TO + 1) // P.BAND_WIDTH
     assert P.POOL_FROM % P.BAND_WIDTH == 0 and (P.POOL_TO + 1) % P.BAND_WIDTH == 0
     ylo, yhi = P.YOUTH_AGES[0] // P.BAND_WIDTH, (P.YOUTH_AGES[1] + 1) // P.BAND_WIDTH
-    _countries, states = S.read_variables(path, (), CENSUS_BAND_VARS)
+    _countries, states = S.read_save_variables(path, (), CENSUS_BAND_VARS)
     out = {}
     for sid, st in states.items():
         v = st["vars"]

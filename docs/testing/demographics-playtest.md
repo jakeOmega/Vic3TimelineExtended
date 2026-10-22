@@ -1350,4 +1350,4 @@ on a modifier with a multiplier, and the bubble line rests on the banking cycle'
     toward 60%.
 11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
     reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
-    stacks (`demographics_harness.py effects SAVE` on a plain-text save).
+    stacks (`demographics_harness.py effects SAVE`; an ordinary save works).

@@ -263,7 +263,8 @@ general unrest; the youth-bulge literature (Urdal 2006) puts it among the strong
 ## Phase 0: measure (before phases 1 and 2)
 
 The plan's distributions are estimates from the formulas; no save is in the repository. The owner runs the readouts on
-plain-text saves at 1836, about 1880, about 1936 and a late year:
+saves at 1836, about 1880, about 1936 and a late year (plain text at first; `wc`, `effects` and `gini`'s census line
+read ordinary binary saves since the PR review):
 
 - `demographics_harness.py wc SAVE` already prints each country's figure, terms and multipliers and its states' range.
   Add a histogram of state scores and the share of people at each strength under the current and the proposed curves.

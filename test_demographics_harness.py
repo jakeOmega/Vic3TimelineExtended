@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
+import demographics_effects as DE  # noqa: E402
 import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
@@ -1003,9 +1004,9 @@ class TestEffects(unittest.TestCase):
         self.assertAlmostEqual(countries["1"]["vars"]["te_dg_primacy"], 0.6)
 
     def test_strength_bins(self):
-        rows = H.strength_bins([(0.0, 1e6), (0.3, 2e6), (1.2, 1e6), (2.0, 5e5)])
+        rows = H.strength_bins([(0.0, 1e6), (0.01, 1e6), (0.3, 2e6), (1.2, 1e6), (2.0, 5e5)])
         self.assertEqual([r[0] for r in rows], ["0", "0-0.5", "0.5-1", "1-1.5", "1.5-2", ">2"])
-        self.assertEqual([r[1] for r in rows], [1, 1, 0, 1, 1, 0])
+        self.assertEqual([r[1] for r in rows], [2, 1, 0, 1, 1, 0], "0.01 itself applies no modifier")
         self.assertEqual(rows[1][2], 2e6)
 
     def test_wc_prints_both_curves(self):
@@ -1045,7 +1046,76 @@ class TestEffects(unittest.TestCase):
         sparse.write_text(_effects_save(EFFECTS_COUNTRIES, states), encoding="utf-8")
         text = run(["effects", str(sparse)])
         self.assertIn("wc_high", text)
-        self.assertIn("inequality", text)
+        # State 6 has a score but no Gini: counted in wc_low's table, left out of inequality's (not put at 0).
+        for name, states in (("wc_low (state)", 2), ("inequality", 1)):
+            table = text.split(name + ":")[1].split("\n\n")[0].split("\n")[1:7]
+            self.assertEqual(sum(int(line.split()[4]) for line in table), states, name)
+
+
+def _binary_effects_save(countries, states, laws=()):
+    """The binary twin of _effects_save, from save_country_probe's tests' builders; laws: (id, name, owner id)."""
+    import test_save_country_probe as B
+    records = [B.state_db(*(B.state(int(sid), f"STATE_S{sid}", int(owner), variables=values or None)
+                            for sid, (owner, values) in states.items()))]
+    if laws:
+        records.append(B.law_db(*(B.law(rid, name, owner, active=True) for rid, name, owner in laws)))
+    return B.write_save([B.country(int(cid), tag, variables=values or None) for cid, (tag, values) in countries.items()],
+                        records=records)
+
+
+class TestBinarySaves(unittest.TestCase):
+    """wc, effects and gini's census line read an ordinary binary save (S.read_save_variables, through
+    save_country_probe's decoder), and print what the same save in plain text prints."""
+
+    def setUp(self):
+        self.binary = _binary_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES)
+        self.addCleanup(Path(self.binary).unlink)
+        self.plain = Path(tempfile.mkdtemp()) / "effects.v3"
+        self.plain.write_text(_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES), encoding="utf-8")
+
+    def test_effects_and_wc_print_what_plain_text_prints(self):
+        for command in ("effects", "wc"):
+            self.assertEqual(run([command, self.binary]), run([command, str(self.plain)]), command)
+
+    def test_gini_prints_the_census_line_alone(self):
+        text = run(["gini", self.binary])
+        self.assertIn("a binary save has no pops", text)
+        self.assertIn("census Ginis above 0.70: 1 of 2 states (67% of people)", text)
+
+    def test_variables_laws_and_references_read_as_plain_text(self):
+        path = _binary_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES, laws=[(40, "law_primogeniture", 1)])
+        self.addCleanup(Path(path).unlink)
+        countries, states = S.read_save_variables(path, H.EFFECT_COUNTRY_VARS, H.EFFECT_STATE_VARS)
+        self.assertEqual(countries["1"]["tag"], "GBR")
+        self.assertEqual(countries["1"]["laws"], {"law_primogeniture"})
+        self.assertEqual(countries["1"]["vars"]["te_dg_primate_state"], "5")
+        self.assertAlmostEqual(countries["1"]["vars"]["te_inh_concentration"], 76.3)
+        self.assertEqual(countries["2"]["vars"], {})
+        self.assertEqual(states["5"]["owner"], "1")
+        self.assertAlmostEqual(states["5"]["vars"]["te_dg_gini"], 0.75)
+        self.assertNotIn("te_dg_wc", S.read_save_variables(path, (), ("te_dg_gini",))[1]["5"]["vars"])
+
+    def test_the_youth_bulge_reads_the_census_unemployment(self):
+        # One state, its young (bands 4 and 5, ages 20-29) at 3 a band and every other band at 1: 12 of 44 people.
+        bands = {f"te_dg_b{s}{b}": (3 if b in (4, 5) else 1) for s in "fm" for b in range(P.BANDS)}
+        for unemp in (0.2, None):
+            values = dict(bands, te_dg_walk_pop=1e6, **({} if unemp is None else {"te_dg_unemp": unemp}))
+            path = _binary_effects_save({"1": ("GBR", {})}, {"5": ("1", values)})
+            self.addCleanup(Path(path).unlink)
+            text = run(["effects", path])
+            self.assertEqual("no stored unemployment" in text, unemp is None)
+            youth = text.split("youth:")[1].split("\n\n")[0].splitlines()[1:]
+            got = next(line.split()[0] for line in youth if line.split()[4] == "1")
+            want = next(b for b, _, n in H.strength_bins([(DE.youth(12 / 44, unemp or 0.0), 1e6)]) if n)
+            self.assertEqual(got, want, unemp)
+            self.assertEqual(got != "0", unemp is not None)
+
+    def test_a_save_neither_can_read_exits_1(self):
+        bad = Path(tempfile.mkdtemp()) / "ironman.v3"
+        bad.write_bytes(b"SAV0103\n\xff\x00 no zip here")
+        with self.assertRaisesRegex(S.NotPlainText, "neither a plain-text save nor a binary one"):
+            S.read_save_variables(bad, (), ())
+        run(["effects", str(bad)], code=1)
 
 
 class TestFidelity(unittest.TestCase):
