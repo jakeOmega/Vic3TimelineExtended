@@ -113,7 +113,7 @@ Policies, laws, events and, under the full Banking System, your policy stance
 push the readings directly. Fiat Money and Digital Currency add 0.2 bubble
 pressure a month, and Digital Currency and Decentralized Cryptocurrency make the
 cycle more volatile. Wealth Concentration moves it too: Great Family Fortunes
-adds up to 0.5 bubble pressure a month and Dispersed Wealth takes up to 0.4
+adds up to 0.5 bubble pressure a month and Dispersed Wealth takes up to 0.53
 off (see [Who inherits](06-politics.md#who-inherits)).
 
 ## Banking crashes and contagion

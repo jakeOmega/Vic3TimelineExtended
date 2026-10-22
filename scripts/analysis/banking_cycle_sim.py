@@ -769,7 +769,7 @@ class Config:
     wage_pressure: float = 0.0
     # Standing country_bubble_pressure_monthly_add beyond the laws', a month:
     # Wealth Concentration's national line (Great Family Fortunes +0.3 at a
-    # score of 80, Dispersed Wealth -0.3 at 20; the 2026-10-22 effects design).
+    # score of 80, Dispersed Wealth -0.4 at 20; the 2026-10-22 effects design).
     # 0 by default, which leaves every run bit-identical.
     extra_bubble: float = 0.0
     # Investment level of institution_national_bank (0-9 in this mod). Scales

@@ -43,7 +43,7 @@ not from which pop type holds the property (§ Wealth Concentration below).
 | Wealth Concentration's upper end | **Straight line**, no kink: 1.67× at a score of 100 |
 | Wealth Concentration's lower end | **The kink**: 1.17× at 10, 1.33× at 0 |
 | A national suffrage line for Fewer Men | **Dropped**: the women's rights movement already presses for the laws it wants (§ Sex balance) |
-| The dispersed side | **Steadier, not slower** (second round): concentrated property grows faster but crashes more often, dispersed property grows slower but steadier. Dispersed Property loses the owners' efficiency cut; the national pair carries bubble pressure, +0.3 a month at 1× on Great Fortunes and −0.3 on Dispersed Wealth; education access becomes ±0.10 (§ Wealth Concentration) |
+| The dispersed side | **Steadier, not slower** (second round): concentrated property grows faster but crashes more often, dispersed property grows slower but steadier. Dispersed Property loses the owners' efficiency cut; the national pair carries bubble pressure, +0.3 a month at 1× on Great Fortunes and −0.4 on Dispersed Wealth (−0.3 until the simulator's readout, raised on the PR review: `banking_cycle_simulation.md` §27); education access becomes ±0.10 (§ Wealth Concentration) |
 | Wealth Concentration under every rule | **The full increase.** If it proves a problem, it moves behind the rule |
 | Wealth Concentration's neutral point | **50**, so 1836 starts fairly concentrated and the 20th century's levelling shows |
 | One effect per condition | **A default**, kept only where it doesn't cost realism or fun. Land Hunger and the Youth Bulge keep a radicals line |
@@ -113,7 +113,7 @@ just past the reference costs nothing more, owner rejected).
 |---|---|---|
 | Strength | full at 100 or 0 | § The curve |
 | Great Fortunes (country) | Aristocrats and Capitalists clout +20% | +20%, now reached at 80; +33% at 100; **bubble pressure +0.3 a month** (+0.5 at 100) |
-| Dispersed Wealth (country) | Aristocrats clout −20% | Aristocrats and Capitalists clout −20%; **bubble pressure −0.3 a month** (−0.4 at 0) |
+| Dispersed Wealth (country) | Aristocrats clout −20% | Aristocrats and Capitalists clout −20%; **bubble pressure −0.4 a month** (−0.53 at 0) |
 | Concentrated Property (state) | Aristocrats' and Capitalists' investment-pool efficiency +10%, radicals +10%, qualifications −10%, education access −0.05 | efficiency +20%, **political strength from wealth +20%**, qualifications −20%, **education access −0.10**; the radicals line moves to Land Hunger |
 | Dispersed Property (state) | Farmers' and Shopkeepers' investment-pool efficiency +10% | political strength from wealth −10%, qualifications +10%, **education access +0.10**, radicals −10%; no investment line |
 | Land Hunger (state, farm states) | migration quota +20% | quota +30%, **Land Reform movement support +25%**, radicals +10% |
@@ -135,9 +135,10 @@ just past the reference costs nothing more, owner rejected).
   1929 and 2008; Mian, Straub and Sufi find the saving glut of the rich financed debt more than investment. And many
   owners deciding separately don't all pile into one bond issue, as Barings did with Argentina's in 1890 (the owner's
   "decisions made by a larger base of people"). So the national pair carries bubble pressure: Great Fortunes +0.3 a
-  month at 1× (+0.5 at 100), Dispersed Wealth −0.3 (−0.4 at 0). That is a Cautious ruler's size (−0.3; Reckless +0.6,
-  fiat money +0.2): over a five-year boom, 18 points against the 65 at which a state's chance of a financial panic
-  doubles. It is a country field, so it sits on the national pair, whose refresh (`te_demog_wc_national`) already
+  month at 1× (+0.5 at 100), Dispersed Wealth −0.4 (−0.53 at 0), the larger because bubble pressure stops at 0 and a
+  push down moves crashes about half as far as a push up (`banking_cycle_simulation.md` §27). +0.3 is a Cautious
+  ruler's size (−0.3; Reckless +0.6, fiat money +0.2): over a five-year boom, 18 points against the 65 at which a
+  state's chance of a financial panic doubles. It is a country field, so it sits on the national pair, whose refresh (`te_demog_wc_national`) already
   exists, never on the per-state pair. It acts only once a country's banking cycle runs (`te_banking_cycle_running`:
   a stock exchange and a level-5 Urban Center) and the banking rule is on; before that, a dispersed country such as
   France (Forced Heirship, about 25–35 in 1836) has only the schooling and mobility lines. The result is concentrated
@@ -373,6 +374,7 @@ first, since it reaches every game.
 Settled 2026-10-22, second round: the lower end's kink, and the dispersed side (§ Decisions). Left to Phase 0:
 
 1. The steep Gini slope's size: doubling above 0.70 is the starting point.
-2. The bubble line's size: ±0.3 a month at 1× is the starting point; the simulator sets it.
+2. The bubble line's size: ±0.3 a month at 1× is the starting point; the simulator sets it. Settled on the PR review:
+   +0.3 and −0.4 (`banking_cycle_simulation.md` §27).
 3. Primate City's fade with development: settled by the crowding read.
 4. The sizes as a whole are proposals until Phase 0 and the observer run.

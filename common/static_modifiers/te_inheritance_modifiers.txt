@@ -39,12 +39,14 @@ inh_great_fortunes = {
 
 # National score below 50. Few great houses remain to buy influence, and
 # many owners deciding apart don't all pile into one bond issue (Barings and
-# Argentina, 1890).
+# Argentina, 1890). -0.4 a month at full strength, more than the other side's
+# +0.3: bubble pressure stops at 0, so a push down moves crashes about half as
+# far as the same push up (banking_cycle_simulation.md §27).
 inh_dispersed_wealth = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_aristocrats_pol_str_mult = -0.2
 	country_capitalists_pol_str_mult = -0.2
-	country_bubble_pressure_monthly_add = -0.3
+	country_bubble_pressure_monthly_add = -0.4
 }
 
 # State score above 50. The great houses save and invest, and their wealth

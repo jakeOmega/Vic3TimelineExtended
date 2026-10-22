@@ -38,9 +38,10 @@ GINI_FROM = 0.45
 GINI_STEEP = 0.70
 GINI_SPAN = 0.20
 
-# Wealth Concentration's national bubble line, a month at 1x (banking_cycle_simulation.md §27).
+# Wealth Concentration's national bubble line, a month at 1x (banking_cycle_simulation.md §27). The
+# dispersed side is the larger: bubble pressure stops at 0, so a push down moves crashes less far.
 BUBBLE_GREAT = 0.3
-BUBBLE_DISPERSED = -0.3
+BUBBLE_DISPERSED = -0.4
 
 
 def _clamp(x, lo, hi):

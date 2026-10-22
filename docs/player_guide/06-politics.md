@@ -372,7 +372,7 @@ houses twenty years later.
 Your country's figure sets the political weight of great fortunes and how
 fast speculation builds. Above 50, Great Family Fortunes strengthens the
 Aristocrats and Capitalists by 20% and adds 0.3 bubble pressure a month to the
-banking cycle; below 50, Dispersed Wealth weakens both by 20% and takes 0.3 a
+banking cycle; below 50, Dispersed Wealth weakens both by 20% and takes 0.4 a
 month off. Concentrated wealth grows faster but crashes more often; dispersed
 wealth grows slower but steadier. Each state's own score does the rest in that
 state:

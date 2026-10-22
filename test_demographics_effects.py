@@ -97,8 +97,10 @@ class TestSizes(unittest.TestCase):
             "te_demog_mt_metropolis", "te_demog_mt_crowding", "te_demog_mt_dispersed", "te_demog_census_youth_bulge",
             "te_demog_census_fewer_men", "te_demog_census_more_men"})
 
-    def test_the_bubble_line_is_symmetric(self):
-        self.assertEqual(DE.BUBBLE_GREAT, -DE.BUBBLE_DISPERSED)
+    def test_the_bubble_line(self):
+        # The dispersed side is the larger (banking_cycle_simulation.md §27).
+        self.assertEqual((DE.BUBBLE_GREAT, DE.BUBBLE_DISPERSED), (0.3, -0.4))
+        self.assertEqual(DE.SIZES["inh_great_fortunes"]["country_bubble_pressure_monthly_add"], DE.BUBBLE_GREAT)
         self.assertEqual(DE.SIZES["inh_dispersed_wealth"]["country_bubble_pressure_monthly_add"], DE.BUBBLE_DISPERSED)
 
 

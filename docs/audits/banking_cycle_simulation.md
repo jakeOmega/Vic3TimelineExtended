@@ -2455,27 +2455,32 @@ move off it loses the bonus at once.
 
 The demographic effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`) puts bubble
 pressure on Wealth Concentration's national pair: Great Family Fortunes +0.3 a month at a score of 80 (+0.5 at 100),
-Dispersed Wealth −0.3 at 20 (−0.4 at 0). `--extra-bubble X` adds a flat monthly term after the laws' lines (a run at
-0 is bit-identical; `test_banking_sim_extensions.ExtraBubble`). 400 runs a cell, market economy, crashes a century:
+Dispersed Wealth −0.4 at 20 (−0.53 at 0). The dispersed line was −0.3 until the owner's review of #1101; the last
+column is the size it moved to. `--extra-bubble X` adds a flat monthly term after the laws' lines (a run at 0 is
+bit-identical; `test_banking_sim_extensions.ExtraBubble`; −0.53 is `--extra-bubble -0.5333`). 400 runs a cell, market
+economy, crashes a century:
 
-| Arm | 0 | +0.3 | −0.3 | +0.5 (score 100) | −0.4 (score 0) |
-|---|---|---|---|---|---|
-| gold, no policy, no tools | 7.9 | 8.8 (+11%) | 7.4 (−6%) | 9.9 (+25%) | 7.3 (−8%) |
-| gold, no policy, 5 points | 5.5 | 7.3 (+33%) | 4.3 (−22%) | 8.9 (+62%) | 3.8 (−31%) |
-| gold, price mandate, no tools | 10.1 | 11.8 (+17%) | 9.1 (−10%) | 12.8 (+27%) | 8.9 (−12%) |
-| fiat, price mandate, no tools | 15.8 | 18.6 (+18%) | 13.7 (−13%) | 21.1 (+34%) | 13.3 (−16%) |
-| fiat, price mandate, 5 points | 8.2 | 11.7 (+43%) | 5.7 (−30%) | 14.2 (+73%) | 4.7 (−43%) |
-| fiat, inflation targeting, no tools | 16.4 | 19.7 (+20%) | 14.7 (−10%) | 22.1 (+35%) | 14.2 (−13%) |
-| fiat, growth mandate, no tools | 20.6 | 22.9 (+11%) | 18.8 (−9%) | 23.9 (+16%) | 18.1 (−12%) |
+| Arm | 0 | +0.3 (80) | −0.3 | +0.5 (100) | −0.4 (20) | −0.53 (0) |
+|---|---|---|---|---|---|---|
+| gold, no policy, no tools | 7.9 | 8.8 (+11%) | 7.4 (−6%) | 9.9 (+25%) | 7.3 (−8%) | 7.1 (−10%) |
+| gold, no policy, 5 points | 5.5 | 7.3 (+33%) | 4.3 (−22%) | 8.9 (+62%) | 3.8 (−31%) | 3.3 (−40%) |
+| gold, price mandate, no tools | 10.1 | 11.8 (+17%) | 9.1 (−10%) | 12.8 (+27%) | 8.9 (−12%) | 8.5 (−16%) |
+| fiat, price mandate, no tools | 15.8 | 18.6 (+18%) | 13.7 (−13%) | 21.1 (+34%) | 13.3 (−16%) | 12.4 (−22%) |
+| fiat, price mandate, 5 points | 8.2 | 11.7 (+43%) | 5.7 (−30%) | 14.2 (+73%) | 4.7 (−43%) | 3.6 (−56%) |
+| fiat, inflation targeting, no tools | 16.4 | 19.7 (+20%) | 14.7 (−10%) | 22.1 (+35%) | 14.2 (−13%) | 13.5 (−18%) |
+| fiat, growth mandate, no tools | 20.6 | 22.9 (+11%) | 18.8 (−9%) | 23.9 (+16%) | 18.1 (−12%) | 17.9 (−13%) |
 
-- **±0.3 stays, on judgment: the design's test is met in most arms, not all.** It asked for a score-100 country to
-  crash 10–30% more often than a neutral one untooled, and a score-0 country 10–25% less. Across the untooled arms the
-  results are +16% to +35% and −8% to −16%: two fiat arms (+34%, +35%) sit above the +30% edge, and gold with no
-  monetary policy at a score of 0 (−8%) sits short of −10%. Raising or lowering the line would fix one end and break
-  the other, so it stays, and the owner has the table.
+- **+0.3 and −0.4.** The design asked for a score-100 country to crash 10–30% more often than a neutral one untooled,
+  and a score-0 country 10–25% less. At ±0.3 the high end gave +16% to +35% and the low end −8% to −16%: two fiat
+  arms (+34%, +35%) above the +30% edge, and gold with no monetary policy (−8%) short of −10%. The two lines are
+  separate modifiers, so each end moves alone. At −0.4 every untooled arm at a score of 0 lands inside the band, −10%
+  to −22% (gold with no policy at −10% exactly, within the noise of 400 runs), and at 20 the cut, −8% to −16%, is
+  close to the +11% to +20% a score of 80 adds. The high side stays at +0.3, its two fiat arms a few points over the
+  edge, as a judgment call. The owner reads the no-policy row as the least realistic, and wanted the dispersed
+  extreme stronger anyway.
 - **The response is asymmetric.** A push down helps only while a bubble is building, since bubble pressure stops at
-  0, so −0.4 moves crashes about half as far as +0.5.
-- **Tools amplify it.** A managed cycle has less noise for the line to hide in: with 5 points the gaps are two to three
+  0: at the old size, −0.4 moved crashes about half as far as +0.5. That is why the dispersed line is the larger.
+- **Tools amplify it.** A managed cycle has less noise for the line to hide in: with 5 points the gaps are two to four
   times the untooled ones. A player who manages the cycle feels the line most.
 - **Fiat with no monetary policy at all is saturated** (about 34 crashes a century, under every bubble term), and no
   country runs it in game.

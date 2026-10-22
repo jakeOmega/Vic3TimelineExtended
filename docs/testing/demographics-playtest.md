@@ -1329,7 +1329,7 @@ on a modifier with a multiplier, and the bubble line rests on the banking cycle'
 2. **Past the reference.** A state at a score of 90 or more carries Concentrated Property at more than its full size
    (the multiplier above 100%); a primate country past 50% primacy shows Primate City above 100%.
 3. **The bubble line.** A country whose banking cycle runs, with a national figure of 80: the Banking dashboard's
-   next-month bubble range reads about 0.3 more than its other sources (Dispersed Wealth at 20: 0.3 less).
+   next-month bubble range reads about 0.3 more than its other sources (Dispersed Wealth at 20: 0.4 less).
 4. **Land Reform.** A land-hungry farm state with the Land Reform movement present: the movement's support breakdown
    names Land Hunger, and the field's description reads (not a raw key).
 5. **Socialist and labor support.** Full, a late state with a Gini above 0.70: the socialist and labor movements'
