@@ -1,0 +1,222 @@
+﻿# ============================================================================
+# Power Grid: the monthly balancing (te_grid_*)
+# ============================================================================
+# A grid is one country's Grid Transfer Stations in one market area: France's
+# and French Algeria's are separate grids although they share a market. Once a
+# month (te_grid_monthly_pulse, power_grid_on_actions.txt) each grid shares its
+# Electricity so that every member state ends up with the same ratio of supply
+# to demand: states with power to spare upload it as Grid Power, short states
+# download it. The flows of a grid sum to zero, so no Grid Power leaves the
+# grid it was uploaded in, and Grid Power's market price stays near its base.
+#
+# The arithmetic is in power_grid_values.txt. State variables, on a station's
+# state:
+#   te_grid_local_production / _consumption  Electricity without the station
+#   te_grid_flow     this month's flow, + upload / - download (damped)
+#   te_grid_command  the quantity asked of the station's method (0 idle)
+#   te_grid_factor   share of the order the station moved last time measured
+#   te_grid_pending  marks a station not yet balanced this pulse
+# Country variables te_grid_region_production / _consumption hold the grid
+# being balanced's sums for te_grid_target_value, and are cleared afterwards.
+#
+# The flow modifiers are applied on the building with local-variable
+# multipliers: a `multiplier = var:` or script value there would resolve
+# against ROOT, the country (scripting_best_practices.md, #500).
+# ============================================================================
+
+# Country scope, from te_grid_monthly_pulse.
+te_grid_monthly_update_effect = {
+	te_grid_conservation_selfcheck_effect = yes
+
+	# A state whose station is gone keeps no figures.
+	every_scope_state = {
+		limit = {
+			NOT = { has_building = building_grid_transfer_station }
+			has_variable = te_grid_flow
+		}
+		te_grid_clear_state_effect = yes
+	}
+
+	# Stations that can take part wait to be balanced; the rest go idle.
+	every_scope_state = {
+		limit = { has_building = building_grid_transfer_station }
+		if = {
+			limit = { te_grid_station_online = yes }
+			set_variable = te_grid_pending
+		}
+		else = {
+			te_grid_idle_station_effect = yes
+		}
+	}
+
+	# One grid at a time, seeded from any waiting station. Each pass balances
+	# the seed at least, so the loop ends.
+	while = {
+		limit = {
+			any_scope_state = { has_variable = te_grid_pending }
+		}
+		random_scope_state = {
+			limit = { has_variable = te_grid_pending }
+			save_scope_as = te_grid_seed
+		}
+		te_grid_balance_region_effect = yes
+	}
+
+	if = {
+		limit = { has_variable = te_grid_region_production }
+		remove_variable = te_grid_region_production
+	}
+	if = {
+		limit = { has_variable = te_grid_region_consumption }
+		remove_variable = te_grid_region_consumption
+	}
+}
+
+# Country scope. Balances the grid of scope:te_grid_seed: first each member's
+# Electricity without its station and the grid's sums, then each member's flow.
+te_grid_balance_region_effect = {
+	set_local_variable = { name = te_grid_sum_production value = 0 }
+	set_local_variable = { name = te_grid_sum_consumption value = 0 }
+	every_scope_state = {
+		limit = { te_grid_in_seed_region = yes }
+		set_variable = { name = te_grid_local_production value = te_grid_local_production_value }
+		set_variable = { name = te_grid_local_consumption value = te_grid_local_consumption_value }
+		change_local_variable = { name = te_grid_sum_production add = var:te_grid_local_production }
+		change_local_variable = { name = te_grid_sum_consumption add = var:te_grid_local_consumption }
+	}
+	set_variable = { name = te_grid_region_production value = local_var:te_grid_sum_production }
+	set_variable = { name = te_grid_region_consumption value = local_var:te_grid_sum_consumption }
+
+	every_scope_state = {
+		limit = { te_grid_in_seed_region = yes }
+		remove_variable = te_grid_pending
+		te_grid_set_station_flow_effect = yes
+	}
+}
+
+# State scope, a station of the grid being balanced. The factor is measured
+# from last month's flow and order before either is overwritten.
+te_grid_set_station_flow_effect = {
+	set_variable = { name = te_grid_factor value = te_grid_station_factor_value }
+	set_variable = { name = te_grid_flow value = te_grid_flow_value }
+	set_variable = { name = te_grid_command value = te_grid_command_value }
+	# Under a unit a week isn't worth moving.
+	if = {
+		limit = { var:te_grid_command < 1 }
+		set_variable = { name = te_grid_command value = 0 }
+	}
+	set_local_variable = { name = te_grid_upload_mult value = te_grid_upload_mult_value }
+	set_local_variable = { name = te_grid_download_mult value = te_grid_download_mult_value }
+	random_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		te_grid_apply_station_modifiers_effect = yes
+	}
+}
+
+# State scope. A station that can't take part this month moves nothing. Its
+# factor is kept for when it comes back.
+te_grid_idle_station_effect = {
+	set_variable = { name = te_grid_flow value = 0 }
+	set_variable = { name = te_grid_command value = 0 }
+	set_local_variable = { name = te_grid_upload_mult value = -1 }
+	set_local_variable = { name = te_grid_download_mult value = -1 }
+	random_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		te_grid_apply_station_modifiers_effect = yes
+	}
+}
+
+# Building scope, a Grid Transfer Station. Reads local_var:te_grid_upload_mult
+# and local_var:te_grid_download_mult. A same-name add_modifier stacks, so the
+# old copies go first.
+te_grid_apply_station_modifiers_effect = {
+	if = {
+		limit = { has_modifier = modifier_grid_station_upload }
+		remove_modifier = modifier_grid_station_upload
+	}
+	if = {
+		limit = { has_modifier = modifier_grid_station_download }
+		remove_modifier = modifier_grid_station_download
+	}
+	add_modifier = {
+		name = modifier_grid_station_upload
+		multiplier = local_var:te_grid_upload_mult
+	}
+	add_modifier = {
+		name = modifier_grid_station_download
+		multiplier = local_var:te_grid_download_mult
+	}
+}
+
+# State scope, a state that no longer has a station.
+te_grid_clear_state_effect = {
+	if = {
+		limit = { has_variable = te_grid_flow }
+		remove_variable = te_grid_flow
+	}
+	if = {
+		limit = { has_variable = te_grid_command }
+		remove_variable = te_grid_command
+	}
+	if = {
+		limit = { has_variable = te_grid_factor }
+		remove_variable = te_grid_factor
+	}
+	if = {
+		limit = { has_variable = te_grid_local_production }
+		remove_variable = te_grid_local_production
+	}
+	if = {
+		limit = { has_variable = te_grid_local_consumption }
+		remove_variable = te_grid_local_consumption
+	}
+}
+
+# Country scope, before the balancing. TE_SELF_CHECK grid_conservation, once a
+# game: the first time a country has a station uploading and another
+# downloading at least 100 a week each, compare what all its stations moved last
+# week. The balancing sets uploads equal to downloads, and corrects each order
+# for its station's staffing, so they should agree.
+#   OK      the two within 10% of each other.
+#   BROKEN  further apart: the staffing correction (te_grid_station_factor_value)
+#           does not hold, or something else makes or buys Grid Power.
+#   BROKEN grid_readback  both read 0: sg:grid_power reports nothing for a
+#           station's state, and the balancing has no measure of its own flows.
+# Fallbacks and the play-test rows: docs/testing/power-grid-playtest.md.
+te_grid_conservation_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_conservation_checked }
+			any_scope_state = {
+				has_variable = te_grid_flow
+				var:te_grid_flow > 0
+				has_variable = te_grid_command
+				var:te_grid_command >= 100
+			}
+			any_scope_state = {
+				has_variable = te_grid_flow
+				var:te_grid_flow < 0
+				has_variable = te_grid_command
+				var:te_grid_command >= 100
+			}
+		}
+		set_global_variable = te_grid_conservation_checked
+		set_global_variable = { name = te_grid_chk_uploaded value = te_grid_country_uploaded }
+		set_global_variable = { name = te_grid_chk_downloaded value = te_grid_country_downloaded }
+		set_global_variable = { name = te_grid_chk_stations value = te_grid_country_stations }
+		if = {
+			limit = {
+				global_var:te_grid_chk_uploaded <= 0
+				global_var:te_grid_chk_downloaded <= 0
+			}
+			debug_log = "TE_SELF_CHECK BROKEN grid_readback (uploaded=0 downloaded=0 across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0] while two were ordered to move 100 or more: sg:grid_power reports nothing in a station's state, so the balancing cannot see its own flows; see docs/testing/power-grid-playtest.md)"
+		}
+		else_if = {
+			limit = { te_grid_chk_imbalance_g <= 0.1 }
+			debug_log = "TE_SELF_CHECK OK grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0]: a country's grids upload what they download)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0], more than 10% apart: the staffing correction does not hold or something else trades Grid Power; see docs/testing/power-grid-playtest.md)"
+		}
+	}
+}

@@ -1,0 +1,73 @@
+﻿# ============================================================================
+# Power Grid: the Grid Transfer Station
+# ============================================================================
+# One station per state. It turns the state's spare Electricity into Grid
+# Power for the market, or Grid Power from the market into Electricity where
+# the state is short. Its method carries a 1-unit input and output of both
+# goods; te_grid_monthly_update_effect (power_grid_effects.txt) picks the
+# direction every month and scales that side with the upload or download
+# modifier (power_grid_modifiers.txt), the Strategic Reserve Hub's pattern.
+#
+# Private infrastructure that always runs subsidized
+# (country_building_grid_transfer_station_require_subsidies_bool in
+# base_values): it buys and sells both goods at market prices, so no script
+# books its trade, and the government covers whatever its wages cost.
+# ============================================================================
+
+building_grid_transfer_station = {
+	building_group = bg_private_infrastructure
+	icon = "gfx/interface/icons/building_icons/power_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	# One level per state (state_building_grid_transfer_station_max_level_add
+	# in base_values). bg_private_infrastructure counts levels per state
+	# region, which would let only one owner of a split region have a station.
+	has_max_level = yes
+	ignore_stateregion_max_level = yes
+
+	unlocking_technologies = {
+		electrical_capacitors
+	}
+
+	production_method_groups = {
+		pmg_grid_transfer_station
+		pmg_maintenance_heavy
+	}
+
+	required_construction = construction_cost_medium
+
+	# A grid grows from one station. The first station a country builds in a
+	# market area may go in any of its states there; every later one in that
+	# market area must border a state of the same country that has one. A grid
+	# is the country's stations in one market area (te_grid_monthly_update_effect),
+	# so France and French Algeria run separate grids.
+	possible = {
+		custom_tooltip = {
+			text = te_grid_station_adjacent_tt
+			OR = {
+				# The station's own state, so the guard never reads against it.
+				has_building = building_grid_transfer_station
+				any_neighbouring_state = {
+					owner = ROOT.owner
+					has_building = building_grid_transfer_station
+				}
+				NOT = {
+					owner = {
+						any_scope_state = {
+							has_building = building_grid_transfer_station
+							is_in_same_market_area = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# Evaluated in state scope. A station pays off where the state's Electricity
+	# is dear or cheap against its base price, so the AI builds where power is
+	# short or spare (te_grid_station_ai_value).
+	ai_value = {
+		value = te_grid_station_ai_value
+	}
+}

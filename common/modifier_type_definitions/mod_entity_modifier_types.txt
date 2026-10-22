@@ -105,6 +105,19 @@ goods_output_launch_capacity_add = {
 	percent = no
 }
 
+# Grid Power is a mod good, so vanilla registers none of its goods modifiers. The
+# Grid Transfer Station's method carries the _add pair, and its upload and
+# download modifiers (power_grid_modifiers.txt) scale them with the _mult pair.
+goods_input_grid_power_add = {
+	color = bad
+	percent = no
+}
+
+goods_output_grid_power_add = {
+	color = good
+	percent = no
+}
+
 goods_input_robotics_add = {
 	color = bad
 	percent = no
@@ -590,6 +603,25 @@ goods_input_launch_capacity_mult = {
 
 	game_data = {
 		ai_value = -250
+	}
+}
+
+goods_input_grid_power_mult = {
+	decimals = 0
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = -250
+	}
+}
+
+goods_output_grid_power_mult = {
+	color = good
+	percent = yes
+
+	game_data = {
+		ai_value = 250
 	}
 }
 
@@ -1574,6 +1606,22 @@ state_building_generic_logistics_hub_max_level_add = {
 state_building_strategic_reserve_hub_max_level_add = {
 	color = good
 	percent = no
+}
+
+# One Grid Transfer Station per state, from base_values.
+state_building_grid_transfer_station_max_level_add = {
+	color = good
+	percent = no
+}
+
+# Grid Transfer Stations always run subsidized, from base_values: the
+# pattern Interventionism uses for highways and airports.
+country_building_grid_transfer_station_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
 }
 
 state_building_resettlement_colony_max_level_add = {

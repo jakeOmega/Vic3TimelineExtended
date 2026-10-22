@@ -3,6 +3,8 @@
 	country_bubble_pressure_monthly_add = -1
 	state_building_state_youth_centers_max_level_add = 1
 	state_building_strategic_reserve_hub_max_level_add = 1
+	state_building_grid_transfer_station_max_level_add = 1
+	country_building_grid_transfer_station_require_subsidies_bool = yes
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)

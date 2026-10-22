@@ -1,0 +1,25 @@
+﻿# ============================================================================
+# Power Grid Production Methods
+# ============================================================================
+# The base 1-unit input and output of both goods is LOAD-BEARING, as in
+# strategic_reserve_pms.txt: goods_input_*_add and goods_output_*_add only move
+# goods from a method's modifier blocks, not from a runtime add_modifier, so the
+# station's upload and download modifiers are _mult modifiers that scale these
+# lines. Idle, both modifiers sit at -1 and every line is zero.
+# ============================================================================
+
+pm_grid_transfer_base = {
+	texture = "gfx/interface/icons/production_method_icons/power_plant.dds"
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electricity_add = 1
+			goods_output_electricity_add = 1
+			goods_input_grid_power_add = 1
+			goods_output_grid_power_add = 1
+		}
+		level_scaled = {
+			building_employment_engineers_add = 500
+			building_employment_clerks_add = 500
+		}
+	}
+}
