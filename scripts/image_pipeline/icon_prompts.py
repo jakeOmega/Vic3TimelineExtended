@@ -763,7 +763,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "excavation_permit": {"subject": "a rolled parchment scroll sealed with a big red wax seal, a small iron trowel and a soft brush lying across it", "seed": 0},
         # Power grids (#1109), on Transit Rights' crates until now.
         # Not household plugs (round 1), nor a spark over a brass fitting, which read as a gas flame (round 2).
-        "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 3},
+        "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 2},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
