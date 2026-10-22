@@ -3,7 +3,7 @@
 # ============================================================================
 
 pmg_grid_transfer_station = {
-	texture = "gfx/interface/icons/goods_icons/electricity.dds"
+	texture = "gfx/interface/icons/goods_icons/grid_power.dds"
 	production_methods = {
 		pm_grid_transfer_base
 	}

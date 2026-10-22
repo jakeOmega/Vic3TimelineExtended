@@ -1351,3 +1351,18 @@ on a modifier with a multiplier, and the bubble line rests on the banking cycle'
 11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
     reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
     stacks (`demographics_harness.py effects SAVE`; an ordinary save works).
+
+## The Leading Cause of Death's icons and the Famine pip (2026-10-22)
+
+The Leading Cause of Death cell shows a headstone until deaths by cause are first counted, then the leading cause's own
+icon, one for each of the pie's seven causes (`demographics_gui_icons.md`). The History charts' Famine pip is an amber
+bowl in place of vanilla's goods-shortage box.
+
+1. **Before the first count.** A new game, on the country tab and a state's subtab: the cell shows the headstone and
+   reads Next count, and `error.log` and `debug.log` have no line about `te_dg_dc_lead` (the hidden cause icons read
+   it; their container's visible waits for the count).
+2. **The cause's icon.** After the first count, on both: the icon is the cause the reading names (Infection beside the
+   virus, and so on). A state whose leading cause differs from its country's shows its own.
+3. **No overlap.** At most one icon in the cell at once, never the headstone under a cause's icon.
+4. **The Famine pip.** A country that had a famine year: its pip over the year's bars and in the key reads as an amber
+   bowl at 10 px, distinct from the War and event pips.

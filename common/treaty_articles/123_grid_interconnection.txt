@@ -14,7 +14,7 @@
 # Power is priced in its market and isn't traded between markets.
 # =================================================================
 grid_interconnection_agreement = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/transit_rights_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/grid_interconnection_agreement.dds"
 	kind = mutual
 	cost = 50
 

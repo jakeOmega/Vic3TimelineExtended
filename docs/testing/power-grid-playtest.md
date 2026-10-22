@@ -68,3 +68,11 @@ The balancing now runs once a month for every grid in the world, from a hidden c
 | **Interconnector switches at once.** In the console, switch an AI-like station to the interconnector (or watch the AI do it) and read the tile on the 1st after. | The grids join at the first run after the switch. | A month's delay: `activate_production_method` takes effect after the run reads it; harmless. |
 | **Split state region.** Two countries owning parts of one state region, both with stations, sign the agreement. | Their stations join (and the article can be signed on that border alone). | Not joined and not signable: `any_neighbouring_state` counts neighbours of the state region, not states within it; treat a shared region as a border in `te_grid_land_link` and the article's `possible`. |
 | **Hub name.** Open a state with a station on a grid of two or more, then one on a different grid. | A Hub row naming the grid's largest producer, the same name on every state of one grid and a different one on another grid. A long name (Île-de-France) fits or wraps without clipping. | Blank or a raw key: `State.MakeScope.Var('te_grid_hub').GetState.GetName` doesn't render a state reference stored on a state. Remove the row, or store the hub's name another way. A clipped name: move the hub to the tile's hover. |
+
+## Icons (2026-10-22)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Station.** The build menu, a station's building panel, the state's Power Grid tile and the Power Grid concept's tooltip. | The substation picture, not the Power Plants' one, in all four. | A blank or magenta square: the DDS isn't deployed (`gfx/interface/icons/building_icons/building_grid_transfer_station.dds`). |
+| **Grid Power.** The market panel's goods list, a station's goods, and a tooltip that names the good (`@grid_power!`). | The pylon with a lightning bolt, not Electricity's coil, in each, the text icon at the size of its neighbours'. | The text icon only: `gui/zzz_extra_goods_texticons.gui`'s `grid_power` entry. |
+| **Agreement.** A treaty draft offering the Grid Interconnection Agreement. | A red and a blue cable joined under a lightning bolt, not Transit Rights' crates. | — |

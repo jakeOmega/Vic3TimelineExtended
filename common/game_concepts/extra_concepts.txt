@@ -178,7 +178,7 @@ concept_seabed_licence = {
 }
 # Grid Transfer Stations sharing Electricity (power_grid_effects.txt).
 concept_power_grid = {
-	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+	texture = "gfx/interface/icons/building_icons/building_grid_transfer_station.dds"
 }
 # An unused share of a basin (seabed claims spec § 1).
 concept_seabed_claim = {

@@ -167,7 +167,7 @@ magnetic_drive_ships = {
 # monthly balancing keeps each grid's uploads equal to its downloads, and
 # tradeable = no keeps it off trade routes between markets.
 grid_power = {
-	texture = "gfx/interface/icons/goods_icons/electricity.dds"
+	texture = "gfx/interface/icons/goods_icons/grid_power.dds"
 	cost = 30
 	category = industrial
 	tradeable = no

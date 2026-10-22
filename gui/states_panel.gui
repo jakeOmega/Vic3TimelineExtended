@@ -2501,7 +2501,7 @@ types state_panel_types
 				tooltip = "TE_STATE_GRID_TT"
 
 				blockoverride "texture" {
-					texture = "gfx/interface/icons/building_icons/power_plant.dds"
+					texture = "gfx/interface/icons/building_icons/building_grid_transfer_station.dds"
 				}
 
 				blockoverride "name" {

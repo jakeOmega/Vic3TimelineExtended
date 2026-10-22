@@ -98,7 +98,11 @@ defaults (September 2026, ~350 icons):
 - Some objects read as something else at icon size: a laser turret as a
   camera (make it fire at a target), a landing craft as a ferry, a flight
   simulator pod as a lunar lander, a parachute as a hot-air balloon, a
-  helmet seen from the front as a face.
+  helmet seen from the front as a face, a blue spark over a brass pipe
+  fitting as a gas flame (draw a zigzag lightning bolt), a knobbly green
+  germ as a cabbage (give a virus spaced stalks with red tips).
+- A lattice pylon or tower is all thin lines and vanishes at a goods text
+  icon's 25 px: give it thick girders and something solid in front.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -164,6 +168,8 @@ _GUI_SYSTEMS = {
     "nuclear": "nuclear_icons",
     "colonial": "colonial_empire_icons",
     "space": "space_race_icons",
+    # The Demographics tab and state subtab (docs/systems/demographics_gui_icons.md).
+    "demog": "demographics_icons",
 }
 _GUI_FILES = {
     "banking": "gui/journal_entry_widgets/banking_dashboard_widget.gui",
@@ -175,6 +181,7 @@ _GUI_FILES = {
     "nuclear": "gui/journal_entry_widgets/nuclear_overview_widget.gui",
     "colonial": "gui/journal_entry_widgets/colonial_empire_widget.gui",
     "space": "gui/journal_entry_widgets/space_race_widget.gui",
+    "demog": "gui/te_demographics_widgets.gui",
 }
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
@@ -494,6 +501,15 @@ CATEGORIES = {
     **{sys_: dict(folder=folder, size=150, mode="cutout", fill=0.92, grade_strength=0.5,
                   grade_folder="alert_icons", neighbours="alert_icons", gui=(_GUI_FILES[sys_],), style=UN_STYLE)
        for sys_, folder in _GUI_SYSTEMS.items()},
+    # The Demographics History charts' pips (10 px over a census year's bars):
+    # at that size only a flat one-colour shape reads, so a silhouette is
+    # embossed in one colour with the dark outline, as the mobilization
+    # options are. Written at 120 px, the size of the generic_icons they replace.
+    "demog_pip": dict(
+        folder="demographics_icons", size=120, mode="emboss", fill=0.9,
+        # Amber: the emboss's lighting has a median of about 0.6, so the colours are set above the target.
+        color=(372, 268, 74), color_bottom=(338, 206, 50),
+        neighbours="generic_icons", gui=("gui/te_demographics_widgets.gui",), style=SILHOUETTE),
 }
 
 
@@ -749,6 +765,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "return_cultural_property": {"subject": "a small white marble bust packed in an open wooden crate full of straw, a green ribbon tied in a bow around the crate", "seed": 3},
         "archaeological_concession": {"subject": "an iron spade stuck upright in a small mound of brown earth beside a terracotta amphora split cleanly into two halves", "seed": 3},
         "excavation_permit": {"subject": "a rolled parchment scroll sealed with a big red wax seal, a small iron trowel and a soft brush lying across it", "seed": 0},
+        # Power grids (#1109), on Transit Rights' crates until now.
+        # Not household plugs (round 1), nor a spark over a brass fitting, which read as a gas flame (round 2).
+        "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 2},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -974,6 +993,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_tourism_industry": {"subject": "a seaside resort: a tall white hotel with balconies above a sandy beach lined with rows of colourful parasols, palm trees and a promenade with cafes, a turquoise sea with small sailing boats", "seed": 2},  # fallback: restyle tourism.dds
         "building_network_infrastructure": {"subject": "a telecommunications hub: a tall red-and-white steel radio mast and several big white satellite dishes beside a low grey exchange building, telephone poles and cable trenches running away across green countryside toward a distant city", "seed": 0},  # fallback: restyle network.dds
         "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: a sleek dark grey factory hall with a glowing orange furnace seen through its open doors, stacks of black carbon-fibre sheets and dark composite panels in its yard, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle advanced_materials.dds
+        # Power grids (#1107), on the power plant's icon until now. A substation, not a plant:
+        # FLUX puts chimneys on anything called a plant.
+        "building_grid_transfer_station": {"subject": "an electrical substation yard: rows of big grey transformers and steel lattice gantries strung with high-voltage lines behind a wire fence, the lines leaving on tall steel pylons across green fields, loosely hand-painted with visible brush strokes", "seed": 0},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -1631,6 +1653,12 @@ ICONS: dict[str, dict[str, dict]] = {
         # Reroll: "a dried poppy seed pod" drew a brown burr.
         "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": 3,
                   "now": f"{_GI}/goods_icons/opium.dds"},
+        # Grid Power (#1107), on Electricity's icon until now; common/goods, its text icon and the
+        # station's method group point here by hand. A pylon, not Electricity's coil. Rounds before:
+        # a lattice pylon (too thin at 25 px, twice), an insulator stack (a copper spool), a
+        # transformer (a box). s3 is the lattice-pylon version of this one.
+        "grid_power": {"subject": "a chunky grey steel transmission pylon with thick legs and fat blue glass insulators on its arms, a big bright blue zigzag lightning bolt in front of it", "seed": 1,
+                       "now": f"{_GI}/goods_icons/electricity.dds"},
     },
     # Batch 5: the two renamed prestige goods of the goods above, each a finer
     # version of its good's idea (bulk carboy -> small reagent vials).
@@ -2040,6 +2068,38 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_dwarf": {"subject": "a small round tan-and-rust-brown dwarf planet with a pale heart-shaped patch and "
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+    },
+    # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
+    # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.
+    # The keys follow the pie's textures (pie_<cause>.dds).
+    "demog": {
+        # s0 lost its pale face in the cut-out.
+        "ov_leading_cause": {"subject": "a rounded grey granite headstone with a perfectly plain smooth face, a small bunch of red flowers at its foot on a patch of green grass", "seed": 2,
+                             "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # A fat green germ covered in knobs read as a cabbage or a ball of beads.
+        "cause_infection": {"subject": "a round dark green virus: a smooth ball with short thick stalks ending in round red knobs sticking out evenly all over it", "seed": 1,
+                            "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # A brown medicine bottle with pills read as medicine in general.
+        "cause_chronic": {"subject": "a plump dark red anatomical human heart with thick stubby red and blue vessels on top", "seed": 2,
+                          "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # s0 and s3 lettered a corner of the sign. A crutch crossed with a bandage read as a gallows.
+        "cause_external": {"subject": "a yellow triangular warning sign with a red border and a thick black exclamation mark in its middle", "seed": 2,
+                           "now": f"{_GI}/generic_icons/red_cross.dds"},
+        "cause_work": {"subject": "an empty battered yellow miner's hard hat with a small brass lamp on its front", "seed": 2,
+                       "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # Not the Fertility cell's cradle. A stork carrying a bundle (s0) was thin at 44 px.
+        "cause_maternal": {"subject": "a pair of small pink knitted baby booties tied with ribbon", "seed": 0,
+                           "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # Nuclear strikes and crushed uprisings. s3 signed its base.
+        "cause_killed": {"subject": "a small grey and orange mushroom cloud rising from a burst of flame", "seed": 1,
+                         "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # The war dead, not war: two crossed sabres were thin at 44 px.
+        "cause_war": {"subject": "an empty dented steel army helmet resting on the butt of a rifle stuck upright in a mound of earth", "seed": 1,
+                      "now": f"{_GI}/generic_icons/red_cross.dds"},
+    },
+    "demog_pip": {
+        "pip_famine": {"subject": "an empty round bowl seen from the side with a spoon resting across its rim", "seed": 2,
+                       "now": f"{_GI}/generic_icons/goods_shortage.dds"},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
