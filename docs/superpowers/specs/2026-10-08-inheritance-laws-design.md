@@ -277,6 +277,10 @@ column:
 | communist (was communal) | communist, communist and proletarian movements | SD | D | N | SD | SA | D |
 | anarchist (new) | anarchist | SD | D | N | SD | D | SA |
 
+Added 2026-10-22 (the reform movements, after a 2019 observer save held 77 countries on Primogeniture): liberal,
+liberal-republican and national-liberal movements SD N N A D D; radical SD N A D N D; socialist SD N A D A N; land
+reformer SD A A N D N. Until then only the traditionalist movements, which defend Primogeniture, held a stance.
+
 The hand-written blocks in `common/ideologies/extra_ideologies.txt` name the two new laws too (the
 `ideology_lawgroup_audit` rule). Islamic Inheritance: P D, C A, F A, T D (testation is capped at a third), S D, U D.
 Where a custom-religion economy approves Usage Rights for its state-ownership side (socialist, imperial cult,

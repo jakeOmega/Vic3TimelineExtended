@@ -316,7 +316,9 @@ pays most where many pops are Second-Rate Citizens or face Open Prejudice.
 
 The Inheritance group decides who inherits an estate. Interest groups judge
 the inheritance law in force for as long as it stands, so a group that dislikes
-yours loses approval the whole time.
+yours loses approval the whole time. Every reform movement (liberal, radical,
+socialist and land reform) opposes Primogeniture & Entail and grows more radical
+while it stands, and the traditionalist movements defend it.
 
 | Law | Available | Wealth Concentration target | Also |
 |---|---|---|---|
