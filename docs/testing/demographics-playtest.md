@@ -1361,7 +1361,7 @@ bowl in place of vanilla's goods-shortage box.
 1. **Before the first count.** A new game, on the country tab and a state's subtab: the cell shows the headstone and
    reads Next count.
 2. **The cause's icon.** After the first count, on both: the icon is the cause the reading names (Infection beside the
-   germ, and so on). A state whose leading cause differs from its country's shows its own.
+   virus, and so on). A state whose leading cause differs from its country's shows its own.
 3. **No overlap.** At most one icon in the cell at once, never the headstone under a cause's icon.
 4. **The Famine pip.** A country that had a famine year: its pip over the year's bars and in the key reads as an amber
    bowl at 10 px, distinct from the War and event pips.

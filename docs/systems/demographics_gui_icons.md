@@ -31,7 +31,7 @@ Once deaths by cause are counted (the cell's ready scripted GUI, `te_demog_dc_re
 
 | Code | Cause | Art | File |
 |---|---|---|---|
-| 1 | Infection, Hunger | a green germ | `gfx/interface/icons/demographics_icons/cause_infection.dds` |
+| 1 | Infection, Hunger | a green virus with red knobs | `gfx/interface/icons/demographics_icons/cause_infection.dds` |
 | 2 | Chronic Illness | a red anatomical heart | `gfx/interface/icons/demographics_icons/cause_chronic.dds` |
 | 3 | Accidents, Violence | a yellow warning triangle | `gfx/interface/icons/demographics_icons/cause_external.dds` |
 | 4 | Work | a miner's yellow hard hat with its lamp | `gfx/interface/icons/demographics_icons/cause_work.dds` |

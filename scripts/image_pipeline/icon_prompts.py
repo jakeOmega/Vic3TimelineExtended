@@ -762,8 +762,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "archaeological_concession": {"subject": "an iron spade stuck upright in a small mound of brown earth beside a terracotta amphora split cleanly into two halves", "seed": 3},
         "excavation_permit": {"subject": "a rolled parchment scroll sealed with a big red wax seal, a small iron trowel and a soft brush lying across it", "seed": 0},
         # Power grids (#1109), on Transit Rights' crates until now.
-        "grid_interconnection_agreement_b": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted brass coupling with a bright blue electric spark", "seed": None},
-        "grid_interconnection_agreement": {"subject": "two thick black power cables joined end to end by a big plug pushed into its socket, a small bright blue electric spark at the join", "seed": None},
+        # Not household plugs (round 1), nor a spark over a brass fitting, which read as a gas flame (round 2).
+        "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 3},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -1650,13 +1650,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": 3,
                   "now": f"{_GI}/goods_icons/opium.dds"},
         # Grid Power (#1107), on Electricity's icon until now; common/goods, its text icon and the
-        # station's method group point here by hand. A pylon, not Electricity's coil.
-        "grid_power": {"subject": "a tall grey steel lattice high-voltage transmission tower with three heavy black cables on blue glass insulators, a small bright blue electric spark at its top", "seed": None,
+        # station's method group point here by hand. A pylon, not Electricity's coil. Rounds before:
+        # a lattice pylon (too thin at 25 px, twice), an insulator stack (a copper spool), a
+        # transformer (a box). s3 is the lattice-pylon version of this one.
+        "grid_power": {"subject": "a chunky grey steel transmission pylon with thick legs and fat blue glass insulators on its arms, a big bright blue zigzag lightning bolt in front of it", "seed": 1,
                        "now": f"{_GI}/goods_icons/electricity.dds"},
-        "grid_power_toy": {"subject": "a short squat steel transmission pylon like a chunky toy model with thick grey girders, three fat blue glass insulators hanging from its arms holding thick black cables, a bright blue electric spark at its top", "seed": None,
-                           "now": f"{_GI}/goods_icons/electricity.dds"},
-        "grid_power_insulator": {"subject": "a fat stack of ribbed brown ceramic high-voltage insulators on a steel bracket holding a thick black cable, bright blue electric sparks crackling along the cable", "seed": None,
-                                 "now": f"{_GI}/goods_icons/electricity.dds"},
     },
     # Batch 5: the two renamed prestige goods of the goods above, each a finer
     # version of its good's idea (bulk carboy -> small reagent vials).
@@ -2074,10 +2072,9 @@ ICONS: dict[str, dict[str, dict]] = {
         # s0 lost its pale face in the cut-out.
         "ov_leading_cause": {"subject": "a rounded grey granite headstone with a perfectly plain smooth face, a small bunch of red flowers at its foot on a patch of green grass", "seed": 2,
                              "now": f"{_GI}/generic_icons/red_cross.dds"},
-        "cause_infection": {"subject": "a fat round green germ, a bumpy ball covered in short thick rounded knobs", "seed": None,
+        # A fat green germ covered in knobs read as a cabbage or a ball of beads.
+        "cause_infection": {"subject": "a round dark green virus: a smooth ball with short thick stalks ending in round red knobs sticking out evenly all over it", "seed": 1,
                             "now": f"{_GI}/generic_icons/red_cross.dds"},
-        "cause_infection_virus": {"subject": "a round dark green virus: a smooth ball with short thick stalks ending in round red knobs sticking out evenly all over it", "seed": None,
-                                  "now": f"{_GI}/generic_icons/red_cross.dds"},
         # A brown medicine bottle with pills read as medicine in general.
         "cause_chronic": {"subject": "a plump dark red anatomical human heart with thick stubby red and blue vessels on top", "seed": 2,
                           "now": f"{_GI}/generic_icons/red_cross.dds"},
