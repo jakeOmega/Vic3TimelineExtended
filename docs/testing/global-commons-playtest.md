@@ -36,7 +36,7 @@ what only the game can show.
    Launch and Chemical Tugs, the groups' defaults. Watch for a base left with no method in a new group.
 6. Deep-Sea Mine support vessels: a mine on any extraction method shows a Support Vessels group on Motor Ship
    Tenders, buying 40 Motor Ships a level a week at full staff and base throughput and no ships through its
-   extraction method. Research Modern Material Science: Magnetic Drive Tenders appear, and switching buys 25 Magnetic
+   extraction method. Research Modern Material Science: Magnetic Drive Tenders appear, and switching buys 20 Magnetic
    Drive Ships instead and adds the Production Method Retooling modifier. A save from before the group starts its
    mines on Motor Ship Tenders, the default; watch for a mine left with no method in it.
 7. AI: in an observer run past 2100, AI Deep-Sea Mines move to Magnetic Drive Tenders within a few years of Modern

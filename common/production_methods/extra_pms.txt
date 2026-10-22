@@ -16440,10 +16440,10 @@ pm_automated_ocean_mine_uncapped = {
 # them need (pm_advanced_metamaterials_shipbuilding, pm_advanced_company_shipbuilding)
 # and the ports', wharves' and whaling stations' magnetic-drive methods unlock with. It
 # is on a separate branch from abyssal_plain_mining, so the mine starts on Motor Ships.
-# Magnetic Drive Tenders need 25 hulls against 40, so they cost less at base prices
-# (3,250 against 3,600 a level a week). Switching retools the mine: 1,300 construction
+# Magnetic Drive Tenders need 20 hulls against 40, so they cost less at base prices
+# (2,600 against 3,600 a level a week). Switching retools the mine: 1,300 construction
 # for each 1 a week of maintenance (extra_defines.txt), so 260 a level on
-# pm_maintenance_intensive's 0.2, about 14 years of the saving at base prices. ai_value
+# pm_maintenance_intensive's 0.2, about 5 years of the saving at base prices. ai_value
 # ranks the two for the AI (the group's comment in extra_pm_groups.txt).
 pm_motor_ship_tenders_building_ocean_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
@@ -16477,11 +16477,11 @@ pm_magnetic_drive_tenders_building_ocean_mine = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_magnetic_drive_ships_add = 25            # Price:  130, Total cost:  3250.0 (100.00%)
+			goods_input_magnetic_drive_ships_add = 20            # Price:  130, Total cost:  2600.0 (100.00%)
 			# Output goods
-			# Total input cost: 3250.0
+			# Total input cost: 2600.0
 			# Total output cost: 0
-			# Profit: -3250.0
+			# Profit: -2600.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 0
@@ -19528,7 +19528,7 @@ pm_maintenance = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.1                # Price:  500, Total cost: 50.0
+			goods_input_construction_add = 0.1                # Price: 1000, Total cost: 100.0
 		}
 	}
 }
@@ -19543,7 +19543,7 @@ pm_maintenance_light = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.05               # Price:  500, Total cost: 25.0
+			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
 		}
 	}
 }
@@ -19553,7 +19553,7 @@ pm_maintenance_heavy = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.15               # Price:  500, Total cost: 75.0
+			goods_input_construction_add = 0.15               # Price: 1000, Total cost: 150.0
 		}
 	}
 }
@@ -19563,7 +19563,7 @@ pm_maintenance_intensive = {
 	is_hidden_when_unavailable = yes
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.2                # Price:  500, Total cost: 100.0
+			goods_input_construction_add = 0.2                # Price: 1000, Total cost: 200.0
 		}
 	}
 }
@@ -19616,7 +19616,7 @@ pm_maintenance_mechanized_mine = {
 
 	building_modifiers = {
 		level_scaled = {
-			goods_input_construction_add = 0.05               # Price:  500, Total cost: 25.0
+			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
 		}
 	}
 }

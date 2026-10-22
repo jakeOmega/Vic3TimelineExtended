@@ -263,9 +263,9 @@ Mining) can be built in any coastal state, and each level needs a seabed licence
 three quarters of its throughput while its state is blockaded. Its ships come
 from the Support Vessels group: Motor Ship Tenders run it on Motor Ships, and
 Magnetic Drive Tenders, from Modern Material Science, run it on fewer Magnetic
-Drive Ships for £350 a level less each week at base prices. Switching an
+Drive Ships for £1,000 a level less each week at base prices. Switching an
 existing mine costs about £260,000 a level in
-[retooling](03-economy.md#construction-maintenance-and-retooling), around 14
+[retooling](03-economy.md#construction-maintenance-and-retooling), around 5
 years of that saving, so the switch pays back sooner while Motor Ships are
 expensive. The
 Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
