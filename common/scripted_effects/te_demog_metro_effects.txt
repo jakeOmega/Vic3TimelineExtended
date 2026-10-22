@@ -4,7 +4,7 @@
 # figures); modifiers: te_demog_metro_modifiers.txt; Python twin: scripts/analysis/demographics_metro.py.
 #
 # The share is computed and shown wherever the census runs (Full or Display only: te_demog_cohorts_run); its effects,
-# the two modifiers and the census's urban fertility term (te_demog_mt_fertility_scale, te_demog_values.txt), act
+# the three modifiers and the census's urban fertility term (te_demog_mt_fertility_scale, te_demog_values.txt), act
 # under Full only (te_demog_effects_run: the release precondition, nothing changes outside Full).
 #
 # Variables (state):
@@ -15,6 +15,7 @@
 #                  the state has too few urban people, or outside the census
 #   te_dg_mt_mult  the multiplier of the state's metropolitan-share modifier (Full only; kept, since a modifier's
 #                  multiplier is read again after it is applied)
+#   te_dg_mt_crowd_mult  Metropolitan Crowding's multiplier, the 0-1 ramp (Full only; kept for the same reason)
 # ============================================================================
 
 # THIS = ROOT = a state, on its yearly pulse (te_demog_state_yearly_on_action), before te_demog_state_yearly: the share

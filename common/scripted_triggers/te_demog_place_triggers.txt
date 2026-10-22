@@ -40,9 +40,9 @@ te_demog_pc_site_still_open = {
 }
 
 # Country scope: the decision's AI rule, the same conditions for every country (spec §11.2; no is_ai). A Primate pattern
-# at half strength or more in a country of eight census states or more whose largest city Migration Crowding presses at
-# its ceiling (the congested metropolis Brasília and Abuja were built to relieve; te_demog_k_pc_ai_crowding), out of
-# default, with the money in the treasury and the authority to spare.
+# at 0.7 strength or more (42.5% primacy) in a country of eight census states or more whose largest city Migration
+# Crowding presses at its ceiling (the congested metropolis Brasília and Abuja were built to relieve;
+# te_demog_k_pc_ai_crowding), out of default, with the money in the treasury and the authority to spare.
 te_demog_pc_ai_wants = {
 	has_variable = te_dg_up_s
 	var:te_dg_up_s >= te_demog_k_pc_ai_strength
