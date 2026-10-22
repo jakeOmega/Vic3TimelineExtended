@@ -1304,7 +1304,14 @@ def flag_layout(im: Image.Image, size: tuple[int, int], cloth=(128, 172, 214)) -
 
 
 def embossed(raw: Image.Image, spec: dict, size: int) -> Image.Image:
-    """FLUX silhouette -> the PM/law pipeline's metallic emboss, at `size`."""
+    """FLUX silhouette -> the PM/law pipeline's metallic emboss, at `size`; with `outline` (px), a dark rim that wide.
+
+    The rim grows outward, so a category with one sets `fill` to leave it room."""
+    im = _embossed(raw, spec, size)
+    return outlined(im, spec["outline"], opacity=1.0) if spec.get("outline") else im
+
+
+def _embossed(raw: Image.Image, spec: dict, size: int) -> Image.Image:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from gen_pm_icons import apply_metallic_style
     lum = np.asarray(raw.convert("L").resize((size * 2, size * 2), Image.LANCZOS), dtype=np.float64) / 255

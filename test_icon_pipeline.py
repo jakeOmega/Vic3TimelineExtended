@@ -391,6 +391,25 @@ class EmbossGradientTests(unittest.TestCase):
         self.assertLess(bottom[1] / bottom[0], 0.4)  # red at the bottom
         self.assertTrue((a[..., 3] == np.asarray(self.embossed(self.raw, self.spec, 64))[..., 3]).all())
 
+    def test_outline_rims_the_shape_in_dark_and_keeps_its_middle(self):
+        plain = np.asarray(self.embossed(self.raw, self.spec, 64))
+        rim = np.asarray(self.embossed(self.raw, dict(self.spec, outline=3), 64))
+        grown = (rim[..., 3] > 200) & (plain[..., 3] < 20)
+        self.assertGreater(grown.sum(), 0)
+        self.assertLess(rim[grown][:, :3].max(), 40, "the rim is dark")
+        self.assertLessEqual(np.abs(rim[32, 32].astype(int) - plain[32, 32]).max(), 1)
+
+
+class EntrySpecTests(unittest.TestCase):
+    """An entry's own compose settings override its category's."""
+
+    def test_an_entrys_own_colours_reach_the_emboss(self):
+        import generate_icons as g
+        cat = next(c for c, s in g.CATEGORIES.items() if s["mode"] == "emboss")
+        spec = g.entry_spec(cat, {"subject": "x", "seed": None, "color": (1, 2, 3), "color_bottom": (4, 5, 6)})
+        self.assertEqual((spec["color"], spec["color_bottom"]), ((1, 2, 3), (4, 5, 6)))
+        self.assertEqual(spec["mode"], "emboss")
+
 
 @unittest.skipIf(icon_dds is None, "Pillow is not installed")
 class SpreadGradeAndRecolorTests(unittest.TestCase):
