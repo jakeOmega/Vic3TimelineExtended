@@ -428,13 +428,15 @@ def country_budgets(path):
             for v in out.values() if v.get("tag") and v.get("gdp", 0.0) > 0}
 
 
-def read_variables(path, country_vars, state_vars):
+def read_variables(path, country_vars, state_vars, raw=()):
     """(countries, states) from a plain-text save's script variables and active laws.
 
     countries: {id: {"tag": str, "laws": set, "vars": {name: value}}} for the variables named in
-    country_vars; states: {id: {"owner": country id, "vars": {...}}} for state_vars. A record's
-    nested blocks can restart at column 0 (`0={` inside a country), so records are told by brace
-    depth, not by indentation. Raises NotPlainText as read_sections does.
+    country_vars; states: {id: {"owner": country id, "vars": {...}}} for state_vars. A variable named
+    in raw keeps its identity as written, a string: a scope reference such as te_dg_primate_state
+    (`type=state`, `identity=<state id>`), which isn't fixed point. A record's nested blocks can
+    restart at column 0 (`0={` inside a country), so records are told by brace depth, not by
+    indentation. Raises NotPlainText as read_sections does.
     """
     check_plain_text(path)
     countries, states = {}, {}
@@ -477,7 +479,8 @@ def read_variables(path, country_vars, state_vars):
             elif text.startswith("identity=") and flag:
                 wanted = country_vars if section == "country_manager" else state_vars
                 if flag in wanted:
-                    (countries if section == "country_manager" else states)[rec]["vars"][flag] = fixed_point(text[9:])
+                    value = text[9:] if flag in raw else fixed_point(text[9:])
+                    (countries if section == "country_manager" else states)[rec]["vars"][flag] = value
                 flag = None
     for cid, laws in law_owner.items():
         if cid in countries:

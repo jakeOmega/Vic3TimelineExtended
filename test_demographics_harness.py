@@ -946,6 +946,108 @@ class TestWealthConcentrationReader(unittest.TestCase):
             self.assertEqual(H.main(["wc", str(bad)]), 1)
 
 
+def _variables(values):
+    """A save's variables block: a number as a fixed-point value, ("state", id) as a state reference (the form
+    a plain-text save writes, e.g. te_dg_primate_state in puerto rico_1836_01_20.v3)."""
+    out = []
+    for flag, v in values.items():
+        if isinstance(v, tuple):
+            kind, identity = v
+        else:
+            kind, identity = "value", round(v * 100000) % 2 ** 64
+        out.append(f"\t\t\t\tflag={flag}\n\t\t\t\tdata={{\n\t\t\t\t\ttype={kind}\n\t\t\t\t\tidentity={identity}\n"
+                   f"\t\t\t\t}}\n")
+    return "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(out) + "\t\t\t} }\n\t}\n"
+
+
+def _effects_save(countries, states):
+    """A plain-text save from {id: (tag, {var: value})} and {id: (owner id, {var: value})}."""
+    text = "SAV0100effects-test\nmeta_data={\n\tversion=\"1.14.5\"\n}\ncountry_manager={\n\tdatabase={\n"
+    for cid, (tag, values) in countries.items():
+        text += f"{cid}={{\n\tdefinition=\"{tag}\"\n" + (_variables(values) if values else "") + "}\n"
+    text += "\t}\n}\nstates={\n\tdatabase={\n"
+    for sid, (owner, values) in states.items():
+        text += f"{sid}={{\n\tcountry={owner}\n" + (_variables(values) if values else "") + "}\n"
+    return text + "\t}\n}\n"
+
+
+EFFECTS_COUNTRIES = {"1": ("GBR", {"te_inh_concentration": 76.3, "te_dg_primacy": 0.6, "te_dg_up_states": 3,
+                                   "te_dg_primate_state": ("state", 5)}),
+                     "2": ("SIC", {})}
+EFFECTS_STATES = {"5": ("1", {"te_dg_wc": 94, "te_dg_walk_pop": 2e6, "te_dg_gini": 0.75, "te_dg_mt": 80,
+                              "te_dg_sex_balance": 140, "te_dg_agr_share": 0.5}),
+                  "6": ("1", {"te_dg_wc": 15, "te_dg_walk_pop": 1e6, "te_dg_gini": 0.5, "te_dg_mt": 10,
+                              "te_dg_sex_balance": 75})}
+
+
+def run(argv, code=0):
+    """H.main(argv)'s printed text; it must return code."""
+    out = io.StringIO()
+    with redirect_stdout(out), redirect_stderr(io.StringIO()):
+        got = H.main(argv)
+    assert got == code, (argv, got, out.getvalue())
+    return out.getvalue()
+
+
+class TestEffects(unittest.TestCase):
+    """Phase 0's readouts (2026-10-22 effects design): each condition's strength in a save, old curve against new."""
+
+    def setUp(self):
+        self.path = Path(tempfile.mkdtemp()) / "effects.v3"
+        self.path.write_text(_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES), encoding="utf-8")
+
+    def test_raw_variables_keep_the_reference(self):
+        countries, _ = S.read_variables(self.path, ("te_dg_primate_state", "te_dg_primacy"), (),
+                                        raw=("te_dg_primate_state",))
+        self.assertEqual(countries["1"]["vars"]["te_dg_primate_state"], "5")
+        self.assertAlmostEqual(countries["1"]["vars"]["te_dg_primacy"], 0.6)
+
+    def test_strength_bins(self):
+        rows = H.strength_bins([(0.0, 1e6), (0.3, 2e6), (1.2, 1e6), (2.0, 5e5)])
+        self.assertEqual([r[0] for r in rows], ["0", "0-0.5", "0.5-1", "1-1.5", "1.5-2", ">2"])
+        self.assertEqual([r[1] for r in rows], [1, 1, 0, 1, 1, 0])
+        self.assertEqual(rows[1][2], 2e6)
+
+    def test_wc_prints_both_curves(self):
+        text = run(["wc", str(self.path)])
+        self.assertRegex(text, r"state scores.*\n.*80-90")
+        self.assertIn("1-1.5", text)
+
+    def test_gini_counts_states_above_070(self):
+        # The fixture has no pops, so the pop-by-pop part reports none and exits 1; the census line still prints.
+        self.assertRegex(run(["gini", str(self.path)], code=1), r"above 0\.70: 1 of 2 states \(67% of people\)")
+
+    def test_effects_prints_every_condition(self):
+        text = run(["effects", str(self.path)])
+        for name in ("wc_high", "wc_low", "primacy", "metro_up", "inequality", "more_men", "fewer_men", "youth"):
+            self.assertIn(name, text)
+        self.assertIn("radicals stack", text)
+        self.assertIn("turmoil stack", text)
+        self.assertIn("primate Urban Center stack", text)
+
+    def test_effects_reads_the_new_sizes(self):
+        rows = H.effects_rows(*S.read_variables(self.path, H.EFFECT_COUNTRY_VARS, H.EFFECT_STATE_VARS,
+                                                raw=H.EFFECT_RAW_VARS), {}, {})
+        # The primate state 5: Primate City 0.2 x primacy(0.6) + Metropolis 0.1 x metro_up(80).
+        self.assertEqual([r[0] for r in rows["uc"]], ["GBR"])
+        self.assertAlmostEqual(rows["uc"][0][2], 0.2 * 1.2 + 0.1 * 1.5)
+        radicals = dict((r[0], r[2]) for r in rows["radicals"])
+        # State 5: Land Hunger 0.1 x wc_high(94) x 0.5 + Inequality 0.1 x inequality(0.75) + More Men 0.15 x
+        # more_men(140); state 6: Dispersed Property -0.1 x wc_low(15) + Inequality 0.1 x inequality(0.5).
+        self.assertAlmostEqual(radicals["5"], 0.1 * (44 / 30) * 0.5 + 0.1 * 1.75 + 0.15 * 1.25)
+        self.assertAlmostEqual(radicals["6"], -0.1 * (1 + (35 / 30 - 1) / 2) + 0.1 * 0.25)
+        turmoil = dict((r[0], r[2]) for r in rows["turmoil"])
+        self.assertAlmostEqual(turmoil["6"], 0.15 * 1.2, msg="Provincial Neglect on the non-primate state")
+
+    def test_effects_skips_missing_figures(self):
+        states = dict(EFFECTS_STATES, **{"6": ("1", {"te_dg_wc": 15})})
+        sparse = self.path.with_name("sparse.v3")
+        sparse.write_text(_effects_save(EFFECTS_COUNTRIES, states), encoding="utf-8")
+        text = run(["effects", str(sparse)])
+        self.assertIn("wc_high", text)
+        self.assertIn("inequality", text)
+
+
 class TestFidelity(unittest.TestCase):
     """`fidelity SAVE`: the model's cause multipliers on the census's own SoL and literacy (the step's te_dg_in_sol
     and te_dg_in_lit, or the walk's te_dg_sol and te_dg_lit for a census from before them) against the ones the
