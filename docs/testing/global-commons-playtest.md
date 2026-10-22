@@ -34,6 +34,15 @@ what only the game can show.
 5. Saves from before the change: existing Deep-Sea Mines keep their levels and change outputs on load, and lay off
    the half of their staff the new method no longer employs. Existing Extraplanetary Bases start on Chemical
    Launch and Chemical Tugs, the groups' defaults. Watch for a base left with no method in a new group.
+6. Deep-Sea Mine support vessels: a mine on any extraction method shows a Support Vessels group on Motor Ship
+   Tenders, buying 40 Motor Ships a level a week at full staff and base throughput and no ships through its
+   extraction method. Research Modern Material Science: Magnetic Drive Tenders appear, and switching buys 20 Magnetic
+   Drive Ships instead and adds the Production Method Retooling modifier. A save from before the group starts its
+   mines on Motor Ship Tenders, the default; watch for a mine left with no method in it.
+7. AI: in an observer run past 2100, AI Deep-Sea Mines move to Magnetic Drive Tenders within a few years of Modern
+   Material Science and don't switch back. Mines that never move mean `most_productive` with `ai_value` 1000 / 3000
+   doesn't rank cost-only methods as `pmg_emissions_control` assumes (record it there too); mines flipping back and
+   forth mean the stickiness doesn't hold them.
 
 ## Seabed licences (§ 2)
 

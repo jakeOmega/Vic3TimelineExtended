@@ -7,6 +7,11 @@ propulsion arrives. § 1.2 gives the Extraplanetary Base two logistics groups, e
 one era-12 upgrade cutting its Launch Capacity input; with Space Colonization and both,
 it out-earns the Deep-Sea Mine per level.
 
+The Deep-Sea Mine's ships are in a group of their own, its support vessels: Motor Ship
+Tenders by default, and Magnetic Drive Tenders once the technology that makes those
+ships arrives. Every Deep-Sea figure counts them: a claim that the mine earns more holds
+on the dearer tenders, and a claim that it earns less holds on the cheaper.
+
 Everything is read from the files: the buildings' method groups, each method's goods and
 staff, the logistics methods' input multipliers, the technologies' eras and the goods'
 base prices (vanilla_parsed plus the mod's goods file, as pm_costs.py prices them). The
@@ -23,6 +28,7 @@ import glob
 import itertools
 import json
 import os
+import re
 import sys
 import unittest
 
@@ -40,6 +46,16 @@ LOGISTICS = {
 LOGISTICS_MODIFIER = "goods_input_launch_capacity_mult"
 LOGISTICS_CUT = -0.3
 LAND_TECH_METAL_MINE = "pm_smart_miners_building_tech_metals_mine"
+# The Deep-Sea Mine's support vessels: one free default and one upgrade, each costing one
+# kind of ship and nothing else.
+VESSELS = "pmg_support_vessels_building_ocean_mine"
+SHIP_GOODS = {"clippers", "steamers", "motor_ships", "magnetic_drive_ships"}
+# Vanilla game/common/defines/00_ai.txt (1.14.5), unless extra_defines.txt overrides them.
+VANILLA_AI_DEFINES = {
+    "PRODUCTION_METHOD_BASE_VALUE": 1000.0,
+    "PRODUCTION_METHOD_STICKINESS_DOWNGRADE": 0.75,
+    "PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR": 10.0,
+}
 # The rebalance holds under the Global Commons rule; with it off the mine is uncapped
 # and keeps the methods it had before (spec § 2.9), its *_uncapped family.
 RULE, RULE_ON, RULE_OFF = "global_commons_rule", "global_commons_enabled", "global_commons_disabled"
@@ -72,6 +88,16 @@ def _block(body, *path):
     return body if isinstance(body, dict) else {}
 
 
+def _assert_tracked_texture(case, texture):
+    case.assertTrue(texture.startswith("gfx/interface/icons/production_method_icons/"))
+    # CI checks out without gfx/, so accept a texture git tracks.
+    if not os.path.exists(os.path.join(REPO, texture)):
+        import subprocess
+        tracked = subprocess.run(["git", "ls-files", "--error-unmatch", texture],
+                                 cwd=REPO, capture_output=True)
+        case.assertEqual(tracked.returncode, 0, texture)
+
+
 class _Data:
     """The parsed entities, loaded once for the module."""
 
@@ -86,6 +112,8 @@ class _Data:
         self.values = _parse_dir("common", "script_values")
         self.modifier_types = _parse_dir("common", "modifier_type_definitions")
         self.rules = _parse_dir("common", "game_rules")
+        with open(os.path.join(REPO, "common", "defines", "extra_defines.txt"), encoding="utf-8-sig") as f:
+            self.defines = re.sub(r"#[^\n]*", "", f.read())
         self._vanilla_techs = None
 
     def era(self, tech):
@@ -151,14 +179,29 @@ class _Data:
         return sum(qty * self.prices[good] * (1 + mults.get(good, 0.0))
                    for good, qty in self.goods(pm, direction).items())
 
-    def profit(self, pm, upgrades=()):
-        """Per-level profit at base prices, with the input multipliers of `upgrades` summed
-        (the engine adds same-type modifiers)."""
+    def profit(self, pm, secondary=()):
+        """Per-level profit at base prices of `pm` with the `secondary` methods of the
+        building's other groups: their goods add to its own, and their input multipliers
+        are summed (the engine adds same-type modifiers) and apply to all of them."""
         mults = {}
-        for upgrade in upgrades:
-            for good, mult in self.input_mults(upgrade).items():
+        for other in secondary:
+            for good, mult in self.input_mults(other).items():
                 mults[good] = mults.get(good, 0.0) + mult
-        return self.value(pm, "output") - self.value(pm, "input", mults)
+        methods = (pm, *secondary)
+        return sum(self.value(m, "output") - self.value(m, "input", mults) for m in methods)
+
+    def tenders(self, pm):
+        """The support-vessel methods a Deep-Sea Mine on `pm` can run in that method's era."""
+        era = self.method_era(pm, DEEP_SEA)
+        return [t for t in self.group_methods(VESSELS) if self.method_era(t, DEEP_SEA) <= era]
+
+    def deep_profits(self, pm):
+        """{tender: per-level profit} of Deep-Sea method `pm` on each tender of its era."""
+        return {t: self.profit(pm, [t]) for t in self.tenders(pm)}
+
+    def ai_define(self, key):
+        m = re.search(r"\b" + key + r"\s*=\s*([\d.]+)", self.defines)
+        return float(m[1]) if m else VANILLA_AI_DEFINES[key]
 
     def logistics_upgrades(self):
         """{group: its upgrade method}: the group's one method with an unlocking technology."""
@@ -191,8 +234,8 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
         self.space = self.d.group_methods(self.d.base_group(SPACE))
 
     def test_the_buildings_share_their_other_groups(self):
-        """Only the base groups and the logistics groups differ, so the rest cancels."""
-        deep = self.d.building_groups(DEEP_SEA)[1:]
+        """Only the base, logistics and support-vessel groups differ, so the rest cancels."""
+        deep = [g for g in self.d.building_groups(DEEP_SEA)[1:] if g != VESSELS]
         space = [g for g in self.d.building_groups(SPACE)[1:] if g not in LOGISTICS]
         self.assertEqual(deep, space)
 
@@ -201,7 +244,8 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
             if self.d.method_era(space, SPACE) > self.d.method_era(deep, DEEP_SEA):
                 continue  # compared era with era (module docstring)
             with self.subTest(deep_sea=deep, extraplanetary=space):
-                self.assertGreaterEqual(self.d.profit(deep), self.d.profit(space))
+                self.assertGreaterEqual(min(self.d.deep_profits(deep).values()),
+                                        self.d.profit(space))
 
     def test_era_11_outputs_each_at_least_the_asteroid_mine(self):
         era_11 = [pm for pm in self.space if self.d.method_era(pm, SPACE) == 11]
@@ -214,7 +258,9 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
                 with self.subTest(extraplanetary=pm, good=good):
                     self.assertGreaterEqual(deep_out.get(good, 0.0), qty)
             with self.subTest(extraplanetary=pm, axis="input cost"):
-                self.assertLess(self.d.value(base[0], "input"), self.d.value(pm, "input"))
+                dearest = max(self.d.value(t, "input") for t in self.d.tenders(base[0]))
+                self.assertLess(self.d.value(base[0], "input") + dearest,
+                                self.d.value(pm, "input"))
             with self.subTest(extraplanetary=pm, axis="workforce"):
                 self.assertEqual(self.d.employment(base[0]), self.d.employment(pm))
 
@@ -238,10 +284,13 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
     def test_base_method_margin_below_the_late_land_mines(self):
         base = [pm for pm in self.deep if self.d.method_era(pm, DEEP_SEA) == 11][0]
 
-        def margin(pm):
-            return self.d.profit(pm) / self.d.value(pm, "input")
+        def margin(pm, secondary=()):
+            cost = sum(self.d.value(m, "input") for m in (pm, *secondary))
+            return self.d.profit(pm, secondary) / cost
 
-        self.assertLess(margin(base), margin(LAND_TECH_METAL_MINE))
+        for tender in self.d.tenders(base):
+            with self.subTest(tender=tender):
+                self.assertLess(margin(base, [tender]), margin(LAND_TECH_METAL_MINE))
 
 
 class RuleOffKeepsTheOldMine(unittest.TestCase):
@@ -312,13 +361,7 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
             for pm in self.d.group_methods(group):
                 texture = str(_unwrap(self.d.pms[pm].get("texture"))).strip('"')
                 with self.subTest(method=pm):
-                    self.assertTrue(texture.startswith("gfx/interface/icons/production_method_icons/"))
-                    # CI checks out without gfx/, so accept a texture git tracks.
-                    if not os.path.exists(os.path.join(REPO, texture)):
-                        import subprocess
-                        tracked = subprocess.run(["git", "ls-files", "--error-unmatch", texture],
-                                                 cwd=REPO, capture_output=True)
-                        self.assertEqual(tracked.returncode, 0, texture)
+                    _assert_tracked_texture(self, texture)
 
     def test_modifier_is_registered_as_a_percentage(self):
         definition = self.d.modifier_types.get(LOGISTICS_MODIFIER)
@@ -329,7 +372,7 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
         upgrades = list(self.d.logistics_upgrades().values())
         deep = self.d.group_methods(self.d.base_group(DEEP_SEA))
         space = self.d.group_methods(self.d.base_group(SPACE))
-        best_deep = max(self.d.profit(pm) for pm in deep)
+        best_deep = max(max(self.d.deep_profits(pm).values()) for pm in deep)
         for pm in space:
             era = self.d.method_era(pm, SPACE)
             with self.subTest(extraplanetary=pm, era=era):
@@ -340,7 +383,7 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
                     # The Asteroid Mine stays behind the Deep-Sea Mine of its era even with both.
                     same_era = [d for d in deep if self.d.method_era(d, DEEP_SEA) <= era]
                     self.assertLess(self.d.profit(pm, upgrades),
-                                    max(self.d.profit(d) for d in same_era))
+                                    max(min(self.d.deep_profits(d).values()) for d in same_era))
 
     def test_each_upgrade_only_cuts_launch_capacity(self):
         space = self.d.group_methods(self.d.base_group(SPACE))
@@ -353,19 +396,98 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
                     self.assertAlmostEqual(saving, -LOGISTICS_CUT * launch * self.d.prices["launch_capacity"])
 
 
+class DeepSeaMineSupportVessels(unittest.TestCase):
+    """The Deep-Sea Mine's ships: Motor Ship Tenders, then Magnetic Drive Tenders once the
+    technology that makes those ships arrives, for every extraction method."""
+
+    def setUp(self):
+        self.d = _DATA
+        self.methods = self.d.group_methods(VESSELS)
+        self.default, self.upgrade = sorted(
+            self.methods, key=lambda pm: bool(_list(self.d.pms[pm].get("unlocking_technologies"))))
+
+    def ships(self, pm):
+        return {good for good in self.d.goods(pm, "input") if good in SHIP_GOODS}
+
+    def test_group_sits_on_the_deep_sea_mine_after_its_base_group(self):
+        self.assertEqual(self.d.building_groups(DEEP_SEA)[1], VESSELS)
+        self.assertNotIn(VESSELS, self.d.building_groups(SPACE))
+
+    def test_extraction_methods_carry_no_ships(self):
+        for pm in self.d.group_methods(self.d.base_group(DEEP_SEA), None):
+            with self.subTest(method=pm):
+                self.assertEqual(self.ships(pm), set())
+
+    def test_a_free_default_and_one_gated_upgrade_each_on_one_ship(self):
+        self.assertEqual(len(self.methods), 2)
+        self.assertEqual(str(_unwrap(self.d.pms[self.default].get("is_default"))), "yes")
+        self.assertEqual(_list(self.d.pms[self.default].get("unlocking_technologies")), [])
+        self.assertEqual(len(_list(self.d.pms[self.upgrade].get("unlocking_technologies"))), 1)
+        for pm in self.methods:
+            with self.subTest(method=pm):
+                # Only ships: no output, staff or other modifier, so the profit comparisons
+                # above count all the group adds.
+                self.assertEqual(list(_block(self.d.pms[pm], "building_modifiers")), ["workforce_scaled"])
+                self.assertEqual(set(self.d.goods(pm, "input")), self.ships(pm))
+                self.assertEqual(len(self.ships(pm)), 1)
+                self.assertEqual(self.d.goods(pm, "output"), {})
+        self.assertEqual(self.ships(self.default), {"motor_ships"})
+        self.assertEqual(self.ships(self.upgrade), {"magnetic_drive_ships"})
+
+    def test_upgrade_waits_for_the_technology_that_makes_its_ships(self):
+        (good,) = self.ships(self.upgrade)
+        supply = {str(t) for pm, body in self.d.pms.items() if isinstance(body, dict)
+                  and self.d.goods(pm, "output").get(good, 0.0) > 0
+                  for t in _list(body.get("unlocking_technologies"))}
+        self.assertTrue(supply, f"no method makes {good}")
+        (tech,) = _list(self.d.pms[self.upgrade].get("unlocking_technologies"))
+        self.assertIn(str(tech), supply)
+
+    def test_upgrade_costs_less_at_base_prices(self):
+        self.assertLess(self.d.value(self.upgrade, "input"), self.d.value(self.default, "input"))
+
+    def test_textures_are_tracked_mod_icons(self):
+        for pm in self.methods:
+            with self.subTest(method=pm):
+                _assert_tracked_texture(self, str(_unwrap(self.d.pms[pm].get("texture"))).strip('"'))
+
+    def test_ai_moves_up_to_the_upgrade_and_not_back(self):
+        """Cost-only methods flip with prices under most_profitable (pmg_emissions_control's
+        record), so the group takes most_productive and ai_value ranks the upgrade. What
+        ai_value does is undocumented, so the ranking must hold whether it replaces (or
+        multiplies) the method's score or adds to the base score, as
+        test_emissions_control_ai_value.py requires of the emissions tiers."""
+        self.assertEqual(str(_unwrap(self.d.groups[VESSELS].get("ai_selection"))), "most_productive")
+        low, high = (float(_unwrap(self.d.pms[pm].get("ai_value"))) for pm in (self.default, self.upgrade))
+        self.assertGreater(low, 0)
+        stickiness = self.d.ai_define("PRODUCTION_METHOD_STICKINESS_DOWNGRADE")
+        base = self.d.ai_define("PRODUCTION_METHOD_BASE_VALUE")
+        for reading, (lo, hi) in {"replaces or multiplies": (low, high),
+                                  "adds to the base": (base + low, base + high)}.items():
+            with self.subTest(reading=reading):
+                self.assertGreater(hi * stickiness, lo)
+        # An input shortage must still be able to move a mine back to Motor Ship Tenders.
+        self.assertLess(high / low, self.d.ai_define("PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR"))
+
+
 def print_table():
+    """Per-level figures; a Deep-Sea row is one method on one tender (method + tender)."""
     d = _Data()
     upgrades = list(d.logistics_upgrades().values())
     print(f"{'method':42} {'era':>3} {'staff':>6} {'input':>9} {'output':>9} "
           f"{'profit':>9} {'margin':>7} {'one cut':>9} {'both':>9}")
     for building in (DEEP_SEA, SPACE):
         for pm in d.group_methods(d.base_group(building)):
-            inp, out, profit = d.value(pm, "input"), d.value(pm, "output"), d.profit(pm)
-            row = (f"{pm:42} {d.method_era(pm, building):>3} {d.employment(pm):>6.0f} "
-                   f"{inp:>9,.0f} {out:>9,.0f} {profit:>9,.0f} {profit / inp:>7.0%}")
-            if building == SPACE:
-                row += f" {d.profit(pm, upgrades[1:]):>9,.0f} {d.profit(pm, upgrades):>9,.0f}"
-            print(row)
+            for tender in d.tenders(pm) if building == DEEP_SEA else [None]:
+                secondary = [tender] if tender else []
+                inp = sum(d.value(m, "input") for m in (pm, *secondary))
+                out, profit = d.value(pm, "output"), d.profit(pm, secondary)
+                label = f"{pm} + {tender.split('_')[1]}" if tender else pm
+                row = (f"{label:42} {d.method_era(pm, building):>3} {d.employment(pm):>6.0f} "
+                       f"{inp:>9,.0f} {out:>9,.0f} {profit:>9,.0f} {profit / inp:>7.0%}")
+                if building == SPACE:
+                    row += f" {d.profit(pm, upgrades[1:]):>9,.0f} {d.profit(pm, upgrades):>9,.0f}"
+                print(row)
 
 
 if __name__ == "__main__":

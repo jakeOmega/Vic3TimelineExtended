@@ -1020,6 +1020,23 @@ REPLACE_OR_CREATE:pmg_base_building_ocean_mine = {
 		pm_automated_ocean_mine_uncapped
 	}
 }
+# The Deep-Sea Mine's ships, for every method in the group above; the methods and the
+# design notes are with the mine's in extra_pms.txt. Both only cost ships, so under the
+# default most_profitable the AI would switch between them whenever Motor and Magnetic
+# Drive Ship prices cross, each switch a five-year retool, as the pure-cost
+# emissions-control tiers did (mod_systems.md § Construction as a Market Good, "AI
+# production-method switching"). Under most_productive they should score alike, so the
+# stickiness holds the current one (not yet observed for cost-only methods), and the
+# methods' ai_value (1000 / 3000) is meant to move the AI up to Magnetic Drive Tenders,
+# not back: pmg_emissions_control's pattern.
+pmg_support_vessels_building_ocean_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = {
+		pm_motor_ship_tenders_building_ocean_mine
+		pm_magnetic_drive_tenders_building_ocean_mine
+	}
+}
 REPLACE_OR_CREATE:pmg_base_building_space_elevator_construction_site = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {

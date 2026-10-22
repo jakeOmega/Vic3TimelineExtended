@@ -984,6 +984,7 @@ REPLACE_OR_CREATE:building_ocean_mine = {
 
 	production_method_groups = {
 		pmg_base_building_ocean_mine
+		pmg_support_vessels_building_ocean_mine
 		pmg_maintenance_intensive
 	}
 

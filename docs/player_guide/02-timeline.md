@@ -206,7 +206,7 @@ renames twelve base-game goods to fit a longer timeline.
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
 | Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
-| Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations; the pops' Leisure need, as Steamers |
+| Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations, and the Deep-Sea Mine's tenders; the pops' Leisure need, as Steamers |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods; the Leisure need too |
 
 The Convenience and Tourism needs, which wealthier pops fill with these goods,
@@ -260,7 +260,14 @@ mineral deposits](03-economy.md#new-mineral-deposits).
 Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
 Mining) can be built in any coastal state, and each level needs a seabed licence
 ([Seabed licences](#seabed-licences)). Like a fishing wharf, it loses up to
-three quarters of its throughput while its state is blockaded. The
+three quarters of its throughput while its state is blockaded. Its ships come
+from the Support Vessels group: Motor Ship Tenders run it on Motor Ships, and
+Magnetic Drive Tenders, from Modern Material Science, run it on fewer Magnetic
+Drive Ships for £1,000 a level less each week at base prices. Switching an
+existing mine costs about £260,000 a level in
+[retooling](03-economy.md#construction-maintenance-and-retooling), around 5
+years of that saving, so the switch pays back sooner while Motor Ships are
+expensive. The
 Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
 mines metals and minerals, and after Space Colonization it can switch to the
 Resort Colony production method, which produces art and tourism instead.
