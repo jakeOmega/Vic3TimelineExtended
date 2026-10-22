@@ -2,8 +2,9 @@
 
 The estimate (method a): each natural cause's deaths at the step's rates over the last count's bands
 (demographics_model.cause_deaths_estimate; the generated te_demog_cause_deaths_estimate), scaled to the census's own
-deaths from those causes; childbirth's, the deaths added on top, the war dead and the people killed by events as counted
-(demographics_model.cause_deaths; te_demog_cause_deaths_store). The country sums its states' and keeps the cause
+deaths from those causes; under Full the deaths the engine added on top count under their causes (owner, 2026-10-22:
+te_dg_ot_<c>, the walk's split by the effects' tags), devastation's beside the war dead; childbirth's, the war dead and
+the people killed by events as counted (demographics_model.cause_deaths; te_demog_cause_deaths_store). The country sums its states' and keeps the cause
 multipliers, Health Care Access and childbirth's rate people- or births-weighted (te_demog_country_census). These run
 the script through test_demographics_registry's _Engine against the model.
 """
@@ -24,10 +25,12 @@ import demographics_params as P  # noqa: E402
 import gen_demographics as G  # noqa: E402
 
 CONSOLE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
-SLICES = ("inf", "ext", "chr", "work", "mat", "ontop", "war", "kill")
+SLICES = ("inf", "ext", "chr", "work", "mat", "war", "kill")
 CAUSE_SHORT = {"infection": "inf", "external": "ext", "chronic": "chr", "work": "work"}
 MODEL_KEY = {"inf": "infection", "ext": "external", "chr": "chronic", "work": "work", "mat": "maternal",
-             "ontop": "on_top", "war": "war", "kill": "kills"}
+             "war": "war", "kill": "kills"}
+# a window's deaths on top by cause, people (te_dg_ot_<c>): famine and pollution, a mine's lines, devastation; aid saved some
+CAUSES_ON_TOP = {"inf": 900.0, "chr": 400.0, "ext": -150.0, "work": 250.0, "war": 600.0}
 
 
 def close(case, got, want, rel=1e-6, what=""):
@@ -76,19 +79,59 @@ class TestBandRates(unittest.TestCase):
 
 
 class TestModel(unittest.TestCase):
+    RAW = {"infection": 300.0, "external": 40.0, "chronic": 200.0, "work": 10.0}
+
     def test_the_slices_add_up_to_the_deaths_with_the_war_dead_and_the_killed(self):
-        raw = {"infection": 300.0, "external": 40.0, "chronic": 200.0, "work": 10.0}
-        for dz in (0.0, 0.25, -0.3):
-            with self.subTest(dz=dz):
-                out = M.cause_deaths(raw, deaths=600.0, maternal=20.0, deaths_scale=dz, war_dead=50.0, kills=7.0)
+        for on_top in (None, {"inf": 30.0, "chr": 12.0, "ext": -4.0, "work": 6.0, "war": 25.0}):
+            with self.subTest(on_top=on_top):
+                out = M.cause_deaths(self.RAW, deaths=600.0, maternal=20.0, war_dead=50.0, kills=7.0, on_top=on_top,
+                                     engine=640.0)
                 self.assertAlmostEqual(out["total"], 657.0)
                 self.assertAlmostEqual(sum(out[MODEL_KEY[s]] for s in SLICES), out["total"])
-                # the shares of the four follow the estimate's
-                self.assertAlmostEqual(out["infection"] / out["chronic"], 1.5)
-                self.assertEqual(out["on_top"] > 0, dz > 0)
-                if dz > 0:
-                    self.assertAlmostEqual(out["on_top"], 580.0 * dz / (1 + dz))
                 self.assertAlmostEqual(out["fit"], 550.0 / 580.0)
+                if on_top is None:
+                    # the shares of the four follow the estimate's, and nothing is on top
+                    self.assertAlmostEqual(out["infection"] / out["chronic"], 1.5)
+                    self.assertEqual(out["war"], 50.0)
+                    self.assertEqual(set(out["on_top"].values()), {0.0})
+
+    def test_each_cause_takes_its_own_on_top(self):
+        """Owner, 2026-10-22: the window's deaths on top by cause, on the census's count by the window's deaths (580 of
+        640 here); war's join the war dead, the rest of the deaths split by the estimate."""
+        on_top = {"inf": 64.0, "chr": 32.0, "ext": 0.0, "work": 16.0, "war": 32.0}
+        out = M.cause_deaths(self.RAW, deaths=600.0, maternal=20.0, war_dead=50.0, on_top=on_top, engine=640.0)
+        k = 580.0 / 640.0
+        rest = 580.0 - 144.0 * k
+        self.assertAlmostEqual(out["on_top"]["inf"], 64.0 * k)
+        self.assertAlmostEqual(out["infection"], rest * 300 / 550 + 64.0 * k)
+        self.assertAlmostEqual(out["chronic"], rest * 200 / 550 + 32.0 * k)
+        self.assertAlmostEqual(out["external"], rest * 40 / 550)
+        self.assertAlmostEqual(out["war"], 50.0 + 32.0 * k)
+
+    def test_the_estimate_is_read_through_the_scales(self):
+        """The estimate is at the step's rates, each cause's multiplier scaled by its own on-top share: the rest splits
+        by the model's own deaths, the estimate over each scale."""
+        scales = {"infection": 2.0, "external": 1.0, "chronic": 1.0, "work": 1.0}
+        raw = dict(self.RAW, infection=600.0)
+        out = M.cause_deaths(raw, deaths=600.0, maternal=20.0, scales=scales)
+        self.assertAlmostEqual(out["infection"] / out["chronic"], 1.5)
+
+    def test_the_scales_add_what_one_scale_did(self):
+        """cause_scales: each cause takes its own share of dz on its own deaths; the rest (war's, the census's lag) on all
+        four. The four then add E x (1 + dz), as one scale on all did. No estimate or no shares: one scale."""
+        shares = {"inf": 0.1, "chr": 0.05, "ext": -0.01, "work": 0.02, "war": 0.1}
+        for dz in (0.3, 0.0, -0.2):
+            with self.subTest(dz=dz):
+                s = M.cause_scales(dz, shares, self.RAW)
+                e = sum(self.RAW.values())
+                self.assertAlmostEqual(sum(self.RAW[c] * s[c] for c in self.RAW), e * (1 + dz))
+                rest = dz - 0.16
+                self.assertAlmostEqual(s["infection"], 1 + rest + 0.1 * e / 300)
+        self.assertEqual(M.cause_scales(0.3, None, self.RAW), {c: 1.3 for c in self.RAW})
+        self.assertEqual(M.cause_scales(0.3, shares, None), {c: 1.3 for c in self.RAW})
+        # a cause the model gives under a death can't take its own: they join the rest
+        s = M.cause_scales(0.3, shares, dict(self.RAW, work=0.5))
+        self.assertAlmostEqual(s["work"], 1 + 0.3 - 0.14)
 
     def test_the_estimate_matches_the_sweep_away_from_the_open_bands(self):
         """A run's last step: the estimate over last count's bands comes within a few per cent of the sweep's deaths
@@ -124,13 +167,15 @@ class TestScript(unittest.TestCase):
             close(self, eng.vars[f"te_dg_dc_{s}"], want[MODEL_KEY[s]], what=s)
         close(self, eng.vars["te_dg_dc_total"], eng.vars["te_dg_deaths"] + war + kills, what="total")
         close(self, eng.vars["te_dg_dc_fit"], want["fit"], what="fit")
-        self.assertEqual(eng.vars["te_dg_dc_war"], war)
+        # the war dead as counted, and under Full devastation's civilians beside them (owner, 2026-10-22)
+        close(self, eng.vars["te_dg_dc_war"], war + max(0.0, eng.vars.get("te_dg_dc_war_top", 0.0)), what="war")
         self.assertEqual(eng.vars["te_dg_dc_kill"], kills)
 
     def test_a_step_without_flows(self):
         eng, _ring, figures, _pop = self.cohort.step_both()
         self.check(eng, figures)
-        self.assertEqual(eng.vars["te_dg_dc_ontop"], 0.0)
+        for c in P.DEATH_CAUSES:
+            self.assertEqual(eng.vars[f"te_dg_dc_{c}_top"], 0.0, c)
 
     def test_a_step_with_war_dead_and_kills(self):
         eng, _ring, figures, _pop = self.cohort.step_both(war_dead=900.0, kills=1500.0, migration=4000.0)
@@ -155,19 +200,47 @@ class TestScript(unittest.TestCase):
         self.assertIn(f"Aged {lo}–{hi - 1},", line)
         self.assertIn("ScriptValue('te_demog_infection_adult')", line)
 
-    def test_deaths_added_on_top_are_their_own_slice(self):
-        eng, _ring, figures, _pop = self.cohort.step_both(on_top=(0.05, 0.12), full=True)
+    def test_deaths_on_top_without_a_split_spread_over_the_causes(self):
+        """A first count under Full (no split by cause yet): the deaths on top spread over the four by the estimate, as
+        do deaths the game took away; there is no slice of their own."""
+        for dz in (0.12, -0.2):
+            with self.subTest(dz=dz):
+                eng, _ring, figures, _pop = self.cohort.step_both(on_top=(0.05, dz), full=True)
+                self.check(eng, figures)
+                self.assertNotIn("te_dg_dc_ontop", eng.vars)
+                four = sum(eng.vars[f"te_dg_dc_{s}"] for s in ("inf", "ext", "chr", "work"))
+                close(self, four, eng.vars["te_dg_deaths"] - eng.vars["te_dg_dc_mat"], what="the four")
+
+    def test_deaths_on_top_count_under_their_causes(self):
+        """Owner, 2026-10-22: the walk's split by cause (te_dg_ot_<c>) places each cause's deaths on top on its own
+        ages, so the ring matches the model's, and the slices take them, devastation's beside the war dead."""
+        eng, ring, figures, pop = self.cohort.step_both(on_top=(0.05, 0.12), full=True, causes=CAUSES_ON_TOP)
+        self.cohort.check_step(eng, ring, figures, pop)
         self.check(eng, figures)
         nat = eng.vars["te_dg_deaths"] - eng.vars["te_dg_dc_mat"]
-        close(self, eng.vars["te_dg_dc_ontop"], nat * 0.12 / 1.12, rel=1e-4, what="on top")
+        k = nat / eng.vars["te_dg_ed"]
+        for c, v in CAUSES_ON_TOP.items():
+            close(self, eng.vars[f"te_dg_dc_{c}_top"], v * k, rel=1e-4, what=f"{c} on top")
+            close(self, eng.vars[f"te_dg_dc_{c}_top"], figures["causes"]["on_top"][c], rel=1e-4, what=f"{c} model")
+        close(self, eng.vars["te_dg_dc_war"], 600.0 * k, rel=1e-4, what="devastation's civilians")
+        # the deaths on top count in their causes' slices, not spread over all four
+        flat, _r, flat_figures, _p = self.cohort.step_both(on_top=(0.05, 0.12), full=True)
+        self.assertGreater(eng.vars["te_dg_dc_inf"] / eng.vars["te_dg_dc_ext"],
+                           flat.vars["te_dg_dc_inf"] / flat.vars["te_dg_dc_ext"])
+        # one scale or per cause, the ring adds about the same deaths (the four add E x (1 + dz) at linear order)
+        close(self, eng.vars["te_dg_deaths"], flat.vars["te_dg_deaths"], rel=0.02, what="the ring's deaths")
 
-    def test_deaths_taken_away_show_no_slice(self):
-        """Below 0 the game took deaths away: the four causes share all the census's deaths but childbirth's."""
-        eng, _ring, figures, _pop = self.cohort.step_both(on_top=(0.0, -0.2), full=True)
-        self.check(eng, figures)
-        self.assertEqual(eng.vars["te_dg_dc_ontop"], 0.0)
-        four = sum(eng.vars[f"te_dg_dc_{s}"] for s in ("inf", "ext", "chr", "work"))
-        close(self, four, eng.vars["te_dg_deaths"] - eng.vars["te_dg_dc_mat"], what="the four")
+    def test_each_causes_multiplier_takes_its_own_scale(self):
+        """te_demog_on_top_scales against demographics_model.cause_scales, from the estimate at the model's rates."""
+        eng, ring, figures, pop = self.cohort.step_both(on_top=(0.05, 0.12), full=True, causes=CAUSES_ON_TOP)
+        inp = R.TestCohortScript.INP
+        cm = M.cause_multipliers(inp)
+        wf, wm = M.work_split(inp, cm["work"])
+        raw = M.cause_deaths_estimate(*M.band_sums(eng.ring_before), cm, wf, wm, M.infection_adult(inp))
+        want = M.cause_scales(0.12, M.on_top_shares(CAUSES_ON_TOP, 30.0 * pop / 1000), raw)
+        for c, s in CAUSE_SHORT.items():
+            close(self, eng.locals[f"te_dg_sg_{s}"], want[c], rel=1e-3, what=c)
+        self.assertGreater(want["infection"], want["external"], "infection takes the famine, accidents the aid")
 
     def test_a_seed_has_none(self):
         eng = _engine_for(R.TestCohortScript.INP, 1836, 250000.0)
@@ -179,7 +252,8 @@ class TestScript(unittest.TestCase):
 
     def test_the_estimate_reads_last_counts_bands_before_the_sweep(self):
         begin = _block(_text(EFFECTS), "te_demog_step_begin")
-        self.assertGreater(begin.index("te_demog_cause_deaths_estimate = yes"), begin.index("te_demog_on_top_scales = yes"))
+        # at the model's rates, before the scales place each cause's deaths on top by it (owner, 2026-10-22)
+        self.assertLess(begin.index("te_demog_cause_deaths_estimate = yes"), begin.index("te_demog_on_top_scales = yes"))
         finish = _block(_text(EFFECTS), "te_demog_step_finish")
         self.assertLess(finish.index("te_demog_cause_deaths_store = yes"), finish.index("te_demog_set_scale = yes"))
         self.assertGreater(finish.index("te_demog_cause_deaths_store = yes"),

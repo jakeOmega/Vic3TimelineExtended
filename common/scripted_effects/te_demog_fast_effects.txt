@@ -257,6 +257,8 @@ te_demog_fast_clear_rates = {
 			limit = { has_variable = te_dg_ss_d }
 			remove_variable = te_dg_ss_d
 		}
+		# Causes of Death's start parts by cause (owner, 2026-10-22)
+		te_demog_on_top_start_clear = yes
 	}
 	if = {
 		limit = { has_modifier = te_demog_fast_births }

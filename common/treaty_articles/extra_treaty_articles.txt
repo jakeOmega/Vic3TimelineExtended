@@ -437,6 +437,7 @@ healthcare_aid = {
 	target_modifier = {
 		country_treaty_leverage_generation_add = 200
 		state_mortality_mult = -0.05
+		state_death_cause_inf_mult = -0.05
 		state_standard_of_living_add = 1
 	}
 

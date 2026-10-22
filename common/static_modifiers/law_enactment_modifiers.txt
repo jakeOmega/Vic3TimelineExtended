@@ -723,6 +723,7 @@ langpol_assimilation_boost = {
 augment_health_panic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_chr_mult = 0.05
 }
 inherit_wealth_consolidation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds

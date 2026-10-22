@@ -523,6 +523,7 @@ ste_reactor_leak_coverup = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_legitimacy_base_add = -10
 	state_mortality_mult = 0.02
+	state_death_cause_chr_mult = 0.02
 }
 ste_reactor_leak_shutdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
@@ -1005,6 +1006,7 @@ drugs_shortage_spending = {
 drugs_shortage_rationing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	state_mortality_mult = 0.03
+	state_death_cause_chr_mult = 0.03
 }
 drugs_shortage_pharma_drive = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds

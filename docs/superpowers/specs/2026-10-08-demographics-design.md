@@ -407,7 +407,10 @@ pop), vanilla's health laws' and child labour's lines (but not Private Health In
 on top for now: owner, 2026-10-10, pending probe P6), and §8.4's. The census's next step scales its own rates to what the
 engine did, so the ring places the deaths added on top by the model's own age pattern, young and old (owner,
 2026-10-10: one scale on every cause; a per-term split, devastation on everyone and pollution on chronic causes, waits
-until the panel shows an artefact). The share of old people therefore
+until the panel shows an artefact). *(2026-10-22, owner: it showed, an Added on Top slice that named no cause. The
+deaths on top now count under their causes, each engine line tagged with its cause and devastation's beside the war
+dead, and each cause's multiplier takes its own share: `docs/systems/mod_systems.md` § Causes of Death, "Deaths on top
+by cause".)* The share of old people therefore
 drives the death rate, as the owner asked. An aged state with excellent health still has a high crude death rate:
 Japan's is 13 per 1,000 because a third of its people are over 60, not because its health is poor.
 

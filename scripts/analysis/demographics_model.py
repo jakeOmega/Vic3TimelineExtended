@@ -337,21 +337,31 @@ def cause_deaths_estimate(bands_f, bands_m, mult, work_f, work_m, adult, rates=N
     return out
 
 
-def cause_deaths(raw, deaths, maternal, deaths_scale=0.0, war_dead=0.0, kills=0.0):
-    """Last year's deaths by cause, people (the script's te_dg_dc_*, te_demog_cause_deaths_store): the four natural
-    causes' estimates (raw) scaled to the census's own deaths from them, its deaths less childbirth's and, under Full,
-    less what the on-top scale added (deaths_scale, te_dg_dz, when above 0: below 0 the game took deaths away, which no
-    slice shows); childbirth's, the deaths added on top, the war dead and the people killed by events as counted.
-    "total" is the slices' sum, the census's deaths with the war dead and the killed; "fit" the estimate over the deaths
-    from the four causes before the on-top split, 1 when the estimate matches the sweep."""
+def cause_deaths(raw, deaths, maternal, war_dead=0.0, kills=0.0, on_top=None, engine=0.0, scales=None):
+    """Last year's deaths by cause, people (the script's te_dg_dc_*, te_demog_cause_deaths_store). The census's deaths
+    less childbirth's are the four natural causes' and, under Full, the civilians of war and devastation. Since the
+    owner's 2026-10-22 call the deaths the engine added on top count under their causes:
+    - on_top: {cause: its deaths on top over the window} (te_dg_ot_<c>, on_top_causes), on the census's count by the
+      window's deaths (engine, te_dg_ed): each cause takes its own, and war's join the counted war dead;
+    - the rest (the census's own deaths, its lag, anything no tag names) splits by each cause's share of the model's
+      own deaths: the estimate at the step's rates (raw) over the scale each cause's multiplier took (scales,
+      cause_scales; None for one scale on all, which cancels).
+    Without a split (not Full, a first count, an old save) every death splits by the estimate. Each natural slice at
+    least 0. "on_top" is {slice: its deaths on top} for the hovers; "total" the slices' sum, the census's deaths with the
+    war dead and the killed; "fit" the estimate over the natural deaths, 1 when the estimate matches the sweep."""
     natural = max(deaths - maternal, 0.0)
-    on_top = natural * deaths_scale / (1 + deaths_scale) if deaths_scale > 0 else 0.0
     est = sum(raw[c] for c in CAUSE_DEATH_CAUSES)
-    k = (natural - on_top) / est if est > 0 else 0.0
-    out = {c: raw[c] * k for c in CAUSE_DEATH_CAUSES}
-    out.update(maternal=maternal, on_top=on_top, war=war_dead, kills=kills)
+    model = {c: raw[c] / max(scales[c], CAUSE_SCALE_MIN) if scales else raw[c] for c in CAUSE_DEATH_CAUSES}
+    total_model = sum(model.values())
+    k = natural / engine if on_top and engine > 0 else 0.0
+    top = {s: (on_top[s] * k if k else 0.0) for s in P.DEATH_CAUSES}
+    rest = natural - sum(top.values())
+    out = {c: max(0.0, (rest * model[c] / total_model if total_model > 0 else 0.0) + top[NATURAL_SLICES[c]])
+           for c in CAUSE_DEATH_CAUSES}
+    out.update(maternal=maternal, war=war_dead + max(0.0, top["war"]), kills=kills)
     out["total"] = sum(out.values())
     out["fit"] = est / max(natural, 1.0)
+    out["on_top"] = top
     return out
 
 
@@ -1229,6 +1239,55 @@ def on_top_split(end, start=None):
     return events, max(0.0, events - own), severe
 
 
+def on_top_cause_start(own, tag, tb, bare):
+    """A cause's part of the engine's rate at a window's start, straight after the refresh fitted M (Causes of Death,
+    owner 2026-10-22; the script's te_demog_on_top_start_part): the pops' own lines that count under it, and its tagged
+    state lines (tag, the sum of their state_death_cause_<c>_mult), which M makes act on the census's rate: tb (target
+    / bare) x the bare deaths they reach. One unit throughout (the walk's, or a rate)."""
+    return own + tag * tb * bare
+
+
+def on_top_cause_end(own, tag, tag_start, tb, bare):
+    """The same part at the window's end, under the M fitted at its start (te_demog_on_top_cause): M took
+    (1 - tb) x tag_start off, so a line that arrived inside the window kills at the bare curve's weight."""
+    return own + bare * (tag - (1 - tb) * tag_start)
+
+
+def on_top_causes(end, start):
+    """{cause: its deaths on top over the window}, each cause's part weighted as window_events weighs the rate. end and
+    start: {cause: part} at each end, in one unit (a rate x the window, or a rate)."""
+    w = P.WINDOW_START_WEIGHT
+    return {c: w * start[c] + (1 - w) * end[c] for c in P.DEATH_CAUSES}
+
+
+NATURAL_SLICES = {"infection": "inf", "chronic": "chr", "external": "ext", "work": "work"}
+CAUSE_SCALE_MIN = P.CAUSE_SCALE_MIN
+CAUSE_SCALE_MIN_DEATHS = P.CAUSE_SCALE_MIN_DEATHS
+
+
+def on_top_shares(on_top, target):
+    """{cause: d_c}: each cause's deaths on top over the model's target, the share of dz it explains (te_dg_dz_<c>); empty
+    where the window has no split by cause (on_top None) or no target."""
+    if not on_top or target <= 0:
+        return {}
+    return {c: on_top[c] / target for c in P.DEATH_CAUSES}
+
+
+def cause_scales(deaths_scale, shares, raw):
+    """{natural cause: the scale on its multiplier} (te_demog_on_top_scales). A cause takes the deaths on top its tags
+    and the pops' own lines name, on its own ages: d_c x E / its own deaths at the model's rates (raw; E their sum).
+    The rest of dz (war and devastation, whose civilians die at every age, the census's lag and anything no tag names)
+    spreads over all four at the model's age pattern, as all of dz did before the causes were split. The four then add
+    E x (1 + dz) deaths, as one scale did. No raw estimate (a late-game state) or no shares: one scale, 1 + dz. Each at
+    least 0. A cause the model gives under one death (CAUSE_SCALE_MIN_DEATHS) can't take its own, so they join the rest."""
+    if not shares or raw is None:
+        return {c: max(0.0, 1 + deaths_scale) for c in NATURAL_SLICES}
+    e = sum(raw[c] for c in NATURAL_SLICES)
+    placed = {c: s for c, s in NATURAL_SLICES.items() if raw[c] >= CAUSE_SCALE_MIN_DEATHS}
+    rest = deaths_scale - sum(shares[s] for s in placed.values())
+    return {c: max(0.0, 1 + rest + (shares[placed[c]] * e / raw[c] if c in placed else 0.0)) for c in NATURAL_SLICES}
+
+
 def starvation_value(food_security):
     """The engine's starvation value for a pop at this food security: clamp((FOOD_SECURITY_STARVATION_THRESHOLD - food
     security) x STARVATION_EFFECTS_SCALING_FACTOR, 0, STARVATION_VALUE_MAX) (vanilla 00_defines.txt's comment). The
@@ -1261,7 +1320,7 @@ def model_crude_rates(inp, year=1836):
 
 
 def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.0, rates=None,
-         births_scale=0.0, deaths_scale=0.0, known=None):
+         births_scale=0.0, deaths_scale=0.0, known=None, deaths_shares=None):
     """One yearly step (§2.1), in the script's order: medicine drifts before the rates (te_demog_medicine_drift
     before te_demog_prepare). Returns the year's figures.
 
@@ -1274,6 +1333,9 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     year's children per woman and the cause multipliers, so the ring places the events the engine
     added on top of the model: newborns, and deaths by the model's age pattern. The life table,
     "tfr" and the *_model totals stay the model's own; "tfr_shown" is the scaled one.
+    deaths_shares (Causes of Death, owner 2026-10-22; te_dg_ot_<c> over the target): {cause: the share of dz its tags and
+    the pops' own lines explain}. Each natural cause then takes its own on its ages (cause_scales), the rest of dz all of
+    them, so the four add the deaths one scale did; a late-game state, which has no estimate to place them by, keeps one.
     known: Internal Resettlement's known moves (demographics_resettle.Known, 2026-10-19), booked beside the residual by
     their programmes' profiles; its transit dead are among `kills` but leave by the profile, not from every age.
     """
@@ -1316,28 +1378,28 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     tfr = tfr * (1 + births_scale)
     # the people the sweep takes its dead from, by band (issue #1029's estimate, cause_deaths_estimate below)
     bands_f, bands_m = band_sums(ring)
-    if deaths_scale:
-        if rates is None:
-            mult = cause_multipliers(inp)
-            work_f, work_m = work_split(inp, mult["work"])
-            k = 1 + deaths_scale
-            qf, qm = rates_from_multipliers({c: v * k for c, v in mult.items()}, work_f * k, work_m * k,
-                                            infection_adult(inp))
-        else:
-            qf = [min(100000.0, q * (1 + deaths_scale)) for q in qf]
-            qm = [min(100000.0, q * (1 + deaths_scale)) for q in qm]
-    # issue #1029: each natural cause's deaths at the year's rates, with the on-top scale the sweep's rates carry (a
-    # replay's logged rates carry no multipliers, so it has none)
-    causes_raw = None
+    # issue #1029: each natural cause's deaths at the model's rates, from the bands at the last count (a replay's logged
+    # rates carry no multipliers, so it has none). A late-game state's own count replaces the calendar estimate
+    # (lx_cause_deaths), so it isn't made there, as in the script (te_demog_step_begin): calendar ages put an immortal
+    # state's deaths dozens of times too high
+    causes_raw = scales = None
     if rates is None:
         cm = cause_multipliers(inp)
         cwf, cwm = work_split(inp, cm["work"])
-        ck = 1 + deaths_scale
-        # a late-game state's own count replaces the calendar estimate below (lx_cause_deaths), so it isn't made there, as
-        # in the script (te_demog_step_begin): calendar ages put an immortal state's deaths dozens of times too high
-        if lx is None:
-            causes_raw = cause_deaths_estimate(bands_f, bands_m, {c: v * ck for c, v in cm.items()}, cwf * ck,
-                                               cwm * ck, infection_adult(inp))
+        model_raw = (cause_deaths_estimate(bands_f, bands_m, cm, cwf, cwm, infection_adult(inp))
+                     if lx is None else None)
+        # the on-top scales, each cause's on its own ages (te_demog_on_top_scales)
+        scales = cause_scales(deaths_scale, deaths_shares, model_raw)
+        ck = {"infection": scales["infection"], "external": scales["external"], "chronic": scales["chronic"],
+              "maternal": 1.0, "work": scales["work"]}
+        if deaths_scale or deaths_shares:
+            qf, qm = rates_from_multipliers({c: v * ck[c] for c, v in cm.items()}, cwf * ck["work"],
+                                            cwm * ck["work"], infection_adult(inp))
+        if model_raw is not None:
+            causes_raw = {c: v * scales[c] for c, v in model_raw.items()}
+    elif deaths_scale:
+        qf = [min(100000.0, q * (1 + deaths_scale)) for q in qf]
+        qm = [min(100000.0, q * (1 + deaths_scale)) for q in qm]
     maternal = 0.0
     s = ring.scale
     war_m = clamp(war_dead * P.WAR_DEAD_MALE_SHARE / ring.fam, 0, 0.5) if ring.fam else 0.0
@@ -1411,7 +1473,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
     if lx is not None:
         deaths += lx_pool_deaths(ring, lx, qf, qm, qf0, qm0)
         # the late sweep counts its own deaths by cause, the treated at their biological ages (te_demog_lx_cause_deaths)
-        causes_raw = lx_cause_deaths(lx, {c: v * ck for c, v in cm.items()}, cwf * ck, cwm * ck, infection_adult(inp))
+        causes_raw = lx_cause_deaths(lx, {c: v * ck[c] for c, v in cm.items()}, cwf * ck["work"], cwm * ck["work"],
+                                     infection_adult(inp))
     else:
         pq_f, pq_m = qf[-1] / 100000.0, qm[-1] / 100000.0
         deaths += ring.pool_f * pq_f + ring.pool_m * pq_m
@@ -1437,8 +1500,9 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
             "fertility": fert, "raw": raw,
             "tfr_shown": tfr, "maternal": maternal,
-            "causes": None if causes_raw is None else cause_deaths(causes_raw, deaths, maternal, deaths_scale,
-                                                                   war_dead, kills),
+            "causes": None if causes_raw is None else cause_deaths(
+                causes_raw, deaths, maternal, war_dead, kills, on_top=deaths_shares, engine=1 + deaths_scale,
+                scales=scales),
             # the model's own events, None where the scale left too few to read them back (the script keeps the last)
             "births_model": births / (1 + births_scale) if 1 + births_scale >= P.ON_TOP_FACTOR_MIN else None,
             "deaths_model": ((deaths - maternal) / (1 + deaths_scale)

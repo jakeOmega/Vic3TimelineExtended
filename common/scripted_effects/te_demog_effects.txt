@@ -90,9 +90,10 @@
 #                       the panel's figures (te_dg_w1549, women aged 15-49, is
 #                       the country's TFR weight), each with last year's in
 #                       te_dg_prev_<name> from the second census on
-#   te_dg_dc_inf, _ext, _chr, _work, _mat, _ontop, _war, _kill, te_dg_dc_total, te_dg_dc_lead, te_dg_dc_fit
+#   te_dg_dc_inf, _ext, _chr, _work, _mat, _war, _kill, te_dg_dc_total, te_dg_dc_lead, te_dg_dc_fit
 #                       issue #1029: last step's deaths by cause, people, their sum and the largest's code, and the
 #                       estimate's fit (te_demog_cause_deaths_store, below); a seed sets them 0 and removes the fit
+#   te_dg_dc_<c>_top    each cause's deaths on top of the census (inf, chr, ext, work, war; owner, 2026-10-22)
 #   te_dg_count_mi      the month of the state's last count (te_history_month_index), for its next count
 #   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
 #                       its outline), stored at the census for the panel's bars
@@ -788,6 +789,8 @@ te_demog_seed = {
 		limit = { has_variable = te_dg_ss_d }
 		remove_variable = te_dg_ss_d
 	}
+	# Causes of Death's start parts by cause (owner, 2026-10-22)
+	te_demog_on_top_start_clear = yes
 	set_variable = { name = te_dg_tfr_model value = var:te_dg_tfr }
 	# a seed's figures, not a step's (te_demog_set_trend)
 	set_local_variable = { name = te_dg_from_step value = 0 }
@@ -1777,10 +1780,11 @@ te_demog_step = {
 # The step's first half: medicine's share of the gap (te_demog_medicine_drift, the Causes of Death
 # plan), the practices' drift toward their targets (te_demog_practices_step, Late Marriage and Birth
 # Spacing; it reads the drifted access), the year's rates into locals (te_demog_prepare), then the
-# flows, which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then the rates
-# scaled to what the engine did over the window (te_demog_on_top_scales, phase 2 step 4), then each
-# natural cause's deaths at those rates over last count's bands, before the sweep writes this count's
-# (te_demog_cause_deaths_estimate, issue #1029).
+# flows, which take and remove te_dg_war_in and te_dg_kills_in (te_demog_flows), then each natural
+# cause's deaths at the model's rates over last count's bands, before the sweep writes this count's
+# (te_demog_cause_deaths_estimate, issue #1029), then the rates and those deaths scaled to what the engine
+# did over the window, each cause by its own deaths on top (te_demog_on_top_scales, phase 2 step 4; owner,
+# 2026-10-22).
 te_demog_step_begin = {
 	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
@@ -1796,14 +1800,15 @@ te_demog_step_begin = {
 	# no known moves unless the flows find Internal Resettlement's counters (te_demog_rs_take; the sweep reads it)
 	set_local_variable = { name = te_dg_rk_on value = 0 }
 	te_demog_flows = yes
-	te_demog_on_top_scales = yes
-	# the calendar estimate of deaths by cause, which a late-game state's own count replaces (te_demog_lx_cause_deaths),
-	# so it runs only outside the late game: calendar ages put an immortal state's deaths fifty times too high, which a
-	# famine's deaths scale could take past the fixed-point range (te_demog_on_top_scales)
+	# the calendar estimate of deaths by cause at the model's rates, which a late-game state's own count replaces
+	# (te_demog_lx_cause_deaths), so it runs only outside the late game: calendar ages put an immortal state's deaths
+	# fifty times too high, which a famine's deaths scale could take past the fixed-point range. Before the scales, which
+	# place each cause's deaths on top by it and then scale it with its multiplier (owner, 2026-10-22)
 	if = {
 		limit = { local_var:te_dg_lx_on = 0 }
 		te_demog_cause_deaths_estimate = yes
 	}
+	te_demog_on_top_scales = yes
 }
 
 # The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
@@ -2135,52 +2140,119 @@ te_demog_step_finish = {
 
 # THIS = a state at the end of its step (te_demog_step_finish, with the step's locals): last year's deaths by cause,
 # people (issue #1029; demographics_model.cause_deaths), for the Causes of Death section and the country's census,
-# which sums them. The four natural causes are te_demog_cause_deaths_estimate's figures (in the late game the late
-# sweep's own, te_demog_lx_cause_deaths) scaled to the census's own deaths from them: its deaths less childbirth's
-# (te_dg_mat) and, under Full, less what the on-top scale added (te_dg_dz above 0; below 0 the game took deaths away,
-# which no slice shows). Childbirth's, the deaths added on top, the war dead (te_dg_war) and the people killed by
-# events (te_dg_kills) as counted. Each scaled slice multiplies before it divides, so a small one keeps its digits.
+# which sums them. The census's deaths less childbirth's (te_dg_mat) are the four natural causes' and, under Full,
+# the civilians of war and devastation. Since the owner's 2026-10-22 call the deaths the engine added on top count under
+# their causes, not as a slice of their own: each cause's deaths on top over the window (te_dg_ot_<c>,
+# te_demog_on_top_causes), on the census's count by the window's deaths (te_dg_ed), are its own, and war's join the
+# war dead. The rest (the census's own deaths, its lag, anything no tag names) splits by each cause's share of the
+# model's own deaths: te_demog_cause_deaths_estimate's figures (in the late game the late sweep's own,
+# te_demog_lx_cause_deaths) at the step's rates, over the scale each multiplier took (te_dg_sg_<c>). Without a split by
+# cause (not Full, a first count, an old save) every death splits by the estimate. Childbirth's, the war dead
+# (te_dg_war) and the people killed by events (te_dg_kills) as counted. Each scaled slice multiplies before it divides,
+# so a small one keeps its digits.
 #   te_dg_dc_inf, _ext, _chr, _work  infection and hunger, accidents and violence, chronic illness and old age, work
-#   te_dg_dc_mat, te_dg_dc_ontop, te_dg_dc_war, te_dg_dc_kill  childbirth, added on top, war, killed by events
+#   te_dg_dc_mat, te_dg_dc_war, te_dg_dc_kill  childbirth, war and devastation, killed by events
+#   te_dg_dc_<c>_top  each cause's deaths on top, people, signed (inf, chr, ext, work, war; 0 without a split): the hovers
 #   te_dg_dc_total  the slices' sum: te_dg_deaths with the war dead and the killed
-#   te_dg_dc_fit    the estimate over the census's deaths from the four causes before the on-top split: 1 when the
-#                   estimate matches the sweep (the self-check's figure; te_debug_demog_cause_deaths_selfcheck)
+#   te_dg_dc_fit    the estimate over the census's natural deaths: 1 when the estimate matches the sweep (the
+#                   self-check's figure; te_debug_demog_cause_deaths_selfcheck)
 te_demog_cause_deaths_store = {
 	set_local_variable = { name = te_dg_dc_nat value = { value = local_var:te_dg_deaths subtract = local_var:te_dg_mat min = 0 } }
-	set_local_variable = { name = te_dg_dc_top value = 0 }
+	# the deaths on top by cause over the window (te_dg_ot_<c>, Full only), on the census's count by the window's deaths
+	set_local_variable = { name = te_dg_dc_k value = 0 }
 	if = {
-		limit = { local_var:te_dg_dz > 0 }
-		set_local_variable = {
-			name = te_dg_dc_top
-			value = { value = local_var:te_dg_dc_nat multiply = local_var:te_dg_dz divide = { value = local_var:te_dg_dz add = 1 min = 1 } }
+		limit = {
+			has_variable = te_dg_ot_inf
+			has_variable = te_dg_ot_chr
+			has_variable = te_dg_ot_ext
+			has_variable = te_dg_ot_work
+			has_variable = te_dg_ot_war
+			var:te_dg_ed > 0
+		}
+		set_local_variable = { name = te_dg_dc_k value = { value = local_var:te_dg_dc_nat divide = { value = var:te_dg_ed min = 1 } } }
+	}
+	te_demog_cause_deaths_top = { C = inf }
+	te_demog_cause_deaths_top = { C = chr }
+	te_demog_cause_deaths_top = { C = ext }
+	te_demog_cause_deaths_top = { C = work }
+	te_demog_cause_deaths_top = { C = war }
+	set_local_variable = {
+		name = te_dg_dc_rest
+		value = {
+			value = local_var:te_dg_dc_nat
+			subtract = var:te_dg_dc_inf_top
+			subtract = var:te_dg_dc_chr_top
+			subtract = var:te_dg_dc_ext_top
+			subtract = var:te_dg_dc_work_top
+			subtract = var:te_dg_dc_war_top
 		}
 	}
-	set_local_variable = { name = te_dg_dc_own value = { value = local_var:te_dg_dc_nat subtract = local_var:te_dg_dc_top } }
+	# the model's own deaths from each cause: the estimate at the step's rates over the scale its multiplier took
+	# (te_demog_on_top_cause_scales; 1 where the step set none)
 	set_local_variable = {
 		name = te_dg_dc_est
 		value = { value = local_var:te_dg_ce_inf add = local_var:te_dg_ce_ext add = local_var:te_dg_ce_chr add = local_var:te_dg_ce_work }
 	}
-	if = {
-		limit = { local_var:te_dg_dc_est > 0 }
-		set_variable = { name = te_dg_dc_inf value = { value = local_var:te_dg_ce_inf multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
-		set_variable = { name = te_dg_dc_ext value = { value = local_var:te_dg_ce_ext multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
-		set_variable = { name = te_dg_dc_chr value = { value = local_var:te_dg_ce_chr multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
-		set_variable = { name = te_dg_dc_work value = { value = local_var:te_dg_ce_work multiply = local_var:te_dg_dc_own divide = { value = local_var:te_dg_dc_est min = 0.00001 } } }
+	te_demog_cause_deaths_model = { C = inf }
+	te_demog_cause_deaths_model = { C = ext }
+	te_demog_cause_deaths_model = { C = chr }
+	te_demog_cause_deaths_model = { C = work }
+	set_local_variable = {
+		name = te_dg_dc_mod
+		value = { value = local_var:te_dg_dc_m_inf add = local_var:te_dg_dc_m_ext add = local_var:te_dg_dc_m_chr add = local_var:te_dg_dc_m_work }
 	}
-	else = {
-		set_variable = { name = te_dg_dc_inf value = 0 }
-		set_variable = { name = te_dg_dc_ext value = 0 }
-		set_variable = { name = te_dg_dc_chr value = 0 }
-		set_variable = { name = te_dg_dc_work value = 0 }
-	}
+	te_demog_cause_deaths_slice = { C = inf }
+	te_demog_cause_deaths_slice = { C = ext }
+	te_demog_cause_deaths_slice = { C = chr }
+	te_demog_cause_deaths_slice = { C = work }
 	set_variable = { name = te_dg_dc_mat value = local_var:te_dg_mat }
-	set_variable = { name = te_dg_dc_ontop value = local_var:te_dg_dc_top }
-	set_variable = { name = te_dg_dc_war value = local_var:te_dg_war }
+	# war and devastation: the war dead as counted, and the civilians the tagged war lines killed
+	set_variable = { name = te_dg_dc_war value = { value = var:te_dg_dc_war_top min = 0 add = local_var:te_dg_war } }
 	set_variable = { name = te_dg_dc_kill value = local_var:te_dg_kills }
 	te_demog_cause_deaths_total = yes
+	te_demog_cause_deaths_old_clear = yes
 	set_variable = { name = te_dg_dc_fit value = { value = local_var:te_dg_dc_est divide = { value = local_var:te_dg_dc_nat min = 1 } } }
 	# once a game: the estimate against the sweep (te_debug_demog_effects.txt)
 	te_debug_demog_cause_deaths_selfcheck = yes
+}
+
+# One cause's deaths on top, people (signed): te_dg_dc_<c>_top, 0 without a split by cause. The hovers read it.
+te_demog_cause_deaths_top = {
+	set_variable = { name = te_dg_dc_$C$_top value = 0 }
+	if = {
+		limit = { local_var:te_dg_dc_k > 0 }
+		set_variable = { name = te_dg_dc_$C$_top value = { value = var:te_dg_ot_$C$ multiply = local_var:te_dg_dc_k } }
+	}
+}
+
+# One natural cause's model deaths, local te_dg_dc_m_<c>.
+te_demog_cause_deaths_model = {
+	set_local_variable = { name = te_dg_dc_m_$C$ value = local_var:te_dg_ce_$C$ }
+	if = {
+		limit = { has_local_variable = te_dg_sg_$C$ }
+		set_local_variable = {
+			name = te_dg_dc_m_$C$
+			value = { value = local_var:te_dg_ce_$C$ divide = { value = local_var:te_dg_sg_$C$ min = te_demog_k_cause_scale_min } }
+		}
+	}
+}
+
+# One natural cause's slice: its share of the rest by the model's own deaths, and its own deaths on top; at least 0.
+te_demog_cause_deaths_slice = {
+	set_variable = { name = te_dg_dc_$C$ value = { value = var:te_dg_dc_$C$_top min = 0 } }
+	if = {
+		limit = { local_var:te_dg_dc_mod > 0 }
+		set_variable = {
+			name = te_dg_dc_$C$
+			value = {
+				value = local_var:te_dg_dc_m_$C$
+				multiply = local_var:te_dg_dc_rest
+				divide = { value = local_var:te_dg_dc_mod min = 0.00001 }
+				add = var:te_dg_dc_$C$_top
+				min = 0
+			}
+		}
+	}
 }
 
 # THIS = a state at its seed (issue #1029): a seed counts no deaths (te_dg_deaths 0), so it has none by cause, and no fit.
@@ -2190,11 +2262,16 @@ te_demog_cause_deaths_zero = {
 	set_variable = { name = te_dg_dc_chr value = 0 }
 	set_variable = { name = te_dg_dc_work value = 0 }
 	set_variable = { name = te_dg_dc_mat value = 0 }
-	set_variable = { name = te_dg_dc_ontop value = 0 }
 	set_variable = { name = te_dg_dc_war value = 0 }
 	set_variable = { name = te_dg_dc_kill value = 0 }
+	set_variable = { name = te_dg_dc_inf_top value = 0 }
+	set_variable = { name = te_dg_dc_chr_top value = 0 }
+	set_variable = { name = te_dg_dc_ext_top value = 0 }
+	set_variable = { name = te_dg_dc_work_top value = 0 }
+	set_variable = { name = te_dg_dc_war_top value = 0 }
 	set_variable = { name = te_dg_dc_total value = 0 }
 	set_variable = { name = te_dg_dc_lead value = 0 }
+	te_demog_cause_deaths_old_clear = yes
 	if = {
 		limit = { has_variable = te_dg_dc_fit }
 		remove_variable = te_dg_dc_fit
@@ -2203,8 +2280,9 @@ te_demog_cause_deaths_zero = {
 
 # THIS = a state or a country, once its te_dg_dc_* slices are written (issue #1029): their sum, the pie's whole, and the
 # largest slice, te_dg_dc_lead: its code in the pie's clockwise order (te_demog_dc_cum_*), 1 infection and hunger, 2
-# chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 6 added on top, 7 killed by events, 8
-# war; 0 with no deaths. The first of a tie takes it.
+# chronic illness and old age, 3 accidents and violence, 4 work, 5 childbirth, 7 killed by events, 8 war and
+# devastation; 0 with no deaths. 6 was the deaths added on top, which count under their causes since 2026-10-22: the
+# codes keep their numbers, so a save's history keeps its colours. The first of a tie takes it.
 te_demog_cause_deaths_total = {
 	set_variable = {
 		name = te_dg_dc_total
@@ -2214,7 +2292,6 @@ te_demog_cause_deaths_total = {
 			add = var:te_dg_dc_chr
 			add = var:te_dg_dc_work
 			add = var:te_dg_dc_mat
-			add = var:te_dg_dc_ontop
 			add = var:te_dg_dc_war
 			add = var:te_dg_dc_kill
 		}
@@ -2226,7 +2303,6 @@ te_demog_cause_deaths_total = {
 	te_demog_cause_deaths_lead = { SLICE = ext CODE = 3 }
 	te_demog_cause_deaths_lead = { SLICE = work CODE = 4 }
 	te_demog_cause_deaths_lead = { SLICE = mat CODE = 5 }
-	te_demog_cause_deaths_lead = { SLICE = ontop CODE = 6 }
 	te_demog_cause_deaths_lead = { SLICE = kill CODE = 7 }
 	te_demog_cause_deaths_lead = { SLICE = war CODE = 8 }
 }
@@ -2248,9 +2324,13 @@ te_demog_cause_deaths_country_init = {
 	set_local_variable = { name = te_dg_c_dc_chr value = 0 }
 	set_local_variable = { name = te_dg_c_dc_work value = 0 }
 	set_local_variable = { name = te_dg_c_dc_mat value = 0 }
-	set_local_variable = { name = te_dg_c_dc_ontop value = 0 }
 	set_local_variable = { name = te_dg_c_dc_war value = 0 }
 	set_local_variable = { name = te_dg_c_dc_kill value = 0 }
+	set_local_variable = { name = te_dg_c_dc_inf_top value = 0 }
+	set_local_variable = { name = te_dg_c_dc_chr_top value = 0 }
+	set_local_variable = { name = te_dg_c_dc_ext_top value = 0 }
+	set_local_variable = { name = te_dg_c_dc_work_top value = 0 }
+	set_local_variable = { name = te_dg_c_dc_war_top value = 0 }
 }
 
 # THIS = a census state, in te_demog_country_census's walk (the locals are the country's effect's).
@@ -2262,9 +2342,17 @@ te_demog_cause_deaths_country_add = {
 		change_local_variable = { name = te_dg_c_dc_chr add = var:te_dg_dc_chr }
 		change_local_variable = { name = te_dg_c_dc_work add = var:te_dg_dc_work }
 		change_local_variable = { name = te_dg_c_dc_mat add = var:te_dg_dc_mat }
-		change_local_variable = { name = te_dg_c_dc_ontop add = var:te_dg_dc_ontop }
 		change_local_variable = { name = te_dg_c_dc_war add = var:te_dg_dc_war }
 		change_local_variable = { name = te_dg_c_dc_kill add = var:te_dg_dc_kill }
+	}
+	# each cause's deaths on top (owner, 2026-10-22), from the states whose count has them
+	if = {
+		limit = { has_variable = te_dg_dc_war_top }
+		change_local_variable = { name = te_dg_c_dc_inf_top add = var:te_dg_dc_inf_top }
+		change_local_variable = { name = te_dg_c_dc_chr_top add = var:te_dg_dc_chr_top }
+		change_local_variable = { name = te_dg_c_dc_ext_top add = var:te_dg_dc_ext_top }
+		change_local_variable = { name = te_dg_c_dc_work_top add = var:te_dg_dc_work_top }
+		change_local_variable = { name = te_dg_c_dc_war_top add = var:te_dg_dc_war_top }
 	}
 }
 
@@ -2275,10 +2363,24 @@ te_demog_cause_deaths_country_store = {
 	set_variable = { name = te_dg_dc_chr value = local_var:te_dg_c_dc_chr }
 	set_variable = { name = te_dg_dc_work value = local_var:te_dg_c_dc_work }
 	set_variable = { name = te_dg_dc_mat value = local_var:te_dg_c_dc_mat }
-	set_variable = { name = te_dg_dc_ontop value = local_var:te_dg_c_dc_ontop }
 	set_variable = { name = te_dg_dc_war value = local_var:te_dg_c_dc_war }
 	set_variable = { name = te_dg_dc_kill value = local_var:te_dg_c_dc_kill }
+	set_variable = { name = te_dg_dc_inf_top value = local_var:te_dg_c_dc_inf_top }
+	set_variable = { name = te_dg_dc_chr_top value = local_var:te_dg_c_dc_chr_top }
+	set_variable = { name = te_dg_dc_ext_top value = local_var:te_dg_c_dc_ext_top }
+	set_variable = { name = te_dg_dc_work_top value = local_var:te_dg_c_dc_work_top }
+	set_variable = { name = te_dg_dc_war_top value = local_var:te_dg_c_dc_war_top }
 	te_demog_cause_deaths_total = yes
+	te_demog_cause_deaths_old_clear = yes
+}
+
+# THIS = a state or a country: the deaths added on top as a slice of their own, which a save from before 2026-10-22
+# holds, go (they count under their causes since).
+te_demog_cause_deaths_old_clear = {
+	if = {
+		limit = { has_variable = te_dg_dc_ontop }
+		remove_variable = te_dg_dc_ontop
+	}
 }
 
 # THIS = a state, after its census (demographics_model.structure, by band): the

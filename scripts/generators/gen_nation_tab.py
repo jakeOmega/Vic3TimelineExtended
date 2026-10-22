@@ -372,6 +372,8 @@ NOT_A_ROW = {
     "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
     "goods_trade_advantage_*_mult": "the arms embargo's own line in Where These Come From (seven goods)",
+    "state_death_cause_*_mult": "the Demographics tab's Causes of Death: a label beside a mortality line, which the "
+                                "mortality line's own row shows",
 }
 
 

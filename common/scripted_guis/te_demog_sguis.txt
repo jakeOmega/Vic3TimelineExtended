@@ -202,8 +202,7 @@ te_demog_state_causes_sgui = {
 	effect = { }
 }
 
-# The rule's Full setting: only then does the census set births and deaths, so only then is there a Deaths Added on
-# Top row.
+# The rule's Full setting, for a state's hover that says what the census does rather than would do.
 te_demog_state_full_sgui = {
 	scope = state
 	is_shown = { te_demog_effects_run = yes }
@@ -212,9 +211,9 @@ te_demog_state_full_sgui = {
 	effect = { }
 }
 
-# A measured scale under Full: the step had a target (the first Full step after a seed writes te_dg_ed_target 0 and
-# dz 0), the walk measured the split (a save from before the split has none until its next count), and the refresh
-# noted its clamp (none on the first Full step after Display only or a seed).
+# A measured scale under Full, for the deaths row's line on the census's own rate (te_demog_st_ontop_rate): the step
+# had a target (the first Full step after a seed writes te_dg_ed_target 0 and dz 0), and the refresh noted whether the
+# floor bit its window (none on the first Full step after Display only or a seed), which the line's note reads.
 te_demog_state_on_top_sgui = {
 	scope = state
 	is_shown = {
@@ -222,25 +221,8 @@ te_demog_state_on_top_sgui = {
 		has_variable = te_dg_ed_target
 		var:te_dg_ed_target > 0
 		has_variable = te_dg_dz
-		has_variable = te_dg_ed_state
-		has_variable = te_dg_ed_sev
-		has_variable = te_dg_sev_share
+		has_variable = te_dg_cdr_model
 		has_variable = te_dg_ed_clamp_d
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
-# The note under that hover's split (te_demog_st_ontop_phi): under Full, Private Health Insurance's wealth line
-# (demographics_params.WEALTH_LINE_FLOOR) can take the richest pops' deaths to 0. The walk then leaves them out, but the
-# split still takes off their unfloored share, so the other effects on some of its people read below x1 and the whole
-# state's high by as much (owner, 2026-10-20: the edge is accepted, and the hover says so). The state's owner's law.
-te_demog_state_phi_note_sgui = {
-	scope = state
-	is_shown = {
-		te_demog_effects_run = yes
-		owner ?= { has_law = law_type:law_private_health_insurance }
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -576,7 +558,7 @@ te_demog_acc_ready_sgui = {
 	effect = { }
 }
 
-# Under Full, the census's own death rate across the country's states (te_dg_cdr_model): the Added on Top row's measure.
+# Under Full, the census's own death rate across the country's states (te_dg_cdr_model): the deaths row's line on it.
 te_demog_ontop_ready_sgui = {
 	scope = country
 	is_shown = {

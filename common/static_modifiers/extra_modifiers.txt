@@ -130,6 +130,7 @@ nuclear_strike_aftermath = {
 	state_infrastructure_mult = -0.5
 	state_standard_of_living_add = -3
 	state_mortality_mult = 0.25
+	state_death_cause_war_mult = 0.25
 	building_throughput_add = -0.5
 }
 
@@ -138,6 +139,7 @@ tactical_nuke_aftermath = {
 	state_infrastructure_mult = -0.1
 	state_standard_of_living_add = -1
 	state_mortality_mult = 0.05
+	state_death_cause_war_mult = 0.05
 	building_training_rate_mult = -1
 }
 
@@ -341,6 +343,7 @@ failed_state_modifier = {
 INJECT:state_region_pollution_health = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_chr_mult = 0.55
 	state_standard_of_living_add = -3
 	state_demog_replaced_ratio_add = -0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 	state_work_capacity_mult = -0.1	# the census's participation input (phase 2 step 1; the design §1.7): ill health keeps people from work
@@ -1344,6 +1347,7 @@ banking_crash_intervention_capital_controls = {
 global_warming = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_chr_mult = 0.05
 	state_standard_of_living_add = -1.0
 	building_group_bg_agriculture_throughput_add = -0.1
 	state_migration_quota_mult = 0.01                     # climate refugees; scales: mild=2.5, moderate=5, severe=10, catastrophic=20
@@ -1407,6 +1411,7 @@ renewable_investment_cost_modifier = {
 climate_adaptation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_mortality_mult = -0.025
+	state_death_cause_chr_mult = -0.025
 	state_standard_of_living_add = 0.5
 	country_authority_cost_add = 250
 }
@@ -1474,6 +1479,7 @@ emergency_climate_spending_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_bureaucracy_mult = -0.05
 	state_mortality_mult = -0.05
+	state_death_cause_chr_mult = -0.05
 	state_standard_of_living_add = 1
 }
 
@@ -1488,6 +1494,7 @@ climate_crisis_emergency_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_bureaucracy_mult = -0.10
 	state_mortality_mult = -0.05
+	state_death_cause_chr_mult = -0.05
 	state_standard_of_living_add = 1
 	country_institution_cost_institution_ministry_of_the_environment_mult = -0.50
 }
@@ -1511,6 +1518,7 @@ climate_survival_footing_modifier = {
 climate_fortress_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_mortality_mult = 0.10
+	state_death_cause_chr_mult = 0.10
 	state_standard_of_living_add = -2
 	building_throughput_add = -0.05
 	country_prestige_mult = -0.10
@@ -1521,6 +1529,7 @@ climate_fortress_modifier = {
 climate_carrying_on_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
 	state_mortality_mult = 0.10
+	state_death_cause_chr_mult = 0.10
 	state_standard_of_living_add = -2
 	building_group_bg_agriculture_throughput_add = -0.15
 }
@@ -1529,6 +1538,7 @@ crop_failure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_group_bg_agriculture_throughput_add = -0.15
 	state_mortality_mult = 0.03
+	state_death_cause_inf_mult = 0.03
 }
 
 crop_failure_relief_modifier = {
@@ -1595,6 +1605,7 @@ water_crisis_rationing_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_standard_of_living_add = -1.5
 	state_mortality_mult = 0.02
+	state_death_cause_inf_mult = 0.02
 	building_group_bg_agriculture_throughput_add = -0.10
 }
 
@@ -1667,6 +1678,7 @@ climate_summit_pledge_no_gw_modifier = {
 tropical_disease_spread_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_inf_mult = 0.05
 	state_standard_of_living_add = -1
 	building_group_bg_service_throughput_add = -0.10
 }
@@ -1674,6 +1686,7 @@ tropical_disease_spread_modifier = {
 tropical_disease_research_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	state_mortality_mult = 0.02
+	state_death_cause_inf_mult = 0.02
 	country_tech_research_speed_mult = 0.03
 	country_bureaucracy_mult = -0.03
 }
@@ -1681,6 +1694,7 @@ tropical_disease_research_modifier = {
 tropical_disease_public_health_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_mortality_mult = 0.01
+	state_death_cause_inf_mult = 0.01
 	country_legitimacy_base_add = 10
 	state_standard_of_living_add = -0.3
 }
@@ -1695,6 +1709,7 @@ arctic_melting_modifier = {
 	building_port_throughput_add = -0.10
 	building_group_bg_fishing_throughput_add = -0.15
 	state_mortality_mult = 0.01
+	state_death_cause_chr_mult = 0.01
 }
 
 coastal_relocation_modifier = {
@@ -3873,6 +3888,7 @@ un_mission_aid_state_modifier = {
 	state_standard_of_living_add = 1.5
 	state_food_security_add = 0.2
 	state_mortality_mult = -0.05
+	state_death_cause_inf_mult = -0.05
 }
 un_mission_stabilisation_state_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
@@ -3920,6 +3936,7 @@ un_regime_climate_emitter_modifier = {
 un_regime_climate_adaptation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds
 	state_mortality_mult = -0.01
+	state_death_cause_chr_mult = -0.01
 	state_standard_of_living_add = 0.2
 	building_group_bg_agriculture_throughput_add = 0.02
 }
@@ -4257,6 +4274,7 @@ un_humanitarian_aid_received_modifier = {
 	state_standard_of_living_add = 1
 	state_food_security_add = 0.25
 	state_mortality_mult = -0.05
+	state_death_cause_inf_mult = -0.05
 }
 
 un_humanitarian_token_received_modifier = {
@@ -4409,6 +4427,7 @@ un_aid_received_modifier = {
 	state_standard_of_living_add = 1
 	state_food_security_add = 0.2
 	state_mortality_mult = -0.03
+	state_death_cause_inf_mult = -0.03
 }
 
 # ---- Law of the Sea (UNCLOS) ----
@@ -4563,6 +4582,7 @@ ww_prolonged_war_exhaustion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_war_support_casualties_mult = 0.25
 	state_mortality_mult = 0.03
+	state_death_cause_war_mult = 0.03
 	state_standard_of_living_add = -4
 	state_radicals_from_political_movements_mult = 1.0
 }
@@ -4579,6 +4599,7 @@ ww_devastation_modifier = {
 	state_standard_of_living_add = -5
 	state_infrastructure_add = -10
 	state_mortality_mult = 0.05
+	state_death_cause_war_mult = 0.05
 	building_group_bg_agriculture_throughput_add = -0.2
 	state_migration_pull_mult = -0.5
 }
@@ -4652,6 +4673,7 @@ ww_ground_offensive_modifier = {
 	unit_army_defense_mult = 0.05
 	country_war_support_casualties_mult = -0.1
 	state_mortality_mult = 0.02
+	state_death_cause_war_mult = 0.02
 	state_standard_of_living_add = -1
 	state_radicals_from_political_movements_mult = 0.25
 }
@@ -5698,6 +5720,7 @@ reproductive_rights_progressive_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.02
 	state_mortality_mult = -0.01
+	state_death_cause_inf_mult = -0.01
 }
 
 contraception_restricted_modifier = {
@@ -6159,12 +6182,14 @@ creative_productivity_modifier = {
 mental_health_crisis_active_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_mortality_mult = 0.03
+	state_death_cause_ext_mult = 0.03
 }
 
 # JE completion
 mental_health_infrastructure_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_mortality_mult = -0.03
+	state_death_cause_ext_mult = -0.03
 	country_prestige_mult = 0.05
 }
 
@@ -6172,6 +6197,7 @@ mental_health_infrastructure_modifier = {
 mental_health_neglect_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_ext_mult = 0.05
 	country_prestige_add = -25
 }
 
@@ -6179,6 +6205,7 @@ mental_health_neglect_modifier = {
 mental_health_leave_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_mortality_mult = -0.02
+	state_death_cause_ext_mult = -0.02
 	country_bureaucracy_mult = -0.02
 }
 
@@ -6191,6 +6218,7 @@ resilience_programs_modifier = {
 youth_mental_health_funding_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_mortality_mult = -0.02
+	state_death_cause_ext_mult = -0.02
 	country_prestige_mult = 0.02
 }
 
@@ -6204,6 +6232,7 @@ social_media_regulation_modifier = {
 mental_health_crisis_ignored_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	state_mortality_mult = 0.05
+	state_death_cause_ext_mult = 0.05
 	country_prestige_mult = -0.05
 }
 
@@ -6211,6 +6240,7 @@ mental_health_crisis_ignored_modifier = {
 addiction_public_health_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_mortality_mult = -0.02
+	state_death_cause_chr_mult = -0.02
 	country_bureaucracy_mult = -0.02
 }
 
@@ -6224,6 +6254,7 @@ war_on_drugs_modifier = {
 veteran_mental_health_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	state_mortality_mult = -0.01
+	state_death_cause_ext_mult = -0.01
 	country_prestige_mult = 0.02
 }
 
@@ -6231,6 +6262,7 @@ veteran_mental_health_modifier = {
 institutional_reform_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_mortality_mult = -0.02
+	state_death_cause_chr_mult = -0.02
 	country_prestige_mult = 0.02
 }
 

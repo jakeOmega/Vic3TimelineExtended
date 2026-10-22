@@ -1892,13 +1892,14 @@ te_demog_k_crisis_at_war = { value = 0.3 }
 te_demog_k_on_top_scale_min = { value = -1 }
 te_demog_k_on_top_factor_min = { value = 0.01 }
 te_demog_k_window_start_weight = { value = 0.5 }
+te_demog_k_cause_scale_min_deaths = { value = 1 }
+te_demog_k_cause_scale_min = { value = 0.0001 }
 te_demog_k_rate_total_floor = { value = -1 }
 te_demog_k_rate_bare_min = { value = 80 }
 te_demog_k_natural_fertility_floor = { value = 0.2 }
 te_demog_k_wealth_line_floor = { value = -0.005 }
 te_demog_k_medicine_snap = { value = 0.005 }
 te_demog_k_medicine_snap_neg = { value = -0.005 }
-te_demog_k_deaths_on_top_high = { value = 1.25 }
 te_demog_k_base_access = { value = 0.4 }
 te_demog_k_maternal_base = { value = 670 }
 te_demog_k_practice_rate = { value = 0.025 }

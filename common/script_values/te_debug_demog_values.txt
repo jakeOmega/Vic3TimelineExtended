@@ -1132,3 +1132,16 @@ te_debug_demog_late_country_w = {
 		value = var:te_dg_lx_w
 	}
 }
+
+# TE_SELF_CHECK cause_tags_read (te_debug_demog_cause_tags_selfcheck, Causes of Death; owner 2026-10-22), state scope: the
+# five tags' sum and the state's devastation, for its log line.
+te_debug_demog_cause_tag_sum = {
+	value = modifier:state_death_cause_inf_mult
+	add = modifier:state_death_cause_chr_mult
+	add = modifier:state_death_cause_ext_mult
+	add = modifier:state_death_cause_work_mult
+	add = modifier:state_death_cause_war_mult
+}
+te_debug_demog_devastation = {
+	value = devastation
+}

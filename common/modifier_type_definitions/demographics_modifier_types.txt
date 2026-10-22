@@ -323,3 +323,39 @@ state_backup_work_mortality_mult = {
 	decimals = 0
 	script_only = yes
 }
+
+# Causes of Death (owner, 2026-10-22): a tag beside each mortality line the census leaves on top, at the line's own value,
+# naming the cause its deaths count under in the Causes of Death section (te_demog_on_top_split reads the five at both
+# ends of its window). The engine sums and scales them with the line they sit beside; the census only reads them. Tags
+# on vanilla's carriers are te_demog_cause_tags_generated.txt's INJECTs (demographics_params.DEATH_CAUSE_TAGS). Loc
+# names them as labels, not as a second amount (scripting_best_practices.md, script_only).
+state_death_cause_inf_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_death_cause_chr_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_death_cause_ext_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_death_cause_work_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+state_death_cause_war_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}

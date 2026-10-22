@@ -1199,6 +1199,7 @@ pm_roche_tower = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.15
+			state_death_cause_chr_mult = -0.15
 			goods_output_services_mult = 0.05
 			building_university_throughput_add = 0.25
 		}
@@ -1230,6 +1231,7 @@ pm_pfizer_rd_campus = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.1
+			state_death_cause_inf_mult = -0.1
 			goods_output_services_mult = 0.05
 			building_university_throughput_add = 0.5
 		}
@@ -1614,6 +1616,7 @@ pm_cochlear_global_hq = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.1
+			state_death_cause_chr_mult = -0.1
 			building_economy_of_scale_level_cap_add = 20
 		}
 	}
@@ -11730,6 +11733,7 @@ pm_novo_nordisk_kalundborg_plant = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.05
+			state_death_cause_chr_mult = -0.05
 			state_pollution_generation_mult = -0.15
 			building_synthetics_plant_biomass_throughput_add = 0.25
 		}
@@ -11798,6 +11802,7 @@ pm_biocon_park = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.05
+			state_death_cause_chr_mult = -0.05
 			building_synthetics_plant_opium_throughput_add = 0.20
 		}
 	}
@@ -11868,6 +11873,7 @@ pm_biontech_mainz_campus = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_mortality_mult = -0.10
+			state_death_cause_inf_mult = -0.10
 			building_synthetics_plant_opium_throughput_add = 0.20
 		}
 	}

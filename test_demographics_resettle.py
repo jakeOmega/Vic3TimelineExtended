@@ -186,10 +186,14 @@ class TestWalkCounters(unittest.TestCase):
         """Review M4: Hard Winter's and the settlements' famine's dead reach the census as kills, not emigrants."""
         events = squash(_text(ROOT / "events" / "resettlement_events.txt"))
         for value, kill in (("1000", "kill_population_in_state = { value = 1000 strata = lower }"),
-                            # the famine can't kill more farmers than the state holds (re-review)
-                            ("{ value = 5000 max = resettlement_state_farmers }",
+                            # the famine can't kill more farmers than the state holds (re-review); a script value, since
+                            # an argument is one token (#1096: a { } block there dropped every event after it)
+                            ("resettlement_famine_dead",
                              "kill_population_in_state = { value = 5000 pop_type = farmers }")):
             self.assertIn(f"hidden_effect = {{ te_demog_note_kills = {{ VALUE = {value} }} }} {kill}", events)
+        famine = squash(_block(_text(ROOT / "common" / "script_values" / "resettlement_values.txt"),
+                               "resettlement_famine_dead"))
+        self.assertIn("value = 5000 max = resettlement_state_farmers", famine)
 
     def test_the_transit_dead_are_known_kills(self):
         """The 2026-10-09 gap: they reached the census through te_demog_note_kills, the strikes' path."""

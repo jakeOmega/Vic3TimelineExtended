@@ -145,6 +145,7 @@ gm_national_sig_conquerors_of_space = {
 gm_national_sig_olympic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	state_mortality_mult = -0.01
+	state_death_cause_chr_mult = -0.01
 }
 
 gm_national_sig_heroes = {
@@ -219,6 +220,7 @@ gm_boon_tech_industrial = {
 gm_boon_tech_athletic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	state_mortality_mult = -0.05
+	state_death_cause_chr_mult = -0.05
 }
 
 gm_boon_tech_naturalist = {

@@ -386,7 +386,9 @@ class ModifierTests(unittest.TestCase):
         for name, body in top_level_blocks(read(MODIFIERS)):
             if not name.startswith(("gm_national_", "gm_ig_approval_", "gm_local_")):
                 continue
-            fields = [k for k in re.findall(r"(?m)^\s*(\w+)\s*=", body) if k != "icon"]
+            # a mortality line's Causes of Death tag is a label beside it, not a field of its own (owner, 2026-10-22)
+            fields = [k for k in re.findall(r"(?m)^\s*(\w+)\s*=", body)
+                      if k != "icon" and not k.startswith("state_death_cause_")]
             self.assertEqual(len(fields), 1, name)
             self.assertIn("modifier_statue_", body, name)
 
@@ -2377,7 +2379,9 @@ class BoonTests(unittest.TestCase):
             name = f"gm_boon_{src.key}"
             body = block(read(MODIFIERS), name)
             self.assertIsNotNone(body, name)
-            fields = [k for k in re.findall(r"(?m)^\s*(\w+)\s*=", body) if k != "icon"]
+            # a mortality line's Causes of Death tag is a label beside it (owner, 2026-10-22)
+            fields = [k for k in re.findall(r"(?m)^\s*(\w+)\s*=", body)
+                      if k != "icon" and not k.startswith("state_death_cause_")]
             self.assertEqual(fields, [src.boon_field], name)
             self.assertAlmostEqual(number(body, src.boon_field), src.boon_value, msg=name)
             self.assertIn("modifier_statue_positive", body, name)
