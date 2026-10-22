@@ -2450,3 +2450,30 @@ move off it loses the bonus at once.
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 300 --points 0 --only fiat [--wage-pressure 1.0] [--tune it_lean=0.25 | --tune cred_it=0 | --tune cred_growth=-0.1]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 300 --points 0 --only fiat --fin-law law_central_bank_independence --bank-level 9 [--wage-pressure 1.0] [--tune cred_it=0]
 ```
+
+## 27. Wealth Concentration's bubble line (2026-10-22)
+
+The demographic effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`) puts bubble
+pressure on Wealth Concentration's national pair: Great Family Fortunes +0.3 a month at a score of 80 (+0.5 at 100),
+Dispersed Wealth −0.3 at 20 (−0.4 at 0). `--extra-bubble X` adds a flat monthly term after the laws' lines (a run at
+0 is bit-identical; `test_banking_sim_extensions.ExtraBubble`). 400 runs a cell, market economy, crashes a century:
+
+| Arm | 0 | +0.3 | −0.3 | +0.5 (score 100) | −0.4 (score 0) |
+|---|---|---|---|---|---|
+| gold, no policy, no tools | 7.9 | 8.8 (+11%) | 7.4 (−6%) | 9.9 (+25%) | 7.3 (−8%) |
+| gold, no policy, 5 points | 5.5 | 7.3 (+33%) | 4.3 (−22%) | 8.9 (+62%) | 3.8 (−31%) |
+| gold, price mandate, no tools | 10.1 | 11.8 (+17%) | 9.1 (−10%) | 12.8 (+27%) | 8.9 (−12%) |
+| fiat, price mandate, no tools | 15.8 | 18.6 (+18%) | 13.7 (−13%) | 21.1 (+34%) | 13.3 (−16%) |
+| fiat, price mandate, 5 points | 8.2 | 11.7 (+43%) | 5.7 (−30%) | 14.2 (+73%) | 4.7 (−43%) |
+| fiat, inflation targeting, no tools | 16.4 | 19.7 (+20%) | 14.7 (−10%) | 22.1 (+35%) | 14.2 (−13%) |
+| fiat, growth mandate, no tools | 20.6 | 22.9 (+11%) | 18.8 (−9%) | 23.9 (+16%) | 18.1 (−12%) |
+
+- **The design's test holds, so ±0.3 stays.** It asked for a score-100 country to crash 10–30% more often than a
+  neutral one untooled, and a score-0 country 10–25% less: +16% to +35% and −8% to −16% across the arms, inside or at
+  the band's edges.
+- **The response is asymmetric.** A push down helps only while a bubble is building, since bubble pressure stops at
+  0, so −0.4 moves crashes about half as far as +0.5.
+- **Tools amplify it.** A managed cycle has less noise for the line to hide in: with 5 points the gaps are two to three
+  times the untooled ones. A player who manages the cycle feels the line most.
+- **Fiat with no monetary policy at all is saturated** (about 34 crashes a century, under every bubble term), and no
+  country runs it in game.

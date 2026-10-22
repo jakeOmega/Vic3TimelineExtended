@@ -767,6 +767,11 @@ class Config:
     # default; `--wage-pressure 1.0` is a country with factory councils and
     # workers' protections (§12).
     wage_pressure: float = 0.0
+    # Standing country_bubble_pressure_monthly_add beyond the laws', a month:
+    # Wealth Concentration's national line (Great Family Fortunes +0.3 at a
+    # score of 80, Dispersed Wealth -0.3 at 20; the 2026-10-22 effects design).
+    # 0 by default, which leaves every run bit-identical.
+    extra_bubble: float = 0.0
     # Investment level of institution_national_bank (0-9 in this mod). Scales
     # the institution's modifier and the financial law's institution_modifier.
     bank_level: int = 0
@@ -798,6 +803,8 @@ class Config:
             raise ValueError("pool spending cap must be finite and at least 1")
         if not math.isfinite(self.pool_weekly_income) or self.pool_weekly_income <= 0:
             raise ValueError("pool weekly income must be finite and positive")
+        if not math.isfinite(self.extra_bubble):
+            raise ValueError("extra bubble must be finite")
         if any(t not in economy_tools(self.economy) for t in self.hold_tools):
             raise ValueError("held tools must belong to the selected economy")
         if len(set(self.hold_tools)) != len(self.hold_tools):
@@ -2043,6 +2050,8 @@ def advance_variables(cfg: Config, state: State, rng: random.Random) -> None:
     state.bubble_pressure += (
         law_modifier_sum(cfg, "country_bubble_pressure_monthly_add") * tuned("currency_bubble", 1.0)
     )
+    if cfg.extra_bubble:
+        state.bubble_pressure += cfg.extra_bubble
     state.finance_cycle_value += law_modifier_sum(cfg, "country_finance_value_monthly_add")
 
     # the monetary stance channel (§16.3)
@@ -3885,6 +3894,10 @@ def main() -> int:
                     help="standing country_wage_pressure_add in pp (labour laws; "
                          "+0.2 to +1.4 in game, 0 by default). Counts twice above "
                          "the 8%% band edge, as te_mon_pressure_wage_spiral does")
+    ap.add_argument("--extra-bubble", type=float, default=0.0,
+                    help="standing country_bubble_pressure_monthly_add a month beyond the "
+                         "laws' (Wealth Concentration's national line: +0.3 at a score of "
+                         "80, -0.3 at 20); 0 by default")
     ap.add_argument("--bank-level", type=int, default=0,
                     help="investment level of the National Bank institution (0-9); "
                          "scales its modifier and the financial law's "
@@ -3988,7 +4001,7 @@ def main() -> int:
                         Config(currency="gold", mode=mode, points=int(pts or 2),
                                fin_law=args.fin_law, years=args.years,
                                growth_feedback=feedback, peg_crisis=True,
-                               wage_pressure=args.wage_pressure,
+                               wage_pressure=args.wage_pressure, extra_bubble=args.extra_bubble,
                                deficit_mean=args.deficit_mean, bank_level=args.bank_level),
                         args.seed, args.runs, tune, growth_arm, drain_arm))
         workers = args.jobs or min(len(pjobs), os.cpu_count() or 1)
@@ -4006,7 +4019,7 @@ def main() -> int:
         hjobs = [
             (Config(currency=c, mode=m, fin_law=args.fin_law,
                     national_bank=not args.no_national_bank, years=args.years,
-                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean,
+                    wage_pressure=args.wage_pressure, extra_bubble=args.extra_bubble, deficit_mean=args.deficit_mean,
                     bank_level=args.bank_level),
              args.seed, args.runs, dict(TUNE), bounces)
             for c, m in valid_cells(args.only)
@@ -4029,7 +4042,7 @@ def main() -> int:
         rjobs = [
             (Config(currency=c, mode=m, fin_law=args.fin_law,
                     national_bank=not args.no_national_bank, years=args.years,
-                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean,
+                    wage_pressure=args.wage_pressure, extra_bubble=args.extra_bubble, deficit_mean=args.deficit_mean,
                     bank_level=args.bank_level),
              args.seed, args.runs, dict(TUNE), tools, args.rescue_delay, args.rescue_entry)
             for c, m in valid_cells(args.only) if m == MODE_PRICE
@@ -4074,7 +4087,7 @@ def main() -> int:
                     excluded_tools=excluded,
                     simplified=args.simplified,
                     dc_affinity=affinity,
-                    wage_pressure=args.wage_pressure,
+                    wage_pressure=args.wage_pressure, extra_bubble=args.extra_bubble,
                     deficit_mean=args.deficit_mean,
                     bank_level=args.bank_level,
                 )
@@ -4100,6 +4113,7 @@ def print_table(rows: list[dict], args) -> None:
         f"Banking cycle simulation — {args.runs} runs x {args.years} years per cell, "
         f"pulse order {args.pulse_order}, no-click weight {args.no_click_weight:g}"
         + (f", wage pressure {args.wage_pressure:g}" if args.wage_pressure else "")
+        + (f", extra bubble {args.extra_bubble:g}" if args.extra_bubble else "")
         + (f", deficit mean {args.deficit_mean:g}" if args.deficit_mean != 1.5 else "")
         + (f", bank level {args.bank_level}, {args.fin_law}" if args.bank_level else "")
         + (f", TUNE {args.tune}" if args.tune else "")
