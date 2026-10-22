@@ -1,0 +1,178 @@
+﻿# =================================================================
+# TREATY ARTICLE: grid_interconnection_agreement
+# Mutual agreement joining the two countries' power grids where they
+# border. Historical: the Nordel and UCPTE power pools, cross-border
+# interconnectors between neighbours in one market.
+#
+# The article has no modifier. The monthly grid balancing
+# (common/scripted_effects/power_grid_effects.txt) reads it: each station
+# owner's partners are listed at the start of a run
+# (te_grid_refresh_partners_effect), and a station joins a partner's
+# bordering station in the same market area into one grid
+# (te_grid_land_link), or one across the sea when both run an HVDC Undersea
+# Interconnector (te_grid_sea_link). Only countries in one market: Grid
+# Power is priced in its market and isn't traded between markets.
+# =================================================================
+grid_interconnection_agreement = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/transit_rights_treaties.dds"
+	kind = mutual
+	cost = 50
+
+	relations_progress_per_day = 0.25
+	relations_improvement_max = 20
+
+	flags = {
+		can_be_renegotiated
+		friendly
+	}
+
+	usage_limit = once_per_treaty
+
+	mutual_exclusions = {
+		grid_interconnection_agreement
+	}
+
+	unlocked_by_technologies = {
+		intergovernmental_organizations
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		has_technology_researched = electrical_capacitors
+		scope:other_country = { has_technology_researched = electrical_capacitors }
+		custom_tooltip = {
+			text = te_grid_interconnection_same_market_tt
+			market = scope:other_country.market
+		}
+		custom_tooltip = {
+			text = te_grid_interconnection_border_tt
+			any_scope_state = {
+				any_neighbouring_state = { owner = scope:other_country }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:first_country = {
+					any_scope_treaty = {
+						binds = scope:second_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = grid_interconnection_agreement
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.03
+			# A country with a grid of its own looks for neighbours to join.
+			if = {
+				limit = {
+					any_scope_state = { has_building = building_grid_transfer_station }
+				}
+				add = 0.07
+			}
+		}
+
+		inherent_accept_score = {
+			value = -10
+
+			# Mutual articles bind first/second, not other_country, here.
+			if = {
+				limit = { root = scope:first_country }
+				scope:second_country = { save_temporary_scope_as = te_treaty_partner }
+			}
+			else = {
+				scope:first_country = { save_temporary_scope_as = te_treaty_partner }
+			}
+
+			# Hostile nations don't share a grid
+			if = {
+				limit = {
+					OR = {
+						has_attitude = { who = scope:te_treaty_partner attitude = antagonistic }
+						has_attitude = { who = scope:te_treaty_partner attitude = domineering }
+						has_attitude = { who = scope:te_treaty_partner attitude = belligerent }
+					}
+				}
+				add = {
+					desc = "AI_HOSTILE_ATTITUDE"
+					value = -1000
+				}
+			}
+			# The agreement joins grids at once where both have a station across
+			# the border.
+			if = {
+				limit = {
+					any_scope_state = {
+						has_building = building_grid_transfer_station
+						any_neighbouring_state = {
+							owner = scope:te_treaty_partner
+							has_building = building_grid_transfer_station
+						}
+					}
+				}
+				add = {
+					desc = "AI_GRID_STATIONS_MEET"
+					value = 30
+				}
+			}
+			# Cooperative attitude
+			if = {
+				limit = {
+					has_attitude = { who = scope:te_treaty_partner attitude = cooperative }
+				}
+				add = {
+					desc = "AI_COOPERATIVE_ATTITUDE"
+					value = 10
+				}
+			}
+			# Genial attitude
+			if = {
+				limit = {
+					has_attitude = { who = scope:te_treaty_partner attitude = genial }
+				}
+				add = {
+					desc = "AI_FRIENDLY_ATTITUDE"
+					value = 15
+				}
+			}
+			# Same power bloc
+			if = {
+				limit = {
+					is_in_same_power_bloc = scope:te_treaty_partner
+				}
+				add = {
+					desc = "AI_SAME_POWER_BLOC"
+					value = 10
+				}
+			}
+		}
+	}
+}

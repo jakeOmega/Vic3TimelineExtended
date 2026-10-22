@@ -1,16 +1,25 @@
 ﻿# ============================================================================
 # Power Grid script values (te_grid_*)
 # ============================================================================
-# The monthly balancing (te_grid_monthly_update_effect, power_grid_effects.txt)
-# gives every state of one grid the same ratio of Electricity supply to
-# demand. For each station state i of a grid:
+# The monthly balancing (te_grid_world_update_effect, power_grid_effects.txt)
+# gives every state of one grid the same ratio r of Electricity supply to
+# demand. For each station state i of a grid, with LP_i and LC_i its
+# Electricity production and consumption without its station:
 #
-#   target_i = LocalProduction_i - LocalConsumption_i x P_grid / C_grid
+#   an uploader (LP_i > r x LC_i) sends     U_i = LP_i - r x LC_i
+#   a downloader buys Grid Power            D_i = (r x LC_i - LP_i) / eff_i
 #
-# where Local* leave out the station's own flows and P_grid / C_grid are their
-# sums over the grid. The targets sum to zero over the grid, so what the grid's
-# stations upload as Grid Power is what its stations download. Positive is an
-# upload (Electricity in, Grid Power out), negative a download.
+# A downloading station turns only eff_i of the Grid Power it buys back into
+# Electricity (transmission losses, the owner's grid transmission efficiency),
+# so a downloader's D_i x eff_i makes up its shortfall. Grid Power is
+# conserved, sum U = sum D, which fixes r:
+#
+#   r = (sum_up LP + sum_down LP / eff) / (sum_up LC + sum_down LC / eff)
+#
+# Which states upload depends on r, so te_grid_balance_region_effect starts
+# from the lossless r = P / C and re-solves four times. Positive flows are
+# uploads (Electricity in, Grid Power out), negative ones downloads, both in
+# Grid Power.
 #
 # State scope unless noted. All per-state figures are a week's goods, as
 # state_goods_production and state_goods_consumption report them.
@@ -51,12 +60,24 @@ te_grid_downloaded = {
 
 # --- The state without its station ------------------------------------------
 
+# The Electricity a downloading station made per unit of Grid Power it bought:
+# the efficiency it was set to (te_grid_delivery), 1 before the first setting.
+te_grid_delivery_value = {
+	value = 1
+	if = {
+		limit = { has_variable = te_grid_delivery }
+		value = var:te_grid_delivery
+	}
+}
+
 # A download is Electricity the station made, and an upload Electricity it
 # bought, so taking them out leaves what the state's own plants make and its
 # own buildings and pops use.
 te_grid_local_production_value = {
-	value = te_grid_electricity_production
-	subtract = te_grid_downloaded
+	value = te_grid_downloaded
+	multiply = te_grid_delivery_value
+	multiply = -1
+	add = te_grid_electricity_production
 	min = 0
 }
 
@@ -66,40 +87,65 @@ te_grid_local_consumption_value = {
 	min = 0
 }
 
+# The state's grid transmission efficiency: its owner's
+# country_grid_transmission_efficiency_add (0.6 in base_values, 1 with Smart
+# Grids), between 0.1 and 1.
+te_grid_state_efficiency_value = {
+	value = 1
+	if = {
+		limit = { exists = owner }
+		value = owner.modifier:country_grid_transmission_efficiency_add
+	}
+	min = 0.1
+	max = 1
+}
+
 # --- This month's flow --------------------------------------------------------
 
-# What the state should send (+) or take (-) so that its supply-to-demand ratio
-# matches its grid's. Reads var:te_grid_local_production and
-# var:te_grid_local_consumption, set this pulse, and the grid's sums, held on
-# the owner while its grid is being balanced. Multiplied before it is divided,
-# so the quotient keeps its decimals. A grid that uses no Electricity moves
-# nothing.
+# Read during te_grid_balance_region_effect, from the state variables it sets
+# (te_grid_local_production, te_grid_local_consumption, te_grid_efficiency) and
+# the grid's ratio (global te_grid_ratio).
+
+# What the state has over (+) or short of (-) the grid's ratio.
+te_grid_surplus_value = {
+	value = var:te_grid_local_consumption
+	multiply = global_var:te_grid_ratio
+	multiply = -1
+	add = var:te_grid_local_production
+}
+
+# A downloader's terms in r: its Electricity over its efficiency.
+te_grid_production_over_efficiency = {
+	value = var:te_grid_local_production
+	divide = var:te_grid_efficiency
+}
+
+te_grid_consumption_over_efficiency = {
+	value = var:te_grid_local_consumption
+	divide = var:te_grid_efficiency
+}
+
+# The state's target flow in Grid Power: its surplus as an upload, or its
+# shortfall over its efficiency as a download. Zero while the grid has no
+# demand to share (global te_grid_region_active 0).
 te_grid_target_value = {
 	value = 0
 	if = {
-		limit = {
-			has_variable = te_grid_local_production
-			has_variable = te_grid_local_consumption
-			owner = {
-				has_variable = te_grid_region_production
-				has_variable = te_grid_region_consumption
-				var:te_grid_region_consumption > 0
-			}
+		limit = { global_var:te_grid_region_active = 1 }
+		value = te_grid_surplus_value
+		if = {
+			limit = { te_grid_surplus_value < 0 }
+			divide = var:te_grid_efficiency
 		}
-		value = var:te_grid_local_consumption
-		multiply = owner.var:te_grid_region_production
-		divide = owner.var:te_grid_region_consumption
-		multiply = -1
-		add = var:te_grid_local_production
 	}
 }
 
 # The flow moves 70% of the way from last month's to the target, so a grid
 # settles over a few months rather than swinging as buildings rehire. The
-# targets of a grid sum to zero and so do last month's flows, so the blend
-# does too.
+# balancing then scales the larger side so the grid's uploads equal its
+# downloads exactly.
 te_grid_flow_value = {
-	value = te_grid_target_value
+	value = var:te_grid_target
 	multiply = 0.7
 	if = {
 		limit = { has_variable = te_grid_flow }
@@ -148,8 +194,8 @@ te_grid_station_factor_value = {
 	max = 2
 }
 
-# The quantity to ask of the station's method this month: the flow's size over
-# the station's factor. Read after te_grid_flow and te_grid_factor are set.
+# The Grid Power to ask of the station's method this month: the flow's size
+# over the station's factor. Read after te_grid_flow and te_grid_factor are set.
 te_grid_command_value = {
 	value = var:te_grid_flow
 	if = {
@@ -159,8 +205,11 @@ te_grid_command_value = {
 	divide = var:te_grid_factor
 }
 
-# The two flow modifiers' multipliers. Applied with Q - 1, a direction's 1-unit
-# method lines move Q a week; with -1 that direction is off.
+# The flow modifiers' multipliers, before the Electricity lines are netted of
+# other bonuses. Applied with Q - 1, a 1-unit method line moves Q a week; with
+# -1 that line is off.
+
+# Upload: Grid Power out, and the same Electricity in.
 te_grid_upload_mult_value = {
 	value = -1
 	if = {
@@ -173,6 +222,7 @@ te_grid_upload_mult_value = {
 	}
 }
 
+# Download: Grid Power in.
 te_grid_download_mult_value = {
 	value = -1
 	if = {
@@ -182,6 +232,102 @@ te_grid_download_mult_value = {
 		}
 		value = var:te_grid_command
 		subtract = 1
+	}
+}
+
+# Download: Electricity out, the efficiency's share of the Grid Power in.
+te_grid_download_supply_mult_value = {
+	value = -1
+	if = {
+		limit = {
+			var:te_grid_flow < 0
+			var:te_grid_command > 0
+		}
+		value = var:te_grid_command
+		multiply = var:te_grid_efficiency
+		subtract = 1
+	}
+}
+
+# --- State panel tile (read every frame, so every read is guarded) -----------
+
+te_grid_tile_shown = {
+	value = 0
+	if = {
+		limit = { has_building = building_grid_transfer_station }
+		value = 1
+	}
+}
+
+# 1 sending, 2 receiving, 3 idle (on a grid with nothing to move), 4 offline
+# (less than a quarter staffed, or not yet balanced).
+te_grid_mode_disp = {
+	value = 4
+	if = {
+		limit = {
+			te_grid_station_online = yes
+			has_variable = te_grid_flow
+			has_variable = te_grid_command
+		}
+		value = 3
+		if = {
+			limit = {
+				var:te_grid_command > 0
+				var:te_grid_flow > 0
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				var:te_grid_command > 0
+				var:te_grid_flow < 0
+			}
+			value = 2
+		}
+	}
+}
+
+# The Electricity the station sends (an upload) or delivers (a download, after
+# losses) a week.
+te_grid_electricity_moved_disp = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_grid_flow
+			has_variable = te_grid_command
+			var:te_grid_command > 0
+		}
+		value = var:te_grid_flow
+		if = {
+			limit = { var:te_grid_flow < 0 }
+			multiply = -1
+			multiply = te_grid_delivery_value
+		}
+	}
+}
+
+te_grid_region_size_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_region_size }
+		value = var:te_grid_region_size
+	}
+}
+
+# The grid's supply as a share of its demand once shared (r).
+te_grid_region_ratio_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_region_ratio }
+		value = var:te_grid_region_ratio
+	}
+}
+
+te_grid_interconnector_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_has_interconnector = yes }
+		value = 1
 	}
 }
 
@@ -208,35 +354,9 @@ te_grid_station_ai_value = {
 	max = 2500
 }
 
-# --- Self-check (country scope) -------------------------------------------------
+# --- Self-checks ----------------------------------------------------------------
 
-# What the country's stations moved last week, and what they were asked to,
-# for TE_SELF_CHECK grid_conservation.
-te_grid_country_uploaded = {
-	value = 0
-	every_scope_state = {
-		limit = { has_building = building_grid_transfer_station }
-		add = te_grid_uploaded
-	}
-}
-
-te_grid_country_downloaded = {
-	value = 0
-	every_scope_state = {
-		limit = { has_building = building_grid_transfer_station }
-		add = te_grid_downloaded
-	}
-}
-
-te_grid_country_stations = {
-	value = 0
-	every_scope_state = {
-		limit = { has_building = building_grid_transfer_station }
-		add = 1
-	}
-}
-
-# Global-variable readers for the self-check's debug_log line, which prints
+# Global-variable readers for the self-checks' debug_log lines, which print
 # values through SCOPE.ScriptValue.
 te_grid_chk_uploaded_g = { value = global_var:te_grid_chk_uploaded }
 te_grid_chk_downloaded_g = { value = global_var:te_grid_chk_downloaded }
@@ -256,8 +376,8 @@ te_grid_chk_cascade_gap_g = {
 	}
 }
 
-# |uploaded - downloaded| over the larger of the two: 0 when the country's
-# grids balance exactly.
+# |uploaded - downloaded| over the larger of the two: 0 when a grid balances
+# exactly.
 te_grid_chk_imbalance_g = {
 	value = global_var:te_grid_chk_uploaded
 	subtract = global_var:te_grid_chk_downloaded
@@ -276,3 +396,5 @@ te_grid_chk_larger_g = {
 	}
 	min = 1
 }
+
+te_grid_chk_month_g = { value = global_var:te_grid_chk_month }

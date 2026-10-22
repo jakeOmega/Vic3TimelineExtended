@@ -147,6 +147,7 @@ clean_energy_technologies = {
 	modifier = {
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		country_clean_energy_pb_principles_bool = yes
+		country_grid_transmission_efficiency_add = 0.08
 	}
 
 	ai_weight = {

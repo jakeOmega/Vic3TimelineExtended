@@ -76,6 +76,7 @@ smart_grids = {
 	modifier = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_voting_power_mult = 0.2
+		country_grid_transmission_efficiency_add = 0.05
 	}
 
 	unlocking_technologies = {

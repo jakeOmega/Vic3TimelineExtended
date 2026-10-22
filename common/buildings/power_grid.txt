@@ -33,6 +33,7 @@ building_grid_transfer_station = {
 
 	production_method_groups = {
 		pmg_grid_transfer_station
+		pmg_grid_interconnector
 		pmg_maintenance_heavy
 	}
 

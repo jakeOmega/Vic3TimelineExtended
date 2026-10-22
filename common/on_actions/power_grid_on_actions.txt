@@ -1,21 +1,29 @@
 ﻿# ============================================================================
-# Power Grid: the monthly balancing of every country's grids
+# Power Grid: the monthly balancing of every grid
 # ============================================================================
-# See power_grid_effects.txt. Runs only for a country that has a Grid Transfer
-# Station; one that has lost its last station keeps no flow to reset.
+# See power_grid_effects.txt. A grid can span countries (a Grid
+# Interconnection Agreement), so every grid is balanced in one run, on the 1st
+# of the month. The global pulse has no ROOT, and the flow modifiers'
+# multipliers want one, so it fires te_grid.1 (events/te_grid_events.txt) on
+# one country that has a station; its immediate runs the world-wide update
+# (scripting_best_practices.md, "The global pulse has no ROOT, so dispatch
+# through a country event").
 # ============================================================================
 
-on_monthly_pulse_country = {
+# No root scope.
+on_monthly_pulse = {
 	on_actions = {
-		te_grid_monthly_pulse
+		te_grid_world_dispatch
 	}
 }
 
-te_grid_monthly_pulse = {
-	trigger = {
-		any_scope_state = { has_building = building_grid_transfer_station }
-	}
+te_grid_world_dispatch = {
 	effect = {
-		te_grid_monthly_update_effect = yes
+		random_country = {
+			limit = {
+				any_scope_state = { has_building = building_grid_transfer_station }
+			}
+			trigger_event = { id = te_grid.1 }
+		}
 	}
 }

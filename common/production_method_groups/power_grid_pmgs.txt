@@ -8,3 +8,14 @@ pmg_grid_transfer_station = {
 		pm_grid_transfer_base
 	}
 }
+
+# Whether the station also runs an HVDC Undersea Interconnector, which joins its
+# grid to another interconnector station's across the sea
+# (te_grid_sea_link). The first method is the default.
+pmg_grid_interconnector = {
+	texture = "gfx/interface/icons/production_method_icons/electric_engines.dds"
+	production_methods = {
+		pm_grid_no_interconnector
+		pm_grid_hvdc_interconnector
+	}
+}
