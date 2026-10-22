@@ -7,30 +7,44 @@
 # ============================================================================
 
 # ---- The urban pattern's effects (§5.1's table: a choice, not a penalty) ------------------------------------------
-# The strength, 0-1: 0 at 25% primacy (the Dominant label's floor: Balanced and Dispersed are the baseline), rising in a
-# straight line to 1 at 60% (Seoul's share of Korea's urban people), so nothing steps at the label edges. 40% (the
-# Primate label's floor) is 0.43.
+# The strength: 0 at 25% primacy (the Dominant label's floor: Balanced and Dispersed are the baseline), rising in a
+# straight line to 1 at 50%, a reference, not a ceiling (docs/superpowers/specs/2026-10-22-demographic-effects-impact-
+# design.md § The curve): past it at half the slope, 1.2 at 60% (Seoul's share of Korea's urban people), 2 at 100%.
+# Nothing steps at the label edges; 40% (the Primate label's floor) is 0.6. Python twin: demographics_effects.primacy.
 te_demog_k_up_floor = { value = 0.25 }
-te_demog_k_up_span = { value = 0.35 }
+te_demog_k_up_span = { value = 0.25 }
 # A country of one or two states has no urban hierarchy to speak of: its largest state is most of its urban people by
 # construction (dozens of one-state countries read 100% in the 1903 observer census), so the effects need three census
 # states.
 te_demog_k_up_min_states = { value = 3 }
-# The two state modifiers' fields at full strength (te_demog_place_modifiers.txt). The primate state: agglomeration, the
-# Urban Center (the city's services) working at a larger scale and drawing migrants. The rest: migrants drawn away and
-# some regional resentment.
-te_demog_k_up_uc = { value = 0.1 }
-te_demog_k_up_pull = { value = 0.15 }
-te_demog_k_up_rest_pull = { value = -0.1 }
-te_demog_k_up_rest_turmoil = { value = 0.1 }
+# The two state modifiers' fields at full strength (te_demog_place_modifiers.txt; demographics_effects.SIZES). The
+# primate state: agglomeration, the Urban Center (the city's services) working at a larger scale and drawing migrants,
+# and talent and ideas gathering in its universities (Paris, London, Tokyo). The rest: migrants drawn away, and regional
+# resentment, which moves a province with an identity of its own (Catalonia, Scotland) toward its minority movement.
+te_demog_k_up_uc = { value = 0.2 }
+te_demog_k_up_pull = { value = 0.25 }
+te_demog_k_up_university = { value = 0.1 }
+te_demog_k_up_rest_pull = { value = -0.15 }
+te_demog_k_up_rest_turmoil = { value = 0.15 }
+te_demog_k_up_rest_minority = { value = 0.15 }
 
-# Country scope, at the census (te_demog_up_country): the strength from this census's primacy.
-te_demog_up_strength = {
+# Country scope, at the census (te_demog_up_country): the strength from this census's primacy, the reach past the floor
+# in spans and then (x + min(x, 1)) / 2.
+te_demog_up_reach = {
 	value = var:te_dg_primacy
 	subtract = te_demog_k_up_floor
 	divide = { value = te_demog_k_up_span min = 0.01 }
 	min = 0
-	max = 1
+}
+
+te_demog_up_strength = {
+	value = te_demog_up_reach
+	add = {
+		value = te_demog_up_reach
+		max = 1
+	}
+	divide = 2
+	max = 2
 }
 
 # State scope: its urban people, the order the census finds its largest city by (te_demog_up_country), as the primacy
@@ -107,6 +121,14 @@ te_demog_up_shown_rest_turmoil = {
 	value = te_demog_up_shown_s
 	multiply = te_demog_k_up_rest_turmoil
 }
+te_demog_up_shown_university = {
+	value = te_demog_up_shown_s
+	multiply = te_demog_k_up_university
+}
+te_demog_up_shown_rest_minority = {
+	value = te_demog_up_shown_s
+	multiply = te_demog_k_up_rest_minority
+}
 
 # ---- The Planned Capital decision ----------------------------------------------------------------------------------
 # Costs: a one-off 3% of a year's GDP (the banking events' "huge" tier, banking_event_expense_huge), paid from the
@@ -120,10 +142,11 @@ te_demog_k_pc_new_capital_days = { value = 7300 }
 te_demog_k_pc_cooldown_years = { value = 50 }
 # A candidate site holds at least 1% of the country's people.
 te_demog_k_pc_min_share = { value = 0.01 }
-# The AI takes it only with a Primate pattern at half strength or more (45% primacy) in a country of eight census states
-# or more whose largest city is crowded to the ceiling, with the cost in its treasury and the authority to spare: a
-# planned capital is rare, about fifteen in the real twentieth century.
-te_demog_k_pc_ai_strength = { value = 0.5 }
+# The AI takes it only with a Primate pattern of 42.5% primacy or more (strength 0.7: 0.25 + 0.7 x 0.25; it held 42.5%,
+# as 0.5 did on the old span, when the effects design of 2026-10-22 re-anchored the curve) in a country of eight census
+# states or more whose largest city is crowded to the ceiling, with the cost in its treasury and the authority to spare:
+# a planned capital is rare, about fifteen in the real twentieth century.
+te_demog_k_pc_ai_strength = { value = 0.7 }
 # The metropolis's crowding: Migration Crowding's multiplier at its ceiling, ten times the reference density (migration
 # pull -45%), the Family Policy AI's crowding mark (te_demog_ms_crowded_share). Some crowding somewhere is on in 73% of
 # countries in an 1837 save and 88% in 1902, so its mere presence filters nothing; at the ceiling the step 3a review

@@ -13,7 +13,7 @@
 #   country  te_dg_primate_state  its largest city at the last census (a state: the census state with the most urban
 #                                 people, the one primacy is measured by)
 #            te_dg_up_states      the census states counted
-#            te_dg_up_s           the pattern's strength, 0-1 (te_demog_up_strength; 0 under three census states)
+#            te_dg_up_s           the pattern's strength, 0-2 (te_demog_up_strength; 0 under three census states)
 #            te_dg_pc_year        the date its last planned capital was founded (te_demog_ms_now: a year with months)
 #   state    te_dg_up_mult        the multiplier of the state's urban-pattern modifier (its owner's te_dg_up_s at its
 #                                 last pulse; kept, since a modifier's multiplier is read again after it is applied)

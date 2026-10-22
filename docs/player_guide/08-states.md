@@ -500,12 +500,16 @@ Dominant from 25%, Balanced from 10% and Dispersed below that.
 
 Under the Full setting a Dominant or Primate pattern has effects; Balanced and
 Dispersed are the baseline. Your largest city gets Primate City, with more Urban
-Center throughput and migration attraction. Every other state gets Provincial
-Neglect, with less migration attraction and higher penalties from turmoil. Both
-grow with the largest city's share of urban people, from nothing at 25% to their
-full size at 60%: Urban Center throughput +10% and migration attraction +15% for
-the city, migration attraction −10% and turmoil penalties +10% for the rest. A
-country of fewer than three states gets neither. Each state takes the new figure
+Center and University throughput and migration attraction. Every other state gets
+Provincial Neglect, with less migration attraction, higher penalties from turmoil
+and, where the state has a culture of its own, more support for its Cultural
+Minority Movement. Both grow with the largest city's share of urban people, from
+nothing at 25% to their full size at 50%: Urban Center throughput +20%,
+University throughput +10% and migration attraction +25% for the city, migration
+attraction −15%, turmoil penalties +15% and cultural minority support +15% for
+the rest. Past 50% they keep growing at half the pace, to twice their full size
+when one city holds all the urban people. A country of fewer than three states
+gets neither. Each state takes the new figure
 at its yearly count, and the Urban Pattern tooltip names your largest city and
 shows the current figures. Under Display only it says what Full would do.
 
@@ -546,7 +550,7 @@ lapse. A site you lose, or a war that starts, while the choice is open takes
 that site off the list. A planned capital draws migrants and building to a
 region your largest city leaves behind, so over the years it can lower that
 city's share and with it Provincial Neglect. The AI plans one only with a
-Primate pattern of 45% or more, eight states or more, a largest city crowded to
+Primate pattern of 42.5% or more, eight states or more, a largest city crowded to
 Migration Crowding's ceiling (ten times the reference density), and the money
 in its treasury.
 
