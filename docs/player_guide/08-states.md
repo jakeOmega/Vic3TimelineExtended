@@ -335,8 +335,9 @@ state's yearly census:
   women and raises radicals from movements, by up to 10% at 150.
 
 Under Full the state's Gini sets one more: **Census: Inequality** appears where
-it is above 0.45 and raises radicals from movements by 5% for each 0.1 above
-that, with no cap.
+it is above 0.45 and raises radicals from movements, and support for the
+socialist and labor movements, by 5% for each 0.1 above that, twice as fast
+above 0.70, with no cap.
 
 The census books migration as whole families once a state gains or loses many
 people in a year, so migration alone seldom carries a state's balance past 90
