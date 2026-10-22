@@ -41,6 +41,8 @@ not from which pop type holds the property (§ Wealth Concentration below).
 | Design rule 5 | **Revised**: a strong condition is worth about one vanilla law on its main effect. The census's own model terms (births, deaths, the workforce term) are not effect sizes and keep their rules |
 | Where full strength sits | **At the historical case, as a reference size, not a ceiling.** Going past it still counts (§ The curve) |
 | Wealth Concentration's upper end | **Straight line**, no kink: 1.67× at a score of 100 |
+| Wealth Concentration's lower end | **The kink**: 1.17× at 10, 1.33× at 0 |
+| The dispersed side | **Steadier, not slower** (second round): concentrated property grows faster but crashes more often, dispersed property grows slower but steadier. Dispersed Property loses the owners' efficiency cut; the national pair carries bubble pressure, +0.3 a month at 1× on Great Fortunes and −0.3 on Dispersed Wealth; education access becomes ±0.10 (§ Wealth Concentration) |
 | Wealth Concentration under every rule | **The full increase.** If it proves a problem, it moves behind the rule |
 | Wealth Concentration's neutral point | **50**, so 1836 starts fairly concentrated and the 20th century's levelling shows |
 | One effect per condition | **A default**, kept only where it doesn't cost realism or fun. Land Hunger and the Youth Bulge keep a radicals line |
@@ -49,7 +51,7 @@ not from which pop type holds the property (§ Wealth Concentration below).
 | Metropolitan share's cap | **Lifted**: past 15%, about 20% on its main line |
 | Phases | **1 and 2 build together**, in a later session |
 
-Proposals below that the owner has not yet confirmed are marked **(proposed)**; the open ones are listed at the end.
+Every size here is a proposal until Phase 0 and the observer run; the questions still open are listed at the end.
 
 ## Principles
 
@@ -59,7 +61,7 @@ Proposals below that the owner has not yet confirmed are marked **(proposed)**; 
 
    | Condition | Its effect |
    |---|---|
-   | Wealth Concentration | political capture, capital formation, social mobility |
+   | Wealth Concentration | political capture, capital formation against financial stability, social mobility and schooling |
    | Land Hunger | the Land Reform movement, emigration and rural revolt |
    | Inequality | the Socialist and Labor movements, on top of its radicals |
    | Youth Bulge | general unrest: radicals and turmoil |
@@ -86,7 +88,7 @@ needed, at 2. One script value per modifier, so each keeps its one refresh site.
 | Condition | Neutral | Reference (1×) | Beyond |
 |---|---|---|---|
 | Wealth Concentration, high | 50 | 80 | straight: 90 → 1.33×, 100 → 1.67× |
-| Wealth Concentration, low **(proposed: the owner leans to a kink here)** | 50 | 20 | 10 → 1.17×, 0 → 1.33× |
+| Wealth Concentration, low | 50 | 20 | 10 → 1.17×, 0 → 1.33× (owner) |
 | Primacy (largest city's share of urban people) | 25% | 50% | 60% → 1.2×, 80% → 1.6×, 100% → 2× (seen at 60% in game, owner) |
 | Metropolitan share, Metropolis side | 40 | 60 | 80 → 1.5×, 95 (the target's ceiling) → 1.88× |
 | Metropolitan share, Dispersed side | 20 | 5 (the target's floor) | none |
@@ -109,10 +111,10 @@ just past the reference costs nothing more, owner rejected).
 | Modifier | Now, at full strength | Proposed, at the reference (1×) |
 |---|---|---|
 | Strength | full at 100 or 0 | § The curve |
-| Great Fortunes (country) | Aristocrats and Capitalists clout +20% | +20%, now reached at 80; +33% at 100 |
-| Dispersed Wealth (country) | Aristocrats clout −20% | **(proposed)** Aristocrats and Capitalists clout −20% |
-| Concentrated Property (state) | Aristocrats' and Capitalists' investment-pool efficiency +10%, radicals +10%, qualifications −10%, education access −0.05 | efficiency +20%, **political strength from wealth +20%**, qualifications −20%, education access −0.05; the radicals line moves to Land Hunger |
-| Dispersed Property (state) | Farmers' and Shopkeepers' investment-pool efficiency +10% | **(proposed)** Aristocrats' and Capitalists' efficiency −10%, political strength from wealth −10%, qualifications +10%, radicals −10% |
+| Great Fortunes (country) | Aristocrats and Capitalists clout +20% | +20%, now reached at 80; +33% at 100; **bubble pressure +0.3 a month** (+0.5 at 100) |
+| Dispersed Wealth (country) | Aristocrats clout −20% | Aristocrats and Capitalists clout −20%; **bubble pressure −0.3 a month** (−0.4 at 0) |
+| Concentrated Property (state) | Aristocrats' and Capitalists' investment-pool efficiency +10%, radicals +10%, qualifications −10%, education access −0.05 | efficiency +20%, **political strength from wealth +20%**, qualifications −20%, **education access −0.10**; the radicals line moves to Land Hunger |
+| Dispersed Property (state) | Farmers' and Shopkeepers' investment-pool efficiency +10% | political strength from wealth −10%, qualifications +10%, **education access +0.10**, radicals −10%; no investment line |
 | Land Hunger (state, farm states) | migration quota +20% | quota +30%, **Land Reform movement support +25%**, radicals +10% |
 
 - **Political capture.** `state_political_strength_from_wealth_mult` multiplies the part of every pop's clout that
@@ -122,10 +124,30 @@ just past the reference costs nothing more, owner rejected).
   or a newspaper, and many small owners struggle to act together, hence −10% on the dispersed side (half, since
   dispersal spreads wealth's voice rather than removing it).
 - **Capital formation.** Great fortunes save a larger share of their income than small holders do, so concentration
-  speeds the investment pool and dispersal slows it. Efficiency, not contribution: both scale the same flow (+20%
-  efficiency is about +0.06 on the Capitalists' 0.30 contribution), and efficiency reads as a plain percentage.
-- **Mobility.** Concentrated property shortens the ladder (−20% qualifications, the Guild System's figure); dispersed
-  property opens it (+10%).
+  speeds the investment pool. Efficiency, not contribution: both scale the same flow (+20% efficiency is about +0.06
+  on the Capitalists' 0.30 contribution), and efficiency reads as a plain percentage. Dispersal does not slow it
+  (owner, second round): small owners save too (the French peasant's stocking, Japan's postal savings), and an
+  efficiency cut on the dispersed side made the gap between the poles 46 points on a field that compounds (+33% at
+  100, −13% at 0).
+- **Financial stability** (owner, second round). The rich's extra saving does not all become investment: it is lent
+  to everyone else and bids up assets. Kumhof, Rancière and Winant (2015) find sharp rises in top incomes before both
+  1929 and 2008; Mian, Straub and Sufi find the saving glut of the rich financed debt more than investment. And many
+  owners deciding separately don't all pile into one bond issue, as Barings did with Argentina's in 1890 (the owner's
+  "decisions made by a larger base of people"). So the national pair carries bubble pressure: Great Fortunes +0.3 a
+  month at 1× (+0.5 at 100), Dispersed Wealth −0.3 (−0.4 at 0). That is a Cautious ruler's size (−0.3; Reckless +0.6,
+  fiat money +0.2): over a five-year boom, 18 points against the 65 at which a state's chance of a financial panic
+  doubles. It is a country field, so it sits on the national pair, whose refresh (`te_demog_wc_national`) already
+  exists, never on the per-state pair. It acts only once a country's banking cycle runs (`te_banking_cycle_running`:
+  a stock exchange and a level-5 Urban Center) and the banking rule is on; before that, a dispersed country such as
+  France (Forced Heirship, about 25–35 in 1836) has only the schooling and mobility lines. The result is concentrated
+  property growing faster and crashing more often, dispersed property growing slower and steadier. The banking
+  dashboard's next-month range reads the modifier total (`banking_disp_bubble_change_lo`/`_hi`), so the new source
+  shows there with no GUI work.
+- **Mobility and schooling.** Concentrated property shortens the ladder (−20% qualifications, the Guild System's
+  figure); dispersed property opens it (+10%). Where land was concentrated, landowners held back public schooling
+  (Galor, Moav and Vollrath 2009 on the US states; Engerman and Sokoloff on the Americas), so education access is
+  −0.10 on the concentrated side and +0.10 on the dispersed side, about one level of Public Schools (+0.125 a level).
+  This is the dispersed side's slow-compounding route: literacy into qualifications.
 - **Stability.** A wide propertied middle resists revolutionary movements (radicals −10% on the dispersed side).
 - **Land hunger.** Great estates left the young no land of their own: emigration (southern Italy) and rural revolt
   (Andalusia, Russia 1905, Mexico 1910). The base game creates the Land Reform movement only after Enclosure, in a
@@ -143,7 +165,13 @@ just past the reference costs nothing more, owner rejected).
 Options considered: raise the values but keep the curve (only Primogeniture countries feel it); centre the curve on the
 measured 1836 median, so 1836 starts neutral (owner: keep 50); tax waste on Concentrated Property, great fortunes
 avoiding tax (left out: the tax code already prices wealth); Farmers' and Shopkeepers' clout on Dispersed Wealth
-(above); contribution in place of efficiency.
+(above); contribution in place of efficiency. For the dispersed side (second round): owners' efficiency −10% (the
+first proposal; dropped above); Banking Crash Likelihood in place of bubble pressure (laws use ±10–50%; bubble pressure
+is the owner's idea and shows on the dashboard as it builds); the workforce's chance to own new levels
+(`building_self_investment_chance_add`: it changes who owns, which the owner's note leaves to vanilla); resilience to a
+state's financial panic (`state_harvest_condition_financial_panic_impact_mult`: it reaches only financial-centre states,
+a weaker copy of the bubble line); tax capacity (the tax code already prices wealth); a home-market demand bonus (the
+engine already sets demand from pops' wealth).
 
 ## Inequality (Gini, Full only)
 
@@ -186,6 +214,13 @@ development** (open, below).
 |---|---|---|
 | Metropolis (share 60) | crowding density −10%, infrastructure from population +10%, Urban Center throughput +5%, turmoil effects +5% | crowding −10% (unchanged: it feeds the target's loop), **infrastructure from population +20%**, throughput +10%, turmoil +10% |
 | Dispersed Towns (share 5) | infrastructure from population −10% | −20% |
+
+**Crowding keeps its 0–1 strength.** It raises the state's Migration Crowding, which lowers the share's target
+(`te_demog_mt_t_crowding`): a model term like the fertility scale, which reads the same `te_demog_mt_e_pos`. So it moves
+off `te_demog_mt_metropolis` into a modifier of its own, applied beside it at the same refresh
+(`te_demog_mt_state_refresh`) with the 0–1 multiplier, and the share's balance points don't move. The other three fields
+stay on `te_demog_mt_metropolis` and take the extended curve. The builder names the new modifier and decides whether
+it shows; `test_demographics_metro.py` pins both.
 
 The stack to watch is the primate metropolis: at 60% primacy and a share of 80, Primate City (+24%) and Metropolis
 (+15%) give about +39% Urban Center throughput, against vanilla's largest single bonus of +33% (`modifier_urban_centers`).
@@ -238,8 +273,29 @@ plain-text saves at 1836, about 1880, about 1936 and a late year:
   variables before any save is read.
 - Late primate countries: their largest city's Migration Crowding (`migration_crowding_mult_applied`), which decides
   whether Primate City's fade is needed.
+- The bubble line in the banking simulator: `banking_cycle_sim.py` reads bubble pressure only from laws, so add a flat
+  monthly term (`--extra-bubble X`) and compare crashes a century at 0, ±0.3 and +0.5, with no tools and with a
+  player's points. No save needed.
 
-Phase 0 sets the steep Gini slope's size and settles the fade.
+Phase 0 sets the steep Gini slope's size and the bubble line's, and settles the fade.
+
+**Phase 0 doesn't hold up the build** (my call, 2026-10-22, from the owner's standing rule that owner-run checks
+don't gate work). The tools come first, since they need no save. Then the build goes ahead at the starting sizes in
+this document, and the save readouts and the simulator table go into the PR for the owner. A size moves before merge
+only when its test fails:
+
+- **The bubble line:** keep ±0.3 if, in the simulator's untooled market arm, a score-100 country crashes roughly 10–30%
+  more often a century than a neutral one, and a score-0 country roughly 10–25% less. Below that the line is lost in
+  the noise, and above it, it outweighs the efficiency it is meant to balance. Scale the 0.3 to land inside the band.
+- **The steep Gini slope:** keep doubling unless the readout puts more than about a third of late states above 0.70.
+  Then the steep part is a charge nearly every late state pays, so halve the extra slope (+10% per 0.2 becomes +5%).
+  The owner reads the count, since the saves are theirs.
+- **Primate City's fade:** built only if the crowding read calls for it (Phase 3).
+
+The simulator's term is flat (`--extra-bubble X`, one value per run at 0, ±0.3 and +0.5), not the score moving with
+the cycle. The loop is small: a Frenzy adds 5 to every state's score (`te_demog_wc_boom_check`) and a crash takes 5 off
+(`banking_cycle_effects.txt`). The line's slope is 0.01 a month per point (0.3 over the 30 points from 50 to 80), so a
+Frenzy adds 0.05 a month, a sixth of the line at 1×.
 
 ## Phases 1 and 2: the build (together)
 
@@ -253,7 +309,12 @@ first, since it reaches every game.
   `te_demog_consequence_modifiers.txt` and `te_demog_consequence_values.txt` (new effect-strength values beside the
   model's 0–1 ramps).
 - **New country modifier:** Fewer Men's national line, with its refresh, its clear outside Full, its civil-war
-  rebuild and its `gen_nation_tab.py` registry line.
+  rebuild and its `gen_nation_tab.py` registry line. Don't name it `te_demog_census_*`: `NOT_ON_COUNTRY` files that
+  prefix under "states". It reads the country-scope `te_dg_sex_balance`.
+- **Builder's notes:** `te_demog_k_up_span` 0.35 → 0.25 moves the primacy strength the Planned Capital AI reads from
+  `te_dg_up_s`; hold its threshold where it is with a constant. `state_pop_support_movement_land_reform_mult` has only
+  a placeholder description in the engine catalogue, so check its label in game and add mod localization if it shows
+  raw.
 - **Tests that pin sizes:** `test_demographics_place.py`, `test_demographics_metro.py`, `test_demographics_registry.py`
   (`TestInheritanceBalance`, and the youth and sex sizes), `test_demographics_wc_shocks.py` (the Inequality modifier's
   refresh, body and description), `test_hidden_state_modifiers.py`; the Python twins
@@ -262,7 +323,10 @@ first, since it reaches every game.
   `te_demog_up_shown_*`, the settlement tooltip, the sex balance and youth hovers, the Wealth Concentration concept and
   law group text); grep the loc for the old figures.
 - **Player guide:** `06-politics.md` (the Wealth Concentration table), `08-states.md` (the census modifiers, the urban
-  pattern and settlement), rebuilt PDF.
+  pattern and settlement), `04-banking.md` (the sentence listing what pushes bubble pressure: Fiat Money and Digital
+  Currency's +0.2, now Great Fortunes and Dispersed Wealth too), rebuilt PDF.
+- **Nation tab:** the national pair's new field needs no row: `gen_nation_tab.py`'s `NOT_A_ROW` already sends
+  `country_bubble_pressure_monthly_add` to the Banking tab.
 - **Docs:** `docs/systems/mod_systems.md` (§ Inheritance, § Demographics' Wealth Concentration, Inequality, urban
   pattern, metropolitan share and phase 2 step 4 subsections); the master spec's design rule 5 and §7 table, pointing
   here.
@@ -294,16 +358,19 @@ first, since it reaches every game.
   More Men at 2× +30%, Land Hunger +10% × its farm share). The conditions rarely coincide; Phase 0 measures how often.
   A combined per-state cap, one multiplier over all of them, is the fallback.
 - **Self-reinforcement.** More owners' investment, more capitalists, a higher Gini, a higher Wealth Concentration
-  target. The 3% yearly drift and the inequality term's ±15 cap bound it.
+  target. The 3% yearly drift and the inequality term's ±15 cap bound it. The bubble line adds a second, small loop:
+  more bubble, more Frenzies, +5 to the score each, more bubble (+0.05 a month per Frenzy), undone by the −5 a crash
+  takes (§ Phase 0).
 - **The top of the scale.** Concentrated Property at a score of 100 gives qualifications −33% and investment +33%;
   reaching 100 takes Primogeniture with Perpetual Dynastic Trusts, Laissez-Faire and a high Gini.
-- **AI.** The AI steers none of these; the observer run checks stability and law paths.
+- **AI.** The AI steers none of these; the observer run checks stability and law paths. Bubble pressure reaches the AI
+  through its banking tools, whose weights already answer the bubble whatever pushes it.
 
 ## Open decisions
 
-1. Wealth Concentration's lower end: the kink (1.33× at 0) or straight (1.67×)? The owner leans to the kink.
-2. The dispersed side after the owner's note: owners' efficiency −10%, political strength from wealth −10%,
-   qualifications +10%, radicals −10%, and Dispersed Wealth on Aristocrats and Capitalists. Confirm.
-3. The steep Gini slope's size: doubling above 0.70 is the starting point; Phase 0 sets it.
-4. Primate City's fade with development: settled by Phase 0's crowding read.
-5. The sizes as a whole are proposals until Phase 0 and the observer run.
+Settled 2026-10-22, second round: the lower end's kink, and the dispersed side (§ Decisions). Left to Phase 0:
+
+1. The steep Gini slope's size: doubling above 0.70 is the starting point.
+2. The bubble line's size: ±0.3 a month at 1× is the starting point; the simulator sets it.
+3. Primate City's fade with development: settled by the crowding read.
+4. The sizes as a whole are proposals until Phase 0 and the observer run.
