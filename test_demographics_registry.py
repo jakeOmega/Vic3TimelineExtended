@@ -5474,6 +5474,27 @@ class TestWealthSizes(unittest.TestCase):
     def test_dispersed_side_has_no_investment_line(self):
         self.assertFalse([f for f in _modifier_fields(INH_MODIFIERS, "inh_dispersed_property") if "investment" in f])
 
+    def test_the_law_tooltips_describe_the_new_effects(self):
+        """The inheritance laws' custom tooltips (extra_laws.txt) restate what the score does: the dispersed side has no
+        Farmers' and Shopkeepers' investment line and weakens the Capitalists too, Concentrated Property's radicals
+        moved to Land Hunger, and both sides move bubble pressure (review of #1101)."""
+        loc = {}
+        for line in (ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml").read_text(
+                encoding="utf-8-sig").splitlines():
+            m = re.match(r'\s+(LAW_\w+_INHERITANCE_TT):\d*\s*"(.*)"\s*$', line)
+            if m:
+                loc[m.group(1)] = m.group(2)
+        lowering = ("LAW_EQUAL_INHERITANCE_INHERITANCE_TT", "LAW_NON_INHERITABLE_USAGE_RIGHTS_INHERITANCE_TT",
+                    "LAW_STATE_UNIVERSAL_HEIR_INHERITANCE_TT")
+        for key in lowering:
+            self.assertNotIn("Farmers and Shopkeepers invest", loc[key], key)
+            self.assertIn("Capitalists", loc[key], key)
+            self.assertIn("bubble", loc[key], key)
+        primo = loc["LAW_PRIMOGENITURE_INHERITANCE_TT"]
+        self.assertNotIn("radicals gather", primo)
+        self.assertIn("bubble", primo)
+        self.assertIn("clout", primo)
+
 
 class TestWealthStateModifiers(unittest.TestCase):
     """Spec 4.2's split (phase 2): two country modifiers from the national figure, three state

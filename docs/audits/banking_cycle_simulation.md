@@ -2468,9 +2468,11 @@ Dispersed Wealth −0.3 at 20 (−0.4 at 0). `--extra-bubble X` adds a flat mont
 | fiat, inflation targeting, no tools | 16.4 | 19.7 (+20%) | 14.7 (−10%) | 22.1 (+35%) | 14.2 (−13%) |
 | fiat, growth mandate, no tools | 20.6 | 22.9 (+11%) | 18.8 (−9%) | 23.9 (+16%) | 18.1 (−12%) |
 
-- **The design's test holds, so ±0.3 stays.** It asked for a score-100 country to crash 10–30% more often than a
-  neutral one untooled, and a score-0 country 10–25% less: +16% to +35% and −8% to −16% across the arms, inside or at
-  the band's edges.
+- **±0.3 stays, on judgment: the design's test is met in most arms, not all.** It asked for a score-100 country to
+  crash 10–30% more often than a neutral one untooled, and a score-0 country 10–25% less. Across the untooled arms the
+  results are +16% to +35% and −8% to −16%: two fiat arms (+34%, +35%) sit above the +30% edge, and gold with no
+  monetary policy at a score of 0 (−8%) sits short of −10%. Raising or lowering the line would fix one end and break
+  the other, so it stays, and the owner has the table.
 - **The response is asymmetric.** A push down helps only while a bubble is building, since bubble pressure stops at
   0, so −0.4 moves crashes about half as far as +0.5.
 - **Tools amplify it.** A managed cycle has less noise for the line to hide in: with 5 points the gaps are two to three

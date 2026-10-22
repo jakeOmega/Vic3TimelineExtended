@@ -1342,9 +1342,12 @@ on a modifier with a multiplier, and the bubble line rests on the banking cycle'
    support rises in the hardest-hit states, by up to 25% at 80 men per 100 women.
 9. **Primate City's fade** (Phase 0): in a late game, the primate city's Migration Crowding hover. Crowding near its
    ceiling would argue for fading Primate City's upside with development (the spec's Phase 3).
-10. **Small primate countries.** Full, 1836: the save readout put Kandy, Chile, Tidore and Brunei at 1.5–2× primacy,
-    Provincial Neglect turmoil about +28% and their capital's Urban Center about +37%. Check those countries stay
-    governable; the fallback is a lower cap than 2 on the primacy strength.
+10. **Primate countries past full strength.** Full, 1836: the save readout (`puerto rico_1836_01_20.v3`) puts 41 of
+    the 66 countries with an urban pattern past full primacy strength (23 at 1–1.5×, 18 at 1.5–2×; about 93 M
+    people), where the old curve capped 47 of them at 1×. The worst (Kandy, Chile, Tidore, Brunei) give their
+    provinces Provincial Neglect turmoil of about +28% and their capital about +37% Urban Center throughput. Check
+    those countries stay governable; the levers are a lower cap than 2 on the primacy strength, or the reference back
+    toward 60%.
 11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
     reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
     stacks (`demographics_harness.py effects SAVE` on a plain-text save).
