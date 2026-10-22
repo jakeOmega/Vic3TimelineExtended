@@ -334,12 +334,10 @@ first, since it reaches every game.
   law paths (AI Britain's reforms will be slower under more aristocratic clout, which is historically right until 1911).
 - **Self-checks:** none expected. Every field is a registered type on a state or country static modifier with a
   multiplier, a pattern the mod already relies on. Bubble pressure is the one script-only type: the banking cycle reads
-  it back as `modifier:country_bubble_pressure_monthly_add`. Whether the engine scales a script-only type by its
-  multiplier is what `primogeniture_scaled` checks, and no verdict is recorded. But the banking cycle's own Speculative
-  Inertia modifiers (`bubble_inertia_*`, `extra_modifiers.txt`) carry the same family's
-  `country_finance_momentum_monthly_add` at a script-value multiplier (`bubble_inertia_multiplier_script_value`), and
-  have been play-tested since 2026-09-22. So the play-test list checks the dashboard's next-month range instead of a
-  log line.
+  it back as `modifier:country_bubble_pressure_monthly_add`. The engine scales a script-only type by its multiplier
+  (the owner confirmed it in game in 2025 or earlier; the banking cycle's `bubble_inertia_*` rely on it;
+  `scripting_best_practices.md`), so the play-test list's dashboard row is a cheap confirmation, not a test of an
+  unknown.
 
 ## Phase 3: later
 
