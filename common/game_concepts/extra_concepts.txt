@@ -176,6 +176,10 @@ concept_antimatter_facility = {
 concept_seabed_licence = {
 	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
 }
+# Grid Transfer Stations sharing Electricity (power_grid_effects.txt).
+concept_power_grid = {
+	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+}
 # An unused share of a basin (seabed claims spec § 1).
 concept_seabed_claim = {
 	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"

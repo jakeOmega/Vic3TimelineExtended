@@ -2491,6 +2491,102 @@ types state_panel_types
 				}
 			}
 
+			### POWER GRID (power grids phase 2): on a state with a Grid
+			### Transfer Station. Its mode (sending, receiving, idle, offline),
+			### the Electricity it moves a week, its grid's size and the owner's
+			### transmission efficiency; the tile's hover explains them and gives
+			### the grid's supply against its demand.
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_tile_shown'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_GRID_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/power_plant.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_GRID_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_word_row = {
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_MODE"
+							}
+							blockoverride "row_value" {
+								text = "TE_STATE_GRID_ROW_MODE_VALUE"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_MOVED_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_MOVED"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|K]#!"
+							}
+						}
+
+						### The grid's hub, its largest producer, read from the
+						### state reference the balancing stores (te_grid_hub).
+						te_state_tile_word_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_HUB_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_HUB"
+							}
+							blockoverride "row_value" {
+								text = "TE_STATE_GRID_ROW_HUB_VALUE"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_region_size_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_SIZE_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_SIZE"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_EFFICIENCY_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_EFFICIENCY"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!"
+							}
+						}
+					}
+				}
+			}
+
 			### UN MISSION (UN redesign phase 6; phase 7 added the electoral
 			### kind and the Standing UN Force's line in the tooltip)
 			### One tile while an active UN mission works in this state: its

@@ -22,13 +22,73 @@ te_grid_station_online = {
 	}
 }
 
-# State scope, during te_grid_monthly_update_effect. The state is waiting to be
-# balanced and lies in the grid being balanced: the owner's states in the same
-# market area as scope:te_grid_seed.
-te_grid_in_seed_region = {
-	has_variable = te_grid_pending
+# State scope. The state's station runs an HVDC Undersea Interconnector, which
+# joins it to another interconnector station across the sea
+# (te_grid_sea_link).
+te_grid_has_interconnector = {
+	is_coastal = yes
+	any_scope_building = {
+		is_building_type = building_grid_transfer_station
+		has_active_production_method = pm_grid_hvdc_interconnector
+	}
+}
+
+# State scope, during the balancing: the owner and the owner of $FROM$ (a state)
+# have a Grid Interconnection Agreement in force. Reads the partner list each
+# owner's stations are refreshed with at the start of the run
+# (te_grid_refresh_partners_effect), so no treaty is walked per neighbour.
+te_grid_owners_interconnected = {
+	owner = {
+		is_target_in_variable_list = { name = te_grid_partners target = $FROM$.owner }
+	}
+}
+
+# State scope (a waiting station), during the balancing: joined to the grid of
+# $FROM$ (a member station) across the sea. Both stations run an
+# interconnector and share a sea node (the caller iterates $FROM$'s
+# every_sea_node_adjacent_state). Within one country that is enough: its
+# market areas are all in its market. Between two countries it takes a Grid
+# Interconnection Agreement and one market, so the Grid Power each side trades
+# stays in the market it is priced in.
+te_grid_sea_link = {
+	te_grid_has_interconnector = yes
 	OR = {
-		this = scope:te_grid_seed
-		is_in_same_market_area = scope:te_grid_seed
+		owner = $FROM$.owner
+		AND = {
+			market = $FROM$.market
+			te_grid_owners_interconnected = { FROM = $FROM$ }
+		}
+	}
+}
+
+# State scope (a waiting station), during the balancing: joined to the grid of
+# $FROM$ (a member station of another country) across a land border. The two
+# states border each other (the caller iterates $FROM$'s
+# every_neighbouring_state), lie in one market area, and their owners have a
+# Grid Interconnection Agreement in force.
+te_grid_land_link = {
+	NOT = { owner = $FROM$.owner }
+	is_in_same_market_area = $FROM$
+	te_grid_owners_interconnected = { FROM = $FROM$ }
+}
+
+# State scope (an AI's coastal station, saved as scope:te_grid_ai_end), in
+# te_grid_ai_interconnectors_effect. A station across a shared sea would join
+# it to another grid through an interconnector: one of the same country in
+# another market area, or an agreement partner's in the same market.
+te_grid_ai_interconnector_wanted = {
+	any_sea_node_adjacent_state = {
+		te_grid_state_has_station = yes
+		OR = {
+			AND = {
+				owner = scope:te_grid_ai_end.owner
+				NOT = { is_in_same_market_area = scope:te_grid_ai_end }
+			}
+			AND = {
+				NOT = { owner = scope:te_grid_ai_end.owner }
+				market = scope:te_grid_ai_end.market
+				te_grid_owners_interconnected = { FROM = scope:te_grid_ai_end }
+			}
+		}
 	}
 }

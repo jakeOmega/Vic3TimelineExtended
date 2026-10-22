@@ -9,6 +9,7 @@
 	modifier = {
 		building_power_plant_throughput_add = 0.25
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
+		country_grid_transmission_efficiency_add = 0.05
 	}
 
 	unlocking_technologies = {

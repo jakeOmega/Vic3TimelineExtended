@@ -23,3 +23,26 @@ pm_grid_transfer_base = {
 		}
 	}
 }
+
+pm_grid_no_interconnector = {
+	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
+}
+
+# HVDC converter valves and a cable to the far shore. Its only effect is the
+# link the balancing reads (te_grid_has_interconnector); what it costs is the
+# electronics and the engineers. The AI switches to it where it has a grid of
+# its own across the sea (te_grid_ai_interconnectors_effect).
+pm_grid_hvdc_interconnector = {
+	texture = "gfx/interface/icons/production_method_icons/electric_engines.dds"
+	unlocking_technologies = {
+		clean_energy_technologies
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_electronic_components_add = 5
+		}
+		level_scaled = {
+			building_employment_engineers_add = 250
+		}
+	}
+}

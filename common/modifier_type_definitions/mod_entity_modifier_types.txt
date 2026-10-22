@@ -1614,6 +1614,18 @@ state_building_grid_transfer_station_max_level_add = {
 	percent = no
 }
 
+# The share of downloaded Grid Power a Grid Transfer Station turns back into
+# Electricity: 0.6 in base_values, raised by Rural Electrification (+0.2),
+# Transistors, Clean Energy Technologies, Smart Grids and Modern Material
+# Science (+0.05 each) to 1. Read by script only
+# (te_grid_state_efficiency_value).
+country_grid_transmission_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	script_only = yes
+}
+
 # Grid Transfer Stations always run subsidized, from base_values: the
 # pattern Interventionism uses for highways and airports.
 country_building_grid_transfer_station_require_subsidies_bool = {
