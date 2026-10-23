@@ -1887,7 +1887,7 @@
  inheritance_events.4.b:0 "The fortune founds a dynasty."
  inheritance_events.4.b.tt:0 "Every state's [concept_inheritance_concentration] rises by #v 5#!."
  inheritance_events.4.c:0 "The heirs contest it in court."
- inheritance_events.4.c.tt:0 "Every state's [concept_inheritance_concentration] falls by #v 2#!."
+ inheritance_events.4.c.tt:0 "Every state's [concept_inheritance_concentration] falls by #v 10#!."
  inheritance_events.4.d:0 "The founder of one of the nation's great fortunes has died, and the will is about to be read. Under [GetLawType('law_free_testation').GetName] the fortune goes where the will says. The family, the firm's board and half the nation's charities are waiting to hear where that is."
  inheritance_events.4.f:0 "\"The man who dies thus rich dies disgraced.\" (Andrew Carnegie, The Gospel of Wealth, 1889)"
  inheritance_events.4.t:0 "The Founder's Will"

@@ -300,11 +300,16 @@ inheritance_events.4 = {
 		}
 	}
 
-	option = { # The heirs go to court
+	# The heirs go to court: the estate is split among every claimant and the
+	# fees take the rest, the deepest cut (the Vanderbilt contest, 1877-79;
+	# Jarndyce and Jarndyce). The extra points outlast the foundation's ten
+	# years of perks, so it is the choice for a country that wants
+	# concentration down most.
+	option = {
 		name = inheritance_events.4.c
 		custom_tooltip = {
 			text = inheritance_events.4.c.tt
-			te_inh_shift_concentration = { AMOUNT = -2 }
+			te_inh_shift_concentration = { AMOUNT = -10 }
 		}
 		add_modifier = { name = inh_probate_litigation years = 5 }
 		ai_chance = {

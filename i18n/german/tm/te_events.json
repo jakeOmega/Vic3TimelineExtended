@@ -7860,8 +7860,8 @@
   "de": "Die Erben fechten es vor Gericht an."
  },
  "inheritance_events.4.c.tt": {
-  "en": "Every state's [concept_inheritance_concentration] falls by #v 2#!.",
-  "de": "Die [concept_inheritance_concentration] jedes Staates sinkt um #v 2#!."
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 10#!.",
+  "de": "Die [concept_inheritance_concentration] jedes Staates sinkt um #v 10#!."
  },
  "inheritance_events.4.d": {
   "en": "The founder of one of the nation's great fortunes has died, and the will is about to be read. Under [GetLawType('law_free_testation').GetName] the fortune goes where the will says. The family, the firm's board and half the nation's charities are waiting to hear where that is.",

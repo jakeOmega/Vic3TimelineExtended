@@ -228,7 +228,7 @@ the law for 20 years, with a 25-year cooldown. Each option moves the score, a po
 |---|---|---|
 | Primogeniture & Entail | The Cadet Sons | Army, church, colonies or the city |
 | Forced Heirship | The Last Division | Fewer children (the French path), emigrate (Württemberg and Baden, whose split farms sent thousands to America), sell to a neighbour (score up), or legislate undivided succession (adds §2.4) |
-| Freedom of Testation | The Founder's Will | Endow a foundation (score down; Carnegie's *Gospel of Wealth*, 1889), found a dynasty (score up), or the heirs go to court |
+| Freedom of Testation | The Founder's Will | Endow a foundation (score down; Carnegie's *Gospel of Wealth*, 1889), found a dynasty (score up), or the heirs go to court (score down most: the estate is split among every claimant and the fees take the rest; the courts' backlog costs five years of dearer institutions) |
 | State as Universal Heir | The Hidden Estates | Crack down (authority, radicals) or look away (score creeps up under a law that says zero) |
 | Possession by Use | The Empty Holding | The commune reallocates it or a family claims continuity |
 | Birthright Endowment (amendment) | The First Cohort | Steer the stake into education or let it be spent |
