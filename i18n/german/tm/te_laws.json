@@ -47,6 +47,10 @@
   "en": "Algorithmic Jurisprudence",
   "de": "Algorithmische Rechtsprechung"
  },
+ "law_algorithmic_jurisprudence_desc": {
+  "en": "Models decide routine cases and draft judgments for the rest, and human judges sign them. The rulings are fast and consistent, and as impartial as whoever trains the models.",
+  "de": "Modelle entscheiden Routinefälle und entwerfen für die übrigen Urteile, und menschliche Richter unterzeichnen sie. Die Entscheidungen sind schnell und konsistent und so unparteiisch wie diejenigen, die die Modelle trainieren."
+ },
  "law_automated_bureaucracy": {
   "en": "Automated Bureaucracy",
   "de": "Automatisierte Bürokratie"
@@ -124,8 +128,8 @@
   "de": "Gemeinschaftliche Kindererziehung"
  },
  "law_communal_child_rearing_desc": {
-  "en": "The family is a relic of bourgeois individualism. To ensure absolute equality of opportunity and loyalty to the state above all, children will be raised collectively by the state in public crèches and dormitories.",
-  "de": "Die Familie ist ein Relikt bürgerlichen Individualismus. Um vollkommene Chancengleichheit und die Treue zum Staat über alles zu sichern, werden Kinder gemeinschaftlich vom Staat in öffentlichen Kinderkrippen und Internaten großgezogen."
+  "en": "The family is a relic of bourgeois individualism. To ensure absolute equality of opportunity and loyalty to the state above all, children will be raised collectively by the state in public crèches and dormitories. Without $building_state_youth_centers$ raising children communally, working parents have fewer children.",
+  "de": "Die Familie ist ein Relikt bürgerlichen Individualismus. Um vollkommene Chancengleichheit und die Treue zum Staat über alles zu sichern, werden Kinder gemeinschaftlich vom Staat in öffentlichen Kinderkrippen und Internaten großgezogen. Ohne $building_state_youth_centers$, die Kinder gemeinschaftlich großziehen, haben arbeitende Eltern weniger Kinder."
  },
  "law_comprehensive_rights": {
   "en": "Anti-Discrimination Laws",
@@ -138,6 +142,10 @@
  "law_constitutional_review": {
   "en": "Constitutional Review",
   "de": "Verfassungsgerichtsbarkeit"
+ },
+ "law_constitutional_review_desc": {
+  "en": "The courts may strike down any law that breaches the written constitution. Ordinary majorities govern within it, and changing its core is slow.",
+  "de": "Die Gerichte dürfen jedes Gesetz kippen, das gegen die geschriebene Verfassung verstößt. Einfache Mehrheiten regieren in ihrem Rahmen, und eine Änderung ihres Kerns geht langsam."
  },
  "law_contracted_administration": {
   "en": "Contracted Administration",
@@ -230,6 +238,10 @@
  "law_executive_tribunals": {
   "en": "Executive Tribunals",
   "de": "Kabinettsjustiz"
+ },
+ "law_executive_tribunals_desc": {
+  "en": "The officials who govern also judge. A magistrate collects the taxes, keeps the peace and hears the cases of the district, and a judge who displeases the ruler is replaced.",
+  "de": "Die Beamten, die regieren, sprechen auch Recht. Ein Magistrat zieht die Steuern ein, wahrt den Frieden und verhandelt die Fälle seines Bezirks, und ein Richter, der dem Herrscher missfällt, wird ersetzt."
  },
  "law_federal_system": {
   "en": "Federal System",
@@ -354,6 +366,10 @@
  "law_judicial_supremacy": {
   "en": "Judicial Supremacy",
   "de": "Vorrang der Justiz"
+ },
+ "law_judicial_supremacy_desc": {
+  "en": "The courts decide only the cases brought before them, and the government still governs. But the courts' reading of the constitution binds the legislature, reaches rights the text does not name, and no ordinary law can overturn it.",
+  "de": "Die Gerichte entscheiden nur die Fälle, die ihnen vorgelegt werden, und die Regierung regiert weiterhin. Doch die Auslegung der Verfassung durch die Gerichte bindet die Legislative, erstreckt sich auf Rechte, die der Text nicht nennt, und kein gewöhnliches Gesetz kann sie aufheben."
  },
  "law_legal_limbo": {
   "en": "Legal Limbo",
@@ -912,8 +928,8 @@
   "de": "Geburtenförderung"
  },
  "law_pro_natalist_subsidies_desc": {
-  "en": "A growing nation needs a growing populace. The state actively encourages larger families through propaganda, tax incentives, and direct subsidies to ensure our continued strength and prosperity.",
-  "de": "Eine wachsende Nation braucht eine wachsende Bevölkerung. Der Staat fördert aktiv größere Familien durch Propaganda, Steueranreize und direkte Zuschüsse, um unsere fortdauernde Stärke und Prosperität zu sichern."
+  "en": "Through propaganda, incentives, or even coercion, this policy encourages higher birthrates.",
+  "de": "Durch Propaganda, Anreize oder sogar Zwang fördert diese Politik höhere Geburtenraten."
  },
  "law_protected_class": {
   "en": "Protected Class",
@@ -975,6 +991,10 @@
   "en": "Religious Courts",
   "de": "Religiöse Gerichte"
  },
+ "law_religious_courts_desc": {
+  "en": "Clerical judges apply religious law to most disputes, beside whatever the ruler decrees. They answer to the faith rather than to the state. Should the state separate itself from religion, state courts replace them.",
+  "de": "Geistliche Richter wenden auf die meisten Streitigkeiten religiöses Recht an, neben allem, was der Herrscher verfügt. Sie sind der Glaubensgemeinschaft verantwortlich, nicht dem Staat. Trennt sich der Staat von der Religion, ersetzen staatliche Gerichte sie."
+ },
  "law_restorative_justice": {
   "en": "Restorative Justice",
   "de": "Wiedergutmachende Justiz"
@@ -996,8 +1016,8 @@
   "de": "Staatliches Eugenikprogramm"
  },
  "law_state_eugenics_program_desc": {
-  "en": "The state mandates genetic screening and 'enhancements' to guide the evolution of its populace.",
-  "de": "Der Staat schreibt genetische Untersuchungen und ‚Verbesserungen' vor, um die Evolution seiner Bevölkerung zu lenken."
+  "en": "Heredity becomes a matter of state. Officials screen the population for 'fitness', decide who may marry and bear children, and, as the science allows, direct the evolution of the populace itself.",
+  "de": "Vererbung wird zur Staatsangelegenheit. Beamte prüfen die Bevölkerung auf „Tauglichkeit“, entscheiden, wer heiraten und Kinder bekommen darf, und lenken, soweit die Wissenschaft es erlaubt, die Evolution der Bevölkerung selbst."
  },
  "law_state_intellectual_property": {
   "en": "State Intellectual Property",
@@ -1050,6 +1070,10 @@
  "law_statutory_courts": {
   "en": "Statutory Courts",
   "de": "Gesetzesgebundene Gerichte"
+ },
+ "law_statutory_courts_desc": {
+  "en": "Judges hold office for life or by career and cannot be dismissed for their rulings, but they apply the law as written. Whoever makes the law, a parliament or a king in council, has the last word: no court can strike it down.",
+  "de": "Richter üben ihr Amt auf Lebenszeit oder als Laufbahn aus und können wegen ihrer Urteile nicht entlassen werden, wenden das Gesetz aber so an, wie es geschrieben steht. Wer das Gesetz macht, ein Parlament oder ein König im Rat, hat das letzte Wort: Kein Gericht kann es kippen."
  },
  "law_strict_ip_protection": {
   "en": "Strict IP Protection",
@@ -1216,8 +1240,8 @@
   "de": "Strafrecht"
  },
  "lawgroup_criminal_justice_desc": {
-  "en": "The form and function of the criminal justice system, including laws, courts, and law enforcement agencies.",
-  "de": "Form und Funktion des Strafrechtssystems, einschließlich Gesetzen, Gerichten und Strafverfolgungsbehörden."
+  "en": "The form and function of the criminal justice system: what follows a conviction, and how offenders are punished or rehabilitated.",
+  "de": "Form und Funktion des Strafrechtssystems: was auf eine Verurteilung folgt und wie Straftäter bestraft oder resozialisiert werden."
  },
  "lawgroup_electoral_finance": {
   "en": "Electoral Finance",
@@ -1248,8 +1272,8 @@
   "de": "Genetische Rechte"
  },
  "lawgroup_genetic_rights_desc": {
-  "en": "Regulates the use of genetic engineering on flora, fauna, and humanity itself.",
-  "de": "Regelt den Einsatz von Gentechnik an Flora, Fauna und der Menschheit selbst."
+  "en": "Governs heredity: whether the state may decide who bears children, and who may engineer the genes of flora, fauna and humanity itself.",
+  "de": "Regelt die Vererbung: ob der Staat entscheiden darf, wer Kinder bekommt, und wer die Gene von Flora, Fauna und der Menschheit selbst verändern darf."
  },
  "lawgroup_human_augmentation": {
   "en": "Human Augmentation",
@@ -1286,6 +1310,10 @@
  "lawgroup_judiciary": {
   "en": "Judiciary",
   "de": "Justiz"
+ },
+ "lawgroup_judiciary_desc": {
+  "en": "Who judges disputes and the government's own acts, how independent the judges are, and whether they can overturn the law.",
+  "de": "Wer über Streitigkeiten und die Handlungen der Regierung selbst urteilt, wie unabhängig die Richter sind und ob sie das Gesetz kippen können."
  },
  "lawgroup_language_policy": {
   "en": "Language Policy",

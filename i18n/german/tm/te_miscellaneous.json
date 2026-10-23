@@ -27,6 +27,10 @@
   "en": "from good relations with a [concept_great_power]",
   "de": "durch gute Beziehungen zu einer [concept_great_power]"
  },
+ "AI_GRID_STATIONS_MEET": {
+  "en": "from $building_grid_transfer_station$s on both sides of the border or the sea",
+  "de": "durch $building_grid_transfer_station$en auf beiden Seiten der Grenze oder des Meeres"
+ },
  "AI_HAS_ENVIRONMENT_MINISTRY": {
   "en": "from having an environment ministry",
   "de": "durch ein bestehendes Umweltministerium"
@@ -732,8 +736,8 @@
   "de": "Förderung der Kulturinstitute einstellen"
  },
  "CH_DISABLE_CULTURAL_INSTITUTES_DESC": {
-  "en": "Scale back the state's cultural patronage network and recover the [concept_authority] tied up in it.",
-  "de": "Baut das staatliche Netzwerk der Kulturförderung zurück und gewinnt die darin gebundene [concept_authority] zurück."
+  "en": "Scale back the state's cultural patronage network and recover the [concept_influence] tied up in it.",
+  "de": "Baut das staatliche Netzwerk der Kulturförderung zurück und gewinnt den darin gebundenen [concept_influence] zurück."
  },
  "CH_DISABLE_CULTURAL_PROTECTIONISM": {
   "en": "End Cultural Protectionism",
@@ -748,8 +752,8 @@
   "de": "Globale Medienkampagne beenden"
  },
  "CH_DISABLE_GLOBAL_MEDIA_CAMPAIGN_DESC": {
-  "en": "Stop dedicating state authority to exporting our media and narrative abroad.",
-  "de": "Setzt keine staatliche Autorität mehr dafür ein, unsere Medien und unser Narrativ ins Ausland zu tragen."
+  "en": "Stop spending [concept_influence] on exporting our media and narrative abroad.",
+  "de": "Gibt keinen [concept_influence] mehr dafür aus, unsere Medien und unser Narrativ ins Ausland zu tragen."
  },
  "CH_DISABLE_WORLD_EXPOSITION": {
   "en": "End International Cultural Outreach",
@@ -764,8 +768,8 @@
   "de": "Globale Medienkampagne starten"
  },
  "CH_GLOBAL_MEDIA_CAMPAIGN_DESC": {
-  "en": "Use mass media as an arm of state influence, converting authority into [concept_prestige] and [concept_cultural_pull] abroad.",
-  "de": "Setzt Massenmedien als Werkzeug staatlichen Einflusses ein und wandelt Autorität im Ausland in [concept_prestige] und [concept_cultural_pull] um."
+  "en": "Use mass media as an arm of state influence, converting [concept_influence] into [concept_prestige] and [concept_cultural_pull] abroad.",
+  "de": "Setzt Massenmedien als Werkzeug staatlichen Einflusses ein und wandelt [concept_influence] im Ausland in [concept_prestige] und [concept_cultural_pull] um."
  },
  "CH_INCREASE_PROGRAM_FUNDING": {
   "en": "Increase Cultural Program Funding",
@@ -775,9 +779,17 @@
   "en": "Raise the funding level for direct cultural patronage. Each step adds flat [concept_cultural_pull], 5% more of it, and a matching recurring expense scaled to our GDP.",
   "de": "Erhöht die Förderstufe der direkten Kulturförderung. Jede Stufe gibt einen festen Betrag an [concept_cultural_pull], 5% mehr davon, sowie entsprechende laufende, am BIP orientierte Ausgaben."
  },
+ "CH_INSTITUTES_INFLUENCE_TT": {
+  "en": "We have #bold 150#! [concept_influence] available",
+  "de": "Uns stehen #bold 150#! [concept_influence] zur Verfügung"
+ },
  "CH_MEDIA_BLOCKED_BY_PROTECTIONISM": {
   "en": "Cannot launch a Global Media Campaign while Cultural Protectionism is in effect.",
   "de": "Eine Globale Medienkampagne kann nicht gestartet werden, solange Kultureller Protektionismus in Kraft ist."
+ },
+ "CH_MEDIA_INFLUENCE_TT": {
+  "en": "We have #bold 200#! [concept_influence] available",
+  "de": "Uns stehen #bold 200#! [concept_influence] zur Verfügung"
  },
  "CH_PROGRAM_FUNDING_NOT_MAX": {
   "en": "Funding is not already at maximum ([ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_cultural_program_max_funding_add')|0]).",
@@ -1275,6 +1287,42 @@
   "en": "GMO Plantation",
   "de": "GVO-Plantage"
  },
+ "GM_ARCH_ANTIQUITIES_NATIONALISM": {
+  "en": "from pride in our antiquities",
+  "de": "durch Stolz auf unsere Altertümer"
+ },
+ "GM_ARCH_CONCESSION_RELUCTANCE": {
+  "en": "from reluctance to give away half the finds",
+  "de": "durch Widerwillen, die Hälfte der Funde abzugeben"
+ },
+ "GM_ARCH_DIG_WANTED": {
+  "en": "from wanting to dig there",
+  "de": "durch den Wunsch, dort zu graben"
+ },
+ "GM_ARCH_PERMIT_RELUCTANCE": {
+  "en": "from reluctance to let foreigners dig",
+  "de": "durch Widerwillen, Ausländer graben zu lassen"
+ },
+ "GM_TR_RETURN_RELUCTANCE": {
+  "en": "from reluctance to give up trophies",
+  "de": "durch Widerwillen, Trophäen herzugeben"
+ },
+ "GM_TR_RETURN_WANTED": {
+  "en": "from wanting our monuments home",
+  "de": "durch den Wunsch, unsere Monumente heimzuholen"
+ },
+ "GM_TR_SURRENDER_RELUCTANCE": {
+  "en": "from reluctance to surrender a monument",
+  "de": "durch Widerwillen, ein Monument auszuliefern"
+ },
+ "GM_TR_SURRENDER_SIZE": {
+  "en": "from the size of the monument",
+  "de": "durch die Größe des Monuments"
+ },
+ "GM_TR_SURRENDER_WANTED": {
+  "en": "from gaining a trophy",
+  "de": "durch den Gewinn einer Trophäe"
+ },
  "GP_ACCEPT_NATIONALIZATION_TT": {
   "en": "Publicly accept the nationalization. Other [Concept('concept_great_power', 'Great Powers')] will remember our restraint.",
   "de": "Akzeptiert die Verstaatlichung öffentlich. Andere [Concept('concept_great_power', 'Großmächte')] werden sich an unsere Zurückhaltung erinnern."
@@ -1736,12 +1784,12 @@
   "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_schools').GetName]:\\n #g +5%#! $state_assimilation_mult$"
  },
  "LAW_EQUAL_INHERITANCE_INHERITANCE_TT": {
-  "en": "The law pulls the [concept_inheritance_concentration] toward #v 25#!, so the Aristocrats lose strength and, in its states, Farmers and Shopkeepers invest more. In farming states, peasants have fewer children and stay on their plots: birth rate and migration down, scaled by the state's share of Peasants and Farmers and refreshed at each state's yearly update.",
-  "de": "Das Gesetz zieht die [concept_inheritance_concentration] in Richtung #v 25#!, sodass die Aristokraten an Stärke verlieren und in den Staaten des Landes Farmer und Verkäufer mehr investieren. In landwirtschaftlichen Staaten haben Bauern weniger Kinder und bleiben auf ihren Parzellen: Geburtsrate und Migration sinken, skaliert nach dem Anteil von Bauern und Farmern im Staat und bei der jährlichen Aktualisierung jedes Staates erneuert."
+  "en": "The law lowers the [concept_inheritance_concentration], so the Aristocrats and Capitalists lose strength and bubbles build more slowly once the banking cycle runs, and in its states wealth buys less clout, more people qualify for better jobs and schooling is easier to reach. In farming states, peasants have fewer children and stay on their plots: birth rate and migration down, scaled by the state's share of Peasants and Farmers and refreshed at each state's yearly update.",
+  "de": "Das Gesetz senkt die [concept_inheritance_concentration], sodass die Aristokraten und Kapitalisten an Stärke verlieren und sich Blasen langsamer aufbauen, sobald der Bankenzyklus läuft, und in den Staaten des Landes Vermögen weniger Einfluss bringt, mehr Menschen für bessere Stellen in Frage kommen und Schulbildung leichter zugänglich ist. In landwirtschaftlichen Staaten haben Bauern weniger Kinder und bleiben auf ihren Parzellen: Geburtsrate und Migration sinken, skaliert nach dem Anteil von Bauern und Farmern im Staat und bei der jährlichen Aktualisierung jedes Staates erneuert."
  },
  "LAW_FREE_TESTATION_INHERITANCE_TT": {
-  "en": "The law pulls the [concept_inheritance_concentration] toward #v 60#!, so great fortunes slightly strengthen the Aristocrats and Capitalists.",
-  "de": "Das Gesetz zieht die [concept_inheritance_concentration] in Richtung #v 60#!, sodass große Vermögen die Aristokraten und Kapitalisten leicht stärken."
+  "en": "The law raises the [concept_inheritance_concentration] a little, so great fortunes slightly strengthen the Aristocrats and Capitalists.",
+  "de": "Das Gesetz erhöht die [concept_inheritance_concentration] ein wenig, sodass große Vermögen die Aristokraten und Kapitalisten leicht stärken."
  },
  "LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT": {
   "en": "#n The above [concept_institution] info is misleading. Please see below for the actual effect.#!\\n\\nFor each [concept_investment_level] in [GetInstitutionType('institution_ministry_of_war').GetName]:\\n #n -1#! $building_group_bg_military_standard_of_living_add$\\n #g -2%#! $state_mortality_mult$\\n #g +2%#! $unit_defense_mult$\\n #g +2%#! $unit_offense_mult$\\n #g +10%#! $country_military_tech_research_speed_mult$",
@@ -1752,8 +1800,8 @@
   "de": "#n Die obige Information zur [concept_institution] ist irreführend. Die tatsächliche Wirkung finden Sie unten.#!\\n\\nFür jede [concept_investment_level] in [GetInstitutionType('institution_health_system').GetName]:\\n #g -2%#! $state_mortality_mult$\\n #g +0,25#! $state_standard_of_living_add$\\n #g +1%#! $country_tech_research_speed_mult$"
  },
  "LAW_NON_INHERITABLE_USAGE_RIGHTS_INHERITANCE_TT": {
-  "en": "The law pulls the [concept_inheritance_concentration] toward #v 0#!, so the Aristocrats lose strength and Farmers and Shopkeepers invest more.",
-  "de": "Das Gesetz zieht die [concept_inheritance_concentration] in Richtung #v 0#!, sodass die Aristokraten an Stärke verlieren und Farmer und Verkäufer mehr investieren."
+  "en": "The law lowers the [concept_inheritance_concentration] as far as any inheritance law, so the Aristocrats and Capitalists lose strength and bubbles build more slowly once the banking cycle runs, and in its states wealth buys less clout, more people qualify for better jobs, schooling is easier to reach and radicals find fewer followers.",
+  "de": "Das Gesetz senkt die [concept_inheritance_concentration] so weit wie jedes Erbrecht, sodass die Aristokraten und Kapitalisten an Stärke verlieren und sich Blasen langsamer aufbauen, sobald der Bankenzyklus läuft, und in den Staaten des Landes Vermögen weniger Einfluss bringt, mehr Menschen für bessere Stellen in Frage kommen, Schulbildung leichter zugänglich ist und Radikale weniger Anhänger finden."
  },
  "LAW_PARTIBLE_INHERITANCE_TT": {
   "en": "The law neither raises nor lowers the [concept_inheritance_concentration].",

@@ -25196,8 +25196,8 @@
   "de": "Weigert euch, sie zu ratifizieren."
  },
  "un_vote.3.c_convention_tt": {
-  "en": "#bold We stay outside the convention.#! None of its obligations — and none of its benefits — apply to us; it binds every member that ratifies it. The Assembly takes note of the refusal:",
-  "de": "#bold Wir bleiben außerhalb der Konvention.#! Keine ihrer Pflichten – und keiner ihrer Vorteile – gilt für uns; sie bindet jedes Mitglied, das sie ratifiziert. Die Versammlung nimmt die Weigerung zur Kenntnis:"
+  "en": "#bold We stay outside the convention.#! Its party terms, and its benefits, do not apply to us; it binds every member that ratifies it, though whatever it does to every country still reaches us. The Assembly takes note of the refusal:",
+  "de": "#bold Wir bleiben außerhalb der Konvention.#! Ihre Bedingungen für Vertragsparteien und ihre Vorteile gelten nicht für uns; sie bindet jedes Mitglied, das sie ratifiziert, doch was sie jedem Land auferlegt, erreicht auch uns. Die Versammlung nimmt die Weigerung zur Kenntnis:"
  },
  "un_vote.3.c_decision": {
   "en": "Denounce the decision.",
@@ -25215,6 +25215,10 @@
   "en": "#bold We take no part.#! The effort goes ahead with the members who contribute, and we pay nothing towards it. The Assembly takes note of the refusal:",
   "de": "#bold Wir nehmen nicht teil.#! Das Vorhaben geht mit den beitragenden Mitgliedern voran, und wir zahlen nichts dazu. Die Versammlung nimmt die Weigerung zur Kenntnis:"
  },
+ "un_vote.3.c_vetoed_tt": {
+  "en": "#bold A veto has already blocked it or softened it into a form that binds no one,#! so denouncing it defies nothing and costs us no International Standing. The statement still costs us:",
+  "de": "#bold Ein Veto hat sie bereits blockiert oder zu einer Form abgeschwächt, die niemanden bindet,#! daher widersetzt sich die Verurteilung nichts und kostet uns kein Internationales Ansehen. Die Erklärung kostet uns dennoch:"
+ },
  "un_vote.3.d_choice_convention": {
   "en": "\\n\\nWe voted against it. A convention binds only the members that ratify it: we may ratify it after all, or stay outside it.",
   "de": "\\n\\nWir haben dagegen gestimmt. Eine Konvention bindet nur die Mitglieder, die sie ratifizieren: Wir können sie doch noch ratifizieren oder außen vor bleiben."
@@ -25226,6 +25230,10 @@
  "un_vote.3.d_choice_pledge": {
   "en": "\\n\\nWe voted against it. The Assembly now asks its members to take part: we may join the effort after all, or refuse.",
   "de": "\\n\\nWir haben dagegen gestimmt. Die Versammlung bittet ihre Mitglieder nun um Beteiligung: Wir können uns dem Vorhaben doch noch anschließen oder ablehnen."
+ },
+ "un_vote.3.d_choice_vetoed": {
+  "en": "\\n\\nWe voted against it, and a veto has blocked it or softened it into a form that binds no one. Accepting it or denouncing it is a statement only: there is nothing to comply with, and nothing to defy.",
+  "de": "\\n\\nWir haben dagegen gestimmt, und ein Veto hat sie blockiert oder zu einer Form abgeschwächt, die niemanden bindet. Sie zu akzeptieren oder zu verurteilen ist nur eine Erklärung: Es gibt nichts zu befolgen und nichts, dem man sich widersetzen könnte."
  },
  "un_vote.3.d_failed": {
   "en": "The General Assembly has concluded its vote. The resolution proposed by [SCOPE.sCountry('un_vote_proposer').GetName] has #R failed#! with [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] votes in favor and [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] against.",
