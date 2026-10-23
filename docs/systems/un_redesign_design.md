@@ -2582,9 +2582,11 @@ docket prompts reaching human players, and the aggrieved party going first.
 8. **Proposal pace (great powers and standing).** `common/script_values/un_propose_pace_values.txt`
    holds one multiplier, `un_propose_pace_mult`, read three ways:
    - the sponsor mark (`un_ga_resolution_modifier`, 5 years) and `un_request_cooldown` (10 years)
-     run `un_propose_sponsor_days` / `un_propose_cooldown_days` at every site that adds them
-     (`un_propose_effects.txt`, `un_events.2`). The sponsor mark also bars a second proposal, so
-     the two are scaled together;
+     run the base times the multiplier at every site that adds them (`un_propose_effects.txt`,
+     `un_events.2`), through `un_propose_add_sponsor_mark` / `un_propose_add_request_cooldown`:
+     a ladder of literal durations, since `add_modifier` read the computed script values they
+     first passed as 0 days (2026-10-23). The sponsor mark also bars a second proposal, so the
+     two are scaled together;
    - `un_docket_offer_order` ranks the members a convention is offered to (power share ÷ the
      multiplier), so a great power in good standing is offered first;
    - `un_docket_agenda_months_value` halves the Assembly-business cadence (24 to 12 months) while

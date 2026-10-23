@@ -392,8 +392,9 @@ un_sponsor_influence_cost = { value = 150 }
 un_sponsor_punitive_influence_cost = { value = 300 }
 
 # Two years: about as long as a resolution takes to come to a vote and be
-# carried out. Not decaying, so the cost holds at its figure throughout.
-un_sponsor_cost_days = { value = 730 }
+# carried out. Not decaying, so the cost holds at its figure throughout. A bare
+# number: add_modifier's days reads a { value = N } script value as 0.
+un_sponsor_cost_days = 730
 
 # ---- Financial Cost / Benefit Scaling ----
 

@@ -15,7 +15,10 @@
 # Restated in words in docs/player_guide/10-united-nations.md ("Tabling UN
 # business", "International standing"), je_un_standing_help_* and
 # je_un_chamber_raised_agenda (te_journal_entries_l_english.yml), and
-# docs/systems/journal_entry_systems.md. Edit them with these figures.
+# docs/systems/journal_entry_systems.md, and as literal durations in
+# un_propose_add_sponsor_mark and un_propose_add_request_cooldown
+# (un_propose_effects.txt; test_un_propose_pace.py checks them). Edit them
+# with these figures.
 # ============================================================================
 
 # ---- Tuning -----------------------------------------------------------------------------
@@ -76,20 +79,12 @@ un_propose_pace_mult = {
 
 # ---- Durations ---------------------------------------------------------------------------
 
-# The sponsor mark: five years at the base pace. Scope: the proposing country
-un_propose_sponsor_days = {
-	value = normal_modifier_time
-	multiply = un_propose_pace_mult
-	min = un_propose_min_days
-}
-
-# The bar on the next own-motion proposal: ten years at the base pace.
-# Scope: the proposing country
-un_propose_cooldown_days = {
-	value = long_modifier_time
-	multiply = un_propose_pace_mult
-	min = un_propose_min_days
-}
+# The sponsor mark runs five years (normal_modifier_time) times the multiplier,
+# and the bar on the next own-motion proposal ten (long_modifier_time), never
+# under un_propose_min_days. They are no script values: add_modifier's days
+# reads a computed one as 0, so un_propose_add_sponsor_mark and
+# un_propose_add_request_cooldown branch over the multiplier's ten values with
+# a literal duration each.
 
 # ---- The docket ---------------------------------------------------------------------------
 

@@ -109,16 +109,8 @@ un_propose_condemn_effect = {
 		# chamber row can preview the same pick — see the file header.
 		un_propose_condemn_select_target = yes
 		scope:un_propose_condemn_target ?= { save_scope_as = un_vote_target }
-		add_modifier = {
-			name = un_ga_resolution_modifier
-			days = un_propose_sponsor_days
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_sponsor_mark = yes
+		un_propose_add_request_cooldown = yes
 		un_resolution_open = { TOPIC = condemn }
 	}
 	un_propose_sponsor_cost = yes
@@ -134,16 +126,8 @@ un_propose_sanctions_effect = {
 		# chamber row can preview the same pick — see the file header.
 		un_propose_sanctions_select_target = yes
 		scope:un_propose_sanctions_target ?= { save_scope_as = un_vote_target }
-		add_modifier = {
-			name = un_ga_resolution_modifier
-			days = un_propose_sponsor_days
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_sponsor_mark = yes
+		un_propose_add_request_cooldown = yes
 		un_resolution_open = { TOPIC = sanctions }
 	}
 	un_propose_sponsor_punitive_cost = yes
@@ -159,11 +143,7 @@ un_propose_expulsion_effect = {
 		# Prior `scaled_debug_value` was a placeholder — undefined script value.
 		un_propose_expulsion_select_target = yes
 		scope:un_propose_expulsion_target ?= { save_scope_as = un_vote_target }
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_request_cooldown = yes
 		# Every other member votes, including the target — it gets to defend itself
 		un_resolution_open = { TOPIC = expulsion }
 	}
@@ -183,16 +163,8 @@ un_propose_mandate_effect = {
 				exists = scope:un_mandate_case_state
 			}
 			scope:un_mandate_case_target = { save_scope_as = un_vote_target }
-			add_modifier = {
-				name = un_ga_resolution_modifier
-				days = un_propose_sponsor_days
-				is_decaying = yes
-			}
-			add_modifier = {
-				name = un_request_cooldown
-				days = un_propose_cooldown_days
-				is_decaying = yes
-			}
+			un_propose_add_sponsor_mark = yes
+			un_propose_add_request_cooldown = yes
 			set_variable = { name = un_mandate_proposal_cooldown days = 1825 }
 			un_resolution_open = { TOPIC = military_mandate }
 			# The topic-specific fields ride on the resolution container, so
@@ -230,11 +202,7 @@ un_propose_mandate_effect = {
 un_propose_peacekeepers_effect = {
 	custom_tooltip = {
 		text = "UN_REQUEST_PEACEKEEPERS_TT"
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_request_cooldown = yes
 		# Open the vote; the requester is also the resolution's target
 		save_scope_as = un_vote_target
 		un_resolution_open = { TOPIC = peacekeeping_request }
@@ -247,11 +215,7 @@ un_propose_peacekeepers_effect = {
 un_propose_aid_effect = {
 	custom_tooltip = {
 		text = "UN_REQUEST_AID_TT"
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_request_cooldown = yes
 		# Open the vote; the requester is also the resolution's target
 		save_scope_as = un_vote_target
 		un_resolution_open = { TOPIC = aid_request }
@@ -264,16 +228,8 @@ un_propose_aid_effect = {
 un_propose_reform_effect = {
 	custom_tooltip = {
 		text = "UN_PROPOSE_CHARTER_REFORM_TT"
-		add_modifier = {
-			name = un_ga_resolution_modifier
-			days = un_propose_sponsor_days
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_sponsor_mark = yes
+		un_propose_add_request_cooldown = yes
 		# The proposer champions reform (as un_events.6's own option does).
 		add_modifier = {
 			name = un_reform_champion_modifier
@@ -363,11 +319,7 @@ un_propose_standing_force_effect = {
 # Scope: the proposing country
 un_propose_observer_request_effect = {
 	custom_tooltip = UN_PROPOSE_OBSERVER_REQUEST_TT
-	add_modifier = {
-		name = un_request_cooldown
-		days = un_propose_cooldown_days
-		is_decaying = yes
-	}
+	un_propose_add_request_cooldown = yes
 	hidden_effect = {
 		# The requester is also the resolution's target.
 		save_scope_as = un_vote_target
@@ -483,15 +435,104 @@ un_propose_own_motion_costs_punitive = {
 
 # Scope: the proposing country
 un_propose_own_motion_marks = {
-	add_modifier = {
-		name = un_ga_resolution_modifier
-		days = un_propose_sponsor_days
-		is_decaying = yes
+	un_propose_add_sponsor_mark = yes
+	un_propose_add_request_cooldown = yes
+}
+
+# The sponsor mark (un_ga_resolution_modifier, five years at the base pace) and
+# the bar on the next own-motion proposal (un_request_cooldown, ten), each for
+# its base times un_propose_pace_mult (un_propose_pace_values.txt). Every site
+# that adds either one calls these. The durations are literals because
+# add_modifier's days reads a computed script value as 0 ("for 0 days";
+# scripting_best_practices.md, "Modifier & Cooldown Duration Units"). The
+# multiplier takes ten values, a great power's half times a standing tier, and
+# each band below holds one of them; its duration is the base times that value,
+# to the nearest day and at least un_propose_min_days. test_un_propose_pace.py
+# recomputes both from the tuning, so a retuned multiplier fails it until the
+# ladders follow.
+# Scope: the proposing country
+un_propose_add_sponsor_mark = {
+	if = {
+		limit = { un_propose_pace_mult < 0.39 }	# x0.35: a great power at Exemplary
+		add_modifier = { name = un_ga_resolution_modifier days = 639 is_decaying = yes }
 	}
-	add_modifier = {
-		name = un_request_cooldown
-		days = un_propose_cooldown_days
-		is_decaying = yes
+	else_if = {
+		limit = { un_propose_pace_mult < 0.46 }	# x0.425: a great power at Respected
+		add_modifier = { name = un_ga_resolution_modifier days = 776 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.56 }	# x0.5: a great power at Neutral
+		add_modifier = { name = un_ga_resolution_modifier days = 913 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.66 }	# x0.625: a great power at Poor
+		add_modifier = { name = un_ga_resolution_modifier days = 1141 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.72 }	# x0.7: Exemplary
+		add_modifier = { name = un_ga_resolution_modifier days = 1278 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.8 }	# x0.75: a great power at Disgraced
+		add_modifier = { name = un_ga_resolution_modifier days = 1369 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.92 }	# x0.85: Respected
+		add_modifier = { name = un_ga_resolution_modifier days = 1551 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 1.12 }	# x1: Neutral
+		add_modifier = { name = un_ga_resolution_modifier days = 1825 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 1.37 }	# x1.25: Poor
+		add_modifier = { name = un_ga_resolution_modifier days = 2281 is_decaying = yes }
+	}
+	else = {	# x1.5: Disgraced
+		add_modifier = { name = un_ga_resolution_modifier days = 2738 is_decaying = yes }
+	}
+}
+
+# Scope: the proposing country
+un_propose_add_request_cooldown = {
+	if = {
+		limit = { un_propose_pace_mult < 0.39 }	# x0.35: a great power at Exemplary
+		add_modifier = { name = un_request_cooldown days = 1278 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.46 }	# x0.425: a great power at Respected
+		add_modifier = { name = un_request_cooldown days = 1551 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.56 }	# x0.5: a great power at Neutral
+		add_modifier = { name = un_request_cooldown days = 1825 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.66 }	# x0.625: a great power at Poor
+		add_modifier = { name = un_request_cooldown days = 2281 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.72 }	# x0.7: Exemplary
+		add_modifier = { name = un_request_cooldown days = 2555 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.8 }	# x0.75: a great power at Disgraced
+		add_modifier = { name = un_request_cooldown days = 2738 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 0.92 }	# x0.85: Respected
+		add_modifier = { name = un_request_cooldown days = 3103 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 1.12 }	# x1: Neutral
+		add_modifier = { name = un_request_cooldown days = 3650 is_decaying = yes }
+	}
+	else_if = {
+		limit = { un_propose_pace_mult < 1.37 }	# x1.25: Poor
+		add_modifier = { name = un_request_cooldown days = 4563 is_decaying = yes }
+	}
+	else = {	# x1.5: Disgraced
+		add_modifier = { name = un_request_cooldown days = 5475 is_decaying = yes }
 	}
 }
 

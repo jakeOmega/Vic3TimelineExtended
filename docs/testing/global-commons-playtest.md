@@ -558,6 +558,9 @@ decision Begin Orbital Debris Removal and wait a month.
    Hazardous, option g: the event Ribbon Strike, its picture, both option tooltips stating the
    −50% for 6 or 2 months, the repair option showing its treasury cost. After either option
    the elevator building shows Ribbon Strike, and option g again does nothing until it ends.
+   Each option's effects give Ribbon Strike for 182 or 61 days, not 0, and it ends about six or
+   two months on (both were `{ value = N }` script values, which `add_modifier` reads as 0 days,
+   until 2026-10-23).
 4. **A Kessler cascade cleared by Fusion Sweepers** (play-test list of the spec). Console to
    Kessler Cascade (90), research Muon-Catalyzed Fusion Reactors, own a Space Elevator of ten
    levels, take Begin Orbital Debris Removal: the Space Program switches to Fusion Sweepers,
@@ -575,7 +578,9 @@ decision Begin Orbital Debris Removal and wait a month.
    on the Mars Mission or higher), we gain 5 infamy, Our Record on the UN tab shows
    Anti-satellite strikes 15 (with a UN), every other country in orbit likes us 30 less, the
    index rises by 12, both notifications read correctly (ours and the third party's), and the
-   action is greyed against that target for 12 months for every country.
+   action is greyed against that target for 12 months for every country. Hover the target's
+   Orbital Network Disrupted: it expires a year on (six months on the Mars Mission), not at once
+   and not never (its duration was a `{ value = N }` script value until 2026-10-23).
 7. **The AI and the strike.** In an observer run with a late war between space powers: an AI
    strikes only an enemy with more in orbit than itself, rarely, and almost never once the
    index is 50 or more unless it is losing. An AI should never strike a country with no
@@ -594,7 +599,10 @@ decision Begin Orbital Debris Removal and wait a month.
     unavailable (the rule's `disable_pm_*` flags; the mod's first use of them).
 11. **A revolution.** A country holding Orbital Debris and Orbital Cleanup loses a civil war
     to its rebels: the winner has both back after its next monthly pulse, and a struck
-    country's 12-month cooldown carries over.
+    country's 12-month cooldown carries over. A country still under Orbital Network Disrupted
+    that loses one has it back the next month, at the strike's strength, expiring within a month
+    of when the strike's would have (`te_asat_rebuild_disruption`'s ladder of 30-day literals;
+    it passed a computed duration, read as 0 days, until 2026-10-23).
 
 ### Placeholder art
 

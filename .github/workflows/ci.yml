@@ -246,6 +246,12 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 script_argument_audit.py --strict
 
+      # add_modifier reads a duration given as a script value written as a
+      # block, or computed, as 0 days ("for 0 days" in the tooltip).
+      - name: Audit — add_modifier durations a script value would zero
+        if: ${{ !cancelled() }}
+        run: python3 modifier_duration_audit.py --strict
+
       - name: Audit — loc keys named in script that no loc file defines
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
