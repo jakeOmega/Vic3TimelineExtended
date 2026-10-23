@@ -57,3 +57,20 @@ strength is 50 or more, and let it carry.
 | **A veto.** Petition against an AI permanent-member enforcer, once while it is your rival and once after the rivalry has ended and relations are above Cold. | It vetoes the first and not the second; a vetoed petition says it was blocked and the sanctions stay. | A veto in the second case: `un_lift_sanctions_ill_disposed` is missing from `un_vote_ai_should_veto`. |
 | **An orphaned regime.** Have the enforcer leave the UN. | The next month the sanctions lapse, with The Sanctions on Us Lapse in the feed. | Still sanctioned: check `un_sanctions_regime_orphaned` on the target. |
 | **A revolution.** Let a revolution win in a sanctioned country. | The winner is under the sanctions again within a month. | |
+
+## Proposal durations (2026-10-23)
+
+`add_modifier` reads a duration given as a script value written as a block, or computed, as 0 days: Planned Capital's
+option said "for 0 days" (`scripting_best_practices.md`, "Modifier & Cooldown Duration Units"). The proposal pace's two
+marks were computed and the sponsor's cost a `{ value = 730 }`. The marks are now a ladder of literals over
+`un_propose_pace_mult` (`un_propose_add_sponsor_mark`, `un_propose_add_request_cooldown`), the cost a bare
+`un_sponsor_cost_days = 730`, and `modifier_duration_audit` keeps the form out. The World Court's two windows are
+`set_variable` lifetimes, made bare too though that form was never seen to fail.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Own motion.** As a Neutral member that is not a great power, hover Propose on a convention row (Cultural Heritage Program) in Table a Resolution. | General Assembly Resolution Participant for 1825 days, UN Request Cooldown for 3650 days, Sponsoring a UN Resolution for 730 days. | "for 0 days" on the cost: a bare script value reads as 0 as well; write `730` in `un_propose_sponsor_cost`. Every rung listed: the tooltip shows each `else_if`; wrap each ladder in a `custom_tooltip` naming the duration. |
+| **The pace.** The same as a great power at Respected, at Exemplary, and as an ordinary member at Disgraced. | 776 and 1551 days; 639 and 1278; 2738 and 5475. | The wrong rung: compare `un_propose_pace_mult` with the bands in `un_propose_effects.txt` (`test_un_propose_pace.py` checks the arithmetic). |
+| **The docket's appeal.** `un_events.2`, An Appeal to the Assembly. | The condemnation option shows General Assembly Resolution Participant for the pace's days; the sanctions option shows it and UN Request Cooldown. | As above. |
+| **They run.** Table on our own motion, then look at the country's modifiers a month later. | Both marks are there and expire about five and ten years on (less for a great power); a second own-motion proposal stays greyed until the cooldown ends. | Gone at once or never expiring: report it, with the modifier's expiry from the tooltip. |
+| **The World Court's windows.** Have a ruling defied, and another found for the holder. | A year on, the claimant may still move for a military mandate over the region without the case of 60 (ten years in all), and a war goal against the region still costs it extra infamy (twenty). | Gone at once: `set_variable` reads a bare script value as 0; write `3650` / `7300` at the four sites in `un_justice_effects.txt`. |

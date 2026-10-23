@@ -57,10 +57,10 @@ METHODS = {
 
 
 def number(text, name):
-    """A script value written `name = { value = N }`."""
-    m = re.search(rf"^{re.escape(name)} = \{{ value = (-?[\d.]+) \}}", text, re.M)
+    """A script value written `name = { value = N }`, or `name = N` (the durations)."""
+    m = re.search(rf"^{re.escape(name)} = (?:\{{ value = (-?[\d.]+) \}}|(-?[\d.]+)$)", text, re.M)
     assert m, f"{name} is not a one-line value"
-    return float(m.group(1))
+    return float(m.group(1) or m.group(2))
 
 
 def field(body, name):
@@ -276,6 +276,19 @@ class StrikeTest(unittest.TestCase):
 
     def test_the_lens_has_an_icon(self):
         self.assertTrue(LENS.exists() or tracked(LENS), "missing lens_toolbar_icons/te_asat_strike_action.dds")
+
+    def test_the_rebuild_puts_back_the_months_left_as_literals(self):
+        """add_modifier's days reads a computed script value as 0, so the rebuild branches on
+        the months left (scripting_best_practices.md, "Modifier & Cooldown Duration Units")."""
+        body = block(strip_comments(read(EFFECTS)), "te_asat_rebuild_disruption")
+        self.assertNotIn("te_asat_disruption_days_left", body)
+        rungs = [(int(m), int(d)) for m, d in re.findall(
+            r"te_asat_disruption_months_left <= (\d+) \}\s*add_modifier = \{ name = te_orbital_network_disrupted "
+            r"days = (\d+) multiplier = te_asat_disruption_factor_held \}", body)]
+        longest = round(number(strip_comments(read(VALUES)), "te_asat_disruption_days") / 30)
+        self.assertEqual(rungs, [(k, 30 * k) for k in range(1, longest)])
+        self.assertRegex(body, r"else = \{\s*add_modifier = \{ name = te_orbital_network_disrupted "
+                               rf"days = {30 * longest} multiplier = te_asat_disruption_factor_held \}}")
 
     def test_debris_and_relations(self):
         values = strip_comments(read(VALUES))

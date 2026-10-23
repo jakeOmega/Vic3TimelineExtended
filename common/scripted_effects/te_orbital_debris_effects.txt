@@ -157,10 +157,56 @@ te_asat_rebuild_disruption = {
 		}
 		else_if = {
 			limit = { NOT = { has_modifier = te_orbital_network_disrupted } }
-			add_modifier = {
-				name = te_orbital_network_disrupted
-				days = te_asat_disruption_days_left
-				multiplier = te_asat_disruption_factor_held
+			# The months left at 30 days each, a literal per month: add_modifier's
+			# days reads a computed script value as 0 (scripting_best_practices.md,
+			# "Modifier & Cooldown Duration Units"). Twelve months is the longest
+			# a strike disrupts (te_asat_disruption_days).
+			if = {
+				limit = { te_asat_disruption_months_left <= 1 }
+				add_modifier = { name = te_orbital_network_disrupted days = 30 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 2 }
+				add_modifier = { name = te_orbital_network_disrupted days = 60 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 3 }
+				add_modifier = { name = te_orbital_network_disrupted days = 90 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 4 }
+				add_modifier = { name = te_orbital_network_disrupted days = 120 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 5 }
+				add_modifier = { name = te_orbital_network_disrupted days = 150 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 6 }
+				add_modifier = { name = te_orbital_network_disrupted days = 180 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 7 }
+				add_modifier = { name = te_orbital_network_disrupted days = 210 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 8 }
+				add_modifier = { name = te_orbital_network_disrupted days = 240 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 9 }
+				add_modifier = { name = te_orbital_network_disrupted days = 270 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 10 }
+				add_modifier = { name = te_orbital_network_disrupted days = 300 multiplier = te_asat_disruption_factor_held }
+			}
+			else_if = {
+				limit = { te_asat_disruption_months_left <= 11 }
+				add_modifier = { name = te_orbital_network_disrupted days = 330 multiplier = te_asat_disruption_factor_held }
+			}
+			else = {
+				add_modifier = { name = te_orbital_network_disrupted days = 360 multiplier = te_asat_disruption_factor_held }
 			}
 		}
 	}

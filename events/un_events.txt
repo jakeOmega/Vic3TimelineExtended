@@ -284,11 +284,7 @@ un_events.2 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		add_modifier = {
-			name = un_ga_resolution_modifier
-			days = un_propose_sponsor_days
-			is_decaying = yes
-		}
+		un_propose_add_sponsor_mark = yes
 		change_relations = { country = scope:condemned_country value = -20 }
 		hidden_effect = {
 			scope:condemned_country = { save_scope_as = un_vote_target }
@@ -326,16 +322,8 @@ un_events.2 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		add_modifier = {
-			name = un_ga_resolution_modifier
-			days = un_propose_sponsor_days
-			is_decaying = yes
-		}
-		add_modifier = {
-			name = un_request_cooldown
-			days = un_propose_cooldown_days
-			is_decaying = yes
-		}
+		un_propose_add_sponsor_mark = yes
+		un_propose_add_request_cooldown = yes
 		change_relations = { country = scope:condemned_country value = -30 }
 		hidden_effect = {
 			scope:condemned_country = { save_scope_as = un_vote_target }

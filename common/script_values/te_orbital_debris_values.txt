@@ -72,8 +72,10 @@ te_debris_ribbon_chance_per_point = { value = 0.02 }
 
 # The ribbon strike's damage lasts this many days: ridden out (6 months), or
 # after the emergency repair (2 months), which costs te_debris_ribbon_repair_cost.
-te_debris_ribbon_days_long = { value = 182 }
-te_debris_ribbon_days_short = { value = 61 }
+# Bare numbers, as vanilla's normal_modifier_time is: add_modifier's days reads
+# a { value = N } script value as 0 (modifier_duration_audit).
+te_debris_ribbon_days_long = 182
+te_debris_ribbon_days_short = 61
 # Twice vanilla's very large event sum (gdp x 0.0025): about a week of a great
 # power's revenue for four months of a Space Elevator back.
 # Scope: the elevator's owner (ROOT of te_orbital_debris.1)
@@ -127,9 +129,10 @@ te_asat_moratorium_factor = { value = 2 }
 te_asat_cooldown_months = { value = 12 }
 # How long the target's network stays disrupted, in days: 12 months, or 6 when
 # its Space Program runs the Mars Mission or higher; and the share of the
-# penalty an Orbital Battlestation leaves.
-te_asat_disruption_days = { value = 365 }
-te_asat_disruption_days_short = { value = 182 }
+# penalty an Orbital Battlestation leaves. The days are bare numbers, like the
+# ribbon strike's.
+te_asat_disruption_days = 365
+te_asat_disruption_days_short = 182
 te_asat_battlestation_factor = { value = 0.5 }
 
 # The month a strike's disruption ends, from the struck country's own scope
@@ -145,17 +148,16 @@ te_asat_disruption_end_month = {
 	add = te_history_month_index
 }
 
-# What is left of a recorded disruption, in days, for te_asat_rebuild_disruption.
-# Scope: country
-te_asat_disruption_days_left = {
+# What is left of a recorded disruption, in months, for
+# te_asat_rebuild_disruption's ladder: it can't pass a computed duration to
+# add_modifier (read as 0 days), so it branches on this. Scope: country
+te_asat_disruption_months_left = {
 	value = 0
 	if = {
 		limit = { has_variable = te_asat_disrupted_until }
 		value = var:te_asat_disrupted_until
 		subtract = te_history_month_index
-		multiply = 30
 	}
-	min = 1
 }
 
 # The recorded disruption's strength (1, or te_asat_battlestation_factor with
