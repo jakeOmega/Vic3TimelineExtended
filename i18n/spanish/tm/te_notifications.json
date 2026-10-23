@@ -2121,7 +2121,7 @@
  },
  "notification_un_mission_aid_failed_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked. UN delivery falls.",
-  "es": "La [Concept('concept_un_mission_aid', 'misión de ayuda')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado. Los resultados de la ONU empeoran."
+  "es": "La [Concept('concept_un_mission_aid', 'misión de ayuda')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado. El cumplimiento de la ONU empeora."
  },
  "notification_un_mission_aid_failed_notice_name": {
   "en": "A UN Aid Mission Fails",
@@ -2129,7 +2129,7 @@
  },
  "notification_un_mission_aid_succeeded_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
-  "es": "La [Concept('concept_un_mission_aid', 'misión de ayuda')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de resultados de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
+  "es": "La [Concept('concept_un_mission_aid', 'misión de ayuda')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de cumplimiento de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
  },
  "notification_un_mission_aid_succeeded_notice_name": {
   "en": "A UN Aid Mission Accomplished",
@@ -2137,7 +2137,7 @@
  },
  "notification_un_mission_electoral_failed_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_electoral', 'electoral observers')] in [SCOPE.sState('un_msn_state_done').GetName] have left before an election: we were attacked, or we no longer hold elections. UN delivery falls.",
-  "es": "Los [Concept('concept_un_mission_electoral', 'observadores electorales')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] se han marchado antes de unas elecciones: fuimos atacados o ya no celebramos elecciones. Los resultados de la ONU empeoran."
+  "es": "Los [Concept('concept_un_mission_electoral', 'observadores electorales')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] se han marchado antes de unas elecciones: fuimos atacados o ya no celebramos elecciones. El cumplimiento de la ONU empeora."
  },
  "notification_un_mission_electoral_failed_notice_name": {
   "en": "UN Electoral Observers Withdrawn",
@@ -2153,7 +2153,7 @@
  },
  "notification_un_mission_electoral_succeeded_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_electoral', 'electoral observers')] in [SCOPE.sState('un_msn_state_done').GetName] have seen our election through and gone home. The Assembly's record of delivery grows, and our international standing with it.",
-  "es": "Los [Concept('concept_un_mission_electoral', 'observadores electorales')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] han presenciado nuestras elecciones hasta el final y se han marchado a casa. El historial de resultados de la Asamblea mejora, y con él nuestra posición internacional."
+  "es": "Los [Concept('concept_un_mission_electoral', 'observadores electorales')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] han presenciado nuestras elecciones hasta el final y se han marchado a casa. El historial de cumplimiento de la Asamblea mejora, y con él nuestra posición internacional."
  },
  "notification_un_mission_electoral_succeeded_notice_name": {
   "en": "An Election Observed",
@@ -2177,7 +2177,7 @@
  },
  "notification_un_mission_peacekeeping_failed_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, or everyone who served in it left. UN delivery falls.",
-  "es": "La [Concept('concept_un_mission_peacekeeping', 'misión de mantenimiento de la paz')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado o todos los que participaban en ella se marcharon. Los resultados de la ONU empeoran."
+  "es": "La [Concept('concept_un_mission_peacekeeping', 'misión de mantenimiento de la paz')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado o todos los que participaban en ella se marcharon. El cumplimiento de la ONU empeora."
  },
  "notification_un_mission_peacekeeping_failed_notice_name": {
   "en": "A UN Peacekeeping Mission Fails",
@@ -2185,7 +2185,7 @@
  },
  "notification_un_mission_peacekeeping_succeeded_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
-  "es": "La [Concept('concept_un_mission_peacekeeping', 'misión de mantenimiento de la paz')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de resultados de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
+  "es": "La [Concept('concept_un_mission_peacekeeping', 'misión de mantenimiento de la paz')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de cumplimiento de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
  },
  "notification_un_mission_peacekeeping_succeeded_notice_name": {
   "en": "A UN Peacekeeping Mission Accomplished",
@@ -2201,7 +2201,7 @@
  },
  "notification_un_mission_stabilisation_failed_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. UN delivery falls.",
-  "es": "La [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado, se la envió de vuelta a casa o todos los que participaban en ella se marcharon. Los resultados de la ONU empeoran."
+  "es": "La [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha fracasado: el país anfitrión fue atacado, se la envió de vuelta a casa o todos los que participaban en ella se marcharon. El cumplimiento de la ONU empeora."
  },
  "notification_un_mission_stabilisation_failed_notice_name": {
   "en": "A UN Stabilisation Mission Fails",
@@ -2209,7 +2209,7 @@
  },
  "notification_un_mission_stabilisation_succeeded_notice_desc": {
   "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
-  "es": "La [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de resultados de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
+  "es": "La [Concept('concept_un_mission_stabilisation', 'misión de estabilización')] de la ONU en [SCOPE.sState('un_msn_state_done').GetName] ha cumplido su labor. El historial de cumplimiento de la Asamblea mejora y los países que participaron en ella reciben honores por ello."
  },
  "notification_un_mission_stabilisation_succeeded_notice_name": {
   "en": "A UN Stabilisation Mission Accomplished",

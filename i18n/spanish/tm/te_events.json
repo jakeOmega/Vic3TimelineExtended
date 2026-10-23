@@ -3561,7 +3561,7 @@
  },
  "covert_warfare.3.b_tt": {
   "en": "#b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! is not told we know. The operation keeps doing its harm at full strength, but while it runs our own network inside #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! grows each month, by #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! to #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! strength the busier the operation is, more slowly above half strength. We can expose it at any time from Known Foreign Operations on the Covert tab of the Military panel.",
-  "es": "A #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! no se le dice que lo sabemos. La operación sigue haciendo su daño a plena fuerza, pero mientras dura nuestra propia red dentro de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! crece cada mes entre #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! y #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! de fuerza, más cuanto más activa es la operación y más despacio por encima de la mitad de fuerza. Podemos exponerla en cualquier momento desde Operaciones extranjeras conocidas, en la pestaña Encubierto del panel Ejército."
+  "es": "A #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! no se le dice que lo sabemos. La operación sigue haciendo su daño a plena fuerza, pero mientras dura nuestra propia red dentro de #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! crece cada mes entre #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p1')|0]#! y #G [GetPlayer.MakeScope.ScriptValue('covert_net_watch_gain_p3')|1]#! de fuerza, más cuanto más activa es la operación y más despacio por encima de la mitad de fuerza. Podemos exponerla en cualquier momento desde Operaciones extranjeras conocidas, en la pestaña Encubierta del panel Ejército."
  },
  "covert_warfare.3.d": {
   "en": "Our counterintelligence services have caught agents of #b [SCOPE.sCountry('iw_catcher_attacker').GetName]#! running [concept_covert_operations] against us: [ROOT.GetCountry.GetCustom('covert_caught_type_name')]. They do not know we know. We can expose the operation now, or let it run and watch it. While it runs it goes on doing its harm, and every month our own service learns more about theirs.",
@@ -6289,7 +6289,7 @@
  },
  "extra_law_events.38.t": {
   "en": "Bank Run Triggers Doubt",
-  "es": "Una corrida bancaria siembra la duda"
+  "es": "Un pánico bancario siembra la duda"
  },
  "extra_law_events.39.a": {
   "en": "Withdraw the bill to stem the outflow",
@@ -9833,7 +9833,7 @@
  },
  "ministry_law_events.6.d": {
   "en": "A [concept_diplomatic_incident] with a foreign power has exposed the embarrassing inadequacy of our current foreign affairs apparatus. Communiqués were bungled, protocols were ignored, and the resulting misunderstanding nearly escalated into a crisis - lending fresh urgency to the case for [SCOPE.sLaw('current_law_scope').GetName].",
-  "es": "Un [concept_diplomatic_incident|l] con una potencia extranjera ha dejado al descubierto la vergonzosa insuficiencia de nuestro actual aparato de asuntos extranjeros. Los comunicados se redactaron mal, se ignoraron los protocolos y el malentendido resultante estuvo a punto de convertirse en una crisis, lo que da nueva urgencia a la defensa de [SCOPE.sLaw('current_law_scope').GetName]."
+  "es": "Un [concept_diplomatic_incident|l] con una potencia extranjera ha dejado al descubierto la vergonzosa insuficiencia de nuestro actual aparato de asuntos exteriores. Los comunicados se redactaron mal, se ignoraron los protocolos y el malentendido resultante estuvo a punto de convertirse en una crisis, lo que da nueva urgencia a la defensa de [SCOPE.sLaw('current_law_scope').GetName]."
  },
  "ministry_law_events.6.f": {
   "en": "The ambassador, it transpires, greeted the foreign dignitary with the traditional salutation for a funeral rather than a state banquet. The dignitary was not amused. I am told relations have been set back by approximately a decade.",
@@ -10085,7 +10085,7 @@
  },
  "minor_events_timelineextended.7.d_cascade": {
   "en": "The financial turmoil in [SCOPE.sCountry('banking_crash_origin_country').GetName] has triggered a crash in our own overheated markets. Years of speculative excess left our financial system brittle, and the shock from abroad was all it took to shatter confidence. Our own bubble has burst.",
-  "es": "La turbulencia financiera en [SCOPE.sCountry('banking_crash_origin_country').GetName] ha desencadenado un crac en nuestros propios mercados sobrecalentados. Años de excesos especulativos dejaron frágil nuestro sistema financiero y el golpe del exterior fue todo lo que hizo falta para quebrar la confianza. Nuestra propia burbuja ha estallado."
+  "es": "La agitación financiera en [SCOPE.sCountry('banking_crash_origin_country').GetName] ha desencadenado un crac en nuestros propios mercados sobrecalentados. Años de excesos especulativos dejaron frágil nuestro sistema financiero y el golpe del exterior fue todo lo que hizo falta para quebrar la confianza. Nuestra propia burbuja ha estallado."
  },
  "minor_events_timelineextended.7.d_cascade_severe": {
   "en": "The panic in [SCOPE.sCountry('banking_crash_origin_country').GetName] has ignited a full-blown crash in our own financial system. Our markets, already swollen with speculative credit, needed only a spark — and the collapse abroad provided a conflagration. Banks are calling in loans, credit is freezing, and the contagion has become our own crisis.",
@@ -18733,11 +18733,11 @@
  },
  "space_race_events.31.d": {
   "en": "As our orbital program accelerates, so does the cloud of spent rocket stages, dead satellites, and assorted debris accumulating in low Earth orbit. Scientists warn that an uncontrolled cascade could render entire orbital bands unusable.",
-  "es": "A medida que se acelera nuestro programa orbital, también lo hace la nube de etapas de cohete gastadas, satélites muertos y desechos diversos que se acumulan en la órbita terrestre baja. Los científicos advierten de que una cascada incontrolada podría inutilizar bandas orbitales enteras."
+  "es": "A medida que se acelera nuestro programa orbital, también lo hace la nube de etapas de cohete gastadas, satélites muertos y basura espacial diversa que se acumulan en la órbita terrestre baja. Los científicos advierten de que una cascada incontrolada podría inutilizar bandas orbitales enteras."
  },
  "space_race_events.31.d_debris": {
   "en": "The debris around Earth is now [ROOT.GetCountry.GetCustom('te_debris_tier')]: spent stages, dead satellites and the fragments of every collision and strike, crossing the orbits our missions fly through. Each launch has to be planned around it, and scientists warn that past a certain density the collisions feed themselves.",
-  "es": "Nivel actual de los desechos alrededor de la Tierra: [ROOT.GetCountry.GetCustom('te_debris_tier')]. Son etapas gastadas, satélites muertos y los fragmentos de cada colisión y ataque, que cruzan las órbitas por las que vuelan nuestras misiones. Cada lanzamiento debe planificarse en torno a ellos, y los científicos advierten de que, pasada cierta densidad, las colisiones se alimentan a sí mismas."
+  "es": "Nivel actual de la basura espacial alrededor de la Tierra: [ROOT.GetCountry.GetCustom('te_debris_tier')]. Son etapas gastadas, satélites muertos y los fragmentos de cada colisión y ataque, que cruzan las órbitas por las que vuelan nuestras misiones. Cada lanzamiento debe planificarse en torno a ellos, y los científicos advierten de que, pasada cierta densidad, las colisiones se alimentan a sí mismas."
  },
  "space_race_events.31.f": {
   "en": "\\\"Every bolt, every fleck of paint up there is a bullet at orbital velocity. We're building a minefield around our own planet.\\\"\\n\\n— Orbital Dynamics Researcher\\n\\n\\\"A manageable problem: if we manage it now rather than later.\\\"\\n\\n— Space Agency Deputy Director",
@@ -19081,7 +19081,7 @@
  },
  "space_race_events.47.d": {
   "en": "A micrometeorite — no larger than a grain of sand, but traveling at 20 kilometers per second — has struck one of our orbital assets. The impact punctured the outer hull and damaged a secondary system. Standard Whipple shielding absorbed most of the kinetic energy, but the incident underscores the constant hazard of operating in the debris environment.",
-  "es": "Un micrometeorito, no mayor que un grano de arena pero que viajaba a 20 kilómetros por segundo, ha golpeado uno de nuestros activos orbitales. El impacto perforó el casco exterior y dañó un sistema secundario. El blindaje Whipple estándar absorbió la mayor parte de la energía cinética, pero el incidente subraya el peligro constante de operar en un entorno de desechos."
+  "es": "Un micrometeorito, no mayor que un grano de arena pero que viajaba a 20 kilómetros por segundo, ha golpeado uno de nuestros activos orbitales. El impacto perforó el casco exterior y dañó un sistema secundario. El blindaje Whipple estándar absorbió la mayor parte de la energía cinética, pero el incidente subraya el peligro constante de operar en un entorno de basura orbital."
  },
  "space_race_events.47.f": {
   "en": "\\\"A pebble. A pebble at seven times the speed of a rifle bullet. Out here, even dust is ammunition.\\\"\\n\\n— Station Damage Assessment Officer, examining the fist-sized crater in the hull",
@@ -19409,7 +19409,7 @@
  },
  "space_race_events.60.d.25": {
   "en": "\\n\\nA rocky planet is surrounded by an unnaturally dense cloud of orbital debris—thousands of #bold artificial objects#! in decaying orbits. A civilization was here. It choked its own sky with satellites and wreckage. Whether anything survives beneath that shroud is unknown.",
-  "es": "\\n\\nUn planeta rocoso está rodeado por una nube de desechos orbitales de una densidad antinatural: miles de #bold objetos artificiales#! en órbitas decrecientes. Aquí hubo una civilización. Asfixió su propio cielo con satélites y restos. No se sabe si queda algo bajo ese velo."
+  "es": "\\n\\nUn planeta rocoso está rodeado por una nube de basura orbital de una densidad antinatural: miles de #bold objetos artificiales#! en órbitas decrecientes. Aquí hubo una civilización. Asfixió su propio cielo con satélites y restos. No se sabe si queda algo bajo ese velo."
  },
  "space_race_events.60.d.26": {
   "en": "\\n\\nHigh concentrations of chlorofluorocarbons and sulfur hexafluoride detected in the planet's atmosphere—gases that do not occur in nature. #bold Industrial civilization: confirmed.#! The atmospheric signature is estimated to be decades to centuries old.",
@@ -19790,6 +19790,10 @@
  "space_race_events.76.a_lost": {
   "en": "We will build again.",
   "es": "Volveremos a construir."
+ },
+ "space_race_events.76.d": {
+  "en": "Our launch complex has been refitted to a mission profile that can no longer carry some of the programs it was built for, and [ROOT.GetCountry.GetAdjective] ambitions at that scale have been shelved. The scientists and engineers who dedicated themselves to those missions now seek new assignments, and the infrastructure built for them sits idle.",
+  "es": "Nuestro complejo de lanzamiento se ha reacondicionado para un perfil de la misión que ya no puede dar cabida a algunos de los programas para los que fue construido, y el proyecto [ROOT.GetCountry.GetAdjective] de esa envergadura ha quedado archivado. Los científicos e ingenieros que se dedicaron a esas misiones buscan ahora nuevos cometidos, y la infraestructura construida para ellas permanece ociosa."
  },
  "space_race_events.76.d_lost": {
   "en": "We no longer hold a working launch complex, and the programs it was carrying cannot continue without one. Their progress is lost. The scientists and engineers who built them are dispersing to other work, and whatever infrastructure remains in our hands sits idle until we can launch again.",
@@ -20173,7 +20177,7 @@
  },
  "te_debug_colonial_empire.1.c": {
   "en": "Strained (50)",
-  "es": "Tensa (50)"
+  "es": "En tensión (50)"
  },
  "te_debug_colonial_empire.1.d": {
   "en": "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session.",
@@ -20349,7 +20353,7 @@
  },
  "te_debug_covert.3.a": {
   "en": "Set Tradecraft to 45 (Established)",
-  "es": "Fijar Técnicas de espionaje en 45 (Asentado)"
+  "es": "Fijar Técnicas de espionaje en 45 (Consolidado)"
  },
  "te_debug_covert.3.b": {
   "en": "Set Tradecraft to 85 (Veteran)",
@@ -20649,7 +20653,7 @@
  },
  "te_debug_demog.1.u.tt": {
   "en": "Writes a TE_DEMOG_LATE line for our capital: the ageing rate and the pull of those in longevity care, eligibility (the share within reach), cover, the adults' ever-treated share, the public route's share and its reach now, the market threshold, the augmentation and health laws' reads, the ectogenesis levels, Living to 100 (the state's, in care, not in care), old age from (the state's and the untreated's), rho, the wealth slope, its mean and the wealth pair in force, the mean calendar and biological ages, the mean age at childbirth, the share of births to women of 50 and over, band 5's share and deficit and the pool's; -1 where the census holds none. A TE_DEMOG_LATE_COUNTRY line gives our country's.",
-  "es": "Escribe una línea TE_DEMOG_LATE para nuestra capital: la tasa de envejecimiento y la atracción de quienes reciben medicina de la longevidad, la elegibilidad (la proporción al alcance), la cobertura, la proporción de adultos tratados alguna vez, la proporción de la vía pública y su alcance actual, el umbral de mercado, las lecturas de las leyes de aumento y de sanidad, los niveles de ectogénesis, Vivir hasta los 100 (el del estado, en atención, sin atención), vejez desde (la del estado y la de los no tratados), rho, la pendiente de riqueza, su media y el par de riqueza en vigor, las edades cronológica y biológica medias, la edad media al dar a luz, la proporción de nacimientos de mujeres de 50 años o más, la proporción y el déficit de la banda 5 y los del conjunto; -1 donde el censo no tiene ninguno. Una línea TE_DEMOG_LATE_COUNTRY ofrece la de nuestro país."
+  "es": "Escribe una línea TE_DEMOG_LATE para nuestra capital: la tasa de envejecimiento y la atracción de quienes reciben medicina de la longevidad, la elegibilidad (la proporción al alcance), la cobertura, la proporción de adultos tratados alguna vez, la proporción de la vía pública y su alcance actual, el umbral de mercado, las lecturas de las leyes de mejora y de sanidad, los niveles de ectogénesis, Vivir hasta los 100 (el del estado, en atención, sin atención), vejez desde (la del estado y la de los no tratados), rho, la pendiente de riqueza, su media y el par de riqueza en vigor, las edades cronológica y biológica medias, la edad media al dar a luz, la proporción de nacimientos de mujeres de 50 años o más, la proporción y el déficit de la banda 5 y los del conjunto; -1 donde el censo no tiene ninguno. Una línea TE_DEMOG_LATE_COUNTRY ofrece la de nuestro país."
  },
  "te_debug_demog.1.v": {
   "en": "The late game: research the ageing ladder now",
@@ -20761,7 +20765,7 @@
  },
  "te_debug_deterrence.1.g": {
   "en": "Recessed at once (warheads in storage)",
-  "es": "En reserva de inmediato (ojivas en almacén)"
+  "es": "Desactivada de inmediato (ojivas en almacén)"
  },
  "te_debug_deterrence.1.h": {
   "en": "Automatic Retaliation at once (with its technology)",
@@ -21041,7 +21045,7 @@
  },
  "te_debug_monetary.10.a": {
   "en": "Pin a debug kind-1 anchor on the largest dial economy",
-  "es": "Fijar un ancla de depuración de tipo 1 en la mayor economía del dial"
+  "es": "Fijar un ancla de depuración de tipo 1 en la mayor economía del mando"
  },
  "te_debug_monetary.10.b": {
   "en": "Release the debug anchor",
@@ -21077,7 +21081,7 @@
  },
  "te_debug_monetary.11.a": {
   "en": "Pin a debug swap line from the largest dial economy",
-  "es": "Fijar una línea de swap de depuración desde la mayor economía del dial"
+  "es": "Fijar una línea de swap de depuración desde la mayor economía del mando"
  },
  "te_debug_monetary.11.b": {
   "en": "Release the debug swap line (settles any balance)",
@@ -21269,7 +21273,7 @@
  },
  "te_debug_monetary.8.d": {
   "en": "#lore Console-only. Nothing in the mod fires this event. None of these figures is hidden state; the two globals are simply printed nowhere else.#!\\n\\n#title The world rate#!\\nWorld rate (global): #v [GetGlobalVariable('te_world_rate').GetValue|3]#!   This country's copy: #v [ROOT.GetVariable('te_mon_world_rate_now').GetValue|3]#!   Reference rate: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!\\nAccumulators — sum of weight x real rate: #v [GetGlobalVariable('te_world_rate_acc_num').GetValue|3]#!   sum of weight (GDP in millions of the discretionary great powers): #v [GetGlobalVariable('te_world_rate_acc_den').GetValue|3]#! — both 0 means nobody is discretionary and the world rate is the reference rate\\nDebug offset: #v [GetGlobalVariable('te_world_rate_debug_offset').GetValue|1]#! — blank when none is set\\nThis country's weight and weighted real rate, if it were counted: #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weight')|3]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weighted_real')|3]#!\\n\\n#title Gold#!\\nGap: #v [ROOT.GetVariable('te_gold_flow_gap').GetValue|2]#!   Flow this month: #v [ROOT.GetVariable('te_gold_flow').GetValue|0]#!   as % of GDP a year: #v [ROOT.GetVariable('te_gold_flow_pct').GetValue|2]#!   Pressure it adds next month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!\\nOne point of gap is worth: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_flow_unit')|0]#! a month   Room left for inflow: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_inflow_room')|0]#!   Hot money: #v [ROOT.GetVariable('te_gold_hot_money').GetValue|0]#!   Own share of the world-rate accumulators (0 / 0 unless this country is in the average): #v [ROOT.GetVariable('te_mon_world_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_own_den').GetValue|3]#!\\nBank vault: #v [ROOT.GetVariable('te_bank_gold').GetValue|0]#! of a limit of #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_limit')|0]#! = #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_scaled')|3]#!   seeded: #v [ROOT.GetVariable('te_bank_gold_seeded').GetValue|0]#!   (the TREASURY's scaled reserves, for comparison: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_scaled_reserves')|3]#!)\\nOne recapitalisation step: #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_recap_amount')|0]#!\\n\\n#title The peg#!\\nConfidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Move this month if under pressure: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_confidence_move')|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!\\nDefending, months left: #v [ROOT.GetVariable('te_peg_defend_months').GetValue|0]#!   Suspended, months left: #v [ROOT.GetVariable('te_peg_suspended_months').GetValue|0]#!\\nPeg-defence formula: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_defence_target')|2]#! — world rate + half of a shortfall of #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_shortfall_pp')|2]#!   Target floor / ceiling now: #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_min')|0]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_max')|0]#!",
-  "es": "#lore Solo por consola. Nada en el mod lanza este evento. Ninguna de estas cifras es estado oculto; las dos globales simplemente no se muestran en ningún otro sitio.#!\\n\\n#title El tipo mundial#!\\nTipo mundial (global): #v [GetGlobalVariable('te_world_rate').GetValue|3]#!   Copia de este país: #v [ROOT.GetVariable('te_mon_world_rate_now').GetValue|3]#!   Tipo de referencia: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!\\nAcumuladores — suma de peso x tipo real: #v [GetGlobalVariable('te_world_rate_acc_num').GetValue|3]#!   suma de peso (PIB en millones de las grandes potencias con política discrecional): #v [GetGlobalVariable('te_world_rate_acc_den').GetValue|3]#! — si ambos son 0, nadie es discrecional y el tipo mundial es el tipo de referencia\\nDesfase de depuración: #v [GetGlobalVariable('te_world_rate_debug_offset').GetValue|1]#! — en blanco si no hay ninguno\\nPeso y tipo real ponderado de este país, si se contara: #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weight')|3]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weighted_real')|3]#!\\n\\n#title Oro#!\\nDiferencia: #v [ROOT.GetVariable('te_gold_flow_gap').GetValue|2]#!   Flujo este mes: #v [ROOT.GetVariable('te_gold_flow').GetValue|0]#!   como % del PIB anual: #v [ROOT.GetVariable('te_gold_flow_pct').GetValue|2]#!   Presión que añade el mes próximo: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!\\nUn punto de diferencia vale: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_flow_unit')|0]#! al mes   Margen restante para entradas: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_inflow_room')|0]#!   Capital especulativo: #v [ROOT.GetVariable('te_gold_hot_money').GetValue|0]#!   Parte propia de los acumuladores del tipo mundial (0 / 0 salvo que este país entre en el promedio): #v [ROOT.GetVariable('te_mon_world_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_own_den').GetValue|3]#!\\nCámara del banco: #v [ROOT.GetVariable('te_bank_gold').GetValue|0]#! de un límite de #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_limit')|0]#! = #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_scaled')|3]#!   inicializado: #v [ROOT.GetVariable('te_bank_gold_seeded').GetValue|0]#!   (las reservas escaladas del TESORO, para comparar: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_scaled_reserves')|3]#!)\\nUn paso de recapitalización: #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_recap_amount')|0]#!\\n\\n#title La paridad#!\\nConfianza: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Variación este mes si hay presión: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_confidence_move')|1]#!   Enfriamiento de crisis: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!\\nEn defensa, meses restantes: #v [ROOT.GetVariable('te_peg_defend_months').GetValue|0]#!   Suspendida, meses restantes: #v [ROOT.GetVariable('te_peg_suspended_months').GetValue|0]#!\\nFórmula de defensa de la paridad: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_defence_target')|2]#! — tipo mundial + la mitad de un déficit de #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_shortfall_pp')|2]#!   Suelo / techo actual del objetivo: #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_min')|0]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_max')|0]#!"
+  "es": "#lore Solo por consola. Nada en el mod lanza este evento. Ninguna de estas cifras es estado oculto; las dos globales simplemente no se muestran en ningún otro sitio.#!\\n\\n#title El tipo mundial#!\\nTipo mundial (global): #v [GetGlobalVariable('te_world_rate').GetValue|3]#!   Copia de este país: #v [ROOT.GetVariable('te_mon_world_rate_now').GetValue|3]#!   Tipo de referencia: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!\\nAcumuladores — suma de peso x tipo real: #v [GetGlobalVariable('te_world_rate_acc_num').GetValue|3]#!   suma de peso (PIB en millones de las grandes potencias con política discrecional): #v [GetGlobalVariable('te_world_rate_acc_den').GetValue|3]#! — si ambos son 0, nadie es discrecional y el tipo mundial es el tipo de referencia\\nDesfase de depuración: #v [GetGlobalVariable('te_world_rate_debug_offset').GetValue|1]#! — en blanco si no hay ninguno\\nPeso y tipo real ponderado de este país, si se contara: #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weight')|3]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_world_rate_weighted_real')|3]#!\\n\\n#title Oro#!\\nDiferencia: #v [ROOT.GetVariable('te_gold_flow_gap').GetValue|2]#!   Flujo este mes: #v [ROOT.GetVariable('te_gold_flow').GetValue|0]#!   como % del PIB anual: #v [ROOT.GetVariable('te_gold_flow_pct').GetValue|2]#!   Presión que añade el mes próximo: #v [SCOPE.GetRootScope.ScriptValue('te_mon_pressure_gold_flow')|2]#!\\nUn punto de diferencia vale: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_flow_unit')|0]#! al mes   Margen restante para entradas: #v [SCOPE.GetRootScope.ScriptValue('te_mon_gold_inflow_room')|0]#!   Dinero golondrina: #v [ROOT.GetVariable('te_gold_hot_money').GetValue|0]#!   Parte propia de los acumuladores del tipo mundial (0 / 0 salvo que este país entre en el promedio): #v [ROOT.GetVariable('te_mon_world_own_num').GetValue|3]#! / #v [ROOT.GetVariable('te_mon_world_own_den').GetValue|3]#!\\nCámara del banco: #v [ROOT.GetVariable('te_bank_gold').GetValue|0]#! de un límite de #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_limit')|0]#! = #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_gold_scaled')|3]#!   inicializado: #v [ROOT.GetVariable('te_bank_gold_seeded').GetValue|0]#!   (las reservas escaladas del TESORO, para comparar: #v [SCOPE.GetRootScope.ScriptValue('te_mon_debug_scaled_reserves')|3]#!)\\nUn paso de recapitalización: #v [SCOPE.GetRootScope.ScriptValue('te_mon_bank_recap_amount')|0]#!\\n\\n#title La paridad#!\\nConfianza: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Variación este mes si hay presión: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_confidence_move')|1]#!   Enfriamiento de crisis: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!\\nEn defensa, meses restantes: #v [ROOT.GetVariable('te_peg_defend_months').GetValue|0]#!   Suspendida, meses restantes: #v [ROOT.GetVariable('te_peg_suspended_months').GetValue|0]#!\\nFórmula de defensa de la paridad: #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_defence_target')|2]#! — tipo mundial + la mitad de un déficit de #v [SCOPE.GetRootScope.ScriptValue('te_mon_peg_shortfall_pp')|2]#!   Suelo / techo actual del objetivo: #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_min')|0]#! / #v [SCOPE.GetRootScope.ScriptValue('te_mon_target_max')|0]#!"
  },
  "te_debug_monetary.8.e": {
   "en": "End the suspension at the next pulse",
@@ -22473,7 +22477,7 @@
  },
  "te_orbital_debris.1.a": {
   "en": "Keep the climbers running",
-  "es": "Mantener en marcha los escaladores"
+  "es": "Mantener en marcha los vehículos de ascenso"
  },
  "te_orbital_debris.1.a.tt": {
   "en": "Our Space Elevator, for 6 months: [GetStaticModifier('te_ribbon_strike_damage').GetDesc]",
@@ -22489,7 +22493,7 @@
  },
  "te_orbital_debris.1.d": {
   "en": "A fragment no bigger than a bolt, one of the thousands now crossing the elevator's altitude every day, has cut through part of the tether. Nothing has fallen and the climbers are still running, on the undamaged strands and at half their rate. Our engineers can re-lay the damaged section from the ground station over the next six months, or we can pay to splice it from both ends at once and have the elevator back at full rate in two.",
-  "es": "Un fragmento no mayor que un perno, uno de los miles que cruzan cada día la altitud del ascensor, ha cortado parte del cable. No ha caído nada y los escaladores siguen funcionando, por las hebras intactas y a la mitad de su ritmo. Nuestros ingenieros pueden tender de nuevo la sección dañada desde la estación terrestre a lo largo de los próximos seis meses, o podemos pagar para empalmarla desde ambos extremos a la vez y recuperar el ritmo completo del ascensor en dos."
+  "es": "Un fragmento no mayor que un perno, uno de los miles que cruzan cada día la altitud del ascensor, ha cortado parte del cable. No ha caído nada y los vehículos de ascenso siguen funcionando, por las hebras intactas y a la mitad de su ritmo. Nuestros ingenieros pueden tender de nuevo la sección dañada desde la estación terrestre a lo largo de los próximos seis meses, o podemos pagar para empalmarla desde ambos extremos a la vez y recuperar el ritmo completo del ascensor en dos."
  },
  "te_orbital_debris.1.f": {
   "en": "\\\"We built it to survive a hurricane. Nobody asked what it would do against a bolt at eight kilometres a second.\\\"",
@@ -24185,7 +24189,7 @@
  },
  "un_events.41.d": {
   "en": "The delegates ask us to table a moratorium on destructive anti-satellite tests. Its parties would pay twice the price for a strike of their own, gain standing in the world, and count their debris removal toward the UN's delivery.",
-  "es": "Los delegados nos piden que presentemos una moratoria de las pruebas antisatélite destructivas. Sus partes pagarían el doble por un ataque propio, ganarían posición en el mundo y contarían su retirada de basura espacial a efectos de la entrega de la ONU."
+  "es": "Los delegados nos piden que presentemos una moratoria de las pruebas antisatélite destructivas. Sus partes pagarían el doble por un ataque propio, ganarían posición en el mundo y contarían su retirada de basura espacial a efectos del cumplimiento de la ONU."
  },
  "un_events.41.d_cause_strike": {
   "en": "[GetGlobalVariable('un_dkt_last_subject').GetCountry.GetName] has destroyed a satellite in orbit, and its debris now threatens every craft that shares the altitude.\\n\\n",
@@ -24349,7 +24353,7 @@
  },
  "un_mandate.1.d_complied": {
   "en": "[AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] is ours again, taken under the authority of the General Assembly and by the terms it set. The mandate is discharged. #G UN delivery +1#! (weighted by our weight in world affairs), and the organisation's standing is the better for having been obeyed.",
-  "es": "Hemos recuperado [AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] bajo la autoridad de la Asamblea General y en los términos que esta fijó. El mandato queda cumplido. #G Entrega de la ONU +1#! (ponderada según nuestro peso en los asuntos mundiales), y la posición de la organización sale reforzada por haber sido obedecida."
+  "es": "Hemos recuperado [AddLocalizationIf(SCOPE.sStateRegion('un_mandate_closed_region').Exists, SCOPE.sStateRegion('un_mandate_closed_region').GetName)] bajo la autoridad de la Asamblea General y en los términos que esta fijó. El mandato queda cumplido. #G Cumplimiento de la ONU +1#! (ponderada según nuestro peso en los asuntos mundiales), y la posición de la organización sale reforzada por haber sido obedecida."
  },
  "un_mandate.1.d_complied_forfeit": {
   "en": "The territory is ours — but we took it after leaving the organisation whose authorization we were using. The chamber does not recognise a mandate exercised by a state that has walked out of it. #R UN credibility −3#! (weighted by our weight in world affairs), and the censure that would have gone to a violator falls on us instead.",

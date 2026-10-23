@@ -237,7 +237,7 @@
  },
  "ministry_fa_diplomacy_advance": {
   "en": "Foreign Affairs Ministry: Diplomacy Advance",
-  "es": "Ministerio de Asuntos Extranjeros: avance diplomático"
+  "es": "Ministerio de Asuntos Exteriores: avance diplomático"
  },
  "ministry_fa_diplomacy_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
@@ -245,7 +245,7 @@
  },
  "ministry_fa_diplomacy_cautious": {
   "en": "Foreign Affairs Ministry: Diplomacy Cautious Advance",
-  "es": "Ministerio de Asuntos Extranjeros: avance prudente en diplomacia"
+  "es": "Ministerio de Asuntos Exteriores: avance prudente en diplomacia"
  },
  "ministry_fa_diplomacy_cautious_desc": {
   "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
@@ -253,7 +253,7 @@
  },
  "ministry_fa_diplomacy_stall": {
   "en": "Foreign Affairs Ministry: Diplomacy Stall",
-  "es": "Ministerio de Asuntos Extranjeros: diplomacia estancada"
+  "es": "Ministerio de Asuntos Exteriores: diplomacia estancada"
  },
  "mutual_assistance_pact": {
   "en": "Mutual Assistance Pact",
@@ -325,7 +325,7 @@
  },
  "ruler_average_diplomat_desc": {
   "en": "A ruler of unremarkable diplomatic skill. They manage foreign affairs competently but without particular distinction.",
-  "es": "Un gobernante de habilidad diplomática poco destacable. Gestiona los asuntos extranjeros con competencia, pero sin especial distinción."
+  "es": "Un gobernante de habilidad diplomática poco destacable. Gestiona los asuntos exteriores con competencia, pero sin especial distinción."
  },
  "ruler_exceptional_diplomat": {
   "en": "Master Diplomat",

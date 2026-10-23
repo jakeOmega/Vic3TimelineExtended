@@ -1869,7 +1869,7 @@
  },
  "NW_PROLIF_GUARANTEE_LAPSED_TT": {
   "en": "[SCOPE.sCountry('nuclear_pg_guarantor').GetName] can no longer sign a $nuclear_guarantee$ with us: it has lost its warheads or its military ties with us, our relations have fallen to Poor, a war has come between us, or another power already guarantees us.",
-  "es": "[SCOPE.sCountry('nuclear_pg_guarantor').GetName] ya no puede firmar una $nuclear_guarantee$ con nosotros: ha perdido sus ojivas o sus vínculos militares con nosotros, nuestras relaciones han empeorado hasta el nivel Pobre, ha estallado una guerra entre nosotros o ya nos garantiza otra potencia."
+  "es": "[SCOPE.sCountry('nuclear_pg_guarantor').GetName] ya no puede firmar una $nuclear_guarantee$ con nosotros: ha perdido sus ojivas o sus vínculos militares con nosotros, nuestras relaciones han empeorado hasta ser malas, ha estallado una guerra entre nosotros o ya nos garantiza otra potencia."
  },
  "NW_PROLIF_GUARANTEE_TT": {
   "en": "Every neighbour of [SCOPE.sCountry('proliferating_country').GetName] without the bomb that we have military ties with (an alliance, a defensive pact, our Guarantee Independence of it, or a power bloc in common), and that no one guarantees yet, is offered a $nuclear_guarantee$ from us, in force for ten years if it accepts. We pay the upkeep of every guarantee accepted, and we will be asked to answer when that country is threatened or struck.",
@@ -3825,7 +3825,7 @@
  },
  "UN_PROPOSE_FOOD_RESERVE_DESC": {
   "en": "Move the [concept_un_general_assembly] to found the [concept_un_food_reserve]: members pledge grain from their Strategic Reserves, and every new [concept_un_mission_aid] draws on the pledges to feed its state. While it stands, hunger among the members' people moves the delivery pillar of [concept_un_authority]. It is recommendatory and a simple majority carries it. #G UN credibility +1 if it passes.#!",
-  "es": "Instar a la [concept_un_general_assembly] a fundar la [concept_un_food_reserve]: los miembros comprometen grano de sus Reservas estratégicas, y cada nueva [concept_un_mission_aid|l] recurre a esos compromisos para alimentar a su estado. Mientras exista, el hambre entre la población de los miembros mueve el pilar de entrega de la [concept_un_authority|l]. Es una resolución recomendatoria y la aprueba una mayoría simple. #G +1 de credibilidad de la ONU si se aprueba.#!"
+  "es": "Instar a la [concept_un_general_assembly] a fundar la [concept_un_food_reserve]: los miembros comprometen grano de sus Reservas estratégicas, y cada nueva [concept_un_mission_aid|l] recurre a esos compromisos para alimentar a su estado. Mientras exista, el hambre entre la población de los miembros mueve el pilar de cumplimiento de la [concept_un_authority|l]. Es una resolución recomendatoria y la aprueba una mayoría simple. #G +1 de credibilidad de la ONU si se aprueba.#!"
  },
  "UN_PROPOSE_FOOD_RESERVE_TT": {
   "en": "#bold A General Assembly vote has been called#! to found the World Food Reserve. Human members can vote at once; AI members vote in the ninth to eleventh month. Results follow after a year.",
@@ -6365,7 +6365,7 @@
  },
  "banking_policy_stance_bar_second": {
   "en": "loose",
-  "es": "expansiva"
+  "es": "laxa"
  },
  "banking_raise_margin_requirements": {
   "en": "Raise Margin Requirements",
@@ -6433,11 +6433,11 @@
  },
  "banking_stance_band_1": {
   "en": "Monetary Stance: Very Loose",
-  "es": "Postura monetaria: muy expansiva"
+  "es": "Postura monetaria: muy laxa"
  },
  "banking_stance_band_2": {
   "en": "Monetary Stance: Loose",
-  "es": "Postura monetaria: expansiva"
+  "es": "Postura monetaria: laxa"
  },
  "banking_stance_band_3": {
   "en": "Monetary Stance: Neutral",
@@ -17841,11 +17841,11 @@
  },
  "nd_w_readiness_choice_0": {
   "en": "Recessed",
-  "es": "Desacoplada"
+  "es": "Desactivada"
  },
  "nd_w_readiness_choice_0_tt": {
   "en": "#tooltip_header Recessed#!\\n$TOOLTIP_DELIMITER$\\nWarheads stored apart from their delivery systems. The cheapest and safest posture — custody costs half, incidents are half as likely as at Routine, and a crisis with us is less dangerous — and the least usable: #R nothing can be launched, not even in retaliation, until our forces are back at Routine, two weeks away.#! A threat we make is taken less seriously. Restraint-minded groups approve; the officers do not.\\n\\nSurvivability a crisis counts: #v [GetPlayer.MakeScope.ScriptValue('nd_effective_survivability_at_readiness_0')|0]#!\\nUpkeep at this level: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_0')|D]#!/week",
-  "es": "#tooltip_header Desacoplada#!\\n$TOOLTIP_DELIMITER$\\nOjivas almacenadas aparte de sus sistemas de lanzamiento. La postura más barata y segura —la custodia cuesta la mitad, los incidentes son la mitad de probables que con preparación rutinaria y una crisis con nosotros es menos peligrosa— y la menos utilizable: #R no se puede lanzar nada, ni siquiera como represalia, hasta que nuestras fuerzas vuelvan a la preparación rutinaria, a dos semanas de distancia.#! Una amenaza nuestra se toma menos en serio. Los grupos partidarios de la contención la aprueban; los oficiales, no.\\n\\nCapacidad de supervivencia que cuenta una crisis: #v [GetPlayer.MakeScope.ScriptValue('nd_effective_survivability_at_readiness_0')|0]#!\\nMantenimiento a este nivel: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_0')|D]#!/semana"
+  "es": "#tooltip_header Desactivada#!\\n$TOOLTIP_DELIMITER$\\nOjivas almacenadas aparte de sus sistemas de lanzamiento. La postura más barata y segura —la custodia cuesta la mitad, los incidentes son la mitad de probables que con preparación rutinaria y una crisis con nosotros es menos peligrosa— y la menos utilizable: #R no se puede lanzar nada, ni siquiera como represalia, hasta que nuestras fuerzas vuelvan a la preparación rutinaria, a dos semanas de distancia.#! Una amenaza nuestra se toma menos en serio. Los grupos partidarios de la contención la aprueban; los oficiales, no.\\n\\nCapacidad de supervivencia que cuenta una crisis: #v [GetPlayer.MakeScope.ScriptValue('nd_effective_survivability_at_readiness_0')|0]#!\\nMantenimiento a este nivel: @money!#v [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_at_readiness_0')|D]#!/semana"
  },
  "nd_w_readiness_choice_1": {
   "en": "Routine",
@@ -17881,7 +17881,7 @@
  },
  "nd_w_readiness_tt": {
   "en": "#tooltip_header Readiness#!\\n$TOOLTIP_DELIMITER$\\nHow quickly our forces can respond. Higher readiness makes a threat credible, a response prepared and our forces harder to catch in a first strike, and costs money, wears the crews down and makes incidents more likely. Recessed takes the warheads off their delivery systems: nothing can be launched from it. A change takes two weeks per step. An arrow beside the level shows the step under way; bringing stored warheads back to Routine means mating them to their delivery systems again.",
-  "es": "#tooltip_header Preparación#!\\n$TOOLTIP_DELIMITER$\\nCon qué rapidez pueden responder nuestras fuerzas. Una preparación mayor hace creíble una amenaza, prepara la respuesta y dificulta que nuestras fuerzas caigan en un primer ataque, pero cuesta dinero, desgasta a las dotaciones y hace más probables los incidentes. Desacoplada separa las ojivas de sus sistemas de lanzamiento: desde ella no se puede lanzar nada. Cada cambio tarda dos semanas por escalón. Una flecha junto al nivel indica el escalón en curso; devolver las ojivas almacenadas a Rutinaria implica volver a acoplarlas a sus sistemas de lanzamiento."
+  "es": "#tooltip_header Preparación#!\\n$TOOLTIP_DELIMITER$\\nCon qué rapidez pueden responder nuestras fuerzas. Una preparación mayor hace creíble una amenaza, prepara la respuesta y dificulta que nuestras fuerzas caigan en un primer ataque, pero cuesta dinero, desgasta a las dotaciones y hace más probables los incidentes. Desactivada separa las ojivas de sus sistemas de lanzamiento: desde ella no se puede lanzar nada. Cada cambio tarda dos semanas por escalón. Una flecha junto al nivel indica el escalón en curso; devolver las ojivas almacenadas a Rutinaria implica volver a acoplarlas a sus sistemas de lanzamiento."
  },
  "nd_w_reliability_label": {
   "en": "Command reliability",
@@ -22725,7 +22725,7 @@
  },
  "te_demog_how_modifiers": {
   "en": "Under the Full setting the yearly count puts standing modifiers on a state where its figures call for them: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect. Each is worked out again every year at a strength set by the figure behind it, and goes when the figure falls back. The Modifiers section lists them, so the state's modifier row, which keeps what starts and ends on a date, does not. Hover one for its effects at the strength the state has now.",
-  "es": "Con el ajuste Completo, el recuento anual aplica a un estado modificadores permanentes allí donde sus cifras lo piden: Desigualdad, Abultamiento juvenil, Menos hombres, Más hombres, la Brecha de longevidad, Metrópolis, Pueblos dispersos, Ciudad primada y Abandono provincial. Cada uno se recalcula cada año con una intensidad fijada por la cifra que lo origina, y desaparece cuando la cifra retrocede. La sección de Modificadores los enumera, por lo que no lo hace la fila de modificadores del estado, que conserva lo que empieza y termina en una fecha. Pasa el cursor sobre uno para ver sus efectos con la intensidad que tiene ahora el estado."
+  "es": "Con el ajuste Completo, el recuento anual aplica a un estado modificadores permanentes allí donde sus cifras lo piden: Desigualdad, Abultamiento juvenil, Menos hombres, Más hombres, la Brecha de longevidad, Metrópoli, Villas dispersas, Ciudad primada y Abandono provincial. Cada uno se recalcula cada año con una intensidad fijada por la cifra que lo origina, y desaparece cuando la cifra retrocede. La sección de Modificadores los enumera, por lo que no lo hace la fila de modificadores del estado, que conserva lo que empieza y termina en una fecha. Pasa el cursor sobre uno para ver sus efectos con la intensidad que tiene ahora el estado."
  },
  "te_demog_how_mortality": {
   "en": "Deaths come from five causes: infection and hunger, accidents and violence, chronic illness and old age, work, and childbirth. Each runs at the rates of a poor country without modern medicine, times a multiplier that medical technology, health laws, institutions and a higher [concept_sol] bring down. Life expectancy is how long a child born now would live at this year's rates: the census's own, before famine, war and disasters. Medicine reaches a state over years: health care access and each treatment close a share of the gap at each count, a tenth at first and more as communications and medical training improve. Turmoil raises deaths from accidents and violence.",
@@ -28433,7 +28433,7 @@
  },
  "un_asat_terms_tt": {
   "en": "As a party, a destructive anti-satellite strike would cost us #R twice#! the infamy and twice the case strength, and a debris-removal method on our $building_space_program$ would count toward the UN's Delivery pillar each year.",
-  "es": "Como parte, un ataque antisatélite destructivo nos costaría #R el doble#! de infamia y el doble de fuerza del caso, y un método de retirada de escombros en nuestro $building_space_program$ contaría cada año para el pilar de ejecución de la ONU."
+  "es": "Como parte, un ataque antisatélite destructivo nos costaría #R el doble#! de infamia y el doble de fuerza del caso, y un método de retirada de escombros en nuestro $building_space_program$ contaría cada año para el pilar de cumplimiento de la ONU."
  },
  "un_authority_at_least_20_tt": {
   "en": "[concept_un_authority] is at least 20",
@@ -29149,7 +29149,7 @@
  },
  "un_mission_expelled_tt": {
   "en": "#R We send the [Concept('concept_un_mission_stabilisation', 'UN stabilisation mission')] home.#! It fails, and UN delivery falls.",
-  "es": "#R Mandamos a casa la [Concept('concept_un_mission_stabilisation', 'misión de estabilización de la ONU')].#! Fracasa, y la ejecución de la ONU disminuye."
+  "es": "#R Mandamos a casa la [Concept('concept_un_mission_stabilisation', 'misión de estabilización de la ONU')].#! Fracasa, y el cumplimiento de la ONU disminuye."
  },
  "un_mission_host_intel_tt": {
   "en": "While the mission stays, the intelligence networks of the countries serving in it grow faster in our country.",
@@ -29273,7 +29273,7 @@
  },
  "un_mission_withdraw_last_tt": {
   "en": "#R We are the last to serve in it: the mission fails at the next monthly update, and UN delivery falls.#!",
-  "es": "#R Somos los últimos en servir en ella: la misión fracasa en la próxima actualización mensual, y la ejecución de la ONU disminuye.#!"
+  "es": "#R Somos los últimos en servir en ella: la misión fracasa en la próxima actualización mensual, y el cumplimiento de la ONU disminuye.#!"
  },
  "un_mission_withdraw_relations_tt": {
   "en": "[SCOPE.sCountry('un_msn_tt_host').GetName] resents being left: #R −10#! relations.",
@@ -29901,7 +29901,7 @@
  },
  "un_vote_asat_passed_tt": {
   "en": "The Moratorium on Destructive Anti-Satellite Tests was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! A party's destructive anti-satellite strike costs it twice the infamy and twice the case strength, and a party running a debris-removal method counts toward the Delivery pillar.",
-  "es": "Se adoptó la Moratoria de pruebas antisatélite destructivas. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! Un ataque antisatélite destructivo de una parte le cuesta el doble de infamia y el doble de fuerza del caso, y una parte que aplica un método de retirada de escombros suma para el pilar de ejecución."
+  "es": "Se adoptó la Moratoria de pruebas antisatélite destructivas. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! Un ataque antisatélite destructivo de una parte le cuesta el doble de infamia y el doble de fuerza del caso, y una parte que aplica un método de retirada de escombros suma para el pilar de cumplimiento."
  },
  "un_vote_bloc_leverage_gain_tt": {
   "en": "Our [concept_power_bloc] gains #G 3#! [concept_power_bloc_leverage] in each of its other members that sits in the Assembly: we have shown the bloc we can deliver.",
@@ -29913,7 +29913,7 @@
  },
  "un_vote_ceasefire_passed_tt": {
   "en": "The Assembly ordered a ceasefire. #G UN credibility +1, moving [concept_un_authority]'s target.#! For 24 months, every month the aggressor fights on as an attacker against a member, its [concept_war_support] in each such war falls by 2.5 × the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier), its record of aggression grows and the UN's peace and order suffers; after three months of it, the aggressor loses standing. If the war ends while the order stands and the aggressor has taken nothing from its victim, the UN's delivery gains and peacekeepers deploy to the victim's most devastated state. If the order runs out with the war still on, or the war ends with the aggressor holding the victim's capital or the victim as a subject, or with the victim holding fewer states than when the order was made, UN credibility falls.",
-  "es": "La Asamblea ordenó un alto el fuego. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! Durante 24 meses, cada mes que el agresor siga combatiendo como atacante contra un miembro, su [concept_war_support|l] en cada una de esas guerras cae 2,5 × la [concept_un_enforcement|l] de la ONU (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! en el nivel actual), su historial de agresión aumenta y la paz y el orden de la ONU se resienten; pasados tres meses así, el agresor pierde posición. Si la guerra termina mientras la orden sigue vigente y el agresor no ha tomado nada de su víctima, la ejecución de la ONU mejora y los cascos azules se despliegan en el estado más devastado de la víctima. Si la orden expira con la guerra aún en curso, o la guerra termina con el agresor poseyendo la capital de la víctima o a la víctima como súbdito, o con la víctima poseyendo menos estados que cuando se dictó la orden, la credibilidad de la ONU disminuye."
+  "es": "La Asamblea ordenó un alto el fuego. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! Durante 24 meses, cada mes que el agresor siga combatiendo como atacante contra un miembro, su [concept_war_support|l] en cada una de esas guerras cae 2,5 × la [concept_un_enforcement|l] de la ONU (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! en el nivel actual), su historial de agresión aumenta y la paz y el orden de la ONU se resienten; pasados tres meses así, el agresor pierde posición. Si la guerra termina mientras la orden sigue vigente y el agresor no ha tomado nada de su víctima, el cumplimiento de la ONU mejora y los cascos azules se despliegan en el estado más devastado de la víctima. Si la orden expira con la guerra aún en curso, o la guerra termina con el agresor poseyendo la capital de la víctima o a la víctima como súbdito, o con la víctima poseyendo menos estados que cuando se dictó la orden, la credibilidad de la ONU disminuye."
  },
  "un_vote_ceasefire_passed_vetoed_tt": {
   "en": "The ceasefire carried in the General Assembly but was vetoed in the [concept_un_security_council]. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! The Assembly can only call for a ceasefire: the aggressor's [concept_war_support] in each war it fights against a member falls once, by 10 × the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!), and nothing more follows.",
@@ -29993,7 +29993,7 @@
  },
  "un_vote_food_reserve_passed_tt": {
   "en": "The [concept_un_food_reserve] is founded. #G UN credibility +1, moving [concept_un_authority]'s target.#! Members may pledge grain from their Strategic Reserves, and every new [concept_un_mission_aid] draws on the pledges. From next month the delivery pillar of authority answers for hunger among the members: down to #R -10#! with famine, #G +3#! while almost no one goes hungry.",
-  "es": "Se funda la [concept_un_food_reserve]. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! Los miembros pueden comprometer grano de sus Reservas estratégicas, y toda nueva [concept_un_mission_aid|l] recurre a esos compromisos. A partir del mes que viene, el pilar de ejecución de la autoridad responde del hambre entre los miembros: hasta #R -10#! con hambruna, #G +3#! mientras casi nadie pasa hambre."
+  "es": "Se funda la [concept_un_food_reserve]. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! Los miembros pueden comprometer grano de sus Reservas estratégicas, y toda nueva [concept_un_mission_aid|l] recurre a esos compromisos. A partir del mes que viene, el pilar de cumplimiento de la autoridad responde del hambre entre los miembros: hasta #R -10#! con hambruna, #G +3#! mientras casi nadie pasa hambre."
  },
  "un_vote_heritage_passed_tt": {
   "en": "The Cultural Heritage Program was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! The UN Educational, Scientific and Cultural Organization (UNESCO) is established.",
@@ -30069,7 +30069,7 @@
  },
  "un_vote_peacekeeping_request_passed_weak_tt": {
   "en": "The peacekeeping request passed, but the United Nations is below the Established tier and can field no force. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! No mission opens and no contingents are levied: the requester is sent observers, a five-year boost to its relations and prestige.",
-  "es": "La solicitud de mantenimiento de la paz fue aprobada, pero las Naciones Unidas están por debajo del nivel Establecida y no pueden desplegar ninguna fuerza. #G Credibilidad de la ONU +0,5, lo que mueve el objetivo de la [concept_un_authority|l].#! No se abre ninguna misión ni se reclutan contingentes: al solicitante se le envían observadores, un impulso de cinco años a sus relaciones y su prestigio."
+  "es": "La solicitud de mantenimiento de la paz fue aprobada, pero las Naciones Unidas están por debajo de la categoría Consolidada y no pueden desplegar ninguna fuerza. #G Credibilidad de la ONU +0,5, lo que mueve el objetivo de la [concept_un_authority|l].#! No se abre ninguna misión ni se reclutan contingentes: al solicitante se le envían observadores, un impulso de cinco años a sus relaciones y su prestigio."
  },
  "un_vote_physical_protection_passed_tt": {
   "en": "The Convention on the Physical Protection of Nuclear Material was adopted. #G UN credibility +1, moving [concept_un_authority]'s target.#! Its parties' custody of their warheads counts as secured: #G half#! as many go missing whenever they change hands, and each month there is a #v 3%#! chance to find one of theirs that already has.",
@@ -30077,7 +30077,7 @@
  },
  "un_vote_referendum_passed_tt": {
   "en": "The Assembly ordered a supervised referendum. #G UN credibility +1, moving [concept_un_authority]'s target.#! The [concept_overlord] must hold the vote or refuse it. Held, it ends in independence with a chance from the subject's [concept_liberty_desire] (20% to 90%), or else the subject's liberty desire falls by 20; the overlord gains standing and the UN's delivery gains. Refused, the overlord loses 5 standing and its record of defiance grows by 10, the subject's liberty desire rises by 15, the overlord's prestige and its subjects' loyalty suffer for five years, and UN credibility falls.",
-  "es": "La Asamblea ordenó un referéndum supervisado. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! El [concept_overlord|l] debe celebrar la votación o negarse. Si se celebra, termina en independencia con una probabilidad que depende del [concept_liberty_desire|l] del súbdito (del 20% al 90%), o bien el deseo de libertad del súbdito disminuye en 20; el soberano gana posición y la ejecución de la ONU mejora. Si se rechaza, el soberano pierde 5 de posición y su historial de desafío aumenta en 10, el deseo de libertad del súbdito aumenta en 15, el prestigio del soberano y la lealtad de sus súbditos se resienten durante cinco años, y la credibilidad de la ONU disminuye."
+  "es": "La Asamblea ordenó un referéndum supervisado. #G Credibilidad de la ONU +1, lo que mueve el objetivo de la [concept_un_authority|l].#! El [concept_overlord|l] debe celebrar la votación o negarse. Si se celebra, termina en independencia con una probabilidad que depende del [concept_liberty_desire|l] del súbdito (del 20% al 90%), o bien el deseo de libertad del súbdito disminuye en 20; el soberano gana posición y el cumplimiento de la ONU mejora. Si se rechaza, el soberano pierde 5 de posición y su historial de desafío aumenta en 10, el deseo de libertad del súbdito aumenta en 15, el prestigio del soberano y la lealtad de sus súbditos se resienten durante cinco años, y la credibilidad de la ONU disminuye."
  },
  "un_vote_referendum_passed_vetoed_tt": {
   "en": "A [concept_un_permanent_member] cast a [concept_un_veto]. A referendum has no graduated form, so the resolution is blocked outright and no vote is held.",

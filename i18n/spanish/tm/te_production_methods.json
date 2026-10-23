@@ -6473,7 +6473,7 @@
  },
  "pm_resettlement_rustication": {
   "en": "Rustication",
-  "es": "Rusticación"
+  "es": "Envío al campo"
  },
  "pm_resettlement_rustication_desc": {
   "en": "Urban workers sent down to the countryside to learn from the peasants. Recruits laborers and clerks outside agriculture. The laborers and clerks left behind turn radical.$resettlement_programme_bonus_pm_line$$resettlement_declaration_pm_line$",

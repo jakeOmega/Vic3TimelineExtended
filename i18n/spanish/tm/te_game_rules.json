@@ -233,7 +233,7 @@
  },
  "setting_global_commons_disabled_desc": {
   "en": "The $building_ocean_mine$ is uncapped: any coastal state can build it without limit. The Law of the Sea has no seabed terms, and there are no Antarctic research stations and no Antarctic Treaty. Launch windows and orbital debris follow the Space Race rule.",
-  "es": "La $building_ocean_mine$ no tiene tope: cualquier estado costero puede construirla sin límite. La Ley del Mar no contiene cláusulas sobre el lecho marino, y no hay estaciones de investigación antárticas ni Tratado Antártico. Las ventanas de lanzamiento y la basura orbital siguen la regla de la Carrera espacial."
+  "es": "La $building_ocean_mine$ no tiene tope: cualquier estado costero puede construirla sin límite. El Derecho del Mar no contiene cláusulas sobre el lecho marino, y no hay estaciones de investigación antárticas ni Tratado Antártico. Las ventanas de lanzamiento y la basura orbital siguen la regla de la Carrera espacial."
  },
  "setting_global_commons_enabled": {
   "en": "Global Commons Enabled",
@@ -241,7 +241,7 @@
  },
  "setting_global_commons_enabled_desc": {
   "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licences, shared out every year among the countries with Abyssal Plain Mining, and every $building_ocean_mine$ level needs one. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
-  "es": "El lecho marino es un bien común. Cada una de las cinco cuencas oceánicas cuenta con un número fijo de licencias de explotación del lecho marino, que se reparte cada año entre los países con Minería de llanuras abisales, y cada nivel de $building_ocean_mine$ necesita una. La Ley del Mar de la ONU puede regular el lecho marino, las estaciones de investigación pueden invernar en el hielo antártico y un Tratado Antártico puede cerrar la cuenca austral."
+  "es": "El lecho marino es un bien común. Cada una de las cinco cuencas oceánicas cuenta con un número fijo de licencias de explotación del lecho marino, que se reparte cada año entre los países con Minería de llanuras abisales, y cada nivel de $building_ocean_mine$ necesita una. El Derecho del Mar de la ONU puede regular el lecho marino, las estaciones de investigación pueden invernar en el hielo antártico y un Tratado Antártico puede cerrar la cuenca austral."
  },
  "setting_global_warming_disabled": {
   "en": "Global Warming Disabled",
