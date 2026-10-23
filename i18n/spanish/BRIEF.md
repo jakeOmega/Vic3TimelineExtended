@@ -80,7 +80,7 @@ ES  El gobierno de [TARGET_COUNTRY.GetName] ha caído
 
 Write *de* and *a* before a name, never *del* or *al*: the name brings no article to contract with.
 
-`GetAdjective` gives the masculine singular, lowercase («francés», «británico»). The official Spanish places it after a masculine singular noun (*el estado [X.GetAdjective]*, *el gobierno [X.GetAdjective]*). Where the noun is feminine or plural, rephrase with *de [X.GetName]* instead of letting the adjective disagree.
+`GetAdjective` gives the masculine singular, lowercase («francés», «británico»). The official Spanish places it after a masculine singular noun (*el estado [X.GetAdjective]*, *el gobierno [X.GetAdjective]*). Keep every `GetAdjective` call the English has (the checker counts them, and swapping one for `GetName` is rejected). Where the English attaches it to a feminine or plural noun, choose a masculine singular noun to carry it (*el sistema bancario [X.GetAdjective]*, *el mercado [X.GetAdjective]*) rather than letting it disagree.
 
 ## Terminology
 
