@@ -2977,16 +2977,12 @@ class PolicyTests(unittest.TestCase):
                 self.assertEqual(_policy_value(body, policy), factors[what], f"{policy} {what}")
 
     def test_upkeep_is_on_the_building(self):
-        """The maintenance input is level_scaled, which throughput does not
-        touch, so the policy scales the building's construction input (as the
-        engine's pm_retooling does), on the monument only."""
+        """No policy changes upkeep now (policy spec 2026-10-23 § 5); the two
+        old policy modifiers stay defined only so the pulse removes them from
+        older saves."""
         mods = read(MODIFIERS)
-        for policy, factors in POLICIES.items():
-            body = block(mods, f"gm_policy_upkeep_{policy}")
-            if factors["upkeep"] == 0:
-                self.assertIsNone(body, policy)
-                continue
-            self.assertAlmostEqual(number(body, "goods_input_construction_mult"), factors["upkeep"] * 0.5, msg=policy)
+        for old in ("gm_policy_upkeep_open", "gm_policy_upkeep_mothballed"):
+            self.assertIsNotNone(block(mods, old), old)
         self.assertNotIn("building_grand_monument_throughput_add", strip_comments(mods))
         local = squash(block(read(EFFECTS), "gm_remove_local_modifiers"))
         self.assertIn("b:building_grand_monument ?= { remove_modifier = gm_upkeep remove_modifier = gm_policy_upkeep_open "
@@ -6302,16 +6298,18 @@ class UpkeepTests(unittest.TestCase):
     of the levels its monuments record (0.1 construction a level, as
     pm_maintenance), x1.5 Open, nothing Mothballed (owner, 2026-10-18)."""
 
-    def test_one_modifier_sized_by_the_records(self):
+    def test_upkeep_is_cancelled(self):
+        """Policy spec 2026-10-23 § 5 (owner): Grand Monuments cost nothing to
+        maintain. gm_upkeep at -1 cancels pm_maintenance's level-scaled input
+        whatever the level, as Mothballed did; pmg_maintenance stays on the
+        building (removing a PMG in a running save is unverified)."""
         self.assertEqual(squash(block(read(MODIFIERS), "gm_upkeep")).split("icon = ")[1].split(" ", 1)[1],
                          "goods_input_construction_mult = 1")
-        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")),
-                         "value = gm_state_primary_levels add = gm_state_secondary_levels "
-                         "multiply = gm_policy_factor_upkeep subtract = 1 "
-                         "if = { limit = { NOT = { has_variable = gm_migrated } } value = 0 }")
-        self.assertEqual(squash(block(read(VALUES), "gm_policy_factor_upkeep")),
-                         "value = 1 if = { limit = { owner = { gm_policy_is = { P = open STANDARD = no } } } value = 1.5 } "
-                         "if = { limit = { owner = { gm_policy_is = { P = mothballed STANDARD = no } } } value = 0 }")
+        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")), "value = -1")
+        self.assertIsNone(block(read(VALUES), "gm_policy_factor_upkeep"))
+        self.assertNotIn("gm_policy_factor_upkeep", "".join(strip_comments(read(p.relative_to(ROOT).as_posix()))
+                                                            for p in ROOT.glob("common/**/*.txt")))
+        self.assertIn("pmg_maintenance", squash(block(read(BUILDING), "building_grand_monument")))
         self.assertIn("gm_upkeep", loc())
 
     def test_the_state_pulse_is_its_one_refresh(self):

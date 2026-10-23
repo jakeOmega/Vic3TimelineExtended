@@ -1761,41 +1761,15 @@ gm_state_mig_high = {
 	multiply = 1.05
 }
 
-# ---- Upkeep (sites spec 2026-10-18 §3.4) -------------------------------------------
-# State scope, the owner's policy: Open pays half again, Mothballed nothing
-# (owner, 2026-10-18: "it is weak now"), every other policy the levels' due.
-gm_policy_factor_upkeep = {
-	value = 1
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = open STANDARD = no } }
-		}
-		value = 1.5
-	}
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-		}
-		value = 0
-	}
-}
-
-# State scope. The multiplier on gm_upkeep: the finished building stands at
-# level 1, and pm_maintenance charges for that one, so the rest of the levels
-# the monuments here record, by the policy, less that one. -1 (Mothballed) is
-# no upkeep at all.
+# ---- Upkeep (sites spec 2026-10-18 §3.4; policy spec 2026-10-23 § 5) -----------------
+# State scope. The multiplier on gm_upkeep: Grand Monuments cost nothing to
+# maintain (owner, 2026-10-23). At -1, gm_upkeep cancels pm_maintenance's
+# level-scaled construction input whatever the building's level, an older
+# save's unmigrated building at its full height too, as Mothballed did before.
+# pmg_maintenance stays on the building: removing a PMG in a running save is
+# unverified.
 gm_state_upkeep_mult = {
-	value = gm_state_primary_levels
-	add = gm_state_secondary_levels
-	multiply = gm_policy_factor_upkeep
-	subtract = 1
-	# An older save's building until monument_events.32 records it: it stands
-	# at its full height, and pm_maintenance is level-scaled, so its own levels
-	# already pay (any multiplier would square them).
-	if = {
-		limit = { NOT = { has_variable = gm_migrated } }
-		value = 0
-	}
+	value = -1
 }
 
 # The level a merge left a finished building at (gm_merge_check), for the
