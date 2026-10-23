@@ -11,21 +11,41 @@
   "en": "Assimilation Drive",
   "es": "Campaña de asimilación"
  },
+ "movement_crushed_assimilation_drive_modifier_desc": {
+  "en": "With the civil rights movement defeated, the state has accelerated its cultural [concept_assimilation] program.",
+  "es": "Con el movimiento por los derechos civiles derrotado, el Estado ha acelerado su programa de [concept_assimilation|l] cultural."
+ },
  "movement_crushed_expulsion_modifier": {
   "en": "Minority Expulsion Program",
   "es": "Programa de expulsión de minorías"
+ },
+ "movement_crushed_expulsion_modifier_desc": {
+  "en": "The state is actively driving out unwanted minorities, encouraging or forcing their emigration.",
+  "es": "El Estado expulsa activamente a las minorías no deseadas, alentando o forzando su emigración."
  },
  "movement_crushed_order_restored_modifier": {
   "en": "Order Restored",
   "es": "Orden restablecido"
  },
+ "movement_crushed_order_restored_modifier_desc": {
+  "en": "The civil rights movement has been crushed. Social order is restored, though at the cost of international standing.",
+  "es": "El movimiento por los derechos civiles ha sido aplastado. Se ha restablecido el orden social, aunque a costa de la posición internacional."
+ },
  "movement_crushed_political_suppression_modifier": {
   "en": "Political Suppression of Minorities",
   "es": "Represión política de las minorías"
  },
+ "movement_crushed_political_suppression_modifier_desc": {
+  "en": "Discriminated communities have been stripped of what little political voice they had.",
+  "es": "A las comunidades discriminadas se les ha arrebatado la poca voz política que tenían."
+ },
  "movement_crushed_segregation_enforced_modifier": {
   "en": "Segregation Enforced",
   "es": "Segregación impuesta"
+ },
+ "movement_crushed_segregation_enforced_modifier_desc": {
+  "en": "With dissent silenced, the regime has tightened racial and cultural segregation under the full force of law.",
+  "es": "Con la disidencia silenciada, el régimen ha endurecido la segregación racial y cultural con todo el peso de la ley."
  },
  "movement_environmental": {
   "en": "Environmental Movement",

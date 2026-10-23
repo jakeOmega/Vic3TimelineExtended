@@ -1813,7 +1813,7 @@
  },
  "goods_output_fertilizer_mult_desc": {
   "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
-  "es": "Bonificación o penalización a la cantidad de $fertilizer$ @fertilizer! que producen los edificios"
+  "es": "Una bonificación o penalización a la cantidad de @fertilizer! $fertilizer$ producidos por los edificios"
  },
  "goods_output_fine_art_mult": {
   "en": "Building @fine_art! $fine_art$ output",

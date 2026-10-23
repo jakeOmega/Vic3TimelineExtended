@@ -3,641 +3,1285 @@
   "en": "Intercontinental Ballistic Missiles",
   "es": "Misiles balísticos intercontinentales"
  },
+ "ICBMs_desc": {
+  "en": "What's the point of having the most powerful weapons in the world if you can't use them on anyone you want? By mounting our most devastating creations on top of rockets, no corner of the globe is safe from our righteous fury.",
+  "es": "¿De qué sirve tener las armas más poderosas del mundo si no podemos usarlas contra quien queramos? Al montar nuestras creaciones más devastadoras sobre cohetes, ningún rincón del planeta está a salvo de nuestra justa furia."
+ },
  "LGBTQ_rights_movement": {
   "en": "LGBTQ+ Rights Movement",
   "es": "Movimiento por los derechos LGBTQ+"
+ },
+ "LGBTQ_rights_movement_desc": {
+  "en": "A social movement advocating for the rights and acceptance of individuals with diverse sexual orientations and gender identities, challenging traditional norms and pushing for legal and social reform.",
+  "es": "Un movimiento social que defiende los derechos y la aceptación de las personas con orientaciones sexuales e identidades de género diversas, cuestiona las normas tradicionales e impulsa reformas legales y sociales."
  },
  "abyssal_plain_mining": {
   "en": "Abyssal Plain Mining",
   "es": "Minería de llanuras abisales"
  },
+ "abyssal_plain_mining_desc": {
+  "en": "By mining the deep ocean floor, we can access valuable minerals and resources that are otherwise out of reach. This could be a game-changer for industries like electronics and renewable energy.",
+  "es": "Al explotar el fondo del océano profundo, podemos acceder a minerales y recursos valiosos que de otro modo estarían fuera de nuestro alcance. Esto podría cambiar las reglas del juego en industrias como la electrónica y las energías renovables."
+ },
  "additive_manufacturing": {
   "en": "Additive Manufacturing",
   "es": "Fabricación aditiva"
+ },
+ "additive_manufacturing_desc": {
+  "en": "Also known as 3D printing, this process builds objects layer-by-layer. Now we can create complex and customized items on demand, transforming everything from healthcare to making trinkets for the home.",
+  "es": "También conocido como impresión 3D, este proceso construye objetos capa por capa. Ahora podemos crear artículos complejos y personalizados bajo demanda, lo que transforma desde la sanidad hasta la fabricación de baratijas para el hogar."
  },
  "advanced_agricultural_statistics": {
   "en": "Advanced Agricultural Statistics",
   "es": "Estadística agrícola avanzada"
  },
+ "advanced_agricultural_statistics_desc": {
+  "en": "By applying modern statistical methods to farming, we can make agriculture more efficient. This means bigger harvests and fatter livestock, all thanks to the magic of numbers.",
+  "es": "Al aplicar métodos estadísticos modernos a la agricultura, podemos hacerla más eficiente. Esto se traduce en cosechas mayores y ganado más gordo, todo gracias a la magia de los números."
+ },
  "advanced_assembly_lines": {
   "en": "Advanced Assembly Lines",
   "es": "Líneas de montaje avanzadas"
+ },
+ "advanced_assembly_lines_desc": {
+  "en": "Further refining the assembly line with modular components and just-in-time production makes our factories even more efficient. We can now produce a wider variety of goods at lower costs, which is good for the economy, I suppose.",
+  "es": "Seguir perfeccionando la línea de montaje con componentes modulares y producción justo a tiempo hace que nuestras fábricas sean aún más eficientes. Ahora podemos producir una mayor variedad de bienes a menor coste, lo cual es bueno para la economía, supongo."
  },
  "advanced_body_armor": {
   "en": "Advanced Body Armor",
   "es": "Blindaje corporal avanzado"
  },
+ "advanced_body_armor_desc": {
+  "en": "With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat.",
+  "es": "Con nuevos materiales como los compuestos ligeros e incluso los exoesqueletos, nuestros soldados están mejor protegidos y son más móviles. Esto debería mejorar sus probabilidades de sobrevivir a las incomodidades del combate."
+ },
  "advanced_materials_armor": {
   "en": "Advanced Materials Armor",
   "es": "Blindaje de materiales avanzados"
+ },
+ "advanced_materials_armor_desc": {
+  "en": "The use of advanced materials like Composite and Reactive Armor makes our military vehicles tougher. Hopefully, this will keep them from blowing up so easily.",
+  "es": "El uso de materiales avanzados como el blindaje compuesto y el reactivo hace más resistentes nuestros vehículos militares. Con suerte, esto evitará que exploten con tanta facilidad."
  },
  "advanced_military_aircraft": {
   "en": "Advanced Military Aircraft",
   "es": "Aeronaves militares avanzadas"
  },
+ "advanced_military_aircraft_desc": {
+  "en": "The latest military aircraft are faster, can fly farther, and carry more firepower. This makes them much better at the business of aerial combat and spying.",
+  "es": "Los aviones militares más recientes son más rápidos, pueden volar más lejos y llevan más potencia de fuego. Esto los hace mucho mejores en el negocio del combate aéreo y el espionaje."
+ },
  "advanced_nanofabrication": {
   "en": "Advanced Nanofabrication",
   "es": "Nanofabricación avanzada"
+ },
+ "advanced_nanofabrication_desc": {
+  "en": "We can now create incredibly small and precise structures. This level of control at the nanoscale is set to revolutionize everything from electronics to medicine.",
+  "es": "Ahora podemos crear estructuras increíblemente pequeñas y precisas. Este nivel de control a escala nanométrica está llamado a revolucionar todo, desde la electrónica hasta la medicina."
  },
  "advanced_structural_engineering": {
   "en": "Advanced Structural Engineering",
   "es": "Ingeniería estructural avanzada"
  },
+ "advanced_structural_engineering_desc": {
+  "en": "By combining high-strength composites, new welding techniques, and tougher concrete, we can build things that are lighter, stronger, and last longer. A boon for all industries, really.",
+  "es": "Al combinar compuestos de alta resistencia, nuevas técnicas de soldadura y hormigón más resistente, podemos construir cosas más ligeras, más fuertes y más duraderas. Una bendición para todas las industrias, la verdad."
+ },
  "advanced_submarine_technology": {
   "en": "Advanced Submarine Technology",
   "es": "Tecnología submarina avanzada"
+ },
+ "advanced_submarine_technology_desc": {
+  "en": "Thanks to things like nuclear power, our new submarines can go farther, faster, and are much harder to detect. A useful tool for sneaking around underwater.",
+  "es": "Gracias a avances como la energía nuclear, nuestros nuevos submarinos llegan más lejos, son más rápidos y mucho más difíciles de detectar. Una herramienta útil para moverse a hurtadillas bajo el agua."
  },
  "advanced_workflow_optimization": {
   "en": "Advanced Workflow Optimization",
   "es": "Optimización avanzada de flujos de trabajo"
  },
+ "advanced_workflow_optimization_desc": {
+  "en": "Using the latest technology and data analysis, we can make our business processes more streamlined and automated. This cuts down on waste and should, in theory, make everyone more productive.",
+  "es": "Con la tecnología más reciente y el análisis de datos, podemos agilizar y automatizar más nuestros procesos empresariales. Esto reduce el desperdicio y debería, en teoría, hacer más productivo a todo el mundo."
+ },
  "aluminum_mass_production": {
   "en": "Aluminum Mass Production",
   "es": "Producción en serie de aluminio"
+ },
+ "aluminum_mass_production_desc": {
+  "en": "We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.",
+  "es": "Hemos descubierto cómo producir aluminio a gran escala. Este metal ligero es útil en todo tipo de industrias, así que cabe esperar verlo por todas partes."
  },
  "animation": {
   "en": "Animation",
   "es": "Animación"
  },
+ "animation_desc": {
+  "en": "By making drawings appear to move, we've created a new form of entertainment. It's a popular way to tell stories and express artistic ideas, for better or worse.",
+  "es": "Al hacer que los dibujos parezcan moverse, hemos creado una nueva forma de entretenimiento. Es una forma popular de contar historias y expresar ideas artísticas, para bien o para mal."
+ },
  "anti_sub_warfare": {
   "en": "Anti-Submarine Warfare",
   "es": "Guerra antisubmarina"
+ },
+ "anti_sub_warfare_desc": {
+  "en": "With better sonar and torpedoes that can find their own way, we've gotten much better at hunting down enemy submarines. Our waters are now a little safer.",
+  "es": "Con mejores sonares y torpedos que encuentran su propio camino, hemos mejorado mucho en la caza de submarinos enemigos. Nuestras aguas son ahora un poco más seguras."
  },
  "anti_war_movement": {
   "en": "Anti-War Movement",
   "es": "Movimiento contra la guerra"
  },
+ "anti_war_movement_desc": {
+  "en": "It turns out that not everyone is a fan of war. These movements have a knack for shaping public opinion and can sometimes even force politicians to reconsider their military adventures.",
+  "es": "Resulta que no todo el mundo es partidario de la guerra. Estos movimientos tienen don para moldear la opinión pública y a veces pueden incluso obligar a los políticos a replantearse sus aventuras militares."
+ },
  "antibiotic_mass_production": {
   "en": "Antibiotic Mass Production",
   "es": "Producción en serie de antibióticos"
+ },
+ "antibiotic_mass_production_desc": {
+  "en": "Now that we can produce antibiotics in large quantities, bacterial infections are no longer a death sentence. This has done wonders for public health and makes surgery a bit less of a gamble.",
+  "es": "Ahora que podemos producir antibióticos en grandes cantidades, las infecciones bacterianas ya no son una sentencia de muerte. Esto ha hecho maravillas por la salud pública y hace que la cirugía sea algo menos arriesgada."
  },
  "antimatter_production": {
   "en": "Antimatter Production",
   "es": "Producción de antimateria"
  },
+ "antimatter_production_desc": {
+  "en": "We can now create antimatter on a large scale, a fuel source with an incredible energy density. This unlocks unprecedented power for our spacecraft and military hardware, revolutionizing how we operate.",
+  "es": "Ahora podemos crear antimateria a gran escala, una fuente de combustible con una densidad de energía increíble. Esto desbloquea un poder sin precedentes para nuestras naves espaciales y nuestro armamento militar, y revoluciona nuestra forma de operar."
+ },
  "art_deco_architecture": {
   "en": "Art Deco Architecture",
   "es": "Arquitectura art déco"
+ },
+ "art_deco_architecture_desc": {
+  "en": "A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and [concept_prestige], making our cities look a bit more glamorous.",
+  "es": "Un estilo definido por formas geométricas audaces y detalles suntuosos. Se suele usar para hacer ostentación de riqueza y [concept_prestige|l], lo que hace que nuestras ciudades parezcan algo más glamurosas."
  },
  "artificial_intelligence": {
   "en": "Artificial General Intelligence",
   "es": "Inteligencia artificial general"
  },
+ "artificial_intelligence_desc": {
+  "en": "We're creating machines that can think and reason like humans. While this could transform industries from healthcare to finance, it does raise some rather tricky questions about our new creations.",
+  "es": "Estamos creando máquinas que pueden pensar y razonar como los humanos. Aunque esto podría transformar sectores que van desde la sanidad hasta las finanzas, plantea algunas preguntas bastante espinosas sobre nuestras nuevas creaciones."
+ },
  "asteroid_mining": {
   "en": "Asteroid Mining",
   "es": "Minería de asteroides"
+ },
+ "asteroid_mining_desc": {
+  "en": "Why limit ourselves to the resources on Earth? By mining asteroids, we could find valuable metals and minerals, fuel our space missions, and maybe even get rich in the process.",
+  "es": "¿Por qué limitarnos a los recursos de la Tierra? Al explotar asteroides, podríamos encontrar metales y minerales valiosos, abastecer de combustible nuestras misiones espaciales e incluso, quizá, enriquecernos en el proceso."
  },
  "augmented_reality_warfare": {
   "en": "Augmented Reality Warfare",
   "es": "Guerra de realidad aumentada"
  },
+ "augmented_reality_warfare_desc": {
+  "en": "By overlaying digital information onto a soldier's view of the world, we can give them better situational awareness and targeting. It's a whole new way to experience the battlefield.",
+  "es": "Al superponer información digital a la visión del mundo de un soldado, podemos darle mejor conciencia de la situación y mejor puntería. Es una forma completamente nueva de vivir el campo de batalla."
+ },
  "automated_surveillance": {
   "en": "Automated Surveillance",
   "es": "Vigilancia automatizada"
+ },
+ "automated_surveillance_desc": {
+  "en": "With ground sensors and aerial drones, we can keep an eye on things without having to send people out. This makes our military operations more effective, if a bit intrusive.",
+  "es": "Con sensores terrestres y drones aéreos, podemos vigilar sin tener que enviar gente. Esto hace más eficaces nuestras operaciones militares, aunque algo intrusivas."
  },
  "autonomous_vehicles": {
   "en": "Autonomous Vehicles",
   "es": "Vehículos autónomos"
  },
+ "autonomous_vehicles_desc": {
+  "en": "Vehicles that can drive themselves are no longer a fantasy. They could revolutionize transportation, make our roads safer, and perhaps even put an end to traffic jams.",
+  "es": "Los vehículos que se conducen solos ya no son una fantasía. Podrían revolucionar el transporte, hacer nuestras carreteras más seguras y quizá incluso acabar con los atascos."
+ },
  "barcodes_and_scanners": {
   "en": "Barcodes and Scanners",
   "es": "Códigos de barras y escáneres"
+ },
+ "barcodes_and_scanners_desc": {
+  "en": "Those little black and white lines have changed the face of retail and logistics. Now we can track products and sales with a simple scan, making everything much more efficient.",
+  "es": "Esas pequeñas líneas blancas y negras han cambiado la cara del comercio minorista y la logística. Ahora podemos seguir productos y ventas con un simple escaneo, lo que hace todo mucho más eficiente."
  },
  "bergius_process": {
   "en": "Bergius Process",
   "es": "Proceso Bergius"
  },
+ "bergius_process_desc": {
+  "en": "By hydrogenating coal at high temperatures and pressures, we can create synthetic fuel. A useful trick to have up our sleeve when oil is scarce.",
+  "es": "Al hidrogenar carbón a altas temperaturas y presiones, podemos crear combustible sintético. Un truco útil que guardarnos en la manga cuando el petróleo escasea."
+ },
  "bioenhanced_soldiers": {
   "en": "Bioenhanced Soldiers",
   "es": "Soldados biomejorados"
+ },
+ "bioenhanced_soldiers_desc": {
+  "en": "Through biotechnology and genetic engineering, we can make our soldiers stronger and smarter. This does, however, open up a rather unsettling debate about the limits of human augmentation.",
+  "es": "Mediante la biotecnología y la ingeniería genética, podemos hacer a nuestros soldados más fuertes e inteligentes. Sin embargo, esto abre un debate bastante inquietante sobre los límites de la mejora humana."
  },
  "biohacking_and_human_augmentation": {
   "en": "Human Augmentation",
   "es": "Mejora humana"
  },
+ "biohacking_and_human_augmentation_desc": {
+  "en": "From gene editing to neuroprosthetics, we're pushing the boundaries of what it means to be human. This raises all sorts of ethical questions about who gets to be augmented and what we're becoming.",
+  "es": "Desde la edición genética hasta las neuroprótesis, estamos empujando los límites de lo que significa ser humano. Esto plantea todo tipo de cuestiones éticas sobre quién puede mejorarse y en qué nos estamos convirtiendo."
+ },
  "biological_immortality": {
   "en": "Biological Immortality",
   "es": "Inmortalidad biológica"
+ },
+ "biological_immortality_desc": {
+  "en": "The idea of living forever is no longer just a dream. Through advancements in medicine and genetic engineering, we might just be able to cheat death itself.",
+  "es": "La idea de vivir para siempre ya no es solo un sueño. Gracias a los avances de la medicina y la ingeniería genética, quizá podamos burlar a la propia muerte."
  },
  "biotechnology": {
   "en": "Biotechnology",
   "es": "Biotecnología"
  },
+ "biotechnology_desc": {
+  "en": "With technologies like CRISPR, we can now edit genes with incredible precision. This is leading to breakthroughs in agriculture, medicine, and who knows what else.",
+  "es": "Con tecnologías como CRISPR, ahora podemos editar genes con una precisión increíble. Esto está dando lugar a avances en la agricultura, la medicina y quién sabe qué más."
+ },
  "bombing_aircraft": {
   "en": "Bombing Aircraft",
   "es": "Aviones de bombardeo"
+ },
+ "bombing_aircraft_desc": {
+  "en": "These aircraft have changed the face of warfare. Now we can drop bombs on enemy targets and [concept_infrastructure] from a great distance, which is a very effective way to make a point.",
+  "es": "Estos aviones han cambiado la faz de la guerra. Ahora podemos lanzar bombas sobre objetivos enemigos e [concept_infrastructure|l] desde una gran distancia, lo cual es una forma muy eficaz de hacerse entender."
  },
  "brain_computer_interfaces": {
   "en": "Brain-Computer Interfaces",
   "es": "Interfaces cerebro-ordenador"
  },
+ "brain_computer_interfaces_desc": {
+  "en": "We can now connect human brains directly to computers. This opens up amazing new possibilities for medicine, communication, and even enhancing our own abilities.",
+  "es": "Ahora podemos conectar cerebros humanos directamente a ordenadores. Esto abre nuevas y asombrosas posibilidades para la medicina, la comunicación e incluso la mejora de nuestras propias capacidades."
+ },
  "carbon_capture_and_storage": {
   "en": "Carbon Capture and Storage",
   "es": "Captura y almacenamiento de carbono"
+ },
+ "carbon_capture_and_storage_desc": {
+  "en": "Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.",
+  "es": "Captura de carbono en fuentes estacionarias y su almacenamiento, o su eliminación directa de la atmósfera. Desbloquea una captura en origen del 50%, la Planta de conversión de carbono con Captura directa del aire y el requisito tecnológico para la Eliminación fósil gestionada."
  },
  "cellular_networks": {
   "en": "Cellular Networks",
   "es": "Redes celulares"
  },
+ "cellular_networks_desc": {
+  "en": "The rise of cellular networks has meant we can now make phone calls from almost anywhere. This has changed the way we live and do business, for better or worse.",
+  "es": "El auge de las redes celulares ha permitido que ahora podamos hacer llamadas telefónicas desde casi cualquier lugar. Esto ha cambiado nuestra forma de vivir y de hacer negocios, para bien o para mal."
+ },
  "civil_rights_movement": {
   "en": "Civil Rights Movement",
   "es": "Movimiento por los derechos civiles"
+ },
+ "civil_rights_movement_desc": {
+  "en": "A movement aimed at ending racial segregation and [concept_discrimination]. It has fought for equal rights and opportunities for all, shaking the very foundations of society.",
+  "es": "Un movimiento dirigido a acabar con la segregación racial y la [concept_discrimination|l]. Ha luchado por la igualdad de derechos y oportunidades para todos y ha sacudido los cimientos mismos de la sociedad."
  },
  "clean_energy_technologies": {
   "en": "Clean Energy Technologies",
   "es": "Tecnologías de energía limpia"
  },
+ "clean_energy_technologies_desc": {
+  "en": "With solar panels and wind turbines, we can generate electricity without burning fossil fuels. This should help reduce our impact on the environment, assuming we can build enough of them.",
+  "es": "Con paneles solares y turbinas eólicas, podemos generar electricidad sin quemar combustibles fósiles. Esto debería ayudar a reducir nuestro impacto en el medio ambiente, suponiendo que podamos construir suficientes."
+ },
  "cloud_computing": {
   "en": "Cloud Computing",
   "es": "Computación en la nube"
+ },
+ "cloud_computing_desc": {
+  "en": "By delivering computing services over the internet, we can now store and process data on a massive scale. It's a flexible and powerful tool for businesses and individuals alike.",
+  "es": "Al prestar servicios informáticos a través de internet, ahora podemos almacenar y procesar datos a gran escala. Es una herramienta flexible y potente tanto para empresas como para particulares."
  },
  "combined_arms": {
   "en": "Combined Arms",
   "es": "Armas combinadas"
  },
+ "combined_arms_desc": {
+  "en": "By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.",
+  "es": "Al hacer que las distintas ramas del ejército trabajen juntas, podemos ser mucho más eficaces en combate. Cada general de ejército cuya formación despliegue al menos dos grupos de unidades distintos (infantería, artillería, caballería, tanques o aviación), cada uno de ellos con al menos un 5% de la formación, obtiene rasgos únicos de [concept_combined_arms|l] que otorgan bonificaciones de combate. Desplegar los cinco grupos en una misma formación desbloquea la bonificación definitiva de Dominio de espectro completo."
+ },
  "commercial_aviation": {
   "en": "Commercial Aviation",
   "es": "Aviación comercial"
+ },
+ "commercial_aviation_desc": {
+  "en": "The widespread use of airplanes for travel and cargo has made the world a much smaller place. Now we can get to the other side of the globe in a matter of hours, for a price.",
+  "es": "El uso generalizado de aviones para viajes y carga ha hecho del mundo un lugar mucho más pequeño. Ahora podemos llegar al otro lado del globo en cuestión de horas, eso sí, previo pago."
  },
  "compact_fusion_reactors": {
   "en": "Muon-Catalyzed Fusion Reactors",
   "es": "Reactores de fusión catalizada por muones"
  },
+ "compact_fusion_reactors_desc": {
+  "en": "These smaller, more efficient fusion reactors could be a game-changer. They promise to provide clean, cheap energy, if we can ever get them to work properly.",
+  "es": "Estos reactores de fusión, más pequeños y eficientes, podrían cambiar las reglas del juego. Prometen proporcionar energía limpia y barata, si es que algún día logramos que funcionen como es debido."
+ },
  "computer_aided_design": {
   "en": "Computer-Aided Design",
   "es": "Diseño asistido por ordenador"
+ },
+ "computer_aided_design_desc": {
+  "en": "CAD has revolutionized engineering and manufacturing. Now we can create more complex and accurate designs, all with the help of a computer.",
+  "es": "El diseño asistido por ordenador (CAD) ha revolucionado la ingeniería y la fabricación. Ahora podemos crear diseños más complejos y precisos, todo con la ayuda de un ordenador."
  },
  "computer_networks": {
   "en": "Computer Networks",
   "es": "Redes informáticas"
  },
+ "computer_networks_desc": {
+  "en": "By connecting computers together, we can share data and resources. This simple idea laid the groundwork for the modern internet and all that comes with it.",
+  "es": "Al conectar ordenadores entre sí, podemos compartir datos y recursos. Esta sencilla idea sentó las bases de la internet moderna y de todo lo que conlleva."
+ },
  "computing_machines": {
   "en": "Computing Machines",
   "es": "Máquinas de computación"
+ },
+ "computing_machines_desc": {
+  "en": "Early computers and calculating devices have changed the way we process information. They've automated all sorts of tasks and led to huge advancements in many fields.",
+  "es": "Los primeros ordenadores y dispositivos de cálculo han cambiado nuestra forma de procesar la información. Han automatizado todo tipo de tareas y han impulsado enormes avances en muchos campos."
  },
  "consumer_credit": {
   "en": "Consumer Credit",
   "es": "Crédito al consumo"
  },
+ "consumer_credit_desc": {
+  "en": "A system that lets people buy things they can't afford. It's great for the economy, as long as everyone remembers to pay their bills.",
+  "es": "Un sistema que permite a la gente comprar cosas que no puede permitirse. Es estupendo para la economía, siempre que todos se acuerden de pagar sus facturas."
+ },
  "containerization": {
   "en": "Containerization",
   "es": "Contenerización"
+ },
+ "containerization_desc": {
+  "en": "The simple act of putting goods in standardized containers has revolutionized global trade. Now we can move things around the world much more efficiently and cheaply.",
+  "es": "El simple hecho de meter las mercancías en contenedores normalizados ha revolucionado el comercio mundial. Ahora podemos mover cosas por todo el mundo de forma mucho más eficiente y barata."
  },
  "contraceptive_pill": {
   "en": "Contraceptive Pill",
   "es": "Píldora anticonceptiva"
  },
+ "contraceptive_pill_desc": {
+  "en": "This little pill has had a huge impact on society. By giving women more control over their fertility, it has played a key role in family planning and women's liberation.",
+  "es": "Esta pequeña píldora ha tenido un enorme impacto en la sociedad. Al dar a las mujeres más control sobre su fertilidad, ha desempeñado un papel clave en la planificación familiar y en la liberación de la mujer."
+ },
  "cryptography": {
   "en": "Cryptography",
   "es": "Criptografía"
+ },
+ "cryptography_desc": {
+  "en": "The art of writing and solving codes. It's a crucial tool for keeping our communications secret and for breaking into the enemy's.",
+  "es": "El arte de escribir y descifrar códigos. Es una herramienta fundamental para mantener en secreto nuestras comunicaciones y para infiltrarnos en las del enemigo."
  },
  "cyber_warfare": {
   "en": "Cyber Warfare",
   "es": "Ciberguerra"
  },
+ "cyber_warfare_desc": {
+  "en": "As our world becomes more digital, so does warfare. We're now developing the tools to attack and defend in cyberspace, a new and invisible battlefield.",
+  "es": "A medida que nuestro mundo se vuelve más digital, también lo hace la guerra. Estamos desarrollando las herramientas para atacar y defendernos en el ciberespacio, un campo de batalla nuevo e invisible."
+ },
  "cybersecurity": {
   "en": "Cybersecurity",
   "es": "Ciberseguridad"
+ },
+ "cybersecurity_desc": {
+  "en": "With our increasing reliance on digital technologies, we need new ways to protect ourselves from new threats. Cybersecurity is all about keeping our information and systems safe.",
+  "es": "Con nuestra creciente dependencia de las tecnologías digitales, necesitamos nuevas formas de protegernos de nuevas amenazas. La ciberseguridad consiste en mantener a salvo nuestra información y nuestros sistemas."
  },
  "decline_of_organized_religion": {
   "en": "Decline of Organized Religion",
   "es": "Declive de la religión organizada"
  },
+ "decline_of_organized_religion_desc": {
+  "en": "It seems that fewer people are finding solace in organized religion these days. This trend towards secularism is changing our social norms, values, and even how we see ourselves.",
+  "es": "Parece que cada vez menos personas encuentran consuelo en la religión organizada. Esta tendencia hacia el laicismo está cambiando nuestras normas sociales, nuestros valores e incluso la manera en que nos vemos a nosotros mismos."
+ },
+ "decolonization_desc": {
+  "en": "The dismantling of colonial empires has led to the birth of new nations and a redrawing of the world map. A messy but necessary process of change.",
+  "es": "El desmantelamiento de los imperios coloniales ha dado lugar al nacimiento de nuevas naciones y a un nuevo trazado del mapa mundial. Un proceso de cambio caótico pero necesario."
+ },
  "digital_education": {
   "en": "Digital Education",
   "es": "Educación digital"
+ },
+ "digital_education_desc": {
+  "en": "With online learning and multimedia resources, education is going digital. This could make learning more accessible and collaborative, if you have a good internet connection.",
+  "es": "Con el aprendizaje en línea y los recursos multimedia, la educación se está digitalizando. Esto podría hacer el aprendizaje más accesible y colaborativo, si tienes una buena conexión a internet."
  },
  "digital_entertainment": {
   "en": "Digital Entertainment",
   "es": "Entretenimiento digital"
  },
+ "digital_entertainment_desc": {
+  "en": "From video games to streaming services, digital entertainment is reshaping how we spend our leisure time. There are now more ways than ever to be entertained, or distracted.",
+  "es": "De los videojuegos a los servicios de streaming, el entretenimiento digital está transformando la manera en que pasamos nuestro tiempo libre. Hoy hay más formas que nunca de entretenerse, o de distraerse."
+ },
  "digital_telecommunications": {
   "en": "Digital Telecommunications",
   "es": "Telecomunicaciones digitales"
+ },
+ "digital_telecommunications_desc": {
+  "en": "The switch from analog to digital has made our communication systems much more efficient and versatile. Now we can enjoy clearer calls and faster data, most of the time.",
+  "es": "El paso de lo analógico a lo digital ha hecho que nuestros sistemas de comunicación sean mucho más eficientes y versátiles. Ahora podemos disfrutar de llamadas más nítidas y datos más rápidos, la mayor parte del tiempo."
  },
  "directed_energy_defenses": {
   "en": "Directed Energy Defenses",
   "es": "Defensas de energía dirigida"
  },
+ "directed_energy_defenses_desc": {
+  "en": "By using high-energy lasers, we can now shoot down incoming missiles and drones. It's a futuristic way to defend ourselves, and it looks impressive too.",
+  "es": "Con láseres de alta energía, ahora podemos derribar misiles y drones entrantes. Es una forma futurista de defendernos, y además causa buena impresión."
+ },
  "directed_energy_weapons": {
   "en": "Directed Energy Weapons",
   "es": "Armas de energía dirigida"
+ },
+ "directed_energy_weapons_desc": {
+  "en": "We can now use high-energy lasers and microwaves as weapons. They offer a new level of precision for targeting and neutralizing threats.",
+  "es": "Ahora podemos usar láseres y microondas de alta energía como armas. Ofrecen un nuevo nivel de precisión para localizar y neutralizar amenazas."
  },
  "e-commerce": {
   "en": "E-Commerce",
   "es": "Comercio electrónico"
  },
+ "e-commerce_desc": {
+  "en": "Thanks to the internet, we can now buy and sell goods from anywhere in the world. It's a convenient way to shop, and a great way for businesses to reach new customers.",
+  "es": "Gracias a internet, ahora podemos comprar y vender mercancías desde cualquier lugar del mundo. Es una forma cómoda de comprar y una gran manera de que las empresas lleguen a nuevos clientes."
+ },
  "early_nanotechnology": {
   "en": "Early Nanotechnology",
   "es": "Nanotecnología temprana"
+ },
+ "early_nanotechnology_desc": {
+  "en": "We're just beginning to manipulate materials at the atomic level. This early work in nanotechnology could lead to some incredible breakthroughs in the future.",
+  "es": "Apenas estamos empezando a manipular materiales a nivel atómico. Estos primeros trabajos de nanotecnología podrían conducir a avances increíbles en el futuro."
  },
  "electric_vehicles": {
   "en": "Electric Vehicles",
   "es": "Vehículos eléctricos"
  },
+ "electric_vehicles_desc": {
+  "en": "Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.",
+  "es": "Los motores eléctricos de batería superan a la combustión interna en el transporte de pasajeros. La infraestructura de carga, el frenado regenerativo y las cadenas de suministro de tierras raras transforman la fabricación de automóviles."
+ },
  "electronic_warfare": {
   "en": "Electronic Warfare",
   "es": "Guerra electrónica"
+ },
+ "electronic_warfare_desc": {
+  "en": "By disrupting enemy communications and radar, we can gain a significant advantage in battle. Electronic warfare is a new and subtle way to fight.",
+  "es": "Al interrumpir las comunicaciones y el radar del enemigo, podemos obtener una ventaja considerable en la batalla. La guerra electrónica es una forma de combatir nueva y sutil."
  },
  "environmental_movement": {
   "en": "Environmental Movement",
   "es": "Movimiento ecologista"
  },
+ "environmental_movement_desc": {
+  "en": "A movement dedicated to protecting our planet. It raises awareness about ecological issues and pushes for more sustainable ways of living.",
+  "es": "Un movimiento dedicado a proteger nuestro planeta. Sensibiliza sobre los problemas ecológicos y presiona a favor de formas de vida más sostenibles."
+ },
  "fiber_optics": {
   "en": "Fiber Optics",
   "es": "Fibra óptica"
+ },
+ "fiber_optics_desc": {
+  "en": "By sending data as pulses of light through thin glass strands, we can have faster and more efficient communication networks. It's the backbone of our modern digital world.",
+  "es": "Al enviar datos como pulsos de luz a través de finas hebras de vidrio, podemos tener redes de comunicación más rápidas y eficientes. Es la columna vertebral de nuestro mundo digital moderno."
  },
  "fluorescent_lamps": {
   "en": "Fluorescent Lamps",
   "es": "Lámparas fluorescentes"
  },
+ "fluorescent_lamps_desc": {
+  "en": "These new lamps are much more efficient than the old arc lamps. They've made electrical lighting more widespread, and our cities a lot brighter.",
+  "es": "Estas nuevas lámparas son mucho más eficientes que las antiguas lámparas de arco. Han extendido el alumbrado eléctrico y han hecho nuestras ciudades mucho más luminosas."
+ },
  "fusion_batteries": {
   "en": "Fusion Batteries",
   "es": "Baterías de fusión"
+ },
+ "fusion_batteries_desc": {
+  "en": "Imagine a battery that never needs to be recharged. These compact fusion reactors could power our devices and vehicles for years, revolutionizing energy as we know it.",
+  "es": "Imagina una batería que nunca necesita recargarse. Estos reactores de fusión compactos podrían alimentar nuestros dispositivos y vehículos durante años y revolucionar la energía tal y como la conocemos."
  },
  "fusion_power": {
   "en": "Fusion Power",
   "es": "Energía de fusión"
  },
+ "fusion_power_desc": {
+  "en": "If we can harness the power of nuclear fusion, we could have a nearly limitless source of clean energy. It's the holy grail of energy production, but it's not quite here yet.",
+  "es": "Si logramos aprovechar la energía de la fusión nuclear, podríamos disponer de una fuente casi ilimitada de energía limpia. Es el santo grial de la producción de energía, pero todavía no está del todo a nuestro alcance."
+ },
  "gene_splicing": {
   "en": "Gene Splicing",
   "es": "Empalme de genes"
+ },
+ "gene_splicing_desc": {
+  "en": "By cutting and pasting DNA, we can now manipulate the very building blocks of life. This has opened up new possibilities for medicine and agriculture, as well as a host of ethical dilemmas.",
+  "es": "Cortando y pegando ADN, ahora podemos manipular los mismísimos componentes básicos de la vida. Esto ha abierto nuevas posibilidades para la medicina y la agricultura, además de una multitud de dilemas éticos."
  },
  "generative_ai": {
   "en": "Generative AI",
   "es": "IA generativa"
  },
+ "generative_ai_desc": {
+  "en": "We now have AI that can create original content, from images to music to text. It's a powerful new tool for creativity, and it's getting better all the time.",
+  "es": "Ya contamos con una IA capaz de crear contenido original, desde imágenes hasta música y texto. Es una nueva y poderosa herramienta para la creatividad, y mejora cada día."
+ },
  "genetic_engineering": {
   "en": "Genetic Engineering",
   "es": "Ingeniería genética"
+ },
+ "genetic_engineering_desc": {
+  "en": "By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.",
+  "es": "Manipulando los genes de los organismos, podemos desarrollar nuevos tratamientos médicos y mejorar nuestros cultivos. Es una tecnología poderosa, pero que debemos manejar con cuidado."
  },
  "globalization": {
   "en": "Globalization",
   "es": "Globalización"
  },
+ "globalization_desc": {
+  "en": "The world is becoming more and more interconnected. This acceleration of trade, communication, and cultural exchange is bringing us closer together, for better or for worse.",
+  "es": "El mundo está cada vez más interconectado. Esta aceleración del comercio, la comunicación y el intercambio cultural nos acerca unos a otros, para bien o para mal."
+ },
  "green_revolution": {
   "en": "Green Revolution",
   "es": "Revolución verde"
+ },
+ "green_revolution_desc": {
+  "en": "A series of technological innovations in agriculture that have led to a huge increase in food production. It has helped to feed a growing world, but not without its own set of problems.",
+  "es": "Una serie de innovaciones tecnológicas en la agricultura que han provocado un enorme aumento de la producción de alimentos. Ha ayudado a alimentar a un mundo en crecimiento, aunque no sin sus propios problemas."
  },
  "guided_missiles": {
   "en": "Guided Missiles",
   "es": "Misiles guiados"
  },
+ "guided_missiles_desc": {
+  "en": "Now our missiles can find their own way to the target. This makes them much more accurate and effective, which is bad news for the enemy.",
+  "es": "Ahora nuestros misiles pueden encontrar por sí solos el camino hacia el objetivo. Esto los hace mucho más precisos y eficaces, lo cual son malas noticias para el enemigo."
+ },
  "hydraulic_fracturing": {
   "en": "Hydraulic Fracturing",
   "es": "Fracturación hidráulica"
+ },
+ "hydraulic_fracturing_desc": {
+  "en": "A controversial but effective way to extract natural gas and oil from underground. It's a boon for the energy industry, but not so much for the environment.",
+  "es": "Una forma controvertida pero eficaz de extraer gas natural y petróleo del subsuelo. Es una bendición para el sector energético, pero no tanto para el medio ambiente."
  },
  "hypersonic_weapons": {
   "en": "Hypersonic Weapons",
   "es": "Armas hipersónicas"
  },
+ "hypersonic_weapons_desc": {
+  "en": "Weapons that can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for our existing defense systems.",
+  "es": "Armas capaces de viajar a más de cinco veces la velocidad del sonido. Son increíblemente rápidas y precisas, y un verdadero quebradero de cabeza para nuestros sistemas de defensa actuales."
+ },
  "inertial_navigation_systems": {
   "en": "Inertial Navigation Systems",
   "es": "Sistemas de navegación inercial"
+ },
+ "inertial_navigation_systems_desc": {
+  "en": "Using gyroscopes and accelerometers, these systems can guide vehicles with incredible accuracy. They're especially useful for planes and ships, helping them to stay on course.",
+  "es": "Mediante giroscopios y acelerómetros, estos sistemas pueden guiar vehículos con una precisión increíble. Son especialmente útiles para aviones y barcos, ya que los ayudan a mantener el rumbo."
  },
  "infrared_night_vision": {
   "en": "Infrared Night Vision",
   "es": "Visión nocturna infrarroja"
  },
+ "infrared_night_vision_desc": {
+  "en": "This technology allows us to see in the dark. It has changed the way we conduct military and security operations, turning night into day.",
+  "es": "Esta tecnología nos permite ver en la oscuridad. Ha cambiado la forma en que realizamos las operaciones militares y de seguridad, y convierte la noche en día."
+ },
  "integrated_circuits": {
   "en": "Integrated Circuits",
   "es": "Circuitos integrados"
+ },
+ "integrated_circuits_desc": {
+  "en": "By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.",
+  "es": "Al colocar muchos componentes electrónicos en un único chip, podemos hacer que nuestros dispositivos sean más pequeños, más rápidos y más potentes. Es el secreto de nuestra electrónica moderna."
  },
  "intergovernmental_organizations": {
   "en": "Intergovernmental Organizations",
   "es": "Organizaciones intergubernamentales"
  },
+ "intergovernmental_organizations_desc": {
+  "en": "Formal organizations where countries can collaborate on specific issues. They're supposed to promote cooperation and make things more efficient, though that's not always the case.",
+  "es": "Organizaciones formales en las que los países pueden colaborar en asuntos concretos. Se supone que fomentan la cooperación y hacen las cosas más eficientes, aunque no siempre es así."
+ },
  "internet_of_things": {
   "en": "Internet of Things",
   "es": "Internet de las cosas"
+ },
+ "internet_of_things_desc": {
+  "en": "Embedded sensors and connected devices weave a digital layer over physical [concept_infrastructure], generating continuous telemetry on factories, farms, transport, and homes.",
+  "es": "Los sensores integrados y los dispositivos conectados tejen una capa digital sobre las [concept_infrastructure|l] físicas, y generan telemetría continua de fábricas, granjas, transportes y hogares."
  },
  "isoprene": {
   "en": "Isoprene",
   "es": "Isopreno"
  },
+ "isoprene_desc": {
+  "en": "A key ingredient in the production of synthetic rubber. It's a versatile material that's used in everything from tires to footwear.",
+  "es": "Un ingrediente clave en la producción de caucho sintético. Es un material versátil que se usa en todo, desde neumáticos hasta calzado."
+ },
  "jadc2": {
   "en": "Joint All-Domain Command and Control (JADC2)",
   "es": "Mando y control conjunto en todos los dominios (JADC2)"
+ },
+ "jadc2_desc": {
+  "en": "A military concept that aims to connect all of our forces across every domain. It's designed to improve our situational awareness and decision-making, making us a more effective fighting force.",
+  "es": "Un concepto militar que pretende conectar todas nuestras fuerzas en todos los dominios. Está diseñado para mejorar nuestra conciencia situacional y nuestra toma de decisiones, y hacer de nosotros una fuerza de combate más eficaz."
  },
  "jet_engine_technology": {
   "en": "Jet Engine Technology",
   "es": "Tecnología de motores a reacción"
  },
+ "jet_engine_technology_desc": {
+  "en": "The jet engine has revolutionized aviation. It has allowed us to fly faster, farther, and higher than ever before, changing the face of both military and commercial air travel.",
+  "es": "El motor a reacción ha revolucionado la aviación. Nos ha permitido volar más rápido, más lejos y más alto que nunca, y ha cambiado la faz tanto del transporte aéreo militar como del comercial."
+ },
  "keynesian_economics": {
   "en": "Keynesian Economics",
   "es": "Economía keynesiana"
+ },
+ "keynesian_economics_desc": {
+  "en": "An economic theory that advocates for government intervention to manage the economy. It's all about using public spending to stimulate growth and reduce unemployment, a popular idea in times of crisis.",
+  "es": "Una teoría económica que defiende la intervención del gobierno para gestionar la economía. Se trata de usar el gasto público para estimular el crecimiento y reducir el desempleo, una idea popular en tiempos de crisis."
  },
  "knowledge_economy": {
   "en": "Knowledge Economy",
   "es": "Economía del conocimiento"
  },
+ "knowledge_economy_desc": {
+  "en": "In this new economy, knowledge is the most valuable commodity. The creation and use of information are now the main drivers of growth, which means we all need to be a bit smarter.",
+  "es": "En esta nueva economía, el conocimiento es la mercancía más valiosa. La creación y el uso de la información son ahora los principales motores del crecimiento, lo que significa que todos tenemos que ser un poco más listos."
+ },
  "lab-grown_food": {
   "en": "Lab-Grown Food",
   "es": "Alimentos cultivados en laboratorio"
+ },
+ "lab-grown_food_desc": {
+  "en": "We can now grow food in a lab, from cultured meat to other synthetic products. It could be a more sustainable and ethical way to feed the world, if people are willing to eat it.",
+  "es": "Ahora podemos cultivar alimentos en un laboratorio, desde carne cultivada hasta otros productos sintéticos. Podría ser una manera más sostenible y ética de alimentar al mundo, si la gente está dispuesta a comerlos."
  },
  "laser_technology": {
   "en": "Laser Technology",
   "es": "Tecnología láser"
  },
+ "laser_technology_desc": {
+  "en": "The laser has found its way into all sorts of applications, from telecommunications to medicine to manufacturing. It's a precise and powerful tool with a seemingly endless number of uses.",
+  "es": "El láser se ha abierto paso en todo tipo de aplicaciones, desde las telecomunicaciones hasta la medicina y la fabricación. Es una herramienta precisa y potente con un número aparentemente infinito de usos."
+ },
  "machine_learning": {
   "en": "Machine Learning",
   "es": "Aprendizaje automático"
+ },
+ "machine_learning_desc": {
+  "en": "We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful.",
+  "es": "Ahora podemos construir ordenadores capaces de aprender de los datos. Esto ha dado lugar a una multitud de nuevas tecnologías y aplicaciones, y no hará más que ganar potencia."
  },
  "mainframe_computers": {
   "en": "Mainframe Computers",
   "es": "Ordenadores centrales"
  },
+ "mainframe_computers_desc": {
+  "en": "These large, powerful computers are the workhorses of big business and government. They're reliable and can handle massive amounts of data, making them essential for large-scale operations.",
+  "es": "Estos ordenadores grandes y potentes son los caballos de batalla de las grandes empresas y del gobierno. Son fiables y pueden manejar cantidades masivas de datos, lo que los hace esenciales para las operaciones a gran escala."
+ },
  "marketing_research": {
   "en": "Marketing Research",
   "es": "Investigación de mercados"
+ },
+ "marketing_research_desc": {
+  "en": "By studying what consumers want, businesses can create more effective advertising and better products. It's all about understanding people's desires, and then selling them back to them.",
+  "es": "Al estudiar lo que quieren los consumidores, las empresas pueden crear una publicidad más eficaz y mejores productos. Todo consiste en entender los deseos de la gente y luego vendérselos de vuelta."
  },
  "mass_media": {
   "en": "Mass Media",
   "es": "Medios de comunicación de masas"
  },
+ "mass_media_desc": {
+  "en": "Through various platforms, we can now spread information, entertainment, and news to a massive audience. This gives the media a powerful influence over public opinion and culture.",
+  "es": "A través de diversas plataformas, ahora podemos difundir información, entretenimiento y noticias a una audiencia masiva. Esto da a los medios de comunicación una poderosa influencia sobre la opinión pública y la cultura."
+ },
  "mental_health_awareness": {
   "en": "Mental Health Awareness",
   "es": "Concienciación sobre la salud mental"
+ },
+ "mental_health_awareness_desc": {
+  "en": "We're finally starting to understand the importance of mental well-being. This increased awareness is leading to better care, less stigma, and new ways to support those who are struggling.",
+  "es": "Por fin estamos empezando a comprender la importancia del bienestar mental. Esta mayor concienciación está dando lugar a una mejor atención, menos estigma y nuevas formas de apoyar a quienes tienen dificultades."
  },
  "microprocessor": {
   "en": "Microprocessor",
   "es": "Microprocesador"
  },
+ "microprocessor_desc": {
+  "en": "This tiny chip is the brain of our modern computers and electronic devices. Its invention has led to an explosion of technological innovation, changing the world in countless ways.",
+  "es": "Este diminuto chip es el cerebro de nuestros ordenadores y dispositivos electrónicos modernos. Su invención ha provocado una explosión de innovación tecnológica y ha cambiado el mundo de incontables maneras."
+ },
  "military_grade_cybersecurity": {
   "en": "Military-Grade Cybersecurity",
   "es": "Ciberseguridad de grado militar"
+ },
+ "military_grade_cybersecurity_desc": {
+  "en": "We're developing advanced techniques to protect our most sensitive information and systems from cyber threats. In the digital age, a strong defense is more important than ever.",
+  "es": "Estamos desarrollando técnicas avanzadas para proteger nuestra información y nuestros sistemas más sensibles de las ciberamenazas. En la era digital, una defensa sólida es más importante que nunca."
  },
  "mind_backups": {
   "en": "Mind Backups",
   "es": "Copias de seguridad mentales"
  },
+ "mind_backups_desc": {
+  "en": "The ability to store our memories and consciousness in digital form. It's a path to a kind of immortality, allowing us to live on long after our physical bodies have failed.",
+  "es": "La capacidad de almacenar nuestros recuerdos y nuestra conciencia en forma digital. Es un camino hacia una especie de inmortalidad, que nos permite seguir viviendo mucho después de que nuestros cuerpos físicos hayan fallado."
+ },
  "missile_defense_systems": {
   "en": "Missile Defense Systems",
   "es": "Sistemas de defensa antimisiles"
+ },
+ "missile_defense_systems_desc": {
+  "en": "With anti-ballistic missiles and laser interceptors, we can now defend against incoming missile attacks. This should improve our security and strategic stability, in theory.",
+  "es": "Con misiles antibalísticos e interceptores láser, ahora podemos defendernos de los ataques con misiles entrantes. Esto debería mejorar nuestra seguridad y estabilidad estratégica, en teoría."
  },
  "modern_automotive_technology": {
   "en": "Advanced Automotive Production Techniques",
   "es": "Técnicas avanzadas de producción automovilística"
  },
+ "modern_automotive_technology_desc": {
+  "en": "By combining precision machining with modern features like coil spring suspension and electric starters, we're making our cars more comfortable and reliable than ever before.",
+  "es": "Al combinar el mecanizado de precisión con prestaciones modernas como la suspensión de muelles helicoidales y los motores de arranque eléctricos, hacemos nuestros coches más cómodos y fiables que nunca."
+ },
  "modern_chemical_processes": {
   "en": "Modern Chemical Processes",
   "es": "Procesos químicos modernos"
+ },
+ "modern_chemical_processes_desc": {
+  "en": "New processes like the Ostwald and Haber methods have revolutionized the chemical industry. We can now produce important chemicals and synthetic materials on a massive scale.",
+  "es": "Nuevos procesos como los métodos de Ostwald y de Haber han revolucionado la industria química. Ahora podemos producir a gran escala productos químicos importantes y materiales sintéticos."
  },
  "modern_management_techniques": {
   "en": "Modern Management Techniques",
   "es": "Técnicas de gestión modernas"
  },
+ "modern_management_techniques_desc": {
+  "en": "New ways of organizing and managing our businesses and institutions are leading to greater efficiency and productivity. It's all about working smarter, not harder.",
+  "es": "Las nuevas formas de organizar y gestionar nuestras empresas e instituciones conducen a una mayor eficiencia y productividad. Se trata de trabajar de forma más inteligente, no más dura."
+ },
  "modern_material_science": {
   "en": "Modern Material Science",
   "es": "Ciencia de materiales moderna"
+ },
+ "modern_material_science_desc": {
+  "en": "From graphene to metamaterials, we're creating new substances with unique properties. These advanced materials are set to revolutionize everything from electronics to aerospace.",
+  "es": "Del grafeno a los metamateriales, estamos creando nuevas sustancias con propiedades únicas. Estos materiales avanzados están llamados a revolucionar todo, desde la electrónica hasta la industria aeroespacial."
  },
  "modern_materials": {
   "en": "Modern Materials",
   "es": "Materiales modernos"
  },
+ "modern_materials_desc": {
+  "en": "New materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what we had before. They've changed the way we build and manufacture things.",
+  "es": "Nuevos materiales como la fibra de vidrio, el nailon y el teflón son más resistentes, ligeros y versátiles que los que teníamos antes. Han cambiado la forma en que construimos y fabricamos las cosas."
+ },
  "modern_pharmaceuticals": {
   "en": "Modern Pharmaceuticals",
   "es": "Productos farmacéuticos modernos"
+ },
+ "modern_pharmaceuticals_desc": {
+  "en": "With new drugs and vaccines, we've made huge strides in public health. People are living longer, healthier lives, all thanks to the miracles of modern medicine.",
+  "es": "Con nuevos fármacos y vacunas, hemos dado enormes pasos en la salud pública. La gente vive más y con mejor salud, todo gracias a los milagros de la medicina moderna."
  },
  "modern_skyscrapers": {
   "en": "Modern Skyscrapers",
   "es": "Rascacielos modernos"
  },
+ "modern_skyscrapers_desc": {
+  "en": "Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.",
+  "es": "Gracias a los nuevos diseños arquitectónicos y materiales, ahora podemos construir edificios más altos e impresionantes. Estos rascacielos se han convertido en símbolos de nuestro mundo moderno y urbano."
+ },
  "modern_tools": {
   "en": "Modern Tools",
   "es": "Herramientas modernas"
+ },
+ "modern_tools_desc": {
+  "en": "Tools like forklifts have made our workplaces more efficient and safer. They've improved productivity and reduced the number of accidents, which is good for everyone.",
+  "es": "Herramientas como las carretillas elevadoras han hecho nuestros lugares de trabajo más eficientes y seguros. Han mejorado la productividad y reducido el número de accidentes, lo que beneficia a todos."
  },
  "modern_urban_planning": {
   "en": "Modern Urban Planning",
   "es": "Planificación urbana moderna"
  },
+ "modern_urban_planning_desc": {
+  "en": "By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.",
+  "es": "Planificando nuestras ciudades de forma más sistemática, podemos crear lugares más eficientes, sostenibles y agradables para vivir. Es una manera de poner algo de orden en el caos del crecimiento urbano."
+ },
  "modern_vaccines": {
   "en": "Modern Vaccines",
   "es": "Vacunas modernas"
+ },
+ "modern_vaccines_desc": {
+  "en": "Vaccines for diseases like diphtheria, tetanus, and tuberculosis have saved countless lives. They're a cornerstone of public health, protecting us from some of the world's most deadly diseases.",
+  "es": "Las vacunas contra enfermedades como la difteria, el tétanos y la tuberculosis han salvado incontables vidas. Son una piedra angular de la salud pública y nos protegen de algunas de las enfermedades más mortales del mundo."
  },
  "molecular_assemblers": {
   "en": "Molecular Assemblers",
   "es": "Ensambladores moleculares"
  },
+ "molecular_assemblers_desc": {
+  "en": "Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.",
+  "es": "Imagina máquinas capaces de construir cosas átomo a átomo. Estos ensambladores moleculares podrían crear bienes muy personalizados con una precisión increíble y cambiar la naturaleza misma de la fabricación."
+ },
  "motorized_artillery": {
   "en": "Motorized Artillery",
   "es": "Artillería motorizada"
+ },
+ "motorized_artillery_desc": {
+  "en": "By putting our artillery on wheels, we've made it much more mobile and effective. Now our big guns can keep up with the rest of our ground forces.",
+  "es": "Al montar nuestra artillería sobre ruedas, la hemos hecho mucho más móvil y eficaz. Ahora nuestros cañones pesados pueden seguir el ritmo del resto de nuestras fuerzas terrestres."
  },
  "mrna_therapeutics": {
   "en": "mRNA Therapeutics",
   "es": "Terapias de ARNm"
  },
+ "mrna_therapeutics_desc": {
+  "en": "Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.",
+  "es": "La administración mediante nanopartículas lipídicas de ARNm sintético permite vacunas de respuesta rápida y terapias génicas. Los plazos de respuesta ante brotes pasan de años a meses."
+ },
  "naval_convoy_defense": {
   "en": "Naval Convoy Defense",
   "es": "Defensa de convoyes navales"
+ },
+ "naval_convoy_defense_desc": {
+  "en": "New strategies and technologies are making our naval convoys safer. It's all about protecting the ships that carry our vital goods and personnel across the seas.",
+  "es": "Nuevas estrategias y tecnologías hacen más seguros nuestros convoyes navales. Todo se reduce a proteger los barcos que transportan nuestros bienes y personal vitales a través de los mares."
  },
  "naval_fire_control_systems": {
   "en": "Naval Fire Control Systems",
   "es": "Sistemas navales de control de tiro"
  },
+ "naval_fire_control_systems_desc": {
+  "en": "Advanced systems for targeting and coordinating naval gunfire. They make our ships' weapons more accurate and deadly, which is always a plus in a [concept_naval_battle].",
+  "es": "Sistemas avanzados para apuntar y coordinar el fuego naval. Hacen más precisas y letales las armas de nuestros barcos, lo cual siempre es una ventaja en una [concept_naval_battle|l]."
+ },
  "network_centric_warfare": {
   "en": "Network Centric Warfare",
   "es": "Guerra centrada en red"
+ },
+ "network_centric_warfare_desc": {
+  "en": "By connecting all of our forces through advanced communication systems, we can improve our situational awareness and decision-making. It's a new way of fighting that leverages the power of information.",
+  "es": "Al conectar todas nuestras fuerzas mediante sistemas de comunicación avanzados, podemos mejorar nuestra conciencia situacional y nuestra toma de decisiones. Es una nueva forma de combatir que aprovecha el poder de la información."
  },
  "neural_lace": {
   "en": "Neural Lace",
   "es": "Encaje neuronal"
  },
+ "neural_lace_desc": {
+  "en": "A brain-computer interface that allows for a seamless connection between our minds and digital devices. It could enhance our cognitive abilities and give us direct control over technology.",
+  "es": "Una interfaz cerebro-ordenador que permite una conexión fluida entre nuestras mentes y los dispositivos digitales. Podría potenciar nuestras capacidades cognitivas y darnos control directo sobre la tecnología."
+ },
  "nuclear_energy": {
   "en": "Nuclear Energy",
   "es": "Energía nuclear"
+ },
+ "nuclear_energy_desc": {
+  "en": "By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.",
+  "es": "Al aprovechar la energía de las reacciones nucleares, hemos encontrado una nueva y potente fuente de energía. Ha impulsado nuestras industrias y reducido nuestra dependencia de los combustibles fósiles, pero conlleva sus propios riesgos."
  },
  "nuclear_weapons": {
   "en": "Nuclear Weapons",
   "es": "Armas nucleares"
  },
+ "nuclear_weapons_desc": {
+  "en": "The atomic bomb has changed the world forever. These incredibly powerful weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics.",
+  "es": "La bomba atómica ha cambiado el mundo para siempre. Estas armas increíblemente poderosas han alterado de forma fundamental la naturaleza de la guerra y han inaugurado una nueva era de política global."
+ },
  "orbital_manufacturing": {
   "en": "Orbital Manufacturing",
   "es": "Fabricación orbital"
+ },
+ "orbital_manufacturing_desc": {
+  "en": "The unique environment of space allows us to create materials and products that are impossible to make on Earth. Orbital manufacturing could be the key to our future in space.",
+  "es": "El entorno único del espacio nos permite crear materiales y productos imposibles de fabricar en la Tierra. La fabricación orbital podría ser la clave de nuestro futuro en el espacio."
  },
  "orbital_weapon_platforms": {
   "en": "Orbital Weapon Platforms",
   "es": "Plataformas de armas orbitales"
  },
+ "orbital_weapon_platforms_desc": {
+  "en": "By placing weapons in space, we can have a global strike capability and a constant eye on our enemies. It's the ultimate high ground in modern warfare.",
+  "es": "Al colocar armas en el espacio, podemos disponer de una capacidad de ataque global y de un ojo constante sobre nuestros enemigos. Es el terreno elevado definitivo de la guerra moderna."
+ },
  "personal_appliances": {
   "en": "Personal Appliances",
   "es": "Electrodomésticos personales"
+ },
+ "personal_appliances_desc": {
+  "en": "Refrigerators, washing machines, and air conditioners have made our lives much more comfortable and efficient. They've automated many of our daily chores, giving us more time for other things.",
+  "es": "Los frigoríficos, las lavadoras y los aparatos de aire acondicionado han hecho nuestra vida mucho más cómoda y eficiente. Han automatizado muchas de nuestras tareas cotidianas y nos dejan más tiempo para otras cosas."
  },
  "personal_computers": {
   "en": "Personal Computers",
   "es": "Ordenadores personales"
  },
+ "personal_computers_desc": {
+  "en": "The personal computer has brought the power of digital technology to the masses. It has changed the way we work, learn, and communicate, opening up a world of new possibilities.",
+  "es": "El ordenador personal ha llevado el poder de la tecnología digital a las masas. Ha cambiado la forma en que trabajamos, aprendemos y nos comunicamos, y ha abierto un mundo de nuevas posibilidades."
+ },
  "personalized_medicine": {
   "en": "Personalized Medicine",
   "es": "Medicina personalizada"
+ },
+ "personalized_medicine_desc": {
+  "en": "By tailoring medical treatments to individual patients, we can make them more effective. It's a new approach to healthcare that takes into account our unique genetic and lifestyle factors.",
+  "es": "Al adaptar los tratamientos médicos a cada paciente, podemos hacerlos más eficaces. Es un nuevo enfoque de la atención sanitaria que tiene en cuenta nuestros factores genéticos y de estilo de vida únicos."
  },
  "photocopiers": {
   "en": "Photocopiers",
   "es": "Fotocopiadoras"
  },
+ "photocopiers_desc": {
+  "en": "The ability to quickly and easily make copies of documents has streamlined office work and improved productivity. It's a simple but essential tool in the modern workplace.",
+  "es": "La posibilidad de hacer copias de documentos de forma rápida y sencilla ha agilizado el trabajo de oficina y mejorado la productividad. Es una herramienta simple pero esencial en el lugar de trabajo moderno."
+ },
  "plastic_mass_production": {
   "en": "Plastic Mass Production",
   "es": "Producción en serie de plástico"
+ },
+ "plastic_mass_production_desc": {
+  "en": "The mass production of plastic has given us a wide range of new, lightweight, and durable products. It has also given us a massive environmental problem to deal with.",
+  "es": "La producción en serie de plástico nos ha dado una amplia gama de productos nuevos, ligeros y duraderos. También nos ha dado un enorme problema medioambiental con el que lidiar."
  },
  "pollution_control": {
   "en": "Pollution Control",
   "es": "Control de la contaminación"
  },
+ "pollution_control_desc": {
+  "en": "We're finally starting to clean up our act. By managing [concept_pollution_system] from our industries and cars, we can improve our air and water quality and protect public health.",
+  "es": "Por fin estamos empezando a hacer limpieza. Al gestionar la [concept_pollution_system|l] de nuestras industrias y coches, podemos mejorar la calidad del aire y del agua y proteger la salud pública."
+ },
  "pop_culture": {
   "en": "Pop Culture",
   "es": "Cultura pop"
+ },
+ "pop_culture_desc": {
+  "en": "From music and movies to fashion and fads, pop culture has a powerful influence on our society. It shapes our trends, our values, and even how we see the world.",
+  "es": "De la música y el cine a la moda y las manías pasajeras, la cultura pop ejerce una poderosa influencia en nuestra sociedad. Moldea nuestras tendencias, nuestros valores e incluso la forma en que vemos el mundo."
  },
  "post-scarcity_economy": {
   "en": "Post-Scarcity Economy",
   "es": "Economía de la posescasez"
  },
+ "post-scarcity_economy_desc": {
+  "en": "What if we lived in a world where there was enough for everyone? A post-scarcity economy, made possible by advanced technology, could eliminate material want and redefine the very meaning of work.",
+  "es": "¿Y si viviéramos en un mundo en el que hubiera suficiente para todos? Una economía de la posescasez, hecha posible por la tecnología avanzada, podría eliminar la carencia material y redefinir el significado mismo del trabajo."
+ },
  "precision_guided_munitions": {
   "en": "Precision Guided Munitions",
   "es": "Municiones de precisión guiada"
+ },
+ "precision_guided_munitions_desc": {
+  "en": "Smart bombs and cruise missiles can now hit their targets with incredible accuracy. This makes our military strikes more effective and reduces collateral damage, at least in theory.",
+  "es": "Las bombas inteligentes y los misiles de crucero ya pueden alcanzar sus objetivos con una precisión increíble. Esto hace más eficaces nuestros ataques militares y reduce los daños colaterales, al menos en teoría."
  },
  "predictive_logistics": {
   "en": "Predictive Logistics",
   "es": "Logística predictiva"
  },
+ "predictive_logistics_desc": {
+  "en": "By using data to forecast our supply chain needs, we can make our logistics more efficient and less costly. It's a smarter way to get things where they need to go.",
+  "es": "Al utilizar datos para prever las necesidades de nuestra cadena de suministro, podemos hacer nuestra logística más eficiente y menos costosa. Es una manera más inteligente de hacer llegar las cosas adonde tienen que ir."
+ },
  "prefabricated_construction": {
   "en": "Prefabricated Construction",
   "es": "Construcción prefabricada"
+ },
+ "prefabricated_construction_desc": {
+  "en": "Standardized prefab building components - concrete panels, steel-frame modules, modular bathroom pods - slash construction time for housing, hospitals, and military bases. Postwar reconstruction speed defines the era.",
+  "es": "Los componentes de construcción prefabricados y normalizados (paneles de hormigón, módulos con estructura de acero, cabinas de baño modulares) reducen drásticamente el tiempo de construcción de viviendas, hospitales y bases militares. La velocidad de la reconstrucción de posguerra define la época."
  },
  "programmable_matter": {
   "en": "Programmable Matter",
   "es": "Materia programable"
  },
+ "programmable_matter_desc": {
+  "en": "Imagine materials that can change their shape, color, or texture on command. Programmable matter could be the next great leap in materials science, with endless possibilities.",
+  "es": "Imagina materiales capaces de cambiar de forma, color o textura bajo demanda. La materia programable podría ser el próximo gran salto de la ciencia de los materiales, con posibilidades infinitas."
+ },
  "public_works_programs": {
   "en": "Public Works Programs",
   "es": "Programas de obras públicas"
+ },
+ "public_works_programs_desc": {
+  "en": "Government-funded projects to build [concept_infrastructure] and improve public utilities. They're a way to stimulate the economy and create jobs, especially in tough times.",
+  "es": "Proyectos financiados por el gobierno para construir [concept_infrastructure|l] y mejorar los servicios públicos. Son una forma de estimular la economía y crear empleo, sobre todo en tiempos difíciles."
  },
  "quantum_communications": {
   "en": "Quantum Communications",
   "es": "Comunicaciones cuánticas"
  },
+ "quantum_communications_desc": {
+  "en": "Quantum technology can provide us with unbreakable channels for communication. It's the ultimate in secure messaging, protecting our most sensitive information from prying eyes.",
+  "es": "La tecnología cuántica puede proporcionarnos canales de comunicación inviolables. Es lo último en mensajería segura y protege nuestra información más sensible de miradas indiscretas."
+ },
  "quantum_computing": {
   "en": "Quantum Computing",
   "es": "Computación cuántica"
+ },
+ "quantum_computing_desc": {
+  "en": "By harnessing the strange principles of quantum mechanics, we can build computers that are far more powerful than anything we have today. They could solve some of the world's most complex problems.",
+  "es": "Al aprovechar los extraños principios de la mecánica cuántica, podemos construir ordenadores mucho más potentes que cualquiera de los que tenemos hoy. Podrían resolver algunos de los problemas más complejos del mundo."
  },
  "quantum_materials": {
   "en": "Quantum Materials",
   "es": "Materiales cuánticos"
  },
+ "quantum_materials_desc": {
+  "en": "Engineered substances with unique quantum properties. These materials could lead to breakthroughs in energy, computing, and telecommunications, changing the world as we know it.",
+  "es": "Sustancias de ingeniería con propiedades cuánticas únicas. Estos materiales podrían conducir a avances en energía, computación y telecomunicaciones, y cambiar el mundo tal como lo conocemos."
+ },
  "radar": {
   "en": "Radar",
   "es": "Radar"
+ },
+ "radar_desc": {
+  "en": "This technology allows us to detect objects at a great distance, even when we can't see them. It has been a crucial tool in military aviation and many other fields.",
+  "es": "Esta tecnología nos permite detectar objetos a gran distancia, incluso cuando no podemos verlos. Ha sido una herramienta crucial en la aviación militar y en muchos otros campos."
  },
  "rapid_deployment_forces": {
   "en": "Rapid Deployment Forces",
   "es": "Fuerzas de despliegue rápido"
  },
+ "rapid_deployment_forces_desc": {
+  "en": "Highly trained and specialized units that can be sent anywhere in the world at a moment's notice. They give us a flexible and effective way to respond to crises.",
+  "es": "Unidades muy entrenadas y especializadas que pueden enviarse a cualquier parte del mundo con un preaviso mínimo. Nos dan una forma flexible y eficaz de responder a las crisis."
+ },
  "recon_satellites": {
   "en": "Reconnaissance Satellites",
   "es": "Satélites de reconocimiento"
+ },
+ "recon_satellites_desc": {
+  "en": "With satellites, we can now spy on any part of the world from space. This has revolutionized intelligence gathering, giving us an unprecedented view of our adversaries.",
+  "es": "Con los satélites, ahora podemos espiar cualquier parte del mundo desde el espacio. Esto ha revolucionado la recopilación de inteligencia y nos da una visión sin precedentes de nuestros adversarios."
  },
  "reusable_rocketry": {
   "en": "Reusable Rocketry",
   "es": "Cohetería reutilizable"
  },
+ "reusable_rocketry_desc": {
+  "en": "By making our rockets reusable, we can dramatically reduce the cost of space travel. This could open up a new era of exploration and commercial activity in space.",
+  "es": "Al hacer reutilizables nuestros cohetes, podemos reducir drásticamente el coste de los viajes espaciales. Esto podría abrir una nueva era de exploración y actividad comercial en el espacio."
+ },
  "robotics": {
   "en": "Industrial Robotics",
   "es": "Robótica industrial"
+ },
+ "robotics_desc": {
+  "en": "Industrial robots have transformed our factories. They can perform complex tasks with incredible precision and efficiency, making our production lines safer and more productive.",
+  "es": "Los robots industriales han transformado nuestras fábricas. Pueden realizar tareas complejas con una precisión y eficiencia increíbles, y hacen nuestras líneas de producción más seguras y productivas."
  },
  "rocketry": {
   "en": "Rocketry",
   "es": "Cohetería"
  },
+ "rocketry_desc": {
+  "en": "The development of rockets has given us powerful new weapons and the ability to explore space. It has been a key technology of the 20th century, with a profound impact on warfare and science.",
+  "es": "El desarrollo de los cohetes nos ha dado nuevas y poderosas armas y la capacidad de explorar el espacio. Ha sido una tecnología clave del siglo XX, con un profundo impacto en la guerra y en la ciencia."
+ },
  "rural_electrification": {
   "en": "Rural Electrification",
   "es": "Electrificación rural"
+ },
+ "rural_electrification_desc": {
+  "en": "Bringing electricity to the countryside has improved the quality of life and created new economic opportunities for rural populations. It's a key step in modernizing a nation.",
+  "es": "Llevar la electricidad al campo ha mejorado la calidad de vida y creado nuevas oportunidades económicas para las poblaciones rurales. Es un paso clave en la modernización de una nación."
  },
  "satellite_communications": {
   "en": "Satellite Communications",
   "es": "Comunicaciones por satélite"
  },
+ "satellite_communications_desc": {
+  "en": "Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.",
+  "es": "Los satélites nos han dado una red de comunicación global. Ahora podemos transmitir información instantáneamente por todo el mundo, lo que hace de nuestro planeta un lugar mucho más conectado."
+ },
  "second_wave_feminism": {
   "en": "Second Wave Feminism",
   "es": "Feminismo de la segunda ola"
+ },
+ "second_wave_feminism_desc": {
+  "en": "This wave of feminism has fought for equality and personal rights for women. It has had a significant impact on our society, changing gender roles and legal norms.",
+  "es": "Esta ola del feminismo ha luchado por la igualdad y los derechos personales de las mujeres. Ha tenido un impacto significativo en nuestra sociedad, al cambiar los roles de género y las normas jurídicas."
  },
  "semiautomatic_rifle": {
   "en": "Semi-Automatic Rifle",
   "es": "Fusil semiautomático"
  },
+ "semiautomatic_rifle_desc": {
+  "en": "Semi-automatic rifles like the M1 Garand give our infantry a much higher rate of fire. This improves their firepower and makes them more effective in a firefight.",
+  "es": "Los fusiles semiautomáticos como el M1 Garand dan a nuestra infantería una cadencia de fuego mucho mayor. Esto mejora su potencia de fuego y los hace más eficaces en un tiroteo."
+ },
  "sexual_revolution": {
   "en": "Sexual Revolution",
   "es": "Revolución sexual"
+ },
+ "sexual_revolution_desc": {
+  "en": "A social movement that has challenged traditional ideas about sexuality and relationships. It has led to greater acceptance of premarital sex, contraception, and different family structures.",
+  "es": "Un movimiento social que ha cuestionado las ideas tradicionales sobre la sexualidad y las relaciones. Ha conducido a una mayor aceptación del sexo prematrimonial, la anticoncepción y las diferentes estructuras familiares."
  },
  "smart_grids": {
   "en": "Smart Grids",
   "es": "Redes inteligentes"
  },
+ "smart_grids_desc": {
+  "en": "By incorporating advanced technology into our electrical grids, we can make them more efficient, reliable, and sustainable. It's a smarter way to manage our power.",
+  "es": "Al incorporar tecnología avanzada a nuestras redes eléctricas, podemos hacerlas más eficientes, fiables y sostenibles. Es una forma más inteligente de gestionar nuestra energía."
+ },
  "social_justice_movements": {
   "en": "Social Justice Movements",
   "es": "Movimientos por la justicia social"
+ },
+ "social_justice_movements_desc": {
+  "en": "Movements that fight for equality, fairness, and human rights. They tackle issues like racial [concept_discrimination] and economic inequality, pushing for social change through activism and advocacy.",
+  "es": "Movimientos que luchan por la igualdad, la justicia y los derechos humanos. Abordan cuestiones como la [concept_discrimination|l] racial y la desigualdad económica, y presionan a favor del cambio social mediante el activismo y la defensa de causas."
  },
  "social_media": {
   "en": "Social Media",
   "es": "Redes sociales"
  },
+ "social_media_desc": {
+  "en": "Social media platforms have changed the way we communicate and share information. They've given everyone a voice, for better or for worse, and have had a huge impact on our culture and politics.",
+  "es": "Las plataformas de redes sociales han cambiado la forma en que nos comunicamos y compartimos información. Han dado voz a todo el mundo, para bien o para mal, y han tenido un enorme impacto en nuestra cultura y nuestra política."
+ },
  "sonar": {
   "en": "Sonar",
   "es": "Sónar"
+ },
+ "sonar_desc": {
+  "en": "By using sound to detect objects underwater, sonar has become an essential tool for naval defense. It helps us to find submarines and other underwater threats.",
+  "es": "Al utilizar el sonido para detectar objetos bajo el agua, el sonar se ha convertido en una herramienta esencial para la defensa naval. Nos ayuda a encontrar submarinos y otras amenazas submarinas."
  },
  "space_based_solar_power": {
   "en": "Space-Based Solar Power",
   "es": "Energía solar espacial"
  },
+ "space_based_solar_power_desc": {
+  "en": "By putting massive solar collectors in orbit, we could have a reliable and abundant source of clean energy. It's an ambitious idea, but one that could solve our energy problems for good.",
+  "es": "Al poner enormes colectores solares en órbita, podríamos contar con una fuente fiable y abundante de energía limpia. Es una idea ambiciosa, pero que podría resolver nuestros problemas energéticos para siempre."
+ },
  "space_colonization": {
   "en": "Space Colonization",
   "es": "Colonización espacial"
+ },
+ "space_colonization_desc": {
+  "en": "As our own planet becomes more crowded, we may need to look to the stars for new places to live. Space colonization could be the next great chapter in human history.",
+  "es": "A medida que nuestro propio planeta se vuelve más abarrotado, quizá tengamos que mirar a las estrellas en busca de nuevos lugares donde vivir. La colonización espacial podría ser el próximo gran capítulo de la historia humana."
  },
  "space_elevator": {
   "en": "Space Elevator",
   "es": "Ascensor espacial"
  },
+ "space_elevator_desc": {
+  "en": "A hypothetical structure that would allow us to travel between Earth and space with ease. It would make space travel much cheaper and could accelerate our exploration of the cosmos.",
+  "es": "Una estructura hipotética que nos permitiría viajar entre la Tierra y el espacio con facilidad. Abarataría mucho los viajes espaciales y podría acelerar nuestra exploración del cosmos."
+ },
  "space_exploration": {
   "en": "Space Exploration",
   "es": "Exploración espacial"
+ },
+ "space_exploration_desc": {
+  "en": "Advancements in rocketry and satellite technology have allowed us to explore space. This has been a new era of scientific discovery and a testament to human ingenuity.",
+  "es": "Los avances en cohetería y tecnología de satélites nos han permitido explorar el espacio. Ha sido una nueva era de descubrimiento científico y un testimonio del ingenio humano."
  },
  "space_militarization": {
   "en": "Space Militarization",
   "es": "Militarización del espacio"
  },
+ "space_militarization_desc": {
+  "en": "As space becomes more important strategically, we're seeing a push to develop and deploy military capabilities there. This raises concerns about the weaponization of space and the need for new rules of engagement.",
+  "es": "A medida que el espacio cobra importancia estratégica, asistimos a un impulso por desarrollar y desplegar allí capacidades militares. Esto suscita preocupación por el emplazamiento de armas en el espacio y por la necesidad de nuevas reglas de enfrentamiento."
+ },
  "stainless_steel_mass_production": {
   "en": "Stainless Steel Mass Production",
   "es": "Producción en serie de acero inoxidable"
+ },
+ "stainless_steel_mass_production_desc": {
+  "en": "We can now produce stainless steel in large quantities. This corrosion-resistant and durable material is useful in a wide range of applications.",
+  "es": "Ahora podemos producir acero inoxidable en grandes cantidades. Este material duradero y resistente a la corrosión es útil en una amplia gama de aplicaciones."
  },
  "stealth_technology": {
   "en": "Stealth Technology",
   "es": "Tecnología furtiva"
  },
+ "stealth_technology_desc": {
+  "en": "By using special materials and designs, we can make our military assets nearly invisible to radar and other [concept_detection] systems. It's a powerful advantage in modern warfare.",
+  "es": "Mediante materiales y diseños especiales, podemos hacer que nuestros recursos militares sean casi invisibles al radar y a otros sistemas de [concept_detection|l]. Es una ventaja poderosa en la guerra moderna."
+ },
  "supersonic_aircraft": {
   "en": "Supersonic Aircraft",
   "es": "Aviones supersónicos"
+ },
+ "supersonic_aircraft_desc": {
+  "en": "Aircraft that can travel faster than the speed of sound. They've made air travel faster and have enhanced our military aviation capabilities.",
+  "es": "Aeronaves que pueden viajar más rápido que la velocidad del sonido. Han hecho el transporte aéreo más rápido y han mejorado nuestras capacidades de aviación militar."
  },
  "supply_chain_management": {
   "en": "Supply Chain Management",
   "es": "Gestión de la cadena de suministro"
  },
+ "supply_chain_management_desc": {
+  "en": "By using technology and data to optimize our supply chains, we can make them more efficient and less costly. It's all about getting the right things to the right place at the right time.",
+  "es": "Al usar tecnología y datos para optimizar nuestras cadenas de suministro, podemos hacerlas más eficientes y menos costosas. Todo consiste en hacer llegar las cosas adecuadas al lugar adecuado en el momento adecuado."
+ },
  "swarm_technology": {
   "en": "Swarm Technology",
   "es": "Tecnología de enjambre"
+ },
+ "swarm_technology_desc": {
+  "en": "By coordinating large groups of autonomous systems, we can create powerful new tools for reconnaissance, defense, and attack. The whole is truly greater than the sum of its parts.",
+  "es": "Al coordinar grandes grupos de sistemas autónomos, podemos crear nuevas y poderosas herramientas de reconocimiento, defensa y ataque. El todo es realmente mayor que la suma de sus partes."
  },
  "synthetic_biology": {
   "en": "Synthetic Biology",
   "es": "Biología sintética"
  },
+ "synthetic_biology_desc": {
+  "en": "By designing and building new biological parts and systems, we can create solutions to some of the world's most pressing problems. It's a field with enormous potential, and some significant risks.",
+  "es": "Al diseñar y construir nuevas partes y sistemas biológicos, podemos crear soluciones a algunos de los problemas más acuciantes del mundo. Es un campo con un enorme potencial y algunos riesgos considerables."
+ },
  "tactical_nuclear_weapons": {
   "en": "Tactical Nuclear Weapons",
   "es": "Armas nucleares tácticas"
+ },
+ "tactical_nuclear_weapons_desc": {
+  "en": "Smaller, more versatile nuclear weapons that can be used on the battlefield. They expand our strategic options, but also make the use of nuclear weapons a more thinkable proposition.",
+  "es": "Armas nucleares más pequeñas y versátiles que pueden usarse en el campo de batalla. Amplían nuestras opciones estratégicas, pero también hacen que el uso de armas nucleares sea una posibilidad más concebible."
  },
  "telemedicine": {
   "en": "Telemedicine",
   "es": "Telemedicina"
  },
+ "telemedicine_desc": {
+  "en": "By delivering healthcare services remotely, we can improve access to care for people in underserved areas. It's a more efficient way to use our medical resources, and it's becoming more common all the time.",
+  "es": "Al prestar servicios sanitarios a distancia, podemos mejorar el acceso a la atención de las personas de zonas desatendidas. Es una forma más eficiente de usar nuestros recursos médicos, y cada vez es más habitual."
+ },
  "telepathic_communities": {
   "en": "Telepathic Communities",
   "es": "Comunidades telepáticas"
+ },
+ "telepathic_communities_desc": {
+  "en": "What if we could communicate directly from mind to mind? Telepathic communities, connected by brain-computer interfaces, could foster a new level of empathy and understanding.",
+  "es": "¿Y si pudiéramos comunicarnos directamente de mente a mente? Las comunidades telepáticas, conectadas por interfaces cerebro-ordenador, podrían fomentar un nuevo nivel de empatía y comprensión."
  },
  "television": {
   "en": "Television",
@@ -647,40 +1291,84 @@
   "en": "Television Broadcasting",
   "es": "Radiodifusión televisiva"
  },
+ "television_broadcasting_desc": {
+  "en": "The rise of television has changed the way we get our news and entertainment. It has become a powerful force in shaping public opinion, for better or for worse.",
+  "es": "El auge de la televisión ha cambiado la forma en que recibimos nuestras noticias y entretenimiento. Se ha convertido en una fuerza poderosa a la hora de moldear la opinión pública, para bien o para mal."
+ },
+ "television_desc": {
+  "en": "Television has revolutionized entertainment and communication. It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time.",
+  "es": "La televisión ha revolucionado el entretenimiento y la comunicación. Se ha convertido en un medio poderoso para difundir información y moldear la opinión pública, una pantalla parpadeante tras otra."
+ },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",
   "es": "Terrorismo y antiterrorismo"
+ },
+ "terrorism_and_anti_terrorism_desc": {
+  "en": "The rise of terrorism has forced us to develop new strategies to protect ourselves. This has redefined our national security priorities and led to a new era of global cooperation and conflict.",
+  "es": "El auge del terrorismo nos ha obligado a desarrollar nuevas estrategias para protegernos. Esto ha redefinido nuestras prioridades de seguridad nacional y ha dado paso a una nueva era de cooperación y conflicto globales."
  },
  "transistors": {
   "en": "Transistor Technology",
   "es": "Tecnología del transistor"
  },
+ "transistors_desc": {
+  "en": "The transistor is the tiny switch that makes all of our modern electronics possible. Its invention has led to a revolution in computing and communication, changing the world in countless ways.",
+  "es": "El transistor es el diminuto interruptor que hace posible toda nuestra electrónica moderna. Su invención ha provocado una revolución en la informática y las comunicaciones, y ha cambiado el mundo de incontables maneras."
+ },
  "universal_basic_income": {
   "en": "Universal Basic Income",
   "es": "Renta básica universal"
+ },
+ "universal_basic_income_desc": {
+  "en": "The idea of giving everyone a basic income is gaining traction as a way to address economic inequality and automation. It's a bold idea, but one that could reshape our society for the better.",
+  "es": "La idea de dar a todos unos ingresos básicos está ganando terreno como forma de abordar la desigualdad económica y la automatización. Es una idea audaz, pero que podría transformar nuestra sociedad para mejor."
  },
  "universal_digital_identity": {
   "en": "Universal Digital Identity",
   "es": "Identidad digital universal"
  },
+ "universal_digital_identity_desc": {
+  "en": "State-issued digital identity becomes the substrate for voting, banking, healthcare, and movement. Privacy collapses into a binary: state-trusted or state-suspect.",
+  "es": "La identidad digital emitida por el Estado se convierte en el sustrato del voto, la banca, la sanidad y los desplazamientos. La privacidad se reduce a una disyuntiva: ciudadano de confianza o sospechoso para el Estado."
+ },
  "unmanned_aerial_vehicles": {
   "en": "Unmanned Aerial Vehicles",
   "es": "Vehículos aéreos no tripulados"
+ },
+ "unmanned_aerial_vehicles_desc": {
+  "en": "Drones have changed the face of warfare. They allow us to conduct surveillance and precision strikes without risking the lives of our pilots, giving us a powerful new tool in our military arsenal.",
+  "es": "Los drones han cambiado la faz de la guerra. Nos permiten realizar labores de vigilancia y ataques de precisión sin arriesgar la vida de nuestros pilotos, lo que nos da una nueva y poderosa herramienta en nuestro arsenal militar."
  },
  "video_games": {
   "en": "Video Games",
   "es": "Videojuegos"
  },
+ "video_games_desc": {
+  "en": "Video games have become a massive new form of entertainment and art. They've had a huge influence on popular culture, and they're only getting more immersive and complex.",
+  "es": "Los videojuegos se han convertido en una nueva forma masiva de entretenimiento y arte. Han tenido una enorme influencia en la cultura popular, y cada vez son más inmersivos y complejos."
+ },
  "virtual_reality": {
   "en": "Virtual Reality",
   "es": "Realidad virtual"
+ },
+ "virtual_reality_desc": {
+  "en": "Virtual reality technologies can create incredibly immersive experiences for entertainment, education, and training. It's a new way to interact with the digital world, and it's full of potential.",
+  "es": "Las tecnologías de realidad virtual pueden crear experiencias increíblemente inmersivas para el entretenimiento, la educación y el entrenamiento. Es una nueva forma de interactuar con el mundo digital, y está llena de potencial."
  },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",
   "es": "Internet inalámbrico (Wi-Fi)"
  },
+ "wireless_internet_desc": {
+  "en": "Wi-Fi has made it possible to connect to the internet without cables. It has made our lives more convenient and has revolutionized the way we work, communicate, and entertain ourselves.",
+  "es": "El Wi-Fi ha hecho posible conectarse a internet sin cables. Ha hecho nuestra vida más cómoda y ha revolucionado la manera en que trabajamos, nos comunicamos y nos entretenemos."
+ },
  "world_wide_web": {
   "en": "World Wide Web",
   "es": "World Wide Web"
+ },
+ "world_wide_web_desc": {
+  "en": "The World Wide Web has transformed the way we access and share information. It has created a global platform for collaboration and innovation, connecting us all in a vast network of knowledge.",
+  "es": "La World Wide Web ha transformado la forma en que accedemos a la información y la compartimos. Ha creado una plataforma global para la colaboración y la innovación, que nos conecta a todos en una vasta red de conocimiento."
  }
 }
