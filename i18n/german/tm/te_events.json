@@ -575,6 +575,86 @@
   "en": "Those Who Speak Up",
   "de": "Wer den Mund aufmacht"
  },
+ "arch_events.1.a": {
+  "en": "Open a Systematic dig",
+  "de": "Eine Systematische Grabung eröffnen"
+ },
+ "arch_events.1.b": {
+  "en": "Open an Antiquarian dig",
+  "de": "Eine Antiquarische Grabung eröffnen"
+ },
+ "arch_events.1.c": {
+  "en": "Leave the ground for now",
+  "de": "Den Boden vorerst in Ruhe lassen"
+ },
+ "arch_events.1.c.tt": {
+  "en": "The site waits among our Archaeological Expeditions, open to a dig at any time",
+  "de": "Die Fundstätte wartet unter unseren Archäologischen Expeditionen, jederzeit für eine Grabung offen"
+ },
+ "arch_events.1.d": {
+  "en": "An ancient site has come to light in our lands, and the scholars of the capital ask for the ground to be opened properly before the finders open it for us.",
+  "de": "In unserem Land ist eine antike Fundstätte ans Licht gekommen, und die Gelehrten der Hauptstadt bitten darum, den Boden ordnungsgemäß zu öffnen, ehe die Finder ihn für uns öffnen."
+ },
+ "arch_events.1.f": {
+  "en": "\\\"We were cutting the drain where the ground always stays wet, and the spade went in and didn't come out clean. There was something under it, hard and smooth and carved.\\\" The labourer looked from the inspector to the trench and back again. \\\"My grandmother always said not to dig on that side of the field. I thought it was because of the sheep.\\\"\\n\\n— a labourer, to the district's inspector of antiquities",
+  "de": "„Wir haben den Entwässerungsgraben dort gezogen, wo der Boden immer nass bleibt, und der Spaten ging hinein und kam nicht sauber wieder heraus. Darunter war etwas, hart und glatt und gemeißelt.“ Der Landarbeiter blickte vom Inspektor zum Graben und wieder zurück. „Meine Großmutter hat immer gesagt, man solle auf dieser Seite des Feldes nicht graben. Ich dachte, es läge an den Schafen.“\\n\\n— ein Landarbeiter, zum Altertumsinspektor des Bezirks"
+ },
+ "arch_events.1.f_survey": {
+  "en": "\\\"Every guidebook in the library says it is lost, and every one of them was written by someone who never left the library.\\\" The professor spread the old map across the minister's desk, pinning its corners with an inkwell and a paperweight shaped like a sphinx. \\\"The ancient writers tell us where to look, if we read them as surveyors and not as poets. Give me a field season and forty men, and I will give you a name the whole world will learn to pronounce.\\\"\\n\\n— a professor of antiquities, to the minister of education",
+  "de": "„Jeder Reiseführer in der Bibliothek sagt, sie sei verloren, und jeder von ihnen wurde von jemandem geschrieben, der die Bibliothek nie verlassen hat.“ Der Professor breitete die alte Karte über den Schreibtisch des Ministers und beschwerte ihre Ecken mit einem Tintenfass und einem Briefbeschwerer in Gestalt einer Sphinx. „Die antiken Schriftsteller sagen uns, wo wir suchen müssen, wenn wir sie als Landvermesser lesen und nicht als Dichter. Geben Sie mir eine Grabungssaison und vierzig Mann, und ich gebe Ihnen einen Namen, den die ganze Welt aussprechen lernen wird.“\\n\\n— ein Professor für Altertumskunde, zum Bildungsminister"
+ },
+ "arch_events.1.t": {
+  "en": "Something Under the Spade",
+  "de": "Etwas unter dem Spaten"
+ },
+ "arch_events.1.t_survey": {
+  "en": "The Scholars Know Where to Look",
+  "de": "Die Gelehrten wissen, wo sie suchen müssen"
+ },
+ "arch_events.2.a": {
+  "en": "A great day for scholarship",
+  "de": "Ein großer Tag für die Wissenschaft"
+ },
+ "arch_events.2.a.tt": {
+  "en": "The monument stands in our state at its full levels, with its row in our Grand Monuments",
+  "de": "Das Monument steht in unserem Staat mit allen Stufen, mit seiner Zeile in unseren Großen Monumenten"
+ },
+ "arch_events.2.b": {
+  "en": "A pity",
+  "de": "Schade"
+ },
+ "arch_events.2.b.tt": {
+  "en": "The monument stands in our state, with half the levels it would have had",
+  "de": "Das Monument steht in unserem Staat, mit der Hälfte der Stufen, die es sonst gehabt hätte"
+ },
+ "arch_events.2.c": {
+  "en": "Crate it with care",
+  "de": "Mit Sorgfalt verpacken"
+ },
+ "arch_events.2.c.tt": {
+  "en": "Under the Excavation Concession, part of the find stands in [SCOPE.sCountry('gm_arch_host').GetName]'s state as its monument, and the masterpiece, half its levels, goes on display in our capital as a trophy. [SCOPE.sCountry('gm_arch_host').GetNameNoFormatting] may one day ask for it back",
+  "de": "Gemäß der Grabungskonzession steht ein Teil des Fundes im Staat [SCOPE.sCountry('gm_arch_host').GetAltName('GEN')] als dessen Monument, und das Meisterwerk, die Hälfte seiner Stufen, wird in unserer Hauptstadt als Trophäe ausgestellt. [SCOPE.sCountry('gm_arch_host').GetAltNameNoFormatting('NOM')|U] fordert es vielleicht eines Tages zurück"
+ },
+ "arch_events.2.d": {
+  "en": "The glory is ours, the stones are theirs",
+  "de": "Der Ruhm gehört uns, die Steine gehören ihnen"
+ },
+ "arch_events.2.d.tt": {
+  "en": "The finds stay with [SCOPE.sCountry('gm_arch_host').GetName], where the monument stands. Our scholars gain Foreign Scholarship: +10 [concept_prestige] and +1 [concept_cultural_pull] for ten years",
+  "de": "Die Funde bleiben bei [SCOPE.sCountry('gm_arch_host').GetAltName('DAT')], wo das Monument steht. Unsere Gelehrten erhalten Ausländische Gelehrsamkeit: +10 [concept_prestige] und +1 [concept_cultural_pull] für zehn Jahre"
+ },
+ "arch_events.2.e": {
+  "en": "They have taken the best of it",
+  "de": "Sie haben das Beste davon mitgenommen"
+ },
+ "arch_events.2.e.tt": {
+  "en": "Half the levels stand in our state as its monument. [SCOPE.sCountry('gm_arch_sponsor').GetName] has shipped the other half to its capital as a trophy, which we may claim back with a Return Cultural Property treaty",
+  "de": "Die Hälfte der Stufen steht in unserem Staat als dessen Monument. [SCOPE.sCountry('gm_arch_sponsor').GetAltName('NOM')|U] hat die andere Hälfte als Trophäe in die eigene Hauptstadt verschifft, die wir mit einem Vertrag zur Rückgabe von Kulturgut zurückfordern können"
+ },
+ "arch_events.2.f": {
+  "en": "It stays where it belongs",
+  "de": "Es bleibt, wo es hingehört"
+ },
  "arch_events.2.f.tt": {
   "en": "The monument stands in our state at its full levels. [SCOPE.sCountry('gm_arch_sponsor').GetName] takes home only the credit",
   "de": "Das Monument steht mit allen seinen Stufen in unserem Staat. [SCOPE.sCountry('gm_arch_sponsor').GetAltName('NOM')|U] nimmt nur den Ruhm mit nach Hause"
