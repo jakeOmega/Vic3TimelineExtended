@@ -83,69 +83,177 @@
   "en": "African Leadership",
   "es": "Liderazgo africano"
  },
+ "dp_leadership_african_union_desc": {
+  "en": "Start a $dp_leadership_african_union$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_african_union$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$"
+ },
+ "dp_leadership_african_union_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the African [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] africana."
+ },
  "dp_leadership_china": {
   "en": "Contest Leadership of China",
   "es": "Disputar el liderazgo de China"
+ },
+ "dp_leadership_china_desc": {
+  "en": "Start a $dp_leadership_china$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_china$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$"
+ },
+ "dp_leadership_china_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Chinese [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] china."
  },
  "dp_leadership_dar_al_islam": {
   "en": "Caliphal Leadership",
   "es": "Liderazgo califal"
  },
+ "dp_leadership_dar_al_islam_desc": {
+  "en": "Start a $dp_leadership_dar_al_islam$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_dar_al_islam$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$"
+ },
+ "dp_leadership_dar_al_islam_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Islamic [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] islámica."
+ },
  "dp_leadership_east_african_federation": {
   "en": "East African Leadership",
   "es": "Liderazgo de África Oriental"
+ },
+ "dp_leadership_east_african_federation_desc": {
+  "en": "Start a $dp_leadership_east_african_federation$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_east_african_federation$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$"
+ },
+ "dp_leadership_east_african_federation_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the East African [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] africana del este."
  },
  "dp_leadership_european_union": {
   "en": "European Leadership",
   "es": "Liderazgo europeo"
  },
+ "dp_leadership_european_union_desc": {
+  "en": "Start a $dp_leadership_european_union$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_european_union$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$"
+ },
+ "dp_leadership_european_union_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the European [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] europea."
+ },
  "dp_leadership_india": {
   "en": "Indian Leadership",
   "es": "Liderazgo indio"
+ },
+ "dp_leadership_india_desc": {
+  "en": "Start a $dp_leadership_india$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_india$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$"
+ },
+ "dp_leadership_india_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] india."
  },
  "dp_leadership_indonesia": {
   "en": "Indonesian Leadership",
   "es": "Liderazgo indonesio"
  },
+ "dp_leadership_indonesia_desc": {
+  "en": "Start a $dp_leadership_indonesia$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_indonesia$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$"
+ },
+ "dp_leadership_indonesia_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indonesian [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] indonesia."
+ },
  "dp_leadership_intermarium": {
   "en": "Intermarium Leadership",
   "es": "Liderazgo del Intermarium"
+ },
+ "dp_leadership_intermarium_desc": {
+  "en": "Start a $dp_leadership_intermarium$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_intermarium$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$"
+ },
+ "dp_leadership_intermarium_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Intermarium [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] del Intermarium."
  },
  "dp_leadership_united_earth": {
   "en": "Terran Leadership",
   "es": "Liderazgo terrano"
  },
+ "dp_leadership_united_earth_desc": {
+  "en": "Start a $dp_leadership_united_earth$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_united_earth$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$"
+ },
+ "dp_leadership_united_earth_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Terran [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] terrana."
+ },
  "dp_leadership_united_north_america": {
   "en": "North American Leadership",
   "es": "Liderazgo norteamericano"
+ },
+ "dp_leadership_united_north_america_desc": {
+  "en": "Start a $dp_leadership_united_north_america$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$",
+  "es": "Inicia una [concept_diplomatic_play|l]: $dp_leadership_united_north_america$\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$"
+ },
+ "dp_leadership_united_north_america_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the North American [Concept('concept_unification', '$concept_major_unification$')].",
+  "es": "Establece como [concept_war_goal|l] inicial expulsar al [concept_country|l] objetivo como [concept_unification_candidate|l] de la [Concept('concept_unification', '$concept_major_unification$')|l] norteamericana."
  },
  "dp_unify_african_union": {
   "en": "Unify the African Union",
   "es": "Unificar la Unión Africana"
  },
+ "dp_unify_african_union_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all African [concept_homeland] states held by other nations.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los estados de la [concept_homeland|l] africana que estén en manos de otras naciones."
+ },
  "dp_unify_dar_al_islam": {
   "en": "Unify the Dar-Al-Islam",
   "es": "Unificar Dar al-Islam"
+ },
+ "dp_unify_dar_al_islam_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all Islamic [concept_homeland] states held by other nations.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los estados de la [concept_homeland|l] islámica que estén en manos de otras naciones."
  },
  "dp_unify_east_african_federation": {
   "en": "Unify East Africa",
   "es": "Unificar África Oriental"
  },
+ "dp_unify_east_african_federation_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all East African [concept_homeland] states held by other nations.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los estados de la [concept_homeland|l] africana del este que estén en manos de otras naciones."
+ },
  "dp_unify_european_union": {
   "en": "Unify the European Union",
   "es": "Unificar la Unión Europea"
+ },
+ "dp_unify_european_union_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all European [concept_homeland] states held by other nations.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los estados de la [concept_homeland|l] europea que estén en manos de otras naciones."
  },
  "dp_unify_intermarium": {
   "en": "Unify the Intermarium",
   "es": "Unificar el Intermarium"
  },
+ "dp_unify_intermarium_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all Intermarium [concept_homeland] states held by other nations.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los estados de la [concept_homeland|l] del Intermarium que estén en manos de otras naciones."
+ },
  "dp_unify_united_earth": {
   "en": "Unify Earth",
   "es": "Unificar la Tierra"
  },
+ "dp_unify_united_earth_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex every land [concept_state] held by other nations on Earth.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los [Concept('concept_state', 'estados')] terrestres que estén en manos de otras naciones en la Tierra."
+ },
  "dp_unify_united_north_america": {
   "en": "Unify North America",
   "es": "Unificar Norteamérica"
+ },
+ "dp_unify_united_north_america_desc": {
+  "en": "Sets the initiating [concept_war_goal] to annex all North American [concept_homeland] states held by other nations.",
+  "es": "Establece como [concept_war_goal|l] inicial anexionar todos los estados de la [concept_homeland|l] norteamericana que estén en manos de otras naciones."
  },
  "dyn_c_african_empire": {
   "en": "African Empire",
