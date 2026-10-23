@@ -30,12 +30,18 @@ surrender_monument = {
 		state
 	}
 
+	# ROOT is the prospective source. Shown only for a country with a monument it
+	# could surrender (owner, 2026-10-23), so a draft with any other country
+	# doesn't list an article that has no state to name. possible repeats it: a
+	# war goal enforcing the article checks possible.
 	visible = {
 		gm_system_enabled = yes
+		gm_tr_country_has_takeable = yes
 	}
 
 	possible = {
 		gm_system_enabled = yes
+		gm_tr_country_has_takeable = yes
 	}
 
 	can_ratify = {

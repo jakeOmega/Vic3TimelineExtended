@@ -97,7 +97,10 @@ Unions' two traits, which the engine scales ×0.5 while the group is marginal an
 
 1. **Full.** Issue Medical Outreach in a state behind its medicine targets. Once the state has caught up, the decree
    ends on its own; the decree panel names the reason as "This state's medicine is still behind what our technology
-   and laws allow", not a raw comparison.
+   and laws allow, and the next yearly count won't close the gap on its own", not a raw comparison. A state whose
+   Causes of Death section shows no arrow (medicine at its targets) can't be picked, and an issued decree is still in
+   place a week later (2026-10-23: a held decree is judged without its own line; if it ends at once,
+   `te_demog_medicine_behind_without_outreach` misreads the state's spread).
 2. **Full, an observer run of a few decades:** AI countries issue it in states behind and let it lapse; few states
    hold it once caught up.
 
