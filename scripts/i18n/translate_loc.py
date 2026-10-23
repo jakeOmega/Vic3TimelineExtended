@@ -52,8 +52,20 @@ DEV_ONLY_FILES = {"te_debug_tax_l_english.yml"}
 
 # German declines country names with the article baked in; vanilla defines
 # these seven forms for every tag and dynamic name, and German text reaches
-# them through GetAltName('<FORM>').
-COUNTRY_FORMS = ("NOM", "GEN", "DAT", "AKK", "VON", "IN", "NACH")
+# them through GetAltName('<FORM>'). A language vanilla doesn't decline
+# (Spanish) has no forms, and its text must keep GetName.
+COUNTRY_FORMS = {"german": ("NOM", "GEN", "DAT", "AKK", "VON", "IN", "NACH")}
+
+# The translation-memory field holding each language's text.
+TM_FIELDS = {"german": "de", "spanish": "es"}
+
+
+def country_forms(language: str) -> tuple[str, ...]:
+    return COUNTRY_FORMS.get(language, ())
+
+
+def tm_field(language: str) -> str:
+    return TM_FIELDS.get(language, language)
 
 # Agents carry ~100k tokens of fixed context whatever the chunk, so fewer,
 # larger chunks cost less; the key cap keeps label-heavy files (3-4 words a
@@ -113,6 +125,8 @@ _DESCRIPTIVE_KEY = re.compile(
 _NAME_PREFIXES = (
     "concept_", "je_", "law_", "lawgroup_", "institution_", "decree_", "principle_",
     "ideology_", "building_", "ig_", "movement_", "bg_",
+    # Names whose prose sits in other files: two agents coined each twice.
+    "amendment_", "banking_dash_mon_mandate_", "st_res_policy_",
 )
 _NAME_FILES = ("te_formable_countries", "te_goods_and_needs", "te_technologies")
 
@@ -137,8 +151,8 @@ def is_glossary_entry(entry: Entry) -> bool:
 
 
 def is_country_name(entry: Entry) -> bool:
-    """A formable tag (`AFU`) or dynamic country name (`dyn_c_...`); German
-    needs the seven declined forms of each."""
+    """A formable tag (`AFU`) or dynamic country name (`dyn_c_...`); a
+    language that declines them (German) needs its forms of each."""
     if not os.path.basename(entry.file).startswith("te_formable_countries"):
         return False
     if re.search(r"_(adj|ADJ)$", entry.key):
@@ -255,16 +269,19 @@ class Overlay:
         return lines
 
 
+_ALL_FORMS = tuple(form for forms in COUNTRY_FORMS.values() for form in forms)
+
+
 def _form_order(key: str) -> int:
     form = key.rsplit("_", 1)[-1]
-    return COUNTRY_FORMS.index(form) if form in COUNTRY_FORMS else len(COUNTRY_FORMS)
+    return _ALL_FORMS.index(form) if form in _ALL_FORMS else len(_ALL_FORMS)
 
 
-def load_overlay(language: str, field: str) -> Overlay | None:
+def load_overlay(language: str, field: str | None = None) -> Overlay | None:
     """The language's overlay, or None if it has no translation memory."""
     if not os.path.isdir(os.path.join(language_dirs(language)[0], "tm")):
         return None
-    return Overlay(load_tm(language), field)
+    return Overlay(load_tm(language), field or tm_field(language))
 
 
 def classify(entries: list[Entry], tm: dict[str, dict]) -> dict[str, list[Entry]]:
@@ -330,11 +347,15 @@ def markup_profile(value: str) -> dict[str, Counter]:
     }
 
 
-def check_translation(en: str, translated: str) -> tuple[list[str], list[str]]:
+def check_translation(en: str, translated: str, language: str = "german") -> tuple[list[str], list[str]]:
     """(errors, warnings) for one translated value against its English."""
     errors, warnings = [], []
     if not translated.strip() and en.strip():
         return ["empty translation"], []
+    if not country_forms(language) and _ALT_NAME.search(translated):
+        # The markup profile reads GetAltName as GetName, but a form the
+        # language doesn't define renders as nothing useful.
+        errors.append(f"GetAltName: {language} has no declined country names; keep GetName")
     en_profile, tr_profile = markup_profile(en), markup_profile(translated)
     for name, expected in en_profile.items():
         got = tr_profile[name]
@@ -360,8 +381,14 @@ def check_translation(en: str, translated: str) -> tuple[list[str], list[str]]:
 # --------------------------------------------------------------------------
 # Number format
 
-# Languages that write 2,5 and 1.000 where English writes 2.5 and 1,000.
-DECIMAL_COMMA = {"german", "french", "spanish", "braz_por", "polish", "russian", "turkish"}
+# Languages that write 2,5 where English writes 2.5, and what each writes for
+# the comma in 1,000, as vanilla's loc does: a point, or a no-break space.
+THOUSANDS_SEPARATOR = {
+    "german": ".", "braz_por": ".", "turkish": ".",
+    "french": " ", "spanish": " ", "polish": " ", "russian": " ",
+}
+# Languages whose official loc mostly writes 10%, not 10 %.
+CLOSED_PERCENT = {"german", "spanish"}
 _MARKUP = re.compile(r"\[[^\[\]]*\]|\$[^$]*\$|#[a-zA-Z_]+(?::\S*)?|@\w+!")
 _EN_DECIMAL = re.compile(r"(?<![\w.,])\d+\.\d+(?![.,]?\d)")
 _EN_THOUSANDS = re.compile(r"(?<![\w.,])\d{1,3}(?:,\d{3})+(?![.,]?\d)")
@@ -380,19 +407,24 @@ def _prose_segments(value: str) -> list[tuple[bool, str]]:
 
 def localize_numbers(en: str, translated: str, language: str) -> str:
     """Rewrite the English-format numbers of `en` that the translation kept
-    verbatim in its prose (2.5 -> 2,5, 1,000 -> 1.000). Numbers inside markup,
-    and numbers the translator already converted, are left alone."""
-    if language not in DECIMAL_COMMA:
+    verbatim in its prose (2.5 -> 2,5, 1,000 -> 1.000 or 1 000). Numbers
+    inside markup, and numbers the translator already converted, are left
+    alone."""
+    separator = THOUSANDS_SEPARATOR.get(language)
+    if separator is None:
         return translated
-    if language == "german" and not re.search(r"\d %", en):
-        # The official German writes 10%, not 10 %.
+    if language in CLOSED_PERCENT and not re.search(r"\d[  ]%", en):
         translated = "".join(
-            re.sub(r"(\d) %", r"\1%", text) if is_prose else text
+            re.sub(r"(\d)[  ]%", r"\1%", text) if is_prose else text
             for is_prose, text in _prose_segments(translated)
         )
     prose = " ".join(text for is_prose, text in _prose_segments(en) if is_prose)
     swaps = {n: n.replace(".", ",") for n in _EN_DECIMAL.findall(prose)}
-    swaps.update({n: n.replace(",", ".") for n in _EN_THOUSANDS.findall(prose)})
+    for n in _EN_THOUSANDS.findall(prose):
+        swaps[n] = n.replace(",", separator)
+        if separator == " ":
+            # A translator types a plain space; a line break there would split the number.
+            swaps[n.replace(",", " ")] = swaps[n]
     if not swaps:
         return translated
     pattern = re.compile(r"(?<![\w.,])(" + "|".join(map(re.escape, sorted(swaps, key=len, reverse=True))) + r")(?![.,]?\d)")
@@ -407,28 +439,35 @@ def localize_numbers(en: str, translated: str, language: str) -> str:
 
 # (outer open, outer close, inner open, inner close) as the official
 # translation writes them.
-QUOTES = {"german": ("„", "“", "‚", "‘")}
-_QUOTE_TOKEN = re.compile(r'\\"|[„“”‚‘]')
+QUOTES = {"german": ("„", "“", "‚", "‘"), "spanish": ("«", "»", "“", "”")}
+# The marks a translator may type to open and to close a quotation. German's
+# “ closes („…“) where Spanish's opens (“…”); Spanish leaves out ‘’, since
+# its ’ is an apostrophe.
+QUOTE_MARKS = {"german": ("„‚", "“”‘"), "spanish": ("«“", "»”")}
 
 
 def localize_quotes(value: str, language: str) -> str:
-    """Rewrite the English's escaped straight quotes (`\\"…\\"`), and a closing
-    mark of the wrong shape („…” for „…“), as the language's own quotation
-    marks, nesting the inner pair inside an outer one. A value whose quotes
-    don't pair up is returned unchanged."""
+    """Rewrite the English's escaped straight quotes (`\\"…\\"`), and a mark
+    of the wrong shape („…” for „…“, “…” outermost in Spanish), as the
+    language's own quotation marks, nesting the inner pair inside an outer
+    one. A value whose quotes don't pair up is returned unchanged."""
     marks = QUOTES.get(language)
-    if not marks or not _QUOTE_TOKEN.search(value):
+    if not marks:
+        return value
+    closers = QUOTE_MARKS[language][1]
+    token_re = re.compile(r'\\"|[' + "".join(QUOTE_MARKS[language]) + "]")
+    if not token_re.search(value):
         return value
     out, stack, pos = [], [], 0
-    for match in _QUOTE_TOKEN.finditer(value):
+    for match in token_re.finditer(value):
         out.append(value[pos:match.start()])
         pos = match.end()
         token = match.group(0)
-        closing = (token == '\\"' and stack and stack[-1] == "esc") or (token in "“”‘" and stack)
+        closing = (token == '\\"' and stack and stack[-1] == "esc") or (token in closers and stack)
         if closing:
             stack.pop()
             out.append(marks[1] if not stack else marks[3])
-        elif token in "“”‘":
+        elif token in closers:
             return value  # a closing mark with nothing open
         else:
             out.append(marks[0] if not stack else marks[2])
@@ -459,6 +498,7 @@ class VanillaTerms:
     """Key-aligned vanilla English/target pairs, for per-chunk glossaries."""
 
     def __init__(self, language: str):
+        self.language = language
         self.en = _load_vanilla("english")
         self.tr = _load_vanilla(language)
         by_term: dict[str, Counter] = defaultdict(Counter)
@@ -546,7 +586,8 @@ def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerm
         hits = [t for t in vanilla.terms if t.casefold() in folded and _mentions(t, text)]
         hits.sort(key=lambda t: (-len(t.split()), t))
         if hits:
-            lines.append("# VANILLA TERMS — official German game terms; use them wherever the English means that thing:")
+            title = vanilla.language.replace("_", " ").title()
+            lines.append(f"# VANILLA TERMS — official {title} game terms; use them wherever the English means that thing:")
             lines.extend(f"#   {t} => {vanilla.terms[t]}" for t in hits[:cap])
     return lines
 
@@ -614,7 +655,7 @@ def write_chunk(path: str, chunk_id: str, chunk: list[Entry], glossary: list[str
     if country_names:
         lines.append("#")
         lines.append("# === COUNTRY NAME FORMS === for each name below write "
-                     + ", ".join(f"<KEY>_{f}" for f in COUNTRY_FORMS) + " (BRIEF.md § Country names)")
+                     + ", ".join(f"<KEY>_{f}" for f in country_forms(language)) + " (BRIEF.md § Country names)")
         for entry in country_names:
             lines.append(_loc_line(entry.key, entry.en))
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -639,7 +680,8 @@ def cmd_prepare(args) -> int:
     country_names: list[Entry] = []
     if args.set == "names":
         pending = [e for e in pending if e.key in glossary_keys]
-        country_names = [e for e in pending if is_country_name(e)]
+        if country_forms(language):
+            country_names = [e for e in pending if is_country_name(e)]
     else:
         pending = [e for e in pending if e.key not in glossary_keys]
     if args.files:
@@ -712,11 +754,15 @@ def cmd_refresh(args) -> int:
     return 0
 
 
-def repair_bare_quotes(line: str) -> str | None:
+def repair_bare_quotes(line: str, language: str = "german") -> str | None:
     """The value of a line whose text runs on past a bare `"` (the model closed
     „a quotation" with a plain quote mark): everything up to the line's last
-    `"`, with each bare `"` inside turned into „ or “ by whether a quotation
-    is open. None if the line doesn't have that shape."""
+    `"`, with each bare `"` inside turned into the language's opening or
+    closing mark („ or “) by whether a quotation is open. None if the line
+    doesn't have that shape, or the language has no marks listed."""
+    if language not in QUOTES:
+        return None
+    opening, closing = QUOTES[language][:2]
     start = line.find('"', line.find(":"))
     end = line.rstrip().rfind('"')
     if start == -1 or end <= start:
@@ -729,19 +775,19 @@ def repair_bare_quotes(line: str) -> str | None:
             out.append(inner[i:i + 2])
             i += 2
             continue
-        if c == "„":
+        if c == opening:
             depth += 1
-        elif c == "“":
+        elif c == closing:
             depth = max(0, depth - 1)
         elif c == '"':
-            c = "“" if depth else "„"
+            c = closing if depth else opening
             depth = depth - 1 if depth else 1
         out.append(c)
         i += 1
     return "".join(out)
 
 
-def read_output(work: str, chunk_id: str) -> tuple[dict[str, str], set[str]]:
+def read_output(work: str, chunk_id: str, language: str = "german") -> tuple[dict[str, str], set[str]]:
     """Every `key:0 "value"` line from the agent's output part files, and the
     keys whose line had to be repaired (`repair_bare_quotes`): text after the
     first closing quote, where `split_loc_line` (and so every loc tool here) cuts
@@ -757,7 +803,7 @@ def read_output(work: str, chunk_id: str) -> tuple[dict[str, str], set[str]]:
                 values[parsed[0]] = parsed[1]
                 trailing = parsed[2].strip()
                 if trailing and not trailing.startswith("#"):
-                    fixed = repair_bare_quotes(line)
+                    fixed = repair_bare_quotes(line, language)
                     if fixed is not None:
                         values[parsed[0]] = fixed
                         repaired.add(parsed[0])
@@ -776,13 +822,13 @@ def cmd_merge(args) -> int:
     report = {}
     totals = Counter()
     for chunk_id in chunk_ids:
-        output, repaired = read_output(work, chunk_id)
+        output, repaired = read_output(work, chunk_id, language)
         if not output:
             continue
         info = manifest[chunk_id]
         source_en = info["keys"]
         expected = list(source_en)
-        expected += [f"{k}_{form}" for k in info.get("country_names", []) for form in COUNTRY_FORMS]
+        expected += [f"{k}_{form}" for k in info.get("country_names", []) for form in country_forms(language)]
         rejects, warns, accepted = {}, {}, 0
         for key in expected:
             if key not in output:
@@ -795,11 +841,12 @@ def cmd_merge(args) -> int:
             en = source_en[base]
             value = output[key]
             if key == base:
-                errors, warnings = check_translation(en, value)
+                errors, warnings = check_translation(en, value, language)
             else:
                 errors, warnings = ([] if value.strip() else ["empty translation"]), []
             if key in repaired:
-                warnings = warnings + ['bare " inside the value, repaired to „…“']
+                opening, closing = QUOTES[language][:2]
+                warnings = warnings + [f'bare " inside the value, repaired to {opening}…{closing}']
             if errors:
                 rejects[key] = errors
                 continue
@@ -854,7 +901,7 @@ def cmd_prompt(args) -> int:
             language_title=args.language.replace("_", " ").title(),
             brief=os.path.join(committed, "BRIEF.md"),
             chunk=os.path.join(work, "chunks", cid + ".txt"),
-            lines=len(info["keys"]) + 7 * len(info.get("country_names", [])),
+            lines=len(info["keys"]) + len(country_forms(args.language)) * len(info.get("country_names", [])),
             content=", mostly event text" if events else "",
             updates=(f"; {len(info['previous'])} of them update an existing translation, see BRIEF.md § Updated lines"
                      if info.get("previous") else ""),
@@ -956,7 +1003,7 @@ def cmd_status(args) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--language", default="german")
-    parser.add_argument("--field", default="de", help="TM field holding the translation")
+    parser.add_argument("--field", help="TM field holding the translation (default: TM_FIELDS)")
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("prepare")
     p.add_argument("--set", choices=("names", "all"), default="all")
@@ -980,6 +1027,7 @@ def main(argv: list[str] | None = None) -> int:
     pr = sub.add_parser("prompt", help="print the standard agent prompt for chunks")
     pr.add_argument("chunks", nargs="+")
     args = parser.parse_args(argv)
+    args.field = args.field or tm_field(args.language)
     return {"prepare": cmd_prepare, "merge": cmd_merge, "status": cmd_status,
             "prompt": cmd_prompt, "check-terms": cmd_check_terms, "refresh": cmd_refresh, "prepare-fixes": cmd_prepare_fixes}[args.command](args)
 

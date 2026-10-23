@@ -62,9 +62,6 @@ LANGUAGES = (
     "turkish",
 )
 
-# The translation-memory field holding each language's text.
-TM_FIELDS = {"german": "de"}
-
 SOURCE_SUFFIX = "_l_english.yml"
 SOURCE_HEADER = "l_english:"
 
@@ -145,7 +142,7 @@ def load_overlays(languages: tuple[str, ...] = LANGUAGES) -> dict:
 
     overlays = {}
     for language in languages:
-        overlay = load_overlay(language, TM_FIELDS.get(language, language))
+        overlay = load_overlay(language)
         if overlay is not None:
             overlays[language] = overlay
     return overlays
