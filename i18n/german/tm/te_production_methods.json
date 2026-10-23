@@ -4515,6 +4515,10 @@
   "en": "Green Assembly",
   "de": "Grüne Montage"
  },
+ "pm_grid_hvdc_interconnector": {
+  "en": "HVDC Undersea Interconnector",
+  "de": "HGÜ-Seekabelverbindung"
+ },
  "pm_guinness_st_james_gate_brewery": {
   "en": "Guinness St. James's Gate Brewery",
   "de": "Guinness-Brauerei St. James's Gate"

@@ -43,6 +43,10 @@
   "en": "Supreme political authority is vested in artificial intelligence, which determines the state's objectives and directs their implementation. Human institutions serve in advisory and executive capacities.",
   "de": "Die oberste politische Gewalt liegt bei einer künstlichen Intelligenz, die die Ziele des Staates festlegt und ihre Umsetzung lenkt. Menschliche Institutionen dienen in beratender und ausführender Funktion."
  },
+ "law_algorithmic_jurisprudence": {
+  "en": "Algorithmic Jurisprudence",
+  "de": "Algorithmische Rechtsprechung"
+ },
  "law_automated_bureaucracy": {
   "en": "Automated Bureaucracy",
   "de": "Automatisierte Bürokratie"
@@ -131,6 +135,10 @@
   "en": "LGBTQ+ individuals have legal rights under [concept_lgbtq_rights_movement] legislation, including anti-[concept_discrimination] laws and protections from hate crimes. However, they may lack some aspects of full social equality, such as marriage equality or adoption rights.",
   "de": "LGBTQ+-Personen besitzen gesetzliche Rechte im Rahmen der [concept_lgbtq_rights_movement]-Gesetzgebung, einschließlich Gesetzen gegen [concept_discrimination] und Schutz vor Hassverbrechen. Es können ihnen jedoch einige Aspekte voller sozialer Gleichheit fehlen, etwa die Ehe für alle oder Adoptionsrechte."
  },
+ "law_constitutional_review": {
+  "en": "Constitutional Review",
+  "de": "Verfassungsgerichtsbarkeit"
+ },
  "law_contracted_administration": {
   "en": "Contracted Administration",
   "de": "Ausgelagerte Verwaltung"
@@ -218,6 +226,10 @@
  "law_equal_inheritance_desc": {
   "en": "The law reserves every child a fixed share of the estate, as the Napoleonic Code does. Farms divide with each generation, so peasants have fewer children to keep the plot whole and stay on the land, while the great fortunes slowly dissolve.",
   "de": "Das Gesetz sichert jedem Kind einen festen Anteil am Nachlass, wie der Code Napoléon. Höfe werden mit jeder Generation geteilt, also bekommen die Bauern weniger Kinder, um die Parzelle zu erhalten, und bleiben auf dem Land, während sich die großen Vermögen langsam auflösen."
+ },
+ "law_executive_tribunals": {
+  "en": "Executive Tribunals",
+  "de": "Kabinettsjustiz"
  },
  "law_federal_system": {
   "en": "Federal System",
@@ -338,6 +350,10 @@
  "law_intrusive_surveillance_desc": {
   "en": "An extensive surveillance system monitors citizens' activities, both online and offline. Personal information is collected, stored, and used by the government to control and manipulate society, with little or no privacy protection.",
   "de": "Ein umfassendes Überwachungssystem beobachtet die Aktivitäten der Bürger, online wie offline. Persönliche Daten werden von der Regierung gesammelt, gespeichert und genutzt, um die Gesellschaft zu kontrollieren und zu lenken, bei kaum oder keinem Datenschutz."
+ },
+ "law_judicial_supremacy": {
+  "en": "Judicial Supremacy",
+  "de": "Vorrang der Justiz"
  },
  "law_legal_limbo": {
   "en": "Legal Limbo",
@@ -892,8 +908,8 @@
   "de": "Das Arbeitsministerium regelt Arbeitsrecht, Arbeitnehmerrechte und Arbeitsmarktbedingungen mit dem Ziel, dass qualifizierte Arbeitskräfte dort ausgebildet und eingesetzt werden, wo sie gebraucht werden."
  },
  "law_pro_natalist_subsidies": {
-  "en": "Pro-Natalist Subsidies",
-  "de": "Geburtenfördernde Subventionen"
+  "en": "Pro-Natalist Policy",
+  "de": "Geburtenförderung"
  },
  "law_pro_natalist_subsidies_desc": {
   "en": "A growing nation needs a growing populace. The state actively encourages larger families through propaganda, tax incentives, and direct subsidies to ensure our continued strength and prosperity.",
@@ -954,6 +970,10 @@
  "law_rehabilitation_focused_criminal_justice_desc": {
   "en": "A criminal justice system that emphasizes rehabilitation and reintegration of offenders into society.",
   "de": "Ein Strafrechtssystem, das die Rehabilitation und Wiedereingliederung von Straftätern in die Gesellschaft betont."
+ },
+ "law_religious_courts": {
+  "en": "Religious Courts",
+  "de": "Religiöse Gerichte"
  },
  "law_restorative_justice": {
   "en": "Restorative Justice",
@@ -1026,6 +1046,10 @@
  "law_state_universal_heir_desc": {
   "en": "Private property ends with its owner's life: estates pass to the state, which administers them for the nation. With nothing to leave their children, families save less.",
   "de": "Privateigentum endet mit dem Leben seines Eigentümers: Nachlässe fallen an den Staat, der sie für die Nation verwaltet. Da sie ihren Kindern nichts hinterlassen können, sparen Familien weniger."
+ },
+ "law_statutory_courts": {
+  "en": "Statutory Courts",
+  "de": "Gesetzesgebundene Gerichte"
  },
  "law_strict_ip_protection": {
   "en": "Strict IP Protection",
@@ -1258,6 +1282,10 @@
  "lawgroup_internet_governance_desc": {
   "en": "Defines the state's control over the [concept_digital_rights_system].",
   "de": "Legt die staatliche Kontrolle über [concept_digital_rights_system] fest."
+ },
+ "lawgroup_judiciary": {
+  "en": "Judiciary",
+  "de": "Justiz"
  },
  "lawgroup_language_policy": {
   "en": "Language Policy",

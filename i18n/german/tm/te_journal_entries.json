@@ -1303,9 +1303,21 @@
   "en": "Tradecraft",
   "de": "Spionagehandwerk"
  },
+ "je_iw_how_sub_watching": {
+  "en": "Watching",
+  "de": "Beobachtung"
+ },
  "je_iw_how_tradecraft": {
   "en": "[concept_tradecraft] is our agency's experience, from 0 to [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_max')|0]. Operations past their preparatory phase raise it each month, an exposed operation lowers it, and with no operation running it drifts down. Each tier adds to our [concept_intelligence_capacity] and makes our networks grow #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! faster.\\n#bold Fledgling#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Established#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: priority [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Seasoned#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Regime Change and Nuclear Programme Sabotage; #bold Veteran#! at [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: one more operation of each type.\\nFalling below a tier never ends a running operation. Hover Tradecraft in the overview for this month's figures.",
   "de": "[concept_tradecraft] ist die Erfahrung unserer Agentur, von 0 bis [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_max')|0]. Operationen jenseits ihrer Vorbereitungsphase erhöhen sie jeden Monat, eine aufgedeckte Operation senkt sie, und wenn keine Operation läuft, sinkt sie allmählich. Jede Stufe erhöht unsere [concept_intelligence_capacity] und lässt unsere Netzwerke #G [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_net_gain_pct_display')|0]%#! schneller wachsen.\\n#bold Unerfahren#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_1_floor')|0]; #bold Etabliert#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]: Priorität [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0]; #bold Erfahren#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]: Regimewechsel und Nuklearprogramm-Sabotage; #bold Veteran#! ab [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier_4_floor')|0]: eine weitere Operation jeder Art.\\nEin Absinken unter eine Stufe beendet nie eine laufende Operation. Der Mauszeiger über Spionagehandwerk in der Übersicht zeigt die Werte dieses Monats."
+ },
+ "je_iw_known_expose_button": {
+  "en": "Expose",
+  "de": "Aufdecken"
+ },
+ "je_iw_known_header": {
+  "en": "Known Foreign Operations",
+  "de": "Bekannte ausländische Operationen"
  },
  "je_iw_last_exposed_named": {
   "en": "Counterintelligence exposed $covert_exposed_op_link$ run against us by #b [THIS.GetCountry.GetName]#!, [SCOPE.GetRootScope.ScriptValue('covert_last_exposed_age_display')|0] months ago.",
@@ -1399,6 +1411,10 @@
   "en": "#R Comms Disruption#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
   "de": "#R Kommunikationsstörung#! gegen [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('AKK')]"
  },
+ "je_iw_op_row_counterintel_support": {
+  "en": "#G Supporting Counterintelligence#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "de": "#G Unterstützt die Spionageabwehr#! [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('IN')]"
+ },
  "je_iw_op_row_cultivate_assets": {
   "en": "#G Cultivating Assets#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
   "de": "#G Kontakte aufbauen#! [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetAltName('IN')]"
@@ -1414,6 +1430,10 @@
  "je_iw_op_row_detection": {
   "en": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! a month",
   "de": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! pro Monat"
+ },
+ "je_iw_op_row_detection_none": {
+  "en": "[concept_operation_detection]: #G none#!, an open arrangement",
+  "de": "[concept_operation_detection]: #G keines#!, eine offene Vereinbarung"
  },
  "je_iw_op_row_detection_tt": {
   "en": "Our [concept_intelligence_capacity] #v [GetPlayer.MakeScope.ScriptValue('intelligence_capacity_display')|0]#! against their #R [ScriptContainer.GetVariableValue('iw_tgt_ic')|0]#!, plus #R [ScriptContainer.GetVariableValue('iw_tgt_td')|0]#! [Concept('concept_target_defenses', 'defence')] against this kind of operation. Funding, our network there, priority and our [concept_covert_efficiency] set the rest. Any network of theirs inside our own service sharpens their counterintelligence further.",
@@ -2778,6 +2798,10 @@
  "je_space_race_widget_ov_stage": {
   "en": "Stage: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
   "de": "Stufe: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] von 5"
+ },
+ "je_space_race_widget_ov_staged_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
+  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! Flotten"
  },
  "je_space_race_widget_ov_transit_label": {
   "en": "Transit",
@@ -4731,6 +4755,10 @@
   "en": "The Convention on the Law of the Sea is not already in force",
   "de": "Das Seerechtsübereinkommen ist noch nicht in Kraft"
  },
+ "je_un_chamber_propose_need_lift_sanctions": {
+  "en": "We are under [concept_un_sanctions]",
+  "de": "Gegen uns gelten [concept_un_sanctions]"
+ },
  "je_un_chamber_propose_need_mandate": {
   "en": "We hold no authorization already, and a case for one is open to us",
   "de": "Wir halten noch keine Ermächtigung, und uns steht ein Fall dafür offen"
@@ -4946,6 +4974,10 @@
  "je_un_chamber_propose_nonmember": {
   "en": "#v We are not a member, so we may propose nothing.#! The Assembly hears motions only from its own delegations.\\n",
   "de": "#v Wir sind kein Mitglied, daher dürfen wir nichts beantragen.#! Die Versammlung hört Anträge nur von ihren eigenen Delegationen.\\n"
+ },
+ "je_un_chamber_propose_preview_lift_sanctions": {
+  "en": "#bold Enforced by:#! [AddLocalizationIf(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists, SCOPE.sCountry('un_lift_sanctions_enforcer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists), 'je_un_chamber_country_gone')], for #v [THIS.ScriptValue('un_disp_sanctions_months')|0]#! months",
+  "de": "#bold Durchgesetzt von:#! [AddLocalizationIf(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists, SCOPE.sCountry('un_lift_sanctions_enforcer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists), 'je_un_chamber_country_gone')], seit #v [THIS.ScriptValue('un_disp_sanctions_months')|0]#! Monaten"
  },
  "je_un_chamber_propose_preview_observer_request": {
   "en": "#bold Observers to:#! [SCOPE.sState('un_observer_request_state').GetName]",
@@ -5591,6 +5623,10 @@
   "en": "#bold Humanitarian Aid Request#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Ersuchen um humanitäre Hilfe#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
+ "je_un_chamber_topic_antarctic": {
+  "en": "#bold Antarctic Treaty#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Antarktisvertrag#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
  "je_un_chamber_topic_arms_embargo": {
   "en": "#bold [concept_un_arms_embargo]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold [concept_un_arms_embargo]#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
@@ -5658,6 +5694,10 @@
  "je_un_chamber_topic_law_of_sea": {
   "en": "#bold Convention on the Law of the Sea#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
   "de": "#bold Seerechtsübereinkommen#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_lift_sanctions": {
+  "en": "#bold Lift the [concept_un_sanctions]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "de": "#bold Aufhebung der [concept_un_sanctions]#! (Resolution Nr. [THIS.Var('un_res_seq').GetValue|0])"
  },
  "je_un_chamber_topic_military_mandate": {
   "en": "#bold Authorized Military Mandate#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
@@ -5810,6 +5850,14 @@
  "je_un_chamber_votes_header": {
   "en": "Recorded Ballot",
   "de": "Protokollierte Abstimmung"
+ },
+ "je_un_conv_name_antarctic": {
+  "en": "Antarctic Treaty",
+  "de": "Antarktisvertrag"
+ },
+ "je_un_conv_name_asat": {
+  "en": "Moratorium on Destructive Anti-Satellite Tests",
+  "de": "Moratorium für zerstörerische Antisatellitentests"
  },
  "je_un_conv_name_climate": {
   "en": "Climate Accord",
@@ -6507,6 +6555,14 @@
   "en": "        Humanitarian Aid Request",
   "de": "        Ersuchen um humanitäre Hilfe"
  },
+ "je_un_led_topic_antarctic": {
+  "en": "        Antarctic Treaty",
+  "de": "        Antarktisvertrag"
+ },
+ "je_un_led_topic_asat": {
+  "en": "        Moratorium on Destructive Anti-Satellite Tests",
+  "de": "        Moratorium für zerstörerische Antisatellitentests"
+ },
  "je_un_led_topic_ceasefire": {
   "en": "        Binding Ceasefire",
   "de": "        Verbindlicher Waffenstillstand"
@@ -6562,6 +6618,10 @@
  "je_un_led_topic_law_of_sea": {
   "en": "        Convention on the Law of the Sea",
   "de": "        Seerechtsübereinkommen"
+ },
+ "je_un_led_topic_lift_sanctions": {
+  "en": "        Petition to Lift [concept_un_sanctions]",
+  "de": "        Antrag auf Aufhebung der [concept_un_sanctions]"
  },
  "je_un_led_topic_military_mandate": {
   "en": "        Authorized Military Mandate",
@@ -6870,6 +6930,10 @@
  "je_un_record_aggression": {
   "en": "Aggression",
   "de": "Aggression"
+ },
+ "je_un_record_asat": {
+  "en": "Anti-satellite strikes",
+  "de": "Antisatellitenschläge"
  },
  "je_un_record_case": {
   "en": "#bold Case strength#!",

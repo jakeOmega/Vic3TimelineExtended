@@ -4895,6 +4895,10 @@
   "en": "The share of mothers' deaths in childbirth that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
   "de": "Der Anteil der Todesfälle von Müttern bei der Geburt, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
  },
+ "state_medical_diffusion_add": {
+  "en": "Spread of Medicine",
+  "de": "Verbreitung der Medizin"
+ },
  "state_migration_crowding_density_mult": {
   "en": "[concept_migration_crowding] Tolerance",
   "de": "[concept_migration_crowding]-Toleranz"

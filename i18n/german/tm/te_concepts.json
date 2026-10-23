@@ -1235,10 +1235,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
  },
- "antitrust_public_outrage_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
- },
  "antitrust_strict_enforcement": {
   "en": "Antitrust: Strict Enforcement",
   "de": "Kartellrecht: Strikte Durchsetzung"
@@ -1306,10 +1302,6 @@
  "augment_ethics_board_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
- },
- "augment_ethics_board_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Fortschritt der Gesetzeseinführung durch ein kürzliches Ereignis."
  },
  "augment_health_panic": {
   "en": "Augmentation Health Scare",
@@ -1662,6 +1654,10 @@
  "bg_biotechnology": {
   "en": "Biotechnology",
   "de": "Biotechnologie"
+ },
+ "bg_clean_power": {
+  "en": "Clean Power",
+  "de": "Saubere Energie"
  },
  "bg_company_buildings": {
   "en": "Company Buildings",
@@ -3183,6 +3179,10 @@
   "en": "Government-run movement of people from one part of the country to another. A Settlement Authority on a thinly populated frontier recruits across the country under one program (from land grants to deportation), moves the number shown in the state's modifiers each month, and closes when the region fills up. Coercive programs cost lives in transit and breach the Universal Declaration of Human Rights for its parties, and Special Settlements and Rustication anger the people left behind. Settlers press on anyone already living on the frontier who is not at least a second-class citizen.",
   "de": "Staatlich gelenkte Umsiedlung von Menschen von einem Landesteil in einen anderen. Eine Siedlungsbehörde an einer dünn besiedelten Grenze rekrutiert landesweit unter einem Programm (von Landzuteilungen bis zu Deportation), bewegt jeden Monat die in den Modifikatoren des Staates angezeigte Zahl und schließt, sobald die Region gefüllt ist. Zwangsprogramme kosten Menschenleben während des Transports und verletzen für ihre Vertragsparteien die Allgemeine Erklärung der Menschenrechte, und Sondersiedlungen sowie Landverbannung verärgern die Zurückgebliebenen. Siedler bedrängen jeden, der bereits an der Grenze lebt und nicht mindestens Bürger zweiter Klasse ist."
  },
+ "concept_judicial_independence": {
+  "en": "Judicial Independence",
+  "de": "Richterliche Unabhängigkeit"
+ },
  "concept_launch_authority": {
   "en": "Launch Authority",
   "de": "Einsatzbefugnis"
@@ -3287,6 +3287,10 @@
   "en": "How many [concept_covert_operations] you can run at once. Every country has one, major powers two and great powers three; technologies and the Ministry of Intelligence and Security add more, up to ten. Each unused slot is redirected to counterintelligence.",
   "de": "Wie viele [concept_covert_operations] Sie gleichzeitig durchführen können. Jedes Land hat eine, Mittelmächte zwei und Großmächte drei; Technologien und das Geheimdienst- und Sicherheitsministerium bringen weitere hinzu, bis zu zehn. Jeder ungenutzte Slot wird auf die Spionageabwehr umgeleitet."
  },
+ "concept_orbital_debris": {
+  "en": "Orbital Debris",
+  "de": "Weltraumschrott"
+ },
  "concept_pollution_system": {
   "en": "Pollution",
   "de": "Verschmutzung"
@@ -3331,6 +3335,10 @@
   "en": "How an interest group that favors #v Limited War#! over #v Total War#! judges our nuclear posture: as a dove. A mild view, from a group that approves of Limited War rather than strongly approving, moves its approval by at most 1 instead of 2. Everything but the arsenal itself counts once our [concept_nuclear_doctrine] has stood for six months.\\n\\n#G Likes#!: No First Use (+2) and Existential Deterrence (+1); Recessed [concept_nuclear_readiness] (+1).\\n#R Dislikes#!: Nuclear Compellence and Nuclear Warfighting (−2) and Flexible First Use (−1); High Alert (−1); Launch on Warning and Automatic Retaliation as [concept_launch_authority] (−1); and the arsenal itself once the [concept_nuclear_taboo] makes it a burden, from a burden of 33% (−1) and 67% (−2).",
   "de": "Wie eine Interessengruppe, die #v Begrenzten Krieg#! dem #v Totalen Krieg#! vorzieht, unsere nukleare Haltung beurteilt: als Taube. Eine milde Sicht, von einer Gruppe, die Begrenzten Krieg nur gutheißt statt ihn stark zu befürworten, verschiebt ihre Zustimmung um höchstens 1 statt 2. Alles außer dem Arsenal selbst zählt, sobald unsere [concept_nuclear_doctrine] sechs Monate Bestand hat.\\n\\n#G Gefällt#!: Kein Erstschlag (+2) und Existenzielle Abschreckung (+1); eingelagerte [concept_nuclear_readiness] (+1).\\n#R Missfällt#!: Nukleare Nötigung und Nukleare Kriegsführung (−2) und Flexibler Erstschlag (−1); Hohe Alarmbereitschaft (−1); Start bei Vorwarnung und Automatische Vergeltung als [concept_launch_authority] (−1); und das Arsenal selbst, sobald das [concept_nuclear_taboo] es zur Last macht, ab einer Last von 33% (−1) und 67% (−2)."
  },
+ "concept_power_grid": {
+  "en": "Power Grid",
+  "de": "Stromnetz"
+ },
  "concept_religious_revival": {
   "en": "Religious Revival",
   "de": "Religiöse Erweckung"
@@ -3354,6 +3362,14 @@
  "concept_rules_of_war_system_desc": {
   "en": "Laws governing the conduct of warfare. Each serves a different aim: #v $law_total_war$#! mobilizes the whole nation for victory, #v $law_traditional_rules_of_war$#! keeps a free hand and a steady officer corps, #v $law_war_crimes_forbidden$#! governs occupation so that conquered lands stay calmer, #v $law_humanitarian_regulations$#! makes us a partner other nations trust, and #v $law_limited_war$#! keeps wars small and slow to start. $law_humanitarian_regulations$ forbids strategic nuclear strikes and $law_limited_war$ all nuclear strikes, unless we or a country we protect have been struck, or we face annexation or subjugation in a war we are fighting.",
   "de": "Gesetze, die die Kriegsführung regeln. Jedes dient einem anderen Ziel: #v $law_total_war$#! mobilisiert die ganze Nation für den Sieg, #v $law_traditional_rules_of_war$#! sichert freie Hand und ein gefestigtes Offizierskorps, #v $law_war_crimes_forbidden$#! regelt die Besatzung, sodass eroberte Gebiete ruhiger bleiben, #v $law_humanitarian_regulations$#! macht uns zu einem Partner, dem andere Nationen vertrauen, und #v $law_limited_war$#! hält Kriege klein und schwer auszulösen. $law_humanitarian_regulations$ verbietet strategische Nuklearschläge und $law_limited_war$ alle Nuklearschläge, es sei denn, wir oder ein von uns geschütztes Land wurden getroffen, oder uns droht in einem Krieg, den wir führen, die Annexion oder Unterwerfung."
+ },
+ "concept_seabed_claim": {
+  "en": "Seabed Claim",
+  "de": "Meeresbodenanspruch"
+ },
+ "concept_seabed_licence": {
+  "en": "Seabed Licence",
+  "de": "Meeresbodenlizenz"
  },
  "concept_sol_expectations": {
   "en": "Adaptive SoL Expectations",
@@ -3507,6 +3523,10 @@
   "en": "Urban centers attract tourists with their cultural offerings, shopping, entertainment, and historical significance. Higher city ranks provide larger [concept_tourism_output] bonuses.",
   "de": "Städtische Zentren ziehen Touristen mit ihrem kulturellen Angebot, Einkaufsmöglichkeiten, Unterhaltung und historischer Bedeutung an. Höhere Stadtränge bieten größere [concept_tourism_output]-Boni."
  },
+ "concept_tourism_infrastructure": {
+  "en": "Excess Infrastructure",
+  "de": "Überschüssige Infrastruktur"
+ },
  "concept_tourism_monuments": {
   "en": "Monuments",
   "de": "Monumente"
@@ -3531,14 +3551,6 @@
   "en": "National parks and natural reserves draw eco-tourists and recreation seekers, increasing [concept_tourism_throughput].",
   "de": "Nationalparks und Naturschutzgebiete ziehen Ökotouristen und Erholungssuchende an und steigern den [concept_tourism_throughput]."
  },
- "concept_tourism_ports": {
-  "en": "Ports",
-  "de": "Häfen"
- },
- "concept_tourism_ports_desc": {
-  "en": "Coastal access and port [concept_infrastructure] bring cruise ships and maritime visitors, boosting [concept_tourism_throughput]. States with active ports see increased tourist flow.",
-  "de": "Küstenzugang und Hafen-[concept_infrastructure] bringen Kreuzfahrtschiffe und maritime Besucher und steigern den [concept_tourism_throughput]. Staaten mit aktiven Häfen verzeichnen stärkeren Touristenverkehr."
- },
  "concept_tourism_system": {
   "en": "Tourism",
   "de": "Tourismus"
@@ -3554,14 +3566,6 @@
  "concept_tourism_throughput_desc": {
   "en": "The [concept_throughput] multiplier for the [concept_tourism_system] industry, representing how accessible and attractive the state is to visitors. Improved by ports, land transport, art production, parks, and monuments.",
   "de": "Der [concept_throughput]-Multiplikator für die Branche [concept_tourism_system], der widerspiegelt, wie zugänglich und attraktiv der Staat für Besucher ist. Verbessert durch Häfen, Landverkehr, Kunstproduktion, Parks und Monumente."
- },
- "concept_tourism_transit": {
-  "en": "Transit",
-  "de": "Transit"
- },
- "concept_tourism_transit_desc": {
-  "en": "Land transportation [concept_infrastructure] — railways and highways — makes a state more accessible to tourists, increasing [concept_throughput]. Airports raise [concept_tourism_output] instead.",
-  "de": "Landverkehrs-[concept_infrastructure] — Eisenbahnen und Fernstraßen — macht einen Staat für Touristen leichter zugänglich und steigert den [concept_throughput]. Flughäfen erhöhen stattdessen den [concept_tourism_output]."
  },
  "concept_tradecraft": {
   "en": "Tradecraft",
@@ -3966,10 +3970,6 @@
  "country_building_highway_require_subsidies_bool_desc": {
   "en": "When enabled, highways must be subsidized by the government to remain operational",
   "de": "Wenn aktiviert, müssen Autobahnen vom Staat subventioniert werden, um betriebsbereit zu bleiben"
- },
- "country_building_renewable_energy_plant_require_subsidies_bool_desc": {
-  "en": "Renewable energy plants must be subsidized by the government and cannot operate without public funding.",
-  "de": "Anlagen für erneuerbare Energien müssen vom Staat subventioniert werden und können ohne öffentliche Finanzierung nicht betrieben werden."
  },
  "country_building_synthetics_plant_coal_require_subsidies_bool_desc": {
   "en": "Requires public subsidies for Carbon Conversion Works.",
@@ -4603,10 +4603,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
  },
- "crimjust_reform_debate_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
- },
  "crimjust_rehabilitation_focus": {
   "en": "Criminal Justice: Rehabilitation Focus",
   "de": "Strafrecht: Fokus auf Resozialisierung"
@@ -5211,10 +5207,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
  },
- "famrep_demographic_debate_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
- },
  "famrep_family_planning": {
   "en": "Family Policy: Comprehensive Family Planning",
   "de": "Familienpolitik: Umfassende Familienplanung"
@@ -5326,10 +5318,6 @@
  "finreg_bankers_lobby_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
- },
- "finreg_bankers_lobby_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
  },
  "finreg_banking_stability": {
   "en": "Restored Banking Confidence",
@@ -5599,10 +5587,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
  },
- "genetics_ethics_debate_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
- },
  "genetics_research_exemption": {
   "en": "Genetics: Research Exemption",
   "de": "Genetik: Forschungsausnahme"
@@ -5755,10 +5739,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
  },
- "govprin_popular_assembly_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
- },
  "govprin_tech_first": {
   "en": "Governance: Tech First",
   "de": "Regierungsführung: Technik zuerst"
@@ -5854,6 +5834,14 @@
  "greenwashing_modifier_desc": {
   "en": "The government pays lip service to environmental concerns without meaningful action.",
   "de": "Die Regierung bekennt sich zu Umweltanliegen nur mit Lippenbekenntnissen, ohne wirksames Handeln."
+ },
+ "grid_interconnection_agreement": {
+  "en": "Grid Interconnection Agreement",
+  "de": "Netzverbundabkommen"
+ },
+ "grid_power": {
+  "en": "Grid Power",
+  "de": "Netzstrom"
  },
  "gw_btn_adopt": {
   "en": "Adopt",
@@ -6207,10 +6195,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
  },
- "inherit_succession_dispute_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
- },
  "inherit_wealth_consolidation": {
   "en": "Concentrated Inheritances",
   "de": "Konzentrierte Erbschaften"
@@ -6314,10 +6298,6 @@
  "ip_piracy_debate_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
- },
- "ip_piracy_debate_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
  },
  "irr_cultural_ties_modifier_desc": {
   "en": "We have invested in cultural exchange with our same-culture neighbor. Goodwill flows both ways.",
@@ -6506,10 +6486,6 @@
  "langpol_cultural_resistance_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung stark positiv beeinflusst."
- },
- "langpol_cultural_resistance_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein aktuelles Ereignis hat den Fortschritt bei der Gesetzesverabschiedung etwas positiv beeinflusst."
  },
  "langpol_pluralist_accommodation": {
   "en": "Language Policy: Pluralist Accommodation",
@@ -7015,10 +6991,6 @@
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_aid_distant_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_aid_humanitarian": {
   "en": "International Aid Ministry: Humanitarian Allocation",
   "de": "Ministerium für internationale Hilfe: Humanitäre Zuteilung"
@@ -7034,14 +7006,6 @@
  "ministry_budget_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
- "ministry_budget_cautious": {
-  "en": "Ministry: Budget Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Budgetvormarsch"
- },
- "ministry_budget_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
  "ministry_budget_generous": {
   "en": "Ministry Budget: Generous Funding",
@@ -7079,17 +7043,9 @@
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_consumer_tainted_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_culture_patronage_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
- "ministry_culture_patronage_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
  "ministry_dissolution_advance": {
   "en": "Ministry: Dissolution Advance",
@@ -7098,14 +7054,6 @@
  "ministry_dissolution_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
- "ministry_dissolution_cautious": {
-  "en": "Ministry: Dissolution Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Auflösungsvormarsch"
- },
- "ministry_dissolution_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
  "ministry_dissolution_phased": {
   "en": "Ministry Dissolution: Phased Wind-Down",
@@ -7123,10 +7071,6 @@
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_env_smokestacks_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_env_voluntary": {
   "en": "Environment Ministry: Voluntary Standards",
   "de": "Umweltministerium: Freiwillige Standards"
@@ -7143,25 +7087,13 @@
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_intel_shadow_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_labor_struggle_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_labor_struggle_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_prop_loudspeaker_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
- "ministry_prop_loudspeaker_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
  "ministry_refugee_crisis_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
@@ -7227,10 +7159,6 @@
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_thought_watchers_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_turf_advance": {
   "en": "Ministry: Turf Advance",
   "de": "Ministerium: Revierfortschritt"
@@ -7238,14 +7166,6 @@
  "ministry_turf_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
- "ministry_turf_cautious": {
-  "en": "Ministry: Turf Cautious Advance",
-  "de": "Ministerium: Vorsichtiger Reviervormarsch"
- },
- "ministry_turf_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
  "ministry_turf_coexist": {
   "en": "Ministry Turf: Coexist with Existing Departments",
@@ -7263,17 +7183,9 @@
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
- "ministry_urban_sprawl_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
  "ministry_war_generals_advance_desc": {
   "en": "A strong positive boost to ministry law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
- },
- "ministry_war_generals_cautious_desc": {
-  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Erlassfortschritt eines Ministeriumsgesetzes durch ein kürzliches Ereignis."
  },
  "minority_business_protection_modifier_desc": {
   "en": "The government has intervened to protect minority-owned businesses from organized boycotts, at some bureaucratic cost.",
@@ -7370,10 +7282,6 @@
  "monpol_gold_hoarders_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Gesetzeserlassfortschritt durch ein kürzliches Ereignis."
- },
- "monpol_gold_hoarders_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Gesetzeserlassfortschritt durch ein kürzliches Ereignis."
  },
  "monpol_industrial_alignment": {
   "en": "Monetary Policy: Industrial Alignment",
@@ -8939,10 +8847,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Gesetzeserlassfortschritt durch ein kürzliches Ereignis."
  },
- "row_military_pushback_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Gesetzeserlassfortschritt durch ein kürzliches Ereignis."
- },
  "row_realpolitik_exemptions": {
   "en": "Rules of War: Realpolitik Exemptions",
   "de": "Kriegsregeln: Realpolitische Ausnahmen"
@@ -10059,10 +9963,6 @@
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
  },
- "statepower_autonomy_debate_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
- },
  "statepower_centralized": {
   "en": "State Power: Centralized Administration",
   "de": "Staatsmacht: Zentralisierte Verwaltung"
@@ -10991,10 +10891,6 @@
   "en": "This country refused to table a convention protecting the world's cultural and natural heritage, calling culture a domestic matter.",
   "de": "Dieses Land hat sich geweigert, ein Abkommen zum Schutz des Kultur- und Naturerbes der Welt vorzulegen, und Kultur zur inneren Angelegenheit erklärt."
  },
- "un_heritage_token_modifier_desc": {
-  "en": "This country has made a modest contribution to UNESCO heritage preservation.",
-  "de": "Dieses Land hat einen bescheidenen Beitrag zum Erhalt des UNESCO-Erbes geleistet."
- },
  "un_high_authority_infamy_modifier_desc": {
   "en": "The UN's authority means that aggressive acts carry greater international consequences. [concept_infamy] generation is increased.",
   "de": "Die Autorität der UN sorgt dafür, dass aggressive Handlungen größere internationale Folgen haben. Die Erzeugung von [concept_infamy] ist erhöht."
@@ -11010,10 +10906,6 @@
  "un_human_rights_refusal_modifier_desc": {
   "en": "This country has refused to sign the Universal Declaration of Human Rights, strengthening domestic authority but damaging its international image.",
   "de": "Dieses Land hat sich geweigert, die Allgemeine Erklärung der Menschenrechte zu unterzeichnen, was die innenpolitische Autorität stärkt, aber seinem internationalen Ansehen schadet."
- },
- "un_human_rights_reservations_modifier_desc": {
-  "en": "This country has signed the Universal Declaration of Human Rights with reservations on certain provisions.",
-  "de": "Dieses Land hat die Allgemeine Erklärung der Menschenrechte mit Vorbehalten zu bestimmten Bestimmungen unterzeichnet."
  },
  "un_humanitarian_aid_cost_desc": {
   "en": "Ongoing financial costs of providing humanitarian assistance through the UN.",
@@ -11058,10 +10950,6 @@
  "un_law_of_sea_refusal_modifier_desc": {
   "en": "This country rejected the Convention on the Law of the Sea, attracting international criticism and increased tensions over maritime disputes.",
   "de": "Dieses Land hat das Seerechtsübereinkommen abgelehnt und sich damit internationale Kritik sowie verstärkte Spannungen bei Seestreitigkeiten zugezogen."
- },
- "un_law_of_sea_reservations_modifier_desc": {
-  "en": "This country signed the Convention on the Law of the Sea with reservations on sovereignty, gaining partial benefits.",
-  "de": "Dieses Land hat das Seerechtsübereinkommen mit Vorbehalten zur Souveränität unterzeichnet und erhält dadurch teilweise Vorteile."
  },
  "un_loan_conditions_modifier_desc": {
   "en": "The conditions attached to this country's emergency loan from the United Nations, dictated by its creditors.",
@@ -11798,10 +11686,6 @@
  "welfare_automation_fears_advance_desc": {
   "en": "A strong positive boost to law enactment progress from a recent event.",
   "de": "Ein starker positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
- },
- "welfare_automation_fears_cautious_desc": {
-  "en": "A smaller positive boost to law enactment progress from a recent event.",
-  "de": "Ein kleinerer positiver Schub für den Fortschritt bei der Gesetzeseinführung durch ein jüngstes Ereignis."
  },
  "welfare_investment_chill": {
   "en": "Investor Caution",

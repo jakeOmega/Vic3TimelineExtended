@@ -4319,10 +4319,6 @@
   "en": "Antitrust: Public Outrage Advance",
   "de": "Kartellrecht: Öffentliche Empörung schreitet voran"
  },
- "antitrust_public_outrage_cautious": {
-  "en": "Antitrust: Public Outrage Cautious Advance",
-  "de": "Kartellrecht: Öffentliche Empörung – Vorsichtiger Vormarsch"
- },
  "antitrust_public_outrage_stall": {
   "en": "Antitrust: Public Outrage Stall",
   "de": "Kartellrecht: Öffentliche Empörung stockt"
@@ -4346,10 +4342,6 @@
  "augment_ethics_board_advance": {
   "en": "Augmentation: Ethics Board Advance",
   "de": "Augmentierung: Ethikrat schreitet voran"
- },
- "augment_ethics_board_cautious": {
-  "en": "Augmentation: Ethics Board Cautious Advance",
-  "de": "Augmentierung: Ethikrat – Vorsichtiger Vormarsch"
  },
  "augment_ethics_board_stall": {
   "en": "Augmentation: Ethics Board Stall",
@@ -4530,10 +4522,6 @@
  "banking_cw_mutual_aid_loyalists_tt": {
   "en": "[Concept('concept_loyalist', 'Loyalists')] among the [concept_lower_strata], at most once every #v 5#! years.",
   "de": "[Concept('concept_loyalist', 'Loyalisten')] in der [concept_lower_strata], höchstens einmal alle #v 5#! Jahre."
- },
- "banking_cycle_status_not_started": {
-  "en": "The cycle's readings appear here once the entry starts.",
-  "de": "Die Werte des Zyklus erscheinen hier, sobald der Eintrag beginnt."
  },
  "banking_cycle_value_bar_name": {
   "en": "[concept_banking_cycle] Value",
@@ -7055,6 +7043,10 @@
   "en": "Greenhouse Gas Emissions",
   "de": "Treibhausgasemissionen"
  },
+ "concept_health_care_access": {
+  "en": "Health Care Access",
+  "de": "Zugang zur Gesundheitsversorgung"
+ },
  "concept_heir_education_system": {
   "en": "Heir Education",
   "de": "Erbenerziehung"
@@ -7282,10 +7274,6 @@
  "country_building_highway_require_subsidies_bool": {
   "en": "Highways Require Subsidies",
   "de": "Autobahnen benötigen Subventionen"
- },
- "country_building_renewable_energy_plant_require_subsidies_bool": {
-  "en": "Forced Subsidies for Renewable Energy Plants",
-  "de": "Zwangssubventionen für Anlagen erneuerbarer Energien"
  },
  "country_building_synthetics_plant_coal_require_subsidies_bool": {
   "en": "$building_synthetics_plant_coal$ Requires Subsidies",
@@ -8059,10 +8047,6 @@
   "en": "Criminal Justice: Reform Debate Advance",
   "de": "Strafrecht: Vormarsch der Reformdebatte"
  },
- "crimjust_reform_debate_cautious": {
-  "en": "Criminal Justice: Reform Debate Cautious Advance",
-  "de": "Strafrecht: Vorsichtiger Vormarsch der Reformdebatte"
- },
  "crimjust_reform_debate_stall": {
   "en": "Criminal Justice: Reform Debate Stall",
   "de": "Strafrecht: Reformdebatte stockt"
@@ -8319,10 +8303,6 @@
   "en": "Family Policy: Demographic Debate Advance",
   "de": "Familienpolitik: Vormarsch der demografischen Debatte"
  },
- "famrep_demographic_debate_cautious": {
-  "en": "Family Policy: Demographic Debate Cautious Advance",
-  "de": "Familienpolitik: Vorsichtiger Vormarsch der demografischen Debatte"
- },
  "famrep_demographic_debate_stall": {
   "en": "Family Policy: Demographic Debate Stall",
   "de": "Familienpolitik: Demografische Debatte stockt"
@@ -8427,10 +8407,6 @@
   "en": "[concept_financial_regulation]: Bankers’ Lobby Advance",
   "de": "[concept_financial_regulation]: Vormarsch der Bankenlobby"
  },
- "finreg_bankers_lobby_cautious": {
-  "en": "[concept_financial_regulation]: Bankers’ Lobby Cautious Advance",
-  "de": "[concept_financial_regulation]: Vorsichtiger Vormarsch der Bankenlobby"
- },
  "finreg_bankers_lobby_stall": {
   "en": "[concept_financial_regulation]: Bankers’ Lobby Stall",
   "de": "[concept_financial_regulation]: Bankenlobby stockt"
@@ -8515,10 +8491,6 @@
   "en": "Genetics: Ethics Debate Advance",
   "de": "Genetik: Vormarsch der Ethikdebatte"
  },
- "genetics_ethics_debate_cautious": {
-  "en": "Genetics: Ethics Debate Cautious Advance",
-  "de": "Genetik: Vorsichtiger Vormarsch der Ethikdebatte"
- },
  "genetics_ethics_debate_stall": {
   "en": "Genetics: Ethics Debate Stall",
   "de": "Genetik: Ethikdebatte stockt"
@@ -8531,6 +8503,10 @@
   "en": "Glass Ceiling Broken",
   "de": "Gläserne Decke durchbrochen"
  },
+ "gm_arch_history_lead": {
+  "en": "Historical note:",
+  "de": "Historische Anmerkung:"
+ },
  "gm_button_clear_name": {
   "en": "Clear Name",
   "de": "Namen löschen"
@@ -8538,14 +8514,6 @@
  "gm_button_clear_name_tooltip": {
   "en": "#b Clear the typed name#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]",
   "de": "#b Eingegebenen Namen löschen#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
- },
- "gm_button_com_extend": {
-  "en": "Ask for More Time",
-  "de": "Um mehr Zeit bitten"
- },
- "gm_button_com_extend_tooltip": {
-  "en": "#b Ask for more time#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]",
-  "de": "#b Um mehr Zeit bitten#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
  },
  "gm_button_name_cancel": {
   "en": "Cancel",
@@ -8650,14 +8618,6 @@
  "gm_com_decline_tt": {
   "en": "The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] resent the refusal: about #R −1#! approval, fading over a few years.",
   "de": "Die [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] nehmen die Ablehnung übel: etwa #R −1#! Zustimmung, über einige Jahre verblassend."
- },
- "gm_com_extend_effect_tt": {
-  "en": "#v 36#! more months to meet the commission. Met after that, it pays half: about #G +1#! approval and #G +2.5#! [concept_legitimacy].",
-  "de": "Weitere #v 36#! Monate, um den Auftrag zu erfüllen. Danach erfüllt, zahlt er die Hälfte: etwa #G +1#! Zustimmung und #G +2,5#! [concept_legitimacy]."
- },
- "gm_com_extend_once_tt": {
-  "en": "Only once for each commission",
-  "de": "Nur einmal je Auftrag"
  },
  "gm_com_form_arch": {
   "en": "an arch",
@@ -9219,17 +9179,9 @@
   "en": "Grandeur Added",
   "de": "Hinzugefügte Grandeur"
  },
- "gm_je_com_months_extended": {
-  "en": " We have already asked for more time, so meeting it now earns half the reward.",
-  "de": " Wir haben bereits um mehr Zeit gebeten, daher bringt die Erfüllung jetzt die halbe Belohnung ein."
- },
  "gm_je_com_months_tt": {
   "en": "When they run out, the commission is missed and the group that asked resents it.[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_extended'), '(CFixedPoint)1' ), 'gm_je_com_months_extended', 'gm_je_com_months_unextended' )]",
   "de": "Laufen sie ab, ist der Auftrag verfehlt, und die Gruppe, die ihn erbeten hat, nimmt es übel.[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_com_extended'), '(CFixedPoint)1' ), 'gm_je_com_months_extended', 'gm_je_com_months_unextended' )]"
- },
- "gm_je_com_months_unextended": {
-  "en": " Ask for More Time adds #v 36#! months, once, for half the reward.",
-  "de": " „Um mehr Zeit bitten“ fügt einmalig #v 36#! Monate hinzu, für die halbe Belohnung."
  },
  "gm_je_com_named": {
   "en": "To be named for [JournalEntry.GetCountry.GetCustom('gm_com_namesake_phrase')]",
@@ -9335,10 +9287,6 @@
   "en": "$ig_industrialists$ Attraction",
   "de": "Anziehung ($ig_industrialists$)"
  },
- "gm_je_lbl_promise": {
-  "en": "A Promise Kept",
-  "de": "Ein gehaltenes Versprechen"
- },
  "gm_je_lbl_religious": {
   "en": "$ig_devout$ Attraction",
   "de": "Anziehung ($ig_devout$)"
@@ -9443,14 +9391,6 @@
   "en": "#b Cultural Pull#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#!, at most +5\\nStanding [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, in steps of 10[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), 'gm_je_tt_culture_cap', 'gm_je_tt_culture_next')]",
   "de": "#b Kulturelle Anziehungskraft#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#!, höchstens +5\\nBestehende [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, in Schritten von 10[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), 'gm_je_tt_culture_cap', 'gm_je_tt_culture_next')]"
  },
- "gm_je_tt_culture_cap": {
-  "en": "; the cap is reached",
-  "de": "; die Obergrenze ist erreicht"
- },
- "gm_je_tt_culture_next": {
-  "en": "; next step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!",
-  "de": "; nächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!"
- },
  "gm_je_tt_ig": {
   "en": "#b Approval from monuments#!\\nEach group has one total across all our monuments: the [concept_grandeur] of those it approves of that still fit, minus those it objects to and the contested monuments it resents, plus what remains of past decisions on contested monuments, which fades. The total moves approval by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_ig')|0]#! a step either way.",
   "de": "#b Zustimmung durch Monumente#!\\nJede Gruppe hat eine Gesamtsumme über alle unsere Monumente: die [concept_grandeur] derer, die sie gutheißt und die noch passen, abzüglich derer, die sie ablehnt, und der umstrittenen Monumente, die sie übel nimmt, zuzüglich dessen, was von früheren Entscheidungen über umstrittene Monumente übrig ist und verblasst. Die Summe verschiebt die Zustimmung um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_ig')|0]#! je Schritt in beide Richtungen."
@@ -9470,10 +9410,6 @@
  "gm_je_tt_prestige": {
   "en": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#!\\nStanding [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige')|0]#! a step.",
   "de": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#!\\nBestehende [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, jedes Monument, das nicht umstritten ist.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige')|0]#! je Schritt."
- },
- "gm_je_tt_promise": {
-  "en": "#b A Promise Kept#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise')|1]#! [concept_legitimacy]\\nFrom the last commission we met. It fades by 3% a month.",
-  "de": "#b Ein gehaltenes Versprechen#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_promise')|1]#! [concept_legitimacy]\\nAus dem letzten erfüllten Auftrag. Sie verblasst um 3% pro Monat."
  },
  "gm_je_tt_religious": {
   "en": "#b $interest_group_ig_devout_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious')|%0]#!\\nFrom grand shrines that still fit: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_religious')|0]#!.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_religious')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_religious')|%0]#! a step.",
@@ -9666,6 +9602,30 @@
  "gm_name_skin_evt": {
   "en": "the [ROOT.GetState.GetCustom('gm_skin_name')]",
   "de": "[ROOT.GetState.GetCustom('gm_skin_name')]"
+ },
+ "gm_name_space_interstellar_probe_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Interstellar Voyage",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] der interstellaren Reise"
+ },
+ "gm_name_space_interstellar_probe_row": {
+  "en": "The [State.GetCustom('gm_form_name')] of the Interstellar Voyage",
+  "de": "[State.GetCustom('gm_form_name')] der interstellaren Reise"
+ },
+ "gm_name_space_mars_landing_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Mars Landing",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] der Marslandung"
+ },
+ "gm_name_space_mars_landing_row": {
+  "en": "The [State.GetCustom('gm_form_name')] of the Mars Landing",
+  "de": "[State.GetCustom('gm_form_name')] der Marslandung"
+ },
+ "gm_name_space_moon_base_evt": {
+  "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Lunar Colony",
+  "de": "[ROOT.GetState.GetCustom('gm_form_name')] der Mondkolonie"
+ },
+ "gm_name_space_moon_base_row": {
+  "en": "The [State.GetCustom('gm_form_name')] of the Lunar Colony",
+  "de": "[State.GetCustom('gm_form_name')] der Mondkolonie"
  },
  "gm_name_space_moon_landing_evt": {
   "en": "the [ROOT.GetState.GetCustom('gm_form_name')] of the Moon Landing",
@@ -9919,6 +9879,34 @@
   "en": "The monument is upheld: a contested or heritage monument keeps its name",
   "de": "Das Monument ist unumstritten: Ein umstrittenes oder ein Kulturerbe-Monument behält seinen Namen"
  },
+ "gm_sig_antiquity": {
+  "en": "Ancestral Antiquity",
+  "de": "Altertum der Ahnen"
+ },
+ "gm_sig_archive": {
+  "en": "Epigraphic Archive",
+  "de": "Epigrafisches Archiv"
+ },
+ "gm_sig_concert_of_nations": {
+  "en": "To the Concert of Nations",
+  "de": "Dem Konzert der Nationen"
+ },
+ "gm_sig_conquerors_of_space": {
+  "en": "To the Conquerors of Space",
+  "de": "Den Eroberern des Alls"
+ },
+ "gm_sig_olympic": {
+  "en": "Olympic",
+  "de": "Olympia"
+ },
+ "gm_sig_to_victory": {
+  "en": "To Victory",
+  "de": "Dem Sieg"
+ },
+ "gm_sig_unknown_soldier": {
+  "en": "To the Unknown Soldier",
+  "de": "Dem Unbekannten Soldaten"
+ },
  "gm_skin_choice_tt": {
   "en": "The monument takes this form. The form changes its name and look, not what it does.",
   "de": "Das Monument nimmt diese Form an. Die Form ändert seinen Namen und sein Aussehen, nicht was es bewirkt."
@@ -10122,10 +10110,6 @@
  "govprin_popular_assembly_advance": {
   "en": "Governance: Popular Assembly Advance",
   "de": "Regierungsführung: Volksversammlung – Vorstoß"
- },
- "govprin_popular_assembly_cautious": {
-  "en": "Governance: Popular Assembly Cautious Advance",
-  "de": "Regierungsführung: Volksversammlung – Vorsichtiger Vormarsch"
  },
  "govprin_popular_assembly_stall": {
   "en": "Governance: Popular Assembly Stall",
@@ -10735,10 +10719,6 @@
   "en": "Inheritance: Succession Dispute Advance",
   "de": "Erbfolge: Nachfolgestreit – Vorstoß"
  },
- "inherit_succession_dispute_cautious": {
-  "en": "Inheritance: Succession Dispute Cautious Advance",
-  "de": "Erbfolge: Nachfolgestreit – Vorsichtiger Vormarsch"
- },
  "inherit_succession_dispute_stall": {
   "en": "Inheritance: Succession Dispute Stall",
   "de": "Erbfolge: Nachfolgestreit – Stillstand"
@@ -10782,10 +10762,6 @@
  "ip_piracy_debate_advance": {
   "en": "Intellectual Property: Piracy Debate Advance",
   "de": "Geistiges Eigentum: Piraterie-Debatte – Vorstoß"
- },
- "ip_piracy_debate_cautious": {
-  "en": "Intellectual Property: Piracy Debate Cautious Advance",
-  "de": "Geistiges Eigentum: Piraterie-Debatte – Vorsichtiger Vormarsch"
  },
  "ip_piracy_debate_stall": {
   "en": "Intellectual Property: Piracy Debate Stall",
@@ -10999,17 +10975,9 @@
   "en": "Funding level: [GetPlayer.MakeScope.ScriptValue('covert_funding_level_display')|0] -> [GetPlayer.MakeScope.ScriptValue('covert_funding_next_level_up')|0]\\nNew weekly cost: @money!#R [GetPlayer.MakeScope.ScriptValue('covert_operation_cost_at_next_up')|D]#!/week\\n#italic Higher funding buys better tradecraft: less detection risk and more counterintelligence capacity. The ladder in the command centre lists what every level gives.#!",
   "de": "Finanzierungsstufe: [GetPlayer.MakeScope.ScriptValue('covert_funding_level_display')|0] -> [GetPlayer.MakeScope.ScriptValue('covert_funding_next_level_up')|0]\\nNeue wöchentliche Kosten: @money!#R [GetPlayer.MakeScope.ScriptValue('covert_operation_cost_at_next_up')|D]#!/Woche\\n#italic Höhere Finanzierung kauft besseres Spionagehandwerk: weniger Entdeckungsrisiko und mehr Abwehrkapazität. Die Stufenleiter in der Kommandozentrale listet auf, was jede Stufe bringt.#!"
  },
- "iw_no_cordial_relations_tt": {
-  "en": "Cannot run this operation against nations with cordial relations or better",
-  "de": "Kann nicht gegen Nationen durchgeführt werden, zu denen herzliche Beziehungen oder besser bestehen"
- },
  "iw_no_duplicate_target_tt": {
   "en": "Not already running this operation against this country",
   "de": "Diese Operation läuft noch nicht gegen dieses Land"
- },
- "iw_no_good_relations_tt": {
-  "en": "Cannot launch hostile operations against nations with amicable relations or better",
-  "de": "Feindselige Operationen können nicht gegen Nationen gestartet werden, zu denen einvernehmliche Beziehungen oder besser bestehen"
  },
  "iw_no_intel_sharing_tt": {
   "en": "Cannot target nations with an active Intelligence Sharing Pact",
@@ -11243,10 +11211,6 @@
   "en": "Language Policy: Cultural Resistance Advance",
   "de": "Sprachpolitik: Kultureller Widerstand – Vorstoß"
  },
- "langpol_cultural_resistance_cautious": {
-  "en": "Language Policy: Cultural Resistance Cautious Advance",
-  "de": "Sprachpolitik: Kultureller Widerstand – Vorsichtiger Vormarsch"
- },
  "langpol_cultural_resistance_stall": {
   "en": "Language Policy: Cultural Resistance Stall",
   "de": "Sprachpolitik: Kultureller Widerstand – Stillstand"
@@ -11455,10 +11419,6 @@
   "en": "International Aid Ministry: Distant Crisis Advance",
   "de": "Ministerium für internationale Hilfe: Ferne Krise – Vorstoß"
  },
- "ministry_aid_distant_cautious": {
-  "en": "International Aid Ministry: Distant Crisis Cautious Advance",
-  "de": "Ministerium für internationale Hilfe: Ferne Krise – Vorsichtiger Vormarsch"
- },
  "ministry_aid_distant_stall": {
   "en": "International Aid Ministry: Distant Crisis Stall",
   "de": "Ministerium für internationale Hilfe: Ferne Krise – Stillstand"
@@ -11487,10 +11447,6 @@
   "en": "Consumer Protection Ministry: Tainted Product Advance",
   "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Vorstoß"
  },
- "ministry_consumer_tainted_cautious": {
-  "en": "Consumer Protection Ministry: Tainted Product Cautious Advance",
-  "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Vorsichtiger Vormarsch"
- },
  "ministry_consumer_tainted_stall": {
   "en": "Consumer Protection Ministry: Tainted Product Stall",
   "de": "Verbraucherschutzministerium: Verunreinigtes Produkt – Stillstand"
@@ -11502,10 +11458,6 @@
  "ministry_culture_patronage_advance": {
   "en": "Culture Ministry: Patronage Advance",
   "de": "Kulturministerium: Mäzenatentum – Vorstoß"
- },
- "ministry_culture_patronage_cautious": {
-  "en": "Culture Ministry: Patronage Cautious Advance",
-  "de": "Kulturministerium: Mäzenatentum – Vorsichtiger Vormarsch"
  },
  "ministry_culture_patronage_stall": {
   "en": "Culture Ministry: Patronage Stall",
@@ -11522,10 +11474,6 @@
  "ministry_env_smokestacks_advance": {
   "en": "Environment Ministry: Smokestacks Advance",
   "de": "Umweltministerium: Schornsteine – Vorstoß"
- },
- "ministry_env_smokestacks_cautious": {
-  "en": "Environment Ministry: Smokestacks Cautious Advance",
-  "de": "Umweltministerium: Schornsteine – Vorsichtiger Vormarsch"
  },
  "ministry_env_smokestacks_stall": {
   "en": "Environment Ministry: Smokestacks Stall",
@@ -11547,10 +11495,6 @@
   "en": "Intelligence Ministry: Shadow Files Advance",
   "de": "Geheimdienstministerium: Schattenakten – Vorstoß"
  },
- "ministry_intel_shadow_cautious": {
-  "en": "Intelligence Ministry: Shadow Files Cautious Advance",
-  "de": "Geheimdienstministerium: Schattenakten – Vorsichtiger Vormarsch"
- },
  "ministry_intel_shadow_stall": {
   "en": "Intelligence Ministry: Shadow Files Stall",
   "de": "Geheimdienstministerium: Schattenakten – Stillstand"
@@ -11567,10 +11511,6 @@
   "en": "Labor Ministry: Struggle Advance",
   "de": "Arbeitsministerium: Arbeitskampf – Vorstoß"
  },
- "ministry_labor_struggle_cautious": {
-  "en": "Labor Ministry: Struggle Cautious Advance",
-  "de": "Arbeitsministerium: Arbeitskampf – Vorsichtiger Vormarsch"
- },
  "ministry_labor_struggle_stall": {
   "en": "Labor Ministry: Struggle Stall",
   "de": "Arbeitsministerium: Arbeitskampf – Stillstand"
@@ -11578,10 +11518,6 @@
  "ministry_prop_loudspeaker_advance": {
   "en": "Propaganda Ministry: Loudspeaker Advance",
   "de": "Propagandaministerium: Lautsprecher – Vorstoß"
- },
- "ministry_prop_loudspeaker_cautious": {
-  "en": "Propaganda Ministry: Loudspeaker Cautious Advance",
-  "de": "Propagandaministerium: Lautsprecher – Vorsichtiger Vormarsch"
  },
  "ministry_prop_loudspeaker_stall": {
   "en": "Propaganda Ministry: Loudspeaker Stall",
@@ -11631,10 +11567,6 @@
   "en": "Thought Control Ministry: Watchers Advance",
   "de": "Ministerium für Gedankenkontrolle: Wächter – Vorstoß"
  },
- "ministry_thought_watchers_cautious": {
-  "en": "Thought Control Ministry: Watchers Cautious Advance",
-  "de": "Ministerium für Gedankenkontrolle: Wächter – Vorsichtiger Vormarsch"
- },
  "ministry_thought_watchers_stall": {
   "en": "Thought Control Ministry: Watchers Stall",
   "de": "Ministerium für Gedankenkontrolle: Wächter – Stillstand"
@@ -11650,10 +11582,6 @@
  "ministry_urban_sprawl_advance": {
   "en": "Urban Planning Ministry: Urban Sprawl Advance",
   "de": "Stadtplanungsministerium: Zersiedlung – Vorstoß"
- },
- "ministry_urban_sprawl_cautious": {
-  "en": "Urban Planning Ministry: Urban Sprawl Cautious Advance",
-  "de": "Stadtplanungsministerium: Zersiedlung – Vorsichtiger Vormarsch"
  },
  "ministry_urban_sprawl_friendly": {
   "en": "Urban Planning Ministry: Sprawl-Friendly",
@@ -11674,10 +11602,6 @@
  "ministry_war_generals_advance": {
   "en": "Ministry of War: Generals Advance",
   "de": "Kriegsministerium: Generäle – Vorstoß"
- },
- "ministry_war_generals_cautious": {
-  "en": "Ministry of War: Generals Cautious Advance",
-  "de": "Kriegsministerium: Generäle – Vorsichtiger Vormarsch"
  },
  "ministry_war_generals_stall": {
   "en": "War Ministry: Generals’ War Room Stall",
@@ -11726,10 +11650,6 @@
  "monpol_gold_hoarders_advance": {
   "en": "Monetary Policy: Gold Hoarders Advance",
   "de": "Geldpolitik: Goldhorter – Vorstoß"
- },
- "monpol_gold_hoarders_cautious": {
-  "en": "Monetary Policy: Gold Hoarders Cautious Advance",
-  "de": "Geldpolitik: Goldhorter – Vorsichtiger Vormarsch"
  },
  "monpol_gold_hoarders_stall": {
   "en": "Monetary Policy: Gold Hoarders Stall",
@@ -15183,10 +15103,6 @@
   "en": "Rules of War: Military Pushback Advance",
   "de": "Kriegsregeln: Militärischer Widerstand schreitet voran"
  },
- "row_military_pushback_cautious": {
-  "en": "Rules of War: Military Pushback Cautious Advance",
-  "de": "Kriegsregeln: Militärischer Widerstand – Vorsichtiger Vormarsch"
- },
  "row_military_pushback_stall": {
   "en": "Rules of War: Military Pushback Stall",
   "de": "Kriegsregeln: Militärischer Widerstand stockt"
@@ -17243,10 +17159,6 @@
   "en": "State Power: Autonomy Debate Advance",
   "de": "Staatsmacht: Autonomiedebatte schreitet voran"
  },
- "statepower_autonomy_debate_cautious": {
-  "en": "State Power: Autonomy Debate Cautious Advance",
-  "de": "Staatsmacht: Autonomiedebatte – Vorsichtiger Vormarsch"
- },
  "statepower_autonomy_debate_stall": {
   "en": "State Power: Autonomy Debate Stall",
   "de": "Staatsmacht: Autonomiedebatte stockt"
@@ -17763,6 +17675,54 @@
   "en": "#v [State.MakeScope.Var('te_dg_urban').GetValue|D]#! urban people",
   "de": "#v [State.MakeScope.Var('te_dg_urban').GetValue|D]#! Stadtbewohner"
  },
+ "te_demog_dc_chr": {
+  "en": "Chronic Illness",
+  "de": "Chronische Krankheit"
+ },
+ "te_demog_dc_ext": {
+  "en": "Accidents, Violence",
+  "de": "Unfälle, Gewalt"
+ },
+ "te_demog_dc_inf": {
+  "en": "Infection, Hunger",
+  "de": "Infektion, Hunger"
+ },
+ "te_demog_dc_kill": {
+  "en": "Killed by Events",
+  "de": "Durch Ereignisse getötet"
+ },
+ "te_demog_dc_mat": {
+  "en": "Childbirth",
+  "de": "Geburt"
+ },
+ "te_demog_dc_top_chr_what": {
+  "en": "pollution, the climate, drugs and addiction, radiation",
+  "de": "Umweltverschmutzung, Klima, Drogen und Sucht, Strahlung"
+ },
+ "te_demog_dc_top_ext_what": {
+  "en": "disasters, massacres, crackdowns, mental health",
+  "de": "Katastrophen, Massaker, Repressionen, psychische Gesundheit"
+ },
+ "te_demog_dc_top_inf_what": {
+  "en": "severe starvation, epidemics, famines, life outside the homeland, aid and relief",
+  "de": "schwerer Hunger, Epidemien, Hungersnöte, Leben außerhalb der Heimat, Hilfe und Fürsorge"
+ },
+ "te_demog_dc_top_war_what": {
+  "en": "devastation and war's other harms",
+  "de": "Verwüstung und andere Kriegsfolgen"
+ },
+ "te_demog_dc_top_work_what": {
+  "en": "dangerous workplaces, forced labor",
+  "de": "gefährliche Arbeitsplätze, Zwangsarbeit"
+ },
+ "te_demog_dc_war": {
+  "en": "War, Devastation",
+  "de": "Krieg, Verwüstung"
+ },
+ "te_demog_dc_work": {
+  "en": "Work",
+  "de": "Arbeit"
+ },
  "te_demog_debug_working_adults": {
   "en": "Test: Working Adults",
   "de": "Test: Erwachsene Arbeiterschaft"
@@ -17931,6 +17891,10 @@
   "en": "Each state's [concept_inheritance_concentration] moves 3% of the way to its own target every year. The target is 50 plus six terms: the Inheritance law and its amendments, land tenure in farming states, who owns the state's capital, its income inequality, taxes on wealth and the economic laws. Heavy war losses, a lost war that cost it a war goal, a winning revolution of the left and a banking crash knock scores down at once, and devastation lowers a state's score every year it lasts. The national figure weighs the states by where property is held.",
   "de": "Die [concept_inheritance_concentration] jedes Staates bewegt sich jedes Jahr um 3% des Weges zu ihrem eigenen Ziel. Das Ziel ist 50 plus sechs Posten: das Erbrecht und seine Nachträge, der Landbesitz in Agrarstaaten, wer das Kapital des Staates besitzt, seine Einkommensungleichheit, Vermögenssteuern und die Wirtschaftsgesetze. Schwere Kriegsverluste, ein verlorener Krieg, der ein Kriegsziel kostete, eine siegreiche Revolution der Linken und ein Bankencrash drücken die Werte sofort nach unten, und Verwüstung senkt den Wert eines Staates in jedem Jahr, in dem sie andauert. Der nationale Wert gewichtet die Staaten danach, wo Eigentum gehalten wird."
  },
+ "te_demog_ms_rural_exemption": {
+  "en": "Rural Exemption",
+  "de": "Ländliche Ausnahme"
+ },
  "te_demog_ov_births": {
   "en": "Births: #v [GetPlayer.MakeScope.Var('te_dg_cbr').GetValue|1]#! per 1,000 people last year",
   "de": "Geburten: #v [GetPlayer.MakeScope.Var('te_dg_cbr').GetValue|1]#! je 1.000 Menschen im Vorjahr"
@@ -17959,25 +17923,9 @@
   "en": "#grey Deaths per 1,000 people are counted from the first full year of the census.#!",
   "de": "#grey Todesfälle je 1.000 Menschen werden ab dem ersten vollen Jahr der Volkszählung gezählt.#!"
  },
- "te_demog_ov_dependency": {
-  "en": "Dependency Ratio",
-  "de": "Abhängigenquote"
- },
- "te_demog_ov_dependency_prev": {
-  "en": "#grey (last census: [GetPlayer.MakeScope.Var('te_dg_prev_dependency').GetValue|%0])#!",
-  "de": "#grey (letzte Volkszählung: [GetPlayer.MakeScope.Var('te_dg_prev_dependency').GetValue|%0])#!"
- },
- "te_demog_ov_dependency_tt": {
-  "en": "#b Dependency Ratio#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)2' ) ), 'te_demog_ov_dependency_prev', '' )]\\nChildren under 15 and people 65 and over, against the people aged 15 to 64 who mostly provide for them. The higher it is, the more each person of working age supports.",
-  "de": "#b Abhängigenquote#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)2' ) ), 'te_demog_ov_dependency_prev', '' )]\\nKinder unter 15 und Menschen ab 65 im Verhältnis zu den Menschen von 15 bis 64, die überwiegend für sie sorgen. Je höher sie ist, desto mehr trägt jeder Mensch im erwerbsfähigen Alter."
- },
  "te_demog_ov_e0": {
   "en": "Life Expectancy",
   "de": "Lebenserwartung"
- },
- "te_demog_ov_e0_capital": {
-  "en": "Each cause of death runs at the rates of a poor country without modern medicine, times a multiplier that medicine, health laws, institutions and a higher [concept_sol] bring down. In [GetPlayer.GetCapital.GetName], the [concept_capital_state]:\\n Infection and hunger: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_inf').GetValue|2]#!\\n Accidents and violence: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_ext').GetValue|2]#!\\n Chronic illness and old age: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_chr').GetValue|2]#!\\n Work: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_work').GetValue|2]#!\\n Childbirth: #v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_mat').GetValue|0]#! deaths per 100,000 births",
-  "de": "Jede Todesursache läuft mit den Raten eines armen Landes ohne moderne Medizin, mal einem Multiplikator, den Medizin, Gesundheitsgesetze, Institutionen und ein höherer [concept_sol] senken. In [GetPlayer.GetCapital.GetName], dem [concept_capital_state]:\\n Infektion und Hunger: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_inf').GetValue|2]#!\\n Unfälle und Gewalt: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_ext').GetValue|2]#!\\n Chronische Krankheit und Alter: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_chr').GetValue|2]#!\\n Arbeit: ×#v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_work').GetValue|2]#!\\n Geburt: #v [GetPlayer.GetCapital.MakeScope.Var('te_dg_m_mat').GetValue|0]#! Todesfälle je 100.000 Geburten"
  },
  "te_demog_ov_e0_prev": {
   "en": "#grey (last census: [GetPlayer.MakeScope.Var('te_dg_prev_e0').GetValue|1])#!",
@@ -18015,10 +17963,6 @@
   "en": "#v [GetPlayer.MakeScope.Var('te_dg_median').GetValue|1]#! years",
   "de": "#v [GetPlayer.MakeScope.Var('te_dg_median').GetValue|1]#! Jahre"
  },
- "te_demog_ov_pattern": {
-  "en": "Urban Pattern",
-  "de": "Städtisches Muster"
- },
  "te_demog_ov_pattern_prev": {
   "en": "#grey (last census: [GetPlayer.MakeScope.Var('te_dg_prev_urban_share').GetValue|%0] urban)#!",
   "de": "#grey (letzte Volkszählung: [GetPlayer.MakeScope.Var('te_dg_prev_urban_share').GetValue|%0] städtisch)#!"
@@ -18026,10 +17970,6 @@
  "te_demog_ov_pattern_tt": {
   "en": "#b Urban Pattern#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)2' ) ), 'te_demog_ov_pattern_prev', '' )]\\nHow the urban people are spread over the states, each state counted as one city: #b $te_demog_pattern_0$#! when the largest holds 40% or more of all urban people, #b $te_demog_pattern_1$#! from 25%, #b $te_demog_pattern_2$#! from 10%, #b $te_demog_pattern_3$#! below that. The largest holds #v [GetPlayer.MakeScope.Var('te_dg_primacy').GetValue|%0]#!.",
   "de": "#b Städtisches Muster#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)2' ) ), 'te_demog_ov_pattern_prev', '' )]\\nWie die Stadtbevölkerung auf die Staaten verteilt ist, wobei jeder Staat als eine Stadt zählt: #b $te_demog_pattern_0$#!, wenn die größte 40% oder mehr aller Stadtbewohner hält, #b $te_demog_pattern_1$#! ab 25%, #b $te_demog_pattern_2$#! ab 10%, #b $te_demog_pattern_3$#! darunter. Die größte hält #v [GetPlayer.MakeScope.Var('te_dg_primacy').GetValue|%0]#!."
- },
- "te_demog_ov_pattern_value": {
-  "en": "$te_demog_pattern_name$, #v [GetPlayer.MakeScope.Var('te_dg_urban_share').GetValue|%0]#! urban",
-  "de": "$te_demog_pattern_name$, #v [GetPlayer.MakeScope.Var('te_dg_urban_share').GetValue|%0]#! städtisch"
  },
  "te_demog_ov_pending": {
   "en": "#grey At the turn of the year#!",
@@ -18050,10 +17990,6 @@
  "te_demog_ov_sex_value": {
   "en": "#v [GetPlayer.MakeScope.Var('te_dg_sex_balance').GetValue|0]#! men per 100 women",
   "de": "#v [GetPlayer.MakeScope.Var('te_dg_sex_balance').GetValue|0]#! Männer je 100 Frauen"
- },
- "te_demog_ov_tfr": {
-  "en": "Children per Woman",
-  "de": "Kinder je Frau"
  },
  "te_demog_ov_tfr_capital": {
   "en": "In [GetPlayer.GetCapital.GetName], the [concept_capital_state]: #v [GetPlayer.GetCapital.MakeScope.Var('te_dg_tfr').GetValue|2]#!\\n Wealth alone: #v [GetPlayer.GetCapital.MakeScope.Var('te_dg_wtfr').GetValue|2]#!\\n Education: ×#v [GetPlayer.GetCapital.MakeScope.ScriptValue('te_demog_tfr_education')|2]#!\\n Child survival: ×#v [GetPlayer.GetCapital.MakeScope.ScriptValue('te_demog_tfr_survival')|2]#!\\n Urban life: ×#v [GetPlayer.GetCapital.MakeScope.ScriptValue('te_demog_tfr_urban')|2]#!\\n Means to plan a family: #v [GetPlayer.GetCapital.MakeScope.Var('te_dg_means').GetValue|%0]#!",
@@ -18327,14 +18263,6 @@
   "en": "Deaths: #v [State.MakeScope.Var('te_dg_cdr').GetValue|1]#! per 1,000 people last year",
   "de": "Todesfälle: #v [State.MakeScope.Var('te_dg_cdr').GetValue|1]#! je 1.000 Menschen im Vorjahr"
  },
- "te_demog_st_dependency_prev": {
-  "en": "#grey (last census: [State.MakeScope.Var('te_dg_prev_dependency').GetValue|%0])#!",
-  "de": "#grey (letzte Volkszählung: [State.MakeScope.Var('te_dg_prev_dependency').GetValue|%0])#!"
- },
- "te_demog_st_dependency_tt": {
-  "en": "#b Dependency Ratio#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)2' ) ), 'te_demog_st_dependency_prev', '' )]\\nChildren under 15 and people 65 and over, against the people aged 15 to 64 who mostly provide for them. The higher it is, the more each person of working age supports.",
-  "de": "#b Abhängigenquote#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_dependency'), '(CFixedPoint)2' ) ), 'te_demog_st_dependency_prev', '' )]\\nKinder unter 15 und Menschen ab 65 im Verhältnis zu den Menschen von 15 bis 64, die überwiegend für sie sorgen. Je höher sie ist, desto mehr trägt jeder Mensch im erwerbsfähigen Alter."
- },
  "te_demog_st_e0_causes": {
   "en": "Each cause of death runs at the rates of a poor country without modern medicine, times a multiplier that medicine, health laws, institutions and a higher [concept_sol] bring down. In this state:\\n Infection and hunger: ×#v [State.MakeScope.Var('te_dg_m_inf').GetValue|2]#!\\n Accidents and violence: ×#v [State.MakeScope.Var('te_dg_m_ext').GetValue|2]#!\\n Chronic illness and old age: ×#v [State.MakeScope.Var('te_dg_m_chr').GetValue|2]#!\\n Work: ×#v [State.MakeScope.Var('te_dg_m_work').GetValue|2]#!\\n Childbirth: #v [State.MakeScope.Var('te_dg_m_mat').GetValue|0]#! deaths per 100,000 births",
   "de": "Jede Todesursache läuft mit den Raten eines armen Landes ohne moderne Medizin, mal einem Multiplikator, den Medizin, Gesundheitsgesetze, Institutionen und ein höherer [concept_sol] senken. In diesem Staat:\\n Infektion und Hunger: ×#v [State.MakeScope.Var('te_dg_m_inf').GetValue|2]#!\\n Unfälle und Gewalt: ×#v [State.MakeScope.Var('te_dg_m_ext').GetValue|2]#!\\n Chronische Krankheit und Alter: ×#v [State.MakeScope.Var('te_dg_m_chr').GetValue|2]#!\\n Arbeit: ×#v [State.MakeScope.Var('te_dg_m_work').GetValue|2]#!\\n Geburt: #v [State.MakeScope.Var('te_dg_m_mat').GetValue|0]#! Todesfälle je 100.000 Geburten"
@@ -18366,22 +18294,6 @@
  "te_demog_st_median_value": {
   "en": "#v [State.MakeScope.Var('te_dg_median').GetValue|1]#! years",
   "de": "#v [State.MakeScope.Var('te_dg_median').GetValue|1]#! Jahre"
- },
- "te_demog_st_mig": {
-  "en": "Net Migration",
-  "de": "Nettowanderung"
- },
- "te_demog_st_mig_in": {
-  "en": "+#v [State.MakeScope.Var('te_dg_net_migration').GetValue|D]#! people",
-  "de": "+#v [State.MakeScope.Var('te_dg_net_migration').GetValue|D]#! Menschen"
- },
- "te_demog_st_mig_out": {
-  "en": "#v [State.MakeScope.Var('te_dg_net_migration').GetValue|D]#! people",
-  "de": "#v [State.MakeScope.Var('te_dg_net_migration').GetValue|D]#! Menschen"
- },
- "te_demog_st_mig_tt": {
-  "en": "#b Net Migration#!\\nThe people who settled in the state minus those who left over the last year, beyond what its births, deaths, war dead and the people killed by events account for. A small difference reads 0. It is known from the first full year of the census.",
-  "de": "#b Nettowanderung#!\\nDie Menschen, die sich im vergangenen Jahr im Staat niedergelassen haben, abzüglich derer, die ihn verlassen haben, über das hinaus, was seine Geburten, Todesfälle, Kriegstoten und die durch Ereignisse Getöteten erklären. Eine kleine Differenz wird als 0 angezeigt. Sie ist ab dem ersten vollen Jahr der Volkszählung bekannt."
  },
  "te_demog_st_next": {
   "en": "#grey After the next count#!",
@@ -18535,14 +18447,6 @@
   "en": "People at the census.",
   "de": "Menschen bei der Volkszählung."
  },
- "te_demog_states_head_sex": {
-  "en": "Men",
-  "de": "Männer"
- },
- "te_demog_states_head_sex_tt": {
-  "en": "Men per 100 women aged 20 to 59.",
-  "de": "Männer je 100 Frauen im Alter von 20 bis 59 Jahren."
- },
  "te_demog_states_head_state": {
   "en": "State",
   "de": "Staat"
@@ -18558,14 +18462,6 @@
  "te_demog_states_head_tfr_tt": {
   "en": "Children per woman.",
   "de": "Kinder je Frau."
- },
- "te_demog_states_head_wc": {
-  "en": "Wealth",
-  "de": "Vermögen"
- },
- "te_demog_states_head_wc_tt": {
-  "en": "[concept_inheritance_concentration], 0 to 100.",
-  "de": "[concept_inheritance_concentration], 0 bis 100."
  },
  "te_demog_subtab": {
   "en": "Demographics",
@@ -19291,6 +19187,10 @@
   "en": "Your government is paying its bills with money the national bank creates for it rather than with money it has borrowed or raised. The mint runs beyond what the economy needs, and the extra lands in the treasury. It is the fastest revenue a state can raise and the most expensive: per pound financed it pushes prices roughly eight times as hard as borrowing the same amount, and lenders charge you for doing it.",
   "de": "Ihre Regierung bezahlt ihre Rechnungen mit Geld, das die Nationalbank für sie schafft, statt mit geliehenem oder eingenommenem Geld. Die Prägeanstalt läuft über das hinaus, was die Wirtschaft braucht, und der Überschuss landet in der Staatskasse. Es ist die schnellste Einnahmequelle, die ein Staat erschließen kann, und die teuerste: Pro finanziertem Pfund treibt sie die Preise etwa achtmal so stark wie das Leihen derselben Summe, und Kreditgeber lassen sich das bezahlen."
  },
+ "te_nation_sources_header": {
+  "en": "Where These Come From",
+  "de": "Woher sie stammen"
+ },
  "te_officer_academies_standing": {
   "en": "Academy Officer Corps",
   "de": "Offizierskorps der Akademien"
@@ -19411,6 +19311,42 @@
   "en": "Trained Reservists",
   "de": "Ausgebildete Reservisten"
  },
+ "te_seabed_basin_arctic": {
+  "en": "Arctic",
+  "de": "Arktis"
+ },
+ "te_seabed_basin_atlantic": {
+  "en": "Atlantic",
+  "de": "Atlantik"
+ },
+ "te_seabed_basin_indian": {
+  "en": "Indian",
+  "de": "Indik"
+ },
+ "te_seabed_basin_pacific": {
+  "en": "Pacific",
+  "de": "Pazifik"
+ },
+ "te_seabed_basin_southern": {
+  "en": "Southern",
+  "de": "Südpolarmeer"
+ },
+ "te_seabed_long_haul": {
+  "en": "Long-Haul Seabed Operations",
+  "de": "Tiefseebergbau in fernen Becken"
+ },
+ "te_seabed_regime_name_1": {
+  "en": "Open",
+  "de": "Offen"
+ },
+ "te_seabed_regime_name_2": {
+  "en": "Regulated",
+  "de": "Reguliert"
+ },
+ "te_seabed_regime_name_3": {
+  "en": "Scramble",
+  "de": "Wettlauf"
+ },
  "te_society_ch_open_journal_tt": {
   "en": "Opens $je_cultural_hegemony$ in the journal.",
   "de": "Öffnet $je_cultural_hegemony$ im Journal."
@@ -19467,10 +19403,6 @@
   "en": "#bold [concept_tourism_parks]#!\\nA $building_national_park$ adds #v +25%#!, rising with the state's [concept_tourism_base_appeal] to #v +37.5%#! at the highest appeal.\\n\\nMaximum: #v +37.5%#!",
   "de": "#bold [concept_tourism_parks]#!\\nEin $building_national_park$ fügt #v +25%#! hinzu und steigt mit der [concept_tourism_base_appeal] des Staates bei höchster Attraktivität auf #v +37,5%#!.\\n\\nMaximum: #v +37,5%#!"
  },
- "te_state_tourism_ports_tt": {
-  "en": "#bold [concept_tourism_ports]#!\\nEach $building_port$ level adds #v +0.2%#! up to level 100, then #v +0.04%#! per level up to level 500.\\n\\nMaximum: #v +36%#!",
-  "de": "#bold [concept_tourism_ports]#!\\nJede Stufe eines $building_port$ fügt bis Stufe 100 #v +0,2%#! hinzu, danach bis Stufe 500 #v +0,04%#! pro Stufe.\\n\\nMaximum: #v +36%#!"
- },
  "te_state_tourism_throughput_applied_tt": {
   "en": "#bold [concept_tourism_throughput] on this state#!\\nEvery modifier on this state that changes tourism throughput: the sources above, as last applied, plus any others, such as decrees and a $building_grand_monument$. Hover the value for the full breakdown.\\n\\nThe sources above are re-applied each month, so a change there shows up here after the next monthly update.",
   "de": "#bold [concept_tourism_throughput] in diesem Staat#!\\nJeder Modifikator in diesem Staat, der den Tourismusdurchsatz verändert: die obigen Quellen, wie zuletzt angewendet, sowie alle weiteren, etwa Dekrete und ein $building_grand_monument$. Fahren Sie mit der Maus über den Wert für die vollständige Aufschlüsselung.\\n\\nDie obigen Quellen werden jeden Monat neu angewendet, sodass eine Änderung dort erst nach der nächsten monatlichen Aktualisierung hier erscheint."
@@ -19478,10 +19410,6 @@
  "te_state_tourism_throughput_tt": {
   "en": "#bold [concept_tourism_throughput]#!\\n$concept_tourism_throughput_desc$\\n\\nThe sources below come to #v [State.MakeScope.ScriptValue('total_tourism_throughput_bonus_percent')|+=0%]#!. It is applied to the state as a modifier and refreshed each month. The bar under each source shows how close it is to its maximum.",
   "de": "#bold [concept_tourism_throughput]#!\\n$concept_tourism_throughput_desc$\\n\\nDie Quellen unten ergeben zusammen #v [State.MakeScope.ScriptValue('total_tourism_throughput_bonus_percent')|+=0%]#!. Sie werden dem Staat als Modifikator zugewiesen und jeden Monat aktualisiert. Der Balken unter jeder Quelle zeigt, wie nah sie an ihrem Maximum liegt."
- },
- "te_state_tourism_transit_tt": {
-  "en": "#bold [concept_tourism_transit]#!\\nEach $building_railway$ level and each $building_highway$ level adds #v +0.1%#! up to level 100, then #v +0.02%#! per level up to level 500.\\n\\nMaximum: #v +36%#! (#v +18%#! from each)",
-  "de": "#bold [concept_tourism_transit]#!\\nJede Stufe einer $building_railway$ und jede Stufe einer $building_highway$ fügt bis Stufe 100 #v +0,1%#! hinzu, danach bis Stufe 500 #v +0,02%#! pro Stufe.\\n\\nMaximum: #v +36%#! (#v +18%#! von jeweils einer)"
  },
  "te_subjugation_strength_sufficient_tt": {
   "en": "Our [concept_subjugation_strength] against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (currently #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• From [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! against #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, a ratio of #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! divided by #V 20#!)\\n• From our [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]",
@@ -19542,10 +19470,6 @@
  "te_systems_window_launcher_tt": {
   "en": "#b Timeline Extended#!\\nThe Space Race, the Colonial Empire and Grand Monuments, a tab each. These are the journal entries' own panels: a change made here shows there too.",
   "de": "#b Timeline Extended#!\\nDer Wettlauf ins All, das Kolonialreich und Große Monumente, je ein Reiter. Dies sind die eigenen Panels der Journaleinträge: Eine hier vorgenommene Änderung zeigt sich auch dort."
- },
- "te_systems_window_none": {
-  "en": "None of these systems has begun for you yet. Hover a tab for what it needs.",
-  "de": "Keines dieser Systeme hat für Sie bereits begonnen. Fahren Sie über einen Reiter, um zu sehen, was er braucht."
  },
  "te_systems_window_title": {
   "en": "Timeline Extended",
@@ -20215,10 +20139,6 @@
   "en": "Refused World Heritage Convention",
   "de": "Welterbekonvention abgelehnt"
  },
- "un_heritage_token_modifier": {
-  "en": "UNESCO Heritage Participant",
-  "de": "UNESCO-Welterbe-Teilnehmer"
- },
  "un_high_authority_infamy_modifier": {
   "en": "UN International Order",
   "de": "Internationale UN-Ordnung"
@@ -20250,10 +20170,6 @@
  "un_human_rights_refusal_modifier": {
   "en": "Refused Human Rights Declaration",
   "de": "Menschenrechtserklärung abgelehnt"
- },
- "un_human_rights_reservations_modifier": {
-  "en": "Human Rights Declaration - With Reservations",
-  "de": "Menschenrechtserklärung – mit Vorbehalten"
  },
  "un_humanitarian_aid_cost": {
   "en": "Humanitarian Aid Expenses",
@@ -20298,10 +20214,6 @@
  "un_law_of_sea_refusal_modifier": {
   "en": "Rejected Law of the Sea",
   "de": "Seerechtsübereinkommen abgelehnt"
- },
- "un_law_of_sea_reservations_modifier": {
-  "en": "Law of the Sea (Reservations)",
-  "de": "Seerechtsübereinkommen (Vorbehalte)"
  },
  "un_ledger_tt_credibility_down_0_5": {
   "en": "#R UN credibility −0.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target",
@@ -21806,10 +21718,6 @@
  "welfare_automation_fears_advance": {
   "en": "Welfare: Automation Fears Advance",
   "de": "Sozialhilfe: Automatisierungsängste – Vormarsch"
- },
- "welfare_automation_fears_cautious": {
-  "en": "Welfare: Automation Fears Cautious Advance",
-  "de": "Sozialhilfe: Automatisierungsängste – Vorsichtiger Vormarsch"
  },
  "welfare_automation_fears_stall": {
   "en": "Welfare: Automation Fears Stall",

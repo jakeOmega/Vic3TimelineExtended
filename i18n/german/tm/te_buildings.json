@@ -955,6 +955,10 @@
   "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. Its level is its [concept_grandeur]. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
   "de": "Ein Monument, das eine Regierung für das errichtet, wofür sie steht: ihre Krone, ihre Republik, ihre Revolution, ihren Anführer, ihren Glauben oder die Nation. Seine Stufe ist seine [concept_grandeur]. Es verleiht Prestige, Legitimität und die Gunst gleichgesinnter Interessengruppen, solange das, was es ehrt, noch Bestand hat. Fällt dies, muss die nächste Regierung entscheiden, was damit geschehen soll. Siehe den Reiter „Große Monumente“ im Fenster „Timeline Extended“."
  },
+ "building_grand_monument_site": {
+  "en": "Grand Monument (Under Construction)",
+  "de": "Großes Monument (im Bau)"
+ },
  "building_graphite_mine": {
   "en": "Graphite Mine",
   "de": "Graphitmine"
@@ -970,6 +974,10 @@
  "building_great_indian_railway_jamalpur_works": {
   "en": "Great Indian Railway Jamalpur Works",
   "de": "Great-Indian-Railway-Werke Jamalpur"
+ },
+ "building_grid_transfer_station": {
+  "en": "Grid Transfer Station",
+  "de": "Netzübergabestation"
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -994,6 +1002,10 @@
  "building_group_bg_bureaucracy_throughput_add_desc": {
   "en": "A bonus or penalty to both input and output of $bg_bureaucracy$ buildings",
   "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $bg_bureaucracy$-Gebäude"
+ },
+ "building_group_bg_clean_power_construction_efficiency_add": {
+  "en": "$bg_clean_power$ Construction Efficiency",
+  "de": "Baueffizienz von $bg_clean_power$"
  },
  "building_group_bg_construction_throughput_add": {
   "en": "Construction Building [concept_throughput]",
@@ -1574,6 +1586,10 @@
  "building_ocean_mine": {
   "en": "Deep-Sea Mine",
   "de": "Tiefseemine"
+ },
+ "building_ocean_mine_throughput_add": {
+  "en": "$building_ocean_mine$ building [concept_throughput]",
+  "de": "[concept_throughput] – Gebäude $building_ocean_mine$"
  },
  "building_ocmc_unsan_gold_mines": {
   "en": "OCMC Unsan Gold Mines",

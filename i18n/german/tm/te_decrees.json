@@ -47,6 +47,10 @@
   "en": "A highly effective campaign to encourage migration to a region.",
   "de": "Eine hochwirksame Kampagne zur Förderung der Migration in eine Region."
  },
+ "decree_medical_outreach": {
+  "en": "Medical Outreach",
+  "de": "Medizinische Aufbauhilfe"
+ },
  "decree_migration_invalid_tooltip": {
   "en": "In a [concept_power_bloc] allowing forced migration.",
   "de": "In einem [concept_power_bloc], der Zwangsmigration erlaubt."

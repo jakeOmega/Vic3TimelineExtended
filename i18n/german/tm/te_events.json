@@ -11311,10 +11311,6 @@
   "en": "The war is lost. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] ask that the dead at least be honoured: a memorial to the fallen, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')]. A government that will not do even that will be asked why.",
   "de": "Der Krieg ist verloren. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] bitten darum, wenigstens die Toten zu ehren: ein Denkmal für die Gefallenen, errichtet binnen [ROOT.GetCountry.GetCustom('gm_com_time_words')]. Eine Regierung, die nicht einmal das tut, wird sich fragen lassen müssen, warum."
  },
- "monument_events.21.d_petition": {
-  "en": "The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] petition the government for a monument dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')] wherever we choose to build it. They have less to honour in stone than they would like, and they have said so in the press.",
-  "de": "[SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] ersuchen die Regierung um ein Monument mit der Widmung #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, errichtet binnen [ROOT.GetCountry.GetCustom('gm_com_time_words')], wo immer wir es bauen wollen. Sie haben weniger in Stein zu ehren, als sie möchten, und haben das in der Presse gesagt."
- },
  "monument_events.21.d_regime": {
   "en": "The new order has no monument of its own. The [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] ask for one: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] dedicated #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, raised within [ROOT.GetCountry.GetCustom('gm_com_time_words')], so that no one mistakes what now governs [ROOT.GetCountry.GetName].",
   "de": "Die neue Ordnung hat kein eigenes Monument. [SCOPE.gsInterestGroup('gm_com_ig_scope').GetName] bitten um eines: [ROOT.GetCountry.GetCustom('gm_com_form_phrase')] mit der Widmung #b [ROOT.GetCountry.GetCustom('gm_com_dedication_name')]#!, errichtet binnen [ROOT.GetCountry.GetCustom('gm_com_time_words')], damit niemand verkennt, was nun [ROOT.GetCountry.GetAltName('AKK')] regiert."
@@ -11402,10 +11398,6 @@
  "monument_events.24.mausoleum": {
   "en": "Mausoleum",
   "de": "Mausoleum"
- },
- "monument_events.24.memorial": {
-  "en": "Memorial",
-  "de": "Ehrenmal"
  },
  "monument_events.24.memorial_church": {
   "en": "Memorial Church",
