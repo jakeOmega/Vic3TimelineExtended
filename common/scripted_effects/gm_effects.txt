@@ -442,8 +442,8 @@ gm_state_monthly = {
 		gm_state_record_dedication = yes
 		gm_monument_migration_self_check = yes
 		gm_monument_merge_level_self_check = yes
-		# Tourism counts everything standing here; the monument policy (v2 §5)
-		# scales it and each local effect.
+		# Tourism counts everything standing here; Open to the Public scales
+		# it (policy spec 2026-10-23 § 4.1).
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
 		set_variable = {
 			name = gm_local_tourism_steps
@@ -478,9 +478,11 @@ gm_state_monthly = {
 		gm_state_local_steps_one = { KEY = athletic CAP = gm_local_cap_athletic }
 		# And each unique dedication's (signatures spec §2.2), counted the same
 		# way, beside its parent's.
-		gm_state_sig_local_steps_one = { SIG = antiquity }
-		gm_state_sig_local_steps_one = { SIG = archive }
-		gm_state_sig_local_steps_one = { SIG = first_emperor }
+		# Open's x1.5 covers the two signatures whose local effect is tourism
+		# (policy spec 2026-10-23 § 4.1); the archive's is not.
+		gm_state_sig_local_steps_one = { SIG = antiquity FACTOR = gm_policy_factor_tourism }
+		gm_state_sig_local_steps_one = { SIG = archive FACTOR = 1 }
+		gm_state_sig_local_steps_one = { SIG = first_emperor FACTOR = gm_policy_factor_tourism }
 		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
 		# offer or roll. Last: a taking removes the building.
 		gm_state_tr_monthly = yes
@@ -563,7 +565,6 @@ gm_state_local_steps_one = {
 		name = gm_local_steps_$KEY$
 		value = {
 			value = gm_curve_steps_lin_f5
-			multiply = gm_policy_factor_local
 			max = $CAP$
 		}
 	}
@@ -704,6 +705,7 @@ gm_decay_ledgers = {
 # a scripted GUI effect or a country event option. Never call it where ROOT is
 # a state, building, law or character: the multipliers resolve against ROOT.
 gm_country_refresh = {
+	gm_policy_migrate = yes
 	gm_init_ledgers = yes
 	if = {
 		limit = {
@@ -943,10 +945,7 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
 	# The monument policy (v2 §5), on the steps so the effect moves by the
-	# factor: Mothballed halves prestige and cultural pull, State Ceremonial
-	# adds half to legitimacy and the Leader's authority.
-	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_standing }
-	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_standing }
+	# factor: State Ceremonial adds half to legitimacy and the Leader's authority.
 	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
 	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
 	# The unique dedications' sums (signatures spec §2.1), steps and policy.

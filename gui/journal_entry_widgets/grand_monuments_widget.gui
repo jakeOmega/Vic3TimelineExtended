@@ -1813,6 +1813,20 @@ types grand_monuments_widget_types
 					text = "gm_je_val_prestige"
 				}
 			}
+			# The prestige percentage, on the same steps (policy spec 2026-10-23 § 8).
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige_pct'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_prestige_pct"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_prestige_pct"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_prestige_pct') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_prestige_pct"
+				}
+			}
 			gm_step_row = {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tt_legitimacy"
@@ -2441,14 +2455,14 @@ types grand_monuments_widget_types
 				parentanchor = hcenter
 
 				gm_policy_button = {
-					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_standard_sgui')]" }
-					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_standard_tooltip" }
-					blockoverride "policy_text" { text = "gm_button_policy_standard" }
-				}
-				gm_policy_button = {
 					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_open_sgui')]" }
 					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_open_tooltip" }
 					blockoverride "policy_text" { text = "gm_button_policy_open" }
+				}
+				gm_policy_button = {
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_ceremonial_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_ceremonial_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_ceremonial" }
 				}
 			}
 			flowcontainer = {
@@ -2457,14 +2471,14 @@ types grand_monuments_widget_types
 				parentanchor = hcenter
 
 				gm_policy_button = {
-					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_ceremonial_sgui')]" }
-					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_ceremonial_tooltip" }
-					blockoverride "policy_text" { text = "gm_button_policy_ceremonial" }
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_culture_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_culture_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_culture" }
 				}
 				gm_policy_button = {
-					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_mothballed_sgui')]" }
-					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_mothballed_tooltip" }
-					blockoverride "policy_text" { text = "gm_button_policy_mothballed" }
+					blockoverride "policy_context" { datacontext = "[GetScriptedGui('gm_policy_education_sgui')]" }
+					blockoverride "policy_tooltip" { tooltip = "gm_button_policy_education_tooltip" }
+					blockoverride "policy_text" { text = "gm_button_policy_education" }
 				}
 			}
 		}

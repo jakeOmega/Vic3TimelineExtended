@@ -50,7 +50,7 @@ SPECIFIC = ("leader", "religious", "war_memorial", "artistic", "scientific", "in
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners",
        "petty_bourgeoisie", "rural_folk", "trade_unions")
 # The bars: row key -> the gm_set_steps OUT/NEXT suffix it follows.
-FRACS = {"prestige": "standing", "legitimacy": "regime", "culture": "culture",
+FRACS = {"prestige": "standing", "prestige_pct": "standing", "legitimacy": "regime", "culture": "culture",
          "leader": "leader", "religious": "religious", "war_memorial": "war_memorial",
          "artistic": "artistic", "scientific": "scientific", "industrial": "industrial"}
 # The unique dedications with a national effect (signatures spec 2026-10-16 §8):
@@ -383,7 +383,7 @@ class PolicyLayoutTest(unittest.TestCase):
                           r"((?:gm_policy_button = \{.*?\} \} )+)\}", tail)
         self.assertEqual([r.count("gm_policy_button = {") for r in rows], [2, 2])
         order = re.findall(r"GetScriptedGui\('gm_policy_(\w+)_sgui'\)", tail)
-        self.assertEqual(order, ["standard", "open", "ceremonial", "mothballed"])
+        self.assertEqual(order, ["open", "ceremonial", "culture", "education"])
         button = _squash(_type_body(_gui(), "gm_policy_button"))
         self.assertIn("size = { 230 24 }", button)
 
@@ -881,7 +881,7 @@ class StateCardTest(unittest.TestCase):
         values = _read(VALUES)
         # Each dedication's local effect (ageing spec 2026-10-16 §4.2).
         monthly = _squash(_block(_read(EFFECTS), "gm_state_local_steps_one"))
-        self.assertIn("value = gm_curve_steps_lin_f5 multiply = gm_policy_factor_local", monthly)
+        self.assertIn("value = gm_curve_steps_lin_f5 max = $CAP$", monthly)
         curve = _squash(_block(values, "gm_curve_steps_lin_f5"))
         steps = _squash(_block(values, "gm_state_disp_steps"))
         self.assertEqual(steps, curve.replace("var:gm_curve_in", "gm_state_grandeur"))

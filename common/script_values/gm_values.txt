@@ -485,18 +485,10 @@ gm_state_disp_local = {
 }
 
 # ---- The monument policy (v2 §5; gm_policy_effects.txt) -------------------------
-# Factors on the per-step values (§5). Country scope: the steps of standing
-# grandeur (prestige and cultural pull) and of regime and Leader grandeur
-# (legitimacy, the Leader's authority), multiplied after the curve in
-# gm_compute_totals, so the effect itself moves by the factor.
-gm_policy_factor_standing = {
-	value = 1
-	if = {
-		limit = { gm_policy_is = { P = mothballed STANDARD = no } }
-		value = 0.5
-	}
-}
-
+# Factors on the per-step values (policy spec 2026-10-23 § 3). Country scope:
+# the steps of regime and Leader grandeur (legitimacy, the Leader's authority),
+# multiplied after the curve in gm_compute_totals, so the effect itself moves
+# by the factor.
 gm_policy_factor_regime = {
 	value = 1
 	if = {
@@ -505,8 +497,9 @@ gm_policy_factor_regime = {
 	}
 }
 
-# State scope, the owner's policy: the steps of a monument's own Tourism
-# Industry throughput and of its dedication's local effect (gm_state_monthly).
+# State scope, the owner's policy: the steps of a monument's own tourism output
+# (gm_state_monthly) and of the two signatures whose local effect is tourism
+# (gm_state_sig_local_steps_one). No policy cuts tourism (spec § 4.1).
 gm_policy_factor_tourism = {
 	value = 1
 	if = {
@@ -515,42 +508,9 @@ gm_policy_factor_tourism = {
 		}
 		value = 1.5
 	}
-	else_if = {
-		limit = {
-			owner = {
-				OR = {
-					gm_policy_is = { P = ceremonial STANDARD = no }
-					gm_policy_is = { P = mothballed STANDARD = no }
-				}
-			}
-		}
-		value = 0.5
-	}
-}
-
-gm_policy_factor_local = {
-	value = 1
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-		}
-		value = 0.5
-	}
 }
 
 # ---- Ageing (spec 2026-10-16 §2) ----------------------------------------------
-# State scope, the owner's policy: Mothballed halves how fast its monuments
-# age; no other policy changes it.
-gm_policy_factor_age = {
-	value = 1
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-		}
-		value = 0.5
-	}
-}
-
 # The years a monument ages for (owner, 2026-10-19): a century at 2% a year,
 # so its age grandeur stops at twice its starting grandeur and the monument at
 # three times what it was dedicated with. Nothing is grander for being older
@@ -577,7 +537,6 @@ gm_state_age_step = {
 	value = gm_state_primary_start
 	multiply = 2
 	divide = 1200
-	multiply = gm_policy_factor_age
 	max = gm_state_age_room
 }
 
@@ -1564,6 +1523,24 @@ gm_disp_national_any = {
 # which records the step's width W (gm_w_*): it began at N - W, so it is
 # (G - N + W) / W full, and with no end the bar is never held full.
 gm_disp_frac_prestige = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_standing
+			has_variable = gm_n_standing
+			has_variable = gm_w_standing
+		}
+		value = var:gm_g_standing
+		subtract = var:gm_n_standing
+		add = var:gm_w_standing
+		divide = var:gm_w_standing
+	}
+	min = 0
+	max = 1
+}
+
+# The prestige percentage's row: the same steps as the flat part's.
+gm_disp_frac_prestige_pct = {
 	value = 0
 	if = {
 		limit = {
