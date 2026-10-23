@@ -260,7 +260,9 @@ The national urban pattern's effects and the Plan a New Capital decision (spec Â
 4. **A country of one or two states**: no modifier, though its primacy reads near 100%; the tooltip says why.
 5. **The decision** (Full; Modern Sewerage shows it, Steel-Frame Buildings opens it): the greyed reasons read right
    (pattern, peace and plays, moved recently, the 50 years with the next year, 100 authority, a site). Take it: the
-   event offers up to three sites, largest first, never the capital or the largest city. Choosing one: the capital
+   event offers up to three sites, largest first, never the capital or the largest city. Each site's tooltip gives
+   Building the New Capital for 1825 days and Planned Capital for 7300 days (it said 0 days for both before the
+   durations became literals, 2026-10-23). Choosing one: the capital
    moves at once; the treasury drops by about 3% of a year's GDP; Building the New Capital takes 100 authority for five
    years; the new capital shows Planned Capital for 20 years; the decision is greyed "the next from <year + 50>". Not
    Now (the default) spends nothing and the decision stays open. While the event is open the decision is greyed "Our

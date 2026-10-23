@@ -118,17 +118,19 @@ te_demog_pc_state_check = {
 # THIS = ROOT = the country, in te_demog_capital.1's chosen option; scope:$SITE$ = the site (saved in the event's
 # immediate, so it exists in the option's tooltip too). The money and the authority, the new capital's development
 # modifier, then on the click only (te_dg_pc_click: the tooltip walk tests every limit and writes nothing, and the
-# move's dispatcher has a branch for each of 675 state regions) the move, the date and the self-check.
+# move's dispatcher has a branch for each of 675 state regions) the move, the date and the self-check. The durations
+# are literals, five years and 20: add_modifier's days read the named { value = N } script values they once named as 0
+# (the option's tooltip said "for 0 days"; scripting_best_practices.md, "Modifier & Cooldown Duration Units").
 te_demog_pc_build = {
 	add_treasury = te_demog_pc_money_cost
 	add_modifier = {
 		name = te_demog_pc_works
-		days = te_demog_k_pc_works_days
+		days = 1825
 	}
 	scope:$SITE$ = {
 		add_modifier = {
 			name = te_demog_pc_new_capital
-			days = te_demog_k_pc_new_capital_days
+			days = 7300
 		}
 	}
 	custom_tooltip = {

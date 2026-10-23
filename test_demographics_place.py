@@ -230,12 +230,13 @@ class TestModifiers(unittest.TestCase):
                 self.assertLessEqual(abs(size), 0.25, f"{name}: {field}")
 
     def test_the_timed_modifiers_run_in_days(self):
-        self.assertEqual(K["te_demog_k_pc_works_days"], K["te_demog_k_pc_build_years"] * 365)
-        self.assertEqual(K["te_demog_k_pc_new_capital_days"], 20 * 365)
+        """Literal days: add_modifier read the named { value = N } script values it once had as 0 ("for 0 days")."""
         effects = _text(PLACE_EFFECTS)
         self.assertNotRegex(effects, r"\bmonths = ")
-        self.assertIn("days = te_demog_k_pc_works_days", effects)
-        self.assertIn("days = te_demog_k_pc_new_capital_days", effects)
+        days = {name: int(n) for name, n in
+                re.findall(r"name = (\w+)\s+days = (\d+)", _block(effects, "te_demog_pc_build"))}
+        self.assertEqual(days, {"te_demog_pc_works": K["te_demog_k_pc_build_years"] * 365,
+                                "te_demog_pc_new_capital": 20 * 365})
 
     def test_the_constants_parse_as_engine_literals(self):
         for name, v in K.items():
