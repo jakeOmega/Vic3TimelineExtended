@@ -6894,11 +6894,11 @@ class SitesFinalReviewTests(unittest.TestCase):
         self.assertIn("has_building = building_grand_monument has_variable = gm_migrated gm_state_level > 1", settle)
 
     def test_upkeep_waits_for_migration(self):
-        # I3: pm_maintenance is level-scaled, so the multiplier on an older
-        # save's full-height building would square its upkeep.
-        mult = squash(block(read(VALUES), "gm_state_upkeep_mult"))
-        self.assertIn("if = { limit = { NOT = { has_variable = gm_migrated } } value = 0 }", mult)
-        self.assertGreater(mult.index("NOT = { has_variable = gm_migrated }"), mult.index("subtract = 1"))
+        # I3 once kept the multiplier off an older save's full-height building,
+        # since pm_maintenance is level-scaled and a level count would square
+        # it. At -1 (policy spec 2026-10-23 § 5) the modifier is -100% of the
+        # input whatever the level, so that building pays nothing too.
+        self.assertEqual(squash(block(read(VALUES), "gm_state_upkeep_mult")), "value = -1")
 
     def test_every_finished_building_script_makes_is_migrated(self):
         # The upkeep and merge gates rest on it: every create_building of the
