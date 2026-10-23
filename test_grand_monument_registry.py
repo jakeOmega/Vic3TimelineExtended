@@ -374,10 +374,22 @@ class ModifierTests(unittest.TestCase):
                              "gm_step_ig", 1)
 
     def test_local_pairs(self):
-        self.assert_pair("gm_local_tourism", "building_tourism_industry_throughput_add",
-                         "gm_step_tourism", 0.25)
+        self.assert_pair("gm_local_tourism", "goods_output_tourism_mult", "gm_step_tourism", 0.10)
         for d in DEDICATIONS:
             self.assert_pair(f"gm_local_{d.key}", d.local_field, f"gm_step_local_{d.key}", d.local_step)
+
+    def test_pilgrim_hostels_is_output(self):
+        # Tourism heritage spec 2026-10-23 § 5.1: monument tourism is output, as base appeal is.
+        body = block(read(MODIFIERS), "gm_evt_pilgrim_hostels")
+        self.assertAlmostEqual(number(body, "goods_output_tourism_mult"), 0.05)
+        self.assertNotIn("throughput", body)
+
+    def test_no_monument_loc_promises_throughput(self):
+        L = loc()
+        keys = [k for k in L if k.startswith(("gm_state_", "gm_sig_", "gm_policy_")) or k == "monument_events.2.common_tt"]
+        for k in keys:
+            self.assertNotIn("building_tourism_industry_throughput_add", L[k], k)
+            self.assertNotIn("Tourism Industry throughput", L[k], k)
 
     def test_culture_step(self):
         self.assertRegex(strip_comments(read(VALUES)), r"(?m)^gm_step_culture = 1\s*$")
@@ -4999,7 +5011,7 @@ Signature = namedtuple("Signature", "key kind family name national local ig pare
 # row order is the debug codes' (gm_disp_sig_code).
 SIGNATURES = (
     Signature("antiquity", "family", None, "Ancestral Antiquity", (("", "cultural_pull", 1),),
-              ("building_tourism_industry_throughput_add", 0.10), "intelligentsia", None, None,
+              ("goods_output_tourism_mult", 0.05), "intelligentsia", None, None,
               ("stelae_of_aksum", "obelisks_of_karnak", "persepolis", "luxor_obelisk", "venus_de_milo",
                "piraeus_lion", "horses_of_saint_mark", "great_zimbabwe", "uffizi_gallery", "capitoline_museums",
                "temples_of_baalbek", "palmyra", "xanthos", "arch_of_ctesiphon", "winged_victory_of_samothrace",
@@ -5036,7 +5048,7 @@ SIGNATURES = (
     Signature("glory_of_athens", "one_off", "antiquity", "The Glory of Athens", (("", "country_influence_mult", 0.02),),
               None, None, None, None, ("parthenon",)),
     Signature("first_emperor", "one_off", "antiquity", "The First Emperor’s Army", (),
-              ("building_tourism_industry_throughput_add", 0.25), None, None, None, ("terracotta_army",)),
+              ("goods_output_tourism_mult", 0.10), None, None, None, ("terracotta_army",)),
     Signature("to_victory", "special", None, "To Victory", (("", "country_prestige_mult", 0.02),), None, None,
               "war_memorial", "victory", ()),
     Signature("unknown_soldier", "special", None, "To the Unknown Soldier",
