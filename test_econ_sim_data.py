@@ -156,8 +156,18 @@ class TestLadders(unittest.TestCase):
 
     def test_maintenance_rates(self):
         self.assertEqual(D.ladder(MS, N, "heavy").maintenance, 0.1)
-        self.assertEqual(D.ladder(MS, N, "infrastructure").maintenance, 0.15)
         self.assertEqual(D.ladder(MS, N, "mining").maintenance, 0.05)
+        # Railways pay by their train method (pmg_maintenance_graded)
+        rail = D.ladder(MS, N, "infrastructure")
+        self.assertEqual(rail.maintenance, 0.05)
+        self.assertEqual(D.maintenance_at(rail, "pm_steam_trains"), 0.05)
+        self.assertEqual(D.maintenance_at(rail, "pm_electric_trains"), 0.1)
+        self.assertEqual(D.maintenance_at(rail, "pm_diesel_trains_principle_transport_3"), 0.1)
+        self.assertEqual(D.maintenance_at(rail, "pm_containerized_cargo"), 0.15)
+        # a mine's equipment unlocks the rate it already pays
+        mining = D.ladder(MS, N, "mining")
+        for pm in mining.base:
+            self.assertEqual(D.maintenance_at(mining, pm.pm), 0.05)
 
     def test_ladder_shapes(self):
         self.assertEqual(set(MD.ladders), set(D.SECTOR_BUILDINGS))

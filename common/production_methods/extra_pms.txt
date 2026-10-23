@@ -1536,12 +1536,12 @@ pm_laser_excavation_technology_tech_metals_mine = {
 	required_input_goods = electricity
 }
 
+# The tech metals mines' first and simplest equipment, and the group's fallback, so it
+# carries no technology: the group has no hand-worked method, and three of the four
+# tech metals mines (lithium, rare earths, platinum group metals) unlock without
+# watertube_boiler upstream. Every later pump carries its iron mine twin's technology.
 pm_condensing_engine_pump_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/condensing_engine_pump.dds"
-
-	unlocking_technologies = {
-		watertube_boiler
-	}
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -1835,6 +1835,10 @@ pm_high_pressure_hydraulic_pump_building_gold_mine = {
 
 pm_high_pressure_hydraulic_pump_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/production_method_icons/highpressurehydraulics.dds"
+
+	unlocking_technologies = {
+		modern_materials
+	}
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -19574,8 +19578,12 @@ pm_maintenance_intensive = {
 # from the condensing engine on unlocks the paid method, and the free one swaps to it
 # through replacement_if_valid (as the train methods swap to their principle variants),
 # so the change comes with the equipment switch that caused it. Going back to picks and
-# shovels or the atmospheric pump leaves only the free method valid. The discoverable
-# mines have no hand-worked tier and use pmg_maintenance_light.
+# shovels or the atmospheric pump leaves only the free method valid. The ten discoverable
+# mines that share these mines' equipment groups (bauxite, chromium, manganese and
+# specialty alloys on the iron mine's; copper and precious metals on the lead mine's;
+# phosphate, potash and salt on the sulfur mine's; graphite on the coal mine's) take this
+# group too. The four tech metals mines have no hand-worked tier (their equipment starts
+# at the condensing engine pump) and use pmg_maintenance_light.
 pm_maintenance_traditional = {
 	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
 	is_hidden_when_unavailable = yes
@@ -19617,6 +19625,90 @@ pm_maintenance_mechanized_mine = {
 	building_modifiers = {
 		level_scaled = {
 			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
+		}
+	}
+}
+
+# Power plants, railways and ports: upkeep follows the base method (pmg_maintenance_graded).
+# A level of these buildings is small on its early methods and grows several times over
+# up the ladder, while maintenance is charged per level. A fossil power plant level sells
+# 750-4,200 a week at base prices (25-140 electricity), against 13,500-360,000 for a
+# renewable, hydro, nuclear or fusion level, so the heavy tier's flat 0.15 took 20% of an
+# early plant's revenue and under 1% of the others'. Early trains and the basic port add
+# 90-135 a level over their inputs. So each building pays by the method it runs:
+#   light 0.05     early trains, steam trains; anchorage, basic and industrial ports;
+#                  early and coal-fired power plants
+#   standard 0.10  electric and diesel trains, Centralized Traffic Control; the modern
+#                  port; oil-fired and both modern fossil plants
+#   heavy 0.15     containerized cargo onward; container ports onward
+# The mines' mechanism (pm_maintenance_traditional above): the light method is first and
+# needs no other method, so it is the default and the fallback, and each tier hands over
+# to the next through replacement_if_valid. The standard method's list holds every method
+# of the heavy tier too, so a jump from a light-tier method straight to a heavy-tier one
+# goes light -> standard -> heavy. Going down, the dearer method loses its last unlocking
+# method and the building falls back to one that still fits. Transport-principle variants
+# sit in their base method's tier, so the principle swap changes no maintenance.
+# Renewable, hydro, nuclear and fusion plants keep pmg_maintenance_heavy / _intensive.
+pm_maintenance_graded_light = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	replacement_if_valid = pm_maintenance_graded_standard
+
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.05               # Price: 1000, Total cost: 50.0
+		}
+	}
+}
+
+pm_maintenance_graded_standard = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	replacement_if_valid = pm_maintenance_graded_heavy
+
+	unlocking_production_methods = {
+		# standard tier
+		pm_electric_trains
+		pm_electric_trains_principle_transport_3
+		pm_diesel_trains
+		pm_diesel_trains_principle_transport_3
+		pm_centralized_traffic_control
+		pm_modern_port
+		pm_oil-fired_plant
+		pm_modern_coal-fired_plant
+		pm_modern_oil-fired_plant
+		# heavy tier, so the light method can step up through this one
+		pm_containerized_cargo
+		pm_automated_loading_and_unloading
+		pm_autonomous_trains
+		pm_container_ports
+		pm_global_ports
+		pm_magnetic_drive_ports
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.1                # Price: 1000, Total cost: 100.0
+		}
+	}
+}
+
+pm_maintenance_graded_heavy = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_containerized_cargo
+		pm_automated_loading_and_unloading
+		pm_autonomous_trains
+		pm_container_ports
+		pm_global_ports
+		pm_magnetic_drive_ports
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.15               # Price: 1000, Total cost: 150.0
 		}
 	}
 }

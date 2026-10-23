@@ -75,16 +75,28 @@ building:
 
 | Rate per level | Buildings |
 |---|---|
-| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the modern mines (bauxite, chromium, copper, graphite, lithium and the like) and the coal, iron, lead, sulfur and gold mines once they run a mechanized pump |
-| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries |
-| 0.15 | Railways, Highways, Airports, Ports, Network Infrastructure, Power Plants, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, Oil Rigs |
+| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the tech metals mines (lithium, nickel and cobalt, rare earths, platinum group metals), every other mine once it runs a mechanized pump; Railways, Ports and Power Plants on their early methods |
+| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries; Railways, Ports and Power Plants on their middle methods |
+| 0.15 | Highways, Airports, Network Infrastructure, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, Oil Rigs; Railways and Ports on their latest methods |
 | 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
 
-Farms, plantations and urban centers pay none. The coal, iron, lead, sulfur and
-gold mines pay none while they run picks and shovels or the atmospheric engine
-pump, and start paying when their equipment changes to a condensing engine pump
-or anything later; going back to the old equipment stops the upkeep. A few
-company buildings also use construction in their production. This upkeep competes with your queues for the same supply, so a
+Railways, Ports and Power Plants pay by the method they run, because a level on
+an early method carries a fraction of the traffic or power of a level on a late
+one:
+
+| Rate per level | Railway | Port | Power Plant |
+|---|---|---|---|
+| 0.05 | Early and steam trains | Anchorage, basic and industrial ports | Early and coal-fired plants |
+| 0.1 | Electric and diesel trains, Centralized Traffic Control | Modern port | Oil-fired and both modern plants |
+| 0.15 | Containerized cargo and later | Container ports and later | No method |
+
+The rate follows the method by itself, up or down. Farms, plantations and urban
+centers pay none. The other mines (coal, iron, lead, sulfur and gold, and the
+bauxite, copper, graphite and similar mines that use the same equipment) pay
+none while they run picks and shovels or the atmospheric engine pump, and start
+paying when their equipment changes to a condensing engine pump or anything
+later; going back to the old equipment stops the upkeep. A few company buildings
+also use construction in their production. This upkeep competes with your queues for the same supply, so a
 growing economy needs a growing construction sector, and a country built around
 railways and power pays more than one built around trade.
 
