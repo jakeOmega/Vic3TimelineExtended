@@ -317,6 +317,9 @@ free_market_construction_rule = {
 		flag = disable_pm_maintenance_intensive
 		flag = disable_pm_maintenance_traditional
 		flag = disable_pm_maintenance_mechanized_mine
+		flag = disable_pm_maintenance_graded_light
+		flag = disable_pm_maintenance_graded_standard
+		flag = disable_pm_maintenance_graded_heavy
 		flag = force_pm_no_maintenance
 
 		# Company and Engineering & Logistics methods keep the construction
@@ -344,6 +347,9 @@ free_market_construction_rule = {
 		flag = disable_pm_maintenance_intensive
 		flag = disable_pm_maintenance_traditional
 		flag = disable_pm_maintenance_mechanized_mine
+		flag = disable_pm_maintenance_graded_light
+		flag = disable_pm_maintenance_graded_standard
+		flag = disable_pm_maintenance_graded_heavy
 		flag = force_pm_no_maintenance
 
 		flag = disable_pm_disney_world

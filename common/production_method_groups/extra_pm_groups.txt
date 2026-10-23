@@ -1477,8 +1477,8 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 
 # Maintenance at other rates (pm_maintenance_* in extra_pms.txt). Same shape as
 # pmg_maintenance: one rate, and pm_no_maintenance under the game rule. The GUI hides
-# all four groups by key (production_methods.gui and the building panels), so a new
-# tier group must be added to those checks too. Which building takes which tier:
+# every maintenance group by key (production_methods.gui and the building panels), so
+# a new tier group must be added to those checks too. Which building takes which tier:
 # docs/systems/mod_systems.md, "Maintenance tiers".
 REPLACE_OR_CREATE:pmg_maintenance_light = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
@@ -1523,6 +1523,23 @@ REPLACE_OR_CREATE:pmg_maintenance_mine = {
 	production_methods = {
 		pm_maintenance_traditional
 		pm_maintenance_mechanized_mine
+		pm_no_maintenance
+	}
+}
+
+# Power plants, railways and ports: maintenance follows the base method, because a level
+# of these buildings is several times larger on its late methods than on its early ones.
+# See pm_maintenance_graded_light in extra_pms.txt. Light first: it is the default and
+# the fallback.
+REPLACE_OR_CREATE:pmg_maintenance_graded = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_graded_light
+		pm_maintenance_graded_standard
+		pm_maintenance_graded_heavy
 		pm_no_maintenance
 	}
 }

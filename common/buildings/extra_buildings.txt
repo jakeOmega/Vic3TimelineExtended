@@ -453,7 +453,9 @@ INJECT:building_power_plant = {
 	production_method_groups = {
 		pmg_power_automation
 		pmg_emissions_control
-		pmg_maintenance_heavy
+		# Upkeep by base method: a fossil plant level is far smaller than a renewable,
+		# hydro, nuclear or fusion level (pm_maintenance_graded_light, extra_pms.txt)
+		pmg_maintenance_graded
 	}
 
 	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
@@ -1121,7 +1123,8 @@ INJECT:building_port = {
 	production_method_groups = {
 		pmg_water_personal_transport
 		pmg_emissions_control
-		pmg_maintenance_heavy
+		# Upkeep by base method (pm_maintenance_graded_light, extra_pms.txt)
+		pmg_maintenance_graded
 	}
 
 	possible = {
@@ -1134,7 +1137,8 @@ INJECT:building_port = {
 
 INJECT:building_railway = {
 	production_method_groups = {
-		pmg_maintenance_heavy
+		# Upkeep by base method (pm_maintenance_graded_light, extra_pms.txt)
+		pmg_maintenance_graded
 	}
 }
 
@@ -1302,7 +1306,7 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1333,7 +1337,7 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1364,7 +1368,7 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1395,7 +1399,7 @@ REPLACE_OR_CREATE:building_copper_mine = {
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_lead_mine
 		pmg_carbon_capture_steam_automation_building_lead_mine
 	}
@@ -1426,7 +1430,7 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_iron_mine
 		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
@@ -1457,7 +1461,7 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_lead_mine
 		pmg_carbon_capture_steam_automation_building_lead_mine
 	}
@@ -1612,7 +1616,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 		pmg_steam_automation_building_coal_mine
 		pmg_train_automation_building_coal_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_coal_mine
 		pmg_carbon_capture_steam_automation_building_coal_mine
 	}
@@ -1643,7 +1647,7 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_sulfur_mine
 		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
@@ -1674,7 +1678,7 @@ REPLACE_OR_CREATE:building_potash_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_sulfur_mine
 		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
@@ -1705,7 +1709,7 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
-		pmg_maintenance_light
+		pmg_maintenance_mine
 		pmg_carbon_capture_mining_equipment_building_sulfur_mine
 		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
