@@ -13,6 +13,15 @@ gm_national_prestige = {
 	country_prestige_add = 10
 }
 
+# Public Education (policy spec 2026-10-23 § 4.4): a step of standing grandeur
+# on the 1/n curve with a first step of 10, only under that policy. A state_*
+# field held by the journal entry, like three signatures' (unverified; the
+# self-check gm_education_reaches_states).
+gm_national_education = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_education_access_add = 0.01
+}
+
 # The percentage part, on the same steps (policy spec 2026-10-23 § 8).
 gm_national_prestige_pct = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds

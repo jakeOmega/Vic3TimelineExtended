@@ -838,6 +838,7 @@ gm_country_monthly = {
 	gm_com_check_progress = yes
 	gm_com_monthly = yes
 	gm_country_refresh = yes
+	gm_policy_education_self_check = yes
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		change_variable = { name = gm_contested add = 1 }
@@ -942,6 +943,16 @@ gm_compute_totals = {
 	set_variable = { name = gm_g_leader_in value = { value = var:gm_g_leader add = var:gm_g_ceremonial } }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing WIDTH = gm_w_standing F = 5 }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture WIDTH = gm_w_culture F = 10 }
+	# Public Education (policy spec 2026-10-23 § 4.4): education access from
+	# standing grandeur, on the curve cultural pull uses; 0 under any other
+	# policy, so its row and modifier go when the policy changes.
+	if = {
+		limit = { gm_policy_is = { P = education STANDARD = no } }
+		gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education F = 10 }
+	}
+	else = {
+		set_variable = { name = gm_s_education value = 0 }
+	}
 	gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
 	gm_set_steps = { IN = gm_g_leader_in OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
 	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }
@@ -1097,6 +1108,7 @@ gm_apply_national_modifiers = {
 		gm_remove_national_modifiers = yes
 		gm_add_national = { NAME = gm_national_prestige VAR = gm_s_standing }
 		gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_education VAR = gm_s_education }
 		gm_add_national = { NAME = gm_national_legitimacy VAR = gm_s_regime }
 		gm_add_national = { NAME = gm_national_leader VAR = gm_s_leader }
 		gm_add_national = { NAME = gm_national_religious VAR = gm_s_religious }
@@ -1141,6 +1153,7 @@ gm_apply_national_modifiers = {
 gm_remove_national_modifiers = {
 	remove_modifier = gm_national_prestige
 	remove_modifier = gm_national_prestige_pct
+	remove_modifier = gm_national_education
 	remove_modifier = gm_national_legitimacy
 	remove_modifier = gm_national_leader
 	remove_modifier = gm_national_religious

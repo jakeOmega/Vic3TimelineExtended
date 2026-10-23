@@ -361,6 +361,7 @@ class ModifierTests(unittest.TestCase):
         # Policy spec 2026-10-23 § 8: +10 a step plus +1% a step.
         self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 10)
         self.assert_pair("gm_national_prestige_pct", "country_prestige_mult", "gm_step_prestige_pct", 0.01)
+        self.assert_pair("gm_national_education", "state_education_access_add", "gm_step_education", 0.01)
         self.assert_pair("gm_national_legitimacy", "country_legitimacy_base_add", "gm_step_legitimacy", 2)
         self.assert_pair("gm_national_teardown", "country_legitimacy_base_add", "gm_step_teardown", 3)
         self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -1)
@@ -778,7 +779,7 @@ class NationalTests(unittest.TestCase):
                       "WIDTH = gm_w_standing F = 5 }", body)
         self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture "
                       "WIDTH = gm_w_culture F = 10 }", body)
-        self.assertEqual(body.count("gm_set_steps_lin_open"), 2)
+        self.assertEqual(body.count("gm_set_steps_lin_open"), 3, "prestige, pull and Public Education")
         # Legitimacy's input carries State Ceremonial's share (policy spec 2026-10-23 § 4.2).
         self.assertIn("gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
@@ -3076,6 +3077,28 @@ class PolicyTests(unittest.TestCase):
             self.assertIn(f"value = var:{var} ", squash(block(self.values, frac)), frac)
         for key in ("gm_je_tt_legitimacy", "gm_je_tt_leader"):
             self.assertIn("gm_display_g_ceremonial", loc()[key], key)
+
+    def test_education_only_under_its_policy(self):
+        # Switching away leaves no education behind (plan Review Focus 2).
+        totals = squash(block(read(EFFECTS), "gm_compute_totals"))
+        self.assertIn("if = { limit = { gm_policy_is = { P = education STANDARD = no } } gm_set_steps_lin_open = "
+                      "{ IN = gm_g_standing OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education "
+                      "F = 10 } } else = { set_variable = { name = gm_s_education value = 0 } }", totals)
+        self.assertIn("gm_add_national = { NAME = gm_national_education VAR = gm_s_education }",
+                      squash(block(read(EFFECTS), "gm_apply_national_modifiers")))
+        self.assertIn("remove_modifier = gm_national_education",
+                      squash(block(read(EFFECTS), "gm_remove_national_modifiers")))
+
+    def test_education_self_check(self):
+        # Spec § 4.4: a JE-held state_* field reaching the states is unverified.
+        check = squash(block(self.e, "gm_policy_education_self_check"))
+        self.assertIn("has_global_variable = gm_education_self_checked", check)
+        self.assertIn("TE_SELF_CHECK OK gm_education_reaches_states", check)
+        self.assertIn("TE_SELF_CHECK BROKEN gm_education_reaches_states", check)
+        self.assertIn("capital.modifier:state_education_access_add", check)
+        self.assertIn("var:gm_s_education >= 1", check, "no OK on nothing")
+        monthly = squash(block(read(EFFECTS), "gm_country_monthly"))
+        self.assertLess(monthly.find("gm_country_refresh = yes"), monthly.find("gm_policy_education_self_check = yes"))
 
     def test_cultural_promotion_follows_the_rule(self):
         # With the rule on, prestige never moves by policy; with it off, pull never does (plan Review Focus 5).

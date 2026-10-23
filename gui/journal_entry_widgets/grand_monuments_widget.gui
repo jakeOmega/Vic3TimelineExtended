@@ -1853,6 +1853,20 @@ types grand_monuments_widget_types
 					text = "gm_je_val_culture"
 				}
 			}
+			# Public Education (policy spec 2026-10-23 § 4.4): only under that policy.
+			gm_step_row = {
+				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_education'), '(CFixedPoint)0' )]"
+				tooltip = "gm_je_tt_education"
+				blockoverride "row_label" {
+					text = "gm_je_lbl_education"
+				}
+				blockoverride "row_frac" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_frac_education') )]"
+				}
+				blockoverride "row_value" {
+					text = "gm_je_val_education"
+				}
+			}
 			gm_step_row = {
 				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tt_leader"

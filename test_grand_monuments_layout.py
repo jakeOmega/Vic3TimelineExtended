@@ -51,6 +51,7 @@ IGS = ("armed_forces", "devout", "industrialists", "intelligentsia", "landowners
        "petty_bourgeoisie", "rural_folk", "trade_unions")
 # The bars: row key -> the gm_set_steps OUT/NEXT suffix it follows.
 FRACS = {"prestige": "standing", "prestige_pct": "standing", "legitimacy": "regime", "culture": "culture",
+         "education": "education",
          "leader": "leader", "religious": "religious", "war_memorial": "war_memorial",
          "artistic": "artistic", "scientific": "scientific", "industrial": "industrial"}
 # The unique dedications with a national effect (signatures spec 2026-10-16 §8):
@@ -530,7 +531,7 @@ class DisplayValuesTest(unittest.TestCase):
         lin = {m.group(3): (m.group(1), m.group(4)) for m in re.finditer(
             r"gm_set_steps_lin_open = \{ IN = (gm_\w+) OUT = gm_s_(\w+) NEXT = gm_n_(\w+) "
             r"WIDTH = (gm_w_\w+) F = \d+ \}", totals)}
-        self.assertEqual(set(lin), {"standing", "culture"})
+        self.assertEqual(set(lin), {"standing", "culture", "education"})
         gui = _gui()
         for row, suffix in FRACS.items():
             self.assertIn(f"ScriptValue('gm_disp_frac_{row}')", gui, row)
