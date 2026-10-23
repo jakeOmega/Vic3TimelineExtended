@@ -38,3 +38,21 @@ Airport and Spaceport use: +5% on Civil, Electric Civil and Autonomous, +2.5% on
 | Check | Expect | If it fails |
 |---|---|---|
 | **Value.** Build a Highway on the Civil Highway method in a state, staff it, then read the tourism card's "All modifiers" output line (hover for the breakdown). | The Highway appears as a source of about +5% per level, scaled by staffing. Switching to Industrial Highway halves it to +2.5%. | A missing source means the method's `state_modifiers` block did not load: check `debug.log` for the PM. |
+
+## Monuments move to output, heritage leaves base appeal
+
+Tourism heritage phase 1 (`docs/superpowers/specs/2026-10-23-tourism-heritage-design.md`): a monument's tourism is an
+output bonus, and the heritage the existing landmarks, sites and 1836 wonders stand for comes off Base Appeal through
+`tourism_heritage_moved` (`common/script_values/tourism_heritage_generated.txt`). Figures are at the Standard policy;
+Open to the Public multiplies a Grand Monument's steps by 1.5, and an AI that has a monument beside a Tourism Industry
+plays Open.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Attica, day one.** Open Attica's state panel. | Base Appeal reads +60%, and its tooltip says 40% of it is counted in its monuments. The output "All modifiers" line shows the Grand Monument at +40% (four steps of the Parthenon's 50 grandeur), plus Ancestral Antiquity's +5% a step. | Base Appeal at +100% means `tourism_heritage_moved` reads 0: check `gm_landmarks_seeded` is set and the rule is on. A Grand Monument line in throughput means `gm_local_tourism` did not change. |
+| **A state with nothing moved.** Hover Base Appeal in Nebraska. | The tooltip has no "counted in its monuments" line. | A "0%" line means the `SelectLocalization` in `te_state_tourism_appeal_tt` didn't pick the empty key. |
+| **Agra.** Open Agra's panel. | The output column's Monuments row reads +40% (the Taj Mahal); Base Appeal reads +45%. | Monuments at +10% means `is_building_type` did not match inside `every_scope_building` in `tourism_bonus_from_monuments`; the eight wonders all fall to the default. |
+| **Another monument.** A state with a later wonder (the Eiffel Tower, a mod wonder). | Monuments reads +10%. | — |
+| **Rule off.** Start a game with the Grand Monuments rule disabled; open Attica and Agra. | Attica's Base Appeal reads +100%; Agra's still +45% (the Taj Mahal is vanilla's). | Attica below +100% means the landmark gate isn't reading the rule. |
+| **Western Mali.** Before and after the Great Mosque of Djenné is built. | Base Appeal +40% throughout; Monuments +20% once the mosque stands. | — |
+| **Skyscraper.** A state with a Skyscraper. | The throughput column's Skyscraper row reads +10%, with its tooltip. | A raw key means `te_state_tourism_skyscraper_lbl` or `_tt` did not load. |
