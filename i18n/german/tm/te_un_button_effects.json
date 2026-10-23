@@ -1,27 +1,27 @@
 {
  "UN_ARMS_CONTROL_EFFECTS": {
-  "en": "Applies $un_arms_control_participant_modifier$ (+10% $country_infamy_decay_mult$, +5% $country_infamy_generation_mult$, −5% $unit_kill_rate_add$, −15% $unit_devastation_mult$, −5% $country_military_goods_cost_mult$, +25 $country_bureaucracy_cost_add$).",
-  "de": "Wendet $un_arms_control_participant_modifier$ an (+10% $country_infamy_decay_mult$, +5% $country_infamy_generation_mult$, −5% $unit_kill_rate_add$, −15% $unit_devastation_mult$, −5% $country_military_goods_cost_mult$, +25 $country_bureaucracy_cost_add$)."
+  "en": "Applies $un_arms_control_participant_modifier$ (+10% $country_infamy_decay_mult$, +5% $country_infamy_generation_mult$, −5% $unit_kill_rate_add$, −15% $unit_devastation_mult$, −5% $country_military_goods_cost_mult$, +100 $country_influence_cost_add$).",
+  "de": "Wendet $un_arms_control_participant_modifier$ an (+10% $country_infamy_decay_mult$, +5% $country_infamy_generation_mult$, −5% $unit_kill_rate_add$, −15% $unit_devastation_mult$, −5% $country_military_goods_cost_mult$, +100 $country_influence_cost_add$)."
  },
  "UN_CHAMPION_ORDER_EFFECTS": {
-  "en": "Applies $un_champion_order_cost$ (+50 $country_authority_cost_add$, −10% $country_influence_mult$).",
-  "de": "Wendet $un_champion_order_cost$ an (+50 $country_authority_cost_add$, −10% $country_influence_mult$)."
+  "en": "Applies $un_champion_order_cost$ (+500 $country_influence_cost_add$).",
+  "de": "Wendet $un_champion_order_cost$ an (+500 $country_influence_cost_add$)."
  },
  "UN_END_PEACEKEEPING_EFFECTS": {
-  "en": "Removes $un_peacekeeping_contributor_modifier$ (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +25 $country_bureaucracy_cost_add$).",
-  "de": "Entfernt $un_peacekeeping_contributor_modifier$ (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +25 $country_bureaucracy_cost_add$)."
+  "en": "Removes $un_peacekeeping_contributor_modifier$ (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +100 $country_influence_cost_add$).",
+  "de": "Entfernt $un_peacekeeping_contributor_modifier$ (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +100 $country_influence_cost_add$)."
  },
  "UN_HUMAN_RIGHTS_EFFECTS": {
-  "en": "Applies $un_human_rights_champion_modifier$ (+5% $country_institution_impact_institution_ministry_of_refugee_affairs_mult$, +5% $country_prestige_mult$, +5% $country_institution_size_change_speed_mult$, +25 $country_bureaucracy_cost_add$).",
-  "de": "Wendet $un_human_rights_champion_modifier$ an (+5% $country_institution_impact_institution_ministry_of_refugee_affairs_mult$, +5% $country_prestige_mult$, +5% $country_institution_size_change_speed_mult$, +25 $country_bureaucracy_cost_add$)."
+  "en": "Applies $un_human_rights_champion_modifier$ (+5% $country_institution_impact_institution_ministry_of_refugee_affairs_mult$, +5% $country_prestige_mult$, +5% $country_institution_size_change_speed_mult$, +100 $country_influence_cost_add$).",
+  "de": "Wendet $un_human_rights_champion_modifier$ an (+5% $country_institution_impact_institution_ministry_of_refugee_affairs_mult$, +5% $country_prestige_mult$, +5% $country_institution_size_change_speed_mult$, +100 $country_influence_cost_add$)."
  },
  "UN_LIFT_SANCTIONS_EFFECTS": {
   "en": "Removes $un_sanctions_enforcer_modifier$ (+5% $country_leverage_generation_mult$). Removes $un_sanctions_target_modifier$ (−10% $country_influence_mult$, −5% $country_prestige_mult$, −15% $state_trade_advantage_mult$). #R UN credibility −1#! × our weight in world affairs, moving [concept_un_authority]'s target.",
   "de": "Entfernt $un_sanctions_enforcer_modifier$ (+5% $country_leverage_generation_mult$). Entfernt $un_sanctions_target_modifier$ (−10% $country_influence_mult$, −5% $country_prestige_mult$, −15% $state_trade_advantage_mult$). #R UN-Glaubwürdigkeit −1#! × unser Gewicht in den Weltangelegenheiten, wodurch sich das Ziel der [concept_un_authority] verschiebt."
  },
  "UN_PEACEKEEPING_EFFECTS": {
-  "en": "Applies $un_peacekeeping_contributor_modifier$ (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +25 $country_bureaucracy_cost_add$).",
-  "de": "Wendet $un_peacekeeping_contributor_modifier$ an (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +25 $country_bureaucracy_cost_add$)."
+  "en": "Applies $un_peacekeeping_contributor_modifier$ (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +100 $country_influence_cost_add$).",
+  "de": "Wendet $un_peacekeeping_contributor_modifier$ an (+5% $country_leverage_generation_mult$, +5% $country_prestige_mult$, +5% $country_military_goods_cost_mult$, +10% $unit_experience_gain_mult$, +100 $country_influence_cost_add$)."
  },
  "UN_STOP_CHAMPIONING_EFFECTS": {
   "en": "Removes $un_champion_order_cost$ (+500 $country_influence_cost_add$).",

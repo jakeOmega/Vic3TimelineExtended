@@ -119,6 +119,10 @@
   "en": "AI-Managed Arms Industry",
   "de": "KI-gesteuerte Rüstungsindustrie"
  },
+ "pm_ai_managed_building_artillery_foundry": {
+  "en": "AI-Managed $building_artillery_foundry$",
+  "de": "KI-Verwaltung: $building_artillery_foundry$"
+ },
  "pm_ai_managed_building_furniture_manufactory": {
   "en": "AI-Managed Furniture Manufactories",
   "de": "KI-gesteuerte Möbelmanufakturen"
@@ -3671,9 +3675,25 @@
   "en": "CGV Haut-Brion Estate",
   "de": "CGV-Weingut Haut-Brion"
  },
+ "pm_chemical_launch_building_space_mine": {
+  "en": "Chemical Launch",
+  "de": "Chemischer Start"
+ },
+ "pm_chemical_launch_building_space_mine_desc": {
+  "en": "Crews, habitats and equipment ride chemical rockets to orbit, and the base pays for every tonne in Launch Capacity.",
+  "de": "Besatzungen, Habitate und Ausrüstung fliegen mit chemischen Raketen in die Umlaufbahn, und die Basis bezahlt jede Tonne in Startkapazität."
+ },
  "pm_chemical_rockets": {
   "en": "Chemical Rockets",
   "de": "Chemische Raketen"
+ },
+ "pm_chemical_tugs_building_space_mine": {
+  "en": "Chemical Tugs",
+  "de": "Chemische Schlepper"
+ },
+ "pm_chemical_tugs_building_space_mine_desc": {
+  "en": "Chemical tugs haul ore and supplies between the asteroids and Earth orbit, and every tonne of their propellant is launched from Earth.",
+  "de": "Chemische Schlepper befördern Erz und Nachschub zwischen den Asteroiden und der Erdumlaufbahn, und jede Tonne ihres Treibstoffs wird von der Erde aus gestartet."
  },
  "pm_chr_hansen_copenhagen_laboratory": {
   "en": "Chr. Hansen Copenhagen Laboratory",
@@ -3842,6 +3862,38 @@
  "pm_debarkers_and_chippers": {
   "en": "Debarkers and Chippers",
   "de": "Entrindungs- und Hackmaschinen"
+ },
+ "pm_debris_active_removal": {
+  "en": "Active Debris Removal",
+  "de": "Aktive Schrottbeseitigung"
+ },
+ "pm_debris_active_removal_desc": {
+  "en": "Servicer spacecraft rendezvous with dead satellites and spent stages, grapple them and drag them down to burn up. Slow and costly, one object at a time.",
+  "de": "Wartungsraumfahrzeuge treffen sich mit toten Satelliten und ausgebrannten Stufen, greifen sie und ziehen sie hinab, damit sie verglühen. Langsam und kostspielig, ein Objekt nach dem anderen."
+ },
+ "pm_debris_fusion_sweepers": {
+  "en": "Fusion Sweepers",
+  "de": "Fusionskehrer"
+ },
+ "pm_debris_fusion_sweepers_desc": {
+  "en": "Fusion-driven tugs sweep whole orbital shells, gathering debris by the tonne for re-entry or for salvage.",
+  "de": "Fusionsgetriebene Schlepper fegen ganze Orbitalschalen leer und sammeln den Schrott tonnenweise für den Wiedereintritt oder zur Bergung."
+ },
+ "pm_debris_laser_broom": {
+  "en": "Laser Broom",
+  "de": "Laserbesen"
+ },
+ "pm_debris_laser_broom_desc": {
+  "en": "Ground and orbital lasers ablate the surface of small fragments, nudging them into lower orbits where the air drags them down.",
+  "de": "Boden- und Orbitallaser tragen die Oberfläche kleiner Fragmente ab und schubsen sie in niedrigere Umlaufbahnen, wo die Luft sie nach unten zieht."
+ },
+ "pm_debris_removal_none": {
+  "en": "No Debris Removal",
+  "de": "Keine Schrottbeseitigung"
+ },
+ "pm_debris_removal_none_desc": {
+  "en": "The programme flies its missions and leaves the debris to others.",
+  "de": "Das Programm fliegt seine Missionen und überlässt den Schrott anderen."
  },
  "pm_decentralized_religious_structures": {
   "en": "Decentralized Religious Structures",
@@ -4239,6 +4291,14 @@
   "en": "Fusion SSTO Craft",
   "de": "Fusions-SSTO-Raumschiffe"
  },
+ "pm_fusion_tugs_building_space_mine": {
+  "en": "Fusion Tugs",
+  "de": "Fusionsschlepper"
+ },
+ "pm_fusion_tugs_building_space_mine_desc": {
+  "en": "Fusion-driven tugs make the same transfers on a fraction of the propellant, so less of it has to be launched from Earth.",
+  "de": "Fusionsgetriebene Schlepper führen dieselben Transfers mit einem Bruchteil des Treibstoffs durch, sodass weniger davon von der Erde gestartet werden muss."
+ },
  "pm_galician_boryslaw_oil_field": {
   "en": "Galician Borysław Oil Field",
   "de": "Galizisches Ölfeld Borysław"
@@ -4503,6 +4563,14 @@
   "en": "Gran Azucarera Aranjuez Refinery",
   "de": "Gran-Azucarera-Raffinerie Aranjuez"
  },
+ "pm_grand_monument_site": {
+  "en": "Under Construction",
+  "de": "Im Bau"
+ },
+ "pm_grand_monument_site_desc": {
+  "en": "The monument is being built. It has no upkeep and no effects until it is dedicated.",
+  "de": "Das Monument wird gebaut. Es hat keinen Unterhalt und keine Wirkungen, bis es gewidmet wird."
+ },
  "pm_graphene_electric_motors": {
   "en": "Graphene Electric Motors",
   "de": "Graphen-Elektromotoren"
@@ -4518,6 +4586,26 @@
  "pm_grid_hvdc_interconnector": {
   "en": "HVDC Undersea Interconnector",
   "de": "HGÜ-Seekabelverbindung"
+ },
+ "pm_grid_hvdc_interconnector_desc": {
+  "en": "A high-voltage direct-current cable joins this station to any station running one across the sea, in a state that shares a sea with this one: our own, or a country we have a $grid_interconnection_agreement$ with in our [concept_market]. Their grids become one. It does nothing in a state with no coast.",
+  "de": "Ein Hochspannungs-Gleichstromkabel verbindet diese Station mit jeder Station, die über das Meer hinweg ebenfalls eines betreibt, in einem Staat, der mit diesem ein Meer teilt: unserem eigenen oder dem eines Landes, mit dem wir ein $grid_interconnection_agreement$ auf unserem [concept_market] haben. Ihre Netze werden eins. In einem Staat ohne Küste bewirkt es nichts."
+ },
+ "pm_grid_no_interconnector": {
+  "en": "No Interconnector",
+  "de": "Keine Kuppelleitung"
+ },
+ "pm_grid_no_interconnector_desc": {
+  "en": "The station joins only the grid it is connected to by land.",
+  "de": "Die Station gehört nur zu dem Netz, mit dem sie über Land verbunden ist."
+ },
+ "pm_grid_transfer_base": {
+  "en": "Substation",
+  "de": "Umspannwerk"
+ },
+ "pm_grid_transfer_base_desc": {
+  "en": "Moves $electricity$ between this state and its grid. The grid's monthly balancing decides which way and how much.",
+  "de": "Überträgt $electricity$ zwischen diesem Staat und seinem Stromnetz. Der monatliche Ausgleich des Netzes entscheidet, in welche Richtung und wie viel."
  },
  "pm_guinness_st_james_gate_brewery": {
   "en": "Guinness St. James's Gate Brewery",
@@ -4922,6 +5010,14 @@
  "pm_magnetic_drive_ports_desc": {
   "en": "Magnetically-driven ships docking at automated terminals push [concept_throughput] far past containerization-era levels. Heavy electronic and digital infrastructure required.",
   "de": "Magnetisch angetriebene Schiffe, die an automatisierten Terminals anlegen, treiben den [concept_throughput] weit über das Niveau des Container-Zeitalters hinaus. Umfangreiche elektronische und digitale Infrastruktur erforderlich."
+ },
+ "pm_magnetic_drive_tenders_building_ocean_mine": {
+  "en": "Magnetic Drive Tenders",
+  "de": "Versorgungsschiffe mit Magnetantrieb"
+ },
+ "pm_magnetic_drive_tenders_building_ocean_mine_desc": {
+  "en": "Magnetic drive tenders hold station over the seabed collectors and run ore and crews to port in fewer, larger hulls.",
+  "de": "Versorgungsschiffe mit Magnetantrieb halten Position über den Meeresbodenkollektoren und bringen Erz und Besatzungen in weniger, größeren Rümpfen in den Hafen."
  },
  "pm_magnetic_drive_trawlers": {
   "en": "Magnetic Drive Trawlers",
@@ -5370,6 +5466,14 @@
  "pm_moser_karlsbad_glass_works": {
   "en": "Moser Karlsbad Glass Works",
   "de": "Moser-Glaswerke Karlsbad"
+ },
+ "pm_motor_ship_tenders_building_ocean_mine": {
+  "en": "Motor Ship Tenders",
+  "de": "Versorgungsschiffe mit Motorantrieb"
+ },
+ "pm_motor_ship_tenders_building_ocean_mine_desc": {
+  "en": "A fleet of motor ships holds station over the seabed, lowering and recovering the collectors and running ore and crews to port.",
+  "de": "Eine Flotte von Motorschiffen hält Position über dem Meeresboden, setzt die Kollektoren aus und holt sie wieder ein und bringt Erz und Besatzungen in den Hafen."
  },
  "pm_motor_trawlers": {
   "en": "Motor Trawlers",
@@ -5864,8 +5968,8 @@
   "de": "Keine Rückstandsbehandlung"
  },
  "pm_no_water_personal_transport": {
-  "en": "No Water Personal Transport",
-  "de": "Kein Wasser-Personenverkehr"
+  "en": "No Passenger Ships",
+  "de": "Keine Passagierschiffe"
  },
  "pm_nobel_baku_refinery": {
   "en": "Nobel Baku Refinery",
@@ -6894,6 +6998,14 @@
  "pm_tessier_ashpool_hq": {
   "en": "Tessier-Ashpool Operations",
   "de": "Tessier-Ashpool Operations"
+ },
+ "pm_tethered_launch_building_space_mine": {
+  "en": "Tethered Launch",
+  "de": "Seilgestützter Start"
+ },
+ "pm_tethered_launch_building_space_mine_desc": {
+  "en": "Cargo climbs to orbit on space elevator ribbons instead of burning propellant, so the base buys far less Launch Capacity.",
+  "de": "Fracht steigt auf Bändern des Weltraumaufzugs in die Umlaufbahn, statt Treibstoff zu verbrennen, sodass die Basis weit weniger Startkapazität einkauft."
  },
  "pm_textile_finishing_machinery": {
   "en": "Textile Finishing Machinery",
@@ -8319,9 +8431,21 @@
   "en": "Gran Azucarera Aranjuez Refinery",
   "de": "Gran-Azucarera-Raffinerie Aranjuez"
  },
+ "pmg_grand_monument_site": {
+  "en": "Construction",
+  "de": "Bau"
+ },
  "pmg_great_indian_railway_jamalpur_works": {
   "en": "Great Indian Railway Jamalpur Works",
   "de": "Great-Indian-Railway-Werke Jamalpur"
+ },
+ "pmg_grid_interconnector": {
+  "en": "Interconnector",
+  "de": "Kuppelleitung"
+ },
+ "pmg_grid_transfer_station": {
+  "en": "Grid Transfer",
+  "de": "Netzübergabe"
  },
  "pmg_guinness_st_james_gate_brewery": {
   "en": "Guinness St. James's Gate Brewery",
@@ -8482,6 +8606,10 @@
  "pmg_lanfang_pontianak_kongsi_house": {
   "en": "Lanfang Pontianak Kongsi House",
   "de": "Lanfang-Kongsi-Haus Pontianak"
+ },
+ "pmg_launch_to_orbit_building_space_mine": {
+  "en": "Launch to Orbit",
+  "de": "Start in die Umlaufbahn"
  },
  "pmg_lee_wilson_plantation_depot": {
   "en": "Lee Wilson Plantation Depot",
@@ -8971,6 +9099,10 @@
   "en": "Sony Pictures Studios",
   "de": "Sony Pictures Studios"
  },
+ "pmg_space_program_debris_removal": {
+  "en": "Debris Removal",
+  "de": "Schrottbeseitigung"
+ },
  "pmg_spacex_starbase": {
   "en": "Starbase",
   "de": "Starbase"
@@ -9026,6 +9158,10 @@
  "pmg_sunhwaguk_seoul_tobacco_factory": {
   "en": "Sunhwaguk Seoul Tobacco Factory",
   "de": "Sunhwaguk-Tabakfabrik Seoul"
+ },
+ "pmg_support_vessels_building_ocean_mine": {
+  "en": "Support Vessels",
+  "de": "Hilfsschiffe"
  },
  "pmg_synthetic_biomass": {
   "en": "Synthetic Biomass",
@@ -9115,6 +9251,10 @@
   "en": "Transportation",
   "de": "Transport"
  },
+ "pmg_transport_in_space_building_space_mine": {
+  "en": "Transport in Space",
+  "de": "Transport im Weltraum"
+ },
  "pmg_trubia_cannon_foundry": {
   "en": "Trubia Cannon Foundry",
   "de": "Trubia-Kanonengießerei"
@@ -9180,8 +9320,8 @@
   "de": "Wadia-Werft Bombay"
  },
  "pmg_water_personal_transport": {
-  "en": "Water Personal Transport",
-  "de": "Persönlicher Wassertransport"
+  "en": "Passenger Ships",
+  "de": "Passagierschiffe"
  },
  "pmg_west_ural_oil_depot": {
   "en": "West Ural Oil Depot",
