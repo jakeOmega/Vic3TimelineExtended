@@ -75,7 +75,8 @@ WONDERS_1836 = {"building_taj_mahal": "STATE_AGRA", "building_angkor_wat": "STAT
 # Spec § 5.2: each wonder's output figure is the appeal its state's heritage took.
 WONDERS = {"building_taj_mahal": 0.40, "building_angkor_wat": 0.30, "building_hagia_sophia": 0.20,
            "building_vatican_city": 0.20, "building_forbidden_city": 0.20,
-           "building_saint_basils_cathedral": 0.20, "building_white_house": 0.20}
+           "building_saint_basils_cathedral": 0.20, "building_white_house": 0.20,
+           "building_mosque_of_djenne": 0.20}
 
 
 class MonumentsAreOutput(unittest.TestCase):
@@ -176,7 +177,9 @@ class HeritageMoves(unittest.TestCase):
         for state, left in {"STATE_ATTICA": 60, "STATE_EASTERN_THRACE": 60, "STATE_BEIJING": 55,
                             "STATE_ILE_DE_FRANCE": 70, "STATE_TUSCANY": 90, "STATE_CAMBODIA": 60,
                             "STATE_CRETE": 75, "STATE_UPPER_EGYPT": 50, "STATE_MOSCOW": 65,
-                            "STATE_WESTERN_MALI": 60}.items():
+                            "STATE_EASTERN_MALI": 45, "STATE_WESTERN_MALI": 45,
+                            # Mediterranean coasts against their peers (Calabria 75, Apulia 80, Sicily 75)
+                            "STATE_CAMPANIA": 80, "STATE_PELOPONNESE": 75, "STATE_LEBANON": 65}.items():
             self.assertEqual(scores[state] - moved[state], left, state)
 
 

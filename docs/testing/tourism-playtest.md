@@ -54,5 +54,6 @@ plays Open.
 | **Agra.** Open Agra's panel. | The output column's Monuments row reads +40% (the Taj Mahal); Base Appeal reads +45%. | Monuments at +10% means `is_building_type` did not match inside `every_scope_building` in `tourism_bonus_from_monuments`; the eight wonders all fall to the default. |
 | **Another monument.** A state with a later wonder (the Eiffel Tower, a mod wonder). | Monuments reads +10%. | — |
 | **Rule off.** Start a game with the Grand Monuments rule disabled; open Attica and Agra. | Attica's Base Appeal reads +100%; Agra's still +45% (the Taj Mahal is vanilla's). | Attica below +100% means the landmark gate isn't reading the rule. |
+| **Eastern Mali.** Before and after the Great Mosque of Djenné is built. | Base Appeal +45% until it stands, then Monuments +20%. Western Mali's Base Appeal reads +45% throughout (rescored: Djenné was never there). | — |
 | **Moscow.** Open Moscow's panel. | Base Appeal +65%; Monuments +20% (Saint Basil's). The Kremlin's 20 stay in Base Appeal until phase 2 adds it. | — |
 | **Skyscraper.** A state with a Skyscraper. | The throughput column's Skyscraper row reads +10%, with its tooltip. | A raw key means `te_state_tourism_skyscraper_lbl` or `_tt` did not load. |

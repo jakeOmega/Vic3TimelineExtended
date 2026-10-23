@@ -48,7 +48,7 @@ tourism_heritage_moved = {
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LEBANON }
-		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded } add = 25 }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded } add = 20 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BAGHDAD }
@@ -82,7 +82,7 @@ tourism_heritage_moved = {
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CAMPANIA }
-		if = { limit = { gm_system_enabled = yes } add = 30 }
+		if = { limit = { gm_system_enabled = yes } add = 15 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CAMBODIA }
@@ -101,8 +101,12 @@ tourism_heritage_moved = {
 		add = 20
 	}
 	else_if = {
+		limit = { state_region = s:STATE_EASTERN_MALI }
+		add = 20
+	}
+	else_if = {
 		limit = { state_region = s:STATE_PELOPONNESE }
-		if = { limit = { gm_system_enabled = yes } add = 30 }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CRETE }

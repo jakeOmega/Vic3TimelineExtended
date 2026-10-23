@@ -293,7 +293,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_PELOPONNESE }
-		value = 95 # Core of ancient Greece (Olympia, Mycenae), beautiful coastline and mountains. (30 moved to monuments: tourism_heritage_generated.txt)
+		value = 95 # Core of ancient Greece (Olympia, Mycenae), beautiful coastline and mountains. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_IONIAN_ISLANDS }
@@ -1409,11 +1409,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EASTERN_MALI }
-		value = 65 # Famed city of Timbuktu and unique Dogon country architecture.
+		value = 65 # Djenné and its Great Mosque (in ruins in 1836, rebuilt 1907), and the Dogon country of the Bandiagara escarpment. (Rescored 2026-10-23: Timbuktu is its own state.) (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WESTERN_MALI }
-		value = 60 # Historic city of Djenn� (Great Mosque).
+		value = 45 # The upper Niger and Senegal valleys around Bamako and Kayes; Sahel savanna. (Rescored 2026-10-23: Djenné lies in Eastern Mali.)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TIMBUKTU }
@@ -1577,7 +1577,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LEBANON }
-		value = 85 # Ancient Phoenician cities (Byblos, Tyre), Roman ruins (Baalbek), and scenic mountains. (25 moved to monuments: tourism_heritage_generated.txt)
+		value = 85 # Ancient Phoenician cities (Byblos, Tyre), Roman ruins (Baalbek), and scenic mountains. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SYRIA }
@@ -2185,7 +2185,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CAMPANIA }
-		value = 95 # Naples, Pompeii, Herculaneum, Amalfi Coast, and Vesuvius. An incredible concentration of attractions. (30 moved to monuments: tourism_heritage_generated.txt)
+		value = 95 # Naples, Pompeii, Herculaneum, Amalfi Coast, and Vesuvius. An incredible concentration of attractions. (15 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CALABRIA }
@@ -2851,9 +2851,9 @@ tourism_throughput_from_skyscraper = {
 # Output from the state's one-off monuments (bg_monuments: vanilla's wonders,
 # the mod's, the Space Program, a power bloc statue), as base appeal is an
 # output bonus (tourism heritage spec 2026-10-23 § 5.2). The wonders standing
-# in 1836 give what their state's heritage took off base appeal
-# (tourism_heritage_generated.txt), so the state's total is unchanged while
-# they stand; every other monument +10%.
+# in 1836, and the Great Mosque of Djenné that vanilla rebuilds, give what
+# their state's heritage took off base appeal (tourism_heritage_generated.txt),
+# so the state's total is unchanged while they stand; every other monument +10%.
 # Grand Monuments are a group of their own (bg_grand_monuments) and give their
 # tourism through gm_local_tourism.
 tourism_bonus_from_monuments = {
@@ -2867,6 +2867,7 @@ tourism_bonus_from_monuments = {
 		else_if = { limit = { is_building_type = building_forbidden_city } add = 0.2 }
 		else_if = { limit = { is_building_type = building_saint_basils_cathedral } add = 0.2 }
 		else_if = { limit = { is_building_type = building_white_house } add = 0.2 }
+		else_if = { limit = { is_building_type = building_mosque_of_djenne } add = 0.2 }
 		else = { add = 0.1 }
 	}
 }

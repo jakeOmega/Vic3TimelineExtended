@@ -529,8 +529,8 @@ types te_state_panel_widget_types
 	### uncapped. Left, its status as the journal entry's row shows it
 	### (gm_row_status, the mod's own icons with the word beneath). Right, its
 	### name and dedication (the row's gm_row_title keys), then what it does
-	### here: grandeur with a bar of the step now being filled, its Tourism
-	### Industry throughput and its dedication's local effect, each as last
+	### here: grandeur with a bar of the step now being filled, its tourism
+	### output and its dedication's local effect, each as last
 	### refreshed by gm_state_monthly (gm_state_disp_* in gm_values.txt); the
 	### local effect's name and format come from the custom localization
 	### gm_local_effect_label / _value. Under them, while contested, who wants it

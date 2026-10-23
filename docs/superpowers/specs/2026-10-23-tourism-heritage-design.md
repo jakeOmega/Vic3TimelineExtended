@@ -102,10 +102,11 @@ At the same time, monument tourism becomes an **output** bonus, as base appeal i
     is the origin record of the Dendera zodiac, an 1836 trophy in Paris, placed in Upper Egypt, with its own pictures
     and an Archive signature. It stays as it is. If Abydos proves to be in Upper Egypt too, the 20 points go to a
     Middle Egypt temple the builder finds (Amarna's are the Nefertiti site's).
-11. **Western Mali keeps its 20 points for the Great Mosque of Djenné** (revised in review, 2026-10-23). Vanilla's
-    `building_mosque_of_djenne` can only be built in `STATE_EASTERN_MALI` (its `potential`), so a cut in Western Mali
-    would never come back; the mosque takes the +10% default. Whether Eastern Mali's score should credit Djenné is the
-    owner's call.
+11. **Djenné is Eastern Mali's** (revised in review, owner 2026-10-23). Vanilla's `building_mosque_of_djenne` can
+    only be built in `STATE_EASTERN_MALI` (Sikasso, Mopti, Ségou), and vanilla's Western Mali is Kayes and Bamako, so
+    the old scores had it in the wrong state, and Timbuktu (a state of its own) in Eastern Mali's comment. Eastern
+    Mali's 65 now credits Djenné and the Dogon country, and moves 20 to the mosque, which lay in ruins in 1836: the
+    ruins rule applies, and the wonder brings them back. Western Mali is rescored to 45 for what it has.
 12. **Mothballed still halves the country's monument prestige, To History's included.** Splitting standing grandeur
     by dedication would double the national totals' bookkeeping, and once the policy rework (§ 15) limits
     mothballing to a severe crisis, the case is rare. The rework can revisit it.
@@ -136,6 +137,7 @@ monuments move to a new output value, `tourism_bonus_from_monuments`, added to `
 | Taj Mahal | +40% |
 | Angkor Wat | +30% |
 | Hagia Sophia, Vatican City, Forbidden City, Saint Basil's Cathedral, White House | +20% |
+| Great Mosque of Djenné (in ruins in 1836; vanilla's wonder rebuilds it, in Eastern Mali only) | +20% |
 | Every other `bg_monuments` building | +10% |
 
 The Skyscraper isn't a monument and keeps its +10% throughput, in a value of its own
@@ -236,7 +238,7 @@ state's value as scored, and the points come off only while the monuments that t
 - A test (`test_tourism_heritage.py`): the generated file matches the CSV (`--check`), every monument the CSV names
   exists (landmark, site or wonder), and every CSV state is one `tourism.txt` lists.
 
-States moved: 92. Points moved: 2,300, about 5% of all listed appeal. The unlisted default (20) is unchanged.
+States moved: 93. Points moved: 2,290, about 5% of all listed appeal. The unlisted default (20) is unchanged.
 
 ### 6.4 Split states
 
@@ -412,7 +414,7 @@ The tables below come from a judgement pass over all 671 comments (scratch data,
 
 ### Appendix A. Points moved, by state
 
-Old and *New* are base-appeal points; *New* is the score with every moved point gone, which § 6.1 checks against peers with similar scenery and climate. *At start* adds what stands on 1 January 1836; *Later* adds every monument the state will have (sites dug). Monuments count on the summed 1/n curve at +10 a step, plus the vanilla wonder's figure. Signature tourism (Antiquity) is left out, and so are two effects on existing political landmarks: they take the monument policy's factor (a solvent AI with a Tourism Industry plays Open, ×1.5; Mothballed is ×0.5), and those built within a century of 1836 grow by ageing (§ 6.2). The figures are at factor ×1 and starting grandeur.
+Old and *New* are base-appeal points (Western Mali rescored from 60 to 45 and Eastern Mali's comment corrected, call 11; the Mediterranean figures for Campania, the Peloponnese and Lebanon raised in review); *New* is the score with every moved point gone, which § 6.1 checks against peers with similar scenery and climate. *At start* adds what stands on 1 January 1836; *Later* adds every monument the state will have (sites dug). Monuments count on the summed 1/n curve at +10 a step, plus the vanilla wonder's figure. Signature tourism (Antiquity) is left out, and so are two effects on existing political landmarks: they take the monument policy's factor (a solvent AI with a Tourism Industry plays Open, ×1.5; Mothballed is ×0.5), and those built within a century of 1836 grow by ageing (§ 6.2). The figures are at factor ×1 and starting grandeur.
 
 | State | Old | Moved | New | Moved to | At start | Later |
 |---|---:|---:|---:|---|---:|---:|
@@ -424,13 +426,13 @@ Old and *New* are base-appeal points; *New* is the score with every moved point 
 | Tuscany | 100 | 10 | 90 | 10 to Uffizi Gallery (landmark): the Uffizi | 130 | 130 |
 | Upper Egypt | 100 | 50 | 50 | 30 to Obelisks Of Karnak (landmark): Karnak and Luxor; 20 to Deir El Bahari Cache (site): the Valley of the Kings | 90 | 120 |
 | Beijing | 95 | 40 | 55 | 20 to Temple Of Heaven (landmark): Temple of Heaven, the Great Wall; 20 to Forbidden City (wonder): the Forbidden City | 115 | 115 |
-| Campania | 95 | 30 | 65 | 30 to Pompeii (site): Pompeii and Herculaneum | 85 | 135 |
+| Campania | 95 | 15 | 80 | 15 to Pompeii (site): Pompeii and Herculaneum | 100 | 150 |
 | Crete | 95 | 20 | 75 | 20 to Palace Of Knossos (site): Knossos | 75 | 115 |
 | Eastern Thrace | 95 | 35 | 60 | 15 to Topkapi Palace (landmark): Topkapı; 20 to Hagia Sophia (wonder): Hagia Sophia | 120 | 120 |
 | Himalayas | 95 | 20 | 75 | 20 to Swayambhunath (**new landmark**): Kathmandu's temple cities | 95 | 95 |
 | Isfahan | 95 | 40 | 55 | 40 to Naqsh-e Jahan Square (**new landmark**): Isfahan's Islamic architecture | 95 | 95 |
 | Mexico | 95 | 30 | 65 | 30 to Teotihuacan (**new site**): Teotihuacan | 65 | 95 |
-| Peloponnese | 95 | 30 | 65 | 15 to Mycenae Grave Circle (site): Mycenae; 15 to Olympia (site): Olympia | 65 | 125 |
+| Peloponnese | 95 | 20 | 75 | 10 to Mycenae Grave Circle (site): Mycenae; 10 to Olympia (site): Olympia | 75 | 135 |
 | Provence | 95 | 20 | 75 | 20 to Palais des Papes (**new landmark**): the Papal Palace, Roman ruins | 95 | 95 |
 | Sicily | 95 | 20 | 75 | 20 to Valley of the Temples (**new landmark**): Greek and Roman temples | 95 | 95 |
 | Xian | 95 | 40 | 55 | 40 to Terracotta Army (site): the Terracotta Army | 55 | 105 |
@@ -459,7 +461,7 @@ Old and *New* are base-appeal points; *New* is the score with every moved point 
 | Estremadura | 85 | 20 | 65 | 20 to Jerónimos Monastery (**new landmark**): Belém, Sintra | 85 | 85 |
 | Khiva | 85 | 30 | 55 | 30 to Itchan Kala (**new landmark**): walled Khiva | 85 | 85 |
 | Languedoc | 85 | 20 | 65 | 20 to Pont du Gard (**new landmark**): Pont du Gard, Nîmes | 85 | 85 |
-| Lebanon | 85 | 25 | 60 | 25 to Temples Of Baalbek (landmark): Baalbek, Byblos, Tyre | 100 | 110 |
+| Lebanon | 85 | 20 | 65 | 20 to Temples Of Baalbek (landmark): Baalbek, Byblos, Tyre | 105 | 115 |
 | Lima | 85 | 20 | 65 | 20 to Caral Supe (site): pre-Columbian sites | 65 | 105 |
 | Moscow | 85 | 40 | 45 | 20 to Saint Basils Cathedral (wonder): Red Square; 20 to Moscow Kremlin (**new landmark**): the Kremlin | 85 | 85 |
 | Oaxaca | 85 | 20 | 65 | 20 to Monte Albán (**new site**): Monte Albán | 65 | 85 |
@@ -505,6 +507,7 @@ Old and *New* are base-appeal points; *New* is the score with every moved point 
 | North Rhine | 70 | 20 | 50 | 20 to Aachen Cathedral (**new landmark**): Aachen and Cologne | 70 | 70 |
 | Bundelkhand | 65 | 20 | 45 | 20 to Khajuraho (**new site**): Khajuraho | 45 | 65 |
 | Kazan | 65 | 20 | 45 | 20 to Kazan Kremlin (**new landmark**): the Kremlin | 65 | 65 |
+| Eastern Mali | 65 | 20 | 45 | 20 to Mosque Of Djenne (wonder): the Great Mosque (in ruins in 1836; vanilla's wonder rebuilds it) | 45 | 65 |
 | Malwa | 65 | 20 | 45 | 20 to Gwalior Fort (**new landmark**): Gwalior | 65 | 65 |
 | Sindh | 65 | 25 | 40 | 25 to Mohenjo Daro (site): Mohenjo-daro | 40 | 80 |
 | Extremadura | 50 | 20 | 30 | 20 to Roman Theatre of Mérida (**new site**): Roman Mérida | 30 | 50 |
@@ -668,7 +671,6 @@ Points are the heritage share judged for each; 0 means the scenery check found t
 | Wales | 75 | 10 | castles | below floor after the scenery check: Snowdonia and the coast carry most of the score |
 | West Country | 75 | 10 | Stonehenge | below floor after the scenery check: the coast carries most of the score |
 | Western Hubei | 75 | 10 | Wudang temples | below floor |
-| Western Mali | 60 | 20 | the Great Mosque of Djenné | vanilla's mosque can only be built in Eastern Mali, so nothing would give the points back |
 | Xian | 95 | 10 | Big Wild Goose Pagoda | below floor |
 | Yaroslavl | 70 | 10 | Golden Ring churches | below floor |
 

@@ -10,7 +10,7 @@ STATE_DELHI,40,red_fort,existing_landmark,Sultanate and Mughal sites
 STATE_ATTICA,40,parthenon,existing_landmark,the Acropolis
 STATE_UPPER_EGYPT,30,obelisks_of_karnak,existing_landmark,Karnak and Luxor
 STATE_UPPER_EGYPT,20,deir_el_bahari_cache,existing_site,the Valley of the Kings
-STATE_LEBANON,25,temples_of_baalbek,existing_landmark,"Baalbek, Byblos, Tyre"
+STATE_LEBANON,20,temples_of_baalbek,existing_landmark,"Baalbek, Byblos, Tyre"
 STATE_BAGHDAD,20,ishtar_gate_babylon,existing_site,Babylon
 STATE_FARS,40,persepolis,existing_landmark,Persepolis and Pasargadae
 STATE_EASTERN_THRACE,15,topkapi_palace,existing_landmark,Topkapı
@@ -20,12 +20,12 @@ STATE_KANTO,20,nikko_toshogu,existing_landmark,Nikkō
 STATE_BEIJING,20,temple_of_heaven,existing_landmark,"Temple of Heaven, the Great Wall"
 STATE_BEIJING,20,forbidden_city,vanilla_wonder,the Forbidden City
 STATE_INGRIA,20,alexander_column,existing_landmark,St Petersburg's palaces
-STATE_CAMPANIA,30,pompeii,existing_site,Pompeii and Herculaneum
+STATE_CAMPANIA,15,pompeii,existing_site,Pompeii and Herculaneum
 STATE_CAMBODIA,30,angkor_wat,vanilla_wonder,Angkor
 STATE_AGRA,40,taj_mahal,vanilla_wonder,the Taj Mahal and Agra Fort
 STATE_SYRIA,20,palmyra,existing_landmark,"Palmyra, Krak des Chevaliers"
-STATE_PELOPONNESE,15,mycenae_grave_circle,existing_site,Mycenae
-STATE_PELOPONNESE,15,olympia,existing_site,Olympia
+STATE_PELOPONNESE,10,mycenae_grave_circle,existing_site,Mycenae
+STATE_PELOPONNESE,10,olympia,existing_site,Olympia
 STATE_CRETE,20,palace_of_knossos,existing_site,Knossos
 STATE_SINDH,25,mohenjo_daro,existing_site,Mohenjo-daro
 STATE_MOSUL,25,nineveh_library,existing_site,Nineveh
@@ -34,6 +34,7 @@ STATE_ICA,30,machu_picchu,existing_site,"Nazca, Cuzco, Machu Picchu"
 STATE_CHIAPAS,20,tomb_of_pakal,existing_site,Palenque
 STATE_LIMA,20,caral_supe,existing_site,pre-Columbian sites
 STATE_MOSCOW,20,saint_basils_cathedral,vanilla_wonder,Red Square
+STATE_EASTERN_MALI,20,mosque_of_djenne,vanilla_wonder,"the Great Mosque of Djenné (in ruins in 1836; vanilla's wonder, buildable only here, rebuilds it)"
 STATE_MOSCOW,20,moscow_kremlin,new_landmark,the Kremlin
 STATE_TRANSJORDAN,30,petra,new_landmark,Petra (with the Mesha Stele beside it)
 STATE_GONDER,20,fasil_ghebbi,new_landmark,the castles of Gondar
@@ -98,7 +99,6 @@ STATE_DIYARBAKIR,20,mount_nemrut,new_site,the Nemrut statues
 STATE_GANSU,20,mogao_caves,new_site,the Mogao Caves
 STATE_BUNDELKHAND,20,khajuraho,new_site,Khajuraho
 STATE_MYSORE,20,hampi,new_site,Hampi (verify its state)
-STATE_WESTERN_MALI,0,,revisit,"20 points: the Great Mosque of Djenné (vanilla's building_mosque_of_djenne can only be built in STATE_EASTERN_MALI, so nothing could give them back)"
 STATE_SYRIA,0,,revisit,10 points: Krak des Chevaliers (the residue after Palmyra's 20; Damascus is townscape)
 STATE_GOTLAND,0,,revisit,10 points: Visby (below floor after the scenery check: Gotland's coast scores like Scania's: its old score left little for Visby)
 STATE_WALES,0,,revisit,10 points: castles (below floor after the scenery check: Snowdonia and the coast carry most of the score)
