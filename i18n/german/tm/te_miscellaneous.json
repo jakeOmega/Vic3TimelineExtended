@@ -3505,7 +3505,7 @@
  },
  "TE_STATE_GRID_ROW_EFFICIENCY_TT": {
   "en": "#b Grid Transmission Efficiency#!\\nThe share of the $grid_power$ this state's station receives that it turns back into $electricity$: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Rural Electrification, Transistors, Clean Energy Technologies, Smart Grids and Modern Material Science raise it.",
-  "de": "#b Übertragungseffizienz des Netzes#!\\nDer Anteil am $grid_power$, den die Station dieses Staates empfängt und wieder in $electricity$ umwandelt: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Elektrifizierung des ländlichen Raums, Transistoren, Saubere-Energie-Technologien, Intelligente Stromnetze und Moderne Materialwissenschaft erhöhen ihn."
+  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil am $grid_power$, den die Station dieses Staates empfängt und wieder in $electricity$ umwandelt: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Elektrifizierung des ländlichen Raums, Transistoren, Saubere-Energie-Technologien, Intelligente Stromnetze und Moderne Materialwissenschaft erhöhen ihn."
  },
  "TE_STATE_GRID_ROW_HUB": {
   "en": "Hub",
@@ -3589,7 +3589,7 @@
  },
  "TE_STATE_SEABED_ROW_WEIGHT_TT": {
   "en": "#b Claim Weight Here#!\\nWhat this state adds to our claim weight in the $TE_STATE_SEABED_BASIN_NAME$ now:\\nCoast: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] for a coastal state, half that if unincorporated)\\nPort levels: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nNaval share: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (our [Concept('concept_naval_power_projection','naval power projection')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], doubled under Unilateral Licensing or the $te_seabed_regime_name_3$ regime, spread over our coast)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! for our policy\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Our weight in the $TE_STATE_SEABED_BASIN_NAME$ at the last sharing: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Each January's sharing counts it again.",
-  "de": "#b Anspruchsgewicht hier#!\\nWas dieser Staat derzeit zu unserem Anspruchsgewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ beiträgt:\\nKüste: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] für einen Küstenstaat, halb so viel, wenn nicht inkorporiert)\\nHafenstufen: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nMarineanteil: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (unsere [Concept('concept_naval_power_projection','Seemachtprojektion')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], verdoppelt unter Einseitiger Lizenzierung oder im Regime $te_seabed_regime_name_3$, verteilt über unsere Küste)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! für unsere Politik\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Unser Gewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ bei der letzten Aufteilung: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Die Aufteilung jedes Januars zählt es erneut."
+  "de": "#b Anspruchsgewicht hier#!\\nWas dieser Staat derzeit zu unserem Anspruchsgewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ beiträgt:\\nKüste: #v [State.MakeScope.ScriptValue('te_seabed_state_coast_term_disp')|0]#! ([State.MakeScope.ScriptValue('te_seabed_coast_weight')|0] für einen Küstenstaat, halb so viel, wenn nicht inkorporiert)\\nHafenstufen: #v [State.MakeScope.ScriptValue('te_seabed_state_port_levels')|0]#!\\nMarineanteil: #v [State.MakeScope.ScriptValue('te_seabed_state_navy_share_disp')|1]#! (unsere [Concept('concept_naval_power_projection','Seemachtprojektion')] ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0], verdoppelt unter Einseitiger Lizenzvergabe oder im Regime $te_seabed_regime_name_3$, verteilt über unsere Küste)\\n× #v [State.MakeScope.ScriptValue('te_seabed_state_owner_factor_disp')|2]#! für unsere Politik\\n\\n[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_weight_counts'), '(CFixedPoint)0'), 'TE_STATE_SEABED_WEIGHT_NONE')]Unser Gewicht im Becken $TE_STATE_SEABED_BASIN_NAME$ bei der letzten Aufteilung: #v [State.MakeScope.ScriptValue('te_seabed_state_basin_weight_disp')|1]#!. Die Aufteilung jedes Januars zählt es erneut."
  },
  "TE_STATE_SEABED_TT": {
   "en": "#bold [concept_seabed_licence]s#!\\nAcross the country: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_total')|0]#! in use of our #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_entitled_total')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_distant_total')|0]#! of them from other basins\\n\\n#bold Our licences and unused claims#! (and the world's licences in use, of the pool)\\nPacific: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]#!; [State.MakeScope.ScriptValue('te_seabed_world_records_disp_pacific')|0] of [State.MakeScope.ScriptValue('te_seabed_pool_pacific')|0] (weight [State.GetOwner.MakeScope.ScriptValue('te_seabed_w_disp_pacific')|1])\\nAtlantic: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]#!; [State.MakeScope.ScriptValue('te_seabed_world_records_disp_atlantic')|0] of [State.MakeScope.ScriptValue('te_seabed_pool_atlantic')|0] (weight [State.GetOwner.MakeScope.ScriptValue('te_seabed_w_disp_atlantic')|1])\\nIndian: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]#!; [State.MakeScope.ScriptValue('te_seabed_world_records_disp_indian')|0] of [State.MakeScope.ScriptValue('te_seabed_pool_indian')|0] (weight [State.GetOwner.MakeScope.ScriptValue('te_seabed_w_disp_indian')|1])\\nArctic: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]#!; [State.MakeScope.ScriptValue('te_seabed_world_records_disp_arctic')|0] of [State.MakeScope.ScriptValue('te_seabed_pool_arctic')|0] (weight [State.GetOwner.MakeScope.ScriptValue('te_seabed_w_disp_arctic')|1])\\nSouthern: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]#!, #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]#!; [State.MakeScope.ScriptValue('te_seabed_world_records_disp_southern')|0] of [State.MakeScope.ScriptValue('te_seabed_pool_southern')|0] (weight [State.GetOwner.MakeScope.ScriptValue('te_seabed_w_disp_southern')|1])\\n\\nRoom to build: #v [State.GetOwner.MakeScope.ScriptValue('te_seabed_room_shown')|0]#!\\n\\n#lore At home, weight is (2 × coastal states, unincorporated ones at half, + port levels + naval power projection ÷ [State.GetOwner.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × the basin's share of our coast) × the policy factor; elsewhere, a twentieth of that naval term. Levels on another basin's licence work at -[State.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]% throughput. As of the last sharing.#!",
@@ -5529,7 +5529,7 @@
  },
  "banking_dash_mon_target_label": {
   "en": "Rate Target",
-  "de": "Zinsziel"
+  "de": "Zielzins"
  },
  "banking_dash_mon_target_tt": {
   "en": "#header Rate Target#!\\nWhere you want the policy rate to end up. Stepping it does not move the rate today: each month the rate closes #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_gap_share_pct')|0]%#! of the gap or of how far inflation is from its own target, whichever is less, and never less than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point. Setting the target past where you want the rate moves it no faster than inflation warrants.\\nThere is no fee and no cooldown for changing it. The cost of a wrong setting is what it does to your economy, not what it costs to press.\\n$TOOLTIP_DELIMITER$\\n#title Your monetary law allows:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_target_min')|1]%#! to #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_dial_range_note')]",
@@ -6301,11 +6301,11 @@
  },
  "banking_mon_delegate_off_tt": {
   "en": "Takes the rate target back from the central bank. It stays where the bank last left it until you move it.",
-  "de": "Nimmt der Zentralbank das Zinsziel wieder ab. Es bleibt dort, wo die Bank es zuletzt belassen hat, bis Sie es verändern."
+  "de": "Nimmt der Zentralbank den Zielzins wieder ab. Er bleibt dort, wo die Bank ihn zuletzt belassen hat, bis Sie ihn verändern."
  },
  "banking_mon_delegate_on_tt": {
   "en": "Hands the rate target to the central bank, which will set it from its mandate at each monthly update.",
-  "de": "Überträgt das Zinsziel der Zentralbank, die es bei jeder monatlichen Aktualisierung gemäß ihrem Mandat festlegt."
+  "de": "Überträgt den Zielzins der Zentralbank, die ihn bei jeder monatlichen Aktualisierung gemäß ihrem Mandat festlegt."
  },
  "banking_mon_mandate_peg_set_tt": {
   "en": "Orders your central bank to hold the rate target on the world rate, to the tenth of a point (up to a point above it while the vault is short of gold), so that gold does not drain away, and to ignore your own cycle while it does. It takes effect at the next monthly update, and the mandate is then fixed for a year.",
@@ -9633,11 +9633,11 @@
  },
  "gm_arch_site_tomb_of_tutankhamun_dug": {
   "en": "Below the entrance to the tomb of Ramesses VI, on $gm_arch_site_tomb_of_tutankhamun_place$ in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName], sixteen steps lead down to a sealed door. Beyond it lie four crowded rooms the robbers barely touched: gilded shrines nested one inside the other, chariots, couches, statues, chests and jewellery, some five thousand objects, and in a stone sarcophagus three coffins, the innermost of solid gold, around the mummy of Tutankhamun in a mask of gold.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$",
-  "de": "Unterhalb des Eingangs zum Grab Ramses’ VI. führen in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName] sechzehn Stufen zu einer versiegelten Tür hinab (Ort: $gm_arch_site_tomb_of_tutankhamun_place$). Dahinter liegen vier überfüllte Kammern, die die Räuber kaum berührt haben: vergoldete Schreine, ineinandergestellt, Streitwagen, Ruhebetten, Statuen, Truhen und Schmuck, rund fünftausend Gegenstände, und in einem steinernen Sarkophag drei Särge, der innerste aus massivem Gold, um die Mumie des Tutanchamun mit einer Maske aus Gold.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$"
+  "de": "Unterhalb des Eingangs zum Grab Ramses’ VI., auf $gm_arch_site_tomb_of_tutankhamun_place$ in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName], führen sechzehn Stufen zu einer versiegelten Tür hinab. Dahinter liegen vier überfüllte Kammern, die die Räuber kaum berührt haben: vergoldete Schreine, ineinandergestellt, Streitwagen, Ruhebetten, Statuen, Truhen und Schmuck, rund fünftausend Gegenstände, und in einem steinernen Sarkophag drei Särge, der innerste aus massivem Gold, um die Mumie des Tutanchamun mit einer Maske aus Gold.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$"
  },
  "gm_arch_site_tomb_of_tutankhamun_found": {
   "en": "Every royal tomb found at Thebes was robbed in antiquity, and most scholars say the valley of the royal tombs has given up all it had. Our Egyptologists disagree: objects bearing the name of an obscure boy king, Tutankhamun, have turned up nearby, and they believe the boy king's tomb lies somewhere under the rubble of $gm_arch_site_tomb_of_tutankhamun_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName].\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$",
-  "de": "Jedes in Theben gefundene Königsgrab wurde schon in der Antike ausgeraubt, und die meisten Gelehrten sagen, das Tal der Königsgräber habe alles hergegeben, was es besaß. Unsere Ägyptologen widersprechen: In der Nähe sind Gegenstände mit dem Namen eines unbekannten Knabenkönigs, Tutanchamun, aufgetaucht, und sie glauben, dass das Grab des Knabenkönigs irgendwo unter dem Schutt liegt (Ort: $gm_arch_site_tomb_of_tutankhamun_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName]).\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$"
+  "de": "Jedes in Theben gefundene Königsgrab wurde schon in der Antike ausgeraubt, und die meisten Gelehrten sagen, das Tal der Königsgräber habe alles hergegeben, was es besaß. Unsere Ägyptologen widersprechen: In der Nähe sind Gegenstände mit dem Namen eines unbekannten Knabenkönigs, Tutanchamun, aufgetaucht, und sie glauben, dass das Grab des Knabenkönigs irgendwo unter dem Schutt auf $gm_arch_site_tomb_of_tutankhamun_place$ liegt, in [SCOPE.sState('gm_arch_ev_tomb_of_tutankhamun').GetName].\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_tutankhamun_history$"
  },
  "gm_arch_site_tomb_of_tutankhamun_history": {
   "en": "Howard Carter, paid by Lord Carnarvon, found the steps on 4 November 1922; asked what could be seen through the first hole, Carter answered 'Wonderful things.' Clearing the tomb took ten years. Egypt kept every object, refusing the customary division of finds; they are in the Grand Egyptian Museum, while the mummy still lies in the tomb.",
@@ -10877,7 +10877,7 @@
  },
  "gm_je_abroad_ways_tt": {
   "en": "To bring it home: occupy the state where it stands in a war and carry it off; demand it with the Return Cultural Property treaty article, which a war can enforce; or wait for its holder to send it back.",
-  "de": "Um es heimzuholen: den Staat, in dem es steht, in einem Krieg besetzen und es fortschaffen; es mit dem Vertragsartikel „Rückgabe von Kulturgut“ fordern, den ein Krieg durchsetzen kann; oder warten, bis sein Besitzer es zurückschickt."
+  "de": "Zum Heimholen: den Staat, in dem es steht, in einem Krieg besetzen und es fortschaffen; es mit dem Vertragsartikel „Rückgabe von Kulturgut“ fordern, den ein Krieg durchsetzen kann; oder warten, bis sein Besitzer es zurückschickt."
  },
  "gm_je_arch_costs": {
   "en": "Digs divert #R [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_innovation')|0]#! [concept_innovation] a week",
@@ -13517,7 +13517,7 @@
  },
  "gm_state_tr_header_tt": {
   "en": "Monuments, or parts of them, carried here from other lands. They count for whoever holds this state. A country whose armies hold half the state in a war can carry them off.",
-  "de": "Monumente oder Teile von ihnen, die aus anderen Ländern hierher gebracht wurden. Sie zählen für den, der diesen Staat innehat. Ein Land, dessen Armeen im Krieg die Hälfte des Staates halten, kann sie wegschaffen."
+  "de": "Monumente oder Teile von ihnen, die aus anderen Ländern hierher gebracht wurden. Sie zählen für den, der diesen Staat innehat. Ein Land, dessen Armeen im Krieg die Hälfte des Staates halten, kann sie fortschaffen."
  },
  "gm_state_tr_summary_many": {
   "en": "#v [State.MakeScope.ScriptValue('gm_state_tr_disp_here')|0]#! trophies, worth #v [State.MakeScope.ScriptValue('gm_state_tr_disp_here_grandeur')|0]#! [concept_grandeur] to [State.GetOwner.GetName]",
@@ -13529,7 +13529,7 @@
  },
  "gm_state_tr_summary_tt": {
   "en": "#b What they count for#!\\nEach trophy counts for half the levels carried off, rounded up, in the standing [concept_grandeur] of whoever holds this state, #v [State.GetOwner.GetName]#!. That raises their [concept_prestige] and [concept_cultural_pull], and the Armed Forces approve of it.\\nA country whose armies hold half the state in a war can carry them off.",
-  "de": "#b Wofür sie zählen#!\\nJede Trophäe zählt für #v [State.GetOwner.GetAltName('AKK')]#!, den Besitzer dieses Staates, mit der Hälfte der weggeschafften Stufen, aufgerundet, zur bestehenden [concept_grandeur]. Das erhöht dessen [concept_prestige] und [concept_cultural_pull], und die Streitkräfte befürworten es.\\nEin Land, dessen Armeen im Krieg die Hälfte des Staates halten, kann sie wegschaffen."
+  "de": "#b Wofür sie zählen#!\\nJede Trophäe zählt für #v [State.GetOwner.GetAltName('AKK')]#!, den Besitzer dieses Staates, mit der Hälfte der fortgeschafften Stufen, aufgerundet, zur bestehenden [concept_grandeur]. Das erhöht dessen [concept_prestige] und [concept_cultural_pull], und die Streitkräfte befürworten es.\\nEin Land, dessen Armeen im Krieg die Hälfte des Staates halten, kann sie fortschaffen."
  },
  "gm_state_tr_view_collapsed": {
   "en": "Collapsed",
@@ -13581,19 +13581,19 @@
  },
  "gm_tr_article_return_needs_tt": {
   "en": "The giver holds a trophy taken from the receiver's lands",
-  "de": "Der Geber besitzt eine Trophäe, die aus den Ländern des Empfängers weggeschafft wurde"
+  "de": "Der Geber besitzt eine Trophäe, die aus den Ländern des Empfängers fortgeschafft wurde"
  },
  "gm_tr_bring_home_own_tt": {
   "en": "Bring it home: all its levels are rebuilt where it was taken from. We carried it off ourselves, so it brings no Homecoming. We lose what it counts for as a trophy.",
-  "de": "Nach Hause bringen: Alle seine Stufen werden dort wieder aufgebaut, wo es weggenommen wurde. Wir haben es selbst weggeschafft, daher bringt es keine Heimkehr. Wir verlieren, wofür es als Trophäe zählt."
+  "de": "Heimholen: Alle seine Stufen werden dort wieder aufgebaut, wo es weggenommen wurde. Wir haben es selbst fortgeschafft, daher bringt es keine Heimkehr. Wir verlieren, wofür es als Trophäe zählt."
  },
  "gm_tr_bring_home_tt": {
   "en": "Bring it home: all its levels are rebuilt where it was taken from, and the Homecoming gives #G +5#! [concept_legitimacy] for ten years. We lose what it counts for as a trophy.",
-  "de": "Nach Hause bringen: Alle seine Stufen werden dort wieder aufgebaut, wo es weggenommen wurde, und die Heimkehr bringt #G +5#! [concept_legitimacy] für zehn Jahre. Wir verlieren, wofür es als Trophäe zählt."
+  "de": "Heimholen: Alle seine Stufen werden dort wieder aufgebaut, wo es weggenommen wurde, und die Heimkehr bringt #G +5#! [concept_legitimacy] für zehn Jahre. Wir verlieren, wofür es als Trophäe zählt."
  },
  "gm_tr_leave_standing_tt": {
   "en": "It stays where it is. While our armies hold the state, its card in the state view keeps a Carry It Off button.",
-  "de": "Es bleibt, wo es ist. Solange unsere Armeen den Staat halten, behält seine Karte in der Staatsansicht eine Schaltfläche „Wegschaffen“."
+  "de": "Es bleibt, wo es ist. Solange unsere Armeen den Staat halten, behält seine Karte in der Staatsansicht eine Schaltfläche „Fortschaffen“."
  },
  "gm_tr_name_centenary": {
   "en": "The Centenary [ScriptContainer.GetCustom('gm_tr_form_name')]",
@@ -13897,7 +13897,7 @@
  },
  "gm_tr_row_held_by_tt": {
   "en": "To bring it home: occupy the state where it stands in a war and carry it off; demand it with the Return Cultural Property treaty article, which a war can enforce; or wait for its holder to send it back.",
-  "de": "Um es heimzuholen: im Krieg den Staat besetzen, in dem es steht, und es wegschaffen; es mit dem Vertragsartikel „Rückgabe von Kulturgütern“ fordern, den ein Krieg durchsetzen kann; oder warten, bis sein Besitzer es zurückschickt."
+  "de": "Zum Heimholen: im Krieg den Staat besetzen, in dem es steht, und es fortschaffen; es mit dem Vertragsartikel „Rückgabe von Kulturgut“ fordern, den ein Krieg durchsetzen kann; oder warten, bis sein Besitzer es zurückschickt."
  },
  "gm_tr_row_home": {
   "en": "From our own lands: it can go home at no cost",
@@ -13909,15 +13909,15 @@
  },
  "gm_tr_row_site_value_tt": {
   "en": "#b [concept_grandeur]#! #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#!\\nA trophy counts for half the grandeur carried off, its levels and its years, rounded up, in the [concept_grandeur] of whoever holds this state. The effects of all held trophies are aggregated, and can be viewed in the Grand Monuments tab of the Timeline Extended window or in the Journal Entry.\\nIf it goes home, all its levels are rebuilt and its years come back with it.",
-  "de": "#b [concept_grandeur]#! #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#!\\nEine Trophäe zählt mit der Hälfte der weggeschafften Grandeur, nämlich ihrer Stufen und ihrer Jahre, aufgerundet, zur [concept_grandeur] dessen, der diesen Staat innehat. Die Effekte aller gehaltenen Trophäen werden zusammengefasst und lassen sich auf dem Reiter „Große Monumente“ des Fensters „Timeline Extended“ oder im Journaleintrag einsehen.\\nKehrt es heim, werden alle seine Stufen wieder aufgebaut, und seine Jahre kehren mit ihm zurück."
+  "de": "#b [concept_grandeur]#! #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#!\\nEine Trophäe zählt mit der Hälfte der fortgeschafften Grandeur, nämlich ihrer Stufen und ihrer Jahre, aufgerundet, zur [concept_grandeur] dessen, der diesen Staat innehat. Die Effekte aller gehaltenen Trophäen werden zusammengefasst und lassen sich auf dem Reiter „Große Monumente“ des Fensters „Timeline Extended“ oder im Journaleintrag einsehen.\\nKehrt es heim, werden alle seine Stufen wieder aufgebaut, und seine Jahre kehren mit ihm zurück."
  },
  "gm_tr_row_value": {
   "en": "#v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_levels')|0]#! levels carried off, worth #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#! [concept_grandeur] here",
-  "de": "#v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_levels')|0]#! Stufen weggeschafft, im Wert von #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#! [concept_grandeur] hier"
+  "de": "#v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_levels')|0]#! Stufen fortgeschafft, im Wert von #v [ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_grandeur')|0]#! [concept_grandeur] hier"
  },
  "gm_tr_row_value_tt": {
   "en": "A trophy counts for half the grandeur carried off, its levels and its years, rounded up, in the [concept_grandeur] that gives prestige and cultural pull, and the Armed Forces approve of it. If it goes home, all its levels are rebuilt and its years come back with it.",
-  "de": "Eine Trophäe zählt mit der Hälfte der weggeschafften Grandeur, nämlich ihrer Stufen und ihrer Jahre, aufgerundet, zur [concept_grandeur], die Prestige und kulturelle Anziehungskraft bringt, und die Streitkräfte befürworten es. Kehrt es heim, werden alle seine Stufen wieder aufgebaut, und seine Jahre kehren mit ihm zurück."
+  "de": "Eine Trophäe zählt mit der Hälfte der fortgeschafften Grandeur, nämlich ihrer Stufen und ihrer Jahre, aufgerundet, zur [concept_grandeur], die Prestige und kulturelle Anziehungskraft bringt, und die Streitkräfte befürworten es. Kehrt es heim, werden alle seine Stufen wieder aufgebaut, und seine Jahre kehren mit ihm zurück."
  },
  "gm_tr_sgui_origin_tt": {
   "en": "The state it was taken from has an owner",
@@ -13965,19 +13965,19 @@
  },
  "gm_tr_take_occupation_tt": {
   "en": "Carry off #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels to our capital, where they count for #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] and please the Armed Forces. We gain #R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#! [concept_infamy], relations with its owner fall by 30, and its people's war support rises by 10.",
-  "de": "#v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! seiner #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen in unsere Hauptstadt wegschaffen, wo sie für #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] zählen und die Streitkräfte erfreuen. Wir erhalten #R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#! [concept_infamy], die Beziehungen zu seinem Besitzer sinken um 30, und die Kriegsunterstützung seiner Bevölkerung steigt um 10."
+  "de": "#v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! seiner #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen in unsere Hauptstadt fortschaffen, wo sie für #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] zählen und die Streitkräfte erfreuen. Wir erhalten #R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#! [concept_infamy], die Beziehungen zu seinem Besitzer sinken um 30, und die Kriegsunterstützung seiner Bevölkerung steigt um 10."
  },
  "gm_tr_take_own_tt": {
   "en": "Carry off #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! of its #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels to our capital, where they count for #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] and please the Armed Forces. A tenth of the state's people turn radical, and the country we took the state from, if it still stands, is angered.",
-  "de": "#v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! seiner #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen in unsere Hauptstadt wegschaffen, wo sie für #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] zählen und die Streitkräfte erfreuen. Ein Zehntel der Bevölkerung des Staates radikalisiert sich, und das Land, dem wir den Staat abgenommen haben, ist verärgert, falls es noch besteht."
+  "de": "#v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_levels')|0]#! seiner #v [THIS.GetState.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen in unsere Hauptstadt fortschaffen, wo sie für #v [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_value')|0]#! [concept_grandeur] zählen und die Streitkräfte erfreuen. Ein Zehntel der Bevölkerung des Staates radikalisiert sich, und das Land, dem wir den Staat abgenommen haben, ist verärgert, falls es noch besteht."
  },
  "gm_tr_take_site_home_tt": {
   "en": "It was taken from our lands: bring it home. All its levels are rebuilt where it stood, and the Homecoming gives #G +5#! [concept_legitimacy] for ten years.",
-  "de": "Es wurde aus unserem Land weggenommen: nach Hause bringen. Alle seine Stufen werden dort wieder aufgebaut, wo es stand, und die Heimkehr bringt #G +5#! [concept_legitimacy] für zehn Jahre."
+  "de": "Es wurde aus unserem Land weggenommen: heimholen. Alle seine Stufen werden dort wieder aufgebaut, wo es stand, und die Heimkehr bringt #G +5#! [concept_legitimacy] für zehn Jahre."
  },
  "gm_tr_take_site_tt": {
   "en": "Carry it off to our capital, where it counts for half its levels in [concept_grandeur] and pleases the Armed Forces. We gain [concept_infamy], relations with its holder fall by 30, and its holder's war support rises by 10.",
-  "de": "In unsere Hauptstadt wegschaffen, wo es mit der Hälfte seiner Stufen zur [concept_grandeur] zählt und die Streitkräfte erfreut. Wir erhalten [concept_infamy], die Beziehungen zu seinem Besitzer sinken um 30, und dessen Kriegsunterstützung steigt um 10."
+  "de": "In unsere Hauptstadt fortschaffen, wo es mit der Hälfte seiner Stufen zur [concept_grandeur] zählt und die Streitkräfte erfreut. Wir erhalten [concept_infamy], die Beziehungen zu seinem Besitzer sinken um 30, und dessen Kriegsunterstützung steigt um 10."
  },
  "gm_unlock_tt": {
   "en": "You own a Grand Monument or one under construction, have an opportunity open, or hold a trophy or have one held abroad",
@@ -22169,7 +22169,7 @@
  },
  "te_decision_debris_removal": {
   "en": "Begin Orbital Debris Removal",
-  "de": "Beseitigung von Weltraumschrott beginnen"
+  "de": "Weltraumschrottbeseitigung beginnen"
  },
  "te_decision_debris_removal_desc": {
   "en": "Put our Space Program to work clearing [concept_orbital_debris]. Everyone in orbit benefits from what we remove, and we gain prestige for doing it.",
@@ -22433,7 +22433,7 @@
  },
  "te_demog_cd_dc_war_tt": {
   "en": "#b War and Devastation#!\\n$te_demog_cd_dc_war_deaths$\\nThe dead of our wars, shared out to the states by their soldiers. The census takes them from the people of fighting age, 20 to 39, nineteen in twenty of them men. Under the Full setting, the civilians that devastation and war's other harms kill count here too, from people of every age.",
-  "de": "#b Krieg und Verwüstung#!\\n$te_demog_cd_dc_war_deaths$\\nDie Toten unserer Kriege, nach ihren Soldaten auf die Staaten verteilt. Die Volkszählung nimmt sie aus den Menschen im kampffähigen Alter, 20 bis 39, davon neunzehn von zwanzig Männer. In der Einstellung „Vollständig“ zählen hier auch die Zivilisten, die Verwüstung und andere Kriegsfolgen töten, aus Menschen jeden Alters."
+  "de": "#b Krieg und Verwüstung#!\\n$te_demog_cd_dc_war_deaths$\\nDie Toten unserer Kriege, nach ihren Soldaten auf die Staaten verteilt. Die Volkszählung nimmt sie aus den Menschen im wehrfähigen Alter, 20 bis 39, davon neunzehn von zwanzig Männer. In der Einstellung „Voll“ zählen hier auch die Zivilisten, die Verwüstung und andere Kriegsfolgen töten, aus Menschen jeden Alters."
  },
  "te_demog_cd_dc_work_deaths": {
   "en": "Last year: #v [GetPlayer.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]",
@@ -22465,11 +22465,11 @@
  },
  "te_demog_cd_ontop_rate": {
   "en": "\\nUnder the Full setting the game adds deaths on top of the census's own, which the pie counts under their causes. Across our states last year: #v [GetPlayer.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! deaths per 1,000 people[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], against #v [GetPlayer.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! at the census's own rate (×#v [GetPlayer.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!).",
-  "de": "\\nIn der Einstellung „Vollständig“ fügt das Spiel den eigenen Todesfällen der Volkszählung weitere hinzu, die das Kreisdiagramm unter ihren Ursachen zählt. In unseren Staaten im Vorjahr: #v [GetPlayer.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! Todesfälle je 1.000 Menschen[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], gegenüber #v [GetPlayer.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! bei der eigenen Rate der Volkszählung (×#v [GetPlayer.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!)."
+  "de": "\\nIn der Einstellung „Voll“ fügt das Spiel den eigenen Todesfällen der Volkszählung weitere hinzu, die das Kreisdiagramm unter ihren Ursachen zählt. In unseren Staaten im Vorjahr: #v [GetPlayer.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! Todesfälle je 1.000 Menschen[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], gegenüber #v [GetPlayer.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! bei der eigenen Rate der Volkszählung (×#v [GetPlayer.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!)."
  },
  "te_demog_cd_pie_tt": {
   "en": "#b Causes of Death#!\\nLast year's #v [GetPlayer.MakeScope.Var('te_dg_dc_total').GetValue|K]#! deaths in our states, by cause:\\n $te_demog_dc_inf$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#!\\n $te_demog_dc_chr$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#!\\n $te_demog_dc_ext$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#!\\n $te_demog_dc_work$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#!\\n $te_demog_dc_mat$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#!\\n $te_demog_dc_kill$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#!\\n $te_demog_dc_war$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#!\\n#lore The four natural causes are estimated: the census's own deaths shared out by each cause's rate in each age band. Under the Full setting, the deaths the game adds on top of the census count under their causes. The rest are counted as they are.#!",
-  "de": "#b Todesursachen#!\\nDie #v [GetPlayer.MakeScope.Var('te_dg_dc_total').GetValue|K]#! Todesfälle des Vorjahres in unseren Staaten, nach Ursache:\\n $te_demog_dc_inf$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#!\\n $te_demog_dc_chr$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#!\\n $te_demog_dc_ext$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#!\\n $te_demog_dc_work$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#!\\n $te_demog_dc_mat$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#!\\n $te_demog_dc_kill$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#!\\n $te_demog_dc_war$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#!\\n#lore Die vier natürlichen Ursachen sind geschätzt: die eigenen Todesfälle der Volkszählung, aufgeteilt nach der Rate jeder Ursache in jeder Altersklasse. In der Einstellung „Vollständig“ zählen die Todesfälle, die das Spiel zusätzlich zur Volkszählung hinzufügt, unter ihren Ursachen. Die übrigen werden so gezählt, wie sie sind.#!"
+  "de": "#b Todesursachen#!\\nDie #v [GetPlayer.MakeScope.Var('te_dg_dc_total').GetValue|K]#! Todesfälle des Vorjahres in unseren Staaten, nach Ursache:\\n $te_demog_dc_inf$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#!\\n $te_demog_dc_chr$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#!\\n $te_demog_dc_ext$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#!\\n $te_demog_dc_work$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#!\\n $te_demog_dc_mat$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#!\\n $te_demog_dc_kill$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#!\\n $te_demog_dc_war$: #v [GetPlayer.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#!\\n#lore Die vier natürlichen Ursachen sind geschätzt: die eigenen Todesfälle der Volkszählung, aufgeteilt nach der Rate jeder Ursache in jeder Altersklasse. In der Einstellung „Voll“ zählen die Todesfälle, die das Spiel zusätzlich zur Volkszählung hinzufügt, unter ihren Ursachen. Die übrigen werden so gezählt, wie sie sind.#!"
  },
  "te_demog_cd_um_line": {
   "en": " Besides them, #v [GetPlayer.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
@@ -22497,19 +22497,19 @@
  },
  "te_demog_census_conscription_down": {
   "en": "Census: Fighting-Age Men",
-  "de": "Volkszählung: Kampffähige Männer"
+  "de": "Volkszählung: Wehrfähige Männer"
  },
  "te_demog_census_conscription_down_desc": {
   "en": "This state has fewer men of fighting age, 20 to 39, for its people than the world had in 1836: an older people, or one that has lost its young men to war or emigration. Less of its workforce can be called up. The census on the Demographics tab sets it each year.",
-  "de": "Dieser Staat hat im Verhältnis zu seiner Bevölkerung weniger Männer im kampffähigen Alter, 20 bis 39, als die Welt 1836 hatte: ein älteres Volk oder eines, das seine jungen Männer an Krieg oder Auswanderung verloren hat. Ein kleinerer Teil seiner Arbeitskräfte kann einberufen werden. Die Volkszählung auf dem Reiter „Demografie“ legt es jedes Jahr fest."
+  "de": "Dieser Staat hat im Verhältnis zu seiner Bevölkerung weniger Männer im wehrfähigen Alter, 20 bis 39, als die Welt 1836 hatte: ein älteres Volk oder eines, das seine jungen Männer an Krieg oder Auswanderung verloren hat. Ein kleinerer Teil seiner Arbeitskräfte kann einberufen werden. Die Volkszählung auf dem Reiter „Demografie“ legt es jedes Jahr fest."
  },
  "te_demog_census_conscription_up": {
   "en": "Census: Fighting-Age Men",
-  "de": "Volkszählung: Kampffähige Männer"
+  "de": "Volkszählung: Wehrfähige Männer"
  },
  "te_demog_census_conscription_up_desc": {
   "en": "This state has more men of fighting age, 20 to 39, for its people than the world had in 1836, so more of its workforce can be called up. The census on the Demographics tab sets it each year.",
-  "de": "Dieser Staat hat im Verhältnis zu seiner Bevölkerung mehr Männer im kampffähigen Alter, 20 bis 39, als die Welt 1836 hatte, daher kann ein größerer Teil seiner Arbeitskräfte einberufen werden. Die Volkszählung auf dem Reiter „Demografie“ legt es jedes Jahr fest."
+  "de": "Dieser Staat hat im Verhältnis zu seiner Bevölkerung mehr Männer im wehrfähigen Alter, 20 bis 39, als die Welt 1836 hatte, daher kann ein größerer Teil seiner Arbeitskräfte einberufen werden. Die Volkszählung auf dem Reiter „Demografie“ legt es jedes Jahr fest."
  },
  "te_demog_census_deaths_down": {
   "en": "Census: Deaths",
@@ -22573,7 +22573,7 @@
  },
  "te_demog_census_workforce_down_desc": {
   "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labour laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count, and the game's own workforce moves toward it over the years that follow.",
-  "de": "Bei der Demografieregel „Vollständig“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien, und die Arbeitskräfte des Spiels bewegen sich in den folgenden Jahren auf sie zu."
+  "de": "Bei der Demografieregel „Voll“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien, und die Arbeitskräfte des Spiels bewegen sich in den folgenden Jahren auf sie zu."
  },
  "te_demog_census_workforce_up": {
   "en": "Census: Workforce",
@@ -22581,7 +22581,7 @@
  },
  "te_demog_census_workforce_up_desc": {
   "en": "Under the Full Demographics rule the census sets this state's workforce from who is of working age and who works: the child labour laws, the pension age, women's work and health. It replaces the laws' and technologies' own workforce lines at each yearly count, and the game's own workforce moves toward it over the years that follow.",
-  "de": "Bei der Demografieregel „Vollständig“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien, und die Arbeitskräfte des Spiels bewegen sich in den folgenden Jahren auf sie zu."
+  "de": "Bei der Demografieregel „Voll“ legt die Volkszählung die Arbeitskräfte dieses Staates danach fest, wer im Erwerbsalter ist und wer arbeitet: die Kinderarbeitsgesetze, das Rentenalter, die Erwerbstätigkeit der Frauen und die Gesundheit. Sie ersetzt bei jeder jährlichen Zählung die eigenen Arbeitskräftezeilen der Gesetze und Technologien, und die Arbeitskräfte des Spiels bewegen sich in den folgenden Jahren auf sie zu."
  },
  "te_demog_census_youth_bulge": {
   "en": "Census: Youth Bulge",
@@ -22637,7 +22637,7 @@
  },
  "te_demog_dc_head_deaths_tt": {
   "en": "Last year's deaths from the cause. The four natural causes are estimated: the census's own deaths shared out by each cause's rate in each five-year age band. Under the Full setting, the deaths the game adds on top of the census count under their causes, as the game's effects tag them. Childbirth's deaths, the war dead and the people killed by events are counted as they are.",
-  "de": "Die Todesfälle des Vorjahres durch die Ursache. Die vier natürlichen Ursachen sind geschätzt: die eigenen Todesfälle der Volkszählung, aufgeteilt nach der Rate jeder Ursache in jeder Fünfjahres-Altersklasse. In der Einstellung „Vollständig“ zählen die Todesfälle, die das Spiel zusätzlich zur Volkszählung hinzufügt, unter ihren Ursachen, wie die Effekte des Spiels sie kennzeichnen. Die Todesfälle durch Geburt, die Kriegstoten und die durch Ereignisse Getöteten werden so gezählt, wie sie sind."
+  "de": "Die Todesfälle des Vorjahres durch die Ursache. Die vier natürlichen Ursachen sind geschätzt: die eigenen Todesfälle der Volkszählung, aufgeteilt nach der Rate jeder Ursache in jeder Fünfjahres-Altersklasse. In der Einstellung „Voll“ zählen die Todesfälle, die das Spiel zusätzlich zur Volkszählung hinzufügt, unter ihren Ursachen, wie die Effekte des Spiels sie kennzeichnen. Die Todesfälle durch Geburt, die Kriegstoten und die durch Ereignisse Getöteten werden so gezählt, wie sie sind."
  },
  "te_demog_dc_head_share": {
   "en": "Share",
@@ -22729,11 +22729,11 @@
  },
  "te_demog_fam": {
   "en": "Fighting-Age Men",
-  "de": "Kampffähige Männer"
+  "de": "Wehrfähige Männer"
  },
  "te_demog_fam_rule": {
   "en": "Men of fighting age, 20 to 39, against their share of the world's people in 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, give a state's multiplier on its [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: an older people, or one that has lost its young men, fewer, down to none; a young one more, with no ceiling. War dead come from the same men.",
-  "de": "Männer im kampffähigen Alter, 20 bis 39, im Verhältnis zu ihrem Anteil an den Menschen der Welt im Jahr 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, ergeben den Multiplikator eines Staates auf seine [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: ein älteres Volk oder eines, das seine jungen Männer verloren hat, weniger, bis hin zu keinen; ein junges mehr, ohne Obergrenze. Die Kriegstoten stammen aus denselben Männern."
+  "de": "Männer im wehrfähigen Alter, 20 bis 39, im Verhältnis zu ihrem Anteil an den Menschen der Welt im Jahr 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, ergeben den Multiplikator eines Staates auf seine [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: ein älteres Volk oder eines, das seine jungen Männer verloren hat, weniger, bis hin zu keinen; ein junges mehr, ohne Obergrenze. Die Kriegstoten stammen aus denselben Männern."
  },
  "te_demog_family_limitation": {
   "en": "Family Limitation",
@@ -22793,7 +22793,7 @@
  },
  "te_demog_hist_bd_legend": {
   "en": "#lore Per 1,000 people a year: births green, deaths red. Their gap is natural change; migration is apart.[SelectLocalization( GetScriptedGui('te_demog_um_shown_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_hist_um_note', 'te_tt_blank' )]#!",
-  "de": "#lore Je 1.000 Menschen und Jahr: Geburten grün, Todesfälle rot. Ihr Abstand ist der natürliche Wandel; die Wanderung steht für sich.[SelectLocalization( GetScriptedGui('te_demog_um_shown_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_hist_um_note', 'te_tt_blank' )]#!"
+  "de": "#lore Je 1.000 Menschen und Jahr: Geburten grün, Todesfälle rot. Ihr Abstand ist der natürliche Saldo; die Wanderung steht für sich.[SelectLocalization( GetScriptedGui('te_demog_um_shown_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_hist_um_note', 'te_tt_blank' )]#!"
  },
  "te_demog_hist_bd_on": {
   "en": "Births: #v [ScriptContainer.GetVariableValue('te_dg_h_cbr')|1]#! per 1,000\\nDeaths: #v [ScriptContainer.GetVariableValue('te_dg_h_cdr')|1]#! per 1,000\\nNatural change: #v [Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_cbr'), ScriptContainer.GetVariableValue('te_dg_h_cdr') )|+1]#! per 1,000",
@@ -22869,11 +22869,11 @@
  },
  "te_demog_hist_mig_on": {
   "en": "Net migration: #v [ScriptContainer.GetVariableValue('te_dg_h_mig')|+1]#! per 1,000",
-  "de": "Nettowanderung: #v [ScriptContainer.GetVariableValue('te_dg_h_mig')|+1]#! je 1.000"
+  "de": "Wanderungssaldo: #v [ScriptContainer.GetVariableValue('te_dg_h_mig')|+1]#! je 1.000"
  },
  "te_demog_hist_mig_title": {
   "en": "Net Migration",
-  "de": "Nettowanderung"
+  "de": "Wanderungssaldo"
  },
  "te_demog_hist_mk_event": {
   "en": " · #v a demographic event#!",
@@ -22941,11 +22941,11 @@
  },
  "te_demog_how_applied": {
   "en": "Under the Full setting the census sets each state's births and deaths. From its first step in a state, the Laws and Institutions lines in the state's birth rate and mortality go: the effects the census models, such as those of the child labor and women's rights laws, the health laws, vaccines, antibiotics, the pill and mild starvation, become part of its own rates, and the rest, such as the family-policy laws and the late medical technologies, it applies at its own rate. Either way, a new law or technology takes effect at the state's next census step. An effect on the whole state, such as pollution, devastation or a decree, moves its births or deaths by its own percentage of the census's rate, as its tooltip line reads; an effect on some of its people, such as severe starvation, applies to their rate in the base game. Private Health Insurance's cut for the wealthy works at the census's rate, and no pop's deaths fall below half of it. Under Display only the census only reports, and births and deaths follow the game's own rules. The workforce follows the game's own rules either way.",
-  "de": "In der Einstellung „Vollständig“ legt die Volkszählung die Geburten und Todesfälle jedes Staates fest. Ab ihrem ersten Schritt in einem Staat entfallen die Zeilen „Gesetze und Institutionen“ in der Geburtenrate und der Sterblichkeit des Staates: Die Effekte, die die Volkszählung abbildet, etwa die der Kinderarbeits- und Frauenrechtsgesetze, der Gesundheitsgesetze, der Impfstoffe, der Antibiotika, der Pille und des leichten Hungers, werden Teil ihrer eigenen Raten, und den Rest, etwa die familienpolitischen Gesetze und die späten medizinischen Technologien, wendet sie mit ihrer eigenen Rate an. So oder so wirkt ein neues Gesetz oder eine neue Technologie beim nächsten Zählschritt des Staates. Ein Effekt auf den ganzen Staat, etwa Umweltverschmutzung, Verwüstung oder ein Dekret, verschiebt dessen Geburten oder Todesfälle um seinen eigenen Prozentsatz der Rate der Volkszählung, wie seine Tooltip-Zeile lautet; ein Effekt auf einen Teil seiner Menschen, etwa schwerer Hunger, gilt wie im Basisspiel für deren Rate. Die Senkung der Todesfälle bei Wohlhabenden durch die Private Krankenversicherung wirkt mit der Rate der Volkszählung, und die Todesfälle keines Pops fallen unter die Hälfte davon. Bei „Nur Anzeige“ berichtet die Volkszählung nur, und Geburten und Todesfälle folgen den eigenen Regeln des Spiels. Die Arbeitskräfte folgen so oder so den eigenen Regeln des Spiels."
+  "de": "In der Einstellung „Voll“ legt die Volkszählung die Geburten und Todesfälle jedes Staates fest. Ab ihrem ersten Schritt in einem Staat entfallen die Zeilen „Gesetze und Institutionen“ in der Geburtenrate und der Sterblichkeit des Staates: Die Effekte, die die Volkszählung abbildet, etwa die der Kinderarbeits- und Frauenrechtsgesetze, der Gesundheitsgesetze, der Impfstoffe, der Antibiotika, der Pille und des leichten Hungers, werden Teil ihrer eigenen Raten, und den Rest, etwa die familienpolitischen Gesetze und die späten medizinischen Technologien, wendet sie mit ihrer eigenen Rate an. So oder so wirkt ein neues Gesetz oder eine neue Technologie beim nächsten Zählschritt des Staates. Ein Effekt auf den ganzen Staat, etwa Umweltverschmutzung, Verwüstung oder ein Dekret, verschiebt dessen Geburten oder Todesfälle um seinen eigenen Prozentsatz der Rate der Volkszählung, wie seine Tooltip-Zeile lautet; ein Effekt auf einen Teil seiner Menschen, etwa schwerer Hunger, gilt wie im Basisspiel für deren Rate. Die Senkung der Todesfälle bei Wohlhabenden durch die Private Krankenversicherung wirkt mit der Rate der Volkszählung, und die Todesfälle keines Pops fallen unter die Hälfte davon. Bei „Nur Anzeige“ berichtet die Volkszählung nur, und Geburten und Todesfälle folgen den eigenen Regeln des Spiels. Die Arbeitskräfte folgen so oder so den eigenen Regeln des Spiels."
  },
  "te_demog_how_causes": {
   "en": "The census counts one total of deaths a year. Causes of Death splits it: each natural cause's deaths at the year's rates, from the people of each five-year age band at the last count, are scaled so the four add up to the census's own deaths from them. The split is exact where an age band holds one age group, and an estimate for children under 5, for people 85 and over, and for people in longevity care, whose bodies age at their own pace. Under the Full setting the game adds deaths on top of the census's own: famine, pollution, devastation, dangerous work, decrees and events. Each of those effects names the cause its deaths count under, and the census places them on that cause's ages; devastation's dead join the war dead. Mothers who die in childbirth, the war dead and the people killed by events are counted as they are. The country's figures are its states' added up.",
-  "de": "Die Volkszählung zählt einmal im Jahr eine Gesamtzahl der Todesfälle. „Todesursachen“ teilt sie auf: Die Todesfälle jeder natürlichen Ursache nach den Raten des Jahres, aus den Menschen jeder Fünfjahres-Altersklasse bei der letzten Zählung, werden so skaliert, dass die vier die eigenen Todesfälle der Volkszählung daraus ergeben. Die Aufteilung ist exakt, wo eine Altersklasse eine Altersgruppe umfasst, und eine Schätzung für Kinder unter 5, für Menschen ab 85 und für Menschen in der Langlebigkeitsmedizin, deren Körper in ihrem eigenen Tempo altern. In der Einstellung „Vollständig“ fügt das Spiel den eigenen Todesfällen der Volkszählung weitere hinzu: Hungersnot, Umweltverschmutzung, Verwüstung, gefährliche Arbeit, Dekrete und Ereignisse. Jeder dieser Effekte nennt die Ursache, unter der seine Todesfälle zählen, und die Volkszählung legt sie auf die Alter dieser Ursache; die Toten der Verwüstung kommen zu den Kriegstoten. Mütter, die bei der Geburt sterben, die Kriegstoten und die durch Ereignisse Getöteten werden so gezählt, wie sie sind. Die Zahlen des Landes sind die Summe seiner Staaten."
+  "de": "Die Volkszählung zählt einmal im Jahr eine Gesamtzahl der Todesfälle. „Todesursachen“ teilt sie auf: Die Todesfälle jeder natürlichen Ursache nach den Raten des Jahres, aus den Menschen jeder Fünfjahres-Altersklasse bei der letzten Zählung, werden so skaliert, dass die vier die eigenen Todesfälle der Volkszählung daraus ergeben. Die Aufteilung ist exakt, wo eine Altersklasse eine Altersgruppe umfasst, und eine Schätzung für Kinder unter 5, für Menschen ab 85 und für Menschen in der Langlebigkeitsmedizin, deren Körper in ihrem eigenen Tempo altern. In der Einstellung „Voll“ fügt das Spiel den eigenen Todesfällen der Volkszählung weitere hinzu: Hungersnot, Umweltverschmutzung, Verwüstung, gefährliche Arbeit, Dekrete und Ereignisse. Jeder dieser Effekte nennt die Ursache, unter der seine Todesfälle zählen, und die Volkszählung legt sie auf die Alter dieser Ursache; die Toten der Verwüstung kommen zu den Kriegstoten. Mütter, die bei der Geburt sterben, die Kriegstoten und die durch Ereignisse Getöteten werden so gezählt, wie sie sind. Die Zahlen des Landes sind die Summe seiner Staaten."
  },
  "te_demog_how_census": {
   "en": "Every state keeps its people as a count by single year of age, women and men apart. Each year the count grows a year older: the newborn enter at 0, each age loses its dead at its own rates, and the war dead, the people killed by events and the migrants who come or go are taken from the ages they belong to. The count is then scaled to the state's real population, so the census and the game never disagree on how many people there are. A state's first count, at the start of the game or when the state first appears, is the settled shape of its own birth and death rates.",
@@ -22953,7 +22953,7 @@
  },
  "te_demog_how_family": {
   "en": "The $lawgroup_family_reproductive_policy$ law sets which measures the government may take (under $law_communal_child_rearing$, so does the form of government), and each is a button in Family Policy. A measure takes effect at once, costs money, authority or bureaucracy while it runs, moves the interest groups, and can't be ended for five years. One the law no longer allows ends at once when the law changes. The Crash Campaign ends itself after five years and can't return for ten; Birth Limit's button moves from two children to one, then ends it. Measures act only under the Full Demographics rule. The census reads a measure at each state's next count: how many children families want, the means to plan a family, mothers' deaths and, once prenatal sexing exists, the boys and girls born; the births follow over the year after, and the children reach working age fifteen years on. Parental Leave's women's work counts as the women's rights laws' does.",
-  "de": "Das Gesetz zur $lawgroup_family_reproductive_policy$ legt fest, welche Maßnahmen die Regierung ergreifen darf (unter $law_communal_child_rearing$ tut das auch die Regierungsform), und jede ist eine Schaltfläche in der Familienpolitik. Eine Maßnahme wirkt sofort, kostet, solange sie läuft, Geld, Autorität oder Bürokratie, bewegt die Interessengruppen und kann fünf Jahre lang nicht beendet werden. Eine, die das Gesetz nicht mehr erlaubt, endet sofort, wenn sich das Gesetz ändert. Die Crash-Kampagne endet nach fünf Jahren von selbst und kann zehn Jahre lang nicht wiederkehren; die Schaltfläche der Geburtenbeschränkung wechselt von zwei Kindern auf eines und beendet sie dann. Maßnahmen wirken nur bei der Demografieregel „Vollständig“. Die Volkszählung liest eine Maßnahme bei der nächsten Zählung jedes Staates: wie viele Kinder Familien wollen, die Mittel zur Familienplanung, die Todesfälle von Müttern und, sobald es pränatale Geschlechtsbestimmung gibt, die geborenen Jungen und Mädchen; die Geburten folgen im Jahr darauf, und die Kinder erreichen das Erwerbsalter fünfzehn Jahre später. Die Erwerbstätigkeit der Frauen durch die Elternzeit zählt wie die der Frauenrechtsgesetze."
+  "de": "Das Gesetz zur $lawgroup_family_reproductive_policy$ legt fest, welche Maßnahmen die Regierung ergreifen darf (unter $law_communal_child_rearing$ tut das auch die Regierungsform), und jede ist eine Schaltfläche in der Familienpolitik. Eine Maßnahme wirkt sofort, kostet, solange sie läuft, Geld, Autorität oder Bürokratie, bewegt die Interessengruppen und kann fünf Jahre lang nicht beendet werden. Eine, die das Gesetz nicht mehr erlaubt, endet sofort, wenn sich das Gesetz ändert. Die Intensivkampagne endet nach fünf Jahren von selbst und kann zehn Jahre lang nicht wiederkehren; die Schaltfläche der Geburtenbeschränkung wechselt von zwei Kindern auf eines und beendet sie dann. Maßnahmen wirken nur bei der Demografieregel „Voll“. Die Volkszählung liest eine Maßnahme bei der nächsten Zählung jedes Staates: wie viele Kinder Familien wollen, die Mittel zur Familienplanung, die Todesfälle von Müttern und, sobald es pränatale Geschlechtsbestimmung gibt, die geborenen Jungen und Mädchen; die Geburten folgen im Jahr darauf, und die Kinder erreichen das Erwerbsalter fünfzehn Jahre später. Die Erwerbstätigkeit der Frauen durch die Elternzeit zählt wie die der Frauenrechtsgesetze."
  },
  "te_demog_how_fertility": {
   "en": "Wealth sets how many children couples would have with nothing holding them back. Women's legal standing moves that, and two customs lower it: late marriage, where women marry in their mid-twenties and many never marry, and birth spacing, where couples space and stop births by custom. Both fade as modern contraception spreads, and birth spacing fades with health care too; women's paid work and farms that pass whole to one heir make late marriage more common. [concept_literacy], child survival (life expectancy between 30 and 80 years) and urban life each lower how many they want. The means to plan a family grow with [concept_literacy] and with medicine, from vulcanised rubber to the pill, and decide how much of the gap between the two they close.",
@@ -22973,7 +22973,7 @@
  },
  "te_demog_how_modifiers": {
   "en": "Under the Full setting the yearly count puts standing modifiers on a state where its figures call for them: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect. Each is worked out again every year at a strength set by the figure behind it, and goes when the figure falls back. The Modifiers section lists them, so the state's modifier row, which keeps what starts and ends on a date, does not. Hover one for its effects at the strength the state has now.",
-  "de": "In der Einstellung „Vollständig“ versieht die jährliche Zählung einen Staat mit dauerhaften Modifikatoren, wo seine Zahlen es verlangen: Ungleichheit, Jugendüberhang, Weniger Männer, Mehr Männer, die Langlebigkeitslücke, Metropole, Verstreute Städte, Primatstadt und Provinzvernachlässigung. Jeder wird jedes Jahr neu berechnet, mit einer Stärke, die die Zahl dahinter bestimmt, und verschwindet, wenn die Zahl zurückfällt. Der Abschnitt „Modifikatoren“ listet sie auf, die Modifikatorzeile des Staates, die behält, was an einem Datum beginnt und endet, dagegen nicht. Der Mauszeiger über einem zeigt seine Effekte mit der Stärke, die der Staat jetzt hat."
+  "de": "In der Einstellung „Voll“ versieht die jährliche Zählung einen Staat mit dauerhaften Modifikatoren, wo seine Zahlen es verlangen: Ungleichheit, Jugendüberhang, Weniger Männer, Mehr Männer, die Langlebigkeitslücke, Metropole, Verstreute Städte, Primatstadt und Provinzvernachlässigung. Jeder wird jedes Jahr neu berechnet, mit einer Stärke, die die Zahl dahinter bestimmt, und verschwindet, wenn die Zahl zurückfällt. Der Abschnitt „Modifikatoren“ listet sie auf, die Modifikatorzeile des Staates, die behält, was an einem Datum beginnt und endet, dagegen nicht. Der Mauszeiger über einem zeigt seine Effekte mit der Stärke, die der Staat jetzt hat."
  },
  "te_demog_how_mortality": {
   "en": "Deaths come from five causes: infection and hunger, accidents and violence, chronic illness and old age, work, and childbirth. Each runs at the rates of a poor country without modern medicine, times a multiplier that medical technology, health laws, institutions and a higher [concept_sol] bring down. Life expectancy is how long a child born now would live at this year's rates: the census's own, before famine, war and disasters. Medicine reaches a state over years: health care access and each treatment close a share of the gap at each count, a tenth at first and more as communications and medical training improve. Turmoil raises deaths from accidents and violence.",
@@ -23321,7 +23321,7 @@
  },
  "te_demog_ms_crash_campaign": {
   "en": "Crash Campaign",
-  "de": "Crash-Kampagne"
+  "de": "Intensivkampagne"
  },
  "te_demog_ms_crash_campaign_authority_tt": {
   "en": "Needs @aut! [GetPlayer.MakeScope.ScriptValue('te_demog_ms_authority_crash_campaign')|0] free authority to start",
@@ -23329,7 +23329,7 @@
  },
  "te_demog_ms_crash_campaign_barred_tt": {
   "en": "A Crash Campaign ended less than ten years ago: it can return in [GetPlayer.MakeScope.ScriptValue('te_demog_ms_barred_until_crash_campaign')|0]",
-  "de": "Eine Crash-Kampagne endete vor weniger als zehn Jahren: Sie kann frühestens [GetPlayer.MakeScope.ScriptValue('te_demog_ms_barred_until_crash_campaign')|0] wiederkehren"
+  "de": "Eine Intensivkampagne endete vor weniger als zehn Jahren: Sie kann frühestens [GetPlayer.MakeScope.ScriptValue('te_demog_ms_barred_until_crash_campaign')|0] wiederkehren"
  },
  "te_demog_ms_crash_campaign_desc": {
   "en": "A drive to bring births down at once, whatever it takes.",
@@ -23365,7 +23365,7 @@
  },
  "te_demog_ms_display_only": {
   "en": "#lore Family policy measures act only under the Full Demographics rule: the rows show what each would do.#!",
-  "de": "#lore Familienpolitische Maßnahmen wirken nur bei der Demografieregel „Vollständig“: Die Zeilen zeigen, was jede bewirken würde.#!"
+  "de": "#lore Familienpolitische Maßnahmen wirken nur bei der Demografieregel „Voll“: Die Zeilen zeigen, was jede bewirken würde.#!"
  },
  "te_demog_ms_end_tt": {
   "en": "Ends this measure: its effects and running cost stop at once",
@@ -23373,15 +23373,15 @@
  },
  "te_demog_ms_family_housing": {
   "en": "Family Housing",
-  "de": "Familienwohnungen"
+  "de": "Familienwohnungsbau"
  },
  "te_demog_ms_family_housing_cost": {
   "en": "Family Housing: Running Cost",
-  "de": "Familienwohnungen: Laufende Kosten"
+  "de": "Familienwohnungsbau: Laufende Kosten"
  },
  "te_demog_ms_family_housing_cost_desc": {
   "en": "What Family Housing costs each week: a quarter of a percent of GDP a year, by the share of the people in cities.",
-  "de": "Was die Familienwohnungen jede Woche kosten: ein Viertelprozent des BIP pro Jahr, nach dem Anteil der Menschen in Städten."
+  "de": "Was die Familienwohnungsbau jede Woche kosten: ein Viertelprozent des BIP pro Jahr, nach dem Anteil der Menschen in Städten."
  },
  "te_demog_ms_family_housing_desc": {
   "en": "Homes built and let to families with children, so that life in a city leaves room for them.",
@@ -23473,7 +23473,7 @@
  },
  "te_demog_ms_head_term_tt": {
   "en": "A measure runs for at least five years from its start, and can't be ended before then. The Crash Campaign ends itself after five years and can't return for ten.",
-  "de": "Eine Maßnahme läuft ab ihrem Start mindestens fünf Jahre und kann vorher nicht beendet werden. Die Crash-Kampagne endet nach fünf Jahren von selbst und kann zehn Jahre lang nicht wiederkehren."
+  "de": "Eine Maßnahme läuft ab ihrem Start mindestens fünf Jahre und kann vorher nicht beendet werden. Die Intensivkampagne endet nach fünf Jahren von selbst und kann zehn Jahre lang nicht wiederkehren."
  },
  "te_demog_ms_honours": {
   "en": "Honours for Large Families",
@@ -23661,7 +23661,7 @@
  },
  "te_demog_ms_sex_education": {
   "en": "Sex Education",
-  "de": "Sexualkunde"
+  "de": "Sexualaufklärung"
  },
  "te_demog_ms_sex_education_desc": {
   "en": "Teaching about reproduction and family planning in schools, so that knowing how to plan a family no longer depends on reading.",
@@ -23949,7 +23949,7 @@
  },
  "te_demog_ov_fam_tt": {
   "en": "#b Fighting-Age Men#!\\n[SelectLocalization( GetScriptedGui('te_demog_pool_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_fam_figures', 'te_demog_ov_fam_waiting' )]\\n\\n$te_demog_fam_rule$",
-  "de": "#b Kampffähige Männer#!\\n[SelectLocalization( GetScriptedGui('te_demog_pool_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_fam_figures', 'te_demog_ov_fam_waiting' )]\\n\\n$te_demog_fam_rule$"
+  "de": "#b Wehrfähige Männer#!\\n[SelectLocalization( GetScriptedGui('te_demog_pool_ready_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_fam_figures', 'te_demog_ov_fam_waiting' )]\\n\\n$te_demog_fam_rule$"
  },
  "te_demog_ov_fam_waiting": {
   "en": "Counted at the next yearly census.",
@@ -24061,7 +24061,7 @@
  },
  "te_demog_ov_nat": {
   "en": "Natural Change",
-  "de": "Natürliche Veränderung"
+  "de": "Natürlicher Saldo"
  },
  "te_demog_ov_nat_figures": {
   "en": "Births: #v [GetPlayer.MakeScope.Var('te_dg_cbr').GetValue|1]#! per 1,000\\nDeaths: #v [GetPlayer.MakeScope.Var('te_dg_cdr').GetValue|1]#! per 1,000[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_um_nat_line', 'te_tt_blank' )]",
@@ -24073,7 +24073,7 @@
  },
  "te_demog_ov_nat_tt": {
   "en": "#b Natural Change#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)2' ) ), 'te_demog_ov_nat_prev', '' )]\\nBirths less deaths per 1,000 people last year, before migration: whether our people grow of themselves. The war dead and the people killed by events are apart, under Causes of Death.\\n[SelectLocalization( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_nat_figures', 'te_demog_ov_births_pending' )]",
-  "de": "#b Natürliche Veränderung#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)2' ) ), 'te_demog_ov_nat_prev', '' )]\\nGeburten abzüglich Todesfälle je 1.000 Menschen im Vorjahr, vor der Wanderung: ob unsere Bevölkerung von selbst wächst. Die Kriegstoten und die durch Ereignisse getöteten Menschen sind gesondert ausgewiesen, unter „Todesursachen“.\\n[SelectLocalization( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_nat_figures', 'te_demog_ov_births_pending' )]"
+  "de": "#b Natürlicher Saldo#! [SelectLocalization( Not( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)2' ) ), 'te_demog_ov_nat_prev', '' )]\\nGeburten abzüglich Todesfälle je 1.000 Menschen im Vorjahr, vor der Wanderung: ob unsere Bevölkerung von selbst wächst. Die Kriegstoten und die durch Ereignisse getöteten Menschen sind gesondert ausgewiesen, unter „Todesursachen“.\\n[SelectLocalization( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_ov_nat_figures', 'te_demog_ov_births_pending' )]"
  },
  "te_demog_ov_nat_value": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('te_demog_natural_change')|+1]#! per 1,000",
@@ -24093,7 +24093,7 @@
  },
  "te_demog_ov_old_age_tt_late": {
   "en": "#b Old Age From#!\\nThe age at which our people have fifteen years of life left, women's and men's averaged, at the death rates each age has now, those in longevity care and those not together. It reads None once no age has fifteen years left, as under Biological Immortality. A pension Linked to Average Longevity follows it, five years below.\\n\\nThose not in longevity care: [SelectLocalization( GetScriptedGui('te_demog_lx_old_c_none_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_lx_none', 'te_demog_ov_old_age_c_years' )]. Their bodies still age, so old age still comes for them; a pension Linked to Common Longevity follows their figure, five years below.",
-  "de": "#b Alter ab#!\\nDas Alter, in dem unseren Menschen noch fünfzehn Lebensjahre bleiben, Frauen und Männer gemittelt, bei den Sterberaten, die jedes Alter jetzt hat, mit den Menschen in Langlebigkeitsmedizin und denen ohne zusammen. Es zeigt „Keines“, sobald kein Alter mehr fünfzehn Lebensjahre vor sich hat, wie unter Biologischer Unsterblichkeit. Ein an die durchschnittliche Langlebigkeit gekoppeltes Rentenalter folgt ihm, fünf Jahre darunter.\\n\\nMenschen ohne Langlebigkeitsmedizin: [SelectLocalization( GetScriptedGui('te_demog_lx_old_c_none_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_lx_none', 'te_demog_ov_old_age_c_years' )]. Ihre Körper altern weiter, das hohe Alter kommt also weiterhin für sie; ein an die gewöhnliche Langlebigkeit gekoppeltes Rentenalter folgt ihrem Wert, fünf Jahre darunter."
+  "de": "#b Alter ab#!\\nDas Alter, in dem unseren Menschen noch fünfzehn Lebensjahre bleiben, Frauen und Männer gemittelt, bei den Sterberaten, die jedes Alter jetzt hat, mit den Menschen in Langlebigkeitsmedizin und denen ohne zusammen. Es zeigt „Keine“, sobald kein Alter mehr fünfzehn Lebensjahre vor sich hat, wie unter Biologischer Unsterblichkeit. Ein an die durchschnittliche Langlebigkeit gekoppeltes Rentenalter folgt ihm, fünf Jahre darunter.\\n\\nMenschen ohne Langlebigkeitsmedizin: [SelectLocalization( GetScriptedGui('te_demog_lx_old_c_none_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_demog_lx_none', 'te_demog_ov_old_age_c_years' )]. Ihre Körper altern weiter, das hohe Alter kommt also weiterhin für sie; ein an die gewöhnliche Langlebigkeit gekoppeltes Rentenalter folgt ihrem Wert, fünf Jahre darunter."
  },
  "te_demog_ov_old_age_years": {
   "en": "#v [GetPlayer.MakeScope.Var('te_dg_old_age').GetValue|0]#! years",
@@ -24941,7 +24941,7 @@
  },
  "te_demog_st_fam_full": {
   "en": "The census sets its conscription ×#v [State.MakeScope.ScriptValue('te_demog_conscription_mult')|2]#! (Census: Fighting-Age Men).",
-  "de": "Die Volkszählung legt seine Einberufungsquote auf ×#v [State.MakeScope.ScriptValue('te_demog_conscription_mult')|2]#! fest (Volkszählung: Männer im wehrfähigen Alter)."
+  "de": "Die Volkszählung legt seine Einberufungsquote auf ×#v [State.MakeScope.ScriptValue('te_demog_conscription_mult')|2]#! fest (Volkszählung: Wehrfähige Männer)."
  },
  "te_demog_st_fam_held": {
   "en": "#grey Not applied yet: it would set the state's conscription ×[State.MakeScope.ScriptValue('te_demog_conscription_mult')|2], but conscription follows the base game's rules for now.#!",
@@ -24949,7 +24949,7 @@
  },
  "te_demog_st_fam_tt": {
   "en": "#b Fighting-Age Men#!\\n[SelectLocalization( GetScriptedGui('te_demog_state_pool_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_figures', 'te_demog_st_fam_waiting' )]\\n\\n$te_demog_fam_rule$",
-  "de": "#b Männer im wehrfähigen Alter#!\\n[SelectLocalization( GetScriptedGui('te_demog_state_pool_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_figures', 'te_demog_st_fam_waiting' )]\\n\\n$te_demog_fam_rule$"
+  "de": "#b Wehrfähige Männer#!\\n[SelectLocalization( GetScriptedGui('te_demog_state_pool_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_fam_figures', 'te_demog_st_fam_waiting' )]\\n\\n$te_demog_fam_rule$"
  },
  "te_demog_st_fam_waiting": {
   "en": "Counted at the state's next census.",
@@ -25093,7 +25093,7 @@
  },
  "te_demog_st_nat_tt": {
   "en": "#b Natural Change#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)2' ) ), 'te_demog_st_nat_prev', '' )]\\nBirths less deaths per 1,000 people last year, before migration: whether the state grows of itself. The war dead and the people killed by events are apart, under Causes of Death.\\n[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_nat_figures', 'te_demog_ov_births_pending' )]",
-  "de": "#b Natürliche Veränderung#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)2' ) ), 'te_demog_st_nat_prev', '' )]\\nGeburten abzüglich Todesfälle je 1.000 Menschen im Vorjahr, vor der Wanderung: ob der Staat von selbst wächst. Die Kriegstoten und die durch Ereignisse getöteten Menschen sind gesondert ausgewiesen, unter „Todesursachen“.\\n[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_nat_figures', 'te_demog_ov_births_pending' )]"
+  "de": "#b Natürlicher Saldo#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)2' ) ), 'te_demog_st_nat_prev', '' )]\\nGeburten abzüglich Todesfälle je 1.000 Menschen im Vorjahr, vor der Wanderung: ob der Staat von selbst wächst. Die Kriegstoten und die durch Ereignisse getöteten Menschen sind gesondert ausgewiesen, unter „Todesursachen“.\\n[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_nat_figures', 'te_demog_ov_births_pending' )]"
  },
  "te_demog_st_nat_value": {
   "en": "#v [State.MakeScope.ScriptValue('te_demog_natural_change')|+1]#! per 1,000",
@@ -25709,7 +25709,7 @@
  },
  "te_demog_wave_branches_police": {
   "en": "Constables on the Streets",
-  "de": "Gendarmen auf den Straßen"
+  "de": "Polizisten auf den Straßen"
  },
  "te_demog_wave_branches_police_desc": {
   "en": "More police patrol the districts where young single men gather.",
@@ -25861,7 +25861,7 @@
  },
  "te_demog_wave_overspill_sprawl": {
   "en": "Urban Sprawl",
-  "de": "Zersiedelung"
+  "de": "Zersiedlung"
  },
  "te_demog_wave_overspill_sprawl_desc": {
   "en": "The city spreads wherever it can, taking everyone who comes, on worse terms: crowded roads and unhealthy districts.",
@@ -25869,7 +25869,7 @@
  },
  "te_demog_wave_overspill_sprawl_politics": {
   "en": "Urban Sprawl: Politics",
-  "de": "Zersiedelung: Politik"
+  "de": "Zersiedlung: Politik"
  },
  "te_demog_wave_overspill_sprawl_politics_desc": {
   "en": "Employers welcome a city that takes everyone who comes looking for work.",
@@ -30689,7 +30689,7 @@
  },
  "we_se_debris_clearance": {
   "en": "Orbital Debris Clearance",
-  "de": "Beseitigung von Orbitalschrott"
+  "de": "Beseitigung von Weltraumschrott"
  },
  "we_se_debris_defense": {
   "en": "Orbital Defense Grid",

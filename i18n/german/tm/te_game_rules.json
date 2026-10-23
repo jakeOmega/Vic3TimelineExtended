@@ -181,7 +181,7 @@
  },
  "setting_demographics_full": {
   "en": "Full",
-  "de": "Vollständig"
+  "de": "Voll"
  },
  "setting_demographics_full_desc": {
   "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births and deaths. It takes over the birth and death effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top. The workforce follows the game's own rules.",

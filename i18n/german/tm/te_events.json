@@ -641,7 +641,7 @@
  },
  "arch_events.2.d.tt": {
   "en": "The finds stay with [SCOPE.sCountry('gm_arch_host').GetName], where the monument stands. Our scholars gain Foreign Scholarship: +10 [concept_prestige] and +1 [concept_cultural_pull] for ten years",
-  "de": "Die Funde bleiben bei [SCOPE.sCountry('gm_arch_host').GetAltName('DAT')], wo das Monument steht. Unsere Gelehrten erhalten Ausländische Gelehrsamkeit: +10 [concept_prestige] und +1 [concept_cultural_pull] für zehn Jahre"
+  "de": "Die Funde bleiben bei [SCOPE.sCountry('gm_arch_host').GetAltName('DAT')], wo das Monument steht. Unsere Gelehrten erhalten Gelehrsamkeit im Ausland: +10 [concept_prestige] und +1 [concept_cultural_pull] für zehn Jahre"
  },
  "arch_events.2.e": {
   "en": "They have taken the best of it",
@@ -19409,7 +19409,7 @@
  },
  "space_race_events.60.d.25": {
   "en": "\\n\\nA rocky planet is surrounded by an unnaturally dense cloud of orbital debris—thousands of #bold artificial objects#! in decaying orbits. A civilization was here. It choked its own sky with satellites and wreckage. Whether anything survives beneath that shroud is unknown.",
-  "de": "\\n\\nEin felsiger Planet ist von einer unnatürlich dichten Wolke aus Orbitalschrott umgeben — Tausende #bold künstlicher Objekte#! auf zerfallenden Bahnen. Hier war einst eine Zivilisation. Sie hat ihren eigenen Himmel mit Satelliten und Wrackteilen verstopft. Ob unter diesem Schleier noch etwas überlebt, ist unbekannt."
+  "de": "\\n\\nEin felsiger Planet ist von einer unnatürlich dichten Wolke aus Weltraumschrott umgeben — Tausende #bold künstlicher Objekte#! auf zerfallenden Bahnen. Hier war einst eine Zivilisation. Sie hat ihren eigenen Himmel mit Satelliten und Wrackteilen verstopft. Ob unter diesem Schleier noch etwas überlebt, ist unbekannt."
  },
  "space_race_events.60.d.26": {
   "en": "\\n\\nHigh concentrations of chlorofluorocarbons and sulfur hexafluoride detected in the planet's atmosphere—gases that do not occur in nature. #bold Industrial civilization: confirmed.#! The atmospheric signature is estimated to be decades to centuries old.",
@@ -20505,7 +20505,7 @@
  },
  "te_debug_demog.1.d.tt": {
   "en": "Walks every state of the world that has a census three times, then runs its yearly cohort step three times, each pass between TE_DEMOG_BENCH lines in debug.log, whose timestamps time it. The start line says whether the walk summed what the census absorbs (full=1, the Full setting). The passes leave each census wrong, so afterwards every one is seeded again from today's population.",
-  "de": "Durchläuft jeden Staat der Welt, der eine Volkszählung hat, dreimal und führt dann dreimal seinen jährlichen Kohortenschritt aus, jeden Durchlauf zwischen TE_DEMOG_BENCH-Zeilen in der debug.log, deren Zeitstempel ihn zeitlich erfassen. Die Startzeile gibt an, ob der Durchlauf summiert hat, was die Volkszählung aufnimmt (full=1, die Einstellung „Vollständig“). Die Durchläufe hinterlassen jede Volkszählung fehlerhaft, daher wird danach jede erneut aus der heutigen Bevölkerung initialisiert."
+  "de": "Durchläuft jeden Staat der Welt, der eine Volkszählung hat, dreimal und führt dann dreimal seinen jährlichen Kohortenschritt aus, jeden Durchlauf zwischen TE_DEMOG_BENCH-Zeilen in der debug.log, deren Zeitstempel ihn zeitlich erfassen. Die Startzeile gibt an, ob der Durchlauf summiert hat, was die Volkszählung aufnimmt (full=1, die Einstellung „Voll“). Die Durchläufe hinterlassen jede Volkszählung fehlerhaft, daher wird danach jede erneut aus der heutigen Bevölkerung initialisiert."
  },
  "te_debug_demog.1.desc": {
   "en": "Console-only tools for checking the demographic census against its Python model. Nothing in the mod fires this event. Every option writes to debug.log.\\n\\nA second replay in the same year steps our capital's census twice in one year, which leaves it wrong: re-seed our census afterwards. The benchmark does the same to every census in the world, then seeds them all again itself.",
@@ -20645,7 +20645,7 @@
  },
  "te_debug_demog.1.t_opt.tt": {
   "en": "Writes a TE_DEMOG_CONSEQ line for our capital: fam and faw are its men aged 20 to 39 and the women of those ages, share their share of its people and men_share of its men, term the conscription term from them, mc the one the census applies under Full and consc_mod the state's conscription multiplier; youth is the share aged 20 to 29, unemp the share of its workforce without work the census stored and unemp_walk the walk's own count of it, y_now the youth bulge's strength now and yb the one in force; sex is men per 100 women aged 20 to 59, sxb the balance this year's births read, tfr_sex and women_add its terms, fewer and more the two sex-balance modifiers' strengths; radicals_mod, turmoil_mod and feminist_mod are the state's reads of the fields they move. A TE_DEMOG_CONSEQ_COUNTRY line gives our census states together.",
-  "de": "Schreibt eine Zeile TE_DEMOG_CONSEQ für unsere Hauptstadt: fam und faw sind ihre Männer im Alter von 20 bis 39 und die Frauen dieses Alters, share ihr Anteil an ihrer Bevölkerung und men_share an ihren Männern, term der daraus abgeleitete Wehrpflichtterm, mc der, den die Volkszählung unter „Vollständig“ anwendet, und consc_mod der Wehrpflichtmultiplikator des Staates; youth ist der Anteil der 20- bis 29-Jährigen, unemp der von der Volkszählung gespeicherte Anteil ihrer Arbeitskräfte ohne Arbeit und unemp_walk die eigene Zählung des Durchlaufs davon, y_now die aktuelle Stärke des Jugendüberhangs und yb die wirksame; sex sind Männer je 100 Frauen im Alter von 20 bis 59, sxb das Verhältnis, das die Geburten dieses Jahres widerspiegeln, tfr_sex und women_add seine Terme, fewer und more die Stärken der beiden Modifikatoren für das Geschlechterverhältnis; radicals_mod, turmoil_mod und feminist_mod sind die Werte, die der Staat aus den Feldern liest, die sie verändern. Eine Zeile TE_DEMOG_CONSEQ_COUNTRY gibt unsere Volkszählungsstaaten zusammen an."
+  "de": "Schreibt eine Zeile TE_DEMOG_CONSEQ für unsere Hauptstadt: fam und faw sind ihre Männer im Alter von 20 bis 39 und die Frauen dieses Alters, share ihr Anteil an ihrer Bevölkerung und men_share an ihren Männern, term der daraus abgeleitete Wehrpflichtterm, mc der, den die Volkszählung unter „Voll“ anwendet, und consc_mod der Wehrpflichtmultiplikator des Staates; youth ist der Anteil der 20- bis 29-Jährigen, unemp der von der Volkszählung gespeicherte Anteil ihrer Arbeitskräfte ohne Arbeit und unemp_walk die eigene Zählung des Durchlaufs davon, y_now die aktuelle Stärke des Jugendüberhangs und yb die wirksame; sex sind Männer je 100 Frauen im Alter von 20 bis 59, sxb das Verhältnis, das die Geburten dieses Jahres widerspiegeln, tfr_sex und women_add seine Terme, fewer und more die Stärken der beiden Modifikatoren für das Geschlechterverhältnis; radicals_mod, turmoil_mod und feminist_mod sind die Werte, die der Staat aus den Feldern liest, die sie verändern. Eine Zeile TE_DEMOG_CONSEQ_COUNTRY gibt unsere Volkszählungsstaaten zusammen an."
  },
  "te_debug_demog.1.u": {
   "en": "The late game: log our capital's longevity figures",
@@ -20669,7 +20669,7 @@
  },
  "te_debug_demog.1.w.tt": {
   "en": "Opens a chooser that fires any of the ten events of the demographic event wave on our country now, whatever its condition and whether it fired within a generation. Its options act as they would under Full; the ones that use the census's levers need Full.",
-  "de": "Öffnet eine Auswahl, die eines der zehn Ereignisse der demografischen Ereigniswelle jetzt in unserem Land auslöst, gleich welche Bedingung gilt und ob es innerhalb einer Generation schon ausgelöst wurde. Seine Optionen wirken so, wie sie unter „Vollständig“ wirken würden; die, die die Stellhebel der Volkszählung nutzen, brauchen „Vollständig“."
+  "de": "Öffnet eine Auswahl, die eines der zehn Ereignisse der demografischen Ereigniswelle jetzt in unserem Land auslöst, gleich welche Bedingung gilt und ob es innerhalb einer Generation schon ausgelöst wurde. Seine Optionen wirken so, wie sie unter „Voll“ wirken würden; die, die die Stellhebel der Volkszählung nutzen, brauchen „Voll“."
  },
  "te_debug_demog.1.x": {
   "en": "Family policy: log what our capital's census reads",
@@ -20677,7 +20677,7 @@
  },
  "te_debug_demog.1.x.tt": {
   "en": "Writes a TE_DEMOG_FAMILY line to debug.log for our capital: the Family Policy readings it takes (desired family size, family housing, family planning knowledge, maternal deaths, the rural exemption, the boys per 100 girls), our measures' desired family size, the family policy term and Birth Limit's part of it, the farm share and the urban pull left, the boys added per 100 girls in force, and the census's stored desired family size, means, children per woman with its planned and unplanned parts, maternal deaths and men per 100 women.",
-  "de": "Schreibt eine Zeile TE_DEMOG_FAMILY in die debug.log für unsere Hauptstadt: die Werte der Familienpolitik, die sie übernimmt (gewünschte Familiengröße, Familienwohnraum, Wissen über Familienplanung, mütterliche Todesfälle, die ländliche Ausnahme, die Jungen je 100 Mädchen), die gewünschte Familiengröße aus unseren Maßnahmen, den Term der Familienpolitik und den Anteil der Geburtenbeschränkung daran, den Agraranteil und den verbleibenden städtischen Sog, die wirksamen zusätzlichen Jungen je 100 Mädchen und die gespeicherte gewünschte Familiengröße der Volkszählung, Mittelwerte, Kinder je Frau mit ihrem geplanten und ungeplanten Anteil, mütterliche Todesfälle und Männer je 100 Frauen."
+  "de": "Schreibt eine Zeile TE_DEMOG_FAMILY in die debug.log für unsere Hauptstadt: die Werte der Familienpolitik, die sie übernimmt (gewünschte Familiengröße, Familienwohnungsbau, Wissen über Familienplanung, mütterliche Todesfälle, die ländliche Ausnahme, die Jungen je 100 Mädchen), die gewünschte Familiengröße aus unseren Maßnahmen, den Term der Familienpolitik und den Anteil der Geburtenbeschränkung daran, den Agraranteil und den verbleibenden städtischen Sog, die wirksamen zusätzlichen Jungen je 100 Mädchen und die gespeicherte gewünschte Familiengröße der Volkszählung, Mittelwerte, Kinder je Frau mit ihrem geplanten und ungeplanten Anteil, mütterliche Todesfälle und Männer je 100 Frauen."
  },
  "te_debug_demog.1.z": {
   "en": "Close",
@@ -21729,7 +21729,7 @@
  },
  "te_debug_orbital_debris.1.a": {
   "en": "Cluttered: 10 low, 20 high",
-  "de": "Zugemüllt: 10 niedrig, 20 hoch"
+  "de": "Überfüllt: 10 niedrig, 20 hoch"
  },
  "te_debug_orbital_debris.1.b": {
   "en": "Hazardous: 20 low, 40 high",
@@ -22121,7 +22121,7 @@
  },
  "te_demog_wave.3.d": {
   "en": "The war has killed #v [SCOPE.GetRootScope.ScriptValue('te_demog_wave_war_dead_share')|%0]#! of our men of fighting age. There are streets where no family is untouched, and the young women of this generation face a shortage of husbands their mothers never knew. Whatever we decide, the gap will follow this cohort for the rest of its life.",
-  "de": "Der Krieg hat #v [SCOPE.GetRootScope.ScriptValue('te_demog_wave_war_dead_share')|%0]#! unserer Männer im kampffähigen Alter getötet. Es gibt Straßen, in denen keine Familie verschont geblieben ist, und die jungen Frauen dieser Generation sehen sich einem Mangel an Ehemännern gegenüber, den ihre Mütter nie kannten. Was auch immer wir beschließen, die Lücke wird diese Kohorte ihr ganzes Leben lang begleiten."
+  "de": "Der Krieg hat #v [SCOPE.GetRootScope.ScriptValue('te_demog_wave_war_dead_share')|%0]#! unserer Männer im wehrfähigen Alter getötet. Es gibt Straßen, in denen keine Familie verschont geblieben ist, und die jungen Frauen dieser Generation sehen sich einem Mangel an Ehemännern gegenüber, den ihre Mütter nie kannten. Was auch immer wir beschließen, die Lücke wird diese Kohorte ihr ganzes Leben lang begleiten."
  },
  "te_demog_wave.3.f": {
   "en": "\\\"They shall grow not old, as we that are left grow old: age shall not weary them, nor the years condemn.\\\"\\n\\n— Laurence Binyon, For the Fallen",
@@ -22513,7 +22513,7 @@
  },
  "te_peg.1.a.tt": {
   "en": "For #b one year#! your rate target cannot be set lower than #b four points above the world rate#! — whoever holds the dial, you or your central bank. #v Peg Confidence#! rises by #G 40#!. A rate that far above what your economy can bear is a downturn, and that is the price of the peg.",
-  "de": "Für #b ein Jahr#! kann Ihr Zinsziel nicht niedriger gesetzt werden als #b vier Punkte über dem Weltzins#! — egal, wer den Zinsregler hält, Sie oder Ihre Zentralbank. #v Bindungsvertrauen#! steigt um #G 40#!. Ein Zins, der so weit über dem liegt, was Ihre Wirtschaft verträgt, ist ein Abschwung, und das ist der Preis der Bindung."
+  "de": "Für #b ein Jahr#! kann Ihr Zielzins nicht niedriger gesetzt werden als #b vier Punkte über dem Weltzins#! — egal, wer den Zinsregler hält, Sie oder Ihre Zentralbank. #v Bindungsvertrauen#! steigt um #G 40#!. Ein Zins, der so weit über dem liegt, was Ihre Wirtschaft verträgt, ist ein Abschwung, und das ist der Preis der Bindung."
  },
  "te_peg.1.b": {
   "en": "Suspend payment in gold. For the duration.",
@@ -22649,7 +22649,7 @@
  },
  "te_seabed.3.a": {
   "en": "Another frontier, another scramble.",
-  "de": "Noch eine Grenze, noch ein Gerangel."
+  "de": "Noch eine Grenze, noch ein Wettlauf."
  },
  "te_seabed.3.a.tt": {
   "en": "Once we take part in a sharing, the Seabed tab of the $te_systems_window_title$ window shows our claims and every claimant's share of each basin.",
