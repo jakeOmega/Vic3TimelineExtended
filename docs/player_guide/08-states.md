@@ -199,14 +199,17 @@ Throughput.
 
 ### Tourism output
 
-Two sources on the card set a state's output bonus:
+Three sources on the card set a state's output bonus:
 
 | Source | Bonus |
 |---|---|
 | Base Appeal | A fixed score for each state region, from its scenery, climate and history. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. Nothing changes it. |
 | Cities | +100% for the largest city in the world, 5% less for each place below it, nothing below 20th. See [World city rankings](#world-city-rankings). |
+| Monuments | +10% for each monument. The wonders that stood in 1836 give more: the Taj Mahal +40%, Angkor Wat +30%, and Hagia Sophia, the Vatican, the Forbidden City, Saint Basil's Cathedral and the White House +20%; the Great Mosque of Djenné gives +20% once rebuilt. |
 
-The card's "All modifiers" line adds everything else that changes output. An
+The card's "All modifiers" line adds everything else that changes output. A
+Grand Monument adds +10% for each step of its grandeur (see [Grand
+monuments](02-timeline.md#grand-monuments)). An
 Airport or Spaceport adds +15% per level, scaled by staffing. A Highway adds +5%
 on the Civil, Electric Civil and Autonomous Highway methods and +2.5% on the
 Industrial and Electric Industrial ones. Laws add between
@@ -225,15 +228,14 @@ toward its cap:
 | Excess Infrastructure | The infrastructure the state produces less what its buildings use: +25% at 10,000, +50% at 30,000, +75% at 90,000. Each point adds less than the one before. | +100%, never quite reached |
 | Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
-| Monuments | +10% for a Skyscraper, +25% for each monument | none |
+| Skyscraper | +10% | none |
 
 Railways and Highways raise Excess Infrastructure by supplying infrastructure.
 Each building you add uses some, so a crowded industrial state has little to
 spare for visitors.
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
-(+50%), a Grand Monument (+25% for each step of its grandeur, see [Grand
-monuments](02-timeline.md#grand-monuments)) and bonuses from events.
+(+50%) and bonuses from events.
 
 ## World city rankings
 

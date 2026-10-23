@@ -913,7 +913,7 @@
  concept_tourism_infrastructure:0 "Excess Infrastructure"
  concept_tourism_infrastructure_desc:0 "The [concept_infrastructure] a state has left once its buildings have taken their share. Visitors use the roads, rails and harbours the local economy is not already using, so spare capacity raises [concept_tourism_throughput]. Each extra point adds less than the one before."
  concept_tourism_monuments:0 "Monuments"
- concept_tourism_monuments_desc:0 "Historical monuments, landmarks, and world wonders are major tourist attractions, significantly boosting [concept_tourism_throughput]."
+ concept_tourism_monuments_desc:0 "Historical monuments, landmarks, and world wonders are major tourist attractions, significantly boosting [concept_tourism_output]."
  concept_tourism_output:0 "Tourism Output"
  concept_tourism_output_desc:0 "The total output bonus for the [concept_tourism_system] industry in this state. It starts from the state's base appeal and city rank; airports, some laws, pollution, [concept_turmoil] and other modifiers then raise or lower it. Higher city ranks and more appealing locations produce more tourism revenue."
  concept_tourism_parks:0 "Parks"

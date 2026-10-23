@@ -2829,29 +2829,51 @@ tourism_throughput_from_parks = {
 	}
 }
 
-# Flat bonus from unique monuments
-tourism_throughput_from_monuments = {
+# A Skyscraper's flat throughput. It is no monument, so it stays a throughput
+# source when the monuments move to output.
+tourism_throughput_from_skyscraper = {
 	value = 0
 	if = {
 		limit = { has_building = building_skyscraper }
-		add = 0.10
-	}
-	every_scope_building = {
-		limit = {
-			is_building_group = bg_monuments
-		}
-		add = 0.25
+		add = 0.1
 	}
 }
 
 # Decree bonus: now applied via building_tourism_industry_throughput_add on decree_promote_tourism
 # tourism_throughput_from_decree: REMOVED (moved to decree modifier block)
 
+# --- INDIVIDUAL TOURISM OUTPUT MODIFIERS: MONUMENTS ---
+
+# Output from the state's one-off monuments (bg_monuments: vanilla's wonders,
+# the mod's, the Space Program, a power bloc statue), as base appeal is an
+# output bonus (tourism heritage spec 2026-10-23 § 5.2). The wonders standing
+# in 1836, and the Great Mosque of Djenné that vanilla rebuilds, give what
+# their state's heritage took off base appeal (tourism_heritage_generated.txt),
+# so the state's total is unchanged while they stand; every other monument +10%.
+# Grand Monuments are a group of their own (bg_grand_monuments) and give their
+# tourism through gm_local_tourism.
+tourism_bonus_from_monuments = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_group = bg_monuments }
+		if = { limit = { is_building_type = building_taj_mahal } add = 0.4 }
+		else_if = { limit = { is_building_type = building_angkor_wat } add = 0.3 }
+		else_if = { limit = { is_building_type = building_hagia_sophia } add = 0.2 }
+		else_if = { limit = { is_building_type = building_vatican_city } add = 0.2 }
+		else_if = { limit = { is_building_type = building_forbidden_city } add = 0.2 }
+		else_if = { limit = { is_building_type = building_saint_basils_cathedral } add = 0.2 }
+		else_if = { limit = { is_building_type = building_white_house } add = 0.2 }
+		else_if = { limit = { is_building_type = building_mosque_of_djenne } add = 0.2 }
+		else = { add = 0.1 }
+	}
+}
+
 # --- TOTAL CALCULATIONS ---
 
 total_tourism_output_bonus_percent = {
 	value = tourism_bonus_from_base_appeal
 	add = tourism_bonus_from_urban_centers
+	add = tourism_bonus_from_monuments
 	# Airports, laws, turmoil, pollution, obstinance now handled via direct modifiers
 }
 
@@ -2859,7 +2881,7 @@ total_tourism_throughput_bonus_percent = {
 	value = tourism_throughput_from_infrastructure
 	add = tourism_throughput_from_art
 	add = tourism_throughput_from_parks
-	add = tourism_throughput_from_monuments
+	add = tourism_throughput_from_skyscraper
 	# Decree now handled via decree modifier block
 }
 
@@ -2868,7 +2890,8 @@ total_tourism_throughput_bonus_percent = {
 # 0-100: how far one source has climbed toward its own cap, drawn as the thin
 # bar under its row. The caps are derived from the tiers above and written
 # here once, never in the .gui — keep them in step with those tiers.
-# Monuments are uncapped and have no bar.
+# Monuments (an output source) are uncapped and have no bar; nor has the
+# Skyscraper's flat +10% throughput.
 
 # Appeal is already a 0-1 score.
 tourism_fill_base_appeal_pct = {
