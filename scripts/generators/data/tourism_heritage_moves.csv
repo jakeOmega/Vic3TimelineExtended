@@ -1,0 +1,137 @@
+state,points,monument,kind,reason
+STATE_DISTRICT_OF_COLUMBIA,20,white_house,vanilla_wonder,the White House
+STATE_TUSCANY,10,uffizi_gallery,existing_landmark,the Uffizi
+STATE_LAZIO,20,vatican_city,vanilla_wonder,St Peter's and the Vatican
+STATE_LAZIO,20,capitoline_museums,existing_landmark,"the Capitol, Colosseum and Forum"
+STATE_ILE_DE_FRANCE,30,arc_de_triomphe,existing_landmark,the Arc and Versailles
+STATE_ZEALAND,20,liberty_column,existing_landmark,Copenhagen's castles
+STATE_RAJPUTANA,20,jantar_mantar,existing_landmark,"forts and palaces of Jaipur, Jodhpur, Udaipur"
+STATE_DELHI,40,red_fort,existing_landmark,Sultanate and Mughal sites
+STATE_ATTICA,40,parthenon,existing_landmark,the Acropolis
+STATE_UPPER_EGYPT,30,obelisks_of_karnak,existing_landmark,Karnak and Luxor
+STATE_UPPER_EGYPT,20,deir_el_bahari_cache,existing_site,the Valley of the Kings
+STATE_LEBANON,25,temples_of_baalbek,existing_landmark,"Baalbek, Byblos, Tyre"
+STATE_BAGHDAD,20,ishtar_gate_babylon,existing_site,Babylon
+STATE_FARS,40,persepolis,existing_landmark,Persepolis and Pasargadae
+STATE_EASTERN_THRACE,15,topkapi_palace,existing_landmark,Topkapı
+STATE_EASTERN_THRACE,20,hagia_sophia,vanilla_wonder,Hagia Sophia
+STATE_ANNAM,20,imperial_city_of_hue,existing_landmark,the Imperial City
+STATE_KANTO,20,nikko_toshogu,existing_landmark,Nikkō
+STATE_BEIJING,20,temple_of_heaven,existing_landmark,"Temple of Heaven, the Great Wall"
+STATE_BEIJING,20,forbidden_city,vanilla_wonder,the Forbidden City
+STATE_INGRIA,20,alexander_column,existing_landmark,St Petersburg's palaces
+STATE_CAMPANIA,30,pompeii,existing_site,Pompeii and Herculaneum
+STATE_CAMBODIA,30,angkor_wat,vanilla_wonder,Angkor
+STATE_AGRA,40,taj_mahal,vanilla_wonder,the Taj Mahal and Agra Fort
+STATE_SYRIA,20,palmyra,existing_landmark,"Palmyra, Krak des Chevaliers"
+STATE_PELOPONNESE,15,mycenae_grave_circle,existing_site,Mycenae
+STATE_PELOPONNESE,15,olympia,existing_site,Olympia
+STATE_CRETE,20,palace_of_knossos,existing_site,Knossos
+STATE_SINDH,25,mohenjo_daro,existing_site,Mohenjo-daro
+STATE_MOSUL,25,nineveh_library,existing_site,Nineveh
+STATE_XIAN,40,terracotta_army,existing_site,the Terracotta Army
+STATE_ICA,30,machu_picchu,existing_site,"Nazca, Cuzco, Machu Picchu"
+STATE_CHIAPAS,20,tomb_of_pakal,existing_site,Palenque
+STATE_LIMA,20,caral_supe,existing_site,pre-Columbian sites
+STATE_YEMEN,0,shibam,new_landmark,Shibam (other owner's part)
+STATE_WESTERN_MALI,20,mosque_of_djenne,vanilla_wonder,the Great Mosque (in ruins in 1836; vanilla's wonder rebuilds it)
+STATE_SYRIA,0,,revisit,10 points: Krak des Chevaliers (the residue after Palmyra's 20; Damascus is townscape)
+STATE_GOTLAND,0,,revisit,10 points: Visby (below floor after the scenery check: Gotland's coast scores like Scania's: its old score left little for Visby)
+STATE_WALES,0,,revisit,10 points: castles (below floor after the scenery check: Snowdonia and the coast carry most of the score)
+STATE_WEST_COUNTRY,0,,revisit,10 points: Stonehenge (below floor after the scenery check: the coast carries most of the score)
+STATE_PICARDY,0,,revisit,0 points: Amiens Cathedral (below floor after the scenery check: Picardy already scores like the flat plains (50); its cathedral added little)
+STATE_ORISSA,0,,revisit,10 points: Konark Sun Temple (below floor after the scenery check: the coast scores like the Circars')
+STATE_EAST_AEGEAN_ISLANDS,0,,revisit,0 points: old Rhodes (below floor after the scenery check: the East Aegean already scores like the Cyclades (85))
+STATE_RYUKYU_ISLANDS,0,,revisit,10 points: Shuri Castle (below floor after the scenery check: subtropical islands carry the score)
+STATE_EASTERN_HIMALAYAS,0,,revisit,"10 points: Tiger's Nest, dzongs (below floor after the scenery check: Himalayan scenery carries the score)"
+STATE_SHENGJING,0,,revisit,10 points: Mukden Palace (below floor after the scenery check: Manchuria's neighbours score 45-50)
+STATE_ISTRIA,0,,revisit,10 points: Pula Arena (below floor after the scenery check: the coast carries the score)
+STATE_MALTA,0,,revisit,10 points: megalithic temples (below floor after the scenery check: a Mediterranean island scores 60 or more on its own)
+STATE_ARAKAN,0,,revisit,10 points: Mrauk U (below floor after the scenery check: the coast scores like Tenasserim's)
+STATE_HONDURAS,0,,revisit,10 points: Copán (below floor after the scenery check: the Caribbean coast and Bay Islands carry the score)
+STATE_CEYLON,0,,revisit,10 points: Anuradhapura (below floor after the scenery check: beaches and highlands carry the score)
+STATE_DEIR_EZ_ZOR,0,,revisit,"10 points: Dura-Europos, Mari (below floor after the scenery check: an arid valley scores 30 on its own)"
+STATE_LEINSTER,0,,revisit,10 points: Newgrange (below floor after the scenery check: Wicklow and the Boyne carry the score)
+STATE_SARDINIA,0,,revisit,10 points: Nuragic ruins (below floor after the scenery check: the coast scores like Corsica's)
+STATE_TUNISIA,0,,revisit,10 points: Carthage (below floor after the scenery check: the coast carries the score; El Djem takes the ruins' 20)
+STATE_COLORADO,0,,revisit,"10 points: Mesa Verde (below floor (archaeology candidate, 1888))"
+STATE_ALBANIA,0,,revisit,"10 points: Butrint (below floor (archaeology candidate, 1928))"
+STATE_SOUTHERN_TRANSYLVANIA,0,,revisit,"10 points: castles (Bran, Hunedoara) (below floor)"
+STATE_MOLDAVIA,0,,revisit,10 points: painted monasteries of Bukovina (below floor; most lie outside the state)
+STATE_EAST_JAVA,0,,revisit,10 points: temple complexes (below floor)
+STATE_OMAN,0,,revisit,"10 points: forts (Nizwa, Bahla) (below floor)"
+STATE_GOLD_COAST,0,,revisit,"10 points: slave forts (Elmina, Cape Coast) (below floor; coastal parts, not Kumasi's)"
+STATE_ROMAGNA,0,,revisit,10 points: Ravenna's mosaics (below floor)
+STATE_NEW_MEXICO,0,,revisit,"10 points: Chaco Canyon, Taos Pueblo (below floor)"
+STATE_CAUCA,0,,revisit,"10 points: San Agustín (below floor (archaeology candidate, 1913))"
+STATE_CAJAMARCA,0,,revisit,"10 points: Inca Cajamarca, Chan Chan (below floor)"
+STATE_BAJO_PARAGUAY,0,,revisit,10 points: Jesuit missions (below floor)
+STATE_CONSTANTINE,0,,revisit,"10 points: Roman ruins (Djémila, Timgad) (below floor (archaeology candidate))"
+STATE_GUYENNE,0,,revisit,10 points: Lascaux (the site already sits in Aquitaine)
+STATE_BRITTANY,0,,revisit,10 points: Carnac megaliths (below floor)
+STATE_MAINE_ANJOU,0,,revisit,10 points: Loire châteaux (below floor; Chambord stands in Orléans)
+STATE_ALENTEJO,0,,revisit,"10 points: megaliths, Évora's temple (below floor)"
+STATE_MURCIA,0,,revisit,10 points: Cartagena (below floor)
+STATE_GUJARAT,0,,revisit,"10 points: Indus Valley sites (Dholavira, Lothal) (below floor (archaeology candidates))"
+STATE_BOMBAY,0,,revisit,"10 points: Ajanta and Ellora, Elephanta (below floor; Ajanta and Ellora lie in Hyderabad's lands)"
+STATE_KURNOOL,0,,revisit,10 points: notable ruins (below floor; see Hampi)
+STATE_EAST_HAUSALAND,0,,revisit,10 points: walled Kano (below floor)
+STATE_SENEGAL,0,,revisit,10 points: Gorée (below floor)
+STATE_NEJD,0,,revisit,10 points: Diriyah (below floor; ruined in 1818)
+STATE_EASTERN_MALI,0,,revisit,10 points: Dogon country (below floor)
+STATE_CYPRUS,0,,revisit,10 points: ancient ruins (below floor)
+STATE_TRABZON,0,,revisit,10 points: Sumela Monastery (below floor)
+STATE_ARMENIA,0,,revisit,"10 points: monasteries (Geghard, Tatev) (below floor)"
+STATE_AZERBAIJAN,0,,revisit,"10 points: Fire Temple, Gobustan (below floor)"
+STATE_KOSOVO,0,,revisit,10 points: medieval monasteries (below floor)
+STATE_BALKH,0,,revisit,"10 points: Bactria, Mazar-i-Sharif (below floor)"
+STATE_ERZURUM,0,,revisit,10 points: Ani (below floor)
+STATE_KARS,0,,revisit,10 points: Ani (below floor)
+STATE_CHIANG_MAI,0,,revisit,10 points: temples (below floor)
+STATE_NAKHON_RATCHASIMA,0,,revisit,10 points: Khmer ruins (Phimai) (below floor)
+STATE_NINGXIA,0,,revisit,10 points: Western Xia tombs (below floor)
+STATE_CHONGQING,0,,revisit,10 points: Dazu Rock Carvings (below floor)
+STATE_FUJIAN,0,,revisit,10 points: Tulou (below floor)
+STATE_WESTERN_HUBEI,0,,revisit,10 points: Wudang temples (below floor)
+STATE_EAST_KARELIA,0,,revisit,10 points: Kizhi Pogost (below floor)
+STATE_ARKHANGELSK,0,,revisit,10 points: Solovetsky Monastery (below floor)
+STATE_TURKMENIA,0,,revisit,10 points: Merv (below floor; Merv stands in Merz)
+STATE_SYRDARYA,0,,revisit,10 points: Yasawi mausoleum (below floor)
+STATE_CRIMEA,0,,revisit,"10 points: Bakhchisaray, Chersonesos (below floor)"
+STATE_APULIA,0,,revisit,10 points: trulli (below floor)
+STATE_SLOVAKIA,0,,revisit,10 points: castles (below floor)
+STATE_BAVARIA,0,,revisit,10 points: Neuschwanstein (built 1869-86: not standing in 1836)
+STATE_SAN_SALVADOR,0,,revisit,10 points: Mayan sites (below floor)
+STATE_PIAUI,0,,revisit,10 points: Serra da Capivara paintings (below floor)
+STATE_VERACRUZ,0,,revisit,10 points: El Tajín (below floor)
+STATE_PSKOV,0,,revisit,10 points: kremlin (below floor)
+STATE_YAROSLAVL,0,,revisit,10 points: Golden Ring churches (below floor)
+STATE_NIZHNY_NOVGOROD,0,,revisit,10 points: kremlin (below floor)
+STATE_RYAZAN,0,,revisit,10 points: kremlin (below floor)
+STATE_AGRA,0,,revisit,10 points: Fatehpur Sikri (the residue after the Taj Mahal's 40)
+STATE_XIAN,0,,revisit,10 points: Big Wild Goose Pagoda (below floor)
+STATE_GONDER,0,,revisit,10 points: Lalibela (below floor; may lie in another state)
+STATE_HEDJAZ,0,,pilgrimage,Mecca and Medina
+STATE_PALESTINE,0,,pilgrimage,Jerusalem
+STATE_SINAI,0,,pilgrimage,"Mount Sinai, St Catherine's"
+STATE_AWADH,0,,pilgrimage,Varanasi
+STATE_BIHAR,0,,pilgrimage,Bodh Gaya
+STATE_GALICIA,0,,pilgrimage,Santiago de Compostela
+STATE_KHORASAN,0,,pilgrimage,Mashhad
+STATE_PEGU,0,,pilgrimage,Shwedagon Pagoda
+STATE_NGARI,0,,pilgrimage,Mount Kailash
+STATE_SHIKOKU,0,,pilgrimage,the 88-temple pilgrimage
+STATE_MARYLAND,0,,pass2_townscape,monument standing: Washington Monument (Baltimore)
+STATE_HAITI,0,,pass2_townscape,monument standing: Sans-Souci Palace
+STATE_OLD_CASTILE,0,,pass2_townscape,monument standing: Arco de Santa María
+STATE_DAHOMEY,0,,pass2_townscape,monument standing: Royal Palaces of Abomey
+STATE_BENIN,0,,pass2_townscape,monument standing: Royal Palace of Benin
+STATE_RHONE,0,,pass2_townscape,monument standing: Statue of Louis XIV
+STATE_HOLLAND,0,,pass2_townscape,monument standing: Tomb of William the Silent
+STATE_PUNJAB,0,,pass2_townscape,monument standing: Shalimar Gardens
+STATE_IRAKAJEMI,0,,pass2_townscape,monument standing: Golestan Palace
+STATE_KONYA,0,,pass2_townscape,monument standing: Xanthos
+STATE_BRANDENBURG,0,,pass2_townscape,monument standing: Brandenburg Gate
+STATE_PIEDMONT,0,,pass2_townscape,monument standing: Basilica of Superga
+STATE_LOMBARDY,0,,pass2_townscape,monument standing: La Scala
+STATE_VENETIA,0,,pass2_townscape,monument standing: Lion of Saint Mark

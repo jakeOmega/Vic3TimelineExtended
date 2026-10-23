@@ -907,7 +907,7 @@
  concept_temperature_anomaly_desc:0 "The current deviation from pre-industrial global average temperature (in °C). Increases over time as [concept_greenhouse_gas_emissions] accumulate. Crossing threshold values (0.5°C, 1°C, 2°C, 3°C) triggers escalating climate events including extreme weather, agricultural disruption, sea level rise, and mass displacement."
  concept_tourism_art:0 "Art"
  concept_tourism_art_desc:0 "Fine art production attracts culturally-minded tourists. States with active art industries see a [concept_throughput] bonus from galleries, studios, and cultural events."
- concept_tourism_base_appeal_desc:0 "The inherent attractiveness of a state to tourists, based on its natural features, climate, and geography. This is a fixed baseline that other factors build upon."
+ concept_tourism_base_appeal_desc:0 "The inherent attractiveness of a state to tourists, based on its natural features, climate, geography and townscape. A state's historical monuments count in the monuments instead, so their tourism goes with them. This is the baseline that other factors build upon."
  concept_tourism_cities:0 "Cities"
  concept_tourism_cities_desc:0 "Urban centers attract tourists with their cultural offerings, shopping, entertainment, and historical significance. Higher city ranks provide larger [concept_tourism_output] bonuses."
  concept_tourism_infrastructure:0 "Excess Infrastructure"

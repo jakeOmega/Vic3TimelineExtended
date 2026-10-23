@@ -2693,10 +2693,14 @@
 
 # --- INDIVIDUAL TOURISM OUTPUT MODIFIERS ---
 
-# From the state's static, unchangeable appeal score (0-1, from the
-# base_tourism_appeal_value table above)
+# From the state's appeal score (0-1, from the base_tourism_appeal_value table
+# above), less the heritage its monuments take while they can exist
+# (tourism_heritage_moved, tourism_heritage_generated.txt; tourism heritage spec
+# 2026-10-23 § 6.3). National Parks read the raw score.
 tourism_bonus_from_base_appeal = {
 	value = base_tourism_appeal_value
+	subtract = tourism_heritage_moved
+	min = 0
 }
 
 city_size_rank = {
@@ -2893,7 +2897,7 @@ total_tourism_throughput_bonus_percent = {
 # Monuments (an output source) are uncapped and have no bar; nor has the
 # Skyscraper's flat +10% throughput.
 
-# Appeal is already a 0-1 score.
+# Appeal is already a 0-1 score: the net one, after the monuments' share.
 tourism_fill_base_appeal_pct = {
 	value = tourism_bonus_from_base_appeal
 	multiply = 100

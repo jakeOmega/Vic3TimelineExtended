@@ -5,6 +5,9 @@ heritage a monument stands for comes off base appeal through a gated term (§ 6)
 
     python3 test_tourism_heritage.py
 """
+import collections
+import importlib.util
+import json
 import re
 import unittest
 from pathlib import Path
@@ -12,6 +15,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 TOURISM = ROOT / "common" / "script_values" / "tourism.txt"
 PANEL_WIDGETS = ROOT / "gui" / "te_state_panel_widgets.gui"
+GENERATED = ROOT / "common" / "script_values" / "tourism_heritage_generated.txt"
+
+_spec = importlib.util.spec_from_file_location(
+    "gen_tourism_heritage", ROOT / "scripts" / "generators" / "gen_tourism_heritage.py")
+gen = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(gen)
 
 
 def read(path):
@@ -38,6 +47,12 @@ def block(text, name):
         depth += {"{": 1, "}": -1}.get(c, 0)
         i += 1
     return text[m.end():i - 1]
+
+
+def appeal_scores():
+    """STATE_X -> its score in base_tourism_appeal_value (the value after its state_region)."""
+    body = block(read(TOURISM), "base_tourism_appeal_value")
+    return {s: int(v) for s, v in re.findall(r"state_region = s:(STATE_\w+) \}\s*value = (\d+)", body)}
 
 
 # Spec § 5.2: each wonder's output figure is the appeal its state's heritage took.
@@ -74,6 +89,57 @@ class MonumentsAreOutput(unittest.TestCase):
         out_col, thr_col = card.split("te_state_tourism_throughput_tt", 1)
         self.assertTrue("tourism_bonus_from_monuments" in out_col, "Monuments not in the output column")
         self.assertTrue("tourism_throughput_from_skyscraper" in thr_col, "no Skyscraper row in throughput")
+
+
+class HeritageMoves(unittest.TestCase):
+    def test_generated_file_is_current(self):
+        self.assertEqual(read(GENERATED), gen.render(gen.load_moves()))
+
+    def test_gates_follow_the_rule_and_the_seeding(self):
+        out = squash(gen.render([gen.Move("STATE_X", 20, "a", "vanilla_wonder", ""),
+                                 gen.Move("STATE_X", 30, "b", "existing_landmark", ""),
+                                 gen.Move("STATE_X", 10, "c", "existing_site", ""),
+                                 gen.Move("STATE_X", 5, "d", "new_site", "")]))
+        self.assertIn("limit = { state_region = s:STATE_X } add = 20 if =", out)
+        self.assertIn("if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded } "
+                      "add = 30 }", out)
+        self.assertIn("if = { limit = { gm_system_enabled = yes } add = 15 }", out)
+        self.assertTrue(out.rstrip().endswith("divide = 100 }"))
+
+    def test_every_monument_exists(self):
+        seeds = read(ROOT / "common/scripted_effects/gm_landmark_effects.txt")
+        sites = read(ROOT / "common/scripted_effects/gm_archaeology_effects.txt")
+        vanilla = json.loads((ROOT / "vanilla_parsed/common/buildings.json").read_text(encoding="utf-8"))
+        for m in gen.load_moves():
+            if m.kind in ("existing_landmark", "new_landmark"):
+                self.assertIn(f"KEY = {m.monument} ", seeds, m)
+            elif m.kind in ("existing_site", "new_site"):
+                self.assertIn(f"KEY = {m.monument} ", sites, m)
+            else:
+                self.assertIn('"bg_monuments"', json.dumps(vanilla[f"building_{m.monument}"]), m)
+
+    def test_every_state_is_scored(self):
+        scored = appeal_scores()
+        for m in gen.load_moves():
+            self.assertIn(m.state, scored, m)
+
+    def test_base_appeal_nets_the_moves(self):
+        t = read(TOURISM)
+        body = squash(block(t, "tourism_bonus_from_base_appeal"))
+        self.assertIn("value = base_tourism_appeal_value subtract = tourism_heritage_moved min = 0", body)
+        parks = block(t, "tourism_throughput_from_parks")
+        self.assertIn("base_tourism_appeal_value", parks)
+        self.assertNotIn("tourism_bonus_from_base_appeal", parks)
+
+    def test_scores_left_match_the_spec(self):
+        scores = appeal_scores()
+        moved = collections.Counter()
+        for m in gen.load_moves():
+            moved[m.state] += m.points
+        for state, left in {"STATE_ATTICA": 60, "STATE_EASTERN_THRACE": 60, "STATE_BEIJING": 55,
+                            "STATE_ILE_DE_FRANCE": 70, "STATE_TUSCANY": 90, "STATE_CAMBODIA": 60,
+                            "STATE_CRETE": 75, "STATE_UPPER_EGYPT": 50}.items():
+            self.assertEqual(scores[state] - moved[state], left, state)
 
 
 if __name__ == "__main__":
