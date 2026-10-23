@@ -27,6 +27,10 @@
   "en": "Free Market Construction",
   "de": "Freie Marktbauwirtschaft"
  },
+ "rule_global_commons_rule": {
+  "en": "Global Commons",
+  "de": "Globale Gemeingüter"
+ },
  "rule_global_warming_rule": {
   "en": "Global Warming",
   "de": "Globale Erwärmung"
@@ -172,16 +176,16 @@
   "de": "Nur Anzeige"
  },
  "setting_demographics_display_only_desc": {
-  "en": "Experimental. The census and its panel, without its effects on the population.",
-  "de": "Experimentell. Die Volkszählung und ihre Tafel, ohne ihre Auswirkungen auf die Bevölkerung."
+  "en": "Experimental. The census and its panel only: births and deaths follow the game's own rules.",
+  "de": "Experimentell. Nur die Volkszählung und ihre Tafel: Geburten und Todesfälle folgen den Regeln des Spiels."
  },
  "setting_demographics_full": {
   "en": "Full",
-  "de": "Vollständig"
+  "de": "Voll"
  },
  "setting_demographics_full_desc": {
-  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel. From a later version it also shapes births, deaths and the workforce.",
-  "de": "Experimentell. Jeder Staat führt eine Volkszählung seiner Bevölkerung nach Alter und Geschlecht, die auf der Demografie-Tafel angezeigt wird. Ab einer späteren Version beeinflusst sie auch Geburten, Todesfälle und die Arbeitskräfte."
+  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births and deaths. It takes over the birth and death effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top. The workforce follows the game's own rules.",
+  "de": "Experimentell. Jeder Staat führt eine Volkszählung seiner Bevölkerung nach Alter und Geschlecht, die auf der Demografie-Tafel angezeigt wird, und die Volkszählung bestimmt seine Geburten und Todesfälle. Sie übernimmt die Geburten- und Sterblichkeitseffekte, die die meisten Gesetze und Technologien aufführen, sowie die des leichten Hungers; schwerer Hunger, Krieg und andere Schocks wirken weiterhin zusätzlich. Die Arbeitskräfte folgen den Regeln des Spiels."
  },
  "setting_free_market_construction_disabled": {
   "en": "Free Market Construction Disabled",
@@ -223,6 +227,22 @@
   "en": "As Free Market Construction Enabled, but buildings do not retool: switching production methods does not raise the construction a building uses as maintenance. [concept_construction] is a tradeable good: $building_construction_sector$ buildings sell it on the market, the government buys the amount you set each week in the construction panel, and investors buy for private projects from the [concept_investment_pool]. Industry and infrastructure use a little construction as maintenance, and the private share of construction follows the two purchases instead of your economic-system law. See [concept_te_construction_market].",
   "de": "Wie Freie Marktbauwirtschaft aktiviert, jedoch rüsten Gebäude nicht um: Ein Wechsel der Produktionsmethode erhöht nicht den Bau, den ein Gebäude als Unterhalt verbraucht. [concept_construction] ist ein handelbares Gut: $building_construction_sector$-Gebäude verkaufen es auf dem Markt, die Regierung kauft die Menge, die Sie jede Woche im Baupanel festlegen, und Investoren kaufen für private Projekte aus dem [concept_investment_pool]. Industrie und Infrastruktur verbrauchen etwas Bau als Unterhalt, und der private Anteil am Bau folgt den beiden Käufen statt Ihrem wirtschaftspolitischen Gesetz. Siehe [concept_te_construction_market]."
  },
+ "setting_global_commons_disabled": {
+  "en": "Global Commons Disabled",
+  "de": "Globale Gemeingüter deaktiviert"
+ },
+ "setting_global_commons_disabled_desc": {
+  "en": "The $building_ocean_mine$ is uncapped: any coastal state can build it without limit. The Law of the Sea has no seabed terms, and there are no Antarctic research stations and no Antarctic Treaty. Launch windows and orbital debris follow the Space Race rule.",
+  "de": "Die $building_ocean_mine$ ist unbegrenzt: Jeder Küstenstaat kann sie ohne Beschränkung bauen. Das Seerechtsübereinkommen enthält keine Meeresbodenbestimmungen, und es gibt weder Antarktis-Forschungsstationen noch einen Antarktisvertrag. Startfenster und Weltraumschrott folgen der Regel zum Wettlauf ins All."
+ },
+ "setting_global_commons_enabled": {
+  "en": "Global Commons Enabled",
+  "de": "Globale Gemeingüter aktiviert"
+ },
+ "setting_global_commons_enabled_desc": {
+  "en": "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licences, shared out every year among the countries with Abyssal Plain Mining, and every $building_ocean_mine$ level needs one. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin.",
+  "de": "Der Meeresboden ist ein Gemeingut. Jedes der fünf Meeresbecken hat ein festes Kontingent an Meeresbodenlizenzen, das jedes Jahr unter den Ländern mit Tiefseeebenen-Bergbau aufgeteilt wird, und jede Stufe der $building_ocean_mine$ braucht eine. Das Seerechtsübereinkommen der UN kann den Meeresboden regulieren, Forschungsstationen können auf dem Antarktiseis überwintern, und ein Antarktisvertrag kann das Südbecken schließen."
+ },
  "setting_global_warming_disabled": {
   "en": "Global Warming Disabled",
   "de": "Globale Erwärmung deaktiviert"
@@ -244,16 +264,16 @@
   "de": "Große Monumente deaktiviert"
  },
  "setting_grand_monuments_disabled_desc": {
-  "en": "The Grand Monument cannot be built, and no monument ceremony, contest or journal entry runs.",
-  "de": "Das Große Monument kann nicht errichtet werden, und es läuft weder eine Einweihungszeremonie noch ein Wettbewerb noch ein Journaleintrag dazu."
+  "en": "The Grand Monument cannot be built, and no monument ceremony, contest, trophy or journal entry runs.",
+  "de": "Das Große Monument kann nicht errichtet werden, und es läuft weder eine Einweihungszeremonie noch ein Wettbewerb noch eine Trophäe noch ein Journaleintrag dazu."
  },
  "setting_grand_monuments_enabled": {
   "en": "Grand Monuments Enabled",
   "de": "Große Monumente aktiviert"
  },
  "setting_grand_monuments_enabled_desc": {
-  "en": "Countries may raise Grand Monuments to their crown, republic, revolution, leader, faith or nation. What a monument honours can fall with the regime that raised it, and the next government decides whether to pull it down, rededicate it or keep it as heritage.",
-  "de": "Länder können Große Monumente zu Ehren ihrer Krone, Republik, Revolution, ihres Anführers, Glaubens oder ihrer Nation errichten. Was ein Monument ehrt, kann mit dem Regime fallen, das es errichtet hat, und die nächste Regierung entscheidet, ob sie es abreißt, umwidmet oder als Kulturerbe erhält."
+  "en": "Countries may raise Grand Monuments to their crown, republic, revolution, leader, faith or nation. What a monument honours can fall with the regime that raised it, and the next government decides whether to pull it down, rededicate it or keep it as heritage. An occupying army can carry one off as a trophy.",
+  "de": "Länder können Große Monumente zu Ehren ihrer Krone, Republik, Revolution, ihres Anführers, Glaubens oder ihrer Nation errichten. Was ein Monument ehrt, kann mit dem Regime fallen, das es errichtet hat, und die nächste Regierung entscheidet, ob sie es abreißt, umwidmet oder als Kulturerbe erhält. Eine Besatzungsarmee kann eines als Trophäe fortschaffen."
  },
  "setting_heir_education_disabled": {
   "en": "Heir Education Disabled",

@@ -952,8 +952,16 @@
   "de": "Großes Monument"
  },
  "building_grand_monument_desc": {
-  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. Its level is its [concept_grandeur]. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
-  "de": "Ein Monument, das eine Regierung für das errichtet, wofür sie steht: ihre Krone, ihre Republik, ihre Revolution, ihren Anführer, ihren Glauben oder die Nation. Seine Stufe ist seine [concept_grandeur]. Es verleiht Prestige, Legitimität und die Gunst gleichgesinnter Interessengruppen, solange das, was es ehrt, noch Bestand hat. Fällt dies, muss die nächste Regierung entscheiden, was damit geschehen soll. Siehe den Reiter „Große Monumente“ im Fenster „Timeline Extended“."
+  "en": "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.",
+  "de": "Ein Monument, das eine Regierung für das errichtet, wofür sie steht: ihre Krone, ihre Republik, ihre Revolution, ihren Anführer, ihren Glauben oder die Nation. Es wird als $building_grand_monument_site$ gebaut und mit der Widmung fertiggestellt, und zwar mit der [concept_grandeur] der errichteten Stufen. Es verleiht Prestige, Legitimität und die Gunst gleichgesinnter Interessengruppen, solange das, was es ehrt, noch Bestand hat. Fällt dies, muss die nächste Regierung entscheiden, was damit geschehen soll. Siehe den Reiter „Große Monumente“ im Fenster „Timeline Extended“."
+ },
+ "building_grand_monument_site": {
+  "en": "Grand Monument (Under Construction)",
+  "de": "Großes Monument (im Bau)"
+ },
+ "building_grand_monument_site_desc": {
+  "en": "A Grand Monument being built. Each level adds to the monument it will be; it has no upkeep and no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built.",
+  "de": "Ein Großes Monument im Bau. Jede Stufe trägt zu dem Monument bei, das es einmal sein wird; es hat weder Unterhalt noch Wirkung, bis es gewidmet wird, über seine Karte in der Staatsansicht oder den Reiter „Große Monumente“, sobald hier nichts mehr gebaut wird. Mit der Widmung wird das Monument mit den errichteten Stufen fertiggestellt."
  },
  "building_graphite_mine": {
   "en": "Graphite Mine",
@@ -970,6 +978,14 @@
  "building_great_indian_railway_jamalpur_works": {
   "en": "Great Indian Railway Jamalpur Works",
   "de": "Great-Indian-Railway-Werke Jamalpur"
+ },
+ "building_grid_transfer_station": {
+  "en": "Grid Transfer Station",
+  "de": "Netzübergabestation"
+ },
+ "building_grid_transfer_station_desc": {
+  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach through an $pm_grid_hvdc_interconnector$ or a $grid_interconnection_agreement$. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$, losing some on the way (#b Grid Transmission Efficiency#!). A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
+  "de": "Verbindet diesen Staat mit seinem [concept_power_grid]: unseren übrigen Stationen im selben [concept_market_area] sowie den Stationen, die diese über eine $pm_grid_hvdc_interconnector$ oder ein $grid_interconnection_agreement$ erreichen. Jeden Monat gleicht das Netz $electricity$ zwischen allen angeschlossenen Staaten so aus, dass jeder dasselbe Verhältnis von Angebot zu Nachfrage hat. Ein Staat mit Energieüberschuss gibt diese als @grid_power! $grid_power$ ans Netz ab, und ein Staat mit Mangel bezieht $grid_power$ und wandelt ihn wieder in $electricity$ um, wobei unterwegs ein Teil verloren geht (#b Netzübertragungseffizienz#!). Ein Netz gibt nur ab, was es aufgenommen hat. Eine pro Staat. Unsere erste Station in einem Marktgebiet kann in jedem unserer dortigen Staaten stehen; jede weitere muss an einen unserer Staaten grenzen, der bereits eine hat. Stets subventioniert."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -994,6 +1010,14 @@
  "building_group_bg_bureaucracy_throughput_add_desc": {
   "en": "A bonus or penalty to both input and output of $bg_bureaucracy$ buildings",
   "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $bg_bureaucracy$-Gebäude"
+ },
+ "building_group_bg_clean_power_construction_efficiency_add": {
+  "en": "$bg_clean_power$ Construction Efficiency",
+  "de": "Baueffizienz von $bg_clean_power$"
+ },
+ "building_group_bg_clean_power_construction_efficiency_add_desc": {
+  "en": "An increase or decrease to the weekly [concept_construction] progress for $bg_clean_power$ buildings: hydro, nuclear, fusion and renewable plants",
+  "de": "Eine Erhöhung oder Senkung des wöchentlichen [concept_construction]-Fortschritts für $bg_clean_power$-Gebäude: Wasser-, Kern-, Fusions- und Erneuerbare-Energien-Anlagen"
  },
  "building_group_bg_construction_throughput_add": {
   "en": "Construction Building [concept_throughput]",
@@ -1575,6 +1599,14 @@
   "en": "Deep-Sea Mine",
   "de": "Tiefseemine"
  },
+ "building_ocean_mine_throughput_add": {
+  "en": "$building_ocean_mine$ building [concept_throughput]",
+  "de": "[concept_throughput] – Gebäude $building_ocean_mine$"
+ },
+ "building_ocean_mine_throughput_add_desc": {
+  "en": "$building_ocean_mine$ building [concept_throughput]",
+  "de": "[concept_throughput] – Gebäude $building_ocean_mine$"
+ },
  "building_ocmc_unsan_gold_mines": {
   "en": "OCMC Unsan Gold Mines",
   "de": "OCMC-Goldminen Unsan"
@@ -1614,6 +1646,10 @@
  "building_orbital_battlestation_construction_site": {
   "en": "Orbital Battlestation Construction Site",
   "de": "Baustelle: Orbitale Kampfstation"
+ },
+ "building_orbital_battlestation_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_orbital_battlestation$ buildings, and to the military bonuses they give",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $building_orbital_battlestation$-Gebäude sowie auf die militärischen Boni, die sie gewähren"
  },
  "building_orient_express_sirkeci_terminal": {
   "en": "Orient Express Sirkeci Terminal",
@@ -2019,6 +2055,10 @@
   "en": "Has available Solar Receiver slots (including levels [concept_under_construction])",
   "de": "Verfügt über freie Solarempfänger-Slots (einschließlich der Stufen [concept_under_construction])"
  },
+ "building_solar_receiver_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_solar_receiver$ buildings",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $building_solar_receiver$-Gebäude"
+ },
  "building_sony_pictures_studios": {
   "en": "Sony Pictures Studios",
   "de": "Sony Pictures Studios"
@@ -2030,6 +2070,10 @@
  "building_space_elevator_construction_site": {
   "en": "Space Elevator Construction Site",
   "de": "Baustelle: Weltraumaufzug"
+ },
+ "building_space_elevator_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_space_elevator$ buildings",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $building_space_elevator$-Gebäude"
  },
  "building_space_mine": {
   "en": "Extraplanetary Base",

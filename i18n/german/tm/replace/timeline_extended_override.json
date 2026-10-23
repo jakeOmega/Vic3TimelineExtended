@@ -383,10 +383,6 @@
   "en": "Conductive and Base Metals",
   "de": "Leit- und Basismetalle"
  },
- "merchant_marine": {
-  "en": "Bulk Transportation",
-  "de": "Massengutverkehr"
- },
  "no_veterancy": {
   "en": "Recruit",
   "de": "Rekrut"
@@ -422,6 +418,10 @@
  "pmg_fertilizer_production": {
   "en": "Chemicals Production",
   "de": "Chemikalienproduktion"
+ },
+ "pmg_passenger_trains": {
+  "en": "Rolling Stock",
+  "de": "Rollmaterial"
  },
  "prestige_good_brunn_type_engines": {
   "en": "High-Performance Engines",
@@ -478,10 +478,6 @@
  "telephones": {
   "en": "Wired Telecommunication Gear",
   "de": "Kabelgebundene Telekommunikationsgeräte"
- },
- "transportation": {
-  "en": "Personal Transportation",
-  "de": "Individualverkehr"
  },
  "veterancy0": {
   "en": "Green",
