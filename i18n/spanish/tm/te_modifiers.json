@@ -1,0 +1,6 @@
+{
+ "goods_output_fertilizer_mult": {
+  "en": "Building @fertilizer! $fertilizer$ output",
+  "es": "Producción de $fertilizer$ @fertilizer! de edificios"
+ }
+}

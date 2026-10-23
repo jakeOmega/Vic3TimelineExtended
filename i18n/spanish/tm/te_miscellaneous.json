@@ -1,0 +1,618 @@
+{
+ "amendment_cb_dual_mandate": {
+  "en": "Dual Mandate Act",
+  "es": "Ley de mandato dual"
+ },
+ "amendment_cb_inflation_targeting": {
+  "en": "Inflation Targeting Act",
+  "es": "Ley de objetivo de inflación"
+ },
+ "amendment_civilian_police_oversight": {
+  "en": "Civilian Oversight",
+  "es": "Supervisión civil"
+ },
+ "amendment_corporate_data_exemption": {
+  "en": "Corporate Data Access Exemption",
+  "es": "Exención de acceso a datos corporativos"
+ },
+ "amendment_corporate_security_powers": {
+  "en": "Corporate Security Powers",
+  "es": "Poderes de seguridad corporativos"
+ },
+ "amendment_env_grandfather_clause": {
+  "en": "Environmental Grandfather Clause",
+  "es": "Cláusula medioambiental de derechos adquiridos"
+ },
+ "amendment_langreform_advisory_panel": {
+  "en": "Language Advisory Panel",
+  "es": "Comité asesor lingüístico"
+ },
+ "amendment_langreform_minority_protection": {
+  "en": "Minority Language Protection",
+  "es": "Protección de lenguas minoritarias"
+ },
+ "amendment_langreform_national_focus": {
+  "en": "National Language Priority",
+  "es": "Prioridad de la lengua nacional"
+ },
+ "amendment_langreform_powerful_academy": {
+  "en": "Language Academy Established",
+  "es": "Academia de la lengua establecida"
+ },
+ "amendment_langreform_revived_arabic": {
+  "en": "Classical Arabic Revival",
+  "es": "Resurgimiento del árabe clásico"
+ },
+ "amendment_langreform_revived_aramaic": {
+  "en": "Aramaic Revival",
+  "es": "Resurgimiento del arameo"
+ },
+ "amendment_langreform_revived_avestan": {
+  "en": "Avestan Revival",
+  "es": "Resurgimiento del avéstico"
+ },
+ "amendment_langreform_revived_chinese": {
+  "en": "Literary Chinese Revival",
+  "es": "Resurgimiento del chino literario"
+ },
+ "amendment_langreform_revived_coptic": {
+  "en": "Coptic Revival",
+  "es": "Resurgimiento del copto"
+ },
+ "amendment_langreform_revived_geez": {
+  "en": "Ge'ez Revival",
+  "es": "Resurgimiento del ge'ez"
+ },
+ "amendment_langreform_revived_gothic": {
+  "en": "Gothic Revival",
+  "es": "Resurgimiento del gótico"
+ },
+ "amendment_langreform_revived_greek": {
+  "en": "Classical Greek Revival",
+  "es": "Resurgimiento del griego clásico"
+ },
+ "amendment_langreform_revived_hebrew": {
+  "en": "Hebrew Revival",
+  "es": "Resurgimiento del hebreo"
+ },
+ "amendment_langreform_revived_irish": {
+  "en": "Classical Irish Revival",
+  "es": "Resurgimiento del irlandés clásico"
+ },
+ "amendment_langreform_revived_latin": {
+  "en": "Latin Revival",
+  "es": "Resurgimiento del latín"
+ },
+ "amendment_langreform_revived_mayan": {
+  "en": "Classic Mayan Revival",
+  "es": "Resurgimiento del maya clásico"
+ },
+ "amendment_langreform_revived_nahuatl": {
+  "en": "Classical Nahuatl Revival",
+  "es": "Resurgimiento del náhuatl clásico"
+ },
+ "amendment_langreform_revived_norse": {
+  "en": "Old Norse Revival",
+  "es": "Resurgimiento del nórdico antiguo"
+ },
+ "amendment_langreform_revived_pali": {
+  "en": "Pali Revival",
+  "es": "Resurgimiento del pali"
+ },
+ "amendment_langreform_revived_prussian": {
+  "en": "Old Prussian Revival",
+  "es": "Resurgimiento del prusiano antiguo"
+ },
+ "amendment_langreform_revived_sanskrit": {
+  "en": "Sanskrit Revival",
+  "es": "Resurgimiento del sánscrito"
+ },
+ "amendment_langreform_revived_slavonic": {
+  "en": "Old Church Slavonic Revival",
+  "es": "Resurgimiento del antiguo eslavo eclesiástico"
+ },
+ "amendment_language_naturalization_requirement": {
+  "en": "Language Requirement for Naturalization",
+  "es": "Requisito lingüístico para la naturalización"
+ },
+ "amendment_military_necessity_clause": {
+  "en": "Military Necessity Clause",
+  "es": "Cláusula de necesidad militar"
+ },
+ "amendment_minority_script_preservation": {
+  "en": "Minority Script Preservation",
+  "es": "Preservación de la escritura minoritaria"
+ },
+ "amendment_national_champion_exemption": {
+  "en": "National Champion Exemption",
+  "es": "Exención para campeones nacionales"
+ },
+ "amendment_no_first_strike": {
+  "en": "No-First-Strike Pledge",
+  "es": "Compromiso de no atacar primero"
+ },
+ "amendment_small_donor_matching": {
+  "en": "Small Donor Matching",
+  "es": "Igualación de pequeños donantes"
+ },
+ "amendment_undivided_farm_succession": {
+  "en": "Undivided Farm Succession",
+  "es": "Sucesión indivisa de explotaciones agrarias"
+ },
+ "banking_dash_mon_mandate_dual": {
+  "en": "Dual Mandate",
+  "es": "Mandato dual"
+ },
+ "banking_dash_mon_mandate_growth": {
+  "en": "Growth",
+  "es": "Crecimiento"
+ },
+ "banking_dash_mon_mandate_inflation": {
+  "en": "Inflation Targeting",
+  "es": "Objetivo de inflación"
+ },
+ "banking_dash_mon_mandate_peg": {
+  "en": "Peg Defence",
+  "es": "Defensa de la paridad"
+ },
+ "bg_megastructure_capped_private": {
+  "en": "Private Megastructure Facility",
+  "es": "Instalación privada de megaestructuras"
+ },
+ "concept_asset_relief_program": {
+  "en": "Asset Relief Program",
+  "es": "Programa de alivio de activos"
+ },
+ "concept_banking_asset_purchases": {
+  "en": "Asset Purchases",
+  "es": "Compra de activos"
+ },
+ "concept_banking_bank_gold": {
+  "en": "Bank's Gold",
+  "es": "Oro del banco"
+ },
+ "concept_banking_borrowed_gold": {
+  "en": "Borrowed Gold",
+  "es": "Oro prestado"
+ },
+ "concept_banking_credit_standing": {
+  "en": "Credit Standing",
+  "es": "Solvencia crediticia"
+ },
+ "concept_banking_exchange_rate": {
+  "en": "Exchange Rate Index",
+  "es": "Índice de tipo de cambio"
+ },
+ "concept_banking_expected_inflation": {
+  "en": "Expected Inflation",
+  "es": "Inflación esperada"
+ },
+ "concept_banking_gold_flow": {
+  "en": "Gold Flow",
+  "es": "Flujo de oro"
+ },
+ "concept_banking_inflation_anchoring": {
+  "en": "Inflation Anchoring",
+  "es": "Anclaje de la inflación"
+ },
+ "concept_banking_intervention_budget": {
+  "en": "Intervention Budget",
+  "es": "Presupuesto de intervención"
+ },
+ "concept_banking_monetary_anchor": {
+  "en": "Monetary Anchor",
+  "es": "Ancla monetaria"
+ },
+ "concept_banking_monetary_union": {
+  "en": "Monetary Union",
+  "es": "Unión monetaria"
+ },
+ "concept_banking_peg_confidence": {
+  "en": "Peg Confidence",
+  "es": "Confianza en la paridad"
+ },
+ "concept_banking_policy_rate": {
+  "en": "Policy Rate",
+  "es": "Tipo de interés oficial"
+ },
+ "concept_banking_policy_stance": {
+  "en": "Policy Stance",
+  "es": "Postura de política"
+ },
+ "concept_banking_price_pressure": {
+  "en": "Inflationary Pressure",
+  "es": "Presión inflacionista"
+ },
+ "concept_banking_rate_paid": {
+  "en": "Rate You Pay",
+  "es": "Tipo que pagas"
+ },
+ "concept_banking_rate_target": {
+  "en": "Rate Target",
+  "es": "Tipo objetivo"
+ },
+ "concept_banking_reference_rate": {
+  "en": "World Reference Rate",
+  "es": "Tipo de referencia mundial"
+ },
+ "concept_banking_risk_premium": {
+  "en": "Risk Premium",
+  "es": "Prima de riesgo"
+ },
+ "concept_banking_wage_pressure": {
+  "en": "Wage Pressure",
+  "es": "Presión salarial"
+ },
+ "concept_banking_world_rate": {
+  "en": "World Rate",
+  "es": "Tipo mundial"
+ },
+ "concept_ch_art_diminishing_returns": {
+  "en": "Diminishing Returns",
+  "es": "Rendimientos decrecientes"
+ },
+ "concept_ch_art_production": {
+  "en": "Art Production",
+  "es": "Producción artística"
+ },
+ "concept_ch_exported_model": {
+  "en": "Exported Model",
+  "es": "Modelo exportado"
+ },
+ "concept_ch_influence_tier": {
+  "en": "Influence Tier",
+  "es": "Nivel de influencia"
+ },
+ "concept_ch_modifier_bonus": {
+  "en": "Modifier Bonus",
+  "es": "Bonificación de modificador"
+ },
+ "concept_ch_tech_leadership": {
+  "en": "Tech Leadership",
+  "es": "Liderazgo tecnológico"
+ },
+ "concept_civil_rights_movement": {
+  "en": "Civil Rights Movement",
+  "es": "Movimiento por los derechos civiles"
+ },
+ "concept_construction_cost_scaling": {
+  "en": "Construction Cost Scaling",
+  "es": "Escalado del coste de construcción"
+ },
+ "concept_covert_warfare_system": {
+  "en": "Covert Warfare",
+  "es": "Guerra encubierta"
+ },
+ "concept_cultural_hegemony_system": {
+  "en": "Cultural Hegemony",
+  "es": "Hegemonía cultural"
+ },
+ "concept_cultural_pull_components": {
+  "en": "[concept_cultural_pull] Components",
+  "es": "Componentes del [concept_cultural_pull|l]"
+ },
+ "concept_cultural_pull_raw_score": {
+  "en": "Raw Score",
+  "es": "Puntuación bruta"
+ },
+ "concept_cultural_pull_share": {
+  "en": "Cultural Share",
+  "es": "Cuota cultural"
+ },
+ "concept_custom_treaty_articles": {
+  "en": "Custom Treaty Articles",
+  "es": "Artículos de tratado personalizados"
+ },
+ "concept_digital_rights_system": {
+  "en": "Digital Rights",
+  "es": "Derechos digitales"
+ },
+ "concept_export_credit_facility": {
+  "en": "Export Credit Facility",
+  "es": "Línea de crédito a la exportación"
+ },
+ "concept_foreign_cultural_benchmark": {
+  "en": "Foreign Cultural Benchmark",
+  "es": "Referente cultural extranjero"
+ },
+ "concept_fx_swap_lines": {
+  "en": "Swap Lines",
+  "es": "Líneas de swap"
+ },
+ "concept_global_warming_system": {
+  "en": "Global Warming",
+  "es": "Calentamiento global"
+ },
+ "concept_greenhouse_gas_emissions": {
+  "en": "Greenhouse Gas Emissions",
+  "es": "Emisiones de gases de efecto invernadero"
+ },
+ "concept_health_care_access": {
+  "en": "Health Care Access",
+  "es": "Acceso a la atención sanitaria"
+ },
+ "concept_heir_education_system": {
+  "en": "Heir Education",
+  "es": "Educación del heredero"
+ },
+ "concept_human_augmentation_system": {
+  "en": "Human Augmentation",
+  "es": "Mejora humana"
+ },
+ "concept_legislative_override_capacity": {
+  "en": "Legislative Override Capacity",
+  "es": "Capacidad de anulación legislativa"
+ },
+ "concept_lgbtq_rights_movement": {
+  "en": "LGBTQ+",
+  "es": "LGBTQ+"
+ },
+ "concept_mental_health_crisis": {
+  "en": "Mental Health Crisis",
+  "es": "Crisis de salud mental"
+ },
+ "concept_open_market_operations": {
+  "en": "Open Market Operations",
+  "es": "Operaciones de mercado abierto"
+ },
+ "concept_post_scarcity_system": {
+  "en": "Post-Scarcity",
+  "es": "Poscarencia"
+ },
+ "concept_rules_of_war_system": {
+  "en": "Rules of War",
+  "es": "Reglas de guerra"
+ },
+ "concept_solar_collector_array": {
+  "en": "Solar Collector",
+  "es": "Colector solar"
+ },
+ "concept_sr_setback_risk": {
+  "en": "Setback Risk",
+  "es": "Riesgo de contratiempos"
+ },
+ "concept_st_res_active_rate": {
+  "en": "Active",
+  "es": "Activa"
+ },
+ "concept_st_res_adjustment_step": {
+  "en": "Adjustment Step",
+  "es": "Paso de ajuste"
+ },
+ "concept_st_res_flow_cap": {
+  "en": "Flow Cap",
+  "es": "Límite de flujo"
+ },
+ "concept_st_res_policy": {
+  "en": "Reserve Policy",
+  "es": "Política de reserva"
+ },
+ "concept_st_res_rate_setting": {
+  "en": "Rate Setting",
+  "es": "Ajuste de la tasa"
+ },
+ "concept_state_collapse_system": {
+  "en": "State Collapse",
+  "es": "Colapso del Estado"
+ },
+ "concept_te_construction_market": {
+  "en": "Construction Market",
+  "es": "Mercado de la construcción"
+ },
+ "concept_tourism_base_appeal": {
+  "en": "Base Appeal",
+  "es": "Atractivo base"
+ },
+ "concept_un_arms_embargo": {
+  "en": "UN Arms Embargo",
+  "es": "Embargo de armas de la ONU"
+ },
+ "concept_un_authority_cap": {
+  "en": "Authority Cap",
+  "es": "Límite de autoridad"
+ },
+ "concept_un_development_fund": {
+  "en": "World Development Fund",
+  "es": "Fondo Mundial de Desarrollo"
+ },
+ "concept_un_food_reserve": {
+  "en": "World Food Reserve",
+  "es": "Reserva Mundial de Alimentos"
+ },
+ "concept_un_general_assembly": {
+  "en": "General Assembly",
+  "es": "Asamblea General"
+ },
+ "concept_un_mission_aid": {
+  "en": "Aid Mission",
+  "es": "Misión de ayuda"
+ },
+ "concept_un_mission_electoral": {
+  "en": "Electoral Observer Mission",
+  "es": "Misión de observación electoral"
+ },
+ "concept_un_mission_peacekeeping": {
+  "en": "Peacekeeping Mission",
+  "es": "Misión de mantenimiento de la paz"
+ },
+ "concept_un_mission_stabilisation": {
+  "en": "Stabilisation Mission",
+  "es": "Misión de estabilización"
+ },
+ "concept_un_passage_majority": {
+  "en": "Majority",
+  "es": "Mayoría"
+ },
+ "concept_un_passage_two_thirds": {
+  "en": "Two-Thirds",
+  "es": "Dos tercios"
+ },
+ "concept_un_permanent_member": {
+  "en": "Permanent Member",
+  "es": "Miembro permanente"
+ },
+ "concept_un_resolution_binding": {
+  "en": "Binding Resolution",
+  "es": "Resolución vinculante"
+ },
+ "concept_un_resolution_recommendatory": {
+  "en": "Recommendatory Resolution",
+  "es": "Resolución recomendatoria"
+ },
+ "concept_un_security_council": {
+  "en": "Security Council",
+  "es": "Consejo de Seguridad"
+ },
+ "concept_un_specialized_agencies": {
+  "en": "UN Specialized Agencies",
+  "es": "Agencias especializadas de la ONU"
+ },
+ "concept_un_standing_force": {
+  "en": "Standing UN Force",
+  "es": "Fuerza permanente de la ONU"
+ },
+ "concept_un_suspended_representation": {
+  "en": "Suspended Representation",
+  "es": "Representación suspendida"
+ },
+ "concept_un_tier_contested": {
+  "en": "Contested",
+  "es": "Cuestionada"
+ },
+ "concept_un_tier_established": {
+  "en": "Established",
+  "es": "Consolidada"
+ },
+ "concept_un_tier_moribund": {
+  "en": "Moribund",
+  "es": "Moribunda"
+ },
+ "concept_un_tier_strong": {
+  "en": "Strong",
+  "es": "Fuerte"
+ },
+ "concept_un_tier_supranational": {
+  "en": "Supranational",
+  "es": "Supranacional"
+ },
+ "concept_un_world_court": {
+  "en": "World Court",
+  "es": "Tribunal Mundial"
+ },
+ "concept_united_nations_system": {
+  "en": "United Nations",
+  "es": "Naciones Unidas"
+ },
+ "concept_world_war_system": {
+  "en": "World War",
+  "es": "Guerra Mundial"
+ },
+ "ig_approval_negative_modifier": {
+  "en": "Disapproves of Policy",
+  "es": "Desaprueba la política"
+ },
+ "ig_approval_positive_modifier": {
+  "en": "Approves of Policy",
+  "es": "Aprueba la política"
+ },
+ "ig_approval_very_negative_modifier": {
+  "en": "Strongly Disapproves of Policy",
+  "es": "Desaprueba rotundamente la política"
+ },
+ "principle_monetary_union_1": {
+  "en": "Monetary Cooperation",
+  "es": "Cooperación monetaria"
+ },
+ "principle_monetary_union_2": {
+  "en": "Common Currency",
+  "es": "Moneda común"
+ },
+ "principle_monetary_union_3": {
+  "en": "Fiscal Backstop",
+  "es": "Respaldo fiscal"
+ },
+ "principle_monetary_union_4": {
+  "en": "Banking Union",
+  "es": "Unión bancaria"
+ },
+ "principle_monetary_union_5": {
+  "en": "Reserve Currency",
+  "es": "Moneda de reserva"
+ },
+ "st_res_policy_buy_cheap": {
+  "en": "Buy When Cheap",
+  "es": "Comprar cuando esté barato"
+ },
+ "st_res_policy_label_budget": {
+  "en": "Weekly purchase budget (@money! estimated)",
+  "es": "Presupuesto semanal de compras (@money! estimado)"
+ },
+ "st_res_policy_label_buy_thr": {
+  "en": "Buy below (% of base price)",
+  "es": "Comprar por debajo de (% del precio base)"
+ },
+ "st_res_policy_label_ceil_pct": {
+  "en": "Target stockpile (% of capacity)",
+  "es": "Reserva objetivo (% de la capacidad)"
+ },
+ "st_res_policy_label_floor_pct": {
+  "en": "Protected stockpile (% of capacity)",
+  "es": "Reserva protegida (% de la capacidad)"
+ },
+ "st_res_policy_label_max_flow": {
+  "en": "Maximum weekly flow (units)",
+  "es": "Flujo semanal máximo (unidades)"
+ },
+ "st_res_policy_label_price_memory": {
+  "en": "Price memory (weeks averaged)",
+  "es": "Memoria de precios (semanas promediadas)"
+ },
+ "st_res_policy_label_ramp": {
+  "en": "Response ramp (points)",
+  "es": "Rampa de respuesta (puntos)"
+ },
+ "st_res_policy_label_sell_thr": {
+  "en": "Release above (% of base price)",
+  "es": "Liberar por encima de (% del precio base)"
+ },
+ "st_res_policy_manual": {
+  "en": "Manual",
+  "es": "Manual"
+ },
+ "st_res_policy_range_possible": {
+  "en": "Stays within this setting's range",
+  "es": "Se mantiene dentro del rango de este ajuste"
+ },
+ "st_res_policy_release_high": {
+  "en": "Release When Expensive",
+  "es": "Liberar cuando esté caro"
+ },
+ "st_res_policy_short_buy_cheap": {
+  "en": "Buy Cheap",
+  "es": "Comprar barato"
+ },
+ "st_res_policy_short_manual": {
+  "en": "Manual",
+  "es": "Manual"
+ },
+ "st_res_policy_short_release_high": {
+  "en": "Release High",
+  "es": "Liberar caro"
+ },
+ "st_res_policy_short_stabilize": {
+  "en": "Stabilize",
+  "es": "Estabilizar"
+ },
+ "st_res_policy_short_stockpile": {
+  "en": "Stockpile",
+  "es": "Acumular"
+ },
+ "st_res_policy_stabilize": {
+  "en": "Stabilize Prices",
+  "es": "Estabilizar precios"
+ },
+ "st_res_policy_stockpile": {
+  "en": "Stockpile",
+  "es": "Acumular"
+ }
+}

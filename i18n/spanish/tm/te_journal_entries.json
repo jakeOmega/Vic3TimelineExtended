@@ -1,0 +1,2394 @@
+{
+ "je_banking_cycle_command_economy": {
+  "en": "Logistics & Allocation Gauge",
+  "es": "Indicador de logística y asignación"
+ },
+ "je_banking_cycle_cooperative_ownership": {
+  "en": "Cooperative Finance Dashboard",
+  "es": "Panel de finanzas cooperativas"
+ },
+ "je_banking_cycle_title_market": {
+  "en": "Boom & Bust Cycle",
+  "es": "Ciclo de auge y caída"
+ },
+ "je_ch_how_header": {
+  "en": "How Cultural Hegemony Works",
+  "es": "Cómo funciona la hegemonía cultural"
+ },
+ "je_ch_how_sub_benchmark": {
+  "en": "Foreign Cultural Benchmark",
+  "es": "Referente cultural extranjero"
+ },
+ "je_ch_how_sub_board": {
+  "en": "Top Cultural Powers",
+  "es": "Principales potencias culturales"
+ },
+ "je_ch_how_sub_models": {
+  "en": "Political Models of the World",
+  "es": "Modelos políticos del mundo"
+ },
+ "je_ch_how_sub_programmes": {
+  "en": "Cultural Programmes",
+  "es": "Programas culturales"
+ },
+ "je_ch_how_sub_pull": {
+  "en": "Where Our Pull Comes From",
+  "es": "De dónde procede nuestro atractivo"
+ },
+ "je_ch_how_sub_share": {
+  "en": "Cultural Share and Tiers",
+  "es": "Cuota cultural y niveles"
+ },
+ "je_ch_ov_leaders_label": {
+  "en": "Leading Powers",
+  "es": "Potencias líderes"
+ },
+ "je_ch_ov_model_anarchist": {
+  "en": "Anarchist",
+  "es": "Anarquista"
+ },
+ "je_ch_ov_model_communist": {
+  "en": "Communist",
+  "es": "Comunista"
+ },
+ "je_ch_ov_model_corporatist": {
+  "en": "Corporatist",
+  "es": "Corporativista"
+ },
+ "je_ch_ov_model_developmentalist_junta": {
+  "en": "Dev. Junta",
+  "es": "Junta desarrollista"
+ },
+ "je_ch_ov_model_fascist": {
+  "en": "Fascist",
+  "es": "Fascista"
+ },
+ "je_ch_ov_model_liberal": {
+  "en": "Liberal",
+  "es": "Liberal"
+ },
+ "je_ch_ov_model_military_junta": {
+  "en": "Military Junta",
+  "es": "Junta militar"
+ },
+ "je_ch_ov_model_other": {
+  "en": "Mixed",
+  "es": "Mixta"
+ },
+ "je_ch_ov_model_reactionary": {
+  "en": "Reactionary",
+  "es": "Reaccionaria"
+ },
+ "je_ch_ov_model_religious": {
+  "en": "Theocratic",
+  "es": "Teocrática"
+ },
+ "je_ch_ov_model_republican": {
+  "en": "Republican",
+  "es": "Republicana"
+ },
+ "je_ch_ov_model_royalist_absolutist": {
+  "en": "Absolutist",
+  "es": "Absolutista"
+ },
+ "je_ch_ov_model_royalist_constitutional": {
+  "en": "Constitutional",
+  "es": "Constitucional"
+ },
+ "je_ch_ov_model_socialist": {
+  "en": "Socialist",
+  "es": "Socialista"
+ },
+ "je_ch_ov_model_technocratic": {
+  "en": "Technocratic",
+  "es": "Tecnocrática"
+ },
+ "je_ch_ov_rank_label": {
+  "en": "World Rank",
+  "es": "Rango mundial"
+ },
+ "je_ch_ov_tier_0": {
+  "en": "Negligible",
+  "es": "Insignificante"
+ },
+ "je_ch_ov_tier_1": {
+  "en": "Minor",
+  "es": "Menor"
+ },
+ "je_ch_ov_tier_2": {
+  "en": "Moderate",
+  "es": "Moderada"
+ },
+ "je_ch_ov_tier_3": {
+  "en": "Significant",
+  "es": "Significativa"
+ },
+ "je_ch_ov_tier_4": {
+  "en": "Major Power",
+  "es": "Potencia importante"
+ },
+ "je_ch_ov_tier_5": {
+  "en": "Hegemon",
+  "es": "Hegemón"
+ },
+ "je_ch_widget_board_header": {
+  "en": "Top Cultural Powers",
+  "es": "Principales potencias culturales"
+ },
+ "je_ch_widget_board_us": {
+  "en": "Our Rank: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
+  "es": "Nuestro puesto: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! de [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ },
+ "je_ch_widget_breakdown_header": {
+  "en": "Where Our Pull Comes From",
+  "es": "De dónde procede nuestro atractivo"
+ },
+ "je_ch_widget_funding_label": {
+  "en": "Programme Funding",
+  "es": "Financiación del programa"
+ },
+ "je_ch_widget_history_header": {
+  "en": "History",
+  "es": "Historial"
+ },
+ "je_ch_widget_models_header": {
+  "en": "Political Models of the World",
+  "es": "Modelos políticos del mundo"
+ },
+ "je_ch_widget_prog_institutes": {
+  "en": "Cultural Institutes",
+  "es": "Institutos culturales"
+ },
+ "je_ch_widget_prog_media": {
+  "en": "Global Media Campaign",
+  "es": "Campaña mediática global"
+ },
+ "je_ch_widget_prog_outreach": {
+  "en": "International Outreach",
+  "es": "Proyección internacional"
+ },
+ "je_ch_widget_prog_protectionism": {
+  "en": "Cultural Protectionism",
+  "es": "Proteccionismo cultural"
+ },
+ "je_ch_widget_programmes_header": {
+  "en": "Cultural Programmes",
+  "es": "Programas culturales"
+ },
+ "je_civil_rights": {
+  "en": "Civil Rights Movement",
+  "es": "Movimiento por los derechos civiles"
+ },
+ "je_colonial_empire": {
+  "en": "Colonial Empire",
+  "es": "Imperio colonial"
+ },
+ "je_colonial_empire_btn_open_choice": {
+  "en": "Review Options",
+  "es": "Revisar opciones"
+ },
+ "je_colonial_empire_candidates_eligible": {
+  "en": "Eligible territories",
+  "es": "Territorios elegibles"
+ },
+ "je_colonial_empire_candidates_largest": {
+  "en": "Largest",
+  "es": "Mayores"
+ },
+ "je_colonial_empire_candidates_round_table": {
+  "en": "Round Table could accept",
+  "es": "Podría aceptar la Mesa Redonda"
+ },
+ "je_colonial_empire_decision_planned": {
+  "en": "Planned Full Decolonization",
+  "es": "Descolonización total planificada"
+ },
+ "je_colonial_empire_decision_release": {
+  "en": "Release a Colonial Territory",
+  "es": "Liberar un territorio colonial"
+ },
+ "je_colonial_empire_decision_round_table": {
+  "en": "Round Table Conference",
+  "es": "Conferencia de la Mesa Redonda"
+ },
+ "je_colonial_empire_decisions_header": {
+  "en": "Decolonization",
+  "es": "Descolonización"
+ },
+ "je_colonial_empire_drift_acceptance": {
+  "en": "Colonial [concept_acceptance]",
+  "es": "[concept_acceptance] colonial"
+ },
+ "je_colonial_empire_drift_base": {
+  "en": "Base decline",
+  "es": "Descenso base"
+ },
+ "je_colonial_empire_drift_cap": {
+  "en": "Monthly limit",
+  "es": "Límite mensual"
+ },
+ "je_colonial_empire_drift_domestic": {
+  "en": "War and [concept_turmoil]",
+  "es": "Guerra y [concept_turmoil|l]"
+ },
+ "je_colonial_empire_drift_gp": {
+  "en": "[concept_great_power|E] pressure",
+  "es": "Presión de las [Concept('concept_great_power', 'grandes potencias')|E]"
+ },
+ "je_colonial_empire_drift_laws": {
+  "en": "Laws and events",
+  "es": "Leyes y eventos"
+ },
+ "je_colonial_empire_drift_policies": {
+  "en": "Programmes",
+  "es": "Programas"
+ },
+ "je_colonial_empire_drift_rank": {
+  "en": "Rank",
+  "es": "Rango"
+ },
+ "je_colonial_empire_history_header": {
+  "en": "History",
+  "es": "Historial"
+ },
+ "je_colonial_empire_how_header": {
+  "en": "How the Colonial Empire Works",
+  "es": "Cómo funciona el imperio colonial"
+ },
+ "je_colonial_empire_how_sub_bar": {
+  "en": "Colonial Stability",
+  "es": "Estabilidad colonial"
+ },
+ "je_colonial_empire_how_sub_decolonization": {
+  "en": "Decolonization",
+  "es": "Descolonización"
+ },
+ "je_colonial_empire_how_sub_moves": {
+  "en": "What Moves Stability",
+  "es": "Qué mueve la estabilidad"
+ },
+ "je_colonial_empire_how_sub_pressure": {
+  "en": "Great-Power Pressure",
+  "es": "Presión de las grandes potencias"
+ },
+ "je_colonial_empire_how_sub_programmes": {
+  "en": "Colonial Programmes",
+  "es": "Programas coloniales"
+ },
+ "je_colonial_empire_ov_act": {
+  "en": "Months Solidified: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
+  "es": "Meses consolidados: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
+ },
+ "je_colonial_empire_ov_hold": {
+  "en": "Months at 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
+  "es": "Meses en 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
+ },
+ "je_colonial_empire_ov_programmes_label": {
+  "en": "Programmes",
+  "es": "Programas"
+ },
+ "je_colonial_empire_ov_stability_value": {
+  "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
+  "es": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mes)"
+ },
+ "je_colonial_empire_pressure_header": {
+  "en": "International Pressure",
+  "es": "Presión internacional"
+ },
+ "je_colonial_empire_programmes_header": {
+  "en": "Colonial Programmes",
+  "es": "Programas coloniales"
+ },
+ "je_colonial_empire_stability_header": {
+  "en": "Why Stability Is Moving",
+  "es": "Por qué se mueve la estabilidad"
+ },
+ "je_colonial_empire_territories_header": {
+  "en": "Eligible Territories",
+  "es": "Territorios elegibles"
+ },
+ "je_colonial_empire_territories_more": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more')|0] más"
+ },
+ "je_colonial_empire_territory_head_gdp": {
+  "en": "GDP",
+  "es": "PIB"
+ },
+ "je_colonial_empire_territory_head_name": {
+  "en": "Territory",
+  "es": "Territorio"
+ },
+ "je_colonial_empire_territory_head_pop": {
+  "en": "People",
+  "es": "Habitantes"
+ },
+ "je_colonial_empire_territory_head_primary": {
+  "en": "Primary",
+  "es": "Principal"
+ },
+ "je_colonial_empire_territory_head_sol": {
+  "en": "SoL",
+  "es": "NdV"
+ },
+ "je_covert_warfare": {
+  "en": "Covert Warfare",
+  "es": "Guerra encubierta"
+ },
+ "je_create_new_religion": {
+  "en": "Create New Religion",
+  "es": "Crear una nueva religión"
+ },
+ "je_cultural_hegemony": {
+  "en": "Cultural Hegemony",
+  "es": "Hegemonía cultural"
+ },
+ "je_digital_rights": {
+  "en": "Digital Rights & Surveillance",
+  "es": "Derechos digitales y vigilancia"
+ },
+ "je_global_warming": {
+  "en": "Global Warming",
+  "es": "Calentamiento global"
+ },
+ "je_global_warming_progress": {
+  "en": "#bold Global Temperature:#! #v [ROOT.GetCountry.MakeScope.ScriptValue('temperature_anomaly_display')|2]#! °C - [ROOT.GetCountry.GetCustom('gw_severity_short')]",
+  "es": "#bold Temperatura global:#! #v [ROOT.GetCountry.MakeScope.ScriptValue('temperature_anomaly_display')|2]#! °C - [ROOT.GetCountry.GetCustom('gw_severity_short')]"
+ },
+ "je_grand_monuments": {
+  "en": "Monuments",
+  "es": "Monumentos"
+ },
+ "je_group_covert_warfare": {
+  "en": "Covert Warfare",
+  "es": "Guerra encubierta"
+ },
+ "je_group_environment": {
+  "en": "Environment",
+  "es": "Medio ambiente"
+ },
+ "je_group_soft_power": {
+  "en": "Soft Power",
+  "es": "Poder blando"
+ },
+ "je_heir_education": {
+  "en": "Heir Education",
+  "es": "Educación del heredero"
+ },
+ "je_human_augmentation": {
+  "en": "Human Augmentation Debate",
+  "es": "Debate sobre la mejora humana"
+ },
+ "je_iw_ci_economic_label": {
+  "en": "Economic defence",
+  "es": "Defensa económica"
+ },
+ "je_iw_ci_funding_label": {
+  "en": "Funding bonus",
+  "es": "Bonificación de financiación"
+ },
+ "je_iw_ci_ideological_label": {
+  "en": "Ideological defence",
+  "es": "Defensa ideológica"
+ },
+ "je_iw_ci_military_label": {
+  "en": "Military defence",
+  "es": "Defensa militar"
+ },
+ "je_iw_ci_slots_label": {
+  "en": "Unused slots redirected",
+  "es": "Cupos sin usar redirigidos"
+ },
+ "je_iw_ci_sub_caught": {
+  "en": "Last Caught",
+  "es": "Última captura"
+ },
+ "je_iw_defense_header": {
+  "en": "Counterintelligence",
+  "es": "Contrainteligencia"
+ },
+ "je_iw_detection_base": {
+  "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_detection_base_display')|0]%#! a month",
+  "es": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_detection_base_display')|0]%#! al mes"
+ },
+ "je_iw_detection_base_label": {
+  "en": "Base risk",
+  "es": "Riesgo base"
+ },
+ "je_iw_fund_tbl_head_cost": {
+  "en": "Cost/week",
+  "es": "Coste/semana"
+ },
+ "je_iw_fund_tbl_head_level": {
+  "en": "Level",
+  "es": "Nivel"
+ },
+ "je_iw_funding_header": {
+  "en": "Funding",
+  "es": "Financiación"
+ },
+ "je_iw_funding_stepper_label": {
+  "en": "Level",
+  "es": "Nivel"
+ },
+ "je_iw_funding_sub_levels": {
+  "en": "Funding Levels",
+  "es": "Niveles de financiación"
+ },
+ "je_iw_how_header": {
+  "en": "How Covert Warfare Works",
+  "es": "Cómo funciona la guerra encubierta"
+ },
+ "je_iw_how_sub_ci": {
+  "en": "Counterintelligence",
+  "es": "Contrainteligencia"
+ },
+ "je_iw_how_sub_detection": {
+  "en": "Detection",
+  "es": "Detección"
+ },
+ "je_iw_how_sub_funding": {
+  "en": "Funding",
+  "es": "Financiación"
+ },
+ "je_iw_how_sub_networks": {
+  "en": "Agent Networks",
+  "es": "Redes de agentes"
+ },
+ "je_iw_how_sub_ops": {
+  "en": "Operations",
+  "es": "Operaciones"
+ },
+ "je_iw_how_sub_standing": {
+  "en": "Intelligence Standing",
+  "es": "Posición de inteligencia"
+ },
+ "je_iw_how_sub_tradecraft": {
+  "en": "Tradecraft",
+  "es": "Técnicas de espionaje"
+ },
+ "je_iw_how_sub_watching": {
+  "en": "Watching",
+  "es": "Vigilancia"
+ },
+ "je_iw_known_expose_button": {
+  "en": "Expose",
+  "es": "Desenmascarar"
+ },
+ "je_iw_known_header": {
+  "en": "Known Foreign Operations",
+  "es": "Operaciones extranjeras conocidas"
+ },
+ "je_iw_net_header": {
+  "en": "Agent Networks",
+  "es": "Redes de agentes"
+ },
+ "je_iw_net_row_catch": {
+  "en": "Catching their operations: #G +[ScriptContainer.MakeScope.ScriptValue('covert_net_catch_display')|1]#! detection risk",
+  "es": "Detectar sus operaciones: #G +[ScriptContainer.MakeScope.ScriptValue('covert_net_catch_display')|1]#! de riesgo de detección"
+ },
+ "je_iw_net_row_intel_none": {
+  "en": "Their service: nothing yet",
+  "es": "Su servicio: nada todavía"
+ },
+ "je_iw_net_row_intel_ops": {
+  "en": "Their operations against us: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! running",
+  "es": "Sus operaciones contra nosotros: #v [ScriptContainer.GetVariableValue('iw_net_intel_ops')|0]#! en curso"
+ },
+ "je_iw_net_row_title": {
+  "en": "Network in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "Red en [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_net_row_trend_decaying": {
+  "en": "#R Decaying#!: no operations running there",
+  "es": "#R En declive#!: no hay operaciones en curso allí"
+ },
+ "je_iw_net_row_trend_growing": {
+  "en": "#G Growing#! while operations run there",
+  "es": "#G En crecimiento#! mientras haya operaciones en curso allí"
+ },
+ "je_iw_no_operations": {
+  "en": "No operations running",
+  "es": "Ninguna operación en curso"
+ },
+ "je_iw_op_row_comms_disruption": {
+  "en": "#R Comms Disruption#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#R Interrupción de comunicaciones#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_counterintel_support": {
+  "en": "#G Supporting Counterintelligence#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#G Apoyo a la contrainteligencia#! en [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_cultivate_assets": {
+  "en": "#G Cultivating Assets#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#G Captación de activos#! en [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_destabilization": {
+  "en": "#R Destabilization#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#R Desestabilización#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_detection": {
+  "en": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! a month",
+  "es": "[concept_operation_detection]: #R [ScriptContainer.GetVariableValue('iw_detect')|1]%#! al mes"
+ },
+ "je_iw_op_row_detection_none": {
+  "en": "[concept_operation_detection]: #G none#!, an open arrangement",
+  "es": "[concept_operation_detection]: #G ninguno#!, un acuerdo abierto"
+ },
+ "je_iw_op_row_election_interference": {
+  "en": "#Y Election Interference#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#Y Injerencia electoral#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_financial_subversion": {
+  "en": "#Y Financial Subversion#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#Y Subversión financiera#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_ideological_subversion": {
+  "en": "#Y Ideological Subversion#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#Y Subversión ideológica#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_industrial_espionage": {
+  "en": "#G Industrial Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#G Espionaje industrial#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_influence_campaign": {
+  "en": "#Y Influence Campaign#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#Y Campaña de influencia#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_infrastructure_sabotage": {
+  "en": "#R [concept_infrastructure] Sabotage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#R Sabotaje de [concept_infrastructure|l]#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_military_espionage": {
+  "en": "#G Military Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#G Espionaje militar#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_nuclear_sabotage": {
+  "en": "#R Nuclear Sabotage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#R Sabotaje nuclear#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_phase_prep": {
+  "en": "Phase: #R Preparatory#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Establishing",
+  "es": "Fase: #R Preparatoria#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] meses para el establecimiento"
+ },
+ "je_iw_op_row_regime_change": {
+  "en": "#R Regime Change#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#R Cambio de régimen#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_secure_material": {
+  "en": "#G Securing Loose Material#! in [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#G Aseguramiento de material suelto#! en [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_space_espionage": {
+  "en": "#G Space Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]",
+  "es": "#G Espionaje espacial#! contra [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ },
+ "je_iw_op_row_tech_stolen_none": {
+  "en": "[concept_technology] stolen: nothing yet",
+  "es": "[concept_technology] robada: nada todavía"
+ },
+ "je_iw_ov_caught_label": {
+  "en": "Spy Caught",
+  "es": "Espía capturado"
+ },
+ "je_iw_ov_funding_label": {
+  "en": "Funding [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display')|0]",
+  "es": "Financiación [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display')|0]"
+ },
+ "je_iw_ov_standing_0": {
+  "en": "Vulnerable",
+  "es": "Vulnerable"
+ },
+ "je_iw_ov_standing_1": {
+  "en": "Exposed",
+  "es": "Expuesta"
+ },
+ "je_iw_ov_standing_2": {
+  "en": "Defended",
+  "es": "Defendida"
+ },
+ "je_iw_ov_standing_3": {
+  "en": "Hardened",
+  "es": "Reforzada"
+ },
+ "je_iw_ov_standing_4": {
+  "en": "Fortress",
+  "es": "Fortaleza"
+ },
+ "je_iw_priority_stepper_label": {
+  "en": "Priority",
+  "es": "Prioridad"
+ },
+ "je_iw_sec_ops_header": {
+  "en": "Operations",
+  "es": "Operaciones"
+ },
+ "je_iw_slots_detail": {
+  "en": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display')|0]#! of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! in use",
+  "es": "[concept_operation_slots]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_active_display')|0]#! de #v [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_slots_display')|0]#! en uso"
+ },
+ "je_iw_stand_down_button": {
+  "en": "Stand down",
+  "es": "Retirarse"
+ },
+ "je_mental_health_crisis": {
+  "en": "Mental Health Crisis",
+  "es": "Crisis de salud mental"
+ },
+ "je_nuclear_how_header": {
+  "en": "How Nuclear Weapons Work",
+  "es": "Cómo funcionan las armas nucleares"
+ },
+ "je_nuclear_how_sub_crisis": {
+  "en": "Crises",
+  "es": "Crisis"
+ },
+ "je_nuclear_how_sub_delivery": {
+  "en": "Delivery and Defence",
+  "es": "Lanzamiento y defensa"
+ },
+ "je_nuclear_how_sub_home": {
+  "en": "At Home",
+  "es": "En casa"
+ },
+ "je_nuclear_how_sub_posture": {
+  "en": "Posture and Forces",
+  "es": "Postura y fuerzas"
+ },
+ "je_nuclear_how_sub_powers": {
+  "en": "Nuclear Powers",
+  "es": "Potencias nucleares"
+ },
+ "je_nuclear_how_sub_programme": {
+  "en": "The Programme",
+  "es": "El programa"
+ },
+ "je_nuclear_how_sub_reputation": {
+  "en": "Reputation",
+  "es": "Reputación"
+ },
+ "je_nuclear_how_sub_taboo": {
+  "en": "The Nuclear Taboo",
+  "es": "El tabú nuclear"
+ },
+ "je_nuclear_ov_prog_0": {
+  "en": "Unfunded",
+  "es": "Sin financiación"
+ },
+ "je_nuclear_ov_prog_1": {
+  "en": "Developing",
+  "es": "En desarrollo"
+ },
+ "je_nuclear_ov_prog_2": {
+  "en": "Producing",
+  "es": "En producción"
+ },
+ "je_nuclear_ov_prog_3": {
+  "en": "Frozen",
+  "es": "Congelado"
+ },
+ "je_nuclear_ov_prog_4": {
+  "en": "At Ceiling",
+  "es": "En el límite"
+ },
+ "je_nuclear_ov_prog_5": {
+  "en": "Dismantling",
+  "es": "Desmantelando"
+ },
+ "je_nuclear_ov_prog_6": {
+  "en": "No Programme",
+  "es": "Sin programa"
+ },
+ "je_nuclear_ov_prog_7": {
+  "en": "Renounced",
+  "es": "Renunciado"
+ },
+ "je_nuclear_ov_prog_8": {
+  "en": "Disarmed",
+  "es": "Desarmado"
+ },
+ "je_nuclear_ov_taboo_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mes)"
+ },
+ "je_nuclear_program": {
+  "en": "Nuclear Weapons",
+  "es": "Armas nucleares"
+ },
+ "je_nuclear_program_status_line": {
+  "en": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Warheads held: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]",
+  "es": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Ojivas en nuestro poder: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]"
+ },
+ "je_nuclear_program_widget_defence_label": {
+  "en": "Home defence",
+  "es": "Defensa nacional"
+ },
+ "je_nuclear_program_widget_delivery_label": {
+  "en": "Delivery capability",
+  "es": "Capacidad de lanzamiento"
+ },
+ "je_nuclear_program_widget_first_device_label": {
+  "en": "First device",
+  "es": "Primer artefacto"
+ },
+ "je_nuclear_program_widget_funding_label": {
+  "en": "Programme funding",
+  "es": "Financiación del programa"
+ },
+ "je_nuclear_program_widget_funding_value": {
+  "en": "Step #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/week",
+  "es": "Escalón #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/semana"
+ },
+ "je_nuclear_program_widget_next_label": {
+  "en": "Next warhead in",
+  "es": "Próxima ojiva en"
+ },
+ "je_nuclear_program_widget_odds_header": {
+  "en": "Delivery and Defence",
+  "es": "Lanzamiento y defensa"
+ },
+ "je_nuclear_program_widget_powers_header": {
+  "en": "Nuclear Powers",
+  "es": "Potencias nucleares"
+ },
+ "je_nuclear_program_widget_programme_header": {
+  "en": "The Programme",
+  "es": "El programa"
+ },
+ "je_nuclear_program_widget_rate_label": {
+  "en": "Warhead production",
+  "es": "Producción de ojivas"
+ },
+ "je_nuclear_program_widget_rate_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / month",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / mes"
+ },
+ "je_nuclear_program_widget_taboo_burden_label": {
+  "en": "Burden of our arsenal",
+  "es": "Carga de nuestro arsenal"
+ },
+ "je_nuclear_program_widget_taboo_burden_value": {
+  "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
+  "es": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! de prestigio · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! de influencia"
+ },
+ "je_nuclear_program_widget_taboo_header": {
+  "en": "The Nuclear Taboo",
+  "es": "El tabú nuclear"
+ },
+ "je_nuclear_program_widget_taboo_heading_label": {
+  "en": "Heading toward",
+  "es": "Rumbo a"
+ },
+ "je_nuclear_program_widget_taboo_history_header": {
+  "en": "The Taboo Over Time",
+  "es": "El tabú a lo largo del tiempo"
+ },
+ "je_nuclear_program_widget_taboo_score_label": {
+  "en": "Nuclear taboo",
+  "es": "Tabú nuclear"
+ },
+ "je_nuclear_program_widget_taboo_strategic_label": {
+  "en": "First use on a city",
+  "es": "Primer uso contra una ciudad"
+ },
+ "je_nuclear_program_widget_taboo_tactical_label": {
+  "en": "First use in battle",
+  "es": "Primer uso en combate"
+ },
+ "je_nuclear_program_widget_taboo_threat_label": {
+  "en": "A public ultimatum",
+  "es": "Un ultimátum público"
+ },
+ "je_nuclear_program_widget_taboo_threat_value": {
+  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy",
+  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! de infamia"
+ },
+ "je_post_scarcity": {
+  "en": "Post-Scarcity Transition",
+  "es": "Transición a la poscarencia"
+ },
+ "je_space_race_interstellar_probe": {
+  "en": "Interstellar Probe",
+  "es": "Sonda interestelar"
+ },
+ "je_space_race_interstellar_probe_completion_header": {
+  "en": "Probe Leaves the Solar System",
+  "es": "La sonda abandona el sistema solar"
+ },
+ "je_space_race_interstellar_probe_failure_header": {
+  "en": "Interstellar Program Suspended",
+  "es": "Programa interestelar suspendido"
+ },
+ "je_space_race_interstellar_probe_on_completion_header": {
+  "en": "Our probe sails beyond the Sun",
+  "es": "Nuestra sonda navega más allá del Sol"
+ },
+ "je_space_race_interstellar_probe_on_failure_header": {
+  "en": "Our interstellar mission is on hold",
+  "es": "Nuestra misión interestelar queda en suspenso"
+ },
+ "je_space_race_interstellar_probe_setback_header": {
+  "en": "If the interstellar program is cancelled",
+  "es": "Si se cancela el programa interestelar"
+ },
+ "je_space_race_interstellar_results": {
+  "en": "Interstellar Probe: Awaiting Data",
+  "es": "Sonda interestelar: a la espera de datos"
+ },
+ "je_space_race_interstellar_results_completion_header": {
+  "en": "Signal From the Stars",
+  "es": "Señal desde las estrellas"
+ },
+ "je_space_race_interstellar_results_on_completion_header": {
+  "en": "Our probe sends back its findings",
+  "es": "Nuestra sonda envía sus hallazgos"
+ },
+ "je_space_race_mars_landing": {
+  "en": "Mars Landing",
+  "es": "Aterrizaje en Marte"
+ },
+ "je_space_race_mars_landing_completion_header": {
+  "en": "Boots on Mars",
+  "es": "Pisadas en Marte"
+ },
+ "je_space_race_mars_landing_failure_header": {
+  "en": "Mars Program Suspended",
+  "es": "Programa marciano suspendido"
+ },
+ "je_space_race_mars_landing_on_completion_header": {
+  "en": "Humanity walks on Mars",
+  "es": "La humanidad camina sobre Marte"
+ },
+ "je_space_race_mars_landing_on_failure_header": {
+  "en": "Our Mars ambitions are on hold",
+  "es": "Nuestras ambiciones en Marte quedan en suspenso"
+ },
+ "je_space_race_mars_landing_setback_header": {
+  "en": "If the Mars program is cancelled",
+  "es": "Si se cancela el programa marciano"
+ },
+ "je_space_race_mars_landing_subsequent_outcome_header": {
+  "en": "If we follow others to Mars",
+  "es": "Si seguimos a otros hasta Marte"
+ },
+ "je_space_race_moon_base": {
+  "en": "Moon Base",
+  "es": "Base lunar"
+ },
+ "je_space_race_moon_base_completion_header": {
+  "en": "Permanent Moon Base Established",
+  "es": "Base lunar permanente establecida"
+ },
+ "je_space_race_moon_base_failure_header": {
+  "en": "Lunar Base Program Suspended",
+  "es": "Programa de base lunar suspendido"
+ },
+ "je_space_race_moon_base_on_failure_header": {
+  "en": "Our lunar base is on hold",
+  "es": "Nuestra base lunar queda en suspenso"
+ },
+ "je_space_race_moon_landing": {
+  "en": "Moon Landing",
+  "es": "Alunizaje"
+ },
+ "je_space_race_moon_landing_completion_header": {
+  "en": "Boots on the Moon",
+  "es": "Pisadas en la Luna"
+ },
+ "je_space_race_moon_landing_failure_header": {
+  "en": "Lunar Program Suspended",
+  "es": "Programa lunar suspendido"
+ },
+ "je_space_race_moon_landing_on_completion_header": {
+  "en": "Humanity walks on the Moon",
+  "es": "La humanidad camina sobre la Luna"
+ },
+ "je_space_race_moon_landing_on_failure_header": {
+  "en": "Our lunar ambitions are on hold",
+  "es": "Nuestras ambiciones lunares quedan en suspenso"
+ },
+ "je_space_race_moon_landing_setback_header": {
+  "en": "If the Moon program is grounded",
+  "es": "Si el programa lunar queda en tierra"
+ },
+ "je_space_race_orbital": {
+  "en": "Orbital Flight",
+  "es": "Vuelo orbital"
+ },
+ "je_space_race_orbital_completion_header": {
+  "en": "Earth Orbit Achieved",
+  "es": "Órbita terrestre alcanzada"
+ },
+ "je_space_race_orbital_failure_header": {
+  "en": "Orbital Program Suspended",
+  "es": "Programa orbital suspendido"
+ },
+ "je_space_race_orbital_on_completion_header": {
+  "en": "Our spacecraft circles the Earth",
+  "es": "Nuestra nave espacial rodea la Tierra"
+ },
+ "je_space_race_orbital_on_failure_header": {
+  "en": "Our orbital ambitions are on hold",
+  "es": "Nuestras ambiciones orbitales quedan en suspenso"
+ },
+ "je_space_race_orbital_setback_header": {
+  "en": "If the orbital program is grounded",
+  "es": "Si el programa orbital queda en tierra"
+ },
+ "je_space_race_orbital_subsequent_outcome_header": {
+  "en": "If another nation orbits first",
+  "es": "Si otra nación orbita antes"
+ },
+ "je_space_race_probe": {
+  "en": "Deep-Space Probe",
+  "es": "Sonda de espacio profundo"
+ },
+ "je_space_race_probe_completion_header": {
+  "en": "Probe Reaches Its Target",
+  "es": "La sonda llega a su objetivo"
+ },
+ "je_space_race_probe_failure_header": {
+  "en": "Probe Program Suspended",
+  "es": "Programa de sondas suspendido"
+ },
+ "je_space_race_probe_first_outcome_header": {
+  "en": "If our probe arrives first",
+  "es": "Si nuestra sonda llega primero"
+ },
+ "je_space_race_probe_on_failure_header": {
+  "en": "Our planetary probe is on hold",
+  "es": "Nuestra sonda planetaria queda en suspenso"
+ },
+ "je_space_race_probe_setback_header": {
+  "en": "If the probe program is cancelled",
+  "es": "Si se cancela el programa de sondas"
+ },
+ "je_space_race_solar_colonization": {
+  "en": "Solar System Colonization",
+  "es": "Colonización del sistema solar"
+ },
+ "je_space_race_suborbital": {
+  "en": "Suborbital Flight",
+  "es": "Vuelo suborbital"
+ },
+ "je_space_race_suborbital_completion_header": {
+  "en": "Edge of Space Reached",
+  "es": "Borde del espacio alcanzado"
+ },
+ "je_space_race_suborbital_failure_header": {
+  "en": "Suborbital Program Suspended",
+  "es": "Programa suborbital suspendido"
+ },
+ "je_space_race_suborbital_on_failure_header": {
+  "en": "Our suborbital ambitions are on hold",
+  "es": "Nuestras ambiciones suborbitales quedan en suspenso"
+ },
+ "je_space_race_suborbital_setback_header": {
+  "en": "If the program is grounded",
+  "es": "Si el programa queda en tierra"
+ },
+ "je_space_race_suborbital_subsequent_outcome_header": {
+  "en": "If others reach space before us",
+  "es": "Si otros llegan al espacio antes que nosotros"
+ },
+ "je_space_race_widget_ambitious_label": {
+  "en": "Ambitious",
+  "es": "Ambicioso"
+ },
+ "je_space_race_widget_colonies_header": {
+  "en": "Our Colonies",
+  "es": "Nuestras colonias"
+ },
+ "je_space_race_widget_colonies_held_label": {
+  "en": "Colonies Held",
+  "es": "Colonias en posesión"
+ },
+ "je_space_race_widget_colonies_stage_1": {
+  "en": "Stage 1: Mars & Asteroids",
+  "es": "Fase 1: Marte y asteroides"
+ },
+ "je_space_race_widget_colonies_stage_2": {
+  "en": "Stage 2: Jupiter System & Venus",
+  "es": "Fase 2: sistema de Júpiter y Venus"
+ },
+ "je_space_race_widget_colonies_stage_3": {
+  "en": "Stage 3: Mercury & Saturn System",
+  "es": "Fase 3: Mercurio y sistema de Saturno"
+ },
+ "je_space_race_widget_colonies_stage_4": {
+  "en": "Stage 4: Uranus & Neptune Systems",
+  "es": "Fase 4: sistemas de Urano y Neptuno"
+ },
+ "je_space_race_widget_colonies_stage_5": {
+  "en": "Stage 5: Kuiper Belt & Beyond",
+  "es": "Fase 5: cinturón de Kuiper y más allá"
+ },
+ "je_space_race_widget_control_header": {
+  "en": "Mission Control",
+  "es": "Control de misión"
+ },
+ "je_space_race_widget_eta_interstellar_probe": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_interstellar_probe')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_interstellar_probe')|0] meses"
+ },
+ "je_space_race_widget_eta_label": {
+  "en": "Estimate",
+  "es": "Estimación"
+ },
+ "je_space_race_widget_eta_mars_landing": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_mars_landing')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_mars_landing')|0] meses"
+ },
+ "je_space_race_widget_eta_moon_base": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_base')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_base')|0] meses"
+ },
+ "je_space_race_widget_eta_moon_landing": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_landing')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_moon_landing')|0] meses"
+ },
+ "je_space_race_widget_eta_orbital": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_orbital')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_orbital')|0] meses"
+ },
+ "je_space_race_widget_eta_probe": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_probe')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_probe')|0] meses"
+ },
+ "je_space_race_widget_eta_solar_colonization": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_solar_colonization')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_solar_colonization')|0] meses"
+ },
+ "je_space_race_widget_eta_suborbital": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_suborbital')|0] months",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_suborbital')|0] meses"
+ },
+ "je_space_race_widget_how_header": {
+  "en": "How the Space Race Works",
+  "es": "Cómo funciona la carrera espacial"
+ },
+ "je_space_race_widget_how_sub_approach": {
+  "en": "Approach and Pace",
+  "es": "Enfoque y ritmo"
+ },
+ "je_space_race_widget_how_sub_first": {
+  "en": "The First",
+  "es": "El primero"
+ },
+ "je_space_race_widget_how_sub_funding": {
+  "en": "Funding",
+  "es": "Financiación"
+ },
+ "je_space_race_widget_how_sub_programme": {
+  "en": "The Programme",
+  "es": "El programa"
+ },
+ "je_space_race_widget_how_sub_rivals": {
+  "en": "Rivals",
+  "es": "Rivales"
+ },
+ "je_space_race_widget_how_sub_setbacks": {
+  "en": "Setbacks",
+  "es": "Contratiempos"
+ },
+ "je_space_race_widget_ov_ambitious_interstellar_probe": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_mars_landing": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_mars_landing')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_moon_base": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_base')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_base')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_moon_landing": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_moon_landing')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_orbital": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_orbital')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_probe": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_probe')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_solar_colonization": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_solar_colonization')|0]/sem"
+ },
+ "je_space_race_widget_ov_ambitious_suborbital": {
+  "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0]/wk",
+  "es": "Ambicioso −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_suborbital')|0]/sem"
+ },
+ "je_space_race_widget_ov_colony_label": {
+  "en": "Next Colony",
+  "es": "Próxima colonia"
+ },
+ "je_space_race_widget_ov_idle": {
+  "en": "Idle",
+  "es": "Inactivo"
+ },
+ "je_space_race_widget_ov_progress_label": {
+  "en": "Progress",
+  "es": "Progreso"
+ },
+ "je_space_race_widget_ov_safe_interstellar_probe": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_interstellar_probe')|0]/sem"
+ },
+ "je_space_race_widget_ov_safe_mars_landing": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_mars_landing')|0]/sem"
+ },
+ "je_space_race_widget_ov_safe_moon_base": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_base')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_base')|0]/sem"
+ },
+ "je_space_race_widget_ov_safe_moon_landing": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_moon_landing')|0]/sem"
+ },
+ "je_space_race_widget_ov_safe_orbital": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_orbital')|1]/sem"
+ },
+ "je_space_race_widget_ov_safe_probe": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_probe')|0]/sem"
+ },
+ "je_space_race_widget_ov_safe_solar_colonization": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_solar_colonization')|0]/sem"
+ },
+ "je_space_race_widget_ov_safe_suborbital": {
+  "en": "Safe −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]/wk",
+  "es": "Seguro −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]/sem"
+ },
+ "je_space_race_widget_ov_shielded": {
+  "en": "Shielded: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cooldown_months')|0] mo",
+  "es": "Protegido: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cooldown_months')|0] meses"
+ },
+ "je_space_race_widget_ov_stage": {
+  "en": "Stage: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] of 5",
+  "es": "Fase: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage')|0] de 5"
+ },
+ "je_space_race_widget_ov_staged_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! flotas"
+ },
+ "je_space_race_widget_ov_transit_label": {
+  "en": "Transit",
+  "es": "Tránsito"
+ },
+ "je_space_race_widget_ov_worlds": {
+  "en": "Worlds: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34",
+  "es": "Mundos: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34"
+ },
+ "je_space_race_widget_profile_header": {
+  "en": "Mission Profile",
+  "es": "Perfil de la misión"
+ },
+ "je_space_race_widget_prog_interstellar_0": {
+  "en": "#bold Interstellar Probe#! — [JournalEntry.GetCountry.GetCustom('sr_prog_interstellar_probe')]",
+  "es": "#bold Sonda interestelar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_interstellar_probe')]"
+ },
+ "je_space_race_widget_prog_interstellar_3": {
+  "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
+  "es": "#bold Sonda interestelar#! — $sr_prog_state_signal_received$"
+ },
+ "je_space_race_widget_prog_mars_landing": {
+  "en": "#bold Mars Landing#! — [JournalEntry.GetCountry.GetCustom('sr_prog_mars_landing')]",
+  "es": "#bold Aterrizaje en Marte#! — [JournalEntry.GetCountry.GetCustom('sr_prog_mars_landing')]"
+ },
+ "je_space_race_widget_prog_moon_base": {
+  "en": "#bold Moon Base#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]",
+  "es": "#bold Base lunar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]"
+ },
+ "je_space_race_widget_prog_moon_landing": {
+  "en": "#bold Moon Landing#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_landing')]",
+  "es": "#bold Alunizaje#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_landing')]"
+ },
+ "je_space_race_widget_prog_orbital": {
+  "en": "#bold Orbital Flight#! — [JournalEntry.GetCountry.GetCustom('sr_prog_orbital')]",
+  "es": "#bold Vuelo orbital#! — [JournalEntry.GetCountry.GetCustom('sr_prog_orbital')]"
+ },
+ "je_space_race_widget_prog_probe": {
+  "en": "#bold Deep-Space Probe#! — [JournalEntry.GetCountry.GetCustom('sr_prog_probe')]",
+  "es": "#bold Sonda de espacio profundo#! — [JournalEntry.GetCountry.GetCustom('sr_prog_probe')]"
+ },
+ "je_space_race_widget_prog_solar_colonization": {
+  "en": "#bold Solar System Colonization#! — [JournalEntry.GetCountry.GetCustom('sr_prog_solar_colonization')]",
+  "es": "#bold Colonización del sistema solar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_solar_colonization')]"
+ },
+ "je_space_race_widget_prog_suborbital": {
+  "en": "#bold Suborbital Flight#! — [JournalEntry.GetCountry.GetCustom('sr_prog_suborbital')]",
+  "es": "#bold Vuelo suborbital#! — [JournalEntry.GetCountry.GetCustom('sr_prog_suborbital')]"
+ },
+ "je_space_race_widget_programme_header": {
+  "en": "Programme",
+  "es": "Programa"
+ },
+ "je_space_race_widget_progress_interstellar_probe": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_interstellar_results": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 meses"
+ },
+ "je_space_race_widget_progress_mars_landing": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_moon_base": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_base_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_base_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_base')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_base_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_base_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_base')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_moon_landing": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_moon_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_moon_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_moon_landing')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_orbital": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_orbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_orbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_orbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_orbital')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_probe": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_probe')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_solar_colonization": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_solar_colonization_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_solar_colonization_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_solar_colonization')|1]/mes#!)"
+ },
+ "je_space_race_widget_progress_suborbital": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_suborbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mo#!)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_suborbital_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mes#!)"
+ },
+ "je_space_race_widget_risk_interstellar_probe": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mes"
+ },
+ "je_space_race_widget_risk_mars_landing": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mes"
+ },
+ "je_space_race_widget_risk_moon_base": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mes"
+ },
+ "je_space_race_widget_risk_moon_landing": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mes"
+ },
+ "je_space_race_widget_risk_orbital": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mes"
+ },
+ "je_space_race_widget_risk_probe": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mes"
+ },
+ "je_space_race_widget_risk_solar_colonization": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mes"
+ },
+ "je_space_race_widget_risk_suborbital": {
+  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
+  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mes"
+ },
+ "je_space_race_widget_rival_more_interstellar_probe": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_interstellar_probe')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_interstellar_probe')|0] más"
+ },
+ "je_space_race_widget_rival_more_mars_landing": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_mars_landing')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_mars_landing')|0] más"
+ },
+ "je_space_race_widget_rival_more_moon_base": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_base')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_base')|0] más"
+ },
+ "je_space_race_widget_rival_more_moon_landing": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_landing')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_moon_landing')|0] más"
+ },
+ "je_space_race_widget_rival_more_orbital": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_orbital')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_orbital')|0] más"
+ },
+ "je_space_race_widget_rival_more_probe": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_probe')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_probe')|0] más"
+ },
+ "je_space_race_widget_rival_more_solar_colonization": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_solar_colonization')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_solar_colonization')|0] más"
+ },
+ "je_space_race_widget_rival_more_suborbital": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_suborbital')|0] more",
+  "es": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_suborbital')|0] más"
+ },
+ "je_space_race_widget_rivals_header": {
+  "en": "Rivals",
+  "es": "Rivales"
+ },
+ "je_space_race_widget_safe_label": {
+  "en": "Safe",
+  "es": "Seguro"
+ },
+ "je_space_race_widget_setbacks_label": {
+  "en": "Setbacks So Far",
+  "es": "Contratiempos hasta ahora"
+ },
+ "je_space_race_widget_standard_label": {
+  "en": "Standard",
+  "es": "Estándar"
+ },
+ "je_state_collapse": {
+  "en": "State Collapse",
+  "es": "Colapso del Estado"
+ },
+ "je_strategic_reserve": {
+  "en": "Strategic Reserve",
+  "es": "Reserva estratégica"
+ },
+ "je_strategic_reserve_how_header": {
+  "en": "How the Strategic Reserve Works",
+  "es": "Cómo funciona la reserva estratégica"
+ },
+ "je_strategic_reserve_how_sub_decay": {
+  "en": "Decay",
+  "es": "Deterioro"
+ },
+ "je_strategic_reserve_how_sub_history": {
+  "en": "Fill History",
+  "es": "Historial de llenado"
+ },
+ "je_strategic_reserve_how_sub_hub": {
+  "en": "The Hub and Silos",
+  "es": "El centro y los silos"
+ },
+ "je_strategic_reserve_how_sub_income": {
+  "en": "Sales Income",
+  "es": "Ingresos por ventas"
+ },
+ "je_strategic_reserve_how_sub_policies": {
+  "en": "Reserve Policies",
+  "es": "Políticas de reserva"
+ },
+ "je_strategic_reserve_how_sub_presets": {
+  "en": "Presets and Settings",
+  "es": "Preajustes y ajustes"
+ },
+ "je_strategic_reserve_how_sub_rates": {
+  "en": "Rates",
+  "es": "Tasas"
+ },
+ "je_strategic_reserve_inv_col_good": {
+  "en": "Good",
+  "es": "Bien"
+ },
+ "je_strategic_reserve_inv_col_rate": {
+  "en": "Rate",
+  "es": "Tasa"
+ },
+ "je_strategic_reserve_inv_col_stock": {
+  "en": "Stock",
+  "es": "Existencias"
+ },
+ "je_strategic_reserve_inv_header": {
+  "en": "Reserve Inventory",
+  "es": "Inventario de reserva"
+ },
+ "je_strategic_reserve_ov_cap_value": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
+  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/sem"
+ },
+ "je_strategic_reserve_ov_hub_staffed": {
+  "en": "Hub Operating",
+  "es": "Centro en funcionamiento"
+ },
+ "je_strategic_reserve_ov_income_label": {
+  "en": "Sales Income",
+  "es": "Ingresos por ventas"
+ },
+ "je_strategic_reserve_ov_income_value": {
+  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk",
+  "es": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/sem"
+ },
+ "je_un_assembly_header": {
+  "en": "General Assembly",
+  "es": "Asamblea General"
+ },
+ "je_un_auth_header_history": {
+  "en": "UN Authority History",
+  "es": "Historial de autoridad de la ONU"
+ },
+ "je_un_auth_header_why": {
+  "en": "Why UN Authority Is Moving",
+  "es": "Por qué se mueve la autoridad de la ONU"
+ },
+ "je_un_auth_power_line": {
+  "en": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! of world power)",
+  "es": "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! del poder mundial)"
+ },
+ "je_un_auth_sub_ladder": {
+  "en": "Tier and Charter",
+  "es": "Nivel y Carta"
+ },
+ "je_un_auth_sub_log": {
+  "en": "Recent Entries",
+  "es": "Entradas recientes"
+ },
+ "je_un_auth_sub_pillars": {
+  "en": "Authority and Its Pillars",
+  "es": "La autoridad y sus pilares"
+ },
+ "je_un_auth_sub_powers": {
+  "en": "Champions, Underminers and Outsiders",
+  "es": "Defensores, saboteadores y ajenos"
+ },
+ "je_un_auth_tbl_base_label": {
+  "en": "Base",
+  "es": "Base"
+ },
+ "je_un_auth_tbl_commitment_detail": {
+  "en": "champions minus underminers, by power",
+  "es": "defensores menos saboteadores, según su poder"
+ },
+ "je_un_auth_tbl_commitment_label": {
+  "en": "Commitment",
+  "es": "Compromiso"
+ },
+ "je_un_auth_tbl_credibility_detail": {
+  "en": "the Assembly's record, fading over years",
+  "es": "el historial de la Asamblea, que se desvanece con los años"
+ },
+ "je_un_auth_tbl_credibility_label": {
+  "en": "Credibility",
+  "es": "Credibilidad"
+ },
+ "je_un_auth_tbl_delivery_detail": {
+  "en": "aid, peacekeeping, missions and mandates delivered$je_un_auth_tbl_delivery_hunger_detail$",
+  "es": "ayuda, mantenimiento de la paz, misiones y mandatos cumplidos$je_un_auth_tbl_delivery_hunger_detail$"
+ },
+ "je_un_auth_tbl_delivery_label": {
+  "en": "Delivery",
+  "es": "Cumplimiento"
+ },
+ "je_un_auth_tbl_funding_label": {
+  "en": "Funding",
+  "es": "Financiación"
+ },
+ "je_un_auth_tbl_headline": {
+  "en": "#bold [concept_un_authority]#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|1]#! → #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|1]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+2]/mo)",
+  "es": "#bold [concept_un_authority]#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|1]#! → #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|1]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+2]/mes)"
+ },
+ "je_un_auth_tbl_order_label": {
+  "en": "Peace and order",
+  "es": "Paz y orden"
+ },
+ "je_un_auth_tbl_participation_label": {
+  "en": "Participation",
+  "es": "Participación"
+ },
+ "je_un_auth_tbl_policy_label": {
+  "en": "Policy",
+  "es": "Política"
+ },
+ "je_un_auth_tier_contested": {
+  "en": "#bold Tier:#! [concept_un_tier_contested]",
+  "es": "#bold Nivel:#! [concept_un_tier_contested]"
+ },
+ "je_un_auth_tier_established": {
+  "en": "#bold Tier:#! [concept_un_tier_established]",
+  "es": "#bold Nivel:#! [concept_un_tier_established]"
+ },
+ "je_un_auth_tier_moribund": {
+  "en": "#bold Tier:#! [concept_un_tier_moribund]",
+  "es": "#bold Nivel:#! [concept_un_tier_moribund]"
+ },
+ "je_un_auth_tier_strong": {
+  "en": "#bold Tier:#! [concept_un_tier_strong]",
+  "es": "#bold Nivel:#! [concept_un_tier_strong]"
+ },
+ "je_un_auth_tier_supranational": {
+  "en": "#bold Tier:#! [concept_un_tier_supranational]",
+  "es": "#bold Nivel:#! [concept_un_tier_supranational]"
+ },
+ "je_un_chamber_conseq_fail": {
+  "en": "  #bold If it falls:#! $un_vote_failed_tt$",
+  "es": "  #bold Si se rechaza:#! $un_vote_failed_tt$"
+ },
+ "je_un_chamber_conseq_fail_expulsion": {
+  "en": "  #bold If it falls:#! $un_vote_expulsion_failed_tt$",
+  "es": "  #bold Si se rechaza:#! $un_vote_expulsion_failed_tt$"
+ },
+ "je_un_chamber_council_member_entry": {
+  "en": "#v Permanent member#! — [THIS.GetCountry.GetName]",
+  "es": "#v Miembro permanente#! — [THIS.GetCountry.GetName]"
+ },
+ "je_un_chamber_country_gone": {
+  "en": "a former member",
+  "es": "un antiguo miembro"
+ },
+ "je_un_chamber_deleg_bulk_against_label": {
+  "en": "Lobby Top Members Against",
+  "es": "Presionar en contra a los principales miembros"
+ },
+ "je_un_chamber_deleg_bulk_for_label": {
+  "en": "Lobby Top Members For",
+  "es": "Presionar a favor a los principales miembros"
+ },
+ "je_un_chamber_deleg_firm_against_entry": {
+  "en": "#R Firmly against#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "es": "#R Firmemente en contra#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_deleg_firm_for_entry": {
+  "en": "#G Firmly for#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "es": "#G Firmemente a favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_deleg_header": {
+  "en": "Delegations",
+  "es": "Delegaciones"
+ },
+ "je_un_chamber_deleg_lobby_against_label": {
+  "en": "Lobby Against",
+  "es": "Presionar en contra"
+ },
+ "je_un_chamber_deleg_lobby_for_label": {
+  "en": "Lobby For",
+  "es": "Presionar a favor"
+ },
+ "je_un_chamber_deleg_pledge_against_label": {
+  "en": "Pledge Against",
+  "es": "Comprometer voto en contra"
+ },
+ "je_un_chamber_deleg_pledge_for_label": {
+  "en": "Pledge For",
+  "es": "Comprometer voto a favor"
+ },
+ "je_un_chamber_deleg_pledged_against": {
+  "en": "  #v Pledged#! to vote #R against#!, to [SCOPE.sCountry('un_deleg_pledgee').GetName]",
+  "es": "  #v Comprometido#! a votar #R en contra#!, ante [SCOPE.sCountry('un_deleg_pledgee').GetName]"
+ },
+ "je_un_chamber_deleg_stop_label": {
+  "en": "Stop Lobbying",
+  "es": "Dejar de presionar"
+ },
+ "je_un_chamber_details_header": {
+  "en": "Voting Details",
+  "es": "Detalles de la votación"
+ },
+ "je_un_chamber_exposure_header": {
+  "en": "Our Record",
+  "es": "Nuestro historial"
+ },
+ "je_un_chamber_history_header": {
+  "en": "Resolutions on the Record",
+  "es": "Resoluciones registradas"
+ },
+ "je_un_chamber_mandate_actor": {
+  "en": "  Authorized: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_actor').Exists, SCOPE.sCountry('un_chamber_mnd_actor').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_actor').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  Autorizado: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_actor').Exists, SCOPE.sCountry('un_chamber_mnd_actor').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_actor').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mandate_beneficiary": {
+  "en": "  To be restored to [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists, SCOPE.sCountry('un_chamber_mnd_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  A restituir a [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists, SCOPE.sCountry('un_chamber_mnd_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_beneficiary').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mandate_target": {
+  "en": "  Against: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_target').Exists, SCOPE.sCountry('un_chamber_mnd_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_target').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  Contra: [AddLocalizationIf(SCOPE.sCountry('un_chamber_mnd_target').Exists, SCOPE.sCountry('un_chamber_mnd_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_mnd_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mandates_header": {
+  "en": "Mandates in Force",
+  "es": "Mandatos en vigor"
+ },
+ "je_un_chamber_mission_aid": {
+  "en": "#bold [concept_un_mission_aid]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold [concept_un_mission_aid]#! en [SCOPE.sState('un_chamber_msn_state').GetName], para [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_electoral": {
+  "en": "#bold [concept_un_mission_electoral]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold [concept_un_mission_electoral]#! en [SCOPE.sState('un_chamber_msn_state').GetName], para [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_force": {
+  "en": "    the [concept_un_standing_force]",
+  "es": "    la [concept_un_standing_force|l]"
+ },
+ "je_un_chamber_mission_join_label": {
+  "en": "Send a Contingent",
+  "es": "Enviar un contingente"
+ },
+ "je_un_chamber_mission_peacekeeping": {
+  "en": "#bold [concept_un_mission_peacekeeping]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold [concept_un_mission_peacekeeping]#! en [SCOPE.sState('un_chamber_msn_state').GetName], para [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_stabilisation": {
+  "en": "#bold [concept_un_mission_stabilisation]#! in [SCOPE.sState('un_chamber_msn_state').GetName], for [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold [concept_un_mission_stabilisation]#! en [SCOPE.sState('un_chamber_msn_state').GetName], para [AddLocalizationIf(SCOPE.sCountry('un_chamber_msn_host').Exists, SCOPE.sCountry('un_chamber_msn_host').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_msn_host').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_mission_withdraw_label": {
+  "en": "Bring Our Contingent Home",
+  "es": "Hacer volver a nuestro contingente"
+ },
+ "je_un_chamber_missions_header": {
+  "en": "Missions in the Field",
+  "es": "Misiones sobre el terreno"
+ },
+ "je_un_chamber_obligations_header": {
+  "en": "Our Obligations",
+  "es": "Nuestras obligaciones"
+ },
+ "je_un_chamber_propose_button_label": {
+  "en": "Propose",
+  "es": "Proponer"
+ },
+ "je_un_chamber_propose_header": {
+  "en": "Propose a Resolution",
+  "es": "Proponer una resolución"
+ },
+ "je_un_chamber_propose_need_development_fund": {
+  "en": "The [concept_un_development_fund] does not already stand",
+  "es": "El [concept_un_development_fund|l] aún no existe"
+ },
+ "je_un_chamber_propose_need_food_reserve": {
+  "en": "The [concept_un_food_reserve] does not already stand",
+  "es": "La [concept_un_food_reserve|l] aún no existe"
+ },
+ "je_un_chamber_propose_need_lift_sanctions": {
+  "en": "We are under [concept_un_sanctions]",
+  "es": "Estamos bajo [concept_un_sanctions|l]"
+ },
+ "je_un_chamber_propose_need_reform": {
+  "en": "The [concept_un_charter] has room for another reform",
+  "es": "La [concept_un_charter|l] admite otra reforma"
+ },
+ "je_un_chamber_propose_need_standing_force": {
+  "en": "The [concept_un_standing_force] has not been founded yet",
+  "es": "La [concept_un_standing_force|l] aún no se ha fundado"
+ },
+ "je_un_chamber_propose_preview_lift_sanctions": {
+  "en": "#bold Enforced by:#! [AddLocalizationIf(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists, SCOPE.sCountry('un_lift_sanctions_enforcer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists), 'je_un_chamber_country_gone')], for #v [THIS.ScriptValue('un_disp_sanctions_months')|0]#! months",
+  "es": "#bold Aplicadas por:#! [AddLocalizationIf(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists, SCOPE.sCountry('un_lift_sanctions_enforcer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_lift_sanctions_enforcer').Exists), 'je_un_chamber_country_gone')], durante #v [THIS.ScriptValue('un_disp_sanctions_months')|0]#! meses"
+ },
+ "je_un_chamber_propose_preview_observer_request": {
+  "en": "#bold Observers to:#! [SCOPE.sState('un_observer_request_state').GetName]",
+  "es": "#bold Observadores a:#! [SCOPE.sState('un_observer_request_state').GetName]"
+ },
+ "je_un_chamber_propose_target_arms_embargo": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_arms_embargo_pick').Exists, SCOPE.sCountry('un_arms_embargo_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_arms_embargo_pick').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_arms_embargo_pick').Exists, SCOPE.sCountry('un_arms_embargo_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_arms_embargo_pick').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_ceasefire": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][SelectLocalization(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim', 'te_tt_blank')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, SCOPE.sCountry('un_ceasefire_victim_pick').GetName)]",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_ceasefire_pick').Exists, SCOPE.sCountry('un_ceasefire_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_ceasefire_pick').Exists), 'je_un_chamber_country_gone')][SelectLocalization(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, 'je_un_chamber_propose_target_ceasefire_victim', 'te_tt_blank')][AddLocalizationIf(SCOPE.sCountry('un_ceasefire_victim_pick').Exists, SCOPE.sCountry('un_ceasefire_victim_pick').GetName)]"
+ },
+ "je_un_chamber_propose_target_ceasefire_victim": {
+  "en": ", at war with ",
+  "es": ", en guerra con "
+ },
+ "je_un_chamber_propose_target_condemn": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_condemn_target').Exists, SCOPE.sCountry('un_propose_condemn_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_condemn_target').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_condemn_target').Exists, SCOPE.sCountry('un_propose_condemn_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_condemn_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_credentials": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_credentials_pick').Exists, SCOPE.sCountry('un_credentials_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_credentials_pick').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_credentials_pick').Exists, SCOPE.sCountry('un_credentials_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_credentials_pick').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_expulsion": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_expulsion_target').Exists, SCOPE.sCountry('un_propose_expulsion_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_expulsion_target').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_expulsion_target').Exists, SCOPE.sCountry('un_propose_expulsion_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_expulsion_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_propose_target_mandate": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_mandate_case_target').Exists, SCOPE.sCountry('un_mandate_case_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_mandate_case_target').Exists), 'je_un_chamber_country_gone')] (#bold [SCOPE.sStateRegion('un_chamber_case_region').GetName]#!)",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_mandate_case_target').Exists, SCOPE.sCountry('un_mandate_case_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_mandate_case_target').Exists), 'je_un_chamber_country_gone')] (#bold [SCOPE.sStateRegion('un_chamber_case_region').GetName]#!)"
+ },
+ "je_un_chamber_propose_target_sanctions": {
+  "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_sanctions_target').Exists, SCOPE.sCountry('un_propose_sanctions_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_sanctions_target').Exists), 'je_un_chamber_country_gone')]",
+  "es": "#bold Objetivo:#! [AddLocalizationIf(SCOPE.sCountry('un_propose_sanctions_target').Exists, SCOPE.sCountry('un_propose_sanctions_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_propose_sanctions_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_proposer": {
+  "en": "  Proposed by [AddLocalizationIf(SCOPE.sCountry('un_chamber_proposer').Exists, SCOPE.sCountry('un_chamber_proposer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_proposer').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  Propuesta de [AddLocalizationIf(SCOPE.sCountry('un_chamber_proposer').Exists, SCOPE.sCountry('un_chamber_proposer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_proposer').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_res_mandate_beneficiary": {
+  "en": "  To be restored to [AddLocalizationIf(SCOPE.sCountry('un_chamber_res_beneficiary').Exists, SCOPE.sCountry('un_chamber_res_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_res_beneficiary').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  A restituir a [AddLocalizationIf(SCOPE.sCountry('un_chamber_res_beneficiary').Exists, SCOPE.sCountry('un_chamber_res_beneficiary').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_res_beneficiary').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_rule_majority": {
+  "en": "#bold Passage Rule:#! [concept_un_passage_majority]",
+  "es": "#bold Regla de aprobación:#! [concept_un_passage_majority]"
+ },
+ "je_un_chamber_sub_ballot": {
+  "en": "The Ballot",
+  "es": "La votación"
+ },
+ "je_un_chamber_sub_docket": {
+  "en": "The Docket",
+  "es": "El orden del día"
+ },
+ "je_un_chamber_sub_dues": {
+  "en": "Dues",
+  "es": "Cuotas"
+ },
+ "je_un_chamber_sub_mandate_case": {
+  "en": "Our Case",
+  "es": "Nuestro caso"
+ },
+ "je_un_chamber_sub_mandate_register": {
+  "en": "The Register",
+  "es": "El registro"
+ },
+ "je_un_chamber_sub_missions_active": {
+  "en": "In the Field",
+  "es": "Sobre el terreno"
+ },
+ "je_un_chamber_sub_missions_ended": {
+  "en": "Ended",
+  "es": "Finalizadas"
+ },
+ "je_un_chamber_sub_propose_censure": {
+  "en": "Censure and Enforcement",
+  "es": "Censura e imposición"
+ },
+ "je_un_chamber_sub_propose_charter": {
+  "en": "The Charter",
+  "es": "La Carta"
+ },
+ "je_un_chamber_sub_propose_conventions": {
+  "en": "Conventions and Declarations",
+  "es": "Convenciones y declaraciones"
+ },
+ "je_un_chamber_sub_propose_help": {
+  "en": "Requests for Help",
+  "es": "Peticiones de ayuda"
+ },
+ "je_un_chamber_sub_propose_institutions": {
+  "en": "Institutions of the United Nations",
+  "es": "Instituciones de las Naciones Unidas"
+ },
+ "je_un_chamber_sub_propose_justice": {
+  "en": "Courts and Self-Determination",
+  "es": "Tribunales y autodeterminación"
+ },
+ "je_un_chamber_sub_reach": {
+  "en": "The UN's Reach",
+  "es": "El alcance de la ONU"
+ },
+ "je_un_chamber_sub_regimes": {
+  "en": "Conventions",
+  "es": "Convenciones"
+ },
+ "je_un_chamber_sub_session": {
+  "en": "Before the Assembly",
+  "es": "Ante la Asamblea"
+ },
+ "je_un_chamber_target": {
+  "en": "  Directed at [AddLocalizationIf(SCOPE.sCountry('un_chamber_target').Exists, SCOPE.sCountry('un_chamber_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_target').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  Dirigido a [AddLocalizationIf(SCOPE.sCountry('un_chamber_target').Exists, SCOPE.sCountry('un_chamber_target').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_target').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_topic_aid_request": {
+  "en": "#bold Humanitarian Aid Request#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Solicitud de ayuda humanitaria#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_antarctic": {
+  "en": "#bold Antarctic Treaty#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Tratado Antártico#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_arms_embargo": {
+  "en": "#bold [concept_un_arms_embargo]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold [concept_un_arms_embargo]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_ceasefire": {
+  "en": "#bold Binding Ceasefire#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Alto el fuego vinculante#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_climate": {
+  "en": "#bold Climate Accord#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Acuerdo climático#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_condemn": {
+  "en": "#bold Condemnation of Aggression#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Condena de la agresión#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_court_referral": {
+  "en": "#bold Referral to the [concept_un_world_court]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Remisión al [concept_un_world_court|l]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_credentials": {
+  "en": "#bold Suspension of [concept_un_credentials]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Suspensión de [concept_un_credentials|l]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_cultural_diversity": {
+  "en": "#bold Cultural Diversity#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Diversidad cultural#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_decolonization": {
+  "en": "#bold [Concept('concept_decolonization_system', 'Decolonization')] Resolution#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Resolución sobre la [Concept('concept_decolonization_system', 'descolonización')]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_development_fund": {
+  "en": "#bold World Development Fund#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Fondo Mundial de Desarrollo#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_food_reserve": {
+  "en": "#bold World Food Reserve#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Reserva Mundial de Alimentos#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_heritage": {
+  "en": "#bold Cultural Heritage Program#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Programa de patrimonio cultural#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_icc": {
+  "en": "#bold International Criminal Court#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Corte Penal Internacional#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_lift_sanctions": {
+  "en": "#bold Lift the [concept_un_sanctions]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Levantar las [concept_un_sanctions|l]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_military_mandate": {
+  "en": "#bold Authorized Military Mandate#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Mandato militar autorizado#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_npt": {
+  "en": "#bold Nuclear Non-Proliferation Treaty#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Tratado de no proliferación nuclear#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_observer_request": {
+  "en": "#bold Electoral Observers Request#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Solicitud de observadores electorales#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_pandemic": {
+  "en": "#bold Global Pandemic Response#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Respuesta mundial a la pandemia#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_peacekeeping_request": {
+  "en": "#bold [concept_un_peacekeeping] Deployment#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Despliegue para el [concept_un_peacekeeping|l]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_referendum": {
+  "en": "#bold Supervised Self-Determination Referendum#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Referéndum de autodeterminación supervisado#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_reform": {
+  "en": "#bold Charter Reform#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Reforma de la Carta#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_refugee": {
+  "en": "#bold International Refugee Resolution#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Resolución internacional sobre refugiados#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_sanctions": {
+  "en": "#bold [concept_un_sanctions]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold [concept_un_sanctions]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_space": {
+  "en": "#bold International Space Cooperation#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold Cooperación espacial internacional#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_topic_standing_force": {
+  "en": "#bold [concept_un_standing_force]#! (Resolution No. [THIS.Var('un_res_seq').GetValue|0])",
+  "es": "#bold [concept_un_standing_force]#! (Resolución n.º [THIS.Var('un_res_seq').GetValue|0])"
+ },
+ "je_un_chamber_vetoed_by": {
+  "en": "  #R [concept_un_veto] cast by#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')]",
+  "es": "  #R [concept_un_veto] ejercido por#! [AddLocalizationIf(SCOPE.sCountry('un_chamber_vetoer').Exists, SCOPE.sCountry('un_chamber_vetoer').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_chamber_vetoer').Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_vote_no_label": {
+  "en": "Vote Against",
+  "es": "Votar en contra"
+ },
+ "je_un_chamber_vote_veto_cancel_label": {
+  "en": "Think Again",
+  "es": "Reconsiderar"
+ },
+ "je_un_chamber_vote_veto_confirm_label": {
+  "en": "Confirm the Veto",
+  "es": "Confirmar el veto"
+ },
+ "je_un_chamber_vote_veto_label": {
+  "en": "Veto…",
+  "es": "Vetar…"
+ },
+ "je_un_chamber_vote_yes_label": {
+  "en": "Vote in Favour",
+  "es": "Votar a favor"
+ },
+ "je_un_chamber_voter_entry_no": {
+  "en": "#R Opposed#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "es": "#R En contra#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_voter_entry_yes": {
+  "en": "#G In favour#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]",
+  "es": "#G A favor#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'je_un_chamber_country_gone')]"
+ },
+ "je_un_chamber_votes_header": {
+  "en": "Recorded Ballot",
+  "es": "Votación registrada"
+ },
+ "je_un_conv_name_antarctic": {
+  "en": "Antarctic Treaty",
+  "es": "Tratado Antártico"
+ },
+ "je_un_conv_name_asat": {
+  "en": "Moratorium on Destructive Anti-Satellite Tests",
+  "es": "Moratoria de pruebas antisatélite destructivas"
+ },
+ "je_un_conv_name_climate": {
+  "en": "Climate Accord",
+  "es": "Acuerdo climático"
+ },
+ "je_un_conv_name_cultural_diversity": {
+  "en": "Convention on Cultural Diversity",
+  "es": "Convención sobre la diversidad cultural"
+ },
+ "je_un_conv_name_decolonization": {
+  "en": "Decolonization Resolution",
+  "es": "Resolución sobre la descolonización"
+ },
+ "je_un_conv_name_heritage": {
+  "en": "Cultural Heritage Program",
+  "es": "Programa de patrimonio cultural"
+ },
+ "je_un_conv_name_human_rights": {
+  "en": "Universal Declaration of Human Rights",
+  "es": "Declaración Universal de Derechos Humanos"
+ },
+ "je_un_conv_name_icc": {
+  "en": "International Criminal Court",
+  "es": "Corte Penal Internacional"
+ },
+ "je_un_conv_name_narcotics": {
+  "en": "Single Convention on Narcotic Drugs",
+  "es": "Convención Única sobre Estupefacientes"
+ },
+ "je_un_conv_name_npt": {
+  "en": "Nuclear Non-Proliferation Treaty",
+  "es": "Tratado de no proliferación nuclear"
+ },
+ "je_un_conv_name_pandemic": {
+  "en": "Global Pandemic Response",
+  "es": "Respuesta mundial a la pandemia"
+ },
+ "je_un_conv_name_refugee": {
+  "en": "International Refugee Resolution",
+  "es": "Resolución internacional sobre refugiados"
+ },
+ "je_un_conv_name_space": {
+  "en": "International Space Cooperation",
+  "es": "Cooperación espacial internacional"
+ },
+ "je_un_dev_fund_avg_label": {
+  "en": "Members' average (GDP per head)",
+  "es": "Media de los miembros (PIB per cápita)"
+ },
+ "je_un_dev_fund_paid_label": {
+  "en": "Paid out a week",
+  "es": "Desembolsado por semana"
+ },
+ "je_un_dev_fund_recipient": {
+  "en": "[THIS.GetCountry.GetName]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
+  "es": "[THIS.GetCountry.GetName]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! por semana (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] per cápita)"
+ },
+ "je_un_dev_fund_recipient_us": {
+  "en": "#bold [THIS.GetCountry.GetName] (us):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
+  "es": "#bold [THIS.GetCountry.GetName] (nosotros):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! por semana (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] per cápita)"
+ },
+ "je_un_dev_fund_sub_recipients": {
+  "en": "Recipients",
+  "es": "Receptores"
+ },
+ "je_un_how_header": {
+  "en": "How the UN Works",
+  "es": "Cómo funciona la ONU"
+ },
+ "je_un_how_sub_authority": {
+  "en": "UN Authority",
+  "es": "Autoridad de la ONU"
+ },
+ "je_un_how_sub_delegations": {
+  "en": "Delegations and Lobbying",
+  "es": "Delegaciones y presiones"
+ },
+ "je_un_how_sub_dues": {
+  "en": "Dues and Obligations",
+  "es": "Cuotas y obligaciones"
+ },
+ "je_un_how_sub_missions": {
+  "en": "Missions",
+  "es": "Misiones"
+ },
+ "je_un_how_sub_record": {
+  "en": "Our Record",
+  "es": "Nuestro historial"
+ },
+ "je_un_how_sub_standing": {
+  "en": "International Standing",
+  "es": "Posición internacional"
+ },
+ "je_un_led_actor_credibility": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: credibility [THIS.Var('un_led_value').GetValue|+2]",
+  "es": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: credibilidad [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_actor_delivery": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: delivery [THIS.Var('un_led_value').GetValue|+2]",
+  "es": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: cumplimiento [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_actor_direct": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: authority [THIS.Var('un_led_value').GetValue|+2] at once",
+  "es": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: autoridad [THIS.Var('un_led_value').GetValue|+2] de inmediato"
+ },
+ "je_un_led_actor_order": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: peace and order [THIS.Var('un_led_value').GetValue|+2]",
+  "es": "#bold [THIS.Var('un_led_year').GetValue|0]#! — [AddLocalizationIf(SCOPE.sCountry('un_led_actor_disp').Exists, SCOPE.sCountry('un_led_actor_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_actor_disp').Exists), 'je_un_chamber_country_gone')]: paz y orden [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_assembly_credibility": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: credibility [THIS.Var('un_led_value').GetValue|+2]",
+  "es": "#bold [THIS.Var('un_led_year').GetValue|0]#! — la Asamblea General: credibilidad [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_assembly_delivery": {
+  "en": "#bold [THIS.Var('un_led_year').GetValue|0]#! — the General Assembly: delivery [THIS.Var('un_led_value').GetValue|+2]",
+  "es": "#bold [THIS.Var('un_led_year').GetValue|0]#! — la Asamblea General: cumplimiento [THIS.Var('un_led_value').GetValue|+2]"
+ },
+ "je_un_led_reason_1043": {
+  "en": "      #lore refused to help restore order in#! $je_un_led_subject_country$",
+  "es": "      #lore se negó a ayudar a restablecer el orden en#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1053": {
+  "en": "      #lore quietly traded through the sanctions on#! $je_un_led_subject_country$",
+  "es": "      #lore comerció discretamente a pesar de las sanciones contra#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1073": {
+  "en": "      #lore refused aid for the famine in#! $je_un_led_subject_country$",
+  "es": "      #lore negó ayuda por la hambruna en#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_1111": {
+  "en": "      #lore publicly denounced the [concept_un_veto] cast by#! $je_un_led_subject_country$",
+  "es": "      #lore denunció públicamente el [concept_un_veto|l] ejercido por#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_18_on": {
+  "en": "      #lore an emergency loan delivered to#! $je_un_led_subject_country$",
+  "es": "      #lore un préstamo de emergencia concedido a#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_33_on": {
+  "en": "      #lore a supervised self-determination referendum held in#! $je_un_led_subject_country$",
+  "es": "      #lore un referéndum de autodeterminación supervisado celebrado en#! $je_un_led_subject_country$"
+ },
+ "je_un_led_reason_8_on": {
+  "en": "      #lore launched a nuclear first strike on#! $je_un_led_subject_state$",
+  "es": "      #lore lanzó un primer ataque nuclear contra#! $je_un_led_subject_state$"
+ },
+ "je_un_led_reason_9_on": {
+  "en": "      #lore used a tactical nuclear weapon in#! $je_un_led_subject_state$",
+  "es": "      #lore usó un arma nuclear táctica en#! $je_un_led_subject_state$"
+ },
+ "je_un_led_topic_aid_request": {
+  "en": "        Humanitarian Aid Request",
+  "es": "        Solicitud de ayuda humanitaria"
+ },
+ "je_un_led_topic_antarctic": {
+  "en": "        Antarctic Treaty",
+  "es": "        Tratado Antártico"
+ },
+ "je_un_led_topic_asat": {
+  "en": "        Moratorium on Destructive Anti-Satellite Tests",
+  "es": "        Moratoria de pruebas antisatélite destructivas"
+ },
+ "je_un_led_topic_ceasefire": {
+  "en": "        Binding Ceasefire",
+  "es": "        Alto el fuego vinculante"
+ },
+ "je_un_led_topic_climate": {
+  "en": "        Climate Accord",
+  "es": "        Acuerdo climático"
+ },
+ "je_un_led_topic_condemn": {
+  "en": "        Condemnation of Aggression",
+  "es": "        Condena de la agresión"
+ },
+ "je_un_led_topic_court_referral": {
+  "en": "        Referral to the World Court",
+  "es": "        Remisión al Tribunal Mundial"
+ },
+ "je_un_led_topic_credentials": {
+  "en": "        Suspension of Credentials",
+  "es": "        Suspensión de credenciales"
+ },
+ "je_un_led_topic_cultural_diversity": {
+  "en": "        Convention on Cultural Diversity",
+  "es": "        Convención sobre la diversidad cultural"
+ },
+ "je_un_led_topic_decolonization": {
+  "en": "        [Concept('concept_decolonization_system', 'Decolonization')] Resolution",
+  "es": "        Resolución sobre la [Concept('concept_decolonization_system', 'descolonización')]"
+ },
+ "je_un_led_topic_development_fund": {
+  "en": "        World Development Fund",
+  "es": "        Fondo Mundial de Desarrollo"
+ },
+ "je_un_led_topic_expulsion": {
+  "en": "        Motion to Expel a [concept_un_permanent_member]",
+  "es": "        Moción para expulsar a un [concept_un_permanent_member|l]"
+ },
+ "je_un_led_topic_food_reserve": {
+  "en": "        World Food Reserve",
+  "es": "        Reserva Mundial de Alimentos"
+ },
+ "je_un_led_topic_heritage": {
+  "en": "        Cultural Heritage Program",
+  "es": "        Programa de patrimonio cultural"
+ },
+ "je_un_led_topic_human_rights": {
+  "en": "        Universal Declaration of Human Rights",
+  "es": "        Declaración Universal de Derechos Humanos"
+ },
+ "je_un_led_topic_icc": {
+  "en": "        International Criminal Court",
+  "es": "        Corte Penal Internacional"
+ },
+ "je_un_led_topic_lift_sanctions": {
+  "en": "        Petition to Lift [concept_un_sanctions]",
+  "es": "        Petición de levantar las [concept_un_sanctions|l]"
+ },
+ "je_un_led_topic_military_mandate": {
+  "en": "        Authorized Military Mandate",
+  "es": "        Mandato militar autorizado"
+ },
+ "je_un_led_topic_narcotics": {
+  "en": "        Single Convention on Narcotic Drugs",
+  "es": "        Convención Única sobre Estupefacientes"
+ },
+ "je_un_led_topic_npt": {
+  "en": "        Nuclear Non-Proliferation Treaty",
+  "es": "        Tratado de no proliferación nuclear"
+ },
+ "je_un_led_topic_observer_request": {
+  "en": "        Electoral Observers Request",
+  "es": "        Solicitud de observadores electorales"
+ },
+ "je_un_led_topic_pandemic": {
+  "en": "        Global Pandemic Response",
+  "es": "        Respuesta mundial a la pandemia"
+ },
+ "je_un_led_topic_peacekeeping_request": {
+  "en": "        [concept_un_peacekeeping] Deployment",
+  "es": "        Despliegue para el [concept_un_peacekeeping|l]"
+ },
+ "je_un_led_topic_physical_protection": {
+  "en": "        Physical Protection of Nuclear Material",
+  "es": "        Protección física del material nuclear"
+ },
+ "je_un_led_topic_referendum": {
+  "en": "        Supervised Self-Determination Referendum",
+  "es": "        Referéndum de autodeterminación supervisado"
+ },
+ "je_un_led_topic_reform": {
+  "en": "        Charter Reform",
+  "es": "        Reforma de la Carta"
+ },
+ "je_un_led_topic_refugee": {
+  "en": "        International Refugee Resolution",
+  "es": "        Resolución internacional sobre refugiados"
+ },
+ "je_un_led_topic_space": {
+  "en": "        International Space Cooperation",
+  "es": "        Cooperación espacial internacional"
+ },
+ "je_un_led_topic_standing_force": {
+  "en": "        Standing UN Force",
+  "es": "        Fuerza permanente de la ONU"
+ },
+ "je_un_ov_agencies_label": {
+  "en": "Agencies",
+  "es": "Agencias"
+ },
+ "je_un_ov_authority_value": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/mo)",
+  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_step')|+1]/mes)"
+ },
+ "je_un_ov_council_label": {
+  "en": "Security Council",
+  "es": "Consejo de Seguridad"
+ },
+ "je_un_ov_member_0": {
+  "en": "No UN",
+  "es": "Sin ONU"
+ },
+ "je_un_ov_member_1": {
+  "en": "Cannot join",
+  "es": "No puede unirse"
+ },
+ "je_un_ov_member_2": {
+  "en": "Not a member",
+  "es": "No es miembro"
+ },
+ "je_un_ov_member_3": {
+  "en": "Member",
+  "es": "Miembro"
+ },
+ "je_un_ov_member_4": {
+  "en": "Permanent member",
+  "es": "Miembro permanente"
+ },
+ "je_un_ov_member_5": {
+  "en": "Suspended, seat carried",
+  "es": "Suspendido, escaño conservado"
+ },
+ "je_un_ov_member_6": {
+  "en": "Suspended",
+  "es": "Suspendido"
+ },
+ "je_un_ov_tier_0": {
+  "en": "Moribund",
+  "es": "Moribunda"
+ },
+ "je_un_ov_tier_1": {
+  "en": "Contested",
+  "es": "Cuestionada"
+ },
+ "je_un_ov_tier_2": {
+  "en": "Established",
+  "es": "Consolidada"
+ },
+ "je_un_ov_tier_3": {
+  "en": "Strong",
+  "es": "Fuerte"
+ },
+ "je_un_ov_tier_4": {
+  "en": "Supranational",
+  "es": "Supranacional"
+ },
+ "je_un_preview_dues_header": {
+  "en": "If we are a member",
+  "es": "Si somos miembros"
+ },
+ "je_un_preview_npt_header": {
+  "en": "If the United Nations enforces non-proliferation",
+  "es": "Si las Naciones Unidas imponen la no proliferación"
+ },
+ "je_un_prog_arms": {
+  "en": "Signed arms control",
+  "es": "Control de armamentos firmado"
+ },
+ "je_un_prog_climate": {
+  "en": "Bound by the Climate Accord",
+  "es": "Sujetos al Acuerdo climático"
+ },
+ "je_un_prog_development": {
+  "en": "Funding development aid",
+  "es": "Financiando ayuda al desarrollo"
+ },
+ "je_un_prog_heritage": {
+  "en": "In the heritage programme",
+  "es": "En el programa de patrimonio"
+ },
+ "je_un_prog_hr_champions": {
+  "en": "Championing human rights",
+  "es": "Defensores de los derechos humanos"
+ },
+ "je_un_prog_hr_signatories": {
+  "en": "Signed the Declaration of Human Rights",
+  "es": "Firmantes de la Declaración de Derechos Humanos"
+ },
+ "je_un_prog_npt": {
+  "en": "Signed the Non-Proliferation Treaty",
+  "es": "Firmantes del Tratado de no proliferación"
+ },
+ "je_un_prog_peacekeeping": {
+  "en": "Contributing to peacekeeping",
+  "es": "Contribuyendo al mantenimiento de la paz"
+ },
+ "je_un_prog_sanctions": {
+  "en": "Under sanction",
+  "es": "Bajo sanciones"
+ },
+ "je_un_programmes_header": {
+  "en": "Programmes and Conventions",
+  "es": "Programas y convenciones"
+ },
+ "je_un_record_aggression": {
+  "en": "Aggression",
+  "es": "Agresión"
+ },
+ "je_un_record_asat": {
+  "en": "Anti-satellite strikes",
+  "es": "Ataques antisatélite"
+ },
+ "je_un_record_covert": {
+  "en": "Covert operations",
+  "es": "Operaciones encubiertas"
+ },
+ "je_un_record_defiance": {
+  "en": "Defiance",
+  "es": "Desafío"
+ },
+ "je_un_record_infamy": {
+  "en": "Infamy",
+  "es": "Infamia"
+ },
+ "je_un_record_nuclear": {
+  "en": "Nuclear weapons",
+  "es": "Armas nucleares"
+ },
+ "je_un_record_supports_header": {
+  "en": "Would Support",
+  "es": "Apoyarían"
+ },
+ "je_un_record_violation": {
+  "en": "Violated mandates",
+  "es": "Mandatos violados"
+ },
+ "je_un_session_months": {
+  "en": "Month #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months')|0]#! of 12",
+  "es": "Mes #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_months')|0]#! de 12"
+ },
+ "je_un_standing_effects_disgraced": {
+  "en": "  In force: #R $un_standing_disgraced_modifier$#! — $un_standing_disgraced_modifier_desc$",
+  "es": "  En vigor: #R $un_standing_disgraced_modifier$#! — $un_standing_disgraced_modifier_desc$"
+ },
+ "je_un_standing_effects_exemplary": {
+  "en": "  In force: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$",
+  "es": "  En vigor: #G $un_standing_exemplary_modifier$#! — $un_standing_exemplary_modifier_desc$"
+ },
+ "je_un_standing_effects_poor": {
+  "en": "  In force: #R $un_standing_poor_modifier$#! — $un_standing_poor_modifier_desc$",
+  "es": "  En vigor: #R $un_standing_poor_modifier$#! — $un_standing_poor_modifier_desc$"
+ },
+ "je_un_standing_effects_respected": {
+  "en": "  In force: #G $un_standing_respected_modifier$#! — $un_standing_respected_modifier_desc$",
+  "es": "  En vigor: #G $un_standing_respected_modifier$#! — $un_standing_respected_modifier_desc$"
+ },
+ "je_un_statistics": {
+  "en": "#bold [Concept('concept_un_represented', 'Represented')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]",
+  "es": "#bold [Concept('concept_un_represented', 'Representados')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] elegibles\\n#bold [Concept('concept_great_power', 'Grandes potencias')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]"
+ },
+ "je_un_statistics_suspended_many": {
+  "en": "#bold [Concept('concept_un_represented', 'Represented')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] eligible\\n#bold [Concept('concept_un_suspended_representation', 'Suspended')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_suspended_member_count')|0]#!\\n#bold [Concept('concept_great_power', 'Great Powers')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! of [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]",
+  "es": "#bold [Concept('concept_un_represented', 'Representados')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_eligible_country_count')|0] elegibles\\n#bold [Concept('concept_un_suspended_representation', 'Suspendidos')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_suspended_member_count')|0]#!\\n#bold [Concept('concept_great_power', 'Grandes potencias')]:#! #v [SCOPE.GetRootScope.ScriptValue('un_gp_member_count')|0]#! de [SCOPE.GetRootScope.ScriptValue('un_total_gp_count')|0]"
+ },
+ "je_un_tally_counts": {
+  "en": "#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes')|0] for#! · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_no')|0] against#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_eligible')|0]",
+  "es": "#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes')|0] a favor#! · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_no')|0] en contra#! de [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_eligible')|0]"
+ },
+ "je_united_nations": {
+  "en": "United Nations",
+  "es": "Naciones Unidas"
+ },
+ "je_world_war": {
+  "en": "The Gathering Storm",
+  "es": "La tormenta que se avecina"
+ },
+ "je_world_war_ideology_authoritarian": {
+  "en": "\\n#bold Our Ideology:#! Authoritarian",
+  "es": "\\n#bold Nuestra ideología:#! Autoritaria"
+ },
+ "je_world_war_ideology_nonaligned": {
+  "en": "\\n#bold Our Ideology:#! Non-Aligned",
+  "es": "\\n#bold Nuestra ideología:#! No alineada"
+ }
+}

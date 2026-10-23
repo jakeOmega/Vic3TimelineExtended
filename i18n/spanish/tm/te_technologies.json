@@ -1,0 +1,686 @@
+{
+ "ICBMs": {
+  "en": "Intercontinental Ballistic Missiles",
+  "es": "Misiles balísticos intercontinentales"
+ },
+ "LGBTQ_rights_movement": {
+  "en": "LGBTQ+ Rights Movement",
+  "es": "Movimiento por los derechos LGBTQ+"
+ },
+ "abyssal_plain_mining": {
+  "en": "Abyssal Plain Mining",
+  "es": "Minería de llanuras abisales"
+ },
+ "additive_manufacturing": {
+  "en": "Additive Manufacturing",
+  "es": "Fabricación aditiva"
+ },
+ "advanced_agricultural_statistics": {
+  "en": "Advanced Agricultural Statistics",
+  "es": "Estadística agrícola avanzada"
+ },
+ "advanced_assembly_lines": {
+  "en": "Advanced Assembly Lines",
+  "es": "Líneas de montaje avanzadas"
+ },
+ "advanced_body_armor": {
+  "en": "Advanced Body Armor",
+  "es": "Blindaje corporal avanzado"
+ },
+ "advanced_materials_armor": {
+  "en": "Advanced Materials Armor",
+  "es": "Blindaje de materiales avanzados"
+ },
+ "advanced_military_aircraft": {
+  "en": "Advanced Military Aircraft",
+  "es": "Aeronaves militares avanzadas"
+ },
+ "advanced_nanofabrication": {
+  "en": "Advanced Nanofabrication",
+  "es": "Nanofabricación avanzada"
+ },
+ "advanced_structural_engineering": {
+  "en": "Advanced Structural Engineering",
+  "es": "Ingeniería estructural avanzada"
+ },
+ "advanced_submarine_technology": {
+  "en": "Advanced Submarine Technology",
+  "es": "Tecnología submarina avanzada"
+ },
+ "advanced_workflow_optimization": {
+  "en": "Advanced Workflow Optimization",
+  "es": "Optimización avanzada de flujos de trabajo"
+ },
+ "aluminum_mass_production": {
+  "en": "Aluminum Mass Production",
+  "es": "Producción en serie de aluminio"
+ },
+ "animation": {
+  "en": "Animation",
+  "es": "Animación"
+ },
+ "anti_sub_warfare": {
+  "en": "Anti-Submarine Warfare",
+  "es": "Guerra antisubmarina"
+ },
+ "anti_war_movement": {
+  "en": "Anti-War Movement",
+  "es": "Movimiento contra la guerra"
+ },
+ "antibiotic_mass_production": {
+  "en": "Antibiotic Mass Production",
+  "es": "Producción en serie de antibióticos"
+ },
+ "antimatter_production": {
+  "en": "Antimatter Production",
+  "es": "Producción de antimateria"
+ },
+ "art_deco_architecture": {
+  "en": "Art Deco Architecture",
+  "es": "Arquitectura art déco"
+ },
+ "artificial_intelligence": {
+  "en": "Artificial General Intelligence",
+  "es": "Inteligencia artificial general"
+ },
+ "asteroid_mining": {
+  "en": "Asteroid Mining",
+  "es": "Minería de asteroides"
+ },
+ "augmented_reality_warfare": {
+  "en": "Augmented Reality Warfare",
+  "es": "Guerra de realidad aumentada"
+ },
+ "automated_surveillance": {
+  "en": "Automated Surveillance",
+  "es": "Vigilancia automatizada"
+ },
+ "autonomous_vehicles": {
+  "en": "Autonomous Vehicles",
+  "es": "Vehículos autónomos"
+ },
+ "barcodes_and_scanners": {
+  "en": "Barcodes and Scanners",
+  "es": "Códigos de barras y escáneres"
+ },
+ "bergius_process": {
+  "en": "Bergius Process",
+  "es": "Proceso Bergius"
+ },
+ "bioenhanced_soldiers": {
+  "en": "Bioenhanced Soldiers",
+  "es": "Soldados biomejorados"
+ },
+ "biohacking_and_human_augmentation": {
+  "en": "Human Augmentation",
+  "es": "Mejora humana"
+ },
+ "biological_immortality": {
+  "en": "Biological Immortality",
+  "es": "Inmortalidad biológica"
+ },
+ "biotechnology": {
+  "en": "Biotechnology",
+  "es": "Biotecnología"
+ },
+ "bombing_aircraft": {
+  "en": "Bombing Aircraft",
+  "es": "Aviones de bombardeo"
+ },
+ "brain_computer_interfaces": {
+  "en": "Brain-Computer Interfaces",
+  "es": "Interfaces cerebro-ordenador"
+ },
+ "carbon_capture_and_storage": {
+  "en": "Carbon Capture and Storage",
+  "es": "Captura y almacenamiento de carbono"
+ },
+ "cellular_networks": {
+  "en": "Cellular Networks",
+  "es": "Redes celulares"
+ },
+ "civil_rights_movement": {
+  "en": "Civil Rights Movement",
+  "es": "Movimiento por los derechos civiles"
+ },
+ "clean_energy_technologies": {
+  "en": "Clean Energy Technologies",
+  "es": "Tecnologías de energía limpia"
+ },
+ "cloud_computing": {
+  "en": "Cloud Computing",
+  "es": "Computación en la nube"
+ },
+ "combined_arms": {
+  "en": "Combined Arms",
+  "es": "Armas combinadas"
+ },
+ "commercial_aviation": {
+  "en": "Commercial Aviation",
+  "es": "Aviación comercial"
+ },
+ "compact_fusion_reactors": {
+  "en": "Muon-Catalyzed Fusion Reactors",
+  "es": "Reactores de fusión catalizada por muones"
+ },
+ "computer_aided_design": {
+  "en": "Computer-Aided Design",
+  "es": "Diseño asistido por ordenador"
+ },
+ "computer_networks": {
+  "en": "Computer Networks",
+  "es": "Redes informáticas"
+ },
+ "computing_machines": {
+  "en": "Computing Machines",
+  "es": "Máquinas de computación"
+ },
+ "consumer_credit": {
+  "en": "Consumer Credit",
+  "es": "Crédito al consumo"
+ },
+ "containerization": {
+  "en": "Containerization",
+  "es": "Contenerización"
+ },
+ "contraceptive_pill": {
+  "en": "Contraceptive Pill",
+  "es": "Píldora anticonceptiva"
+ },
+ "cryptography": {
+  "en": "Cryptography",
+  "es": "Criptografía"
+ },
+ "cyber_warfare": {
+  "en": "Cyber Warfare",
+  "es": "Ciberguerra"
+ },
+ "cybersecurity": {
+  "en": "Cybersecurity",
+  "es": "Ciberseguridad"
+ },
+ "decline_of_organized_religion": {
+  "en": "Decline of Organized Religion",
+  "es": "Declive de la religión organizada"
+ },
+ "digital_education": {
+  "en": "Digital Education",
+  "es": "Educación digital"
+ },
+ "digital_entertainment": {
+  "en": "Digital Entertainment",
+  "es": "Entretenimiento digital"
+ },
+ "digital_telecommunications": {
+  "en": "Digital Telecommunications",
+  "es": "Telecomunicaciones digitales"
+ },
+ "directed_energy_defenses": {
+  "en": "Directed Energy Defenses",
+  "es": "Defensas de energía dirigida"
+ },
+ "directed_energy_weapons": {
+  "en": "Directed Energy Weapons",
+  "es": "Armas de energía dirigida"
+ },
+ "e-commerce": {
+  "en": "E-Commerce",
+  "es": "Comercio electrónico"
+ },
+ "early_nanotechnology": {
+  "en": "Early Nanotechnology",
+  "es": "Nanotecnología temprana"
+ },
+ "electric_vehicles": {
+  "en": "Electric Vehicles",
+  "es": "Vehículos eléctricos"
+ },
+ "electronic_warfare": {
+  "en": "Electronic Warfare",
+  "es": "Guerra electrónica"
+ },
+ "environmental_movement": {
+  "en": "Environmental Movement",
+  "es": "Movimiento ecologista"
+ },
+ "fiber_optics": {
+  "en": "Fiber Optics",
+  "es": "Fibra óptica"
+ },
+ "fluorescent_lamps": {
+  "en": "Fluorescent Lamps",
+  "es": "Lámparas fluorescentes"
+ },
+ "fusion_batteries": {
+  "en": "Fusion Batteries",
+  "es": "Baterías de fusión"
+ },
+ "fusion_power": {
+  "en": "Fusion Power",
+  "es": "Energía de fusión"
+ },
+ "gene_splicing": {
+  "en": "Gene Splicing",
+  "es": "Empalme de genes"
+ },
+ "generative_ai": {
+  "en": "Generative AI",
+  "es": "IA generativa"
+ },
+ "genetic_engineering": {
+  "en": "Genetic Engineering",
+  "es": "Ingeniería genética"
+ },
+ "globalization": {
+  "en": "Globalization",
+  "es": "Globalización"
+ },
+ "green_revolution": {
+  "en": "Green Revolution",
+  "es": "Revolución verde"
+ },
+ "guided_missiles": {
+  "en": "Guided Missiles",
+  "es": "Misiles guiados"
+ },
+ "hydraulic_fracturing": {
+  "en": "Hydraulic Fracturing",
+  "es": "Fracturación hidráulica"
+ },
+ "hypersonic_weapons": {
+  "en": "Hypersonic Weapons",
+  "es": "Armas hipersónicas"
+ },
+ "inertial_navigation_systems": {
+  "en": "Inertial Navigation Systems",
+  "es": "Sistemas de navegación inercial"
+ },
+ "infrared_night_vision": {
+  "en": "Infrared Night Vision",
+  "es": "Visión nocturna infrarroja"
+ },
+ "integrated_circuits": {
+  "en": "Integrated Circuits",
+  "es": "Circuitos integrados"
+ },
+ "intergovernmental_organizations": {
+  "en": "Intergovernmental Organizations",
+  "es": "Organizaciones intergubernamentales"
+ },
+ "internet_of_things": {
+  "en": "Internet of Things",
+  "es": "Internet de las cosas"
+ },
+ "isoprene": {
+  "en": "Isoprene",
+  "es": "Isopreno"
+ },
+ "jadc2": {
+  "en": "Joint All-Domain Command and Control (JADC2)",
+  "es": "Mando y control conjunto en todos los dominios (JADC2)"
+ },
+ "jet_engine_technology": {
+  "en": "Jet Engine Technology",
+  "es": "Tecnología de motores a reacción"
+ },
+ "keynesian_economics": {
+  "en": "Keynesian Economics",
+  "es": "Economía keynesiana"
+ },
+ "knowledge_economy": {
+  "en": "Knowledge Economy",
+  "es": "Economía del conocimiento"
+ },
+ "lab-grown_food": {
+  "en": "Lab-Grown Food",
+  "es": "Alimentos cultivados en laboratorio"
+ },
+ "laser_technology": {
+  "en": "Laser Technology",
+  "es": "Tecnología láser"
+ },
+ "machine_learning": {
+  "en": "Machine Learning",
+  "es": "Aprendizaje automático"
+ },
+ "mainframe_computers": {
+  "en": "Mainframe Computers",
+  "es": "Ordenadores centrales"
+ },
+ "marketing_research": {
+  "en": "Marketing Research",
+  "es": "Investigación de mercados"
+ },
+ "mass_media": {
+  "en": "Mass Media",
+  "es": "Medios de comunicación de masas"
+ },
+ "mental_health_awareness": {
+  "en": "Mental Health Awareness",
+  "es": "Concienciación sobre la salud mental"
+ },
+ "microprocessor": {
+  "en": "Microprocessor",
+  "es": "Microprocesador"
+ },
+ "military_grade_cybersecurity": {
+  "en": "Military-Grade Cybersecurity",
+  "es": "Ciberseguridad de grado militar"
+ },
+ "mind_backups": {
+  "en": "Mind Backups",
+  "es": "Copias de seguridad mentales"
+ },
+ "missile_defense_systems": {
+  "en": "Missile Defense Systems",
+  "es": "Sistemas de defensa antimisiles"
+ },
+ "modern_automotive_technology": {
+  "en": "Advanced Automotive Production Techniques",
+  "es": "Técnicas avanzadas de producción automovilística"
+ },
+ "modern_chemical_processes": {
+  "en": "Modern Chemical Processes",
+  "es": "Procesos químicos modernos"
+ },
+ "modern_management_techniques": {
+  "en": "Modern Management Techniques",
+  "es": "Técnicas de gestión modernas"
+ },
+ "modern_material_science": {
+  "en": "Modern Material Science",
+  "es": "Ciencia de materiales moderna"
+ },
+ "modern_materials": {
+  "en": "Modern Materials",
+  "es": "Materiales modernos"
+ },
+ "modern_pharmaceuticals": {
+  "en": "Modern Pharmaceuticals",
+  "es": "Productos farmacéuticos modernos"
+ },
+ "modern_skyscrapers": {
+  "en": "Modern Skyscrapers",
+  "es": "Rascacielos modernos"
+ },
+ "modern_tools": {
+  "en": "Modern Tools",
+  "es": "Herramientas modernas"
+ },
+ "modern_urban_planning": {
+  "en": "Modern Urban Planning",
+  "es": "Planificación urbana moderna"
+ },
+ "modern_vaccines": {
+  "en": "Modern Vaccines",
+  "es": "Vacunas modernas"
+ },
+ "molecular_assemblers": {
+  "en": "Molecular Assemblers",
+  "es": "Ensambladores moleculares"
+ },
+ "motorized_artillery": {
+  "en": "Motorized Artillery",
+  "es": "Artillería motorizada"
+ },
+ "mrna_therapeutics": {
+  "en": "mRNA Therapeutics",
+  "es": "Terapias de ARNm"
+ },
+ "naval_convoy_defense": {
+  "en": "Naval Convoy Defense",
+  "es": "Defensa de convoyes navales"
+ },
+ "naval_fire_control_systems": {
+  "en": "Naval Fire Control Systems",
+  "es": "Sistemas navales de control de tiro"
+ },
+ "network_centric_warfare": {
+  "en": "Network Centric Warfare",
+  "es": "Guerra centrada en red"
+ },
+ "neural_lace": {
+  "en": "Neural Lace",
+  "es": "Encaje neuronal"
+ },
+ "nuclear_energy": {
+  "en": "Nuclear Energy",
+  "es": "Energía nuclear"
+ },
+ "nuclear_weapons": {
+  "en": "Nuclear Weapons",
+  "es": "Armas nucleares"
+ },
+ "orbital_manufacturing": {
+  "en": "Orbital Manufacturing",
+  "es": "Fabricación orbital"
+ },
+ "orbital_weapon_platforms": {
+  "en": "Orbital Weapon Platforms",
+  "es": "Plataformas de armas orbitales"
+ },
+ "personal_appliances": {
+  "en": "Personal Appliances",
+  "es": "Electrodomésticos personales"
+ },
+ "personal_computers": {
+  "en": "Personal Computers",
+  "es": "Ordenadores personales"
+ },
+ "personalized_medicine": {
+  "en": "Personalized Medicine",
+  "es": "Medicina personalizada"
+ },
+ "photocopiers": {
+  "en": "Photocopiers",
+  "es": "Fotocopiadoras"
+ },
+ "plastic_mass_production": {
+  "en": "Plastic Mass Production",
+  "es": "Producción en serie de plástico"
+ },
+ "pollution_control": {
+  "en": "Pollution Control",
+  "es": "Control de la contaminación"
+ },
+ "pop_culture": {
+  "en": "Pop Culture",
+  "es": "Cultura pop"
+ },
+ "post-scarcity_economy": {
+  "en": "Post-Scarcity Economy",
+  "es": "Economía de la poscarencia"
+ },
+ "precision_guided_munitions": {
+  "en": "Precision Guided Munitions",
+  "es": "Municiones de precisión guiada"
+ },
+ "predictive_logistics": {
+  "en": "Predictive Logistics",
+  "es": "Logística predictiva"
+ },
+ "prefabricated_construction": {
+  "en": "Prefabricated Construction",
+  "es": "Construcción prefabricada"
+ },
+ "programmable_matter": {
+  "en": "Programmable Matter",
+  "es": "Materia programable"
+ },
+ "public_works_programs": {
+  "en": "Public Works Programs",
+  "es": "Programas de obras públicas"
+ },
+ "quantum_communications": {
+  "en": "Quantum Communications",
+  "es": "Comunicaciones cuánticas"
+ },
+ "quantum_computing": {
+  "en": "Quantum Computing",
+  "es": "Computación cuántica"
+ },
+ "quantum_materials": {
+  "en": "Quantum Materials",
+  "es": "Materiales cuánticos"
+ },
+ "radar": {
+  "en": "Radar",
+  "es": "Radar"
+ },
+ "rapid_deployment_forces": {
+  "en": "Rapid Deployment Forces",
+  "es": "Fuerzas de despliegue rápido"
+ },
+ "recon_satellites": {
+  "en": "Reconnaissance Satellites",
+  "es": "Satélites de reconocimiento"
+ },
+ "reusable_rocketry": {
+  "en": "Reusable Rocketry",
+  "es": "Cohetería reutilizable"
+ },
+ "robotics": {
+  "en": "Industrial Robotics",
+  "es": "Robótica industrial"
+ },
+ "rocketry": {
+  "en": "Rocketry",
+  "es": "Cohetería"
+ },
+ "rural_electrification": {
+  "en": "Rural Electrification",
+  "es": "Electrificación rural"
+ },
+ "satellite_communications": {
+  "en": "Satellite Communications",
+  "es": "Comunicaciones por satélite"
+ },
+ "second_wave_feminism": {
+  "en": "Second Wave Feminism",
+  "es": "Feminismo de la segunda ola"
+ },
+ "semiautomatic_rifle": {
+  "en": "Semi-Automatic Rifle",
+  "es": "Fusil semiautomático"
+ },
+ "sexual_revolution": {
+  "en": "Sexual Revolution",
+  "es": "Revolución sexual"
+ },
+ "smart_grids": {
+  "en": "Smart Grids",
+  "es": "Redes inteligentes"
+ },
+ "social_justice_movements": {
+  "en": "Social Justice Movements",
+  "es": "Movimientos por la justicia social"
+ },
+ "social_media": {
+  "en": "Social Media",
+  "es": "Redes sociales"
+ },
+ "sonar": {
+  "en": "Sonar",
+  "es": "Sónar"
+ },
+ "space_based_solar_power": {
+  "en": "Space-Based Solar Power",
+  "es": "Energía solar espacial"
+ },
+ "space_colonization": {
+  "en": "Space Colonization",
+  "es": "Colonización espacial"
+ },
+ "space_elevator": {
+  "en": "Space Elevator",
+  "es": "Ascensor espacial"
+ },
+ "space_exploration": {
+  "en": "Space Exploration",
+  "es": "Exploración espacial"
+ },
+ "space_militarization": {
+  "en": "Space Militarization",
+  "es": "Militarización del espacio"
+ },
+ "stainless_steel_mass_production": {
+  "en": "Stainless Steel Mass Production",
+  "es": "Producción en serie de acero inoxidable"
+ },
+ "stealth_technology": {
+  "en": "Stealth Technology",
+  "es": "Tecnología furtiva"
+ },
+ "supersonic_aircraft": {
+  "en": "Supersonic Aircraft",
+  "es": "Aviones supersónicos"
+ },
+ "supply_chain_management": {
+  "en": "Supply Chain Management",
+  "es": "Gestión de la cadena de suministro"
+ },
+ "swarm_technology": {
+  "en": "Swarm Technology",
+  "es": "Tecnología de enjambre"
+ },
+ "synthetic_biology": {
+  "en": "Synthetic Biology",
+  "es": "Biología sintética"
+ },
+ "tactical_nuclear_weapons": {
+  "en": "Tactical Nuclear Weapons",
+  "es": "Armas nucleares tácticas"
+ },
+ "telemedicine": {
+  "en": "Telemedicine",
+  "es": "Telemedicina"
+ },
+ "telepathic_communities": {
+  "en": "Telepathic Communities",
+  "es": "Comunidades telepáticas"
+ },
+ "television": {
+  "en": "Television",
+  "es": "Televisión"
+ },
+ "television_broadcasting": {
+  "en": "Television Broadcasting",
+  "es": "Radiodifusión televisiva"
+ },
+ "terrorism_and_anti_terrorism": {
+  "en": "Terrorism and Antiterrorism",
+  "es": "Terrorismo y antiterrorismo"
+ },
+ "transistors": {
+  "en": "Transistor Technology",
+  "es": "Tecnología del transistor"
+ },
+ "universal_basic_income": {
+  "en": "Universal Basic Income",
+  "es": "Renta básica universal"
+ },
+ "universal_digital_identity": {
+  "en": "Universal Digital Identity",
+  "es": "Identidad digital universal"
+ },
+ "unmanned_aerial_vehicles": {
+  "en": "Unmanned Aerial Vehicles",
+  "es": "Vehículos aéreos no tripulados"
+ },
+ "video_games": {
+  "en": "Video Games",
+  "es": "Videojuegos"
+ },
+ "virtual_reality": {
+  "en": "Virtual Reality",
+  "es": "Realidad virtual"
+ },
+ "wireless_internet": {
+  "en": "Wireless Internet (Wi-Fi)",
+  "es": "Internet inalámbrico (Wi-Fi)"
+ },
+ "world_wide_web": {
+  "en": "World Wide Web",
+  "es": "World Wide Web"
+ }
+}

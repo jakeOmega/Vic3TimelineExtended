@@ -1,0 +1,638 @@
+{
+ "AFU": {
+  "en": "African Union",
+  "es": "Unión Africana"
+ },
+ "AFU_ADJ": {
+  "en": "African",
+  "es": "africano"
+ },
+ "BHA": {
+  "en": "India",
+  "es": "India"
+ },
+ "BHA_ADJ": {
+  "en": "Indian",
+  "es": "indio"
+ },
+ "DAR": {
+  "en": "Dar-Al-Islam",
+  "es": "Dar al-Islam"
+ },
+ "DAR_ADJ": {
+  "en": "Islamic",
+  "es": "islámico"
+ },
+ "EAF": {
+  "en": "East African Federation",
+  "es": "Federación de África Oriental"
+ },
+ "EAF_ADJ": {
+  "en": "East African",
+  "es": "africano del este"
+ },
+ "EUN": {
+  "en": "European Union",
+  "es": "Unión Europea"
+ },
+ "EUN_ADJ": {
+  "en": "European",
+  "es": "europeo"
+ },
+ "INM": {
+  "en": "Intermarium",
+  "es": "Intermarium"
+ },
+ "INM_ADJ": {
+  "en": "Intermarian",
+  "es": "del Intermarium"
+ },
+ "NUS": {
+  "en": "Indonesia",
+  "es": "Indonesia"
+ },
+ "NUS_ADJ": {
+  "en": "Indonesian",
+  "es": "indonesio"
+ },
+ "UNA": {
+  "en": "North American Union",
+  "es": "Unión Norteamericana"
+ },
+ "UNA_ADJ": {
+  "en": "North American",
+  "es": "norteamericano"
+ },
+ "UNE": {
+  "en": "United Earth",
+  "es": "Tierra Unida"
+ },
+ "UNE_ADJ": {
+  "en": "Terran",
+  "es": "terrano"
+ },
+ "ZHO": {
+  "en": "China",
+  "es": "China"
+ },
+ "ZHO_ADJ": {
+  "en": "Chinese",
+  "es": "chino"
+ },
+ "dp_leadership_african_union": {
+  "en": "African Leadership",
+  "es": "Liderazgo africano"
+ },
+ "dp_leadership_china": {
+  "en": "Contest Leadership of China",
+  "es": "Disputar el liderazgo de China"
+ },
+ "dp_leadership_dar_al_islam": {
+  "en": "Caliphal Leadership",
+  "es": "Liderazgo califal"
+ },
+ "dp_leadership_east_african_federation": {
+  "en": "East African Leadership",
+  "es": "Liderazgo de África Oriental"
+ },
+ "dp_leadership_european_union": {
+  "en": "European Leadership",
+  "es": "Liderazgo europeo"
+ },
+ "dp_leadership_india": {
+  "en": "Indian Leadership",
+  "es": "Liderazgo indio"
+ },
+ "dp_leadership_indonesia": {
+  "en": "Indonesian Leadership",
+  "es": "Liderazgo indonesio"
+ },
+ "dp_leadership_intermarium": {
+  "en": "Intermarium Leadership",
+  "es": "Liderazgo del Intermarium"
+ },
+ "dp_leadership_united_earth": {
+  "en": "Terran Leadership",
+  "es": "Liderazgo terrano"
+ },
+ "dp_leadership_united_north_america": {
+  "en": "North American Leadership",
+  "es": "Liderazgo norteamericano"
+ },
+ "dp_unify_african_union": {
+  "en": "Unify the African Union",
+  "es": "Unificar la Unión Africana"
+ },
+ "dp_unify_dar_al_islam": {
+  "en": "Unify the Dar-Al-Islam",
+  "es": "Unificar Dar al-Islam"
+ },
+ "dp_unify_east_african_federation": {
+  "en": "Unify East Africa",
+  "es": "Unificar África Oriental"
+ },
+ "dp_unify_european_union": {
+  "en": "Unify the European Union",
+  "es": "Unificar la Unión Europea"
+ },
+ "dp_unify_intermarium": {
+  "en": "Unify the Intermarium",
+  "es": "Unificar el Intermarium"
+ },
+ "dp_unify_united_earth": {
+  "en": "Unify Earth",
+  "es": "Unificar la Tierra"
+ },
+ "dp_unify_united_north_america": {
+  "en": "Unify North America",
+  "es": "Unificar Norteamérica"
+ },
+ "dyn_c_african_empire": {
+  "en": "African Empire",
+  "es": "Imperio Africano"
+ },
+ "dyn_c_african_imperium": {
+  "en": "African Imperium",
+  "es": "Imperium Africano"
+ },
+ "dyn_c_african_technate": {
+  "en": "United African Technate",
+  "es": "Tecnato Africano Unido"
+ },
+ "dyn_c_african_union": {
+  "en": "African Union",
+  "es": "Unión Africana"
+ },
+ "dyn_c_akhand_bharat": {
+  "en": "Akhand Bharat",
+  "es": "Akhand Bharat"
+ },
+ "dyn_c_akhand_bharati_adj": {
+  "en": "Akhand Bharati",
+  "es": "akhand bharati"
+ },
+ "dyn_c_american_imperial_adj": {
+  "en": "American Imperial",
+  "es": "imperial americano"
+ },
+ "dyn_c_american_imperial_union": {
+  "en": "American Imperial Union",
+  "es": "Unión Imperial Americana"
+ },
+ "dyn_c_american_technate": {
+  "en": "American Technate",
+  "es": "Tecnato Americano"
+ },
+ "dyn_c_associated_trusts_of_america": {
+  "en": "Associated Trusts of America",
+  "es": "Fideicomisos Asociados de América"
+ },
+ "dyn_c_bharati_adj": {
+  "en": "Bharati",
+  "es": "bharati"
+ },
+ "dyn_c_bharatiya_adj": {
+  "en": "Bharatiya",
+  "es": "bharatiya"
+ },
+ "dyn_c_bharatiya_samrajya": {
+  "en": "Bharatiya Samrajya",
+  "es": "Bharatiya Samrajya"
+ },
+ "dyn_c_bharatiya_vigyan_sangha": {
+  "en": "Bharatiya Vigyan Sangha",
+  "es": "Bharatiya Vigyan Sangha"
+ },
+ "dyn_c_caliphate_adj": {
+  "en": "Caliphal",
+  "es": "califal"
+ },
+ "dyn_c_catholic_federation_of_three_seas": {
+  "en": "Catholic Federation of the Three Seas",
+  "es": "Federación Católica de los Tres Mares"
+ },
+ "dyn_c_celestial_adj": {
+  "en": "Celestial",
+  "es": "celestial"
+ },
+ "dyn_c_celestial_empire": {
+  "en": "Celestial Empire",
+  "es": "Imperio Celestial"
+ },
+ "dyn_c_celestial_peoples_adj": {
+  "en": "Celestial People's",
+  "es": "popular celestial"
+ },
+ "dyn_c_celestial_peoples_federation": {
+  "en": "Celestial People's Federation",
+  "es": "Federación Popular Celestial"
+ },
+ "dyn_c_chinese_imperial_adj": {
+  "en": "Chinese Imperial",
+  "es": "imperial chino"
+ },
+ "dyn_c_continental_adj": {
+  "en": "Continental",
+  "es": "continental"
+ },
+ "dyn_c_continental_technate": {
+  "en": "Continental Technate",
+  "es": "Tecnato Continental"
+ },
+ "dyn_c_cosmic_soviet_adj": {
+  "en": "Cosmic Soviet",
+  "es": "soviético cósmico"
+ },
+ "dyn_c_cosmic_soviet_union": {
+  "en": "Cosmic Soviet Union",
+  "es": "Unión Soviética Cósmica"
+ },
+ "dyn_c_crown_of_saint_stephen": {
+  "en": "Crown of Saint Stephen",
+  "es": "Corona de San Esteban"
+ },
+ "dyn_c_crown_of_saint_stephen_adj": {
+  "en": "Hungarian",
+  "es": "húngaro"
+ },
+ "dyn_c_east_african_confederation": {
+  "en": "East African Confederation",
+  "es": "Confederación de África Oriental"
+ },
+ "dyn_c_east_african_federation": {
+  "en": "East African Federation",
+  "es": "Federación de África Oriental"
+ },
+ "dyn_c_east_african_imperium": {
+  "en": "East African Imperium",
+  "es": "Imperium de África Oriental"
+ },
+ "dyn_c_east_african_technate": {
+  "en": "East African Technate",
+  "es": "Tecnato de África Oriental"
+ },
+ "dyn_c_empire_of_earth": {
+  "en": "Empire of Earth",
+  "es": "Imperio de la Tierra"
+ },
+ "dyn_c_empire_of_greater_ethiopia": {
+  "en": "Empire of Greater Ethiopia",
+  "es": "Imperio de la Gran Etiopía"
+ },
+ "dyn_c_empire_of_the_americas": {
+  "en": "Empire of the Americas",
+  "es": "Imperio de las Américas"
+ },
+ "dyn_c_european_imperial_adj": {
+  "en": "European Imperial",
+  "es": "imperial europeo"
+ },
+ "dyn_c_european_imperial_federation": {
+  "en": "European Imperial Federation",
+  "es": "Federación Imperial Europea"
+ },
+ "dyn_c_european_imperium": {
+  "en": "European Imperium",
+  "es": "Imperium Europeo"
+ },
+ "dyn_c_european_soviet_adj": {
+  "en": "European Soviet",
+  "es": "soviético europeo"
+ },
+ "dyn_c_european_technate": {
+  "en": "European Technate",
+  "es": "Tecnato Europeo"
+ },
+ "dyn_c_european_union": {
+  "en": "European Union",
+  "es": "Unión Europea"
+ },
+ "dyn_c_federal_district_of_columbia": {
+  "en": "Federal District of Columbia",
+  "es": "Distrito Federal de Columbia"
+ },
+ "dyn_c_great_qing_empire": {
+  "en": "Empire of the Great Qing",
+  "es": "Imperio de la Dinastía Qing"
+ },
+ "dyn_c_great_yuan_empire": {
+  "en": "Empire of the Great Yuan",
+  "es": "Imperio del Gran Yuan"
+ },
+ "dyn_c_greater_chinese_adj": {
+  "en": "Greater Chinese",
+  "es": "de la Gran China"
+ },
+ "dyn_c_greater_chinese_empire": {
+  "en": "Greater Chinese Empire",
+  "es": "Imperio de la Gran China"
+ },
+ "dyn_c_greater_ethiopian_adj": {
+  "en": "Ethiopian",
+  "es": "etíope"
+ },
+ "dyn_c_hindu_rashtra": {
+  "en": "Hindu Rashtra",
+  "es": "Hindu Rashtra"
+ },
+ "dyn_c_hindu_rashtra_adj": {
+  "en": "Hindu Rashtra",
+  "es": "del Hindu Rashtra"
+ },
+ "dyn_c_holy_terran_adj": {
+  "en": "Holy Terran",
+  "es": "sagrado terrano"
+ },
+ "dyn_c_holy_terran_dominion": {
+  "en": "Holy Terran Dominion",
+  "es": "Dominio Sagrado Terrano"
+ },
+ "dyn_c_house_of_wisdom": {
+  "en": "House of Wisdom",
+  "es": "Casa de la Sabiduría"
+ },
+ "dyn_c_house_of_wisdom_adj": {
+  "en": "Bayt al-Hikma",
+  "es": "de Bayt al-Hikma"
+ },
+ "dyn_c_imamate_of_east_africa": {
+  "en": "Imamate of East Africa",
+  "es": "Imamato de África Oriental"
+ },
+ "dyn_c_imperial_federation_adj": {
+  "en": "Imperial Federal",
+  "es": "federal imperial"
+ },
+ "dyn_c_imperial_federation_of_earth": {
+  "en": "Imperial Federation of Earth",
+  "es": "Federación Imperial de la Tierra"
+ },
+ "dyn_c_imperial_mexican_adj": {
+  "en": "Imperial Mexican",
+  "es": "imperial mexicano"
+ },
+ "dyn_c_imperial_union_of_america": {
+  "en": "Imperial Union of America",
+  "es": "Unión Imperial de América"
+ },
+ "dyn_c_indonesia_raya": {
+  "en": "Indonesia Raya",
+  "es": "Indonesia Raya"
+ },
+ "dyn_c_indonesia_raya_adj": {
+  "en": "Indonesia Raya",
+  "es": "de Indonesia Raya"
+ },
+ "dyn_c_indonesian_technical_union": {
+  "en": "Indonesian Technical Union",
+  "es": "Unión Técnica Indonesia"
+ },
+ "dyn_c_intermarium": {
+  "en": "Intermarium",
+  "es": "Intermarium"
+ },
+ "dyn_c_islamic_federation": {
+  "en": "Islamic Federation",
+  "es": "Federación Islámica"
+ },
+ "dyn_c_islamic_socialist_republic": {
+  "en": "Islamic Socialist Republic",
+  "es": "República Socialista Islámica"
+ },
+ "dyn_c_islamic_sultanate": {
+  "en": "Islamic Sultanate",
+  "es": "Sultanato Islámico"
+ },
+ "dyn_c_majapahit_revival": {
+  "en": "Majapahit Revival",
+  "es": "Resurgimiento de Majapahit"
+ },
+ "dyn_c_national_estates_of_america": {
+  "en": "National Estates of America",
+  "es": "Estamentos Nacionales de América"
+ },
+ "dyn_c_negara_islam_adj": {
+  "en": "Indonesian Islamic",
+  "es": "islámico indonesio"
+ },
+ "dyn_c_negara_islam_indonesia": {
+  "en": "Negara Islam Indonesia",
+  "es": "Negara Islam Indonesia"
+ },
+ "dyn_c_new_canaan": {
+  "en": "New Canaan",
+  "es": "Nueva Canaán"
+ },
+ "dyn_c_north_american_royal_adj": {
+  "en": "North American Royal",
+  "es": "real norteamericano"
+ },
+ "dyn_c_north_american_soviet_adj": {
+  "en": "North American Soviet",
+  "es": "soviético norteamericano"
+ },
+ "dyn_c_north_american_union": {
+  "en": "North American Union",
+  "es": "Unión Norteamericana"
+ },
+ "dyn_c_nusantara_empire": {
+  "en": "Nusantara Empire",
+  "es": "Imperio de Nusantara"
+ },
+ "dyn_c_nusantara_empire_adj": {
+  "en": "Nusantaran",
+  "es": "de Nusantara"
+ },
+ "dyn_c_ottoman_caliphate": {
+  "en": "Ottoman Caliphate",
+  "es": "Califato Otomano"
+ },
+ "dyn_c_ottoman_caliphate_adj": {
+  "en": "Ottoman",
+  "es": "otomano"
+ },
+ "dyn_c_pan_african_socialist_federation": {
+  "en": "Pan-African Socialist Federation",
+  "es": "Federación Socialista Panafricana"
+ },
+ "dyn_c_pan_african_theocracy": {
+  "en": "Pan-African Theocracy",
+  "es": "Teocracia Panafricana"
+ },
+ "dyn_c_pan_islamic_league": {
+  "en": "Pan-Islamic League",
+  "es": "Liga Panislámica"
+ },
+ "dyn_c_pax_americana": {
+  "en": "Pax Americana",
+  "es": "Pax Americana"
+ },
+ "dyn_c_pax_americana_adj": {
+  "en": "Pax Americana",
+  "es": "de la Pax Americana"
+ },
+ "dyn_c_peoples_republic_of_bharat": {
+  "en": "People's Republic of Bharat",
+  "es": "República Popular de Bharat"
+ },
+ "dyn_c_peoples_republic_of_indonesia": {
+  "en": "People's Republic of Indonesia",
+  "es": "República Popular de Indonesia"
+ },
+ "dyn_c_polish_lithuanian_commonwealth": {
+  "en": "Polish-Lithuanian Commonwealth",
+  "es": "Mancomunidad Polaco-Lituana"
+ },
+ "dyn_c_promethean_adj": {
+  "en": "Promethean",
+  "es": "prometeico"
+ },
+ "dyn_c_promethean_empire": {
+  "en": "Promethean Empire",
+  "es": "Imperio Prometeico"
+ },
+ "dyn_c_qing_imperial_adj": {
+  "en": "Qing Imperial",
+  "es": "imperial qing"
+ },
+ "dyn_c_rashidun_adj": {
+  "en": "Rashidun",
+  "es": "rashidún"
+ },
+ "dyn_c_rashidun_caliphate": {
+  "en": "Rashidun Caliphate",
+  "es": "Califato Rashidún"
+ },
+ "dyn_c_republic_of_china": {
+  "en": "Republic of China",
+  "es": "República de China"
+ },
+ "dyn_c_republic_of_india": {
+  "en": "Republic of India",
+  "es": "República de la India"
+ },
+ "dyn_c_republic_of_indonesia": {
+  "en": "Republic of Indonesia",
+  "es": "República de Indonesia"
+ },
+ "dyn_c_republique_mondiale": {
+  "en": "République Mondiale",
+  "es": "République Mondiale"
+ },
+ "dyn_c_republique_mondiale_adj": {
+  "en": "Mondiale",
+  "es": "mundial"
+ },
+ "dyn_c_safavid_adj": {
+  "en": "Safavid",
+  "es": "safávida"
+ },
+ "dyn_c_safavid_caliphate": {
+  "en": "Safavid Caliphate",
+  "es": "Califato Safávida"
+ },
+ "dyn_c_sinocybernetic_adj": {
+  "en": "Sinocybernetic",
+  "es": "sinocibernético"
+ },
+ "dyn_c_solomonic_african_empire": {
+  "en": "Solomonic African Empire",
+  "es": "Imperio Africano Salomónico"
+ },
+ "dyn_c_soviet_federation_of_north_america": {
+  "en": "Soviet Federation of North America",
+  "es": "Federación Soviética de Norteamérica"
+ },
+ "dyn_c_state_and_district_of_america": {
+  "en": "State and District of America",
+  "es": "Estado y Distrito de América"
+ },
+ "dyn_c_technocratic_republic_of_china": {
+  "en": "Technocratic Republic of China",
+  "es": "República Tecnocrática de China"
+ },
+ "dyn_c_terran_imperial_adj": {
+  "en": "Terran Imperial",
+  "es": "imperial terrano"
+ },
+ "dyn_c_terran_imperium": {
+  "en": "Terran Imperium",
+  "es": "Imperium Terrano"
+ },
+ "dyn_c_terran_socialist_adj": {
+  "en": "Terran Socialist",
+  "es": "socialista terrano"
+ },
+ "dyn_c_terran_socialist_federation": {
+  "en": "Terran Socialist Federation",
+  "es": "Federación Socialista Terrana"
+ },
+ "dyn_c_terran_technate": {
+  "en": "Terran Technate",
+  "es": "Tecnato Terrano"
+ },
+ "dyn_c_terran_technate_adj": {
+  "en": "Terran Technate",
+  "es": "del Tecnato Terrano"
+ },
+ "dyn_c_the_caliphate": {
+  "en": "The Caliphate",
+  "es": "El Califato"
+ },
+ "dyn_c_three_seas_adj": {
+  "en": "Three Seas",
+  "es": "de los Tres Mares"
+ },
+ "dyn_c_three_seas_socialist_federation": {
+  "en": "Federation of Three Seas Soviets",
+  "es": "Federación de Soviets de los Tres Mares"
+ },
+ "dyn_c_three_seas_technical_union": {
+  "en": "Three Seas Technical Union",
+  "es": "Unión Técnica de los Tres Mares"
+ },
+ "dyn_c_ujamaa_adj": {
+  "en": "Ujamaa",
+  "es": "de Ujamaa"
+ },
+ "dyn_c_ujamaa_federation": {
+  "en": "Ujamaa Federation",
+  "es": "Federación Ujamaa"
+ },
+ "dyn_c_union_of_european_socialist_republics": {
+  "en": "Union of European Socialist Republics",
+  "es": "Unión de Repúblicas Socialistas Europeas"
+ },
+ "dyn_c_united_crowns_of_north_america": {
+  "en": "United Crowns of North America",
+  "es": "Coronas Unidas de Norteamérica"
+ },
+ "dyn_c_united_earth": {
+  "en": "United Earth",
+  "es": "Tierra Unida"
+ },
+ "dyn_c_vasudhaiva_kutumbakam": {
+  "en": "Vasudhaiva Kutumbakam",
+  "es": "Vasudhaiva Kutumbakam"
+ },
+ "dyn_c_vasudhaiva_kutumbakam_adj": {
+  "en": "Vasudhaiva",
+  "es": "vasudhaiva"
+ },
+ "dyn_c_weltbund": {
+  "en": "Weltbund",
+  "es": "Weltbund"
+ },
+ "dyn_c_weltbund_adj": {
+  "en": "Weltbund",
+  "es": "del Weltbund"
+ },
+ "dyn_c_workers_commonwealth_of_america": {
+  "en": "Workers' Commonwealth of America",
+  "es": "Mancomunidad de Trabajadores de América"
+ },
+ "dyn_c_yuan_imperial_adj": {
+  "en": "Yuan Imperial",
+  "es": "imperial yuan"
+ }
+}

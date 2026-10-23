@@ -1,0 +1,742 @@
+{
+ "law_active_persecution": {
+  "en": "Active Persecution",
+  "es": "Persecución activa"
+ },
+ "law_algorithmic_governance": {
+  "en": "Algorithmic Governance",
+  "es": "Gobernanza algorítmica"
+ },
+ "law_algorithmic_jurisprudence": {
+  "en": "Algorithmic Jurisprudence",
+  "es": "Jurisprudencia algorítmica"
+ },
+ "law_automated_bureaucracy": {
+  "en": "Automated Bureaucracy",
+  "es": "Burocracia automatizada"
+ },
+ "law_auxiliary_fleet": {
+  "en": "Auxiliary Fleet",
+  "es": "Flota auxiliar"
+ },
+ "law_ban_on_genetic_modification": {
+  "en": "Ban on Genetic Modification",
+  "es": "Prohibición de la modificación genética"
+ },
+ "law_basic_protections": {
+  "en": "Basic Protections",
+  "es": "Protecciones básicas"
+ },
+ "law_central_bank_independence": {
+  "en": "Central Bank Independence",
+  "es": "Independencia del banco central"
+ },
+ "law_civic_monolingualism": {
+  "en": "Civic Monolingualism",
+  "es": "Monolingüismo cívico"
+ },
+ "law_command_cooperative_economy": {
+  "en": "Command/Cooperative Economy",
+  "es": "Economía planificada/cooperativa"
+ },
+ "law_commodity_money": {
+  "en": "Commodity Money",
+  "es": "Dinero mercancía"
+ },
+ "law_communal_administration": {
+  "en": "Communal Administration",
+  "es": "Administración comunal"
+ },
+ "law_communal_child_rearing": {
+  "en": "Communal Child-Rearing",
+  "es": "Crianza comunal"
+ },
+ "law_comprehensive_rights": {
+  "en": "Anti-Discrimination Laws",
+  "es": "Leyes antidiscriminación"
+ },
+ "law_constitutional_review": {
+  "en": "Constitutional Review",
+  "es": "Revisión constitucional"
+ },
+ "law_contracted_administration": {
+  "en": "Contracted Administration",
+  "es": "Administración contratada"
+ },
+ "law_corporate_genetic_licensing": {
+  "en": "Corporate Genetic Licensing",
+  "es": "Licencias genéticas corporativas"
+ },
+ "law_creative_commons": {
+  "en": "Creative Commons",
+  "es": "Creative Commons"
+ },
+ "law_decentralized_cryptocurrency": {
+  "en": "Decentralized Cryptocurrency",
+  "es": "Criptomoneda descentralizada"
+ },
+ "law_devolution": {
+  "en": "Devolved Administration",
+  "es": "Administración descentralizada"
+ },
+ "law_digital_currency": {
+  "en": "Digital Currency",
+  "es": "Moneda digital"
+ },
+ "law_direct_democracy": {
+  "en": "Collective Governance",
+  "es": "Gobernanza colectiva"
+ },
+ "law_directed_credit_development_banks": {
+  "en": "Directed Credit & Development Banks",
+  "es": "Crédito dirigido y bancos de desarrollo"
+ },
+ "law_dirigisme": {
+  "en": "Dirigiste Policy",
+  "es": "Política dirigista"
+ },
+ "law_donation_limits": {
+  "en": "Donation Limits",
+  "es": "Límites a las donaciones"
+ },
+ "law_equal_inheritance": {
+  "en": "Forced Heirship",
+  "es": "Legítima forzosa"
+ },
+ "law_executive_tribunals": {
+  "en": "Executive Tribunals",
+  "es": "Tribunales ejecutivos"
+ },
+ "law_federal_system": {
+  "en": "Federal System",
+  "es": "Sistema federal"
+ },
+ "law_feudal_contracts": {
+  "en": "Traditional Vassalage",
+  "es": "Vasallaje tradicional"
+ },
+ "law_fiat_currency": {
+  "en": "Fiat Money",
+  "es": "Dinero fiduciario"
+ },
+ "law_fossil_expansion_moratorium": {
+  "en": "Fossil Expansion Moratorium",
+  "es": "Moratoria de expansión fósil"
+ },
+ "law_free_mutual_banking": {
+  "en": "Free & Mutual Banking",
+  "es": "Banca libre y mutualista"
+ },
+ "law_free_testation": {
+  "en": "Freedom of Testation",
+  "es": "Libertad de testar"
+ },
+ "law_freedom_of_contract": {
+  "en": "Freedom of Contract",
+  "es": "Libertad de contratación"
+ },
+ "law_freedom_of_information": {
+  "en": "Freedom of Information",
+  "es": "Libertad de información"
+ },
+ "law_full_equality_and_protection": {
+  "en": "Full Equality and Protection",
+  "es": "Plena igualdad y protección"
+ },
+ "law_gold_standard": {
+  "en": "Gold Standard",
+  "es": "Patrón oro"
+ },
+ "law_guilds_chartered_monopolies": {
+  "en": "Guilds and Chartered Monopolies",
+  "es": "Gremios y monopolios con carta real"
+ },
+ "law_human_purity": {
+  "en": "Human Purity",
+  "es": "Pureza humana"
+ },
+ "law_humanitarian_regulations": {
+  "en": "Humanitarian Regulations",
+  "es": "Regulaciones humanitarias"
+ },
+ "law_informal_government_secrecy": {
+  "en": "Informal Government Secrecy",
+  "es": "Secretismo gubernamental informal"
+ },
+ "law_intrusive_surveillance": {
+  "en": "Intrusive Surveillance System",
+  "es": "Sistema de vigilancia intrusiva"
+ },
+ "law_judicial_supremacy": {
+  "en": "Judicial Supremacy",
+  "es": "Supremacía judicial"
+ },
+ "law_legal_limbo": {
+  "en": "Legal Limbo",
+  "es": "Limbo legal"
+ },
+ "law_limited_war": {
+  "en": "Limited War",
+  "es": "Guerra limitada"
+ },
+ "law_linguistic_purity": {
+  "en": "Linguistic Purity",
+  "es": "Pureza lingüística"
+ },
+ "law_littoral_defense": {
+  "en": "Littoral Defense",
+  "es": "Defensa litoral"
+ },
+ "law_local_vernacular": {
+  "en": "Local Vernacular",
+  "es": "Lengua vernácula local"
+ },
+ "law_managed_fossil_phaseout": {
+  "en": "Managed Fossil Phaseout",
+  "es": "Eliminación fósil gestionada"
+ },
+ "law_mandatory_augmentation": {
+  "en": "Mandatory Augmentation",
+  "es": "Mejora obligatoria"
+ },
+ "law_medical_augmentation_only": {
+  "en": "Medical Augmentation Only",
+  "es": "Solo mejoras médicas"
+ },
+ "law_minimal_privacy_protection": {
+  "en": "Minimal Privacy Protection",
+  "es": "Protección mínima de la privacidad"
+ },
+ "law_ministry_of_commerce": {
+  "en": "Ministry of Commerce Established",
+  "es": "Ministerio de Comercio establecido"
+ },
+ "law_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection Established",
+  "es": "Ministerio de Protección del Consumidor establecido"
+ },
+ "law_ministry_of_culture": {
+  "en": "Ministry of Culture Established",
+  "es": "Ministerio de Cultura establecido"
+ },
+ "law_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs Established",
+  "es": "Ministerio de Asuntos Exteriores establecido"
+ },
+ "law_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security Established",
+  "es": "Ministerio de Inteligencia y Seguridad establecido"
+ },
+ "law_ministry_of_international_aid": {
+  "en": "Ministry of International Aid Established",
+  "es": "Ministerio de Ayuda Internacional establecido"
+ },
+ "law_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda Established",
+  "es": "Ministerio de Propaganda establecido"
+ },
+ "law_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs Established",
+  "es": "Ministerio de Asuntos de Refugiados establecido"
+ },
+ "law_ministry_of_religion": {
+  "en": "Ministry of Religion Established",
+  "es": "Ministerio de Religión establecido"
+ },
+ "law_ministry_of_science": {
+  "en": "Ministry of Science Established",
+  "es": "Ministerio de Ciencia establecido"
+ },
+ "law_ministry_of_the_environment": {
+  "en": "Ministry of the Environment Established",
+  "es": "Ministerio de Medio Ambiente establecido"
+ },
+ "law_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control Established",
+  "es": "Ministerio de Control del Pensamiento establecido"
+ },
+ "law_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning Established",
+  "es": "Ministerio de Planificación Urbana establecido"
+ },
+ "law_ministry_of_war": {
+  "en": "Ministry of War Established",
+  "es": "Ministerio de la Guerra establecido"
+ },
+ "law_minority_rights_affirmative_action": {
+  "en": "Affirmative Action",
+  "es": "Discriminación positiva"
+ },
+ "law_minority_rights_cultural_assimilation": {
+  "en": "Cultural Assimilation",
+  "es": "Asimilación cultural"
+ },
+ "law_minority_rights_discrimination": {
+  "en": "Discrimination",
+  "es": "Discriminación"
+ },
+ "law_minority_rights_ghettoization": {
+  "en": "Ghettoization",
+  "es": "Guetización"
+ },
+ "law_minority_rights_indifference": {
+  "en": "Indifference",
+  "es": "Indiferencia"
+ },
+ "law_minority_rights_protection": {
+  "en": "Protection",
+  "es": "Protección"
+ },
+ "law_minority_rights_violent_hostility": {
+  "en": "Violent Hostility",
+  "es": "Hostilidad violenta"
+ },
+ "law_moderate_data_privacy": {
+  "en": "Moderate Data Privacy",
+  "es": "Privacidad de datos moderada"
+ },
+ "law_multilingual_federalism": {
+  "en": "Multilingual Federalism",
+  "es": "Federalismo multilingüe"
+ },
+ "law_national_bank": {
+  "en": "National Bank Established",
+  "es": "Banco Nacional establecido"
+ },
+ "law_neocameralism": {
+  "en": "Neocameralism",
+  "es": "Neocameralismo"
+ },
+ "law_neocolonialism": {
+  "en": "Neocolonialism",
+  "es": "Neocolonialismo"
+ },
+ "law_net_neutrality": {
+  "en": "Net Neutrality",
+  "es": "Neutralidad de la red"
+ },
+ "law_no_augmentation": {
+  "en": "No Augmentation",
+  "es": "Sin mejoras"
+ },
+ "law_no_campaign_finance_laws": {
+  "en": "No Campaign Finance Laws",
+  "es": "Sin leyes de financiación de campañas"
+ },
+ "law_no_internet_policy": {
+  "en": "No Internet Policy",
+  "es": "Sin política de internet"
+ },
+ "law_no_ip_protection": {
+  "en": "No IP Protection",
+  "es": "Sin protección de la propiedad intelectual"
+ },
+ "law_no_ministry_of_commerce": {
+  "en": "No Ministry of Commerce",
+  "es": "Sin Ministerio de Comercio"
+ },
+ "law_no_ministry_of_consumer_protection": {
+  "en": "No Ministry of Consumer Protection",
+  "es": "Sin Ministerio de Protección del Consumidor"
+ },
+ "law_no_ministry_of_culture": {
+  "en": "No Ministry of Culture",
+  "es": "Sin Ministerio de Cultura"
+ },
+ "law_no_ministry_of_foreign_affairs": {
+  "en": "No Ministry of Foreign Affairs",
+  "es": "Sin Ministerio de Asuntos Exteriores"
+ },
+ "law_no_ministry_of_intelligence_and_security": {
+  "en": "No Ministry of Intelligence and Security",
+  "es": "Sin Ministerio de Inteligencia y Seguridad"
+ },
+ "law_no_ministry_of_international_aid": {
+  "en": "No Ministry of International Aid",
+  "es": "Sin Ministerio de Ayuda Internacional"
+ },
+ "law_no_ministry_of_labor": {
+  "en": "No Ministry of Labor",
+  "es": "Sin Ministerio de Trabajo"
+ },
+ "law_no_ministry_of_propaganda": {
+  "en": "No Ministry of Propaganda",
+  "es": "Sin Ministerio de Propaganda"
+ },
+ "law_no_ministry_of_refugee_affairs": {
+  "en": "No Ministry of Refugee Affairs",
+  "es": "Sin Ministerio de Asuntos de Refugiados"
+ },
+ "law_no_ministry_of_religion": {
+  "en": "No Ministry of Religion",
+  "es": "Sin Ministerio de Religión"
+ },
+ "law_no_ministry_of_science": {
+  "en": "No Ministry of Science",
+  "es": "Sin Ministerio de Ciencia"
+ },
+ "law_no_ministry_of_the_environment": {
+  "en": "No Ministry of the Environment",
+  "es": "Sin Ministerio de Medio Ambiente"
+ },
+ "law_no_ministry_of_thought_control": {
+  "en": "No Ministry of Thought Control",
+  "es": "Sin Ministerio de Control del Pensamiento"
+ },
+ "law_no_ministry_of_urban_planning": {
+  "en": "No Ministry of Urban Planning",
+  "es": "Sin Ministerio de Planificación Urbana"
+ },
+ "law_no_ministry_of_war": {
+  "en": "No Ministry of War",
+  "es": "Sin Ministerio de la Guerra"
+ },
+ "law_no_national_bank": {
+  "en": "No National Bank",
+  "es": "Sin Banco Nacional"
+ },
+ "law_non_inheritable_usage_rights": {
+  "en": "Possession by Use",
+  "es": "Posesión por uso"
+ },
+ "law_open_government": {
+  "en": "Open Government",
+  "es": "Gobierno abierto"
+ },
+ "law_open_source_genetics": {
+  "en": "Open-Source Genetics",
+  "es": "Genética de código abierto"
+ },
+ "law_open_source_innovation": {
+  "en": "Open Source Innovation",
+  "es": "Innovación de código abierto"
+ },
+ "law_partible": {
+  "en": "Customary Inheritance",
+  "es": "Herencia consuetudinaria"
+ },
+ "law_penal_labor_camps": {
+  "en": "Penal Labor Camps",
+  "es": "Campos de trabajo penal"
+ },
+ "law_population_control_measures": {
+  "en": "Population Control Measures",
+  "es": "Medidas de control de la población"
+ },
+ "law_post-scarcity": {
+  "en": "Post-Scarcity Economy",
+  "es": "Economía de la poscarencia"
+ },
+ "law_primogeniture": {
+  "en": "Primogeniture & Entail",
+  "es": "Primogenitura y mayorazgo"
+ },
+ "law_private_military_contractors": {
+  "en": "Private Military Contractors",
+  "es": "Contratistas militares privados"
+ },
+ "law_private_policing": {
+  "en": "Private Policing",
+  "es": "Policía privada"
+ },
+ "law_pro_capital_ministry_of_labor": {
+  "en": "Pro-Capital Ministry of Labor Established",
+  "es": "Ministerio de Trabajo patronal establecido"
+ },
+ "law_pro_labor_ministry_of_labor": {
+  "en": "Pro-Labor Ministry of Labor Established",
+  "es": "Ministerio de Trabajo obrerista establecido"
+ },
+ "law_pro_natalist_subsidies": {
+  "en": "Pro-Natalist Policy",
+  "es": "Política pronatalista"
+ },
+ "law_protected_class": {
+  "en": "Protected Class",
+  "es": "Clase protegida"
+ },
+ "law_prudential_narrow_banking": {
+  "en": "Prudential / Narrow Banking",
+  "es": "Banca prudencial / limitada"
+ },
+ "law_publicly_funded_elections": {
+  "en": "Publicly Funded Elections",
+  "es": "Elecciones financiadas con fondos públicos"
+ },
+ "law_punishment_focused_criminal_justice": {
+  "en": "Punishment-Focused Criminal Justice",
+  "es": "Justicia penal centrada en el castigo"
+ },
+ "law_regulated_augmentation_market": {
+  "en": "Regulated Augmentation Market",
+  "es": "Mercado regulado de mejoras"
+ },
+ "law_regulated_utilities": {
+  "en": "Regulated Utilities",
+  "es": "Servicios públicos regulados"
+ },
+ "law_rehabilitation_focused_criminal_justice": {
+  "en": "Rehabilitation-Focused Criminal Justice",
+  "es": "Justicia penal centrada en la rehabilitación"
+ },
+ "law_religious_courts": {
+  "en": "Religious Courts",
+  "es": "Tribunales religiosos"
+ },
+ "law_restorative_justice": {
+  "en": "Restorative Justice",
+  "es": "Justicia restaurativa"
+ },
+ "law_state_controlled_internet": {
+  "en": "State-Controlled Internet",
+  "es": "Internet controlado por el Estado"
+ },
+ "law_state_eugenics_program": {
+  "en": "State Eugenics Program",
+  "es": "Programa estatal de eugenesia"
+ },
+ "law_state_intellectual_property": {
+  "en": "State Intellectual Property",
+  "es": "Propiedad intelectual estatal"
+ },
+ "law_state_led_language_reform": {
+  "en": "State-Led Language Reform",
+  "es": "Reforma lingüística dirigida por el Estado"
+ },
+ "law_state_owned_banking": {
+  "en": "State-Owned Banking",
+  "es": "Banca estatal"
+ },
+ "law_state_secrets": {
+  "en": "State Secrets",
+  "es": "Secretos de Estado"
+ },
+ "law_state_sponsored_family_planning": {
+  "en": "State-Sponsored Family Planning",
+  "es": "Planificación familiar patrocinada por el Estado"
+ },
+ "law_state_universal_heir": {
+  "en": "State as Universal Heir",
+  "es": "El Estado como heredero universal"
+ },
+ "law_statutory_courts": {
+  "en": "Statutory Courts",
+  "es": "Tribunales estatutarios"
+ },
+ "law_strict_ip_protection": {
+  "en": "Strict IP Protection",
+  "es": "Protección estricta de la propiedad intelectual"
+ },
+ "law_strong_privacy_rights": {
+  "en": "Strong Privacy Rights",
+  "es": "Derechos de privacidad sólidos"
+ },
+ "law_total_war": {
+  "en": "Total War",
+  "es": "Guerra total"
+ },
+ "law_traditional_family_structure": {
+  "en": "Traditional Family Structure",
+  "es": "Estructura familiar tradicional"
+ },
+ "law_traditional_heredity": {
+  "en": "Traditional Heredity",
+  "es": "Herencia tradicional"
+ },
+ "law_traditional_ip_protection": {
+  "en": "Traditional IP Protection",
+  "es": "Protección tradicional de la propiedad intelectual"
+ },
+ "law_traditional_rules_of_war": {
+  "en": "Traditional Rules of War",
+  "es": "Reglas de guerra tradicionales"
+ },
+ "law_trust_busting": {
+  "en": "Antitrust Enforcement",
+  "es": "Aplicación de la legislación antimonopolio"
+ },
+ "law_ubiquitous_translation": {
+  "en": "Ubiquitous Translation",
+  "es": "Traducción ubicua"
+ },
+ "law_unitary_state": {
+  "en": "Unitary State",
+  "es": "Estado unitario"
+ },
+ "law_universal_banking_light_prudence": {
+  "en": "Universal Banking (Light Prudence)",
+  "es": "Banca universal (prudencia ligera)"
+ },
+ "law_universal_basic_income": {
+  "en": "Universal Basic Income",
+  "es": "Renta básica universal"
+ },
+ "law_unregulated_banking": {
+  "en": "Unregulated Banking",
+  "es": "Banca no regulada"
+ },
+ "law_unregulated_donations": {
+  "en": "Unregulated Donations",
+  "es": "Donaciones no reguladas"
+ },
+ "law_unregulated_internet": {
+  "en": "Unregulated Internet",
+  "es": "Internet no regulado"
+ },
+ "law_unrestricted_augmentation": {
+  "en": "Unrestricted Augmentation",
+  "es": "Mejora sin restricciones"
+ },
+ "law_unrestricted_extraction": {
+  "en": "Unrestricted Extraction",
+  "es": "Extracción sin restricciones"
+ },
+ "law_war_crimes_forbidden": {
+  "en": "War Crimes Forbidden",
+  "es": "Crímenes de guerra prohibidos"
+ },
+ "lawgroup_LGBTQ_rights": {
+  "en": "LGBTQ+ Rights",
+  "es": "Derechos LGBTQ+"
+ },
+ "lawgroup_antitrust": {
+  "en": "Antitrust & Market Structure",
+  "es": "Antimonopolio y estructura del mercado"
+ },
+ "lawgroup_criminal_justice": {
+  "en": "Criminal Justice",
+  "es": "Justicia penal"
+ },
+ "lawgroup_electoral_finance": {
+  "en": "Electoral Finance",
+  "es": "Financiación electoral"
+ },
+ "lawgroup_family_reproductive_policy": {
+  "en": "Family & Reproductive Policy",
+  "es": "Política familiar y reproductiva"
+ },
+ "lawgroup_financial_regulation": {
+  "en": "Financial Regulation",
+  "es": "Regulación financiera"
+ },
+ "lawgroup_genetic_rights": {
+  "en": "Genetic Rights",
+  "es": "Derechos genéticos"
+ },
+ "lawgroup_human_augmentation": {
+  "en": "Human Augmentation",
+  "es": "Mejora humana"
+ },
+ "lawgroup_inheritance": {
+  "en": "Inheritance Laws",
+  "es": "Leyes de herencia"
+ },
+ "lawgroup_intellectual_property": {
+  "en": "Intellectual Property",
+  "es": "Propiedad intelectual"
+ },
+ "lawgroup_internet_governance": {
+  "en": "Internet Governance",
+  "es": "Gobernanza de internet"
+ },
+ "lawgroup_judiciary": {
+  "en": "Judiciary",
+  "es": "Poder judicial"
+ },
+ "lawgroup_language_policy": {
+  "en": "Language Policy",
+  "es": "Política lingüística"
+ },
+ "lawgroup_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "es": "Ministerio de Comercio"
+ },
+ "lawgroup_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "es": "Ministerio de Protección del Consumidor"
+ },
+ "lawgroup_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "es": "Ministerio de Cultura"
+ },
+ "lawgroup_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "es": "Ministerio de Asuntos Exteriores"
+ },
+ "lawgroup_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "es": "Ministerio de Inteligencia y Seguridad"
+ },
+ "lawgroup_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "es": "Ministerio de Ayuda Internacional"
+ },
+ "lawgroup_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "es": "Ministerio de Trabajo"
+ },
+ "lawgroup_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "es": "Ministerio de Propaganda"
+ },
+ "lawgroup_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "es": "Ministerio de Asuntos de Refugiados"
+ },
+ "lawgroup_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "es": "Ministerio de Religión"
+ },
+ "lawgroup_ministry_of_science": {
+  "en": "Ministry of Science",
+  "es": "Ministerio de Ciencia"
+ },
+ "lawgroup_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "es": "Ministerio de Medio Ambiente"
+ },
+ "lawgroup_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "es": "Ministerio de Control del Pensamiento"
+ },
+ "lawgroup_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "es": "Ministerio de Planificación Urbana"
+ },
+ "lawgroup_ministry_of_war": {
+  "en": "Ministry of War",
+  "es": "Ministerio de la Guerra"
+ },
+ "lawgroup_minority_rights": {
+  "en": "Minority Rights",
+  "es": "Derechos de las minorías"
+ },
+ "lawgroup_monetary_policy": {
+  "en": "Monetary Policy",
+  "es": "Política monetaria"
+ },
+ "lawgroup_national_bank": {
+  "en": "National Bank",
+  "es": "Banco Nacional"
+ },
+ "lawgroup_privacy_rights": {
+  "en": "Privacy Rights",
+  "es": "Derechos de privacidad"
+ },
+ "lawgroup_resource_transition": {
+  "en": "Resource Transition",
+  "es": "Transición de recursos"
+ },
+ "lawgroup_right_to_information": {
+  "en": "Right to Information",
+  "es": "Derecho a la información"
+ },
+ "lawgroup_rules_of_war": {
+  "en": "Rules of War",
+  "es": "Reglas de guerra"
+ },
+ "lawgroup_state_power": {
+  "en": "State Power",
+  "es": "Poder del Estado"
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "principle_group_artistic_expression": {
+  "en": "Artistic Expression",
+  "es": "Expresión artística"
+ },
+ "principle_group_cultural_plurality": {
+  "en": "Cultural Plurality",
+  "es": "Pluralidad cultural"
+ },
+ "principle_group_cultural_unity": {
+  "en": "Cultural Unity",
+  "es": "Unidad cultural"
+ },
+ "principle_group_education": {
+  "en": "Education",
+  "es": "Educación"
+ },
+ "principle_group_engineering_and_logistics": {
+  "en": "Engineering and Logistics",
+  "es": "Ingeniería y logística"
+ },
+ "principle_group_environmental_sustainability": {
+  "en": "Environmental Sustainability",
+  "es": "Sostenibilidad medioambiental"
+ },
+ "principle_group_global_security": {
+  "en": "Global Security",
+  "es": "Seguridad global"
+ },
+ "principle_group_healthcare": {
+  "en": "Healthcare",
+  "es": "Sanidad"
+ },
+ "principle_group_military_training": {
+  "en": "Military Training",
+  "es": "Formación militar"
+ },
+ "principle_group_monetary_union": {
+  "en": "Monetary Union",
+  "es": "Unión monetaria"
+ },
+ "principle_group_multilateral_institutions": {
+  "en": "Multilateral Institutions",
+  "es": "Instituciones multilaterales"
+ },
+ "principle_group_rural": {
+  "en": "Rural Development",
+  "es": "Desarrollo rural"
+ },
+ "principle_group_urban_planning": {
+  "en": "Urban Planning",
+  "es": "Planificación urbana"
+ },
+ "principle_group_welfare": {
+  "en": "Welfare",
+  "es": "Bienestar"
+ }
+}

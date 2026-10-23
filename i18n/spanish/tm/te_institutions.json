@@ -1,0 +1,70 @@
+{
+ "institution_migration_controls": {
+  "en": "Migration Controls",
+  "es": "Controles de migración"
+ },
+ "institution_ministry_of_commerce": {
+  "en": "Ministry of Commerce",
+  "es": "Ministerio de Comercio"
+ },
+ "institution_ministry_of_consumer_protection": {
+  "en": "Ministry of Consumer Protection",
+  "es": "Ministerio de Protección del Consumidor"
+ },
+ "institution_ministry_of_culture": {
+  "en": "Ministry of Culture",
+  "es": "Ministerio de Cultura"
+ },
+ "institution_ministry_of_foreign_affairs": {
+  "en": "Ministry of Foreign Affairs",
+  "es": "Ministerio de Asuntos Exteriores"
+ },
+ "institution_ministry_of_intelligence_and_security": {
+  "en": "Ministry of Intelligence and Security",
+  "es": "Ministerio de Inteligencia y Seguridad"
+ },
+ "institution_ministry_of_international_aid": {
+  "en": "Ministry of International Aid",
+  "es": "Ministerio de Ayuda Internacional"
+ },
+ "institution_ministry_of_labor": {
+  "en": "Ministry of Labor",
+  "es": "Ministerio de Trabajo"
+ },
+ "institution_ministry_of_propaganda": {
+  "en": "Ministry of Propaganda",
+  "es": "Ministerio de Propaganda"
+ },
+ "institution_ministry_of_refugee_affairs": {
+  "en": "Ministry of Refugee Affairs",
+  "es": "Ministerio de Asuntos de Refugiados"
+ },
+ "institution_ministry_of_religion": {
+  "en": "Ministry of Religion",
+  "es": "Ministerio de Religión"
+ },
+ "institution_ministry_of_science": {
+  "en": "Ministry of Science",
+  "es": "Ministerio de Ciencia"
+ },
+ "institution_ministry_of_the_environment": {
+  "en": "Ministry of the Environment",
+  "es": "Ministerio de Medio Ambiente"
+ },
+ "institution_ministry_of_thought_control": {
+  "en": "Ministry of Thought Control",
+  "es": "Ministerio de Control del Pensamiento"
+ },
+ "institution_ministry_of_urban_planning": {
+  "en": "Ministry of Urban Planning",
+  "es": "Ministerio de Planificación Urbana"
+ },
+ "institution_ministry_of_war": {
+  "en": "Ministry of War",
+  "es": "Ministerio de la Guerra"
+ },
+ "institution_national_bank": {
+  "en": "National Bank",
+  "es": "Banco Nacional"
+ }
+}

@@ -1,0 +1,1978 @@
+{
+ "building_advanced_material_fabricator": {
+  "en": "Advanced Material Fabricator",
+  "es": "Fabricador de materiales avanzados"
+ },
+ "building_advanced_material_fabricator_throughput_add": {
+  "en": "Advanced Material Fabricator [concept_throughput]",
+  "es": "[concept_throughput] del fabricador de materiales avanzados"
+ },
+ "building_aerospace_industry": {
+  "en": "Aerospace Industry",
+  "es": "Industria aeroespacial"
+ },
+ "building_afghan_nassaji_kabul_mills": {
+  "en": "Afghan Nassaji Kabul Mills",
+  "es": "Fábricas textiles Afghan Nassaji Kabul"
+ },
+ "building_airbus_lagardere_plant": {
+  "en": "Jean-Luc Lagardère Plant",
+  "es": "Planta Jean-Luc Lagardère"
+ },
+ "building_airport": {
+  "en": "Airport",
+  "es": "Aeropuerto"
+ },
+ "building_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "es": "Planta Ajinomoto Kawasaki"
+ },
+ "building_aker_oslo_shipyard": {
+  "en": "Aker Oslo Shipyard",
+  "es": "Astillero Aker Oslo"
+ },
+ "building_alibaba_cainiao_park": {
+  "en": "Cainiao Logistics Park",
+  "es": "Parque logístico Cainiao"
+ },
+ "building_allatini_thessaloniki_flour_mill": {
+  "en": "Allatini Thessaloniki Flour Mill",
+  "es": "Molino harinero Allatini Tesalónica"
+ },
+ "building_alpine_donawitz_steelworks": {
+  "en": "Alpine Donawitz Steelworks",
+  "es": "Acería Alpine Donawitz"
+ },
+ "building_altos_hornos_baracaldo_furnaces": {
+  "en": "Altos Hornos Baracaldo Furnaces",
+  "es": "Altos Hornos Baracaldo"
+ },
+ "building_amazon_fulfillment_center": {
+  "en": "Automated Fulfillment Center",
+  "es": "Centro de distribución automatizado"
+ },
+ "building_anglo_persian_abadan_refinery": {
+  "en": "Anglo-Persian Abadan Refinery",
+  "es": "Refinería Anglo-Persian Abadán"
+ },
+ "building_anglo_sicilian_licata_wharf": {
+  "en": "Anglo-Sicilian Licata Wharf",
+  "es": "Muelle Anglo-Sicilian Licata"
+ },
+ "building_annual_antimatter_facility_progress": {
+  "en": "Annual [concept_antimatter_facility] Progress",
+  "es": "Progreso anual de la [concept_antimatter_facility|l]"
+ },
+ "building_annual_consciousness_network_progress": {
+  "en": "Annual Consciousness Network Progress",
+  "es": "Progreso anual de la red de conciencia"
+ },
+ "building_annual_mind_upload_nexus_progress": {
+  "en": "Annual Mind Upload Nexus Progress",
+  "es": "Progreso anual del nexo de carga mental"
+ },
+ "building_annual_nanofabrication_center_progress": {
+  "en": "Annual Nanofabrication Center Progress",
+  "es": "Progreso anual del centro de nanofabricación"
+ },
+ "building_annual_orbital_battlestation_progress": {
+  "en": "Annual Orbital Battlestation Progress",
+  "es": "Progreso anual de la estación de combate orbital"
+ },
+ "building_annual_solar_collector_progress": {
+  "en": "Annual Solar Collector Progress",
+  "es": "Progreso anual del colector solar"
+ },
+ "building_annual_space_elevator_progress": {
+  "en": "Annual Space Elevator Progress",
+  "es": "Progreso anual del ascensor espacial"
+ },
+ "building_ansaldo_sestri_ponente_works": {
+  "en": "Ansaldo Sestri Ponente Works",
+  "es": "Fábricas Ansaldo Sestri Ponente"
+ },
+ "building_antimatter_engine": {
+  "en": "Antimatter Engine",
+  "es": "Motor de antimateria"
+ },
+ "building_antimatter_facility": {
+  "en": "Antimatter Containment Facility",
+  "es": "Instalación de contención de antimateria"
+ },
+ "building_antimatter_facility_construction_site": {
+  "en": "Antimatter Facility Construction Site",
+  "es": "Instalación de antimateria en construcción"
+ },
+ "building_antimatter_warhead_plant": {
+  "en": "Antimatter Warhead Plant",
+  "es": "Planta de ojivas de antimateria"
+ },
+ "building_anzin_colliery": {
+  "en": "Mines d'Anzin Colliery",
+  "es": "Mina de carbón Mines d'Anzin"
+ },
+ "building_ap_moller_copenhagen_wharf": {
+  "en": "A.P. Møller Copenhagen Wharf",
+  "es": "Muelle A.P. Møller Copenhague"
+ },
+ "building_apple_park": {
+  "en": "Apple Park",
+  "es": "Apple Park"
+ },
+ "building_argentinian_wine_mendoza_bodega": {
+  "en": "Argentine Wine Mendoza Bodega",
+  "es": "Bodega de vino argentino de Mendoza"
+ },
+ "building_armstrong_elswick_works": {
+  "en": "Armstrong Elswick Works",
+  "es": "Fábricas Armstrong Elswick"
+ },
+ "building_asml_veldhoven_campus": {
+  "en": "ASML Veldhoven Campus",
+  "es": "Campus ASML Veldhoven"
+ },
+ "building_assam_company_nazira_tea_estate": {
+  "en": "Assam Company Nazira Tea Estate",
+  "es": "Plantación de té Assam Company Nazira"
+ },
+ "building_axiom_space_hq": {
+  "en": "Axiom Space Station",
+  "es": "Estación Espacial Axiom"
+ },
+ "building_b_grimm_bangkok_warehouse": {
+  "en": "B. Grimm Bangkok Warehouse",
+  "es": "Almacén B. Grimm Bangkok"
+ },
+ "building_bacardi_santiago_distillery": {
+  "en": "Bacardí Santiago Distillery",
+  "es": "Destilería Bacardí Santiago"
+ },
+ "building_bae_samlesbury_aerodrome": {
+  "en": "BAE Systems Samlesbury Aerodrome",
+  "es": "Aeródromo BAE Systems Samlesbury"
+ },
+ "building_basf_ludwigshafen_plant": {
+  "en": "BASF Ludwigshafen Works",
+  "es": "Fábricas BASF Ludwigshafen"
+ },
+ "building_basileiades_piraeus_works": {
+  "en": "Basileiades Piraeus Works",
+  "es": "Fábricas Basileiades El Pireo"
+ },
+ "building_bauxite_mine": {
+  "en": "Bauxite Mine",
+  "es": "Mina de bauxita"
+ },
+ "building_bauxite_mine_throughput_add": {
+  "en": "$building_bauxite_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_bauxite_mine$"
+ },
+ "building_bayer_leverkusen_plant": {
+  "en": "Bayer Leverkusen Plant",
+  "es": "Planta Bayer Leverkusen"
+ },
+ "building_bengal_coal_raniganj_mine": {
+  "en": "Bengal Coal Raniganj Mine",
+  "es": "Mina Bengal Coal Raniganj"
+ },
+ "building_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "es": "Banco Nacional de Genes BGI"
+ },
+ "building_bhp_broken_hill_mine": {
+  "en": "BHP Broken Hill Mine",
+  "es": "Mina BHP Broken Hill"
+ },
+ "building_bhp_mount_whaleback_mine": {
+  "en": "Mount Whaleback Mine",
+  "es": "Mina Mount Whaleback"
+ },
+ "building_biocon_park": {
+  "en": "Biocon Park",
+  "es": "Parque Biocon"
+ },
+ "building_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "es": "Campus BioNTech Maguncia"
+ },
+ "building_blackberry_rim_campus": {
+  "en": "RIM Campus",
+  "es": "Campus RIM"
+ },
+ "building_boeing_everett_factory": {
+  "en": "Boeing Everett Factory",
+  "es": "Fábrica Boeing Everett"
+ },
+ "building_bolckow_eston_ironworks": {
+  "en": "Bolckow Vaughan Eston Ironworks",
+  "es": "Siderúrgica Bolckow Vaughan Eston"
+ },
+ "building_bombay_burmah_rangoon_timber_depot": {
+  "en": "Bombay Burmah Rangoon Timber Depot",
+  "es": "Depósito de madera Bombay Burmah Rangún"
+ },
+ "building_bombay_dyeing_spring_mills": {
+  "en": "Bombay Dyeing Spring Mills",
+  "es": "Fábricas textiles Bombay Dyeing Spring"
+ },
+ "building_boston_dynamics_ai_institute": {
+  "en": "Boston Dynamics AI Institute",
+  "es": "Instituto de IA Boston Dynamics"
+ },
+ "building_bp_refinery_complex": {
+  "en": "BP Refinery Complex",
+  "es": "Complejo de refinerías BP"
+ },
+ "building_bytedance_data_fortress": {
+  "en": "TikTok Data Fortress",
+  "es": "Fortaleza de datos TikTok"
+ },
+ "building_calcutta_electric_victoria_house": {
+  "en": "Calcutta Electric Victoria House",
+  "es": "Casa Victoria Calcutta Electric"
+ },
+ "building_caribbean_petroleum_maracaibo_depot": {
+  "en": "Caribbean Petroleum Maracaibo Depot",
+  "es": "Depósito Caribbean Petroleum Maracaibo"
+ },
+ "building_carnegie_homestead_mill": {
+  "en": "Carnegie Homestead Mill",
+  "es": "Acería Carnegie Homestead"
+ },
+ "building_catl_gigafactory": {
+  "en": "CATL Gigafactory",
+  "es": "Gigafactoría CATL"
+ },
+ "building_ccci_leopoldville_depot": {
+  "en": "CCCI Léopoldville Rubber Depot",
+  "es": "Depósito de caucho CCCI Léopoldville"
+ },
+ "building_cfr_bucharest_railway_works": {
+  "en": "CFR Bucharest Railway Works",
+  "es": "Talleres ferroviarios CFR Bucarest"
+ },
+ "building_cgv_haut_brion_estate": {
+  "en": "CGV Haut-Brion Estate",
+  "es": "Finca CGV Haut-Brion"
+ },
+ "building_chr_hansen_copenhagen_laboratory": {
+  "en": "Chr. Hansen Copenhagen Laboratory",
+  "es": "Laboratorio Chr. Hansen Copenhague"
+ },
+ "building_chromium_mine": {
+  "en": "Chromium Mine",
+  "es": "Mina de cromo"
+ },
+ "building_chromium_mine_throughput_add": {
+  "en": "$building_chromium_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_chromium_mine$"
+ },
+ "building_coats_ferguslie_mills": {
+  "en": "J&P Coats Ferguslie Thread Mills",
+  "es": "Fábricas de hilo J&P Coats Ferguslie"
+ },
+ "building_cochlear_global_hq": {
+  "en": "Cochlear Global Headquarters",
+  "es": "Sede mundial Cochlear"
+ },
+ "building_cockerill_seraing_works": {
+  "en": "Cockerill Seraing Works",
+  "es": "Fábricas Cockerill Seraing"
+ },
+ "building_colt_hartford_armory": {
+  "en": "Colt Hartford Armory",
+  "es": "Armería Colt Hartford"
+ },
+ "building_consciousness_network": {
+  "en": "Consciousness Network",
+  "es": "Red de conciencia"
+ },
+ "building_consciousness_network_construction_site": {
+  "en": "Consciousness Network Construction Site",
+  "es": "Red de conciencia en construcción"
+ },
+ "building_copper_mine": {
+  "en": "Copper Mine",
+  "es": "Mina de cobre"
+ },
+ "building_copper_mine_throughput_add": {
+  "en": "$building_copper_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_copper_mine$"
+ },
+ "building_cordoba_railway_alta_gracia_works": {
+  "en": "Córdoba Railway Alta Gracia Works",
+  "es": "Talleres Córdoba Railway Alta Gracia"
+ },
+ "building_cramp_philadelphia_shipyard": {
+  "en": "Cramp Philadelphia Shipyard",
+  "es": "Astillero Cramp Filadelfia"
+ },
+ "building_csfa_sicilian_sulfur_depot": {
+  "en": "CSFA Sicilian Sulfur Depot",
+  "es": "Depósito de azufre siciliano CSFA"
+ },
+ "building_dassault_merignac_plant": {
+  "en": "Dassault Merignac Plant",
+  "es": "Planta Dassault Mérignac"
+ },
+ "building_de_beers_sorting_office": {
+  "en": "De Beers Sorting Office",
+  "es": "Oficina de clasificación De Beers"
+ },
+ "building_disney_world": {
+  "en": "Disney World",
+  "es": "Disney World"
+ },
+ "building_dmc_mulhouse_mills": {
+  "en": "DMC Mulhouse Thread Mills",
+  "es": "Fábricas de hilo DMC Mulhouse"
+ },
+ "building_douro_wine_lodge": {
+  "en": "Douro Wine Lodge",
+  "es": "Bodega de vino del Duero"
+ },
+ "building_dupont_experimental_station": {
+  "en": "DuPont Experimental Station",
+  "es": "Estación experimental DuPont"
+ },
+ "building_duro_la_felguera_steelworks": {
+  "en": "Duro La Felguera Steelworks",
+  "es": "Acería Duro La Felguera"
+ },
+ "building_eea_dock_sud_power_station": {
+  "en": "EEA Dock Sud Power Station",
+  "es": "Central eléctrica EEA Dock Sud"
+ },
+ "building_egyptian_rail_cairo_central": {
+  "en": "Egyptian Railway Cairo Central Station",
+  "es": "Estación Central de El Cairo del Ferrocarril Egipcio"
+ },
+ "building_eic_trading_house": {
+  "en": "East India Company Trading House",
+  "es": "Casa comercial de la Compañía de las Indias Orientales"
+ },
+ "building_el_aguila_tampico_refinery": {
+  "en": "El Águila Tampico Refinery",
+  "es": "Refinería El Águila Tampico"
+ },
+ "building_electricidad_caracas_power_house": {
+  "en": "Electricidad de Caracas Power House",
+  "es": "Central eléctrica Electricidad de Caracas"
+ },
+ "building_electrics_industry_appliances": {
+  "en": "Consumer Appliance Industries",
+  "es": "Industrias de electrodomésticos"
+ },
+ "building_electrics_industry_appliances_throughput_add": {
+  "en": "Appliances [concept_throughput]",
+  "es": "[concept_throughput] de electrodomésticos"
+ },
+ "building_electrics_industry_radio": {
+  "en": "Wireless Telecommunications Industries",
+  "es": "Industrias de telecomunicaciones inalámbricas"
+ },
+ "building_electronic_components_and_semiconductor_industry": {
+  "en": "Electronic Components and Semiconductor Industry",
+  "es": "Industria de componentes electrónicos y semiconductores"
+ },
+ "building_electronic_components_and_semiconductor_industry_throughput_add": {
+  "en": "Electronic Components and Semiconductor Industry [concept_throughput] Multiplier",
+  "es": "Multiplicador de [concept_throughput|l] de la industria de componentes electrónicos y semiconductores"
+ },
+ "building_elso_budapesti_steam_mill": {
+  "en": "Első Budapesti Steam Mill",
+  "es": "Molino de vapor Első Budapesti"
+ },
+ "building_employment_deportee_add": {
+  "en": "Deportee Labor Positions",
+  "es": "Puestos de trabajo de deportados"
+ },
+ "building_eni_palazzo": {
+  "en": "Palazzo ENI",
+  "es": "Palazzo ENI"
+ },
+ "building_ericsson_telefonplan": {
+  "en": "Ericsson Telefonplan",
+  "es": "Ericsson Telefonplan"
+ },
+ "building_erste_brunner_maschinenwerk": {
+  "en": "Erste Brünner Maschinenwerk",
+  "es": "Erste Brünner Maschinenwerk"
+ },
+ "building_espana_industrial_sants_mills": {
+  "en": "España Industrial Sants Mills",
+  "es": "Fábricas textiles España Industrial Sants"
+ },
+ "building_estaleiro_maua_niteroi_dockyard": {
+  "en": "Estaleiro Mauá Niterói Dockyard",
+  "es": "Astillero Mauá Niterói"
+ },
+ "building_estanifera_llallagua_tin_concentrator": {
+  "en": "Estannífera Llallagua Tin Concentrator",
+  "es": "Concentradora de estaño Estannífera Llallagua"
+ },
+ "building_ethiopian_railway_dire_dawa_depot": {
+  "en": "Ethiopian Railway Dire Dawa Depot",
+  "es": "Depósito del Ferrocarril Etíope Dire Dawa"
+ },
+ "building_famae_santiago_arsenal": {
+  "en": "FAMAE Santiago Arsenal",
+  "es": "Arsenal FAMAE Santiago"
+ },
+ "building_fanuc_forest": {
+  "en": "The FANUC Forest",
+  "es": "El Bosque FANUC"
+ },
+ "building_fcm_la_seyne_shipyard": {
+  "en": "FCM La Seyne Shipyard",
+  "es": "Astillero FCM La Seyne"
+ },
+ "building_ferranti_hollinwood_works": {
+  "en": "Ferranti Hollinwood Works",
+  "es": "Fábricas Ferranti Hollinwood"
+ },
+ "building_ferrari_maranello_factory": {
+  "en": "Ferrari Maranello Factory",
+  "es": "Fábrica Ferrari Maranello"
+ },
+ "building_fiat_lingotto_factory": {
+  "en": "FIAT Lingotto Factory",
+  "es": "Fábrica FIAT Lingotto"
+ },
+ "building_foochow_mawei_dockyard": {
+  "en": "Foochow Mawei Dockyard",
+  "es": "Astillero Foochow Mawei"
+ },
+ "building_ford_rouge_plant": {
+  "en": "Ford Rouge Plant",
+  "es": "Planta Ford Rouge"
+ },
+ "building_franco_belge_raismes_works": {
+  "en": "Franco-Belge Raismes Works",
+  "es": "Fábricas Franco-Belge Raismes"
+ },
+ "building_fundicao_ipanema_sorocaba_foundry": {
+  "en": "Fundição Ipanema Sorocaba Foundry",
+  "es": "Fundición Ipanema Sorocaba"
+ },
+ "building_fundidora_monterrey_blast_furnace": {
+  "en": "Fundidora Monterrey Blast Furnace",
+  "es": "Alto horno Fundidora Monterrey"
+ },
+ "building_fusion_plant": {
+  "en": "Fusion Plant",
+  "es": "Central de fusión"
+ },
+ "building_fusion_plant_throughput_add": {
+  "en": "Fusion Plant [concept_throughput]",
+  "es": "[concept_throughput] de la central de fusión"
+ },
+ "building_galician_boryslaw_oil_field": {
+  "en": "Galician Borysław Oil Field",
+  "es": "Yacimiento petrolífero de Galitzia Borysław"
+ },
+ "building_gavrilovic_petrinja_meatworks": {
+  "en": "Gavrilović Petrinja Meatworks",
+  "es": "Planta cárnica Gavrilović Petrinja"
+ },
+ "building_gazprom_lakhta_center": {
+  "en": "The Lakhta Center",
+  "es": "Centro Lakhta"
+ },
+ "building_ge_schenectady_works": {
+  "en": "GE Schenectady Works",
+  "es": "Fábricas GE Schenectady"
+ },
+ "building_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "es": "Campus Genentech DNA Way"
+ },
+ "building_generic_arsenal": {
+  "en": "Arsenal",
+  "es": "Arsenal"
+ },
+ "building_generic_assay_office": {
+  "en": "Assay Office",
+  "es": "Oficina de ensayos"
+ },
+ "building_generic_chem_works": {
+  "en": "Chemical Works",
+  "es": "Fábricas químicas"
+ },
+ "building_generic_cold_storage": {
+  "en": "Cold Storage Facility",
+  "es": "Instalación de almacenamiento en frío"
+ },
+ "building_generic_colonial_depot": {
+  "en": "Colonial Depot",
+  "es": "Depósito colonial"
+ },
+ "building_generic_corporate_university": {
+  "en": "Corporate University",
+  "es": "Universidad corporativa"
+ },
+ "building_generic_data_fortress": {
+  "en": "National Data Fortress",
+  "es": "Fortaleza nacional de datos"
+ },
+ "building_generic_dry_dock": {
+  "en": "Dry Dock",
+  "es": "Dique seco"
+ },
+ "building_generic_dye_fiber_park": {
+  "en": "Dye & Fiber Research Park",
+  "es": "Parque de investigación de tintes y fibras"
+ },
+ "building_generic_electronics_lab": {
+  "en": "Electronics Laboratory",
+  "es": "Laboratorio de electrónica"
+ },
+ "building_generic_exhibition_centre": {
+  "en": "National Exhibition Centre",
+  "es": "Centro nacional de exposiciones"
+ },
+ "building_generic_export_warehouse": {
+  "en": "Export Warehouse",
+  "es": "Almacén de exportación"
+ },
+ "building_generic_financial_center": {
+  "en": "International Financial Center",
+  "es": "Centro financiero internacional"
+ },
+ "building_generic_fish_market": {
+  "en": "Fish Market",
+  "es": "Mercado de pescado"
+ },
+ "building_generic_foundry_complex": {
+  "en": "Foundry Complex",
+  "es": "Complejo de fundición"
+ },
+ "building_generic_furniture_showroom": {
+  "en": "Furniture Showroom",
+  "es": "Sala de exposición de muebles"
+ },
+ "building_generic_granary_complex": {
+  "en": "Granary Complex",
+  "es": "Complejo de graneros"
+ },
+ "building_generic_hq_skyscraper": {
+  "en": "Corporate Headquarters Skyscraper",
+  "es": "Rascacielos de sede corporativa"
+ },
+ "building_generic_industrial_city": {
+  "en": "Private Industrial City",
+  "es": "Ciudad industrial privada"
+ },
+ "building_generic_industrial_zone": {
+  "en": "Specialized Industrial Zone",
+  "es": "Zona industrial especializada"
+ },
+ "building_generic_logistics_hub": {
+  "en": "National Logistics Hub",
+  "es": "Centro logístico nacional"
+ },
+ "building_generic_lumber_yard": {
+  "en": "Lumber Yard",
+  "es": "Almacén de madera"
+ },
+ "building_generic_machine_shop": {
+  "en": "Machine Shop",
+  "es": "Taller mecánico"
+ },
+ "building_generic_materials_lab": {
+  "en": "Advanced Materials Laboratory",
+  "es": "Laboratorio de materiales avanzados"
+ },
+ "building_generic_media_hq": {
+  "en": "Global Media Headquarters",
+  "es": "Sede mundial de medios"
+ },
+ "building_generic_mega_factory": {
+  "en": "Mega-Factory Complex",
+  "es": "Complejo de megafábricas"
+ },
+ "building_generic_mineral_refinery": {
+  "en": "Mineral Refinery",
+  "es": "Refinería de minerales"
+ },
+ "building_generic_monument_to_industry": {
+  "en": "Monument to Industry",
+  "es": "Monumento a la industria"
+ },
+ "building_generic_motor_works": {
+  "en": "Motor Works",
+  "es": "Fábrica de motores"
+ },
+ "building_generic_ordnance_depot": {
+  "en": "Ordnance Depot",
+  "es": "Depósito de artillería"
+ },
+ "building_generic_ore_processing": {
+  "en": "Ore Processing Plant",
+  "es": "Planta de procesamiento de minerales"
+ },
+ "building_generic_paper_mill_complex": {
+  "en": "Paper Mill Complex",
+  "es": "Complejo papelero"
+ },
+ "building_generic_pipeline_terminus": {
+  "en": "Cross-Continental Pipeline Terminus",
+  "es": "Terminal de oleoducto transcontinental"
+ },
+ "building_generic_power_hub": {
+  "en": "High-Efficiency Power Hub",
+  "es": "Centro energético de alta eficiencia"
+ },
+ "building_generic_proving_grounds": {
+  "en": "Strategic Proving Grounds",
+  "es": "Campo de pruebas estratégico"
+ },
+ "building_generic_rail_nexus": {
+  "en": "Intercontinental Rail Nexus",
+  "es": "Nodo ferroviario intercontinental"
+ },
+ "building_generic_rd_complex": {
+  "en": "Central R&D Complex",
+  "es": "Complejo central de I+D"
+ },
+ "building_generic_resource_depository": {
+  "en": "National Resource Depository",
+  "es": "Depósito nacional de recursos"
+ },
+ "building_generic_robotics_institute": {
+  "en": "Automation & Robotics Institute",
+  "es": "Instituto de automatización y robótica"
+ },
+ "building_generic_shipping_terminal": {
+  "en": "Global Shipping Terminal",
+  "es": "Terminal marítima mundial"
+ },
+ "building_generic_silk_exchange": {
+  "en": "Silk Exchange",
+  "es": "Bolsa de la seda"
+ },
+ "building_generic_spaceport": {
+  "en": "Spaceport",
+  "es": "Puerto espacial"
+ },
+ "building_generic_tank_farm": {
+  "en": "Tank Farm",
+  "es": "Parque de tanques"
+ },
+ "building_generic_textile_depot": {
+  "en": "Textile Depot",
+  "es": "Depósito textil"
+ },
+ "building_generic_vintner_hall": {
+  "en": "Vintner's Hall",
+  "es": "Sala de vinicultores"
+ },
+ "building_getzner_bludenz_textile_works": {
+  "en": "Getzner Bludenz Textile Works",
+  "es": "Fábricas textiles Getzner Bludenz"
+ },
+ "building_gm_name_carrier_anchor": {
+  "en": "Monument Name Placeholder",
+  "es": "Nombre de monumento provisional"
+ },
+ "building_googleplex": {
+  "en": "The Googleplex",
+  "es": "El Googleplex"
+ },
+ "building_gotaverken_gothenburg_shipyard": {
+  "en": "Götaverken Gothenburg Shipyard",
+  "es": "Astillero Götaverken Gotemburgo"
+ },
+ "building_gran_azucarera_aranjuez_refinery": {
+  "en": "Gran Azucarera Aranjuez Refinery",
+  "es": "Refinería Gran Azucarera Aranjuez"
+ },
+ "building_grand_monument": {
+  "en": "Grand Monument",
+  "es": "Gran monumento"
+ },
+ "building_grand_monument_site": {
+  "en": "Grand Monument (Under Construction)",
+  "es": "Gran monumento (en construcción)"
+ },
+ "building_graphite_mine": {
+  "en": "Graphite Mine",
+  "es": "Mina de grafito"
+ },
+ "building_graphite_mine_throughput_add": {
+  "en": "$building_graphite_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_graphite_mine$"
+ },
+ "building_great_indian_railway_jamalpur_works": {
+  "en": "Great Indian Railway Jamalpur Works",
+  "es": "Talleres Great Indian Railway Jamalpur"
+ },
+ "building_grid_transfer_station": {
+  "en": "Grid Transfer Station",
+  "es": "Estación de transferencia de red"
+ },
+ "building_group_bg_arts_standard_of_living_add": {
+  "en": "$bg_arts$ Employee [concept_sol]",
+  "es": "[concept_sol] de los empleados en $bg_arts$"
+ },
+ "building_group_bg_biotechnology_throughput_add": {
+  "en": "Biotechnology [concept_throughput]",
+  "es": "[concept_throughput] de la biotecnología"
+ },
+ "building_group_bg_bureaucracy_throughput_add": {
+  "en": "Government Administration [concept_throughput] Modifier",
+  "es": "Modificador de [concept_throughput|l] de la administración gubernamental"
+ },
+ "building_group_bg_clean_power_construction_efficiency_add": {
+  "en": "$bg_clean_power$ Construction Efficiency",
+  "es": "Eficiencia de construcción de $bg_clean_power$"
+ },
+ "building_group_bg_construction_throughput_add": {
+  "en": "Construction Building [concept_throughput]",
+  "es": "[concept_throughput] de los edificios de construcción"
+ },
+ "building_group_bg_heavy_industry_infrastructure_usage_mult": {
+  "en": "[concept_infrastructure_usage] of $bg_heavy_industry$ buildings",
+  "es": "[concept_infrastructure_usage] de $bg_heavy_industry$"
+ },
+ "building_group_bg_high_tech_construction_efficiency_add": {
+  "en": "$bg_high_tech$ Construction Efficiency",
+  "es": "Eficiencia de construcción de $bg_high_tech$"
+ },
+ "building_group_bg_military_standard_of_living_add": {
+  "en": "Soldiers’ [concept_ch_sol]",
+  "es": "[concept_ch_sol] de los soldados"
+ },
+ "building_group_bg_power_construction_efficiency_add": {
+  "en": "$bg_power$ Construction Efficiency",
+  "es": "Eficiencia de construcción de $bg_power$"
+ },
+ "building_group_bg_power_infrastructure_usage_mult": {
+  "en": "[concept_infrastructure_usage] of $bg_power$ buildings",
+  "es": "[concept_infrastructure_usage] de $bg_power$"
+ },
+ "building_group_bg_power_throughput_add": {
+  "en": "Power Plant [concept_throughput]",
+  "es": "[concept_throughput] de las centrales eléctricas"
+ },
+ "building_group_bg_ship_construction_construction_efficiency_add": {
+  "en": "$bg_ship_construction$ Construction Efficiency",
+  "es": "Eficiencia de construcción de $bg_ship_construction$"
+ },
+ "building_group_bg_trade_employee_mult": {
+  "en": "Trade Employee Multiplier",
+  "es": "Multiplicador de empleados del comercio"
+ },
+ "building_group_bg_urban_facilities_employee_mult": {
+  "en": "Urban Facilities Employee Multiplier",
+  "es": "Multiplicador de empleados de instalaciones urbanas"
+ },
+ "building_group_te_construction_market_bg_employee_mult": {
+  "en": "Construction Site [concept_workforce]",
+  "es": "[concept_workforce] de las obras de construcción"
+ },
+ "building_guinness_st_james_gate_brewery": {
+  "en": "Guinness St. James's Gate Brewery",
+  "es": "Cervecería Guinness St. James's Gate"
+ },
+ "building_guthrie_singapore_agency": {
+  "en": "Guthrie Singapore Agency House",
+  "es": "Casa de agencia Guthrie Singapur"
+ },
+ "building_gwr_swindon_works": {
+  "en": "GWR Swindon Works",
+  "es": "Talleres GWR Swindon"
+ },
+ "building_hanka_precision_hq": {
+  "en": "Hanka Precision Laboratory",
+  "es": "Laboratorio de precisión Hanka"
+ },
+ "building_hanseong_jeongi_gwanghwamun_station": {
+  "en": "Hanseong Electric Gwanghwamun Station",
+  "es": "Central eléctrica Hanseong Electric Gwanghwamun"
+ },
+ "building_hanyang_arsenal_iron_works": {
+  "en": "Hanyang Arsenal Iron Works",
+  "es": "Siderúrgica del Arsenal Hanyang"
+ },
+ "building_hbc_york_factory": {
+  "en": "Hudson's Bay York Factory",
+  "es": "Fábrica de York de la Hudson's Bay"
+ },
+ "building_highway": {
+  "en": "Highway",
+  "es": "Autopista"
+ },
+ "building_highway_throughput_add": {
+  "en": "Highway [concept_throughput]",
+  "es": "[concept_throughput] de la autopista"
+ },
+ "building_hispano_suiza_barcelona_factory": {
+  "en": "Hispano-Suiza Barcelona Factory",
+  "es": "Fábrica Hispano-Suiza Barcelona"
+ },
+ "building_hp_labs": {
+  "en": "HP Labs",
+  "es": "Laboratorios HP"
+ },
+ "building_huawei_ox_horn_campus": {
+  "en": "Huawei Ox Horn Campus",
+  "es": "Campus Huawei Ox Horn"
+ },
+ "building_hughes_yuzovka_steelworks": {
+  "en": "Hughes Yuzovka Steelworks",
+  "es": "Acería Hughes Yuzovka"
+ },
+ "building_hydro_plant": {
+  "en": "Hydro Plant",
+  "es": "Central hidroeléctrica"
+ },
+ "building_hydro_plant_throughput_add": {
+  "en": "Hydro Plant [concept_throughput]",
+  "es": "[concept_throughput] de la central hidroeléctrica"
+ },
+ "building_hyundai_ulsan_factory": {
+  "en": "Hyundai Ulsan Factory",
+  "es": "Fábrica Hyundai Ulsan"
+ },
+ "building_ig_farben_buna_werke": {
+  "en": "IG Farben Buna-Werke",
+  "es": "IG Farben Buna-Werke"
+ },
+ "building_ikea_almhult_campus": {
+  "en": "IKEA Älmhult Campus",
+  "es": "Campus IKEA Älmhult"
+ },
+ "building_ilva_bagnoli_steelworks": {
+  "en": "ILVA Bagnoli Steelworks",
+  "es": "Acería ILVA Bagnoli"
+ },
+ "building_imperial_arsenal_golden_horn": {
+  "en": "Imperial Arsenal Golden Horn",
+  "es": "Arsenal Imperial del Cuerno de Oro"
+ },
+ "building_imperial_tobacco_wills_factory": {
+  "en": "Imperial Tobacco Wills Factory",
+  "es": "Fábrica Imperial Tobacco Wills"
+ },
+ "building_industrial_mineral_salt_mine": {
+  "en": "Industrial Mineral and Salt Mine",
+  "es": "Mina de minerales industriales y sal"
+ },
+ "building_industrial_mineral_salt_mine_throughput_add": {
+  "en": "$building_industrial_mineral_salt_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_industrial_mineral_salt_mine$"
+ },
+ "building_infosys_mysore_campus": {
+  "en": "Infosys Mysore Campus",
+  "es": "Campus Infosys Mysore"
+ },
+ "building_ingolstadt_power_station": {
+  "en": "Ingolstadt Power Station",
+  "es": "Central eléctrica de Ingolstadt"
+ },
+ "building_intel_ronler_acres": {
+  "en": "Intel Ronler Acres Campus",
+  "es": "Campus Intel Ronler Acres"
+ },
+ "building_iranian_state_railway_veresk_station": {
+  "en": "Iranian State Railway Veresk Station",
+  "es": "Estación Veresk de los Ferrocarriles Estatales Iraníes"
+ },
+ "building_izhevsk_arms_factory": {
+  "en": "Izhevsk Arms Factory",
+  "es": "Fábrica de armas Izhevsk"
+ },
+ "building_jardine_princeps_house": {
+  "en": "Jardine Princeps House",
+  "es": "Casa Princeps Jardine"
+ },
+ "building_jiangnan_nanjing_brocade_hall": {
+  "en": "Jiangnan Nanjing Brocade Hall",
+  "es": "Salón de brocados Jiangnan Nankín"
+ },
+ "building_jingdezhen_imperial_kiln": {
+  "en": "Jingdezhen Imperial Kiln",
+  "es": "Horno imperial de Jingdezhen"
+ },
+ "building_john_brown_clydebank_yard": {
+  "en": "John Brown Clydebank Shipyard",
+  "es": "Astillero John Brown Clydebank"
+ },
+ "building_john_holt_lagos_trading_house": {
+  "en": "John Holt Lagos Trading House",
+  "es": "Casa comercial John Holt Lagos"
+ },
+ "building_jsr_yokkaichi_complex": {
+  "en": "JSR Yokkaichi Complex",
+  "es": "Complejo JSR Yokkaichi"
+ },
+ "building_jsw_vijayanagar_works": {
+  "en": "JSW Vijayanagar Works",
+  "es": "Fábricas JSW Vijayanagar"
+ },
+ "building_kablin_zarate_paper_mill": {
+  "en": "Kablín Zárate Paper Mill",
+  "es": "Papelera Kablín Zárate"
+ },
+ "building_kaiping_tangshan_colliery": {
+  "en": "Kaiping Tangshan Colliery",
+  "es": "Mina de carbón Kaiping Tangshan"
+ },
+ "building_kinkozan_kiyomizu_kiln": {
+  "en": "Kinkozan Kiyomizu Kiln",
+  "es": "Horno Kinkozan Kiyomizu"
+ },
+ "building_kirgizian_copper_smelter": {
+  "en": "Kirgizian Copper Smelter",
+  "es": "Fundición de cobre kirguiza"
+ },
+ "building_klanicko_belgrade_slaughterhouse": {
+  "en": "Klanično Belgrade Slaughterhouse",
+  "es": "Matadero Klanično Belgrado"
+ },
+ "building_klein_galician_paper_mill": {
+  "en": "Klein Galician Paper Mill",
+  "es": "Papelera Klein de Galitzia"
+ },
+ "building_kouppas_piraeus_foundry": {
+  "en": "Kouppas Piraeus Foundry",
+  "es": "Fundición Kouppas El Pireo"
+ },
+ "building_krupp_essen_works": {
+  "en": "Krupp Essen Works",
+  "es": "Fábricas Krupp Essen"
+ },
+ "building_la_rosada_buenos_aires_arsenal": {
+  "en": "La Rosada Buenos Aires Arsenal",
+  "es": "Arsenal La Rosada Buenos Aires"
+ },
+ "building_lanfang_pontianak_kongsi_house": {
+  "en": "Lanfang Pontianak Kongsi House",
+  "es": "Casa kongsi Lanfang Pontianak"
+ },
+ "building_lee_wilson_plantation_depot": {
+  "en": "Lee Wilson Plantation Depot",
+  "es": "Depósito de plantación Lee Wilson"
+ },
+ "building_lilpop_warsaw_metalworks": {
+  "en": "Lilpop Warsaw Metalworks",
+  "es": "Metalúrgica Lilpop Varsovia"
+ },
+ "building_lithium_mine": {
+  "en": "Lithium Mine",
+  "es": "Mina de litio"
+ },
+ "building_lithium_mine_throughput_add": {
+  "en": "$building_lithium_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_lithium_mine$"
+ },
+ "building_lkab_kiruna_mine": {
+  "en": "LKAB Kiruna Iron Mine",
+  "es": "Mina de hierro LKAB Kiruna"
+ },
+ "building_lockheed_skunk_works": {
+  "en": "Skunk Works",
+  "es": "Skunk Works"
+ },
+ "building_madura_mills_madurai_complex": {
+  "en": "Madura Mills Madurai Complex",
+  "es": "Complejo Madura Mills Madurai"
+ },
+ "building_manfred_weiss_csepel_works": {
+  "en": "Manfred Weiss Csepel Works",
+  "es": "Fábricas Manfred Weiss Csepel"
+ },
+ "building_manganese_mine": {
+  "en": "Manganese Mine",
+  "es": "Mina de manganeso"
+ },
+ "building_manganese_mine_throughput_add": {
+  "en": "$building_manganese_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_manganese_mine$"
+ },
+ "building_mantero_como_silk_mill": {
+  "en": "Mantero Como Silk Mill",
+  "es": "Fábrica Mantero de seda de Como"
+ },
+ "building_mantetsu_dalian_railway_hub": {
+  "en": "Mantetsu Dalian Railway Hub",
+  "es": "Nudo ferroviario Mantetsu Dalian"
+ },
+ "building_maple_tottenham_court_showroom": {
+  "en": "Maple & Co Tottenham Court Road",
+  "es": "Maple & Co Tottenham Court Road"
+ },
+ "building_markwald_bangkok_rice_mill": {
+  "en": "Markwald Bangkok Rice Mill",
+  "es": "Molino de arroz Markwald Bangkok"
+ },
+ "building_massey_harris_toronto_implement_works": {
+  "en": "Massey-Harris Toronto Implement Works",
+  "es": "Fábrica de maquinaria agrícola Massey-Harris Toronto"
+ },
+ "building_mav_budapest_locomotive_works": {
+  "en": "MÁV Budapest Locomotive Works",
+  "es": "Fábrica de locomotoras MÁV Budapest"
+ },
+ "building_megastructure_consortium_hq": {
+  "en": "Megastructure Consortium HQ",
+  "es": "Sede del consorcio de megaestructuras"
+ },
+ "building_meissen_porcelain_manufactory": {
+  "en": "Meissen Porcelain Manufactory",
+  "es": "Manufactura de porcelana de Meissen"
+ },
+ "building_mfo_oerlikon_works": {
+  "en": "MFO Oerlikon Works",
+  "es": "Fábricas MFO Oerlikon"
+ },
+ "building_michelin_clermont_ferrand": {
+  "en": "Michelin Clermont-Ferrand Works",
+  "es": "Fábricas Michelin Clermont-Ferrand"
+ },
+ "building_microsoft_redmond_campus": {
+  "en": "Microsoft Redmond Campus",
+  "es": "Campus Microsoft Redmond"
+ },
+ "building_military_base": {
+  "en": "Military Base",
+  "es": "Base militar"
+ },
+ "building_mind_upload_nexus": {
+  "en": "Mind Upload Nexus",
+  "es": "Nexo de carga mental"
+ },
+ "building_mind_upload_nexus_construction_site": {
+  "en": "Mind Upload Nexus Construction Site",
+  "es": "Nexo de carga mental en construcción"
+ },
+ "building_misr_mahalla_textile_complex": {
+  "en": "Misr Mahalla Textile Complex",
+  "es": "Complejo textil Misr Mahalla"
+ },
+ "building_mitsubishi_nagasaki_shipyard": {
+  "en": "Mitsubishi Nagasaki Shipyard",
+  "es": "Astillero Mitsubishi Nagasaki"
+ },
+ "building_mitsui_trading_house": {
+  "en": "Mitsui Trading House",
+  "es": "Casa comercial Mitsui"
+ },
+ "building_mokta_el_hadid_beni_saf_mine": {
+  "en": "Mokta el Hadid Beni Saf Mine",
+  "es": "Mina Mokta el Hadid Beni Saf"
+ },
+ "building_monsanto_chesterfield_center": {
+  "en": "Monsanto Chesterfield Research Center",
+  "es": "Centro de investigación Monsanto Chesterfield"
+ },
+ "building_morozov_orekhovo_zuevo_mills": {
+  "en": "Morozov Orekhovo-Zuevo Mills",
+  "es": "Fábricas textiles Morozov Orekhovo-Zuevo"
+ },
+ "building_moscow_irrigation_cotton_depot": {
+  "en": "Moscow Irrigation Cotton Depot",
+  "es": "Depósito de algodón Riego de Moscú"
+ },
+ "building_moser_karlsbad_glass_works": {
+  "en": "Moser Karlsbad Glass Works",
+  "es": "Fábricas de vidrio Moser Karlsbad"
+ },
+ "building_mozambique_company_beira_concession": {
+  "en": "Mozambique Company Beira Concession",
+  "es": "Concesión de la Compañía de Mozambique Beira"
+ },
+ "building_nam_dinh_textile_plant": {
+  "en": "Nam Định Textile Plant",
+  "es": "Planta textil Nam Định"
+ },
+ "building_nanofabrication_center": {
+  "en": "Nanofabrication Center",
+  "es": "Centro de nanofabricación"
+ },
+ "building_nanofabrication_center_construction_site": {
+  "en": "Nanofabrication Center Construction Site",
+  "es": "Centro de nanofabricación en construcción"
+ },
+ "building_national_park": {
+  "en": "National Park",
+  "es": "Parque nacional"
+ },
+ "building_nederlandse_petroleum_pangkalan_depot": {
+  "en": "NedPetroleum Pangkalan Brandan Depot",
+  "es": "Depósito NedPetroleum Pangkalan Brandan"
+ },
+ "building_netflix_animation_studios": {
+  "en": "Netflix Animation Studios",
+  "es": "Estudios de animación Netflix"
+ },
+ "building_network_infrastructure": {
+  "en": "Network Infrastructure",
+  "es": "Infraestructura de red"
+ },
+ "building_network_infrastructure_throughput_add": {
+  "en": "Network [concept_infrastructure] [concept_throughput]",
+  "es": "[concept_throughput] de las [concept_infrastructure|l] de red"
+ },
+ "building_neurovault_hq": {
+  "en": "Neurovault Research Complex",
+  "es": "Complejo de investigación Neurovault"
+ },
+ "building_nhm_factorij_batavia": {
+  "en": "NHM Factorij Batavia",
+  "es": "Factoría NHM Batavia"
+ },
+ "building_nickel_cobalt_mine": {
+  "en": "Nickel and Cobalt Mine",
+  "es": "Mina de níquel y cobalto"
+ },
+ "building_nickel_cobalt_mine_throughput_add": {
+  "en": "$building_nickel_cobalt_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_nickel_cobalt_mine$"
+ },
+ "building_nintendo_development_center": {
+  "en": "Nintendo Development Center",
+  "es": "Centro de desarrollo Nintendo"
+ },
+ "building_nioc_masjed_soleyman_field": {
+  "en": "NIOC Masjed Soleyman Oil Field",
+  "es": "Yacimiento petrolífero NIOC Masjed Soleyman"
+ },
+ "building_nobel_baku_refinery": {
+  "en": "Nobel Baku Refinery",
+  "es": "Refinería Nobel Bakú"
+ },
+ "building_noda_shoyu_goyogura": {
+  "en": "Noda Shoyu Goyōgura",
+  "es": "Noda Shoyu Goyōgura"
+ },
+ "building_nokia_cable_works": {
+  "en": "Nokia Cable Works",
+  "es": "Fábricas de cables Nokia"
+ },
+ "building_norsk_hydro_rjukan_plant": {
+  "en": "Norsk Hydro Rjukan Plant",
+  "es": "Planta Norsk Hydro Rjukan"
+ },
+ "building_novo_nordisk_kalundborg_plant": {
+  "en": "Novo Nordisk Kalundborg Plant",
+  "es": "Planta Novo Nordisk Kalundborg"
+ },
+ "building_nuclear_plant": {
+  "en": "Nuclear Plant",
+  "es": "Central nuclear"
+ },
+ "building_nuclear_plant_throughput_add": {
+  "en": "Nuclear Plant [concept_throughput]",
+  "es": "[concept_throughput] de la central nuclear"
+ },
+ "building_nvidia_endeavor_campus": {
+  "en": "Nvidia Endeavor Campus",
+  "es": "Campus Nvidia Endeavor"
+ },
+ "building_ocean_mine": {
+  "en": "Deep-Sea Mine",
+  "es": "Mina de aguas profundas"
+ },
+ "building_ocean_mine_throughput_add": {
+  "en": "$building_ocean_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_ocean_mine$"
+ },
+ "building_ocmc_unsan_gold_mines": {
+  "en": "OCMC Unsan Gold Mines",
+  "es": "Minas de oro OCMC Unsan"
+ },
+ "building_ocp_khouribga_mine": {
+  "en": "OCP Khouribga Phosphate Mine",
+  "es": "Mina de fosfato OCP Khouribga"
+ },
+ "building_oevg_steyr_arms_works": {
+  "en": "OEVG Steyr Arms Works",
+  "es": "Fábrica de armas OEVG Steyr"
+ },
+ "building_ong_lung_sheng_tea_warehouse": {
+  "en": "Ong Lung Sheng Tea Warehouse",
+  "es": "Almacén de té Ong Lung Sheng"
+ },
+ "building_openai_research_lab": {
+  "en": "OpenAI Research Laboratory",
+  "es": "Laboratorio de investigación OpenAI"
+ },
+ "building_opium_ghazipur_factory": {
+  "en": "Opium Ghazipur Factory",
+  "es": "Fábrica de opio Ghazipur"
+ },
+ "building_oracle_cloud_data_center": {
+  "en": "Oracle Cloud Data Center",
+  "es": "Centro de datos en la nube Oracle"
+ },
+ "building_orbital_battlestation": {
+  "en": "Orbital Battlestation",
+  "es": "Estación de combate orbital"
+ },
+ "building_orbital_battlestation_construction_site": {
+  "en": "Orbital Battlestation Construction Site",
+  "es": "Estación de combate orbital en construcción"
+ },
+ "building_orient_express_sirkeci_terminal": {
+  "en": "Orient Express Sirkeci Terminal",
+  "es": "Terminal Orient Express Sirkeci"
+ },
+ "building_oriental_dev_kunsan_granary": {
+  "en": "Oriental Development Kunsan Granary",
+  "es": "Granero Oriental Development Kunsan"
+ },
+ "building_panama_company_culebra_cut": {
+  "en": "Panama Company Culebra Cut",
+  "es": "Corte Culebra de la Compañía de Panamá"
+ },
+ "building_paradox_kvarnholmen_studio": {
+  "en": "Paradox Kvarnholmen Studio",
+  "es": "Estudio Paradox Kvarnholmen"
+ },
+ "building_pedro_domecq_jerez_bodega": {
+  "en": "Pedro Domecq Jerez Bodega",
+  "es": "Bodega Pedro Domecq Jerez"
+ },
+ "building_pernambuco_recife_cotton_mill": {
+  "en": "Pernambuco Recife Cotton Mill",
+  "es": "Fábrica de algodón Pernambuco Recife"
+ },
+ "building_perskhlopok_cotton_combines": {
+  "en": "Perskhlopok Cotton Combines",
+  "es": "Complejos algodoneros Perskhlopok"
+ },
+ "building_persshelk_silk_reeling_house": {
+  "en": "Persshelk Silk Reeling House",
+  "es": "Casa de devanado de seda Persshelk"
+ },
+ "building_peruvian_amazon_iquitos_depot": {
+  "en": "Peruvian Amazon Iquitos Rubber Depot",
+  "es": "Depósito de caucho Peruvian Amazon Iquitos"
+ },
+ "building_petrobras_cenpes_center": {
+  "en": "Cenpes Research Center",
+  "es": "Centro de investigación Cenpes"
+ },
+ "building_pfizer_rd_campus": {
+  "en": "Pfizer Global R&D Campus",
+  "es": "Campus global de I+D Pfizer"
+ },
+ "building_philips_eindhoven_natlab": {
+  "en": "Philips Eindhoven NatLab",
+  "es": "Philips Eindhoven NatLab"
+ },
+ "building_phosphate_mine": {
+  "en": "Phosphate Mine",
+  "es": "Mina de fosfato"
+ },
+ "building_phosphate_mine_throughput_add": {
+  "en": "$building_phosphate_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_phosphate_mine$"
+ },
+ "building_pirelli_bicocca_plant": {
+  "en": "Pirelli Bicocca Plant",
+  "es": "Planta Pirelli Bicocca"
+ },
+ "building_platinum_group_metals_mine": {
+  "en": "Platinum Group Metals Mine",
+  "es": "Mina de metales del grupo del platino"
+ },
+ "building_platinum_group_metals_mine_throughput_add": {
+  "en": "$building_platinum_group_metals_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_platinum_group_metals_mine$"
+ },
+ "building_portalis_lyon_silk_house": {
+  "en": "Portalis Lyon Silk House",
+  "es": "Casa de seda Portalis Lyon"
+ },
+ "building_potash_mine": {
+  "en": "Potash Mine",
+  "es": "Mina de potasa"
+ },
+ "building_potash_mine_throughput_add": {
+  "en": "$building_potash_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_potash_mine$"
+ },
+ "building_power_bloc_hq": {
+  "en": "Power Bloc Headquarters",
+  "es": "Sede del bloque de poder"
+ },
+ "building_precious_minor_base_metal_mine": {
+  "en": "Precious and Minor Base Metal Mine",
+  "es": "Mina de metales preciosos y metales base menores"
+ },
+ "building_precious_minor_base_metal_mine_throughput_add": {
+  "en": "$building_precious_minor_base_metal_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_precious_minor_base_metal_mine$"
+ },
+ "building_prussian_railway_directorate": {
+  "en": "Prussian Railway Directorate",
+  "es": "Dirección de Ferrocarriles de Prusia"
+ },
+ "building_putilov_works": {
+  "en": "Putilov Works",
+  "es": "Fábricas Putilov"
+ },
+ "building_rac_sitka_trading_post": {
+  "en": "Russian-American Company Sitka Trading Post",
+  "es": "Puesto comercial de la Compañía Ruso-Americana Sitka"
+ },
+ "building_ralli_odessa_grain_elevator": {
+  "en": "Ralli Odessa Grain Elevator",
+  "es": "Silo de grano Ralli Odesa"
+ },
+ "building_ramirez_vila_real_cannery": {
+  "en": "Ramirez Vila Real Cannery",
+  "es": "Conservera Ramirez Vila Real"
+ },
+ "building_rare_earth_metals_mine": {
+  "en": "Rare Earth Metals Mine",
+  "es": "Mina de metales de tierras raras"
+ },
+ "building_rare_earth_metals_mine_throughput_add": {
+  "en": "$building_rare_earth_metals_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_rare_earth_metals_mine$"
+ },
+ "building_rekal_hq": {
+  "en": "Rekal Memory Center",
+  "es": "Centro de memoria Rekal"
+ },
+ "building_reliance_jamnagar_refinery": {
+  "en": "Jamnagar Refinery",
+  "es": "Refinería de Jamnagar"
+ },
+ "building_renault_billancourt_plant": {
+  "en": "Renault Billancourt Plant",
+  "es": "Planta Renault Billancourt"
+ },
+ "building_renewable_energy_plant": {
+  "en": "Renewable Energy Plant",
+  "es": "Central de energías renovables"
+ },
+ "building_renewable_energy_plant_throughput_add": {
+  "en": "Renewable Energy Plant [concept_throughput]",
+  "es": "[concept_throughput] de la central de energías renovables"
+ },
+ "building_resettlement_arrivals_add": {
+  "en": "Settlers arrived last month",
+  "es": "Colonos llegados el mes pasado"
+ },
+ "building_resettlement_colony": {
+  "en": "Settlement Authority",
+  "es": "Autoridad de asentamiento"
+ },
+ "building_resettlement_transit_deaths_add": {
+  "en": "Died in transit last month",
+  "es": "Fallecidos en tránsito el mes pasado"
+ },
+ "building_rheinmetall_unterluss_proving_ground": {
+  "en": "Rheinmetall Unterlüss Proving Ground",
+  "es": "Campo de pruebas Rheinmetall Unterlüss"
+ },
+ "building_ricordi_galleria_vittorio_emanuele": {
+  "en": "Ricordi Galleria Publishing House",
+  "es": "Editorial Ricordi Galleria"
+ },
+ "building_robotics_industry": {
+  "en": "Robotics Industry",
+  "es": "Industria de la robótica"
+ },
+ "building_robotics_industry_throughput_add": {
+  "en": "Robotics Industry [concept_throughput]",
+  "es": "[concept_throughput] de la industria de la robótica"
+ },
+ "building_roche_tower": {
+  "en": "The Roche Tower",
+  "es": "La torre Roche"
+ },
+ "building_rodriguez_arguelles_havana_tobacco_house": {
+  "en": "Rodríguez Argüelles Havana Tobacco House",
+  "es": "Casa tabacalera Rodríguez Argüelles La Habana"
+ },
+ "building_rolls_royce_derby_works": {
+  "en": "Rolls-Royce Derby Works",
+  "es": "Fábricas Rolls-Royce Derby"
+ },
+ "building_romanian_star_ploiesti_refinery": {
+  "en": "Romanian Star Ploiești Refinery",
+  "es": "Refinería Romanian Star Ploiești"
+ },
+ "building_rosatom_mayak_association": {
+  "en": "Mayak Production Association",
+  "es": "Asociación de producción Mayak"
+ },
+ "building_roscosmos_vostochny_cosmodrome": {
+  "en": "Vostochny Cosmodrome",
+  "es": "Cosmódromo Vostochny"
+ },
+ "building_rosen_association_hq": {
+  "en": "Rosen Association Headquarters",
+  "es": "Sede de la Asociación Rosen"
+ },
+ "building_rossi_sao_leopoldo_arms_factory": {
+  "en": "Rossi São Leopoldo Arms Factory",
+  "es": "Fábrica de armas Rossi São Leopoldo"
+ },
+ "building_saint_etienne_arms_manufactory": {
+  "en": "Saint-Étienne Arms Manufactory",
+  "es": "Manufactura de armas de Saint-Étienne"
+ },
+ "building_samsung_digital_city": {
+  "en": "Samsung Digital City",
+  "es": "Ciudad Digital Samsung"
+ },
+ "building_san_miguel_manila_brewery": {
+  "en": "San Miguel Manila Brewery",
+  "es": "Cervecería San Miguel Manila"
+ },
+ "building_sandford_newcastle_natal_ironworks": {
+  "en": "Sandford Newcastle-Natal Ironworks",
+  "es": "Siderúrgica Sandford Newcastle-Natal"
+ },
+ "building_sansinena_avellaneda_frigorifico": {
+  "en": "Sansinena Avellaneda Frigorífico",
+  "es": "Frigorífico Sansinena Avellaneda"
+ },
+ "building_sao_paulo_railway_paranapiacaba_workshop": {
+  "en": "São Paulo Railway Paranapiacaba Workshop",
+  "es": "Taller ferroviario São Paulo Railway Paranapiacaba"
+ },
+ "building_sap_headquarters": {
+  "en": "SAP SE Headquarters",
+  "es": "Sede de SAP SE"
+ },
+ "building_sassoon_bombay_docks": {
+  "en": "Sassoon Bombay Docks",
+  "es": "Muelles Sassoon Bombay"
+ },
+ "building_saudi_aramco_abqaiq_plant": {
+  "en": "Abqaiq Plant",
+  "es": "Planta de Abqaiq"
+ },
+ "building_schichau_elbing_shipyard": {
+  "en": "Schichau-Werke Elbing",
+  "es": "Schichau-Werke Elbing"
+ },
+ "building_schneider_le_creusot": {
+  "en": "Schneider Le Creusot Works",
+  "es": "Fábricas Schneider Le Creusot"
+ },
+ "building_secn_ferrol_shipyard": {
+  "en": "SECN Ferrol Shipyard",
+  "es": "Astillero SECN Ferrol"
+ },
+ "building_sfct_hon_gai_collieries": {
+  "en": "SFCT Hòn Gai Collieries",
+  "es": "Minas de carbón SFCT Hòn Gai"
+ },
+ "building_shell_pernis_refinery": {
+  "en": "Shell Pernis Refinery",
+  "es": "Refinería Shell Pernis"
+ },
+ "building_sherkat_shemali_cotton_gin": {
+  "en": "Sherkat-e Shemali Cotton Gin",
+  "es": "Desmotadora de algodón Sherkat-e Shemali"
+ },
+ "building_sherkate_eslamiya_isfahan_mill": {
+  "en": "Sherkat-e Eslāmiyyeh Isfahan Mill",
+  "es": "Fábrica textil Sherkat-e Eslāmiyyeh Isfahán"
+ },
+ "building_shopify_fulfillment_hub": {
+  "en": "Shopify Fulfillment Network Hub",
+  "es": "Centro de la red de distribución Shopify"
+ },
+ "building_siam_electric_wat_liab_station": {
+  "en": "Siam Electricity Wat Liab Power Station",
+  "es": "Central eléctrica Siam Electricity Wat Liab"
+ },
+ "building_sibur_tobolsk_complex": {
+  "en": "Sibur Tobolsk Petrochemical Complex",
+  "es": "Complejo petroquímico Sibur Tobolsk"
+ },
+ "building_siemens_erlangen_campus": {
+  "en": "Siemens Erlangen Campus",
+  "es": "Campus Siemens Erlangen"
+ },
+ "building_skoda_pilsen_works": {
+  "en": "Škoda Pilsen Works",
+  "es": "Fábricas Škoda Pilsen"
+ },
+ "building_softbank_vision_fund_hq": {
+  "en": "The Vision Fund Headquarters",
+  "es": "Sede del Vision Fund"
+ },
+ "building_software_industry": {
+  "en": "Software Industry",
+  "es": "Industria del software"
+ },
+ "building_software_industry_throughput_add": {
+  "en": "Software Industries [concept_throughput]",
+  "es": "[concept_throughput] de las industrias del software"
+ },
+ "building_solar_collector": {
+  "en": "Orbital Solar Collector",
+  "es": "Colector solar orbital"
+ },
+ "building_solar_collector_construction_site": {
+  "en": "Solar Collector Construction Site",
+  "es": "Colector solar en construcción"
+ },
+ "building_solar_collector_throughput_add": {
+  "en": "Solar Collector [concept_throughput]",
+  "es": "[concept_throughput] del colector solar"
+ },
+ "building_solar_receiver": {
+  "en": "Solar Power Receiver",
+  "es": "Receptor de energía solar"
+ },
+ "building_sony_pictures_studios": {
+  "en": "Sony Pictures Studios",
+  "es": "Estudios Sony Pictures"
+ },
+ "building_space_elevator": {
+  "en": "Space Elevator",
+  "es": "Ascensor espacial"
+ },
+ "building_space_elevator_construction_site": {
+  "en": "Space Elevator Construction Site",
+  "es": "Ascensor espacial en construcción"
+ },
+ "building_space_mine": {
+  "en": "Extraplanetary Base",
+  "es": "Base extraplanetaria"
+ },
+ "building_space_program": {
+  "en": "Space Program",
+  "es": "Programa espacial"
+ },
+ "building_space_program_throughput_add": {
+  "en": "Space Program [concept_throughput]",
+  "es": "[concept_throughput] del programa espacial"
+ },
+ "building_spacex_starbase": {
+  "en": "Starbase",
+  "es": "Starbase"
+ },
+ "building_specialty_alloy_metal_mine": {
+  "en": "Specialty Alloy Metal Mine",
+  "es": "Mina de metales de aleaciones especiales"
+ },
+ "building_specialty_alloy_metal_mine_throughput_add": {
+  "en": "$building_specialty_alloy_metal_mine$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_specialty_alloy_metal_mine$"
+ },
+ "building_standard_oil_refinery": {
+  "en": "Standard Oil Refinery",
+  "es": "Refinería Standard Oil"
+ },
+ "building_state_youth_centers": {
+  "en": "State Youth Centers",
+  "es": "Centros estatales de juventud"
+ },
+ "building_steel_brothers_syriam_depot": {
+  "en": "Steel Brothers Syriam Depot",
+  "es": "Depósito Steel Brothers Syriam"
+ },
+ "building_stf_fiume_torpedo_works": {
+  "en": "STF Fiume Torpedo Works",
+  "es": "Fábrica de torpedos STF Fiume"
+ },
+ "building_strategic_reserve_hub": {
+  "en": "Strategic Reserve Hub",
+  "es": "Centro de reserva estratégica"
+ },
+ "building_strategic_reserve_silo": {
+  "en": "Strategic Reserve Silo",
+  "es": "Silo de reserva estratégica"
+ },
+ "building_stt_haskoy_shipyard": {
+  "en": "STT Hasköy Shipyard",
+  "es": "Astillero STT Hasköy"
+ },
+ "building_sudamericana_valparaiso_pier": {
+  "en": "Sudamericana Valparaíso Pier",
+  "es": "Muelle Sudamericana Valparaíso"
+ },
+ "building_suez_company_ismailia_hq": {
+  "en": "Suez Company Ismailia Headquarters",
+  "es": "Sede de la Compañía de Suez Ismailia"
+ },
+ "building_sumitomo_besshi_mine": {
+  "en": "Sumitomo Besshi Mine",
+  "es": "Mina Sumitomo Besshi"
+ },
+ "building_sunhwaguk_seoul_tobacco_factory": {
+  "en": "Sunhwaguk Seoul Tobacco Factory",
+  "es": "Fábrica de tabaco Sunhwaguk Seúl"
+ },
+ "building_synthetics_plant_biomass": {
+  "en": "Integrated Biorefinery",
+  "es": "Biorrefinería integrada"
+ },
+ "building_synthetics_plant_coal": {
+  "en": "Carbon Conversion Works",
+  "es": "Planta de conversión de carbono"
+ },
+ "building_synthetics_plant_drinks": {
+  "en": "Beverage Concentrates Plant",
+  "es": "Planta de concentrados de bebidas"
+ },
+ "building_synthetics_plant_fruit": {
+  "en": "Cultured Produce Facility",
+  "es": "Instalación de productos vegetales cultivados"
+ },
+ "building_synthetics_plant_meat": {
+  "en": "Cultured Meat Plant",
+  "es": "Planta de carne cultivada"
+ },
+ "building_synthetics_plant_oil": {
+  "en": "Synthetic Fuel Works",
+  "es": "Planta de combustible sintético"
+ },
+ "building_synthetics_plant_oil_throughput_add": {
+  "en": "Synthetics Fuel Works [concept_throughput]",
+  "es": "[concept_throughput] de la planta de combustible sintético"
+ },
+ "building_synthetics_plant_opium": {
+  "en": "Pharmaceutical Industries",
+  "es": "Industrias farmacéuticas"
+ },
+ "building_synthetics_plant_rubber": {
+  "en": "Synthetic Rubber Works",
+  "es": "Planta de caucho sintético"
+ },
+ "building_synthetics_plant_rubber_throughput_add": {
+  "en": "Synthetics Works Rubber [concept_throughput]",
+  "es": "[concept_throughput] de la planta de caucho sintético"
+ },
+ "building_synthetics_plant_silk": {
+  "en": "Synthetic Clothes Industries",
+  "es": "Industrias de ropa sintética"
+ },
+ "building_synthetics_plant_silk_throughput_add": {
+  "en": "$building_synthetics_plant_silk$ building [concept_throughput]",
+  "es": "[concept_throughput] del edificio $building_synthetics_plant_silk$"
+ },
+ "building_synthetics_plant_sugar": {
+  "en": "Artificial Sweeteners Plant",
+  "es": "Planta de edulcorantes artificiales"
+ },
+ "building_synthetics_plant_wood": {
+  "en": "Phenolic Resin Panels Plant",
+  "es": "Planta de paneles de resina fenólica"
+ },
+ "building_tashkent_railroad_workshops": {
+  "en": "Tashkent Railroad Workshops",
+  "es": "Talleres del Ferrocarril de Taskent"
+ },
+ "building_tata_jamshedpur_works": {
+  "en": "Tata Jamshedpur Works",
+  "es": "Fábricas Tata Jamshedpur"
+ },
+ "building_tencent_seafront_towers": {
+  "en": "Tencent Seafront Towers",
+  "es": "Torres Tencent Seafront"
+ },
+ "building_tessier_ashpool_hq": {
+  "en": "Tessier-Ashpool Orbital",
+  "es": "Orbital Tessier-Ashpool"
+ },
+ "building_thonet_bystrice_bentwood_factory": {
+  "en": "Thonet Bystřice Bentwood Factory",
+  "es": "Fábrica de madera curvada Thonet Bystřice"
+ },
+ "building_thyssen_steelworks": {
+  "en": "Thyssen Steelworks",
+  "es": "Acería Thyssen"
+ },
+ "building_tobacco_regie_cibali_factory": {
+  "en": "Tobacco Régie Cibali Factory",
+  "es": "Fábrica Tobacco Régie Cibali"
+ },
+ "building_tokyo_electric_asakusa_station": {
+  "en": "Tokyo Electric Asakusa Power Station",
+  "es": "Central eléctrica Tokyo Electric Asakusa"
+ },
+ "building_total_antimatter_facility_progress": {
+  "en": "Antimatter Facility Progress",
+  "es": "Progreso de la instalación de antimateria"
+ },
+ "building_total_consciousness_network_progress": {
+  "en": "Consciousness Network Progress",
+  "es": "Progreso de la red de conciencia"
+ },
+ "building_total_mind_upload_nexus_progress": {
+  "en": "Mind Upload Nexus Progress",
+  "es": "Progreso del nexo de carga mental"
+ },
+ "building_total_nanofabrication_center_progress": {
+  "en": "Nanofabrication Center Progress",
+  "es": "Progreso del centro de nanofabricación"
+ },
+ "building_total_orbital_battlestation_progress": {
+  "en": "Orbital Battlestation Progress",
+  "es": "Progreso de la estación de combate orbital"
+ },
+ "building_total_solar_collector_progress": {
+  "en": "Solar Collector Progress",
+  "es": "Progreso del colector solar"
+ },
+ "building_total_space_elevator_progress": {
+  "en": "Space Elevator Progress",
+  "es": "Progreso del ascensor espacial"
+ },
+ "building_tourism_industry": {
+  "en": "Tourism Industry",
+  "es": "Industria turística"
+ },
+ "building_toyota_kaikan_plant": {
+  "en": "Toyota Kaikan Museum & Plant",
+  "es": "Museo y planta Toyota Kaikan"
+ },
+ "building_trubia_cannon_foundry": {
+  "en": "Trubia Cannon Foundry",
+  "es": "Fundición de cañones Trubia"
+ },
+ "building_tsmc_fab_18": {
+  "en": "TSMC Fab 18",
+  "es": "TSMC Fab 18"
+ },
+ "building_turkish_petroleum_kirkuk_depot": {
+  "en": "Turkish Petroleum Kirkuk Depot",
+  "es": "Depósito Turkish Petroleum Kirkuk"
+ },
+ "building_tycho_manufacturing_hq": {
+  "en": "Tycho Orbital Works",
+  "es": "Fábricas orbitales Tycho"
+ },
+ "building_un_headquarters": {
+  "en": "United Nations Headquarters",
+  "es": "Sede de las Naciones Unidas"
+ },
+ "building_uniao_fabril_barreiro_plant": {
+  "en": "União Fabril Barreiro Plant",
+  "es": "Planta União Fabril Barreiro"
+ },
+ "building_united_fruit_great_white_fleet_terminal": {
+  "en": "United Fruit Terminal",
+  "es": "Terminal United Fruit"
+ },
+ "building_united_tobacco_moscow_plant": {
+  "en": "United Tobacco Moscow Plant",
+  "es": "Planta United Tobacco Moscú"
+ },
+ "building_universal_studios_hollywood": {
+  "en": "Universal Studios Hollywood",
+  "es": "Universal Studios Hollywood"
+ },
+ "building_ursus_warsaw_tractor_plant": {
+  "en": "Ursus Warsaw Tractor Plant",
+  "es": "Fábrica de tractores Ursus Varsovia"
+ },
+ "building_vale_carajas_mine": {
+  "en": "Carajás Mine",
+  "es": "Mina de Carajás"
+ },
+ "building_van_vlissingen_oostenburg_works": {
+  "en": "Van Vlissingen Oostenburg Works",
+  "es": "Fábricas Van Vlissingen Oostenburg"
+ },
+ "building_verizon_building": {
+  "en": "The Verizon Building",
+  "es": "El edificio Verizon"
+ },
+ "building_vodka_monopoly_warehouse": {
+  "en": "State Vodka Monopoly Warehouse",
+  "es": "Almacén del monopolio estatal del vodka"
+ },
+ "building_volkswagen_autostadt": {
+  "en": "Volkswagen Autostadt",
+  "es": "Volkswagen Autostadt"
+ },
+ "building_wadia_bombay_dockyard": {
+  "en": "Wadia Bombay Dockyard",
+  "es": "Astillero Wadia Bombay"
+ },
+ "building_west_ural_oil_depot": {
+  "en": "West Ural Oil Depot",
+  "es": "Depósito de petróleo West Ural"
+ },
+ "building_white_star_albion_house": {
+  "en": "White Star Albion House",
+  "es": "Casa Albion White Star"
+ },
+ "building_witkowitzer_ostrava_ironworks": {
+  "en": "Witkowitzer Ostrava Ironworks",
+  "es": "Siderúrgica Witkowitzer Ostrava"
+ },
+ "building_wonder_abraj_al_bait": {
+  "en": "Abraj Al-Bait Clock Tower",
+  "es": "Torre del reloj Abraj Al-Bait"
+ },
+ "building_wonder_aswan_high_dam": {
+  "en": "Aswan High Dam",
+  "es": "Presa de Asuán"
+ },
+ "building_wonder_azadi_tower": {
+  "en": "Azadi Tower",
+  "es": "Torre Azadi"
+ },
+ "building_wonder_basilica_of_our_lady_of_peace": {
+  "en": "Basilica of Our Lady of Peace",
+  "es": "Basílica de Nuestra Señora de la Paz"
+ },
+ "building_wonder_berlin_tv_tower": {
+  "en": "Berlin TV Tower",
+  "es": "Torre de televisión de Berlín"
+ },
+ "building_wonder_burj_khalifa": {
+  "en": "Burj Khalifa",
+  "es": "Burj Khalifa"
+ },
+ "building_wonder_channel_tunnel": {
+  "en": "Channel Tunnel",
+  "es": "Túnel del Canal de la Mancha"
+ },
+ "building_wonder_cn_tower": {
+  "en": "CN Tower",
+  "es": "Torre CN"
+ },
+ "building_wonder_continental_union_hq": {
+  "en": "Continental Union Headquarters",
+  "es": "Sede de la Unión Continental"
+ },
+ "building_wonder_empire_state_building": {
+  "en": "Empire State Building",
+  "es": "Edificio Empire State"
+ },
+ "building_wonder_fast_telescope": {
+  "en": "FAST Telescope",
+  "es": "Telescopio FAST"
+ },
+ "building_wonder_gardens_by_the_bay": {
+  "en": "Gardens by the Bay",
+  "es": "Jardines de la Bahía"
+ },
+ "building_wonder_golden_bridge": {
+  "en": "Golden Bridge",
+  "es": "Puente Dorado"
+ },
+ "building_wonder_golden_gate_bridge": {
+  "en": "Golden Gate Bridge",
+  "es": "Puente Golden Gate"
+ },
+ "building_wonder_hoover_dam": {
+  "en": "Hoover Dam",
+  "es": "Presa Hoover"
+ },
+ "building_wonder_international_space_station": {
+  "en": "International Space Station",
+  "es": "Estación Espacial Internacional"
+ },
+ "building_wonder_itaipu_dam": {
+  "en": "Itaipu Dam",
+  "es": "Presa de Itaipú"
+ },
+ "building_wonder_iter": {
+  "en": "ITER Fusion Reactor",
+  "es": "Reactor de fusión ITER"
+ },
+ "building_wonder_kennedy_space_center": {
+  "en": "Kennedy Space Center",
+  "es": "Centro Espacial Kennedy"
+ },
+ "building_wonder_kenyatta_icc": {
+  "en": "Kenyatta International Convention Centre",
+  "es": "Centro Internacional de Convenciones Kenyatta"
+ },
+ "building_wonder_large_hadron_collider": {
+  "en": "Large Hadron Collider",
+  "es": "Gran Colisionador de Hadrones"
+ },
+ "building_wonder_ligo": {
+  "en": "LIGO Observatory",
+  "es": "Observatorio LIGO"
+ },
+ "building_wonder_lotte_world_tower": {
+  "en": "Lotte World Tower",
+  "es": "Torre Lotte World"
+ },
+ "building_wonder_lotus_temple": {
+  "en": "Lotus Temple",
+  "es": "Templo del Loto"
+ },
+ "building_wonder_moscow_state_university": {
+  "en": "Moscow State University",
+  "es": "Universidad Estatal de Moscú"
+ },
+ "building_wonder_palais_des_nations": {
+  "en": "Palais des Nations",
+  "es": "Palacio de las Naciones"
+ },
+ "building_wonder_peace_palace": {
+  "en": "Peace Palace",
+  "es": "Palacio de la Paz"
+ },
+ "building_wonder_pentagon": {
+  "en": "The Pentagon",
+  "es": "El Pentágono"
+ },
+ "building_wonder_petronas_towers": {
+  "en": "Petronas Towers",
+  "es": "Torres Petronas"
+ },
+ "building_wonder_shanghai_tower": {
+  "en": "Shanghai Tower",
+  "es": "Torre de Shanghái"
+ },
+ "building_wonder_statue_of_unity": {
+  "en": "Statue of Unity",
+  "es": "Estatua de la Unidad"
+ },
+ "building_wonder_svalbard_seed_vault": {
+  "en": "Svalbard Global Seed Vault",
+  "es": "Bóveda Global de Semillas de Svalbard"
+ },
+ "building_wonder_sydney_opera_house": {
+  "en": "Sydney Opera House",
+  "es": "Ópera de Sídney"
+ },
+ "building_wonder_taipei_101": {
+  "en": "Taipei 101",
+  "es": "Taipei 101"
+ },
+ "building_wonder_three_gorges_dam": {
+  "en": "Three Gorges Dam",
+  "es": "Presa de las Tres Gargantas"
+ },
+ "building_wonder_tokyo_tower": {
+  "en": "Tokyo Tower",
+  "es": "Torre de Tokio"
+ },
+ "building_wonder_world_trade_center": {
+  "en": "World Trade Center",
+  "es": "World Trade Center"
+ },
+ "building_worth_rue_de_la_paix_atelier": {
+  "en": "Worth Rue de la Paix Atelier",
+  "es": "Atelier Worth Rue de la Paix"
+ },
+ "building_yasuda_atosanupuri_mine": {
+  "en": "Yasuda Atosanupuri Sulfur Mine",
+  "es": "Mina de azufre Yasuda Atosanupuri"
+ },
+ "building_ynchausti_manila_trading_house": {
+  "en": "Ynchausti Manila Trading House",
+  "es": "Casa comercial Ynchausti Manila"
+ },
+ "building_yoyodyne_propulsion_hq": {
+  "en": "Yoyodyne Propulsion Lab",
+  "es": "Laboratorio de propulsión Yoyodyne"
+ },
+ "building_zastava_kragujevac_arsenal": {
+  "en": "Zastava Kragujevac Arsenal",
+  "es": "Arsenal Zastava Kragujevac"
+ }
+}

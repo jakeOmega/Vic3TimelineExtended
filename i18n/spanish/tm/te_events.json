@@ -1,0 +1,418 @@
+{
+ "amendment_petition_events.1.t": {
+  "en": "The Old Letters",
+  "es": "Las cartas antiguas"
+ },
+ "amendment_petition_events.10.t": {
+  "en": "Never the First",
+  "es": "Nunca los primeros"
+ },
+ "amendment_petition_events.11.t": {
+  "en": "Necessity Knows No Law",
+  "es": "La necesidad no conoce ley"
+ },
+ "amendment_petition_events.12.t": {
+  "en": "Pennies Against Millions",
+  "es": "Centavos contra millones"
+ },
+ "amendment_petition_events.13.t": {
+  "en": "The Pulpit's Exception",
+  "es": "La excepción del púlpito"
+ },
+ "amendment_petition_events.14.t": {
+  "en": "Rotation in Office",
+  "es": "Rotación en el cargo"
+ },
+ "amendment_petition_events.15.t": {
+  "en": "Company Men",
+  "es": "Hombres de la Compañía"
+ },
+ "amendment_petition_events.16.t": {
+  "en": "Complaints Against the Force",
+  "es": "Quejas contra las fuerzas del orden"
+ },
+ "amendment_petition_events.17.t": {
+  "en": "What the Dead Owe",
+  "es": "Lo que deben los muertos"
+ },
+ "amendment_petition_events.18.t": {
+  "en": "Dynasty Trusts",
+  "es": "Fideicomisos dinásticos"
+ },
+ "amendment_petition_events.19.t": {
+  "en": "The Duty and the Stake",
+  "es": "El deber y la apuesta"
+ },
+ "amendment_petition_events.2.t": {
+  "en": "Spoken Like a Citizen",
+  "es": "Hablar como un ciudadano"
+ },
+ "amendment_petition_events.3.t": {
+  "en": "A Second Official Tongue",
+  "es": "Una segunda lengua oficial"
+ },
+ "amendment_petition_events.4.t": {
+  "en": "Too Large to Break",
+  "es": "Demasiado grandes para caer"
+ },
+ "amendment_petition_events.5.t": {
+  "en": "The Workers' Own Firms",
+  "es": "Las empresas de los propios trabajadores"
+ },
+ "amendment_petition_events.6.t": {
+  "en": "Order in the Courts",
+  "es": "Orden en los tribunales"
+ },
+ "amendment_petition_events.7.t": {
+  "en": "The Cost of Cells",
+  "es": "El coste de las celdas"
+ },
+ "amendment_petition_events.8.t": {
+  "en": "The Data Lobby",
+  "es": "El lobby de los datos"
+ },
+ "amendment_petition_events.9.t": {
+  "en": "Those Who Speak Up",
+  "es": "Los que alzan la voz"
+ },
+ "movement_events_te.1.a": {
+  "en": "Let them march in peace",
+  "es": "Dejar que marchen en paz"
+ },
+ "movement_events_te.1.b": {
+  "en": "Disperse the crowds",
+  "es": "Dispersar a las multitudes"
+ },
+ "movement_events_te.1.c": {
+  "en": "We march alongside them",
+  "es": "Marchamos a su lado"
+ },
+ "movement_events_te.1.t": {
+  "en": "Civil Rights March",
+  "es": "Marcha por los derechos civiles"
+ },
+ "movement_events_te.10.a": {
+  "en": "Subsidize augmentations for all",
+  "es": "Subvencionar las mejoras para todos"
+ },
+ "movement_events_te.10.b": {
+  "en": "Regulate pricing",
+  "es": "Regular los precios"
+ },
+ "movement_events_te.10.c": {
+  "en": "Let the market decide",
+  "es": "Que decida el mercado"
+ },
+ "movement_events_te.10.t": {
+  "en": "The Augmentation Divide",
+  "es": "La brecha de las mejoras"
+ },
+ "movement_events_te.100.a": {
+  "en": "Order has been restored",
+  "es": "El orden ha sido restablecido"
+ },
+ "movement_events_te.100.b": {
+  "en": "Accelerate the [concept_assimilation] program",
+  "es": "Acelerar el programa de [concept_assimilation|l]"
+ },
+ "movement_events_te.100.c": {
+  "en": "Enforce strict separation",
+  "es": "Imponer una separación estricta"
+ },
+ "movement_events_te.100.e": {
+  "en": "They are no longer welcome here",
+  "es": "Ya no son bienvenidos aquí"
+ },
+ "movement_events_te.100.t": {
+  "en": "The Movement Broken",
+  "es": "El movimiento, quebrantado"
+ },
+ "movement_events_te.11.a": {
+  "en": "Shut them down",
+  "es": "Acabar con ellos"
+ },
+ "movement_events_te.11.b": {
+  "en": "License and regulate them",
+  "es": "Concederles licencia y regularlos"
+ },
+ "movement_events_te.11.c": {
+  "en": "Send researchers to study their methods",
+  "es": "Enviar investigadores a estudiar sus métodos"
+ },
+ "movement_events_te.11.t": {
+  "en": "The Biohacker Underground",
+  "es": "El submundo biohacker"
+ },
+ "movement_events_te.12.a": {
+  "en": "Digital copies are property",
+  "es": "Las copias digitales son propiedad"
+ },
+ "movement_events_te.12.b": {
+  "en": "Form an ethics commission",
+  "es": "Formar una comisión de ética"
+ },
+ "movement_events_te.12.c": {
+  "en": "Recognize digital consciousness",
+  "es": "Reconocer la conciencia digital"
+ },
+ "movement_events_te.12.t": {
+  "en": "The Digital Consciousness Debate",
+  "es": "El debate sobre la conciencia digital"
+ },
+ "movement_events_te.13.a": {
+  "en": "Root out these smuggling networks",
+  "es": "Desarticular estas redes de contrabando"
+ },
+ "movement_events_te.13.b": {
+  "en": "Look the other way",
+  "es": "Mirar hacia otro lado"
+ },
+ "movement_events_te.13.c": {
+  "en": "Quietly fund the networks",
+  "es": "Financiar las redes en silencio"
+ },
+ "movement_events_te.13.t": {
+  "en": "The Underground Railroad",
+  "es": "El Ferrocarril Subterráneo"
+ },
+ "movement_events_te.14.a": {
+  "en": "Protect the targeted businesses",
+  "es": "Proteger los negocios atacados"
+ },
+ "movement_events_te.14.b": {
+  "en": "A lesson in loyalty",
+  "es": "Una lección de lealtad"
+ },
+ "movement_events_te.14.c": {
+  "en": "Rally consumers to support minority shops",
+  "es": "Movilizar a los consumidores para apoyar los comercios de las minorías"
+ },
+ "movement_events_te.14.t": {
+  "en": "The Boycott",
+  "es": "El boicot"
+ },
+ "movement_events_te.15.a": {
+  "en": "Declare a national day of mourning",
+  "es": "Declarar un día de luto nacional"
+ },
+ "movement_events_te.15.b": {
+  "en": "The [concept_agitator] reaped what they sowed",
+  "es": "El [concept_agitator|l] cosechó lo que sembró"
+ },
+ "movement_events_te.15.c": {
+  "en": "Open a formal investigation",
+  "es": "Abrir una investigación formal"
+ },
+ "movement_events_te.15.t": {
+  "en": "Blood of a Martyr",
+  "es": "Sangre de un mártir"
+ },
+ "movement_events_te.16.a": {
+  "en": "Arrest them all",
+  "es": "Arrestarlos a todos"
+ },
+ "movement_events_te.16.b": {
+  "en": "Offer limited concessions",
+  "es": "Ofrecer concesiones limitadas"
+ },
+ "movement_events_te.16.c": {
+  "en": "Let the world watch",
+  "es": "Que el mundo lo vea"
+ },
+ "movement_events_te.16.t": {
+  "en": "Mass Disobedience",
+  "es": "Desobediencia masiva"
+ },
+ "movement_events_te.17.a": {
+  "en": "Condemn them before the world",
+  "es": "Condenarlos ante el mundo"
+ },
+ "movement_events_te.17.b": {
+  "en": "It is not our affair",
+  "es": "No es asunto nuestro"
+ },
+ "movement_events_te.17.t": {
+  "en": "A Stain on Their Record",
+  "es": "Una mancha en su historial"
+ },
+ "movement_events_te.2.a": {
+  "en": "The law is the law",
+  "es": "La ley es la ley"
+ },
+ "movement_events_te.2.b": {
+  "en": "Make an exception this time",
+  "es": "Hacer una excepción esta vez"
+ },
+ "movement_events_te.2.c": {
+  "en": "This must change",
+  "es": "Esto debe cambiar"
+ },
+ "movement_events_te.2.t": {
+  "en": "Segregation Incident",
+  "es": "Incidente de segregación"
+ },
+ "movement_events_te.200.t": {
+  "en": "A New Era of Equality",
+  "es": "Una nueva era de igualdad"
+ },
+ "movement_events_te.220.t": {
+  "en": "The Civil Rights Mandate is Signed",
+  "es": "Se firma el mandato por los derechos civiles"
+ },
+ "movement_events_te.221.t": {
+  "en": "The Movement Carries the Day",
+  "es": "El movimiento se impone"
+ },
+ "movement_events_te.222.t": {
+  "en": "A Settlement, At Last",
+  "es": "Por fin, un acuerdo"
+ },
+ "movement_events_te.223.t": {
+  "en": "Reform on Paper",
+  "es": "Reforma sobre el papel"
+ },
+ "movement_events_te.230.t": {
+  "en": "The Movement Demobilizes",
+  "es": "El movimiento se desmoviliza"
+ },
+ "movement_events_te.231.t": {
+  "en": "The Long Drift",
+  "es": "La larga deriva"
+ },
+ "movement_events_te.232.t": {
+  "en": "The Movement Fades",
+  "es": "El movimiento se apaga"
+ },
+ "movement_events_te.240.t": {
+  "en": "Victory on Paper",
+  "es": "Victoria sobre el papel"
+ },
+ "movement_events_te.3.a": {
+  "en": "Fund a state cultural program",
+  "es": "Financiar un programa cultural estatal"
+ },
+ "movement_events_te.3.b": {
+  "en": "Let it flourish on its own",
+  "es": "Dejar que florezca por sí solo"
+ },
+ "movement_events_te.3.c": {
+  "en": "Channel it into national unity propaganda",
+  "es": "Encauzarlo hacia la propaganda de unidad nacional"
+ },
+ "movement_events_te.3.t": {
+  "en": "Cultural Renaissance",
+  "es": "Renacimiento cultural"
+ },
+ "movement_events_te.301.t": {
+  "en": "First Mass Rally Draws Notice",
+  "es": "La primera concentración masiva llama la atención"
+ },
+ "movement_events_te.302.t": {
+  "en": "Equal on Paper",
+  "es": "Iguales sobre el papel"
+ },
+ "movement_events_te.303.t": {
+  "en": "Coalition Forms with Trade Unions",
+  "es": "Se forma una coalición con los sindicatos"
+ },
+ "movement_events_te.304.t": {
+  "en": "Federal Commission Recommends Action",
+  "es": "La Comisión Federal recomienda actuar"
+ },
+ "movement_events_te.305.t": {
+  "en": "The March on the Capital",
+  "es": "La marcha sobre la capital"
+ },
+ "movement_events_te.4.a": {
+  "en": "We reject foreign interference",
+  "es": "Rechazamos la injerencia extranjera"
+ },
+ "movement_events_te.4.b": {
+  "en": "We will work toward reform",
+  "es": "Trabajaremos por la reforma"
+ },
+ "movement_events_te.4.c": {
+  "en": "Deflect with counter-accusations",
+  "es": "Desviar la atención con contraacusaciones"
+ },
+ "movement_events_te.4.t": {
+  "en": "International Pressure on Human Rights",
+  "es": "Presión internacional por los derechos humanos"
+ },
+ "movement_events_te.5.a": {
+  "en": "Hunt down the deserters",
+  "es": "Dar caza a los desertores"
+ },
+ "movement_events_te.5.b": {
+  "en": "Allow alternative service",
+  "es": "Permitir el servicio alternativo"
+ },
+ "movement_events_te.5.c": {
+  "en": "Ignore the problem for now",
+  "es": "Ignorar el problema por ahora"
+ },
+ "movement_events_te.5.t": {
+  "en": "Draft Resistance",
+  "es": "Resistencia al reclutamiento"
+ },
+ "movement_events_te.6.a": {
+  "en": "Discredit these traitors",
+  "es": "Desacreditar a estos traidores"
+ },
+ "movement_events_te.6.c": {
+  "en": "Invite them to advise on policy",
+  "es": "Invitarlos a asesorar sobre política"
+ },
+ "movement_events_te.6.t": {
+  "en": "Veterans Speak Against the War",
+  "es": "Los veteranos hablan contra la guerra"
+ },
+ "movement_events_te.7.a": {
+  "en": "Let them have their say",
+  "es": "Dejarles expresarse"
+ },
+ "movement_events_te.7.b": {
+  "en": "This threatens national security",
+  "es": "Esto amenaza la seguridad nacional"
+ },
+ "movement_events_te.7.c": {
+  "en": "Use this momentum for diplomacy",
+  "es": "Aprovechar este impulso para la diplomacia"
+ },
+ "movement_events_te.7.t": {
+  "en": "Peace Rally Fills the Capital",
+  "es": "Una concentración por la paz llena la capital"
+ },
+ "movement_events_te.8.a": {
+  "en": "Investigate and prosecute",
+  "es": "Investigar y procesar"
+ },
+ "movement_events_te.8.b": {
+  "en": "Dismiss as baseless propaganda",
+  "es": "Descartarlo como propaganda sin fundamento"
+ },
+ "movement_events_te.8.c": {
+  "en": "Tax their excess profits",
+  "es": "Gravar sus beneficios extraordinarios"
+ },
+ "movement_events_te.8.t": {
+  "en": "War Profiteering Exposed",
+  "es": "Sale a la luz la especulación en tiempos de guerra"
+ },
+ "movement_events_te.9.a": {
+  "en": "Approve the civilian trials",
+  "es": "Aprobar los ensayos civiles"
+ },
+ "movement_events_te.9.b": {
+  "en": "Military applications only",
+  "es": "Solo aplicaciones militares"
+ },
+ "movement_events_te.9.c": {
+  "en": "Too dangerous - deny the application",
+  "es": "Demasiado peligroso: denegar la solicitud"
+ },
+ "movement_events_te.9.t": {
+  "en": "Neural Implant Human Trials",
+  "es": "Ensayos en humanos de implantes neuronales"
+ }
+}

@@ -1,0 +1,298 @@
+{
+ "building_art_academy": {
+  "en": "Creative Industry",
+  "es": "Industria creativa"
+ },
+ "building_chemical_plant": {
+  "en": "Chemical Plants",
+  "es": "Plantas químicas"
+ },
+ "building_electrics_industry": {
+  "en": "Wired Telecommunications Industries",
+  "es": "Industrias de telecomunicaciones por cable"
+ },
+ "building_synthetics_plant": {
+  "en": "Synthetic Dyes Industries",
+  "es": "Industrias de tintes sintéticos"
+ },
+ "coal": {
+  "en": "Energy and Carbon Minerals",
+  "es": "Minerales energéticos y carbonosos"
+ },
+ "company_basic_electrics": {
+  "en": "Telecommunications",
+  "es": "Telecomunicaciones"
+ },
+ "company_basic_electrics_dynamic_name_tag_plural": {
+  "en": "Telecommunications",
+  "es": "Telecomunicaciones"
+ },
+ "company_basic_electrics_dynamic_name_tag_singular": {
+  "en": "Telecommunication",
+  "es": "Telecomunicación"
+ },
+ "concept_harvest_condition": {
+  "en": "Local Condition",
+  "es": "Condición local"
+ },
+ "concept_harvest_condition_intensity": {
+  "en": "Intensity",
+  "es": "Intensidad"
+ },
+ "concept_harvest_conditions": {
+  "en": "Local Conditions",
+  "es": "Condiciones locales"
+ },
+ "country_institution_cost_institution_home_affairs_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
+  "es": "@bur![Nbsp]Coste de [concept_bureaucracy|l]: [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "cultural_erasure": {
+  "en": "Latent Hostility",
+  "es": "Hostilidad latente"
+ },
+ "fertilizer": {
+  "en": "Chemicals",
+  "es": "Productos químicos"
+ },
+ "fine_art": {
+  "en": "Art and Entertainment",
+  "es": "Arte y entretenimiento"
+ },
+ "glass": {
+  "en": "Glass and Plastics",
+  "es": "Vidrio y plásticos"
+ },
+ "goods_input_coal_add": {
+  "en": "@coal! $coal$ input",
+  "es": "Insumo de $coal$ @coal!"
+ },
+ "goods_input_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Input",
+  "es": "Insumo de $fertilizer$ @fertilizer!"
+ },
+ "goods_input_glass_add": {
+  "en": "@glass! $glass$ input",
+  "es": "Insumo de $glass$ @glass!"
+ },
+ "goods_input_iron_add": {
+  "en": "@iron! $iron$ input",
+  "es": "Insumo de $iron$ @iron!"
+ },
+ "goods_input_lead_add": {
+  "en": "@lead! $lead$ input",
+  "es": "Insumo de $lead$ @lead!"
+ },
+ "goods_input_opium_add": {
+  "en": "@opium! $opium$ input",
+  "es": "Insumo de $opium$ @opium!"
+ },
+ "goods_input_radios_add": {
+  "en": "@radios! $radios$ input",
+  "es": "Insumo de $radios$ @radios!"
+ },
+ "goods_input_radios_mult": {
+  "en": "@radios![Nbsp]$radios$ input",
+  "es": "Insumo de $radios$[Nbsp]@radios!"
+ },
+ "goods_input_sulfur_add": {
+  "en": "@sulfur! $sulfur$ input",
+  "es": "Insumo de $sulfur$ @sulfur!"
+ },
+ "goods_input_telephones_add": {
+  "en": "@telephones! $telephones$ input",
+  "es": "Insumo de $telephones$ @telephones!"
+ },
+ "goods_input_transportation_add": {
+  "en": "@transportation! $transportation$ input",
+  "es": "Insumo de $transportation$ @transportation!"
+ },
+ "goods_output_coal_add": {
+  "en": "@coal! $coal$ output",
+  "es": "Producción de $coal$ @coal!"
+ },
+ "goods_output_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Output",
+  "es": "Producción de $fertilizer$ @fertilizer!"
+ },
+ "goods_output_fine_art_add": {
+  "en": "@fine_art! $fine_art$ output",
+  "es": "Producción de $fine_art$ @fine_art!"
+ },
+ "goods_output_glass_add": {
+  "en": "@glass! $glass$ output",
+  "es": "Producción de $glass$ @glass!"
+ },
+ "goods_output_iron_add": {
+  "en": "@iron! $iron$ output",
+  "es": "Producción de $iron$ @iron!"
+ },
+ "goods_output_lead_add": {
+  "en": "@lead! $lead$ output",
+  "es": "Producción de $lead$ @lead!"
+ },
+ "goods_output_opium_add": {
+  "en": "@opium! $opium$ output",
+  "es": "Producción de $opium$ @opium!"
+ },
+ "goods_output_radios_add": {
+  "en": "@radios! $radios$ output",
+  "es": "Producción de $radios$ @radios!"
+ },
+ "goods_output_radios_mult": {
+  "en": "Building @radios! $radios$ output",
+  "es": "Producción de $radios$ @radios! de edificios"
+ },
+ "goods_output_sulfur_add": {
+  "en": "@sulfur! $sulfur$ output",
+  "es": "Producción de $sulfur$ @sulfur!"
+ },
+ "goods_output_telephones_add": {
+  "en": "@telephones! $telephones$ output",
+  "es": "Producción de $telephones$ @telephones!"
+ },
+ "goods_output_transportation_add": {
+  "en": "@transportation! $transportation$ output",
+  "es": "Producción de $transportation$ @transportation!"
+ },
+ "institution_health_system": {
+  "en": "Ministry of Health",
+  "es": "Ministerio de Sanidad"
+ },
+ "institution_police": {
+  "en": "Ministry of Public Safety",
+  "es": "Ministerio de Seguridad Pública"
+ },
+ "institution_schools": {
+  "en": "Ministry of Education",
+  "es": "Ministerio de Educación"
+ },
+ "iron": {
+  "en": "Structural Metals",
+  "es": "Metales estructurales"
+ },
+ "law_cultural_exclusion": {
+  "en": "Assimilatory Citizenship",
+  "es": "Ciudadanía asimilacionista"
+ },
+ "law_ethnostate": {
+  "en": "Ancestral Citizenship",
+  "es": "Ciudadanía ancestral"
+ },
+ "law_multicultural": {
+  "en": "Universal Citizenship",
+  "es": "Ciudadanía universal"
+ },
+ "law_national_supremacy": {
+  "en": "Cultural Citizenship",
+  "es": "Ciudadanía cultural"
+ },
+ "law_racial_segregation": {
+  "en": "Racialized Citizenship",
+  "es": "Ciudadanía racializada"
+ },
+ "law_subjecthood": {
+  "en": "Sovereign Subjecthood",
+  "es": "Régimen de súbditos soberano"
+ },
+ "lead": {
+  "en": "Conductive and Base Metals",
+  "es": "Metales conductores y básicos"
+ },
+ "no_veterancy": {
+  "en": "Recruit",
+  "es": "Recluta"
+ },
+ "opium": {
+  "en": "Drugs",
+  "es": "Drogas"
+ },
+ "pm_artificial_fertilizers": {
+  "en": "Basic Chemical Production",
+  "es": "Producción química básica"
+ },
+ "pm_film_art": {
+  "en": "Moving Pictures",
+  "es": "Cine"
+ },
+ "pm_improved_fertilizer": {
+  "en": "Refined Chemical Processes",
+  "es": "Procesos químicos refinados"
+ },
+ "pm_nitrogen_fixation": {
+  "en": "Synthetic Nitrogen Production",
+  "es": "Producción de nitrógeno sintético"
+ },
+ "pm_no_maintenance": {
+  "en": "No Maintenance",
+  "es": "Sin mantenimiento"
+ },
+ "pm_photographic_art": {
+  "en": "Photography",
+  "es": "Fotografía"
+ },
+ "pmg_fertilizer_production": {
+  "en": "Chemicals Production",
+  "es": "Producción de productos químicos"
+ },
+ "pmg_passenger_trains": {
+  "en": "Rolling Stock",
+  "es": "Material rodante"
+ },
+ "prestige_good_brunn_type_engines": {
+  "en": "High-Performance Engines",
+  "es": "Motores de alto rendimiento"
+ },
+ "prestige_good_generic_fertilizer": {
+  "en": "Specialty Reagents",
+  "es": "Reactivos especializados"
+ },
+ "prestige_good_generic_opium": {
+  "en": "Potent Formulations",
+  "es": "Formulaciones potentes"
+ },
+ "prestige_good_radiola_radios": {
+  "en": "Precision Wireless Gear",
+  "es": "Equipos inalámbricos de precisión"
+ },
+ "radios": {
+  "en": "Wireless Telecommunication Gear",
+  "es": "Equipos de telecomunicación inalámbrica"
+ },
+ "second_rate_citizen": {
+  "en": "Provisional Acceptance",
+  "es": "Aceptación provisional"
+ },
+ "stockpile_navy_requirement_coal_add": {
+  "en": "Navy @coal! $coal$ Consumption",
+  "es": "Consumo de $coal$ @coal! de la armada"
+ },
+ "sulfur": {
+  "en": "Chemical and Industrial Minerals",
+  "es": "Minerales químicos e industriales"
+ },
+ "telephones": {
+  "en": "Wired Telecommunication Gear",
+  "es": "Equipos de telecomunicación por cable"
+ },
+ "veterancy0": {
+  "en": "Green",
+  "es": "Novato"
+ },
+ "veterancy1": {
+  "en": "Regular",
+  "es": "Regular"
+ },
+ "veterancy2": {
+  "en": "Disciplined",
+  "es": "Disciplinado"
+ },
+ "veterancy3": {
+  "en": "Hardened",
+  "es": "Curtido"
+ },
+ "veterancy4": {
+  "en": "Seasoned",
+  "es": "Experimentado"
+ }
+}

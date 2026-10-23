@@ -1,0 +1,550 @@
+{
+ "amendment_birthright_endowment": {
+  "en": "Birthright Endowment",
+  "es": "Dotación de nacimiento"
+ },
+ "amendment_collective_administration": {
+  "en": "Collegial Administration",
+  "es": "Administración colegiada"
+ },
+ "amendment_collective_algorithmic_commons": {
+  "en": "Algorithmic Commons",
+  "es": "Bienes comunes algorítmicos"
+ },
+ "amendment_collective_direct_democracy": {
+  "en": "Direct Democracy",
+  "es": "Democracia directa"
+ },
+ "amendment_collective_free_federation": {
+  "en": "Free Federation",
+  "es": "Federación libre"
+ },
+ "amendment_collective_leadership": {
+  "en": "Collective Leadership",
+  "es": "Liderazgo colectivo"
+ },
+ "amendment_collective_patrician_council": {
+  "en": "Patrician Council",
+  "es": "Consejo patricio"
+ },
+ "amendment_community_service": {
+  "en": "Community Service Alternative",
+  "es": "Alternativa de servicio comunitario"
+ },
+ "amendment_compromise_modifier": {
+  "en": "Compromise Amendment",
+  "es": "Enmienda de compromiso"
+ },
+ "amendment_cooperative_preference": {
+  "en": "Worker Cooperative Preference",
+  "es": "Preferencia por las cooperativas de trabajo"
+ },
+ "amendment_estate_duties": {
+  "en": "Estate Duties",
+  "es": "Impuesto de sucesiones"
+ },
+ "amendment_langreform_constructed": {
+  "en": "Constructed Language",
+  "es": "Lengua construida"
+ },
+ "amendment_langreform_revival": {
+  "en": "Classical Language Revival",
+  "es": "Resurgimiento de la lengua clásica"
+ },
+ "amendment_langreform_simplification": {
+  "en": "Language Simplification",
+  "es": "Simplificación de la lengua"
+ },
+ "amendment_mandatory_minimums": {
+  "en": "Mandatory Minimum Sentences",
+  "es": "Penas mínimas obligatorias"
+ },
+ "amendment_official_bilingualism": {
+  "en": "Official Bilingualism",
+  "es": "Bilingüismo oficial"
+ },
+ "amendment_perpetual_trusts": {
+  "en": "Perpetual Dynastic Trusts",
+  "es": "Fideicomisos dinásticos perpetuos"
+ },
+ "amendment_purist_modifier": {
+  "en": "Unamended Bill",
+  "es": "Proyecto sin enmiendas"
+ },
+ "amendment_religious_exemption": {
+  "en": "Religious Exemption Clause",
+  "es": "Cláusula de exención religiosa"
+ },
+ "amendment_spoils_system": {
+  "en": "Spoils System",
+  "es": "Sistema de botín"
+ },
+ "amendment_whistleblower_shield": {
+  "en": "Whistleblower Protection Act",
+  "es": "Ley de protección del denunciante"
+ },
+ "bg_biotechnology": {
+  "en": "Biotechnology",
+  "es": "Biotecnología"
+ },
+ "bg_clean_power": {
+  "en": "Clean Power",
+  "es": "Energía limpia"
+ },
+ "bg_company_buildings": {
+  "en": "Company Buildings",
+  "es": "Edificios de compañía"
+ },
+ "bg_discoverable_mining": {
+  "en": "Discoverable Mining",
+  "es": "Minería por descubrir"
+ },
+ "bg_exotic": {
+  "en": "Exotic Infrastructure",
+  "es": "Infraestructura exótica"
+ },
+ "bg_grand_monuments": {
+  "en": "Grand Monuments",
+  "es": "Grandes monumentos"
+ },
+ "bg_high_tech": {
+  "en": "High-Tech Industry",
+  "es": "Industria de alta tecnología"
+ },
+ "bg_parks": {
+  "en": "Parks",
+  "es": "Parques"
+ },
+ "bg_resettlement": {
+  "en": "Resettlement",
+  "es": "Reasentamiento"
+ },
+ "concept_agent_network": {
+  "en": "Agent Network",
+  "es": "Red de agentes"
+ },
+ "concept_antimatter_facility": {
+  "en": "Antimatter Facility",
+  "es": "Instalación de antimateria"
+ },
+ "concept_banking_backstops": {
+  "en": "Backstops",
+  "es": "Respaldos"
+ },
+ "concept_banking_contagion": {
+  "en": "Banking Contagion",
+  "es": "Contagio bancario"
+ },
+ "concept_banking_crash": {
+  "en": "Banking Crash",
+  "es": "Colapso bancario"
+ },
+ "concept_banking_cycle": {
+  "en": "Banking Cycle",
+  "es": "Ciclo bancario"
+ },
+ "concept_banking_delegation": {
+  "en": "Delegation",
+  "es": "Delegación"
+ },
+ "concept_banking_inflation": {
+  "en": "Inflation",
+  "es": "Inflación"
+ },
+ "concept_banking_mandate": {
+  "en": "Mandate",
+  "es": "Mandato"
+ },
+ "concept_banking_momentum": {
+  "en": "Banking Momentum",
+  "es": "Impulso bancario"
+ },
+ "concept_banking_monetisation": {
+  "en": "Monetising the Deficit",
+  "es": "Monetización del déficit"
+ },
+ "concept_bubble_pressure": {
+  "en": "Bubble Pressure",
+  "es": "Presión de burbuja"
+ },
+ "concept_capital_controls": {
+  "en": "Capital Controls",
+  "es": "Controles de capital"
+ },
+ "concept_ch_infamy": {
+  "en": "Infamy",
+  "es": "Infamia"
+ },
+ "concept_ch_instability": {
+  "en": "Instability",
+  "es": "Inestabilidad"
+ },
+ "concept_ch_megaprojects": {
+  "en": "Megaprojects",
+  "es": "Megaproyectos"
+ },
+ "concept_ch_modifiers": {
+  "en": "Other Modifiers",
+  "es": "Otros modificadores"
+ },
+ "concept_ch_monuments": {
+  "en": "Monuments",
+  "es": "Monumentos"
+ },
+ "concept_ch_prestige": {
+  "en": "Prestige",
+  "es": "Prestigio"
+ },
+ "concept_ch_sol": {
+  "en": "Standard of Living",
+  "es": "Nivel de vida"
+ },
+ "concept_climate_policy": {
+  "en": "Climate Policy",
+  "es": "Política climática"
+ },
+ "concept_colonial_band": {
+  "en": "Stability Band",
+  "es": "Banda de estabilidad"
+ },
+ "concept_colonial_overreach": {
+  "en": "Imperial Overreach",
+  "es": "Sobreextensión imperial"
+ },
+ "concept_colonial_stability": {
+  "en": "Colonial Stability",
+  "es": "Estabilidad colonial"
+ },
+ "concept_combined_arms": {
+  "en": "Combined Arms",
+  "es": "Armas combinadas"
+ },
+ "concept_contested_monument": {
+  "en": "Contested Monument",
+  "es": "Monumento en disputa"
+ },
+ "concept_covert_efficiency": {
+  "en": "Efficiency Factor",
+  "es": "Factor de eficiencia"
+ },
+ "concept_covert_funding": {
+  "en": "Covert Funding",
+  "es": "Financiación encubierta"
+ },
+ "concept_covert_operations": {
+  "en": "Covert Operations",
+  "es": "Operaciones encubiertas"
+ },
+ "concept_cultural_pull": {
+  "en": "Cultural Pull",
+  "es": "Atractivo cultural"
+ },
+ "concept_currency_devaluation": {
+  "en": "Currency Devaluation",
+  "es": "Devaluación de la moneda"
+ },
+ "concept_decolonization_system": {
+  "en": "Decolonization",
+  "es": "Descolonización"
+ },
+ "concept_directed_credit": {
+  "en": "Directed Credit",
+  "es": "Crédito dirigido"
+ },
+ "concept_environmental_crisis": {
+  "en": "Environmental Crisis",
+  "es": "Crisis medioambiental"
+ },
+ "concept_feminism_movement": {
+  "en": "Second-Wave Feminism",
+  "es": "Feminismo de la segunda ola"
+ },
+ "concept_financial_regulation": {
+  "en": "Financial Regulation",
+  "es": "Regulación financiera"
+ },
+ "concept_fortification_level": {
+  "en": "Fortification Level",
+  "es": "Nivel de fortificación"
+ },
+ "concept_fortification_system": {
+  "en": "Fortifications",
+  "es": "Fortificaciones"
+ },
+ "concept_fortified_bastion": {
+  "en": "Fortified Bastion",
+  "es": "Bastión fortificado"
+ },
+ "concept_fortified_position": {
+  "en": "Fortified Position",
+  "es": "Posición fortificada"
+ },
+ "concept_fortified_stronghold": {
+  "en": "Fortified Stronghold",
+  "es": "Reducto fortificado"
+ },
+ "concept_fossil_transition": {
+  "en": "Fossil Transition",
+  "es": "Transición fósil"
+ },
+ "concept_funding_stealth": {
+  "en": "Funding Stealth",
+  "es": "Sigilo de la financiación"
+ },
+ "concept_grandeur": {
+  "en": "Grandeur",
+  "es": "Grandeza"
+ },
+ "concept_heritage_monument": {
+  "en": "Heritage Monument",
+  "es": "Monumento patrimonial"
+ },
+ "concept_homeland_dynamics": {
+  "en": "Homeland Dynamics",
+  "es": "Dinámica de la tierra natal"
+ },
+ "concept_impregnable_fortress": {
+  "en": "Impregnable Fortress",
+  "es": "Fortaleza inexpugnable"
+ },
+ "concept_inheritance_concentration": {
+  "en": "Wealth Concentration",
+  "es": "Concentración de la riqueza"
+ },
+ "concept_intelligence_capacity": {
+  "en": "Intelligence Capacity",
+  "es": "Capacidad de inteligencia"
+ },
+ "concept_internal_resettlement": {
+  "en": "Internal Resettlement",
+  "es": "Reasentamiento interno"
+ },
+ "concept_judicial_independence": {
+  "en": "Judicial Independence",
+  "es": "Independencia judicial"
+ },
+ "concept_launch_authority": {
+  "en": "Launch Authority",
+  "es": "Autoridad de lanzamiento"
+ },
+ "concept_migration_crowding": {
+  "en": "Migration Crowding",
+  "es": "Hacinamiento migratorio"
+ },
+ "concept_ministry_system": {
+  "en": "Ministry System",
+  "es": "Sistema de ministerios"
+ },
+ "concept_nuclear_doctrine": {
+  "en": "Nuclear Doctrine",
+  "es": "Doctrina nuclear"
+ },
+ "concept_nuclear_program": {
+  "en": "Nuclear Program",
+  "es": "Programa nuclear"
+ },
+ "concept_nuclear_readiness": {
+  "en": "Nuclear Readiness",
+  "es": "Preparación nuclear"
+ },
+ "concept_nuclear_stockpile": {
+  "en": "Nuclear Stockpile",
+  "es": "Arsenal nuclear"
+ },
+ "concept_nuclear_strike": {
+  "en": "Nuclear Strike",
+  "es": "Ataque nuclear"
+ },
+ "concept_nuclear_taboo": {
+  "en": "Nuclear Taboo",
+  "es": "Tabú nuclear"
+ },
+ "concept_operation_detection": {
+  "en": "Detection Risk",
+  "es": "Riesgo de detección"
+ },
+ "concept_operation_slots": {
+  "en": "Operation Slots",
+  "es": "Cupos de operaciones"
+ },
+ "concept_orbital_debris": {
+  "en": "Orbital Debris",
+  "es": "Basura orbital"
+ },
+ "concept_pollution_system": {
+  "en": "Pollution",
+  "es": "Contaminación"
+ },
+ "concept_posture_business": {
+  "en": "Business View",
+  "es": "Visión empresarial"
+ },
+ "concept_posture_militarist": {
+  "en": "Militarist View",
+  "es": "Visión militarista"
+ },
+ "concept_posture_officers": {
+  "en": "Officers' View",
+  "es": "Visión de los oficiales"
+ },
+ "concept_posture_restraint": {
+  "en": "Restraint View",
+  "es": "Visión de contención"
+ },
+ "concept_power_grid": {
+  "en": "Power Grid",
+  "es": "Red eléctrica"
+ },
+ "concept_religious_revival": {
+  "en": "Religious Revival",
+  "es": "Resurgimiento religioso"
+ },
+ "concept_reserve_battalions": {
+  "en": "Reserve Battalions",
+  "es": "Batallones de reserva"
+ },
+ "concept_seabed_claim": {
+  "en": "Seabed Claim",
+  "es": "Reclamación del lecho marino"
+ },
+ "concept_seabed_licence": {
+  "en": "Seabed Licence",
+  "es": "Licencia del lecho marino"
+ },
+ "concept_sol_expectations": {
+  "en": "Adaptive SoL Expectations",
+  "es": "Expectativas adaptativas de nivel de vida"
+ },
+ "concept_solar_colonization": {
+  "en": "Solar Colonization",
+  "es": "Colonización solar"
+ },
+ "concept_space_milestone": {
+  "en": "Space Milestone",
+  "es": "Hito espacial"
+ },
+ "concept_space_race": {
+  "en": "Space Race",
+  "es": "Carrera espacial"
+ },
+ "concept_sr_approach": {
+  "en": "Approach",
+  "es": "Enfoque"
+ },
+ "concept_sr_funding": {
+  "en": "Programme Funding",
+  "es": "Financiación del programa"
+ },
+ "concept_subjugation_strength": {
+  "en": "Subjugation Strength",
+  "es": "Fuerza de sometimiento"
+ },
+ "concept_target_defenses": {
+  "en": "Target's Defenses",
+  "es": "Defensas del objetivo"
+ },
+ "concept_tax_bill": {
+  "en": "Tax Bill",
+  "es": "Proyecto de ley fiscal"
+ },
+ "concept_tax_code": {
+  "en": "Tax Code",
+  "es": "Código fiscal"
+ },
+ "concept_tax_commencement": {
+  "en": "Commencement",
+  "es": "Entrada en vigor"
+ },
+ "concept_temperature_anomaly": {
+  "en": "Temperature Anomaly",
+  "es": "Anomalía de temperatura"
+ },
+ "concept_tourism_art": {
+  "en": "Art",
+  "es": "Arte"
+ },
+ "concept_tourism_cities": {
+  "en": "Cities",
+  "es": "Ciudades"
+ },
+ "concept_tourism_infrastructure": {
+  "en": "Excess Infrastructure",
+  "es": "Infraestructuras excedentes"
+ },
+ "concept_tourism_monuments": {
+  "en": "Monuments",
+  "es": "Monumentos"
+ },
+ "concept_tourism_output": {
+  "en": "Tourism Output",
+  "es": "Producción turística"
+ },
+ "concept_tourism_parks": {
+  "en": "Parks",
+  "es": "Parques"
+ },
+ "concept_tourism_system": {
+  "en": "Tourism",
+  "es": "Turismo"
+ },
+ "concept_tourism_throughput": {
+  "en": "Tourism Throughput",
+  "es": "Rendimiento turístico"
+ },
+ "concept_tradecraft": {
+  "en": "Tradecraft",
+  "es": "Técnicas de espionaje"
+ },
+ "concept_un_authority": {
+  "en": "UN Authority",
+  "es": "Autoridad de la ONU"
+ },
+ "concept_un_charter": {
+  "en": "UN Charter",
+  "es": "Carta de la ONU"
+ },
+ "concept_un_credentials": {
+  "en": "Credentials",
+  "es": "Credenciales"
+ },
+ "concept_un_dues": {
+  "en": "UN Dues",
+  "es": "Cuotas de la ONU"
+ },
+ "concept_un_enforcement": {
+  "en": "UN Enforcement",
+  "es": "Imposición de la ONU"
+ },
+ "concept_un_mission": {
+  "en": "UN Mission",
+  "es": "Misión de la ONU"
+ },
+ "concept_un_peacekeeping": {
+  "en": "UN Peacekeeping",
+  "es": "Mantenimiento de la paz de la ONU"
+ },
+ "concept_un_represented": {
+  "en": "Represented",
+  "es": "Representado"
+ },
+ "concept_un_sanctions": {
+  "en": "UN Sanctions",
+  "es": "Sanciones de la ONU"
+ },
+ "concept_un_veto": {
+  "en": "Veto",
+  "es": "Veto"
+ },
+ "concept_un_weight": {
+  "en": "Weight",
+  "es": "Peso"
+ },
+ "concept_urban_engineering": {
+  "en": "Urban Engineering",
+  "es": "Ingeniería urbana"
+ },
+ "concept_wonder_building": {
+  "en": "Wonder Building",
+  "es": "Edificio maravilla"
+ }
+}
