@@ -14,6 +14,7 @@ import sys
 import unittest
 import unittest.mock
 from pathlib import Path
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
@@ -6765,6 +6766,56 @@ class TestMedicalOutreach(unittest.TestCase):
         eng.vars["te_dg_acc"] = 0.7
         self.assertFalse(eng.holds(_parse_script("te_demog_medicine_behind = yes")))
 
+    def _issuable(self, issued, acc=0.7, trt_inf=0.0, inf_target=0.0, spread=0.0):
+        """The decree's state_trigger for a state whose access target is 0.7 and infection's treatment target
+        `inf_target`, at drifted access `acc` and infection's treatment `trt_inf` (the other treatments 0, on target),
+        and `spread` from the types other than the decree's own; a held decree adds its line to the state's spread, as
+        the engine's modifier read does."""
+        trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "state_trigger")
+        fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
+        fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.3
+        fixtures[f"modifier:{P.TREATMENT_TYPE['infection']}"] = inf_target
+        fixtures[f"modifier:{P.DIFFUSION_TYPE}"] = spread + (P.MEDICAL_OUTREACH_DIFFUSION if issued else 0.0)
+        eng = _Engine(fixtures)
+        if issued:
+            eng.decrees.add("decree_medical_outreach")
+        eng.vars.update(te_dg_acc=acc, te_dg_trt_inf=trt_inf, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
+        return eng.holds(trig)
+
+    def test_it_is_offered_only_where_it_changes_the_next_count(self):
+        """Only where it does something (owner, 2026-10-23): the next count, which closes the state's share of each
+        gap and puts a value within the snap on its target, comes out different with the decree's line than without
+        it (demographics_model.medicine_drift). Not for the last few thousandths the count closes anyway, nor where
+        the share of the gap is at its cap; and the shortfalls are judged one by one, not summed."""
+        targets = {"infection": 0.4, "maternal": 0.0, "chronic": 0.0}
+        for spread in (0.0, 0.25, 0.6, 0.9):
+            for short in (0.0, 0.004, 0.0054, 0.0058, 0.0072, 0.0078, 0.01, 0.05, 0.3):
+                for trt_short in (0.0, 0.004, 0.02):
+                    mods = {P.ACCESS_TYPE: 0.3, **{P.TREATMENT_TYPE[c]: v for c, v in targets.items()}}
+                    prev = {"access": 0.7 - short, "infection": 0.4 - trt_short, "maternal": 0.0, "chronic": 0.0}
+                    without = demographics_model.medicine_drift(prev, SimpleNamespace(mods={**mods,
+                                                                                       P.DIFFUSION_TYPE: spread}))
+                    with_it = demographics_model.medicine_drift(prev, SimpleNamespace(mods={
+                        **mods, P.DIFFUSION_TYPE: spread + P.MEDICAL_OUTREACH_DIFFUSION}))
+                    changes = any(abs(without[k] - with_it[k]) > 1e-9 for k in without)
+                    trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")),
+                                 "state_trigger")
+                    fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
+                    fixtures.update({f"modifier:{t}": v for t, v in mods.items()})
+                    fixtures[f"modifier:{P.DIFFUSION_TYPE}"] = spread
+                    eng = _Engine(fixtures)
+                    eng.vars.update(te_dg_acc=prev["access"], te_dg_trt_inf=prev["infection"], te_dg_trt_mat=0.0,
+                                    te_dg_trt_chr=0.0)
+                    with self.subTest(spread=spread, short=short, trt_short=trt_short):
+                        self.assertEqual(eng.holds(trig), changes)
+        # what the old rule (the summed shortfalls above the snap) offered: two values 0.004 short, each of which the
+        # count puts on its target
+        self.assertFalse(self._issuable(False, acc=0.696, trt_inf=0.396, inf_target=0.4))
+        self.assertTrue(self._issuable(False, acc=0.696, trt_inf=0.39, inf_target=0.4))
+        # a share of the gap at its cap closes every gap at the count: nothing for the decree to add
+        self.assertTrue(self._issuable(False, acc=0.4))
+        self.assertFalse(self._issuable(False, acc=0.4, spread=0.9))
+
     def test_the_ai_weighs_it_by_the_gap(self):
         # the shared-mechanics rule: the AI issues it where medicine is behind, with lower thresholds once issued
         # (Road Maintenance's pattern), and never once the state caught up; and, as vanilla weighs decrees, by the
@@ -6790,17 +6841,22 @@ class TestMedicalOutreach(unittest.TestCase):
         AI's only way to give it up: the AI never revokes a decree itself, and an ai_weight of 0 only stops it issuing
         one (#894's observer run, 2026-10-12: with a has_decree escape, every AI decree stood until the state changed
         hands)."""
-        trig = _find(_parse_script(_block(_text(self.DECREES), "decree_medical_outreach")), "state_trigger")
-        fixtures = {f"modifier:{t}": 0.0 for t in P.DEMOG_TYPES}
-        fixtures[f"modifier:{P.ACCESS_TYPE}"] = 0.6
-        for acc, issued, want in ((0.8, False, True), (1.0, False, False), (0.8, True, True), (0.997, True, False),
-                                  (1.0, True, False)):
-            eng = _Engine(fixtures)
-            if issued:
-                eng.decrees.add("decree_medical_outreach")
-            eng.vars.update(te_dg_acc=acc, te_dg_trt_inf=0.0, te_dg_trt_mat=0.0, te_dg_trt_chr=0.0)
+        for acc, issued, want in ((0.5, False, True), (0.7, False, False), (0.5, True, True), (0.697, True, False),
+                                  (0.7, True, False)):
             with self.subTest(acc=acc, issued=issued):
-                self.assertEqual(eng.holds(trig), want)
+                self.assertEqual(self._issuable(issued, acc=acc), want)
+
+    def test_a_held_decree_lasts_exactly_where_it_could_be_issued(self):
+        """A held decree is judged at the state's spread without its own line: judged with it, a decree issued 0.0065
+        short (0.00585 left at the count without it, 0.00455 with it) would end at the next weekly check, its authority
+        spent on a decree the state couldn't keep."""
+        self.assertTrue(self._issuable(False, acc=0.6935))
+        self.assertTrue(self._issuable(True, acc=0.6935))
+        for spread in (0.0, 0.15, 0.35, 0.6, 0.85):
+            for short in (0.0, 0.003, 0.0055, 0.006, 0.0075, 0.009, 0.02, 0.2):
+                with self.subTest(spread=spread, short=short):
+                    self.assertEqual(self._issuable(True, acc=0.7 - short, spread=spread),
+                                     self._issuable(False, acc=0.7 - short, spread=spread))
 
 
 class TestCausesDisplay(unittest.TestCase):
