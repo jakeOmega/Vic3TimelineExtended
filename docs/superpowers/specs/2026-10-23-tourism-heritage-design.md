@@ -92,8 +92,8 @@ At the same time, monument tourism becomes an **output** bonus, as base appeal i
    their dedications.
 7. **Vanilla wonders' figures** (§ 5.2) equal the points they take, so each state's total comes out right and the
    score without the wonder passes the scenery check (§ 6.1).
-8. **Signature and event tourism convert at the same ratio** as the monuments' own: 0.4 of the throughput figure,
-   taken as output.
+8. **Signature and event tourism convert at the same ratio** as the monuments' own, 0.4 of the throughput figure
+   taken as output, rounded to whole fives (owner, 2026-10-23): +0.10 becomes +0.05, +0.25 becomes +0.10.
 9. **The moves are a gated term, and the scores stay as written** (§ 6.3). With the Grand Monuments rule off, only
    the vanilla wonders' points move: a disabled system keeps its non-system effects (CLAUDE.md), so Lower Egypt
    doesn't sit at 50 forever with no pyramids. A save from before phase 2 keeps the points its new landmarks would
@@ -117,8 +117,8 @@ At the same time, monument tourism becomes an **output** bonus, as base appeal i
   pins them equal.
 - The step count is unchanged: the state's summed grandeur on the 1/n curve (`gm_curve_steps_lin_f5`, at most 30
   steps), times the policy's tourism factor (Open ×1.5; State Ceremonial and Mothballed ×0.5).
-- `gm_local_sig_antiquity` +0.10 throughput becomes +0.04 output a step. `gm_local_sig_first_emperor` +0.25 becomes
-  +0.10. `gm_evt_pilgrim_hostels` (an event's timed modifier, `monument_events.txt`) +0.10 becomes +0.04.
+- `gm_local_sig_antiquity` +0.10 throughput becomes +0.05 output a step. `gm_local_sig_first_emperor` +0.25 becomes
+  +0.10. `gm_evt_pilgrim_hostels` (an event's timed modifier, `monument_events.txt`) +0.10 becomes +0.05.
 - Loc that names throughput: `gm_state_tourism_tt`, `monument_events.2.common_tt`, the Antiquity and First Emperor
   signature lines, the pilgrim hostels option, and any `$building_tourism_industry_throughput_add$` splice in a GM key
   (grep `gm_` keys for it). `gui_chart_script_values.txt:190` reads `gm_local_tourism` and needs checking.

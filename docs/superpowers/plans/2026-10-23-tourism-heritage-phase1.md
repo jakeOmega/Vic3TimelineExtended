@@ -24,7 +24,7 @@ Phases 2 (To History and the 52 new landmarks, after the policy and prestige pas
 - Commits: stage by path (never `-a`); end every message with
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` and
   `Claude-Session: https://claude.ai/code/session_018Dbkw7hXDhNUyNmcLCmeX9`.
-- Spec values, verbatim: monument tourism **+10% Tourism output a step** (`goods_output_tourism_mult = 0.10`, `gm_step_tourism = 0.10`); Ancestral Antiquity **+0.04** output a step; First Emperor's Army **+0.10**; Pilgrim Hostels **+0.04**; vanilla wonders' output **Taj Mahal 0.40, Angkor Wat 0.30, Hagia Sophia, Vatican City, Forbidden City, Saint Basil's Cathedral, White House and Great Mosque of Djenné 0.20, every other `bg_monuments` building 0.10**; Skyscraper keeps **+0.10 throughput**.
+- Spec values, verbatim: monument tourism **+10% Tourism output a step** (`goods_output_tourism_mult = 0.10`, `gm_step_tourism = 0.10`); Ancestral Antiquity **+0.05** output a step; First Emperor's Army **+0.10**; Pilgrim Hostels **+0.05**; vanilla wonders' output **Taj Mahal 0.40, Angkor Wat 0.30, Hagia Sophia, Vatican City, Forbidden City, Saint Basil's Cathedral, White House and Great Mosque of Djenné 0.20, every other `bg_monuments` building 0.10**; Skyscraper keeps **+0.10 throughput**.
 
 ## Review Focus
 
@@ -49,12 +49,12 @@ Phases 2 (To History and the 52 new landmarks, after the policy and prestige pas
 **Interfaces:**
 - Produces: `gm_local_tourism` carries `goods_output_tourism_mult = 0.10`; `gm_step_tourism = 0.10`. Task 5's docs cite these.
 
-- [ ] **Step 1: Change the pins.** In `test_local_pairs`, assert `("gm_local_tourism", "goods_output_tourism_mult", "gm_step_tourism", 0.10)`. In `SIGNATURES`, antiquity's local becomes `("goods_output_tourism_mult", 0.04)` and first_emperor's `("goods_output_tourism_mult", 0.10)`. Add to the same test class:
+- [ ] **Step 1: Change the pins.** In `test_local_pairs`, assert `("gm_local_tourism", "goods_output_tourism_mult", "gm_step_tourism", 0.10)`. In `SIGNATURES`, antiquity's local becomes `("goods_output_tourism_mult", 0.05)` and first_emperor's `("goods_output_tourism_mult", 0.10)`. Add to the same test class:
 
 ```python
 def test_pilgrim_hostels_is_output(self):
     body = block(read(MODIFIERS), "gm_evt_pilgrim_hostels")
-    self.assertAlmostEqual(number(body, "goods_output_tourism_mult"), 0.04)
+    self.assertAlmostEqual(number(body, "goods_output_tourism_mult"), 0.05)
     self.assertNotIn("throughput", body)
 
 def test_no_monument_loc_promises_throughput(self):
@@ -69,9 +69,9 @@ def test_no_monument_loc_promises_throughput(self):
 
 - [ ] **Step 2: Run, expect failures.** `$PY test_grand_monument_registry.py > /tmp/t1.txt 2>&1; grep -E '^(Ran |OK|FAILED)' /tmp/t1.txt` → FAILED (the pins, the hostels test, the loc test).
 
-- [ ] **Step 3: Edit the modifiers and values.** Each of the four modifiers swaps `building_tourism_industry_throughput_add` for `goods_output_tourism_mult` at the figures in Global Constraints. Set `gm_step_tourism = 0.10`, `gm_step_sig_local_antiquity = 0.04`, `gm_step_sig_local_first_emperor = 0.10`. Update each header comment that says "throughput". `gui_chart_script_values.txt:190` and `:242–250` only test `has_modifier`, so they need no change.
+- [ ] **Step 3: Edit the modifiers and values.** Each of the four modifiers swaps `building_tourism_industry_throughput_add` for `goods_output_tourism_mult` at the figures in Global Constraints. Set `gm_step_tourism = 0.10`, `gm_step_sig_local_antiquity = 0.05`, `gm_step_sig_local_first_emperor = 0.10`. Update each header comment that says "throughput". `gui_chart_script_values.txt:190` and `:242–250` only test `has_modifier`, so they need no change.
 
-- [ ] **Step 4: Edit the loc.** Labels and tooltips say Tourism output: `gm_state_lbl_tourism` becomes `$goods_output_tourism_mult$`; the tooltips' bold heading and the policy lines say "tourism output from each monument". The two signature effect lines read `#G +4%#!` and `#G +10%#!` "Tourism output in its state". The `common_tt` line splices `$goods_output_tourism_mult$`. Then run `$PY organize_loc.py`.
+- [ ] **Step 4: Edit the loc.** Labels and tooltips say Tourism output: `gm_state_lbl_tourism` becomes `$goods_output_tourism_mult$`; the tooltips' bold heading and the policy lines say "tourism output from each monument". The two signature effect lines read `#G +5%#!` and `#G +10%#!` "Tourism output in its state". The `common_tt` line splices `$goods_output_tourism_mult$`. Then run `$PY organize_loc.py`.
 
 - [ ] **Step 5: Edit the guide.** At the six lines listed, "+25% Tourism Industry throughput" becomes "+10% tourism output", and "throughput" becomes "output" wherever it means a monument's tourism. Line 518 is about wonders: it becomes "+10% tourism output in its state" (Task 2 sets that figure). Line 1053 (Open to the Public): "The tourism output each monument gives ×1.5".
 
@@ -323,7 +323,7 @@ class HeritageMoves(unittest.TestCase):
 - Modify: `docs/testing/tourism-playtest.md` (new section "Monuments move to output, heritage leaves base appeal")
 - Modify: `docs/player_guide/08-states.md` (the Base Appeal paragraph: landscape, climate and townscape; historical monuments count in the monuments), then rebuild `docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf`
 
-- [ ] **Step 1: `mod_systems.md`.** Tourism: name `tourism_heritage_moved`, its generator and gates, and `tourism_bonus_from_monuments` with the wonders' figures. Card: Monuments in the output column, Skyscraper in throughput. Grand Monuments: `gm_local_tourism` is `goods_output_tourism_mult` 0.10 a step; the signatures 0.04 and 0.10.
+- [ ] **Step 1: `mod_systems.md`.** Tourism: name `tourism_heritage_moved`, its generator and gates, and `tourism_bonus_from_monuments` with the wonders' figures. Card: Monuments in the output column, Skyscraper in throughput. Grand Monuments: `gm_local_tourism` is `goods_output_tourism_mult` 0.10 a step; the signatures 0.05 and 0.10.
 
 - [ ] **Step 2: Play-test rows**, in the file's Check / Expect / If it fails table format:
   - Attica on day one: Base Appeal +60%, the tooltip says 40% is counted in its monuments; with the Parthenon standing, the output "All modifiers" line shows the Grand Monument's +40% (×1.5 under Open).
