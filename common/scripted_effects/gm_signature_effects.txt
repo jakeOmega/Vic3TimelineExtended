@@ -415,6 +415,9 @@ gm_sig_set_steps = {
 # changes hands; none can be built).
 gm_sig_set_steps_lin_open = {
 	gm_set_steps_lin_open = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 }
+	# Cultural Promotion covers Antiquity's pull: it is monument pull (policy
+	# spec 2026-10-23 § 4.3).
+	gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }
 }
 
 # ---- The local effects (§2.2): on_monthly_pulse_state, ROOT = the state --------------

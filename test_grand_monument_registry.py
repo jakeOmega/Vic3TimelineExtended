@@ -786,7 +786,8 @@ class NationalTests(unittest.TestCase):
         # would take off about one step, not half).
         for g in ("standing", "regime", "leader"):
             self.assertIn(f"set_variable = {{ name = gm_g_{g} value = gm_sum_{g} }}", body)
-        for steps, factor in (("regime", "regime"), ("leader", "regime")):
+        for steps, factor in (("standing", "prestige"), ("culture", "culture"), ("regime", "regime"),
+                              ("leader", "regime")):
             call = f"gm_policy_scale_steps = {{ S = {steps} FACTOR = gm_policy_factor_{factor} }}"
             self.assertIn(call, body)
             self.assertGreater(body.find(call), body.find(f"OUT = gm_s_{steps} "), "after the curve")
@@ -2942,13 +2943,15 @@ MODIFIER_TYPES = "common/modifier_type_definitions/mod_entity_modifier_types.txt
 # policy -> its factor on each per-step value (policy spec 2026-10-23 § 3). Cultural
 # Promotion is the default: a country that never chose one reads as it (STANDARD = yes).
 POLICIES = {
-    "open": {"tourism": 1.5},
-    "ceremonial": {"tourism": 1},
-    "culture": {"tourism": 1},
-    "education": {"tourism": 1},
+    "open": {"tourism": 1.5, "culture": 1, "prestige": 1},
+    "ceremonial": {"tourism": 1, "culture": 1, "prestige": 1},
+    # Pull with the Cultural Hegemony rule on, prestige with it off (spec § 4.3).
+    "culture": {"tourism": 1, "culture": 1.5, "prestige": 1.5},
+    "education": {"tourism": 1, "culture": 1, "prestige": 1},
 }
 DEFAULT_POLICY = "culture"
-FACTOR_VALUES = {"tourism": "gm_policy_factor_tourism"}
+FACTOR_VALUES = {"tourism": "gm_policy_factor_tourism", "culture": "gm_policy_factor_culture",
+                 "prestige": "gm_policy_factor_prestige"}
 
 
 def _policy_value(body, policy):
@@ -3028,6 +3031,19 @@ class PolicyTests(unittest.TestCase):
         for policy in POLICIES:
             self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} ", ai, policy)
         self.assertIn("gm_policy_ai_choose = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
+
+    def test_cultural_promotion_follows_the_rule(self):
+        # With the rule on, prestige never moves by policy; with it off, pull never does (plan Review Focus 5).
+        culture = squash(block(self.values, "gm_policy_factor_culture"))
+        prestige = squash(block(self.values, "gm_policy_factor_prestige"))
+        self.assertIn("has_game_rule = cultural_hegemony_enabled", culture)
+        self.assertNotIn("NOT = { has_game_rule", culture)
+        self.assertIn("NOT = { has_game_rule = cultural_hegemony_enabled }", prestige)
+        totals = squash(block(read(EFFECTS), "gm_compute_totals"))
+        self.assertIn("gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige }", totals)
+        self.assertIn("gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture }", totals)
+        sig = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
+        self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }", sig)
 
     def test_migration_drops_old_flags_only(self):
         body = squash(block(self.e, "gm_policy_migrate"))
@@ -5324,7 +5340,8 @@ class SignatureEffectTests(unittest.TestCase):
         self.assertNotIn("gm_policy_scale_steps", steps, "no monument policy moves these (policy spec 2026-10-23)")
         lin = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
         self.assertEqual(lin, "gm_set_steps_lin_open = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ "
-                              "NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 }")
+                              "NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 } "
+                              "gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }")
         self.assertIn("gm_sig_compute_sums = yes", squash(block(read(EFFECTS), "gm_compute_totals")))
 
     def test_national_hooks_from_root(self):

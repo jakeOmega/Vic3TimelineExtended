@@ -497,6 +497,34 @@ gm_policy_factor_regime = {
 	}
 }
 
+# Country scope, Cultural Promotion (spec § 4.3): monument cultural pull x1.5,
+# on the steps of the monuments' own pull and of Ancestral Antiquity's. Pull
+# feeds only the Cultural Hegemony system, so with its rule off the policy
+# raises prestige instead (gm_policy_factor_prestige; owner, 2026-10-23).
+gm_policy_factor_culture = {
+	value = 1
+	if = {
+		limit = {
+			gm_policy_is = { P = culture STANDARD = yes }
+			has_game_rule = cultural_hegemony_enabled
+		}
+		value = 1.5
+	}
+}
+
+# Country scope: Cultural Promotion with the Cultural Hegemony rule off, on the
+# steps of standing grandeur (the flat prestige and the percentage).
+gm_policy_factor_prestige = {
+	value = 1
+	if = {
+		limit = {
+			gm_policy_is = { P = culture STANDARD = yes }
+			NOT = { has_game_rule = cultural_hegemony_enabled }
+		}
+		value = 1.5
+	}
+}
+
 # State scope, the owner's policy: the steps of a monument's own tourism output
 # (gm_state_monthly) and of the two signatures whose local effect is tourism
 # (gm_state_sig_local_steps_one). No policy cuts tourism (spec § 4.1).

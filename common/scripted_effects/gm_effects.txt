@@ -945,7 +945,11 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
 	# The monument policy (v2 §5), on the steps so the effect moves by the
-	# factor: State Ceremonial adds half to legitimacy and the Leader's authority.
+	# factor: Cultural Promotion adds half to cultural pull, or to prestige with
+	# the Cultural Hegemony rule off (policy spec 2026-10-23 § 4.3); State
+	# Ceremonial adds half to legitimacy and the Leader's authority.
+	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige }
+	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture }
 	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
 	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
 	# The unique dedications' sums (signatures spec §2.1), steps and policy.
