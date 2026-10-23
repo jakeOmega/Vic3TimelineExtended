@@ -566,7 +566,7 @@ def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerm
         elif vanilla and key in vanilla.tr:
             ref_lines.append(f"#   {key} = {vanilla.tr[key]}")
     if ref_lines:
-        lines.append("# REFERENCED KEYS — what these links and $references$ insert (nominative):")
+        lines.append("# REFERENCED KEYS — what these links and $references$ insert (base form):")
         lines.extend(ref_lines[:cap])
     mod_terms = []
     for key in sorted(glossary_keys - in_chunk):
