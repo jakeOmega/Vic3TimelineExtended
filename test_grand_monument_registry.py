@@ -779,21 +779,23 @@ class NationalTests(unittest.TestCase):
         self.assertIn("gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture "
                       "WIDTH = gm_w_culture F = 10 }", body)
         self.assertEqual(body.count("gm_set_steps_lin_open"), 2)
-        self.assertIn("gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
+        # Legitimacy's input carries State Ceremonial's share (policy spec 2026-10-23 § 4.2).
+        self.assertIn("gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", body)
         self.assertIn("gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }", body)
         # The monument policy (v2 §5) scales the steps after the curve, so the
         # effect itself moves by the factor (halving grandeur before the curve
         # would take off about one step, not half).
         for g in ("standing", "regime", "leader"):
             self.assertIn(f"set_variable = {{ name = gm_g_{g} value = gm_sum_{g} }}", body)
-        for steps, factor in (("standing", "prestige"), ("culture", "culture"), ("regime", "regime"),
-                              ("leader", "regime")):
+        for steps, factor in (("standing", "prestige"), ("culture", "culture")):
             call = f"gm_policy_scale_steps = {{ S = {steps} FACTOR = gm_policy_factor_{factor} }}"
             self.assertIn(call, body)
             self.assertGreater(body.find(call), body.find(f"OUT = gm_s_{steps} "), "after the curve")
         for key in NATIONAL:
             self.assertIn(f"set_variable = {{ name = gm_g_{key} value = gm_sum_{key} }}", body)
-            self.assertIn(f"gm_set_steps = {{ IN = gm_g_{key} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
+            # The Leader's input carries State Ceremonial's share too (policy spec § 4.2).
+            src = "gm_g_leader_in" if key == "leader" else f"gm_g_{key}"
+            self.assertIn(f"gm_set_steps = {{ IN = {src} OUT = gm_s_{key} NEXT = gm_n_{key} F = 5 }}", body)
         for ig in IGS:
             self.assertIn(f"gm_compute_ig = {{ IG = {ig} }}", body)
         steps = squash(block(self.e, "gm_set_steps"))
@@ -3031,6 +3033,49 @@ class PolicyTests(unittest.TestCase):
         for policy in POLICIES:
             self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} ", ai, policy)
         self.assertIn("gm_policy_ai_choose = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
+
+    def test_ceremonial_adds_before_the_curve(self):
+        # Owner, 2026-10-23: under Ceremonial legitimacy counts regime grandeur as
+        # normal plus a quarter of every monument's, the Leader's authority too.
+        totals = squash(block(read(EFFECTS), "gm_compute_totals"))
+        self.assertIn("set_variable = { name = gm_g_venues value = gm_sum_venues }", totals)
+        self.assertIn("set_variable = { name = gm_g_ceremonial value = gm_policy_ceremonial_grandeur }", totals)
+        for g in ("regime", "leader"):
+            self.assertIn(f"set_variable = {{ name = gm_g_{g}_in value = {{ value = var:gm_g_{g} "
+                          f"add = var:gm_g_ceremonial }} }}", totals, g)
+            self.assertLess(totals.find(f"name = gm_g_{g}_in "), totals.find(f"IN = gm_g_{g}_in "), g)
+        self.assertLess(totals.find("name = gm_g_ceremonial "), totals.find("name = gm_g_regime_in "))
+        self.assertIn("gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }", totals)
+        self.assertIn("gm_set_steps = { IN = gm_g_leader_in OUT = gm_s_leader NEXT = gm_n_leader F = 5 }", totals)
+        self.assertNotIn("gm_policy_factor_regime", totals)
+        self.assertIsNone(block(self.values, "gm_policy_factor_regime"))
+        self.assertRegex(strip_comments(self.values), r"(?m)^gm_policy_ceremonial_share = 0\.25\s*$")
+        share = squash(block(self.values, "gm_policy_ceremonial_grandeur"))
+        self.assertEqual(share, "value = 0 if = { limit = { gm_policy_is = { P = ceremonial STANDARD = no } "
+                                "has_variable = gm_g_venues } value = var:gm_g_venues "
+                                "multiply = gm_policy_ceremonial_share }")
+
+    def test_venues(self):
+        # Contested monuments are out; heritage and held trophies are in (plan Review Focus 4).
+        trig = squash(block(read(TRIGGERS), "gm_state_counts_venue"))
+        self.assertIn("has_building = building_grand_monument", trig)
+        self.assertIn("gm_state_is_contested = no", trig)
+        self.assertIn("OR = { gm_state_is_dedicated = yes gm_state_is_heritage = yes }", trig)
+        mon = squash(block(read(MON_TRIGGERS), "gm_mon_counts_venue"))
+        self.assertIn("gm_mon_is_contested = no", mon)
+        self.assertIn("OR = { has_variable = gm_tr_dedication gm_mon_is_heritage = yes }", mon)
+        venues = squash(block(self.values, "gm_sum_venues"))
+        self.assertIn("gm_state_counts_venue = yes", venues)
+        self.assertIn("gm_mon_counts_venue = yes", venues)
+        self.assertIn("add = gm_tr_disp_held_grandeur", venues)
+
+    def test_rows_read_the_real_input(self):
+        # A country with no regime monuments under Ceremonial: the bar and hover
+        # read the curve's input, not regime grandeur alone (plan Review Focus 3).
+        for frac, var in (("gm_disp_frac_legitimacy", "gm_g_regime_in"), ("gm_disp_frac_leader", "gm_g_leader_in")):
+            self.assertIn(f"value = var:{var} ", squash(block(self.values, frac)), frac)
+        for key in ("gm_je_tt_legitimacy", "gm_je_tt_leader"):
+            self.assertIn("gm_display_g_ceremonial", loc()[key], key)
 
     def test_cultural_promotion_follows_the_rule(self):
         # With the rule on, prestige never moves by policy; with it off, pull never does (plan Review Focus 5).

@@ -312,6 +312,19 @@ gm_state_counts_standing = {
 	gm_state_is_contested = no
 }
 
+# State Ceremonial's venues (policy spec 2026-10-23 § 4.2): every monument not
+# contested, heritage included, so a new regime can hold its events in the old
+# king's palace (owner). Once tourism heritage phase 2 adds To History
+# (pm_monument_historic), it counts at half (spec § 4.5).
+gm_state_counts_venue = {
+	has_building = building_grand_monument
+	gm_state_is_contested = no
+	OR = {
+		gm_state_is_dedicated = yes
+		gm_state_is_heritage = yes
+	}
+}
+
 # §1.1: the dedications that take heritage skins. The Grand Shrine takes faith
 # skins; the War Memorial takes heritage skins only (plan decision 4).
 gm_state_takes_heritage_skin = {

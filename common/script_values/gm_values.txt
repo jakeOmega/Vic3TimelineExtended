@@ -485,17 +485,29 @@ gm_state_disp_local = {
 }
 
 # ---- The monument policy (v2 §5; gm_policy_effects.txt) -------------------------
-# Factors on the per-step values (policy spec 2026-10-23 § 3). Country scope:
-# the steps of regime and Leader grandeur (legitimacy, the Leader's authority),
-# multiplied after the curve in gm_compute_totals, so the effect itself moves
-# by the factor.
-gm_policy_factor_regime = {
-	value = 1
+# State Ceremonial (policy spec 2026-10-23 § 4.2): legitimacy and the Leader's
+# authority count their own grandeur as always plus this share of the venue
+# grandeur (gm_g_venues), before the curve, so a country with no regime
+# monuments gains too (owner: +140 authority at 1,000 grandeur "is a little
+# more than 1 decree").
+gm_policy_ceremonial_share = 0.25
+
+# Country scope, after gm_g_venues is written: the grandeur the share adds, 0
+# under any other policy.
+gm_policy_ceremonial_grandeur = {
+	value = 0
 	if = {
-		limit = { gm_policy_is = { P = ceremonial STANDARD = no } }
-		value = 1.5
+		limit = {
+			gm_policy_is = { P = ceremonial STANDARD = no }
+			has_variable = gm_g_venues
+		}
+		value = var:gm_g_venues
+		multiply = gm_policy_ceremonial_share
 	}
 }
+
+# Factors on the per-step values, multiplied after the curve, so the effect
+# itself moves by the factor.
 
 # Country scope, Cultural Promotion (spec § 4.3): monument cultural pull x1.5,
 # on the steps of the monuments' own pull and of Ancestral Antiquity's. Pull
@@ -659,6 +671,27 @@ gm_sum_regime = {
 			add = gm_mon_grandeur
 		}
 	}
+}
+
+# Venue grandeur (policy spec 2026-10-23 § 4.2): every monument State
+# Ceremonial can hold its events at, the primaries and those beside another,
+# and the trophies held, for what they count in standing grandeur (a nationalist
+# government shows off what it has taken; owner).
+gm_sum_venues = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_counts_venue = yes }
+		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_counts_venue = yes }
+			add = gm_mon_grandeur
+		}
+	}
+	add = gm_tr_disp_held_grandeur
 }
 
 # One per dedication with a national effect of its own.
@@ -923,6 +956,15 @@ gm_display_g_regime = {
 	if = {
 		limit = { has_variable = gm_g_regime }
 		value = var:gm_g_regime
+	}
+}
+
+# What State Ceremonial's share adds to legitimacy's and authority's input.
+gm_display_g_ceremonial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_ceremonial }
+		value = var:gm_g_ceremonial
 	}
 }
 
@@ -1585,14 +1627,15 @@ gm_disp_frac_prestige_pct = {
 	max = 1
 }
 
+# The bar reads the curve's input, the share included (spec § 4.2).
 gm_disp_frac_legitimacy = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = gm_g_regime
+			has_variable = gm_g_regime_in
 			has_variable = gm_n_regime
 		}
-		value = var:gm_g_regime
+		value = var:gm_g_regime_in
 		multiply = 2
 		subtract = var:gm_n_regime
 		add = 10
@@ -1629,10 +1672,10 @@ gm_disp_frac_leader = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = gm_g_leader
+			has_variable = gm_g_leader_in
 			has_variable = gm_n_leader
 		}
-		value = var:gm_g_leader
+		value = var:gm_g_leader_in
 		multiply = 2
 		subtract = var:gm_n_leader
 		add = 5

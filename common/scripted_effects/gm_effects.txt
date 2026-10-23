@@ -934,10 +934,16 @@ gm_compute_totals = {
 	set_variable = { name = gm_g_artistic value = gm_sum_artistic }
 	set_variable = { name = gm_g_scientific value = gm_sum_scientific }
 	set_variable = { name = gm_g_industrial value = gm_sum_industrial }
+	# State Ceremonial's share of every venue (policy spec 2026-10-23 § 4.2),
+	# added to regime and Leader grandeur before their curves.
+	set_variable = { name = gm_g_venues value = gm_sum_venues }
+	set_variable = { name = gm_g_ceremonial value = gm_policy_ceremonial_grandeur }
+	set_variable = { name = gm_g_regime_in value = { value = var:gm_g_regime add = var:gm_g_ceremonial } }
+	set_variable = { name = gm_g_leader_in value = { value = var:gm_g_leader add = var:gm_g_ceremonial } }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing WIDTH = gm_w_standing F = 5 }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture WIDTH = gm_w_culture F = 10 }
-	gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
-	gm_set_steps = { IN = gm_g_leader OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
+	gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
+	gm_set_steps = { IN = gm_g_leader_in OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
 	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }
 	gm_set_steps = { IN = gm_g_war_memorial OUT = gm_s_war_memorial NEXT = gm_n_war_memorial F = 5 }
 	gm_set_steps = { IN = gm_g_artistic OUT = gm_s_artistic NEXT = gm_n_artistic F = 5 }
@@ -946,12 +952,9 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
 	# The monument policy (v2 §5), on the steps so the effect moves by the
 	# factor: Cultural Promotion adds half to cultural pull, or to prestige with
-	# the Cultural Hegemony rule off (policy spec 2026-10-23 § 4.3); State
-	# Ceremonial adds half to legitimacy and the Leader's authority.
+	# the Cultural Hegemony rule off (policy spec 2026-10-23 § 4.3).
 	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige }
 	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture }
-	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
-	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
 	# The unique dedications' sums (signatures spec §2.1), steps and policy.
 	gm_sig_compute_sums = yes
 	gm_compute_ig = { IG = armed_forces }
