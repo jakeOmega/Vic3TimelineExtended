@@ -98,7 +98,7 @@ STATE_DIYARBAKIR,20,mount_nemrut,new_site,the Nemrut statues
 STATE_GANSU,20,mogao_caves,new_site,the Mogao Caves
 STATE_BUNDELKHAND,20,khajuraho,new_site,Khajuraho
 STATE_MYSORE,20,hampi,new_site,Hampi (verify its state)
-STATE_WESTERN_MALI,20,mosque_of_djenne,vanilla_wonder,the Great Mosque (in ruins in 1836; vanilla's wonder rebuilds it)
+STATE_WESTERN_MALI,0,,revisit,"20 points: the Great Mosque of Djenné (vanilla's building_mosque_of_djenne can only be built in STATE_EASTERN_MALI, so nothing could give them back)"
 STATE_SYRIA,0,,revisit,10 points: Krak des Chevaliers (the residue after Palmyra's 20; Damascus is townscape)
 STATE_GOTLAND,0,,revisit,10 points: Visby (below floor after the scenery check: Gotland's coast scores like Scania's: its old score left little for Visby)
 STATE_WALES,0,,revisit,10 points: castles (below floor after the scenery check: Snowdonia and the coast carry most of the score)

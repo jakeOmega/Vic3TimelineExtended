@@ -102,8 +102,10 @@ At the same time, monument tourism becomes an **output** bonus, as base appeal i
     is the origin record of the Dendera zodiac, an 1836 trophy in Paris, placed in Upper Egypt, with its own pictures
     and an Archive signature. It stays as it is. If Abydos proves to be in Upper Egypt too, the 20 points go to a
     Middle Egypt temple the builder finds (Amarna's are the Nefertiti site's).
-11. **Western Mali takes its cut until someone builds the Djenné wonder.** The Great Mosque lay in ruins in 1836, so
-    the ruins rule applies, and vanilla's wonder brings the points back.
+11. **Western Mali keeps its 20 points for the Great Mosque of Djenné** (revised in review, 2026-10-23). Vanilla's
+    `building_mosque_of_djenne` can only be built in `STATE_EASTERN_MALI` (its `potential`), so a cut in Western Mali
+    would never come back; the mosque takes the +10% default. Whether Eastern Mali's score should credit Djenné is the
+    owner's call.
 12. **Mothballed still halves the country's monument prestige, To History's included.** Splitting standing grandeur
     by dedication would double the national totals' bookkeeping, and once the policy rework (§ 15) limits
     mothballing to a severe crisis, the case is rare. The rework can revisit it.
@@ -134,7 +136,6 @@ monuments move to a new output value, `tourism_bonus_from_monuments`, added to `
 | Taj Mahal | +40% |
 | Angkor Wat | +30% |
 | Hagia Sophia, Vatican City, Forbidden City, Saint Basil's Cathedral, White House | +20% |
-| Great Mosque of Djenné (in ruins in 1836; vanilla's wonder rebuilds it) | +20% |
 | Every other `bg_monuments` building | +10% |
 
 The Skyscraper isn't a monument and keeps its +10% throughput, in a value of its own
@@ -235,7 +236,7 @@ state's value as scored, and the points come off only while the monuments that t
 - A test (`test_tourism_heritage.py`): the generated file matches the CSV (`--check`), every monument the CSV names
   exists (landmark, site or wonder), and every CSV state is one `tourism.txt` lists.
 
-States moved: 93. Points moved: 2,320, about 5% of all listed appeal. The unlisted default (20) is unchanged.
+States moved: 92. Points moved: 2,300, about 5% of all listed appeal. The unlisted default (20) is unchanged.
 
 ### 6.4 Split states
 
@@ -334,7 +335,7 @@ Pass 2 takes townscapes: a representative monument stands for a city's heritage 
 Florence, Paris, Toledo, Bruges, Fez, Kraków, Old Havana), and looting it stands for wider looting. My
 keyword scan found about 125 states whose comments rest on an old town.
 
-Appendix D lists the 75 states whose named heritage was under the floor, at first or after the scenery check, and
+Appendix D lists the 76 states whose named heritage was under the floor, at first or after the scenery check, and
 stays in appeal. Appendix E lists the pilgrimage states, and Appendix F the 14 states where a monument already stands
 but the comment credits only the city. All three are kept for pass 2. The CSV in § 6.3 carries them too, as rows with
 0 points moved.
@@ -359,7 +360,8 @@ Each set of moves lands in the same PR as the monuments that take them, so no st
 in between. The gates (§ 6.3) keep that true for saves already running when a phase ships.
 
 1. **Mechanics and existing coverage:** § 5 (output conversion, vanilla wonders, card, loc) and the moves of the 30
-   states in Appendix A whose points go only to existing landmarks, sites and wonders. Moscow moves whole in phase 2.
+   states in Appendix A whose points go only to existing landmarks, sites and wonders, and Moscow's 20 to Saint
+   Basil's (the wonder stands already, so its +20% would otherwise count twice); the Kremlin's 20 move in phase 2.
 2. **To History and the new landmarks** (§ 7, Appendix B) with their moves, **after the policy pass's prestige change**
    (§ 8, § 15). Could split by region.
 3. **New archaeology sites** (Appendix C) with their moves. It doesn't wait for the prestige change: a site adds
@@ -410,7 +412,7 @@ The tables below come from a judgement pass over all 671 comments (scratch data,
 
 ### Appendix A. Points moved, by state
 
-Old and *New* are base-appeal points; *New* is the score with every moved point gone, which § 6.1 checks against peers with similar scenery and climate. *At start* adds what stands on 1 January 1836; *Later* adds every monument the state will have (sites dug, the Djenné mosque rebuilt). Monuments count on the summed 1/n curve at +10 a step, plus the vanilla wonder's figure. Signature tourism (Antiquity) is left out, and so are two effects on existing political landmarks: they take the monument policy's factor (a solvent AI with a Tourism Industry plays Open, ×1.5; Mothballed is ×0.5), and those built within a century of 1836 grow by ageing (§ 6.2). The figures are at factor ×1 and starting grandeur.
+Old and *New* are base-appeal points; *New* is the score with every moved point gone, which § 6.1 checks against peers with similar scenery and climate. *At start* adds what stands on 1 January 1836; *Later* adds every monument the state will have (sites dug). Monuments count on the summed 1/n curve at +10 a step, plus the vanilla wonder's figure. Signature tourism (Antiquity) is left out, and so are two effects on existing political landmarks: they take the monument policy's factor (a solvent AI with a Tourism Industry plays Open, ×1.5; Mothballed is ×0.5), and those built within a century of 1836 grow by ageing (§ 6.2). The figures are at factor ×1 and starting grandeur.
 
 | State | Old | Moved | New | Moved to | At start | Later |
 |---|---:|---:|---:|---|---:|---:|
@@ -505,7 +507,6 @@ Old and *New* are base-appeal points; *New* is the score with every moved point 
 | Kazan | 65 | 20 | 45 | 20 to Kazan Kremlin (**new landmark**): the Kremlin | 65 | 65 |
 | Malwa | 65 | 20 | 45 | 20 to Gwalior Fort (**new landmark**): Gwalior | 65 | 65 |
 | Sindh | 65 | 25 | 40 | 25 to Mohenjo Daro (site): Mohenjo-daro | 40 | 80 |
-| Western Mali | 60 | 20 | 40 | 20 to Mosque Of Djenne (wonder): the Great Mosque (in ruins in 1836; vanilla's wonder rebuilds it) | 40 | 60 |
 | Extremadura | 50 | 20 | 30 | 20 to Roman Theatre of Mérida (**new site**): Roman Mérida | 30 | 50 |
 
 ### Appendix B. New landmarks
@@ -616,12 +617,12 @@ Points are the heritage share judged for each; 0 means the scenery check found t
 | Crimea | 85 | 10 | Bakhchisaray, Chersonesos | below floor |
 | Cyprus | 80 | 10 | ancient ruins | below floor |
 | Deir Ez Zor | 40 | 10 | Dura-Europos, Mari | below floor after the scenery check: an arid valley scores 30 on its own |
-| Eastern Himalayas | 80 | 10 | Tiger's Nest, dzongs | below floor after the scenery check: Himalayan scenery carries the score |
-| Eastern Mali | 65 | 10 | Dogon country | below floor |
 | East Aegean Islands | 85 | 0 | old Rhodes | below floor after the scenery check: the East Aegean already scores like the Cyclades (85) |
 | East Hausaland | 50 | 10 | walled Kano | below floor |
 | East Java | 80 | 10 | temple complexes | below floor |
 | East Karelia | 60 | 10 | Kizhi Pogost | below floor |
+| Eastern Himalayas | 80 | 10 | Tiger's Nest, dzongs | below floor after the scenery check: Himalayan scenery carries the score |
+| Eastern Mali | 65 | 10 | Dogon country | below floor |
 | Erzurum | 65 | 10 | Ani | below floor |
 | Fujian | 70 | 10 | Tulou | below floor |
 | Gold Coast | 50 | 10 | slave forts (Elmina, Cape Coast) | below floor; coastal parts, not Kumasi's |
@@ -665,8 +666,9 @@ Points are the heritage share judged for each; 0 means the scenery check found t
 | Turkmenia | 65 | 10 | Merv | below floor; Merv stands in Merz |
 | Veracruz | 75 | 10 | El Tajín | below floor |
 | Wales | 75 | 10 | castles | below floor after the scenery check: Snowdonia and the coast carry most of the score |
-| Western Hubei | 75 | 10 | Wudang temples | below floor |
 | West Country | 75 | 10 | Stonehenge | below floor after the scenery check: the coast carries most of the score |
+| Western Hubei | 75 | 10 | Wudang temples | below floor |
+| Western Mali | 60 | 20 | the Great Mosque of Djenné | vanilla's mosque can only be built in Eastern Mali, so nothing would give the points back |
 | Xian | 95 | 10 | Big Wild Goose Pagoda | below floor |
 | Yaroslavl | 70 | 10 | Golden Ring churches | below floor |
 

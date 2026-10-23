@@ -24,6 +24,7 @@ STATE_CAMPANIA,30,pompeii,existing_site,Pompeii and Herculaneum
 STATE_CAMBODIA,30,angkor_wat,vanilla_wonder,Angkor
 STATE_AGRA,40,taj_mahal,vanilla_wonder,the Taj Mahal and Agra Fort
 STATE_SYRIA,20,palmyra,existing_landmark,"Palmyra, Krak des Chevaliers"
+STATE_MOSCOW,20,saint_basils_cathedral,vanilla_wonder,Red Square
 STATE_PELOPONNESE,15,mycenae_grave_circle,existing_site,Mycenae
 STATE_PELOPONNESE,15,olympia,existing_site,Olympia
 STATE_CRETE,20,palace_of_knossos,existing_site,Knossos
@@ -34,7 +35,7 @@ STATE_ICA,30,machu_picchu,existing_site,"Nazca, Cuzco, Machu Picchu"
 STATE_CHIAPAS,20,tomb_of_pakal,existing_site,Palenque
 STATE_LIMA,20,caral_supe,existing_site,pre-Columbian sites
 STATE_YEMEN,0,shibam,new_landmark,Shibam (other owner's part)
-STATE_WESTERN_MALI,20,mosque_of_djenne,vanilla_wonder,the Great Mosque (in ruins in 1836; vanilla's wonder rebuilds it)
+STATE_WESTERN_MALI,0,,revisit,"20 points: the Great Mosque of Djenné (vanilla's building_mosque_of_djenne can only be built in STATE_EASTERN_MALI, so nothing could give them back)"
 STATE_SYRIA,0,,revisit,10 points: Krak des Chevaliers (the residue after Palmyra's 20; Damascus is townscape)
 STATE_GOTLAND,0,,revisit,10 points: Visby (below floor after the scenery check: Gotland's coast scores like Scania's: its old score left little for Visby)
 STATE_WALES,0,,revisit,10 points: castles (below floor after the scenery check: Snowdonia and the coast carry most of the score)

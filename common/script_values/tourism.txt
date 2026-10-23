@@ -1413,7 +1413,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WESTERN_MALI }
-		value = 60 # Historic city of Djenn� (Great Mosque). (20 moved to monuments: tourism_heritage_generated.txt)
+		value = 60 # Historic city of Djenn� (Great Mosque).
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TIMBUKTU }
@@ -2133,7 +2133,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MOSCOW }
-		value = 85 # Kremlin and Red Square are iconic. The political and spiritual heart of Russia for centuries.
+		value = 85 # Kremlin and Red Square are iconic. The political and spiritual heart of Russia for centuries. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DAGESTAN }
@@ -2851,9 +2851,9 @@ tourism_throughput_from_skyscraper = {
 # Output from the state's one-off monuments (bg_monuments: vanilla's wonders,
 # the mod's, the Space Program, a power bloc statue), as base appeal is an
 # output bonus (tourism heritage spec 2026-10-23 § 5.2). The wonders standing
-# in 1836, and the Great Mosque of Djenné that vanilla rebuilds, give what
-# their state's heritage took off base appeal (tourism_heritage_generated.txt),
-# so the state's total is unchanged while they stand; every other monument +10%.
+# in 1836 give what their state's heritage took off base appeal
+# (tourism_heritage_generated.txt), so the state's total is unchanged while
+# they stand; every other monument +10%.
 # Grand Monuments are a group of their own (bg_grand_monuments) and give their
 # tourism through gm_local_tourism.
 tourism_bonus_from_monuments = {
@@ -2867,7 +2867,6 @@ tourism_bonus_from_monuments = {
 		else_if = { limit = { is_building_type = building_forbidden_city } add = 0.2 }
 		else_if = { limit = { is_building_type = building_saint_basils_cathedral } add = 0.2 }
 		else_if = { limit = { is_building_type = building_white_house } add = 0.2 }
-		else_if = { limit = { is_building_type = building_mosque_of_djenne } add = 0.2 }
 		else = { add = 0.1 }
 	}
 }

@@ -97,6 +97,10 @@ tourism_heritage_moved = {
 		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded } add = 20 }
 	}
 	else_if = {
+		limit = { state_region = s:STATE_MOSCOW }
+		add = 20
+	}
+	else_if = {
 		limit = { state_region = s:STATE_PELOPONNESE }
 		if = { limit = { gm_system_enabled = yes } add = 30 }
 	}
@@ -127,10 +131,6 @@ tourism_heritage_moved = {
 	else_if = {
 		limit = { state_region = s:STATE_LIMA }
 		if = { limit = { gm_system_enabled = yes } add = 20 }
-	}
-	else_if = {
-		limit = { state_region = s:STATE_WESTERN_MALI }
-		add = 20
 	}
 	divide = 100
 }

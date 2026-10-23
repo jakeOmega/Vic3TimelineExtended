@@ -105,7 +105,9 @@ def render(moves):
 
 
 def annotate(text, moves):
-    """text with each moved state's total noted on its score's comment, any earlier note replaced."""
+    """text with each moved state's total noted on its score's comment; every earlier note goes first, so a
+    state whose moves have gone loses its note."""
+    text = NOTE_RE.sub("", text)
     totals = collections.Counter()
     for m in moves:
         totals[m.state] += m.points
@@ -114,7 +116,7 @@ def annotate(text, moves):
         match = pattern.search(text)
         if not match:
             raise ValueError(f"{state}: no score in tourism.txt")
-        comment = NOTE_RE.sub("", match.group(2) or " #").rstrip()
+        comment = (match.group(2) or " #").rstrip()
         text = text[:match.start()] + match.group(1) + comment + NOTE.format(points) + text[match.end():]
     return text
 
