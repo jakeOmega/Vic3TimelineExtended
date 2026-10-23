@@ -115,10 +115,13 @@ gm_policy_education_self_check = {
 }
 
 # Country scope, AI only, each January while it owns a monument and may
-# change: Mothballed in hard times or in debt; State Ceremonial with legitimacy
-# under 40 and regime grandeur to multiply; Open to the Public when a monument
-# stands beside a Tourism Industry; else Standard. Changes only when the pick
-# differs, so a settled AI never starts a wait.
+# change (policy spec 2026-10-23 § 7). No policy saves money now, so a crisis
+# gives the AI nothing to mothball. The first that holds: State Ceremonial with
+# legitimacy under 40 when its input would reach the legitimacy curve's first
+# step; Open to the Public when a monument stands beside a Tourism Industry,
+# since tourism pays; Public Education with literacy under half; else
+# Cultural Promotion. Changes only when the pick differs, so a settled AI
+# never starts a wait.
 gm_policy_ai_choose = {
 	if = {
 		limit = {
@@ -130,18 +133,8 @@ gm_policy_ai_choose = {
 		set_variable = { name = gm_policy_pick value = flag:culture }
 		if = {
 			limit = {
-				OR = {
-					gm_country_hard_times = yes
-					scaled_debt > 0
-				}
-			}
-			set_variable = { name = gm_policy_pick value = flag:education }
-		}
-		else_if = {
-			limit = {
 				government_legitimacy < 40
-				has_variable = gm_g_regime
-				var:gm_g_regime > 0
+				gm_policy_ceremonial_input_if_chosen >= 10
 			}
 			set_variable = { name = gm_policy_pick value = flag:ceremonial }
 		}
@@ -153,6 +146,10 @@ gm_policy_ai_choose = {
 				}
 			}
 			set_variable = { name = gm_policy_pick value = flag:open }
+		}
+		else_if = {
+			limit = { literacy_rate < 0.5 }
+			set_variable = { name = gm_policy_pick value = flag:education }
 		}
 		gm_policy_ai_apply = { P = open STANDARD = no }
 		gm_policy_ai_apply = { P = ceremonial STANDARD = no }

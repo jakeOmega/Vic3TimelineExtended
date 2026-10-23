@@ -3027,12 +3027,24 @@ class PolicyTests(unittest.TestCase):
                          "NOT = { has_variable = gm_policy_cooldown }")
 
     def test_the_ai(self):
+        # Policy spec 2026-10-23 § 7: no policy saves money, so nothing to mothball in a crisis.
         ai = squash(block(self.e, "gm_policy_ai_choose"))
-        for s_ in ("is_ai = yes", "month = 0", "gm_policy_can_change = yes"):
+        for s_ in ("is_ai = yes", "month = 0", "gm_policy_can_change = yes",
+                   "set_variable = { name = gm_policy_pick value = flag:culture }",
+                   "government_legitimacy < 40", "gm_policy_ceremonial_input_if_chosen >= 10",
+                   "literacy_rate < 0.5", "has_building = building_tourism_industry"):
             self.assertIn(s_, ai)
-        self.assertLess(ai.find("flag:ceremonial"), ai.find("flag:open"))
+        order = [ai.find(f"value = flag:{p} }}") for p in ("ceremonial", "open", "education")]
+        self.assertNotIn(-1, order)
+        self.assertEqual(order, sorted(order))
+        self.assertNotIn("scaled_debt", ai)
+        self.assertNotIn("gm_country_hard_times", ai)
         for policy in POLICIES:
-            self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} ", ai, policy)
+            self.assertIn(f"gm_policy_ai_apply = {{ P = {policy} STANDARD = "
+                          f"{'yes' if policy == DEFAULT_POLICY else 'no'} }}", ai, policy)
+        share = squash(block(self.values, "gm_policy_ceremonial_input_if_chosen"))
+        self.assertIn("var:gm_g_venues multiply = gm_policy_ceremonial_share", share)
+        self.assertIn("var:gm_g_regime", share)
         self.assertIn("gm_policy_ai_choose = yes", squash(block(read(EFFECTS), "gm_country_monthly")))
 
     def test_ceremonial_adds_before_the_curve(self):

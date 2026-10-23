@@ -509,6 +509,23 @@ gm_policy_ceremonial_grandeur = {
 	}
 }
 
+# Country scope, for the AI (gm_policy_ai_choose): legitimacy's input were it
+# on State Ceremonial, regime grandeur plus the share of every venue.
+gm_policy_ceremonial_input_if_chosen = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_regime }
+		add = var:gm_g_regime
+	}
+	if = {
+		limit = { has_variable = gm_g_venues }
+		add = {
+			value = var:gm_g_venues
+			multiply = gm_policy_ceremonial_share
+		}
+	}
+}
+
 # Public Education's self-check (gm_policy_education_self_check), country
 # scope: the capital's education access over the base taken before the
 # modifier went on, what the steps give, and half that.
