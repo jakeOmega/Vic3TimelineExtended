@@ -7,13 +7,28 @@ The mod is written in English. `localization/english/` is the only loc the repo 
 
 None of the generated `.yml` is committed. The translation memory is.
 
+Two languages have one: German (`german/`) and Spanish (`spanish/`), both machine-translated.
+
 ## What's here
 
 | Path | What |
 |---|---|
 | `<language>/BRIEF.md` | The translator's instructions: markup rules, grammar conventions, voice. Every agent run reads it. |
 | `<language>/terms.json` | Terms coined during runs, English → translation (the mod's recurring names that aren't loc keys of their own, plus official game terms agents kept getting wrong). `prepare` adds the ones a chunk contains to its glossary; `check-terms` finds translations that disagree. Add to it whenever a report shows two chunks rendering one term differently. |
-| `<language>/tm/<file>.json` | The translation memory, one file per English loc file. Each key maps to `{"en": <the English it was translated from>, "de": <the translation>}`. Declined country-name forms (`AFU_DAT`, …) have no English key of their own; they carry `"base": <key>` and sit with that key. |
+| `<language>/tm/<file>.json` | The translation memory, one file per English loc file. Each key maps to `{"en": <the English it was translated from>, "de": <the translation>}`; the translation's field is the language's code in `TM_FIELDS` (`"de"`, `"es"`). German's declined country-name forms (`AFU_DAT`, …) have no English key of their own; they carry `"base": <key>` and sit with that key. |
+
+## What differs by language
+
+`scripts/i18n/translate_loc.py` keeps what differs between languages in four tables, each taken from what the base game's own loc does in that language (issue #566 has the survey):
+
+| Table | German | Spanish |
+|---|---|---|
+| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` |
+| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` |
+| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside |
+| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% |
+
+A new language needs a row in each table it differs in, a `BRIEF.md` (copy the nearest one and rewrite its grammar, number, quote and voice sections against the base game's loc in that language), and an empty `terms.json`. Pass `--language <folder>` to every command below; the default is German.
 
 ## When the English changes
 
@@ -55,4 +70,4 @@ Runs are resumable: whatever has merged is done, and `prepare` only offers what 
 
 ## Corrections from players
 
-Edit the key's `"de"` value in `<language>/tm/*.json`, keeping `"en"` as it is, and commit. The next deploy ships it.
+Edit the key's translation (`"de"`, `"es"`) in `<language>/tm/*.json`, keeping `"en"` as it is, and commit. The next deploy ships it.
