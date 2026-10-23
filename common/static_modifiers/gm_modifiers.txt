@@ -278,9 +278,11 @@ gm_ig_approval_trade_unions = {
 
 # ---- Local (§2.5): on the monument's state, multiplier = its own steps -------
 # Refreshed by gm_state_monthly (gm_effects.txt) from on_monthly_pulse_state.
+# Tourism is output, as base appeal is: one step is ten points of appeal
+# (tourism heritage spec 2026-10-23 § 5).
 gm_local_tourism = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	building_tourism_industry_throughput_add = 0.25
+	goods_output_tourism_mult = 0.10
 }
 
 gm_local_crown = {
@@ -348,7 +350,7 @@ gm_local_athletic = {
 # on_monthly_pulse_state, multiplier = the steps of what carries it here.
 gm_local_sig_antiquity = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	building_tourism_industry_throughput_add = 0.1
+	goods_output_tourism_mult = 0.05
 }
 
 gm_local_sig_archive = {
@@ -358,7 +360,7 @@ gm_local_sig_archive = {
 
 gm_local_sig_first_emperor = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	building_tourism_industry_throughput_add = 0.25
+	goods_output_tourism_mult = 0.10
 }
 
 # ---- Typed names (v2 §3.5): on the country only while a naming is open ----------
@@ -409,7 +411,7 @@ gm_evt_state_occasion = {
 
 gm_evt_pilgrim_hostels = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	building_tourism_industry_throughput_add = 0.1
+	goods_output_tourism_mult = 0.05
 }
 
 gm_evt_devout_pleased = {

@@ -417,7 +417,7 @@ gm_clear_state = {
 }
 
 # ---- The local pulse (§2.5): on_monthly_pulse_state, ROOT = the state --------
-# Tourism Industry throughput for every monument; the dedication's own local
+# Tourism output for every monument; the dedication's own local
 # effect for every dedicated one (fits, heritage or contested, §2.3). Both on
 # the 1/n curve (gm_curve_steps_lin_f5) over the grandeur standing here.
 gm_state_monthly = {

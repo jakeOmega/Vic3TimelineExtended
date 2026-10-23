@@ -106,7 +106,7 @@ REPLACE_OR_CREATE:bg_clean_power = {
 # Repeatable "Grand Monument" buildings (see common/buildings/grand_monuments.txt).
 # Deliberately a TOP-LEVEL group with NO parent_group: two existing systems iterate
 # bg_monuments and assume its members are unique one-off wonders --
-#   * tourism.txt / tourism_throughput_from_monuments  (+0.25 per bg_monuments building)
+#   * tourism.txt / tourism_bonus_from_monuments  (+10% output per bg_monuments building, more for the 1836 wonders)
 #   * cultural_hegemony_script_values.txt / cultural_pull_from_monuments (+3 each, uncapped)
 # An infinitely repeatable member would break both, so Grand Monuments stay outside
 # bg_monuments and contribute to those systems on their own capped terms instead.
