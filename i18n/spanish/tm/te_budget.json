@@ -1,0 +1,522 @@
+{
+ "country_te_budget_expense_archaeology_add": {
+  "en": "Counted in the Budget Breakdown under Archaeological Digs",
+  "es": "Contabilizado en el desglose del presupuesto bajo Excavaciones arqueológicas"
+ },
+ "country_te_budget_expense_archaeology_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Archaeological Digs.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Excavaciones arqueológicas."
+ },
+ "country_te_budget_expense_banking_add": {
+  "en": "Counted in the Budget Breakdown under Banking",
+  "es": "Contabilizado en el desglose del presupuesto bajo Banca"
+ },
+ "country_te_budget_expense_banking_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Banking.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Banca."
+ },
+ "country_te_budget_expense_climate_add": {
+  "en": "Counted in the Budget Breakdown under Climate Policy",
+  "es": "Contabilizado en el desglose del presupuesto bajo Política climática"
+ },
+ "country_te_budget_expense_climate_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Climate Policy.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Política climática."
+ },
+ "country_te_budget_expense_colonial_add": {
+  "en": "Counted in the Budget Breakdown under Colonial Development",
+  "es": "Contabilizado en el desglose del presupuesto bajo Desarrollo colonial"
+ },
+ "country_te_budget_expense_colonial_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Colonial Development.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Desarrollo colonial."
+ },
+ "country_te_budget_expense_covert_add": {
+  "en": "Counted in the Budget Breakdown under Covert Actions",
+  "es": "Contabilizado en el desglose del presupuesto bajo Acciones encubiertas"
+ },
+ "country_te_budget_expense_covert_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Covert Actions.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Acciones encubiertas."
+ },
+ "country_te_budget_expense_culture_add": {
+  "en": "Counted in the Budget Breakdown under Cultural Hegemony",
+  "es": "Contabilizado en el desglose del presupuesto bajo Hegemonía cultural"
+ },
+ "country_te_budget_expense_culture_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Cultural Hegemony.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Hegemonía cultural."
+ },
+ "country_te_budget_expense_drugs_add": {
+  "en": "Counted in the Budget Breakdown under Drug Shortage Response",
+  "es": "Contabilizado en el desglose del presupuesto bajo Respuesta a la escasez de drogas"
+ },
+ "country_te_budget_expense_drugs_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Respuesta a la escasez de drogas."
+ },
+ "country_te_budget_expense_family_add": {
+  "en": "Counted in the Budget Breakdown under Family Policy",
+  "es": "Contabilizado en el desglose del presupuesto bajo Política familiar"
+ },
+ "country_te_budget_expense_family_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Family Policy.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Política familiar."
+ },
+ "country_te_budget_expense_nuclear_add": {
+  "en": "Counted in the Budget Breakdown under Nuclear Program",
+  "es": "Contabilizado en el desglose del presupuesto bajo Programa nuclear"
+ },
+ "country_te_budget_expense_nuclear_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Program.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Programa nuclear."
+ },
+ "country_te_budget_expense_nuclear_taboo_add": {
+  "en": "Counted in the Budget Breakdown under Nuclear Civil Defence",
+  "es": "Contabilizado en el desglose del presupuesto bajo Defensa civil nuclear"
+ },
+ "country_te_budget_expense_nuclear_taboo_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Civil Defence.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Defensa civil nuclear."
+ },
+ "country_te_budget_expense_pensions_add": {
+  "en": "Counted in the Budget Breakdown under Old-Age Pensions",
+  "es": "Contabilizado en el desglose del presupuesto bajo Pensiones de jubilación"
+ },
+ "country_te_budget_expense_pensions_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Old-Age Pensions.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Pensiones de jubilación."
+ },
+ "country_te_budget_expense_space_add": {
+  "en": "Counted in the Budget Breakdown under Space Race",
+  "es": "Contabilizado en el desglose del presupuesto bajo Carrera espacial"
+ },
+ "country_te_budget_expense_space_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Space Race.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Carrera espacial."
+ },
+ "country_te_budget_expense_un_add": {
+  "en": "Counted in the Budget Breakdown under United Nations",
+  "es": "Contabilizado en el desglose del presupuesto bajo Naciones Unidas"
+ },
+ "country_te_budget_expense_un_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
+  "es": "No es un segundo cargo: la línea de $country_expenses_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Naciones Unidas."
+ },
+ "country_te_budget_income_pension_reform_add": {
+  "en": "Counted in the Budget Breakdown under Pension Reform",
+  "es": "Contabilizado en el desglose del presupuesto bajo Reforma de las pensiones"
+ },
+ "country_te_budget_income_pension_reform_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Pension Reform.",
+  "es": "No es un segundo pago: la línea de $country_tax_income_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Reforma de las pensiones."
+ },
+ "country_te_budget_income_reserve_add": {
+  "en": "Counted in the Budget Breakdown under Strategic Reserve Sales",
+  "es": "Contabilizado en el desglose del presupuesto bajo Ventas de la reserva estratégica"
+ },
+ "country_te_budget_income_reserve_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Strategic Reserve Sales.",
+  "es": "No es un segundo pago: la línea de $country_tax_income_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Ventas de la reserva estratégica."
+ },
+ "country_te_budget_income_tax_code_add": {
+  "en": "Counted in the Budget Breakdown under Spectrum Auctions",
+  "es": "Contabilizado en el desglose del presupuesto bajo Subastas del espectro"
+ },
+ "country_te_budget_income_tax_code_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Spectrum Auctions.",
+  "es": "No es un segundo pago: la línea de $country_tax_income_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Subastas del espectro."
+ },
+ "country_te_budget_income_un_add": {
+  "en": "Counted in the Budget Breakdown under United Nations",
+  "es": "Contabilizado en el desglose del presupuesto bajo Naciones Unidas"
+ },
+ "country_te_budget_income_un_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
+  "es": "No es un segundo pago: la línea de $country_tax_income_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Naciones Unidas."
+ },
+ "country_te_budget_income_war_tax_add": {
+  "en": "Counted in the Budget Breakdown under War Profit Tax",
+  "es": "Contabilizado en el desglose del presupuesto bajo Impuesto sobre los beneficios de guerra"
+ },
+ "country_te_budget_income_war_tax_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under War Profit Tax.",
+  "es": "No es un segundo pago: la línea de $country_tax_income_add$ ya incluye este importe. Se repite para que la pestaña Desglose del panel Presupuesto pueda mostrarlo bajo Impuesto sobre los beneficios de guerra."
+ },
+ "te_budget_chart_additional_expense": {
+  "en": "Other Additional Expenses",
+  "es": "Otros gastos adicionales"
+ },
+ "te_budget_chart_additional_income": {
+  "en": "Other Additional Income",
+  "es": "Otros ingresos adicionales"
+ },
+ "te_budget_chart_administration": {
+  "en": "General Administration",
+  "es": "Administración general"
+ },
+ "te_budget_chart_administration_group": {
+  "en": "Administration",
+  "es": "Administración"
+ },
+ "te_budget_chart_army": {
+  "en": "Army",
+  "es": "Ejército"
+ },
+ "te_budget_chart_civil": {
+  "en": "Other Civil Buildings",
+  "es": "Otros edificios civiles"
+ },
+ "te_budget_chart_diplomacy_expense": {
+  "en": "Diplomatic Payments",
+  "es": "Pagos diplomáticos"
+ },
+ "te_budget_chart_diplomacy_income": {
+  "en": "Diplomatic Income",
+  "es": "Ingresos diplomáticos"
+ },
+ "te_budget_chart_expand_tt": {
+  "en": "Expand or collapse this breakdown. The pie groups collapsed categories and separates expanded categories into their visible parts.",
+  "es": "Expande o contrae este desglose. El gráfico circular agrupa las categorías contraídas y separa las categorías expandidas en sus partes visibles."
+ },
+ "te_budget_chart_expense": {
+  "en": "Weekly Expenses",
+  "es": "Gastos semanales"
+ },
+ "te_budget_chart_group_tt": {
+  "en": "This total includes the indented rows below it. Expand to see its components as separate pie slices. Shares count positive component amounts; refunds remain signed, so expansion never changes the denominator. A zero net group can still contain costs and refunds.",
+  "es": "Este total incluye las filas con sangría que hay debajo. Expándelo para ver sus componentes como porciones separadas del gráfico. Las proporciones cuentan los importes positivos de los componentes; los reembolsos conservan su signo, así que expandir nunca cambia el denominador. Un grupo con saldo neto cero puede contener igualmente costes y reembolsos."
+ },
+ "te_budget_chart_how": {
+  "en": "How the Breakdown Works",
+  "es": "Cómo funciona el desglose"
+ },
+ "te_budget_chart_how_text": {
+  "en": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space Program: its weekly operating deficit, its wages and Launch Capacity, appears under Programme Costs as part of Space Race.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total. The Space Program's cost is capped at what that total holds after administration.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nGroups start collapsed. Click the arrow to expand Taxes, Administration, Military, Shipping, Programme Costs or diplomatic flows. Army and Navy each expand to Wages plus Materials and Support. Rows are ordered from largest to smallest amount within each group. Collapsed groups have one pie slice; expanded groups give their visible parts separate slices. Military wages are derived from each branch’s forecast total minus its goods. Materials and Support includes branch goods plus the full operating deficits of logistics centres and naval fortifications. Their own wages and upkeep are separate from barracks, conscription and naval administration costs covered by the branch forecast. Support upkeep combines wages, goods and slave upkeep. Navy also includes warship construction and maintenance. Other Military Costs reconciles remaining upkeep and forecast differences. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
+  "es": "#b Asignación de la administración#!\\nLa Administración gubernamental produce burocracia y capacidad fiscal en lugar de bienes para la venta. Su déficit operativo semanal es el coste de sus salarios y de sus bienes de insumo, incluido cualquier mantenimiento de esclavos. Las universidades, los puertos y otros edificios civiles se quedan en Otros edificios civiles, salvo el Programa espacial: su déficit operativo semanal, con sus salarios y su capacidad de lanzamiento, aparece en Costes de programas como parte de la Carrera espacial.\\n\\nLa parte asignada a las instituciones es su uso actual de burocracia dividido entre toda la burocracia producida, con un tope del 100%. Cada institución recibe ese fondo en proporción a su nivel actual, incluidas las instituciones con costes de burocracia reducidos. Los objetivos que aún se están implantando no cuentan. La Administración general recibe el resto, incluidos la capacidad sin usar y el uso de burocracia ajeno a las instituciones. Si no hay producción ni niveles de institución, todos los costes de administración se quedan ahí.\\n\\nEl presupuesto predice los salarios, mientras que los edificios de administración informan de su último balance semanal. La asignación tiene como tope el total del gobierno en salarios civiles, bienes y mantenimiento de esclavos, de modo que un cambio salarial no puede asignar más que ese total. El coste del Programa espacial tiene como tope lo que queda de ese total tras la administración.\\n\\n#b Gráficos e importes#!\\nLos totales de ingresos y gastos excluyen la Transferencia de fondo de inversión. Bienes de construcción también excluye esa transferencia, que financia la construcción privada. Militar incluye los salarios, los bienes y el mantenimiento de esclavos del ejército de tierra y la armada, además de la construcción y el mantenimiento de barcos de guerra. Transporte marítimo abarca los barcos de suministro y las conexiones portuarias.\\n\\n#b Sistemas del diario#!\\nBanca, Acciones encubiertas, Hegemonía cultural, Naciones Unidas y otros sistemas tienen filas propias. Pasa el cursor por una fila para ver las fuentes que se aplican en ese momento. Sus importes se restan una sola vez de Gastos adicionales o de Ingresos adicionales; solo queda ahí el resto no atribuido. Los pagos únicos del tesoro y los costes de recursos no monetarios quedan fuera del presupuesto semanal.\\n\\nLos grupos empiezan contraídos. Haz clic en la flecha para expandir Impuestos, Administración, Militar, Transporte marítimo, Costes de programas o los flujos diplomáticos. Ejército y Armada se expanden cada uno en Salarios más Materiales y apoyo. Las filas se ordenan de mayor a menor importe dentro de cada grupo. Un grupo contraído tiene una sola porción del gráfico; los grupos expandidos dan a sus partes visibles porciones separadas. Los salarios militares se derivan del total previsto de cada rama menos sus bienes. Materiales y apoyo incluye los bienes de la rama más los déficits operativos completos de los centros logísticos y las fortificaciones navales. Sus propios salarios y su mantenimiento son aparte de los costes de cuarteles, reclutamiento y administración naval que cubre la previsión de la rama. El mantenimiento de apoyo combina salarios, bienes y mantenimiento de esclavos. La Armada incluye además la construcción y el mantenimiento de barcos de guerra. Otros costes militares concilia las diferencias restantes de mantenimiento y de previsión. Los colores de las categorías se mantienen fijos en los gráficos y en la lista. Con muchas instituciones la paleta se repite; usa los nombres y los porcentajes para identificar cada categoría. Los ajustes negativos con signo aparecen en la lista con una porción nula en el gráfico. Los gráficos quedan vacíos si no hay importes positivos."
+ },
+ "te_budget_chart_income": {
+  "en": "Weekly Income",
+  "es": "Ingresos semanales"
+ },
+ "te_budget_chart_institution_colonial_affairs_tt": {
+  "en": "#b $institution_colonial_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_colonial_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_colonial_affairs$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_colonial_affairs')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_health_system_tt": {
+  "en": "#b $institution_health_system$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_health_system')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_health_system$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_health_system')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_home_affairs_tt": {
+  "en": "#b $institution_home_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_home_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_home_affairs$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_home_affairs')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_migration_controls_tt": {
+  "en": "#b $institution_migration_controls$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_migration_controls')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_migration_controls$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_migration_controls')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_commerce_tt": {
+  "en": "#b $institution_ministry_of_commerce$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_commerce')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_commerce$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_commerce')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_consumer_protection_tt": {
+  "en": "#b $institution_ministry_of_consumer_protection$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_consumer_protection')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_consumer_protection$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_consumer_protection')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_culture_tt": {
+  "en": "#b $institution_ministry_of_culture$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_culture')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_culture$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_culture')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_foreign_affairs_tt": {
+  "en": "#b $institution_ministry_of_foreign_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_foreign_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_foreign_affairs$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_foreign_affairs')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_intelligence_and_security_tt": {
+  "en": "#b $institution_ministry_of_intelligence_and_security$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_intelligence_and_security')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_intelligence_and_security$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_intelligence_and_security')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_international_aid_tt": {
+  "en": "#b $institution_ministry_of_international_aid$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_international_aid')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_international_aid$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_international_aid')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_labor_tt": {
+  "en": "#b $institution_ministry_of_labor$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_labor')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_labor$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_labor')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_propaganda_tt": {
+  "en": "#b $institution_ministry_of_propaganda$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_propaganda')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_propaganda$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_propaganda')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_refugee_affairs_tt": {
+  "en": "#b $institution_ministry_of_refugee_affairs$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_refugee_affairs')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_refugee_affairs$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_refugee_affairs')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_religion_tt": {
+  "en": "#b $institution_ministry_of_religion$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_religion')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_religion$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_religion')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_science_tt": {
+  "en": "#b $institution_ministry_of_science$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_science')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_science$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_science')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_the_environment_tt": {
+  "en": "#b $institution_ministry_of_the_environment$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_the_environment')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_the_environment$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_the_environment')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_thought_control_tt": {
+  "en": "#b $institution_ministry_of_thought_control$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_thought_control')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_thought_control$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_thought_control')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_urban_planning_tt": {
+  "en": "#b $institution_ministry_of_urban_planning$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_urban_planning')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_urban_planning$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_urban_planning')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_ministry_of_war_tt": {
+  "en": "#b $institution_ministry_of_war$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_war')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_ministry_of_war$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_ministry_of_war')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_national_bank_tt": {
+  "en": "#b $institution_national_bank$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_national_bank')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_national_bank$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_national_bank')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_police_tt": {
+  "en": "#b $institution_police$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_police')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_police$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_police')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_schools_tt": {
+  "en": "#b $institution_schools$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_schools')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_schools$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_schools')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_social_security_tt": {
+  "en": "#b $institution_social_security$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_social_security')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_social_security$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_social_security')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_institution_workplace_safety_tt": {
+  "en": "#b $institution_workplace_safety$#!\\nCurrent level: [TopScope.ScriptValue('te_budget_level_institution_workplace_safety')|0]\\nAdministration cost: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBureaucracy produced: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nInstitution bureaucracy use: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nInstitution pool: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nTotal institution levels: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nAllocated cost: @money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]\\n\\nAdministration cost × institution bureaucracy use ÷ bureaucracy produced, capped at the administration cost; then institution pool × current level ÷ total institution levels.",
+  "es": "#b $institution_workplace_safety$#!\\nNivel actual: [TopScope.ScriptValue('te_budget_level_institution_workplace_safety')|0]\\nCoste de administración: @money![TopScope.ScriptValue('te_budget_administration_cost')|D]\\nBurocracia producida: @bur![TopScope.ScriptValue('te_budget_produced_bureaucracy')|D]\\nUso de burocracia de las instituciones: @bur![GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]\\nFondo de las instituciones: @money![TopScope.ScriptValue('te_budget_institution_pool')|D]\\nNiveles totales de las instituciones: [TopScope.ScriptValue('te_budget_institution_levels')|0]\\nCoste asignado: @money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]\\n\\nCoste de administración × uso de burocracia de las instituciones ÷ burocracia producida, con el coste de administración como tope; después, fondo de las instituciones × nivel actual ÷ niveles totales de las instituciones."
+ },
+ "te_budget_chart_materials": {
+  "en": "Materials and Support",
+  "es": "Materiales y apoyo"
+ },
+ "te_budget_chart_materials_tt": {
+  "en": "Materials and Support includes branch goods plus full logistics-centre and naval-fortification upkeep, combining their wages, goods and any slave upkeep. Barracks, conscription and naval administration stay in the native branch amounts and are not added again. Navy also includes warship construction and maintenance. Weekly operating balances can differ from wage forecasts; Other Military Costs reconciles the difference.",
+  "es": "Materiales y apoyo incluye los bienes de la rama más el mantenimiento completo de los centros logísticos y las fortificaciones navales, que combina sus salarios, bienes y cualquier mantenimiento de esclavos. Los cuarteles, el reclutamiento y la administración naval permanecen en los importes propios de la rama y no se suman de nuevo. La Armada incluye además la construcción y el mantenimiento de barcos de guerra. Los balances operativos semanales pueden diferir de las previsiones salariales; Otros costes militares concilia la diferencia."
+ },
+ "te_budget_chart_military": {
+  "en": "Military",
+  "es": "Militar"
+ },
+ "te_budget_chart_military_adjustment": {
+  "en": "Other Military Costs",
+  "es": "Otros costes militares"
+ },
+ "te_budget_chart_navy": {
+  "en": "Navy",
+  "es": "Armada"
+ },
+ "te_budget_chart_no_expense": {
+  "en": "No positive expenses this week.",
+  "es": "Esta semana no hay gastos positivos."
+ },
+ "te_budget_chart_no_income": {
+  "en": "No positive income this week.",
+  "es": "Esta semana no hay ingresos positivos."
+ },
+ "te_budget_chart_other_expense": {
+  "en": "Other Expenses",
+  "es": "Otros gastos"
+ },
+ "te_budget_chart_other_income": {
+  "en": "Other Income",
+  "es": "Otros ingresos"
+ },
+ "te_budget_chart_pie_tt": {
+  "en": "Each color matches a row below. Collapsed groups form one slice; expanded groups use their visible children. Pies show shares of positive component amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
+  "es": "Cada color corresponde a una fila de abajo. Los grupos contraídos forman una sola porción; los grupos expandidos usan sus elementos visibles. Los gráficos circulares muestran proporciones de los importes positivos de los componentes; los ajustes con signo permanecen en la lista. Los encabezados semanales incluyen esos ajustes y excluyen la Transferencia de fondo de inversión."
+ },
+ "te_budget_chart_port_connections": {
+  "en": "Port Connections",
+  "es": "Conexiones portuarias"
+ },
+ "te_budget_chart_programmes": {
+  "en": "Programme Costs",
+  "es": "Costes de programas"
+ },
+ "te_budget_chart_row_tt": {
+  "en": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration, and the Space Program, which is under Programme Costs. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
+  "es": "Importe semanal y proporción de los importes positivos. Otros edificios civiles excluye los costes de administración asignados a las instituciones y a la Administración general, así como el Programa espacial, que está en Costes de programas. Otros ingresos y Otros gastos concilian los importes enumerados con los totales del presupuesto público tras excluir la Transferencia de fondo de inversión, e incluyen flujos temporales y partidas sin categorizar."
+ },
+ "te_budget_chart_shipping": {
+  "en": "Shipping and Connections",
+  "es": "Transporte marítimo y conexiones"
+ },
+ "te_budget_chart_source_expense_archaeology": {
+  "en": "Archaeological Digs",
+  "es": "Excavaciones arqueológicas"
+ },
+ "te_budget_chart_source_expense_archaeology_tt": {
+  "en": "#b Archaeological Digs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Excavaciones arqueológicas#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_banking": {
+  "en": "Banking",
+  "es": "Banca"
+ },
+ "te_budget_chart_source_expense_banking_tt": {
+  "en": "#b Banking#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Banca#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_climate": {
+  "en": "Climate Policy",
+  "es": "Política climática"
+ },
+ "te_budget_chart_source_expense_climate_tt": {
+  "en": "#b Climate Policy#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Política climática#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_colonial": {
+  "en": "Colonial Development",
+  "es": "Desarrollo colonial"
+ },
+ "te_budget_chart_source_expense_colonial_tt": {
+  "en": "#b Colonial Development#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_colonial')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_colonial_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Desarrollo colonial#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_colonial')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_colonial_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_covert": {
+  "en": "Covert Actions",
+  "es": "Acciones encubiertas"
+ },
+ "te_budget_chart_source_expense_covert_tt": {
+  "en": "#b Covert Actions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_covert')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_covert_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Acciones encubiertas#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_covert')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_covert_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_culture": {
+  "en": "Cultural Hegemony",
+  "es": "Hegemonía cultural"
+ },
+ "te_budget_chart_source_expense_culture_tt": {
+  "en": "#b Cultural Hegemony#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_culture')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_culture_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Hegemonía cultural#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_culture')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_culture_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_drugs": {
+  "en": "Drug Shortage Response",
+  "es": "Respuesta a la escasez de drogas"
+ },
+ "te_budget_chart_source_expense_drugs_tt": {
+  "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Respuesta a la escasez de drogas#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_family": {
+  "en": "Family Policy",
+  "es": "Política familiar"
+ },
+ "te_budget_chart_source_expense_family_tt": {
+  "en": "#b Family Policy#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_family')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_family_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Política familiar#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_family')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_family_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_nuclear": {
+  "en": "Nuclear Program",
+  "es": "Programa nuclear"
+ },
+ "te_budget_chart_source_expense_nuclear_taboo": {
+  "en": "Nuclear Civil Defence",
+  "es": "Defensa civil nuclear"
+ },
+ "te_budget_chart_source_expense_nuclear_taboo_tt": {
+  "en": "#b Nuclear Civil Defence#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_taboo_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Defensa civil nuclear#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_taboo_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_nuclear_tt": {
+  "en": "#b Nuclear Program#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Programa nuclear#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_pensions": {
+  "en": "Old-Age Pensions",
+  "es": "Pensiones de jubilación"
+ },
+ "te_budget_chart_source_expense_pensions_tt": {
+  "en": "#b Old-Age Pensions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_pensions')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_pensions_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Pensiones de jubilación#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_pensions')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_pensions_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_space": {
+  "en": "Space Race",
+  "es": "Carrera espacial"
+ },
+ "te_budget_chart_source_expense_space_tt": {
+  "en": "#b Space Race#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_space')|D]\\nSpace Program: @money![TopScope.ScriptValue('te_budget_space_program_cost')|D]\\nThe Space Program's wages and input goods, moved here from Other Civil Buildings.\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_space_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Carrera espacial#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_space')|D]\\nPrograma espacial: @money![TopScope.ScriptValue('te_budget_space_program_cost')|D]\\nLos salarios y los bienes de insumo del Programa espacial, trasladados aquí desde Otros edificios civiles.\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_space_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_expense_un": {
+  "en": "United Nations",
+  "es": "Naciones Unidas"
+ },
+ "te_budget_chart_source_expense_un_tt": {
+  "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Naciones Unidas#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_income_pension_reform": {
+  "en": "Pension Reform",
+  "es": "Reforma de las pensiones"
+ },
+ "te_budget_chart_source_income_pension_reform_tt": {
+  "en": "#b Pension Reform#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_pension_reform_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Reforma de las pensiones#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_pension_reform_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_income_reserve": {
+  "en": "Strategic Reserve Sales",
+  "es": "Ventas de la reserva estratégica"
+ },
+ "te_budget_chart_source_income_reserve_tt": {
+  "en": "#b Strategic Reserve Sales#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_reserve')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_reserve_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Ventas de la reserva estratégica#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_income_reserve')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_reserve_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_income_tax_code": {
+  "en": "Spectrum Auctions",
+  "es": "Subastas del espectro"
+ },
+ "te_budget_chart_source_income_tax_code_tt": {
+  "en": "#b Spectrum Auctions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_tax_code')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_tax_code_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Subastas del espectro#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_income_tax_code')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_tax_code_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_income_un": {
+  "en": "United Nations",
+  "es": "Naciones Unidas"
+ },
+ "te_budget_chart_source_income_un_tt": {
+  "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_un_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Naciones Unidas#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_income_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_un_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_source_income_war_tax": {
+  "en": "War Profit Tax",
+  "es": "Impuesto sobre los beneficios de guerra"
+ },
+ "te_budget_chart_source_income_war_tax_tt": {
+  "en": "#b War Profit Tax#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_war_tax')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_war_tax_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "es": "#b Impuesto sobre los beneficios de guerra#!\\nImporte semanal: @money![TopScope.ScriptValue('te_budget_income_war_tax')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_war_tax_add')]\\n\\nFuentes aplicadas actualmente, incluidos los cargos temporales, sus multiplicadores y cualquier decaimiento. Los pagos únicos del tesoro y los costes no monetarios quedan excluidos del presupuesto semanal."
+ },
+ "te_budget_chart_supply_construction": {
+  "en": "Supply Ship Construction",
+  "es": "Construcción de barcos de suministro"
+ },
+ "te_budget_chart_supply_maintenance": {
+  "en": "Supply Ship Maintenance",
+  "es": "Mantenimiento de barcos de suministro"
+ },
+ "te_budget_chart_tab": {
+  "en": "Breakdown",
+  "es": "Desglose"
+ },
+ "te_budget_chart_tab_tt": {
+  "en": "Weekly public income and expenses as pies and itemized amounts. Government Administration costs are allocated among your institutions.",
+  "es": "Ingresos y gastos públicos semanales en gráficos circulares e importes detallados. Los costes de la Administración gubernamental se reparten entre tus instituciones."
+ },
+ "te_budget_chart_taxes": {
+  "en": "Taxes",
+  "es": "Impuestos"
+ },
+ "te_budget_chart_wages": {
+  "en": "Wages",
+  "es": "Salarios"
+ }
+}

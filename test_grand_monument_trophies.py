@@ -241,6 +241,22 @@ class TakingTests(unittest.TestCase):
         self.assertEqual(squash(block(read(ARTICLE_RETURN), "possible")),
                          "gm_system_enabled = yes gm_tr_country_holds_from = { CLAIMANT = scope:other_country }")
 
+    def test_the_articles_show_only_where_there_is_a_monument(self):
+        # owner, 2026-10-23: the draft lists an article only where it has something to act on. ROOT is the
+        # prospective source in visible as in possible (vanilla treaty_port's visible reads the source's coastal
+        # states), so Return Cultural Property shows for a holder of the other side's trophies and Surrender a
+        # Monument for a country with a monument it could give up; possible repeats it for a war goal
+        self.assertEqual(squash(block(read(ARTICLE_RETURN), "visible")),
+                         "gm_system_enabled = yes exists = scope:other_country "
+                         "gm_tr_country_holds_from = { CLAIMANT = scope:other_country }")
+        for gate in ("visible", "possible"):
+            self.assertEqual(squash(block(read(ARTICLE_SURRENDER), gate)),
+                             "gm_system_enabled = yes gm_tr_country_has_takeable = yes", gate)
+        # the states the article can name (its state_valid_trigger) are the ones the gate counts
+        self.assertEqual(squash(block(read(TR_TRIGGERS), "gm_tr_country_has_takeable")),
+                         "any_scope_state = { gm_state_tr_takeable = yes }")
+        self.assertIn("gm_state_tr_takeable = yes", squash(block(read(ARTICLE_SURRENDER), "state_valid_trigger")))
+
     def test_the_hidden_events_do_the_work(self):
         events = strip_comments(read(TR_EVENTS))
         for n, doer in ((10, "gm_state_tr_take = { WHO = scope:gm_tr_order_by ROUTE = occupation }"),

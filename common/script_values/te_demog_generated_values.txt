@@ -1422,6 +1422,16 @@ te_demog_medical_diffusion = {
 	min = 0
 	max = 1
 }
+# State scope, a state holding Medical Outreach: its share of the gap without the decree's line, so the decree's
+# state_trigger can ask whether the decree still changes the next count (te_demog_medicine_left_without_outreach).
+# The decree's name stays in the decree: a release comments the decree out whole.
+te_demog_medical_diffusion_without_outreach = {
+	value = modifier:state_medical_diffusion_add
+	add = 0.1
+	subtract = 0.2
+	min = 0
+	max = 1
+}
 # State scope: infection's medicine at its targets (the section's arrow).
 te_demog_f_infection_medicine_target = {
 	value = 1

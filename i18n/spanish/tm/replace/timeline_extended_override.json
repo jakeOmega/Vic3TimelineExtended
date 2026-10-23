@@ -1,0 +1,502 @@
+{
+ "BUILDING_MAP_LIST_PANEL_PROFIT_IMPACT_TOOLTIP": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] after expansion#!\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\nA prediction of how much expanding this building would affect its weekly [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')].",
+  "es": "#header Previsión de [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] tras la ampliación#!\\n(Sin contar los [Concept('concept_building_wage','$concept_building_wages$')|l])\\n$TOOLTIP_DELIMITER$\\nUna previsión de cuánto afectaría ampliar este edificio al importe semanal de [SelectLocalization(ObjectsEqual(MapListBuildingPanel.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')]."
+ },
+ "CAN_EXPAND_BUILDING_TOOLTIP": {
+  "en": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] in [STATE.GetName]#! (Size: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Predicted [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nAvailable Labor: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$",
+  "es": "#header $BUILD_OR_EXPAND$ [BUILDING_TYPE.GetName] en [STATE.GetName]#! (Tamaño: [BUILDING.GetExpansionLevelBreakdownDesc])\\n[AddLocalizationIf( Not(STATE.GetOwner.IsLocalPlayer), 'CAN_EXPAND_BUILDING_TOOLTIP_FOREIGN' )]#tooltippable #tooltip:[GetRawTextTooltipTag('$PROFIT_IMPACT_DESC$')] #v @money!$PROFIT_IMPACT|K+=$#!#!#! Previsión de [SelectLocalization(Or(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), BUILDING.GetBuildingType.IsMilitaryBuilding), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / semana\\n[ConcatIfNeitherEmpty('$PRODUCTIVITY$', '\\n')][ConcatIfNeitherEmpty('$QUALIFICATIONS$', '\\n')][SelectLocalization( LessThan_CFixedPoint(State.GetConstructionEfficiency, '(CFixedPoint)0'), 'CONSTRUCTION_QUEUE_STATE_CONSTRUCTION_EFFICIENCY_WARNING', '')]$TOOLTIP_DELIMITER$\\n@construction! $REQUIRED_CONSTRUCTION|v0$ [concept_construction|l] ($CONSTRUCTION_COST_CHANGE$)\\n$EXPAND_BUILDING_TT_NATIONAL_MAINTENANCE$\\n\\n$PRODUCTION_BREAKDOWN$\\n\\n[STATE.GetMarketAccessStatus]\\nMano de obra disponible: [State.GetNumSubsistenceWorkingAdults|Dv] [GetPopType('peasants').GetName] [SelectLocalization( GreaterThan_int64(State.GetNumUnemployedWorkingAdults, '(int64)0'), 'AND_UNEMPLOYED', '' )][ConcatIfNeitherEmpty('$PORT_INFO$', '\\n')]\\n\\n$KEY_MODIFIER_INSTRUCTIONS$"
+ },
+ "CULTURAL_COMMUNITY_DECAYING_ACCEPTANCE_DELTA_DESC": {
+  "en": "$VALUE|0+=$ from Cultural Integration (will increase by [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] per year)",
+  "es": "$VALUE|0+=$ por Integración cultural (aumentará en [CulturalCommunity.GetState.MakeScope.ScriptValue('total_state_yearly_cultural_acceptance_add')] al año)"
+ },
+ "EXPANSION_PROFIT_IMPACT": {
+  "en": "#header Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] of new level#!\\n#v @money!$VAL|K+=$#! Predicted [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / week\\n(Excluding [Concept('concept_building_wage','$concept_building_wages$')])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$",
+  "es": "#header Previsión de [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] del nuevo nivel#!\\n#v @money!$VAL|K+=$#! Previsión de [SelectLocalization(ObjectsEqual(BUILDING.GetBuildingType, GetBuildingType('building_government_administration').Self), 'BUILDING_UPKEEP_HEADER', 'BUILDING_EARNINGS_HEADER')] / semana\\n(Sin contar los [Concept('concept_building_wage','$concept_building_wages$')|l])\\n$TOOLTIP_DELIMITER$\\n$IMPACT_DETAILS$\\n\\n$BUILDING_PREDICTION_DISCLAIMER$"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_3_DURING_FORMATION": {
+  "en": "Available when your [concept_power_bloc] has #v 3#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "es": "Disponible cuando tu [concept_power_bloc|l] tenga #v 3#! espacios para [Concept('concept_power_bloc_principle','principios')]. Empieza con #v 2#! y gana #v 1#! con un [concept_power_bloc_rank|l] #v ##5#! o mejor y al menos #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')|l], y #v 1#! más con rango #v ##3#! o mejor y al menos #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_4_DURING_FORMATION": {
+  "en": "Available when your [concept_power_bloc] has #v 4#! [concept_power_bloc_principle] slots. It starts with #v 2#! and gains #v 1#! at [concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')] and #v 1#! more at rank #v ##3#! or better with at least #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "es": "Disponible cuando tu [concept_power_bloc|l] tenga #v 4#! espacios para [Concept('concept_power_bloc_principle','principios')]. Empieza con #v 2#! y gana #v 1#! con un [concept_power_bloc_rank|l] #v ##5#! o mejor y al menos #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')|l], y #v 1#! más con rango #v ##3#! o mejor y al menos #v 10#!.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "TOOLTIP_LOCKED_PRINCIPLE_SLOT_DURING_FORMATION": {
+  "en": "More [concept_power_bloc_principle] slots will become available as your [concept_power_bloc] achieves a higher [concept_power_bloc_rank] and acquires more [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]",
+  "es": "Habrá más espacios para [Concept('concept_power_bloc_principle','principios')] a medida que tu [concept_power_bloc|l] logre un [concept_power_bloc_rank|l] más alto y adquiera más [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')|l].[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_pb_principle_slots_max'), '(CFixedPoint)4' ), 'te_pb_slot_techs_sentence' )]"
+ },
+ "academics_desc": {
+  "en": "Researchers, doctors, lawyers and other educated professionals, especially those studying and teaching in academic institutions. Politically, they are at the forefront of the Intelligentsia.",
+  "es": "Investigadores, médicos, abogados y otros profesionales con formación, en especial quienes estudian y enseñan en instituciones académicas. En lo político, están en la vanguardia de la élite intelectual."
+ },
+ "building_art_academy": {
+  "en": "Creative Industry",
+  "es": "Industria creativa"
+ },
+ "building_chemical_plant": {
+  "en": "Chemical Plants",
+  "es": "Plantas químicas"
+ },
+ "building_electrics_industry": {
+  "en": "Wired Telecommunications Industries",
+  "es": "Industrias de telecomunicaciones por cable"
+ },
+ "building_synthetics_plant": {
+  "en": "Synthetic Dyes Industries",
+  "es": "Industrias de tintes sintéticos"
+ },
+ "coal": {
+  "en": "Energy and Carbon Minerals",
+  "es": "Minerales energéticos y carbonosos"
+ },
+ "company_basic_electrics": {
+  "en": "Telecommunications",
+  "es": "Telecomunicaciones"
+ },
+ "company_basic_electrics_dynamic_name_tag_plural": {
+  "en": "Telecommunications",
+  "es": "Telecomunicaciones"
+ },
+ "company_basic_electrics_dynamic_name_tag_singular": {
+  "en": "Telecommunication",
+  "es": "Telecomunicación"
+ },
+ "concept_harvest_condition": {
+  "en": "Local Condition",
+  "es": "Condición local"
+ },
+ "concept_harvest_condition_desc": {
+  "en": "A $concept_harvest_condition$ is an occurrence that affects a [Concept('concept_country','$concept_country_possessive$')] local economy with a variable [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')], duration, and range. It is generally a natural phenomenon and can have either #g positive#! or #r negative#! effects on the [Concept('concept_state','$concept_states$')] it affects. $concept_harvest_conditions$ will mostly affect the [concept_throughput] of agricultural [Concept('concept_building','$concept_buildings$')], but they can also have an effect on your [Concept('concept_pop','$concept_population$')] and $concept_states$ in other ways, such as reducing available [concept_infrastructure].\\n\\n$concept_harvest_conditions$ will often affect $concept_states$ surrounding their #b epicenter#!. In such cases, the [concept_harvest_condition_intensity] will generally decrease as the distance to the #b epicenter#! increases.\\n\\n#title Potential $concept_harvest_conditions$:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!",
+  "es": "Una $concept_harvest_condition$ es un suceso que afecta a la economía local [Concept('concept_country','$concept_country_possessive$')] con una [Concept('concept_harvest_condition_intensity','$concept_harvest_condition_intensity_short$')|l] variable, una duración y un alcance. Suele ser un fenómeno natural y puede tener efectos #g positivos#! o #r negativos#! en los [Concept('concept_state','$concept_states$')|l] a los que afecta. Las $concept_harvest_conditions$ afectarán sobre todo al [concept_throughput|l] de los [Concept('concept_building','$concept_buildings$')|l] agrícolas, pero también pueden afectar de otras maneras a tu [Concept('concept_pop','$concept_population$')|l] y a los $concept_states$, por ejemplo reduciendo las [concept_infrastructure|l] disponibles.\\n\\nLas $concept_harvest_conditions$ afectarán a menudo a los $concept_states$ que rodean su #b epicentro#!. En esos casos, la [concept_harvest_condition_intensity|l] suele disminuir a medida que aumenta la distancia al #b epicentro#!.\\n\\n#title $concept_harvest_conditions$ posibles:#!#indent_newline:3 \\n[GetHarvestConditionTypesList]#!"
+ },
+ "concept_harvest_condition_intensity": {
+  "en": "Intensity",
+  "es": "Intensidad"
+ },
+ "concept_harvest_conditions": {
+  "en": "Local Conditions",
+  "es": "Condiciones locales"
+ },
+ "concept_power_bloc_principle_group_desc": {
+  "en": "Groups of five tiers of [Concept('concept_power_bloc_principle','$concept_power_bloc_principles$')] that support the same theme.",
+  "es": "Grupos de cinco niveles de [Concept('concept_power_bloc_principle','$concept_power_bloc_principles$')|l] que apoyan un mismo tema."
+ },
+ "country_institution_cost_institution_home_affairs_mult": {
+  "en": "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_home_affairs').GetName]",
+  "es": "@bur![Nbsp]Coste de [concept_bureaucracy|l]: [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "country_institution_cost_institution_home_affairs_mult_desc": {
+  "en": "An increase or reduction to the @bur![Nbsp][concept_bureaucracy] cost of the [GetInstitutionType('institution_home_affairs').GetName] [concept_institution]",
+  "es": "Un aumento o una reducción del coste de @bur![Nbsp][concept_bureaucracy|l] de la [concept_institution|l] [GetInstitutionType('institution_home_affairs').GetName]"
+ },
+ "cultural_erasure": {
+  "en": "Latent Hostility",
+  "es": "Hostilidad latente"
+ },
+ "fertilizer": {
+  "en": "Chemicals",
+  "es": "Productos químicos"
+ },
+ "fine_art": {
+  "en": "Art and Entertainment",
+  "es": "Arte y entretenimiento"
+ },
+ "glass": {
+  "en": "Glass and Plastics",
+  "es": "Vidrio y plásticos"
+ },
+ "goods_input_coal_add": {
+  "en": "@coal! $coal$ input",
+  "es": "Insumo de $coal$ @coal!"
+ },
+ "goods_input_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ consumed by buildings",
+  "es": "La cantidad de @coal! $coal$ que consumen los edificios"
+ },
+ "goods_input_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Input",
+  "es": "Insumo de $fertilizer$ @fertilizer!"
+ },
+ "goods_input_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! $fertilizer$ consumed by buildings",
+  "es": "La cantidad de @fertilizer! $fertilizer$ que consumen los edificios"
+ },
+ "goods_input_glass_add": {
+  "en": "@glass! $glass$ input",
+  "es": "Insumo de $glass$ @glass!"
+ },
+ "goods_input_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ consumed by buildings",
+  "es": "La cantidad de @glass! $glass$ que consumen los edificios"
+ },
+ "goods_input_iron_add": {
+  "en": "@iron! $iron$ input",
+  "es": "Insumo de $iron$ @iron!"
+ },
+ "goods_input_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ consumed by buildings",
+  "es": "La cantidad de @iron! $iron$ que consumen los edificios"
+ },
+ "goods_input_lead_add": {
+  "en": "@lead! $lead$ input",
+  "es": "Insumo de $lead$ @lead!"
+ },
+ "goods_input_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ consumed by buildings",
+  "es": "La cantidad de @lead! $lead$ que consumen los edificios"
+ },
+ "goods_input_opium_add": {
+  "en": "@opium! $opium$ input",
+  "es": "Insumo de $opium$ @opium!"
+ },
+ "goods_input_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ consumed by buildings",
+  "es": "La cantidad de @opium! $opium$ que consumen los edificios"
+ },
+ "goods_input_radios_add": {
+  "en": "@radios! $radios$ input",
+  "es": "Insumo de $radios$ @radios!"
+ },
+ "goods_input_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ consumed by buildings",
+  "es": "La cantidad de @radios! $radios$ que consumen los edificios"
+ },
+ "goods_input_radios_mult": {
+  "en": "@radios![Nbsp]$radios$ input",
+  "es": "Insumo de $radios$[Nbsp]@radios!"
+ },
+ "goods_input_radios_mult_desc": {
+  "en": "The amount of @radios![Nbsp]$radios$ consumed by buildings",
+  "es": "La cantidad de @radios![Nbsp]$radios$ que consumen los edificios"
+ },
+ "goods_input_sulfur_add": {
+  "en": "@sulfur! $sulfur$ input",
+  "es": "Insumo de $sulfur$ @sulfur!"
+ },
+ "goods_input_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ consumed by buildings",
+  "es": "La cantidad de @sulfur! $sulfur$ que consumen los edificios"
+ },
+ "goods_input_telephones_add": {
+  "en": "@telephones! $telephones$ input",
+  "es": "Insumo de $telephones$ @telephones!"
+ },
+ "goods_input_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ consumed by buildings",
+  "es": "La cantidad de @telephones! $telephones$ que consumen los edificios"
+ },
+ "goods_input_transportation_add": {
+  "en": "@transportation! $transportation$ input",
+  "es": "Insumo de $transportation$ @transportation!"
+ },
+ "goods_input_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ consumed by buildings",
+  "es": "La cantidad de @transportation! $transportation$ que consumen los edificios"
+ },
+ "goods_output_coal_add": {
+  "en": "@coal! $coal$ output",
+  "es": "Producción de $coal$ @coal!"
+ },
+ "goods_output_coal_add_desc": {
+  "en": "The amount of @coal! $coal$ produced by buildings",
+  "es": "La cantidad de @coal! $coal$ que producen los edificios"
+ },
+ "goods_output_fertilizer_add": {
+  "en": "@fertilizer! $fertilizer$ Output",
+  "es": "Producción de $fertilizer$ @fertilizer!"
+ },
+ "goods_output_fertilizer_add_desc": {
+  "en": "The amount of @fertilizer! $fertilizer$ produced by buildings",
+  "es": "La cantidad de @fertilizer! $fertilizer$ que producen los edificios"
+ },
+ "goods_output_fine_art_add": {
+  "en": "@fine_art! $fine_art$ output",
+  "es": "Producción de $fine_art$ @fine_art!"
+ },
+ "goods_output_fine_art_add_desc": {
+  "en": "The amount of @fine_art! $fine_art$ produced by buildings",
+  "es": "La cantidad de @fine_art! $fine_art$ que producen los edificios"
+ },
+ "goods_output_glass_add": {
+  "en": "@glass! $glass$ output",
+  "es": "Producción de $glass$ @glass!"
+ },
+ "goods_output_glass_add_desc": {
+  "en": "The amount of @glass! $glass$ produced by buildings",
+  "es": "La cantidad de @glass! $glass$ que producen los edificios"
+ },
+ "goods_output_iron_add": {
+  "en": "@iron! $iron$ output",
+  "es": "Producción de $iron$ @iron!"
+ },
+ "goods_output_iron_add_desc": {
+  "en": "The amount of @iron! $iron$ produced by buildings",
+  "es": "La cantidad de @iron! $iron$ que producen los edificios"
+ },
+ "goods_output_lead_add": {
+  "en": "@lead! $lead$ output",
+  "es": "Producción de $lead$ @lead!"
+ },
+ "goods_output_lead_add_desc": {
+  "en": "The amount of @lead! $lead$ produced by buildings",
+  "es": "La cantidad de @lead! $lead$ que producen los edificios"
+ },
+ "goods_output_opium_add": {
+  "en": "@opium! $opium$ output",
+  "es": "Producción de $opium$ @opium!"
+ },
+ "goods_output_opium_add_desc": {
+  "en": "The amount of @opium! $opium$ produced by buildings",
+  "es": "La cantidad de @opium! $opium$ que producen los edificios"
+ },
+ "goods_output_radios_add": {
+  "en": "@radios! $radios$ output",
+  "es": "Producción de $radios$ @radios!"
+ },
+ "goods_output_radios_add_desc": {
+  "en": "The amount of @radios! $radios$ produced by buildings",
+  "es": "La cantidad de @radios! $radios$ que producen los edificios"
+ },
+ "goods_output_radios_mult": {
+  "en": "Building @radios! $radios$ output",
+  "es": "Producción de $radios$ @radios! de edificios"
+ },
+ "goods_output_radios_mult_desc": {
+  "en": "A bonus or penalty to the amount of @radios! $radios$ produced by buildings",
+  "es": "Una bonificación o penalización a la cantidad de @radios! $radios$ que producen los edificios"
+ },
+ "goods_output_sulfur_add": {
+  "en": "@sulfur! $sulfur$ output",
+  "es": "Producción de $sulfur$ @sulfur!"
+ },
+ "goods_output_sulfur_add_desc": {
+  "en": "The amount of @sulfur! $sulfur$ produced by buildings",
+  "es": "La cantidad de @sulfur! $sulfur$ que producen los edificios"
+ },
+ "goods_output_telephones_add": {
+  "en": "@telephones! $telephones$ output",
+  "es": "Producción de $telephones$ @telephones!"
+ },
+ "goods_output_telephones_add_desc": {
+  "en": "The amount of @telephones! $telephones$ produced by buildings",
+  "es": "La cantidad de @telephones! $telephones$ que producen los edificios"
+ },
+ "goods_output_transportation_add": {
+  "en": "@transportation! $transportation$ output",
+  "es": "Producción de $transportation$ @transportation!"
+ },
+ "goods_output_transportation_add_desc": {
+  "en": "The amount of @transportation! $transportation$ produced by buildings",
+  "es": "La cantidad de @transportation! $transportation$ que producen los edificios"
+ },
+ "institution_health_system": {
+  "en": "Ministry of Health",
+  "es": "Ministerio de Sanidad"
+ },
+ "institution_police": {
+  "en": "Ministry of Public Safety",
+  "es": "Ministerio de Seguridad Pública"
+ },
+ "institution_police_desc": {
+  "en": "The public agencies that police the country or, under [GetLawType('law_private_policing').GetName], license the private firms that do and back them up.",
+  "es": "Los organismos públicos que vigilan el país o que, bajo [GetLawType('law_private_policing').GetName], conceden licencia a las empresas privadas que lo hacen y las respaldan."
+ },
+ "institution_schools": {
+  "en": "Ministry of Education",
+  "es": "Ministerio de Educación"
+ },
+ "iron": {
+  "en": "Structural Metals",
+  "es": "Metales estructurales"
+ },
+ "law_cultural_exclusion": {
+  "en": "Assimilatory Citizenship",
+  "es": "Ciudadanía asimilacionista"
+ },
+ "law_cultural_exclusion_desc": {
+  "en": "The state is open to all who are willing to merge into the national identity. Naturalization is a process of cultural adoption, requiring the abandonment of outside traditions.",
+  "es": "El Estado está abierto a todo el que quiera fundirse en la identidad nacional. La naturalización es un proceso de adopción cultural que exige abandonar las tradiciones ajenas."
+ },
+ "law_dedicated_police_desc": {
+  "en": "A national police force of career officers with standardized training and a professional chain of command, paid from the national budget and answerable to the government.",
+  "es": "Una fuerza de policía nacional de agentes de carrera con formación normalizada y una cadena de mando profesional, pagada con el presupuesto nacional y responsable ante el gobierno."
+ },
+ "law_ethnostate": {
+  "en": "Ancestral Citizenship",
+  "es": "Ciudadanía ancestral"
+ },
+ "law_ethnostate_desc": {
+  "en": "Citizenship is an immutable trait derived from the 'Right of Blood.' Only those of the core ancestral lineage are recognized as legal members of the nation.",
+  "es": "La ciudadanía es un rasgo inmutable derivado del «derecho de sangre». Solo quienes pertenecen al linaje ancestral central son reconocidos como miembros legales de la nación."
+ },
+ "law_local_police_desc": {
+  "en": "Towns and counties raise their own constables and watchmen, paid from local rates and overseen by magistrates and local notables. The force is public, but local elites decide what it does.",
+  "es": "Las ciudades y los condados reclutan a sus propios alguaciles y vigilantes, pagados con impuestos locales y supervisados por magistrados y notables locales. La fuerza es pública, pero las élites locales deciden qué hace."
+ },
+ "law_militarized_police_desc": {
+  "en": "A national police organized along military lines, with military ranks, equipment and training. It answers to the government as an instrument of its will, which it carries out more effectively and more violently.",
+  "es": "Una policía nacional organizada según líneas militares, con rangos, equipamiento y formación militares. Responde ante el gobierno como instrumento de su voluntad, que ejecuta con mayor eficacia y mayor violencia."
+ },
+ "law_multicultural": {
+  "en": "Universal Citizenship",
+  "es": "Ciudadanía universal"
+ },
+ "law_multicultural_desc": {
+  "en": "Citizenship is a matter of residency and the 'Right of Soil.' Every resident born within the borders is a full member of the nation, regardless of heritage or creed.",
+  "es": "La ciudadanía es una cuestión de residencia y del «derecho de suelo». Todo residente nacido dentro de las fronteras es miembro de pleno derecho de la nación, sea cual sea su origen o credo."
+ },
+ "law_national_supremacy": {
+  "en": "Cultural Citizenship",
+  "es": "Ciudadanía cultural"
+ },
+ "law_national_supremacy_desc": {
+  "en": "Membership in the nation is determined by adherence to its primary spirit. Citizenship is reserved for those who share the language, traditions, and heritage of the dominant culture.",
+  "es": "La pertenencia a la nación se determina por la adhesión a su espíritu primordial. La ciudadanía queda reservada a quienes comparten el idioma, las tradiciones y el patrimonio de la cultura dominante."
+ },
+ "law_no_police_desc": {
+  "en": "No structured police force exists. Communities, landlords and, in the last resort, the army keep what order there is.",
+  "es": "No existe ninguna fuerza policial estructurada. Las comunidades, los terratenientes y, en último extremo, el ejército mantienen el poco orden que hay."
+ },
+ "law_racial_segregation": {
+  "en": "Racialized Citizenship",
+  "es": "Ciudadanía racializada"
+ },
+ "law_racial_segregation_desc": {
+  "en": "Citizenship is stratified based on perceived racial or ancestral proximity. Preference is given to specific lineages regardless of their cultural or linguistic adoption.",
+  "es": "La ciudadanía se estratifica según la proximidad racial o ancestral percibida. Se da preferencia a determinados linajes con independencia de que hayan adoptado la cultura o la lengua."
+ },
+ "law_subjecthood": {
+  "en": "Sovereign Subjecthood",
+  "es": "Régimen de súbditos soberano"
+ },
+ "law_subjecthood_desc": {
+  "en": "The state defines its people foremostly as subjects of a sovereign. Legal identity is tied to local tradition and community loyalty rather than a centralized national status.",
+  "es": "El Estado define a su población ante todo como súbditos de un soberano. La identidad jurídica depende de la tradición local y de la lealtad a la comunidad, y no de un estatus nacional centralizado."
+ },
+ "lawgroup_policing_desc": {
+  "en": "Who provides ordinary law enforcement, who pays for it, and to whom it answers.",
+  "es": "Quién presta el servicio policial ordinario, quién lo paga y ante quién responde."
+ },
+ "lead": {
+  "en": "Conductive and Base Metals",
+  "es": "Metales conductores y básicos"
+ },
+ "no_veterancy": {
+  "en": "Recruit",
+  "es": "Recluta"
+ },
+ "opium": {
+  "en": "Drugs",
+  "es": "Drogas"
+ },
+ "pm_artificial_fertilizers": {
+  "en": "Basic Chemical Production",
+  "es": "Producción química básica"
+ },
+ "pm_film_art": {
+  "en": "Moving Pictures",
+  "es": "Cine"
+ },
+ "pm_improved_fertilizer": {
+  "en": "Refined Chemical Processes",
+  "es": "Procesos químicos refinados"
+ },
+ "pm_nitrogen_fixation": {
+  "en": "Synthetic Nitrogen Production",
+  "es": "Producción de nitrógeno sintético"
+ },
+ "pm_no_maintenance": {
+  "en": "No Maintenance",
+  "es": "Sin mantenimiento"
+ },
+ "pm_photographic_art": {
+  "en": "Photography",
+  "es": "Fotografía"
+ },
+ "pmg_fertilizer_production": {
+  "en": "Chemicals Production",
+  "es": "Producción de productos químicos"
+ },
+ "pmg_passenger_trains": {
+  "en": "Rolling Stock",
+  "es": "Material rodante"
+ },
+ "prestige_good_brunn_type_engines": {
+  "en": "High-Performance Engines",
+  "es": "Motores de alto rendimiento"
+ },
+ "prestige_good_generic_fertilizer": {
+  "en": "Specialty Reagents",
+  "es": "Reactivos especializados"
+ },
+ "prestige_good_generic_opium": {
+  "en": "Potent Formulations",
+  "es": "Formulaciones potentes"
+ },
+ "prestige_good_radiola_radios": {
+  "en": "Precision Wireless Gear",
+  "es": "Equipos inalámbricos de precisión"
+ },
+ "principle_advanced_research_1_desc": {
+  "en": "The bloc cultivates a class of engineers and scientific thinkers, drawing the intelligentsia toward member states.",
+  "es": "El bloque cultiva una clase de ingenieros y pensadores científicos y atrae a la élite intelectual hacia los países miembros."
+ },
+ "principle_advanced_research_2_desc": {
+  "en": "Research output picks up: innovation capacity grows and engineers gain political weight.",
+  "es": "La producción investigadora se acelera: crece la capacidad de innovación y los ingenieros ganan peso político."
+ },
+ "principle_advanced_research_3_desc": {
+  "en": "Directed research accelerates across all tech trees, with academics gaining visible political influence.",
+  "es": "La investigación dirigida se acelera en todos los árboles tecnológicos, y los académicos ganan una influencia política visible."
+ },
+ "radios": {
+  "en": "Wireless Telecommunication Gear",
+  "es": "Equipos de telecomunicación inalámbrica"
+ },
+ "second_rate_citizen": {
+  "en": "Provisional Acceptance",
+  "es": "Aceptación provisional"
+ },
+ "state_building_construction_sector_max_level_add_desc": {
+  "en": "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land.",
+  "es": "Cada punto permite que un [concept_state|l] aloje a #v 1 000#! personas más antes de que el [concept_migration_crowding|l] reduzca su [concept_migration_pull|l], por poca [concept_arable_land|l] que tenga. El $state_migration_crowding_density_mult$ del Estado multiplica a estas personas igual que a su tierra."
+ },
+ "stockpile_navy_requirement_coal_add": {
+  "en": "Navy @coal! $coal$ Consumption",
+  "es": "Consumo de $coal$ @coal! de la armada"
+ },
+ "stockpile_navy_requirement_coal_add_desc": {
+  "en": "Increases how much @coal! $coal$ the navy consumes",
+  "es": "Aumenta la cantidad de @coal! $coal$ que consume la armada"
+ },
+ "sulfur": {
+  "en": "Chemical and Industrial Minerals",
+  "es": "Minerales químicos e industriales"
+ },
+ "telephones": {
+  "en": "Wired Telecommunication Gear",
+  "es": "Equipos de telecomunicación por cable"
+ },
+ "veterancy0": {
+  "en": "Green",
+  "es": "Novato"
+ },
+ "veterancy1": {
+  "en": "Regular",
+  "es": "Regular"
+ },
+ "veterancy2": {
+  "en": "Disciplined",
+  "es": "Disciplinado"
+ },
+ "veterancy3": {
+  "en": "Hardened",
+  "es": "Curtido"
+ },
+ "veterancy4": {
+  "en": "Seasoned",
+  "es": "Curtido"
+ }
+}

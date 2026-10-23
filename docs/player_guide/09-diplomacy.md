@@ -49,6 +49,12 @@ Excavation Concession and Excavation Permit leave nothing on the state. They
 let the other side dig there only while the treaty is in force and the conceding
 country owns the state, so a dig under one stops as soon as either ends.
 
+The four Grand Monument articles appear in a draft only where they have
+something to act on. Surrender a Monument is listed for a conceding country
+that owns a monument it could give up, Return Cultural Property for one that
+holds a trophy from the other side's lands, and the two excavation articles for
+one with a buried site open to the other side.
+
 ![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
 ### Treaty articles by purpose

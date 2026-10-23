@@ -115,10 +115,18 @@ te_demog_workforce_lines_apply = {
 	}
 }
 
-# THIS = a state: its medicine is still spreading, more than the snap behind its targets in all (te_demog_medicine_gap),
-# so Medical Outreach would do something. False for a state without the census's medicine.
+# THIS = a state without Medical Outreach: the decree would change its next count. Some value is still far enough behind
+# its target that the count, at the state's share of the gap as it stands, would leave it at least the snap short, where
+# the decree's line takes it further. False at the targets, for a value the count puts on its target anyway, where the
+# share of the gap is at its cap, and for a state without the census's medicine.
 te_demog_medicine_behind = {
-	te_demog_medicine_gap > te_demog_k_medicine_snap
+	te_demog_medicine_left_next >= te_demog_k_medicine_snap
+}
+
+# THIS = a state holding Medical Outreach: the decree still changes its next count, judged at the share of the gap
+# without the decree's line, so a decree lasts exactly where it could be issued.
+te_demog_medicine_behind_without_outreach = {
+	te_demog_medicine_left_without_outreach >= te_demog_k_medicine_snap
 }
 
 # ---- Phase 2 step 2: the pension setting (te_demog_work_effects.txt) -------------------------------------------

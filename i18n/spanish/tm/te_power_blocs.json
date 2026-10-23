@@ -1,0 +1,254 @@
+{
+ "power_bloc_banking_union_bool": {
+  "en": "One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily",
+  "es": "Un único supervisor y una única garantía de depósitos en toda la unión: los países adoptantes obtienen #G −25%#! de probabilidad de colapso bancario, #G −25%#! de impulso aleatorio y #G +1#! de intervención bancaria en reserva, y un colapso en otra parte de la moneda se propaga mucho menos fácilmente"
+ },
+ "power_bloc_can_enact_decree_cultural_emigration_initiative_bool": {
+  "en": "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]",
+  "es": "Puede promulgar el [Concept('concept_decree', 'decreto')] Iniciativa de emigración cultural"
+ },
+ "power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc": {
+  "en": "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries.",
+  "es": "Puede promulgar el [concept_decree|l] Iniciativa de emigración cultural, que fomenta la emigración de quienes no pertenecen a las [concept_primary_cultures|l] a otros países."
+ },
+ "power_bloc_can_enact_greenest_grass_campaign_bool": {
+  "en": "Can Enact Greenest Grass Campaign",
+  "es": "Puede promulgar la Campaña de la hierba más verde"
+ },
+ "power_bloc_can_enact_greenest_grass_campaign_bool_desc": {
+  "en": "Can enact the Greenest Grass Campaign [concept_decree], an upgraded version of the Greener Grass Campaign decree.",
+  "es": "Puede promulgar el [concept_decree|l] Campaña de la hierba más verde, una versión mejorada del decreto Campaña de fomento de la inmigración."
+ },
+ "power_bloc_can_give_development_aid_bool": {
+  "en": "Members Can Give Development Assistance",
+  "es": "Los miembros pueden dar ayuda al desarrollo"
+ },
+ "power_bloc_can_give_development_aid_bool_desc": {
+  "en": "Can give development assistance to another country, at the cost of [concept_authority], raising the [concept_sol] of its poorest and increasing its dependence on the donor.",
+  "es": "Puede dar ayuda al desarrollo a otro país, con un coste de [concept_authority|l], elevando el [concept_sol|l] de sus habitantes más pobres y aumentando su dependencia del donante."
+ },
+ "power_bloc_can_give_education_aid_bool": {
+  "en": "Members Can Give Education Aid",
+  "es": "Los miembros pueden dar ayuda educativa"
+ },
+ "power_bloc_can_give_education_aid_bool_desc": {
+  "en": "Can give educational assistance to another country, at the cost of [concept_bureaucracy], increasing [concept_education_access] in the target country.",
+  "es": "Puede dar ayuda educativa a otro país, con un coste de [concept_bureaucracy|l], aumentando el [concept_education_access|l] en el país objetivo."
+ },
+ "power_bloc_can_give_healthcare_aid_bool": {
+  "en": "Members Can Give Healthcare Aid",
+  "es": "Los miembros pueden dar ayuda sanitaria"
+ },
+ "power_bloc_can_give_healthcare_aid_bool_desc": {
+  "en": "Can give healthcare aid to another country, at the cost of [concept_bureaucracy], decreasing mortality, increasing [concept_sol], and reducing [concept_pollution_impact] in the target country.",
+  "es": "Puede dar ayuda sanitaria a otro país, con un coste de [concept_bureaucracy|l], reduciendo la mortalidad, aumentando el [concept_sol|l] y reduciendo el [concept_pollution_impact|l] en el país objetivo."
+ },
+ "power_bloc_can_give_humanitarian_aid_bool": {
+  "en": "Members Can Give Humanitarian Aid",
+  "es": "Los miembros pueden dar ayuda humanitaria"
+ },
+ "power_bloc_can_give_humanitarian_aid_bool_desc": {
+  "en": "Can give humanitarian aid to assist the poor in another country, increasing [concept_influence] and improving relations.",
+  "es": "Puede dar ayuda humanitaria para asistir a los pobres de otro país, aumentando la [concept_influence|l] y mejorando las relaciones."
+ },
+ "power_bloc_can_give_science_aid_2_bool": {
+  "en": "Members Can Give Large Science Aid",
+  "es": "Los miembros pueden dar ayuda científica a gran escala"
+ },
+ "power_bloc_can_give_science_aid_2_bool_desc": {
+  "en": "Can give science aid to another country, spending [concept_innovation], increasing [concept_technology_spread] in the target country.",
+  "es": "Puede dar ayuda científica a otro país, gastando [concept_innovation|l], aumentando la [concept_technology_spread|l] en el país objetivo."
+ },
+ "power_bloc_can_give_science_aid_bool": {
+  "en": "Members Can Give Science Aid",
+  "es": "Los miembros pueden dar ayuda científica"
+ },
+ "power_bloc_can_give_science_aid_bool_desc": {
+  "en": "Can give science aid to another country, spending [concept_innovation], increasing [concept_technology_spread] in the target country.",
+  "es": "Puede dar ayuda científica a otro país, gastando [concept_innovation|l], aumentando la [concept_technology_spread|l] en el país objetivo."
+ },
+ "power_bloc_can_give_security_aid_bool": {
+  "en": "Members Can Give Security Aid",
+  "es": "Los miembros pueden dar ayuda de seguridad"
+ },
+ "power_bloc_can_give_security_aid_bool_desc": {
+  "en": "Can give security aid to another country, at the cost of [concept_bureaucracy], decreasing [concept_turmoil] in the target country.",
+  "es": "Puede dar ayuda de seguridad a otro país, con un coste de [concept_bureaucracy|l], reduciendo la [concept_turmoil|l] en el país objetivo."
+ },
+ "power_bloc_can_use_crisis_resolution_bool": {
+  "en": "Leader Can Use Crisis Resolution [concept_diplomatic_action]",
+  "es": "El líder puede usar la [concept_diplomatic_action|l] Resolución de crisis"
+ },
+ "power_bloc_can_use_crisis_resolution_bool_desc": {
+  "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')], at the cost of [concept_authority].",
+  "es": "El líder puede usar la [concept_diplomatic_action|l] Resolución de crisis para resolver crisis y estabilizar a los [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')|l], con un coste de [concept_authority|l]."
+ },
+ "power_bloc_can_use_extend_influence_bool": {
+  "en": "Can Use Extend Influence [concept_diplomatic_action]",
+  "es": "Puede usar la [concept_diplomatic_action|l] Extender influencia"
+ },
+ "power_bloc_can_use_extend_influence_bool_desc": {
+  "en": "Can use the Extend Influence [concept_diplomatic_action] to increase the leverage of the [concept_power_bloc] in a [concept_country].",
+  "es": "Puede usar la [concept_diplomatic_action|l] Extender influencia para aumentar la potestad del [concept_power_bloc|l] en un [concept_country|l]."
+ },
+ "power_bloc_can_use_join_united_nations_bool": {
+  "en": "Leader Can Require UN Membership",
+  "es": "El líder puede exigir la pertenencia a la ONU"
+ },
+ "power_bloc_can_use_join_united_nations_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
+  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')|l] puede añadir el artículo Exigir pertenencia a la ONU a los tratados, obligando a otro país a ingresar en las Naciones Unidas."
+ },
+ "power_bloc_fiscal_backstop_bool": {
+  "en": "The leader is lender of last resort to every adopter, and their overvaluation premium is halved",
+  "es": "El líder es prestamista de última instancia de todos los países adoptantes, y su prima de sobrevaloración se reduce a la mitad"
+ },
+ "power_bloc_leader_can_force_cultural_acceptance_bool": {
+  "en": "Leader Can Force Cultural Acceptance",
+  "es": "El líder puede imponer la aceptación cultural"
+ },
+ "power_bloc_leader_can_force_cultural_acceptance_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] to add the leader's [concept_primary_cultures] to their primary cultures.",
+  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')|l] puede obligar a los [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')|l] a añadir las [concept_primary_cultures|l] del líder a las suyas."
+ },
+ "power_bloc_leader_can_force_cultural_adoption_bool": {
+  "en": "Leader Can Force Cultural Adoption",
+  "es": "El líder puede imponer la adopción cultural"
+ },
+ "power_bloc_leader_can_force_cultural_adoption_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
+  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')|l] puede obligar a los [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')|l] a sustituir sus [concept_primary_cultures|l] por las del líder."
+ },
+ "power_bloc_leader_can_peacefully_annex_bool": {
+  "en": "Leader Can Peacefully Annex Subjects",
+  "es": "El líder puede anexionar súbditos de forma pacífica"
+ },
+ "power_bloc_leader_can_peacefully_annex_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can peacefully annex [Concept('concept_subject', '$concept_subjects$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
+  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')|l] puede anexionar de forma pacífica [Concept('concept_subject', '$concept_subjects$')|l] sin una [concept_diplomatic_play|l], si el súbdito tiene un [concept_liberty_desire|l] bajo y un [Concept('concept_gdp', 'PIB')] suficientemente bajo."
+ },
+ "power_bloc_monetary_cooperation_bool": {
+  "en": "The leader’s central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month",
+  "es": "El banco central del líder respalda a todos los miembros: #G −0,5#! puntos de prima de riesgo y #G +1#! de confianza en la paridad al mes"
+ },
+ "power_bloc_reserve_currency_bool": {
+  "en": "The union’s money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium",
+  "es": "El dinero de la unión se atesora en todo el mundo: el líder emite moneda respaldada por esos saldos y puede recortar hasta #G −1#! punto de prima de riesgo, y los países adoptantes obtienen además #G +5%#! de ventaja comercial y #G −0,25#! puntos de prima"
+ },
+ "power_bloc_shared_currency_bool": {
+  "en": "Members may adopt the leader’s currency",
+  "es": "Los miembros pueden adoptar la moneda del líder"
+ },
+ "principle_group_artistic_expression": {
+  "en": "Artistic Expression",
+  "es": "Expresión artística"
+ },
+ "principle_group_artistic_expression_desc": {
+  "en": "The [concept_power_bloc] encourages artistic expression and the development of culture.",
+  "es": "El [concept_power_bloc|l] fomenta la expresión artística y el desarrollo de la cultura."
+ },
+ "principle_group_cultural_plurality": {
+  "en": "Cultural Plurality",
+  "es": "Pluralidad cultural"
+ },
+ "principle_group_cultural_plurality_desc": {
+  "en": "The [concept_power_bloc] encourages cultural plurality and understanding throughout its territories.",
+  "es": "El [concept_power_bloc|l] fomenta la pluralidad cultural y el entendimiento en todos sus territorios."
+ },
+ "principle_group_cultural_unity": {
+  "en": "Cultural Unity",
+  "es": "Unidad cultural"
+ },
+ "principle_group_cultural_unity_desc": {
+  "en": "The [concept_power_bloc] enforces cultural unity among its members in the public sphere.",
+  "es": "El [concept_power_bloc|l] impone la unidad cultural entre sus miembros en la esfera pública."
+ },
+ "principle_group_education": {
+  "en": "Education",
+  "es": "Educación"
+ },
+ "principle_group_education_desc": {
+  "en": "The [concept_power_bloc] encourages education and intellectual development.",
+  "es": "El [concept_power_bloc|l] fomenta la educación y el desarrollo intelectual."
+ },
+ "principle_group_engineering_and_logistics": {
+  "en": "Engineering and Logistics",
+  "es": "Ingeniería y logística"
+ },
+ "principle_group_engineering_and_logistics_desc": {
+  "en": "The [concept_power_bloc] encourages military engineering and logistics development.",
+  "es": "El [concept_power_bloc|l] fomenta la ingeniería militar y el desarrollo de la logística."
+ },
+ "principle_group_environmental_sustainability": {
+  "en": "Environmental Sustainability",
+  "es": "Sostenibilidad medioambiental"
+ },
+ "principle_group_environmental_sustainability_desc": {
+  "en": "The [concept_power_bloc] encourages environmental sustainability and the protection of the environment.",
+  "es": "El [concept_power_bloc|l] fomenta la sostenibilidad medioambiental y la protección del medio ambiente."
+ },
+ "principle_group_global_security": {
+  "en": "Global Security",
+  "es": "Seguridad global"
+ },
+ "principle_group_global_security_desc": {
+  "en": "The [concept_power_bloc] encourages global security and views its mandate as a protector of international peace.",
+  "es": "El [concept_power_bloc|l] fomenta la seguridad global y concibe su mandato como el de protector de la paz internacional."
+ },
+ "principle_group_healthcare": {
+  "en": "Healthcare",
+  "es": "Sanidad"
+ },
+ "principle_group_healthcare_desc": {
+  "en": "The [concept_power_bloc] encourages healthcare and the well-being of its citizens.",
+  "es": "El [concept_power_bloc|l] fomenta la sanidad y el bienestar de sus ciudadanos."
+ },
+ "principle_group_military_training": {
+  "en": "Military Training",
+  "es": "Formación militar"
+ },
+ "principle_group_military_training_desc": {
+  "en": "The [concept_power_bloc] encourages military training and the development of military technology.",
+  "es": "El [concept_power_bloc|l] fomenta la formación militar y el desarrollo de la tecnología militar."
+ },
+ "principle_group_monetary_union": {
+  "en": "Monetary Union",
+  "es": "Unión monetaria"
+ },
+ "principle_group_monetary_union_desc": {
+  "en": "The [concept_power_bloc] binds its members' money together — first their central banks, then their currency, and at last their debts.",
+  "es": "El [concept_power_bloc|l] vincula el dinero de sus miembros: primero sus bancos centrales, luego su moneda y, por último, sus deudas."
+ },
+ "principle_group_multilateral_institutions": {
+  "en": "Multilateral Institutions",
+  "es": "Instituciones multilaterales"
+ },
+ "principle_group_multilateral_institutions_desc": {
+  "en": "The [concept_power_bloc] anchors itself in the international order, building up the United Nations and binding its members through a web of treaties and institutions.",
+  "es": "El [concept_power_bloc|l] se ancla en el orden internacional, refuerza las Naciones Unidas y une a sus miembros mediante una red de tratados e instituciones."
+ },
+ "principle_group_rural": {
+  "en": "Rural Development",
+  "es": "Desarrollo rural"
+ },
+ "principle_group_rural_desc": {
+  "en": "The [concept_power_bloc] encourages rural development and the improvement of rural [concept_infrastructure].",
+  "es": "El [concept_power_bloc|l] fomenta el desarrollo rural y la mejora de las [concept_infrastructure|l] rurales."
+ },
+ "principle_group_urban_planning": {
+  "en": "Urban Planning",
+  "es": "Planificación urbana"
+ },
+ "principle_group_urban_planning_desc": {
+  "en": "The [concept_power_bloc] encourages urban planning and the development of cities.",
+  "es": "El [concept_power_bloc|l] fomenta la planificación urbana y el desarrollo de las ciudades."
+ },
+ "principle_group_welfare": {
+  "en": "Welfare",
+  "es": "Bienestar"
+ },
+ "principle_group_welfare_desc": {
+  "en": "The [concept_power_bloc] encourages welfare and the well-being of its citizens.",
+  "es": "El [concept_power_bloc|l] fomenta la asistencia social y el bienestar de sus ciudadanos."
+ }
+}

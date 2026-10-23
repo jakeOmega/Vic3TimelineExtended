@@ -7,13 +7,28 @@ The mod is written in English. `localization/english/` is the only loc the repo 
 
 None of the generated `.yml` is committed. The translation memory is.
 
+Two languages have one: German (`german/`) and Spanish (`spanish/`), both machine-translated.
+
 ## What's here
 
 | Path | What |
 |---|---|
 | `<language>/BRIEF.md` | The translator's instructions: markup rules, grammar conventions, voice. Every agent run reads it. |
 | `<language>/terms.json` | Terms coined during runs, English → translation (the mod's recurring names that aren't loc keys of their own, plus official game terms agents kept getting wrong). `prepare` adds the ones a chunk contains to its glossary; `check-terms` finds translations that disagree. Add to it whenever a report shows two chunks rendering one term differently. |
-| `<language>/tm/<file>.json` | The translation memory, one file per English loc file. Each key maps to `{"en": <the English it was translated from>, "de": <the translation>}`. Declined country-name forms (`AFU_DAT`, …) have no English key of their own; they carry `"base": <key>` and sit with that key. |
+| `<language>/tm/<file>.json` | The translation memory, one file per English loc file. Each key maps to `{"en": <the English it was translated from>, "de": <the translation>}`; the translation's field is the language's code in `TM_FIELDS` (`"de"`, `"es"`). German's declined country-name forms (`AFU_DAT`, …) have no English key of their own; they carry `"base": <key>` and sit with that key. |
+
+## What differs by language
+
+`scripts/i18n/translate_loc.py` keeps what differs between languages in four tables, each taken from what the base game's own loc does in that language (issue #566 has the survey):
+
+| Table | German | Spanish |
+|---|---|---|
+| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` |
+| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` |
+| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside |
+| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% |
+
+A new language needs a row in each table it differs in, a `BRIEF.md` (copy the nearest one and rewrite its grammar, number, quote and voice sections against the base game's loc in that language), and an empty `terms.json`. Pass `--language <folder>` to every command below; the default is German.
 
 ## When the English changes
 
@@ -49,10 +64,17 @@ The fourth update pass (October 2026) covered 4,954 keys and 74,300 words, 408 o
 
 Without a game install, run `prepare --no-vanilla`. The chunk headers then have no VANILLA TERMS and no base-game keys under REFERENCED KEYS. The fourth pass made up for it with a file listing, for each base-game key the chunks referenced, the inflected forms and surrounding text the memory already gives it, and told the agents to grep the memory for any base-game term (`grep -h -i '<term>' i18n/german/tm/*.json`), since those lines were translated with the official glossary. Expect more guessed genders around base-game concepts than in a run with the game.
 
+The Spanish run (October 2026) translated the whole mod in one pass: 29,120 keys and 404,500 words, half again the German first run. It took about an hour and a half: a glossary chunk of 2,323 names (18 minutes for one agent), then 45 content chunks with eight agents kept running at a time, then a correction chunk of 113 lines. Agents averaged about ten minutes and 220,000 tokens a chunk. One line was rejected, because the brief at first suggested swapping a `GetAdjective` for `GetName`, which the markup check counts as a lost call. What worked, for the next language:
+
+- **Seed `terms.json` before the first content chunk.** The German list's English side, looked up in the base game's loc for the new language (`VanillaTerms`) or taken from the glossary chunk's own renderings, gave about 135 terms before the first content chunk. Pop types, interest groups, vanilla law names (the voting laws) and the UN agencies' acronyms (OMS, ACNUR, CIJ) were the terms agents most often got wrong without one.
+- **Dispatch on a rolling basis, not in waves.** After each merge, add what the report settled to `terms.json`, `refresh` the chunks no agent has started, and send the next one, so eight stay busy and each new chunk carries every term settled so far.
+- **Keep lowercase common nouns out of `terms.json`.** `check-terms` matches the English with its markup, so *peasants* inside `[GetPopType('peasants')]`, or *homeland* used loosely, flags correct lines. Dropping those entries cut 91 mismatches to 39, nearly all of them real.
+- **Expect tier and band names to drift.** A system's level names (the UN authority tiers, the tradecraft tiers, nuclear readiness, the colonial bands, the monetary stance bands) sit as one-word label keys in one chunk while the prose that names them sits in others, and `chunk_glossary` leaves lone words out. Four agents rendered nuclear readiness "Recessed" four ways. The correction chunk took them back to the label keys' wording with `--key-note`s chosen by an English-and-Spanish regex pair per family, each note conditional ("if the word here means something else, keep the line").
+
 `merge` also drops every TM entry, in every file, whose key the English no longer has. In a feature branch that translates only its own files (`prepare --files te_tax`), revert the other TM files it pruned (`git checkout -- i18n/<language>/tm/<file>.json`) so the pruning lands with a translation pass instead.
 
 Runs are resumable: whatever has merged is done, and `prepare` only offers what is still missing or stale. The merge check passes 97% of the base game's own English/German pairs unchanged; what it rejects there is vanilla German that has drifted from its English.
 
 ## Corrections from players
 
-Edit the key's `"de"` value in `<language>/tm/*.json`, keeping `"en"` as it is, and commit. The next deploy ships it.
+Edit the key's translation (`"de"`, `"es"`) in `<language>/tm/*.json`, keeping `"en"` as it is, and commit. The next deploy ships it.

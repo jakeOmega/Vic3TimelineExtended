@@ -26,8 +26,13 @@ return_cultural_property = {
 	# demands and gifts do (owner, 2026-10-12; the source paid).
 	maintenance_paid_by = target_country
 
+	# Shown only where there is something to return (owner, 2026-10-23): the
+	# prospective source holds a trophy whose origin the other country owns, as
+	# possible asks (below).
 	visible = {
 		gm_system_enabled = yes
+		exists = scope:other_country
+		gm_tr_country_holds_from = { CLAIMANT = scope:other_country }
 	}
 
 	# ROOT is the prospective source, the holder that gives the trophies back,
