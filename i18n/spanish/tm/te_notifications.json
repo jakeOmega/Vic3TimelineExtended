@@ -2281,7 +2281,7 @@
  },
  "notification_un_war_surcharge_notice_desc": {
   "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country hosting a UN peacekeeping or stabilisation mission.",
-  "es": "Hemos añadido un objetivo de guerra sin un mandato militar de las Naciones Unidas. Con su fuerza actual, la Asamblea hace que cada objetivo de este tipo cueste infamia adicional: 2 en el nivel Consolidado, 4 en el Fuerte y 10 en el Supranacional, y el doble a partir del Fuerte contra un país que albergue una misión de mantenimiento de la paz o de estabilización de la ONU."
+  "es": "Hemos añadido un objetivo de guerra sin un mandato militar de las Naciones Unidas. Con su fuerza actual, la Asamblea hace que cada objetivo de este tipo cueste infamia adicional: 2 en la categoría Consolidada, 4 en la Fuerte y 10 en la Supranacional, y el doble a partir de la Fuerte contra un país que albergue una misión de mantenimiento de la paz o de estabilización de la ONU."
  },
  "notification_un_war_surcharge_notice_name": {
   "en": "A War Without a Mandate",
