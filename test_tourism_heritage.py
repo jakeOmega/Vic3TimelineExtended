@@ -142,5 +142,29 @@ class HeritageMoves(unittest.TestCase):
             self.assertEqual(scores[state] - moved[state], left, state)
 
 
+def moved_totals():
+    totals = collections.Counter()
+    for m in gen.load_moves():
+        totals[m.state] += m.points
+    return totals
+
+
+class ScoreNotes(unittest.TestCase):
+    def test_annotate_is_idempotent_and_touches_only_comments(self):
+        moves = gen.load_moves()
+        once = gen.annotate(read(TOURISM), moves)
+        self.assertEqual(gen.annotate(once, moves), once)
+
+        def strip(t):
+            return re.sub(r"#.*", "", t)
+        self.assertEqual(strip(once), strip(read(TOURISM)))
+
+    def test_scores_carry_their_note(self):
+        t = read(TOURISM)
+        for state, n in moved_totals().items():
+            self.assertRegex(t, rf"s:{state} \}}\n\t\tvalue = \d+ #[^\n]*\({n} moved to monuments: "
+                                rf"tourism_heritage_generated\.txt\)", state)
+
+
 if __name__ == "__main__":
     unittest.main()

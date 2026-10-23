@@ -121,7 +121,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DISTRICT_OF_COLUMBIA }
-		value = 70 # Location of the capital, historically significant even from its founding. Assessed on its geographical and planned potential.
+		value = 70 # Location of the capital, historically significant even from its founding. Assessed on its geographical and planned potential. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WEST_VIRGINIA }
@@ -293,7 +293,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_PELOPONNESE }
-		value = 95 # Core of ancient Greece (Olympia, Mycenae), beautiful coastline and mountains.
+		value = 95 # Core of ancient Greece (Olympia, Mycenae), beautiful coastline and mountains. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_IONIAN_ISLANDS }
@@ -477,7 +477,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CAMBODIA }
-		value = 90 # Angkor Wat and surrounding temples are a top-tier world historical site. Tonle Sap lake is a unique feature.
+		value = 90 # Angkor Wat and surrounding temples are a top-tier world historical site. Tonle Sap lake is a unique feature. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SAVOY }
@@ -493,7 +493,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TUSCANY }
-		value = 100 # Cradle of the Renaissance (Florence, Siena, Pisa), iconic rolling hills, and coastline.
+		value = 100 # Cradle of the Renaissance (Florence, Siena, Pisa), iconic rolling hills, and coastline. (10 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ROMAGNA }
@@ -501,7 +501,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LAZIO }
-		value = 100 # Rome. The Colosseum, Forum, Vatican (technically post-1836 state but the site is ancient). The epicenter of an empire. Unmatched in history.
+		value = 100 # Rome. The Colosseum, Forum, Vatican (technically post-1836 state but the site is ancient). The epicenter of an empire. Unmatched in history. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_NEVADA }
@@ -601,11 +601,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LIMA }
-		value = 85 # Major pre-Columbian sites and the historical center of Spanish power in South America.
+		value = 85 # Major pre-Columbian sites and the historical center of Spanish power in South America. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ICA }
-		value = 90 # Nazca Lines, Paracas culture, and proximity to Cuzco.
+		value = 90 # Nazca Lines, Paracas culture, and proximity to Cuzco. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_AREQUIPA }
@@ -801,7 +801,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_UPPER_EGYPT }
-		value = 100 # Luxor, Karnak, Valley of the Kings. The heartland of Ancient Egypt.
+		value = 100 # Luxor, Karnak, Valley of the Kings. The heartland of Ancient Egypt. (50 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EGYPTIAN_DESERT }
@@ -1001,7 +1001,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ILE_DE_FRANCE }
-		value = 100 # Paris. Versailles. The historical and cultural heart of France for centuries.
+		value = 100 # Paris. Versailles. The historical and cultural heart of France for centuries. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ELBE }
@@ -1093,7 +1093,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ZEALAND }
-		value = 80 # Contains the capital Copenhagen and numerous historic castles.
+		value = 80 # Contains the capital Copenhagen and numerous historic castles. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WESTERN_NORWAY }
@@ -1121,7 +1121,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CRETE }
-		value = 95 # Minoan civilization (Knossos), dramatic gorges (Samaria), and a stunning coastline.
+		value = 95 # Minoan civilization (Knossos), dramatic gorges (Samaria), and a stunning coastline. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WEST_INDIES }
@@ -1149,11 +1149,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SINDH }
-		value = 65 # Indus Valley Civilization sites (Mohenjo-Daro) are of immense historical importance.
+		value = 65 # Indus Valley Civilization sites (Mohenjo-Daro) are of immense historical importance. (25 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_RAJPUTANA }
-		value = 80 # "Land of Kings." Forts and palaces of Jaipur, Jodhpur, Udaipur. Desert landscapes.
+		value = 80 # "Land of Kings." Forts and palaces of Jaipur, Jodhpur, Udaipur. Desert landscapes. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CIRCARS }
@@ -1217,7 +1217,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DELHI }
-		value = 85 # Seat of many empires, with major historical sites from the Sultanate and Mughal periods.
+		value = 85 # Seat of many empires, with major historical sites from the Sultanate and Mughal periods. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_AWADH }
@@ -1297,7 +1297,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ATTICA }
-		value = 100 # Athens, the Acropolis, the Parthenon. Ground zero for Western civilization.
+		value = 100 # Athens, the Acropolis, the Parthenon. Ground zero for Western civilization. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SKOPIA }
@@ -1413,7 +1413,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WESTERN_MALI }
-		value = 60 # Historic city of Djenn� (Great Mosque).
+		value = 60 # Historic city of Djenn� (Great Mosque). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TIMBUKTU }
@@ -1577,11 +1577,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LEBANON }
-		value = 85 # Ancient Phoenician cities (Byblos, Tyre), Roman ruins (Baalbek), and scenic mountains.
+		value = 85 # Ancient Phoenician cities (Byblos, Tyre), Roman ruins (Baalbek), and scenic mountains. (25 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SYRIA }
-		value = 90 # Damascus, Aleppo, Palmyra, and Crac des Chevaliers represent a staggering depth of history.
+		value = 90 # Damascus, Aleppo, Palmyra, and Crac des Chevaliers represent a staggering depth of history. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ALEPPO }
@@ -1589,7 +1589,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BAGHDAD }
-		value = 85 # Historical capital of the Abbasid Caliphate, ancient Babylon nearby.
+		value = 85 # Historical capital of the Abbasid Caliphate, ancient Babylon nearby. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BASRA }
@@ -1597,7 +1597,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MOSUL }
-		value = 75 # Ancient Nineveh and other Assyrian capitals.
+		value = 75 # Ancient Nineveh and other Assyrian capitals. (25 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LARISTAN }
@@ -1621,7 +1621,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_FARS }
-		value = 90 # Persepolis and Pasargadae, the heart of the ancient Persian Empire.
+		value = 90 # Persepolis and Pasargadae, the heart of the ancient Persian Empire. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ISFAHAN }
@@ -1685,7 +1685,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EASTERN_THRACE }
-		value = 95 # Constantinople/Istanbul. Crossroads of empires, immense historical significance.
+		value = 95 # Constantinople/Istanbul. Crossroads of empires, immense historical significance. (35 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HUDAVENDIGAR }
@@ -1777,7 +1777,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ANNAM }
-		value = 75 # Imperial city of Hue, coastline.
+		value = 75 # Imperial city of Hue, coastline. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LAOS }
@@ -1821,7 +1821,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KANTO }
-		value = 90 # Contains Edo/Tokyo and nearby attractions like Nikko and Mount Fuji.
+		value = 90 # Contains Edo/Tokyo and nearby attractions like Nikko and Mount Fuji. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TOKAI }
@@ -1921,7 +1921,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BEIJING }
-		value = 95 # Imperial capital for centuries. Forbidden City, Temple of Heaven, and access to the Great Wall.
+		value = 95 # Imperial capital for centuries. Forbidden City, Temple of Heaven, and access to the Great Wall. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SHANXI }
@@ -1929,7 +1929,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_XIAN }
-		value = 95 # Home to the Terracotta Army and the ancient capital of several dynasties.
+		value = 95 # Home to the Terracotta Army and the ancient capital of several dynasties. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_NINGXIA }
@@ -2169,7 +2169,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_INGRIA }
-		value = 90 # St. Petersburg. The imperial capital, designed to rival the great cities of Europe. Palaces and canals.
+		value = 90 # St. Petersburg. The imperial capital, designed to rival the great cities of Europe. Palaces and canals. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CHERSON }
@@ -2185,7 +2185,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CAMPANIA }
-		value = 95 # Naples, Pompeii, Herculaneum, Amalfi Coast, and Vesuvius. An incredible concentration of attractions.
+		value = 95 # Naples, Pompeii, Herculaneum, Amalfi Coast, and Vesuvius. An incredible concentration of attractions. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CALABRIA }
@@ -2437,7 +2437,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CHIAPAS }
-		value = 85 # Mayan ruins (Palenque), Sumidero Canyon, and mountainous jungle.
+		value = 85 # Mayan ruins (Palenque), Sumidero Canyon, and mountainous jungle. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SAN_SALVADOR }
@@ -2669,7 +2669,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_AGRA }
-		value = 85 # Taj Mahal. Need I say more? Also Agra Fort and Fatehpur Sikri.
+		value = 85 # Taj Mahal. Need I say more? Also Agra Fort and Fatehpur Sikri. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BUNDELKHAND }

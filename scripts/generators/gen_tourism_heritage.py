@@ -16,16 +16,24 @@ monument, kind, reason); rows with 0 points are the revisit lists, kept for pass
 test_tourism_heritage.py fails CI when the committed file is stale:
 
     python3 scripts/generators/gen_tourism_heritage.py [--check]
+
+--annotate instead notes each moved state's total on its score's comment in
+tourism.txt, so a reader of the table sees it; tourism.txt is hand-written, so
+this is a one-shot editor, never a regenerator. Re-run it with the generator.
 """
 import argparse
 import collections
 import csv
 import os
+import re
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CSV = os.path.join(REPO, "scripts", "generators", "data", "tourism_heritage_moves.csv")
 OUT = os.path.join(REPO, "common", "script_values", "tourism_heritage_generated.txt")
+TOURISM = os.path.join(REPO, "common", "script_values", "tourism.txt")
+NOTE = " ({} moved to monuments: tourism_heritage_generated.txt)"
+NOTE_RE = re.compile(r" \(\d+ moved to monuments: tourism_heritage_generated\.txt\)")
 
 Move = collections.namedtuple("Move", "state points monument kind reason")
 
@@ -96,11 +104,34 @@ def render(moves):
     return "\n".join(lines) + "\n"
 
 
+def annotate(text, moves):
+    """text with each moved state's total noted on its score's comment, any earlier note replaced."""
+    totals = collections.Counter()
+    for m in moves:
+        totals[m.state] += m.points
+    for state, points in totals.items():
+        pattern = re.compile(rf"(state_region = s:{state} \}}\n\t\tvalue = \d+)( #[^\n]*)?")
+        match = pattern.search(text)
+        if not match:
+            raise ValueError(f"{state}: no score in tourism.txt")
+        comment = NOTE_RE.sub("", match.group(2) or " #").rstrip()
+        text = text[:match.start()] + match.group(1) + comment + NOTE.format(points) + text[match.end():]
+    return text
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--check", action="store_true", help="exit 1 when the committed file is stale; write nothing")
+    parser.add_argument("--annotate", action="store_true", help="note each move on its score in tourism.txt")
     args = parser.parse_args()
     moves = load_moves()
+    if args.annotate:
+        with open(TOURISM, encoding="utf-8-sig", newline="") as f:
+            text = f.read()
+        with open(TOURISM, "w", encoding="utf-8-sig", newline="") as f:
+            f.write(annotate(text, moves))
+        print(f"noted {len({m.state for m in moves})} states in {os.path.relpath(TOURISM, REPO)}")
+        return 0
     text = render(moves)
     if args.check:
         try:
