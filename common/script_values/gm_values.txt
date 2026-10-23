@@ -126,7 +126,7 @@ gm_step_legitimacy = 2
 gm_step_ig = 1
 gm_step_teardown = 3
 gm_step_vanity = -1
-gm_step_tourism = 0.25
+gm_step_tourism = 0.10
 gm_step_culture = 1
 
 gm_step_local_crown = 0.10
@@ -408,7 +408,7 @@ gm_state_disp_step_pct = {
 	max = 100
 }
 
-# Its Tourism Industry throughput here (gm_local_tourism), as last refreshed.
+# Its tourism output here (gm_local_tourism), as last refreshed.
 gm_state_disp_tourism = {
 	value = 0
 	if = {

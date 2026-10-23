@@ -933,8 +933,9 @@ class ForeignTests(unittest.TestCase):
                              .startswith(b"\xef\xbb\xbf" * 2), name)
             body = squash(raw_block_at(strip_comments(text), rf"(?m)^{name}\s*=\s*\{{"))
             for part in ("kind = directed", "maintenance_paid_by = target_country", "required_inputs = { state }",
-                         "visible = { gm_system_enabled = yes }",
-                         "gm_arch_country_offers_site = { WHO = scope:other_country }",
+                         # shown only where the host has a site open to the sponsor (owner, 2026-10-23)
+                         "visible = { gm_system_enabled = yes exists = scope:other_country "
+                         "gm_arch_country_offers_site = { WHO = scope:other_country } }",
                          "state_valid_trigger = { scope:input = { owner = root "
                          "gm_arch_state_offers_site = { WHO = scope:other_country } } }",
                          f"no_duplicate_treaty_article = {{ ARTICLE_TYPE = {name} }}",
@@ -943,6 +944,9 @@ class ForeignTests(unittest.TestCase):
                          "on_withdrawal = {} on_break = {}"):
                 self.assertIn(part, body, f"{name}: {part}")
             self.assertNotIn("set_variable", body, f"{name}: nothing written on the state")
+            # a war goal enforcing the article checks possible, so it asks for the site too
+            self.assertIn("gm_arch_country_offers_site = { WHO = scope:other_country }",
+                          squash(block(strip_comments(text), "possible")), name)
         self.assertIn("gm_arch_method_antiquarian_ok = yes", self.arts["archaeological_concession"])
         self.assertIn("gm_arch_method_systematic_ok = yes", squash(block(strip_comments(self.arts["excavation_permit"]),
                                                                          "can_ratify")))

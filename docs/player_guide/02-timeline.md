@@ -515,7 +515,7 @@ Biotechnology unlocks.
 The mod adds 37 wonders: landmarks of the twentieth and twenty-first centuries.
 Each costs 5,000 construction, has one level, and exists once in the world.
 Wonders, like the base game's monuments and the Space Program, count as
-monuments: each one raises Tourism Industry throughput in its state by 25% and
+monuments: each one raises tourism output in its state by 10% and
 adds 3 cultural pull ([Where cultural pull comes
 from](11-influence.md#where-cultural-pull-comes-from)).
 
@@ -684,8 +684,8 @@ ends with an Open Journal Entry button.
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name
 and dedication, its grandeur with a bar toward its next step, its levels and age
-once finished, and the Tourism
-Industry throughput and local effect it gives that state. Hover a line for its
+once finished, and the tourism
+output and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
 the Timeline Extended window, where the buttons are. While you can carry the
 monument off as a trophy, the card has a Carry It Off button. A Grand Monument
@@ -723,8 +723,8 @@ Every monument, whatever it honors, gives:
 
 - +25 prestige for each step of standing grandeur, counting every monument that
   is not contested.
-- +25% Tourism Industry throughput in its state for each step of its own
-  grandeur, so five grandeur matches one of the base game's monuments.
+- +10% tourism output in its state for each step of its own grandeur, so five
+  grandeur matches one wonder.
 - +1 cultural pull for each step of standing grandeur (steps of 10, 20, 30 and
   so on), with no ceiling.
 
@@ -783,8 +783,8 @@ The state's one Grand Monument building stands at level 1 whatever stands
 there; each monument keeps its own levels. Each monument counts on its own: its dedication gives its own effect in the state and in the nation
 while its message stands, its interest groups approve or object, and it ages and
 can be contested on its own. A civic obelisk beside a crown column adds to the
-Petty Bourgeoisie's approval, not to the crown's legitimacy, and Tourism
-Industry throughput counts every monument's grandeur together.
+Petty Bourgeoisie's approval, not to the crown's legitimacy, and tourism
+output counts every monument's grandeur together.
 
 The first monument is the grandest: once a new monument raised beside it has
 its dedication and name, the grander of the two stands first. Each of the others
@@ -856,7 +856,7 @@ the monuments' own pull; the others taper fast. Mothballed halves them. Monument
 
 | Unique dedication | Carried by | Per step |
 |---|---|---|
-| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, on top of the monuments' own pull and with no ceiling, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
+| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, on top of the monuments' own pull and with no ceiling, and +5% tourism output in its state; the Intelligentsia approve |
 | Epigraphic Archive | Inscriptions and lost libraries: the Rosetta Stone, the Temple of Dendera, the Mesha Stele, the Library of Ashurbanipal, the Dead Sea Scrolls and 10 more | +2 innovation cap and +2% technology spread, and +10% University throughput in its state; the Intelligentsia approve |
 | Seat of the Throne | Royal palaces: Topkapı Palace, the Red Fort, Sans-Souci Palace, the Royal Palace of Benin and 6 more | +3% authority |
 | Royal Pantheon | Royal tombs and statues: the Alexander Column, the Basilica of Superga, Nikkō Tōshō-gū and 4 more | +5% loyalists from high legitimacy |
@@ -869,7 +869,7 @@ adds a little more: The Mandate of Heaven (the Temple of Heaven, Seat of the
 Throne and +1 legitimacy), To the Grande Armée (the Arc de Triomphe, Martial
 Glory and +3% prestige), The Glory of Athens (the Parthenon, Ancestral
 Antiquity and +2% influence) and The First Emperor's Army (the Terracotta Army,
-Ancestral Antiquity and +25% Tourism Industry throughput in its state). La
+Ancestral Antiquity and +10% tourism output in its state). La
 Scala, the Teatro di San Carlo, the Jantar Mantar, the Shalimar Gardens, the
 Jardim Botânico and the Muhammad Ali Mosque have none.
 
@@ -1050,7 +1050,7 @@ choice starts no wait.
 | Policy | Gives | Costs | When it is worth it |
 |---|---|---|---|
 | Standard | Nothing changes. | Nothing. | The default. |
-| Open to the Public | The Tourism Industry throughput each monument gives ×1.5, and anniversaries about twice as often. | Maintenance ×1.5. | Monuments that stand beside a Tourism Industry. |
+| Open to the Public | The tourism output each monument gives ×1.5, and anniversaries about twice as often. | Maintenance ×1.5. | Monuments that stand beside a Tourism Industry. |
 | State Ceremonial | Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5. | Tourism from each monument ×0.5. | Low legitimacy with regime monuments standing. |
 | Mothballed | No maintenance. | Prestige and cultural pull from monuments, and each monument's tourism and local effect, ×0.5; no anniversaries. | Hard times or debt. |
 

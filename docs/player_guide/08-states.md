@@ -30,7 +30,7 @@ tooltip breaks the numbers down.
 | Seabed Licences | On a coastal state, once your country has had its first share of seabed licences | The state's ocean basin, the licences its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licences](02-timeline.md#seabed-licences). |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |
-| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: Tourism Industry throughput and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
+| Grand Monument card | While a Grand Monument stands in the state, yours or another country's | The monument's status, name and dedication, its grandeur with a bar toward its next step, its levels and age once finished, and what it gives the state: tourism output and its dedication's local effect. A contested monument also names its Old Supporters and the group it is Resented By. On your own state the arrow at its corner opens the Grand Monuments tab of the Timeline Extended window; see [The extended timeline](02-timeline.md#grand-monuments). |
 | Grand Monument (Under Construction) card | While a Grand Monument is being built in the state | The levels built, the grandeur they come to, what a level finished now adds, whether levels are still being built, and on your own state the Dedicate button. |
 
 In every version of the mod, the birth, death and workforce effects of laws,
@@ -199,14 +199,17 @@ Throughput.
 
 ### Tourism output
 
-Two sources on the card set a state's output bonus:
+Three sources on the card set a state's output bonus:
 
 | Source | Bonus |
 |---|---|
-| Base Appeal | A fixed score for each state region, from its scenery, climate and history. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. Nothing changes it. |
+| Base Appeal | A score for each state region, from its scenery, climate and townscape. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. A region's historical monuments count under Monuments and in its Grand Monuments instead, so their share goes with them: Attica's Acropolis takes 40 of its 100, and Base Appeal reads +60% while the Parthenon gives it back. The tooltip says how much has moved. |
 | Cities | +100% for the largest city in the world, 5% less for each place below it, nothing below 20th. See [World city rankings](#world-city-rankings). |
+| Monuments | +10% for each monument. The wonders that stood in 1836 give more: the Taj Mahal +40%, Angkor Wat +30%, and Hagia Sophia, the Vatican, the Forbidden City, Saint Basil's Cathedral and the White House +20%; the Great Mosque of Djenné gives +20% once rebuilt in Eastern Mali. |
 
-The card's "All modifiers" line adds everything else that changes output. An
+The card's "All modifiers" line adds everything else that changes output. A
+Grand Monument adds +10% for each step of its grandeur (see [Grand
+monuments](02-timeline.md#grand-monuments)). An
 Airport or Spaceport adds +15% per level, scaled by staffing. A Highway adds +5%
 on the Civil, Electric Civil and Autonomous Highway methods and +2.5% on the
 Industrial and Electric Industrial ones. Laws add between
@@ -225,15 +228,14 @@ toward its cap:
 | Excess Infrastructure | The infrastructure the state produces less what its buildings use: +25% at 10,000, +50% at 30,000, +75% at 90,000. Each point adds less than the one before. | +100%, never quite reached |
 | Art | +1% per Creative Industry level up to 20, +0.25% up to 100, +0.05% up to 500, +0.01% up to 1,500 | +70% |
 | Parks | +25% with a National Park, rising with Base Appeal to +37.5% | +37.5% |
-| Monuments | +10% for a Skyscraper, +25% for each monument | none |
+| Skyscraper | +10% | none |
 
 Railways and Highways raise Excess Infrastructure by supplying infrastructure.
 Each building you add uses some, so a crowded industrial state has little to
 spare for visitors.
 
 The "All modifiers" line for throughput also carries the Promote Tourism decree
-(+50%), a Grand Monument (+25% for each step of its grandeur, see [Grand
-monuments](02-timeline.md#grand-monuments)) and bonuses from events.
+(+50%) and bonuses from events.
 
 ## World city rankings
 
@@ -459,8 +461,9 @@ Electric Telegraph, Modern Nursing, Radio, the World Wide Web and Telemedicine
 are researched. A party to the Global Pandemic Response, the convention that
 founds the World Health Organization, closes a further share, larger as the
 UN's enforcement rises. Under Full, the Medical Outreach decree closes a
-further fifth of the gap at each count in one state, and it ends once the
-state has caught up. Turmoil raises deaths from accidents and
+further fifth of the gap at each count in one state. It can be issued only in a
+state whose next count would leave its medicine short of the targets, and it
+ends once the state has caught up. Turmoil raises deaths from accidents and
 violence, by half at full turmoil. Where the map marks a state with malaria
 (most of tropical Africa, parts of Indonesia and the Pacific islands), deaths
 from infection run higher, more so with severe malaria, until Malaria

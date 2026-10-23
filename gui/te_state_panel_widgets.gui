@@ -344,6 +344,26 @@ types te_state_panel_widget_types
 							}
 						}
 					}
+
+					### Monuments are uncapped (+10% each, more for the 1836
+					### wonders), so there is no headroom to draw.
+					te_state_meter = {
+						blockoverride "meter_tooltip" {
+							tooltip = "te_state_tourism_monuments_tt"
+						}
+
+						te_state_stat_row = {
+							blockoverride "row_icon_texture" {
+								texture = "gfx/interface/icons/building_icons/statue_of_liberty.dds"
+							}
+							blockoverride "row_label" {
+								text = "[concept_tourism_monuments]"
+							}
+							blockoverride "row_value" {
+								raw_text = "[State.MakeScope.ScriptValue('tourism_bonus_from_monuments')|+=0%]"
+							}
+						}
+					}
 				}
 
 				### THROUGHPUT
@@ -442,22 +462,21 @@ types te_state_panel_widget_types
 						}
 					}
 
-					### Monuments are uncapped (+25% each), so there is no
-					### headroom to draw.
+					### A Skyscraper's flat +10%: no headroom to draw.
 					te_state_meter = {
 						blockoverride "meter_tooltip" {
-							tooltip = "te_state_tourism_monuments_tt"
+							tooltip = "te_state_tourism_skyscraper_tt"
 						}
 
 						te_state_stat_row = {
 							blockoverride "row_icon_texture" {
-								texture = "gfx/interface/icons/building_icons/statue_of_liberty.dds"
+								texture = "gfx/interface/icons/building_icons/skyscraper.dds"
 							}
 							blockoverride "row_label" {
-								text = "[concept_tourism_monuments]"
+								text = "te_state_tourism_skyscraper_lbl"
 							}
 							blockoverride "row_value" {
-								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_monuments')|+=0%]"
+								raw_text = "[State.MakeScope.ScriptValue('tourism_throughput_from_skyscraper')|+=0%]"
 							}
 						}
 					}
@@ -510,8 +529,8 @@ types te_state_panel_widget_types
 	### uncapped. Left, its status as the journal entry's row shows it
 	### (gm_row_status, the mod's own icons with the word beneath). Right, its
 	### name and dedication (the row's gm_row_title keys), then what it does
-	### here: grandeur with a bar of the step now being filled, its Tourism
-	### Industry throughput and its dedication's local effect, each as last
+	### here: grandeur with a bar of the step now being filled, its tourism
+	### output and its dedication's local effect, each as last
 	### refreshed by gm_state_monthly (gm_state_disp_* in gm_values.txt); the
 	### local effect's name and format come from the custom localization
 	### gm_local_effect_label / _value. Under them, while contested, who wants it

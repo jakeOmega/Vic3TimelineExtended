@@ -70,7 +70,7 @@ building_grand_monument_site = {
 			add = 25
 		}
 
-		# The Tourism Industry throughput pays off where one exists.
+		# The monument's tourism output pays off where a Tourism Industry exists.
 		if = {
 			limit = { has_building = building_tourism_industry }
 			add = 50

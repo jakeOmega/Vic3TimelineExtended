@@ -437,7 +437,7 @@ te_demog_crisis = {
 
 # State scope: how far the census's drifted medicine is behind where it is heading, summed over health-care access and
 # the three treatments (only the shortfalls); 0 for a state without the census's medicine (the Causes of Death plan).
-# Medical Outreach's state_trigger reads it through te_demog_medicine_behind.
+# Medical Outreach's ai_weight reads it.
 te_demog_medicine_gap = {
 	value = 0
 	if = {
@@ -452,6 +452,38 @@ te_demog_medicine_gap = {
 		add = { value = te_demog_treatment_target_maternal subtract = var:te_dg_trt_mat min = 0 }
 		add = { value = te_demog_treatment_target_chronic subtract = var:te_dg_trt_chr min = 0 }
 	}
+}
+
+# State scope: the largest of those four shortfalls; 0 at the targets and for a state without the census's medicine.
+te_demog_medicine_shortfall_max = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_acc
+			has_variable = te_dg_trt_inf
+			has_variable = te_dg_trt_mat
+			has_variable = te_dg_trt_chr
+		}
+		min = { value = te_demog_access_target subtract = var:te_dg_acc }
+		min = { value = te_demog_treatment_target_infection subtract = var:te_dg_trt_inf }
+		min = { value = te_demog_treatment_target_maternal subtract = var:te_dg_trt_mat }
+		min = { value = te_demog_treatment_target_chronic subtract = var:te_dg_trt_chr }
+	}
+}
+
+# State scope: what the next count leaves of that shortfall, at the state's share of the gap as it stands
+# (te_demog_medicine_drift). Under the snap the count puts the value on its target, so Medical Outreach changes the next
+# count only where this is at least the snap (te_demog_medicine_behind); a share of the gap at its cap of 1 leaves 0.
+te_demog_medicine_left_next = {
+	value = te_demog_medicine_shortfall_max
+	multiply = { value = 1 subtract = te_demog_medical_diffusion }
+}
+
+# State scope, a state holding Medical Outreach: the same without the decree's line, so the decree lasts while it still
+# changes the next count (te_demog_medicine_behind_without_outreach).
+te_demog_medicine_left_without_outreach = {
+	value = te_demog_medicine_shortfall_max
+	multiply = { value = 1 subtract = te_demog_medical_diffusion_without_outreach }
 }
 
 # State scope: the global city-size rank (1 = the biggest city, recomputed monthly into
