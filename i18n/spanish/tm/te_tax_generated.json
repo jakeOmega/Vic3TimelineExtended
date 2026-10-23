@@ -1,0 +1,1574 @@
+{
+ "amendment_te_tax_cons_1": {
+  "en": "Consumption Tax Rate 5%",
+  "es": "Tipo impositivo al consumo 5%"
+ },
+ "amendment_te_tax_cons_10": {
+  "en": "Consumption Tax Rate 50%",
+  "es": "Tipo impositivo al consumo 50%"
+ },
+ "amendment_te_tax_cons_10_desc": {
+  "en": "Taxes goods on the taxed-goods list at 50% when pops buy them.",
+  "es": "Grava con un 50% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_11": {
+  "en": "Consumption Tax Rate 55%",
+  "es": "Tipo impositivo al consumo 55%"
+ },
+ "amendment_te_tax_cons_11_desc": {
+  "en": "Taxes goods on the taxed-goods list at 55% when pops buy them.",
+  "es": "Grava con un 55% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_12": {
+  "en": "Consumption Tax Rate 60%",
+  "es": "Tipo impositivo al consumo 60%"
+ },
+ "amendment_te_tax_cons_12_desc": {
+  "en": "Taxes goods on the taxed-goods list at 60% when pops buy them.",
+  "es": "Grava con un 60% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_1_desc": {
+  "en": "Taxes goods on the taxed-goods list at 5% when pops buy them.",
+  "es": "Grava con un 5% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_2": {
+  "en": "Consumption Tax Rate 10%",
+  "es": "Tipo impositivo al consumo 10%"
+ },
+ "amendment_te_tax_cons_2_desc": {
+  "en": "Taxes goods on the taxed-goods list at 10% when pops buy them.",
+  "es": "Grava con un 10% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_3": {
+  "en": "Consumption Tax Rate 15%",
+  "es": "Tipo impositivo al consumo 15%"
+ },
+ "amendment_te_tax_cons_3_desc": {
+  "en": "Taxes goods on the taxed-goods list at 15% when pops buy them.",
+  "es": "Grava con un 15% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_4": {
+  "en": "Consumption Tax Rate 20%",
+  "es": "Tipo impositivo al consumo 20%"
+ },
+ "amendment_te_tax_cons_4_desc": {
+  "en": "Taxes goods on the taxed-goods list at 20% when pops buy them.",
+  "es": "Grava con un 20% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_5": {
+  "en": "Consumption Tax Rate 25%",
+  "es": "Tipo impositivo al consumo 25%"
+ },
+ "amendment_te_tax_cons_5_desc": {
+  "en": "Taxes goods on the taxed-goods list at 25% when pops buy them.",
+  "es": "Grava con un 25% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_6": {
+  "en": "Consumption Tax Rate 30%",
+  "es": "Tipo impositivo al consumo 30%"
+ },
+ "amendment_te_tax_cons_6_desc": {
+  "en": "Taxes goods on the taxed-goods list at 30% when pops buy them.",
+  "es": "Grava con un 30% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_7": {
+  "en": "Consumption Tax Rate 35%",
+  "es": "Tipo impositivo al consumo 35%"
+ },
+ "amendment_te_tax_cons_7_desc": {
+  "en": "Taxes goods on the taxed-goods list at 35% when pops buy them.",
+  "es": "Grava con un 35% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_8": {
+  "en": "Consumption Tax Rate 40%",
+  "es": "Tipo impositivo al consumo 40%"
+ },
+ "amendment_te_tax_cons_8_desc": {
+  "en": "Taxes goods on the taxed-goods list at 40% when pops buy them.",
+  "es": "Grava con un 40% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_cons_9": {
+  "en": "Consumption Tax Rate 45%",
+  "es": "Tipo impositivo al consumo 45%"
+ },
+ "amendment_te_tax_cons_9_desc": {
+  "en": "Taxes goods on the taxed-goods list at 45% when pops buy them.",
+  "es": "Grava con un 45% los bienes de la lista de bienes gravados cuando los colectivos los compran."
+ },
+ "amendment_te_tax_div_1": {
+  "en": "Dividend Tax 2.5%",
+  "es": "Impuesto sobre dividendos 2,5%"
+ },
+ "amendment_te_tax_div_10": {
+  "en": "Dividend Tax 25%",
+  "es": "Impuesto sobre dividendos 25%"
+ },
+ "amendment_te_tax_div_10_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 25%.",
+  "es": "Grava con un 25% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_11": {
+  "en": "Dividend Tax 27.5%",
+  "es": "Impuesto sobre dividendos 27,5%"
+ },
+ "amendment_te_tax_div_11_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 27.5%.",
+  "es": "Grava con un 27,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_12": {
+  "en": "Dividend Tax 30%",
+  "es": "Impuesto sobre dividendos 30%"
+ },
+ "amendment_te_tax_div_12_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 30%.",
+  "es": "Grava con un 30% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_13": {
+  "en": "Dividend Tax 32.5%",
+  "es": "Impuesto sobre dividendos 32,5%"
+ },
+ "amendment_te_tax_div_13_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 32.5%.",
+  "es": "Grava con un 32,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_14": {
+  "en": "Dividend Tax 35%",
+  "es": "Impuesto sobre dividendos 35%"
+ },
+ "amendment_te_tax_div_14_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 35%.",
+  "es": "Grava con un 35% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_15": {
+  "en": "Dividend Tax 37.5%",
+  "es": "Impuesto sobre dividendos 37,5%"
+ },
+ "amendment_te_tax_div_15_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 37.5%.",
+  "es": "Grava con un 37,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_16": {
+  "en": "Dividend Tax 40%",
+  "es": "Impuesto sobre dividendos 40%"
+ },
+ "amendment_te_tax_div_16_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 40%.",
+  "es": "Grava con un 40% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_17": {
+  "en": "Dividend Tax 42.5%",
+  "es": "Impuesto sobre dividendos 42,5%"
+ },
+ "amendment_te_tax_div_17_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 42.5%.",
+  "es": "Grava con un 42,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_18": {
+  "en": "Dividend Tax 45%",
+  "es": "Impuesto sobre dividendos 45%"
+ },
+ "amendment_te_tax_div_18_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 45%.",
+  "es": "Grava con un 45% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_19": {
+  "en": "Dividend Tax 47.5%",
+  "es": "Impuesto sobre dividendos 47,5%"
+ },
+ "amendment_te_tax_div_19_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 47.5%.",
+  "es": "Grava con un 47,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_1_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 2.5%.",
+  "es": "Grava con un 2,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_2": {
+  "en": "Dividend Tax 5%",
+  "es": "Impuesto sobre dividendos 5%"
+ },
+ "amendment_te_tax_div_20": {
+  "en": "Dividend Tax 50%",
+  "es": "Impuesto sobre dividendos 50%"
+ },
+ "amendment_te_tax_div_20_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 50%.",
+  "es": "Grava con un 50% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_2_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 5%.",
+  "es": "Grava con un 5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_3": {
+  "en": "Dividend Tax 7.5%",
+  "es": "Impuesto sobre dividendos 7,5%"
+ },
+ "amendment_te_tax_div_3_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 7.5%.",
+  "es": "Grava con un 7,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_4": {
+  "en": "Dividend Tax 10%",
+  "es": "Impuesto sobre dividendos 10%"
+ },
+ "amendment_te_tax_div_4_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 10%.",
+  "es": "Grava con un 10% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_5": {
+  "en": "Dividend Tax 12.5%",
+  "es": "Impuesto sobre dividendos 12,5%"
+ },
+ "amendment_te_tax_div_5_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 12.5%.",
+  "es": "Grava con un 12,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_6": {
+  "en": "Dividend Tax 15%",
+  "es": "Impuesto sobre dividendos 15%"
+ },
+ "amendment_te_tax_div_6_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 15%.",
+  "es": "Grava con un 15% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_7": {
+  "en": "Dividend Tax 17.5%",
+  "es": "Impuesto sobre dividendos 17,5%"
+ },
+ "amendment_te_tax_div_7_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 17.5%.",
+  "es": "Grava con un 17,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_8": {
+  "en": "Dividend Tax 20%",
+  "es": "Impuesto sobre dividendos 20%"
+ },
+ "amendment_te_tax_div_8_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 20%.",
+  "es": "Grava con un 20% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_div_9": {
+  "en": "Dividend Tax 22.5%",
+  "es": "Impuesto sobre dividendos 22,5%"
+ },
+ "amendment_te_tax_div_9_desc": {
+  "en": "Taxes dividends paid to pops who own private buildings at 22.5%.",
+  "es": "Grava con un 22,5% los dividendos pagados a los colectivos que poseen edificios privados."
+ },
+ "amendment_te_tax_head_1": {
+  "en": "Head Tax 0.05",
+  "es": "Impuesto de capitación 0,05"
+ },
+ "amendment_te_tax_head_10": {
+  "en": "Head Tax 0.5",
+  "es": "Impuesto de capitación 0,5"
+ },
+ "amendment_te_tax_head_10_desc": {
+  "en": "Levies 0.5 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,5 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_11": {
+  "en": "Head Tax 0.55",
+  "es": "Impuesto de capitación 0,55"
+ },
+ "amendment_te_tax_head_11_desc": {
+  "en": "Levies 0.55 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,55 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_12": {
+  "en": "Head Tax 0.6",
+  "es": "Impuesto de capitación 0,6"
+ },
+ "amendment_te_tax_head_12_desc": {
+  "en": "Levies 0.6 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,6 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_13": {
+  "en": "Head Tax 0.65",
+  "es": "Impuesto de capitación 0,65"
+ },
+ "amendment_te_tax_head_13_desc": {
+  "en": "Levies 0.65 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,65 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_14": {
+  "en": "Head Tax 0.7",
+  "es": "Impuesto de capitación 0,7"
+ },
+ "amendment_te_tax_head_14_desc": {
+  "en": "Levies 0.7 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,7 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_15": {
+  "en": "Head Tax 0.75",
+  "es": "Impuesto de capitación 0,75"
+ },
+ "amendment_te_tax_head_15_desc": {
+  "en": "Levies 0.75 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,75 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_16": {
+  "en": "Head Tax 0.8",
+  "es": "Impuesto de capitación 0,8"
+ },
+ "amendment_te_tax_head_16_desc": {
+  "en": "Levies 0.8 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,8 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_17": {
+  "en": "Head Tax 0.85",
+  "es": "Impuesto de capitación 0,85"
+ },
+ "amendment_te_tax_head_17_desc": {
+  "en": "Levies 0.85 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,85 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_18": {
+  "en": "Head Tax 0.9",
+  "es": "Impuesto de capitación 0,9"
+ },
+ "amendment_te_tax_head_18_desc": {
+  "en": "Levies 0.9 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,9 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_19": {
+  "en": "Head Tax 0.95",
+  "es": "Impuesto de capitación 0,95"
+ },
+ "amendment_te_tax_head_19_desc": {
+  "en": "Levies 0.95 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,95 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_1_desc": {
+  "en": "Levies 0.05 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,05 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_2": {
+  "en": "Head Tax 0.1",
+  "es": "Impuesto de capitación 0,1"
+ },
+ "amendment_te_tax_head_20": {
+  "en": "Head Tax 1",
+  "es": "Impuesto de capitación 1"
+ },
+ "amendment_te_tax_head_20_desc": {
+  "en": "Levies 1 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_21": {
+  "en": "Head Tax 1.05",
+  "es": "Impuesto de capitación 1,05"
+ },
+ "amendment_te_tax_head_21_desc": {
+  "en": "Levies 1.05 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,05 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_22": {
+  "en": "Head Tax 1.1",
+  "es": "Impuesto de capitación 1,1"
+ },
+ "amendment_te_tax_head_22_desc": {
+  "en": "Levies 1.1 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,1 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_23": {
+  "en": "Head Tax 1.15",
+  "es": "Impuesto de capitación 1,15"
+ },
+ "amendment_te_tax_head_23_desc": {
+  "en": "Levies 1.15 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,15 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_24": {
+  "en": "Head Tax 1.2",
+  "es": "Impuesto de capitación 1,2"
+ },
+ "amendment_te_tax_head_24_desc": {
+  "en": "Levies 1.2 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,2 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_25": {
+  "en": "Head Tax 1.25",
+  "es": "Impuesto de capitación 1,25"
+ },
+ "amendment_te_tax_head_25_desc": {
+  "en": "Levies 1.25 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,25 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_26": {
+  "en": "Head Tax 1.3",
+  "es": "Impuesto de capitación 1,3"
+ },
+ "amendment_te_tax_head_26_desc": {
+  "en": "Levies 1.3 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,3 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_27": {
+  "en": "Head Tax 1.35",
+  "es": "Impuesto de capitación 1,35"
+ },
+ "amendment_te_tax_head_27_desc": {
+  "en": "Levies 1.35 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,35 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_28": {
+  "en": "Head Tax 1.4",
+  "es": "Impuesto de capitación 1,4"
+ },
+ "amendment_te_tax_head_28_desc": {
+  "en": "Levies 1.4 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,4 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_29": {
+  "en": "Head Tax 1.45",
+  "es": "Impuesto de capitación 1,45"
+ },
+ "amendment_te_tax_head_29_desc": {
+  "en": "Levies 1.45 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,45 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_2_desc": {
+  "en": "Levies 0.1 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,1 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_3": {
+  "en": "Head Tax 0.15",
+  "es": "Impuesto de capitación 0,15"
+ },
+ "amendment_te_tax_head_30": {
+  "en": "Head Tax 1.5",
+  "es": "Impuesto de capitación 1,5"
+ },
+ "amendment_te_tax_head_30_desc": {
+  "en": "Levies 1.5 on each working adult who pays no rural assessment.",
+  "es": "Cobra 1,5 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_3_desc": {
+  "en": "Levies 0.15 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,15 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_4": {
+  "en": "Head Tax 0.2",
+  "es": "Impuesto de capitación 0,2"
+ },
+ "amendment_te_tax_head_4_desc": {
+  "en": "Levies 0.2 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,2 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_5": {
+  "en": "Head Tax 0.25",
+  "es": "Impuesto de capitación 0,25"
+ },
+ "amendment_te_tax_head_5_desc": {
+  "en": "Levies 0.25 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,25 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_6": {
+  "en": "Head Tax 0.3",
+  "es": "Impuesto de capitación 0,3"
+ },
+ "amendment_te_tax_head_6_desc": {
+  "en": "Levies 0.3 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,3 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_7": {
+  "en": "Head Tax 0.35",
+  "es": "Impuesto de capitación 0,35"
+ },
+ "amendment_te_tax_head_7_desc": {
+  "en": "Levies 0.35 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,35 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_8": {
+  "en": "Head Tax 0.4",
+  "es": "Impuesto de capitación 0,4"
+ },
+ "amendment_te_tax_head_8_desc": {
+  "en": "Levies 0.4 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,4 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_head_9": {
+  "en": "Head Tax 0.45",
+  "es": "Impuesto de capitación 0,45"
+ },
+ "amendment_te_tax_head_9_desc": {
+  "en": "Levies 0.45 on each working adult who pays no rural assessment.",
+  "es": "Cobra 0,45 por cada adulto activo que no paga la contribución rural."
+ },
+ "amendment_te_tax_land_1": {
+  "en": "Rural Assessment 0.025",
+  "es": "Contribución rural 0,025"
+ },
+ "amendment_te_tax_land_10": {
+  "en": "Rural Assessment 0.25",
+  "es": "Contribución rural 0,25"
+ },
+ "amendment_te_tax_land_10_desc": {
+  "en": "Assesses 0.25 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,25 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_11": {
+  "en": "Rural Assessment 0.275",
+  "es": "Contribución rural 0,275"
+ },
+ "amendment_te_tax_land_11_desc": {
+  "en": "Assesses 0.275 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,275 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_12": {
+  "en": "Rural Assessment 0.3",
+  "es": "Contribución rural 0,3"
+ },
+ "amendment_te_tax_land_12_desc": {
+  "en": "Assesses 0.3 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,3 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_13": {
+  "en": "Rural Assessment 0.325",
+  "es": "Contribución rural 0,325"
+ },
+ "amendment_te_tax_land_13_desc": {
+  "en": "Assesses 0.325 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,325 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_14": {
+  "en": "Rural Assessment 0.35",
+  "es": "Contribución rural 0,35"
+ },
+ "amendment_te_tax_land_14_desc": {
+  "en": "Assesses 0.35 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,35 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_15": {
+  "en": "Rural Assessment 0.375",
+  "es": "Contribución rural 0,375"
+ },
+ "amendment_te_tax_land_15_desc": {
+  "en": "Assesses 0.375 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,375 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_16": {
+  "en": "Rural Assessment 0.4",
+  "es": "Contribución rural 0,4"
+ },
+ "amendment_te_tax_land_16_desc": {
+  "en": "Assesses 0.4 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,4 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_17": {
+  "en": "Rural Assessment 0.425",
+  "es": "Contribución rural 0,425"
+ },
+ "amendment_te_tax_land_17_desc": {
+  "en": "Assesses 0.425 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,425 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_18": {
+  "en": "Rural Assessment 0.45",
+  "es": "Contribución rural 0,45"
+ },
+ "amendment_te_tax_land_18_desc": {
+  "en": "Assesses 0.45 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,45 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_19": {
+  "en": "Rural Assessment 0.475",
+  "es": "Contribución rural 0,475"
+ },
+ "amendment_te_tax_land_19_desc": {
+  "en": "Assesses 0.475 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,475 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_1_desc": {
+  "en": "Assesses 0.025 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,025 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_2": {
+  "en": "Rural Assessment 0.05",
+  "es": "Contribución rural 0,05"
+ },
+ "amendment_te_tax_land_20": {
+  "en": "Rural Assessment 0.5",
+  "es": "Contribución rural 0,5"
+ },
+ "amendment_te_tax_land_20_desc": {
+  "en": "Assesses 0.5 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,5 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_21": {
+  "en": "Rural Assessment 0.525",
+  "es": "Contribución rural 0,525"
+ },
+ "amendment_te_tax_land_21_desc": {
+  "en": "Assesses 0.525 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,525 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_22": {
+  "en": "Rural Assessment 0.55",
+  "es": "Contribución rural 0,55"
+ },
+ "amendment_te_tax_land_22_desc": {
+  "en": "Assesses 0.55 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,55 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_23": {
+  "en": "Rural Assessment 0.575",
+  "es": "Contribución rural 0,575"
+ },
+ "amendment_te_tax_land_23_desc": {
+  "en": "Assesses 0.575 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,575 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_24": {
+  "en": "Rural Assessment 0.6",
+  "es": "Contribución rural 0,6"
+ },
+ "amendment_te_tax_land_24_desc": {
+  "en": "Assesses 0.6 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,6 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_25": {
+  "en": "Rural Assessment 0.625",
+  "es": "Contribución rural 0,625"
+ },
+ "amendment_te_tax_land_25_desc": {
+  "en": "Assesses 0.625 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,625 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_26": {
+  "en": "Rural Assessment 0.65",
+  "es": "Contribución rural 0,65"
+ },
+ "amendment_te_tax_land_26_desc": {
+  "en": "Assesses 0.65 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,65 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_27": {
+  "en": "Rural Assessment 0.675",
+  "es": "Contribución rural 0,675"
+ },
+ "amendment_te_tax_land_27_desc": {
+  "en": "Assesses 0.675 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,675 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_28": {
+  "en": "Rural Assessment 0.7",
+  "es": "Contribución rural 0,7"
+ },
+ "amendment_te_tax_land_28_desc": {
+  "en": "Assesses 0.7 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,7 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_29": {
+  "en": "Rural Assessment 0.725",
+  "es": "Contribución rural 0,725"
+ },
+ "amendment_te_tax_land_29_desc": {
+  "en": "Assesses 0.725 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,725 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_2_desc": {
+  "en": "Assesses 0.05 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,05 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_3": {
+  "en": "Rural Assessment 0.075",
+  "es": "Contribución rural 0,075"
+ },
+ "amendment_te_tax_land_30": {
+  "en": "Rural Assessment 0.75",
+  "es": "Contribución rural 0,75"
+ },
+ "amendment_te_tax_land_30_desc": {
+  "en": "Assesses 0.75 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,75 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_31": {
+  "en": "Rural Assessment 0.775",
+  "es": "Contribución rural 0,775"
+ },
+ "amendment_te_tax_land_31_desc": {
+  "en": "Assesses 0.775 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,775 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_32": {
+  "en": "Rural Assessment 0.8",
+  "es": "Contribución rural 0,8"
+ },
+ "amendment_te_tax_land_32_desc": {
+  "en": "Assesses 0.8 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,8 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_33": {
+  "en": "Rural Assessment 0.825",
+  "es": "Contribución rural 0,825"
+ },
+ "amendment_te_tax_land_33_desc": {
+  "en": "Assesses 0.825 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,825 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_34": {
+  "en": "Rural Assessment 0.85",
+  "es": "Contribución rural 0,85"
+ },
+ "amendment_te_tax_land_34_desc": {
+  "en": "Assesses 0.85 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,85 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_35": {
+  "en": "Rural Assessment 0.875",
+  "es": "Contribución rural 0,875"
+ },
+ "amendment_te_tax_land_35_desc": {
+  "en": "Assesses 0.875 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,875 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_36": {
+  "en": "Rural Assessment 0.9",
+  "es": "Contribución rural 0,9"
+ },
+ "amendment_te_tax_land_36_desc": {
+  "en": "Assesses 0.9 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,9 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_37": {
+  "en": "Rural Assessment 0.925",
+  "es": "Contribución rural 0,925"
+ },
+ "amendment_te_tax_land_37_desc": {
+  "en": "Assesses 0.925 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,925 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_38": {
+  "en": "Rural Assessment 0.95",
+  "es": "Contribución rural 0,95"
+ },
+ "amendment_te_tax_land_38_desc": {
+  "en": "Assesses 0.95 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,95 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_39": {
+  "en": "Rural Assessment 0.975",
+  "es": "Contribución rural 0,975"
+ },
+ "amendment_te_tax_land_39_desc": {
+  "en": "Assesses 0.975 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,975 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_3_desc": {
+  "en": "Assesses 0.075 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,075 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_4": {
+  "en": "Rural Assessment 0.1",
+  "es": "Contribución rural 0,1"
+ },
+ "amendment_te_tax_land_40": {
+  "en": "Rural Assessment 1",
+  "es": "Contribución rural 1"
+ },
+ "amendment_te_tax_land_40_desc": {
+  "en": "Assesses 1 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_41": {
+  "en": "Rural Assessment 1.025",
+  "es": "Contribución rural 1,025"
+ },
+ "amendment_te_tax_land_41_desc": {
+  "en": "Assesses 1.025 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,025 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_42": {
+  "en": "Rural Assessment 1.05",
+  "es": "Contribución rural 1,05"
+ },
+ "amendment_te_tax_land_42_desc": {
+  "en": "Assesses 1.05 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,05 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_43": {
+  "en": "Rural Assessment 1.075",
+  "es": "Contribución rural 1,075"
+ },
+ "amendment_te_tax_land_43_desc": {
+  "en": "Assesses 1.075 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,075 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_44": {
+  "en": "Rural Assessment 1.1",
+  "es": "Contribución rural 1,1"
+ },
+ "amendment_te_tax_land_44_desc": {
+  "en": "Assesses 1.1 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,1 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_45": {
+  "en": "Rural Assessment 1.125",
+  "es": "Contribución rural 1,125"
+ },
+ "amendment_te_tax_land_45_desc": {
+  "en": "Assesses 1.125 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,125 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_46": {
+  "en": "Rural Assessment 1.15",
+  "es": "Contribución rural 1,15"
+ },
+ "amendment_te_tax_land_46_desc": {
+  "en": "Assesses 1.15 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,15 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_47": {
+  "en": "Rural Assessment 1.175",
+  "es": "Contribución rural 1,175"
+ },
+ "amendment_te_tax_land_47_desc": {
+  "en": "Assesses 1.175 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,175 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_48": {
+  "en": "Rural Assessment 1.2",
+  "es": "Contribución rural 1,2"
+ },
+ "amendment_te_tax_land_48_desc": {
+  "en": "Assesses 1.2 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 1,2 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_4_desc": {
+  "en": "Assesses 0.1 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,1 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_5": {
+  "en": "Rural Assessment 0.125",
+  "es": "Contribución rural 0,125"
+ },
+ "amendment_te_tax_land_5_desc": {
+  "en": "Assesses 0.125 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,125 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_6": {
+  "en": "Rural Assessment 0.15",
+  "es": "Contribución rural 0,15"
+ },
+ "amendment_te_tax_land_6_desc": {
+  "en": "Assesses 0.15 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,15 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_7": {
+  "en": "Rural Assessment 0.175",
+  "es": "Contribución rural 0,175"
+ },
+ "amendment_te_tax_land_7_desc": {
+  "en": "Assesses 0.175 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,175 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_8": {
+  "en": "Rural Assessment 0.2",
+  "es": "Contribución rural 0,2"
+ },
+ "amendment_te_tax_land_8_desc": {
+  "en": "Assesses 0.2 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,2 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_land_9": {
+  "en": "Rural Assessment 0.225",
+  "es": "Contribución rural 0,225"
+ },
+ "amendment_te_tax_land_9_desc": {
+  "en": "Assesses 0.225 on peasants and farmers working agricultural buildings, who then pay no head tax.",
+  "es": "Impone 0,225 a los campesinos y agricultores que trabajan en edificios agrícolas, que entonces no pagan el impuesto de capitación."
+ },
+ "amendment_te_tax_wage_1": {
+  "en": "Wage Tax 2.5%",
+  "es": "Impuesto sobre salarios 2,5%"
+ },
+ "amendment_te_tax_wage_10": {
+  "en": "Wage Tax 25%",
+  "es": "Impuesto sobre salarios 25%"
+ },
+ "amendment_te_tax_wage_10_desc": {
+  "en": "Taxes the wages of employed pops at 25%.",
+  "es": "Grava con un 25% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_11": {
+  "en": "Wage Tax 27.5%",
+  "es": "Impuesto sobre salarios 27,5%"
+ },
+ "amendment_te_tax_wage_11_desc": {
+  "en": "Taxes the wages of employed pops at 27.5%.",
+  "es": "Grava con un 27,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_12": {
+  "en": "Wage Tax 30%",
+  "es": "Impuesto sobre salarios 30%"
+ },
+ "amendment_te_tax_wage_12_desc": {
+  "en": "Taxes the wages of employed pops at 30%.",
+  "es": "Grava con un 30% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_13": {
+  "en": "Wage Tax 32.5%",
+  "es": "Impuesto sobre salarios 32,5%"
+ },
+ "amendment_te_tax_wage_13_desc": {
+  "en": "Taxes the wages of employed pops at 32.5%.",
+  "es": "Grava con un 32,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_14": {
+  "en": "Wage Tax 35%",
+  "es": "Impuesto sobre salarios 35%"
+ },
+ "amendment_te_tax_wage_14_desc": {
+  "en": "Taxes the wages of employed pops at 35%.",
+  "es": "Grava con un 35% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_15": {
+  "en": "Wage Tax 37.5%",
+  "es": "Impuesto sobre salarios 37,5%"
+ },
+ "amendment_te_tax_wage_15_desc": {
+  "en": "Taxes the wages of employed pops at 37.5%.",
+  "es": "Grava con un 37,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_16": {
+  "en": "Wage Tax 40%",
+  "es": "Impuesto sobre salarios 40%"
+ },
+ "amendment_te_tax_wage_16_desc": {
+  "en": "Taxes the wages of employed pops at 40%.",
+  "es": "Grava con un 40% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_17": {
+  "en": "Wage Tax 42.5%",
+  "es": "Impuesto sobre salarios 42,5%"
+ },
+ "amendment_te_tax_wage_17_desc": {
+  "en": "Taxes the wages of employed pops at 42.5%.",
+  "es": "Grava con un 42,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_18": {
+  "en": "Wage Tax 45%",
+  "es": "Impuesto sobre salarios 45%"
+ },
+ "amendment_te_tax_wage_18_desc": {
+  "en": "Taxes the wages of employed pops at 45%.",
+  "es": "Grava con un 45% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_19": {
+  "en": "Wage Tax 47.5%",
+  "es": "Impuesto sobre salarios 47,5%"
+ },
+ "amendment_te_tax_wage_19_desc": {
+  "en": "Taxes the wages of employed pops at 47.5%.",
+  "es": "Grava con un 47,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_1_desc": {
+  "en": "Taxes the wages of employed pops at 2.5%.",
+  "es": "Grava con un 2,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_2": {
+  "en": "Wage Tax 5%",
+  "es": "Impuesto sobre salarios 5%"
+ },
+ "amendment_te_tax_wage_20": {
+  "en": "Wage Tax 50%",
+  "es": "Impuesto sobre salarios 50%"
+ },
+ "amendment_te_tax_wage_20_desc": {
+  "en": "Taxes the wages of employed pops at 50%.",
+  "es": "Grava con un 50% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_2_desc": {
+  "en": "Taxes the wages of employed pops at 5%.",
+  "es": "Grava con un 5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_3": {
+  "en": "Wage Tax 7.5%",
+  "es": "Impuesto sobre salarios 7,5%"
+ },
+ "amendment_te_tax_wage_3_desc": {
+  "en": "Taxes the wages of employed pops at 7.5%.",
+  "es": "Grava con un 7,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_4": {
+  "en": "Wage Tax 10%",
+  "es": "Impuesto sobre salarios 10%"
+ },
+ "amendment_te_tax_wage_4_desc": {
+  "en": "Taxes the wages of employed pops at 10%.",
+  "es": "Grava con un 10% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_5": {
+  "en": "Wage Tax 12.5%",
+  "es": "Impuesto sobre salarios 12,5%"
+ },
+ "amendment_te_tax_wage_5_desc": {
+  "en": "Taxes the wages of employed pops at 12.5%.",
+  "es": "Grava con un 12,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_6": {
+  "en": "Wage Tax 15%",
+  "es": "Impuesto sobre salarios 15%"
+ },
+ "amendment_te_tax_wage_6_desc": {
+  "en": "Taxes the wages of employed pops at 15%.",
+  "es": "Grava con un 15% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_7": {
+  "en": "Wage Tax 17.5%",
+  "es": "Impuesto sobre salarios 17,5%"
+ },
+ "amendment_te_tax_wage_7_desc": {
+  "en": "Taxes the wages of employed pops at 17.5%.",
+  "es": "Grava con un 17,5% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_8": {
+  "en": "Wage Tax 20%",
+  "es": "Impuesto sobre salarios 20%"
+ },
+ "amendment_te_tax_wage_8_desc": {
+  "en": "Taxes the wages of employed pops at 20%.",
+  "es": "Grava con un 20% los salarios de los colectivos empleados."
+ },
+ "amendment_te_tax_wage_9": {
+  "en": "Wage Tax 22.5%",
+  "es": "Impuesto sobre salarios 22,5%"
+ },
+ "amendment_te_tax_wage_9_desc": {
+  "en": "Taxes the wages of employed pops at 22.5%.",
+  "es": "Grava con un 22,5% los salarios de los colectivos empleados."
+ },
+ "te_tax_ig_view_armed_forces_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_armed_forces_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_armed_forces_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_armed_forces_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_armed_forces_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_armed_forces_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_armed_forces_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_armed_forces_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_devout_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_devout_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_devout_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_devout_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_devout_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_devout_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_devout_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_devout_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_industrialists_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_industrialists_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_industrialists_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_industrialists_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_industrialists_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_industrialists_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_industrialists_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_industrialists_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_intelligentsia_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_intelligentsia_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_intelligentsia_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_intelligentsia_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_intelligentsia_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_intelligentsia_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_intelligentsia_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_intelligentsia_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_landowners_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_landowners_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_landowners_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_landowners_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_landowners_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_landowners_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_landowners_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_landowners_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_petty_bourgeoisie_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_rural_folk_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_rural_folk_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_rural_folk_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_rural_folk_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_rural_folk_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_rural_folk_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_rural_folk_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_rural_folk_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_trade_unions_m1": {
+  "en": "Opposes the Tax Code",
+  "es": "Se opone al Código fiscal"
+ },
+ "te_tax_ig_view_trade_unions_m1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_trade_unions_m2": {
+  "en": "Strongly Opposes the Tax Code",
+  "es": "Rechaza firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_trade_unions_m2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_trade_unions_p1": {
+  "en": "Endorses the Tax Code",
+  "es": "Respalda el Código fiscal"
+ },
+ "te_tax_ig_view_trade_unions_p1_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_ig_view_trade_unions_p2": {
+  "en": "Strongly Endorses the Tax Code",
+  "es": "Respalda firmemente el Código fiscal"
+ },
+ "te_tax_ig_view_trade_unions_p2_desc": {
+  "en": "Under the legislated tax code: this group's stance on the taxation law the enacted code comes closest to, counted as it would be for that law. Under the light tax code: how far below the tax level the taxes its members pay are set.",
+  "es": "Con el código fiscal legislado: la postura de este grupo sobre la ley de tributación a la que más se parece el código promulgado, contada como lo sería para esa ley. Con el código fiscal ligero: en qué medida se fijan por debajo del nivel de impuestos los impuestos que pagan sus miembros."
+ },
+ "te_tax_light_react_armed_forces_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_armed_forces_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_armed_forces_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_armed_forces_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_devout_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_devout_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_devout_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_devout_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_industrialists_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_industrialists_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_industrialists_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_industrialists_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_intelligentsia_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_intelligentsia_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_intelligentsia_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_intelligentsia_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_landowners_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_landowners_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_landowners_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_landowners_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_petty_bourgeoisie_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_petty_bourgeoisie_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_petty_bourgeoisie_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_petty_bourgeoisie_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_rural_folk_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_rural_folk_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_rural_folk_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_rural_folk_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_trade_unions_neg": {
+  "en": "Resents Recent Tax Changes",
+  "es": "Disgustado por los cambios fiscales recientes"
+ },
+ "te_tax_light_react_trade_unions_neg_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_react_trade_unions_pos": {
+  "en": "Welcomes Recent Tax Changes",
+  "es": "Satisfecho con los cambios fiscales recientes"
+ },
+ "te_tax_light_react_trade_unions_pos_desc": {
+  "en": "How this group took the light tax code's recent rate changes. It fades over the following months.",
+  "es": "Cómo ha acogido este grupo los cambios recientes de tipos del código fiscal ligero. Se desvanece en los meses siguientes."
+ },
+ "te_tax_light_relief_cons": {
+  "en": "$te_tax_inst_cons$ Relief",
+  "es": "$te_tax_inst_cons$: desgravación"
+ },
+ "te_tax_light_relief_cons_desc": {
+  "en": "The light tax code sets the $te_tax_inst_cons$ below the rate the taxation law sets at the current tax level.",
+  "es": "Con el código fiscal ligero, «$te_tax_inst_cons$» queda por debajo del tipo que fija la ley de tributación en el nivel de impuestos actual."
+ },
+ "te_tax_light_relief_div": {
+  "en": "$te_tax_inst_div$ Relief",
+  "es": "$te_tax_inst_div$: desgravación"
+ },
+ "te_tax_light_relief_div_desc": {
+  "en": "The light tax code sets the $te_tax_inst_div$ below the rate the taxation law sets at the current tax level.",
+  "es": "Con el código fiscal ligero, «$te_tax_inst_div$» queda por debajo del tipo que fija la ley de tributación en el nivel de impuestos actual."
+ },
+ "te_tax_light_relief_head": {
+  "en": "$te_tax_inst_head$ Relief",
+  "es": "$te_tax_inst_head$: desgravación"
+ },
+ "te_tax_light_relief_head_desc": {
+  "en": "The light tax code sets the $te_tax_inst_head$ below the rate the taxation law sets at the current tax level.",
+  "es": "Con el código fiscal ligero, «$te_tax_inst_head$» queda por debajo del tipo que fija la ley de tributación en el nivel de impuestos actual."
+ },
+ "te_tax_light_relief_land": {
+  "en": "$te_tax_inst_land$ Relief",
+  "es": "$te_tax_inst_land$: desgravación"
+ },
+ "te_tax_light_relief_land_desc": {
+  "en": "The light tax code sets the $te_tax_inst_land$ below the rate the taxation law sets at the current tax level.",
+  "es": "Con el código fiscal ligero, «$te_tax_inst_land$» queda por debajo del tipo que fija la ley de tributación en el nivel de impuestos actual."
+ },
+ "te_tax_light_relief_wage": {
+  "en": "$te_tax_inst_wage$ Relief",
+  "es": "$te_tax_inst_wage$: desgravación"
+ },
+ "te_tax_light_relief_wage_desc": {
+  "en": "The light tax code sets the $te_tax_inst_wage$ below the rate the taxation law sets at the current tax level.",
+  "es": "Con el código fiscal ligero, «$te_tax_inst_wage$» queda por debajo del tipo que fija la ley de tributación en el nivel de impuestos actual."
+ },
+ "te_tax_lt_tt_react_cons": {
+  "en": "Paid most by $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$, $ig_devout$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
+  "es": "Pagado sobre todo por $ig_rural_folk$, $ig_trade_unions$, $ig_petty_bourgeoisie$ y $ig_devout$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+ },
+ "te_tax_lt_tt_react_div": {
+  "en": "Paid most by $ig_industrialists$, $ig_landowners$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
+  "es": "Pagado sobre todo por $ig_industrialists$ y $ig_landowners$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+ },
+ "te_tax_lt_tt_react_head": {
+  "en": "Paid most by $ig_trade_unions$, $ig_petty_bourgeoisie$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
+  "es": "Pagado sobre todo por $ig_trade_unions$ y $ig_petty_bourgeoisie$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+ },
+ "te_tax_lt_tt_react_land": {
+  "en": "Paid most by $ig_rural_folk$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
+  "es": "Pagado sobre todo por $ig_rural_folk$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+ },
+ "te_tax_lt_tt_react_wage": {
+  "en": "Paid most by $ig_trade_unions$, $ig_intelligentsia$, $ig_petty_bourgeoisie$. Each interest group reacts by how much of this tax its members pay and by its views on taxation; a reaction that pleases a group counts half. Reactions fade over about six months.",
+  "es": "Pagado sobre todo por $ig_trade_unions$, $ig_intelligentsia$ y $ig_petty_bourgeoisie$. Cada grupo de interés reacciona según qué parte de este impuesto pagan sus miembros y según sus opiniones sobre la tributación; una reacción que satisface al grupo cuenta la mitad. Las reacciones se desvanecen en unos seis meses."
+ },
+ "te_tax_offer_untax_clothes": {
+  "en": "Leave $clothes$ untaxed.",
+  "es": "Dejar sin gravar «$clothes$»."
+ },
+ "te_tax_offer_untax_electricity": {
+  "en": "Leave $electricity$ untaxed.",
+  "es": "Dejar sin gravar «$electricity$»."
+ },
+ "te_tax_offer_untax_fabric": {
+  "en": "Leave $fabric$ untaxed.",
+  "es": "Dejar sin gravar «$fabric$»."
+ },
+ "te_tax_offer_untax_fish": {
+  "en": "Leave $fish$ untaxed.",
+  "es": "Dejar sin gravar «$fish$»."
+ },
+ "te_tax_offer_untax_furniture": {
+  "en": "Leave $furniture$ untaxed.",
+  "es": "Dejar sin gravar «$furniture$»."
+ },
+ "te_tax_offer_untax_grain": {
+  "en": "Leave $grain$ untaxed.",
+  "es": "Dejar sin gravar «$grain$»."
+ },
+ "te_tax_offer_untax_groceries": {
+  "en": "Leave $groceries$ untaxed.",
+  "es": "Dejar sin gravar «$groceries$»."
+ },
+ "te_tax_offer_untax_paper": {
+  "en": "Leave $paper$ untaxed.",
+  "es": "Dejar sin gravar «$paper$»."
+ },
+ "te_tax_offer_untax_services": {
+  "en": "Leave $services$ untaxed.",
+  "es": "Dejar sin gravar «$services$»."
+ },
+ "te_tax_offer_untax_transportation": {
+  "en": "Leave $transportation$ untaxed.",
+  "es": "Dejar sin gravar «$transportation$»."
+ },
+ "te_tax_offer_untax_wood": {
+  "en": "Leave $wood$ untaxed.",
+  "es": "Dejar sin gravar «$wood$»."
+ },
+ "te_tax_tt_offer_untax_clothes": {
+  "en": "The bill and the draft no longer tax $clothes$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$clothes$»."
+ },
+ "te_tax_tt_offer_untax_electricity": {
+  "en": "The bill and the draft no longer tax $electricity$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$electricity$»."
+ },
+ "te_tax_tt_offer_untax_fabric": {
+  "en": "The bill and the draft no longer tax $fabric$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$fabric$»."
+ },
+ "te_tax_tt_offer_untax_fish": {
+  "en": "The bill and the draft no longer tax $fish$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$fish$»."
+ },
+ "te_tax_tt_offer_untax_furniture": {
+  "en": "The bill and the draft no longer tax $furniture$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$furniture$»."
+ },
+ "te_tax_tt_offer_untax_grain": {
+  "en": "The bill and the draft no longer tax $grain$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$grain$»."
+ },
+ "te_tax_tt_offer_untax_groceries": {
+  "en": "The bill and the draft no longer tax $groceries$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$groceries$»."
+ },
+ "te_tax_tt_offer_untax_paper": {
+  "en": "The bill and the draft no longer tax $paper$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$paper$»."
+ },
+ "te_tax_tt_offer_untax_services": {
+  "en": "The bill and the draft no longer tax $services$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$services$»."
+ },
+ "te_tax_tt_offer_untax_transportation": {
+  "en": "The bill and the draft no longer tax $transportation$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$transportation$»."
+ },
+ "te_tax_tt_offer_untax_wood": {
+  "en": "The bill and the draft no longer tax $wood$.",
+  "es": "El proyecto de ley y el borrador ya no gravan «$wood$»."
+ }
+}

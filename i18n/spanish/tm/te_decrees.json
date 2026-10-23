@@ -1,0 +1,142 @@
+{
+ "decree_antiterrorism_campaign": {
+  "en": "Anti-Terrorism Campaign",
+  "es": "Campaña antiterrorista"
+ },
+ "decree_antiterrorism_campaign_desc": {
+  "en": "Anti-Terrorism Campaign allows the government to increase security measures and reduce the risk of terrorist attacks.",
+  "es": "La campaña antiterrorista permite al gobierno aumentar las medidas de seguridad y reducir el riesgo de atentados terroristas."
+ },
+ "decree_bureaucracy_reform": {
+  "en": "Bureaucratic Reform",
+  "es": "Reforma burocrática"
+ },
+ "decree_bureaucracy_reform_desc": {
+  "en": "Bureaucratic Reform allows the government to streamline the [concept_bureaucracy] and reduce corruption.",
+  "es": "La reforma burocrática permite al gobierno agilizar la [concept_bureaucracy|l] y reducir la corrupción."
+ },
+ "decree_cultural_emigration_initiative": {
+  "en": "Cultural Emigration Initiative",
+  "es": "Iniciativa de emigración cultural"
+ },
+ "decree_cultural_emigration_initiative_desc": {
+  "en": "Cultural Emigration Initiative allows the government to encourage citizens to emigrate to other countries.",
+  "es": "La iniciativa de emigración cultural permite al gobierno animar a los ciudadanos a emigrar a otros países."
+ },
+ "decree_cultural_integration": {
+  "en": "Cultural Integration",
+  "es": "Integración cultural"
+ },
+ "decree_cultural_integration_desc": {
+  "en": "Cultural Integration speeds up the process of integrating cultures, increasing cultural acceptance.",
+  "es": "La integración cultural acelera el proceso de integración de culturas, lo que aumenta la aceptación cultural."
+ },
+ "decree_encourage_emigration": {
+  "en": "Encourage Emigration",
+  "es": "Fomentar la emigración"
+ },
+ "decree_encourage_emigration_desc": {
+  "en": "Promote emigration to reduce population pressure through media campaigns and incentives.",
+  "es": "Fomenta la emigración para reducir la presión demográfica mediante campañas en los medios e incentivos."
+ },
+ "decree_greenest_grass_campaign": {
+  "en": "Greenest Grass Campaign",
+  "es": "Campaña de la hierba más verde"
+ },
+ "decree_greenest_grass_campaign_desc": {
+  "en": "A highly effective campaign to encourage migration to a region.",
+  "es": "Una campaña muy eficaz para animar a la migración hacia una región."
+ },
+ "decree_medical_outreach": {
+  "en": "Medical Outreach",
+  "es": "Atención médica comunitaria"
+ },
+ "decree_medical_outreach_behind_tt": {
+  "en": "This state's medicine is still behind what our technology and laws allow",
+  "es": "La medicina de este estado aún está por detrás de lo que permiten nuestra tecnología y nuestras leyes"
+ },
+ "decree_medical_outreach_desc": {
+  "en": "Doctors and nurses go out to train this state's practitioners and staff its clinics, so the newest treatments and the reach of our health system arrive here years sooner.",
+  "es": "Médicos y enfermeras salen a formar a los profesionales de este estado y a dotar de personal sus clínicas, de modo que los tratamientos más recientes y el alcance de nuestro sistema sanitario lleguen aquí años antes."
+ },
+ "decree_migration_invalid_tooltip": {
+  "en": "In a [concept_power_bloc] allowing forced migration.",
+  "es": "En un [concept_power_bloc|l] que permite la migración forzosa."
+ },
+ "decree_natalism_initiative": {
+  "en": "Natalism Initiative",
+  "es": "Iniciativa natalista"
+ },
+ "decree_natalism_initiative_desc": {
+  "en": "Natalism Initiative allows the government to encourage citizens to have more children.",
+  "es": "La iniciativa natalista permite al gobierno animar a los ciudadanos a tener más hijos."
+ },
+ "decree_political_patronage": {
+  "en": "Political Patronage",
+  "es": "Clientelismo político"
+ },
+ "decree_political_patronage_desc": {
+  "en": "Political Patronage allows the government to appoint political allies to key positions in the government.",
+  "es": "El clientelismo político permite al gobierno nombrar a aliados políticos en puestos clave del gobierno."
+ },
+ "decree_pollution_control": {
+  "en": "Pollution Control",
+  "es": "Control de la contaminación"
+ },
+ "decree_pollution_control_desc": {
+  "en": "[concept_pollution_system] Control reduces pollution generation in a state.",
+  "es": "El control de la [concept_pollution_system|l] reduce la generación de contaminación en un estado."
+ },
+ "decree_promote_tourism": {
+  "en": "Promote Tourism",
+  "es": "Promover el turismo"
+ },
+ "decree_promote_tourism_desc": {
+  "en": "Through advertising and investment in [concept_infrastructure], we can increase the number of tourists visiting our [concept_state].",
+  "es": "Mediante la publicidad y la inversión en [concept_infrastructure|l], podemos aumentar el número de turistas que visitan nuestro [concept_state|l]."
+ },
+ "decree_resettlement_recruitment_drive": {
+  "en": "Resettlement Recruitment Drive",
+  "es": "Campaña de captación para el reasentamiento"
+ },
+ "decree_resettlement_recruitment_drive_desc": {
+  "en": "Recruiters for our Settlement Authorities concentrate here. Every Settlement Authority recruits from this state before any other, and may take twice as many of its eligible people each month.",
+  "es": "Los reclutadores de nuestras Autoridades de asentamiento se concentran aquí. Cada Autoridad de asentamiento recluta en este estado antes que en cualquier otro, y puede tomar el doble de personas elegibles cada mes."
+ },
+ "decree_resettlement_recruitment_drive_needs_authority_tt": {
+  "en": "We run at least one Settlement Authority",
+  "es": "Dirigimos al menos una Autoridad de asentamiento"
+ },
+ "decree_subsidize_immigration": {
+  "en": "Subsidize Immigration",
+  "es": "Subvencionar la inmigración"
+ },
+ "decree_subsidize_immigration_desc": {
+  "en": "Subsidize Immigration provides financial assistance to immigrants, encouraging them to settle in our [concept_state].",
+  "es": "Subvencionar la inmigración ofrece ayuda financiera a los inmigrantes y los anima a asentarse en nuestro [concept_state|l]."
+ },
+ "decree_tax_breaks": {
+  "en": "Tax Breaks",
+  "es": "Exenciones fiscales"
+ },
+ "decree_tax_breaks_desc": {
+  "en": "Tax Breaks allows the government to reduce taxes locally, increasing approval.",
+  "es": "Las exenciones fiscales permiten al gobierno reducir los impuestos a nivel local, lo que aumenta la aprobación."
+ },
+ "decree_trade_reform": {
+  "en": "Trade Reform",
+  "es": "Reforma comercial"
+ },
+ "decree_trade_reform_desc": {
+  "en": "Trade Reform allows the government to reduce [concept_tariffs] and increase trade with other countries.",
+  "es": "La reforma comercial permite al gobierno reducir los [concept_tariffs|l] y aumentar el comercio con otros países."
+ },
+ "decree_war_propaganda": {
+  "en": "War Propaganda",
+  "es": "Propaganda de guerra"
+ },
+ "decree_war_propaganda_desc": {
+  "en": "War Propaganda allows the government to increase [concept_war_support].",
+  "es": "La propaganda de guerra permite al gobierno aumentar el [concept_war_support|l]."
+ }
+}
