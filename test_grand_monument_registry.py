@@ -358,7 +358,9 @@ class ModifierTests(unittest.TestCase):
         self.assertAlmostEqual(float(mirror.group(1)), expected, msg=step_name)
 
     def test_national_pairs(self):
-        self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 25)
+        # Policy spec 2026-10-23 § 8: +10 a step plus +1% a step.
+        self.assert_pair("gm_national_prestige", "country_prestige_add", "gm_step_prestige", 10)
+        self.assert_pair("gm_national_prestige_pct", "country_prestige_mult", "gm_step_prestige_pct", 0.01)
         self.assert_pair("gm_national_legitimacy", "country_legitimacy_base_add", "gm_step_legitimacy", 2)
         self.assert_pair("gm_national_teardown", "country_legitimacy_base_add", "gm_step_teardown", 3)
         self.assert_pair("gm_national_vanity", "country_legitimacy_base_add", "gm_step_vanity", -1)
@@ -367,6 +369,13 @@ class ModifierTests(unittest.TestCase):
             self.assert_pair(f"gm_national_{key}", d.national_field, f"gm_step_national_{key}",
                              d.national_step)
         self.assertEqual({d.key for d in DEDICATIONS if d.national_field}, set(NATIONAL))
+
+    def test_prestige_pct_rides_the_standing_steps(self):
+        apply = squash(block(read(EFFECTS), "gm_apply_national_modifiers"))
+        self.assertIn("gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }", apply)
+        self.assertIn("remove_modifier = gm_national_prestige_pct",
+                      squash(block(read(EFFECTS), "gm_remove_national_modifiers")))
+        self.assertIn("gm_display_prestige_pct", loc()["gm_je_val_prestige"])
 
     def test_ig_pairs(self):
         for ig in IGS:

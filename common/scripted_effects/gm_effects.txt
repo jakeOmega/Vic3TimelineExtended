@@ -1090,6 +1090,7 @@ gm_apply_national_modifiers = {
 	je:je_grand_monuments ?= {
 		gm_remove_national_modifiers = yes
 		gm_add_national = { NAME = gm_national_prestige VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }
 		gm_add_national = { NAME = gm_national_legitimacy VAR = gm_s_regime }
 		gm_add_national = { NAME = gm_national_leader VAR = gm_s_leader }
 		gm_add_national = { NAME = gm_national_religious VAR = gm_s_religious }
@@ -1133,6 +1134,7 @@ gm_apply_national_modifiers = {
 # Journal-entry scope.
 gm_remove_national_modifiers = {
 	remove_modifier = gm_national_prestige
+	remove_modifier = gm_national_prestige_pct
 	remove_modifier = gm_national_legitimacy
 	remove_modifier = gm_national_leader
 	remove_modifier = gm_national_religious

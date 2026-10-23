@@ -118,10 +118,12 @@ gm_curve_steps_lin_f5 = {
 # Mirrors of the static modifiers in gm_modifiers.txt, each of which carries
 # exactly one step (the multiplier is the step count). Loc reads these; the
 # registry test pins every pair equal.
-# Prestige: on the 1/n curve, the 1836 landmarks give up to about +180
-# (Egypt). Not too much (owner, 2026-10-19): leading the world in one
-# prestige good gives more, and an unrecognized power cannot be a great power.
-gm_step_prestige = 25
+# Prestige: on the 1/n curve, a flat part and a percentage a step (policy spec
+# 2026-10-23 § 8, owner): monuments alone can't lift a minor far, and they still
+# matter to a great power with a lot of prestige. Egypt's 1836 landmarks give
+# +70 and +7%.
+gm_step_prestige = 10
+gm_step_prestige_pct = 0.01
 gm_step_legitimacy = 2
 gm_step_ig = 1
 gm_step_teardown = 3
@@ -891,6 +893,16 @@ gm_display_prestige = {
 		limit = { has_variable = gm_s_standing }
 		value = var:gm_s_standing
 		multiply = gm_step_prestige
+	}
+}
+
+# The percentage part (a fraction; loc shows it with |%).
+gm_display_prestige_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_standing }
+		value = var:gm_s_standing
+		multiply = gm_step_prestige_pct
 	}
 }
 
