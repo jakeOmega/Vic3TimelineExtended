@@ -2802,7 +2802,7 @@
  monument_events.17.f:0 "The stonemasons have been asked for three estimates: one to take it down, one to change the inscription, and one to clean it."
  monument_events.17.t:0 "What Becomes of the Monument"
  monument_events.2.a:0 "Let it stand as it is, for now"
- monument_events.2.a.tt:0 "The work stands as it is, with no upkeep and no effects, and more may be built on it. Its Dedicate button, on its state's card and under Awaiting Dedication, holds the ceremony again when we are ready.\n\n$monument_events.2.common_tt$"
+ monument_events.2.a.tt:0 "The work stands as it is, with no effects, and more may be built on it. Its Dedicate button, on its state's card and under Awaiting Dedication, holds the ceremony again when we are ready.\n\n$monument_events.2.common_tt$"
  monument_events.2.b:0 "Dedicate it to the republic"
  monument_events.2.b.tt:0 "A monument to the republic. While the country is a republic and still owns it, it lends #v $country_legitimacy_base_add$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_legitimacy')|0]#! for each step of regime [concept_grandeur], counted with our other monuments to the regime. The $ig_intelligentsia$ approve and the $ig_landowners$ object. In [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_republic')|%0]#! $state_loyalists_from_political_movements_mult$ for each step of its own.\n\nIf the republic falls, or the state passes to another country, it becomes #R contested#!.\n\n$monument_events.2.common_tt$"
  monument_events.2.c:0 "Consecrate it"

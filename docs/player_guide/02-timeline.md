@@ -609,7 +609,7 @@ revolution, its leader, its faith or the nation. You build it as a **Grand
 Monument (Under Construction)**: each level costs 1,000 construction, and while
 it is being built it has no upkeep and no effects. Dedicating it finishes it: a
 Grand Monument stands in its place at level 1, keeping the levels it was built
-with, and needs only maintenance for those levels and a small caretaker staff.
+with. It costs nothing to maintain and needs only a small caretaker staff.
 A monument's **grandeur** starts at what its levels were worth when they were
 built and grows as the monument ages (see [A finished monument and its
 age](#a-finished-monument-and-its-age)). The Grand Monuments game rule can
@@ -712,7 +712,7 @@ These sections follow:
 |---|---|---|
 | Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
-| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. The four monument policy buttons are at the foot. |
+| National Effects | Open | A row for each national effect in force: Prestige and Prestige (%), Legitimacy, Cultural Pull, Education Access under Public Education, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. The four monument policy buttons are at the foot. |
 | Awaiting Dedication | Open | Only while one of your Grand Monuments is under construction: a row for each, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
 | Our Monuments | Open | A row for each finished monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
@@ -721,8 +721,8 @@ These sections follow:
 
 Every monument, whatever it honors, gives:
 
-- +25 prestige for each step of standing grandeur, counting every monument that
-  is not contested.
+- +10 prestige and +1% prestige for each step of standing grandeur, counting
+  every monument that is not contested.
 - +10% tourism output in its state for each step of its own grandeur, so five
   grandeur matches one wonder.
 - +1 cultural pull for each step of standing grandeur (steps of 10, 20, 30 and
@@ -753,8 +753,8 @@ from 75 to 225 by 1936.
 | 10 | 15 | 20 | 30 |
 | 25 | 37.5 | 50 | 75 |
 
-It ages while its message stands or while it is kept as heritage, at half the
-rate under Mothballed, and not at all while it is contested. A
+It ages while its message stands or while it is kept as heritage, and not at
+all while it is contested. A
 trophy abroad does not age; it starts again once home. Each anniversary's first
 option adds a tenth of the grandeur it was dedicated with, at least 1, and
 completing an [opportunity](#monument-opportunities) adds 5. Pulling a monument
@@ -852,7 +852,7 @@ It counts only while the monument stands on the dedication it was given on:
 National effects count every monument that carries the same unique dedication
 together, in steps of 5 like the dedications' own, and each in force has its own
 row in National Effects. Ancestral Antiquity's cultural pull tapers slowly, like
-the monuments' own pull; the others taper fast. Mothballed halves them. Monuments of one kind share one:
+the monuments' own pull; the others taper fast. Monuments of one kind share one:
 
 | Unique dedication | Carried by | Per step |
 |---|---|---|
@@ -1044,21 +1044,25 @@ keeps its name.
 
 One policy covers all your monuments. You set it with the four buttons at the
 foot of National Effects, and the overview's last line names the one in force.
-After a change the policy cannot change again for five years, but your first
-choice starts no wait.
+Each policy is the best at one thing, so the cost of choosing one is what the
+others would give. After a change the policy cannot change again for five
+years, but your first choice starts no wait.
 
-| Policy | Gives | Costs | When it is worth it |
-|---|---|---|---|
-| Standard | Nothing changes. | Nothing. | The default. |
-| Open to the Public | The tourism output each monument gives ×1.5, and anniversaries about twice as often. | Maintenance ×1.5. | Monuments that stand beside a Tourism Industry. |
-| State Ceremonial | Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5. | Tourism from each monument ×0.5. | Low legitimacy with regime monuments standing. |
-| Mothballed | No maintenance. | Prestige and cultural pull from monuments, and each monument's tourism and local effect, ×0.5; no anniversaries. | Hard times or debt. |
+| Policy | Gives | When it is worth it |
+|---|---|---|
+| Open to the Public | Tourism output from each monument ×1.5, the tourism of Ancestral Antiquity and the First Emperor's Army included. | Monuments that stand beside a Tourism Industry. |
+| State Ceremonial | Legitimacy and the Leader's authority from monuments also count a quarter of the grandeur of every monument you hold that is not contested, heritage and trophies included, whatever it honors. | Low legitimacy. |
+| Cultural Promotion | Cultural pull from monuments ×1.5, Ancestral Antiquity's included. With the Cultural Hegemony rule off, prestige from monuments ×1.5 instead. | The policy until you choose another. |
+| Public Education | +1% education access in every state for each step of standing grandeur, in steps of 10, 20, 30 and so on. | Literacy still well short of what your people could reach. |
 
-The national effects change at once, and each monument's own at the start of
-the next month. The AI picks each January: Mothballed in hard times or in debt,
-State Ceremonial with legitimacy under 40 and regime monuments standing, Open to
-the Public with a monument in a state with a Tourism Industry, and otherwise
-Standard.
+No policy changes maintenance, which Grand Monuments don't need, or ageing,
+local effects or anniversaries.
+
+The national effects change at once, and each monument's tourism at the start
+of the next month. The AI picks each January: State Ceremonial with legitimacy
+under 40 when the quarter would complete at least a step, Open to the Public
+with a monument in a state with a Tourism Industry, Public Education with
+literacy under 50%, and otherwise Cultural Promotion.
 
 ### Contested monuments
 
@@ -1272,8 +1276,7 @@ pause construction first.
 Every dedication has an anniversary event that can fire once a monument of that
 dedication reaches level 3 and still fits. Each offers a choice between two
 benefits, usually for two interest groups, and the only cost is money. A
-contested or heritage monument holds no anniversaries, and none come while your
-monument policy is Mothballed.
+contested or heritage monument holds no anniversaries.
 
 The AI raises most of its monuments through opportunities. Without one, it raises
 them mainly as a great or major power, in a state with a
