@@ -251,8 +251,10 @@ uses the ranking.
 The census is experimental, and released versions of the mod leave it out. A
 development build offers it as the Demographics (Experimental) game rule, off by
 default: set it to Full or Display only when you start a new game. A save from
-an earlier version keeps it off. The rest of this section describes the census
-with the rule on.
+an earlier version keeps it off. With it off, some laws, technologies and
+decrees still list lines only the census reads, such as Contraception or Health
+Care Access; their names end in (Demographics off), since they do nothing. The
+rest of this section describes the census with the rule on.
 
 With it on, every state keeps a census of its people by single year of age and
 by sex. It is taken when the game starts and again once a year, and it opens a
