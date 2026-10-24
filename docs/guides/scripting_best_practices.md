@@ -2186,7 +2186,8 @@ A law has two AI fields, and they are not interchangeable (vanilla `game/common/
 - **`total_size`** — valid pop scope accessor for the total size (headcount) of a pop. Found in `event_targets.log`. Used in vanilla events (e.g., `max = scope:relevant_pop.total_size`). Use this when you need the population of a specific pop in script values.
 - **`THIS.size`** — NOT a valid accessor. Will cause runtime errors. Use `total_size` instead.
 - **`pop_weight_modifier_scale`** — exists in pop scope but is NOT the pop's headcount. It's a modifier scale factor. Do NOT use it as a proxy for pop size.
-- **`state_population`** — trigger only (comparison operator), NOT a script value. Cannot be used as `add = state_population`. See "Treaty Article Scoping" section above.
+- **`state_population`** — a trigger, and in a state-scope script value also a value (`value = state_population`, `divide = state_population`; vanilla's `state_gdp_per_capita` divides by it), but not in a `weight = { add = … }` block. See "`state_population` / `total_population` Are Triggers, Not Script Values" above.
+- **The largest pop is not the largest culture.** `ordered_scope_pop = { order_by = total_size position = 0 culture = { … } }` takes the culture of the single biggest pop, so a culture split over several pops (by profession, religion or strata) loses to a smaller one held in one: British Guatemala was released as its 7.7% Irish over its 8.2% Tamil (2026-10-24). No value gives a culture's share of a state to `order_by` (`culture_percent_state` is a trigger only), so rank cultures by walking them: `every_scope_culture`, then for each `every_scope_pop = { limit = { culture = scope:candidate } change_local_variable = { name = size add = total_size } }` in the state, keeping the best in another local. `decol_choose_release_culture` (`decolonization.txt`) is the worked example.
 
 ## Interest Group Effects
 

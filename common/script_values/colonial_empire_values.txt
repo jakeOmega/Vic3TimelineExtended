@@ -25,6 +25,12 @@ colonial_state_sol_floor_share = 0.8
 # eligible-territories list's hover prints it.
 colonial_state_indigenous_min_share = 0.1
 
+# Above this share of a territory's people of our primary cultures, it is
+# settled land, not a colony (colonial_state_settler_majority): no colony, and
+# no decolonization decision offers it. Read against
+# colonial_territory_primary_share_value; the panel's hovers print it.
+colonial_settler_majority_share = 0.5
+
 # The acceptance terms' weight per state and the overreach term's scale and
 # free ratio (colonial_stability_term_low_acceptance / _high_acceptance /
 # _overreach and colonial_overreach_ratio). Named so the Colonial Holdings
@@ -1712,7 +1718,8 @@ colonial_empire_disp_next_tick = {
 # ELIGIBLE TERRITORIES — THE LIST UNDER WHY STABILITY IS MOVING
 #
 # Every state of ours that is_decolonization_eligible_state (not a homeland of
-# our cultures, at least 100,000 people, overseas): the territories the three
+# our cultures, at least 100,000 people, overseas, not mostly our own people):
+# the territories the three
 # decolonization decisions can offer, and the superset of those the
 # stability bar counts as colonies (is_overseas_colonial_state adds one of
 # two signals, colonial_state_indigenous_signal or

@@ -29,7 +29,8 @@ least 100,000 people, lies outside your capital's region and the regions next to
 it, and has people of a culture that isn't one of your primary cultures. On top
 of that, its average standard of living must be below 80% of your national
 average, or one of those cultures must make up more than a tenth of the state
-with an average acceptance below 60 there.
+with an average acceptance below 60 there. A state where more than half the
+people are of your primary cultures is settled land, not a colony.
 - A colonial subject: a Colony or Chartered Company subject, or a Protectorate
 that holds overseas land and whose cultures share no heritage with yours.
 
@@ -224,13 +225,16 @@ a lower level counts as a third of a month for each level.
 
 Every territory in Colonial Holdings has a Release button. It opens a popup about
 that territory alone, which names the people who would form the new country and
-how many of your states go with it: a territory leaves with every connected
-state of yours that is a homeland of the same culture. Choose how it goes, or
-reconsider. Reconsider releases nothing, and it is what the popup does if you
-leave it unanswered. A territory can be released if it isn't a homeland of your
-cultures, has at least 100,000 people and lies overseas by the same region test;
-it doesn't have to be poorly accepted. Hover Release to see whether a Round
-Table is open to it.
+how many of your states go with it. The new country is formed by the most
+numerous culture whose homeland the territory is or, if none of them lives
+there, by its most numerous culture that isn't one of yours, and it leaves with
+every connected state of yours that is a homeland of that culture. Choose how it
+goes, or reconsider. Reconsider releases nothing, and it is what the popup does
+if you leave it unanswered. A territory can be released if it isn't a homeland
+of your cultures, has at least 100,000 people, lies overseas by the same region
+test and isn't settled land (more than half its people of your primary
+cultures); it doesn't have to be poorly accepted. Hover Release to see whether a
+Round Table is open to it.
 
 | Choice | Needs | What you get |
 |---|---|---|
@@ -304,7 +308,7 @@ than 24 months.
 |---|---|---|
 | The empire holds | The bar stays at 100 for 60 consecutive months | Permanent Colonial Empire Solidified, plus a permanent modifier for your path if one program dominated. Overseas states where everyone is well accepted become homelands. After Quiet Assimilation every overseas state of 75,000 people or more does, whatever its acceptance; after The Iron Fist Holds none do, and you gain 25 infamy. You can never get the entry again. |
 | Federation | You take the Imperial Federation Act or the Civilizing Mission Compact | Imperial Federation from the decision, plus a permanent The Iron Fist (Act) or The Commonwealth Path (Compact). Well-accepted overseas states become homelands. You can never get the entry again. |
-| Collapse | The bar reaches 0 | Up to three of your overseas territories, picked at random, become independent with their homeland regions, and they inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years. |
+| Collapse | The bar reaches 0 | Up to three of your overseas territories other than settled land, picked at random, become independent with their homeland regions, and they inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years. |
 | Voluntary end | You no longer hold any colony or colonial subject while the bar is above 0 | A decaying boost to diplomatic reputation; the event's wording depends on whether you freed colonies by choice. No lockout: new colonies bring the entry back. |
 
 | Longest program | If the empire holds | If it collapses | The countries you free |

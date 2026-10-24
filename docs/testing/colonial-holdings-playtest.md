@@ -45,3 +45,19 @@ State.MakeScope )`), the shape the Grand Monument rows ship, and the effect save
 | **Dominion greyed.** Hover Dominion on a Protectorate, a Chartered Company and a subject's own subject. | Greyed: a protectorate or chartered company has no looser kind; a subject's subject is not ours. | |
 | **The last holding.** Free or raise the last colony and subject. | The entry ends voluntarily: The Last Flag Lowered after a release you chose, The Colonial Chapter Closes after a dominion alone. | |
 | **The Timeline Extended tab.** Repeat one button from the window's Colonial Empire tab. | The same rows and buttons, acting the same. | |
+
+## Settled land and the people a release forms (2026-10-24)
+
+The owner's report: British Guatemala, 75% English, was listed and released as its 7.7% Irish. Settled land (more
+than `colonial_settler_majority_share` of the people of our primary cultures) is now no colony and no territory, and
+every release forms with `decol_choose_release_culture` (the largest homeland culture present, else the largest
+culture that is not ours, each culture counted whole). The pick sums pops into local variables
+(`decol_release_culture_weigh`), a form the demographics probe proved; the threshold reads
+`colonial_territory_primary_share_value`, the share the Primary column already showed.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Settled land leaves the list.** As Britain, a state like British Guatemala (more than half English) after the monthly refresh. | Not in Territories and not counted in the overview's Colonies; still a colony if it was not settled land. | Every territory gone, or none: `colonial_state_settler_majority` misreads the share; check a row's Primary figure against the population tab. |
+| **The release names the right people.** Release a territory whose homeland people are absent (several minorities, none at home). | The popup names its most numerous culture that is not ours, counted over all its pops; Grant it independence forms the country with that culture. | The popup and the new country disagree: the preview and `form_decolonized_country` read different pops (a month between them) or the local variables did not carry across the state-to-pop scope change; log `decol_release_culture_best`. |
+| **"Goes alone."** Release a territory with no neighbouring homeland state of ours. | "If it goes, it goes alone, as a nation of its X people." With a region: "...it takes with it ... N states in all." | "1 states in all": `decolonization_region_1_count` was unset when `.402`'s desc was evaluated. |
+| **A collapse spares settled land.** `event te_debug_colonial_empire.1`, Collapsing (10), then let the bar drain to 0. | Up to three successor countries, none from a state that is more than half our people. | |
