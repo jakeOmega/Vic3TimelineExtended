@@ -118,10 +118,15 @@ gm_curve_steps_lin_f5 = {
 # Mirrors of the static modifiers in gm_modifiers.txt, each of which carries
 # exactly one step (the multiplier is the step count). Loc reads these; the
 # registry test pins every pair equal.
-# Prestige: on the 1/n curve, the 1836 landmarks give up to about +180
-# (Egypt). Not too much (owner, 2026-10-19): leading the world in one
-# prestige good gives more, and an unrecognized power cannot be a great power.
-gm_step_prestige = 25
+# Prestige: on the 1/n curve, a flat part and a percentage a step (policy spec
+# 2026-10-23 § 8, owner): monuments alone can't lift a minor far, and they still
+# matter to a great power with a lot of prestige. Egypt's 1836 landmarks give
+# +70 and +7%.
+gm_step_prestige = 10
+gm_step_prestige_pct = 0.01
+# Public Education: +1% education access a step (owner, 2026-10-23: rich
+# countries reach the ceiling anyway, and it competes with Open's money).
+gm_step_education = 0.01
 gm_step_legitimacy = 2
 gm_step_ig = 1
 gm_step_teardown = 3
@@ -483,28 +488,107 @@ gm_state_disp_local = {
 }
 
 # ---- The monument policy (v2 §5; gm_policy_effects.txt) -------------------------
-# Factors on the per-step values (§5). Country scope: the steps of standing
-# grandeur (prestige and cultural pull) and of regime and Leader grandeur
-# (legitimacy, the Leader's authority), multiplied after the curve in
-# gm_compute_totals, so the effect itself moves by the factor.
-gm_policy_factor_standing = {
-	value = 1
+# State Ceremonial (policy spec 2026-10-23 § 4.2): legitimacy and the Leader's
+# authority count their own grandeur as always plus this share of the venue
+# grandeur (gm_g_venues), before the curve, so a country with no regime
+# monuments gains too (owner: +140 authority at 1,000 grandeur "is a little
+# more than 1 decree").
+gm_policy_ceremonial_share = 0.25
+
+# Country scope, after gm_g_venues is written: the grandeur the share adds, 0
+# under any other policy.
+gm_policy_ceremonial_grandeur = {
+	value = 0
 	if = {
-		limit = { gm_policy_is = { P = mothballed STANDARD = no } }
-		value = 0.5
+		limit = {
+			gm_policy_is = { P = ceremonial STANDARD = no }
+			has_variable = gm_g_venues
+		}
+		value = var:gm_g_venues
+		multiply = gm_policy_ceremonial_share
 	}
 }
 
-gm_policy_factor_regime = {
+# Country scope, for the AI (gm_policy_ai_choose): legitimacy's input were it
+# on State Ceremonial, regime grandeur plus the share of every venue.
+gm_policy_ceremonial_input_if_chosen = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_regime }
+		add = var:gm_g_regime
+	}
+	if = {
+		limit = { has_variable = gm_g_venues }
+		add = {
+			value = var:gm_g_venues
+			multiply = gm_policy_ceremonial_share
+		}
+	}
+}
+
+# Public Education's self-check (gm_policy_education_self_check), country
+# scope: the capital's education access over the base taken before the
+# modifier went on, what the steps give, and half that.
+gm_edu_check_rise = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_edu_check_base
+			exists = capital
+		}
+		value = capital.modifier:state_education_access_add
+		subtract = var:gm_edu_check_base
+	}
+}
+
+gm_edu_check_expect = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_education }
+		value = var:gm_s_education
+		multiply = gm_step_education
+	}
+}
+
+gm_edu_check_half_expect = {
+	value = gm_edu_check_expect
+	multiply = 0.5
+}
+
+# Factors on the per-step values, multiplied after the curve, so the effect
+# itself moves by the factor.
+
+# Country scope, Cultural Promotion (spec § 4.3): monument cultural pull x1.5,
+# on the steps of the monuments' own pull and of Ancestral Antiquity's. Pull
+# feeds only the Cultural Hegemony system, so with its rule off the policy
+# raises prestige instead (gm_policy_factor_prestige; owner, 2026-10-23).
+gm_policy_factor_culture = {
 	value = 1
 	if = {
-		limit = { gm_policy_is = { P = ceremonial STANDARD = no } }
+		limit = {
+			gm_policy_is = { P = culture STANDARD = yes }
+			has_game_rule = cultural_hegemony_enabled
+		}
 		value = 1.5
 	}
 }
 
-# State scope, the owner's policy: the steps of a monument's own Tourism
-# Industry throughput and of its dedication's local effect (gm_state_monthly).
+# Country scope: Cultural Promotion with the Cultural Hegemony rule off, on the
+# steps of standing grandeur (the flat prestige and the percentage).
+gm_policy_factor_prestige = {
+	value = 1
+	if = {
+		limit = {
+			gm_policy_is = { P = culture STANDARD = yes }
+			NOT = { has_game_rule = cultural_hegemony_enabled }
+		}
+		value = 1.5
+	}
+}
+
+# State scope, the owner's policy: the steps of a monument's own tourism output
+# (gm_state_monthly) and of the two signatures whose local effect is tourism
+# (gm_state_sig_local_steps_one). No policy cuts tourism (spec § 4.1).
 gm_policy_factor_tourism = {
 	value = 1
 	if = {
@@ -513,42 +597,9 @@ gm_policy_factor_tourism = {
 		}
 		value = 1.5
 	}
-	else_if = {
-		limit = {
-			owner = {
-				OR = {
-					gm_policy_is = { P = ceremonial STANDARD = no }
-					gm_policy_is = { P = mothballed STANDARD = no }
-				}
-			}
-		}
-		value = 0.5
-	}
-}
-
-gm_policy_factor_local = {
-	value = 1
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-		}
-		value = 0.5
-	}
 }
 
 # ---- Ageing (spec 2026-10-16 §2) ----------------------------------------------
-# State scope, the owner's policy: Mothballed halves how fast its monuments
-# age; no other policy changes it.
-gm_policy_factor_age = {
-	value = 1
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-		}
-		value = 0.5
-	}
-}
-
 # The years a monument ages for (owner, 2026-10-19): a century at 2% a year,
 # so its age grandeur stops at twice its starting grandeur and the monument at
 # three times what it was dedicated with. Nothing is grander for being older
@@ -575,7 +626,6 @@ gm_state_age_step = {
 	value = gm_state_primary_start
 	multiply = 2
 	divide = 1200
-	multiply = gm_policy_factor_age
 	max = gm_state_age_room
 }
 
@@ -670,6 +720,27 @@ gm_sum_regime = {
 			add = gm_mon_grandeur
 		}
 	}
+}
+
+# Venue grandeur (policy spec 2026-10-23 § 4.2): every monument State
+# Ceremonial can hold its events at, the primaries and those beside another,
+# and the trophies held, for what they count in standing grandeur (a nationalist
+# government shows off what it has taken; owner).
+gm_sum_venues = {
+	value = 0
+	every_scope_state = {
+		limit = { gm_state_counts_venue = yes }
+		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = { gm_mon_counts_venue = yes }
+			add = gm_mon_grandeur
+		}
+	}
+	add = gm_tr_disp_held_grandeur
 }
 
 # One per dedication with a national effect of its own.
@@ -894,6 +965,16 @@ gm_display_prestige = {
 	}
 }
 
+# The percentage part (a fraction; loc shows it with |%).
+gm_display_prestige_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_standing }
+		value = var:gm_s_standing
+		multiply = gm_step_prestige_pct
+	}
+}
+
 gm_display_g_standing = {
 	value = 0
 	if = {
@@ -924,6 +1005,33 @@ gm_display_g_regime = {
 	if = {
 		limit = { has_variable = gm_g_regime }
 		value = var:gm_g_regime
+	}
+}
+
+# Public Education's row (a fraction; loc shows it with |%).
+gm_display_education = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_s_education }
+		value = var:gm_s_education
+		multiply = gm_step_education
+	}
+}
+
+gm_display_n_education = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_n_education }
+		value = var:gm_n_education
+	}
+}
+
+# What State Ceremonial's share adds to legitimacy's and authority's input.
+gm_display_g_ceremonial = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_ceremonial }
+		value = var:gm_g_ceremonial
 	}
 }
 
@@ -1404,6 +1512,10 @@ gm_disp_national_any = {
 					NOT = { var:gm_s_culture = 0 }
 				}
 				AND = {
+					has_variable = gm_s_education
+					NOT = { var:gm_s_education = 0 }
+				}
+				AND = {
 					has_variable = gm_s_regime
 					NOT = { var:gm_s_regime = 0 }
 				}
@@ -1568,14 +1680,51 @@ gm_disp_frac_prestige = {
 	max = 1
 }
 
+# Public Education's bar, on its own 1/n curve over standing grandeur.
+gm_disp_frac_education = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_standing
+			has_variable = gm_n_education
+			has_variable = gm_w_education
+		}
+		value = var:gm_g_standing
+		subtract = var:gm_n_education
+		add = var:gm_w_education
+		divide = var:gm_w_education
+	}
+	min = 0
+	max = 1
+}
+
+# The prestige percentage's row: the same steps as the flat part's.
+gm_disp_frac_prestige_pct = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gm_g_standing
+			has_variable = gm_n_standing
+			has_variable = gm_w_standing
+		}
+		value = var:gm_g_standing
+		subtract = var:gm_n_standing
+		add = var:gm_w_standing
+		divide = var:gm_w_standing
+	}
+	min = 0
+	max = 1
+}
+
+# The bar reads the curve's input, the share included (spec § 4.2).
 gm_disp_frac_legitimacy = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = gm_g_regime
+			has_variable = gm_g_regime_in
 			has_variable = gm_n_regime
 		}
-		value = var:gm_g_regime
+		value = var:gm_g_regime_in
 		multiply = 2
 		subtract = var:gm_n_regime
 		add = 10
@@ -1612,10 +1761,10 @@ gm_disp_frac_leader = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = gm_g_leader
+			has_variable = gm_g_leader_in
 			has_variable = gm_n_leader
 		}
-		value = var:gm_g_leader
+		value = var:gm_g_leader_in
 		multiply = 2
 		subtract = var:gm_n_leader
 		add = 5
@@ -1749,41 +1898,15 @@ gm_state_mig_high = {
 	multiply = 1.05
 }
 
-# ---- Upkeep (sites spec 2026-10-18 §3.4) -------------------------------------------
-# State scope, the owner's policy: Open pays half again, Mothballed nothing
-# (owner, 2026-10-18: "it is weak now"), every other policy the levels' due.
-gm_policy_factor_upkeep = {
-	value = 1
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = open STANDARD = no } }
-		}
-		value = 1.5
-	}
-	if = {
-		limit = {
-			owner = { gm_policy_is = { P = mothballed STANDARD = no } }
-		}
-		value = 0
-	}
-}
-
-# State scope. The multiplier on gm_upkeep: the finished building stands at
-# level 1, and pm_maintenance charges for that one, so the rest of the levels
-# the monuments here record, by the policy, less that one. -1 (Mothballed) is
-# no upkeep at all.
+# ---- Upkeep (sites spec 2026-10-18 §3.4; policy spec 2026-10-23 § 5) -----------------
+# State scope. The multiplier on gm_upkeep: Grand Monuments cost nothing to
+# maintain (owner, 2026-10-23). At -1, gm_upkeep cancels pm_maintenance's
+# level-scaled construction input whatever the building's level, an older
+# save's unmigrated building at its full height too, as Mothballed did before.
+# pmg_maintenance stays on the building: removing a PMG in a running save is
+# unverified.
 gm_state_upkeep_mult = {
-	value = gm_state_primary_levels
-	add = gm_state_secondary_levels
-	multiply = gm_policy_factor_upkeep
-	subtract = 1
-	# An older save's building until monument_events.32 records it: it stands
-	# at its full height, and pm_maintenance is level-scaled, so its own levels
-	# already pay (any multiplier would square them).
-	if = {
-		limit = { NOT = { has_variable = gm_migrated } }
-		value = 0
-	}
+	value = -1
 }
 
 # The level a merge left a finished building at (gm_merge_check), for the

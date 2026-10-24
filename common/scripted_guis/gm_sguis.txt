@@ -283,42 +283,12 @@ gm_rename_sgui = {
 	}
 }
 
-# ---- The monument policy (v2 §5) ------------------------------------------------
+# ---- The monument policy (v2 §5; policy spec 2026-10-23 § 3) ---------------------
 # One button per policy in National Effects. Valid while it is not the current
 # policy and no change has been made in the last 60 months (the first choice
-# starts no wait). The national totals change at once; each monument's tourism,
-# local effect and upkeep at its state's next monthly pulse.
-gm_policy_standard_sgui = {
-	scope = country
-
-	is_shown = {
-		always = yes
-	}
-
-	is_valid = {
-		custom_tooltip = {
-			text = gm_policy_current_tt
-			NOT = { gm_policy_is = { P = standard STANDARD = yes } }
-		}
-		custom_tooltip = {
-			text = gm_policy_wait_tt
-			gm_policy_can_change = yes
-		}
-	}
-
-	effect = {
-		custom_tooltip = {
-			text = gm_policy_standard_effect_tt
-			gm_policy_set = { P = standard }
-		}
-		hidden_effect = { gm_country_refresh = yes }
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-}
-
+# starts no wait). The national totals change at once; each monument's tourism
+# at its state's next monthly pulse. Cultural Promotion is the default
+# (STANDARD = yes): a country that never chose one reads as it.
 gm_policy_open_sgui = {
 	scope = country
 
@@ -381,7 +351,7 @@ gm_policy_ceremonial_sgui = {
 	}
 }
 
-gm_policy_mothballed_sgui = {
+gm_policy_culture_sgui = {
 	scope = country
 
 	is_shown = {
@@ -391,7 +361,49 @@ gm_policy_mothballed_sgui = {
 	is_valid = {
 		custom_tooltip = {
 			text = gm_policy_current_tt
-			NOT = { gm_policy_is = { P = mothballed STANDARD = no } }
+			NOT = { gm_policy_is = { P = culture STANDARD = yes } }
+		}
+		custom_tooltip = {
+			text = gm_policy_wait_tt
+			gm_policy_can_change = yes
+		}
+	}
+
+	effect = {
+		# Cultural pull with Cultural Hegemony on, prestige with it off (policy
+		# spec 2026-10-23 § 4.3).
+		if = {
+			limit = { has_game_rule = cultural_hegemony_enabled }
+			custom_tooltip = {
+				text = gm_policy_culture_effect_tt
+				gm_policy_set = { P = culture }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = gm_policy_culture_prestige_effect_tt
+				gm_policy_set = { P = culture }
+			}
+		}
+		hidden_effect = { gm_country_refresh = yes }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_policy_education_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = gm_policy_current_tt
+			NOT = { gm_policy_is = { P = education STANDARD = no } }
 		}
 		custom_tooltip = {
 			text = gm_policy_wait_tt
@@ -401,8 +413,8 @@ gm_policy_mothballed_sgui = {
 
 	effect = {
 		custom_tooltip = {
-			text = gm_policy_mothballed_effect_tt
-			gm_policy_set = { P = mothballed }
+			text = gm_policy_education_effect_tt
+			gm_policy_set = { P = education }
 		}
 		hidden_effect = { gm_country_refresh = yes }
 	}

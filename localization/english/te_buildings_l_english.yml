@@ -243,7 +243,7 @@
  building_grand_monument:0 "Grand Monument"
  building_grand_monument_desc:0 "A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window."
  building_grand_monument_site:0 "Grand Monument (Under Construction)"
- building_grand_monument_site_desc:0 "A Grand Monument being built. Each level adds to the monument it will be; it has no upkeep and no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built."
+ building_grand_monument_site_desc:0 "A Grand Monument being built. Each level adds to the monument it will be; it has no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built."
  building_graphite_mine:0 "Graphite Mine"
  building_graphite_mine_throughput_add:0 "$building_graphite_mine$ building [concept_throughput]"
  building_graphite_mine_throughput_add_desc:0 "$building_graphite_mine$ building [concept_throughput]"

@@ -2992,11 +2992,12 @@ gm_policy_name = {
 		localization_key = gm_policy_ceremonial
 	}
 	text = {
-		trigger = { has_variable = gm_policy var:gm_policy = flag:mothballed }
-		localization_key = gm_policy_mothballed
+		trigger = { has_variable = gm_policy var:gm_policy = flag:education }
+		localization_key = gm_policy_education
 	}
+	# The default, Cultural Promotion (policy spec 2026-10-23 § 3).
 	text = {
-		localization_key = gm_policy_standard
+		localization_key = gm_policy_culture
 	}
 }
 
@@ -3013,11 +3014,16 @@ gm_policy_effects = {
 		localization_key = gm_policy_effects_ceremonial
 	}
 	text = {
-		trigger = { has_variable = gm_policy var:gm_policy = flag:mothballed }
-		localization_key = gm_policy_effects_mothballed
+		trigger = { has_variable = gm_policy var:gm_policy = flag:education }
+		localization_key = gm_policy_effects_education
+	}
+	# Cultural Promotion: pull with Cultural Hegemony on, prestige with it off.
+	text = {
+		trigger = { has_game_rule = cultural_hegemony_enabled }
+		localization_key = gm_policy_effects_culture
 	}
 	text = {
-		localization_key = gm_policy_effects_standard
+		localization_key = gm_policy_effects_culture_prestige
 	}
 }
 

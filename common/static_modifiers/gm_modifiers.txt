@@ -10,7 +10,22 @@
 # Refreshed by gm_apply_national_modifiers (gm_effects.txt), ROOT = country.
 gm_national_prestige = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
-	country_prestige_add = 25
+	country_prestige_add = 10
+}
+
+# Public Education (policy spec 2026-10-23 § 4.4): a step of standing grandeur
+# on the 1/n curve with a first step of 10, only under that policy. A state_*
+# field held by the journal entry, like three signatures' (unverified; the
+# self-check gm_education_reaches_states).
+gm_national_education = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_education_access_add = 0.01
+}
+
+# The percentage part, on the same steps (policy spec 2026-10-23 § 8).
+gm_national_prestige_pct = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.01
 }
 
 gm_national_legitimacy = {
@@ -372,19 +387,18 @@ gm_name_carrier_slot = {
 	country_max_companies_add = 1
 }
 
-# ---- The monument policy (v2 §5): on the monument itself (building scope) ------
+# ---- Upkeep: on the monument itself (building scope) --------------------------
 # Refreshed by gm_state_monthly. The maintenance input, the only goods a Grand
 # Monument uses, is level_scaled, which throughput does not touch
 # (scripting_best_practices.md § "Production Method Modifier Scaling Blocks"),
-# so the policy scales the building's construction-goods input as the engine's
-# own pm_retooling does. On the building, not the state, so no other building
-# pays it. pm_no_maintenance is off under the default construction market rule,
-# so upkeep cannot move by switching methods.
+# so a construction-goods input modifier on the building scales it, as the
+# engine's own pm_retooling does. On the building, not the state, so no other
+# building is touched.
 # The finished building's upkeep (sites spec 2026-10-18 §3.4): one modifier,
-# its multiplier the levels its monuments record times the policy's factor,
-# less the one level the building stands at (gm_state_upkeep_mult). The two
-# policy modifiers below are no longer added; they stay for older saves, whose
-# pulse removes them.
+# its multiplier always -1 (gm_state_upkeep_mult), so it cancels the building's
+# maintenance input: Grand Monuments cost nothing to maintain (policy spec
+# 2026-10-23 § 5). The two policy modifiers below are no longer added; they
+# stay for older saves, whose pulse removes them.
 gm_upkeep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	goods_input_construction_mult = 1

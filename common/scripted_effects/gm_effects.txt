@@ -442,8 +442,8 @@ gm_state_monthly = {
 		gm_state_record_dedication = yes
 		gm_monument_migration_self_check = yes
 		gm_monument_merge_level_self_check = yes
-		# Tourism counts everything standing here; the monument policy (v2 §5)
-		# scales it and each local effect.
+		# Tourism counts everything standing here; Open to the Public scales
+		# it (policy spec 2026-10-23 § 4.1).
 		set_variable = { name = gm_curve_in value = gm_state_grandeur }
 		set_variable = {
 			name = gm_local_tourism_steps
@@ -453,9 +453,9 @@ gm_state_monthly = {
 			}
 		}
 		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
-		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): the levels
-		# its monuments record, at pm_maintenance's 0.1 a level, through one
-		# modifier whose multiplier reads ROOT, this state, by name
+		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): none since
+		# policy spec 2026-10-23 § 5, one modifier at -1 that cancels the
+		# maintenance input, its multiplier read from ROOT, this state, by name
 		# (scripting_best_practices.md). Its variable is overwritten, never
 		# removed.
 		set_variable = { name = gm_upkeep_mult value = gm_state_upkeep_mult }
@@ -478,9 +478,11 @@ gm_state_monthly = {
 		gm_state_local_steps_one = { KEY = athletic CAP = gm_local_cap_athletic }
 		# And each unique dedication's (signatures spec §2.2), counted the same
 		# way, beside its parent's.
-		gm_state_sig_local_steps_one = { SIG = antiquity }
-		gm_state_sig_local_steps_one = { SIG = archive }
-		gm_state_sig_local_steps_one = { SIG = first_emperor }
+		# Open's x1.5 covers the two signatures whose local effect is tourism
+		# (policy spec 2026-10-23 § 4.1); the archive's is not.
+		gm_state_sig_local_steps_one = { SIG = antiquity FACTOR = gm_policy_factor_tourism }
+		gm_state_sig_local_steps_one = { SIG = archive FACTOR = 1 }
+		gm_state_sig_local_steps_one = { SIG = first_emperor FACTOR = gm_policy_factor_tourism }
 		# Trophies (gm_trophy_effects.txt): the owner stamped, an occupier's
 		# offer or roll. Last: a taking removes the building.
 		gm_state_tr_monthly = yes
@@ -563,7 +565,6 @@ gm_state_local_steps_one = {
 		name = gm_local_steps_$KEY$
 		value = {
 			value = gm_curve_steps_lin_f5
-			multiply = gm_policy_factor_local
 			max = $CAP$
 		}
 	}
@@ -704,6 +705,7 @@ gm_decay_ledgers = {
 # a scripted GUI effect or a country event option. Never call it where ROOT is
 # a state, building, law or character: the multipliers resolve against ROOT.
 gm_country_refresh = {
+	gm_policy_migrate = yes
 	gm_init_ledgers = yes
 	if = {
 		limit = {
@@ -836,6 +838,7 @@ gm_country_monthly = {
 	gm_com_check_progress = yes
 	gm_com_monthly = yes
 	gm_country_refresh = yes
+	gm_policy_education_self_check = yes
 	every_scope_state = {
 		limit = { gm_state_is_contested = yes }
 		change_variable = { name = gm_contested add = 1 }
@@ -932,10 +935,26 @@ gm_compute_totals = {
 	set_variable = { name = gm_g_artistic value = gm_sum_artistic }
 	set_variable = { name = gm_g_scientific value = gm_sum_scientific }
 	set_variable = { name = gm_g_industrial value = gm_sum_industrial }
+	# State Ceremonial's share of every venue (policy spec 2026-10-23 § 4.2),
+	# added to regime and Leader grandeur before their curves.
+	set_variable = { name = gm_g_venues value = gm_sum_venues }
+	set_variable = { name = gm_g_ceremonial value = gm_policy_ceremonial_grandeur }
+	set_variable = { name = gm_g_regime_in value = { value = var:gm_g_regime add = var:gm_g_ceremonial } }
+	set_variable = { name = gm_g_leader_in value = { value = var:gm_g_leader add = var:gm_g_ceremonial } }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_standing NEXT = gm_n_standing WIDTH = gm_w_standing F = 5 }
 	gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_culture NEXT = gm_n_culture WIDTH = gm_w_culture F = 10 }
-	gm_set_steps = { IN = gm_g_regime OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
-	gm_set_steps = { IN = gm_g_leader OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
+	# Public Education (policy spec 2026-10-23 § 4.4): education access from
+	# standing grandeur, on the curve cultural pull uses; 0 under any other
+	# policy, so its row and modifier go when the policy changes.
+	if = {
+		limit = { gm_policy_is = { P = education STANDARD = no } }
+		gm_set_steps_lin_open = { IN = gm_g_standing OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education F = 10 }
+	}
+	else = {
+		set_variable = { name = gm_s_education value = 0 }
+	}
+	gm_set_steps = { IN = gm_g_regime_in OUT = gm_s_regime NEXT = gm_n_regime F = 10 }
+	gm_set_steps = { IN = gm_g_leader_in OUT = gm_s_leader NEXT = gm_n_leader F = 5 }
 	gm_set_steps = { IN = gm_g_religious OUT = gm_s_religious NEXT = gm_n_religious F = 5 }
 	gm_set_steps = { IN = gm_g_war_memorial OUT = gm_s_war_memorial NEXT = gm_n_war_memorial F = 5 }
 	gm_set_steps = { IN = gm_g_artistic OUT = gm_s_artistic NEXT = gm_n_artistic F = 5 }
@@ -943,12 +962,10 @@ gm_compute_totals = {
 	gm_set_steps = { IN = gm_g_industrial OUT = gm_s_industrial NEXT = gm_n_industrial F = 5 }
 	gm_set_steps = { IN = gm_teardown_ledger OUT = gm_s_teardown NEXT = gm_n_teardown F = 5 }
 	# The monument policy (v2 §5), on the steps so the effect moves by the
-	# factor: Mothballed halves prestige and cultural pull, State Ceremonial
-	# adds half to legitimacy and the Leader's authority.
-	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_standing }
-	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_standing }
-	gm_policy_scale_steps = { S = regime FACTOR = gm_policy_factor_regime }
-	gm_policy_scale_steps = { S = leader FACTOR = gm_policy_factor_regime }
+	# factor: Cultural Promotion adds half to cultural pull, or to prestige with
+	# the Cultural Hegemony rule off (policy spec 2026-10-23 § 4.3).
+	gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige }
+	gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture }
 	# The unique dedications' sums (signatures spec §2.1), steps and policy.
 	gm_sig_compute_sums = yes
 	gm_compute_ig = { IG = armed_forces }
@@ -1090,6 +1107,8 @@ gm_apply_national_modifiers = {
 	je:je_grand_monuments ?= {
 		gm_remove_national_modifiers = yes
 		gm_add_national = { NAME = gm_national_prestige VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_prestige_pct VAR = gm_s_standing }
+		gm_add_national = { NAME = gm_national_education VAR = gm_s_education }
 		gm_add_national = { NAME = gm_national_legitimacy VAR = gm_s_regime }
 		gm_add_national = { NAME = gm_national_leader VAR = gm_s_leader }
 		gm_add_national = { NAME = gm_national_religious VAR = gm_s_religious }
@@ -1133,6 +1152,8 @@ gm_apply_national_modifiers = {
 # Journal-entry scope.
 gm_remove_national_modifiers = {
 	remove_modifier = gm_national_prestige
+	remove_modifier = gm_national_prestige_pct
+	remove_modifier = gm_national_education
 	remove_modifier = gm_national_legitimacy
 	remove_modifier = gm_national_leader
 	remove_modifier = gm_national_religious

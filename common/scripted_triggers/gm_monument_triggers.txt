@@ -136,6 +136,17 @@ gm_mon_counts_standing = {
 	gm_mon_is_contested = no
 }
 
+# State Ceremonial's venues (gm_state_counts_venue's twin): at home, not
+# contested, dedicated or heritage.
+gm_mon_counts_venue = {
+	has_tag = gm_monument
+	gm_mon_is_contested = no
+	OR = {
+		has_variable = gm_tr_dedication
+		gm_mon_is_heritage = yes
+	}
+}
+
 # ---- Its interest groups (the state's IG alignment, monument_triggers.txt) --------
 # The Leader's pair is dynamic: the ruler's own IG approves, the strongest IG
 # outside the government (gm_opposition_ig on the owner) opposes.
