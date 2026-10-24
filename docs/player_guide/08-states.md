@@ -287,7 +287,9 @@ a state works about as in the base game, but a rich modern country has a sixth
 to a quarter fewer workers than the flat lines would give it. Each yearly count
 sets a state's workforce to the census's figure, shown as Census: Workforce in
 its workforce tooltip, and the game's own count moves toward it over the years
-that follow.
+that follow. Under Full, the laws' and technologies' Workforce Ratio lines say
+what the census does with them: (read as women's work) for the ones it counts
+toward how many women work, (replaced by the census) for the rest.
 
 With Old Age Pension, you choose the pension age with five buttons on the
 Demographics tab. A setting holds for five years once chosen, and the AI picks

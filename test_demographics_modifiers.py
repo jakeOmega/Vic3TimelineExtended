@@ -525,6 +525,15 @@ class TestWorkforceReaders(unittest.TestCase):
         self.assertEqual(by_key["contraceptive_pill"].kind, "technology")
 
 
+def _rule_loc():
+    """Every English loc value by key, and te_demog_custom_loc.txt's text."""
+    loc = {}
+    for path in (ROOT / "localization/english").glob("*.yml"):
+        for m in re.finditer(r'(?m)^ ([\w.\-]+):\d* "(.*)"\s*$', path.read_text(encoding="utf-8-sig")):
+            loc[m.group(1)] = m.group(2)
+    return loc, (ROOT / "common/customizable_localization/te_demog_custom_loc.txt").read_text(encoding="utf-8-sig")
+
+
 class TestCensusOffNames(unittest.TestCase):
     """With the census off, every census-only type's name and description say so (te_demog_custom_loc.txt)."""
 
@@ -535,11 +544,7 @@ class TestCensusOffNames(unittest.TestCase):
     def setUpClass(cls):
         types = (ROOT / "common/modifier_type_definitions/demographics_modifier_types.txt").read_text(encoding="utf-8-sig")
         cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", types)
-        cls.loc = {}
-        for path in (ROOT / "localization/english").glob("*.yml"):
-            for m in re.finditer(r'(?m)^ ([\w.\-]+):\d* "(.*)"\s*$', path.read_text(encoding="utf-8-sig")):
-                cls.loc[m.group(1)] = m.group(2)
-        cls.custom = (ROOT / "common/customizable_localization/te_demog_custom_loc.txt").read_text(encoding="utf-8-sig")
+        cls.loc, cls.custom = _rule_loc()
 
     def test_every_census_type_ends_in_the_tag(self):
         self.assertGreater(len(self.types), 40)
@@ -562,6 +567,34 @@ class TestCensusOffNames(unittest.TestCase):
                                      ("always = yes", key)], entry)
             self.assertTrue(self.loc[key], key)
         self.assertEqual(self.loc["te_demog_census_off_none"], "")
+
+
+class TestWorkforceLineNames(unittest.TestCase):
+    """Under Full, the two moved Workforce Ratio families' names say what the census does with them instead."""
+
+    FAMILIES = {"state_demog_replaced_ratio_add": ("te_demog_wf_replaced_name", "te_demog_wf_replaced_tag"),
+                "state_demog_womens_work_ratio_add": ("te_demog_wf_womens_name", "te_demog_wf_womens_tag")}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, cls.custom = _rule_loc()
+
+    def test_both_families_end_in_their_tag(self):
+        moved = (ROOT / "common/modifier_type_definitions/demographics_workforce_line_types.txt").read_text(
+            encoding="utf-8-sig")
+        self.assertEqual(set(re.findall(r"(?m)^(\w+)\s*=\s*\{", moved)), set(self.FAMILIES))
+        for name, (entry, _) in self.FAMILIES.items():
+            self.assertEqual(self.loc[name], f"$state_working_adult_ratio_add$[GetPlayer.GetCustom('{entry}')]", name)
+
+    def test_the_tag_shows_only_under_full(self):
+        for entry, key in self.FAMILIES.values():
+            block = re.search(rf"(?ms)^{entry} = \{{(.*?)^\}}", self.custom)
+            self.assertIsNotNone(block, entry)
+            texts = re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+            self.assertEqual(texts, [("te_demog_effects_run = yes", key), ("always = yes", "te_demog_census_off_none")],
+                             entry)
+            # the rendered name is pasted into a quoted tooltip argument (loc_render_audit): no straight apostrophe
+            self.assertTrue(self.loc[key] and "'" not in self.loc[key], key)
 
 
 if __name__ == "__main__":

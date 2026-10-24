@@ -1406,3 +1406,14 @@ does; no modifier name in vanilla or the mod has used it before.
    `GetPlayer.GetCustom` writes one, `docs/audits/open_issues.md` L11). If it does, or the tag shows a raw key, the
    fallback is the release's: comment the lines out of a build that ships with the census off
    (`scripts/release/comment_out_census_inputs.py`), and take the calls back out of the loc.
+
+## The Workforce Ratio lines under Full (2026-10-24)
+
+Under Full, the two moved Workforce Ratio families name what the census does with them instead
+(`te_demog_wf_replaced_name`, `te_demog_wf_womens_name` in `te_demog_custom_loc.txt`), by the same `GetPlayer.GetCustom`
+call as the section above.
+
+1. **Full.** Old Age Pension's institution effects read "Workforce Ratio (replaced by the census)", the tag grey;
+   Women's Suffrage reads "Workforce Ratio (read as women’s work)". The Nation tab's women's-work row carries the same tag.
+2. **Display only and Disabled.** The same tooltips read plain "Workforce Ratio", with no trailing space.
+3. **The log.** As above: no `not valid for 'te_demog_wf_` burst in `error.log`.
