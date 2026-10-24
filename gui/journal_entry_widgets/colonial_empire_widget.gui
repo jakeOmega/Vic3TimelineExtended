@@ -63,8 +63,9 @@
 ### consumes — six read live and three read from the snapshot variables
 ### colonial_empire_refresh_display writes; each pillar bar's range is a
 ### colonial_pillar_* script value. The eligible territories are the states
-### colonial_empire_refresh_display stores (colonial_empire_territory_1..8),
-### each read through colonial_territory_disp_* values that call the entry's
+### colonial_empire_refresh_display stores (colonial_empire_territory_1..8,
+### the seeds of the release blocs), each read through colonial_bloc_disp_*
+### values summed from colonial_territory_disp_* values that call the entry's
 ### own triggers; the colonial subjects are the capitals it stores
 ### (colonial_empire_subject_1..8), each read through vanilla's subject getters
 ### and colonial_subject_disp_* values. The band and the next band's edge
@@ -305,25 +306,31 @@ types colonial_empire_widget_types
 		}
 	}
 
-	### One territory: whether it counts as a colony (the colony icon lit, or
-	### dimmed), its name (its people on hover), primary-culture share,
-	### standard of living and GDP, in te_ce_territory_head's cells, then its
-	### Release button. The share is red while the indigenous-population test
-	### holds, the standard of living red while the living-standards test
-	### holds: the figure that makes it a colony. Each cell's hover gives the
-	### figure's threshold.
+	### One release bloc: a territory and the states a release would take with
+	### it (colonial_empire_mark_release_blocs), shown at its seed, the
+	### largest. Whether any of its states counts as a colony (the colony icon
+	### lit, or dimmed), its name with "+N" for the states that go with it (on
+	### hover the people it forms with, its states, its weight on stability:
+	### colonial_empire_bloc_sgui), primary-culture share, standard of living
+	### and GDP across its states, in te_ce_territory_head's cells, then its
+	### Release button. The share is red while a state of the bloc holds the
+	### indigenous-population test, the standard of living red while one holds
+	### the living-standards test: the figure that makes it a colony. Each
+	### cell's hover gives the figure's threshold.
 	###
 	### The instance gates the row on the count of stored rows ("row_visible")
-	### and sets the stored state as its datacontext ("row_context"), on the
+	### and sets the stored seed as its datacontext ("row_context"), on the
 	### inner container so the variable is read only while the row is shown
-	### (Space Race's rival rows). Every cell reads the state through
+	### (Space Race's rival rows). Every cell reads the seed through
 	### State.MakeScope.ScriptValue (grand monuments' rows), the
-	### colonial_territory_disp_* values that call the entry's own triggers.
+	### colonial_bloc_disp_* values the monthly assessment summed from each
+	### state's colonial_territory_disp_*, which call the entry's own triggers.
 	###
-	### Release opens decolonization_events.402 for this territory alone
-	### (colonial_empire_release_state_sgui, the territory passed as ce_state:
-	### gm_tr_take_button's shape). Always drawn; greyed with the reason when it
-	### cannot be pressed, and its hover says whether a Round Table is open.
+	### Release opens decolonization_events.402 for the seed (its release takes
+	### the whole bloc: colonial_empire_release_state_sgui, the seed passed as
+	### ce_state: gm_tr_take_button's shape). Always drawn; greyed with the
+	### reason when it cannot be pressed, and its hover says whether a Round
+	### Table is open.
 	type te_ce_territory_row = widget {
 		size = { 476 26 }
 		block "row_visible" {}
@@ -342,7 +349,7 @@ types colonial_empire_widget_types
 				icon = {
 					size = { 22 22 }
 					parentanchor = center
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_colony'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_colony'), '(CFixedPoint)1' )]"
 					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
 					tooltip = "je_colonial_empire_territory_colony_tt"
 				}
@@ -350,7 +357,7 @@ types colonial_empire_widget_types
 					size = { 22 22 }
 					parentanchor = center
 					alpha = 0.25
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_colony'), '(CFixedPoint)0' )]"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_colony'), '(CFixedPoint)0' )]"
 					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
 					tooltip = "je_colonial_empire_territory_not_colony_tt"
 				}
@@ -358,7 +365,8 @@ types colonial_empire_widget_types
 			widget = {
 				size = { 210 24 }
 				parentanchor = vcenter
-				tooltip = "je_colonial_empire_territory_pop_tt"
+				datacontext = "[GetScriptedGui('colonial_empire_bloc_sgui')]"
+				tooltip = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
 
 				textbox = {
 					parentanchor = left|vcenter
@@ -368,7 +376,34 @@ types colonial_empire_widget_types
 					align = left|nobaseline
 					using = fontsize_medium
 					default_format = "#tooltippable"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_extra'), '(CFixedPoint)0' )]"
 					text = "[State.GetName]"
+				}
+				# A bloc: the name, cut short if it must be, and "+N" always
+				# shown (176 + 4 + 30 = 210).
+				flowcontainer = {
+					parentanchor = left|vcenter
+					direction = horizontal
+					spacing = 4
+					visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_extra'), '(CFixedPoint)0' )]"
+
+					textbox = {
+						autoresize = yes
+						max_width = 176
+						elide = right
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						text = "[State.GetName]"
+					}
+					textbox = {
+						autoresize = yes
+						max_width = 30
+						elide = right
+						align = left|nobaseline
+						using = fontsize_medium
+						text = "je_colonial_empire_territory_name_extra"
+					}
 				}
 			}
 			widget = {
@@ -382,7 +417,7 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_indigenous'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_indigenous'), '(CFixedPoint)1' )]"
 					text = "je_colonial_empire_territory_primary_bad"
 					tooltip = "je_colonial_empire_territory_primary_bad_tt"
 				}
@@ -393,7 +428,7 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_indigenous'), '(CFixedPoint)0' )]"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_indigenous'), '(CFixedPoint)0' )]"
 					text = "je_colonial_empire_territory_primary"
 					tooltip = "je_colonial_empire_territory_primary_tt"
 				}
@@ -409,7 +444,7 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_disparity'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_disparity'), '(CFixedPoint)1' )]"
 					text = "je_colonial_empire_territory_sol_bad"
 					tooltip = "je_colonial_empire_territory_sol_bad_tt"
 				}
@@ -420,7 +455,7 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = fontsize_medium
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_disparity'), '(CFixedPoint)0' )]"
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_bloc_disp_disparity'), '(CFixedPoint)0' )]"
 					text = "je_colonial_empire_territory_sol"
 					tooltip = "je_colonial_empire_territory_sol_tt"
 				}
@@ -1876,9 +1911,11 @@ types colonial_empire_widget_types
 				# Every state of ours that is_decolonization_eligible_state, the
 				# test Planned Full Decolonization and the Release buttons use:
 				# overseas, not a homeland of our cultures, at least
-				# colonial_territory_min_population people. The colony icon is lit
-				# for the ones that also meet is_overseas_colonial_state, the
-				# test that keeps the entry running.
+				# colonial_territory_min_population people, not settled land.
+				# One row per release bloc, the states one release takes together
+				# (colonial_empire_mark_release_blocs). The colony icon is lit for
+				# a bloc with a state that also meets is_overseas_colonial_state,
+				# the test that keeps the entry running.
 				colonial_empire_subheader = {
 					blockoverride "subheader_margin" {
 						margin_top = 0

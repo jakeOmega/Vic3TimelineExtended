@@ -49,8 +49,9 @@ it did not build. Each item says what the change would be and what it costs.
   terms). A Round Table for a subject (its liberty desire falling while talks run, a better relations start, the
   Landowners' displeasure) would mirror the territories' choice.
 - **The release region in the popup.** `.402` says how many states go with a territory and which people would form
-  the new country, but not which states. An option tooltip that lists the marked states (`.401`'s per-state list
-  under a header) would show it.
+  the new country, but not which states. The territory row's name hover lists them (release blocs, 2026-10-24); an
+  option tooltip in `.402` that lists the marked states (`.401`'s per-state list under a header) would show them
+  there too.
 - **Per-colony programmes.** The three programmes act on every colony at once. Letting the player aim Investment or
   the Garrison at chosen territories (a state modifier per row, its cost per territory) is the deeper version of
   "actions beside their targets". It is a redesign of the programmes, their costs and the AI's review.

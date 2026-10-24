@@ -252,10 +252,60 @@ colonial_empire_territories_sgui = {
 		colonial_empire_more_territory_line = { POS = 23 }
 		if = {
 			limit = {
-				has_variable = colonial_empire_eligible_count
-				var:colonial_empire_eligible_count > 24
+				has_variable = colonial_empire_bloc_count
+				var:colonial_empire_bloc_count > 24
 			}
 			custom_tooltip = je_colonial_empire_territories_more_tail
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# Read-only text: one row of the territory list, a release bloc (its seed
+# passed as ce_state), on its name's hover. The people a release forms with,
+# the states it takes with their people (eight, largest GDP first, then a
+# count), and its weight on stability. Built only while hovered; every figure
+# is the monthly assessment's (colonial_empire_mark_release_blocs).
+# ---------------------------------------------------------------------------
+colonial_empire_bloc_sgui = {
+	scope = country
+	saved_scopes = { ce_state }
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { exists = scope:ce_state }
+			custom_tooltip = je_colonial_empire_bloc_head
+			if = {
+				limit = { scope:ce_state = { has_variable = colonial_bloc_culture } }
+				scope:ce_state = {
+					var:colonial_bloc_culture = { save_temporary_scope_as = ce_bloc_culture }
+				}
+				custom_tooltip = je_colonial_empire_bloc_people
+			}
+			if = {
+				limit = { scope:ce_state = { colonial_bloc_disp_extra > 0 } }
+				custom_tooltip = je_colonial_empire_bloc_states
+				colonial_empire_bloc_member_line = { POS = 0 }
+				colonial_empire_bloc_member_line = { POS = 1 }
+				colonial_empire_bloc_member_line = { POS = 2 }
+				colonial_empire_bloc_member_line = { POS = 3 }
+				colonial_empire_bloc_member_line = { POS = 4 }
+				colonial_empire_bloc_member_line = { POS = 5 }
+				colonial_empire_bloc_member_line = { POS = 6 }
+				colonial_empire_bloc_member_line = { POS = 7 }
+				if = {
+					limit = { scope:ce_state = { colonial_bloc_disp_states > 8 } }
+					custom_tooltip = je_colonial_empire_bloc_states_tail
+				}
+			}
+			else = {
+				custom_tooltip = je_colonial_empire_bloc_alone
+			}
+			custom_tooltip = je_colonial_empire_bloc_weight
 		}
 	}
 }
