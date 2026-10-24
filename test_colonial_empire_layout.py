@@ -1335,9 +1335,12 @@ class LiberationContagionTest(unittest.TestCase):
 class DecolonizedCultureScopeTest(unittest.TestCase):
     """A saved scope lasts until the whole effect chain ends, and decolonization
     events .201 / .204 (up to three) and .401.a (one per marked state) call
-    form_decolonized_country more than once in one option. The culture is saved
-    only when a branch finds one, so a capital with no homeland culture found
-    the previous country's still set, skipped both fallbacks and formed with it."""
+    form_decolonized_country more than once in one option. The culture used to
+    be saved only when a branch found one, so a capital with no homeland culture
+    found the previous country's still set, skipped both fallbacks and formed
+    with it. The pick is decol_choose_release_culture now (2026-10-24), shared
+    with .402's preview: it clears its scope first, and its steps test what the
+    call has found in a local variable, never the scope's `exists`."""
 
     # Saved by the helper's first two statements on every call, and read after
     # the create (the helper's tail, apply_decolonization_path), so never cleared.
@@ -1348,6 +1351,7 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
         decol = _read(DECOLONIZATION)
         cls.helper = _strip_comments(_block(decol, "form_decolonized_country"))
         cls.legacy = _strip_comments(_block(decol, "apply_decolonization_path"))
+        cls.pick = _strip_comments(_block(decol, "decol_choose_release_culture"))
 
     def test_the_capital_and_parent_are_saved_on_every_call(self):
         self.assertRegex(self.helper, r"\A\s*save_scope_as = new_country_capital\s+"
@@ -1356,18 +1360,21 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
             with self.subTest(scope=name):
                 self.assertNotIn(f"clear_saved_scope = {name}", self.helper + self.legacy)
 
-    def test_every_other_tested_scope_is_cleared_before_its_first_use(self):
+    def test_the_culture_is_picked_afresh_before_its_first_use(self):
         tested = set(re.findall(r"exists = scope:(\w+)", self.helper + self.legacy)) - set(self.FRESH)
-        self.assertIn("new_country_culture", tested)
-        for name in tested:
-            with self.subTest(scope=name):
-                clear = re.search(rf"if = \{{\s*limit = \{{ exists = scope:{name} \}}\s*"
-                                  rf"clear_saved_scope = {name}\s*\}}", self.helper)
-                self.assertIsNotNone(clear, f"form_decolonized_country never clears scope:{name}")
-                first = re.search(rf"\b{name}\b", self.helper).start()
-                self.assertTrue(clear.start() <= first < clear.end(),
-                                f"scope:{name} is used before the clear")
+        self.assertEqual(tested, {"new_country_culture"}, "a new scope tested by exists needs a clear")
+        first = re.search(r"\bnew_country_culture\b", self.helper)
+        self.assertEqual(first.start(), self.helper.index(
+            "decol_choose_release_culture = { CULTURE_SCOPE = new_country_culture }") + len(
+            "decol_choose_release_culture = { CULTURE_SCOPE = "))
 
+    def test_the_pick_clears_its_scope_first_and_never_tests_it(self):
+        clear = re.search(r"if = \{\s*limit = \{ exists = scope:\$CULTURE_SCOPE\$ \}\s*"
+                          r"clear_saved_scope = \$CULTURE_SCOPE\$\s*\}", self.pick)
+        self.assertIsNotNone(clear)
+        self.assertEqual(self.pick.count("exists = scope:$CULTURE_SCOPE$"), 1, "the steps read local_var, not exists")
+        self.assertLess(clear.start(), self.pick.index("every_scope_culture"))
+        self.assertIn("local_var:decol_release_culture_best <= 0", self.pick)
 
 if __name__ == "__main__":
     unittest.main()
