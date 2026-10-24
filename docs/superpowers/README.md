@@ -34,6 +34,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [specs/2026-10-08-inheritance-laws-design.md](specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events) | Partial: built in #822, balanced in #843 | §5's three second-wave events: *The Hidden Estates* (State as Universal Heir), *The Empty Holding* (Possession by Use), *The First Cohort* (Birthright Endowment) |
 | [specs/2026-10-17-judiciary-design.md](specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock) | Partial: phase 1 built (#1022, #1025; plan archived); the Nation tab hand-off shipped (#1021) | Phase 2, defying the court (challenge, comply, defy or pack); phase 3, seven amendments; phase 4, landmark cases. Each gets its own plan after the phase 1 play-test |
 
+### Colonial Empire
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-10-24-colonial-criteria-and-independence-wars-design.md](specs/2026-10-24-colonial-criteria-and-independence-wars-design.md): what a colony is from first principles (UN Resolution 1541: separated by sea, a distinct people, subordinated), and a war of independence a colonizer can choose to fight | Proposal, nothing built; follows the settler-land fix (acb6dab) | The owner's calls in §8 (D1-D16); then phase 1 (the colony test), phase 2 (independence wars for held territories, collapse as a wave), phase 3 (great powers taking sides, talks, the crisis at home) |
+
 ## Archived — `archive/`
 
 Everything below has shipped. PR numbers are the main build first, then follow-ups.

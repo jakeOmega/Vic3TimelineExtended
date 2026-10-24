@@ -966,14 +966,17 @@ class TerritoryListTest(unittest.TestCase):
         start = self.refresh.index("remove_variable = colonial_empire_territory_1")
         chunk = self.refresh[start:]
         self.assertIn("is_player = yes", chunk)
-        picks = re.findall(r"limit = \{ var:colonial_empire_eligible_count >= (\d+) \}\s*ordered_scope_state = \{"
-                           r"\s*limit = \{ is_decolonization_eligible_state = yes \}\s*order_by = gdp\s*"
-                           r"position = (\d+)\s*check_range_bounds = no", chunk)
-        self.assertEqual([(int(a), int(b)) for a, b in picks], [(k, k - 1) for k in range(1, 9)])
+        self.assertIn("colonial_empire_mark_release_blocs = yes", chunk)
+        slots = re.findall(r"colonial_empire_territory_slot = \{ N = (\d+) POS = (\d+) \}", chunk)
+        self.assertEqual([(int(a), int(b)) for a, b in slots], [(k, k - 1) for k in range(1, 9)])
         for k in range(1, 9):
             self.assertIn(f"remove_variable = colonial_empire_territory_{k}", chunk)
-            self.assertIn(f"name = colonial_empire_territory_{k}", chunk)
-        # The count the rows and "+N more" read is the one the decisions section prints.
+        slot = _block(_read(DISPLAY), "colonial_empire_territory_slot")
+        self.assertRegex(slot, r"limit = \{ var:colonial_empire_bloc_count >= \$N\$ \}\s*ordered_scope_state = \{"
+                               r"\s*limit = \{ has_variable = colonial_bloc_seed \}\s*order_by = colonial_bloc_disp_gdp\s*"
+                               r"position = \$POS\$\s*check_range_bounds = no")
+        self.assertIn("name = colonial_empire_territory_$N$", slot)
+        # The decisions section still prints the count of eligible states.
         self.assertIn("set_variable = { name = colonial_empire_eligible_count value = colonial_eligible_state_count }",
                       self.refresh)
         self.assertIn("limit = { is_decolonization_eligible_state = yes }",
@@ -1003,7 +1006,7 @@ class TerritoryListTest(unittest.TestCase):
     def test_each_criterion_has_its_threshold_on_hover(self):
         loc = _loc()
         row = _type_body(self.gui, "te_ce_territory_row")
-        for cell, value in (("primary", "colonial_territory_disp_indigenous"), ("sol", "colonial_territory_disp_disparity")):
+        for cell, value in (("primary", "colonial_bloc_disp_indigenous"), ("sol", "colonial_bloc_disp_disparity")):
             with self.subTest(cell=cell):
                 self.assertRegex(row, rf"ScriptValue\('{value}'\), '\(CFixedPoint\)1' \)\]\"\s*"
                                       rf"text = \"je_colonial_empire_territory_{cell}_bad\"\s*"
@@ -1013,7 +1016,8 @@ class TerritoryListTest(unittest.TestCase):
                 self.assertIn("#G Not met", loc[f"je_colonial_empire_territory_{cell}_tt"])
         self.assertIn("colonial_territory_disp_sol_floor", loc["je_colonial_empire_territory_sol_tt"])
         self.assertIn("acceptance_status_4", loc["je_colonial_empire_territory_primary_tt"])
-        self.assertIn("colonial_territory_min_population", loc["je_colonial_empire_territory_pop_tt"])
+        self.assertIn("colonial_territory_min_population", loc["je_colonial_empire_territory_head_name_tt"])
+        self.assertIn("colonial_bloc_disp_weight", loc["je_colonial_empire_bloc_weight"])
         self.assertIn("colonial_state_sol_floor_share", loc["je_colonial_empire_territory_sol_tt"])
         self.assertIn("colonial_state_indigenous_min_share", loc["je_colonial_empire_territory_primary_tt"])
         for key, value in loc.items():
@@ -1027,14 +1031,87 @@ class TerritoryListTest(unittest.TestCase):
         self.assertEqual([int(n) for n in re.findall(r"colonial_empire_more_territory_line = \{ POS = (\d+) \}", sgui)],
                          list(range(8, 24)))
         line = _block(_read(DISPLAY), "colonial_empire_more_territory_line")
-        self.assertIn("var:colonial_empire_eligible_count > $POS$", line)
-        self.assertIn("order_by = gdp", line)
-        self.assertIn("is_decolonization_eligible_state = yes", line)
+        self.assertIn("var:colonial_empire_bloc_count > $POS$", line)
+        self.assertIn("order_by = colonial_bloc_disp_gdp", line)
+        self.assertIn("has_variable = colonial_bloc_seed", line)
 
-    def test_the_cleanup_removes_the_primary_shares(self):
+    def test_the_cleanup_clears_the_blocs(self):
         cleanup = _block(_read(DECOLONIZATION), "colonial_empire_je_cleanup_effect")
-        self.assertRegex(cleanup, r"every_scope_state = \{\s*limit = \{ has_variable = colonial_territory_primary_share \}"
-                                  r"\s*remove_variable = colonial_territory_primary_share")
+        self.assertIn("colonial_bloc_clear_state = yes", cleanup)
+        self.assertNotIn("colonial_territory_primary_share", cleanup, "nothing sets it any more")
+
+
+class ReleaseBlocTest(unittest.TestCase):
+    """Owner's request (2026-10-24): Henan and Southern Anhui, neighbours and
+    both homelands of the Han alone, were two rows, though releasing either
+    takes the other. The list shows one row per release bloc: a territory and
+    the states its release would take with it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.display = _read(DISPLAY)
+        cls.values = _read(VALUES)
+        cls.mark = _block(cls.display, "colonial_empire_mark_release_blocs")
+        cls.seed = _block(cls.display, "colonial_bloc_seed_here")
+        cls.member = _block(cls.display, "colonial_bloc_add_member")
+        cls.clear = _block(cls.display, "colonial_bloc_clear_state")
+
+    def test_seeds_are_taken_largest_first_and_skip_covered_states(self):
+        self.assertRegex(self.mark, r"ordered_scope_state = \{\s*limit = \{ is_decolonization_eligible_state = yes \}"
+                                    r"\s*order_by = gdp\s*max = \d+\s*check_range_bounds = no")
+        self.assertRegex(self.mark, r"limit = \{ NOT = \{ has_variable = colonial_bloc_covered \} \}\s*colonial_bloc_seed_here = yes")
+        # Last month's marks go first.
+        self.assertLess(self.mark.index("colonial_bloc_clear_state = yes"), self.mark.index("ordered_scope_state"))
+
+    def test_the_region_is_the_one_a_release_takes(self):
+        # The same flood-fill and culture pick .402's preview and the release use.
+        self.assertIn("_decolonization_preview_region = {", self.seed)
+        self.assertIn("decol_choose_release_culture = { CULTURE_SCOPE = colonial_bloc_member_culture }", self.member)
+
+    def test_a_member_is_covered_only_if_its_own_release_forms_with_the_same_people(self):
+        self.assertRegex(self.member, r"scope:colonial_bloc_member_culture = \{ this = scope:colonial_bloc_culture_pick \}"
+                                      r"\s*\}\s*set_variable = colonial_bloc_covered")
+        self.assertIn("is_decolonization_eligible_state = yes", self.member)
+
+    def test_the_sums_read_each_states_own_tests(self):
+        for value in ("colonial_territory_disp_gdp", "colonial_territory_disp_population",
+                      "colonial_territory_disp_colony", "colonial_territory_disp_indigenous",
+                      "colonial_territory_disp_disparity", "colonial_territory_disp_weight_acceptance"):
+            with self.subTest(value=value):
+                self.assertIn(f"value = {value} }}", self.member)
+
+    def test_the_clear_removes_every_bloc_variable(self):
+        written = set(re.findall(r"set_variable = \{ name = (colonial_bloc_\w+)", self.seed + self.member))
+        written |= set(re.findall(r"set_variable = (colonial_bloc_\w+)", self.seed + self.member))
+        written |= set(re.findall(r"change_variable = \{ name = (colonial_bloc_\w+)", self.member))
+        self.assertGreater(len(written), 10)
+        for var in written:
+            with self.subTest(var=var):
+                self.assertIn(f"remove_variable = {var}\n", self.clear + "\n")
+        self.assertIn("clear_variable_list = colonial_bloc_members", self.clear)
+
+    def test_the_bloc_values_guard_their_variables(self):
+        names = re.findall(r"(?m)^(colonial_bloc_disp_\w+) = \{", self.values)
+        self.assertGreater(len(names), 8)
+        for name in names:
+            body = _block(self.values, name)
+            for var in re.findall(r"(?<!owner\.)var:(\w+)", body):
+                with self.subTest(value=name, var=var):
+                    self.assertIn(f"has_variable = {var}", body)
+
+    def test_the_name_hover_lists_the_bloc(self):
+        row = _type_body(_read(GUI), "te_ce_territory_row")
+        self.assertIn("datacontext = \"[GetScriptedGui('colonial_empire_bloc_sgui')]\"", row)
+        self.assertIn("AddScope( 'ce_state', State.MakeScope )", row)
+        self.assertIn("je_colonial_empire_territory_name_extra", row)
+        # A bloc's name and its "+N" share the name cell.
+        widths = [int(w) for w in re.findall(r"max_width = (\d+)", row[row.index("flowcontainer = {", row.index("colonial_empire_bloc_sgui")):row.index("je_colonial_empire_territory_name_extra")])]
+        self.assertEqual(widths[-2] + 4 + widths[-1], 210)
+        sgui = _block(_read(SGUIS), "colonial_empire_bloc_sgui")
+        self.assertEqual([int(n) for n in re.findall(r"colonial_empire_bloc_member_line = \{ POS = (\d+) \}", sgui)],
+                         list(range(8)))
+        line = _block(self.display, "colonial_empire_bloc_member_line")
+        self.assertIn("colonial_bloc_disp_states > $POS$", line)
 
 
 class ProjectionBarTest(unittest.TestCase):
@@ -1203,12 +1280,13 @@ class WidthBudgetTest(unittest.TestCase):
                 self.assertFits(text, font, cell, key)
 
     def test_longest_dynamic_texts(self):
-        self.assertEqual(set(self.row_cells), {"primary", "sol", "gdp"})
+        self.assertEqual(set(self.row_cells), {"name_extra", "primary", "sol", "gdp"})
         self.assertEqual(set(self.subject_cells), {"name", "ld", "gdp"})
         cases = [
             (LONGEST_STATE, "medium", self.name_cell, "a territory's name"),
             ("999.99M", "medium", self.subject_cells["gdp"], "a subject's GDP"),
             ("100", "medium", self.subject_cells["ld"], "a subject's liberty desire"),
+            ("+99", "medium", self.row_cells["name_extra"], "a bloc's other states"),
             ("100%", "medium", self.row_cells["primary"], "primary share"),
             ("99.9", "medium", self.row_cells["sol"], "standard of living"),
             ("999.99M", "medium", self.row_cells["gdp"], "a territory's GDP"),
@@ -1335,9 +1413,12 @@ class LiberationContagionTest(unittest.TestCase):
 class DecolonizedCultureScopeTest(unittest.TestCase):
     """A saved scope lasts until the whole effect chain ends, and decolonization
     events .201 / .204 (up to three) and .401.a (one per marked state) call
-    form_decolonized_country more than once in one option. The culture is saved
-    only when a branch finds one, so a capital with no homeland culture found
-    the previous country's still set, skipped both fallbacks and formed with it."""
+    form_decolonized_country more than once in one option. The culture used to
+    be saved only when a branch found one, so a capital with no homeland culture
+    found the previous country's still set, skipped both fallbacks and formed
+    with it. The pick is decol_choose_release_culture now (2026-10-24), shared
+    with .402's preview: it clears its scope first, and its steps test what the
+    call has found in a local variable, never the scope's `exists`."""
 
     # Saved by the helper's first two statements on every call, and read after
     # the create (the helper's tail, apply_decolonization_path), so never cleared.
@@ -1348,6 +1429,7 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
         decol = _read(DECOLONIZATION)
         cls.helper = _strip_comments(_block(decol, "form_decolonized_country"))
         cls.legacy = _strip_comments(_block(decol, "apply_decolonization_path"))
+        cls.pick = _strip_comments(_block(decol, "decol_choose_release_culture"))
 
     def test_the_capital_and_parent_are_saved_on_every_call(self):
         self.assertRegex(self.helper, r"\A\s*save_scope_as = new_country_capital\s+"
@@ -1356,18 +1438,21 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
             with self.subTest(scope=name):
                 self.assertNotIn(f"clear_saved_scope = {name}", self.helper + self.legacy)
 
-    def test_every_other_tested_scope_is_cleared_before_its_first_use(self):
+    def test_the_culture_is_picked_afresh_before_its_first_use(self):
         tested = set(re.findall(r"exists = scope:(\w+)", self.helper + self.legacy)) - set(self.FRESH)
-        self.assertIn("new_country_culture", tested)
-        for name in tested:
-            with self.subTest(scope=name):
-                clear = re.search(rf"if = \{{\s*limit = \{{ exists = scope:{name} \}}\s*"
-                                  rf"clear_saved_scope = {name}\s*\}}", self.helper)
-                self.assertIsNotNone(clear, f"form_decolonized_country never clears scope:{name}")
-                first = re.search(rf"\b{name}\b", self.helper).start()
-                self.assertTrue(clear.start() <= first < clear.end(),
-                                f"scope:{name} is used before the clear")
+        self.assertEqual(tested, {"new_country_culture"}, "a new scope tested by exists needs a clear")
+        first = re.search(r"\bnew_country_culture\b", self.helper)
+        self.assertEqual(first.start(), self.helper.index(
+            "decol_choose_release_culture = { CULTURE_SCOPE = new_country_culture }") + len(
+            "decol_choose_release_culture = { CULTURE_SCOPE = "))
 
+    def test_the_pick_clears_its_scope_first_and_never_tests_it(self):
+        clear = re.search(r"if = \{\s*limit = \{ exists = scope:\$CULTURE_SCOPE\$ \}\s*"
+                          r"clear_saved_scope = \$CULTURE_SCOPE\$\s*\}", self.pick)
+        self.assertIsNotNone(clear)
+        self.assertEqual(self.pick.count("exists = scope:$CULTURE_SCOPE$"), 1, "the steps read local_var, not exists")
+        self.assertLess(clear.start(), self.pick.index("every_scope_culture"))
+        self.assertIn("local_var:decol_release_culture_best <= 0", self.pick)
 
 if __name__ == "__main__":
     unittest.main()

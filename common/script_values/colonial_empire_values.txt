@@ -25,6 +25,12 @@ colonial_state_sol_floor_share = 0.8
 # eligible-territories list's hover prints it.
 colonial_state_indigenous_min_share = 0.1
 
+# Above this share of a territory's people of our primary cultures, it is
+# settled land, not a colony (colonial_state_settler_majority): no colony, and
+# no decolonization decision offers it. Read against
+# colonial_territory_primary_share_value; the panel's hovers print it.
+colonial_settler_majority_share = 0.5
+
 # The acceptance terms' weight per state and the overreach term's scale and
 # free ratio (colonial_stability_term_low_acceptance / _high_acceptance /
 # _overreach and colonial_overreach_ratio). Named so the Colonial Holdings
@@ -1709,19 +1715,23 @@ colonial_empire_disp_next_tick = {
 }
 
 # ============================================================================
-# ELIGIBLE TERRITORIES — THE LIST UNDER WHY STABILITY IS MOVING
+# ELIGIBLE TERRITORIES — THE COLONIAL HOLDINGS LIST
 #
 # Every state of ours that is_decolonization_eligible_state (not a homeland of
-# our cultures, at least 100,000 people, overseas): the territories the three
-# decolonization decisions can offer, and the superset of those the
-# stability bar counts as colonies (is_overseas_colonial_state adds one of
-# two signals, colonial_state_indigenous_signal or
-# colonial_state_disparity_signal). colonial_empire_refresh_display stores the
-# first eight by GDP as colonial_empire_territory_1..8 (players only); the
-# rows read these values with the stored state as their scope. Each reads the
-# entry's own triggers, so a row cannot disagree with the entry. The one
-# figure no trigger gives, the primary-culture share, walks the state's pops,
-# so the refresh records it monthly on the state.
+# our cultures, at least 100,000 people, overseas, not mostly our own people):
+# the territories the three decolonization decisions can offer, and the
+# superset of those the stability bar counts as colonies
+# (is_overseas_colonial_state adds one of two signals,
+# colonial_state_indigenous_signal or colonial_state_disparity_signal).
+#
+# The list shows them as release blocs: a territory and the states a release
+# would take with it (colonial_empire_mark_release_blocs in
+# colonial_empire_display_effects.txt). colonial_empire_refresh_display stores
+# the eight largest blocs by GDP as their seed states,
+# colonial_empire_territory_1..8 (players only); the rows read the bloc's
+# figures from the seed through colonial_bloc_disp_* below, which the refresh
+# summed from each member's colonial_territory_disp_* (each reading the
+# entry's own triggers, so a row cannot disagree with the entry).
 # ============================================================================
 
 # SCOPE: state.
@@ -1742,19 +1752,8 @@ colonial_territory_disp_sol_floor = {
 	value = colonial_state_sol_qualifying_floor
 }
 
-# Share of the state's people of our primary cultures, 0-1, as of the last
-# monthly assessment (colonial_territory_record_primary_share).
-colonial_territory_disp_primary = {
-	value = 0
-	if = {
-		limit = { has_variable = colonial_territory_primary_share }
-		value = var:colonial_territory_primary_share
-	}
-	min = 0
-	max = 1
-}
-
-# What colonial_territory_record_primary_share stores. Walks the state's pops.
+# Share of the state's people of our primary cultures, 0-1
+# (colonial_state_settler_majority). Walks the state's pops.
 colonial_territory_primary_share_value = {
 	value = 0
 	every_scope_pop = {
@@ -1767,6 +1766,23 @@ colonial_territory_primary_share_value = {
 	}
 	min = 0
 	max = 1
+}
+
+# The people of our primary cultures in the state, and its average standard
+# of living times its people: a release bloc's sums
+# (colonial_bloc_add_member), so the row can print the bloc's share and its
+# average weighted by people. The first walks the state's pops.
+colonial_territory_primary_population = {
+	value = 0
+	every_scope_pop = {
+		limit = { pop_has_primary_culture = yes }
+		add = total_size
+	}
+}
+
+colonial_territory_sol_population = {
+	value = average_sol
+	multiply = state_population
 }
 
 # The territory's weight on the bar's monthly change, before the monthly
@@ -1877,8 +1893,170 @@ colonial_territory_disp_colony = {
 	}
 }
 
+# ---- A release bloc's figures, read on its seed (a row's stored state) ----
+# The sums colonial_bloc_add_member wrote; each falls back to the seed's own
+# figure while it has none (a save upgraded before the first assessment shows
+# no rows, so this is only a guard).
+# SCOPE: state.
+
+# States in the bloc beyond the seed: the row's "+N".
+colonial_bloc_disp_extra = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_bloc_size }
+		value = var:colonial_bloc_size
+		subtract = 1
+	}
+	min = 0
+}
+
+colonial_bloc_disp_states = {
+	value = 1
+	if = {
+		limit = { has_variable = colonial_bloc_size }
+		value = var:colonial_bloc_size
+	}
+}
+
+colonial_bloc_disp_gdp = {
+	value = colonial_territory_disp_gdp
+	if = {
+		limit = { has_variable = colonial_bloc_gdp }
+		value = var:colonial_bloc_gdp
+	}
+}
+
+colonial_bloc_disp_population = {
+	value = colonial_territory_disp_population
+	if = {
+		limit = { has_variable = colonial_bloc_population }
+		value = var:colonial_bloc_population
+	}
+}
+
+# Share of the bloc's people of our primary cultures, 0-1.
+colonial_bloc_disp_primary = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = colonial_bloc_primary
+			has_variable = colonial_bloc_population
+		}
+		value = var:colonial_bloc_primary
+		divide = {
+			value = var:colonial_bloc_population
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# The bloc's average standard of living, weighted by people.
+colonial_bloc_disp_sol = {
+	value = colonial_territory_disp_sol
+	if = {
+		limit = {
+			has_variable = colonial_bloc_sol
+			has_variable = colonial_bloc_population
+		}
+		value = var:colonial_bloc_sol
+		divide = {
+			value = var:colonial_bloc_population
+			min = 1
+		}
+	}
+}
+
+# 1 when a state of the bloc holds the signal or the test, else 0.
+colonial_bloc_disp_indigenous = {
+	value = colonial_territory_disp_indigenous
+	if = {
+		limit = { has_variable = colonial_bloc_indigenous }
+		value = var:colonial_bloc_indigenous
+	}
+}
+
+colonial_bloc_disp_disparity = {
+	value = colonial_territory_disp_disparity
+	if = {
+		limit = { has_variable = colonial_bloc_disparity }
+		value = var:colonial_bloc_disparity
+	}
+}
+
+colonial_bloc_disp_colony = {
+	value = colonial_territory_disp_colony
+	if = {
+		limit = { has_variable = colonial_bloc_colonies }
+		value = 0
+		if = {
+			limit = { var:colonial_bloc_colonies > 0 }
+			value = 1
+		}
+	}
+}
+
+# The bloc's weight on the bar's monthly change, as
+# colonial_territory_disp_weight is one territory's: its states' acceptance
+# terms, plus the overreach term now less the term without the bloc (its
+# colonies leave the colonies, its other states the metropole). Exact, not a
+# sum of each state's own overreach change, which would miscount a bloc of
+# several colonies.
+colonial_bloc_disp_weight = {
+	value = colonial_bloc_disp_weight_acceptance
+	add = colonial_bloc_disp_weight_overreach
+}
+
+colonial_bloc_disp_weight_acceptance = {
+	value = colonial_territory_disp_weight_acceptance
+	if = {
+		limit = { has_variable = colonial_bloc_acceptance }
+		value = var:colonial_bloc_acceptance
+	}
+}
+
+colonial_bloc_disp_weight_overreach = {
+	value = colonial_territory_disp_weight_overreach
+	if = {
+		limit = {
+			has_variable = colonial_bloc_colonies
+			has_variable = colonial_bloc_others
+			owner ?= {
+				has_variable = colonial_empire_colony_count
+				has_variable = colonial_empire_metropole_count
+			}
+		}
+		value = owner.var:colonial_empire_colony_count
+		divide = {
+			value = owner.var:colonial_empire_metropole_count
+			min = 1
+		}
+		subtract = colonial_overreach_free_ratio
+		min = 0
+		multiply = colonial_overreach_per_ratio
+		subtract = colonial_bloc_overreach_without
+	}
+}
+
+# The overreach term without the bloc. Read only behind
+# colonial_bloc_disp_weight_overreach's guard.
+colonial_bloc_overreach_without = {
+	value = owner.var:colonial_empire_colony_count
+	subtract = var:colonial_bloc_colonies
+	min = 0
+	divide = {
+		value = owner.var:colonial_empire_metropole_count
+		subtract = var:colonial_bloc_others
+		min = 1
+	}
+	subtract = colonial_overreach_free_ratio
+	min = 0
+	multiply = colonial_overreach_per_ratio
+}
+
 # SCOPE: country. How many rows are stored (the slots are filled 1, 2, ... in
-# order), and how many eligible territories the rows leave out.
+# order), and how many release blocs the rows leave out.
 colonial_empire_disp_territory_rows = {
 	value = 0
 	if = {
@@ -1924,7 +2102,11 @@ colonial_empire_disp_territories_eligible = {
 }
 
 colonial_empire_disp_territories_more = {
-	value = colonial_empire_disp_territories_eligible
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_bloc_count }
+		value = var:colonial_empire_bloc_count
+	}
 	subtract = colonial_empire_disp_territory_rows
 	min = 0
 	if = {
