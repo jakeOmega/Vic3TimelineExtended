@@ -1046,7 +1046,7 @@
  country_combined_arms_bonus_enabled_bool_desc:0 "Generals commanding formations with a diverse mix of unit groups gain [concept_combined_arms] commander traits. Each group that makes up at least 5% of the formation grants a unique trait when at least two groups are present."
  country_court_challenges_ignored_bool_desc:0 "No court challenges a change to the constitution, whatever the Judiciary law."
  country_homelands_can_change_bool_desc:0 "Allows [concept_homeland] assignments to shift over time based on which cultures predominantly inhabit a state."
- country_longevity_care_banned_bool_desc:0 "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab."
+ country_longevity_care_banned_bool_desc:0 "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
  country_nuclear_disarmament_bool_desc:0 "This country has agreed to give up its nuclear weapons."
  country_nuclear_program_pause_bool_desc:0 "Nuclear weapons development is halted, by a freeze agreed in a treaty or at an arsenal ceiling: the programme builds nothing and cannot be funded."
  country_receiving_nuclear_program_aid_bool_desc:0 "This country is receiving aid to develop its [concept_nuclear_program]."
