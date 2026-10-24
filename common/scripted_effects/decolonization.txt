@@ -24,8 +24,43 @@
 # time per empire (decol_liberation_contagion). Produces the historical wave
 # pattern: India 1947 → Burma, Ceylon, Indonesia.
 # Last, it sends the new country the Nationalization Question (.15).
+#
+# A war of independence (decol_iw_fight, decolonization_war_effects.txt) forms
+# the rebels with decol_iw_forming on the parent: they get the rebels' marks
+# (decol_iw_rebels_formed) and the contagion, since the declaration is what
+# inspires, and the rest waits for the war's end: no former-colony mark (no
+# post-independence events mid-war), no legacy, no relations, no .15. A lost
+# war runs decol_iw_aftermath_bloody; talks, and a war that never began, run
+# decol_path_legacy and send .15 then.
 apply_decolonization_path = {
 	save_scope_as = decolonized_new_country
+	if = {
+		limit = { scope:decolonizing_parent ?= { has_variable = decol_iw_forming } }
+		decol_iw_rebels_formed = yes
+	}
+	else = {
+		decol_path_legacy = yes
+	}
+	decol_path_contagion = yes
+	if = {
+		limit = {
+			NOT = { scope:decolonizing_parent ?= { has_variable = decol_iw_forming } }
+		}
+		# The Nationalization Question (decolonization_events.15), for every
+		# country formed here (owner ruling, 2026-09-26). Its usual sender,
+		# on_become_independent, is for a subject made independent, which a country
+		# created by create_dynamic_country never was. A week's delay lets the new
+		# country's GDP and foreign-ownership figures, which .15's trigger reads,
+		# settle first. If the engine also sends on_become_independent, the
+		# nationalization_cooldown_var .15 sets in immediate stops a second firing.
+		trigger_event = { id = decolonization_events.15 days = 7 }
+	}
+}
+
+# apply_decolonization_path's legacy: the former-colony mark, the programme's
+# legacy, and the relations by policy and release type. Scope: the new
+# country (scope:decolonized_new_country); scope:decolonizing_parent.
+decol_path_legacy = {
 	# The parent is our former overlord, as for a country released by the
 	# vanilla release actions; without this the former-colony events never
 	# reach a country formed here (decol_mark_former_colony, below).
@@ -142,7 +177,10 @@ apply_decolonization_path = {
 			change_relations = { country = scope:decolonized_new_country value = -25 }
 		}
 	}
+}
 
+# apply_decolonization_path's liberation contagion. Scope: the new country.
+decol_path_contagion = {
 	# Liberation contagion: every other country running the colonial-empire JE
 	# feels a 12-month -1.0/mo drain on its stability bar. Independence
 	# elsewhere accelerates the next wave.
@@ -167,15 +205,6 @@ apply_decolonization_path = {
 			months = 12
 		}
 	}
-
-	# The Nationalization Question (decolonization_events.15), for every
-	# country formed here (owner ruling, 2026-09-26). Its usual sender,
-	# on_become_independent, is for a subject made independent, which a country
-	# created by create_dynamic_country never was. A week's delay lets the new
-	# country's GDP and foreign-ownership figures, which .15's trigger reads,
-	# settle first. If the engine also sends on_become_independent, the
-	# nationalization_cooldown_var .15 sets in immediate stops a second firing.
-	trigger_event = { id = decolonization_events.15 days = 7 }
 }
 
 # Mark the scoped country as a former colony of $OVERLORD$, with the two
@@ -1000,6 +1029,8 @@ decol_sync_programmes = {
 decol_repair_after_civil_war = {
 	decol_sync_permanent_modifiers = yes
 	decol_sync_programmes = yes
+	# Wars of independence: the home front's modifier, from the records.
+	decol_iw_repair_after_civil_war = yes
 }
 
 # Forge an immediately-binding "neocolonial arrangement" treaty between a

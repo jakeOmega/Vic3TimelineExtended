@@ -1,0 +1,82 @@
+﻿# ============================================================================
+# WAR OF INDEPENDENCE — RECONQUEST
+#
+# The goal of dp_te_colonial_war (common/diplomatic_plays/te_colonial_war_play.txt):
+# annex back the country a colony of ours formed when it declared
+# independence. te_reunify_country's annex_country settings, with three
+# differences:
+#
+#   1. No mirrored_wargoal block, so it never self-enforces by occupation
+#      (vanilla_war_reference.md § 13): holding the territory does not end the
+#      war, only the rebels' capitulation or a peace does. That is the
+#      guerrilla war in one line.
+#   2. Zero infamy: the metropole is putting down its own colony, and the
+#      condemnation comes from the great powers and the colonial bar.
+#   3. Valid only while the rebels name the holder as their metropole and talks
+#      have not conceded (decol_iw_conceded, the accords of .76's talks): then
+#      the engine drops the goal, and with no goals left the war can end in a
+#      white peace.
+#
+# on_enforced records the win on the holder (decol_iw_record_enforced), which
+# settles it the next day.
+# ============================================================================
+
+te_colonial_reconquest = {
+	icon = "gfx/interface/icons/war_goals/annex_country.dds"
+
+	kind = annex_country
+
+	settings = {
+		require_target_be_part_of_war
+		annexes_entire_country
+		skip_build_list
+
+		# Validation
+		validate_conflicts_war_goals_all
+		validate_conflicts_annex_country
+	}
+
+	execution_priority = 100
+
+	contestion_type = control_half_target_country_states
+
+	target_type = country
+
+	possible = {
+		# scopes: root = holder, creator_country, diplomatic_play, target_country
+		scope:target_country = {
+			var:decol_iw_metropole ?= root
+			NOT = { has_variable = decol_iw_conceded }
+		}
+	}
+
+	valid = {
+		scope:target_country = {
+			var:decol_iw_metropole ?= root
+			NOT = { has_variable = decol_iw_conceded }
+		}
+	}
+
+	maneuvers = {
+		value = 0
+		add = {
+			desc = "MANEUVERS_BASE_VALUE"
+			value = 10
+		}
+	}
+
+	infamy = {
+		value = 0
+	}
+
+	on_enforced = {
+		# scopes here: root = holder, creator_country, target_country
+		root = {
+			decol_iw_record_enforced = yes
+		}
+	}
+
+	ai = {
+		is_significant_demand = yes
+	}
+}

@@ -1,6 +1,6 @@
 # Colonial Empire: what a colony is, and fighting to keep one (design)
 
-Date: 2026-10-24. Status: proposal, nothing built. Follows the settler-land fix of the same day (acb6dab: a territory
+Date: 2026-10-24. Status: built, all three phases (§ 10 says what the build settled and where it differs). Follows the settler-land fix of the same day (acb6dab: a territory
 whose people are more than half of our primary cultures is settled land, neither a colony nor releasable; a release
 forms with its largest homeland culture, else its largest culture not ours), which this spec takes as given. Owner
 decisions are marked *(owner)*; calls I made are marked *(my call)* and listed in § 9; questions for the owner are in
@@ -665,3 +665,40 @@ option), and a new `docs/testing/colonial-wars-playtest.md`.
 - Deferring the former-colony aftermath until the war is lost.
 - Every figure in §§ 2.3-2.8: weights, war-support lines, the bar term, the home-front ladder, the outcome modifiers.
 - Three record slots.
+
+## 10. As built (2026-10-24)
+
+**Owner decisions.** All three phases in one change. Every § 8 recommendation was taken, D16 as Bloody Decolonization
+whatever programme ran, D11 with the law change, D14 with no scripted subject declarations, and D13 with extra guards
+(the owner: "rarely, and with additional guards to ensure it doesn't happen in cases where it shouldn't (e.g. not
+joining an ally's rebels)"): `decol_iw_can_intervene` refuses a great power that is our ally or defensive-pact
+partner, in our power bloc, our subject or overlord, under a truce with us, already at war (or beside us), or not
+our rival with the larger army.
+
+**Where the build settled or differs:**
+
+- Straits (D5): both halves are built, so the fill gives the same answer whether or not `any_neighbouring_state`
+  crosses a strait: it refuses a crossing unless both ends are our homelands and adds a homeland crossing itself.
+  `test_colonial_geography.py` models the fill under both readings.
+- Old saves: the spec said nothing else was needed, but the entry's voluntary end would read "no colonies" before
+  a save's first pass. It waits for `ce_separation_cached`.
+- `colonial_state_high_acceptance` changes only its geography, as § 1.4's callers list says; it does not require a
+  distinct people.
+- The wave (§ 2.9) takes the territories a release could take (`is_decolonization_eligible_state`), as the collapse
+  did, worst first by `decol_iw_rise_order`; the counters the successors' legacy reads are cleared after the wave's
+  last answer.
+- A secession is recorded at `on_secession_start` when the secessionists' capital still carries our separation mark
+  (their own pass has not run) and their people share no heritage trait with ours. A colonial subject's war is
+  recorded by the monthly settle.
+- Talks (§ 2.6) are for a territory's rebels only: in a subject's or a secession's war the goal is theirs, so there
+  is no goal of ours to drop. The panel greys Open Talks for those.
+- Records are kept as a kind (1 rebels, 2 subject, 3 secession) in the same three slots; a pro-colonial great power's
+  offer of arms is `.79`; a war's ending is settled monthly, and the day after our goal is enforced (`.78`).
+- The negotiated release at a declaration gives what `.402.b` gives, Peaceful Decolonization included
+  (`decol_chosen_release_rewards`), plus its own 100 authority.
+- Event numbers: `.70` declaration, `.71` start (hidden), `.72` won, `.73` lost, `.74` anti-colonial great power,
+  `.75` regime crisis, `.76` the Accords, `.77` wave step (hidden), `.78` settle (hidden), `.79` pro-colonial great
+  power, `.80` Open Talks' confirmation. Blood in the Colonies' Fight is `.13.e` (`.13.d` is its description).
+
+Self-checks and play-test entries: `docs/testing/colonial-wars-playtest.md`. Reference: `docs/systems/mod_systems.md`
+§ What a Colony Is and § Wars of Independence; player guide chapter 12.

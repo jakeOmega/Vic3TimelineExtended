@@ -64,7 +64,7 @@ colonial_stability_bar = {
 	# common/script_values/colonial_empire_values.txt
 	# (`colonial_stability_term_*`, country scope). The bar consumes the leaves
 	# one-for-one, each keeping its own `desc` key so the player's hover
-	# breakdown still shows all 21 terms individually, followed by the monthly
+	# breakdown still shows all 22 terms individually, followed by the monthly
 	# cap (colonial_stability_term_cap). The journal-entry widget
 	# and the history charts consume the group sums (`colonial_stability_drift_*`)
 	# and `colonial_stability_drift_total`, which are built from the SAME leaves.
@@ -193,6 +193,10 @@ colonial_stability_bar = {
 		add = {
 			desc = "colonial_war_penalty_tt"
 			value = owner.colonial_stability_term_war
+		}
+		add = {
+			desc = "colonial_independence_war_penalty_tt"
+			value = owner.colonial_stability_term_independence_war
 		}
 		add = {
 			desc = "colonial_revolution_penalty_tt"
