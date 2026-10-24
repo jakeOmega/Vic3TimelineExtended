@@ -25,6 +25,16 @@ colonial_state_sol_floor_share = 0.8
 # eligible-territories list's hover prints it.
 colonial_state_indigenous_min_share = 0.1
 
+# The acceptance terms' weight per state and the overreach term's scale and
+# free ratio (colonial_stability_term_low_acceptance / _high_acceptance /
+# _overreach and colonial_overreach_ratio). Named so the Colonial Holdings
+# list's per-territory weight (colonial_territory_disp_weight) reads the same
+# numbers as the bar.
+colonial_low_acceptance_per_colony = -0.4
+colonial_high_acceptance_per_state = 0.5
+colonial_overreach_per_ratio = -0.4
+colonial_overreach_free_ratio = 1.5
+
 # Count of overseas colonial states (non-homeland, overseas, 100k+ pop, has unintegrated pops)
 colonial_state_count = {
 	value = 0
@@ -40,13 +50,7 @@ colonial_state_count = {
 colonial_low_acceptance_count = {
 	value = 0
 	every_scope_state = {
-		limit = {
-			is_overseas_colonial_state = yes
-			any_scope_pop = {
-				# acceptance_status_2 = 20 (vanilla); matches colonial_empire_buttons.txt's threshold
-				pop_acceptance < acceptance_status_2
-			}
-		}
+		limit = { colonial_state_low_acceptance_colony = yes }
 		add = 1
 	}
 }
@@ -55,16 +59,7 @@ colonial_low_acceptance_count = {
 colonial_high_acceptance_count = {
 	value = 0
 	every_scope_state = {
-		limit = {
-			NOT = { is_homeland_of_country_cultures = owner }
-			state_population >= colonial_territory_min_population
-			is_overseas_from_capital = yes
-			NOT = {
-				any_scope_pop = {
-					pop_acceptance < acceptance_status_4
-				}
-			}
-		}
+		limit = { colonial_state_high_acceptance = yes }
 		add = 1
 	}
 }
@@ -82,6 +77,18 @@ colonial_eligible_state_count = {
 	}
 }
 
+# Count of our colonial subjects, at any depth (is_qualifying_colonial_subject,
+# the subject half of je_colonial_empire's `possible`). Snapshotted into
+# colonial_empire_subject_count for the overview's holdings line and the
+# Colonial Holdings subject list.
+colonial_subject_count = {
+	value = 0
+	every_subject_or_below = {
+		limit = { is_qualifying_colonial_subject = yes }
+		add = 1
+	}
+}
+
 # Subset of the above that the Round Table Conference accepts: no pop below
 # acceptance_status_2. Mirrors colonial_empire_possible_round_table's gate.
 colonial_round_table_state_count = {
@@ -89,15 +96,16 @@ colonial_round_table_state_count = {
 	every_scope_state = {
 		limit = {
 			is_decolonization_eligible_state = yes
-			NOT = {
-				any_scope_pop = {
-					pop_acceptance < acceptance_status_2
-				}
-			}
+			colonial_state_round_table_ready = yes
 		}
 		add = 1
 	}
 }
+
+# The authority a Round Table Conference needs: more than this. Read by the
+# empire-wide gate (colonial_empire_possible_round_table) and the one-territory
+# Round Table (decolonization_events.402.b), and printed by their tooltips.
+colonial_round_table_authority = 200
 
 # Count of great powers with anti-colonial stance (set via event 14).
 # Self-exclusion is `this = prev`, not `this = ROOT`: the bar reads these
@@ -253,7 +261,7 @@ metropole_state_count = {
 colonial_overreach_ratio = {
 	value = colonial_state_count
 	divide = metropole_state_count
-	subtract = 1.5
+	subtract = colonial_overreach_free_ratio
 	min = 0
 }
 
@@ -677,7 +685,7 @@ colonial_stability_term_overreach = {
 	# The ratio once (it walks the states twice), scaled, then capped at 0:
 	# the same as the former `if ratio > 0` (2026-10-03 script profile).
 	value = colonial_overreach_ratio
-	multiply = -0.4
+	multiply = colonial_overreach_per_ratio
 	max = 0
 }
 
@@ -775,13 +783,13 @@ colonial_stability_term_low_acceptance = {
 	# A count is never negative, so no `> 0` test: it walked every state's
 	# pops a second time (2026-10-03 script profile).
 	value = colonial_low_acceptance_count
-	multiply = -0.4
+	multiply = colonial_low_acceptance_per_colony
 }
 
 colonial_stability_term_high_acceptance = {
 	# See colonial_stability_term_low_acceptance.
 	value = colonial_high_acceptance_count
-	multiply = 0.5
+	multiply = colonial_high_acceptance_per_state
 }
 
 # --- Domestic disruption ---
@@ -1761,6 +1769,89 @@ colonial_territory_primary_share_value = {
 	max = 1
 }
 
+# The territory's weight on the bar's monthly change, before the monthly
+# limit: what holding it adds (positive) or takes away (negative), and so what
+# releasing it would remove. Its own acceptance term, plus the overreach term
+# now less the term without it (a colony leaves the colonies, any other
+# territory the metropole: metropole_state_count counts every state that is
+# not a colony). The overreach half reads the monthly counts the refresh
+# stores on the owner, so a hover walks no states; 0 until they exist.
+colonial_territory_disp_weight = {
+	value = colonial_territory_disp_weight_acceptance
+	add = colonial_territory_disp_weight_overreach
+}
+
+colonial_territory_disp_weight_acceptance = {
+	value = 0
+	if = {
+		limit = { colonial_state_low_acceptance_colony = yes }
+		add = colonial_low_acceptance_per_colony
+	}
+	if = {
+		limit = { colonial_state_high_acceptance = yes }
+		add = colonial_high_acceptance_per_state
+	}
+}
+
+colonial_territory_disp_weight_overreach = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = colonial_empire_colony_count
+				has_variable = colonial_empire_metropole_count
+			}
+		}
+		value = owner.var:colonial_empire_colony_count
+		divide = {
+			value = owner.var:colonial_empire_metropole_count
+			min = 1
+		}
+		subtract = colonial_overreach_free_ratio
+		min = 0
+		multiply = colonial_overreach_per_ratio
+		subtract = colonial_territory_overreach_without
+	}
+}
+
+# The overreach term without this territory (see above). Read only behind
+# colonial_territory_disp_weight_overreach's guard.
+colonial_territory_overreach_without = {
+	value = 0
+	if = {
+		limit = {
+			is_overseas_colonial_state = yes
+			owner ?= {
+				has_variable = colonial_empire_colony_count
+				has_variable = colonial_empire_metropole_count
+			}
+		}
+		value = owner.var:colonial_empire_colony_count
+		subtract = 1
+		divide = {
+			value = owner.var:colonial_empire_metropole_count
+			min = 1
+		}
+	}
+	else_if = {
+		limit = {
+			owner ?= {
+				has_variable = colonial_empire_colony_count
+				has_variable = colonial_empire_metropole_count
+			}
+		}
+		value = owner.var:colonial_empire_colony_count
+		divide = {
+			value = owner.var:colonial_empire_metropole_count
+			subtract = 1
+			min = 1
+		}
+	}
+	subtract = colonial_overreach_free_ratio
+	min = 0
+	multiply = colonial_overreach_per_ratio
+}
+
 # 1 when the signal or the test holds, else 0.
 colonial_territory_disp_indigenous = {
 	value = 0
@@ -1851,6 +1942,98 @@ colonial_empire_disp_territories_pending = {
 		limit = {
 			colonial_empire_disp_territories_eligible > 0
 			colonial_empire_disp_territory_rows < 1
+		}
+		value = 1
+	}
+}
+
+# ============================================================================
+# THE COLONIAL HOLDINGS SECTION — WHAT HOLDS THE ENTRY, AND THE SUBJECT LIST
+#
+# The overview's holdings line counts what keeps je_colonial_empire running
+# (its `possible`): the colonies (is_overseas_colonial_state) and the colonial
+# subjects (is_qualifying_colonial_subject), from the monthly snapshot
+# colonial_empire_refresh_display takes. The subject list stores the first
+# eight subjects by GDP as their capitals (colonial_empire_subject_1..8); each
+# row reads its subject through the stored state, with vanilla's own getters
+# for its kind and liberty desire and these values for the rest.
+# ============================================================================
+
+# SCOPE: country (the empire). 0 before the first snapshot.
+colonial_empire_disp_colonies = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_colony_count }
+		value = var:colonial_empire_colony_count
+	}
+}
+
+colonial_empire_disp_subjects = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_subject_count }
+		value = var:colonial_empire_subject_count
+	}
+}
+
+# How many subject rows are stored (the slots are filled 1, 2, ... in order),
+# and how many subjects the rows leave out.
+colonial_empire_disp_subject_rows = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_subject_1 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_3 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_4 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_5 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_6 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_7 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_subject_8 }
+		add = 1
+	}
+}
+
+colonial_empire_disp_subjects_more = {
+	value = colonial_empire_disp_subjects
+	subtract = colonial_empire_disp_subject_rows
+	min = 0
+}
+
+# SCOPE: country (a subject, reached through its stored capital).
+colonial_subject_disp_gdp = {
+	value = gdp
+}
+
+# 1 while the subject could be raised to a dominion by the panel's Dominion
+# button (a colony, which vanilla lets become one), else 0: the row's hover
+# says which way out each subject has.
+colonial_subject_disp_can_be_dominion = {
+	value = 0
+	if = {
+		limit = {
+			is_subject_type = subject_type_colony
+			can_increase_autonomy = yes
 		}
 		value = 1
 	}

@@ -16,7 +16,7 @@ DECOLONIZATION = os.path.join(REPO, "common", "scripted_effects", "decolonizatio
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_ce_sec_stability", "te_ce_sec_pressure", "te_ce_sec_programmes", "te_ce_sec_decisions"]
+STATUS = ["te_ce_sec_holdings", "te_ce_sec_stability", "te_ce_sec_pressure", "te_ce_sec_programmes"]
 REFERENCE = ["te_ce_sec_history", "te_ce_sec_how"]
 ROOTS = {   # root name -> (what it instances, the journal container it is attached to)
     "widget_je_colonial_empire_overview": ("te_ce_overview_panel", "custom_widget_container_1"),
@@ -24,7 +24,8 @@ ROOTS = {   # root name -> (what it instances, the journal container it is attac
     "widget_je_colonial_empire_reference": ("te_ce_reference_sections", "custom_widget_container_3"),
 }
 OLD_ROOTS = ["widget_je_colonial_empire", "widget_je_colonial_empire_history"]
-OLD_FLAGS = ["colonial_empire_history_open", "colonial_empire_pressure_open"]
+OLD_FLAGS = ["colonial_empire_history_open", "colonial_empire_pressure_open",
+             "colonial_empire_decisions_closed", "colonial_empire_territories_open"]
 PROGRAMMES = ("invest", "garrison", "assimilation")
 
 # The explanations "How the Colonial Empire Works" holds, and the live
@@ -35,7 +36,18 @@ HOW_KEYS = ["je_colonial_empire_how_bar_1", "je_colonial_empire_how_bar_2", "je_
 RETIRED_KEYS = ["je_colonial_empire_status_summary", "je_colonial_empire_ov_pie_label",
                 "je_colonial_empire_bar_headline", "je_colonial_empire_band_headline",
                 "je_colonial_empire_conditions_body", "je_colonial_empire_phase_row",
-                "je_colonial_empire_candidates_row"]
+                "je_colonial_empire_candidates_row",
+                # The Decolonization section and its candidate counts, and the
+                # territory list's People column and nested header (2026-10-24:
+                # Colonial Holdings, a button beside each target).
+                "je_colonial_empire_candidates_eligible", "je_colonial_empire_candidates_eligible_tt",
+                "je_colonial_empire_candidates_largest", "je_colonial_empire_candidates_largest_tt",
+                "je_colonial_empire_candidates_round_table", "je_colonial_empire_candidates_round_table_tt",
+                "je_colonial_empire_decision_release", "je_colonial_empire_decision_release_tt",
+                "je_colonial_empire_decision_round_table", "je_colonial_empire_decision_round_table_tt",
+                "je_colonial_empire_decisions_header", "je_colonial_empire_territories_header",
+                "je_colonial_empire_territory_head_pop", "je_colonial_empire_territory_head_pop_tt",
+                "je_colonial_empire_territory_pop"]
 # The nine drift groups, the monthly limit and the total, and where each reads.
 # The three that iterate read the snapshot through guarded values.
 TABLE = [("base", "ScriptValue('colonial_stability_drift_base')"),
@@ -53,7 +65,6 @@ TABLE = [("base", "ScriptValue('colonial_stability_drift_base')"),
 # monthly limit and the total are sums, so those three rows have no bar.
 PILLARS = ["laws", "igs", "rank", "policies", "domestic", "overreach", "gp", "acceptance"]
 READY = "GetScriptedGui('colonial_empire_display_ready').IsShown"
-HAS_CANDIDATES = "GetScriptedGui('colonial_empire_has_candidates').IsShown"
 
 
 def _read(path):
@@ -189,7 +200,7 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        self.assertEqual(len(flags), 7)
+        self.assertEqual(len(flags), 6)
         for f in flags:
             self.assertRegex(f, r"^colonial_empire_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -205,11 +216,9 @@ class FlagTest(unittest.TestCase):
         for sec, flag in (("te_ce_sec_stability", "colonial_empire_stability_closed"),
                           ("te_ce_sec_pressure", "colonial_empire_pressure_closed"),
                           ("te_ce_sec_programmes", "colonial_empire_programmes_closed"),
-                          ("te_ce_sec_decisions", "colonial_empire_decisions_closed"),
+                          ("te_ce_sec_holdings", "colonial_empire_holdings_closed"),
                           ("te_ce_sec_history", "colonial_empire_history_closed"),
-                          ("te_ce_sec_how", "colonial_empire_how_open"),
-                          # A list, so collapsed (play-test round 3).
-                          ("te_ce_sec_stability", "colonial_empire_territories_open")):
+                          ("te_ce_sec_how", "colonial_empire_how_open")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec), sec)
 
     def test_no_section_is_an_exception(self):
@@ -299,7 +308,7 @@ class DisplayScriptTest(unittest.TestCase):
     def test_display_values_guard_every_variable(self):
         values = _read(VALUES)
         names = re.findall(r"(?m)^(colonial_empire_disp_\w+) = \{", values)
-        self.assertEqual(len(names), 40)
+        self.assertEqual(len(names), 44)
         panel = _read(GUI) + "\n".join(v for k, v in _loc().items() if k.startswith("je_colonial_empire_"))
         for name in names:
             with self.subTest(value=name):
@@ -358,8 +367,8 @@ class StabilityTableTest(unittest.TestCase):
 
     def test_every_variable_read_is_gated(self):
         """Every .Var( read in the panel, in a text, in the loc it names or in a
-        datacontext, sits under the display_ready (or has_candidates) gate: the
-        entry is shown while inactive (gotcha #14)."""
+        datacontext, sits under the display_ready gate: the entry is shown while
+        inactive (gotcha #14)."""
         loc = _loc()
         text = _strip_comments(self.gui)
         checked = 0
@@ -371,8 +380,8 @@ class StabilityTableTest(unittest.TestCase):
             checked += 1
             with self.subTest(text=value):
                 gates = " ".join(_enclosing_visibles(text, m.start()))
-                self.assertTrue(READY in gates or HAS_CANDIDATES in gates, value)
-        self.assertEqual(checked, 3 + 8)   # three candidate rows, eight territory rows
+                self.assertIn(READY, gates, value)
+        self.assertEqual(checked, 8 + 8)   # eight territory rows, eight subject rows
         for row in self._rows():
             self.assertNotIn(".Var(", row, "the drift rows read the guarded disp values")
 
@@ -421,17 +430,200 @@ class DecisionsTest(unittest.TestCase):
     def test_the_button_sits_beside_its_decision(self):
         gui = _read(GUI)
         self.assertRegex(gui, r"type colonial_empire_decision_row = flowcontainer \{\s*direction = horizontal")
-        body = _type_body(gui, "te_ce_sec_decisions")
+        self.assertIn("datacontext = \"[GetScriptedGui('colonial_empire_planned_sgui')]\"",
+                      _type_body(gui, "colonial_empire_decision_row"))
+        body = _type_body(gui, "te_ce_sec_holdings")
         loc = _loc()
-        for d in ("release", "round_table", "planned"):
-            with self.subTest(decision=d):
-                self.assertRegex(body, rf'text = "je_colonial_empire_decision_{d}"\s*'
-                                       rf'tooltip = "je_colonial_empire_decision_{d}_tt"')
-                self.assertNotIn("#lore", loc[f"je_colonial_empire_decision_{d}"])
-                self.assertNotIn("\\n", loc[f"je_colonial_empire_decision_{d}"])
-        # The counts are said once, above the three rows they grey.
-        self.assertLess(body.index("je_colonial_empire_candidates_eligible"),
-                        body.index("colonial_empire_decision_row = {"))
+        # One decision row: Planned Full Decolonization. Releasing one territory
+        # or one subject is a button on its own row (HoldingsTest).
+        self.assertEqual(body.count("colonial_empire_decision_row = {"), 1)
+        self.assertRegex(body, r'text = "je_colonial_empire_decision_planned"\s*'
+                               r'tooltip = "je_colonial_empire_decision_planned_tt"')
+        self.assertNotIn("#lore", loc["je_colonial_empire_decision_planned"])
+        self.assertNotIn("\\n", loc["je_colonial_empire_decision_planned"])
+        self.assertNotIn("AddScope( 'op'", body[body.index("colonial_empire_decision_row = {"):])
+        self.assertNotIn("colonial_empire_decision_sgui", _read(SGUIS))
+
+
+# The per-target buttons of Colonial Holdings: the handler, its saved scope,
+# its gate and effect, and the confirmation event the effect opens.
+PER_TARGET = [("colonial_empire_release_state_sgui", "ce_state", "STATE", "release_state", "402"),
+              ("colonial_empire_free_subject_sgui", "ce_capital", "CAPITAL", "free_subject", "403"),
+              ("colonial_empire_dominion_subject_sgui", "ce_capital", "CAPITAL", "dominion_subject", "404")]
+EVENTS = os.path.join(REPO, "events", "decolonization_events.txt")
+
+
+def _options(event_body):
+    return [event_body[slice(*_span(event_body, m.start()))]
+            for m in re.finditer(r"(?m)^\toption = \{", event_body)]
+
+
+class HoldingsTest(unittest.TestCase):
+    """The owner's request (2026-10-24): the panel shows why the entry runs, the
+    territories and the colonial subjects, and an action that targets one of
+    them sits beside it, opening a confirmation for that one target."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.body = _type_body(cls.gui, "te_ce_sec_holdings")
+        cls.sguis = _read(SGUIS)
+        cls.effects = _read(DECOLONIZATION)
+        cls.triggers = _read(TRIGGERS)
+        cls.events = _read(EVENTS)
+        cls.loc = _loc()
+
+    def test_territories_then_subjects_then_the_whole_empire(self):
+        order = [self.body.index(k) for k in ('"je_colonial_empire_holdings_territories"',
+                                               '"je_colonial_empire_holdings_subjects"',
+                                               '"je_colonial_empire_holdings_whole"')]
+        self.assertEqual(order, sorted(order))
+        self.assertLess(self.body.index("te_ce_territory_row = {"), order[1])
+        self.assertLess(order[1], self.body.index("te_ce_subject_row = {"))
+        self.assertLess(self.body.index("te_ce_subject_row = {"), order[2])
+
+    def test_each_button_passes_its_own_target(self):
+        rows = {"te_ce_territory_row": [PER_TARGET[0]], "te_ce_subject_row": PER_TARGET[1:]}
+        for row_type, handlers in rows.items():
+            row = _type_body(self.gui, row_type)
+            for sgui, scope, *_ in handlers:
+                with self.subTest(sgui=sgui):
+                    m = re.search(rf"datacontext = \"\[GetScriptedGui\('{sgui}'\)\]\"", row)
+                    self.assertTrue(m, f"{sgui} is not on a row of {row_type}")
+                    button = row[slice(*_span(row, row.rindex("button = {", 0, m.start())))]
+                    for prop in ("enabled", "onclick", "tooltip"):
+                        self.assertRegex(button, rf"\b{prop} = \"[^\"]*AddScope\( '{scope}', State\.MakeScope \)")
+                    self.assertNotRegex(_own_properties(button), r"\bvisible = ", "a row's button is always drawn")
+
+    def test_eight_subject_rows_each_gated_on_the_count(self):
+        rows = [self.body[slice(*_span(self.body, m.start()))]
+                for m in re.finditer(r"te_ce_subject_row = \{", self.body)]
+        self.assertEqual(len(rows), 8)
+        for k, row in enumerate(rows, 1):
+            with self.subTest(row=k):
+                self.assertIn(f"ScriptValue('colonial_empire_disp_subject_rows'), '(CFixedPoint){k}' )", row)
+                self.assertIn(f"Var('colonial_empire_subject_{k}').GetState", row)
+                self.assertLess(row.index('"row_visible"'), row.index('"row_context"'))
+        row_type = _type_body(self.gui, "te_ce_subject_row")
+        self.assertLess(row_type.index('block "row_visible"'), row_type.index("flowcontainer = {"))
+        self.assertGreater(row_type.index('block "row_context"'), row_type.index("flowcontainer = {"))
+        # The cells reach the subject through its stored capital (gotcha #11).
+        self.assertIn('datacontext = "[State.GetCountry]"', row_type)
+        self.assertNotIn("Var(", row_type)
+
+    def test_the_handlers_delegate_and_fail_closed(self):
+        for sgui, scope, param, action, _ in PER_TARGET:
+            with self.subTest(sgui=sgui):
+                body = _block(self.sguis, sgui)
+                self.assertIn(f"saved_scopes = {{ {scope} }}", body)
+                self.assertIn("ai_is_valid = { always = no }", body)
+                valid = body[slice(*_span(body, re.search(r"(?m)^\tis_valid = \{", body).start()))]
+                self.assertLess(valid.index(f"exists = scope:{scope}"),
+                                valid.index(f"colonial_empire_possible_{action} = {{ {param} = scope:{scope} }}"))
+                self.assertIn(f"colonial_empire_effect_{action} = {{ {param} = scope:{scope} }}", body)
+
+    def test_each_effect_opens_its_confirmation_under_the_lock(self):
+        for _, _, _, action, event in PER_TARGET:
+            with self.subTest(action=action):
+                body = _block(self.effects, f"colonial_empire_effect_{action}")
+                hidden = body[slice(*_span(body, body.index("hidden_effect = {")))]
+                self.assertIn("set_variable = { name = decol_offer_pending days = 7 }", hidden)
+                self.assertIn(f"trigger_event = {{ id = decolonization_events.{event} popup = yes }}", hidden)
+                self.assertRegex(body, r"^\s*custom_tooltip = CE_\w+_TT", "the hover's line sits outside the wrapper")
+                gate = _block(self.triggers, f"colonial_empire_possible_{action}")
+                self.assertTrue("colonial_empire_no_offer_pending = yes" in gate
+                                or "colonial_empire_subject_action_base" in gate, action)
+        self.assertIn("colonial_empire_no_offer_pending = yes",
+                      _block(self.triggers, "colonial_empire_subject_action_base"))
+        self.assertIn("colonial_empire_no_offer_pending = yes",
+                      _block(self.triggers, "colonial_empire_possible_planned_decolonization"))
+
+    def test_every_option_clears_the_lock_and_reconsider_is_the_default(self):
+        for event in ("401", "402", "403", "404"):
+            options = _options(_block(self.events, f"decolonization_events.{event}"))
+            with self.subTest(event=event):
+                self.assertGreaterEqual(len(options), 2)
+                for option in options:
+                    self.assertIn("decol_offer_clear = yes", option)
+                if event != "401":
+                    last = options[-1]
+                    self.assertIn("default_option = yes", last)
+                    self.assertEqual(sum("default_option = yes" in o for o in options), 1)
+                    for act in ("form_decolonized_country", "make_independent", "increase_autonomy"):
+                        self.assertNotIn(act, last)
+
+    def test_the_round_table_option_reads_the_shared_tests(self):
+        options = _options(_block(self.events, "decolonization_events.402"))
+        rt = options[1]
+        self.assertIn("colonial_state_round_table_ready = yes", rt)
+        self.assertIn("authority > colonial_round_table_authority", rt)
+        self.assertIn("show_as_unavailable = { always = yes }", rt)
+        self.assertIn("highlighted_option = yes", rt)
+        gate = _block(self.triggers, "colonial_empire_possible_round_table_state")
+        self.assertIn("colonial_state_round_table_ready = yes", gate)
+        self.assertIn("authority > colonial_round_table_authority", gate)
+        self.assertIn("authority > colonial_round_table_authority",
+                      _block(self.triggers, "colonial_empire_possible_round_table"))
+        self.assertNotRegex(self.triggers, r"authority > 200")
+
+    def test_dominion_is_vanillas_step_up_for_a_colony(self):
+        gate = _block(self.triggers, "colonial_empire_possible_dominion_subject")
+        self.assertIn("is_subject_type = subject_type_colony", gate)
+        self.assertIn("can_increase_autonomy = yes", gate)
+        self.assertIn("catalyst_autonomy_change_imposed", gate)
+        grant = _options(_block(self.events, "decolonization_events.404"))[0]
+        for line in ("increase_autonomy = yes", "add_liberty_desire = -30",
+                     "type = catalyst_autonomy_change_imposed", "create_unidirectional_truce",
+                     "decol_clear_subject_pressure = yes"):
+            self.assertIn(line, grant)
+
+    def test_freed_subjects_are_former_colonies_without_the_band_pressure(self):
+        options = _options(_block(self.events, "decolonization_events.403"))
+        for option in options[:2]:
+            self.assertIn("decol_mark_former_colony = { OVERLORD = root }", option)
+            self.assertIn("make_independent = yes", option)
+            self.assertIn("decol_clear_subject_pressure = yes", option)
+        self.assertIn("has_law = law_type:law_neocolonialism", options[1])
+        clear = _block(self.effects, "decol_clear_subject_pressure")
+        for band in ("strained", "crumbling", "collapsing"):
+            self.assertIn(f"has_modifier = colonial_overlord_{band}_subject_ld_modifier", clear)
+
+    def test_the_prestige_reward_does_not_stack(self):
+        rewards = _block(self.effects, "decol_chosen_release_rewards")
+        self.assertRegex(rewards, r"limit = \{ NOT = \{ has_modifier = peaceful_decolonization_modifier \} \}"
+                                  r"\s*add_modifier = \{\s*name = peaceful_decolonization_modifier")
+        self.assertIn("decol_record_chosen_release = yes", rewards)
+
+    def test_the_subject_snapshot(self):
+        refresh = _block(_read(DISPLAY), "colonial_empire_refresh_display")
+        chunk = refresh[refresh.index("remove_variable = colonial_empire_subject_1"):]
+        self.assertIn("is_player = yes", chunk)
+        self.assertEqual(re.findall(r"colonial_empire_subject_slot = \{ N = (\d) POS = (\d) \}", chunk),
+                         [(str(k), str(k - 1)) for k in range(1, 9)])
+        slot = _block(_read(DISPLAY), "colonial_empire_subject_slot")
+        self.assertIn("count >= $N$", slot)
+        self.assertIn("order_by = gdp", slot)
+        self.assertIn("check_range_bounds = no", slot)
+        self.assertEqual(slot.count("is_qualifying_colonial_subject = yes"), 2)
+        cleanup = _block(self.effects, "colonial_empire_je_cleanup_effect")
+        for k in range(1, 9):
+            self.assertIn(f"remove_variable = colonial_empire_subject_{k}\n", cleanup)
+        self.assertIn("is_qualifying_colonial_subject = yes",
+                      _block(_read(VALUES), "colonial_subject_count"))
+
+    def test_the_overview_says_what_holds_the_entry(self):
+        overview = _type_body(self.gui, "te_ce_overview_panel")
+        self.assertRegex(overview, r'text = "je_colonial_empire_ov_held"\s*tooltip = "je_colonial_empire_ov_held_tt"')
+        held = self.loc["je_colonial_empire_ov_held"]
+        self.assertIn("colonial_empire_disp_colonies", held)
+        self.assertIn("colonial_empire_disp_subjects", held)
+        tt = self.loc["je_colonial_empire_ov_held_tt"]
+        for value in ("colonial_territory_min_population", "colonial_state_indigenous_min_share",
+                      "colonial_state_sol_floor_share"):
+            self.assertIn(value, tt)
+        self.assertNotRegex(re.sub(r"\[[^\]]*\]|#\w+", "", tt), r"\d", "editing rule 1: no number typed in loc")
+        # The colonies it counts are the entry's own test.
+        self.assertIn("value = colonial_state_count", _block(_read(DISPLAY), "colonial_empire_refresh_display"))
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -487,7 +679,11 @@ VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 "gfx/interface/icons/generic_icons/transparent.dds",
                 "gfx/interface/icons/generic_icons/trend_up.dds",
                 "gfx/interface/icons/generic_icons/trend_down.dds",
-                "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+                "gfx/interface/icons/generic_icons/trend_nochange.dds",
+                # Vanilla's own art for vanilla things in the subject list: the
+                # liberty-desire concept's icon and each subject type's icon.
+                "gfx/interface/icons/diplomatic_action_icons/liberty_desire.dds",
+                "[State.GetCountry.GetSubjectType.GetTexture]"}
 
 
 def _tracked(path):
@@ -732,23 +928,25 @@ TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "colonial_empire_tr
 
 class TerritoryListTest(unittest.TestCase):
     """Play-test round 3 (owner, 2026-09-30): the eligible territories as a
-    collapsed list, largest GDP first, each row showing how it scores on the
-    tests, read through the entry's own triggers."""
+    list, largest GDP first, each row showing how it scores on the tests, read
+    through the entry's own triggers. Since 2026-10-24 it is Colonial Holdings'
+    first list, open, each row with its Release button."""
 
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(GUI)
-        cls.body = _type_body(cls.gui, "te_ce_sec_stability")
+        cls.body = _type_body(cls.gui, "te_ce_sec_holdings")
         cls.values = _read(VALUES)
         cls.refresh = _block(_read(DISPLAY), "colonial_empire_refresh_display")
 
-    def test_the_list_is_collapsed_under_the_ready_gate(self):
-        m = re.search(r"flowcontainer = \{\s*direction = vertical\s*ignoreinvisible = yes\s*spacing = 2\s*"
-                      r"visible = \"\[GetVariableSystem\.Exists\('colonial_empire_territories_open'\)\]\"", self.body)
-        self.assertTrue(m, "the list is not behind its _open flag")
+    def test_the_list_is_open_under_the_ready_gate(self):
+        m = re.search(r"te_ce_territory_row = \{", self.body)
         gates = " ".join(_enclosing_visibles(self.body, m.end()))
         self.assertIn(READY, gates)
-        self.assertIn("colonial_empire_subsection_header = {", self.body)
+        self.assertNotIn("GetVariableSystem.Exists('colonial_empire_holdings_closed')]", gates.replace("Not(", ""),
+                         "the list sits only under the section's own (open-by-default) flag")
+        self.assertNotIn("territories_open", self.gui)
+        self.assertNotIn("territor", _type_body(self.gui, "te_ce_sec_stability"))
 
     def test_eight_rows_each_gated_on_the_count(self):
         rows = [self.body[slice(*_span(self.body, m.start()))]
@@ -949,15 +1147,18 @@ class WidthBudgetTest(unittest.TestCase):
         cls.loc = _loc()
         pillar = _type_body(cls.gui, "colonial_empire_pillar_row")
         cls.pillar_label, cls.pillar_value = (int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", pillar))
-        table = _type_body(cls.gui, "colonial_empire_value_row")
-        cls.label_cell, cls.value_cell = (int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", table))
         head = _type_body(cls.gui, "te_ce_territory_head")
-        cls.head_cells = dict(re.findall(r'max_width = (\d+)[^}]*?text = "je_colonial_empire_territory_head_(\w+)"', head,
-                                         re.S))
-        cls.head_cells = {k: int(v) for v, k in cls.head_cells.items()} if False else \
-            {k: int(v) for v, k in re.findall(r'max_width = (\d+)[^}]*?text = "je_colonial_empire_territory_head_(\w+)"',
-                                              head, re.S)}
+        cls.head_cells = {k: int(v) for v, k in re.findall(
+            r'max_width = (\d+)[^}]*?text = "je_colonial_empire_territory_head_(\w+)"', head, re.S)}
         row = _type_body(cls.gui, "te_ce_territory_row")
+        subject_head = _type_body(cls.gui, "te_ce_subject_head")
+        cls.subject_head_cells = {k: int(v) for v, k in re.findall(
+            r'max_width = (\d+)[^}]*?text = "je_colonial_empire_subject_head_(\w+)"', subject_head, re.S)}
+        subject_row = _type_body(cls.gui, "te_ce_subject_row")
+        cls.subject_cells = {k: int(v) for v, k in re.findall(
+            r'max_width = (\d+)[^}]*?text = "je_colonial_empire_subject_(\w+)"', subject_row, re.S)}
+        cls.button_cells = {k: int(v) for v, k in re.findall(
+            r'max_width = (\d+)[^}]*?text = "je_colonial_empire_btn_(\w+)"', row + subject_row, re.S)}
         cls.name_cell = int(re.search(r'max_width = (\d+)[^}]*?text = "\[State\.GetName\]"', row, re.S).group(1))
         cls.row_cells = {k: int(v) for v, k in re.findall(
             r'max_width = (\d+)[^}]*?text = "je_colonial_empire_territory_(\w+?)(?:_bad)?"', row, re.S)}
@@ -980,19 +1181,20 @@ class WidthBudgetTest(unittest.TestCase):
     def test_static_labels(self):
         cases = [(f"je_colonial_empire_drift_{g}", "medium", self.pillar_label) for g, _ in TABLE]
         cases += [
-            ("je_colonial_empire_candidates_eligible", "medium", self.label_cell),
-            ("je_colonial_empire_candidates_round_table", "medium", self.label_cell),
-            ("je_colonial_empire_candidates_largest", "medium", self.label_cell),
             ("je_colonial_empire_ov_stability_label", "medium", self.ov_label),
             ("je_colonial_empire_btn_open_choice", "small", self.choice_cell),
             ("je_colonial_empire_ov_isolation", "small", self.icon_cell),
             ("je_colonial_empire_ov_consensus", "small", self.icon_cell),
-            ("je_colonial_empire_territories_header", "medium", 440 - 32),   # nested header, after its arrow
         ]
         cases += [(f"je_colonial_empire_band_{b}", "small", self.icon_cell)
                   for b in ("solidified", "stable", "strained", "crumbling", "collapsing")]
-        self.assertEqual(set(self.head_cells), {"name", "pop", "primary", "sol", "gdp"})
+        self.assertEqual(set(self.head_cells), {"name", "primary", "sol", "gdp"})
         cases += [(f"je_colonial_empire_territory_head_{k}", "small", w) for k, w in self.head_cells.items()]
+        self.assertEqual(set(self.subject_head_cells), {"name", "kind", "gdp"})
+        cases += [(f"je_colonial_empire_subject_head_{k}", "small", w) for k, w in self.subject_head_cells.items()]
+        # Release twice (a territory's and a subject's), Dominion once.
+        self.assertEqual(set(self.button_cells), {"release", "dominion"})
+        cases += [(f"je_colonial_empire_btn_{k}", "small", w) for k, w in self.button_cells.items()]
         for key, font, cell in cases:
             with self.subTest(key=key):
                 text = _visible_text(self.loc[key])
@@ -1001,18 +1203,18 @@ class WidthBudgetTest(unittest.TestCase):
                 self.assertFits(text, font, cell, key)
 
     def test_longest_dynamic_texts(self):
-        self.assertEqual(set(self.row_cells), {"pop", "primary", "sol", "gdp"})
+        self.assertEqual(set(self.row_cells), {"primary", "sol", "gdp"})
+        self.assertEqual(set(self.subject_cells), {"name", "ld", "gdp"})
         cases = [
             (LONGEST_STATE, "medium", self.name_cell, "a territory's name"),
-            (LONGEST_STATE, "medium", self.value_cell, "Decolonization's Largest row"),
-            ("99.99M", "medium", self.row_cells["pop"], "a territory's people"),
+            ("999.99M", "medium", self.subject_cells["gdp"], "a subject's GDP"),
+            ("100", "medium", self.subject_cells["ld"], "a subject's liberty desire"),
             ("100%", "medium", self.row_cells["primary"], "primary share"),
             ("99.9", "medium", self.row_cells["sol"], "standard of living"),
             ("999.99M", "medium", self.row_cells["gdp"], "a territory's GDP"),
             ("100% (-1.67/mo)", "medium", self.ov_value, "the overview's value"),
             ("-10.00", "medium", self.pillar_value, "a term's value"),
             ("Supporting: 100%", "medium", self.legend_cell, "the pie's legend"),
-            ("999", "medium", self.value_cell, "a candidate count"),
             ("3 / 3", "medium", self.level_cell, "a programme's level"),
         ]
         for text, font, cell, what in cases:

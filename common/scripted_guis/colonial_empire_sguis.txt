@@ -5,9 +5,11 @@
 # surface for je_colonial_empire now that the vanilla button grid is AI-only.
 #
 # Every action handler delegates: `is_valid` calls a colonial_empire_possible_*
-# trigger and `effect` a colonial_empire_effect_* effect. A decision's trigger
-# and effect are also its scripted button's `possible` and `effect`; a
-# programme's are the gates and steps the AI's monthly review uses too. Nothing
+# trigger and `effect` a colonial_empire_effect_* effect. Planned Full
+# Decolonization's trigger and effect are also its scripted button's `possible`
+# and `effect`; a programme's are the gates and steps the AI's monthly review
+# uses too; the per-target buttons' are the player's alone, and the
+# confirmation events they open read the same gates. Nothing
 # here restates a condition or an action, so the AI and the player's widget
 # cannot drift apart. Change the shared helper in
 # common/scripted_triggers/colonial_empire_triggers.txt or
@@ -28,14 +30,20 @@
 #   2  raise Military Garrison           3  lower Military Garrison
 #   4  raise Cultural Assimilation       5  lower Cultural Assimilation
 #
-# OP TABLE — colonial_empire_decision_sgui (saved_scopes = { op })
-#   0  Release a Colonial Territory   (-> decolonization_events.400)
-#   1  Planned Full Decolonization    (-> decolonization_events.401)
-#   2  Round Table Conference         (-> decolonization_events.400)
-#
-# Both tables are repeated in the .gui header and in
+# The table is repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md § Colonial Stability Widget. Keep all
 # three in step.
+#
+# PER-TARGET BUTTONS (the Colonial Holdings section): one handler per action,
+# each taking its one target as its only saved scope, the shape gm_sguis.txt's
+# monument rows use (AddScope( 'gm_state', State.MakeScope )):
+#   colonial_empire_release_state_sgui     ce_state    -> decolonization_events.402
+#   colonial_empire_free_subject_sgui      ce_capital  -> decolonization_events.403
+#   colonial_empire_dominion_subject_sgui  ce_capital  -> decolonization_events.404
+# A subject travels as its capital (gotcha #11: the panel reaches a country
+# through a stored state), and script takes the capital's owner. Each is_valid
+# fails closed on a missing scope. Planned Full Decolonization, which acts on
+# the whole empire, is colonial_empire_planned_sgui.
 #
 # ---------------------------------------------------------------------------
 # WHY THE OP CODE DECIDES WHAT A CONTROL *DOES* BUT NEVER WHETHER IT IS *DRAWN*
@@ -73,24 +81,6 @@ colonial_empire_display_ready = {
 	scope = country
 	is_shown = {
 		has_variable = colonial_empire_tier
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
-
-# ---------------------------------------------------------------------------
-# Read-only: is there a territory the decolonization decisions could act on?
-#
-# colonial_empire_refresh_display removes colonial_empire_largest_eligible_state
-# when nothing qualifies, so the row that names it needs its own guard rather
-# than sharing colonial_empire_display_ready's.
-# ---------------------------------------------------------------------------
-colonial_empire_has_candidates = {
-	scope = country
-	is_shown = {
-		has_variable = colonial_empire_largest_eligible_state
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -350,57 +340,124 @@ colonial_empire_policy_sgui = {
 
 
 # ---------------------------------------------------------------------------
-# The three decolonization decisions.
+# Planned Full Decolonization: every eligible territory at once.
 #
-# `is_shown = { always = yes }` deliberately: a decision with nothing to release
-# stays visible and disabled, with the reason in the button's IsValidTooltip. A
+# `is_shown = { always = yes }` deliberately: with nothing to release it stays
+# visible and disabled, with the reason in the button's IsValidTooltip. A
 # control that vanishes teaches nothing.
 #
-# These are NOT armed-then-confirmed in the GUI. Each one fires
-# decolonization_events.400 / .401, which previews up to three candidate
-# territories (with the state count and culture of each release region) and
-# offers a "Reconsider" option that clears every marker. That confirmation is
-# real game state: it survives a save, it cannot be left half-armed by closing
-# the panel, and it lets the player pick WHICH territory. A GetVariableSystem
-# arm flag would be client-side, have no lifetime, and greet a returning player
-# still armed -- strictly worse. Nothing is released by pressing these.
+# Not armed-then-confirmed in the GUI: the effect fires
+# decolonization_events.401, which lists every territory and offers a
+# Reconsider option that clears every marker. That confirmation is real game
+# state: it survives a save and cannot be left half-armed by closing the panel.
+# A GetVariableSystem arm flag would be client-side, have no lifetime, and
+# greet a returning player still armed. Nothing is released by pressing this.
 # ---------------------------------------------------------------------------
-colonial_empire_decision_sgui = {
+colonial_empire_planned_sgui = {
 	scope = country
-	saved_scopes = { op }
 
 	is_shown = { always = yes }
 
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		trigger_if = {
-			limit = { exists = scope:op scope:op = 0 }
-			colonial_empire_possible_release_territory = yes
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			colonial_empire_possible_planned_decolonization = yes
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			colonial_empire_possible_round_table = yes
-		}
-		trigger_else = { always = no }
+		colonial_empire_possible_planned_decolonization = yes
 	}
 
 	effect = {
-		if = {
-			limit = { exists = scope:op scope:op = 0 }
-			colonial_empire_effect_release_territory = yes
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			colonial_empire_effect_planned_decolonization = yes
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			colonial_empire_effect_round_table = yes
+		colonial_empire_effect_planned_decolonization = yes
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# The per-target buttons of the Colonial Holdings section: Release beside a
+# territory, Release and Dominion beside a colonial subject. Each opens
+# the confirmation event for its one target; nothing is released or changed
+# by the click. The gates and effects are the shared helpers in
+# colonial_empire_triggers.txt and decolonization.txt (PER-TARGET GATES /
+# PER-TARGET DECISIONS).
+#
+# Always drawn; a target that cannot be acted on greys its button with the
+# reason in IsValidTooltip. `exists` first, so a scope that did not arrive
+# greys the button instead of acting on nothing.
+# ---------------------------------------------------------------------------
+colonial_empire_release_state_sgui = {
+	scope = country
+	saved_scopes = { ce_state }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_state
+		colonial_empire_possible_release_state = { STATE = scope:ce_state }
+	}
+
+	effect = {
+		colonial_empire_effect_release_state = { STATE = scope:ce_state }
+	}
+}
+
+colonial_empire_free_subject_sgui = {
+	scope = country
+	saved_scopes = { ce_capital }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_capital
+		colonial_empire_possible_free_subject = { CAPITAL = scope:ce_capital }
+	}
+
+	effect = {
+		colonial_empire_effect_free_subject = { CAPITAL = scope:ce_capital }
+	}
+}
+
+colonial_empire_dominion_subject_sgui = {
+	scope = country
+	saved_scopes = { ce_capital }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_capital
+		colonial_empire_possible_dominion_subject = { CAPITAL = scope:ce_capital }
+	}
+
+	effect = {
+		colonial_empire_effect_dominion_subject = { CAPITAL = scope:ce_capital }
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# Read-only text: every colonial subject, by GDP, with its kind and liberty
+# desire. The hover on the subject list's "+N more" line
+# (colonial_empire_widget.gui, te_ce_sec_holdings), built only while hovered.
+# Each line is printed in the subject's own scope, which gives it a bullet and
+# its flag (gotcha #19: the name carries the flag already, so the line adds
+# none).
+# ---------------------------------------------------------------------------
+colonial_empire_subjects_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+
+	effect = {
+		custom_tooltip = je_colonial_empire_subjects_more_head
+		ordered_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
+			order_by = gdp
+			max = 40
+			custom_tooltip = je_colonial_empire_subject_more_line
 		}
 	}
 }

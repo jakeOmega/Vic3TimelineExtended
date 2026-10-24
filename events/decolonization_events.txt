@@ -4393,6 +4393,7 @@ decolonization_events.401 = {
 		}
 		remove_variable = decolonization_path_planned
 		remove_variable = decolonization_planned_count
+		decol_offer_clear = yes
 	}
 
 	# Option B: Reconsider (clean cancel)
@@ -4411,5 +4412,285 @@ decolonization_events.401 = {
 		}
 		remove_variable = decolonization_path_planned
 		remove_variable = decolonization_planned_count
+		decol_offer_clear = yes
+	}
+}
+
+# ============================================================================
+# PER-TARGET CONFIRMATIONS (the Colonial Holdings section)
+# The buttons beside each territory and each colonial subject in the panel
+# open these, for that one target (colonial_empire_effect_release_state /
+# _free_subject / _dominion_subject in decolonization.txt, which save it as
+# scope:decol_offer_state or scope:decol_offer_subject). Reconsider is the
+# default, so an event left to time out releases nothing. Every option clears
+# the one-at-a-time lock and the release preview (decol_offer_clear) and
+# refreshes the panel. Players only: the AI decides through .400 / .401 and the
+# subject events .1 / .3.
+# ============================================================================
+
+# Event 402: one territory's future. Grant it independence (.400's unilateral
+# release), or negotiate it at a Round Table, shown greyed with its reasons
+# when the territory or the empire is not ready (the empire-wide Round Table's
+# tests, for this territory).
+decolonization_events.402 = {
+	type = country_event
+	placement = scope:decol_offer_state
+	is_popup = yes
+
+	event_image = { texture = "gfx/event_pictures/colonial_flag_lowering.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.402.t
+	desc = decolonization_events.402.d
+	flavor = decolonization_events.402.f
+
+	duration = 3
+
+	# Grant it independence.
+	option = {
+		name = decolonization_events.402.a
+		trigger = {
+			scope:decol_offer_state ?= { owner = root }
+		}
+		ai_chance = { base = 1 }
+
+		# apply_decolonization_path reads the release's kind off the parent
+		# while the new country forms (relations with it: -10).
+		set_variable = decolonization_path_release_single
+		scope:decol_offer_state = {
+			form_decolonized_country = yes
+		}
+		remove_variable = decolonization_path_release_single
+		decol_chosen_release_rewards = { DAYS = normal_modifier_time MONTHS = 8 }
+		decol_offer_clear = yes
+		if = {
+			limit = { has_journal_entry = je_colonial_empire }
+			colonial_empire_refresh_display = yes
+		}
+	}
+
+	# Negotiate it at a Round Table Conference.
+	option = {
+		name = decolonization_events.402.b
+		highlighted_option = yes
+		trigger = {
+			scope:decol_offer_state ?= { owner = root }
+			custom_tooltip = {
+				text = CE_STATE_NO_SEVERELY_UNACCEPTED
+				scope:decol_offer_state = { colonial_state_round_table_ready = yes }
+			}
+			authority > colonial_round_table_authority
+		}
+		show_as_unavailable = { always = yes }
+		ai_chance = { base = 1 }
+
+		# The reason it is offered, only when it is (a greyed option never
+		# claims a reason it does not meet: event_creation_guide.md).
+		if = {
+			limit = {
+				scope:decol_offer_state ?= { colonial_state_round_table_ready = yes }
+				authority > colonial_round_table_authority
+			}
+			custom_tooltip = decolonization_events.402.b_tt
+		}
+		# Relations with the new country: +25 (apply_decolonization_path).
+		set_variable = decolonization_path_round_table
+		scope:decol_offer_state = {
+			form_decolonized_country = yes
+		}
+		remove_variable = decolonization_path_round_table
+		decol_chosen_release_rewards = { DAYS = normal_modifier_time MONTHS = 12 }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		decol_offer_clear = yes
+		if = {
+			limit = { has_journal_entry = je_colonial_empire }
+			colonial_empire_refresh_display = yes
+		}
+	}
+
+	# Reconsider.
+	option = {
+		name = decolonization_events.402.c
+		default_option = yes
+		ai_chance = { base = 1 }
+		decol_offer_clear = yes
+	}
+}
+
+# Event 403: independence for one colonial subject. The terms of .1's grant
+# (.1.c), and under Neocolonialism its release on terms (.1.d_neo).
+decolonization_events.403 = {
+	type = country_event
+	placement = root
+	is_popup = yes
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.403.t
+	desc = decolonization_events.403.d
+	flavor = decolonization_events.403.f
+
+	duration = 3
+
+	immediate = {
+		# The colonial power, named by the notice the freed subject gets.
+		save_scope_as = decol_colonial_power
+	}
+
+	# Grant it independence.
+	option = {
+		name = decolonization_events.403.a
+		trigger = {
+			scope:decol_offer_subject ?= { is_direct_subject_of = root }
+		}
+		ai_chance = { base = 1 }
+
+		scope:decol_offer_subject = {
+			post_notification = colonial_independence_granted_notice
+			decol_clear_subject_pressure = yes
+			decol_mark_former_colony = { OVERLORD = root }
+			make_independent = yes
+		}
+		change_relations = {
+			country = scope:decol_offer_subject
+			value = 30
+		}
+		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:decol_offer_subject }
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:decol_offer_subject
+			PRO_AMOUNT = 1
+			ANTI_AMOUNT = -1
+			FACTOR = appeasement_relations_increased
+		}
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
+		decol_chosen_release_rewards = { DAYS = long_modifier_time MONTHS = 8 }
+		decol_offer_clear = yes
+		if = {
+			limit = { has_journal_entry = je_colonial_empire }
+			colonial_empire_refresh_display = yes
+		}
+	}
+
+	# Neocolonialism: independence on terms that favour our firms.
+	option = {
+		name = decolonization_events.403.b
+		trigger = {
+			has_law = law_type:law_neocolonialism
+			scope:decol_offer_subject ?= { is_direct_subject_of = root }
+		}
+		highlighted_option = yes
+		ai_chance = { base = 1 }
+
+		scope:decol_offer_subject = {
+			post_notification = colonial_neocolonial_terms_notice
+			decol_clear_subject_pressure = yes
+			decol_mark_former_colony = { OVERLORD = root }
+			make_independent = yes
+			add_modifier = {
+				name = neocolonial_dependency_imposed_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+		}
+		decol_record_chosen_release = yes
+		add_modifier = {
+			name = neocolonial_economic_extraction_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_relations = {
+			country = scope:decol_offer_subject
+			value = -10
+		}
+		add_lobby_appeasement_from_diplomacy_unidirectional = {
+			FIRST = root
+			SECOND = scope:decol_offer_subject
+			PRO_AMOUNT = -1
+			ANTI_AMOUNT = 1
+			FACTOR = appeasement_relations_decreased
+		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		add_modifier = { name = colonial_stability_positive_event days = 90 }
+		decol_offer_clear = yes
+		if = {
+			limit = { has_journal_entry = je_colonial_empire }
+			colonial_empire_refresh_display = yes
+		}
+	}
+
+	# Reconsider.
+	option = {
+		name = decolonization_events.403.c
+		default_option = yes
+		ai_chance = { base = 1 }
+		decol_offer_clear = yes
+	}
+}
+
+# Event 404: dominion status for one colony. Vanilla's own step up in autonomy
+# (da_increase_autonomy_of_subject: the subject becomes the next looser kind,
+# a dominion for a colony; liberty desire -30; a five-year truce; the autonomy
+# cooldown), after which it no longer counts as a colonial subject.
+decolonization_events.404 = {
+	type = country_event
+	placement = root
+	is_popup = yes
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = decolonization_events.404.t
+	desc = decolonization_events.404.d
+	flavor = decolonization_events.404.f
+
+	duration = 3
+
+	# Grant it dominion status.
+	option = {
+		name = decolonization_events.404.a
+		trigger = {
+			scope:decol_offer_subject ?= {
+				is_direct_subject_of = root
+				can_increase_autonomy = yes
+			}
+		}
+		ai_chance = { base = 1 }
+
+		custom_tooltip = decolonization_events.404.a_tt
+		scope:decol_offer_subject = {
+			decol_clear_subject_pressure = yes
+			increase_autonomy = yes
+			add_liberty_desire = -30
+			hidden_effect = {
+				create_diplomatic_catalyst = { type = catalyst_autonomy_change_imposed target = root }
+			}
+		}
+		create_unidirectional_truce = { country = scope:decol_offer_subject months = 60 }
+		decol_offer_clear = yes
+		if = {
+			limit = { has_journal_entry = je_colonial_empire }
+			colonial_empire_refresh_display = yes
+		}
+	}
+
+	# Reconsider.
+	option = {
+		name = decolonization_events.404.b
+		default_option = yes
+		ai_chance = { base = 1 }
+		decol_offer_clear = yes
 	}
 }
