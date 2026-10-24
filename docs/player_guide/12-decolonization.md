@@ -92,18 +92,21 @@ Every section starts open except the explanations:
 
 Colonial Holdings shows what keeps the entry running and what you can let go.
 Its Territories list holds every territory you could
-[release](#releasing-colonies), up to eight of them, largest GDP first; hover
-"+N more" for the rest. Each row gives the share of the territory's people of
-your primary cultures (Primary), its standard of living (SoL) and its GDP;
-hover the name for its population. The colony icon at the start of the row is
-lit when the territory counts as a colony, which keeps the entry running and
-weighs on the bar through Imperial Overreach and Colonial Acceptance, and dim
-when it doesn't. A red figure is the test that makes it one: a red Primary share
-means another culture is more than a tenth of its people and accepted below 60,
-and a red SoL means its standard of living is below 80% of your national average
-while some of its people are of other cultures. Hover a figure for its
-threshold. A territory with a dim icon can still be released, with the Release
-button at the end of its row.
+[release](#releasing-colonies), up to eight rows, largest GDP first; hover
+"+N more" for the rest. A release takes the neighbouring states where the same
+people are at home, so those states share one row: "Henan +1" is Henan and one
+more state that would leave with it. Each row gives the share of its people of
+your primary cultures (Primary), its standard of living (SoL) and its GDP,
+across all its states; hover the name for the states, the people who would form
+the new country and the row's weight on stability. The colony icon at the start
+of the row is lit when a state in it counts as a colony, which keeps the entry
+running and weighs on the bar through Imperial Overreach and Colonial
+Acceptance, and dim when none does. A red figure is the test that makes one a
+colony: a red Primary share means another culture is more than a tenth of a
+state's people and accepted below 60, and a red SoL means a state's standard of
+living is below 80% of your national average while some of its people are of
+other cultures. Hover a figure for its threshold. A row with a dim icon can
+still be released, with the Release button at the end of the row.
 
 The Colonial Subjects list shows your colonial subjects the same way: the flag,
 the name, the kind of subject (hover it for why it counts as colonial), its

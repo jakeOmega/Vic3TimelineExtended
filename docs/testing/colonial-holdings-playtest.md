@@ -61,3 +61,19 @@ culture that is not ours, each culture counted whole). The pick sums pops into l
 | **The release names the right people.** Release a territory whose homeland people are absent (several minorities, none at home). | The popup names its most numerous culture that is not ours, counted over all its pops; Grant it independence forms the country with that culture. | The popup and the new country disagree: the preview and `form_decolonized_country` read different pops (a month between them) or the local variables did not carry across the state-to-pop scope change; log `decol_release_culture_best`. |
 | **"Goes alone."** Release a territory with no neighbouring homeland state of ours. | "If it goes, it goes alone, as a nation of its X people." With a region: "...it takes with it ... N states in all." | "1 states in all": `decolonization_region_1_count` was unset when `.402`'s desc was evaluated. |
 | **A collapse spares settled land.** `event te_debug_colonial_empire.1`, Collapsing (10), then let the bar drain to 0. | Up to three successor countries, none from a state that is more than half our people. | |
+
+## Release blocs: one row for the states one release takes (2026-10-24)
+
+The owner's request: Henan and Southern Anhui, neighbours and both homelands of the Han alone, were two rows though
+releasing either takes the other. Each row is now a bloc (`colonial_empire_mark_release_blocs`, monthly, players
+only): a territory and the states its release would take, shown at its largest state with "+N". Forms new to this
+panel, none read in game yet: a culture held in a state variable (`colonial_bloc_culture`) and read in a tooltip
+through `var:x = { save_temporary_scope_as }`, and `ordered_in_list` over a variable list held on a state.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **One row per bloc.** As a European power holding Henan and Southern Anhui (or any two neighbouring territories sharing their only homeland culture). | One row, "Henan +1" (the larger state first); the GDP is both states', and Release on it opens `.402` naming 2 states. | Two rows: a member was not covered, the culture comparison failed (`scope:colonial_bloc_member_culture = { this = scope:colonial_bloc_culture_pick }`); compare `decol_release_culture_best` for each. |
+| **The name's hover.** Hover a bloc's name. | The people it would form ("Released, it forms a nation of its Han people."), "one release takes all 2 of these", each state with its people, then the weight on stability. | No people line: the culture variable did not hold a culture scope; store the culture's key as a flag instead. No state lines: `ordered_in_list` on a state's list failed; walk `every_scope_state` with a `colonial_bloc_of` variable instead. |
+| **A different release keeps its row.** A territory whose largest homeland people differ from its neighbour's (a Hui-majority state beside Han ones). | Its own row, and it also appears in the Han bloc's hover, since the Han release would take it. | |
+| **"+N more".** With more than eight blocs. | The rest by the bloc's GDP, a bloc as "X +N: £GDP". | |
+| **The monthly cost.** A large empire (China, Britain) on the monthly pulse. | No visible stutter at the month's turn. | Limit the pass to the eight largest seeds plus a count, or move it to the panel's open. |

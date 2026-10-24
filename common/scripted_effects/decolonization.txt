@@ -344,7 +344,9 @@ _decolonization_preview_region = {
 			prev = { change_variable = { name = $COUNT_VAR$ add = 1 } }
 		}
 	}
-	debug_log = "DECOL_DEBUG: _decolonization_preview_region completed"  # DEBUG_DECOLONIZATION_TRACE (a parameter inside a debug_log string comes out mangled, so the region and count variable names are not printed)
+	# No trace line here: the territory list's monthly bloc pass
+	# (colonial_empire_mark_release_blocs) calls this once per bloc; the
+	# decision buttons log their own picks.
 }
 
 form_decolonized_country = { # scope (THIS) is capital state of new country
@@ -767,6 +769,7 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_metropole_count
 	remove_variable = colonial_empire_subject_count
 	remove_variable = colonial_empire_eligible_count
+	remove_variable = colonial_empire_bloc_count
 	remove_variable = colonial_empire_territory_1
 	remove_variable = colonial_empire_territory_2
 	remove_variable = colonial_empire_territory_3
@@ -783,10 +786,15 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_subject_6
 	remove_variable = colonial_empire_subject_7
 	remove_variable = colonial_empire_subject_8
-	# And the primary-culture shares the list recorded on its states.
+	# And the release blocs the list marked on its states.
 	every_scope_state = {
-		limit = { has_variable = colonial_territory_primary_share }
-		remove_variable = colonial_territory_primary_share
+		limit = {
+			OR = {
+				has_variable = colonial_bloc_seed
+				has_variable = colonial_bloc_covered
+			}
+		}
+		colonial_bloc_clear_state = yes
 	}
 
 	# Country-scope modifiers of the three programmes. A programme running at
