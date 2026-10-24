@@ -3270,13 +3270,16 @@ sv_prestige_event_medium = { value = prestige  multiply = 0.05  }
 sv_prestige_event_large  = { value = prestige  multiply = 0.15  }
 sv_prestige_event_huge   = { value = prestige  multiply = 0.30  }
 
-# Treasury (instant): use gold_reserves as the base. Vanilla precedent for
-# this script-value source — it tracks the country's literal money stock.
-sv_treasury_event_tiny   = { value = gold_reserves  multiply = 0.005 }
-sv_treasury_event_small  = { value = gold_reserves  multiply = 0.02  }
-sv_treasury_event_medium = { value = gold_reserves  multiply = 0.05  }
-sv_treasury_event_large  = { value = gold_reserves  multiply = 0.15  }
-sv_treasury_event_huge   = { value = gold_reserves  multiply = 0.30  }
+# Treasury (instant): a share of the yearly gross income, the convention every
+# other one-off payment in the mod follows (gm_event_cost, te_demog_wave_cost_*).
+# Positive: a cost is add_treasury = { value = sv_treasury_event_<tier> multiply = -1 }.
+# Not gold_reserves: a country living on loans has no reserves, so a share of
+# them charged it nothing (The Budget Debate's full budget was free in debt).
+sv_treasury_event_tiny   = { value = yearly_gross_income  multiply = 0.005 }
+sv_treasury_event_small  = { value = yearly_gross_income  multiply = 0.02  }
+sv_treasury_event_medium = { value = yearly_gross_income  multiply = 0.05  }
+sv_treasury_event_large  = { value = yearly_gross_income  multiply = 0.15  }
+sv_treasury_event_huge   = { value = yearly_gross_income  multiply = 0.30  }
 
 # Money-flow (weekly): pair with a static modifier carrying
 # country_expenses_add = 1, country_tax_income_add = 1, or
