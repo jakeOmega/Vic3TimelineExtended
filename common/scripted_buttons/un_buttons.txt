@@ -349,8 +349,32 @@ un_propose_expulsion_button = {
 			}
 			add = 25
 		}
+		# The seat would come to us: a carried motion seats the great-power
+		# member with the most prestige that holds none (owner, 2026-10-24).
+		if = {
+			limit = { un_expulsion_next_in_line = yes }
+			add = 30
+		}
 		# Less interesting when our own UN authority is weak
 		if = { limit = { has_global_variable = un_authority global_var:un_authority < 30 } add = -15 }
+		# Never a motion with no case: the members weigh the target's veto
+		# record against its standing and service (un_expulsion_case), and a
+		# motion that stands on nothing would fail at the cost of the
+		# sponsor's influence. The motion names the member with the strongest
+		# case (un_propose_expulsion_select_target), so any one will do.
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						NOT = { this = ROOT }
+						is_un_permanent_member = yes
+						has_modifier = un_veto_isolation_modifier
+						un_expulsion_case > 0
+					}
+				}
+			}
+			multiply = 0
+		}
 	}
 
 	effect = { un_propose_expulsion_effect = yes }

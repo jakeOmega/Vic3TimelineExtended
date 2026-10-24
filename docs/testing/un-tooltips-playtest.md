@@ -74,3 +74,17 @@ marks were computed and the sponsor's cost a `{ value = 730 }`. The marks are no
 | **The docket's appeal.** `un_events.2`, An Appeal to the Assembly. | The condemnation option shows General Assembly Resolution Participant for the pace's days; the sanctions option shows it and UN Request Cooldown. | As above. |
 | **They run.** Table on our own motion, then look at the country's modifiers a month later. | Both marks are there and expire about five and ten years on (less for a great power); a second own-motion proposal stays greyed until the cooldown ends. | Gone at once or never expiring: report it, with the modifier's expiry from the tooltip. |
 | **The World Court's windows.** Have a ruling defied, and another found for the holder. | A year on, the claimant may still move for a military mandate over the region without the case of 60 (ten years in all), and a war goal against the region still costs it extra infamy (twenty). | Gone at once: `set_variable` reads a bare script value as 0; write `3650` / `7300` at the four sites in `un_justice_effects.txt`. |
+
+## A motion to expel weighed on its own case (2026-10-24)
+
+A motion to expel no longer carries on the habit of consensus: every member but the target adds the case for expulsion
+(veto record, less standing and service) to its lean, and a proposer next in line for the seat costs it 5
+(docs/systems/journal_entry_systems.md, "Expulsion Vote"). Quick setup: `event te_debug_un.1`, then veto a binding
+resolution as a permanent member.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Our Record.** After the veto, open Our Record. | An Our Permanent Seat block: Veto record 5, and Case for expelling us with our standing and service; its hover lists the three parts with numbers. | No block: the `un_disp_veto_record` row's `visible` failed. A hover with raw `[JournalEntry...]` text: the row tooltip has no journal-entry context; move the figures into the row's own text. |
+| **The record fades.** Twelve months on. | About 4.75. | Unchanged or gone: check `un_veto_record_monthly_update` runs from `un_dossier_monthly_update`. |
+| **The propose row.** As another great power with no seat, open Table a Resolution. | Motion to Expel names the vetoer with the strongest case and shows Case for expulsion with its parts; when we are the great power with the most prestige that holds no seat, also The seat: we are next in line. | The seat line never shows, or shows for a power that is not first: `un_expulsion_next_in_line` (`prestige > prev.prestige` in an `any_country`) misread; compare the Security Council's in-line list. |
+| **The vote.** Table it, then read our lean under the resolution and the Delegations list. | The habit of consensus reads +0 (none on a motion to expel); the case against the target equals the case shown when tabled; a proposer next in line reads 5 less in "ties to the proposer". A neutral Assembly against an Exemplary vetoer that hosts the headquarters leans against. | Consensus still +10: `un_lean_consensus` did not read the topic. |

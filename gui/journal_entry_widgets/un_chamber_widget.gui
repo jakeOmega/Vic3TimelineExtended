@@ -2196,6 +2196,36 @@ types un_chamber_widget_types
 						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_strength'), JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_mandate') ), 'je_un_record_yes', 'je_un_record_no' )]"
 					}
 				}
+
+				# The veto record and the case for expelling us from a
+				# permanent seat (owner, 2026-10-24): apart from the case
+				# above, and shown only once we have vetoed.
+				un_chamber_subheader = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record'), '(CFixedPoint)0' )]"
+					blockoverride "subheader_text" {
+						text = "je_un_record_council_header"
+					}
+				}
+				un_chamber_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record'), '(CFixedPoint)0' )]"
+					tooltip = "je_un_record_veto_tt"
+					blockoverride "row_label" {
+						text = "je_un_record_veto"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|1]"
+					}
+				}
+				un_chamber_value_row = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record'), '(CFixedPoint)0' )]"
+					tooltip = "je_un_record_expulsion_tt"
+					blockoverride "row_label" {
+						text = "je_un_record_expulsion"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case')|+1]"
+					}
+				}
 			}
 		}
 	}
