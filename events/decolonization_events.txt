@@ -4487,7 +4487,15 @@ decolonization_events.402 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = { base = 1 }
 
-		custom_tooltip = decolonization_events.402.b_tt
+		# The reason it is offered, only when it is (a greyed option never
+		# claims a reason it does not meet: event_creation_guide.md).
+		if = {
+			limit = {
+				scope:decol_offer_state ?= { colonial_state_round_table_ready = yes }
+				authority > colonial_round_table_authority
+			}
+			custom_tooltip = decolonization_events.402.b_tt
+		}
 		# Relations with the new country: +25 (apply_decolonization_path).
 		set_variable = decolonization_path_round_table
 		scope:decol_offer_state = {
