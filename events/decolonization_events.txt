@@ -3014,10 +3014,12 @@ decolonization_events.201 = {
 		ai_chance = { base = 5 }
 		custom_tooltip = {
 			text = je_colonial_empire_fail_tt
+			# Settled land (mostly our own people) is not a colony and stays.
 			every_scope_state = {
 				limit = {
 					NOT = { is_homeland_of_country_cultures = ROOT }
 					is_overseas_from_capital = yes
+					colonial_state_settler_majority = no
 				}
 				set_variable = decolonization_marker
 			}
@@ -3164,10 +3166,12 @@ decolonization_events.204 = {
 		# successor states retain ties.
 		custom_tooltip = {
 			text = je_colonial_empire_negotiated_tt
+			# Settled land (mostly our own people) is not a colony and stays.
 			every_scope_state = {
 				limit = {
 					NOT = { is_homeland_of_country_cultures = ROOT }
 					is_overseas_from_capital = yes
+					colonial_state_settler_majority = no
 				}
 				set_variable = decolonization_marker
 			}
@@ -4444,7 +4448,23 @@ decolonization_events.402 = {
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
 	title = decolonization_events.402.t
-	desc = decolonization_events.402.d
+	# Whether the territory takes neighbouring states with it (the preview's
+	# count includes the territory itself).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.402.d_region
+				trigger = {
+					has_variable = decolonization_region_1_count
+					var:decolonization_region_1_count > 1
+				}
+			}
+			triggered_desc = {
+				desc = decolonization_events.402.d
+				trigger = { always = yes }
+			}
+		}
+	}
 	flavor = decolonization_events.402.f
 
 	duration = 3

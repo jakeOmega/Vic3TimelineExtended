@@ -346,7 +346,21 @@ is_overseas_colonial_state = {
 		}
 		# Outside the capital's macro-region and all neighboring macro-regions
 		is_overseas_from_capital = yes
+		# Not settled land (last: it walks the pops)
+		colonial_state_settler_majority = no
 	}
+}
+
+# Our own people are most of the territory: the owner's primary cultures are
+# more than colonial_settler_majority_share of its people. Such a territory is
+# settled land, not a colony (owner ruling, 2026-10-24: a British Guatemala of
+# 75% English offered for release, and released as its 8% Irish). It is no
+# colony, no decolonization decision offers it, and a collapse (.201, .204)
+# does not take it. Walks the state's pops, so callers put it after their
+# cheap tests.
+# Scope: state.
+colonial_state_settler_majority = {
+	colonial_territory_primary_share_value > colonial_settler_majority_share
 }
 
 # The two signals of is_overseas_colonial_state, one trigger each so the
@@ -419,15 +433,18 @@ colonial_stability_bar_at_least = {
 # strict trigger above filters out well-integrated overseas territories (high
 # acceptance + SoL parity), but for the player's decolonization choices the
 # more intuitive definition is just "any overseas non-homeland holding of
-# meaningful size." The strict trigger continues to gate the JE itself, the
-# colonial-policy modifiers, and similar mechanics where "colonial-flavored"
-# matters; this looser trigger only controls release eligibility.
+# meaningful size" whose people are not mostly ours (settled land is not a
+# colony: colonial_state_settler_majority). The strict trigger continues to
+# gate the JE itself, the colonial-policy modifiers, and similar mechanics
+# where "colonial-flavored" matters; this looser trigger only controls release
+# eligibility. Every state that passes the strict trigger passes this one.
 is_decolonization_eligible_state = {
 	custom_tooltip = {
 		text = IS_DECOLONIZATION_ELIGIBLE_STATE_TT
 		NOT = { is_homeland_of_country_cultures = owner }
 		state_population >= colonial_territory_min_population
 		is_overseas_from_capital = yes
+		colonial_state_settler_majority = no
 	}
 }
 
