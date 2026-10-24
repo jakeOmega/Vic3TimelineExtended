@@ -986,8 +986,7 @@ def participation_rows(carriers=None, lines=None):
     rows = []
     for law, inst in (("law_restorative_justice", None), ("law_rehabilitation_focused_criminal_justice", None),
                       ("law_pro_labor_ministry_of_labor", "institution_ministry_of_labor"),
-                      ("law_pro_capital_ministry_of_labor", "institution_ministry_of_labor"),
-                      ("law_state_eugenics_program", None)):
+                      ("law_pro_capital_ministry_of_labor", "institution_ministry_of_labor")):
         kw = dict(WORKFORCE_TODAY, laws=WORKFORCE_TODAY["laws"] | {law})
         if inst:
             kw["institutions"] = {**WORKFORCE_TODAY["institutions"], inst: 5}

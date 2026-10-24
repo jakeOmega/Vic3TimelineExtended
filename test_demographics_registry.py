@@ -1731,7 +1731,7 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_restricted_child_labor", "modifier", "state_farmers_mortality_mult"): ("absorbed", 0.02),
         ("law", "law_restricted_child_labor", "modifier", "state_laborers_mortality_mult"): ("absorbed", 0.02),
         ("law", "law_restricted_child_labor", "modifier", "state_peasants_mortality_mult"): ("absorbed", 0.02),
-        ("law", "law_state_eugenics_program", "modifier", "state_birth_rate_mult"): ("ontop", 0.1),
+        ("law", "law_state_eugenics_program", "modifier", "state_birth_rate_mult"): ("ontop", -0.05),   # sterilisation (owner, 2026-10-24)
         ("law", "law_state_sponsored_family_planning", "modifier", "state_birth_rate_mult"): ("absorbed", -0.05),
         ("law", "law_unrestricted_augmentation", "modifier", "state_mortality_mult"): ("absorbed", -0.05),
         ("law", "law_women_in_the_fields", "modifier", "state_birth_rate_mult"): ("absorbed", -0.1),
@@ -1951,16 +1951,14 @@ class TestWorkforceLinesMoved(unittest.TestCase):
         ("law", "law_rehabilitation_focused_criminal_justice", "modifier"): ("replaced", 0.05),
         ("law", "law_pro_labor_ministry_of_labor", "institution_modifier"): ("replaced", 0.01),
         ("law", "law_pro_capital_ministry_of_labor", "institution_modifier"): ("replaced", 0.02),
-        ("law", "law_state_eugenics_program", "modifier"): ("replaced", 0.05),
     }
     # call 3's participation inputs on laws (the design §1.7's inventory; starting sizes, call 11), in the game's units
-    # since 2026-10-20 as the rates they add to: the inventory's 0.02, 0.03, 0.005 and 0.01 x 0.7. Capacity multiplies.
+    # since 2026-10-20 as the rates they add to: the inventory's 0.02, 0.03, 0.005 and 0.01 x 0.7.
     PARTICIPATION = {
         ("law", "law_restorative_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.014,
         ("law", "law_rehabilitation_focused_criminal_justice", "modifier", P.MALE_PARTICIPATION_TYPE): 0.021,
         ("law", "law_pro_labor_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.0035,
         ("law", "law_pro_capital_ministry_of_labor", "institution_modifier", P.PARTICIPATION_TYPE): 0.007,
-        ("law", "law_state_eugenics_program", "modifier", P.CAPACITY_TYPE): 0.1,
     }
     # the carriers no reader walks: (file, block) -> the lines its block must hold
     BLOCKS = {

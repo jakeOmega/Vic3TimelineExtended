@@ -68,7 +68,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_every_type_has_a_carrier(self):
         carried = {c.type for c in self.carriers}
-        for name in P.DEMOG_TYPES:
+        # capacity's only carrier is Pollution Impact's static modifier, which no reader walks
+        # (TestWorkforceLinesMoved.BLOCKS pins it), since State Eugenics lost its line (owner, 2026-10-24)
+        for name in set(P.DEMOG_TYPES) - {P.CAPACITY_TYPE}:
             self.assertIn(name, carried, name)
 
     def test_each_type_sits_where_its_design_puts_it(self):
@@ -85,9 +87,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    "state_chronic_mortality_mult": {"law"},
                    P.CONTRACEPTION_TYPE: {"technology"}, P.MEANS_SHIFT_TYPE: {"law"},
                    P.NATURAL_FERTILITY_TYPE: {"law"}, P.DIFFUSION_TYPE: {"technology"},
-                   # call 3's participation inputs (phase 2 step 1): the criminal-justice laws and State Eugenics'
-                   # flat lines, the Ministries of Labour per level; Community Service and Mandatory Minimums are
-                   # amendments (read since 2026-10-17, when load_carriers took amendments in)
+                   # call 3's participation inputs (phase 2 step 1): the criminal-justice laws' flat lines, the
+                   # Ministries of Labour per level; Community Service and Mandatory Minimums are amendments (read
+                   # since 2026-10-17, when load_carriers took amendments in). No law carries capacity today.
                    P.MALE_PARTICIPATION_TYPE: {"law", "amendment"}, P.PARTICIPATION_TYPE: {"law_institution"},
                    P.CAPACITY_TYPE: {"law"},
                    # calibration step 3: Malaria Prevention's control

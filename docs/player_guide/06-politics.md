@@ -166,7 +166,7 @@ or subjugate it, and back to another law once it is at peace.
 |---|---|---|
 | Antitrust & Market Structure | Guilds and Chartered Monopolies, Freedom of Contract, Antitrust Enforcement, Regulated Utilities, Dirigiste Policy, Command/Cooperative Economy | Companies and monopolies. |
 | Intellectual Property | No IP Protection, Creative Commons, Traditional IP Protection, Strict IP Protection, Open Source Innovation, State Intellectual Property | Innovation and technology spread against capitalist investment. |
-| Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output and companies ([Companies added by the mod](02-timeline.md#companies-added-by-the-mod)), birth rate and authority. |
+| Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output and companies ([Companies added by the mod](02-timeline.md#companies-added-by-the-mod)), birth rate, authority and minority acceptance. |
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 | Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](15-climate.md#the-fossil-transition)). |

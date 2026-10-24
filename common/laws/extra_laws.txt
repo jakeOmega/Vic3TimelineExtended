@@ -3193,11 +3193,15 @@ law_state_eugenics_program = {
 	# from the 1900s to the 1970s.
 	unlocking_technologies = { behaviorism }
 
+	# An authority law that pays for its authority, as vanilla's do. The programmes
+	# never made a population fitter; they sterilised, registered and excluded. The
+	# "fitter people" lines belong to State Youth Centers' Eugenics Programs method,
+	# where the player pays for them (owner, 2026-10-24).
 	modifier = {
 		country_authority_add = 150
-		state_demog_replaced_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
-		state_work_capacity_mult = 0.1	# the census's participation input (phase 2 step 1; the design §1.7): the law's claim to a fitter people, as fitness for work late in life
-		state_demog_ontop_birth_rate_mult = 0.1
+		state_demog_ontop_birth_rate_mult = -0.05	# sterilisation of the "unfit"
+		country_acceptance_no_shared_heritage_trait_add = -10	# the boards' targets were minorities (Ethnostate's own line)
+		state_bureaucracy_population_base_cost_factor_mult = 0.05	# registries, screening boards, hereditary health courts
 	}
 }
 
