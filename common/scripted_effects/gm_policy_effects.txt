@@ -61,12 +61,14 @@ gm_policy_migrate = {
 
 # Country scope, each month after the refresh (gm_country_monthly): whether
 # gm_national_education, held by the journal entry, reaches the states (spec
-# § 4.4: a JE-held state_* field is unverified). While the policy is another, or
-# Public Education has no whole step, the capital's education access is the
-# base. The first month under it with a step arms the check, since the modifier
-# a refresh adds shows from the next pulse; the month after, the capital's
-# access must have risen by at least half what the steps give. Once a game; a
-# country that chose it before any base was taken is skipped. Fallback in
+# § 4.4: a JE-held state_* field is unverified). While the policy is another,
+# the modifier is off, so the capital's education access is the base. The first
+# month under Public Education with a whole step arms the check, since the
+# modifier a refresh adds shows from the next pulse; the month after, the
+# capital's access must have risen by at least half what the steps give. Under
+# it with under a step the modifier may already be on, so the check stands down
+# until the country comes to it again from another policy; a capital that moved
+# since the base does too. Once a game. Fallback in
 # docs/testing/grand-monuments-policy-playtest.md.
 gm_policy_education_self_check = {
 	if = {
@@ -79,19 +81,15 @@ gm_policy_education_self_check = {
 				gm_policy_is = { P = education STANDARD = no }
 				has_variable = gm_s_education
 				var:gm_s_education >= 1
+				has_variable = gm_edu_check_base
+				has_variable = gm_edu_check_capital
+				capital = { this = root.var:gm_edu_check_capital }
 			}
 			if = {
-				limit = {
-					has_variable = gm_edu_check_base
-					NOT = { has_variable = gm_edu_check_armed }
-				}
+				limit = { NOT = { has_variable = gm_edu_check_armed } }
 				set_variable = gm_edu_check_armed
 			}
-			else_if = {
-				limit = {
-					has_variable = gm_edu_check_base
-					has_variable = gm_edu_check_armed
-				}
+			else = {
 				set_global_variable = gm_education_self_checked
 				if = {
 					limit = { gm_edu_check_rise >= gm_edu_check_half_expect }
@@ -100,17 +98,37 @@ gm_policy_education_self_check = {
 				else = {
 					debug_log = "TE_SELF_CHECK BROKEN gm_education_reaches_states (the capital's education access rose by [SCOPE.ScriptValue('gm_edu_check_rise')|3], but the steps give [SCOPE.ScriptValue('gm_edu_check_expect')|3]: a state_* field held by the journal entry does not reach the states; take the fallback in docs/testing/grand-monuments-policy-playtest.md)"
 				}
-				remove_variable = gm_edu_check_armed
-				remove_variable = gm_edu_check_base
+				gm_policy_education_self_check_reset = yes
 			}
+		}
+		else_if = {
+			limit = { gm_policy_is = { P = education STANDARD = no } }
+			gm_policy_education_self_check_reset = yes
 		}
 		else = {
 			set_variable = { name = gm_edu_check_base value = capital.modifier:state_education_access_add }
+			set_variable = { name = gm_edu_check_capital value = capital }
 			if = {
 				limit = { has_variable = gm_edu_check_armed }
 				remove_variable = gm_edu_check_armed
 			}
 		}
+	}
+}
+
+# Country scope: the self-check's records gone, so it waits for the next base.
+gm_policy_education_self_check_reset = {
+	if = {
+		limit = { has_variable = gm_edu_check_armed }
+		remove_variable = gm_edu_check_armed
+	}
+	if = {
+		limit = { has_variable = gm_edu_check_base }
+		remove_variable = gm_edu_check_base
+	}
+	if = {
+		limit = { has_variable = gm_edu_check_capital }
+		remove_variable = gm_edu_check_capital
 	}
 }
 

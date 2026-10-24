@@ -3111,6 +3111,15 @@ class PolicyTests(unittest.TestCase):
         self.assertIn("var:gm_s_education >= 1", check, "no OK on nothing")
         monthly = squash(block(read(EFFECTS), "gm_country_monthly"))
         self.assertLess(monthly.find("gm_country_refresh = yes"), monthly.find("gm_policy_education_self_check = yes"))
+        # The base is taken only while the modifier is off: under Public Education
+        # with under a step it is already on, so the check stands down instead
+        # (final review I2). A capital that moved since the base skips the check.
+        stand_down = ("else_if = { limit = { gm_policy_is = { P = education STANDARD = no } } "
+                      "gm_policy_education_self_check_reset = yes }")
+        self.assertIn(stand_down, check)
+        self.assertLess(check.find(stand_down), check.find("set_variable = { name = gm_edu_check_base "))
+        self.assertIn("capital = { this = root.var:gm_edu_check_capital }", check)
+        self.assertIn("set_variable = { name = gm_edu_check_capital value = capital }", check)
 
     def test_cultural_promotion_follows_the_rule(self):
         # With the rule on, prestige never moves by policy; with it off, pull never does (plan Review Focus 5).
@@ -3141,8 +3150,45 @@ class PolicyTests(unittest.TestCase):
             text = strip_comments(read(path.relative_to(ROOT).as_posix()))
             if path.name == "gm_policy_effects.txt":
                 text = text.replace(block(text, "gm_policy_migrate"), "")
+            if path.name == "gm_policy_triggers.txt":
+                text = text.replace(block(text, "gm_policy_is"), "")
             self.assertNotRegex(text, r"P = (mothballed|standard)\b|flag:(mothballed|standard)\b", str(path))
-            self.assertNotRegex(text, r"gm_policy_factor_(standing|local|age|upkeep)\b", str(path))
+            self.assertNotRegex(text, r"gm_policy_factor_(standing|local|age|upkeep|regime)\b", str(path))
+        # Loc and GUI too: a deleted script value read there renders as 0 (mid-branch review).
+        for path in list(ROOT.glob("localization/english/*.yml")) + list(ROOT.glob("gui/**/*.gui")):
+            text = path.read_text(encoding="utf-8-sig")
+            self.assertNotRegex(text, r"gm_policy_factor_(standing|local|age|upkeep|regime)\b", str(path))
+
+    def test_monument_loc_reads_only_defined_script_values(self):
+        # A ScriptValue('x') naming no script value renders as 0 and logs an error.
+        import json
+        defined = set()
+        for path in ROOT.glob("common/script_values/*.txt"):
+            defined |= set(re.findall(r"(?m)^([A-Za-z_]\w*)\s*=", read(path.relative_to(ROOT).as_posix())))
+        defined |= set(json.loads((ROOT / "vanilla_parsed/common/script_values.json").read_text(encoding="utf-8")))
+        missing = sorted({(key, name) for key, text in loc().items()
+                          if key.startswith(("gm_", "monument_events", "te_state_gm"))
+                          for name in re.findall(r"ScriptValue\('(\w+)'\)", text) if name not in defined})
+        self.assertEqual(missing, [])
+
+    def test_an_unmigrated_save_reads_as_the_default(self):
+        # Until the first monthly pulse migrates it, an older save's Mothballed or
+        # Standard reads as Cultural Promotion, so its button isn't valid and
+        # can't start a wait for nothing (mid-branch review, spec § 6).
+        body = squash(block(read(POLICY_TRIGGERS), "gm_policy_is"))
+        self.assertIn("always = $STANDARD$ OR = { NOT = { has_variable = gm_policy } var:gm_policy = flag:standard "
+                      "var:gm_policy = flag:mothballed }", body)
+
+    def test_hovers_name_cultural_promotions_factor(self):
+        # The per-step figures don't add up to the headline without the x1.5 (mid-branch review).
+        L = loc()
+        for key in ("gm_je_tt_culture", "gm_je_tt_sig_antiquity"):
+            self.assertIn("'gm_policy_culture_tt_line'", L[key], key)
+            self.assertIn("ScriptValue('gm_policy_factor_culture')", L[key], key)
+        for key in ("gm_je_tt_prestige", "gm_je_tt_prestige_pct"):
+            self.assertIn("'gm_policy_prestige_tt_line'", L[key], key)
+            self.assertIn("ScriptValue('gm_policy_factor_prestige')", L[key], key)
+        self.assertIn("gm_step_prestige_pct", L["monument_events.2.common_tt"])
 
     def test_anniversaries_ignore_the_policy(self):
         # Owner, 2026-10-23: Open no longer makes anniversaries more frequent.
@@ -6418,9 +6464,8 @@ class MergeRecordTests(unittest.TestCase):
 
 
 class UpkeepTests(unittest.TestCase):
-    """Sites spec 2026-10-18 §3.4: a level-1 finished building pays the upkeep
-    of the levels its monuments record (0.1 construction a level, as
-    pm_maintenance), x1.5 Open, nothing Mothballed (owner, 2026-10-18)."""
+    """Sites spec 2026-10-18 §3.4, then policy spec 2026-10-23 § 5: one modifier
+    on the finished building, now at -1, so no Grand Monument pays upkeep."""
 
     def test_upkeep_is_cancelled(self):
         """Policy spec 2026-10-23 § 5 (owner): Grand Monuments cost nothing to

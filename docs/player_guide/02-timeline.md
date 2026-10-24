@@ -1056,11 +1056,12 @@ years, but your first choice starts no wait.
 | Public Education | +1% education access in every state for each step of standing grandeur, in steps of 10, 20, 30 and so on. | Literacy still well short of what your people could reach. |
 
 No policy changes maintenance, which Grand Monuments don't need, or ageing,
-local effects or anniversaries.
+anniversaries or what a dedication does in its own state.
 
 The national effects change at once, and each monument's tourism at the start
 of the next month. The AI picks each January: State Ceremonial with legitimacy
-under 40 when the quarter would complete at least a step, Open to the Public
+under 40 when its regime grandeur and the quarter together reach legitimacy's
+first step, Open to the Public
 with a monument in a state with a Tourism Industry, Public Education with
 literacy under 50%, and otherwise Cultural Promotion.
 

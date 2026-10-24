@@ -453,9 +453,9 @@ gm_state_monthly = {
 			}
 		}
 		add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }
-		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): the levels
-		# its monuments record, at pm_maintenance's 0.1 a level, through one
-		# modifier whose multiplier reads ROOT, this state, by name
+		# Upkeep on the building itself (sites spec 2026-10-18 §3.4): none since
+		# policy spec 2026-10-23 § 5, one modifier at -1 that cancels the
+		# maintenance input, its multiplier read from ROOT, this state, by name
 		# (scripting_best_practices.md). Its variable is overwritten, never
 		# removed.
 		set_variable = { name = gm_upkeep_mult value = gm_state_upkeep_mult }
