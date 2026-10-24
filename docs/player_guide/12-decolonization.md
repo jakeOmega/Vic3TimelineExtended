@@ -54,7 +54,7 @@ window, which the button under the sidebar's Map List opens, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active; hover
 it for what is still missing. It ends with an Open Journal Entry button.
 
-<!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Why Stability Is Moving open with its bars and the Eligible Territories list expanded -->
+<!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Colonial Holdings open with its territories, their Release buttons and a colonial subject's Release and Dominion buttons -->
 
 The overview's first row shows your [band](#colonial-stability-bands), as an
 icon and a name (hover it for the band's modifier), and the three programs, lit
@@ -66,7 +66,8 @@ where the next band begins; hover it for how many months away that is. Beside
 the bar are the value and this month's change, such as "62% (+0.42/mo)", and an
 arrow for its direction. Hover the bar for every term behind the change, and
 the value for the projection. The line under the bar reads "Next band", with
-the band and its threshold.
+the band and its threshold. Under it, Colonies and Colonial subjects count what
+keeps the entry running; hover the line for both tests.
 
 In the Solidified band, two more bars count toward winning: "Months at 100"
 against 60 and, for a great power, "Months Solidified" against 36, the
@@ -81,25 +82,34 @@ Every section starts open except the explanations:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. Under them is the Eligible Territories list, collapsed. |
+| Colonial Holdings | Open | Your territories and your colonial subjects, with buttons beside each, then Planned Full Decolonization (see below). |
+| Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. |
 | International Pressure | Open | Your prestige, the condemning and supporting shares, and every great power that condemns or supports you. |
 | Colonial Programmes | Open | The three programs, each with its costs, its level out of 3, and a minus and a plus button to lower or raise it. |
-| Decolonization | Open | How many territories are eligible, how many a Round Table could accept, and the largest; then the three decisions, each with a Review Options button. |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
 | How the Colonial Empire Works | Collapsed | The explanations. |
 
-The Eligible Territories list shows the territories the [decolonization
-decisions](#releasing-colonies) can offer, up to eight of them, largest GDP
-first; hover "+N more" for the rest. Each row gives the territory's people, the
-share of them of your primary cultures (Primary), its standard of living (SoL)
-and its GDP. The colony icon at the start of the row is lit when the territory
-counts as a colony for the stability bar, through Imperial Overreach and
-Colonial Acceptance, and dim when it doesn't. A red figure is the test that
-makes it one: a red Primary share means another culture is more than a tenth of
-its people and accepted below 60, and a red SoL means its standard of living is
-below 80% of your national average while some of its people are of other
-cultures. Hover a figure for its threshold. A
-territory with a dim icon can still be released. The list updates monthly.
+Colonial Holdings shows what keeps the entry running and what you can let go.
+Its Territories list holds every territory you could
+[release](#releasing-colonies), up to eight of them, largest GDP first; hover
+"+N more" for the rest. Each row gives the share of the territory's people of
+your primary cultures (Primary), its standard of living (SoL) and its GDP;
+hover the name for its population. The colony icon at the start of the row is
+lit when the territory counts as a colony, which keeps the entry running and
+weighs on the bar through Imperial Overreach and Colonial Acceptance, and dim
+when it doesn't. A red figure is the test that makes it one: a red Primary share
+means another culture is more than a tenth of its people and accepted below 60,
+and a red SoL means its standard of living is below 80% of your national average
+while some of its people are of other cultures. Hover a figure for its
+threshold. A territory with a dim icon can still be released, with the Release
+button at the end of its row.
+
+The Colonial Subjects list shows your colonial subjects the same way: the flag,
+the name, the kind of subject (hover it for why it counts as colonial), its
+liberty desire and its GDP, then a Release and a Dominion button (see [Freeing
+colonial subjects](#freeing-colonial-subjects)). Under The Whole Empire is
+Planned Full Decolonization. Both lists update monthly, and at once after a
+release.
 
 ### Colonial stability bands
 
@@ -173,7 +183,8 @@ lists who condemns and who supports you.
 ## Colonial programs and decolonization decisions
 
 The Colonial Empire panels are where you act: three programs you run at a level
-from 0 to 3, and three ways to release colonies. The decisions panel adds the
+from 0 to 3, a button beside each territory and each colonial subject to let it
+go, and Planned Full Decolonization to let them all go. Two decisions offer the
 routes to a permanent empire.
 
 ### The three colonial programs
@@ -211,28 +222,48 @@ a lower level counts as a third of a month for each level.
 
 ### Releasing colonies
 
-The Decolonization section offers three decisions. Each one's Review Options
-button opens an event that lists the candidates before anything happens, and each event has a
-Reconsider option that releases nothing. A territory is a candidate if it isn't
-a homeland of your cultures, has at least 100,000 people and lies overseas by
-the same region test; it doesn't have to be poorly accepted.
+Every territory in Colonial Holdings has a Release button. It opens a popup about
+that territory alone, which names the people who would form the new country and
+how many of your states go with it: a territory leaves with every connected
+state of yours that is a homeland of the same culture. Choose how it goes, or
+reconsider. Reconsider releases nothing, and it is what the popup does if you
+leave it unanswered. A territory can be released if it isn't a homeland of your
+cultures, has at least 100,000 people and lies overseas by the same region test;
+it doesn't have to be poorly accepted. Hover Release to see whether a Round
+Table is open to it.
 
-| Decision | What it releases | What you get |
+| Choice | Needs | What you get |
 |---|---|---|
-| Release a Colonial Territory | One of up to three candidates, largest first | +1 stability a month for 8 months; the new country starts slightly less friendly. |
-| Round Table Conference | One of up to three candidates with no severely unaccepted population; needs more than 200 authority | +1 stability a month for 12 months; Intelligentsia approve, Landowners disapprove; the new country starts friendlier. |
-| Planned Full Decolonization | Every candidate at once | The whole list goes; the new countries start resentful. |
+| Grant it independence | nothing | +1 stability a month for 8 months; the new country starts slightly less friendly. |
+| Round Table Conference | none of the territory's people severely unaccepted, and more than 200 authority; grayed with the reason otherwise | +1 stability a month for 12 months; Intelligentsia approve, Landowners disapprove; the new country starts friendlier. |
+| Planned Full Decolonization, under The Whole Empire | nothing | Every territory goes at once, after a popup that lists them; the new countries start resentful. |
 
-<!-- screenshot: the confirmation event for a Round Table Conference, listing three candidate colonies with their state counts and the Reconsider option -->
+<!-- screenshot: the popup for one territory, with Grant it independence, the Round Table Conference grayed with its reason, and Reconsider -->
 
-Each candidate leaves with every connected state of yours that is a homeland of
-the same culture; the popup shows how many states each choice gives away. Every
-release grants Peaceful Decolonization, a decaying +15% prestige, +50 influence
-and −200 authority (five years, or ten after Planned Full Decolonization). Each
-new country also shakes every other empire: all other countries running the
-Colonial Empire entry take a year of Colonial Crisis, −1 stability a month.
-An empire carries one such year at a time: new countries formed before it runs
-out add nothing to it.
+One of these popups can wait for an answer at a time; until you answer it, the
+other buttons are grayed. A release also grants Peaceful Decolonization, a
+decaying +15% prestige, +50 influence and −200 authority for five years (ten
+after Planned Full Decolonization). A territory or subject you free while it
+lasts doesn't add a second one. Each new country also shakes every other
+empire: all other countries running the Colonial Empire entry take a year of
+Colonial Crisis, −1 stability a month. An empire carries one such year at a
+time: new countries formed before it runs out add nothing to it.
+
+### Freeing colonial subjects
+
+Every colonial subject in Colonial Holdings has a Release and a Dominion button.
+Each opens a popup about that subject first, with Reconsider as its default. Both
+need it to be your own subject, not one of your subjects' subjects, and not your
+enemy in a diplomatic play.
+
+| Button | Needs | What happens |
+|---|---|---|
+| Release | nothing more | The subject becomes independent, a former colony of yours. Relations rise by 30, the Landowners strongly disapprove, and you gain +1 stability a month for 8 months and ten years of Peaceful Decolonization. With the Neocolonialism law you can instead free it on your terms: it takes Neocolonial Dependency, you take Neocolonial Economic Concessions, and relations fall by 10. |
+| Dominion | a Colony that can become a dominion, and no change of its autonomy by you lately | It becomes a Dominion, as with the base game's Increase Autonomy: its liberty desire falls by 30 and you take a five-year truce with it. A dominion isn't a colonial subject, so it stops keeping the entry running and your band no longer raises its liberty desire. It still joins your wars, and it may start diplomatic plays of its own. |
+
+A chartered company or a protectorate has no looser kind of subject to become,
+so its way out is independence. Letting go of your last colony or colonial
+subject ends the entry (see [How a colonial empire ends](#how-a-colonial-empire-ends)).
 
 Once the UN charter carries Charter Reform II and the Decolonization Resolution
 is in force, the General Assembly can order a referendum in a direct subject
@@ -283,8 +314,8 @@ than 24 months.
 | Cultural Assimilation Programme | Quiet Assimilation | Negotiated Withdrawal | Cultural Assimilation Legacy; they start with Assimilatory Citizenship, and relations rise by 15 |
 | none | The Empire Endures | The Empire Crumbles | no legacy |
 
-The legacy applies to every country the system creates: those you free through
-the three decisions, those an event frees as a new country, and those that break
+The legacy applies to every country the system creates: those you release from
+Colonial Holdings, those an event frees as a new country, and those that break
 away in a collapse. On top of the legacy, a Round Table adds 25 to relations, a
 single release subtracts 10 and Planned Full Decolonization subtracts 25. The
 Empire Crumbles also leaves you with Colonial Empire Collapsed, a decaying loss
@@ -353,8 +384,10 @@ in the same strategic region, and player great powers, get a notification.
 
 ## How the AI runs its colonies
 
-The AI plays by the same rules and uses the same programs and decisions. Once a
-month it reviews its programs. It lowers a program by a level when that level is
+The AI plays by the same rules and uses the same programs. It releases a
+territory through decisions that offer it the most populous candidates, by grant
+or at a Round Table, and frees subjects through events; the buttons beside each
+territory and subject are yours. Once a month it reviews its programs. It lowers a program by a level when that level is
 wasted, or when it can no longer pay for it: in default, or with weekly income
 below its expenses, for Investment; short of authority or bureaucracy for the
 other two. A level is wasted when, without it, the bar's monthly change would

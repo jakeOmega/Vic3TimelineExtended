@@ -9,13 +9,15 @@
 #   - je_colonial_empire's `immediate` block  (so a freshly activated entry is
 #     populated on the first frame instead of showing dashes for a month)
 #   - je_colonial_empire's `on_monthly_pulse` tail
-#   - the tail of all nine colonial_empire_effect_* button actions
-#     (so a click moves the numbers immediately)
+#   - the tail of the panel's actions (colonial_programme_after_step and the
+#     three decision effects) and of the options of the per-target
+#     confirmations decolonization_events.402-.404 that change a holding (so a
+#     click or a release moves the numbers immediately)
 #
 # SCOPE: country.
 #
 # The whole body is wrapped in `hidden_effect` -- the same reason
-# te_history_record_sample is. The nine button actions are rendered as widget
+# te_history_record_sample is. The button actions are rendered as widget
 # button tooltips through ScriptedGui.ExecuteTooltip, which re-renders every
 # frame the panel is open; this effect must contribute no tooltip text and must
 # not have its iterators walked during that render.
@@ -184,30 +186,20 @@ colonial_empire_refresh_display = {
 		# panel headline and the signed history series.
 		set_variable = { name = colonial_empire_d_total value = colonial_stability_drift_total }
 
-		# --- Decolonization candidates -------------------------------------
-		# Counts only, plus the name of the state the player would be offered
-		# first. The three-candidate flood-fill preview stays inside the button
-		# actions, on click: running it here would walk it every month for every
-		# colonial country, and the confirmation event (decolonization_events.400
-		# / .401) already previews all three picks properly.
+		# --- What the entry is held by -------------------------------------
+		# The overview's colonies and subjects line: the colonies (is_overseas_colonial_state,
+		# what keeps the entry running) and the colonial subjects. The eligible
+		# count is every territory the Colonial Holdings list and Planned Full
+		# Decolonization can take (is_decolonization_eligible_state, a superset
+		# of the colonies); the list's rows and "+N more" read it.
+		set_variable = { name = colonial_empire_colony_count value = colonial_state_count }
+		# And every other state of ours, the overreach ratio's denominator: the
+		# territory list's per-territory weight reads the two counts.
+		set_variable = { name = colonial_empire_metropole_count value = metropole_state_count }
+		set_variable = { name = colonial_empire_subject_count value = colonial_subject_count }
 		set_variable = { name = colonial_empire_eligible_count value = colonial_eligible_state_count }
-		set_variable = { name = colonial_empire_round_table_count value = colonial_round_table_state_count }
 
-		remove_variable = colonial_empire_largest_eligible_state
-		ordered_scope_state = {
-			limit = { is_decolonization_eligible_state = yes }
-			order_by = state_population
-			max = 1
-			save_temporary_scope_as = colonial_empire_largest_candidate
-			prev = {
-				set_variable = {
-					name = colonial_empire_largest_eligible_state
-					value = scope:colonial_empire_largest_candidate
-				}
-			}
-		}
-
-		# --- Eligible territories, for the list under Why Stability ---------
+		# --- Eligible territories, for the Colonial Holdings list -----------
 		# The first eight eligible territories by GDP, stored as state scopes
 		# (colonial_empire_territory_1..8) for the panel's rows, which read
 		# everything else live from the stored state (colonial_territory_disp_*
@@ -367,6 +359,32 @@ colonial_empire_refresh_display = {
 				}
 			}
 		}
+
+		# --- Colonial subjects, for the Colonial Holdings list --------------
+		# The first eight qualifying subjects by GDP, each stored as its capital
+		# (colonial_empire_subject_1..8): gotcha #11, the panel reaches a country
+		# through a stored state (the Space Race rivals' and the covert
+		# networks' shape). Players only, each slot taken only while the count
+		# reaches it (colonial_empire_subject_slot), as for the territories.
+		remove_variable = colonial_empire_subject_1
+		remove_variable = colonial_empire_subject_2
+		remove_variable = colonial_empire_subject_3
+		remove_variable = colonial_empire_subject_4
+		remove_variable = colonial_empire_subject_5
+		remove_variable = colonial_empire_subject_6
+		remove_variable = colonial_empire_subject_7
+		remove_variable = colonial_empire_subject_8
+		if = {
+			limit = { is_player = yes }
+			colonial_empire_subject_slot = { N = 1 POS = 0 }
+			colonial_empire_subject_slot = { N = 2 POS = 1 }
+			colonial_empire_subject_slot = { N = 3 POS = 2 }
+			colonial_empire_subject_slot = { N = 4 POS = 3 }
+			colonial_empire_subject_slot = { N = 5 POS = 4 }
+			colonial_empire_subject_slot = { N = 6 POS = 5 }
+			colonial_empire_subject_slot = { N = 7 POS = 6 }
+			colonial_empire_subject_slot = { N = 8 POS = 7 }
+		}
 	}
 }
 
@@ -401,5 +419,37 @@ colonial_empire_more_territory_line = {
 			save_temporary_scope_as = colonial_empire_more_state
 		}
 		custom_tooltip = je_colonial_empire_territory_more_line
+	}
+}
+
+# Slot $N$ (1-8) of the Colonial Holdings subject list: the capital of the
+# qualifying subject at GDP position $POS$ ($N$ - 1), among those with a
+# capital, so the slots fill 1, 2, ... without a gap. Only while that many
+# exist, because an ordered_ position past the end of the list clamps to the
+# last element instead of skipping (sr_rival_slot's shape).
+# Scope: country (the empire), inside colonial_empire_refresh_display.
+colonial_empire_subject_slot = {
+	if = {
+		limit = {
+			any_subject_or_below = {
+				is_qualifying_colonial_subject = yes
+				exists = capital
+				count >= $N$
+			}
+		}
+		ordered_subject_or_below = {
+			limit = {
+				is_qualifying_colonial_subject = yes
+				exists = capital
+			}
+			order_by = gdp
+			position = $POS$
+			check_range_bounds = no
+			capital = { save_scope_as = colonial_empire_subject_capital }
+		}
+		set_variable = {
+			name = colonial_empire_subject_$N$
+			value = scope:colonial_empire_subject_capital
+		}
 	}
 }

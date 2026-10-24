@@ -380,6 +380,32 @@ colonial_state_disparity_signal = {
 	average_sol < colonial_state_sol_qualifying_floor
 }
 
+# The two acceptance terms of the bar, per state (colonial_low_acceptance_count
+# and colonial_high_acceptance_count count them; the Colonial Holdings list's
+# per-territory weight reads them one at a time). Scope: state.
+#
+# A colony with any severely unaccepted people (below acceptance_status_2,
+# vanilla's 20): it drains the bar.
+colonial_state_low_acceptance_colony = {
+	is_overseas_colonial_state = yes
+	any_scope_pop = {
+		pop_acceptance < acceptance_status_2
+	}
+}
+
+# An overseas territory where everyone is well accepted (no one below
+# acceptance_status_4, vanilla's 60): it steadies the bar, colony or not.
+colonial_state_high_acceptance = {
+	NOT = { is_homeland_of_country_cultures = owner }
+	state_population >= colonial_territory_min_population
+	is_overseas_from_capital = yes
+	NOT = {
+		any_scope_pop = {
+			pop_acceptance < acceptance_status_4
+		}
+	}
+}
+
 # Is colonial stability at least $N$? Country scope; `?=` because the entry
 # may have ended. For colonial_empire_live_bar (colonial_empire_values.txt),
 # which reads the bar as a whole number for the overview's projection.
@@ -796,6 +822,7 @@ colonial_empire_possible_release_territory = {
 }
 
 colonial_empire_possible_planned_decolonization = {
+	colonial_empire_no_offer_pending = yes
 	custom_tooltip = {
 		text = CE_NEEDS_COLONIAL_STATES
 		any_scope_state = {
@@ -809,12 +836,141 @@ colonial_empire_possible_round_table = {
 		text = CE_ROUND_TABLE_REQUIRES_ACCEPTABLE_COLONY
 		any_scope_state = {
 			is_decolonization_eligible_state = yes
-			NOT = {
-				any_scope_pop = {
-					pop_acceptance < acceptance_status_2
+			colonial_state_round_table_ready = yes
+		}
+	}
+	authority > colonial_round_table_authority
+}
+
+# Scope: state. The Round Table's test on a territory: none of its people is
+# severely unaccepted (acceptance below acceptance_status_2, vanilla's 20), so
+# there is a partner to negotiate with rather than a tinderbox. Read by the
+# empire-wide gate above, its count (colonial_round_table_state_count), its
+# pick (colonial_empire_effect_round_table) and the one-territory Round Table
+# (colonial_empire_possible_round_table_state, decolonization_events.402.b).
+colonial_state_round_table_ready = {
+	NOT = {
+		any_scope_pop = {
+			pop_acceptance < acceptance_status_2
+		}
+	}
+}
+
+# ============================================================================
+# COLONIAL EMPIRE — PER-TARGET GATES (the Colonial Holdings section)
+#
+# The Colonial Holdings section of the panel (colonial_empire_widget.gui,
+# te_ce_sec_holdings) lists our territories and our colonial subjects, each
+# with its own buttons beside it. Each button opens a confirmation event for
+# that one territory or subject (decolonization_events.402 / .403 / .404); the
+# button's scripted GUI (colonial_empire_sguis.txt) passes the territory, or
+# the subject's capital, as a saved scope, and its is_valid is the gate below.
+# The confirmation events' options read the same gates, so a choice cannot be
+# offered in the event that the button would have refused.
+#
+# SCOPE: country (the empire, ROOT). $STATE$ is the territory; $CAPITAL$ the
+# subject's capital, a state (gotcha #11 of gui_modding_guide.md: the panel
+# reaches a country through a stored state), whose owner is the subject.
+# A custom_tooltip line is what the greyed button's hover prints, so each is
+# phrased as a condition.
+# ============================================================================
+
+# One decision at a time. Each per-target button, and Planned Full
+# Decolonization, opens a confirmation that previews its target in shared
+# variables (the release region's markers and count), so a second one opened
+# before the first is answered would overwrite the first one's preview.
+# decol_offer_pending is set when a confirmation opens and cleared by each of
+# its options; it lapses on its own after a week in case an event is lost.
+colonial_empire_no_offer_pending = {
+	custom_tooltip = {
+		text = CE_NO_DECISION_PENDING
+		NOT = { has_variable = decol_offer_pending }
+	}
+}
+
+# Release one territory: it is ours and the decolonization decisions could
+# offer it (is_decolonization_eligible_state, the test the list itself uses).
+colonial_empire_possible_release_state = {
+	colonial_empire_no_offer_pending = yes
+	custom_tooltip = {
+		text = CE_STATE_IS_ELIGIBLE
+		$STATE$ = {
+			owner = root
+			is_decolonization_eligible_state = yes
+		}
+	}
+}
+
+# Negotiate one territory's independence at a Round Table Conference: the
+# empire-wide Round Table's tests (colonial_empire_possible_round_table) for
+# this territory alone. The confirmation event's Round Table option.
+colonial_empire_possible_round_table_state = {
+	colonial_empire_possible_release_state = { STATE = $STATE$ }
+	custom_tooltip = {
+		text = CE_STATE_NO_SEVERELY_UNACCEPTED
+		$STATE$ = { colonial_state_round_table_ready = yes }
+	}
+	authority > colonial_round_table_authority
+}
+
+# Both subject actions: the capital's owner is our own direct subject, still
+# a colonial subject by the entry's test, and not our enemy in a diplomatic
+# play (vanilla's autonomy actions refuse an enemy too).
+colonial_empire_subject_action_base = {
+	colonial_empire_no_offer_pending = yes
+	custom_tooltip = {
+		text = CE_SUBJECT_IS_OURS
+		$CAPITAL$ = {
+			owner = {
+				is_direct_subject_of = root
+				is_qualifying_colonial_subject = yes
+			}
+		}
+	}
+	custom_tooltip = {
+		text = CE_SUBJECT_NOT_OPPOSING
+		$CAPITAL$ = {
+			owner = {
+				NOT = { is_diplomatic_play_enemy_of = root }
+			}
+		}
+	}
+}
+
+# Grant a colonial subject its independence.
+colonial_empire_possible_free_subject = {
+	colonial_empire_subject_action_base = { CAPITAL = $CAPITAL$ }
+}
+
+# Raise a colony to a dominion: vanilla's own step up in autonomy
+# (subject_type_colony's higher_autonomy_subject_type_alternatives is the
+# dominion, which only a colonial country may be), so only a colony qualifies.
+# A chartered company or a protectorate has no looser kind of subject to
+# become; its only way out is independence. Vanilla's autonomy cooldown
+# applies, as for da_increase_autonomy_of_subject: the effect leaves the same
+# catalyst, so this and vanilla's action cannot be chained.
+colonial_empire_possible_dominion_subject = {
+	colonial_empire_subject_action_base = { CAPITAL = $CAPITAL$ }
+	custom_tooltip = {
+		text = CE_SUBJECT_CAN_BECOME_DOMINION
+		$CAPITAL$ = {
+			owner = {
+				is_subject_type = subject_type_colony
+				can_increase_autonomy = yes
+			}
+		}
+	}
+	custom_tooltip = {
+		text = CE_SUBJECT_AUTONOMY_NOT_ON_COOLDOWN
+		$CAPITAL$ = {
+			owner = {
+				NOT = {
+					any_diplomatic_catalyst = {
+						is_diplomatic_catalyst_type = catalyst_autonomy_change_imposed
+						target = root
+					}
 				}
 			}
 		}
 	}
-	authority > 200
 }

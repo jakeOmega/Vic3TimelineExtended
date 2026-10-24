@@ -749,9 +749,10 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_supporter_share
 	remove_variable = colonial_empire_pressure_level
 	remove_variable = colonial_empire_d_total
+	remove_variable = colonial_empire_colony_count
+	remove_variable = colonial_empire_metropole_count
+	remove_variable = colonial_empire_subject_count
 	remove_variable = colonial_empire_eligible_count
-	remove_variable = colonial_empire_round_table_count
-	remove_variable = colonial_empire_largest_eligible_state
 	remove_variable = colonial_empire_territory_1
 	remove_variable = colonial_empire_territory_2
 	remove_variable = colonial_empire_territory_3
@@ -760,6 +761,14 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_territory_6
 	remove_variable = colonial_empire_territory_7
 	remove_variable = colonial_empire_territory_8
+	remove_variable = colonial_empire_subject_1
+	remove_variable = colonial_empire_subject_2
+	remove_variable = colonial_empire_subject_3
+	remove_variable = colonial_empire_subject_4
+	remove_variable = colonial_empire_subject_5
+	remove_variable = colonial_empire_subject_6
+	remove_variable = colonial_empire_subject_7
+	remove_variable = colonial_empire_subject_8
 	# And the primary-culture shares the list recorded on its states.
 	every_scope_state = {
 		limit = { has_variable = colonial_territory_primary_share }
@@ -1478,6 +1487,9 @@ colonial_empire_effect_planned_decolonization = {
 			limit = { is_decolonization_eligible_state = yes }
 			set_variable = decolonization_marker
 		}
+		# One confirmation at a time (colonial_empire_no_offer_pending): .401's
+		# options clear it.
+		set_variable = { name = decol_offer_pending days = 7 }
 		# Count marked states for the confirmation event's loc display.
 		set_variable = { name = decolonization_planned_count value = 0 }
 		every_scope_state = {
@@ -1524,7 +1536,7 @@ colonial_empire_effect_round_table = {
 		ordered_scope_state = {
 			limit = {
 				is_decolonization_eligible_state = yes
-				NOT = { any_scope_pop = { pop_acceptance < acceptance_status_2 } }
+				colonial_state_round_table_ready = yes
 			}
 			order_by = state_population
 			max = 1
@@ -1538,7 +1550,7 @@ colonial_empire_effect_round_table = {
 		ordered_scope_state = {
 			limit = {
 				is_decolonization_eligible_state = yes
-				NOT = { any_scope_pop = { pop_acceptance < acceptance_status_2 } }
+				colonial_state_round_table_ready = yes
 				NOT = { has_variable = decolonization_region_1_marker }
 			}
 			order_by = state_population
@@ -1553,7 +1565,7 @@ colonial_empire_effect_round_table = {
 		ordered_scope_state = {
 			limit = {
 				is_decolonization_eligible_state = yes
-				NOT = { any_scope_pop = { pop_acceptance < acceptance_status_2 } }
+				colonial_state_round_table_ready = yes
 				NOT = { has_variable = decolonization_region_1_marker }
 				NOT = { has_variable = decolonization_region_2_marker }
 			}
@@ -1573,4 +1585,145 @@ colonial_empire_effect_round_table = {
 
 	# Refresh the widget's snapshot variables now rather than next month.
 	colonial_empire_refresh_display = yes
+}
+
+# ============================================================================
+# PER-TARGET DECISIONS (the Colonial Holdings section)
+#
+# The panel's Colonial Holdings section (colonial_empire_widget.gui,
+# te_ce_sec_holdings) puts a button beside each territory and each colonial
+# subject. A button opens a confirmation event for its one target; nothing is
+# released until the player picks an option there, and Reconsider (the
+# default) clears everything. The buttons' scripted GUIs
+# (colonial_empire_sguis.txt) gate on colonial_empire_possible_*_state /
+# _subject (colonial_empire_triggers.txt) and call these.
+#
+#   colonial_empire_effect_release_state    -> .402  grant it independence,
+#                                                    or a Round Table for it
+#   colonial_empire_effect_free_subject     -> .403  independence (and, under
+#                                                    Neocolonialism, on terms)
+#   colonial_empire_effect_dominion_subject -> .404  dominion status
+#
+# Each body is in `hidden_effect`, as the decision effects above are: the
+# panel renders the effect as the button's tooltip every frame
+# (ScriptedGui.ExecuteTooltip). The player-facing line is the custom_tooltip
+# outside it. Each sets decol_offer_pending, which keeps a second confirmation
+# from opening over the first (colonial_empire_no_offer_pending); every option
+# of .401-.404 clears it through decol_offer_clear.
+#
+# The AI does not use these: its decisions run through the scripted buttons'
+# ai_chance (Release / Round Table / Planned, .400 / .401) and the subject
+# events .1 / .3.
+# ============================================================================
+
+# Open the decision on one territory. The region the release would take with
+# it (the territory and every neighbouring state of ours where its culture is
+# at home) is previewed now, with .400's first preview slot: form's on_created
+# clears that marker from the states it cedes, and decol_offer_clear from any
+# left behind.
+# Scope: country (the empire). $STATE$: the territory.
+colonial_empire_effect_release_state = {
+	custom_tooltip = CE_RELEASE_STATE_TT
+	# Whether the decision will offer a Round Table, said on the button's hover
+	# (the two tests of .402.b, colonial_empire_possible_round_table_state).
+	if = {
+		limit = {
+			$STATE$ = { colonial_state_round_table_ready = yes }
+			authority > colonial_round_table_authority
+		}
+		custom_tooltip = CE_RELEASE_STATE_ROUND_TABLE_OPEN
+	}
+	else_if = {
+		limit = {
+			$STATE$ = { colonial_state_round_table_ready = yes }
+		}
+		custom_tooltip = CE_RELEASE_STATE_ROUND_TABLE_NO_AUTHORITY
+	}
+	else = {
+		custom_tooltip = CE_RELEASE_STATE_ROUND_TABLE_UNACCEPTED
+	}
+	hidden_effect = {
+		$STATE$ = {
+			save_scope_as = decol_offer_state
+			_decolonization_preview_region = {
+				REGION_VAR = decolonization_region_1_marker
+				COUNT_VAR = decolonization_region_1_count
+				CULTURE_SCOPE = culture_for_region_1
+			}
+		}
+		set_variable = { name = decol_offer_pending days = 7 }
+		trigger_event = { id = decolonization_events.402 popup = yes }
+	}
+}
+
+# Open the decision to grant one colonial subject its independence.
+# Scope: country (the empire). $CAPITAL$: the subject's capital.
+colonial_empire_effect_free_subject = {
+	custom_tooltip = CE_FREE_SUBJECT_TT
+	hidden_effect = {
+		$CAPITAL$ = {
+			owner = { save_scope_as = decol_offer_subject }
+		}
+		set_variable = { name = decol_offer_pending days = 7 }
+		trigger_event = { id = decolonization_events.403 popup = yes }
+	}
+}
+
+# Open the decision to raise one colony to a dominion.
+# Scope: country (the empire). $CAPITAL$: the subject's capital.
+colonial_empire_effect_dominion_subject = {
+	custom_tooltip = CE_DOMINION_SUBJECT_TT
+	hidden_effect = {
+		$CAPITAL$ = {
+			owner = { save_scope_as = decol_offer_subject }
+		}
+		set_variable = { name = decol_offer_pending days = 7 }
+		trigger_event = { id = decolonization_events.404 popup = yes }
+	}
+}
+
+# Every option of .401-.404 ends here: the lock, and the release preview's
+# markers and count (.402's; .401 marks with decolonization_marker, which its
+# own options clear).
+# Scope: country (the empire).
+decol_offer_clear = {
+	remove_variable = decol_offer_pending
+	every_scope_state = {
+		limit = { has_variable = decolonization_region_1_marker }
+		remove_variable = decolonization_region_1_marker
+	}
+	remove_variable = decolonization_region_1_count
+}
+
+# What a release the empire chose earns it, for a territory released from its
+# row (.402) or a subject freed (.403). peaceful_decolonization_modifier is
+# added once, not stacked: one per release, a row at a time, would pile up
+# +15% prestige each. The colonial_stability_positive_event copies do stack,
+# as every release eases the pressure on what is left, and the monthly cap on
+# the bar bounds them. decol_record_chosen_release lets .206 say the empire
+# chose its ending.
+# Scope: country (the empire). $DAYS$: the peaceful modifier's length (a named
+# duration); $MONTHS$: the stability boost's.
+decol_chosen_release_rewards = {
+	if = {
+		limit = { NOT = { has_modifier = peaceful_decolonization_modifier } }
+		add_modifier = {
+			name = peaceful_decolonization_modifier
+			days = $DAYS$
+			is_decaying = yes
+		}
+	}
+	add_modifier = { name = colonial_stability_positive_event months = $MONTHS$ }
+	decol_record_chosen_release = yes
+}
+
+# A subject that stops being a colonial subject (freed, or made a dominion)
+# loses the liberty-desire pressure the entry's monthly pulse puts on
+# qualifying subjects by band. The pulse only reaches qualifying subjects, so
+# it would never take these off again.
+# Scope: country (the subject).
+decol_clear_subject_pressure = {
+	if = { limit = { has_modifier = colonial_overlord_strained_subject_ld_modifier } remove_modifier = colonial_overlord_strained_subject_ld_modifier }
+	if = { limit = { has_modifier = colonial_overlord_crumbling_subject_ld_modifier } remove_modifier = colonial_overlord_crumbling_subject_ld_modifier }
+	if = { limit = { has_modifier = colonial_overlord_collapsing_subject_ld_modifier } remove_modifier = colonial_overlord_collapsing_subject_ld_modifier }
 }

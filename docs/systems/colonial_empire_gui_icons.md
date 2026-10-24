@@ -1,6 +1,8 @@
 # Colonial Empire GUI: Icons
 
-The Colonial Empire overview (`te_ce_overview_panel` in `gui/journal_entry_widgets/colonial_empire_widget.gui`) draws ten icons of its own and a three-disc pie with its legend. The eligible-territories list under Why Stability Is Moving (`te_ce_territory_row`) draws one more. They were vanilla placeholders, or other systems' textures, through the style pass's play-test rounds, and PR #586 replaced them. All of them live in `gfx/interface/icons/colonial_empire_icons/`.
+The Colonial Empire overview (`te_ce_overview_panel` in `gui/journal_entry_widgets/colonial_empire_widget.gui`) draws ten icons of its own and a three-disc pie with its legend. The territory list in Colonial Holdings (`te_ce_territory_row`) draws one more. They were vanilla placeholders, or other systems' textures, through the style pass's play-test rounds, and PR #586 replaced them. All of them live in `gfx/interface/icons/colonial_empire_icons/`.
+
+The colonial-subject list in Colonial Holdings (`te_ce_subject_head` / `te_ce_subject_row`, 2026-10-24) draws only vanilla's art for vanilla things, on purpose: each subject's flag (`tiny_flag`), its subject type's own icon (`[State.GetCountry.GetSubjectType.GetTexture]`) and, over the liberty-desire column, the liberty-desire concept's icon (`gfx/interface/icons/diplomatic_action_icons/liberty_desire.dds`). `ColonialIconsTest` keeps them in its list of vanilla textures.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `te_ce_overview_panel`, `te_ce_ov_pie` or `te_ce_territory_row`. What picks one is a display value's code (`colonial_empire_disp_tier`, `colonial_empire_disp_pressure_level`, a territory's `colonial_territory_disp_colony`) or a programme's scope-free handler (`colonial_empire_active_*_sgui`). No script reads the paths. `ColonialIconsTest` in `test_colonial_empire_layout.py` holds each code to its file and fails on any placeholder left in the widget.
 

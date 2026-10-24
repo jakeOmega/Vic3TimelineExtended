@@ -2297,9 +2297,9 @@ The decolonization system models the decline of colonial empires through a journ
 
 Three layers:
 1. **Gate & Progress Bar:** `je_colonial_empire` activates when a country has colonial states and `decolonization` tech. The `colonial_stability_bar` (0-100, starts at 50) tracks how stable the empire is. At 0 the empire collapses; at 100 it solidifies.
-2. **Player Interaction:** the **Colonial Stability widget** (`gui/journal_entry_widgets/colonial_empire_widget.gui`) is the human surface, laid out to `docs/guides/gui_style_guide.md`: an overview at the top (band, programmes running, the stability bar with where it is heading in 12 months at this month's rate, green while rising and red while falling, and a thin line at the next band's edge, in the top band the months held at 100 and the months Solidified against their targets, the condemners' and supporters' shares of great-power prestige), then why stability is moving (each term a pillar bar over its range, then the eligible territories as a collapsed list, largest GDP first, with each one's population, primary-culture share, standard of living and GDP against the colony tests), international pressure, the three programmes (each a level, 0-3, with a minus and a plus), the three decolonization decisions, two history charts and a collapsed How the Colonial Empire Works. The 3 decision buttons behind it carry `is_ai = yes` and are the **AI's** path to the decisions; the AI steps the programmes in a monthly review (§ Colonial Programmes below). Every surface calls the same `colonial_empire_possible_*` / `colonial_empire_effect_*` helpers. Full reference: `journal_entry_systems.md` § Colonial Stability Widget.
+2. **Player Interaction:** the **Colonial Stability widget** (`gui/journal_entry_widgets/colonial_empire_widget.gui`) is the human surface, laid out to `docs/guides/gui_style_guide.md`: an overview at the top (band, programmes running, what holds the entry (the colonies and colonial subjects, both tests on hover), the stability bar with where it is heading in 12 months at this month's rate, green while rising and red while falling, and a thin line at the next band's edge, in the top band the months held at 100 and the months Solidified against their targets, the condemners' and supporters' shares of great-power prestige), then **Colonial Holdings** (the territories, largest GDP first, with each one's primary-culture share, standard of living and GDP against the colony tests and a Release button; the colonial subjects with their kind, liberty desire, GDP and Release and Dominion buttons; Planned Full Decolonization), why stability is moving (each term a pillar bar over its range), international pressure, the three programmes (each a level, 0-3, with a minus and a plus), two history charts and a collapsed How the Colonial Empire Works. The 3 decision buttons behind it carry `is_ai = yes` and are the **AI's** path to the decisions; the AI steps the programmes in a monthly review (§ Colonial Programmes below). Every surface calls the same `colonial_empire_possible_*` / `colonial_empire_effect_*` helpers; the per-target buttons are the player's alone (§ Colonial Holdings below). Full reference: `journal_entry_systems.md` § Colonial Stability Widget.
    **Timeline Extended window (2026-09-30; not yet seen in game).** The same panels also show on the *Colonial Empire* tab of the mod's own window (`gui/te_systems_window.gui`), under `datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"`, then a link back to the entry. The tab is greyed until the entry runs; its tooltip lists `ce_entry_unlocked` (the entry's technology and `possible`).
-3. **Events:** 21 events fire from `decolonization_events_on_action` (monthly pulse), covering colonial negotiations, crackdowns, releases, GP stance choices, post-independence transitions, and the Suez Crisis model. `decolonization_events.400` / `.401` are the confirmation popups the three decisions open — each previews candidates and offers a "Reconsider" option, so nothing is released by pressing a button.
+3. **Events:** 21 events fire from `decolonization_events_on_action` (monthly pulse), covering colonial negotiations, crackdowns, releases, GP stance choices, post-independence transitions, and the Suez Crisis model. `decolonization_events.400` / `.401` are the confirmation popups the three decisions open — each previews candidates and offers a "Reconsider" option, so nothing is released by pressing a button. `.402` / `.403` / `.404` are the per-target ones: one territory's release (grant or Round Table), one subject's independence, one colony's dominion status, each with Reconsider as its default.
 
 ### Files
 
@@ -2312,16 +2312,26 @@ Three layers:
 | `common/scripted_buttons/colonial_empire_buttons.txt` | 3 AI-only decision buttons; `possible` / `effect` delegate to the shared helpers. The programmes have no buttons |
 | `common/scripted_effects/decolonization.txt` | `form_decolonized_country`, JE cleanup, the decision actions, the programme steps (`colonial_programme_*_up` / `_down` cores, `colonial_empire_effect_*_up` / `_down` for the widget), `colonial_programmes_refresh_modifiers`, `colonial_ai_review_programmes`, the civil-war sync |
 | `common/scripted_effects/colonial_empire_display_effects.txt` | `colonial_empire_refresh_display` — the single site deriving all widget display state |
-| `common/scripted_guis/colonial_empire_sguis.txt` | 8 handlers backing the widget (2 guards, 3 programme-state reads, 1 text renderer, 2 op-coded actions) |
+| `common/scripted_guis/colonial_empire_sguis.txt` | 13 handlers backing the widget (1 guard, 3 programme-state reads, 3 text renderers, the op-coded programme steps, Planned Full Decolonization, and the 3 per-target buttons, each taking its target as a saved scope) |
 | `common/customizable_localization/colonial_empire_custom_loc.txt` | Band names, status line and phase-modifier line, keyed on `colonial_empire_live_tier`, the band ladder in `colonial_empire_values.txt`, read live |
 | `common/scripted_effects/te_history_colonial_effects.txt` | `te_history_record_colonial_samples` — the two chart series |
 | `common/scripted_effects/colonial_collapse_effects.txt` | Colonial collapse: tiny, poor AI countries absorbed or decentralized in the decolonization era |
 | `common/laws/colonial_empire_law_injections.txt` | Per-law colonial-stability and programme-effectiveness contributions |
 | `common/modifier_type_definitions/colonial_empire_modifier_types.txt` | The four `country_colonial_*` aggregate modifier types |
 | `common/on_actions/extra_on_actions.txt` | `decolonization_events_on_action` wiring |
-| `events/decolonization_events.txt` | All 21 decolonization events plus the `.400` / `.401` confirmations |
+| `events/decolonization_events.txt` | All 21 decolonization events plus the `.400` / `.401` confirmations and the per-target `.402`-`.404` |
 | `events/te_debug_colonial_empire_events.txt` | Console harness: `event te_debug_colonial_empire.1` (bands) / `.2` (pressure, decisions) / `.3` (programme costs, the AI review) |
 | `common/static_modifiers/extra_modifiers.txt` | 40+ decolonization modifiers |
+
+### Colonial Holdings (why the entry runs, and per-target decisions)
+
+The owner's request (2026-10-24): the panel should show why the entry runs for us, the states and the subjects, and an action that targets one of them should sit beside it rather than behind a button that asks which. The overview's line counts the colonies (`is_overseas_colonial_state`) and the colonial subjects (`is_qualifying_colonial_subject`), the two halves of the entry's `possible`. The Colonial Holdings section lists the eligible territories and the colonial subjects, eight of each by GDP from the monthly snapshot (subjects stored as their capitals, gotcha #11), each row with its buttons:
+
+- **Release** on a territory opens `.402`: grant it independence (`.400`'s unilateral release: +1 stability a month for 8 months, relations -10) or a Round Table (no pop below `acceptance_status_2`, authority above `colonial_round_table_authority`; 12 months, the IG reactions, relations +25), or Reconsider. The Round Table option is shown greyed with its reasons when closed, and the button's hover says which.
+- **Release** on a subject opens `.403`: `.1.c`'s grant of independence (former colony, relations +30, Landowners very negative, +1 stability for 8 months), under Neocolonialism `.1.d_neo`'s, or Reconsider.
+- **Dominion** on a subject opens `.404`: vanilla's own step up in autonomy, for a Colony only (a chartered company or a protectorate has no looser kind; vanilla's dominion takes only a colonial country): `increase_autonomy`, liberty desire -30, the autonomy cooldown catalyst and a 60-month truce, as `da_increase_autonomy_of_subject`. A dominion no longer qualifies, so it stops holding the entry. It gives no stability bonus of its own, on purpose: the same change through vanilla's diplomatic action gives none.
+
+Peaceful Decolonization from a row release is added only if not held (`decol_chosen_release_rewards`). A subject that stops qualifying loses the band's liberty-desire modifiers at once (`decol_clear_subject_pressure`), because the pulse only reaches qualifying subjects. One confirmation at a time (`decol_offer_pending`, cleared by every option of `.401`-`.404`). The AI keeps its own paths (the `.400` buttons, the subject events). Reference, handlers and gates: `journal_entry_systems.md` § Colonial Stability Widget → Per-target decisions. Open questions and ideas: `docs/systems/decolonization_ui_followups.md`.
 
 ### Colonial Programmes (levels, costs, AI)
 
@@ -2354,7 +2364,7 @@ The raise and lower rules leave a dead band one level wide, so a programme does 
 
 **This table is the formula.** Every term is a named leaf script value in `common/script_values/colonial_empire_values.txt` (country scope), and the bar's `monthly_progress` is nothing but 21 unconditional `add = { desc = "<tooltip key>" value = owner.<leaf> }` lines, plus a 22nd, last line for the monthly cap (below). Each leaf returns 0 when its gate is false. The widget and the history charts read the **same** leaves through the nine `colonial_stability_drift_*` group sums, so there is exactly one place each number lives.
 
-To retune a term, change only its leaf. To add one: add a leaf, add it to its group, add one `add` line to the bar with a `desc` key, and add a row here.
+To retune a term, change only its leaf (or the named constant it multiplies by). To add one: add a leaf, add it to its group, add one `add` line to the bar with a `desc` key, and add a row here.
 
 | Leaf (`colonial_stability_term_…`) | Group | Gate | Value | Tooltip key |
 |---|---|---|---|---|
@@ -2364,7 +2374,7 @@ To retune a term, change only its leaf. To add one: add a leaf, add it to its gr
 | `_ig_armed_forces` | igs | Armed Forces powerful | **+0.2** | `colonial_ig_armed_forces_strong_tt` |
 | `_ig_intelligentsia` | igs | Intelligentsia powerful | **-0.4** | `colonial_ig_intelligentsia_strong_tt` |
 | `_ig_unions` | igs | Trade Unions powerful | **-0.3** | `colonial_ig_unions_strong_tt` |
-| `_overreach` | overreach | `colonial_overreach_ratio > 0` | ratio × **-0.4** | `colonial_overreach_tt` |
+| `_overreach` | overreach | `colonial_overreach_ratio > 0` (colonies ÷ other states − `colonial_overreach_free_ratio`, **1.5**) | ratio × `colonial_overreach_per_ratio` (**-0.4**) | `colonial_overreach_tt` |
 | `_gp_rank` | rank | great power | **+0.3** | `colonial_gp_rank_bonus_tt` |
 | `_non_gp` | rank | not a great power | **-0.5** | `colonial_non_gp_penalty_tt` |
 | `_gp_condemnation` | gp | — (0 with no condemners) | `colonial_gp_condemnation_weight` × **-0.6** | `colonial_gp_condemnation_tt` |
@@ -2374,12 +2384,14 @@ To retune a term, change only its leaf. To add one: add a leaf, add it to its gr
 | `_garrison` | policies | Garrison level ≥ 1 | `modifier:country_colonial_garrison_effectiveness_add` × level ÷ 3 | `colonial_garrison_aggregate_tt` |
 | `_assim` | policies | Assimilation level ≥ 1 | `modifier:country_colonial_assim_effectiveness_add` × level ÷ 3 | `colonial_assim_aggregate_tt` |
 | `_invest` | policies | Investment level ≥ 1 | `modifier:country_colonial_invest_effectiveness_add` × level ÷ 3 | `colonial_invest_aggregate_tt` |
-| `_low_acceptance` | acceptance | low-acceptance colonies > 0 | count × **-0.4** | `colonial_low_acceptance_tt` |
-| `_high_acceptance` | acceptance | high-acceptance colonies > 0 | count × **+0.5** | `colonial_high_acceptance_tt` |
+| `_low_acceptance` | acceptance | low-acceptance colonies > 0 (`colonial_state_low_acceptance_colony`) | count × `colonial_low_acceptance_per_colony` (**-0.4**) | `colonial_low_acceptance_tt` |
+| `_high_acceptance` | acceptance | high-acceptance colonies > 0 (`colonial_state_high_acceptance`) | count × `colonial_high_acceptance_per_state` (**+0.5**) | `colonial_high_acceptance_tt` |
 | `_war` | domestic | at war | **-0.5** | `colonial_war_penalty_tt` |
 | `_revolution` | domestic | revolution | **-1.0** | `colonial_revolution_penalty_tt` |
 | `_turmoil` | domestic | `country_turmoil > 0.05` | turmoil × **-2.0** | `colonial_turmoil_penalty_tt` |
 | `_cap` (**last line**) | — (not in a group) | sum outside ±`colonial_stability_drift_cap` | clamp(sum, ±1.667) − sum | `colonial_drift_cap_tt` |
+
+**Per-territory weight.** The four named constants in the rows above (the acceptance weights, the overreach scale and its free ratio) are also read by the Colonial Holdings list's hover, `colonial_territory_disp_weight`: a territory's own acceptance term plus the overreach term now less the term without it (from the monthly `colonial_empire_colony_count` / `_metropole_count`), so the hover says what releasing it would take off the bar. Retune the constant, not the leaf.
 
 **Great-power terms scale with relative prestige.** Each condemning or supporting great power is weighted by its prestige divided by the empire's (floored at 1), clamped to **[0.25, 2.0]** — `colonial_gp_condemnation_weight` / `colonial_gp_support_weight` sum those weights. A peer great power therefore contributes the table's figure (-0.6 / +0.3), one with double the empire's prestige or more contributes twice that, and one with a quarter or less contributes a quarter. Net effect: the most prestigious empires shrug off condemnation from lesser powers, while small colonial holders (Portugal, Belgium, the Netherlands) feel superpower condemnation at up to -1.2/month each.
 

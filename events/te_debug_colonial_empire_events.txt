@@ -184,11 +184,66 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 		colonial_empire_effect_planned_decolonization = yes
 	}
 
+	# Open the Colonial Holdings section's three per-target confirmations
+	# (.402 / .403 / .404) for the largest territory and the largest direct
+	# colonial subject, through the same shared effects the rows' buttons call.
+	# Each has Reconsider as its default.
+	option = {
+		name = te_debug_colonial_empire.2.h
+		trigger = {
+			colonial_empire_no_offer_pending = yes
+			any_scope_state = { is_decolonization_eligible_state = yes }
+		}
+		ordered_scope_state = {
+			limit = { is_decolonization_eligible_state = yes }
+			order_by = gdp
+			max = 1
+			save_scope_as = te_debug_ce_state
+		}
+		colonial_empire_effect_release_state = { STATE = scope:te_debug_ce_state }
+	}
+
+	option = {
+		name = te_debug_colonial_empire.2.i
+		trigger = {
+			colonial_empire_no_offer_pending = yes
+			any_direct_subject = { is_qualifying_colonial_subject = yes }
+		}
+		ordered_direct_subject = {
+			limit = { is_qualifying_colonial_subject = yes }
+			order_by = gdp
+			max = 1
+			capital ?= { save_scope_as = te_debug_ce_capital }
+		}
+		colonial_empire_effect_free_subject = { CAPITAL = scope:te_debug_ce_capital }
+	}
+
+	option = {
+		name = te_debug_colonial_empire.2.j
+		trigger = {
+			colonial_empire_no_offer_pending = yes
+			any_direct_subject = {
+				is_qualifying_colonial_subject = yes
+				is_subject_type = subject_type_colony
+			}
+		}
+		ordered_direct_subject = {
+			limit = {
+				is_qualifying_colonial_subject = yes
+				is_subject_type = subject_type_colony
+			}
+			order_by = gdp
+			max = 1
+			capital ?= { save_scope_as = te_debug_ce_capital }
+		}
+		colonial_empire_effect_dominion_subject = { CAPITAL = scope:te_debug_ce_capital }
+	}
+
 	# Diagnostics for the decolonization rows when they look wrong.
 	option = {
 		name = te_debug_colonial_empire.2.g
 		colonial_empire_refresh_display = yes
-		debug_log = "COLONIAL_DEBUG: eligible=[THIS.GetVariable('colonial_empire_eligible_count').GetValue] round_table_ok=[THIS.GetVariable('colonial_empire_round_table_count').GetValue] overreach=[THIS.GetVariable('colonial_empire_d_overreach').GetValue] gp=[THIS.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[THIS.GetVariable('colonial_empire_d_acceptance').GetValue]"
+		debug_log = "COLONIAL_DEBUG: eligible=[THIS.GetVariable('colonial_empire_eligible_count').GetValue] colonies=[THIS.GetVariable('colonial_empire_colony_count').GetValue] subjects=[THIS.GetVariable('colonial_empire_subject_count').GetValue] overreach=[THIS.GetVariable('colonial_empire_d_overreach').GetValue] gp=[THIS.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[THIS.GetVariable('colonial_empire_d_acceptance').GetValue]"
 	}
 }
 
