@@ -1,0 +1,46 @@
+﻿# ============================================================================
+# DEMOGRAPHICS — the census's inputs while the census doesn't run
+# ============================================================================
+# Every modifier type in common/modifier_type_definitions/demographics_modifier_types.txt
+# is read only by the census. Under the Demographics rule's Disabled setting no
+# census runs, yet the techs, laws and institutions that carry those types still
+# list their lines. So each type's name ends in
+# [GetPlayer.GetCustom('te_demog_census_off_name')] and its description in
+# [GetPlayer.GetCustom('te_demog_census_off_desc')] (te_modifiers_l_english.yml):
+# empty while te_demog_cohorts_run holds (Full, Display only), a tag and a note
+# otherwise. test_demographics_modifiers.py holds every type to both.
+#
+# A modifier name renders with no scope of its own, so the entries are country
+# entries reached through GetPlayer, as vanilla's concept text reaches
+# enactment_phase_0. The trigger reads the scripted gate, not the rule, so a
+# release (scripts/release/comment_out_census_inputs.py sets the gate to
+# always = no and removes the rule) leaves nothing reading a missing rule.
+# ============================================================================
+
+te_demog_census_off_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_cohorts_run = yes }
+		localization_key = te_demog_census_off_none
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_tag
+	}
+}
+
+te_demog_census_off_desc = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_cohorts_run = yes }
+		localization_key = te_demog_census_off_none
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_note
+	}
+}

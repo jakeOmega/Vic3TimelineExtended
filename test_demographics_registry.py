@@ -6540,10 +6540,13 @@ class TestModifierTypes(unittest.TestCase):
             for line in ("script_only = yes", "percent = yes", "decimals = 0"):
                 self.assertIn(line, body, name)
             self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
-            self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \".*Used by the census on the Demographics tab\.\"$", name)
+            # each census type's text ends in the census-off call (te_demog_custom_loc.txt, test_demographics_modifiers)
+            self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \".*Used by the census on the Demographics tab\."
+                                  r"\[GetPlayer\.GetCustom\('te_demog_census_off_desc'\)\]\"$", name)
             self.assertNotIn(name, engine, name)
         # a typographic apostrophe: the engine pastes a modifier's name into a quoted tooltip argument (loc_render_audit)
-        self.assertIn(f"{P.FEMALE_WORK_SHARE_TYPE}:0 \"Women\u2019s Work Outside the Home\"", loc)
+        self.assertIn(f"{P.FEMALE_WORK_SHARE_TYPE}:0 \"Women\u2019s Work Outside the Home"
+                      "[GetPlayer.GetCustom('te_demog_census_off_name')]\"", loc)
         lines = DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES)
         everything = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
                                 "jet_engine_technology"})
