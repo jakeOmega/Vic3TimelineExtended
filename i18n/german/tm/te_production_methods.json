@@ -4589,7 +4589,7 @@
  },
  "pm_grid_hvdc_interconnector_desc": {
   "en": "Converter valves and a high-voltage direct-current cable to the far shore, with a range of one [concept_sea_node] (#b $building_grid_undersea_cable_range_add$#!), which $smart_grids$ and $quantum_materials$ lengthen.",
-  "de": "Konverterventile und ein Hochspannungs-Gleichstromkabel zum gegenüberliegenden Ufer, mit einer Reichweite von eins ([concept_sea_node]; #b $building_grid_undersea_cable_range_add$#!), die $smart_grids$ und $quantum_materials$ verlängern."
+  "de": "Konverterventile und ein Hochspannungs-Gleichstromkabel zum gegenüberliegenden Ufer, mit einer Reichweite von einem Meeresabschnitt ([concept_sea_node], #b $building_grid_undersea_cable_range_add$#!), die $smart_grids$ und $quantum_materials$ verlängern."
  },
  "pm_grid_transfer_base": {
   "en": "Substation",

@@ -435,29 +435,141 @@
   "en": "The Farm Is Not to Be Cut",
   "de": "Der Hof darf nicht zerteilt werden"
  },
+ "amendment_petition_events.21.a": {
+  "en": "Suspend the writ until the war is won.",
+  "de": "Den Habeas Corpus aussetzen, bis der Krieg gewonnen ist."
+ },
+ "amendment_petition_events.21.b": {
+  "en": "The writ runs in war as in peace.",
+  "de": "Der Habeas Corpus gilt im Krieg wie im Frieden."
+ },
+ "amendment_petition_events.21.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] report that enemy agents and sympathizers arrested behind the lines are walking free on writs of habeas corpus. They ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] letting the government hold suspects without trial until the war ends.",
+  "de": "Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] melden, dass hinter den Linien festgenommene feindliche Agenten und Sympathisanten dank des Habeas Corpus frei herumlaufen. Sie fordern einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der der Regierung erlaubt, Verdächtige ohne Gerichtsverfahren bis zum Kriegsende festzuhalten."
+ },
+ "amendment_petition_events.21.f": {
+  "en": "\\\"Are all the laws but one to go unexecuted, and the government itself go to pieces, lest that one be violated?\\\" (Abraham Lincoln, 1861)",
+  "de": "„Sollen alle Gesetze bis auf eines unvollstreckt bleiben und die Regierung selbst zerfallen, damit dieses eine nicht verletzt wird?“ (Abraham Lincoln, 1861)"
+ },
  "amendment_petition_events.21.t": {
   "en": "The Writ Suspended",
   "de": "Habeas Corpus ausgesetzt"
+ },
+ "amendment_petition_events.22.a": {
+  "en": "Put the judges on the ballot.",
+  "de": "Die Richter auf den Stimmzettel setzen."
+ },
+ "amendment_petition_events.22.b": {
+  "en": "Judges must not court votes.",
+  "de": "Richter dürfen nicht um Stimmen werben."
+ },
+ "amendment_petition_events.22.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] say the judges answer to nobody: appointed by the powerful, for life, to rule over the people who elect everyone else. They ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] making judges stand for election like any other official.",
+  "de": "Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] sagen, die Richter seien niemandem Rechenschaft schuldig: von den Mächtigen auf Lebenszeit ernannt, um über das Volk zu richten, das alle anderen wählt. Sie fordern einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der Richter wie jeden anderen Amtsträger zur Wahl stellt."
+ },
+ "amendment_petition_events.22.f": {
+  "en": "\\\"Let the people choose their judges, as they choose their governors.\\\"",
+  "de": "„Das Volk soll seine Richter wählen, wie es seine Gouverneure wählt.“"
  },
  "amendment_petition_events.22.t": {
   "en": "Let the People Choose Their Judges",
   "de": "Das Volk soll seine Richter wählen"
  },
+ "amendment_petition_events.23.a": {
+  "en": "Open courts for the merchants.",
+  "de": "Gerichte für die Kaufleute eröffnen."
+ },
+ "amendment_petition_events.23.b": {
+  "en": "Disputes go before our own judges.",
+  "de": "Streitfälle kommen vor unsere eigenen Richter."
+ },
+ "amendment_petition_events.23.d": {
+  "en": "Foreign merchants will not lend or trade on credit while their disputes go before courts they don't trust and can't follow. The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] setting up commercial courts with foreign and local judges, beside the courts we have.",
+  "de": "Ausländische Kaufleute wollen weder Kredit geben noch auf Kredit handeln, solange ihre Streitfälle vor Gerichten landen, denen sie nicht trauen und deren Verfahren sie nicht durchschauen. Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] fordern einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der Handelsgerichte mit ausländischen und einheimischen Richtern neben den bestehenden Gerichten einrichtet."
+ },
+ "amendment_petition_events.23.f": {
+  "en": "\\\"A contract is worth what the court that enforces it is worth.\\\"",
+  "de": "„Ein Vertrag ist so viel wert wie das Gericht, das ihn durchsetzt.“"
+ },
  "amendment_petition_events.23.t": {
   "en": "Courts for the Merchants",
   "de": "Gerichte für die Kaufleute"
+ },
+ "amendment_petition_events.24.a": {
+  "en": "Let juries decide.",
+  "de": "Geschworene entscheiden lassen."
+ },
+ "amendment_petition_events.24.b": {
+  "en": "Judging is for judges.",
+  "de": "Urteilen ist Sache der Richter."
+ },
+ "amendment_petition_events.24.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] want an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] sending serious cases to a jury of ordinary citizens. A government that wants someone convicted, they say, should have to convince twelve of its own people.",
+  "de": "Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] wollen einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der schwere Fälle vor ein Geschworenengericht aus einfachen Bürgern bringt. Eine Regierung, die jemanden verurteilt sehen will, müsse, so sagen sie, zwölf ihrer eigenen Leute überzeugen."
+ },
+ "amendment_petition_events.24.f": {
+  "en": "In 1878 Vera Zasulich shot the governor of St Petersburg in front of witnesses. A jury acquitted her.",
+  "de": "1878 erschoss Wera Sassulitsch vor Zeugen den Gouverneur von Sankt Petersburg. Ein Geschworenengericht sprach sie frei."
  },
  "amendment_petition_events.24.t": {
   "en": "Twelve Good Citizens",
   "de": "Zwölf rechtschaffene Bürger"
  },
+ "amendment_petition_events.25.a": {
+  "en": "Rebels go before the army's courts.",
+  "de": "Rebellen kommen vors Kriegsgericht."
+ },
+ "amendment_petition_events.25.b": {
+  "en": "Civilians answer to civilian courts.",
+  "de": "Zivilisten stehen vor Zivilgerichten."
+ },
+ "amendment_petition_events.25.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] complain that the ringleaders of the unrest are tried slowly and let off lightly. They ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] sending civilians accused of rebellion or sedition before courts-martial.",
+  "de": "Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] beklagen, dass die Rädelsführer der Unruhen zu langsam abgeurteilt werden und zu milde davonkommen. Sie fordern einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der Zivilisten, denen Rebellion oder Aufwiegelung vorgeworfen wird, vor Kriegsgerichte stellt."
+ },
+ "amendment_petition_events.25.f": {
+  "en": "\\\"A court-martial needs an afternoon. A jury needs a month and gets it wrong.\\\"",
+  "de": "„Ein Kriegsgericht braucht einen Nachmittag. Ein Geschworenengericht braucht einen Monat und irrt sich.“"
+ },
  "amendment_petition_events.25.t": {
   "en": "Courts-Martial for Rebels",
   "de": "Kriegsgerichte für Rebellen"
  },
+ "amendment_petition_events.26.a": {
+  "en": "Let the people's courts judge.",
+  "de": "Die Volkstribunale urteilen lassen."
+ },
+ "amendment_petition_events.26.b": {
+  "en": "The tribunals we have will do.",
+  "de": "Die bestehenden Gerichte genügen."
+ },
+ "amendment_petition_events.26.d": {
+  "en": "The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] say the old courts still judge by the old society's law. They ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] setting up people's tribunals, staffed by the party and judging by its idea of justice.",
+  "de": "Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] sagen, die alten Gerichte urteilten noch immer nach dem Recht der alten Gesellschaft. Sie fordern einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der Volkstribunale einrichtet, die von der Partei besetzt sind und nach deren Vorstellung von Gerechtigkeit urteilen."
+ },
+ "amendment_petition_events.26.f": {
+  "en": "\\\"The court must not ban terror, but must substantiate it and legitimize it in principle.\\\" (Vladimir Lenin, 1922)",
+  "de": "„Das Gericht darf den Terror nicht beseitigen, sondern muss ihn grundsätzlich begründen und legitimieren.“ (Wladimir Lenin, 1922)"
+ },
  "amendment_petition_events.26.t": {
   "en": "Justice of the Party",
   "de": "Die Justiz der Partei"
+ },
+ "amendment_petition_events.27.a": {
+  "en": "Every appeal goes to a human judge.",
+  "de": "Jede Berufung geht an einen menschlichen Richter."
+ },
+ "amendment_petition_events.27.b": {
+  "en": "The machine's rulings stand.",
+  "de": "Die Urteile der Maschine bleiben bestehen."
+ },
+ "amendment_petition_events.27.d": {
+  "en": "A ruling by the court system's model has gone viral: a sentence nobody in the courtroom could explain, and an appeal heard by the same model. The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] giving everyone the right to have an appeal heard by a person.",
+  "de": "Ein Urteil des Modells des Justizsystems hat sich viral verbreitet: ein Urteilsspruch, den niemand im Gerichtssaal erklären konnte, und eine Berufung, die vom selben Modell verhandelt wurde. Die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] fordern einen [concept_amendment] zu [SCOPE.sLaw('petition_law').GetName], der jedem das Recht gibt, eine Berufung von einem Menschen verhandeln zu lassen."
+ },
+ "amendment_petition_events.27.f": {
+  "en": "\\\"Nobody can be judged by a process that no person can be asked about.\\\"",
+  "de": "„Niemand darf von einem Verfahren gerichtet werden, über das man keinen Menschen befragen kann.“"
  },
  "amendment_petition_events.27.t": {
   "en": "A Human Signature",
@@ -663,6 +775,10 @@
   "en": "Under the Excavation Concession, part of the find stands in [SCOPE.sCountry('gm_arch_host').GetName]'s state as its monument, and the masterpiece, half its levels, goes on display in our capital as a trophy. [SCOPE.sCountry('gm_arch_host').GetNameNoFormatting] may one day ask for it back",
   "de": "Gemäß der Grabungskonzession steht ein Teil des Fundes im Staat [SCOPE.sCountry('gm_arch_host').GetAltName('GEN')] als dessen Monument, und das Meisterwerk, die Hälfte seiner Stufen, wird in unserer Hauptstadt als Trophäe ausgestellt. [SCOPE.sCountry('gm_arch_host').GetAltNameNoFormatting('NOM')|U] fordert es vielleicht eines Tages zurück"
  },
+ "arch_events.2.d": {
+  "en": "The last trench at the ancient site has been closed. The finds are numbered and packed, the workmen paid off and the spoil heaps left to the weeds, and the scholars who ran the dig have gone home to write up what came out of the ground, and to argue over what it means.",
+  "de": "Der letzte Graben an der antiken Stätte ist geschlossen. Die Funde sind nummeriert und verpackt, die Arbeiter ausbezahlt und die Abraumhalden dem Unkraut überlassen, und die Gelehrten, die die Grabung geleitet haben, sind nach Hause gegangen, um aufzuschreiben, was aus dem Boden kam, und um darüber zu streiten, was es bedeutet."
+ },
  "arch_events.2.e": {
   "en": "They have taken the best of it",
   "de": "Sie haben das Beste davon mitgenommen"
@@ -670,6 +786,10 @@
  "arch_events.2.e.tt": {
   "en": "Half the levels stand in our state as its monument. [SCOPE.sCountry('gm_arch_sponsor').GetName] has shipped the other half to its capital as a trophy, which we may claim back with a Return Cultural Property treaty",
   "de": "Die Hälfte der Stufen steht in unserem Staat als dessen Monument. [SCOPE.sCountry('gm_arch_sponsor').GetAltName('NOM')|U] hat die andere Hälfte als Trophäe in die eigene Hauptstadt verschifft, die wir mit einem Vertrag zur Rückgabe von Kulturgut zurückfordern können"
+ },
+ "arch_events.2.f": {
+  "en": "\\\"Every layer drawn, measured and photographed before the next came up, and not one wall knocked down to save a week.\\\" The director laid the last field notebook on the pile and blew the dust off its cover. \\\"The ministry wanted a monument by the summer and got one by the autumn, and I expect to hear about it. But in a hundred years, when somebody wants to know what stood here and who lived in it, it will all be in these.\\\"\\n\\n— the director of the excavation",
+  "de": "„Jede Schicht gezeichnet, vermessen und fotografiert, bevor die nächste freigelegt wurde, und keine einzige Mauer eingerissen, um eine Woche zu sparen.“ Der Leiter legte das letzte Feldbuch auf den Stapel und blies den Staub vom Einband. „Das Ministerium wollte bis zum Sommer ein Monument und bekam es im Herbst, und ich rechne damit, dass ich darauf angesprochen werde. Aber in hundert Jahren, wenn jemand wissen will, was hier stand und wer darin lebte, wird alles in diesen stehen.“\\n\\n— der Leiter der Ausgrabung"
  },
  "arch_events.2.f_concession": {
   "en": "\\\"Forty crates for the forward hold. Handle as glass. Do not stack.\\\" The harbour clerk signed the manifest without looking up, while the cranes swung the crates aboard: plaster, straw, and inside them the best of three seasons' digging, chosen piece by piece in a long afternoon of bargaining with the host's inspectors. \\\"Half each, they agreed. The half that fits in a crate is ours, and the half that doesn't is theirs. Everyone was very civilised about it.\\\"\\n\\n— a clerk at the port of embarkation",
@@ -4143,6 +4263,10 @@
   "en": "Armed resistance has erupted in [SCOPE.sState('uprising_colony').GetName]. Local fighters are conducting raids against [Concept('concept_government_building', 'government buildings')] and [concept_infrastructure]. Military commanders demand reinforcements, but the cost of suppression mounts by the day.",
   "de": "In [SCOPE.sState('uprising_colony').GetName] ist bewaffneter Widerstand ausgebrochen. Örtliche Kämpfer verüben Überfälle auf [Concept('concept_government_building', 'Regierungsgebäude')] und [concept_infrastructure]. Militärkommandeure fordern Verstärkung, doch die Kosten der Niederschlagung steigen von Tag zu Tag."
  },
+ "decolonization_events.13.e": {
+  "en": "Then it is a war.",
+  "de": "Dann ist es Krieg."
+ },
  "decolonization_events.13.f": {
   "en": "The telegram arrived at dawn: GARRISON OVERRUN AT CHECKPOINT FOUR. CASUALTIES UNKNOWN. REQUEST IMMEDIATE REINFORCEMENT.\\n\\nThe war minister stared at it for a long time.\\n\\n\\\"How many more of these,\\\" he said at last, \\\"before we admit that we are fighting a war we cannot win?\\\"",
   "de": "Das Telegramm traf im Morgengrauen ein: GARNISON AN KONTROLLPUNKT VIER ÜBERRANNT. VERLUSTE UNBEKANNT. FORDERE SOFORTIGE VERSTÄRKUNG AN.\\n\\nDer Kriegsminister starrte lange darauf.\\n\\n„Wie viele davon noch“, sagte er schließlich, „bevor wir zugeben, dass wir einen Krieg führen, den wir nicht gewinnen können?“"
@@ -4647,6 +4771,86 @@
   "en": "The Empire Stands Down",
   "de": "Das Imperium tritt ab"
  },
+ "decolonization_events.402.a": {
+  "en": "Grant it independence.",
+  "de": "Die Unabhängigkeit gewähren."
+ },
+ "decolonization_events.402.b": {
+  "en": "Convene a Round Table Conference.",
+  "de": "Eine Rundtischkonferenz einberufen."
+ },
+ "decolonization_events.402.b_tt": {
+  "en": "Its people and our government are ready to negotiate: the new nation starts on friendlier terms with us, and the empire steadies for longer.",
+  "de": "Die Bevölkerung dort und unsere Regierung sind verhandlungsbereit: Die neue Nation startet unter freundlicheren Vorzeichen mit uns, und das Reich festigt sich für längere Zeit."
+ },
+ "decolonization_events.402.c": {
+  "en": "Reconsider. The flag stays up for now.",
+  "de": "Überdenken. Die Flagge bleibt vorerst oben."
+ },
+ "decolonization_events.402.d": {
+  "en": "The file on [SCOPE.sState('decol_offer_state').GetName] has come up from the colonial office. Its leaders want a date, and our governors want an answer. If it goes, it goes alone, as a nation of its [SCOPE.sCulture('culture_for_region_1').GetName] people.\\n\\nWe can grant it independence by our own act and be done with it, or seat its leaders at a round table and negotiate the handover, if there is anyone there still willing to sit with us.",
+  "de": "Die Akte zu [SCOPE.sState('decol_offer_state').GetName] ist aus dem Kolonialamt eingetroffen. Seine Führer wollen ein Datum, und unsere Gouverneure wollen eine Antwort. Wenn es gehen soll, dann allein, als Nation seines [SCOPE.sCulture('culture_for_region_1').GetName]-Volkes.\\n\\nWir können die Unabhängigkeit aus eigenem Entschluss gewähren und die Sache beenden oder die Führer an einen runden Tisch setzen und die Übergabe aushandeln, falls dort noch jemand bereit ist, sich mit uns zu setzen."
+ },
+ "decolonization_events.402.d_region": {
+  "en": "The file on [SCOPE.sState('decol_offer_state').GetName] has come up from the colonial office. Its leaders want a date, and our governors want an answer. If it goes, its [SCOPE.sCulture('culture_for_region_1').GetName] people form the new nation, and it takes with it every neighbouring state of ours where they are at home: [ROOT.GetVariable('decolonization_region_1_count').GetValue|0] states in all.\\n\\nWe can grant it independence by our own act and be done with it, or seat its leaders at a round table and negotiate the handover, if there is anyone there still willing to sit with us.",
+  "de": "Die Akte zu [SCOPE.sState('decol_offer_state').GetName] ist aus dem Kolonialamt eingetroffen. Seine Führer wollen ein Datum, und unsere Gouverneure wollen eine Antwort. Wenn es gehen soll, bildet sein [SCOPE.sCulture('culture_for_region_1').GetName]-Volk die neue Nation, und es nimmt jeden benachbarten Staat von uns mit, in dem dieses Volk zu Hause ist: insgesamt [ROOT.GetVariable('decolonization_region_1_count').GetValue|0] Staaten.\\n\\nWir können die Unabhängigkeit aus eigenem Entschluss gewähren und die Sache beenden oder die Führer an einen runden Tisch setzen und die Übergabe aushandeln, falls dort noch jemand bereit ist, sich mit uns zu setzen."
+ },
+ "decolonization_events.402.f": {
+  "en": "\\\"Gentlemen, the question is not whether, but when.\\\"\\n\\n\\\"And by whose signature.\\\"",
+  "de": "„Meine Herren, die Frage ist nicht ob, sondern wann.“\\n\\n„Und mit wessen Unterschrift.“"
+ },
+ "decolonization_events.402.t": {
+  "en": "The Future of [SCOPE.sState('decol_offer_state').GetName]",
+  "de": "Die Zukunft von [SCOPE.sState('decol_offer_state').GetName]"
+ },
+ "decolonization_events.403.a": {
+  "en": "Let it go with our blessing.",
+  "de": "Mit unserem Segen ziehen lassen."
+ },
+ "decolonization_events.403.b": {
+  "en": "Let it go, on terms our firms can live with.",
+  "de": "Ziehen lassen, zu Bedingungen, mit denen unsere Firmen leben können."
+ },
+ "decolonization_events.403.c": {
+  "en": "Reconsider. Not yet.",
+  "de": "Überdenken. Noch nicht."
+ },
+ "decolonization_events.403.d": {
+  "en": "The government of [SCOPE.sCountry('decol_offer_subject').GetNameNoFormatting] has run its own affairs in all but name for years, and its delegates no longer ask whether, only when. The cabinet is ready to sign it over in full: its own flag, its own army, its own seat among the nations. What we keep after that is its goodwill, if we give freely.",
+  "de": "Die Regierung [SCOPE.sCountry('decol_offer_subject').GetAltNameNoFormatting('GEN')] führt ihre Angelegenheiten seit Jahren in allem außer dem Namen selbst, und ihre Delegierten fragen nicht mehr, ob, sondern nur noch, wann. Das Kabinett ist bereit, es ihr vollständig zu übertragen: eigene Flagge, eigene Armee, eigener Sitz unter den Nationen. Was wir danach behalten, ist ihr guter Wille, wenn wir großzügig geben."
+ },
+ "decolonization_events.403.f": {
+  "en": "\\\"You are handing them the keys.\\\"\\n\\n\\\"They have had the keys for years, Minister. We are handing them the house.\\\"",
+  "de": "„Sie übergeben ihnen die Schlüssel.“\\n\\n„Die Schlüssel haben sie seit Jahren, Herr Minister. Wir übergeben ihnen das Haus.“"
+ },
+ "decolonization_events.403.t": {
+  "en": "Independence for [SCOPE.sCountry('decol_offer_subject').GetNameNoFormatting]",
+  "de": "Unabhängigkeit für [SCOPE.sCountry('decol_offer_subject').GetAltNameNoFormatting('AKK')]"
+ },
+ "decolonization_events.404.a": {
+  "en": "Grant it dominion status.",
+  "de": "Den Dominion-Status gewähren."
+ },
+ "decolonization_events.404.a_tt": {
+  "en": "It stays our subject and still joins our wars, but no longer counts as one of our colonial subjects, and our stability band no longer drives its [concept_liberty_desire] up. A dominion may start diplomatic plays of its own.",
+  "de": "Es bleibt unser Klientelland und tritt weiterhin unseren Kriegen bei, zählt aber nicht mehr zu unseren kolonialen Klientelländern, und unser Stabilitätsband treibt dessen [concept_liberty_desire] nicht mehr in die Höhe. Ein Dominion darf eigene Diplomatiespiele beginnen."
+ },
+ "decolonization_events.404.b": {
+  "en": "Reconsider. It is not ready.",
+  "de": "Überdenken. Es ist noch nicht bereit."
+ },
+ "decolonization_events.404.d": {
+  "en": "The assembly of [SCOPE.sCountry('decol_offer_subject').GetNameNoFormatting] has petitioned our government, in the most loyal terms, for the standing of a self-governing dominion. It would keep our flag in the corner of its own and our fleet in its harbours, and send its sons when we go to war. In return it asks to run its own affairs, at home and abroad, without a governor's signature on every page.",
+  "de": "Die Versammlung [SCOPE.sCountry('decol_offer_subject').GetAltNameNoFormatting('GEN')] hat unsere Regierung in den loyalsten Worten um den Status eines selbstverwalteten Dominions ersucht. Sie würde unsere Flagge in der Ecke ihrer eigenen behalten, unsere Flotte in ihren Häfen dulden und ihre Söhne schicken, wenn wir in den Krieg ziehen. Im Gegenzug bittet sie darum, ihre Angelegenheiten im Innern wie nach außen selbst zu führen, ohne die Unterschrift eines Gouverneurs auf jeder Seite."
+ },
+ "decolonization_events.404.f": {
+  "en": "\\\"A dominion is a colony that has learned to say please.\\\"\\n\\n\\\"Or an empire that has learned to listen.\\\"",
+  "de": "„Ein Dominion ist eine Kolonie, die gelernt hat, Bitte zu sagen.“\\n\\n„Oder ein Imperium, das gelernt hat zuzuhören.“"
+ },
+ "decolonization_events.404.t": {
+  "en": "Dominion Status for [SCOPE.sCountry('decol_offer_subject').GetNameNoFormatting]",
+  "de": "Dominion-Status für [SCOPE.sCountry('decol_offer_subject').GetAltNameNoFormatting('AKK')]"
+ },
  "decolonization_events.5.a": {
   "en": "Extend the hand of friendship.",
   "de": "Die Hand der Freundschaft reichen."
@@ -4907,6 +5111,214 @@
   "en": "Year One",
   "de": "Jahr eins"
  },
+ "decolonization_events.70.a": {
+  "en": "Let them go.",
+  "de": "Sie ziehen lassen."
+ },
+ "decolonization_events.70.b": {
+  "en": "Negotiate the handover.",
+  "de": "Die Übergabe aushandeln."
+ },
+ "decolonization_events.70.b_neo_tt": {
+  "en": "Under $law_neocolonialism$ it goes on terms that keep our firms and our markets there. It costs #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_negotiation_authority')|0]#! [concept_authority], easing over a year.",
+  "de": "Unter $law_neocolonialism$ wird es zu Bedingungen entlassen, die unsere Firmen und unsere Märkte dort halten. Es kostet #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_negotiation_authority')|0]#! [concept_authority], was sich über ein Jahr hinweg abbaut."
+ },
+ "decolonization_events.70.b_tt": {
+  "en": "Its declared government is our partner at the table: the new nation starts on friendlier terms with us, and the empire steadies for longer. It costs #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_negotiation_authority')|0]#! [concept_authority], easing over a year.",
+  "de": "Seine ausgerufene Regierung ist unser Partner am Verhandlungstisch: Die neue Nation startet unter freundlicheren Vorzeichen mit uns, und das Reich festigt sich für längere Zeit. Es kostet #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_negotiation_authority')|0]#! [concept_authority], was sich über ein Jahr hinweg abbaut."
+ },
+ "decolonization_events.70.c": {
+  "en": "This is our soil. Send the army.",
+  "de": "Das ist unser Boden. Die Armee entsenden."
+ },
+ "decolonization_events.70.c_slots_tt": {
+  "en": "We are fighting fewer than three wars of independence",
+  "de": "Wir führen weniger als drei Unabhängigkeitskriege"
+ },
+ "decolonization_events.70.c_tt": {
+  "en": "#header A war of independence#!\\nThe rebels form as a nation, with the territory and every neighbouring state of ours where their people are at home. The next day they open a [concept_diplomatic_play] against us, and some three weeks later we are at war to take it back. Holding their land does not end the war: they must capitulate, or a peace leaves them free. Each month it drains [concept_colonial_stability], our [concept_legitimacy] falls the longer it runs, and the great powers take sides. Win, and the territory is ours again and quiet for ten years. Lose, and it leaves on the worst terms.",
+  "de": "#header Ein Unabhängigkeitskrieg#!\\nDie Rebellen konstituieren sich als Nation, mit dem Gebiet und jedem benachbarten Staat von uns, in dem ihr Volk zu Hause ist. Am nächsten Tag eröffnen sie ein [concept_diplomatic_play] gegen uns, und etwa drei Wochen später befinden wir uns im Krieg, um es zurückzuholen. Ihr Land besetzt zu halten beendet den Krieg nicht: Sie müssen kapitulieren, oder ein Frieden lässt sie frei. Jeden Monat zehrt er an der [concept_colonial_stability], unsere [concept_legitimacy] sinkt, je länger er dauert, und die Großmächte ergreifen Partei. Gewinnen wir, ist das Gebiet wieder unser und zehn Jahre lang ruhig. Verlieren wir, verlässt es uns zu den schlechtesten Bedingungen."
+ },
+ "decolonization_events.70.d": {
+  "en": "A congress in [SCOPE.sState('decol_iw_territory').GetName] has declared independence and named a provisional government. Its [SCOPE.sCulture('decol_iw_culture').GetName] fighters hold the hills, its strikers hold the docks, and its leaders have cabled the capital: they will discuss the date of our withdrawal, and nothing else.\\n\\nWe can let it go, negotiate the handover with the men who signed the declaration, or send the army to put it down. A war will not be over by Christmas.",
+  "de": "Ein Kongress in [SCOPE.sState('decol_iw_territory').GetName] hat die Unabhängigkeit erklärt und eine provisorische Regierung benannt. Seine [SCOPE.sCulture('decol_iw_culture').GetName]-Kämpfer halten die Hügel, seine Streikenden halten die Docks, und seine Führer haben der Hauptstadt telegrafiert: Sie werden über das Datum unseres Abzugs sprechen und über nichts anderes.\\n\\nWir können es ziehen lassen, die Übergabe mit den Männern aushandeln, die die Erklärung unterzeichnet haben, oder die Armee schicken, um es niederzuschlagen. Ein Krieg wird nicht bis Weihnachten vorbei sein."
+ },
+ "decolonization_events.70.d_settlers": {
+  "en": "A congress in [SCOPE.sState('decol_iw_territory').GetName] has declared independence and named a provisional government. Its [SCOPE.sCulture('decol_iw_culture').GetName] fighters hold the hills, its strikers hold the docks, and its leaders have cabled the capital: they will discuss the date of our withdrawal, and nothing else.\\n\\nOur own people there, [SCOPE.sState('decol_iw_territory').MakeScope.ScriptValue('colonial_territory_primary_share_value')|%0] of the territory, are arming in the towns. Their committees have cabled too: if the government abandons them, they will not abandon the territory.\\n\\nWe can let it go, negotiate the handover with the men who signed the declaration, or send the army to put it down. A war will not be over by Christmas.",
+  "de": "Ein Kongress in [SCOPE.sState('decol_iw_territory').GetName] hat die Unabhängigkeit erklärt und eine provisorische Regierung benannt. Seine [SCOPE.sCulture('decol_iw_culture').GetName]-Kämpfer halten die Hügel, seine Streikenden halten die Docks, und seine Führer haben der Hauptstadt telegrafiert: Sie werden über das Datum unseres Abzugs sprechen und über nichts anderes.\\n\\nUnsere eigenen Leute dort, [SCOPE.sState('decol_iw_territory').MakeScope.ScriptValue('colonial_territory_primary_share_value')|%0] des Gebiets, bewaffnen sich in den Städten. Auch ihre Komitees haben telegrafiert: Wenn die Regierung sie im Stich lässt, werden sie das Gebiet nicht im Stich lassen.\\n\\nWir können es ziehen lassen, die Übergabe mit den Männern aushandeln, die die Erklärung unterzeichnet haben, oder die Armee schicken, um es niederzuschlagen. Ein Krieg wird nicht bis Weihnachten vorbei sein."
+ },
+ "decolonization_events.70.f": {
+  "en": "\\\"A province cannot declare anything,\\\" the minister said.\\n\\nThe cable lay on the table between them. It carried a dozen signatures, most of them from men nobody in the room had heard of, and one that everyone knew from the prison rolls.",
+  "de": "„Eine Provinz kann nichts erklären“, sagte der Minister.\\n\\nDas Telegramm lag auf dem Tisch zwischen ihnen. Es trug ein Dutzend Unterschriften, die meisten von Männern, von denen niemand im Raum je gehört hatte, und eine, die jeder aus den Gefangenenlisten kannte."
+ },
+ "decolonization_events.70.t": {
+  "en": "Declaration in [SCOPE.sState('decol_iw_territory').GetName]",
+  "de": "Erklärung in [SCOPE.sState('decol_iw_territory').GetName]"
+ },
+ "decolonization_events.72.a": {
+  "en": "Hold what we have.",
+  "de": "Halten, was wir haben."
+ },
+ "decolonization_events.72.d": {
+  "en": "The fighting in [SCOPE.sState('decol_iw_end_state').GetName] is over, and it is over on our terms. The rebel ministers are in our prisons or on the boats, the flag is back over the government buildings, and the garrisons are counting what is left of the towns.\\n\\nNothing that started the rising has changed. Its people are as far from us as they were, and the villages that fed the fighters will remember who burned them.",
+  "de": "Die Kämpfe in [SCOPE.sState('decol_iw_end_state').GetName] sind vorbei, und zwar zu unseren Bedingungen. Die Minister der Rebellen sitzen in unseren Gefängnissen oder auf den Booten, die Flagge weht wieder über den Regierungsgebäuden, und die Garnisonen zählen, was von den Städten übrig ist.\\n\\nNichts von dem, was den Aufstand ausgelöst hat, hat sich geändert. Seine Bevölkerung ist uns so fern wie zuvor, und die Dörfer, die die Kämpfer ernährt haben, werden sich erinnern, wer sie niedergebrannt hat."
+ },
+ "decolonization_events.72.declared_tt": {
+  "en": "No declaration from [SCOPE.sState('decol_iw_end_state').GetName] for #v 10#! years.",
+  "de": "Keine Erklärung aus [SCOPE.sState('decol_iw_end_state').GetName] für #v 10#! Jahre."
+ },
+ "decolonization_events.72.f": {
+  "en": "\\\"We have won,\\\" the general told the cabinet.\\n\\nNobody asked him what.",
+  "de": "„Wir haben gesiegt“, sagte der General dem Kabinett.\\n\\nNiemand fragte ihn, was."
+ },
+ "decolonization_events.72.garrison_tt": {
+  "en": "#v 12#! months are added to the Military Garrison's record, which steers how the empire ends.",
+  "de": "Zur Bilanz der Militärgarnison kommen #v 12#! Monate hinzu; sie bestimmt, wie das Reich endet."
+ },
+ "decolonization_events.72.t": {
+  "en": "Order Restored in [SCOPE.sState('decol_iw_end_state').GetName]",
+  "de": "Ordnung wiederhergestellt in [SCOPE.sState('decol_iw_end_state').GetName]"
+ },
+ "decolonization_events.73.a": {
+  "en": "We will remember too.",
+  "de": "Auch wir werden uns erinnern."
+ },
+ "decolonization_events.73.d": {
+  "en": "The war for [SCOPE.sState('decol_iw_end_state').GetName] is over, and we have lost it. [SCOPE.sCountry('decol_iw_end_rebels').GetName] has its government, its army and its seat among the nations, and none of it was given. The settlers are on the ships, the last garrison has marched to the quays, and the officers who held the line for us are asking who sent them.\\n\\nThe new nation will be run by the men who beat us, and they will remember how.",
+  "de": "Der Krieg um [SCOPE.sState('decol_iw_end_state').GetName] ist vorbei, und wir haben ihn verloren. [SCOPE.sCountry('decol_iw_end_rebels').GetAltName('NOM')|U] hat nun eine Regierung, eine Armee und einen Sitz unter den Nationen, und nichts davon wurde geschenkt. Die Siedler sind auf den Schiffen, die letzte Garnison ist zu den Kais marschiert, und die Offiziere, die für uns die Stellung gehalten haben, fragen, wer sie dorthin geschickt hat.\\n\\nDie neue Nation wird von den Männern geführt werden, die uns besiegt haben, und sie werden sich erinnern, wie."
+ },
+ "decolonization_events.73.f": {
+  "en": "The band played the anthem twice, because the ship was late.",
+  "de": "Die Kapelle spielte die Hymne zweimal, weil das Schiff sich verspätete."
+ },
+ "decolonization_events.73.t": {
+  "en": "The Flag Comes Down",
+  "de": "Die Flagge wird eingeholt"
+ },
+ "decolonization_events.74.a": {
+  "en": "We condemn it, before the world.",
+  "de": "Wir verurteilen es vor aller Welt."
+ },
+ "decolonization_events.74.b": {
+  "en": "Send them arms.",
+  "de": "Ihnen Waffen schicken."
+ },
+ "decolonization_events.74.b_tt": {
+  "en": "#header Arms for the rebels#!\\nWhile the war lasts, they fight harder and their resolve holds, and we pay them a sum from our [concept_treasury] each month.",
+  "de": "#header Waffen für die Rebellen#!\\nSolange der Krieg dauert, kämpfen sie härter und ihre Entschlossenheit hält, und wir zahlen ihnen jeden Monat eine Summe aus unserer [concept_treasury]."
+ },
+ "decolonization_events.74.c": {
+  "en": "Their fight is ours. We march.",
+  "de": "Ihr Kampf ist unser Kampf. Wir marschieren."
+ },
+ "decolonization_events.74.c_guard_tt": {
+  "en": "We are a [concept_great_power] at peace and the colonial power's rival with the larger army, not its ally, its bloc partner, its subject or its overlord, and not under a [concept_truce] with it",
+  "de": "Wir sind eine [concept_great_power] im Frieden und der Rivale der Kolonialmacht mit der größeren Armee, nicht ihr Verbündeter, ihr Blockpartner, ihr Klientelland oder ihr Suzerän und ohne [concept_truce] mit ihr"
+ },
+ "decolonization_events.74.d": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has sent its army against [SCOPE.sCountry('decol_iw_gp_rebels').GetName], the colony that declared its independence in [SCOPE.sState('decol_iw_note_state').GetName]. Our government has said for years that the age of empires is over, and the rebels' envoys are in our capital to ask what that means.",
+  "de": "[SCOPE.sCountry('decol_iw_gp_metropole').GetAltName('NOM')|U] hat seine Armee gegen [SCOPE.sCountry('decol_iw_gp_rebels').GetAltName('AKK')] geschickt, die Kolonie, die in [SCOPE.sState('decol_iw_note_state').GetName] ihre Unabhängigkeit erklärt hat. Unsere Regierung sagt seit Jahren, das Zeitalter der Imperien sei vorbei, und die Gesandten der Rebellen sind in unserer Hauptstadt, um zu fragen, was das bedeutet."
+ },
+ "decolonization_events.74.e": {
+  "en": "This is not our quarrel.",
+  "de": "Das ist nicht unser Streit."
+ },
+ "decolonization_events.74.e_tt": {
+  "en": "We take no side.",
+  "de": "Wir ergreifen keine Partei."
+ },
+ "decolonization_events.74.f": {
+  "en": "\\\"Words are cheap,\\\" the envoy said. \\\"Rifles are cheaper. We will take either, but we would prefer rifles.\\\"",
+  "de": "„Worte sind billig“, sagte der Gesandte. „Gewehre sind billiger. Wir nehmen beides, aber uns wären Gewehre lieber.“"
+ },
+ "decolonization_events.74.t": {
+  "en": "War in [SCOPE.sState('decol_iw_note_state').GetName]",
+  "de": "Krieg in [SCOPE.sState('decol_iw_note_state').GetName]"
+ },
+ "decolonization_events.75.a": {
+  "en": "Step aside. Let the captains have their elections.",
+  "de": "Zur Seite treten. Die Hauptleute sollen ihre Wahlen bekommen."
+ },
+ "decolonization_events.75.a_tt": {
+  "en": "#header The officers' government#!\\nTalks open on every war of independence, and every territory a release could take is freed.",
+  "de": "#header Die Regierung der Offiziere#!\\nGespräche beginnen in jedem Unabhängigkeitskrieg, und jedes Gebiet, das eine Entlassung erfassen könnte, wird freigegeben."
+ },
+ "decolonization_events.75.b": {
+  "en": "Crush the officers.",
+  "de": "Die Offiziere niederschlagen."
+ },
+ "decolonization_events.75.c": {
+  "en": "Call the general.",
+  "de": "Den General rufen."
+ },
+ "decolonization_events.75.c_tt": {
+  "en": "The general's mandate: for three years, a peace by the accords costs us no [concept_legitimacy].",
+  "de": "Das Mandat des Generals: Drei Jahre lang kostet uns ein Frieden durch die Abkommen keine [concept_legitimacy]."
+ },
+ "decolonization_events.75.d": {
+  "en": "Four years of war in the colonies, and the army no longer believes it can be won. A movement of junior officers, the men who have done the fighting, holds the radio station and the barracks around the capital. Its manifesto asks for three things: an end to the colonial wars, elections, and the release of political prisoners. The crowds have put flowers in their rifles.\\n\\nThe government can step aside, or order the loyal regiments to crush them.",
+  "de": "Vier Jahre Krieg in den Kolonien, und die Armee glaubt nicht mehr, dass er zu gewinnen ist. Eine Bewegung junger Offiziere, der Männer, die gekämpft haben, hält den Rundfunksender und die Kasernen rund um die Hauptstadt. Ihr Manifest fordert drei Dinge: ein Ende der Kolonialkriege, Wahlen und die Freilassung politischer Gefangener. Die Menschenmengen haben Blumen in ihre Gewehre gesteckt.\\n\\nDie Regierung kann zur Seite treten oder die loyalen Regimenter anweisen, sie niederzuschlagen."
+ },
+ "decolonization_events.75.d_vote": {
+  "en": "Four years of war in the colonies have broken the Republic. The settlers and the army's commanders in the colony have formed a committee of public safety and refuse the government's orders, and paratroopers are rumoured to be on their way to the capital. Parliament cannot form a cabinet that will last a week.\\n\\nOne man could end it: a general with the army's trust and the public's. He will come, on his terms.",
+  "de": "Vier Jahre Krieg in den Kolonien haben die Republik zerbrochen. Die Siedler und die Befehlshaber der Armee in der Kolonie haben einen Wohlfahrtsausschuss gebildet und verweigern die Befehle der Regierung, und Fallschirmjäger sollen gerüchteweise auf dem Weg in die Hauptstadt sein. Das Parlament kann kein Kabinett bilden, das eine Woche hält.\\n\\nEin Mann könnte es beenden: ein General, dem die Armee und die Öffentlichkeit vertrauen. Er wird kommen, zu seinen Bedingungen."
+ },
+ "decolonization_events.75.e": {
+  "en": "The Republic will hold the line.",
+  "de": "Die Republik wird standhalten."
+ },
+ "decolonization_events.75.f": {
+  "en": "\\\"We did not take power,\\\" the captain told the journalist. \\\"We picked it up off the floor.\\\"",
+  "de": "„Wir haben die Macht nicht ergriffen“, sagte der Hauptmann zum Journalisten. „Wir haben sie vom Boden aufgehoben.“"
+ },
+ "decolonization_events.75.f_vote": {
+  "en": "\\\"I have understood you,\\\" he told the crowd. Each half of it believed he meant them.",
+  "de": "„Ich habe euch verstanden“, sagte er zur Menge. Jede Hälfte von ihr glaubte, er meine sie."
+ },
+ "decolonization_events.75.t": {
+  "en": "The Captains' Revolt",
+  "de": "Der Aufstand der Hauptleute"
+ },
+ "decolonization_events.75.t_vote": {
+  "en": "The Republic in Danger",
+  "de": "Die Republik in Gefahr"
+ },
+ "decolonization_events.76.a": {
+  "en": "It is done.",
+  "de": "Es ist vollbracht."
+ },
+ "decolonization_events.76.d": {
+  "en": "Our delegates and the government of [SCOPE.sCountry('decol_iw_end_rebels').GetName] have signed the accords in a spa town by a lake, under a ceasefire neither side fully trusts: independence, a referendum to make it legal, guarantees for the settlers that may hold, and a timetable for the last troops. [SCOPE.sState('decol_iw_end_state').GetName] is no longer ours, and at least we chose the date.\\n\\nThe army calls it a betrayal. The opposition calls it four years too late.",
+  "de": "Unsere Delegierten und die Regierung [SCOPE.sCountry('decol_iw_end_rebels').GetAltName('GEN')] haben die Abkommen in einer Kurstadt an einem See unterzeichnet, unter einem Waffenstillstand, dem keine Seite ganz traut: Unabhängigkeit, ein Referendum, um sie rechtmäßig zu machen, Garantien für die Siedler, die vielleicht halten, und ein Zeitplan für die letzten Truppen. [SCOPE.sState('decol_iw_end_state').GetName] gehört nicht mehr uns, und wenigstens haben wir das Datum gewählt.\\n\\nDie Armee nennt es Verrat. Die Opposition nennt es vier Jahre zu spät."
+ },
+ "decolonization_events.76.f": {
+  "en": "\\\"An honourable peace,\\\" said the communiqué. The officers who read it in the colony did not use the word honourable.",
+  "de": "„Ein ehrenvoller Friede“, hieß es im Kommuniqué. Die Offiziere, die es in der Kolonie lasen, benutzten das Wort ehrenvoll nicht."
+ },
+ "decolonization_events.76.t": {
+  "en": "The Accords",
+  "de": "Die Abkommen"
+ },
+ "decolonization_events.79.a": {
+  "en": "Send them what they need.",
+  "de": "Ihnen schicken, was sie brauchen."
+ },
+ "decolonization_events.79.b": {
+  "en": "This is not our quarrel.",
+  "de": "Das ist nicht unser Streit."
+ },
+ "decolonization_events.79.d": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has gone to war with [SCOPE.sCountry('decol_iw_gp_rebels').GetName], the colony that declared its independence in [SCOPE.sState('decol_iw_note_state').GetName]. Our government has always defended the colonial powers' right to keep order in their possessions, and [SCOPE.sCountry('decol_iw_gp_metropole').GetName]'s ambassador has asked, quietly, whether that still holds.",
+  "de": "[SCOPE.sCountry('decol_iw_gp_metropole').GetAltName('NOM')|U] ist in den Krieg gegen [SCOPE.sCountry('decol_iw_gp_rebels').GetAltName('AKK')] gezogen, die Kolonie, die in [SCOPE.sState('decol_iw_note_state').GetName] ihre Unabhängigkeit erklärt hat. Unsere Regierung hat stets das Recht der Kolonialmächte verteidigt, in ihren Besitzungen für Ordnung zu sorgen, und der Botschafter [SCOPE.sCountry('decol_iw_gp_metropole').GetAltName('GEN')] hat leise gefragt, ob das noch gilt."
+ },
+ "decolonization_events.79.f": {
+  "en": "\\\"A friend in need,\\\" the ambassador said, \\\"is a friend who sends ammunition.\\\"",
+  "de": "„Ein Freund in der Not“, sagte der Botschafter, „ist ein Freund, der Munition schickt.“"
+ },
+ "decolonization_events.79.t": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] Fights for [SCOPE.sState('decol_iw_note_state').GetName]",
+  "de": "[SCOPE.sCountry('decol_iw_gp_metropole').GetAltName('NOM')|U] kämpft um [SCOPE.sState('decol_iw_note_state').GetName]"
+ },
  "decolonization_events.8.a": {
   "en": "The tide cannot be held back.",
   "de": "Die Flut lässt sich nicht aufhalten."
@@ -4927,6 +5339,30 @@
   "en": "These Dark Satanic Mills of Empire",
   "de": "Diese finsteren satanischen Mühlen des Imperiums"
  },
+ "decolonization_events.80.a": {
+  "en": "Send the envoys.",
+  "de": "Die Gesandten schicken."
+ },
+ "decolonization_events.80.a_tt": {
+  "en": "Talks open. In #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_talks_months')|0]#! months the accords drop our claim, and the war can end in a peace: we offer one from the peace screen, conceding their independence if they refuse a white peace.",
+  "de": "Gespräche beginnen. In #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_talks_months')|0]#! Monaten entfällt durch die Abkommen unser Anspruch, und der Krieg kann in einem Frieden enden: Wir bieten einen über den Friedensbildschirm an und gestehen ihnen ihre Unabhängigkeit zu, falls sie einen weißen Frieden ablehnen."
+ },
+ "decolonization_events.80.b": {
+  "en": "Not yet.",
+  "de": "Noch nicht."
+ },
+ "decolonization_events.80.d": {
+  "en": "Our envoys can meet the rebels' government on neutral ground. Talks will take months, and the fighting goes on while they run. When the accords are signed our claim to [SCOPE.sState('decol_iw_talks_state').GetName] is dropped, and the war can end in a peace. Nothing is agreed until the end.",
+  "de": "Unsere Gesandten können sich mit der Regierung der Rebellen auf neutralem Boden treffen. Die Gespräche werden Monate dauern, und die Kämpfe gehen währenddessen weiter. Sobald die Abkommen unterzeichnet sind, entfällt unser Anspruch auf [SCOPE.sState('decol_iw_talks_state').GetName], und der Krieg kann in einem Frieden enden. Bis zum Schluss ist nichts vereinbart."
+ },
+ "decolonization_events.80.f": {
+  "en": "\\\"We do not negotiate with terrorists,\\\" the minister said, on the first day of the negotiations.",
+  "de": "„Wir verhandeln nicht mit Terroristen“, sagte der Minister am ersten Tag der Verhandlungen."
+ },
+ "decolonization_events.80.t": {
+  "en": "Talks with [SCOPE.sState('decol_iw_talks_state').GetCountry.GetName]",
+  "de": "Gespräche mit [SCOPE.sState('decol_iw_talks_state').GetCountry.GetAltName('DAT')]"
+ },
  "decolonization_events.9.a": {
   "en": "Address their grievances.",
   "de": "Ihre Beschwerden ansprechen."
@@ -4942,6 +5378,10 @@
  "decolonization_events.9.d": {
   "en": "Tensions are boiling over in [SCOPE.sState('unrest_colony').GetName], where discriminated communities demand greater rights under our direct rule. Our administrators report the situation could deteriorate rapidly without decisive action.",
   "de": "Die Spannungen kochen über in [SCOPE.sState('unrest_colony').GetName], wo diskriminierte Gemeinschaften unter unserer direkten Herrschaft mehr Rechte fordern. Unsere Verwalter berichten, dass sich die Lage ohne entschlossenes Handeln rasch verschlechtern könnte."
+ },
+ "decolonization_events.9.e": {
+  "en": "Release them, but secure our interests.",
+  "de": "Sie entlassen, aber unsere Interessen sichern."
  },
  "decolonization_events.9.f": {
   "en": "\\\"The governor requests additional police,\\\" the clerk reported.\\n\\n\\\"He requested additional police last month.\\\"\\n\\n\\\"Yes, Minister. And the month before that. This time he says if we don't send police, he'll need soldiers. And if we don't send soldiers...\\\" The clerk trailed off.\\n\\n\\\"Then what?\\\"\\n\\n\\\"Then he'd like a ticket home, sir.\\\"",
@@ -7806,6 +8246,78 @@
  "inheritance_events.13.t": {
   "en": "One Heir to the Farm",
   "de": "Ein Erbe für den Hof"
+ },
+ "inheritance_events.14.a": {
+  "en": "Audit every official's estate.",
+  "de": "Den Nachlass jedes Beamten prüfen."
+ },
+ "inheritance_events.14.a.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 3#!.",
+  "de": "Die [concept_inheritance_concentration] jedes Staates sinkt um #v 3#!."
+ },
+ "inheritance_events.14.b": {
+  "en": "Look away.",
+  "de": "Wegsehen."
+ },
+ "inheritance_events.14.b.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 5#!.",
+  "de": "Die [concept_inheritance_concentration] jedes Staates steigt um #v 5#!."
+ },
+ "inheritance_events.14.d": {
+  "en": "Under [GetLawType('law_state_universal_heir').GetName] every estate passes to the state when its owner dies. A generation on, the officials who administer those estates have found their own ways round the law: a country house in a cousin's name, a flat that was always the son's, an account abroad. The people who queue for housing know whose children never do.",
+  "de": "Unter [GetLawType('law_state_universal_heir').GetName] fällt jeder Nachlass an den Staat, wenn sein Eigentümer stirbt. Eine Generation später haben die Beamten, die diese Nachlässe verwalten, ihre eigenen Wege um das Gesetz herum gefunden: ein Landhaus auf den Namen eines Vetters, eine Wohnung, die schon immer dem Sohn gehörte, ein Konto im Ausland. Die Menschen, die um Wohnraum anstehen, wissen, wessen Kinder das nie müssen."
+ },
+ "inheritance_events.14.f": {
+  "en": "\\\"Officially nothing is inherited. Unofficially, everything is.\\\"",
+  "de": "„Offiziell wird nichts vererbt. Inoffiziell alles.“"
+ },
+ "inheritance_events.14.t": {
+  "en": "The Hidden Estates",
+  "de": "Die verborgenen Nachlässe"
+ },
+ "inheritance_events.15.a": {
+  "en": "The commune gives the land to whoever will work it.",
+  "de": "Die Dorfgemeinde gibt das Land an den, der es bewirtschaftet."
+ },
+ "inheritance_events.15.a.tt": {
+  "en": "Every state's [concept_inheritance_concentration] falls by #v 2#!.",
+  "de": "Die [concept_inheritance_concentration] jedes Staates sinkt um #v 2#!."
+ },
+ "inheritance_events.15.b": {
+  "en": "The family keeps working it.",
+  "de": "Die Familie bewirtschaftet es weiter."
+ },
+ "inheritance_events.15.b.tt": {
+  "en": "Every state's [concept_inheritance_concentration] rises by #v 5#!.",
+  "de": "Die [concept_inheritance_concentration] jedes Staates steigt um #v 5#!."
+ },
+ "inheritance_events.15.d": {
+  "en": "Under [GetLawType('law_non_inheritable_usage_rights').GetName] land belongs to whoever uses it, and when a holder dies the holding goes back to the commune. One has just fallen empty. The dead holder's children have worked it since they could walk, and they say that continuing to use it is all the title anyone needs. The commune's assembly says that is what inheritance always said.",
+  "de": "Unter [GetLawType('law_non_inheritable_usage_rights').GetName] gehört das Land dem, der es nutzt, und wenn ein Inhaber stirbt, fällt sein Landbesitz an die Dorfgemeinde zurück. Gerade ist einer frei geworden. Die Kinder des verstorbenen Inhabers bearbeiten ihn, seit sie laufen können, und sie sagen, die weitere Nutzung sei der einzige Rechtstitel, den jemand brauche. Die Versammlung der Dorfgemeinde sagt, das habe die Erbfolge schon immer behauptet."
+ },
+ "inheritance_events.15.f": {
+  "en": "\\\"Property is theft.\\\" (Pierre-Joseph Proudhon, What Is Property?, 1840)",
+  "de": "„Eigentum ist Diebstahl.“ (Pierre-Joseph Proudhon, Was ist das Eigentum?, 1840)"
+ },
+ "inheritance_events.15.t": {
+  "en": "The Empty Holding",
+  "de": "Der verwaiste Landbesitz"
+ },
+ "inheritance_events.16.a": {
+  "en": "The stake may go only to schooling and training.",
+  "de": "Das Startkapital darf nur für Schulbildung und Ausbildung verwendet werden."
+ },
+ "inheritance_events.16.b": {
+  "en": "Encourage them to found businesses.",
+  "de": "Sie ermutigen, Unternehmen zu gründen."
+ },
+ "inheritance_events.16.c": {
+  "en": "It is theirs to spend as they choose.",
+  "de": "Es steht ihnen frei, es nach Belieben auszugeben."
+ },
+ "inheritance_events.16.c.tt": {
+  "en": "Much of the money ends up with whoever sold the goods: every state's [concept_inheritance_concentration] rises by #v 3#!.",
+  "de": "Ein Großteil des Geldes landet bei denen, die die Waren verkauft haben: Die [concept_inheritance_concentration] jedes Staates steigt um #v 3#!."
  },
  "inheritance_events.2.a": {
   "en": "Buy them commissions in the army.",

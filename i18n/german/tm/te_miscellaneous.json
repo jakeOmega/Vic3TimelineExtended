@@ -27201,7 +27201,7 @@
  },
  "te_grid_interconnection_border_tt": {
   "en": "Both countries share a border or a [concept_sea_node], or their undersea cables reach each other",
-  "de": "Beide Länder teilen sich eine Grenze oder ein Meer ([concept_sea_node]), oder ihre Seekabel reichen bis zueinander"
+  "de": "Beide Länder teilen sich eine Grenze oder einen Meeresabschnitt ([concept_sea_node]), oder ihre Seekabel reichen bis zueinander"
  },
  "te_grid_market_exports": {
   "en": "Exports",
