@@ -50,15 +50,25 @@ te_fptp_marked_party_count = {
 	}
 }
 
-# Country scope, with scope:te_fptp_country saved and var:te_fptp_chk_second
-# set: unmarked parties larger than the second largest (should be none).
+# Country scope, with scope:te_fptp_country saved: unmarked parties larger
+# than either marked party (should be none). Pairwise, so a ranking that
+# ignored its order can't pass by agreeing with itself.
 te_fptp_outranking_minor_count = {
 	value = 0
 	every_active_party = {
 		limit = {
 			NOT = { is_party_type = revolutionary_party }
 			NOT = { te_fptp_party_is_major = yes }
-			te_fptp_party_clout > scope:te_fptp_country.var:te_fptp_chk_second
+			save_temporary_scope_value_as = {
+				name = te_fptp_chk_unmarked
+				value = te_fptp_party_clout
+			}
+			scope:te_fptp_country = {
+				any_active_party = {
+					te_fptp_party_is_major = yes
+					te_fptp_party_clout < scope:te_fptp_chk_unmarked
+				}
+			}
 		}
 		add = 1
 	}
