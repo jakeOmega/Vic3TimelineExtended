@@ -40,12 +40,1252 @@ te_judiciary_events.1 = {
 			is_decaying = yes
 			multiplier = var:te_jud_overhaul_mult
 		}
+		# The protests (phase 2, spec § 14.1): Lawyers in the Streets, in
+		# place of phase 1's bare middle-strata radicals.
 		if = {
 			limit = { te_jud_overhaul_gap >= 40 }
-			add_radicals = {
-				value = small_radicals
-				strata = middle
+			trigger_event = { id = te_judiciary_events.6 }
+		}
+	}
+}
+
+# ======================================================================
+#  PHASE 2: DEFYING THE COURT (spec § 14.1)
+#  te_jud_challenge_monthly files a forced law with the court once it is in
+#  force, and .2 fires 180 days later.
+# ======================================================================
+
+# The ruling (hidden). The court must still review forced laws, and the law
+# must still stand; otherwise the case lapses. A court whose score is at the
+# threshold for how hard the law was forced strikes it down (.3); a weaker one
+# upholds it (.4).
+te_judiciary_events.2 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = te_jud_case_law
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				te_jud_court_can_strike_laws = yes
+				has_law = var:te_jud_case_law
+				has_variable = te_judicial_independence
+				has_variable = te_jud_case_tier
 			}
+			if = {
+				limit = { var:te_judicial_independence >= te_jud_strike_threshold }
+				trigger_event = { id = te_judiciary_events.3 }
+			}
+			else = {
+				trigger_event = { id = te_judiciary_events.4 }
+			}
+		}
+		else = {
+			te_jud_close_case = yes
+		}
+	}
+}
+
+# The Court Strikes Down the Act. Comply (the law in force before it comes
+# back), defy (the score and lenders' trust), or pack the court.
+te_judiciary_events.3 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.3.t
+	desc = te_judiciary_events.3.d
+	flavor = te_judiciary_events.3.f
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	immediate = {
+		random_active_law = {
+			limit = { type = root.var:te_jud_case_law }
+			save_scope_as = te_jud_struck_law
+		}
+		var:te_jud_case_replaced ?= { save_scope_as = te_jud_restored_type }
+		te_jud_close_case = yes
+	}
+
+	option = { # Comply with the ruling
+		name = te_judiciary_events.3.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:te_jud_restored_type }
+			activate_law = scope:te_jud_restored_type
+		}
+		else = {
+			add_modifier = { name = te_jud_ruling_unreversed years = 5 is_decaying = yes }
+		}
+		add_modifier = { name = te_jud_ruling_obeyed years = 5 is_decaying = yes }
+		custom_tooltip = {
+			text = te_jud_gain_5_tt
+			te_jud_gain = { AMOUNT = 5 }
+		}
+		ai_chance = {
+			base = 3
+		}
+	}
+
+	option = { # Defy the court
+		name = te_judiciary_events.3.b
+		custom_tooltip = {
+			text = te_jud_spend_large_tt
+			te_jud_spend = { AMOUNT = 20 }
+		}
+		add_modifier = { name = te_jud_ruling_defied years = 5 is_decaying = yes }
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { legitimacy > 75 }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Pack the court
+		name = te_judiciary_events.3.c
+		custom_tooltip = {
+			text = te_jud_spend_pack_tt
+			te_jud_spend = { AMOUNT = 15 }
+		}
+		te_jud_pack_court = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 1000 }
+				add = 2
+			}
+		}
+	}
+}
+
+# The Court Upholds the Act: the court found the procedure lawful, and the
+# act carries its approval.
+te_judiciary_events.4 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.4.t
+	desc = te_judiciary_events.4.d
+	flavor = te_judiciary_events.4.f
+
+	event_image = { video = "unspecific_signed_contract" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	immediate = {
+		random_active_law = {
+			limit = { type = root.var:te_jud_case_law }
+			save_scope_as = te_jud_struck_law
+		}
+		te_jud_close_case = yes
+	}
+
+	option = {
+		name = te_judiciary_events.4.a
+		default_option = yes
+		add_modifier = { name = te_jud_act_upheld years = 2 is_decaying = yes }
+	}
+}
+
+# The Enlarged Bench, a year after the court was packed (te_jud_pack_court):
+# write the new bench's deference into law by dropping to Statutory Courts,
+# keep it, or restore the old bench.
+te_judiciary_events.5 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.5.t
+	desc = te_judiciary_events.5.d
+	flavor = te_judiciary_events.5.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		has_modifier = te_jud_court_packed
+	}
+
+	option = { # Statutory Courts: the courts apply the law as written
+		name = te_judiciary_events.5.a
+		trigger = {
+			NOT = { has_law = law_type:law_statutory_courts }
+			NOT = { te_jud_enacting_judiciary_law = yes }
+		}
+		activate_law = law_type:law_statutory_courts
+		remove_modifier = te_jud_court_packed
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Keep the enlarged bench
+		name = te_judiciary_events.5.b
+		# REVIEWED 2026-10-25 (no_effect_option): the packed court stays for the rest of its ten years
+		default_option = yes
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Restore the old bench
+		name = te_judiciary_events.5.c
+		remove_modifier = te_jud_court_packed
+		add_modifier = { name = te_jud_bench_restored years = 5 is_decaying = yes }
+		custom_tooltip = {
+			text = te_jud_gain_5_tt
+			te_jud_gain = { AMOUNT = 5 }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { legitimacy < 40 }
+				add = 2
+			}
+		}
+	}
+}
+
+# Lawyers in the Streets: the court overhaul's protests (.1, at a gap of 40
+# or more). Pakistan's lawyers' movement (2007), Israel's protests (2023).
+te_judiciary_events.6 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.6.t
+	desc = te_judiciary_events.6.d
+	flavor = te_judiciary_events.6.f
+
+	event_image = { video = "africa_public_protest" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	option = { # Let them march
+		name = te_judiciary_events.6.a
+		default_option = yes
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Clear the streets
+		name = te_judiciary_events.6.b
+		add_modifier = { name = te_jud_protests_dispersed years = 2 is_decaying = yes }
+		add_radicals = {
+			value = very_small_radicals
+			strata = middle
+		}
+		ig:ig_armed_forces ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { authority > 500 }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Promise the judges their tenure
+		name = te_judiciary_events.6.c
+		custom_tooltip = {
+			text = te_jud_gain_10_tt
+			te_jud_gain = { AMOUNT = 10 }
+		}
+		add_modifier = { name = te_jud_tenure_promised years = 2 is_decaying = yes }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ======================================================================
+#  PHASE 3: AMENDMENT DEBATES (spec § 14.2)
+#  The scripted ways in for three Judiciary amendments while a host court
+#  law is enacted, pooled in on_law_checkpoint_debate. Each trigger
+#  restates its amendment's `possible`, since add_amendment silently does
+#  nothing when it fails. When the law in force carries the amendment, the
+#  event offers to carry it over (a law's amendments leave with it). The
+#  other four come only by petition (amendment_petition_events.21-.27).
+# ======================================================================
+
+# Who Judges the Judges? (Judicial Elections), while Statutory Courts or
+# Constitutional Review is enacted under an elected government.
+te_judiciary_events.20 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.20.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = te_judiciary_events.20.d_carry
+				trigger = {
+					active_law:lawgroup_judiciary ?= {
+						has_amendment = amendment_type:amendment_judicial_elections
+					}
+				}
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_judiciary_events.20.d
+			}
+		}
+	}
+	flavor = te_judiciary_events.20.f
+
+	category = enactment
+
+	event_image = { video = "southamerica_election" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_statutory_courts
+			is_enacting_law = law_type:law_constitutional_review
+		}
+		# amendment_judicial_elections's `possible`
+		te_jud_elected_government = yes
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_judicial_elections
+			}
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			OR = {
+				leader ?= {
+					OR = {
+						has_ideology = ideology:ideology_jacksonian_democrat
+						has_ideology = ideology:ideology_populist
+					}
+				}
+				law_stance = {
+					law = law_type:law_universal_suffrage
+					value > approve
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ordered_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				OR = {
+					leader ?= {
+						OR = {
+							has_ideology = ideology:ideology_jacksonian_democrat
+							has_ideology = ideology:ideology_populist
+						}
+					}
+					law_stance = {
+						law = law_type:law_universal_suffrage
+						value > approve
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = amendment_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Let the voters choose the judges
+		name = te_judiciary_events.20.a
+		trigger = { exists = scope:amendment_sponsor_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_judicial_elections
+				sponsor = scope:amendment_sponsor_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+
+	option = { # The bench is no place for candidates
+		name = te_judiciary_events.20.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:amendment_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# The Jury Question (Jury Trials), while Statutory Courts or Constitutional
+# Review is enacted.
+te_judiciary_events.21 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.21.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = te_judiciary_events.21.d_carry
+				trigger = {
+					active_law:lawgroup_judiciary ?= {
+						has_amendment = amendment_type:amendment_jury_trials
+					}
+				}
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_judiciary_events.21.d
+			}
+		}
+	}
+	flavor = te_judiciary_events.21.f
+
+	category = enactment
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_statutory_courts
+			is_enacting_law = law_type:law_constitutional_review
+		}
+		# amendment_jury_trials has no `possible` condition
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_jury_trials
+			}
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			OR = {
+				is_interest_group_type = ig_intelligentsia
+				law_stance = {
+					law = law_type:law_guaranteed_liberties
+					value > neutral
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ordered_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				OR = {
+					is_interest_group_type = ig_intelligentsia
+					law_stance = {
+						law = law_type:law_guaranteed_liberties
+						value > neutral
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = amendment_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Citizens will sit in judgement
+		name = te_judiciary_events.21.a
+		trigger = { exists = scope:amendment_sponsor_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_jury_trials
+				sponsor = scope:amendment_sponsor_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+
+	option = { # Trained judges, not juries
+		name = te_judiciary_events.21.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:amendment_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# A Right to a Human Judge (Human-in-the-Loop Appeals), while Algorithmic
+# Jurisprudence is enacted.
+te_judiciary_events.22 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.22.t
+	desc = te_judiciary_events.22.d
+	flavor = te_judiciary_events.22.f
+
+	category = enactment
+
+	event_image = { video = "middleeast_engineer_blueprint" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		is_enacting_law = law_type:law_algorithmic_jurisprudence
+		# amendment_human_in_the_loop has no `possible` condition
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_human_in_the_loop
+			}
+		}
+		any_interest_group = {
+			ig_counts_as_marginal = no
+			OR = {
+				is_interest_group_type = ig_intelligentsia
+				is_interest_group_type = ig_trade_unions
+				law_stance = {
+					law = law_type:law_strong_privacy_rights
+					value > neutral
+				}
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ordered_interest_group = {
+			limit = {
+				ig_counts_as_marginal = no
+				OR = {
+					is_interest_group_type = ig_intelligentsia
+					is_interest_group_type = ig_trade_unions
+					law_stance = {
+						law = law_type:law_strong_privacy_rights
+						value > neutral
+					}
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = amendment_sponsor_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Every appeal goes to a human judge
+		name = te_judiciary_events.22.a
+		trigger = { exists = scope:amendment_sponsor_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_human_in_the_loop
+				sponsor = scope:amendment_sponsor_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+
+	option = { # The machine is more consistent than any judge
+		name = te_judiciary_events.22.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:amendment_sponsor_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
+
+# ======================================================================
+#  PHASE 4: LANDMARK CASES (spec § 14.3)
+#  Each is keyed to game state, never to a date or a tag, and comes once
+#  per country (te_jud_heard_<case>, a variable, so a revolution's winner
+#  doesn't hear it again). Rolled yearly from te_jud_landmark_* in
+#  te_judiciary_on_actions.txt; the Voided Election from
+#  on_election_campaign_end and the Doctrine of Necessity a fortnight after
+#  a paper-court law is activated (te_jud_law_activated).
+# ======================================================================
+
+# The Free Soil Case: a constitutional court rules on slavery while slavery
+# is legal and abolitionists organize. Dred Scott v. Sandford (1857) held
+# that the enslaved were property the constitution protected; Somerset v.
+# Stewart (1772) that English law knew no slavery. A court sure of its
+# standing (60) can take the Somerset road.
+te_judiciary_events.30 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.30.t
+	desc = te_judiciary_events.30.d
+	flavor = te_judiciary_events.30.f
+
+	event_image = { video = "southamerica_slave_chains" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_free_soil }
+		te_jud_court_can_strike_laws = yes
+		has_variable = te_judicial_independence
+		var:te_judicial_independence >= 30
+		NOT = { has_law = law_type:law_slavery_banned }
+		any_political_movement = {
+			is_political_movement_type = movement_anti_slavery
+			political_movement_support >= 0.05
+		}
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_free_soil
+	}
+
+	option = { # Property in persons is protected
+		name = te_judiciary_events.30.a
+		add_modifier = { name = te_jud_case_dred_scott years = 10 }
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_landowners ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # No one may be held as property
+		name = te_judiciary_events.30.b
+		trigger = {
+			var:te_judicial_independence >= 60
+		}
+		add_modifier = { name = te_jud_case_free_soil years = 10 }
+		custom_tooltip = {
+			text = te_jud_gain_5_tt
+			te_jud_gain = { AMOUNT = 5 }
+		}
+		ig:ig_landowners ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = aristocrats
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # A question for the legislature
+		name = te_judiciary_events.30.c
+		default_option = yes
+		custom_tooltip = {
+			text = te_jud_spend_small_tt
+			te_jud_spend = { AMOUNT = 5 }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# The Otsu Case: a foreign power we can't match demands that a man who
+# attacked its envoy hang, and the law says he can't. In 1891 a Japanese
+# policeman wounded the visiting Russian tsarevich; Chief Justice Kojima
+# Iken held that the code allowed no death sentence and the court gave
+# life, against the cabinet.
+te_judiciary_events.31 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.31.t
+	desc = te_judiciary_events.31.d
+	flavor = te_judiciary_events.31.f
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_otsu }
+		NOT = { te_jud_paper_court = yes }
+		has_variable = te_judicial_independence
+		var:te_judicial_independence >= 30
+		NOT = { country_rank >= rank_value:great_power }
+		any_country = {
+			NOT = { this = root }
+			is_ai = yes
+			country_rank >= rank_value:great_power
+			relations:root < relations_threshold:cordial
+		}
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_otsu
+		# REVIEWED 2026-10-25 (imputed_foreign_action): the demanding power is an AI great power (is_ai), so no player is blamed for a demand it never made; the relations change follows our answer to it
+		random_country = {
+			limit = {
+				NOT = { this = root }
+				is_ai = yes
+				country_rank >= rank_value:great_power
+				relations:root < relations_threshold:cordial
+			}
+			save_scope_as = te_jud_pressing_power
+		}
+	}
+
+	option = { # The law sets the sentence
+		name = te_judiciary_events.31.a
+		default_option = yes
+		custom_tooltip = {
+			text = te_jud_gain_10_tt
+			te_jud_gain = { AMOUNT = 10 }
+		}
+		add_modifier = { name = te_jud_case_otsu_upheld years = 5 is_decaying = yes }
+		change_relations = { country = scope:te_jud_pressing_power value = -20 }
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # Give them the sentence they demand
+		name = te_judiciary_events.31.b
+		custom_tooltip = {
+			text = te_jud_spend_pack_tt
+			te_jud_spend = { AMOUNT = 15 }
+		}
+		add_modifier = { name = te_jud_case_otsu_overruled years = 5 is_decaying = yes }
+		change_relations = { country = scope:te_jud_pressing_power value = 20 }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 1
+			}
+		}
+	}
+}
+
+# Freedom of Contract: a supreme court reads a right to contract into the
+# constitution and strikes down a labour law. Lochner v. New York (1905)
+# voided New York's limit on bakers' hours; in 1937 Roosevelt proposed
+# adding up to six justices, and that spring the court upheld a minimum wage
+# (West Coast Hotel v. Parrish), "the switch in time that saved nine".
+te_judiciary_events.32 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.32.t
+	desc = te_judiciary_events.32.d
+	flavor = te_judiciary_events.32.f
+
+	event_image = { video = "asia_factory_accident" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_freedom_of_contract }
+		has_law = law_type:law_judicial_supremacy
+		te_jud_court_can_strike_laws = yes
+		has_variable = te_judicial_independence
+		var:te_judicial_independence >= 40
+		OR = {
+			has_law = law_type:law_regulatory_bodies
+			has_law = law_type:law_worker_protections
+		}
+		ig:ig_industrialists ?= {
+			is_marginal = no
+			te_ap_ig_strong = yes
+		}
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_freedom_of_contract
+	}
+
+	option = { # Accept the ruling
+		name = te_judiciary_events.32.a
+		add_modifier = { name = te_jud_case_freedom_of_contract years = 10 }
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ig:ig_industrialists ?= { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Add judges who will uphold the law
+		name = te_judiciary_events.32.b
+		custom_tooltip = {
+			text = te_jud_spend_pack_tt
+			te_jud_spend = { AMOUNT = 15 }
+		}
+		te_jud_pack_court = yes
+		ig:ig_trade_unions ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 1000 }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Lean on the court until it changes its mind
+		name = te_judiciary_events.32.c
+		default_option = yes
+		custom_tooltip = {
+			text = te_jud_spend_small_tt
+			te_jud_spend = { AMOUNT = 5 }
+		}
+		ig:ig_industrialists ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+}
+
+# The Voided Election: just after an election, a court finds that the head
+# of the government won by corrupt practice and voids the result. The
+# Allahabad High Court voided Indira Gandhi's election in June 1975; two
+# weeks later she declared the Emergency, and ruled by decree until 1977.
+te_judiciary_events.33 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.33.t
+	desc = te_judiciary_events.33.d
+	flavor = te_judiciary_events.33.f
+
+	event_image = { video = "southamerica_election" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_voided_election }
+		te_jud_elected_government = yes
+		NOT = { te_jud_paper_court = yes }
+		has_variable = te_judicial_independence
+		var:te_judicial_independence >= 50
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_voided_election
+		ordered_interest_group = {
+			limit = { is_in_government = yes }
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_jud_ruling_ig
+		}
+	}
+
+	option = { # Respect the ruling
+		name = te_judiciary_events.33.a
+		default_option = yes
+		custom_tooltip = {
+			text = te_jud_gain_5_tt
+			te_jud_gain = { AMOUNT = 5 }
+		}
+		add_modifier = { name = te_jud_case_election_respected years = 5 is_decaying = yes }
+		scope:te_jud_ruling_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Declare an emergency
+		name = te_judiciary_events.33.b
+		custom_tooltip = {
+			text = te_jud_spend_emergency_tt
+			te_jud_spend = { AMOUNT = 30 }
+		}
+		add_modifier = { name = te_jud_case_emergency years = 3 }
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { authority > 1000 }
+				add = 1
+			}
+		}
+	}
+}
+
+# The Doctrine of Necessity: a regime that has just put itself above the
+# courts asks them to declare it lawful. Pakistan's Federal Court upheld
+# the dissolution of the assembly in 1955 (Federation v. Tamizuddin Khan)
+# and the 1958 coup (State v. Dosso); in Asma Jilani (1972) the Supreme
+# Court disowned the doctrine. Fired a fortnight after a paper-court law
+# is activated, for a court with standing to lose.
+te_judiciary_events.34 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.34.t
+	desc = te_judiciary_events.34.d
+	flavor = te_judiciary_events.34.f
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_necessity }
+		has_variable = te_jud_seeded
+		te_jud_paper_court = yes
+		has_variable = te_judicial_independence
+		var:te_judicial_independence >= 30
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_necessity
+	}
+
+	option = { # Necessity knows no law
+		name = te_judiciary_events.34.a
+		default_option = yes
+		custom_tooltip = {
+			text = te_jud_spend_large_tt
+			te_jud_spend = { AMOUNT = 20 }
+		}
+		add_modifier = { name = te_jud_case_necessity years = 5 is_decaying = yes }
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # The judges resign rather than say so
+		name = te_judiciary_events.34.b
+		add_modifier = { name = te_jud_case_judges_resign years = 5 is_decaying = yes }
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# A House of Justice: under religious courts and in unrest, the protesters'
+# first demand is a court of law. In Persia in 1905 merchants and clergy
+# took sanctuary (bast) and asked the shah for an adalatkhaneh, a house of
+# justice; the constitution followed in 1906.
+te_judiciary_events.35 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.35.t
+	desc = te_judiciary_events.35.d
+	flavor = te_judiciary_events.35.f
+
+	event_image = { video = "middleeast_islam" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_house_of_justice }
+		has_law = law_type:law_religious_courts
+		has_technology_researched = rationalism
+		NOT = { enacting_any_law = yes }
+		te_ap_unrest = yes
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_house_of_justice
+	}
+
+	option = { # Grant a house of justice
+		name = te_judiciary_events.35.a
+		trigger = {
+			NOT = { enacting_any_law = yes }
+		}
+		start_enactment = law_type:law_statutory_courts
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		ig:ig_devout ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # The clergy's courts suffice
+		name = te_judiciary_events.35.b
+		default_option = yes
+		ig:ig_devout ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# Courts for a New Code: reform from above. The Ottoman Tanzimat opened
+# commercial courts beside the qadis' (1840), then the Nizamiye courts
+# (1864) and the Mecelle civil code (1869-76). Under Religious Courts with
+# Rationalism and a reforming lobby: courts beside the religious ones (the
+# Mixed Commercial Courts amendment), or a code and the road to Statutory
+# Courts.
+te_judiciary_events.36 = {
+	type = country_event
+	placement = root
+
+	title = te_judiciary_events.36.t
+	desc = te_judiciary_events.36.d
+	flavor = te_judiciary_events.36.f
+
+	event_image = { video = "middleeast_engineer_blueprint" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = te_jud_heard_new_code }
+		has_law = law_type:law_religious_courts
+		has_technology_researched = rationalism
+		OR = {
+			ig:ig_intelligentsia ?= {
+				is_marginal = no
+				te_ap_ig_strong = yes
+			}
+			any_political_movement = {
+				is_political_movement_type = movement_modernizer
+				political_movement_support >= 0.05
+			}
+		}
+	}
+
+	immediate = {
+		set_variable = te_jud_heard_new_code
+		active_law:lawgroup_judiciary ?= { save_scope_as = te_jud_court_law }
+		ordered_interest_group = {
+			limit = {
+				is_marginal = no
+				OR = {
+					is_interest_group_type = ig_industrialists
+					is_interest_group_type = ig_petty_bourgeoisie
+					is_interest_group_type = ig_intelligentsia
+				}
+			}
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_jud_reform_ig
+		}
+	}
+
+	option = { # Courts beside the qadis
+		name = te_judiciary_events.36.a
+		trigger = {
+			exists = scope:te_jud_reform_ig
+			te_ap_law_ok_mixed_commercial_courts = yes
+			# amendment_mixed_commercial_courts's `possible`
+			NOT = { has_law_or_variant = law_type:law_isolationism }
+		}
+		scope:te_jud_court_law = {
+			add_amendment = {
+				type = amendment_mixed_commercial_courts
+				sponsor = scope:te_jud_reform_ig
+				cooldown = 60
+			}
+		}
+		scope:te_jud_reform_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	option = { # Codify the law
+		name = te_judiciary_events.36.b
+		trigger = {
+			NOT = { enacting_any_law = yes }
+		}
+		start_enactment = law_type:law_statutory_courts
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_devout ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = { # The sharia courts suffice
+		name = te_judiciary_events.36.c
+		default_option = yes
+		ig:ig_devout ?= {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
 		}
 	}
 }

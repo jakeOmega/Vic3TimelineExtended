@@ -106,6 +106,13 @@ you qualify.
 | Perpetual Dynastic Trusts (*Dynasty Trusts*) | Freedom of Testation, with the Industrialists powerful or in government; from Globalization on | 2.5% | Industrialists |
 | Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or social democratic group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
 | Undivided Farm Succession (*The Farm Is Not to Be Cut*) | Forced Heirship or Customary Inheritance, with the Rural Folk powerful or in government | 2.5% | Rural Folk |
+| Suspension of Habeas Corpus (*The Writ Suspended*) | Statutory Courts or Constitutional Review, at war, with the Armed Forces powerful or in government | 25% | Armed Forces |
+| Judicial Elections (*Let the People Choose Their Judges*) | Statutory Courts or Constitutional Review under an elected government, with a group led by a Jacksonian Democrat or populist powerful or in government | 5% | That group |
+| Mixed Commercial Courts (*Courts for the Merchants*) | Religious Courts or Executive Tribunals, not under Isolationism, with the Industrialists or Petite Bourgeoisie powerful or in government | 2.5% | The stronger of the two |
+| Jury Trials (*Twelve Good Citizens*) | Statutory Courts or Constitutional Review, with the Intelligentsia powerful or in government | 2.5% | Intelligentsia |
+| Military Tribunals for Civilians (*Courts-Martial for Rebels*) | Executive Tribunals or Statutory Courts, unrest as for Order in the Courts, and the Armed Forces powerful or in government | 10% | Armed Forces |
+| People's Tribunals (*Justice of the Party*) | Executive Tribunals under a Single-Party State, with a governing group led by a vanguardist or fascist | 5% | That group |
+| Human-in-the-Loop Appeals (*A Human Signature*) | Algorithmic Jurisprudence, with legitimacy below 50 or the Intelligentsia or Trade Unions powerful or in government | 5% | Intelligentsia, or Trade Unions |
 
 Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
 for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval

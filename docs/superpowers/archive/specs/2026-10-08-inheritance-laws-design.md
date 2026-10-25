@@ -2,8 +2,9 @@
 
 ## What shipped (2026-10-08)
 
-Everything below except three generation events: State as Universal Heir's *The Hidden Estates*, Possession by Use's
-*The Empty Holding* and the Endowment's *The First Cohort* (§5 names the first wave; these are the second). The open
+Everything below. The first wave of generation events shipped with the rest; the second wave (§5), State as Universal
+Heir's *The Hidden Estates*, Possession by Use's *The Empty Holding* and the Endowment's *The First Cohort*, shipped on
+2026-10-25 (§ 11). The open
 questions (§9) were settled as follows: Perpetual Trusts' parent is `law_laissez_faire`; the Endowment swap adds the
 Endowment before it removes the duty, so it works whether or not `add_amendment` sees a same-block removal; the
 Ottoman Empire stays on Customary; the values are the proposals here, with the modifier sizes in
@@ -306,3 +307,20 @@ theocratic), the approval moves to State as Universal Heir and Possession by Use
 - `gen_law_consistency.py` regenerates `extra_law_consistency_generated.txt` for the new laws on the next reload.
 - Player guide: the Inheritance row in `06-politics.md`, Islamic Inheritance's row there, and the petition list in
   `20-appendix-reference-lists.md`.
+
+## 11. The second wave as built (2026-10-25)
+
+`inheritance_events.14`–`.16`, with modifiers in `te_inheritance_modifiers.txt`. Sizes are proposals, as everywhere
+in this spec.
+
+- **The Hidden Estates** (State as Universal Heir; the generation clock, 10% a year, 25-year cooldown). Audit every
+  estate: score −3, 100 authority fading over five years, a few upper-strata radicals. Look away: score +5, and ten
+  years of `inh_estates_overlooked` (Bureaucrats +10% clout and +10% investment pool, legitimacy −3).
+- **The Empty Holding** (Possession by Use; the same clock). The commune reallocates: score −2, ten years of
+  agriculture throughput −3% (nobody improves land the next repartition may take), Rural Folk pleased. The family
+  keeps it: score +5, ten years of agriculture throughput +5%, anarchist-led groups displeased.
+- **The First Cohort** (Birthright Endowment, held 5 years, `te_inh_endowment_years`; 25% a year). It comes once per
+  tenure (`te_inh_first_cohort_paid`, cleared when the Endowment lapses) rather than on a 25-year cooldown, since the
+  name says it is the first. Three answers, one more than the table above: schooling only (education access +0.03,
+  qualifications +10%, institutions 3% dearer), founding businesses (Shopkeepers' and Farmers' investment pool +10%),
+  or spend as they choose (score +3, lower-strata standard of living +1, a few loyalists). Ten years each.

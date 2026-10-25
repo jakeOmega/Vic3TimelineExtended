@@ -511,7 +511,7 @@ law_strong_privacy_rights = {
 #  it can (State as Universal Heir 50, Possession by Use 60), else on Forced
 #  Heirship (25), or Customary (10) without Egalitarianism. Freedom of
 #  Testation (5) sits below Customary: Le Play's cause, a conservative one.
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 # =================================================================
 
 # Primogeniture & Entail: the eldest takes the estate, and entail stops him

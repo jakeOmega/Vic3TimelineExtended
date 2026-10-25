@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  JUDICIARY — laws
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 #  The laws carry what the courts can do. Judicial Independence
 #  (te_judiciary_effects.txt) carries how far they are trusted, up to the
 #  ceiling each law's tooltip shows. Every rule a player plans around is a
@@ -121,6 +121,8 @@ law_constitutional_review = {
 		state_bureaucracy_population_base_cost_factor_mult = 0.05
 		# Entrenchment (spec § 3.4), read at on_law_enactment_started.
 		country_constitutional_law_enactment_success_add = -0.1
+		# A law forced through goes to the courts (phase 2, spec § 14.1).
+		country_court_reviews_forced_laws_bool = yes
 	}
 
 	ai_enact_weight_modifier = {
@@ -161,6 +163,8 @@ law_judicial_supremacy = {
 		# Entrenchment (spec § 3.4), read at on_law_enactment_started.
 		country_constitutional_law_enactment_success_add = -0.15
 		country_rights_law_enactment_success_add = -0.15
+		# A law forced through goes to the courts (phase 2, spec § 14.1).
+		country_court_reviews_forced_laws_bool = yes
 	}
 
 	ai_enact_weight_modifier = {

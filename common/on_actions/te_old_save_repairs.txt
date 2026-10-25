@@ -248,7 +248,7 @@ te_repair_double_inheritance_law = {
 
 # OLD-SAVE REPAIR (#1022): remove after 2026-10-22 or at vanilla 1.15, whichever comes first.
 #
-# The Judiciary group (docs/superpowers/specs/2026-10-17-judiciary-design.md
+# The Judiciary group (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 # § 6) is new, so a save from before it gives every country Executive
 # Tribunals, the first law in te_judiciary_laws.txt, and no score. First
 # month: the starting court by rule. Second month: te_jud_world_seeded, which

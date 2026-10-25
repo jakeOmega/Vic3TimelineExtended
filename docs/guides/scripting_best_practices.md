@@ -986,6 +986,7 @@ Common undocumented-but-real triggers worth knowing: `has_treaty_defensive_pact_
   - `.GetBuildingType.GetName` — building type in variable (PROVEN in vanilla)
   - `.GetValue|0` — numeric value (PROVEN in vanilla)
   - `.GetCountry.GetName` — **UNVERIFIED in this mod; did not work in testing.** Vanilla 1.14 does use `[ROOT.Var('current_expedition_location_var').GetCountry.GetName]` (`ep2_04_l_english.yml`) and `[...Var('coup_sponsor').GetCountry.GetAdjective]` (`ip4_misc_01_l_english.yml`) with a country stored via `prev`, so it may work — but until verified in-game here, use the capital workaround below (covert operation containers do: `iw_target_capital`), or the scripted-GUI workaround below it when the variable is not yours to change.
+- **A law type in a variable** (Judiciary phase 2, 2026-10-25; unverified in game): `law_type = { save_scope_as = t }` from a law, then `set_variable = { name = X value = scope:t }`, read back as `has_law = var:X` or `var:X = { save_scope_as = u }` and `activate_law = scope:u`. Vanilla stores building types and laws (above), so it likely works; `TE_SELF_CHECK … judiciary_law_type_variable` in `debug.log` says whether it does (`docs/testing/judiciary-playtest.md`).
 - **`.GetName` directly on `Var()` does NOT work** — you must chain the type accessor first (e.g., `.GetState.GetName`, not just `.GetName`).
 - **Error symptom:** `Could not find data system function 'GetName' in '....MakeScope.Var('my_var').GetName'` — means you forgot the type accessor (`.GetCountry`, `.GetState`, etc.).
 

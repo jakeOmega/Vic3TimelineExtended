@@ -27,13 +27,6 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [plans/2026-09-30-legislated-tax-code.md](plans/2026-09-30-legislated-tax-code.md): the package-level plan, packages 0–8 | Partial: packages 0–7 built | Package 8 (catalog expansion: political-reform, colonial, monetary and restraint promises, advanced instruments) and package 3's split of the carbon effects |
 | [plans/2026-10-02-legislated-tax-code-tasks.md](plans/2026-10-02-legislated-tax-code-tasks.md): Tasks 1–17 for packages 1–5 | Partial: Tasks 1–15 built (#680), Task 17 replaced by the 10-03 plan's Tasks 25–27 | Task 16, the carbon levy. Only its numbers exist (`docs/systems/carbon_levy_numbers.md`, "parked until #674", which has since landed). `carbon_tax_modifier` is unchanged |
 
-### Laws
-
-| Doc | Status | What's left |
-|-----|--------|-------------|
-| [specs/2026-10-08-inheritance-laws-design.md](specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events) | Partial: built in #822, balanced in #843 | §5's three second-wave events: *The Hidden Estates* (State as Universal Heir), *The Empty Holding* (Possession by Use), *The First Cohort* (Birthright Endowment) |
-| [specs/2026-10-17-judiciary-design.md](specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock) | Partial: phase 1 built (#1022, #1025; plan archived); the Nation tab hand-off shipped (#1021) | Phase 2, defying the court (challenge, comply, defy or pack); phase 3, seven amendments; phase 4, landmark cases. Each gets its own plan after the phase 1 play-test |
-
 ### Space Race
 
 | Doc | Status | What's left |
@@ -99,7 +92,9 @@ Everything below has shipped. PR numbers are the main build first, then follow-u
 | [specs/2026-10-09-tax-code-light-design.md](archive/specs/2026-10-09-tax-code-light-design.md): the Light Tax Code setting | #845 |
 | [specs/2026-10-01-bureaucracy-laws-design.md](archive/specs/2026-10-01-bureaucracy-laws-design.md): machine administration vs. machine rule, Contracted and Communal Administration, the Spoils System | #623, #625 (#638) |
 | [specs/2026-10-04-policing-laws-design.md](archive/specs/2026-10-04-policing-laws-design.md): Private Policing and its amendments | #697 |
-| [plans/2026-10-17-judiciary-phase1.md](archive/plans/2026-10-17-judiciary-phase1.md): Judiciary phase 1 (the spec stays active for phases 2–4) | #1022 (#1025) |
+| [specs/2026-10-08-inheritance-laws-design.md](archive/specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events; the second wave of events in its § 11) | #822, #843, #1154 |
+| [specs/2026-10-17-judiciary-design.md](archive/specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock); phases 2–4 (defying the court, seven amendments, landmark cases) as built in its § 14 | #1022 (#1025, #1021), #1154 |
+| [plans/2026-10-17-judiciary-phase1.md](archive/plans/2026-10-17-judiciary-phase1.md): Judiciary phase 1 | #1022 (#1025) |
 | [plans/2026-10-02-drugs-phase-2-healthcare-demand.md](archive/plans/2026-10-02-drugs-phase-2-healthcare-demand.md): the Healthcare need and opium plantation penalties | #656 (#657, #658) |
 
 ### Demographics
@@ -190,7 +185,7 @@ Nothing below blocks its doc's archiving. Each is out of scope by the doc's own 
 - **Nation tab:** moving Nuclear Power onto its journal entry (§6) was deferred by the owner; `KEEP_IN_LIST` holds `nuclear_power` until then.
 - **Seabed claims:** Seabed Sabotage is deferred to v2 by the owner.
 - **Banking always-on:** the §10 open points (restructuring before the start, Credit Standing under Simplified, monetary history before the start).
-- **Judiciary phase 1:** the six law icons still need their final render on the owner's GPU machine, and the laws use placeholder icons until then.
+- **Judiciary:** the six law icons still need their final render on the owner's GPU machine, and the laws use placeholder icons until then. Phases 2–4 were built before phase 1's play-test, at the owner's request; § 14.4 lists the calls made without the owner (the strike-down thresholds, the amendments' parents and sizes, the landmark cases' triggers), and `docs/testing/judiciary-playtest.md` § Phases 2–4 the engine facts the build rests on.
 - **Covert tech theft:** the retired espionage modifiers are marked "PENDING REMOVAL one release after 2026-10-06/07" in `mod_systems.md`.
 - **Grand Monuments:** the archaeology spec's deferred list (political brakes, speculative breakthroughs, special-site events); the trophies spec's UN topic for cultural property; signatures' Muses family and further historical opportunities; no landmark row yet uses `gm_seed_landmark_beside`. The policy pass's audit gap, a `ScriptValue('x')` in loc or a GUI that names no script value, is open #1120.
 - **Transport goods:** two fallbacks wait on the observer run in `docs/testing/ai-economy-playtest.md`: the `REPLACE:building_railway` whose shortfall branch ignores staffing (§ 3.1), if states stay short of Transportation, and construction's input handed back to Merchant Marine (§ 2), if construction hubs choke.

@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  JUDICIARY — on actions
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 #  Effects: common/scripted_effects/te_judiciary_effects.txt.
 # ======================================================================
 
@@ -49,12 +49,21 @@ te_jud_monthly = {
 			te_jud_seed_score = yes
 		}
 		te_jud_refresh = yes
+		# Phase 2: a law forced through goes to the courts once it passes.
+		te_jud_challenge_monthly = yes
+		# Phase 3: amendments whose conditions lapsed.
+		te_jud_amendment_upkeep = yes
 	}
 }
 
 on_yearly_pulse_country = {
 	on_actions = {
 		te_jud_yearly
+		te_jud_landmark_free_soil
+		te_jud_landmark_otsu
+		te_jud_landmark_freedom_of_contract
+		te_jud_landmark_house_of_justice
+		te_jud_landmark_new_code
 	}
 }
 
@@ -145,5 +154,84 @@ te_jud_law_activated = {
 				trigger_event = { id = te_judiciary_events.1 days = 7 }
 			}
 		}
+		# The Doctrine of Necessity (phase 4): a regime that has just put
+		# itself above the courts asks them to call it lawful. The event's
+		# trigger reads the score; nothing here may (ROOT is the law).
+		if = {
+			limit = {
+				OR = {
+					type = law_type:law_autocracy
+					type = law_type:law_bakufu
+					type = law_type:law_neo_absolutism
+					type = law_type:law_single_party_state
+					type = law_type:law_algorithmic_governance
+				}
+			}
+			owner = {
+				trigger_event = { id = te_judiciary_events.34 days = 14 }
+			}
+		}
+	}
+}
+
+# Landmark cases (phase 4, spec § 14.3; te_judiciary_events.30-.36). Each
+# rolls on its own once a year, in the amendment petitions' idiom (a
+# no-event weight with the event, summing to 1000), and comes once per
+# country (te_jud_heard_<case>); the events' triggers hold the conditions.
+
+# The Free Soil Case: an abolition movement in a slave state with a
+# constitutional court. 5%.
+te_jud_landmark_free_soil = {
+	random_events = {
+		950 = 0
+		50 = te_judiciary_events.30
+	}
+}
+
+# The Otsu Case: a lasting imbalance of power. 2.5%.
+te_jud_landmark_otsu = {
+	random_events = {
+		975 = 0
+		25 = te_judiciary_events.31
+	}
+}
+
+# Freedom of Contract: Judicial Supremacy beside labour laws and strong
+# Industrialists. 5%.
+te_jud_landmark_freedom_of_contract = {
+	random_events = {
+		950 = 0
+		50 = te_judiciary_events.32
+	}
+}
+
+# A House of Justice: unrest under religious courts. 10%.
+te_jud_landmark_house_of_justice = {
+	random_events = {
+		900 = 0
+		100 = te_judiciary_events.35
+	}
+}
+
+# Courts for a New Code: a reforming lobby under religious courts. 2.5%.
+te_jud_landmark_new_code = {
+	random_events = {
+		975 = 0
+		25 = te_judiciary_events.36
+	}
+}
+
+# The Voided Election: 10% of elections, once per country. Root = the
+# country that just held an election (covert_warfare_on_actions.txt).
+on_election_campaign_end = {
+	on_actions = {
+		te_jud_landmark_voided_election
+	}
+}
+
+te_jud_landmark_voided_election = {
+	random_events = {
+		900 = 0
+		100 = te_judiciary_events.33
 	}
 }
