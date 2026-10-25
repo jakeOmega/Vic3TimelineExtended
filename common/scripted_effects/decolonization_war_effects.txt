@@ -371,11 +371,16 @@ decol_iw_settle_slot = {
 			decol_iw_end_won = { N = $N$ }
 		}
 		else_if = {
-			# The war has not had time to start, or its play is still running.
+			# The war has not had time to start, or its play is still running
+			# (before any war: a play type has on_war_end, so its play may
+			# outlive the war, and a lost war must still settle).
 			limit = {
 				OR = {
 					has_variable = decol_iw_pending_$N$
-					decol_iw_slot_has_play = { N = $N$ }
+					AND = {
+						NOT = { has_variable = decol_iw_war_$N$ }
+						decol_iw_slot_has_play = { N = $N$ }
+					}
 				}
 			}
 			# Self-check: 60 days after Fight it is still a play.
@@ -785,8 +790,9 @@ decol_iw_open_all_talks = {
 }
 
 # The accords: our goal is dropped (te_colonial_reconquest is no longer valid
-# against them), so the war can end in a white peace: the rebels' AI should
-# take one, and a player offers one from the peace screen.
+# against them), so the war can end in a peace: white, or conceding the rebels'
+# te_colonial_independence, which does nothing. The rebels' AI should take
+# either, and a player offers one from the peace screen.
 decol_iw_accords = {
 	var:decol_iw_rebels_$N$ ?= {
 		set_variable = decol_iw_conceded

@@ -380,9 +380,10 @@ secessionists from the peace screen.
 ### Talks and the home front
 
 Open Talks on a war's row asks for a popup first. Talks take six months while
-the fighting goes on. When the accords are signed, your claim is dropped: the
-rebels take a white peace, and you offer one from the peace screen. An AI opens
-talks after half a year of war support in the red, or after four years.
+the fighting goes on. When the accords are signed, your claim is dropped and
+the rebels accept a peace: offer one from the peace screen, conceding their
+independence if they refuse a white peace. An AI opens talks after half a year
+of war support in the red, or after four years.
 
 A war that has run four years, with your war support in it at 25 or below for a
 year running, breaks the home front. Without a voting franchise, junior

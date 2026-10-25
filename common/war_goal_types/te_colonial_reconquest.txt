@@ -16,8 +16,9 @@
 #      condemnation comes from the great powers and the colonial bar.
 #   3. Valid only while the rebels name the holder as their metropole and talks
 #      have not conceded (decol_iw_conceded, the accords of .76's talks): then
-#      the engine drops the goal, and with no goals left the war can end in a
-#      white peace.
+#      the engine drops the goal, and with only the rebels' own goal left
+#      (te_colonial_independence, which does nothing) the war can end in a
+#      peace.
 #
 # on_enforced records the win on the holder (decol_iw_record_enforced), which
 # settles it the next day.

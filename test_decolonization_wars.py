@@ -145,6 +145,9 @@ class GoalAndPlayTests(unittest.TestCase):
     def test_a_running_play_holds_the_record(self):
         settle = _def(EFFECTS, "decol_iw_settle_slot")
         hold = settle.index("decol_iw_slot_has_play = { N = $N$ }")
+        # Only before a war: the play may outlive it, and a lost war settles.
+        self.assertRegex(settle, r"AND = \{\s*NOT = \{ has_variable = decol_iw_war_\$N\$ \}\s*"
+                                 r"decol_iw_slot_has_play = \{ N = \$N\$ \}\s*\}")
         self.assertLess(hold, settle.index("decol_iw_end_unstarted = { N = $N$ }"))
         self.assertIn("set_variable = { name = decol_iw_pending_$N$ days = 60 }", _def(EFFECTS, "decol_iw_open_slot"))
         has_play = _def(TRIGGERS, "decol_iw_slot_has_play")

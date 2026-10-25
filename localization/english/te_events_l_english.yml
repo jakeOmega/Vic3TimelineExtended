@@ -1215,7 +1215,7 @@
  decolonization_events.8.f:0 "\"Have you read this?\" The minister slapped the pamphlet down on the cabinet table. \"This professor - this nobody at the university - has single-handedly turned half the students in the capital into revolutionaries.\"\n\n\"He is not a nobody, Minister. He is the most widely-read author in three continents.\"\n\n\"Then arrest him!\"\n\n\"And make him the most widely-read #italic martyr#! in three continents?\""
  decolonization_events.8.t:0 "These Dark Satanic Mills of Empire"
  decolonization_events.80.a:0 "Send the envoys."
- decolonization_events.80.a_tt:0 "Talks open. In #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_talks_months')|0]#! months the accords drop our claim, and the war can end in a white peace: their side takes one, and we offer one from the peace screen."
+ decolonization_events.80.a_tt:0 "Talks open. In #v [ROOT.GetCountry.MakeScope.ScriptValue('decol_iw_talks_months')|0]#! months the accords drop our claim, and the war can end in a peace: we offer one from the peace screen, conceding their independence if they refuse a white peace."
  decolonization_events.80.b:0 "Not yet."
  decolonization_events.80.d:0 "Our envoys can meet the rebels' government on neutral ground. Talks will take months, and the fighting goes on while they run. When the accords are signed our claim to [SCOPE.sState('decol_iw_talks_state').GetName] is dropped, and the war can end in a peace. Nothing is agreed until the end."
  decolonization_events.80.f:0 "\"We do not negotiate with terrorists,\" the minister said, on the first day of the negotiations."
