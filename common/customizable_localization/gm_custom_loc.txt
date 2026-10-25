@@ -138,6 +138,10 @@ gm_dedication_name = {
 		localization_key = pm_monument_athletic
 	}
 	text = {
+		trigger = { gm_state_has_pm = { PM = pm_monument_historic } }
+		localization_key = pm_monument_historic
+	}
+	text = {
 		localization_key = pm_monument_undedicated
 	}
 }

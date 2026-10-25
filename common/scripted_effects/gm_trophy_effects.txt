@@ -248,6 +248,7 @@ gm_tr_record_dedication = {
 	gm_tr_record_dedication_one = { KEY = scientific }
 	gm_tr_record_dedication_one = { KEY = industrial }
 	gm_tr_record_dedication_one = { KEY = athletic }
+	gm_tr_record_dedication_one = { KEY = historic }
 }
 
 gm_tr_record_dedication_one = {

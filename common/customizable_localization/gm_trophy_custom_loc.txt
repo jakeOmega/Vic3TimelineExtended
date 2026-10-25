@@ -1481,6 +1481,10 @@ gm_tr_dedication_name = {
 		localization_key = pm_monument_athletic
 	}
 	text = {
+		trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:historic }
+		localization_key = pm_monument_historic
+	}
+	text = {
 		localization_key = pm_monument_undedicated
 	}
 }

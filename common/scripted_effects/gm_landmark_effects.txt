@@ -254,6 +254,7 @@ gm_debug_log_landmark = {
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = scientific }
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = industrial }
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = athletic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = historic }
 		}
 	}
 	else = {

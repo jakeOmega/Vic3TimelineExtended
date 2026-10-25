@@ -17,7 +17,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
+    BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, HISTORIC, LANDMARKS, NAMESAKES, PICTURES, RETIRED_FORMS, TROPHY_CODE_BASE,
     TROPHY_PICTURES, block, committed, loc, picture_key, raw_block_at, read, squash, strip_comments,
 )
 
@@ -488,9 +488,9 @@ class NameTests(unittest.TestCase):
             self.assertNotIn("State.", L[key].replace("GetState.", ""), f"{key} reads a State context")
 
     def test_dedication_and_honours_names(self):
-        # A unique dedication's names come first (signatures spec §3), the twelve after.
+        # A unique dedication's names come first (signatures spec §3), the twelve after, then To History's.
         plain = [(f, key) for f, key in custom_loc_branches("gm_tr_dedication_name") if key.startswith("pm_monument_")]
-        self.assertEqual({f for f, _ in plain}, {d.key for d in DEDICATIONS})
+        self.assertEqual({f for f, _ in plain}, {d.key for d in DEDICATIONS} | {HISTORIC})
         for d, key in plain:
             self.assertEqual(key, f"pm_monument_{d}")
 

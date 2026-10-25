@@ -1373,6 +1373,8 @@
  pm_monument_civic_desc:0 "Not to a party and not to a house, but to the country itself. Pleases the Petty Bourgeoisie, and never falls with a government. #R The dedication is permanent.#!"
  pm_monument_crown:0 "To the Crown"
  pm_monument_crown_desc:0 "Dynastic portraits, a royal box, a procession that passes beneath it. Lends legitimacy while the country is crowned, and becomes contested if the crown falls. #R The dedication is permanent.#!"
+ pm_monument_historic:0 "To History"
+ pm_monument_historic_desc:0 "A monument of an older age, kept for its own sake and for those who travel to see it. It honours no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!"
  pm_monument_industrial:0 "Great Exhibition Hall"
  pm_monument_industrial_desc:0 "A permanent world's fair. Pleases the Industrialists. #R The dedication is permanent.#!"
  pm_monument_leader:0 "To the Leader"
