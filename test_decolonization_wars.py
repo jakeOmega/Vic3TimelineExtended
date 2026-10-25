@@ -59,6 +59,9 @@ TRIGGERS = _read("common", "scripted_triggers", "decolonization_war_triggers.txt
 EVENTS = _read("events", "decolonization_events.txt")
 PLAY = _read("common", "diplomatic_plays", "te_colonial_war_play.txt")
 GOAL = _read("common", "war_goal_types", "te_colonial_reconquest.txt")
+REBEL_GOAL = _read("common", "war_goal_types", "te_colonial_independence.txt")
+UN_TRIGGERS = _read("common", "scripted_triggers", "un_force_triggers.txt")
+UN_EFFECTS = _read("common", "scripted_effects", "un_force_effects.txt")
 WAR_SUPPORT = _read("common", "script_values", "zz_te_war_support_injections.txt")
 ON_ACTIONS = _read("common", "on_actions", "extra_on_actions.txt")
 CIVIL_WAR = _read("common", "on_actions", "te_civil_war_on_actions.txt")
@@ -98,11 +101,75 @@ class GoalAndPlayTests(unittest.TestCase):
         self.assertIn("var:decol_iw_metropole ?= root", _block(play, "possible"))
         self.assertNotIn("allow_negotiated_peace = no", play)
 
-    def test_the_war_is_opened_from_our_scope(self):
+    def test_the_rebels_goal_never_self_enforces(self):
+        goal = _def(REBEL_GOAL, "te_colonial_independence")
+        self.assertIn("kind = custom", goal)
+        self.assertIn("contestion_type = control_all_own_states", goal)
+        self.assertNotIn("mirrored_wargoal", goal)
+        self.assertRegex(_block(goal, "infamy"), r"^\s*value = 0\s*$")
+        self.assertIn("is_significant_demand = yes", _block(goal, "ai"))
+        for block in ("possible", "valid"):
+            with self.subTest(block=block):
+                self.assertIn("var:decol_iw_metropole ?= scope:target_country", _block(goal, block))
+
+    def test_the_rebels_play_is_script_only_and_against_their_metropole(self):
+        play = _def(PLAY, "dp_te_independence_war")
+        self.assertIn("war_goal = te_colonial_independence", play)
+        self.assertIn("selectable_in_lens = { always = no }", play)
+        self.assertIn("add_infamy_for_starting_initiator_wargoals = no", play)
+        self.assertIn("add_infamy_for_starting_target_wargoals = no", play)
+        self.assertIn("initiator_can_add_war_goals = no", play)
+        self.assertIn("target_can_add_war_goals = no", play)
+        self.assertIn("var:decol_iw_metropole ?= scope:target_country", _block(play, "possible"))
+        self.assertNotIn("allow_negotiated_peace = no", play)
+
+    def test_the_rebels_open_the_war_with_our_goal_as_our_demand(self):
+        # The first build's play from our scope (war = yes, escalation 100)
+        # never became a war in the owner's first game; the rebels open it
+        # now, at dp_sepoy_mutiny's escalation, our reconquest our demand.
         opening = _def(EFFECTS, "decol_iw_open_war")
-        self.assertRegex(opening, r"create_diplomatic_play = \{[^}]*type = dp_te_colonial_war[^}]*"
-                                  r"target_country = scope:decol_iw_target[^}]*war = yes[^}]*escalation = 100")
-        self.assertNotIn("initiator", opening)
+        create = _block(_block(opening, "scope:decol_iw_target"), "create_diplomatic_play")
+        self.assertIn("type = dp_te_independence_war", create)
+        self.assertIn("target_country = scope:decol_iw_self", create)
+        self.assertIn("escalation = 80", create)
+        self.assertNotIn("war = yes", create)
+        self.assertNotIn("initiator", create)
+        demand = _block(create, "add_war_goal")
+        for line in ("holder = scope:decol_iw_self", "type = te_colonial_reconquest",
+                     "target_country = scope:decol_iw_target", "primary_demand = yes"):
+            with self.subTest(line=line):
+                self.assertIn(line, demand)
+        # A second call cannot open a second play.
+        self.assertIn("NOT = { decol_iw_slot_has_play = { N = $N$ } }", opening)
+
+    def test_a_running_play_holds_the_record(self):
+        settle = _def(EFFECTS, "decol_iw_settle_slot")
+        hold = settle.index("decol_iw_slot_has_play = { N = $N$ }")
+        self.assertLess(hold, settle.index("decol_iw_end_unstarted = { N = $N$ }"))
+        self.assertIn("set_variable = { name = decol_iw_pending_$N$ days = 60 }", _def(EFFECTS, "decol_iw_open_slot"))
+        has_play = _def(TRIGGERS, "decol_iw_slot_has_play")
+        self.assertIn("is_diplomatic_play_type = dp_te_independence_war", has_play)
+        self.assertIn("is_diplomatic_play_type = dp_te_colonial_war", has_play)
+
+    def test_the_war_start_check_tells_its_cases_apart(self):
+        # Re-armed (_v2): the first build's check had already fired in a save.
+        for name, reason in (("decol_iw_settle_slot", "reason=still_a_play"),
+                             ("decol_iw_end_won", "reason=won_unfought"),
+                             ("decol_iw_end_unstarted", "reason=no_play_no_war")):
+            with self.subTest(effect=name):
+                body = _def(EFFECTS, name)
+                self.assertIn("te_selfcheck_decol_iw_war_started_v2", body)
+                self.assertIn(reason, body)
+        self.assertNotIn("has_global_variable = te_selfcheck_decol_iw_war_started }", EFFECTS)
+        self.assertIn("te_selfcheck_decol_iw_play_created", _def(EFFECTS, "decol_iw_open_war"))
+        # A player who backs down chooses to let them go: only an AI is read.
+        self.assertIn("is_ai = yes", _def(EFFECTS, "decol_iw_end_unstarted"))
+
+    def test_the_un_force_knows_the_rebels_play(self):
+        self.assertIn("un_force_goal_strikeable = { TYPE = te_colonial_independence PLAY = dp_te_independence_war }",
+                      _def(UN_TRIGGERS, "un_force_has_strikeable_goal"))
+        self.assertIn("un_force_strike_goal_type = { TYPE = te_colonial_independence PLAY = dp_te_independence_war }",
+                      _def(UN_EFFECTS, "un_force_strike_war_goals"))
 
 
 class DeferralTests(unittest.TestCase):

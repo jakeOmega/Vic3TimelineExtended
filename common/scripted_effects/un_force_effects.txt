@@ -120,6 +120,8 @@ un_force_strike_war_goals = {
 		un_force_strike_goal_type = { TYPE = demand_no_strait_closure PLAY = dp_demand_no_strait_closure }
 		# A war of independence's reconquest (decolonization_war_effects.txt), outside its own play.
 		un_force_strike_goal_type = { TYPE = te_colonial_reconquest PLAY = dp_te_colonial_war }
+		# A war of independence's own goal, outside the rebels' play.
+		un_force_strike_goal_type = { TYPE = te_colonial_independence PLAY = dp_te_independence_war }
 		# Several opening plays. unification and unification_leadership are
 		# never struck (un_force_has_strikeable_goal).
 		if = {

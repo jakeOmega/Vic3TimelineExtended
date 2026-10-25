@@ -4,13 +4,14 @@
 # A colony that declares independence (decolonization_events.70: from the
 # event pool below bar 40, from Blood in the Colonies' Fight, or in the
 # collapse's wave) can be let go, negotiated with or fought. Fight forms the
-# rebels as a country and opens a war of reconquest against them the next day
-# (dp_te_colonial_war / te_colonial_reconquest, whose goal never self-enforces:
-# holding the territory does not end the war, only the rebels' capitulation or
-# a peace does). A colonial subject's independence war and the secession of a
-# colony are recorded as the same kind of war (decol_iw_track_subject_wars,
-# decol_iw_on_secession_start), so all three share the home front, the bar's
-# drain, the fighters' package and the endings.
+# rebels as a country, and the next day they open a play against us
+# (dp_te_independence_war, their goal te_colonial_independence, ours
+# te_colonial_reconquest) that breaks into war in three weeks or so. Neither
+# goal self-enforces: holding the territory does not end the war, only a
+# capitulation or a peace does. A colonial subject's independence war and the
+# secession of a colony are recorded as the same kind of war
+# (decol_iw_track_subject_wars, decol_iw_on_secession_start), so all three
+# share the home front, the bar's drain, the fighters' package and the endings.
 #
 # Design: docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
 #
@@ -25,7 +26,8 @@
 #   decol_iw_year_N      months into the current year (0-11): the yearly
 #                        interest-group reactions
 #   decol_iw_war_N       set once the war has been seen
-#   decol_iw_pending_N   30 days: the war has not had time to start
+#   decol_iw_pending_N   60 days: the war has not had time to start (the
+#                        rebels' play opens at escalation 80)
 #   decol_iw_won_N       our goal was enforced (te_colonial_reconquest)
 #   decol_iw_red_N       consecutive months our war support has been at the
 #                        red line or below
@@ -51,10 +53,10 @@
 # DECLARING
 # ---------------------------------------------------------------------------
 
-# Fight a declaration: the rebels form, take a record, and the war opens the
-# next day (decolonization_events.71). scope:decol_iw_territory is the
-# territory. form_decolonized_country forms them with the territory's people
-# and the neighbouring states where those people are at home;
+# Fight a declaration: the rebels form, take a record, and open their play
+# against us the next day (decolonization_events.71). scope:decol_iw_territory
+# is the territory. form_decolonized_country forms them with the territory's
+# people and the neighbouring states where those people are at home;
 # apply_decolonization_path sees decol_iw_forming and leaves the legacy for the
 # war's end (decol_iw_rebels_formed). If no country forms (no free dynamic tag)
 # nothing else happens and the territory stays ours.
@@ -132,11 +134,12 @@ decol_iw_open_slot = {
 	set_variable = { name = decol_iw_year_$N$ value = 0 }
 	set_variable = { name = decol_iw_red_$N$ value = 0 }
 	set_variable = { name = decol_iw_backers_$N$ value = 0 }
-	set_variable = { name = decol_iw_pending_$N$ days = 30 }
+	set_variable = { name = decol_iw_pending_$N$ days = 60 }
 }
 
 # ---------------------------------------------------------------------------
-# THE WAR BEGINS (decolonization_events.71, the day after Fight)
+# THE WAR BEGINS (the rebels' play, from decolonization_events.71 the day
+# after Fight)
 # ---------------------------------------------------------------------------
 
 decol_iw_start_wars = {
@@ -147,8 +150,14 @@ decol_iw_start_wars = {
 }
 
 # Open the war of record $N$, a territory's rebels' (kind 1) that has not
-# begun: the form nuclear_exchange_effects.txt uses for dp_nuclear_exchange
-# (`initiator =` is rejected: scripting_best_practices.md).
+# begun. The rebels open dp_te_independence_war against us at escalation 80
+# (vanilla dp_sepoy_mutiny's), with our te_colonial_reconquest added as our
+# primary demand (vanilla's Ezo republic play), so the war breaks out in three
+# weeks or so and the settle sees it. They open it from their own scope:
+# `initiator =` is rejected (scripting_best_practices.md). The first build
+# opened dp_te_colonial_war from our scope with `war = yes` at escalation 100,
+# and in the owner's first game an AI empire's never became a war
+# (te_colonial_war_play.txt).
 decol_iw_open_war = {
 	if = {
 		limit = {
@@ -159,18 +168,41 @@ decol_iw_open_war = {
 		}
 		var:decol_iw_rebels_$N$ = { save_scope_as = decol_iw_target }
 		if = {
-			limit = { NOT = { has_war_with = scope:decol_iw_target } }
-			create_diplomatic_play = {
-				name = decol_iw_war_name
-				type = dp_te_colonial_war
-				target_country = scope:decol_iw_target
-				war = yes # REVIEWED 2026-10-24: create_diplomatic_play parameter, as nuclear_exchange_effects.txt (effects.log 1.14.5)
-				escalation = 100
+			limit = {
+				NOT = { has_war_with = scope:decol_iw_target }
+				NOT = { decol_iw_slot_has_play = { N = $N$ } }
+			}
+			scope:decol_iw_target = {
+				create_diplomatic_play = {
+					name = decol_iw_war_name
+					type = dp_te_independence_war
+					target_country = scope:decol_iw_self
+					escalation = 80
+					add_war_goal = {
+						holder = scope:decol_iw_self
+						type = te_colonial_reconquest
+						target_country = scope:decol_iw_target
+						primary_demand = yes
+					}
+				}
 			}
 		}
 		if = {
 			limit = { has_war_with = scope:decol_iw_target }
 			decol_iw_war_begins = { N = $N$ }
+		}
+		# Self-check (docs/testing/colonial-wars-playtest.md): the play exists
+		# once it has been created. Once a game.
+		else_if = {
+			limit = { NOT = { has_global_variable = te_selfcheck_decol_iw_play_created } }
+			set_global_variable = te_selfcheck_decol_iw_play_created
+			if = {
+				limit = { decol_iw_slot_has_play = { N = $N$ } }
+				debug_log = "TE_SELF_CHECK OK decol_iw_play_created metropole=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN decol_iw_play_created metropole=[THIS.GetCountry.GetNameNoFormatting] (the rebels' play against us does not exist once created: open it with its type's goal alone, no add_war_goal, to find what the engine refuses, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 		}
 	}
 }
@@ -211,15 +243,17 @@ decol_iw_war_begins = {
 			trigger_event = { id = decolonization_events.79 days = 3 }
 		}
 	}
-	# Self-check (docs/testing/colonial-wars-playtest.md): a play created the
-	# day after the rebels form becomes a war. Once a game.
+	# Self-check (docs/testing/colonial-wars-playtest.md): the rebels' play,
+	# opened the day after they form, becomes a war. Once a game; the BROKEN
+	# halves are in the settle, decol_iw_end_won and decol_iw_end_unstarted
+	# (marker _v2: the first build's check had already fired in a save).
 	if = {
 		limit = {
 			var:decol_iw_kind_$N$ = 1
-			NOT = { has_global_variable = te_selfcheck_decol_iw_war_started }
+			NOT = { has_global_variable = te_selfcheck_decol_iw_war_started_v2 }
 		}
-		set_global_variable = te_selfcheck_decol_iw_war_started
-		debug_log = "TE_SELF_CHECK OK decol_iw_war_started metropole=[SCOPE.sCountry('decol_iw_note_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_note_rebels').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		set_global_variable = te_selfcheck_decol_iw_war_started_v2
+		debug_log = "TE_SELF_CHECK OK decol_iw_war_started metropole=[THIS.GetCountry.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
 
@@ -337,8 +371,23 @@ decol_iw_settle_slot = {
 			decol_iw_end_won = { N = $N$ }
 		}
 		else_if = {
-			# The war has not had time to start.
-			limit = { has_variable = decol_iw_pending_$N$ }
+			# The war has not had time to start, or its play is still running.
+			limit = {
+				OR = {
+					has_variable = decol_iw_pending_$N$
+					decol_iw_slot_has_play = { N = $N$ }
+				}
+			}
+			# Self-check: 60 days after Fight it is still a play.
+			if = {
+				limit = {
+					NOT = { has_variable = decol_iw_pending_$N$ }
+					var:decol_iw_kind_$N$ = 1
+					NOT = { has_global_variable = te_selfcheck_decol_iw_war_started_v2 }
+				}
+				set_global_variable = te_selfcheck_decol_iw_war_started_v2
+				debug_log = "TE_SELF_CHECK BROKEN decol_iw_war_started metropole=[THIS.GetCountry.GetNameNoFormatting] reason=still_a_play (60 days after Fight the rebels' play has not become a war: create it with war = yes, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 		}
 		else_if = {
 			# It never started: the self-check's BROKEN case. The rebels are free
@@ -500,6 +549,18 @@ decol_iw_write_row = {
 # We won record $N$: .72, then the record ends.
 decol_iw_end_won = {
 	decol_iw_save_end_scopes = { N = $N$ }
+	# Self-check: a territory's rebels annexed back before any settle saw a war
+	# most likely backed down from their play (their back-down concedes our
+	# demand); a war that began and ended inside one month reads the same.
+	if = {
+		limit = {
+			var:decol_iw_kind_$N$ = 1
+			NOT = { has_variable = decol_iw_war_$N$ }
+			NOT = { has_global_variable = te_selfcheck_decol_iw_war_started_v2 }
+		}
+		set_global_variable = te_selfcheck_decol_iw_war_started_v2
+		debug_log = "TE_SELF_CHECK BROKEN decol_iw_war_started metropole=[THIS.GetCountry.GetNameNoFormatting] reason=won_unfought (the rebels were annexed back and no settle saw a war: they backed down from their play, so a Fight wins without fighting, or a war began and ended inside a month; create the play with war = yes, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
 	trigger_event = { id = decolonization_events.72 }
 	decol_iw_post_end_notices = yes
 	decol_iw_clear_slot = { N = $N$ }
@@ -535,10 +596,17 @@ decol_iw_end_talks = {
 # (the ordinary legacy, no lost-war penalties), with a notice.
 decol_iw_end_unstarted = {
 	decol_iw_save_end_scopes = { N = $N$ }
+	# Self-check: the play ended without a war and the rebels are free. A
+	# player who backs down is choosing to let them go, so only an AI
+	# metropole is read.
 	if = {
-		limit = { NOT = { has_global_variable = te_selfcheck_decol_iw_war_started } }
-		set_global_variable = te_selfcheck_decol_iw_war_started
-		debug_log = "TE_SELF_CHECK BROKEN decol_iw_war_started metropole=[SCOPE.sCountry('decol_iw_end_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_end_rebels').GetNameNoFormatting] (30 days after Fight we are not at war with the rebels: create the play from the rebels' scope instead, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		limit = {
+			var:decol_iw_kind_$N$ = 1
+			is_ai = yes
+			NOT = { has_global_variable = te_selfcheck_decol_iw_war_started_v2 }
+		}
+		set_global_variable = te_selfcheck_decol_iw_war_started_v2
+		debug_log = "TE_SELF_CHECK BROKEN decol_iw_war_started metropole=[THIS.GetCountry.GetNameNoFormatting] reason=no_play_no_war (the play ended without a war and the rebels are free: the AI defender backed down, or the rebels did without conceding our demand, or the play was never made (decol_iw_play_created); create the play with war = yes, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 	save_scope_as = decolonizing_parent
 	scope:decol_iw_end_rebels ?= {

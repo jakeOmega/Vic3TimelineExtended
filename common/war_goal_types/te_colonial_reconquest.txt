@@ -1,7 +1,9 @@
 ﻿# ============================================================================
 # WAR OF INDEPENDENCE — RECONQUEST
 #
-# The goal of dp_te_colonial_war (common/diplomatic_plays/te_colonial_war_play.txt):
+# Our goal in a war of independence (common/diplomatic_plays/te_colonial_war_play.txt):
+# added as our primary demand when the rebels open dp_te_independence_war
+# against us (and the opening goal of the first build's dp_te_colonial_war):
 # annex back the country a colony of ours formed when it declared
 # independence. te_reunify_country's annex_country settings, with three
 # differences:
