@@ -445,7 +445,8 @@ grid evens out less than a late one.
 You can build one station per state. Your first station in a market area can
 go in any of your states there, and every later one must border a state of
 yours that has a station, built or queued, so a grid grows outward from where
-it starts. A station joins its grid once it is a quarter staffed. Stations are
+it starts. A station costs 100 construction, the same as a level of Barracks,
+and joins its grid once it is a quarter staffed. Stations are
 private infrastructure that is always subsidized: a station buys and sells
 both goods at market prices, and your government pays whatever its wages cost
 beyond what it earns.
@@ -473,8 +474,11 @@ its grid has and your transmission efficiency. Its hover has the grid's
 supply against its demand.
 
 A station is worth building where power plants make more than the state uses,
-and where Electricity is dear. A state with neither gains little from joining.
-The AI builds stations in states where Electricity is far from its base price.
+and where Electricity is dear. A state with no power uses none, because its
+buildings can't run the methods that need it; a station lets it receive power
+once a building there switches to one. The AI builds stations in every market
+area where it makes Electricity: it starts in a state with power plants and
+queues a station in one more bordering state each month, larger states first.
 
 ## Tariffs for all goods at once
 
