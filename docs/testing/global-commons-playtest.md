@@ -478,8 +478,8 @@ Logged once a game each. Nothing logged means the premise never came up (no chem
    opens, one colony is founded that month and the bar drops by one goal; the next month another, while the window stays open
    and a goal is left; what is left waits. Founded worlds belong to the open body only.
 3. **A setback while fleets are staged.** With 2.5 fleets staged, fire a setback (`event te_debug_space_race.1` option j while
-   solar colonization is the most advanced running milestone, or wait for the roll): the bar loses 25% (Ambitious) or 15%
-   (Safe, Standard) of one goal, plus any flat amount, not of the whole bar. The option's tooltip says so.
+   solar colonization is the most advanced running milestone, or wait for the roll): the bar loses the option's months of
+   progress at the recorded pace, as its tooltip says, and never more than one goal, so the staged fleets survive.
 4. **An off-window launch after Asteroid Mining.** Research Asteroid Mining, Standard approach, every stage-1 window closed and
    staged progress above one goal. Next Windows gives each closed destination today's premium and the verdict, months saved (to
    the stage's next window, option b's `stage_wait`) against months cost (goal × premium ÷ pace). A colony is founded off-window

@@ -90,6 +90,45 @@ sr_progress = {
 	min = 0.5
 }
 
+# ======= Event progress, in months of the pace =======
+# A month of progress, for every event that moves a milestone's progress
+# (space_race_effects.txt, "Progress in months"): the pace sr_record_event_pace
+# stored when the event fired, or the live pace for an event that fired before
+# it recorded one (an event already open in a save from before 2026-10-25).
+sr_event_pace_value = {
+	if = {
+		limit = { has_variable = sr_event_pace }
+		value = var:sr_event_pace
+	}
+	else = {
+		value = sr_progress
+	}
+}
+# N months of it, for the option tooltips (SR_*_MONTHS_TT). Display only.
+sr_event_months_1 = {
+	value = sr_event_pace_value
+}
+sr_event_months_2 = {
+	value = sr_event_pace_value
+	multiply = 2
+}
+sr_event_months_3 = {
+	value = sr_event_pace_value
+	multiply = 3
+}
+sr_event_months_4 = {
+	value = sr_event_pace_value
+	multiply = 4
+}
+sr_event_months_5 = {
+	value = sr_event_pace_value
+	multiply = 5
+}
+sr_event_months_6 = {
+	value = sr_event_pace_value
+	multiply = 6
+}
+
 # ======= After the race: Commercial Space Industry =======
 # The points of sr_commercial_space_dividend (space_race_modifiers.txt), each
 # worth +5% Extraplanetary Base throughput: the flat progress the country's

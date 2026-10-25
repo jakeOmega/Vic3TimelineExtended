@@ -162,7 +162,7 @@ sr_cleanup_inactive_space_race_milestones = {
 # sr_fire_ambitious_failure_event / sr_fire_safe_setback_event save the country
 # as scope:sr_setback_<milestone> before they dispatch, and saved scopes travel
 # with trigger_event, so the event and each of its options know which milestone
-# failed. The five helpers below act on that marked milestone only — never on
+# failed. The four helpers below act on that marked milestone only — never on
 # "every running milestone", and never on the sr_failed_<milestone> flags, which
 # two journal entries can raise in the same month (each entry's pulse is its own
 # script run, so markers never mix between entries).
@@ -192,32 +192,21 @@ sr_temporary_safety_review_effect = {
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = solar_colonization }
 }
 
-sr_apply_ambitious_failure_progress_loss = {
+# The failed milestone loses $MONTHS$ months of progress (see "Progress in
+# months" below): a minor setback (Safe, Standard) 1 to 4 months, the default
+# answer 2 or 3; an Ambitious failure 4 months with the six-month review, 5 or
+# 6 for the answers that press on without it. Ambitious months are of its
+# faster pace.
+sr_setback_lose_months = {
 	sr_resolve_setback_markers = yes
-	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = probe              MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.75 }
-	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.75 }
-	# Solar colonization: a share of at most one goal, never of the fleets
-	# staged in orbit (Global Commons § 5.2, sr_launch_window_effects.txt).
-	sr_apply_solar_colonization_progress_loss = { MULT = 0.75 }
-}
-
-sr_apply_safe_setback_progress_loss = {
-	sr_resolve_setback_markers = yes
-	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = probe              MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = moon_base          MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = mars_landing       MULT = 0.85 }
-	sr_apply_progress_loss_base = { MILESTONE = interstellar_probe MULT = 0.85 }
-	# Solar colonization: a share of at most one goal, never of the fleets
-	# staged in orbit (Global Commons § 5.2, sr_launch_window_effects.txt).
-	sr_apply_solar_colonization_progress_loss = { MULT = 0.85 }
+	sr_setback_lose_months_base = { MILESTONE = suborbital         MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
+	sr_setback_lose_months_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }
 }
 
 sr_clear_failed_milestone_flags = {
@@ -230,23 +219,6 @@ sr_clear_failed_milestone_flags = {
 	sr_clear_failed_flag_base = { MILESTONE = mars_landing       }
 	sr_clear_failed_flag_base = { MILESTONE = interstellar_probe }
 	sr_clear_failed_flag_base = { MILESTONE = solar_colonization }
-}
-
-# Add var:sr_progress_boost (negative in every failure event) to the failed
-# milestone only. The failure events' counterpart of sr_boost_active_milestones,
-# which the in-progress events (49, 50, 52) use to push every running milestone.
-# Set sr_progress_boost before calling.
-sr_boost_setback_milestone = {
-	sr_resolve_setback_markers = yes
-	sr_boost_setback_milestone_base = { MILESTONE = suborbital         }
-	sr_boost_setback_milestone_base = { MILESTONE = orbital            }
-	sr_boost_setback_milestone_base = { MILESTONE = moon_landing       }
-	sr_boost_setback_milestone_base = { MILESTONE = probe              }
-	sr_boost_setback_milestone_base = { MILESTONE = moon_base          }
-	sr_boost_setback_milestone_base = { MILESTONE = mars_landing       }
-	sr_boost_setback_milestone_base = { MILESTONE = interstellar_probe }
-	sr_boost_setback_milestone_base = { MILESTONE = solar_colonization }
-	remove_variable = sr_progress_boost
 }
 
 # "A more cautious approach" (space_race_events.10.b, .15.c): switch the failed
@@ -270,24 +242,84 @@ sr_switch_setback_milestone_to_safe = {
 	}
 }
 
-# Boost progress for all active milestones
-# Set sr_progress_boost before calling (can be negative for penalties)
+# Every running milestone gains $MONTHS$ months of progress (see "Progress in
+# months" below). The in-progress events that push the whole programme (20, 31,
+# 49, 50, 52) use it.
 sr_boost_active_milestones = {
-	sr_boost_active_milestone_base = { MILESTONE = suborbital         }
-	sr_boost_active_milestone_base = { MILESTONE = orbital            }
-	sr_boost_active_milestone_base = { MILESTONE = moon_landing       }
-	sr_boost_active_milestone_base = { MILESTONE = probe              }
-	sr_boost_active_milestone_base = { MILESTONE = moon_base          }
-	sr_boost_active_milestone_base = { MILESTONE = mars_landing       }
-	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe }
+	sr_boost_active_milestone_base = { MILESTONE = suborbital         MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = orbital            MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = moon_landing       MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = probe              MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = moon_base          MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = mars_landing       MONTHS = $MONTHS$ }
+	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe MONTHS = $MONTHS$ }
 	# Solar colonization's journal entry stays open, frozen, while its production
 	# method is switched off (and after the last colony); its pulse adds nothing
 	# then, and neither does an event.
 	if = {
 		limit = { sr_solar_colonization_running = yes }
-		sr_boost_active_milestone_base = { MILESTONE = solar_colonization }
+		sr_boost_active_milestone_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }
 	}
-	remove_variable = sr_progress_boost
+}
+
+# --- Progress in months -------------------------------------------------------
+# Every event that moves a milestone's progress moves it by whole months of the
+# programme's pace: sr_progress, what the monthly pulse adds to each running
+# milestone (2026-10-25). Until then a setback kept x0.75 (Ambitious) or x0.85
+# (Safe, Standard) of the progress, most options took a flat 3 to 10 points on
+# top, and the in-progress events gave flat 2 to 30. Both scaled badly. The risk
+# is a monthly roll, so a milestone sees setbacks in proportion to the time it
+# takes, and each one took a share of a progress that grows toward a goal up to
+# 13 times larger by the end of the race: a slow programme settled where its
+# pace equalled its losses. Simulated on Standard, the Mars Landing at a pace of
+# 4 a month took 880 months on average against 113 without setbacks (151 now),
+# and at 2 never finished. The flat amounts meant nothing past the first
+# milestones.
+# In months, a setback costs every milestone the same share of its time,
+# whatever its goal or pace, and the risk alone makes later milestones harder.
+#
+# A month is the pace sr_record_event_pace stored when the event fired (each
+# such event calls it from its immediate), so changing funding while an event
+# waits changes neither what it costs nor what it pays (sr_event_pace_value).
+# Two such events open at once share the variable; the second records the pace
+# of a moment later, which differs only if funding changed in between.
+sr_record_event_pace = {
+	set_variable = { name = sr_event_pace value = sr_progress }
+}
+
+# Add $MONTHS$ months of progress to one milestone. Country scope.
+sr_gain_progress_months = {
+	if = {
+		limit = { has_variable = sr_progress_$MILESTONE$ }
+		change_variable = {
+			name = sr_progress_$MILESTONE$
+			add = {
+				value = sr_event_pace_value
+				multiply = $MONTHS$
+			}
+		}
+	}
+}
+
+# Take $MONTHS$ months of progress from one milestone: never more than it has,
+# nor more than one goal. Progress past one goal is Solar System Colonization's
+# fleets staged in orbit (Global Commons § 5.2), which a setback never touches,
+# so a large staged bank doesn't make every setback ruinous (and gives no
+# reason to cut funding while waiting); every other milestone completes at its
+# goal. Country scope.
+sr_lose_progress_months = {
+	if = {
+		limit = { has_variable = sr_progress_$MILESTONE$ }
+		change_variable = {
+			name = sr_progress_$MILESTONE$
+			subtract = {
+				value = sr_event_pace_value
+				multiply = $MONTHS$
+				max = sr_$MILESTONE$_goal
+				max = var:sr_progress_$MILESTONE$
+			}
+		}
+	}
 }
 
 # Called when a milestone is completed - handles cleanup
@@ -433,9 +465,9 @@ sr_cleanup_milestone_variables_effect = {
 }
 
 # --- Per-milestone iteration bases (Style B inline orchestrator pattern) -----
-# Five top-level helpers (sr_temporary_safety_review_effect,
-# sr_apply_ambitious_failure_progress_loss, sr_apply_safe_setback_progress_loss,
-# sr_clear_failed_milestone_flags, sr_boost_active_milestones) all walk the
+# The top-level helpers (sr_temporary_safety_review_effect,
+# sr_setback_lose_months, sr_clear_failed_milestone_flags,
+# sr_switch_setback_milestone_to_safe, sr_boost_active_milestones) all walk the
 # same 8 milestones (suborbital..solar_colonization). Each delegates to one of
 # these bases and the orchestrator lists the tokens explicitly so the support
 # matrix stays grep-able at the call site.
@@ -458,15 +490,11 @@ sr_apply_safety_review_to_milestone_base = {
 	}
 }
 
-# Multiplicatively reduce the failed milestone's progress. Country scope.
-# $MULT$ is the retention factor (0.75 ambitious, 0.85 safe).
-sr_apply_progress_loss_base = {
+# sr_setback_lose_months' body: the failed milestone only. Country scope.
+sr_setback_lose_months_base = {
 	if = {
-		limit = {
-			exists = scope:sr_setback_$MILESTONE$
-			has_variable = sr_progress_$MILESTONE$
-		}
-		change_variable = { name = sr_progress_$MILESTONE$ multiply = $MULT$ }
+		limit = { exists = scope:sr_setback_$MILESTONE$ }
+		sr_lose_progress_months = { MILESTONE = $MILESTONE$ MONTHS = $MONTHS$ }
 	}
 }
 
@@ -478,14 +506,6 @@ sr_clear_failed_flag_base = {
 			has_variable = sr_failed_$MILESTONE$
 		}
 		remove_variable = sr_failed_$MILESTONE$
-	}
-}
-
-# sr_boost_setback_milestone's body: the failed milestone only. Country scope.
-sr_boost_setback_milestone_base = {
-	if = {
-		limit = { exists = scope:sr_setback_$MILESTONE$ }
-		sr_boost_active_milestone_base = { MILESTONE = $MILESTONE$ }
 	}
 }
 
@@ -528,17 +548,12 @@ sr_resolve_setback_marker_base = {
 	}
 }
 
-# Add var:sr_progress_boost (signed) to one active milestone's progress, clamped
-# at zero. Country scope. Caller sets sr_progress_boost before the orchestrator
-# and removes it afterwards.
+# sr_boost_active_milestones' body: $MONTHS$ months of progress to one milestone
+# if it is under way. Country scope.
 sr_boost_active_milestone_base = {
 	if = {
 		limit = { has_variable = sr_active_$MILESTONE$ }
-		change_variable = { name = sr_progress_$MILESTONE$ add = var:sr_progress_boost }
-		if = {
-			limit = { var:sr_progress_$MILESTONE$ < 0 }
-			set_variable = { name = sr_progress_$MILESTONE$ value = 0 }
-		}
+		sr_gain_progress_months = { MILESTONE = $MILESTONE$ MONTHS = $MONTHS$ }
 	}
 }
 

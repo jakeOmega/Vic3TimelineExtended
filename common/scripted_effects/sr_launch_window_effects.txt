@@ -219,31 +219,9 @@ sr_window_log_copy = {
 }
 
 # ---- Setbacks hit only the fleet being readied (spec § 5.2) ------------------------
-# Country scope. Solar colonization's share of a setback: (1 - $MULT$) x
-# min(progress, goal). Progress past one goal is fleets staged in orbit, which
-# a setback never touches, so a large staged bank doesn't make every setback
-# ruinous (and gives no reason to cut funding while waiting). $MULT$ is the
-# retention factor sr_apply_progress_loss_base takes (0.75 ambitious, 0.85
-# safe); the other milestones keep that base. The flat amounts some options
-# add are smaller than any goal, so they need no cap.
-sr_apply_solar_colonization_progress_loss = {
-	if = {
-		limit = {
-			exists = scope:sr_setback_solar_colonization
-			has_variable = sr_progress_solar_colonization
-		}
-		if = {
-			limit = { var:sr_progress_solar_colonization > sr_solar_colonization_goal }
-			set_local_variable = { name = sr_setback_readied value = sr_solar_colonization_goal }
-			change_local_variable = { name = sr_setback_readied multiply = $MULT$ }
-			change_variable = { name = sr_progress_solar_colonization subtract = sr_solar_colonization_goal }
-			change_variable = { name = sr_progress_solar_colonization add = local_var:sr_setback_readied }
-		}
-		else = {
-			change_variable = { name = sr_progress_solar_colonization multiply = $MULT$ }
-		}
-	}
-}
+# A setback, or an in-progress event's loss, never takes more than one goal from
+# solar colonization, so fleets staged in orbit are safe: sr_lose_progress_months
+# (space_race_effects.txt) caps every loss at the milestone's goal.
 
 # ---- Display: the destinations' lines -----------------------------------------------
 # Printed by sr_launch_windows_sgui (common/scripted_guis/sr_launch_window_sguis.txt)

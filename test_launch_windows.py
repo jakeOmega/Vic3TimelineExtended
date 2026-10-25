@@ -416,28 +416,27 @@ class GateScriptTest(unittest.TestCase):
         self.assertLess(month.index("value = sr_launch_fleet_cost"), month.index("sr_establish_colony_effect = yes"))
         self.assertIn("local_var:sr_launch_claimed_before < sr_total_global_colonies", month)
 
-    def test_setback_cap_applies_to_solar_colonization_only(self):
-        for name, mult in (("sr_apply_ambitious_failure_progress_loss", "0.75"),
-                           ("sr_apply_safe_setback_progress_loss", "0.85")):
-            body = _block(self.effects, name)
-            with self.subTest(helper=name):
-                self.assertIn(f"sr_apply_solar_colonization_progress_loss = {{ MULT = {mult} }}", body)
-                self.assertEqual(len(re.findall(rf"sr_apply_progress_loss_base = \{{ MILESTONE = \w+\s+MULT = {mult} \}}",
-                                                body)), 7)
-        self.assertNotIn("MILESTONE = solar_colonization MULT", self.effects)
+    def test_setbacks_reach_solar_colonization_through_the_capped_loss(self):
+        body = _block(self.effects, "sr_setback_lose_months")
+        self.assertIn("sr_setback_lose_months_base = { MILESTONE = solar_colonization MONTHS = $MONTHS$ }", body)
+        base = _block(self.effects, "sr_setback_lose_months_base")
+        self.assertIn("sr_lose_progress_months = { MILESTONE = $MILESTONE$ MONTHS = $MONTHS$ }", base)
+        self.assertNotIn("sr_apply_solar_colonization_progress_loss", self.windows)
 
-    def test_setback_cap_takes_a_share_of_one_goal_at_most(self):
-        # The helper's arithmetic, step by step, against loss = share x min(P, G).
-        body = _block(self.windows, "sr_apply_solar_colonization_progress_loss")
-        self.assertIn("var:sr_progress_solar_colonization > sr_solar_colonization_goal", body)
-        steps = re.findall(r"(subtract|add|multiply) = (\S+) \}", body)
-        self.assertEqual(steps, [("multiply", "$MULT$"), ("subtract", "sr_solar_colonization_goal"),
-                                 ("add", "local_var:sr_setback_readied"), ("multiply", "$MULT$")])
-        for progress in (100.0, 400.0, 1000.0):
-            for mult in (0.75, 0.85):
-                goal = 400.0
-                after = progress - goal + goal * mult if progress > goal else progress * mult
-                self.assertAlmostEqual(progress - after, (1 - mult) * min(progress, goal))
+    def test_a_loss_takes_one_goal_at_most(self):
+        # loss = min(months x pace, goal, progress): staged fleets past one goal
+        # are never touched, and progress never goes below zero.
+        body = _block(self.effects, "sr_lose_progress_months")
+        steps = re.findall(r"(value|multiply|max) = (\S+)", body)
+        self.assertEqual(steps, [("value", "sr_event_pace_value"), ("multiply", "$MONTHS$"),
+                                 ("max", "sr_$MILESTONE$_goal"), ("max", "var:sr_progress_$MILESTONE$")])
+        goal = 400.0
+        for progress in (10.0, 400.0, 1000.0):
+            for loss_wanted in (30.0, 500.0):
+                loss = min(loss_wanted, goal, progress)
+                after = progress - loss
+                self.assertGreaterEqual(after, 0)
+                self.assertGreaterEqual(after, progress - goal)
 
     def test_global_variable_reads_are_guarded(self):
         values = _strip(_raw("common", "script_values", "sr_launch_window_values.txt"))
