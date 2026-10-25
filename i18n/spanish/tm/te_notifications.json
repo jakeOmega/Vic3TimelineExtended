@@ -112,8 +112,8 @@
   "es": "Propaganda contrarrestada"
  },
  "notification_covert_severe_exposure_notice_desc": {
-  "en": "A foreign power has been caught running a covert campaign to bring down a government we stand behind. Their standing with us has suffered for it.",
-  "es": "Se ha sorprendido a una potencia extranjera llevando a cabo una campaña encubierta para derrocar a un gobierno que respaldamos. Su posición ante nosotros se ha resentido por ello."
+  "en": "[SCOPE.sCountry('covert_exposure_operator').GetName] has been caught running a covert campaign to bring down the government of [SCOPE.sCountry('detected_by_country').GetName], which we stand behind. Our relations with [SCOPE.sCountry('covert_exposure_operator').GetName] have suffered for it.",
+  "es": "Se ha sorprendido a [SCOPE.sCountry('covert_exposure_operator').GetName] llevando a cabo una campaña encubierta para derrocar el gobierno de [SCOPE.sCountry('detected_by_country').GetName], al que respaldamos. Nuestras relaciones con [SCOPE.sCountry('covert_exposure_operator').GetName] se han resentido por ello."
  },
  "notification_covert_severe_exposure_notice_name": {
   "en": "Foreign Subversion Exposed",
@@ -127,29 +127,81 @@
   "en": "Colonial Claims Renounced",
   "es": "Reivindicaciones coloniales abandonadas"
  },
+ "notification_decol_iw_accords_notice_desc": {
+  "en": "The talks with [SCOPE.sCountry('decol_iw_talks_rebels').GetName] have reached terms: our claim is dropped, and the war can end in a white peace. Offer one from the peace screen.",
+  "es": "Las conversaciones con [SCOPE.sCountry('decol_iw_talks_rebels').GetName] han llegado a un acuerdo: se retira nuestra reclamación, y la guerra puede terminar en una paz blanca. Ofrece una desde la pantalla de paz."
+ },
  "notification_decol_iw_accords_notice_name": {
   "en": "The Accords Are Agreed",
   "es": "Acuerdos alcanzados"
+ },
+ "notification_decol_iw_allied_arms_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_side_taker').GetName] is sending us arms for our war to keep a colony.",
+  "es": "[SCOPE.sCountry('decol_iw_side_taker').GetName] nos envía armas para nuestra guerra por conservar una colonia."
  },
  "notification_decol_iw_allied_arms_notice_name": {
   "en": "Arms from a Friend",
   "es": "Armas de un amigo"
  },
+ "notification_decol_iw_intervention_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_side_taker').GetName] has entered our war of independence on the rebels' side.",
+  "es": "[SCOPE.sCountry('decol_iw_side_taker').GetName] ha entrado en nuestra guerra de independencia del lado de los rebeldes."
+ },
  "notification_decol_iw_intervention_notice_name": {
   "en": "A Great Power Intervenes",
   "es": "Una gran potencia interviene"
+ },
+ "notification_decol_iw_rebels_armed_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_side_taker').GetName] is arming the rebels we are fighting.",
+  "es": "[SCOPE.sCountry('decol_iw_side_taker').GetName] está armando a los rebeldes con los que combatimos."
+ },
+ "notification_decol_iw_rebels_armed_notice_name": {
+  "en": "Foreign Arms for the Rebels",
+  "es": "Armas extranjeras para los rebeldes"
+ },
+ "notification_decol_iw_talks_opened_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_talks_metropole').GetName] has opened talks to end the war.",
+  "es": "[SCOPE.sCountry('decol_iw_talks_metropole').GetName] ha iniciado conversaciones para poner fin a la guerra."
  },
  "notification_decol_iw_talks_opened_notice_name": {
   "en": "Talks Begin",
   "es": "Empiezan las negociaciones"
  },
+ "notification_decol_iw_war_begins_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has gone to war with [SCOPE.sCountry('decol_iw_gp_rebels').GetName], the colony that declared its independence in [SCOPE.sState('decol_iw_note_state').GetName].",
+  "es": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] ha entrado en guerra con [SCOPE.sCountry('decol_iw_gp_rebels').GetName], la colonia que declaró su independencia en [SCOPE.sState('decol_iw_note_state').GetName]."
+ },
  "notification_decol_iw_war_begins_notice_name": {
   "en": "A War of Independence",
   "es": "Una guerra de independencia"
  },
+ "notification_decol_iw_war_begins_rebels_notice_desc": {
+  "en": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] has gone to war to take back our country.",
+  "es": "[SCOPE.sCountry('decol_iw_gp_metropole').GetName] ha entrado en guerra para recuperar nuestro país."
+ },
+ "notification_decol_iw_war_begins_rebels_notice_name": {
+  "en": "They Have Sent the Army",
+  "es": "Han enviado al ejército"
+ },
+ "notification_decol_iw_war_ends_notice_desc": {
+  "en": "The war between [SCOPE.sCountry('decol_iw_end_metropole').GetName] and its colony in [SCOPE.sState('decol_iw_end_state').GetName] is over.",
+  "es": "La guerra entre [SCOPE.sCountry('decol_iw_end_metropole').GetName] y su colonia en [SCOPE.sState('decol_iw_end_state').GetName] ha terminado."
+ },
+ "notification_decol_iw_war_ends_notice_name": {
+  "en": "A War of Independence Ends",
+  "es": "Termina una guerra de independencia"
+ },
+ "notification_decol_iw_war_unstarted_notice_desc": {
+  "en": "The war to take back [SCOPE.sState('decol_iw_end_state').GetName] never began. [SCOPE.sCountry('decol_iw_end_rebels').GetName] is free.",
+  "es": "La guerra para recuperar [SCOPE.sState('decol_iw_end_state').GetName] nunca comenzó. [SCOPE.sCountry('decol_iw_end_rebels').GetName] es libre."
+ },
  "notification_decol_iw_war_unstarted_notice_name": {
   "en": "No War Came",
   "es": "No hubo guerra"
+ },
+ "notification_decol_iw_war_won_rebels_notice_desc": {
+  "en": "Our war with [SCOPE.sCountry('decol_iw_end_metropole').GetName] is over, and we are free.",
+  "es": "Nuestra guerra con [SCOPE.sCountry('decol_iw_end_metropole').GetName] ha terminado, y somos libres."
  },
  "notification_decol_iw_war_won_rebels_notice_name": {
   "en": "Independence Won",
@@ -220,48 +272,48 @@
   "es": "Queda un año para la oportunidad"
  },
  "notification_gm_tr_home_reach_notice_desc": {
-  "en": "We now hold a trophy taken from our own lands. Bring It Home, on its row under Trophies, rebuilds it where it stood.",
-  "es": "Ahora poseemos un trofeo arrebatado de nuestras propias tierras. Traerlo a casa, en su fila bajo Trofeos, lo reconstruye donde se alzaba."
+  "en": "We hold a trophy taken from [SCOPE.sState('gm_tr_notice_state').GetName], one of our own states. Bring It Home, on its row under Trophies, rebuilds it where it stood.",
+  "es": "Poseemos un trofeo arrebatado de [SCOPE.sState('gm_tr_notice_state').GetName], uno de nuestros propios estados. Traerlo a casa, en su fila bajo Trofeos, lo reconstruye donde se alzaba."
  },
  "notification_gm_tr_home_reach_notice_name": {
   "en": "A Trophy Within Reach",
   "es": "Un trofeo al alcance"
  },
  "notification_gm_tr_homecoming_notice_desc": {
-  "en": "A monument carried off as a trophy has been rebuilt where it stood. The Homecoming lends the government legitimacy for ten years.",
-  "es": "Un monumento llevado como trofeo ha sido reconstruido donde se alzaba. El regreso a casa otorga legitimidad al gobierno durante diez años."
+  "en": "A monument carried off as a trophy has been rebuilt where it stood, in [SCOPE.sState('gm_tr_notice_state').GetName]. The Homecoming lends the government legitimacy for ten years.",
+  "es": "Un monumento llevado como trofeo ha sido reconstruido donde se alzaba, en [SCOPE.sState('gm_tr_notice_state').GetName]. El regreso a casa otorga legitimidad al gobierno durante diez años."
  },
  "notification_gm_tr_homecoming_notice_name": {
   "en": "A Trophy Comes Home",
   "es": "Un trofeo vuelve a casa"
  },
  "notification_gm_tr_lost_notice_desc": {
-  "en": "Enemy soldiers have carried off one of our Grand Monuments, or part of it. It is listed under Held Abroad on the Grand Monuments tab, with the ways to get it back. The outrage stiffens our war support.",
-  "es": "Soldados enemigos se han llevado uno de nuestros grandes monumentos, o parte de él. Figura en Retenido en el extranjero, en la pestaña Grandes monumentos, junto con las formas de recuperarlo. La indignación refuerza nuestro respaldo a la guerra."
+  "en": "[SCOPE.sCountry('gm_tr_taker').GetName] has carried off one of our Grand Monuments, or part of it, from [SCOPE.sState('gm_tr_notice_state').GetName]. It is listed under Held Abroad on the Grand Monuments tab, with the ways to get it back. The outrage stiffens our war support.",
+  "es": "[SCOPE.sCountry('gm_tr_taker').GetName] se ha llevado uno de nuestros grandes monumentos, o parte de él, de [SCOPE.sState('gm_tr_notice_state').GetName]. Figura en Retenido en el extranjero, en la pestaña Grandes monumentos, junto con las formas de recuperarlo. La indignación refuerza nuestro respaldo a la guerra."
  },
  "notification_gm_tr_lost_notice_name": {
   "en": "Our Monument Carried Off",
   "es": "Nuestro monumento, saqueado"
  },
  "notification_gm_tr_site_reach_notice_desc": {
-  "en": "Our armies hold a state where trophies stand. Its state view lists them, and each can be carried off while we hold it.",
-  "es": "Nuestros ejércitos controlan un estado donde se alzan trofeos. Su vista de estado los enumera, y cada uno puede llevarse mientras lo controlemos."
+  "en": "Our armies hold [SCOPE.sState('gm_tr_notice_state').GetName], where trophies stand. Its state view lists them, and each can be carried off while we hold it.",
+  "es": "Nuestros ejércitos controlan [SCOPE.sState('gm_tr_notice_state').GetName], donde se alzan trofeos. Su vista de estado los enumera, y cada uno puede llevarse mientras lo controlemos."
  },
  "notification_gm_tr_site_reach_notice_name": {
   "en": "Trophies Within Reach",
   "es": "Trofeos al alcance"
  },
  "notification_gm_tr_taken_notice_desc": {
-  "en": "Our soldiers have carried off a monument, or part of one, as a trophy. It stands in our capital now, under Trophies on the Grand Monuments tab.",
-  "es": "Nuestros soldados se han llevado un monumento, o parte de uno, como trofeo. Ahora se alza en nuestra capital, en Trofeos, en la pestaña Grandes monumentos."
+  "en": "We have carried off a monument, or part of one, from [SCOPE.sState('gm_tr_notice_state').GetName] as a trophy. It stands in our capital now, under Trophies on the Grand Monuments tab.",
+  "es": "Nos hemos llevado como trofeo un monumento, o parte de uno, de [SCOPE.sState('gm_tr_notice_state').GetName]. Ahora se alza en nuestra capital, en Trofeos, en la pestaña Grandes monumentos."
  },
  "notification_gm_tr_taken_notice_name": {
   "en": "A Trophy Carried Off",
   "es": "Un trofeo arrebatado"
  },
  "notification_gm_vanity_backlash_notice_desc": {
-  "en": "A new level of a Grand Monument opened while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years.",
-  "es": "Se inauguró un nuevo nivel de un gran monumento mientras el país estaba en impago, hambruna o recesión. La población del estado lo ve con rencor, y la legitimidad del gobierno sufre durante unos dos años."
+  "en": "A new level of a Grand Monument opened in [SCOPE.sState('gm_vanity_state').GetName] while the country was in default, famine or recession. The state's people resent it, and the government's legitimacy suffers for about two years.",
+  "es": "Se inauguró un nuevo nivel de un gran monumento en [SCOPE.sState('gm_vanity_state').GetName] mientras el país estaba en impago, hambruna o recesión. La población del estado lo ve con rencor, y la legitimidad del gobierno sufre durante unos dos años."
  },
  "notification_gm_vanity_backlash_notice_name": {
   "en": "A Palace amid Hardship",
@@ -1668,8 +1720,8 @@
   "es": "Intento de [concept_nuclear_strike|l] fallido"
  },
  "notification_industrial_nuke_fails_defender_desc": {
-  "en": "A [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has failed.",
-  "es": "Un [concept_nuclear_strike|l] contra [SCOPE.sState('target_state').GetName] ha fracasado."
+  "en": "Our defenses stopped a [concept_nuclear_strike] by [SCOPE.sCountry('nd_current_strike_launcher').GetName] on [SCOPE.sState('target_state').GetName].",
+  "es": "Nuestras defensas detuvieron un [concept_nuclear_strike|l] de [SCOPE.sCountry('nd_current_strike_launcher').GetName] contra [SCOPE.sState('target_state').GetName]."
  },
  "notification_industrial_nuke_fails_defender_name": {
   "en": "Attempted [concept_nuclear_strike] Failed",
@@ -1684,8 +1736,8 @@
   "es": "[concept_nuclear_strike] exitoso"
  },
  "notification_industrial_nuke_succeeds_defender_desc": {
-  "en": "A [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] has been successful.",
-  "es": "Un [concept_nuclear_strike|l] contra [SCOPE.sState('target_state').GetName] ha tenido éxito."
+  "en": "[SCOPE.sCountry('nd_current_strike_launcher').GetName] has struck [SCOPE.sState('target_state').GetName] with a [concept_nuclear_strike].",
+  "es": "[SCOPE.sCountry('nd_current_strike_launcher').GetName] ha atacado [SCOPE.sState('target_state').GetName] con un [concept_nuclear_strike|l]."
  },
  "notification_industrial_nuke_succeeds_defender_name": {
   "en": "[concept_nuclear_strike] Successful",
@@ -1748,8 +1800,8 @@
   "es": "Doctrina vinculada por ley"
  },
  "notification_nd_exchange_war_failed_desc": {
-  "en": "Two weeks after a government refused to stand down from the nuclear exchange, the war it asked for has still not begun. The exchange is over: neither side may now answer it with nuclear weapons outside a war.",
-  "es": "Dos semanas después de que un gobierno se negara a retirarse del intercambio nuclear, la guerra que pidió aún no ha empezado. El intercambio ha terminado: ninguna de las partes puede ya responder a él con armas nucleares fuera de una guerra."
+  "en": "Two weeks after [SCOPE.sCountry('nd_exchange_refusing').GetName] refused to stand down from the nuclear exchange with [SCOPE.sCountry('nd_exchange_enemy').GetName], the war it asked for has still not begun. The exchange is over: neither side may now answer it with nuclear weapons outside a war.",
+  "es": "Dos semanas después de que [SCOPE.sCountry('nd_exchange_refusing').GetName] se negara a retirarse del intercambio nuclear con [SCOPE.sCountry('nd_exchange_enemy').GetName], la guerra que pidió aún no ha empezado. El intercambio ha terminado: ninguna de las partes puede ya responder a él con armas nucleares fuera de una guerra."
  },
  "notification_nd_exchange_war_failed_name": {
   "en": "No War After the Exchange",
@@ -2044,8 +2096,8 @@
   "es": "La Carta se ha quedado pequeña"
  },
  "notification_un_conference_opened_notice_desc": {
-  "en": "A great power has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organisation will be founded in a year, and every country invited to sign its charter.",
-  "es": "Una gran potencia ha convocado una conferencia fundacional para unas nuevas Naciones Unidas. Si la principal potencia del mundo no la hace fracasar, la nueva organización se fundará en un año y todos los países serán invitados a firmar su carta."
+  "en": "[SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations. If the world's leading power does not wreck it, the new organisation will be founded in a year, and every country invited to sign its charter.",
+  "es": "[SCOPE.sCountry('un_conference_convener').GetName] ha convocado una conferencia fundacional para unas nuevas Naciones Unidas. Si la principal potencia del mundo no la hace fracasar, la nueva organización se fundará en un año y todos los países serán invitados a firmar su carta."
  },
  "notification_un_conference_opened_notice_name": {
   "en": "A Founding Conference",
@@ -2140,8 +2192,8 @@
   "es": "Objetivo de guerra eliminado"
  },
  "notification_un_humanitarian_token_received_desc": {
-  "en": "A foreign power has provided modest humanitarian assistance to help address the ongoing crisis.",
-  "es": "Una potencia extranjera ha prestado una modesta ayuda humanitaria para contribuir a afrontar la crisis en curso."
+  "en": "[SCOPE.sCountry('aid_donor').GetName] has provided modest humanitarian assistance to help address the ongoing crisis.",
+  "es": "[SCOPE.sCountry('aid_donor').GetName] ha prestado una modesta ayuda humanitaria para contribuir a afrontar la crisis en curso."
  },
  "notification_un_humanitarian_token_received_name": {
   "en": "Humanitarian Assistance Received",
@@ -2196,8 +2248,8 @@
   "es": "Termina una misión de la ONU"
  },
  "notification_un_mission_opened_notice_desc": {
-  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to one of our states. Its work is shown in the state, and in the chamber's register of missions.",
-  "es": "Las Naciones Unidas han enviado una [Concept('concept_un_mission', 'misión')] a uno de nuestros estados. Su labor aparece en el estado y en el registro de misiones de la sala."
+  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to [SCOPE.sState('un_msn_state').GetName]. Its work is shown in the state, and in the chamber's register of missions.",
+  "es": "Las Naciones Unidas han enviado una [Concept('concept_un_mission', 'misión')] a [SCOPE.sState('un_msn_state').GetName]. Su labor aparece en el estado y en el registro de misiones de la sala."
  },
  "notification_un_mission_opened_notice_name": {
   "en": "A UN Mission Arrives",
@@ -2220,8 +2272,8 @@
   "es": "Misión de mantenimiento de la paz de la ONU cumplida"
  },
  "notification_un_mission_reinforced_notice_desc": {
-  "en": "Another member has sent a contingent to the [Concept('concept_un_mission', 'UN mission')] in one of our states. The mission grows stronger.",
-  "es": "Otro miembro ha enviado un contingente a la [Concept('concept_un_mission', 'misión de la ONU')] en uno de nuestros estados. La misión se refuerza."
+  "en": "[SCOPE.sCountry('un_msn_notice_member').GetName] has sent a contingent to the [Concept('concept_un_mission', 'UN mission')] in [SCOPE.sState('un_msn_notice_state').GetName]. The mission grows stronger.",
+  "es": "[SCOPE.sCountry('un_msn_notice_member').GetName] ha enviado un contingente a la [Concept('concept_un_mission', 'misión de la ONU')] en [SCOPE.sState('un_msn_notice_state').GetName]. La misión se refuerza."
  },
  "notification_un_mission_reinforced_notice_name": {
   "en": "A UN Mission Reinforced",
@@ -2244,8 +2296,8 @@
   "es": "Misión de estabilización de la ONU cumplida"
  },
  "notification_un_mission_withdrawn_notice_desc": {
-  "en": "A member has brought its contingent home from the UN mission in one of our states. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",
-  "es": "Un miembro ha hecho regresar a su contingente de la misión de la ONU en uno de nuestros estados. Una misión de mantenimiento de la paz o de estabilización sin nadie que participe en ella fracasa."
+  "en": "[SCOPE.sCountry('un_msn_notice_member').GetName] has brought its contingent home from the UN mission in [SCOPE.sState('un_msn_notice_state').GetName]. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",
+  "es": "[SCOPE.sCountry('un_msn_notice_member').GetName] ha hecho regresar a su contingente de la misión de la ONU en [SCOPE.sState('un_msn_notice_state').GetName]. Una misión de mantenimiento de la paz o de estabilización sin nadie que participe en ella fracasa."
  },
  "notification_un_mission_withdrawn_notice_name": {
   "en": "A UN Contingent Goes Home",

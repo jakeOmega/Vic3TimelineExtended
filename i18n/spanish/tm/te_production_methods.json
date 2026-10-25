@@ -4568,8 +4568,8 @@
   "es": "En construcción"
  },
  "pm_grand_monument_site_desc": {
-  "en": "The monument is being built. It has no upkeep and no effects until it is dedicated.",
-  "es": "El monumento está en obras. No tiene mantenimiento ni efectos hasta que se dedique."
+  "en": "The monument is being built. It has no effects until it is dedicated.",
+  "es": "El monumento está en obras. No tiene efectos hasta que se dedique."
  },
  "pm_graphene_electric_motors": {
   "en": "Graphene Electric Motors",
@@ -4588,8 +4588,8 @@
   "es": "Cable HVDC"
  },
  "pm_grid_hvdc_interconnector_desc": {
-  "en": "A high-voltage direct-current cable joins this station to any station running one across the sea, in a state that shares a sea with this one: our own, or a country we have a $grid_interconnection_agreement$ with in our [concept_market]. Their grids become one. It does nothing in a state with no coast.",
-  "es": "Un cable de corriente continua de alta tensión une esta central con cualquier central que tenga uno al otro lado del mar, en un estado que comparta mar con este, ya sea nuestro o de un país con el que tengamos un $grid_interconnection_agreement$ en nuestro [concept_market|l]. Sus redes se convierten en una sola. No hace nada en un estado sin costa."
+  "en": "Converter valves and a high-voltage direct-current cable to the far shore, with a range of one [concept_sea_node] (#b $building_grid_undersea_cable_range_add$#!), which $smart_grids$ and $quantum_materials$ lengthen.",
+  "es": "Válvulas conversoras y un cable de corriente continua de alta tensión hasta la orilla opuesta, con un alcance de un salto de [concept_sea_node|l] (#b $building_grid_undersea_cable_range_add$#!), que alargan $smart_grids$ y $quantum_materials$."
  },
  "pm_grid_transfer_base": {
   "en": "Substation",
@@ -5031,21 +5031,33 @@
   "en": "Heavy Maintenance",
   "es": "Mantenimiento pesado"
  },
+ "pm_maintenance_graded_heavy_desc": {
+  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for railways from containerized cargo on and ports from container ports on: large, busy plant that wears out as it is used.",
+  "es": "Mantenimiento a una vez y media la tasa estándar de [concept_construction|l] por nivel, para los ferrocarriles a partir de la carga en contenedores y los puertos a partir de los puertos de contenedores: instalaciones grandes y concurridas que se desgastan con el uso."
+ },
  "pm_maintenance_graded_light": {
   "en": "Light Maintenance",
   "es": "Mantenimiento ligero"
  },
+ "pm_maintenance_graded_light_desc": {
+  "en": "Upkeep at half the standard rate of [concept_construction] per level, for railways on early or steam trains, small ports, and early and coal-fired power plants, whose levels carry little traffic or output. A later method moves the building to a higher rate.",
+  "es": "Mantenimiento a la mitad de la tasa estándar de [concept_construction|l] por nivel, para ferrocarriles con trenes primitivos o de vapor, puertos pequeños y centrales eléctricas primitivas y de carbón, cuyos niveles soportan poco tráfico o producción. Un método posterior pasa el edificio a una tasa mayor."
+ },
  "pm_maintenance_graded_standard": {
   "en": "Standard Maintenance",
   "es": "Mantenimiento estándar"
+ },
+ "pm_maintenance_graded_standard_desc": {
+  "en": "Upkeep at the standard rate of [concept_construction] per level, for railways on electric or diesel trains or Centralized Traffic Control, modern ports, and oil-fired and modern fossil power plants.",
+  "es": "Mantenimiento a la tasa estándar de [concept_construction|l] por nivel, para ferrocarriles con trenes eléctricos o diésel o con Control centralizado del tráfico, puertos modernos y centrales eléctricas de petróleo y de combustibles fósiles modernas."
  },
  "pm_maintenance_heavy": {
   "en": "Heavy Maintenance",
   "es": "Mantenimiento pesado"
  },
  "pm_maintenance_heavy_desc": {
-  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for railways, ports, roads, airports, networks, power stations and oil rigs: plant that wears out as it is used.",
-  "es": "Mantenimiento a una vez y media la tasa estándar de [concept_construction|l] por nivel, para ferrocarriles, puertos, carreteras, aeropuertos, redes, centrales eléctricas y plataformas petrolíferas: instalaciones que se desgastan con el uso."
+  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for roads, airports, networks, hydro and renewable power stations and oil rigs: plant that wears out as it is used.",
+  "es": "Mantenimiento a una vez y media la tasa estándar de [concept_construction|l] por nivel, para carreteras, aeropuertos, redes, centrales eléctricas hidráulicas y renovables y plataformas petrolíferas: instalaciones que se desgastan con el uso."
  },
  "pm_maintenance_intensive": {
   "en": "Intensive Maintenance",
@@ -5060,8 +5072,8 @@
   "es": "Mantenimiento ligero"
  },
  "pm_maintenance_light_desc": {
-  "en": "Upkeep at half the standard rate of [concept_construction] per level, for buildings with little plant to keep up: exchanges, academies, offices and the modern mines.",
-  "es": "Mantenimiento a la mitad de la tasa estándar de [concept_construction|l] por nivel, para los edificios con poca maquinaria que conservar: bolsas, academias, oficinas y las minas modernas."
+  "en": "Upkeep at half the standard rate of [concept_construction] per level, for buildings with little plant to keep up: exchanges, academies, offices and the tech metals mines.",
+  "es": "Mantenimiento a la mitad de la tasa estándar de [concept_construction|l] por nivel, para los edificios con poca maquinaria que conservar: bolsas, academias, oficinas y las minas de metales tecnológicos."
  },
  "pm_maintenance_mechanized_mine": {
   "en": "Mechanized Workings",
@@ -5386,6 +5398,10 @@
  "pm_monument_historic": {
   "en": "To History",
   "es": "A la historia"
+ },
+ "pm_monument_historic_desc": {
+  "en": "A monument of an older age, kept for its own sake and for those who travel to see it. It honours no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!",
+  "es": "Un monumento de una época más antigua, conservado por sí mismo y por quienes viajan a verlo. No honra a ningún gobierno ni complace a ningún grupo, así que ningún gobierno puede enemistarse con él. #R La dedicatoria es permanente.#!"
  },
  "pm_monument_industrial": {
   "en": "Great Exhibition Hall",
@@ -6859,17 +6875,33 @@
   "en": "Fusion Shipyards",
   "es": "Astilleros de fusión"
  },
+ "pm_sr_fabrication_fusion_shipyards_desc": {
+  "en": "Orbital yards run on fusion power turn out colony modules by the dozen. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "es": "Los astilleros orbitales que funcionan con energía de fusión producen módulos coloniales por docenas. Solo con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
+ },
  "pm_sr_fabrication_lunar_foundries": {
   "en": "Lunar Foundries",
   "es": "Fundiciones lunares"
+ },
+ "pm_sr_fabrication_lunar_foundries_desc": {
+  "en": "Foundries on the Moon cast module frames from lunar metal and launch them from its shallow gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "es": "Las fundiciones de la Luna moldean armazones de módulos con metal lunar y los lanzan desde su pozo gravitatorio poco profundo. Solo con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
  },
  "pm_sr_fabrication_none": {
   "en": "No Module Fabrication",
   "es": "Sin fabricación de módulos"
  },
+ "pm_sr_fabrication_none_desc": {
+  "en": "The programme builds no modules for our colonies.",
+  "es": "El programa no construye módulos para nuestras colonias."
+ },
  "pm_sr_fabrication_orbital_assembly": {
   "en": "Orbital Assembly",
   "es": "Ensamblaje orbital"
+ },
+ "pm_sr_fabrication_orbital_assembly_desc": {
+  "en": "Modules for our colonies are assembled in Earth orbit from parts lifted one launch at a time. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "es": "Los módulos para nuestras colonias se ensamblan en órbita terrestre con piezas subidas en un lanzamiento tras otro. Solo con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
  },
  "pm_sr_site_marker": {
   "en": "Colony Record",

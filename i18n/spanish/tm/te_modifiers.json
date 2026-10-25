@@ -343,6 +343,14 @@
   "en": "A flat percentage point increase to the likelihood of enacting this specific law",
   "es": "Aumento fijo, en puntos porcentuales, de la probabilidad de promulgar esta ley concreta"
  },
+ "country_enactment_success_chance_law_slavery_banned_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_slavery_banned').GetName]",
+  "es": "Probabilidad de [concept_enactment_success|l] de [GetLawType('law_slavery_banned').GetName]"
+ },
+ "country_enactment_success_chance_law_slavery_banned_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "es": "Un aumento fijo, en puntos porcentuales, de la probabilidad de promulgar esta ley en concreto"
+ },
  "country_family_limitation_literacy_mult": {
   "en": "Family Limitation Among the Literate[GetPlayer.GetCustom('te_demog_census_off_name')]",
   "es": "Limitación familiar entre los alfabetizados[GetPlayer.GetCustom('te_demog_census_off_name')]"
@@ -1134,6 +1142,14 @@
  "country_space_race_risk_mult_desc": {
   "en": "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress.",
   "es": "Ajuste multiplicativo del riesgo de fracaso de la [concept_space_race|l]. El enfoque seguro en los hitos activos reduce el riesgo de fracaso a costa de un progreso más lento."
+ },
+ "country_sr_module_fabrication_add": {
+  "en": "Colony Module Fabrication per Month",
+  "es": "Fabricación mensual de módulos coloniales"
+ },
+ "country_sr_module_fabrication_add_desc": {
+  "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",
+  "es": "Puntos al mes para nuestros módulos coloniales en cola, con los ajustes de colonias simples y completas de la regla de la Carrera espacial. Cada módulo cuesta 100."
  },
  "country_st_res_aeroplanes_capacity_add": {
   "en": "$aeroplanes$ Reserve Capacity",
@@ -3327,6 +3343,10 @@
   "en": "[GetBuildingType('building_grid_hvdc_interconnector').GetName] Max Level",
   "es": "Nivel máximo de [GetBuildingType('building_grid_hvdc_interconnector').GetName]"
  },
+ "state_building_grid_hvdc_interconnector_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_grid_hvdc_interconnector').GetName] can expand to in this state",
+  "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_grid_hvdc_interconnector').GetName] en este estado"
+ },
  "state_building_grid_transfer_station_max_level_add": {
   "en": "[GetBuildingType('building_grid_transfer_station').GetName] Max Level",
   "es": "Nivel máximo de [GetBuildingType('building_grid_transfer_station').GetName]"
@@ -5344,8 +5364,8 @@
   "es": "Tolerancia al [concept_migration_crowding|l]"
  },
  "state_migration_crowding_density_mult_desc": {
-  "en": "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. Improved by urban planning, [concept_infrastructure], and modern transportation.",
-  "es": "Multiplica la población que puede albergar un estado antes de que el [concept_migration_crowding|l] reduzca la [concept_migration_pull|l]: tanto la parte que permite su [concept_arable_land|l] como la que añade su [concept_urban_engineering|l]. Mejora con la planificación urbana, las [concept_infrastructure|l] y el transporte moderno."
+  "en": "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. It multiplies the densities that open and close an [concept_internal_resettlement] frontier in the same way. Improved by urban planning, [concept_infrastructure], and modern transportation.",
+  "es": "Multiplica la población que puede albergar un estado antes de que el [concept_migration_crowding|l] reduzca la [concept_migration_pull|l]: tanto la parte que permite su [concept_arable_land|l] como la que añade su [concept_urban_engineering|l]. Multiplica del mismo modo las densidades que abren y cierran una frontera de [concept_internal_resettlement|l]. Mejora con la planificación urbana, las [concept_infrastructure|l] y el transporte moderno."
  },
  "state_min_cultural_acceptance_delta_add": {
   "en": "Minimum Local Acceptance",
