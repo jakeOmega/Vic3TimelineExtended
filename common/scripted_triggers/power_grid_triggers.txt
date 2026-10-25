@@ -92,3 +92,48 @@ te_grid_ai_interconnector_wanted = {
 		}
 	}
 }
+
+# ---- AI -----------------------------------------------------------------------
+
+# State scope. Its owner makes Electricity in a state of its market area, this
+# one included, so a station here joins a grid with power to share. A station
+# that downloads counts as making it, so a group fed through an interconnector
+# or an agreement counts too.
+te_grid_ai_market_area_has_power = {
+	save_temporary_scope_as = te_grid_ai_powered
+	owner = {
+		any_scope_state = {
+			is_in_same_market_area = scope:te_grid_ai_powered
+			te_grid_electricity_production > 0
+		}
+	}
+}
+
+# State scope. The building's possible, for the AI's own pass, which runs in
+# country scope where ROOT is not the state: the owner's first station in the
+# market area may go anywhere there, and every later one must border a state
+# of the owner's that has one, built or queued. Keep the two in step.
+te_grid_station_placeable = {
+	save_temporary_scope_as = te_grid_ai_placed
+	OR = {
+		any_neighbouring_state = {
+			owner = scope:te_grid_ai_placed.owner
+			te_grid_state_has_station = yes
+		}
+		NOT = {
+			owner = {
+				any_scope_state = {
+					is_in_same_market_area = scope:te_grid_ai_placed
+					te_grid_state_has_station = yes
+				}
+			}
+		}
+	}
+}
+
+# State scope, in te_grid_ai_build_effect: a state the AI queues a station in.
+te_grid_ai_station_site = {
+	te_grid_state_has_station = no
+	te_grid_ai_market_area_has_power = yes
+	te_grid_station_placeable = yes
+}
