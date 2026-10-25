@@ -3866,7 +3866,7 @@ class PictureTests(unittest.TestCase):
                             f"{'yes' if skin == 'generic' else 'no'} CODE = {code} }}")
         codes = sorted(PICTURES)
         expected += [f"gm_state_picture_skin = {{ SKIN = {PICTURES[c][0]} GENERIC = no CODE = {c} }}"
-                     for c in codes if PICTURES[c][1] == "faith"]
+                     for c in codes if PICTURES[c][1] == "faith" and c < LANDMARK_CODE_BASE]
         expected += [f"gm_state_picture_pair = {{ SKIN = {PICTURES[c][0]} GENERIC = "
                      f"{'yes' if PICTURES[c][0] == 'generic' else 'no'} FORM = {PICTURES[c][1]} CODE = {c} }}"
                      for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"
