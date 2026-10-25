@@ -72,15 +72,17 @@ class TestGenerated(unittest.TestCase):
         test_demographics_modifiers pins the lines on the laws)."""
         self.assertNotIn("te_demog_wc_land_term = {", self.values)
         for name, typ in (("te_demog_child_work", P.CHILD_WORK_TYPE), ("te_demog_pr_target_lm", P.LM_FARMS_TYPE),
-                          # stage 3 (2026-10-19): the migrant profile's women at work and families' transport
-                          ("te_demog_female_work_share", P.FEMALE_WORK_SHARE_TYPE),
+                          # stage 3 (2026-10-19): the migrant profile's families' transport
                           ("te_demog_family_transport", P.FAMILY_MIGRATION_TYPE)):
             body = self.values.split(f"{name} = {{", 1)[1].split("\n}\n", 1)[0]
             self.assertIn(f"modifier:{typ}", body, name)
             self.assertNotIn("has_law", body, name)
             self.assertNotIn("has_technology_researched", body, name)
-        body = self.values.split("te_demog_female_work_share = {", 1)[1].split("\n}\n", 1)[0]
-        self.assertIn(f"value = {gen.lit(P.FEMALE_WORK_SHARE_DEFAULT)}", body, "the base the laws' lines add to")
+        # Late Marriage's women's work reads women's share of the workers, the census's own (2026-10-25)
+        body = self.values.split("te_demog_pr_target_lm = {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn(f"multiply = te_demog_women_worker_share multiply = "
+                      f"{gen.lit(P.LM_WOMENS_WORK / P.WOMEN_WORKER_PARITY)}", body)
+        self.assertNotIn("te_demog_female_work_share", self.values)
 
     def test_means_read_the_modifier(self):
         body = self.values.split("te_demog_means = {", 1)[1].split("\n}\n", 1)[0]

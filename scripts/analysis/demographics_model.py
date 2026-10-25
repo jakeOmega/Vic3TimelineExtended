@@ -52,8 +52,8 @@ class Inputs:
     birth_limit: float = 0.0             # Birth Limit's part of P.DESIRED_TYPE (its modifier's line: 0, -0.3 or -0.45;
                                          # the script's te_demog_ms_birth_limit_part), which the Rural Exemption relieves
     malaria: int = 0                     # the state region's malaria trait level (P.MALARIA_TRAITS; calibration step 3)
-    # phase 2 step 2 (§2.5): under Full, women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last
-    # count (te_dg_fws_wk), which splits work deaths; None = the law table (outside Full, or before a count)
+    # phase 2 step 2 (§2.5): women's share of the census's own workers aged P.WORK_SPLIT_AGES at the last count
+    # (te_dg_fws_wk; women_worker_share); None = before a count
     work_female_share: float | None = None
     sex_balance: float | None = None     # men per 100 women aged 20-59 the step reads (te_dg_sxb); None = no term
     # phase 3, the late game (late-game §4.2, §3.5): people by the Gini's wealth band {k: people} (the walk's
@@ -88,10 +88,16 @@ def wealth_tfr(sol):
     return lerp_sol(sol, P.WEALTH_TFR_LOW, P.WEALTH_TFR_HIGH)
 
 
-def female_work_share(inp):
-    """Women's share of the workforce (te_demog_female_work_share): the base plus the women's-rights laws'
-    P.FEMALE_WORK_SHARE_TYPE line, within 0-1 (modifier-types stage 3)."""
-    return clamp(P.FEMALE_WORK_SHARE_DEFAULT + inp.mods.get(P.FEMALE_WORK_SHARE_TYPE, 0.0), 0.0, 1.0)
+def women_worker_share(inp):
+    """Women's share of the workers (te_demog_women_worker_share): the census's own count of women among its workers
+    aged P.WORK_SPLIT_AGES at the last count (te_dg_fws_wk), else, before a count, what the sexes' rates give equal
+    numbers of working-age women and men (sex_rates). It splits work deaths and sets the labour migrants' women's share
+    and Late Marriage's women's work, under every setting the census runs (2026-10-25: outside Full, and for the flows
+    and Late Marriage everywhere, they read the women's-rights laws' own share before)."""
+    if inp.work_female_share is not None:
+        return inp.work_female_share
+    rf, rm = sex_rates(inp)
+    return rf / max(rf + rm, 1e-4)
 
 
 def plain_multiplier(inp, cause):
@@ -209,15 +215,10 @@ def rates_from_multipliers(mult, work_f, work_m, adult):
     return qf, qm
 
 
-def work_death_share(inp):
-    """Women's share of work deaths (te_demog_work_death_share): under Full the census's own count of women among the
-    workers aged P.WORK_SPLIT_AGES at the last count (phase 2 step 2, §2.5), else the laws' share (female_work_share)."""
-    return female_work_share(inp) if inp.work_female_share is None else inp.work_female_share
-
-
 def work_split(inp, work_mult):
-    """(women's, men's) work-death multipliers: the cause multiplier x 2 x each sex's share."""
-    fw = work_death_share(inp)
+    """(women's, men's) work-death multipliers: the cause multiplier x 2 x each sex's share of the workers
+    (women_worker_share; phase 2 step 2, §2.5)."""
+    fw = women_worker_share(inp)
     return work_mult * 2 * fw, work_mult * 2 * (1 - fw)
 
 
@@ -483,11 +484,12 @@ def practice_erosion(practice, inp):
 def practice_target(practice, inp, start):
     """Where a practice's share drifts (§4.2, §4.3; te_demog_pr_target_<P>): the start less its erosion, plus Late
     Marriage's drivers, impartible inheritance on the farms (the laws' P.LM_FARMS_TYPE line x the agrarian share:
-    Primogeniture, Undivided Farm Succession) and women's paid work, within 0-1."""
+    Primogeniture, Undivided Farm Succession) and women's paid work (the women's job share x women's share of the
+    workers over parity), within 0-1."""
     target = start * (1 - practice_erosion(practice, inp))
     if practice == "lm":
         target += inp.mods.get(P.LM_FARMS_TYPE, 0.0) * inp.agrarian_share
-        target += P.LM_WOMENS_WORK * inp.female_job_share * female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
+        target += P.LM_WOMENS_WORK * inp.female_job_share * women_worker_share(inp) / P.WOMEN_WORKER_PARITY
     return clamp(target, 0.0, 1.0)
 
 
@@ -950,12 +952,12 @@ def migrant_profile(inp, balance=None, sign=0):
     """Per (class, sex) share of a net migration, summing to 1 (§2.5). balance and sign (the migration's) move the
     labour kind's women's share toward LABOUR_BALANCE_SHARE (labour_balance_weight)."""
     refugee = clamp(inp.crisis, 0.0, 1.0)
-    rights = female_work_share(inp) / P.FULL_FEMALE_WORK_SHARE
+    women = women_worker_share(inp) / P.WOMEN_WORKER_PARITY
     family = P.FAMILY_BASE + inp.mods.get(P.FAMILY_MIGRATION_TYPE, 0.0)   # the transport technologies' line
-    family += P.FAMILY_RIGHTS_WEIGHT * rights + min(P.CHAIN_CAP, P.CHAIN_STEP * inp.inflow_years)
+    family += min(P.CHAIN_CAP, P.CHAIN_STEP * inp.inflow_years)
     family = clamp(family, 0.0, 1.0 - refugee)
     labour = max(0.0, 1.0 - family - refugee)
-    labour_f = clamp(P.LABOUR_FEMALE_SHARE_MIN + inp.female_job_share * rights
+    labour_f = clamp(P.LABOUR_FEMALE_SHARE_MIN + inp.female_job_share * women
                      * (P.LABOUR_FEMALE_SHARE_MAX - P.LABOUR_FEMALE_SHARE_MIN),
                      P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX)
     labour_f += (P.LABOUR_BALANCE_SHARE - labour_f) * labour_balance_weight(balance, sign)
@@ -1035,6 +1037,9 @@ class Ring:
     lx_slot: dict = field(default_factory=dict)
     lx_out: dict = field(default_factory=dict)
     births: float = 0.0                 # the last step's births (te_dg_births; 0 after a seed): ectogenesis's share
+    # women's share of the workers aged P.WORK_SPLIT_AGES at the last count (te_dg_fws_wk; None without workers there):
+    # the next step's women_worker_share (2026-10-25)
+    fws_work: float | None = None
 
     def age_of_slot(self, k):
         """Age of slot k's people after the step of self.year."""
@@ -1160,6 +1165,8 @@ def seed(inp, year, engine_pop):
     ring.total = engine_pop
     # phase 3: a state seeded once ageing is slowed starts its bands at the steady state (te_demog_lx_seed)
     lx_seed(ring, inp, year)
+    # the seed's count of women among the workers (te_demog_work_finish), which the first step reads
+    ring.fws_work = work_figures(ring, inp, old_age(qf, qm))["fws_work"]
     return ring
 
 
@@ -1366,6 +1373,10 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         # the sex balance the step's fertility and women's rate read (te_demog_sex_births_store): the ring's before its
         # sweep, which is the census's last figure (phase 2 step 4)
         inp = replace(inp, sex_balance=structure(ring)["men_per_100_women"])
+        # women's share of the workers at the last count (te_dg_fws_wk; women_worker_share, 2026-10-25): it splits the
+        # year's work deaths and sets the labour migrants' women and Late Marriage's women's work
+        if inp.work_female_share is None:
+            inp = replace(inp, work_female_share=ring.fws_work)
         # uploaded minds' call 2: Mind Backups' restore at last step's longevity care (te_demog_cause_inputs_store)
         inp = replace(inp, backup_elig=ring.lx_elig or 0.0)
         # medicine spreads (the Causes of Death plan): the drifted values move, then the year's rates use them
@@ -1377,8 +1388,11 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
         fert = fertility(inp, e0)
         tfr = fert["tfr"]
         prof = migrant_profile(inp, inp.sex_balance, migration)
+        # the old age the step's working ages end at, read before the step (te_demog_work_setup's te_dg_wa_oa)
+        wk_old = working_ages_old_age(ring, qf, qm)
     else:
         qf, qm, mmr, tfr, prof = rates
+        wk_old = working_ages_old_age(ring, qf, qm)
         lt_f, lt_m = life_table(qf), life_table(qm)
         e0 = (lt_f["e0"] + lt_m["e0"]) / 2
         fert = {"tfr": tfr}
@@ -1518,6 +1532,8 @@ def step(ring, inp, year, engine_pop=None, war_dead=0.0, kills=0.0, migration=0.
             ring.lx_out["b50"] = lx["b50"] / births
     else:
         ring.lx_out = {}
+    # the step's count of women among the workers (te_demog_work_finish after te_demog_step_finish), for the next step
+    ring.fws_work = work_figures(ring, inp, wk_old)["fws_work"]
     out = {"lx": ring.lx_out, "mab": birth_age / births + 0.5 if births > 0 else None, "births": births, "deaths": deaths, "tfr": tfr_model, "e0": e0, "e0_f": lt_f["e0"], "e0_m": lt_m["e0"],
             "e65": (lt_f["e65"] + lt_m["e65"]) / 2, "q0_per_1000": q0_model,
             "fertility": fert, "raw": raw,

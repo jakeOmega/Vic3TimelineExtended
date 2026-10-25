@@ -1665,15 +1665,6 @@ def multipliers(o):
             o(f"add = {lit(1 - w)}")
             o("}")
             o("")
-    o("# State scope: women's share of the workforce, the base plus the women's-rights laws' line (modifier-types")
-    o("# stage 3; demographics_model.female_work_share), within 0-1.")
-    o("te_demog_female_work_share = {")
-    o(f"value = {lit(P.FEMALE_WORK_SHARE_DEFAULT)}")
-    o(f"add = modifier:{P.FEMALE_WORK_SHARE_TYPE}")
-    o("min = 0")
-    o("max = 1")
-    o("}")
-    o("")
     o("# State scope: the share of the gap to desired fertility a population can close (spec 2.3;")
     o("# demographics modifier types, stage 2): traditional methods plus the techs' contraception,")
     o("# at most 1, scaled by literacy, plus the fertility-control shift.")
@@ -1703,8 +1694,8 @@ def constants(o):
         "urban_weight": P.URBAN_WEIGHT, "war_male_share": P.WAR_DEAD_MALE_SHARE,
         "residual_noise_share": P.RESIDUAL_NOISE_SHARE,
         "labour_female_min": P.LABOUR_FEMALE_SHARE_MIN, "labour_female_max": P.LABOUR_FEMALE_SHARE_MAX,
-        "family_base": P.FAMILY_BASE, "family_rights_weight": P.FAMILY_RIGHTS_WEIGHT,
-        "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
+        "family_base": P.FAMILY_BASE, "women_worker_parity": P.WOMEN_WORKER_PARITY,
+        "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_factor_min": P.ON_TOP_FACTOR_MIN,
         "window_start_weight": P.WINDOW_START_WEIGHT,
@@ -1948,8 +1939,8 @@ def practices(o):
         o(f"value = te_demog_pr_seed_{p}")
         if p == "lm":
             o(f"add = {{ value = var:te_dg_agr_share multiply = modifier:{P.LM_FARMS_TYPE} }}")
-            o(f"add = {{ value = var:te_dg_fjob_share multiply = te_demog_female_work_share "
-              f"multiply = {lit(P.LM_WOMENS_WORK / P.FULL_FEMALE_WORK_SHARE)} }}")
+            o(f"add = {{ value = var:te_dg_fjob_share multiply = te_demog_women_worker_share "
+              f"multiply = {lit(P.LM_WOMENS_WORK / P.WOMEN_WORKER_PARITY)} }}")
         o("min = 0")
         o("max = 1")
         o("}")
