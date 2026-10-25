@@ -59,3 +59,41 @@ still reaches the milestones.
    10). Enforced in the peace, the colony moves.
 7. **The AI.** In an observer run past the first colonies, an AI holding a colony with no space programme (an heir's)
    offers it; AI powers in the race ask for colonies; neither spams the treaty screen.
+
+## Targets, colony fleets and settlers (slices 2 and 3)
+
+Design: `docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md`. The console is
+`event te_debug_space_race.3` (log our fleets, the fleets bound for each world and every colony's people; send a fleet
+now; land every fleet now; emigration on High and this month's settlers now; fill our colonies to half their room).
+Grep `debug.log` for `TE_SR_FLEETS` and `TE_SR_SETTLERS` after option a.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK colony_fleet_arrival world=<index> flown=<months> …` | once a game, the first fleet that lands in its arrival month | the global step landed it in its month; `flown` should be the transit `docs/engine/launch_windows_report.md` gives its body and drive for its departure month | `TE_SELF_CHECK BROKEN colony_fleet_arrival … late=<months>`: a fleet landed two or more months after its month, so the step missed it | land fleets from the entry's monthly pulse as well, for the country's own slots |
+| `TE_SELF_CHECK OK/BROKEN emigration_batch before=… after=… sent=…` | once a game, the first month a country sends settlers | the Space Program's state lost at least 90% of what was sent | it lost less: the strata filter removed fewer people than asked, or `state_population` reads the change only later | if the state's population falls by the batch a month later instead, read the change at the next month's step; if the filter falls short, take the batch without `strata` |
+
+1. **Targets, under every setting.** With a programme running, open the Solar System list: unclaimed worlds the
+   programme can reach show Target. Under Races Only only the current stage's worlds (and any released one) do. Pick
+   one: its row reads "Our target", Colony Fleets names it, and the next fleet goes there when its window opens, even
+   if another world's window is open first. Clear goes back to the draw.
+2. **A fleet travels (Simple or Full Colonies).** Found a programme and let a fleet leave for Mars: the world stays
+   Unclaimed, Colony Fleets lists the fleet with its world and landing (about 9 months by chemical rocket), and the
+   Mars row shows "1·9". On its landing month the founding event fires and the world reads "Ours".
+3. **Drives.** With Fusion Power the same trip in a window takes about 3 months; with Muon-Catalyzed Fusion Reactors
+   about 1, any month. The Drive line in Colony Fleets names the drive.
+4. **A race to a world.** Send a fleet to a world an AI's fleet is already bound for (its row shows the count): if
+   theirs lands first, ours founds another free world of the same planet ("Another Flag Already Flies"), or, at an
+   asteroid, is lost ("A Fleet With Nowhere to Land").
+5. **The automatic pick.** Leave the target unset: the programme sends fleets to near, cheap worlds first and does not
+   send a chemical fleet to Uranus (16 years). The AI's fleets do the same.
+6. **The stages.** Under Simple or Full, a fleet can leave for Saturn while Mars is still free (with Deep Space
+   Exploration or a colony held); the stage line shows the innermost stage with a free world.
+7. **Settlers.** Under Simple or Full, the Settlers section lists our colonies with people / room. Set Emigration to
+   Low: next month the colonies gain 500 people between them, the Space Program's Launch Capacity bill rises by about
+   5%, and the census of its state shows the emigrants. Set Mars High and Venus Closed: Mars takes most of them, Venus
+   none.
+8. **The bonus.** Option g (half the room): People off Earth reads the sum, and Off-World Population is on Solar System
+   Colonization at the multiplier its tooltip shows.
+9. **Crews and AGI.** Crews read one per 5,000 people; with Artificial General Intelligence they read AGI.
+10. **The AI's settlers.** In an observer run under Simple Colonies, a top-three space power holding colonies sets
+    Emigration to Steady within a year; its colonies' people grow.
