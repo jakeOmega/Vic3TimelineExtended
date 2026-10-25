@@ -4568,8 +4568,8 @@
   "de": "Im Bau"
  },
  "pm_grand_monument_site_desc": {
-  "en": "The monument is being built. It has no upkeep and no effects until it is dedicated.",
-  "de": "Das Monument wird gebaut. Es hat keinen Unterhalt und keine Wirkungen, bis es gewidmet wird."
+  "en": "The monument is being built. It has no effects until it is dedicated.",
+  "de": "Das Monument wird gebaut. Es hat keine Wirkungen, bis es gewidmet wird."
  },
  "pm_graphene_electric_motors": {
   "en": "Graphene Electric Motors",
@@ -4584,20 +4584,12 @@
   "de": "Grüne Montage"
  },
  "pm_grid_hvdc_interconnector": {
-  "en": "HVDC Undersea Interconnector",
-  "de": "HGÜ-Seekabelverbindung"
+  "en": "HVDC Cable",
+  "de": "HGÜ-Kabel"
  },
  "pm_grid_hvdc_interconnector_desc": {
-  "en": "A high-voltage direct-current cable joins this station to any station running one across the sea, in a state that shares a sea with this one: our own, or a country we have a $grid_interconnection_agreement$ with in our [concept_market]. Their grids become one. It does nothing in a state with no coast.",
-  "de": "Ein Hochspannungs-Gleichstromkabel verbindet diese Station mit jeder Station, die über das Meer hinweg ebenfalls eines betreibt, in einem Staat, der mit diesem ein Meer teilt: unserem eigenen oder dem eines Landes, mit dem wir ein $grid_interconnection_agreement$ auf unserem [concept_market] haben. Ihre Netze werden eins. In einem Staat ohne Küste bewirkt es nichts."
- },
- "pm_grid_no_interconnector": {
-  "en": "No Interconnector",
-  "de": "Keine Kuppelleitung"
- },
- "pm_grid_no_interconnector_desc": {
-  "en": "The station joins only the grid it is connected to by land.",
-  "de": "Die Station gehört nur zu dem Netz, mit dem sie über Land verbunden ist."
+  "en": "Converter valves and a high-voltage direct-current cable to the far shore, with a range of one [concept_sea_node] (#b $building_grid_undersea_cable_range_add$#!), which $smart_grids$ and $quantum_materials$ lengthen.",
+  "de": "Konverterventile und ein Hochspannungs-Gleichstromkabel zum gegenüberliegenden Ufer, mit einer Reichweite von einem Meeresabschnitt ([concept_sea_node], #b $building_grid_undersea_cable_range_add$#!), die $smart_grids$ und $quantum_materials$ verlängern."
  },
  "pm_grid_transfer_base": {
   "en": "Substation",
@@ -5035,13 +5027,37 @@
   "en": "Late-era whalers with electronic prey [concept_detection] and magnetic drive propulsion outproduce diesel fleets at the cost of meaningful [concept_pollution_system] and fuel demand.",
   "de": "Walfänger der Spätzeit mit elektronischer Beute-[concept_detection] und Magnetantrieb übertreffen Dieselflotten in der Ausbeute, allerdings auf Kosten spürbarer [concept_pollution_system] und eines hohen Treibstoffbedarfs."
  },
+ "pm_maintenance_graded_heavy": {
+  "en": "Heavy Maintenance",
+  "de": "Schwere Instandhaltung"
+ },
+ "pm_maintenance_graded_heavy_desc": {
+  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for railways from containerized cargo on and ports from container ports on: large, busy plant that wears out as it is used.",
+  "de": "Unterhalt zum Eineinhalbfachen des Standardsatzes an [concept_construction] pro Stufe, für Eisenbahnen ab Containerfracht und Häfen ab Containerhäfen: große, stark ausgelastete Anlagen, die sich durch Gebrauch abnutzen."
+ },
+ "pm_maintenance_graded_light": {
+  "en": "Light Maintenance",
+  "de": "Leichte Instandhaltung"
+ },
+ "pm_maintenance_graded_light_desc": {
+  "en": "Upkeep at half the standard rate of [concept_construction] per level, for railways on early or steam trains, small ports, and early and coal-fired power plants, whose levels carry little traffic or output. A later method moves the building to a higher rate.",
+  "de": "Unterhalt zur Hälfte des Standardsatzes an [concept_construction] pro Stufe, für Eisenbahnen mit frühen Zügen oder Dampfzügen, kleine Häfen sowie frühe und kohlebefeuerte Kraftwerke, deren Stufen wenig Verkehr oder Leistung tragen. Eine spätere Methode versetzt das Gebäude in einen höheren Satz."
+ },
+ "pm_maintenance_graded_standard": {
+  "en": "Standard Maintenance",
+  "de": "Standard-Instandhaltung"
+ },
+ "pm_maintenance_graded_standard_desc": {
+  "en": "Upkeep at the standard rate of [concept_construction] per level, for railways on electric or diesel trains or Centralized Traffic Control, modern ports, and oil-fired and modern fossil power plants.",
+  "de": "Unterhalt zum Standardsatz an [concept_construction] pro Stufe, für Eisenbahnen mit Elektro- oder Dieselzügen oder zentralisierter Verkehrssteuerung, moderne Häfen sowie ölbefeuerte und moderne fossile Kraftwerke."
+ },
  "pm_maintenance_heavy": {
   "en": "Heavy Maintenance",
   "de": "Schwere Instandhaltung"
  },
  "pm_maintenance_heavy_desc": {
-  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for railways, ports, roads, airports, networks, power stations and oil rigs: plant that wears out as it is used.",
-  "de": "Unterhalt zum Eineinhalbfachen des Standardsatzes an [concept_construction] pro Stufe, für Eisenbahnen, Häfen, Straßen, Flughäfen, Netze, Kraftwerke und Ölbohranlagen: Anlagen, die sich durch Gebrauch abnutzen."
+  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for roads, airports, networks, hydro and renewable power stations and oil rigs: plant that wears out as it is used.",
+  "de": "Unterhalt zum Eineinhalbfachen des Standardsatzes an [concept_construction] pro Stufe, für Straßen, Flughäfen, Netze, Wasserkraftwerke, Kraftwerke für erneuerbare Energien und Ölbohranlagen: Anlagen, die sich durch Gebrauch abnutzen."
  },
  "pm_maintenance_intensive": {
   "en": "Intensive Maintenance",
@@ -5056,8 +5072,8 @@
   "de": "Leichte Instandhaltung"
  },
  "pm_maintenance_light_desc": {
-  "en": "Upkeep at half the standard rate of [concept_construction] per level, for buildings with little plant to keep up: exchanges, academies, offices and the modern mines.",
-  "de": "Unterhalt zur Hälfte des Standardsatzes an [concept_construction] pro Stufe, für Gebäude mit wenig instand zu haltenden Anlagen: Börsen, Akademien, Büros und die modernen Minen."
+  "en": "Upkeep at half the standard rate of [concept_construction] per level, for buildings with little plant to keep up: exchanges, academies, offices and the tech metals mines.",
+  "de": "Unterhalt zur Hälfte des Standardsatzes an [concept_construction] pro Stufe, für Gebäude mit wenig instand zu haltenden Anlagen: Börsen, Akademien, Büros und die Technologiemetall-Minen."
  },
  "pm_maintenance_mechanized_mine": {
   "en": "Mechanized Workings",
@@ -5378,6 +5394,14 @@
  "pm_monument_crown_desc": {
   "en": "Dynastic portraits, a royal box, a procession that passes beneath it. Lends legitimacy while the country is crowned, and becomes contested if the crown falls. #R The dedication is permanent.#!",
   "de": "Dynastische Porträts, eine königliche Loge, ein Umzug, der darunter hindurchzieht. Verleiht Legitimität, solange das Land eine Krone trägt, und wird umstritten, wenn die Krone fällt. #R Die Widmung ist dauerhaft.#!"
+ },
+ "pm_monument_historic": {
+  "en": "To History",
+  "de": "Der Geschichte"
+ },
+ "pm_monument_historic_desc": {
+  "en": "A monument of an older age, kept for its own sake and for those who travel to see it. It honours no government and pleases no group, so no government can fall out with it. #R The dedication is permanent.#!",
+  "de": "Ein Monument aus einer älteren Zeit, um seiner selbst willen bewahrt und für alle, die zu ihm reisen, um es zu sehen. Es ehrt keine Regierung und gefällt keiner Gruppe, daher kann sich keine Regierung mit ihm überwerfen. #R Die Widmung ist dauerhaft.#!"
  },
  "pm_monument_industrial": {
   "en": "Great Exhibition Hall",
@@ -6846,6 +6870,42 @@
  "pm_spacex_starbase": {
   "en": "Starbase",
   "de": "Starbase"
+ },
+ "pm_sr_fabrication_fusion_shipyards": {
+  "en": "Fusion Shipyards",
+  "de": "Fusionswerften"
+ },
+ "pm_sr_fabrication_fusion_shipyards_desc": {
+  "en": "Orbital yards run on fusion power turn out colony modules by the dozen. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "de": "Mit Fusionsenergie betriebene Orbitalwerften fertigen Koloniemodule im Dutzend. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
+ },
+ "pm_sr_fabrication_lunar_foundries": {
+  "en": "Lunar Foundries",
+  "de": "Mondgießereien"
+ },
+ "pm_sr_fabrication_lunar_foundries_desc": {
+  "en": "Foundries on the Moon cast module frames from lunar metal and launch them from its shallow gravity well. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "de": "Gießereien auf dem Mond gießen Modulrahmen aus Mondmetall und starten sie aus seinem flachen Gravitationsbrunnen. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
+ },
+ "pm_sr_fabrication_none": {
+  "en": "No Module Fabrication",
+  "de": "Keine Modulfertigung"
+ },
+ "pm_sr_fabrication_none_desc": {
+  "en": "The programme builds no modules for our colonies.",
+  "de": "Das Programm baut keine Module für unsere Kolonien."
+ },
+ "pm_sr_fabrication_orbital_assembly": {
+  "en": "Orbital Assembly",
+  "de": "Orbitalmontage"
+ },
+ "pm_sr_fabrication_orbital_assembly_desc": {
+  "en": "Modules for our colonies are assembled in Earth orbit from parts lifted one launch at a time. Only under the Simple and Full Colonies settings of the Space Race rule.",
+  "de": "Module für unsere Kolonien werden im Erdorbit aus Teilen zusammengebaut, die Start um Start hinaufgebracht werden. Nur bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“."
+ },
+ "pm_sr_site_marker": {
+  "en": "Colony Record",
+  "de": "Kolonieregister"
  },
  "pm_st_res_hub_reserve": {
   "en": "Reserve Control",
@@ -8639,6 +8699,10 @@
   "en": "Maintenance",
   "de": "Wartung"
  },
+ "pmg_maintenance_graded": {
+  "en": "Maintenance",
+  "de": "Instandhaltung"
+ },
  "pmg_maintenance_heavy": {
   "en": "Maintenance",
   "de": "Instandhaltung"
@@ -9103,9 +9167,17 @@
   "en": "Debris Removal",
   "de": "Schrottbeseitigung"
  },
+ "pmg_space_program_module_fabrication": {
+  "en": "Module Fabrication",
+  "de": "Modulfertigung"
+ },
  "pmg_spacex_starbase": {
   "en": "Starbase",
   "de": "Starbase"
+ },
+ "pmg_sr_site_marker": {
+  "en": "Colony",
+  "de": "Kolonie"
  },
  "pmg_st_res_hub": {
   "en": "Hub Reserve",

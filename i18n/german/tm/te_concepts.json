@@ -1027,6 +1027,30 @@
   "en": "An [concept_amendment] giving each seat to whoever tops the poll. A vote for a party that can't win is wasted, so interest groups crowd into the two largest parties, which become broad coalitions. Disagreement inside the government costs less [concept_legitimacy], but the voters left without a winning party cost it some.",
   "de": "Ein [concept_amendment], der jeden Sitz an den Kandidaten mit den meisten Stimmen vergibt. Eine Stimme für eine Partei ohne Siegchance ist verloren, sodass sich Interessengruppen in den beiden größten Parteien zusammendrängen, die zu breiten Koalitionen werden. Meinungsverschiedenheiten innerhalb der Regierung kosten weniger [concept_legitimacy], doch die Wähler, die keine siegreiche Partei haben, kosten etwas davon."
  },
+ "amendment_habeas_corpus_suspension_desc": {
+  "en": "An [concept_amendment] letting the government hold people without trial for the duration of a war. Dissent is cheaper to suppress, and the courts, which can't free a prisoner, earn less [concept_judicial_independence]. Only in wartime, and it lapses when the war ends.",
+  "de": "Ein [concept_amendment], der es der Regierung erlaubt, Menschen für die Dauer eines Krieges ohne Gerichtsverfahren festzuhalten. Widerspruch lässt sich billiger unterdrücken, und die Gerichte, die keinen Gefangenen freilassen können, erlangen weniger [concept_judicial_independence]. Nur in Kriegszeiten; er läuft aus, sobald der Krieg endet."
+ },
+ "amendment_human_in_the_loop_desc": {
+  "en": "An [concept_amendment] giving everyone a right to appeal a machine's ruling to a human judge. The public trusts rulings a person can review, at the cost of half the law's administrative saving, and under Algorithmic Governance a human signature ends the captured court's override.",
+  "de": "Ein [concept_amendment], der jedem das Recht gibt, gegen das Urteil einer Maschine bei einem menschlichen Richter Berufung einzulegen. Die Öffentlichkeit vertraut Urteilen, die ein Mensch überprüfen kann, auf Kosten der Hälfte der Verwaltungseinsparung des Gesetzes, und unter Algorithmischer Regierungsführung beendet eine menschliche Unterschrift die Übersteuerung durch das vereinnahmte Gericht."
+ },
+ "amendment_judicial_elections": {
+  "en": "Judicial Elections",
+  "de": "Richterwahlen"
+ },
+ "amendment_judicial_elections_desc": {
+  "en": "An [concept_amendment] putting judges on the ballot. Voters trust judges they chose, but judges who face the voters defer to them, so the courts can earn less [concept_judicial_independence]. Only under an elected government.",
+  "de": "Ein [concept_amendment], der Richter auf den Stimmzettel setzt. Wähler vertrauen Richtern, die sie selbst gewählt haben, doch Richter, die sich den Wählern stellen, beugen sich ihnen, sodass die Gerichte weniger [concept_judicial_independence] erlangen können. Nur unter einer gewählten Regierung."
+ },
+ "amendment_jury_trials": {
+  "en": "Jury Trials",
+  "de": "Geschworenengerichte"
+ },
+ "amendment_jury_trials_desc": {
+  "en": "An [concept_amendment] sending serious cases to a jury of citizens. The courts earn more [concept_judicial_independence] and the public more say, but juries acquit the government's enemies, so suppression costs more.",
+  "de": "Ein [concept_amendment], der schwere Fälle vor ein Geschworenengericht aus Bürgern bringt. Die Gerichte erlangen mehr [concept_judicial_independence] und die Öffentlichkeit mehr Mitsprache, doch Geschworene sprechen die Feinde der Regierung frei, sodass Unterdrückung mehr kostet."
+ },
  "amendment_langreform_advisory_panel_desc": {
   "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
   "de": "Ein Gremium von Gelehrten veröffentlicht maßgebliche Richtlinien zum Sprachgebrauch, die moralisches Gewicht tragen, aber keine Gesetzeskraft haben."
@@ -1155,9 +1179,21 @@
   "en": "An [concept_amendment] carving out exceptions for 'military necessity' in humanitarian regulations, appeasing the armed forces at the cost of international reputation.",
   "de": "Ein [concept_amendment], der Ausnahmen für „militärische Notwendigkeit“ in humanitären Vorschriften schafft und damit die Streitkräfte besänftigt, auf Kosten des internationalen Ansehens."
  },
+ "amendment_military_tribunals": {
+  "en": "Military Tribunals for Civilians",
+  "de": "Militärgerichte für Zivilisten"
+ },
+ "amendment_military_tribunals_desc": {
+  "en": "An [concept_amendment] sending civilians accused of rebellion or sedition before courts-martial, in peace as in war. Suppression is cheaper and the Armed Forces stronger, and the courts earn less [concept_judicial_independence].",
+  "de": "Ein [concept_amendment], der Zivilisten, denen Rebellion oder Aufwiegelung vorgeworfen wird, vor Kriegsgerichte stellt, im Frieden wie im Krieg. Unterdrückung wird billiger und die Streitkräfte stärker, und die Gerichte erlangen weniger [concept_judicial_independence]."
+ },
  "amendment_minority_script_preservation_desc": {
   "en": "An [concept_amendment] requiring that minority writing systems be taught alongside the reformed national script in regions where they are traditionally used.",
   "de": "Ein [concept_amendment], der vorschreibt, dass in Regionen, in denen sie traditionell verwendet werden, Minderheitenschriftsysteme neben der reformierten Nationalschrift gelehrt werden."
+ },
+ "amendment_mixed_commercial_courts_desc": {
+  "en": "An [concept_amendment] sending merchants' disputes with foreigners to courts with foreign and local judges, beside the religious or executive courts. Lenders charge less, the courts can earn a little more [concept_judicial_independence], and the clergy lose cases to them.",
+  "de": "Ein [concept_amendment], der Streitigkeiten von Kaufleuten mit Ausländern an Gerichte mit ausländischen und einheimischen Richtern verweist, neben den religiösen Gerichten oder der Kabinettsjustiz. Kreditgeber verlangen weniger, die Gerichte können etwas mehr [concept_judicial_independence] erlangen, und der Klerus verliert Fälle an sie."
  },
  "amendment_national_champion_exemption_desc": {
   "en": "An [concept_amendment] exempting the nation's largest company from antitrust breakup, preserving a 'national champion' capable of competing internationally.",
@@ -1174,6 +1210,14 @@
  "amendment_official_bilingualism_desc": {
   "en": "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both.",
   "de": "Ein [concept_amendment], der die am weitesten verbreitete Minderheitensprache neben der Nationalsprache zur Mitamtssprache erklärt, mit allen staatlichen Dienstleistungen in beiden Sprachen."
+ },
+ "amendment_peoples_tribunals": {
+  "en": "People’s Tribunals",
+  "de": "Volkstribunale"
+ },
+ "amendment_peoples_tribunals_desc": {
+  "en": "An [concept_amendment] setting up the ruling party's own courts, which judge by its idea of justice. Suppression is cheaper and movements breed loyalists, and lenders charge for justice that follows the party line. Only under a Single-Party State, and it lapses if the party loses its monopoly.",
+  "de": "Ein [concept_amendment], der eigene Gerichte der Regierungspartei einrichtet, die nach deren Vorstellung von Gerechtigkeit urteilen. Unterdrückung wird billiger, und Bewegungen bringen Loyalisten hervor, während Kreditgeber für eine Justiz, die der Parteilinie folgt, einen Aufpreis verlangen. Nur unter einem Einparteienstaat; er läuft aus, wenn die Partei ihr Monopol verliert."
  },
  "amendment_perpetual_trusts": {
   "en": "Perpetual Dynastic Trusts",
@@ -3232,8 +3276,8 @@
   "de": "Richterliche Unabhängigkeit"
  },
  "concept_judicial_independence_desc": {
-  "en": "How far the courts are trusted to rule without fear of the government, from 0 to 100. Each Judiciary law sets a ceiling: Executive Tribunals 10, Religious Courts 40, Algorithmic Jurisprudence 60, Statutory Courts 70, Constitutional Review and Judicial Supremacy 100. Under Autocracy, Single-Party State or Algorithmic Governance the ceiling is halved, since the executive can ignore its courts. The score rises by 4 a year toward the ceiling and falls by 10 a year above it.\\n\\nIn proportion to the score, the courts add [concept_legitimacy], lower the [concept_banking_credit_standing] premium, make Capitalists invest more and calm movements that lose a law change. Under Constitutional Review and Judicial Supremacy they also hear challenges to changes in the constitution's core, which lowers those laws' enactment success (under Judicial Supremacy, the rights laws' too), unless the executive can ignore them. Forcing a law through spends the score, and a change that leaves it far above the new ceiling unsettles lenders and costs legitimacy for some years.\\n\\nNow #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_jud_ceiling')|0]#!.",
-  "de": "Wie weit den Gerichten zugetraut wird, ohne Furcht vor der Regierung zu urteilen, von 0 bis 100. Jedes Justizgesetz legt eine Obergrenze fest: Kabinettsjustiz 10, Religiöse Gerichte 40, Algorithmische Rechtsprechung 60, Gesetzesgebundene Gerichte 70, Verfassungsgerichtsbarkeit und Vorrang der Justiz 100. Unter Autokratie, Einparteienstaat oder Algorithmischer Regierungsführung wird die Obergrenze halbiert, da die Exekutive ihre Gerichte ignorieren kann. Der Wert steigt um 4 pro Jahr auf die Obergrenze zu und fällt um 10 pro Jahr, wenn er darüber liegt.\\n\\nIm Verhältnis zum Wert fügen die Gerichte [concept_legitimacy] hinzu, senken den Aufschlag der [concept_banking_credit_standing], lassen Kapitalisten mehr investieren und beruhigen Bewegungen, die eine Gesetzesänderung verlieren. Unter Verfassungsgerichtsbarkeit und Vorrang der Justiz hören sie außerdem Anfechtungen von Änderungen am Kern der Verfassung an, was den Erlasserfolg dieser Gesetze senkt (unter Vorrang der Justiz auch den der Rechtegesetze), es sei denn, die Exekutive kann sie ignorieren. Ein Gesetz durchzudrücken verbraucht den Wert, und eine Änderung, die ihn weit über der neuen Obergrenze zurücklässt, verunsichert Kreditgeber und kostet einige Jahre lang Legitimität.\\n\\nDerzeit #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!, mit Kurs auf #v [GetPlayer.MakeScope.ScriptValue('te_jud_ceiling')|0]#!."
+  "en": "How far the courts are trusted to rule without fear of the government, from 0 to 100. Each Judiciary law sets a ceiling: Executive Tribunals 10, Religious Courts 40, Algorithmic Jurisprudence 60, Statutory Courts 70, Constitutional Review and Judicial Supremacy 100. Under Autocracy, Single-Party State or Algorithmic Governance the ceiling is halved, since the executive can ignore its courts. The score rises by 4 a year toward the ceiling and falls by 10 a year above it.\\n\\nIn proportion to the score, the courts add [concept_legitimacy], lower the [concept_banking_credit_standing] premium, make Capitalists invest more and calm movements that lose a law change. Under Constitutional Review and Judicial Supremacy they also hear challenges to changes in the constitution's core, which lowers those laws' enactment success (under Judicial Supremacy, the rights laws' too), unless the executive can ignore them. Forcing a law through spends the score, and under Constitutional Review and Judicial Supremacy the law then goes to the courts, which strike it down if the score is high enough; the government can comply, defy them or pack the bench. A change that leaves the score far above the new ceiling unsettles lenders and costs legitimacy for some years.\\n\\nNow #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!, heading for #v [GetPlayer.MakeScope.ScriptValue('te_jud_ceiling')|0]#!.",
+  "de": "Wie weit den Gerichten zugetraut wird, ohne Furcht vor der Regierung zu urteilen, von 0 bis 100. Jedes Justizgesetz legt eine Obergrenze fest: Kabinettsjustiz 10, Religiöse Gerichte 40, Algorithmische Rechtsprechung 60, Gesetzesgebundene Gerichte 70, Verfassungsgerichtsbarkeit und Vorrang der Justiz 100. Unter Autokratie, Einparteienstaat oder Algorithmischer Regierungsführung wird die Obergrenze halbiert, da die Exekutive ihre Gerichte ignorieren kann. Der Wert steigt um 4 pro Jahr auf die Obergrenze zu und fällt um 10 pro Jahr, wenn er darüber liegt.\\n\\nIm Verhältnis zum Wert fügen die Gerichte [concept_legitimacy] hinzu, senken den Aufschlag der [concept_banking_credit_standing], lassen Kapitalisten mehr investieren und beruhigen Bewegungen, die eine Gesetzesänderung verlieren. Unter Verfassungsgerichtsbarkeit und Vorrang der Justiz hören sie außerdem Anfechtungen von Änderungen am Kern der Verfassung an, was den Erlasserfolg dieser Gesetze senkt (unter Vorrang der Justiz auch den der Rechtegesetze), es sei denn, die Exekutive kann sie ignorieren. Ein Gesetz durchzudrücken verbraucht den Wert, und unter Verfassungsgerichtsbarkeit und Vorrang der Justiz geht das Gesetz danach vor die Gerichte, die es aufheben, wenn der Wert hoch genug ist; die Regierung kann sich fügen, sich widersetzen oder die Richterbank aufstocken. Eine Änderung, die den Wert weit über der neuen Obergrenze zurücklässt, verunsichert Kreditgeber und kostet einige Jahre lang Legitimität.\\n\\nDerzeit #v [GetPlayer.MakeScope.ScriptValue('te_jud_display')|0]#!, mit Kurs auf #v [GetPlayer.MakeScope.ScriptValue('te_jud_ceiling')|0]#!."
  },
  "concept_launch_authority": {
   "en": "Launch Authority",
@@ -3396,8 +3440,8 @@
   "de": "Stromnetz"
  },
  "concept_power_grid_desc": {
-  "en": "Grid Transfer Stations that share their $electricity$. A grid starts as one country's stations in one [concept_market_area], and joins another group across the sea where both ends run an $pm_grid_hvdc_interconnector$, or another country's stations across a border under a $grid_interconnection_agreement$ in the same [concept_market]. Once a month the grid gives every state on it the same supply of $electricity$ against its demand: states with power to spare send it as $grid_power$, short states receive it, and a receiving station loses the rest of its owner's #b Grid Transmission Efficiency#! on the way.",
-  "de": "Netzübergabestationen, die $electricity$ untereinander teilen. Ein Netz beginnt als die Stationen eines Landes in einem [concept_market_area] und schließt sich über das Meer mit einer anderen Gruppe zusammen, wo an beiden Enden eine $pm_grid_hvdc_interconnector$ betrieben wird, oder mit den Stationen eines anderen Landes über eine Grenze hinweg im Rahmen eines $grid_interconnection_agreement$ im selben [concept_market]. Einmal im Monat gibt das Netz jedem angeschlossenen Staat gemessen an seiner Nachfrage das gleiche Angebot an $electricity$: Staaten mit Energieüberschuss speisen diesen als $grid_power$ ein, Staaten mit Mangel erhalten ihn, und eine empfangende Station verliert unterwegs den Teil, den die #b Netzübertragungseffizienz#! ihres Besitzers nicht abdeckt."
+  "en": "Grid Transfer Stations that share their $electricity$. A grid starts as one country's stations in one [concept_market_area], and joins another group across the sea where both ends have an undersea cable (an $building_grid_hvdc_interconnector$) and either end's $building_grid_undersea_cable_range_add$ reaches the other, or another country's stations across a border under a $grid_interconnection_agreement$, in our [concept_market] or another. Once a month the grid gives every state on it the same supply of $electricity$ against its demand: states with power to spare send it as $grid_power$, short states receive it, and a receiving station loses the rest of its owner's #b Grid Transmission Efficiency#! on the way. $grid_power$ has a fixed price, so power that crosses between markets is paid for at it.",
+  "de": "Netzübergabestationen, die $electricity$ untereinander teilen. Ein Netz beginnt als die Stationen eines Landes in einem [concept_market_area] und schließt sich über das Meer mit einer anderen Gruppe zusammen, wo beide Enden ein Seekabel ($building_grid_hvdc_interconnector$) haben und die $building_grid_undersea_cable_range_add$ eines der beiden Enden das andere erreicht, oder mit den Stationen eines anderen Landes über eine Grenze hinweg unter einem $grid_interconnection_agreement$, in unserem [concept_market] oder einem anderen. Einmal im Monat gibt das Netz jedem angeschlossenen Staat gemessen an seiner Nachfrage das gleiche Angebot an $electricity$: Staaten mit Energieüberschuss speisen diesen als $grid_power$ ein, Staaten mit Mangel erhalten ihn, und eine empfangende Station verliert unterwegs den Teil, den die #b Netzübertragungseffizienz#! ihres Besitzers nicht abdeckt. $grid_power$ hat einen festen Preis, daher wird Strom, der zwischen Märkten fließt, dazu bezahlt."
  },
  "concept_religious_revival": {
   "en": "Religious Revival",
@@ -3492,8 +3536,8 @@
   "de": "Die Stufe, auf der ein [concept_space_milestone] finanziert wird, von 0 bis zu einer Obergrenze, die mit der Technologie steigt. Jede Stufe erhöht das Tempo jedes laufenden Meilensteins um 0,5 pro Monat und kostet jede Woche Innovation."
  },
  "concept_sr_setback_risk_desc": {
-  "en": "The chance each month that a running [concept_space_milestone] suffers a setback and loses progress, between 1% and 50%. No roll is made during the six months of review after most Ambitious failures.",
-  "de": "Die Wahrscheinlichkeit, mit der ein laufender [concept_space_milestone] jeden Monat einen Rückschlag erleidet und Fortschritt verliert, zwischen 1% und 50%. In den sechs Monaten der Überprüfung nach den meisten ehrgeizigen Fehlschlägen wird nicht gewürfelt."
+  "en": "The chance each month that a running [concept_space_milestone] suffers a setback and loses some months of progress, between 1% and 50%. No roll is made during the six months of review after most Ambitious failures.",
+  "de": "Die Wahrscheinlichkeit, mit der ein laufender [concept_space_milestone] jeden Monat einen Rückschlag erleidet und den Fortschritt einiger Monate verliert, zwischen 1% und 50%. In den sechs Monaten der Überprüfung nach den meisten ehrgeizigen Fehlschlägen wird nicht gewürfelt."
  },
  "concept_st_res_active_rate_desc": {
   "en": "Gross weekly volume the Strategic Reserve Hub is actually trading on the market — equal to [concept_st_res_rate_setting] plus the current weekly decay loss. Storing at +1/week with 0.4 weekly decay means the hub buys 1.4/week so the stockpile nets +1/week after spoilage. With the rate setting at zero but the stockpile non-empty, Active equals the decay rate (the hub buys just enough to maintain the stockpile against losses). Capped by the Hub Flow Cap and scaled by hub [concept_throughput] modifiers.",
@@ -3580,8 +3624,8 @@
   "de": "Die Produktion von Kunst zieht kulturinteressierte Touristen an. Staaten mit aktiver Kunstindustrie erhalten einen [concept_throughput]-Bonus durch Galerien, Ateliers und kulturelle Veranstaltungen."
  },
  "concept_tourism_base_appeal_desc": {
-  "en": "The inherent attractiveness of a state to tourists, based on its natural features, climate, and geography. This is a fixed baseline that other factors build upon.",
-  "de": "Die inhärente Attraktivität eines Staates für Touristen, basierend auf seinen natürlichen Merkmalen, seinem Klima und seiner Geografie. Dies ist eine feste Ausgangsbasis, auf der andere Faktoren aufbauen."
+  "en": "The inherent attractiveness of a state to tourists, based on its natural features, climate, geography and townscape. A state's historical monuments count in the monuments instead, so their tourism goes with them. This is the baseline that other factors build upon.",
+  "de": "Die inhärente Attraktivität eines Staates für Touristen, basierend auf seinen natürlichen Merkmalen, seinem Klima, seiner Geografie und seinem Stadtbild. Die historischen Monumente eines Staates zählen stattdessen bei den Monumenten, sodass der Tourismus, den sie anziehen, mit ihnen steht und fällt. Dies ist die Ausgangsbasis, auf der andere Faktoren aufbauen."
  },
  "concept_tourism_cities": {
   "en": "Cities",
@@ -3604,16 +3648,16 @@
   "de": "Monumente"
  },
  "concept_tourism_monuments_desc": {
-  "en": "Historical monuments, landmarks, and world wonders are major tourist attractions, significantly boosting [concept_tourism_throughput].",
-  "de": "Historische Monumente, Wahrzeichen und Weltwunder sind bedeutende touristische Attraktionen und steigern den [concept_tourism_throughput] erheblich."
+  "en": "Historical monuments, landmarks, and world wonders are major tourist attractions, significantly boosting [concept_tourism_output].",
+  "de": "Historische Monumente, Wahrzeichen und Weltwunder sind bedeutende touristische Attraktionen und steigern den [concept_tourism_output] erheblich."
  },
  "concept_tourism_output": {
   "en": "Tourism Output",
   "de": "Tourismusertrag"
  },
  "concept_tourism_output_desc": {
-  "en": "The total output bonus for the [concept_tourism_system] industry in this state. It starts from the state's base appeal and city rank; airports, some laws, pollution, [concept_turmoil] and other modifiers then raise or lower it. Higher city ranks and more appealing locations produce more tourism revenue.",
-  "de": "Der gesamte Produktionsbonus für die Branche [concept_tourism_system] in diesem Staat. Er beginnt bei der Grundattraktivität und dem Stadtrang des Staates; Flughäfen, einige Gesetze, Verschmutzung, [concept_turmoil] und andere Modifikatoren heben oder senken ihn danach. Höhere Stadtränge und attraktivere Standorte erzeugen mehr Tourismuseinnahmen."
+  "en": "The total output bonus for the [concept_tourism_system] industry in this state. It starts from the state's base appeal, city rank and monuments; airports, some laws, pollution, [concept_turmoil] and other modifiers then raise or lower it. Higher city ranks and more appealing locations produce more tourism revenue.",
+  "de": "Der gesamte Produktionsbonus für die Branche [concept_tourism_system] in diesem Staat. Er beginnt bei der Grundattraktivität, dem Stadtrang und den Monumenten des Staates; Flughäfen, einige Gesetze, Verschmutzung, [concept_turmoil] und andere Modifikatoren heben oder senken ihn danach. Höhere Stadtränge und attraktivere Standorte erzeugen mehr Tourismuseinnahmen."
  },
  "concept_tourism_parks": {
   "en": "Parks",
@@ -3636,8 +3680,8 @@
   "de": "Tourismusdurchsatz"
  },
  "concept_tourism_throughput_desc": {
-  "en": "The [concept_throughput] multiplier for the [concept_tourism_system] industry, representing how accessible and attractive the state is to visitors. Improved by excess infrastructure, art production, parks, and monuments.",
-  "de": "Der [concept_throughput]-Multiplikator für die Branche [concept_tourism_system], der widerspiegelt, wie zugänglich und attraktiv der Staat für Besucher ist. Verbessert durch überschüssige Infrastruktur, Kunstproduktion, Parks und Monumente."
+  "en": "The [concept_throughput] multiplier for the [concept_tourism_system] industry, representing how accessible and attractive the state is to visitors. Improved by excess infrastructure, art production and parks.",
+  "de": "Der [concept_throughput]-Multiplikator für die Branche [concept_tourism_system], der widerspiegelt, wie zugänglich und attraktiv der Staat für Besucher ist. Verbessert durch überschüssige Infrastruktur, Kunstproduktion und Parks."
  },
  "concept_tradecraft": {
   "en": "Tradecraft",
@@ -4027,6 +4071,10 @@
   "en": "Add the Multicultural Ideology to the Intelligentsia [concept_interest_group].",
   "de": "Fügt der [concept_interest_group] der Intellektuellen die Multikulturelle Ideologie hinzu."
  },
+ "country_amendment_lapses_at_peace_bool_desc": {
+  "en": "This ends at the next monthly update after the war does.",
+  "de": "Dies endet bei der nächsten monatlichen Aktualisierung nach dem Ende des Krieges."
+ },
  "country_banking_lock_asset_relief_bool_desc": {
   "en": "The current [concept_financial_regulation] law disallows government purchase of distressed financial assets.",
   "de": "Das aktuelle Gesetz zur [concept_financial_regulation] untersagt dem Staat den Aufkauf notleidender Finanzanlagen."
@@ -4126,6 +4174,10 @@
  "country_court_challenges_ignored_bool_desc": {
   "en": "No court challenges a change to the constitution, whatever the Judiciary law.",
   "de": "Kein Gericht ficht eine Verfassungsänderung an, gleich welches Justizgesetz gilt."
+ },
+ "country_court_reviews_forced_laws_bool_desc": {
+  "en": "A law forced through by Forceful Legislation goes to the courts once it passes. Six months later they strike it down if [concept_judicial_independence] is at least #v 90#! when the law was only expedited, #v 60#! when it was pushed forward decisively or #v 30#! when it was forced through. The government can then comply, defy the court or pack it.",
+  "de": "Ein Gesetz, das per Gesetzgebung mit harter Hand durchgesetzt wurde, geht vor die Gerichte, sobald es verabschiedet ist. Sechs Monate später heben sie es auf, wenn die [concept_judicial_independence] mindestens #v 90#! beträgt, falls das Gesetz nur beschleunigt wurde, #v 60#!, falls es entschlossen vorangetrieben wurde, oder #v 30#!, falls es durchgesetzt wurde. Die Regierung kann sich dann fügen, sich dem Gericht widersetzen oder die Richterbank aufstocken."
  },
  "country_homelands_can_change_bool_desc": {
   "en": "Allows [concept_homeland] assignments to shift over time based on which cultures predominantly inhabit a state.",
@@ -4931,6 +4983,50 @@
   "en": "#b Debtor:#!\\n• Debt-load risk premium is reduced as under a lender-of-last-resort guarantee; relief shrinks with its past guarantee calls.\\n• #R Pays 0.1% of its GDP every month#! to the receiver. Receives #R no bailout#! on default.\\n#b Receiver:#!\\n• Collects the monthly payment; takes on risk premium equal to the debtor’s saving #v × debtor GDP ÷ receiver GDP#!.\\n#b Ends when:#! the debtor stays below #v 25%#! of its credit limit and out of default for #v 12 consecutive months#!, or the receiver defaults.",
   "de": "#b Schuldner:#!\\n• Der Risikoaufschlag durch die Schuldenlast wird wie unter einer Garantie als Kreditgeber letzter Instanz verringert; die Entlastung schrumpft mit früheren Garantieabrufen.\\n• #R Zahlt monatlich 0,1% seines BIP#! an den Verwalter. Erhält bei Zahlungsausfall #R keine Rettung#!.\\n#b Verwalter:#!\\n• Erhält die monatliche Zahlung; übernimmt einen Risikoaufschlag in Höhe der Ersparnis des Schuldners #v × BIP des Schuldners ÷ BIP des Verwalters#!.\\n#b Endet, wenn:#! der Schuldner unter #v 25%#! seines Kreditlimits und #v 12 Monate in Folge#! ohne Zahlungsausfall bleibt, oder der Verwalter zahlungsunfähig wird."
  },
+ "decol_iw_accords_mandate_modifier_desc": {
+  "en": "We ended a war to keep a colony by signing away its independence at the table, under a leader with the mandate to do it.",
+  "de": "Wir haben einen Krieg um den Erhalt einer Kolonie beendet, indem wir ihre Unabhängigkeit am Verhandlungstisch abgetreten haben, unter einer Führung mit dem Mandat dazu."
+ },
+ "decol_iw_accords_modifier_desc": {
+  "en": "We ended a war to keep a colony by signing away its independence at the table.",
+  "de": "Wir haben einen Krieg um den Erhalt einer Kolonie beendet, indem wir ihre Unabhängigkeit am Verhandlungstisch abgetreten haben."
+ },
+ "decol_iw_allied_arms_modifier_desc": {
+  "en": "A friendly great power is supplying our forces in the war to keep a colony.",
+  "de": "Eine befreundete Großmacht versorgt unsere Truppen im Krieg um den Erhalt einer Kolonie."
+ },
+ "decol_iw_fighters_modifier_desc": {
+  "en": "We are fighting the colonial power that ruled us. Our fighters know the land, melt into the villages after a defeat, and the young men come forward faster than they can be trained.",
+  "de": "Wir kämpfen gegen die Kolonialmacht, die uns beherrscht hat. Unsere Kämpfer kennen das Land, tauchen nach einer Niederlage in den Dörfern unter, und die jungen Männer melden sich schneller, als sie ausgebildet werden können."
+ },
+ "decol_iw_foreign_arms_modifier_desc": {
+  "en": "Great powers that oppose colonial rule are sending us rifles, instructors and money.",
+  "de": "Großmächte, die sich gegen die Kolonialherrschaft stellen, schicken uns Gewehre, Ausbilder und Geld."
+ },
+ "decol_iw_general_mandate_modifier_desc": {
+  "en": "A general called to power to end the colonial crisis governs with the army's trust and the public's.",
+  "de": "Ein General, der an die Macht gerufen wurde, um die Kolonialkrise zu beenden, regiert mit dem Vertrauen der Armee und der Öffentlichkeit."
+ },
+ "decol_iw_hold_the_line_modifier_desc": {
+  "en": "The government refused to give way to the army and the settlers' committees, and it governs a country that half believes it has been betrayed.",
+  "de": "Die Regierung weigerte sich, vor der Armee und den Komitees der Siedler nachzugeben, und regiert ein Land, das halb glaubt, verraten worden zu sein."
+ },
+ "decol_iw_home_front_modifier_desc": {
+  "en": "Every year of war to keep our colonies costs the government more of the public's faith.",
+  "de": "Jedes Jahr Krieg um den Erhalt unserer Kolonien kostet die Regierung mehr vom Vertrauen der Öffentlichkeit."
+ },
+ "decol_iw_lost_modifier_desc": {
+  "en": "We fought to keep a colony and lost. The defeat has shaken the government and our standing in the world.",
+  "de": "Wir haben um den Erhalt einer Kolonie gekämpft und verloren. Die Niederlage hat die Regierung und unser Ansehen in der Welt erschüttert."
+ },
+ "decol_iw_negotiation_modifier_desc": {
+  "en": "Negotiating with a declared government in the middle of a rising has spent the government's authority.",
+  "de": "Mitten in einem Aufstand mit einer ausgerufenen Regierung zu verhandeln, hat die Autorität der Regierung verbraucht."
+ },
+ "decol_iw_officers_crushed_modifier_desc": {
+  "en": "The regiments that stayed loyal put down the officers who rose against the colonial wars. The government survived, and everyone saw what it took.",
+  "de": "Die Regimenter, die loyal geblieben waren, haben die Offiziere niedergeschlagen, die sich gegen die Kolonialkriege erhoben. Die Regierung hat überlebt, und jeder hat gesehen, was es gekostet hat."
+ },
  "decolonization_negotiations_modifier": {
   "en": "Decolonization Negotiations",
   "de": "Dekolonisierungsverhandlungen"
@@ -5058,6 +5154,14 @@
  "dp_nuclear_exchange": {
   "en": "War After a Nuclear Exchange",
   "de": "Krieg nach einem nuklearen Schlagabtausch"
+ },
+ "dp_te_colonial_war_desc": {
+  "en": "Sets the initiating [concept_war_goal] to take back the colony that declared its independence.",
+  "de": "Setzt das auslösende [concept_war_goal] auf die Rückeroberung der Kolonie, die ihre Unabhängigkeit erklärt hat."
+ },
+ "dp_te_independence_war_desc": {
+  "en": "Sets the initiating [concept_war_goal] to keep the independence a colony declared from its colonial power.",
+  "de": "Setzt das auslösende [concept_war_goal] auf den Erhalt der Unabhängigkeit, die eine Kolonie gegenüber ihrer Kolonialmacht erklärt hat."
  },
  "dp_te_un_mandate_restore_state_desc": {
   "en": "Sets the initiating [concept_war_goal] to recover the [concept_state] the [concept_un_general_assembly] has authorized us to recover. Only available while we hold an unexercised mandate against this [concept_country]. #R The mandate covers this one demand:#! adding any other demand against that country for territory, subjugation, regime change or humiliation to the same [concept_diplomatic_play] voids it, earns the Assembly's condemnation and suspends our standing benefits for ten years. Backing down from the play forfeits it as well.",
@@ -6020,8 +6124,8 @@
   "de": "Eine gegenseitige Vereinbarung, die [Concept('concept_power_grid', 'Stromnetze')] beider Länder dort zu verbinden, wo sie aneinandergrenzen, damit Kraftwerke auf der einen Seite die andere versorgen können."
  },
  "grid_interconnection_agreement_effects_desc": {
-  "en": "• Our $building_grid_transfer_station$s and theirs in bordering states of one [concept_market_area] share a [concept_power_grid].\\n• Stations running an $pm_grid_hvdc_interconnector$ on both sides join across the sea.\\n• Both countries must be in the same [concept_market].",
-  "de": "• Unsere und ihre Gebäude der Art $building_grid_transfer_station$ in aneinandergrenzenden Staaten im selben [concept_market_area] teilen sich ein [concept_power_grid].\\n• Stationen, die auf beiden Seiten eine $pm_grid_hvdc_interconnector$ betreiben, verbinden sich über das Meer.\\n• Beide Länder müssen im selben [concept_market] liegen."
+  "en": "• Our $building_grid_transfer_station$s and theirs in bordering states share a [concept_power_grid].\\n• Stations with an undersea cable ($building_grid_hvdc_interconnector$) on both sides join across the sea, when either one's $building_grid_undersea_cable_range_add$ reaches the other.\\n• Between two [concept_market]s, the power that crosses is paid for at $grid_power$'s fixed price: the sending market's stations are paid for all they send, and the receiving market's pay for all they receive.",
+  "de": "• Unsere und ihre Gebäude der Art $building_grid_transfer_station$ in aneinandergrenzenden Staaten teilen sich ein [concept_power_grid].\\n• Stationen mit einem Seekabel ($building_grid_hvdc_interconnector$) auf beiden Seiten verbinden sich über das Meer, wenn die $building_grid_undersea_cable_range_add$ eines der beiden Kabel das andere erreicht.\\n• Zwischen zwei [Concept('concept_market', 'Märkten')] wird der Strom, der die Grenze überquert, zum festen Preis von $grid_power$ abgerechnet: Die Stationen des sendenden Marktes werden für alles bezahlt, was sie senden, und die des empfangenden Marktes bezahlen für alles, was sie empfangen."
  },
  "grid_power": {
   "en": "Grid Power",
@@ -6295,6 +6399,38 @@
   "en": "Cadet Sons in the Colonies",
   "de": "Nachgeborene Söhne in den Kolonien"
  },
+ "inh_cohort_enterprise": {
+  "en": "A Cohort of Founders",
+  "de": "Eine Gründergeneration"
+ },
+ "inh_cohort_enterprise_desc": {
+  "en": "The first young adults to receive the capital stake were encouraged to put it into businesses and farms of their own.",
+  "de": "Die ersten jungen Erwachsenen, die das Startkapital erhielten, wurden ermutigt, es in eigene Unternehmen und Höfe zu stecken."
+ },
+ "inh_cohort_schooled": {
+  "en": "A Schooled Cohort",
+  "de": "Eine gebildete Generation"
+ },
+ "inh_cohort_schooled_desc": {
+  "en": "The capital stake may only pay for schooling and training, and someone has to check that it does.",
+  "de": "Das Startkapital darf nur Schulbildung und Ausbildung bezahlen, und jemand muss prüfen, dass es das tut."
+ },
+ "inh_cohort_spent": {
+  "en": "A Cohort with Money to Spend",
+  "de": "Eine Generation mit Geld zum Ausgeben"
+ },
+ "inh_cohort_spent_desc": {
+  "en": "The first young adults to receive the capital stake spent it as they chose.",
+  "de": "Die ersten jungen Erwachsenen, die das Startkapital erhielten, gaben es aus, wie sie wollten."
+ },
+ "inh_commune_repartition": {
+  "en": "Repartitioned Holdings",
+  "de": "Neu verteilter Besitz"
+ },
+ "inh_commune_repartition_desc": {
+  "en": "The commune reallocates holdings that fall empty, so nobody improves land the next reallocation may take away.",
+  "de": "Die Dorfgemeinde teilt frei gewordenen Landbesitz neu zu, sodass niemand Land verbessert, das ihm die nächste Neuverteilung wegnehmen kann."
+ },
  "inh_concentrated_property": {
   "en": "Concentrated Property",
   "de": "Konzentriertes Eigentum"
@@ -6327,6 +6463,22 @@
   "en": "A New Dynasty",
   "de": "Eine neue Dynastie"
  },
+ "inh_estates_audited": {
+  "en": "Estate Audits",
+  "de": "Nachlassprüfungen"
+ },
+ "inh_estates_audited_desc": {
+  "en": "Inspectors are going through the estates of every official to find what was hidden from the state.",
+  "de": "Prüfer gehen die Nachlässe jedes Beamten durch, um zu finden, was dem Staat verborgen wurde."
+ },
+ "inh_estates_overlooked": {
+  "en": "Hidden Estates",
+  "de": "Verborgene Nachlässe"
+ },
+ "inh_estates_overlooked_desc": {
+  "en": "Officials quietly leave their children what the law says goes to the state, and they save again for heirs who will have it. The public has noticed.",
+  "de": "Beamte hinterlassen ihren Kindern stillschweigend, was nach dem Gesetz an den Staat gehen müsste, und sparen erneut für Erben, die es bekommen werden. Die Öffentlichkeit hat es bemerkt."
+ },
  "inh_fewer_children": {
   "en": "Fewer Heirs",
   "de": "Weniger Erben"
@@ -6346,6 +6498,14 @@
  "inh_great_fortunes_desc": {
   "en": "Great fortunes pass whole from one generation to the next. The families who hold them buy influence, and the savings they lend on bid up assets and feed speculative bubbles. Full at a national [concept_inheritance_concentration] of 80 and stronger above (now #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!). Its [concept_bubble_pressure] counts once your [concept_banking_cycle] runs.",
   "de": "Große Vermögen gehen unversehrt von einer Generation auf die nächste über. Die Familien, die sie halten, kaufen sich Einfluss, und die Ersparnisse, die sie verleihen, treiben die Preise von Vermögenswerten in die Höhe und nähren Spekulationsblasen. Voll ausgeprägt bei einer nationalen [concept_inheritance_concentration] von 80 und darüber noch stärker (derzeit #v [GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display')|0]#!). Der zugehörige [concept_bubble_pressure] zählt, sobald Ihr [concept_banking_cycle] läuft."
+ },
+ "inh_holding_continuity": {
+  "en": "Holdings Kept in the Family",
+  "de": "Landbesitz bleibt in der Familie"
+ },
+ "inh_holding_continuity_desc": {
+  "en": "Families keep working the holdings their parents worked, and land the children will keep is worth improving.",
+  "de": "Familien bewirtschaften weiter den Landbesitz, den schon ihre Eltern bewirtschaftet haben, und Land, das die Kinder behalten werden, lohnt die Verbesserung."
  },
  "inh_land_hunger": {
   "en": "Land Hunger",
@@ -7512,16 +7672,16 @@
   "de": "Ein kleinerer positiver Schub für den Gesetzeserlassfortschritt durch ein kürzliches Ereignis."
  },
  "modifier_grid_station_download_desc": {
-  "en": "The $grid_power$ this station buys from its grid to turn into $electricity$ for the state.",
-  "de": "Der $grid_power$, den diese Station aus ihrem Netz bezieht, um ihn für den Staat in $electricity$ umzuwandeln."
+  "en": "The $grid_power$ this station buys from its grid to turn into $electricity$ for the state. A station that takes in power from another [concept_market] also buys that import here.",
+  "de": "Der $grid_power$, den diese Station aus ihrem Netz bezieht, um ihn für den Staat in $electricity$ umzuwandeln. Eine Station, die Strom aus einem anderen [concept_market] aufnimmt, kauft diesen Import hier ebenfalls ein."
  },
  "modifier_grid_station_download_electricity_desc": {
   "en": "The $electricity$ this station supplies to the state from its grid. It matches the $grid_power$ the station buys, net of any other bonus to the station's $electricity$ lines.",
   "de": "Die Menge an $electricity$, die diese Station dem Staat aus ihrem Netz liefert. Sie entspricht dem $grid_power$, den die Station bezieht, bereinigt um jeden anderen Bonus auf die $electricity$-Posten der Station."
  },
  "modifier_grid_station_upload_desc": {
-  "en": "The $grid_power$ this station makes from the state's spare $electricity$ and sends to its grid.",
-  "de": "Der $grid_power$, den diese Station aus dem Überschuss des Staates an $electricity$ erzeugt und in ihr Netz einspeist."
+  "en": "The $grid_power$ this station makes from the state's spare $electricity$ and sends to its grid. A station that takes in power from another [concept_market] also sells that import into its own market here.",
+  "de": "Der $grid_power$, den diese Station aus dem Überschuss des Staates an $electricity$ erzeugt und in ihr Netz einspeist. Eine Station, die Strom aus einem anderen [concept_market] aufnimmt, verkauft diesen Import hier ebenfalls in ihren eigenen Markt."
  },
  "modifier_grid_station_upload_electricity_desc": {
   "en": "The $electricity$ this station buys from the state to send to its grid. It matches the $grid_power$ the station makes, net of any other bonus to the station's $electricity$ lines.",
@@ -9891,6 +10051,22 @@
   "en": "With the race run, the rockets, crews and contractors that once competed for milestones haul ore from the asteroids. Each point of monthly space race progress our sources still give adds +5% Extraplanetary Base throughput, up to +50%, recalculated every month. Funding and progress bonuses do not count.",
   "de": "Nachdem das Rennen gelaufen ist, holen die Raketen, Besatzungen und Auftragnehmer, die einst um Meilensteine konkurrierten, Erz von den Asteroiden. Jeder Punkt monatlichen Fortschritts im Wettlauf ins All, den unsere Quellen noch liefern, erhöht den Durchsatz der Außerplanetaren Stützpunkte um +5%, bis zu +50%, jeden Monat neu berechnet. Finanzierungs- und Fortschrittsboni zählen nicht."
  },
+ "sr_ebase_room_bonus_desc": {
+  "en": "Our Extraplanetary Base levels work the room of the near-Earth asteroids and our colonies, the richest first. The metal asteroids raise their output.",
+  "de": "Die Stufen unseres Außerplanetaren Stützpunkts nutzen den Raum der erdnahen Asteroiden und unserer Kolonien, die reichsten zuerst. Die Metallasteroiden erhöhen ihren Ausstoß."
+ },
+ "sr_ebase_room_penalty_desc": {
+  "en": "Our Extraplanetary Base levels work the room of the near-Earth asteroids and our colonies, the richest first. The outer worlds' room is poor, and a level past all of our room works at -50%.",
+  "de": "Die Stufen unseres Außerplanetaren Stützpunkts nutzen den Raum der erdnahen Asteroiden und unserer Kolonien, die reichsten zuerst. Der Raum der äußeren Welten ist dürftig, und eine Stufe jenseits unseres gesamten Raums arbeitet mit -50%."
+ },
+ "sr_emigration_programme": {
+  "en": "Emigration Programme",
+  "de": "Auswanderungsprogramm"
+ },
+ "sr_emigration_programme_desc": {
+  "en": "Our programme sends settlers to our colonies each month. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
+  "de": "Unser Programm schickt jeden Monat Siedler zu unseren Kolonien. Jede Stufe erhöht den Durchsatz des Raumfahrtprogramms und mit ihm den Bedarf an Startkapazität."
+ },
  "sr_engineering_breakthrough": {
   "en": "Engineering Breakthrough",
   "de": "Technischer Durchbruch"
@@ -10051,6 +10227,14 @@
   "en": "A space mission failure has set back progress and damaged public confidence in the program.",
   "de": "Ein fehlgeschlagener Weltraumeinsatz hat den Fortschritt zurückgeworfen und das Vertrauen der Öffentlichkeit in das Programm beschädigt."
  },
+ "sr_module_upkeep": {
+  "en": "Colony Modules",
+  "de": "Koloniemodule"
+ },
+ "sr_module_upkeep_desc": {
+  "en": "Our colonies' modules past each colony's first are kept up from Earth. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
+  "de": "Die Module unserer Kolonien, die über das erste Modul jeder Kolonie hinausgehen, werden von der Erde aus unterhalten. Jede Stufe erhöht den Durchsatz des Raumfahrtprogramms und mit ihm den Bedarf an Startkapazität."
+ },
  "sr_moon_base": {
   "en": "Lunar Base Established",
   "de": "Mondbasis errichtet"
@@ -10079,6 +10263,14 @@
   "en": "Our astronauts have walked on the Moon.",
   "de": "Unsere Astronauten haben den Mond betreten."
  },
+ "sr_offworld_population": {
+  "en": "Off-World Population",
+  "de": "Bevölkerung außerhalb der Erde"
+ },
+ "sr_offworld_population_desc": {
+  "en": "Our people living on other worlds lend the nation prestige and draw the world's eyes, more with every 100,000 of them, up to a million.",
+  "de": "Unsere Landsleute, die auf anderen Welten leben, verleihen der Nation Prestige und ziehen die Blicke der Welt auf sich, mit je 100.000 von ihnen stärker, bis zu einer Million."
+ },
  "sr_orbital": {
   "en": "Orbital Flight Achieved",
   "de": "Orbitalflug erreicht"
@@ -10102,6 +10294,14 @@
  "sr_orbital_scientist_desc": {
   "en": "Our first astronaut was a scientist, accelerating research breakthroughs from orbit.",
   "de": "Unser erster Astronaut war ein Wissenschaftler und beschleunigt Forschungsdurchbrüche aus dem Orbit."
+ },
+ "sr_powers_entry": {
+  "en": "[THIS.GetCountry.GetName]: #v [THIS.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! of 8",
+  "de": "[THIS.GetCountry.GetAltName('NOM')|U]: #v [THIS.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! von 8"
+ },
+ "sr_powers_intro": {
+  "en": "Every other power in the space race, and how many of the eight entries with a goal it has achieved:",
+  "de": "Jede andere Macht im Wettlauf ins All und wie viele der acht Einträge mit einem Ziel sie erreicht hat:"
  },
  "sr_probe": {
   "en": "Deep-Space Probe Completed",
@@ -10871,6 +11071,22 @@
   "en": "Cabinet Authority Eroded",
   "de": "Kabinettsautorität geschwunden"
  },
+ "te_cede_colony": {
+  "en": "Cede Colony",
+  "de": "Kolonie abtreten"
+ },
+ "te_cede_colony_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] cedes a colony to [TARGET_COUNTRY.GetNameNoFormatting]",
+  "de": "[SOURCE_COUNTRY.GetAltNameNoFormatting('NOM')|U] tritt eine Kolonie an [TARGET_COUNTRY.GetAltNameNoFormatting('AKK')] ab"
+ },
+ "te_cede_colony_desc": {
+  "en": "A country gives another one of its colonies in the solar system, named in the treaty.",
+  "de": "Ein Land gibt einem anderen eine seiner Kolonien im Sonnensystem, die im Vertrag benannt wird."
+ },
+ "te_cede_colony_effects_desc": {
+  "en": "• The named colony passes to the receiver at once and for good, with its specialization and its discoveries.\\n• It stays the receiver's when the treaty ends.",
+  "de": "• Die genannte Kolonie geht sofort und endgültig mit ihrer Spezialisierung und ihren Entdeckungen an den Empfänger über.\\n• Sie bleibt beim Empfänger, wenn der Vertrag endet."
+ },
  "te_construction_market_capacity_modifier_desc": {
   "en": "Applies the effects of this construction-focused modifier.",
   "de": "Wendet die Effekte dieses baubezogenen Modifikators an."
@@ -10931,9 +11147,53 @@
   "en": "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!",
   "de": "#lore Geschichte verfügbar seit [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  },
+ "te_jud_act_upheld_desc": {
+  "en": "The courts found the act we forced through lawful, and it carries their approval.",
+  "de": "Die Gerichte haben das Gesetz, das wir durchgesetzt haben, für rechtmäßig befunden, und es trägt ihre Billigung."
+ },
  "te_jud_algorithmic_capture_desc": {
   "en": "The system that drafts our laws also judges them, so no court stands in the way of a law the government wants.",
   "de": "Das System, das unsere Gesetze entwirft, beurteilt sie auch, sodass kein Gericht einem Gesetz im Weg steht, das die Regierung will."
+ },
+ "te_jud_bench_restored_desc": {
+  "en": "We sent the judges we added home, and the courts sit as they did before.",
+  "de": "Wir haben die Richter, die wir hinzugefügt hatten, nach Hause geschickt, und die Gerichte tagen wieder wie zuvor."
+ },
+ "te_jud_case_dred_scott_desc": {
+  "en": "Our highest court ruled that the enslaved are property the constitution protects. The abolitionists have stopped expecting justice from the law.",
+  "de": "Unser oberstes Gericht hat entschieden, dass Versklavte Eigentum sind, das die Verfassung schützt. Die Abolitionisten erwarten vom Gesetz keine Gerechtigkeit mehr."
+ },
+ "te_jud_case_election_respected_desc": {
+  "en": "The courts voided an election and the government stood for it again. Even its opponents admit the rules bind it.",
+  "de": "Die Gerichte haben eine Wahl für ungültig erklärt, und die Regierung hat sich erneut zur Wahl gestellt. Selbst ihre Gegner räumen ein, dass die Regeln sie binden."
+ },
+ "te_jud_case_emergency_desc": {
+  "en": "After the courts voided the government's election, it declared an emergency: the courts are set aside, the press is censored and the opposition is in prison.",
+  "de": "Nachdem die Gerichte die Wahl der Regierung für ungültig erklärt hatten, rief sie den Notstand aus: Die Gerichte sind ausgeschaltet, die Presse wird zensiert, und die Opposition sitzt im Gefängnis."
+ },
+ "te_jud_case_free_soil_desc": {
+  "en": "Our highest court ruled that no one may be held as property. Abolition has the law on its side.",
+  "de": "Unser oberstes Gericht hat entschieden, dass niemand als Eigentum gehalten werden darf. Die Abschaffung der Sklaverei hat das Gesetz auf ihrer Seite."
+ },
+ "te_jud_case_freedom_of_contract_desc": {
+  "en": "Our highest court found a right to contract in the constitution and struck down a labor law. Employers may now offer any terms a worker will take.",
+  "de": "Unser oberstes Gericht hat in der Verfassung ein Recht auf Vertragsfreiheit gefunden und ein Arbeitsgesetz aufgehoben. Arbeitgeber dürfen nun alle Bedingungen anbieten, die ein Arbeiter annimmt."
+ },
+ "te_jud_case_judges_resign_desc": {
+  "en": "Rather than declare the new regime lawful, the judges resigned. Everyone knows why.",
+  "de": "Statt das neue Regime für rechtmäßig zu erklären, sind die Richter zurückgetreten. Jeder weiß, warum."
+ },
+ "te_jud_case_necessity_desc": {
+  "en": "Our courts declared the new regime lawful, since necessity knows no law. The regime has its legal title, and the courts have less to be trusted for.",
+  "de": "Unsere Gerichte haben das neue Regime für rechtmäßig erklärt, denn Not kennt kein Gebot. Das Regime hat seinen Rechtstitel, und die Gerichte verdienen weniger Vertrauen."
+ },
+ "te_jud_case_otsu_overruled_desc": {
+  "en": "We set aside our own law to give a foreign power the sentence it demanded.",
+  "de": "Wir haben unser eigenes Gesetz beiseitegeschoben, um einer fremden Macht das Urteil zu geben, das sie verlangte."
+ },
+ "te_jud_case_otsu_upheld_desc": {
+  "en": "Our courts held to the law against a foreign power's demand, and our people are proud of them.",
+  "de": "Unsere Gerichte haben sich der Forderung einer fremden Macht zum Trotz an das Gesetz gehalten, und unser Volk ist stolz auf sie."
  },
  "te_jud_constitutional_challenge_desc": {
   "en": "The law touches the constitution's core, and the courts will hear challenges to it.",
@@ -10943,9 +11203,37 @@
   "en": "We cut the courts down to size. Lenders and the public noticed.",
   "de": "Wir haben die Gerichte zurechtgestutzt. Kreditgeber und Öffentlichkeit haben es bemerkt."
  },
+ "te_jud_court_packed_desc": {
+  "en": "We added judges who will rule our way. The courts challenge nothing, and the public trusts them less.",
+  "de": "Wir haben Richter hinzugefügt, die in unserem Sinne urteilen werden. Die Gerichte beanstanden nichts, und die Öffentlichkeit vertraut ihnen weniger."
+ },
+ "te_jud_packing_cost_desc": {
+  "en": "Enlarging the bench took a bill, a fight and a good deal of the government's attention.",
+  "de": "Die Aufstockung der Richterbank kostete ein Gesetz, einen Kampf und einen guten Teil der Aufmerksamkeit der Regierung."
+ },
+ "te_jud_protests_dispersed_desc": {
+  "en": "The police cleared the lawyers and their supporters from the streets.",
+  "de": "Die Polizei hat die Anwälte und ihre Unterstützer von den Straßen vertrieben."
+ },
+ "te_jud_ruling_defied_desc": {
+  "en": "The courts struck our act down and we kept it anyway. Lenders wonder what else we would ignore.",
+  "de": "Die Gerichte haben unser Gesetz aufgehoben, und wir haben es trotzdem beibehalten. Kreditgeber fragen sich, was wir sonst noch missachten würden."
+ },
+ "te_jud_ruling_obeyed_desc": {
+  "en": "The courts struck our act down and we obeyed. Even our opponents say the law binds us.",
+  "de": "Die Gerichte haben unser Gesetz aufgehoben, und wir haben uns gefügt. Selbst unsere Gegner sagen, dass das Recht uns bindet."
+ },
+ "te_jud_ruling_unreversed_desc": {
+  "en": "The courts struck our act down, and it stands only because nothing could be put back in its place.",
+  "de": "Die Gerichte haben unser Gesetz aufgehoben, und es besteht nur fort, weil sich nichts an seiner Stelle wiederherstellen ließ."
+ },
  "te_jud_supremacy_challenge_desc": {
   "en": "The courts have the last word on the constitution and the rights it protects, and this law falls within their reach.",
   "de": "Die Gerichte haben das letzte Wort über die Verfassung und die Rechte, die sie schützt, und dieses Gesetz fällt in ihren Zuständigkeitsbereich."
+ },
+ "te_jud_tenure_promised_desc": {
+  "en": "We promised the judges their tenure, and the groups that wanted them gone are not pleased.",
+  "de": "Wir haben den Richtern ihre Unabsetzbarkeit versprochen, und die Gruppen, die sie loswerden wollten, sind nicht erfreut."
  },
  "te_jud_unelected_authority_desc": {
   "en": "Our courts apply the law the crown makes, and nothing overrides it.",
