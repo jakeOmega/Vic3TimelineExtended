@@ -227,13 +227,6 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 **Fix:** By design; keep. If a *new* law name appears in these warnings that matches neither class, investigate instead of assuming noise.
 
-### L17. Strategic-reserve silo missing-texture warning (unresolved)
-**Files:** `common/buildings/strategic_reserve.txt:61`
-
-**Problem:** `Database type building_strategic_reserve_silo has missing texture` (guitexturehandler.h:155) once per launch. The building's `icon` points at a vanilla dds that exists; the missing texture is some other UI slot (map/entity/background) not yet identified. Cosmetic — panels render with fallback art.
-
-**Fix:** Unresolved; next investigation step is comparing against a warning-free mod building's full gfx surface (icon + any `city_gfx`/entity/asset references) to find the queried-but-missing slot.
-
 ### L23. Console-only debug test events logged as orphaned (by design)
 **Files:** `events/te_debug_*_events.txt` (seven today: ch, colonial_empire, covert, gw, nuclear, space_race, un)
 
@@ -260,17 +253,16 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 ---
 
 ### L26. Grand Monuments v2 load-time notices
-**Files:** `events/monument_events.txt` (`monument_events.11`), `common/buildings/gm_name_carrier.txt`, `common/scripted_effects/gm_commission_effects.txt:115`
+**Files:** `events/monument_events.txt` (`monument_events.11`), `common/scripted_effects/gm_commission_effects.txt:115`
 
-**Problem (2026-10-07):** Grand Monuments v2 (#759) logs three lines once per launch, and the picture work (#909) added a fourth.
+**Problem (2026-10-07):** Grand Monuments v2 (#759) logs two lines once per launch, and the picture work (#909) added a third. (A fourth, `Database type building_gm_name_carrier_anchor has missing texture`, went on 2026-10-25, when the placeholder building was given a `background`: the slot `guitexturehandler.h:155` reports missing is the building panel's background, `scripting_best_practices.md`.)
 - `No default option in event monument_events.11.` (`event.cpp:358`). By design: the skin choice leaves out `default_option` so that an expired event takes its first valid option, the most specific skin (the note above its Hebrew option).
-- `Database type building_gm_name_carrier_anchor has missing texture` (`guitexturehandler.h:155`). The placeholder building is never built and its `icon` exists, so this is the same unidentified UI slot as L17.
 - `Flag 'leader' is used but is never set` (`jomini_effect.cpp:1139`). `gm_com_dedication` is set as `flag:$DEDICATION$`, which the parse-time validator cannot see.
 - `Flag 'memorial' is used but is never set` (`jomini_effect.cpp:1139`, 2026-10-12). #909 retired the Memorial form, so nothing sets `flag:memorial` any more, but a monument or commission from an older save can still hold it. The form's `gm_form_name` and `gm_com_form_phrase` branches stay on purpose to name it (`RETIRED_FORMS` in `test_grand_monument_registry.py`).
 
-Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these four.
+Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures name these three.
 
-**Fix:** None needed for the first, third and fourth. Close the second with L17 once that slot is found.
+**Fix:** None needed.
 
 ---
 
@@ -282,6 +274,15 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`, whose signatures 
 Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
 **Fix:** only a whole-article override of vanilla's `ship_transfer` that skips every mutual article (`kind`, or the four by name), which the mod avoids for vanilla content (INJECT over REPLACE). Owner's call; nothing to do while the result stays correct.
+
+### L28. Zero construction speed with a queued project (unattributed)
+**Files:** none named; the engine's `country.cpp:9608` (`:9594`, worded "queues", in the 2026-10-11 logs)
+
+**Problem (2026-10-25):** `Failed to approximate weeks left in construction queue: The total construction speed is zero. Returning max int...` logs 20 to 40 times a minute through a long game, a third of `error.log` on 2026-10-24 (3,208 lines in three and a half hours), with no country and no script frame. The 2026-10-11 observer runs logged it too. Some country holds a construction queue and has no construction at all. Two candidates, neither checked: a country with no states (vanilla's base construction, `country_gdp_construction`, scales with GDP, which is 0 there), or a construction-market country whose sites produce nothing (§ Construction as a Market Good, `docs/systems/mod_systems.md`).
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** find the country first: on an autosave from such a session, list the countries with queued construction and their states and construction (`scripts/analysis/save_country_probe.py`). If they are stateless countries, it is vanilla's estimate and moves to `docs/vanilla/vanilla_known_bugs.md`; if they are construction-market countries, it is ours.
 
 ---
 

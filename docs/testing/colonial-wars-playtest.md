@@ -30,6 +30,8 @@ has happened (a declaration fought, talks concluded), so OK cannot be a false pa
 | `decol_iw_rebels_armed` | two months into a territory's rebels' first war | the rebels have an army (`any_military_formation = { is_army = yes }`) | a new dynamic country does not build one in time | seed one with `create_military_formation` in `decol_iw_rebels_formed` |
 | `decol_iw_talks_peace` | when a war ends after the accords (OK), or six months after the accords with the war still on (BROKEN) | a dropped goal (`decol_iw_conceded` makes `te_colonial_reconquest` invalid) lets the war end in a white peace | the engine kept the war going with no goal against the rebels | talks end the war only by the player's peace offer; an AI's talks just lower the drain (the conceded war already drains at `decol_iw_bar_drain_per_war_in_talks`) |
 
+**Readings.** 2026-10-24, the owner's game on `dd43038d`: `decol_iw_war_started` logged **BROKEN** on July 28, 1969, and no OK line in any generation. No secession began in the month before, so it was a territory's Fight (record kind 1), not a secession's record: the play created the day after the rebels formed never became a war in 30 days, and nothing in `debug.log` or `error.log` names `create_diplomatic_play`, `dp_te_colonial_war` or `te_colonial_reconquest`. The blank `metropole=` and `rebels=` are the known blank of a saved scope's name in `debug_log` (`scripting_best_practices.md`), not a finding. The fallback above is the next step; not built yet.
+
 ## The colony test (2026-10-24)
 
 | Check | Expect | If it fails |
@@ -62,3 +64,9 @@ has happened (a declaration fought, talks concluded), so OK cannot be a false pa
 | **A colonial subject's war.** A Colony subject at high liberty desire starts its independence play and we fight. | The war appears in the Wars of Independence block (no Open Talks); the subject fights with the fighters' package; its ending fires `.72` or `.73`. | No row: `decol_iw_track_subject_wars`. |
 | **A colonial secession.** A secession in a separated, distinct colony. | A row for the secessionists; their defeat gives `.72`, their win `.73`. | No row: at `on_secession_start` the capital's `ce_separated` no longer named us. |
 | **A revolution mid-war.** A revolution wins while a war runs. | The winner keeps the war's row and the home front's modifier at once. | The modifier gone for a month: `decol_iw_repair_after_civil_war`. A record that settles as a loss: the winner is not at war with the rebels (expected, per the design). |
+
+## From the 2026-10-25 log triage
+
+| Check | Expected | If not |
+|---|---|---|
+| **The conscription crisis in a war with a colony.** A colonial empire at war with its own colonial subject, or with rebels it has a war of independence on record with, and no crackdown running. | `.51` (the conscription crisis) can fire, and `error.log` has no `is_subject_of trigger [ Invalid Country! ]` from `colonial_empire_triggers.txt`. | Until 2026-10-25 `decol_fighting_colonial_war` saved its scope with `save_scope_as`, an effect the trigger parser drops, so only a running crackdown counted. |
