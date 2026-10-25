@@ -86,7 +86,7 @@
 te_grid_world_update_effect = {
 	te_grid_world_clear_effect = yes
 	te_grid_dispatch_info_effect = yes
-	te_grid_unscaled_selfcheck_start_effect = yes
+	te_grid_staffing_info_start_effect = yes
 	set_global_variable = { name = te_grid_cable_range_max value = 0 }
 
 	every_country = {
@@ -153,7 +153,7 @@ te_grid_world_update_effect = {
 		te_grid_close_region_effect = yes
 	}
 
-	te_grid_unscaled_selfcheck_end_effect = yes
+	te_grid_staffing_info_end_effect = yes
 	te_grid_world_clear_effect = yes
 }
 
@@ -603,13 +603,6 @@ te_grid_balance_region_effect = {
 		variable = te_grid_region
 		te_grid_staffing_selfcheck_effect = yes
 		set_variable = { name = te_grid_factor value = te_grid_station_factor_value }
-		# The first run after the unscaled lines (TE_SELF_CHECK grid_unscaled)
-		# starts every station at 1, so no order carries a correction learned
-		# from the old lines.
-		if = {
-			limit = { NOT = { has_global_variable = te_grid_unscaled_armed } }
-			set_variable = { name = te_grid_factor value = 1 }
-		}
 		set_variable = { name = te_grid_local_production value = te_grid_local_production_value }
 		set_variable = { name = te_grid_local_consumption value = te_grid_local_consumption_value }
 		set_variable = { name = te_grid_efficiency value = te_grid_state_efficiency_value }
@@ -1272,53 +1265,40 @@ te_grid_conservation_verdict_effect = {
 	}
 }
 
-# TE_SELF_CHECK grid_unscaled, once a game: does staffing cut the method's
-# unscaled goods lines (power_grid_pms.txt)? The level_scaled lines they
-# replaced on 2026-10-25 did, at the building's occupancy. One station can't
-# tell: an input shortage or a throughput penalty cuts a line too. So the check
-# compares groups across every grid in one run, by what each station moved
-# last week on its own account against last month's order (te_grid_own_uploaded
-# or te_grid_own_downloaded over te_grid_command): stations under half staffed
-# against stations 90% staffed or more, each with staff at last month's run and
-# now and ordered to move 100 or more. Causes they share cancel out.
-#   Run 1 after the switch (te_grid_unscaled_armed unset): every factor is set
-#   to 1 (te_grid_balance_region_effect), so no order carries a correction
-#   learned from the old lines, which would inflate it up to five times.
-#   Run 2 on: the groups are counted (te_grid_us_collect), and the verdict is
-#   given once both have 3 stations or more.
-#   OK      the under-half group moved 75% or more of the full group's share:
-#           staffing doesn't cut unscaled lines.
-#   BROKEN  less: it does. The factor makes up for staffing down to a fifth
-#           (its 0.2 floor), as it did for the level_scaled lines; put the
-#           lines back to level_scaled or keep these, and correct the player
-#           guide's "however few workers".
+# TE_GRID staffing, info, once a game: how well staffed the stations are a
+# year after the station became a very attractive job (2026-10-25,
+# building_job_attractiveness_mult in power_grid_pms.txt). A station moves its
+# staffing's share of its order, whatever block its goods lines sit in, so the
+# grid relies on stations staying staffed. Counted at the thirteenth balancing
+# after this build first runs, over every station on a grid: under a quarter
+# staffed, under half, under 90%, and 90% or more. Expect most at 90% or more;
+# a station still hiring (a new one, or one in a state short of engineers or
+# clerks) sits lower.
 #
-# Both lines print the under-quarter group too, whose share is about its
-# staffing if the lines scale with it.
-#
-# TE_GRID empty_station, info, once a game (marker _v2 for the unscaled lines):
-# the first station that had no staff at last month's run and has none now, and
-# was ordered to move 100 or more. moved=0 means an empty building runs none of
-# its unscaled lines; more means it does, and nothing is lost until it hires.
+# TE_GRID empty_station, info, once a game: the first station that had no
+# staff at last month's run and has none now, and was ordered to move 100 or
+# more. moved=0 means an empty building runs none of its lines.
 
-# Global, at the start of te_grid_world_update_effect: from run 2 after the
-# switch until the verdict, count this run's groups from zero.
-te_grid_unscaled_selfcheck_start_effect = {
+# Global, at the start of te_grid_world_update_effect: counts the runs since
+# this build, and at the thirteenth tallies this run's stations from zero.
+te_grid_staffing_info_start_effect = {
 	if = {
-		limit = {
-			has_global_variable = te_grid_unscaled_armed
-			NOT = { has_global_variable = te_grid_unscaled_checked }
+		limit = { NOT = { has_global_variable = te_grid_staffing_logged } }
+		if = {
+			limit = { has_global_variable = te_grid_staffing_runs }
+			change_global_variable = { name = te_grid_staffing_runs add = 1 }
 		}
-		set_global_variable = te_grid_us_collect
-		set_global_variable = { name = te_grid_us_low_n value = 0 }
-		set_global_variable = { name = te_grid_us_low_ordered value = 0 }
-		set_global_variable = { name = te_grid_us_low_moved value = 0 }
-		set_global_variable = { name = te_grid_us_quarter_n value = 0 }
-		set_global_variable = { name = te_grid_us_quarter_ordered value = 0 }
-		set_global_variable = { name = te_grid_us_quarter_moved value = 0 }
-		set_global_variable = { name = te_grid_us_full_n value = 0 }
-		set_global_variable = { name = te_grid_us_full_ordered value = 0 }
-		set_global_variable = { name = te_grid_us_full_moved value = 0 }
+		else = {
+			set_global_variable = { name = te_grid_staffing_runs value = 1 }
+		}
+		if = {
+			limit = { global_var:te_grid_staffing_runs >= 13 }
+			set_global_variable = te_grid_staffing_collect
+			set_global_variable = { name = te_grid_st_quarter value = 0 }
+			set_global_variable = { name = te_grid_st_half value = 0 }
+			set_global_variable = { name = te_grid_st_most value = 0 }
+			set_global_variable = { name = te_grid_st_full value = 0 }
+		}
 	}
 }
 
@@ -1326,47 +1306,36 @@ te_grid_unscaled_selfcheck_start_effect = {
 # order and its te_grid_staffed are overwritten.
 te_grid_staffing_selfcheck_effect = {
 	if = {
-		limit = {
-			has_global_variable = te_grid_us_collect
-			has_variable = te_grid_command
-			var:te_grid_command >= 100
-			has_variable = te_grid_flow
-			NOT = { var:te_grid_flow = 0 }
-			te_grid_station_staffed_throughout = yes
-		}
-		te_grid_chk_read_moved_effect = yes
+		limit = { has_global_variable = te_grid_staffing_collect }
 		if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_grid_transfer_station
+					occupancy < 0.25
+				}
+			}
+			change_global_variable = { name = te_grid_st_quarter add = 1 }
+		}
+		else_if = {
 			limit = {
 				any_scope_building = {
 					is_building_type = building_grid_transfer_station
 					occupancy < 0.5
 				}
 			}
-			change_global_variable = { name = te_grid_us_low_n add = 1 }
-			change_global_variable = { name = te_grid_us_low_ordered add = global_var:te_grid_chk_ordered }
-			change_global_variable = { name = te_grid_us_low_moved add = global_var:te_grid_chk_moved }
-			if = {
-				limit = {
-					any_scope_building = {
-						is_building_type = building_grid_transfer_station
-						occupancy < 0.25
-					}
-				}
-				change_global_variable = { name = te_grid_us_quarter_n add = 1 }
-				change_global_variable = { name = te_grid_us_quarter_ordered add = global_var:te_grid_chk_ordered }
-				change_global_variable = { name = te_grid_us_quarter_moved add = global_var:te_grid_chk_moved }
-			}
+			change_global_variable = { name = te_grid_st_half add = 1 }
 		}
 		else_if = {
 			limit = {
 				any_scope_building = {
 					is_building_type = building_grid_transfer_station
-					occupancy >= 0.9
+					occupancy < 0.9
 				}
 			}
-			change_global_variable = { name = te_grid_us_full_n add = 1 }
-			change_global_variable = { name = te_grid_us_full_ordered add = global_var:te_grid_chk_ordered }
-			change_global_variable = { name = te_grid_us_full_moved add = global_var:te_grid_chk_moved }
+			change_global_variable = { name = te_grid_st_most add = 1 }
+		}
+		else = {
+			change_global_variable = { name = te_grid_st_full add = 1 }
 		}
 	}
 	if = {
@@ -1381,36 +1350,17 @@ te_grid_staffing_selfcheck_effect = {
 		}
 		set_global_variable = te_grid_empty_station_logged_v2
 		te_grid_chk_read_moved_effect = yes
-		debug_log = "TE_GRID empty_station moved=[SCOPE.ScriptValue('te_grid_chk_moved_g')|0] ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] (a station with no staff at last month's balancing and none now; moved=0 means an empty building runs none of its unscaled lines)"
+		debug_log = "TE_GRID empty_station moved=[SCOPE.ScriptValue('te_grid_chk_moved_g')|0] ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] (a station with no staff at last month's balancing and none now; moved=0 means an empty building runs none of its lines)"
 	}
 }
 
-# Global, at the end of te_grid_world_update_effect: the verdict once both
-# groups have 3 stations, then nothing more; the first run after the switch
-# only arms the check.
-te_grid_unscaled_selfcheck_end_effect = {
+# Global, at the end of te_grid_world_update_effect.
+te_grid_staffing_info_end_effect = {
 	if = {
-		limit = {
-			has_global_variable = te_grid_us_collect
-			global_var:te_grid_us_low_n >= 3
-			global_var:te_grid_us_full_n >= 3
-		}
-		set_global_variable = te_grid_unscaled_checked
-		if = {
-			limit = { te_grid_us_share_ratio_g >= 0.75 }
-			debug_log = "TE_SELF_CHECK OK grid_unscaled (stations under half staffed n=[SCOPE.ScriptValue('te_grid_us_low_n_g')|0] moved [SCOPE.ScriptValue('te_grid_us_low_share_g')|2] of their orders, under a quarter n=[SCOPE.ScriptValue('te_grid_us_quarter_n_g')|0] [SCOPE.ScriptValue('te_grid_us_quarter_share_g')|2], 90% staffed n=[SCOPE.ScriptValue('te_grid_us_full_n_g')|0] [SCOPE.ScriptValue('te_grid_us_full_share_g')|2]: staffing doesn't cut the unscaled lines)"
-		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN grid_unscaled (stations under half staffed n=[SCOPE.ScriptValue('te_grid_us_low_n_g')|0] moved [SCOPE.ScriptValue('te_grid_us_low_share_g')|2] of their orders, under a quarter n=[SCOPE.ScriptValue('te_grid_us_quarter_n_g')|0] [SCOPE.ScriptValue('te_grid_us_quarter_share_g')|2], 90% staffed n=[SCOPE.ScriptValue('te_grid_us_full_n_g')|0] [SCOPE.ScriptValue('te_grid_us_full_share_g')|2], under 75% of it: staffing cuts unscaled lines too; see docs/testing/power-grid-playtest.md)"
-		}
-	}
-	if = {
-		limit = { has_global_variable = te_grid_us_collect }
-		remove_global_variable = te_grid_us_collect
-	}
-	if = {
-		limit = { NOT = { has_global_variable = te_grid_unscaled_armed } }
-		set_global_variable = te_grid_unscaled_armed
+		limit = { has_global_variable = te_grid_staffing_collect }
+		set_global_variable = te_grid_staffing_logged
+		remove_global_variable = te_grid_staffing_collect
+		debug_log = "TE_GRID staffing a year after the attractive-job change: stations under a quarter staffed=[SCOPE.ScriptValue('te_grid_st_quarter_g')|0], under half=[SCOPE.ScriptValue('te_grid_st_half_g')|0], under 90%=[SCOPE.ScriptValue('te_grid_st_most_g')|0], 90% or more=[SCOPE.ScriptValue('te_grid_st_full_g')|0] (a station moves its staffing's share of its order; see docs/testing/power-grid-playtest.md)"
 	}
 }
 
