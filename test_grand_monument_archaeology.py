@@ -19,7 +19,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILT, LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
+    BUILT, HISTORIC, LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
 )
 
 EFFECTS = "common/scripted_effects/gm_archaeology_effects.txt"
@@ -138,10 +138,16 @@ class TableTests(unittest.TestCase):
     def test_the_picture_codes_follow_the_rows(self):
         first = LANDMARKS.index(BURIED[0]) + 1
         self.assertEqual(first, 52, "append-only: the first buried site is row 52")
-        # Then the historical opportunities' landmarks (signatures spec §6), after every buried site.
+        # Then the historical opportunities' landmarks (signatures spec §6), after the first buried sites, and
+        # after them the To History landmarks and then sites (tourism heritage phases 2 and 3).
         historical = tuple(lm for lm in LANDMARKS if lm.year)
-        self.assertEqual(len(LANDMARKS), 51 + len(BURIED) + len(historical))
-        self.assertEqual(LANDMARKS[51 + len(BURIED):], historical)
+        older = tuple(lm for lm in BURIED if lm.dedication != HISTORIC)
+        self.assertEqual(LANDMARKS[51:51 + len(older)], older)
+        self.assertEqual(LANDMARKS[51 + len(older):51 + len(older) + len(historical)], historical)
+        rest = LANDMARKS[51 + len(older) + len(historical):]
+        self.assertTrue(rest and all(lm.dedication == HISTORIC for lm in rest))
+        self.assertEqual(list(rest), [lm for lm in rest if lm.placed] + [lm for lm in rest if lm.buried],
+                         "the landmarks, then the sites")
 
     def test_the_issues_candidates_are_all_there(self):
         # Issue #939's list: the sites it names, by the key this table gives them.

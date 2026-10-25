@@ -939,8 +939,10 @@ class ReturnToAStateWithAMonumentTests(unittest.TestCase):
         self.assertEqual(kinds["piraeus_lion"], "apart")
         # Eastern Thrace: Topkapi stands.
         self.assertEqual(kinds["horses_of_saint_mark"], "apart")
+        # Lower Egypt: the Pyramids of Giza stand (tourism heritage phase 2).
+        self.assertEqual(kinds["rosetta_stone"], "apart")
         # Nothing stands where these came from: rebuilt, as before.
-        for key in ("rosetta_stone", "tipus_tiger", "venus_de_milo", "baba_merzoug", "royal_palace_of_kandy"):
+        for key in ("tipus_tiger", "venus_de_milo", "baba_merzoug", "royal_palace_of_kandy"):
             self.assertEqual(kinds[key], "rebuild", key)
 
     def test_the_levels_a_state_of_1836_comes_to(self):

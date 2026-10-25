@@ -176,10 +176,15 @@ class HeritageMoves(unittest.TestCase):
             moved[m.state] += m.points
         for state, left in {"STATE_ATTICA": 60, "STATE_EASTERN_THRACE": 60, "STATE_BEIJING": 55,
                             "STATE_ILE_DE_FRANCE": 70, "STATE_TUSCANY": 90, "STATE_CAMBODIA": 60,
-                            "STATE_CRETE": 75, "STATE_UPPER_EGYPT": 50, "STATE_MOSCOW": 65,
+                            "STATE_CRETE": 75, "STATE_UPPER_EGYPT": 50, "STATE_MOSCOW": 45,
                             "STATE_EASTERN_MALI": 45, "STATE_WESTERN_MALI": 45,
                             # Mediterranean coasts against their peers (Calabria 75, Apulia 80, Sicily 75)
-                            "STATE_CAMPANIA": 80, "STATE_PELOPONNESE": 75, "STATE_LEBANON": 65}.items():
+                            "STATE_CAMPANIA": 80, "STATE_PELOPONNESE": 75, "STATE_LEBANON": 65,
+                            # Phase 2 (Appendix A): Kyoto's temples go to Kinkaku-ji alone; Tōdai-ji stands at
+                            # Nara, in Kansai, whose score never credited it.
+                            "STATE_LOWER_EGYPT": 50, "STATE_KYOTO": 60, "STATE_KANSAI": 90, "STATE_TRANSJORDAN": 60,
+                            "STATE_ISFAHAN": 55, "STATE_UZBEKIA": 50, "STATE_YEMEN": 60, "STATE_SICILY": 75,
+                            "STATE_DALMATIA": 70}.items():
             self.assertEqual(scores[state] - moved[state], left, state)
 
 

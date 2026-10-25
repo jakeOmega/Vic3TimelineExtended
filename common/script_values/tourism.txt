@@ -289,7 +289,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SICILY }
-		value = 95 # Crossroads of history (Greek, Roman, Norman), Mt. Etna, stunning coastline. Top-tier destination.
+		value = 95 # Crossroads of history (Greek, Roman, Norman), Mt. Etna, stunning coastline. Top-tier destination. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_PELOPONNESE }
@@ -409,7 +409,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CENTRAL_JAVA }
-		value = 85 # Borobudur and Prambanan temple complexes are world-class historical sites.
+		value = 85 # Borobudur and Prambanan temple complexes are world-class historical sites. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CEYLON }
@@ -433,7 +433,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_YEMEN }
-		value = 80 # Unique architecture of Sana'a and Shibam, island of Socotra (though far offshore). Rich history.
+		value = 80 # Unique architecture of Sana'a and Shibam, island of Socotra (though far offshore). Rich history. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HEDJAZ }
@@ -441,7 +441,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TUNISIA }
-		value = 85 # Ancient Carthage, Roman ruins (El Djem), pleasant Mediterranean coast, and Sahara desert landscapes.
+		value = 85 # Ancient Carthage, Roman ruins (El Djem), pleasant Mediterranean coast, and Sahara desert landscapes. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_GUINEA }
@@ -805,11 +805,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EGYPTIAN_DESERT }
-		value = 85 # Abu Simbel and desert oases.
+		value = 85 # Abu Simbel and desert oases. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LOWER_EGYPT }
-		value = 100 # Giza pyramids and Sphinx, Cairo's history, Nile Delta.
+		value = 100 # Giza pyramids and Sphinx, Cairo's history, Nile Delta. (50 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MATRUH }
@@ -817,7 +817,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MIDDLE_EGYPT }
-		value = 75 # Important but less-visited Pharaonic sites like Abydos and Dendera.
+		value = 75 # Important but less-visited Pharaonic sites like Abydos and Dendera. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SINAI }
@@ -825,7 +825,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DONGOLA }
-		value = 70 # Heart of the ancient Kingdom of Kush, with numerous pyramids and temples (Mero�).
+		value = 70 # Heart of the ancient Kingdom of Kush, with numerous pyramids and temples (Mero�). (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KORDOFAN }
@@ -885,7 +885,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HOME_COUNTIES }
-		value = 70 # Historic heartland of England (Windsor, Canterbury, Oxford) surrounding London. White Cliffs of Dover.
+		value = 70 # Historic heartland of England (Windsor, Canterbury, Oxford) surrounding London. White Cliffs of Dover. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LANCASHIRE }
@@ -933,7 +933,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LANGUEDOC }
-		value = 85 # Roman history (Pont du Gard, N�mes), medieval cities (Carcassonne), and Mediterranean coast.
+		value = 85 # Roman history (Pont du Gard, N�mes), medieval cities (Carcassonne), and Mediterranean coast. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_RHONE }
@@ -949,7 +949,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_PROVENCE }
-		value = 95 # French Riviera, lavender fields, Roman ruins, and Papal Palace in Avignon. Top-tier destination.
+		value = 95 # French Riviera, lavender fields, Roman ruins, and Papal Palace in Avignon. Top-tier destination. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ALSACE_LORRAINE }
@@ -957,7 +957,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_NORMANDY }
-		value = 80 # Mont-Saint-Michel, D-Day beaches (post-1836 importance but the coast is scenic), distinctive countryside, and chalk cliffs.
+		value = 80 # Mont-Saint-Michel, D-Day beaches (post-1836 importance but the coast is scenic), distinctive countryside, and chalk cliffs. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_POITOU }
@@ -997,7 +997,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ORLEANS }
-		value = 75 # Loire Valley with its famous ch�teaux.
+		value = 75 # Loire Valley with its famous ch�teaux. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ILE_DE_FRANCE }
@@ -1013,7 +1013,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ESTREMADURA }
-		value = 85 # Lisbon and its surroundings, including Sintra. Historically rich with a pleasant coastline.
+		value = 85 # Lisbon and its surroundings, including Sintra. Historically rich with a pleasant coastline. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ALENTEJO }
@@ -1041,11 +1041,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_UPPER_ANDALUSIA }
-		value = 90 # Historic cities of Seville, Cordoba, and Granada, plus the Costa del Sol coastline.
+		value = 90 # Historic cities of Seville, Cordoba, and Granada, plus the Costa del Sol coastline. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LOWER_ANDALUSIA }
-		value = 90 # Moorish heritage (Seville, Cordoba), white villages, and Atlantic coast.
+		value = 90 # Moorish heritage (Seville, Cordoba), white villages, and Atlantic coast. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EXTREMADURA }
@@ -1177,7 +1177,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MADRAS }
-		value = 80 # "Temple State of India," with countless grand Dravidian temples. Coromandel Coast.
+		value = 80 # "Temple State of India," with countless grand Dravidian temples. Coromandel Coast. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KASHMIR }
@@ -1185,7 +1185,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HYDERABAD }
-		value = 70 # Historic city of Hyderabad and Golconda Fort. Deccan Plateau.
+		value = 70 # Historic city of Hyderabad and Golconda Fort. Deccan Plateau. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_GUJARAT }
@@ -1193,7 +1193,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MALWA }
-		value = 65 # Historic forts and palaces (Gwalior).
+		value = 65 # Historic forts and palaces (Gwalior). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BOMBAY }
@@ -1309,7 +1309,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_THESSALIA }
-		value = 80 # Meteora monasteries are a stunning and unique world wonder.
+		value = 80 # Meteora monasteries are a stunning and unique world wonder. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_WESTERN_THRACE }
@@ -1345,7 +1345,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_GONDER }
-		value = 80 # Historic castles of Gondar and the rock-hewn churches of Lalibela (nearby).
+		value = 80 # Historic castles of Gondar and the rock-hewn churches of Lalibela (nearby). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KAZEMBE }
@@ -1569,7 +1569,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TRANSJORDAN }
-		value = 90 # Petra and Wadi Rum are world-class historical and natural wonders. Dead Sea.
+		value = 90 # Petra and Wadi Rum are world-class historical and natural wonders. Dead Sea. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_PALESTINE }
@@ -1585,7 +1585,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ALEPPO }
-		value = 90 # One of the oldest continuously inhabited cities, with a world-famous citadel and souk.
+		value = 90 # One of the oldest continuously inhabited cities, with a world-famous citadel and souk. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BAGHDAD }
@@ -1625,7 +1625,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ISFAHAN }
-		value = 95 # Isfahan's stunning Islamic architecture is a world treasure.
+		value = 95 # Isfahan's stunning Islamic architecture is a world treasure. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MAZANDARAN }
@@ -1737,7 +1737,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HERAT }
-		value = 70 # Ancient city with major Islamic architecture, including the Minaret of Jam (nearby).
+		value = 70 # Ancient city with major Islamic architecture, including the Minaret of Jam (nearby). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BALKH }
@@ -1761,11 +1761,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CENTRAL_HIGHLANDS }
-		value = 75 # Bamiyan Buddhas (destroyed, but the niches and landscape remain) and Band-e-Amir lakes.
+		value = 75 # Bamiyan Buddhas (destroyed, but the niches and landscape remain) and Band-e-Amir lakes. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BANGKOK }
-		value = 80 # Historic Grand Palace and temples of Bangkok, floating markets.
+		value = 80 # Historic Grand Palace and temples of Bangkok, floating markets. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MEKONG }
@@ -1793,11 +1793,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SEOUL }
-		value = 85 # Historic capital of Korea for centuries, with palaces and city walls.
+		value = 85 # Historic capital of Korea for centuries, with palaces and city walls. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BUSAN }
-		value = 75 # Southern port with beaches and nearby historic city of Gyeongju (capital of Silla).
+		value = 75 # Southern port with beaches and nearby historic city of Gyeongju (capital of Silla). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SARIWON }
@@ -1833,7 +1833,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KYOTO }
-		value = 100 # Imperial capital of Kyoto and the first capital of Nara. The cultural and historical heart of Japan.
+		value = 100 # Imperial capital of Kyoto and the first capital of Nara. The cultural and historical heart of Japan. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KANSAI }
@@ -1849,7 +1849,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CHUGOKU }
-		value = 80 # Itsukushima Shrine (floating torii gate) and historic cities.
+		value = 80 # Itsukushima Shrine (floating torii gate) and historic cities. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SHIKOKU }
@@ -1857,7 +1857,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LHASA }
-		value = 90 # Potala Palace and Jokhang Temple make Lhasa a unique and world-famous spiritual center. High Himalayas.
+		value = 90 # Potala Palace and Jokhang Temple make Lhasa a unique and world-famous spiritual center. High Himalayas. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_NGARI }
@@ -1865,7 +1865,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HIMALAYAS }
-		value = 95 # Contains Mount Everest and Kathmandu Valley's temple cities. The highest mountain range on Earth.
+		value = 95 # Contains Mount Everest and Kathmandu Valley's temple cities. The highest mountain range on Earth. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EASTERN_HIMALAYAS }
@@ -1881,7 +1881,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SICHUAN }
-		value = 85 # Giant Buddha of Leshan, holy Mount Emei, and Jiuzhaigou's colorful lakes. Panda country.
+		value = 85 # Giant Buddha of Leshan, holy Mount Emei, and Jiuzhaigou's colorful lakes. Panda country. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_YUNNAN }
@@ -1917,7 +1917,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SHANDONG }
-		value = 75 # Mount Tai (holy mountain) and the birthplace of Confucius (Qufu).
+		value = 75 # Mount Tai (holy mountain) and the birthplace of Confucius (Qufu). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BEIJING }
@@ -1925,7 +1925,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SHANXI }
-		value = 75 # Yungang Grottoes and the ancient city of Pingyao.
+		value = 75 # Yungang Grottoes and the ancient city of Pingyao. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_XIAN }
@@ -1961,7 +1961,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SUZHOU }
-		value = 85 # "Venice of the East." Classical gardens of Suzhou and water towns.
+		value = 85 # "Venice of the East." Classical gardens of Suzhou and water towns. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_JIANGSU }
@@ -1973,7 +1973,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HENAN }
-		value = 75 # Shaolin Temple and Longmen Grottoes. A cradle of Chinese civilization.
+		value = 75 # Shaolin Temple and Longmen Grottoes. A cradle of Chinese civilization. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ZHILI }
@@ -2041,11 +2041,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_UZBEKIA }
-		value = 90 # Samarkand, Bukhara, Khiva. The heart of the Silk Road with stunning architecture.
+		value = 90 # Samarkand, Bukhara, Khiva. The heart of the Silk Road with stunning architecture. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KHIVA }
-		value = 85 # The walled city of Khiva is a perfectly preserved treasure.
+		value = 85 # The walled city of Khiva is a perfectly preserved treasure. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TAJIKISTAN }
@@ -2117,7 +2117,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KAZAN }
-		value = 65 # Historic Kazan Kremlin at the confluence of the Volga and Kazanka rivers.
+		value = 65 # Historic Kazan Kremlin at the confluence of the Volga and Kazanka rivers. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_PERM }
@@ -2133,7 +2133,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MOSCOW }
-		value = 85 # Kremlin and Red Square are iconic. The political and spiritual heart of Russia for centuries. (20 moved to monuments: tourism_heritage_generated.txt)
+		value = 85 # Kremlin and Red Square are iconic. The political and spiritual heart of Russia for centuries. (40 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DAGESTAN }
@@ -2213,7 +2213,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DALMATIA }
-		value = 90 # Stunning coastline with countless islands. Historic cities of Split (Diocletian's Palace) and Dubrovnik.
+		value = 90 # Stunning coastline with countless islands. Historic cities of Split (Diocletian's Palace) and Dubrovnik. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_CROATIA }
@@ -2305,11 +2305,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_RHINELAND }
-		value = 80 # The Rhine Gorge with its castles and vineyards is a classic tourist destination.
+		value = 80 # The Rhine Gorge with its castles and vineyards is a classic tourist destination. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_NORTH_RHINE }
-		value = 70 # Historic cities like Cologne (cathedral) and Aachen (Charlemagne's capital).
+		value = 70 # Historic cities like Cologne (cathedral) and Aachen (Charlemagne's capital). (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LOWER_SILESIA }
@@ -2401,7 +2401,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KIEV }
-		value = 80 # Historic mother city of Rus', with major churches and monasteries.
+		value = 80 # Historic mother city of Rus', with major churches and monasteries. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MECKLENBURG }
@@ -2413,7 +2413,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_UMBRIA }
-		value = 80 # "Green Heart of Italy." Hilltop towns like Perugia and Assisi.
+		value = 80 # "Green Heart of Italy." Hilltop towns like Perugia and Assisi. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BANAT }
@@ -2525,7 +2525,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TALINN }
-		value = 75 # Exceptionally well-preserved medieval walled city on the Baltic.
+		value = 75 # Exceptionally well-preserved medieval walled city on the Baltic. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_RIGA }
@@ -2541,7 +2541,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MERZ }
-		value = 70 # Ancient oasis city of Merv, a major Silk Road site.
+		value = 70 # Ancient oasis city of Merv, a major Silk Road site. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SYRDARYA }

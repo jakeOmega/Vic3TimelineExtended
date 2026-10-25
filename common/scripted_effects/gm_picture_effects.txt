@@ -229,6 +229,57 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = muhammad_ali_mosque CODE = 304 }
 	gm_state_picture_landmark = { KEY = nelsons_column CODE = 10 }
 	gm_state_picture_landmark = { KEY = washington_monument CODE = 12 }
+	gm_state_picture_landmark = { KEY = pyramids_of_giza CODE = 12 }
+	gm_state_picture_landmark = { KEY = petra CODE = 250 }
+	gm_state_picture_landmark = { KEY = moscow_kremlin CODE = 142 }
+	gm_state_picture_landmark = { KEY = fasil_ghebbi CODE = 221 }
+	gm_state_picture_landmark = { KEY = valley_of_the_temples CODE = 180 }
+	gm_state_picture_landmark = { KEY = borobudur CODE = 121 }
+	gm_state_picture_landmark = { KEY = old_city_of_sanaa CODE = 160 }
+	gm_state_picture_landmark = { KEY = shibam CODE = 160 }
+	gm_state_picture_landmark = { KEY = amphitheatre_of_el_djem CODE = 441 }
+	gm_state_picture_landmark = { KEY = abu_simbel CODE = 250 }
+	gm_state_picture_landmark = { KEY = temple_of_seti_abydos CODE = 251 }
+	gm_state_picture_landmark = { KEY = pyramids_of_meroe CODE = 12 }
+	gm_state_picture_landmark = { KEY = windsor_castle CODE = 221 }
+	gm_state_picture_landmark = { KEY = pont_du_gard CODE = 101 }
+	gm_state_picture_landmark = { KEY = palais_des_papes CODE = 221 }
+	gm_state_picture_landmark = { KEY = mont_saint_michel CODE = 221 }
+	gm_state_picture_landmark = { KEY = chateau_de_chambord CODE = 15 }
+	gm_state_picture_landmark = { KEY = jeronimos_monastery CODE = 300 }
+	gm_state_picture_landmark = { KEY = alhambra CODE = 160 }
+	gm_state_picture_landmark = { KEY = mezquita_of_cordoba CODE = 304 }
+	gm_state_picture_landmark = { KEY = shore_temple CODE = 312 }
+	gm_state_picture_landmark = { KEY = charminar CODE = 161 }
+	gm_state_picture_landmark = { KEY = gwalior_fort CODE = 121 }
+	gm_state_picture_landmark = { KEY = meteora CODE = 302 }
+	gm_state_picture_landmark = { KEY = citadel_of_aleppo CODE = 161 }
+	gm_state_picture_landmark = { KEY = naqsh_e_jahan_square CODE = 150 }
+	gm_state_picture_landmark = { KEY = buddhas_of_bamiyan CODE = 13 }
+	gm_state_picture_landmark = { KEY = musalla_of_herat CODE = 304 }
+	gm_state_picture_landmark = { KEY = grand_palace_bangkok CODE = 310 }
+	gm_state_picture_landmark = { KEY = changdeokgung CODE = 170 }
+	gm_state_picture_landmark = { KEY = bulguksa CODE = 172 }
+	gm_state_picture_landmark = { KEY = kinkaku_ji CODE = 172 }
+	gm_state_picture_landmark = { KEY = todai_ji CODE = 308 }
+	gm_state_picture_landmark = { KEY = itsukushima_shrine CODE = 313 }
+	gm_state_picture_landmark = { KEY = potala_palace CODE = 309 }
+	gm_state_picture_landmark = { KEY = swayambhunath CODE = 308 }
+	gm_state_picture_landmark = { KEY = leshan_giant_buddha CODE = 13 }
+	gm_state_picture_landmark = { KEY = temple_of_confucius CODE = 311 }
+	gm_state_picture_landmark = { KEY = yungang_grottoes CODE = 13 }
+	gm_state_picture_landmark = { KEY = humble_administrators_garden CODE = 413 }
+	gm_state_picture_landmark = { KEY = longmen_grottoes CODE = 13 }
+	gm_state_picture_landmark = { KEY = registan CODE = 150 }
+	gm_state_picture_landmark = { KEY = itchan_kala CODE = 161 }
+	gm_state_picture_landmark = { KEY = mausoleum_of_sultan_sanjar CODE = 304 }
+	gm_state_picture_landmark = { KEY = kazan_kremlin CODE = 142 }
+	gm_state_picture_landmark = { KEY = saint_sophia_kiev CODE = 140 }
+	gm_state_picture_landmark = { KEY = diocletians_palace CODE = 102 }
+	gm_state_picture_landmark = { KEY = marksburg CODE = 221 }
+	gm_state_picture_landmark = { KEY = aachen_cathedral CODE = 300 }
+	gm_state_picture_landmark = { KEY = basilica_of_saint_francis CODE = 300 }
+	gm_state_picture_landmark = { KEY = walls_of_tallinn CODE = 221 }
 }
 
 gm_state_picture_landmark = {
