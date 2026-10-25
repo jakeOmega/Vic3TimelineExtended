@@ -746,14 +746,14 @@ Event target link 'owner' returned an invalid object
 
 The infamy value calls `is_scripted_unification_conquest = { TARGET = scope:infamy_target_state.owner }`, and the trigger reads `$TARGET$` with no existence check, so it fails when that state's owner is invalid. Once in a session, 2026-10-05. Not anchored on the trigger file: the mod calls `has_treaty_alliance_with` from it nineteen times, and this signature would match any of those calls passing an invalid owner (#730). The mod's reunification war goal (te_reunify_country.txt) also adds `country_infamy_value`, so the helper-anchor check keeps flagging this entry until a triage names the vanilla caller at the bottom of the stack.
 
-### `common/journal_entries/00_acw_entries.txt:311`, `common/journal_entries/00_hawaii.txt:21`, `common/journal_entries/00_indian_removal.txt:7`, `common/journal_entries/00_zanzibar.txt:7` — `is_shown_in_lobby` reads a tag that may be gone
+### `common/journal_entries/00_acw_entries.txt:311`, `common/journal_entries/00_hawaii.txt:21`, `common/journal_entries/00_indian_removal.txt:7`, `common/journal_entries/00_sick_man.txt:7`, `common/journal_entries/00_zanzibar.txt:7` — `is_shown_in_lobby` reads a tag that may be gone
 
 ```
 Event target link 'c' returned an unset scope
 Invalid left side during comparison 'c'
 ```
 
-Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries.
+Each entry's `is_shown_in_lobby = { c:USA = THIS }` (Hawaii's `c:HAW`, Zanzibar's `c:OMA`, the Sick Man's `c:TUR`) uses a plain link, not `?=`. Loading a save in which the tag no longer exists logs both lines for each entry, four times per load (2026-10-05, a save in 2015). The mod overrides none of these entries. 2026-10-25: the Sick Man's too, in a 1988 save without the Ottomans.
 
 ### `common/political_movements/00_ideological_movements.txt:4947` — Div/0 in a movement's `state_weight`
 
