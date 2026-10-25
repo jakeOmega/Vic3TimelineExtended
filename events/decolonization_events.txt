@@ -4729,7 +4729,7 @@ decolonization_events.404 = {
 # collapse becomes a wave of declarations (.77). .78 settles a won war the day
 # after our goal is enforced. Effects and records:
 # common/scripted_effects/decolonization_war_effects.txt. Design:
-# docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
+# docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
 # ============================================================================
 
 # Event 70: Declaration in [territory]. From the pool below bar 40, from the

@@ -12,7 +12,7 @@
 # decol_iw_on_secession_start), so all three share the home front, the bar's
 # drain, the fighters' package and the endings.
 #
-# Design: docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
+# Design: docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
 #
 # THE RECORDS: three slots on us, the metropole (Portugal fought three). Per
 # slot N:

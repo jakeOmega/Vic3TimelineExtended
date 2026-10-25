@@ -4,7 +4,7 @@ merchant marine movement between markets.
 The classification lives in scripts/generators/convert_transport_goods.py;
 these tests read the same tables, so the construction fallback
 (CONSTRUCTION_GOOD = "merchant_marine" plus a rerun) keeps them passing.
-Design: docs/superpowers/specs/2026-10-21-transport-goods-design.md.
+Design: docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md.
 """
 
 import re

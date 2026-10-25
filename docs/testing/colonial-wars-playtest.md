@@ -1,7 +1,7 @@
 # Colonial wars play-test checklist
 
 What the next play-test should look at for the colony test and the wars of independence (2026-10-24,
-`docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md`; `mod_systems.md` § What a Colony
+`docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md`; `mod_systems.md` § What a Colony
 Is and § Wars of Independence). In-game checks do not gate a merge (CLAUDE.md, "In-game checks: self-checks and the
 play-test list"): both landed on the offline gate, and this list holds what only the game can show. Add new sections
 newest last, and strike through a fixed item with the commit that fixed it.

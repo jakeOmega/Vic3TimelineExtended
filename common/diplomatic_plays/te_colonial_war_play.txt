@@ -13,7 +13,7 @@
 # allowed: a white peace is independence. Zero infamy (owner ruling D7,
 # 2026-10-24): the condemnation comes from the great powers and the bar.
 #
-# Design: docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.4.
+# Design: docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.4.
 # ============================================================================
 
 dp_te_colonial_war = {

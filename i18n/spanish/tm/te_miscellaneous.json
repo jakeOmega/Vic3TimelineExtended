@@ -25907,9 +25907,17 @@
   "en": " #grey (replaced by the census)#!",
   "es": " #grey (sustituido por el censo)#!"
  },
- "te_demog_wf_womens_tag": {
-  "en": " #grey (read as women’s work)#!",
-  "es": " #grey (como trabajo de las mujeres)#!"
+ "te_demog_wf_womens_desc_full": {
+  "en": "How far women's rights and the technologies that free women's time bring women into paid work. The demographic census counts it toward the share of a state's women of working age who work, which reaches the men's share at #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_womens_work_full')|+%0]#! in all. Until the census first counts a state, it applies there as plain $state_working_adult_ratio_add$.",
+  "es": "Hasta qué punto los derechos de las mujeres y las tecnologías que liberan su tiempo llevan a las mujeres al trabajo remunerado. El censo demográfico lo suma a la proporción de mujeres en edad de trabajar de un estado que trabajan, que alcanza la de los hombres con #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_womens_work_full')|+%0]#! en total. Hasta que el censo cuenta un estado por primera vez, se aplica allí tal cual, como $state_working_adult_ratio_add$."
+ },
+ "te_demog_wf_womens_desc_plain": {
+  "en": "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it reads this effect as women's work instead.",
+  "es": "$state_working_adult_ratio_add_desc$. Donde el censo demográfico fija la población activa de un estado, este efecto se interpreta como trabajo de las mujeres."
+ },
+ "te_demog_wf_womens_full": {
+  "en": "Women’s Work #grey ($state_working_adult_ratio_add$)#!",
+  "es": "Trabajo de las mujeres #grey ($state_working_adult_ratio_add$)#!"
  },
  "te_demog_wk_bill": {
   "en": "Pension Bill",

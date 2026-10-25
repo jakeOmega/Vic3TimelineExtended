@@ -63,8 +63,8 @@ At the same time, monument tourism becomes an **output** bonus, as base appeal i
 | New dedication | Where existing dedications' bonuses don't fit, a new one. **"To History"**: tourism, plus the prestige and cultural pull every monument gives. No legitimacy, no interest group approval, never contested, **cannot be pulled down**; it can still be looted or lost in a war |
 | Prestige | **Lower the flat prestige per step and add a small percentage per step**, done in the policy pass (§ 15) |
 | The score without the monument | **Must be right on its own**: if the wonder is destroyed, the state keeps what its scenery and climate merit. The Aegean, with its famous weather, mustn't score low without its monuments |
-| To History's upkeep and policy | **No upkeep, and every monument policy counts it at half** (amended 2026-10-23 by the policy pass, `docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md` § 4.5; no Grand Monument has upkeep now) |
-| The monument policy | **Done in its own design** (`docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md`): four policies, each the best at one thing; no upkeep; Mothballed and Standard gone |
+| To History's upkeep and policy | **No upkeep, and every monument policy counts it at half** (amended 2026-10-23 by the policy pass, `docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md` § 4.5; no Grand Monument has upkeep now) |
+| The monument policy | **Done in its own design** (`docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md`): four policies, each the best at one thing; no upkeep; Mothballed and Standard gone |
 
 ## 4. Calls made in writing this (check these)
 
@@ -107,7 +107,7 @@ At the same time, monument tourism becomes an **output** bonus, as base appeal i
     the old scores had it in the wrong state, and Timbuktu (a state of its own) in Eastern Mali's comment. Eastern
     Mali's 65 now credits Djenné and the Dogon country, and moves 20 to the mosque, which lay in ruins in 1836: the
     ruins rule applies, and the wonder brings them back. Western Mali is rescored to 45 for what it has.
-12. **Superseded by the policy pass:** Mothballed is gone (`docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md` § 6). Cultural Promotion counts To History at half
+12. **Superseded by the policy pass:** Mothballed is gone (`docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md` § 6). Cultural Promotion counts To History at half
     (§ 4.5 there).
 
 ## 5. Monument tourism becomes output
@@ -275,8 +275,8 @@ other dedications' wiring (fit triggers, kind, name, loc, ceremony list, panel r
 - **Rededicate:** unreachable, since only contested monuments can be rededicated.
 - **Trophies:** yes, by form share (pieces of structures 25%, tokens 10%), as any monument.
 - **Ageing:** as any dedicated, uncontested monument.
-- **Upkeep:** moot. No Grand Monument costs anything to maintain since the policy pass (`docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md` § 5).
-- **Monument policy:** every policy counts it at half (amended by the policy pass, `docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md` § 4.5). Open raises its
+- **Upkeep:** moot. No Grand Monument costs anything to maintain since the policy pass (`docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md` § 5).
+- **Monument policy:** every policy counts it at half (amended by the policy pass, `docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md` § 4.5). Open raises its
   tourism ×1.25; in a state where it stands beside a monument of another dedication (Syria, Transjordan), the factor
   follows each monument's share of the state's grandeur, To History at ×1.25 and the rest at ×1.5. It joins State
   Ceremonial's venues at half its grandeur, and counts half toward Cultural Promotion's extra pull and toward Public
@@ -364,7 +364,7 @@ in between. The gates (§ 6.3) keep that true for saves already running when a p
    states in Appendix A whose points go only to existing landmarks, sites and wonders, and Moscow's 20 to Saint
    Basil's (the wonder stands already, so its +20% would otherwise count twice); the Kremlin's 20 move in phase 2.
 2. **To History and the new landmarks** (§ 7, Appendix B) with their moves, **after the policy pass's prestige change**
-   (§ 8, § 15; `docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md`, which this phase now follows). Could split by region.
+   (§ 8, § 15; `docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md`, which this phase now follows). Could split by region.
 3. **New archaeology sites** (Appendix C) with their moves. It doesn't wait for the prestige change: a site adds
    standing grandeur only once dug.
 
@@ -379,7 +379,7 @@ in between. The gates (§ 6.3) keep that true for saves already running when a p
 
 ## 15. Follow-up: the monument policy and prestige
 
-**Resolved** by `docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md`. Two corrections to the notes below: Mothballed already removed all upkeep from 2026-10-18
+**Resolved** by `docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md`. Two corrections to the notes below: Mothballed already removed all upkeep from 2026-10-18
 (`gm_policy_factor_upkeep` was 0, so `gm_state_upkeep_mult` was −1; the `gm_policy_upkeep_mothballed` modifier the
 third note cites was no longer applied), and the policy pass dropped upkeep and Mothballed altogether.
 

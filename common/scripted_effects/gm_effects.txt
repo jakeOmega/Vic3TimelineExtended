@@ -1460,7 +1460,7 @@ gm_state_adopt_for_winner = {
 			has_variable = gm_raised_by
 			owner = { has_variable = gm_cw_loser }
 			owner.var:gm_cw_loser ?= { save_temporary_scope_as = gm_tmp_loser }
-			var:gm_raised_by = scope:gm_tmp_loser
+			var:gm_raised_by ?= scope:gm_tmp_loser
 		}
 		set_variable = { name = gm_raised_by value = owner }
 	}

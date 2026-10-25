@@ -820,6 +820,16 @@ Error setting properties for '' (widget)
 
 Vanilla's `### UNASSIGNED HEADER` block (vanilla line 16141) gives a `widget` `margin_top` and `margin_left`, which a plain widget does not take. The mod's override keeps vanilla's block as it is (mod lines 16428–16430). One set per opening of the unassigned-generals or admirals menu; cosmetic.
 
+### `gui/building_details_panel.gui:4723` — a building its workforce owns, with no pops, reads the first pop of an empty list
+- source: `pdx_gui_data_model.h:421`
+
+```
+FetchData failed for 'PopListItem.GetPopType.GetTexture'
+Could not get datacontext of type PopListItem from model
+```
+
+The ownership icon's `#local workforce` branch (vanilla line 4725) takes `datacontext_from_model` index 0 of the owned building's pop list, which is empty when the building has no workers. The mod's override keeps vanilla's block as it is (mod line 4723). The second line names no file, so the entry also anchors on its source. 2026-10-24: 12 and 4 lines while a building panel was open; cosmetic.
+
 ### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88` and `events/technology_events.txt:28` — a country with no states read through its capital
 - reviewed: helper anchor, signature cannot match a mod call (the mod reads only the numeric interest_tier_effect_* constants from 00_diplomacy_values, which read no capital, region or market; its override of leverage_threshold_to_invite lives in the mod's own script values)
 
@@ -833,7 +843,7 @@ Undefined event target 'capital_scope'
 
 A country that loses its last state while it is still at war stays in the game until the war ends, with no capital (`scripting_best_practices.md` § Guard Scope References in Triggers). Vanilla reads `capital` unguarded in the Iberian entry's `should_show_when_not_involved` (`top_overlord ?= { capital = { ... } }`), in the natural-borders entry's `is_shown_when_inactive` (`any_subject_or_below = { capital = { ... } }`), in `technology_events.txt`'s car-regulation trigger (`capital.market`) and in `liberty_desire_weekly_change` (`common/script_values/00_diplomacy_values.txt:846`, `root.second_country.capital`). 2026-10-10 (a 300-year 4x observer run): 160, 11, 2 and 23 lines. The same window carries the stateless country's `Could not get leader of interest group` lines. Two vanilla events read the capital the same way: `events/movement_events.txt:1657` (`capital`, then `add_loyalists_in_state` on `NULL_STATE`) and `events/agitators_events/agitators_law_events.txt:1497` (`capital = { save_scope_as = capital_scope }`, so `scope:capital_scope` at line 1523 is undefined), one or two lines each in the 2026-10-10 and 2026-10-11 runs. The vanilla AI strategies read capitals the same way; the next entry covers them, for stacks with no mod frame only.
 
-### `common/ai_strategies/00_default_strategy.txt` and `common/ai_strategies/01_admin_strategies.txt:51` — the AI reads a stateless country's capital
+### `common/ai_strategies/00_default_strategy.txt`, `common/ai_strategies/01_admin_strategies.txt:51` and `common/ai_strategies/02_diplomatic_strategies.txt:724, 778` — the AI reads a stateless country's capital
 - stack: vanilla only
 
 ```
@@ -843,7 +853,7 @@ Event target link 'market_capital' returned an invalid object
 Event target link 'market' returned an invalid object
 ```
 
-The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through common/ai_strategies/02_diplomatic_strategies.txt. `- stack: vanilla only` keeps those visible (#863). Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
+The same stateless country as the entry above, read by the AI: the default strategy through a vanilla scripted trigger (Script location common/scripted_triggers/00_scripted_triggers.txt:1065, called from the default strategy; its line 8873 reads `market_capital`), and the admin strategy at line 51 (`capital`, then `region`). Across the 2026-10-10 and 2026-10-11 observer runs it tags 25 lines, none with a mod frame. A mod effect that sets off an AI evaluation reaches the same frames with the same message: a UN ballot's diplomatic catalyst did, 46 lines on 2026-10-10 (stack `un_on_actions.txt:88 <- … <- 00_default_strategy.txt:6513`), and so do a few through the diplomatic strategies. `- stack: vanilla only` keeps those visible (#863). The diplomatic strategies' British secret-goal scores for Southern Africa (`dominate` and `conquer`, commented "Cleaning up Boers and Zulu") read `capital.region` for every subject and for the target (lines 724 and 778); on 2026-10-24 they logged a `capital` and a `region` line each, twice in one session, with no mod frame. Not mod-fixable: vanilla's strategies would need an `exists` guard on every capital read.
 
 ### `common/journal_entries/01_silkworm_diseases.txt:75, 141` and `events/agitators_events/silkworm_diseases.txt:242` — the pébrine entry compares markets of countries that have none
 

@@ -177,7 +177,7 @@ No line after a few years means no country with a workforce of 100,000 had betwe
 
 ## Transport goods: Transportation inside a state, Merchant Marine between markets (#1050)
 
-Industry's freight is now local Transportation (× 50/30), Merchant Marine is bought only by Trade Centers (and the engine's port connections and convoys), railway and port infrastructure counts per level, the passenger tiers take inputs worth about 40% of their output, and the AI stops subsidizing railways and ports (`common/ai_strategies/te_ai_subsidy_strategies.txt`). Design: `docs/superpowers/specs/2026-10-21-transport-goods-design.md`; the #1050 baselines and save scripts are in `/mnt/d/vic3te-data/issue1050-2026-10-21/`. The owner's test is "nothing weird" in an observer run; the rows below are what weird would look like. Run into the 2040s, or load a late-game start, so the late tiers and the construction hubs are in play.
+Industry's freight is now local Transportation (× 50/30), Merchant Marine is bought only by Trade Centers (and the engine's port connections and convoys), railway and port infrastructure counts per level, the passenger tiers take inputs worth about 40% of their output, and the AI stops subsidizing railways and ports (`common/ai_strategies/te_ai_subsidy_strategies.txt`). Design: `docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md`; the #1050 baselines and save scripts are in `/mnt/d/vic3te-data/issue1050-2026-10-21/`. The owner's test is "nothing weird" in an observer run; the rows below are what weird would look like. Run into the 2040s, or load a late-game start, so the late tiers and the construction hubs are in play.
 
 | Check | Expect | If it fails |
 |---|---|---|

@@ -4,7 +4,7 @@
 A colony is separated from its ruler (UN Resolution 1541, Principle IV): not
 joined to our capital over land through states we own, a strait joining two
 states only when both are homelands of our primary cultures
-(docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
+(docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
 § 1.4). The engine's answer is cached monthly by a ring fill
 (common/scripted_effects/colonial_geography_effects.txt), whose tests and
 strait list live in common/scripted_triggers/colonial_geography_triggers.txt.

@@ -8,7 +8,7 @@
 
 **Tech Stack:** Paradox script (`common/`), Python 3.11/3.12 (`unittest`), the mod state server (worktree copy on :8951) for `pm_costs` comments and the audits.
 
-**Spec:** `docs/superpowers/specs/2026-10-21-transport-goods-design.md`
+**Spec:** `docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md`
 
 ## Global Constraints
 
