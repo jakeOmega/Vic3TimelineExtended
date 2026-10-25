@@ -1,0 +1,123 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colony panels' scripted GUIs
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md
+# (§ 3 targets, § 10.7 Settlers). The buttons in
+# gui/journal_entry_widgets/sr_sites_generated_rows.gui (one per world, which
+# pass the world's index in gen_solar_sites.SITES as scope:site) and the
+# Settlers section of space_race_widget.gui (scope:op). Player-only: the AI
+# picks its worlds and sets its programme through the journal entry's pulse
+# (sr_cf_pick_auto, sr_emig_ai_review).
+# ============================================================================
+
+# Solar System: send our next colony fleet to the world, or, on our target,
+# let the programme choose again.
+sr_colony_target_sgui = {
+	scope = country
+	saved_scopes = { site }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	# Our target can always be cleared; a new one needs the programme running.
+	is_valid = {
+		OR = {
+			sr_cf_scope_site_is_target = yes
+			AND = {
+				sr_solar_colonization_running = yes
+				sr_cf_scope_site_targetable = yes
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_cf_scope_site_is_target = yes }
+			custom_tooltip = {
+				text = sr_cf_target_clear_tt
+				remove_variable = sr_cf_target
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = sr_cf_target_set_tt
+				sr_cf_set_target_from_scope = yes
+			}
+		}
+	}
+}
+
+# Settlers: a colony's emigration priority steps Normal, High, Closed, Low.
+sr_colony_priority_sgui = {
+	scope = country
+	saved_scopes = { site }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		sr_cf_scope_site_held = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = sr_emig_priority_step_tt
+			sr_emig_step_prio_from_scope = yes
+		}
+	}
+}
+
+# Settlers: the emigration programme's level, op 0 down and op 1 up.
+sr_settlers_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = sr_emig_at_lowest_tt
+				sr_emig_level_value >= 1
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_emig_at_highest_tt
+				sr_emig_level_value <= 2
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = sr_emig_level_down_tt
+		}
+		else = {
+			custom_tooltip = sr_emig_level_up_tt
+		}
+		hidden_effect = {
+			sr_emig_step_level = yes
+		}
+	}
+}

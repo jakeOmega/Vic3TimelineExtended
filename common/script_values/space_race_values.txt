@@ -24,35 +24,45 @@ sr_interstellar_probe_goal = {
 	value = 600
 }
 sr_solar_colonization_goal = {
-	# Base goal scales with stage - further out = harder
-	value = 400
+	# Base goal scales with stage - further out = harder: 400, 450, 500, 550,
+	# 650 (sr_colonization_goal_stage_<n>, gen_solar_sites.STAGE_GOALS). Under
+	# simple and full colonies, with a target, the target's own stage's goal
+	# (the stages are no locks there; slices 2-3 design § 9).
+	value = sr_colonization_goal_stage_1
 	if = {
 		limit = {
-			has_global_variable = sr_colonization_stage
-			global_var:sr_colonization_stage >= 2
+			sr_colonies_contested_enabled = yes
+			has_variable = sr_cf_target
 		}
-		add = 50
+		value = sr_cf_target_goal
 	}
-	if = {
-		limit = {
-			has_global_variable = sr_colonization_stage
-			global_var:sr_colonization_stage >= 3
-		}
-		add = 50
-	}
-	if = {
-		limit = {
-			has_global_variable = sr_colonization_stage
-			global_var:sr_colonization_stage >= 4
-		}
-		add = 50
-	}
-	if = {
+	else_if = {
 		limit = {
 			has_global_variable = sr_colonization_stage
 			global_var:sr_colonization_stage >= 5
 		}
-		add = 100
+		value = sr_colonization_goal_stage_5
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 4
+		}
+		value = sr_colonization_goal_stage_4
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 3
+		}
+		value = sr_colonization_goal_stage_3
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_colonization_stage
+			global_var:sr_colonization_stage >= 2
+		}
+		value = sr_colonization_goal_stage_2
 	}
 }
 

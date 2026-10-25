@@ -8,8 +8,10 @@ start to appear once you research Rocketry in era 6, but you need a Space
 Program building, unlocked by Guided Missiles in era 7, before any of them can
 make progress. The Space Race game rule controls the system; with it off, the
 journal entries and their events never appear. Its Simple Colonies and Full
-Colonies settings also let a colony change hands (see [Ceding a
-colony](#ceding-a-colony)).
+Colonies settings also make colony fleets take months or years to arrive, give
+colonies settlers and let a colony change hands (see [Colony fleets in
+flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers) and
+[Ceding a colony](#ceding-a-colony)).
 
 ## Joining the space race
 
@@ -372,11 +374,16 @@ confirms its discovery; the reward is the same.
 ## Colonizing the solar system
 
 Solar System Colonization is repeatable. Each time its bar fills, a colony fleet
-founds a colony on a random unclaimed world in the current stage that it can
-reach that month (see [Launch windows](#launch-windows)). Each world can be
+leaves for an unclaimed world: the one you chose with Target in the Solar System
+list (see [Choosing a colony's world](#choosing-a-colonys-world)), or otherwise
+one the program picks among those it can reach that month (see [Launch
+windows](#launch-windows)). Under Races Only the program picks a random world of
+the current stage, and the colony is founded the month its fleet leaves. Under
+Simple Colonies and Full Colonies the fleet travels and founds the colony when it
+lands (see [Colony fleets in flight](#colony-fleets-in-flight)). Each world can be
 claimed once, by anyone, so every other country racing for colonies competes for
-the same 34 sites. A stage opens for everyone once every world in the one before
-it has been claimed, and each stage needs more progress per colony.
+the same 34 sites. Under Races Only a stage opens for everyone once every world in
+the one before it has been claimed. Each stage needs more progress per colony.
 
 | Stage | Worlds | Colonies | Progress per colony |
 |---|---|---|---|
@@ -389,6 +396,9 @@ it has been claimed, and each stage needs more progress per colony.
 From stage 3, a country that doesn't yet hold a colony needs the Deep Space
 Exploration or Interstellar Mission method to start the program; a country that
 already holds one carries on through all five stages with Solar Colonization.
+Under Simple Colonies and Full Colonies the same rule applies world by world: a
+country holding no colony needs one of those methods to send a fleet to Mercury,
+Saturn or beyond.
 Each colony's event offers two specializations, and the one you choose becomes a
 small permanent modifier on the journal entry. The options differ by world:
 research speed, military research speed, innovation cap, space race progress,
@@ -439,6 +449,7 @@ Propulsion technology loosens the windows in three steps:
 | Directed Energy Weapons (opens colonization) | In a window only. |
 | Asteroid Mining | In a window as before; outside one, at a premium of extra progress, when your approach judges it worth it. |
 | Muon-Catalyzed Fusion Reactors | Any month, with no premium. |
+| Antimatter Production, with an Antimatter Containment Facility built | Any month, with no premium. |
 
 The premium is the extra propellant an off-window transfer needs, so it climbs
 fast away from the window: on Mars, about +40% the month after a window closes
@@ -451,6 +462,99 @@ when it saves at least half as many, and Safe always waits for a window. A fleet
 that leaves outside a window spends the goal plus the premium. In practice a fast
 program launches just after a window closes rather than wait two years for Mars,
 and almost never just before one, when waiting is cheap.
+
+Fusion Power doesn't change when a fleet can leave, only how long it takes to
+arrive under Simple Colonies and Full Colonies (see [Colony fleets in
+flight](#colony-fleets-in-flight)).
+
+### Choosing a colony's world
+
+The Solar System list in Solar System Colonization has a Target button on each
+unclaimed world your program can send its next fleet to, while the program
+runs. Click it to choose that world: its row reads Our target, and the Colony
+Fleets section names it. The next fleet waits for that world's launch window, even
+if another world's window opens first. Outside the window it leaves at the
+premium when your approach judges it worth it, weighing the wait for that world's
+own window. Under Simple Colonies and Full Colonies a chosen world costs the
+progress of its own stage. Click Clear on the row to let the program pick again;
+it also picks again when someone else claims the world first.
+
+Under Races Only you can choose any world of the current stage, or a released
+world of an earlier stage. The colony is still founded the month its fleet
+leaves. AI programs don't choose ahead; they pick when a fleet is ready.
+
+### Colony fleets in flight
+
+Under Simple Colonies and Full Colonies, a colony fleet takes months or years to
+reach its world, and claims it only when it lands. Your drive sets how long:
+
+| Drive | Technology | Leaves | Mars | Jupiter | Uranus | Kuiper Belt |
+|---|---|---|---|---|---|---|
+| Chemical | (from the start) | In a launch window | 9 months | 33 months | 16 years | 51 years |
+| Fusion | Fusion Power | In a launch window | 2 to 3 months | 7 to 9 months | about 3 years | 11 to 25 years |
+| Fusion torch | Muon-Catalyzed Fusion Reactors | Any month | 1 month | 2 months | 6 months | 1 year |
+| Antimatter | Antimatter Production, with an Antimatter Containment Facility built | Any month | 1 month | 1 month | 2 months | 4 months |
+
+Fusion's times are for a departure in the window; a fusion fleet that leaves
+outside one, at the premium, takes longer, much longer to the outer planets.
+Mercury takes 4 months by chemical rocket. Colony Fleets names your drive, lists
+each fleet in flight with its world and the month it lands, and holds up to six;
+with six in flight the bar waits.
+
+The stages are not locks: a fleet can leave for any unclaimed world, and distance
+gates the outer system instead. A world costs its own stage's progress, 400 for
+Mars and the asteroids up to 650 for the Kuiper Belt. Without a choice of yours,
+the program sends each fleet to the best world it can reach within 15 years:
+nearer, cheaper and inner worlds first, and away from worlds a fleet already on
+its way, yours or another country's, will reach first. So a chemical program
+settles Mars, the asteroids and Jupiter, and waits for better drives before
+Uranus. AI programs pick the same way. You can still choose a world farther out
+by hand.
+
+Each world's row in the Solar System list shows the fleets on their way, as the
+number of fleets and the months until the first lands, in a brighter color when
+the first is yours. The first fleet to land claims the world. A fleet that lands to
+find its world taken founds another unclaimed world of the same planet or belt
+(Mars, Jupiter, Saturn, Uranus, Neptune or the Kuiper Belt) instead. If none is
+free, or it was bound for an asteroid, Venus or Mercury, it is lost with the
+progress it cost. Either way an event tells you.
+
+### Colony settlers
+
+Under Simple Colonies and Full Colonies, colonies hold people. A colony starts as
+an automated outpost with no one in it, so it grows only once settlers arrive:
+then by about 2.4% a year up to its room, from 10,000 people on the smallest
+moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
+and Utopia plains. The Settlers section of Solar System Colonization sets how
+many settlers you send from Earth:
+
+| Emigration | Settlers a month | Launch Capacity bill |
+|---|---|---|
+| Off | none | none |
+| Low | 500 | +5% Space Program throughput |
+| Steady | 1,000 | +10% |
+| High | 2,000 | +15% |
+
+The settlers leave the state that holds your Space Program, half from the middle
+strata and half from the lower, and only while your colonies have room; that
+state's census counts them as emigrants. Each colony's row shows its people and
+room and a priority button that steps through Normal, High, Closed and Low. A
+colony's share of each month's settlers is its priority (Closed none, Low 1,
+Normal 2, High 4) times its free room, and a colony that fills up passes the rest
+of its share to the others. So set the colony you are building up to High and the
+ones you don't want settled to Closed.
+
+People are crews: the Crews figure counts how many module levels a colony's
+people can run, one for every 5,000. A colony's founding specialization runs
+without a crew. With Artificial General Intelligence colonies need no crews at
+all, and the figure reads AGI.
+
+Your people off Earth give Off-World Population on Solar System Colonization:
++1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
+A colony's people go with it when it changes hands, and are lost if it is
+released. AI programs set Emigration to Steady while they are in the top three
+of the space race with money to spare, to Low otherwise, and to Off in default
+or when their colonies are full.
 
 ### Who holds a colony
 
@@ -659,7 +763,9 @@ the Ambitious approach, more so when another country is running the same
 milestone; AI major powers lean toward Safe. The AI raises funding while it has
 innovation to spare and cuts it when innovation runs short. Launch windows bind
 the AI as they bind you, and its approach decides its launches outside a window
-the same way.
+the same way. Under Simple Colonies and Full Colonies the AI sends its colony
+fleets where the program picks for you when you choose no world, and sets its
+emigration once a year (see [Colony settlers](#colony-settlers)).
 
 A revolution's winner continues the old country's program, with its progress
 (except progress toward a first colony) and its rewards, and rebels can't start

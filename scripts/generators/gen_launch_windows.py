@@ -14,7 +14,17 @@ them as month-index ranges against ``te_history_month_index``
   (the off-window premium for that offset, as a fraction: 0.35 = +35%).
 * docs/engine/launch_windows_report.md -- every window body's cycle, its
   premium curve with the spread across cycles, the historical launches the
-  method is checked against, and the Mars windows of era 11.
+  method is checked against, the Mars windows of era 11, and the transit
+  times.
+
+Transit times (solar colonization slices 2-3 design § 2,
+docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md):
+for every window body and Mercury, the months a colony fleet takes by each of
+four drives (``DRIVES``), as ``sr_transit_<drive>_<body>`` by the same signed
+months from the optimum as the premium. Chemical is the body's median Hohmann
+time; fusion the shortest Lambert transfer within its delta-v budget; the
+torch and antimatter drives a brachistochrone at their acceleration, capped by
+their delta-v. Mercury, never gated, has one figure per drive.
 
 The rule (spec § 5.3): a departure date *d* is optimal when the target's true
 longitude at *d + T* equals Earth's at *d* + 180 degrees, where *T* is half the
@@ -90,6 +100,8 @@ CAPTURE_ECCENTRICITY = 0.9  # a loose capture orbit at the target
 # Standish Table 1 (1800-2050): a [AU], e, I, L, long. peri, long. node [deg],
 # then the same six rates per Julian century.
 STANDISH = {
+    "mercury": ((0.38709927, 0.20563593, 7.00497902, 252.25032350, 77.45779628, 48.33076593),
+                (0.00000037, 0.00001906, -0.00594749, 149472.67411175, 0.16047689, -0.12534081)),
     "earth": ((1.00000261, 0.01671123, -0.00001531, 100.46457166, 102.93768193, 0.0),
               (0.00000562, -0.00004392, -0.01294668, 35999.37244981, 0.32327364, 0.0)),
     "venus": ((0.72333566, 0.00677672, 3.39467605, 181.97909950, 131.60246718, 76.67984255),
@@ -120,6 +132,7 @@ SBDB = {
 # Capture at the target: GM [km^3/s^2] and periapsis radius [km] of the loose
 # capture orbit (a tenth of the radius up; at small bodies a rendezvous, GM 0).
 CAPTURE = {
+    "mercury": (22_031.86, 2_439.7 * 1.1),
     "venus": (324_858.592, 6_051.8 * 1.1),
     "mars": (42_828.37, 3_389.5 * 1.1),
     "jupiter": (126_686_534.0, 71_492.0 * 1.1),
@@ -175,6 +188,41 @@ TOF_GRID = 24
 TOF_RANGE = (0.25, 2.6)  # times the body's Hohmann time
 TOF_REFINE_STEPS = 10
 LAMBERT_ITERATIONS = 32
+
+
+# The four drives of a colony fleet (slices 2-3 design § 1, § 2), slowest
+# first. `budget_kms`: fusion's delta-v budget (departure plus capture, as the
+# premium's), spent on the shortest Lambert transfer it covers. `accel_g` and
+# `cap_kms`: a torch's constant acceleration and its delta-v cap, a
+# brachistochrone that coasts at half the cap when the cap binds.
+@dataclass(frozen=True)
+class Drive:
+    key: str  # script token: sr_transit_<key>_<body>
+    name: str
+    tech: str  # what gives it (report only; sr_drive_level in the script)
+    budget_kms: float | None = None
+    accel_g: float | None = None
+    cap_kms: float | None = None
+
+
+DRIVES = (
+    Drive("chemical", "Chemical", "the Space Program"),
+    Drive("fusion", "Fusion", "Fusion Power", budget_kms=30.0),
+    Drive("torch", "Fusion torch", "Muon-Catalyzed Fusion Reactors", accel_g=0.01, cap_kms=400.0),
+    Drive("antimatter", "Antimatter", "Antimatter Production and an Antimatter Containment Facility",
+          accel_g=0.03, cap_kms=2000.0),
+)
+# Mercury has no launch window (UNGATED_SITES) but a transit time: one figure
+# per drive, its mean over evenly spread months of the span.
+TRANSIT_ONLY = (Body("mercury", "Mercury", 3, ("mercury",)),)
+TRANSIT_DAY = 15  # a fleet's departure day in its month
+FUSION_TOF_RANGE = (0.05, 2.6)  # times the Hohmann time: fusion reaches far below chemical's grid
+FUSION_TOF_GRID = 48
+FUSION_REFINE_STEPS = 8
+BRACHISTOCHRONE_ITERATIONS = 6
+MERCURY_SAMPLES = 240
+G0 = 9.80665  # m/s^2
+MONTH_DAYS = 30.4375
 
 
 # ---------------------------------------------------------------------------
@@ -403,6 +451,108 @@ def min_delta_v(key: str, departures: np.ndarray, hohmann_days: float) -> np.nda
 
 
 # ---------------------------------------------------------------------------
+# Transit times (slices 2-3 design § 2)
+# ---------------------------------------------------------------------------
+def months_of(days: float) -> int:
+    """Whole months, rounded half up, at least one: a fleet lands at a monthly step."""
+    return max(1, int(math.floor(days / MONTH_DAYS + 0.5)))
+
+
+def fusion_tof(key: str, departures: np.ndarray, hohmann_days: float, budget_kms: float) -> np.ndarray:
+    """The shortest time of flight [days] whose delta-v is within the budget,
+    per departure JD: the first grid time that is, refined by bisection
+    against the one before it. The Hohmann time where none is."""
+    nd = departures.size
+    earth_r, earth_v = state("earth", departures)
+    grid = np.geomspace(FUSION_TOF_RANGE[0], FUSION_TOF_RANGE[1], FUSION_TOF_GRID) * hohmann_days
+
+    def cost(dep_index: np.ndarray, tof: np.ndarray) -> np.ndarray:
+        r2, v_t = state(key, departures[dep_index] + tof)
+        v1, v2 = lambert(earth_r[dep_index], r2, tof)
+        dep = np.linalg.norm(v1 - earth_v[dep_index], axis=-1) * AU_PER_DAY_KMS
+        arr = np.linalg.norm(v2 - v_t, axis=-1) * AU_PER_DAY_KMS
+        return _delta_v(key, dep, arr)
+
+    table = cost(np.repeat(np.arange(nd), FUSION_TOF_GRID), np.tile(grid, nd)).reshape(nd, FUSION_TOF_GRID)
+    within = table <= budget_kms
+    found = within.any(axis=1)
+    first = np.argmax(within, axis=1)
+    hi, lo = grid[first], grid[np.maximum(first - 1, 0)]
+    refine = found & (first > 0)
+    idx = np.arange(nd)
+    for _ in range(FUSION_REFINE_STEPS):
+        mid = 0.5 * (lo + hi)
+        ok = cost(idx, mid) <= budget_kms
+        hi = np.where(refine & ok, mid, hi)
+        lo = np.where(refine & ~ok, mid, lo)
+    return np.where(found, hi, hohmann_days)
+
+
+def brachistochrone_days(key: str, departures: np.ndarray, accel_g: float, cap_kms: float) -> np.ndarray:
+    """Days to the body at constant acceleration, turning at the midpoint, over
+    the distance from Earth at departure to the body at arrival (iterated);
+    with the delta-v cap binding, accelerate to half the cap, coast, brake."""
+    accel = accel_g * G0
+    v_max = cap_kms * 1000.0 / 2.0
+    earth, _ = state("earth", departures)
+    days = np.full(departures.shape, 30.0)
+    for _ in range(BRACHISTOCHRONE_ITERATIONS):
+        target, _ = state(key, departures + days)
+        metres = np.linalg.norm(target - earth, axis=-1) * AU_KM * 1000.0
+        full = 2.0 * np.sqrt(metres / accel)
+        t_accel = v_max / accel
+        capped = 2.0 * t_accel + (metres - accel * t_accel ** 2) / v_max
+        days = np.where(accel * full / 2.0 > v_max, capped, full) / DAY_S
+    return days
+
+
+def drive_days(drive: Drive, key: str, departures: np.ndarray, hohmann_days: float) -> np.ndarray:
+    if drive.budget_kms is not None:
+        return fusion_tof(key, departures, hohmann_days, drive.budget_kms)
+    if drive.accel_g is not None:
+        return brachistochrone_days(key, departures, drive.accel_g, drive.cap_kms)
+    return np.full(departures.shape, hohmann_days)
+
+
+def transit_months(key: str, departures: np.ndarray, groups: np.ndarray, hohmann_days: float) -> dict[str, dict[int, int]]:
+    """{drive: {group: months}}: each group's mean over its departures, a
+    better drive never slower than the one before it, chemical the Hohmann time."""
+    out: dict[str, dict[int, int]] = {}
+    previous = None
+    for drive in DRIVES:
+        days = drive_days(drive, key, departures, hohmann_days)
+        table = {}
+        for g in sorted(set(groups.tolist())):
+            months = months_of(float(np.mean(days[groups == g])))
+            table[g] = months if previous is None else min(months, previous[g])
+        out[drive.key] = table
+        previous = table
+    return out
+
+
+@dataclass
+class TransitPlan:
+    """A body with a transit time and no window (Mercury): one figure per drive."""
+    body: Body
+    hohmann_days: float
+    transit: dict[str, int]
+
+
+def plan_transit_only(body: Body, first_month: int, last_month: int) -> TransitPlan:
+    months = sorted({int(m) for m in np.linspace(first_month, last_month, MERCURY_SAMPLES).round()})
+    departures = np.array([datetime_to_jd(datetime(*month_of(m), TRANSIT_DAY)) for m in months])
+    earth, _ = state("earth", departures)
+    r_earth = np.linalg.norm(earth, axis=-1)
+    tof = hohmann_time(r_earth, _semi_major(body.key))
+    for _ in range(4):
+        target, _ = state(body.key, departures + tof)
+        tof = hohmann_time(r_earth, np.linalg.norm(target, axis=-1))
+    hohmann_days = float(np.median(tof))
+    table = transit_months(body.key, departures, np.zeros(departures.size, dtype=int), hohmann_days)
+    return TransitPlan(body, hohmann_days, {drive: by_group[0] for drive, by_group in table.items()})
+
+
+# ---------------------------------------------------------------------------
 # Windows and premiums
 # ---------------------------------------------------------------------------
 @dataclass
@@ -437,6 +587,8 @@ class BodyPlan:
     spread: dict[int, tuple[float, float]] = field(default_factory=dict)  # per-cycle premium range
     best_dv: tuple[float, float] = (0.0, 0.0)  # cheapest window month: min, max over sampled cycles
     sampled: int = 0
+    hohmann_days: float = 0.0  # median over its windows
+    transit: dict[str, dict[int, int]] = field(default_factory=dict)  # drive -> offset -> months
 
 
 def _round_premium(p: float) -> float:
@@ -501,6 +653,15 @@ def plan_body(body: Body, first_month: int, last_month: int) -> BodyPlan:
             plan.premium[off] = _round_premium(premium_from_extra(plan.extra_dv[off]))
         per_cycle = [min(PREMIUM_CAP, premium_from_extra(v)) for v in values]
         plan.spread[off] = (min(per_cycle), max(per_cycle))
+    # Transit by drive, on the same offsets and cycles (one departure each, on
+    # TRANSIT_DAY): what a fleet leaving that month takes.
+    plan.hohmann_days = hohmann_days
+    transit_deps, transit_groups = [], []
+    for w in cycles:
+        for off in offsets:
+            transit_deps.append(datetime_to_jd(datetime(*month_of(w.optimum_month + off), TRANSIT_DAY)))
+            transit_groups.append(off)
+    plan.transit = transit_months(body.key, np.array(transit_deps), np.array(transit_groups), hohmann_days)
     return plan
 
 
@@ -508,6 +669,7 @@ def plan_body(body: Body, first_month: int, last_month: int) -> BodyPlan:
 # long-running server computes it once (about two seconds) and every later
 # reload reuses it.
 _PLAN_CACHE: dict[tuple[int, int], list[BodyPlan]] = {}
+_TRANSIT_CACHE: dict[tuple[int, int], list[TransitPlan]] = {}
 
 
 def plan_all(root: Path = ROOT) -> tuple[list[BodyPlan], int, int]:
@@ -516,6 +678,13 @@ def plan_all(root: Path = ROOT) -> tuple[list[BodyPlan], int, int]:
     if (first, last) not in _PLAN_CACHE:
         _PLAN_CACHE[first, last] = [plan_body(b, first, last) for b in BODIES]
     return _PLAN_CACHE[first, last], first, last
+
+
+def plan_transit_all(root: Path = ROOT) -> list[TransitPlan]:
+    _, first, last = plan_all(root)
+    if (first, last) not in _TRANSIT_CACHE:
+        _TRANSIT_CACHE[first, last] = [plan_transit_only(b, first, last) for b in TRANSIT_ONLY]
+    return _TRANSIT_CACHE[first, last]
 
 
 # ---------------------------------------------------------------------------
@@ -653,23 +822,55 @@ def _guarded_blocks(entries: list[tuple[int, int, str]], first: int, last: int) 
     return lines
 
 
-def _premium_tree(key: str, premium: dict[int, float], offsets: list[int], depth: int) -> list[str]:
+def _offset_tree(key: str, table: dict[int, float], offsets: list[int], depth: int) -> list[str]:
+    """A binary search on sr_launch_offset_<key> returning table[offset]."""
     tab = "\t" * depth
     if len(offsets) == 1:
-        return [f"{tab}value = {_num(premium[offsets[0]])} # offset {offsets[0]:+d}"]
-    if all(premium[o] == premium[offsets[0]] for o in offsets):
-        return [f"{tab}value = {_num(premium[offsets[0]])} # offsets {offsets[0]:+d} to {offsets[-1]:+d}"]
+        return [f"{tab}value = {_num(table[offsets[0]])} # offset {offsets[0]:+d}"]
+    if all(table[o] == table[offsets[0]] for o in offsets):
+        return [f"{tab}value = {_num(table[offsets[0]])} # offsets {offsets[0]:+d} to {offsets[-1]:+d}"]
     mid = len(offsets) // 2
     left, right = offsets[:mid], offsets[mid:]
     lines = [f"{tab}if = {{", f"{tab}\tlimit = {{ sr_launch_offset_{key} < {right[0]} }}"]
-    lines += _premium_tree(key, premium, left, depth + 1)
+    lines += _offset_tree(key, table, left, depth + 1)
     lines += [f"{tab}}}", f"{tab}else = {{"]
-    lines += _premium_tree(key, premium, right, depth + 1)
+    lines += _offset_tree(key, table, right, depth + 1)
     lines += [f"{tab}}}"]
     return lines
 
 
-def render_values(plans: list[BodyPlan], first: int, last: int) -> str:
+_premium_tree = _offset_tree
+
+
+def render_transit(plan: BodyPlan) -> list[str]:
+    key = plan.body.key
+    offsets = sorted(plan.transit["chemical"])
+    out = [f"# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time "
+           f"({plan.hohmann_days:.0f} days) whatever the month; the others by months from the optimum,",
+           f"# a departure on day {TRANSIT_DAY} averaged over the same {plan.sampled} cycles:"]
+    for off in offsets:
+        row = ", ".join(f"{d.key} {plan.transit[d.key][off]}" for d in DRIVES[1:])
+        out.append(f"#   {off:+3d}: {row}")
+    out.append(f"sr_transit_chemical_{key} = {{ value = {plan.transit['chemical'][offsets[0]]} }}")
+    for drive in DRIVES[1:]:
+        out += [f"sr_transit_{drive.key}_{key} = {{", "\tvalue = 0"]
+        out += _offset_tree(key, plan.transit[drive.key], offsets, 1)
+        out.append("}")
+    return out + [""]
+
+
+def render_transit_only(plans: list[TransitPlan]) -> list[str]:
+    out = ["# ===== Transit only: a body with no launch window =====",
+           f"# One figure per drive, the mean over {MERCURY_SAMPLES} months spread across the span."]
+    for plan in plans:
+        key = plan.body.key
+        out.append(f"# {plan.body.name}: the median Hohmann time is {plan.hohmann_days:.0f} days")
+        for drive in DRIVES:
+            out.append(f"sr_transit_{drive.key}_{key} = {{ value = {plan.transit[drive.key]} }}")
+    return out + [""]
+
+
+def render_values(plans: list[BodyPlan], first: int, last: int, transit_plans: list[TransitPlan]) -> str:
     out = [HEADER, VALUES_PREAMBLE]
     for plan in plans:
         key, ws = plan.body.key, plan.windows
@@ -709,7 +910,9 @@ def render_values(plans: list[BodyPlan], first: int, last: int) -> str:
         out.append("\tvalue = 0")
         out += _premium_tree(key, plan.premium, offsets, 1)
         out += ["}", ""]
-    out += render_readers(plans)
+        out += render_transit(plan)
+    out += render_transit_only(transit_plans)
+    out += render_readers(plans, transit_plans)
     return "\n".join(out)
 
 
@@ -728,7 +931,8 @@ def render_triggers(plans: list[BodyPlan]) -> str:
 
 
 def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
-    lines = [f"{name} = {{", f"\tsr_current_colonization_stage >= {stage}"]
+    lines = [f"{name} = {{", "\tOR = {", "\t\tsr_colonies_contested_enabled = yes",
+             f"\t\tsr_current_colonization_stage >= {stage}", "\t}"]
     if len(sites) == 1:
         lines.append(f"\tNOT = {{ has_global_variable = sr_colony_{sites[0]} }}")
     else:
@@ -738,12 +942,40 @@ def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
     return lines + ["}"]
 
 
-def render_readers(plans: list[BodyPlan]) -> list[str]:
+def _transit_reader(k: str, cached: bool) -> list[str]:
+    """sr_transit_months_<k>: this country's drive's transit now. A window
+    body's figures by offset come from the month's cache (the chemical one is
+    a constant); Mercury's are constants."""
+    lines = [f"sr_transit_months_{k} = {{", f"\tvalue = sr_transit_chemical_{k}"]
+    for i, (level, drive) in enumerate(((3, "antimatter"), (2, "torch"), (1, "fusion"))):
+        word = "if" if i == 0 else "else_if"
+        if cached:
+            var = f"sr_window_transit_{drive}_{k}"
+            lines.append(f"\t{word} = {{ limit = {{ sr_drive_level >= {level} has_global_variable = {var} }} "
+                         f"value = global_var:{var} }}")
+        else:
+            lines.append(f"\t{word} = {{ limit = {{ sr_drive_level >= {level} }} value = sr_transit_{drive}_{k} }}")
+    return lines + ["}"]
+
+
+def render_readers(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> list[str]:
     """Per-body readers of the window cache and the stage's minima: the body
     list's boilerplate, so a window body is added in one place (BODIES)."""
     out = [READERS_PREAMBLE]
     for code, plan in enumerate(plans, start=1):
         k = plan.body.key
+        out += _transit_reader(k, cached=True)
+        out += [
+            f"sr_launch_target_cost_{k} = {{",
+            "\tvalue = sr_launch_never",
+            f"\tif = {{ limit = {{ sr_launch_departs_free = {{ BODY = {k} }} }} value = 0 }}",
+            f"\telse_if = {{ limit = {{ sr_launch_target_departs_paid = {{ BODY = {k} }} }} value = sr_window_premium_now_{k} }}",
+            "}",
+            f"sr_launch_target_months_allowed_{k} = {{",
+            f"\tvalue = sr_window_wait_months_{k}",
+            "\tmultiply = sr_launch_approach_weight",
+            "}",
+        ]
         out += [
             f"# {plan.body.name}",
             f"sr_window_body_code_{k} = {{ value = {code} }}",
@@ -771,6 +1003,9 @@ def render_readers(plans: list[BodyPlan]) -> list[str]:
             f"\telse_if = {{ limit = {{ sr_launch_departs_paid = {{ BODY = {k} }} }} value = 1 }}",
             "}",
         ]
+    for plan in transit_plans:
+        out += [f"# {plan.body.name} (no window)"]
+        out += _transit_reader(plan.body.key, cached=False)
     out += ["", "# The stage's soonest window among its unclaimed sites (m in the off-window",
             "# rule, spec § 5.2a): 0 while one is open or Mercury is left; sr_launch_never",
             "# when the stage has nothing left. Any scope.",
@@ -818,6 +1053,8 @@ IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body's stage has been
 # sr_sites_generated.txt's sr_establish_colony_effect draws them). An earlier
 # stage's body is in play only while a world of it is released (a dead holder
 # with no heir, colony record design § 6): those stages are full otherwise.
+# Under simple and full colonies the stages are no locks (slices 2-3 design
+# § 9): a body is in play while it has an unclaimed world.
 # Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
 """
 
@@ -835,6 +1072,16 @@ READERS_PREAMBLE = """# ===== Readers of the window cache (sr_launch_windows_ref
 # sr_window_disp_verdict_<body> country, the panel's verdict on launching there
 #                               now outside its window: 1 the approach would,
 #                               0 it waits, 2 Safe (never off-window)
+# sr_transit_months_<body>      country: the months a colony fleet leaving now
+#                               takes, by its drive (sr_drive_level), from the
+#                               month's cache sr_window_transit_<drive>_<body>
+#                               (chemical, a constant, needs none)
+# sr_launch_target_cost_<body>  country: the premium a fleet bound for a chosen
+#                               world of the body leaves at now (0 in a window or
+#                               with a torch), sr_launch_never if it can't
+#                               (sr_launch_target_departs_paid: the approach's test
+#                               against the body's own wait, not the stage's,
+#                               sr_launch_target_months_allowed_<body> = k x it)
 """
 
 TRIGGERS_PREAMBLE = """# Launch windows for Solar System Colonization (Global Commons spec § 5.3).
@@ -847,7 +1094,41 @@ TRIGGERS_PREAMBLE = """# Launch windows for Solar System Colonization (Global Co
 """
 
 
-def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
+def render_transit_report(plans: list[BodyPlan], transit_plans: list[TransitPlan]) -> list[str]:
+    lines = ["", "## Transit times", "",
+             "The months a colony fleet takes (solar colonization slices 2-3 design § 2), rounded, at least 1. "
+             "Chemical is the body's median Hohmann time, whatever the month. "
+             + " ".join(
+                 f"{d.name} ({d.tech}): "
+                 + (f"the shortest Lambert transfer within {d.budget_kms:.0f} km/s, from {FUSION_TOF_RANGE[0]} to "
+                    f"{FUSION_TOF_RANGE[1]} times the Hohmann time." if d.budget_kms is not None else
+                    f"a brachistochrone at {d.accel_g} g, its delta-v capped at {d.cap_kms:,.0f} km/s.")
+                 for d in DRIVES[1:])
+             + f" By months from the optimum, a departure on day {TRANSIT_DAY} averaged over the premium's "
+               "cycles; a better drive is never slower than the one before it.", "",
+             "| Body | Chemical | " + " | ".join(f"{d.name}, in a window" for d in DRIVES[1:]) + " |",
+             "|---|---|" + "---|" * (len(DRIVES) - 1)]
+    for plan in plans:
+        window = [-1, 0, 1]
+        cells = []
+        for d in DRIVES[1:]:
+            values = [plan.transit[d.key][o] for o in window]
+            cells.append(f"{min(values)}–{max(values)}" if min(values) != max(values) else f"{values[0]}")
+        lines.append(f"| {plan.body.name} | {plan.transit['chemical'][0]} | " + " | ".join(cells) + " |")
+    for plan in transit_plans:
+        lines.append(f"| {plan.body.name} (no window) | {plan.transit['chemical']} | "
+                     + " | ".join(str(plan.transit[d.key]) for d in DRIVES[1:]) + " |")
+    for plan in plans:
+        offsets = sorted(plan.transit["chemical"])
+        lines += ["", f"### {plan.body.name}: transit by month", "",
+                  "| Months | " + " | ".join(d.name for d in DRIVES[1:]) + " |",
+                  "|---|" + "---|" * (len(DRIVES) - 1)]
+        for off in offsets:
+            lines.append(f"| {off:+d} | " + " | ".join(str(plan.transit[d.key][off]) for d in DRIVES[1:]) + " |")
+    return lines
+
+
+def render_report(plans: list[BodyPlan], first: int, last: int, transit_plans: list[TransitPlan]) -> str:
     lines = [
         "<!-- AUTO-GENERATED by scripts/generators/gen_launch_windows.py - do not edit manually. -->",
         "# Launch windows report",
@@ -909,15 +1190,17 @@ def render_report(plans: list[BodyPlan], first: int, last: int) -> str:
         if month_index(2030, 1) <= w.optimum_month <= month_index(2060, 12):
             lines.append(f"| {month_label(w.start)}–{month_label(w.end)} | {jd_to_datetime(w.optimum_jd).date()} | "
                          f"{month_label(w.arrival_month)} |")
+    lines += render_transit_report(plans, transit_plans)
     return "\n".join(lines) + "\n"
 
 
 def plan_outputs(root: Path = ROOT) -> dict[Path, str]:
     plans, first, last = plan_all(root)
+    transit_plans = plan_transit_all(root)
     return {
         TRIGGERS_OUT: render_triggers(plans),
-        VALUES_OUT: render_values(plans, first, last),
-        REPORT_OUT: render_report(plans, first, last),
+        VALUES_OUT: render_values(plans, first, last, transit_plans),
+        REPORT_OUT: render_report(plans, first, last, transit_plans),
     }
 
 

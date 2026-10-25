@@ -205,6 +205,8 @@ NOT_ON_COUNTRY = {
     "nd_posture_*": "interest groups",
     "sr_colony_*": "je_space_race_solar_colonization", "sr_discovery_*": "je_space_race_solar_colonization",
     "sr_solar_system_trade": "je_space_race_solar_colonization",
+    "sr_emigration_programme": "je_space_race_solar_colonization",
+    "sr_offworld_population": "je_space_race_solar_colonization",
     "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",
