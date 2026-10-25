@@ -1505,20 +1505,20 @@ sr_site_mirror_on_valles_marineris = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_valles_marineris_research MULT = sr_site_mult_a_valles_marineris }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_valles_marineris_research }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_valles_marineris_research }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_valles_marineris >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_valles_marineris_mining MULT = sr_site_mult_b_valles_marineris }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_valles_marineris_mining }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_valles_marineris_mining }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_valles_marineris = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_valles_marineris_research }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_valles_marineris_mining }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_valles_marineris_research }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_valles_marineris_mining }
 	if = { limit = { has_variable = sr_emig_prio_valles_marineris } remove_variable = sr_emig_prio_valles_marineris }
 	sr_mq_drop_site = { INDEX = 1 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -1675,14 +1675,14 @@ sr_site_mirror_on_olympus_mons = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_olympus_mons_atmospheric MULT = sr_site_mult_a_olympus_mons }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_olympus_mons_atmospheric }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_olympus_mons_atmospheric }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_olympus_mons >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_olympus_mons_geothermal MULT = sr_site_mult_b_olympus_mons }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_olympus_mons_geothermal }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_olympus_mons_geothermal }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_olympus_tubes global_var:sr_site_disc_olympus_tubes = 1 }
@@ -1703,8 +1703,8 @@ sr_site_mirror_on_olympus_mons = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_olympus_mons = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_olympus_mons_atmospheric }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_olympus_mons_geothermal }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_olympus_mons_atmospheric }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_olympus_mons_geothermal }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_olympus_tubes_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_olympus_tubes_b }
 	sr_site_clear_discovery = { DISCOVERY = olympus_tubes }
@@ -1866,14 +1866,14 @@ sr_site_mirror_on_hellas_planitia = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_hellas_settlement MULT = sr_site_mult_a_hellas_planitia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_hellas_settlement }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_hellas_settlement }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_hellas_planitia >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_hellas_astrobiology MULT = sr_site_mult_b_hellas_planitia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_hellas_astrobiology }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_hellas_astrobiology }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_hellas_fossils global_var:sr_site_disc_hellas_fossils = 1 }
@@ -1894,8 +1894,8 @@ sr_site_mirror_on_hellas_planitia = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_hellas_planitia = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_hellas_settlement }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_hellas_astrobiology }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_hellas_settlement }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_hellas_astrobiology }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_hellas_fossils_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_hellas_fossils_b }
 	sr_site_clear_discovery = { DISCOVERY = hellas_fossils }
@@ -2057,14 +2057,14 @@ sr_site_mirror_on_utopia_planitia = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_utopia_ice MULT = sr_site_mult_a_utopia_planitia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_utopia_ice }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_utopia_ice }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_utopia_planitia >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_utopia_agriculture MULT = sr_site_mult_b_utopia_planitia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_utopia_agriculture }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_utopia_agriculture }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_utopia_glacier global_var:sr_site_disc_utopia_glacier = 1 }
@@ -2085,8 +2085,8 @@ sr_site_mirror_on_utopia_planitia = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_utopia_planitia = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_utopia_ice }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_utopia_agriculture }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_utopia_ice }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_utopia_agriculture }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_utopia_glacier_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_utopia_glacier_b }
 	sr_site_clear_discovery = { DISCOVERY = utopia_glacier }
@@ -2248,14 +2248,14 @@ sr_site_mirror_on_arcadia_planitia = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_arcadia_civilian MULT = sr_site_mult_a_arcadia_planitia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_arcadia_civilian }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_arcadia_civilian }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_arcadia_planitia >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_arcadia_military MULT = sr_site_mult_b_arcadia_planitia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_arcadia_military }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_arcadia_military }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_arcadia_brines global_var:sr_site_disc_arcadia_brines = 1 }
@@ -2276,8 +2276,8 @@ sr_site_mirror_on_arcadia_planitia = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_arcadia_planitia = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_arcadia_civilian }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_arcadia_military }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_arcadia_civilian }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_arcadia_military }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_arcadia_brines_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_arcadia_brines_b }
 	sr_site_clear_discovery = { DISCOVERY = arcadia_brines }
@@ -2439,14 +2439,14 @@ sr_site_mirror_on_ceres = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_ceres_waystation MULT = sr_site_mult_a_ceres }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_ceres_waystation }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_ceres_waystation }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_ceres >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_ceres_observatory MULT = sr_site_mult_b_ceres }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_ceres_observatory }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_ceres_observatory }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_ceres_reservoir global_var:sr_site_disc_ceres_reservoir = 1 }
@@ -2467,8 +2467,8 @@ sr_site_mirror_on_ceres = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_ceres = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_ceres_waystation }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_ceres_observatory }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_ceres_waystation }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_ceres_observatory }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_ceres_reservoir_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_ceres_reservoir_b }
 	sr_site_clear_discovery = { DISCOVERY = ceres_reservoir }
@@ -2630,14 +2630,14 @@ sr_site_mirror_on_vesta = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_vesta_mining MULT = sr_site_mult_a_vesta }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_vesta_mining }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_vesta_mining }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_vesta >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_vesta_science MULT = sr_site_mult_b_vesta }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_vesta_science }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_vesta_science }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_vesta_impactor global_var:sr_site_disc_vesta_impactor = 1 }
@@ -2658,8 +2658,8 @@ sr_site_mirror_on_vesta = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_vesta = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_vesta_mining }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_vesta_science }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_vesta_mining }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_vesta_science }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_vesta_impactor_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_vesta_impactor_b }
 	sr_site_clear_discovery = { DISCOVERY = vesta_impactor }
@@ -2821,14 +2821,14 @@ sr_site_mirror_on_psyche = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_psyche_industrial MULT = sr_site_mult_a_psyche }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_psyche_industrial }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_psyche_industrial }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_psyche >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_psyche_careful MULT = sr_site_mult_b_psyche }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_psyche_careful }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_psyche_careful }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_psyche_metal global_var:sr_site_disc_psyche_metal = 1 }
@@ -2849,8 +2849,8 @@ sr_site_mirror_on_psyche = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_psyche = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_psyche_industrial }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_psyche_careful }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_psyche_industrial }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_psyche_careful }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_psyche_metal_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_psyche_metal_b }
 	sr_site_clear_discovery = { DISCOVERY = psyche_metal }
@@ -3012,14 +3012,14 @@ sr_site_mirror_on_pallas = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_pallas_composites MULT = sr_site_mult_a_pallas }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_pallas_composites }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_pallas_composites }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_pallas >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_pallas_observatory MULT = sr_site_mult_b_pallas }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_pallas_observatory }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_pallas_observatory }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_pallas_water global_var:sr_site_disc_pallas_water = 1 }
@@ -3040,8 +3040,8 @@ sr_site_mirror_on_pallas = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_pallas = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_pallas_composites }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_pallas_observatory }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_pallas_composites }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_pallas_observatory }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_pallas_water_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_pallas_water_b }
 	sr_site_clear_discovery = { DISCOVERY = pallas_water }
@@ -3203,20 +3203,20 @@ sr_site_mirror_on_hygiea = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_hygiea_volatiles MULT = sr_site_mult_a_hygiea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_hygiea_volatiles }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_hygiea_volatiles }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_hygiea >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_hygiea_automated MULT = sr_site_mult_b_hygiea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_hygiea_automated }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_hygiea_automated }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_hygiea = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_hygiea_volatiles }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_hygiea_automated }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_hygiea_volatiles }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_hygiea_automated }
 	if = { limit = { has_variable = sr_emig_prio_hygiea } remove_variable = sr_emig_prio_hygiea }
 	sr_mq_drop_site = { INDEX = 10 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -3373,14 +3373,14 @@ sr_site_mirror_on_io = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_io_mining MULT = sr_site_mult_a_io }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_io_mining }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_io_mining }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_io >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_io_research MULT = sr_site_mult_b_io }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_io_research }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_io_research }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_io_roof global_var:sr_site_disc_io_roof = 1 }
@@ -3401,8 +3401,8 @@ sr_site_mirror_on_io = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_io = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_io_mining }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_io_research }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_io_mining }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_io_research }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_io_roof_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_io_roof_b }
 	sr_site_clear_discovery = { DISCOVERY = io_roof }
@@ -3564,14 +3564,14 @@ sr_site_mirror_on_europa = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_europa_drilling MULT = sr_site_mult_a_europa }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_europa_drilling }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_europa_drilling }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_europa >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_europa_surface MULT = sr_site_mult_b_europa }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_europa_surface }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_europa_surface }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_europa_life global_var:sr_site_disc_europa_life = 1 }
@@ -3608,8 +3608,8 @@ sr_site_mirror_on_europa = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_europa = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_europa_drilling }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_europa_surface }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_europa_drilling }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_europa_surface }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_europa_life_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_europa_life_b }
 	sr_site_clear_discovery = { DISCOVERY = europa_life }
@@ -3776,14 +3776,14 @@ sr_site_mirror_on_ganymede = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_ganymede_settlement MULT = sr_site_mult_a_ganymede }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_ganymede_settlement }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_ganymede_settlement }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_ganymede >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_ganymede_command MULT = sr_site_mult_b_ganymede }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_ganymede_command }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_ganymede_command }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_ganymede_layers global_var:sr_site_disc_ganymede_layers = 1 }
@@ -3804,8 +3804,8 @@ sr_site_mirror_on_ganymede = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_ganymede = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_ganymede_settlement }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_ganymede_command }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_ganymede_settlement }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_ganymede_command }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_ganymede_layers_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_ganymede_layers_b }
 	sr_site_clear_discovery = { DISCOVERY = ganymede_layers }
@@ -3967,14 +3967,14 @@ sr_site_mirror_on_callisto = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_callisto_gateway MULT = sr_site_mult_a_callisto }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_callisto_gateway }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_callisto_gateway }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_callisto >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_callisto_agricultural MULT = sr_site_mult_b_callisto }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_callisto_agricultural }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_callisto_agricultural }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_callisto_archive global_var:sr_site_disc_callisto_archive = 1 }
@@ -3995,8 +3995,8 @@ sr_site_mirror_on_callisto = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_callisto = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_callisto_gateway }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_callisto_agricultural }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_callisto_gateway }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_callisto_agricultural }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_callisto_archive_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_callisto_archive_b }
 	sr_site_clear_discovery = { DISCOVERY = callisto_archive }
@@ -4158,20 +4158,20 @@ sr_site_mirror_on_himalia = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_himalia_telescope MULT = sr_site_mult_a_himalia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_himalia_telescope }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_himalia_telescope }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_himalia >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_himalia_depot MULT = sr_site_mult_b_himalia }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_himalia_depot }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_himalia_depot }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_himalia = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_himalia_telescope }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_himalia_depot }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_himalia_telescope }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_himalia_depot }
 	if = { limit = { has_variable = sr_emig_prio_himalia } remove_variable = sr_emig_prio_himalia }
 	sr_mq_drop_site = { INDEX = 15 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -4328,20 +4328,20 @@ sr_site_mirror_on_amalthea = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_amalthea_physics MULT = sr_site_mult_a_amalthea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_amalthea_physics }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_amalthea_physics }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_amalthea >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_amalthea_rings MULT = sr_site_mult_b_amalthea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_amalthea_rings }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_amalthea_rings }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_amalthea = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_amalthea_physics }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_amalthea_rings }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_amalthea_physics }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_amalthea_rings }
 	if = { limit = { has_variable = sr_emig_prio_amalthea } remove_variable = sr_emig_prio_amalthea }
 	sr_mq_drop_site = { INDEX = 16 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -4498,14 +4498,14 @@ sr_site_mirror_on_venus = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_venus_atmospheric MULT = sr_site_mult_a_venus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_venus_atmospheric }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_venus_atmospheric }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_venus >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_venus_extraction MULT = sr_site_mult_b_venus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_venus_extraction }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_venus_extraction }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_venus_waves global_var:sr_site_disc_venus_waves = 1 }
@@ -4526,8 +4526,8 @@ sr_site_mirror_on_venus = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_venus = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_venus_atmospheric }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_venus_extraction }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_venus_atmospheric }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_venus_extraction }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_venus_waves_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_venus_waves_b }
 	sr_site_clear_discovery = { DISCOVERY = venus_waves }
@@ -4689,14 +4689,14 @@ sr_site_mirror_on_mercury = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_mercury_solar MULT = sr_site_mult_a_mercury }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_mercury_solar }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_mercury_solar }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_mercury >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_mercury_ice MULT = sr_site_mult_b_mercury }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_mercury_ice }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_mercury_ice }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_mercury_archive global_var:sr_site_disc_mercury_archive = 1 }
@@ -4717,8 +4717,8 @@ sr_site_mirror_on_mercury = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_mercury = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_mercury_solar }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_mercury_ice }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_mercury_solar }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_mercury_ice }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_mercury_archive_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_mercury_archive_b }
 	sr_site_clear_discovery = { DISCOVERY = mercury_archive }
@@ -4880,14 +4880,14 @@ sr_site_mirror_on_titan = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_titan_hydrocarbons MULT = sr_site_mult_a_titan }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_titan_hydrocarbons }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_titan_hydrocarbons }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_titan >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_titan_prebiotic MULT = sr_site_mult_b_titan }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_titan_prebiotic }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_titan_prebiotic }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_titan_chemistry global_var:sr_site_disc_titan_chemistry = 1 }
@@ -4908,8 +4908,8 @@ sr_site_mirror_on_titan = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_titan = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_titan_hydrocarbons }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_titan_prebiotic }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_titan_hydrocarbons }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_titan_prebiotic }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_titan_chemistry_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_titan_chemistry_b }
 	sr_site_clear_discovery = { DISCOVERY = titan_chemistry }
@@ -5071,14 +5071,14 @@ sr_site_mirror_on_enceladus = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_enceladus_astrobiology MULT = sr_site_mult_a_enceladus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_enceladus_astrobiology }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_enceladus_astrobiology }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_enceladus >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_enceladus_water MULT = sr_site_mult_b_enceladus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_enceladus_water }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_enceladus_water }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_enceladus_life global_var:sr_site_disc_enceladus_life = 1 }
@@ -5099,8 +5099,8 @@ sr_site_mirror_on_enceladus = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_enceladus = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_enceladus_astrobiology }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_enceladus_water }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_enceladus_astrobiology }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_enceladus_water }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_enceladus_life_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_enceladus_life_b }
 	sr_site_clear_discovery = { DISCOVERY = enceladus_life }
@@ -5262,20 +5262,20 @@ sr_site_mirror_on_rhea = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_rhea_propellant MULT = sr_site_mult_a_rhea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_rhea_propellant }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_rhea_propellant }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_rhea >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_rhea_observation MULT = sr_site_mult_b_rhea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_rhea_observation }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_rhea_observation }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_rhea = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_rhea_propellant }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_rhea_observation }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_rhea_propellant }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_rhea_observation }
 	if = { limit = { has_variable = sr_emig_prio_rhea } remove_variable = sr_emig_prio_rhea }
 	sr_mq_drop_site = { INDEX = 21 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -5432,20 +5432,20 @@ sr_site_mirror_on_mimas = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_mimas_installation MULT = sr_site_mult_a_mimas }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_mimas_installation }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_mimas_installation }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_mimas >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_mimas_gravity MULT = sr_site_mult_b_mimas }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_mimas_gravity }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_mimas_gravity }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_mimas = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_mimas_installation }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_mimas_gravity }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_mimas_installation }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_mimas_gravity }
 	if = { limit = { has_variable = sr_emig_prio_mimas } remove_variable = sr_emig_prio_mimas }
 	sr_mq_drop_site = { INDEX = 22 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -5602,20 +5602,20 @@ sr_site_mirror_on_iapetus = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_iapetus_ridge MULT = sr_site_mult_a_iapetus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_iapetus_ridge }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_iapetus_ridge }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_iapetus >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_iapetus_organics MULT = sr_site_mult_b_iapetus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_iapetus_organics }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_iapetus_organics }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_iapetus = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_iapetus_ridge }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_iapetus_organics }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_iapetus_ridge }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_iapetus_organics }
 	if = { limit = { has_variable = sr_emig_prio_iapetus } remove_variable = sr_emig_prio_iapetus }
 	sr_mq_drop_site = { INDEX = 23 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -5772,14 +5772,14 @@ sr_site_mirror_on_titania = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_titania_mining MULT = sr_site_mult_a_titania }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_titania_mining }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_titania_mining }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_titania >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_titania_geophysics MULT = sr_site_mult_b_titania }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_titania_geophysics }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_titania_geophysics }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_titania_ocean global_var:sr_site_disc_titania_ocean = 1 }
@@ -5800,8 +5800,8 @@ sr_site_mirror_on_titania = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_titania = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_titania_mining }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_titania_geophysics }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_titania_mining }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_titania_geophysics }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_titania_ocean_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_titania_ocean_b }
 	sr_site_clear_discovery = { DISCOVERY = titania_ocean }
@@ -5963,20 +5963,20 @@ sr_site_mirror_on_oberon = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_oberon_relay MULT = sr_site_mult_a_oberon }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_oberon_relay }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_oberon_relay }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_oberon >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_oberon_research MULT = sr_site_mult_b_oberon }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_oberon_research }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_oberon_research }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_oberon = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_oberon_relay }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_oberon_research }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_oberon_relay }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_oberon_research }
 	if = { limit = { has_variable = sr_emig_prio_oberon } remove_variable = sr_emig_prio_oberon }
 	sr_mq_drop_site = { INDEX = 25 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -6133,20 +6133,20 @@ sr_site_mirror_on_miranda = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_miranda_rupes MULT = sr_site_mult_a_miranda }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_miranda_rupes }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_miranda_rupes }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_miranda >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_miranda_drilling MULT = sr_site_mult_b_miranda }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_miranda_drilling }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_miranda_drilling }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_miranda = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_miranda_rupes }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_miranda_drilling }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_miranda_rupes }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_miranda_drilling }
 	if = { limit = { has_variable = sr_emig_prio_miranda } remove_variable = sr_emig_prio_miranda }
 	sr_mq_drop_site = { INDEX = 26 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -6303,20 +6303,20 @@ sr_site_mirror_on_ariel = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_ariel_cryovolcanic MULT = sr_site_mult_a_ariel }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_ariel_cryovolcanic }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_ariel_cryovolcanic }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_ariel >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_ariel_quarrying MULT = sr_site_mult_b_ariel }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_ariel_quarrying }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_ariel_quarrying }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_ariel = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_ariel_cryovolcanic }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_ariel_quarrying }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_ariel_cryovolcanic }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_ariel_quarrying }
 	if = { limit = { has_variable = sr_emig_prio_ariel } remove_variable = sr_emig_prio_ariel }
 	sr_mq_drop_site = { INDEX = 27 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -6473,14 +6473,14 @@ sr_site_mirror_on_triton = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_triton_geyser MULT = sr_site_mult_a_triton }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_triton_geyser }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_triton_geyser }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_triton >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_triton_gateway MULT = sr_site_mult_b_triton }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_triton_gateway }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_triton_gateway }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_triton_jet global_var:sr_site_disc_triton_jet = 1 }
@@ -6501,8 +6501,8 @@ sr_site_mirror_on_triton = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_triton = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_triton_geyser }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_triton_gateway }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_triton_geyser }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_triton_gateway }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_triton_jet_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_triton_jet_b }
 	sr_site_clear_discovery = { DISCOVERY = triton_jet }
@@ -6664,20 +6664,20 @@ sr_site_mirror_on_proteus = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_proteus_probe MULT = sr_site_mult_a_proteus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_proteus_probe }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_proteus_probe }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_proteus >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_proteus_extraction MULT = sr_site_mult_b_proteus }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_proteus_extraction }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_proteus_extraction }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_proteus = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_proteus_probe }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_proteus_extraction }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_proteus_probe }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_proteus_extraction }
 	if = { limit = { has_variable = sr_emig_prio_proteus } remove_variable = sr_emig_prio_proteus }
 	sr_mq_drop_site = { INDEX = 29 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -6834,14 +6834,14 @@ sr_site_mirror_on_pluto = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_pluto_research MULT = sr_site_mult_a_pluto }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_pluto_research }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_pluto_research }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_pluto >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_pluto_harvesting MULT = sr_site_mult_b_pluto }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_pluto_harvesting }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_pluto_harvesting }
 	}
 	if = {
 		limit = { has_global_variable = sr_site_disc_pluto_antifreeze global_var:sr_site_disc_pluto_antifreeze = 1 }
@@ -6862,8 +6862,8 @@ sr_site_mirror_on_pluto = {
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_pluto = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_pluto_research }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_pluto_harvesting }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_pluto_research }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_pluto_harvesting }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_pluto_antifreeze_a }
 	sr_site_hide_modifier = { MODIFIER = sr_discovery_pluto_antifreeze_b }
 	sr_site_clear_discovery = { DISCOVERY = pluto_antifreeze }
@@ -7025,20 +7025,20 @@ sr_site_mirror_on_eris = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_eris_selfsufficiency MULT = sr_site_mult_a_eris }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_eris_selfsufficiency }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_eris_selfsufficiency }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_eris >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_eris_monitoring MULT = sr_site_mult_b_eris }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_eris_monitoring }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_eris_monitoring }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_eris = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_eris_selfsufficiency }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_eris_monitoring }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_eris_selfsufficiency }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_eris_monitoring }
 	if = { limit = { has_variable = sr_emig_prio_eris } remove_variable = sr_emig_prio_eris }
 	sr_mq_drop_site = { INDEX = 31 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -7195,20 +7195,20 @@ sr_site_mirror_on_makemake = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_makemake_chemistry MULT = sr_site_mult_a_makemake }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_makemake_chemistry }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_makemake_chemistry }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_makemake >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_makemake_solarwind MULT = sr_site_mult_b_makemake }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_makemake_solarwind }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_makemake_solarwind }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_makemake = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_makemake_chemistry }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_makemake_solarwind }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_makemake_chemistry }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_makemake_solarwind }
 	if = { limit = { has_variable = sr_emig_prio_makemake } remove_variable = sr_emig_prio_makemake }
 	sr_mq_drop_site = { INDEX = 32 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -7365,20 +7365,20 @@ sr_site_mirror_on_haumea = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_haumea_dynamics MULT = sr_site_mult_a_haumea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_haumea_dynamics }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_haumea_dynamics }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_haumea >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_haumea_rings MULT = sr_site_mult_b_haumea }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_haumea_rings }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_haumea_rings }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_haumea = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_haumea_dynamics }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_haumea_rings }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_haumea_dynamics }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_haumea_rings }
 	if = { limit = { has_variable = sr_emig_prio_haumea } remove_variable = sr_emig_prio_haumea }
 	sr_mq_drop_site = { INDEX = 33 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
@@ -7535,20 +7535,20 @@ sr_site_mirror_on_sedna = {
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_sedna_outpost MULT = sr_site_mult_a_sedna }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_sedna_outpost }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_sedna_outpost }
 	}
 	if = {
 		limit = { sr_site_lvl_b_value_sedna >= 1 }
 		sr_site_show_modifier_at = { MODIFIER = sr_colony_sedna_interstellar MULT = sr_site_mult_b_sedna }
 	}
 	else = {
-		sr_site_hide_modifier = { MODIFIER = sr_colony_sedna_interstellar }
+		sr_site_hide_modifier_at = { MODIFIER = sr_colony_sedna_interstellar }
 	}
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }
 }
 sr_site_unmirror_sedna = {
-	sr_site_hide_modifier = { MODIFIER = sr_colony_sedna_outpost }
-	sr_site_hide_modifier = { MODIFIER = sr_colony_sedna_interstellar }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_sedna_outpost }
+	sr_site_hide_modifier_at = { MODIFIER = sr_colony_sedna_interstellar }
 	if = { limit = { has_variable = sr_emig_prio_sedna } remove_variable = sr_emig_prio_sedna }
 	sr_mq_drop_site = { INDEX = 34 }
 	set_variable = { name = sr_colony_count value = sr_sites_held_count }

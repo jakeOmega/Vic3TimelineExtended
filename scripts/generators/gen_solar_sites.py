@@ -353,7 +353,7 @@ def _mirror_on(site: Site) -> list[str]:
                 f"\t\tsr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
                 "\t}",
                 "\telse = {",
-                f"\t\tsr_site_hide_modifier = {{ MODIFIER = {modifier} }}",
+                f"\t\tsr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}",
                 "\t}"]
     for d in site.discoveries:
         da, db = discovery_modifiers(d)
@@ -380,8 +380,8 @@ def _mirror_on(site: Site) -> list[str]:
 def _unmirror(site: Site) -> list[str]:
     a, b = spec_modifiers(site)
     out = [f"sr_site_unmirror_{site.key} = {{",
-           f"\tsr_site_hide_modifier = {{ MODIFIER = {a} }}",
-           f"\tsr_site_hide_modifier = {{ MODIFIER = {b} }}"]
+           f"\tsr_site_hide_modifier_at = {{ MODIFIER = {a} }}",
+           f"\tsr_site_hide_modifier_at = {{ MODIFIER = {b} }}"]
     for d in site.discoveries:
         da, db = discovery_modifiers(d)
         out += [f"\tsr_site_hide_modifier = {{ MODIFIER = {da} }}",

@@ -218,7 +218,7 @@ class RecordTest(unittest.TestCase):
                 self.assertIn("is_country_alive = yes", body)
 
     def test_the_shared_helpers_remove_only_what_is_there(self):
-        for name in ("sr_site_hide_modifier", "sr_site_clear_discovery", "sr_site_set_discovery_done"):
+        for name in ("sr_site_hide_modifier", "sr_site_hide_modifier_at", "sr_site_clear_discovery", "sr_site_set_discovery_done"):
             body = _block(self.shared, name)
             for m in re.finditer(r"remove_(variable|modifier) = (\S+)", body):
                 with self.subTest(helper=name, target=m.group(2)):
@@ -723,7 +723,7 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"sr_site_lvl_{slot}_value_{k} >= 1", body)
                     self.assertIn(f"sr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
                                   body)
-                    self.assertIn(f"sr_site_hide_modifier = {{ MODIFIER = {modifier} }}", body)
+                    self.assertIn(f"sr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}", body)
 
     def test_the_multiplier_is_tested_by_its_record_not_has_modifier(self):
         show = _block(self.shared, "sr_site_show_modifier_at")
@@ -743,8 +743,17 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(modifier=modifier):
                 self.assertLess(body.index(f"set_variable = {{ name = {modifier}_mult value = 1 }}"),
                                 body.index(f"sr_site_sync_{site.key} = yes"))
-        hide = _block(self.shared, "sr_site_hide_modifier")
-        self.assertIn("limit = { has_variable = $MODIFIER$_mult }\n\t\tremove_variable = $MODIFIER$_mult", hide)
+        hide_at = _block(self.shared, "sr_site_hide_modifier_at")
+        self.assertIn("limit = { has_variable = $MODIFIER$_mult }\n\t\tremove_variable = $MODIFIER$_mult", hide_at)
+        # A discovery's modifier has no multiplier record: the plain hide mustn't read one,
+        # or the parse-time validator reports every discovery's <modifier>_mult as never set.
+        self.assertNotIn("_mult", _block(self.shared, "sr_site_hide_modifier"))
+        for site in gss.SITES:
+            body = _block(self.effects, f"sr_site_mirror_on_{site.key}") + _block(self.effects, f"sr_site_unmirror_{site.key}")
+            for d in site.discoveries:
+                for modifier in gss.discovery_modifiers(d):
+                    with self.subTest(site=site.key, modifier=modifier):
+                        self.assertNotIn(f"sr_site_hide_modifier_at = {{ MODIFIER = {modifier} }}", body)
 
     def test_release_clears_the_modules_and_the_unmirror_the_queue(self):
         for site in gss.SITES:
