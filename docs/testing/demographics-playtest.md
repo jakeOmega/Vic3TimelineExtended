@@ -951,6 +951,20 @@ ruling of 2026-10-16, and the youth bulge), so the owner should accept or veto w
    `resettle_moves_booked` reads OK with a positive `rest` (its first step's counters cover only the months since the
    load).
 
+## The Settlement Authority's frontier scales with world population (2026-10-25)
+
+Both frontier densities (2 and 10 people per km²) and the AI's 0.5 per km² bonus now hold at a world population of one
+billion and scale in proportion to `global_population` (`resettlement_world_population_scale`,
+`mod_systems.md` § Internal Resettlement). `test_resettlement_programme_registry.py` pins the wiring; only the game
+shows the numbers.
+
+1. **1836.** In a new game, the Settlement Authority's build requirements on an open frontier (Siberia, the American
+   West) read an opening density a little above 2 (world population over a billion) and a closing density about five
+   times it; Migration Crowding Tolerance raises both as before.
+2. **Late game.** On a save with about 4 billion people, the same tooltip reads about 4× the 1836 figures before
+   tolerance, and `event te_debug_resettlement.1` (option d) logs the same thresholds in its `TE_RESETTLEMENT: frontier`
+   lines.
+
 ## The metropolitan share (spec §5.2, 2026-10-19)
 
 A state's metropolitan share, 0-100: the share of its urban people living in its largest city, a modelled stock that

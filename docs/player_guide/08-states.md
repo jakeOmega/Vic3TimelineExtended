@@ -742,7 +742,11 @@ frontier, measured over the whole state region whoever owns each part:
 - an existing one keeps running, and can add levels, until the region reaches
 10 people per km².
 
-Both densities scale with Migration Crowding Tolerance, and the building's
+These figures hold at a world population of one billion, about the world's
+population at the 1836 start, and grow in proportion to it: at two billion
+people they are 4 and 20. A frontier is thin compared with the rest of the
+world, so it closes only when its region fills faster than the world grows.
+Both densities also scale with Migration Crowding Tolerance, and the building's
 requirements show the region's current density against them. In an 1836 start
 the open frontiers include the American West, Siberia, the Kazakh steppe,
 Hokkaido and the Argentine pampas.
@@ -881,7 +885,8 @@ event list](19-appendix-events.md#resettlement-event-list).
 
 The AI values a Settlement Authority on an open frontier when one of its states
 has more than 10% of its workforce out of work or migration crowding, and on any
-frontier emptier than 0.5 people per km². It stops founding new ones once it has
-three. It issues the Recruitment Drive in states with more than 10% of the
+frontier emptier than 0.5 people per km² (at one billion people, scaled with
+world population like the frontier densities). It stops founding new ones once
+it has three. It issues the Recruitment Drive in states with more than 10% of the
 workforce out of work or a crowding penalty above 10%. The mod gives the coercive programs a low AI weight, but only
 the AI Voluntary Only rule guarantees that AI countries stay off them.

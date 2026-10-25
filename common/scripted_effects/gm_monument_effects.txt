@@ -428,19 +428,11 @@ gm_mon_lift_contest = {
 }
 
 # From gm_check_contests (the owner's refresh), each secondary it holds. Seen
-# first, a civil war's winner's adoption, then the state's three branches: a
-# shrine its owner did not raise is heritage, a contest whose message stands
-# again is lifted, a message that falls is contested.
+# first, then the state's three branches: a shrine its owner did not raise is
+# heritage, a contest whose message stands again is lifted, a message that
+# falls is contested.
 gm_mon_check_contest = {
 	gm_mon_first_sight = yes
-	if = {
-		limit = {
-			var:gm_tr_origin ?= {
-				owner = { has_variable = gm_cw_adopting }
-			}
-		}
-		gm_mon_adopt_for_winner = yes
-	}
 	if = {
 		limit = {
 			has_tag = gm_monument
@@ -483,14 +475,6 @@ gm_mon_check_contest = {
 gm_mon_changed_hands = {
 	if = {
 		limit = {
-			var:gm_tr_origin ?= {
-				owner = { has_variable = gm_cw_adopting }
-			}
-		}
-		gm_mon_adopt_for_winner = yes
-	}
-	if = {
-		limit = {
 			has_variable = gm_tr_seen
 			gm_mon_is_bound = yes
 			var:gm_tr_origin ?= {
@@ -510,24 +494,6 @@ gm_mon_changed_hands = {
 			gm_remove_state_var = { VAR = gm_tr_heritage }
 			gm_mon_contest = yes
 		}
-	}
-}
-
-# A civil war's loser raised it; the winner, its state's owner now, did.
-gm_mon_adopt_for_winner = {
-	clear_saved_scope = gm_tmp_mon_winner
-	var:gm_tr_origin ?= {
-		owner = { save_scope_as = gm_tmp_mon_winner }
-	}
-	if = {
-		limit = {
-			exists = scope:gm_tmp_mon_winner
-			has_variable = gm_tr_raised_by
-			scope:gm_tmp_mon_winner = { has_variable = gm_cw_loser }
-			scope:gm_tmp_mon_winner.var:gm_cw_loser ?= { save_temporary_scope_as = gm_tmp_mon_loser }
-			var:gm_tr_raised_by ?= scope:gm_tmp_mon_loser
-		}
-		set_variable = { name = gm_tr_raised_by value = scope:gm_tmp_mon_winner }
 	}
 }
 
