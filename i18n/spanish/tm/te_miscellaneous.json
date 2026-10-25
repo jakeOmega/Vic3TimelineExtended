@@ -22895,6 +22895,10 @@
   "en": "The birth and death effects of this state's laws, technologies and institutions.",
   "es": "Los efectos sobre los nacimientos y las muertes de las leyes, tecnologías e instituciones de este estado."
  },
+ "te_demog_line_tag": {
+  "en": " #grey (Demographics)#!",
+  "es": " #grey (Demografía)#!"
+ },
  "te_demog_line_wealth_deaths_down": {
   "en": "Laws and Institutions",
   "es": "Leyes e instituciones"
@@ -25898,6 +25902,14 @@
  "te_demog_wealth_pending": {
   "en": "#lore The national wealth figures arrive within a year, at the country's yearly update.#!",
   "es": "#lore Las cifras de riqueza nacional llegan en el plazo de un año, en la actualización anual del país.#!"
+ },
+ "te_demog_wf_replaced_tag": {
+  "en": " #grey (replaced by the census)#!",
+  "es": " #grey (sustituido por el censo)#!"
+ },
+ "te_demog_wf_womens_tag": {
+  "en": " #grey (read as women’s work)#!",
+  "es": " #grey (como trabajo de las mujeres)#!"
  },
  "te_demog_wk_bill": {
   "en": "Pension Bill",
