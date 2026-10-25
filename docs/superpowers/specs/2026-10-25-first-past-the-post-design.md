@@ -109,8 +109,10 @@ The generated copies drop vanilla's `usa_two_party_system` terms.
   starts with it; Britain is a candidate for later.)*
 - **Enactment debate** (`te_fptp_events.2`, pooled in `on_law_checkpoint_debate`
   as `extra_law_events.87` is): while an allowed voting law is enacted in a
-  country with two parties and no first past the post, the strongest group in a
-  major party asks for it.
+  country whose two largest parties hold 60% of the clout and no first past the
+  post, the strongest group in a major party asks for it. The same gate as
+  `would_sponsor` and the petition, so the debate doesn't spread it to every
+  multi-party AI democracy.
 - **Petition** (`amendment_petition_events.28`, 2.5% a year): on an allowed
   voting law in force, when the two largest parties' groups hold 60% of the
   clout, the strongest of them asks.
@@ -135,7 +137,8 @@ force, removed when the country sits on an allowed voting law without it
 - `TE_SELF_CHECK OK|BROKEN fptp_major_parties`, once a game, the first time a
   country with three or more active parties refreshes: exactly two parties
   marked, no unmarked party larger than either marked one (compared pairwise,
-  not through the ordering being checked), and the second's clout above 0.
+  not through the ordering being checked, with a positive control so a
+  comparison that didn't read can't pass), and the second's clout above 0.
   BROKEN means the ranking (`ordered_active_party` by a script value, or the
   `every_member` clout sum) failed; the fallback is ranking by `momentum`.
 - Play-test list: `docs/testing/first-past-the-post-playtest.md` (the terms in

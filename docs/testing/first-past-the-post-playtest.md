@@ -15,7 +15,7 @@ checks"). Design: `docs/superpowers/specs/2026-10-25-first-past-the-post-design.
 
 | Line in `debug.log` | When | BROKEN means | Fallback |
 |---|---|---|---|
-| `TE_SELF_CHECK OK\|BROKEN fptp_major_parties` | The first monthly pulse at which some country has three or more active parties (once a game) | The two largest parties weren't marked from `ordered_active_party` by `te_fptp_party_clout`: wrong count, an unmarked party larger than a marked one (compared pairwise), or every clout 0 (the `every_member` sum failed) | Order by the party's `momentum` instead of its members' clout (`te_fptp_refresh_major_parties`, `te_fptp_second_party_clout`) |
+| `TE_SELF_CHECK OK\|BROKEN fptp_major_parties` | The first monthly pulse at which some country has three or more active parties (once a game) | The two largest parties weren't marked from `ordered_active_party` by `te_fptp_party_clout`: wrong count, an unmarked party larger than a marked one (compared pairwise), or every clout 0 (the `every_member` sum failed). `control=0` instead means the pairwise comparison itself didn't read (`save_temporary_scope_value_as` in a script value's `limit`), not the ranking | Order by the party's `momentum` instead of its members' clout (`te_fptp_refresh_major_parties`, `te_fptp_second_party_clout`) |
 
 ## Checks
 

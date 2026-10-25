@@ -263,7 +263,8 @@ te_fptp_save_outsider = {
 # time a country with three or more parties is ranked:
 #   OK      exactly two parties marked, no unmarked party larger than either
 #           marked one (compared pairwise, so it doesn't lean on the ordering it
-#           checks), and the second's clout above 0
+#           checks), the comparison's positive control at least 1 (else the
+#           comparison didn't read), and the second's clout above 0
 #   BROKEN  the ranking failed: ordered_active_party by a script value, or the
 #           every_member clout sum. Fallback: rank by momentum
 #           (docs/testing/first-past-the-post-playtest.md).
@@ -282,6 +283,7 @@ te_fptp_selfcheck = {
 		set_global_variable = { name = te_fptp_chk_second value = var:te_fptp_chk_second }
 		set_global_variable = { name = te_fptp_chk_marked value = te_fptp_marked_party_count }
 		set_global_variable = { name = te_fptp_chk_outranked value = te_fptp_outranking_minor_count }
+		set_global_variable = { name = te_fptp_chk_control value = te_fptp_outranked_control_count }
 		set_global_variable = {
 			name = te_fptp_chk_parties
 			value = {
@@ -293,12 +295,13 @@ te_fptp_selfcheck = {
 			limit = {
 				global_var:te_fptp_chk_marked = 2
 				global_var:te_fptp_chk_outranked = 0
+				global_var:te_fptp_chk_control >= 1
 				var:te_fptp_chk_second > 0
 			}
 			debug_log = "TE_SELF_CHECK OK fptp_major_parties (two largest of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0] marked; second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2])"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN fptp_major_parties (of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0], marked=[SCOPE.ScriptValue('te_fptp_chk_marked_g')|0] (want 2), unmarked larger than the second=[SCOPE.ScriptValue('te_fptp_chk_outranked_g')|0] (want 0), second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2] (want above 0): ordered_active_party by te_fptp_party_clout or its every_member sum failed; see docs/testing/first-past-the-post-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN fptp_major_parties (of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0], marked=[SCOPE.ScriptValue('te_fptp_chk_marked_g')|0] (want 2), unmarked larger than a marked one=[SCOPE.ScriptValue('te_fptp_chk_outranked_g')|0] (want 0), control=[SCOPE.ScriptValue('te_fptp_chk_control_g')|0] (want 1 or more; 0 means the pairwise comparison didn't read, not the ranking), second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2] (want above 0): ordered_active_party by te_fptp_party_clout or its every_member sum failed; see docs/testing/first-past-the-post-playtest.md)"
 		}
 		remove_variable = te_fptp_chk_second
 	}

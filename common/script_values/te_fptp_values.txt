@@ -74,8 +74,35 @@ te_fptp_outranking_minor_count = {
 	}
 }
 
+# Country scope, with scope:te_fptp_country saved: the positive control for
+# te_fptp_outranking_minor_count. Unmarked parties that some marked party is at
+# least as large as: with three or more parties and a working comparison, at
+# least 1. 0 means the comparison itself failed (the saved value didn't read),
+# which would otherwise pass as "none outranked".
+te_fptp_outranked_control_count = {
+	value = 0
+	every_active_party = {
+		limit = {
+			NOT = { is_party_type = revolutionary_party }
+			NOT = { te_fptp_party_is_major = yes }
+			save_temporary_scope_value_as = {
+				name = te_fptp_chk_unmarked
+				value = te_fptp_party_clout
+			}
+			scope:te_fptp_country = {
+				any_active_party = {
+					te_fptp_party_is_major = yes
+					te_fptp_party_clout >= scope:te_fptp_chk_unmarked
+				}
+			}
+		}
+		add = 1
+	}
+}
+
 # Self-check readouts (debug_log can only print a script value).
 te_fptp_chk_marked_g = { value = global_var:te_fptp_chk_marked }
 te_fptp_chk_outranked_g = { value = global_var:te_fptp_chk_outranked }
 te_fptp_chk_second_g = { value = global_var:te_fptp_chk_second }
 te_fptp_chk_parties_g = { value = global_var:te_fptp_chk_parties }
+te_fptp_chk_control_g = { value = global_var:te_fptp_chk_control }
