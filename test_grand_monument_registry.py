@@ -990,7 +990,10 @@ class ContestTests(unittest.TestCase):
         self.assertIn("limit = { gm_state_is_dedicated = yes gm_state_is_bound = yes "
                       "NOT = { has_variable = gm_ceremony_pending } NOT = { has_variable = gm_restore_pm } "
                       "has_variable = gm_seen }", body)
-        self.assertIn("owner = { has_variable = gm_cw_adopting } } gm_state_adopt_for_winner = yes", body)
+        # A civil war's winner adopted the loser's monuments at the win
+        # (gm_repair_after_civil_war): nothing here looks for the loser, who is
+        # deleted within two weeks (issue #1136).
+        self.assertNotIn("gm_cw_", body)
         # A shrine this country did not raise always becomes heritage, whatever
         # the route it arrived by (conquest, a secession that drops te_cw_role,
         # or a civil war of this country's own), and this branch must run
@@ -1027,11 +1030,29 @@ class ContestTests(unittest.TestCase):
         self.assertLess(won.find("te_civil_war_resolve_sides = yes"), won.find("gm_repair_after_civil_war = yes"))
         self.assertLess(won.find("gm_repair_after_civil_war = yes"), won.find("te_civil_war_clear = yes"))
         repair = squash(block(self.e, "gm_repair_after_civil_war"))
-        self.assertIn("set_variable = { name = gm_cw_loser value = scope:te_cw_loser days = 30 }", repair)
-        self.assertIn("set_variable = { name = gm_cw_adopting value = yes days = 30 }", repair)
-        adopt = squash(block(self.e, "gm_state_adopt_for_winner"))
-        self.assertIn("var:gm_raised_by ?= scope:gm_tmp_loser", adopt)
-        self.assertIn("set_variable = { name = gm_raised_by value = owner }", adopt)
+        repoint = ("limit = { var:gm_raised_by ?= scope:te_cw_loser } "
+                   "set_variable = { name = gm_raised_by value = root }")
+        # A dead loser was the nation: every monument it raised, wherever it
+        # stands, is repointed while the loser still resolves (issue #1136).
+        dead = repair.index("scope:te_cw_loser = { is_country_alive = no }")
+        alive = repair.index("else = {", dead)
+        self.assertIn("every_state = { " + repoint + " }", repair[dead:alive])
+        for lst in ("gm_monuments", "gm_trophies", "gm_shadows"):
+            self.assertIn(f"gm_cw_repoint_list = {{ LIST = {lst} }}", repair[dead:alive])
+        one = squash(block(self.e, "gm_cw_repoint_list"))
+        self.assertIn("every_in_global_list = { variable = $LIST$ "
+                      "limit = { var:gm_tr_raised_by ?= scope:te_cw_loser } "
+                      "set_variable = { name = gm_tr_raised_by value = root } }", one)
+        # A live loser (a secession that won) keeps all but the winner's states'.
+        self.assertIn("every_scope_state = { " + repoint + " }", repair[alive:])
+        self.assertNotIn("every_state =", repair[alive:])
+        # No window to adopt later: the loser would be gone by then.
+        self.assertNotIn("gm_cw_loser", repair)
+        self.assertNotIn("gm_cw_adopting", repair)
+        mon = read(MON_EFFECTS)
+        for name in ("gm_state_adopt_for_winner", "gm_mon_adopt_for_winner"):
+            self.assertIsNone(block(self.e, name))
+            self.assertIsNone(block(mon, name))
 
     def test_ledger_helper_covers_every_ig(self):
         body = squash(block(self.e, "gm_state_ledger_ig"))
@@ -5318,9 +5339,13 @@ class SecondaryContestTests(unittest.TestCase):
 
     def test_a_civil_wars_winner_adopts_secondaries(self):
         body = squash(strip_comments(block(self.e, "gm_repair_after_civil_war")))
-        self.assertIn("every_in_global_list = { variable = gm_monuments", body)
-        self.assertIn("gm_mon_adopt_for_winner = yes", body)
+        self.assertIn("gm_cw_repoint_list = { LIST = gm_monuments }", body)
+        self.assertIn("every_in_global_list = { variable = gm_monuments limit = { "
+                      "var:gm_tr_origin ?= { owner = root } var:gm_tr_raised_by ?= scope:te_cw_loser } "
+                      "set_variable = { name = gm_tr_raised_by value = root } }", body)
         self.assertIn("gm_monument_pass = yes", body)
+        for name in ("gm_mon_check_contest", "gm_mon_changed_hands"):
+            self.assertNotIn("gm_cw_", squash(block(self.m, name)))
 
     def test_the_choices_go_through_one_hidden_event(self):
         order = squash(block(self.m, "gm_mon_order_choice"))

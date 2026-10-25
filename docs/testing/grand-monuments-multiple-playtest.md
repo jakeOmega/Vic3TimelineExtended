@@ -70,3 +70,13 @@ GUI has stacked a type's icons over another type inside one widget before, so th
 | **Our Monuments.** Open the journal entry's Our Monuments, and the Timeline Extended window's Grand Monuments tab. | A row per state's primary as before, then a row per secondary with where it stands. A change in one shows in the other. | |
 | **A civil war.** Have a civil war's winner take such a state. | The rows are back within a month (the pass rebuilds the lists). | Rows missing for good: check `gm_mon_lists_written`. |
 | **Pictures.** A returned landmark whose picture was drawn later. | It shows the right picture within a month. | |
+
+## Civil wars (2026-10-25, #1136)
+
+A civil war's winner takes over the monuments the loser raised at the win, wherever they stand
+(`gm_repair_after_civil_war`), because the loser is deleted within about two weeks and nothing can name it after that.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A late arrival.** Let a revolution win in a country whose regime or Grand Shrine monument stands in a state a third country holds (conquered before the war). Wait until the loser is gone (about two weeks; `scripts/analysis/save_country_probe.py` shows when), then take that state back by treaty or peace deal. | The monument is the winner's own: a shrine is not heritage, and a regime monument is contested only if its message doesn't fit the winner's laws. The state's `gm_raised_by` names the winner. | A shrine turned heritage or a fitting monument contested: the raiser was not rewritten at the win. Check that `TE_CIVIL_WAR: the loser resolves at on_civil_war_won and is dead` was logged. |
+| **Beside another.** The same with a monument beside another in that state, or one carried off as a trophy before the war. | The same for its row, and for the trophy once it is returned. | The same; its record is `gm_tr_raised_by`. |
