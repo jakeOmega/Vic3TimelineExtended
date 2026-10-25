@@ -101,6 +101,36 @@ un_lean_veto_line_moribund = { value = -10 }
 un_lean_reason_size = { value = 10 }
 un_lean_reason_size_negative = { value = -10 }
 
+# ---- Tuning: the motion to expel a permanent member ------------------------------
+# (owner, 2026-10-24). A motion to expel is weighed on its own case, not the
+# dossier's: the target's VETO RECORD, less its standing and its service to the
+# UN (un_expulsion_case). It replaces the habit of consensus there, which
+# carried a motion against any recent vetoer by default (a neutral Assembly
+# voted 80% yes, against two thirds needed).
+#
+# Every veto a permanent member casts outside Moribund adds this to its veto
+# record (un_veto_record_add)...
+un_veto_record_points = { value = 5 }
+# ...which fades by 5% a year: 0.95^(1/12) a month.
+un_veto_record_decay_factor = { value = 0.99574 }
+# A record below this is dropped (one veto reaches it after about 45 years).
+un_veto_record_floor = { value = 0.5 }
+# The target's standing.
+un_expulsion_case_exemplary = { value = -10 }
+un_expulsion_case_respected = { value = -5 }
+un_expulsion_case_poor = { value = 5 }
+un_expulsion_case_disgraced = { value = 10 }
+# Its service: hosting the headquarters; running the development programme;
+# running the peacekeeping programme or serving in a mission. Each counts this
+# much, and all of them together no more than the cap.
+un_expulsion_case_service_each = { value = -5 }
+un_expulsion_case_service_cap = { value = -10 }
+# The proposer would take the seat (un_expulsion_next_in_line): the members
+# hold the seat grab against it a little.
+un_lean_expulsion_seat_grab = { value = -5 }
+# The AI tables a motion only against a case above this (un_expulsion_ai_case_floor).
+un_expulsion_ai_case_floor_base = { value = 10 }
+
 # ---- The dossier: reads ---------------------------------------------------------
 
 # Scope: country
@@ -208,6 +238,96 @@ un_disp_dos_asat = {
 	}
 }
 
+# ---- The case for expulsion (owner, 2026-10-24) -------------------------------------
+# What every member but the target adds to its lean on a motion to expel this
+# country from its permanent seat (un_lean_grounds): its veto record, less its
+# standing and its service. Not part of un_case_strength: the punitive topics
+# keep their own case.
+# Scope: country (the target)
+un_expulsion_case = {
+	value = un_disp_veto_record
+	add = un_expulsion_case_standing_term
+	add = un_expulsion_case_service_term
+}
+
+# The case an AI needs before it tables a motion to expel: the base, and the
+# seat grab's cost on top when the seat would come to it.
+# Scope: country (the prospective proposer)
+un_expulsion_ai_case_floor = {
+	value = un_expulsion_ai_case_floor_base
+	if = {
+		limit = { un_expulsion_next_in_line = yes }
+		subtract = un_lean_expulsion_seat_grab
+	}
+}
+
+# 1 while this country holds a permanent seat and has a veto record: Our
+# Record's Our Permanent Seat block.
+# Scope: country
+un_disp_expulsion_exposed = {
+	value = 0
+	if = {
+		limit = {
+			is_un_permanent_member = yes
+			has_variable = un_veto_record
+		}
+		value = 1
+	}
+}
+
+# Scope: country
+un_disp_veto_record = {
+	value = 0
+	if = {
+		limit = { has_variable = un_veto_record }
+		add = var:un_veto_record
+	}
+}
+
+# Scope: country
+un_expulsion_case_standing_term = {
+	value = 0
+	if = {
+		limit = { un_standing_tier_exemplary = yes }
+		add = un_expulsion_case_exemplary
+	}
+	else_if = {
+		limit = { un_standing_tier_respected = yes }
+		add = un_expulsion_case_respected
+	}
+	else_if = {
+		limit = { un_standing_tier_poor = yes }
+		add = un_expulsion_case_poor
+	}
+	else_if = {
+		limit = { un_standing_tier_disgraced = yes }
+		add = un_expulsion_case_disgraced
+	}
+}
+
+# Scope: country
+un_expulsion_case_service_term = {
+	value = 0
+	if = {
+		limit = { un_hq_is_host = yes }
+		add = un_expulsion_case_service_each
+	}
+	if = {
+		limit = { un_standing_program_active_development = yes }
+		add = un_expulsion_case_service_each
+	}
+	if = {
+		limit = {
+			OR = {
+				un_standing_program_active_peacekeeping = yes
+				has_modifier = un_mission_service_cost
+			}
+		}
+		add = un_expulsion_case_service_each
+	}
+	min = un_expulsion_case_service_cap
+}
+
 # The threshold this resolution's topic needs, 0 for a non-punitive topic.
 # Scope: resolution container
 un_res_case_threshold = {
@@ -247,14 +367,29 @@ un_res_case_threshold = {
 
 un_lean_consensus = {
 	value = un_lean_consensus_value
+	# No member presumes in favour of stripping a permanent seat: the motion
+	# stands on its case (un_lean_grounds).
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+		value = 0
+	}
 }
 
 # THE GROUNDS. For a punitive topic, how far the target's case clears the
-# topic's threshold, halved, between -20 and +30. The target itself does not
+# topic's threshold, halved, between -20 and +30. For a motion to expel, the
+# case for expulsion, whole (un_expulsion_case). The target itself does not
 # weigh its own case here (un_lean_self does that).
 un_lean_grounds = {
 	value = 0
 	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_expulsion }
+			exists = scope:un_vote_target
+			NOT = { scope:un_vote_target ?= this }
+		}
+		scope:un_vote_target = { add = un_expulsion_case }
+	}
+	else_if = {
 		limit = {
 			scope:un_resolution ?= { un_resolution_is_punitive = yes }
 			exists = scope:un_vote_target
@@ -316,6 +451,14 @@ un_lean_proposer = {
 			divide = 10
 			min = -10
 			max = 10
+		}
+		# A motion to expel whose proposer would take the seat.
+		if = {
+			limit = {
+				scope:un_resolution ?= { has_tag = un_topic_expulsion }
+				scope:un_vote_proposer ?= { un_expulsion_next_in_line = yes }
+			}
+			add = un_lean_expulsion_seat_grab
 		}
 	}
 }

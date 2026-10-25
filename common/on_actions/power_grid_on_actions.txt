@@ -27,3 +27,20 @@ te_grid_world_dispatch = {
 		}
 	}
 }
+
+# The AI's own station building (te_grid_ai_build_effect). Never the balancing:
+# that runs once a month for the world, above.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_grid_ai_build_on_action
+	}
+}
+
+te_grid_ai_build_on_action = {
+	effect = {
+		if = {
+			limit = { is_ai = yes }
+			te_grid_ai_build_effect = yes
+		}
+	}
+}

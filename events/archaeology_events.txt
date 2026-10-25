@@ -542,7 +542,7 @@ arch_events.2 = {
 
 	# Our expedition abroad, the finds left with the host.
 	option = {
-		name = arch_events.2.d
+		name = arch_events.2.g
 		trigger = {
 			NOT = { exists = scope:gm_arch_ev_host_view }
 			OR = {
@@ -551,7 +551,7 @@ arch_events.2 = {
 			}
 		}
 		default_option = yes
-		custom_tooltip = arch_events.2.d.tt
+		custom_tooltip = arch_events.2.g.tt
 		if = {
 			limit = { exists = scope:gm_arch_ev_ruined }
 			custom_tooltip = arch_events.2.ruined.tt
@@ -575,13 +575,13 @@ arch_events.2 = {
 
 	# The host of a foreign dig whose finds stay with us.
 	option = {
-		name = arch_events.2.f
+		name = arch_events.2.h
 		trigger = {
 			exists = scope:gm_arch_ev_host_view
 			NOT = { exists = scope:gm_arch_ev_concession }
 		}
 		default_option = yes
-		custom_tooltip = arch_events.2.f.tt
+		custom_tooltip = arch_events.2.h.tt
 		if = {
 			limit = { exists = scope:gm_arch_ev_ruined }
 			custom_tooltip = arch_events.2.ruined.tt

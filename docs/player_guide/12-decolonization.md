@@ -24,19 +24,27 @@ Decolonization is a society technology in era 6, the first of the mod's eras.
 After you research it, the Colonial Empire entry activates as soon as you hold
 either of these:
 
-- An overseas colony: a state that is not a homeland of your cultures, has at
-least 100,000 people, lies outside your capital's region and the regions next to
-it, and has people of a culture that isn't one of your primary cultures. On top
-of that, its average standard of living must be below 80% of your national
-average, or one of those cultures must make up more than a tenth of the state
-with an average acceptance below 60 there. A state where more than half the
-people are of your primary cultures is settled land, not a colony.
+- An overseas colony: a state that is not a homeland of your cultures and has
+at least 100,000 people, which is separated from your capital, has a distinct
+people and is held down. It is separated when it isn't joined to your capital
+over land through your own states; a strait joins two states only when both are
+homelands of your primary cultures. It has a distinct people when a culture
+that shares no heritage trait with any of your primary cultures is more than a
+tenth of it. It is held down when it is unincorporated, when that people's
+average acceptance there is below 60, or when its average standard of living is
+below 80% of your national average. A state where more than half the people are
+of your primary cultures is settled land, not a colony.
 - A colonial subject: a Colony or Chartered Company subject, or a Protectorate
-that holds overseas land and whose cultures share no heritage with yours.
+separated from your capital in the same way, none of whose primary cultures
+shares a heritage trait with yours.
 
-The regions in that test are large ones: Western Europe, North Africa, India,
-Southeast Asia and so on. Neighboring regions don't count as overseas, so for a
-capital in Western Europe, North Africa and Eastern Europe are next door.
+This is the test the United Nations used in 1960. France's Algeria and its
+Tunisian and Moroccan protectorates, Japan's Korea and Taiwan, and Italy's Libya
+are colonies, across the sea from their capitals. Land empires are not: Russia's
+Central Asia and China's Tibet are joined to their capitals by land, and leave,
+if they leave, by the base game's secessions. Heritage traits are narrow, so a
+people you share one with doesn't make a state a colony: Ireland under Britain,
+Iceland under Denmark, Ryukyu under Japan, or a country's own islands.
 
 A great power with a few well-integrated colonies and little international
 opposition can hold on; a smaller empire condemned by the big powers usually
@@ -83,7 +91,7 @@ Every section starts open except the explanations:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Colonial Holdings | Open | Your territories and your colonial subjects, with buttons beside each, then Planned Full Decolonization (see below). |
+| Colonial Holdings | Open | Your wars of independence, your territories and your colonial subjects, with buttons beside each, then Planned Full Decolonization (see below). |
 | Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. |
 | International Pressure | Open | Your prestige, the condemning and supporting shares, and every great power that condemns or supports you. |
 | Colonial Programmes | Open | The three programs, each with its costs, its level out of 3, and a minus and a plus button to lower or raise it. |
@@ -102,11 +110,18 @@ the new country and the row's weight on stability. The colony icon at the start
 of the row is lit when a state in it counts as a colony, which keeps the entry
 running and weighs on the bar through Imperial Overreach and Colonial
 Acceptance, and dim when none does. A red figure is the test that makes one a
-colony: a red Primary share means another culture is more than a tenth of a
-state's people and accepted below 60, and a red SoL means a state's standard of
-living is below 80% of your national average while some of its people are of
-other cultures. Hover a figure for its threshold. A row with a dim icon can
-still be released, with the Release button at the end of the row.
+colony: a red Primary share means a people sharing no heritage with yours is
+more than a tenth of a state and accepted below 60, and a red SoL means a
+state's standard of living is below 80% of your national average while some of
+its people are of other cultures. An unincorporated state counts too; hover the
+icon for how many of the row's states are. Hover a figure for its threshold. A
+row with a dim icon can still be released, with the Release button at the end
+of the row.
+
+While you fight a [war of independence](#wars-of-independence), a Wars of
+Independence list sits above the territories: the country fighting you, the
+months the war has run (red while your war support in it is 25 or below), the
+great powers arming it, and an Open Talks button.
 
 The Colonial Subjects list shows your colonial subjects the same way: the flag,
 the name, the kind of subject (hover it for why it counts as colonial), its
@@ -144,7 +159,7 @@ current value.
 | Interest Groups | Powerful Landowners +0.3 and Armed Forces +0.2; powerful Intelligentsia −0.4 and Trade Unions −0.3. |
 | Rank | +0.3 as a great power, −0.5 as anything else. |
 | Programmes | Whatever your running colonial programs are worth. |
-| War and Turmoil | −0.5 while at war, −1 during a revolution, and a penalty that grows with national turmoil. |
+| War and Turmoil | −0.5 while at war, a further −0.5 for each war of independence (−0.25 once its accords are signed), −1 during a revolution, and a penalty that grows with national turmoil. |
 | Imperial Overreach | A penalty once your colonial states outnumber your other states by more than 1.5 to 1. |
 | Great Power pressure | Condemnation and support from great powers (see below). |
 | Colonial Acceptance | −0.4 for each colony with a severely unaccepted population, +0.5 for each overseas state where everyone is well accepted. |
@@ -234,10 +249,12 @@ there, by its most numerous culture that isn't one of yours, and it leaves with
 every connected state of yours that is a homeland of that culture. Choose how it
 goes, or reconsider. Reconsider releases nothing, and it is what the popup does
 if you leave it unanswered. A territory can be released if it isn't a homeland
-of your cultures, has at least 100,000 people, lies overseas by the same region
-test and isn't settled land (more than half its people of your primary
-cultures); it doesn't have to be poorly accepted. Hover Release to see whether a
-Round Table is open to it.
+of your cultures, has at least 100,000 people, is separated from your capital,
+has a distinct people and isn't settled land (more than half its people of your
+primary cultures); it doesn't have to be held down. A land of your own
+heritage, such as an Australia you rule directly, leaves by the base game's
+release or as a dominion instead. Hover Release to see whether a Round Table is
+open to it.
 
 | Choice | Needs | What you get |
 |---|---|---|
@@ -300,6 +317,94 @@ years (Mandate System Transition), and can be taken only once. It gives a
 permanent diplomatic-reputation bonus at a small cost in acceptance, and a year
 of Positive Colonial Development.
 
+## Wars of independence
+
+A colony can declare its independence, and you can let it go, negotiate, or
+fight to keep it. Fighting is hard to win, and winning buys years, not a
+settlement: the people are as unaccepted as they were.
+
+### When a colony declares independence
+
+Once your bar is below 40, a colony with severely unaccepted people (acceptance
+below 20) may declare independence in Declaration in (the territory), twice as
+often below 20. The one most likely to rise goes first: the colony with the
+largest share of severely unaccepted people, then the largest. Outside a
+collapse, you face at most one declaration every two years, and a territory
+that declared, or that you won back, waits ten years before it declares again.
+Below 40, Blood in the Colonies also turns its suppression into a war of
+independence; at 40 or above it stays a police action.
+
+The popup names the territory, the people who would form the new country and,
+when your own people are a tenth or more of the territory, its settlers.
+
+| Choice | What happens |
+|---|---|
+| Let them go | The country forms now, as in Blood in the Colonies' release: Colonial War Weariness, the Armed Forces disapprove, the Intelligentsia approve, five months of +1 stability. |
+| Negotiate the handover | A Round Table release with the declared government as your partner, whatever its acceptance: +1 stability a month for 12 months and friendlier relations. It costs 100 authority, easing over a year. Under Neocolonialism it goes on your economic terms instead. |
+| Send the army | The rebels form as a country with the territory and the neighbouring states where its people are at home, and the next day you are at war with them. You can fight three such wars at once; with three running the option is grayed. |
+
+### Fighting a war of independence
+
+The war is a War of Independence whose goal, Reconquer, annexes the rebels
+back. It costs no infamy, and neither side can add goals. Holding their land
+doesn't end it: only their capitulation or a peace does, so a war can drag on
+long after your army holds every province.
+
+The rebels fight like guerrillas. They lose less morale and fewer provinces
+after a defeat, defend their own provinces better, raise twice the conscripts
+and train them faster, and their war support gains "Fighting for independence"
+(+0.5 a week), or more with foreign arms. Yours loses "A war to keep a colony"
+(−0.25 a week) and "The world condemns it" (−0.25, or −0.5 once the condemning
+great powers hold two thirds of great-power prestige), and gains "Settlers to
+defend" (+0.25) when your own people are a tenth of the territory. Each war
+drains the bar by 0.5 a month on top of the at-war term. Every year of war,
+summed over all your wars of independence, costs 2 legitimacy, up to 10. Each
+year the Intelligentsia and the Trade Unions disapprove; the Armed Forces
+approve for two years, then turn on the government.
+
+A colonial subject's independence war against you, and the secession of a
+colony, count as wars of independence too: they appear in the list, the subject
+or the secessionists fight with the same advantages, and they end the same way.
+Talks are only for a territory's rebels; you make peace with a subject or with
+secessionists from the peace screen.
+
+### How a war of independence ends
+
+| Ending | When | You get | The territory |
+|---|---|---|---|
+| Order Restored | The rebels capitulate or are annexed, or a subject that fought you is still yours when its war ends | 12 months of +1 stability, 12 months on Military Garrison's record (your ending leans toward The Iron Fist), the Armed Forces approve, the Intelligentsia disapprove | Yours again, with large radicals, and no declaration from it for ten years |
+| The Flag Comes Down | The war ends and the rebels are free | The Flag Came Down: −15% prestige and −10 legitimacy, decaying over five years; the Armed Forces strongly disapprove for three years and The Veterans' Protest can follow; 12 months of −1 stability | A former colony with Bloody Decolonization's legacy, whatever program you ran: autocracy, outlawed dissent and relations −50 |
+| The Accords | Talks dropped your claim and the war ended in a peace | The Accords: −15% prestige and −5 legitimacy, decaying over five years (no legitimacy under the general's mandate); the Armed Forces disapprove for a year | A former colony with your longest program's legacy and a Round Table's friendlier relations |
+
+### Talks and the home front
+
+Open Talks on a war's row asks for a popup first. Talks take six months while
+the fighting goes on. When the accords are signed, your claim is dropped: the
+rebels take a white peace, and you offer one from the peace screen. An AI opens
+talks after half a year of war support in the red, or after four years.
+
+A war that has run four years, with your war support in it at 25 or below for a
+year running, breaks the home front. Without a voting franchise, junior
+officers rise in The Captains' Revolt: step aside, and talks open on every war,
+every territory you could release goes, and the country gets universal
+suffrage and a parliamentary republic (a monarchy keeps its crown); or crush
+the officers, at −20 legitimacy for two years, and face them again a year
+later. With one, it is The Republic in Danger: call the general, who brings a
+presidential republic, +100 authority for three years and a peace by the
+accords that costs no legitimacy; or hold the line at −15 legitimacy.
+
+### The world takes sides
+
+When a war of independence starts, every great power hears of it. One that
+condemns colonialism decides in War in (the territory): condemn it (relations
+−20), arm the rebels (they fight harder and keep their resolve, it pays them a
+monthly sum, and relations fall by 30), intervene, or stay out. Intervening
+joins the war on the rebels' side and is rare: it is open only to a great power
+at peace that is your rival with the larger army, and never to your ally,
+defensive-pact partner, power bloc partner, subject or overlord, or one under a
+truce with you. A great power that backs colonial rule may send you arms
+instead, for two years, but never joins the war.
+
 ## How a colonial empire ends
 
 The journal entry ends in one of four ways. The event you get when the empire
@@ -311,7 +416,7 @@ than 24 months.
 |---|---|---|
 | The empire holds | The bar stays at 100 for 60 consecutive months | Permanent Colonial Empire Solidified, plus a permanent modifier for your path if one program dominated. Overseas states where everyone is well accepted become homelands. After Quiet Assimilation every overseas state of 75,000 people or more does, whatever its acceptance; after The Iron Fist Holds none do, and you gain 25 infamy. You can never get the entry again. |
 | Federation | You take the Imperial Federation Act or the Civilizing Mission Compact | Imperial Federation from the decision, plus a permanent The Iron Fist (Act) or The Commonwealth Path (Compact). Well-accepted overseas states become homelands. You can never get the entry again. |
-| Collapse | The bar reaches 0 | Up to three of your overseas territories other than settled land, picked at random, become independent with their homeland regions, and they inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years. |
+| Collapse | The bar reaches 0 | Up to three of your territories declare independence, the one most likely to rise first, two months apart, and you can let each go, negotiate or [fight](#wars-of-independence); those that go inherit the legacy of your longest program (below). Every colonial subject gains Imperial Collapse Aftershock, a large liberty-desire increase for 20 years, and its relations with you drop by 50. The entry can't return for ten years. |
 | Voluntary end | You no longer hold any colony or colonial subject while the bar is above 0 | A decaying boost to diplomatic reputation; the event's wording depends on whether you freed colonies by choice. No lockout: new colonies bring the entry back. |
 
 | Longest program | If the empire holds | If it collapses | The countries you free |
@@ -322,8 +427,9 @@ than 24 months.
 | none | The Empire Endures | The Empire Crumbles | no legacy |
 
 The legacy applies to every country the system creates: those you release from
-Colonial Holdings, those an event frees as a new country, and those that break
-away in a collapse. On top of the legacy, a Round Table adds 25 to relations, a
+Colonial Holdings, those an event frees as a new country, and those that go in a
+collapse. A colony that wins a war of independence takes Bloody Decolonization's
+legacy instead, whatever program you ran. On top of the legacy, a Round Table adds 25 to relations, a
 single release subtracts 10 and Planned Full Decolonization subtracts 25. The
 Empire Crumbles also leaves you with Colonial Empire Collapsed, a decaying loss
 of prestige and standard of living; Negotiated Withdrawal instead gives the same
@@ -331,7 +437,8 @@ decaying diplomatic-reputation boost as a voluntary end.
 
 When a revolution wins, the new government carries the empire on. It keeps the
 programs you were running, Colonial Empire Solidified and the path rewards of a
-finished empire, and the Imperial Federation and Mandate System modifiers (see
+finished empire, the Imperial Federation and Mandate System modifiers, and any
+war of independence it is still fighting (see
 [After a revolution](06-politics.md#after-a-revolution)).
 
 ## Decolonization events
@@ -404,6 +511,13 @@ cost stays down for a year. If it lowered nothing, the AI raises one program a
 level while the change is below the limit (below +0.5 with the bar full) and it
 can afford the step, preferring the garrison when several colonies are badly
 unaccepted.
+
+At a declaration, an AI weighs its rank, the condemning great powers and its
+other wars. A great power with settlers in the territory, a powerful army lobby
+and no voting franchise fights about two times in three; a democratic great
+power with no settlers and two condemners about one time in four. A country
+that isn't a great power is much less likely to fight, and one in default or
+already at war with a great power never does.
 
 An AI that isn't a great power leans strongly toward Planned Full Decolonization,
 more so when three great powers condemn it or three of its colonies are badly

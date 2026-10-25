@@ -259,6 +259,17 @@ of the members with a vote and cannot be vetoed. If it carries you lose the seat
 and 5 standing, stay a member, carry UN Withdrawal Consequences for ten years,
 and lose your standing benefits for five.
 
+Each veto outside Moribund also adds 5 to your **veto record**, which fades by 5% a year. A
+motion to expel is weighed on its own case, not the case that decides
+condemnations and sanctions: your veto record, −10 for Exemplary standing or −5
+for Respected (+5 for Poor, +10 for Disgraced), and −5 each for hosting the
+headquarters, running the development programme, and running the peacekeeping
+programme or serving in a mission (−10 at most). Every other member adds that
+case to its lean, and the habit of consensus does not apply. The seat goes to
+the great power with the most prestige that holds none, which can be the
+proposer; members lean 5 against a proposer that would take it. Once you have
+vetoed, Our Record shows your veto record and the case for expelling you.
+
 ## Resolutions in the General Assembly
 
 The floor takes one resolution at a time, and each is open for a year. The
@@ -306,7 +317,7 @@ The other eight are:
 | Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping programme for ten years; nobody else is asked. |
 | Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
 | Charter Reform | A major power, once the charter is ripe | The next reform. |
-| Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years | The seat is stripped. |
+| Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years and is not its ally, overlord or subject | The seat is stripped. |
 
 From Strong, sanctions also become embargoes: each major-power member with
 diplomatic relevance to the target that voted for them (at Supranational, every
@@ -363,10 +374,10 @@ the Recorded Ballot shows every voter's lean and why the members voted as they d
 
 | Term | Value |
 |---|---|
-| The habit of consensus | +10 |
-| The case against the target | Half of how far the target's case clears the threshold, −20 to +30 |
+| The habit of consensus | +10 (0 on a motion to expel) |
+| The case against the target | Half of how far the target's case clears the threshold, −20 to +30; on a motion to expel, the case for expulsion, whole |
 | It is our own censure | −50 (−30 from Strong) |
-| Our ties to the proposer | Alliance +20, same bloc +20, rivalry −30, diplomatic relevance +5, relations up to ±10 |
+| Our ties to the proposer | Alliance +20, same bloc +20, rivalry −30, diplomatic relevance +5, relations up to ±10; −5 on a motion to expel that would seat the proposer |
 | Our ties to the target, on accusing topics | Alliance −60, same bloc −35, rivalry +30, relations up to ±10 |
 | Our own record (glass houses) | −10 with a case of 30, −20 at 50 |
 | The proposer's standing | Exemplary +5, Respected +2, Poor −2, Disgraced −5 |

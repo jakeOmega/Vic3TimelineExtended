@@ -103,6 +103,7 @@ Only the game shows which one a recipient got, so a new popup belongs on the sys
 - Create a separate file per namespace: `localization/english/<namespace>_l_english.yml`
 - Must have `l_english:` header line, UTF-8 BOM encoding, one leading space before each key.
 - Required keys per event: `.t` (title), `.d` (description), `.f` (flavor text), `.a`/`.b`/`.c` (option button text).
+- **An event's fourth option is `.e`, not `.d`.** `.d`, `.f` and `.t` are the description, flavor and title, so a fourth option named `<event>.d` shares the description's key: the button reads the description, and the second definition of the key is silently dropped. Letter options a, b, c, e, g… (`decolonization_events.13.e`, `.74.e`, `.75.e`). The bare `.d` or `.f` that ends a `first_valid` desc or flavor counts too: `arch_events.2`'s options were `.d` and `.f`. `test_event_option_keys.py` checks every event.
 - Conditional descriptions use `_variant` suffix (e.g. `.d_modern`, `.d_tv`, `.d_cyber`).
 - Required keys per modifier: `modifier_name:0 "Display Name"`, `modifier_name_desc:0 "Tooltip description."`
 

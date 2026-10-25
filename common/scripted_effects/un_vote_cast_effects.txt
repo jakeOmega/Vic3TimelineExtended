@@ -414,6 +414,9 @@ un_vote_cast_veto = {
 					days = normal_modifier_time
 					is_decaying = yes
 				}
+				# The veto record, the case for expelling us from the seat
+				# (un_dossier_effects.txt); the tooltip names it.
+				un_veto_record_add = yes
 			}
 
 			# Infamy hit on punitive resolutions (vetoing humanitarian intervention,

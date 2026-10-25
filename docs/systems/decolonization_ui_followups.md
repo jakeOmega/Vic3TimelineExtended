@@ -47,7 +47,9 @@ it did not build. Each item says what the change would be and what it costs.
   empire most, but the row has no width left (see item 5 above).
 - **Negotiated independence for subjects.** Subjects have only the unilateral grant (and, under Neocolonialism, on
   terms). A Round Table for a subject (its liberty desire falling while talks run, a better relations start, the
-  Landowners' displeasure) would mirror the territories' choice.
+  Landowners' displeasure) would mirror the territories' choice. The same goes for a fourth option at a declaration of
+  independence (`.70`): release as a protectorate, Resolution 1541's free association (the colonial-wars spec's D8),
+  through `create_diplomatic_pact` with a subject type after the create, once that is verified from an event.
 - **The release region in the popup.** `.402` says how many states go with a territory and which people would form
   the new country, but not which states. The territory row's name hover lists them (release blocs, 2026-10-24); an
   option tooltip in `.402` that lists the marked states (`.401`'s per-state list under a header) would show them

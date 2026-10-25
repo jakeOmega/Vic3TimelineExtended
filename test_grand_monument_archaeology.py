@@ -775,8 +775,8 @@ class EventTests(unittest.TestCase):
         L = loc()
         for n, parts in ((1, ("t", "t_survey", "d", "f", "f_survey", "a", "b", "c", "c.tt")),
                          (2, ("t", "t_ruined", "t_abroad", "t_host", "d", "f", "f_ruined", "f_concession", "f_permit",
-                              "f_host_concession", "f_host", "a", "a.tt", "b", "b.tt", "c", "c.tt", "d", "d.tt",
-                              "e", "e.tt", "f", "f.tt", "ruined.tt"))):
+                              "f_host_concession", "f_host", "a", "a.tt", "b", "b.tt", "c", "c.tt", "e", "e.tt",
+                              "g", "g.tt", "h", "h.tt", "ruined.tt"))):
             for p in parts:
                 self.assertIn(f"arch_events.{n}.{p}", L)
         for k in L:

@@ -88,8 +88,8 @@ te_grid_local_consumption_value = {
 }
 
 # The state's grid transmission efficiency: its owner's
-# country_grid_transmission_efficiency_add (0.6 in base_values, 1 with all
-# five technologies that raise it), between 0.1 and 1.
+# country_grid_transmission_efficiency_add (0.75 in base_values, 1 with all
+# six technologies that raise it), between 0.1 and 1.
 te_grid_state_efficiency_value = {
 	value = 1
 	if = {
@@ -347,25 +347,51 @@ te_grid_interconnector_disp = {
 
 # --- AI -----------------------------------------------------------------------
 
-# The building's ai_value. A station earns its keep where the state's
-# Electricity is far from its base price, either way: dear where the state is
-# short, cheap where it has power to spare. 5000 per unit of the gap (1 = 100%
-# off base price), so 20% off gives 1000 (GOVERNMENT_BUILDING_BASE_VALUE),
-# capped at 2500. Zero where Electricity sits at its base price.
+# The building's ai_value, and the order te_grid_ai_build_effect picks the AI's
+# sites in. Zero unless the owner makes Electricity somewhere in the state's
+# market area (te_grid_ai_market_area_has_power): a grid with no power plant
+# has nothing to share. The state's own use of Electricity is no test, since a
+# state without power can't run the methods that use it and so reads as
+# needing none. Otherwise 4000 (twice vanilla's railway and university), plus
+#   20 per Electricity the state makes a week, up to 4000: the grid's power
+#     starts where it is made, so the first station goes there;
+#   1 per 1,000 people, up to 2000: the larger states, where a grid would
+#     find the most demand once it brings power;
+#   10 000 per unit of the gap between the state's Electricity price and its
+#     base (1 = 100% off, either way), up to 2000;
+# at most 10 000, vanilla's monument value.
 te_grid_station_ai_value = {
 	value = 0
-	sg:electricity ?= {
+	if = {
+		limit = { te_grid_ai_market_area_has_power = yes }
+		value = 4000
 		add = {
-			value = state_goods_pricier
-			min = 0
+			value = te_grid_electricity_production
+			multiply = 20
+			max = 4000
 		}
 		add = {
-			value = state_goods_cheaper
-			min = 0
+			value = state_population
+			divide = 1000
+			max = 2000
 		}
+		add = {
+			value = 0
+			sg:electricity ?= {
+				add = {
+					value = state_goods_pricier
+					min = 0
+				}
+				add = {
+					value = state_goods_cheaper
+					min = 0
+				}
+			}
+			multiply = 10000
+			max = 2000
+		}
+		max = 10000
 	}
-	multiply = 5000
-	max = 2500
 }
 
 # --- Self-checks ----------------------------------------------------------------

@@ -381,7 +381,7 @@ class StabilityTableTest(unittest.TestCase):
             with self.subTest(text=value):
                 gates = " ".join(_enclosing_visibles(text, m.start()))
                 self.assertIn(READY, gates, value)
-        self.assertEqual(checked, 8 + 8)   # eight territory rows, eight subject rows
+        self.assertEqual(checked, 8 + 8 + 3)   # eight territory rows, eight subject rows, three war rows
         for row in self._rows():
             self.assertNotIn(".Var(", row, "the drift rows read the guarded disp values")
 
@@ -813,7 +813,7 @@ class QuietTooltipsTest(unittest.TestCase):
         je = _read(JE)
         decol = _read(DECOLONIZATION)
         for name, body in (("on_complete", _block_in(je, "on_complete")), ("on_fail", _block_in(je, "on_fail")),
-                           ("apply_decolonization_path", _block(decol, "apply_decolonization_path"))):
+                           ("decol_path_legacy", _block(decol, "decol_path_legacy"))):
             with self.subTest(block=name):
                 self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
                 self.assertRegex(body, r"colonial_(invest|garrison|assimilate)_months_value")
@@ -985,9 +985,19 @@ class TerritoryListTest(unittest.TestCase):
     def test_the_rows_read_the_entrys_own_tests(self):
         triggers = _read(TRIGGERS)
         colonial = _block(triggers, "is_overseas_colonial_state")
-        self.assertRegex(colonial, r"OR = \{\s*colonial_state_indigenous_signal = yes\s*colonial_state_disparity_signal = yes\s*\}")
+        self.assertRegex(colonial, r"OR = \{\s*colonial_state_unincorporated_signal = yes\s*"
+                                   r"colonial_state_indigenous_signal = yes\s*colonial_state_disparity_signal = yes\s*\}")
+        # The prima facie case: separated and distinct, in the strict and the loose test alike.
+        for t in ("is_overseas_colonial_state", "is_decolonization_eligible_state"):
+            with self.subTest(prima_facie=t):
+                self.assertIn("is_separated_from_capital = yes", _block(triggers, t))
+                self.assertIn("colonial_state_distinct_people = yes", _block(triggers, t))
         for name, trig in (("indigenous", "colonial_state_indigenous_signal"),
                            ("disparity", "colonial_state_disparity_signal"),
+                           ("unincorporated", "colonial_state_unincorporated_signal"),
+                           ("separated", "is_separated_from_capital"),
+                           ("distinct", "colonial_state_distinct_people"),
+                           ("eligible", "is_decolonization_eligible_state"),
                            ("colony", "is_overseas_colonial_state")):
             with self.subTest(value=name):
                 self.assertIn(f"limit = {{ {trig} = yes }}", _block(self.values, f"colonial_territory_disp_{name}"))
@@ -1386,7 +1396,10 @@ class LiberationContagionTest(unittest.TestCase):
     the loop's next pass can read at once."""
 
     def setUp(self):
-        self.path = _strip_comments(_block(_read(DECOLONIZATION), "apply_decolonization_path"))
+        decol = _read(DECOLONIZATION)
+        # apply_decolonization_path calls the contagion once for every country it forms.
+        self.assertIn("decol_path_contagion = yes", _block(decol, "apply_decolonization_path"))
+        self.path = _strip_comments(_block(decol, "decol_path_contagion"))
 
     def _contagion_blocks(self):
         blocks = []
@@ -1428,7 +1441,8 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
     def setUpClass(cls):
         decol = _read(DECOLONIZATION)
         cls.helper = _strip_comments(_block(decol, "form_decolonized_country"))
-        cls.legacy = _strip_comments(_block(decol, "apply_decolonization_path"))
+        cls.legacy = _strip_comments(_block(decol, "apply_decolonization_path") + _block(decol, "decol_path_legacy")
+                                     + _block(decol, "decol_path_contagion"))
         cls.pick = _strip_comments(_block(decol, "decol_choose_release_culture"))
 
     def test_the_capital_and_parent_are_saved_on_every_call(self):

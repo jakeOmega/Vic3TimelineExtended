@@ -130,4 +130,81 @@ INJECT:war_support_from_journal_entries = {
 			}
 		}
 	}
+
+	# ---- Wars of independence (decolonization_war_effects.txt) ----
+	# A colony fighting us for its independence: a territory's rebels, a
+	# colonial subject or a secession, each holding var:decol_iw_metropole (us)
+	# while the war lasts. The fighters' side first: they keep fighting.
+	if = {
+		limit = {
+			var:decol_iw_metropole ?= { save_temporary_scope_as = decol_iw_ws_metropole }
+			has_war_with = scope:decol_iw_ws_metropole
+			scope:war = { is_war_participant = scope:decol_iw_ws_metropole }
+		}
+		add = {
+			value = 0.5
+			desc = "WAR_SUPPORT_TE_DECOL_INDEPENDENCE"
+		}
+		# A great power arms them (decolonization_events.74.b).
+		if = {
+			limit = { has_modifier = decol_iw_foreign_arms_modifier }
+			add = {
+				value = 0.25
+				desc = "WAR_SUPPORT_TE_DECOL_FOREIGN_ARMS"
+			}
+		}
+	}
+	# The metropole's side: the home front tires, the world's condemnation
+	# (the share the monthly settle stores, at the colonial bar's two
+	# escalation lines, a third and two thirds of great-power prestige), and
+	# settlers to defend.
+	if = {
+		limit = {
+			scope:war = {
+				any_war_participant = {
+					var:decol_iw_metropole ?= ROOT
+					has_war_with = ROOT
+				}
+			}
+		}
+		add = {
+			value = -0.25
+			desc = "WAR_SUPPORT_TE_DECOL_COLONIAL_WAR"
+		}
+		if = {
+			limit = {
+				has_variable = decol_iw_condemner_share
+				var:decol_iw_condemner_share >= 0.667
+			}
+			add = {
+				value = -0.5
+				desc = "WAR_SUPPORT_TE_DECOL_CONDEMNED"
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = decol_iw_condemner_share
+				var:decol_iw_condemner_share >= 0.333
+			}
+			add = {
+				value = -0.25
+				desc = "WAR_SUPPORT_TE_DECOL_CONDEMNED"
+			}
+		}
+		if = {
+			limit = {
+				scope:war = {
+					any_war_participant = {
+						var:decol_iw_metropole ?= ROOT
+						has_war_with = ROOT
+						has_variable = decol_iw_settlers
+					}
+				}
+			}
+			add = {
+				value = 0.25
+				desc = "WAR_SUPPORT_TE_DECOL_SETTLERS"
+			}
+		}
+	}
 }

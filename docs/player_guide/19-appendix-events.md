@@ -151,14 +151,16 @@ trade privilege in the new country, whose upkeep you pay.
 | The World is Watching (not the cultural hegemony milestone of the same name) | An anti-colonial great power presses you over a colonial subject (needs Intergovernmental Organizations). |
 | The Price of Empire | A colonial subject at 75 liberty desire rises in armed revolt (needs Civil Rights Movement). |
 | Trouble in (the colony's name) | A colony has a severely unaccepted population. |
-| Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. |
+| Blood in the Colonies | Armed resistance in a colony, once two or more colonies are badly unaccepted. Below 40 stability its suppression is a war of independence. |
+| Declaration in (the territory) | Below 40 stability, a colony with severely unaccepted people declares independence; also each declaration of a collapse. See [Wars of independence](12-decolonization.md#wars-of-independence). |
+| The Captains' Revolt, The Republic in Danger | A war of independence has run four years with your war support in it at 25 or below for a year. |
 | Judged by New Standards | An anti-colonial great power condemns you in international forums. |
 | Powerful Friends | A pro-colonial great power offers its backing. |
 | These Dark Satanic Mills of Empire, The Intelligentsia Petition | An Anti-Colonialist leads the Intelligentsia. |
 | The Treasury Says No | Your debt is high while you hold colonies. |
-| Conscription Crisis | You are at war against a rebelling colonial subject or culturally distinct secessionists, or at war while Colonial Crackdown runs. |
+| Conscription Crisis | You are fighting a war of independence (against a colony's rebels, a rebelling colonial subject or a colony's secessionists), or are at war while Colonial Crackdown runs. |
 | The Universities Speak | The entry has run for ten years and a powerful Intelligentsia is out of government. |
-| The Veterans' Protest | Your garrison has run for more than three years. |
+| The Veterans' Protest | Your garrison has run for more than three years, or you lost a war of independence. |
 
 ### Former colony event list
 

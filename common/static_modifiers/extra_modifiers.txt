@@ -6,8 +6,8 @@
 	state_building_grid_transfer_station_max_level_add = 1
 	country_building_grid_transfer_station_require_subsidies_bool = yes
 	# Power grids: the share of downloaded Grid Power a station turns back into
-	# Electricity. Five technologies raise it to 1 (power_grid_values.txt).
-	country_grid_transmission_efficiency_add = 0.6
+	# Electricity. Six technologies raise it to 1 (power_grid_values.txt).
+	country_grid_transmission_efficiency_add = 0.75
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
@@ -2089,6 +2089,84 @@ colonial_war_exhaustion_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.10
 	country_prestige_from_army_power_projection_mult = -0.10
+}
+
+# ---- Wars of independence (decolonization_war_effects.txt, events .70-.80) ----
+# The rebels fight like guerrillas while they fight us: re-applied each month by
+# the settle, two months long (vanilla's caucasus_war_defender_circassia and
+# modifier_kenesary_revolt carry the same set).
+decol_iw_fighters_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds
+	unit_morale_loss_mult = -0.5
+	battle_defense_owned_province_mult = 0.5
+	unit_provinces_lost_mult = -0.65
+	state_conscription_rate_mult = 1.0
+	building_training_rate_mult = 0.5
+}
+
+# One great power's arms, multiplied by the backers (up to three:
+# decol_iw_backer_mult). Vanilla's polish_rebel_funding_modifier is the shape.
+decol_iw_foreign_arms_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_offense_mult = 0.10
+	unit_defense_mult = 0.10
+}
+
+# A pro-colonial great power's arms for the metropole (.79): the smaller package.
+decol_iw_allied_arms_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_offense_mult = 0.05
+	unit_defense_mult = 0.05
+}
+
+# The home front: one year of war's worth, multiplied by the years of every war
+# we are fighting summed, up to five (decol_iw_home_front_mult).
+decol_iw_home_front_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -2
+}
+
+# The negotiated release at a declaration (.70.b): authority, easing over a year.
+decol_iw_negotiation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_cost_add = 100
+}
+
+# The Flag Comes Down (.73), decaying over five years.
+decol_iw_lost_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+	country_legitimacy_base_add = -10
+}
+
+# The Accords (.76): as a loss, but lighter; under the general's mandate (.75.c)
+# without the cost to legitimacy.
+decol_iw_accords_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+	country_legitimacy_base_add = -5
+}
+
+decol_iw_accords_mandate_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.15
+}
+
+# The regime crisis (.75): the officers crushed; the general's mandate; holding
+# the line.
+decol_iw_officers_crushed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	country_legitimacy_base_add = -20
+}
+
+decol_iw_general_mandate_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds
+	country_authority_add = 100
+}
+
+decol_iw_hold_the_line_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -15
 }
 
 cultural_reclamation_modifier = {
