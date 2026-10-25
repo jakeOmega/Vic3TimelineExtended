@@ -9,8 +9,8 @@
 #   orbital_debris_low / _high (global)   te_debris_global_monthly, te_debris_add
 #   te_debris_removal_month, te_debris_cleaners, te_debris_top_cleaner,
 #   te_debris_programs (global)           te_debris_global_monthly
-#   te_asat_last_strike_month, te_asat_strikes_total (global)
-#                                         te_asat_strike_effect
+#   te_asat_last_strike_month, te_asat_strikes_total, te_asat_last_striker,
+#   te_asat_last_target (global)          te_asat_strike_effect
 #   te_asat_struck_month (country)        te_asat_strike_effect, on the target
 #   te_orbital_debris, te_debris_cleaner_prestige (country modifiers)
 #                                         te_debris_country_monthly, their one
@@ -355,6 +355,10 @@ te_asat_strike_effect = {
 	te_debris_add = { LOW = te_asat_debris_low HIGH = te_asat_debris_high }
 	# The records the UN phase reads.
 	set_global_variable = { name = te_asat_last_strike_month value = te_history_month_index }
+	# Who struck whom, for the Orbit section's hover (te_asat_record_sgui, the
+	# Space Race tab of the Timeline Extended window). Display only.
+	set_global_variable = { name = te_asat_last_striker value = ROOT }
+	set_global_variable = { name = te_asat_last_target value = scope:te_asat_target }
 	if = {
 		limit = { NOT = { has_global_variable = te_asat_strikes_total } }
 		set_global_variable = { name = te_asat_strikes_total value = 0 }

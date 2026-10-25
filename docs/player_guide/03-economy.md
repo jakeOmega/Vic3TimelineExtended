@@ -422,8 +422,8 @@ Electricity so that every state on it has the same supply against its demand.
 A state with power to spare sells it to the grid as Grid Power, and a short
 state buys Grid Power and turns it back into Electricity. When the whole grid
 is short, every state on it is short by the same share. A grid takes out what
-it puts in, so power never crosses to a grid it isn't joined to, and Grid
-Power can't be traded between markets. Its price stays near its base of 30.
+it puts in, so power never crosses to a grid it isn't joined to. Grid Power
+can't be traded between markets, and its price is fixed at its base of 30.
 After a change, such as a new power plant or a new station, the grid takes a
 few months to settle.
 
@@ -461,21 +461,32 @@ Two things join grids that don't touch:
 Interconnector method. It costs Electronic Components and more engineers.
 Two interconnector stations in states that share a sea join their grids: your
 own across the sea, such as a mainland and a colony in your market, or a
-partner's under a Grid Interconnection Agreement in your market. The method
+partner's under a Grid Interconnection Agreement. The method
 does nothing in a state with no coast. The AI switches a coastal station when
 it has a grid of its own, or a partner's, across the sea, and back when it
 has none.
 - The Grid Interconnection Agreement treaty article (from Intergovernmental
-Organizations, between two countries in one market that share a border or a
-sea, such as a customs union or a subject in its overlord's market) joins both
+Organizations, between two countries that share a border or a sea) joins both
 countries' stations where they border, and their interconnectors across the
-sea. It breaks if the two stop sharing a market.
+sea. The two can be in one market or in two.
+
+A grid that joins two markets sends power across the border from the market
+with more to spare to the one with less. Because Grid Power's price is fixed,
+it is paid for at 30 a unit on both sides: the sending market's stations are
+paid for all the Grid Power they sell, and the receiving market's pay for all
+they buy. Exporting your surplus earns your stations what selling it at home
+would, and importing costs what buying at home would. One station in the
+receiving market, at the border, takes the import in: it buys the import and
+sells it into its market at the same price, which costs it nothing and keeps
+the market from running short of Grid Power.
 
 The state panel shows a Power Grid tile on a state with a station: whether its
 station is sending or receiving, the grid's hub (its largest producer, which
 names the grid), the Electricity the station moves a week, how many states
-its grid has and your transmission efficiency. Its hover has the grid's
-supply against its demand.
+its grid has and your transmission efficiency. On a grid that joins two
+markets it also shows the Exports or Imports of the state's market across the
+border, and Pass-through on the station that takes the import in. Its hover
+has the grid's supply against its demand.
 
 A station is worth building where power plants make more than the state uses,
 and where Electricity is dear. A state with no power uses none, because its

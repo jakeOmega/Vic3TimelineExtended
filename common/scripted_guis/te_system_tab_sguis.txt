@@ -317,25 +317,32 @@ te_pops_demog_tab_unlock_sgui = {
 
 # ---------------------------------------------------------------------------
 # Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab
-# opens while any of them runs; each entry's block has its own gate below,
-# because GetPlayerJournalEntry takes one literal key. The checklist is when
-# the first milestone starts (sr_entry_unlocked).
+# opens with the first milestone and stays open from then on (sr_in_space_race:
+# the country has run a milestone, or holds an entry), so the Space Powers
+# standings and Orbit, which read no entry, show between milestones too
+# (owner, 2026-10-25). Each entry's block has its own gate below, because
+# GetPlayerJournalEntry takes one literal key, and a note stands in for them
+# while none runs (te_window_space_race_idle_sgui). The checklist is when the
+# first milestone starts (sr_entry_unlocked).
 # ---------------------------------------------------------------------------
 te_window_space_race_tab_sgui = {
 	scope = country
 	is_shown = {
 		sr_space_race_on = yes
-		OR = {
-			has_journal_entry = je_space_race_suborbital
-			has_journal_entry = je_space_race_orbital
-			has_journal_entry = je_space_race_moon_landing
-			has_journal_entry = je_space_race_probe
-			has_journal_entry = je_space_race_moon_base
-			has_journal_entry = je_space_race_mars_landing
-			has_journal_entry = je_space_race_interstellar_probe
-			has_journal_entry = je_space_race_interstellar_results
-			has_journal_entry = je_space_race_solar_colonization
-		}
+		sr_in_space_race = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The tab is open and no entry runs: its note, in the entries' place.
+te_window_space_race_idle_sgui = {
+	scope = country
+	is_shown = {
+		sr_space_race_on = yes
+		sr_in_space_race = yes
+		NOT = { sr_holds_space_race_entry = yes }
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }

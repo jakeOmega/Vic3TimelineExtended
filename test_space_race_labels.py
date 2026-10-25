@@ -202,7 +202,7 @@ def _longest_figure(name):
         return SETBACKS_CEILING
     if re.fullmatch(r"sr_funding_\w+|sr_max_funding_level", name):
         return FUNDING_CEILING
-    if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+", name):
+    if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
     if re.fullmatch(r"sr_disp_cf_slot_\d_months", name):
         return TRANSIT_CEILING
@@ -244,7 +244,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
              r"|cf_destination_\w+|cf_drive_line|cf_races_only_note|settlers_note|settlers_crews_note"
-             r"|settlers_agi_note|settlers_empty)")
+             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none))")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -263,7 +263,7 @@ CELLS = {
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
-        r"|emig_month_label|offworld_label)"),
+        r"|emig_month_label|offworld_label|orbit_\w+_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
@@ -288,7 +288,7 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+)"),
+        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
@@ -298,6 +298,9 @@ CELLS = {
     "a world's holder: none (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_unclaimed"'),
         r"je_space_race_widget_ss_unclaimed"),
+    "a power's estimate (te_sr_power_lead_text, the Space Race tab)": (
+        ("te_sr_power_lead_text", None),
+        r"je_space_race_widget_power_(lead|own)_\w+"),
     "a world's holder: our target (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_target"'),
         r"je_space_race_widget_ss_target"),
@@ -327,10 +330,14 @@ CELLS = {
         r"je_space_race_widget_programme_header"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
-                   r"|fleets_header|settlers_header)")
+                   r"|fleets_header|settlers_header|powers_header|orbit_header)")
 
 
 def _cell(gui, type_name, marker):
+    if marker is None:  # the type is the textbox: its instances set the text
+        assert re.search(rf"type {type_name} = textbox \{{", gui), type_name
+        box = _type_body(gui, type_name)
+        return _width(box), _font(box)
     box = _textbox_with(_type_body(gui, type_name), marker)
     if type_name == "te_sr_ov_pie":  # the label is as wide as the pie's widget
         return int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(gui, type_name)).group(1)), _font(box)
@@ -393,6 +400,7 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_render(_loc("je_space_race_widget_funding_label")), "Funding")
         self.assertEqual(_longest_country_name(), "United Socialist Council Republics of California")
         self.assertEqual(_render(_loc("je_space_race_widget_rival_range_mars_landing")), "100%–100%")
+        self.assertEqual(_render(_loc("je_space_race_widget_power_lead_suborbital")), "Suborbital Flight: 100%–100%")
 
     def test_the_owners_overrun_is_caught(self):
         """The budget flags what the owner saw: "Next Colony" in the old 90."""

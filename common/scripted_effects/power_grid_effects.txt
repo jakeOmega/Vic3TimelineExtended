@@ -6,15 +6,23 @@
 # Algeria's are two groups although they share a market) and joins:
 #   - another group across the sea, where both ends run an HVDC Undersea
 #     Interconnector (pm_grid_hvdc_interconnector) and their states share a
-#     sea node: within one country, or between two in one market with a Grid
+#     sea node: within one country, or between two with a Grid
 #     Interconnection Agreement;
-#   - a neighbouring group of another country across a land border, in the
-#     same market area, when the two have a Grid Interconnection Agreement.
+#   - a neighbouring group of another country across a land border, when the
+#     two have a Grid Interconnection Agreement.
 # Once a month each grid shares its Electricity so that every member state
 # ends up with the same ratio of supply to demand: states with power to spare
 # upload it as Grid Power, short states download it, and a downloading station
 # turns only its owner's transmission efficiency of it back into Electricity.
 # A grid's uploads equal its downloads, so no Grid Power leaves it.
+#
+# An agreement can join countries in different markets. Grid Power has a
+# fixed price, so the market whose stations upload more than they download is
+# paid for all it sells, and the one that downloads more pays for all it buys:
+# the power is paid for across the border. One station in each receiving
+# market passes the import through, buying and selling that much more, so the
+# engine never reads that market's Grid Power as short
+# (te_grid_cross_market_effect).
 #
 # A grid can span countries, so the balancing is one world-wide run: the
 # global on_monthly_pulse fires te_grid.1 on one country with a station
@@ -38,7 +46,16 @@
 #   te_grid_region_size / te_grid_region_ratio / te_grid_hub  the grid's
 #                    stations, its supply-to-demand ratio and its hub (largest
 #                    producer, a state), for the state panel tile
-#   te_grid_pending, te_grid_member, te_grid_frontier  marks during a run
+#   te_grid_market_net  on a grid that spans markets, the Grid Power the
+#                    state's market's stations on it send (+) or receive (-)
+#                    across the border this month
+#   te_grid_import   the Grid Power a receiving market's station passes
+#                    through this month (0 elsewhere on a spanning grid)
+#   te_grid_import_command  what the pass-through asks of the method, over the
+#                    station's factor
+#   te_grid_pending, te_grid_member, te_grid_frontier, te_grid_border,
+#   te_grid_market_pending  marks during a run (te_grid_border: a member
+#                    linked to a member in another market)
 # Global lists during a run: te_grid_pending_states (online stations not yet
 # in a grid), te_grid_region (the grid being built and balanced) and
 # te_grid_frontier (members whose links are still to be followed). Global
@@ -154,6 +171,14 @@ te_grid_clear_marks_effect = {
 	if = {
 		limit = { has_variable = te_grid_frontier }
 		remove_variable = te_grid_frontier
+	}
+	if = {
+		limit = { has_variable = te_grid_border }
+		remove_variable = te_grid_border
+	}
+	if = {
+		limit = { has_variable = te_grid_market_pending }
+		remove_variable = te_grid_market_pending
 	}
 }
 
@@ -317,6 +342,7 @@ te_grid_expand_from_effect = {
 				has_variable = te_grid_pending
 				te_grid_sea_link = { FROM = scope:te_grid_link_from }
 			}
+			te_grid_mark_border_effect = yes
 			te_grid_add_group_effect = yes
 		}
 	}
@@ -325,7 +351,24 @@ te_grid_expand_from_effect = {
 			has_variable = te_grid_pending
 			te_grid_land_link = { FROM = scope:te_grid_link_from }
 		}
+		te_grid_mark_border_effect = yes
 		te_grid_add_group_effect = yes
+	}
+}
+
+# State scope, a waiting station about to join from scope:te_grid_link_from.
+# A link into another market marks both ends as border stations, where
+# te_grid_cross_market_effect looks first for a station to pass an import
+# through.
+te_grid_mark_border_effect = {
+	if = {
+		limit = {
+			NOT = { market = scope:te_grid_link_from.market }
+		}
+		set_variable = te_grid_border
+		scope:te_grid_link_from = {
+			set_variable = te_grid_border
+		}
 	}
 }
 
@@ -343,7 +386,10 @@ te_grid_close_region_effect = {
 
 # Country scope, with te_grid_region holding the grid's members.
 te_grid_balance_region_effect = {
+	te_grid_region_unchanged_effect = yes
 	te_grid_conservation_selfcheck_effect = yes
+	te_grid_import_selfcheck_effect = yes
+	te_grid_fixed_price_selfcheck_effect = yes
 
 	# Each member: its factor (from last month's order, before it is
 	# overwritten), its Electricity without the station, its efficiency.
@@ -456,7 +502,176 @@ te_grid_balance_region_effect = {
 		set_variable = { name = te_grid_region_size value = local_var:te_grid_members }
 		set_variable = { name = te_grid_region_ratio value = global_var:te_grid_ratio }
 		set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }
+	}
+
+	# What crosses between markets, once every flow is set; then the orders.
+	te_grid_cross_market_effect = yes
+	every_in_global_list = {
+		variable = te_grid_region
 		te_grid_set_station_flow_effect = yes
+	}
+}
+
+# ---- Between markets -------------------------------------------------------------
+
+# Country scope, with te_grid_region holding a grid whose flows are set
+# (te_grid_flow). A grid within one market uploads what it downloads there. On
+# one that spans markets that holds for the grid but not market by market:
+# one market's stations send more than they receive and another's receive
+# more, and the difference crosses the border. Grid Power has a fixed price,
+# so the sending market is paid for all it sells and the receiving one pays
+# for all it buys. The engine counts a market whose Grid Power sells under a
+# quarter of what it buys as short (NEconomy GOODS_SHORTAGE_PENALTY_THRESHOLD)
+# and cuts its buyers' output, so one station in each receiving market passes
+# the import through: it buys and sells te_grid_import more, which nets to
+# nothing at a fixed price and keeps the market's sales at half its purchases
+# or more. TE_SELF_CHECK grid_import_shortage reads whether that holds.
+te_grid_cross_market_effect = {
+	random_in_global_list = {
+		variable = te_grid_region
+		save_scope_as = te_grid_seed_state
+	}
+	if = {
+		limit = {
+			any_in_global_list = {
+				variable = te_grid_region
+				NOT = { market = scope:te_grid_seed_state.market }
+			}
+		}
+		every_in_global_list = {
+			variable = te_grid_region
+			set_variable = te_grid_market_pending
+		}
+		# One market at a time. Each pass clears the mark from every member of
+		# its market, its pick included, so the loop ends.
+		while = {
+			limit = {
+				any_in_global_list = {
+					variable = te_grid_region
+					has_variable = te_grid_market_pending
+				}
+			}
+			random_in_global_list = {
+				variable = te_grid_region
+				limit = { has_variable = te_grid_market_pending }
+				te_grid_settle_market_effect = yes
+			}
+		}
+	}
+	else = {
+		every_in_global_list = {
+			variable = te_grid_region
+			te_grid_clear_cross_market_effect = yes
+		}
+	}
+}
+
+# State scope, a member of a grid that spans markets. Its market's net flow on
+# the grid goes on every member there (te_grid_market_net). If the market
+# receives, its pass-through station carries the import (te_grid_import), one
+# with staff (an empty station is on its grid but passes nothing through):
+# last month's if it is still a border station here, so the tile doesn't move
+# about, else a border station here, else any here; with none staffed, this
+# member.
+te_grid_settle_market_effect = {
+	save_scope_as = te_grid_market_member
+	set_local_variable = { name = te_grid_market_sum value = 0 }
+	every_in_global_list = {
+		variable = te_grid_region
+		limit = { market = scope:te_grid_market_member.market }
+		change_local_variable = { name = te_grid_market_sum add = var:te_grid_flow }
+	}
+	if = {
+		limit = { local_var:te_grid_market_sum < 0 }
+		if = {
+			limit = {
+				any_in_global_list = {
+					variable = te_grid_region
+					market = scope:te_grid_market_member.market
+					has_variable = te_grid_border
+					has_variable = te_grid_import
+					var:te_grid_import > 0
+					te_grid_station_staffed = yes
+				}
+			}
+			random_in_global_list = {
+				variable = te_grid_region
+				limit = {
+					market = scope:te_grid_market_member.market
+					has_variable = te_grid_border
+					has_variable = te_grid_import
+					var:te_grid_import > 0
+					te_grid_station_staffed = yes
+				}
+				save_scope_as = te_grid_import_host
+			}
+		}
+		else_if = {
+			limit = {
+				any_in_global_list = {
+					variable = te_grid_region
+					market = scope:te_grid_market_member.market
+					has_variable = te_grid_border
+					te_grid_station_staffed = yes
+				}
+			}
+			random_in_global_list = {
+				variable = te_grid_region
+				limit = {
+					market = scope:te_grid_market_member.market
+					has_variable = te_grid_border
+					te_grid_station_staffed = yes
+				}
+				save_scope_as = te_grid_import_host
+			}
+		}
+		else_if = {
+			limit = {
+				any_in_global_list = {
+					variable = te_grid_region
+					market = scope:te_grid_market_member.market
+					te_grid_station_staffed = yes
+				}
+			}
+			random_in_global_list = {
+				variable = te_grid_region
+				limit = {
+					market = scope:te_grid_market_member.market
+					te_grid_station_staffed = yes
+				}
+				save_scope_as = te_grid_import_host
+			}
+		}
+		else = {
+			save_scope_as = te_grid_import_host
+		}
+	}
+	every_in_global_list = {
+		variable = te_grid_region
+		limit = { market = scope:te_grid_market_member.market }
+		remove_variable = te_grid_market_pending
+		set_variable = { name = te_grid_market_net value = local_var:te_grid_market_sum }
+		set_variable = { name = te_grid_import value = 0 }
+	}
+	if = {
+		limit = { local_var:te_grid_market_sum < 0 }
+		scope:te_grid_import_host = {
+			set_variable = { name = te_grid_import value = local_var:te_grid_market_sum }
+			change_variable = { name = te_grid_import multiply = -1 }
+		}
+	}
+}
+
+# State scope. A station on no grid that spans markets this month has nothing
+# to pass through and no market flow to show.
+te_grid_clear_cross_market_effect = {
+	if = {
+		limit = { has_variable = te_grid_market_net }
+		remove_variable = te_grid_market_net
+	}
+	if = {
+		limit = { has_variable = te_grid_import }
+		remove_variable = te_grid_import
 	}
 }
 
@@ -468,8 +683,14 @@ te_grid_set_station_flow_effect = {
 		limit = { var:te_grid_command < 1 }
 		set_variable = { name = te_grid_command value = 0 }
 	}
+	set_variable = { name = te_grid_import_command value = te_grid_import_command_value }
+	if = {
+		limit = { var:te_grid_import_command < 1 }
+		set_variable = { name = te_grid_import_command value = 0 }
+	}
 	set_variable = { name = te_grid_delivery value = var:te_grid_efficiency }
 	set_local_variable = { name = te_grid_upload_mult value = te_grid_upload_mult_value }
+	set_local_variable = { name = te_grid_upload_power_mult value = te_grid_upload_power_mult_value }
 	set_local_variable = { name = te_grid_download_mult value = te_grid_download_mult_value }
 	set_local_variable = { name = te_grid_download_supply_mult value = te_grid_download_supply_mult_value }
 	te_grid_apply_station_modifiers_effect = yes
@@ -490,6 +711,8 @@ te_grid_set_station_flow_effect = {
 te_grid_idle_station_effect = {
 	set_variable = { name = te_grid_flow value = 0 }
 	set_variable = { name = te_grid_command value = 0 }
+	set_variable = { name = te_grid_import_command value = 0 }
+	te_grid_clear_cross_market_effect = yes
 	# On no grid this month: the tile shows no grid figures.
 	if = {
 		limit = { has_variable = te_grid_region_size }
@@ -504,16 +727,18 @@ te_grid_idle_station_effect = {
 		remove_variable = te_grid_hub
 	}
 	set_local_variable = { name = te_grid_upload_mult value = -1 }
+	set_local_variable = { name = te_grid_upload_power_mult value = -1 }
 	set_local_variable = { name = te_grid_download_mult value = -1 }
 	set_local_variable = { name = te_grid_download_supply_mult value = -1 }
 	te_grid_apply_station_modifiers_effect = yes
 }
 
 # State scope, a state with a station. Reads local_var:te_grid_upload_mult (the
-# Grid Power out and Electricity in of an upload), te_grid_download_mult (the
-# Grid Power in of a download) and te_grid_download_supply_mult (its
-# Electricity out, after losses): the multiplier each line should carry in all
-# (Q - 1 active, -1 off). The Grid Power lines take it as it is. The
+# Electricity in of an upload), te_grid_upload_power_mult (its Grid Power out,
+# with a pass-through's resale), te_grid_download_mult (the Grid Power in of a
+# download, with a pass-through's purchase) and te_grid_download_supply_mult
+# (its Electricity out, after losses): the multiplier each line should carry
+# in all (Q - 1 active, -1 off). The Grid Power lines take it as it is. The
 # Electricity lines take it less every other modifier on them, so a state
 # trait like Niagara Falls (+20% Electricity output, added to the 1-unit line)
 # neither makes Electricity at an uploading station nor adds to a downloading
@@ -574,7 +799,8 @@ te_grid_read_other_electricity_effect = {
 }
 
 # Building scope, a Grid Transfer Station. Reads the four local multipliers set
-# by te_grid_apply_station_modifiers_effect. A same-name add_modifier stacks, so
+# by te_grid_apply_station_modifiers_effect and te_grid_set_station_flow_effect
+# (or te_grid_idle_station_effect). A same-name add_modifier stacks, so
 # the old copies go first.
 te_grid_set_station_modifiers_effect = {
 	if = {
@@ -595,7 +821,7 @@ te_grid_set_station_modifiers_effect = {
 	}
 	add_modifier = {
 		name = modifier_grid_station_upload
-		multiplier = local_var:te_grid_upload_mult
+		multiplier = local_var:te_grid_upload_power_mult
 	}
 	add_modifier = {
 		name = modifier_grid_station_upload_electricity
@@ -666,9 +892,14 @@ te_grid_clear_state_effect = {
 		remove_variable = te_grid_hub
 	}
 	if = {
+		limit = { has_variable = te_grid_import_command }
+		remove_variable = te_grid_import_command
+	}
+	if = {
 		limit = { has_variable = te_grid_staffed }
 		remove_variable = te_grid_staffed
 	}
+	te_grid_clear_cross_market_effect = yes
 }
 
 # ---- Self-checks and info ------------------------------------------------------
@@ -685,13 +916,40 @@ te_grid_dispatch_info_effect = {
 	}
 }
 
+# Country scope, at the start of a grid's balancing. Sets
+# local_var:te_grid_chk_unchanged to 1 when the grid has the stations it had
+# last month (every member's stored size is this run's member count), else 0.
+# Last week's flows can be judged only against last month's grid, so the
+# self-checks below skip a grid that gained or lost a station since.
+te_grid_region_unchanged_effect = {
+	set_local_variable = { name = te_grid_chk_members value = 0 }
+	every_in_global_list = {
+		variable = te_grid_region
+		change_local_variable = { name = te_grid_chk_members add = 1 }
+	}
+	set_local_variable = { name = te_grid_chk_unchanged value = 1 }
+	if = {
+		limit = {
+			any_in_global_list = {
+				variable = te_grid_region
+				OR = {
+					NOT = { has_variable = te_grid_region_size }
+					NOT = { var:te_grid_region_size = local_var:te_grid_chk_members }
+				}
+			}
+		}
+		set_local_variable = { name = te_grid_chk_unchanged value = 0 }
+	}
+}
+
 # Country scope, at the start of a grid's balancing, before its members'
 # figures are overwritten. TE_SELF_CHECK grid_conservation, once a game: the
 # first grid with a station uploading and another downloading at least 100 a
-# week each, compare what its stations moved last week, in Grid Power (which
-# losses don't touch). The balancing sets uploads equal to downloads and
-# corrects each order for what its station fell short last time, so they
-# should agree.
+# week each, compare what its stations moved last week on their own account,
+# in Grid Power (which losses don't touch; a pass-through cancels out of each
+# station's read, te_grid_own_uploaded). The balancing sets uploads equal to
+# downloads and corrects each order for what its station fell short last
+# time, so they should agree.
 #   OK      the two within 10% of each other.
 #   BROKEN  further apart: the shortfall correction (te_grid_station_factor_value)
 #           does not hold, or something else makes or buys Grid Power.
@@ -729,26 +987,9 @@ te_grid_conservation_selfcheck_effect = {
 				}
 			}
 		}
-		# Last week's flows balance only within last month's grid: skip a grid
-		# that gained or lost a station since (every member's stored size must
-		# be this run's member count).
-		set_local_variable = { name = te_grid_chk_members value = 0 }
-		every_in_global_list = {
-			variable = te_grid_region
-			change_local_variable = { name = te_grid_chk_members add = 1 }
-		}
+		# Last week's flows balance only within last month's grid.
 		if = {
-			limit = {
-				NOT = {
-					any_in_global_list = {
-						variable = te_grid_region
-						OR = {
-							NOT = { has_variable = te_grid_region_size }
-							NOT = { var:te_grid_region_size = local_var:te_grid_chk_members }
-						}
-					}
-				}
-			}
+			limit = { local_var:te_grid_chk_unchanged = 1 }
 			te_grid_conservation_verdict_effect = yes
 		}
 	}
@@ -763,8 +1004,8 @@ te_grid_conservation_verdict_effect = {
 	set_global_variable = { name = te_grid_chk_stations value = 0 }
 	every_in_global_list = {
 		variable = te_grid_region
-		change_global_variable = { name = te_grid_chk_uploaded add = te_grid_uploaded }
-		change_global_variable = { name = te_grid_chk_downloaded add = te_grid_downloaded }
+		change_global_variable = { name = te_grid_chk_uploaded add = te_grid_own_uploaded }
+		change_global_variable = { name = te_grid_chk_downloaded add = te_grid_own_downloaded }
 		change_global_variable = { name = te_grid_chk_stations add = 1 }
 	}
 	if = {
@@ -785,8 +1026,8 @@ te_grid_conservation_verdict_effect = {
 
 # State scope, a member of the grid being balanced, before its factor, its
 # order and its te_grid_staffed are overwritten. Two once-a-game lines on what
-# the station moved last week against last month's order (te_grid_uploaded or
-# te_grid_downloaded over te_grid_command). A station off the grid last month
+# the station moved last week on its own account against last month's order
+# (te_grid_own_uploaded or te_grid_own_downloaded over te_grid_command). A station off the grid last month
 # was ordered nothing, so neither judges it.
 #
 # TE_SELF_CHECK grid_level_scaled: the first station under half staffed, with
@@ -847,13 +1088,14 @@ te_grid_level_scaled_selfcheck_effect = {
 }
 
 # State scope, in te_grid_level_scaled_selfcheck_effect: last month's order and
-# what the station moved in its direction last week, as globals for the lines.
+# what the station moved in its direction last week on its own account (a
+# pass-through left out), as globals for the lines.
 te_grid_chk_read_moved_effect = {
 	set_global_variable = { name = te_grid_chk_ordered value = var:te_grid_command }
-	set_global_variable = { name = te_grid_chk_moved value = te_grid_uploaded }
+	set_global_variable = { name = te_grid_chk_moved value = te_grid_own_uploaded }
 	if = {
 		limit = { var:te_grid_flow < 0 }
-		set_global_variable = { name = te_grid_chk_moved value = te_grid_downloaded }
+		set_global_variable = { name = te_grid_chk_moved value = te_grid_own_downloaded }
 	}
 }
 
@@ -888,6 +1130,140 @@ te_grid_cascade_selfcheck_effect = {
 			}
 			else = {
 				debug_log = "TE_SELF_CHECK BROKEN grid_station_cascade (state Electricity output bonus=[SCOPE.ScriptValue('te_grid_chk_state_output_g')|3], the station's read less its own=[SCOPE.ScriptValue('te_grid_chk_building_output_g')|3]: a building's read doesn't carry its state's lines; see docs/testing/power-grid-playtest.md)"
+			}
+		}
+	}
+}
+
+# State scope, a member of the grid being balanced. Sums what the stations of
+# its market on the grid moved last week on their own account, pass-throughs
+# left out, into local_var:te_grid_chk_market_up and _down.
+te_grid_market_readback_effect = {
+	save_scope_as = te_grid_chk_member
+	set_local_variable = { name = te_grid_chk_market_up value = 0 }
+	set_local_variable = { name = te_grid_chk_market_down value = 0 }
+	every_in_global_list = {
+		variable = te_grid_region
+		limit = { market = scope:te_grid_chk_member.market }
+		change_local_variable = { name = te_grid_chk_market_up add = te_grid_own_uploaded }
+		change_local_variable = { name = te_grid_chk_market_down add = te_grid_own_downloaded }
+	}
+}
+
+# Country scope, at the start of a grid's balancing, before last month's
+# pass-through is overwritten. TE_SELF_CHECK grid_import_shortage, once a game:
+# the first receiving market, on a grid unchanged since last month, whose
+# stations on the grid sold under a quarter of the Grid Power they bought on
+# their own account last week (alone, the market would be short) while its
+# pass-through station carried enough to lift sales to 0.4 of purchases or
+# more. Is the market's Grid Power in shortage?
+#   OK      no: the pass-through counts as a sale and a purchase.
+#   BROKEN  yes: the engine nets a building's sale of a good against its
+#           purchase of it, or reads a shortage some other way, and the
+#           receiving market's stations deliver less than they buy.
+# Fallbacks: docs/testing/power-grid-playtest.md.
+te_grid_import_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_import_checked }
+			local_var:te_grid_chk_unchanged = 1
+			any_in_global_list = {
+				variable = te_grid_region
+				has_variable = te_grid_import
+				var:te_grid_import >= 100
+			}
+		}
+		random_in_global_list = {
+			variable = te_grid_region
+			limit = {
+				has_variable = te_grid_import
+				var:te_grid_import >= 100
+			}
+			te_grid_market_readback_effect = yes
+			set_local_variable = { name = te_grid_chk_through value = te_grid_passed_through }
+			# Alone: sales under a quarter of purchases.
+			set_local_variable = { name = te_grid_chk_quarter value = local_var:te_grid_chk_market_down }
+			change_local_variable = { name = te_grid_chk_quarter multiply = 0.25 }
+			# With the pass-through: sales at 0.4 of purchases or more.
+			set_local_variable = { name = te_grid_chk_sold value = local_var:te_grid_chk_market_up }
+			change_local_variable = { name = te_grid_chk_sold add = local_var:te_grid_chk_through }
+			set_local_variable = { name = te_grid_chk_bought value = local_var:te_grid_chk_market_down }
+			change_local_variable = { name = te_grid_chk_bought add = local_var:te_grid_chk_through }
+			change_local_variable = { name = te_grid_chk_bought multiply = 0.4 }
+			if = {
+				limit = {
+					local_var:te_grid_chk_market_down >= 100
+					local_var:te_grid_chk_market_up < local_var:te_grid_chk_quarter
+					local_var:te_grid_chk_sold >= local_var:te_grid_chk_bought
+				}
+				set_global_variable = te_grid_import_checked
+				set_global_variable = { name = te_grid_chk_uploaded value = local_var:te_grid_chk_market_up }
+				set_global_variable = { name = te_grid_chk_downloaded value = local_var:te_grid_chk_market_down }
+				set_global_variable = { name = te_grid_chk_through value = local_var:te_grid_chk_through }
+				if = {
+					limit = {
+						market = {
+							mg:grid_power ?= { market_goods_has_goods_shortage = yes }
+						}
+					}
+					debug_log = "TE_SELF_CHECK BROKEN grid_import_shortage (a receiving market's stations sold=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] bought=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] on their own account, passed through=[SCOPE.ScriptValue('te_grid_chk_through_g')|0], and its Grid Power is in shortage: the pass-through doesn't count; see docs/testing/power-grid-playtest.md)"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK OK grid_import_shortage (a receiving market's stations sold=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] bought=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] on their own account, passed through=[SCOPE.ScriptValue('te_grid_chk_through_g')|0], and its Grid Power is not in shortage)"
+				}
+			}
+		}
+	}
+}
+
+# Country scope, at the start of a grid's balancing. TE_SELF_CHECK
+# grid_fixed_price, once a game: the first sending market, on a grid unchanged
+# since last month, whose stations on the grid sold at least a quarter more
+# Grid Power than they bought last week, and 100 or more. Without a fixed price
+# that surplus would cut the market's price by several percent. Is the price
+# within 2% of base?
+#   OK      yes: fixed_price holds Grid Power at its base, as it does gold.
+#   BROKEN  no: the price moves, so a sending market earns less for what
+#           crosses and a receiving one pays more.
+# Fallbacks: docs/testing/power-grid-playtest.md.
+te_grid_fixed_price_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_fixed_price_checked }
+			local_var:te_grid_chk_unchanged = 1
+			any_in_global_list = {
+				variable = te_grid_region
+				has_variable = te_grid_market_net
+				var:te_grid_market_net >= 100
+			}
+		}
+		random_in_global_list = {
+			variable = te_grid_region
+			limit = {
+				has_variable = te_grid_market_net
+				var:te_grid_market_net >= 100
+			}
+			te_grid_market_readback_effect = yes
+			set_local_variable = { name = te_grid_chk_surplus value = local_var:te_grid_chk_market_up }
+			change_local_variable = { name = te_grid_chk_surplus subtract = local_var:te_grid_chk_market_down }
+			set_local_variable = { name = te_grid_chk_bought value = local_var:te_grid_chk_market_down }
+			change_local_variable = { name = te_grid_chk_bought multiply = 1.25 }
+			if = {
+				limit = {
+					local_var:te_grid_chk_surplus >= 100
+					local_var:te_grid_chk_market_up >= local_var:te_grid_chk_bought
+				}
+				set_global_variable = te_grid_fixed_price_checked
+				set_global_variable = { name = te_grid_chk_uploaded value = local_var:te_grid_chk_market_up }
+				set_global_variable = { name = te_grid_chk_downloaded value = local_var:te_grid_chk_market_down }
+				set_global_variable = { name = te_grid_chk_price_gap value = te_grid_chk_price_gap_value }
+				if = {
+					limit = { global_var:te_grid_chk_price_gap <= 0.02 }
+					debug_log = "TE_SELF_CHECK OK grid_fixed_price (a sending market's stations sold=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] bought=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0], and Grid Power is [SCOPE.ScriptValue('te_grid_chk_price_gap_g')|%1] from its base price)"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN grid_fixed_price (a sending market's stations sold=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] bought=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0], and Grid Power is [SCOPE.ScriptValue('te_grid_chk_price_gap_g')|%1] from its base price: fixed_price doesn't hold it; see docs/testing/power-grid-playtest.md)"
+				}
 			}
 		}
 	}

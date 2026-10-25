@@ -76,10 +76,31 @@
 ###                          sr_disp_prog_interstellar
 ### The sr_disp_* values are in common/script_values/space_race_display_values.txt.
 ###
+### The Timeline Extended window's Space Race tab also has two sections of its
+### own (te_sr_sec_powers, te_sr_sec_orbit), which read no journal entry and so
+### show between milestones; neither is mounted in the journal:
+###   space powers        -> our row on GetPlayer.GetCapital; the others' order
+###                          and capitals from sr_powers_refresh (the viewer's
+###                          sr_power_total, sr_power_<1..8>); each icon reads
+###                          sr_disp_prog_<m> on the row's power, its hover
+###                          GetCustom('sr_power_prog_<m>'); the estimate is the
+###                          Rivals rows' band (sr_disp_rival_{lo,hi}_<m>) for
+###                          the code sr_disp_power_lead picks, ours exact
+###                          (sr_disp_progress_frac_<m>); "+N more" walks
+###                          sr_powers_sgui on hover
+###   orbit               -> the debris row; te_asat_disp_* and the custom loc
+###                          te_asat_satellites_state / te_asat_moratorium_state
+###                          (common/script_values/te_orbital_debris_values.txt,
+###                          te_orbital_debris_custom_loc.txt); the strike's
+###                          checklist and targets from te_asat_strike_ready_sgui,
+###                          the last strike from te_asat_record_sgui
+###
 ### COST. The Rivals rows read stored slots and evaluate three small script
 ### values each per frame; the full list (sr_rivals_sgui, which walks every
 ### country) renders only on the "+N more" hover. The monthly refresh that
-### fills the slots runs for players only.
+### fills the slots runs for players only. Space Powers works the same way
+### (sr_powers_refresh, sr_powers_sgui); its rows evaluate a code and their
+### icons' small values per frame, while the tab shows them.
 ###
 ### Widths are fixed, never content-sized: every root and composer is 520
 ### wide (`minimumsize`), each panel's content 480, and rows of numbers use
@@ -3119,6 +3140,598 @@ types space_race_widget_types
 	}
 
 	### ======================================================================
+	### THE SPACE RACE TAB'S OWN SECTIONS (the Timeline Extended window,
+	### gui/te_systems_window.gui). The tab stays open once the country is in
+	### the race (sr_in_space_race), with or without a milestone running, so
+	### these read no journal entry: the player through GetPlayer, a power
+	### through its capital. Above the milestones' blocks; never in the journal.
+	### ======================================================================
+
+	### One entry of a power's programme in a Space Powers row: its journal
+	### icon at half the programme row's size, lit once achieved, half while
+	### under way, faint otherwise, with a small mark for a first
+	### (te_sr_ov_prog_cell's states). The instance sets the texture, the
+	### tests that pick one, and the tooltip: the state in words, in the third
+	### person (sr_power_prog_<m>, read on the row's power).
+	type te_sr_power_cell = widget {
+		size = { 24 24 }
+
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			block "lit" {}
+			block "prog_texture" {}
+		}
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			alpha = 0.6
+			block "running" {}
+			block "prog_texture" {}
+		}
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			alpha = 0.25
+			block "unlit" {}
+			block "prog_texture" {}
+		}
+		icon = {
+			size = { 10 10 }
+			parentanchor = top|right
+			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
+			block "first" {
+				visible = no
+			}
+		}
+	}
+
+	### The Interstellar Probe and the wait for its data in a Space Powers row:
+	### te_sr_ov_prog_cell_interstellar's four states at half the size, on the
+	### row's power, with one hover for all four.
+	type te_sr_power_cell_interstellar = widget {
+		size = { 24 24 }
+		tooltip = "je_space_race_widget_power_prog_interstellar"
+
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_not_begun.dds"
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
+		}
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_under_way.dds"
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
+		}
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_awaiting_data.dds"
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
+		}
+		icon = {
+			size = { 22 22 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_data_received.dds"
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
+		}
+		icon = {
+			size = { 10 10 }
+			parentanchor = top|right
+			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
+		}
+	}
+
+	### The text of a row's estimate column: right-aligned in the column, its
+	### width fixed (te_sr_power_lead_band / _own). The instance sets which
+	### code it shows for, its text and its hover.
+	type te_sr_power_lead_text = textbox {
+		minimumsize = { 266 -1 }
+		maximumsize = { 266 -1 }
+		autoresize = yes
+		elide = right
+		parentanchor = right|vcenter
+		align = right|nobaseline
+		using = fontsize_medium
+		default_format = "#tooltippable"
+	}
+
+	### The estimate column of another power's row: its furthest milestone
+	### under way (sr_disp_power_lead) and the Rivals rows' band around its
+	### progress (sr_disp_rival_lo/hi_<m>, the power passed in as
+	### scope:sr_rival), so the band is as wide as the Rivals rows' and our
+	### covert network narrows it alike. One text per code, by one equality
+	### test each, so no two show at once.
+	type te_sr_power_lead_band = widget {
+		size = { 270 24 }
+
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)0' )]"
+			text = "je_space_race_widget_power_lead_none"
+			tooltip = "je_space_race_widget_power_lead_none_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_power_lead_suborbital"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)2' )]"
+			text = "je_space_race_widget_power_lead_orbital"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)3' )]"
+			text = "je_space_race_widget_power_lead_moon_landing"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)4' )]"
+			text = "je_space_race_widget_power_lead_probe"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)5' )]"
+			text = "je_space_race_widget_power_lead_moon_base"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)6' )]"
+			text = "je_space_race_widget_power_lead_mars_landing"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)7' )]"
+			text = "je_space_race_widget_power_lead_interstellar_probe"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)8' )]"
+			text = "je_space_race_widget_power_lead_solar_colonization"
+			tooltip = "je_space_race_widget_power_est_tt"
+		}
+	}
+
+	### The estimate column of our own row: our furthest milestone under way and
+	### our exact progress towards its goal (sr_disp_progress_frac_<m>).
+	type te_sr_power_lead_own = widget {
+		size = { 270 24 }
+
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)0' )]"
+			text = "je_space_race_widget_power_lead_none"
+			tooltip = "je_space_race_widget_power_lead_none_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_power_own_suborbital"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)2' )]"
+			text = "je_space_race_widget_power_own_orbital"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)3' )]"
+			text = "je_space_race_widget_power_own_moon_landing"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)4' )]"
+			text = "je_space_race_widget_power_own_probe"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)5' )]"
+			text = "je_space_race_widget_power_own_moon_base"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)6' )]"
+			text = "je_space_race_widget_power_own_mars_landing"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)7' )]"
+			text = "je_space_race_widget_power_own_interstellar_probe"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+		te_sr_power_lead_text = {
+			visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_power_lead'), '(CFixedPoint)8' )]"
+			text = "je_space_race_widget_power_own_solar_colonization"
+			tooltip = "je_space_race_widget_power_own_tt"
+		}
+	}
+
+	### One power in Space Powers: its name on a line of its own (a name can
+	### run to 48 characters, which no column beside the icons holds), then its
+	### programme as eight small icons in journal order (te_sr_ov_programme's
+	### order), and, in a fixed column beside them, its furthest milestone
+	### under way with its progress (lead_column: te_sr_power_lead_band for a
+	### rival, te_sr_power_lead_own for us). 8 x 24 + 8 x 2 + 270 = 478, inside
+	### the 480 column. The row's `visible` is on the outer widget and the
+	### power's capital, the datacontext, on the inner one, so a slot not filled
+	### is never read (te_sr_rival_row does the same).
+	type te_sr_power_row = widget {
+		size = { 480 50 }
+		block "row_visible" {}
+
+		flowcontainer = {
+			direction = vertical
+			spacing = 4
+			block "row_context" {}
+
+			textbox = {
+				minimumsize = { 480 -1 }
+				maximumsize = { 480 -1 }
+				autoresize = yes
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				default_format = "#tooltippable"
+				text = "je_space_race_widget_rival_name"
+				tooltip = "je_space_race_widget_power_name_tt"
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 2
+
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_suborbital"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' ) )]"
+					}
+					blockoverride "first" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)4' )]"
+					}
+				}
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_orbital"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' ) )]"
+					}
+					blockoverride "first" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)4' )]"
+					}
+				}
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_moon_landing"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' ) )]"
+					}
+					blockoverride "first" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)4' )]"
+					}
+				}
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_probe"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' ) )]"
+					}
+					blockoverride "first" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)4' )]"
+					}
+				}
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_moon_base"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' ) )]"
+					}
+					blockoverride "first" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)4' )]"
+					}
+				}
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_mars_landing"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' ) )]"
+					}
+					blockoverride "first" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)4' )]"
+					}
+				}
+				te_sr_power_cell_interstellar = {}
+				te_sr_power_cell = {
+					tooltip = "je_space_race_widget_power_prog_solar_colonization"
+					blockoverride "prog_texture" {
+						texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+					}
+					blockoverride "lit" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "running" {
+						visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "unlit" {
+						visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' ) )]"
+					}
+				}
+				block "lead_column" {}
+			}
+		}
+	}
+
+	### Space Powers: our programme, then every other power in the race, the
+	### first eight as rows (sr_power_<1..8>, furthest along first, from
+	### sr_powers_refresh, space_race_effects.txt, once a month), then "+N more",
+	### whose hover is the whole list (sr_powers_sgui, only walked on hover). A
+	### live list, open by default (style guide rule 1). Our row reads our
+	### capital straight (GetPlayer.GetCapital), so it shows before the first
+	### refresh too.
+	type te_sr_sec_powers = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_powers_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_powers_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_powers_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_powers_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_powers_closed'))]"
+
+			te_sr_power_row = {
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.GetCapital]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_own = {}
+				}
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_powers_others"
+				}
+			}
+			te_sr_text = {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' ) )]"
+				text = "je_space_race_widget_powers_pending"
+			}
+			te_sr_text = {
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_powers_none"
+			}
+
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_1').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_2').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_3').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)4' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_4').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)5' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_5').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)6' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_6').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)7' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_7').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_power_row = {
+				blockoverride "row_visible" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)8' )]"
+				}
+				blockoverride "row_context" {
+					datacontext = "[GetPlayer.MakeScope.Var('sr_power_8').GetState]"
+				}
+				blockoverride "lead_column" {
+					te_sr_power_lead_band = {}
+				}
+			}
+			te_sr_text = {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)9' )]"
+				default_format = "#tooltippable"
+				text = "je_space_race_widget_powers_more"
+				tooltip = "[GetScriptedGui('sr_powers_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+		}
+	}
+
+	### Orbit: what the anti-satellite strike and debris mean for us now
+	### (Global Commons § 6), for a player between milestones too. Orbital
+	### debris (Mission Control's own row, which reads only globals and the
+	### player), our satellites, the strikes so far, the Moratorium and our own
+	### strike; each row's hover gives the detail. A live section, open by
+	### default. The figures: te_orbital_debris_values.txt (te_asat_disp_*), the
+	### words: te_orbital_debris_custom_loc.txt, the hovers' lists:
+	### common/scripted_guis/te_orbital_debris_sguis.txt.
+	type te_sr_sec_orbit = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_orbit_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_orbit_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_orbit_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_orbit_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_orbit_closed'))]"
+
+			te_sr_debris_row = {}
+			te_sr_value_row = {
+				tooltip = "te_orbit_satellites_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_orbit_satellites_label"
+				}
+				blockoverride "row_value" {
+					text = "te_orbit_satellites_value"
+				}
+			}
+			te_sr_value_row = {
+				tooltip = "te_orbit_strikes_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_orbit_strikes_label"
+				}
+				blockoverride "row_value" {
+					text = "te_orbit_strikes_value"
+				}
+			}
+			te_sr_value_row = {
+				tooltip = "te_orbit_moratorium_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_orbit_moratorium_label"
+				}
+				blockoverride "row_value" {
+					text = "te_orbit_moratorium_value"
+				}
+			}
+			te_sr_value_row = {
+				tooltip = "te_orbit_strike_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_orbit_strike_label"
+				}
+				blockoverride "row_value" {
+					text = "te_orbit_strike_value"
+				}
+			}
+		}
+	}
+
+	### ======================================================================
 	### REFERENCE (collapsed by default)
 	### ======================================================================
 
@@ -3197,6 +3810,22 @@ types space_race_widget_types
 			}
 			te_sr_note = {
 				text = "je_space_race_widget_how_programme"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_powers"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_powers"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_orbit"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_orbit"
 			}
 		}
 	}

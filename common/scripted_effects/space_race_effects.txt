@@ -1161,6 +1161,114 @@ sr_clear_rival_slots = {
 	if = { limit = { has_variable = sr_rival_$MILESTONE$_5 } remove_variable = sr_rival_$MILESTONE$_5 }
 }
 
+# --- Display-only: the Space Powers standings --------------------------------
+# The Timeline Extended window's Space Race tab stays open once a country is in
+# the race (sr_in_space_race), and opens with Space Powers (te_sr_sec_powers,
+# space_race_widget.gui): our programme, then up to eight other powers, each as
+# its programme's icons and an estimate of its furthest milestone under way.
+# Unlike the Rivals rows, which exist only inside a milestone we run, it shows
+# between milestones and powers on milestones we never ran.
+#
+# - Who: every other power in the race (sr_is_space_power), in the order of
+#   sr_power_rank_score (space_race_values.txt): what each has achieved and
+#   which milestone it is on, never its progress.
+# - Into the viewer's own variables, once a month: sr_power_total (how many),
+#   and sr_power_<1..8>, each power's capital (gotcha #11). The icons and the
+#   estimate are read live, per frame.
+# - The estimate is the Rivals rows' (sr_disp_rival_*_<m> with the power passed
+#   in as scope:sr_rival), so each power's offset (sr_fuzz_<m>) is drawn here
+#   for every milestone it runs, when missing or a year old, as
+#   sr_rivals_estimate_refresh_base draws it: the same offset in both places.
+#
+# Players only, from the monthly pulse (space_race_on_actions.txt). Everything
+# is a variable, rebuilt every month.
+# Scope: country (a player in the race); ROOT is the same country.
+sr_powers_refresh = {
+	save_scope_as = sr_powers_viewer
+	every_country = {
+		limit = { sr_is_space_power = yes }
+		sr_power_fuzz_base = { MILESTONE = suborbital         }
+		sr_power_fuzz_base = { MILESTONE = orbital            }
+		sr_power_fuzz_base = { MILESTONE = moon_landing       }
+		sr_power_fuzz_base = { MILESTONE = probe              }
+		sr_power_fuzz_base = { MILESTONE = moon_base          }
+		sr_power_fuzz_base = { MILESTONE = mars_landing       }
+		sr_power_fuzz_base = { MILESTONE = interstellar_probe }
+		sr_power_fuzz_base = { MILESTONE = solar_colonization }
+	}
+	set_variable = { name = sr_power_total value = 0 } # REVIEWED 2026-10-25: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+	every_country = {
+		limit = { sr_is_space_power = yes }
+		scope:sr_powers_viewer = { change_variable = { name = sr_power_total add = 1 } }
+	}
+	sr_power_slot = { N = 1 POS = 0 }
+	sr_power_slot = { N = 2 POS = 1 }
+	sr_power_slot = { N = 3 POS = 2 }
+	sr_power_slot = { N = 4 POS = 3 }
+	sr_power_slot = { N = 5 POS = 4 }
+	sr_power_slot = { N = 6 POS = 5 }
+	sr_power_slot = { N = 7 POS = 6 }
+	sr_power_slot = { N = 8 POS = 7 }
+}
+
+# A power's offset for $MILESTONE$, while it runs it: drawn if it has none,
+# again a year after. Scope: the power.
+sr_power_fuzz_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		if = {
+			limit = { NOT = { has_variable = sr_fuzz_until_$MILESTONE$ } }
+			sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+		}
+		else_if = {
+			limit = { var:sr_fuzz_until_$MILESTONE$ <= te_history_month_index }
+			sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+		}
+	}
+}
+
+# Slot $N$ (1-8) gets the power at position $POS$ ($N$ - 1) of the standings.
+# An ordered_ position past the end of the list clamps to the last element, so
+# the count is checked first (sr_rival_slot). Scope: the viewer
+# (scope:sr_powers_viewer is set).
+sr_power_slot = {
+	if = {
+		limit = {
+			any_country = {
+				sr_is_space_power = yes
+				count >= $N$
+			}
+		}
+		ordered_country = {
+			limit = { sr_is_space_power = yes }
+			order_by = sr_power_rank_score
+			position = $POS$
+			capital = { save_scope_as = sr_power_capital }
+		}
+		scope:sr_powers_viewer = {
+			set_variable = { name = sr_power_$N$ value = scope:sr_power_capital } # REVIEWED 2026-10-25: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_power_$N$ }
+		remove_variable = sr_power_$N$
+	}
+}
+
+# The snapshot of a country that no longer views it (no longer played).
+# Scope: the country.
+sr_powers_clear = {
+	if = { limit = { has_variable = sr_power_total } remove_variable = sr_power_total }
+	if = { limit = { has_variable = sr_power_1 } remove_variable = sr_power_1 }
+	if = { limit = { has_variable = sr_power_2 } remove_variable = sr_power_2 }
+	if = { limit = { has_variable = sr_power_3 } remove_variable = sr_power_3 }
+	if = { limit = { has_variable = sr_power_4 } remove_variable = sr_power_4 }
+	if = { limit = { has_variable = sr_power_5 } remove_variable = sr_power_5 }
+	if = { limit = { has_variable = sr_power_6 } remove_variable = sr_power_6 }
+	if = { limit = { has_variable = sr_power_7 } remove_variable = sr_power_7 }
+	if = { limit = { has_variable = sr_power_8 } remove_variable = sr_power_8 }
+}
+
 # --- A launch complex that can no longer carry a milestone -------------------
 # Every milestone journal entry fails when the space programme building stops
 # granting its tier's country_sr_*_program_bool: the building was lost (the
