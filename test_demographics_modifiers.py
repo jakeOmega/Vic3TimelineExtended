@@ -606,8 +606,8 @@ class TestWorkforceLineNames(unittest.TestCase):
                          [("te_demog_effects_run = yes", "te_demog_wf_womens_desc_full"),
                           ("always = yes", "te_demog_wf_womens_desc_plain")])
         full = self.loc["te_demog_wf_womens_full"]
-        self.assertTrue(full.startswith("Women’s Work"), full)
-        self.assertIn("$state_working_adult_ratio_add$", full)
+        # "Women's Work" alone since Women's Work Outside the Home went (owner, 2026-10-25)
+        self.assertEqual(full, "Women’s Work")
         self.assertNotIn("'", full)  # pasted into a quoted tooltip argument, as above
         self.assertEqual(self.loc["te_demog_wf_plain"], "$state_working_adult_ratio_add$")
         self.assertTrue(self.loc["te_demog_wf_womens_desc_plain"].startswith("$state_working_adult_ratio_add_desc$"))

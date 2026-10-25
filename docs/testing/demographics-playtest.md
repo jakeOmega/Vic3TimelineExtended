@@ -1441,9 +1441,9 @@ the same `GetPlayer.GetCustom` call as the section above. The women's-work famil
 women's work first (owner, 2026-10-25).
 
 1. **Full.** Old Age Pension's institution effects read "Workforce Ratio (replaced by the census)", the tag grey;
-   Women's Suffrage reads "Women’s Work (Workforce Ratio)", the parenthesis grey, and the line's description, where the
+   Women's Suffrage reads "Women’s Work" (no parenthesis since 2026-10-25), and the line's description, where the
    game shows one (the Nation tab row's tooltip), starts "How far women's rights" and names +35%, not a raw
-   `ScriptValue` call. The Nation tab's women's-work row reads "Women’s Work (Workforce Ratio): …".
+   `ScriptValue` call. The Nation tab's women's-work row reads "Women’s Work: …".
 2. **Display only and Disabled.** The same tooltips read plain "Workforce Ratio", with no trailing space, and the
    women's-work description starts with the base game's "The ratio of Workforce to Dependents". If the name is blank
    or a raw key here, the macro in `te_demog_wf_plain` doesn't expand through custom loc: write the vanilla name's text
