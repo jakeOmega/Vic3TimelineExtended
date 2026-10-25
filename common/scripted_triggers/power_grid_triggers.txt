@@ -46,36 +46,31 @@ te_grid_owners_interconnected = {
 # State scope (a waiting station), during the balancing: joined to the grid of
 # $FROM$ (a member station) across the sea. Both stations run an
 # interconnector and share a sea node (the caller iterates $FROM$'s
-# every_sea_node_adjacent_state). Within one country that is enough: its
-# market areas are all in its market. Between two countries it takes a Grid
-# Interconnection Agreement and one market, so the Grid Power each side trades
-# stays in the market it is priced in.
+# every_sea_node_adjacent_state). Within one country that is enough; between
+# two it takes a Grid Interconnection Agreement, in one market or across two
+# (te_grid_cross_market_effect settles what crosses).
 te_grid_sea_link = {
 	te_grid_has_interconnector = yes
 	OR = {
 		owner = $FROM$.owner
-		AND = {
-			market = $FROM$.market
-			te_grid_owners_interconnected = { FROM = $FROM$ }
-		}
+		te_grid_owners_interconnected = { FROM = $FROM$ }
 	}
 }
 
 # State scope (a waiting station), during the balancing: joined to the grid of
 # $FROM$ (a member station of another country) across a land border. The two
 # states border each other (the caller iterates $FROM$'s
-# every_neighbouring_state), lie in one market area, and their owners have a
-# Grid Interconnection Agreement in force.
+# every_neighbouring_state) and their owners have a Grid Interconnection
+# Agreement in force, in one market or across two.
 te_grid_land_link = {
 	NOT = { owner = $FROM$.owner }
-	is_in_same_market_area = $FROM$
 	te_grid_owners_interconnected = { FROM = $FROM$ }
 }
 
 # State scope (an AI's coastal station, saved as scope:te_grid_ai_end), in
 # te_grid_ai_interconnectors_effect. A station across a shared sea would join
 # it to another grid through an interconnector: one of the same country in
-# another market area, or an agreement partner's in the same market.
+# another market area, or an agreement partner's.
 te_grid_ai_interconnector_wanted = {
 	any_sea_node_adjacent_state = {
 		te_grid_state_has_station = yes
@@ -86,7 +81,6 @@ te_grid_ai_interconnector_wanted = {
 			}
 			AND = {
 				NOT = { owner = scope:te_grid_ai_end.owner }
-				market = scope:te_grid_ai_end.market
 				te_grid_owners_interconnected = { FROM = scope:te_grid_ai_end }
 			}
 		}
