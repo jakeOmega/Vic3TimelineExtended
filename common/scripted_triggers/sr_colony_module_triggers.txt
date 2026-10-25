@@ -1,0 +1,81 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — colony modules and Extraplanetary Base room: triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-modules-and-bases-design.md.
+# The per-world triggers are generated (sr_sites_generated.txt).
+# ============================================================================
+
+# Country scope. A module can leave for the body this month at no premium: its
+# window is open, or windows don't bind this country (a torch or antimatter
+# drive). Off-window launches at a premium spend the colonization bar, which
+# modules don't (design § 6).
+sr_mod_departs = {
+	OR = {
+		NOT = { sr_launch_windows_apply = yes }
+		has_global_variable = sr_window_is_open_$BODY$
+	}
+}
+
+# Country scope. A shipment slot is free.
+sr_ms_has_free_slot = {
+	OR = {
+		NOT = { has_variable = sr_ms_1_site }
+		NOT = { has_variable = sr_ms_2_site }
+		NOT = { has_variable = sr_ms_3_site }
+		NOT = { has_variable = sr_ms_4_site }
+		NOT = { has_variable = sr_ms_5_site }
+		NOT = { has_variable = sr_ms_6_site }
+		NOT = { has_variable = sr_ms_7_site }
+		NOT = { has_variable = sr_ms_8_site }
+	}
+}
+
+# Country scope. Its Space Program runs the fabrication method PM.
+sr_mod_fabrication_runs = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		has_active_production_method = $PM$
+	}
+}
+
+# Country scope. The module_fabrication self-check's subject: a Space Program
+# running a fabrication method at half staff or more.
+sr_mod_fab_qualifies = {
+	any_scope_building = {
+		is_building_type = building_space_program
+		NOT = { has_active_production_method = pm_sr_fabrication_none }
+		occupancy >= 0.5
+	}
+}
+
+# ---- Extraplanetary Base room (design § 9) --------------------------------------------
+# Country scope. One more Extraplanetary Base level, counting those queued,
+# fits in the country's room; always under races only, where bases are
+# unlimited.
+sr_ebase_has_room = {
+	OR = {
+		NOT = { sr_colonies_contested_enabled = yes }
+		sr_ebase_queued_levels < sr_ebase_room_total
+	}
+}
+
+# Country scope, the building's can_build_government: an AI government builds
+# within the room only; a player's builds past it, at the penalty.
+sr_ebase_may_build_government = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_ebase_room_full_tt
+			sr_ebase_has_room = yes
+		}
+	}
+}
+
+# Country scope, the building's can_build_private: no private investor builds
+# past the room, in anyone's country.
+sr_ebase_may_build_private = {
+	custom_tooltip = {
+		text = sr_ebase_room_full_tt
+		sr_ebase_has_room = yes
+	}
+}

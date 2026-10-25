@@ -12,11 +12,12 @@ te_grid_state_has_station = {
 
 # State scope. The state's Grid Transfer Station is built, so it takes part in
 # its grid's balancing this month; one still under construction is set idle.
-# Staffing doesn't matter: the method's goods lines are level_scaled
-# (power_grid_pms.txt), and a station with no staff keeps its order and its
-# modifiers, so it moves its share from its first hire rather than from the
-# next month's balancing. An empty building is expected to run none of its
-# lines, so until then its grid's uploads and downloads differ by its share.
+# Staffing doesn't decide it. A station moves its staffing's share of its
+# order (power_grid_pms.txt), which the balancing's factor makes up for, and a
+# station with no staff keeps its order and its modifiers, so it moves from its
+# first hire rather than from the next month's balancing. An empty building
+# runs none of its lines, so until then its grid's uploads and downloads differ
+# by its share.
 # Until 2026-10-25 the lines were workforce_scaled and a station needed a
 # quarter of its staff, so one that lost workers dropped its state off the grid.
 te_grid_station_online = {

@@ -448,10 +448,13 @@ You can build one station per state. Your first station in a market area can
 go in any of your states there, and every later one must border a state of
 yours that has a station, built or queued, so a grid grows outward from where
 it starts. A station costs 100 construction, the same as a level of Barracks,
-and joins its grid as soon as it is built. It moves its full share however
-few workers it has, so a station that loses staff doesn't cut its state off
-the grid. With no workers at all it moves nothing, and starts again as soon
-as it hires one. Stations are
+and joins its grid as soon as it is built. Engineers and clerks seek station
+jobs out and stay in them, so a station fills in two or three months and
+keeps its staff. A station moves its staff's share of what it is asked, so the
+monthly balancing asks a thinly staffed one for more, enough to move its full
+share down to a fifth staffed; while it is still hiring it moves a little more
+than its share. With no workers at all it moves nothing, and starts again as
+soon as it hires one. Stations are
 private infrastructure that is always subsidized: a station buys and sells
 both goods at market prices, and your government pays whatever its wages cost
 beyond what it earns.

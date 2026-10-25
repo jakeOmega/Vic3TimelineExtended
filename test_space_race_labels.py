@@ -54,6 +54,11 @@ SETTLERS_A_MONTH = 2000   # sr_disp_emig_per_month at High (sr_emig_level_batche
 OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 810,000 before modules; seven digits
 TRANSIT_CEILING = 999     # sr_disp_cf_slot_<n>_months: the longest transit is 611 (chemical, the Kuiper Belt)
 END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
+FAB_RATE_CEILING = 99.9   # sr_disp_fab_rate: the best method gives 25 a month; technology could add more
+FAB_STOCK = 200           # sr_disp_fab_stock: sr_mod_fab_stock_cap
+SHIP_SLOTS = 8            # sr_disp_ms_waiting / _flying: gen_solar_sites.SHIP_SLOTS
+UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_pct: a level past the first per module, 34 worlds x 7 at most
+EBASE_LEVELS = 9999       # sr_disp_ebase_levels / _room: 770 levels of room in all; four digits
 
 
 def _read(path):
@@ -211,7 +216,11 @@ def _longest_figure(name):
     fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS,
              "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
-             "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE}
+             "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
+             "sr_disp_fab_rate": FAB_RATE_CEILING, "sr_disp_fab_stock": FAB_STOCK,
+             "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
+             "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
+             "sr_disp_ebase_room": EBASE_LEVELS}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -244,7 +253,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
              r"|cf_destination_\w+|cf_drive_line|cf_races_only_note|settlers_note|settlers_crews_note"
-             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none))")
+             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none)|modules_note)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -263,11 +272,12 @@ CELLS = {
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
-        r"|emig_month_label|offworld_label|orbit_\w+_label)"),
+        r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
+        r"|ebase_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
-        r"|emig_month_figure|offworld_figure)"),
+        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure)"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -288,7 +298,7 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others)"),
+        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others|mq_header)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
@@ -325,12 +335,18 @@ CELLS = {
     "emigration level (te_sr_sec_settlers)": (
         ("te_sr_sec_settlers", 'text = "je_space_race_widget_emig_level_0"'),
         r"je_space_race_widget_emig_level_\d"),
+    "a module column's heading (te_sr_module_header_row)": (
+        ("te_sr_module_header_row", 'text = "je_space_race_widget_modules_col_a"'),
+        r"je_space_race_widget_modules_col_(a|b|hab|port|def)"),
+    "the crew column's heading (te_sr_module_header_row)": (
+        ("te_sr_module_header_row", 'text = "je_space_race_widget_modules_col_staffing"'),
+        r"je_space_race_widget_modules_col_staffing"),
     "programme label (te_sr_ov_programme)": (
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
-                   r"|fleets_header|settlers_header|powers_header|orbit_header)")
+                   r"|fleets_header|settlers_header|modules_header|powers_header|orbit_header)")
 
 
 def _cell(gui, type_name, marker):

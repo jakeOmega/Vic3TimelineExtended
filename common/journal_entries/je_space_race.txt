@@ -1514,11 +1514,15 @@ je_space_race_solar_colonization = {
 			}
 			sr_set_milestone_status_base = { MILESTONE = solar_colonization }
 			# Colony population (simple and full; slices 2-3 design § 10): the
-			# AI's yearly review, the month's emigrants, then the entry's two
-			# modifiers. A colony holder's entry is always open, so this runs
-			# for every holder, programme or not.
+			# AI's yearly review, the month's emigrants; colony modules (colony
+			# modules design §§ 5, 10): the AI's yearly review, the month's
+			# fabrication; then the entry's three modifiers. A colony holder's
+			# entry is always open, so this runs for every holder, programme or
+			# not.
 			sr_emig_ai_review = yes
 			sr_emig_month = yes
+			sr_mod_ai_review = yes
+			sr_mod_month = yes
 			sr_emig_refresh_modifiers = yes
 		}
 	}

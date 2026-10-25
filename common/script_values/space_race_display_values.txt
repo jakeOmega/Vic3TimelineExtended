@@ -1180,3 +1180,55 @@ sr_disp_agi = {
 	value = 0
 	if = { limit = { has_technology_researched = artificial_intelligence } value = 1 }
 }
+
+# ======= Colony modules (colony modules design § 11) =======
+# Colony Modules (te_sr_sec_modules); the per-world values are generated
+# (sr_sites_display_generated.txt). The month's fabrication points, and the
+# stock waiting for a module.
+sr_disp_fab_rate = {
+	value = sr_mod_fab_rate
+}
+sr_disp_fab_stock = {
+	value = 0
+	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }
+	floor = yes
+}
+# Our shipments waiting at Earth for a window, and in flight.
+sr_disp_ms_waiting = {
+	value = 0
+	if = { limit = { has_variable = sr_ms_1_site NOT = { has_variable = sr_ms_1_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_2_site NOT = { has_variable = sr_ms_2_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_3_site NOT = { has_variable = sr_ms_3_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_4_site NOT = { has_variable = sr_ms_4_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_5_site NOT = { has_variable = sr_ms_5_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_6_site NOT = { has_variable = sr_ms_6_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_7_site NOT = { has_variable = sr_ms_7_arrive } } add = 1 }
+	if = { limit = { has_variable = sr_ms_8_site NOT = { has_variable = sr_ms_8_arrive } } add = 1 }
+}
+sr_disp_ms_flying = {
+	value = 0
+	if = { limit = { has_variable = sr_ms_1_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_2_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_3_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_4_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_5_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_6_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_7_arrive } add = 1 }
+	if = { limit = { has_variable = sr_ms_8_arrive } add = 1 }
+}
+# The modules' upkeep: +1% Space Program throughput a level past the first.
+sr_disp_mod_upkeep_pct = {
+	value = sr_mod_upkeep_levels
+}
+# Our Extraplanetary Base levels, our room for them, and the throughput the
+# room gives them (percent, the average grade; negative past the room).
+sr_disp_ebase_levels = {
+	value = sr_ebase_levels
+}
+sr_disp_ebase_room = {
+	value = sr_ebase_room_total
+}
+sr_disp_ebase_grade = {
+	value = 0
+	if = { limit = { has_variable = sr_ebase_grade } value = var:sr_ebase_grade }
+}

@@ -233,11 +233,12 @@ te_grid_flow_value = {
 # How much of what the station was asked to move it moved last week, read back
 # from the state's Grid Power (te_grid_own_uploaded / te_grid_own_downloaded
 # against var:te_grid_command, last month's order for its own flow; a
-# pass-through cancels out of both). The method's lines are level_scaled, so
-# staffing doesn't cut them; this corrects for whatever still does, such as a
-# shortage of the station's inputs. The order is divided by it, so the station
-# moves what the balance needs and the grid's uploads keep matching its
-# downloads. Kept from the month before when the station was idle, was asked
+# pass-through cancels out of both). This corrects for whatever cuts the
+# method's lines: staffing (a station moves its occupancy's share of its order,
+# whatever block its goods lines sit in) and a shortage of its inputs. The
+# order is divided by it, so the station moves what the balance needs and the
+# grid's uploads keep matching its downloads, down to a fifth staffed (the 0.2
+# floor). Kept from the month before when the station was idle, was asked
 # too little to measure, or moved nothing (no staff: measured, its factor would
 # sit at 0.2 and its first hire would move five times its share); 1 until
 # first measured. Read before te_grid_flow and te_grid_command are overwritten.
@@ -654,12 +655,8 @@ te_grid_chk_method_range_value = {
 te_grid_chk_ordered_g = { value = global_var:te_grid_chk_ordered }
 te_grid_chk_moved_g = { value = global_var:te_grid_chk_moved }
 
-# What a station moved over what it was ordered, for TE_SELF_CHECK
-# grid_level_scaled.
-te_grid_chk_moved_share_g = {
-	value = global_var:te_grid_chk_moved
-	divide = {
-		value = global_var:te_grid_chk_ordered
-		min = 1
-	}
-}
+# TE_GRID staffing: how many stations sit in each staffing band.
+te_grid_st_quarter_g = { value = global_var:te_grid_st_quarter }
+te_grid_st_half_g = { value = global_var:te_grid_st_half }
+te_grid_st_most_g = { value = global_var:te_grid_st_most }
+te_grid_st_full_g = { value = global_var:te_grid_st_full }
