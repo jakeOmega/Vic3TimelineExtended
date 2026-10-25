@@ -46,8 +46,9 @@ still reaches the milestones.
 1. **The rule.** The setup screen's Space Race rule offers Full Colonies, Simple Colonies, Races Only (the default) and
    Disabled. Under each of the first three every space race entry appears as before; under Disabled none does.
 2. **The designer.** Under Simple Colonies, open a treaty with a country that holds a colony: Cede Colony lists that
-   country's colonies by name and icon ("Valles Marineris Colony"), and only those. Under Races Only the article does
-   not appear.
+   country's colonies by name and icon ("Valles Marineris Colony"), and only those. The list, the picked colony under
+   it, the draft row and the signed treaty's row are the mod's own widgets (vanilla shows a building type only for a
+   company monopoly): check each shows the colony's name and icon. Under Races Only the article does not appear.
 3. **The building types appear nowhere else**: not in the build menu, the production overview, the encyclopedia, a
    company's or an industry charter's list. If one does, note where.
 4. **A sale.** Cede one of our colonies for a Money Transfer to an AI great power: it accepts when the money is large

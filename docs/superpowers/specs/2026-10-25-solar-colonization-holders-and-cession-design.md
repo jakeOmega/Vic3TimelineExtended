@@ -514,3 +514,9 @@ Where the build departs from the sections above, and why:
   in one script run never share one.
 - **A released world is a fresh world**: its specialization and discovery records
   are cleared with its holder, for its next founder to choose again.
+- **The treaty screens draw a building type without a company** (§ 11): vanilla's
+  Add dialog, draft row and signed row show a `building_type` input only for
+  `acquire_monopoly_for_company`, after its company, so Cede Colony would have
+  opened with nothing to pick. The mod's overrides of `right_click_menu.gui`,
+  `treaty_draft_panel.gui` and `treaty_panel.gui` add a generic branch in each
+  (`### BUILDING TYPE (GENERIC …)`; `test_treaty_article_input_widgets.py`).
