@@ -227,3 +227,64 @@ te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event
 		sr_emig_refresh_modifiers = yes
 	}
 }
+
+te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event te_debug_space_race.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.4.t
+	desc = te_debug_space_race.4.d
+	flavor = te_debug_space_race.4.f
+
+	# Every colony's modules and caps: TE_SR_MODULES lines.
+	option = {
+		name = te_debug_space_race.4.a
+		default_option = yes
+		sr_mod_debug_log = yes
+	}
+
+	# Our fabrication stock full.
+	option = {
+		name = te_debug_space_race.4.b
+		trigger = { sr_colonies_contested_enabled = yes }
+		set_variable = { name = sr_fab_stock value = sr_mod_fab_stock_cap }
+	}
+
+	# One of each module our first colony allows, queued, and this month's
+	# fabrication run now.
+	option = {
+		name = te_debug_space_race.4.c
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_mod_debug_queue_first = yes
+		sr_mod_month = yes
+	}
+
+	# Every one of our shipments lands now (the modifier_seen_same_effect
+	# self-check), then the entry's modifiers.
+	option = {
+		name = te_debug_space_race.4.e
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			has_variable = sr_ms_count
+		}
+		sr_ms_debug_land_all_now = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
+	# Our Extraplanetary Base room recomputed now.
+	option = {
+		name = te_debug_space_race.4.g
+		trigger = { has_technology_researched = asteroid_mining }
+		sr_ebase_refresh = yes
+		debug_log = "TE_SR_MODULES Extraplanetary Base room: [THIS.Var('sr_ebase_room').GetValue|0] levels, grade [THIS.Var('sr_ebase_grade').GetValue|2]% over [THIS.ScriptValue('sr_ebase_levels')|0] built"
+	}
+}

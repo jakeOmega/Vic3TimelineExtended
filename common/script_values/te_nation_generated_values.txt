@@ -237,6 +237,14 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = sr_first_interstellar_probe }
 		add = 1
 	}
@@ -1582,6 +1590,14 @@ te_nation_list_science_and_space_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = sr_commercial_space_dividend }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
 		add = 1
 	}
 	if = {
@@ -5033,6 +5049,14 @@ te_nation_types_science_and_space_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = sr_first_interstellar_probe }
 		add = 1
 	}
@@ -5410,6 +5434,14 @@ te_nation_group_space_and_seabed_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_orbital_debris }
 		add = 1
 	}
@@ -5458,6 +5490,14 @@ te_nation_type_building_space_mine_throughput_add_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = sr_commercial_space_dividend }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_bonus }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = sr_ebase_room_penalty }
 		add = 1
 	}
 	if = {

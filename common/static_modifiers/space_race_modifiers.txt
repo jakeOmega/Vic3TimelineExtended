@@ -245,6 +245,29 @@ sr_offworld_population = {
 	country_cultural_pull_mult = 0.02
 }
 
+# ======= Solar System Colonization - colony modules (simple and full colonies)
+# On the entry, at multiplier = the module levels past the first at the
+# colonies held (sr_mod_upkeep_units), re-applied monthly with the two above by
+# sr_emig_refresh_modifiers (colony modules design § 8): each level's upkeep is
+# the Space Program's Launch Capacity bill, as emigration's is.
+sr_module_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.01
+}
+
+# Extraplanetary Base room (colony modules design § 9): unit country modifiers,
+# one at a time, at multiplier = the average grade of the country's base levels
+# in percent, past its room at -50%. The one refresh site is sr_ebase_refresh
+# (sr_colony_module_effects.txt), monthly from the country pulse.
+sr_ebase_room_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_space_mine_throughput_add = 0.01
+}
+sr_ebase_room_penalty = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_space_mine_throughput_add = -0.01
+}
+
 # ======= Space Race - After the race: Commercial Space Industry
 # Once a country has nothing left to race for (sr_space_race_concluded), the
 # flat progress its sources still give each month (Space Elevator, companies,

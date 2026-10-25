@@ -27,8 +27,41 @@ sr_site_show_modifier = {
 	}
 }
 
+# Country scope. A specialization of a world we hold, at MULT (its level times
+# the colony's staffing, sr_site_mult_<a|b>_<key>; slice 4 design § 3): the
+# record, and where the entry is open the modifier at that multiplier. The
+# multiplier applied is recorded as <modifier>_mult, and only a change of it
+# (or no record) removes the old copy and adds the new: the test is the
+# variable, never has_modifier, so a second sync in the same effect adds
+# nothing even if has_modifier cannot yet see this one's add. MULT reads
+# global variables only, so it evaluates alike in the entry's scope.
+sr_site_show_modifier_at = {
+	if = {
+		limit = { NOT = { has_variable = $MODIFIER$_held } }
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = $MODIFIER$_mult }
+				NOT = { var:$MODIFIER$_mult = $MULT$ }
+			}
+		}
+		je:je_space_race_solar_colonization ?= {
+			if = {
+				limit = { has_modifier = $MODIFIER$ }
+				remove_modifier = $MODIFIER$
+			}
+			add_modifier = { name = $MODIFIER$ multiplier = $MULT$ }
+			owner = { set_variable = { name = $MODIFIER$_mult value = $MULT$ } }
+			sr_mod_seen_self_check = { MODIFIER = $MODIFIER$ }
+		}
+	}
+}
+
 # Country scope. One modifier of a world we no longer hold (or of the option we
-# did not take), hidden: record and modifier.
+# did not take), hidden: record and modifier, and the multiplier a
+# specialization was shown at.
 sr_site_hide_modifier = {
 	if = {
 		limit = { has_variable = $MODIFIER$_held }
@@ -39,6 +72,10 @@ sr_site_hide_modifier = {
 			limit = { has_modifier = $MODIFIER$ }
 			remove_modifier = $MODIFIER$
 		}
+	}
+	if = {
+		limit = { has_variable = $MODIFIER$_mult }
+		remove_variable = $MODIFIER$_mult
 	}
 }
 
@@ -226,6 +263,9 @@ sr_sites_global_monthly = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
 		sr_cf_global_arrivals = yes
+		# Colony modules leave and land (sr_colony_module_effects.txt), so the
+		# world's step below syncs the modules that landed.
+		sr_ms_global_month = yes
 	}
 	sr_sites_monthly = yes
 	if = {

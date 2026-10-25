@@ -41,43 +41,44 @@ sr_sites_held_count = {
 }
 
 # Cede Colony's AI: what the article's input world is worth, 20 plus 5 a
-# stage (design § 11.2). scope:article in inherent_accept_score.
+# stage (design § 11.2), plus 5 a module level past the first (slice 4 design
+# § 7). scope:article in inherent_accept_score.
 sr_cede_ai_input_value = {
 	value = 0
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_valles_marineris } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_olympus_mons } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hellas_planitia } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_utopia_planitia } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_arcadia_planitia } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ceres } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_vesta } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_psyche } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pallas } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hygiea } value = 25 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_io } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_europa } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ganymede } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_callisto } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_himalia } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_amalthea } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_venus } value = 30 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mercury } value = 35 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titan } value = 35 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_enceladus } value = 35 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_rhea } value = 35 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mimas } value = 35 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_iapetus } value = 35 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titania } value = 40 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_oberon } value = 40 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_miranda } value = 40 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ariel } value = 40 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_triton } value = 40 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_proteus } value = 40 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pluto } value = 45 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_eris } value = 45 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_makemake } value = 45 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_haumea } value = 45 }
-	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_sedna } value = 45 }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_valles_marineris } value = 25 add = { value = sr_site_extra_levels_valles_marineris multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_olympus_mons } value = 25 add = { value = sr_site_extra_levels_olympus_mons multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hellas_planitia } value = 25 add = { value = sr_site_extra_levels_hellas_planitia multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_utopia_planitia } value = 25 add = { value = sr_site_extra_levels_utopia_planitia multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_arcadia_planitia } value = 25 add = { value = sr_site_extra_levels_arcadia_planitia multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ceres } value = 25 add = { value = sr_site_extra_levels_ceres multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_vesta } value = 25 add = { value = sr_site_extra_levels_vesta multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_psyche } value = 25 add = { value = sr_site_extra_levels_psyche multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pallas } value = 25 add = { value = sr_site_extra_levels_pallas multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_hygiea } value = 25 add = { value = sr_site_extra_levels_hygiea multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_io } value = 30 add = { value = sr_site_extra_levels_io multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_europa } value = 30 add = { value = sr_site_extra_levels_europa multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ganymede } value = 30 add = { value = sr_site_extra_levels_ganymede multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_callisto } value = 30 add = { value = sr_site_extra_levels_callisto multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_himalia } value = 30 add = { value = sr_site_extra_levels_himalia multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_amalthea } value = 30 add = { value = sr_site_extra_levels_amalthea multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_venus } value = 30 add = { value = sr_site_extra_levels_venus multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mercury } value = 35 add = { value = sr_site_extra_levels_mercury multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titan } value = 35 add = { value = sr_site_extra_levels_titan multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_enceladus } value = 35 add = { value = sr_site_extra_levels_enceladus multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_rhea } value = 35 add = { value = sr_site_extra_levels_rhea multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_mimas } value = 35 add = { value = sr_site_extra_levels_mimas multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_iapetus } value = 35 add = { value = sr_site_extra_levels_iapetus multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_titania } value = 40 add = { value = sr_site_extra_levels_titania multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_oberon } value = 40 add = { value = sr_site_extra_levels_oberon multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_miranda } value = 40 add = { value = sr_site_extra_levels_miranda multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_ariel } value = 40 add = { value = sr_site_extra_levels_ariel multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_triton } value = 40 add = { value = sr_site_extra_levels_triton multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_proteus } value = 40 add = { value = sr_site_extra_levels_proteus multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_pluto } value = 45 add = { value = sr_site_extra_levels_pluto multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_eris } value = 45 add = { value = sr_site_extra_levels_eris multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_makemake } value = 45 add = { value = sr_site_extra_levels_makemake multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_haumea } value = 45 add = { value = sr_site_extra_levels_haumea multiply = 5 } }
+	if = { limit = { scope:article.input_building_type ?= bt:building_sr_site_sedna } value = 45 add = { value = sr_site_extra_levels_sedna multiply = 5 } }
 }
 
 # ===== Colony fleets (slices 2-3 design §§ 4-7) =====
@@ -890,11 +891,18 @@ sr_cf_target_goal = {
 # ===== Population (slices 2-3 design § 10) =====
 sr_site_crew_per_level = { value = 5000 }
 
-# Per world, any scope: its room (people, before modules), its people, its free
-# room, and the module levels above the first its people can crew. Country scope:
+# Per world, any scope: its base room (people, before Habitats), its room (+50% of
+# the base a Habitat level, slice 4 design § 3), its people, its free room, and
+# the module levels above the first its people can crew. Country scope:
 # THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when
 # unset) and its emigration weight, priority x free room, 0 unless THIS holds it.
-sr_site_room_valles_marineris = { value = 50000 }
+sr_site_base_room_valles_marineris = { value = 50000 }
+sr_site_room_valles_marineris = {
+	value = sr_site_hab_value_valles_marineris
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_valles_marineris
+}
 sr_site_pop_value_valles_marineris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_valles_marineris } value = global_var:sr_site_pop_valles_marineris }
@@ -903,6 +911,10 @@ sr_site_free_room_valles_marineris = {
 	value = sr_site_room_valles_marineris
 	subtract = sr_site_pop_value_valles_marineris
 	min = 0
+}
+sr_site_fill_valles_marineris = {
+	value = sr_site_pop_value_valles_marineris
+	divide = sr_site_room_valles_marineris
 }
 sr_site_crews_valles_marineris = {
 	value = sr_site_pop_value_valles_marineris
@@ -919,7 +931,13 @@ sr_emig_weight_valles_marineris = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_emig_prio_weight_valles_marineris multiply = sr_site_free_room_valles_marineris }
 }
-sr_site_room_olympus_mons = { value = 40000 }
+sr_site_base_room_olympus_mons = { value = 40000 }
+sr_site_room_olympus_mons = {
+	value = sr_site_hab_value_olympus_mons
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_olympus_mons
+}
 sr_site_pop_value_olympus_mons = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_olympus_mons } value = global_var:sr_site_pop_olympus_mons }
@@ -928,6 +946,10 @@ sr_site_free_room_olympus_mons = {
 	value = sr_site_room_olympus_mons
 	subtract = sr_site_pop_value_olympus_mons
 	min = 0
+}
+sr_site_fill_olympus_mons = {
+	value = sr_site_pop_value_olympus_mons
+	divide = sr_site_room_olympus_mons
 }
 sr_site_crews_olympus_mons = {
 	value = sr_site_pop_value_olympus_mons
@@ -944,7 +966,13 @@ sr_emig_weight_olympus_mons = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_emig_prio_weight_olympus_mons multiply = sr_site_free_room_olympus_mons }
 }
-sr_site_room_hellas_planitia = { value = 50000 }
+sr_site_base_room_hellas_planitia = { value = 50000 }
+sr_site_room_hellas_planitia = {
+	value = sr_site_hab_value_hellas_planitia
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_hellas_planitia
+}
 sr_site_pop_value_hellas_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_hellas_planitia } value = global_var:sr_site_pop_hellas_planitia }
@@ -953,6 +981,10 @@ sr_site_free_room_hellas_planitia = {
 	value = sr_site_room_hellas_planitia
 	subtract = sr_site_pop_value_hellas_planitia
 	min = 0
+}
+sr_site_fill_hellas_planitia = {
+	value = sr_site_pop_value_hellas_planitia
+	divide = sr_site_room_hellas_planitia
 }
 sr_site_crews_hellas_planitia = {
 	value = sr_site_pop_value_hellas_planitia
@@ -969,7 +1001,13 @@ sr_emig_weight_hellas_planitia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_emig_prio_weight_hellas_planitia multiply = sr_site_free_room_hellas_planitia }
 }
-sr_site_room_utopia_planitia = { value = 50000 }
+sr_site_base_room_utopia_planitia = { value = 50000 }
+sr_site_room_utopia_planitia = {
+	value = sr_site_hab_value_utopia_planitia
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_utopia_planitia
+}
 sr_site_pop_value_utopia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_utopia_planitia } value = global_var:sr_site_pop_utopia_planitia }
@@ -978,6 +1016,10 @@ sr_site_free_room_utopia_planitia = {
 	value = sr_site_room_utopia_planitia
 	subtract = sr_site_pop_value_utopia_planitia
 	min = 0
+}
+sr_site_fill_utopia_planitia = {
+	value = sr_site_pop_value_utopia_planitia
+	divide = sr_site_room_utopia_planitia
 }
 sr_site_crews_utopia_planitia = {
 	value = sr_site_pop_value_utopia_planitia
@@ -994,7 +1036,13 @@ sr_emig_weight_utopia_planitia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_emig_prio_weight_utopia_planitia multiply = sr_site_free_room_utopia_planitia }
 }
-sr_site_room_arcadia_planitia = { value = 40000 }
+sr_site_base_room_arcadia_planitia = { value = 40000 }
+sr_site_room_arcadia_planitia = {
+	value = sr_site_hab_value_arcadia_planitia
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_arcadia_planitia
+}
 sr_site_pop_value_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_arcadia_planitia } value = global_var:sr_site_pop_arcadia_planitia }
@@ -1003,6 +1051,10 @@ sr_site_free_room_arcadia_planitia = {
 	value = sr_site_room_arcadia_planitia
 	subtract = sr_site_pop_value_arcadia_planitia
 	min = 0
+}
+sr_site_fill_arcadia_planitia = {
+	value = sr_site_pop_value_arcadia_planitia
+	divide = sr_site_room_arcadia_planitia
 }
 sr_site_crews_arcadia_planitia = {
 	value = sr_site_pop_value_arcadia_planitia
@@ -1019,7 +1071,13 @@ sr_emig_weight_arcadia_planitia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_emig_prio_weight_arcadia_planitia multiply = sr_site_free_room_arcadia_planitia }
 }
-sr_site_room_ceres = { value = 40000 }
+sr_site_base_room_ceres = { value = 40000 }
+sr_site_room_ceres = {
+	value = sr_site_hab_value_ceres
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ceres
+}
 sr_site_pop_value_ceres = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_ceres } value = global_var:sr_site_pop_ceres }
@@ -1028,6 +1086,10 @@ sr_site_free_room_ceres = {
 	value = sr_site_room_ceres
 	subtract = sr_site_pop_value_ceres
 	min = 0
+}
+sr_site_fill_ceres = {
+	value = sr_site_pop_value_ceres
+	divide = sr_site_room_ceres
 }
 sr_site_crews_ceres = {
 	value = sr_site_pop_value_ceres
@@ -1044,7 +1106,13 @@ sr_emig_weight_ceres = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_emig_prio_weight_ceres multiply = sr_site_free_room_ceres }
 }
-sr_site_room_vesta = { value = 25000 }
+sr_site_base_room_vesta = { value = 25000 }
+sr_site_room_vesta = {
+	value = sr_site_hab_value_vesta
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_vesta
+}
 sr_site_pop_value_vesta = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_vesta } value = global_var:sr_site_pop_vesta }
@@ -1053,6 +1121,10 @@ sr_site_free_room_vesta = {
 	value = sr_site_room_vesta
 	subtract = sr_site_pop_value_vesta
 	min = 0
+}
+sr_site_fill_vesta = {
+	value = sr_site_pop_value_vesta
+	divide = sr_site_room_vesta
 }
 sr_site_crews_vesta = {
 	value = sr_site_pop_value_vesta
@@ -1069,7 +1141,13 @@ sr_emig_weight_vesta = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_emig_prio_weight_vesta multiply = sr_site_free_room_vesta }
 }
-sr_site_room_psyche = { value = 20000 }
+sr_site_base_room_psyche = { value = 20000 }
+sr_site_room_psyche = {
+	value = sr_site_hab_value_psyche
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_psyche
+}
 sr_site_pop_value_psyche = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_psyche } value = global_var:sr_site_pop_psyche }
@@ -1078,6 +1156,10 @@ sr_site_free_room_psyche = {
 	value = sr_site_room_psyche
 	subtract = sr_site_pop_value_psyche
 	min = 0
+}
+sr_site_fill_psyche = {
+	value = sr_site_pop_value_psyche
+	divide = sr_site_room_psyche
 }
 sr_site_crews_psyche = {
 	value = sr_site_pop_value_psyche
@@ -1094,7 +1176,13 @@ sr_emig_weight_psyche = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_emig_prio_weight_psyche multiply = sr_site_free_room_psyche }
 }
-sr_site_room_pallas = { value = 20000 }
+sr_site_base_room_pallas = { value = 20000 }
+sr_site_room_pallas = {
+	value = sr_site_hab_value_pallas
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_pallas
+}
 sr_site_pop_value_pallas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_pallas } value = global_var:sr_site_pop_pallas }
@@ -1103,6 +1191,10 @@ sr_site_free_room_pallas = {
 	value = sr_site_room_pallas
 	subtract = sr_site_pop_value_pallas
 	min = 0
+}
+sr_site_fill_pallas = {
+	value = sr_site_pop_value_pallas
+	divide = sr_site_room_pallas
 }
 sr_site_crews_pallas = {
 	value = sr_site_pop_value_pallas
@@ -1119,7 +1211,13 @@ sr_emig_weight_pallas = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_emig_prio_weight_pallas multiply = sr_site_free_room_pallas }
 }
-sr_site_room_hygiea = { value = 15000 }
+sr_site_base_room_hygiea = { value = 15000 }
+sr_site_room_hygiea = {
+	value = sr_site_hab_value_hygiea
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_hygiea
+}
 sr_site_pop_value_hygiea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_hygiea } value = global_var:sr_site_pop_hygiea }
@@ -1128,6 +1226,10 @@ sr_site_free_room_hygiea = {
 	value = sr_site_room_hygiea
 	subtract = sr_site_pop_value_hygiea
 	min = 0
+}
+sr_site_fill_hygiea = {
+	value = sr_site_pop_value_hygiea
+	divide = sr_site_room_hygiea
 }
 sr_site_crews_hygiea = {
 	value = sr_site_pop_value_hygiea
@@ -1144,7 +1246,13 @@ sr_emig_weight_hygiea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_emig_prio_weight_hygiea multiply = sr_site_free_room_hygiea }
 }
-sr_site_room_io = { value = 15000 }
+sr_site_base_room_io = { value = 15000 }
+sr_site_room_io = {
+	value = sr_site_hab_value_io
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_io
+}
 sr_site_pop_value_io = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_io } value = global_var:sr_site_pop_io }
@@ -1153,6 +1261,10 @@ sr_site_free_room_io = {
 	value = sr_site_room_io
 	subtract = sr_site_pop_value_io
 	min = 0
+}
+sr_site_fill_io = {
+	value = sr_site_pop_value_io
+	divide = sr_site_room_io
 }
 sr_site_crews_io = {
 	value = sr_site_pop_value_io
@@ -1169,7 +1281,13 @@ sr_emig_weight_io = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_emig_prio_weight_io multiply = sr_site_free_room_io }
 }
-sr_site_room_europa = { value = 30000 }
+sr_site_base_room_europa = { value = 30000 }
+sr_site_room_europa = {
+	value = sr_site_hab_value_europa
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_europa
+}
 sr_site_pop_value_europa = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_europa } value = global_var:sr_site_pop_europa }
@@ -1178,6 +1296,10 @@ sr_site_free_room_europa = {
 	value = sr_site_room_europa
 	subtract = sr_site_pop_value_europa
 	min = 0
+}
+sr_site_fill_europa = {
+	value = sr_site_pop_value_europa
+	divide = sr_site_room_europa
 }
 sr_site_crews_europa = {
 	value = sr_site_pop_value_europa
@@ -1194,7 +1316,13 @@ sr_emig_weight_europa = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_emig_prio_weight_europa multiply = sr_site_free_room_europa }
 }
-sr_site_room_ganymede = { value = 40000 }
+sr_site_base_room_ganymede = { value = 40000 }
+sr_site_room_ganymede = {
+	value = sr_site_hab_value_ganymede
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ganymede
+}
 sr_site_pop_value_ganymede = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_ganymede } value = global_var:sr_site_pop_ganymede }
@@ -1203,6 +1331,10 @@ sr_site_free_room_ganymede = {
 	value = sr_site_room_ganymede
 	subtract = sr_site_pop_value_ganymede
 	min = 0
+}
+sr_site_fill_ganymede = {
+	value = sr_site_pop_value_ganymede
+	divide = sr_site_room_ganymede
 }
 sr_site_crews_ganymede = {
 	value = sr_site_pop_value_ganymede
@@ -1219,7 +1351,13 @@ sr_emig_weight_ganymede = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_emig_prio_weight_ganymede multiply = sr_site_free_room_ganymede }
 }
-sr_site_room_callisto = { value = 40000 }
+sr_site_base_room_callisto = { value = 40000 }
+sr_site_room_callisto = {
+	value = sr_site_hab_value_callisto
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_callisto
+}
 sr_site_pop_value_callisto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_callisto } value = global_var:sr_site_pop_callisto }
@@ -1228,6 +1366,10 @@ sr_site_free_room_callisto = {
 	value = sr_site_room_callisto
 	subtract = sr_site_pop_value_callisto
 	min = 0
+}
+sr_site_fill_callisto = {
+	value = sr_site_pop_value_callisto
+	divide = sr_site_room_callisto
 }
 sr_site_crews_callisto = {
 	value = sr_site_pop_value_callisto
@@ -1244,7 +1386,13 @@ sr_emig_weight_callisto = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_emig_prio_weight_callisto multiply = sr_site_free_room_callisto }
 }
-sr_site_room_himalia = { value = 10000 }
+sr_site_base_room_himalia = { value = 10000 }
+sr_site_room_himalia = {
+	value = sr_site_hab_value_himalia
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_himalia
+}
 sr_site_pop_value_himalia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_himalia } value = global_var:sr_site_pop_himalia }
@@ -1253,6 +1401,10 @@ sr_site_free_room_himalia = {
 	value = sr_site_room_himalia
 	subtract = sr_site_pop_value_himalia
 	min = 0
+}
+sr_site_fill_himalia = {
+	value = sr_site_pop_value_himalia
+	divide = sr_site_room_himalia
 }
 sr_site_crews_himalia = {
 	value = sr_site_pop_value_himalia
@@ -1269,7 +1421,13 @@ sr_emig_weight_himalia = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_emig_prio_weight_himalia multiply = sr_site_free_room_himalia }
 }
-sr_site_room_amalthea = { value = 10000 }
+sr_site_base_room_amalthea = { value = 10000 }
+sr_site_room_amalthea = {
+	value = sr_site_hab_value_amalthea
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_amalthea
+}
 sr_site_pop_value_amalthea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_amalthea } value = global_var:sr_site_pop_amalthea }
@@ -1278,6 +1436,10 @@ sr_site_free_room_amalthea = {
 	value = sr_site_room_amalthea
 	subtract = sr_site_pop_value_amalthea
 	min = 0
+}
+sr_site_fill_amalthea = {
+	value = sr_site_pop_value_amalthea
+	divide = sr_site_room_amalthea
 }
 sr_site_crews_amalthea = {
 	value = sr_site_pop_value_amalthea
@@ -1294,7 +1456,13 @@ sr_emig_weight_amalthea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_emig_prio_weight_amalthea multiply = sr_site_free_room_amalthea }
 }
-sr_site_room_venus = { value = 30000 }
+sr_site_base_room_venus = { value = 30000 }
+sr_site_room_venus = {
+	value = sr_site_hab_value_venus
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_venus
+}
 sr_site_pop_value_venus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_venus } value = global_var:sr_site_pop_venus }
@@ -1303,6 +1471,10 @@ sr_site_free_room_venus = {
 	value = sr_site_room_venus
 	subtract = sr_site_pop_value_venus
 	min = 0
+}
+sr_site_fill_venus = {
+	value = sr_site_pop_value_venus
+	divide = sr_site_room_venus
 }
 sr_site_crews_venus = {
 	value = sr_site_pop_value_venus
@@ -1319,7 +1491,13 @@ sr_emig_weight_venus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_emig_prio_weight_venus multiply = sr_site_free_room_venus }
 }
-sr_site_room_mercury = { value = 25000 }
+sr_site_base_room_mercury = { value = 25000 }
+sr_site_room_mercury = {
+	value = sr_site_hab_value_mercury
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_mercury
+}
 sr_site_pop_value_mercury = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_mercury } value = global_var:sr_site_pop_mercury }
@@ -1328,6 +1506,10 @@ sr_site_free_room_mercury = {
 	value = sr_site_room_mercury
 	subtract = sr_site_pop_value_mercury
 	min = 0
+}
+sr_site_fill_mercury = {
+	value = sr_site_pop_value_mercury
+	divide = sr_site_room_mercury
 }
 sr_site_crews_mercury = {
 	value = sr_site_pop_value_mercury
@@ -1344,7 +1526,13 @@ sr_emig_weight_mercury = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_emig_prio_weight_mercury multiply = sr_site_free_room_mercury }
 }
-sr_site_room_titan = { value = 40000 }
+sr_site_base_room_titan = { value = 40000 }
+sr_site_room_titan = {
+	value = sr_site_hab_value_titan
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_titan
+}
 sr_site_pop_value_titan = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_titan } value = global_var:sr_site_pop_titan }
@@ -1353,6 +1541,10 @@ sr_site_free_room_titan = {
 	value = sr_site_room_titan
 	subtract = sr_site_pop_value_titan
 	min = 0
+}
+sr_site_fill_titan = {
+	value = sr_site_pop_value_titan
+	divide = sr_site_room_titan
 }
 sr_site_crews_titan = {
 	value = sr_site_pop_value_titan
@@ -1369,7 +1561,13 @@ sr_emig_weight_titan = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_emig_prio_weight_titan multiply = sr_site_free_room_titan }
 }
-sr_site_room_enceladus = { value = 20000 }
+sr_site_base_room_enceladus = { value = 20000 }
+sr_site_room_enceladus = {
+	value = sr_site_hab_value_enceladus
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_enceladus
+}
 sr_site_pop_value_enceladus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_enceladus } value = global_var:sr_site_pop_enceladus }
@@ -1378,6 +1576,10 @@ sr_site_free_room_enceladus = {
 	value = sr_site_room_enceladus
 	subtract = sr_site_pop_value_enceladus
 	min = 0
+}
+sr_site_fill_enceladus = {
+	value = sr_site_pop_value_enceladus
+	divide = sr_site_room_enceladus
 }
 sr_site_crews_enceladus = {
 	value = sr_site_pop_value_enceladus
@@ -1394,7 +1596,13 @@ sr_emig_weight_enceladus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_emig_prio_weight_enceladus multiply = sr_site_free_room_enceladus }
 }
-sr_site_room_rhea = { value = 20000 }
+sr_site_base_room_rhea = { value = 20000 }
+sr_site_room_rhea = {
+	value = sr_site_hab_value_rhea
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_rhea
+}
 sr_site_pop_value_rhea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_rhea } value = global_var:sr_site_pop_rhea }
@@ -1403,6 +1611,10 @@ sr_site_free_room_rhea = {
 	value = sr_site_room_rhea
 	subtract = sr_site_pop_value_rhea
 	min = 0
+}
+sr_site_fill_rhea = {
+	value = sr_site_pop_value_rhea
+	divide = sr_site_room_rhea
 }
 sr_site_crews_rhea = {
 	value = sr_site_pop_value_rhea
@@ -1419,7 +1631,13 @@ sr_emig_weight_rhea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_emig_prio_weight_rhea multiply = sr_site_free_room_rhea }
 }
-sr_site_room_mimas = { value = 10000 }
+sr_site_base_room_mimas = { value = 10000 }
+sr_site_room_mimas = {
+	value = sr_site_hab_value_mimas
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_mimas
+}
 sr_site_pop_value_mimas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_mimas } value = global_var:sr_site_pop_mimas }
@@ -1428,6 +1646,10 @@ sr_site_free_room_mimas = {
 	value = sr_site_room_mimas
 	subtract = sr_site_pop_value_mimas
 	min = 0
+}
+sr_site_fill_mimas = {
+	value = sr_site_pop_value_mimas
+	divide = sr_site_room_mimas
 }
 sr_site_crews_mimas = {
 	value = sr_site_pop_value_mimas
@@ -1444,7 +1666,13 @@ sr_emig_weight_mimas = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_emig_prio_weight_mimas multiply = sr_site_free_room_mimas }
 }
-sr_site_room_iapetus = { value = 15000 }
+sr_site_base_room_iapetus = { value = 15000 }
+sr_site_room_iapetus = {
+	value = sr_site_hab_value_iapetus
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_iapetus
+}
 sr_site_pop_value_iapetus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_iapetus } value = global_var:sr_site_pop_iapetus }
@@ -1453,6 +1681,10 @@ sr_site_free_room_iapetus = {
 	value = sr_site_room_iapetus
 	subtract = sr_site_pop_value_iapetus
 	min = 0
+}
+sr_site_fill_iapetus = {
+	value = sr_site_pop_value_iapetus
+	divide = sr_site_room_iapetus
 }
 sr_site_crews_iapetus = {
 	value = sr_site_pop_value_iapetus
@@ -1469,7 +1701,13 @@ sr_emig_weight_iapetus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_emig_prio_weight_iapetus multiply = sr_site_free_room_iapetus }
 }
-sr_site_room_titania = { value = 20000 }
+sr_site_base_room_titania = { value = 20000 }
+sr_site_room_titania = {
+	value = sr_site_hab_value_titania
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_titania
+}
 sr_site_pop_value_titania = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_titania } value = global_var:sr_site_pop_titania }
@@ -1478,6 +1716,10 @@ sr_site_free_room_titania = {
 	value = sr_site_room_titania
 	subtract = sr_site_pop_value_titania
 	min = 0
+}
+sr_site_fill_titania = {
+	value = sr_site_pop_value_titania
+	divide = sr_site_room_titania
 }
 sr_site_crews_titania = {
 	value = sr_site_pop_value_titania
@@ -1494,7 +1736,13 @@ sr_emig_weight_titania = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_emig_prio_weight_titania multiply = sr_site_free_room_titania }
 }
-sr_site_room_oberon = { value = 20000 }
+sr_site_base_room_oberon = { value = 20000 }
+sr_site_room_oberon = {
+	value = sr_site_hab_value_oberon
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_oberon
+}
 sr_site_pop_value_oberon = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_oberon } value = global_var:sr_site_pop_oberon }
@@ -1503,6 +1751,10 @@ sr_site_free_room_oberon = {
 	value = sr_site_room_oberon
 	subtract = sr_site_pop_value_oberon
 	min = 0
+}
+sr_site_fill_oberon = {
+	value = sr_site_pop_value_oberon
+	divide = sr_site_room_oberon
 }
 sr_site_crews_oberon = {
 	value = sr_site_pop_value_oberon
@@ -1519,7 +1771,13 @@ sr_emig_weight_oberon = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_emig_prio_weight_oberon multiply = sr_site_free_room_oberon }
 }
-sr_site_room_miranda = { value = 10000 }
+sr_site_base_room_miranda = { value = 10000 }
+sr_site_room_miranda = {
+	value = sr_site_hab_value_miranda
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_miranda
+}
 sr_site_pop_value_miranda = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_miranda } value = global_var:sr_site_pop_miranda }
@@ -1528,6 +1786,10 @@ sr_site_free_room_miranda = {
 	value = sr_site_room_miranda
 	subtract = sr_site_pop_value_miranda
 	min = 0
+}
+sr_site_fill_miranda = {
+	value = sr_site_pop_value_miranda
+	divide = sr_site_room_miranda
 }
 sr_site_crews_miranda = {
 	value = sr_site_pop_value_miranda
@@ -1544,7 +1806,13 @@ sr_emig_weight_miranda = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_emig_prio_weight_miranda multiply = sr_site_free_room_miranda }
 }
-sr_site_room_ariel = { value = 15000 }
+sr_site_base_room_ariel = { value = 15000 }
+sr_site_room_ariel = {
+	value = sr_site_hab_value_ariel
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_ariel
+}
 sr_site_pop_value_ariel = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_ariel } value = global_var:sr_site_pop_ariel }
@@ -1553,6 +1821,10 @@ sr_site_free_room_ariel = {
 	value = sr_site_room_ariel
 	subtract = sr_site_pop_value_ariel
 	min = 0
+}
+sr_site_fill_ariel = {
+	value = sr_site_pop_value_ariel
+	divide = sr_site_room_ariel
 }
 sr_site_crews_ariel = {
 	value = sr_site_pop_value_ariel
@@ -1569,7 +1841,13 @@ sr_emig_weight_ariel = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_emig_prio_weight_ariel multiply = sr_site_free_room_ariel }
 }
-sr_site_room_triton = { value = 20000 }
+sr_site_base_room_triton = { value = 20000 }
+sr_site_room_triton = {
+	value = sr_site_hab_value_triton
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_triton
+}
 sr_site_pop_value_triton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_triton } value = global_var:sr_site_pop_triton }
@@ -1578,6 +1856,10 @@ sr_site_free_room_triton = {
 	value = sr_site_room_triton
 	subtract = sr_site_pop_value_triton
 	min = 0
+}
+sr_site_fill_triton = {
+	value = sr_site_pop_value_triton
+	divide = sr_site_room_triton
 }
 sr_site_crews_triton = {
 	value = sr_site_pop_value_triton
@@ -1594,7 +1876,13 @@ sr_emig_weight_triton = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_emig_prio_weight_triton multiply = sr_site_free_room_triton }
 }
-sr_site_room_proteus = { value = 10000 }
+sr_site_base_room_proteus = { value = 10000 }
+sr_site_room_proteus = {
+	value = sr_site_hab_value_proteus
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_proteus
+}
 sr_site_pop_value_proteus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_proteus } value = global_var:sr_site_pop_proteus }
@@ -1603,6 +1891,10 @@ sr_site_free_room_proteus = {
 	value = sr_site_room_proteus
 	subtract = sr_site_pop_value_proteus
 	min = 0
+}
+sr_site_fill_proteus = {
+	value = sr_site_pop_value_proteus
+	divide = sr_site_room_proteus
 }
 sr_site_crews_proteus = {
 	value = sr_site_pop_value_proteus
@@ -1619,7 +1911,13 @@ sr_emig_weight_proteus = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_emig_prio_weight_proteus multiply = sr_site_free_room_proteus }
 }
-sr_site_room_pluto = { value = 20000 }
+sr_site_base_room_pluto = { value = 20000 }
+sr_site_room_pluto = {
+	value = sr_site_hab_value_pluto
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_pluto
+}
 sr_site_pop_value_pluto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_pluto } value = global_var:sr_site_pop_pluto }
@@ -1628,6 +1926,10 @@ sr_site_free_room_pluto = {
 	value = sr_site_room_pluto
 	subtract = sr_site_pop_value_pluto
 	min = 0
+}
+sr_site_fill_pluto = {
+	value = sr_site_pop_value_pluto
+	divide = sr_site_room_pluto
 }
 sr_site_crews_pluto = {
 	value = sr_site_pop_value_pluto
@@ -1644,7 +1946,13 @@ sr_emig_weight_pluto = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_emig_prio_weight_pluto multiply = sr_site_free_room_pluto }
 }
-sr_site_room_eris = { value = 10000 }
+sr_site_base_room_eris = { value = 10000 }
+sr_site_room_eris = {
+	value = sr_site_hab_value_eris
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_eris
+}
 sr_site_pop_value_eris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_eris } value = global_var:sr_site_pop_eris }
@@ -1653,6 +1961,10 @@ sr_site_free_room_eris = {
 	value = sr_site_room_eris
 	subtract = sr_site_pop_value_eris
 	min = 0
+}
+sr_site_fill_eris = {
+	value = sr_site_pop_value_eris
+	divide = sr_site_room_eris
 }
 sr_site_crews_eris = {
 	value = sr_site_pop_value_eris
@@ -1669,7 +1981,13 @@ sr_emig_weight_eris = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_emig_prio_weight_eris multiply = sr_site_free_room_eris }
 }
-sr_site_room_makemake = { value = 10000 }
+sr_site_base_room_makemake = { value = 10000 }
+sr_site_room_makemake = {
+	value = sr_site_hab_value_makemake
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_makemake
+}
 sr_site_pop_value_makemake = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_makemake } value = global_var:sr_site_pop_makemake }
@@ -1678,6 +1996,10 @@ sr_site_free_room_makemake = {
 	value = sr_site_room_makemake
 	subtract = sr_site_pop_value_makemake
 	min = 0
+}
+sr_site_fill_makemake = {
+	value = sr_site_pop_value_makemake
+	divide = sr_site_room_makemake
 }
 sr_site_crews_makemake = {
 	value = sr_site_pop_value_makemake
@@ -1694,7 +2016,13 @@ sr_emig_weight_makemake = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_emig_prio_weight_makemake multiply = sr_site_free_room_makemake }
 }
-sr_site_room_haumea = { value = 10000 }
+sr_site_base_room_haumea = { value = 10000 }
+sr_site_room_haumea = {
+	value = sr_site_hab_value_haumea
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_haumea
+}
 sr_site_pop_value_haumea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_haumea } value = global_var:sr_site_pop_haumea }
@@ -1703,6 +2031,10 @@ sr_site_free_room_haumea = {
 	value = sr_site_room_haumea
 	subtract = sr_site_pop_value_haumea
 	min = 0
+}
+sr_site_fill_haumea = {
+	value = sr_site_pop_value_haumea
+	divide = sr_site_room_haumea
 }
 sr_site_crews_haumea = {
 	value = sr_site_pop_value_haumea
@@ -1719,7 +2051,13 @@ sr_emig_weight_haumea = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_emig_prio_weight_haumea multiply = sr_site_free_room_haumea }
 }
-sr_site_room_sedna = { value = 10000 }
+sr_site_base_room_sedna = { value = 10000 }
+sr_site_room_sedna = {
+	value = sr_site_hab_value_sedna
+	multiply = 0.5
+	add = 1
+	multiply = sr_site_base_room_sedna
+}
 sr_site_pop_value_sedna = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_pop_sedna } value = global_var:sr_site_pop_sedna }
@@ -1728,6 +2066,10 @@ sr_site_free_room_sedna = {
 	value = sr_site_room_sedna
 	subtract = sr_site_pop_value_sedna
 	min = 0
+}
+sr_site_fill_sedna = {
+	value = sr_site_pop_value_sedna
+	divide = sr_site_room_sedna
 }
 sr_site_crews_sedna = {
 	value = sr_site_pop_value_sedna
@@ -1857,4 +2199,2888 @@ sr_offworld_pop_total = {
 	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = sr_site_pop_value_makemake }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = sr_site_pop_value_haumea }
 	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = sr_site_pop_value_sedna }
+}
+
+# ===== Modules (slice 4 design §§ 2-4, 7-8) =====
+sr_mod_spec_budget = { value = 4 }
+
+# Per world, any scope:
+#   sr_site_lvl_<a|b>_value_<key>  a specialization's level; the founding choice
+#                                  reads 1 until a module raises it, the other 0
+#   sr_site_<hab|def|port>_value_<key>  a generic module's level
+#   sr_site_levels_<key>          the levels that need crews (Habitats house them)
+#   sr_site_extra_levels_<key>    every module level past the founding outpost's
+#   sr_site_staffing_<key>        1 with the crews, AGI or under races only; else
+#                                  (crews + 1) / levels (design § 4)
+#   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing
+#   sr_site_<spec|generic>_built_<key>  the levels against each cap
+# Country scope, counting THIS's queue and every shipment on its way:
+#   sr_mod_spec_used_<key>, sr_mod_slots_used_<key>
+sr_site_lvl_a_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_valles_marineris } value = global_var:sr_site_lvl_a_valles_marineris }
+	else_if = { limit = { has_global_variable = sr_site_spec_valles_marineris global_var:sr_site_spec_valles_marineris = 1 } value = 1 }
+}
+sr_site_lvl_b_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_valles_marineris } value = global_var:sr_site_lvl_b_valles_marineris }
+	else_if = { limit = { has_global_variable = sr_site_spec_valles_marineris global_var:sr_site_spec_valles_marineris = 2 } value = 1 }
+}
+sr_site_hab_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_valles_marineris } value = global_var:sr_site_hab_valles_marineris }
+}
+sr_site_def_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_valles_marineris } value = global_var:sr_site_def_valles_marineris }
+}
+sr_site_port_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_valles_marineris } value = global_var:sr_site_port_valles_marineris }
+}
+sr_site_levels_valles_marineris = {
+	value = sr_site_lvl_a_value_valles_marineris
+	add = sr_site_lvl_b_value_valles_marineris
+	add = sr_site_def_value_valles_marineris
+	add = sr_site_port_value_valles_marineris
+}
+sr_site_extra_levels_valles_marineris = {
+	value = sr_site_levels_valles_marineris
+	add = sr_site_hab_value_valles_marineris
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_valles_marineris = {
+	value = sr_site_levels_valles_marineris
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_valles_marineris = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_valles_marineris < sr_site_crew_needed_valles_marineris
+			NOT = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_valles_marineris
+		add = 1
+		divide = sr_site_levels_valles_marineris
+	}
+}
+sr_site_mult_a_valles_marineris = {
+	value = sr_site_lvl_a_value_valles_marineris
+	multiply = sr_site_staffing_valles_marineris
+}
+sr_site_mult_b_valles_marineris = {
+	value = sr_site_lvl_b_value_valles_marineris
+	multiply = sr_site_staffing_valles_marineris
+}
+sr_site_spec_built_valles_marineris = { value = sr_site_lvl_a_value_valles_marineris add = sr_site_lvl_b_value_valles_marineris }
+sr_site_generic_built_valles_marineris = {
+	value = sr_site_hab_value_valles_marineris
+	add = sr_site_def_value_valles_marineris
+	add = sr_site_port_value_valles_marineris
+}
+sr_mod_spec_used_valles_marineris = {
+	value = sr_site_spec_built_valles_marineris
+	if = { limit = { has_variable = sr_mq_a_valles_marineris } add = var:sr_mq_a_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_a_valles_marineris } add = global_var:sr_site_ship_a_valles_marineris }
+	if = { limit = { has_variable = sr_mq_b_valles_marineris } add = var:sr_mq_b_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_b_valles_marineris } add = global_var:sr_site_ship_b_valles_marineris }
+}
+sr_mod_slots_used_valles_marineris = {
+	value = sr_site_generic_built_valles_marineris
+	if = { limit = { has_variable = sr_mq_hab_valles_marineris } add = var:sr_mq_hab_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_hab_valles_marineris } add = global_var:sr_site_ship_hab_valles_marineris }
+	if = { limit = { has_variable = sr_mq_def_valles_marineris } add = var:sr_mq_def_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_def_valles_marineris } add = global_var:sr_site_ship_def_valles_marineris }
+	if = { limit = { has_variable = sr_mq_port_valles_marineris } add = var:sr_mq_port_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_ship_port_valles_marineris } add = global_var:sr_site_ship_port_valles_marineris }
+}
+sr_site_lvl_a_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_olympus_mons } value = global_var:sr_site_lvl_a_olympus_mons }
+	else_if = { limit = { has_global_variable = sr_site_spec_olympus_mons global_var:sr_site_spec_olympus_mons = 1 } value = 1 }
+}
+sr_site_lvl_b_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_olympus_mons } value = global_var:sr_site_lvl_b_olympus_mons }
+	else_if = { limit = { has_global_variable = sr_site_spec_olympus_mons global_var:sr_site_spec_olympus_mons = 2 } value = 1 }
+}
+sr_site_hab_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_olympus_mons } value = global_var:sr_site_hab_olympus_mons }
+}
+sr_site_def_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_olympus_mons } value = global_var:sr_site_def_olympus_mons }
+}
+sr_site_port_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_olympus_mons } value = global_var:sr_site_port_olympus_mons }
+}
+sr_site_levels_olympus_mons = {
+	value = sr_site_lvl_a_value_olympus_mons
+	add = sr_site_lvl_b_value_olympus_mons
+	add = sr_site_def_value_olympus_mons
+	add = sr_site_port_value_olympus_mons
+}
+sr_site_extra_levels_olympus_mons = {
+	value = sr_site_levels_olympus_mons
+	add = sr_site_hab_value_olympus_mons
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_olympus_mons = {
+	value = sr_site_levels_olympus_mons
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_olympus_mons = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_olympus_mons < sr_site_crew_needed_olympus_mons
+			NOT = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_olympus_mons
+		add = 1
+		divide = sr_site_levels_olympus_mons
+	}
+}
+sr_site_mult_a_olympus_mons = {
+	value = sr_site_lvl_a_value_olympus_mons
+	multiply = sr_site_staffing_olympus_mons
+}
+sr_site_mult_b_olympus_mons = {
+	value = sr_site_lvl_b_value_olympus_mons
+	multiply = sr_site_staffing_olympus_mons
+}
+sr_site_spec_built_olympus_mons = { value = sr_site_lvl_a_value_olympus_mons add = sr_site_lvl_b_value_olympus_mons }
+sr_site_generic_built_olympus_mons = {
+	value = sr_site_hab_value_olympus_mons
+	add = sr_site_def_value_olympus_mons
+	add = sr_site_port_value_olympus_mons
+}
+sr_mod_spec_used_olympus_mons = {
+	value = sr_site_spec_built_olympus_mons
+	if = { limit = { has_variable = sr_mq_a_olympus_mons } add = var:sr_mq_a_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_a_olympus_mons } add = global_var:sr_site_ship_a_olympus_mons }
+	if = { limit = { has_variable = sr_mq_b_olympus_mons } add = var:sr_mq_b_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_b_olympus_mons } add = global_var:sr_site_ship_b_olympus_mons }
+}
+sr_mod_slots_used_olympus_mons = {
+	value = sr_site_generic_built_olympus_mons
+	if = { limit = { has_variable = sr_mq_hab_olympus_mons } add = var:sr_mq_hab_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_hab_olympus_mons } add = global_var:sr_site_ship_hab_olympus_mons }
+	if = { limit = { has_variable = sr_mq_def_olympus_mons } add = var:sr_mq_def_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_def_olympus_mons } add = global_var:sr_site_ship_def_olympus_mons }
+	if = { limit = { has_variable = sr_mq_port_olympus_mons } add = var:sr_mq_port_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_ship_port_olympus_mons } add = global_var:sr_site_ship_port_olympus_mons }
+}
+sr_site_lvl_a_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_hellas_planitia } value = global_var:sr_site_lvl_a_hellas_planitia }
+	else_if = { limit = { has_global_variable = sr_site_spec_hellas_planitia global_var:sr_site_spec_hellas_planitia = 1 } value = 1 }
+}
+sr_site_lvl_b_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_hellas_planitia } value = global_var:sr_site_lvl_b_hellas_planitia }
+	else_if = { limit = { has_global_variable = sr_site_spec_hellas_planitia global_var:sr_site_spec_hellas_planitia = 2 } value = 1 }
+}
+sr_site_hab_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_hellas_planitia } value = global_var:sr_site_hab_hellas_planitia }
+}
+sr_site_def_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_hellas_planitia } value = global_var:sr_site_def_hellas_planitia }
+}
+sr_site_port_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_hellas_planitia } value = global_var:sr_site_port_hellas_planitia }
+}
+sr_site_levels_hellas_planitia = {
+	value = sr_site_lvl_a_value_hellas_planitia
+	add = sr_site_lvl_b_value_hellas_planitia
+	add = sr_site_def_value_hellas_planitia
+	add = sr_site_port_value_hellas_planitia
+}
+sr_site_extra_levels_hellas_planitia = {
+	value = sr_site_levels_hellas_planitia
+	add = sr_site_hab_value_hellas_planitia
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_hellas_planitia = {
+	value = sr_site_levels_hellas_planitia
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_hellas_planitia = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_hellas_planitia < sr_site_crew_needed_hellas_planitia
+			NOT = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_hellas_planitia
+		add = 1
+		divide = sr_site_levels_hellas_planitia
+	}
+}
+sr_site_mult_a_hellas_planitia = {
+	value = sr_site_lvl_a_value_hellas_planitia
+	multiply = sr_site_staffing_hellas_planitia
+}
+sr_site_mult_b_hellas_planitia = {
+	value = sr_site_lvl_b_value_hellas_planitia
+	multiply = sr_site_staffing_hellas_planitia
+}
+sr_site_spec_built_hellas_planitia = { value = sr_site_lvl_a_value_hellas_planitia add = sr_site_lvl_b_value_hellas_planitia }
+sr_site_generic_built_hellas_planitia = {
+	value = sr_site_hab_value_hellas_planitia
+	add = sr_site_def_value_hellas_planitia
+	add = sr_site_port_value_hellas_planitia
+}
+sr_mod_spec_used_hellas_planitia = {
+	value = sr_site_spec_built_hellas_planitia
+	if = { limit = { has_variable = sr_mq_a_hellas_planitia } add = var:sr_mq_a_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_a_hellas_planitia } add = global_var:sr_site_ship_a_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_b_hellas_planitia } add = var:sr_mq_b_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_b_hellas_planitia } add = global_var:sr_site_ship_b_hellas_planitia }
+}
+sr_mod_slots_used_hellas_planitia = {
+	value = sr_site_generic_built_hellas_planitia
+	if = { limit = { has_variable = sr_mq_hab_hellas_planitia } add = var:sr_mq_hab_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_hab_hellas_planitia } add = global_var:sr_site_ship_hab_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_def_hellas_planitia } add = var:sr_mq_def_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_def_hellas_planitia } add = global_var:sr_site_ship_def_hellas_planitia }
+	if = { limit = { has_variable = sr_mq_port_hellas_planitia } add = var:sr_mq_port_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_port_hellas_planitia } add = global_var:sr_site_ship_port_hellas_planitia }
+}
+sr_site_lvl_a_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_utopia_planitia } value = global_var:sr_site_lvl_a_utopia_planitia }
+	else_if = { limit = { has_global_variable = sr_site_spec_utopia_planitia global_var:sr_site_spec_utopia_planitia = 1 } value = 1 }
+}
+sr_site_lvl_b_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_utopia_planitia } value = global_var:sr_site_lvl_b_utopia_planitia }
+	else_if = { limit = { has_global_variable = sr_site_spec_utopia_planitia global_var:sr_site_spec_utopia_planitia = 2 } value = 1 }
+}
+sr_site_hab_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_utopia_planitia } value = global_var:sr_site_hab_utopia_planitia }
+}
+sr_site_def_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_utopia_planitia } value = global_var:sr_site_def_utopia_planitia }
+}
+sr_site_port_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_utopia_planitia } value = global_var:sr_site_port_utopia_planitia }
+}
+sr_site_levels_utopia_planitia = {
+	value = sr_site_lvl_a_value_utopia_planitia
+	add = sr_site_lvl_b_value_utopia_planitia
+	add = sr_site_def_value_utopia_planitia
+	add = sr_site_port_value_utopia_planitia
+}
+sr_site_extra_levels_utopia_planitia = {
+	value = sr_site_levels_utopia_planitia
+	add = sr_site_hab_value_utopia_planitia
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_utopia_planitia = {
+	value = sr_site_levels_utopia_planitia
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_utopia_planitia = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_utopia_planitia < sr_site_crew_needed_utopia_planitia
+			NOT = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_utopia_planitia
+		add = 1
+		divide = sr_site_levels_utopia_planitia
+	}
+}
+sr_site_mult_a_utopia_planitia = {
+	value = sr_site_lvl_a_value_utopia_planitia
+	multiply = sr_site_staffing_utopia_planitia
+}
+sr_site_mult_b_utopia_planitia = {
+	value = sr_site_lvl_b_value_utopia_planitia
+	multiply = sr_site_staffing_utopia_planitia
+}
+sr_site_spec_built_utopia_planitia = { value = sr_site_lvl_a_value_utopia_planitia add = sr_site_lvl_b_value_utopia_planitia }
+sr_site_generic_built_utopia_planitia = {
+	value = sr_site_hab_value_utopia_planitia
+	add = sr_site_def_value_utopia_planitia
+	add = sr_site_port_value_utopia_planitia
+}
+sr_mod_spec_used_utopia_planitia = {
+	value = sr_site_spec_built_utopia_planitia
+	if = { limit = { has_variable = sr_mq_a_utopia_planitia } add = var:sr_mq_a_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_a_utopia_planitia } add = global_var:sr_site_ship_a_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_b_utopia_planitia } add = var:sr_mq_b_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_b_utopia_planitia } add = global_var:sr_site_ship_b_utopia_planitia }
+}
+sr_mod_slots_used_utopia_planitia = {
+	value = sr_site_generic_built_utopia_planitia
+	if = { limit = { has_variable = sr_mq_hab_utopia_planitia } add = var:sr_mq_hab_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_hab_utopia_planitia } add = global_var:sr_site_ship_hab_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_def_utopia_planitia } add = var:sr_mq_def_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_def_utopia_planitia } add = global_var:sr_site_ship_def_utopia_planitia }
+	if = { limit = { has_variable = sr_mq_port_utopia_planitia } add = var:sr_mq_port_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_port_utopia_planitia } add = global_var:sr_site_ship_port_utopia_planitia }
+}
+sr_site_lvl_a_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_arcadia_planitia } value = global_var:sr_site_lvl_a_arcadia_planitia }
+	else_if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia global_var:sr_site_spec_arcadia_planitia = 1 } value = 1 }
+}
+sr_site_lvl_b_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_arcadia_planitia } value = global_var:sr_site_lvl_b_arcadia_planitia }
+	else_if = { limit = { has_global_variable = sr_site_spec_arcadia_planitia global_var:sr_site_spec_arcadia_planitia = 2 } value = 1 }
+}
+sr_site_hab_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_arcadia_planitia } value = global_var:sr_site_hab_arcadia_planitia }
+}
+sr_site_def_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_arcadia_planitia } value = global_var:sr_site_def_arcadia_planitia }
+}
+sr_site_port_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_arcadia_planitia } value = global_var:sr_site_port_arcadia_planitia }
+}
+sr_site_levels_arcadia_planitia = {
+	value = sr_site_lvl_a_value_arcadia_planitia
+	add = sr_site_lvl_b_value_arcadia_planitia
+	add = sr_site_def_value_arcadia_planitia
+	add = sr_site_port_value_arcadia_planitia
+}
+sr_site_extra_levels_arcadia_planitia = {
+	value = sr_site_levels_arcadia_planitia
+	add = sr_site_hab_value_arcadia_planitia
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_arcadia_planitia = {
+	value = sr_site_levels_arcadia_planitia
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_arcadia_planitia = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_arcadia_planitia < sr_site_crew_needed_arcadia_planitia
+			NOT = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_arcadia_planitia
+		add = 1
+		divide = sr_site_levels_arcadia_planitia
+	}
+}
+sr_site_mult_a_arcadia_planitia = {
+	value = sr_site_lvl_a_value_arcadia_planitia
+	multiply = sr_site_staffing_arcadia_planitia
+}
+sr_site_mult_b_arcadia_planitia = {
+	value = sr_site_lvl_b_value_arcadia_planitia
+	multiply = sr_site_staffing_arcadia_planitia
+}
+sr_site_spec_built_arcadia_planitia = { value = sr_site_lvl_a_value_arcadia_planitia add = sr_site_lvl_b_value_arcadia_planitia }
+sr_site_generic_built_arcadia_planitia = {
+	value = sr_site_hab_value_arcadia_planitia
+	add = sr_site_def_value_arcadia_planitia
+	add = sr_site_port_value_arcadia_planitia
+}
+sr_mod_spec_used_arcadia_planitia = {
+	value = sr_site_spec_built_arcadia_planitia
+	if = { limit = { has_variable = sr_mq_a_arcadia_planitia } add = var:sr_mq_a_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_a_arcadia_planitia } add = global_var:sr_site_ship_a_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_b_arcadia_planitia } add = var:sr_mq_b_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_b_arcadia_planitia } add = global_var:sr_site_ship_b_arcadia_planitia }
+}
+sr_mod_slots_used_arcadia_planitia = {
+	value = sr_site_generic_built_arcadia_planitia
+	if = { limit = { has_variable = sr_mq_hab_arcadia_planitia } add = var:sr_mq_hab_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_hab_arcadia_planitia } add = global_var:sr_site_ship_hab_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_def_arcadia_planitia } add = var:sr_mq_def_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_def_arcadia_planitia } add = global_var:sr_site_ship_def_arcadia_planitia }
+	if = { limit = { has_variable = sr_mq_port_arcadia_planitia } add = var:sr_mq_port_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_ship_port_arcadia_planitia } add = global_var:sr_site_ship_port_arcadia_planitia }
+}
+sr_site_lvl_a_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_ceres } value = global_var:sr_site_lvl_a_ceres }
+	else_if = { limit = { has_global_variable = sr_site_spec_ceres global_var:sr_site_spec_ceres = 1 } value = 1 }
+}
+sr_site_lvl_b_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_ceres } value = global_var:sr_site_lvl_b_ceres }
+	else_if = { limit = { has_global_variable = sr_site_spec_ceres global_var:sr_site_spec_ceres = 2 } value = 1 }
+}
+sr_site_hab_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_ceres } value = global_var:sr_site_hab_ceres }
+}
+sr_site_def_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_ceres } value = global_var:sr_site_def_ceres }
+}
+sr_site_port_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_ceres } value = global_var:sr_site_port_ceres }
+}
+sr_site_levels_ceres = {
+	value = sr_site_lvl_a_value_ceres
+	add = sr_site_lvl_b_value_ceres
+	add = sr_site_def_value_ceres
+	add = sr_site_port_value_ceres
+}
+sr_site_extra_levels_ceres = {
+	value = sr_site_levels_ceres
+	add = sr_site_hab_value_ceres
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_ceres = {
+	value = sr_site_levels_ceres
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_ceres = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_ceres < sr_site_crew_needed_ceres
+			NOT = { global_var:sr_site_holder_ceres ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_ceres
+		add = 1
+		divide = sr_site_levels_ceres
+	}
+}
+sr_site_mult_a_ceres = {
+	value = sr_site_lvl_a_value_ceres
+	multiply = sr_site_staffing_ceres
+}
+sr_site_mult_b_ceres = {
+	value = sr_site_lvl_b_value_ceres
+	multiply = sr_site_staffing_ceres
+}
+sr_site_spec_built_ceres = { value = sr_site_lvl_a_value_ceres add = sr_site_lvl_b_value_ceres }
+sr_site_generic_built_ceres = {
+	value = sr_site_hab_value_ceres
+	add = sr_site_def_value_ceres
+	add = sr_site_port_value_ceres
+}
+sr_mod_spec_used_ceres = {
+	value = sr_site_spec_built_ceres
+	if = { limit = { has_variable = sr_mq_a_ceres } add = var:sr_mq_a_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_a_ceres } add = global_var:sr_site_ship_a_ceres }
+	if = { limit = { has_variable = sr_mq_b_ceres } add = var:sr_mq_b_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_b_ceres } add = global_var:sr_site_ship_b_ceres }
+}
+sr_mod_slots_used_ceres = {
+	value = sr_site_generic_built_ceres
+	if = { limit = { has_variable = sr_mq_hab_ceres } add = var:sr_mq_hab_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_hab_ceres } add = global_var:sr_site_ship_hab_ceres }
+	if = { limit = { has_variable = sr_mq_def_ceres } add = var:sr_mq_def_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_def_ceres } add = global_var:sr_site_ship_def_ceres }
+	if = { limit = { has_variable = sr_mq_port_ceres } add = var:sr_mq_port_ceres }
+	if = { limit = { has_global_variable = sr_site_ship_port_ceres } add = global_var:sr_site_ship_port_ceres }
+}
+sr_site_lvl_a_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_vesta } value = global_var:sr_site_lvl_a_vesta }
+	else_if = { limit = { has_global_variable = sr_site_spec_vesta global_var:sr_site_spec_vesta = 1 } value = 1 }
+}
+sr_site_lvl_b_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_vesta } value = global_var:sr_site_lvl_b_vesta }
+	else_if = { limit = { has_global_variable = sr_site_spec_vesta global_var:sr_site_spec_vesta = 2 } value = 1 }
+}
+sr_site_hab_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_vesta } value = global_var:sr_site_hab_vesta }
+}
+sr_site_def_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_vesta } value = global_var:sr_site_def_vesta }
+}
+sr_site_port_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_vesta } value = global_var:sr_site_port_vesta }
+}
+sr_site_levels_vesta = {
+	value = sr_site_lvl_a_value_vesta
+	add = sr_site_lvl_b_value_vesta
+	add = sr_site_def_value_vesta
+	add = sr_site_port_value_vesta
+}
+sr_site_extra_levels_vesta = {
+	value = sr_site_levels_vesta
+	add = sr_site_hab_value_vesta
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_vesta = {
+	value = sr_site_levels_vesta
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_vesta = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_vesta < sr_site_crew_needed_vesta
+			NOT = { global_var:sr_site_holder_vesta ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_vesta
+		add = 1
+		divide = sr_site_levels_vesta
+	}
+}
+sr_site_mult_a_vesta = {
+	value = sr_site_lvl_a_value_vesta
+	multiply = sr_site_staffing_vesta
+}
+sr_site_mult_b_vesta = {
+	value = sr_site_lvl_b_value_vesta
+	multiply = sr_site_staffing_vesta
+}
+sr_site_spec_built_vesta = { value = sr_site_lvl_a_value_vesta add = sr_site_lvl_b_value_vesta }
+sr_site_generic_built_vesta = {
+	value = sr_site_hab_value_vesta
+	add = sr_site_def_value_vesta
+	add = sr_site_port_value_vesta
+}
+sr_mod_spec_used_vesta = {
+	value = sr_site_spec_built_vesta
+	if = { limit = { has_variable = sr_mq_a_vesta } add = var:sr_mq_a_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_a_vesta } add = global_var:sr_site_ship_a_vesta }
+	if = { limit = { has_variable = sr_mq_b_vesta } add = var:sr_mq_b_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_b_vesta } add = global_var:sr_site_ship_b_vesta }
+}
+sr_mod_slots_used_vesta = {
+	value = sr_site_generic_built_vesta
+	if = { limit = { has_variable = sr_mq_hab_vesta } add = var:sr_mq_hab_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_hab_vesta } add = global_var:sr_site_ship_hab_vesta }
+	if = { limit = { has_variable = sr_mq_def_vesta } add = var:sr_mq_def_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_def_vesta } add = global_var:sr_site_ship_def_vesta }
+	if = { limit = { has_variable = sr_mq_port_vesta } add = var:sr_mq_port_vesta }
+	if = { limit = { has_global_variable = sr_site_ship_port_vesta } add = global_var:sr_site_ship_port_vesta }
+}
+sr_site_lvl_a_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_psyche } value = global_var:sr_site_lvl_a_psyche }
+	else_if = { limit = { has_global_variable = sr_site_spec_psyche global_var:sr_site_spec_psyche = 1 } value = 1 }
+}
+sr_site_lvl_b_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_psyche } value = global_var:sr_site_lvl_b_psyche }
+	else_if = { limit = { has_global_variable = sr_site_spec_psyche global_var:sr_site_spec_psyche = 2 } value = 1 }
+}
+sr_site_hab_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_psyche } value = global_var:sr_site_hab_psyche }
+}
+sr_site_def_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_psyche } value = global_var:sr_site_def_psyche }
+}
+sr_site_port_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_psyche } value = global_var:sr_site_port_psyche }
+}
+sr_site_levels_psyche = {
+	value = sr_site_lvl_a_value_psyche
+	add = sr_site_lvl_b_value_psyche
+	add = sr_site_def_value_psyche
+	add = sr_site_port_value_psyche
+}
+sr_site_extra_levels_psyche = {
+	value = sr_site_levels_psyche
+	add = sr_site_hab_value_psyche
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_psyche = {
+	value = sr_site_levels_psyche
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_psyche = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_psyche < sr_site_crew_needed_psyche
+			NOT = { global_var:sr_site_holder_psyche ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_psyche
+		add = 1
+		divide = sr_site_levels_psyche
+	}
+}
+sr_site_mult_a_psyche = {
+	value = sr_site_lvl_a_value_psyche
+	multiply = sr_site_staffing_psyche
+}
+sr_site_mult_b_psyche = {
+	value = sr_site_lvl_b_value_psyche
+	multiply = sr_site_staffing_psyche
+}
+sr_site_spec_built_psyche = { value = sr_site_lvl_a_value_psyche add = sr_site_lvl_b_value_psyche }
+sr_site_generic_built_psyche = {
+	value = sr_site_hab_value_psyche
+	add = sr_site_def_value_psyche
+	add = sr_site_port_value_psyche
+}
+sr_mod_spec_used_psyche = {
+	value = sr_site_spec_built_psyche
+	if = { limit = { has_variable = sr_mq_a_psyche } add = var:sr_mq_a_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_a_psyche } add = global_var:sr_site_ship_a_psyche }
+	if = { limit = { has_variable = sr_mq_b_psyche } add = var:sr_mq_b_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_b_psyche } add = global_var:sr_site_ship_b_psyche }
+}
+sr_mod_slots_used_psyche = {
+	value = sr_site_generic_built_psyche
+	if = { limit = { has_variable = sr_mq_hab_psyche } add = var:sr_mq_hab_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_hab_psyche } add = global_var:sr_site_ship_hab_psyche }
+	if = { limit = { has_variable = sr_mq_def_psyche } add = var:sr_mq_def_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_def_psyche } add = global_var:sr_site_ship_def_psyche }
+	if = { limit = { has_variable = sr_mq_port_psyche } add = var:sr_mq_port_psyche }
+	if = { limit = { has_global_variable = sr_site_ship_port_psyche } add = global_var:sr_site_ship_port_psyche }
+}
+sr_site_lvl_a_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_pallas } value = global_var:sr_site_lvl_a_pallas }
+	else_if = { limit = { has_global_variable = sr_site_spec_pallas global_var:sr_site_spec_pallas = 1 } value = 1 }
+}
+sr_site_lvl_b_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_pallas } value = global_var:sr_site_lvl_b_pallas }
+	else_if = { limit = { has_global_variable = sr_site_spec_pallas global_var:sr_site_spec_pallas = 2 } value = 1 }
+}
+sr_site_hab_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_pallas } value = global_var:sr_site_hab_pallas }
+}
+sr_site_def_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_pallas } value = global_var:sr_site_def_pallas }
+}
+sr_site_port_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_pallas } value = global_var:sr_site_port_pallas }
+}
+sr_site_levels_pallas = {
+	value = sr_site_lvl_a_value_pallas
+	add = sr_site_lvl_b_value_pallas
+	add = sr_site_def_value_pallas
+	add = sr_site_port_value_pallas
+}
+sr_site_extra_levels_pallas = {
+	value = sr_site_levels_pallas
+	add = sr_site_hab_value_pallas
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_pallas = {
+	value = sr_site_levels_pallas
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_pallas = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_pallas < sr_site_crew_needed_pallas
+			NOT = { global_var:sr_site_holder_pallas ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_pallas
+		add = 1
+		divide = sr_site_levels_pallas
+	}
+}
+sr_site_mult_a_pallas = {
+	value = sr_site_lvl_a_value_pallas
+	multiply = sr_site_staffing_pallas
+}
+sr_site_mult_b_pallas = {
+	value = sr_site_lvl_b_value_pallas
+	multiply = sr_site_staffing_pallas
+}
+sr_site_spec_built_pallas = { value = sr_site_lvl_a_value_pallas add = sr_site_lvl_b_value_pallas }
+sr_site_generic_built_pallas = {
+	value = sr_site_hab_value_pallas
+	add = sr_site_def_value_pallas
+	add = sr_site_port_value_pallas
+}
+sr_mod_spec_used_pallas = {
+	value = sr_site_spec_built_pallas
+	if = { limit = { has_variable = sr_mq_a_pallas } add = var:sr_mq_a_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_a_pallas } add = global_var:sr_site_ship_a_pallas }
+	if = { limit = { has_variable = sr_mq_b_pallas } add = var:sr_mq_b_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_b_pallas } add = global_var:sr_site_ship_b_pallas }
+}
+sr_mod_slots_used_pallas = {
+	value = sr_site_generic_built_pallas
+	if = { limit = { has_variable = sr_mq_hab_pallas } add = var:sr_mq_hab_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_hab_pallas } add = global_var:sr_site_ship_hab_pallas }
+	if = { limit = { has_variable = sr_mq_def_pallas } add = var:sr_mq_def_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_def_pallas } add = global_var:sr_site_ship_def_pallas }
+	if = { limit = { has_variable = sr_mq_port_pallas } add = var:sr_mq_port_pallas }
+	if = { limit = { has_global_variable = sr_site_ship_port_pallas } add = global_var:sr_site_ship_port_pallas }
+}
+sr_site_lvl_a_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_hygiea } value = global_var:sr_site_lvl_a_hygiea }
+	else_if = { limit = { has_global_variable = sr_site_spec_hygiea global_var:sr_site_spec_hygiea = 1 } value = 1 }
+}
+sr_site_lvl_b_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_hygiea } value = global_var:sr_site_lvl_b_hygiea }
+	else_if = { limit = { has_global_variable = sr_site_spec_hygiea global_var:sr_site_spec_hygiea = 2 } value = 1 }
+}
+sr_site_hab_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_hygiea } value = global_var:sr_site_hab_hygiea }
+}
+sr_site_def_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_hygiea } value = global_var:sr_site_def_hygiea }
+}
+sr_site_port_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_hygiea } value = global_var:sr_site_port_hygiea }
+}
+sr_site_levels_hygiea = {
+	value = sr_site_lvl_a_value_hygiea
+	add = sr_site_lvl_b_value_hygiea
+	add = sr_site_def_value_hygiea
+	add = sr_site_port_value_hygiea
+}
+sr_site_extra_levels_hygiea = {
+	value = sr_site_levels_hygiea
+	add = sr_site_hab_value_hygiea
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_hygiea = {
+	value = sr_site_levels_hygiea
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_hygiea = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_hygiea < sr_site_crew_needed_hygiea
+			NOT = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_hygiea
+		add = 1
+		divide = sr_site_levels_hygiea
+	}
+}
+sr_site_mult_a_hygiea = {
+	value = sr_site_lvl_a_value_hygiea
+	multiply = sr_site_staffing_hygiea
+}
+sr_site_mult_b_hygiea = {
+	value = sr_site_lvl_b_value_hygiea
+	multiply = sr_site_staffing_hygiea
+}
+sr_site_spec_built_hygiea = { value = sr_site_lvl_a_value_hygiea add = sr_site_lvl_b_value_hygiea }
+sr_site_generic_built_hygiea = {
+	value = sr_site_hab_value_hygiea
+	add = sr_site_def_value_hygiea
+	add = sr_site_port_value_hygiea
+}
+sr_mod_spec_used_hygiea = {
+	value = sr_site_spec_built_hygiea
+	if = { limit = { has_variable = sr_mq_a_hygiea } add = var:sr_mq_a_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_a_hygiea } add = global_var:sr_site_ship_a_hygiea }
+	if = { limit = { has_variable = sr_mq_b_hygiea } add = var:sr_mq_b_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_b_hygiea } add = global_var:sr_site_ship_b_hygiea }
+}
+sr_mod_slots_used_hygiea = {
+	value = sr_site_generic_built_hygiea
+	if = { limit = { has_variable = sr_mq_hab_hygiea } add = var:sr_mq_hab_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_hab_hygiea } add = global_var:sr_site_ship_hab_hygiea }
+	if = { limit = { has_variable = sr_mq_def_hygiea } add = var:sr_mq_def_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_def_hygiea } add = global_var:sr_site_ship_def_hygiea }
+	if = { limit = { has_variable = sr_mq_port_hygiea } add = var:sr_mq_port_hygiea }
+	if = { limit = { has_global_variable = sr_site_ship_port_hygiea } add = global_var:sr_site_ship_port_hygiea }
+}
+sr_site_lvl_a_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_io } value = global_var:sr_site_lvl_a_io }
+	else_if = { limit = { has_global_variable = sr_site_spec_io global_var:sr_site_spec_io = 1 } value = 1 }
+}
+sr_site_lvl_b_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_io } value = global_var:sr_site_lvl_b_io }
+	else_if = { limit = { has_global_variable = sr_site_spec_io global_var:sr_site_spec_io = 2 } value = 1 }
+}
+sr_site_hab_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_io } value = global_var:sr_site_hab_io }
+}
+sr_site_def_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_io } value = global_var:sr_site_def_io }
+}
+sr_site_port_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_io } value = global_var:sr_site_port_io }
+}
+sr_site_levels_io = {
+	value = sr_site_lvl_a_value_io
+	add = sr_site_lvl_b_value_io
+	add = sr_site_def_value_io
+	add = sr_site_port_value_io
+}
+sr_site_extra_levels_io = {
+	value = sr_site_levels_io
+	add = sr_site_hab_value_io
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_io = {
+	value = sr_site_levels_io
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_io = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_io < sr_site_crew_needed_io
+			NOT = { global_var:sr_site_holder_io ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_io
+		add = 1
+		divide = sr_site_levels_io
+	}
+}
+sr_site_mult_a_io = {
+	value = sr_site_lvl_a_value_io
+	multiply = sr_site_staffing_io
+}
+sr_site_mult_b_io = {
+	value = sr_site_lvl_b_value_io
+	multiply = sr_site_staffing_io
+}
+sr_site_spec_built_io = { value = sr_site_lvl_a_value_io add = sr_site_lvl_b_value_io }
+sr_site_generic_built_io = {
+	value = sr_site_hab_value_io
+	add = sr_site_def_value_io
+	add = sr_site_port_value_io
+}
+sr_mod_spec_used_io = {
+	value = sr_site_spec_built_io
+	if = { limit = { has_variable = sr_mq_a_io } add = var:sr_mq_a_io }
+	if = { limit = { has_global_variable = sr_site_ship_a_io } add = global_var:sr_site_ship_a_io }
+	if = { limit = { has_variable = sr_mq_b_io } add = var:sr_mq_b_io }
+	if = { limit = { has_global_variable = sr_site_ship_b_io } add = global_var:sr_site_ship_b_io }
+}
+sr_mod_slots_used_io = {
+	value = sr_site_generic_built_io
+	if = { limit = { has_variable = sr_mq_hab_io } add = var:sr_mq_hab_io }
+	if = { limit = { has_global_variable = sr_site_ship_hab_io } add = global_var:sr_site_ship_hab_io }
+	if = { limit = { has_variable = sr_mq_def_io } add = var:sr_mq_def_io }
+	if = { limit = { has_global_variable = sr_site_ship_def_io } add = global_var:sr_site_ship_def_io }
+	if = { limit = { has_variable = sr_mq_port_io } add = var:sr_mq_port_io }
+	if = { limit = { has_global_variable = sr_site_ship_port_io } add = global_var:sr_site_ship_port_io }
+}
+sr_site_lvl_a_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_europa } value = global_var:sr_site_lvl_a_europa }
+	else_if = { limit = { has_global_variable = sr_site_spec_europa global_var:sr_site_spec_europa = 1 } value = 1 }
+}
+sr_site_lvl_b_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_europa } value = global_var:sr_site_lvl_b_europa }
+	else_if = { limit = { has_global_variable = sr_site_spec_europa global_var:sr_site_spec_europa = 2 } value = 1 }
+}
+sr_site_hab_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_europa } value = global_var:sr_site_hab_europa }
+}
+sr_site_def_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_europa } value = global_var:sr_site_def_europa }
+}
+sr_site_port_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_europa } value = global_var:sr_site_port_europa }
+}
+sr_site_levels_europa = {
+	value = sr_site_lvl_a_value_europa
+	add = sr_site_lvl_b_value_europa
+	add = sr_site_def_value_europa
+	add = sr_site_port_value_europa
+}
+sr_site_extra_levels_europa = {
+	value = sr_site_levels_europa
+	add = sr_site_hab_value_europa
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_europa = {
+	value = sr_site_levels_europa
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_europa = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_europa < sr_site_crew_needed_europa
+			NOT = { global_var:sr_site_holder_europa ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_europa
+		add = 1
+		divide = sr_site_levels_europa
+	}
+}
+sr_site_mult_a_europa = {
+	value = sr_site_lvl_a_value_europa
+	multiply = sr_site_staffing_europa
+}
+sr_site_mult_b_europa = {
+	value = sr_site_lvl_b_value_europa
+	multiply = sr_site_staffing_europa
+}
+sr_site_spec_built_europa = { value = sr_site_lvl_a_value_europa add = sr_site_lvl_b_value_europa }
+sr_site_generic_built_europa = {
+	value = sr_site_hab_value_europa
+	add = sr_site_def_value_europa
+	add = sr_site_port_value_europa
+}
+sr_mod_spec_used_europa = {
+	value = sr_site_spec_built_europa
+	if = { limit = { has_variable = sr_mq_a_europa } add = var:sr_mq_a_europa }
+	if = { limit = { has_global_variable = sr_site_ship_a_europa } add = global_var:sr_site_ship_a_europa }
+	if = { limit = { has_variable = sr_mq_b_europa } add = var:sr_mq_b_europa }
+	if = { limit = { has_global_variable = sr_site_ship_b_europa } add = global_var:sr_site_ship_b_europa }
+}
+sr_mod_slots_used_europa = {
+	value = sr_site_generic_built_europa
+	if = { limit = { has_variable = sr_mq_hab_europa } add = var:sr_mq_hab_europa }
+	if = { limit = { has_global_variable = sr_site_ship_hab_europa } add = global_var:sr_site_ship_hab_europa }
+	if = { limit = { has_variable = sr_mq_def_europa } add = var:sr_mq_def_europa }
+	if = { limit = { has_global_variable = sr_site_ship_def_europa } add = global_var:sr_site_ship_def_europa }
+	if = { limit = { has_variable = sr_mq_port_europa } add = var:sr_mq_port_europa }
+	if = { limit = { has_global_variable = sr_site_ship_port_europa } add = global_var:sr_site_ship_port_europa }
+}
+sr_site_lvl_a_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_ganymede } value = global_var:sr_site_lvl_a_ganymede }
+	else_if = { limit = { has_global_variable = sr_site_spec_ganymede global_var:sr_site_spec_ganymede = 1 } value = 1 }
+}
+sr_site_lvl_b_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_ganymede } value = global_var:sr_site_lvl_b_ganymede }
+	else_if = { limit = { has_global_variable = sr_site_spec_ganymede global_var:sr_site_spec_ganymede = 2 } value = 1 }
+}
+sr_site_hab_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_ganymede } value = global_var:sr_site_hab_ganymede }
+}
+sr_site_def_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_ganymede } value = global_var:sr_site_def_ganymede }
+}
+sr_site_port_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_ganymede } value = global_var:sr_site_port_ganymede }
+}
+sr_site_levels_ganymede = {
+	value = sr_site_lvl_a_value_ganymede
+	add = sr_site_lvl_b_value_ganymede
+	add = sr_site_def_value_ganymede
+	add = sr_site_port_value_ganymede
+}
+sr_site_extra_levels_ganymede = {
+	value = sr_site_levels_ganymede
+	add = sr_site_hab_value_ganymede
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_ganymede = {
+	value = sr_site_levels_ganymede
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_ganymede = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_ganymede < sr_site_crew_needed_ganymede
+			NOT = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_ganymede
+		add = 1
+		divide = sr_site_levels_ganymede
+	}
+}
+sr_site_mult_a_ganymede = {
+	value = sr_site_lvl_a_value_ganymede
+	multiply = sr_site_staffing_ganymede
+}
+sr_site_mult_b_ganymede = {
+	value = sr_site_lvl_b_value_ganymede
+	multiply = sr_site_staffing_ganymede
+}
+sr_site_spec_built_ganymede = { value = sr_site_lvl_a_value_ganymede add = sr_site_lvl_b_value_ganymede }
+sr_site_generic_built_ganymede = {
+	value = sr_site_hab_value_ganymede
+	add = sr_site_def_value_ganymede
+	add = sr_site_port_value_ganymede
+}
+sr_mod_spec_used_ganymede = {
+	value = sr_site_spec_built_ganymede
+	if = { limit = { has_variable = sr_mq_a_ganymede } add = var:sr_mq_a_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_a_ganymede } add = global_var:sr_site_ship_a_ganymede }
+	if = { limit = { has_variable = sr_mq_b_ganymede } add = var:sr_mq_b_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_b_ganymede } add = global_var:sr_site_ship_b_ganymede }
+}
+sr_mod_slots_used_ganymede = {
+	value = sr_site_generic_built_ganymede
+	if = { limit = { has_variable = sr_mq_hab_ganymede } add = var:sr_mq_hab_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_hab_ganymede } add = global_var:sr_site_ship_hab_ganymede }
+	if = { limit = { has_variable = sr_mq_def_ganymede } add = var:sr_mq_def_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_def_ganymede } add = global_var:sr_site_ship_def_ganymede }
+	if = { limit = { has_variable = sr_mq_port_ganymede } add = var:sr_mq_port_ganymede }
+	if = { limit = { has_global_variable = sr_site_ship_port_ganymede } add = global_var:sr_site_ship_port_ganymede }
+}
+sr_site_lvl_a_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_callisto } value = global_var:sr_site_lvl_a_callisto }
+	else_if = { limit = { has_global_variable = sr_site_spec_callisto global_var:sr_site_spec_callisto = 1 } value = 1 }
+}
+sr_site_lvl_b_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_callisto } value = global_var:sr_site_lvl_b_callisto }
+	else_if = { limit = { has_global_variable = sr_site_spec_callisto global_var:sr_site_spec_callisto = 2 } value = 1 }
+}
+sr_site_hab_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_callisto } value = global_var:sr_site_hab_callisto }
+}
+sr_site_def_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_callisto } value = global_var:sr_site_def_callisto }
+}
+sr_site_port_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_callisto } value = global_var:sr_site_port_callisto }
+}
+sr_site_levels_callisto = {
+	value = sr_site_lvl_a_value_callisto
+	add = sr_site_lvl_b_value_callisto
+	add = sr_site_def_value_callisto
+	add = sr_site_port_value_callisto
+}
+sr_site_extra_levels_callisto = {
+	value = sr_site_levels_callisto
+	add = sr_site_hab_value_callisto
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_callisto = {
+	value = sr_site_levels_callisto
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_callisto = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_callisto < sr_site_crew_needed_callisto
+			NOT = { global_var:sr_site_holder_callisto ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_callisto
+		add = 1
+		divide = sr_site_levels_callisto
+	}
+}
+sr_site_mult_a_callisto = {
+	value = sr_site_lvl_a_value_callisto
+	multiply = sr_site_staffing_callisto
+}
+sr_site_mult_b_callisto = {
+	value = sr_site_lvl_b_value_callisto
+	multiply = sr_site_staffing_callisto
+}
+sr_site_spec_built_callisto = { value = sr_site_lvl_a_value_callisto add = sr_site_lvl_b_value_callisto }
+sr_site_generic_built_callisto = {
+	value = sr_site_hab_value_callisto
+	add = sr_site_def_value_callisto
+	add = sr_site_port_value_callisto
+}
+sr_mod_spec_used_callisto = {
+	value = sr_site_spec_built_callisto
+	if = { limit = { has_variable = sr_mq_a_callisto } add = var:sr_mq_a_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_a_callisto } add = global_var:sr_site_ship_a_callisto }
+	if = { limit = { has_variable = sr_mq_b_callisto } add = var:sr_mq_b_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_b_callisto } add = global_var:sr_site_ship_b_callisto }
+}
+sr_mod_slots_used_callisto = {
+	value = sr_site_generic_built_callisto
+	if = { limit = { has_variable = sr_mq_hab_callisto } add = var:sr_mq_hab_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_hab_callisto } add = global_var:sr_site_ship_hab_callisto }
+	if = { limit = { has_variable = sr_mq_def_callisto } add = var:sr_mq_def_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_def_callisto } add = global_var:sr_site_ship_def_callisto }
+	if = { limit = { has_variable = sr_mq_port_callisto } add = var:sr_mq_port_callisto }
+	if = { limit = { has_global_variable = sr_site_ship_port_callisto } add = global_var:sr_site_ship_port_callisto }
+}
+sr_site_lvl_a_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_himalia } value = global_var:sr_site_lvl_a_himalia }
+	else_if = { limit = { has_global_variable = sr_site_spec_himalia global_var:sr_site_spec_himalia = 1 } value = 1 }
+}
+sr_site_lvl_b_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_himalia } value = global_var:sr_site_lvl_b_himalia }
+	else_if = { limit = { has_global_variable = sr_site_spec_himalia global_var:sr_site_spec_himalia = 2 } value = 1 }
+}
+sr_site_hab_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_himalia } value = global_var:sr_site_hab_himalia }
+}
+sr_site_def_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_himalia } value = global_var:sr_site_def_himalia }
+}
+sr_site_port_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_himalia } value = global_var:sr_site_port_himalia }
+}
+sr_site_levels_himalia = {
+	value = sr_site_lvl_a_value_himalia
+	add = sr_site_lvl_b_value_himalia
+	add = sr_site_def_value_himalia
+	add = sr_site_port_value_himalia
+}
+sr_site_extra_levels_himalia = {
+	value = sr_site_levels_himalia
+	add = sr_site_hab_value_himalia
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_himalia = {
+	value = sr_site_levels_himalia
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_himalia = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_himalia < sr_site_crew_needed_himalia
+			NOT = { global_var:sr_site_holder_himalia ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_himalia
+		add = 1
+		divide = sr_site_levels_himalia
+	}
+}
+sr_site_mult_a_himalia = {
+	value = sr_site_lvl_a_value_himalia
+	multiply = sr_site_staffing_himalia
+}
+sr_site_mult_b_himalia = {
+	value = sr_site_lvl_b_value_himalia
+	multiply = sr_site_staffing_himalia
+}
+sr_site_spec_built_himalia = { value = sr_site_lvl_a_value_himalia add = sr_site_lvl_b_value_himalia }
+sr_site_generic_built_himalia = {
+	value = sr_site_hab_value_himalia
+	add = sr_site_def_value_himalia
+	add = sr_site_port_value_himalia
+}
+sr_mod_spec_used_himalia = {
+	value = sr_site_spec_built_himalia
+	if = { limit = { has_variable = sr_mq_a_himalia } add = var:sr_mq_a_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_a_himalia } add = global_var:sr_site_ship_a_himalia }
+	if = { limit = { has_variable = sr_mq_b_himalia } add = var:sr_mq_b_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_b_himalia } add = global_var:sr_site_ship_b_himalia }
+}
+sr_mod_slots_used_himalia = {
+	value = sr_site_generic_built_himalia
+	if = { limit = { has_variable = sr_mq_hab_himalia } add = var:sr_mq_hab_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_hab_himalia } add = global_var:sr_site_ship_hab_himalia }
+	if = { limit = { has_variable = sr_mq_def_himalia } add = var:sr_mq_def_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_def_himalia } add = global_var:sr_site_ship_def_himalia }
+	if = { limit = { has_variable = sr_mq_port_himalia } add = var:sr_mq_port_himalia }
+	if = { limit = { has_global_variable = sr_site_ship_port_himalia } add = global_var:sr_site_ship_port_himalia }
+}
+sr_site_lvl_a_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_amalthea } value = global_var:sr_site_lvl_a_amalthea }
+	else_if = { limit = { has_global_variable = sr_site_spec_amalthea global_var:sr_site_spec_amalthea = 1 } value = 1 }
+}
+sr_site_lvl_b_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_amalthea } value = global_var:sr_site_lvl_b_amalthea }
+	else_if = { limit = { has_global_variable = sr_site_spec_amalthea global_var:sr_site_spec_amalthea = 2 } value = 1 }
+}
+sr_site_hab_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_amalthea } value = global_var:sr_site_hab_amalthea }
+}
+sr_site_def_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_amalthea } value = global_var:sr_site_def_amalthea }
+}
+sr_site_port_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_amalthea } value = global_var:sr_site_port_amalthea }
+}
+sr_site_levels_amalthea = {
+	value = sr_site_lvl_a_value_amalthea
+	add = sr_site_lvl_b_value_amalthea
+	add = sr_site_def_value_amalthea
+	add = sr_site_port_value_amalthea
+}
+sr_site_extra_levels_amalthea = {
+	value = sr_site_levels_amalthea
+	add = sr_site_hab_value_amalthea
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_amalthea = {
+	value = sr_site_levels_amalthea
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_amalthea = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_amalthea < sr_site_crew_needed_amalthea
+			NOT = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_amalthea
+		add = 1
+		divide = sr_site_levels_amalthea
+	}
+}
+sr_site_mult_a_amalthea = {
+	value = sr_site_lvl_a_value_amalthea
+	multiply = sr_site_staffing_amalthea
+}
+sr_site_mult_b_amalthea = {
+	value = sr_site_lvl_b_value_amalthea
+	multiply = sr_site_staffing_amalthea
+}
+sr_site_spec_built_amalthea = { value = sr_site_lvl_a_value_amalthea add = sr_site_lvl_b_value_amalthea }
+sr_site_generic_built_amalthea = {
+	value = sr_site_hab_value_amalthea
+	add = sr_site_def_value_amalthea
+	add = sr_site_port_value_amalthea
+}
+sr_mod_spec_used_amalthea = {
+	value = sr_site_spec_built_amalthea
+	if = { limit = { has_variable = sr_mq_a_amalthea } add = var:sr_mq_a_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_a_amalthea } add = global_var:sr_site_ship_a_amalthea }
+	if = { limit = { has_variable = sr_mq_b_amalthea } add = var:sr_mq_b_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_b_amalthea } add = global_var:sr_site_ship_b_amalthea }
+}
+sr_mod_slots_used_amalthea = {
+	value = sr_site_generic_built_amalthea
+	if = { limit = { has_variable = sr_mq_hab_amalthea } add = var:sr_mq_hab_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_hab_amalthea } add = global_var:sr_site_ship_hab_amalthea }
+	if = { limit = { has_variable = sr_mq_def_amalthea } add = var:sr_mq_def_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_def_amalthea } add = global_var:sr_site_ship_def_amalthea }
+	if = { limit = { has_variable = sr_mq_port_amalthea } add = var:sr_mq_port_amalthea }
+	if = { limit = { has_global_variable = sr_site_ship_port_amalthea } add = global_var:sr_site_ship_port_amalthea }
+}
+sr_site_lvl_a_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_venus } value = global_var:sr_site_lvl_a_venus }
+	else_if = { limit = { has_global_variable = sr_site_spec_venus global_var:sr_site_spec_venus = 1 } value = 1 }
+}
+sr_site_lvl_b_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_venus } value = global_var:sr_site_lvl_b_venus }
+	else_if = { limit = { has_global_variable = sr_site_spec_venus global_var:sr_site_spec_venus = 2 } value = 1 }
+}
+sr_site_hab_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_venus } value = global_var:sr_site_hab_venus }
+}
+sr_site_def_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_venus } value = global_var:sr_site_def_venus }
+}
+sr_site_port_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_venus } value = global_var:sr_site_port_venus }
+}
+sr_site_levels_venus = {
+	value = sr_site_lvl_a_value_venus
+	add = sr_site_lvl_b_value_venus
+	add = sr_site_def_value_venus
+	add = sr_site_port_value_venus
+}
+sr_site_extra_levels_venus = {
+	value = sr_site_levels_venus
+	add = sr_site_hab_value_venus
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_venus = {
+	value = sr_site_levels_venus
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_venus = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_venus < sr_site_crew_needed_venus
+			NOT = { global_var:sr_site_holder_venus ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_venus
+		add = 1
+		divide = sr_site_levels_venus
+	}
+}
+sr_site_mult_a_venus = {
+	value = sr_site_lvl_a_value_venus
+	multiply = sr_site_staffing_venus
+}
+sr_site_mult_b_venus = {
+	value = sr_site_lvl_b_value_venus
+	multiply = sr_site_staffing_venus
+}
+sr_site_spec_built_venus = { value = sr_site_lvl_a_value_venus add = sr_site_lvl_b_value_venus }
+sr_site_generic_built_venus = {
+	value = sr_site_hab_value_venus
+	add = sr_site_def_value_venus
+	add = sr_site_port_value_venus
+}
+sr_mod_spec_used_venus = {
+	value = sr_site_spec_built_venus
+	if = { limit = { has_variable = sr_mq_a_venus } add = var:sr_mq_a_venus }
+	if = { limit = { has_global_variable = sr_site_ship_a_venus } add = global_var:sr_site_ship_a_venus }
+	if = { limit = { has_variable = sr_mq_b_venus } add = var:sr_mq_b_venus }
+	if = { limit = { has_global_variable = sr_site_ship_b_venus } add = global_var:sr_site_ship_b_venus }
+}
+sr_mod_slots_used_venus = {
+	value = sr_site_generic_built_venus
+	if = { limit = { has_variable = sr_mq_hab_venus } add = var:sr_mq_hab_venus }
+	if = { limit = { has_global_variable = sr_site_ship_hab_venus } add = global_var:sr_site_ship_hab_venus }
+	if = { limit = { has_variable = sr_mq_def_venus } add = var:sr_mq_def_venus }
+	if = { limit = { has_global_variable = sr_site_ship_def_venus } add = global_var:sr_site_ship_def_venus }
+	if = { limit = { has_variable = sr_mq_port_venus } add = var:sr_mq_port_venus }
+	if = { limit = { has_global_variable = sr_site_ship_port_venus } add = global_var:sr_site_ship_port_venus }
+}
+sr_site_lvl_a_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_mercury } value = global_var:sr_site_lvl_a_mercury }
+	else_if = { limit = { has_global_variable = sr_site_spec_mercury global_var:sr_site_spec_mercury = 1 } value = 1 }
+}
+sr_site_lvl_b_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_mercury } value = global_var:sr_site_lvl_b_mercury }
+	else_if = { limit = { has_global_variable = sr_site_spec_mercury global_var:sr_site_spec_mercury = 2 } value = 1 }
+}
+sr_site_hab_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_mercury } value = global_var:sr_site_hab_mercury }
+}
+sr_site_def_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_mercury } value = global_var:sr_site_def_mercury }
+}
+sr_site_port_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_mercury } value = global_var:sr_site_port_mercury }
+}
+sr_site_levels_mercury = {
+	value = sr_site_lvl_a_value_mercury
+	add = sr_site_lvl_b_value_mercury
+	add = sr_site_def_value_mercury
+	add = sr_site_port_value_mercury
+}
+sr_site_extra_levels_mercury = {
+	value = sr_site_levels_mercury
+	add = sr_site_hab_value_mercury
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_mercury = {
+	value = sr_site_levels_mercury
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_mercury = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_mercury < sr_site_crew_needed_mercury
+			NOT = { global_var:sr_site_holder_mercury ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_mercury
+		add = 1
+		divide = sr_site_levels_mercury
+	}
+}
+sr_site_mult_a_mercury = {
+	value = sr_site_lvl_a_value_mercury
+	multiply = sr_site_staffing_mercury
+}
+sr_site_mult_b_mercury = {
+	value = sr_site_lvl_b_value_mercury
+	multiply = sr_site_staffing_mercury
+}
+sr_site_spec_built_mercury = { value = sr_site_lvl_a_value_mercury add = sr_site_lvl_b_value_mercury }
+sr_site_generic_built_mercury = {
+	value = sr_site_hab_value_mercury
+	add = sr_site_def_value_mercury
+	add = sr_site_port_value_mercury
+}
+sr_mod_spec_used_mercury = {
+	value = sr_site_spec_built_mercury
+	if = { limit = { has_variable = sr_mq_a_mercury } add = var:sr_mq_a_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_a_mercury } add = global_var:sr_site_ship_a_mercury }
+	if = { limit = { has_variable = sr_mq_b_mercury } add = var:sr_mq_b_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_b_mercury } add = global_var:sr_site_ship_b_mercury }
+}
+sr_mod_slots_used_mercury = {
+	value = sr_site_generic_built_mercury
+	if = { limit = { has_variable = sr_mq_hab_mercury } add = var:sr_mq_hab_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_hab_mercury } add = global_var:sr_site_ship_hab_mercury }
+	if = { limit = { has_variable = sr_mq_def_mercury } add = var:sr_mq_def_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_def_mercury } add = global_var:sr_site_ship_def_mercury }
+	if = { limit = { has_variable = sr_mq_port_mercury } add = var:sr_mq_port_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_port_mercury } add = global_var:sr_site_ship_port_mercury }
+}
+sr_site_lvl_a_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_titan } value = global_var:sr_site_lvl_a_titan }
+	else_if = { limit = { has_global_variable = sr_site_spec_titan global_var:sr_site_spec_titan = 1 } value = 1 }
+}
+sr_site_lvl_b_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_titan } value = global_var:sr_site_lvl_b_titan }
+	else_if = { limit = { has_global_variable = sr_site_spec_titan global_var:sr_site_spec_titan = 2 } value = 1 }
+}
+sr_site_hab_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_titan } value = global_var:sr_site_hab_titan }
+}
+sr_site_def_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_titan } value = global_var:sr_site_def_titan }
+}
+sr_site_port_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_titan } value = global_var:sr_site_port_titan }
+}
+sr_site_levels_titan = {
+	value = sr_site_lvl_a_value_titan
+	add = sr_site_lvl_b_value_titan
+	add = sr_site_def_value_titan
+	add = sr_site_port_value_titan
+}
+sr_site_extra_levels_titan = {
+	value = sr_site_levels_titan
+	add = sr_site_hab_value_titan
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_titan = {
+	value = sr_site_levels_titan
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_titan = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_titan < sr_site_crew_needed_titan
+			NOT = { global_var:sr_site_holder_titan ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_titan
+		add = 1
+		divide = sr_site_levels_titan
+	}
+}
+sr_site_mult_a_titan = {
+	value = sr_site_lvl_a_value_titan
+	multiply = sr_site_staffing_titan
+}
+sr_site_mult_b_titan = {
+	value = sr_site_lvl_b_value_titan
+	multiply = sr_site_staffing_titan
+}
+sr_site_spec_built_titan = { value = sr_site_lvl_a_value_titan add = sr_site_lvl_b_value_titan }
+sr_site_generic_built_titan = {
+	value = sr_site_hab_value_titan
+	add = sr_site_def_value_titan
+	add = sr_site_port_value_titan
+}
+sr_mod_spec_used_titan = {
+	value = sr_site_spec_built_titan
+	if = { limit = { has_variable = sr_mq_a_titan } add = var:sr_mq_a_titan }
+	if = { limit = { has_global_variable = sr_site_ship_a_titan } add = global_var:sr_site_ship_a_titan }
+	if = { limit = { has_variable = sr_mq_b_titan } add = var:sr_mq_b_titan }
+	if = { limit = { has_global_variable = sr_site_ship_b_titan } add = global_var:sr_site_ship_b_titan }
+}
+sr_mod_slots_used_titan = {
+	value = sr_site_generic_built_titan
+	if = { limit = { has_variable = sr_mq_hab_titan } add = var:sr_mq_hab_titan }
+	if = { limit = { has_global_variable = sr_site_ship_hab_titan } add = global_var:sr_site_ship_hab_titan }
+	if = { limit = { has_variable = sr_mq_def_titan } add = var:sr_mq_def_titan }
+	if = { limit = { has_global_variable = sr_site_ship_def_titan } add = global_var:sr_site_ship_def_titan }
+	if = { limit = { has_variable = sr_mq_port_titan } add = var:sr_mq_port_titan }
+	if = { limit = { has_global_variable = sr_site_ship_port_titan } add = global_var:sr_site_ship_port_titan }
+}
+sr_site_lvl_a_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_enceladus } value = global_var:sr_site_lvl_a_enceladus }
+	else_if = { limit = { has_global_variable = sr_site_spec_enceladus global_var:sr_site_spec_enceladus = 1 } value = 1 }
+}
+sr_site_lvl_b_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_enceladus } value = global_var:sr_site_lvl_b_enceladus }
+	else_if = { limit = { has_global_variable = sr_site_spec_enceladus global_var:sr_site_spec_enceladus = 2 } value = 1 }
+}
+sr_site_hab_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_enceladus } value = global_var:sr_site_hab_enceladus }
+}
+sr_site_def_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_enceladus } value = global_var:sr_site_def_enceladus }
+}
+sr_site_port_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_enceladus } value = global_var:sr_site_port_enceladus }
+}
+sr_site_levels_enceladus = {
+	value = sr_site_lvl_a_value_enceladus
+	add = sr_site_lvl_b_value_enceladus
+	add = sr_site_def_value_enceladus
+	add = sr_site_port_value_enceladus
+}
+sr_site_extra_levels_enceladus = {
+	value = sr_site_levels_enceladus
+	add = sr_site_hab_value_enceladus
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_enceladus = {
+	value = sr_site_levels_enceladus
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_enceladus = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_enceladus < sr_site_crew_needed_enceladus
+			NOT = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_enceladus
+		add = 1
+		divide = sr_site_levels_enceladus
+	}
+}
+sr_site_mult_a_enceladus = {
+	value = sr_site_lvl_a_value_enceladus
+	multiply = sr_site_staffing_enceladus
+}
+sr_site_mult_b_enceladus = {
+	value = sr_site_lvl_b_value_enceladus
+	multiply = sr_site_staffing_enceladus
+}
+sr_site_spec_built_enceladus = { value = sr_site_lvl_a_value_enceladus add = sr_site_lvl_b_value_enceladus }
+sr_site_generic_built_enceladus = {
+	value = sr_site_hab_value_enceladus
+	add = sr_site_def_value_enceladus
+	add = sr_site_port_value_enceladus
+}
+sr_mod_spec_used_enceladus = {
+	value = sr_site_spec_built_enceladus
+	if = { limit = { has_variable = sr_mq_a_enceladus } add = var:sr_mq_a_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_a_enceladus } add = global_var:sr_site_ship_a_enceladus }
+	if = { limit = { has_variable = sr_mq_b_enceladus } add = var:sr_mq_b_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_b_enceladus } add = global_var:sr_site_ship_b_enceladus }
+}
+sr_mod_slots_used_enceladus = {
+	value = sr_site_generic_built_enceladus
+	if = { limit = { has_variable = sr_mq_hab_enceladus } add = var:sr_mq_hab_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_hab_enceladus } add = global_var:sr_site_ship_hab_enceladus }
+	if = { limit = { has_variable = sr_mq_def_enceladus } add = var:sr_mq_def_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_def_enceladus } add = global_var:sr_site_ship_def_enceladus }
+	if = { limit = { has_variable = sr_mq_port_enceladus } add = var:sr_mq_port_enceladus }
+	if = { limit = { has_global_variable = sr_site_ship_port_enceladus } add = global_var:sr_site_ship_port_enceladus }
+}
+sr_site_lvl_a_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_rhea } value = global_var:sr_site_lvl_a_rhea }
+	else_if = { limit = { has_global_variable = sr_site_spec_rhea global_var:sr_site_spec_rhea = 1 } value = 1 }
+}
+sr_site_lvl_b_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_rhea } value = global_var:sr_site_lvl_b_rhea }
+	else_if = { limit = { has_global_variable = sr_site_spec_rhea global_var:sr_site_spec_rhea = 2 } value = 1 }
+}
+sr_site_hab_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_rhea } value = global_var:sr_site_hab_rhea }
+}
+sr_site_def_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_rhea } value = global_var:sr_site_def_rhea }
+}
+sr_site_port_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_rhea } value = global_var:sr_site_port_rhea }
+}
+sr_site_levels_rhea = {
+	value = sr_site_lvl_a_value_rhea
+	add = sr_site_lvl_b_value_rhea
+	add = sr_site_def_value_rhea
+	add = sr_site_port_value_rhea
+}
+sr_site_extra_levels_rhea = {
+	value = sr_site_levels_rhea
+	add = sr_site_hab_value_rhea
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_rhea = {
+	value = sr_site_levels_rhea
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_rhea = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_rhea < sr_site_crew_needed_rhea
+			NOT = { global_var:sr_site_holder_rhea ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_rhea
+		add = 1
+		divide = sr_site_levels_rhea
+	}
+}
+sr_site_mult_a_rhea = {
+	value = sr_site_lvl_a_value_rhea
+	multiply = sr_site_staffing_rhea
+}
+sr_site_mult_b_rhea = {
+	value = sr_site_lvl_b_value_rhea
+	multiply = sr_site_staffing_rhea
+}
+sr_site_spec_built_rhea = { value = sr_site_lvl_a_value_rhea add = sr_site_lvl_b_value_rhea }
+sr_site_generic_built_rhea = {
+	value = sr_site_hab_value_rhea
+	add = sr_site_def_value_rhea
+	add = sr_site_port_value_rhea
+}
+sr_mod_spec_used_rhea = {
+	value = sr_site_spec_built_rhea
+	if = { limit = { has_variable = sr_mq_a_rhea } add = var:sr_mq_a_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_a_rhea } add = global_var:sr_site_ship_a_rhea }
+	if = { limit = { has_variable = sr_mq_b_rhea } add = var:sr_mq_b_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_b_rhea } add = global_var:sr_site_ship_b_rhea }
+}
+sr_mod_slots_used_rhea = {
+	value = sr_site_generic_built_rhea
+	if = { limit = { has_variable = sr_mq_hab_rhea } add = var:sr_mq_hab_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_hab_rhea } add = global_var:sr_site_ship_hab_rhea }
+	if = { limit = { has_variable = sr_mq_def_rhea } add = var:sr_mq_def_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_def_rhea } add = global_var:sr_site_ship_def_rhea }
+	if = { limit = { has_variable = sr_mq_port_rhea } add = var:sr_mq_port_rhea }
+	if = { limit = { has_global_variable = sr_site_ship_port_rhea } add = global_var:sr_site_ship_port_rhea }
+}
+sr_site_lvl_a_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_mimas } value = global_var:sr_site_lvl_a_mimas }
+	else_if = { limit = { has_global_variable = sr_site_spec_mimas global_var:sr_site_spec_mimas = 1 } value = 1 }
+}
+sr_site_lvl_b_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_mimas } value = global_var:sr_site_lvl_b_mimas }
+	else_if = { limit = { has_global_variable = sr_site_spec_mimas global_var:sr_site_spec_mimas = 2 } value = 1 }
+}
+sr_site_hab_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_mimas } value = global_var:sr_site_hab_mimas }
+}
+sr_site_def_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_mimas } value = global_var:sr_site_def_mimas }
+}
+sr_site_port_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_mimas } value = global_var:sr_site_port_mimas }
+}
+sr_site_levels_mimas = {
+	value = sr_site_lvl_a_value_mimas
+	add = sr_site_lvl_b_value_mimas
+	add = sr_site_def_value_mimas
+	add = sr_site_port_value_mimas
+}
+sr_site_extra_levels_mimas = {
+	value = sr_site_levels_mimas
+	add = sr_site_hab_value_mimas
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_mimas = {
+	value = sr_site_levels_mimas
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_mimas = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_mimas < sr_site_crew_needed_mimas
+			NOT = { global_var:sr_site_holder_mimas ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_mimas
+		add = 1
+		divide = sr_site_levels_mimas
+	}
+}
+sr_site_mult_a_mimas = {
+	value = sr_site_lvl_a_value_mimas
+	multiply = sr_site_staffing_mimas
+}
+sr_site_mult_b_mimas = {
+	value = sr_site_lvl_b_value_mimas
+	multiply = sr_site_staffing_mimas
+}
+sr_site_spec_built_mimas = { value = sr_site_lvl_a_value_mimas add = sr_site_lvl_b_value_mimas }
+sr_site_generic_built_mimas = {
+	value = sr_site_hab_value_mimas
+	add = sr_site_def_value_mimas
+	add = sr_site_port_value_mimas
+}
+sr_mod_spec_used_mimas = {
+	value = sr_site_spec_built_mimas
+	if = { limit = { has_variable = sr_mq_a_mimas } add = var:sr_mq_a_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_a_mimas } add = global_var:sr_site_ship_a_mimas }
+	if = { limit = { has_variable = sr_mq_b_mimas } add = var:sr_mq_b_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_b_mimas } add = global_var:sr_site_ship_b_mimas }
+}
+sr_mod_slots_used_mimas = {
+	value = sr_site_generic_built_mimas
+	if = { limit = { has_variable = sr_mq_hab_mimas } add = var:sr_mq_hab_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_hab_mimas } add = global_var:sr_site_ship_hab_mimas }
+	if = { limit = { has_variable = sr_mq_def_mimas } add = var:sr_mq_def_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_def_mimas } add = global_var:sr_site_ship_def_mimas }
+	if = { limit = { has_variable = sr_mq_port_mimas } add = var:sr_mq_port_mimas }
+	if = { limit = { has_global_variable = sr_site_ship_port_mimas } add = global_var:sr_site_ship_port_mimas }
+}
+sr_site_lvl_a_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_iapetus } value = global_var:sr_site_lvl_a_iapetus }
+	else_if = { limit = { has_global_variable = sr_site_spec_iapetus global_var:sr_site_spec_iapetus = 1 } value = 1 }
+}
+sr_site_lvl_b_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_iapetus } value = global_var:sr_site_lvl_b_iapetus }
+	else_if = { limit = { has_global_variable = sr_site_spec_iapetus global_var:sr_site_spec_iapetus = 2 } value = 1 }
+}
+sr_site_hab_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_iapetus } value = global_var:sr_site_hab_iapetus }
+}
+sr_site_def_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_iapetus } value = global_var:sr_site_def_iapetus }
+}
+sr_site_port_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_iapetus } value = global_var:sr_site_port_iapetus }
+}
+sr_site_levels_iapetus = {
+	value = sr_site_lvl_a_value_iapetus
+	add = sr_site_lvl_b_value_iapetus
+	add = sr_site_def_value_iapetus
+	add = sr_site_port_value_iapetus
+}
+sr_site_extra_levels_iapetus = {
+	value = sr_site_levels_iapetus
+	add = sr_site_hab_value_iapetus
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_iapetus = {
+	value = sr_site_levels_iapetus
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_iapetus = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_iapetus < sr_site_crew_needed_iapetus
+			NOT = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_iapetus
+		add = 1
+		divide = sr_site_levels_iapetus
+	}
+}
+sr_site_mult_a_iapetus = {
+	value = sr_site_lvl_a_value_iapetus
+	multiply = sr_site_staffing_iapetus
+}
+sr_site_mult_b_iapetus = {
+	value = sr_site_lvl_b_value_iapetus
+	multiply = sr_site_staffing_iapetus
+}
+sr_site_spec_built_iapetus = { value = sr_site_lvl_a_value_iapetus add = sr_site_lvl_b_value_iapetus }
+sr_site_generic_built_iapetus = {
+	value = sr_site_hab_value_iapetus
+	add = sr_site_def_value_iapetus
+	add = sr_site_port_value_iapetus
+}
+sr_mod_spec_used_iapetus = {
+	value = sr_site_spec_built_iapetus
+	if = { limit = { has_variable = sr_mq_a_iapetus } add = var:sr_mq_a_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_a_iapetus } add = global_var:sr_site_ship_a_iapetus }
+	if = { limit = { has_variable = sr_mq_b_iapetus } add = var:sr_mq_b_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_b_iapetus } add = global_var:sr_site_ship_b_iapetus }
+}
+sr_mod_slots_used_iapetus = {
+	value = sr_site_generic_built_iapetus
+	if = { limit = { has_variable = sr_mq_hab_iapetus } add = var:sr_mq_hab_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_hab_iapetus } add = global_var:sr_site_ship_hab_iapetus }
+	if = { limit = { has_variable = sr_mq_def_iapetus } add = var:sr_mq_def_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_def_iapetus } add = global_var:sr_site_ship_def_iapetus }
+	if = { limit = { has_variable = sr_mq_port_iapetus } add = var:sr_mq_port_iapetus }
+	if = { limit = { has_global_variable = sr_site_ship_port_iapetus } add = global_var:sr_site_ship_port_iapetus }
+}
+sr_site_lvl_a_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_titania } value = global_var:sr_site_lvl_a_titania }
+	else_if = { limit = { has_global_variable = sr_site_spec_titania global_var:sr_site_spec_titania = 1 } value = 1 }
+}
+sr_site_lvl_b_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_titania } value = global_var:sr_site_lvl_b_titania }
+	else_if = { limit = { has_global_variable = sr_site_spec_titania global_var:sr_site_spec_titania = 2 } value = 1 }
+}
+sr_site_hab_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_titania } value = global_var:sr_site_hab_titania }
+}
+sr_site_def_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_titania } value = global_var:sr_site_def_titania }
+}
+sr_site_port_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_titania } value = global_var:sr_site_port_titania }
+}
+sr_site_levels_titania = {
+	value = sr_site_lvl_a_value_titania
+	add = sr_site_lvl_b_value_titania
+	add = sr_site_def_value_titania
+	add = sr_site_port_value_titania
+}
+sr_site_extra_levels_titania = {
+	value = sr_site_levels_titania
+	add = sr_site_hab_value_titania
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_titania = {
+	value = sr_site_levels_titania
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_titania = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_titania < sr_site_crew_needed_titania
+			NOT = { global_var:sr_site_holder_titania ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_titania
+		add = 1
+		divide = sr_site_levels_titania
+	}
+}
+sr_site_mult_a_titania = {
+	value = sr_site_lvl_a_value_titania
+	multiply = sr_site_staffing_titania
+}
+sr_site_mult_b_titania = {
+	value = sr_site_lvl_b_value_titania
+	multiply = sr_site_staffing_titania
+}
+sr_site_spec_built_titania = { value = sr_site_lvl_a_value_titania add = sr_site_lvl_b_value_titania }
+sr_site_generic_built_titania = {
+	value = sr_site_hab_value_titania
+	add = sr_site_def_value_titania
+	add = sr_site_port_value_titania
+}
+sr_mod_spec_used_titania = {
+	value = sr_site_spec_built_titania
+	if = { limit = { has_variable = sr_mq_a_titania } add = var:sr_mq_a_titania }
+	if = { limit = { has_global_variable = sr_site_ship_a_titania } add = global_var:sr_site_ship_a_titania }
+	if = { limit = { has_variable = sr_mq_b_titania } add = var:sr_mq_b_titania }
+	if = { limit = { has_global_variable = sr_site_ship_b_titania } add = global_var:sr_site_ship_b_titania }
+}
+sr_mod_slots_used_titania = {
+	value = sr_site_generic_built_titania
+	if = { limit = { has_variable = sr_mq_hab_titania } add = var:sr_mq_hab_titania }
+	if = { limit = { has_global_variable = sr_site_ship_hab_titania } add = global_var:sr_site_ship_hab_titania }
+	if = { limit = { has_variable = sr_mq_def_titania } add = var:sr_mq_def_titania }
+	if = { limit = { has_global_variable = sr_site_ship_def_titania } add = global_var:sr_site_ship_def_titania }
+	if = { limit = { has_variable = sr_mq_port_titania } add = var:sr_mq_port_titania }
+	if = { limit = { has_global_variable = sr_site_ship_port_titania } add = global_var:sr_site_ship_port_titania }
+}
+sr_site_lvl_a_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_oberon } value = global_var:sr_site_lvl_a_oberon }
+	else_if = { limit = { has_global_variable = sr_site_spec_oberon global_var:sr_site_spec_oberon = 1 } value = 1 }
+}
+sr_site_lvl_b_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_oberon } value = global_var:sr_site_lvl_b_oberon }
+	else_if = { limit = { has_global_variable = sr_site_spec_oberon global_var:sr_site_spec_oberon = 2 } value = 1 }
+}
+sr_site_hab_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_oberon } value = global_var:sr_site_hab_oberon }
+}
+sr_site_def_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_oberon } value = global_var:sr_site_def_oberon }
+}
+sr_site_port_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_oberon } value = global_var:sr_site_port_oberon }
+}
+sr_site_levels_oberon = {
+	value = sr_site_lvl_a_value_oberon
+	add = sr_site_lvl_b_value_oberon
+	add = sr_site_def_value_oberon
+	add = sr_site_port_value_oberon
+}
+sr_site_extra_levels_oberon = {
+	value = sr_site_levels_oberon
+	add = sr_site_hab_value_oberon
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_oberon = {
+	value = sr_site_levels_oberon
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_oberon = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_oberon < sr_site_crew_needed_oberon
+			NOT = { global_var:sr_site_holder_oberon ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_oberon
+		add = 1
+		divide = sr_site_levels_oberon
+	}
+}
+sr_site_mult_a_oberon = {
+	value = sr_site_lvl_a_value_oberon
+	multiply = sr_site_staffing_oberon
+}
+sr_site_mult_b_oberon = {
+	value = sr_site_lvl_b_value_oberon
+	multiply = sr_site_staffing_oberon
+}
+sr_site_spec_built_oberon = { value = sr_site_lvl_a_value_oberon add = sr_site_lvl_b_value_oberon }
+sr_site_generic_built_oberon = {
+	value = sr_site_hab_value_oberon
+	add = sr_site_def_value_oberon
+	add = sr_site_port_value_oberon
+}
+sr_mod_spec_used_oberon = {
+	value = sr_site_spec_built_oberon
+	if = { limit = { has_variable = sr_mq_a_oberon } add = var:sr_mq_a_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_a_oberon } add = global_var:sr_site_ship_a_oberon }
+	if = { limit = { has_variable = sr_mq_b_oberon } add = var:sr_mq_b_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_b_oberon } add = global_var:sr_site_ship_b_oberon }
+}
+sr_mod_slots_used_oberon = {
+	value = sr_site_generic_built_oberon
+	if = { limit = { has_variable = sr_mq_hab_oberon } add = var:sr_mq_hab_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_hab_oberon } add = global_var:sr_site_ship_hab_oberon }
+	if = { limit = { has_variable = sr_mq_def_oberon } add = var:sr_mq_def_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_def_oberon } add = global_var:sr_site_ship_def_oberon }
+	if = { limit = { has_variable = sr_mq_port_oberon } add = var:sr_mq_port_oberon }
+	if = { limit = { has_global_variable = sr_site_ship_port_oberon } add = global_var:sr_site_ship_port_oberon }
+}
+sr_site_lvl_a_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_miranda } value = global_var:sr_site_lvl_a_miranda }
+	else_if = { limit = { has_global_variable = sr_site_spec_miranda global_var:sr_site_spec_miranda = 1 } value = 1 }
+}
+sr_site_lvl_b_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_miranda } value = global_var:sr_site_lvl_b_miranda }
+	else_if = { limit = { has_global_variable = sr_site_spec_miranda global_var:sr_site_spec_miranda = 2 } value = 1 }
+}
+sr_site_hab_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_miranda } value = global_var:sr_site_hab_miranda }
+}
+sr_site_def_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_miranda } value = global_var:sr_site_def_miranda }
+}
+sr_site_port_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_miranda } value = global_var:sr_site_port_miranda }
+}
+sr_site_levels_miranda = {
+	value = sr_site_lvl_a_value_miranda
+	add = sr_site_lvl_b_value_miranda
+	add = sr_site_def_value_miranda
+	add = sr_site_port_value_miranda
+}
+sr_site_extra_levels_miranda = {
+	value = sr_site_levels_miranda
+	add = sr_site_hab_value_miranda
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_miranda = {
+	value = sr_site_levels_miranda
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_miranda = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_miranda < sr_site_crew_needed_miranda
+			NOT = { global_var:sr_site_holder_miranda ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_miranda
+		add = 1
+		divide = sr_site_levels_miranda
+	}
+}
+sr_site_mult_a_miranda = {
+	value = sr_site_lvl_a_value_miranda
+	multiply = sr_site_staffing_miranda
+}
+sr_site_mult_b_miranda = {
+	value = sr_site_lvl_b_value_miranda
+	multiply = sr_site_staffing_miranda
+}
+sr_site_spec_built_miranda = { value = sr_site_lvl_a_value_miranda add = sr_site_lvl_b_value_miranda }
+sr_site_generic_built_miranda = {
+	value = sr_site_hab_value_miranda
+	add = sr_site_def_value_miranda
+	add = sr_site_port_value_miranda
+}
+sr_mod_spec_used_miranda = {
+	value = sr_site_spec_built_miranda
+	if = { limit = { has_variable = sr_mq_a_miranda } add = var:sr_mq_a_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_a_miranda } add = global_var:sr_site_ship_a_miranda }
+	if = { limit = { has_variable = sr_mq_b_miranda } add = var:sr_mq_b_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_b_miranda } add = global_var:sr_site_ship_b_miranda }
+}
+sr_mod_slots_used_miranda = {
+	value = sr_site_generic_built_miranda
+	if = { limit = { has_variable = sr_mq_hab_miranda } add = var:sr_mq_hab_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_hab_miranda } add = global_var:sr_site_ship_hab_miranda }
+	if = { limit = { has_variable = sr_mq_def_miranda } add = var:sr_mq_def_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_def_miranda } add = global_var:sr_site_ship_def_miranda }
+	if = { limit = { has_variable = sr_mq_port_miranda } add = var:sr_mq_port_miranda }
+	if = { limit = { has_global_variable = sr_site_ship_port_miranda } add = global_var:sr_site_ship_port_miranda }
+}
+sr_site_lvl_a_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_ariel } value = global_var:sr_site_lvl_a_ariel }
+	else_if = { limit = { has_global_variable = sr_site_spec_ariel global_var:sr_site_spec_ariel = 1 } value = 1 }
+}
+sr_site_lvl_b_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_ariel } value = global_var:sr_site_lvl_b_ariel }
+	else_if = { limit = { has_global_variable = sr_site_spec_ariel global_var:sr_site_spec_ariel = 2 } value = 1 }
+}
+sr_site_hab_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_ariel } value = global_var:sr_site_hab_ariel }
+}
+sr_site_def_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_ariel } value = global_var:sr_site_def_ariel }
+}
+sr_site_port_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_ariel } value = global_var:sr_site_port_ariel }
+}
+sr_site_levels_ariel = {
+	value = sr_site_lvl_a_value_ariel
+	add = sr_site_lvl_b_value_ariel
+	add = sr_site_def_value_ariel
+	add = sr_site_port_value_ariel
+}
+sr_site_extra_levels_ariel = {
+	value = sr_site_levels_ariel
+	add = sr_site_hab_value_ariel
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_ariel = {
+	value = sr_site_levels_ariel
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_ariel = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_ariel < sr_site_crew_needed_ariel
+			NOT = { global_var:sr_site_holder_ariel ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_ariel
+		add = 1
+		divide = sr_site_levels_ariel
+	}
+}
+sr_site_mult_a_ariel = {
+	value = sr_site_lvl_a_value_ariel
+	multiply = sr_site_staffing_ariel
+}
+sr_site_mult_b_ariel = {
+	value = sr_site_lvl_b_value_ariel
+	multiply = sr_site_staffing_ariel
+}
+sr_site_spec_built_ariel = { value = sr_site_lvl_a_value_ariel add = sr_site_lvl_b_value_ariel }
+sr_site_generic_built_ariel = {
+	value = sr_site_hab_value_ariel
+	add = sr_site_def_value_ariel
+	add = sr_site_port_value_ariel
+}
+sr_mod_spec_used_ariel = {
+	value = sr_site_spec_built_ariel
+	if = { limit = { has_variable = sr_mq_a_ariel } add = var:sr_mq_a_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_a_ariel } add = global_var:sr_site_ship_a_ariel }
+	if = { limit = { has_variable = sr_mq_b_ariel } add = var:sr_mq_b_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_b_ariel } add = global_var:sr_site_ship_b_ariel }
+}
+sr_mod_slots_used_ariel = {
+	value = sr_site_generic_built_ariel
+	if = { limit = { has_variable = sr_mq_hab_ariel } add = var:sr_mq_hab_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_hab_ariel } add = global_var:sr_site_ship_hab_ariel }
+	if = { limit = { has_variable = sr_mq_def_ariel } add = var:sr_mq_def_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_def_ariel } add = global_var:sr_site_ship_def_ariel }
+	if = { limit = { has_variable = sr_mq_port_ariel } add = var:sr_mq_port_ariel }
+	if = { limit = { has_global_variable = sr_site_ship_port_ariel } add = global_var:sr_site_ship_port_ariel }
+}
+sr_site_lvl_a_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_triton } value = global_var:sr_site_lvl_a_triton }
+	else_if = { limit = { has_global_variable = sr_site_spec_triton global_var:sr_site_spec_triton = 1 } value = 1 }
+}
+sr_site_lvl_b_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_triton } value = global_var:sr_site_lvl_b_triton }
+	else_if = { limit = { has_global_variable = sr_site_spec_triton global_var:sr_site_spec_triton = 2 } value = 1 }
+}
+sr_site_hab_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_triton } value = global_var:sr_site_hab_triton }
+}
+sr_site_def_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_triton } value = global_var:sr_site_def_triton }
+}
+sr_site_port_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_triton } value = global_var:sr_site_port_triton }
+}
+sr_site_levels_triton = {
+	value = sr_site_lvl_a_value_triton
+	add = sr_site_lvl_b_value_triton
+	add = sr_site_def_value_triton
+	add = sr_site_port_value_triton
+}
+sr_site_extra_levels_triton = {
+	value = sr_site_levels_triton
+	add = sr_site_hab_value_triton
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_triton = {
+	value = sr_site_levels_triton
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_triton = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_triton < sr_site_crew_needed_triton
+			NOT = { global_var:sr_site_holder_triton ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_triton
+		add = 1
+		divide = sr_site_levels_triton
+	}
+}
+sr_site_mult_a_triton = {
+	value = sr_site_lvl_a_value_triton
+	multiply = sr_site_staffing_triton
+}
+sr_site_mult_b_triton = {
+	value = sr_site_lvl_b_value_triton
+	multiply = sr_site_staffing_triton
+}
+sr_site_spec_built_triton = { value = sr_site_lvl_a_value_triton add = sr_site_lvl_b_value_triton }
+sr_site_generic_built_triton = {
+	value = sr_site_hab_value_triton
+	add = sr_site_def_value_triton
+	add = sr_site_port_value_triton
+}
+sr_mod_spec_used_triton = {
+	value = sr_site_spec_built_triton
+	if = { limit = { has_variable = sr_mq_a_triton } add = var:sr_mq_a_triton }
+	if = { limit = { has_global_variable = sr_site_ship_a_triton } add = global_var:sr_site_ship_a_triton }
+	if = { limit = { has_variable = sr_mq_b_triton } add = var:sr_mq_b_triton }
+	if = { limit = { has_global_variable = sr_site_ship_b_triton } add = global_var:sr_site_ship_b_triton }
+}
+sr_mod_slots_used_triton = {
+	value = sr_site_generic_built_triton
+	if = { limit = { has_variable = sr_mq_hab_triton } add = var:sr_mq_hab_triton }
+	if = { limit = { has_global_variable = sr_site_ship_hab_triton } add = global_var:sr_site_ship_hab_triton }
+	if = { limit = { has_variable = sr_mq_def_triton } add = var:sr_mq_def_triton }
+	if = { limit = { has_global_variable = sr_site_ship_def_triton } add = global_var:sr_site_ship_def_triton }
+	if = { limit = { has_variable = sr_mq_port_triton } add = var:sr_mq_port_triton }
+	if = { limit = { has_global_variable = sr_site_ship_port_triton } add = global_var:sr_site_ship_port_triton }
+}
+sr_site_lvl_a_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_proteus } value = global_var:sr_site_lvl_a_proteus }
+	else_if = { limit = { has_global_variable = sr_site_spec_proteus global_var:sr_site_spec_proteus = 1 } value = 1 }
+}
+sr_site_lvl_b_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_proteus } value = global_var:sr_site_lvl_b_proteus }
+	else_if = { limit = { has_global_variable = sr_site_spec_proteus global_var:sr_site_spec_proteus = 2 } value = 1 }
+}
+sr_site_hab_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_proteus } value = global_var:sr_site_hab_proteus }
+}
+sr_site_def_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_proteus } value = global_var:sr_site_def_proteus }
+}
+sr_site_port_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_proteus } value = global_var:sr_site_port_proteus }
+}
+sr_site_levels_proteus = {
+	value = sr_site_lvl_a_value_proteus
+	add = sr_site_lvl_b_value_proteus
+	add = sr_site_def_value_proteus
+	add = sr_site_port_value_proteus
+}
+sr_site_extra_levels_proteus = {
+	value = sr_site_levels_proteus
+	add = sr_site_hab_value_proteus
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_proteus = {
+	value = sr_site_levels_proteus
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_proteus = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_proteus < sr_site_crew_needed_proteus
+			NOT = { global_var:sr_site_holder_proteus ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_proteus
+		add = 1
+		divide = sr_site_levels_proteus
+	}
+}
+sr_site_mult_a_proteus = {
+	value = sr_site_lvl_a_value_proteus
+	multiply = sr_site_staffing_proteus
+}
+sr_site_mult_b_proteus = {
+	value = sr_site_lvl_b_value_proteus
+	multiply = sr_site_staffing_proteus
+}
+sr_site_spec_built_proteus = { value = sr_site_lvl_a_value_proteus add = sr_site_lvl_b_value_proteus }
+sr_site_generic_built_proteus = {
+	value = sr_site_hab_value_proteus
+	add = sr_site_def_value_proteus
+	add = sr_site_port_value_proteus
+}
+sr_mod_spec_used_proteus = {
+	value = sr_site_spec_built_proteus
+	if = { limit = { has_variable = sr_mq_a_proteus } add = var:sr_mq_a_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_a_proteus } add = global_var:sr_site_ship_a_proteus }
+	if = { limit = { has_variable = sr_mq_b_proteus } add = var:sr_mq_b_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_b_proteus } add = global_var:sr_site_ship_b_proteus }
+}
+sr_mod_slots_used_proteus = {
+	value = sr_site_generic_built_proteus
+	if = { limit = { has_variable = sr_mq_hab_proteus } add = var:sr_mq_hab_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_hab_proteus } add = global_var:sr_site_ship_hab_proteus }
+	if = { limit = { has_variable = sr_mq_def_proteus } add = var:sr_mq_def_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_def_proteus } add = global_var:sr_site_ship_def_proteus }
+	if = { limit = { has_variable = sr_mq_port_proteus } add = var:sr_mq_port_proteus }
+	if = { limit = { has_global_variable = sr_site_ship_port_proteus } add = global_var:sr_site_ship_port_proteus }
+}
+sr_site_lvl_a_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_pluto } value = global_var:sr_site_lvl_a_pluto }
+	else_if = { limit = { has_global_variable = sr_site_spec_pluto global_var:sr_site_spec_pluto = 1 } value = 1 }
+}
+sr_site_lvl_b_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_pluto } value = global_var:sr_site_lvl_b_pluto }
+	else_if = { limit = { has_global_variable = sr_site_spec_pluto global_var:sr_site_spec_pluto = 2 } value = 1 }
+}
+sr_site_hab_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_pluto } value = global_var:sr_site_hab_pluto }
+}
+sr_site_def_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_pluto } value = global_var:sr_site_def_pluto }
+}
+sr_site_port_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_pluto } value = global_var:sr_site_port_pluto }
+}
+sr_site_levels_pluto = {
+	value = sr_site_lvl_a_value_pluto
+	add = sr_site_lvl_b_value_pluto
+	add = sr_site_def_value_pluto
+	add = sr_site_port_value_pluto
+}
+sr_site_extra_levels_pluto = {
+	value = sr_site_levels_pluto
+	add = sr_site_hab_value_pluto
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_pluto = {
+	value = sr_site_levels_pluto
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_pluto = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_pluto < sr_site_crew_needed_pluto
+			NOT = { global_var:sr_site_holder_pluto ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_pluto
+		add = 1
+		divide = sr_site_levels_pluto
+	}
+}
+sr_site_mult_a_pluto = {
+	value = sr_site_lvl_a_value_pluto
+	multiply = sr_site_staffing_pluto
+}
+sr_site_mult_b_pluto = {
+	value = sr_site_lvl_b_value_pluto
+	multiply = sr_site_staffing_pluto
+}
+sr_site_spec_built_pluto = { value = sr_site_lvl_a_value_pluto add = sr_site_lvl_b_value_pluto }
+sr_site_generic_built_pluto = {
+	value = sr_site_hab_value_pluto
+	add = sr_site_def_value_pluto
+	add = sr_site_port_value_pluto
+}
+sr_mod_spec_used_pluto = {
+	value = sr_site_spec_built_pluto
+	if = { limit = { has_variable = sr_mq_a_pluto } add = var:sr_mq_a_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_a_pluto } add = global_var:sr_site_ship_a_pluto }
+	if = { limit = { has_variable = sr_mq_b_pluto } add = var:sr_mq_b_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_b_pluto } add = global_var:sr_site_ship_b_pluto }
+}
+sr_mod_slots_used_pluto = {
+	value = sr_site_generic_built_pluto
+	if = { limit = { has_variable = sr_mq_hab_pluto } add = var:sr_mq_hab_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_hab_pluto } add = global_var:sr_site_ship_hab_pluto }
+	if = { limit = { has_variable = sr_mq_def_pluto } add = var:sr_mq_def_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_def_pluto } add = global_var:sr_site_ship_def_pluto }
+	if = { limit = { has_variable = sr_mq_port_pluto } add = var:sr_mq_port_pluto }
+	if = { limit = { has_global_variable = sr_site_ship_port_pluto } add = global_var:sr_site_ship_port_pluto }
+}
+sr_site_lvl_a_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_eris } value = global_var:sr_site_lvl_a_eris }
+	else_if = { limit = { has_global_variable = sr_site_spec_eris global_var:sr_site_spec_eris = 1 } value = 1 }
+}
+sr_site_lvl_b_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_eris } value = global_var:sr_site_lvl_b_eris }
+	else_if = { limit = { has_global_variable = sr_site_spec_eris global_var:sr_site_spec_eris = 2 } value = 1 }
+}
+sr_site_hab_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_eris } value = global_var:sr_site_hab_eris }
+}
+sr_site_def_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_eris } value = global_var:sr_site_def_eris }
+}
+sr_site_port_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_eris } value = global_var:sr_site_port_eris }
+}
+sr_site_levels_eris = {
+	value = sr_site_lvl_a_value_eris
+	add = sr_site_lvl_b_value_eris
+	add = sr_site_def_value_eris
+	add = sr_site_port_value_eris
+}
+sr_site_extra_levels_eris = {
+	value = sr_site_levels_eris
+	add = sr_site_hab_value_eris
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_eris = {
+	value = sr_site_levels_eris
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_eris = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_eris < sr_site_crew_needed_eris
+			NOT = { global_var:sr_site_holder_eris ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_eris
+		add = 1
+		divide = sr_site_levels_eris
+	}
+}
+sr_site_mult_a_eris = {
+	value = sr_site_lvl_a_value_eris
+	multiply = sr_site_staffing_eris
+}
+sr_site_mult_b_eris = {
+	value = sr_site_lvl_b_value_eris
+	multiply = sr_site_staffing_eris
+}
+sr_site_spec_built_eris = { value = sr_site_lvl_a_value_eris add = sr_site_lvl_b_value_eris }
+sr_site_generic_built_eris = {
+	value = sr_site_hab_value_eris
+	add = sr_site_def_value_eris
+	add = sr_site_port_value_eris
+}
+sr_mod_spec_used_eris = {
+	value = sr_site_spec_built_eris
+	if = { limit = { has_variable = sr_mq_a_eris } add = var:sr_mq_a_eris }
+	if = { limit = { has_global_variable = sr_site_ship_a_eris } add = global_var:sr_site_ship_a_eris }
+	if = { limit = { has_variable = sr_mq_b_eris } add = var:sr_mq_b_eris }
+	if = { limit = { has_global_variable = sr_site_ship_b_eris } add = global_var:sr_site_ship_b_eris }
+}
+sr_mod_slots_used_eris = {
+	value = sr_site_generic_built_eris
+	if = { limit = { has_variable = sr_mq_hab_eris } add = var:sr_mq_hab_eris }
+	if = { limit = { has_global_variable = sr_site_ship_hab_eris } add = global_var:sr_site_ship_hab_eris }
+	if = { limit = { has_variable = sr_mq_def_eris } add = var:sr_mq_def_eris }
+	if = { limit = { has_global_variable = sr_site_ship_def_eris } add = global_var:sr_site_ship_def_eris }
+	if = { limit = { has_variable = sr_mq_port_eris } add = var:sr_mq_port_eris }
+	if = { limit = { has_global_variable = sr_site_ship_port_eris } add = global_var:sr_site_ship_port_eris }
+}
+sr_site_lvl_a_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_makemake } value = global_var:sr_site_lvl_a_makemake }
+	else_if = { limit = { has_global_variable = sr_site_spec_makemake global_var:sr_site_spec_makemake = 1 } value = 1 }
+}
+sr_site_lvl_b_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_makemake } value = global_var:sr_site_lvl_b_makemake }
+	else_if = { limit = { has_global_variable = sr_site_spec_makemake global_var:sr_site_spec_makemake = 2 } value = 1 }
+}
+sr_site_hab_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_makemake } value = global_var:sr_site_hab_makemake }
+}
+sr_site_def_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_makemake } value = global_var:sr_site_def_makemake }
+}
+sr_site_port_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_makemake } value = global_var:sr_site_port_makemake }
+}
+sr_site_levels_makemake = {
+	value = sr_site_lvl_a_value_makemake
+	add = sr_site_lvl_b_value_makemake
+	add = sr_site_def_value_makemake
+	add = sr_site_port_value_makemake
+}
+sr_site_extra_levels_makemake = {
+	value = sr_site_levels_makemake
+	add = sr_site_hab_value_makemake
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_makemake = {
+	value = sr_site_levels_makemake
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_makemake = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_makemake < sr_site_crew_needed_makemake
+			NOT = { global_var:sr_site_holder_makemake ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_makemake
+		add = 1
+		divide = sr_site_levels_makemake
+	}
+}
+sr_site_mult_a_makemake = {
+	value = sr_site_lvl_a_value_makemake
+	multiply = sr_site_staffing_makemake
+}
+sr_site_mult_b_makemake = {
+	value = sr_site_lvl_b_value_makemake
+	multiply = sr_site_staffing_makemake
+}
+sr_site_spec_built_makemake = { value = sr_site_lvl_a_value_makemake add = sr_site_lvl_b_value_makemake }
+sr_site_generic_built_makemake = {
+	value = sr_site_hab_value_makemake
+	add = sr_site_def_value_makemake
+	add = sr_site_port_value_makemake
+}
+sr_mod_spec_used_makemake = {
+	value = sr_site_spec_built_makemake
+	if = { limit = { has_variable = sr_mq_a_makemake } add = var:sr_mq_a_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_a_makemake } add = global_var:sr_site_ship_a_makemake }
+	if = { limit = { has_variable = sr_mq_b_makemake } add = var:sr_mq_b_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_b_makemake } add = global_var:sr_site_ship_b_makemake }
+}
+sr_mod_slots_used_makemake = {
+	value = sr_site_generic_built_makemake
+	if = { limit = { has_variable = sr_mq_hab_makemake } add = var:sr_mq_hab_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_hab_makemake } add = global_var:sr_site_ship_hab_makemake }
+	if = { limit = { has_variable = sr_mq_def_makemake } add = var:sr_mq_def_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_def_makemake } add = global_var:sr_site_ship_def_makemake }
+	if = { limit = { has_variable = sr_mq_port_makemake } add = var:sr_mq_port_makemake }
+	if = { limit = { has_global_variable = sr_site_ship_port_makemake } add = global_var:sr_site_ship_port_makemake }
+}
+sr_site_lvl_a_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_haumea } value = global_var:sr_site_lvl_a_haumea }
+	else_if = { limit = { has_global_variable = sr_site_spec_haumea global_var:sr_site_spec_haumea = 1 } value = 1 }
+}
+sr_site_lvl_b_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_haumea } value = global_var:sr_site_lvl_b_haumea }
+	else_if = { limit = { has_global_variable = sr_site_spec_haumea global_var:sr_site_spec_haumea = 2 } value = 1 }
+}
+sr_site_hab_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_haumea } value = global_var:sr_site_hab_haumea }
+}
+sr_site_def_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_haumea } value = global_var:sr_site_def_haumea }
+}
+sr_site_port_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_haumea } value = global_var:sr_site_port_haumea }
+}
+sr_site_levels_haumea = {
+	value = sr_site_lvl_a_value_haumea
+	add = sr_site_lvl_b_value_haumea
+	add = sr_site_def_value_haumea
+	add = sr_site_port_value_haumea
+}
+sr_site_extra_levels_haumea = {
+	value = sr_site_levels_haumea
+	add = sr_site_hab_value_haumea
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_haumea = {
+	value = sr_site_levels_haumea
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_haumea = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_haumea < sr_site_crew_needed_haumea
+			NOT = { global_var:sr_site_holder_haumea ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_haumea
+		add = 1
+		divide = sr_site_levels_haumea
+	}
+}
+sr_site_mult_a_haumea = {
+	value = sr_site_lvl_a_value_haumea
+	multiply = sr_site_staffing_haumea
+}
+sr_site_mult_b_haumea = {
+	value = sr_site_lvl_b_value_haumea
+	multiply = sr_site_staffing_haumea
+}
+sr_site_spec_built_haumea = { value = sr_site_lvl_a_value_haumea add = sr_site_lvl_b_value_haumea }
+sr_site_generic_built_haumea = {
+	value = sr_site_hab_value_haumea
+	add = sr_site_def_value_haumea
+	add = sr_site_port_value_haumea
+}
+sr_mod_spec_used_haumea = {
+	value = sr_site_spec_built_haumea
+	if = { limit = { has_variable = sr_mq_a_haumea } add = var:sr_mq_a_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_a_haumea } add = global_var:sr_site_ship_a_haumea }
+	if = { limit = { has_variable = sr_mq_b_haumea } add = var:sr_mq_b_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_b_haumea } add = global_var:sr_site_ship_b_haumea }
+}
+sr_mod_slots_used_haumea = {
+	value = sr_site_generic_built_haumea
+	if = { limit = { has_variable = sr_mq_hab_haumea } add = var:sr_mq_hab_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_hab_haumea } add = global_var:sr_site_ship_hab_haumea }
+	if = { limit = { has_variable = sr_mq_def_haumea } add = var:sr_mq_def_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_def_haumea } add = global_var:sr_site_ship_def_haumea }
+	if = { limit = { has_variable = sr_mq_port_haumea } add = var:sr_mq_port_haumea }
+	if = { limit = { has_global_variable = sr_site_ship_port_haumea } add = global_var:sr_site_ship_port_haumea }
+}
+sr_site_lvl_a_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_a_sedna } value = global_var:sr_site_lvl_a_sedna }
+	else_if = { limit = { has_global_variable = sr_site_spec_sedna global_var:sr_site_spec_sedna = 1 } value = 1 }
+}
+sr_site_lvl_b_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_lvl_b_sedna } value = global_var:sr_site_lvl_b_sedna }
+	else_if = { limit = { has_global_variable = sr_site_spec_sedna global_var:sr_site_spec_sedna = 2 } value = 1 }
+}
+sr_site_hab_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_hab_sedna } value = global_var:sr_site_hab_sedna }
+}
+sr_site_def_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_def_sedna } value = global_var:sr_site_def_sedna }
+}
+sr_site_port_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_port_sedna } value = global_var:sr_site_port_sedna }
+}
+sr_site_levels_sedna = {
+	value = sr_site_lvl_a_value_sedna
+	add = sr_site_lvl_b_value_sedna
+	add = sr_site_def_value_sedna
+	add = sr_site_port_value_sedna
+}
+sr_site_extra_levels_sedna = {
+	value = sr_site_levels_sedna
+	add = sr_site_hab_value_sedna
+	subtract = 1
+	min = 0
+}
+sr_site_crew_needed_sedna = {
+	value = sr_site_levels_sedna
+	subtract = 1
+	min = 0
+}
+sr_site_staffing_sedna = {
+	value = 1
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_crews_sedna < sr_site_crew_needed_sedna
+			NOT = { global_var:sr_site_holder_sedna ?= { has_technology_researched = artificial_intelligence } }
+		}
+		value = sr_site_crews_sedna
+		add = 1
+		divide = sr_site_levels_sedna
+	}
+}
+sr_site_mult_a_sedna = {
+	value = sr_site_lvl_a_value_sedna
+	multiply = sr_site_staffing_sedna
+}
+sr_site_mult_b_sedna = {
+	value = sr_site_lvl_b_value_sedna
+	multiply = sr_site_staffing_sedna
+}
+sr_site_spec_built_sedna = { value = sr_site_lvl_a_value_sedna add = sr_site_lvl_b_value_sedna }
+sr_site_generic_built_sedna = {
+	value = sr_site_hab_value_sedna
+	add = sr_site_def_value_sedna
+	add = sr_site_port_value_sedna
+}
+sr_mod_spec_used_sedna = {
+	value = sr_site_spec_built_sedna
+	if = { limit = { has_variable = sr_mq_a_sedna } add = var:sr_mq_a_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_a_sedna } add = global_var:sr_site_ship_a_sedna }
+	if = { limit = { has_variable = sr_mq_b_sedna } add = var:sr_mq_b_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_b_sedna } add = global_var:sr_site_ship_b_sedna }
+}
+sr_mod_slots_used_sedna = {
+	value = sr_site_generic_built_sedna
+	if = { limit = { has_variable = sr_mq_hab_sedna } add = var:sr_mq_hab_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_hab_sedna } add = global_var:sr_site_ship_hab_sedna }
+	if = { limit = { has_variable = sr_mq_def_sedna } add = var:sr_mq_def_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_def_sedna } add = global_var:sr_site_ship_def_sedna }
+	if = { limit = { has_variable = sr_mq_port_sedna } add = var:sr_mq_port_sedna }
+	if = { limit = { has_global_variable = sr_site_ship_port_sedna } add = global_var:sr_site_ship_port_sedna }
+}
+
+# Country scope: the module levels past the first at the colonies THIS holds, the
+# upkeep's multiplier (design § 8).
+sr_mod_upkeep_levels = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } add = sr_site_extra_levels_valles_marineris }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } add = sr_site_extra_levels_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } add = sr_site_extra_levels_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } add = sr_site_extra_levels_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } add = sr_site_extra_levels_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this } add = sr_site_extra_levels_ceres }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this } add = sr_site_extra_levels_vesta }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this } add = sr_site_extra_levels_psyche }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this } add = sr_site_extra_levels_pallas }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this } add = sr_site_extra_levels_hygiea }
+	if = { limit = { global_var:sr_site_holder_io ?= this } add = sr_site_extra_levels_io }
+	if = { limit = { global_var:sr_site_holder_europa ?= this } add = sr_site_extra_levels_europa }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } add = sr_site_extra_levels_ganymede }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } add = sr_site_extra_levels_callisto }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this } add = sr_site_extra_levels_himalia }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this } add = sr_site_extra_levels_amalthea }
+	if = { limit = { global_var:sr_site_holder_venus ?= this } add = sr_site_extra_levels_venus }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } add = sr_site_extra_levels_mercury }
+	if = { limit = { global_var:sr_site_holder_titan ?= this } add = sr_site_extra_levels_titan }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this } add = sr_site_extra_levels_enceladus }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this } add = sr_site_extra_levels_rhea }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this } add = sr_site_extra_levels_mimas }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this } add = sr_site_extra_levels_iapetus }
+	if = { limit = { global_var:sr_site_holder_titania ?= this } add = sr_site_extra_levels_titania }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this } add = sr_site_extra_levels_oberon }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this } add = sr_site_extra_levels_miranda }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this } add = sr_site_extra_levels_ariel }
+	if = { limit = { global_var:sr_site_holder_triton ?= this } add = sr_site_extra_levels_triton }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this } add = sr_site_extra_levels_proteus }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this } add = sr_site_extra_levels_pluto }
+	if = { limit = { global_var:sr_site_holder_eris ?= this } add = sr_site_extra_levels_eris }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = sr_site_extra_levels_makemake }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = sr_site_extra_levels_haumea }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = sr_site_extra_levels_sedna }
+}
+
+# Country scope: THIS's Extraplanetary Base room, in levels (design § 9): the
+# near-Earth 10 and every colony it holds.
+sr_ebase_room_total = {
+	value = 10
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } add = 40 }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } add = 30 }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } add = 40 }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } add = 40 }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } add = 30 }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this } add = 40 }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this } add = 40 }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this } add = 60 }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this } add = 30 }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this } add = 20 }
+	if = { limit = { global_var:sr_site_holder_io ?= this } add = 20 }
+	if = { limit = { global_var:sr_site_holder_europa ?= this } add = 20 }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } add = 30 }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } add = 30 }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this } add = 20 }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_venus ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } add = 40 }
+	if = { limit = { global_var:sr_site_holder_titan ?= this } add = 20 }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this } add = 15 }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this } add = 20 }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this } add = 15 }
+	if = { limit = { global_var:sr_site_holder_titania ?= this } add = 15 }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this } add = 15 }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_triton ?= this } add = 15 }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this } add = 15 }
+	if = { limit = { global_var:sr_site_holder_eris ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = 10 }
 }

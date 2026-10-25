@@ -11,6 +11,13 @@ on_monthly_pulse_country = {
 
 space_race_on_action = {
 	effect = {
+		# Extraplanetary Base room (sr_colony_module_effects.txt; colony modules
+		# design § 9): its one refresh site, for every country that can build
+		# a base, colony or not.
+		if = {
+			limit = { has_technology_researched = asteroid_mining }
+			sr_ebase_refresh = yes
+		}
 		sr_cleanup_inactive_space_race_milestones = yes
 		sr_monthly_colony_discoveries = yes
 		# The site_receiver_entry self-check (sr_site_effects.txt).

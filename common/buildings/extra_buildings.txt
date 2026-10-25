@@ -967,6 +967,17 @@ REPLACE_OR_CREATE:building_space_mine = {
 	}
 
 	required_construction = construction_cost_space_mine
+	# Simple and full colonies (colony modules design § 9): room for levels comes
+	# from the near-Earth asteroids and the colonies held, and a level past it
+	# works at -50%. No private investor builds past the room, and no AI
+	# government; a player's government can, at the penalty. Under races only
+	# both always pass (sr_ebase_has_room).
+	can_build_government = {
+		owner ?= { sr_ebase_may_build_government = yes }
+	}
+	can_build_private = {
+		owner ?= { sr_ebase_may_build_private = yes }
+	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 }
@@ -1025,6 +1036,7 @@ REPLACE_OR_CREATE:building_space_program = {
 	production_method_groups = {
 		pmg_base_building_space_program
 		pmg_space_program_debris_removal # orbital debris cleanup (te_orbital_debris_pmgs.txt)
+		pmg_space_program_module_fabrication # colony modules (sr_colony_module_pmgs.txt)
 	}
 
 	possible = {

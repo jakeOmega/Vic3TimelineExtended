@@ -3034,6 +3034,474 @@ types space_race_widget_types
 		}
 	}
 
+	### One colony we hold in Colony Modules (simple and full colonies; colony
+	### modules design § 11): its icon and name, its staffing (the share of its
+	### modules its crews can run), then a cell per module type, in the column
+	### order of the header row (te_sr_module_header_row): the first
+	### specialization, the second, Habitat, Spaceport, Defences. A cell is the
+	### level (its tooltip what the module does: a specialization's is its Our
+	### Colonies row's), "+N" for what is queued or on its way, and a button that
+	### queues one more (sr_colony_module_sgui, scope:site = the world's index,
+	### scope:op = the type). The last button clears the colony's queue
+	### (scope:op = 0). 24 + 88 + 36 + 5 × 52 + 24 + 8 × 4 spacing + 2 × 4
+	### margin = 472, in the 480 column. Instances in te_sr_module_rows
+	### (sr_sites_generated_rows.gui).
+	type te_sr_module_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "module_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "module_icon" {}
+			}
+		}
+		widget = {
+			size = { 88 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 88
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "module_name" {}
+			}
+		}
+		widget = {
+			size = { 36 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_modules_staffing_tt"
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 36
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#v"
+				block "module_staffing" {}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = no
+			spacing = 0
+			parentanchor = vcenter
+
+			widget = {
+				size = { 14 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					align = center|nobaseline
+					using = fontsize_medium
+					block "mod_a_level" {}
+				}
+			}
+			widget = {
+				size = { 18 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 18
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#v"
+					block "mod_a_pending" {}
+				}
+			}
+			button_icon_plus_action = {
+				size = { 20 20 }
+				parentanchor = vcenter
+				block "mod_a_button" {}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = no
+			spacing = 0
+			parentanchor = vcenter
+
+			widget = {
+				size = { 14 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					align = center|nobaseline
+					using = fontsize_medium
+					block "mod_b_level" {}
+				}
+			}
+			widget = {
+				size = { 18 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 18
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#v"
+					block "mod_b_pending" {}
+				}
+			}
+			button_icon_plus_action = {
+				size = { 20 20 }
+				parentanchor = vcenter
+				block "mod_b_button" {}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = no
+			spacing = 0
+			parentanchor = vcenter
+
+			widget = {
+				size = { 14 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					align = center|nobaseline
+					using = fontsize_medium
+					block "mod_hab_level" {}
+				}
+			}
+			widget = {
+				size = { 18 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 18
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#v"
+					block "mod_hab_pending" {}
+				}
+			}
+			button_icon_plus_action = {
+				size = { 20 20 }
+				parentanchor = vcenter
+				block "mod_hab_button" {}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = no
+			spacing = 0
+			parentanchor = vcenter
+
+			widget = {
+				size = { 14 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					align = center|nobaseline
+					using = fontsize_medium
+					block "mod_port_level" {}
+				}
+			}
+			widget = {
+				size = { 18 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 18
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#v"
+					block "mod_port_pending" {}
+				}
+			}
+			button_icon_plus_action = {
+				size = { 20 20 }
+				parentanchor = vcenter
+				block "mod_port_button" {}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = no
+			spacing = 0
+			parentanchor = vcenter
+
+			widget = {
+				size = { 14 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					align = center|nobaseline
+					using = fontsize_medium
+					block "mod_def_level" {}
+				}
+			}
+			widget = {
+				size = { 18 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 18
+					align = left|nobaseline
+					using = fontsize_small
+					default_format = "#v"
+					block "mod_def_pending" {}
+				}
+			}
+			button_icon_plus_action = {
+				size = { 20 20 }
+				parentanchor = vcenter
+				block "mod_def_button" {}
+			}
+		}
+		button_icon_cancel = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			block "module_clear_button" {}
+		}
+	}
+
+	### One entry of Colony Modules' queue (colony modules design § 5): its place,
+	### the world and the module (custom loc sr_mq_<n>_world_name and
+	### sr_mq_<n>_module_name, from the place's sr_mq_<n>_site and _type), and a
+	### button that removes it (sr_colony_module_queue_sgui, scope:op = the place).
+	### Fabrication builds place 1 next. 24 + 200 + 180 + 24 + 3 × 4 spacing + 2 × 4
+	### margin = 448, in the 480 column. Instances in te_sr_mq_rows
+	### (sr_sites_generated_rows.gui).
+	type te_sr_mq_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "mq_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				align = right|nobaseline
+				using = fontsize_medium
+				default_format = "#v"
+				block "mq_place" {}
+			}
+		}
+		widget = {
+			size = { 200 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 200
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "mq_world" {}
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "mq_module" {}
+			}
+		}
+		button_icon_cancel = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			block "mq_remove_button" {}
+		}
+	}
+
+	### The column heads above the Colony Modules rows: the same widths as
+	### te_sr_module_row, a cell's 52 for each module type.
+	type te_sr_module_header_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 116 20 }
+		}
+		textbox = {
+			size = { 36 20 }
+			align = left|nobaseline
+			using = fontsize_small
+			elide = right
+			text = "je_space_race_widget_modules_col_staffing"
+			tooltip = "je_space_race_widget_modules_staffing_tt"
+		}
+		textbox = {
+			size = { 52 20 }
+			align = left|nobaseline
+			using = fontsize_small
+			elide = right
+			text = "je_space_race_widget_modules_col_a"
+			tooltip = "je_space_race_widget_modules_col_spec_tt"
+		}
+		textbox = {
+			size = { 52 20 }
+			align = left|nobaseline
+			using = fontsize_small
+			elide = right
+			text = "je_space_race_widget_modules_col_b"
+			tooltip = "je_space_race_widget_modules_col_spec_tt"
+		}
+		textbox = {
+			size = { 52 20 }
+			align = left|nobaseline
+			using = fontsize_small
+			elide = right
+			text = "je_space_race_widget_modules_col_hab"
+			tooltip = "je_space_race_widget_mod_hab_tt"
+		}
+		textbox = {
+			size = { 52 20 }
+			align = left|nobaseline
+			using = fontsize_small
+			elide = right
+			text = "je_space_race_widget_modules_col_port"
+			tooltip = "je_space_race_widget_mod_port_tt"
+		}
+		textbox = {
+			size = { 52 20 }
+			align = left|nobaseline
+			using = fontsize_small
+			elide = right
+			text = "je_space_race_widget_modules_col_def"
+			tooltip = "je_space_race_widget_mod_def_tt"
+		}
+	}
+
+	### Colony Modules (solar colonization, simple and full colonies; colony
+	### modules design § 11): fabrication (points a month and the stock),
+	### shipments waiting and in flight, the modules' upkeep, the Extraplanetary
+	### Base room, the queue in order, then every colony we hold. Open by default; the flag is
+	### sr_panel_modules_closed.
+	type te_sr_sec_modules = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		spacing = 2
+		visible = "[And( JournalEntry.IsActive, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ) )]"
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_modules_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_modules_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_modules_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_modules_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_modules_closed'))]"
+
+			te_sr_note = {
+				text = "je_space_race_widget_modules_note"
+			}
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_fab_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_fab_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_fab_figure"
+				}
+			}
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_shipments_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_shipments_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_shipments_figure"
+				}
+			}
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_mod_upkeep_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_mod_upkeep_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_mod_upkeep_figure"
+				}
+			}
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_ebase_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_ebase_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_ebase_figure"
+				}
+			}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_settlers_empty"
+			}
+			### The queue, first in first out: place 1 is built next.
+			te_sr_subheader = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_1'), '(CFixedPoint)1' )]"
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_mq_header"
+				}
+			}
+			te_sr_mq_rows = {}
+			te_sr_module_header_row = {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)1' )]"
+			}
+			te_sr_module_rows = {}
+		}
+	}
+
 	### Everything a returning player checks, open by default.
 	type te_sr_status_sections = flowcontainer {
 		direction = vertical
@@ -5176,6 +5644,7 @@ types space_race_widget_types
 		te_sr_sec_colonies = {}
 		te_sr_sec_colony_fleets = {}
 		te_sr_sec_settlers = {}
+		te_sr_sec_modules = {}
 		te_sr_sec_solar_system = {}
 	}
 

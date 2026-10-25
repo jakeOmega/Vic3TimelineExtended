@@ -145,8 +145,8 @@ sr_emig_step_prio = {
 	}
 }
 
-# ---- The entry's two modifiers (design § 10.3, § 10.5) ------------------------------
-# Country scope. Both on the solar colonization entry at a multiplier, each
+# ---- The entry's three modifiers (design § 10.3, § 10.5; colony modules design § 8) --
+# Country scope. All on the solar colonization entry at a multiplier, each
 # removed first (a same-name add_modifier stacks), re-applied here only: from
 # the entry's pulse monthly, after the AI's review, and from the Settlers
 # button. Run it at most once per effect: whether has_modifier sees an
@@ -162,6 +162,10 @@ sr_emig_refresh_modifiers = {
 		if = {
 			limit = { has_modifier = sr_offworld_population }
 			remove_modifier = sr_offworld_population
+		}
+		if = {
+			limit = { has_modifier = sr_module_upkeep }
+			remove_modifier = sr_module_upkeep
 		}
 	}
 	if = {
@@ -180,6 +184,15 @@ sr_emig_refresh_modifiers = {
 		}
 		je:je_space_race_solar_colonization ?= {
 			add_modifier = { name = sr_offworld_population multiplier = sr_offworld_bonus_units }
+		}
+	}
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_mod_upkeep_levels >= 1
+		}
+		je:je_space_race_solar_colonization ?= {
+			add_modifier = { name = sr_module_upkeep multiplier = sr_mod_upkeep_units }
 		}
 	}
 }

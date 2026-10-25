@@ -1065,3 +1065,1861 @@ sr_cf_scope_site_held = {
 		AND = { scope:site = 34 global_var:sr_site_holder_sedna ?= this }
 	}
 }
+
+# ===== Modules (slice 4 design §§ 2, 5-6) =====
+# Per world, country scope:
+#   sr_mq_any_<key>               THIS has a module of it queued
+#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the
+#                                 queue has a free place, the cap has room counting
+#                                 queue and shipments, and a specialization's
+#                                 founding choice is made
+#   sr_mod_departs_<key>          a module can leave for it this month at no premium
+# Any scope: sr_site_shipping_<key>, a module is on its way there.
+sr_mq_any_valles_marineris = {
+	OR = {
+		has_variable = sr_mq_hab_valles_marineris
+		has_variable = sr_mq_a_valles_marineris
+		has_variable = sr_mq_b_valles_marineris
+		has_variable = sr_mq_port_valles_marineris
+		has_variable = sr_mq_def_valles_marineris
+	}
+}
+sr_mod_can_queue_a_valles_marineris = {
+	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_valles_marineris
+	sr_mod_spec_used_valles_marineris < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_valles_marineris = {
+	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_valles_marineris
+	sr_mod_spec_used_valles_marineris < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_valles_marineris = {
+	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_valles_marineris < 4
+}
+sr_mod_can_queue_def_valles_marineris = {
+	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_valles_marineris < 4
+}
+sr_mod_can_queue_port_valles_marineris = {
+	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_valles_marineris < 4
+}
+sr_mod_departs_valles_marineris = { sr_mod_departs = { BODY = mars } }
+sr_site_shipping_valles_marineris = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_valles_marineris
+		has_global_variable = sr_site_ship_a_valles_marineris
+		has_global_variable = sr_site_ship_b_valles_marineris
+		has_global_variable = sr_site_ship_port_valles_marineris
+		has_global_variable = sr_site_ship_def_valles_marineris
+	}
+}
+sr_mq_any_olympus_mons = {
+	OR = {
+		has_variable = sr_mq_hab_olympus_mons
+		has_variable = sr_mq_a_olympus_mons
+		has_variable = sr_mq_b_olympus_mons
+		has_variable = sr_mq_port_olympus_mons
+		has_variable = sr_mq_def_olympus_mons
+	}
+}
+sr_mod_can_queue_a_olympus_mons = {
+	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_olympus_mons
+	sr_mod_spec_used_olympus_mons < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_olympus_mons = {
+	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_olympus_mons
+	sr_mod_spec_used_olympus_mons < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_olympus_mons = {
+	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_olympus_mons < 3
+}
+sr_mod_can_queue_def_olympus_mons = {
+	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_olympus_mons < 3
+}
+sr_mod_can_queue_port_olympus_mons = {
+	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_olympus_mons < 3
+}
+sr_mod_departs_olympus_mons = { sr_mod_departs = { BODY = mars } }
+sr_site_shipping_olympus_mons = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_olympus_mons
+		has_global_variable = sr_site_ship_a_olympus_mons
+		has_global_variable = sr_site_ship_b_olympus_mons
+		has_global_variable = sr_site_ship_port_olympus_mons
+		has_global_variable = sr_site_ship_def_olympus_mons
+	}
+}
+sr_mq_any_hellas_planitia = {
+	OR = {
+		has_variable = sr_mq_hab_hellas_planitia
+		has_variable = sr_mq_a_hellas_planitia
+		has_variable = sr_mq_b_hellas_planitia
+		has_variable = sr_mq_port_hellas_planitia
+		has_variable = sr_mq_def_hellas_planitia
+	}
+}
+sr_mod_can_queue_a_hellas_planitia = {
+	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_hellas_planitia
+	sr_mod_spec_used_hellas_planitia < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_hellas_planitia = {
+	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_hellas_planitia
+	sr_mod_spec_used_hellas_planitia < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_hellas_planitia = {
+	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hellas_planitia < 4
+}
+sr_mod_can_queue_def_hellas_planitia = {
+	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hellas_planitia < 4
+}
+sr_mod_can_queue_port_hellas_planitia = {
+	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hellas_planitia < 4
+}
+sr_mod_departs_hellas_planitia = { sr_mod_departs = { BODY = mars } }
+sr_site_shipping_hellas_planitia = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_hellas_planitia
+		has_global_variable = sr_site_ship_a_hellas_planitia
+		has_global_variable = sr_site_ship_b_hellas_planitia
+		has_global_variable = sr_site_ship_port_hellas_planitia
+		has_global_variable = sr_site_ship_def_hellas_planitia
+	}
+}
+sr_mq_any_utopia_planitia = {
+	OR = {
+		has_variable = sr_mq_hab_utopia_planitia
+		has_variable = sr_mq_a_utopia_planitia
+		has_variable = sr_mq_b_utopia_planitia
+		has_variable = sr_mq_port_utopia_planitia
+		has_variable = sr_mq_def_utopia_planitia
+	}
+}
+sr_mod_can_queue_a_utopia_planitia = {
+	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_utopia_planitia
+	sr_mod_spec_used_utopia_planitia < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_utopia_planitia = {
+	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_utopia_planitia
+	sr_mod_spec_used_utopia_planitia < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_utopia_planitia = {
+	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_utopia_planitia < 4
+}
+sr_mod_can_queue_def_utopia_planitia = {
+	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_utopia_planitia < 4
+}
+sr_mod_can_queue_port_utopia_planitia = {
+	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_utopia_planitia < 4
+}
+sr_mod_departs_utopia_planitia = { sr_mod_departs = { BODY = mars } }
+sr_site_shipping_utopia_planitia = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_utopia_planitia
+		has_global_variable = sr_site_ship_a_utopia_planitia
+		has_global_variable = sr_site_ship_b_utopia_planitia
+		has_global_variable = sr_site_ship_port_utopia_planitia
+		has_global_variable = sr_site_ship_def_utopia_planitia
+	}
+}
+sr_mq_any_arcadia_planitia = {
+	OR = {
+		has_variable = sr_mq_hab_arcadia_planitia
+		has_variable = sr_mq_a_arcadia_planitia
+		has_variable = sr_mq_b_arcadia_planitia
+		has_variable = sr_mq_port_arcadia_planitia
+		has_variable = sr_mq_def_arcadia_planitia
+	}
+}
+sr_mod_can_queue_a_arcadia_planitia = {
+	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_arcadia_planitia
+	sr_mod_spec_used_arcadia_planitia < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_arcadia_planitia = {
+	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_arcadia_planitia
+	sr_mod_spec_used_arcadia_planitia < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_arcadia_planitia = {
+	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_arcadia_planitia < 3
+}
+sr_mod_can_queue_def_arcadia_planitia = {
+	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_arcadia_planitia < 3
+}
+sr_mod_can_queue_port_arcadia_planitia = {
+	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_arcadia_planitia < 3
+}
+sr_mod_departs_arcadia_planitia = { sr_mod_departs = { BODY = mars } }
+sr_site_shipping_arcadia_planitia = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_arcadia_planitia
+		has_global_variable = sr_site_ship_a_arcadia_planitia
+		has_global_variable = sr_site_ship_b_arcadia_planitia
+		has_global_variable = sr_site_ship_port_arcadia_planitia
+		has_global_variable = sr_site_ship_def_arcadia_planitia
+	}
+}
+sr_mq_any_ceres = {
+	OR = {
+		has_variable = sr_mq_hab_ceres
+		has_variable = sr_mq_a_ceres
+		has_variable = sr_mq_b_ceres
+		has_variable = sr_mq_port_ceres
+		has_variable = sr_mq_def_ceres
+	}
+}
+sr_mod_can_queue_a_ceres = {
+	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_ceres
+	sr_mod_spec_used_ceres < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_ceres = {
+	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_ceres
+	sr_mod_spec_used_ceres < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_ceres = {
+	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ceres < 3
+}
+sr_mod_can_queue_def_ceres = {
+	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ceres < 3
+}
+sr_mod_can_queue_port_ceres = {
+	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ceres < 3
+}
+sr_mod_departs_ceres = { sr_mod_departs = { BODY = ceres } }
+sr_site_shipping_ceres = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_ceres
+		has_global_variable = sr_site_ship_a_ceres
+		has_global_variable = sr_site_ship_b_ceres
+		has_global_variable = sr_site_ship_port_ceres
+		has_global_variable = sr_site_ship_def_ceres
+	}
+}
+sr_mq_any_vesta = {
+	OR = {
+		has_variable = sr_mq_hab_vesta
+		has_variable = sr_mq_a_vesta
+		has_variable = sr_mq_b_vesta
+		has_variable = sr_mq_port_vesta
+		has_variable = sr_mq_def_vesta
+	}
+}
+sr_mod_can_queue_a_vesta = {
+	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_vesta
+	sr_mod_spec_used_vesta < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_vesta = {
+	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_vesta
+	sr_mod_spec_used_vesta < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_vesta = {
+	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_vesta < 2
+}
+sr_mod_can_queue_def_vesta = {
+	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_vesta < 2
+}
+sr_mod_can_queue_port_vesta = {
+	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_vesta < 2
+}
+sr_mod_departs_vesta = { sr_mod_departs = { BODY = vesta } }
+sr_site_shipping_vesta = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_vesta
+		has_global_variable = sr_site_ship_a_vesta
+		has_global_variable = sr_site_ship_b_vesta
+		has_global_variable = sr_site_ship_port_vesta
+		has_global_variable = sr_site_ship_def_vesta
+	}
+}
+sr_mq_any_psyche = {
+	OR = {
+		has_variable = sr_mq_hab_psyche
+		has_variable = sr_mq_a_psyche
+		has_variable = sr_mq_b_psyche
+		has_variable = sr_mq_port_psyche
+		has_variable = sr_mq_def_psyche
+	}
+}
+sr_mod_can_queue_a_psyche = {
+	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_psyche
+	sr_mod_spec_used_psyche < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_psyche = {
+	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_psyche
+	sr_mod_spec_used_psyche < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_psyche = {
+	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_psyche < 2
+}
+sr_mod_can_queue_def_psyche = {
+	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_psyche < 2
+}
+sr_mod_can_queue_port_psyche = {
+	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_psyche < 2
+}
+sr_mod_departs_psyche = { sr_mod_departs = { BODY = psyche } }
+sr_site_shipping_psyche = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_psyche
+		has_global_variable = sr_site_ship_a_psyche
+		has_global_variable = sr_site_ship_b_psyche
+		has_global_variable = sr_site_ship_port_psyche
+		has_global_variable = sr_site_ship_def_psyche
+	}
+}
+sr_mq_any_pallas = {
+	OR = {
+		has_variable = sr_mq_hab_pallas
+		has_variable = sr_mq_a_pallas
+		has_variable = sr_mq_b_pallas
+		has_variable = sr_mq_port_pallas
+		has_variable = sr_mq_def_pallas
+	}
+}
+sr_mod_can_queue_a_pallas = {
+	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_pallas
+	sr_mod_spec_used_pallas < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_pallas = {
+	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_pallas
+	sr_mod_spec_used_pallas < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_pallas = {
+	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_pallas < 2
+}
+sr_mod_can_queue_def_pallas = {
+	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_pallas < 2
+}
+sr_mod_can_queue_port_pallas = {
+	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_pallas < 2
+}
+sr_mod_departs_pallas = { sr_mod_departs = { BODY = pallas } }
+sr_site_shipping_pallas = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_pallas
+		has_global_variable = sr_site_ship_a_pallas
+		has_global_variable = sr_site_ship_b_pallas
+		has_global_variable = sr_site_ship_port_pallas
+		has_global_variable = sr_site_ship_def_pallas
+	}
+}
+sr_mq_any_hygiea = {
+	OR = {
+		has_variable = sr_mq_hab_hygiea
+		has_variable = sr_mq_a_hygiea
+		has_variable = sr_mq_b_hygiea
+		has_variable = sr_mq_port_hygiea
+		has_variable = sr_mq_def_hygiea
+	}
+}
+sr_mod_can_queue_a_hygiea = {
+	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_hygiea
+	sr_mod_spec_used_hygiea < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_hygiea = {
+	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_hygiea
+	sr_mod_spec_used_hygiea < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_hygiea = {
+	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hygiea < 2
+}
+sr_mod_can_queue_def_hygiea = {
+	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hygiea < 2
+}
+sr_mod_can_queue_port_hygiea = {
+	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hygiea < 2
+}
+sr_mod_departs_hygiea = { sr_mod_departs = { BODY = hygiea } }
+sr_site_shipping_hygiea = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_hygiea
+		has_global_variable = sr_site_ship_a_hygiea
+		has_global_variable = sr_site_ship_b_hygiea
+		has_global_variable = sr_site_ship_port_hygiea
+		has_global_variable = sr_site_ship_def_hygiea
+	}
+}
+sr_mq_any_io = {
+	OR = {
+		has_variable = sr_mq_hab_io
+		has_variable = sr_mq_a_io
+		has_variable = sr_mq_b_io
+		has_variable = sr_mq_port_io
+		has_variable = sr_mq_def_io
+	}
+}
+sr_mod_can_queue_a_io = {
+	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_io
+	sr_mod_spec_used_io < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_io = {
+	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_io
+	sr_mod_spec_used_io < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_io = {
+	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_io < 2
+}
+sr_mod_can_queue_def_io = {
+	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_io < 2
+}
+sr_mod_can_queue_port_io = {
+	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_io < 2
+}
+sr_mod_departs_io = { sr_mod_departs = { BODY = jupiter } }
+sr_site_shipping_io = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_io
+		has_global_variable = sr_site_ship_a_io
+		has_global_variable = sr_site_ship_b_io
+		has_global_variable = sr_site_ship_port_io
+		has_global_variable = sr_site_ship_def_io
+	}
+}
+sr_mq_any_europa = {
+	OR = {
+		has_variable = sr_mq_hab_europa
+		has_variable = sr_mq_a_europa
+		has_variable = sr_mq_b_europa
+		has_variable = sr_mq_port_europa
+		has_variable = sr_mq_def_europa
+	}
+}
+sr_mod_can_queue_a_europa = {
+	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_europa
+	sr_mod_spec_used_europa < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_europa = {
+	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_europa
+	sr_mod_spec_used_europa < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_europa = {
+	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_europa < 3
+}
+sr_mod_can_queue_def_europa = {
+	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_europa < 3
+}
+sr_mod_can_queue_port_europa = {
+	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_europa < 3
+}
+sr_mod_departs_europa = { sr_mod_departs = { BODY = jupiter } }
+sr_site_shipping_europa = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_europa
+		has_global_variable = sr_site_ship_a_europa
+		has_global_variable = sr_site_ship_b_europa
+		has_global_variable = sr_site_ship_port_europa
+		has_global_variable = sr_site_ship_def_europa
+	}
+}
+sr_mq_any_ganymede = {
+	OR = {
+		has_variable = sr_mq_hab_ganymede
+		has_variable = sr_mq_a_ganymede
+		has_variable = sr_mq_b_ganymede
+		has_variable = sr_mq_port_ganymede
+		has_variable = sr_mq_def_ganymede
+	}
+}
+sr_mod_can_queue_a_ganymede = {
+	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_ganymede
+	sr_mod_spec_used_ganymede < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_ganymede = {
+	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_ganymede
+	sr_mod_spec_used_ganymede < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_ganymede = {
+	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ganymede < 3
+}
+sr_mod_can_queue_def_ganymede = {
+	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ganymede < 3
+}
+sr_mod_can_queue_port_ganymede = {
+	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ganymede < 3
+}
+sr_mod_departs_ganymede = { sr_mod_departs = { BODY = jupiter } }
+sr_site_shipping_ganymede = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_ganymede
+		has_global_variable = sr_site_ship_a_ganymede
+		has_global_variable = sr_site_ship_b_ganymede
+		has_global_variable = sr_site_ship_port_ganymede
+		has_global_variable = sr_site_ship_def_ganymede
+	}
+}
+sr_mq_any_callisto = {
+	OR = {
+		has_variable = sr_mq_hab_callisto
+		has_variable = sr_mq_a_callisto
+		has_variable = sr_mq_b_callisto
+		has_variable = sr_mq_port_callisto
+		has_variable = sr_mq_def_callisto
+	}
+}
+sr_mod_can_queue_a_callisto = {
+	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_callisto
+	sr_mod_spec_used_callisto < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_callisto = {
+	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_callisto
+	sr_mod_spec_used_callisto < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_callisto = {
+	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_callisto < 3
+}
+sr_mod_can_queue_def_callisto = {
+	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_callisto < 3
+}
+sr_mod_can_queue_port_callisto = {
+	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_callisto < 3
+}
+sr_mod_departs_callisto = { sr_mod_departs = { BODY = jupiter } }
+sr_site_shipping_callisto = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_callisto
+		has_global_variable = sr_site_ship_a_callisto
+		has_global_variable = sr_site_ship_b_callisto
+		has_global_variable = sr_site_ship_port_callisto
+		has_global_variable = sr_site_ship_def_callisto
+	}
+}
+sr_mq_any_himalia = {
+	OR = {
+		has_variable = sr_mq_hab_himalia
+		has_variable = sr_mq_a_himalia
+		has_variable = sr_mq_b_himalia
+		has_variable = sr_mq_port_himalia
+		has_variable = sr_mq_def_himalia
+	}
+}
+sr_mod_can_queue_a_himalia = {
+	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_himalia
+	sr_mod_spec_used_himalia < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_himalia = {
+	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_himalia
+	sr_mod_spec_used_himalia < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_himalia = {
+	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_himalia < 1
+}
+sr_mod_can_queue_def_himalia = {
+	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_himalia < 1
+}
+sr_mod_can_queue_port_himalia = {
+	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_himalia < 1
+}
+sr_mod_departs_himalia = { sr_mod_departs = { BODY = jupiter } }
+sr_site_shipping_himalia = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_himalia
+		has_global_variable = sr_site_ship_a_himalia
+		has_global_variable = sr_site_ship_b_himalia
+		has_global_variable = sr_site_ship_port_himalia
+		has_global_variable = sr_site_ship_def_himalia
+	}
+}
+sr_mq_any_amalthea = {
+	OR = {
+		has_variable = sr_mq_hab_amalthea
+		has_variable = sr_mq_a_amalthea
+		has_variable = sr_mq_b_amalthea
+		has_variable = sr_mq_port_amalthea
+		has_variable = sr_mq_def_amalthea
+	}
+}
+sr_mod_can_queue_a_amalthea = {
+	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_amalthea
+	sr_mod_spec_used_amalthea < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_amalthea = {
+	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_amalthea
+	sr_mod_spec_used_amalthea < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_amalthea = {
+	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_amalthea < 1
+}
+sr_mod_can_queue_def_amalthea = {
+	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_amalthea < 1
+}
+sr_mod_can_queue_port_amalthea = {
+	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_amalthea < 1
+}
+sr_mod_departs_amalthea = { sr_mod_departs = { BODY = jupiter } }
+sr_site_shipping_amalthea = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_amalthea
+		has_global_variable = sr_site_ship_a_amalthea
+		has_global_variable = sr_site_ship_b_amalthea
+		has_global_variable = sr_site_ship_port_amalthea
+		has_global_variable = sr_site_ship_def_amalthea
+	}
+}
+sr_mq_any_venus = {
+	OR = {
+		has_variable = sr_mq_hab_venus
+		has_variable = sr_mq_a_venus
+		has_variable = sr_mq_b_venus
+		has_variable = sr_mq_port_venus
+		has_variable = sr_mq_def_venus
+	}
+}
+sr_mod_can_queue_a_venus = {
+	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_venus
+	sr_mod_spec_used_venus < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_venus = {
+	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_venus
+	sr_mod_spec_used_venus < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_venus = {
+	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_venus < 2
+}
+sr_mod_can_queue_def_venus = {
+	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_venus < 2
+}
+sr_mod_can_queue_port_venus = {
+	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_venus < 2
+}
+sr_mod_departs_venus = { sr_mod_departs = { BODY = venus } }
+sr_site_shipping_venus = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_venus
+		has_global_variable = sr_site_ship_a_venus
+		has_global_variable = sr_site_ship_b_venus
+		has_global_variable = sr_site_ship_port_venus
+		has_global_variable = sr_site_ship_def_venus
+	}
+}
+sr_mq_any_mercury = {
+	OR = {
+		has_variable = sr_mq_hab_mercury
+		has_variable = sr_mq_a_mercury
+		has_variable = sr_mq_b_mercury
+		has_variable = sr_mq_port_mercury
+		has_variable = sr_mq_def_mercury
+	}
+}
+sr_mod_can_queue_a_mercury = {
+	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_mercury
+	sr_mod_spec_used_mercury < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_mercury = {
+	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_mercury
+	sr_mod_spec_used_mercury < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_mercury = {
+	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_mercury < 3
+}
+sr_mod_can_queue_def_mercury = {
+	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_mercury < 3
+}
+sr_mod_can_queue_port_mercury = {
+	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_mercury < 3
+}
+sr_mod_departs_mercury = { always = yes }
+sr_site_shipping_mercury = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_mercury
+		has_global_variable = sr_site_ship_a_mercury
+		has_global_variable = sr_site_ship_b_mercury
+		has_global_variable = sr_site_ship_port_mercury
+		has_global_variable = sr_site_ship_def_mercury
+	}
+}
+sr_mq_any_titan = {
+	OR = {
+		has_variable = sr_mq_hab_titan
+		has_variable = sr_mq_a_titan
+		has_variable = sr_mq_b_titan
+		has_variable = sr_mq_port_titan
+		has_variable = sr_mq_def_titan
+	}
+}
+sr_mod_can_queue_a_titan = {
+	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_titan
+	sr_mod_spec_used_titan < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_titan = {
+	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_titan
+	sr_mod_spec_used_titan < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_titan = {
+	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titan < 3
+}
+sr_mod_can_queue_def_titan = {
+	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titan < 3
+}
+sr_mod_can_queue_port_titan = {
+	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titan < 3
+}
+sr_mod_departs_titan = { sr_mod_departs = { BODY = saturn } }
+sr_site_shipping_titan = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_titan
+		has_global_variable = sr_site_ship_a_titan
+		has_global_variable = sr_site_ship_b_titan
+		has_global_variable = sr_site_ship_port_titan
+		has_global_variable = sr_site_ship_def_titan
+	}
+}
+sr_mq_any_enceladus = {
+	OR = {
+		has_variable = sr_mq_hab_enceladus
+		has_variable = sr_mq_a_enceladus
+		has_variable = sr_mq_b_enceladus
+		has_variable = sr_mq_port_enceladus
+		has_variable = sr_mq_def_enceladus
+	}
+}
+sr_mod_can_queue_a_enceladus = {
+	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_enceladus
+	sr_mod_spec_used_enceladus < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_enceladus = {
+	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_enceladus
+	sr_mod_spec_used_enceladus < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_enceladus = {
+	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_enceladus < 2
+}
+sr_mod_can_queue_def_enceladus = {
+	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_enceladus < 2
+}
+sr_mod_can_queue_port_enceladus = {
+	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_enceladus < 2
+}
+sr_mod_departs_enceladus = { sr_mod_departs = { BODY = saturn } }
+sr_site_shipping_enceladus = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_enceladus
+		has_global_variable = sr_site_ship_a_enceladus
+		has_global_variable = sr_site_ship_b_enceladus
+		has_global_variable = sr_site_ship_port_enceladus
+		has_global_variable = sr_site_ship_def_enceladus
+	}
+}
+sr_mq_any_rhea = {
+	OR = {
+		has_variable = sr_mq_hab_rhea
+		has_variable = sr_mq_a_rhea
+		has_variable = sr_mq_b_rhea
+		has_variable = sr_mq_port_rhea
+		has_variable = sr_mq_def_rhea
+	}
+}
+sr_mod_can_queue_a_rhea = {
+	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_rhea
+	sr_mod_spec_used_rhea < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_rhea = {
+	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_rhea
+	sr_mod_spec_used_rhea < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_rhea = {
+	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_rhea < 2
+}
+sr_mod_can_queue_def_rhea = {
+	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_rhea < 2
+}
+sr_mod_can_queue_port_rhea = {
+	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_rhea < 2
+}
+sr_mod_departs_rhea = { sr_mod_departs = { BODY = saturn } }
+sr_site_shipping_rhea = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_rhea
+		has_global_variable = sr_site_ship_a_rhea
+		has_global_variable = sr_site_ship_b_rhea
+		has_global_variable = sr_site_ship_port_rhea
+		has_global_variable = sr_site_ship_def_rhea
+	}
+}
+sr_mq_any_mimas = {
+	OR = {
+		has_variable = sr_mq_hab_mimas
+		has_variable = sr_mq_a_mimas
+		has_variable = sr_mq_b_mimas
+		has_variable = sr_mq_port_mimas
+		has_variable = sr_mq_def_mimas
+	}
+}
+sr_mod_can_queue_a_mimas = {
+	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_mimas
+	sr_mod_spec_used_mimas < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_mimas = {
+	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_mimas
+	sr_mod_spec_used_mimas < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_mimas = {
+	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_mimas < 1
+}
+sr_mod_can_queue_def_mimas = {
+	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_mimas < 1
+}
+sr_mod_can_queue_port_mimas = {
+	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_mimas < 1
+}
+sr_mod_departs_mimas = { sr_mod_departs = { BODY = saturn } }
+sr_site_shipping_mimas = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_mimas
+		has_global_variable = sr_site_ship_a_mimas
+		has_global_variable = sr_site_ship_b_mimas
+		has_global_variable = sr_site_ship_port_mimas
+		has_global_variable = sr_site_ship_def_mimas
+	}
+}
+sr_mq_any_iapetus = {
+	OR = {
+		has_variable = sr_mq_hab_iapetus
+		has_variable = sr_mq_a_iapetus
+		has_variable = sr_mq_b_iapetus
+		has_variable = sr_mq_port_iapetus
+		has_variable = sr_mq_def_iapetus
+	}
+}
+sr_mod_can_queue_a_iapetus = {
+	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_iapetus
+	sr_mod_spec_used_iapetus < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_iapetus = {
+	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_iapetus
+	sr_mod_spec_used_iapetus < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_iapetus = {
+	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_iapetus < 2
+}
+sr_mod_can_queue_def_iapetus = {
+	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_iapetus < 2
+}
+sr_mod_can_queue_port_iapetus = {
+	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_iapetus < 2
+}
+sr_mod_departs_iapetus = { sr_mod_departs = { BODY = saturn } }
+sr_site_shipping_iapetus = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_iapetus
+		has_global_variable = sr_site_ship_a_iapetus
+		has_global_variable = sr_site_ship_b_iapetus
+		has_global_variable = sr_site_ship_port_iapetus
+		has_global_variable = sr_site_ship_def_iapetus
+	}
+}
+sr_mq_any_titania = {
+	OR = {
+		has_variable = sr_mq_hab_titania
+		has_variable = sr_mq_a_titania
+		has_variable = sr_mq_b_titania
+		has_variable = sr_mq_port_titania
+		has_variable = sr_mq_def_titania
+	}
+}
+sr_mod_can_queue_a_titania = {
+	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_titania
+	sr_mod_spec_used_titania < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_titania = {
+	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_titania
+	sr_mod_spec_used_titania < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_titania = {
+	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titania < 2
+}
+sr_mod_can_queue_def_titania = {
+	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titania < 2
+}
+sr_mod_can_queue_port_titania = {
+	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titania < 2
+}
+sr_mod_departs_titania = { sr_mod_departs = { BODY = uranus } }
+sr_site_shipping_titania = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_titania
+		has_global_variable = sr_site_ship_a_titania
+		has_global_variable = sr_site_ship_b_titania
+		has_global_variable = sr_site_ship_port_titania
+		has_global_variable = sr_site_ship_def_titania
+	}
+}
+sr_mq_any_oberon = {
+	OR = {
+		has_variable = sr_mq_hab_oberon
+		has_variable = sr_mq_a_oberon
+		has_variable = sr_mq_b_oberon
+		has_variable = sr_mq_port_oberon
+		has_variable = sr_mq_def_oberon
+	}
+}
+sr_mod_can_queue_a_oberon = {
+	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_oberon
+	sr_mod_spec_used_oberon < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_oberon = {
+	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_oberon
+	sr_mod_spec_used_oberon < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_oberon = {
+	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_oberon < 2
+}
+sr_mod_can_queue_def_oberon = {
+	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_oberon < 2
+}
+sr_mod_can_queue_port_oberon = {
+	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_oberon < 2
+}
+sr_mod_departs_oberon = { sr_mod_departs = { BODY = uranus } }
+sr_site_shipping_oberon = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_oberon
+		has_global_variable = sr_site_ship_a_oberon
+		has_global_variable = sr_site_ship_b_oberon
+		has_global_variable = sr_site_ship_port_oberon
+		has_global_variable = sr_site_ship_def_oberon
+	}
+}
+sr_mq_any_miranda = {
+	OR = {
+		has_variable = sr_mq_hab_miranda
+		has_variable = sr_mq_a_miranda
+		has_variable = sr_mq_b_miranda
+		has_variable = sr_mq_port_miranda
+		has_variable = sr_mq_def_miranda
+	}
+}
+sr_mod_can_queue_a_miranda = {
+	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_miranda
+	sr_mod_spec_used_miranda < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_miranda = {
+	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_miranda
+	sr_mod_spec_used_miranda < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_miranda = {
+	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_miranda < 1
+}
+sr_mod_can_queue_def_miranda = {
+	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_miranda < 1
+}
+sr_mod_can_queue_port_miranda = {
+	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_miranda < 1
+}
+sr_mod_departs_miranda = { sr_mod_departs = { BODY = uranus } }
+sr_site_shipping_miranda = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_miranda
+		has_global_variable = sr_site_ship_a_miranda
+		has_global_variable = sr_site_ship_b_miranda
+		has_global_variable = sr_site_ship_port_miranda
+		has_global_variable = sr_site_ship_def_miranda
+	}
+}
+sr_mq_any_ariel = {
+	OR = {
+		has_variable = sr_mq_hab_ariel
+		has_variable = sr_mq_a_ariel
+		has_variable = sr_mq_b_ariel
+		has_variable = sr_mq_port_ariel
+		has_variable = sr_mq_def_ariel
+	}
+}
+sr_mod_can_queue_a_ariel = {
+	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_ariel
+	sr_mod_spec_used_ariel < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_ariel = {
+	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_ariel
+	sr_mod_spec_used_ariel < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_ariel = {
+	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ariel < 2
+}
+sr_mod_can_queue_def_ariel = {
+	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ariel < 2
+}
+sr_mod_can_queue_port_ariel = {
+	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ariel < 2
+}
+sr_mod_departs_ariel = { sr_mod_departs = { BODY = uranus } }
+sr_site_shipping_ariel = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_ariel
+		has_global_variable = sr_site_ship_a_ariel
+		has_global_variable = sr_site_ship_b_ariel
+		has_global_variable = sr_site_ship_port_ariel
+		has_global_variable = sr_site_ship_def_ariel
+	}
+}
+sr_mq_any_triton = {
+	OR = {
+		has_variable = sr_mq_hab_triton
+		has_variable = sr_mq_a_triton
+		has_variable = sr_mq_b_triton
+		has_variable = sr_mq_port_triton
+		has_variable = sr_mq_def_triton
+	}
+}
+sr_mod_can_queue_a_triton = {
+	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_triton
+	sr_mod_spec_used_triton < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_triton = {
+	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_triton
+	sr_mod_spec_used_triton < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_triton = {
+	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_triton < 2
+}
+sr_mod_can_queue_def_triton = {
+	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_triton < 2
+}
+sr_mod_can_queue_port_triton = {
+	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_triton < 2
+}
+sr_mod_departs_triton = { sr_mod_departs = { BODY = neptune } }
+sr_site_shipping_triton = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_triton
+		has_global_variable = sr_site_ship_a_triton
+		has_global_variable = sr_site_ship_b_triton
+		has_global_variable = sr_site_ship_port_triton
+		has_global_variable = sr_site_ship_def_triton
+	}
+}
+sr_mq_any_proteus = {
+	OR = {
+		has_variable = sr_mq_hab_proteus
+		has_variable = sr_mq_a_proteus
+		has_variable = sr_mq_b_proteus
+		has_variable = sr_mq_port_proteus
+		has_variable = sr_mq_def_proteus
+	}
+}
+sr_mod_can_queue_a_proteus = {
+	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_proteus
+	sr_mod_spec_used_proteus < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_proteus = {
+	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_proteus
+	sr_mod_spec_used_proteus < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_proteus = {
+	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_proteus < 1
+}
+sr_mod_can_queue_def_proteus = {
+	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_proteus < 1
+}
+sr_mod_can_queue_port_proteus = {
+	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_proteus < 1
+}
+sr_mod_departs_proteus = { sr_mod_departs = { BODY = neptune } }
+sr_site_shipping_proteus = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_proteus
+		has_global_variable = sr_site_ship_a_proteus
+		has_global_variable = sr_site_ship_b_proteus
+		has_global_variable = sr_site_ship_port_proteus
+		has_global_variable = sr_site_ship_def_proteus
+	}
+}
+sr_mq_any_pluto = {
+	OR = {
+		has_variable = sr_mq_hab_pluto
+		has_variable = sr_mq_a_pluto
+		has_variable = sr_mq_b_pluto
+		has_variable = sr_mq_port_pluto
+		has_variable = sr_mq_def_pluto
+	}
+}
+sr_mod_can_queue_a_pluto = {
+	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_pluto
+	sr_mod_spec_used_pluto < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_pluto = {
+	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_pluto
+	sr_mod_spec_used_pluto < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_pluto = {
+	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_pluto < 2
+}
+sr_mod_can_queue_def_pluto = {
+	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_pluto < 2
+}
+sr_mod_can_queue_port_pluto = {
+	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_pluto < 2
+}
+sr_mod_departs_pluto = { sr_mod_departs = { BODY = kuiper } }
+sr_site_shipping_pluto = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_pluto
+		has_global_variable = sr_site_ship_a_pluto
+		has_global_variable = sr_site_ship_b_pluto
+		has_global_variable = sr_site_ship_port_pluto
+		has_global_variable = sr_site_ship_def_pluto
+	}
+}
+sr_mq_any_eris = {
+	OR = {
+		has_variable = sr_mq_hab_eris
+		has_variable = sr_mq_a_eris
+		has_variable = sr_mq_b_eris
+		has_variable = sr_mq_port_eris
+		has_variable = sr_mq_def_eris
+	}
+}
+sr_mod_can_queue_a_eris = {
+	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_eris
+	sr_mod_spec_used_eris < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_eris = {
+	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_eris
+	sr_mod_spec_used_eris < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_eris = {
+	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_eris < 1
+}
+sr_mod_can_queue_def_eris = {
+	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_eris < 1
+}
+sr_mod_can_queue_port_eris = {
+	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_eris < 1
+}
+sr_mod_departs_eris = { sr_mod_departs = { BODY = kuiper } }
+sr_site_shipping_eris = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_eris
+		has_global_variable = sr_site_ship_a_eris
+		has_global_variable = sr_site_ship_b_eris
+		has_global_variable = sr_site_ship_port_eris
+		has_global_variable = sr_site_ship_def_eris
+	}
+}
+sr_mq_any_makemake = {
+	OR = {
+		has_variable = sr_mq_hab_makemake
+		has_variable = sr_mq_a_makemake
+		has_variable = sr_mq_b_makemake
+		has_variable = sr_mq_port_makemake
+		has_variable = sr_mq_def_makemake
+	}
+}
+sr_mod_can_queue_a_makemake = {
+	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_makemake
+	sr_mod_spec_used_makemake < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_makemake = {
+	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_makemake
+	sr_mod_spec_used_makemake < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_makemake = {
+	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_makemake < 1
+}
+sr_mod_can_queue_def_makemake = {
+	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_makemake < 1
+}
+sr_mod_can_queue_port_makemake = {
+	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_makemake < 1
+}
+sr_mod_departs_makemake = { sr_mod_departs = { BODY = kuiper } }
+sr_site_shipping_makemake = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_makemake
+		has_global_variable = sr_site_ship_a_makemake
+		has_global_variable = sr_site_ship_b_makemake
+		has_global_variable = sr_site_ship_port_makemake
+		has_global_variable = sr_site_ship_def_makemake
+	}
+}
+sr_mq_any_haumea = {
+	OR = {
+		has_variable = sr_mq_hab_haumea
+		has_variable = sr_mq_a_haumea
+		has_variable = sr_mq_b_haumea
+		has_variable = sr_mq_port_haumea
+		has_variable = sr_mq_def_haumea
+	}
+}
+sr_mod_can_queue_a_haumea = {
+	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_haumea
+	sr_mod_spec_used_haumea < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_haumea = {
+	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_haumea
+	sr_mod_spec_used_haumea < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_haumea = {
+	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_haumea < 1
+}
+sr_mod_can_queue_def_haumea = {
+	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_haumea < 1
+}
+sr_mod_can_queue_port_haumea = {
+	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_haumea < 1
+}
+sr_mod_departs_haumea = { sr_mod_departs = { BODY = kuiper } }
+sr_site_shipping_haumea = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_haumea
+		has_global_variable = sr_site_ship_a_haumea
+		has_global_variable = sr_site_ship_b_haumea
+		has_global_variable = sr_site_ship_port_haumea
+		has_global_variable = sr_site_ship_def_haumea
+	}
+}
+sr_mq_any_sedna = {
+	OR = {
+		has_variable = sr_mq_hab_sedna
+		has_variable = sr_mq_a_sedna
+		has_variable = sr_mq_b_sedna
+		has_variable = sr_mq_port_sedna
+		has_variable = sr_mq_def_sedna
+	}
+}
+sr_mod_can_queue_a_sedna = {
+	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_sedna
+	sr_mod_spec_used_sedna < sr_mod_spec_budget
+}
+sr_mod_can_queue_b_sedna = {
+	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
+	has_global_variable = sr_site_spec_sedna
+	sr_mod_spec_used_sedna < sr_mod_spec_budget
+}
+sr_mod_can_queue_hab_sedna = {
+	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_sedna < 1
+}
+sr_mod_can_queue_def_sedna = {
+	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_sedna < 1
+}
+sr_mod_can_queue_port_sedna = {
+	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_sedna < 1
+}
+sr_mod_departs_sedna = { sr_mod_departs = { BODY = kuiper } }
+sr_site_shipping_sedna = {
+	OR = {
+		has_global_variable = sr_site_ship_hab_sedna
+		has_global_variable = sr_site_ship_a_sedna
+		has_global_variable = sr_site_ship_b_sedna
+		has_global_variable = sr_site_ship_port_sedna
+		has_global_variable = sr_site_ship_def_sedna
+	}
+}
+
+# THIS's module queue has a free place (of 20).
+sr_mq_has_room = { NOT = { has_variable = sr_mq_20_site } }
+
+# The queue scripted GUI's place (scope:op) holds an entry.
+sr_mq_scope_place_filled = {
+	OR = {
+		AND = { scope:op = 1 has_variable = sr_mq_1_site }
+		AND = { scope:op = 2 has_variable = sr_mq_2_site }
+		AND = { scope:op = 3 has_variable = sr_mq_3_site }
+		AND = { scope:op = 4 has_variable = sr_mq_4_site }
+		AND = { scope:op = 5 has_variable = sr_mq_5_site }
+		AND = { scope:op = 6 has_variable = sr_mq_6_site }
+		AND = { scope:op = 7 has_variable = sr_mq_7_site }
+		AND = { scope:op = 8 has_variable = sr_mq_8_site }
+		AND = { scope:op = 9 has_variable = sr_mq_9_site }
+		AND = { scope:op = 10 has_variable = sr_mq_10_site }
+		AND = { scope:op = 11 has_variable = sr_mq_11_site }
+		AND = { scope:op = 12 has_variable = sr_mq_12_site }
+		AND = { scope:op = 13 has_variable = sr_mq_13_site }
+		AND = { scope:op = 14 has_variable = sr_mq_14_site }
+		AND = { scope:op = 15 has_variable = sr_mq_15_site }
+		AND = { scope:op = 16 has_variable = sr_mq_16_site }
+		AND = { scope:op = 17 has_variable = sr_mq_17_site }
+		AND = { scope:op = 18 has_variable = sr_mq_18_site }
+		AND = { scope:op = 19 has_variable = sr_mq_19_site }
+		AND = { scope:op = 20 has_variable = sr_mq_20_site }
+	}
+}
+
+# THIS has a module queued at any world (the AI's method).
+sr_mq_any = {
+	OR = {
+		sr_mq_any_valles_marineris = yes
+		sr_mq_any_olympus_mons = yes
+		sr_mq_any_hellas_planitia = yes
+		sr_mq_any_utopia_planitia = yes
+		sr_mq_any_arcadia_planitia = yes
+		sr_mq_any_ceres = yes
+		sr_mq_any_vesta = yes
+		sr_mq_any_psyche = yes
+		sr_mq_any_pallas = yes
+		sr_mq_any_hygiea = yes
+		sr_mq_any_io = yes
+		sr_mq_any_europa = yes
+		sr_mq_any_ganymede = yes
+		sr_mq_any_callisto = yes
+		sr_mq_any_himalia = yes
+		sr_mq_any_amalthea = yes
+		sr_mq_any_venus = yes
+		sr_mq_any_mercury = yes
+		sr_mq_any_titan = yes
+		sr_mq_any_enceladus = yes
+		sr_mq_any_rhea = yes
+		sr_mq_any_mimas = yes
+		sr_mq_any_iapetus = yes
+		sr_mq_any_titania = yes
+		sr_mq_any_oberon = yes
+		sr_mq_any_miranda = yes
+		sr_mq_any_ariel = yes
+		sr_mq_any_triton = yes
+		sr_mq_any_proteus = yes
+		sr_mq_any_pluto = yes
+		sr_mq_any_eris = yes
+		sr_mq_any_makemake = yes
+		sr_mq_any_haumea = yes
+		sr_mq_any_sedna = yes
+	}
+}
+
+# The module scripted GUI's world and type (scope:site, scope:op) may be queued.
+sr_mod_scope_can_queue = {
+	OR = {
+		AND = { scope:site = 1 scope:op = 1 sr_mod_can_queue_a_valles_marineris = yes }
+		AND = { scope:site = 1 scope:op = 2 sr_mod_can_queue_b_valles_marineris = yes }
+		AND = { scope:site = 1 scope:op = 3 sr_mod_can_queue_hab_valles_marineris = yes }
+		AND = { scope:site = 1 scope:op = 4 sr_mod_can_queue_def_valles_marineris = yes }
+		AND = { scope:site = 1 scope:op = 5 sr_mod_can_queue_port_valles_marineris = yes }
+		AND = { scope:site = 2 scope:op = 1 sr_mod_can_queue_a_olympus_mons = yes }
+		AND = { scope:site = 2 scope:op = 2 sr_mod_can_queue_b_olympus_mons = yes }
+		AND = { scope:site = 2 scope:op = 3 sr_mod_can_queue_hab_olympus_mons = yes }
+		AND = { scope:site = 2 scope:op = 4 sr_mod_can_queue_def_olympus_mons = yes }
+		AND = { scope:site = 2 scope:op = 5 sr_mod_can_queue_port_olympus_mons = yes }
+		AND = { scope:site = 3 scope:op = 1 sr_mod_can_queue_a_hellas_planitia = yes }
+		AND = { scope:site = 3 scope:op = 2 sr_mod_can_queue_b_hellas_planitia = yes }
+		AND = { scope:site = 3 scope:op = 3 sr_mod_can_queue_hab_hellas_planitia = yes }
+		AND = { scope:site = 3 scope:op = 4 sr_mod_can_queue_def_hellas_planitia = yes }
+		AND = { scope:site = 3 scope:op = 5 sr_mod_can_queue_port_hellas_planitia = yes }
+		AND = { scope:site = 4 scope:op = 1 sr_mod_can_queue_a_utopia_planitia = yes }
+		AND = { scope:site = 4 scope:op = 2 sr_mod_can_queue_b_utopia_planitia = yes }
+		AND = { scope:site = 4 scope:op = 3 sr_mod_can_queue_hab_utopia_planitia = yes }
+		AND = { scope:site = 4 scope:op = 4 sr_mod_can_queue_def_utopia_planitia = yes }
+		AND = { scope:site = 4 scope:op = 5 sr_mod_can_queue_port_utopia_planitia = yes }
+		AND = { scope:site = 5 scope:op = 1 sr_mod_can_queue_a_arcadia_planitia = yes }
+		AND = { scope:site = 5 scope:op = 2 sr_mod_can_queue_b_arcadia_planitia = yes }
+		AND = { scope:site = 5 scope:op = 3 sr_mod_can_queue_hab_arcadia_planitia = yes }
+		AND = { scope:site = 5 scope:op = 4 sr_mod_can_queue_def_arcadia_planitia = yes }
+		AND = { scope:site = 5 scope:op = 5 sr_mod_can_queue_port_arcadia_planitia = yes }
+		AND = { scope:site = 6 scope:op = 1 sr_mod_can_queue_a_ceres = yes }
+		AND = { scope:site = 6 scope:op = 2 sr_mod_can_queue_b_ceres = yes }
+		AND = { scope:site = 6 scope:op = 3 sr_mod_can_queue_hab_ceres = yes }
+		AND = { scope:site = 6 scope:op = 4 sr_mod_can_queue_def_ceres = yes }
+		AND = { scope:site = 6 scope:op = 5 sr_mod_can_queue_port_ceres = yes }
+		AND = { scope:site = 7 scope:op = 1 sr_mod_can_queue_a_vesta = yes }
+		AND = { scope:site = 7 scope:op = 2 sr_mod_can_queue_b_vesta = yes }
+		AND = { scope:site = 7 scope:op = 3 sr_mod_can_queue_hab_vesta = yes }
+		AND = { scope:site = 7 scope:op = 4 sr_mod_can_queue_def_vesta = yes }
+		AND = { scope:site = 7 scope:op = 5 sr_mod_can_queue_port_vesta = yes }
+		AND = { scope:site = 8 scope:op = 1 sr_mod_can_queue_a_psyche = yes }
+		AND = { scope:site = 8 scope:op = 2 sr_mod_can_queue_b_psyche = yes }
+		AND = { scope:site = 8 scope:op = 3 sr_mod_can_queue_hab_psyche = yes }
+		AND = { scope:site = 8 scope:op = 4 sr_mod_can_queue_def_psyche = yes }
+		AND = { scope:site = 8 scope:op = 5 sr_mod_can_queue_port_psyche = yes }
+		AND = { scope:site = 9 scope:op = 1 sr_mod_can_queue_a_pallas = yes }
+		AND = { scope:site = 9 scope:op = 2 sr_mod_can_queue_b_pallas = yes }
+		AND = { scope:site = 9 scope:op = 3 sr_mod_can_queue_hab_pallas = yes }
+		AND = { scope:site = 9 scope:op = 4 sr_mod_can_queue_def_pallas = yes }
+		AND = { scope:site = 9 scope:op = 5 sr_mod_can_queue_port_pallas = yes }
+		AND = { scope:site = 10 scope:op = 1 sr_mod_can_queue_a_hygiea = yes }
+		AND = { scope:site = 10 scope:op = 2 sr_mod_can_queue_b_hygiea = yes }
+		AND = { scope:site = 10 scope:op = 3 sr_mod_can_queue_hab_hygiea = yes }
+		AND = { scope:site = 10 scope:op = 4 sr_mod_can_queue_def_hygiea = yes }
+		AND = { scope:site = 10 scope:op = 5 sr_mod_can_queue_port_hygiea = yes }
+		AND = { scope:site = 11 scope:op = 1 sr_mod_can_queue_a_io = yes }
+		AND = { scope:site = 11 scope:op = 2 sr_mod_can_queue_b_io = yes }
+		AND = { scope:site = 11 scope:op = 3 sr_mod_can_queue_hab_io = yes }
+		AND = { scope:site = 11 scope:op = 4 sr_mod_can_queue_def_io = yes }
+		AND = { scope:site = 11 scope:op = 5 sr_mod_can_queue_port_io = yes }
+		AND = { scope:site = 12 scope:op = 1 sr_mod_can_queue_a_europa = yes }
+		AND = { scope:site = 12 scope:op = 2 sr_mod_can_queue_b_europa = yes }
+		AND = { scope:site = 12 scope:op = 3 sr_mod_can_queue_hab_europa = yes }
+		AND = { scope:site = 12 scope:op = 4 sr_mod_can_queue_def_europa = yes }
+		AND = { scope:site = 12 scope:op = 5 sr_mod_can_queue_port_europa = yes }
+		AND = { scope:site = 13 scope:op = 1 sr_mod_can_queue_a_ganymede = yes }
+		AND = { scope:site = 13 scope:op = 2 sr_mod_can_queue_b_ganymede = yes }
+		AND = { scope:site = 13 scope:op = 3 sr_mod_can_queue_hab_ganymede = yes }
+		AND = { scope:site = 13 scope:op = 4 sr_mod_can_queue_def_ganymede = yes }
+		AND = { scope:site = 13 scope:op = 5 sr_mod_can_queue_port_ganymede = yes }
+		AND = { scope:site = 14 scope:op = 1 sr_mod_can_queue_a_callisto = yes }
+		AND = { scope:site = 14 scope:op = 2 sr_mod_can_queue_b_callisto = yes }
+		AND = { scope:site = 14 scope:op = 3 sr_mod_can_queue_hab_callisto = yes }
+		AND = { scope:site = 14 scope:op = 4 sr_mod_can_queue_def_callisto = yes }
+		AND = { scope:site = 14 scope:op = 5 sr_mod_can_queue_port_callisto = yes }
+		AND = { scope:site = 15 scope:op = 1 sr_mod_can_queue_a_himalia = yes }
+		AND = { scope:site = 15 scope:op = 2 sr_mod_can_queue_b_himalia = yes }
+		AND = { scope:site = 15 scope:op = 3 sr_mod_can_queue_hab_himalia = yes }
+		AND = { scope:site = 15 scope:op = 4 sr_mod_can_queue_def_himalia = yes }
+		AND = { scope:site = 15 scope:op = 5 sr_mod_can_queue_port_himalia = yes }
+		AND = { scope:site = 16 scope:op = 1 sr_mod_can_queue_a_amalthea = yes }
+		AND = { scope:site = 16 scope:op = 2 sr_mod_can_queue_b_amalthea = yes }
+		AND = { scope:site = 16 scope:op = 3 sr_mod_can_queue_hab_amalthea = yes }
+		AND = { scope:site = 16 scope:op = 4 sr_mod_can_queue_def_amalthea = yes }
+		AND = { scope:site = 16 scope:op = 5 sr_mod_can_queue_port_amalthea = yes }
+		AND = { scope:site = 17 scope:op = 1 sr_mod_can_queue_a_venus = yes }
+		AND = { scope:site = 17 scope:op = 2 sr_mod_can_queue_b_venus = yes }
+		AND = { scope:site = 17 scope:op = 3 sr_mod_can_queue_hab_venus = yes }
+		AND = { scope:site = 17 scope:op = 4 sr_mod_can_queue_def_venus = yes }
+		AND = { scope:site = 17 scope:op = 5 sr_mod_can_queue_port_venus = yes }
+		AND = { scope:site = 18 scope:op = 1 sr_mod_can_queue_a_mercury = yes }
+		AND = { scope:site = 18 scope:op = 2 sr_mod_can_queue_b_mercury = yes }
+		AND = { scope:site = 18 scope:op = 3 sr_mod_can_queue_hab_mercury = yes }
+		AND = { scope:site = 18 scope:op = 4 sr_mod_can_queue_def_mercury = yes }
+		AND = { scope:site = 18 scope:op = 5 sr_mod_can_queue_port_mercury = yes }
+		AND = { scope:site = 19 scope:op = 1 sr_mod_can_queue_a_titan = yes }
+		AND = { scope:site = 19 scope:op = 2 sr_mod_can_queue_b_titan = yes }
+		AND = { scope:site = 19 scope:op = 3 sr_mod_can_queue_hab_titan = yes }
+		AND = { scope:site = 19 scope:op = 4 sr_mod_can_queue_def_titan = yes }
+		AND = { scope:site = 19 scope:op = 5 sr_mod_can_queue_port_titan = yes }
+		AND = { scope:site = 20 scope:op = 1 sr_mod_can_queue_a_enceladus = yes }
+		AND = { scope:site = 20 scope:op = 2 sr_mod_can_queue_b_enceladus = yes }
+		AND = { scope:site = 20 scope:op = 3 sr_mod_can_queue_hab_enceladus = yes }
+		AND = { scope:site = 20 scope:op = 4 sr_mod_can_queue_def_enceladus = yes }
+		AND = { scope:site = 20 scope:op = 5 sr_mod_can_queue_port_enceladus = yes }
+		AND = { scope:site = 21 scope:op = 1 sr_mod_can_queue_a_rhea = yes }
+		AND = { scope:site = 21 scope:op = 2 sr_mod_can_queue_b_rhea = yes }
+		AND = { scope:site = 21 scope:op = 3 sr_mod_can_queue_hab_rhea = yes }
+		AND = { scope:site = 21 scope:op = 4 sr_mod_can_queue_def_rhea = yes }
+		AND = { scope:site = 21 scope:op = 5 sr_mod_can_queue_port_rhea = yes }
+		AND = { scope:site = 22 scope:op = 1 sr_mod_can_queue_a_mimas = yes }
+		AND = { scope:site = 22 scope:op = 2 sr_mod_can_queue_b_mimas = yes }
+		AND = { scope:site = 22 scope:op = 3 sr_mod_can_queue_hab_mimas = yes }
+		AND = { scope:site = 22 scope:op = 4 sr_mod_can_queue_def_mimas = yes }
+		AND = { scope:site = 22 scope:op = 5 sr_mod_can_queue_port_mimas = yes }
+		AND = { scope:site = 23 scope:op = 1 sr_mod_can_queue_a_iapetus = yes }
+		AND = { scope:site = 23 scope:op = 2 sr_mod_can_queue_b_iapetus = yes }
+		AND = { scope:site = 23 scope:op = 3 sr_mod_can_queue_hab_iapetus = yes }
+		AND = { scope:site = 23 scope:op = 4 sr_mod_can_queue_def_iapetus = yes }
+		AND = { scope:site = 23 scope:op = 5 sr_mod_can_queue_port_iapetus = yes }
+		AND = { scope:site = 24 scope:op = 1 sr_mod_can_queue_a_titania = yes }
+		AND = { scope:site = 24 scope:op = 2 sr_mod_can_queue_b_titania = yes }
+		AND = { scope:site = 24 scope:op = 3 sr_mod_can_queue_hab_titania = yes }
+		AND = { scope:site = 24 scope:op = 4 sr_mod_can_queue_def_titania = yes }
+		AND = { scope:site = 24 scope:op = 5 sr_mod_can_queue_port_titania = yes }
+		AND = { scope:site = 25 scope:op = 1 sr_mod_can_queue_a_oberon = yes }
+		AND = { scope:site = 25 scope:op = 2 sr_mod_can_queue_b_oberon = yes }
+		AND = { scope:site = 25 scope:op = 3 sr_mod_can_queue_hab_oberon = yes }
+		AND = { scope:site = 25 scope:op = 4 sr_mod_can_queue_def_oberon = yes }
+		AND = { scope:site = 25 scope:op = 5 sr_mod_can_queue_port_oberon = yes }
+		AND = { scope:site = 26 scope:op = 1 sr_mod_can_queue_a_miranda = yes }
+		AND = { scope:site = 26 scope:op = 2 sr_mod_can_queue_b_miranda = yes }
+		AND = { scope:site = 26 scope:op = 3 sr_mod_can_queue_hab_miranda = yes }
+		AND = { scope:site = 26 scope:op = 4 sr_mod_can_queue_def_miranda = yes }
+		AND = { scope:site = 26 scope:op = 5 sr_mod_can_queue_port_miranda = yes }
+		AND = { scope:site = 27 scope:op = 1 sr_mod_can_queue_a_ariel = yes }
+		AND = { scope:site = 27 scope:op = 2 sr_mod_can_queue_b_ariel = yes }
+		AND = { scope:site = 27 scope:op = 3 sr_mod_can_queue_hab_ariel = yes }
+		AND = { scope:site = 27 scope:op = 4 sr_mod_can_queue_def_ariel = yes }
+		AND = { scope:site = 27 scope:op = 5 sr_mod_can_queue_port_ariel = yes }
+		AND = { scope:site = 28 scope:op = 1 sr_mod_can_queue_a_triton = yes }
+		AND = { scope:site = 28 scope:op = 2 sr_mod_can_queue_b_triton = yes }
+		AND = { scope:site = 28 scope:op = 3 sr_mod_can_queue_hab_triton = yes }
+		AND = { scope:site = 28 scope:op = 4 sr_mod_can_queue_def_triton = yes }
+		AND = { scope:site = 28 scope:op = 5 sr_mod_can_queue_port_triton = yes }
+		AND = { scope:site = 29 scope:op = 1 sr_mod_can_queue_a_proteus = yes }
+		AND = { scope:site = 29 scope:op = 2 sr_mod_can_queue_b_proteus = yes }
+		AND = { scope:site = 29 scope:op = 3 sr_mod_can_queue_hab_proteus = yes }
+		AND = { scope:site = 29 scope:op = 4 sr_mod_can_queue_def_proteus = yes }
+		AND = { scope:site = 29 scope:op = 5 sr_mod_can_queue_port_proteus = yes }
+		AND = { scope:site = 30 scope:op = 1 sr_mod_can_queue_a_pluto = yes }
+		AND = { scope:site = 30 scope:op = 2 sr_mod_can_queue_b_pluto = yes }
+		AND = { scope:site = 30 scope:op = 3 sr_mod_can_queue_hab_pluto = yes }
+		AND = { scope:site = 30 scope:op = 4 sr_mod_can_queue_def_pluto = yes }
+		AND = { scope:site = 30 scope:op = 5 sr_mod_can_queue_port_pluto = yes }
+		AND = { scope:site = 31 scope:op = 1 sr_mod_can_queue_a_eris = yes }
+		AND = { scope:site = 31 scope:op = 2 sr_mod_can_queue_b_eris = yes }
+		AND = { scope:site = 31 scope:op = 3 sr_mod_can_queue_hab_eris = yes }
+		AND = { scope:site = 31 scope:op = 4 sr_mod_can_queue_def_eris = yes }
+		AND = { scope:site = 31 scope:op = 5 sr_mod_can_queue_port_eris = yes }
+		AND = { scope:site = 32 scope:op = 1 sr_mod_can_queue_a_makemake = yes }
+		AND = { scope:site = 32 scope:op = 2 sr_mod_can_queue_b_makemake = yes }
+		AND = { scope:site = 32 scope:op = 3 sr_mod_can_queue_hab_makemake = yes }
+		AND = { scope:site = 32 scope:op = 4 sr_mod_can_queue_def_makemake = yes }
+		AND = { scope:site = 32 scope:op = 5 sr_mod_can_queue_port_makemake = yes }
+		AND = { scope:site = 33 scope:op = 1 sr_mod_can_queue_a_haumea = yes }
+		AND = { scope:site = 33 scope:op = 2 sr_mod_can_queue_b_haumea = yes }
+		AND = { scope:site = 33 scope:op = 3 sr_mod_can_queue_hab_haumea = yes }
+		AND = { scope:site = 33 scope:op = 4 sr_mod_can_queue_def_haumea = yes }
+		AND = { scope:site = 33 scope:op = 5 sr_mod_can_queue_port_haumea = yes }
+		AND = { scope:site = 34 scope:op = 1 sr_mod_can_queue_a_sedna = yes }
+		AND = { scope:site = 34 scope:op = 2 sr_mod_can_queue_b_sedna = yes }
+		AND = { scope:site = 34 scope:op = 3 sr_mod_can_queue_hab_sedna = yes }
+		AND = { scope:site = 34 scope:op = 4 sr_mod_can_queue_def_sedna = yes }
+		AND = { scope:site = 34 scope:op = 5 sr_mod_can_queue_port_sedna = yes }
+	}
+}
+# ... has a queue to clear.
+sr_mod_scope_has_queue = {
+	OR = {
+		AND = { scope:site = 1 sr_mq_any_valles_marineris = yes }
+		AND = { scope:site = 2 sr_mq_any_olympus_mons = yes }
+		AND = { scope:site = 3 sr_mq_any_hellas_planitia = yes }
+		AND = { scope:site = 4 sr_mq_any_utopia_planitia = yes }
+		AND = { scope:site = 5 sr_mq_any_arcadia_planitia = yes }
+		AND = { scope:site = 6 sr_mq_any_ceres = yes }
+		AND = { scope:site = 7 sr_mq_any_vesta = yes }
+		AND = { scope:site = 8 sr_mq_any_psyche = yes }
+		AND = { scope:site = 9 sr_mq_any_pallas = yes }
+		AND = { scope:site = 10 sr_mq_any_hygiea = yes }
+		AND = { scope:site = 11 sr_mq_any_io = yes }
+		AND = { scope:site = 12 sr_mq_any_europa = yes }
+		AND = { scope:site = 13 sr_mq_any_ganymede = yes }
+		AND = { scope:site = 14 sr_mq_any_callisto = yes }
+		AND = { scope:site = 15 sr_mq_any_himalia = yes }
+		AND = { scope:site = 16 sr_mq_any_amalthea = yes }
+		AND = { scope:site = 17 sr_mq_any_venus = yes }
+		AND = { scope:site = 18 sr_mq_any_mercury = yes }
+		AND = { scope:site = 19 sr_mq_any_titan = yes }
+		AND = { scope:site = 20 sr_mq_any_enceladus = yes }
+		AND = { scope:site = 21 sr_mq_any_rhea = yes }
+		AND = { scope:site = 22 sr_mq_any_mimas = yes }
+		AND = { scope:site = 23 sr_mq_any_iapetus = yes }
+		AND = { scope:site = 24 sr_mq_any_titania = yes }
+		AND = { scope:site = 25 sr_mq_any_oberon = yes }
+		AND = { scope:site = 26 sr_mq_any_miranda = yes }
+		AND = { scope:site = 27 sr_mq_any_ariel = yes }
+		AND = { scope:site = 28 sr_mq_any_triton = yes }
+		AND = { scope:site = 29 sr_mq_any_proteus = yes }
+		AND = { scope:site = 30 sr_mq_any_pluto = yes }
+		AND = { scope:site = 31 sr_mq_any_eris = yes }
+		AND = { scope:site = 32 sr_mq_any_makemake = yes }
+		AND = { scope:site = 33 sr_mq_any_haumea = yes }
+		AND = { scope:site = 34 sr_mq_any_sedna = yes }
+	}
+}
