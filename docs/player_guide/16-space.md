@@ -606,9 +606,12 @@ listed in the Colony Modules section of Solar System Colonization:
 | Defences | Nothing yet, for the same reason | The colony's slots |
 
 The founding event has to be answered before you can add a specialization
-level. Each row's buttons queue one more level of a module, counting what is
-already queued and on its way against the colony's room, and its last button
-clears the colony's queue. You can't take a module down once it is built.
+level. Each row's buttons add one more level of a module to the end of your
+module queue, counting what is already queued and on its way against the
+colony's room, and its last button takes all of that colony's modules out of
+the queue. The queue holds up to 20 modules and is listed in order above the
+rows, each with a button that removes it. You can't take a module down once it
+is built.
 
 Modules are built at Earth by your Space Program's third production method
 group, Module Fabrication, which starts on No Module Fabrication:
@@ -620,12 +623,10 @@ group, Module Fabrication, which starts on No Module Fabrication:
 | Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
 
 Each module costs 100 points, so a fully staffed Space Program builds one every
-20, 8 or 4 months, more often with higher funding. Fabrication builds one module
-at a time, colony by colony in the Solar System list's order, so every colony
-with a queue gets a module before any gets two; queue modules only where you
-want them. Within a colony it builds Habitats first, then the specializations,
-the Spaceport and Defences. Up to 200 points wait in stock while nothing is
-queued.
+20, 8 or 4 months, more often with higher funding. Fabrication builds the queue
+in order, first in first out: the module at the top is next. To move a module
+up, remove the ones ahead of it and queue them again. Up to 200 points wait in
+stock while nothing is queued.
 
 A finished module waits at Earth for its world's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your

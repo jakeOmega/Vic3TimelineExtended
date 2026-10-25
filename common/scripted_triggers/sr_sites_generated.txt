@@ -1070,8 +1070,9 @@ sr_cf_scope_site_held = {
 # Per world, country scope:
 #   sr_mq_any_<key>               THIS has a module of it queued
 #   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the
-#                                 cap has room counting queue and shipments, and a
-#                                 specialization's founding choice is made
+#                                 queue has a free place, the cap has room counting
+#                                 queue and shipments, and a specialization's
+#                                 founding choice is made
 #   sr_mod_departs_<key>          a module can leave for it this month at no premium
 # Any scope: sr_site_shipping_<key>, a module is on its way there.
 sr_mq_any_valles_marineris = {
@@ -1085,24 +1086,29 @@ sr_mq_any_valles_marineris = {
 }
 sr_mod_can_queue_a_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_valles_marineris
 	sr_mod_spec_used_valles_marineris < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_valles_marineris
 	sr_mod_spec_used_valles_marineris < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_valles_marineris < 4
 }
 sr_mod_can_queue_def_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_valles_marineris < 4
 }
 sr_mod_can_queue_port_valles_marineris = {
 	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_valles_marineris < 4
 }
 sr_mod_departs_valles_marineris = { sr_mod_departs = { BODY = mars } }
@@ -1126,24 +1132,29 @@ sr_mq_any_olympus_mons = {
 }
 sr_mod_can_queue_a_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_olympus_mons
 	sr_mod_spec_used_olympus_mons < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_olympus_mons
 	sr_mod_spec_used_olympus_mons < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_olympus_mons < 3
 }
 sr_mod_can_queue_def_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_olympus_mons < 3
 }
 sr_mod_can_queue_port_olympus_mons = {
 	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_olympus_mons < 3
 }
 sr_mod_departs_olympus_mons = { sr_mod_departs = { BODY = mars } }
@@ -1167,24 +1178,29 @@ sr_mq_any_hellas_planitia = {
 }
 sr_mod_can_queue_a_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_hellas_planitia
 	sr_mod_spec_used_hellas_planitia < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_hellas_planitia
 	sr_mod_spec_used_hellas_planitia < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_hellas_planitia < 4
 }
 sr_mod_can_queue_def_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_hellas_planitia < 4
 }
 sr_mod_can_queue_port_hellas_planitia = {
 	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_hellas_planitia < 4
 }
 sr_mod_departs_hellas_planitia = { sr_mod_departs = { BODY = mars } }
@@ -1208,24 +1224,29 @@ sr_mq_any_utopia_planitia = {
 }
 sr_mod_can_queue_a_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_utopia_planitia
 	sr_mod_spec_used_utopia_planitia < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_utopia_planitia
 	sr_mod_spec_used_utopia_planitia < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_utopia_planitia < 4
 }
 sr_mod_can_queue_def_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_utopia_planitia < 4
 }
 sr_mod_can_queue_port_utopia_planitia = {
 	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_utopia_planitia < 4
 }
 sr_mod_departs_utopia_planitia = { sr_mod_departs = { BODY = mars } }
@@ -1249,24 +1270,29 @@ sr_mq_any_arcadia_planitia = {
 }
 sr_mod_can_queue_a_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_arcadia_planitia
 	sr_mod_spec_used_arcadia_planitia < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_arcadia_planitia
 	sr_mod_spec_used_arcadia_planitia < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_arcadia_planitia < 3
 }
 sr_mod_can_queue_def_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_arcadia_planitia < 3
 }
 sr_mod_can_queue_port_arcadia_planitia = {
 	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_arcadia_planitia < 3
 }
 sr_mod_departs_arcadia_planitia = { sr_mod_departs = { BODY = mars } }
@@ -1290,24 +1316,29 @@ sr_mq_any_ceres = {
 }
 sr_mod_can_queue_a_ceres = {
 	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_ceres
 	sr_mod_spec_used_ceres < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_ceres = {
 	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_ceres
 	sr_mod_spec_used_ceres < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_ceres = {
 	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ceres < 3
 }
 sr_mod_can_queue_def_ceres = {
 	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ceres < 3
 }
 sr_mod_can_queue_port_ceres = {
 	global_var:sr_site_holder_ceres ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ceres < 3
 }
 sr_mod_departs_ceres = { sr_mod_departs = { BODY = ceres } }
@@ -1331,24 +1362,29 @@ sr_mq_any_vesta = {
 }
 sr_mod_can_queue_a_vesta = {
 	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_vesta
 	sr_mod_spec_used_vesta < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_vesta = {
 	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_vesta
 	sr_mod_spec_used_vesta < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_vesta = {
 	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_vesta < 2
 }
 sr_mod_can_queue_def_vesta = {
 	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_vesta < 2
 }
 sr_mod_can_queue_port_vesta = {
 	global_var:sr_site_holder_vesta ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_vesta < 2
 }
 sr_mod_departs_vesta = { sr_mod_departs = { BODY = vesta } }
@@ -1372,24 +1408,29 @@ sr_mq_any_psyche = {
 }
 sr_mod_can_queue_a_psyche = {
 	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_psyche
 	sr_mod_spec_used_psyche < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_psyche = {
 	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_psyche
 	sr_mod_spec_used_psyche < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_psyche = {
 	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_psyche < 2
 }
 sr_mod_can_queue_def_psyche = {
 	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_psyche < 2
 }
 sr_mod_can_queue_port_psyche = {
 	global_var:sr_site_holder_psyche ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_psyche < 2
 }
 sr_mod_departs_psyche = { sr_mod_departs = { BODY = psyche } }
@@ -1413,24 +1454,29 @@ sr_mq_any_pallas = {
 }
 sr_mod_can_queue_a_pallas = {
 	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_pallas
 	sr_mod_spec_used_pallas < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_pallas = {
 	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_pallas
 	sr_mod_spec_used_pallas < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_pallas = {
 	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_pallas < 2
 }
 sr_mod_can_queue_def_pallas = {
 	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_pallas < 2
 }
 sr_mod_can_queue_port_pallas = {
 	global_var:sr_site_holder_pallas ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_pallas < 2
 }
 sr_mod_departs_pallas = { sr_mod_departs = { BODY = pallas } }
@@ -1454,24 +1500,29 @@ sr_mq_any_hygiea = {
 }
 sr_mod_can_queue_a_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_hygiea
 	sr_mod_spec_used_hygiea < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_hygiea
 	sr_mod_spec_used_hygiea < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_hygiea < 2
 }
 sr_mod_can_queue_def_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_hygiea < 2
 }
 sr_mod_can_queue_port_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_hygiea < 2
 }
 sr_mod_departs_hygiea = { sr_mod_departs = { BODY = hygiea } }
@@ -1495,24 +1546,29 @@ sr_mq_any_io = {
 }
 sr_mod_can_queue_a_io = {
 	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_io
 	sr_mod_spec_used_io < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_io = {
 	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_io
 	sr_mod_spec_used_io < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_io = {
 	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_io < 2
 }
 sr_mod_can_queue_def_io = {
 	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_io < 2
 }
 sr_mod_can_queue_port_io = {
 	global_var:sr_site_holder_io ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_io < 2
 }
 sr_mod_departs_io = { sr_mod_departs = { BODY = jupiter } }
@@ -1536,24 +1592,29 @@ sr_mq_any_europa = {
 }
 sr_mod_can_queue_a_europa = {
 	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_europa
 	sr_mod_spec_used_europa < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_europa = {
 	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_europa
 	sr_mod_spec_used_europa < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_europa = {
 	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_europa < 3
 }
 sr_mod_can_queue_def_europa = {
 	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_europa < 3
 }
 sr_mod_can_queue_port_europa = {
 	global_var:sr_site_holder_europa ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_europa < 3
 }
 sr_mod_departs_europa = { sr_mod_departs = { BODY = jupiter } }
@@ -1577,24 +1638,29 @@ sr_mq_any_ganymede = {
 }
 sr_mod_can_queue_a_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_ganymede
 	sr_mod_spec_used_ganymede < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_ganymede
 	sr_mod_spec_used_ganymede < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ganymede < 3
 }
 sr_mod_can_queue_def_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ganymede < 3
 }
 sr_mod_can_queue_port_ganymede = {
 	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ganymede < 3
 }
 sr_mod_departs_ganymede = { sr_mod_departs = { BODY = jupiter } }
@@ -1618,24 +1684,29 @@ sr_mq_any_callisto = {
 }
 sr_mod_can_queue_a_callisto = {
 	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_callisto
 	sr_mod_spec_used_callisto < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_callisto = {
 	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_callisto
 	sr_mod_spec_used_callisto < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_callisto = {
 	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_callisto < 3
 }
 sr_mod_can_queue_def_callisto = {
 	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_callisto < 3
 }
 sr_mod_can_queue_port_callisto = {
 	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_callisto < 3
 }
 sr_mod_departs_callisto = { sr_mod_departs = { BODY = jupiter } }
@@ -1659,24 +1730,29 @@ sr_mq_any_himalia = {
 }
 sr_mod_can_queue_a_himalia = {
 	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_himalia
 	sr_mod_spec_used_himalia < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_himalia = {
 	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_himalia
 	sr_mod_spec_used_himalia < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_himalia = {
 	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_himalia < 1
 }
 sr_mod_can_queue_def_himalia = {
 	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_himalia < 1
 }
 sr_mod_can_queue_port_himalia = {
 	global_var:sr_site_holder_himalia ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_himalia < 1
 }
 sr_mod_departs_himalia = { sr_mod_departs = { BODY = jupiter } }
@@ -1700,24 +1776,29 @@ sr_mq_any_amalthea = {
 }
 sr_mod_can_queue_a_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_amalthea
 	sr_mod_spec_used_amalthea < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_amalthea
 	sr_mod_spec_used_amalthea < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_amalthea < 1
 }
 sr_mod_can_queue_def_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_amalthea < 1
 }
 sr_mod_can_queue_port_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_amalthea < 1
 }
 sr_mod_departs_amalthea = { sr_mod_departs = { BODY = jupiter } }
@@ -1741,24 +1822,29 @@ sr_mq_any_venus = {
 }
 sr_mod_can_queue_a_venus = {
 	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_venus
 	sr_mod_spec_used_venus < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_venus = {
 	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_venus
 	sr_mod_spec_used_venus < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_venus = {
 	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_venus < 2
 }
 sr_mod_can_queue_def_venus = {
 	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_venus < 2
 }
 sr_mod_can_queue_port_venus = {
 	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_venus < 2
 }
 sr_mod_departs_venus = { sr_mod_departs = { BODY = venus } }
@@ -1782,24 +1868,29 @@ sr_mq_any_mercury = {
 }
 sr_mod_can_queue_a_mercury = {
 	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_mercury
 	sr_mod_spec_used_mercury < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_mercury = {
 	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_mercury
 	sr_mod_spec_used_mercury < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_mercury = {
 	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_mercury < 3
 }
 sr_mod_can_queue_def_mercury = {
 	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_mercury < 3
 }
 sr_mod_can_queue_port_mercury = {
 	global_var:sr_site_holder_mercury ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_mercury < 3
 }
 sr_mod_departs_mercury = { always = yes }
@@ -1823,24 +1914,29 @@ sr_mq_any_titan = {
 }
 sr_mod_can_queue_a_titan = {
 	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_titan
 	sr_mod_spec_used_titan < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_titan = {
 	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_titan
 	sr_mod_spec_used_titan < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_titan = {
 	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_titan < 3
 }
 sr_mod_can_queue_def_titan = {
 	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_titan < 3
 }
 sr_mod_can_queue_port_titan = {
 	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_titan < 3
 }
 sr_mod_departs_titan = { sr_mod_departs = { BODY = saturn } }
@@ -1864,24 +1960,29 @@ sr_mq_any_enceladus = {
 }
 sr_mod_can_queue_a_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_enceladus
 	sr_mod_spec_used_enceladus < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_enceladus
 	sr_mod_spec_used_enceladus < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_enceladus < 2
 }
 sr_mod_can_queue_def_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_enceladus < 2
 }
 sr_mod_can_queue_port_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_enceladus < 2
 }
 sr_mod_departs_enceladus = { sr_mod_departs = { BODY = saturn } }
@@ -1905,24 +2006,29 @@ sr_mq_any_rhea = {
 }
 sr_mod_can_queue_a_rhea = {
 	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_rhea
 	sr_mod_spec_used_rhea < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_rhea = {
 	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_rhea
 	sr_mod_spec_used_rhea < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_rhea = {
 	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_rhea < 2
 }
 sr_mod_can_queue_def_rhea = {
 	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_rhea < 2
 }
 sr_mod_can_queue_port_rhea = {
 	global_var:sr_site_holder_rhea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_rhea < 2
 }
 sr_mod_departs_rhea = { sr_mod_departs = { BODY = saturn } }
@@ -1946,24 +2052,29 @@ sr_mq_any_mimas = {
 }
 sr_mod_can_queue_a_mimas = {
 	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_mimas
 	sr_mod_spec_used_mimas < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_mimas = {
 	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_mimas
 	sr_mod_spec_used_mimas < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_mimas = {
 	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_mimas < 1
 }
 sr_mod_can_queue_def_mimas = {
 	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_mimas < 1
 }
 sr_mod_can_queue_port_mimas = {
 	global_var:sr_site_holder_mimas ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_mimas < 1
 }
 sr_mod_departs_mimas = { sr_mod_departs = { BODY = saturn } }
@@ -1987,24 +2098,29 @@ sr_mq_any_iapetus = {
 }
 sr_mod_can_queue_a_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_iapetus
 	sr_mod_spec_used_iapetus < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_iapetus
 	sr_mod_spec_used_iapetus < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_iapetus < 2
 }
 sr_mod_can_queue_def_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_iapetus < 2
 }
 sr_mod_can_queue_port_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_iapetus < 2
 }
 sr_mod_departs_iapetus = { sr_mod_departs = { BODY = saturn } }
@@ -2028,24 +2144,29 @@ sr_mq_any_titania = {
 }
 sr_mod_can_queue_a_titania = {
 	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_titania
 	sr_mod_spec_used_titania < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_titania = {
 	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_titania
 	sr_mod_spec_used_titania < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_titania = {
 	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_titania < 2
 }
 sr_mod_can_queue_def_titania = {
 	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_titania < 2
 }
 sr_mod_can_queue_port_titania = {
 	global_var:sr_site_holder_titania ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_titania < 2
 }
 sr_mod_departs_titania = { sr_mod_departs = { BODY = uranus } }
@@ -2069,24 +2190,29 @@ sr_mq_any_oberon = {
 }
 sr_mod_can_queue_a_oberon = {
 	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_oberon
 	sr_mod_spec_used_oberon < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_oberon = {
 	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_oberon
 	sr_mod_spec_used_oberon < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_oberon = {
 	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_oberon < 2
 }
 sr_mod_can_queue_def_oberon = {
 	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_oberon < 2
 }
 sr_mod_can_queue_port_oberon = {
 	global_var:sr_site_holder_oberon ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_oberon < 2
 }
 sr_mod_departs_oberon = { sr_mod_departs = { BODY = uranus } }
@@ -2110,24 +2236,29 @@ sr_mq_any_miranda = {
 }
 sr_mod_can_queue_a_miranda = {
 	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_miranda
 	sr_mod_spec_used_miranda < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_miranda = {
 	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_miranda
 	sr_mod_spec_used_miranda < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_miranda = {
 	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_miranda < 1
 }
 sr_mod_can_queue_def_miranda = {
 	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_miranda < 1
 }
 sr_mod_can_queue_port_miranda = {
 	global_var:sr_site_holder_miranda ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_miranda < 1
 }
 sr_mod_departs_miranda = { sr_mod_departs = { BODY = uranus } }
@@ -2151,24 +2282,29 @@ sr_mq_any_ariel = {
 }
 sr_mod_can_queue_a_ariel = {
 	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_ariel
 	sr_mod_spec_used_ariel < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_ariel = {
 	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_ariel
 	sr_mod_spec_used_ariel < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_ariel = {
 	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ariel < 2
 }
 sr_mod_can_queue_def_ariel = {
 	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ariel < 2
 }
 sr_mod_can_queue_port_ariel = {
 	global_var:sr_site_holder_ariel ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_ariel < 2
 }
 sr_mod_departs_ariel = { sr_mod_departs = { BODY = uranus } }
@@ -2192,24 +2328,29 @@ sr_mq_any_triton = {
 }
 sr_mod_can_queue_a_triton = {
 	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_triton
 	sr_mod_spec_used_triton < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_triton = {
 	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_triton
 	sr_mod_spec_used_triton < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_triton = {
 	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_triton < 2
 }
 sr_mod_can_queue_def_triton = {
 	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_triton < 2
 }
 sr_mod_can_queue_port_triton = {
 	global_var:sr_site_holder_triton ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_triton < 2
 }
 sr_mod_departs_triton = { sr_mod_departs = { BODY = neptune } }
@@ -2233,24 +2374,29 @@ sr_mq_any_proteus = {
 }
 sr_mod_can_queue_a_proteus = {
 	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_proteus
 	sr_mod_spec_used_proteus < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_proteus = {
 	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_proteus
 	sr_mod_spec_used_proteus < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_proteus = {
 	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_proteus < 1
 }
 sr_mod_can_queue_def_proteus = {
 	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_proteus < 1
 }
 sr_mod_can_queue_port_proteus = {
 	global_var:sr_site_holder_proteus ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_proteus < 1
 }
 sr_mod_departs_proteus = { sr_mod_departs = { BODY = neptune } }
@@ -2274,24 +2420,29 @@ sr_mq_any_pluto = {
 }
 sr_mod_can_queue_a_pluto = {
 	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_pluto
 	sr_mod_spec_used_pluto < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_pluto = {
 	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_pluto
 	sr_mod_spec_used_pluto < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_pluto = {
 	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_pluto < 2
 }
 sr_mod_can_queue_def_pluto = {
 	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_pluto < 2
 }
 sr_mod_can_queue_port_pluto = {
 	global_var:sr_site_holder_pluto ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_pluto < 2
 }
 sr_mod_departs_pluto = { sr_mod_departs = { BODY = kuiper } }
@@ -2315,24 +2466,29 @@ sr_mq_any_eris = {
 }
 sr_mod_can_queue_a_eris = {
 	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_eris
 	sr_mod_spec_used_eris < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_eris = {
 	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_eris
 	sr_mod_spec_used_eris < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_eris = {
 	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_eris < 1
 }
 sr_mod_can_queue_def_eris = {
 	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_eris < 1
 }
 sr_mod_can_queue_port_eris = {
 	global_var:sr_site_holder_eris ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_eris < 1
 }
 sr_mod_departs_eris = { sr_mod_departs = { BODY = kuiper } }
@@ -2356,24 +2512,29 @@ sr_mq_any_makemake = {
 }
 sr_mod_can_queue_a_makemake = {
 	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_makemake
 	sr_mod_spec_used_makemake < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_makemake = {
 	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_makemake
 	sr_mod_spec_used_makemake < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_makemake = {
 	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_makemake < 1
 }
 sr_mod_can_queue_def_makemake = {
 	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_makemake < 1
 }
 sr_mod_can_queue_port_makemake = {
 	global_var:sr_site_holder_makemake ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_makemake < 1
 }
 sr_mod_departs_makemake = { sr_mod_departs = { BODY = kuiper } }
@@ -2397,24 +2558,29 @@ sr_mq_any_haumea = {
 }
 sr_mod_can_queue_a_haumea = {
 	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_haumea
 	sr_mod_spec_used_haumea < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_haumea = {
 	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_haumea
 	sr_mod_spec_used_haumea < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_haumea = {
 	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_haumea < 1
 }
 sr_mod_can_queue_def_haumea = {
 	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_haumea < 1
 }
 sr_mod_can_queue_port_haumea = {
 	global_var:sr_site_holder_haumea ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_haumea < 1
 }
 sr_mod_departs_haumea = { sr_mod_departs = { BODY = kuiper } }
@@ -2438,24 +2604,29 @@ sr_mq_any_sedna = {
 }
 sr_mod_can_queue_a_sedna = {
 	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_sedna
 	sr_mod_spec_used_sedna < sr_mod_spec_budget
 }
 sr_mod_can_queue_b_sedna = {
 	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
 	has_global_variable = sr_site_spec_sedna
 	sr_mod_spec_used_sedna < sr_mod_spec_budget
 }
 sr_mod_can_queue_hab_sedna = {
 	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_sedna < 1
 }
 sr_mod_can_queue_def_sedna = {
 	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_sedna < 1
 }
 sr_mod_can_queue_port_sedna = {
 	global_var:sr_site_holder_sedna ?= this
+	sr_mq_has_room = yes
 	sr_mod_slots_used_sedna < 1
 }
 sr_mod_departs_sedna = { sr_mod_departs = { BODY = kuiper } }
@@ -2469,7 +2640,36 @@ sr_site_shipping_sedna = {
 	}
 }
 
-# THIS has a module queued at any world (fabrication's loop, the AI's method).
+# THIS's module queue has a free place (of 20).
+sr_mq_has_room = { NOT = { has_variable = sr_mq_20_site } }
+
+# The queue scripted GUI's place (scope:op) holds an entry.
+sr_mq_scope_place_filled = {
+	OR = {
+		AND = { scope:op = 1 has_variable = sr_mq_1_site }
+		AND = { scope:op = 2 has_variable = sr_mq_2_site }
+		AND = { scope:op = 3 has_variable = sr_mq_3_site }
+		AND = { scope:op = 4 has_variable = sr_mq_4_site }
+		AND = { scope:op = 5 has_variable = sr_mq_5_site }
+		AND = { scope:op = 6 has_variable = sr_mq_6_site }
+		AND = { scope:op = 7 has_variable = sr_mq_7_site }
+		AND = { scope:op = 8 has_variable = sr_mq_8_site }
+		AND = { scope:op = 9 has_variable = sr_mq_9_site }
+		AND = { scope:op = 10 has_variable = sr_mq_10_site }
+		AND = { scope:op = 11 has_variable = sr_mq_11_site }
+		AND = { scope:op = 12 has_variable = sr_mq_12_site }
+		AND = { scope:op = 13 has_variable = sr_mq_13_site }
+		AND = { scope:op = 14 has_variable = sr_mq_14_site }
+		AND = { scope:op = 15 has_variable = sr_mq_15_site }
+		AND = { scope:op = 16 has_variable = sr_mq_16_site }
+		AND = { scope:op = 17 has_variable = sr_mq_17_site }
+		AND = { scope:op = 18 has_variable = sr_mq_18_site }
+		AND = { scope:op = 19 has_variable = sr_mq_19_site }
+		AND = { scope:op = 20 has_variable = sr_mq_20_site }
+	}
+}
+
+# THIS has a module queued at any world (the AI's method).
 sr_mq_any = {
 	OR = {
 		sr_mq_any_valles_marineris = yes

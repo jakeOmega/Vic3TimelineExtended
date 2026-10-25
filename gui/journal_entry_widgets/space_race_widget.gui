@@ -3290,6 +3290,68 @@ types space_race_widget_types
 		}
 	}
 
+	### One entry of Colony Modules' queue (colony modules design § 5): its place,
+	### the world and the module (custom loc sr_mq_<n>_world_name and
+	### sr_mq_<n>_module_name, from the place's sr_mq_<n>_site and _type), and a
+	### button that removes it (sr_colony_module_queue_sgui, scope:op = the place).
+	### Fabrication builds place 1 next. 24 + 200 + 180 + 24 + 3 × 4 spacing + 2 × 4
+	### margin = 448, in the 480 column. Instances in te_sr_mq_rows
+	### (sr_sites_generated_rows.gui).
+	type te_sr_mq_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "mq_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				align = right|nobaseline
+				using = fontsize_medium
+				default_format = "#v"
+				block "mq_place" {}
+			}
+		}
+		widget = {
+			size = { 200 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 200
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "mq_world" {}
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "mq_module" {}
+			}
+		}
+		button_icon_cancel = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			block "mq_remove_button" {}
+		}
+	}
+
 	### The column heads above the Colony Modules rows: the same widths as
 	### te_sr_module_row, a cell's 52 for each module type.
 	type te_sr_module_header_row = flowcontainer {
@@ -3354,7 +3416,7 @@ types space_race_widget_types
 	### Colony Modules (solar colonization, simple and full colonies; colony
 	### modules design § 11): fabrication (points a month and the stock),
 	### shipments waiting and in flight, the modules' upkeep, the Extraplanetary
-	### Base room, then every colony we hold. Open by default; the flag is
+	### Base room, the queue in order, then every colony we hold. Open by default; the flag is
 	### sr_panel_modules_closed.
 	type te_sr_sec_modules = flowcontainer {
 		direction = vertical
@@ -3425,6 +3487,14 @@ types space_race_widget_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)0' )]"
 				text = "je_space_race_widget_settlers_empty"
 			}
+			### The queue, first in first out: place 1 is built next.
+			te_sr_subheader = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_1'), '(CFixedPoint)1' )]"
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_mq_header"
+				}
+			}
+			te_sr_mq_rows = {}
 			te_sr_module_header_row = {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)1' )]"
 			}

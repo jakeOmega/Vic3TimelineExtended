@@ -1188,6 +1188,88 @@ sr_disp_cf_slot_6_year = {
 	floor = yes
 }
 
+# The module queue (slice 4 design § 5), per place: 1 while it holds an entry.
+sr_disp_mq_1 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_1_site } value = 1 }
+}
+sr_disp_mq_2 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_2_site } value = 1 }
+}
+sr_disp_mq_3 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_3_site } value = 1 }
+}
+sr_disp_mq_4 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_4_site } value = 1 }
+}
+sr_disp_mq_5 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_5_site } value = 1 }
+}
+sr_disp_mq_6 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_6_site } value = 1 }
+}
+sr_disp_mq_7 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_7_site } value = 1 }
+}
+sr_disp_mq_8 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_8_site } value = 1 }
+}
+sr_disp_mq_9 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_9_site } value = 1 }
+}
+sr_disp_mq_10 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_10_site } value = 1 }
+}
+sr_disp_mq_11 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_11_site } value = 1 }
+}
+sr_disp_mq_12 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_12_site } value = 1 }
+}
+sr_disp_mq_13 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_13_site } value = 1 }
+}
+sr_disp_mq_14 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_14_site } value = 1 }
+}
+sr_disp_mq_15 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_15_site } value = 1 }
+}
+sr_disp_mq_16 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_16_site } value = 1 }
+}
+sr_disp_mq_17 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_17_site } value = 1 }
+}
+sr_disp_mq_18 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_18_site } value = 1 }
+}
+sr_disp_mq_19 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_19_site } value = 1 }
+}
+sr_disp_mq_20 = {
+	value = 0
+	if = { limit = { has_variable = sr_mq_20_site } value = 1 }
+}
+
 # Modules (slice 4 design § 11), per world:
 #   sr_disp_mod_pending_<type>_<key>  our queue of the type and every shipment of it on its way
 #   sr_disp_site_staffing_<key>       the colony's staffing, in percent

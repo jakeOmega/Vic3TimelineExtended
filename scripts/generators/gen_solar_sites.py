@@ -186,6 +186,9 @@ MODULE_CODES = {"a": 1, "b": 2, "hab": 3, "def": 4, "port": 5}
 GENERIC_TYPES = ("hab", "def", "port")
 CREWED_TYPES = ("a", "b", "def", "port")  # a Habitat houses the crews
 SHIP_SLOTS = 8
+QUEUE_SLOTS = 20  # the national module queue, first in first out (owner, 2026-10-25)
+MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habitat",
+                "def": "Defences", "port": "Spaceport"}
 MODULE_AI_VALUE = 5  # Cede Colony's AI value of a module level past the first
 
 # Extraplanetary Bases from colonies (design § 9): every country's near-Earth
@@ -385,9 +388,8 @@ def _unmirror(site: Site) -> list[str]:
                 f"\tsr_site_hide_modifier = {{ MODIFIER = {db} }}",
                 f"\tsr_site_clear_discovery = {{ DISCOVERY = {d} }}"]
     out += [f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{site.key} }} remove_variable = sr_emig_prio_{site.key} }}"]
-    # The holder's module queue for the world stays with the holder (slice 4 design § 7).
-    out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{site.key} }} remove_variable = sr_mq_{t}_{site.key} }}"
-            for t in MODULE_TYPES]
+    # The world leaves the holder's module queue (slice 4 design § 7).
+    out += [f"\tsr_mq_drop_site = {{ INDEX = {site.index} }}"]
     out += ["\tset_variable = { name = sr_colony_count value = sr_sites_held_count }", "}"]
     return out
 
@@ -1397,20 +1399,6 @@ def _module_install(site: Site) -> list[str]:
     return out
 
 
-def _module_take(site: Site) -> list[str]:
-    k = site.key
-    out = [f"# Fabrication builds {site.name}'s next queued module: Habitat, the specializations,",
-           "# the Spaceport, Defences (design § 5).",
-           f"sr_mod_fab_take_{k} = {{"]
-    for n, t in enumerate(MODULE_TYPES):
-        out += ["\tif = {" if n == 0 else "\telse_if = {",
-                f"\t\tlimit = {{ has_variable = sr_mq_{t}_{k} }}",
-                f"\t\tsr_mod_fab_build = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }}",
-                "\t}"]
-    out.append("}")
-    return out
-
-
 def _module_ai(site: Site) -> list[str]:
     """The AI's one module for a colony with nothing queued or shipping (design § 10)."""
     k = site.key
@@ -1428,7 +1416,7 @@ def _module_ai(site: Site) -> list[str]:
            f"\t\t\t\tsr_mod_can_queue_hab_{k} = yes",
            f"\t\t\t\tsr_site_fill_{k} >= 0.75",
            "\t\t\t}",
-           f"\t\t\tsr_mod_queue = {{ KEY = {k} TYPE = hab }}",
+           f"\t\t\t{_queue_call(site, 'hab')}",
            "\t\t}"]
     for first, second, option in (("a", "b", 1), ("b", "a", 2)):
         for slot in (first, second):
@@ -1439,34 +1427,127 @@ def _module_ai(site: Site) -> list[str]:
                     f"\t\t\t\tsr_mod_can_queue_{slot}_{k} = yes",
                     f"\t\t\t\t{crew}",
                     "\t\t\t}",
-                    f"\t\t\tsr_mod_queue = {{ KEY = {k} TYPE = {slot} }}",
+                    f"\t\t\t{_queue_call(site, slot)}",
                     "\t\t}"]
     out += ["\t}", "}"]
     return out
 
 
-def render_module_effects() -> list[str]:
-    out = ["# ===== Modules (slice 4 design §§ 5-7, 10) =====",
-           "# Per world: a landing's install, fabrication's take, the AI's plan. Dispatchers",
-           "# by index follow; the shared parts (the month, slots, the queue, the AI's",
-           "# review) are hand-written in sr_colony_module_effects.txt."]
+def _queue_call(site: Site, t: str) -> str:
+    return (f"sr_mod_queue = {{ KEY = {site.key} TYPE = {t} INDEX = {site.index} "
+            f"CODE = {MODULE_CODES[t]} }}")
+
+
+def _queue_slot_copy(dst: int, src: int) -> list[str]:
+    """Queue entry `src` moves to place `dst`; an empty `src` empties `dst`."""
+    return ["\tif = {",
+            f"\t\tlimit = {{ has_variable = sr_mq_{src}_site }}",
+            f"\t\tset_variable = {{ name = sr_mq_{dst}_site value = var:sr_mq_{src}_site }}",
+            f"\t\tset_variable = {{ name = sr_mq_{dst}_type value = var:sr_mq_{src}_type }}",
+            "\t}",
+            "\telse = {",
+            f"\t\tif = {{ limit = {{ has_variable = sr_mq_{dst}_site }} remove_variable = sr_mq_{dst}_site }}",
+            f"\t\tif = {{ limit = {{ has_variable = sr_mq_{dst}_type }} remove_variable = sr_mq_{dst}_type }}",
+            "\t}"]
+
+
+def render_module_queue() -> list[str]:
+    """The national module queue (owner, 2026-10-25: first in first out). Country
+    variables sr_mq_<n>_site (a world's index) and sr_mq_<n>_type (a module's code),
+    n = 1 to QUEUE_SLOTS, filled from 1 without gaps. The per-world counts
+    sr_mq_<type>_<key>, which the caps and the panel read, follow it."""
+    q = QUEUE_SLOTS
+    out = ["# ===== The module queue (first in first out) =====",
+           f"# Places 1 to {q}: sr_mq_<n>_site (a world's index) and sr_mq_<n>_type (the module's",
+           "# code: 1 the first specialization, 2 the second, 3 Habitat, 4 Defences, 5 Spaceport),",
+           "# filled from place 1 without gaps. The per-world counts (sr_mq_<type>_<key>) follow",
+           "# it: added to by sr_mod_queue, recounted after every removal and monthly.",
+           "",
+           "# A new entry (local_var:sr_mq_new_site, local_var:sr_mq_new_type) in the first free",
+           "# place; the caller has checked one is free (sr_mq_has_room).",
+           "sr_mq_append = {"]
+    for n in range(1, q + 1):
+        out += ["\tif = {" if n == 1 else "\telse_if = {",
+                f"\t\tlimit = {{ NOT = {{ has_variable = sr_mq_{n}_site }} }}",
+                f"\t\tset_variable = {{ name = sr_mq_{n}_site value = local_var:sr_mq_new_site }}",
+                f"\t\tset_variable = {{ name = sr_mq_{n}_type value = local_var:sr_mq_new_type }}",
+                "\t}"]
+    out += ["}", "", "# The entry at place n leaves; the ones behind it move up a place."]
+    for n in range(1, q + 1):
+        out.append(f"sr_mq_remove_{n} = {{")
+        for m in range(n, q):
+            out += _queue_slot_copy(m, m + 1)
+        out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{q}_site }} remove_variable = sr_mq_{q}_site }}",
+                f"\tif = {{ limit = {{ has_variable = sr_mq_{q}_type }} remove_variable = sr_mq_{q}_type }}",
+                "}"]
+    out += ["",
+            "# Every entry for the world INDEX leaves the queue (its row's clear button; the",
+            "# unmirror, when the world leaves THIS), then the counts.",
+            "sr_mq_drop_site = {",
+            "\tset_local_variable = { name = sr_mq_passes value = 0 }",
+            "\twhile = {",
+            "\t\tlimit = {",
+            f"\t\t\tlocal_var:sr_mq_passes < {q}",
+            "\t\t\tOR = {"]
+    out += [f"\t\t\t\tAND = {{ has_variable = sr_mq_{n}_site var:sr_mq_{n}_site = $INDEX$ }}" for n in range(1, q + 1)]
+    out += ["\t\t\t}", "\t\t}", "\t\tchange_local_variable = { name = sr_mq_passes add = 1 }"]
+    for n in range(1, q + 1):
+        out += ["\t\tif = {" if n == 1 else "\t\telse_if = {",
+                f"\t\t\tlimit = {{ has_variable = sr_mq_{n}_site var:sr_mq_{n}_site = $INDEX$ }}",
+                f"\t\t\tsr_mq_remove_{n} = yes",
+                "\t\t}"]
+    out += ["\t}", "\tsr_mq_recount = yes", "}", "",
+            "# The per-world counts, rebuilt from the queue.",
+            "sr_mq_recount = {"]
     for site in SITES:
-        out += ["", f"# --- {site.name} ---"]
-        out += _module_install(site) + _module_take(site) + _module_ai(site)
-    out += ["", "# The next colony with a queue after the last one served (var:sr_fab_cursor), round",
-            "# the end of the table (design § 5).",
-            "sr_mod_fab_next = {"]
+        for t in MODULE_TYPES:
+            var = f"sr_mq_{t}_{site.key}"
+            out.append(f"\tif = {{ limit = {{ has_variable = {var} }} remove_variable = {var} }}")
+    for n in range(1, q + 1):
+        out += ["\tif = {",
+                f"\t\tlimit = {{ has_variable = sr_mq_{n}_site has_variable = sr_mq_{n}_type }}",
+                f"\t\tset_local_variable = {{ name = sr_mq_site_now value = var:sr_mq_{n}_site }}",
+                f"\t\tset_local_variable = {{ name = sr_mq_type_now value = var:sr_mq_{n}_type }}",
+                "\t\tsr_mq_count_by_index = yes",
+                "\t}"]
+    out += ["}", "sr_mq_count_by_index = {"]
     for n, site in enumerate(SITES):
         out += ["\tif = {" if n == 0 else "\telse_if = {",
-                f"\t\tlimit = {{ sr_mod_fab_cursor_value < {site.index} sr_mq_any_{site.key} = yes }}",
-                f"\t\tsr_mod_fab_take_{site.key} = yes",
-                "\t}"]
-    for site in SITES:
-        out += ["\telse_if = {",
-                f"\t\tlimit = {{ sr_mq_any_{site.key} = yes }}",
-                f"\t\tsr_mod_fab_take_{site.key} = yes",
-                "\t}"]
+                f"\t\tlimit = {{ local_var:sr_mq_site_now = {site.index} }}"]
+        for m, t in enumerate(MODULE_TYPES):
+            out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_mq_type_now = {MODULE_CODES[t]} }} "
+                       f"sr_mq_count_add = {{ VAR = sr_mq_{t}_{site.key} }} }}")
+        out.append("\t}")
     out += ["}", "",
+            "# Fabrication builds the queue's first entry (sr_mod_month has checked there is one",
+            "# and the stock covers it). It leaves the queue first; an entry for a world THIS no",
+            "# longer holds is dropped unbuilt.",
+            "sr_mod_fab_head = {",
+            "\tset_local_variable = { name = sr_mq_head_site value = var:sr_mq_1_site }",
+            "\tset_local_variable = { name = sr_mq_head_type value = var:sr_mq_1_type }",
+            "\tsr_mq_remove_1 = yes"]
+    for n, site in enumerate(SITES):
+        k = site.key
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{k} ?= this }}"]
+        for m, t in enumerate(MODULE_TYPES):
+            out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_mq_head_type = {MODULE_CODES[t]} }} "
+                       f"sr_mod_fab_build = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }} }}")
+        out.append("\t}")
+    out += ["\tsr_mq_recount = yes", "}"]
+    return out
+
+
+def render_module_effects() -> list[str]:
+    out = ["# ===== Modules (slice 4 design §§ 5-7, 10) =====",
+           "# Per world: a landing's install and the AI's plan; then the queue, first in first",
+           "# out, and dispatchers by index. The shared parts (the month, the shipment slots,",
+           "# the AI's review) are hand-written in sr_colony_module_effects.txt."]
+    for site in SITES:
+        out += ["", f"# --- {site.name} ---"]
+        out += _module_install(site) + _module_ai(site)
+    out += [""] + render_module_queue()
+    out += ["",
             "# A waiting shipment's world (local_var:sr_ms_site_now): local_var:sr_ms_go = 1 when it",
             "# can leave this month at no premium, with its landing month in local_var:sr_ms_arrive_now.",
             "sr_ms_departure_by_index = {"]
@@ -1505,10 +1586,16 @@ def render_module_effects() -> list[str]:
         out += ["\tif = {" if n == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:site = {site.index} }}"]
         for m, t in enumerate(("a", "b", *GENERIC_TYPES)):
             out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ scope:op = {MODULE_CODES[t]} }} "
-                       f"sr_mod_queue = {{ KEY = {site.key} TYPE = {t} }} }}")
+                       f"{_queue_call(site, t)} }}")
         out.append("\t}")
     out += ["}"]
-    out += _by_index("sr_mod_clear_from_scope", "scope:site", "sr_mod_clear_queue = {{ KEY = {k} }}")
+    out += _by_index("sr_mod_clear_from_scope", "scope:site", "sr_mq_drop_site = {{ INDEX = {i} }}")
+    out += ["", "# The queue scripted GUI's entry (scope:op, its place in the queue) is removed."]
+    out += ["sr_mq_remove_from_scope = {"]
+    for n in range(1, QUEUE_SLOTS + 1):
+        out += ["\tif = {" if n == 1 else "\telse_if = {", f"\t\tlimit = {{ scope:op = {n} }}",
+                f"\t\tsr_mq_remove_{n} = yes", "\t}"]
+    out += ["\tsr_mq_recount = yes", "}"]
     out += ["", "# Extraplanetary Base room filled best grade first (design § 9): local_var:sr_eb_left",
             "# levels to place, local_var:sr_eb_sum the levels x grade so far (percent).",
             "sr_ebase_fill = {"]
@@ -1554,7 +1641,7 @@ def render_module_effects() -> list[str]:
         out += ["\tif = {" if n == 0 else "\telse_if = {",
                 f"\t\tlimit = {{ global_var:sr_site_holder_{k} ?= this }}"]
         for t in ("a", "b", *GENERIC_TYPES):
-            out.append(f"\t\tif = {{ limit = {{ sr_mod_can_queue_{t}_{k} = yes }} sr_mod_queue = {{ KEY = {k} TYPE = {t} }} }}")
+            out.append(f"\t\tif = {{ limit = {{ sr_mod_can_queue_{t}_{k} = yes }} {_queue_call(site, t)} }}")
         out.append("\t}")
     out += ["}", "",
             "# The entry's backstop (sr_sync_solar_colonization_entry): every specialization",
@@ -1572,8 +1659,9 @@ def render_module_triggers() -> list[str]:
            "# Per world, country scope:",
            "#   sr_mq_any_<key>               THIS has a module of it queued",
            "#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the",
-           "#                                 cap has room counting queue and shipments, and a",
-           "#                                 specialization's founding choice is made",
+           "#                                 queue has a free place, the cap has room counting",
+           "#                                 queue and shipments, and a specialization's",
+           "#                                 founding choice is made",
            "#   sr_mod_departs_<key>          a module can leave for it this month at no premium",
            "# Any scope: sr_site_shipping_<key>, a module is on its way there."]
     for site in SITES:
@@ -1584,12 +1672,14 @@ def render_module_triggers() -> list[str]:
         for slot in ("a", "b"):
             out += [f"sr_mod_can_queue_{slot}_{k} = {{",
                     f"\tglobal_var:sr_site_holder_{k} ?= this",
+                    "\tsr_mq_has_room = yes",
                     f"\thas_global_variable = sr_site_spec_{k}",
                     f"\tsr_mod_spec_used_{k} < sr_mod_spec_budget",
                     "}"]
         for t in GENERIC_TYPES:
             out += [f"sr_mod_can_queue_{t}_{k} = {{",
                     f"\tglobal_var:sr_site_holder_{k} ?= this",
+                    "\tsr_mq_has_room = yes",
                     f"\tsr_mod_slots_used_{k} < {site.slots}",
                     "}"]
         if site.body:
@@ -1599,7 +1689,13 @@ def render_module_triggers() -> list[str]:
         out += [f"sr_site_shipping_{k} = {{", "\tOR = {"]
         out += [f"\t\thas_global_variable = sr_site_ship_{t}_{k}" for t in MODULE_TYPES]
         out += ["\t}", "}"]
-    out += ["", "# THIS has a module queued at any world (fabrication's loop, the AI's method).",
+    out += ["", f"# THIS's module queue has a free place (of {QUEUE_SLOTS}).",
+            f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{QUEUE_SLOTS}_site }} }}",
+            "", "# The queue scripted GUI's place (scope:op) holds an entry.",
+            "sr_mq_scope_place_filled = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:op = {n} has_variable = sr_mq_{n}_site }}" for n in range(1, QUEUE_SLOTS + 1)],
+            "\t}", "}",
+            "", "# THIS has a module queued at any world (the AI's method).",
             "sr_mq_any = {", "\tOR = {"]
     out += [f"\t\tsr_mq_any_{s.key} = yes" for s in SITES]
     out += ["\t}", "}",
@@ -1687,6 +1783,13 @@ def render_display() -> str:
                 "\tfloor = yes",
                 "}"]
     out += ["",
+            "# The module queue (slice 4 design § 5), per place: 1 while it holds an entry."]
+    for n in range(1, QUEUE_SLOTS + 1):
+        out += [f"sr_disp_mq_{n} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_mq_{n}_site }} value = 1 }}",
+                "}"]
+    out += ["",
             "# Modules (slice 4 design § 11), per world:",
             "#   sr_disp_mod_pending_<type>_<key>  our queue of the type and every shipment of it on its way",
             "#   sr_disp_site_staffing_<key>       the colony's staffing, in percent"]
@@ -1746,7 +1849,8 @@ def render_buildings() -> str:
 def render_custom_loc() -> str:
     out = [HEADER.rstrip("\n"),
            "# A world's name from its index (gen_solar_sites.SITES order), for the",
-           "# notices (space_race_events.90 / .91 / .92) and the Colony Fleets section.",
+           "# notices (space_race_events.90 / .91 / .92), the Colony Fleets section and the",
+           "# module queue; then each queue place's module.",
            "# Each branch has_variable-guarded.",
            ""]
     names = [("sr_site_notice_gained_name", "sr_site_notice_gained"),
@@ -1757,7 +1861,9 @@ def render_custom_loc() -> str:
              ("sr_cf_target_name", "sr_cf_target"),
              *[(f"sr_cf_slot_{n}_name", f"sr_cf_{n}_site") for n in range(1, FLEET_SLOTS + 1)],
              ("sr_cf_notice_target_name", "sr_cf_notice_target"),
-             ("sr_cf_notice_founded_name", "sr_cf_notice_founded")]
+             ("sr_cf_notice_founded_name", "sr_cf_notice_founded"),
+             # The module queue (slice 4 design § 11): each place's world.
+             *[(f"sr_mq_{n}_world_name", f"sr_mq_{n}_site") for n in range(1, QUEUE_SLOTS + 1)]]
     for name, var in names:
         out += [f"{name} = {{", "\ttype = country", "\trandom_valid = no", ""]
         for site in SITES:
@@ -1767,6 +1873,18 @@ def render_custom_loc() -> str:
                     f"\t\t\tvar:{var} = {site.index}",
                     "\t\t}",
                     f"\t\tlocalization_key = sr_site_name_{site.key}",
+                    "\t}"]
+        out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
+    out += ["# Each queue place's module, from its type code."]
+    for n in range(1, QUEUE_SLOTS + 1):
+        out += [f"sr_mq_{n}_module_name = {{", "\ttype = country", "\trandom_valid = no", ""]
+        for t in ("a", "b", *GENERIC_TYPES):
+            out += ["\ttext = {",
+                    "\t\ttrigger = {",
+                    f"\t\t\thas_variable = sr_mq_{n}_type",
+                    f"\t\t\tvar:sr_mq_{n}_type = {MODULE_CODES[t]}",
+                    "\t\t}",
+                    f"\t\tlocalization_key = sr_mq_module_{t}",
                     "\t}"]
         out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
     return "\n".join(out)
@@ -1871,6 +1989,21 @@ def _module_row(site: Site) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _queue_row(n: int) -> list[str]:
+    op = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( "
+          f"'(CFixedPoint){n}' ) ).End")
+    out = ["\t\tte_sr_mq_row = {"]
+    out += _override("mq_visible", f'visible = "[{_eq(f"sr_disp_mq_{n}", 1)}]"')
+    out += _override("mq_place", f'raw_text = "{n}."')
+    out += _override("mq_world", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_mq_{n}_world_name')]\"")
+    out += _override("mq_module", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_mq_{n}_module_name')]\"")
+    out += _override("mq_remove_button",
+                     f"enabled = \"[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( {op} )]\"",
+                     f"onclick = \"[GetScriptedGui('sr_colony_module_queue_sgui').Execute( {op} )]\"",
+                     f"tooltip = \"[GetScriptedGui('sr_colony_module_queue_sgui').ExecuteTooltip( {op} )]\"")
+    return out + ["\t\t}"]
+
+
 def _slot_row(n: int) -> list[str]:
     out = ["\t\tte_sr_cf_slot_row = {"]
     out += _override("slot_visible", f'visible = "[{_eq(f"sr_disp_cf_slot_{n}", 1)}]"')
@@ -1885,8 +2018,9 @@ def render_gui() -> str:
            "### gen_solar_sites.SITES (slices 2-3 design §§ 3, 8, 10). The row types are in",
            "### space_race_widget.gui: te_sr_site_row (Solar System, every world under its",
            "### location, in panel_order()), te_sr_settler_row (Settlers, every world, shown",
-           "### while ours), te_sr_cf_slot_row (Colony Fleets, one per fleet slot) and",
-           "### te_sr_module_row (Colony Modules, every world, shown while ours). Each",
+           "### while ours), te_sr_cf_slot_row (Colony Fleets, one per fleet slot),",
+           "### te_sr_mq_row (Colony Modules' queue, one per place) and te_sr_module_row",
+           "### (Colony Modules, every world, shown while ours). Each",
            "### value is a display value of sr_sites_display_generated.txt, the scripted",
            "### GUIs are in sr_colony_sguis.txt.",
            "",
@@ -1919,6 +2053,13 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for n in range(1, FLEET_SLOTS + 1):
         out += [""] + _slot_row(n)
+    out += ["\t}", "",
+            "\ttype te_sr_mq_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for n in range(1, QUEUE_SLOTS + 1):
+        out += [""] + _queue_row(n)
     out += ["\t}", "",
             "\ttype te_sr_module_rows = flowcontainer {",
             "\t\tdirection = vertical",

@@ -199,3 +199,30 @@ sr_colony_module_sgui = {
 		}
 	}
 }
+
+# Colony Modules' queue (colony modules design § 11): the entry at place
+# scope:op leaves the queue, and the ones behind it move up.
+sr_colony_module_queue_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		sr_mq_scope_place_filled = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = sr_mq_remove_tt
+			sr_mq_remove_from_scope = yes
+		}
+	}
+}

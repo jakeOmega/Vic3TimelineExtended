@@ -6,11 +6,12 @@
 #
 # A world's module levels are on its global record (sr_site_lvl_<a|b>_<key>,
 # sr_site_<hab|def|port>_<key>), so a cession or an heir takes them along. The
-# holder queues modules (country variables sr_mq_<type>_<key>, a count each);
-# the Space Program's Module Fabrication method gives points a month
+# holder queues modules in one national queue, first in first out (country
+# variables sr_mq_<n>_site and sr_mq_<n>_type, places 1 to 20, with a count per
+# world and type, sr_mq_<type>_<key>, for the caps and the panel); the Space
+# Program's Module Fabrication method gives points a month
 # (country_sr_module_fabrication_add), kept in sr_fab_stock; each 100 builds
-# the next queued module, colony by colony in table order after the last one
-# served (sr_fab_cursor). A built module fills one of eight shipment slots
+# the queue's first entry. A built module fills one of eight shipment slots
 # (sr_ms_<n>_site, _type, _arrive; sr_ms_count), waits for its body's window
 # and lands after the transit its drive buys, from the global monthly step.
 # Every world's shipments on their way are counted in sr_site_ship_<type>_<key>
@@ -21,12 +22,14 @@
 # ============================================================================
 
 # ---- The month's fabrication (the entry's pulse) ----------------------------------
-# Country scope. The month's points into the stock, kept up to its cap so a
-# stall (nothing queued, every slot taken) loses nothing short of it; then up to
-# two modules, each into a free shipment slot.
+# Country scope. The queue's counts rebuilt; the month's points into the stock,
+# kept up to its cap so a stall (nothing queued, every slot taken) loses nothing
+# short of it; then up to two modules from the head of the queue, each into a
+# free shipment slot.
 sr_mod_month = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
+		sr_mq_recount = yes
 		sr_mod_fabrication_self_check = yes
 		if = {
 			limit = { sr_mod_fab_rate > 0 }
@@ -45,26 +48,21 @@ sr_mod_month = {
 				local_var:sr_fab_built < sr_mod_fab_per_month
 				sr_mod_fab_stock_value >= sr_module_points
 				sr_ms_has_free_slot = yes
-				sr_mq_any = yes
+				has_variable = sr_mq_1_site
+				has_variable = sr_mq_1_type
 			}
 			change_local_variable = { name = sr_fab_built add = 1 }
-			sr_mod_fab_next = yes
+			sr_mod_fab_head = yes
 		}
 	}
 }
 
-# Country scope, from sr_mod_fab_take_<key>: one module of TYPE (shipment code
-# CODE) for the world KEY (index INDEX) leaves the queue, costs its points, and
-# fills a shipment slot; the world counts it on its way at once, so the queue's
-# caps see it the same month.
+# Country scope, from sr_mod_fab_head (the queue's first entry, already out of
+# the queue): one module of TYPE (shipment code CODE) for the world KEY (index
+# INDEX) costs its points and fills a shipment slot; the world counts it on its
+# way at once, so the queue's caps see it the same month.
 sr_mod_fab_build = {
-	change_variable = { name = sr_mq_$TYPE$_$KEY$ subtract = 1 }
-	if = {
-		limit = { var:sr_mq_$TYPE$_$KEY$ <= 0 }
-		remove_variable = sr_mq_$TYPE$_$KEY$
-	}
 	change_variable = { name = sr_fab_stock subtract = sr_module_points }
-	set_variable = { name = sr_fab_cursor value = $INDEX$ }
 	sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }
 	set_local_variable = { name = sr_ms_new_site value = $INDEX$ }
 	set_local_variable = { name = sr_ms_new_type value = $CODE$ }
@@ -72,23 +70,26 @@ sr_mod_fab_build = {
 }
 
 # ---- The queue -----------------------------------------------------------------------
-# Country scope. One more module of TYPE queued at the world KEY. The caller has
-# checked the cap (sr_mod_can_queue_<type>_<key>).
+# Country scope. One more module of TYPE (code CODE) for the world KEY (index
+# INDEX), at the end of the queue (sr_mq_append, generated), and in the world's
+# count at once, so the next click's cap sees it. The caller has checked the cap
+# and a free place (sr_mod_can_queue_<type>_<key>). Removals recount
+# (sr_mq_recount, generated), as the month does.
 sr_mod_queue = {
-	if = {
-		limit = { NOT = { has_variable = sr_mq_$TYPE$_$KEY$ } }
-		set_variable = { name = sr_mq_$TYPE$_$KEY$ value = 0 }
-	}
-	change_variable = { name = sr_mq_$TYPE$_$KEY$ add = 1 }
+	set_local_variable = { name = sr_mq_new_site value = $INDEX$ }
+	set_local_variable = { name = sr_mq_new_type value = $CODE$ }
+	sr_mq_append = yes
+	sr_mq_count_add = { VAR = sr_mq_$TYPE$_$KEY$ }
 }
 
-# Country scope. The world's whole queue, cleared (the row's clear button).
-sr_mod_clear_queue = {
-	if = { limit = { has_variable = sr_mq_hab_$KEY$ } remove_variable = sr_mq_hab_$KEY$ }
-	if = { limit = { has_variable = sr_mq_a_$KEY$ } remove_variable = sr_mq_a_$KEY$ }
-	if = { limit = { has_variable = sr_mq_b_$KEY$ } remove_variable = sr_mq_b_$KEY$ }
-	if = { limit = { has_variable = sr_mq_port_$KEY$ } remove_variable = sr_mq_port_$KEY$ }
-	if = { limit = { has_variable = sr_mq_def_$KEY$ } remove_variable = sr_mq_def_$KEY$ }
+# Country scope. One more of a world's queued modules of a type (VAR, a
+# sr_mq_<type>_<key>).
+sr_mq_count_add = {
+	if = {
+		limit = { NOT = { has_variable = $VAR$ } }
+		set_variable = { name = $VAR$ value = 0 }
+	}
+	change_variable = { name = $VAR$ add = 1 }
 }
 
 # ---- Shipment slots -----------------------------------------------------------------

@@ -754,8 +754,7 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=k):
                 for var in gss.module_vars(site):
                     self.assertIn(f"remove_global_variable = {var}", release)
-                for t in gss.MODULE_TYPES:
-                    self.assertIn(f"remove_variable = sr_mq_{t}_{k}", unmirror)
+                self.assertIn(f"sr_mq_drop_site = {{ INDEX = {site.index} }}", unmirror)
 
     def test_the_caps_count_queue_and_shipments(self):
         for site in gss.SITES:
@@ -787,27 +786,69 @@ class ModulesTest(unittest.TestCase):
                     self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} {cap}", body)
                 self.assertIn(f"sr_site_sync_{k} = yes", body)
 
-    def test_fabrication_takes_the_queue_in_order_and_colonies_in_turn(self):
+    def test_fabrication_builds_the_queue_first_in_first_out(self):
+        q = gss.QUEUE_SLOTS
+        month = _block(self.modules, "sr_mod_month")
+        loop = _block(month, "while")
+        self.assertIn("has_variable = sr_mq_1_site", _block(loop, "limit"))
+        self.assertIn("sr_mod_fab_head = yes", loop)
+        self.assertLess(month.index("sr_mq_recount = yes"), month.index("while"))
+        head = _block(self.effects, "sr_mod_fab_head")
+        # The head leaves the queue before it is built, and is built only for a world THIS holds.
+        self.assertLess(head.index("sr_mq_remove_1 = yes"), head.index("sr_mod_fab_build"))
         for site in gss.SITES:
-            body = _block(self.effects, f"sr_mod_fab_take_{site.key}")
             with self.subTest(site=site.key):
-                self.assertEqual(re.findall(r"TYPE = (\w+) CODE", body), list(gss.MODULE_TYPES))
-        nxt = _block(self.effects, "sr_mod_fab_next")
-        after = re.findall(r"sr_mod_fab_cursor_value < (\d+) sr_mq_any_(\w+) = yes", nxt)
-        self.assertEqual(after, [(str(s.index), s.key) for s in gss.SITES])
-        tail = nxt[nxt.rindex("sr_mod_fab_cursor_value"):]
-        self.assertEqual(re.findall(r"limit = \{ sr_mq_any_(\w+) = yes \}", tail), [s.key for s in gss.SITES])
+                self.assertIn(f"local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{site.key} ?= this",
+                              head)
+                for t in gss.MODULE_TYPES:
+                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]} }} sr_mod_fab_build = "
+                                  f"{{ KEY = {site.key} TYPE = {t} CODE = {gss.MODULE_CODES[t]} INDEX = {site.index} }}",
+                                  head)
+        # A new entry takes the first free place; a removal moves every later entry up one.
+        append = _block(self.effects, "sr_mq_append")
+        self.assertEqual(re.findall(r"NOT = \{ has_variable = sr_mq_(\d+)_site \}", append),
+                         [str(n) for n in range(1, q + 1)])
+        for n in range(1, q + 1):
+            remove = _block(self.effects, f"sr_mq_remove_{n}")
+            with self.subTest(place=n):
+                moves = re.findall(r"name = sr_mq_(\d+)_site value = var:sr_mq_(\d+)_site", remove)
+                self.assertEqual(moves, [(str(m), str(m + 1)) for m in range(n, q)])
+                self.assertIn(f"remove_variable = sr_mq_{q}_site", remove)
+        queue = _block(self.modules, "sr_mod_queue")
+        self.assertLess(queue.index("sr_mq_append = yes"), queue.index("sr_mq_count_add"))
+        self.assertIn(f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{q}_site }} }}", self.triggers)
         build = _block(self.modules, "sr_mod_fab_build")
         for line in ("change_variable = { name = sr_fab_stock subtract = sr_module_points }",
-                     "set_variable = { name = sr_fab_cursor value = $INDEX$ }",
                      "sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }", "sr_ms_store_new = yes"):
             self.assertIn(line, build)
+        self.assertNotIn("sr_mq_$TYPE$_$KEY$", build)
+
+    def test_the_counts_follow_the_queue(self):
+        recount = _block(self.effects, "sr_mq_recount")
+        for site in gss.SITES:
+            for t in gss.MODULE_TYPES:
+                self.assertIn(f"remove_variable = sr_mq_{t}_{site.key}", recount)
+        for n in range(1, gss.QUEUE_SLOTS + 1):
+            self.assertIn(f"value = var:sr_mq_{n}_site", recount)
+        drop = _block(self.effects[self.effects.index("\nsr_mq_drop_site = {"):], "sr_mq_drop_site")
+        self.assertIn("var:sr_mq_1_site = $INDEX$", drop)
+        self.assertTrue(drop.rstrip().endswith("sr_mq_recount = yes"))
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"sr_mq_drop_site = {{ INDEX = {site.index} }}", _block(self.effects, f"sr_site_unmirror_{site.key}"))
+                for t in ("a", "b", *gss.GENERIC_TYPES):
+                    self.assertIn("sr_mq_has_room = yes", _block(self.triggers, f"sr_mod_can_queue_{t}_{site.key}"))
+        self.assertIn("sr_mq_recount = yes", _block(self.effects, "sr_mq_remove_from_scope"))
+        rows = self.rows[self.rows.index("type te_sr_mq_rows = flowcontainer {"):]
+        for n in range(1, gss.QUEUE_SLOTS + 1):
+            self.assertIn(f"GetCustom('sr_mq_{n}_world_name')", rows)
+            self.assertIn(f"GetCustom('sr_mq_{n}_module_name')", rows)
 
     def test_the_ai_never_queues_a_placeholder(self):
         for site in gss.SITES:
             body = _block(self.effects, f"sr_mod_ai_plan_{site.key}")
             with self.subTest(site=site.key):
-                self.assertEqual(set(re.findall(r"TYPE = (\w+) \}", body)), {"hab", "a", "b"})
+                self.assertEqual(set(re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)), {"hab", "a", "b"})
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)

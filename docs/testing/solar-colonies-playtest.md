@@ -119,8 +119,10 @@ module at our first colony and fabricate now; land our shipments now; recompute 
    starting on No Module Fabrication. Orbital Assembly (Directed Energy Weapons) shows +5 Colony Module Fabrication per
    Month, and the Colony Modules section's first row reads 5.0 at full staff.
 2. **Queueing.** Each colony we hold has a row: its Crew share, then the first and second specialization, Habitat,
-   Port and Def. A level's tooltip names what it gives. + queues one ("+1" beside the level); the button greys out at
-   four specialization levels or the colony's slots, counting what is queued. The clear button empties the queue.
+   Port and Def. A level's tooltip names what it gives. + adds one to the end of the queue ("+1" beside the level, and
+   a new last line in the Queue list with the world and the module); the button greys out at four specialization
+   levels, the colony's slots or 20 entries, counting what is queued. A queue line's button removes it and the lines
+   below move up; a row's clear button removes all of that colony's lines. Fabrication builds the top line first.
 3. **A module's journey.** With 100 points in stock (option b), a queued module fills a shipment (Shipments 1 / 0),
    leaves in its world's window (1 / 0 becomes 0 / 1) and lands after the transit its drive buys (option e lands it
    now). A specialization level doubles that specialization's line in the entry's modifiers; a Habitat raises the

@@ -23,12 +23,6 @@ sr_mod_fab_stock_value = {
 	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }
 }
 
-# The last colony fabrication served, a world's index (0 before the first).
-sr_mod_fab_cursor_value = {
-	value = 0
-	if = { limit = { has_variable = sr_fab_cursor } value = var:sr_fab_cursor }
-}
-
 # ---- Upkeep (design § 8) -------------------------------------------------------------
 # Journal entry scope (the multiplier of sr_module_upkeep): the module
 # levels past the first at the colonies its country holds, read through owner.

@@ -40,9 +40,10 @@ After this slice, under Simple Colonies and Full Colonies:
    crew of 5,000 people. An understaffed colony runs its modules at the share
    its crews can man. Artificial General Intelligence needs no crews.
 4. **Modules are fabricated at Earth and shipped.** The Space Program's Module
-   Fabrication method gives points a month; the queue takes them one module at
-   a time, colony by colony; a finished module waits for its body's launch
-   window (or leaves any month with a torch) and is installed when it lands.
+   Fabrication method gives points a month; the national queue takes them one
+   module at a time, first in first out; a finished module waits for its body's
+   launch window (or leaves any month with a torch) and is installed when it
+   lands.
 5. **Extraplanetary Bases draw on colonies' room.** Each world's room holds
    tens of base levels at its own grade (16 Psyche +30%, the outer moons worse);
    levels fill the best room first; past all of it, a level works at −50%.
@@ -174,16 +175,19 @@ Every module costs 100 points.
 entry): the month's points go into `sr_fab_stock`, kept up to 200 so a stall
 (no free shipment, nothing queued) loses nothing short of that. Then, up to
 twice a month, while the stock holds 100 and a shipment slot is free, the
-next queued module is built: its colony is the first after the last one
-served (`sr_fab_cursor`, in table order, round the end), so every colony with
-a queue gets a module before any gets two; within a colony, Habitat first,
-then the first specialization, the second, the Spaceport, Defences. It
-leaves the queue and fills a shipment slot.
+queue's first entry is built: it leaves the queue and fills a shipment slot.
+An entry for a world the country no longer holds is dropped unbuilt.
 
-**The queue** is the holder's: per world and module type a count,
-`sr_mq_<type>_<key>` (types `a`, `b`, `hab`, `def`, `port`). A colony that
-leaves its holder takes nothing of it (the next holder starts with none), as
-the emigration priority doesn't follow either.
+**The queue** is the holder's, one for the nation, first in first out
+(owner, 2026-10-25): twenty places, `sr_mq_<n>_site` (a world's index) and
+`sr_mq_<n>_type` (the module's code), filled from place 1 without gaps. A row's
++ adds an entry at the end; removing one (its button in the queue's list, a
+colony's clear button, or the world leaving the country) moves every later
+entry up. A count per world and module type, `sr_mq_<type>_<key>` (types `a`,
+`b`, `hab`, `def`, `port`), follows the queue for the caps and the panel:
+added to on each new entry and recounted after every removal and monthly. A
+colony that leaves its holder takes nothing of it (the next holder starts with
+none), as the emigration priority doesn't follow either.
 
 ## 6. Shipments
 
@@ -302,8 +306,9 @@ stock; queue one of each at our first colony; land our shipments now.
 
 1. **Every module costs 100 points**, the methods give 5, 12 and 25 a month:
    a module every 20, 8 or 4 months at full staff. First guesses.
-2. **Round-robin, not first-in-first-out**: each colony with a queue gets a
-   module in turn; a player concentrates by queuing only where they want.
+2. **First in first out** (settled by the owner on the PR, 2026-10-25, in place
+   of a round-robin over colonies): the queue builds in the order modules were
+   added, and a player moves one up by removing what is ahead of it.
 3. **Habitats need no crew** and staffing never shrinks room.
 4. **Understaffing scales the modules' effect** rather than idling a module.
 5. **No dismantling**: the founding specialization stays at least level 1, so
@@ -351,4 +356,8 @@ Where the build departs from the sections above, and why:
   "Crew"): a cell is 52 wide (`test_space_race_labels.py`), and the heads'
   tooltips name the modules.
 - **The console is a new event**, `te_debug_space_race.4`.
-
+- **The queue is first in first out** (owner, 2026-10-25, on the PR), not the
+  round-robin over colonies of § 5's first draft: twenty places in order, a
+  list in the panel with a remove button per entry (`sr_colony_module_queue_sgui`),
+  the per-world counts kept for the caps. No reordering control: a move-up
+  button would need markup no mod panel has used yet.

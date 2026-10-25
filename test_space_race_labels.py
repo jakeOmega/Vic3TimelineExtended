@@ -298,7 +298,7 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others)"),
+        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others|mq_header)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
