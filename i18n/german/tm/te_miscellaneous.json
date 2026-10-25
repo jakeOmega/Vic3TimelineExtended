@@ -619,9 +619,17 @@
   "en": "Invest in rail, depot, and logistics capacity to permanently improve input [concept_throughput] across the planned network. Strong long-term benefit; expensive and slow: avoid during crisis.",
   "de": "Investiert in Schienennetz, Lagerhäuser und Logistikkapazität, um den [concept_throughput] von Vorleistungen im gesamten Plannetz dauerhaft zu verbessern. Starker langfristiger Nutzen; teuer und langsam: in Krisenzeiten vermeiden."
  },
+ "CE_DOMINION_SUBJECT_TT": {
+  "en": "Opens a decision on raising this colony to a dominion: its [concept_liberty_desire] falls, it stops counting as a colonial subject, and it may start diplomatic plays of its own. Nothing changes until we choose, and we may reconsider.",
+  "de": "Öffnet eine Entscheidung darüber, diese Kolonie zum Dominion zu erheben: Der [concept_liberty_desire] der Kolonie sinkt, sie zählt nicht mehr als koloniales Klientelland, und sie darf eigene Diplomatiespiele beginnen. Bis zu unserer Entscheidung ändert sich nichts, und wir können es uns anders überlegen."
+ },
  "CE_EMERGENCY_ALLOCATION_DESC": {
   "en": "Redirect critical materials and transport to a priority deficit sector. Accelerates coordination momentum but risks building new imbalances elsewhere: best used during panic or deep downturn.",
   "de": "Leitet kritische Materialien und Transportkapazität in einen vorrangigen Mangelsektor um. Beschleunigt die Koordinationsdynamik, riskiert aber neue Ungleichgewichte an anderer Stelle: am besten in Panik oder tiefer Rezession einzusetzen."
+ },
+ "CE_FREE_SUBJECT_TT": {
+  "en": "Opens a decision on granting this subject full independence. Nothing changes until we choose, and we may reconsider.",
+  "de": "Öffnet eine Entscheidung darüber, diesem Klientelland die volle Unabhängigkeit zu gewähren. Bis zu unserer Entscheidung ändert sich nichts, und wir können es uns anders überlegen."
  },
  "CE_GARRISON_DOWN_TT": {
   "en": "Lower $je_colonial_empire_row_garrison$ one level: #R [GetPlayer.MakeScope.ScriptValue('colonial_garrison_step_term')|2]#! less [concept_colonial_stability] a month, and #G [GetPlayer.MakeScope.ScriptValue('colonial_garrison_authority_per_level')|0]#! [concept_authority] freed.",
@@ -671,6 +679,10 @@
   "en": "Must have colonial territories (non-[concept_homeland] states) or qualifying colonial subjects.",
   "de": "Muss Kolonialgebiete besitzen (Staaten, die kein [concept_homeland] sind) oder über geeignete koloniale Vasallen verfügen."
  },
+ "CE_NO_DECISION_PENDING": {
+  "en": "No other decolonization decision is waiting for our answer",
+  "de": "Keine andere Dekolonisierungsentscheidung wartet auf unsere Antwort"
+ },
  "CE_PLANNED_DECOLONIZATION_DESC": {
   "en": "[concept_decolonization_system]: release all remaining colonial territories as independent nations in an orderly fashion. A graceful end to empire.",
   "de": "[concept_decolonization_system]: Entlässt alle verbliebenen Kolonialgebiete in geordneter Weise in die Unabhängigkeit. Ein würdevolles Ende des Imperiums."
@@ -691,6 +703,22 @@
   "en": "Release one colonial territory as an independent nation. Improves stability and grants a peaceful [concept_decolonization_system] [concept_prestige] bonus.",
   "de": "Entlässt ein Kolonialgebiet in die Unabhängigkeit. Verbessert die Stabilität und gewährt einen [concept_prestige]-Bonus für friedliche [concept_decolonization_system]."
  },
+ "CE_RELEASE_STATE_ROUND_TABLE_NO_AUTHORITY": {
+  "en": "A Round Table Conference needs more [concept_authority] than we have.",
+  "de": "Eine Rundtischkonferenz erfordert mehr [concept_authority], als wir haben."
+ },
+ "CE_RELEASE_STATE_ROUND_TABLE_OPEN": {
+  "en": "A Round Table Conference is open to it.",
+  "de": "Eine Rundtischkonferenz steht ihm offen."
+ },
+ "CE_RELEASE_STATE_ROUND_TABLE_UNACCEPTED": {
+  "en": "No Round Table Conference: some of its people are severely unaccepted.",
+  "de": "Keine Rundtischkonferenz: Teile seiner Bevölkerung sind kaum akzeptiert."
+ },
+ "CE_RELEASE_STATE_TT": {
+  "en": "Opens a decision on this territory: grant it independence, or negotiate it at a Round Table Conference. The new nation would be its largest people whose [concept_homeland] it is or, if none of them lives there, its largest people other than ours, and it would leave with every neighbouring state of ours where they are at home. Nothing is released until we choose, and we may reconsider.",
+  "de": "Öffnet eine Entscheidung zu diesem Gebiet: ihm die Unabhängigkeit gewähren oder sie in einer Rundtischkonferenz aushandeln. Die neue Nation wäre die des größten Volkes, dessen [concept_homeland] das Gebiet ist, oder, falls keines davon dort lebt, die des größten Volkes außer unserem; sie nähme jeden unserer angrenzenden Staaten mit, in dem dieses Volk zu Hause ist. Bis zu unserer Entscheidung wird nichts entlassen, und wir können es uns anders überlegen."
+ },
  "CE_ROUND_TABLE_CONFERENCE": {
   "en": "Convene a Round Table Conference",
   "de": "Rundtischkonferenz einberufen"
@@ -703,13 +731,45 @@
   "en": "Requires at least one overseas colonial state with no severely unaccepted population.",
   "de": "Erfordert mindestens einen überseeischen Kolonialstaat ohne schwer unakzeptierte Bevölkerung."
  },
+ "CE_STATE_IS_ELIGIBLE": {
+  "en": "The territory is ours, overseas, not a [concept_homeland] of our cultures, populous enough, and not mostly of our own people",
+  "de": "Das Gebiet gehört uns, liegt in Übersee, ist kein [concept_homeland] unserer Kulturen, ist bevölkerungsreich genug und besteht nicht überwiegend aus unserer eigenen Bevölkerung"
+ },
+ "CE_STATE_NO_SEVERELY_UNACCEPTED": {
+  "en": "None of the territory's people are severely unaccepted",
+  "de": "Keine Bevölkerungsgruppe des Gebiets ist kaum akzeptiert"
+ },
  "CE_STRATEGIC_STOCKPILE_DESC": {
   "en": "Order the accumulation of national material reserves as a buffer against sudden input shortages. A steady, defensive tool providing modest [concept_bubble_pressure] reduction at low planning cost.",
   "de": "Ordnet den Aufbau nationaler Materialreserven als Puffer gegen plötzliche Engpässe bei Vorleistungen an. Ein beständiges, defensives Mittel, das bei geringen Planungskosten eine bescheidene Senkung des [concept_bubble_pressure] bewirkt."
  },
+ "CE_SUBJECT_AUTONOMY_NOT_ON_COOLDOWN": {
+  "en": "We have not changed its autonomy recently",
+  "de": "Wir haben seine Autonomie in letzter Zeit nicht geändert"
+ },
+ "CE_SUBJECT_CAN_BECOME_DOMINION": {
+  "en": "It is a colony that can become a dominion. A chartered company or a protectorate has no looser kind of subject to become",
+  "de": "Es ist eine Kolonie, die ein Dominion werden kann. Für eine Handelsgesellschaft oder ein Protektorat gibt es keine lockerere Art von Klientelland, die sie werden könnten"
+ },
+ "CE_SUBJECT_IS_OURS": {
+  "en": "It is our own colonial subject, not one of our subjects' subjects",
+  "de": "Es ist unser eigenes koloniales Klientelland, nicht das Klientelland eines unserer Klientelländer"
+ },
+ "CE_SUBJECT_NOT_OPPOSING": {
+  "en": "It is not our enemy in a diplomatic play",
+  "de": "Es ist in keinem Diplomatiespiel unser Gegner"
+ },
  "CE_TARGET_REDUCTION_DESC": {
   "en": "Formally scale back overambitious plan targets to provisioned capacity, clearing systemic friction. Reduces [concept_bubble_pressure] significantly but irritates [concept_upper_strata] who invested in ambitious output projections.",
   "de": "Senkt überambitionierte Planziele förmlich auf die vorgesehene Kapazität und beseitigt systemische Reibung. Verringert [concept_bubble_pressure] erheblich, verärgert aber die [concept_upper_strata], die in ehrgeizige Produktionsprognosen investiert hat."
+ },
+ "CE_WAR_OPEN_TALKS_TT": {
+  "en": "Opens the decision to begin talks with them. Nothing is agreed by the click.",
+  "de": "Öffnet die Entscheidung, Gespräche mit ihnen aufzunehmen. Mit dem Klick wird nichts vereinbart."
+ },
+ "CE_WAR_TALKS_NOT_OPEN": {
+  "en": "A war with a territory's rebels is under way, with no talks open",
+  "de": "Ein Krieg mit den Rebellen eines Gebiets läuft, ohne dass Gespräche eröffnet sind"
  },
  "CE_WITHDRAW_POSSIBLE_TT": {
   "en": "Must have funds in the [concept_investment_pool]",
@@ -1752,16 +1812,20 @@
   "de": "[SCOPE.sCountry('embargo_rival').GetName] erhält #bold $trade_embargo_suffered_modifier$#! für #v 5 Jahre#!."
  },
  "IS_DECOLONIZATION_ELIGIBLE_STATE_TT": {
-  "en": "Must be a non-[concept_homeland] territory of at least 100,000 population, outside the capital's region and neighboring regions.",
-  "de": "Muss ein Gebiet sein, das kein [concept_homeland] ist, mindestens 100.000 Einwohner hat und außerhalb der Hauptstadtregion und der angrenzenden Regionen liegt."
+  "en": "Must be a non-[concept_homeland] territory of at least 100,000 population, separated from our capital by sea (not joined to it over land through our own states), where a people sharing no [concept_heritage_trait] with ours is more than a tenth of the population and no more than half of the people are of our primary cultures.",
+  "de": "Muss ein Gebiet sein, das kein [concept_homeland] ist, mindestens 100.000 Einwohner hat und durch das Meer von unserer Hauptstadt getrennt ist (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), in dem ein Volk, das mit unserem Volk keinerlei [concept_heritage_trait] teilt, mehr als ein Zehntel der Bevölkerung ausmacht und höchstens die Hälfte der Bevölkerung zu unseren Hauptkulturen gehört."
  },
  "IS_OVERSEAS_COLONIAL_STATE_TT": {
-  "en": "Must be a populous non-[concept_homeland] territory outside the capital's region and neighboring regions, with either a low-acceptance indigenous population making up more than a tenth of it OR average [concept_sol] below 80% of the metropole's national average (with some non-primary population present).",
-  "de": "Muss ein bevölkerungsreiches Gebiet sein, das kein [concept_homeland] ist und außerhalb der Hauptstadtregion und der angrenzenden Regionen liegt, mit entweder einer indigenen Bevölkerung mit geringer Akzeptanz, die mehr als ein Zehntel ausmacht, ODER einem durchschnittlichen [concept_sol] unter 80% des nationalen Durchschnitts des Mutterlandes (bei Vorhandensein einer nicht-primären Bevölkerung)."
+  "en": "Must be a populous non-[concept_homeland] territory separated from our capital by sea (not joined to it over land through our own states), where a people sharing no [concept_heritage_trait] with ours is more than a tenth of the population and no more than half of the people are of our primary cultures, and which is held down: an [concept_unincorporated_state], OR that people's average [concept_acceptance] below 60, OR average [concept_sol] below 80% of the metropole's national average.",
+  "de": "Muss ein bevölkerungsreiches Gebiet sein, das kein [concept_homeland] ist und durch das Meer von unserer Hauptstadt getrennt ist (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), in dem ein Volk, das mit unserem Volk keinerlei [concept_heritage_trait] teilt, mehr als ein Zehntel der Bevölkerung ausmacht und höchstens die Hälfte der Bevölkerung zu unseren Hauptkulturen gehört, und das niedergehalten wird: als [concept_unincorporated_state|l] ODER bei einer durchschnittlichen [concept_acceptance] dieses Volkes unter 60 ODER bei einem durchschnittlichen [concept_sol] unter 80% des nationalen Durchschnitts des Mutterlandes."
  },
  "IS_OVERSEAS_FROM_CAPITAL_TT": {
   "en": "Must be outside the capital's region and all neighboring regions.",
   "de": "Muss außerhalb der Hauptstadtregion und aller angrenzenden Regionen liegen."
+ },
+ "IS_SEPARATED_FROM_CAPITAL_TT": {
+  "en": "Must be separated from our capital by sea: not joined to it over land through our own states. A [concept_strait] joins two states only when both are [concept_homeland]s of our primary cultures.",
+  "de": "Muss durch das Meer von unserer Hauptstadt getrennt sein: nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden. Eine [concept_strait] verbindet zwei Staaten nur dann, wenn beide [Concept('concept_homeland','Heimatländer')] unserer Hauptkulturen sind."
  },
  "IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT": {
   "en": "Must be a populous non-[concept_homeland] territory with a significant low-acceptance local population.",
@@ -2199,6 +2263,34 @@
   "en": "Our probe will target Venus, studying its atmosphere and greenhouse dynamics. The atmospheric data will accelerate our research and the wider space-race program for ten years, fading over that time.",
   "de": "Unsere Sonde wird die Venus anvisieren und ihre Atmosphäre und Treibhausdynamik untersuchen. Die Atmosphärendaten beschleunigen zehn Jahre lang unsere Forschung und das gesamte Programm des Wettlaufs ins All und klingen dabei allmählich ab."
  },
+ "SR_PROGRESS_ADD_1_MONTHS_TT": {
+  "en": "#G +1 month#! of [concept_space_race] mission progress (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_1')|1]#!)",
+  "de": "#G +1 Monat#! Missionsfortschritt im [concept_space_race] (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_1')|1]#!)"
+ },
+ "SR_PROGRESS_ADD_2_MONTHS_TT": {
+  "en": "#G +2 months#! of [concept_space_race] mission progress (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_2')|1]#!)",
+  "de": "#G +2 Monate#! Missionsfortschritt im [concept_space_race] (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_2')|1]#!)"
+ },
+ "SR_PROGRESS_ADD_3_MONTHS_TT": {
+  "en": "#G +3 months#! of [concept_space_race] mission progress (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_3')|1]#!)",
+  "de": "#G +3 Monate#! Missionsfortschritt im [concept_space_race] (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_3')|1]#!)"
+ },
+ "SR_PROGRESS_ADD_4_MONTHS_TT": {
+  "en": "#G +4 months#! of [concept_space_race] mission progress (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_4')|1]#!)",
+  "de": "#G +4 Monate#! Missionsfortschritt im [concept_space_race] (#G +[SCOPE.GetRootScope.ScriptValue('sr_event_months_4')|1]#!)"
+ },
+ "SR_PROGRESS_LOSE_1_MONTHS_TT": {
+  "en": "#R -1 month#! of [concept_space_race] mission progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_1')|1]#!)",
+  "de": "#R -1 Monat#! Missionsfortschritt im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_1')|1]#!)"
+ },
+ "SR_PROGRESS_LOSE_2_MONTHS_TT": {
+  "en": "#R -2 months#! of [concept_space_race] mission progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_2')|1]#!)",
+  "de": "#R -2 Monate#! Missionsfortschritt im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_2')|1]#!)"
+ },
+ "SR_PROGRESS_LOSE_3_MONTHS_TT": {
+  "en": "#R -3 months#! of [concept_space_race] mission progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_3')|1]#!)",
+  "de": "#R -3 Monate#! Missionsfortschritt im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_3')|1]#!)"
+ },
  "SR_SAFE_APPROACH_DESC": {
   "en": "Proceed methodically and carefully. Slower progress, but minimal risk of catastrophic failure.",
   "de": "Geht methodisch und sorgfältig vor. Langsamerer Fortschritt, aber minimales Risiko eines katastrophalen Scheiterns."
@@ -2206,6 +2298,30 @@
  "SR_SAFE_APPROACH_EFFECT": {
   "en": "Switching to a safe, methodical approach: the same pace, and far less likely to fail.",
   "de": "Wechsel zu einem sicheren, methodischen Ansatz: dasselbe Tempo und deutlich geringeres Risiko des Scheiterns."
+ },
+ "SR_SETBACK_LOSE_1_MONTHS_TT": {
+  "en": "#R Lose 1 month#! of this milestone's [concept_space_race] progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_1')|1]#!)",
+  "de": "#R Verlust von 1 Monat#! am Fortschritt dieses Meilensteins im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_1')|1]#!)"
+ },
+ "SR_SETBACK_LOSE_2_MONTHS_TT": {
+  "en": "#R Lose 2 months#! of this milestone's [concept_space_race] progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_2')|1]#!)",
+  "de": "#R Verlust von 2 Monaten#! am Fortschritt dieses Meilensteins im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_2')|1]#!)"
+ },
+ "SR_SETBACK_LOSE_3_MONTHS_TT": {
+  "en": "#R Lose 3 months#! of this milestone's [concept_space_race] progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_3')|1]#!)",
+  "de": "#R Verlust von 3 Monaten#! am Fortschritt dieses Meilensteins im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_3')|1]#!)"
+ },
+ "SR_SETBACK_LOSE_4_MONTHS_TT": {
+  "en": "#R Lose 4 months#! of this milestone's [concept_space_race] progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_4')|1]#!)",
+  "de": "#R Verlust von 4 Monaten#! am Fortschritt dieses Meilensteins im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_4')|1]#!)"
+ },
+ "SR_SETBACK_LOSE_5_MONTHS_TT": {
+  "en": "#R Lose 5 months#! of this milestone's [concept_space_race] progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_5')|1]#!)",
+  "de": "#R Verlust von 5 Monaten#! am Fortschritt dieses Meilensteins im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_5')|1]#!)"
+ },
+ "SR_SETBACK_LOSE_6_MONTHS_TT": {
+  "en": "#R Lose 6 months#! of this milestone's [concept_space_race] progress (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_6')|1]#!)",
+  "de": "#R Verlust von 6 Monaten#! am Fortschritt dieses Meilensteins im [concept_space_race] (#R -[SCOPE.GetRootScope.ScriptValue('sr_event_months_6')|1]#!)"
  },
  "SR_SHACKLETON_CHOSEN_TT": {
   "en": "We will target Shackleton Crater: a treacherous but scientifically invaluable landing site near the lunar south pole. Polar-ice and shadowed-region observations will raise our research speed and innovation cap for ten years, fading over that time.",
@@ -3419,13 +3535,17 @@
   "en": "Sea cables",
   "de": "Seekabel"
  },
+ "TE_STATE_GRID_ROW_CABLES_TT": {
+  "en": "#b Undersea Cables#!\\nThis state's $building_grid_hvdc_interconnector$ crosses up to #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')] (#b $building_grid_undersea_cable_range_add$#!). It joins this state's grid to any station with a cable of its own when either one's range reaches the other: one of ours in another [concept_market_area], or one of a country we have a $grid_interconnection_agreement$ with. The number is how many stations it joins this way.\\n\\n[GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)]",
+  "de": "#b Seekabel#!\\nDie $building_grid_hvdc_interconnector$ dieses Staates überquert bis zu #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')] (#b $building_grid_undersea_cable_range_add$#!). Sie verbindet das Netz dieses Staates mit jeder Station, die ein eigenes Kabel hat, sobald die Reichweite eines der beiden Kabel das andere erreicht: mit einer von uns in einem anderen [concept_market_area] oder mit einer eines Landes, mit dem wir ein $grid_interconnection_agreement$ haben. Die Zahl gibt an, wie viele Stationen sie auf diese Weise verbindet.\\n\\n[GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)]"
+ },
  "TE_STATE_GRID_ROW_EFFICIENCY": {
   "en": "Efficiency",
   "de": "Effizienz"
  },
  "TE_STATE_GRID_ROW_EFFICIENCY_TT": {
-  "en": "#b Grid Transmission Efficiency#!\\nThe share of the $grid_power$ this state's station receives that it turns back into $electricity$: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Rural Electrification, Transistors, Clean Energy Technologies, Smart Grids and Modern Material Science raise it.",
-  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil am $grid_power$, den die Station dieses Staates empfängt und wieder in $electricity$ umwandelt: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Elektrifizierung des ländlichen Raums, Transistoren, Saubere-Energie-Technologien, Intelligente Stromnetze und Moderne Materialwissenschaft erhöhen ihn."
+  "en": "#b Grid Transmission Efficiency#!\\nThe share of the $grid_power$ this state's station receives that it turns back into $electricity$: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Rural Electrification, Transistors, Microprocessor, Clean Energy Technologies, Smart Grids and Quantum Materials raise it.",
+  "de": "#b Netzübertragungseffizienz#!\\nDer Anteil am $grid_power$, den die Station dieses Staates empfängt und wieder in $electricity$ umwandelt: #v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!. Elektrifizierung des ländlichen Raums, Transistoren, Mikroprozessor, Saubere-Energie-Technologien, Intelligente Stromnetze und Quantenmaterialien erhöhen ihn."
  },
  "TE_STATE_GRID_ROW_HUB": {
   "en": "Hub",
@@ -3435,13 +3555,17 @@
   "en": "#b Hub#!\\nThe grid's largest producer of $electricity$: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Every state on a grid names the same hub, so it tells grids apart.",
   "de": "#b Knoten#!\\nDer größte Erzeuger von $electricity$ im Netz: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Jeder Staat in einem Netz nennt denselben Knoten, daran lassen sich die Netze unterscheiden."
  },
+ "TE_STATE_GRID_ROW_MARKET_TT": {
+  "en": "#b Between Markets#!\\nThis grid joins more than one [concept_market]. This state's market's stations on it #v [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)1'), 'te_grid_market_send_more')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)2'), 'te_grid_market_receive_more')]#!, by #v [State.MakeScope.ScriptValue('te_grid_market_flow_disp')|1]#! $grid_power$ a week.\\n\\n$grid_power$ has a fixed price, so what crosses is paid for at it: a market's senders are paid for all they send, and its receivers pay for all they receive.",
+  "de": "#b Zwischen Märkten#!\\nDieses Netz verbindet mehr als einen [concept_market]. Die Stationen des Marktes dieses Staates in diesem Netz #v [AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)1'), 'te_grid_market_send_more')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)2'), 'te_grid_market_receive_more')]#!, und zwar um #v [State.MakeScope.ScriptValue('te_grid_market_flow_disp')|1]#! $grid_power$ pro Woche.\\n\\n$grid_power$ hat einen festen Preis, und was zwischen den Märkten fließt, wird zu diesem Preis bezahlt: Die Sender eines Marktes werden für alles bezahlt, was sie senden, und seine Empfänger zahlen für alles, was sie empfangen."
+ },
  "TE_STATE_GRID_ROW_MODE": {
   "en": "Mode",
   "de": "Modus"
  },
  "TE_STATE_GRID_ROW_MODE_TT": {
-  "en": "#b Mode#!\\n#v Sending#!: this state has more $electricity$ for its demand than the grid as a whole, and its station sends the spare as $grid_power$.\\n#v Receiving#!: it has less, and its station buys $grid_power$ and turns it into $electricity$.\\n#v Idle#!: it has as much as the grid, or the grid has nothing to share.\\n#v Offline#!: the station is less than a quarter staffed, or hasn't been balanced yet. It joins its grid at the next month's balancing.",
-  "de": "#b Modus#!\\n#v Sendend#!: Dieser Staat hat im Verhältnis zu seinem Bedarf mehr $electricity$ als das Netz insgesamt, und seine Station gibt den Überschuss als $grid_power$ ab.\\n#v Empfangend#!: Er hat weniger, und seine Station kauft $grid_power$ und wandelt ihn in $electricity$ um.\\n#v Leerlauf#!: Er hat so viel wie das Netz, oder das Netz hat nichts zu verteilen.\\n#v Offline#!: Die Station ist zu weniger als einem Viertel besetzt oder wurde noch nicht abgeglichen. Sie schließt sich beim Netzausgleich des nächsten Monats ihrem Netz an."
+  "en": "#b Mode#!\\n#v Sending#!: this state has more $electricity$ for its demand than the grid as a whole, and its station sends the spare as $grid_power$.\\n#v Receiving#!: it has less, and its station buys $grid_power$ and turns it into $electricity$.\\n#v Idle#!: it has as much as the grid, or the grid has nothing to share.\\n#v Offline#!: the station hasn't been balanced yet. It joins its grid at the next month's balancing.\\nA station moves its staff's share of what it is asked, so the balancing asks a thinly staffed one for more, enough down to a fifth staffed. With no staff at all it moves nothing, and starts again as soon as it hires.",
+  "de": "#b Modus#!\\n#v Sendend#!: Dieser Staat hat im Verhältnis zu seinem Bedarf mehr $electricity$ als das Netz insgesamt, und seine Station gibt den Überschuss als $grid_power$ ab.\\n#v Empfangend#!: Er hat weniger, und seine Station kauft $grid_power$ und wandelt ihn in $electricity$ um.\\n#v Leerlauf#!: Er hat so viel wie das Netz, oder das Netz hat nichts zu verteilen.\\n#v Offline#!: Die Station wurde noch nicht abgeglichen. Sie schließt sich beim Netzausgleich des nächsten Monats ihrem Netz an.\\nEine Station bewegt den Anteil des von ihr Verlangten, der ihrer Besetzung entspricht; daher verlangt der Netzausgleich von einer dünn besetzten mehr, bis hinunter zu einer Besetzung von einem Fünftel. Ganz ohne Personal bewegt sie nichts und beginnt wieder, sobald sie Personal einstellt."
  },
  "TE_STATE_GRID_ROW_MOVED": {
   "en": "Flow",
@@ -3455,6 +3579,10 @@
   "en": "Pass-through",
   "de": "Durchleitung"
  },
+ "TE_STATE_GRID_ROW_PASS_TT": {
+  "en": "#b Pass-through#!\\nThis station takes in its market's import: it buys #v [State.MakeScope.ScriptValue('te_grid_import_disp')|1]#! $grid_power$ a week from across the border and sells it into its own market at the same fixed price, which costs it nothing. Without it the market would buy far more $grid_power$ than it sells and read as short of it.",
+  "de": "#b Durchleitung#!\\nDiese Station nimmt die Einfuhr ihres Marktes auf: Sie kauft #v [State.MakeScope.ScriptValue('te_grid_import_disp')|1]#! $grid_power$ pro Woche von jenseits der Grenze und verkauft ihn zum selben festen Preis in ihren eigenen Markt, was sie nichts kostet. Ohne sie würde der Markt weit mehr $grid_power$ kaufen, als er verkauft, und so aussehen, als fehle es ihm daran."
+ },
  "TE_STATE_GRID_ROW_SIZE": {
   "en": "Grid size",
   "de": "Netzgröße"
@@ -3464,8 +3592,8 @@
   "de": "#b Netzgröße#!\\nDie Anzahl der Staaten, deren Stationen sich das [concept_power_grid] dieses Staates teilen."
  },
  "TE_STATE_GRID_TT": {
-  "en": "#bold [concept_power_grid]#!\\nThis state's $building_grid_transfer_station$ shares $electricity$ with #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! states' stations. Once a month the grid gives every state on it the same supply against its demand, now #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\nInterconnector: #v [AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0'), 'te_grid_interconnector_yes')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0'), 'te_grid_interconnector_no')]#!",
-  "de": "#bold [concept_power_grid]#!\\nDie $building_grid_transfer_station$ dieses Staates teilt $electricity$ mit den Stationen von #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Staaten. Einmal im Monat verschafft das Netz jedem Staat darin dieselbe Versorgung im Verhältnis zu seinem Bedarf, derzeit #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nModus: #v $TE_STATE_GRID_MODE_NAME$#!\\nKuppelleitung: #v [AddLocalizationIf(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0'), 'te_grid_interconnector_yes')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0'), 'te_grid_interconnector_no')]#!"
+  "en": "#bold [concept_power_grid]#!\\nThis state's $building_grid_transfer_station$ shares $electricity$ with #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! states' stations. Once a month the grid gives every state on it the same supply against its demand, now #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')]",
+  "de": "#bold [concept_power_grid]#!\\nDie $building_grid_transfer_station$ dieses Staates teilt $electricity$ mit den Stationen von #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Staaten. Einmal im Monat verschafft das Netz jedem Staat darin dieselbe Versorgung im Verhältnis zu seinem Bedarf, derzeit #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nModus: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')]"
  },
  "TE_STATE_HOMELAND_TT": {
   "en": "#bold [concept_homeland_dynamics]#!\\n\\nEach eligible culture has independent progress. Multiple homelands can form or decay in parallel, advancing monthly to #v 100%#!, without random rolls.\\n\\nCreation: a primary culture without a homeland here must reach #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! of the state's population.\\nRemoval: a non-primary homeland culture must fall below #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#!.\\n\\nBase Rate: #v 10#! percentage points per year.\\nModified Rate: #v [State.MakeScope.ScriptValue('te_homeland_annual_progress')|2]#! points per year.\\nRemoval Rate: #v [State.MakeScope.ScriptValue('te_homeland_removal_annual_progress')|2]#! points per year (slower in the states of a party to the UN Convention on Cultural Diversity).\\nChange Speed: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\n\\nTurmoil of 25% / 50% multiplies progress by 1.25 / 1.5. Legitimacy below 25 halves progress; legitimacy of 75 or more multiplies it by 1.25.\\n\\nRequires the entire state region to have the same owner, and homeland changes to be enabled by any one of:\\n$TE_HOMELAND_UNLOCK_SOURCES$\\nLosing either condition pauses progress. A change of owner, primary-culture status, population eligibility or homeland status resets the affected culture's progress.",
@@ -3748,8 +3876,8 @@
   "de": "#bold Eine Abstimmung der Generalversammlung wurde angesetzt#! über die Gründung des Weltentwicklungsfonds. Menschliche Mitglieder können sofort abstimmen; KI-Mitglieder stimmen im neunten bis elften Monat ab. Die Ergebnisse folgen nach einem Jahr."
  },
  "UN_PROPOSE_EXPULSION_DESC": {
-  "en": "Call a 2/3 supermajority [concept_un_general_assembly] vote to strip a recently-vetoing [concept_un_permanent_member] of its [concept_un_security_council] seat. The motion is itself non-vetoable. If it carries, the target loses its [concept_un_veto] power for the rest of the game.",
-  "de": "Ruft eine Abstimmung der [concept_un_general_assembly] mit Zweidrittelmehrheit auf, um einem kürzlich sein Veto einlegenden [concept_un_permanent_member] seinen Sitz im [concept_un_security_council] zu entziehen. Der Antrag selbst ist nicht mit Veto blockierbar. Wird er angenommen, verliert das Ziel für den Rest des Spiels seine [concept_un_veto]-Macht."
+  "en": "Call a two-thirds vote of the [concept_un_general_assembly] to strip a [concept_un_permanent_member] that has used its [concept_un_veto] in the last five years, and is not our ally, our overlord or our subject, of its [concept_un_security_council] seat. No veto can stop it, and no member presumes in its favour: each weighs the case for expulsion, the target's veto record (5 for each veto cast while the UN is not Moribund, fading by 5% a year) less its standing (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and its service (−5 each for hosting the headquarters, running the development programme, and running the peacekeeping programme or serving in a mission; −10 at most). If it carries, the target loses its seat and cannot be seated again for ten years, and the [concept_great_power] member with the most [concept_prestige] that holds no seat takes it, which may be us. Members hold that against a proposer a little (−5).",
+  "de": "Ruft eine Abstimmung der [concept_un_general_assembly] mit Zweidrittelmehrheit auf, um einem [Concept('concept_un_permanent_member','Ständigen Mitglied')], das in den letzten fünf Jahren sein [concept_un_veto] eingelegt hat und weder unser Verbündeter noch unser Suzerän noch unser Klientelland ist, seinen Sitz im [concept_un_security_council] zu entziehen. Kein Veto kann sie aufhalten, und für das Ziel spricht bei keinem Mitglied eine Vermutung: Jedes wägt die Gründe für einen Ausschluss ab, nämlich die Veto-Bilanz des Ziels (5 für jedes Veto, das eingelegt wurde, solange die UN nicht „Marode“ sind, abnehmend um 5% im Jahr) abzüglich seines Ansehens (Vorbildlich −10, Angesehen −5, Schwach +5, Geächtet +10) und seiner Verdienste (je −5 dafür, das Hauptquartier zu beherbergen, das Entwicklungsprogramm zu betreiben und das Friedenssicherungsprogramm zu betreiben oder in einer Mission zu dienen; höchstens −10). Wird sie angenommen, verliert das Ziel seinen Sitz und kann zehn Jahre lang nicht wieder einen Sitz erhalten, und das Mitglied im Rang einer [concept_great_power] mit dem meisten [concept_prestige], das keinen Sitz hält, übernimmt ihn, und das können auch wir selbst sein. Das legen die Mitglieder einem Antragsteller ein wenig zur Last (−5)."
  },
  "UN_PROPOSE_EXPULSION_TT": {
   "en": "We will propose a motion in the [concept_un_general_assembly] calling for the expulsion of a [concept_un_permanent_member] who has recently abused the [concept_un_veto]. As a [concept_un_resolution_recommendatory] motion against the Council itself, it requires a #G 2/3 supermajority#! to pass.",
@@ -3892,8 +4020,8 @@
   "de": "Wir üben unser [concept_un_veto] als [concept_un_permanent_member] aus, um die bindende Form dieser Resolution zu blockieren. Die UN ist #bold Marode#!: Ihre Entscheidungen sind Empfehlungen, und eine zu blockieren #G kostet die Organisation nichts#! — keine Glaubwürdigkeit, keine Gegenreaktion, keine [concept_infamy]. Der Antragsteller wird es dennoch übel nehmen."
  },
  "UN_VOTE_VETO_TT": {
-  "en": "We exercise our [concept_un_permanent_member] [concept_un_veto] to block the binding form of this resolution. Cost: #R UN credibility −1.5 × our weight in world affairs#!, [concept_un_veto] backlash, and (for ICC, condemnation, and peacekeeping resolutions) a small [concept_infamy] hit. If the Assembly still passes the Rome Statute and the veto stands, the last power to veto it is marked as having #R Rejected the Rome Statute#!. The General Assembly's simple majority can still pass a graduated/weak form.",
-  "de": "Wir üben unser [concept_un_veto] als [concept_un_permanent_member] aus, um die bindende Form dieser Resolution zu blockieren. Kosten: #R UN-Glaubwürdigkeit −1,5 × unser Gewicht in den Weltgeschäften#!, [concept_un_veto]-Gegenreaktion und (bei IStGH-, Verurteilungs- und Friedenssicherungsresolutionen) ein kleiner Schlag gegen die [concept_infamy]. Nimmt die Versammlung das Römische Statut trotzdem an und bleibt das Veto bestehen, wird die zuletzt einlegende Macht als #R Ablehner des Römischen Statuts#! vermerkt. Die einfache Mehrheit der Generalversammlung kann weiterhin eine abgestufte/schwache Form annehmen."
+  "en": "We exercise our [concept_un_permanent_member] [concept_un_veto] to block the binding form of this resolution. Cost: #R UN credibility −1.5 × our weight in world affairs#!, [concept_un_veto] backlash, and (for ICC, condemnation, and peacekeeping resolutions) a small [concept_infamy] hit. Our veto record grows by #R 5#!, fading by 5% a year. The record weighs in the case for expelling us from our seat, and for five years any member may move to expel us. If the Assembly still passes the Rome Statute and the veto stands, the last power to veto it is marked as having #R Rejected the Rome Statute#!. The General Assembly's simple majority can still pass a graduated/weak form.",
+  "de": "Wir üben unser [concept_un_veto] als [concept_un_permanent_member] aus, um die bindende Form dieser Resolution zu blockieren. Kosten: #R UN-Glaubwürdigkeit −1,5 × unser Gewicht in den Weltgeschäften#!, [concept_un_veto]-Gegenreaktion und (bei IStGH-, Verurteilungs- und Friedenssicherungsresolutionen) ein kleiner Schlag gegen die [concept_infamy]. Unsere Veto-Bilanz wächst um #R 5#! und schwindet um 5% im Jahr. Die Bilanz fällt ins Gewicht, wenn es darum geht, uns aus unserem Sitz auszuschließen, und fünf Jahre lang kann jedes Mitglied beantragen, uns auszuschließen. Nimmt die Versammlung das Römische Statut trotzdem an und bleibt das Veto bestehen, wird die zuletzt einlegende Macht als #R Ablehner des Römischen Statuts#! vermerkt. Die einfache Mehrheit der Generalversammlung kann weiterhin eine abgestufte/schwache Form annehmen."
  },
  "UN_WITHDRAW_ARMS_CONTROL": {
   "en": "Withdraw from Arms Control",
@@ -4054,6 +4182,10 @@
  "WAR_SUPPORT_TE_COVERT_COMMS_DISRUPTED": {
   "en": "Enemy communications disruption",
   "de": "Feindliche Kommunikationsstörung"
+ },
+ "WAR_SUPPORT_TE_DECOL_COLONIAL_WAR": {
+  "en": "A war to keep a colony",
+  "de": "Ein Krieg um den Erhalt einer Kolonie"
  },
  "WAR_SUPPORT_TE_DECOL_CONDEMNED": {
   "en": "The world condemns it",
@@ -7175,6 +7307,10 @@
   "en": "Powerful Trade Unions",
   "de": "Mächtige Gewerkschafter"
  },
+ "colonial_independence_war_penalty_tt": {
+  "en": "Wars of independence: every war to keep a colony drains the empire",
+  "de": "Unabhängigkeitskriege: Jeder Krieg um den Erhalt einer Kolonie zehrt am Reich"
+ },
  "colonial_integration_progress_modifier": {
   "en": "Colonial Integration Progress",
   "de": "Fortschritt der kolonialen Integration"
@@ -8571,6 +8707,10 @@
   "en": "Holding the Line",
   "de": "Die Stellung halten"
  },
+ "decol_iw_home_front_modifier": {
+  "en": "A War to Keep a Colony",
+  "de": "Ein Krieg um den Erhalt einer Kolonie"
+ },
  "decol_iw_lost_modifier": {
   "en": "The Flag Came Down",
   "de": "Die Flagge wurde eingeholt"
@@ -9199,6 +9339,54 @@
   "en": "the desert terraces above the Supe valley at Caral",
   "de": "den Wüstenterrassen über dem Supe-Tal bei Caral"
  },
+ "gm_arch_site_chichen_itza_dug": {
+  "en": "Restorers have rebuilt the stepped pyramid of El Castillo at $gm_arch_site_chichen_itza_place$, in [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], and cleared the Temple of the Warriors with its hall of a thousand columns, the great ball court and the round observatory. Divers dredging the Sacred Cenote have brought up jade, gold and copper discs, copal incense and the bones of those thrown into it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$",
+  "de": "Restauratoren haben die Stufenpyramide El Castillo in $gm_arch_site_chichen_itza_place$, in [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], wiederaufgebaut und den Tempel der Krieger mit seiner Halle der tausend Säulen, den großen Ballspielplatz und das runde Observatorium freigelegt. Taucher, die den Heiligen Cenote ausbaggerten, haben Jade, Scheiben aus Gold und Kupfer, Kopalweihrauch und die Gebeine derer heraufgeholt, die hineingeworfen wurden.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$"
+ },
+ "gm_arch_site_chichen_itza_found": {
+  "en": "Travellers have drawn the great pyramid and the ball court of $gm_arch_site_chichen_itza_place$, in [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], and the scholars who read them are sure the scrub hides far more: temples, colonnades, and the well into which the Maya threw offerings to the rain god.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$",
+  "de": "Reisende haben die große Pyramide und den Ballspielplatz in $gm_arch_site_chichen_itza_place$, in [SCOPE.sState('gm_arch_ev_chichen_itza').GetName], gezeichnet, und die Gelehrten, die sie deuten, sind sicher, dass das Buschland weit mehr verbirgt: Tempel, Säulengänge und den Brunnen, in den die Maya dem Regengott Opfergaben warfen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chichen_itza_history$"
+ },
+ "gm_arch_site_chichen_itza_history": {
+  "en": "John Lloyd Stephens and Frederick Catherwood described the ruins in 1843. Edward Thompson, who bought the hacienda, dredged the cenote from 1904 and sent its finds to Harvard; the Carnegie Institution restored the city from 1924, and it became the most visited site in Mexico.",
+  "de": "John Lloyd Stephens und Frederick Catherwood beschrieben die Ruinen 1843. Edward Thompson, der die Hazienda gekauft hatte, baggerte ab 1904 den Cenote aus und schickte seine Funde nach Harvard; die Carnegie Institution stellte die Stadt ab 1924 wieder her, und sie wurde zur meistbesuchten Stätte Mexikos."
+ },
+ "gm_arch_site_chichen_itza_place": {
+  "en": "the dry scrub of central Yucatán around the Sacred Cenote",
+  "de": "dem trockenen Buschland von Zentral-Yucatán rund um den Heiligen Cenote"
+ },
+ "gm_arch_site_chogha_zanbil_dug": {
+  "en": "On $gm_arch_site_chogha_zanbil_place$, in [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], the excavators have cleared the ziggurat of the Elamite king Untash-Napirisha, a stepped tower more than a hundred metres square at its base, its bricks stamped with the king's inscriptions, standing inside three rings of walls with temples, palaces and the royal tombs.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$",
+  "de": "Auf $gm_arch_site_chogha_zanbil_place$, in [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], haben die Ausgräber die Zikkurat des elamitischen Königs Untasch-Napirischa freigelegt, einen Stufenturm von mehr als hundert Metern Seitenlänge an der Basis, dessen Ziegel mit den Inschriften des Königs gestempelt sind und der innerhalb von drei Mauerringen mit Tempeln, Palästen und den Königsgräbern steht.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$"
+ },
+ "gm_arch_site_chogha_zanbil_found": {
+  "en": "Geologists flying over $gm_arch_site_chogha_zanbil_place$, in [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], to look for oil have photographed a great square mound inside rings of walls. Our scholars think it a temple tower of the Elamites, a people of Susa older than Persia.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$",
+  "de": "Geologen, die auf der Suche nach Öl über $gm_arch_site_chogha_zanbil_place$, in [SCOPE.sState('gm_arch_ev_chogha_zanbil').GetName], flogen, haben einen großen quadratischen Hügel innerhalb von Mauerringen fotografiert. Unsere Gelehrten halten ihn für einen Tempelturm der Elamiter, eines Volkes von Susa, das älter ist als Persien.\\n\\n$gm_arch_history_lead$ $gm_arch_site_chogha_zanbil_history$"
+ },
+ "gm_arch_site_chogha_zanbil_history": {
+  "en": "Geologists of the Anglo-Persian Oil Company spotted the mound from the air in 1935. Roman Ghirshman excavated it from 1951 to 1962; it was built around 1250 BC and sacked by the Assyrians in 640 BC.",
+  "de": "Geologen der Anglo-Persian Oil Company entdeckten den Hügel 1935 aus der Luft. Roman Ghirshman grub ihn von 1951 bis 1962 aus; die Anlage wurde um 1250 v. Chr. erbaut und 640 v. Chr. von den Assyrern geplündert."
+ },
+ "gm_arch_site_chogha_zanbil_place": {
+  "en": "the plain above the Dez river southeast of Susa",
+  "de": "der Ebene oberhalb des Flusses Dez südöstlich von Susa"
+ },
+ "gm_arch_site_cyrene_dug": {
+  "en": "On $gm_arch_site_cyrene_place$, in [SCOPE.sState('gm_arch_ev_cyrene').GetName], the excavators have cleared the sanctuary of Apollo at the sacred spring, the Temple of Zeus, larger than the Parthenon, the agora and the theatre, and found among the ruins marble statues of gods and athletes lying where they fell.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$",
+  "de": "Auf $gm_arch_site_cyrene_place$, in [SCOPE.sState('gm_arch_ev_cyrene').GetName], haben die Ausgräber das Heiligtum des Apollon an der heiligen Quelle, den Zeustempel, größer als den Parthenon, die Agora und das Theater freigelegt und zwischen den Ruinen Marmorstatuen von Göttern und Athleten gefunden, die dort lagen, wo sie gefallen waren.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$"
+ },
+ "gm_arch_site_cyrene_found": {
+  "en": "On $gm_arch_site_cyrene_place$, in [SCOPE.sState('gm_arch_ev_cyrene').GetName], travellers have walked past thousands of rock-cut tombs and the fallen columns of temples. Our scholars place there the city founded by colonists from Thera, which gave the world the philosopher Aristippus and the silphium plant.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$",
+  "de": "Auf $gm_arch_site_cyrene_place$, in [SCOPE.sState('gm_arch_ev_cyrene').GetName], sind Reisende an Tausenden in den Fels gehauenen Gräbern und den umgestürzten Säulen von Tempeln vorbeigegangen. Unsere Gelehrten verorten dort die von Kolonisten aus Thera gegründete Stadt, die der Welt den Philosophen Aristippos und das Silphion schenkte.\\n\\n$gm_arch_history_lead$ $gm_arch_site_cyrene_history$"
+ },
+ "gm_arch_site_cyrene_history": {
+  "en": "Robert Murdoch Smith and Edwin Porcher dug at Cyrene in 1860 and 1861 and sent its statues to the British Museum. American and then Italian excavations followed from 1910, and the Venus of Cyrene, found by Italian soldiers in 1913, went back to Libya in 2008.",
+  "de": "Robert Murdoch Smith und Edwin Porcher gruben 1860 und 1861 in Kyrene und schickten seine Statuen ans Britische Museum. Ab 1910 folgten amerikanische und dann italienische Grabungen, und die Venus von Kyrene, 1913 von italienischen Soldaten gefunden, kehrte 2008 nach Libyen zurück."
+ },
+ "gm_arch_site_cyrene_place": {
+  "en": "the terraced plateau of the Jebel Akhdar above the sea",
+  "de": "der terrassierten Hochebene des Dschebel Achdar über dem Meer"
+ },
  "gm_arch_site_dead_sea_scrolls_dug": {
   "en": "In eleven of $gm_arch_site_dead_sea_scrolls_place$, in [SCOPE.sState('gm_arch_ev_dead_sea_scrolls').GetName], and in the ruins of the settlement below, the searchers have recovered the remains of about nine hundred manuscripts, most in fragments, from the third century BC to the first century AD: every book of the Hebrew Bible except Esther, a complete scroll of Isaiah, and the rules, hymns and calendars of a sect awaiting the end of days.\\n\\n$gm_arch_history_lead$ $gm_arch_site_dead_sea_scrolls_history$",
   "de": "In elf von $gm_arch_site_dead_sea_scrolls_place$, in [SCOPE.sState('gm_arch_ev_dead_sea_scrolls').GetName], und in den Ruinen der darunterliegenden Siedlung haben die Sucher die Überreste von etwa neunhundert Handschriften geborgen, die meisten in Fragmenten, vom dritten Jahrhundert v. Chr. bis zum ersten Jahrhundert n. Chr.: jedes Buch der hebräischen Bibel außer Ester, eine vollständige Jesajarolle sowie die Regeln, Hymnen und Kalender einer Sekte, die das Ende der Tage erwartete.\\n\\n$gm_arch_history_lead$ $gm_arch_site_dead_sea_scrolls_history$"
@@ -9247,6 +9435,22 @@
   "en": "the village of Kastri, on the slopes of Mount Parnassus",
   "de": "des Dorfes Kastri an den Hängen des Parnass"
  },
+ "gm_arch_site_ephesus_dug": {
+  "en": "Following an inscription that named the gate the processions of Artemis passed through, the excavators have traced the sacred way across $gm_arch_site_ephesus_place$, in [SCOPE.sState('gm_arch_ev_ephesus').GetName], and found the Temple of Artemis six metres under the silt: drums of its columns carved with figures, and the platform of the temple Croesus paid for and of the one built after Herostratus burned it. The theatre, the baths and the marble streets of the city have been cleared around it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$",
+  "de": "Einer Inschrift folgend, die das Tor nannte, durch das die Prozessionen der Artemis zogen, haben die Ausgräber die Heilige Straße auf $gm_arch_site_ephesus_place$, in [SCOPE.sState('gm_arch_ev_ephesus').GetName], verfolgt und den Artemistempel sechs Meter unter dem Schlick gefunden: figürlich verzierte Säulentrommeln und die Plattform des Tempels, den Krösus bezahlte, und die des Tempels, der nach seinem Brand durch Herostratos errichtet wurde. Das Theater, die Bäder und die Marmorstraßen der Stadt sind rundherum freigelegt worden.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$"
+ },
+ "gm_arch_site_ephesus_found": {
+  "en": "Travellers know the theatre and the broken walls of Ephesus, where Saint Paul preached against the silversmiths of Artemis, but no one has found the goddess's temple, one of the Seven Wonders of the world. Our scholars think it lies under $gm_arch_site_ephesus_place$, in [SCOPE.sState('gm_arch_ev_ephesus').GetName], and an English engineer building the railway to Smyrna has offered to look for it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$",
+  "de": "Reisende kennen das Theater und die zerbrochenen Mauern von Ephesos, wo der heilige Paulus gegen die Silberschmiede der Artemis predigte, doch niemand hat den Tempel der Göttin gefunden, eines der Sieben Weltwunder. Unsere Gelehrten glauben, dass er unter $gm_arch_site_ephesus_place$, in [SCOPE.sState('gm_arch_ev_ephesus').GetName], liegt, und ein englischer Ingenieur, der die Bahn nach Smyrna baut, hat angeboten, danach zu suchen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ephesus_history$"
+ },
+ "gm_arch_site_ephesus_history": {
+  "en": "John Turtle Wood, an architect on the Smyrna and Aidin railway, searched for the temple from 1863 and found it on the last day of 1869; its carved column drums went to the British Museum. Austrian excavations cleared the city from 1895, and the facade of the Library of Celsus was set up again in the 1970s.",
+  "de": "John Turtle Wood, ein Architekt der Bahn Smyrna–Aidin, suchte ab 1863 nach dem Tempel und fand ihn am letzten Tag des Jahres 1869; seine reliefierten Säulentrommeln gingen ans Britische Museum. Österreichische Grabungen legten die Stadt ab 1895 frei, und die Fassade der Celsusbibliothek wurde in den 1970er Jahren wieder aufgerichtet."
+ },
+ "gm_arch_site_ephesus_place": {
+  "en": "the silted plain of the Cayster below Ayasuluk",
+  "de": "der verschlickten Ebene des Kaystros unterhalb von Ayasuluk"
+ },
  "gm_arch_site_gobekli_tepe_dug": {
   "en": "On $gm_arch_site_gobekli_tepe_place$, in [SCOPE.sState('gm_arch_ev_gobekli_tepe').GetName], the excavators have uncovered rings of T-shaped limestone pillars up to five metres tall, carved with foxes, boars, snakes, vultures and scorpions, some with arms and hands as if they were figures. They were raised about 9500 BC by hunters and gatherers, before farming, pottery or the wheel, and later filled in.\\n\\n$gm_arch_history_lead$ $gm_arch_site_gobekli_tepe_history$",
   "de": "Auf $gm_arch_site_gobekli_tepe_place$, in [SCOPE.sState('gm_arch_ev_gobekli_tepe').GetName], haben die Ausgräber Ringe aus T-förmigen Kalksteinpfeilern von bis zu fünf Metern Höhe freigelegt, verziert mit Füchsen, Wildschweinen, Schlangen, Geiern und Skorpionen, manche mit Armen und Händen, als wären sie Gestalten. Sie wurden um 9500 v. Chr. von Jägern und Sammlern errichtet, vor Ackerbau, Töpferei und Rad, und später aufgefüllt.\\n\\n$gm_arch_history_lead$ $gm_arch_site_gobekli_tepe_history$"
@@ -9262,6 +9466,38 @@
  "gm_arch_site_gobekli_tepe_place": {
   "en": "the hill of Göbekli Tepe, on a ridge above the Harran plain near Şanlıurfa",
   "de": "dem Hügel Göbekli Tepe auf einem Höhenrücken über der Harran-Ebene bei Şanlıurfa"
+ },
+ "gm_arch_site_hampi_dug": {
+  "en": "The surveyors have mapped the ruins among $gm_arch_site_hampi_place$, in [SCOPE.sState('gm_arch_ev_hampi').GetName]: the Virupaksha temple still in worship, the Vitthala temple with its musical pillars and stone chariot, the royal enclosure with its great platform, the elephant stables, bazaars a kilometre long and the channels and tanks that watered the capital of Vijayanagara.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$",
+  "de": "Die Landvermesser haben die Ruinen zwischen $gm_arch_site_hampi_place$, in [SCOPE.sState('gm_arch_ev_hampi').GetName], kartiert: den Virupaksha-Tempel, in dem noch immer gebetet wird, den Vitthala-Tempel mit seinen Musiksäulen und dem steinernen Wagen, den Königsbezirk mit seiner großen Plattform, die Elefantenställe, einen Kilometer lange Basare sowie die Kanäle und Wasserbecken, die die Hauptstadt Vijayanagara bewässerten.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$"
+ },
+ "gm_arch_site_hampi_found": {
+  "en": "Among $gm_arch_site_hampi_place$, in [SCOPE.sState('gm_arch_ev_hampi').GetName], lie the ruins of a city once larger than any in India: Vijayanagara, capital of the last great Hindu empire of the south, sacked in 1565 and never lived in again. Our scholars want it surveyed.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$",
+  "de": "Zwischen $gm_arch_site_hampi_place$, in [SCOPE.sState('gm_arch_ev_hampi').GetName], liegen die Ruinen einer Stadt, die einst größer war als jede andere in Indien: Vijayanagara, Hauptstadt des letzten großen Hindureichs des Südens, 1565 geplündert und nie wieder bewohnt. Unsere Gelehrten möchten sie vermessen lassen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hampi_history$"
+ },
+ "gm_arch_site_hampi_history": {
+  "en": "Colin Mackenzie mapped the ruins in 1800, and Alexander Greenlaw photographed them in 1856. The empire's army was routed at Talikota in 1565, and the city was looted for months after.",
+  "de": "Colin Mackenzie kartierte die Ruinen 1800, und Alexander Greenlaw fotografierte sie 1856. Das Heer des Reiches wurde 1565 bei Talikota geschlagen, und die Stadt wurde danach monatelang geplündert."
+ },
+ "gm_arch_site_hampi_place": {
+  "en": "the boulder hills on the Tungabhadra around Hampi",
+  "de": "den Felsblockhügeln am Tungabhadra rund um Hampi"
+ },
+ "gm_arch_site_hattusa_dug": {
+  "en": "Above $gm_arch_site_hattusa_place$, in [SCOPE.sState('gm_arch_ev_hattusa').GetName], the excavators have traced six kilometres of walls with the Lion Gate and the King's Gate, the great temple of the storm god and the royal citadel, where they have found an archive of thousands of clay tablets: the letters and treaties of the Hittite kings, their peace with Ramesses II among them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$",
+  "de": "In $gm_arch_site_hattusa_place$, in [SCOPE.sState('gm_arch_ev_hattusa').GetName], haben die Ausgräber den Verlauf von sechs Kilometern Mauern mit dem Löwentor und dem Königstor festgestellt, dazu den großen Tempel des Wettergottes und die königliche Zitadelle, wo sie ein Archiv aus Tausenden von Tontafeln gefunden haben: die Briefe und Verträge der hethitischen Könige, darunter ihren Frieden mit Ramses II.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$"
+ },
+ "gm_arch_site_hattusa_found": {
+  "en": "Travellers have drawn the walls and carved gates above $gm_arch_site_hattusa_place$, in [SCOPE.sState('gm_arch_ev_hattusa').GetName], and the rock sanctuary nearby where gods march in procession. Our scholars now think it was the capital of the Hittites, a people the Bible names and the Egyptians fought.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$",
+  "de": "Reisende haben die Mauern und die Tore mit Reliefs in $gm_arch_site_hattusa_place$, in [SCOPE.sState('gm_arch_ev_hattusa').GetName], gezeichnet, dazu das Felsheiligtum in der Nähe, in dem Götter in einer Prozession schreiten. Unsere Gelehrten halten es nun für die Hauptstadt der Hethiter, eines Volkes, das in der Bibel genannt wird und gegen das die Ägypter kämpften.\\n\\n$gm_arch_history_lead$ $gm_arch_site_hattusa_history$"
+ },
+ "gm_arch_site_hattusa_history": {
+  "en": "Charles Texier saw the ruins in 1834. Hugo Winckler dug there from 1906 and found the royal archive, and Bedřich Hrozný deciphered the Hittite language from its tablets in 1915. The city was abandoned around 1180 BC.",
+  "de": "Charles Texier sah die Ruinen 1834. Hugo Winckler grub dort ab 1906 und fand das Königsarchiv, und Bedřich Hrozný entzifferte 1915 anhand seiner Tafeln die hethitische Sprache. Die Stadt wurde um 1180 v. Chr. aufgegeben."
+ },
+ "gm_arch_site_hattusa_place": {
+  "en": "the hills above Boğazköy, east of Ankara",
+  "de": "den Hügeln oberhalb von Boğazköy, östlich von Ankara"
  },
  "gm_arch_site_ishtar_gate_babylon_dug": {
   "en": "Under $gm_arch_site_ishtar_gate_babylon_place$, in [SCOPE.sState('gm_arch_ev_ishtar_gate_babylon').GetName], the excavators have followed the Processional Way of Babylon to the Ishtar Gate: a double gateway of brick glazed in deep blue, with rows of yellow and white bulls and dragons in relief, its lower courses standing where the floods left them. Thousands of glazed fragments of the lions that lined the road lie in the debris.\\n\\n$gm_arch_history_lead$ $gm_arch_site_ishtar_gate_babylon_history$",
@@ -9279,6 +9515,22 @@
   "en": "the mounds of Babil and Kasr by the Euphrates, near Hillah",
   "de": "den Hügeln von Babil und Kasr am Euphrat bei Hilla"
  },
+ "gm_arch_site_khajuraho_dug": {
+  "en": "In $gm_arch_site_khajuraho_place$, in [SCOPE.sState('gm_arch_ev_khajuraho').GetName], the jungle has been cut back from more than twenty temples of the Chandela kings, built around 1000, their towers rising like mountain peaks and their walls carved with gods, nymphs, musicians, warriors and lovers in thousands of figures.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$",
+  "de": "In $gm_arch_site_khajuraho_place$, in [SCOPE.sState('gm_arch_ev_khajuraho').GetName], wurde der Dschungel von mehr als zwanzig Tempeln der Chandela-Könige zurückgeschnitten, erbaut um 1000, deren Türme wie Berggipfel aufragen und deren Wände mit Göttern, Nymphen, Musikern, Kriegern und Liebenden in Tausenden von Figuren verziert sind.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$"
+ },
+ "gm_arch_site_khajuraho_found": {
+  "en": "Our surveyors in [SCOPE.sState('gm_arch_ev_khajuraho').GetName] report temples overgrown in $gm_arch_site_khajuraho_place$, carved from plinth to spire with gods and dancers. The people of the village still worship at one of them.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$",
+  "de": "Unsere Landvermesser in [SCOPE.sState('gm_arch_ev_khajuraho').GetName] melden überwucherte Tempel in $gm_arch_site_khajuraho_place$, vom Sockel bis zur Spitze mit Göttern und Tänzern verziert. Die Menschen des Dorfes beten noch immer in einem von ihnen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_khajuraho_history$"
+ },
+ "gm_arch_site_khajuraho_history": {
+  "en": "T. S. Burt, a British army engineer, was guided to the temples in 1838, and Alexander Cunningham surveyed them in the 1850s. Of some 85 temples, about 25 survive.",
+  "de": "T. S. Burt, ein Ingenieur der britischen Armee, wurde 1838 zu den Tempeln geführt, und Alexander Cunningham vermaß sie in den 1850er Jahren. Von etwa 85 Tempeln sind rund 25 erhalten."
+ },
+ "gm_arch_site_khajuraho_place": {
+  "en": "the jungle around the village of Khajuraho",
+  "de": "dem Dschungel um das Dorf Khajuraho"
+ },
  "gm_arch_site_lascaux_caves_dug": {
   "en": "The surveyors have mapped $gm_arch_site_lascaux_caves_place$, in [SCOPE.sState('gm_arch_ev_lascaux_caves').GetName]: chamber after chamber painted some seventeen thousand years ago with about six hundred animals, aurochs five metres long, horses, stags, ibex, and a wounded bison facing a man with a bird's head, and some fifteen hundred engravings, with the painters' lamps, pigments and flint tools still on the floor.\\n\\n$gm_arch_history_lead$ $gm_arch_site_lascaux_caves_history$",
   "de": "In $gm_arch_site_lascaux_caves_place$, in [SCOPE.sState('gm_arch_ev_lascaux_caves').GetName], haben die Vermesser Kammer um Kammer kartiert, vor etwa siebzehntausend Jahren mit rund sechshundert Tieren bemalt: Auerochsen von fünf Metern Länge, Pferden, Hirschen, Steinböcken und einem verwundeten Bison gegenüber einem Mann mit Vogelkopf, dazu rund fünfzehnhundert Gravuren, mit den Lampen, Pigmenten und Feuersteinwerkzeugen der Maler noch auf dem Boden.\\n\\n$gm_arch_history_lead$ $gm_arch_site_lascaux_caves_history$"
@@ -9294,6 +9546,22 @@
  "gm_arch_site_lascaux_caves_place": {
   "en": "a cave in the hillside above Montignac, in the valley of the Vézère",
   "de": "einer Höhle im Hang über Montignac im Vézère-Tal"
+ },
+ "gm_arch_site_leptis_magna_dug": {
+  "en": "Clearing the sand from $gm_arch_site_leptis_magna_place$, in [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], the excavators have uncovered the city Septimius Severus rebuilt for his birthplace: a four-way arch carved with his triumphs, the Severan forum and basilica, a theatre, the baths of Hadrian and a harbour with its quays and the base of its lighthouse, almost as they were left.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$",
+  "de": "Beim Abtragen des Sandes von $gm_arch_site_leptis_magna_place$, in [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], haben die Ausgräber die Stadt freigelegt, die Septimius Severus für seine Geburtsstadt neu erbauen ließ: einen vierseitigen Bogen mit Reliefs seiner Triumphe, das severische Forum und die Basilika, ein Theater, die Hadriansthermen und einen Hafen mit seinen Kais und dem Sockel seines Leuchtturms, fast so, wie sie hinterlassen wurden.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$"
+ },
+ "gm_arch_site_leptis_magna_found": {
+  "en": "Sand has buried $gm_arch_site_leptis_magna_place$, in [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], almost to the tops of the columns, and for centuries travellers have carried off its marble: some of its columns stand at Versailles. Our scholars say a whole Roman city lies beneath, the home town of an emperor.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$",
+  "de": "Sand hat die Ruinen in $gm_arch_site_leptis_magna_place$, in [SCOPE.sState('gm_arch_ev_leptis_magna').GetName], fast bis zu den Säulenspitzen begraben, und seit Jahrhunderten tragen Reisende ihren Marmor davon: Einige ihrer Säulen stehen in Versailles. Unsere Gelehrten sagen, darunter liege eine ganze römische Stadt, die Heimatstadt eines Kaisers.\\n\\n$gm_arch_history_lead$ $gm_arch_site_leptis_magna_history$"
+ },
+ "gm_arch_site_leptis_magna_history": {
+  "en": "The French consul Claude Le Maire took columns from the site for Louis XIV in the 1690s. Italian archaeologists dug it from 1920 under the colonial government, and most of the city now stands cleared; Septimius Severus was born there in 145.",
+  "de": "Der französische Konsul Claude Le Maire nahm in den 1690er Jahren Säulen von der Stätte für Ludwig XIV. mit. Italienische Archäologen gruben sie ab 1920 unter der Kolonialregierung aus, und der größte Teil der Stadt liegt inzwischen frei; Septimius Severus wurde dort 145 geboren."
+ },
+ "gm_arch_site_leptis_magna_place": {
+  "en": "the dunes of the Libyan coast at the mouth of the Wadi Lebda",
+  "de": "den Dünen der libyschen Küste an der Mündung des Wadi Lebda"
  },
  "gm_arch_site_machu_picchu_dug": {
   "en": "On $gm_arch_site_machu_picchu_place$, in [SCOPE.sState('gm_arch_ev_machu_picchu').GetName], the expedition has cut away the forest and laid bare a city of granite: temples, palaces and houses of fitted stone, terraces stepping down the mountain, fountains, and the Intihuatana, a carved stone for the sun. In its burial caves and middens lie pottery, bronze tools, ornaments and the bones of the people who lived there.\\n\\n$gm_arch_history_lead$ $gm_arch_site_machu_picchu_history$",
@@ -9327,6 +9595,38 @@
   "en": "two low hills at Mawangdui, on the eastern edge of Changsha",
   "de": "zwei niedrigen Hügeln bei Mawangdui am Ostrand von Changsha"
  },
+ "gm_arch_site_merida_theatre_dug": {
+  "en": "The excavators have dug out the theatre the colony of Emerita Augusta built on $gm_arch_site_merida_theatre_place$, in [SCOPE.sState('gm_arch_ev_merida_theatre').GetName]: its tiers of seats for six thousand, its orchestra floored with marble, and the two storeys of Corinthian columns of its stage front, with statues of emperors and gods in their niches, and the amphitheatre beside it.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$",
+  "de": "Die Ausgräber haben das Theater freigelegt, das die Kolonie Emerita Augusta auf $gm_arch_site_merida_theatre_place$, in [SCOPE.sState('gm_arch_ev_merida_theatre').GetName], erbaute: seine Sitzränge für sechstausend Zuschauer, seine mit Marmor ausgelegte Orchestra und die zwei Geschosse korinthischer Säulen seiner Bühnenfront mit Statuen von Kaisern und Göttern in den Nischen, dazu das Amphitheater daneben.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$"
+ },
+ "gm_arch_site_merida_theatre_found": {
+  "en": "Above ground on $gm_arch_site_merida_theatre_place$, in [SCOPE.sState('gm_arch_ev_merida_theatre').GetName], only the top tiers of a Roman theatre show, which the townspeople call the seven chairs. Our scholars say the rest of it, its stage and colonnades, lies buried beneath.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$",
+  "de": "Über der Erde zeigen sich auf $gm_arch_site_merida_theatre_place$, in [SCOPE.sState('gm_arch_ev_merida_theatre').GetName], nur die obersten Ränge eines römischen Theaters, die die Einwohner die Sieben Stühle nennen. Unsere Gelehrten sagen, der Rest, seine Bühne und seine Säulengänge, liege darunter begraben.\\n\\n$gm_arch_history_lead$ $gm_arch_site_merida_theatre_history$"
+ },
+ "gm_arch_site_merida_theatre_history": {
+  "en": "José Ramón Mélida began the excavation in 1910, and the stage front was raised again in the 1960s. Marcus Agrippa paid for the theatre around 16 BC, and the classical theatre festival held in it began in 1933.",
+  "de": "José Ramón Mélida begann die Ausgrabung 1910, und die Bühnenfront wurde in den 1960er Jahren wieder aufgerichtet. Marcus Agrippa bezahlte das Theater um 16 v. Chr., und das darin abgehaltene Festival des klassischen Theaters begann 1933."
+ },
+ "gm_arch_site_merida_theatre_place": {
+  "en": "the slope of the San Albín hill in Mérida",
+  "de": "dem Hang des Hügels San Albín in Mérida"
+ },
+ "gm_arch_site_mogao_caves_dug": {
+  "en": "The sealed chamber at $gm_arch_site_mogao_caves_place$, in [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], held some fifty thousand manuscripts in Chinese, Tibetan, Sanskrit, Uighur and Hebrew, with paintings on silk and banners: sutras, contracts, letters and calendars put away around 1000, and a printed Diamond Sutra dated 868, the oldest dated printed book.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$",
+  "de": "Die versiegelte Kammer an $gm_arch_site_mogao_caves_place$, in [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], barg etwa fünfzigtausend Manuskripte auf Chinesisch, Tibetisch, Sanskrit, Uigurisch und Hebräisch, dazu Seidenmalereien und Banner: Sutren, Verträge, Briefe und Kalender, um 1000 weggelegt, und ein gedrucktes Diamant-Sutra mit der Datierung 868, das älteste datierte gedruckte Buch.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$"
+ },
+ "gm_arch_site_mogao_caves_found": {
+  "en": "A Taoist priest keeping the caves at $gm_arch_site_mogao_caves_place$, in [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], has broken through a painted wall and found a hidden room stacked to the ceiling with scrolls. He has shown a few to the local officials, who have told him to seal it again.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$",
+  "de": "Ein taoistischer Priester, der die Höhlen an $gm_arch_site_mogao_caves_place$, in [SCOPE.sState('gm_arch_ev_mogao_caves').GetName], hütet, hat eine bemalte Wand durchbrochen und einen verborgenen Raum entdeckt, der bis zur Decke mit Schriftrollen gefüllt ist. Er hat einige den örtlichen Beamten gezeigt, die ihm gesagt haben, er solle ihn wieder verschließen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mogao_caves_history$"
+ },
+ "gm_arch_site_mogao_caves_history": {
+  "en": "Wang Yuanlu found the cave in 1900. Aurel Stein bought thousands of its scrolls from him in 1907 for the British Museum, and Paul Pelliot and Japanese and Russian expeditions followed; what was left went to Beijing in 1910.",
+  "de": "Wang Yuanlu fand die Höhle 1900. Aurel Stein kaufte ihm 1907 Tausende ihrer Schriftrollen für das Britische Museum ab, und Paul Pelliot sowie japanische und russische Expeditionen folgten; was übrig war, kam 1910 nach Peking."
+ },
+ "gm_arch_site_mogao_caves_place": {
+  "en": "the cliff of the Mogao grottoes near Dunhuang",
+  "de": "der Felswand der Mogao-Grotten bei Dunhuang"
+ },
  "gm_arch_site_mohenjo_daro_dug": {
   "en": "Around and beneath $gm_arch_site_mohenjo_daro_place$, in [SCOPE.sState('gm_arch_ev_mohenjo_daro').GetName], the excavators have uncovered a city laid out on a grid about 2500 BC: streets with covered drains, houses of baked brick with wells and bathrooms, a granary, and a great bath on the citadel. They have found carved seals by the hundred, a bronze statuette of a dancing girl, and a bearded figure in steatite they call the Priest-King.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mohenjo_daro_history$",
   "de": "Bei und unter $gm_arch_site_mohenjo_daro_place$, in [SCOPE.sState('gm_arch_ev_mohenjo_daro').GetName], haben die Ausgräber eine um 2500 v. Chr. rasterförmig angelegte Stadt freigelegt: Straßen mit überdeckten Abwasserkanälen, Häuser aus gebrannten Ziegeln mit Brunnen und Bädern, einen Getreidespeicher und ein großes Bad auf der Zitadelle. Sie haben Hunderte geschnitzter Siegel gefunden, eine Bronzestatuette eines tanzenden Mädchens und eine bärtige Figur aus Speckstein, die sie den Priesterkönig nennen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mohenjo_daro_history$"
@@ -9342,6 +9642,38 @@
  "gm_arch_site_mohenjo_daro_place": {
   "en": "a mound by the Indus near Larkana, crowned by a ruined Buddhist stupa",
   "de": "einem Hügel am Indus bei Larkana, gekrönt von einem verfallenen buddhistischen Stupa"
+ },
+ "gm_arch_site_monte_alban_dug": {
+  "en": "On $gm_arch_site_monte_alban_place$, in [SCOPE.sState('gm_arch_ev_monte_alban').GetName], the excavators have cleared the Great Plaza with its palaces, its ball court and the carved stones of the Danzantes, and opened a tomb the Mixtecs reused, Tomb 7, filled with jewellery of gold, silver, turquoise and rock crystal, carved jaguar bones and pearls: the richest burial yet found in the Americas.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$",
+  "de": "Auf $gm_arch_site_monte_alban_place$, in [SCOPE.sState('gm_arch_ev_monte_alban').GetName], haben die Ausgräber den Großen Platz mit seinen Palästen, seinem Ballspielplatz und den Reliefsteinen der Danzantes freigelegt und ein Grab geöffnet, das die Mixteken wiederverwendeten, Grab 7, gefüllt mit Schmuck aus Gold, Silber, Türkis und Bergkristall, geschnitzten Jaguarknochen und Perlen: die reichste Bestattung, die bisher in Amerika gefunden wurde.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$"
+ },
+ "gm_arch_site_monte_alban_found": {
+  "en": "Mounds and terraces cover $gm_arch_site_monte_alban_place$, in [SCOPE.sState('gm_arch_ev_monte_alban').GetName], where the Zapotec lords ruled for a thousand years before the Mixtecs reused their tombs. Our scholars believe some of the tombs are still sealed.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$",
+  "de": "Auf $gm_arch_site_monte_alban_place$, in [SCOPE.sState('gm_arch_ev_monte_alban').GetName], breiten sich Hügel und Terrassen aus, wo die zapotekischen Herrscher tausend Jahre lang regierten, bevor die Mixteken ihre Gräber wiederverwendeten. Unsere Gelehrten glauben, dass einige der Gräber noch versiegelt sind.\\n\\n$gm_arch_history_lead$ $gm_arch_site_monte_alban_history$"
+ },
+ "gm_arch_site_monte_alban_history": {
+  "en": "Alfonso Caso began digging Monte Albán in 1931 and opened Tomb 7 in January 1932; its treasure is in the museum of Oaxaca. The city was founded around 500 BC and was the Zapotec capital until about 800.",
+  "de": "Alfonso Caso begann 1931 mit den Grabungen in Monte Albán und öffnete im Januar 1932 Grab 7; sein Schatz befindet sich im Museum von Oaxaca. Die Stadt wurde um 500 v. Chr. gegründet und war bis etwa 800 die Hauptstadt der Zapoteken."
+ },
+ "gm_arch_site_monte_alban_place": {
+  "en": "the levelled mountaintop above the valley of Oaxaca",
+  "de": "dem eingeebneten Berggipfel über dem Tal von Oaxaca"
+ },
+ "gm_arch_site_mount_nemrut_dug": {
+  "en": "On $gm_arch_site_mount_nemrut_place$, in [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], the expedition has found a mound of broken stone fifty metres high, and on terraces east and west of it the colossal seated statues of King Antiochus I among Zeus, Apollo, Heracles and the goddess of Commagene, their heads, each two metres tall, fallen at their feet beside reliefs of his Persian and Greek ancestors.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$",
+  "de": "Auf $gm_arch_site_mount_nemrut_place$, in [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], hat die Expedition einen fünfzig Meter hohen Hügel aus zerbrochenem Stein gefunden und auf Terrassen östlich und westlich davon die kolossalen Sitzstatuen des Königs Antiochos I. zwischen Zeus, Apollon, Herakles und der Göttin von Kommagene, deren Köpfe, je zwei Meter hoch, ihnen zu Füßen liegen, neben Reliefs seiner persischen und griechischen Ahnen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$"
+ },
+ "gm_arch_site_mount_nemrut_found": {
+  "en": "Shepherds speak of stone giants on $gm_arch_site_mount_nemrut_place$, in [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], and an engineer surveying roads has climbed up to see them. Our scholars place there the tomb of a king of Commagene, a small kingdom between Rome and Persia.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$",
+  "de": "Hirten sprechen von steinernen Riesen auf $gm_arch_site_mount_nemrut_place$, in [SCOPE.sState('gm_arch_ev_mount_nemrut').GetName], und ein Ingenieur, der Straßen vermisst, ist hinaufgestiegen, um sie zu sehen. Unsere Gelehrten verorten dort das Grab eines Königs von Kommagene, eines kleinen Königreichs zwischen Rom und Persien.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mount_nemrut_history$"
+ },
+ "gm_arch_site_mount_nemrut_history": {
+  "en": "The German engineer Karl Sester came on the statues in 1881, and Osman Hamdi Bey surveyed them in 1883. Antiochus I built the sanctuary around 62 BC; his tomb has never been found inside the mound.",
+  "de": "Der deutsche Ingenieur Karl Sester stieß 1881 auf die Statuen, und Osman Hamdi Bey vermaß sie 1883. Antiochos I. ließ das Heiligtum um 62 v. Chr. errichten; sein Grab ist im Hügel nie gefunden worden."
+ },
+ "gm_arch_site_mount_nemrut_place": {
+  "en": "the summit of Mount Nemrut in the Taurus",
+  "de": "dem Gipfel des Nemrut Dağı im Taurus"
  },
  "gm_arch_site_mycenae_grave_circle_dug": {
   "en": "Inside the walls of $gm_arch_site_mycenae_grave_circle_place$, in [SCOPE.sState('gm_arch_ev_mycenae_grave_circle').GetName], just beyond the Lion Gate and beneath a ring of upright slabs, the excavators have opened five deep shaft graves holding nineteen bodies and a great weight of gold: masks beaten from sheet gold, cups, bronze daggers inlaid with hunting scenes, diadems, and hundreds of gold discs once sewn on burial clothes. The finest mask, bearded and calm, the diggers call the Mask of Agamemnon.\\n\\n$gm_arch_history_lead$ $gm_arch_site_mycenae_grave_circle_history$",
@@ -9567,6 +9899,22 @@
   "en": "the burial mounds of the Sutton Hoo estate, above the river Deben near Woodbridge",
   "de": "den Grabhügeln des Anwesens Sutton Hoo über dem Fluss Deben bei Woodbridge"
  },
+ "gm_arch_site_teotihuacan_dug": {
+  "en": "The excavators have stripped the earth from the Pyramid of the Sun in $gm_arch_site_teotihuacan_place$, in [SCOPE.sState('gm_arch_ev_teotihuacan').GetName], rebuilt its stepped terraces, and cleared the Avenue of the Dead between it and the Pyramid of the Moon. At the avenue's far end they found a great walled court and a temple faced with carved serpent heads, the Feathered Serpent among them, still painted.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$",
+  "de": "Die Ausgräber haben die Sonnenpyramide in $gm_arch_site_teotihuacan_place$, in [SCOPE.sState('gm_arch_ev_teotihuacan').GetName], von Erde befreit, ihre Stufenterrassen wiederaufgebaut und die Straße der Toten zwischen ihr und der Mondpyramide freigelegt. Am anderen Ende der Straße fanden sie einen großen ummauerten Hof und einen Tempel, der mit geschnitzten Schlangenköpfen verkleidet ist, darunter die Gefiederte Schlange, noch bemalt.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$"
+ },
+ "gm_arch_site_teotihuacan_found": {
+  "en": "Two great mounds rise from the fields of $gm_arch_site_teotihuacan_place$, in [SCOPE.sState('gm_arch_ev_teotihuacan').GetName]. The Aztecs called them the Pyramids of the Sun and the Moon, and the place the city of the gods. Our scholars hold that they are true pyramids buried in their own rubble, along an avenue of lesser mounds.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$",
+  "de": "Zwei große Hügel erheben sich aus den Feldern in $gm_arch_site_teotihuacan_place$, in [SCOPE.sState('gm_arch_ev_teotihuacan').GetName]. Die Azteken nannten sie die Pyramiden der Sonne und des Mondes und den Ort die Stadt der Götter. Unsere Gelehrten sind der Ansicht, dass es echte Pyramiden sind, begraben unter ihrem eigenen Schutt, an einer Straße kleinerer Hügel entlang.\\n\\n$gm_arch_history_lead$ $gm_arch_site_teotihuacan_history$"
+ },
+ "gm_arch_site_teotihuacan_history": {
+  "en": "Leopoldo Batres restored the Pyramid of the Sun for the centenary of independence in 1910, cutting away several metres of its outer face. Manuel Gamio dug the Temple of the Feathered Serpent from 1917; the city is now thought to have burned around 550.",
+  "de": "Leopoldo Batres restaurierte die Sonnenpyramide zur Hundertjahrfeier der Unabhängigkeit 1910 und trug dabei mehrere Meter ihrer Außenseite ab. Manuel Gamio grub ab 1917 den Tempel der Gefiederten Schlange aus; man nimmt heute an, dass die Stadt um 550 niederbrannte."
+ },
+ "gm_arch_site_teotihuacan_place": {
+  "en": "the valley of San Juan Teotihuacan, northeast of the capital",
+  "de": "dem Tal von San Juan Teotihuacán, nordöstlich der Hauptstadt"
+ },
  "gm_arch_site_terracotta_army_dug": {
   "en": "In pits in $gm_arch_site_terracotta_army_place$, in [SCOPE.sState('gm_arch_ev_terracotta_army').GetName], the excavators have laid bare an army in battle order: thousands of life-sized warriors of fired clay, each face different, archers, infantry and generals, with horses, wooden chariots and real bronze weapons still sharp, made to guard the tomb of Qin Shi Huang, who unified China and died in 210 BC.\\n\\n$gm_arch_history_lead$ $gm_arch_site_terracotta_army_history$",
   "de": "In Gruben in $gm_arch_site_terracotta_army_place$, in [SCOPE.sState('gm_arch_ev_terracotta_army').GetName], haben die Ausgräber ein Heer in Schlachtordnung freigelegt: Tausende lebensgroße Krieger aus gebranntem Ton, jedes Gesicht anders, Bogenschützen, Infanterie und Generäle, mit Pferden, hölzernen Streitwagen und echten, noch scharfen Bronzewaffen, geschaffen zur Bewachung des Grabes von Qin Shi Huang, der China einte und 210 v. Chr. starb.\\n\\n$gm_arch_history_lead$ $gm_arch_site_terracotta_army_history$"
@@ -9582,6 +9930,22 @@
  "gm_arch_site_terracotta_army_place": {
   "en": "the fields east of the burial mound of the First Emperor of Qin, near Lintong",
   "de": "den Feldern östlich des Grabhügels des Ersten Kaisers von Qin bei Lintong"
+ },
+ "gm_arch_site_tikal_dug": {
+  "en": "Cutting through the forest of $gm_arch_site_tikal_place$, in [SCOPE.sState('gm_arch_ev_tikal').GetName], the expedition has cleared the Great Plaza of a Maya city. Two temple pyramids face each other across it, the tallest of the temples crowned by a roof comb some seventy metres above the ground, with carved stelae of its kings, palaces and ball courts around it and causeways leading off into the forest to other temples.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$",
+  "de": "Beim Schlagen von Schneisen in $gm_arch_site_tikal_place$, in [SCOPE.sState('gm_arch_ev_tikal').GetName], hat die Expedition den Großen Platz einer Maya-Stadt freigelegt. Zwei Tempelpyramiden stehen einander über den Platz hinweg gegenüber, der höchste der Tempel von einem Dachkamm gekrönt, etwa siebzig Meter über dem Boden, mit geschnitzten Stelen seiner Könige, Palästen und Ballspielplätzen ringsum und Dammstraßen, die durch den Wald zu weiteren Tempeln führen.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$"
+ },
+ "gm_arch_site_tikal_found": {
+  "en": "Chicle gatherers and the governor's men in [SCOPE.sState('gm_arch_ev_tikal').GetName] speak of stone temples standing above the trees of $gm_arch_site_tikal_place$, nameless and abandoned. Our scholars have read their reports and believe they mark a city of the ancient Maya greater than any yet known.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$",
+  "de": "Chicle-Sammler und die Männer des Gouverneurs in [SCOPE.sState('gm_arch_ev_tikal').GetName] sprechen von steinernen Tempeln, die über den Bäumen in $gm_arch_site_tikal_place$ aufragen, namenlos und verlassen. Unsere Gelehrten haben ihre Berichte gelesen und glauben, dass sie eine Stadt der alten Maya kennzeichnen, größer als jede bisher bekannte.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tikal_history$"
+ },
+ "gm_arch_site_tikal_history": {
+  "en": "Modesto Méndez, governor of Petén, and Ambrosio Tut reached the ruins in 1848 and published the first account. Alfred Maudslay photographed them in the 1880s, and the University of Pennsylvania excavated from 1956 to 1970; its glyphs have since been read to name the city's kings and its wars with Calakmul.",
+  "de": "Modesto Méndez, Gouverneur von Petén, und Ambrosio Tut erreichten die Ruinen 1848 und veröffentlichten den ersten Bericht. Alfred Maudslay fotografierte sie in den 1880er Jahren, und die University of Pennsylvania grub von 1956 bis 1970 aus; ihre Glyphen sind seither gelesen worden und nennen die Könige der Stadt und ihre Kriege mit Calakmul."
+ },
+ "gm_arch_site_tikal_place": {
+  "en": "the forest of Petén, north of Lake Petén Itzá",
+  "de": "dem Wald von Petén, nördlich des Petén-Itzá-Sees"
  },
  "gm_arch_site_tomb_of_alexander_dug": {
   "en": "Beneath $gm_arch_site_tomb_of_alexander_place$, in [SCOPE.sState('gm_arch_ev_tomb_of_alexander').GetName], the excavators have broken into a vaulted tomb of alabaster and marble, its walls painted, its corridors lined with the burials of later Ptolemies, and in its central chamber an empty pedestal and the fragments of a coffin of glass, which the Ptolemies put in place of the golden one: the tomb, the scholars are sure, of Alexander the Great.\\n\\n$gm_arch_history_lead$ $gm_arch_site_tomb_of_alexander_history$",
@@ -11012,12 +11376,12 @@
   "de": "Die [concept_grandeur] eines Monuments setzt sich aus seiner Ausgangs-Grandeur und seinen Jahren zusammen. Es wird als Baustelle errichtet, als $building_grand_monument_site$: Jede darauf gebaute Stufe trägt zum Monument bei, das es werden wird, und zwar mit dem Wert, den eine Stufe in dem Jahr hat, in dem sie fertig wird (5 im Jahr 1836 und ein Zehntel davon in einer zehnmal reicheren Welt), und die Arbeit kann beliebig lange pausiert bleiben. Seine Schaltfläche „Widmen“ hält die Zeremonie ab, sobald keine seiner Stufen mehr im Bau ist, und die Widmung stellt es fertig: An seiner Stelle steht ein Großes Monument der Stufe 1, dessen Stufen und Grandeur in seinen Aufzeichnungen erhalten bleiben, und weiteres Bauen in seinem Staat ist eine neue Baustelle und ein neues Monument. Alles, was ein Monument gewährt, wächst mit der Grandeur in Schritten, von denen jeder mehr verlangt als der vorherige. Seine Wirkungen im eigenen Staat sowie Prestige und kulturelle Anziehungskraft haben einen ersten Schritt von 5 Grandeur, dann 10, 15, 20 und so weiter, sodass Schritte bei 5, 15, 30, 50, 75 abgeschlossen sind; die Wirkungen in einem Staat enden bei 30 Schritten, Prestige und kulturelle Anziehungskraft hören nie auf. Die übrigen nationalen Effekte und die Zustimmung der Interessengruppen brauchen für jeden Schritt das Doppelte des vorherigen, sodass Schritte bei 5, 15, 35, 75, 155 und so weiter abgeschlossen sind, bis zu 8. Innerhalb eines Schritts zählt jeder Punkt. Legitimität und kulturelle Anziehungskraft verwenden Schritte von 10. Die Balken unter „Nationale Effekte“ zeigen, wie weit der aktuelle Schritt gekommen ist."
  },
  "gm_je_how_grandeur_age": {
-  "en": "A finished monument grows grander as it ages: by 2% of its starting grandeur a year, while its message stands or it is kept as heritage, for a century. It doubles in fifty years and stops at three times its starting grandeur. A monument older than the game, standing in 1836 or dug up, comes with its years already counted: its grandeur is split as if it had aged since it was built, so one a century old has finished ageing. Under Mothballed it ages at half that, and a contested one does not age. Each anniversary's public celebration and each opportunity it completes add to its grandeur too. Pulling one down throws its years away with its stone; rededicating halves its levels, its grandeur and its years.",
-  "de": "Ein fertiges Monument gewinnt mit dem Alter an Grandeur: um 2% seiner Ausgangs-Grandeur pro Jahr, solange seine Botschaft Bestand hat oder es als Erbe bewahrt wird, ein Jahrhundert lang. Sie verdoppelt sich in fünfzig Jahren und endet beim Dreifachen der Ausgangs-Grandeur. Ein Monument, das älter ist als das Spiel, 1836 also schon steht oder ausgegraben wird, kommt mit bereits angerechneten Jahren: Seine Grandeur wird aufgeteilt, als wäre es seit seiner Errichtung gealtert, sodass eines, das ein Jahrhundert alt ist, ausgealtert ist. Unter „Eingemottet“ altert es nur halb so schnell, und ein umstrittenes altert nicht. Auch die öffentliche Feier jedes Jahrestags und jede Gelegenheit, die es vollendet, mehren seine Grandeur. Wer eines abreißt, wirft seine Jahre mit seinem Stein weg; eine Neuwidmung halbiert seine Stufen, seine Grandeur und seine Jahre."
+  "en": "A finished monument grows grander as it ages: by 2% of its starting grandeur a year, while its message stands or it is kept as heritage, for a century. It doubles in fifty years and stops at three times its starting grandeur. A monument older than the game, standing in 1836 or dug up, comes with its years already counted: its grandeur is split as if it had aged since it was built, so one a century old has finished ageing. A contested one does not age. Each anniversary's public celebration and each opportunity it completes add to its grandeur too. Pulling one down throws its years away with its stone; rededicating halves its levels, its grandeur and its years.",
+  "de": "Ein fertiges Monument gewinnt mit dem Alter an Grandeur: um 2% seiner Ausgangs-Grandeur pro Jahr, solange seine Botschaft Bestand hat oder es als Erbe bewahrt wird, ein Jahrhundert lang. Sie verdoppelt sich in fünfzig Jahren und endet beim Dreifachen der Ausgangs-Grandeur. Ein Monument, das älter ist als das Spiel, 1836 also schon steht oder ausgegraben wird, kommt mit bereits angerechneten Jahren: Seine Grandeur wird aufgeteilt, als wäre es seit seiner Errichtung gealtert, sodass eines, das ein Jahrhundert alt ist, ausgealtert ist. Ein umstrittenes altert nicht. Auch die öffentliche Feier jedes Jahrestags und jede Gelegenheit, die es vollendet, mehren seine Grandeur. Wer eines abreißt, wirft seine Jahre mit seinem Stein weg; eine Neuwidmung halbiert seine Stufen, seine Grandeur und seine Jahre."
  },
  "gm_je_how_grandeur_national": {
-  "en": "National effects count the grandeur of all our monuments together, so twenty small monuments give what one tall one gives. Each monument's effect in its own state, and its Tourism Industry throughput, count its own grandeur.",
-  "de": "Nationale Effekte zählen die Grandeur aller unserer Monumente zusammen, sodass zwanzig kleine Monumente ergeben, was ein hohes ergibt. Die Wirkung jedes Monuments in seinem eigenen Staat und sein Durchsatz in der Tourismusindustrie zählen seine eigene Grandeur."
+  "en": "National effects count the grandeur of all our monuments together, so twenty small monuments give what one tall one gives. Each monument's effect in its own state, and its tourism output, count its own grandeur.",
+  "de": "Nationale Effekte zählen die Grandeur aller unserer Monumente zusammen, sodass zwanzig kleine Monumente ergeben, was ein hohes ergibt. Die Wirkung jedes Monuments in seinem eigenen Staat und sein Tourismusertrag zählen seine eigene Grandeur."
  },
  "gm_je_how_hard_times": {
   "en": "While the country is in default, in famine or in recession, finishing monument levels turns 0.5% of the state's pops radical and costs 1 legitimacy for each point of grandeur such levels add, fading over about two years. The overview shows Hard Times while this would happen, so construction can be paused first.",
@@ -11032,8 +11396,8 @@
   "de": "Jedes Monument hat einen Namen: wonach es benannt ist (seine Stadt, sein Staat, der Herrscher, was es ehrt, das Jahr oder der Anlass, den eine Gelegenheit begeht) und seine Form, aus den Formen, die sein Stil bietet: eine Säule, ein Triumphbogen, ein Tor, eine Pagode. Das Monument, das eine Gelegenheit vollendet, erhält deren Namen. Ein unumstrittenes Monument lässt sich aus seiner Zeile kostenlos umbenennen oder mit „Benennen“ einen eigenen Namen geben, was das spielinterne Umbenennungsfeld öffnet; ein umstrittenes oder ein Kulturerbe-Monument behält seinen Namen."
  },
  "gm_je_how_policy": {
-  "en": "One policy covers all our monuments. Open to the Public raises the tourism each brings and makes anniversaries more frequent, at half again the upkeep. State Ceremonial adds half again to the legitimacy and authority from monuments to the regime and the Leader, but draws fewer visitors. Mothballed halves upkeep, but also prestige, cultural pull, visitors and each monument's local effect, and holds no anniversaries. After a change, the policy cannot change again for five years; a first choice starts no wait.",
-  "de": "Eine Politik gilt für alle unsere Monumente. „Öffentlich zugänglich“ steigert den Tourismus, den jedes bringt, und macht Jahrestage häufiger, bei anderthalbfachem Unterhalt. „Staatszeremoniell“ erhöht die Legitimität und Autorität aus Monumenten für das Regime und den Staatschef um die Hälfte, zieht aber weniger Besucher an. „Eingemottet“ halbiert den Unterhalt, aber auch Prestige, kulturelle Anziehungskraft, Besucher und die lokale Wirkung jedes Monuments, und hält keine Jahrestage ab. Nach einem Wechsel kann die Politik fünf Jahre lang nicht erneut gewechselt werden; eine erste Wahl löst keine Wartezeit aus."
+  "en": "One policy covers all our monuments, and each is the best at one thing. $gm_policy_open$ raises the tourism each brings by half, the tourism of $gm_sig_antiquity$ and $gm_sig_first_emperor$ included. $gm_policy_ceremonial$ lets legitimacy and the Leader's authority count a quarter of the [concept_grandeur] of every monument, not only those to the regime and the Leader. $gm_policy_culture$, the policy until we choose another, raises their [concept_cultural_pull] by half, or their [concept_prestige] when $rule_cultural_hegemony_rule$ is off. $gm_policy_education$ raises education access in every state. After a change, the policy cannot change again for five years; a first choice starts no wait.",
+  "de": "Eine Politik gilt für alle unsere Monumente, und jede ist in einer Sache die beste. $gm_policy_open$ steigert den Tourismus, den jedes bringt, um die Hälfte, den Tourismus von $gm_sig_antiquity$ und $gm_sig_first_emperor$ eingeschlossen. $gm_policy_ceremonial$ lässt Legitimität und die Autorität des Anführers ein Viertel der [concept_grandeur] jedes Monuments zählen, nicht nur der Monumente für das Regime und den Anführer. $gm_policy_culture$, die Politik, die gilt, bis wir eine andere wählen, steigert deren [concept_cultural_pull|l] um die Hälfte oder deren [concept_prestige], wenn $rule_cultural_hegemony_rule$ ausgeschaltet ist. $gm_policy_education$ steigert den Bildungszugang in jedem Staat. Nach einem Wechsel kann die Politik fünf Jahre lang nicht erneut gewechselt werden; eine erste Wahl löst keine Wartezeit aus."
  },
  "gm_je_how_signatures": {
   "en": "Most historical monuments carry a unique dedication of their own on top of the one they stand on: the Temple of Heaven's is The Mandate of Heaven, on To the Crown. Its name shows in place of the dedication's, and hovering it says what it adds. Monuments of one kind share one: Ancestral Antiquity for the ruins, tombs and treasures of the ancient world, the Epigraphic Archive for inscriptions and lost libraries, Seat of the Throne for royal palaces, Royal Pantheon for royal tombs and statues, Martial Glory for monuments to victories, Liberty, and Heroes of the Nation for national halls of fame. A few have one of their own beside their kind's. It counts only while the monument stands on the dedication it was given on: upheld, it adds its national effect and its effect in its state; contested or kept as heritage, only its effect in its state; rededicated to another, nothing until it is rededicated back. A trophy that carries one counts for whoever holds it, at the trophy's grandeur.",
@@ -11160,8 +11524,8 @@
   "de": "Kein nationaler Effekt ist in Kraft."
  },
  "gm_je_ov_building_tt": {
-  "en": "#b Being Built#!\\nOur Grand Monuments under construction. They have no upkeep and no effects until dedicated, from Awaiting Dedication or the state's card, once nothing more is being built on them.",
-  "de": "#b Im Bau#!\\nUnsere Großen Monumente im Bau. Sie haben keinen Unterhalt und keine Wirkungen, bis sie gewidmet werden, über „Wartet auf Widmung“ oder die Karte des Staates, sobald nichts mehr an ihnen gebaut wird."
+  "en": "#b Being Built#!\\nOur Grand Monuments under construction. They have no effects until dedicated, from Awaiting Dedication or the state's card, once nothing more is being built on them.",
+  "de": "#b Im Bau#!\\nUnsere Großen Monumente im Bau. Sie haben keine Wirkungen, bis sie gewidmet werden, über „Wartet auf Widmung“ oder die Karte des Staates, sobald nichts mehr an ihnen gebaut wird."
  },
  "gm_je_ov_hard_times": {
   "en": "#R Hard Times#!",
@@ -11304,8 +11668,12 @@
   "de": "#b $gm_boon_victory$#!\\n$gm_boon_victory_effect$, noch #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_boon_victory')|0]#! Monate lang.\\n$gm_boon_victory_desc$"
  },
  "gm_je_tt_culture": {
-  "en": "#b Cultural Pull#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nStanding [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested, in steps of 10.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_culture')|0]#! a step. There is no ceiling: each step takes 10 grandeur more than the one before.",
-  "de": "#b Kulturelle Anziehungskraft#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nBestehende [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, jedes Monument, das nicht umstritten ist, in Schritten von 10.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_culture')|0]#! je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 10 Grandeur mehr als der vorherige."
+  "en": "#b Cultural Pull#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nStanding [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested, in steps of 10.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_culture')|0]#! a step. There is no ceiling: each step takes 10 grandeur more than the one before.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture_standing'), '(CFixedPoint)1' ), 'gm_policy_culture_standing_tt_line', 'te_tt_blank' )]",
+  "de": "#b Kulturelle Anziehungskraft#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nBestehende [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, jedes Monument, das nicht umstritten ist, in Schritten von 10.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_culture')|0]#! je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 10 Grandeur mehr als der vorherige.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture_standing'), '(CFixedPoint)1' ), 'gm_policy_culture_standing_tt_line', 'te_tt_blank' )]"
+ },
+ "gm_je_tt_education": {
+  "en": "#b [concept_education_access]#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_education')|%0]#! in every state\\nFrom $gm_policy_education$. [concept_grandeur] counted: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_education')|0]#!, every monument that is not contested[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )], in steps of 10.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_education')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_education')|%0]#! a step. There is no ceiling: each step takes 10 grandeur more than the one before.",
+  "de": "#b [concept_education_access]#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_education')|%0]#! in jedem Staat\\nVon $gm_policy_education$. Angerechnete [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_education')|0]#!, jedes Monument, das nicht umstritten ist[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )], in Schritten von 10.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_education')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_education')|%0]#! je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 10 Grandeur mehr als der vorherige."
  },
  "gm_je_tt_ig": {
   "en": "#b Approval from monuments#!\\nEach group has one total across all our monuments: the [concept_grandeur] of those it approves of that still fit, minus those it objects to and the contested monuments it resents, plus what remains of past decisions on contested monuments, which fades. The total moves approval by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_ig')|0]#! a step either way.",
@@ -11316,16 +11684,20 @@
   "de": "#b $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_industrial')|%0]#!\\nVon Ausstellungshallen: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_industrial')|0]#!.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_industrial')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_industrial')|%0]#! je Schritt."
  },
  "gm_je_tt_leader": {
-  "en": "#b $country_authority_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader')|0]#!\\nFrom monuments to the Leader that still fit: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_leader')|0]#!.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_leader')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_leader')|0]#! a step.",
-  "de": "#b $country_authority_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader')|0]#!\\nVon Monumenten für den Anführer, die noch passen: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_leader')|0]#!.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_leader')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_leader')|0]#! je Schritt."
+  "en": "#b $country_authority_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader')|0]#!\\nFrom monuments to the Leader that still fit: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_leader')|0]#!.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_leader')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_leader')|0]#! a step.",
+  "de": "#b $country_authority_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader')|0]#!\\nVon Monumenten für den Anführer, die noch passen: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_leader')|0]#!.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_leader')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_leader')|0]#! je Schritt."
  },
  "gm_je_tt_legitimacy": {
-  "en": "#b $country_legitimacy_base_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy')|1]#!\\nRegime [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_regime')|0]#!, the monuments to the Crown, the Republic, the Revolution and the Leader that still fit.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_regime')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_legitimacy')|0]#! a step.",
-  "de": "#b $country_legitimacy_base_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy')|1]#!\\n[concept_grandeur] des Regimes: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_regime')|0]#!, die Monumente für die Krone, die Republik, die Revolution und den Anführer, die noch passen.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_regime')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_legitimacy')|0]#! je Schritt."
+  "en": "#b $country_legitimacy_base_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy')|1]#!\\nRegime [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_regime')|0]#!, the monuments to the Crown, the Republic, the Revolution and the Leader that still fit.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_regime')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_legitimacy')|0]#! a step.",
+  "de": "#b $country_legitimacy_base_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy')|1]#!\\n[concept_grandeur] des Regimes: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_regime')|0]#!, die Monumente für die Krone, die Republik, die Revolution und den Anführer, die noch passen.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_ceremonial'), '(CFixedPoint)0' ), 'gm_policy_ceremonial_tt_line', 'te_tt_blank' )]\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_regime')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_legitimacy')|0]#! je Schritt."
  },
  "gm_je_tt_prestige": {
-  "en": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#!\\nStanding [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige')|0]#! a step. There is no ceiling: each step takes 5 grandeur more than the one before.",
-  "de": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#!\\nBestehende [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, jedes Monument, das nicht umstritten ist.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige')|0]#! je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 5 Grandeur mehr als der vorherige."
+  "en": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#! and #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nStanding [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige')|0]#! and #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! a step. There is no ceiling: each step takes 5 grandeur more than the one before.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]",
+  "de": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#! und #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nBestehende [concept_grandeur]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, jedes Monument, das nicht umstritten ist.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige')|0]#! und #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 5 Grandeur mehr als der vorherige.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]"
+ },
+ "gm_je_tt_prestige_pct": {
+  "en": "#b [concept_prestige] (%)#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nA share of our prestige for each step of standing [concept_grandeur], on the same steps as the flat prestige above: #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! a step.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]",
+  "de": "#b [concept_prestige] (%)#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige_pct')|%0]#!\\nEin Anteil an unserem Prestige für jeden Schritt der bestehenden [concept_grandeur], in denselben Schritten wie beim festen Prestige oben: #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_prestige_pct')|%0]#! je Schritt.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_prestige'), '(CFixedPoint)1' ), 'gm_policy_prestige_tt_line', 'te_tt_blank' )]"
  },
  "gm_je_tt_religious": {
   "en": "#b $interest_group_ig_devout_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious')|%0]#!\\nFrom grand shrines that still fit: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_religious')|0]#!.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_religious')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_religious')|%0]#! a step.",
@@ -11336,8 +11708,8 @@
   "de": "#b $country_weekly_innovation_max_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_scientific')|1]#!\\nVon Observatorien: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_scientific')|0]#!.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_scientific')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_national_scientific')|0]#! je Schritt."
  },
  "gm_je_tt_sig_antiquity": {
-  "en": "#b $gm_sig_antiquity$#!: [concept_cultural_pull] #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_antiquity')|1]#!\\nA unique dedication, from #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_c_sig_antiquity')|0]#! monuments upheld on the dedication it was given on, and trophies of it we hold: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_sig_antiquity')|0]#!.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_sig_antiquity')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_sig_antiquity')|1]#! [concept_cultural_pull] a step. There is no ceiling: each step takes 5 grandeur more than the one before.",
-  "de": "#b $gm_sig_antiquity$#!: [concept_cultural_pull] #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_antiquity')|1]#!\\nEine einzigartige Widmung, aus #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_c_sig_antiquity')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den von uns gehaltenen Trophäen davon: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_sig_antiquity')|0]#!.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_sig_antiquity')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_sig_antiquity')|1]#! [Concept('concept_cultural_pull','kulturelle Anziehungskraft')] je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 5 Grandeur mehr als der vorherige."
+  "en": "#b $gm_sig_antiquity$#!: [concept_cultural_pull] #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_antiquity')|1]#!\\nA unique dedication, from #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_c_sig_antiquity')|0]#! monuments upheld on the dedication it was given on, and trophies of it we hold: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_sig_antiquity')|0]#!.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_sig_antiquity')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_sig_antiquity')|1]#! [concept_cultural_pull] a step. There is no ceiling: each step takes 5 grandeur more than the one before.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture'), '(CFixedPoint)1' ), 'gm_policy_culture_tt_line', 'te_tt_blank' )]",
+  "de": "#b $gm_sig_antiquity$#!: [concept_cultural_pull] #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_antiquity')|1]#!\\nEine einzigartige Widmung, aus #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_c_sig_antiquity')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den von uns gehaltenen Trophäen davon: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_sig_antiquity')|0]#!.\\nNächster Schritt bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_sig_antiquity')|0]#!, für #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_sig_antiquity')|1]#! [concept_cultural_pull|l] je Schritt. Es gibt keine Obergrenze: Jeder Schritt braucht 5 Grandeur mehr als der vorherige.[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture'), '(CFixedPoint)1' ), 'gm_policy_culture_tt_line', 'te_tt_blank' )]"
  },
  "gm_je_tt_sig_archive": {
   "en": "#b $gm_sig_archive$#!: max [concept_innovation] #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_archive')|0]#! and #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_sig_archive_spread')|%1]#! [concept_technology_spread]\\nA unique dedication, from #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_c_sig_archive')|0]#! monuments upheld on the dedication it was given on, and trophies of it we hold: [concept_grandeur] #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!.\\nNext step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_sig_archive')|0]#!, for #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_sig_archive')|0]#! max [concept_innovation] and #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_sig_archive_spread')|%0]#! [concept_technology_spread] a step.",
@@ -11435,6 +11807,14 @@
   "en": "#b What a level is worth#!\\nA monument is impressive for what it cost its time: a level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836, and the world is #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_world_wealth_factor')|1]#! times as rich now, so a level built this year adds that much less, to the nearest thousandth and at least 0.001. Each level counts at the rate of the January before it was finished; the monuments already standing keep theirs.",
   "de": "#b Was eine Stufe wert ist#!\\nEin Monument beeindruckt durch das, was es seine Zeit kostete: Eine Stufe fügt 1836 #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! hinzu, und die Welt ist jetzt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_world_wealth_factor')|1]#! Mal so reich, sodass eine in diesem Jahr gebaute Stufe entsprechend weniger hinzufügt, auf das nächste Tausendstel gerundet und mindestens 0,001. Jede Stufe zählt zum Satz des Januars vor ihrer Fertigstellung; die bereits stehenden Monumente behalten ihren."
  },
+ "gm_landmark_aachen_cathedral_desc": {
+  "en": "The palace chapel Charlemagne built at Aachen, consecrated in 805, where he is buried and where the kings of Germany were crowned for six hundred years.",
+  "de": "Die Pfalzkapelle, die Karl der Große in Aachen errichtete, 805 geweiht, wo er begraben liegt und wo die deutschen Könige sechshundert Jahre lang gekrönt wurden."
+ },
+ "gm_landmark_abu_simbel_desc": {
+  "en": "Two temples Ramesses II cut into the sandstone cliffs above the Nile in Nubia, the greater guarded by four seated colossi of the king. Burckhardt saw its buried facade in 1813, and Giovanni Belzoni dug his way inside in 1817.",
+  "de": "Zwei Tempel, die Ramses II. in die Sandsteinfelsen über dem Nil in Nubien hauen ließ, der größere bewacht von vier sitzenden Kolossen des Königs. Burckhardt sah 1813 seine verschüttete Fassade, und Giovanni Belzoni grub sich 1817 ins Innere vor."
+ },
  "gm_landmark_alexander_column_desc": {
   "en": "Raised in 1834 to Alexander I and the victory over Napoleon: one shaft of red granite, standing by its own weight.",
   "de": "1834 zu Ehren Alexanders I. und des Sieges über Napoleon errichtet: ein einziger Schaft aus rotem Granit, der allein durch sein Eigengewicht steht."
@@ -11443,9 +11823,17 @@
   "en": "the $gm_skin_landmark_alexander_column$",
   "de": "die $gm_skin_landmark_alexander_column$"
  },
+ "gm_landmark_alhambra_desc": {
+  "en": "The palace-fortress of the Nasrid sultans of Granada, the last Muslim kingdom in Spain, with its courts of fountains and halls of carved stucco. Washington Irving lodged in its rooms in 1829.",
+  "de": "Die Palastfestung der nasridischen Sultane von Granada, des letzten muslimischen Königreichs in Spanien, mit ihren Brunnenhöfen und Sälen aus geschnitztem Stuck. Washington Irving wohnte 1829 in ihren Räumen."
+ },
  "gm_landmark_alhambra_evt": {
   "en": "the $gm_skin_landmark_alhambra$",
   "de": "die $gm_skin_landmark_alhambra$"
+ },
+ "gm_landmark_amphitheatre_of_el_djem_desc": {
+  "en": "The amphitheatre of Thysdrus, built around 238 for some 35,000 spectators, the largest in Roman Africa. The Berber queen al-Kahina is said to have held out in it against the Arab armies in the seventh century.",
+  "de": "Das Amphitheater von Thysdrus, um 238 für etwa 35.000 Zuschauer erbaut, das größte im römischen Afrika. Die Berberkönigin al-Kahina soll sich im siebten Jahrhundert darin gegen die arabischen Heere gehalten haben."
  },
  "gm_landmark_amphitheatre_of_el_djem_evt": {
   "en": "the $gm_skin_landmark_amphitheatre_of_el_djem$",
@@ -11487,6 +11875,10 @@
   "en": "The great cannon that guarded Algiers harbour from 1542, taken by the French in 1830 and set up in the arsenal at Brest as a column crowned with a cockerel.",
   "de": "Die große Kanone, die ab 1542 den Hafen von Algier bewachte, 1830 von den Franzosen genommen und im Arsenal von Brest als von einem Hahn gekrönte Säule aufgestellt."
  },
+ "gm_landmark_basilica_of_saint_francis_desc": {
+  "en": "The double church raised from 1228 over the tomb of Saint Francis at Assisi, its upper church painted with his life, traditionally by Giotto.",
+  "de": "Die Doppelkirche, die ab 1228 über dem Grab des heiligen Franziskus in Assisi errichtet wurde, ihre Oberkirche mit seiner Lebensgeschichte ausgemalt, der Überlieferung nach von Giotto."
+ },
  "gm_landmark_basilica_of_saint_francis_evt": {
   "en": "the $gm_skin_landmark_basilica_of_saint_francis$",
   "de": "die $gm_skin_landmark_basilica_of_saint_francis$"
@@ -11503,6 +11895,10 @@
   "en": "Built by the Knights of Saint John from 1404 with stone from the ruined Mausoleum of Halicarnassus, and taken by the Ottomans in 1523. Slabs of the Mausoleum's frieze are set in its walls.",
   "de": "Ab 1404 von den Johanniterrittern aus Steinen des zerstörten Mausoleums von Halikarnassos erbaut und 1523 von den Osmanen genommen. In seine Mauern sind Platten des Frieses des Mausoleums eingelassen."
  },
+ "gm_landmark_borobudur_desc": {
+  "en": "A mountain of carved stone in central Java, built around 800 as a Buddhist stupa of nine terraces with 504 statues of the Buddha. Buried for centuries under volcanic ash and jungle, it was cleared on the orders of Thomas Stamford Raffles in 1814.",
+  "de": "Ein Berg aus behauenem Stein in Zentraljava, um 800 als buddhistischer Stupa mit neun Terrassen und 504 Buddhastatuen erbaut. Jahrhundertelang unter Vulkanasche und Dschungel begraben, wurde er 1814 auf Anordnung von Thomas Stamford Raffles freigelegt."
+ },
  "gm_landmark_brandenburg_gate_desc": {
   "en": "Finished in 1791. Napoleon carried its Quadriga off to Paris in 1806, and Prussia brought it home in 1814.",
   "de": "1791 vollendet. Napoleon schaffte seine Quadriga 1806 nach Paris, und Preußen holte sie 1814 heim."
@@ -11510,6 +11906,10 @@
  "gm_landmark_brandenburg_gate_evt": {
   "en": "the $gm_skin_landmark_brandenburg_gate$",
   "de": "das $gm_skin_landmark_brandenburg_gate$"
+ },
+ "gm_landmark_buddhas_of_bamiyan_desc": {
+  "en": "Two standing Buddhas, 53 and 35 metres tall, carved into the cliff of the Bamiyan valley in the sixth century among hundreds of painted caves where monks lived.",
+  "de": "Zwei stehende Buddhas, 53 und 35 Meter hoch, im sechsten Jahrhundert in die Felswand des Tals von Bamiyan gehauen, inmitten Hunderter bemalter Höhlen, in denen Mönche lebten."
  },
  "gm_landmark_buddhas_of_bamiyan_evt": {
   "en": "the $gm_skin_landmark_buddhas_of_bamiyan$",
@@ -11522,6 +11922,10 @@
  "gm_landmark_bukgwan_victory_stele_evt": {
   "en": "the $gm_skin_landmark_bukgwan_victory_stele$",
   "de": "die $gm_skin_landmark_bukgwan_victory_stele$"
+ },
+ "gm_landmark_bulguksa_desc": {
+  "en": "A Buddhist temple on the slopes of Mount Toham near Gyeongju, the old capital of Silla, finished in 774, with two stone pagodas in its court and the Seokguram grotto above it.",
+  "de": "Ein buddhistischer Tempel an den Hängen des Berges Toham bei Gyeongju, der alten Hauptstadt von Silla, 774 vollendet, mit zwei Steinpagoden in seinem Hof und der Seokguram-Grotte darüber."
  },
  "gm_landmark_bunker_hill_monument_desc": {
   "en": "A granite obelisk on Breed's Hill in Charlestown, where the colonial militia met the British army in 1775. Its cornerstone was laid on the battle's fiftieth anniversary; the money ran out before it was half built.",
@@ -11559,17 +11963,45 @@
   "en": "the $gm_skin_landmark_cenotaph_of_maximilian$",
   "de": "der $gm_skin_landmark_cenotaph_of_maximilian$"
  },
+ "gm_landmark_changdeokgung_desc": {
+  "en": "A palace of the Joseon kings in Hanseong, rebuilt in 1610 after the Japanese invasions burned it, with its Secret Garden on the hill behind. It was the main palace for two and a half centuries while Gyeongbokgung lay in ruins.",
+  "de": "Ein Palast der Joseon-Könige in Hanseong, 1610 wiederaufgebaut, nachdem ihn die japanischen Invasionen niedergebrannt hatten, mit seinem Geheimen Garten auf dem Hügel dahinter. Zweieinhalb Jahrhunderte lang war er der Hauptpalast, während Gyeongbokgung in Trümmern lag."
+ },
+ "gm_landmark_charminar_desc": {
+  "en": "A square monument of four arches and four minarets at the heart of Hyderabad, raised by Sultan Muhammad Quli Qutb Shah in 1591 when he founded the city.",
+  "de": "Ein quadratisches Bauwerk mit vier Bögen und vier Minaretten im Herzen von Hyderabad, 1591 von Sultan Muhammad Quli Qutb Shah bei der Gründung der Stadt errichtet."
+ },
  "gm_landmark_charminar_evt": {
   "en": "the $gm_skin_landmark_charminar$",
   "de": "der $gm_skin_landmark_charminar$"
+ },
+ "gm_landmark_chateau_de_chambord_desc": {
+  "en": "The hunting palace Francis I raised in the forests of the Loire from 1519, with a double-spiral staircase at its heart and a roofline of towers, lanterns and chimneys.",
+  "de": "Das Jagdschloss, das Franz I. ab 1519 in den Wäldern an der Loire errichtete, mit einer Doppelwendeltreppe in seinem Zentrum und einer Dachlandschaft aus Türmen, Laternen und Schornsteinen."
  },
  "gm_landmark_chateau_de_chambord_evt": {
   "en": "the $gm_skin_landmark_chateau_de_chambord$",
   "de": "das $gm_skin_landmark_chateau_de_chambord$"
  },
+ "gm_landmark_chichen_itza_desc": {
+  "en": "A Maya city of the Yucatán with the stepped pyramid of El Castillo, a great ball court, an observatory and the Sacred Cenote, the well into which offerings were thrown.",
+  "de": "Eine Maya-Stadt auf Yucatán mit der Stufenpyramide El Castillo, einem großen Ballspielplatz, einem Observatorium und dem Heiligen Cenote, dem Brunnen, in den Opfergaben geworfen wurden."
+ },
+ "gm_landmark_chogha_zanbil_desc": {
+  "en": "The ziggurat the Elamite king Untash-Napirisha raised near Susa around 1250 BC, its bricks stamped with his inscriptions, inside three rings of walls.",
+  "de": "Die Zikkurat, die der elamitische König Untasch-Napirischa um 1250 v. Chr. bei Susa errichtete, ihre Ziegel mit seinen Inschriften gestempelt, innerhalb von drei Mauerringen."
+ },
+ "gm_landmark_citadel_of_aleppo_desc": {
+  "en": "A fortified hill above Aleppo, its great gate and bridge rebuilt by the Ayyubid sultan al-Zahir Ghazi around 1213. An earthquake wrecked much of it in 1822.",
+  "de": "Ein befestigter Hügel über Aleppo, dessen großes Tor und Brücke der ajjubidische Sultan al-Zahir Ghazi um 1213 neu errichten ließ. Ein Erdbeben zerstörte 1822 einen Großteil davon."
+ },
  "gm_landmark_citadel_of_aleppo_evt": {
   "en": "the $gm_skin_landmark_citadel_of_aleppo$",
   "de": "die $gm_skin_landmark_citadel_of_aleppo$"
+ },
+ "gm_landmark_cyrene_desc": {
+  "en": "The greatest of the Greek cities of Libya, founded around 630 BC, with the Temple of Apollo at its sacred spring and a Temple of Zeus larger than the Parthenon.",
+  "de": "Die größte der griechischen Städte Libyens, um 630 v. Chr. gegründet, mit dem Apollontempel an ihrer heiligen Quelle und einem Zeustempel, der größer ist als der Parthenon."
  },
  "gm_landmark_dead_sea_scrolls_desc": {
   "en": "Scrolls from the caves above Qumran, found by Bedouin shepherds from 1947: the oldest manuscripts of the Hebrew Bible yet known.",
@@ -11587,6 +12019,18 @@
   "en": "The oracle of Apollo on Mount Parnassus, buried under the village of Kastri. The French School at Athens moved the village and dug the sanctuary from 1892.",
   "de": "Das Orakel des Apollon am Parnass, unter dem Dorf Kastri begraben. Die Französische Schule in Athen versetzte das Dorf und grub das Heiligtum ab 1892 aus."
  },
+ "gm_landmark_diocletians_palace_desc": {
+  "en": "The palace the emperor Diocletian built on the Adriatic shore to retire to around 305. The people of Salona took refuge in it from the Avars, and the town of Split grew up inside its walls.",
+  "de": "Der Palast, den Kaiser Diokletian an der Adriaküste erbauen ließ, um sich um 305 dorthin zurückzuziehen. Die Bewohner von Salona suchten darin Zuflucht vor den Awaren, und die Stadt Split wuchs innerhalb seiner Mauern heran."
+ },
+ "gm_landmark_ephesus_desc": {
+  "en": "The Greek and Roman city at the mouth of the Cayster, with a theatre for 25,000, the Library of Celsus and the Temple of Artemis, one of the Seven Wonders of the world, lost under the silt of the river.",
+  "de": "Die griechische und römische Stadt an der Mündung des Kaystros, mit einem Theater für 25.000 Zuschauer, der Celsusbibliothek und dem Artemistempel, einem der Sieben Weltwunder, der unter dem Schlick des Flusses verloren ging."
+ },
+ "gm_landmark_fasil_ghebbi_desc": {
+  "en": "The walled royal enclosure of Gondar, where Emperor Fasilides and his successors built castles, halls and churches from 1636. From 1769, in the Zemene Mesafint, the emperors reigned there while warlords ruled in their name.",
+  "de": "Der ummauerte Königsbezirk von Gondar, wo Kaiser Fasilides und seine Nachfolger ab 1636 Schlösser, Hallen und Kirchen errichteten. Ab 1769, in der Zemene Mesafint, herrschten die Kaiser dort, während Kriegsherren in ihrem Namen regierten."
+ },
  "gm_landmark_gobekli_tepe_desc": {
   "en": "Rings of T-shaped limestone pillars raised on a hill in southeastern Anatolia by hunter-gatherers around 9500 BC, before farming and about six thousand years before Stonehenge.",
   "de": "Ringe aus T-förmigen Kalksteinpfeilern, die Jäger und Sammler um 9500 v. Chr. auf einem Hügel in Südostanatolien errichteten, vor dem Ackerbau und etwa sechstausend Jahre vor Stonehenge."
@@ -11598,6 +12042,10 @@
  "gm_landmark_golestan_palace_evt": {
   "en": "the $gm_skin_landmark_golestan_palace$",
   "de": "der $gm_skin_landmark_golestan_palace$"
+ },
+ "gm_landmark_grand_palace_bangkok_desc": {
+  "en": "The palace Rama I built for his new capital of Bangkok from 1782, with the Temple of the Emerald Buddha within its walls.",
+  "de": "Der Palast, den Rama I. ab 1782 für seine neue Hauptstadt Bangkok errichtete, mit dem Tempel des Smaragd-Buddhas innerhalb seiner Mauern."
  },
  "gm_landmark_grand_palace_bangkok_evt": {
   "en": "the $gm_skin_landmark_grand_palace_bangkok$",
@@ -11611,6 +12059,18 @@
   "en": "the $gm_skin_landmark_great_zimbabwe$",
   "de": "$gm_skin_landmark_great_zimbabwe$"
  },
+ "gm_landmark_gwalior_fort_desc": {
+  "en": "A fortress on a sheer sandstone hill above Gwalior, with the tiled palace Raja Man Singh Tomar built around 1500 and Jain colossi cut into its cliffs.",
+  "de": "Eine Festung auf einem steil abfallenden Sandsteinhügel über Gwalior, mit dem gekachelten Palast, den Raja Man Singh Tomar um 1500 errichtete, und in die Felswände gehauenen Dschaina-Kolossen."
+ },
+ "gm_landmark_hampi_desc": {
+  "en": "The ruins of Vijayanagara, capital of the last great Hindu empire of the south, sacked after the battle of Talikota in 1565: temples, bazaars and palaces among boulder hills on the Tungabhadra.",
+  "de": "Die Ruinen von Vijayanagara, der Hauptstadt des letzten großen Hindureichs des Südens, nach der Schlacht von Talikota 1565 geplündert: Tempel, Basare und Paläste zwischen Felsblockhügeln am Tungabhadra."
+ },
+ "gm_landmark_hattusa_desc": {
+  "en": "The capital of the Hittite kings in the hills of central Anatolia, with its Lion Gate, its temples and a royal archive of clay tablets.",
+  "de": "Die Hauptstadt der hethitischen Könige in den Hügeln Zentralanatoliens, mit ihrem Löwentor, ihren Tempeln und einem königlichen Archiv aus Tontafeln."
+ },
  "gm_landmark_horses_of_saint_mark_desc": {
   "en": "Four bronze horses from the Hippodrome of Constantinople, carried off by Venice in 1204. Napoleon took them to Paris in 1797, and they came back to Saint Mark's in 1815.",
   "de": "Vier Bronzepferde aus dem Hippodrom von Konstantinopel, 1204 von Venedig fortgeschafft. Napoleon brachte sie 1797 nach Paris, und 1815 kamen sie nach San Marco zurück."
@@ -11618,6 +12078,10 @@
  "gm_landmark_horses_of_saint_mark_evt": {
   "en": "the $gm_skin_landmark_horses_of_saint_mark$",
   "de": "die $gm_skin_landmark_horses_of_saint_mark$"
+ },
+ "gm_landmark_humble_administrators_garden_desc": {
+  "en": "A scholar's garden of pools, rockeries and pavilions in Suzhou, laid out from 1509 by the retired official Wang Xianchen, who named it after a poem on the simple life.",
+  "de": "Ein Gelehrtengarten mit Teichen, Felsgärten und Pavillons in Suzhou, ab 1509 vom pensionierten Beamten Wang Xianchen angelegt, der ihn nach einem Gedicht über das einfache Leben benannte."
  },
  "gm_landmark_humble_administrators_garden_evt": {
   "en": "the $gm_skin_landmark_humble_administrators_garden$",
@@ -11639,6 +12103,14 @@
   "en": "the $gm_skin_landmark_ishtar_gate_babylon$",
   "de": "das $gm_skin_landmark_ishtar_gate_babylon$"
  },
+ "gm_landmark_itchan_kala_desc": {
+  "en": "The walled inner town of Khiva, its palaces, mosques and madrasas inside walls of mud brick, raised for the most part under the Qongrat khans from about 1800.",
+  "de": "Die ummauerte Innenstadt von Chiwa, ihre Paläste, Moscheen und Medresen innerhalb von Lehmziegelmauern, größtenteils unter den Kungraten-Khanen ab etwa 1800 errichtet."
+ },
+ "gm_landmark_itsukushima_shrine_desc": {
+  "en": "A Shinto shrine on the island of Miyajima in the Inland Sea, built on piers over the water, with its great vermilion torii standing in the sea. Taira no Kiyomori rebuilt it in its present form in 1168.",
+  "de": "Ein Shinto-Schrein auf der Insel Miyajima in der Inlandsee, auf Pfählen über dem Wasser errichtet, mit seinem großen zinnoberroten Torii, das im Meer steht. Taira no Kiyomori ließ ihn 1168 in seiner heutigen Form neu erbauen."
+ },
  "gm_landmark_itsukushima_shrine_evt": {
   "en": "the $gm_skin_landmark_itsukushima_shrine$",
   "de": "der $gm_skin_landmark_itsukushima_shrine$"
@@ -11659,13 +12131,29 @@
   "en": "the $gm_skin_landmark_jardim_botanico$",
   "de": "der $gm_skin_landmark_jardim_botanico$"
  },
+ "gm_landmark_jeronimos_monastery_desc": {
+  "en": "The monastery of the Hieronymites at Belém, raised from 1501 with the wealth of the spice trade where Vasco da Gama set out for India. Its order was dissolved in 1833.",
+  "de": "Das Kloster der Hieronymiten in Belém, ab 1501 mit dem Reichtum des Gewürzhandels errichtet, an der Stelle, von der Vasco da Gama nach Indien aufbrach. Sein Orden wurde 1833 aufgelöst."
+ },
  "gm_landmark_jeronimos_monastery_evt": {
   "en": "the $gm_skin_landmark_jeronimos_monastery$",
   "de": "das $gm_skin_landmark_jeronimos_monastery$"
  },
+ "gm_landmark_kazan_kremlin_desc": {
+  "en": "The citadel of Kazan, rebuilt in white stone after Ivan IV took the city in 1552, with the Annunciation Cathedral and the leaning Söyembikä Tower.",
+  "de": "Die Zitadelle von Kasan, nach der Einnahme der Stadt durch Iwan IV. im Jahr 1552 in weißem Stein neu errichtet, mit der Verkündigungskathedrale und dem schiefen Süjümbike-Turm."
+ },
  "gm_landmark_kazan_kremlin_evt": {
   "en": "the $gm_skin_landmark_kazan_kremlin$",
   "de": "der $gm_skin_landmark_kazan_kremlin$"
+ },
+ "gm_landmark_khajuraho_desc": {
+  "en": "The temples of the Chandela kings in Bundelkhand, built around 1000 and carved with gods, dancers and lovers, overgrown and forgotten after the dynasty fell.",
+  "de": "Die Tempel der Chandela-Könige in Bundelkhand, um 1000 erbaut und mit Göttern, Tänzern und Liebenden verziert, nach dem Fall der Dynastie überwuchert und vergessen."
+ },
+ "gm_landmark_kinkaku_ji_desc": {
+  "en": "The Golden Pavilion, a reliquary hall covered in gold leaf above a pond in the hills of Kyoto, built for the shogun Ashikaga Yoshimitsu in 1397, among the hundreds of temples of the old capital.",
+  "de": "Der Goldene Pavillon, eine mit Blattgold überzogene Reliquienhalle über einem Teich in den Hügeln von Kyoto, 1397 für den Shogun Ashikaga Yoshimitsu erbaut, unter den Hunderten von Tempeln der alten Hauptstadt."
  },
  "gm_landmark_klungkung_palace_desc": {
   "en": "The palace of the Dewa Agung at Klungkung, paramount king of Bali, with the Kertha Gosa hall of justice painted with scenes of heaven and hell.",
@@ -11678,6 +12166,14 @@
  "gm_landmark_lascaux_caves_desc": {
   "en": "A cave in the Dordogne where hunters of the Palaeolithic painted bulls, horses and deer, found by four boys and a dog in 1940.",
   "de": "Eine Höhle in der Dordogne, in der Jäger der Altsteinzeit Stiere, Pferde und Hirsche malten, 1940 von vier Jungen und einem Hund entdeckt."
+ },
+ "gm_landmark_leptis_magna_desc": {
+  "en": "The city the emperor Septimius Severus rebuilt for his birthplace on the Libyan coast, with its forum, basilica, four-way arch and harbour, buried by the dunes.",
+  "de": "Die Stadt an der libyschen Küste, die Kaiser Septimius Severus für seine Geburtsstadt neu erbauen ließ, mit Forum, Basilika, vierseitigem Bogen und Hafen, von den Dünen begraben."
+ },
+ "gm_landmark_leshan_giant_buddha_desc": {
+  "en": "A Buddha 71 metres tall carved into the cliff where three rivers meet at Leshan, begun in 713 by the monk Haitong to calm the waters and finished in 803.",
+  "de": "Ein 71 Meter hoher Buddha, in die Felswand an der Stelle gehauen, wo sich bei Leshan drei Flüsse treffen, 713 vom Mönch Haitong begonnen, um die Wasser zu besänftigen, und 803 vollendet."
  },
  "gm_landmark_leshan_giant_buddha_evt": {
   "en": "the $gm_skin_landmark_leshan_giant_buddha$",
@@ -11707,6 +12203,10 @@
   "en": "the $gm_skin_landmark_lion_of_saint_mark$",
   "de": "der $gm_skin_landmark_lion_of_saint_mark$"
  },
+ "gm_landmark_longmen_grottoes_desc": {
+  "en": "Caves and niches with some hundred thousand statues cut into the limestone cliffs of the Yi river south of Luoyang, among them a Vairocana Buddha 17 metres tall finished in 675.",
+  "de": "Höhlen und Nischen mit etwa hunderttausend Statuen, in die Kalksteinfelsen des Flusses Yi südlich von Luoyang gehauen, darunter ein 17 Meter hoher Vairocana-Buddha, der 675 vollendet wurde."
+ },
  "gm_landmark_longmen_grottoes_evt": {
   "en": "the $gm_skin_landmark_longmen_grottoes$",
   "de": "die $gm_skin_landmark_longmen_grottoes$"
@@ -11723,9 +12223,17 @@
   "en": "The Inca citadel on a ridge above the Urubamba, left overgrown after the conquest. Hiram Bingham brought it to the world's notice in 1911 and Yale carried off its finds.",
   "de": "Die Inka-Zitadelle auf einem Bergrücken über dem Urubamba, nach der Eroberung überwuchert zurückgelassen. Hiram Bingham machte sie 1911 der Welt bekannt, und Yale schaffte ihre Funde fort."
  },
+ "gm_landmark_marksburg_desc": {
+  "en": "A castle high above Braubach, begun in the thirteenth century and the only one on the Middle Rhine never destroyed, among the castles of the Rhine Gorge whose ruins drew the Romantics.",
+  "de": "Eine Burg hoch über Braubach, im dreizehnten Jahrhundert begonnen und die einzige am Mittelrhein, die nie zerstört wurde, unter den Burgen des Mittelrheintals, deren Ruinen die Romantiker anzogen."
+ },
  "gm_landmark_marksburg_evt": {
   "en": "the $gm_skin_landmark_marksburg$",
   "de": "die $gm_skin_landmark_marksburg$"
+ },
+ "gm_landmark_mausoleum_of_sultan_sanjar_desc": {
+  "en": "The domed tomb of Ahmad Sanjar, the last great sultan of the Seljuks, among the ruins of Merv, finished around 1157. Its turquoise dome could once be seen a day's march away.",
+  "de": "Das Kuppelgrab von Ahmad Sandschar, dem letzten großen Sultan der Seldschuken, zwischen den Ruinen von Merw, um 1157 vollendet. Seine türkisfarbene Kuppel war einst einen Tagesmarsch weit zu sehen."
  },
  "gm_landmark_mausoleum_of_sultan_sanjar_evt": {
   "en": "the $gm_skin_landmark_mausoleum_of_sultan_sanjar$",
@@ -11739,6 +12247,10 @@
   "en": "the $gm_skin_landmark_mawangdui_tombs$",
   "de": "die $gm_skin_landmark_mawangdui_tombs$"
  },
+ "gm_landmark_merida_theatre_desc": {
+  "en": "The theatre Agrippa gave the Roman colony of Emerita Augusta around 16 BC, with a tall stage front of marble columns, buried to its top tiers.",
+  "de": "Das Theater, das Agrippa der römischen Kolonie Emerita Augusta um 16 v. Chr. schenkte, mit einer hohen Bühnenfront aus Marmorsäulen, bis zu den obersten Rängen verschüttet."
+ },
  "gm_landmark_merida_theatre_evt": {
   "en": "the $gm_skin_landmark_merida_theatre$",
   "de": "das $gm_skin_landmark_merida_theatre$"
@@ -11751,9 +12263,21 @@
   "en": "the $gm_skin_landmark_mesha_stele$",
   "de": "die $gm_skin_landmark_mesha_stele$"
  },
+ "gm_landmark_meteora_desc": {
+  "en": "Monasteries built from the fourteenth century on the summits of sandstone pillars above the plain of Thessaly, reached by ladders and by nets hauled up on ropes.",
+  "de": "Klöster, die ab dem vierzehnten Jahrhundert auf den Gipfeln von Sandsteinsäulen über der thessalischen Ebene erbaut wurden, die man über Leitern und in an Seilen hochgezogenen Netzen erreichte."
+ },
+ "gm_landmark_mezquita_of_cordoba_desc": {
+  "en": "The Great Mosque of Córdoba, begun in 785 under Abd al-Rahman I and enlarged for two centuries into a forest of striped arches. It has been a cathedral since 1236, with a Renaissance choir raised in its middle.",
+  "de": "Die Große Moschee von Córdoba, 785 unter Abd ar-Rahman I. begonnen und zwei Jahrhunderte lang zu einem Wald aus gestreiften Bögen erweitert. Seit 1236 ist sie eine Kathedrale, mit einem Renaissancechor in ihrer Mitte."
+ },
  "gm_landmark_mezquita_of_cordoba_evt": {
   "en": "the $gm_skin_landmark_mezquita_of_cordoba$",
   "de": "die $gm_skin_landmark_mezquita_of_cordoba$"
+ },
+ "gm_landmark_mogao_caves_desc": {
+  "en": "A walled-up chamber at the Mogao grottoes near Dunhuang, holding some fifty thousand manuscripts and paintings, sealed around 1000, among them the oldest dated printed book.",
+  "de": "Eine zugemauerte Kammer an den Mogao-Grotten bei Dunhuang mit etwa fünfzigtausend Manuskripten und Gemälden, um 1000 versiegelt, darunter das älteste datierte gedruckte Buch."
  },
  "gm_landmark_mogao_caves_evt": {
   "en": "the $gm_skin_landmark_mogao_caves$",
@@ -11763,9 +12287,25 @@
   "en": "A city of the Indus civilization, laid out on a grid of streets in baked brick around 2500 BC. Its ruins were recognised for what they were in 1921.",
   "de": "Eine Stadt der Indus-Kultur, um 2500 v. Chr. in gebranntem Ziegel auf einem Straßenraster angelegt. Ihre Ruinen wurden 1921 als das erkannt, was sie waren."
  },
+ "gm_landmark_mont_saint_michel_desc": {
+  "en": "An abbey on a tidal island off the coast of Normandy, its Gothic Merveille raised from 1211 above the walled village. Since the Revolution it has been a prison.",
+  "de": "Eine Abtei auf einer Gezeiteninsel vor der Küste der Normandie, deren gotische Merveille ab 1211 über dem ummauerten Dorf errichtet wurde. Seit der Revolution dient sie als Gefängnis."
+ },
+ "gm_landmark_monte_alban_desc": {
+  "en": "The Zapotec capital on a levelled mountaintop above the valley of Oaxaca, with its plaza of palaces, ball court and carved stones, and tombs the Mixtecs later filled with gold.",
+  "de": "Die Hauptstadt der Zapoteken auf einem eingeebneten Berggipfel über dem Tal von Oaxaca, mit ihrem Platz der Paläste, ihrem Ballspielplatz und ihren Reliefsteinen sowie Gräbern, die die Mixteken später mit Gold füllten."
+ },
+ "gm_landmark_moscow_kremlin_desc": {
+  "en": "The fortress of the grand princes and tsars above the Moskva, its red brick walls and towers raised by Italian masters from 1485 around the cathedrals where the tsars were crowned and buried. Napoleon's rearguard tried to blow it up as the French left Moscow in 1812.",
+  "de": "Die Festung der Großfürsten und Zaren über der Moskwa, ihre roten Backsteinmauern und Türme ab 1485 von italienischen Meistern um die Kathedralen errichtet, in denen die Zaren gekrönt und beigesetzt wurden. Napoleons Nachhut versuchte, sie zu sprengen, als die Franzosen 1812 Moskau verließen."
+ },
  "gm_landmark_moscow_kremlin_evt": {
   "en": "the $gm_skin_landmark_moscow_kremlin$",
   "de": "der $gm_skin_landmark_moscow_kremlin$"
+ },
+ "gm_landmark_mount_nemrut_desc": {
+  "en": "The tomb sanctuary of King Antiochus I of Commagene on a peak of the Taurus, guarded by colossal stone figures of the king and his gods, their heads toppled by earthquakes.",
+  "de": "Das Grabheiligtum von König Antiochos I. von Kommagene auf einem Gipfel des Taurus, bewacht von kolossalen Steinfiguren des Königs und seiner Götter, deren Köpfe durch Erdbeben herabgestürzt sind."
  },
  "gm_landmark_muhammad_ali_mosque_desc": {
   "en": "A great mosque in the Ottoman manner on the summit of Cairo's Citadel, its walls faced in alabaster, which Muhammad Ali Pasha raised for himself and his dynasty.",
@@ -11774,6 +12314,10 @@
  "gm_landmark_muhammad_ali_mosque_evt": {
   "en": "the $gm_skin_landmark_muhammad_ali_mosque$",
   "de": "die $gm_skin_landmark_muhammad_ali_mosque$"
+ },
+ "gm_landmark_musalla_of_herat_desc": {
+  "en": "The minarets, college and domed mausoleum of the great religious complex Queen Gawhar Shad raised at Herat from 1417, where the Timurid princes are buried.",
+  "de": "Die Minarette, das Kolleg und das Kuppelmausoleum des großen religiösen Komplexes, den Königin Gauhar Schad ab 1417 in Herat errichtete und in dem die timuridischen Prinzen beigesetzt sind."
  },
  "gm_landmark_musalla_of_herat_evt": {
   "en": "the $gm_skin_landmark_musalla_of_herat$",
@@ -11794,6 +12338,10 @@
  "gm_landmark_name_evt_none": {
   "en": "the monument",
   "de": "das Monument"
+ },
+ "gm_landmark_naqsh_e_jahan_square_desc": {
+  "en": "The great square Shah Abbas laid out at Isfahan, with the Shah Mosque, the Mosque of Sheikh Lotfollah, the Ali Qapu palace and the gate of the bazaar on its four sides. Polo was played on it.",
+  "de": "Der große Platz, den Schah Abbas in Isfahan anlegen ließ, mit der Schah-Moschee, der Scheich-Lotfollah-Moschee, dem Ali-Qapu-Palast und dem Tor des Basars an seinen vier Seiten. Auf ihm wurde Polo gespielt."
  },
  "gm_landmark_nelsons_column_desc": {
   "en": "A granite column in a new square at Charing Cross, with a statue of Admiral Nelson at the top and bronze lions at its foot, for the victor of Trafalgar.",
@@ -11827,6 +12375,10 @@
   "en": "the $gm_skin_landmark_obelisks_of_karnak$",
   "de": "die $gm_skin_landmark_obelisks_of_karnak$"
  },
+ "gm_landmark_old_city_of_sanaa_desc": {
+  "en": "A walled city of tower houses of rammed earth and fired brick, their windows framed in white gypsum, on a plateau in the Yemeni highlands: the seat of the Zaydi imams.",
+  "de": "Eine ummauerte Stadt aus Turmhäusern aus Stampflehm und gebranntem Ziegel, deren Fenster in weißen Gips gefasst sind, auf einer Hochebene im jemenitischen Hochland: der Sitz der zaiditischen Imame."
+ },
  "gm_landmark_old_city_of_sanaa_evt": {
   "en": "the $gm_skin_landmark_old_city_of_sanaa$",
   "de": "die $gm_skin_landmark_old_city_of_sanaa$"
@@ -11854,6 +12406,10 @@
  "gm_landmark_palace_of_knossos_evt": {
   "en": "the $gm_skin_landmark_palace_of_knossos$",
   "de": "der $gm_skin_landmark_palace_of_knossos$"
+ },
+ "gm_landmark_palais_des_papes_desc": {
+  "en": "The fortress-palace the popes built at Avignon in the fourteenth century, the largest Gothic palace in Europe. Since the Revolution it has served as a barracks and a prison.",
+  "de": "Der Festungspalast, den die Päpste im vierzehnten Jahrhundert in Avignon errichteten, der größte gotische Palast Europas. Seit der Revolution diente er als Kaserne und Gefängnis."
  },
  "gm_landmark_palais_des_papes_evt": {
   "en": "the $gm_skin_landmark_palais_des_papes$",
@@ -11883,6 +12439,10 @@
   "en": "The palace city of the Achaemenid kings, burned by Alexander in 330 BC. Persians call it Takht-e Jamshid, the throne of the Shahnameh's king Jamshid.",
   "de": "Die Palaststadt der achämenidischen Könige, 330 v. Chr. von Alexander niedergebrannt. Die Perser nennen sie Takht-e Jamshid, den Thron des Königs Dschamschid aus dem Schahname."
  },
+ "gm_landmark_petra_desc": {
+  "en": "The rose-red city of the Nabataeans, its tombs and temples carved into the cliffs of a desert gorge. Johann Ludwig Burckhardt, travelling as a Muslim scholar, was the first European in centuries to see it, in 1812.",
+  "de": "Die rosenrote Stadt der Nabatäer, deren Gräber und Tempel in die Felswände einer Wüstenschlucht gehauen sind. Johann Ludwig Burckhardt, der als muslimischer Gelehrter reiste, war 1812 der erste Europäer seit Jahrhunderten, der sie sah."
+ },
  "gm_landmark_piraeus_lion_desc": {
   "en": "A marble lion that guarded the harbour of Piraeus, carried off by the Venetian commander Morosini in 1687 to stand at the gate of the Arsenal in Venice.",
   "de": "Ein Marmorlöwe, der den Hafen des Piräus bewachte, 1687 vom venezianischen Befehlshaber Morosini fortgeschafft, um am Tor des Arsenals in Venedig zu stehen."
@@ -11895,17 +12455,33 @@
   "en": "The Roman town at the foot of Vesuvius, buried by the eruption of AD 79 with its streets, shops, houses and frescoes. Bourbon diggers began in 1748, and Giuseppe Fiorelli's house-by-house work from 1863 made it the model of an excavation.",
   "de": "Die römische Stadt am Fuß des Vesuvs, beim Ausbruch im Jahr 79 n. Chr. mit ihren Straßen, Läden, Häusern und Fresken begraben. Bourbonische Ausgräber begannen 1748, und Giuseppe Fiorellis Arbeit Haus für Haus ab 1863 machte sie zum Vorbild einer Ausgrabung."
  },
+ "gm_landmark_pont_du_gard_desc": {
+  "en": "A Roman aqueduct bridge of three tiers of arches that carried water across the Gardon valley to Nîmes, built of stone laid without mortar in the first century. A road bridge was added beside its lowest tier in 1743.",
+  "de": "Eine römische Aquäduktbrücke mit drei Bogenreihen, die Wasser über das Tal des Gardon nach Nîmes führte, im ersten Jahrhundert aus ohne Mörtel verlegten Steinen erbaut. Neben ihrer untersten Reihe wurde 1743 eine Straßenbrücke angefügt."
+ },
  "gm_landmark_pont_du_gard_evt": {
   "en": "the $gm_skin_landmark_pont_du_gard$",
   "de": "der $gm_skin_landmark_pont_du_gard$"
+ },
+ "gm_landmark_potala_palace_desc": {
+  "en": "The palace of the Dalai Lamas on the Red Hill above Lhasa, its White Palace raised under the Fifth Dalai Lama from 1645 and its Red Palace finished in 1694.",
+  "de": "Der Palast der Dalai Lamas auf dem Roten Hügel über Lhasa, sein Weißer Palast ab 1645 unter dem Fünften Dalai Lama errichtet und sein Roter Palast 1694 vollendet."
  },
  "gm_landmark_potala_palace_evt": {
   "en": "the $gm_skin_landmark_potala_palace$",
   "de": "der $gm_skin_landmark_potala_palace$"
  },
+ "gm_landmark_pyramids_of_giza_desc": {
+  "en": "The tombs of Khufu, Khafre and Menkaure on the desert's edge across the Nile from Cairo, with the Great Sphinx below them. The Great Pyramid was the tallest building on earth for nearly four thousand years.",
+  "de": "Die Gräber von Cheops, Chephren und Mykerinos am Wüstenrand gegenüber von Kairo am anderen Nilufer, mit der Großen Sphinx unterhalb von ihnen. Die Große Pyramide war fast viertausend Jahre lang das höchste Bauwerk der Erde."
+ },
  "gm_landmark_pyramids_of_giza_evt": {
   "en": "the $gm_skin_landmark_pyramids_of_giza$",
   "de": "die $gm_skin_landmark_pyramids_of_giza$"
+ },
+ "gm_landmark_pyramids_of_meroe_desc": {
+  "en": "Some two hundred steep pyramids of the kings and queens of Kush on the east bank of the Nile, north of the sixth cataract. Giuseppe Ferlini blew the tops off several of them in 1834 looking for gold, and found it.",
+  "de": "Etwa zweihundert steile Pyramiden der Könige und Königinnen von Kusch am Ostufer des Nils, nördlich des sechsten Katarakts. Giuseppe Ferlini sprengte 1834 auf der Suche nach Gold die Spitzen mehrerer davon ab und fand es."
  },
  "gm_landmark_pyramids_of_meroe_evt": {
   "en": "the $gm_skin_landmark_pyramids_of_meroe$",
@@ -11918,6 +12494,10 @@
  "gm_landmark_red_fort_evt": {
   "en": "the $gm_skin_landmark_red_fort$",
   "de": "$gm_skin_landmark_red_fort$"
+ },
+ "gm_landmark_registan_desc": {
+  "en": "The square at the heart of Samarkand, framed by three madrasas, Ulugh Beg's of 1420 and the Sher-Dor and Tilya-Kori of the seventeenth century, their gateways faced in glazed tile.",
+  "de": "Der Platz im Herzen von Samarkand, gerahmt von drei Medresen, der von Ulugbek aus dem Jahr 1420 sowie der Scher-Dor und der Tilla-Kari aus dem siebzehnten Jahrhundert, deren Portale mit glasierten Fliesen verkleidet sind."
  },
  "gm_landmark_registan_evt": {
   "en": "the $gm_skin_landmark_registan$",
