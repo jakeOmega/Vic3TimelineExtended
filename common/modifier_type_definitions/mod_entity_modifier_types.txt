@@ -1627,6 +1627,18 @@ country_grid_transmission_efficiency_add = {
 	script_only = yes
 }
 
+# How many Sea Nodes a Grid Transfer Station's undersea cable crosses: 1 from
+# the HVDC Undersea Interconnector. A station with 1 or more joins its grid to
+# a station with a cable of its own within range of either end. Building
+# scope, so a technology or law can add to it from the country. Read by
+# script only (te_grid_cable_range_value).
+building_grid_undersea_cable_range_add = {
+	decimals = 0
+	color = good
+	percent = no
+	script_only = yes
+}
+
 # Grid Transfer Stations always run subsidized, from base_values: the
 # pattern Interventionism uses for highways and airports.
 country_building_grid_transfer_station_require_subsidies_bool = {

@@ -4,10 +4,12 @@
 # A grid is a set of Grid Transfer Stations that share their Electricity. It
 # grows from one country's stations in one market area (France's and French
 # Algeria's are two groups although they share a market) and joins:
-#   - another group across the sea, where both ends run an HVDC Undersea
-#     Interconnector (pm_grid_hvdc_interconnector) and their states share a
-#     sea node: within one country, or between two with a Grid
-#     Interconnection Agreement;
+#   - another group across the sea, where both ends have an undersea cable
+#     (an Undersea Cable Range, building_grid_undersea_cable_range_add, of 1
+#     or more: the HVDC Undersea Interconnector, pm_grid_hvdc_interconnector,
+#     gives 1) and either end's range reaches the other, counted in Sea
+#     Nodes: within one country, or between two with a Grid Interconnection
+#     Agreement;
 #   - a neighbouring group of another country across a land border, when the
 #     two have a Grid Interconnection Agreement.
 # Once a month each grid shares its Electricity so that every member state
@@ -53,15 +55,23 @@
 #                    through this month (0 elsewhere on a spanning grid)
 #   te_grid_import_command  what the pass-through asks of the method, over the
 #                    station's factor
+#   te_grid_cable_links  (a variable list) the stations the state's cable
+#                    joins to its grid from another group this month, for the
+#                    state panel tile
 #   te_grid_pending, te_grid_member, te_grid_frontier, te_grid_border,
 #   te_grid_market_pending  marks during a run (te_grid_border: a member
 #                    linked to a member in another market)
+#   te_grid_sea_hops  during a walk across the sea, the Sea Nodes between
+#                    the state and the walk's start (te_grid_sea_reach_effect)
 # Global lists during a run: te_grid_pending_states (online stations not yet
 # in a grid), te_grid_region (the grid being built and balanced) and
-# te_grid_frontier (members whose links are still to be followed). Global
-# variables te_grid_ratio and te_grid_region_active hold the grid being
-# balanced's ratio. Country variable list te_grid_partners: the countries each
-# station owner has a Grid Interconnection Agreement with, refreshed each run.
+# te_grid_frontier (members whose links are still to be followed), and
+# during a walk across the sea te_grid_sea_reach, te_grid_sea_layer and
+# te_grid_sea_next. Global variables te_grid_ratio and te_grid_region_active
+# hold the grid being balanced's ratio, and te_grid_cable_range_max the
+# longest Undersea Cable Range of any station this run. Country variable list
+# te_grid_partners: the countries each station owner has a Grid
+# Interconnection Agreement with, refreshed each run.
 #
 # The flow modifiers are applied on the building with local-variable
 # multipliers: a `multiplier = var:` or script value there would resolve
@@ -74,6 +84,7 @@
 te_grid_world_update_effect = {
 	te_grid_world_clear_effect = yes
 	te_grid_dispatch_info_effect = yes
+	set_global_variable = { name = te_grid_cable_range_max value = 0 }
 
 	every_country = {
 		limit = {
@@ -98,13 +109,25 @@ te_grid_world_update_effect = {
 			te_grid_ai_interconnectors_effect = yes
 		}
 		# Stations that can take part wait to be joined into a grid; the rest
-		# go idle.
+		# go idle. Last month's cable links go; this month's build lists them
+		# again.
 		every_scope_state = {
 			limit = { has_building = building_grid_transfer_station }
+			clear_variable_list = te_grid_cable_links
 			if = {
 				limit = { te_grid_station_online = yes }
 				set_variable = te_grid_pending
 				add_to_global_variable_list = { name = te_grid_pending_states target = this }
+				te_grid_cable_range_selfcheck_effect = yes
+				# The farthest any cable reaches this run, which is how far
+				# te_grid_cable_links_effect walks the sea.
+				if = {
+					limit = {
+						te_grid_has_interconnector = yes
+						te_grid_cable_range_value > global_var:te_grid_cable_range_max
+					}
+					set_global_variable = { name = te_grid_cable_range_max value = te_grid_cable_range_value }
+				}
 			}
 			else = {
 				te_grid_idle_station_effect = yes
@@ -156,6 +179,11 @@ te_grid_world_clear_effect = {
 		limit = { has_global_variable = te_grid_region_active }
 		remove_global_variable = te_grid_region_active
 	}
+	if = {
+		limit = { has_global_variable = te_grid_cable_range_max }
+		remove_global_variable = te_grid_cable_range_max
+	}
+	te_grid_sea_reach_clear_effect = yes
 }
 
 # State scope.
@@ -206,10 +234,12 @@ te_grid_refresh_partners_effect = {
 
 # Country scope, an AI country. The AI never picks a method that only costs,
 # so script runs its interconnectors: a coastal online station switches to the
-# HVDC Undersea Interconnector when a station across a shared sea would join
+# HVDC Undersea Interconnector when a station its cable would reach would join
 # it to another grid (te_grid_ai_interconnector_wanted), and back when none
-# would. A switch retools the station, so one is tried at most once a year
-# (te_grid_ai_hvdc_tried), in case the engine's own method choice undoes it.
+# would within the range it has. Its reach with the method is its range now
+# plus the method's (te_grid_hvdc_method_range). A switch retools the station,
+# so one is tried at most once a year (te_grid_ai_hvdc_tried), in case the
+# engine's own method choice undoes it.
 te_grid_ai_interconnectors_effect = {
 	if = {
 		limit = { has_technology_researched = clean_energy_technologies }
@@ -220,9 +250,15 @@ te_grid_ai_interconnectors_effect = {
 				NOT = { has_variable = te_grid_ai_hvdc_tried }
 			}
 			save_scope_as = te_grid_ai_end
+			set_local_variable = { name = te_grid_sea_radius value = te_grid_cable_range_value }
+			if = {
+				limit = { te_grid_runs_hvdc_method = no }
+				change_local_variable = { name = te_grid_sea_radius add = te_grid_hvdc_method_range }
+			}
+			te_grid_sea_reach_effect = yes
 			if = {
 				limit = {
-					NOT = { te_grid_has_interconnector = yes }
+					te_grid_runs_hvdc_method = no
 					te_grid_ai_interconnector_wanted = yes
 				}
 				set_variable = { name = te_grid_ai_hvdc_tried value = yes days = 365 }
@@ -233,7 +269,7 @@ te_grid_ai_interconnectors_effect = {
 			}
 			else_if = {
 				limit = {
-					te_grid_has_interconnector = yes
+					te_grid_runs_hvdc_method = yes
 					NOT = { te_grid_ai_interconnector_wanted = yes }
 				}
 				set_variable = { name = te_grid_ai_hvdc_tried value = yes days = 365 }
@@ -242,6 +278,7 @@ te_grid_ai_interconnectors_effect = {
 					production_method = pm_grid_no_interconnector
 				}
 			}
+			te_grid_sea_reach_clear_effect = yes
 		}
 	}
 }
@@ -326,7 +363,7 @@ te_grid_add_member_effect = {
 	add_to_global_variable_list = { name = te_grid_frontier target = this }
 }
 
-# State scope, a member on the frontier. Joins the groups its interconnector
+# State scope, a member on the frontier. Joins the groups its undersea cable
 # and its owner's agreements reach.
 te_grid_expand_from_effect = {
 	if = {
@@ -337,14 +374,7 @@ te_grid_expand_from_effect = {
 	save_scope_as = te_grid_link_from
 	if = {
 		limit = { te_grid_has_interconnector = yes }
-		every_sea_node_adjacent_state = {
-			limit = {
-				has_variable = te_grid_pending
-				te_grid_sea_link = { FROM = scope:te_grid_link_from }
-			}
-			te_grid_mark_border_effect = yes
-			te_grid_add_group_effect = yes
-		}
+		te_grid_cable_links_effect = yes
 	}
 	every_neighbouring_state = {
 		limit = {
@@ -370,6 +400,134 @@ te_grid_mark_border_effect = {
 			set_variable = te_grid_border
 		}
 	}
+}
+
+# ---- Undersea cables ------------------------------------------------------------
+
+# State scope, a member with an undersea cable, saved as
+# scope:te_grid_link_from. Walks the sea out to the longest cable of the run
+# (global te_grid_cable_range_max), not just its own, so a station whose range
+# falls short still joins one whose range reaches it. Every station with a
+# cable that either end reaches (te_grid_cable_in_range) and whose owner this
+# one's may link with (te_grid_sea_link) joins: its group if it was waiting,
+# and each is listed on the other's te_grid_cable_links when the two are in
+# different groups, for the state panel tile. A station already on the grid
+# is listed too, so the tile names every cable, not only the one that joined
+# it first.
+te_grid_cable_links_effect = {
+	set_local_variable = { name = te_grid_cable_from_range value = te_grid_cable_range_value }
+	set_local_variable = { name = te_grid_sea_radius value = global_var:te_grid_cable_range_max }
+	te_grid_sea_reach_effect = yes
+	every_in_global_list = {
+		variable = te_grid_sea_reach
+		limit = {
+			NOT = { this = scope:te_grid_link_from }
+			OR = {
+				has_variable = te_grid_pending
+				has_variable = te_grid_member
+			}
+			te_grid_sea_link = { FROM = scope:te_grid_link_from }
+			te_grid_cable_in_range = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						owner = scope:te_grid_link_from.owner
+						is_in_same_market_area = scope:te_grid_link_from
+					}
+				}
+			}
+			te_grid_add_cable_link_effect = yes
+		}
+		if = {
+			limit = { has_variable = te_grid_pending }
+			te_grid_mark_border_effect = yes
+			te_grid_add_group_effect = yes
+		}
+	}
+	te_grid_sea_reach_clear_effect = yes
+}
+
+# State scope, a station that scope:te_grid_link_from's cable joins from
+# another group. Lists each on the other's te_grid_cable_links, once.
+te_grid_add_cable_link_effect = {
+	save_scope_as = te_grid_link_to
+	if = {
+		limit = {
+			NOT = { is_target_in_variable_list = { name = te_grid_cable_links target = scope:te_grid_link_from } }
+		}
+		add_to_variable_list = { name = te_grid_cable_links target = scope:te_grid_link_from }
+	}
+	scope:te_grid_link_from = {
+		if = {
+			limit = {
+				NOT = { is_target_in_variable_list = { name = te_grid_cable_links target = scope:te_grid_link_to } }
+			}
+			add_to_variable_list = { name = te_grid_cable_links target = scope:te_grid_link_to }
+		}
+	}
+}
+
+# State scope, with local_var:te_grid_sea_radius set (a number of Sea Nodes).
+# Lists in te_grid_sea_reach every state within that many hops across the sea,
+# this one included, each marked with var:te_grid_sea_hops, its hops from
+# here. A hop is to a state that shares a Sea Node with the last
+# (every_sea_node_adjacent_state). Script can't walk the Sea Nodes themselves,
+# so a cable that crosses more than one lands on a coast that touches both on
+# the way. Breadth-first, a layer of states at a time (te_grid_sea_layer, the
+# states reached at the last hop; te_grid_sea_next, the next hop's), so each
+# state is listed once, at its fewest hops, and a radius of 1 costs what the
+# single every_sea_node_adjacent_state did before cable ranges. Callers clear
+# the walk with te_grid_sea_reach_clear_effect when done with it.
+te_grid_sea_reach_effect = {
+	te_grid_sea_reach_clear_effect = yes
+	set_variable = { name = te_grid_sea_hops value = 0 }
+	add_to_global_variable_list = { name = te_grid_sea_reach target = this }
+	add_to_global_variable_list = { name = te_grid_sea_layer target = this }
+	set_local_variable = { name = te_grid_sea_hop value = 0 }
+	while = {
+		limit = {
+			local_var:te_grid_sea_hop < local_var:te_grid_sea_radius
+			any_in_global_list = {
+				variable = te_grid_sea_layer
+				always = yes
+			}
+		}
+		change_local_variable = { name = te_grid_sea_hop add = 1 }
+		every_in_global_list = {
+			variable = te_grid_sea_layer
+			every_sea_node_adjacent_state = {
+				limit = {
+					NOT = { has_variable = te_grid_sea_hops }
+				}
+				set_variable = { name = te_grid_sea_hops value = local_var:te_grid_sea_hop }
+				add_to_global_variable_list = { name = te_grid_sea_next target = this }
+			}
+		}
+		clear_global_variable_list = te_grid_sea_layer
+		every_in_global_list = {
+			variable = te_grid_sea_next
+			add_to_global_variable_list = { name = te_grid_sea_layer target = this }
+			add_to_global_variable_list = { name = te_grid_sea_reach target = this }
+		}
+		clear_global_variable_list = te_grid_sea_next
+	}
+	clear_global_variable_list = te_grid_sea_layer
+}
+
+# Any scope. Clears a walk across the sea: its marks and its lists.
+te_grid_sea_reach_clear_effect = {
+	every_in_global_list = {
+		variable = te_grid_sea_reach
+		if = {
+			limit = { has_variable = te_grid_sea_hops }
+			remove_variable = te_grid_sea_hops
+		}
+	}
+	clear_global_variable_list = te_grid_sea_reach
+	clear_global_variable_list = te_grid_sea_layer
+	clear_global_variable_list = te_grid_sea_next
 }
 
 # Country scope. The grid's members leave the run's lists.
@@ -899,6 +1057,7 @@ te_grid_clear_state_effect = {
 		limit = { has_variable = te_grid_staffed }
 		remove_variable = te_grid_staffed
 	}
+	clear_variable_list = te_grid_cable_links
 	te_grid_clear_cross_market_effect = yes
 }
 
@@ -913,6 +1072,32 @@ te_grid_dispatch_info_effect = {
 		set_global_variable = te_grid_info_dispatch_logged
 		set_global_variable = { name = te_grid_chk_month value = te_history_month_index }
 		debug_log = "TE_GRID dispatch date=[TimeKeeper.GetCurrentDate.GetString] month=[SCOPE.ScriptValue('te_grid_chk_month_g')|0] (the first world-wide grid balancing)"
+	}
+}
+
+# State scope, an online station. TE_SELF_CHECK grid_cable_range, once a game:
+# the first station running the HVDC Undersea Interconnector reads the
+# method's Undersea Cable Range back from its building
+# (te_grid_cable_range_value, modifier: on the building). The wonders'
+# construction sites read a method's custom building line the same way, but
+# from a workforce_scaled block; this one is unscaled.
+#   OK      the range is at least the method's (te_grid_hvdc_method_range).
+#   BROKEN  less: the method's line doesn't reach the building's read, so no
+#           station has a cable and no grid joins across the sea.
+te_grid_cable_range_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_cable_range_checked }
+			te_grid_runs_hvdc_method = yes
+		}
+		set_global_variable = te_grid_cable_range_checked
+		if = {
+			limit = { te_grid_cable_range_value >= te_grid_hvdc_method_range }
+			debug_log = "TE_SELF_CHECK OK grid_cable_range (a station on the HVDC Undersea Interconnector reads range=[THIS.ScriptValue('te_grid_cable_range_value')|0] Sea Nodes: the method's unscaled building line reaches modifier:)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN grid_cable_range (a station on the HVDC Undersea Interconnector reads range=[THIS.ScriptValue('te_grid_cable_range_value')|0] Sea Nodes, under the method's 1: no cable joins a grid; see docs/testing/power-grid-playtest.md)"
+		}
 	}
 }
 

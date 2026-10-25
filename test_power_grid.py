@@ -10,7 +10,9 @@ mandatory subsidy, the modifiers are applied with local-variable multipliers
 monthly pulse is wired. Since cross-market interconnection: Grid Power has a
 fixed price, a link between two countries needs no shared market, and a
 receiving market's pass-through rides the Grid Power lines only and cancels out
-of every readback the balancing takes.
+of every readback the balancing takes. Since undersea cable ranges: a cable is
+an Undersea Cable Range on a coast, which the HVDC method gives, and the build
+walks the sea far enough that either end's range joins the two.
 
 Run: python3 test_power_grid.py
 """
@@ -494,6 +496,172 @@ class CrossMarketTest(unittest.TestCase):
         self.assertGreaterEqual(sold / bought, 0.5 - 1e-9)
 
 
+class CableRangeTest(unittest.TestCase):
+    """Undersea cables: the HVDC Undersea Interconnector gives a station an
+    Undersea Cable Range of one Sea Node, a script-only building modifier any
+    technology or method could add to, and the cable link reads the range."""
+
+    SGUIS = os.path.join(COMMON, "scripted_guis", "te_grid_sguis.txt")
+
+    def test_range_is_a_script_only_building_type(self):
+        body = _code(_top_level(_read(TYPES), "building_grid_undersea_cable_range_add"))
+        self.assertRegex(body, r"\bscript_only = yes\b")
+        self.assertRegex(body, r"\bdecimals = 0\b")
+        self.assertRegex(body, r"\bpercent = no\b")
+
+    def test_method_gives_one_and_the_ai_reckons_with_the_same(self):
+        hvdc = _code(_top_level(_read(PMS), "pm_grid_hvdc_interconnector"))
+        m = re.search(r"\bbuilding_grid_undersea_cable_range_add = (\d+)", _sub(hvdc, "unscaled"))
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group(1), "1")
+        ai = re.search(r"(?m)^te_grid_hvdc_method_range = (\d+)", _code(_read(VALUES)))
+        self.assertIsNotNone(ai)
+        self.assertEqual(ai.group(1), m.group(1))
+
+    def test_a_cable_is_a_range_on_a_coast_not_the_method(self):
+        triggers = _code(_read(TRIGGERS))
+        has = _top_level(triggers, "te_grid_has_interconnector")
+        self.assertIn("is_coastal = yes", has)
+        self.assertIn("te_grid_cable_range_value >= 1", has)
+        self.assertNotIn("has_active_production_method", has)
+        self.assertIn("has_active_production_method = pm_grid_hvdc_interconnector",
+                      _top_level(triggers, "te_grid_runs_hvdc_method"))
+        value = _code(_top_level(_read(VALUES), "te_grid_cable_range_value"))
+        self.assertIn("is_building_type = building_grid_transfer_station", value)
+        self.assertIn("add = modifier:building_grid_undersea_cable_range_add", value)
+
+    def test_either_end_reaches(self):
+        in_range = _code(_top_level(_read(TRIGGERS), "te_grid_cable_in_range"))
+        self.assertIn("var:te_grid_sea_hops <= local_var:te_grid_cable_from_range", in_range)
+        self.assertIn("var:te_grid_sea_hops <= te_grid_cable_range_value", in_range)
+
+    def test_expansion_walks_the_sea_to_the_longest_cable_of_the_run(self):
+        effects = _code(_read(EFFECTS))
+        expand = _top_level(effects, "te_grid_expand_from_effect")
+        self.assertIn("te_grid_cable_links_effect = yes", expand)
+        self.assertNotIn("every_sea_node_adjacent_state", expand)
+        links = _top_level(effects, "te_grid_cable_links_effect")
+        # Not the station's own range: one whose cable is shorter still joins one whose cable reaches it.
+        self.assertIn("name = te_grid_sea_radius value = global_var:te_grid_cable_range_max", links)
+        self.assertLess(links.index("te_grid_sea_reach_effect = yes"), links.index("te_grid_sea_reach_clear_effect = yes"))
+        for check in ("te_grid_sea_link = { FROM = scope:te_grid_link_from }", "te_grid_cable_in_range = yes",
+                      "has_variable = te_grid_member", "te_grid_add_group_effect = yes"):
+            self.assertIn(check, links)
+        run = _top_level(effects, "te_grid_world_update_effect")
+        self.assertIn("set_global_variable = { name = te_grid_cable_range_max value = 0 }", run)
+        self.assertIn("set_global_variable = { name = te_grid_cable_range_max value = te_grid_cable_range_value }", run)
+        self.assertLess(run.index("te_grid_cable_range_max value = 0"), run.index("while"))
+        clear = _top_level(effects, "te_grid_world_clear_effect")
+        self.assertIn("remove_global_variable = te_grid_cable_range_max", clear)
+        self.assertIn("te_grid_sea_reach_clear_effect = yes", clear)
+
+    def test_the_walk_marks_each_state_once_and_clears_after_itself(self):
+        effects = _code(_read(EFFECTS))
+        walk = _top_level(effects, "te_grid_sea_reach_effect")
+        self.assertTrue(walk.lstrip().startswith("te_grid_sea_reach_clear_effect = yes"))
+        self.assertIn("local_var:te_grid_sea_hop < local_var:te_grid_sea_radius", _sub(walk, "while"))
+        hop = _sub(_sub(walk, "while"), "every_sea_node_adjacent_state")
+        self.assertIn("NOT = { has_variable = te_grid_sea_hops }", hop)
+        self.assertIn("name = te_grid_sea_hops value = local_var:te_grid_sea_hop", hop)
+        clear = _top_level(effects, "te_grid_sea_reach_clear_effect")
+        self.assertIn("remove_variable = te_grid_sea_hops", clear)
+        for name in ("te_grid_sea_reach", "te_grid_sea_layer", "te_grid_sea_next"):
+            self.assertIn(f"clear_global_variable_list = {name}", clear)
+        # No trigger walks the sea by nesting any_sea_node_adjacent_state, which grows as 30^k.
+        self.assertNotIn("any_sea_node_adjacent_state", _code(_read(TRIGGERS)))
+
+    def test_the_ai_reckons_its_reach_with_the_method(self):
+        ai = _code(_top_level(_read(EFFECTS), "te_grid_ai_interconnectors_effect"))
+        self.assertIn("name = te_grid_sea_radius value = te_grid_cable_range_value", ai)
+        self.assertIn("add = te_grid_hvdc_method_range", ai)
+        self.assertEqual(ai.count("te_grid_runs_hvdc_method = no"), 2)
+        self.assertIn("te_grid_runs_hvdc_method = yes", ai)
+        self.assertLess(ai.index("te_grid_sea_reach_effect = yes"), ai.index("te_grid_ai_interconnector_wanted = yes"))
+        self.assertIn("te_grid_sea_reach_clear_effect = yes", ai)
+        wanted = _code(_top_level(_read(TRIGGERS), "te_grid_ai_interconnector_wanted"))
+        self.assertIn("variable = te_grid_sea_reach", wanted)
+
+    def test_cable_links_are_rebuilt_each_run(self):
+        effects = _code(_read(EFFECTS))
+        run = _top_level(effects, "te_grid_world_update_effect")
+        self.assertIn("clear_variable_list = te_grid_cable_links", run)
+        self.assertLess(run.index("clear_variable_list = te_grid_cable_links"), run.index("while"))
+        self.assertIn("clear_variable_list = te_grid_cable_links", _top_level(effects, "te_grid_clear_state_effect"))
+        add = _top_level(effects, "te_grid_add_cable_link_effect")
+        self.assertEqual(add.count("is_target_in_variable_list = { name = te_grid_cable_links"), 2)
+        # A cable within one group is not what joins it.
+        links = _top_level(effects, "te_grid_cable_links_effect")
+        self.assertIn("is_in_same_market_area = scope:te_grid_link_from", links)
+
+    def test_self_check_reads_the_methods_range(self):
+        effects = _code(_read(EFFECTS))
+        self.assertIn("te_grid_cable_range_selfcheck_effect = yes", _top_level(effects, "te_grid_world_update_effect"))
+        check = _read(EFFECTS)[_read(EFFECTS).index("te_grid_cable_range_selfcheck_effect = {"):]
+        self.assertIn("TE_SELF_CHECK OK grid_cable_range", check)
+        self.assertIn("TE_SELF_CHECK BROKEN grid_cable_range", check)
+
+    def test_tile_has_a_sea_cables_row_naming_the_links(self):
+        panel = _read(STATES_PANEL)
+        start = panel.index("### POWER GRID")
+        tile = panel[start:panel.index("### UN MISSION", start)]
+        self.assertIn("TE_STATE_GRID_ROW_CABLES_TT", tile)
+        self.assertIn("te_grid_cable_count_disp", tile)
+        sgui = _code(_top_level(_read(self.SGUIS), "te_grid_cable_links_sgui"))
+        self.assertRegex(sgui, r"\bscope = state\b")
+        self.assertIn("variable = te_grid_cable_links", _sub(sgui, "every_in_list"))
+        loc = _read(os.path.join(LOC_DIR, "te_miscellaneous_l_english.yml"))
+        tt = re.search(r"(?m)^ TE_STATE_GRID_ROW_CABLES_TT:0 (.*)$", loc).group(1)
+        self.assertIn("GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)", tt)
+
+    @staticmethod
+    def grids(edges, ranges, seed_order):
+        """The grids the build makes on a toy sea: `edges` are pairs of states
+        sharing a Sea Node, `ranges` each station's range (all have a cable).
+        Each member walks out to the run's longest range and joins a station
+        within either end's range, as te_grid_cable_links_effect does."""
+        nbrs = {}
+        for a, b in edges:
+            nbrs.setdefault(a, set()).add(b)
+            nbrs.setdefault(b, set()).add(a)
+        radius = max(ranges.values())
+
+        def hops_from(start):
+            hops, layer = {start: 0}, [start]
+            for hop in range(1, radius + 1):
+                nxt = []
+                for s in layer:
+                    for n in sorted(nbrs.get(s, ())):
+                        if n not in hops:
+                            hops[n] = hop
+                            nxt.append(n)
+                layer = nxt
+            return hops
+
+        pending, out = [s for s in seed_order if s in ranges], []
+        while pending:
+            region, frontier = {pending[0]}, [pending.pop(0)]
+            while frontier:
+                x = frontier.pop(0)
+                for y, d in hops_from(x).items():
+                    if y in pending and (d <= ranges[x] or d <= ranges[y]):
+                        pending.remove(y)
+                        region.add(y)
+                        frontier.append(y)
+            out.append(frozenset(region))
+        return set(out)
+
+    def test_the_grids_do_not_depend_on_the_seed(self):
+        # A - c - B - d - C along a coast: A and C two hops from B, four from each other.
+        edges = [("A", "c"), ("c", "B"), ("B", "d"), ("d", "C")]
+        ranges = {"A": 1, "B": 2, "C": 1}
+        first = self.grids(edges, ranges, ["A", "B", "C"])
+        self.assertEqual(first, {frozenset("ABC")})
+        self.assertEqual(self.grids(edges, ranges, ["C", "A", "B"]), first)
+        # With every range 1, as the method alone gives, two hops is too far.
+        self.assertEqual(self.grids(edges, {"A": 1, "B": 1, "C": 1}, ["A", "B", "C"]),
+                         {frozenset("A"), frozenset("B"), frozenset("C")})
+
+
 class LocalizationTest(unittest.TestCase):
     def test_every_new_key_is_localized(self):
         keys = set()
@@ -513,7 +681,10 @@ class LocalizationTest(unittest.TestCase):
                     "TE_STATE_GRID_STATUS", "TE_STATE_GRID_TT", "AI_GRID_STATIONS_MEET",
                     "TE_STATE_GRID_ROW_MARKET", "TE_STATE_GRID_ROW_MARKET_TT", "TE_STATE_GRID_ROW_PASS",
                     "TE_STATE_GRID_ROW_PASS_TT", "te_grid_market_exports", "te_grid_market_imports",
-                    "te_grid_market_send_more", "te_grid_market_receive_more"):
+                    "te_grid_market_send_more", "te_grid_market_receive_more",
+                    "building_grid_undersea_cable_range_add", "building_grid_undersea_cable_range_add_desc",
+                    "TE_STATE_GRID_ROW_CABLES", "TE_STATE_GRID_ROW_CABLES_TT", "te_grid_cable_link_line",
+                    "te_grid_cables_intro", "te_grid_cables_none"):
             self.assertIn(key, keys)
 
 

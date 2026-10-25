@@ -34,16 +34,21 @@ pm_grid_no_interconnector = {
 	texture = "gfx/interface/icons/production_method_icons/no_automation.dds"
 }
 
-# HVDC converter valves and a cable to the far shore. Its only effect is the
-# link the balancing reads (te_grid_has_interconnector); what it costs is the
-# electronics and the engineers. The AI switches to it where it has a grid of
-# its own across the sea (te_grid_ai_interconnectors_effect).
+# HVDC converter valves and a cable to the far shore. Its only effect is its
+# Undersea Cable Range, which the balancing reads (te_grid_cable_range_value):
+# one Sea Node, so it joins stations whose states share one. What it costs is
+# the electronics and the engineers. The AI switches to it where it has a grid
+# of its own across the sea (te_grid_ai_interconnectors_effect), and reckons
+# with te_grid_hvdc_method_range, so keep that value equal to the range here.
 pm_grid_hvdc_interconnector = {
 	texture = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
 	unlocking_technologies = {
 		clean_energy_technologies
 	}
 	building_modifiers = {
+		unscaled = {
+			building_grid_undersea_cable_range_add = 1
+		}
 		workforce_scaled = {
 			goods_input_electronic_components_add = 5
 		}

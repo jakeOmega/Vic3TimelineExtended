@@ -458,17 +458,20 @@ beyond what it earns.
 Two things join grids that don't touch:
 
 - With Clean Energy Technologies, a station can switch to the HVDC Undersea
-Interconnector method. It costs Electronic Components and more engineers.
-Two interconnector stations in states that share a sea join their grids: your
-own across the sea, such as a mainland and a colony in your market, or a
-partner's under a Grid Interconnection Agreement. The method
-does nothing in a state with no coast. The AI switches a coastal station when
-it has a grid of its own, or a partner's, across the sea, and back when it
-has none.
+Interconnector method. It costs Electronic Components and more engineers,
+and lays an undersea cable with an Undersea Cable Range of 1 Sea Node. Two
+stations with cables join their grids when either one's range reaches the
+other: at 1, states on the same Sea Node. Each point of range more crosses
+one more Sea Node, landing on a coast that touches both on the way; no
+technology adds range yet. The cable joins your own grids across the sea,
+such as a mainland and a colony in your market, or a partner's under a Grid
+Interconnection Agreement. The method does nothing in a state with no coast.
+The AI switches a coastal station when a grid of its own, or a partner's, is
+within its cable's reach, and back when none is.
 - The Grid Interconnection Agreement treaty article (from Intergovernmental
-Organizations, between two countries that share a border or a sea) joins both
-countries' stations where they border, and their interconnectors across the
-sea. The two can be in one market or in two.
+Organizations, between two countries that share a border or a Sea Node) joins
+both countries' stations where they border, and their cables across the sea.
+The two can be in one market or in two.
 
 A grid that joins two markets sends power across the border from the market
 with more to spare to the one with less. Because Grid Power's price is fixed,
@@ -483,7 +486,9 @@ the market from running short of Grid Power.
 The state panel shows a Power Grid tile on a state with a station: whether its
 station is sending or receiving, the grid's hub (its largest producer, which
 names the grid), the Electricity the station moves a week, how many states
-its grid has and your transmission efficiency. On a grid that joins two
+its grid has and your transmission efficiency. A station with a cable also
+shows Sea cables, how many stations from other grids its cable joins to this
+one; the hover names them and gives the cable's range. On a grid that joins two
 markets it also shows the Exports or Imports of the state's market across the
 border, and Pass-through on the station that takes the import in. Its hover
 has the grid's supply against its demand.

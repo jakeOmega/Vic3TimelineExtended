@@ -131,6 +131,25 @@ te_grid_state_efficiency_value = {
 	max = 1
 }
 
+# --- Undersea cables ------------------------------------------------------------
+
+# The station's Undersea Cable Range in Sea Nodes: its building's read of
+# building_grid_undersea_cable_range_add, which holds the HVDC Undersea
+# Interconnector's 1 and any line a technology or law of the owner adds. 0
+# without a station.
+te_grid_cable_range_value = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		add = modifier:building_grid_undersea_cable_range_add
+	}
+}
+
+# The range the HVDC Undersea Interconnector gives, for the AI's switch, which
+# asks what a station would reach with the method. Equal to the method's line
+# (power_grid_pms.txt; test_power_grid.py holds the two together).
+te_grid_hvdc_method_range = 1
+
 # --- This month's flow --------------------------------------------------------
 
 # Read during te_grid_balance_region_effect, from the state variables it sets
@@ -412,6 +431,29 @@ te_grid_interconnector_disp = {
 	if = {
 		limit = { te_grid_has_interconnector = yes }
 		value = 1
+	}
+}
+
+# The station's Undersea Cable Range, for the tile: 0 in a state with no coast,
+# where it lays no cable.
+te_grid_cable_range_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_has_interconnector = yes }
+		value = te_grid_cable_range_value
+	}
+}
+
+# The stations the station's cable joins to its grid from other groups this
+# month (te_grid_cable_links, set by the balancing).
+te_grid_cable_count_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_cable_links }
+		every_in_list = {
+			variable = te_grid_cable_links
+			add = 1
+		}
 	}
 }
 
