@@ -59,3 +59,8 @@ still reaches the milestones.
    10). Enforced in the peace, the colony moves.
 7. **The AI.** In an observer run past the first colonies, an AI holding a colony with no space programme (an heir's)
    offers it; AI powers in the race ask for colonies; neither spams the treaty screen.
+
+## From the 2026-10-25 log triage
+
+- **Load.** `error.log` at launch carries no `Database type building_sr_site_<world> has missing texture`: each site
+  building has the Monuments' panel `background` since 2026-10-25 (34 lines a launch before).

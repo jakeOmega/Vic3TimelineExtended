@@ -244,7 +244,7 @@ Error: remove_ruling_interest_group effect [ InterestGroup is insurrectionary ]
 Country in scope has no parties
 ```
 
-Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice).
+Vanilla `law_single_party_state` (and adjacent governance laws) call `set_only_legal_party_from_ig` and `remove_ruling_interest_group` in `on_activate` blocks without guarding against insurrectionary or absent IGs. Same family as `00_victoria_ip4_scripted_effects.txt:449`. Vanilla bug. The resignation event (`events/resignation.txt:414`) reaches the same `remove_ruling_interest_group` error through vanilla's scripted effect when the ruling group has joined a revolution (2026-10-06, twice). The mod reaches the `set_only_legal_party_from_ig` line too, without calling this file's helpers: a country formed by a planned decolonization (form_decolonized_country, from option a of decolonization_events.400) activates the law it is given, whose `on_activate` names a group the new country lacks (2026-10-24, one line, `:1311`). So the `reviewed` note above holds for helper calls only; a mod-framed line of this signature is still the vanilla law's missing guard.
 
 ### `gui/block_windows.gui:650` — malformed item desc
 
@@ -777,6 +777,7 @@ Undefined event target 'agitator_scope_2'
 Undefined event target 'agitator_party_scope'
 Undefined event target 'govnas'
 Undefined event target 'ongoing_revolution_movement'
+Undefined event target 'ongoing_revolution'
 Undefined event target 'da_boss'
 Undefined event target 'agitator_scope'
 Undefined event target 'opposing_ig'
@@ -788,7 +789,7 @@ Event target link 'interest_group' returned an invalid object
 Trying to change relations between the same country
 ```
 
-`scope:agitator_scope_2`, `scope:agitator_party_scope` and `scope:govnas` are used in options and `if` limits without an `exists` check, and the follow-on `add_momentum`, `random_member` and `leader` effects then run in no scope. 2026-10-04: 27 lines over eighteen minutes. The same happens to `scope:ongoing_revolution_movement` in option c of `revolution_pulse_events.13` (`events/agitators_events/revolution_events_02.txt:2097`), whose `add_modifier` then runs in no scope. 2026-10-05: `scope:da_boss` in option b of the scandal event at `agitator_law_events_2.txt:1325`, saved in `immediate` by a `random_interest_group` that can match no group, one line. 2026-10-10: `scope:agitator_scope` in the cancellation triggers and options at agitators_election_events :1911, :1932, :2052 and :2083 (the agitator is gone), `scope:opposing_ig` and `scope:supporting_ig` at agitator_law_events_2 :169 and :367, `this.interest_group.leader` at agitators_election_events :1194 and :1200 for a character whose group no longer exists, and option a of `agitators_election_events.19` (:2923) changing relations with `scope:scary_communist_country` when that is the country itself (a French Commune). One or two lines each.
+`scope:agitator_scope_2`, `scope:agitator_party_scope` and `scope:govnas` are used in options and `if` limits without an `exists` check, and the follow-on `add_momentum`, `random_member` and `leader` effects then run in no scope. 2026-10-04: 27 lines over eighteen minutes. The same happens to `scope:ongoing_revolution_movement` in option c of `revolution_pulse_events.13` (`events/agitators_events/revolution_events_02.txt:2097`), whose `add_modifier` then runs in no scope. 2026-10-24: an option of the same file at line 2006 reads `scope:ongoing_revolution` and `scope:ongoing_revolution_movement` with no guard, so `add_civil_war_progress` and `add_modifier` run in no scope (two sets of four lines). 2026-10-05: `scope:da_boss` in option b of the scandal event at `agitator_law_events_2.txt:1325`, saved in `immediate` by a `random_interest_group` that can match no group, one line. 2026-10-10: `scope:agitator_scope` in the cancellation triggers and options at agitators_election_events :1911, :1932, :2052 and :2083 (the agitator is gone), `scope:opposing_ig` and `scope:supporting_ig` at agitator_law_events_2 :169 and :367, `this.interest_group.leader` at agitators_election_events :1194 and :1200 for a character whose group no longer exists, and option a of `agitators_election_events.19` (:2923) changing relations with `scope:scary_communist_country` when that is the country itself (a French Commune). One or two lines each.
 
 ### `common/political_lobbies/00_political_lobbies.txt:26` — a lobby's upkeep check names a target country that has since died
 
@@ -829,6 +830,22 @@ Could not get datacontext of type PopListItem from model
 ```
 
 The ownership icon's `#local workforce` branch (vanilla line 4725) takes `datacontext_from_model` index 0 of the owned building's pop list, which is empty when the building has no workers. The mod's override keeps vanilla's block as it is (mod line 4723). The second line names no file, so the entry also anchors on its source. 2026-10-24: 12 and 4 lines while a building panel was open; cosmetic.
+
+### `gui/politics_panel_types.gui:2080` — the trend chart's single line drawn from a one-point trend
+
+```
+Line must have atleast 2 points
+```
+
+Vanilla's generic trend chart (`v3_plotline`, the `singleitem` block's `plotline`) draws its line from whatever trend it is given, and a trend with one recorded point (a new country's or interest group's) is too short for the line renderer. The mod doesn't override the file. 2026-10-24: four lines at once while the politics panel was open; cosmetic.
+
+### `common/character_roles/01_appointment_roles.txt:22` — an interest-group leader's career ends after the group is gone
+
+```
+remove_as_interest_group_leader effect [ Character has no valid Interest Group ]
+```
+
+`character_role_ig_leader`'s `on_career_end` ends with `remove_as_interest_group_leader = yes` and no check that the character still has a group, so a leader whose group was dissolved first logs this as the role is taken away. The stack has no other frame. 2026-10-24: one line; harmless.
 
 ### `common/journal_entries/06_iberia.txt:47`, `common/journal_entries/01_natural_borders_of_france.txt:88` and `events/technology_events.txt:28` — a country with no states read through its capital
 - reviewed: helper anchor, signature cannot match a mod call (the mod reads only the numeric interest_tier_effect_* constants from 00_diplomacy_values, which read no capital, region or market; its override of leverage_threshold_to_invite lives in the mod's own script values)

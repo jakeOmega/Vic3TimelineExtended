@@ -365,6 +365,7 @@ When adding a new building or good, always check:
 2. Does any PM produce or consume a new good? → Register `goods_output_{good}_mult` and/or `goods_input_{good}_add`.
 3. Does the building use the `has_max_level` pattern? → Register `state_building_{name}_max_level_add`.
 4. Add localization for all registered modifier names.
+5. Give it a `background` (the building panel's art) as well as an `icon`, even if it is never built. Every vanilla building has one. One without logs `Database type <building> has missing texture` (`guitexturehandler.h:155`) once per launch. The mod's default is `gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds`. The line names no slot, and it took from May to October 2026 to find which one was missing: #1108 cleared it for the Grid Transfer Station, and the Strategic Reserve hub, which has one, never logged it while the silo, which had none, did.
 
 ### Script-Only Modifiers as Cross-System Tags / Capability Bands
 
@@ -443,6 +444,7 @@ A script value's `desc = "KEY"` labels its line in whatever breakdown shows it: 
 ## Effect/Trigger Scope Requirements
 
 - **`any_` triggers do NOT accept `limit`.** In trigger context, conditions go directly as siblings: `any_scope_diplomatic_pact = { count >= 3 is_diplomatic_action_type = X }`. The `limit = { }` sub-block is ONLY valid in effect iterators (`every_X`, `random_X`, `ordered_X`). Using `limit` inside `any_` produces "Unknown trigger type: limit" in debug.log and silently breaks the trigger evaluation (may match ALL pacts instead of filtered ones).
+- **A trigger saves a scope with `save_temporary_scope_as`, never `save_scope_as`.** `save_scope_as` is an effect: in a scripted trigger the parser logs `Unknown trigger type: save_scope_as` at load and drops the line, the validator then calls the name `used but is never set`, and every later `scope:X` read in the trigger fails (`is_subject_of trigger [ Invalid Country! ]`, `Invalid right side during comparison 'scope'`) and reads false. `decol_fighting_colonial_war` lost its colonial-subject and war-of-independence branches this way: 490 lines in one session (2026-10-24). `effect_trigger_validity_audit` can't catch it yet, because its catalog is the union of effect and trigger names (#1142).
 - **`add_homeland = <culture>`** — called from **state_region scope** with a culture argument. NOT from culture scope.
 - **`add_arable_land` is state_region-scoped, so never recalculate it by blindly iterating `every_scope_state` on a fully owned split state.** Once a country owns all pieces of a formerly split region, `every_scope_state` will still visit each owned state scope, and `state_region = { add_arable_land = ... }` will over-apply if each visit mutates the shared region. Gate the recalculation to one representative state per fully owned state region, and if you cache `arable_land_added` on state scope, sum that cache across same-owner states in the region when deriving base arable land or tooltip breakdowns.
 - **`is_on_front`** — a **military_formation/character scope** trigger, NOT a state scope trigger. For state, use `devastation > 0` or `is_target_of_wargoal`.
