@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  INHERITANCE — scripted triggers (country scope)
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 # ======================================================================
 
@@ -8,6 +8,14 @@
 te_inh_has_undivided_farms = {
 	active_law:lawgroup_inheritance ?= {
 		has_amendment = amendment_type:amendment_undivided_farm_succession
+	}
+}
+
+# The law in force carries the Birthright Endowment (The First Cohort,
+# inheritance_events.16).
+te_inh_has_birthright_endowment = {
+	active_law:lawgroup_inheritance ?= {
+		has_amendment = amendment_type:amendment_birthright_endowment
 	}
 }
 

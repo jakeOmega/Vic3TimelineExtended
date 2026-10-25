@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  INHERITANCE — modifiers
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 #  Applied by common/scripted_effects/te_inheritance_effects.txt and
 #  events/inheritance_events.txt. Docs: docs/systems/mod_systems.md
 #  § Inheritance.
@@ -171,6 +171,49 @@ inh_dynasty_founded = {
 inh_probate_litigation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_bureaucracy_investment_cost_factor_mult = 0.05
+}
+
+# The Hidden Estates. An audit of every official's estate takes the
+# government's attention (authority, fading over five years); looking away
+# lets the officials keep what they hid, and they save again for children
+# who will have it, while the public sees the privilege.
+inh_estates_audited = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_cost_add = 100
+}
+inh_estates_overlooked = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_bureaucrats_pol_str_mult = 0.1
+	state_bureaucrats_investment_pool_efficiency_mult = 0.1
+	country_legitimacy_base_add = -3
+}
+
+# The Empty Holding. Land the next repartition may take is not improved;
+# land the children will keep is.
+inh_commune_repartition = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.03
+}
+inh_holding_continuity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	building_group_bg_agriculture_throughput_add = 0.05
+}
+
+# The First Cohort: what the first stakes were spent on.
+inh_cohort_schooled = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	state_education_access_add = 0.03
+	state_pop_qualifications_mult = 0.1
+	country_bureaucracy_investment_cost_factor_mult = 0.03
+}
+inh_cohort_enterprise = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_shopkeepers_investment_pool_efficiency_mult = 0.1
+	state_farmers_investment_pool_efficiency_mult = 0.1
+}
+inh_cohort_spent = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_lower_strata_standard_of_living_add = 1
 }
 
 # ----------------------------------------------------------------------

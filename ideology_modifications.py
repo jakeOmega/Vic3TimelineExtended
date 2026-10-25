@@ -91,7 +91,7 @@ extremist_privacy_entry = [
     ("law_strong_privacy_rights", "strongly_disapprove"),
     ("law_intrusive_surveillance", "strongly_approve"),
 ]
-# Inheritance (spec docs/superpowers/specs/2026-10-08-inheritance-laws-design.md
+# Inheritance (spec docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md
 # §8). Order: Primogeniture & Entail, Customary Inheritance, Forced Heirship,
 # Freedom of Testation, State as Universal Heir, Possession by Use. The left
 # splits by heir: the communist wants the state to inherit, the anarchist
@@ -799,7 +799,7 @@ navy_jingoist = [
 ]
 
 
-# --- lawgroup_judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md § 7) ---
+# --- lawgroup_judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md § 7) ---
 # Every list names all six laws, in file order (the ideology_lawgroup audit;
 # test_judiciary.py). Applied to the vanilla ideologies in JUDICIARY_STANCES by
 # the loop after `modifications`; the mod's own ideologies carry the same

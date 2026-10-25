@@ -263,7 +263,9 @@ score changes yearly and when spent (§ 3.3), so the modifier lags a change by a
 | Forceful Legislation, "Push decisively" (option c) | −10 |
 | Forceful Legislation, "Force it through" (option e) | −20 |
 | Tax code Force Through (`te_tax_force_into`, which applies option c's modifiers) | −10 |
-| Phase 2: defying a ruling, packing the court (§ 10) | to be set |
+| Phase 2: defying a ruling (§ 14.1) | −20 |
+| Phase 2: packing the court (§ 14.1) | −15 |
+| Phase 4: the landmark cases' answers (§ 14.3) | −5 to −30 |
 
 The score is floored at 0. Each option shows its cost in a `custom_tooltip` (the silent-variable rule). The costs apply
 under every court law: under Executive Tribunals the score is near 0, so they cost almost nothing, as they should.
@@ -473,8 +475,9 @@ the rest for the play-test (`docs/testing/judiciary-playtest.md`, new).
 
 ## 10. Later phases
 
-Each later phase gets its own plan once phase 1 has been play-tested, since their details depend on how the score
-behaves.
+Each later phase was to get its own plan once phase 1 had been play-tested, since their details depend on how the
+score behaves. The owner asked for all three on 2026-10-25, before that play-test; § 14 records what was built and the
+calls made without the owner, and the play-test list carries what only the game can show.
 
 - **Phase 2: defying the court.** Under Constitutional Review or Judicial Supremacy (not a paper court), taking a
   Forceful Legislation option opens a challenge. Some months later the court rules:
@@ -542,3 +545,100 @@ cross-cutting, so it gets its own spec. What this spec settles for it:
 - Hidden is not gone: the breakdown tooltips (legitimacy's, the Modifiers tab's) still name the source.
 - Only standing scores move to the tab. A timed consequence with a duration (the Court Overhaul) stays in the list,
   where the player expects to find what just happened to them.
+
+## 14. Phases 2–4 as built (2026-10-25)
+
+Built together, at the owner's request, ahead of the phase 1 play-test. What § 10 left open was settled as below. The
+calls marked **(call)** were made without the owner and are listed for review in § 14.4. Play-test items:
+`docs/testing/judiciary-playtest.md` § Phases 2–4.
+
+### 14.1 Phase 2: defying the court
+
+- **Who reviews.** A new tooltip line, `country_court_reviews_forced_laws_bool` ("Courts Review Forced Laws"), sits on
+  Constitutional Review and Judicial Supremacy. `te_jud_court_can_strike_laws` reads it and excludes a paper court,
+  and a packed court counts as one (below).
+- **Opening a challenge.** Forceful Legislation's three bypass options call `te_jud_open_challenge = { TIER }` under
+  such a court, in a `custom_tooltip` that states the rule. It stores the law being forced and the law in force in its
+  group as law types (`te_jud_challenge_law`, `te_jud_replaced_law`), and which option was taken. The tax code's Force
+  Through opens none **(call)**: a tax bill is not a law the court sees enacted.
+- **Filing.** The monthly country pulse (`te_jud_challenge_monthly`) files the case once the enactment is over and
+  `has_law` reads the forced law, one case at a time, by copying the variables to `te_jud_case_*`. A law that failed is
+  forgotten. All of this runs in country scope; `te_jud_law_activated` still reads no variable (ROOT is the law there).
+- **The ruling** comes 180 days after filing (`te_judiciary_events.2`, hidden). The court strikes the law down when the
+  score is at least `te_jud_strike_threshold`: **90 after Expedite, 60 after Push decisively, 30 after Force it
+  through (call)**. That is deterministic, so the line's description and each option's tooltip can say it; a mature
+  court strikes down most forced laws, which is the check this phase exists for. Otherwise the court upholds the act
+  (`.4`, +3 legitimacy for two years, decaying).
+- **Struck down** (`.3`):
+  - **Comply** restores the replaced law (`activate_law`) and adds +5 legitimacy for five years, decaying, and +5 to
+    the score. If no replaced law was recorded, the forced law stays and costs −10 legitimacy instead, § 10's
+    fallback.
+  - **Defy** costs 20 of the score and five years of `te_jud_ruling_defied`: +1pp risk premium, the overhaul shock's
+    credit term at a gap of 50, and −5 legitimacy. The Intelligentsia disapprove, and some of the middle strata
+    radicalize.
+  - **Pack the court** (`te_jud_pack_court`) costs 15 of the score, takes 150 authority fading over five years, and
+    adds ten years of `te_jud_court_packed`. That modifier carries the paper-court line (so the packed court
+    challenges and reviews nothing), −30% on the ceiling and −5 legitimacy. A year later The Enlarged Bench (`.5`)
+    offers the drop to Statutory Courts (activated directly, and it ends the packing), keeping the bench, or
+    restoring the old one (+5 legitimacy and +5 to the score).
+- **The engine question** (§ 10) is answered in the preferred way, with a self-check:
+  `TE_SELF_CHECK OK|BROKEN judiciary_law_type_variable`, logged once a game when the first challenge opens. BROKEN
+  means a variable can't hold a law type, so no case is ever filed. The fallback, named in the play-test list, is to
+  file from the forced law's own `on_law_activated` and let compliance cost legitimacy.
+- **Lawyers in the Streets** (`.6`) replaces § 3.5's bare radicals at a gap of 40 or more. Letting them march gives the
+  old middle-strata radicals. Clearing the streets takes 100 authority over two years and gives fewer radicals, with
+  the Armed Forces pleased and the Intelligentsia not. Promising the judges their tenure adds 10 to the score and a
+  few loyalists, and costs the governing groups 1 approval for two years.
+
+### 14.2 Phase 3: the amendments
+
+`common/amendments/te_judiciary_amendments.txt`. Every amendment has a petition on a court law in force
+(`amendment_petition_events.21`–`.27`). Three also have a debate event while a host law is being enacted
+(`te_judiciary_events.20`–`.22`, in `on_law_checkpoint_debate`). Courts for a New Code (§ 14.3) is a second way in for
+the commercial courts. The parents (**calls**) were picked from vanilla stances so that the right groups back each
+amendment:
+
+| Amendment | Allowed on | Parent | Effects | Ways in |
+|---|---|---|---|---|
+| Suspension of Habeas Corpus | Statutory, Constitutional | Secret Police | suppression −25%, ceiling −20%, legitimacy −5; wartime only, and it lapses at peace (`country_amendment_lapses_at_peace_bool`, lifted by `te_jud_amendment_upkeep`) | petition `.21`, Armed Forces, at war, 25% |
+| Judicial Elections | Statutory, Constitutional | Universal Suffrage | ceiling −20, legitimacy +5; elected government only | debate `.20`; petition `.22`, a strong group led by a Jacksonian Democrat or populist, 5% |
+| Mixed Commercial Courts | Religious, Executive | Free Trade | credit standing −0.5pp, ceiling +10, Devout clout −5%; not under Isolationism | petition `.23`, strong Industrialists or Petty Bourgeoisie, 2.5%; Courts for a New Code |
+| Jury Trials | Statutory, Constitutional | Guaranteed Liberties | ceiling +10, suppression +10%, legitimacy +3 | debate `.21`; petition `.24`, strong Intelligentsia, 2.5% |
+| Military Tribunals for Civilians | Executive, Statutory | Outlawed Dissent | suppression −15%, Armed Forces clout +10%, ceiling −20% | petition `.25`, unrest and strong Armed Forces, 10% |
+| People's Tribunals | Executive | Single-Party State | suppression −20%, loyalists from movements +10%, credit standing +0.5pp; Single-Party State only, lifted without it | petition `.26`, a governing group led by a vanguardist or fascist, 5% |
+| Human-in-the-Loop Appeals | Algorithmic | Strong Privacy Rights | legitimacy +5, population bureaucracy cost +5%, ceiling +10, and −2 on the capture line, so Algorithmic Governance's captured court gives no override | debate `.22`; petition `.27`, legitimacy under 50 or strong Intelligentsia or Trade Unions, 5% |
+
+`possible` is read only when an amendment is added, so the two standing conditions are enforced monthly by
+`te_jud_amendment_upkeep`.
+
+### 14.3 Phase 4: landmark cases
+
+Each case is keyed to game state, never to a date or a tag, and comes once per country (`te_jud_heard_<case>`, a
+variable, so a revolution's winner doesn't hear it again) **(call)**. Each rolls yearly from its own sub-action in the
+petitions' idiom, except where noted.
+
+| Event | When | Answers |
+|---|---|---|
+| `.30` The Free Soil Case | a court that can strike laws, score 30+, slavery legal, an abolition movement at 5%+; 5% a year | property in persons upheld (ten years of abolition support +25% and movement radicals +10%; Landowners pleased); at score 60+, free soil (ten years of +15% enactment success for Slavery Banned; +5 score; aristocrat radicals); or a question for the legislature (−5 score) |
+| `.31` The Ōtsu Case | not a paper court, score 30+, not a great power, an AI great power at worse than cordial relations; 2.5% | the law sets the sentence (+10 score, +5 legitimacy decaying, relations −20) or the sentence they demand (−15 score, −5 legitimacy, relations +20) |
+| `.32` Freedom of Contract | Judicial Supremacy, score 40+, a labour law, strong Industrialists; 5% | accept (ten years: Trade Unions −10%, Industrialists +10%, labour movement +25%); pack the court (as § 14.1); or lean on the court (−5 score) |
+| `.33` The Voided Election | elected government, not a paper court, score 50+; 10% of `on_election_campaign_end` | respect it (+5 score, +10 legitimacy decaying; the strongest governing group angry) or declare an emergency (−30 score; three years with the paper-court line, suppression −25%, legitimacy −15) |
+| `.34` The Doctrine of Necessity | a fortnight after a paper-court law is activated, score still 30+ | necessity knows no law (−20 score, +10 legitimacy decaying) or the judges resign (−10 legitimacy decaying, middle-strata radicals) |
+| `.35` A House of Justice | Religious Courts, Rationalism, unrest, no enactment; 10% | grant it (`start_enactment` of Statutory Courts, middle-strata loyalists, Devout angry) or the clergy's courts suffice |
+| `.36` Courts for a New Code | Religious Courts, Rationalism, strong Intelligentsia or a modernizer movement at 5%+; 2.5% | courts beside the religious ones (attaches Mixed Commercial Courts), codify (`start_enactment` of Statutory Courts), or keep the religious courts |
+
+The Ōtsu Case picks an AI great power only **(call)**, so no player is blamed for a demand it never made
+(`event_context_audit`'s rule).
+
+### 14.4 Calls made without the owner
+
+For review; each is a number or a choice the owner may want to move:
+
+1. The strike-down thresholds (90, 60, 30) and their being deterministic rather than a roll.
+2. The ruling's delay (180 days after the law is in force) and one case at a time.
+3. The tax code's Force Through opens no challenge.
+4. The sizes in § 14.1 (defy −20 and +1pp, pack −15, 150 authority and ten years at −30% ceiling, comply +5 and +5).
+5. The seven amendments' parents, sizes, hosts and petition chances (§ 14.2), and which three get a debate event.
+6. Landmark cases once per country, and their triggers and chances (§ 14.3).
+7. A House of Justice and Courts for a New Code start the enactment of Statutory Courts (`start_enactment`) rather
+   than adding a modifier to it; whether that effect starts an enactment from an event option is a play-test item.
