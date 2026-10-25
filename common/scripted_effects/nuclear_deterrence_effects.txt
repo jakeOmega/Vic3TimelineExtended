@@ -1713,73 +1713,85 @@ nd_roll_launch_hold = {
 # arsenal and the war, consumes exactly one warhead through the existing strike
 # effects (nuclear_first_strike / nd_tactical_strike_resolve), and records the
 # use once. A failed validation spends nothing and records nothing.
-# Fenced (scope:nd_dispatching exists only in the real run): a preview of the
-# event option that calls this would otherwise walk nuclear_first_strike with
-# scope:attacking_country unset.
+# Fenced by a click-only marker (scripting_best_practices.md § "An Option's
+# Tooltip Walks Its Effects"): the walk writes no variable, so it stops here.
+# A saved scope is no fence: the walk got past exists = scope:nd_dispatching,
+# then walked nuclear_first_strike's random_list with no target state and logged
+# 1,606 lines in 16 seconds while nuclear_incident.50 was open (2026-10-25).
+# Every caller is inside a hidden_effect, so the marker hides no tooltip line.
 nd_dispatch_strategic_strike = {
 	save_scope_as = nd_dispatching
+	set_variable = nd_dispatch_click
 	if = {
-		limit = {
-			exists = scope:nd_dispatching
-			exists = scope:nd_strike_victim
-			nd_is_armed = yes
-			nd_forces_assembled = yes
-			OR = {
-				has_war_with = scope:nd_strike_victim
-				nd_peacetime_incident_dispatch = yes
+		limit = { has_variable = nd_dispatch_click }
+		remove_variable = nd_dispatch_click
+		if = {
+			limit = {
+				exists = scope:nd_strike_victim
+				nd_is_armed = yes
+				nd_forces_assembled = yes
+				OR = {
+					has_war_with = scope:nd_strike_victim
+					nd_peacetime_incident_dispatch = yes
+				}
+				scope:nd_strike_victim = {
+					any_scope_state = { always = yes }
+				}
 			}
+			save_scope_as = attacking_country
 			scope:nd_strike_victim = {
-				any_scope_state = { always = yes }
+				save_scope_as = target_country
+				ordered_scope_state = {
+					order_by = nuclear_strike_target_score
+					position = 0
+					nuclear_first_strike = yes
+				}
 			}
+			nd_record_nuclear_use = { VICTIM = scope:nd_strike_victim }
 		}
-		save_scope_as = attacking_country
-		scope:nd_strike_victim = {
-			save_scope_as = target_country
-			ordered_scope_state = {
-				order_by = nuclear_strike_target_score
-				position = 0
-				nuclear_first_strike = yes
-			}
-		}
-		nd_record_nuclear_use = { VICTIM = scope:nd_strike_victim }
 	}
 }
 
 # Tactical: a military target. Falls back to a strategic strike when the
 # attacker has no tactical weapons or the victim no military installation.
+# Fenced by the same click-only marker as the strategic dispatch.
 nd_dispatch_tactical_strike = {
 	save_scope_as = nd_dispatching
+	set_variable = nd_dispatch_click
 	if = {
-		limit = {
-			exists = scope:nd_dispatching
-			exists = scope:nd_strike_victim
-			nd_is_armed = yes
-			nd_forces_assembled = yes
-			OR = {
-				has_war_with = scope:nd_strike_victim
-				nd_peacetime_incident_dispatch = yes
-			}
-			has_technology_researched = tactical_nuclear_weapons
-			scope:nd_strike_victim = {
-				any_scope_state = { nd_state_has_military_target = yes }
-			}
-		}
-		save_scope_as = attacking_country
-		scope:nd_strike_victim = {
-			save_scope_as = target_country
-			random_scope_state = {
-				limit = { nd_state_has_military_target = yes }
-				save_scope_as = target_state
-			}
-		}
+		limit = { has_variable = nd_dispatch_click }
+		remove_variable = nd_dispatch_click
 		if = {
-			limit = { exists = scope:target_state }
-			nd_tactical_strike_resolve = yes
-			nd_record_nuclear_use = { VICTIM = scope:nd_strike_victim }
+			limit = {
+				exists = scope:nd_strike_victim
+				nd_is_armed = yes
+				nd_forces_assembled = yes
+				OR = {
+					has_war_with = scope:nd_strike_victim
+					nd_peacetime_incident_dispatch = yes
+				}
+				has_technology_researched = tactical_nuclear_weapons
+				scope:nd_strike_victim = {
+					any_scope_state = { nd_state_has_military_target = yes }
+				}
+			}
+			save_scope_as = attacking_country
+			scope:nd_strike_victim = {
+				save_scope_as = target_country
+				random_scope_state = {
+					limit = { nd_state_has_military_target = yes }
+					save_scope_as = target_state
+				}
+			}
+			if = {
+				limit = { exists = scope:target_state }
+				nd_tactical_strike_resolve = yes
+				nd_record_nuclear_use = { VICTIM = scope:nd_strike_victim }
+			}
 		}
-	}
-	else = {
-		nd_dispatch_strategic_strike = yes
+		else = {
+			nd_dispatch_strategic_strike = yes
+		}
 	}
 }
 

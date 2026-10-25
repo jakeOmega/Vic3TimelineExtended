@@ -244,3 +244,12 @@ The total construction speed is zero
 ```
 
 The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.
+
+### `common/decrees/extra_decrees.txt` — the engine checks a decree's country_trigger with no country
+- tracked: `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`
+
+```
+untyped trigger [ Scoped object of type 'country' is not valid (Country  (4294967295))
+```
+
+The engine re-checks each decree's `country_trigger` weekly (vanilla's decree file header: it "should invalidate the Decree on a weekly basis if found invalid"), and now and then it does so with the null country. Vanilla's own decrees log the same message in the same second, and the `<unknown>:0` untyped-trigger entry in the vanilla registry tags those; its `- stack: vanilla only` leaves this file's lines visible. Medical Outreach's trigger logged once on 2026-10-25. Script can't guard a root that is invalid before the block runs. Tracked at `docs/audits/open_issues.md#l29-a-decrees-country_trigger-checked-with-no-country`.

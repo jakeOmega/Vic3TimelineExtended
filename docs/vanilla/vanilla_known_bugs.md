@@ -483,6 +483,26 @@ Event target link 'home_country' returned an invalid object
 
 Vanilla revolution event reads `home_country` on a scope where it isn't always set (typically when the referenced character has no recorded home_country). Engine logs the failure and skips the dependent effect. No mod-side fix.
 
+### `events/agitators_events/revolution_events_01.txt:1700, 1705, 1724, 1729` — Siege of the Arsenal options read a revolution the immediate didn't save
+- stack: vanilla only
+
+```
+Event target link 'scope' returned an invalid object
+add_civil_war_progress effect [ Scoped object is not valid. Type: Civil war
+```
+
+`revolution_pulse1_events.15` saves `ongoing_revolution` in its `immediate` from `random_civil_war = { civil_war_save_scopes = yes }`, and its trigger also accepts a secession (`any_secession_ongoing`). Both options then move that civil war's progress with no check that the scope holds one. On 2026-10-25 it held the null civil war (`Civil war (4294967295)`, logged when the option was taken). While the event sat open it logged 290 lines in three seconds, one per read per frame, with no mod frame. The mod neither overrides nor fires the event, and doesn't override `civil_war_save_scopes`. No mod-side fix.
+
+### `events/technology_events.txt:220` — radio event's opium option reads a ruler the immediate didn't find
+- stack: vanilla only
+
+```
+Undefined event target 'radio_ruler'
+Event target link 'scope' returned an unset scope
+```
+
+`technology_events.20` saves `radio_ruler` from `random_scope_character = { limit = { is_ruler_of_own_country = yes } }`, but its trigger doesn't require a ruler, so a country without one gets the event with the scope unset. The opium option's `trigger` then reads it, one pair of lines per evaluation (2026-10-25, once). No mod-side fix.
+
 ### common/scripted_effects/00_government_type_change_effects.txt:19, 20 (called from `common/government_types/05_council_republics.txt`) — `get_ruler_for` unset cascading into `set_character_as_ruler` wrong-scope
 
 ```
@@ -1451,9 +1471,10 @@ Engine-internal assertion fired during pop-strata setup when an empty hierarchy 
 
 ```
 Mobilize Army Commmand given an invalid army
+Raise Conscripts Command given an invalid formation
 ```
 
-Engine assertion (note the typo `Commmand` is in vanilla's source string — match it verbatim) fired when the AI sends a Mobilize Army command targeting an army that has since been disbanded or merged. Cosmetic.
+Engine assertion (note the typo `Commmand` is in vanilla's source string — match it verbatim) fired when the AI sends a Mobilize Army command targeting an army that has since been disbanded or merged. Cosmetic. Its sibling for conscripts (spelled `Command`) logged in the same second on 2026-10-25, with no script frame (once before in the archived runs).
 
 ### `pdx_online_telemetry.cpp:25` — engine telemetry dump on graphics-settings init
 - source: `pdx_online_telemetry.cpp:25`
