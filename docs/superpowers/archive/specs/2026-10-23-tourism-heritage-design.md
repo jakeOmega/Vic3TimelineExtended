@@ -1,6 +1,35 @@
 # Tourism heritage: moving historical monuments out of base appeal (pass 1) — design
 
-Status: owner-approved in conversation, 2026-10-23; builder check done; awaiting the owner's read of this document.
+Status: owner-approved in conversation, 2026-10-23; builder check done. **Pass 1 built:** phase 1 in #1118, phases 2
+and 3 in #1139, after the policy pass (#1121). Pass 2 stays a later project.
+
+**As built (phases 2 and 3).** Where the build departs from the text below, the code and
+`scripts/generators/data/tourism_heritage_moves.csv` are the record:
+
+- **51 new landmarks, not 52** (Appendix B lists 51 keys; § 9's count was off by one).
+- **Owners the builder placed** (call 14), from vanilla's 1836 history: Fasil Ghebbi under Begemder (BGM, which holds
+  Gonder's city), Shore Temple under the Company (BIC), Gwalior Fort under Gwalior (GWA), the Buddhas of Bamiyan under
+  Kabul (KAB), the Musalla of Herat under Herat (HER), Marksburg under Prussia (the Rhineland has no Nassau part). Two
+  owners the table gave were wrong: the Mausoleum of Sultan Sanjar stands under **Bukhara** (BUK holds Merv, Merz's
+  mine hub), and the Walls of Tallinn under the **United Baltic Provinces** (UBD holds all of Talinn).
+- **Tōdai-ji stands in Kansai.** Nara is Kansai's hub, not Kyoto's, so Kinkaku-ji alone takes Kyoto's 40, at level 10
+  (four steps), and Tōdai-ji (level 5) stands at Nara as a gain: Kansai's comment credits Osaka and the coast, not
+  Nara, so nothing moves there (a 0-point row, for pass 2).
+- **Hampi is Kurnool's.** Bellary is Kurnool's hub. The site stands in Kurnool and takes the 10 Kurnool's comment gives
+  its "notable ruins"; Mysore, whose comment credits Hampi as nearby, keeps its 75 (a revisit row). Points moved:
+  2,280 over 93 states.
+- **Middle Egypt's landmark is Abydos** as call 10 has it: Sohag, by Abydos, is Middle Egypt's.
+- **Stand-in pictures:** Giza and Meroë show the generic obelisk, not a Mesoamerican pyramid; the rest take the
+  nearest style (faith buildings for temples and monasteries, the Chinese gardens picture for Suzhou's garden).
+  `PLACEHOLDER_PICTURES` and `docs/systems/grand_monuments_gui_icons.md` list all 71 landmarks on one, the sites included (the six
+  historical opportunities' among them).
+- **Site technologies** follow the existing sites' date-to-era mapping, not the guesses: Chichén Itzá Mass Media (1924),
+  Teotihuacan and Hattusa Pan-nationalism (1905–10, 1906), Monte Albán and Chogha Zanbil Public Works Programs (1931–32,
+  1935), Leptis Magna Modern Materials (1920s), Cyrene and Mount Nemrut Empiricism, Mérida Mass Propaganda (1910),
+  Mogao Steam Donkey (1900), Hampi Empiricism (1856).
+- **To History's panel picks:** the method is in the dedication group, but the ratchet offers it only from Undedicated,
+  and since construction sites no finished monument stands undedicated except an older save's before its migration,
+  which makes it a site. No AI weight was needed: the AI never picks a dedication for a landmark or a dug site.
 Pass 2 (townscapes) is a later project (§ 11), and the monument policy and prestige rework comes next (§ 15). The per-state moves
 are in `2026-10-23-tourism-heritage-moves.csv` and the new monuments in `2026-10-23-tourism-heritage-monuments.csv`,
 beside this document.

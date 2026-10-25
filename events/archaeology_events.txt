@@ -191,6 +191,62 @@ arch_events.1 = {
 				desc = gm_arch_site_pompeii_found
 			}
 			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_ephesus }
+				desc = gm_arch_site_ephesus_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tikal }
+				desc = gm_arch_site_tikal_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_chichen_itza }
+				desc = gm_arch_site_chichen_itza_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_teotihuacan }
+				desc = gm_arch_site_teotihuacan_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_monte_alban }
+				desc = gm_arch_site_monte_alban_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_leptis_magna }
+				desc = gm_arch_site_leptis_magna_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_cyrene }
+				desc = gm_arch_site_cyrene_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_merida_theatre }
+				desc = gm_arch_site_merida_theatre_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_chogha_zanbil }
+				desc = gm_arch_site_chogha_zanbil_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_hattusa }
+				desc = gm_arch_site_hattusa_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mount_nemrut }
+				desc = gm_arch_site_mount_nemrut_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mogao_caves }
+				desc = gm_arch_site_mogao_caves_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_khajuraho }
+				desc = gm_arch_site_khajuraho_found
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_hampi }
+				desc = gm_arch_site_hampi_found
+			}
+			triggered_desc = {
 				desc = arch_events.1.d
 			}
 		}
@@ -449,6 +505,62 @@ arch_events.2 = {
 			triggered_desc = {
 				trigger = { exists = scope:gm_arch_ev_pompeii }
 				desc = gm_arch_site_pompeii_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_ephesus }
+				desc = gm_arch_site_ephesus_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_tikal }
+				desc = gm_arch_site_tikal_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_chichen_itza }
+				desc = gm_arch_site_chichen_itza_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_teotihuacan }
+				desc = gm_arch_site_teotihuacan_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_monte_alban }
+				desc = gm_arch_site_monte_alban_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_leptis_magna }
+				desc = gm_arch_site_leptis_magna_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_cyrene }
+				desc = gm_arch_site_cyrene_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_merida_theatre }
+				desc = gm_arch_site_merida_theatre_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_chogha_zanbil }
+				desc = gm_arch_site_chogha_zanbil_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_hattusa }
+				desc = gm_arch_site_hattusa_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mount_nemrut }
+				desc = gm_arch_site_mount_nemrut_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_mogao_caves }
+				desc = gm_arch_site_mogao_caves_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_khajuraho }
+				desc = gm_arch_site_khajuraho_dug
+			}
+			triggered_desc = {
+				trigger = { exists = scope:gm_arch_ev_hampi }
+				desc = gm_arch_site_hampi_dug
 			}
 			triggered_desc = {
 				desc = arch_events.2.d

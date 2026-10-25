@@ -2,8 +2,9 @@
 # The base appeal each state's monuments take (tourism heritage spec 2026-10-23 § 6.3), from
 # scripts/generators/data/tourism_heritage_moves.csv. A move counts only while the monuments that take it
 # can exist: a vanilla wonder's always, a landmark's while the Grand Monuments rule is on and the 1836
-# landmarks were seeded, a site's while the rule is on. Re-run the generator after editing the CSV;
-# test_tourism_heritage.py fails when this file is stale.
+# landmarks were seeded (a To History landmark's while gm_landmarks_seeded_2 says they were), a site's
+# while the rule is on. Re-run the generator after editing the CSV; test_tourism_heritage.py fails
+# when this file is stale.
 
 # State scope. Read by tourism_bonus_from_base_appeal (tourism.txt); 0-1, as base_tourism_appeal_value is.
 tourism_heritage_moved = {
@@ -99,6 +100,7 @@ tourism_heritage_moved = {
 	else_if = {
 		limit = { state_region = s:STATE_MOSCOW }
 		add = 20
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EASTERN_MALI }
@@ -135,6 +137,254 @@ tourism_heritage_moved = {
 	else_if = {
 		limit = { state_region = s:STATE_LIMA }
 		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRANSJORDAN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GONDER }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOWER_EGYPT }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 50 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SICILY }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_JAVA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YEMEN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TUNISIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EGYPTIAN_DESERT }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 40 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MIDDLE_EGYPT }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DONGOLA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HOME_COUNTIES }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LANGUEDOC }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_PROVENCE }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORMANDY }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ORLEANS }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ESTREMADURA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UPPER_ANDALUSIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LOWER_ANDALUSIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MADRAS }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HYDERABAD }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MALWA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_THESSALIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ALEPPO }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ISFAHAN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 40 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CENTRAL_HIGHLANDS }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HERAT }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BANGKOK }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SEOUL }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BUSAN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KYOTO }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 40 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_CHUGOKU }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LHASA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HIMALAYAS }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SICHUAN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHANDONG }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SHANXI }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_SUZHOU }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_HENAN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UZBEKIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 40 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHIVA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MERZ }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KAZAN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KIEV }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DALMATIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_RHINELAND }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_NORTH_RHINE }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_UMBRIA }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TALINN }
+		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_AYDIN }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUATEMALA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YUCATAN }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MEXICO }
+		if = { limit = { gm_system_enabled = yes } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OAXACA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRIPOLI }
+		if = { limit = { gm_system_enabled = yes } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LIBYA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EXTREMADURA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHUZESTAN }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANKARA }
+		if = { limit = { gm_system_enabled = yes } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DIYARBAKIR }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GANSU }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BUNDELKHAND }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KURNOOL }
+		if = { limit = { gm_system_enabled = yes } add = 10 }
 	}
 	divide = 100
 }

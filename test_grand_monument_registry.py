@@ -95,6 +95,12 @@ TECH_GATES = {"artistic": "romanticism", "naturalist": "romanticism", "scientifi
 # method whose technology its owner lacks, which would strip five landmarks of
 # their dedications.
 PM_TECH_GATES = {k: TECH_GATES[k] for k in ("industrial", "athletic")}
+# To History (tourism heritage spec 2026-10-23 § 7): the landmarks of 1836 and
+# dug sites that took heritage off base appeal. Never offered by the ceremony,
+# with no local or national effect, no interest group, no anniversary, so it is
+# kept out of DEDICATIONS, every row of which has those; HistoryDedicationTests
+# pins where it is wired.
+HISTORIC = "historic"
 # Dedications that take heritage skins (spec §1.1; the War Memorial takes no
 # faith skin, plan decision 4).
 HERITAGE_SKINNED = ("crown", "republic", "revolution", "leader", "civic", "war_memorial")
@@ -664,9 +670,10 @@ class LocalPulseTests(unittest.TestCase):
         self.assertTrue(body.startswith("gm_state_count_site_levels = yes gm_remove_local_modifiers = yes"))
         self.assertIn("set_variable = { name = gm_curve_in value = gm_state_grandeur }", body)
         # The monument policy (v2 §5) scales the steps: tourism and the local
-        # effect separately (each dedication's, SecondaryFitTests).
+        # effect separately (each dedication's, SecondaryFitTests). Tourism's
+        # factor counts To History's share at half (HistoryDedicationTests).
         self.assertIn("set_variable = { name = gm_local_tourism_steps value = { value = gm_curve_steps_lin_f5 "
-                      "multiply = gm_policy_factor_tourism } }", body)
+                      "multiply = gm_policy_factor_tourism_here } }", body)
         self.assertIn("add_modifier = { name = gm_local_tourism multiplier = var:gm_local_tourism_steps }", body)
         # Upkeep by the records (UpkeepTests).
         self.assertIn("add_modifier = { name = gm_upkeep multiplier = root.var:gm_upkeep_mult }", body)
@@ -788,7 +795,8 @@ class NationalTests(unittest.TestCase):
         # would take off about one step, not half).
         for g in ("standing", "regime", "leader"):
             self.assertIn(f"set_variable = {{ name = gm_g_{g} value = gm_sum_{g} }}", body)
-        for steps, factor in (("standing", "prestige"), ("culture", "culture")):
+        # Each with To History's share at half (policy spec 2026-10-23 § 4.5).
+        for steps, factor in (("standing", "prestige_standing"), ("culture", "culture_standing")):
             call = f"gm_policy_scale_steps = {{ S = {steps} FACTOR = gm_policy_factor_{factor} }}"
             self.assertIn(call, body)
             self.assertGreater(body.find(call), body.find(f"OUT = gm_s_{steps} "), "after the curve")
@@ -1353,6 +1361,79 @@ LANDMARKS = (
              year=1840),
     Landmark("washington_monument", "STATE_DISTRICT_OF_COLUMBIA", None, "republic", "obelisk", ("generic", "obelisk"),
              10, False, year=1848),
+    # Added 2026-10-25 (tourism heritage spec 2026-10-23 § 9, Appendix B): To History, standing in 1836,
+    # each taking the base appeal of the heritage it stands for. Owners from the 1836 history: Gondar is
+    # Begemder's part of Gonder, Sana'a the Zaydi imam's and Shibam the Kathiri's part of Yemen, Merv
+    # Bukhara's part of Merz, Tallinn the United Baltic Provinces'; Tōdai-ji stands at Nara, in Kansai.
+    # Levels by the points each takes (§ 6.2). The stand-ins date from before their pictures were
+    # drawn: Giza and Meroë took the obelisk, not a Mesoamerican pyramid.
+    Landmark("pyramids_of_giza", "STATE_LOWER_EGYPT", "EGY", "historic", "pyramid", ("generic", "obelisk"), 15),
+    Landmark("petra", "STATE_TRANSJORDAN", "EGY", "historic", "rock_cut", ("heritage_aramaic", "rock_cut"), 3, beside=True),
+    Landmark("moscow_kremlin", "STATE_MOSCOW", "RUS", "historic", "tower", ("heritage_slavonic", "bell_tower"), 3),
+    Landmark("fasil_ghebbi", "STATE_GONDER", "BGM", "historic", "hall", ("heritage_gothic", "tower"), 3),
+    Landmark("valley_of_the_temples", "STATE_SICILY", "SIC", "historic", "pantheon", ("heritage_greek", "pantheon"), 3),
+    Landmark("borobudur", "STATE_CENTRAL_JAVA", "DEI", "historic", "gate", ("heritage_sanskrit", "gate"), 3),
+    Landmark("old_city_of_sanaa", "STATE_YEMEN", "ZAI", "historic", "hall", ("heritage_arabic", "hall"), 3),
+    Landmark("shibam", "STATE_YEMEN", "KAT", "historic", "tower", ("heritage_arabic", "hall"), 3),
+    Landmark("amphitheatre_of_el_djem", "STATE_TUNISIA", "TUN", "historic", "forum", ("heritage_latin", "stadium"), 3),
+    Landmark("abu_simbel", "STATE_EGYPTIAN_DESERT", "EGY", "historic", "rock_cut", ("heritage_aramaic", "rock_cut"), 10),
+    Landmark("temple_of_seti_abydos", "STATE_MIDDLE_EGYPT", "EGY", "historic", "colonnade", ("heritage_aramaic", "colonnade"), 3),
+    Landmark("pyramids_of_meroe", "STATE_DONGOLA", "EGY", "historic", "pyramid", ("generic", "obelisk"), 6),
+    Landmark("windsor_castle", "STATE_HOME_COUNTIES", "GBR", "historic", "tower", ("heritage_gothic", "tower"), 3),
+    Landmark("pont_du_gard", "STATE_LANGUEDOC", "FRA", "historic", "arch", ("heritage_latin", "arch"), 3),
+    Landmark("palais_des_papes", "STATE_PROVENCE", "FRA", "historic", "hall", ("heritage_gothic", "tower"), 3),
+    Landmark("mont_saint_michel", "STATE_NORMANDY", "FRA", "historic", "tower", ("heritage_gothic", "tower"), 3),
+    Landmark("chateau_de_chambord", "STATE_ORLEANS", "FRA", "historic", "hall", ("generic", "hall"), 3),
+    Landmark("jeronimos_monastery", "STATE_ESTREMADURA", "POR", "historic", "hall", ("faith_catholic", "faith"), 3),
+    Landmark("alhambra", "STATE_UPPER_ANDALUSIA", "SPA", "historic", "hall", ("heritage_arabic", "hall"), 3),
+    Landmark("mezquita_of_cordoba", "STATE_LOWER_ANDALUSIA", "SPA", "historic", "hall", ("faith_sunni", "faith"), 3),
+    Landmark("shore_temple", "STATE_MADRAS", "BIC", "historic", "pillar", ("faith_hindu", "faith"), 3),
+    Landmark("charminar", "STATE_HYDERABAD", "HYD", "historic", "gate", ("heritage_arabic", "gate"), 3),
+    Landmark("gwalior_fort", "STATE_MALWA", "GWA", "historic", "gate", ("heritage_sanskrit", "gate"), 3),
+    Landmark("meteora", "STATE_THESSALIA", "TUR", "historic", "memorial_church", ("faith_orthodox", "faith"), 3),
+    Landmark("citadel_of_aleppo", "STATE_ALEPPO", "EGY", "historic", "gate", ("heritage_arabic", "gate"), 6),
+    Landmark("naqsh_e_jahan_square", "STATE_ISFAHAN", "PER", "historic", "hall", ("heritage_avestan", "gate"), 10),
+    Landmark("buddhas_of_bamiyan", "STATE_CENTRAL_HIGHLANDS", "KAB", "historic", "statue", ("generic", "statue"), 3),
+    Landmark("musalla_of_herat", "STATE_HERAT", "HER", "historic", "tower", ("faith_sunni", "faith"), 3),
+    Landmark("grand_palace_bangkok", "STATE_BANGKOK", "SIA", "historic", "hall", ("faith_theravada", "faith"), 6),
+    Landmark("changdeokgung", "STATE_SEOUL", "KOR", "historic", "hall", ("heritage_chinese", "hall"), 6),
+    Landmark("bulguksa", "STATE_BUSAN", "KOR", "historic", "pagoda", ("heritage_chinese", "pagoda"), 3),
+    Landmark("kinkaku_ji", "STATE_KYOTO", "JAP", "historic", "pagoda", ("heritage_chinese", "pagoda"), 10),
+    Landmark("todai_ji", "STATE_KANSAI", "JAP", "historic", "hall", ("faith_mahayana", "faith"), 5),
+    Landmark("itsukushima_shrine", "STATE_CHUGOKU", "JAP", "historic", "gate", ("faith_shinto", "faith"), 3),
+    Landmark("potala_palace", "STATE_LHASA", "TIB", "historic", "hall", ("faith_gelugpa", "faith"), 3),
+    Landmark("swayambhunath", "STATE_HIMALAYAS", "NEP", "historic", "pagoda", ("faith_mahayana", "faith"), 3),
+    Landmark("leshan_giant_buddha", "STATE_SICHUAN", "CHI", "historic", "statue", ("generic", "statue"), 3),
+    Landmark("temple_of_confucius", "STATE_SHANDONG", "CHI", "historic", "hall", ("faith_confucian", "faith"), 3),
+    Landmark("yungang_grottoes", "STATE_SHANXI", "CHI", "historic", "rock_cut", ("generic", "statue"), 3),
+    Landmark("humble_administrators_garden", "STATE_SUZHOU", "CHI", "historic", "pagoda", ("heritage_chinese", "gardens"), 3),
+    Landmark("longmen_grottoes", "STATE_HENAN", "CHI", "historic", "rock_cut", ("generic", "statue"), 3),
+    Landmark("registan", "STATE_UZBEKIA", "BUK", "historic", "gate", ("heritage_avestan", "gate"), 10),
+    Landmark("itchan_kala", "STATE_KHIVA", "KHI", "historic", "gate", ("heritage_arabic", "gate"), 6),
+    Landmark("mausoleum_of_sultan_sanjar", "STATE_MERZ", "BUK", "historic", "mausoleum", ("faith_sunni", "faith"), 3),
+    Landmark("kazan_kremlin", "STATE_KAZAN", "RUS", "historic", "tower", ("heritage_slavonic", "bell_tower"), 3),
+    Landmark("saint_sophia_kiev", "STATE_KIEV", "RUS", "historic", "memorial_church", ("heritage_slavonic", "memorial_church"), 3),
+    Landmark("diocletians_palace", "STATE_DALMATIA", "AUS", "historic", "colonnade", ("heritage_latin", "forum"), 3),
+    Landmark("marksburg", "STATE_RHINELAND", "PRU", "historic", "tower", ("heritage_gothic", "tower"), 3),
+    Landmark("aachen_cathedral", "STATE_NORTH_RHINE", "PRU", "historic", "hall", ("faith_catholic", "faith"), 3),
+    Landmark("basilica_of_saint_francis", "STATE_UMBRIA", "PAP", "historic", "hall", ("faith_catholic", "faith"), 3),
+    Landmark("walls_of_tallinn", "STATE_TALINN", "UBD", "historic", "gate", ("heritage_gothic", "tower"), 3),
+    # Added 2026-10-25 (tourism heritage spec 2026-10-23 § 9, Appendix C): buried, To History when dug,
+    # each taking the base appeal of the ruins it stands for. Hampi lies in Kurnool (Bellary), not Mysore.
+    Landmark("ephesus", "STATE_AYDIN", None, "historic", "colonnade", ("heritage_greek", "stoa"), 3, False, False, True),
+    Landmark("tikal", "STATE_GUATEMALA", None, "historic", "pyramid", ("heritage_mayan", "pyramid"), 3, False, False, True),
+    Landmark("chichen_itza", "STATE_YUCATAN", None, "historic", "pyramid", ("heritage_mayan", "pyramid"), 3, False, False, True),
+    Landmark("teotihuacan", "STATE_MEXICO", None, "historic", "pyramid", ("heritage_nahuatl", "pyramid"), 6, False, False, True),
+    Landmark("monte_alban", "STATE_OAXACA", None, "historic", "pyramid", ("heritage_nahuatl", "pyramid"), 3, False, False, True),
+    Landmark("leptis_magna", "STATE_TRIPOLI", None, "historic", "forum", ("heritage_latin", "forum"), 6, False, False, True),
+    Landmark("cyrene", "STATE_LIBYA", None, "historic", "pantheon", ("heritage_greek", "pantheon"), 3, False, False, True),
+    Landmark("merida_theatre", "STATE_EXTREMADURA", None, "historic", "forum", ("heritage_latin", "stadium"), 3, False, False, True),
+    Landmark("chogha_zanbil", "STATE_KHUZESTAN", None, "historic", "pyramid", ("heritage_avestan", "gate"), 3, False, False, True),
+    Landmark("hattusa", "STATE_ANKARA", None, "historic", "gate", ("generic", "gate"), 6, False, False, True),
+    Landmark("mount_nemrut", "STATE_DIYARBAKIR", None, "historic", "statue", ("generic", "statue"), 3, False, False, True),
+    Landmark("mogao_caves", "STATE_GANSU", None, "historic", "rock_cut", ("faith_mahayana", "faith"), 3, False, False, True),
+    Landmark("khajuraho", "STATE_BUNDELKHAND", None, "historic", "pillar", ("faith_hindu", "faith"), 3, False, False, True),
+    Landmark("hampi", "STATE_KURNOOL", None, "historic", "pillar", ("heritage_sanskrit", "pillar"), 3, False, False, True),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
@@ -1390,6 +1471,24 @@ BUILT = {
     "terracotta_army": -210, "tomb_of_philip_ii": -336, "tomb_of_marquis_yi": -433, "royal_tombs_of_sipan": 250,
     "otzi_the_iceman": -3300, "caral_supe": -2600, "gobekli_tepe": -9500, "olympia": -456, "delphi": -330,
     "sidon_necropolis": -330, "villa_of_the_papyri": -50, "tomb_of_alexander": -320, "pompeii": 79,
+    # To History landmarks standing in 1836 (tourism heritage phase 2).
+    "pyramids_of_giza": -2560, "petra": -100, "moscow_kremlin": 1495, "fasil_ghebbi": 1636,
+    "valley_of_the_temples": -500, "borobudur": 825, "old_city_of_sanaa": 600, "shibam": 1530,
+    "amphitheatre_of_el_djem": 238, "abu_simbel": -1264, "temple_of_seti_abydos": -1290, "pyramids_of_meroe": -300,
+    "windsor_castle": 1070, "pont_du_gard": 50, "palais_des_papes": 1364, "mont_saint_michel": 1228,
+    "chateau_de_chambord": 1547, "jeronimos_monastery": 1601, "alhambra": 1354, "mezquita_of_cordoba": 987,
+    "shore_temple": 700, "charminar": 1591, "gwalior_fort": 1486, "meteora": 1382, "citadel_of_aleppo": 1213,
+    "naqsh_e_jahan_square": 1629, "buddhas_of_bamiyan": 570, "musalla_of_herat": 1417, "grand_palace_bangkok": 1782,
+    "changdeokgung": 1610, "bulguksa": 774, "kinkaku_ji": 1397, "todai_ji": 752, "itsukushima_shrine": 1168,
+    "potala_palace": 1694, "swayambhunath": 460, "leshan_giant_buddha": 803, "temple_of_confucius": 1499,
+    "yungang_grottoes": 494, "humble_administrators_garden": 1513, "longmen_grottoes": 675, "registan": 1660,
+    "itchan_kala": 1800, "mausoleum_of_sultan_sanjar": 1157, "kazan_kremlin": 1562, "saint_sophia_kiev": 1037,
+    "diocletians_palace": 305, "marksburg": 1283, "aachen_cathedral": 805, "basilica_of_saint_francis": 1253,
+    "walls_of_tallinn": 1355,
+    # To History sites, buried until the game (tourism heritage phase 3).
+    "ephesus": -550, "tikal": 750, "chichen_itza": 1000, "teotihuacan": 200, "monte_alban": -500,
+    "leptis_magna": 200, "cyrene": -630, "merida_theatre": -16, "chogha_zanbil": -1250, "hattusa": -1650,
+    "mount_nemrut": -62, "mogao_caves": 1000, "khajuraho": 1000, "hampi": 1500,
 }
 
 
@@ -3094,7 +3193,7 @@ class PolicyTests(unittest.TestCase):
         # Switching away leaves no education behind (plan Review Focus 2).
         totals = squash(block(read(EFFECTS), "gm_compute_totals"))
         self.assertIn("if = { limit = { gm_policy_is = { P = education STANDARD = no } } gm_set_steps_lin_open = "
-                      "{ IN = gm_g_standing OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education "
+                      "{ IN = gm_g_education OUT = gm_s_education NEXT = gm_n_education WIDTH = gm_w_education "
                       "F = 10 } } else = { set_variable = { name = gm_s_education value = 0 } }", totals)
         self.assertIn("gm_add_national = { NAME = gm_national_education VAR = gm_s_education }",
                       squash(block(read(EFFECTS), "gm_apply_national_modifiers")))
@@ -3129,8 +3228,13 @@ class PolicyTests(unittest.TestCase):
         self.assertNotIn("NOT = { has_game_rule", culture)
         self.assertIn("NOT = { has_game_rule = cultural_hegemony_enabled }", prestige)
         totals = squash(block(read(EFFECTS), "gm_compute_totals"))
-        self.assertIn("gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige }", totals)
-        self.assertIn("gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture }", totals)
+        self.assertIn("gm_policy_scale_steps = { S = standing FACTOR = gm_policy_factor_prestige_standing }", totals)
+        self.assertIn("gm_policy_scale_steps = { S = culture FACTOR = gm_policy_factor_culture_standing }", totals)
+        # The standing variants start from the rule-bound factors (HistoryDedicationTests).
+        self.assertTrue(squash(block(self.values, "gm_policy_factor_culture_standing"))
+                        .startswith("value = gm_policy_factor_culture "))
+        self.assertTrue(squash(block(self.values, "gm_policy_factor_prestige_standing"))
+                        .startswith("value = gm_policy_factor_prestige "))
         sig = squash(block(read(SIG_EFFECTS), "gm_sig_set_steps_lin_open"))
         self.assertIn("gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }", sig)
 
@@ -3182,12 +3286,17 @@ class PolicyTests(unittest.TestCase):
     def test_hovers_name_cultural_promotions_factor(self):
         # The per-step figures don't add up to the headline without the x1.5 (mid-branch review).
         L = loc()
-        for key in ("gm_je_tt_culture", "gm_je_tt_sig_antiquity"):
-            self.assertIn("'gm_policy_culture_tt_line'", L[key], key)
-            self.assertIn("ScriptValue('gm_policy_factor_culture')", L[key], key)
+        # The monuments' own pull takes the factor with To History at half;
+        # Antiquity's takes it whole (policy spec 2026-10-23 § 4.5).
+        self.assertIn("'gm_policy_culture_standing_tt_line'", L["gm_je_tt_culture"])
+        self.assertIn("ScriptValue('gm_policy_factor_culture_standing')", L["gm_je_tt_culture"])
+        self.assertIn("ScriptValue('gm_policy_factor_culture_standing')", L["gm_policy_culture_standing_tt_line"])
+        self.assertIn("'gm_policy_culture_tt_line'", L["gm_je_tt_sig_antiquity"])
+        self.assertIn("ScriptValue('gm_policy_factor_culture')", L["gm_je_tt_sig_antiquity"])
         for key in ("gm_je_tt_prestige", "gm_je_tt_prestige_pct"):
             self.assertIn("'gm_policy_prestige_tt_line'", L[key], key)
             self.assertIn("ScriptValue('gm_policy_factor_prestige')", L[key], key)
+        self.assertIn("ScriptValue('gm_policy_factor_prestige_standing')", L["gm_policy_prestige_tt_line"])
         self.assertIn("gm_step_prestige_pct", L["monument_events.2.common_tt"])
 
     def test_anniversaries_ignore_the_policy(self):
@@ -3535,6 +3644,77 @@ PICTURES = {
     1000085: ("landmark_villa_of_the_papyri", "hall", None),
     1000086: ("landmark_tomb_of_alexander", "mausoleum", None),
     1000087: ("landmark_pompeii", "forum", None),
+    1000088: ("landmark_walhalla", "hall_of_fame", None),
+    1000089: ("landmark_bunker_hill_monument", "obelisk", None),
+    1000090: ("landmark_obelisk_of_the_second_of_may", "obelisk", None),
+    1000091: ("landmark_muhammad_ali_mosque", "faith", None),
+    1000092: ("landmark_nelsons_column", "column", None),
+    1000093: ("landmark_washington_monument", "obelisk", None),
+    1000094: ("landmark_pyramids_of_giza", "pyramid", None),
+    1000095: ("landmark_petra", "rock_cut", None),
+    1000096: ("landmark_moscow_kremlin", "tower", None),
+    1000097: ("landmark_fasil_ghebbi", "hall", None),
+    1000098: ("landmark_valley_of_the_temples", "pantheon", None),
+    1000099: ("landmark_borobudur", "gate", None),
+    1000100: ("landmark_old_city_of_sanaa", "hall", None),
+    1000101: ("landmark_shibam", "tower", None),
+    1000102: ("landmark_amphitheatre_of_el_djem", "forum", None),
+    1000103: ("landmark_abu_simbel", "rock_cut", None),
+    1000104: ("landmark_temple_of_seti_abydos", "colonnade", None),
+    1000105: ("landmark_pyramids_of_meroe", "pyramid", None),
+    1000106: ("landmark_windsor_castle", "tower", None),
+    1000107: ("landmark_pont_du_gard", "arch", None),
+    1000108: ("landmark_palais_des_papes", "hall", None),
+    1000109: ("landmark_mont_saint_michel", "tower", None),
+    1000110: ("landmark_chateau_de_chambord", "hall", None),
+    1000111: ("landmark_jeronimos_monastery", "hall", None),
+    1000112: ("landmark_alhambra", "hall", None),
+    1000113: ("landmark_mezquita_of_cordoba", "hall", None),
+    1000114: ("landmark_shore_temple", "pillar", None),
+    1000115: ("landmark_charminar", "gate", None),
+    1000116: ("landmark_gwalior_fort", "gate", None),
+    1000117: ("landmark_meteora", "memorial_church", None),
+    1000118: ("landmark_citadel_of_aleppo", "gate", None),
+    1000119: ("landmark_naqsh_e_jahan_square", "hall", None),
+    1000120: ("landmark_buddhas_of_bamiyan", "statue", None),
+    1000121: ("landmark_musalla_of_herat", "tower", None),
+    1000122: ("landmark_grand_palace_bangkok", "hall", None),
+    1000123: ("landmark_changdeokgung", "hall", None),
+    1000124: ("landmark_bulguksa", "pagoda", None),
+    1000125: ("landmark_kinkaku_ji", "pagoda", None),
+    1000126: ("landmark_todai_ji", "hall", None),
+    1000127: ("landmark_itsukushima_shrine", "gate", None),
+    1000128: ("landmark_potala_palace", "hall", None),
+    1000129: ("landmark_swayambhunath", "pagoda", None),
+    1000130: ("landmark_leshan_giant_buddha", "statue", None),
+    1000131: ("landmark_temple_of_confucius", "hall", None),
+    1000132: ("landmark_yungang_grottoes", "rock_cut", None),
+    1000133: ("landmark_humble_administrators_garden", "pagoda", None),
+    1000134: ("landmark_longmen_grottoes", "rock_cut", None),
+    1000135: ("landmark_registan", "gate", None),
+    1000136: ("landmark_itchan_kala", "gate", None),
+    1000137: ("landmark_mausoleum_of_sultan_sanjar", "mausoleum", None),
+    1000138: ("landmark_kazan_kremlin", "tower", None),
+    1000139: ("landmark_saint_sophia_kiev", "memorial_church", None),
+    1000140: ("landmark_diocletians_palace", "colonnade", None),
+    1000141: ("landmark_marksburg", "tower", None),
+    1000142: ("landmark_aachen_cathedral", "hall", None),
+    1000143: ("landmark_basilica_of_saint_francis", "hall", None),
+    1000144: ("landmark_walls_of_tallinn", "gate", None),
+    1000145: ("landmark_ephesus", "colonnade", None),
+    1000146: ("landmark_tikal", "pyramid", None),
+    1000147: ("landmark_chichen_itza", "pyramid", None),
+    1000148: ("landmark_teotihuacan", "pyramid", None),
+    1000149: ("landmark_monte_alban", "pyramid", None),
+    1000150: ("landmark_leptis_magna", "forum", None),
+    1000151: ("landmark_cyrene", "pantheon", None),
+    1000152: ("landmark_merida_theatre", "forum", None),
+    1000153: ("landmark_chogha_zanbil", "pyramid", None),
+    1000154: ("landmark_hattusa", "gate", None),
+    1000155: ("landmark_mount_nemrut", "statue", None),
+    1000156: ("landmark_mogao_caves", "rock_cut", None),
+    1000157: ("landmark_khajuraho", "pillar", None),
+    1000158: ("landmark_hampi", "pillar", None),
 }
 # Codes of pairs no monument can reach any more (a retired form or style).
 RETIRED_PICTURES = set()
@@ -3632,7 +3812,84 @@ TROPHY_PICTURES = {
     2000085: "trophy_villa_of_the_papyri",
     2000086: "trophy_tomb_of_alexander",
     2000087: "trophy_pompeii",
+    2000088: "trophy_walhalla",
+    2000089: "trophy_bunker_hill_monument",
+    2000090: "trophy_obelisk_of_the_second_of_may",
+    2000091: "trophy_muhammad_ali_mosque",
+    2000092: "trophy_nelsons_column",
+    2000093: "trophy_washington_monument",
+    2000094: "trophy_pyramids_of_giza",
+    2000095: "trophy_petra",
+    2000096: "trophy_moscow_kremlin",
+    2000097: "trophy_fasil_ghebbi",
+    2000098: "trophy_valley_of_the_temples",
+    2000099: "trophy_borobudur",
+    2000100: "trophy_old_city_of_sanaa",
+    2000101: "trophy_shibam",
+    2000102: "trophy_amphitheatre_of_el_djem",
+    2000103: "trophy_abu_simbel",
+    2000104: "trophy_temple_of_seti_abydos",
+    2000105: "trophy_pyramids_of_meroe",
+    2000106: "trophy_windsor_castle",
+    2000107: "trophy_pont_du_gard",
+    2000108: "trophy_palais_des_papes",
+    2000109: "trophy_mont_saint_michel",
+    2000110: "trophy_chateau_de_chambord",
+    2000111: "trophy_jeronimos_monastery",
+    2000112: "trophy_alhambra",
+    2000113: "trophy_mezquita_of_cordoba",
+    2000114: "trophy_shore_temple",
+    2000115: "trophy_charminar",
+    2000116: "trophy_gwalior_fort",
+    2000117: "trophy_meteora",
+    2000118: "trophy_citadel_of_aleppo",
+    2000119: "trophy_naqsh_e_jahan_square",
+    2000120: "trophy_buddhas_of_bamiyan",
+    2000121: "trophy_musalla_of_herat",
+    2000122: "trophy_grand_palace_bangkok",
+    2000123: "trophy_changdeokgung",
+    2000124: "trophy_bulguksa",
+    2000125: "trophy_kinkaku_ji",
+    2000126: "trophy_todai_ji",
+    2000127: "trophy_itsukushima_shrine",
+    2000128: "trophy_potala_palace",
+    2000129: "trophy_swayambhunath",
+    2000130: "trophy_leshan_giant_buddha",
+    2000131: "trophy_temple_of_confucius",
+    2000132: "trophy_yungang_grottoes",
+    2000133: "trophy_humble_administrators_garden",
+    2000134: "trophy_longmen_grottoes",
+    2000135: "trophy_registan",
+    2000136: "trophy_itchan_kala",
+    2000137: "trophy_mausoleum_of_sultan_sanjar",
+    2000138: "trophy_kazan_kremlin",
+    2000139: "trophy_saint_sophia_kiev",
+    2000140: "trophy_diocletians_palace",
+    2000141: "trophy_marksburg",
+    2000142: "trophy_aachen_cathedral",
+    2000143: "trophy_basilica_of_saint_francis",
+    2000144: "trophy_walls_of_tallinn",
+    2000145: "trophy_ephesus",
+    2000146: "trophy_tikal",
+    2000147: "trophy_chichen_itza",
+    2000148: "trophy_teotihuacan",
+    2000149: "trophy_monte_alban",
+    2000150: "trophy_leptis_magna",
+    2000151: "trophy_cyrene",
+    2000152: "trophy_merida_theatre",
+    2000153: "trophy_chogha_zanbil",
+    2000154: "trophy_hattusa",
+    2000155: "trophy_mount_nemrut",
+    2000156: "trophy_mogao_caves",
+    2000157: "trophy_khajuraho",
+    2000158: "trophy_hampi",
 }
+
+# The landmarks still on a stand-in picture (tourism heritage spec 2026-10-23
+# § 10): no PICTURES code of their own yet, so they show their stand-in pair's.
+# Kept in step both ways by LandmarkPictureTests, so none is forgotten; the art
+# backlog (docs/systems/grand_monuments_gui_icons.md) lists the same keys.
+PLACEHOLDER_PICTURES = ()
 
 
 def _frozen_problems(pictures, retired, reachable):
@@ -3673,7 +3930,7 @@ class PictureTests(unittest.TestCase):
         cls.body = squash(block(cls.e, "gm_picture_from_look"))
 
     def test_the_table(self):
-        self.assertEqual(len(PICTURES), 167)
+        self.assertEqual(len(PICTURES), 238)
         # Every reachable pair has a picture.
         pairs = {(s, f) for code, (s, f, _) in PICTURES.items() if code != 1}
         for form, skins in FORMS.items():
@@ -3734,7 +3991,7 @@ class PictureTests(unittest.TestCase):
                             f"{'yes' if skin == 'generic' else 'no'} CODE = {code} }}")
         codes = sorted(PICTURES)
         expected += [f"gm_state_picture_skin = {{ SKIN = {PICTURES[c][0]} GENERIC = no CODE = {c} }}"
-                     for c in codes if PICTURES[c][1] == "faith"]
+                     for c in codes if PICTURES[c][1] == "faith" and c < LANDMARK_CODE_BASE]
         expected += [f"gm_state_picture_pair = {{ SKIN = {PICTURES[c][0]} GENERIC = "
                      f"{'yes' if PICTURES[c][0] == 'generic' else 'no'} FORM = {PICTURES[c][1]} CODE = {c} }}"
                      for c in codes if c != 1 and PICTURES[c][2] is None and PICTURES[c][1] != "faith"
@@ -3844,24 +4101,29 @@ class LandmarkTests(unittest.TestCase):
     def test_the_table(self):
         keys = [lm.key for lm in LANDMARKS]
         self.assertEqual(len(keys), len(set(keys)))
-        # One standing monument per state; an unplaced row shares its origin
-        # state with whatever stands there (loot spec §2.2).
-        states = [lm.state for lm in PLACED_LANDMARKS if not lm.beside]
+        # One standing monument per state, a state being a region's part an
+        # owner holds (Yemen's Sana'a and Shibam, Gonder's Aksum and Gondar); an
+        # unplaced row shares its origin state with whatever stands there (loot
+        # spec §2.2).
+        states = [(lm.state, lm.tag) for lm in PLACED_LANDMARKS if not lm.beside]
         self.assertEqual(len(states), len(set(states)),
                          "one landmark per state (§2); a second is beside=True, after the first")
         for i, lm in enumerate(PLACED_LANDMARKS):
             if lm.beside:
-                self.assertTrue(any(o.state == lm.state and not o.beside for o in PLACED_LANDMARKS[:i]),
+                self.assertTrue(any((o.state, o.tag) == (lm.state, lm.tag) and not o.beside
+                                    for o in PLACED_LANDMARKS[:i]),
                                 f"{lm.key}: seeded beside a landmark that is seeded first")
         for lm in LANDMARKS:
-            self.assertIn(lm.dedication, BY_KEY, lm.key)
+            self.assertTrue(lm.dedication in BY_KEY or lm.dedication == HISTORIC, lm.key)
             # A shrine's form is its faith's own building.
             self.assertTrue(lm.form in FORMS or lm.form in BUILDING_FORMS.values()
                             or (lm.form == "faith" and lm.dedication == "religious"), lm.key)
             if lm.form in BUILDING_FORMS.values():
                 self.assertEqual(BUILDING_FORMS[lm.dedication], lm.form, f"{lm.key}: a building's own form")
             if lm.placed:
-                self.assertGreaterEqual(lm.level, 5, lm.key)
+                # A To History landmark is sized by the base appeal it takes, two
+                # steps at least (tourism heritage spec 2026-10-23 § 6.2).
+                self.assertGreaterEqual(lm.level, 3 if lm.dedication == HISTORIC else 5, lm.key)
             elif lm.year:
                 # A historical opportunity's landmark: its level is the opportunity's target.
                 self.assertIn(lm.level, (5, 10), lm.key)
@@ -3869,7 +4131,7 @@ class LandmarkTests(unittest.TestCase):
             elif lm.buried:
                 # A buried site (issue #939) is placed by an excavation, whoever owns the ground then:
                 # a level of its own, no owner of its own.
-                self.assertGreaterEqual(lm.level, 5, lm.key)
+                self.assertGreaterEqual(lm.level, 3 if lm.dedication == HISTORIC else 5, lm.key)
                 self.assertIsNone(lm.tag, f"{lm.key}: a buried site has the owner who digs it")
             else:
                 self.assertIsNone(lm.level, f"{lm.key}: an unplaced landmark's levels are its trophy's")
@@ -3889,8 +4151,11 @@ class LandmarkTests(unittest.TestCase):
         self.assertIn("on_game_started_after_lobby = { on_actions = { gm_landmarks_on_game_started_after_lobby } }",
                       squash(strip_comments(on)))
         body = squash(block(on, "gm_landmarks_on_game_started_after_lobby"))
+        # gm_landmarks_seeded_2: the To History landmarks are in this game, so
+        # base appeal gives up their heritage (tourism heritage spec 2026-10-23 § 6.3).
         self.assertEqual(body, "effect = { if = { limit = { gm_system_enabled = yes NOT = { has_global_variable = "
                                "gm_landmarks_seeded } } set_global_variable = gm_landmarks_seeded "
+                               "set_global_variable = gm_landmarks_seeded_2 "
                                "gm_seed_landmarks = yes gm_seed_trophies = yes gm_monument_self_check = yes } }")
 
     def test_a_call_per_row(self):
@@ -4059,6 +4324,17 @@ class LandmarkPictureTests(unittest.TestCase):
                 lm = LANDMARKS[code - LANDMARK_CODE_BASE - 1]
                 self.assertEqual((skin, form, key), (f"landmark_{lm.key}", lm.form, None), code)
 
+    def test_placeholders_are_listed(self):
+        """A landmark with no picture of its own is in PLACEHOLDER_PICTURES, and
+        one in it has none (spec 2026-10-23 § 10), so the list can't go stale."""
+        own = {LANDMARKS[c - LANDMARK_CODE_BASE - 1].key for c in PICTURES if c >= LANDMARK_CODE_BASE}
+        on_stand_in = [lm.key for lm in LANDMARKS if lm.key not in own]
+        self.assertEqual(list(PLACEHOLDER_PICTURES), on_stand_in, "in LANDMARKS order")
+        backlog = read("docs/systems/grand_monuments_gui_icons.md")
+        for key in PLACEHOLDER_PICTURES:
+            self.assertIn(f"`landmark_{key}__", backlog, f"{key}: a line in the art backlog")
+        print(f"\n{len(PLACEHOLDER_PICTURES)} landmarks on stand-in pictures")
+
     def test_every_stand_in_has_a_picture(self):
         pairs = {(s, f) for s, f, _ in PICTURES.values()}
         for lm in LANDMARKS:
@@ -4075,6 +4351,150 @@ class LandmarkPictureTests(unittest.TestCase):
         self.assertEqual(squash(block(e, "gm_state_picture_landmark")),
                          "if = { limit = { has_variable = gm_landmark var:gm_landmark = flag:$KEY$ } "
                          "set_variable = { name = gm_picture_code value = $CODE$ } }")
+
+
+
+class HistoryDedicationTests(unittest.TestCase):
+    """To History (tourism heritage spec 2026-10-23 § 7): tourism, prestige and
+    cultural pull and nothing else; never offered by the ceremony; timeless, so
+    never contested and never pulled down; every monument policy counts it at
+    half (policy spec 2026-10-23 § 4.5)."""
+
+    PM = "pm_monument_historic"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = read(VALUES)
+        cls.e = read(EFFECTS)
+
+    def test_the_method(self):
+        body = squash(block(read(PMS), self.PM))
+        self.assertIn("unlocking_production_methods = { pm_monument_undedicated pm_monument_historic }", body,
+                      "the ratchet: chosen once")
+        self.assertIn("building_employment_laborers_add = 200 building_employment_clerks_add = 50", body)
+        self.assertNotIn("unlocking_technologies", body, "a landmark's method can't be switched off by the engine")
+        for forbidden in ("country_modifiers", "state_modifiers", "replacement_if_valid", "is_default"):
+            self.assertNotIn(forbidden, body)
+        pmg = squash(block(read(PMG), "pmg_monument_dedication"))
+        self.assertTrue(pmg.endswith("pm_monument_athletic pm_monument_historic }"), pmg[-80:])
+        L = loc()
+        self.assertEqual(L[self.PM], "To History")
+        self.assertIn("#R The dedication is permanent.#!", L[f"{self.PM}_desc"])
+
+    def test_no_ceremony_anniversary_or_opportunity_offers_it(self):
+        # Call 6: a player-built monument would get pure tourism and prestige with no politics.
+        for rel in (EVENTS, ON_ACTIONS, "common/scripted_triggers/gm_commission_triggers.txt",
+                    "common/scripted_effects/gm_commission_effects.txt"):
+            text = strip_comments(read(rel))
+            if rel.endswith("gm_commission_effects.txt"):
+                # Only the restore and its marking, which put a recorded method back.
+                for name in ("gm_state_mark_restore_pm", "gm_state_restore_dedication"):
+                    text = text.replace(block(text, name), "")
+            self.assertNotRegex(text, r"\bhistoric\b", rel)
+
+    def test_timeless_with_no_politics(self):
+        t = read(TRIGGERS)
+        for kind in ("gm_state_kind_regime", "gm_state_kind_ruler", "gm_state_kind_faith"):
+            self.assertNotIn(self.PM, block(t, kind), kind)
+        for ig in IGS:
+            for side in ("approved", "opposed"):
+                self.assertNotIn(self.PM, block(t, f"gm_state_{side}_by_{ig}") or "", f"{side} {ig}")
+                self.assertNotIn("KEY = historic", block(read(MON_TRIGGERS), f"gm_mon_{side}_by_{ig}") or "",
+                                 f"mon {side} {ig}")
+        self.assertIsNone(block(read(MODIFIERS), "gm_local_historic"), "no local effect")
+        self.assertNotIn("KEY = historic", squash(block(self.e, "gm_state_monthly")))
+        self.assertNotIn("historic", squash(block(self.e, "gm_compute_totals")).replace("gm_g_historic", "")
+                         .replace("gm_sum_historic", ""))
+
+    def test_its_records_go_and_come_back(self):
+        # A lost building, a trophy carried off and returned, and a gifted
+        # monument put back on it: each list of dedications names it.
+        lists = (
+            (self.e, "gm_state_record_dedication", "gm_state_record_dedication_one = { KEY = historic }"),
+            (read("common/scripted_effects/gm_commission_effects.txt"), "gm_state_mark_restore_pm",
+             "gm_state_mark_restore_pm_one = { KEY = historic }"),
+            (read("common/scripted_effects/gm_commission_effects.txt"), "gm_state_restore_dedication",
+             "gm_state_restore_dedication_one = { KEY = historic }"),
+            (read("common/scripted_effects/gm_trophy_effects.txt"), "gm_tr_record_dedication",
+             "gm_tr_record_dedication_one = { KEY = historic }"),
+            (read(TRIGGERS), "gm_state_stands_on_dedication",
+             "AND = { var:gm_dedication = flag:historic gm_state_has_pm = { PM = pm_monument_historic } }"),
+            (read(LANDMARK_EFFECTS), "gm_debug_log_landmark", "gm_debug_log_landmark_pm = { KEY = $KEY$ PM = historic }"),
+        )
+        for text, name, line in lists:
+            self.assertIn(line, squash(block(text, name)), name)
+
+    def test_its_name(self):
+        self.assertIn("trigger = { gm_state_has_pm = { PM = pm_monument_historic } } "
+                      "localization_key = pm_monument_historic", squash(block(read(CUSTOM_LOC), "gm_dedication_name")))
+        self.assertIn("trigger = { has_variable = gm_tr_dedication var:gm_tr_dedication = flag:historic } "
+                      "localization_key = pm_monument_historic",
+                      squash(block(read("common/customizable_localization/gm_trophy_custom_loc.txt"),
+                                   "gm_tr_dedication_name")))
+
+    def test_every_policy_counts_it_at_half(self):
+        v = self.values
+        self.assertRegex(strip_comments(v), r"(?m)^gm_policy_history_weight = 0\.5\s*$")
+        self.assertEqual(squash(block(v, "gm_policy_history_cut")), "value = 1 subtract = gm_policy_history_weight")
+        # The sum: primaries, those beside another, trophies of one held.
+        hist = squash(block(v, "gm_sum_historic"))
+        self.assertIn("gm_state_counts_standing = yes gm_state_has_pm = { PM = pm_monument_historic } } "
+                      "add = gm_state_primary_grandeur", hist)
+        self.assertIn("gm_mon_counts_standing = yes gm_mon_is = { KEY = historic } } add = gm_mon_grandeur", hist)
+        self.assertIn("variable = gm_trophies_held limit = { gm_mon_is = { KEY = historic } has_variable = "
+                      "gm_tr_grandeur } add = var:gm_tr_grandeur", hist)
+        totals = squash(block(self.e, "gm_compute_totals"))
+        order = [totals.find(f"name = {n} ") for n in ("gm_g_standing", "gm_g_historic", "gm_g_education", "gm_g_venues")]
+        self.assertNotIn(-1, order)
+        self.assertEqual(order, sorted(order), "each read after what it reads")
+        # Ceremonial: half its grandeur in the venues.
+        self.assertTrue(squash(block(v, "gm_sum_venues")).endswith(
+            "if = { limit = { has_variable = gm_g_historic } subtract = { value = var:gm_g_historic "
+            "multiply = gm_policy_history_cut } }"))
+        # Public Education: half its grandeur in the input, which the bar and hover read.
+        self.assertIn("subtract = { value = var:gm_g_historic multiply = gm_policy_history_cut }",
+                      squash(block(v, "gm_sum_education")))
+        self.assertIn("value = var:gm_g_education ", squash(block(v, "gm_disp_frac_education")))
+        self.assertIn("gm_display_g_education", loc()["gm_je_tt_education"])
+        # Open and Cultural Promotion: what the policy adds, on To History's share, at half.
+        cut = ("subtract = {{ value = {f} subtract = 1 multiply = gm_policy_history_cut "
+               "multiply = {h} divide = {g} }}")
+        for name, base, h, g in (
+                ("gm_policy_factor_culture_standing", "gm_policy_factor_culture", "var:gm_g_historic", "var:gm_g_standing"),
+                ("gm_policy_factor_prestige_standing", "gm_policy_factor_prestige", "var:gm_g_historic",
+                 "var:gm_g_standing"),
+                ("gm_policy_factor_tourism_here", "gm_policy_factor_tourism", "gm_state_historic_grandeur",
+                 "gm_state_grandeur")):
+            body = squash(block(v, name))
+            self.assertTrue(body.startswith(f"value = {base} "), name)
+            self.assertIn(f"{base} > 1", body, f"{name}: nothing taken off a factor of 1")
+            self.assertIn(cut.format(f=base, h=h, g=g), body, name)
+        here = squash(block(v, "gm_state_historic_grandeur"))
+        self.assertIn("gm_state_has_pm = { PM = pm_monument_historic } } add = gm_state_primary_grandeur", here)
+        self.assertIn("variable = gm_monuments_here limit = { gm_mon_is = { KEY = historic } } add = gm_mon_grandeur", here)
+
+    def test_the_policy_figures(self):
+        """Open's x1.25 for a state of To History alone, x1.5 for none, between by
+        share; the same rule on Cultural Promotion's x1.5 (spec § 4.5)."""
+        def factor(f, h, g):
+            return f - (f - 1) * (1 - 0.5) * h / g
+        self.assertEqual(factor(1.5, 30, 30), 1.25)
+        self.assertEqual(factor(1.5, 0, 30), 1.5)
+        # Transjordan: Petra (15) beside the Mesha Stele (25).
+        self.assertAlmostEqual(factor(1.5, 15, 40), 1 + 0.5 * (25 + 0.5 * 15) / 40)
+
+    def test_the_texts_say_so(self):
+        L = loc()
+        for key in ("gm_policy_effects_open", "gm_policy_open_effect_tt", "gm_policy_effects_ceremonial",
+                    "gm_policy_ceremonial_effect_tt", "gm_policy_effects_culture", "gm_policy_culture_effect_tt",
+                    "gm_policy_effects_culture_prestige", "gm_policy_culture_prestige_effect_tt",
+                    "gm_policy_effects_education", "gm_policy_education_effect_tt", "gm_policy_history_half_clause",
+                    "gm_state_tourism_history_clause"):
+            self.assertIn("$pm_monument_historic$", L[key], key)
+        self.assertIn("ScriptValue('gm_policy_factor_tourism_here')", L["gm_state_tourism_tt"])
+        for key in ("gm_policy_ceremonial_tt_line", "gm_policy_culture_standing_tt_line", "gm_policy_prestige_tt_line",
+                    "gm_je_tt_education"):
+            self.assertIn("'gm_policy_history_half_clause'", L[key], key)
 
 
 class LandmarkTechTests(unittest.TestCase):
@@ -5244,9 +5664,11 @@ SIG_LOCAL = tuple(s.key for s in SIGNATURES if s.local)
 SPECIAL_SIGS = tuple(s for s in SIGNATURES if s.kind == "special")
 # A special is its opportunity's boon made permanent, a fifth a step (§5.4).
 SPECIAL_BOON_SHARE = 0.2
-# The civic-progress five carry no family (§4.1), and the shrine of §6.4 none.
+# The civic-progress five carry no family (§4.1), the shrine of §6.4 none, and
+# no To History monument one (tourism heritage spec 2026-10-23 call 5: their
+# levels are sized without a signature's tourism).
 NO_SIGNATURE = ("la_scala", "teatro_di_san_carlo", "jantar_mantar", "shalimar_gardens", "jardim_botanico",
-                "muhammad_ali_mosque")
+                "muhammad_ali_mosque") + tuple(lm.key for lm in LANDMARKS if lm.dedication == HISTORIC)
 
 
 def counts_as(key):

@@ -314,8 +314,8 @@ gm_state_counts_standing = {
 
 # State Ceremonial's venues (policy spec 2026-10-23 § 4.2): every monument not
 # contested, heritage included, so a new regime can hold its events in the old
-# king's palace (owner). Once tourism heritage phase 2 adds To History
-# (pm_monument_historic), it counts at half (spec § 4.5).
+# king's palace (owner). A To History monument counts at half (spec § 4.5,
+# gm_sum_venues).
 gm_state_counts_venue = {
 	has_building = building_grand_monument
 	gm_state_is_contested = no
@@ -543,6 +543,7 @@ gm_state_stands_on_dedication = {
 		AND = { var:gm_dedication = flag:scientific gm_state_has_pm = { PM = pm_monument_scientific } }
 		AND = { var:gm_dedication = flag:industrial gm_state_has_pm = { PM = pm_monument_industrial } }
 		AND = { var:gm_dedication = flag:athletic gm_state_has_pm = { PM = pm_monument_athletic } }
+		AND = { var:gm_dedication = flag:historic gm_state_has_pm = { PM = pm_monument_historic } }
 	}
 }
 
