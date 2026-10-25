@@ -4503,3 +4503,89 @@ space_race_events.83 = {
 		}
 	}
 }
+
+##############################################
+# THE COLONY RECORD: A COLONY CHANGES HANDS
+##############################################
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md § 12.
+# Players only (sr_site_effects.txt). The first world each way is named through
+# sr_sites_generated_custom_loc.txt, any more are counted.
+
+# Cede Colony moved a colony to or from us (sr_site_fire_treaty_notice).
+space_race_events.90 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.90.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = sr_site_notice_gained
+					has_variable = sr_site_notice_lost
+				}
+				desc = space_race_events.90.d_swap
+			}
+			triggered_desc = {
+				trigger = { has_variable = sr_site_notice_gained }
+				desc = space_race_events.90.d_gained
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.90.d_lost
+			}
+		}
+	}
+	flavor = space_race_events.90.f
+
+	duration = 3
+
+	trigger = {
+		OR = {
+			has_variable = sr_site_notice_gained
+			has_variable = sr_site_notice_lost
+		}
+	}
+
+	option = {
+		name = space_race_events.90.a
+		default_option = yes
+		custom_tooltip = sr_site_notice_where_tt
+	}
+
+	after = {
+		sr_site_clear_notice = yes
+	}
+}
+
+# A dead holder's colony is ours: we own its last capital (sr_site_gained_heir).
+space_race_events.91 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.91.t
+	desc = space_race_events.91.d
+	flavor = space_race_events.91.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_site_notice_heir }
+
+	option = {
+		name = space_race_events.91.a
+		default_option = yes
+		custom_tooltip = sr_site_notice_where_tt
+	}
+
+	after = {
+		sr_site_clear_heir_notice = yes
+	}
+}

@@ -152,6 +152,16 @@ sr_solar_colonization_running = {
 	has_variable = sr_active_solar_colonization
 	modifier:country_sr_solar_colonization_program_bool = yes
 	NOT = { has_variable = sr_completed_solar_colonization }
+	sr_solar_colonization_qualified = yes
+}
+
+# The two milestones Solar System Colonization needs to colonize (colony record
+# design § 8). A country given a colony without them, by treaty or as a dead
+# holder's heir, holds the entry and keeps its colony's modifiers, and colonizes
+# nothing: its panel reads Idle and nothing is billed. Country scope.
+sr_solar_colonization_qualified = {
+	has_variable = sr_completed_moon_base
+	has_variable = sr_completed_mars_landing
 }
 
 # Whether a milestone's funding and approach are billed, and its funding adds

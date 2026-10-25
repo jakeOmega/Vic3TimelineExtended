@@ -1,0 +1,24 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colony record, once a month
+# ============================================================================
+# Global scope (no ROOT). Every world's record is the world's, not a country's,
+# so the step runs once a month for the world (sr_sites_global_monthly,
+# sr_site_effects.txt): the holder's capital, a dead holder's heir, a claim
+# with no holder, and the projection onto the holder (design § 5). The engine
+# unions same-name on_action declarations across files.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		sr_sites_on_action
+	}
+}
+
+sr_sites_on_action = {
+	effect = {
+		if = {
+			limit = { sr_space_race_on = yes }
+			sr_sites_global_monthly = yes
+		}
+	}
+}

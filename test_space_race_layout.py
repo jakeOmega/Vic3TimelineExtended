@@ -19,6 +19,8 @@ GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui"
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
 DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_values.txt")
+# The Solar System rows' values, generated from the site table (gen_solar_sites.py).
+SITES_DISPLAY = os.path.join(REPO, "common", "script_values", "sr_sites_display_generated.txt")
 CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "space_race_custom_loc.txt")
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -254,8 +256,9 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        # two live sections per milestone, solar colonization's Our Colonies, and the shared reference
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 2)
+        # two live sections per milestone, solar colonization's Our Colonies and
+        # Solar System, and the shared reference
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 3)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -648,6 +651,7 @@ class DisplayValuesTest(unittest.TestCase):
     def setUpClass(cls):
         cls.values = _read(DISPLAY)
         cls.names = set(re.findall(r"(?m)^(sr_disp_\w+) = \{", cls.values))
+        cls.site_names = set(re.findall(r"(?m)^(sr_disp_\w+) = \{", _read(SITES_DISPLAY)))
 
     def test_every_value_the_panel_reads_exists(self):
         used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)", _read(GUI)))
@@ -655,8 +659,8 @@ class DisplayValuesTest(unittest.TestCase):
                               "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))):
             used.add(key)
         self.assertTrue(used)
-        self.assertEqual(used - self.names, set())
-        self.assertEqual(self.names - used, set(), "a display value nothing reads")
+        self.assertEqual(used - self.names - self.site_names, set())
+        self.assertEqual((self.names | self.site_names) - used, set(), "a display value nothing reads")
 
     def test_every_variable_read_is_guarded(self):
         for name in self.names:
@@ -690,7 +694,7 @@ class DisplayValuesTest(unittest.TestCase):
     def test_no_value_is_read_by_script(self):
         for sub in ("common", "events"):
             for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
-                if os.path.samefile(path, DISPLAY):
+                if os.path.samefile(path, DISPLAY) or os.path.samefile(path, SITES_DISPLAY):
                     continue
                 hit = re.search(r"\bsr_disp_\w+", _strip_comments(_read(path)))
                 self.assertIsNone(hit, f"{path} reads {hit and hit.group(0)}")

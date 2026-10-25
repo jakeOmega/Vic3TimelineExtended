@@ -1316,6 +1316,8 @@ sr_restore_milestone_rewards = {
 sr_repair_after_civil_war = {
 	sr_restore_milestone_rewards = yes
 	sr_sync_probe_data = yes
+	# The worlds the old government held are the winner's (sr_sites_generated.txt).
+	sr_sites_repoint_loser = yes
 }
 
 # The interstellar probe's result: one of four permanent country modifiers,
@@ -1366,6 +1368,10 @@ sr_sync_probe_data = {
 sr_grant_colony_modifier = {
 	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
 	set_variable = { name = $MODIFIER$_held value = yes }
+	# The world's record (sr_sites_generated.txt): which specialization or
+	# discovery outcome it carries, whoever holds it later. Bookkeeping behind
+	# the modifier the option already shows, so hidden from its tooltip.
+	hidden_effect = { sr_site_choose_$MODIFIER$ = yes }
 }
 
 # Country scope. One colony modifier, both ways, as sr_sync_probe_data_base.

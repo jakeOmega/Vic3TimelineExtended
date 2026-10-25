@@ -1,0 +1,269 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colony record's shared effects
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md.
+#
+# Every world has a global record (sr_site_holder_<key>, sr_site_spec_<key>,
+# ...), the truth. The holder's <modifier>_held variables and its journal
+# entry's modifiers are its projection, written by sr_site_sync_<key>. The
+# per-world blocks are generated (sr_sites_generated.txt, from
+# scripts/generators/gen_solar_sites.py); this file holds what they call.
+# ============================================================================
+
+# Country scope. One modifier of a world we hold, shown: its record and, where
+# the entry is open, the modifier on it. The entry's immediate puts back a
+# modifier the record names when the entry opens later
+# (sr_sync_solar_colonization_entry).
+sr_site_show_modifier = {
+	if = {
+		limit = { NOT = { has_variable = $MODIFIER$_held } }
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	je:je_space_race_solar_colonization ?= {
+		if = {
+			limit = { NOT = { has_modifier = $MODIFIER$ } }
+			add_modifier = { name = $MODIFIER$ }
+		}
+	}
+}
+
+# Country scope. One modifier of a world we no longer hold (or of the option we
+# did not take), hidden: record and modifier.
+sr_site_hide_modifier = {
+	if = {
+		limit = { has_variable = $MODIFIER$_held }
+		remove_variable = $MODIFIER$_held
+	}
+	je:je_space_race_solar_colonization ?= {
+		if = {
+			limit = { has_modifier = $MODIFIER$ }
+			remove_modifier = $MODIFIER$
+		}
+	}
+}
+
+# Country scope. A discovery of a world we hold: made, so it never rolls again
+# for us (sr_roll_colony_discovery reads _done).
+sr_site_set_discovery_done = {
+	if = {
+		limit = { NOT = { has_variable = sr_discovery_$DISCOVERY$_done } }
+		set_variable = { name = sr_discovery_$DISCOVERY$_done value = yes }
+	}
+	if = {
+		limit = { has_variable = sr_discovery_$DISCOVERY$_pending }
+		remove_variable = sr_discovery_$DISCOVERY$_pending
+	}
+}
+
+# Country scope. A discovery of a world we hold, rolled at its founding and not
+# yet made: ours to roll each month (sr_monthly_colony_discoveries). A world we
+# received carries no survey timer, so its roll starts at once.
+sr_site_set_discovery_pending = {
+	if = {
+		limit = {
+			NOT = { has_variable = sr_discovery_$DISCOVERY$_pending }
+			NOT = { has_variable = sr_discovery_$DISCOVERY$_done }
+		}
+		set_variable = { name = sr_discovery_$DISCOVERY$_pending value = yes }
+	}
+	if = {
+		limit = { NOT = { has_variable = sr_discovery_$DISCOVERY$_rolled } }
+		set_variable = { name = sr_discovery_$DISCOVERY$_rolled value = yes }
+	}
+}
+
+# Country scope. A discovery of a world we no longer hold.
+sr_site_clear_discovery = {
+	if = {
+		limit = { has_variable = sr_discovery_$DISCOVERY$_pending }
+		remove_variable = sr_discovery_$DISCOVERY$_pending
+	}
+	if = {
+		limit = { has_variable = sr_discovery_$DISCOVERY$_done }
+		remove_variable = sr_discovery_$DISCOVERY$_done
+	}
+}
+
+# ===== After a transfer (sr_site_transfer_<key> = { CAUSE = ... }) =====
+# Country scope: the receiver (sr_site_gained_<cause>) or the giver
+# (sr_site_lost_<cause>). INDEX is the world's place in gen_solar_sites.SITES,
+# which the notices' custom loc names it from.
+
+# Common to every gain: the entry that holds the colony's modifiers opens for a
+# country that has none (design § 8), and a receiver without the Moon Base and
+# Mars Landing is watched by the site_receiver_entry self-check.
+sr_site_gained_base = {
+	if = {
+		limit = {
+			NOT = { has_journal_entry = je_space_race_solar_colonization }
+			sr_space_race_on = yes
+		}
+		add_journal_entry = { type = je_space_race_solar_colonization }
+	}
+	if = {
+		limit = {
+			NOT = { sr_solar_colonization_qualified = yes }
+			NOT = { has_global_variable = sr_sites_receiver_checked }
+			NOT = { has_variable = sr_site_receiver_check }
+		}
+		set_variable = { name = sr_site_receiver_check value = $INDEX$ }
+		set_variable = { name = sr_site_receiver_check_timer value = yes days = 70 }
+	}
+}
+
+# Record a world for the notice: the first world gained (lost, inherited) is
+# named, any more are counted. SIDE: gained, lost or heir.
+sr_site_note_for_notice = {
+	if = {
+		limit = { NOT = { has_variable = sr_site_notice_$SIDE$ } }
+		set_variable = { name = sr_site_notice_$SIDE$ value = $INDEX$ }
+	}
+	else_if = {
+		limit = { has_variable = sr_site_notice_$SIDE$_more }
+		change_variable = { name = sr_site_notice_$SIDE$_more add = 1 }
+	}
+	else = {
+		set_variable = { name = sr_site_notice_$SIDE$_more value = 1 }
+	}
+}
+
+sr_site_gained_treaty = {
+	sr_site_gained_base = { INDEX = $INDEX$ }
+	if = {
+		limit = { is_player = yes }
+		sr_site_note_for_notice = { SIDE = gained INDEX = $INDEX$ }
+		sr_site_fire_treaty_notice = yes
+	}
+}
+
+sr_site_gained_heir = {
+	sr_site_gained_base = { INDEX = $INDEX$ }
+	if = {
+		limit = { is_player = yes }
+		sr_site_note_for_notice = { SIDE = heir INDEX = $INDEX$ }
+		if = {
+			limit = { NOT = { has_variable = sr_site_heir_notice_queued } }
+			set_variable = { name = sr_site_heir_notice_queued value = yes days = 30 }
+			trigger_event = { id = space_race_events.91 days = 1 }
+		}
+	}
+}
+
+# An adoption: a claim with no holder taken up by the country already showing
+# it, after a save from before the record. Nothing to tell.
+sr_site_gained_quiet = {
+	sr_site_gained_base = { INDEX = $INDEX$ }
+}
+
+sr_site_lost_treaty = {
+	if = {
+		limit = { is_player = yes }
+		sr_site_note_for_notice = { SIDE = lost INDEX = $INDEX$ }
+		sr_site_fire_treaty_notice = yes
+	}
+}
+
+# An heir's or an adoption's giver is dead or held nothing, so the transfer
+# saves none and these never run; they exist because sr_site_lost_<cause> is
+# named for every cause. The variable is the console's record of a loss.
+sr_site_lost_heir = {
+	set_variable = { name = sr_site_last_lost value = $INDEX$ }
+}
+
+sr_site_lost_quiet = {
+	set_variable = { name = sr_site_last_lost value = $INDEX$ }
+}
+
+# One treaty notice for every world a treaty moved to or from us that day.
+sr_site_fire_treaty_notice = {
+	if = {
+		limit = { NOT = { has_variable = sr_site_treaty_notice_queued } }
+		set_variable = { name = sr_site_treaty_notice_queued value = yes days = 30 }
+		trigger_event = { id = space_race_events.90 days = 1 }
+	}
+}
+
+# Clear the notices' variables once each event has shown them (its after block).
+sr_site_clear_notice = {
+	if = { limit = { has_variable = sr_site_notice_gained } remove_variable = sr_site_notice_gained }
+	if = { limit = { has_variable = sr_site_notice_gained_more } remove_variable = sr_site_notice_gained_more }
+	if = { limit = { has_variable = sr_site_notice_lost } remove_variable = sr_site_notice_lost }
+	if = { limit = { has_variable = sr_site_notice_lost_more } remove_variable = sr_site_notice_lost_more }
+	if = { limit = { has_variable = sr_site_treaty_notice_queued } remove_variable = sr_site_treaty_notice_queued }
+}
+
+sr_site_clear_heir_notice = {
+	if = { limit = { has_variable = sr_site_notice_heir } remove_variable = sr_site_notice_heir }
+	if = { limit = { has_variable = sr_site_notice_heir_more } remove_variable = sr_site_notice_heir_more }
+	if = { limit = { has_variable = sr_site_heir_notice_queued } remove_variable = sr_site_heir_notice_queued }
+}
+
+# Every player's Solar System rows, after a transfer.
+sr_sites_refresh_players = {
+	every_country = {
+		limit = { is_player = yes }
+		sr_sites_refresh_snapshot = yes
+	}
+}
+
+# ===== The global monthly step (sr_sites_on_actions.txt; no ROOT) =====
+sr_sites_global_monthly = {
+	# A save from before the record: build it from what countries carry
+	# (design § 7), once, then a grace of 45 days before a claim with no
+	# holder is released, so a founding event still open can be answered.
+	if = {
+		limit = { NOT = { has_global_variable = sr_sites_initialized } }
+		every_country = {
+			limit = { sr_has_space_colony = yes }
+			sr_sites_migrate_country = yes
+		}
+		set_global_variable = { name = sr_sites_initialized value = yes }
+		set_global_variable = { name = sr_sites_grace value = yes days = 45 }
+	}
+	sr_sites_monthly = yes
+	sr_sites_refresh_players = yes
+}
+
+# Country scope, from the monthly country pulse. The site_receiver_entry
+# self-check (design § 13): a country that received a colony without the Moon
+# Base and Mars Landing should have the entry open and the colony's modifiers
+# on it once the timer set at the transfer has run out.
+sr_site_receiver_check_step = {
+	if = {
+		limit = {
+			has_variable = sr_site_receiver_check
+			NOT = { has_variable = sr_site_receiver_check_timer }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_sites_receiver_checked } }
+			set_global_variable = { name = sr_sites_receiver_checked value = yes }
+			if = {
+				limit = {
+					has_journal_entry = je_space_race_solar_colonization
+					sr_has_space_colony = yes
+				}
+				debug_log = "TE_SELF_CHECK OK site_receiver_entry: [THIS.GetCountry.GetNameNoFormatting] holds the entry and the colony"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN site_receiver_entry: [THIS.GetCountry.GetNameNoFormatting] has no entry, or lost the colony"
+			}
+		}
+		remove_variable = sr_site_receiver_check
+	}
+}
+
+# Cede Colony's apply, its last step (design § 13): once a game, whether the
+# article's input named a world the source held.
+sr_cede_colony_self_check = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_cede_colony_checked } }
+		set_global_variable = { name = sr_cede_colony_checked value = yes }
+		if = {
+			limit = { has_local_variable = sr_cede_matched }
+			debug_log = "TE_SELF_CHECK OK cede_colony_input: the input building type named a world the source held"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN cede_colony_input: no world matched the article's input"
+		}
+	}
+}

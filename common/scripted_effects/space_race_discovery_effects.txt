@@ -10,6 +10,9 @@ sr_seed_colony_discovery = {
 			chance = 10
 			set_variable = { name = sr_discovery_$DISCOVERY$_pending value = yes }
 			set_variable = { name = sr_discovery_$DISCOVERY$_survey value = yes days = 365 }
+			# The world's record: a later holder of the world inherits the find
+			# (sr_site_mirror_on_<key>, sr_sites_generated.txt).
+			set_global_variable = { name = sr_site_disc_$DISCOVERY$_pending value = yes }
 		}
 	}
 }
@@ -35,6 +38,10 @@ sr_roll_colony_discovery = {
 sr_finish_colony_discovery = {
 	remove_variable = sr_discovery_$DISCOVERY$_pending
 	set_variable = { name = sr_discovery_$DISCOVERY$_done value = yes }
+	if = {
+		limit = { has_global_variable = sr_site_disc_$DISCOVERY$_pending }
+		remove_global_variable = sr_site_disc_$DISCOVERY$_pending
+	}
 }
 
 # Colony surveys continue in passive mode and after all sites are claimed.

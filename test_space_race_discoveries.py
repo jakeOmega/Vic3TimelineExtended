@@ -49,6 +49,8 @@ class ScriptState:
     def __init__(self, definitions):
         self.definitions = definitions
         self.variables = {}
+        # The world's record (colony record design § 3): global variables.
+        self.globals = {}
         self.events = []
         self.rolls = []
         self.chances = []
@@ -59,6 +61,8 @@ class ScriptState:
         for key, arg in occurrences(conditions):
             if key == 'has_variable':
                 result = arg in self.variables
+            elif key == 'has_global_variable':
+                result = arg in self.globals
             elif key == 'NOT':
                 result = not self.matches(arg)
             elif key == 'has_game_rule':
@@ -102,6 +106,10 @@ class ScriptState:
                     value(arg, 'value'), value(arg, 'days') if 'days' in arg else None)
             elif key == 'remove_variable':
                 self.variables.pop(arg, None)
+            elif key == 'set_global_variable':
+                self.globals[value(arg, 'name')] = value(arg, 'value')
+            elif key == 'remove_global_variable':
+                self.globals.pop(arg, None)
             elif key == 'trigger_event':
                 self.events.append(value(arg, 'id'))
             elif key == 'hidden_effect':
@@ -141,6 +149,8 @@ class DiscoveryTests(unittest.TestCase):
         state.rolls = [True]
         state.call('sr_seed_colony_discovery', DISCOVERY='europa_life')
         self.assertEqual(state.variables['sr_discovery_europa_life_survey'], ('yes', '365'))
+        # The world's record keeps the find for whoever holds Europa later.
+        self.assertIn('sr_site_disc_europa_life_pending', state.globals)
         state.variables['sr_discovery_europa_life_survey'] = ('yes', '20')
         state.call('sr_seed_colony_discovery', DISCOVERY='europa_life')
         self.assertEqual(state.variables['sr_discovery_europa_life_survey'], ('yes', '20'))
@@ -203,17 +213,23 @@ class DiscoveryTests(unittest.TestCase):
     def test_every_seed_belongs_to_its_actual_claim(self):
         # The draw is generated from the site table (gen_solar_sites.py).
         text = (ROOT / 'common/scripted_effects/sr_sites_generated.txt').read_text('utf-8-sig')
+        text = text[text.index('sr_establish_colony_effect = {'):text.index('sr_check_colony_stage_effect = {')]
         for key, site in SITES.items():
             with self.subTest(discovery=key):
                 marker = f'sr_seed_colony_discovery = {{ DISCOVERY = {key} }}'
-                self.assertEqual(text.count(marker), 1)
                 claim = f'set_global_variable = {{ name = sr_colony_{site} value = yes }}'
-                start = text.rfind(claim, 0, text.index(marker))
-                self.assertGreater(start, 0)
-                between = text[start:text.index(marker)]
-                self.assertNotIn('trigger_event', between)
-                self.assertNotIn('random_list', between)
-                self.assertLess(text.index(marker), text.index('trigger_event', start))
+                # Once in its own stage's draw and once in each later stage's,
+                # which also draws released worlds (colony record design § 6):
+                # every seed follows its own world's claim.
+                self.assertEqual(text.count(marker), text.count(claim))
+                self.assertGreater(text.count(marker), 0)
+                for found in re.finditer(re.escape(marker), text):
+                    start = text.rfind(claim, 0, found.start())
+                    self.assertGreater(start, 0)
+                    between = text[start:found.start()]
+                    self.assertNotIn('trigger_event', between)
+                    self.assertNotIn('random_list', between)
+                    self.assertLess(found.start(), text.index('trigger_event', start))
 
     def test_twenty_deliveries_have_complete_choices_art_and_reward_repairs(self):
         sync = self.effects['sr_sync_colony_discovery_modifiers'][1]
