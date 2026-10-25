@@ -82,6 +82,7 @@ on_law_checkpoint_debate = {
 		10 = extra_law_events.88	# A Test of the Tongue (Citizenship – Amendment)
 		10 = extra_law_events.89	# Guards at the Mill Gate (Policing – Amendment)
 		10 = extra_law_events.90	# Who Watches the Watchmen (Policing – Amendment)
+		10 = te_fptp_events.2	# The Winner Takes All (First Past the Post – Amendment)
 		10 = inheritance_events.10	# Death Duties (Inheritance – Amendment)
 		10 = inheritance_events.11	# The Trust That Never Ends (Inheritance – Amendment)
 		10 = inheritance_events.12	# A Stake at Twenty-One (Inheritance – Amendment)

@@ -262,6 +262,21 @@ technocratic_party = {
 				desc = "from_militarist"
 			}
 		}
+		# First Past the Post (amendment_first_past_the_post): one of the two
+		# largest parties, as te_fptp_effects.txt ranks them monthly.
+		if = {
+			limit = {
+				owner = {
+					te_fptp_in_force = yes
+					has_variable = te_fptp_two_majors
+					has_variable = te_fptp_major_technocratic_party
+				}
+			}
+			add = {
+				value = te_fptp_major_party_join_weight
+				desc = "te_fptp_major_party_join"
+			}
+		}
 		if = {
 			limit = {
 				scope:number = 1
@@ -298,6 +313,20 @@ technocratic_party = {
 			multiply = {
 				value = 0.0
 				desc = "from_more_than_three_prior_members"
+			}
+		}
+		# First Past the Post: any party but the two largest.
+		if = {
+			limit = {
+				owner = {
+					te_fptp_in_force = yes
+					has_variable = te_fptp_two_majors
+					NOT = { has_variable = te_fptp_major_technocratic_party }
+				}
+			}
+			add = {
+				value = te_fptp_minor_party_join_weight
+				desc = "te_fptp_minor_party_join"
 			}
 		}
 	}

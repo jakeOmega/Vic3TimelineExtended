@@ -4411,6 +4411,10 @@
   "en": "Environmental Grandfather Clause",
   "de": "Umweltrechtlicher Bestandsschutz"
  },
+ "amendment_first_past_the_post": {
+  "en": "First Past the Post",
+  "de": "Relative Mehrheitswahl"
+ },
  "amendment_habeas_corpus_suspension": {
   "en": "Suspension of Habeas Corpus",
   "de": "Aussetzung des Habeas Corpus"
@@ -27750,6 +27754,18 @@
  "te_ea_ir_propaganda_offensive_modifier": {
   "en": "Propaganda Offensive",
   "de": "Propagandaoffensive"
+ },
+ "te_fptp_major_party_join": {
+  "en": "First Past the Post: one of the two largest parties",
+  "de": "Relative Mehrheitswahl: eine der beiden größten Parteien"
+ },
+ "te_fptp_minor_party_join": {
+  "en": "First Past the Post: not one of the two largest parties",
+  "de": "Relative Mehrheitswahl: keine der beiden größten Parteien"
+ },
+ "te_fptp_two_party_tt": {
+  "en": "Interest groups join the two largest parties more readily and any other party far less readily.",
+  "de": "Interessengruppen schließen sich den beiden größten Parteien eher an und jeder anderen Partei weit seltener."
  },
  "te_fx_strong": {
   "en": "Strong Currency",

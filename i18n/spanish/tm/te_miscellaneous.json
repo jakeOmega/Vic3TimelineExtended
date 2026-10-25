@@ -4399,6 +4399,10 @@
   "en": "Environmental Grandfather Clause",
   "es": "Cláusula medioambiental de derechos adquiridos"
  },
+ "amendment_first_past_the_post": {
+  "en": "First Past the Post",
+  "es": "Escrutinio mayoritario uninominal"
+ },
  "amendment_habeas_corpus_suspension": {
   "en": "Suspension of Habeas Corpus",
   "es": "Suspensión del hábeas corpus"
@@ -27502,6 +27506,18 @@
  "te_ea_ir_propaganda_offensive_modifier": {
   "en": "Propaganda Offensive",
   "es": "Ofensiva propagandística"
+ },
+ "te_fptp_major_party_join": {
+  "en": "First Past the Post: one of the two largest parties",
+  "es": "Escrutinio mayoritario uninominal: uno de los dos mayores partidos"
+ },
+ "te_fptp_minor_party_join": {
+  "en": "First Past the Post: not one of the two largest parties",
+  "es": "Escrutinio mayoritario uninominal: no es uno de los dos mayores partidos"
+ },
+ "te_fptp_two_party_tt": {
+  "en": "Interest groups join the two largest parties more readily and any other party far less readily.",
+  "es": "Los grupos de interés se suman con más facilidad a los dos mayores partidos y con mucha menos a cualquier otro."
  },
  "te_fx_strong": {
   "en": "Strong Currency",

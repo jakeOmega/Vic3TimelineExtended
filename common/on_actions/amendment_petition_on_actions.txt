@@ -55,6 +55,7 @@ on_yearly_pulse_country = {
 		te_amendment_petition_military_tribunals
 		te_amendment_petition_peoples_tribunals
 		te_amendment_petition_human_in_the_loop
+		te_amendment_petition_first_past_the_post
 	}
 }
 
@@ -287,5 +288,14 @@ te_amendment_petition_human_in_the_loop = {
 	random_events = {
 		950 = 0
 		50 = amendment_petition_events.27
+	}
+}
+
+# The Winner Takes All: two parties holding most of the clout is a lasting
+# state. 2.5%.
+te_amendment_petition_first_past_the_post = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.28
 	}
 }

@@ -1023,6 +1023,10 @@
   "en": "An [concept_amendment] levying a progressive duty on great estates as they pass. It raises no standing revenue; it lowers the target of the [concept_inheritance_concentration] by #v 30#!. Not with the Birthright Endowment, which levies the duty itself.",
   "de": "Ein [concept_amendment], der eine progressive Abgabe auf große Vermögen beim Erbgang erhebt. Er bringt keine laufenden Einnahmen; er senkt das Ziel der [concept_inheritance_concentration] um #v 30#!. Nicht zusammen mit dem Grunderbe, das die Abgabe selbst erhebt."
  },
+ "amendment_first_past_the_post_desc": {
+  "en": "An [concept_amendment] giving each seat to whoever tops the poll. A vote for a party that can't win is wasted, so interest groups crowd into the two largest parties, which become broad coalitions. Disagreement inside the government costs less [concept_legitimacy], but the voters left without a winning party cost it some.",
+  "de": "Ein [concept_amendment], der jeden Sitz an den Kandidaten mit den meisten Stimmen vergibt. Eine Stimme für eine Partei ohne Siegchance ist verloren, sodass sich Interessengruppen in den beiden größten Parteien zusammendrängen, die zu breiten Koalitionen werden. Meinungsverschiedenheiten innerhalb der Regierung kosten weniger [concept_legitimacy], doch die Wähler, die keine siegreiche Partei haben, kosten etwas davon."
+ },
  "amendment_habeas_corpus_suspension_desc": {
   "en": "An [concept_amendment] letting the government hold people without trial for the duration of a war. Dissent is cheaper to suppress, and the courts, which can't free a prisoner, earn less [concept_judicial_independence]. Only in wartime, and it lapses when the war ends.",
   "de": "Ein [concept_amendment], der es der Regierung erlaubt, Menschen für die Dauer eines Krieges ohne Gerichtsverfahren festzuhalten. Widerspruch lässt sich billiger unterdrücken, und die Gerichte, die keinen Gefangenen freilassen können, erlangen weniger [concept_judicial_independence]. Nur in Kriegszeiten; er läuft aus, sobald der Krieg endet."

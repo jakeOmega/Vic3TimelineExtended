@@ -2692,3 +2692,82 @@ amendment_petition_events.27 = {
 		}
 	}
 }
+
+# ======================================================================
+#  28 – Two Parties Are Enough  (First Past the Post)
+#  The two largest parties' groups hold most of the clout; the strongest
+#  of them asks that elections go to whoever tops the poll.
+# ======================================================================
+amendment_petition_events.28 = {
+	type = country_event
+	placement = root
+
+	title = amendment_petition_events.28.t
+	desc = amendment_petition_events.28.d
+	flavor = amendment_petition_events.28.f
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		te_ap_window_open = yes
+		te_ap_law_ok_first_past_the_post = yes
+		has_variable = te_fptp_two_majors
+		te_fptp_major_clout >= 0.6
+	}
+
+	immediate = {
+		set_variable = { name = te_ap_recent_petition years = 5 }
+		active_law:lawgroup_distribution_of_power ?= { save_scope_as = petition_law }
+		te_fptp_save_sponsor = yes
+		scope:te_fptp_sponsor_ig = { save_scope_as = petition_sponsor_ig }
+		te_fptp_save_outsider = yes
+	}
+
+	cancellation_trigger = {
+		NOT = { te_ap_law_ok_first_past_the_post = yes }
+	}
+
+	option = { # Whoever tops the poll wins the seat
+		name = amendment_petition_events.28.a
+		scope:petition_law = {
+			add_amendment = {
+				type = amendment_first_past_the_post
+				sponsor = scope:petition_sponsor_ig
+				cooldown = 60
+			}
+		}
+		custom_tooltip = te_fptp_two_party_tt
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		scope:te_fptp_outsider_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scope:petition_sponsor_ig = { is_in_government = yes } }
+				add = 1
+			}
+		}
+	}
+
+	option = { # Every vote should count
+		name = amendment_petition_events.28.b
+		default_option = yes
+		scope:petition_sponsor_ig = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+		}
+	}
+}

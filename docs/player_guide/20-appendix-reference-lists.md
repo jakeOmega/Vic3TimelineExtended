@@ -113,6 +113,7 @@ you qualify.
 | Military Tribunals for Civilians (*Courts-Martial for Rebels*) | Executive Tribunals or Statutory Courts, unrest as for Order in the Courts, and the Armed Forces powerful or in government | 10% | Armed Forces |
 | People's Tribunals (*Justice of the Party*) | Executive Tribunals under a Single-Party State, with a governing group led by a vanguardist or fascist | 5% | That group |
 | Human-in-the-Loop Appeals (*A Human Signature*) | Algorithmic Jurisprudence, with legitimacy below 50 or the Intelligentsia or Trade Unions powerful or in government | 5% | Intelligentsia, or Trade Unions |
+| First Past the Post (*Two Parties Are Enough*) | Two parties whose groups hold at least 60% of your clout, on a voting law without it | 2.5% | The strongest group in either party |
 
 Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
 for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval

@@ -575,6 +575,26 @@
   "en": "A Human Signature",
   "es": "Una firma humana"
  },
+ "amendment_petition_events.28.a": {
+  "en": "Whoever tops the poll wins the seat.",
+  "es": "El escaño es para quien obtenga más votos."
+ },
+ "amendment_petition_events.28.b": {
+  "en": "Every vote should count.",
+  "es": "Todos los votos deben contar."
+ },
+ "amendment_petition_events.28.d": {
+  "en": "Two parties now hold most of the country's political weight, and the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask that our elections recognize it: each seat to the candidate with the most votes, and no more bargaining with factions that carried a handful of districts. The smaller parties warn that their voters would be shut out of power for good.",
+  "es": "Dos partidos reúnen ya la mayor parte del peso político del país, y el grupo de interés [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] pide que nuestras elecciones lo reconozcan: cada escaño para el candidato con más votos, y se acabó el regateo con facciones que se llevaron un puñado de distritos. Los partidos más pequeños advierten de que sus votantes quedarían apartados del poder para siempre."
+ },
+ "amendment_petition_events.28.f": {
+  "en": "\\\"Why should a party that won one vote in ten decide who governs?\\\"\\n\\n\\\"Because one voter in ten,\\\" said the man from the small party, \\\"is still a great many people.\\\"",
+  "es": "—¿Por qué habría de decidir quién gobierna un partido que obtuvo uno de cada diez votos?\\n\\n—Porque uno de cada diez votantes —dijo el hombre del partido pequeño— sigue siendo mucha gente."
+ },
+ "amendment_petition_events.28.t": {
+  "en": "Two Parties Are Enough",
+  "es": "Bastan dos partidos"
+ },
  "amendment_petition_events.3.a": {
   "en": "Print the laws in both tongues.",
   "es": "Imprimamos las leyes en ambas lenguas."
@@ -23058,6 +23078,50 @@
  "te_demog_wave.9.t": {
   "en": "The Overspill",
   "es": "El desbordamiento"
+ },
+ "te_fptp_events.1.a": {
+  "en": "Whoever tops the poll takes the seat, as before.",
+  "es": "El escaño es para quien obtenga más votos, como hasta ahora."
+ },
+ "te_fptp_events.1.b": {
+  "en": "Share out the seats by the vote.",
+  "es": "Repartamos los escaños por representación proporcional."
+ },
+ "te_fptp_events.1.b.tt": {
+  "en": "First Past the Post ends: smaller parties can win interest groups again, and later changes of voting law won't ask about it.",
+  "es": "Termina el Escrutinio mayoritario uninominal: los partidos más pequeños vuelven a poder atraer a grupos de interés, y los cambios posteriores de ley electoral no volverán a plantear la cuestión."
+ },
+ "te_fptp_events.1.d": {
+  "en": "The new voting law has taken effect, and the old rule for counting votes has lapsed with the law it was attached to. The [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] want each seat to go, as before, to whoever tops the poll in the district. Reformers say this is the moment to share out the seats by each party's share of the vote, so that no vote is wasted.",
+  "es": "La nueva ley electoral ha entrado en vigor, y la antigua norma de recuento de votos ha caducado junto con la ley a la que estaba vinculada. El grupo de interés [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] quiere que cada escaño siga yendo, como antes, a quien obtenga más votos en el distrito. Los reformistas dicen que es el momento de repartir los escaños según el porcentaje de votos de cada partido, de modo que ningún voto se desperdicie."
+ },
+ "te_fptp_events.1.f": {
+  "en": "\\\"Under the old rule,\\\" the clerk explained, \\\"the man with the most votes wins, and the others go home.\\\"\\n\\n\\\"And under the new one?\\\"\\n\\n\\\"The others come too, in proportion. You will need a larger hall.\\\"",
+  "es": "—Con la antigua norma —explicó el secretario—, gana el hombre con más votos y los demás se van a casa.\\n\\n—¿Y con la nueva?\\n\\n—Los demás vienen también, en proporción. Necesitará una sala más grande."
+ },
+ "te_fptp_events.1.t": {
+  "en": "Counting the Votes",
+  "es": "El recuento de votos"
+ },
+ "te_fptp_events.2.a": {
+  "en": "Let the strongest candidate win.",
+  "es": "Que gane el candidato más fuerte."
+ },
+ "te_fptp_events.2.b": {
+  "en": "Every party should have the seats its votes earn.",
+  "es": "Cada partido debe tener los escaños que sus votos merecen."
+ },
+ "te_fptp_events.2.d": {
+  "en": "The voting bill is before the legislature, and the [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] have named their price for carrying it: each seat should go to whoever tops the poll in its district. Their party and its great rival would share nearly every seat between them. The smaller parties call it a stitch-up, and they are not wrong.",
+  "es": "El proyecto de ley electoral está ante la asamblea legislativa, y el grupo de interés [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] ha puesto precio a su apoyo: que cada escaño sea para quien obtenga más votos en su distrito. Su partido y su gran rival se repartirían entre ambos casi todos los escaños. Los partidos más pequeños lo llaman un apaño, y no les falta razón."
+ },
+ "te_fptp_events.2.f": {
+  "en": "The map on the committee table was covered in two colors. A third had been there once, in a few scattered districts, but someone had painted over it.\\n\\n\\\"A clean result,\\\" the chairman said. \\\"Clean results make for stable government.\\\"",
+  "es": "El mapa sobre la mesa del comité estaba cubierto de dos colores. Antes había habido un tercero, en unos pocos distritos dispersos, pero alguien lo había tapado con pintura.\\n\\n—Un resultado limpio —dijo el presidente—. Los resultados limpios dan lugar a gobiernos estables."
+ },
+ "te_fptp_events.2.t": {
+  "en": "The Winner Takes All",
+  "es": "El ganador se lo lleva todo"
  },
  "te_inflation.1.a": {
   "en": "Call in every note. We begin again.",

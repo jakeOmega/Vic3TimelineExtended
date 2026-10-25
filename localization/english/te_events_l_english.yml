@@ -148,6 +148,11 @@
  amendment_petition_events.27.d:0 "A ruling by the court system's model has gone viral: a sentence nobody in the courtroom could explain, and an appeal heard by the same model. The [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] giving everyone the right to have an appeal heard by a person."
  amendment_petition_events.27.f:0 "\"Nobody can be judged by a process that no person can be asked about.\""
  amendment_petition_events.27.t:0 "A Human Signature"
+ amendment_petition_events.28.a:0 "Whoever tops the poll wins the seat."
+ amendment_petition_events.28.b:0 "Every vote should count."
+ amendment_petition_events.28.d:0 "Two parties now hold most of the country's political weight, and the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask that our elections recognize it: each seat to the candidate with the most votes, and no more bargaining with factions that carried a handful of districts. The smaller parties warn that their voters would be shut out of power for good."
+ amendment_petition_events.28.f:0 "\"Why should a party that won one vote in ten decide who governs?\"\n\n\"Because one voter in ten,\" said the man from the small party, \"is still a great many people.\""
+ amendment_petition_events.28.t:0 "Two Parties Are Enough"
  amendment_petition_events.3.a:0 "Print the laws in both tongues."
  amendment_petition_events.3.b:0 "The state has one language. Let it stay that way."
  amendment_petition_events.3.d:0 "Discontent is spreading among our largest minority, and the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] propose an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] that would make the minority's language co-official: laws printed in both tongues, courts and offices obliged to answer in either. The cost of a second set of clerks, they argue, is smaller than the cost of a garrison."
@@ -5869,6 +5874,21 @@
  te_demog_wave.9.d:0 "[SCOPE.sState('te_wave_state').GetName] has outgrown itself. #v [SCOPE.sState('te_wave_state').MakeScope.ScriptValue('te_demog_mt_shown_share')|0]%#! of its city dwellers live in its one great city, crowded at ten times what its land can comfortably hold, and shanty districts creep along the railway lines and the river flats faster than the drains can follow them."
  te_demog_wave.9.f:0 "\"The map in your office is three years out of date, Minister.\"\n\n\"It was printed last spring.\"\n\n\"Then it is a year out of date. The district I grew up in had cabbage fields in it. Now it has eleven thousand people, two standpipes and a police post that closes at dusk.\"\n\n\"And what do you propose?\"\n\n\"Buy a new map. Then decide whether to draw a line on it, or to let the city keep drawing them for you.\""
  te_demog_wave.9.t:0 "The Overspill"
+
+#
+# TE_FPTP_EVENTS
+#
+ te_fptp_events.1.a:0 "Whoever tops the poll takes the seat, as before."
+ te_fptp_events.1.b:0 "Share out the seats by the vote."
+ te_fptp_events.1.b.tt:0 "First Past the Post ends: smaller parties can win interest groups again, and later changes of voting law won't ask about it."
+ te_fptp_events.1.d:0 "The new voting law has taken effect, and the old rule for counting votes has lapsed with the law it was attached to. The [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] want each seat to go, as before, to whoever tops the poll in the district. Reformers say this is the moment to share out the seats by each party's share of the vote, so that no vote is wasted."
+ te_fptp_events.1.f:0 "\"Under the old rule,\" the clerk explained, \"the man with the most votes wins, and the others go home.\"\n\n\"And under the new one?\"\n\n\"The others come too, in proportion. You will need a larger hall.\""
+ te_fptp_events.1.t:0 "Counting the Votes"
+ te_fptp_events.2.a:0 "Let the strongest candidate win."
+ te_fptp_events.2.b:0 "Every party should have the seats its votes earn."
+ te_fptp_events.2.d:0 "The voting bill is before the legislature, and the [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] have named their price for carrying it: each seat should go to whoever tops the poll in its district. Their party and its great rival would share nearly every seat between them. The smaller parties call it a stitch-up, and they are not wrong."
+ te_fptp_events.2.f:0 "The map on the committee table was covered in two colors. A third had been there once, in a few scattered districts, but someone had painted over it.\n\n\"A clean result,\" the chairman said. \"Clean results make for stable government.\""
+ te_fptp_events.2.t:0 "The Winner Takes All"
 
 #
 # TE_INFLATION

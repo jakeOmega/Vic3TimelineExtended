@@ -1,0 +1,269 @@
+﻿# First Past the Post effects (amendment_first_past_the_post).
+# Design: docs/superpowers/specs/2026-10-25-first-past-the-post-design.md.
+#
+# Country variables:
+#   te_fptp_major_<party type>  the party is one of the two largest (one per type)
+#   te_fptp_two_majors          two or more parties are active, so the two are marked
+#   te_fptp_var                 the country holds first past the post: set while it
+#                               is in force, kept on a law without elections, gone
+#                               after a repeal or a declined te_fptp_events.1
+#   te_fptp_seed_checked        te_fptp_seed has run
+# Interest-group variable:
+#   te_fptp_major_member        the group belongs to one of the two largest parties
+#
+# The join_weight terms read the major marks. They are set here, on the monthly
+# pulse, not inside join_weight: every group re-picks its party at once when a
+# campaign starts, so "largest right now" is undefined there.
+
+# Country scope. The monthly pulse (te_fptp_country_pulse).
+te_fptp_monthly = {
+	te_fptp_seed = yes
+	te_fptp_track_held = yes
+	te_fptp_refresh_major_parties = yes
+	te_fptp_selfcheck = yes
+}
+
+# Country scope. Ranks the active parties by their members' clout and marks the
+# two largest. The revolutionary party is never ranked. With fewer than two
+# parties nothing is marked, and the join_weight terms stay off.
+te_fptp_refresh_major_parties = {
+	save_scope_as = te_fptp_country
+	te_fptp_clear_major_marks = yes
+	if = {
+		limit = {
+			any_active_party = {
+				count >= 2
+				NOT = { is_party_type = revolutionary_party }
+			}
+		}
+		set_variable = te_fptp_two_majors
+		# ordered_* sorts descending: position 0 is the largest.
+		ordered_active_party = {
+			limit = { NOT = { is_party_type = revolutionary_party } }
+			order_by = te_fptp_party_clout
+			position = 0
+			check_range_bounds = no
+			te_fptp_mark_major_party = yes
+		}
+		ordered_active_party = {
+			limit = { NOT = { is_party_type = revolutionary_party } }
+			order_by = te_fptp_party_clout
+			position = 1
+			check_range_bounds = no
+			te_fptp_mark_major_party = yes
+		}
+	}
+}
+
+# Party scope, with scope:te_fptp_country saved. Marks this party and its
+# members. One line per party type, as te_fptp_party_is_major reads them.
+te_fptp_mark_major_party = {
+	every_member = {
+		set_variable = te_fptp_major_member
+	}
+	if = {
+		limit = { is_party_type = agrarian_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_agrarian_party }
+	}
+	else_if = {
+		limit = { is_party_type = anarchist_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_anarchist_party }
+	}
+	else_if = {
+		limit = { is_party_type = communist_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_communist_party }
+	}
+	else_if = {
+		limit = { is_party_type = conservative_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_conservative_party }
+	}
+	else_if = {
+		limit = { is_party_type = fascist_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_fascist_party }
+	}
+	else_if = {
+		limit = { is_party_type = free_trade_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_free_trade_party }
+	}
+	else_if = {
+		limit = { is_party_type = liberal_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_liberal_party }
+	}
+	else_if = {
+		limit = { is_party_type = military_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_military_party }
+	}
+	else_if = {
+		limit = { is_party_type = radical_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_radical_party }
+	}
+	else_if = {
+		limit = { is_party_type = religious_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_religious_party }
+	}
+	else_if = {
+		limit = { is_party_type = social_democrat_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_social_democrat_party }
+	}
+	else_if = {
+		limit = { is_party_type = green_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_green_party }
+	}
+	else_if = {
+		limit = { is_party_type = populist_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_populist_party }
+	}
+	else_if = {
+		limit = { is_party_type = technocratic_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_technocratic_party }
+	}
+}
+
+# Country scope. Takes every major mark off the country and its groups.
+te_fptp_clear_major_marks = {
+	remove_variable = te_fptp_two_majors
+	remove_variable = te_fptp_major_agrarian_party
+	remove_variable = te_fptp_major_anarchist_party
+	remove_variable = te_fptp_major_communist_party
+	remove_variable = te_fptp_major_conservative_party
+	remove_variable = te_fptp_major_fascist_party
+	remove_variable = te_fptp_major_free_trade_party
+	remove_variable = te_fptp_major_liberal_party
+	remove_variable = te_fptp_major_military_party
+	remove_variable = te_fptp_major_radical_party
+	remove_variable = te_fptp_major_religious_party
+	remove_variable = te_fptp_major_social_democrat_party
+	remove_variable = te_fptp_major_green_party
+	remove_variable = te_fptp_major_populist_party
+	remove_variable = te_fptp_major_technocratic_party
+	every_interest_group = {
+		remove_variable = te_fptp_major_member
+	}
+}
+
+# Country scope. Once per country: a country vanilla's culture-based two-party
+# term covered (te_fptp_seed_eligible) gets the amendment, so it keeps a
+# two-party system: the Confederacy when it forms, Texas, and the USA in a save
+# from before the amendment existed (a new game's USA has it from history).
+# Once only, so a repeal sticks.
+te_fptp_seed = {
+	if = {
+		limit = { NOT = { has_variable = te_fptp_seed_checked } }
+		set_variable = te_fptp_seed_checked
+		if = {
+			limit = {
+				te_fptp_seed_eligible = yes
+				NOT = { te_fptp_in_force = yes }
+			}
+			te_fptp_save_sponsor = yes
+			active_law:lawgroup_distribution_of_power ?= {
+				add_amendment = {
+					type = amendment_first_past_the_post
+					sponsor = scope:te_fptp_sponsor_ig
+				}
+			}
+			set_variable = te_fptp_var
+		}
+	}
+}
+
+# Country scope. Keeps te_fptp_var: set while the amendment is in force, gone
+# when the country sits on a law the amendment allows without it (a repeal, or
+# a declined te_fptp_events.1). On a law without elections the variable stays,
+# so te_fptp_events.1 asks again when elections return.
+te_fptp_track_held = {
+	if = {
+		limit = { te_fptp_in_force = yes }
+		set_variable = te_fptp_var
+	}
+	else_if = {
+		limit = {
+			has_variable = te_fptp_var
+			te_fptp_on_allowed_voting_law = yes
+		}
+		remove_variable = te_fptp_var
+	}
+}
+
+# Country scope. Saves scope:te_fptp_sponsor_ig: the group with the most clout
+# in one of the two largest parties, or with the most clout of all when no
+# party is marked.
+te_fptp_save_sponsor = {
+	if = {
+		limit = { any_interest_group = { has_variable = te_fptp_major_member } }
+		ordered_interest_group = {
+			limit = { has_variable = te_fptp_major_member }
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_fptp_sponsor_ig
+		}
+	}
+	else = {
+		ordered_interest_group = {
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_fptp_sponsor_ig
+		}
+	}
+}
+
+# Country scope. Saves scope:te_fptp_outsider_ig: the group with the most clout
+# outside the two largest parties, if any.
+te_fptp_save_outsider = {
+	ordered_interest_group = {
+		limit = {
+			NOT = { has_variable = te_fptp_major_member }
+			is_marginal = no
+		}
+		order_by = ig_clout
+		position = 0
+		check_range_bounds = no
+		save_scope_as = te_fptp_outsider_ig
+	}
+}
+
+# Country scope, after te_fptp_refresh_major_parties. Once a game, the first
+# time a country with three or more parties is ranked:
+#   OK      exactly two parties marked, none unmarked larger than the second,
+#           and the second's clout above 0
+#   BROKEN  the ranking failed: ordered_active_party by a script value, or the
+#           every_member clout sum. Fallback: rank by momentum
+#           (docs/testing/first-past-the-post-playtest.md).
+te_fptp_selfcheck = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_fptp_majors_checked }
+			any_active_party = {
+				count >= 3
+				NOT = { is_party_type = revolutionary_party }
+			}
+		}
+		set_global_variable = te_fptp_majors_checked
+		save_scope_as = te_fptp_country
+		set_variable = { name = te_fptp_chk_second value = te_fptp_second_party_clout }
+		set_global_variable = { name = te_fptp_chk_second value = var:te_fptp_chk_second }
+		set_global_variable = { name = te_fptp_chk_marked value = te_fptp_marked_party_count }
+		set_global_variable = { name = te_fptp_chk_outranked value = te_fptp_outranking_minor_count }
+		set_global_variable = {
+			name = te_fptp_chk_parties
+			value = {
+				value = 0
+				every_active_party = { add = 1 }
+			}
+		}
+		if = {
+			limit = {
+				global_var:te_fptp_chk_marked = 2
+				global_var:te_fptp_chk_outranked = 0
+				var:te_fptp_chk_second > 0
+			}
+			debug_log = "TE_SELF_CHECK OK fptp_major_parties (two largest of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0] marked; second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2])"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN fptp_major_parties (of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0], marked=[SCOPE.ScriptValue('te_fptp_chk_marked_g')|0] (want 2), unmarked larger than the second=[SCOPE.ScriptValue('te_fptp_chk_outranked_g')|0] (want 0), second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2] (want above 0): ordered_active_party by te_fptp_party_clout or its every_member sum failed; see docs/testing/first-past-the-post-playtest.md)"
+		}
+		remove_variable = te_fptp_chk_second
+	}
+}
