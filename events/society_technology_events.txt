@@ -1687,7 +1687,7 @@ society_technology_events.18 = {
 		NOT = { has_variable = ste_event_18_fired }
 		OR = {
 			AND = {
-				has_game_rule = space_race_enabled
+				sr_space_race_on = yes
 				has_variable = sr_colony_count
 				var:sr_colony_count > 0
 			}
@@ -1764,7 +1764,7 @@ society_technology_events.19 = {
 		NOT = { has_variable = ste_event_19_fired }
 		OR = {
 			AND = {
-				has_game_rule = space_race_enabled
+				sr_space_race_on = yes
 				has_variable = sr_colony_count
 				var:sr_colony_count > 0
 				has_variable = ste_event_18_fired

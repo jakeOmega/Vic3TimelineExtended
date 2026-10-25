@@ -27,7 +27,7 @@ ICON_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md
 # The system tabs: (tab key, the rule its gates read, its slot on the strip).
 # One strip, as vanilla's Diplomacy panel holds its five: Nation (always open,
 # no rule) in the first slot, then these four.
-ALL_TABS = [("space_race", "has_game_rule = space_race_enabled", "second"),
+ALL_TABS = [("space_race", "sr_space_race_on = yes", "second"),
             ("grand_monuments", "gm_system_enabled = yes", "third"),
             ("colonial_empire", "has_game_rule = decolonization_enabled", "fourth"),
             ("seabed", "te_global_commons_enabled = yes", "fifth")]
@@ -457,7 +457,7 @@ class StripTest(unittest.TestCase):
         self.assertIn("has_variable = te_seabed_shared", _txt_block(self.sguis, "te_window_seabed_tab_sgui"))
         for m in SR:
             gate = _txt_block(self.sguis, f"te_window_space_race_{m}_sgui")
-            self.assertIn("has_game_rule = space_race_enabled", gate)
+            self.assertIn("sr_space_race_on = yes", gate)
             self.assertIn(f"has_journal_entry = je_space_race_{m}\n", gate)
 
     def test_the_checklists_are_the_entries_own_tests(self):

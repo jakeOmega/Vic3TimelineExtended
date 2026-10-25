@@ -137,8 +137,24 @@ decolonization_rule = {
 	}
 }
 
+# Four settings (colony record design § 10): full and simple colonies, races
+# only and off. Races only is today's system and keeps the name
+# space_race_enabled, so a save from before the change keeps it. Each setting
+# has one flag, named after it; script reads the rule through the gates in
+# common/scripted_triggers/sr_site_triggers.txt (sr_space_race_on,
+# sr_colonies_contested_enabled, sr_colonies_full_enabled), never through a
+# bare has_game_rule = space_race_enabled, which is races only alone. Races
+# only stays the default until the later slices ship (scope § 9).
 space_race_rule = {
 	default = space_race_enabled
+
+	space_race_colonies_full = {
+		flag = space_race_colonies_full
+	}
+
+	space_race_colonies_simple = {
+		flag = space_race_colonies_simple
+	}
 
 	space_race_enabled = {
 		flag = space_race_enabled

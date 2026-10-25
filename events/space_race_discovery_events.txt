@@ -14,7 +14,7 @@ space_race_discovery_events.1 = {
 	flavor = space_race_discovery_events.1.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_europa_life_pending
 		NOT = { has_variable = sr_discovery_europa_life_done }
@@ -48,7 +48,7 @@ space_race_discovery_events.2 = {
 	flavor = space_race_discovery_events.2.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_europa_vents_pending
 		NOT = { has_variable = sr_discovery_europa_vents_done }
@@ -82,7 +82,7 @@ space_race_discovery_events.3 = {
 	flavor = space_race_discovery_events.3.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_enceladus_life_pending
 		NOT = { has_variable = sr_discovery_enceladus_life_done }
@@ -116,7 +116,7 @@ space_race_discovery_events.4 = {
 	flavor = space_race_discovery_events.4.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_titan_chemistry_pending
 		NOT = { has_variable = sr_discovery_titan_chemistry_done }
@@ -150,7 +150,7 @@ space_race_discovery_events.5 = {
 	flavor = space_race_discovery_events.5.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_hellas_fossils_pending
 		NOT = { has_variable = sr_discovery_hellas_fossils_done }
@@ -184,7 +184,7 @@ space_race_discovery_events.6 = {
 	flavor = space_race_discovery_events.6.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_olympus_tubes_pending
 		NOT = { has_variable = sr_discovery_olympus_tubes_done }
@@ -218,7 +218,7 @@ space_race_discovery_events.7 = {
 	flavor = space_race_discovery_events.7.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_utopia_glacier_pending
 		NOT = { has_variable = sr_discovery_utopia_glacier_done }
@@ -252,7 +252,7 @@ space_race_discovery_events.8 = {
 	flavor = space_race_discovery_events.8.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_arcadia_brines_pending
 		NOT = { has_variable = sr_discovery_arcadia_brines_done }
@@ -286,7 +286,7 @@ space_race_discovery_events.9 = {
 	flavor = space_race_discovery_events.9.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_ceres_reservoir_pending
 		NOT = { has_variable = sr_discovery_ceres_reservoir_done }
@@ -320,7 +320,7 @@ space_race_discovery_events.10 = {
 	flavor = space_race_discovery_events.10.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_vesta_impactor_pending
 		NOT = { has_variable = sr_discovery_vesta_impactor_done }
@@ -354,7 +354,7 @@ space_race_discovery_events.11 = {
 	flavor = space_race_discovery_events.11.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_psyche_metal_pending
 		NOT = { has_variable = sr_discovery_psyche_metal_done }
@@ -388,7 +388,7 @@ space_race_discovery_events.12 = {
 	flavor = space_race_discovery_events.12.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_pallas_water_pending
 		NOT = { has_variable = sr_discovery_pallas_water_done }
@@ -422,7 +422,7 @@ space_race_discovery_events.13 = {
 	flavor = space_race_discovery_events.13.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_venus_waves_pending
 		NOT = { has_variable = sr_discovery_venus_waves_done }
@@ -456,7 +456,7 @@ space_race_discovery_events.14 = {
 	flavor = space_race_discovery_events.14.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_mercury_archive_pending
 		NOT = { has_variable = sr_discovery_mercury_archive_done }
@@ -490,7 +490,7 @@ space_race_discovery_events.15 = {
 	flavor = space_race_discovery_events.15.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_io_roof_pending
 		NOT = { has_variable = sr_discovery_io_roof_done }
@@ -524,7 +524,7 @@ space_race_discovery_events.16 = {
 	flavor = space_race_discovery_events.16.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_ganymede_layers_pending
 		NOT = { has_variable = sr_discovery_ganymede_layers_done }
@@ -558,7 +558,7 @@ space_race_discovery_events.17 = {
 	flavor = space_race_discovery_events.17.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_callisto_archive_pending
 		NOT = { has_variable = sr_discovery_callisto_archive_done }
@@ -592,7 +592,7 @@ space_race_discovery_events.18 = {
 	flavor = space_race_discovery_events.18.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_titania_ocean_pending
 		NOT = { has_variable = sr_discovery_titania_ocean_done }
@@ -626,7 +626,7 @@ space_race_discovery_events.19 = {
 	flavor = space_race_discovery_events.19.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_triton_jet_pending
 		NOT = { has_variable = sr_discovery_triton_jet_done }
@@ -660,7 +660,7 @@ space_race_discovery_events.20 = {
 	flavor = space_race_discovery_events.20.f
 	duration = 3
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		sr_has_space_colony = yes
 		has_variable = sr_discovery_pluto_antifreeze_pending
 		NOT = { has_variable = sr_discovery_pluto_antifreeze_done }

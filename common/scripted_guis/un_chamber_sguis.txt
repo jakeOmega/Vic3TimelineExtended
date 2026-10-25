@@ -1906,7 +1906,7 @@ un_chamber_space_race_rule_sgui = {
 	scope = country
 
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 	}
 	ai_is_valid = { always = no }
 

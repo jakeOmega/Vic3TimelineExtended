@@ -8987,6 +8987,11 @@ template article_input_items {
 		visible = "[And(ArticleDraft.RequiresInput('company'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
 	}
 
+	### BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
+	article_input_building_type_generic = {
+		visible = "[And(ArticleDraft.RequiresInput('building_type'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
+	}
+
 	### LAW LIST
 	article_input_law_list = {
 		visible = "[ArticleDraft.HasType('law_commitment')]"
@@ -9067,6 +9072,11 @@ template article_input_fixed_bottom {
 			### COMPANY (GENERIC)
 			selected_company_generic = {
 				visible = "[And(ArticleDraft.RequiresInput('company'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
+			}
+
+			### BUILDING TYPE (GENERIC, TE)
+			selected_building_type_generic = {
+				visible = "[And(ArticleDraft.RequiresInput('building_type'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
 			}
 
 			### LAW
@@ -11544,6 +11554,122 @@ types article_input_types
 		}
 	}
 
+	### BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
+	# Vanilla lists building types only after a company, for
+	# acquire_monopoly_for_company. Cede Colony (te_cede_colony) names a colony
+	# by a building type alone, one hidden type per world, which its
+	# building_type_valid_trigger narrows to the source's colonies.
+	type article_input_building_type_generic = flowcontainer {
+		parentanchor = hcenter
+		direction = vertical
+
+		default_header_clean_faded = {
+			layoutpolicy_horizontal = expanding
+			size = { 300 44 }
+
+			blockoverride "text" {
+				text = "ARTICLE_INPUT_SELECT_BUILDING_TYPE_HEADER"
+			}
+		}
+
+		empty_state = {
+			blockoverride "visible" {
+				visible = "[IsDataModelEmpty(ArticleDraft.GetValidBuildingTypes)]"
+			}
+
+			blockoverride "text" {
+				text = "NONE"
+			}
+
+			blockoverride "size" {
+				minimumsize = { 300 -1 }
+				maximumsize = { 300 -1 }
+			}
+		}
+
+		article_input_building_type_list_generic = {
+			parentanchor = hcenter
+			datamodel = "[ArticleDraft.GetValidBuildingTypes]"
+		}
+	}
+
+	type article_input_building_type_list_generic = dynamicgridbox {
+		datamodel_wrap = 3
+		flipdirection = yes
+
+		item = {
+			container = {
+				grid_button = {
+					visible = "[Not(ObjectsEqual(ArticleDraft.GetBuildingType.Self, BuildingType.Self))]"
+
+					blockoverride "min_width" {
+						min_width = 100
+					}
+
+					blockoverride "properties" {
+						onclick = "[ArticleDraft.SetBuildingType(BuildingType.Self)]"
+					}
+
+					blockoverride "texture" {
+						texture = "[BuildingType.GetIcon]"
+					}
+
+					blockoverride "text_middle" {
+						text = "[BuildingType.GetNameNoFormatting]"
+					}
+
+					blockoverride "default_button" {
+						using = default_button
+					}
+				}
+
+				widget = {
+					visible = "[ObjectsEqual(ArticleDraft.GetBuildingType.Self, BuildingType.Self)]"
+					size = { -1 120 }
+					min_width = 100
+
+					background = {
+						using = paper_bg
+					}
+
+					widget = {
+						parentanchor = hcenter
+						size = { 50 50 }
+						position = { 0 5 }
+
+						icon = {
+							parentanchor = center
+							size = { 200% 200% }
+							using = rotate_glow_animation_02
+						}
+
+						icon = {
+							size = { 100% 100% }
+							parentanchor = center
+							texture = "[BuildingType.GetIcon]"
+						}
+					}
+
+					textbox = {
+						align = hcenter|nobaseline
+						position = { 0 -16 }
+						size = { 95% 50 }
+						parentanchor = hcenter|bottom
+						using = fontsize_small
+						multiline = yes
+						margin_left = 5
+						margin_right = 5
+						text = "[BuildingType.GetNameNoFormatting]"
+					}
+
+					icon = {
+						using = highlighted_square_selection
+					}
+				}
+			}
+		}
+	}
+
 	### COMPANY LIST FILTERED TO SOURCE COUNTRY ONLY
 	type article_input_company_list_source_only = dynamicgridbox {
 		datamodel_wrap = 3
@@ -12196,6 +12322,44 @@ types article_input_types
 
 			textbox = {
 				visible = "[Not(ArticleDraft.HasInputValue('company'))]"
+				parentanchor = vcenter
+				align = nobaseline
+				autoresize = yes
+				using = elide_fontsize_min
+				max_width = 300
+				alpha = 0.3
+				text = "NONE"
+			}
+		}
+	}
+
+	### SELECTED BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
+	type selected_building_type_generic = container {
+		minimumsize = { 400 50 }
+
+		flowcontainer = {
+			parentanchor = center
+			spacing = 5
+
+			icon = {
+				visible = "[ArticleDraft.HasInputValue('building_type')]"
+				parentanchor = vcenter
+				size = { 40 40 }
+				texture = "[ArticleDraft.GetBuildingType.GetIcon]"
+			}
+
+			textbox = {
+				visible = "[ArticleDraft.HasInputValue('building_type')]"
+				parentanchor = vcenter
+				align = nobaseline
+				autoresize = yes
+				using = elide_fontsize_min
+				max_width = 300
+				text = "[ArticleDraft.GetBuildingType.GetName]"
+			}
+
+			textbox = {
+				visible = "[Not(ArticleDraft.HasInputValue('building_type'))]"
 				parentanchor = vcenter
 				align = nobaseline
 				autoresize = yes
