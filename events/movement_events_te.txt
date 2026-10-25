@@ -123,7 +123,7 @@ movement_events_te.1 = {
 			}
 		}
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_multicultural
 			}
 		}

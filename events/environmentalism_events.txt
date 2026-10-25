@@ -181,7 +181,7 @@ environmentalism_events.3 = {
 		}
 		# Environmentalist IG leader gains ideology
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -240,12 +240,12 @@ environmentalism_events.4 = {
 		}
 		# Convert both Intelligentsia and Trade Union leaders to environmentalists
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
 		ig:ig_trade_unions ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -592,7 +592,7 @@ environmentalism_events.8 = {
 			}
 		}
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -1146,7 +1146,7 @@ environmentalism_events.15 = {
 		# Side with environmentalists - even the industrialists must concede at 3 C
 		# Comes with severe economic and political fallout
 		ig:ig_industrialists ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
