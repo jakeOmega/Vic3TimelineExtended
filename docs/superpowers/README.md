@@ -44,7 +44,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 
 | Doc | Status | What's left |
 |-----|--------|-------------|
-| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, space power through launch windows, sieges), colony population and modules | Scoping menu, nothing built | The owner's calls in §9 (D1-D15); then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
+| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, fleets with a location and a transit timer, blockades and sieges), colony population, modules and Extraplanetary Bases from colonies, and an off/simple/full rule | Scoping menu, nothing built; the owner's first answers folded in (§ Decisions) | The open calls in §11; then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
 
 ## Archived — `archive/`
 
