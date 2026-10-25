@@ -423,9 +423,29 @@
   "en": "#lore unknown#!",
   "de": "#lore unbekannt#!"
  },
+ "je_colonial_empire_bloc_alone": {
+  "en": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people. No neighbouring state of ours is their [concept_homeland], so it would go alone.",
+  "de": "#v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! Einwohner. Kein angrenzender Staat von uns ist ihr [concept_homeland], daher würde er allein gehen."
+ },
  "je_colonial_empire_bloc_member_line": {
   "en": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! people",
   "de": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! Menschen"
+ },
+ "je_colonial_empire_bloc_people": {
+  "en": "Released, it forms a nation of its #v [SCOPE.sCulture('ce_bloc_culture').GetName]#! people.",
+  "de": "Nach der Entlassung entsteht eine Nation aus dem Volk der Kultur #v [SCOPE.sCulture('ce_bloc_culture').GetName]#!."
+ },
+ "je_colonial_empire_bloc_states": {
+  "en": "It takes with it every neighbouring state of ours where they are at home, so one release takes all #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! of these, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! people:",
+  "de": "Jeder angrenzende Staat von uns, in dem dieses Volk zu Hause ist, geht mit; eine Entlassung nimmt also alle #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! davon mit, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_population')|D]#! Einwohner:"
+ },
+ "je_colonial_empire_bloc_states_tail": {
+  "en": "#lore And smaller ones, #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! states in all.#!",
+  "de": "#lore Dazu kleinere, insgesamt #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_states')|0]#! Staaten.#!"
+ },
+ "je_colonial_empire_bloc_weight": {
+  "en": "Its weight on stability: #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight')|=+2]#! a month, through [concept_acceptance] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_acceptance')|=+2]#! and [concept_colonial_overreach] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_overreach')|=+2]#!, before the monthly limit. Releasing it takes that away.",
+  "de": "Gewicht für die Stabilität: #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight')|=+2]#! im Monat, durch [concept_acceptance] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_acceptance')|=+2]#! und [concept_colonial_overreach] #v [SCOPE.sState('ce_state').MakeScope.ScriptValue('colonial_bloc_disp_weight_overreach')|=+2]#!, vor der monatlichen Obergrenze. Mit der Entlassung entfällt das."
  },
  "je_colonial_empire_btn_accords": {
   "en": "Accords Signed",
@@ -568,8 +588,8 @@
   "de": "Um wie viel sich der Balken diesen Monat bewegt: die Zeilen darüber, nach der monatlichen Begrenzung."
  },
  "je_colonial_empire_fail_tt": {
-  "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories break away as independent nations, each taking the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programmes let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
-  "de": "Scheitert, wenn der Balken der Kolonialen Stabilität #R 0#! erreicht — das koloniale System bricht zusammen. Bis zu drei koloniale Gebiete spalten sich als unabhängige Nationen ab, jede nimmt die verbundenen Länder mit, die das [concept_homeland] ihres Volkes sind. Der [concept_liberty_desire] unserer kolonialen Untertanen schnellt in die Höhe, und dieser Journaleintrag kann zehn Jahre lang nicht zurückkehren. Sofern uns nicht jahrelange Entwicklungs- oder Assimilationsprogramme erlauben, den Rückzug auszuhandeln, kostet der Zusammenbruch zudem für Jahre [concept_prestige] und [concept_sol]."
+  "en": "Fails when the Colonial Stability bar reaches #R 0#! — the colonial system collapses. Up to three colonial territories declare independence, the most restless first, two months apart; each declaration can be conceded, negotiated or fought, and each that goes takes the connected lands that are its people's [concept_homeland]. Our colonial subjects' [concept_liberty_desire] surges, and this journal cannot return for ten years. Unless years of development or assimilation programmes let us negotiate the withdrawal, the collapse also costs [concept_prestige] and [concept_sol] for years.",
+  "de": "Scheitert, wenn der Balken der Kolonialen Stabilität #R 0#! erreicht — das koloniale System bricht zusammen. Bis zu drei koloniale Gebiete erklären ihre Unabhängigkeit, die unruhigsten zuerst, im Abstand von zwei Monaten; jede Erklärung kann hingenommen, ausgehandelt oder bekämpft werden, und jedes Gebiet, das geht, nimmt die verbundenen Länder mit, die das [concept_homeland] seines Volkes sind. Der [concept_liberty_desire] unserer kolonialen Klientelländer schnellt in die Höhe, und dieser Journaleintrag kann zehn Jahre lang nicht zurückkehren. Sofern uns nicht jahrelange Entwicklungs- oder Assimilationsprogramme erlauben, den Rückzug auszuhandeln, kostet der Zusammenbruch zudem für Jahre [concept_prestige] und [concept_sol]."
  },
  "je_colonial_empire_history_header": {
   "en": "History",
@@ -578,6 +598,30 @@
  "je_colonial_empire_holdings_header": {
   "en": "Colonial Holdings",
   "de": "Kolonialbesitz"
+ },
+ "je_colonial_empire_holdings_subjects": {
+  "en": "Colonial Subjects: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
+  "de": "Koloniale Klientelländer: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
+ },
+ "je_colonial_empire_holdings_subjects_tt": {
+  "en": "#header Colonial subjects#!\\nOur subjects, and their own subjects, that count as colonial: every colony and chartered company, and a protectorate separated from our capital by sea whose people share no [concept_heritage_trait] with ours. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
+  "de": "#header Koloniale Klientelländer#!\\nUnsere Klientelländer und deren eigene Klientelländer, die als kolonial gelten: jede Kolonie und jede Handelsgesellschaft sowie ein Protektorat, das auf dem Seeweg von unserer Hauptstadt getrennt ist und dessen Volk mit uns kein [concept_heritage_trait] teilt. Jedes davon hält diesen Eintrag am Laufen. Sie bewegen den Stabilitätsbalken nicht selbst, aber im Band „Angespannt“ und darunter steigt ihr [concept_liberty_desire] jeden Monat. Monatlich aktualisiert."
+ },
+ "je_colonial_empire_holdings_territories": {
+  "en": "Territories: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
+  "de": "Gebiete: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, davon Kolonien: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
+ },
+ "je_colonial_empire_holdings_territories_tt": {
+  "en": "#header Our territories#!\\nEvery state we hold that is separated from our capital by sea (not joined to it over land through our own states), is not a [concept_homeland] of our cultures, has at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and is not settled land: no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of its people are of our primary cultures. Each can be released from its row, and Planned Full Decolonization releases them all. A territory shares its row with the states one release would take with it.\\nThe ones with the colony icon lit are or hold colonies: they meet the indigenous, the living-standards or the unincorporated test, and any one of them keeps this entry running. The others count only for release. Updated monthly.",
+  "de": "#header Unsere Gebiete#!\\nJeder Staat in unserem Besitz, der auf dem Seeweg von unserer Hauptstadt getrennt ist (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), kein [concept_homeland] unserer Kulturen ist, mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohner hat, von denen mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! zu einem Volk gehören, das mit uns kein [concept_heritage_trait] teilt, und kein Siedlungsland ist: Höchstens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! seiner Bevölkerung gehören zu unseren primären Kulturen. Jeder kann in seiner Zeile entlassen werden, und Geplante vollständige Dekolonisierung entlässt alle. Ein Gebiet teilt sich seine Zeile mit den Staaten, die eine Entlassung mit sich nähme.\\nDie mit leuchtendem Kolonie-Symbol sind Kolonien oder umfassen welche: Sie erfüllen den Indigenen-, den Lebensstandard- oder den Eingliederungstest, und jeder einzelne von ihnen hält diesen Eintrag am Laufen. Die übrigen zählen nur für die Entlassung. Monatlich aktualisiert."
+ },
+ "je_colonial_empire_holdings_wars": {
+  "en": "Wars of Independence: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!",
+  "de": "Unabhängigkeitskriege: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!"
+ },
+ "je_colonial_empire_holdings_wars_tt": {
+  "en": "#header Wars of independence#!\\nEvery war we are fighting to keep a colony: a territory whose declaration we chose to fight, a colonial subject at war for its independence, or a colony's secession. Each drains [concept_colonial_stability], and the years of all of them together cost [concept_legitimacy]. Updated monthly.",
+  "de": "#header Unabhängigkeitskriege#!\\nJeder Krieg, den wir führen, um eine Kolonie zu halten: ein Gebiet, dessen Erklärung wir bekämpfen wollten, ein koloniales Klientelland im Krieg um seine Unabhängigkeit oder die Abspaltung einer Kolonie. Jeder zehrt an der [Concept('concept_colonial_stability', 'Kolonialen Stabilität')], und die Jahre aller zusammen kosten [concept_legitimacy]. Monatlich aktualisiert."
  },
  "je_colonial_empire_holdings_whole": {
   "en": "The Whole Empire",
@@ -596,8 +640,8 @@
   "de": "Der Eintrag wird gewonnen, indem der Balken lange genug bei 100 gehalten wird (die Übersicht zählt die Monate, sobald das Reich in der Stufe Gefestigt ist), oder durch den Beschluss des Imperiale-Föderation-Akts oder des Zivilisierungsmissionspakts. Er scheitert, wenn der Balken 0 erreicht, und endet ohne Strafe, sobald wir keine Kolonie und kein koloniales Klientelland mehr halten."
  },
  "je_colonial_empire_how_decolonization": {
-  "en": "Each decision opens an event that lists what it would release before anything happens: up to three candidates, largest first, for a single release, or every candidate for Planned Full Decolonization. Every event offers to reconsider. A territory is a candidate if it lies overseas, is populous enough and is not a homeland of our cultures. A Round Table Conference accepts only a territory with no severely unaccepted population.",
-  "de": "Jede Entscheidung öffnet ein Ereignis, das auflistet, was sie freigeben würde, bevor etwas geschieht: bis zu drei Kandidaten, die größten zuerst, bei einer einzelnen Freigabe, oder alle Kandidaten bei der Geplanten vollständigen Dekolonisierung. Jedes Ereignis bietet an, die Entscheidung zu überdenken. Ein Gebiet ist Kandidat, wenn es in Übersee liegt, bevölkerungsreich genug ist und nicht das Heimatland unserer Kulturen ist. Eine Konferenz am Runden Tisch nimmt nur ein Gebiet ohne kaum akzeptierte Bevölkerung an."
+  "en": "Each territory in Colonial Holdings has a Release button, and each colonial subject has Release and, for a colony, Dominion. A button opens a decision on that one target before anything happens; Reconsider is always offered, and is the default. A released territory leaves with every neighbouring state of ours where its people are at home. It can go by our own grant, or at a Round Table Conference if none of its people is severely unaccepted and we have more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! [concept_authority]: the Landowners resent it, but the new country starts on better terms with us and stability recovers for longer. Freeing a subject makes it a former colony, as a released territory is. Raising a colony to a dominion is vanilla's own step up in autonomy: it stays our subject but no longer counts as colonial. Planned Full Decolonization releases every territory at once. One decision can be open at a time.",
+  "de": "Jedes Gebiet in „Kolonialbesitz“ hat eine Schaltfläche „Entlassen“, und jedes koloniale Klientelland hat „Entlassen“ und, bei einer Kolonie, „Dominion“. Eine Schaltfläche öffnet eine Entscheidung zu genau diesem Ziel, bevor etwas geschieht; „Überdenken“ wird immer angeboten und ist die Vorgabe. Ein entlassenes Gebiet geht mit jedem angrenzenden Staat von uns, in dem sein Volk zu Hause ist. Es kann durch unsere eigene Gewährung gehen oder auf einer Rundtischkonferenz, wenn niemand aus seiner Bevölkerung kaum akzeptiert ist und wir mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_round_table_authority')|0]#! [concept_authority] haben: Die Grundbesitzer nehmen das übel, aber das neue Land startet in einem besseren Verhältnis zu uns, und die Stabilität erholt sich über einen längeren Zeitraum. Ein Klientelland zu befreien macht es zu einer ehemaligen Kolonie, wie ein entlassenes Gebiet. Eine Kolonie zum Dominion zu erheben ist der Schritt des Basisspiels zu mehr Autonomie: Sie bleibt unser Klientelland, zählt aber nicht mehr als kolonial. Geplante vollständige Dekolonisierung entlässt alle Gebiete auf einmal. Es kann jeweils nur eine Entscheidung offen sein."
  },
  "je_colonial_empire_how_header": {
   "en": "How the Colonial Empire Works",
@@ -636,8 +680,8 @@
   "de": "Kolonialprogramme"
  },
  "je_colonial_empire_negotiated_tt": {
-  "en": "Up to three colonial territories peacefully gain independence, with retained ties to the metropole.",
-  "de": "Bis zu drei koloniale Gebiete erlangen friedlich ihre Unabhängigkeit, wobei die Bindungen zum Mutterland erhalten bleiben."
+  "en": "Up to three colonial territories declare independence, two months apart, each to be conceded, negotiated or fought, and the empire keeps its ties to those it lets go.",
+  "de": "Bis zu drei koloniale Gebiete erklären im Abstand von zwei Monaten ihre Unabhängigkeit, die jeweils zugestanden, ausgehandelt oder bekämpft werden kann, und das Reich behält die Bindungen zu denen, die es ziehen lässt."
  },
  "je_colonial_empire_ov_act": {
   "en": "Months Solidified: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
@@ -678,6 +722,14 @@
  "je_colonial_empire_ov_heading_tt": {
   "en": "#header Where it is heading#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. The #G green#! stretch on the bar is the rise to come, the #R red#! stretch what would be lost. The rate is assessed again every month.",
   "de": "#header Wohin es sich bewegt#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] Monaten bei der Rate dieses Monats: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. Die #G grüne#! Strecke auf dem Balken ist der kommende Anstieg, die #R rote#! Strecke das, was verloren ginge. Die Rate wird jeden Monat neu bewertet."
+ },
+ "je_colonial_empire_ov_held": {
+  "en": "Colonies: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!  ·  Colonial subjects: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
+  "de": "Kolonien: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!  ·  Koloniale Klientelländer: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
+ },
+ "je_colonial_empire_ov_held_tt": {
+  "en": "#header Why this entry runs#!\\nIt runs while we hold at least one colony or colonial subject, and ends without penalty once we hold neither.\\n• A colony is a territory overseas, not a [concept_homeland] of our cultures, with at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of them of our primary cultures, where another culture is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and poorly accepted, or the [concept_sol] is below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! of our average.\\n• A colonial subject is a colony or chartered company of ours or of our subjects, or a protectorate with land overseas whose people share no heritage with ours.\\nColonial Holdings, below, lists each one with its buttons.",
+  "de": "#header Warum dieser Eintrag läuft#!\\nEr läuft, solange wir mindestens eine Kolonie oder ein koloniales Klientelland halten, und endet ohne Strafe, sobald wir keines von beidem mehr halten.\\n• Eine Kolonie ist ein Gebiet in Übersee, das kein [concept_homeland] unserer Kulturen ist, mit mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern, von denen höchstens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! unseren primären Kulturen angehören, und zwar entweder, wenn eine andere Kultur mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! der Bevölkerung stellt und schlecht akzeptiert wird, oder wenn der [concept_sol] unter #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! unseres Durchschnitts liegt.\\n• Ein koloniales Klientelland ist eine Kolonie oder Handelsgesellschaft von uns oder unseren Klientelländern oder ein Protektorat mit Land in Übersee, dessen Volk mit uns kein gemeinsames Erbe teilt.\\nDer „Kolonialbesitz“ weiter unten führt jedes einzeln mit seinen Schaltflächen auf."
  },
  "je_colonial_empire_ov_hold": {
   "en": "Months at 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
@@ -831,33 +883,85 @@
   "en": "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
   "de": "#O Das Kolonialreich steht unter Druck.#! Wachsende Spannungen und internationaler Druck bedrohen unsere Kontrolle."
  },
+ "je_colonial_empire_subject_gdp_tt": {
+  "en": "[concept_gdp]: @money! #v [State.GetCountry.MakeScope.ScriptValue('colonial_subject_disp_gdp')|D]#! a year.",
+  "de": "[concept_gdp]: @money! #v [State.GetCountry.MakeScope.ScriptValue('colonial_subject_disp_gdp')|D]#! pro Jahr."
+ },
  "je_colonial_empire_subject_head_gdp": {
   "en": "GDP",
   "de": "BIP"
+ },
+ "je_colonial_empire_subject_head_gdp_tt": {
+  "en": "Its [concept_gdp] a year. The list runs from the largest down.",
+  "de": "Sein [concept_gdp] pro Jahr. Die Liste läuft vom größten abwärts."
  },
  "je_colonial_empire_subject_head_kind": {
   "en": "Kind",
   "de": "Art"
  },
+ "je_colonial_empire_subject_head_kind_tt": {
+  "en": "What kind of [concept_subject] it is. Hover the icon for why it counts as colonial.",
+  "de": "Welche Art von [concept_subject] es ist. Fahren Sie über das Symbol, um zu sehen, warum es als kolonial zählt."
+ },
+ "je_colonial_empire_subject_head_ld_tt": {
+  "en": "[concept_liberty_desire]. Hover a figure for its level and its weekly change.",
+  "de": "[concept_liberty_desire]. Fahren Sie über eine Zahl, um ihre Stufe und ihre wöchentliche Änderung zu sehen."
+ },
  "je_colonial_empire_subject_head_name": {
   "en": "Subject",
   "de": "Klientelland"
+ },
+ "je_colonial_empire_subject_head_name_tt": {
+  "en": "A colonial [concept_subject] of ours, or of one of our subjects. Its flag opens the country.",
+  "de": "Ein koloniales [concept_subject] von uns oder einem unserer Klientelländer. Seine Flagge öffnet das Land."
+ },
+ "je_colonial_empire_subject_ld_tt": {
+  "en": "[concept_liberty_desire]: #v [State.GetCountry.GetLibertyDesireRaw|0]#! ([State.GetCountry.CalcLibertyDesireLevel.GetNameNoFormatting]), #v [State.GetCountry.GetWeeklyLibertyDesireChange|+1]#! a week.\\nIn the Strained band and below, every colonial subject of ours gains more of it each month.",
+  "de": "[concept_liberty_desire]: #v [State.GetCountry.GetLibertyDesireRaw|0]#! ([State.GetCountry.CalcLibertyDesireLevel.GetNameNoFormatting]), #v [State.GetCountry.GetWeeklyLibertyDesireChange|+1]#! pro Woche.\\nIm Band „Angespannt“ und darunter gewinnt jedes unserer kolonialen Klientelländer jeden Monat mehr davon."
+ },
+ "je_colonial_empire_subject_name_tt": {
+  "en": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\n[State.GetCountry.GetCustom('colonial_subject_reason_custom')]",
+  "de": "#header [State.GetCountry.GetNameNoFormatting]#!\\nHauptstadt: [State.GetName]\\n[State.GetCountry.GetCustom('colonial_subject_reason_custom')]"
+ },
+ "je_colonial_empire_subject_reason_colony": {
+  "en": "A colony. Release frees it; Dominion makes it a dominion, a looser tie that no longer counts as colonial.",
+  "de": "Eine Kolonie. „Entlassen“ befreit sie; „Dominion“ macht sie zu einem Dominion, einer lockereren Bindung, die nicht mehr als kolonial zählt."
+ },
+ "je_colonial_empire_subject_reason_company": {
+  "en": "A chartered company. A company has no looser kind of subject to become, so its way out is independence.",
+  "de": "Eine Handelsgesellschaft. Sie kann keine lockerere Art von Klientelland werden, ihr Ausweg ist daher die Unabhängigkeit."
  },
  "je_colonial_empire_subject_reason_other": {
   "en": "A colonial subject.",
   "de": "Ein koloniales Klientelland."
  },
+ "je_colonial_empire_subject_reason_protectorate": {
+  "en": "A protectorate separated from our capital by sea, whose people share no [concept_heritage_trait] with ours. A protectorate has no looser kind of subject to become, so its way out is independence.",
+  "de": "Ein Protektorat, das auf dem Seeweg von unserer Hauptstadt getrennt ist und dessen Volk mit uns kein [concept_heritage_trait] teilt. Ein Protektorat kann keine lockerere Art von Klientelland werden, sein Ausweg ist daher die Unabhängigkeit."
+ },
+ "je_colonial_empire_subjects_caption": {
+  "en": "#lore Largest GDP first. Release grants independence. Dominion makes a colony a dominion, a looser tie that no longer counts as colonial. Each opens a decision first.#!",
+  "de": "#lore Größtes BIP zuerst. „Entlassen“ gewährt die Unabhängigkeit. „Dominion“ macht eine Kolonie zum Dominion, einer lockereren Bindung, die nicht mehr als kolonial zählt. Beides öffnet zuerst eine Entscheidung.#!"
+ },
  "je_colonial_empire_subjects_more": {
   "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects_more')|0] more",
   "de": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects_more')|0] weitere"
+ },
+ "je_colonial_empire_subjects_more_head": {
+  "en": "#header Every colonial subject, largest GDP first#!",
+  "de": "#header Alle kolonialen Klientelländer, größtes BIP zuerst#!"
+ },
+ "je_colonial_empire_subjects_none": {
+  "en": "#lore We hold no colonial subject.#!",
+  "de": "#lore Wir haben kein koloniales Klientelland.#!"
  },
  "je_colonial_empire_supporter_entry_tt": {
   "en": "#G Supporting#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)",
   "de": "#G Unterstützend#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)"
  },
  "je_colonial_empire_territories_caption": {
-  "en": "#lore Largest GDP first. A lit icon: counted as a colony. A red figure: the test that makes it one.#!",
-  "de": "#lore Größtes BIP zuerst. Ein leuchtendes Symbol: wird als Kolonie gezählt. Eine rote Zahl: der Test, der es dazu macht.#!"
+  "en": "#lore Largest GDP first. A territory shares its row with the states one release would take with it (+N). A lit icon: a colony among them. A red figure: the test that makes it one. Hover a name for the states, the people who would form the new nation and the weight on stability. Release opens a decision on that row alone.#!",
+  "de": "#lore Größtes BIP zuerst. Ein Gebiet teilt sich seine Zeile mit den Staaten, die eine Entlassung mit sich nähme (+N). Ein leuchtendes Symbol: eine Kolonie darunter. Eine rote Zahl: der Test, der eine Kolonie daraus macht. Fahren Sie über einen Namen für die Staaten, das Volk, das die neue Nation bilden würde, und das Gewicht für die Stabilität. „Entlassen“ öffnet eine Entscheidung nur für diese Zeile.#!"
  },
  "je_colonial_empire_territories_more": {
   "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more')|0] more",
@@ -876,64 +980,64 @@
   "de": "#lore Kein Gebiet kommt infrage.#!"
  },
  "je_colonial_empire_territory_colony_tt": {
-  "en": "#header Counted as a colony#!\\nIt meets the indigenous or the living-standards test (its red figure), so it counts toward [concept_colonial_overreach], and drains stability while any of its people are severely unaccepted.",
-  "de": "#header Wird als Kolonie gezählt#!\\nEs erfüllt den Indigenen- oder den Lebensstandard-Test (seine rote Zahl), zählt daher zur [Concept('concept_colonial_overreach', 'Imperialen Überdehnung')] und entzieht Stabilität, solange Teile seiner Bevölkerung kaum akzeptiert werden."
+  "en": "#header Counted as a colony#!\\nIt, or a state that would leave with it, is held down by one of three tests: the indigenous or the living-standards test (its red figure), or it is an [concept_unincorporated_state] (#v [State.MakeScope.ScriptValue('colonial_bloc_disp_unincorporated')|0]#! of its states are). So it counts toward [concept_colonial_overreach], and drains stability while any of its people are severely unaccepted.",
+  "de": "#header Wird als Kolonie gezählt#!\\nEs, oder ein Staat, der mit ihm ginge, erfüllt einen von drei Tests: den Indigenen- oder den Lebensstandard-Test (seine rote Zahl) oder die Bedingung, ein [concept_unincorporated_state] zu sein (#v [State.MakeScope.ScriptValue('colonial_bloc_disp_unincorporated')|0]#! seiner Staaten sind es). Daher zählt es zur [Concept('concept_colonial_overreach', 'Imperialen Überdehnung')] und entzieht Stabilität, solange Teile seiner Bevölkerung kaum akzeptiert werden."
  },
  "je_colonial_empire_territory_gdp_tt": {
-  "en": "[concept_gdp]: @money! #v [State.MakeScope.ScriptValue('colonial_territory_disp_gdp')|D]#! a year.",
-  "de": "[concept_gdp]: @money! #v [State.MakeScope.ScriptValue('colonial_territory_disp_gdp')|D]#! pro Jahr."
+  "en": "[concept_gdp]: @money! #v [State.MakeScope.ScriptValue('colonial_bloc_disp_gdp')|D]#! a year, with every state that would leave with it.",
+  "de": "[concept_gdp]: @money! #v [State.MakeScope.ScriptValue('colonial_bloc_disp_gdp')|D]#! pro Jahr, mit jedem Staat, der mit ihm ginge."
  },
  "je_colonial_empire_territory_head_gdp": {
   "en": "GDP",
   "de": "BIP"
  },
  "je_colonial_empire_territory_head_gdp_tt": {
-  "en": "Its [concept_gdp] a year. The list runs from the largest down.",
-  "de": "Sein [concept_gdp] pro Jahr. Die Liste läuft vom größten abwärts."
+  "en": "Its [concept_gdp] a year, with the states that would leave with it. The list runs from the largest down.",
+  "de": "Sein [concept_gdp] pro Jahr, samt den Staaten, die mit ihm gingen. Die Liste läuft vom größten abwärts."
  },
  "je_colonial_empire_territory_head_name": {
   "en": "Territory",
   "de": "Gebiet"
  },
  "je_colonial_empire_territory_head_name_tt": {
-  "en": "Every territory the decolonization decisions can offer: overseas, not a [concept_homeland] of our cultures, and with at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people. Updated monthly.",
-  "de": "Jedes Gebiet, das die Dekolonisierungsentscheidungen anbieten können: in Übersee, kein [concept_homeland] unserer Kulturen und mit mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern. Monatlich aktualisiert."
+  "en": "Every territory the decolonization decisions can offer: separated from our capital by sea (not joined to it over land through our own states), not a [concept_homeland] of our cultures, with at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of them of our primary cultures. A release takes every neighbouring state of ours where its people are at home, so those states share its row: #v +N#! after the name. Updated monthly.",
+  "de": "Jedes Gebiet, das die Dekolonisierungsentscheidungen anbieten können: auf dem Seeweg von unserer Hauptstadt getrennt (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), kein [concept_homeland] unserer Kulturen, mit mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern, von denen mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! zu einem Volk gehören, das mit uns kein [concept_heritage_trait] teilt, und höchstens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! zu unseren primären Kulturen. Eine Entlassung nimmt jeden angrenzenden Staat von uns mit, in dem sein Volk zu Hause ist; diese Staaten teilen sich daher seine Zeile: #v +N#! nach dem Namen. Monatlich aktualisiert."
  },
  "je_colonial_empire_territory_head_primary": {
   "en": "Primary",
   "de": "Primär"
  },
  "je_colonial_empire_territory_head_primary_tt": {
-  "en": "The share of its people of our primary cultures. #R Red#! when the indigenous test makes it a colony.",
-  "de": "Der Anteil seiner Bevölkerung, der unseren primären Kulturen angehört. #R Rot#!, wenn der Indigenen-Test es zur Kolonie macht."
+  "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
+  "de": "Der Anteil seiner Bevölkerung, der unseren primären Kulturen angehört, über alle Staaten, die gemeinsam gingen. #R Rot#!, wenn der Indigenen-Test einen davon zur Kolonie macht. Über #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! ist ein Gebiet Siedlungsland, keine Kolonie, und wird nicht aufgeführt."
  },
  "je_colonial_empire_territory_head_sol": {
   "en": "SoL",
   "de": "Lebensstd."
  },
  "je_colonial_empire_territory_head_sol_tt": {
-  "en": "Its average [concept_sol]. #R Red#! when the living-standards test makes it a colony.",
-  "de": "Sein durchschnittlicher [concept_sol]. #R Rot#!, wenn der Lebensstandard-Test es zur Kolonie macht."
+  "en": "Its average [concept_sol], weighted by people across the states that would leave together. #R Red#! when the living-standards test makes one of them a colony.",
+  "de": "Sein durchschnittlicher [concept_sol], nach Einwohnern gewichtet über alle Staaten, die gemeinsam gingen. #R Rot#!, wenn der Lebensstandard-Test einen davon zur Kolonie macht."
  },
  "je_colonial_empire_territory_not_colony_tt": {
-  "en": "#header Not counted as a colony#!\\nIt meets neither test, so it adds no [concept_colonial_overreach]. The decisions can still release it.",
-  "de": "#header Wird nicht als Kolonie gezählt#!\\nEs erfüllt keinen der beiden Tests und erhöht daher die [concept_colonial_overreach] nicht. Die Entscheidungen können es dennoch freigeben."
+  "en": "#header Not counted as a colony#!\\nNone of its states meets any of the three tests: each is incorporated, and neither figure is red. So it adds no [concept_colonial_overreach]. The decisions can still release it.",
+  "de": "#header Wird nicht als Kolonie gezählt#!\\nKeiner seiner Staaten erfüllt einen der drei Tests: Jeder ist eingegliedert, und keine der beiden Zahlen ist rot. Daher erhöht es die [concept_colonial_overreach] nicht. Die Entscheidungen können es dennoch entlassen."
  },
  "je_colonial_empire_territory_primary_bad_tt": {
-  "en": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test: another culture is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of its people and accepted below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #R Met: it counts as a colony.#!",
-  "de": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_primary')|%0]#! seiner Bevölkerung sind Angehörige unserer primären Kulturen (letzter Monat).\\nDer Indigenen-Test: Eine andere Kultur stellt mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! seiner Bevölkerung und wird unterhalb von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#! akzeptiert. #R Erfüllt: Es zählt als Kolonie.#!"
+  "en": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test, in each of its states: a people sharing no [concept_heritage_trait] with ours is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and accepted below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #R Met: a colony.#!",
+  "de": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! seiner Bevölkerung sind Angehörige unserer primären Kulturen (letzter Monat).\\nDer Indigenen-Test in jedem seiner Staaten: Ein Volk, das mit uns kein [concept_heritage_trait] teilt, stellt mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! der Bevölkerung und wird unterhalb von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#! akzeptiert. #R Erfüllt: eine Kolonie.#!"
  },
  "je_colonial_empire_territory_primary_tt": {
-  "en": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test: another culture is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of its people and accepted below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #G Not met.#!",
-  "de": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_primary')|%0]#! seiner Bevölkerung sind Angehörige unserer primären Kulturen (letzter Monat).\\nDer Indigenen-Test: Eine andere Kultur stellt mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! seiner Bevölkerung und wird unterhalb von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#! akzeptiert. #G Nicht erfüllt.#!"
+  "en": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test, in each of its states: a people sharing no [concept_heritage_trait] with ours is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and accepted below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #G Not met.#!",
+  "de": "#v [State.MakeScope.ScriptValue('colonial_bloc_disp_primary')|%0]#! seiner Bevölkerung sind Angehörige unserer primären Kulturen (letzter Monat).\\nDer Indigenen-Test in jedem seiner Staaten: Ein Volk, das mit uns kein [concept_heritage_trait] teilt, stellt mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! der Bevölkerung und wird unterhalb von #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#! akzeptiert. #G Nicht erfüllt.#!"
  },
  "je_colonial_empire_territory_sol_bad_tt": {
-  "en": "Average [concept_sol] #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol')|1]#!; the line is #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] of our national average.\\nThe living-standards test: below the line, with any people not of our primary cultures. #R Met: it counts as a colony.#!",
-  "de": "Durchschnittlicher [concept_sol] #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol')|1]#!; die Linie liegt bei #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] unseres nationalen Durchschnitts.\\nDer Lebensstandard-Test: unter der Linie, sofern dort Menschen leben, die nicht unseren primären Kulturen angehören. #R Erfüllt: Es zählt als Kolonie.#!"
+  "en": "Average [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; the line is #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] of our national average.\\nThe living-standards test, in each of its states: below the line, with any people not of our primary cultures. #R Met: a colony.#!",
+  "de": "Durchschnittlicher [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; die Linie liegt bei #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] unseres nationalen Durchschnitts.\\nDer Lebensstandard-Test in jedem seiner Staaten: unter der Linie, sofern dort Menschen leben, die nicht unseren primären Kulturen angehören. #R Erfüllt: eine Kolonie.#!"
  },
  "je_colonial_empire_territory_sol_tt": {
-  "en": "Average [concept_sol] #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol')|1]#!; the line is #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] of our national average.\\nThe living-standards test: below the line, with any people not of our primary cultures. #G Not met.#!",
-  "de": "Durchschnittlicher [concept_sol] #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol')|1]#!; die Linie liegt bei #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] unseres nationalen Durchschnitts.\\nDer Lebensstandard-Test: unter der Linie, sofern dort Menschen leben, die nicht unseren primären Kulturen angehören. #G Nicht erfüllt.#!"
+  "en": "Average [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; the line is #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] of our national average.\\nThe living-standards test, in each of its states: below the line, with any people not of our primary cultures. #G Not met.#!",
+  "de": "Durchschnittlicher [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; die Linie liegt bei #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] unseres nationalen Durchschnitts.\\nDer Lebensstandard-Test in jedem seiner Staaten: unter der Linie, sofern dort Menschen leben, die nicht unseren primären Kulturen angehören. #G Nicht erfüllt.#!"
  },
  "je_colonial_empire_tt_assimilation": {
   "en": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]",
@@ -951,17 +1055,49 @@
   "en": "Ends when all qualifying colonial territories have been voluntarily released — no overseas states or colonial subjects remain — while the Colonial Stability bar is still above zero.",
   "de": "Endet, wenn alle infrage kommenden Kolonialterritorien freiwillig entlassen wurden — es bleiben keine überseeischen Staaten oder Kolonialvasallen mehr — solange die Leiste der Kolonialen Stabilität noch über null steht."
  },
+ "je_colonial_empire_war_backers_tt": {
+  "en": "Great powers arming them: #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#!. Each one's arms make them fight harder, up to three.",
+  "de": "Großmächte, die sie bewaffnen: #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#!. Die Waffen jeder einzelnen lassen sie härter kämpfen, bis zu drei."
+ },
  "je_colonial_empire_war_head_backers": {
   "en": "Backers",
   "de": "Unterstützer"
+ },
+ "je_colonial_empire_war_head_backers_tt": {
+  "en": "Great powers arming them. Up to three count.",
+  "de": "Großmächte, die sie bewaffnen. Bis zu drei zählen."
  },
  "je_colonial_empire_war_head_months": {
   "en": "Months",
   "de": "Monate"
  },
+ "je_colonial_empire_war_head_months_tt": {
+  "en": "Months at war. #R Red#! while our [concept_war_support] in it is at the red line, #v 25#! or below.",
+  "de": "Monate im Krieg. #R Rot#!, solange unsere [concept_war_support] darin an der roten Linie liegt, bei #v 25#! oder darunter."
+ },
  "je_colonial_empire_war_head_name": {
   "en": "Fighting us",
   "de": "Kämpft gegen uns"
+ },
+ "je_colonial_empire_war_head_name_tt": {
+  "en": "The country at war with us for its independence, and on hover where it rose.",
+  "de": "Das Land, das für seine Unabhängigkeit Krieg gegen uns führt, und beim Darüberfahren, wo es sich erhoben hat."
+ },
+ "je_colonial_empire_war_months_bad_tt": {
+  "en": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months at war (last month). Our [concept_war_support] in it is at the red line or below: a year of that, four years in, and the home front breaks.",
+  "de": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! Monate im Krieg (letzter Monat). Unsere [concept_war_support] darin liegt an der roten Linie oder darunter: ein Jahr davon, vier Jahre nach Kriegsbeginn, und die Heimatfront bricht zusammen."
+ },
+ "je_colonial_empire_war_months_tt": {
+  "en": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months at war (last month). Our [concept_war_support] in it is above the red line.",
+  "de": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! Monate im Krieg (letzter Monat). Unsere [concept_war_support] darin liegt über der roten Linie."
+ },
+ "je_colonial_empire_war_name_tt": {
+  "en": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\nAt war with us for #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months; #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! great powers arm them.",
+  "de": "#header [State.GetCountry.GetNameNoFormatting]#!\\nHauptstadt: [State.GetName]\\nSeit #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! Monaten im Krieg mit uns; bewaffnet von #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! Großmächten."
+ },
+ "je_colonial_empire_wars_caption": {
+  "en": "#lore Holding their land does not end a war of independence: only their capitulation, or a peace, does. Open Talks begins the accords.#!",
+  "de": "#lore Das Besetzen ihres Landes beendet keinen Unabhängigkeitskrieg: nur ihre Kapitulation oder ein Frieden tut das. „Verhandlungen aufnehmen“ leitet die Abkommen ein.#!"
  },
  "je_covert_warfare": {
   "en": "Covert Warfare",
@@ -2595,6 +2731,26 @@
   "en": "#bold Approach#!",
   "de": "#bold Vorgehensweise#!"
  },
+ "je_space_race_widget_cf_destination_auto": {
+  "en": "The programme chooses where our next colony fleet goes: a world of the current stage, drawn the month it leaves. Pick one with Target in the Solar System list.",
+  "de": "Das Programm wählt, wohin unsere nächste Kolonieflotte fliegt: eine Welt der aktuellen Stufe, in dem Monat ausgelost, in dem sie abfliegt. Wählen Sie mit „Anvisieren“ in der Liste „Sonnensystem“ eine aus."
+ },
+ "je_space_race_widget_cf_destination_auto_contested": {
+  "en": "The programme chooses where our next colony fleet goes: the best world it can reach within 15 years, near and cheap first, avoiding worlds a rival will reach first. Pick one with Target in the Solar System list, even a far one.",
+  "de": "Das Programm wählt, wohin unsere nächste Kolonieflotte fliegt: die beste Welt, die sie innerhalb von 15 Jahren erreichen kann, nahe und günstige zuerst, unter Meidung von Welten, die ein Rivale zuerst erreichen wird. Wählen Sie mit „Anvisieren“ in der Liste „Sonnensystem“ eine aus, auch eine ferne."
+ },
+ "je_space_race_widget_cf_destination_target": {
+  "en": "Our next colony fleet goes to #v [JournalEntry.GetCountry.GetCustom('sr_cf_target_name')]#!, our choice in the Solar System list. Clear it there to let the programme choose again.",
+  "de": "Unsere nächste Kolonieflotte fliegt zu #v [JournalEntry.GetCountry.GetCustom('sr_cf_target_name')]#!, unsere Wahl in der Liste „Sonnensystem“. Heben Sie sie dort mit „Aufheben“ auf, damit das Programm wieder wählt."
+ },
+ "je_space_race_widget_cf_drive_line": {
+  "en": "Drive: #v [JournalEntry.GetCountry.GetCustom('sr_cf_drive_name')]#!",
+  "de": "Antrieb: #v [JournalEntry.GetCountry.GetCustom('sr_cf_drive_name')]#!"
+ },
+ "je_space_race_widget_cf_drive_tt": {
+  "en": "#header Drives#!\\nThe drive sets how long a colony fleet takes to reach its world.\\n• #v Chemical#!: the classic transfer orbits, in launch windows. About 9 months to Mars, 33 to Jupiter, 16 years to Uranus, 50 to the Kuiper Belt.\\n• #v Fusion#! (Fusion Power): about 3 months to Mars, 8 to Jupiter, 3 years to Uranus, in a window; slower outside one.\\n• #v Fusion torch#! (Muon-Catalyzed Fusion Reactors): any month, about 1 month to Mars and a year to the Kuiper Belt.\\n• #v Antimatter#! (Antimatter Production and an Antimatter Containment Facility): any month, 1 to 4 months anywhere.",
+  "de": "#header Antriebe#!\\nDer Antrieb bestimmt, wie lange eine Kolonieflotte bis zu ihrer Welt braucht.\\n• #v Chemisch#!: die klassischen Transferbahnen, in Startfenstern. Etwa 9 Monate bis zum Mars, 33 bis zum Jupiter, 16 Jahre bis zum Uranus, 50 bis zum Kuipergürtel.\\n• #v Fusionsantrieb#! (Fusionsenergie): etwa 3 Monate bis zum Mars, 8 bis zum Jupiter, 3 Jahre bis zum Uranus, in einem Fenster; außerhalb eines Fensters langsamer.\\n• #v Fusionsfackel#! (Myonenkatalysierte Fusionsreaktoren): in jedem Monat, etwa 1 Monat bis zum Mars und ein Jahr bis zum Kuipergürtel.\\n• #v Antimaterieantrieb#! (Antimaterieproduktion und eine Antimaterie-Eindämmungsanlage): in jedem Monat, 1 bis 4 Monate überallhin."
+ },
  "je_space_race_widget_cf_in_flight_figure": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] of 6",
   "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] von 6"
@@ -2602,6 +2758,10 @@
  "je_space_race_widget_cf_in_flight_label": {
   "en": "Fleets in flight",
   "de": "Flotten unterwegs"
+ },
+ "je_space_race_widget_cf_races_only_note": {
+  "en": "Under Races Only a colony is founded the month its fleet leaves.",
+  "de": "Bei „Nur Wettläufe“ wird eine Kolonie in dem Monat gegründet, in dem ihre Flotte abfliegt."
  },
  "je_space_race_widget_cf_slot_1_eta": {
   "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])",
@@ -2667,6 +2827,10 @@
   "en": "Extraplanetary Base levels / room",
   "de": "Stufen / Raum des Außerplanetaren Stützpunkts"
  },
+ "je_space_race_widget_ebase_tt": {
+  "en": "#header Extraplanetary Base Room#!\\nThe near-Earth asteroids give room for 10 Extraplanetary Base levels, and each colony we hold adds its own, from 10 levels to 60 at 16 Psyche. Our levels work the best room first, at its grade: the metal asteroids raise their output, the outer moons lower it. A level past all of our room works at -50%. Our levels now work at [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]% throughput on average.",
+  "de": "#header Raum des Außerplanetaren Stützpunkts#!\\nDie erdnahen Asteroiden bieten Raum für 10 Stufen des Außerplanetaren Stützpunkts, und jede Kolonie, die wir halten, fügt ihren eigenen hinzu, von 10 Stufen bis zu 60 bei 16 Psyche. Unsere Stufen nutzen zuerst den besten Raum und arbeiten mit dessen Güte: Die Metallasteroiden steigern ihre Leistung, die äußeren Monde senken sie. Eine Stufe jenseits unseres gesamten Raums arbeitet mit -50%. Unsere Stufen arbeiten derzeit im Durchschnitt mit [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]% Durchsatz."
+ },
  "je_space_race_widget_emig_label": {
   "en": "Emigration",
   "de": "Auswanderung"
@@ -2690,6 +2854,10 @@
  "je_space_race_widget_emig_month_label": {
   "en": "Settlers a month",
   "de": "Siedler pro Monat"
+ },
+ "je_space_race_widget_emig_month_tt": {
+  "en": "#header Emigration#!\\nLow sends 500 settlers a month, Steady 1,000 and High 2,000, half middle strata and half lower, from the state of our Space Program, while our colonies have room. Each colony's share is its priority times its free room.\\nEach level raises the Space Program's Launch Capacity bill:\\n[GetStaticModifier('sr_emigration_programme').GetDesc]",
+  "de": "#header Auswanderung#!\\n„Gering“ schickt 500 Siedler im Monat, „Stetig“ 1.000 und „Hoch“ 2.000, zur Hälfte aus der Mittel- und zur Hälfte aus der Unterschicht, aus dem Staat unseres Raumfahrtprogramms, solange unsere Kolonien Raum haben. Der Anteil jeder Kolonie ergibt sich aus ihrer Priorität mal ihrem freien Raum.\\nJede Stufe erhöht die Rechnung für die Startkapazität des Raumfahrtprogramms:\\n[GetStaticModifier('sr_emigration_programme').GetDesc]"
  },
  "je_space_race_widget_emig_prio_0": {
   "en": "Closed",
@@ -2751,6 +2919,10 @@
   "en": "Fabrication a month / in stock",
   "de": "Fertigung pro Monat / auf Lager"
  },
+ "je_space_race_widget_fab_tt": {
+  "en": "#header Module Fabrication#!\\nThe Space Program's Module Fabrication method gives points each month: Orbital Assembly 5, Lunar Foundries 12, Fusion Shipyards 25. Like the rest of the programme, it gives more with the Space Program's throughput (its funding) and less while it is short of staff. Each queued module takes 100. Up to 200 points wait in stock while nothing is queued or every shipment slot is taken.",
+  "de": "#header Modulfertigung#!\\nDie Methode Modulfertigung des Raumfahrtprogramms liefert jeden Monat Punkte: Orbitalmontage 5, Mondgießereien 12, Fusionswerften 25. Wie der Rest des Programms liefert sie mehr mit dem Durchsatz des Raumfahrtprogramms (seiner Finanzierung) und weniger, solange es unterbesetzt ist. Jedes Modul in der Warteschlange benötigt 100. Bis zu 200 Punkte warten auf Lager, solange nichts in der Warteschlange ist oder jeder Lieferplatz belegt ist."
+ },
  "je_space_race_widget_fleets_header": {
   "en": "Colony Fleets",
   "de": "Kolonieflotten"
@@ -2775,6 +2947,14 @@
   "en": "How the Space Race Works",
   "de": "Wie der Wettlauf ins All funktioniert"
  },
+ "je_space_race_widget_how_orbit": {
+  "en": "An anti-satellite strike is a hostile diplomatic action against a country at war with the striker. The striker needs Guided Missiles and a Space Program; the target needs a Space Program or an orbital megaproject, and must not have been struck by anyone in the last 12 months. The strike disrupts the target's orbital network for a year (six months from the Mars Mission on, half as badly with an Orbital Battlestation), adds debris that every country in orbit flies through, and costs the striker infamy, relations and case strength at the UN, twice the infamy and case strength for a party to the Moratorium on Destructive Anti-Satellite Tests. The tab's Orbit section shows the debris, our satellites, the strikes so far, the Moratorium and whether we could strike now.",
+  "de": "Ein Antisatellitenschlag ist eine feindselige diplomatische Handlung gegen ein Land, das sich mit dem Angreifer im Krieg befindet. Der Angreifer braucht Lenkraketen und ein Raumfahrtprogramm; das Ziel braucht ein Raumfahrtprogramm oder ein orbitales Großprojekt und darf in den letzten 12 Monaten von niemandem angegriffen worden sein. Der Schlag stört das Orbitalnetz des Ziels ein Jahr lang (ab der Mars-Mission sechs Monate, mit einer Orbitalen Kampfstation nur halb so stark), erzeugt Weltraumschrott, durch den jedes Land im Orbit fliegt, und kostet den Angreifer Verrufenheit, Beziehungen und Fallstärke bei den Vereinten Nationen, bei einer Partei des Moratoriums für zerstörerische Antisatellitentests die doppelte Verrufenheit und Fallstärke. Der Abschnitt „Orbit“ des Reiters zeigt den Weltraumschrott, unsere Satelliten, die bisherigen Schläge, das Moratorium und ob wir jetzt zuschlagen könnten."
+ },
+ "je_space_race_widget_how_powers": {
+  "en": "The Space Race tab of the Timeline Extended window opens with our first milestone and stays open, whether or not one is under way. Its Space Powers section shows our programme, then every other power in the race, furthest along first: each entry lit once achieved, half-lit while under way, faint otherwise, as in the programme row, and the power's furthest milestone under way with its progress. Ours is exact; a rival's is an estimate in the same band as the Rivals list. The other powers are listed afresh at the start of each month, the first eight as rows and the rest on hover.",
+  "de": "Der Reiter „Wettlauf ins All“ im Fenster „Timeline Extended“ öffnet sich mit unserem ersten Meilenstein und bleibt offen, ob einer läuft oder nicht. Sein Abschnitt „Raumfahrtmächte“ zeigt unser Programm, dann jede andere Macht im Wettlauf, die am weitesten Fortgeschrittenen zuerst: jeder Eintrag hell, sobald erreicht, halbhell, solange er läuft, sonst blass, wie in der Programmzeile, dazu den am weitesten fortgeschrittenen laufenden Meilenstein der Macht mit seinem Fortschritt. Unserer ist exakt; der eines Rivalen ist eine Schätzung im selben Band wie in der Liste „Rivalen“. Die anderen Mächte werden zu Beginn jedes Monats neu aufgeführt, die ersten acht als Zeilen und der Rest beim Darüberfahren."
+ },
  "je_space_race_widget_how_programme": {
   "en": "The row at the foot of the overview is the whole programme: lit once achieved (a flag marks a first), half-lit while under way, faint otherwise. Each entry appears in the journal once the one before it is finished and its technology is researched. Finishing the Interstellar Probe opens Interstellar Probe: Awaiting Data, which counts down the probe's 132-month transit; nothing hurries it. The probe and its wait share one icon in the row, which changes when the probe is launched and again when its data arrives.",
   "de": "Die Zeile am Fuß der Übersicht ist das gesamte Programm: hell, sobald erreicht (eine Flagge kennzeichnet einen Ersten), halbhell, solange es läuft, sonst blass. Jeder Eintrag erscheint im Journal, sobald der vorherige abgeschlossen und seine Technologie erforscht ist. Mit dem Abschluss der Interstellaren Sonde beginnt der Eintrag „Interstellare Sonde: Daten werden erwartet“, der die 132 Monate des Flugs der Sonde herunterzählt; nichts beschleunigt ihn. Die Sonde und ihre Wartezeit teilen sich in der Zeile ein Symbol, das sich ändert, wenn die Sonde gestartet wird, und noch einmal, wenn ihre Daten eintreffen."
@@ -2784,8 +2964,8 @@
   "de": "„Rivalen“ zeigt jede andere Macht, die denselben Meilenstein betreibt und vorantreibt: Spieler und KI-Mächte unter den ersten drei der Weltrangliste. Eine KI-Macht außerhalb der ersten drei kann ein Programm halten, das nie vorankommt, und bleibt daher außen vor. Die ersten fünf erhalten jeweils eine Schätzung ihres Fortschritts, ein Band um eine Markierung: Programme werden angekündigt, ihre Zeitpläne nicht. Das Band beträgt ±25% des Ziels, und der wahre Wert liegt immer darin; die Lage der Markierung im Band wird einmal im Jahr neu ausgelost. Ein Nachrichtendienst-Netzwerk im Land des Rivalen verengt das Band bei Stärke 50 auf ±10% und bei 75 auf ±5%. Weitere Rivalen werden beim Darüberfahren aufgelistet."
  },
  "je_space_race_widget_how_setbacks": {
-  "en": "Each month, every running milestone rolls against its [concept_sr_setback_risk], which stays between 1% and 50% a month. A setback costs progress: Standard and Safe suffer minor setbacks, Ambitious real failures. Most responses to an Ambitious failure also start a six-month post-setback review: no milestone can suffer another setback, and progress continues at full pace. A setback never ends a milestone. In Solar System Colonization it takes its share of one colony's progress at most, so fleets staged in orbit are safe. The estimate ignores setbacks.",
-  "de": "Jeden Monat würfelt jeder laufende Meilenstein gegen sein [concept_sr_setback_risk], das zwischen 1% und 50% im Monat bleibt. Ein Rückschlag kostet Fortschritt: „Standard“ und „Sicher“ erleiden kleinere Rückschläge, „Ehrgeizig“ echte Fehlschläge. Die meisten Reaktionen auf einen Fehlschlag bei „Ehrgeizig“ lösen zudem eine sechsmonatige Überprüfung nach dem Rückschlag aus: Kein Meilenstein kann einen weiteren Rückschlag erleiden, und der Fortschritt läuft mit vollem Tempo weiter. Ein Rückschlag beendet nie einen Meilenstein. In der Besiedlung des Sonnensystems nimmt er höchstens seinen Anteil am Fortschritt einer Kolonie, sodass im Orbit bereitgestellte Flotten sicher sind. Die Schätzung ignoriert Rückschläge."
+  "en": "Each month, every running milestone rolls against its [concept_sr_setback_risk], which stays between 1% and 50% a month. A setback costs months of progress at the pace the programme had when it struck: Standard and Safe suffer minor setbacks of 1 to 4 months, Ambitious real failures of 4 to 6 months of its faster pace. Most responses to an Ambitious failure also start a six-month post-setback review: no milestone can suffer another setback, and progress continues at full pace. A setback never takes more progress than the milestone has and never ends it. In Solar System Colonization it takes one colony's progress at most, so fleets staged in orbit are safe. The estimate ignores setbacks.",
+  "de": "Jeden Monat würfelt jeder laufende Meilenstein gegen sein [concept_sr_setback_risk], das zwischen 1% und 50% im Monat bleibt. Ein Rückschlag kostet Monate an Fortschritt, gemessen am Tempo, das das Programm hatte, als er eintrat: „Standard“ und „Sicher“ erleiden kleinere Rückschläge von 1 bis 4 Monaten, „Ehrgeizig“ echte Fehlschläge von 4 bis 6 Monaten seines schnelleren Tempos. Die meisten Reaktionen auf einen Fehlschlag bei „Ehrgeizig“ lösen zudem eine sechsmonatige Überprüfung nach dem Rückschlag aus: Kein Meilenstein kann einen weiteren Rückschlag erleiden, und der Fortschritt läuft mit vollem Tempo weiter. Ein Rückschlag nimmt nie mehr Fortschritt, als der Meilenstein hat, und beendet ihn nie. In der Besiedlung des Sonnensystems nimmt er höchstens den Fortschritt einer Kolonie, sodass im Orbit bereitgestellte Flotten sicher sind. Die Schätzung ignoriert Rückschläge."
  },
  "je_space_race_widget_how_sub_approach": {
   "en": "Approach and Pace",
@@ -2819,9 +2999,25 @@
   "en": "Setbacks",
   "de": "Rückschläge"
  },
+ "je_space_race_widget_mod_def_tt": {
+  "en": "#header Defences#!\\nWill be what an enemy fleet closing on the colony has to beat. Space fleets are not in the game yet, so Defences do nothing for now. They take a slot and need a crew.",
+  "de": "#header Verteidigungsanlagen#!\\nWerden das sein, was eine feindliche Flotte beim Anflug auf die Kolonie überwinden muss. Raumflotten gibt es im Spiel noch nicht, daher bewirken Verteidigungsanlagen vorerst nichts. Sie belegen einen Platz und brauchen eine Besatzung."
+ },
+ "je_space_race_widget_mod_hab_tt": {
+  "en": "#header Habitat#!\\nEach level adds half of the colony's starting room for people. Habitats need no crew: they house the crews.",
+  "de": "#header Habitat#!\\nJede Stufe fügt die Hälfte des anfänglichen Raums der Kolonie für Menschen hinzu. Habitate brauchen keine Besatzung: Sie beherbergen die Besatzungen."
+ },
+ "je_space_race_widget_mod_port_tt": {
+  "en": "#header Spaceport#!\\nWill repair, refuel and resupply our space fleets at its location. Space fleets are not in the game yet, so a Spaceport does nothing for now. It takes a slot and needs a crew.",
+  "de": "#header Raumhafen#!\\nWird unsere Raumflotten an seinem Standort reparieren, auftanken und versorgen. Raumflotten gibt es im Spiel noch nicht, daher bewirkt ein Raumhafen vorerst nichts. Er belegt einen Platz und braucht eine Besatzung."
+ },
  "je_space_race_widget_mod_upkeep_label": {
   "en": "Module upkeep (throughput)",
   "de": "Modulunterhalt (Durchsatz)"
+ },
+ "je_space_race_widget_mod_upkeep_tt": {
+  "en": "#header Module Upkeep#!\\nEvery module level past each colony's first raises the Space Program's Launch Capacity bill:\\n[GetStaticModifier('sr_module_upkeep').GetDesc]",
+  "de": "#header Modulunterhalt#!\\nJede Modulstufe über der ersten jeder Kolonie erhöht die Rechnung für die Startkapazität des Raumfahrtprogramms:\\n[GetStaticModifier('sr_module_upkeep').GetDesc]"
  },
  "je_space_race_widget_modules_col_b": {
   "en": "II",
@@ -2839,6 +3035,10 @@
   "en": "Port",
   "de": "Hafen"
  },
+ "je_space_race_widget_modules_col_spec_tt": {
+  "en": "#header Specializations I and II#!\\nThe two specializations the colony's founding event offered, in that order. They share four levels: one at 4, both at 2, or 1 and 3. Each level adds the specialization's bonus once more. Hover a colony's level to see what it gives.",
+  "de": "#header Spezialisierungen I und II#!\\nDie beiden Spezialisierungen, die das Gründungsereignis der Kolonie angeboten hat, in dieser Reihenfolge. Sie teilen sich vier Stufen: eine mit 4, beide mit 2 oder 1 und 3. Jede Stufe fügt den Bonus der Spezialisierung ein weiteres Mal hinzu. Fahren Sie über die Stufe einer Kolonie, um zu sehen, was sie bringt."
+ },
  "je_space_race_widget_modules_col_staffing": {
   "en": "Crew",
   "de": "Besatzung"
@@ -2847,6 +3047,14 @@
   "en": "Colony Modules",
   "de": "Koloniemodule"
  },
+ "je_space_race_widget_modules_note": {
+  "en": "Build up each colony with modules. Its two specializations share four levels, and its Habitats, Spaceports and Defences share its slots. The Space Program's Module Fabrication method builds the queue in order, 100 points a module: the first entry is next, and a new one joins at the end, up to 20. A module then waits for its world's launch window and lands after the transit our drive buys.",
+  "de": "Jede Kolonie wird mit Modulen ausgebaut. Ihre beiden Spezialisierungen teilen sich vier Stufen, und ihre Habitate, Raumhäfen und Verteidigungsanlagen teilen sich ihre Plätze. Die Methode Modulfertigung des Raumfahrtprogramms arbeitet die Warteschlange der Reihe nach ab, 100 Punkte je Modul: Der erste Eintrag ist als Nächstes dran, und ein neuer reiht sich am Ende ein, bis zu 20. Ein Modul wartet dann auf das Startfenster seiner Welt und landet nach der Flugzeit, die unser Antrieb erlaubt."
+ },
+ "je_space_race_widget_modules_staffing_tt": {
+  "en": "#header Staffing#!\\nThe share of the colony's modules its crews can run. Every level past the first needs a crew of 5,000 people, except Habitats, which house the crews. An understaffed colony's specializations give that share of their bonus. Artificial General Intelligence runs every module.",
+  "de": "#header Besetzung#!\\nDer Anteil der Module der Kolonie, den ihre Besatzungen betreiben können. Jede Stufe nach der ersten braucht eine Besatzung von 5.000 Menschen, außer den Habitaten, die die Besatzungen beherbergen. Die Spezialisierungen einer unterbesetzten Kolonie liefern diesen Anteil ihres Bonus. Allgemeine Künstliche Intelligenz betreibt jedes Modul."
+ },
  "je_space_race_widget_mq_header": {
   "en": "Queue",
   "de": "Warteschlange"
@@ -2854,6 +3062,10 @@
  "je_space_race_widget_offworld_label": {
   "en": "People off Earth",
   "de": "Menschen außerhalb der Erde"
+ },
+ "je_space_race_widget_offworld_tt": {
+  "en": "#header Off-World Population#!\\nFor every 100,000 of our people on other worlds, up to a million, now ×[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_offworld_units')|1]:\\n[GetStaticModifier('sr_offworld_population').GetDesc]",
+  "de": "#header Bevölkerung außerhalb der Erde#!\\nFür je 100.000 unserer Menschen auf anderen Welten, bis zu einer Million, derzeit ×[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_offworld_units')|1]:\\n[GetStaticModifier('sr_offworld_population').GetDesc]"
  },
  "je_space_race_widget_orbit_header": {
   "en": "Orbit",
@@ -3011,9 +3223,89 @@
   "en": "#header Progress per Month#!\\nEvery running milestone gains this much each month, whatever its approach: what is added, times one plus the multiplier, and never less than 0.5.\\n$TOOLTIP_DELIMITER$\\n#title Added each month:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_add')]\\n#title Multiplier:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_mult')]\\n$TOOLTIP_DELIMITER$\\n#bold Pace:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress')|1]#! a month",
   "de": "#header Fortschritt pro Monat#!\\nJeder laufende Meilenstein gewinnt jeden Monat so viel, unabhängig von seinem Ansatz: der Zuwachs mal eins plus dem Multiplikator, und nie weniger als 0,5.\\n$TOOLTIP_DELIMITER$\\n#title Monatlicher Zuwachs:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_add')]\\n#title Multiplikator:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_mult')]\\n$TOOLTIP_DELIMITER$\\n#bold Tempo:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress')|1]#! im Monat"
  },
+ "je_space_race_widget_power_est_tt": {
+  "en": "#bold An estimate, not a report.#! From what [State.GetCountry.GetName] has announced, its programme stands in this band of its furthest milestone's goal. The band is ±[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] of the goal, and the true figure is always inside it. An intelligence network in the country narrows the band: ±10% at strength 50, ±5% at 75.",
+  "de": "#bold Eine Schätzung, kein Bericht.#! Nach dem, was [State.GetCountry.GetAltName('NOM')] angekündigt hat, liegt das Programm in diesem Band des Ziels seines am weitesten fortgeschrittenen Meilensteins. Das Band beträgt ±[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_band')|%0] des Ziels, und der wahre Wert liegt immer darin. Ein Nachrichtendienst-Netzwerk im Land verengt das Band: ±10% bei Stärke 50, ±5% bei 75."
+ },
+ "je_space_race_widget_power_lead_interstellar_probe": {
+  "en": "Interstellar: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#!",
+  "de": "Interstellar: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe')|%0]#!"
+ },
+ "je_space_race_widget_power_lead_mars_landing": {
+  "en": "Mars Landing: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#!",
+  "de": "Marslandung: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing')|%0]#!"
+ },
+ "je_space_race_widget_power_lead_moon_base": {
+  "en": "Moon Base: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base')|%0]#!",
+  "de": "Mondbasis: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base')|%0]#!"
+ },
+ "je_space_race_widget_power_lead_moon_landing": {
+  "en": "Moon Landing: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#!",
+  "de": "Mondlandung: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing')|%0]#!"
+ },
  "je_space_race_widget_power_lead_none": {
   "en": "Nothing under way",
   "de": "Nichts im Gange"
+ },
+ "je_space_race_widget_power_lead_none_tt": {
+  "en": "No milestone is under way: it is between milestones, waiting on a technology or the milestones before it, or done with the race.",
+  "de": "Kein Meilenstein läuft: Die Macht befindet sich zwischen Meilensteinen, wartet auf eine Technologie oder die vorherigen Meilensteine oder hat den Wettlauf hinter sich."
+ },
+ "je_space_race_widget_power_lead_orbital": {
+  "en": "Orbital Flight: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital')|%0]#!",
+  "de": "Orbitalflug: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital')|%0]#!"
+ },
+ "je_space_race_widget_power_lead_probe": {
+  "en": "Deep-Space Probe: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_probe')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_probe')|%0]#!",
+  "de": "Tiefraumsonde: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_probe')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_probe')|%0]#!"
+ },
+ "je_space_race_widget_power_lead_solar_colonization": {
+  "en": "Next Colony: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization')|%0]#!",
+  "de": "Nächste Kolonie: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization')|%0]#!"
+ },
+ "je_space_race_widget_power_lead_suborbital": {
+  "en": "Suborbital Flight: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital')|%0]#!",
+  "de": "Suborbitalflug: #v [GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital')|%0]–[GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital')|%0]#!"
+ },
+ "je_space_race_widget_power_name_tt": {
+  "en": "#header [State.GetCountry.GetName]#!\\nAchieved: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! of the 8 entries with a goal\\nColonies Held: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_power_colonies')|0]#!",
+  "de": "#header [State.GetCountry.GetName]#!\\nErreicht: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_power_achieved')|0]#! von 8 Einträgen mit einem Ziel\\nGehaltene Kolonien: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_power_colonies')|0]#!"
+ },
+ "je_space_race_widget_power_own_interstellar_probe": {
+  "en": "Interstellar: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_probe')|%0]#!",
+  "de": "Interstellar: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_probe')|%0]#!"
+ },
+ "je_space_race_widget_power_own_mars_landing": {
+  "en": "Mars Landing: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing')|%0]#!",
+  "de": "Marslandung: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing')|%0]#!"
+ },
+ "je_space_race_widget_power_own_moon_base": {
+  "en": "Moon Base: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base')|%0]#!",
+  "de": "Mondbasis: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base')|%0]#!"
+ },
+ "je_space_race_widget_power_own_moon_landing": {
+  "en": "Moon Landing: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_landing')|%0]#!",
+  "de": "Mondlandung: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_landing')|%0]#!"
+ },
+ "je_space_race_widget_power_own_orbital": {
+  "en": "Orbital Flight: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_orbital')|%0]#!",
+  "de": "Orbitalflug: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_orbital')|%0]#!"
+ },
+ "je_space_race_widget_power_own_probe": {
+  "en": "Deep-Space Probe: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_probe')|%0]#!",
+  "de": "Tiefraumsonde: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_probe')|%0]#!"
+ },
+ "je_space_race_widget_power_own_solar_colonization": {
+  "en": "Next Colony: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_solar_colonization')|%0]#!",
+  "de": "Nächste Kolonie: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_solar_colonization')|%0]#!"
+ },
+ "je_space_race_widget_power_own_suborbital": {
+  "en": "Suborbital Flight: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_suborbital')|%0]#!",
+  "de": "Suborbitalflug: #v [State.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_suborbital')|%0]#!"
+ },
+ "je_space_race_widget_power_own_tt": {
+  "en": "Our progress towards the goal of our furthest milestone under way. Each milestone's figures and controls are in its own section below.",
+  "de": "Unser Fortschritt auf dem Weg zum Ziel unseres am weitesten fortgeschrittenen laufenden Meilensteins. Die Zahlen und Bedienelemente jedes Meilensteins stehen unten in seinem eigenen Abschnitt."
  },
  "je_space_race_widget_power_prog_interstellar": {
   "en": "#bold Interstellar Probe#! — [State.GetCountry.GetCustom('sr_power_prog_interstellar')]",
@@ -3055,9 +3347,17 @@
   "en": "+[GetPlayer.MakeScope.ScriptValue('sr_disp_power_more')|0] more",
   "de": "+[GetPlayer.MakeScope.ScriptValue('sr_disp_power_more')|0] weitere"
  },
+ "je_space_race_widget_powers_none": {
+  "en": "No other power is in the space race yet.",
+  "de": "Noch keine andere Macht ist im Wettlauf ins All."
+ },
  "je_space_race_widget_powers_others": {
   "en": "Other Powers",
   "de": "Andere Mächte"
+ },
+ "je_space_race_widget_powers_pending": {
+  "en": "The other powers are listed from the start of next month.",
+  "de": "Die anderen Mächte werden ab Beginn des nächsten Monats aufgeführt."
  },
  "je_space_race_widget_profile_header": {
   "en": "Mission Profile",
@@ -3295,17 +3595,53 @@
   "en": "AGI",
   "de": "AGI"
  },
+ "je_space_race_widget_settlers_agi_note": {
+  "en": "Artificial General Intelligence runs every module: our colonies need no crews.",
+  "de": "Allgemeine Künstliche Intelligenz betreibt jedes Modul: Unsere Kolonien brauchen keine Besatzungen."
+ },
+ "je_space_race_widget_settlers_crews_note": {
+  "en": "People are crews: a colony's people can run one module level for every 5,000 of them. Its founding specialization runs without a crew, as an automated outpost.",
+  "de": "Menschen sind Besatzungen: Die Bevölkerung einer Kolonie kann je 5.000 Menschen eine Modulstufe betreiben. Ihre Gründungsspezialisierung läuft ohne Besatzung, als automatisierter Vorposten."
+ },
+ "je_space_race_widget_settlers_crews_tt": {
+  "en": "Module levels the colony's people can crew, one for every 5,000.",
+  "de": "Modulstufen, die die Bevölkerung der Kolonie besetzen kann, eine je 5.000 Menschen."
+ },
+ "je_space_race_widget_settlers_empty": {
+  "en": "We hold no colony to settle.",
+  "de": "Wir halten keine Kolonie, die wir besiedeln könnten."
+ },
  "je_space_race_widget_settlers_header": {
   "en": "Settlers",
   "de": "Siedler"
+ },
+ "je_space_race_widget_settlers_note": {
+  "en": "Colonies hold people: settlers we send from the state of our Space Program, and their children. A colony grows slowly up to its room. Set how many leave each month, and which colonies they go to.",
+  "de": "In Kolonien leben Menschen: Siedler, die wir aus dem Staat unseres Raumfahrtprogramms schicken, und deren Kinder. Eine Kolonie wächst langsam bis zu ihrem Raum. Legen Sie fest, wie viele jeden Monat aufbrechen und in welche Kolonien sie gehen."
+ },
+ "je_space_race_widget_settlers_people_tt": {
+  "en": "The colony's people, and the room it has for them.",
+  "de": "Die Bevölkerung der Kolonie und der Raum, den sie dafür hat."
  },
  "je_space_race_widget_shipments_label": {
   "en": "Shipments waiting / in flight",
   "de": "Lieferungen wartend / unterwegs"
  },
+ "je_space_race_widget_shipments_tt": {
+  "en": "#header Module Shipments#!\\nA finished module waits at Earth for its world's launch window, or leaves at once with a fusion torch or antimatter drive. It lands after the transit our drive buys and is installed for whoever then holds the world. Eight can wait or fly at once; while all eight are taken, fabrication waits.",
+  "de": "#header Modullieferungen#!\\nEin fertiges Modul wartet auf der Erde auf das Startfenster seiner Welt oder fliegt mit einer Fusionsfackel oder einem Antimaterieantrieb sofort ab. Es landet nach der Flugzeit, die unser Antrieb erlaubt, und wird für den installiert, dem die Welt dann gehört. Acht können gleichzeitig warten oder fliegen; solange alle acht belegt sind, wartet die Fertigung."
+ },
  "je_space_race_widget_solar_system_header": {
   "en": "Solar System",
   "de": "Sonnensystem"
+ },
+ "je_space_race_widget_solar_system_note": {
+  "en": "Every world and who holds it. A world can be claimed once; when its holder is annexed, it passes to whoever owns that holder's last capital. Target sends our next colony fleet to a world.",
+  "de": "Jede Welt und wer sie hält. Eine Welt kann nur einmal beansprucht werden; wird ihr Inhaber annektiert, geht sie an den, dem die letzte Hauptstadt dieses Inhabers gehört. „Anvisieren“ schickt unsere nächste Kolonieflotte zu einer Welt."
+ },
+ "je_space_race_widget_ss_inbound_tt": {
+  "en": "#header Colony fleets on their way#!\\nThe first figure is how many fleets are flying to this world, the second the months until the first lands. Highlighted when the first is ours. The first to land claims the world; the others go on to another free world of the same planet or belt, or are lost.",
+  "de": "#header Kolonieflotten unterwegs#!\\nDie erste Zahl nennt, wie viele Flotten zu dieser Welt fliegen, die zweite die Monate, bis die erste landet. Hervorgehoben, wenn die erste unsere ist. Die erste, die landet, beansprucht die Welt; die anderen fliegen zu einer anderen freien Welt desselben Planeten oder Gürtels weiter oder gehen verloren."
  },
  "je_space_race_widget_ss_loc_asteroids": {
   "en": "The Asteroid Belt",
@@ -4639,6 +4975,14 @@
   "en": "  #bold Grounds:#! the target defied the [concept_un_world_court] in this very dispute, and that is grounds enough; the case against it stood at #v [THIS.Var('un_res_case').GetValue|0]#! when it was tabled.",
   "de": "  #bold Begründung:#! Das Ziel hat sich dem [Concept('concept_un_world_court','Internationalen Gerichtshof')] in eben diesem Streit widersetzt, und das ist Grund genug; der Fall gegen das Ziel lag bei #v [THIS.Var('un_res_case').GetValue|0]#!, als er eingebracht wurde."
  },
+ "je_un_chamber_grounds_expulsion": {
+  "en": "  #bold Grounds:#! the case for expelling the target stood at #v [THIS.Var('un_res_case').GetValue|+0]#! when it was tabled. Every member but the target adds the case as it stands, shown below, to its lean.",
+  "de": "  #bold Begründung:#! Der Fall für den Ausschluss des Ziels stand bei #v [THIS.Var('un_res_case').GetValue|+0]#!, als der Antrag eingebracht wurde. Jedes Mitglied außer dem Ziel addiert den Fall in seinem aktuellen Stand, unten aufgeführt, zu seiner Neigung."
+ },
+ "je_un_chamber_grounds_expulsion_record": {
+  "en": "  Its case now: #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_expulsion_case')|+0]#! — veto record #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, standing #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#!, service #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#!",
+  "de": "  Aktueller Fall: #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_expulsion_case')|+0]#! — Veto-Bilanz #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, Ansehen #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#!, Dienste #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#!"
+ },
  "je_un_chamber_grounds_record": {
   "en": "  Its record now: case #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_case_strength')|0]#! — infamy #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_case_infamy_term')|0]#!, aggression #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_aggression')|0]#!, defiance #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_defiance')|0]#!, violated mandates #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_violation')|0]#!, covert operations #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_covert')|0]#!, nuclear weapons #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_nuclear')|0]#!, anti-satellite strikes #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_asat')|0]#!.",
   "de": "  Ihre Bilanz jetzt: Fall #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_case_strength')|0]#! — Verrufenheit #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_case_infamy_term')|0]#!, Aggression #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_aggression')|0]#!, Widersetzlichkeit #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_defiance')|0]#!, verletzte Mandate #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_violation')|0]#!, verdeckte Operationen #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_covert')|0]#!, Nuklearwaffen #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_nuclear')|0]#!, Antisatellitenschläge #v [SCOPE.sCountry('un_chamber_grounds_target').MakeScope.ScriptValue('un_disp_dos_asat')|0]#!."
@@ -4927,6 +5271,10 @@
   "en": "  the habit of consensus: #v +[THIS.ScriptValue('un_lean_consensus_value')|0]#! #lore (every member)#!",
   "de": "  die Gewohnheit des Konsenses: #v +[THIS.ScriptValue('un_lean_consensus_value')|0]#! #lore (jedes Mitglied)#!"
  },
+ "je_un_chamber_position_consensus_expulsion": {
+  "en": "  the habit of consensus: #v +0#! #lore (none on a motion to expel)#!",
+  "de": "  die Gewohnheit zum Konsens: #v +0#! #lore (keine bei einem Ausschlussantrag)#!"
+ },
  "je_un_chamber_position_glass": {
   "en": "  our own record (glass houses): #v [THIS.Var('un_lean_glass').GetValue|+0]#!",
   "de": "  unsere eigene Bilanz (Glashaus-Effekt): #v [THIS.Var('un_lean_glass').GetValue|+0]#!"
@@ -5026,6 +5374,10 @@
  "je_un_chamber_propose_button_label": {
   "en": "Propose",
   "de": "Einbringen"
+ },
+ "je_un_chamber_propose_case_expulsion": {
+  "en": "#bold Case for expulsion:#! #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_expulsion_case')|+0]#! — veto record #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, standing #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#!, service #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#!",
+  "de": "#bold Fall für den Ausschluss:#! #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_expulsion_case')|+0]#! — Veto-Bilanz #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, Ansehen #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#!, Dienste #v [SCOPE.sCountry('un_propose_expulsion_target').MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#!"
  },
  "je_un_chamber_propose_header": {
   "en": "Propose a Resolution",
@@ -5252,8 +5604,8 @@
   "de": "#bold Ziel:#! #tooltippable;tooltip:je_un_chamber_propose_no_case_expulsion_tt Keines#!"
  },
  "je_un_chamber_propose_no_case_expulsion_tt": {
-  "en": "No [concept_un_permanent_member] stands freshly exposed for abusing the [concept_un_veto].",
-  "de": "Kein [concept_un_permanent_member] steht frisch bloßgestellt da wegen Missbrauchs des [concept_un_veto]."
+  "en": "No [concept_un_permanent_member] that is not our ally, our overlord or our subject has used the [concept_un_veto] in the last five years.",
+  "de": "Kein [concept_un_permanent_member], das nicht unser Verbündeter, unser Suzerän oder unser Klientelland ist, hat in den letzten fünf Jahren das [concept_un_veto] eingelegt."
  },
  "je_un_chamber_propose_no_case_food_reserve": {
   "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_food_reserve_tt #G In Force#!#!",
@@ -5354,6 +5706,10 @@
  "je_un_chamber_propose_recess": {
   "en": "  #G The floor is in recess for [GetGlobalVariable('un_recess_months').GetValue|0] more month(s):#! only human members may table business, so the floor is ours if we want it.",
   "de": "  #G Die Kammer ist noch [GetGlobalVariable('un_recess_months').GetValue|0] weitere Monat(e) in Sitzungspause:#! nur menschliche Mitglieder dürfen Anträge einbringen, daher gehört die Kammer uns, wenn wir es wollen."
+ },
+ "je_un_chamber_propose_seat_ours": {
+  "en": "#bold The seat:#! we are next in line for it, so a carried motion seats us. The members hold that against us a little (#v [THIS.ScriptValue('un_lean_expulsion_seat_grab')|+0]#!).",
+  "de": "#bold Der Sitz:#! Wir sind als Nächste dafür an der Reihe, daher setzt uns ein angenommener Antrag auf den Sitz. Die Mitglieder nehmen uns das ein wenig übel (#v [THIS.ScriptValue('un_lean_expulsion_seat_grab')|+0]#!)."
  },
  "je_un_chamber_propose_target_arms_embargo": {
   "en": "#bold Target:#! [AddLocalizationIf(SCOPE.sCountry('un_arms_embargo_pick').Exists, SCOPE.sCountry('un_arms_embargo_pick').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_arms_embargo_pick').Exists), 'je_un_chamber_country_gone')]",
@@ -7414,6 +7770,10 @@
  "je_un_record_expulsion": {
   "en": "#tooltippable Case for expelling us#!",
   "de": "#tooltippable Gründe für unseren Ausschluss#!"
+ },
+ "je_un_record_expulsion_tt": {
+  "en": "What every other member adds to its lean on a motion to expel us from a permanent seat: our veto record #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, our standing #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#! (Exemplary −10, Respected −5, Poor +5, Disgraced +10) and our service #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#! (−5 each for hosting the headquarters, running the development programme, and running the peacekeeping programme or serving in a mission; −10 at most). The motion needs two thirds of the members with a vote.",
+  "de": "Was jedes andere Mitglied bei einem Antrag, uns aus einem ständigen Sitz auszuschließen, zu seiner Neigung addiert: unsere Veto-Bilanz #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_veto_record')|+0]#!, unser Ansehen #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_standing_term')|+0]#! (Vorbildlich −10, Angesehen −5, Schwach +5, Geächtet +10) und unser Dienst #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_expulsion_case_service_term')|+0]#! (je −5 für das Ausrichten des Hauptquartiers, das Führen des Entwicklungsprogramms und das Führen des Friedenssicherungsprogramms oder den Dienst in einer Mission; höchstens −10). Der Antrag braucht zwei Drittel der stimmberechtigten Mitglieder."
  },
  "je_un_record_infamy": {
   "en": "Infamy",

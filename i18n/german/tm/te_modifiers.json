@@ -1145,7 +1145,7 @@
  },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
-  "de": "Fertigung von Koloniemodulen pro Monat"
+  "de": "Koloniemodulfertigung pro Monat"
  },
  "country_sr_module_fabrication_add_desc": {
   "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",

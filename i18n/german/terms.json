@@ -148,8 +148,6 @@
  "Shopkeepers": "Verkäufer",
  "Simple Colonies": "Einfache Kolonien",
  "Space Race": "Wettlauf ins All",
- "Spaceport": "Raumhafen",
- "Spaceports": "Raumhäfen",
  "Special Settlements": "Sondersiedlungen",
  "Sponsor Contractors": "Auftragnehmer-Sponsoring",
  "Standing Mandate Force": "Ständige Mandatstruppe",
@@ -168,6 +166,7 @@
  "War of Independence": "Unabhängigkeitskrieg",
  "World Court": "Internationaler Gerichtshof",
  "amicable relations": "einvernehmliche Beziehungen",
+ "chartered company": "Handelsgesellschaft",
  "claim weight": "Anspruchsgewicht",
  "colony fleet": "Kolonieflotte",
  "colony fleets": "Kolonieflotten",
@@ -187,6 +186,7 @@
  "pie chart": "Tortendiagramm",
  "reserve battalion": "Reservebataillon",
  "unique dedication": "einzigartige Widmung",
+ "veto record": "Veto-Bilanz",
  "working age": "Erwerbsalter",
  "youth bulge": "Jugendüberhang"
 }

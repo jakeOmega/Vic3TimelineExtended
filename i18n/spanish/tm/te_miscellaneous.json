@@ -749,7 +749,7 @@
  },
  "CE_SUBJECT_CAN_BECOME_DOMINION": {
   "en": "It is a colony that can become a dominion. A chartered company or a protectorate has no looser kind of subject to become",
-  "es": "Es una colonia que puede convertirse en dominio. Una compañía con carta o un protectorado no tiene un tipo de súbdito más laxo al que convertirse"
+  "es": "Es una colonia que puede convertirse en dominio. Una compañía privilegiada o un protectorado no tiene un tipo de súbdito más laxo al que convertirse"
  },
  "CE_SUBJECT_IS_OURS": {
   "en": "It is our own colonial subject, not one of our subjects' subjects",

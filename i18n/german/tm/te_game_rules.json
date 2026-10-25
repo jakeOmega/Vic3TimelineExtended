@@ -351,9 +351,17 @@
   "en": "[concept_space_race]: Full Colonies",
   "de": "[concept_space_race]: Volle Kolonien"
  },
+ "setting_space_race_colonies_full_desc": {
+  "en": "As Simple Colonies. Space fleets, blockades and sieges are planned for this setting; until they arrive it plays as Simple Colonies.",
+  "de": "Wie „Einfache Kolonien“. Raumflotten, Blockaden und Belagerungen sind für diese Einstellung geplant; bis sie kommen, spielt sie sich wie „Einfache Kolonien“."
+ },
  "setting_space_race_colonies_simple": {
   "en": "[concept_space_race]: Simple Colonies",
   "de": "[concept_space_race]: Einfache Kolonien"
+ },
+ "setting_space_race_colonies_simple_desc": {
+  "en": "As Races Only, and colonies can change hands: the Cede Colony treaty article sells or gives a colony, and a war can force one.",
+  "de": "Wie „Nur Wettläufe“, und Kolonien können den Besitzer wechseln: Der Vertragsartikel „Kolonie abtreten“ verkauft oder verschenkt eine Kolonie, und ein Krieg kann eine erzwingen."
  },
  "setting_space_race_disabled": {
   "en": "[concept_space_race] Disabled",
@@ -368,8 +376,8 @@
   "de": "[concept_space_race]: Nur Wettläufe"
  },
  "setting_space_race_enabled_desc": {
-  "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] compete through a milestone-based progression from suborbital flight to interstellar probes, with funding levels affecting progress speed.",
-  "de": "Die Journaleinträge des [concept_space_race] sind aktiv. [Concept('concept_great_power', 'Großmächte')] und [Concept('concept_major_power', 'Mittelmächte')] konkurrieren in einem meilensteinbasierten Fortschritt vom suborbitalen Flug bis zu interstellaren Sonden, wobei die Finanzierungsstufe die Fortschrittsgeschwindigkeit beeinflusst."
+  "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] compete through a milestone-based progression from suborbital flight to interstellar probes, with funding levels affecting progress speed. A colony stays with the power that founded it; if that power is annexed, its colonies pass to whoever owns its last capital.",
+  "de": "Die Journaleinträge des [concept_space_race] sind aktiv. [Concept('concept_great_power', 'Großmächte')] und [Concept('concept_major_power', 'Mittelmächte')] konkurrieren in einem meilensteinbasierten Fortschritt vom suborbitalen Flug bis zu interstellaren Sonden, wobei die Finanzierungsstufe die Fortschrittsgeschwindigkeit beeinflusst. Eine Kolonie bleibt bei der Macht, die sie gegründet hat; wird diese Macht annektiert, gehen ihre Kolonien an den, dem ihre letzte Hauptstadt gehört."
  },
  "setting_te_principle_slots_eight": {
   "en": "Up to Eight",
