@@ -21,6 +21,9 @@
 #   un_res_why_* (resolution)     the reason tallies, from un_resolution_record_vote
 #                                 and un_resolution_record_veto
 #   un_res_case (resolution)      un_resolution_open: the target's case when tabled
+#                                 (on a motion to expel, the case for expulsion)
+#   un_veto_record (country)      un_veto_record_add (a veto cast outside
+#                                 Moribund), and the monthly decay
 #   un_res_last_call (resolution) un_vote.6, or the monthly pulse from month 12:
 #                                 every AI member still without a vote casts now
 #   un_res_ai_cast (resolution)   legacy: written before the late ballots; inert
@@ -154,7 +157,49 @@ un_dossier_monthly_update = {
 			un_dossier_record = { RECORD = aggression POINTS = un_dos_points_aggression }
 		}
 	}
+	un_veto_record_monthly_update = yes
 	un_recess_monthly_update = yes
+}
+
+# ---- The veto record (owner, 2026-10-24) ----------------------------------------------
+# A permanent member's vetoes, the heart of the case for expelling it from its
+# seat (un_expulsion_case, un_dossier_values.txt). Kept apart from the dossier:
+# it fades more slowly (5% a year, not half in five years) and is no part of
+# the case for the punitive topics.
+
+# Add one veto to this country's record. Called with the veto's institutional
+# costs (un_vote_cast_veto), so a veto at Moribund, which costs nothing, is
+# not recorded.
+# Scope: the vetoing country
+un_veto_record_add = {
+	if = {
+		limit = { NOT = { has_variable = un_veto_record } }
+		set_variable = { name = un_veto_record value = 0 }
+	}
+	change_variable = { name = un_veto_record add = un_veto_record_points }
+}
+
+# Every record fades. Saves from before the record started a member that
+# carries a recent veto's isolation with one veto's worth: that member vetoed
+# within five years, and the record would otherwise read zero until it vetoes
+# again. Remove the seed after 2026-12-31.
+# Scope: none (inside un_dossier_monthly_update)
+un_veto_record_monthly_update = {
+	every_country = {
+		limit = { has_variable = un_veto_record }
+		change_variable = { name = un_veto_record multiply = un_veto_record_decay_factor }
+		if = {
+			limit = { var:un_veto_record < un_veto_record_floor }
+			remove_variable = un_veto_record
+		}
+	}
+	every_country = {
+		limit = {
+			has_modifier = un_veto_isolation_modifier
+			NOT = { has_variable = un_veto_record }
+		}
+		set_variable = { name = un_veto_record value = un_veto_record_points }
+	}
 }
 
 # ---- The recess ----------------------------------------------------------------------

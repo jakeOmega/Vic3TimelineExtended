@@ -100,7 +100,8 @@ un_resolution_open = {
 			add_to_variable_list = { name = un_res_yes target = scope:un_res_proposer_scope }
 		}
 		# The grounds (redesign phase 3): the target's case strength when the
-		# resolution was tabled, kept on the resolution for the chamber card.
+		# resolution was tabled, kept on the resolution for the chamber card;
+		# on a motion to expel, the case for expulsion (owner, 2026-10-24).
 		# Staged in a global because it is evaluated in the target's scope.
 		if = {
 			limit = {
@@ -108,7 +109,13 @@ un_resolution_open = {
 				exists = scope:un_vote_target
 			}
 			scope:un_vote_target = {
-				set_global_variable = { name = un_case_stage value = un_case_strength }
+				if = {
+					limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
+					set_global_variable = { name = un_case_stage value = un_expulsion_case }
+				}
+				else = {
+					set_global_variable = { name = un_case_stage value = un_case_strength }
+				}
 			}
 			scope:un_resolution = {
 				set_variable = { name = un_res_case value = global_var:un_case_stage }
