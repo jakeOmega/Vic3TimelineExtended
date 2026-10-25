@@ -1,7 +1,7 @@
 # Tourism heritage: moving historical monuments out of base appeal (pass 1) — design
 
 Status: owner-approved in conversation, 2026-10-23; builder check done. **Pass 1 built:** phase 1 in #1118, phases 2
-and 3 on 2026-10-25 (branch `claude/brave-rubin-uflsyy`), after the policy pass (#1121). Pass 2 stays a later project.
+and 3 in #1139, after the policy pass (#1121). Pass 2 stays a later project.
 
 **As built (phases 2 and 3).** Where the build departs from the text below, the code and
 `scripts/generators/data/tourism_heritage_moves.csv` are the record:
