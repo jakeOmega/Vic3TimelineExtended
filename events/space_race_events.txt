@@ -4589,3 +4589,55 @@ space_race_events.91 = {
 		sr_site_clear_heir_notice = yes
 	}
 }
+
+# A colony fleet landed to find its world taken (simple and full colonies;
+# slices 2-3 design § 5): it founded another world of the same body, or there
+# was none and the fleet is lost (sr_cf_note_diverted, sr_cf_note_lost).
+space_race_events.92 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = sr_cf_notice_founded }
+				desc = space_race_events.92.t_diverted
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.92.t_lost
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = sr_cf_notice_founded }
+				desc = space_race_events.92.d_diverted
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.92.d_lost
+			}
+		}
+	}
+	flavor = space_race_events.92.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_cf_notice_target }
+
+	option = {
+		name = space_race_events.92.a
+		default_option = yes
+		custom_tooltip = sr_cf_notice_where_tt
+	}
+
+	after = {
+		sr_cf_clear_notice = yes
+	}
+}

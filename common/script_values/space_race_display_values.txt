@@ -1109,3 +1109,46 @@ sr_disp_rival_more_solar_colonization = {
 	subtract = 5
 	min = 0
 }
+
+# ======= Colony fleets and population (slices 2-3 design §§ 3, 8, 10) =======
+# Colony Fleets and Settlers (te_sr_sec_colony_fleets, te_sr_sec_settlers); the
+# per-world and per-slot values are generated (sr_sites_display_generated.txt).
+# 1 under simple and full colonies, where colony fleets travel and colonies
+# hold people.
+sr_disp_colonies_contested = {
+	value = 0
+	if = { limit = { sr_colonies_contested_enabled = yes } value = 1 }
+}
+# 1 while we have chosen our next fleet's world.
+sr_disp_cf_target = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target } value = 1 }
+}
+# Our colony fleets in flight (at most six).
+sr_disp_cf_in_flight = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_in_flight } value = var:sr_cf_in_flight }
+}
+# The emigration programme's level, 0 Off to 3 High.
+sr_disp_emig_level = {
+	value = 0
+	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
+}
+# The settlers it sends a month while colonies have room.
+sr_disp_emig_per_month = {
+	value = sr_emig_level_batches
+	multiply = sr_emig_batch_people
+}
+# Our people off Earth, and the off-world bonus's multiplier.
+sr_disp_offworld_pop = {
+	value = sr_offworld_pop_total
+	floor = yes
+}
+sr_disp_offworld_units = {
+	value = sr_offworld_units
+}
+# 1 with Artificial General Intelligence: modules need no crews.
+sr_disp_agi = {
+	value = 0
+	if = { limit = { has_technology_researched = artificial_intelligence } value = 1 }
+}

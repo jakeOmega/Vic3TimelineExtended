@@ -1311,12 +1311,13 @@ je_space_race_solar_colonization = {
 				has_variable = sr_completed_moon_base
 				has_variable = sr_completed_mars_landing
 				modifier:country_sr_solar_colonization_program_bool = yes
-				# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12)
+				# Stages 3-5 (outer system) require Deep Space Exploration PM (space_colonization tech, era 12):
+				# past stage 2 under races only, once no inner world is free under
+				# simple and full (sr_colonization_inner_open).
 				custom_tooltip = {
 					text = sr_outer_system_requires_deep_space_tt
 					OR = {
-						NOT = { has_global_variable = sr_colonization_stage }
-						global_var:sr_colonization_stage <= 2
+						sr_colonization_inner_open = yes
 						modifier:country_sr_deep_space_exploration_program_bool = yes
 					}
 				}
@@ -1512,6 +1513,13 @@ je_space_race_solar_colonization = {
 				sr_complete_milestone_effect = yes
 			}
 			sr_set_milestone_status_base = { MILESTONE = solar_colonization }
+			# Colony population (simple and full; slices 2-3 design § 10): the
+			# AI's yearly review, the month's emigrants, then the entry's two
+			# modifiers. A colony holder's entry is always open, so this runs
+			# for every holder, programme or not.
+			sr_emig_ai_review = yes
+			sr_emig_month = yes
+			sr_emig_refresh_modifiers = yes
 		}
 	}
 

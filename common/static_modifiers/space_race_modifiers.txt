@@ -228,6 +228,23 @@ sr_solar_system_trade = {
 	country_cultural_pull_mult = 0.15
 }
 
+# ======= Solar System Colonization - colony population (simple and full colonies)
+# Both on the entry, at a multiplier, re-applied monthly by
+# sr_emig_refresh_modifiers (sr_colony_population_effects.txt; slices 2-3
+# design § 10). The programme's upkeep, per level of emigration: the Space
+# Program's Launch Capacity bill, as funding raises it.
+sr_emigration_programme = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.05
+}
+
+# The nation's people off Earth, per 100,000 (at most ten times).
+sr_offworld_population = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.01
+	country_cultural_pull_mult = 0.02
+}
+
 # ======= Space Race - After the race: Commercial Space Industry
 # Once a country has nothing left to race for (sr_space_race_concluded), the
 # flat progress its sources still give each month (Space Elevator, companies,

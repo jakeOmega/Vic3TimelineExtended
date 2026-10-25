@@ -417,6 +417,165 @@ sr_launch_premium_mars = {
 	}
 }
 
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (265 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#   -14: fusion 6, torch 1, antimatter 1
+#   -13: fusion 5, torch 1, antimatter 1
+#   -12: fusion 5, torch 1, antimatter 1
+#   -11: fusion 5, torch 1, antimatter 1
+#   -10: fusion 5, torch 1, antimatter 1
+#    -9: fusion 5, torch 1, antimatter 1
+#    -8: fusion 5, torch 1, antimatter 1
+#    -7: fusion 5, torch 1, antimatter 1
+#    -6: fusion 5, torch 1, antimatter 1
+#    -5: fusion 5, torch 1, antimatter 1
+#    -4: fusion 5, torch 1, antimatter 1
+#    -3: fusion 4, torch 1, antimatter 1
+#    -2: fusion 4, torch 1, antimatter 1
+#    -1: fusion 3, torch 1, antimatter 1
+#    +0: fusion 3, torch 1, antimatter 1
+#    +1: fusion 2, torch 1, antimatter 1
+#    +2: fusion 2, torch 1, antimatter 1
+#    +3: fusion 2, torch 1, antimatter 1
+#    +4: fusion 3, torch 1, antimatter 1
+#    +5: fusion 4, torch 1, antimatter 1
+#    +6: fusion 6, torch 1, antimatter 1
+#    +7: fusion 8, torch 1, antimatter 1
+#    +8: fusion 9, torch 1, antimatter 1
+#    +9: fusion 9, torch 1, antimatter 1
+#   +10: fusion 9, torch 1, antimatter 1
+#   +11: fusion 9, torch 1, antimatter 1
+#   +12: fusion 8, torch 1, antimatter 1
+#   +13: fusion 5, torch 1, antimatter 1
+#   +14: fusion 5, torch 1, antimatter 1
+sr_transit_chemical_mars = { value = 9 }
+sr_transit_fusion_mars = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_mars < 0 }
+		if = {
+			limit = { sr_launch_offset_mars < -7 }
+			if = {
+				limit = { sr_launch_offset_mars < -11 }
+				if = {
+					limit = { sr_launch_offset_mars < -13 }
+					value = 6 # offset -14
+				}
+				else = {
+					value = 5 # offsets -13 to -12
+				}
+			}
+			else = {
+				value = 5 # offsets -11 to -8
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_mars < -4 }
+				value = 5 # offsets -7 to -5
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < -2 }
+					if = {
+						limit = { sr_launch_offset_mars < -3 }
+						value = 5 # offset -4
+					}
+					else = {
+						value = 4 # offset -3
+					}
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < -1 }
+						value = 4 # offset -2
+					}
+					else = {
+						value = 3 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_mars < 7 }
+			if = {
+				limit = { sr_launch_offset_mars < 3 }
+				if = {
+					limit = { sr_launch_offset_mars < 1 }
+					value = 3 # offset +0
+				}
+				else = {
+					value = 2 # offsets +1 to +2
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < 5 }
+					if = {
+						limit = { sr_launch_offset_mars < 4 }
+						value = 2 # offset +3
+					}
+					else = {
+						value = 3 # offset +4
+					}
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_mars < 6 }
+						value = 4 # offset +5
+					}
+					else = {
+						value = 6 # offset +6
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_mars < 11 }
+				if = {
+					limit = { sr_launch_offset_mars < 9 }
+					if = {
+						limit = { sr_launch_offset_mars < 8 }
+						value = 8 # offset +7
+					}
+					else = {
+						value = 9 # offset +8
+					}
+				}
+				else = {
+					value = 9 # offsets +9 to +10
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_mars < 13 }
+					if = {
+						limit = { sr_launch_offset_mars < 12 }
+						value = 9 # offset +11
+					}
+					else = {
+						value = 8 # offset +12
+					}
+				}
+				else = {
+					value = 5 # offsets +13 to +14
+				}
+			}
+		}
+	}
+}
+sr_transit_torch_mars = {
+	value = 0
+	value = 1 # offsets -14 to +14
+}
+sr_transit_antimatter_mars = {
+	value = 0
+	value = 1 # offsets -14 to +14
+}
+
 # ===== Ceres (187 windows) =====
 sr_window_next_ceres = {
 	value = 0
@@ -812,6 +971,143 @@ sr_launch_premium_ceres = {
 	}
 }
 
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (481 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -9: fusion 16, torch 1, antimatter 1
+#    -8: fusion 16, torch 2, antimatter 1
+#    -7: fusion 16, torch 2, antimatter 1
+#    -6: fusion 16, torch 2, antimatter 1
+#    -5: fusion 11, torch 2, antimatter 1
+#    -4: fusion 9, torch 2, antimatter 1
+#    -3: fusion 9, torch 2, antimatter 1
+#    -2: fusion 10, torch 2, antimatter 1
+#    -1: fusion 9, torch 2, antimatter 1
+#    +0: fusion 6, torch 2, antimatter 1
+#    +1: fusion 6, torch 2, antimatter 1
+#    +2: fusion 6, torch 1, antimatter 1
+#    +3: fusion 8, torch 1, antimatter 1
+#    +4: fusion 14, torch 1, antimatter 1
+#    +5: fusion 16, torch 1, antimatter 1
+#    +6: fusion 16, torch 1, antimatter 1
+#    +7: fusion 16, torch 2, antimatter 1
+#    +8: fusion 16, torch 2, antimatter 1
+#    +9: fusion 16, torch 2, antimatter 1
+sr_transit_chemical_ceres = { value = 16 }
+sr_transit_fusion_ceres = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_ceres < 0 }
+		if = {
+			limit = { sr_launch_offset_ceres < -5 }
+			value = 16 # offsets -9 to -6
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_ceres < -3 }
+				if = {
+					limit = { sr_launch_offset_ceres < -4 }
+					value = 11 # offset -5
+				}
+				else = {
+					value = 9 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_ceres < -2 }
+					value = 9 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_ceres < -1 }
+						value = 10 # offset -2
+					}
+					else = {
+						value = 9 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_ceres < 5 }
+			if = {
+				limit = { sr_launch_offset_ceres < 2 }
+				value = 6 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_ceres < 3 }
+					value = 6 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_ceres < 4 }
+						value = 8 # offset +3
+					}
+					else = {
+						value = 14 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			value = 16 # offsets +5 to +9
+		}
+	}
+}
+sr_transit_torch_ceres = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_ceres < 0 }
+		if = {
+			limit = { sr_launch_offset_ceres < -5 }
+			if = {
+				limit = { sr_launch_offset_ceres < -7 }
+				if = {
+					limit = { sr_launch_offset_ceres < -8 }
+					value = 1 # offset -9
+				}
+				else = {
+					value = 2 # offset -8
+				}
+			}
+			else = {
+				value = 2 # offsets -7 to -6
+			}
+		}
+		else = {
+			value = 2 # offsets -5 to -1
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_ceres < 5 }
+			if = {
+				limit = { sr_launch_offset_ceres < 2 }
+				value = 2 # offsets +0 to +1
+			}
+			else = {
+				value = 1 # offsets +2 to +4
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_ceres < 7 }
+				value = 1 # offsets +5 to +6
+			}
+			else = {
+				value = 2 # offsets +7 to +9
+			}
+		}
+	}
+}
+sr_transit_antimatter_ceres = {
+	value = 0
+	value = 1 # offsets -9 to +9
+}
+
 # ===== Vesta (173 windows) =====
 sr_window_next_vesta = {
 	value = 0
@@ -1191,6 +1487,167 @@ sr_launch_premium_vesta = {
 			}
 		}
 	}
+}
+
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (404 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -9: fusion 13, torch 1, antimatter 1
+#    -8: fusion 13, torch 2, antimatter 1
+#    -7: fusion 13, torch 2, antimatter 1
+#    -6: fusion 10, torch 2, antimatter 1
+#    -5: fusion 9, torch 2, antimatter 1
+#    -4: fusion 8, torch 2, antimatter 1
+#    -3: fusion 8, torch 2, antimatter 1
+#    -2: fusion 8, torch 2, antimatter 1
+#    -1: fusion 6, torch 2, antimatter 1
+#    +0: fusion 5, torch 2, antimatter 1
+#    +1: fusion 5, torch 1, antimatter 1
+#    +2: fusion 5, torch 1, antimatter 1
+#    +3: fusion 6, torch 1, antimatter 1
+#    +4: fusion 10, torch 1, antimatter 1
+#    +5: fusion 13, torch 1, antimatter 1
+#    +6: fusion 13, torch 1, antimatter 1
+#    +7: fusion 13, torch 1, antimatter 1
+#    +8: fusion 13, torch 2, antimatter 1
+#    +9: fusion 13, torch 2, antimatter 1
+sr_transit_chemical_vesta = { value = 13 }
+sr_transit_fusion_vesta = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_vesta < 0 }
+		if = {
+			limit = { sr_launch_offset_vesta < -5 }
+			if = {
+				limit = { sr_launch_offset_vesta < -7 }
+				value = 13 # offsets -9 to -8
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < -6 }
+					value = 13 # offset -7
+				}
+				else = {
+					value = 10 # offset -6
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_vesta < -3 }
+				if = {
+					limit = { sr_launch_offset_vesta < -4 }
+					value = 9 # offset -5
+				}
+				else = {
+					value = 8 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < -2 }
+					value = 8 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_vesta < -1 }
+						value = 8 # offset -2
+					}
+					else = {
+						value = 6 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_vesta < 5 }
+			if = {
+				limit = { sr_launch_offset_vesta < 2 }
+				value = 5 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < 3 }
+					value = 5 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_vesta < 4 }
+						value = 6 # offset +3
+					}
+					else = {
+						value = 10 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			value = 13 # offsets +5 to +9
+		}
+	}
+}
+sr_transit_torch_vesta = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_vesta < 0 }
+		if = {
+			limit = { sr_launch_offset_vesta < -5 }
+			if = {
+				limit = { sr_launch_offset_vesta < -7 }
+				if = {
+					limit = { sr_launch_offset_vesta < -8 }
+					value = 1 # offset -9
+				}
+				else = {
+					value = 2 # offset -8
+				}
+			}
+			else = {
+				value = 2 # offsets -7 to -6
+			}
+		}
+		else = {
+			value = 2 # offsets -5 to -1
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_vesta < 5 }
+			if = {
+				limit = { sr_launch_offset_vesta < 2 }
+				if = {
+					limit = { sr_launch_offset_vesta < 1 }
+					value = 2 # offset +0
+				}
+				else = {
+					value = 1 # offset +1
+				}
+			}
+			else = {
+				value = 1 # offsets +2 to +4
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_vesta < 7 }
+				value = 1 # offsets +5 to +6
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_vesta < 8 }
+					value = 1 # offset +7
+				}
+				else = {
+					value = 2 # offsets +8 to +9
+				}
+			}
+		}
+	}
+}
+sr_transit_antimatter_vesta = {
+	value = 0
+	value = 1 # offsets -9 to +9
 }
 
 # ===== Psyche (191 windows) =====
@@ -1590,6 +2047,143 @@ sr_launch_premium_psyche = {
 			}
 		}
 	}
+}
+
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (555 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -9: fusion 18, torch 1, antimatter 1
+#    -8: fusion 18, torch 2, antimatter 1
+#    -7: fusion 18, torch 2, antimatter 1
+#    -6: fusion 18, torch 2, antimatter 1
+#    -5: fusion 15, torch 2, antimatter 1
+#    -4: fusion 10, torch 2, antimatter 1
+#    -3: fusion 9, torch 2, antimatter 1
+#    -2: fusion 9, torch 2, antimatter 1
+#    -1: fusion 8, torch 2, antimatter 1
+#    +0: fusion 6, torch 2, antimatter 1
+#    +1: fusion 6, torch 2, antimatter 1
+#    +2: fusion 6, torch 1, antimatter 1
+#    +3: fusion 9, torch 1, antimatter 1
+#    +4: fusion 16, torch 1, antimatter 1
+#    +5: fusion 18, torch 1, antimatter 1
+#    +6: fusion 18, torch 1, antimatter 1
+#    +7: fusion 18, torch 2, antimatter 1
+#    +8: fusion 18, torch 2, antimatter 1
+#    +9: fusion 18, torch 2, antimatter 1
+sr_transit_chemical_psyche = { value = 18 }
+sr_transit_fusion_psyche = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_psyche < 0 }
+		if = {
+			limit = { sr_launch_offset_psyche < -5 }
+			value = 18 # offsets -9 to -6
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_psyche < -3 }
+				if = {
+					limit = { sr_launch_offset_psyche < -4 }
+					value = 15 # offset -5
+				}
+				else = {
+					value = 10 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_psyche < -2 }
+					value = 9 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_psyche < -1 }
+						value = 9 # offset -2
+					}
+					else = {
+						value = 8 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_psyche < 5 }
+			if = {
+				limit = { sr_launch_offset_psyche < 2 }
+				value = 6 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_psyche < 3 }
+					value = 6 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_psyche < 4 }
+						value = 9 # offset +3
+					}
+					else = {
+						value = 16 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			value = 18 # offsets +5 to +9
+		}
+	}
+}
+sr_transit_torch_psyche = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_psyche < 0 }
+		if = {
+			limit = { sr_launch_offset_psyche < -5 }
+			if = {
+				limit = { sr_launch_offset_psyche < -7 }
+				if = {
+					limit = { sr_launch_offset_psyche < -8 }
+					value = 1 # offset -9
+				}
+				else = {
+					value = 2 # offset -8
+				}
+			}
+			else = {
+				value = 2 # offsets -7 to -6
+			}
+		}
+		else = {
+			value = 2 # offsets -5 to -1
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_psyche < 5 }
+			if = {
+				limit = { sr_launch_offset_psyche < 2 }
+				value = 2 # offsets +0 to +1
+			}
+			else = {
+				value = 1 # offsets +2 to +4
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_psyche < 7 }
+				value = 1 # offsets +5 to +6
+			}
+			else = {
+				value = 2 # offsets +7 to +9
+			}
+		}
+	}
+}
+sr_transit_antimatter_psyche = {
+	value = 0
+	value = 1 # offsets -9 to +9
 }
 
 # ===== Pallas (187 windows) =====
@@ -1999,6 +2593,169 @@ sr_launch_premium_pallas = {
 	}
 }
 
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (509 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#   -10: fusion 17, torch 1, antimatter 1
+#    -9: fusion 17, torch 1, antimatter 1
+#    -8: fusion 17, torch 2, antimatter 1
+#    -7: fusion 17, torch 2, antimatter 1
+#    -6: fusion 15, torch 2, antimatter 1
+#    -5: fusion 15, torch 2, antimatter 1
+#    -4: fusion 12, torch 2, antimatter 1
+#    -3: fusion 13, torch 2, antimatter 1
+#    -2: fusion 14, torch 2, antimatter 1
+#    -1: fusion 14, torch 2, antimatter 1
+#    +0: fusion 13, torch 2, antimatter 1
+#    +1: fusion 7, torch 2, antimatter 1
+#    +2: fusion 8, torch 1, antimatter 1
+#    +3: fusion 11, torch 1, antimatter 1
+#    +4: fusion 17, torch 1, antimatter 1
+#    +5: fusion 17, torch 1, antimatter 1
+#    +6: fusion 17, torch 1, antimatter 1
+#    +7: fusion 17, torch 2, antimatter 1
+#    +8: fusion 17, torch 2, antimatter 1
+#    +9: fusion 17, torch 2, antimatter 1
+#   +10: fusion 17, torch 2, antimatter 1
+sr_transit_chemical_pallas = { value = 17 }
+sr_transit_fusion_pallas = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_pallas < 0 }
+		if = {
+			limit = { sr_launch_offset_pallas < -5 }
+			if = {
+				limit = { sr_launch_offset_pallas < -8 }
+				value = 17 # offsets -10 to -9
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < -7 }
+					value = 17 # offset -8
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < -6 }
+						value = 17 # offset -7
+					}
+					else = {
+						value = 15 # offset -6
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_pallas < -3 }
+				if = {
+					limit = { sr_launch_offset_pallas < -4 }
+					value = 15 # offset -5
+				}
+				else = {
+					value = 12 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < -2 }
+					value = 13 # offset -3
+				}
+				else = {
+					value = 14 # offsets -2 to -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_pallas < 5 }
+			if = {
+				limit = { sr_launch_offset_pallas < 2 }
+				if = {
+					limit = { sr_launch_offset_pallas < 1 }
+					value = 13 # offset +0
+				}
+				else = {
+					value = 7 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_pallas < 3 }
+					value = 8 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < 4 }
+						value = 11 # offset +3
+					}
+					else = {
+						value = 17 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			value = 17 # offsets +5 to +10
+		}
+	}
+}
+sr_transit_torch_pallas = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_pallas < 0 }
+		if = {
+			limit = { sr_launch_offset_pallas < -5 }
+			if = {
+				limit = { sr_launch_offset_pallas < -8 }
+				value = 1 # offsets -10 to -9
+			}
+			else = {
+				value = 2 # offsets -8 to -6
+			}
+		}
+		else = {
+			value = 2 # offsets -5 to -1
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_pallas < 5 }
+			if = {
+				limit = { sr_launch_offset_pallas < 2 }
+				value = 2 # offsets +0 to +1
+			}
+			else = {
+				value = 1 # offsets +2 to +4
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_pallas < 8 }
+				if = {
+					limit = { sr_launch_offset_pallas < 6 }
+					value = 1 # offset +5
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_pallas < 7 }
+						value = 1 # offset +6
+					}
+					else = {
+						value = 2 # offset +7
+					}
+				}
+			}
+			else = {
+				value = 2 # offsets +8 to +10
+			}
+		}
+	}
+}
+sr_transit_antimatter_pallas = {
+	value = 0
+	value = 1 # offsets -10 to +10
+}
+
 # ===== Hygiea (196 windows) =====
 sr_window_next_hygiea = {
 	value = 0
@@ -2386,6 +3143,147 @@ sr_launch_premium_hygiea = {
 			}
 		}
 	}
+}
+
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (556 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -8: fusion 18, torch 2, antimatter 1
+#    -7: fusion 18, torch 2, antimatter 1
+#    -6: fusion 18, torch 2, antimatter 1
+#    -5: fusion 15, torch 2, antimatter 1
+#    -4: fusion 11, torch 2, antimatter 1
+#    -3: fusion 10, torch 2, antimatter 1
+#    -2: fusion 10, torch 2, antimatter 1
+#    -1: fusion 8, torch 2, antimatter 1
+#    +0: fusion 7, torch 2, antimatter 1
+#    +1: fusion 6, torch 2, antimatter 1
+#    +2: fusion 7, torch 2, antimatter 1
+#    +3: fusion 10, torch 1, antimatter 1
+#    +4: fusion 17, torch 1, antimatter 1
+#    +5: fusion 18, torch 1, antimatter 1
+#    +6: fusion 18, torch 2, antimatter 1
+#    +7: fusion 18, torch 2, antimatter 1
+#    +8: fusion 18, torch 2, antimatter 1
+sr_transit_chemical_hygiea = { value = 18 }
+sr_transit_fusion_hygiea = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_hygiea < 0 }
+		if = {
+			limit = { sr_launch_offset_hygiea < -4 }
+			if = {
+				limit = { sr_launch_offset_hygiea < -6 }
+				value = 18 # offsets -8 to -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < -5 }
+					value = 18 # offset -6
+				}
+				else = {
+					value = 15 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_hygiea < -2 }
+				if = {
+					limit = { sr_launch_offset_hygiea < -3 }
+					value = 11 # offset -4
+				}
+				else = {
+					value = 10 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < -1 }
+					value = 10 # offset -2
+				}
+				else = {
+					value = 8 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_hygiea < 4 }
+			if = {
+				limit = { sr_launch_offset_hygiea < 2 }
+				if = {
+					limit = { sr_launch_offset_hygiea < 1 }
+					value = 7 # offset +0
+				}
+				else = {
+					value = 6 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < 3 }
+					value = 7 # offset +2
+				}
+				else = {
+					value = 10 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_hygiea < 6 }
+				if = {
+					limit = { sr_launch_offset_hygiea < 5 }
+					value = 17 # offset +4
+				}
+				else = {
+					value = 18 # offset +5
+				}
+			}
+			else = {
+				value = 18 # offsets +6 to +8
+			}
+		}
+	}
+}
+sr_transit_torch_hygiea = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_hygiea < 0 }
+		value = 2 # offsets -8 to -1
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_hygiea < 4 }
+			if = {
+				limit = { sr_launch_offset_hygiea < 2 }
+				value = 2 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_hygiea < 3 }
+					value = 2 # offset +2
+				}
+				else = {
+					value = 1 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_hygiea < 6 }
+				value = 1 # offsets +4 to +5
+			}
+			else = {
+				value = 2 # offsets +6 to +8
+			}
+		}
+	}
+}
+sr_transit_antimatter_hygiea = {
+	value = 0
+	value = 1 # offsets -8 to +8
 }
 
 # ===== Jupiter system (219 windows) =====
@@ -2785,6 +3683,139 @@ sr_launch_premium_jupiter = {
 	}
 }
 
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (1001 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -7: fusion 33, torch 2, antimatter 1
+#    -6: fusion 33, torch 2, antimatter 1
+#    -5: fusion 27, torch 2, antimatter 1
+#    -4: fusion 13, torch 3, antimatter 1
+#    -3: fusion 12, torch 3, antimatter 1
+#    -2: fusion 10, torch 3, antimatter 1
+#    -1: fusion 9, torch 2, antimatter 1
+#    +0: fusion 8, torch 2, antimatter 1
+#    +1: fusion 7, torch 2, antimatter 1
+#    +2: fusion 8, torch 2, antimatter 1
+#    +3: fusion 14, torch 2, antimatter 1
+#    +4: fusion 27, torch 2, antimatter 1
+#    +5: fusion 33, torch 2, antimatter 1
+#    +6: fusion 33, torch 2, antimatter 1
+#    +7: fusion 33, torch 2, antimatter 1
+sr_transit_chemical_jupiter = { value = 33 }
+sr_transit_fusion_jupiter = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_jupiter < 0 }
+		if = {
+			limit = { sr_launch_offset_jupiter < -4 }
+			if = {
+				limit = { sr_launch_offset_jupiter < -6 }
+				value = 33 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < -5 }
+					value = 33 # offset -6
+				}
+				else = {
+					value = 27 # offset -5
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_jupiter < -2 }
+				if = {
+					limit = { sr_launch_offset_jupiter < -3 }
+					value = 13 # offset -4
+				}
+				else = {
+					value = 12 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < -1 }
+					value = 10 # offset -2
+				}
+				else = {
+					value = 9 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_jupiter < 4 }
+			if = {
+				limit = { sr_launch_offset_jupiter < 2 }
+				if = {
+					limit = { sr_launch_offset_jupiter < 1 }
+					value = 8 # offset +0
+				}
+				else = {
+					value = 7 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < 3 }
+					value = 8 # offset +2
+				}
+				else = {
+					value = 14 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_jupiter < 6 }
+				if = {
+					limit = { sr_launch_offset_jupiter < 5 }
+					value = 27 # offset +4
+				}
+				else = {
+					value = 33 # offset +5
+				}
+			}
+			else = {
+				value = 33 # offsets +6 to +7
+			}
+		}
+	}
+}
+sr_transit_torch_jupiter = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_jupiter < 0 }
+		if = {
+			limit = { sr_launch_offset_jupiter < -4 }
+			value = 2 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_jupiter < -2 }
+				value = 3 # offsets -4 to -3
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_jupiter < -1 }
+					value = 3 # offset -2
+				}
+				else = {
+					value = 2 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		value = 2 # offsets +0 to +7
+	}
+}
+sr_transit_antimatter_jupiter = {
+	value = 0
+	value = 1 # offsets -7 to +7
+}
+
 # ===== Venus (150 windows) =====
 sr_window_next_venus = {
 	value = 0
@@ -3155,6 +4186,133 @@ sr_launch_premium_venus = {
 			}
 		}
 	}
+}
+
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (146 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#   -10: fusion 3, torch 1, antimatter 1
+#    -9: fusion 3, torch 1, antimatter 1
+#    -8: fusion 3, torch 1, antimatter 1
+#    -7: fusion 5, torch 1, antimatter 1
+#    -6: fusion 5, torch 1, antimatter 1
+#    -5: fusion 5, torch 1, antimatter 1
+#    -4: fusion 4, torch 1, antimatter 1
+#    -3: fusion 4, torch 1, antimatter 1
+#    -2: fusion 3, torch 1, antimatter 1
+#    -1: fusion 2, torch 1, antimatter 1
+#    +0: fusion 2, torch 1, antimatter 1
+#    +1: fusion 1, torch 1, antimatter 1
+#    +2: fusion 1, torch 1, antimatter 1
+#    +3: fusion 1, torch 1, antimatter 1
+#    +4: fusion 2, torch 1, antimatter 1
+#    +5: fusion 2, torch 1, antimatter 1
+#    +6: fusion 3, torch 1, antimatter 1
+#    +7: fusion 3, torch 1, antimatter 1
+#    +8: fusion 3, torch 1, antimatter 1
+#    +9: fusion 3, torch 1, antimatter 1
+#   +10: fusion 3, torch 1, antimatter 1
+sr_transit_chemical_venus = { value = 5 }
+sr_transit_fusion_venus = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_venus < 0 }
+		if = {
+			limit = { sr_launch_offset_venus < -5 }
+			if = {
+				limit = { sr_launch_offset_venus < -8 }
+				value = 3 # offsets -10 to -9
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < -7 }
+					value = 3 # offset -8
+				}
+				else = {
+					value = 5 # offsets -7 to -6
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_venus < -3 }
+				if = {
+					limit = { sr_launch_offset_venus < -4 }
+					value = 5 # offset -5
+				}
+				else = {
+					value = 4 # offset -4
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < -2 }
+					value = 4 # offset -3
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < -1 }
+						value = 3 # offset -2
+					}
+					else = {
+						value = 2 # offset -1
+					}
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_venus < 5 }
+			if = {
+				limit = { sr_launch_offset_venus < 2 }
+				if = {
+					limit = { sr_launch_offset_venus < 1 }
+					value = 2 # offset +0
+				}
+				else = {
+					value = 1 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_venus < 3 }
+					value = 1 # offset +2
+				}
+				else = {
+					if = {
+						limit = { sr_launch_offset_venus < 4 }
+						value = 1 # offset +3
+					}
+					else = {
+						value = 2 # offset +4
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_venus < 8 }
+				if = {
+					limit = { sr_launch_offset_venus < 6 }
+					value = 2 # offset +5
+				}
+				else = {
+					value = 3 # offsets +6 to +7
+				}
+			}
+			else = {
+				value = 3 # offsets +8 to +10
+			}
+		}
+	}
+}
+sr_transit_torch_venus = {
+	value = 0
+	value = 1 # offsets -10 to +10
+}
+sr_transit_antimatter_venus = {
+	value = 0
+	value = 1 # offsets -10 to +10
 }
 
 # ===== Saturn system (230 windows) =====
@@ -3563,6 +4721,151 @@ sr_launch_premium_saturn = {
 			}
 		}
 	}
+}
+
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (2221 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -7: fusion 73, torch 3, antimatter 2
+#    -6: fusion 73, torch 3, antimatter 2
+#    -5: fusion 73, torch 4, antimatter 2
+#    -4: fusion 31, torch 4, antimatter 2
+#    -3: fusion 24, torch 4, antimatter 2
+#    -2: fusion 22, torch 4, antimatter 2
+#    -1: fusion 18, torch 4, antimatter 2
+#    +0: fusion 16, torch 4, antimatter 2
+#    +1: fusion 16, torch 3, antimatter 2
+#    +2: fusion 19, torch 3, antimatter 2
+#    +3: fusion 34, torch 3, antimatter 2
+#    +4: fusion 67, torch 3, antimatter 2
+#    +5: fusion 73, torch 3, antimatter 2
+#    +6: fusion 73, torch 3, antimatter 2
+#    +7: fusion 73, torch 4, antimatter 2
+sr_transit_chemical_saturn = { value = 73 }
+sr_transit_fusion_saturn = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_saturn < 0 }
+		if = {
+			limit = { sr_launch_offset_saturn < -4 }
+			value = 73 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_saturn < -2 }
+				if = {
+					limit = { sr_launch_offset_saturn < -3 }
+					value = 31 # offset -4
+				}
+				else = {
+					value = 24 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < -1 }
+					value = 22 # offset -2
+				}
+				else = {
+					value = 18 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_saturn < 4 }
+			if = {
+				limit = { sr_launch_offset_saturn < 2 }
+				value = 16 # offsets +0 to +1
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < 3 }
+					value = 19 # offset +2
+				}
+				else = {
+					value = 34 # offset +3
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_saturn < 6 }
+				if = {
+					limit = { sr_launch_offset_saturn < 5 }
+					value = 67 # offset +4
+				}
+				else = {
+					value = 73 # offset +5
+				}
+			}
+			else = {
+				value = 73 # offsets +6 to +7
+			}
+		}
+	}
+}
+sr_transit_torch_saturn = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_saturn < 0 }
+		if = {
+			limit = { sr_launch_offset_saturn < -4 }
+			if = {
+				limit = { sr_launch_offset_saturn < -6 }
+				value = 3 # offset -7
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < -5 }
+					value = 3 # offset -6
+				}
+				else = {
+					value = 4 # offset -5
+				}
+			}
+		}
+		else = {
+			value = 4 # offsets -4 to -1
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_saturn < 4 }
+			if = {
+				limit = { sr_launch_offset_saturn < 2 }
+				if = {
+					limit = { sr_launch_offset_saturn < 1 }
+					value = 4 # offset +0
+				}
+				else = {
+					value = 3 # offset +1
+				}
+			}
+			else = {
+				value = 3 # offsets +2 to +3
+			}
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_saturn < 6 }
+				value = 3 # offsets +4 to +5
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_saturn < 7 }
+					value = 3 # offset +6
+				}
+				else = {
+					value = 4 # offset +7
+				}
+			}
+		}
+	}
+}
+sr_transit_antimatter_saturn = {
+	value = 0
+	value = 2 # offsets -7 to +7
 }
 
 # ===== Uranus system (236 windows) =====
@@ -3981,6 +5284,115 @@ sr_launch_premium_uranus = {
 	}
 }
 
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (5853 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -7: fusion 192, torch 6, antimatter 2
+#    -6: fusion 192, torch 6, antimatter 2
+#    -5: fusion 192, torch 6, antimatter 2
+#    -4: fusion 82, torch 6, antimatter 2
+#    -3: fusion 56, torch 6, antimatter 2
+#    -2: fusion 47, torch 7, antimatter 2
+#    -1: fusion 40, torch 6, antimatter 2
+#    +0: fusion 37, torch 6, antimatter 2
+#    +1: fusion 38, torch 6, antimatter 2
+#    +2: fusion 54, torch 6, antimatter 2
+#    +3: fusion 107, torch 6, antimatter 2
+#    +4: fusion 192, torch 6, antimatter 2
+#    +5: fusion 192, torch 6, antimatter 2
+#    +6: fusion 192, torch 6, antimatter 2
+#    +7: fusion 192, torch 6, antimatter 2
+sr_transit_chemical_uranus = { value = 192 }
+sr_transit_fusion_uranus = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_uranus < 0 }
+		if = {
+			limit = { sr_launch_offset_uranus < -4 }
+			value = 192 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_uranus < -2 }
+				if = {
+					limit = { sr_launch_offset_uranus < -3 }
+					value = 82 # offset -4
+				}
+				else = {
+					value = 56 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < -1 }
+					value = 47 # offset -2
+				}
+				else = {
+					value = 40 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_uranus < 4 }
+			if = {
+				limit = { sr_launch_offset_uranus < 2 }
+				if = {
+					limit = { sr_launch_offset_uranus < 1 }
+					value = 37 # offset +0
+				}
+				else = {
+					value = 38 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < 3 }
+					value = 54 # offset +2
+				}
+				else = {
+					value = 107 # offset +3
+				}
+			}
+		}
+		else = {
+			value = 192 # offsets +4 to +7
+		}
+	}
+}
+sr_transit_torch_uranus = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_uranus < 0 }
+		if = {
+			limit = { sr_launch_offset_uranus < -4 }
+			value = 6 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_uranus < -2 }
+				value = 6 # offsets -4 to -3
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_uranus < -1 }
+					value = 7 # offset -2
+				}
+				else = {
+					value = 6 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		value = 6 # offsets +0 to +7
+	}
+}
+sr_transit_antimatter_uranus = {
+	value = 0
+	value = 2 # offsets -7 to +7
+}
+
 # ===== Neptune system (237 windows) =====
 sr_window_next_neptune = {
 	value = 0
@@ -4394,6 +5806,115 @@ sr_launch_premium_neptune = {
 			}
 		}
 	}
+}
+
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (11240 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -7: fusion 369, torch 9, antimatter 3
+#    -6: fusion 369, torch 9, antimatter 3
+#    -5: fusion 369, torch 9, antimatter 3
+#    -4: fusion 153, torch 9, antimatter 3
+#    -3: fusion 90, torch 10, antimatter 3
+#    -2: fusion 77, torch 10, antimatter 3
+#    -1: fusion 63, torch 10, antimatter 3
+#    +0: fusion 57, torch 9, antimatter 3
+#    +1: fusion 61, torch 9, antimatter 3
+#    +2: fusion 91, torch 9, antimatter 3
+#    +3: fusion 203, torch 9, antimatter 3
+#    +4: fusion 369, torch 9, antimatter 3
+#    +5: fusion 369, torch 9, antimatter 3
+#    +6: fusion 369, torch 9, antimatter 3
+#    +7: fusion 369, torch 9, antimatter 3
+sr_transit_chemical_neptune = { value = 369 }
+sr_transit_fusion_neptune = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_neptune < 0 }
+		if = {
+			limit = { sr_launch_offset_neptune < -4 }
+			value = 369 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_neptune < -2 }
+				if = {
+					limit = { sr_launch_offset_neptune < -3 }
+					value = 153 # offset -4
+				}
+				else = {
+					value = 90 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_neptune < -1 }
+					value = 77 # offset -2
+				}
+				else = {
+					value = 63 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_neptune < 4 }
+			if = {
+				limit = { sr_launch_offset_neptune < 2 }
+				if = {
+					limit = { sr_launch_offset_neptune < 1 }
+					value = 57 # offset +0
+				}
+				else = {
+					value = 61 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_neptune < 3 }
+					value = 91 # offset +2
+				}
+				else = {
+					value = 203 # offset +3
+				}
+			}
+		}
+		else = {
+			value = 369 # offsets +4 to +7
+		}
+	}
+}
+sr_transit_torch_neptune = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_neptune < 0 }
+		if = {
+			limit = { sr_launch_offset_neptune < -4 }
+			value = 9 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_neptune < -2 }
+				if = {
+					limit = { sr_launch_offset_neptune < -3 }
+					value = 9 # offset -4
+				}
+				else = {
+					value = 10 # offset -3
+				}
+			}
+			else = {
+				value = 10 # offsets -2 to -1
+			}
+		}
+	}
+	else = {
+		value = 9 # offsets +0 to +7
+	}
+}
+sr_transit_antimatter_neptune = {
+	value = 0
+	value = 3 # offsets -7 to +7
 }
 
 # ===== Kuiper Belt (237 windows) =====
@@ -4812,6 +6333,129 @@ sr_launch_premium_kuiper = {
 	}
 }
 
+# Transit months by drive (slices 2-3 design § 2): chemical the median Hohmann time (18610 days) whatever the month; the others by months from the optimum,
+# a departure on day 15 averaged over the same 16 cycles:
+#    -7: fusion 611, torch 12, antimatter 4
+#    -6: fusion 611, torch 12, antimatter 4
+#    -5: fusion 611, torch 12, antimatter 4
+#    -4: fusion 611, torch 13, antimatter 4
+#    -3: fusion 222, torch 13, antimatter 4
+#    -2: fusion 218, torch 13, antimatter 4
+#    -1: fusion 303, torch 13, antimatter 4
+#    +0: fusion 133, torch 13, antimatter 4
+#    +1: fusion 150, torch 12, antimatter 4
+#    +2: fusion 243, torch 12, antimatter 4
+#    +3: fusion 459, torch 12, antimatter 4
+#    +4: fusion 611, torch 12, antimatter 4
+#    +5: fusion 611, torch 12, antimatter 4
+#    +6: fusion 611, torch 12, antimatter 4
+#    +7: fusion 611, torch 12, antimatter 4
+sr_transit_chemical_kuiper = { value = 611 }
+sr_transit_fusion_kuiper = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_kuiper < 0 }
+		if = {
+			limit = { sr_launch_offset_kuiper < -4 }
+			value = 611 # offsets -7 to -5
+		}
+		else = {
+			if = {
+				limit = { sr_launch_offset_kuiper < -2 }
+				if = {
+					limit = { sr_launch_offset_kuiper < -3 }
+					value = 611 # offset -4
+				}
+				else = {
+					value = 222 # offset -3
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_kuiper < -1 }
+					value = 218 # offset -2
+				}
+				else = {
+					value = 303 # offset -1
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_kuiper < 4 }
+			if = {
+				limit = { sr_launch_offset_kuiper < 2 }
+				if = {
+					limit = { sr_launch_offset_kuiper < 1 }
+					value = 133 # offset +0
+				}
+				else = {
+					value = 150 # offset +1
+				}
+			}
+			else = {
+				if = {
+					limit = { sr_launch_offset_kuiper < 3 }
+					value = 243 # offset +2
+				}
+				else = {
+					value = 459 # offset +3
+				}
+			}
+		}
+		else = {
+			value = 611 # offsets +4 to +7
+		}
+	}
+}
+sr_transit_torch_kuiper = {
+	value = 0
+	if = {
+		limit = { sr_launch_offset_kuiper < 0 }
+		if = {
+			limit = { sr_launch_offset_kuiper < -4 }
+			value = 12 # offsets -7 to -5
+		}
+		else = {
+			value = 13 # offsets -4 to -1
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_launch_offset_kuiper < 4 }
+			if = {
+				limit = { sr_launch_offset_kuiper < 2 }
+				if = {
+					limit = { sr_launch_offset_kuiper < 1 }
+					value = 13 # offset +0
+				}
+				else = {
+					value = 12 # offset +1
+				}
+			}
+			else = {
+				value = 12 # offsets +2 to +3
+			}
+		}
+		else = {
+			value = 12 # offsets +4 to +7
+		}
+	}
+}
+sr_transit_antimatter_kuiper = {
+	value = 0
+	value = 4 # offsets -7 to +7
+}
+
+# ===== Transit only: a body with no launch window =====
+# One figure per drive, the mean over 240 months spread across the span.
+# Mercury: the median Hohmann time is 107 days
+sr_transit_chemical_mercury = { value = 4 }
+sr_transit_fusion_mercury = { value = 3 }
+sr_transit_torch_mercury = { value = 1 }
+sr_transit_antimatter_mercury = { value = 1 }
+
 # ===== Readers of the window cache (sr_launch_windows_refresh_cache) =====
 # sr_window_body_code_<body>    the body's number in BODIES order, for debug
 #                               lines, which can't name a $BODY$ (BODY_CODE_LEGEND)
@@ -4826,7 +6470,32 @@ sr_launch_premium_kuiper = {
 # sr_window_disp_verdict_<body> country, the panel's verdict on launching there
 #                               now outside its window: 1 the approach would,
 #                               0 it waits, 2 Safe (never off-window)
+# sr_transit_months_<body>      country: the months a colony fleet leaving now
+#                               takes, by its drive (sr_drive_level), from the
+#                               month's cache sr_window_transit_<drive>_<body>
+#                               (chemical, a constant, needs none)
+# sr_launch_target_cost_<body>  country: the premium a fleet bound for a chosen
+#                               world of the body leaves at now (0 in a window or
+#                               with a torch), sr_launch_never if it can't
+#                               (sr_launch_target_departs_paid: the approach's test
+#                               against the body's own wait, not the stage's,
+#                               sr_launch_target_months_allowed_<body> = k x it)
 
+sr_transit_months_mars = {
+	value = sr_transit_chemical_mars
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_mars } value = global_var:sr_window_transit_antimatter_mars }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_mars } value = global_var:sr_window_transit_torch_mars }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_mars } value = global_var:sr_window_transit_fusion_mars }
+}
+sr_launch_target_cost_mars = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = mars } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = mars } } value = sr_window_premium_now_mars }
+}
+sr_launch_target_months_allowed_mars = {
+	value = sr_window_wait_months_mars
+	multiply = sr_launch_approach_weight
+}
 # Mars
 sr_window_body_code_mars = { value = 1 }
 sr_window_wait_months_mars = {
@@ -4851,6 +6520,21 @@ sr_window_disp_verdict_mars = {
 	value = 0
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = mars } } value = 1 }
+}
+sr_transit_months_ceres = {
+	value = sr_transit_chemical_ceres
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_ceres } value = global_var:sr_window_transit_antimatter_ceres }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_ceres } value = global_var:sr_window_transit_torch_ceres }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_ceres } value = global_var:sr_window_transit_fusion_ceres }
+}
+sr_launch_target_cost_ceres = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = ceres } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = ceres } } value = sr_window_premium_now_ceres }
+}
+sr_launch_target_months_allowed_ceres = {
+	value = sr_window_wait_months_ceres
+	multiply = sr_launch_approach_weight
 }
 # Ceres
 sr_window_body_code_ceres = { value = 2 }
@@ -4877,6 +6561,21 @@ sr_window_disp_verdict_ceres = {
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = ceres } } value = 1 }
 }
+sr_transit_months_vesta = {
+	value = sr_transit_chemical_vesta
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_vesta } value = global_var:sr_window_transit_antimatter_vesta }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_vesta } value = global_var:sr_window_transit_torch_vesta }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_vesta } value = global_var:sr_window_transit_fusion_vesta }
+}
+sr_launch_target_cost_vesta = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = vesta } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = vesta } } value = sr_window_premium_now_vesta }
+}
+sr_launch_target_months_allowed_vesta = {
+	value = sr_window_wait_months_vesta
+	multiply = sr_launch_approach_weight
+}
 # Vesta
 sr_window_body_code_vesta = { value = 3 }
 sr_window_wait_months_vesta = {
@@ -4901,6 +6600,21 @@ sr_window_disp_verdict_vesta = {
 	value = 0
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = vesta } } value = 1 }
+}
+sr_transit_months_psyche = {
+	value = sr_transit_chemical_psyche
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_psyche } value = global_var:sr_window_transit_antimatter_psyche }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_psyche } value = global_var:sr_window_transit_torch_psyche }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_psyche } value = global_var:sr_window_transit_fusion_psyche }
+}
+sr_launch_target_cost_psyche = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = psyche } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = psyche } } value = sr_window_premium_now_psyche }
+}
+sr_launch_target_months_allowed_psyche = {
+	value = sr_window_wait_months_psyche
+	multiply = sr_launch_approach_weight
 }
 # Psyche
 sr_window_body_code_psyche = { value = 4 }
@@ -4927,6 +6641,21 @@ sr_window_disp_verdict_psyche = {
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = psyche } } value = 1 }
 }
+sr_transit_months_pallas = {
+	value = sr_transit_chemical_pallas
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_pallas } value = global_var:sr_window_transit_antimatter_pallas }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_pallas } value = global_var:sr_window_transit_torch_pallas }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_pallas } value = global_var:sr_window_transit_fusion_pallas }
+}
+sr_launch_target_cost_pallas = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = pallas } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = pallas } } value = sr_window_premium_now_pallas }
+}
+sr_launch_target_months_allowed_pallas = {
+	value = sr_window_wait_months_pallas
+	multiply = sr_launch_approach_weight
+}
 # Pallas
 sr_window_body_code_pallas = { value = 5 }
 sr_window_wait_months_pallas = {
@@ -4951,6 +6680,21 @@ sr_window_disp_verdict_pallas = {
 	value = 0
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = pallas } } value = 1 }
+}
+sr_transit_months_hygiea = {
+	value = sr_transit_chemical_hygiea
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_hygiea } value = global_var:sr_window_transit_antimatter_hygiea }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_hygiea } value = global_var:sr_window_transit_torch_hygiea }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_hygiea } value = global_var:sr_window_transit_fusion_hygiea }
+}
+sr_launch_target_cost_hygiea = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = hygiea } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = hygiea } } value = sr_window_premium_now_hygiea }
+}
+sr_launch_target_months_allowed_hygiea = {
+	value = sr_window_wait_months_hygiea
+	multiply = sr_launch_approach_weight
 }
 # Hygiea
 sr_window_body_code_hygiea = { value = 6 }
@@ -4977,6 +6721,21 @@ sr_window_disp_verdict_hygiea = {
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = hygiea } } value = 1 }
 }
+sr_transit_months_jupiter = {
+	value = sr_transit_chemical_jupiter
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_jupiter } value = global_var:sr_window_transit_antimatter_jupiter }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_jupiter } value = global_var:sr_window_transit_torch_jupiter }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_jupiter } value = global_var:sr_window_transit_fusion_jupiter }
+}
+sr_launch_target_cost_jupiter = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = jupiter } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = jupiter } } value = sr_window_premium_now_jupiter }
+}
+sr_launch_target_months_allowed_jupiter = {
+	value = sr_window_wait_months_jupiter
+	multiply = sr_launch_approach_weight
+}
 # Jupiter system
 sr_window_body_code_jupiter = { value = 7 }
 sr_window_wait_months_jupiter = {
@@ -5001,6 +6760,21 @@ sr_window_disp_verdict_jupiter = {
 	value = 0
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = jupiter } } value = 1 }
+}
+sr_transit_months_venus = {
+	value = sr_transit_chemical_venus
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_venus } value = global_var:sr_window_transit_antimatter_venus }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_venus } value = global_var:sr_window_transit_torch_venus }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_venus } value = global_var:sr_window_transit_fusion_venus }
+}
+sr_launch_target_cost_venus = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = venus } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = venus } } value = sr_window_premium_now_venus }
+}
+sr_launch_target_months_allowed_venus = {
+	value = sr_window_wait_months_venus
+	multiply = sr_launch_approach_weight
 }
 # Venus
 sr_window_body_code_venus = { value = 8 }
@@ -5027,6 +6801,21 @@ sr_window_disp_verdict_venus = {
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = venus } } value = 1 }
 }
+sr_transit_months_saturn = {
+	value = sr_transit_chemical_saturn
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_saturn } value = global_var:sr_window_transit_antimatter_saturn }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_saturn } value = global_var:sr_window_transit_torch_saturn }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_saturn } value = global_var:sr_window_transit_fusion_saturn }
+}
+sr_launch_target_cost_saturn = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = saturn } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = saturn } } value = sr_window_premium_now_saturn }
+}
+sr_launch_target_months_allowed_saturn = {
+	value = sr_window_wait_months_saturn
+	multiply = sr_launch_approach_weight
+}
 # Saturn system
 sr_window_body_code_saturn = { value = 9 }
 sr_window_wait_months_saturn = {
@@ -5051,6 +6840,21 @@ sr_window_disp_verdict_saturn = {
 	value = 0
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = saturn } } value = 1 }
+}
+sr_transit_months_uranus = {
+	value = sr_transit_chemical_uranus
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_uranus } value = global_var:sr_window_transit_antimatter_uranus }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_uranus } value = global_var:sr_window_transit_torch_uranus }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_uranus } value = global_var:sr_window_transit_fusion_uranus }
+}
+sr_launch_target_cost_uranus = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = uranus } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = uranus } } value = sr_window_premium_now_uranus }
+}
+sr_launch_target_months_allowed_uranus = {
+	value = sr_window_wait_months_uranus
+	multiply = sr_launch_approach_weight
 }
 # Uranus system
 sr_window_body_code_uranus = { value = 10 }
@@ -5077,6 +6881,21 @@ sr_window_disp_verdict_uranus = {
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = uranus } } value = 1 }
 }
+sr_transit_months_neptune = {
+	value = sr_transit_chemical_neptune
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_neptune } value = global_var:sr_window_transit_antimatter_neptune }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_neptune } value = global_var:sr_window_transit_torch_neptune }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_neptune } value = global_var:sr_window_transit_fusion_neptune }
+}
+sr_launch_target_cost_neptune = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = neptune } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = neptune } } value = sr_window_premium_now_neptune }
+}
+sr_launch_target_months_allowed_neptune = {
+	value = sr_window_wait_months_neptune
+	multiply = sr_launch_approach_weight
+}
 # Neptune system
 sr_window_body_code_neptune = { value = 11 }
 sr_window_wait_months_neptune = {
@@ -5102,6 +6921,21 @@ sr_window_disp_verdict_neptune = {
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = neptune } } value = 1 }
 }
+sr_transit_months_kuiper = {
+	value = sr_transit_chemical_kuiper
+	if = { limit = { sr_drive_level >= 3 has_global_variable = sr_window_transit_antimatter_kuiper } value = global_var:sr_window_transit_antimatter_kuiper }
+	else_if = { limit = { sr_drive_level >= 2 has_global_variable = sr_window_transit_torch_kuiper } value = global_var:sr_window_transit_torch_kuiper }
+	else_if = { limit = { sr_drive_level >= 1 has_global_variable = sr_window_transit_fusion_kuiper } value = global_var:sr_window_transit_fusion_kuiper }
+}
+sr_launch_target_cost_kuiper = {
+	value = sr_launch_never
+	if = { limit = { sr_launch_departs_free = { BODY = kuiper } } value = 0 }
+	else_if = { limit = { sr_launch_target_departs_paid = { BODY = kuiper } } value = sr_window_premium_now_kuiper }
+}
+sr_launch_target_months_allowed_kuiper = {
+	value = sr_window_wait_months_kuiper
+	multiply = sr_launch_approach_weight
+}
 # Kuiper Belt
 sr_window_body_code_kuiper = { value = 12 }
 sr_window_wait_months_kuiper = {
@@ -5126,6 +6960,13 @@ sr_window_disp_verdict_kuiper = {
 	value = 0
 	if = { limit = { has_variable = sr_safe_solar_colonization } value = 2 }
 	else_if = { limit = { sr_launch_departs_paid = { BODY = kuiper } } value = 1 }
+}
+# Mercury (no window)
+sr_transit_months_mercury = {
+	value = sr_transit_chemical_mercury
+	if = { limit = { sr_drive_level >= 3 } value = sr_transit_antimatter_mercury }
+	else_if = { limit = { sr_drive_level >= 2 } value = sr_transit_torch_mercury }
+	else_if = { limit = { sr_drive_level >= 1 } value = sr_transit_fusion_mercury }
 }
 
 # The stage's soonest window among its unclaimed sites (m in the off-window

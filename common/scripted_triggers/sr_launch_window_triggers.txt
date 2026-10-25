@@ -15,13 +15,28 @@
 #   fusion drives     (compact_fusion_reactors) any month, free: no windows
 # The Moon, Mercury and the probes are never gated. Players and the AI run the
 # same rule: the AI keeps funding and its approach decides off-window launches.
+# The antimatter drive (slices 2-3 design § 1) leaves any month too.
 #
 # $BODY$ is a window body's token (mars, ceres, vesta, psyche, pallas, hygiea,
 # jupiter, venus, saturn, uranus, neptune, kuiper). Country scope throughout.
 # ============================================================================
 
+# Fusion drives that leave any month: the torch (Muon-Catalyzed Fusion
+# Reactors) or the antimatter drive.
 sr_launch_has_fusion = {
-	has_technology_researched = compact_fusion_reactors
+	OR = {
+		has_technology_researched = compact_fusion_reactors
+		sr_launch_has_antimatter = yes
+	}
+}
+
+# The antimatter drive: the technology and an Antimatter Containment Facility
+# to fill its tanks (scope § 5.3). The fastest of the four (sr_drive_level 3).
+sr_launch_has_antimatter = {
+	has_technology_researched = antimatter_production
+	any_scope_building = {
+		is_building_type = building_antimatter_facility
+	}
 }
 
 sr_launch_has_depots = {
@@ -56,6 +71,20 @@ sr_launch_departs_paid = {
 	sr_launch_has_depots = yes
 	NOT = { has_variable = sr_safe_solar_colonization }
 	sr_launch_months_cost_$BODY$ <= sr_launch_months_allowed
+}
+
+# A fleet bound for a chosen world of the body (a target, or the automatic pick
+# under simple and full colonies; slices 2-3 design § 4) can leave now outside
+# the window, at the premium: as sr_launch_departs_paid, but the months saved
+# are the body's own wait for its window, not the stage's soonest window,
+# because the programme has already chosen where it goes.
+sr_launch_target_departs_paid = {
+	sr_window_body_in_play_$BODY$ = yes
+	sr_launch_windows_apply = yes
+	NOT = { has_global_variable = sr_window_is_open_$BODY$ }
+	sr_launch_has_depots = yes
+	NOT = { has_variable = sr_safe_solar_colonization }
+	sr_launch_months_cost_$BODY$ <= sr_launch_target_months_allowed_$BODY$
 }
 
 # The colony draw (sr_establish_colony_effect): a site of this body may be

@@ -21,6 +21,8 @@ SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
 DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_values.txt")
 # The Solar System rows' values, generated from the site table (gen_solar_sites.py).
 SITES_DISPLAY = os.path.join(REPO, "common", "script_values", "sr_sites_display_generated.txt")
+# The per-world and per-slot rows that read them (gen_solar_sites.py too).
+SITES_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
 CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "space_race_custom_loc.txt")
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -256,9 +258,9 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        # two live sections per milestone, solar colonization's Our Colonies and
-        # Solar System, and the shared reference
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 3)
+        # two live sections per milestone, solar colonization's Our Colonies,
+        # Colony Fleets, Settlers and Solar System, and the shared reference
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 5)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -654,7 +656,7 @@ class DisplayValuesTest(unittest.TestCase):
         cls.site_names = set(re.findall(r"(?m)^(sr_disp_\w+) = \{", _read(SITES_DISPLAY)))
 
     def test_every_value_the_panel_reads_exists(self):
-        used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)", _read(GUI)))
+        used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)", _read(GUI) + _read(SITES_ROWS)))
         for key in re.findall(r"ScriptValue\('(sr_disp_\w+)'\)",
                               "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))):
             used.add(key)
