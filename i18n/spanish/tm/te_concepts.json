@@ -1023,6 +1023,10 @@
   "en": "An [concept_amendment] levying a progressive duty on great estates as they pass. It raises no standing revenue; it lowers the target of the [concept_inheritance_concentration] by #v 30#!. Not with the Birthright Endowment, which levies the duty itself.",
   "es": "Una [concept_amendment|l] que grava con un impuesto progresivo las grandes herencias al transmitirse. No genera ingresos fijos; reduce en #v 30#! el objetivo de la [concept_inheritance_concentration|l]. No se combina con la Dotación de nacimiento, que ya establece el impuesto por sí misma."
  },
+ "amendment_first_past_the_post_desc": {
+  "en": "An [concept_amendment] giving each seat to whoever tops the poll. A vote for a party that can't win is wasted, so interest groups crowd into the two largest parties, which become broad coalitions. Disagreement inside the government costs less [concept_legitimacy], but the voters left without a winning party cost it some.",
+  "es": "Una [concept_amendment|l] que concede cada escaño a quien obtiene más votos. Un voto a un partido que no puede ganar se desperdicia, así que los grupos de interés se agolpan en los dos mayores partidos, que se convierten en amplias coaliciones. El desacuerdo dentro del gobierno cuesta menos [concept_legitimacy|l], pero le cuestan algo los votantes que se quedan sin un partido ganador."
+ },
  "amendment_langreform_advisory_panel_desc": {
   "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
   "es": "Un panel de eruditos publica directrices autorizadas sobre el uso de la lengua, con peso moral pero sin fuerza de ley."

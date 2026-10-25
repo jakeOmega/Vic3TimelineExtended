@@ -435,6 +435,26 @@
   "en": "The Farm Is Not to Be Cut",
   "de": "Der Hof darf nicht zerteilt werden"
  },
+ "amendment_petition_events.28.a": {
+  "en": "Whoever tops the poll wins the seat.",
+  "de": "Wer die meisten Stimmen holt, gewinnt den Sitz."
+ },
+ "amendment_petition_events.28.b": {
+  "en": "Every vote should count.",
+  "de": "Jede Stimme soll zählen."
+ },
+ "amendment_petition_events.28.d": {
+  "en": "Two parties now hold most of the country's political weight, and the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] ask that our elections recognize it: each seat to the candidate with the most votes, and no more bargaining with factions that carried a handful of districts. The smaller parties warn that their voters would be shut out of power for good.",
+  "de": "Zwei Parteien vereinen heute den Großteil des politischen Gewichts im Land, und die [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] verlangen, dass unsere Wahlen dem Rechnung tragen: jeder Sitz an den Kandidaten mit den meisten Stimmen und kein Feilschen mehr mit Fraktionen, die eine Handvoll Wahlkreise gewonnen haben. Die kleineren Parteien warnen, ihre Wähler wären auf Dauer von der Macht ausgeschlossen."
+ },
+ "amendment_petition_events.28.f": {
+  "en": "\\\"Why should a party that won one vote in ten decide who governs?\\\"\\n\\n\\\"Because one voter in ten,\\\" said the man from the small party, \\\"is still a great many people.\\\"",
+  "de": "„Warum sollte eine Partei, die gerade einmal jede zehnte Stimme erhalten hat, darüber entscheiden, wer regiert?“\\n\\n„Weil jeder zehnte Wähler“, sagte der Mann von der kleinen Partei, „immer noch sehr viele Menschen sind.“"
+ },
+ "amendment_petition_events.28.t": {
+  "en": "Two Parties Are Enough",
+  "de": "Zwei Parteien genügen"
+ },
  "amendment_petition_events.3.a": {
   "en": "Print the laws in both tongues.",
   "de": "Die Gesetze in beiden Sprachen drucken."
@@ -22306,6 +22326,50 @@
  "te_demog_wave.9.t": {
   "en": "The Overspill",
   "de": "Der Überlauf"
+ },
+ "te_fptp_events.1.a": {
+  "en": "Whoever tops the poll takes the seat, as before.",
+  "de": "Wer die meisten Stimmen holt, bekommt den Sitz, wie bisher."
+ },
+ "te_fptp_events.1.b": {
+  "en": "Share out the seats by the vote.",
+  "de": "Die Sitze nach Stimmenanteil verteilen."
+ },
+ "te_fptp_events.1.b.tt": {
+  "en": "First Past the Post ends: smaller parties can win interest groups again, and later changes of voting law won't ask about it.",
+  "de": "Die Relative Mehrheitswahl endet: Kleinere Parteien können wieder Interessengruppen für sich gewinnen, und spätere Änderungen des Wahlrechts stellen die Frage nicht erneut."
+ },
+ "te_fptp_events.1.d": {
+  "en": "The new voting law has taken effect, and the old rule for counting votes has lapsed with the law it was attached to. The [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] want each seat to go, as before, to whoever tops the poll in the district. Reformers say this is the moment to share out the seats by each party's share of the vote, so that no vote is wasted.",
+  "de": "Das neue Wahlgesetz ist in Kraft getreten, und die alte Regel zur Stimmenauszählung ist zusammen mit dem Gesetz, an das sie geknüpft war, erloschen. Die [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] wollen, dass jeder Sitz wie bisher an den Kandidaten mit den meisten Stimmen im Wahlkreis geht. Reformer sagen, dies sei der Moment für die Verhältniswahl, bei der die Sitze nach dem Stimmenanteil jeder Partei vergeben werden, damit keine Stimme verloren geht."
+ },
+ "te_fptp_events.1.f": {
+  "en": "\\\"Under the old rule,\\\" the clerk explained, \\\"the man with the most votes wins, and the others go home.\\\"\\n\\n\\\"And under the new one?\\\"\\n\\n\\\"The others come too, in proportion. You will need a larger hall.\\\"",
+  "de": "„Nach der alten Regel“, erklärte der Schreiber, „gewinnt der Mann mit den meisten Stimmen, und die anderen gehen nach Hause.“\\n\\n„Und nach der neuen?“\\n\\n„Die anderen kommen auch, im Verhältnis zu ihren Stimmen. Sie werden einen größeren Saal brauchen.“"
+ },
+ "te_fptp_events.1.t": {
+  "en": "Counting the Votes",
+  "de": "Stimmenauszählung"
+ },
+ "te_fptp_events.2.a": {
+  "en": "Let the strongest candidate win.",
+  "de": "Der stärkste Kandidat soll gewinnen."
+ },
+ "te_fptp_events.2.b": {
+  "en": "Every party should have the seats its votes earn.",
+  "de": "Jede Partei soll die Sitze bekommen, die ihre Stimmen verdienen."
+ },
+ "te_fptp_events.2.d": {
+  "en": "The voting bill is before the legislature, and the [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] have named their price for carrying it: each seat should go to whoever tops the poll in its district. Their party and its great rival would share nearly every seat between them. The smaller parties call it a stitch-up, and they are not wrong.",
+  "de": "Der Gesetzentwurf zum Wahlrecht liegt dem Parlament vor, und die [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] haben ihren Preis für seine Verabschiedung genannt: Jeder Sitz soll an den Kandidaten mit den meisten Stimmen im jeweiligen Wahlkreis gehen. Ihre Partei und deren großer Rivale würden nahezu alle Sitze unter sich aufteilen. Die kleineren Parteien nennen das Kungelei, und sie haben nicht unrecht."
+ },
+ "te_fptp_events.2.f": {
+  "en": "The map on the committee table was covered in two colors. A third had been there once, in a few scattered districts, but someone had painted over it.\\n\\n\\\"A clean result,\\\" the chairman said. \\\"Clean results make for stable government.\\\"",
+  "de": "Die Karte auf dem Ausschusstisch war in zwei Farben gehalten. Eine dritte hatte es einmal gegeben, in ein paar verstreuten Wahlkreisen, doch jemand hatte sie übermalt.\\n\\n„Ein klares Ergebnis“, sagte der Vorsitzende. „Klare Ergebnisse sorgen für eine stabile Regierung.“"
+ },
+ "te_fptp_events.2.t": {
+  "en": "The Winner Takes All",
+  "de": "Der Sieger bekommt alles"
  },
  "te_inflation.1.a": {
   "en": "Call in every note. We begin again.",
