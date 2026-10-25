@@ -5686,6 +5686,14 @@
  te_debug_space_race.3.f:0 "\"Every ship in the sky, and every soul on every rock. Count them.\""
  te_debug_space_race.3.g:0 "Fill our colonies to half their room"
  te_debug_space_race.3.t:0 "Colony Fleets Console"
+ te_debug_space_race.4.a:0 "Log every colony's modules"
+ te_debug_space_race.4.b:0 "Fill our fabrication stock"
+ te_debug_space_race.4.c:0 "Queue one of each module at our first colony and fabricate now"
+ te_debug_space_race.4.d:0 "Console-only shortcuts for testing colony modules and Extraplanetary Base room under Simple and Full Colonies. The lines go to debug.log as TE_SR_MODULES."
+ te_debug_space_race.4.e:0 "Land every one of our module shipments now"
+ te_debug_space_race.4.f:0 "\"Bolt it on, wire it up, and someone find me five thousand people.\""
+ te_debug_space_race.4.g:0 "Recompute our Extraplanetary Base room now"
+ te_debug_space_race.4.t:0 "Colony Modules Console"
 
 #
 # TE_DEBUG_UN

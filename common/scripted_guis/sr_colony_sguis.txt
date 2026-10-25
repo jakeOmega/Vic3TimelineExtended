@@ -2,7 +2,7 @@
 # SOLAR SYSTEM COLONIZATION — the colony panels' scripted GUIs
 # ============================================================================
 # Design: docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md
-# (§ 3 targets, § 10.7 Settlers). The buttons in
+# (§ 3 targets, § 10.7 Settlers) and the colony modules design (§ 11). The buttons in
 # gui/journal_entry_widgets/sr_sites_generated_rows.gui (one per world, which
 # pass the world's index in gen_solar_sites.SITES as scope:site) and the
 # Settlers section of space_race_widget.gui (scope:op). Player-only: the AI
@@ -118,6 +118,84 @@ sr_settlers_sgui = {
 		}
 		hidden_effect = {
 			sr_emig_step_level = yes
+		}
+	}
+}
+
+# Colony Modules (colony modules design § 11): scope:op 1-5 queues one module
+# of that type at the world (1 its first specialization, 2 its second,
+# 3 Habitat, 4 Defences, 5 Spaceport), within its caps; scope:op 0 clears the
+# world's queue.
+sr_colony_module_sgui = {
+	scope = country
+	saved_scopes = { site op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = sr_mod_nothing_queued_tt
+				sr_mod_scope_has_queue = yes
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_mod_cannot_queue_tt
+				sr_mod_scope_can_queue = yes
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = sr_mod_clear_queue_tt
+				sr_mod_clear_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = sr_mod_queue_spec_a_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = sr_mod_queue_spec_b_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = sr_mod_queue_hab_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = sr_mod_queue_def_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = sr_mod_queue_port_tt
+				sr_mod_queue_from_scope = yes
+			}
 		}
 	}
 }

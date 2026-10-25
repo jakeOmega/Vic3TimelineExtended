@@ -247,6 +247,18 @@ class DeepSeaMineAgainstExtraplanetaryBase(unittest.TestCase):
                 self.assertGreaterEqual(min(self.d.deep_profits(deep).values()),
                                         self.d.profit(space))
 
+    def test_the_best_colony_grade_keeps_the_era_11_ordering(self):
+        """Colony modules design § 9: a base level in the best colony's room (16 Psyche)
+        works at its grade's extra throughput, which scales its goods both ways and so
+        its profit; the era-11 Deep-Sea Mine still out-earns it per level."""
+        sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+        import gen_solar_sites
+        best = 1 + max(s.ebase_grade for s in gen_solar_sites.SITES) / 100
+        base = [pm for pm in self.deep if self.d.method_era(pm, DEEP_SEA) == 11]
+        for space in (pm for pm in self.space if self.d.method_era(pm, SPACE) == 11):
+            with self.subTest(extraplanetary=space, throughput=best):
+                self.assertGreater(min(self.d.deep_profits(base[0]).values()), best * self.d.profit(space))
+
     def test_era_11_outputs_each_at_least_the_asteroid_mine(self):
         era_11 = [pm for pm in self.space if self.d.method_era(pm, SPACE) == 11]
         self.assertTrue(era_11)

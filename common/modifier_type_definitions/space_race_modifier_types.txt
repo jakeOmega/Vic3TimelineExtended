@@ -41,3 +41,16 @@ country_space_race_risk_mult = {
 		ai_value = -5000
 	}
 }
+
+# Colony module fabrication points a month (colony modules design § 5): the
+# Space Program's Module Fabrication methods give it, workforce-scaled, and
+# sr_mod_month builds the queued modules from it. The engine consumes nothing.
+country_sr_module_fabrication_add = {
+	color = good
+	percent = no
+	decimals = 1
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}

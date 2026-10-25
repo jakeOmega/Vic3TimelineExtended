@@ -1,0 +1,60 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — colony modules and Extraplanetary Base room: values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-modules-and-bases-design.md.
+# The per-world values are generated (sr_sites_generated.txt).
+# ============================================================================
+
+# ---- Fabrication (design § 5) ------------------------------------------------------
+# Every module's points; at most this many modules a month; the stock kept
+# while fabrication stalls.
+sr_module_points = { value = 100 }
+sr_mod_fab_per_month = { value = 2 }
+sr_mod_fab_stock_cap = { value = 200 }
+
+# Country scope. The month's points: the Space Program's fabrication method
+# (te_colony_module_pms.txt), workforce-scaled.
+sr_mod_fab_rate = {
+	value = modifier:country_sr_module_fabrication_add
+}
+
+sr_mod_fab_stock_value = {
+	value = 0
+	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }
+}
+
+# The last colony fabrication served, a world's index (0 before the first).
+sr_mod_fab_cursor_value = {
+	value = 0
+	if = { limit = { has_variable = sr_fab_cursor } value = var:sr_fab_cursor }
+}
+
+# ---- Upkeep (design § 8) -------------------------------------------------------------
+# Journal entry scope (the multiplier of sr_module_upkeep): the module
+# levels past the first at the colonies its country holds, read through owner.
+sr_mod_upkeep_units = {
+	value = 0
+	owner = { add = sr_mod_upkeep_levels }
+}
+
+# ---- Extraplanetary Base room (design § 9) --------------------------------------------
+# Country scope. Its Extraplanetary Base levels, built, and built and queued.
+sr_ebase_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_mine }
+			add = level
+		}
+	}
+}
+
+sr_ebase_queued_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_mine }
+			add = level_after_queued_constructions
+		}
+	}
+}

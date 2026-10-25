@@ -558,7 +558,12 @@ class PopulationTest(unittest.TestCase):
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                self.assertIn(f"sr_site_room_{k} = {{ value = {site.room * 1000} }}", self.values)
+                self.assertIn(f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}", self.values)
+                # Habitats add half the base room a level (colony modules design § 3).
+                room = _block(self.values, f"sr_site_room_{k}")
+                self.assertIn(f"value = sr_site_hab_value_{k}", room)
+                self.assertIn(f"multiply = {gss.HABITAT_ROOM_SHARE}", room)
+                self.assertIn(f"multiply = sr_site_base_room_{k}", room)
                 for kind in ("sr_site_pop_value", "sr_site_free_room", "sr_site_crews", "sr_emig_prio_weight",
                              "sr_emig_weight"):
                     self.assertRegex(self.values, rf"(?m)^{kind}_{k} = \{{")
@@ -653,6 +658,246 @@ class PopulationTest(unittest.TestCase):
         self.assertEqual(loop.count("value = local_var:sr_emig_pass\n"), len(gss.SITES))
         self.assertEqual(loop.count("change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }"),
                          len(gss.SITES))
+
+
+class ModulesTest(unittest.TestCase):
+    """Colony modules and Extraplanetary Base room (slice 4,
+    2026-10-25-solar-colonization-modules-and-bases-design.md)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.triggers = _strip(_raw(str(gss.TRIGGERS_OUT)))
+        cls.values = _strip(_raw(str(gss.VALUES_OUT)))
+        cls.shared = _strip(_raw("common", "scripted_effects", "sr_site_effects.txt"))
+        cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
+        cls.rows = _raw(str(gss.GUI_OUT))
+
+    def test_the_table_s_slots_and_base_room(self):
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(site.slots, range(1, 5))
+                self.assertIn(site.ebase_room, range(10, 61))
+                self.assertIn(site.ebase_grade, range(-45, 31))
+        self.assertEqual(sum(s.ebase_room for s in gss.SITES), 760)
+        best = max(gss.SITES, key=lambda s: s.ebase_grade)
+        self.assertEqual(best.key, "psyche")
+        # The outer worlds are poorer than the inner, stage by stage on average.
+        means = [sum(s.ebase_grade for s in gss.stage_sites(n)) / len(gss.stage_sites(n)) for n in range(1, 6)]
+        self.assertEqual(means, sorted(means, reverse=True))
+
+    def test_a_specialization_reads_its_founding_level_until_a_module_raises_it(self):
+        for site in gss.SITES:
+            k = site.key
+            for slot, option in (("a", 1), ("b", 2)):
+                body = _block(self.values, f"sr_site_lvl_{slot}_value_{k}")
+                with self.subTest(site=k, slot=slot):
+                    self.assertIn(f"value = global_var:sr_site_lvl_{slot}_{k}", body)
+                    self.assertIn(f"global_var:sr_site_spec_{k} = {option} }} value = 1", body)
+                    self.assertLess(body.index(f"sr_site_lvl_{slot}_{k}"), body.index(f"sr_site_spec_{k}"))
+
+    def test_staffing_counts_crews_against_the_crewed_levels(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                levels = _block(self.values, f"sr_site_levels_{k}")
+                self.assertEqual(re.findall(r"= (sr_site_\w+_value_\w+)", levels),
+                                 [gss.level_value(t, site) for t in gss.CREWED_TYPES])
+                self.assertNotIn("hab", levels)
+                staffing = _block(self.values, f"sr_site_staffing_{k}")
+                self.assertIn("sr_colonies_contested_enabled = yes", staffing)
+                self.assertIn(f"sr_site_crews_{k} < sr_site_crew_needed_{k}", staffing)
+                self.assertIn("has_technology_researched = artificial_intelligence", staffing)
+                self.assertIn(f"value = sr_site_crews_{k}\n\t\tadd = 1\n\t\tdivide = sr_site_levels_{k}", staffing)
+                for slot in ("a", "b"):
+                    mult = _block(self.values, f"sr_site_mult_{slot}_{k}")
+                    self.assertIn(f"value = sr_site_lvl_{slot}_value_{k}", mult)
+                    self.assertIn(f"multiply = sr_site_staffing_{k}", mult)
+
+    def test_the_mirror_shows_each_specialization_at_its_multiplier(self):
+        for site in gss.SITES:
+            k = site.key
+            body = _block(self.effects, f"sr_site_mirror_on_{k}")
+            for slot, modifier in zip(("a", "b"), gss.spec_modifiers(site)):
+                with self.subTest(site=k, slot=slot):
+                    self.assertIn(f"sr_site_lvl_{slot}_value_{k} >= 1", body)
+                    self.assertIn(f"sr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
+                                  body)
+                    self.assertIn(f"sr_site_hide_modifier = {{ MODIFIER = {modifier} }}", body)
+
+    def test_the_multiplier_is_tested_by_its_record_not_has_modifier(self):
+        show = _block(self.shared, "sr_site_show_modifier_at")
+        test = _block(show, "limit") if "limit" in show else ""
+        self.assertIn("NOT = { var:$MODIFIER$_mult = $MULT$ }", show)
+        self.assertNotIn("has_modifier", show[:show.index("je:je_space_race_solar_colonization")])
+        inner = show[show.index("je:je_space_race_solar_colonization"):]
+        self.assertLess(inner.index("remove_modifier = $MODIFIER$"), inner.index("add_modifier"))
+        self.assertIn("add_modifier = { name = $MODIFIER$ multiplier = $MULT$ }", inner)
+        self.assertIn("owner = { set_variable = { name = $MODIFIER$_mult value = $MULT$ } }", inner)
+        self.assertTrue(test)
+        # The founding choice records multiplier 1 for the unscaled modifier the grant just added.
+        for modifier, site, kind, _ in gss.choices():
+            if kind != "spec":
+                continue
+            body = _block(self.effects, f"sr_site_choose_{modifier}")
+            with self.subTest(modifier=modifier):
+                self.assertLess(body.index(f"set_variable = {{ name = {modifier}_mult value = 1 }}"),
+                                body.index(f"sr_site_sync_{site.key} = yes"))
+        hide = _block(self.shared, "sr_site_hide_modifier")
+        self.assertIn("limit = { has_variable = $MODIFIER$_mult }\n\t\tremove_variable = $MODIFIER$_mult", hide)
+
+    def test_release_clears_the_modules_and_the_unmirror_the_queue(self):
+        for site in gss.SITES:
+            k = site.key
+            release = _block(self.effects, f"sr_site_release_{k}")
+            unmirror = _block(self.effects, f"sr_site_unmirror_{k}")
+            with self.subTest(site=k):
+                for var in gss.module_vars(site):
+                    self.assertIn(f"remove_global_variable = {var}", release)
+                for t in gss.MODULE_TYPES:
+                    self.assertIn(f"remove_variable = sr_mq_{t}_{k}", unmirror)
+
+    def test_the_caps_count_queue_and_shipments(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                for slot in ("a", "b"):
+                    can = _block(self.triggers, f"sr_mod_can_queue_{slot}_{k}")
+                    self.assertIn(f"global_var:sr_site_holder_{k} ?= this", can)
+                    self.assertIn(f"has_global_variable = sr_site_spec_{k}", can)
+                    self.assertIn(f"sr_mod_spec_used_{k} < sr_mod_spec_budget", can)
+                for t in gss.GENERIC_TYPES:
+                    self.assertIn(f"sr_mod_slots_used_{k} < {site.slots}", _block(self.triggers, f"sr_mod_can_queue_{t}_{k}"))
+                for name, types in (("spec_used", ("a", "b")), ("slots_used", gss.GENERIC_TYPES)):
+                    used = _block(self.values, f"sr_mod_{name}_{k}")
+                    for t in types:
+                        self.assertIn(f"add = var:sr_mq_{t}_{k}", used)
+                        self.assertIn(f"add = global_var:sr_site_ship_{t}_{k}", used)
+        self.assertIn(f"sr_mod_spec_budget = {{ value = {gss.SPEC_BUDGET} }}", self.values)
+
+    def test_a_landing_installs_within_its_cap_and_syncs(self):
+        for site in gss.SITES:
+            k = site.key
+            body = _block(self.effects, f"sr_mod_install_{k}")
+            with self.subTest(site=k):
+                self.assertIn(f"has_global_variable = sr_colony_{k}", body)
+                for t in ("a", "b", *gss.GENERIC_TYPES):
+                    cap = (f"sr_site_spec_built_{k} < sr_mod_spec_budget" if t in ("a", "b")
+                           else f"sr_site_generic_built_{k} < {site.slots}")
+                    self.assertIn(f"local_var:sr_ms_type_now = {gss.MODULE_CODES[t]} {cap}", body)
+                self.assertIn(f"sr_site_sync_{k} = yes", body)
+
+    def test_fabrication_takes_the_queue_in_order_and_colonies_in_turn(self):
+        for site in gss.SITES:
+            body = _block(self.effects, f"sr_mod_fab_take_{site.key}")
+            with self.subTest(site=site.key):
+                self.assertEqual(re.findall(r"TYPE = (\w+) CODE", body), list(gss.MODULE_TYPES))
+        nxt = _block(self.effects, "sr_mod_fab_next")
+        after = re.findall(r"sr_mod_fab_cursor_value < (\d+) sr_mq_any_(\w+) = yes", nxt)
+        self.assertEqual(after, [(str(s.index), s.key) for s in gss.SITES])
+        tail = nxt[nxt.rindex("sr_mod_fab_cursor_value"):]
+        self.assertEqual(re.findall(r"limit = \{ sr_mq_any_(\w+) = yes \}", tail), [s.key for s in gss.SITES])
+        build = _block(self.modules, "sr_mod_fab_build")
+        for line in ("change_variable = { name = sr_fab_stock subtract = sr_module_points }",
+                     "set_variable = { name = sr_fab_cursor value = $INDEX$ }",
+                     "sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }", "sr_ms_store_new = yes"):
+            self.assertIn(line, build)
+
+    def test_the_ai_never_queues_a_placeholder(self):
+        for site in gss.SITES:
+            body = _block(self.effects, f"sr_mod_ai_plan_{site.key}")
+            with self.subTest(site=site.key):
+                self.assertEqual(set(re.findall(r"TYPE = (\w+) \}", body)), {"hab", "a", "b"})
+        review = _block(self.modules, "sr_mod_ai_review")
+        self.assertIn("is_ai = yes", review)
+        self.assertIn("days = 360", review)
+
+    def test_shipments_move_before_the_worlds_step_under_simple_and_full(self):
+        monthly = _block(self.shared, "sr_sites_global_monthly")
+        self.assertLess(monthly.index("sr_ms_global_month = yes"), monthly.index("sr_sites_monthly = yes"))
+        guarded = monthly[monthly.index("sr_cf_global_arrivals"):monthly.index("sr_sites_monthly = yes")]
+        self.assertIn("sr_ms_global_month = yes", guarded)
+        step = _block(self.modules, "sr_ms_global_month")
+        self.assertLess(step.index("sr_ms_step_slot"), step.index("sr_ms_clear_counters = yes"))
+        self.assertLess(step.index("sr_ms_clear_counters = yes"), step.index("sr_ms_count_slot"))
+        for n in range(1, gss.SHIP_SLOTS + 1):
+            self.assertIn(f"sr_ms_step_slot = {{ N = {n} }}", step)
+            self.assertIn(f"sr_ms_count_slot = {{ N = {n} }}", step)
+            self.assertIn(f"NOT = {{ has_variable = sr_ms_{n}_site }}", _block(self.modules, "sr_ms_store_new"))
+
+    def test_the_base_room_fills_best_grade_first(self):
+        fill = _block(self.effects, "sr_ebase_fill")
+        grades = [int(g) for g in re.findall(r"# [^:]+: \d+ levels at ([+-]\d+)%", _raw(str(gss.EFFECTS_OUT)))]
+        self.assertEqual(len(grades), len(gss.SITES) + 1)
+        self.assertEqual(grades, sorted(grades, reverse=True))
+        self.assertIn(f"value = local_var:sr_eb_left max = {gss.NEAR_EARTH_ROOM}", fill)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"global_var:sr_site_holder_{site.key} ?= this", fill)
+        self.assertTrue(fill.rstrip().endswith(
+            f"multiply = {gss.OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}\n\t}}"))
+        room = _block(self.values, "sr_ebase_room_total")
+        self.assertIn(f"value = {gss.NEAR_EARTH_ROOM}", room)
+        self.assertEqual(sum(int(n) for n in re.findall(r"\?= this \} add = (\d+)", room)), 760)
+
+    def test_the_refresh_averages_over_every_level(self):
+        refresh = _block(self.modules, "sr_ebase_refresh")
+        self.assertLess(refresh.index("remove_modifier = sr_ebase_room_bonus"), refresh.index("add_modifier"))
+        self.assertLess(refresh.index("remove_modifier = sr_ebase_room_penalty"), refresh.index("add_modifier"))
+        self.assertIn("value = local_var:sr_eb_sum\n\t\t\t\t\tdivide = local_var:sr_eb_levels", refresh)
+        self.assertIn("sr_colonies_contested_enabled = yes", refresh)
+        modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
+        self.assertIn("building_space_mine_throughput_add = 0.01", _block(modifiers, "sr_ebase_room_bonus"))
+        self.assertIn("building_space_mine_throughput_add = -0.01", _block(modifiers, "sr_ebase_room_penalty"))
+        # The owner's example: room for 10, 20 levels built, -50% past the room, -25% in all.
+        self.assertEqual(10 * 0 + 10 * gss.OVERFLOW_GRADE, -25 * 20)
+
+    def test_the_build_gates_hold_the_ai_and_private_investors_to_the_room(self):
+        buildings = _strip(_raw("common", "buildings", "extra_buildings.txt"))
+        mine = _block(buildings, "REPLACE_OR_CREATE:building_space_mine")
+        self.assertIn("owner ?= { sr_ebase_may_build_government = yes }", _block(mine, "can_build_government"))
+        self.assertIn("owner ?= { sr_ebase_may_build_private = yes }", _block(mine, "can_build_private"))
+        gates = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
+        self.assertIn("is_ai = no", _block(gates, "sr_ebase_may_build_government"))
+        self.assertNotIn("is_ai", _block(gates, "sr_ebase_may_build_private"))
+        room = _block(gates, "sr_ebase_has_room")
+        self.assertIn("NOT = { sr_colonies_contested_enabled = yes }", room)
+        self.assertIn("sr_ebase_queued_levels < sr_ebase_room_total", room)
+
+    def test_the_fabrication_group_is_on_the_space_program(self):
+        buildings = _strip(_raw("common", "buildings", "extra_buildings.txt"))
+        program = _block(buildings, "REPLACE_OR_CREATE:building_space_program")
+        self.assertIn("pmg_space_program_module_fabrication", program)
+        group = _strip(_raw("common", "production_method_groups", "sr_colony_module_pmgs.txt"))
+        self.assertIn("ai_selection = most_productive", group)
+        pms = _strip(_raw("common", "production_methods", "sr_colony_module_pms.txt"))
+        points = {}
+        for method in re.findall(r"(?m)^(pm_sr_fabrication_\w+) = \{", pms):
+            m = re.search(r"country_sr_module_fabrication_add = (\d+)", _block(pms, method))
+            if m:
+                points[method] = int(m.group(1))
+        self.assertEqual(points, {"pm_sr_fabrication_orbital_assembly": 5, "pm_sr_fabrication_lunar_foundries": 12,
+                                  "pm_sr_fabrication_fusion_shipyards": 25})
+        self.assertNotIn("building_employment_", pms)
+        self.assertIn("script_only = yes", _block(_raw("common", "modifier_type_definitions",
+                                                       "space_race_modifier_types.txt"),
+                                                  "country_sr_module_fabrication_add"))
+
+    def test_the_module_rows_follow_the_table(self):
+        rows = self.rows[self.rows.index("type te_sr_module_rows = flowcontainer {"):]
+        names = re.findall(r'text = "sr_site_name_(\w+)"', rows)
+        self.assertEqual(names, [s.key for s in gss.panel_order()])
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                for t in ("a", "b", *gss.GENERIC_TYPES):
+                    self.assertIn(f"AddScope( 'site', MakeScopeValue( '(CFixedPoint){site.index}' ) )"
+                                  f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){gss.MODULE_CODES[t]}' ) )", rows)
+
+    def test_the_cession_value_counts_the_modules(self):
+        value = _block(self.values, "sr_cede_ai_input_value")
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {gss.MODULE_AI_VALUE} }}", value)
 
 
 if __name__ == "__main__":

@@ -72,56 +72,60 @@ class Site:
     discoveries: tuple[str, ...]  # seeded at founding, in the draw's order
     kind: str  # gfx/interface/icons/space_race_icons/colony_<kind>.dds
     room: int  # people, in thousands, before modules (slices 2-3 design § 10.2)
+    slots: int  # generic module slots, shared by Habitat, Defences, Spaceport (slice 4 design § 1)
+    ebase_room: int  # Extraplanetary Base levels the world's room holds
+    ebase_grade: int  # the throughput a base level in its room gets, in percent
 
     @property
     def index(self) -> int:
         return SITES.index(self) + 1
 
 
-def _s(key, name, stage, location, body, event, specs, discoveries, kind, room):
-    return Site(key, name, stage, location, body, event, tuple(specs), tuple(discoveries), kind, room)
+def _s(key, name, stage, location, body, event, specs, discoveries, kind, room, slots, ebase_room, ebase_grade):
+    return Site(key, name, stage, location, body, event, tuple(specs), tuple(discoveries), kind, room,
+                slots, ebase_room, ebase_grade)
 
 
 SITES: tuple[Site, ...] = (
     # Stage 1: Mars and the asteroids
-    _s("valles_marineris", "Valles Marineris", 1, "mars", "mars", 1, ("research", "mining"), (), "mars", 50),
-    _s("olympus_mons", "Olympus Mons", 1, "mars", "mars", 2, ("atmospheric", "geothermal"), ("olympus_tubes",), "mars", 40),
-    _s("hellas_planitia", "Hellas Planitia", 1, "mars", "mars", 3, ("settlement", "astrobiology"), ("hellas_fossils",), "mars", 50),
-    _s("utopia_planitia", "Utopia Planitia", 1, "mars", "mars", 4, ("ice", "agriculture"), ("utopia_glacier",), "mars", 50),
-    _s("arcadia_planitia", "Arcadia Planitia", 1, "mars", "mars", 5, ("civilian", "military"), ("arcadia_brines",), "mars", 40),
-    _s("ceres", "Ceres", 1, "asteroids", "ceres", 6, ("waystation", "observatory"), ("ceres_reservoir",), "asteroid", 40),
-    _s("vesta", "4 Vesta", 1, "asteroids", "vesta", 7, ("mining", "science"), ("vesta_impactor",), "asteroid", 25),
-    _s("psyche", "16 Psyche", 1, "asteroids", "psyche", 8, ("industrial", "careful"), ("psyche_metal",), "asteroid", 20),
-    _s("pallas", "2 Pallas", 1, "asteroids", "pallas", 9, ("composites", "observatory"), ("pallas_water",), "asteroid", 20),
-    _s("hygiea", "10 Hygiea", 1, "asteroids", "hygiea", 10, ("volatiles", "automated"), (), "asteroid", 15),
+    _s("valles_marineris", "Valles Marineris", 1, "mars", "mars", 1, ("research", "mining"), (), "mars", 50, 4, 40, 10),
+    _s("olympus_mons", "Olympus Mons", 1, "mars", "mars", 2, ("atmospheric", "geothermal"), ("olympus_tubes",), "mars", 40, 3, 30, 10),
+    _s("hellas_planitia", "Hellas Planitia", 1, "mars", "mars", 3, ("settlement", "astrobiology"), ("hellas_fossils",), "mars", 50, 4, 40, 10),
+    _s("utopia_planitia", "Utopia Planitia", 1, "mars", "mars", 4, ("ice", "agriculture"), ("utopia_glacier",), "mars", 50, 4, 40, 10),
+    _s("arcadia_planitia", "Arcadia Planitia", 1, "mars", "mars", 5, ("civilian", "military"), ("arcadia_brines",), "mars", 40, 3, 30, 10),
+    _s("ceres", "Ceres", 1, "asteroids", "ceres", 6, ("waystation", "observatory"), ("ceres_reservoir",), "asteroid", 40, 3, 40, 15),
+    _s("vesta", "4 Vesta", 1, "asteroids", "vesta", 7, ("mining", "science"), ("vesta_impactor",), "asteroid", 25, 2, 40, 20),
+    _s("psyche", "16 Psyche", 1, "asteroids", "psyche", 8, ("industrial", "careful"), ("psyche_metal",), "asteroid", 20, 2, 60, 30),
+    _s("pallas", "2 Pallas", 1, "asteroids", "pallas", 9, ("composites", "observatory"), ("pallas_water",), "asteroid", 20, 2, 30, 10),
+    _s("hygiea", "10 Hygiea", 1, "asteroids", "hygiea", 10, ("volatiles", "automated"), (), "asteroid", 15, 2, 20, 5),
     # Stage 2: the Jupiter system and Venus
-    _s("io", "Io", 2, "jupiter", "jupiter", 11, ("mining", "research"), ("io_roof",), "jovian", 15),
-    _s("europa", "Europa", 2, "jupiter", "jupiter", 12, ("drilling", "surface"), ("europa_life", "europa_vents"), "jovian", 30),
-    _s("ganymede", "Ganymede", 2, "jupiter", "jupiter", 13, ("settlement", "command"), ("ganymede_layers",), "jovian", 40),
-    _s("callisto", "Callisto", 2, "jupiter", "jupiter", 14, ("gateway", "agricultural"), ("callisto_archive",), "jovian", 40),
-    _s("himalia", "Himalia", 2, "jupiter", "jupiter", 15, ("telescope", "depot"), (), "jovian", 10),
-    _s("amalthea", "Amalthea", 2, "jupiter", "jupiter", 16, ("physics", "rings"), (), "jovian", 10),
-    _s("venus", "Venus Cloud Habitat", 2, "inner", "venus", 17, ("atmospheric", "extraction"), ("venus_waves",), "venus", 30),
+    _s("io", "Io", 2, "jupiter", "jupiter", 11, ("mining", "research"), ("io_roof",), "jovian", 15, 2, 20, -5),
+    _s("europa", "Europa", 2, "jupiter", "jupiter", 12, ("drilling", "surface"), ("europa_life", "europa_vents"), "jovian", 30, 3, 20, -5),
+    _s("ganymede", "Ganymede", 2, "jupiter", "jupiter", 13, ("settlement", "command"), ("ganymede_layers",), "jovian", 40, 3, 30, 0),
+    _s("callisto", "Callisto", 2, "jupiter", "jupiter", 14, ("gateway", "agricultural"), ("callisto_archive",), "jovian", 40, 3, 30, 0),
+    _s("himalia", "Himalia", 2, "jupiter", "jupiter", 15, ("telescope", "depot"), (), "jovian", 10, 1, 20, 5),
+    _s("amalthea", "Amalthea", 2, "jupiter", "jupiter", 16, ("physics", "rings"), (), "jovian", 10, 1, 10, 0),
+    _s("venus", "Venus Cloud Habitat", 2, "inner", "venus", 17, ("atmospheric", "extraction"), ("venus_waves",), "venus", 30, 2, 10, -10),
     # Stage 3: Mercury and the Saturn system
-    _s("mercury", "Mercury", 3, "inner", None, 18, ("solar", "ice"), ("mercury_archive",), "mercury", 25),
-    _s("titan", "Titan", 3, "saturn", "saturn", 19, ("hydrocarbons", "prebiotic"), ("titan_chemistry",), "saturnian", 40),
-    _s("enceladus", "Enceladus", 3, "saturn", "saturn", 20, ("astrobiology", "water"), ("enceladus_life",), "saturnian", 20),
-    _s("rhea", "Rhea", 3, "saturn", "saturn", 21, ("propellant", "observation"), (), "saturnian", 20),
-    _s("mimas", "Mimas", 3, "saturn", "saturn", 22, ("installation", "gravity"), (), "saturnian", 10),
-    _s("iapetus", "Iapetus", 3, "saturn", "saturn", 23, ("ridge", "organics"), (), "saturnian", 15),
+    _s("mercury", "Mercury", 3, "inner", None, 18, ("solar", "ice"), ("mercury_archive",), "mercury", 25, 3, 40, 5),
+    _s("titan", "Titan", 3, "saturn", "saturn", 19, ("hydrocarbons", "prebiotic"), ("titan_chemistry",), "saturnian", 40, 3, 20, -15),
+    _s("enceladus", "Enceladus", 3, "saturn", "saturn", 20, ("astrobiology", "water"), ("enceladus_life",), "saturnian", 20, 2, 15, -20),
+    _s("rhea", "Rhea", 3, "saturn", "saturn", 21, ("propellant", "observation"), (), "saturnian", 20, 2, 20, -15),
+    _s("mimas", "Mimas", 3, "saturn", "saturn", 22, ("installation", "gravity"), (), "saturnian", 10, 1, 10, -20),
+    _s("iapetus", "Iapetus", 3, "saturn", "saturn", 23, ("ridge", "organics"), (), "saturnian", 15, 2, 15, -20),
     # Stage 4: the Uranus and Neptune systems
-    _s("titania", "Titania", 4, "uranus", "uranus", 24, ("mining", "geophysics"), ("titania_ocean",), "uranian", 20),
-    _s("oberon", "Oberon", 4, "uranus", "uranus", 25, ("relay", "research"), (), "uranian", 20),
-    _s("miranda", "Miranda", 4, "uranus", "uranus", 26, ("rupes", "drilling"), (), "uranian", 10),
-    _s("ariel", "Ariel", 4, "uranus", "uranus", 27, ("cryovolcanic", "quarrying"), (), "uranian", 15),
-    _s("triton", "Triton", 4, "neptune", "neptune", 28, ("geyser", "gateway"), ("triton_jet",), "neptunian", 20),
-    _s("proteus", "Proteus", 4, "neptune", "neptune", 29, ("probe", "extraction"), (), "neptunian", 10),
+    _s("titania", "Titania", 4, "uranus", "uranus", 24, ("mining", "geophysics"), ("titania_ocean",), "uranian", 20, 2, 15, -25),
+    _s("oberon", "Oberon", 4, "uranus", "uranus", 25, ("relay", "research"), (), "uranian", 20, 2, 15, -25),
+    _s("miranda", "Miranda", 4, "uranus", "uranus", 26, ("rupes", "drilling"), (), "uranian", 10, 1, 10, -30),
+    _s("ariel", "Ariel", 4, "uranus", "uranus", 27, ("cryovolcanic", "quarrying"), (), "uranian", 15, 2, 10, -30),
+    _s("triton", "Triton", 4, "neptune", "neptune", 28, ("geyser", "gateway"), ("triton_jet",), "neptunian", 20, 2, 15, -30),
+    _s("proteus", "Proteus", 4, "neptune", "neptune", 29, ("probe", "extraction"), (), "neptunian", 10, 1, 10, -35),
     # Stage 5: the Kuiper Belt and beyond
-    _s("pluto", "Pluto-Charon", 5, "kuiper", "kuiper", 30, ("research", "harvesting"), ("pluto_antifreeze",), "dwarf", 20),
-    _s("eris", "Eris", 5, "kuiper", "kuiper", 31, ("selfsufficiency", "monitoring"), (), "dwarf", 10),
-    _s("makemake", "Makemake", 5, "kuiper", "kuiper", 32, ("chemistry", "solarwind"), (), "dwarf", 10),
-    _s("haumea", "Haumea", 5, "kuiper", "kuiper", 33, ("dynamics", "rings"), (), "dwarf", 10),
-    _s("sedna", "Sedna", 5, "kuiper", "kuiper", 34, ("outpost", "interstellar"), (), "dwarf", 10),
+    _s("pluto", "Pluto-Charon", 5, "kuiper", "kuiper", 30, ("research", "harvesting"), ("pluto_antifreeze",), "dwarf", 20, 2, 15, -35),
+    _s("eris", "Eris", 5, "kuiper", "kuiper", 31, ("selfsufficiency", "monitoring"), (), "dwarf", 10, 1, 10, -40),
+    _s("makemake", "Makemake", 5, "kuiper", "kuiper", 32, ("chemistry", "solarwind"), (), "dwarf", 10, 1, 10, -40),
+    _s("haumea", "Haumea", 5, "kuiper", "kuiper", 33, ("dynamics", "rings"), (), "dwarf", 10, 1, 10, -40),
+    _s("sedna", "Sedna", 5, "kuiper", "kuiper", 34, ("outpost", "interstellar"), (), "dwarf", 10, 1, 10, -45),
 )
 
 # The panel's locations, in its order (the owner's nine less Earth and the
@@ -171,6 +175,24 @@ GROWTH_PER_MONTH = 0.002
 CREW_PER_LEVEL = 5000
 PRIORITY_WEIGHTS = (0, 1, 2, 4)
 
+# Modules (slice 4 design §§ 2-8). The two specializations share SPEC_BUDGET
+# levels (the owner's D18); the generic modules share the world's slots. A
+# Habitat adds HABITAT_ROOM_SHARE of the base room a level. Types, in the order
+# fabrication takes a colony's queue, with the code a shipment slot records.
+SPEC_BUDGET = 4
+HABITAT_ROOM_SHARE = 0.5
+MODULE_TYPES = ("hab", "a", "b", "port", "def")
+MODULE_CODES = {"a": 1, "b": 2, "hab": 3, "def": 4, "port": 5}
+GENERIC_TYPES = ("hab", "def", "port")
+CREWED_TYPES = ("a", "b", "def", "port")  # a Habitat houses the crews
+SHIP_SLOTS = 8
+MODULE_AI_VALUE = 5  # Cede Colony's AI value of a module level past the first
+
+# Extraplanetary Bases from colonies (design § 9): every country's near-Earth
+# room, and the grade of a level past all of its room, in percent.
+NEAR_EARTH_ROOM = 10
+OVERFLOW_GRADE = -50
+
 
 def spec_modifiers(site: Site) -> tuple[str, str]:
     prefix = SPEC_PREFIX.get(site.key, site.key)
@@ -180,6 +202,17 @@ def spec_modifiers(site: Site) -> tuple[str, str]:
 
 def discovery_modifiers(discovery: str) -> tuple[str, str]:
     return f"sr_discovery_{discovery}_a", f"sr_discovery_{discovery}_b"
+
+
+def module_vars(site: Site) -> list[str]:
+    """The world's module levels (slice 4 design § 2)."""
+    k = site.key
+    return [f"sr_site_lvl_a_{k}", f"sr_site_lvl_b_{k}", *(f"sr_site_{t}_{k}" for t in GENERIC_TYPES)]
+
+
+def level_value(t: str, site: Site) -> str:
+    """The any-scope value of the world's level of module type t."""
+    return f"sr_site_lvl_{t}_value_{site.key}" if t in ("a", "b") else f"sr_site_{t}_value_{site.key}"
 
 
 def stage_sites(stage: int) -> list[Site]:
@@ -192,6 +225,13 @@ def site_building(site: Site) -> str:
 
 def panel_order() -> list[Site]:
     return [s for loc in LOCATIONS for s in SITES if s.location == loc]
+
+
+def ebase_tiers() -> list[Site | None]:
+    """The Extraplanetary Base room in filling order (design § 9): the best grade
+    first, ties in table order, the near-Earth room (None) first among grade 0."""
+    keyed = [((-s.ebase_grade, 1, s.index), s) for s in SITES] + [((0, 0, 0), None)]
+    return [s for _, s in sorted(keyed, key=lambda pair: pair[0])]
 
 
 def choices() -> list[tuple[str, Site, str, int]]:
@@ -300,17 +340,18 @@ def render_stage_check() -> list[str]:
 def _mirror_on(site: Site) -> list[str]:
     a, b = spec_modifiers(site)
     k = site.key
-    out = [f"sr_site_mirror_on_{k} = {{",
-           "\tif = {",
-           f"\t\tlimit = {{ has_global_variable = sr_site_spec_{k} global_var:sr_site_spec_{k} = 1 }}",
-           f"\t\tsr_site_show_modifier = {{ MODIFIER = {a} }}",
-           f"\t\tsr_site_hide_modifier = {{ MODIFIER = {b} }}",
-           "\t}",
-           "\telse_if = {",
-           f"\t\tlimit = {{ has_global_variable = sr_site_spec_{k} global_var:sr_site_spec_{k} = 2 }}",
-           f"\t\tsr_site_show_modifier = {{ MODIFIER = {b} }}",
-           f"\t\tsr_site_hide_modifier = {{ MODIFIER = {a} }}",
-           "\t}"]
+    # Each specialization at its level times the colony's staffing (slice 4
+    # design § 3): the founding choice reads level 1, the other 0, until a
+    # module raises them.
+    out = [f"sr_site_mirror_on_{k} = {{"]
+    for slot, modifier in (("a", a), ("b", b)):
+        out += ["\tif = {",
+                f"\t\tlimit = {{ sr_site_lvl_{slot}_value_{k} >= 1 }}",
+                f"\t\tsr_site_show_modifier_at = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{k} }}",
+                "\t}",
+                "\telse = {",
+                f"\t\tsr_site_hide_modifier = {{ MODIFIER = {modifier} }}",
+                "\t}"]
     for d in site.discoveries:
         da, db = discovery_modifiers(d)
         out += ["\tif = {",
@@ -343,8 +384,11 @@ def _unmirror(site: Site) -> list[str]:
         out += [f"\tsr_site_hide_modifier = {{ MODIFIER = {da} }}",
                 f"\tsr_site_hide_modifier = {{ MODIFIER = {db} }}",
                 f"\tsr_site_clear_discovery = {{ DISCOVERY = {d} }}"]
-    out += [f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{site.key} }} remove_variable = sr_emig_prio_{site.key} }}",
-            "\tset_variable = { name = sr_colony_count value = sr_sites_held_count }", "}"]
+    out += [f"\tif = {{ limit = {{ has_variable = sr_emig_prio_{site.key} }} remove_variable = sr_emig_prio_{site.key} }}"]
+    # The holder's module queue for the world stays with the holder (slice 4 design § 7).
+    out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{site.key} }} remove_variable = sr_mq_{t}_{site.key} }}"
+            for t in MODULE_TYPES]
+    out += ["\tset_variable = { name = sr_colony_count value = sr_sites_held_count }", "}"]
     return out
 
 
@@ -388,6 +432,8 @@ def _release(site: Site) -> list[str]:
            f"\tif = {{ limit = {{ has_global_variable = sr_site_spec_{k} }} remove_global_variable = sr_site_spec_{k} }}",
            f"\tif = {{ limit = {{ has_global_variable = sr_site_region_{k} }} remove_global_variable = sr_site_region_{k} }}",
            f"\tif = {{ limit = {{ has_global_variable = sr_site_pop_{k} }} remove_global_variable = sr_site_pop_{k} }}"]
+    out += [f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}"
+            for var in module_vars(site)]
     for d in site.discoveries:
         out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{d} }} remove_global_variable = sr_site_disc_{d} }}",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{d}_pending }} remove_global_variable = sr_site_disc_{d}_pending }}"]
@@ -526,6 +572,9 @@ def render_dispatcher() -> list[str]:
                    f"set_global_variable = {{ name = sr_site_holder_{k} value = root }} }}")
         if kind == "spec":
             out.append(f"\tset_global_variable = {{ name = sr_site_spec_{k} value = {option} }}")
+            # The grant just added the modifier unscaled: level 1 of a fresh colony,
+            # multiplier 1, recorded so the sync adds no second copy (slice 4 design § 3).
+            out.append(f"\tset_variable = {{ name = {modifier}_mult value = 1 }}")
         else:
             out.append(f"\tset_global_variable = {{ name = sr_site_disc_{kind} value = {option} }}")
             out.append(f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{kind}_pending }} "
@@ -994,7 +1043,7 @@ def render_effects() -> str:
         parts += _sync(site) + _mirror_on(site) + _unmirror(site) + _release(site) + _transfer(site) + _monthly(site)
     parts += ["", *render_dispatcher(), "", *render_monthly_list(), "", *render_migration(), "",
               *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
-              "", *render_fleet_effects(), "", *render_population_effects()]
+              "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects()]
     return "\n".join(parts) + "\n"
 
 
@@ -1018,7 +1067,7 @@ def render_triggers() -> str:
             "\tOR = {"]
     out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES]
     out += ["\t}", "}", ""]
-    out += render_fleet_triggers()
+    out += render_fleet_triggers() + [""] + render_module_triggers()
     return "\n".join(out) + "\n"
 
 
@@ -1105,14 +1154,16 @@ def render_values() -> str:
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = 1 }}" for s in SITES]
     out += ["}", "",
             "# Cede Colony's AI: what the article's input world is worth, 20 plus 5 a",
-            "# stage (design § 11.2). scope:article in inherent_accept_score.",
+            "# stage (design § 11.2), plus 5 a module level past the first (slice 4 design",
+            "# § 7). scope:article in inherent_accept_score.",
             "sr_cede_ai_input_value = {",
             "\tvalue = 0"]
     for site in SITES:
         worth = AI_VALUE_BASE + AI_VALUE_PER_STAGE * site.stage
-        out.append(f"\tif = {{ limit = {{ scope:article.input_building_type ?= bt:{site_building(site)} }} value = {worth} }}")
+        out.append(f"\tif = {{ limit = {{ scope:article.input_building_type ?= bt:{site_building(site)} }} value = {worth} "
+                   f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} }}")
     out += ["}", ""]
-    out += render_fleet_values() + [""] + render_population_values()
+    out += render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
     return "\n".join(out) + "\n"
 
 
@@ -1174,13 +1225,20 @@ def render_population_values() -> list[str]:
     out = ["# ===== Population (slices 2-3 design § 10) =====",
            f"sr_site_crew_per_level = {{ value = {CREW_PER_LEVEL} }}",
            "",
-           "# Per world, any scope: its room (people, before modules), its people, its free",
-           "# room, and the module levels above the first its people can crew. Country scope:",
+           "# Per world, any scope: its base room (people, before Habitats), its room (+50% of",
+           "# the base a Habitat level, slice 4 design § 3), its people, its free room, and",
+           "# the module levels above the first its people can crew. Country scope:",
            "# THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when",
            "# unset) and its emigration weight, priority x free room, 0 unless THIS holds it."]
     for site in SITES:
         k = site.key
-        out += [f"sr_site_room_{k} = {{ value = {site.room * 1000} }}",
+        out += [f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}",
+                f"sr_site_room_{k} = {{",
+                f"\tvalue = sr_site_hab_value_{k}",
+                f"\tmultiply = {HABITAT_ROOM_SHARE}",
+                "\tadd = 1",
+                f"\tmultiply = sr_site_base_room_{k}",
+                "}",
                 f"sr_site_pop_value_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_pop_{k} }} value = global_var:sr_site_pop_{k} }}",
@@ -1189,6 +1247,10 @@ def render_population_values() -> list[str]:
                 f"\tvalue = sr_site_room_{k}",
                 f"\tsubtract = sr_site_pop_value_{k}",
                 "\tmin = 0",
+                "}",
+                f"sr_site_fill_{k} = {{",
+                f"\tvalue = sr_site_pop_value_{k}",
+                f"\tdivide = sr_site_room_{k}",
                 "}",
                 f"sr_site_crews_{k} = {{",
                 f"\tvalue = sr_site_pop_value_{k}",
@@ -1216,6 +1278,341 @@ def render_population_values() -> list[str]:
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = sr_site_pop_value_{s.key} }}"
             for s in SITES]
     out.append("}")
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Modules and Extraplanetary Base room (slice 4 design)
+# ---------------------------------------------------------------------------
+
+def _opt_var(name: str, var: str, *, global_: bool = True) -> list[str]:
+    """A value that reads a variable, 0 when it is absent."""
+    has, read = ("has_global_variable", "global_var") if global_ else ("has_variable", "var")
+    return [f"{name} = {{", "\tvalue = 0", f"\tif = {{ limit = {{ {has} = {var} }} value = {read}:{var} }}", "}"]
+
+
+def render_module_values() -> list[str]:
+    out = ["# ===== Modules (slice 4 design §§ 2-4, 7-8) =====",
+           f"sr_mod_spec_budget = {{ value = {SPEC_BUDGET} }}",
+           "",
+           "# Per world, any scope:",
+           "#   sr_site_lvl_<a|b>_value_<key>  a specialization's level; the founding choice",
+           "#                                  reads 1 until a module raises it, the other 0",
+           "#   sr_site_<hab|def|port>_value_<key>  a generic module's level",
+           "#   sr_site_levels_<key>          the levels that need crews (Habitats house them)",
+           "#   sr_site_extra_levels_<key>    every module level past the founding outpost's",
+           "#   sr_site_staffing_<key>        1 with the crews, AGI or under races only; else",
+           "#                                  (crews + 1) / levels (design § 4)",
+           "#   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing",
+           "#   sr_site_<spec|generic>_built_<key>  the levels against each cap",
+           "# Country scope, counting THIS's queue and every shipment on its way:",
+           "#   sr_mod_spec_used_<key>, sr_mod_slots_used_<key>"]
+    for site in SITES:
+        k = site.key
+        for slot, option in (("a", 1), ("b", 2)):
+            out += [f"sr_site_lvl_{slot}_value_{k} = {{",
+                    "\tvalue = 0",
+                    f"\tif = {{ limit = {{ has_global_variable = sr_site_lvl_{slot}_{k} }} value = global_var:sr_site_lvl_{slot}_{k} }}",
+                    f"\telse_if = {{ limit = {{ has_global_variable = sr_site_spec_{k} global_var:sr_site_spec_{k} = {option} }} "
+                    "value = 1 }",
+                    "}"]
+        for t in GENERIC_TYPES:
+            out += _opt_var(f"sr_site_{t}_value_{k}", f"sr_site_{t}_{k}")
+        out += [f"sr_site_levels_{k} = {{",
+                *[f"\t{'value' if i == 0 else 'add'} = {level_value(t, site)}" for i, t in enumerate(CREWED_TYPES)],
+                "}",
+                f"sr_site_extra_levels_{k} = {{",
+                f"\tvalue = sr_site_levels_{k}",
+                f"\tadd = sr_site_hab_value_{k}",
+                "\tsubtract = 1",
+                "\tmin = 0",
+                "}",
+                f"sr_site_crew_needed_{k} = {{",
+                f"\tvalue = sr_site_levels_{k}",
+                "\tsubtract = 1",
+                "\tmin = 0",
+                "}",
+                f"sr_site_staffing_{k} = {{",
+                "\tvalue = 1",
+                "\tif = {",
+                "\t\tlimit = {",
+                "\t\t\tsr_colonies_contested_enabled = yes",
+                f"\t\t\tsr_site_crews_{k} < sr_site_crew_needed_{k}",
+                f"\t\t\tNOT = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = artificial_intelligence }} }}",
+                "\t\t}",
+                f"\t\tvalue = sr_site_crews_{k}",
+                "\t\tadd = 1",
+                f"\t\tdivide = sr_site_levels_{k}",
+                "\t}",
+                "}"]
+        for slot in ("a", "b"):
+            out += [f"sr_site_mult_{slot}_{k} = {{",
+                    f"\tvalue = sr_site_lvl_{slot}_value_{k}",
+                    f"\tmultiply = sr_site_staffing_{k}",
+                    "}"]
+        out += [f"sr_site_spec_built_{k} = {{ value = sr_site_lvl_a_value_{k} add = sr_site_lvl_b_value_{k} }}",
+                f"sr_site_generic_built_{k} = {{",
+                *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(GENERIC_TYPES)],
+                "}"]
+        for name, types, built in (("spec_used", ("a", "b"), "spec_built"), ("slots_used", GENERIC_TYPES, "generic_built")):
+            out += [f"sr_mod_{name}_{k} = {{", f"\tvalue = sr_site_{built}_{k}"]
+            for t in types:
+                out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
+                        f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}"]
+            out.append("}")
+    out += ["", "# Country scope: the module levels past the first at the colonies THIS holds, the",
+            "# upkeep's multiplier (design § 8).",
+            "sr_mod_upkeep_levels = {", "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = sr_site_extra_levels_{s.key} }}"
+            for s in SITES]
+    out += ["}", "",
+            "# Country scope: THIS's Extraplanetary Base room, in levels (design § 9): the",
+            f"# near-Earth {NEAR_EARTH_ROOM} and every colony it holds.",
+            "sr_ebase_room_total = {", f"\tvalue = {NEAR_EARTH_ROOM}"]
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = {s.ebase_room} }}" for s in SITES]
+    out.append("}")
+    return out
+
+
+def _module_install(site: Site) -> list[str]:
+    k = site.key
+    out = [f"# A module lands at {site.name} (local_var:sr_ms_type_now): installed for whoever holds",
+           "# the world while its cap has room, else lost (design § 6).",
+           f"sr_mod_install_{k} = {{",
+           "\tif = {",
+           f"\t\tlimit = {{ has_global_variable = sr_colony_{k} }}"]
+    first = True
+    for t in ("a", "b", *GENERIC_TYPES):
+        if t in ("a", "b"):
+            cap, var = f"sr_site_spec_built_{k} < sr_mod_spec_budget", f"sr_site_lvl_{t}_{k}"
+        else:
+            cap, var = f"sr_site_generic_built_{k} < {site.slots}", f"sr_site_{t}_{k}"
+        out += ["\t\tif = {" if first else "\t\telse_if = {",
+                f"\t\t\tlimit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]} {cap} }}",
+                f"\t\t\tset_global_variable = {{ name = {var} value = {{ value = {level_value(t, site)} add = 1 }} }}",
+                "\t\t\tset_local_variable = { name = sr_ms_installed value = 1 }",
+                "\t\t}"]
+        first = False
+    out += [f"\t\tsr_site_sync_{k} = yes", "\t}", "}"]
+    return out
+
+
+def _module_take(site: Site) -> list[str]:
+    k = site.key
+    out = [f"# Fabrication builds {site.name}'s next queued module: Habitat, the specializations,",
+           "# the Spaceport, Defences (design § 5).",
+           f"sr_mod_fab_take_{k} = {{"]
+    for n, t in enumerate(MODULE_TYPES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ has_variable = sr_mq_{t}_{k} }}",
+                f"\t\tsr_mod_fab_build = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }}",
+                "\t}"]
+    out.append("}")
+    return out
+
+
+def _module_ai(site: Site) -> list[str]:
+    """The AI's one module for a colony with nothing queued or shipping (design § 10)."""
+    k = site.key
+    crew = (f"OR = {{ sr_site_crews_{k} >= sr_site_levels_{k} "
+            "has_technology_researched = artificial_intelligence }")
+    out = [f"sr_mod_ai_plan_{k} = {{",
+           "\tif = {",
+           "\t\tlimit = {",
+           f"\t\t\tglobal_var:sr_site_holder_{k} ?= this",
+           f"\t\t\tNOT = {{ sr_mq_any_{k} = yes }}",
+           f"\t\t\tNOT = {{ sr_site_shipping_{k} = yes }}",
+           "\t\t}",
+           "\t\tif = {",
+           "\t\t\tlimit = {",
+           f"\t\t\t\tsr_mod_can_queue_hab_{k} = yes",
+           f"\t\t\t\tsr_site_fill_{k} >= 0.75",
+           "\t\t\t}",
+           f"\t\t\tsr_mod_queue = {{ KEY = {k} TYPE = hab }}",
+           "\t\t}"]
+    for first, second, option in (("a", "b", 1), ("b", "a", 2)):
+        for slot in (first, second):
+            out += ["\t\telse_if = {",
+                    "\t\t\tlimit = {",
+                    f"\t\t\t\thas_global_variable = sr_site_spec_{k}",
+                    f"\t\t\t\tglobal_var:sr_site_spec_{k} = {option}",
+                    f"\t\t\t\tsr_mod_can_queue_{slot}_{k} = yes",
+                    f"\t\t\t\t{crew}",
+                    "\t\t\t}",
+                    f"\t\t\tsr_mod_queue = {{ KEY = {k} TYPE = {slot} }}",
+                    "\t\t}"]
+    out += ["\t}", "}"]
+    return out
+
+
+def render_module_effects() -> list[str]:
+    out = ["# ===== Modules (slice 4 design §§ 5-7, 10) =====",
+           "# Per world: a landing's install, fabrication's take, the AI's plan. Dispatchers",
+           "# by index follow; the shared parts (the month, slots, the queue, the AI's",
+           "# review) are hand-written in sr_colony_module_effects.txt."]
+    for site in SITES:
+        out += ["", f"# --- {site.name} ---"]
+        out += _module_install(site) + _module_take(site) + _module_ai(site)
+    out += ["", "# The next colony with a queue after the last one served (var:sr_fab_cursor), round",
+            "# the end of the table (design § 5).",
+            "sr_mod_fab_next = {"]
+    for n, site in enumerate(SITES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ sr_mod_fab_cursor_value < {site.index} sr_mq_any_{site.key} = yes }}",
+                f"\t\tsr_mod_fab_take_{site.key} = yes",
+                "\t}"]
+    for site in SITES:
+        out += ["\telse_if = {",
+                f"\t\tlimit = {{ sr_mq_any_{site.key} = yes }}",
+                f"\t\tsr_mod_fab_take_{site.key} = yes",
+                "\t}"]
+    out += ["}", "",
+            "# A waiting shipment's world (local_var:sr_ms_site_now): local_var:sr_ms_go = 1 when it",
+            "# can leave this month at no premium, with its landing month in local_var:sr_ms_arrive_now.",
+            "sr_ms_departure_by_index = {"]
+    for n, site in enumerate(SITES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ local_var:sr_ms_site_now = {site.index} sr_mod_departs_{site.key} = yes }}",
+                "\t\tset_local_variable = { name = sr_ms_go value = 1 }",
+                f"\t\tset_local_variable = {{ name = sr_ms_arrive_now value = sr_cf_arrival_{site.key} }}",
+                "\t}"]
+    out += ["}", "", "# A landing shipment's world (local_var:sr_ms_site_now, _type_now)."]
+    out += _by_index("sr_ms_land_by_index", "local_var:sr_ms_site_now", "sr_mod_install_{k} = yes")
+    out += ["", "# Every world's shipments on their way, cleared before the monthly rebuild",
+            "# (sr_ms_global_after) and counted again from every country's slots.",
+            "sr_ms_clear_counters = {"]
+    for site in SITES:
+        for t in MODULE_TYPES:
+            var = f"sr_site_ship_{t}_{site.key}"
+            out.append(f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}")
+    out += ["}", "sr_ms_count_by_index = {"]
+    for n, site in enumerate(SITES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ local_var:sr_ms_site_now = {site.index} }}"]
+        for m, t in enumerate(MODULE_TYPES):
+            out += [f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]} }} "
+                    f"sr_ms_count_add = {{ VAR = sr_site_ship_{t}_{site.key} }} }}"]
+        out.append("\t}")
+    out += ["}", "",
+            "# The AI's review: one module for each colony it holds with nothing on the way.",
+            "sr_mod_ai_plan_all = {"]
+    out += [f"\tsr_mod_ai_plan_{s.key} = yes" for s in SITES]
+    out += ["}", "",
+            "# The module scripted GUI's world (scope:site) and type (scope:op: 1 the first",
+            "# specialization, 2 the second, 3 Habitat, 4 Defences, 5 Spaceport; 0 clears the queue).",
+            "sr_mod_queue_from_scope = {"]
+    for n, site in enumerate(SITES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:site = {site.index} }}"]
+        for m, t in enumerate(("a", "b", *GENERIC_TYPES)):
+            out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ scope:op = {MODULE_CODES[t]} }} "
+                       f"sr_mod_queue = {{ KEY = {site.key} TYPE = {t} }} }}")
+        out.append("\t}")
+    out += ["}"]
+    out += _by_index("sr_mod_clear_from_scope", "scope:site", "sr_mod_clear_queue = {{ KEY = {k} }}")
+    out += ["", "# Extraplanetary Base room filled best grade first (design § 9): local_var:sr_eb_left",
+            "# levels to place, local_var:sr_eb_sum the levels x grade so far (percent).",
+            "sr_ebase_fill = {"]
+    for tier in ebase_tiers():
+        room = NEAR_EARTH_ROOM if tier is None else tier.ebase_room
+        grade = 0 if tier is None else tier.ebase_grade
+        name = "near-Earth" if tier is None else tier.name
+        held = "" if tier is None else f" global_var:sr_site_holder_{tier.key} ?= this"
+        out += [f"\t# {name}: {room} levels at {grade:+d}%",
+                "\tif = {",
+                f"\t\tlimit = {{ local_var:sr_eb_left > 0{held} }}",
+                f"\t\tset_local_variable = {{ name = sr_eb_take value = {{ value = local_var:sr_eb_left max = {room} }} }}"]
+        if grade:
+            out.append("\t\tset_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_take "
+                       f"multiply = {grade} add = local_var:sr_eb_sum }} }}")
+        out += ["\t\tchange_local_variable = { name = sr_eb_left subtract = local_var:sr_eb_take }", "\t}"]
+    out += ["\t# Past all of it",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_eb_left > 0 }",
+            "\t\tset_local_variable = { name = sr_eb_sum value = { value = local_var:sr_eb_left "
+            f"multiply = {OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}",
+            "\t}",
+            "}", "",
+            "# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
+            "# our queue and every shipment.",
+            "sr_mod_debug_log = {"]
+    for site in SITES:
+        k = site.key
+        levels = " ".join(f"{t}=[SCOPE.ScriptValue('{level_value(t, site)}')|0]" for t in ("a", "b", *GENERIC_TYPES))
+        queue = (f"specializations [THIS.MakeScope.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
+                 f"generic [THIS.MakeScope.ScriptValue('sr_mod_slots_used_{k}')|0] of {site.slots}")
+        out += ["\tif = {",
+                f"\t\tlimit = {{ has_global_variable = sr_colony_{k} }}",
+                f"\t\tdebug_log = \"TE_SR_MODULES {k}: {levels.replace('SCOPE.', 'THIS.MakeScope.')} "
+                f"staffing=[THIS.MakeScope.ScriptValue('sr_site_staffing_{k}')|2] room=[THIS.MakeScope.ScriptValue('sr_site_room_{k}')|0]; "
+                f"built, our queue and every shipment: {queue}\"",
+                "\t}"]
+    out += ["}", "",
+            "# Console: one of each module our first colony's caps allow, queued.",
+            "sr_mod_debug_queue_first = {"]
+    for n, site in enumerate(SITES):
+        k = site.key
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ global_var:sr_site_holder_{k} ?= this }}"]
+        for t in ("a", "b", *GENERIC_TYPES):
+            out.append(f"\t\tif = {{ limit = {{ sr_mod_can_queue_{t}_{k} = yes }} sr_mod_queue = {{ KEY = {k} TYPE = {t} }} }}")
+        out.append("\t}")
+    out += ["}", "",
+            "# The entry's backstop (sr_sync_solar_colonization_entry): every specialization",
+            "# THIS records, at its multiplier, in space_race_colony_events order.",
+            "sr_sites_sync_entry_specs = {"]
+    for site in SITES:
+        for slot, modifier in zip(("a", "b"), spec_modifiers(site)):
+            out.append(f"\tsr_sync_colony_spec_base = {{ MODIFIER = {modifier} MULT = sr_site_mult_{slot}_{site.key} }}")
+    out.append("}")
+    return out
+
+
+def render_module_triggers() -> list[str]:
+    out = ["# ===== Modules (slice 4 design §§ 2, 5-6) =====",
+           "# Per world, country scope:",
+           "#   sr_mq_any_<key>               THIS has a module of it queued",
+           "#   sr_mod_can_queue_<type>_<key> THIS may queue one more: it holds the world, the",
+           "#                                 cap has room counting queue and shipments, and a",
+           "#                                 specialization's founding choice is made",
+           "#   sr_mod_departs_<key>          a module can leave for it this month at no premium",
+           "# Any scope: sr_site_shipping_<key>, a module is on its way there."]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_mq_any_{k} = {{", "\tOR = {"]
+        out += [f"\t\thas_variable = sr_mq_{t}_{k}" for t in MODULE_TYPES]
+        out += ["\t}", "}"]
+        for slot in ("a", "b"):
+            out += [f"sr_mod_can_queue_{slot}_{k} = {{",
+                    f"\tglobal_var:sr_site_holder_{k} ?= this",
+                    f"\thas_global_variable = sr_site_spec_{k}",
+                    f"\tsr_mod_spec_used_{k} < sr_mod_spec_budget",
+                    "}"]
+        for t in GENERIC_TYPES:
+            out += [f"sr_mod_can_queue_{t}_{k} = {{",
+                    f"\tglobal_var:sr_site_holder_{k} ?= this",
+                    f"\tsr_mod_slots_used_{k} < {site.slots}",
+                    "}"]
+        if site.body:
+            out.append(f"sr_mod_departs_{k} = {{ sr_mod_departs = {{ BODY = {site.body} }} }}")
+        else:
+            out.append(f"sr_mod_departs_{k} = {{ always = yes }}")
+        out += [f"sr_site_shipping_{k} = {{", "\tOR = {"]
+        out += [f"\t\thas_global_variable = sr_site_ship_{t}_{k}" for t in MODULE_TYPES]
+        out += ["\t}", "}"]
+    out += ["", "# THIS has a module queued at any world (fabrication's loop, the AI's method).",
+            "sr_mq_any = {", "\tOR = {"]
+    out += [f"\t\tsr_mq_any_{s.key} = yes" for s in SITES]
+    out += ["\t}", "}",
+            "", "# The module scripted GUI's world and type (scope:site, scope:op) may be queued.",
+            "sr_mod_scope_can_queue = {", "\tOR = {"]
+    for site in SITES:
+        for t in ("a", "b", *GENERIC_TYPES):
+            out.append(f"\t\tAND = {{ scope:site = {site.index} scope:op = {MODULE_CODES[t]} sr_mod_can_queue_{t}_{site.key} = yes }}")
+    out += ["\t}", "}",
+            "# ... has a queue to clear.",
+            "sr_mod_scope_has_queue = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mq_any_{s.key} = yes }}" for s in SITES]
+    out += ["\t}", "}"]
     return out
 
 
@@ -1287,6 +1684,23 @@ def render_display() -> str:
                 f"sr_disp_cf_slot_{n}_year = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = sr_cf_{n}_arrive }} value = var:sr_cf_{n}_arrive divide = 12 }}",
+                "\tfloor = yes",
+                "}"]
+    out += ["",
+            "# Modules (slice 4 design § 11), per world:",
+            "#   sr_disp_mod_pending_<type>_<key>  our queue of the type and every shipment of it on its way",
+            "#   sr_disp_site_staffing_<key>       the colony's staffing, in percent"]
+    for site in SITES:
+        k = site.key
+        for t in ("a", "b", *GENERIC_TYPES):
+            out += [f"sr_disp_mod_pending_{t}_{k} = {{",
+                    "\tvalue = 0",
+                    f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}",
+                    f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}",
+                    "}"]
+        out += [f"sr_disp_site_staffing_{k} = {{",
+                f"\tvalue = sr_site_staffing_{k}",
+                "\tmultiply = 100",
                 "\tfloor = yes",
                 "}"]
     return "\n".join(out) + "\n"
@@ -1428,6 +1842,35 @@ def _settler_row(site: Site) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _module_row(site: Site) -> list[str]:
+    k = site.key
+    out = ["\t\tte_sr_module_row = {"]
+    out += _override("module_visible", f'visible = "[{_eq(f"sr_disp_site_{k}", 1)}]"')
+    out += _override("module_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("module_name", f'text = "sr_site_name_{k}"')
+    out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
+    spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
+               for slot, m in zip(("a", "b"), spec_modifiers(site))}
+    for t in ("a", "b", *GENERIC_TYPES):
+        pending = f"sr_disp_mod_pending_{t}_{k}"
+        tooltip = spec_tt.get(t, f"je_space_race_widget_mod_{t}_tt")
+        out += _override(f"mod_{t}_level", f'raw_text = "[{_sv(level_value(t, site))}|0]"', f'tooltip = "{tooltip}"')
+        out += _override(f"mod_{t}_pending", f'visible = "[{_ge(pending, 1)}]"', f'raw_text = "+[{_sv(pending)}|0]"')
+        site_op = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( "
+                   f"'(CFixedPoint){site.index}' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){MODULE_CODES[t]}' ) ).End")
+        out += _override(f"mod_{t}_button",
+                         f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {site_op} )]\"",
+                         f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {site_op} )]\"",
+                         f"tooltip = \"[GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( {site_op} )]\"")
+    clear = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( "
+             f"'(CFixedPoint){site.index}' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End")
+    out += _override("module_clear_button",
+                     f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {clear} )]\"",
+                     f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {clear} )]\"",
+                     f"tooltip = \"[GetScriptedGui('sr_colony_module_sgui').ExecuteTooltip( {clear} )]\"")
+    return out + ["\t\t}"]
+
+
 def _slot_row(n: int) -> list[str]:
     out = ["\t\tte_sr_cf_slot_row = {"]
     out += _override("slot_visible", f'visible = "[{_eq(f"sr_disp_cf_slot_{n}", 1)}]"')
@@ -1442,7 +1885,8 @@ def render_gui() -> str:
            "### gen_solar_sites.SITES (slices 2-3 design §§ 3, 8, 10). The row types are in",
            "### space_race_widget.gui: te_sr_site_row (Solar System, every world under its",
            "### location, in panel_order()), te_sr_settler_row (Settlers, every world, shown",
-           "### while ours) and te_sr_cf_slot_row (Colony Fleets, one per fleet slot). Each",
+           "### while ours), te_sr_cf_slot_row (Colony Fleets, one per fleet slot) and",
+           "### te_sr_module_row (Colony Modules, every world, shown while ours). Each",
            "### value is a display value of sr_sites_display_generated.txt, the scripted",
            "### GUIs are in sr_colony_sguis.txt.",
            "",
@@ -1475,6 +1919,13 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for n in range(1, FLEET_SLOTS + 1):
         out += [""] + _slot_row(n)
+    out += ["\t}", "",
+            "\ttype te_sr_module_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for site in panel_order():
+        out += [""] + _module_row(site)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

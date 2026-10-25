@@ -282,8 +282,12 @@ class RewardTests(unittest.TestCase):
         self.assertNotRegex(text, r"je:je_space_race_solar_colonization\s*=\s*\{\s*add_modifier")
         granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", text)
         self.assertEqual(len(granted), 68)
-        synced = re.findall(r"sr_sync_colony_modifier_base = \{ MODIFIER = (\w+)\s*\}",
-                            _block(EFFECTS, "sr_sync_solar_colonization_entry"))
+        # The backstop names every specialization at its multiplier, its level times
+        # the colony's staffing (colony modules design § 7), from the site table.
+        self.assertIn("sr_sites_sync_entry_specs = yes", _block(EFFECTS, "sr_sync_solar_colonization_entry"))
+        sites = _read("common", "scripted_effects", "sr_sites_generated.txt")
+        synced = re.findall(r"sr_sync_colony_spec_base = \{ MODIFIER = (\w+) MULT = sr_site_mult_[ab]_\w+ \}",
+                            _block(sites, "sr_sites_sync_entry_specs"))
         self.assertEqual(sorted(synced), sorted(set(granted)))
         defined = set(re.findall(r"^(sr_colony_\w+) = \{", MODIFIERS, re.M))
         self.assertEqual(set(granted), defined)
