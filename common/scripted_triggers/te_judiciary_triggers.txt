@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  JUDICIARY — scripted triggers (country scope)
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 # ======================================================================
 
 # A regime whose executive answers to nobody: its courts challenge nothing
@@ -8,6 +8,16 @@
 # and Algorithmic Governance (te_judiciary_law_injections.txt).
 te_jud_paper_court = {
 	modifier:country_court_challenges_ignored_bool = yes
+}
+
+# The courts can strike down a law: the court law carries the review line
+# (Constitutional Review, Judicial Supremacy), and the executive can't ignore
+# the court (not a paper court, not a packed one). They review a law forced
+# through by Forceful Legislation (phase 2, spec § 14.1) and hear the
+# landmark cases that need a constitutional court (phase 4, § 14.3).
+te_jud_court_can_strike_laws = {
+	modifier:country_court_reviews_forced_laws_bool = yes
+	NOT = { te_jud_paper_court = yes }
 }
 
 # An elected government (Statutory Courts' two lines, spec § 2.3): a voting
@@ -57,6 +67,19 @@ te_jud_enacting_core_law = {
 				is_same_law_group_as = law_type:law_statutory_courts
 			}
 		}
+	}
+}
+
+# A court law is being enacted (the Enlarged Bench's drop to Statutory
+# Courts, te_judiciary_events.5, and the judiciary amendment petitions).
+te_jud_enacting_judiciary_law = {
+	OR = {
+		is_enacting_law = law_type:law_executive_tribunals
+		is_enacting_law = law_type:law_religious_courts
+		is_enacting_law = law_type:law_statutory_courts
+		is_enacting_law = law_type:law_constitutional_review
+		is_enacting_law = law_type:law_judicial_supremacy
+		is_enacting_law = law_type:law_algorithmic_jurisprudence
 	}
 }
 

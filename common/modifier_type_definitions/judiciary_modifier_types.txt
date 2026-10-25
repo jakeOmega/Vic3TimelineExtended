@@ -26,8 +26,17 @@ country_judicial_independence_ceiling_mult = {
 }
 
 # ... and its courts challenge no change to the constitution (§ 3.4). Read by
-# te_jud_paper_court.
+# te_jud_paper_court. A packed court carries it too (te_jud_court_packed).
 country_court_challenges_ignored_bool = { color = bad  boolean = yes }
+
+# A law forced through goes to the courts once it passes (phase 2, § 14.1):
+# Constitutional Review and Judicial Supremacy. Read by
+# te_jud_court_can_strike_laws.
+country_court_reviews_forced_laws_bool = { color = good  boolean = yes }
+
+# The amendment ends when the war does (phase 3, § 14.2): the Suspension of
+# Habeas Corpus. te_jud_amendment_upkeep lifts it at peace.
+country_amendment_lapses_at_peace_bool = { color = neutral  boolean = yes }
 
 # Enactment success of a law in a protected group (§ 3.4). Read at
 # on_law_enactment_started to pick the enactment modifier.

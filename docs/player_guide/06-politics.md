@@ -111,9 +111,28 @@ Constitutional Review and Judicial Supremacy cost override capacity and lower
 the enactment success of the constitutional law groups by 10% and 15%, and
 Judicial Supremacy that of the rights laws too; each law's tooltip lists what
 it does. Cutting the courts to a ceiling 20 or more below the score raises your
-risk premium and costs legitimacy for five years. Religious Courts need an
-established religion. The [Nation tab](01-introduction.md#the-nation-tab) shows
-the score heading for its ceiling, and what the courts give you now.
+risk premium and costs legitimacy for five years, and from a gap of 40 lawyers
+take to the streets. Religious Courts need an established religion. The [Nation
+tab](01-introduction.md#the-nation-tab) shows the score heading for its ceiling,
+and what the courts give you now.
+
+Under Constitutional Review and Judicial Supremacy a law you force through goes
+to the courts once it passes (see [Forceful Legislation](#forceful-legislation)),
+and they rule six months later. They strike it down if Judicial Independence is
+at least 90 when you only expedited it, 60 when you pushed it forward
+decisively, or 30 when you forced it through, and otherwise uphold it. Against a ruling you can comply, which puts the
+old law back and earns legitimacy and 5 points of the score; defy the court,
+which costs 20 points and raises your risk premium for five years; or pack it,
+which costs 15 points and authority, and leaves a court that challenges nothing
+for ten years. A year after packing you may turn the courts into Statutory
+Courts.
+
+Seven amendments change what the courts do (see [Amendments to the mod's
+laws](#amendments-to-the-mods-laws)), and landmark cases come once each when the
+country's situation calls for them: a ruling on slavery while abolitionists
+organize, a foreign power demanding an execution, a labor law struck down under
+Judicial Supremacy, an election voided, a new regime asking its courts to call
+it lawful, and two paths out of Religious Courts toward Statutory Courts.
 
 ### The rules of war
 
@@ -420,9 +439,11 @@ Endowment or the farm rule over.
 Once you have held a law for 20 years, its generation event can come, at
 most once every 25 years: The Cadet Sons under Primogeniture & Entail, The Last
 Division under Forced Heirship (one answer attaches Undivided Farm Succession)
-and The Founder's Will under Freedom of Testation. The Great Estates for Sale
-comes after 15 years of an estate duty. Their answers move the score, a pop
-group or a modifier for up to ten years.
+The Founder's Will under Freedom of Testation, The Hidden Estates under State
+as Universal Heir and The Empty Holding under Possession by Use. The Great
+Estates for Sale comes after 15 years of an estate duty, and The First Cohort
+once, five years after you attach the Birthright Endowment. Their answers move
+the score, a pop group or a modifier for up to ten years.
 
 With Mind Backups or Biological Immortality, Posthumous Title asks whether a
 person can outlive their estate. Recognising continuity of title freezes
@@ -482,7 +503,9 @@ stronger option also needs authority income above its own cost.
 | Force the law through, consequences be damned | 4 | 750 | +50 amenability, +25% success, three quarters fewer stalls, two more setbacks, 35% faster, jumps one enactment phase | Opposition −5 approval, −10 legitimacy, more radicals, some upper-strata radicals at once, capacity −3 |
 
 Each option also lowers Judicial Independence by 5, 10 or 20. That loss
-doesn't fade: the score climbs back at its usual 4 a year.
+doesn't fade: the score climbs back at its usual 4 a year. Under Constitutional
+Review or Judicial Supremacy the law then goes to the courts, which may strike
+it down (see [Laws on state power and information](#laws-on-state-power-and-information)).
 
 The authority cost fades out over five years too. More capacity makes it
 cheaper: a few percent off from 2 (about 9% at 4), then 20% at 5 and half at 8.
@@ -566,6 +589,13 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
 | Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
 | Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
+| Suspension of Habeas Corpus | Statutory Courts, Constitutional Review | Suppression 25% cheaper; Judicial Independence ceiling −20%; −5 legitimacy. Only at war, and it lapses when the war ends. Judged as Secret Police; the Armed Forces ask for it |
+| Judicial Elections | Statutory Courts, Constitutional Review | +5 legitimacy; Judicial Independence ceiling −20. Under an elected government. Judged as Universal Suffrage; offered while either law is enacted |
+| Mixed Commercial Courts | Religious Courts, Executive Tribunals | Half a point off credit standing; ceiling +10; Devout −5% political strength. Judged as Free Trade; the Industrialists or Petite Bourgeoisie ask for it |
+| Jury Trials | Statutory Courts, Constitutional Review | Ceiling +10; +3 legitimacy; suppression 10% dearer. Judged as Guaranteed Liberties; offered while either law is enacted |
+| Military Tribunals for Civilians | Executive Tribunals, Statutory Courts | Suppression 15% cheaper; Armed Forces +10% political strength; ceiling −20%. Judged as Outlawed Dissent; the Armed Forces ask for it in unrest |
+| People's Tribunals | Executive Tribunals under a Single-Party State | Suppression 20% cheaper; movements give 10% more loyalists; half a point on credit standing. It lapses without the Single-Party State. Judged as Single-Party State |
+| Human-in-the-Loop Appeals | Algorithmic Jurisprudence | +5 legitimacy; ceiling +10; local administration costs 5% more; ends the override a captured court gives under Algorithmic Governance. Judged as Strong Privacy Rights; offered while the law is enacted |
 
 The mod also changes one base-game amendment. Anarchy holds elections, so the
 Tradition of Free Elections attaches to it as to the voting laws. Keeping

@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  JUDICIARY — script values (country scope)
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md § 3
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md § 3
 # ======================================================================
 
 # The ceiling Judicial Independence moves toward (spec § 3.1): the court
@@ -55,6 +55,22 @@ te_jud_overhaul_gap = {
 te_jud_overhaul_mult_value = {
 	value = te_jud_overhaul_gap
 	divide = 100
+}
+
+# Phase 2 (spec § 14.1): the score at or above which the court strikes down
+# a law forced through, by how hard it was forced (var:te_jud_case_tier, the
+# Forceful Legislation option: 1 Expedite, 2 Push decisively, 3 Force it
+# through). Read only where a case is filed (te_judiciary_events.2).
+te_jud_strike_threshold = {
+	value = 90
+	if = {
+		limit = { var:te_jud_case_tier = 2 }
+		value = 60
+	}
+	else_if = {
+		limit = { var:te_jud_case_tier >= 3 }
+		value = 30
+	}
 }
 
 # The score for loc, 0 where there is none yet (the concept, the modifier's

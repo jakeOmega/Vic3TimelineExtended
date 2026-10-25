@@ -1,4 +1,4 @@
-"""Judiciary law group (docs/superpowers/specs/2026-10-17-judiciary-design.md).
+"""Judiciary law group (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md).
 
 What the engine would never report:
 
@@ -57,6 +57,8 @@ DISPLAY_TYPES = (
     "country_legitimacy_from_votes_if_elected_add",
     "country_authority_if_unelected_add",
     "country_override_with_algorithmic_governance_add",
+    "country_court_reviews_forced_laws_bool",
+    "country_amendment_lapses_at_peace_bool",
 )
 
 # Spec § 2 and § 2.7. Values as written in the file.
@@ -102,6 +104,7 @@ SPEC_LAWS = {
             "country_suppression_cost_mult": "0.25",
             "state_bureaucracy_population_base_cost_factor_mult": "0.05",
             "country_constitutional_law_enactment_success_add": "-0.1",
+            "country_court_reviews_forced_laws_bool": "yes",
         },
     },
     "law_judicial_supremacy": {
@@ -119,6 +122,7 @@ SPEC_LAWS = {
             "political_movement_pop_attraction_mult": "0.1",
             "country_constitutional_law_enactment_success_add": "-0.15",
             "country_rights_law_enactment_success_add": "-0.15",
+            "country_court_reviews_forced_laws_bool": "yes",
         },
     },
     "law_algorithmic_jurisprudence": {
@@ -602,6 +606,289 @@ class StancesTest(unittest.TestCase):
         religious = block[block.index("law_type:law_religious_courts"):]
         self.assertLess(religious.index("law_type:law_statutory_courts"),
                         religious.index("law_type:law_executive_tribunals"))
+
+
+# ----------------------------------------------------------------------
+#  Phases 2-4 (spec § 14)
+# ----------------------------------------------------------------------
+
+AMENDMENTS_FILE = os.path.join(REPO, "common", "amendments", "te_judiciary_amendments.txt")
+PETITION_EVENTS = os.path.join(REPO, "events", "amendment_petition_events.txt")
+PETITION_ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "amendment_petition_on_actions.txt")
+PETITION_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "amendment_petition_triggers.txt")
+LAW_EVENT_POOLS = os.path.join(REPO, "common", "on_actions", "law_events_on_actions.txt")
+
+# Spec § 14.1: the score at which the court strikes a forced law down, by
+# Forceful Legislation option (size key, tier).
+STRIKE = {("small", 1): 90, ("medium", 2): 60, ("large", 3): 30}
+
+
+def _without_comments(text):
+    return re.sub(r"#[^\n]*", "", text)
+
+
+class DefyingTheCourtTest(unittest.TestCase):
+    """Phase 2: a law forced through under a reviewing court goes to it."""
+
+    def test_reviews_need_the_line_and_a_court_the_executive_cannot_ignore(self):
+        block = _block(_read(TRIGGERS), "te_jud_court_can_strike_laws")
+        self.assertIn("modifier:country_court_reviews_forced_laws_bool = yes", block)
+        self.assertIn("NOT = { te_jud_paper_court = yes }", block)
+
+    def test_forceful_options_open_a_challenge_and_say_so(self):
+        event = _block(_read(MINOR_EVENTS), "minor_events_timelineextended.2")
+        options = re.split(r"\n\toption = \{", event)[1:]
+        by_name = {re.search(r"name = (\S+)", o).group(1): o for o in options}
+        for name, size, tier in (("minor_events_timelineextended.2.b", "small", 1),
+                                 ("minor_events_timelineextended.2.c", "medium", 2),
+                                 ("minor_events_timelineextended.2.e", "large", 3)):
+            self.assertRegex(
+                by_name[name],
+                r"limit = \{ te_jud_court_can_strike_laws = yes \}\s*custom_tooltip = \{\s*text = te_jud_review_%s_tt"
+                r"\s*te_jud_open_challenge = \{ TIER = %d \}" % (size, tier), name)
+        self.assertNotIn("te_jud_open_challenge", by_name["minor_events_timelineextended.2.a"])
+
+    def test_thresholds_match_what_the_tooltips_say(self):
+        block = _block(_read(VALUES), "te_jud_strike_threshold")
+        self.assertRegex(block, r"value = 90")
+        self.assertRegex(block, r"var:te_jud_case_tier = 2 \}\s*value = 60")
+        self.assertRegex(block, r"var:te_jud_case_tier >= 3 \}\s*value = 30")
+        lines = _loc_lines()
+        for (size, _), score in STRIKE.items():
+            self.assertIn("#v %d#!" % score, lines["te_jud_review_%s_tt" % size], size)
+            self.assertIn("#v %d#!" % score, lines["country_court_reviews_forced_laws_bool_desc"], size)
+
+    def test_the_case_is_filed_in_the_country_pulse_once_the_law_stands(self):
+        monthly = _block(_read(ON_ACTIONS), "te_jud_monthly")
+        self.assertIn("te_jud_challenge_monthly = yes", monthly)
+        block = _without_comments(_block(_read(EFFECTS), "te_jud_challenge_monthly"))
+        self.assertIn("NOT = { enacting_any_law = yes }", block)
+        self.assertIn("has_law = var:te_jud_challenge_law", block)
+        self.assertIn("NOT = { has_variable = te_jud_case_filed }", block, "one case at a time")
+        self.assertIn("trigger_event = { id = te_judiciary_events.2 days = 180 }", block)
+        # The filed case is a copy, so a second forced law can't overwrite it.
+        for name, source in (("te_jud_case_law", "te_jud_challenge_law"), ("te_jud_case_replaced", "te_jud_replaced_law"),
+                             ("te_jud_case_tier", "te_jud_challenge_tier")):
+            self.assertRegex(block, r"name = %s\s*value = var:%s" % (name, source))
+
+    def test_the_challenge_stores_both_laws(self):
+        block = _without_comments(_block(_read(EFFECTS), "te_jud_open_challenge"))
+        self.assertIn("te_jud_court_can_strike_laws = yes", block)
+        self.assertIn("currently_active_law_in_group", block)
+        self.assertRegex(block, r"name = te_jud_challenge_law\s*value = scope:te_jud_forced_type")
+        self.assertRegex(block, r"name = te_jud_replaced_law\s*value = scope:te_jud_replaced_type")
+        self.assertIn("te_jud_selfcheck_law_type_variable = yes", block)
+
+    def test_self_check_is_once_a_game_and_needs_the_type(self):
+        block = _block(_read(EFFECTS), "te_jud_selfcheck_law_type_variable")
+        limit = block[:block.index("set_global_variable")]
+        self.assertIn("NOT = { has_global_variable = te_jud_selfcheck_law_type_done }", limit)
+        self.assertIn("exists = scope:te_jud_forced_type", limit, "a missing scope must not read as OK")
+        self.assertIn("TE_SELF_CHECK OK judiciary_law_type_variable", block)
+        self.assertIn("TE_SELF_CHECK BROKEN judiciary_law_type_variable", block)
+
+    def test_every_ruling_closes_the_case(self):
+        events = _read(EVENTS)
+        ruling = _block(events, "te_judiciary_events.2")
+        self.assertIn("hidden = yes", ruling)
+        self.assertIn("var:te_judicial_independence >= te_jud_strike_threshold", ruling)
+        self.assertIn("te_jud_close_case = yes", ruling, "a lapsed case is closed")
+        for event in ("te_judiciary_events.3", "te_judiciary_events.4"):
+            immediate = _block(events, event)
+            immediate = immediate[immediate.index("\timmediate = {"):immediate.index("\toption = {")]
+            self.assertIn("te_jud_close_case = yes", immediate, event)
+
+    def test_answers_to_a_ruling(self):
+        event = _block(_read(EVENTS), "te_judiciary_events.3")
+        options = re.split(r"\n\toption = \{", event)[1:]
+        comply, defy, pack = options
+        self.assertIn("activate_law = scope:te_jud_restored_type", comply)
+        self.assertIn("te_jud_ruling_unreversed", comply, "the fallback when no law was recorded")
+        self.assertRegex(defy, r"text = te_jud_spend_large_tt\s*te_jud_spend = \{ AMOUNT = 20 \}")
+        self.assertIn("te_jud_ruling_defied", defy)
+        self.assertRegex(pack, r"text = te_jud_spend_pack_tt\s*te_jud_spend = \{ AMOUNT = 15 \}")
+        self.assertIn("te_jud_pack_court = yes", pack)
+        self.assertIn("#N -15#!", _loc_lines()["te_jud_spend_pack_tt"])
+
+    def test_a_packed_court_challenges_nothing(self):
+        mods = {k: _body(v) for k, v in _parse(MODIFIERS).items()}
+        packed = {k: _body(v) for k, v in mods["te_jud_court_packed"].items()}
+        self.assertEqual(packed["country_court_challenges_ignored_bool"], "yes")
+        self.assertEqual(packed["country_judicial_independence_ceiling_mult"], "-0.3")
+        block = _block(_read(EFFECTS), "te_jud_pack_court")
+        self.assertLess(block.index("remove_modifier = te_jud_court_packed"),
+                        block.index("add_modifier = { name = te_jud_court_packed years = 10 }"))
+        self.assertIn("trigger_event = { id = te_judiciary_events.5 days = 365 }", block)
+        # Its authority cost is a cost, never a negative add (CLAUDE.md).
+        cost = {k: _body(v) for k, v in mods["te_jud_packing_cost"].items()}
+        self.assertNotIn("country_authority_add", cost)
+        self.assertEqual(cost["country_authority_cost_add"], "150")
+
+    def test_the_overhaul_protests_are_an_event(self):
+        event = _block(_read(EVENTS), "te_judiciary_events.1")
+        immediate = event[event.index("\timmediate = {"):]
+        self.assertIn("trigger_event = { id = te_judiciary_events.6 }", immediate)
+        self.assertNotIn("add_radicals", immediate)
+
+    def test_loc(self):
+        keys = _loc_keys()
+        for n in (3, 4, 5, 6):
+            self.assertIn("te_judiciary_events.%d.t" % n, keys)
+            self.assertIn("te_judiciary_events.%d.d" % n, keys)
+        for key in ("te_jud_ruling_obeyed", "te_jud_ruling_unreversed", "te_jud_ruling_defied", "te_jud_court_packed",
+                    "te_jud_packing_cost", "te_jud_bench_restored", "te_jud_act_upheld", "te_jud_protests_dispersed",
+                    "te_jud_tenure_promised"):
+            self.assertIn(key, keys)
+            self.assertIn(key + "_desc", keys)
+
+
+# Spec § 14.2: parent, hosts.
+AMENDMENTS = {
+    "amendment_habeas_corpus_suspension": ("law_secret_police", {"law_statutory_courts", "law_constitutional_review"}),
+    "amendment_judicial_elections": ("law_universal_suffrage", {"law_statutory_courts", "law_constitutional_review"}),
+    "amendment_mixed_commercial_courts": ("law_free_trade", {"law_religious_courts", "law_executive_tribunals"}),
+    "amendment_jury_trials": ("law_guaranteed_liberties", {"law_statutory_courts", "law_constitutional_review"}),
+    "amendment_military_tribunals": ("law_outlawed_dissent", {"law_executive_tribunals", "law_statutory_courts"}),
+    "amendment_peoples_tribunals": ("law_single_party_state", {"law_executive_tribunals"}),
+    "amendment_human_in_the_loop": ("law_strong_privacy_rights", {"law_algorithmic_jurisprudence"}),
+}
+DEBATED = {"amendment_judicial_elections": 20, "amendment_jury_trials": 21, "amendment_human_in_the_loop": 22}
+
+
+class AmendmentsTest(unittest.TestCase):
+    """Phase 3: seven amendments, each with a scripted way in."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.amendments = {k: _body(v) for k, v in _parse(AMENDMENTS_FILE).items()}
+
+    def test_parents_and_hosts_match_spec(self):
+        self.assertEqual(set(self.amendments), set(AMENDMENTS))
+        for name, (parent, hosts) in AMENDMENTS.items():
+            body = self.amendments[name]
+            with self.subTest(amendment=name):
+                self.assertEqual(_body(body["parent"]), parent)
+                self.assertEqual(set(_body(body["allowed_laws"])), hosts)
+
+    def test_hosts_are_court_laws(self):
+        for name, (_, hosts) in AMENDMENTS.items():
+            self.assertLessEqual(hosts, set(COURT_LAWS), name)
+
+    def test_every_amendment_has_a_petition(self):
+        events = _read(PETITION_EVENTS)
+        pulse = _block(_read(PETITION_ON_ACTIONS), "on_yearly_pulse_country")
+        triggers = _read(PETITION_TRIGGERS)
+        for name, (_, hosts) in AMENDMENTS.items():
+            short = name[len("amendment_"):]
+            with self.subTest(amendment=name):
+                self.assertRegex(events, r"add_amendment = \{\s*type = %s\b" % name)
+                self.assertIn("te_amendment_petition_%s" % short, pulse)
+                ok = _block(triggers, "te_ap_law_ok_%s" % short)
+                self.assertEqual(set(re.findall(r"has_law = law_type:(\w+)", ok)), hosts,
+                                 "the petition restates allowed_laws")
+                self.assertIn("te_ap_enacting_in_judiciary = yes", ok)
+
+    def test_debates_are_pooled_and_attach_to_the_incoming_law(self):
+        pool = _block(_read(LAW_EVENT_POOLS), "on_law_checkpoint_debate")
+        events = _read(EVENTS)
+        for name, n in DEBATED.items():
+            event = _block(events, "te_judiciary_events.%d" % n)
+            with self.subTest(amendment=name):
+                self.assertIn("te_judiciary_events.%d" % n, pool)
+                self.assertIn("category = enactment", event)
+                self.assertRegex(event, r"currently_enacting_law = \{\s*add_amendment = \{\s*type = %s\b" % name)
+                self.assertIn("amendment_compromise_modifier", event)
+                self.assertIn("amendment_purist_modifier", event)
+
+    def test_standing_conditions_are_enforced_monthly(self):
+        habeas = {k: _body(v) for k, v in _body(self.amendments["amendment_habeas_corpus_suspension"]["modifier"]).items()}
+        self.assertEqual(habeas["country_amendment_lapses_at_peace_bool"], "yes")
+        self.assertIn("te_jud_amendment_upkeep = yes", _block(_read(ON_ACTIONS), "te_jud_monthly"))
+        upkeep = _block(_read(EFFECTS), "te_jud_amendment_upkeep")
+        self.assertIn("modifier:country_amendment_lapses_at_peace_bool = yes", upkeep)
+        self.assertIn("amendment_type:amendment_habeas_corpus_suspension ?= this.type", upkeep)
+        self.assertIn("NOT = { has_law = law_type:law_single_party_state }", upkeep)
+        self.assertIn("amendment_type:amendment_peoples_tribunals ?= this.type", upkeep)
+
+    def test_human_in_the_loop_cancels_the_capture(self):
+        modifier = {k: _body(v) for k, v in _body(self.amendments["amendment_human_in_the_loop"]["modifier"]).items()}
+        law = SPEC_LAWS["law_algorithmic_jurisprudence"]["modifier"]
+        self.assertEqual(float(modifier["country_override_with_algorithmic_governance_add"]),
+                         -float(law["country_override_with_algorithmic_governance_add"]))
+
+    def test_names_and_descriptions(self):
+        keys = _loc_keys()
+        for name in AMENDMENTS:
+            self.assertIn(name, keys)
+            self.assertIn(name + "_desc", keys)
+        for n in range(21, 28):
+            for suffix in ("t", "d", "f", "a", "b"):
+                self.assertIn("amendment_petition_events.%d.%s" % (n, suffix), keys)
+
+
+# Spec § 14.3: event, its once-per-country variable.
+CASES = {
+    30: "free_soil", 31: "otsu", 32: "freedom_of_contract", 33: "voided_election",
+    34: "necessity", 35: "house_of_justice", 36: "new_code",
+}
+
+
+class LandmarkCasesTest(unittest.TestCase):
+    """Phase 4: keyed to game state, once per country."""
+
+    def test_each_case_comes_once(self):
+        events = _read(EVENTS)
+        for n, case in CASES.items():
+            event = _block(events, "te_judiciary_events.%d" % n)
+            trigger = event[event.index("\ttrigger = {"):event.index("\timmediate = {")]
+            immediate = event[event.index("\timmediate = {"):]
+            with self.subTest(case=case):
+                self.assertIn("NOT = { has_variable = te_jud_heard_%s }" % case, trigger)
+                self.assertIn("set_variable = te_jud_heard_%s" % case, immediate)
+
+    def test_no_dates_or_tags(self):
+        # The owner (spec Decisions): the alternate timeline may lack the
+        # context by the 20th century, so state, never a date or a tag.
+        events = _read(EVENTS)
+        for n in CASES:
+            event = _without_comments(_block(events, "te_judiciary_events.%d" % n))
+            with self.subTest(event=n):
+                self.assertNotRegex(event, r"\bc:[A-Z]{3}\b|has_tag|game_date|current_date")
+
+    def test_each_case_is_dispatched(self):
+        on_actions = _read(ON_ACTIONS)
+        yearly = _block(on_actions, "on_yearly_pulse_country")
+        for n, case in CASES.items():
+            if n in (33, 34):
+                continue
+            with self.subTest(case=case):
+                self.assertIn("te_jud_landmark_%s" % case, yearly)
+                self.assertIn("te_judiciary_events.%d" % n, _block(on_actions, "te_jud_landmark_%s" % case))
+        self.assertIn("te_jud_landmark_voided_election", _block(on_actions, "on_election_campaign_end"))
+        activated = _block(on_actions, "te_jud_law_activated")
+        self.assertIn("trigger_event = { id = te_judiciary_events.34 days = 14 }", activated)
+
+    def test_the_otsu_power_is_never_a_player(self):
+        event = _block(_read(EVENTS), "te_judiciary_events.31")
+        self.assertEqual(event.count("is_ai = yes"), 2, "the trigger and the scope it saves")
+
+    def test_reform_paths_lead_to_statutory_courts(self):
+        events = _read(EVENTS)
+        for n in (35, 36):
+            self.assertIn("start_enactment = law_type:law_statutory_courts", _block(events, "te_judiciary_events.%d" % n))
+        self.assertRegex(_block(events, "te_judiciary_events.36"),
+                         r"add_amendment = \{\s*type = amendment_mixed_commercial_courts")
+
+    def test_loc(self):
+        keys = _loc_keys()
+        for n in CASES:
+            for suffix in ("t", "d", "f", "a", "b"):
+                self.assertIn("te_judiciary_events.%d.%s" % (n, suffix), keys)
+        for key in ("te_jud_case_dred_scott", "te_jud_case_free_soil", "te_jud_case_otsu_upheld",
+                    "te_jud_case_otsu_overruled", "te_jud_case_freedom_of_contract", "te_jud_case_election_respected",
+                    "te_jud_case_emergency", "te_jud_case_necessity", "te_jud_case_judges_resign"):
+            self.assertIn(key, keys)
+            self.assertIn(key + "_desc", keys)
 
 
 if __name__ == "__main__":

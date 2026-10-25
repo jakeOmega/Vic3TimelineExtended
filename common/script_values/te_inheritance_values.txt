@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  INHERITANCE — script values
-#  Spec: docs/superpowers/specs/2026-10-08-inheritance-laws-design.md §3-4
+#  Spec: docs/superpowers/archive/specs/2026-10-08-inheritance-laws-design.md §3-4
 #  Effects: common/scripted_effects/te_inheritance_effects.txt.
 #  Docs: docs/systems/mod_systems.md § Inheritance.
 # ======================================================================
