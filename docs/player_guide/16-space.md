@@ -9,9 +9,11 @@ Program building, unlocked by Guided Missiles in era 7, before any of them can
 make progress. The Space Race game rule controls the system; with it off, the
 journal entries and their events never appear. Its Simple Colonies and Full
 Colonies settings also make colony fleets take months or years to arrive, give
-colonies settlers and let a colony change hands (see [Colony fleets in
-flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers) and
-[Ceding a colony](#ceding-a-colony)).
+colonies settlers and modules, tie Extraplanetary Bases to the room colonies
+give, and let a colony change hands (see [Colony fleets in
+flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers),
+[Colony modules](#colony-modules), [Extraplanetary Base
+room](#extraplanetary-base-room) and [Ceding a colony](#ceding-a-colony)).
 
 ## Joining the space race
 
@@ -432,7 +434,9 @@ Under Simple Colonies and Full Colonies the same rule applies world by world: a
 country holding no colony needs one of those methods to send a fleet to Mercury,
 Saturn or beyond.
 Each colony's event offers two specializations, and the one you choose becomes a
-small permanent modifier on the journal entry. The options differ by world:
+small permanent modifier on the journal entry. Under Simple Colonies and Full
+Colonies you can raise it, and add the other, with modules (see [Colony
+modules](#colony-modules)). The options differ by world:
 research speed, military research speed, innovation cap, space race progress,
 Extraplanetary Base, Fusion Plant or Orbital Solar Collector throughput,
 Advanced Materials or Launch Capacity output, cultural pull, influence,
@@ -579,7 +583,8 @@ ones you don't want settled to Closed.
 People are crews: the Crews figure counts how many module levels a colony's
 people can run, one for every 5,000. A colony's founding specialization runs
 without a crew. With Artificial General Intelligence colonies need no crews at
-all, and the figure reads AGI.
+all, and the figure reads AGI. Habitats add room for more people (see [Colony
+modules](#colony-modules)).
 
 Your people off Earth give Off-World Population on Solar System Colonization:
 +1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
@@ -587,6 +592,91 @@ A colony's people go with it when it changes hands, and are lost if it is
 released. AI programs set Emigration to Steady while they are in the top three
 of the space race with money to spare, to Low otherwise, and to Off in default
 or when their colonies are full.
+
+### Colony modules
+
+Under Simple Colonies and Full Colonies, you build up each colony with modules,
+listed in the Colony Modules section of Solar System Colonization:
+
+| Module | What a level does | Room for it |
+|---|---|---|
+| The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
+| Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports and Defences: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
+| Spaceport | Nothing yet: it is for the space fleets, which are not in the game yet | The colony's slots |
+| Defences | Nothing yet, for the same reason | The colony's slots |
+
+The founding event has to be answered before you can add a specialization
+level. Each row's buttons queue one more level of a module, counting what is
+already queued and on its way against the colony's room, and its last button
+clears the colony's queue. You can't take a module down once it is built.
+
+Modules are built at Earth by your Space Program's third production method
+group, Module Fabrication, which starts on No Module Fabrication:
+
+| Method | Technology | Launch Capacity and Advanced Materials a week | Points a month |
+|---|---|---|---|
+| Orbital Assembly | Directed Energy Weapons | 1,500 and 10 | 5 |
+| Lunar Foundries | Space Colonization | 2,000 and 15 | 12 |
+| Fusion Shipyards | Muon-Catalyzed Fusion Reactors | 2,000 and 10 | 25 |
+
+Each module costs 100 points, so a fully staffed Space Program builds one every
+20, 8 or 4 months, more often with higher funding. Fabrication builds one module
+at a time, colony by colony in the Solar System list's order, so every colony
+with a queue gets a module before any gets two; queue modules only where you
+want them. Within a colony it builds Habitats first, then the specializations,
+the Spaceport and Defences. Up to 200 points wait in stock while nothing is
+queued.
+
+A finished module waits at Earth for its world's launch window, or leaves at
+once with a fusion torch or antimatter drive, and lands after the transit your
+drive buys (see [Colony fleets in flight](#colony-fleets-in-flight)). Eight
+modules can wait or fly at once; while all eight are taken, fabrication waits.
+A module lands for whoever holds the colony then, and is lost if the world was
+released or its room filled in the meantime.
+
+Every level past the first needs a crew of 5,000 people, except Habitats, which
+house the crews. A colony short of crews runs its modules at the share it can
+staff: four levels with no crews run at a quarter each, which the Crew column
+shows. With Artificial General Intelligence every module runs. Each level past
+each colony's first adds +1% to your Space Program's throughput, raising its
+Launch Capacity bill (Colony Modules on the journal entry).
+
+A colony's modules stay with it when it changes hands, and the Cede Colony AI
+values a colony more for each of them. AI programs in the top three with money
+to spare queue one module a year at each colony: a Habitat once its people fill
+three quarters of its room, otherwise the next specialization level its crews
+can run, its founding specialization first. They run the best fabrication method
+they have while anything is queued, and never build Spaceports or Defences.
+
+### Extraplanetary Base room
+
+Under Simple Colonies and Full Colonies, Extraplanetary Bases need room. The
+near-Earth asteroids give every country room for 10 levels, and each colony you
+hold adds its own, from 10 levels on the small outer moons to 60 at 16 Psyche.
+Each colony's room has a grade, which raises or lowers the output of the levels
+that work it:
+
+| Worlds | Grade |
+|---|---|
+| 16 Psyche | +30% |
+| 4 Vesta, Ceres | +20%, +15% |
+| Mars, 2 Pallas | +10% |
+| 10 Hygiea, Himalia, Mercury | +5% |
+| The near-Earth asteroids, Ganymede, Callisto, Amalthea | 0 |
+| Io, Europa, Venus | −5% to −10% |
+| Saturn's moons | −15% to −20% |
+| Uranus's and Neptune's moons | −25% to −35% |
+| The Kuiper Belt | −35% to −45% |
+
+Your levels fill the best room first, and any past all of your room work at
+−50%. One country modifier, Extraplanetary Base Room, carries the average over
+all your levels, so only the levels past the room pay the penalty: with room for
+10 and 20 levels built, the base works at −25%. A new poor colony adds room
+without lowering what your levels already earn, and taking a rival's Psyche
+colony raises your average and lowers theirs. The Colony Modules section shows
+your levels against your room. Private investors don't build past your room,
+and AI governments don't either; your government can, at the penalty. Under
+Races Only, bases have no room limit.
 
 ### Who holds a colony
 
@@ -801,7 +891,8 @@ innovation to spare and cuts it when innovation runs short. Launch windows bind
 the AI as they bind you, and its approach decides its launches outside a window
 the same way. Under Simple Colonies and Full Colonies the AI sends its colony
 fleets where the program picks for you when you choose no world, and sets its
-emigration once a year (see [Colony settlers](#colony-settlers)).
+emigration and queues its colony modules once a year (see [Colony
+settlers](#colony-settlers) and [Colony modules](#colony-modules)).
 
 A revolution's winner continues the old country's program, with its progress
 (except progress toward a first colony) and its rewards, and rebels can't start

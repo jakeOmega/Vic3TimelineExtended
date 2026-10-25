@@ -271,7 +271,10 @@ years of that saving, so the switch pays back sooner while Motor Ships are
 expensive. The
 Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
 mines metals and minerals, and after Space Colonization it can switch to the
-Resort Colony production method, which produces art and tourism instead.
+Resort Colony production method, which produces art and tourism instead. With
+the Space Race rule on Simple Colonies or Full Colonies its levels need room,
+from the near-Earth asteroids and your colonies, and work at −50% past it (see
+[Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
 The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
 Extraplanetary Base's, and at base prices earns more per level: about three

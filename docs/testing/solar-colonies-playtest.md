@@ -102,3 +102,40 @@ Grep `debug.log` for `TE_SR_FLEETS` and `TE_SR_SETTLERS` after option a.
 
 - **Load.** `error.log` at launch carries no `Database type building_sr_site_<world> has missing texture`: each site
   building has the Monuments' panel `background` since 2026-10-25 (34 lines a launch before).
+
+## Colony modules and Extraplanetary Base room (slice 4)
+
+Design: `docs/superpowers/specs/2026-10-25-solar-colonization-modules-and-bases-design.md`. The console is
+`event te_debug_space_race.4` (log every colony's modules and caps; fill our fabrication stock; queue one of each
+module at our first colony and fabricate now; land our shipments now; recompute our Extraplanetary Base room). Grep
+`debug.log` for `TE_SR_MODULES` after option a.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN module_fabrication country=… points=…` | once a game, a month after a Space Program first runs a fabrication method at half staff or more | the method's `country_sr_module_fabrication_add` reaches its country | the country has no points: the secondary group's workforce-scaled country modifier does not reach it | give the points from script instead: `sr_mod_fab_rate` reads which method the Space Program runs (`sr_mod_fabrication_runs`) and its occupancy |
+| `TE_SELF_CHECK OK/BROKEN modifier_seen_same_effect <modifier>` | once a game, the first time a world's sync re-adds a specialization at its multiplier (the first month after loading a save with colonies, or the first module landing) | `has_modifier` sees a modifier an `add_modifier` placed earlier in the same effect | it doesn't yet: every refresh must stay once per effect (the mod's code already assumes so) | none needed for this slice: `sr_site_show_modifier_at` tests its `_mult` record, not `has_modifier`; record the answer in `scripting_best_practices.md` |
+
+1. **The method group.** Under Simple Colonies, the Space Program's panel shows a third group, Module Fabrication,
+   starting on No Module Fabrication. Orbital Assembly (Directed Energy Weapons) shows +5 Colony Module Fabrication per
+   Month, and the Colony Modules section's first row reads 5.0 at full staff.
+2. **Queueing.** Each colony we hold has a row: its Crew share, then the first and second specialization, Habitat,
+   Port and Def. A level's tooltip names what it gives. + queues one ("+1" beside the level); the button greys out at
+   four specialization levels or the colony's slots, counting what is queued. The clear button empties the queue.
+3. **A module's journey.** With 100 points in stock (option b), a queued module fills a shipment (Shipments 1 / 0),
+   leaves in its world's window (1 / 0 becomes 0 / 1) and lands after the transit its drive buys (option e lands it
+   now). A specialization level doubles that specialization's line in the entry's modifiers; a Habitat raises the
+   colony's room in Settlers.
+4. **Staffing.** A colony with no people and its founding specialization at level 3 reads 33%, and the specialization
+   gives one level's worth; with Artificial General Intelligence it reads 100% and gives three.
+5. **Upkeep.** The entry's Colony Modules modifier adds +1% Space Program throughput for each level past each
+   colony's first, and the Space Program's Launch Capacity bill follows.
+6. **Extraplanetary Base room.** A country with no colony and 20 Extraplanetary Base levels shows Extraplanetary Base
+   Room at -25% throughput in the building's breakdown; one holding 16 Psyche and 20 levels shows +30%. Under Races
+   Only neither shows.
+7. **The AI's bases.** In an observer run under Simple Colonies, AI countries without colonies stop building
+   Extraplanetary Base levels at 10 (none queued past it), and private investors in a player's country stop at the
+   player's room; the player can still build past it.
+8. **The AI's modules.** AI space powers holding colonies switch Module Fabrication on once a year when they queue a
+   module, queue Habitats and specialization levels, never Spaceports or Defences, and switch it off with nothing
+   queued.
+9. **Cession.** A colony ceded with modules keeps them; a module on its way when it was ceded lands for the new holder.
