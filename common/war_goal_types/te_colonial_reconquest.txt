@@ -1,7 +1,9 @@
 ﻿# ============================================================================
 # WAR OF INDEPENDENCE — RECONQUEST
 #
-# The goal of dp_te_colonial_war (common/diplomatic_plays/te_colonial_war_play.txt):
+# Our goal in a war of independence (common/diplomatic_plays/te_colonial_war_play.txt):
+# added as our primary demand when the rebels open dp_te_independence_war
+# against us (and the opening goal of the first build's dp_te_colonial_war):
 # annex back the country a colony of ours formed when it declared
 # independence. te_reunify_country's annex_country settings, with three
 # differences:
@@ -14,8 +16,9 @@
 #      condemnation comes from the great powers and the colonial bar.
 #   3. Valid only while the rebels name the holder as their metropole and talks
 #      have not conceded (decol_iw_conceded, the accords of .76's talks): then
-#      the engine drops the goal, and with no goals left the war can end in a
-#      white peace.
+#      the engine drops the goal, and with only the rebels' own goal left
+#      (te_colonial_independence, which does nothing) the war can end in a
+#      peace.
 #
 # on_enforced records the win on the holder (decol_iw_record_enforced), which
 # settles it the next day.

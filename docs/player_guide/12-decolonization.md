@@ -341,14 +341,15 @@ when your own people are a tenth or more of the territory, its settlers.
 |---|---|
 | Let them go | The country forms now, as in Blood in the Colonies' release: Colonial War Weariness, the Armed Forces disapprove, the Intelligentsia approve, five months of +1 stability. |
 | Negotiate the handover | A Round Table release with the declared government as your partner, whatever its acceptance: +1 stability a month for 12 months and friendlier relations. It costs 100 authority, easing over a year. Under Neocolonialism it goes on your economic terms instead. |
-| Send the army | The rebels form as a country with the territory and the neighbouring states where its people are at home, and the next day you are at war with them. You can fight three such wars at once; with three running the option is grayed. |
+| Send the army | The rebels form as a country with the territory and the neighbouring states where its people are at home. The next day they open a diplomatic play against you, and about three weeks later you are at war. Until then you can still back down, which lets them go. You can fight three such wars at once; with three running the option is grayed. |
 
 ### Fighting a war of independence
 
-The war is a War of Independence whose goal, Reconquer, annexes the rebels
-back. It costs no infamy, and neither side can add goals. Holding their land
-doesn't end it: only their capitulation or a peace does, so a war can drag on
-long after your army holds every province.
+The rebels start the war, a War of Independence. Their goal is Colonial
+Independence; yours, Reconquer, annexes them back. Neither costs infamy, and
+neither side can add goals. Holding their land doesn't end it: only a
+capitulation or a peace does, so a war can drag on long after your army holds
+every province.
 
 The rebels fight like guerrillas. They lose less morale and fewer provinces
 after a defeat, defend their own provinces better, raise twice the conscripts
@@ -379,9 +380,10 @@ secessionists from the peace screen.
 ### Talks and the home front
 
 Open Talks on a war's row asks for a popup first. Talks take six months while
-the fighting goes on. When the accords are signed, your claim is dropped: the
-rebels take a white peace, and you offer one from the peace screen. An AI opens
-talks after half a year of war support in the red, or after four years.
+the fighting goes on. When the accords are signed, your claim is dropped and
+the rebels accept a peace: offer one from the peace screen, conceding their
+independence if they refuse a white peace. An AI opens talks after half a year
+of war support in the red, or after four years.
 
 A war that has run four years, with your war support in it at 25 or below for a
 year running, breaks the home front. Without a voting franchise, junior

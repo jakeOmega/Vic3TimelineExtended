@@ -19,7 +19,7 @@ import unittest
 from collections import namedtuple
 
 from test_grand_monument_registry import (
-    BUILT, LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
+    BUILT, HISTORIC, LANDMARKS, ROOT, block, loc, raw_block_at, read, squash, strip_comments,
 )
 
 EFFECTS = "common/scripted_effects/gm_archaeology_effects.txt"
@@ -84,6 +84,22 @@ ARCH_SITES = (
     Site("villa_of_the_papyri", "microprocessor", "survey"),
     Site("tomb_of_alexander", "mainframe_computers", "survey"),
     Site("pompeii", "romanticism", "excavating"),
+    # Added 2026-10-25 (tourism heritage spec 2026-10-23 Appendix C): To History when dug, the technology
+    # by the date of the find or the excavation that brought visitors.
+    Site("ephesus", "empiricism", "survey"),
+    Site("tikal", "romanticism", "survey"),
+    Site("chichen_itza", "mass_media", "survey"),
+    Site("teotihuacan", "pan-nationalism", "survey"),
+    Site("monte_alban", "public_works_programs", "survey"),
+    Site("leptis_magna", "modern_materials", "survey"),
+    Site("cyrene", "empiricism", "survey"),
+    Site("merida_theatre", "mass_propaganda", "survey"),
+    Site("chogha_zanbil", "public_works_programs", "incidental"),
+    Site("hattusa", "pan-nationalism", "survey"),
+    Site("mount_nemrut", "empiricism", "incidental"),
+    Site("mogao_caves", "steam_donkey", "incidental"),
+    Site("khajuraho", "romanticism", "survey"),
+    Site("hampi", "empiricism", "survey"),
 )
 BURIED = tuple(lm for lm in LANDMARKS if lm.buried)
 METHODS = {"antiquarian": ("romanticism", 4), "systematic": ("empiricism", 2.5), "forensic": ("computer_networks", 3.5)}
@@ -115,13 +131,14 @@ def state_regions():
 
 def seed_call(lm, site):
     return (f"gm_arch_seed_site = {{ KEY = {lm.key} STATE = {lm.state} TECH = {flag(site.tech)} "
-            f"VECTOR = {site.vector} FORM = {lm.form} LEVEL = {lm.level} BUILT = {BUILT[lm.key]} }}")
+            f"VECTOR = {site.vector} FORM = {lm.form} LEVEL = {lm.level} BUILT = {BUILT[lm.key]} "
+            f"DEDICATION = {lm.dedication} }}")
 
 
 class TableTests(unittest.TestCase):
     def test_a_row_for_every_buried_landmark_in_order(self):
         self.assertEqual([s.key for s in ARCH_SITES], [lm.key for lm in BURIED])
-        self.assertEqual(len(ARCH_SITES), 36)
+        self.assertEqual(len(ARCH_SITES), 50)
 
     def test_what_a_site_is(self):
         states, techs = state_regions(), technologies()
@@ -132,16 +149,24 @@ class TableTests(unittest.TestCase):
             self.assertIn(lm.state, states, f"{lm.key}: a state region that exists")
             self.assertIn(site.tech, techs, f"{lm.key}: a technology that exists")
             self.assertIn(site.vector, ("survey", "incidental", "excavating"), lm.key)
-            self.assertEqual(lm.dedication, "civic", f"{lm.key}: the antiquity and archive dedications are deferred")
+            # To the Nation, or To History for a site that took base appeal (tourism heritage spec 2026-10-23
+            # § 9); the antiquity and archive dedications shipped as signatures on To the Nation.
+            self.assertIn(lm.dedication, ("civic", HISTORIC), lm.key)
             self.assertIsNone(lm.tag, lm.key)
 
     def test_the_picture_codes_follow_the_rows(self):
         first = LANDMARKS.index(BURIED[0]) + 1
         self.assertEqual(first, 52, "append-only: the first buried site is row 52")
-        # Then the historical opportunities' landmarks (signatures spec §6), after every buried site.
+        # Then the historical opportunities' landmarks (signatures spec §6), after the first buried sites, and
+        # after them the To History landmarks and then sites (tourism heritage phases 2 and 3).
         historical = tuple(lm for lm in LANDMARKS if lm.year)
-        self.assertEqual(len(LANDMARKS), 51 + len(BURIED) + len(historical))
-        self.assertEqual(LANDMARKS[51 + len(BURIED):], historical)
+        older = tuple(lm for lm in BURIED if lm.dedication != HISTORIC)
+        self.assertEqual(LANDMARKS[51:51 + len(older)], older)
+        self.assertEqual(LANDMARKS[51 + len(older):51 + len(older) + len(historical)], historical)
+        rest = LANDMARKS[51 + len(older) + len(historical):]
+        self.assertTrue(rest and all(lm.dedication == HISTORIC for lm in rest))
+        self.assertEqual(list(rest), [lm for lm in rest if lm.placed] + [lm for lm in rest if lm.buried],
+                         "the landmarks, then the sites")
 
     def test_the_issues_candidates_are_all_there(self):
         # Issue #939's list: the sites it names, by the key this table gives them.
@@ -175,7 +200,7 @@ class SeedTests(unittest.TestCase):
         self.assertIn("add_to_global_variable_list = { name = gm_arch_sites target = scope:gm_arch_new }", body)
         for record in ("name = gm_tr_landmark value = flag:$KEY$", "name = gm_tr_skin value = flag:landmark_$KEY$",
                        "name = gm_tr_form value = flag:$FORM$", "name = gm_tr_levels value = $LEVEL$",
-                       "name = gm_tr_dedication value = flag:civic", "name = gm_tr_namesake value = flag:landmark",
+                       "name = gm_tr_dedication value = flag:$DEDICATION$", "name = gm_tr_namesake value = flag:landmark",
                        "name = gm_tr_share value = flag:whole", "name = gm_tr_origin_region value = scope:gm_arch_seed_region",
                        "name = gm_site_tech value = flag:$TECH$", "name = gm_site_vector value = flag:$VECTOR$",
                        "name = gm_site_status value = 1"):
@@ -213,7 +238,7 @@ class SeedTests(unittest.TestCase):
                       "gm_arch_seed_rounds } gm_arch_seed_sites = yes }", body)
         self.assertLess(body.index("gm_arch_self_check = yes"), body.index("global_var:gm_arch_seed_round <"),
                         "the self-check stays once a game")
-        self.assertEqual(squash(block(read(VALUES), "gm_arch_seed_rounds")), "value = 3",
+        self.assertEqual(squash(block(read(VALUES), "gm_arch_seed_rounds")), "value = 4",
                          "raise it with every row added to ARCH_SITES after a game may have been seeded")
 
     def test_a_site_records_its_year(self):

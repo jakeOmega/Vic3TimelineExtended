@@ -1,6 +1,6 @@
 # Grand Monuments: the monument policy, upkeep and prestige (design)
 
-Date: 2026-10-23. Follows `docs/superpowers/specs/2026-10-23-tourism-heritage-design.md` § 15 (the owner's notes) and
+Date: 2026-10-23. Follows `docs/superpowers/archive/specs/2026-10-23-tourism-heritage-design.md` § 15 (the owner's notes) and
 § 8 (the prestige figures). Owner decisions are marked *(owner)*; calls I made are marked *(my call)* and listed in
 § 13 for checking.
 

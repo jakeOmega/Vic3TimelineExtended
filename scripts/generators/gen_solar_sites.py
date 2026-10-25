@@ -1302,6 +1302,7 @@ def render_buildings() -> str:
         out += [f"{site_building(site)} = {{",
                 "\tbuilding_group = bg_sr_colony_sites",
                 f'\ticon = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"',
+                '\tbackground = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"',
                 "\tcity_type = city",
                 "\tlevels_per_mesh = -1",
                 "\tbuildable = no",

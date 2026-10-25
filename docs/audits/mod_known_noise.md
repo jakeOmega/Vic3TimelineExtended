@@ -137,16 +137,6 @@ retain law Penal Labor Camps
 
 Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, …), and init-order transients for the four lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets / Penal Labor Camps, first in `lawgroup_criminal_justice` since #520; 146 countries at the 2026-10-10 start) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
 
-### `guitexturehandler.h:155` — strategic-reserve silo missing UI texture (unresolved)
-- source: `guitexturehandler.h:155`
-- tracked: `docs/audits/open_issues.md#l17-strategic-reserve-silo-missing-texture-warning-unresolved`
-
-```
-building_strategic_reserve_silo has missing texture
-```
-
-One line per launch; the queried-but-missing texture slot hasn't been identified yet (the building's `icon` dds exists). Cosmetic fallback art. Signature pinned to the silo so other buildings' missing textures still surface. Tracked at `docs/audits/open_issues.md#l17-strategic-reserve-silo-missing-texture-warning-unresolved`.
-
 ### `jomini_eventmanager.cpp:376` — console-only debug test events reported orphaned
 - source: `jomini_eventmanager.cpp:376`
 - tracked: `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`
@@ -221,18 +211,16 @@ Event un_vote.5 is orphaned
 
 ### `event.cpp:358` — Grand Monuments v2 load-time notices
 - source: `event.cpp:358`
-- source: `guitexturehandler.h:155`
 - source: `jomini_effect.cpp:1139`
 - tracked: `docs/audits/open_issues.md#l26-grand-monuments-v2-load-time-notices`
 
 ```
 No default option in event monument_events.11.
-building_gm_name_carrier_anchor has missing texture
 Flag 'leader' is used but is never set
 Flag 'memorial' is used but is never set
 ```
 
-Four lines once per launch. The skin choice has no `default_option` by design, the never-built name-carrier building lacks the same unidentified UI texture as the silo (L17), `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see, and `flag:memorial` is read only to name a Memorial-form monument or commission from a save older than #909, which retired that form. Each signature names its own event, building or flag, so another event without a default, another building's missing texture or another never-set flag still shows up.
+Three lines once per launch. The skin choice has no `default_option` by design, `flag:leader` is set as `flag:$DEDICATION$`, which the validator cannot see, and `flag:memorial` is read only to name a Memorial-form monument or commission from a save older than #909, which retired that form. Each signature names its own event or flag, so another event without a default or another never-set flag still shows up.
 
 ### `common/treaty_articles/31_ship_transfer.txt:58` — vanilla ship transfer's reciprocal check reads the mod's mutual articles
 - tracked: `docs/audits/open_issues.md#l27-ship-transfer-reciprocal-check-reads-mod-mutual-articles`
@@ -245,3 +233,14 @@ Invalid left side during comparison 'target_country'
 ```
 
 Vanilla's reciprocal-article check skips its own two mutual articles but not the mod's four, so a draft holding one logs these three lines; the check's outcome is still correct. Anchored on the vanilla article, with no mod frame in its stack, so the two generic lines can't hide a mod treaty's error. Tracked at `docs/audits/open_issues.md#l27-ship-transfer-reciprocal-check-reads-mod-mutual-articles`.
+
+### `country.cpp:9608` — a construction queue with no construction to spend on it (unattributed)
+- source: `country.cpp:9608`
+- source: `country.cpp:9594`
+- tracked: `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`
+
+```
+The total construction speed is zero
+```
+
+The engine's estimate of a country's queue length divides by its construction speed, and logs this when that speed is zero. It names no country and no script, so the cause isn't known. 2026-10-24: 3,208 lines over three and a half hours of play, steady at 20 to 40 a minute from about half an hour after the launch, a third of every `error.log`; the 2026-10-11 observer runs logged it at `:9594` ("queues"), so it predates that day's builds. Tracked at `docs/audits/open_issues.md#l28-zero-construction-speed-with-a-queued-project-unattributed`.

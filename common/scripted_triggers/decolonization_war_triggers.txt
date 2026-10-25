@@ -79,6 +79,28 @@ decol_iw_slot_at_war = {
 	}
 }
 
+# The play of record $N$ is running, not yet a war: the rebels'
+# dp_te_independence_war, or a first-build dp_te_colonial_war against them
+# (common/diplomatic_plays/te_colonial_war_play.txt). Scope: country (us).
+decol_iw_slot_has_play = {
+	has_variable = decol_iw_rebels_$N$
+	var:decol_iw_rebels_$N$ ?= {
+		save_temporary_scope_as = decol_iw_play_rebels
+		any_diplomatic_play = {
+			OR = {
+				AND = {
+					is_diplomatic_play_type = dp_te_independence_war
+					initiator ?= { this = scope:decol_iw_play_rebels }
+				}
+				AND = {
+					is_diplomatic_play_type = dp_te_colonial_war
+					target ?= { this = scope:decol_iw_play_rebels }
+				}
+			}
+		}
+	}
+}
+
 # The war of record $N$ has broken the home front: it has run
 # decol_iw_crisis_war_months, and our war support in it has been at the red
 # line for decol_iw_crisis_red_months running (the regime crisis, .75).

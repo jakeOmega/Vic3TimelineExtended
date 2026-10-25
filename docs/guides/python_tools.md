@@ -477,6 +477,8 @@ python3 vanilla_parsed.py info             # one-line summary of the committed s
 
 Engine docs (`effects.log` & co.) are separate from all this and still come from Modding-Digests (`vic3_modding_digests_path`).
 
+**Which state region holds a town, and who owns it in 1836.** The snapshot has no `history/` and no province names, but its loc has every state's hub names: `HUB_NAME_STATE_<REGION>_<city|port|farm|mine|wood>` in `vanilla_parsed/localization_english.json` (Bellary is Kurnool's mine hub, Nara Kansai's farm hub, Merv Merz's mine hub). For a split state's owners, read `game/common/history/states/00_states.txt` in a vanilla clone (the owner's private `jakeOmega/vic3`, attachable read-only from a cloud session; a sparse clone of `game/common/history/` and `game/map_data/state_regions/` is enough) and find which `create_state` holds the hub's province id from `map_data/state_regions/`. Tourism heritage phase 2 used it to place Merv under Bukhara and Tallinn under the United Baltic Provinces, which the spec had wrong, and Tōdai-ji in Kansai rather than Kyoto.
+
 ### Checking If the Server Is Running
 ```powershell
 Invoke-RestMethod http://localhost:8950/status

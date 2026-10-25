@@ -97,3 +97,8 @@ Grep `debug.log` for `TE_SR_FLEETS` and `TE_SR_SETTLERS` after option a.
 9. **Crews and AGI.** Crews read one per 5,000 people; with Artificial General Intelligence they read AGI.
 10. **The AI's settlers.** In an observer run under Simple Colonies, a top-three space power holding colonies sets
     Emigration to Steady within a year; its colonies' people grow.
+
+## From the 2026-10-25 log triage
+
+- **Load.** `error.log` at launch carries no `Database type building_sr_site_<world> has missing texture`: each site
+  building has the Monuments' panel `background` since 2026-10-25 (34 lines a launch before).

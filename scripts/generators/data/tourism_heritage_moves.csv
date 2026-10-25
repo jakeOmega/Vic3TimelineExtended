@@ -36,6 +36,70 @@ STATE_ICA,30,machu_picchu,existing_site,"Nazca, Cuzco, Machu Picchu"
 STATE_CHIAPAS,20,tomb_of_pakal,existing_site,Palenque
 STATE_LIMA,20,caral_supe,existing_site,pre-Columbian sites
 STATE_YEMEN,0,shibam,new_landmark,Shibam (other owner's part)
+STATE_MOSCOW,20,moscow_kremlin,new_landmark,the Kremlin
+STATE_TRANSJORDAN,30,petra,new_landmark,Petra (with the Mesha Stele beside it)
+STATE_GONDER,20,fasil_ghebbi,new_landmark,the castles of Gondar
+STATE_LOWER_EGYPT,50,pyramids_of_giza,new_landmark,Giza and the Sphinx
+STATE_SICILY,20,valley_of_the_temples,new_landmark,Greek and Roman temples
+STATE_CENTRAL_JAVA,20,borobudur,new_landmark,Borobudur and Prambanan
+STATE_YEMEN,20,old_city_of_sanaa,new_landmark,Sana'a
+STATE_TUNISIA,20,amphitheatre_of_el_djem,new_landmark,El Djem
+STATE_EGYPTIAN_DESERT,40,abu_simbel,new_landmark,Abu Simbel
+STATE_MIDDLE_EGYPT,20,temple_of_seti_abydos,new_landmark,Abydos (Dendera is the zodiac trophy's origin)
+STATE_DONGOLA,30,pyramids_of_meroe,new_landmark,Meroë
+STATE_HOME_COUNTIES,20,windsor_castle,new_landmark,"Windsor, Canterbury, Oxford"
+STATE_LANGUEDOC,20,pont_du_gard,new_landmark,"Pont du Gard, Nîmes"
+STATE_PROVENCE,20,palais_des_papes,new_landmark,"the Papal Palace, Roman ruins"
+STATE_NORMANDY,20,mont_saint_michel,new_landmark,Mont-Saint-Michel
+STATE_ORLEANS,20,chateau_de_chambord,new_landmark,the Loire châteaux
+STATE_ESTREMADURA,20,jeronimos_monastery,new_landmark,"Belém, Sintra"
+STATE_UPPER_ANDALUSIA,20,alhambra,new_landmark,Granada
+STATE_LOWER_ANDALUSIA,20,mezquita_of_cordoba,new_landmark,Moorish Córdoba and Seville
+STATE_MADRAS,20,shore_temple,new_landmark,Dravidian temples
+STATE_HYDERABAD,20,charminar,new_landmark,Charminar and Golconda
+STATE_MALWA,20,gwalior_fort,new_landmark,Gwalior
+STATE_THESSALIA,20,meteora,new_landmark,Meteora's monasteries
+STATE_ALEPPO,30,citadel_of_aleppo,new_landmark,the citadel
+STATE_ISFAHAN,40,naqsh_e_jahan_square,new_landmark,Isfahan's Islamic architecture
+STATE_CENTRAL_HIGHLANDS,20,buddhas_of_bamiyan,new_landmark,Bamiyan
+STATE_HERAT,20,musalla_of_herat,new_landmark,Herat's Islamic architecture
+STATE_BANGKOK,30,grand_palace_bangkok,new_landmark,the Grand Palace and temples
+STATE_SEOUL,30,changdeokgung,new_landmark,palaces and walls
+STATE_BUSAN,20,bulguksa,new_landmark,Gyeongju
+STATE_KYOTO,40,kinkaku_ji,new_landmark,Kyoto's temples
+STATE_KANSAI,0,todai_ji,new_landmark,"Tōdai-ji at Nara, which is Kansai's (Kansai's score credits Osaka and the coast, not Nara: a gain until pass 2)"
+STATE_CHUGOKU,20,itsukushima_shrine,new_landmark,the floating torii
+STATE_LHASA,20,potala_palace,new_landmark,the Potala
+STATE_HIMALAYAS,20,swayambhunath,new_landmark,Kathmandu's temple cities
+STATE_SICHUAN,20,leshan_giant_buddha,new_landmark,the Giant Buddha
+STATE_SHANDONG,20,temple_of_confucius,new_landmark,Qufu
+STATE_SHANXI,20,yungang_grottoes,new_landmark,Yungang
+STATE_SUZHOU,20,humble_administrators_garden,new_landmark,the classical gardens
+STATE_HENAN,20,longmen_grottoes,new_landmark,"Longmen, Shaolin"
+STATE_UZBEKIA,40,registan,new_landmark,Samarkand and Bukhara
+STATE_KHIVA,30,itchan_kala,new_landmark,walled Khiva
+STATE_MERZ,20,mausoleum_of_sultan_sanjar,new_landmark,Merv
+STATE_KAZAN,20,kazan_kremlin,new_landmark,the Kremlin
+STATE_KIEV,20,saint_sophia_kiev,new_landmark,churches and monasteries
+STATE_DALMATIA,20,diocletians_palace,new_landmark,Split and Dubrovnik
+STATE_RHINELAND,20,marksburg,new_landmark,the Rhine Gorge castles
+STATE_NORTH_RHINE,20,aachen_cathedral,new_landmark,Aachen and Cologne
+STATE_UMBRIA,20,basilica_of_saint_francis,new_landmark,Assisi
+STATE_TALINN,20,walls_of_tallinn,new_landmark,the walled city
+STATE_AYDIN,20,ephesus,new_site,Ephesus (Pergamon's site is a gain when dug)
+STATE_GUATEMALA,20,tikal,new_site,Tikal
+STATE_YUCATAN,20,chichen_itza,new_site,"Chichén Itzá, Tulum"
+STATE_MEXICO,30,teotihuacan,new_site,Teotihuacan
+STATE_OAXACA,20,monte_alban,new_site,Monte Albán
+STATE_TRIPOLI,30,leptis_magna,new_site,"Leptis Magna, Sabratha"
+STATE_LIBYA,20,cyrene,new_site,Cyrene
+STATE_EXTREMADURA,20,merida_theatre,new_site,Roman Mérida
+STATE_KHUZESTAN,20,chogha_zanbil,new_site,"Susa, Chogha Zanbil"
+STATE_ANKARA,30,hattusa,new_site,Hattusa
+STATE_DIYARBAKIR,20,mount_nemrut,new_site,the Nemrut statues
+STATE_GANSU,20,mogao_caves,new_site,the Mogao Caves
+STATE_BUNDELKHAND,20,khajuraho,new_site,Khajuraho
+STATE_KURNOOL,10,hampi,new_site,"Hampi, the comment's notable ruins (Bellary, where Hampi lies, is Kurnool's)"
 STATE_SYRIA,0,,revisit,10 points: Krak des Chevaliers (the residue after Palmyra's 20; Damascus is townscape)
 STATE_GOTLAND,0,,revisit,10 points: Visby (below floor after the scenery check: Gotland's coast scores like Scania's: its old score left little for Visby)
 STATE_WALES,0,,revisit,10 points: castles (below floor after the scenery check: Snowdonia and the coast carry most of the score)
@@ -75,7 +139,7 @@ STATE_ALENTEJO,0,,revisit,"10 points: megaliths, Évora's temple (below floor)"
 STATE_MURCIA,0,,revisit,10 points: Cartagena (below floor)
 STATE_GUJARAT,0,,revisit,"10 points: Indus Valley sites (Dholavira, Lothal) (below floor (archaeology candidates))"
 STATE_BOMBAY,0,,revisit,"10 points: Ajanta and Ellora, Elephanta (below floor; Ajanta and Ellora lie in Hyderabad's lands)"
-STATE_KURNOOL,0,,revisit,10 points: notable ruins (below floor; see Hampi)
+STATE_MYSORE,0,,revisit,"20 points: ruins of Hampi (credited as nearby: Hampi lies in Kurnool, whose site takes Kurnool's 10)"
 STATE_EAST_HAUSALAND,0,,revisit,10 points: walled Kano (below floor)
 STATE_SENEGAL,0,,revisit,10 points: Gorée (below floor)
 STATE_NEJD,0,,revisit,10 points: Diriyah (below floor; ruined in 1818)

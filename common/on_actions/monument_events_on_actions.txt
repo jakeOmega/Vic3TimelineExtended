@@ -389,6 +389,10 @@ gm_landmarks_on_game_started_after_lobby = {
 				NOT = { has_global_variable = gm_landmarks_seeded }
 			}
 			set_global_variable = gm_landmarks_seeded
+			# The To History landmarks (tourism heritage spec 2026-10-23 § 6.3)
+			# seed with the rest: base appeal gives up their heritage only in a
+			# game that has them, so a save from before them keeps its points.
+			set_global_variable = gm_landmarks_seeded_2
 			gm_seed_landmarks = yes
 			gm_seed_trophies = yes
 			gm_monument_self_check = yes

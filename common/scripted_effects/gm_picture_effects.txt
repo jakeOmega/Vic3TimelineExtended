@@ -223,12 +223,77 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = villa_of_the_papyri CODE = 1000085 }
 	gm_state_picture_landmark = { KEY = tomb_of_alexander CODE = 1000086 }
 	gm_state_picture_landmark = { KEY = pompeii CODE = 1000087 }
-	gm_state_picture_landmark = { KEY = walhalla CODE = 220 }
-	gm_state_picture_landmark = { KEY = bunker_hill_monument CODE = 12 }
-	gm_state_picture_landmark = { KEY = obelisk_of_the_second_of_may CODE = 12 }
-	gm_state_picture_landmark = { KEY = muhammad_ali_mosque CODE = 304 }
-	gm_state_picture_landmark = { KEY = nelsons_column CODE = 10 }
-	gm_state_picture_landmark = { KEY = washington_monument CODE = 12 }
+	gm_state_picture_landmark = { KEY = walhalla CODE = 1000088 }
+	gm_state_picture_landmark = { KEY = bunker_hill_monument CODE = 1000089 }
+	gm_state_picture_landmark = { KEY = obelisk_of_the_second_of_may CODE = 1000090 }
+	gm_state_picture_landmark = { KEY = muhammad_ali_mosque CODE = 1000091 }
+	gm_state_picture_landmark = { KEY = nelsons_column CODE = 1000092 }
+	gm_state_picture_landmark = { KEY = washington_monument CODE = 1000093 }
+	gm_state_picture_landmark = { KEY = pyramids_of_giza CODE = 1000094 }
+	gm_state_picture_landmark = { KEY = petra CODE = 1000095 }
+	gm_state_picture_landmark = { KEY = moscow_kremlin CODE = 1000096 }
+	gm_state_picture_landmark = { KEY = fasil_ghebbi CODE = 1000097 }
+	gm_state_picture_landmark = { KEY = valley_of_the_temples CODE = 1000098 }
+	gm_state_picture_landmark = { KEY = borobudur CODE = 1000099 }
+	gm_state_picture_landmark = { KEY = old_city_of_sanaa CODE = 1000100 }
+	gm_state_picture_landmark = { KEY = shibam CODE = 1000101 }
+	gm_state_picture_landmark = { KEY = amphitheatre_of_el_djem CODE = 1000102 }
+	gm_state_picture_landmark = { KEY = abu_simbel CODE = 1000103 }
+	gm_state_picture_landmark = { KEY = temple_of_seti_abydos CODE = 1000104 }
+	gm_state_picture_landmark = { KEY = pyramids_of_meroe CODE = 1000105 }
+	gm_state_picture_landmark = { KEY = windsor_castle CODE = 1000106 }
+	gm_state_picture_landmark = { KEY = pont_du_gard CODE = 1000107 }
+	gm_state_picture_landmark = { KEY = palais_des_papes CODE = 1000108 }
+	gm_state_picture_landmark = { KEY = mont_saint_michel CODE = 1000109 }
+	gm_state_picture_landmark = { KEY = chateau_de_chambord CODE = 1000110 }
+	gm_state_picture_landmark = { KEY = jeronimos_monastery CODE = 1000111 }
+	gm_state_picture_landmark = { KEY = alhambra CODE = 1000112 }
+	gm_state_picture_landmark = { KEY = mezquita_of_cordoba CODE = 1000113 }
+	gm_state_picture_landmark = { KEY = shore_temple CODE = 1000114 }
+	gm_state_picture_landmark = { KEY = charminar CODE = 1000115 }
+	gm_state_picture_landmark = { KEY = gwalior_fort CODE = 1000116 }
+	gm_state_picture_landmark = { KEY = meteora CODE = 1000117 }
+	gm_state_picture_landmark = { KEY = citadel_of_aleppo CODE = 1000118 }
+	gm_state_picture_landmark = { KEY = naqsh_e_jahan_square CODE = 1000119 }
+	gm_state_picture_landmark = { KEY = buddhas_of_bamiyan CODE = 1000120 }
+	gm_state_picture_landmark = { KEY = musalla_of_herat CODE = 1000121 }
+	gm_state_picture_landmark = { KEY = grand_palace_bangkok CODE = 1000122 }
+	gm_state_picture_landmark = { KEY = changdeokgung CODE = 1000123 }
+	gm_state_picture_landmark = { KEY = bulguksa CODE = 1000124 }
+	gm_state_picture_landmark = { KEY = kinkaku_ji CODE = 1000125 }
+	gm_state_picture_landmark = { KEY = todai_ji CODE = 1000126 }
+	gm_state_picture_landmark = { KEY = itsukushima_shrine CODE = 1000127 }
+	gm_state_picture_landmark = { KEY = potala_palace CODE = 1000128 }
+	gm_state_picture_landmark = { KEY = swayambhunath CODE = 1000129 }
+	gm_state_picture_landmark = { KEY = leshan_giant_buddha CODE = 1000130 }
+	gm_state_picture_landmark = { KEY = temple_of_confucius CODE = 1000131 }
+	gm_state_picture_landmark = { KEY = yungang_grottoes CODE = 1000132 }
+	gm_state_picture_landmark = { KEY = humble_administrators_garden CODE = 1000133 }
+	gm_state_picture_landmark = { KEY = longmen_grottoes CODE = 1000134 }
+	gm_state_picture_landmark = { KEY = registan CODE = 1000135 }
+	gm_state_picture_landmark = { KEY = itchan_kala CODE = 1000136 }
+	gm_state_picture_landmark = { KEY = mausoleum_of_sultan_sanjar CODE = 1000137 }
+	gm_state_picture_landmark = { KEY = kazan_kremlin CODE = 1000138 }
+	gm_state_picture_landmark = { KEY = saint_sophia_kiev CODE = 1000139 }
+	gm_state_picture_landmark = { KEY = diocletians_palace CODE = 1000140 }
+	gm_state_picture_landmark = { KEY = marksburg CODE = 1000141 }
+	gm_state_picture_landmark = { KEY = aachen_cathedral CODE = 1000142 }
+	gm_state_picture_landmark = { KEY = basilica_of_saint_francis CODE = 1000143 }
+	gm_state_picture_landmark = { KEY = walls_of_tallinn CODE = 1000144 }
+	gm_state_picture_landmark = { KEY = ephesus CODE = 1000145 }
+	gm_state_picture_landmark = { KEY = tikal CODE = 1000146 }
+	gm_state_picture_landmark = { KEY = chichen_itza CODE = 1000147 }
+	gm_state_picture_landmark = { KEY = teotihuacan CODE = 1000148 }
+	gm_state_picture_landmark = { KEY = monte_alban CODE = 1000149 }
+	gm_state_picture_landmark = { KEY = leptis_magna CODE = 1000150 }
+	gm_state_picture_landmark = { KEY = cyrene CODE = 1000151 }
+	gm_state_picture_landmark = { KEY = merida_theatre CODE = 1000152 }
+	gm_state_picture_landmark = { KEY = chogha_zanbil CODE = 1000153 }
+	gm_state_picture_landmark = { KEY = hattusa CODE = 1000154 }
+	gm_state_picture_landmark = { KEY = mount_nemrut CODE = 1000155 }
+	gm_state_picture_landmark = { KEY = mogao_caves CODE = 1000156 }
+	gm_state_picture_landmark = { KEY = khajuraho CODE = 1000157 }
+	gm_state_picture_landmark = { KEY = hampi CODE = 1000158 }
 }
 
 gm_state_picture_landmark = {
@@ -337,6 +402,77 @@ gm_tr_picture_trophies = {
 	gm_tr_picture_trophy = { KEY = villa_of_the_papyri CODE = 2000085 }
 	gm_tr_picture_trophy = { KEY = tomb_of_alexander CODE = 2000086 }
 	gm_tr_picture_trophy = { KEY = pompeii CODE = 2000087 }
+	gm_tr_picture_trophy = { KEY = walhalla CODE = 2000088 }
+	gm_tr_picture_trophy = { KEY = bunker_hill_monument CODE = 2000089 }
+	gm_tr_picture_trophy = { KEY = obelisk_of_the_second_of_may CODE = 2000090 }
+	gm_tr_picture_trophy = { KEY = muhammad_ali_mosque CODE = 2000091 }
+	gm_tr_picture_trophy = { KEY = nelsons_column CODE = 2000092 }
+	gm_tr_picture_trophy = { KEY = washington_monument CODE = 2000093 }
+	gm_tr_picture_trophy = { KEY = pyramids_of_giza CODE = 2000094 }
+	gm_tr_picture_trophy = { KEY = petra CODE = 2000095 }
+	gm_tr_picture_trophy = { KEY = moscow_kremlin CODE = 2000096 }
+	gm_tr_picture_trophy = { KEY = fasil_ghebbi CODE = 2000097 }
+	gm_tr_picture_trophy = { KEY = valley_of_the_temples CODE = 2000098 }
+	gm_tr_picture_trophy = { KEY = borobudur CODE = 2000099 }
+	gm_tr_picture_trophy = { KEY = old_city_of_sanaa CODE = 2000100 }
+	gm_tr_picture_trophy = { KEY = shibam CODE = 2000101 }
+	gm_tr_picture_trophy = { KEY = amphitheatre_of_el_djem CODE = 2000102 }
+	gm_tr_picture_trophy = { KEY = abu_simbel CODE = 2000103 }
+	gm_tr_picture_trophy = { KEY = temple_of_seti_abydos CODE = 2000104 }
+	gm_tr_picture_trophy = { KEY = pyramids_of_meroe CODE = 2000105 }
+	gm_tr_picture_trophy = { KEY = windsor_castle CODE = 2000106 }
+	gm_tr_picture_trophy = { KEY = pont_du_gard CODE = 2000107 }
+	gm_tr_picture_trophy = { KEY = palais_des_papes CODE = 2000108 }
+	gm_tr_picture_trophy = { KEY = mont_saint_michel CODE = 2000109 }
+	gm_tr_picture_trophy = { KEY = chateau_de_chambord CODE = 2000110 }
+	gm_tr_picture_trophy = { KEY = jeronimos_monastery CODE = 2000111 }
+	gm_tr_picture_trophy = { KEY = alhambra CODE = 2000112 }
+	gm_tr_picture_trophy = { KEY = mezquita_of_cordoba CODE = 2000113 }
+	gm_tr_picture_trophy = { KEY = shore_temple CODE = 2000114 }
+	gm_tr_picture_trophy = { KEY = charminar CODE = 2000115 }
+	gm_tr_picture_trophy = { KEY = gwalior_fort CODE = 2000116 }
+	gm_tr_picture_trophy = { KEY = meteora CODE = 2000117 }
+	gm_tr_picture_trophy = { KEY = citadel_of_aleppo CODE = 2000118 }
+	gm_tr_picture_trophy = { KEY = naqsh_e_jahan_square CODE = 2000119 }
+	gm_tr_picture_trophy = { KEY = buddhas_of_bamiyan CODE = 2000120 }
+	gm_tr_picture_trophy = { KEY = musalla_of_herat CODE = 2000121 }
+	gm_tr_picture_trophy = { KEY = grand_palace_bangkok CODE = 2000122 }
+	gm_tr_picture_trophy = { KEY = changdeokgung CODE = 2000123 }
+	gm_tr_picture_trophy = { KEY = bulguksa CODE = 2000124 }
+	gm_tr_picture_trophy = { KEY = kinkaku_ji CODE = 2000125 }
+	gm_tr_picture_trophy = { KEY = todai_ji CODE = 2000126 }
+	gm_tr_picture_trophy = { KEY = itsukushima_shrine CODE = 2000127 }
+	gm_tr_picture_trophy = { KEY = potala_palace CODE = 2000128 }
+	gm_tr_picture_trophy = { KEY = swayambhunath CODE = 2000129 }
+	gm_tr_picture_trophy = { KEY = leshan_giant_buddha CODE = 2000130 }
+	gm_tr_picture_trophy = { KEY = temple_of_confucius CODE = 2000131 }
+	gm_tr_picture_trophy = { KEY = yungang_grottoes CODE = 2000132 }
+	gm_tr_picture_trophy = { KEY = humble_administrators_garden CODE = 2000133 }
+	gm_tr_picture_trophy = { KEY = longmen_grottoes CODE = 2000134 }
+	gm_tr_picture_trophy = { KEY = registan CODE = 2000135 }
+	gm_tr_picture_trophy = { KEY = itchan_kala CODE = 2000136 }
+	gm_tr_picture_trophy = { KEY = mausoleum_of_sultan_sanjar CODE = 2000137 }
+	gm_tr_picture_trophy = { KEY = kazan_kremlin CODE = 2000138 }
+	gm_tr_picture_trophy = { KEY = saint_sophia_kiev CODE = 2000139 }
+	gm_tr_picture_trophy = { KEY = diocletians_palace CODE = 2000140 }
+	gm_tr_picture_trophy = { KEY = marksburg CODE = 2000141 }
+	gm_tr_picture_trophy = { KEY = aachen_cathedral CODE = 2000142 }
+	gm_tr_picture_trophy = { KEY = basilica_of_saint_francis CODE = 2000143 }
+	gm_tr_picture_trophy = { KEY = walls_of_tallinn CODE = 2000144 }
+	gm_tr_picture_trophy = { KEY = ephesus CODE = 2000145 }
+	gm_tr_picture_trophy = { KEY = tikal CODE = 2000146 }
+	gm_tr_picture_trophy = { KEY = chichen_itza CODE = 2000147 }
+	gm_tr_picture_trophy = { KEY = teotihuacan CODE = 2000148 }
+	gm_tr_picture_trophy = { KEY = monte_alban CODE = 2000149 }
+	gm_tr_picture_trophy = { KEY = leptis_magna CODE = 2000150 }
+	gm_tr_picture_trophy = { KEY = cyrene CODE = 2000151 }
+	gm_tr_picture_trophy = { KEY = merida_theatre CODE = 2000152 }
+	gm_tr_picture_trophy = { KEY = chogha_zanbil CODE = 2000153 }
+	gm_tr_picture_trophy = { KEY = hattusa CODE = 2000154 }
+	gm_tr_picture_trophy = { KEY = mount_nemrut CODE = 2000155 }
+	gm_tr_picture_trophy = { KEY = mogao_caves CODE = 2000156 }
+	gm_tr_picture_trophy = { KEY = khajuraho CODE = 2000157 }
+	gm_tr_picture_trophy = { KEY = hampi CODE = 2000158 }
 }
 
 gm_tr_picture_trophy = {
@@ -1055,6 +1191,290 @@ gm_debug_next_picture = {
 	}
 	else_if = {
 		limit = { var:gm_picture_code = 1000087 }
+		set_variable = { name = gm_picture_code value = 1000088 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000088 }
+		set_variable = { name = gm_picture_code value = 1000089 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000089 }
+		set_variable = { name = gm_picture_code value = 1000090 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000090 }
+		set_variable = { name = gm_picture_code value = 1000091 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000091 }
+		set_variable = { name = gm_picture_code value = 1000092 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000092 }
+		set_variable = { name = gm_picture_code value = 1000093 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000093 }
+		set_variable = { name = gm_picture_code value = 1000094 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000094 }
+		set_variable = { name = gm_picture_code value = 1000095 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000095 }
+		set_variable = { name = gm_picture_code value = 1000096 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000096 }
+		set_variable = { name = gm_picture_code value = 1000097 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000097 }
+		set_variable = { name = gm_picture_code value = 1000098 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000098 }
+		set_variable = { name = gm_picture_code value = 1000099 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000099 }
+		set_variable = { name = gm_picture_code value = 1000100 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000100 }
+		set_variable = { name = gm_picture_code value = 1000101 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000101 }
+		set_variable = { name = gm_picture_code value = 1000102 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000102 }
+		set_variable = { name = gm_picture_code value = 1000103 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000103 }
+		set_variable = { name = gm_picture_code value = 1000104 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000104 }
+		set_variable = { name = gm_picture_code value = 1000105 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000105 }
+		set_variable = { name = gm_picture_code value = 1000106 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000106 }
+		set_variable = { name = gm_picture_code value = 1000107 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000107 }
+		set_variable = { name = gm_picture_code value = 1000108 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000108 }
+		set_variable = { name = gm_picture_code value = 1000109 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000109 }
+		set_variable = { name = gm_picture_code value = 1000110 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000110 }
+		set_variable = { name = gm_picture_code value = 1000111 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000111 }
+		set_variable = { name = gm_picture_code value = 1000112 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000112 }
+		set_variable = { name = gm_picture_code value = 1000113 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000113 }
+		set_variable = { name = gm_picture_code value = 1000114 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000114 }
+		set_variable = { name = gm_picture_code value = 1000115 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000115 }
+		set_variable = { name = gm_picture_code value = 1000116 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000116 }
+		set_variable = { name = gm_picture_code value = 1000117 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000117 }
+		set_variable = { name = gm_picture_code value = 1000118 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000118 }
+		set_variable = { name = gm_picture_code value = 1000119 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000119 }
+		set_variable = { name = gm_picture_code value = 1000120 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000120 }
+		set_variable = { name = gm_picture_code value = 1000121 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000121 }
+		set_variable = { name = gm_picture_code value = 1000122 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000122 }
+		set_variable = { name = gm_picture_code value = 1000123 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000123 }
+		set_variable = { name = gm_picture_code value = 1000124 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000124 }
+		set_variable = { name = gm_picture_code value = 1000125 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000125 }
+		set_variable = { name = gm_picture_code value = 1000126 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000126 }
+		set_variable = { name = gm_picture_code value = 1000127 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000127 }
+		set_variable = { name = gm_picture_code value = 1000128 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000128 }
+		set_variable = { name = gm_picture_code value = 1000129 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000129 }
+		set_variable = { name = gm_picture_code value = 1000130 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000130 }
+		set_variable = { name = gm_picture_code value = 1000131 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000131 }
+		set_variable = { name = gm_picture_code value = 1000132 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000132 }
+		set_variable = { name = gm_picture_code value = 1000133 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000133 }
+		set_variable = { name = gm_picture_code value = 1000134 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000134 }
+		set_variable = { name = gm_picture_code value = 1000135 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000135 }
+		set_variable = { name = gm_picture_code value = 1000136 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000136 }
+		set_variable = { name = gm_picture_code value = 1000137 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000137 }
+		set_variable = { name = gm_picture_code value = 1000138 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000138 }
+		set_variable = { name = gm_picture_code value = 1000139 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000139 }
+		set_variable = { name = gm_picture_code value = 1000140 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000140 }
+		set_variable = { name = gm_picture_code value = 1000141 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000141 }
+		set_variable = { name = gm_picture_code value = 1000142 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000142 }
+		set_variable = { name = gm_picture_code value = 1000143 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000143 }
+		set_variable = { name = gm_picture_code value = 1000144 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000144 }
+		set_variable = { name = gm_picture_code value = 1000145 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000145 }
+		set_variable = { name = gm_picture_code value = 1000146 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000146 }
+		set_variable = { name = gm_picture_code value = 1000147 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000147 }
+		set_variable = { name = gm_picture_code value = 1000148 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000148 }
+		set_variable = { name = gm_picture_code value = 1000149 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000149 }
+		set_variable = { name = gm_picture_code value = 1000150 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000150 }
+		set_variable = { name = gm_picture_code value = 1000151 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000151 }
+		set_variable = { name = gm_picture_code value = 1000152 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000152 }
+		set_variable = { name = gm_picture_code value = 1000153 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000153 }
+		set_variable = { name = gm_picture_code value = 1000154 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000154 }
+		set_variable = { name = gm_picture_code value = 1000155 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000155 }
+		set_variable = { name = gm_picture_code value = 1000156 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000156 }
+		set_variable = { name = gm_picture_code value = 1000157 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000157 }
+		set_variable = { name = gm_picture_code value = 1000158 }
+	}
+	else_if = {
+		limit = { var:gm_picture_code = 1000158 }
 		set_variable = { name = gm_picture_code value = 1 }
 	}
 	else = {

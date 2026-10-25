@@ -1,20 +1,54 @@
 ﻿# ============================================================================
-# WAR OF INDEPENDENCE — DIPLOMATIC PLAY
+# WAR OF INDEPENDENCE — DIPLOMATIC PLAYS
 #
-# The war a metropole opens against a colony that declared independence and
-# that it chose to fight (decolonization_events.70's Fight; the war starts the
-# next day from .71, decol_iw_open_war in decolonization_war_effects.txt).
-# Script-only, as dp_nuclear_exchange and vanilla dp_sepoy_mutiny are: never
-# in the lens, created with `war = yes` and escalation 100.
+# dp_te_independence_war: the play the rebels open against the metropole that
+# chose to fight them (decolonization_events.70's Fight, or Blood in the
+# Colonies'), the day after they form (.71, decol_iw_open_war in
+# decolonization_war_effects.txt). Script-only, as vanilla dp_sepoy_mutiny is:
+# never in the lens, created at escalation 80 as that one is, so the war breaks
+# out in three weeks or so. The rebels' goal is te_colonial_independence; the
+# metropole's, added at the creation as its primary demand (vanilla's Ezo
+# republic shape), is te_colonial_reconquest. A side that backs down should
+# concede the other's primary demand (unverified in this mod; the self-check
+# reads it): the rebels, to be annexed back; the metropole, to let them go.
 #
-# Its goal, te_colonial_reconquest, annexes the rebels back but never
-# self-enforces (no mirrored_wargoal): holding the territory does not end the
-# war, only the rebels' capitulation or a peace does. A negotiated peace stays
-# allowed: a white peace is independence. Zero infamy (owner ruling D7,
+# dp_te_colonial_war: the first build's shape (2026-10-24), the metropole's
+# play against the rebels with `war = yes` and escalation 100. In the owner's
+# first game an AI empire's play never became a war (TE_SELF_CHECK BROKEN
+# decol_iw_war_started; docs/testing/colonial-wars-playtest.md). The likeliest
+# reading: it backed down, which cost it nothing, since the rebels held no
+# demand. Nothing opens it now. It stays defined for a save that holds one.
+#
+# Neither goal self-enforces (no mirrored_wargoal): holding the territory does
+# not end the war, only a capitulation or a peace does. A negotiated peace
+# stays allowed: a white peace is independence. Zero infamy (owner ruling D7,
 # 2026-10-24): the condemnation comes from the great powers and the bar.
 #
 # Design: docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.4.
 # ============================================================================
+
+dp_te_independence_war = {
+	war_goal = te_colonial_independence
+	requires_interest_marker = no
+	add_infamy_for_starting_initiator_wargoals = no
+	add_infamy_for_starting_target_wargoals = no
+	# The war is about the colony and nothing else (_diplomatic_plays.info).
+	initiator_can_add_war_goals = no
+	target_can_add_war_goals = no
+	texture = "gfx/interface/icons/war_goals/independence.dds"
+	selectable_in_lens = { always = no }
+
+	# Only the rebels, against the metropole they name (decol_iw_rebels_formed).
+	possible = {
+		var:decol_iw_metropole ?= scope:target_country
+	}
+
+	ai_acceptance_max = 0
+
+	on_weekly_pulse = { }
+	on_war_begins = { }
+	on_war_end = { }
+}
 
 dp_te_colonial_war = {
 	war_goal = te_colonial_reconquest

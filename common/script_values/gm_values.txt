@@ -218,6 +218,27 @@ gm_state_grandeur = {
 	}
 }
 
+# State scope. The part of gm_state_grandeur standing here To History, the
+# primary's and those beside it (Open to the Public's factor, spec § 4.5).
+gm_state_historic_grandeur = {
+	value = 0
+	if = {
+		limit = { has_building = building_grand_monument }
+		if = {
+			limit = { gm_state_has_pm = { PM = pm_monument_historic } }
+			add = gm_state_primary_grandeur
+		}
+		if = {
+			limit = { has_variable_list = gm_monuments_here }
+			every_in_list = {
+				variable = gm_monuments_here
+				limit = { gm_mon_is = { KEY = historic } }
+				add = gm_mon_grandeur
+			}
+		}
+	}
+}
+
 # The journal entry row's status: 0 none, 1 undedicated, 2 fits (or not yet
 # judged), 3 heritage, 4 contested. A code, so the .gui tests identity rather
 # than a threshold (gui gotcha #23). Later ifs override earlier ones.
@@ -495,6 +516,18 @@ gm_state_disp_local = {
 # more than 1 decree").
 gm_policy_ceremonial_share = 0.25
 
+# Every policy counts a To History monument at half (policy spec 2026-10-23
+# § 4.5, tourism heritage spec 2026-10-23 § 7): its grandeur at this weight in
+# State Ceremonial's venues and Public Education's input, and its share of the
+# grandeur at this weight in what Open to the Public and Cultural Promotion add.
+# gm_policy_history_cut is the part of it a policy leaves out.
+gm_policy_history_weight = 0.5
+
+gm_policy_history_cut = {
+	value = 1
+	subtract = gm_policy_history_weight
+}
+
 # Country scope, after gm_g_venues is written: the grandeur the share adds, 0
 # under any other policy.
 gm_policy_ceremonial_grandeur = {
@@ -573,6 +606,30 @@ gm_policy_factor_culture = {
 	}
 }
 
+# Country scope, after gm_g_historic is written: Cultural Promotion on the
+# monuments' own pull, with To History's share of standing grandeur counted at
+# half (spec § 4.5): 1 + 0.5 x (G_other + 0.5 x G_history) / G_standing.
+# Ancestral Antiquity's pull takes gm_policy_factor_culture whole: no To
+# History monument carries it.
+gm_policy_factor_culture_standing = {
+	value = gm_policy_factor_culture
+	if = {
+		limit = {
+			gm_policy_factor_culture > 1
+			has_variable = gm_g_historic
+			has_variable = gm_g_standing
+			var:gm_g_standing > 0
+		}
+		subtract = {
+			value = gm_policy_factor_culture
+			subtract = 1
+			multiply = gm_policy_history_cut
+			multiply = var:gm_g_historic
+			divide = var:gm_g_standing
+		}
+	}
+}
+
 # Country scope: Cultural Promotion with the Cultural Hegemony rule off, on the
 # steps of standing grandeur (the flat prestige and the percentage).
 gm_policy_factor_prestige = {
@@ -586,6 +643,27 @@ gm_policy_factor_prestige = {
 	}
 }
 
+# Country scope, after gm_g_historic is written: the same, with To History's
+# share of standing grandeur at half, as for pull (spec § 4.5).
+gm_policy_factor_prestige_standing = {
+	value = gm_policy_factor_prestige
+	if = {
+		limit = {
+			gm_policy_factor_prestige > 1
+			has_variable = gm_g_historic
+			has_variable = gm_g_standing
+			var:gm_g_standing > 0
+		}
+		subtract = {
+			value = gm_policy_factor_prestige
+			subtract = 1
+			multiply = gm_policy_history_cut
+			multiply = var:gm_g_historic
+			divide = var:gm_g_standing
+		}
+	}
+}
+
 # State scope, the owner's policy: the steps of a monument's own tourism output
 # (gm_state_monthly) and of the two signatures whose local effect is tourism
 # (gm_state_sig_local_steps_one). No policy cuts tourism (spec § 4.1).
@@ -596,6 +674,28 @@ gm_policy_factor_tourism = {
 			owner = { gm_policy_is = { P = open STANDARD = no } }
 		}
 		value = 1.5
+	}
+}
+
+# State scope: the factor on the tourism of every monument standing here
+# (gm_state_monthly), each monument's share of the state's grandeur at its own
+# rate, so a To History monument's at half what Open adds (spec § 4.5): x1.25
+# alone, x1.5 for the rest. The two signatures keep gm_policy_factor_tourism:
+# no To History monument carries one.
+gm_policy_factor_tourism_here = {
+	value = gm_policy_factor_tourism
+	if = {
+		limit = {
+			gm_policy_factor_tourism > 1
+			gm_state_grandeur > 0
+		}
+		subtract = {
+			value = gm_policy_factor_tourism
+			subtract = 1
+			multiply = gm_policy_history_cut
+			multiply = gm_state_historic_grandeur
+			divide = gm_state_grandeur
+		}
 	}
 }
 
@@ -741,6 +841,68 @@ gm_sum_venues = {
 		}
 	}
 	add = gm_tr_disp_held_grandeur
+	# To History counts at half (spec § 4.5): every one counted above is a venue.
+	if = {
+		limit = { has_variable = gm_g_historic }
+		subtract = {
+			value = var:gm_g_historic
+			multiply = gm_policy_history_cut
+		}
+	}
+}
+
+# To History grandeur (policy spec 2026-10-23 § 4.5): every To History monument
+# counted in standing grandeur, the primaries, those beside another and the
+# trophies of one we hold, which every policy counts at half. A To History
+# monument always fits and is never contested, so each is a venue too.
+gm_sum_historic = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			gm_state_counts_standing = yes
+			gm_state_has_pm = { PM = pm_monument_historic }
+		}
+		add = gm_state_primary_grandeur
+	}
+	if = {
+		limit = { has_variable_list = gm_monuments_held }
+		every_in_list = {
+			variable = gm_monuments_held
+			limit = {
+				gm_mon_counts_standing = yes
+				gm_mon_is = { KEY = historic }
+			}
+			add = gm_mon_grandeur
+		}
+	}
+	if = {
+		limit = { has_variable_list = gm_trophies_held }
+		every_in_list = {
+			variable = gm_trophies_held
+			limit = {
+				gm_mon_is = { KEY = historic }
+				has_variable = gm_tr_grandeur
+			}
+			add = var:gm_tr_grandeur
+		}
+	}
+}
+
+# Public Education's input (spec § 4.5): standing grandeur, To History's at half.
+gm_sum_education = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_standing }
+		value = var:gm_g_standing
+	}
+	if = {
+		limit = { has_variable = gm_g_historic }
+		subtract = {
+			value = var:gm_g_historic
+			multiply = gm_policy_history_cut
+		}
+	}
+	min = 0
 }
 
 # One per dedication with a national effect of its own.
@@ -1023,6 +1185,25 @@ gm_display_n_education = {
 	if = {
 		limit = { has_variable = gm_n_education }
 		value = var:gm_n_education
+	}
+}
+
+# Public Education's input, for its hover.
+gm_display_g_education = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_education }
+		value = var:gm_g_education
+	}
+}
+
+# To History's part of standing grandeur (gm_g_historic), for the hovers that
+# say the policies count it at half.
+gm_display_g_historic = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_g_historic }
+		value = var:gm_g_historic
 	}
 }
 
@@ -1680,16 +1861,17 @@ gm_disp_frac_prestige = {
 	max = 1
 }
 
-# Public Education's bar, on its own 1/n curve over standing grandeur.
+# Public Education's bar, on its own 1/n curve over its input (gm_g_education:
+# standing grandeur, To History's at half).
 gm_disp_frac_education = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = gm_g_standing
+			has_variable = gm_g_education
 			has_variable = gm_n_education
 			has_variable = gm_w_education
 		}
-		value = var:gm_g_standing
+		value = var:gm_g_education
 		subtract = var:gm_n_education
 		add = var:gm_w_education
 		divide = var:gm_w_education

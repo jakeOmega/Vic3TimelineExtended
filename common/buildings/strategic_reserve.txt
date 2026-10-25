@@ -129,6 +129,7 @@ building_strategic_reserve_silo = {
 	}
 
 	icon = "gfx/interface/icons/building_icons/building_strategic_reserve_silo.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 
 	required_construction = construction_cost_high
 
