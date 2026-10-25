@@ -40,6 +40,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 |-----|--------|-------------|
 | [specs/2026-10-24-colonial-criteria-and-independence-wars-design.md](specs/2026-10-24-colonial-criteria-and-independence-wars-design.md): what a colony is from first principles (UN Resolution 1541: separated by sea, a distinct people, subordinated), and a war of independence a colonizer can choose to fight | Proposal, nothing built; follows the settler-land fix (acb6dab) | The owner's calls in §8 (D1-D16); then phase 1 (the colony test), phase 2 (independence wars for held territories, collapse as a wave), phase 3 (great powers taking sides, talks, the crisis at home) |
 
+### Space Race
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, space power through launch windows, sieges), colony population and modules | Scoping menu, nothing built | The owner's calls in §9 (D1-D15); then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
+
 ## Archived — `archive/`
 
 Everything below has shipped. PR numbers are the main build first, then follow-ups.
