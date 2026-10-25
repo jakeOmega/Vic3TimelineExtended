@@ -180,8 +180,13 @@ class FlowModifierTest(unittest.TestCase):
 class BalancingTest(unittest.TestCase):
     def test_global_pulse_dispatches_one_hidden_country_event(self):
         on_actions = _code(_read(ON_ACTIONS))
-        # One world-wide run a month: a country pulse as well would balance every grid twice.
-        self.assertNotIn("on_monthly_pulse_country", on_actions)
+        # One world-wide run a month: a country pulse that balanced as well would balance every
+        # grid twice. The country pulse only runs the AI's station building.
+        self.assertEqual(_sub(on_actions, "on_monthly_pulse_country").split(),
+                         ["on_actions", "=", "{", "te_grid_ai_build_on_action", "}"])
+        ai_pass = _top_level(on_actions, "te_grid_ai_build_on_action")
+        self.assertNotIn("te_grid.1", ai_pass)
+        self.assertNotIn("te_grid_world_update_effect", ai_pass)
         self.assertIn("te_grid_world_dispatch", _sub(on_actions, "on_monthly_pulse"))
         dispatch = _top_level(on_actions, "te_grid_world_dispatch")
         self.assertIn("random_country", dispatch)
@@ -320,6 +325,47 @@ class TreatyAndTileTest(unittest.TestCase):
         self.assertIn("te_grid_tile_shown", values)
         defined = set(re.findall(r"(?m)^(\w+) = \{", _read(VALUES)))
         self.assertLessEqual(values, defined)
+
+
+class AITest(unittest.TestCase):
+    def test_station_costs_what_barracks_cost(self):
+        building = _code(_top_level(_read(BUILDING), "building_grid_transfer_station"))
+        self.assertRegex(building, r"\brequired_construction = construction_cost_very_low\b")
+
+    def test_ai_value_asks_for_power_in_the_market_area_not_the_states_own_use(self):
+        value = _code(_top_level(_read(VALUES), "te_grid_station_ai_value"))
+        self.assertIn("te_grid_ai_market_area_has_power = yes", value)
+        # A state without power runs no method that uses it, so its use reads as none.
+        self.assertNotIn("consumption", value)
+        powered = _code(_top_level(_read(TRIGGERS), "te_grid_ai_market_area_has_power"))
+        self.assertIn("is_in_same_market_area = scope:te_grid_ai_powered", powered)
+        self.assertIn("te_grid_electricity_production > 0", powered)
+
+    def test_ai_placement_mirrors_the_buildings_possible(self):
+        possible = _sub(_code(_top_level(_read(BUILDING), "building_grid_transfer_station")), "possible")
+        placeable = _code(_top_level(_read(TRIGGERS), "te_grid_station_placeable"))
+        for text in (possible, placeable):
+            self.assertIn("any_neighbouring_state", text)
+            self.assertIn("is_in_same_market_area", text)
+            self.assertNotIn("has_building", text)
+        # Not ROOT: the AI's pass runs in country scope.
+        self.assertNotIn("ROOT", placeable)
+        self.assertEqual(placeable.count("te_grid_state_has_station = yes"), 2)
+
+    def test_ai_queues_one_station_a_month_where_it_ranks_highest(self):
+        on_actions = _code(_read(ON_ACTIONS))
+        self.assertIn("is_ai = yes", _top_level(on_actions, "te_grid_ai_build_on_action"))
+        self.assertIn("te_grid_ai_build_effect = yes", _top_level(on_actions, "te_grid_ai_build_on_action"))
+        build = _code(_top_level(_read(EFFECTS), "te_grid_ai_build_effect"))
+        self.assertIn("has_technology_researched = electrical_capacitors", build)
+        pick = _sub(build, "ordered_scope_state")
+        self.assertIn("te_grid_ai_station_site = yes", pick)
+        self.assertIn("order_by = te_grid_station_ai_value", pick)
+        self.assertEqual(build.count("start_building_construction = building_grid_transfer_station"), 1)
+        site = _code(_top_level(_read(TRIGGERS), "te_grid_ai_station_site"))
+        for check in ("te_grid_state_has_station = no", "te_grid_ai_market_area_has_power = yes",
+                      "te_grid_station_placeable = yes"):
+            self.assertIn(check, site)
 
 
 class LocalizationTest(unittest.TestCase):

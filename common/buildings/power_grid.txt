@@ -37,7 +37,9 @@ building_grid_transfer_station = {
 		pmg_maintenance_heavy
 	}
 
-	required_construction = construction_cost_medium
+	# 100 points, Barracks' tier: a station is cheap to set up, and its cost is
+	# the subsidized wages.
+	required_construction = construction_cost_very_low
 
 	# A grid grows from one station. The first station a country builds in a
 	# market area may go in any of its states there; every later one in that
@@ -69,9 +71,11 @@ building_grid_transfer_station = {
 		}
 	}
 
-	# Evaluated in state scope. A station pays off where the state's Electricity
-	# is dear or cheap against its base price, so the AI builds where power is
-	# short or spare (te_grid_station_ai_value).
+	# Evaluated in state scope. High in every state of a market area where the
+	# owner makes Electricity, highest where the state makes it
+	# (te_grid_station_ai_value). The construction AI doesn't reliably build
+	# what ai_value asks for, so an AI country also queues a station a month
+	# itself (te_grid_ai_build_effect).
 	ai_value = {
 		value = te_grid_station_ai_value
 	}

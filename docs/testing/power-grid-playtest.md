@@ -77,3 +77,16 @@ The balancing now runs once a month for every grid in the world, from a hidden c
 | **Grid Power.** The market panel's goods list, a station's goods, and a tooltip that names the good (`@grid_power!`). | The pylon with a lightning bolt, not Electricity's coil, in each, the text icon at the size of its neighbours'. | The text icon only: `gui/zzz_extra_goods_texticons.gui`'s `grid_power` entry. |
 | **HVDC method.** A station's production methods with Clean Energy Technologies researched. | HVDC Undersea Interconnector shows its own bronze cable-and-sea icon, not vanilla's electric engines, in the method list and on the method group. | — |
 | **Agreement.** A treaty draft offering the Grid Interconnection Agreement. | A red and a blue cable joined under a lightning bolt, not Transit Rights' crates. | — |
+
+## The AI builds stations, and they cost 100 (2026-10-24)
+
+Stations cost 100 construction (Barracks' tier), and every AI country with Electrical Capacitors queues one a month itself (`te_grid_ai_build_effect`, `start_building_construction`), as well as scoring them high in `ai_value`. This supersedes the Phase 1 **AI** row.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Cost.** Open the build menu on a state that can take a station. | 100 construction, the same as a Barracks level, before cost scaling. | — |
+| **AI grids.** An observer run from 1836 to the 1910s; count stations per AI country with Electrical Capacitors and a power plant. | Each has a station in its largest Electricity producer within a month or two of having power there, then one more bordering state a month until every state of that market area has one. | None: `start_building_construction` didn't queue (check `debug.log` for the effect), or the queue gate (`construction_queue_government_duration < 52`) never opens; read a few AI countries' queues. Stations queued but never built: the construction AI cancels script-queued government construction; go to a `create_building` decision (the Strategic Reserve pattern). |
+| **No station without power.** An AI country with the technology and no power plant in a market area (a colony). | No stations there until it builds a plant (or a downloading station joins one). | Stations anyway: `te_grid_ai_market_area_has_power` reads production > 0 where there is none. |
+| **Placement.** In the observer run, look at where the second and later stations go. | Each borders an earlier station of the same country, as the build menu requires. | A station off the frontier: `start_building_construction` ignores `possible`, and `te_grid_station_placeable` (its copy for the AI) doesn't hold it; compare the two. |
+| **Staffing and subsidies.** Late in the run, an AI with many stations. | Most stations a quarter staffed or more (online), and the subsidies line not dominated by stations. | Stations mostly offline or a large subsidy drain: 500 engineers and 500 clerks a station is too many for small states; gate the AI pass on population or cut the staffing. |
+| **Power reaches new states.** A state that had no power when its station was built. | Within a year, some building there runs a method that uses Electricity, and the station receives. | The state stays at zero use: the AI never switches a method to Electricity there, and the balancing (which moves power only to existing demand) never gives it any. |

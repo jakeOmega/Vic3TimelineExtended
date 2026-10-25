@@ -1,0 +1,43 @@
+﻿# ============================================================================
+# WAR OF INDEPENDENCE — DIPLOMATIC PLAY
+#
+# The war a metropole opens against a colony that declared independence and
+# that it chose to fight (decolonization_events.70's Fight; the war starts the
+# next day from .71, decol_iw_open_war in decolonization_war_effects.txt).
+# Script-only, as dp_nuclear_exchange and vanilla dp_sepoy_mutiny are: never
+# in the lens, created with `war = yes` and escalation 100.
+#
+# Its goal, te_colonial_reconquest, annexes the rebels back but never
+# self-enforces (no mirrored_wargoal): holding the territory does not end the
+# war, only the rebels' capitulation or a peace does. A negotiated peace stays
+# allowed: a white peace is independence. Zero infamy (owner ruling D7,
+# 2026-10-24): the condemnation comes from the great powers and the bar.
+#
+# Design: docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.4.
+# ============================================================================
+
+dp_te_colonial_war = {
+	war_goal = te_colonial_reconquest
+	requires_interest_marker = no
+	add_infamy_for_starting_initiator_wargoals = no
+	# The war is about the colony and nothing else (_diplomatic_plays.info).
+	initiator_can_add_war_goals = no
+	target_can_add_war_goals = no
+	texture = "gfx/interface/icons/war_goals/annex_country.dds"
+	selectable_in_lens = { always = no }
+
+	# Only against our own rebels: the country formed from our territory that
+	# names us as the metropole it fights (decol_iw_rebels_formed).
+	possible = {
+		scope:target_country = {
+			var:decol_iw_metropole ?= root
+		}
+	}
+
+	# The rebels' AI never gives the territory back at the table.
+	ai_acceptance_max = 0
+
+	on_weekly_pulse = { }
+	on_war_begins = { }
+	on_war_end = { }
+}

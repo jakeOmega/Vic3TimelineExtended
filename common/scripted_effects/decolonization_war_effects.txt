@@ -1,0 +1,1012 @@
+﻿# ============================================================================
+# WARS OF INDEPENDENCE
+#
+# A colony that declares independence (decolonization_events.70: from the
+# event pool below bar 40, from Blood in the Colonies' Fight, or in the
+# collapse's wave) can be let go, negotiated with or fought. Fight forms the
+# rebels as a country and opens a war of reconquest against them the next day
+# (dp_te_colonial_war / te_colonial_reconquest, whose goal never self-enforces:
+# holding the territory does not end the war, only the rebels' capitulation or
+# a peace does). A colonial subject's independence war and the secession of a
+# colony are recorded as the same kind of war (decol_iw_track_subject_wars,
+# decol_iw_on_secession_start), so all three share the home front, the bar's
+# drain, the fighters' package and the endings.
+#
+# Design: docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
+#
+# THE RECORDS: three slots on us, the metropole (Portugal fought three). Per
+# slot N:
+#   decol_iw_rebels_N    the country fighting us
+#   decol_iw_state_N     its capital: the territory, and the panel row's
+#                        datacontext (gui_modding_guide gotcha #11)
+#   decol_iw_kind_N      1 a territory's rebels, 2 a colonial subject,
+#                        3 a secession
+#   decol_iw_months_N    months at war
+#   decol_iw_year_N      months into the current year (0-11): the yearly
+#                        interest-group reactions
+#   decol_iw_war_N       set once the war has been seen
+#   decol_iw_pending_N   30 days: the war has not had time to start
+#   decol_iw_won_N       our goal was enforced (te_colonial_reconquest)
+#   decol_iw_red_N       consecutive months our war support has been at the
+#                        red line or below
+#   decol_iw_talks_N     months since we opened talks
+#   decol_iw_backers_N   great powers arming them
+# On the rebels: decol_iw_metropole (us), decol_iw_settlers (our people were a
+# tenth or more of the territory), decol_iw_conceded (talks dropped our goal),
+# decol_iw_backer_count. On us: decol_iw_running / decol_iw_running_talks (wars
+# under way, for the bar), decol_iw_total_months (the home front),
+# decol_iw_condemner_share (the war-support line), decol_iw_next_declaration
+# (two years between declarations outside a collapse).
+#
+# REVOLUTIONS: a revolution's winner inherits the variables but not the
+# modifiers (scripting_best_practices.md § What a Civil War's Winner Inherits).
+# Every modifier here is refreshed from the records by the monthly settle, its
+# one refresh site, and decol_repair_after_civil_war rebuilds the home front at
+# once. A record whose war has ended while the rebels live settles as a loss.
+#
+# SCOPE: country (the metropole) unless a header says otherwise.
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# DECLARING
+# ---------------------------------------------------------------------------
+
+# Fight a declaration: the rebels form, take a record, and the war opens the
+# next day (decolonization_events.71). scope:decol_iw_territory is the
+# territory. form_decolonized_country forms them with the territory's people
+# and the neighbouring states where those people are at home;
+# apply_decolonization_path sees decol_iw_forming and leaves the legacy for the
+# war's end (decol_iw_rebels_formed). If no country forms (no free dynamic tag)
+# nothing else happens and the territory stays ours.
+decol_iw_fight = {
+	save_scope_as = decol_iw_metropole_scope
+	scope:decol_iw_territory = {
+		if = {
+			limit = { colonial_territory_primary_share_value >= decol_iw_settler_share }
+			scope:decol_iw_metropole_scope = { set_variable = decol_iw_new_settlers }
+		}
+		set_variable = { name = decol_declared days = 3650 }
+	}
+	set_variable = decol_iw_forming
+	scope:decol_iw_territory = {
+		set_variable = decolonization_marker
+		form_decolonized_country = yes
+	}
+	remove_variable = decol_iw_forming
+	remove_variable = decol_iw_new_settlers
+	if = {
+		limit = { has_variable = decol_iw_new_rebels }
+		var:decol_iw_new_rebels = { save_scope_as = decol_iw_slot_rebels }
+		remove_variable = decol_iw_new_rebels
+		decol_iw_open_record = { KIND = 1 }
+		trigger_event = { id = decolonization_events.71 days = 1 }
+	}
+}
+
+# Called by apply_decolonization_path on the new country when we are fighting
+# (decol_iw_forming). Scope: the rebels; scope:decolonizing_parent is us,
+# scope:decolonized_new_country the rebels.
+decol_iw_rebels_formed = {
+	set_variable = { name = decol_iw_metropole value = scope:decolonizing_parent }
+	# Twenty years' grace from colonial collapse, as for any new country.
+	set_variable = { name = decol_collapse_grace days = 7300 }
+	if = {
+		limit = { scope:decolonizing_parent = { has_variable = decol_iw_new_settlers } }
+		set_variable = decol_iw_settlers
+	}
+	scope:decolonizing_parent = {
+		set_variable = { name = decol_iw_new_rebels value = scope:decolonized_new_country }
+	}
+}
+
+# Take the first free record for scope:decol_iw_slot_rebels, a war of kind
+# $KIND$. The caller has checked a record is free.
+decol_iw_open_record = {
+	save_scope_as = decol_iw_slot_owner
+	if = {
+		limit = { decol_iw_slot_free = { N = 1 } }
+		decol_iw_open_slot = { N = 1 KIND = $KIND$ }
+	}
+	else_if = {
+		limit = { decol_iw_slot_free = { N = 2 } }
+		decol_iw_open_slot = { N = 2 KIND = $KIND$ }
+	}
+	else_if = {
+		limit = { decol_iw_slot_free = { N = 3 } }
+		decol_iw_open_slot = { N = 3 KIND = $KIND$ }
+	}
+}
+
+decol_iw_open_slot = {
+	scope:decol_iw_slot_rebels = {
+		set_variable = { name = decol_iw_metropole value = scope:decol_iw_slot_owner }
+		capital ?= { save_scope_as = decol_iw_slot_capital }
+	}
+	set_variable = { name = decol_iw_rebels_$N$ value = scope:decol_iw_slot_rebels }
+	if = {
+		limit = { exists = scope:decol_iw_slot_capital }
+		set_variable = { name = decol_iw_state_$N$ value = scope:decol_iw_slot_capital }
+	}
+	set_variable = { name = decol_iw_kind_$N$ value = $KIND$ }
+	set_variable = { name = decol_iw_months_$N$ value = 0 }
+	set_variable = { name = decol_iw_year_$N$ value = 0 }
+	set_variable = { name = decol_iw_red_$N$ value = 0 }
+	set_variable = { name = decol_iw_backers_$N$ value = 0 }
+	set_variable = { name = decol_iw_pending_$N$ days = 30 }
+}
+
+# ---------------------------------------------------------------------------
+# THE WAR BEGINS (decolonization_events.71, the day after Fight)
+# ---------------------------------------------------------------------------
+
+decol_iw_start_wars = {
+	save_scope_as = decol_iw_self
+	decol_iw_open_war = { N = 1 }
+	decol_iw_open_war = { N = 2 }
+	decol_iw_open_war = { N = 3 }
+}
+
+# Open the war of record $N$, a territory's rebels' (kind 1) that has not
+# begun: the form nuclear_exchange_effects.txt uses for dp_nuclear_exchange
+# (`initiator =` is rejected: scripting_best_practices.md).
+decol_iw_open_war = {
+	if = {
+		limit = {
+			has_variable = decol_iw_rebels_$N$
+			var:decol_iw_kind_$N$ = 1
+			NOT = { has_variable = decol_iw_war_$N$ }
+			var:decol_iw_rebels_$N$ ?= { is_country_alive = yes }
+		}
+		var:decol_iw_rebels_$N$ = { save_scope_as = decol_iw_target }
+		if = {
+			limit = { NOT = { has_war_with = scope:decol_iw_target } }
+			create_diplomatic_play = {
+				name = decol_iw_war_name
+				type = dp_te_colonial_war
+				target_country = scope:decol_iw_target
+				war = yes # REVIEWED 2026-10-24: create_diplomatic_play parameter, as nuclear_exchange_effects.txt (effects.log 1.14.5)
+				escalation = 100
+			}
+		}
+		if = {
+			limit = { has_war_with = scope:decol_iw_target }
+			decol_iw_war_begins = { N = $N$ }
+		}
+	}
+}
+
+# The war of record $N$ is under way, first seen: from .71 or the settle.
+# The rebels take the fighters' package, the world hears of it, and the
+# anti-colonial great powers choose a side (.74).
+decol_iw_war_begins = {
+	set_variable = decol_iw_war_$N$
+	remove_variable = decol_iw_pending_$N$
+	var:decol_iw_rebels_$N$ = { save_scope_as = decol_iw_note_rebels }
+	if = {
+		limit = { has_variable = decol_iw_state_$N$ }
+		var:decol_iw_state_$N$ = { save_scope_as = decol_iw_note_state }
+	}
+	save_scope_as = decol_iw_note_metropole
+	save_scope_as = decol_iw_gp_metropole
+	scope:decol_iw_note_rebels = { save_scope_as = decol_iw_gp_rebels }
+	scope:decol_iw_note_rebels = {
+		decol_iw_refresh_fighters = yes
+		post_notification = decol_iw_war_begins_rebels_notice
+	}
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { this = scope:decol_iw_note_metropole }
+			NOT = { this = scope:decol_iw_note_rebels }
+		}
+		post_notification = decol_iw_war_begins_notice
+		# An anti-colonial great power chooses a side; a pro-colonial one may
+		# offer us arms (.79).
+		if = {
+			limit = { has_variable = gp_anti_colonial_stance }
+			trigger_event = { id = decolonization_events.74 days = 3 }
+		}
+		else_if = {
+			limit = { has_variable = gp_pro_colonial_stance }
+			trigger_event = { id = decolonization_events.79 days = 3 }
+		}
+	}
+	# Self-check (docs/testing/colonial-wars-playtest.md): a play created the
+	# day after the rebels form becomes a war. Once a game.
+	if = {
+		limit = {
+			var:decol_iw_kind_$N$ = 1
+			NOT = { has_global_variable = te_selfcheck_decol_iw_war_started }
+		}
+		set_global_variable = te_selfcheck_decol_iw_war_started
+		debug_log = "TE_SELF_CHECK OK decol_iw_war_started metropole=[SCOPE.sCountry('decol_iw_note_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_note_rebels').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# The fighters' package on the rebels while they fight us: re-applied each
+# month by the settle (its one refresh site), two months long so it lapses on
+# its own when the war ends. Scope: the rebels.
+decol_iw_refresh_fighters = {
+	if = {
+		limit = { has_modifier = decol_iw_fighters_modifier }
+		remove_modifier = decol_iw_fighters_modifier
+	}
+	add_modifier = {
+		name = decol_iw_fighters_modifier
+		months = 2
+	}
+	if = {
+		limit = { has_modifier = decol_iw_foreign_arms_modifier }
+		remove_modifier = decol_iw_foreign_arms_modifier
+	}
+	if = {
+		limit = {
+			has_variable = decol_iw_backer_count
+			var:decol_iw_backer_count > 0
+		}
+		add_modifier = {
+			name = decol_iw_foreign_arms_modifier
+			months = 2
+			multiplier = decol_iw_backer_mult
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE MONTHLY SETTLE (decolonization_events_on_action, before its pool, so it
+# runs whether or not the entry is active: a war can outlast a failed entry)
+# ---------------------------------------------------------------------------
+
+decol_iw_monthly = {
+	save_scope_as = decol_iw_self
+	set_variable = { name = decol_iw_running value = 0 }
+	set_variable = { name = decol_iw_running_talks value = 0 }
+	set_variable = { name = decol_iw_total_months value = 0 }
+	decol_iw_settle_slot = { N = 1 }
+	decol_iw_settle_slot = { N = 2 }
+	decol_iw_settle_slot = { N = 3 }
+	decol_iw_refresh_home_front = yes
+	if = {
+		limit = { var:decol_iw_running > 0 }
+		# The world's condemnation, for the war-support line (which may not walk
+		# every country each beat).
+		set_variable = { name = decol_iw_condemner_share value = colonial_gp_condemner_prestige_share }
+		decol_iw_check_crisis = yes
+	}
+	else = {
+		remove_variable = decol_iw_running
+		remove_variable = decol_iw_running_talks
+		remove_variable = decol_iw_total_months
+		remove_variable = decol_iw_condemner_share
+	}
+}
+
+# The home front's modifier, from the records: remove, then add at the
+# multiplier (the years of war summed, decol_iw_home_front_mult). Its one
+# refresh site, also run by the civil-war repair. Two months long, so a lost
+# settle cannot leave it standing.
+decol_iw_refresh_home_front = {
+	if = {
+		limit = { has_modifier = decol_iw_home_front_modifier }
+		remove_modifier = decol_iw_home_front_modifier
+	}
+	if = {
+		limit = { decol_iw_home_front_mult > 0 }
+		add_modifier = {
+			name = decol_iw_home_front_modifier
+			months = 2
+			multiplier = decol_iw_home_front_mult
+		}
+	}
+}
+
+decol_iw_settle_slot = {
+	if = {
+		limit = { has_variable = decol_iw_rebels_$N$ }
+		if = {
+			# They are gone: annexed back (won) or by someone else (the record ends).
+			limit = { NOT = { var:decol_iw_rebels_$N$ ?= { is_country_alive = yes } } }
+			if = {
+				limit = {
+					OR = {
+						has_variable = decol_iw_won_$N$
+						var:decol_iw_state_$N$ ?= { owner = scope:decol_iw_self }
+					}
+				}
+				decol_iw_end_won = { N = $N$ }
+			}
+			else = {
+				decol_iw_clear_slot = { N = $N$ }
+			}
+		}
+		else_if = {
+			limit = { decol_iw_slot_at_war = { N = $N$ } }
+			if = {
+				limit = { NOT = { has_variable = decol_iw_war_$N$ } }
+				decol_iw_war_begins = { N = $N$ }
+			}
+			decol_iw_war_month = { N = $N$ }
+		}
+		else_if = {
+			# A colonial subject that fought us and is still our subject: we won.
+			limit = {
+				var:decol_iw_kind_$N$ = 2
+				has_variable = decol_iw_war_$N$
+				var:decol_iw_rebels_$N$ = { is_subject_of = scope:decol_iw_self }
+			}
+			decol_iw_end_won = { N = $N$ }
+		}
+		else_if = {
+			# The war has not had time to start.
+			limit = { has_variable = decol_iw_pending_$N$ }
+		}
+		else_if = {
+			# It never started: the self-check's BROKEN case. The rebels are free
+			# without a war; they leave as a release would.
+			limit = { NOT = { has_variable = decol_iw_war_$N$ } }
+			decol_iw_end_unstarted = { N = $N$ }
+		}
+		else_if = {
+			limit = {
+				has_variable = decol_iw_talks_$N$
+				var:decol_iw_rebels_$N$ = { has_variable = decol_iw_conceded }
+			}
+			decol_iw_end_talks = { N = $N$ }
+		}
+		else = {
+			decol_iw_end_lost = { N = $N$ }
+		}
+	}
+}
+
+# One month of the war of record $N$.
+decol_iw_war_month = {
+	change_variable = { name = decol_iw_months_$N$ add = 1 }
+	change_variable = { name = decol_iw_running add = 1 }
+	change_variable = { name = decol_iw_total_months add = var:decol_iw_months_$N$ }
+	var:decol_iw_rebels_$N$ = { save_scope_as = decol_iw_month_rebels }
+	if = {
+		limit = { scope:decol_iw_month_rebels = { has_variable = decol_iw_conceded } }
+		change_variable = { name = decol_iw_running_talks add = 1 }
+	}
+	scope:decol_iw_month_rebels = { decol_iw_refresh_fighters = yes }
+
+	# Each year of the war: the Intelligentsia and the Trade Unions turn
+	# against it; the Armed Forces back it for two years, then blame the
+	# politicians.
+	change_variable = { name = decol_iw_year_$N$ add = 1 }
+	if = {
+		limit = { var:decol_iw_year_$N$ >= 12 }
+		set_variable = { name = decol_iw_year_$N$ value = 0 }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = 365 }
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = 365 }
+		if = {
+			limit = { var:decol_iw_months_$N$ <= 24 }
+			ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = 365 }
+		}
+		else = {
+			ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = 365 }
+		}
+	}
+
+	# Our war support in it, for the regime crisis (.75) and the panel row.
+	if = {
+		limit = {
+			any_scope_war = {
+				is_war_participant = scope:decol_iw_month_rebels
+				has_war_support = {
+					target = scope:decol_iw_self
+					value <= decol_iw_red_war_support
+				}
+			}
+		}
+		change_variable = { name = decol_iw_red_$N$ add = 1 }
+	}
+	else = {
+		set_variable = { name = decol_iw_red_$N$ value = 0 }
+	}
+
+	# Talks: six months to the accords, which drop our goal so the war can end
+	# in a white peace (te_colonial_reconquest's valid).
+	if = {
+		limit = { has_variable = decol_iw_talks_$N$ }
+		change_variable = { name = decol_iw_talks_$N$ add = 1 }
+		if = {
+			limit = {
+				var:decol_iw_talks_$N$ >= decol_iw_talks_months
+				NOT = { scope:decol_iw_month_rebels = { has_variable = decol_iw_conceded } }
+			}
+			decol_iw_accords = { N = $N$ }
+		}
+		# Self-check: a dropped goal ends the war within six months.
+		if = {
+			limit = {
+				var:decol_iw_talks_$N$ >= 12
+				NOT = { has_global_variable = te_selfcheck_decol_iw_talks_peace }
+			}
+			set_global_variable = te_selfcheck_decol_iw_talks_peace
+			debug_log = "TE_SELF_CHECK BROKEN decol_iw_talks_peace metropole=[SCOPE.sCountry('decol_iw_self').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_month_rebels').GetNameNoFormatting] (six months after the accords dropped our goal the war is still on: talks end the war only by the player's peace offer; the drain stays at the talks' figure) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	# An AI opens talks when the war has gone sour for half a year, or after
+	# four years.
+	else_if = {
+		limit = {
+			is_ai = yes
+			OR = {
+				var:decol_iw_red_$N$ >= 6
+				var:decol_iw_months_$N$ >= decol_iw_crisis_war_months
+			}
+		}
+		decol_iw_open_talks = { N = $N$ }
+	}
+
+	# The row's figures, on the rebels' capital (the panel reads them there).
+	decol_iw_write_row = { N = $N$ }
+
+	# Self-check: the rebels raise an army.
+	if = {
+		limit = {
+			var:decol_iw_kind_$N$ = 1
+			var:decol_iw_months_$N$ = 2
+			NOT = { has_global_variable = te_selfcheck_decol_iw_rebels_armed }
+		}
+		set_global_variable = te_selfcheck_decol_iw_rebels_armed
+		if = {
+			limit = { scope:decol_iw_month_rebels = { any_military_formation = { is_army = yes } } }
+			debug_log = "TE_SELF_CHECK OK decol_iw_rebels_armed rebels=[SCOPE.sCountry('decol_iw_month_rebels').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN decol_iw_rebels_armed rebels=[SCOPE.sCountry('decol_iw_month_rebels').GetNameNoFormatting] (two months in, the rebels have no army: seed one with create_military_formation, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# The panel row's figures for record $N$, written on the rebels' capital.
+decol_iw_write_row = {
+	if = {
+		limit = { has_variable = decol_iw_state_$N$ }
+		save_scope_as = decol_iw_row_owner
+		var:decol_iw_rebels_$N$ ?= { save_scope_as = decol_iw_row_rebels }
+		var:decol_iw_state_$N$ ?= {
+			set_variable = { name = decol_iw_row_months value = scope:decol_iw_row_owner.var:decol_iw_months_$N$ }
+			set_variable = { name = decol_iw_row_backers value = scope:decol_iw_row_owner.var:decol_iw_backers_$N$ }
+			if = {
+				limit = { scope:decol_iw_row_owner = { var:decol_iw_red_$N$ > 0 } }
+				set_variable = decol_iw_row_red
+			}
+			else = {
+				remove_variable = decol_iw_row_red
+			}
+			if = {
+				limit = { scope:decol_iw_row_rebels ?= { has_variable = decol_iw_conceded } }
+				set_variable = { name = decol_iw_row_talks value = 2 }
+			}
+			else_if = {
+				limit = { scope:decol_iw_row_owner = { has_variable = decol_iw_talks_$N$ } }
+				set_variable = { name = decol_iw_row_talks value = 1 }
+			}
+			else = {
+				remove_variable = decol_iw_row_talks
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE ENDINGS
+# ---------------------------------------------------------------------------
+
+# We won record $N$: .72, then the record ends.
+decol_iw_end_won = {
+	decol_iw_save_end_scopes = { N = $N$ }
+	trigger_event = { id = decolonization_events.72 }
+	decol_iw_post_end_notices = yes
+	decol_iw_clear_slot = { N = $N$ }
+}
+
+# We lost record $N$: .73 (the deferred aftermath runs in its option), then the
+# record ends.
+decol_iw_end_lost = {
+	decol_iw_save_end_scopes = { N = $N$ }
+	trigger_event = { id = decolonization_events.73 }
+	decol_iw_post_end_notices = yes
+	scope:decol_iw_end_rebels ?= { post_notification = decol_iw_war_won_rebels_notice }
+	decol_iw_clear_slot = { N = $N$ }
+}
+
+# The accords' peace was signed: .76, then the record ends.
+decol_iw_end_talks = {
+	decol_iw_save_end_scopes = { N = $N$ }
+	# Self-check: a dropped goal ends the war in a peace (the BROKEN half is in
+	# decol_iw_war_month).
+	if = {
+		limit = { NOT = { has_global_variable = te_selfcheck_decol_iw_talks_peace } }
+		set_global_variable = te_selfcheck_decol_iw_talks_peace
+		debug_log = "TE_SELF_CHECK OK decol_iw_talks_peace metropole=[SCOPE.sCountry('decol_iw_end_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_end_rebels').GetNameNoFormatting] talks_months=[THIS.GetVariable('decol_iw_talks_$N$').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	trigger_event = { id = decolonization_events.76 }
+	decol_iw_post_end_notices = yes
+	scope:decol_iw_end_rebels ?= { post_notification = decol_iw_war_won_rebels_notice }
+	decol_iw_clear_slot = { N = $N$ }
+}
+
+# The war of record $N$ never began. The rebels leave as a release would
+# (the ordinary legacy, no lost-war penalties), with a notice.
+decol_iw_end_unstarted = {
+	decol_iw_save_end_scopes = { N = $N$ }
+	if = {
+		limit = { NOT = { has_global_variable = te_selfcheck_decol_iw_war_started } }
+		set_global_variable = te_selfcheck_decol_iw_war_started
+		debug_log = "TE_SELF_CHECK BROKEN decol_iw_war_started metropole=[SCOPE.sCountry('decol_iw_end_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_end_rebels').GetNameNoFormatting] (30 days after Fight we are not at war with the rebels: create the play from the rebels' scope instead, docs/testing/colonial-wars-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+	save_scope_as = decolonizing_parent
+	scope:decol_iw_end_rebels ?= {
+		if = {
+			limit = { is_country_alive = yes }
+			save_scope_as = decolonized_new_country
+			decol_path_legacy = yes
+			trigger_event = { id = decolonization_events.15 days = 7 }
+		}
+	}
+	post_notification = decol_iw_war_unstarted_notice
+	decol_iw_clear_slot = { N = $N$ }
+}
+
+# The ending events' scopes. A saved scope lasts the whole effect chain, and
+# one settle can end two records, so the last ending's are cleared first.
+decol_iw_save_end_scopes = {
+	if = {
+		limit = { exists = scope:decol_iw_end_rebels }
+		clear_saved_scope = decol_iw_end_rebels
+	}
+	if = {
+		limit = { exists = scope:decol_iw_end_state }
+		clear_saved_scope = decol_iw_end_state
+	}
+	save_scope_as = decol_iw_end_metropole
+	var:decol_iw_rebels_$N$ ?= { save_scope_as = decol_iw_end_rebels }
+	if = {
+		limit = { has_variable = decol_iw_state_$N$ }
+		var:decol_iw_state_$N$ ?= { save_scope_as = decol_iw_end_state }
+	}
+}
+
+# The great powers hear how it ended (decol_iw_war_ends_notice names the
+# territory and whether it is ours again).
+decol_iw_post_end_notices = {
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { this = scope:decol_iw_end_metropole }
+		}
+		post_notification = decol_iw_war_ends_notice
+	}
+}
+
+# Record $N$ ends: its variables, and the rebels' marks and modifiers.
+decol_iw_clear_slot = {
+	var:decol_iw_rebels_$N$ ?= {
+		if = {
+			limit = { has_modifier = decol_iw_fighters_modifier }
+			remove_modifier = decol_iw_fighters_modifier
+		}
+		if = {
+			limit = { has_modifier = decol_iw_foreign_arms_modifier }
+			remove_modifier = decol_iw_foreign_arms_modifier
+		}
+		remove_variable = decol_iw_metropole
+		remove_variable = decol_iw_settlers
+		remove_variable = decol_iw_conceded
+		remove_variable = decol_iw_backer_count
+	}
+	var:decol_iw_state_$N$ ?= {
+		remove_variable = decol_iw_row_months
+		remove_variable = decol_iw_row_backers
+		remove_variable = decol_iw_row_red
+		remove_variable = decol_iw_row_talks
+	}
+	remove_variable = decol_iw_rebels_$N$
+	remove_variable = decol_iw_state_$N$
+	remove_variable = decol_iw_kind_$N$
+	remove_variable = decol_iw_months_$N$
+	remove_variable = decol_iw_year_$N$
+	remove_variable = decol_iw_war_$N$
+	remove_variable = decol_iw_pending_$N$
+	remove_variable = decol_iw_won_$N$
+	remove_variable = decol_iw_red_$N$
+	remove_variable = decol_iw_talks_$N$
+	remove_variable = decol_iw_backers_$N$
+}
+
+# The day after our goal was enforced (.78): settle each record we won whose
+# rebels are gone, at once rather than at the next monthly settle. A record
+# whose rebels still live waits for the settle.
+decol_iw_settle_won_now = {
+	save_scope_as = decol_iw_self
+	decol_iw_settle_won_slot = { N = 1 }
+	decol_iw_settle_won_slot = { N = 2 }
+	decol_iw_settle_won_slot = { N = 3 }
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		colonial_empire_refresh_display = yes
+	}
+}
+
+decol_iw_settle_won_slot = {
+	if = {
+		limit = {
+			has_variable = decol_iw_won_$N$
+			NOT = { var:decol_iw_rebels_$N$ ?= { is_country_alive = yes } }
+		}
+		decol_iw_end_won = { N = $N$ }
+	}
+}
+
+# Our goal was enforced against scope:target_country (te_colonial_reconquest's
+# on_enforced): mark the record won, and settle the next day (.78), so the win
+# shows at once rather than at the next monthly settle. Scope: us (the holder).
+decol_iw_record_enforced = {
+	if = {
+		limit = { var:decol_iw_rebels_1 ?= scope:target_country }
+		set_variable = decol_iw_won_1
+	}
+	else_if = {
+		limit = { var:decol_iw_rebels_2 ?= scope:target_country }
+		set_variable = decol_iw_won_2
+	}
+	else_if = {
+		limit = { var:decol_iw_rebels_3 ?= scope:target_country }
+		set_variable = decol_iw_won_3
+	}
+	debug_log = "TE_DECOL_IW: reconquest enforced holder=[THIS.GetCountry.GetNameNoFormatting] target=[SCOPE.sCountry('target_country').GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+	trigger_event = { id = decolonization_events.78 days = 1 }
+}
+
+# ---------------------------------------------------------------------------
+# THE AFTERMATH OF A LOST WAR
+# Scope: the former colony (scope:decol_iw_end_rebels); scope:decolonizing_parent
+# is us. A war of independence is a bloody exit, whatever programme we ran
+# (owner ruling D16, 2026-10-24): Bloody Decolonization's modifier, its junta
+# laws and relations -50. A colonial subject already became a former colony
+# through vanilla's on_become_independent, which sends .15 too.
+# ---------------------------------------------------------------------------
+decol_iw_aftermath_bloody = {
+	save_scope_as = decolonized_new_country
+	decol_mark_former_colony = { OVERLORD = scope:decolonizing_parent }
+	add_modifier = {
+		name = bloody_decolonization_legacy_modifier
+		days = long_modifier_time
+		is_decaying = yes
+	}
+	scope:decolonizing_parent = {
+		change_relations = { country = scope:decolonized_new_country value = -50 }
+	}
+	activate_law = law_type:law_autocracy
+	activate_law = law_type:law_outlawed_dissent
+	activate_law = law_type:law_minority_rights_discrimination
+}
+
+# ---------------------------------------------------------------------------
+# TALKS (phase 3)
+# ---------------------------------------------------------------------------
+
+# Open talks on record $N$ (the panel's Open Talks through .80, the regime
+# crisis, an AI's settle). Six months later the accords drop our goal. Only a
+# territory's rebels (kind 1): in a colonial subject's or a secession's war the
+# goal is theirs, and the peace is made from the peace screen.
+decol_iw_open_talks = {
+	if = {
+		limit = {
+			has_variable = decol_iw_rebels_$N$
+			var:decol_iw_kind_$N$ = 1
+			NOT = { has_variable = decol_iw_talks_$N$ }
+		}
+		set_variable = { name = decol_iw_talks_$N$ value = 0 }
+		var:decol_iw_rebels_$N$ ?= { save_scope_as = decol_iw_talks_rebels }
+		scope:decol_iw_talks_rebels ?= { post_notification = decol_iw_talks_opened_notice }
+		decol_iw_write_row = { N = $N$ }
+	}
+}
+
+# Talks on every war at once (the Captains' Revolt).
+decol_iw_open_all_talks = {
+	decol_iw_open_talks = { N = 1 }
+	decol_iw_open_talks = { N = 2 }
+	decol_iw_open_talks = { N = 3 }
+}
+
+# The accords: our goal is dropped (te_colonial_reconquest is no longer valid
+# against them), so the war can end in a white peace: the rebels' AI should
+# take one, and a player offers one from the peace screen.
+decol_iw_accords = {
+	var:decol_iw_rebels_$N$ ?= {
+		set_variable = decol_iw_conceded
+		save_scope_as = decol_iw_talks_rebels
+	}
+	post_notification = decol_iw_accords_notice
+	decol_iw_write_row = { N = $N$ }
+}
+
+# Talks open on the record whose rebels' capital is scope:decol_iw_talks_state
+# (the panel's row, through .80).
+decol_iw_open_talks_for_state = {
+	if = {
+		limit = { var:decol_iw_state_1 ?= scope:decol_iw_talks_state }
+		decol_iw_open_talks = { N = 1 }
+	}
+	else_if = {
+		limit = { var:decol_iw_state_2 ?= scope:decol_iw_talks_state }
+		decol_iw_open_talks = { N = 2 }
+	}
+	else_if = {
+		limit = { var:decol_iw_state_3 ?= scope:decol_iw_talks_state }
+		decol_iw_open_talks = { N = 3 }
+	}
+}
+
+# The panel's Open Talks (colonial_empire_open_talks_sgui): the confirmation
+# (.80) for the war whose rebels' capital is scope:ce_state, under the
+# one-decision lock. Wrapped like colonial_empire_effect_release_state: the
+# button's hover renders this every frame.
+decol_iw_effect_open_talks = {
+	custom_tooltip = CE_WAR_OPEN_TALKS_TT
+	hidden_effect = {
+		scope:ce_state = { save_scope_as = decol_iw_talks_state }
+		set_variable = { name = decol_offer_pending days = 7 }
+		trigger_event = { id = decolonization_events.80 popup = yes }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE HOME FRONT BREAKS (phase 3): .75
+# A war that has run decol_iw_crisis_war_months with our war support at the
+# red line for decol_iw_crisis_red_months running. Once, and again a year
+# after the officers were crushed (decol_iw_crisis_cooldown).
+# ---------------------------------------------------------------------------
+decol_iw_check_crisis = {
+	if = {
+		limit = {
+			NOT = { has_variable = decol_iw_crisis_cooldown }
+			OR = {
+				decol_iw_slot_in_crisis = { N = 1 }
+				decol_iw_slot_in_crisis = { N = 2 }
+				decol_iw_slot_in_crisis = { N = 3 }
+			}
+		}
+		set_variable = { name = decol_iw_crisis_cooldown days = 365 }
+		trigger_event = { id = decolonization_events.75 }
+	}
+}
+
+# The Captains' Revolt's step aside (.75.a): every territory a release could
+# take goes, as Planned Full Decolonization's (.401.a) release does, but
+# forced: no peaceful-decolonization reward.
+decol_iw_release_all_territories = {
+	every_scope_state = {
+		limit = { is_decolonization_eligible_state = yes }
+		set_variable = decolonization_marker
+	}
+	every_scope_state = {
+		limit = { has_variable = decolonization_marker }
+		# Checked again as each state comes up: an earlier state's new country
+		# may already have taken this one with its region (.401.a's note).
+		if = {
+			limit = {
+				has_variable = decolonization_marker
+				owner = ROOT
+			}
+			form_decolonized_country = yes
+			remove_variable = decolonization_marker
+		}
+	}
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		decol_record_chosen_release = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE WORLD TAKES SIDES (phase 3)
+# ---------------------------------------------------------------------------
+
+# A great power arms the rebels (.74.b). Scope: the great power;
+# scope:decol_iw_gp_rebels, scope:decol_iw_gp_metropole.
+decol_iw_begin_arming = {
+	set_variable = { name = decol_iw_arming value = scope:decol_iw_gp_rebels }
+	scope:decol_iw_gp_rebels = {
+		if = {
+			limit = { has_variable = decol_iw_backer_count }
+			change_variable = { name = decol_iw_backer_count add = 1 }
+		}
+		else = {
+			set_variable = { name = decol_iw_backer_count value = 1 }
+		}
+		decol_iw_refresh_fighters = yes
+	}
+	scope:decol_iw_gp_metropole = { decol_iw_count_backers = yes }
+}
+
+# The records' backer counts, for the rows. Scope: us.
+decol_iw_count_backers = {
+	decol_iw_count_slot_backers = { N = 1 }
+	decol_iw_count_slot_backers = { N = 2 }
+	decol_iw_count_slot_backers = { N = 3 }
+}
+
+decol_iw_count_slot_backers = {
+	if = {
+		limit = { has_variable = decol_iw_rebels_$N$ }
+		set_variable = { name = decol_iw_backers_$N$ value = 0 }
+		var:decol_iw_rebels_$N$ ?= { save_scope_as = decol_iw_cb_rebels }
+		if = {
+			limit = { scope:decol_iw_cb_rebels ?= { has_variable = decol_iw_backer_count } }
+			set_variable = { name = decol_iw_backers_$N$ value = scope:decol_iw_cb_rebels.var:decol_iw_backer_count }
+		}
+		decol_iw_write_row = { N = $N$ }
+	}
+}
+
+# A backer's monthly payment to the rebels it arms, while they fight: out of
+# its treasury, into theirs (the swap-settle shape of .6.a). It stops, and the
+# backer's mark goes, when they stop. Scope: the backer, from the monthly
+# on_action.
+decol_iw_backer_monthly = {
+	if = {
+		limit = {
+			var:decol_iw_arming ?= {
+				is_country_alive = yes
+				save_temporary_scope_as = decol_iw_armed_check
+				var:decol_iw_metropole ?= { has_war_with = scope:decol_iw_armed_check }
+			}
+		}
+		save_scope_as = decol_iw_backer
+		set_variable = { name = decol_iw_arms_sum value = decol_iw_arms_monthly }
+		add_treasury = {
+			value = var:decol_iw_arms_sum
+			multiply = -1
+		}
+		var:decol_iw_arming = {
+			add_treasury = scope:decol_iw_backer.var:decol_iw_arms_sum
+		}
+	}
+	else = {
+		remove_variable = decol_iw_arming
+		remove_variable = decol_iw_arms_sum
+	}
+}
+
+# ---------------------------------------------------------------------------
+# SUBJECTS AND SECESSIONS (phase 3)
+# ---------------------------------------------------------------------------
+
+# A colonial subject at war with us for its independence takes a record
+# (kind 2), so the war counts as a colonial war. From the monthly settle,
+# before the slots settle.
+decol_iw_track_subject_wars = {
+	save_scope_as = decol_iw_self
+	every_subject_or_below = {
+		limit = {
+			is_direct_subject_of = scope:decol_iw_self
+			is_qualifying_colonial_subject = yes
+			has_war_with = scope:decol_iw_self
+			NOT = { var:decol_iw_metropole ?= scope:decol_iw_self }
+		}
+		if = {
+			limit = { scope:decol_iw_self = { decol_iw_has_free_slot = yes } }
+			save_scope_as = decol_iw_slot_rebels
+			scope:decol_iw_self = {
+				decol_iw_open_record = { KIND = 2 }
+			}
+		}
+	}
+}
+
+# A secession from us of a colony: on_secession_start (te_civil_war_on_actions.txt).
+# ROOT is us, scope:target the secessionists. A colony's: their capital was
+# separated from ours at our last pass (the cache still names us; their own
+# pass has not run) and none of their primary cultures shares a heritage trait
+# with ours. Such a secession takes a record (kind 3). Scope: us.
+decol_iw_on_secession_start = {
+	if = {
+		limit = {
+			exists = scope:target
+			decol_iw_has_free_slot = yes
+			save_temporary_scope_as = decol_iw_seceded_from
+			scope:target = {
+				capital ?= { var:ce_separated ?= scope:decol_iw_seceded_from }
+				NOT = {
+					any_primary_culture = {
+						shares_heritage_trait_with_any_primary_culture = scope:decol_iw_seceded_from
+					}
+				}
+			}
+		}
+		scope:target = { save_scope_as = decol_iw_slot_rebels }
+		decol_iw_open_record = { KIND = 3 }
+	}
+}
+
+# The colonial empire's wars after a revolution: the winner inherits the
+# records; the home front is rebuilt now (the settle would wait a month).
+# From decol_repair_after_civil_war.
+decol_iw_repair_after_civil_war = {
+	if = {
+		limit = { decol_iw_any_record = yes }
+		decol_iw_refresh_home_front = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE COLLAPSE BECOMES A WAVE (.201 / .204 -> .77 -> .70)
+# ---------------------------------------------------------------------------
+
+# Start the wave: up to three declarations, worst first, 60 days apart. The
+# programme-month counters the successors' legacy reads stay until the wave
+# ends (decol_wave_end).
+decol_wave_start = {
+	set_variable = { name = decol_wave_left value = 3 days = 730 }
+	trigger_event = { id = decolonization_events.77 }
+}
+
+# One step of the wave (.77): the next territory declares, or the wave ends.
+decol_wave_step = {
+	if = {
+		# Another confirmation is open: wait for it (decol_offer_pending lapses
+		# on its own after a week).
+		limit = {
+			has_variable = decol_wave_left
+			has_variable = decol_offer_pending
+		}
+		trigger_event = { id = decolonization_events.77 days = 7 }
+	}
+	else_if = {
+		limit = {
+			has_variable = decol_wave_left
+			var:decol_wave_left > 0
+			any_scope_state = { decol_wave_candidate = yes }
+		}
+		ordered_scope_state = {
+			limit = { decol_wave_candidate = yes }
+			order_by = decol_iw_rise_order
+			position = 0
+			save_scope_as = decol_iw_territory
+		}
+		change_variable = { name = decol_wave_left add = -1 }
+		if = {
+			limit = { var:decol_wave_left > 0 }
+			trigger_event = { id = decolonization_events.77 days = 60 }
+		}
+		else = {
+			# The last declaration: its answer ends the wave (decol_iw_after_choice).
+			set_variable = { name = decol_wave_last days = 365 }
+		}
+		trigger_event = { id = decolonization_events.70 }
+	}
+	else_if = {
+		limit = { has_variable = decol_wave_left }
+		decol_wave_end = yes
+	}
+}
+
+decol_wave_end = {
+	remove_variable = decol_wave_left
+	remove_variable = decol_wave_last
+	# The successors above read our programme-month counters for their legacy
+	# (apply_decolonization_path); on_fail left them for this.
+	colonial_empire_clear_path_months = yes
+}
+
+# Every option of .70 ends here: the confirmation lock and the preview, and
+# the wave's end after its last declaration.
+decol_iw_after_choice = {
+	decol_offer_clear = yes
+	if = {
+		limit = { has_variable = decol_wave_last }
+		decol_wave_end = yes
+	}
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		colonial_empire_refresh_display = yes
+	}
+}

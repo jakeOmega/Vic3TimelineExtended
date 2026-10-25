@@ -1697,7 +1697,8 @@ class TestEngineLineTypes(unittest.TestCase):
     def test_names_splice_the_vanilla_fields(self):
         loc = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
         for (family, field), name in P.ENGINE_LINE_TYPES.items():
-            self.assertRegex(loc, rf'\n {name}:0 "\${field}\$"', name)
+            # the name ends in "(Demographics)" under Full only (te_demog_line_name; a release's gate never shows it)
+            self.assertRegex(loc, rf'\n {name}:0 "\${field}\$\[GetPlayer\.GetCustom\(\'te_demog_line_name\'\)\]"', name)
             # vanilla's descriptions end without a full stop ("How many children are born each year"). A release ships
             # these types with no Demographics rule (final review m2), so the description names no rule or setting.
             desc = re.search(rf'\n {name}_desc:0 "(.*)"', loc).group(1)

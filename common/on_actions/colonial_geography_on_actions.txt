@@ -1,0 +1,36 @@
+﻿# ============================================================================
+# COLONIAL GEOGRAPHY — the separation cache's two passes
+#
+# Every colony test reads whether a state is separated from its owner's
+# capital from a monthly cache (ce_refresh_separation,
+# common/scripted_effects/colonial_geography_effects.txt). It is filled at game
+# start for every country and refreshed on each country's monthly pulse,
+# whatever its technology: the naval laws' AI weights, the anti-colonialist
+# ideology and the UN votes read the colony test at any date.
+# ============================================================================
+
+on_game_started = {
+	on_actions = {
+		colonial_geography_game_start_on_action
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		colonial_geography_on_action
+	}
+}
+
+colonial_geography_game_start_on_action = {
+	effect = {
+		every_country = {
+			ce_separation_step = yes
+		}
+	}
+}
+
+colonial_geography_on_action = {
+	effect = {
+		ce_separation_step = yes
+	}
+}

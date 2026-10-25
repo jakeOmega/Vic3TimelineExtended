@@ -3,6 +3,7 @@
 #   event te_debug_colonial_empire.1    put the stability bar in any band
 #   event te_debug_colonial_empire.2    great-power pressure and the decisions
 #   event te_debug_colonial_empire.3    programme costs and the AI's review
+#   event te_debug_colonial_empire.4    the colony test's census, to debug.log
 # ============================================================================
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires these events.
@@ -299,3 +300,52 @@ te_debug_colonial_empire.3 = { # REVIEWED 2026-10-09: console-only test event (`
 		colonial_empire_refresh_display = yes
 	}
 }
+
+# The colony test, country by country: re-runs the separation pass
+# (ce_separation_step, colonial_geography_effects.txt) for every country, then
+# logs each country that holds a non-homeland state of 100,000 people or more,
+# and each such state's parts of the test. grep TE_CE_CENSUS in debug.log. For
+# the play-test and the 1836 holdings table of the design (docs/superpowers/
+# specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 1.5).
+te_debug_colonial_empire.4 = { # REVIEWED 2026-10-24: console-only test event (`event te_debug_colonial_empire.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_colonial_empire.4.t
+	desc = te_debug_colonial_empire.4.d
+	flavor = te_debug_colonial_empire.4.f
+
+	# The whole world.
+	option = {
+		name = te_debug_colonial_empire.4.a
+		default_option = yes
+		hidden_effect = {
+			every_country = { ce_separation_step = yes }
+			every_country = {
+				limit = {
+					any_scope_state = {
+						state_population >= colonial_territory_min_population
+						NOT = { is_homeland_of_country_cultures = owner }
+					}
+				}
+				te_debug_ce_census_country = yes
+			}
+		}
+	}
+
+	# Only us.
+	option = {
+		name = te_debug_colonial_empire.4.b
+		hidden_effect = {
+			ce_separation_step = yes
+			te_debug_ce_census_country = yes
+		}
+	}
+}
+
