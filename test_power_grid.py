@@ -277,12 +277,12 @@ class EfficiencyTest(unittest.TestCase):
     def test_efficiency_is_registered_and_starts_low(self):
         self.assertRegex(_read(TYPES), r"(?m)^country_grid_transmission_efficiency_add = \{")
         base = _code(_top_level(_read(EXTRA_MODIFIERS), "INJECT:base_values"))
-        self.assertRegex(base, r"\bcountry_grid_transmission_efficiency_add = 0\.6\b")
+        self.assertRegex(base, r"\bcountry_grid_transmission_efficiency_add = 0\.75\b")
 
-    STEPS = {"rural_electrification": 0.2, "transistors": 0.05, "clean_energy_technologies": 0.05,
-             "smart_grids": 0.05, "modern_material_science": 0.05}
+    STEPS = {"rural_electrification": 0.1, "transistors": 0.05, "microprocessor": 0.02,
+             "clean_energy_technologies": 0.03, "smart_grids": 0.03, "quantum_materials": 0.02}
 
-    def test_five_technologies_raise_it_to_one(self):
+    def test_six_technologies_raise_it_to_one(self):
         found = {}
         for name in sorted(os.listdir(TECH_DIR)):
             text = _code(_read(os.path.join(TECH_DIR, name)))
@@ -291,7 +291,7 @@ class EfficiencyTest(unittest.TestCase):
                     m = re.search(r"country_grid_transmission_efficiency_add = ([\d.]+)", _top_level(text, tech))
                     found[tech] = float(m.group(1))
         self.assertEqual(found, self.STEPS)
-        self.assertAlmostEqual(0.6 + sum(found.values()), 1.0)
+        self.assertAlmostEqual(0.75 + sum(found.values()), 1.0)
 
 
 class TreatyAndTileTest(unittest.TestCase):
