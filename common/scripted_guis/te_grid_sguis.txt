@@ -1,0 +1,39 @@
+﻿# ============================================================================
+# Power Grid scripted GUIs
+# ============================================================================
+
+# State scope: the state panel's grid tile, its Undersea Cables row. Names the
+# stations this state's undersea cable joins to its grid from other groups
+# this month (te_grid_cable_links, set by te_grid_cable_links_effect), one line
+# each, or says that none is in range. Read-only: shown and printed on hover.
+te_grid_cable_links_sgui = {
+	scope = state
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = {
+				has_variable_list = te_grid_cable_links
+				any_in_list = {
+					variable = te_grid_cable_links
+					always = yes
+				}
+			}
+			custom_tooltip_no_bullet = te_grid_cables_intro
+			every_in_list = {
+				variable = te_grid_cable_links
+				custom_tooltip = te_grid_cable_link_line
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = te_grid_cables_none
+		}
+	}
+}

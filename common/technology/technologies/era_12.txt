@@ -77,8 +77,10 @@ quantum_materials = {
 	category = production
 
 	modifier = {
-		# High-temperature superconducting lines: the last of the grid's losses
+		# High-temperature superconducting lines: the last of the grid's losses,
+		# and an interconnector's cable crosses one more Sea Node
 		country_grid_transmission_efficiency_add = 0.02
+		building_grid_undersea_cable_range_add = 1
 	}
 
 	unlocking_technologies = {

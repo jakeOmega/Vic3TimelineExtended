@@ -10,7 +10,8 @@
 #
 # Frontier only (§6): a new Authority needs fewer than 2 people per km² in the
 # region; one already here may add levels until 10 per km², when the pulse
-# removes it (the frontier is closed).
+# removes it (the frontier is closed). Both at a world population of a billion,
+# in proportion to it (resettlement_world_population_scale).
 # =================================================================
 building_resettlement_colony = {
 	building_group = bg_resettlement
@@ -75,9 +76,10 @@ building_resettlement_colony = {
 			add = 300
 		}
 
-		# The emptier the frontier, the more it is worth.
+		# The emptier the frontier, the more it is worth: below 0.5 people per km²
+		# at a billion people, in proportion to world population.
 		if = {
-			limit = { resettlement_frontier_density < 0.5 }
+			limit = { resettlement_frontier_empty_margin > 0 }
 			add = 200
 		}
 

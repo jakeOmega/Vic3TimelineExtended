@@ -229,6 +229,20 @@ class FrontierTests(unittest.TestCase):
         text = strip_comments(read(VALUES))
         self.assertRegex(text, r"(?m)^resettlement_frontier_open_base = 2\s*$")
         self.assertRegex(text, r"(?m)^resettlement_frontier_close_base = 10\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_frontier_empty_base = 0\.5\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_frontier_reference_population = 1000000000\s*$")
+
+    def test_thresholds_scale_in_proportion_to_world_population(self):
+        text = read(VALUES)
+        scale = squash(block(text, "resettlement_world_population_scale"))
+        self.assertIn("value = global_population", scale)
+        self.assertIn("divide = resettlement_frontier_reference_population", scale)
+        # Proportional: no floor or ceiling, and nothing added.
+        for word in ("min =", "max =", "add ="):
+            self.assertNotIn(word, scale)
+        for name in ("resettlement_frontier_open_density", "resettlement_frontier_close_density",
+                     "resettlement_frontier_empty_density"):
+            self.assertIn("multiply = resettlement_world_population_scale", squash(block(text, name)), name)
 
     def test_density_is_region_population_over_area(self):
         text = read(VALUES)
@@ -254,7 +268,8 @@ class FrontierTests(unittest.TestCase):
     def test_margins_are_threshold_minus_density(self):
         text = read(VALUES)
         for margin, threshold in (("resettlement_frontier_open_margin", "resettlement_frontier_open_density"),
-                                  ("resettlement_frontier_close_margin", "resettlement_frontier_close_density")):
+                                  ("resettlement_frontier_close_margin", "resettlement_frontier_close_density"),
+                                  ("resettlement_frontier_empty_margin", "resettlement_frontier_empty_density")):
             body = squash(block(text, margin))
             self.assertIn(f"value = {threshold}", body)
             self.assertIn("subtract = resettlement_frontier_density", body)
@@ -479,6 +494,11 @@ class BuildingTests(unittest.TestCase):
                      "resettlement_state_frontier_still_open = yes"):
             self.assertIn(trig, possible)
         self.assertNotIn("law_closed_borders", possible)
+
+    def test_ai_empty_frontier_bonus_scales_with_world_population(self):
+        ai = squash(block(block(read(BUILDING_FILE), "building_resettlement_colony"), "ai_value"))
+        self.assertIn("resettlement_frontier_empty_margin > 0", ai)
+        self.assertNotRegex(ai, r"resettlement_frontier_density [<>]")
 
     def test_level_cap_is_five_plus_five_per_tech(self):
         base = block(read(BASE_VALUES), "INJECT:base_values")
