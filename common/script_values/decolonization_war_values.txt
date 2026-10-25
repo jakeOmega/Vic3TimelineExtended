@@ -1,0 +1,186 @@
+﻿# ============================================================================
+# WARS OF INDEPENDENCE — the numbers
+#
+# A colony that declares independence (decolonization_events.70) can be let go,
+# negotiated with, or fought; a colonial subject's independence war and a
+# colonial secession are fought too. The records, the settle and the endings are
+# in common/scripted_effects/decolonization_war_effects.txt; the design in
+# docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
+# § 2. Every figure here is a first proposal for the play-test.
+# ============================================================================
+
+# ---- The stability bar's term (colonial_stability_term_independence_war) ----
+# Each war we are fighting drains the bar this much a month, on top of the
+# at-war term; a war whose talks have dropped our goal drains the smaller
+# figure while the peace is signed.
+decol_iw_bar_drain_per_war = -0.5
+decol_iw_bar_drain_per_war_in_talks = -0.25
+
+# ---- The home front (decol_iw_home_front_modifier) ----
+# Its multiplier: the years of war summed over every war we are fighting, up to
+# five (the modifier's unit is a year: -2 legitimacy), so a long war, or
+# several at once, costs up to -10 legitimacy. SCOPE: country.
+decol_iw_home_front_max_years = 5
+decol_iw_home_front_mult = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_total_months }
+		value = var:decol_iw_total_months
+		divide = 12
+	}
+	max = decol_iw_home_front_max_years
+	min = 0
+}
+
+# ---- Settlers ----
+# Our people are at least this share of a territory: the war-support line
+# "Settlers to defend", and the AI's lean to fight.
+decol_iw_settler_share = 0.1
+
+# ---- Which territory rises first ----
+# The pool's pick, the collapse wave's order and the rising colonies' order: the
+# most severely unaccepted share of people first, then the largest. The share
+# (0-1) times 1,000, plus the people over 100,000,000, so people only break a
+# tie. SCOPE: state.
+decol_iw_severe_share = {
+	value = 0
+	every_scope_pop = {
+		limit = { pop_acceptance < acceptance_status_2 }
+		add = total_size
+	}
+	divide = {
+		value = state_population
+		min = 1
+	}
+	min = 0
+	max = 1
+}
+
+decol_iw_rise_order = {
+	value = decol_iw_severe_share
+	multiply = 1000
+	add = {
+		value = state_population
+		divide = 100000000
+	}
+}
+
+# ---- The negotiated release (.70.b) ----
+# Its authority cost: decol_iw_negotiation_modifier's country_authority_cost_add,
+# easing over a year. Named so the option's tooltip can print it.
+decol_iw_negotiation_authority = 100
+
+# ---- The regime crisis (.75, phase 3) ----
+# A war of independence that has run this many months, with our war support in
+# it at the red line or below for decol_iw_crisis_red_months months running.
+decol_iw_crisis_war_months = 48
+decol_iw_crisis_red_months = 12
+decol_iw_red_war_support = 25
+
+# ---- Talks (phase 3) ----
+# Months from opening talks to the accords that drop our goal.
+decol_iw_talks_months = 6
+
+# ---- Foreign arms (phase 3) ----
+# The most backers whose arms count (decol_iw_foreign_arms_modifier's
+# multiplier), and what a backer moves to the rebels' treasury each month.
+decol_iw_max_backers = 3
+decol_iw_arms_monthly = {
+	value = gdp
+	multiply = 0.0005
+	min = 1000
+	max = 100000
+}
+
+# The rebels' foreign arms modifier's multiplier: one copy's worth per backer,
+# up to decol_iw_max_backers. SCOPE: country (the rebels).
+decol_iw_backer_mult = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_backer_count }
+		value = var:decol_iw_backer_count
+	}
+	max = decol_iw_max_backers
+	min = 0
+}
+
+# ---- Displays (the Wars of Independence block) ----
+# SCOPE: country (the empire). How many records are held, 0-3.
+decol_iw_disp_wars = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_rebels_1 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = decol_iw_rebels_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = decol_iw_rebels_3 }
+		add = 1
+	}
+}
+
+# 1 while record N is held and has a capital to show, else 0: each row's
+# visibility (a record can end while a later one runs, so the rows are not
+# filled in order).
+decol_iw_disp_slot_1 = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_state_1 }
+		value = 1
+	}
+}
+
+decol_iw_disp_slot_2 = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_state_2 }
+		value = 1
+	}
+}
+
+decol_iw_disp_slot_3 = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_state_3 }
+		value = 1
+	}
+}
+
+# SCOPE: state (a war's row: the rebels' capital, gotcha #11). The figures the
+# settle writes on it each month.
+decol_iw_disp_months = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_row_months }
+		value = var:decol_iw_row_months
+	}
+}
+
+decol_iw_disp_backers = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_row_backers }
+		value = var:decol_iw_row_backers
+	}
+}
+
+# 1 while talks run, 2 once the accords have dropped our goal, else 0.
+decol_iw_disp_talks = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_row_talks }
+		value = var:decol_iw_row_talks
+	}
+}
+
+# 1 when our war support in it is at the red line or below, else 0.
+decol_iw_disp_red = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_iw_row_red }
+		value = 1
+	}
+}

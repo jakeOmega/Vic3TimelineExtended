@@ -23,6 +23,16 @@ on_revolution_start = {
 on_secession_start = {
 	on_actions = {
 		te_civil_war_on_start
+		decol_iw_secession_on_action
+	}
+}
+
+# A colony's secession is a war of independence (decolonization_war_effects.txt:
+# a record, the home front, the fighters' package and the endings). ROOT = us,
+# scope:target = the secessionists.
+decol_iw_secession_on_action = {
+	effect = {
+		decol_iw_on_secession_start = yes
 	}
 }
 

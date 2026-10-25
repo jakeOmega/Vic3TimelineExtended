@@ -40,6 +40,8 @@
 #   colonial_empire_release_state_sgui     ce_state    -> decolonization_events.402
 #   colonial_empire_free_subject_sgui      ce_capital  -> decolonization_events.403
 #   colonial_empire_dominion_subject_sgui  ce_capital  -> decolonization_events.404
+#   colonial_empire_open_talks_sgui        ce_state    -> decolonization_events.80
+#                                          (a war's row: the rebels' capital)
 # A subject travels as its capital (gotcha #11: the panel reaches a country
 # through a stored state), and script takes the capital's owner. Each is_valid
 # fails closed on a missing scope. Planned Full Decolonization, which acts on
@@ -509,5 +511,26 @@ colonial_empire_subjects_sgui = {
 			max = 40
 			custom_tooltip = je_colonial_empire_subject_more_line
 		}
+	}
+}
+
+# Open Talks beside a war of independence (the Wars of Independence block of
+# Colonial Holdings): the confirmation for the war whose rebels' capital is
+# ce_state. Greyed while talks already run or the war has not begun.
+colonial_empire_open_talks_sgui = {
+	scope = country
+	saved_scopes = { ce_state }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_state
+		decol_iw_state_can_open_talks = yes
+	}
+
+	effect = {
+		decol_iw_effect_open_talks = yes
 	}
 }

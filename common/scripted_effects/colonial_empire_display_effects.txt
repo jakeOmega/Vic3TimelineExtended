@@ -371,6 +371,7 @@ colonial_bloc_clear_state = {
 	remove_variable = colonial_bloc_others
 	remove_variable = colonial_bloc_indigenous
 	remove_variable = colonial_bloc_disparity
+	remove_variable = colonial_bloc_unincorporated
 	remove_variable = colonial_bloc_acceptance
 	clear_variable_list = colonial_bloc_members
 }
@@ -401,6 +402,7 @@ colonial_bloc_seed_here = {
 	set_variable = { name = colonial_bloc_others value = 0 }
 	set_variable = { name = colonial_bloc_indigenous value = 0 }
 	set_variable = { name = colonial_bloc_disparity value = 0 }
+	set_variable = { name = colonial_bloc_unincorporated value = 0 }
 	set_variable = { name = colonial_bloc_acceptance value = 0 }
 	owner = {
 		every_scope_state = {
@@ -426,6 +428,7 @@ colonial_bloc_add_member = {
 	set_local_variable = { name = colonial_bloc_m_colony value = colonial_territory_disp_colony }
 	set_local_variable = { name = colonial_bloc_m_indigenous value = colonial_territory_disp_indigenous }
 	set_local_variable = { name = colonial_bloc_m_disparity value = colonial_territory_disp_disparity }
+	set_local_variable = { name = colonial_bloc_m_unincorporated value = colonial_territory_disp_unincorporated }
 	scope:colonial_bloc_seed_state = {
 		add_to_variable_list = { name = colonial_bloc_members target = scope:colonial_bloc_member }
 		change_variable = { name = colonial_bloc_size add = 1 }
@@ -434,6 +437,7 @@ colonial_bloc_add_member = {
 		change_variable = { name = colonial_bloc_primary add = local_var:colonial_bloc_m_primary }
 		change_variable = { name = colonial_bloc_sol add = local_var:colonial_bloc_m_sol }
 		change_variable = { name = colonial_bloc_acceptance add = local_var:colonial_bloc_m_acceptance }
+		change_variable = { name = colonial_bloc_unincorporated add = local_var:colonial_bloc_m_unincorporated }
 		if = {
 			limit = { local_var:colonial_bloc_m_colony > 0 }
 			change_variable = { name = colonial_bloc_colonies add = 1 }

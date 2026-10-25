@@ -502,6 +502,205 @@ types colonial_empire_widget_types
 		}
 	}
 
+	### The wars of independence (Colonial Holdings): its column heads, then
+	### one row per war we are fighting (decol_iw_rebels_1..3 in
+	### decolonization_war_effects.txt: a territory's rebels after Fight, a
+	### colonial subject's independence war, a colony's secession). Fixed
+	### cells, 28 + 186 + 56 + 56 + 130 and four 4 px gaps = 472. The flag
+	### has no head; the last column is the row's Open Talks button.
+	type te_ce_war_head = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 28 20 }
+		}
+		widget = {
+			size = { 186 20 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 186
+				elide = right
+				align = left|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_war_head_name"
+				tooltip = "je_colonial_empire_war_head_name_tt"
+			}
+		}
+		widget = {
+			size = { 56 20 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 56
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_war_head_months"
+				tooltip = "je_colonial_empire_war_head_months_tt"
+			}
+		}
+		widget = {
+			size = { 56 20 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 56
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "je_colonial_empire_war_head_backers"
+				tooltip = "je_colonial_empire_war_head_backers_tt"
+			}
+		}
+		widget = {
+			size = { 130 20 }
+		}
+	}
+
+	### One war: the flag and name of the country fighting us (vanilla's
+	### tiny_flag, the country on click), months at war (red while our war
+	### support in it is at the red line), the great powers arming them, and
+	### Open Talks (decolonization_events.80 through
+	### colonial_empire_open_talks_sgui, the row's capital passed as ce_state).
+	### The button is always drawn; its text says where talks stand, and it
+	### greys with the reason while talks run or the war has not begun. The
+	### instance gates the row on its record and sets the rebels' stored capital
+	### as its datacontext (gotcha #11), on the inner container, as the
+	### territory rows do. Every figure is one the monthly settle writes on that
+	### capital (decol_iw_disp_* in decolonization_war_values.txt).
+	type te_ce_war_row = widget {
+		size = { 476 28 }
+		block "row_visible" {}
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = vcenter
+			ignoreinvisible = yes
+			block "row_context" {}
+
+			widget = {
+				size = { 28 26 }
+				parentanchor = vcenter
+
+				tiny_flag = {
+					parentanchor = center
+					datacontext = "[State.GetCountry]"
+				}
+			}
+			widget = {
+				size = { 186 26 }
+				parentanchor = vcenter
+				tooltip = "je_colonial_empire_war_name_tt"
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 186
+					fontsize_min = 12
+					elide = right
+					align = left|nobaseline
+					using = fontsize_medium
+					default_format = "#tooltippable"
+					text = "je_colonial_empire_war_name"
+				}
+			}
+			widget = {
+				size = { 56 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 56
+					elide = right
+					align = right|nobaseline
+					using = fontsize_medium
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_red'), '(CFixedPoint)1' )]"
+					text = "je_colonial_empire_war_months_bad"
+					tooltip = "je_colonial_empire_war_months_bad_tt"
+				}
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 56
+					elide = right
+					align = right|nobaseline
+					using = fontsize_medium
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_red'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_war_months"
+					tooltip = "je_colonial_empire_war_months_tt"
+				}
+			}
+			widget = {
+				size = { 56 26 }
+				parentanchor = vcenter
+				tooltip = "je_colonial_empire_war_backers_tt"
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 56
+					elide = right
+					align = right|nobaseline
+					using = fontsize_medium
+					text = "je_colonial_empire_war_backers"
+				}
+			}
+			widget = {
+				size = { 130 26 }
+				parentanchor = vcenter
+
+				button = {
+					using = default_button_action
+					size = { 130 24 }
+					parentanchor = center
+					datacontext = "[GetScriptedGui('colonial_empire_open_talks_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 126
+						elide = right
+						using = fontsize_small
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_talks'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_btn_open_talks"
+					}
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 126
+						elide = right
+						using = fontsize_small
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_talks'), '(CFixedPoint)1' )]"
+						text = "je_colonial_empire_btn_in_talks"
+					}
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 126
+						elide = right
+						using = fontsize_small
+						visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('decol_iw_disp_talks'), '(CFixedPoint)2' )]"
+						text = "je_colonial_empire_btn_accords"
+					}
+				}
+			}
+		}
+	}
+
 	### The colonial subject list (Colonial Holdings): its column heads, then
 	### one row per stored subject. Fixed cells, 28 + 142 + 34 + 40 + 68 + 58
 	### + 76 and six 4 px gaps = 470, inside the 476 the territory rows use.
@@ -1906,6 +2105,52 @@ types colonial_empire_widget_types
 				ignoreinvisible = yes
 				spacing = 2
 				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				# --- Wars of independence ------------------------------------
+				# A row per war we are fighting, while there is one: the
+				# records decol_iw_rebels_1..3 (decolonization_war_effects.txt),
+				# each row on its rebels' capital (decol_iw_state_N).
+				colonial_empire_subheader = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+					blockoverride "subheader_margin" {
+						margin_top = 0
+					}
+					blockoverride "subheader_text" {
+						text = "je_colonial_empire_holdings_wars"
+						tooltip = "je_colonial_empire_holdings_wars_tt"
+					}
+				}
+				colonial_empire_list_text = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_wars_caption"
+				}
+				te_ce_war_head = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+				}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_1'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_1').GetState]"
+					}
+				}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_2'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_2').GetState]"
+					}
+				}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_3'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_3').GetState]"
+					}
+				}
 
 				# --- Territories -------------------------------------------
 				# Every state of ours that is_decolonization_eligible_state, the
