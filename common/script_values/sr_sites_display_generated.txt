@@ -208,3 +208,982 @@ sr_disp_site_sedna = {
 	else_if = { limit = { has_global_variable = sr_site_holder_sedna has_variable = sr_ss_cap_sedna } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_sedna } value = 3 }
 }
+
+# Colony fleets and population (slices 2-3 design §§ 3, 8, 10), per world:
+#   sr_disp_site_target_<key>         2 our target, 1 we may target it now, 0 neither
+#   sr_disp_site_inbound_<key>        fleets on their way there
+#   sr_disp_site_inbound_months_<key> months until the first lands
+#   sr_disp_site_inbound_ours_<key>   1 when the first is ours
+#   sr_disp_site_pop_<key>            its people, whole
+#   sr_disp_site_prio_<key>           our priority for it: 0 Closed, 1 Low, 2 Normal, 3 High
+sr_disp_site_target_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 1 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_valles_marineris = yes } value = 1 }
+}
+sr_disp_site_inbound_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_valles_marineris } value = global_var:sr_site_inbound_valles_marineris }
+}
+sr_disp_site_inbound_months_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_valles_marineris } value = global_var:sr_site_inbound_first_valles_marineris subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_valles_marineris = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_valles_marineris ?= this } value = 1 }
+}
+sr_disp_site_pop_valles_marineris = {
+	value = sr_site_pop_value_valles_marineris
+	floor = yes
+}
+sr_disp_site_prio_valles_marineris = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_valles_marineris } value = var:sr_emig_prio_valles_marineris }
+}
+sr_disp_site_target_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 2 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_olympus_mons = yes } value = 1 }
+}
+sr_disp_site_inbound_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_olympus_mons } value = global_var:sr_site_inbound_olympus_mons }
+}
+sr_disp_site_inbound_months_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_olympus_mons } value = global_var:sr_site_inbound_first_olympus_mons subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_olympus_mons = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_olympus_mons ?= this } value = 1 }
+}
+sr_disp_site_pop_olympus_mons = {
+	value = sr_site_pop_value_olympus_mons
+	floor = yes
+}
+sr_disp_site_prio_olympus_mons = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_olympus_mons } value = var:sr_emig_prio_olympus_mons }
+}
+sr_disp_site_target_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 3 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_hellas_planitia = yes } value = 1 }
+}
+sr_disp_site_inbound_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_hellas_planitia } value = global_var:sr_site_inbound_hellas_planitia }
+}
+sr_disp_site_inbound_months_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_hellas_planitia } value = global_var:sr_site_inbound_first_hellas_planitia subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_hellas_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_hellas_planitia ?= this } value = 1 }
+}
+sr_disp_site_pop_hellas_planitia = {
+	value = sr_site_pop_value_hellas_planitia
+	floor = yes
+}
+sr_disp_site_prio_hellas_planitia = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_hellas_planitia } value = var:sr_emig_prio_hellas_planitia }
+}
+sr_disp_site_target_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 4 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_utopia_planitia = yes } value = 1 }
+}
+sr_disp_site_inbound_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_utopia_planitia } value = global_var:sr_site_inbound_utopia_planitia }
+}
+sr_disp_site_inbound_months_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_utopia_planitia } value = global_var:sr_site_inbound_first_utopia_planitia subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_utopia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_utopia_planitia ?= this } value = 1 }
+}
+sr_disp_site_pop_utopia_planitia = {
+	value = sr_site_pop_value_utopia_planitia
+	floor = yes
+}
+sr_disp_site_prio_utopia_planitia = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_utopia_planitia } value = var:sr_emig_prio_utopia_planitia }
+}
+sr_disp_site_target_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 5 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_arcadia_planitia = yes } value = 1 }
+}
+sr_disp_site_inbound_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_arcadia_planitia } value = global_var:sr_site_inbound_arcadia_planitia }
+}
+sr_disp_site_inbound_months_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_arcadia_planitia } value = global_var:sr_site_inbound_first_arcadia_planitia subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_arcadia_planitia = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_arcadia_planitia ?= this } value = 1 }
+}
+sr_disp_site_pop_arcadia_planitia = {
+	value = sr_site_pop_value_arcadia_planitia
+	floor = yes
+}
+sr_disp_site_prio_arcadia_planitia = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_arcadia_planitia } value = var:sr_emig_prio_arcadia_planitia }
+}
+sr_disp_site_target_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 6 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_ceres = yes } value = 1 }
+}
+sr_disp_site_inbound_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_ceres } value = global_var:sr_site_inbound_ceres }
+}
+sr_disp_site_inbound_months_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_ceres } value = global_var:sr_site_inbound_first_ceres subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_ceres = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_ceres ?= this } value = 1 }
+}
+sr_disp_site_pop_ceres = {
+	value = sr_site_pop_value_ceres
+	floor = yes
+}
+sr_disp_site_prio_ceres = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_ceres } value = var:sr_emig_prio_ceres }
+}
+sr_disp_site_target_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 7 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_vesta = yes } value = 1 }
+}
+sr_disp_site_inbound_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_vesta } value = global_var:sr_site_inbound_vesta }
+}
+sr_disp_site_inbound_months_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_vesta } value = global_var:sr_site_inbound_first_vesta subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_vesta = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_vesta ?= this } value = 1 }
+}
+sr_disp_site_pop_vesta = {
+	value = sr_site_pop_value_vesta
+	floor = yes
+}
+sr_disp_site_prio_vesta = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_vesta } value = var:sr_emig_prio_vesta }
+}
+sr_disp_site_target_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 8 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_psyche = yes } value = 1 }
+}
+sr_disp_site_inbound_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_psyche } value = global_var:sr_site_inbound_psyche }
+}
+sr_disp_site_inbound_months_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_psyche } value = global_var:sr_site_inbound_first_psyche subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_psyche = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_psyche ?= this } value = 1 }
+}
+sr_disp_site_pop_psyche = {
+	value = sr_site_pop_value_psyche
+	floor = yes
+}
+sr_disp_site_prio_psyche = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_psyche } value = var:sr_emig_prio_psyche }
+}
+sr_disp_site_target_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 9 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_pallas = yes } value = 1 }
+}
+sr_disp_site_inbound_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_pallas } value = global_var:sr_site_inbound_pallas }
+}
+sr_disp_site_inbound_months_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_pallas } value = global_var:sr_site_inbound_first_pallas subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_pallas = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_pallas ?= this } value = 1 }
+}
+sr_disp_site_pop_pallas = {
+	value = sr_site_pop_value_pallas
+	floor = yes
+}
+sr_disp_site_prio_pallas = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_pallas } value = var:sr_emig_prio_pallas }
+}
+sr_disp_site_target_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 10 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_hygiea = yes } value = 1 }
+}
+sr_disp_site_inbound_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_hygiea } value = global_var:sr_site_inbound_hygiea }
+}
+sr_disp_site_inbound_months_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_hygiea } value = global_var:sr_site_inbound_first_hygiea subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_hygiea = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_hygiea ?= this } value = 1 }
+}
+sr_disp_site_pop_hygiea = {
+	value = sr_site_pop_value_hygiea
+	floor = yes
+}
+sr_disp_site_prio_hygiea = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_hygiea } value = var:sr_emig_prio_hygiea }
+}
+sr_disp_site_target_io = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 11 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_io = yes } value = 1 }
+}
+sr_disp_site_inbound_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_io } value = global_var:sr_site_inbound_io }
+}
+sr_disp_site_inbound_months_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_io } value = global_var:sr_site_inbound_first_io subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_io = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_io ?= this } value = 1 }
+}
+sr_disp_site_pop_io = {
+	value = sr_site_pop_value_io
+	floor = yes
+}
+sr_disp_site_prio_io = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_io } value = var:sr_emig_prio_io }
+}
+sr_disp_site_target_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 12 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_europa = yes } value = 1 }
+}
+sr_disp_site_inbound_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_europa } value = global_var:sr_site_inbound_europa }
+}
+sr_disp_site_inbound_months_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_europa } value = global_var:sr_site_inbound_first_europa subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_europa = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_europa ?= this } value = 1 }
+}
+sr_disp_site_pop_europa = {
+	value = sr_site_pop_value_europa
+	floor = yes
+}
+sr_disp_site_prio_europa = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_europa } value = var:sr_emig_prio_europa }
+}
+sr_disp_site_target_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 13 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_ganymede = yes } value = 1 }
+}
+sr_disp_site_inbound_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_ganymede } value = global_var:sr_site_inbound_ganymede }
+}
+sr_disp_site_inbound_months_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_ganymede } value = global_var:sr_site_inbound_first_ganymede subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_ganymede = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_ganymede ?= this } value = 1 }
+}
+sr_disp_site_pop_ganymede = {
+	value = sr_site_pop_value_ganymede
+	floor = yes
+}
+sr_disp_site_prio_ganymede = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_ganymede } value = var:sr_emig_prio_ganymede }
+}
+sr_disp_site_target_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 14 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_callisto = yes } value = 1 }
+}
+sr_disp_site_inbound_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_callisto } value = global_var:sr_site_inbound_callisto }
+}
+sr_disp_site_inbound_months_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_callisto } value = global_var:sr_site_inbound_first_callisto subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_callisto = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_callisto ?= this } value = 1 }
+}
+sr_disp_site_pop_callisto = {
+	value = sr_site_pop_value_callisto
+	floor = yes
+}
+sr_disp_site_prio_callisto = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_callisto } value = var:sr_emig_prio_callisto }
+}
+sr_disp_site_target_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 15 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_himalia = yes } value = 1 }
+}
+sr_disp_site_inbound_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_himalia } value = global_var:sr_site_inbound_himalia }
+}
+sr_disp_site_inbound_months_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_himalia } value = global_var:sr_site_inbound_first_himalia subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_himalia = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_himalia ?= this } value = 1 }
+}
+sr_disp_site_pop_himalia = {
+	value = sr_site_pop_value_himalia
+	floor = yes
+}
+sr_disp_site_prio_himalia = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_himalia } value = var:sr_emig_prio_himalia }
+}
+sr_disp_site_target_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 16 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_amalthea = yes } value = 1 }
+}
+sr_disp_site_inbound_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_amalthea } value = global_var:sr_site_inbound_amalthea }
+}
+sr_disp_site_inbound_months_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_amalthea } value = global_var:sr_site_inbound_first_amalthea subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_amalthea = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_amalthea ?= this } value = 1 }
+}
+sr_disp_site_pop_amalthea = {
+	value = sr_site_pop_value_amalthea
+	floor = yes
+}
+sr_disp_site_prio_amalthea = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_amalthea } value = var:sr_emig_prio_amalthea }
+}
+sr_disp_site_target_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 17 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_venus = yes } value = 1 }
+}
+sr_disp_site_inbound_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_venus } value = global_var:sr_site_inbound_venus }
+}
+sr_disp_site_inbound_months_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_venus } value = global_var:sr_site_inbound_first_venus subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_venus = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_venus ?= this } value = 1 }
+}
+sr_disp_site_pop_venus = {
+	value = sr_site_pop_value_venus
+	floor = yes
+}
+sr_disp_site_prio_venus = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_venus } value = var:sr_emig_prio_venus }
+}
+sr_disp_site_target_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 18 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_mercury = yes } value = 1 }
+}
+sr_disp_site_inbound_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_mercury } value = global_var:sr_site_inbound_mercury }
+}
+sr_disp_site_inbound_months_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_mercury } value = global_var:sr_site_inbound_first_mercury subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_mercury = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_mercury ?= this } value = 1 }
+}
+sr_disp_site_pop_mercury = {
+	value = sr_site_pop_value_mercury
+	floor = yes
+}
+sr_disp_site_prio_mercury = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_mercury } value = var:sr_emig_prio_mercury }
+}
+sr_disp_site_target_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 19 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_titan = yes } value = 1 }
+}
+sr_disp_site_inbound_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_titan } value = global_var:sr_site_inbound_titan }
+}
+sr_disp_site_inbound_months_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_titan } value = global_var:sr_site_inbound_first_titan subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_titan = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_titan ?= this } value = 1 }
+}
+sr_disp_site_pop_titan = {
+	value = sr_site_pop_value_titan
+	floor = yes
+}
+sr_disp_site_prio_titan = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_titan } value = var:sr_emig_prio_titan }
+}
+sr_disp_site_target_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 20 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_enceladus = yes } value = 1 }
+}
+sr_disp_site_inbound_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_enceladus } value = global_var:sr_site_inbound_enceladus }
+}
+sr_disp_site_inbound_months_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_enceladus } value = global_var:sr_site_inbound_first_enceladus subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_enceladus = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_enceladus ?= this } value = 1 }
+}
+sr_disp_site_pop_enceladus = {
+	value = sr_site_pop_value_enceladus
+	floor = yes
+}
+sr_disp_site_prio_enceladus = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_enceladus } value = var:sr_emig_prio_enceladus }
+}
+sr_disp_site_target_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 21 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_rhea = yes } value = 1 }
+}
+sr_disp_site_inbound_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_rhea } value = global_var:sr_site_inbound_rhea }
+}
+sr_disp_site_inbound_months_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_rhea } value = global_var:sr_site_inbound_first_rhea subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_rhea = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_rhea ?= this } value = 1 }
+}
+sr_disp_site_pop_rhea = {
+	value = sr_site_pop_value_rhea
+	floor = yes
+}
+sr_disp_site_prio_rhea = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_rhea } value = var:sr_emig_prio_rhea }
+}
+sr_disp_site_target_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 22 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_mimas = yes } value = 1 }
+}
+sr_disp_site_inbound_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_mimas } value = global_var:sr_site_inbound_mimas }
+}
+sr_disp_site_inbound_months_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_mimas } value = global_var:sr_site_inbound_first_mimas subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_mimas = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_mimas ?= this } value = 1 }
+}
+sr_disp_site_pop_mimas = {
+	value = sr_site_pop_value_mimas
+	floor = yes
+}
+sr_disp_site_prio_mimas = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_mimas } value = var:sr_emig_prio_mimas }
+}
+sr_disp_site_target_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 23 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_iapetus = yes } value = 1 }
+}
+sr_disp_site_inbound_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_iapetus } value = global_var:sr_site_inbound_iapetus }
+}
+sr_disp_site_inbound_months_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_iapetus } value = global_var:sr_site_inbound_first_iapetus subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_iapetus = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_iapetus ?= this } value = 1 }
+}
+sr_disp_site_pop_iapetus = {
+	value = sr_site_pop_value_iapetus
+	floor = yes
+}
+sr_disp_site_prio_iapetus = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_iapetus } value = var:sr_emig_prio_iapetus }
+}
+sr_disp_site_target_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 24 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_titania = yes } value = 1 }
+}
+sr_disp_site_inbound_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_titania } value = global_var:sr_site_inbound_titania }
+}
+sr_disp_site_inbound_months_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_titania } value = global_var:sr_site_inbound_first_titania subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_titania = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_titania ?= this } value = 1 }
+}
+sr_disp_site_pop_titania = {
+	value = sr_site_pop_value_titania
+	floor = yes
+}
+sr_disp_site_prio_titania = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_titania } value = var:sr_emig_prio_titania }
+}
+sr_disp_site_target_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 25 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_oberon = yes } value = 1 }
+}
+sr_disp_site_inbound_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_oberon } value = global_var:sr_site_inbound_oberon }
+}
+sr_disp_site_inbound_months_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_oberon } value = global_var:sr_site_inbound_first_oberon subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_oberon = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_oberon ?= this } value = 1 }
+}
+sr_disp_site_pop_oberon = {
+	value = sr_site_pop_value_oberon
+	floor = yes
+}
+sr_disp_site_prio_oberon = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_oberon } value = var:sr_emig_prio_oberon }
+}
+sr_disp_site_target_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 26 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_miranda = yes } value = 1 }
+}
+sr_disp_site_inbound_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_miranda } value = global_var:sr_site_inbound_miranda }
+}
+sr_disp_site_inbound_months_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_miranda } value = global_var:sr_site_inbound_first_miranda subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_miranda = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_miranda ?= this } value = 1 }
+}
+sr_disp_site_pop_miranda = {
+	value = sr_site_pop_value_miranda
+	floor = yes
+}
+sr_disp_site_prio_miranda = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_miranda } value = var:sr_emig_prio_miranda }
+}
+sr_disp_site_target_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 27 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_ariel = yes } value = 1 }
+}
+sr_disp_site_inbound_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_ariel } value = global_var:sr_site_inbound_ariel }
+}
+sr_disp_site_inbound_months_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_ariel } value = global_var:sr_site_inbound_first_ariel subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_ariel = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_ariel ?= this } value = 1 }
+}
+sr_disp_site_pop_ariel = {
+	value = sr_site_pop_value_ariel
+	floor = yes
+}
+sr_disp_site_prio_ariel = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_ariel } value = var:sr_emig_prio_ariel }
+}
+sr_disp_site_target_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 28 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_triton = yes } value = 1 }
+}
+sr_disp_site_inbound_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_triton } value = global_var:sr_site_inbound_triton }
+}
+sr_disp_site_inbound_months_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_triton } value = global_var:sr_site_inbound_first_triton subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_triton = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_triton ?= this } value = 1 }
+}
+sr_disp_site_pop_triton = {
+	value = sr_site_pop_value_triton
+	floor = yes
+}
+sr_disp_site_prio_triton = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_triton } value = var:sr_emig_prio_triton }
+}
+sr_disp_site_target_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 29 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_proteus = yes } value = 1 }
+}
+sr_disp_site_inbound_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_proteus } value = global_var:sr_site_inbound_proteus }
+}
+sr_disp_site_inbound_months_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_proteus } value = global_var:sr_site_inbound_first_proteus subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_proteus = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_proteus ?= this } value = 1 }
+}
+sr_disp_site_pop_proteus = {
+	value = sr_site_pop_value_proteus
+	floor = yes
+}
+sr_disp_site_prio_proteus = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_proteus } value = var:sr_emig_prio_proteus }
+}
+sr_disp_site_target_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 30 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_pluto = yes } value = 1 }
+}
+sr_disp_site_inbound_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_pluto } value = global_var:sr_site_inbound_pluto }
+}
+sr_disp_site_inbound_months_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_pluto } value = global_var:sr_site_inbound_first_pluto subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_pluto = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_pluto ?= this } value = 1 }
+}
+sr_disp_site_pop_pluto = {
+	value = sr_site_pop_value_pluto
+	floor = yes
+}
+sr_disp_site_prio_pluto = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_pluto } value = var:sr_emig_prio_pluto }
+}
+sr_disp_site_target_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 31 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_eris = yes } value = 1 }
+}
+sr_disp_site_inbound_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_eris } value = global_var:sr_site_inbound_eris }
+}
+sr_disp_site_inbound_months_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_eris } value = global_var:sr_site_inbound_first_eris subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_eris = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_eris ?= this } value = 1 }
+}
+sr_disp_site_pop_eris = {
+	value = sr_site_pop_value_eris
+	floor = yes
+}
+sr_disp_site_prio_eris = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_eris } value = var:sr_emig_prio_eris }
+}
+sr_disp_site_target_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 32 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_makemake = yes } value = 1 }
+}
+sr_disp_site_inbound_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_makemake } value = global_var:sr_site_inbound_makemake }
+}
+sr_disp_site_inbound_months_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_makemake } value = global_var:sr_site_inbound_first_makemake subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_makemake = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_makemake ?= this } value = 1 }
+}
+sr_disp_site_pop_makemake = {
+	value = sr_site_pop_value_makemake
+	floor = yes
+}
+sr_disp_site_prio_makemake = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_makemake } value = var:sr_emig_prio_makemake }
+}
+sr_disp_site_target_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 33 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_haumea = yes } value = 1 }
+}
+sr_disp_site_inbound_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_haumea } value = global_var:sr_site_inbound_haumea }
+}
+sr_disp_site_inbound_months_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_haumea } value = global_var:sr_site_inbound_first_haumea subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_haumea = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_haumea ?= this } value = 1 }
+}
+sr_disp_site_pop_haumea = {
+	value = sr_site_pop_value_haumea
+	floor = yes
+}
+sr_disp_site_prio_haumea = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_haumea } value = var:sr_emig_prio_haumea }
+}
+sr_disp_site_target_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_target var:sr_cf_target = 34 } value = 2 }
+	else_if = { limit = { sr_solar_colonization_running = yes sr_cf_targetable_sedna = yes } value = 1 }
+}
+sr_disp_site_inbound_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_sedna } value = global_var:sr_site_inbound_sedna }
+}
+sr_disp_site_inbound_months_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_inbound_first_sedna } value = global_var:sr_site_inbound_first_sedna subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_site_inbound_ours_sedna = {
+	value = 0
+	if = { limit = { global_var:sr_site_inbound_by_sedna ?= this } value = 1 }
+}
+sr_disp_site_pop_sedna = {
+	value = sr_site_pop_value_sedna
+	floor = yes
+}
+sr_disp_site_prio_sedna = {
+	value = 2
+	if = { limit = { has_variable = sr_emig_prio_sedna } value = var:sr_emig_prio_sedna }
+}
+
+# Per fleet slot (Colony Fleets): 1 while it flies, the months until it lands,
+# the year it lands.
+sr_disp_cf_slot_1 = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_1_site has_variable = sr_cf_1_arrive } value = 1 }
+}
+sr_disp_cf_slot_1_months = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_1_arrive } value = var:sr_cf_1_arrive subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_cf_slot_1_year = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_1_arrive } value = var:sr_cf_1_arrive divide = 12 }
+	floor = yes
+}
+sr_disp_cf_slot_2 = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_2_site has_variable = sr_cf_2_arrive } value = 1 }
+}
+sr_disp_cf_slot_2_months = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_2_arrive } value = var:sr_cf_2_arrive subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_cf_slot_2_year = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_2_arrive } value = var:sr_cf_2_arrive divide = 12 }
+	floor = yes
+}
+sr_disp_cf_slot_3 = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_3_site has_variable = sr_cf_3_arrive } value = 1 }
+}
+sr_disp_cf_slot_3_months = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_3_arrive } value = var:sr_cf_3_arrive subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_cf_slot_3_year = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_3_arrive } value = var:sr_cf_3_arrive divide = 12 }
+	floor = yes
+}
+sr_disp_cf_slot_4 = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_4_site has_variable = sr_cf_4_arrive } value = 1 }
+}
+sr_disp_cf_slot_4_months = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_4_arrive } value = var:sr_cf_4_arrive subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_cf_slot_4_year = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_4_arrive } value = var:sr_cf_4_arrive divide = 12 }
+	floor = yes
+}
+sr_disp_cf_slot_5 = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_5_site has_variable = sr_cf_5_arrive } value = 1 }
+}
+sr_disp_cf_slot_5_months = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_5_arrive } value = var:sr_cf_5_arrive subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_cf_slot_5_year = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_5_arrive } value = var:sr_cf_5_arrive divide = 12 }
+	floor = yes
+}
+sr_disp_cf_slot_6 = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_6_site has_variable = sr_cf_6_arrive } value = 1 }
+}
+sr_disp_cf_slot_6_months = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_6_arrive } value = var:sr_cf_6_arrive subtract = te_history_month_index }
+	min = 0
+}
+sr_disp_cf_slot_6_year = {
+	value = 0
+	if = { limit = { has_variable = sr_cf_6_arrive } value = var:sr_cf_6_arrive divide = 12 }
+	floor = yes
+}

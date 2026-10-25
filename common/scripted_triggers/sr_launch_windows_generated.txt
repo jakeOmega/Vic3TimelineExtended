@@ -38,10 +38,15 @@ sr_window_open_kuiper = { sr_window_months_to_next_kuiper <= 0 }
 # sr_sites_generated.txt's sr_establish_colony_effect draws them). An earlier
 # stage's body is in play only while a world of it is released (a dead holder
 # with no heir, colony record design § 6): those stages are full otherwise.
+# Under simple and full colonies the stages are no locks (slices 2-3 design
+# § 9): a body is in play while it has an unclaimed world.
 # Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
 
 sr_window_body_in_play_mars = {
-	sr_current_colonization_stage >= 1
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 1
+	}
 	OR = {
 		NOT = { has_global_variable = sr_colony_valles_marineris }
 		NOT = { has_global_variable = sr_colony_olympus_mons }
@@ -51,27 +56,45 @@ sr_window_body_in_play_mars = {
 	}
 }
 sr_window_body_in_play_ceres = {
-	sr_current_colonization_stage >= 1
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 1
+	}
 	NOT = { has_global_variable = sr_colony_ceres }
 }
 sr_window_body_in_play_vesta = {
-	sr_current_colonization_stage >= 1
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 1
+	}
 	NOT = { has_global_variable = sr_colony_vesta }
 }
 sr_window_body_in_play_psyche = {
-	sr_current_colonization_stage >= 1
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 1
+	}
 	NOT = { has_global_variable = sr_colony_psyche }
 }
 sr_window_body_in_play_pallas = {
-	sr_current_colonization_stage >= 1
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 1
+	}
 	NOT = { has_global_variable = sr_colony_pallas }
 }
 sr_window_body_in_play_hygiea = {
-	sr_current_colonization_stage >= 1
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 1
+	}
 	NOT = { has_global_variable = sr_colony_hygiea }
 }
 sr_window_body_in_play_jupiter = {
-	sr_current_colonization_stage >= 2
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 2
+	}
 	OR = {
 		NOT = { has_global_variable = sr_colony_io }
 		NOT = { has_global_variable = sr_colony_europa }
@@ -82,11 +105,17 @@ sr_window_body_in_play_jupiter = {
 	}
 }
 sr_window_body_in_play_venus = {
-	sr_current_colonization_stage >= 2
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 2
+	}
 	NOT = { has_global_variable = sr_colony_venus }
 }
 sr_window_body_in_play_saturn = {
-	sr_current_colonization_stage >= 3
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 3
+	}
 	OR = {
 		NOT = { has_global_variable = sr_colony_titan }
 		NOT = { has_global_variable = sr_colony_enceladus }
@@ -96,7 +125,10 @@ sr_window_body_in_play_saturn = {
 	}
 }
 sr_window_body_in_play_uranus = {
-	sr_current_colonization_stage >= 4
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 4
+	}
 	OR = {
 		NOT = { has_global_variable = sr_colony_titania }
 		NOT = { has_global_variable = sr_colony_oberon }
@@ -105,14 +137,20 @@ sr_window_body_in_play_uranus = {
 	}
 }
 sr_window_body_in_play_neptune = {
-	sr_current_colonization_stage >= 4
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 4
+	}
 	OR = {
 		NOT = { has_global_variable = sr_colony_triton }
 		NOT = { has_global_variable = sr_colony_proteus }
 	}
 }
 sr_window_body_in_play_kuiper = {
-	sr_current_colonization_stage >= 5
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 5
+	}
 	OR = {
 		NOT = { has_global_variable = sr_colony_pluto }
 		NOT = { has_global_variable = sr_colony_eris }
@@ -122,6 +160,9 @@ sr_window_body_in_play_kuiper = {
 	}
 }
 sr_window_mercury_in_play = {
-	sr_current_colonization_stage >= 3
+	OR = {
+		sr_colonies_contested_enabled = yes
+		sr_current_colonization_stage >= 3
+	}
 	NOT = { has_global_variable = sr_colony_mercury }
 }

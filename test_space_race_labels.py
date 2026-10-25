@@ -30,7 +30,11 @@ import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
+# The per-world and per-slot rows (gen_solar_sites.py) pass keys into the row
+# types above, so their keys are measured against those types' cells.
+ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
+SITES_VALUES = os.path.join(REPO, "common", "script_values", "sr_sites_generated.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 VANILLA_LOC = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
 
@@ -45,6 +49,11 @@ STAGE_CEILING = 5         # sr_current_colonization_stage, "Stage: 5 of 5"
 TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting entry's goal
 WORLDS = 34               # sr_total_global_colonies, the 34 worlds; sr_disp_colonies_held is a share of them
 SECTION_HEADER_WIDTH = 400  # the text of the 520-wide section_header_button, less its arrow
+FLEET_SLOTS = 6           # sr_disp_cf_in_flight, "6 of 6": gen_solar_sites.FLEET_SLOTS
+SETTLERS_A_MONTH = 2000   # sr_disp_emig_per_month at High (sr_emig_level_batches 4 x sr_emig_batch_people 500)
+OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 810,000 before modules; seven digits
+TRANSIT_CEILING = 999     # sr_disp_cf_slot_<n>_months: the longest transit is 611 (chemical, the Kuiper Belt)
+END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
 
 
 def _read(path):
@@ -135,8 +144,15 @@ class _Script:
         self.cooldown = max(cooldowns)
 
     def goal(self, m):
-        """The goal at its largest: the base plus every stage's addition."""
+        """The goal at its largest: the base plus every stage's addition, or for
+        solar colonization the largest of the stages' goals it names (generated,
+        gen_solar_sites.STAGE_GOALS)."""
         body = _block(self.values, f"sr_{m}_goal")
+        stages = re.findall(r"value = sr_colonization_goal_stage_(\d)", body)
+        if stages:
+            generated = _read(SITES_VALUES)
+            return max(float(re.search(rf"(?m)^sr_colonization_goal_stage_{s} = \{{ value = ([\d.]+) \}}",
+                                       generated).group(1)) for s in stages)
         base = float(re.search(r"^\s*(?:#[^\n]*\n\s*)*value = ([\d.]+)", body).group(1))
         return base + sum(float(v) for v in re.findall(r"\badd = ([\d.]+)", body))
 
@@ -188,9 +204,14 @@ def _longest_figure(name):
         return FUNDING_CEILING
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
+    if re.fullmatch(r"sr_disp_cf_slot_\d_months", name):
+        return TRANSIT_CEILING
+    if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
+        return END_YEAR
     fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS,
-             "sr_disp_colonies_held": WORLDS}
+             "sr_disp_colonies_held": WORLDS, "sr_disp_cf_in_flight": FLEET_SLOTS,
+             "sr_disp_emig_per_month": SETTLERS_A_MONTH, "sr_disp_offworld_pop": OFFWORLD_PEOPLE}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -203,11 +224,13 @@ def _render(value):
     def figure(m):
         name, pct, fmt = m.group(1) or m.group(2), m.group(3), m.group(4)
         assert fmt is not None, f"a figure with no format: {m.group(0)}"
+        if fmt == "D":  # a whole number with thousands separators
+            return f"{_longest_figure(name):,.0f}"
         if pct:
             return f"{_longest_figure(name) * 100:.{int(fmt)}f}%"
         return f"{_longest_figure(name):.{int(fmt)}f}"
 
-    value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)(?:\|(%?)(\d))?\]",
+    value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)(?:\|(%?)(\d|D))?\]",
                    figure, value)
     value = value.replace("[State.GetCountry.GetName]", _longest_country_name())
     value = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", value)
@@ -219,7 +242,9 @@ def _render(value):
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
-MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note|powers_(?:more|pending|none))"
+MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
+             r"|cf_destination_\w+|cf_drive_line|cf_races_only_note|settlers_note|settlers_crews_note"
+             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none))")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -237,10 +262,12 @@ CELLS = {
         r"je_space_race_widget_progress_\w+"),
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
-        r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|orbit_\w+_label)"),
+        r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
+        r"|emig_month_label|offworld_label|orbit_\w+_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
-        r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure)"),
+        r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
+        r"|emig_month_figure|offworld_figure)"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -274,12 +301,36 @@ CELLS = {
     "a power's estimate (te_sr_power_lead_text, the Space Race tab)": (
         ("te_sr_power_lead_text", None),
         r"je_space_race_widget_power_(lead|own)_\w+"),
+    "a world's holder: our target (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_target"'),
+        r"je_space_race_widget_ss_target"),
+    "the Target button (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_target_button"'),
+        r"je_space_race_widget_ss_target_button"),
+    "the Clear button (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_target_clear"'),
+        r"je_space_race_widget_ss_target_clear"),
+    "a fleet's landing (te_sr_cf_slot_row)": (
+        ("te_sr_cf_slot_row", 'block "slot_eta"'),
+        r"je_space_race_widget_cf_slot_\d_eta"),
+    "a colony's crews under AGI (te_sr_settler_row)": (
+        ("te_sr_settler_row", 'text = "je_space_race_widget_settlers_agi"'),
+        r"je_space_race_widget_settlers_agi"),
+    "a colony's priority (te_sr_settler_row)": (
+        ("te_sr_settler_row", 'text = "je_space_race_widget_emig_prio_0"'),
+        r"je_space_race_widget_emig_prio_\d"),
+    "emigration label (te_sr_sec_settlers)": (
+        ("te_sr_sec_settlers", 'text = "je_space_race_widget_emig_label"'),
+        r"je_space_race_widget_emig_label"),
+    "emigration level (te_sr_sec_settlers)": (
+        ("te_sr_sec_settlers", 'text = "je_space_race_widget_emig_level_0"'),
+        r"je_space_race_widget_emig_level_\d"),
     "programme label (te_sr_ov_programme)": (
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
-                   r"|powers_header|orbit_header)")
+                   r"|fleets_header|settlers_header|powers_header|orbit_header)")
 
 
 def _cell(gui, type_name, marker):
@@ -305,7 +356,7 @@ class LabelBudgetTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(GUI)
-        cls.keys = _shown_keys(cls.gui)
+        cls.keys = _shown_keys(cls.gui + _read(ROWS))
 
     def _fits(self, key, width, font):
         text = _render(_loc(key))

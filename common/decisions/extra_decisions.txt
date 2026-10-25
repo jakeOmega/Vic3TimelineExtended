@@ -552,8 +552,9 @@ te_decision_found_space_program = {
 # Colonization or Deep Space: colonization never "completes" for one country
 # while worlds are left, and the Interstellar Mission carries its bools.
 # Deep Space Exploration is offered only to a country it would help: inner
-# worlds all claimed (sr_colonization_stage >= 3) and no colony held, since a
-# colony holder keeps colonizing on Solar Colonization.
+# worlds all claimed (sr_colonization_inner_open false: stage 3 or later, or
+# under simple and full no stage 1 or 2 world free) and no colony held, since
+# a colony holder keeps colonizing on Solar Colonization.
 #
 # ai_chance: the same gates as founding, against the increase in the weekly
 # bill (sr_mission_bill_increase_<mission>, space_race_values.txt).
@@ -664,11 +665,11 @@ te_decision_space_mission_solar = {
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
 		NOT = { has_global_variable = sr_all_colonies_complete }
-		# Past stage 2 a country without a colony needs Deep Space Exploration.
+		# Past stage 2 a country without a colony needs Deep Space Exploration
+		# (under simple and full, once no inner world is free).
 		OR = {
 			sr_has_space_colony = yes
-			NOT = { has_global_variable = sr_colonization_stage }
-			global_var:sr_colonization_stage <= 2
+			sr_colonization_inner_open = yes
 		}
 	}
 
@@ -724,7 +725,7 @@ te_decision_space_mission_deep_space = {
 		# Only where Solar Colonization no longer reaches: the inner worlds are
 		# all claimed and we hold no colony (solar colonization's `possible`).
 		has_global_variable = sr_colonization_stage
-		global_var:sr_colonization_stage >= 3
+		NOT = { sr_colonization_inner_open = yes }
 		sr_has_space_colony = no
 	}
 

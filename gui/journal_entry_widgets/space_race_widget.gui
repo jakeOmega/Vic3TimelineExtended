@@ -2425,14 +2425,22 @@ types space_race_widget_types
 	### One world in Solar System (te_sr_sec_solar_system): its icon and name,
 	### then who holds it: "Ours", the holder's flag (vanilla's tiny_flag: the
 	### country's name on hover, the country on click; a 48-character name would
-	### not fit the row), "Another power" (a holder with no capital to show), or
-	### "Unclaimed", each on one equality test of sr_disp_site_<key>
+	### not fit the row), "Another power" (a holder with no capital to show),
+	### "Our target" or "Unclaimed", each on one equality test of
+	### sr_disp_site_<key> and sr_disp_site_target_<key>
 	### (sr_sites_display_generated.txt). The flag reads the holder's capital,
 	### stored on the viewer by sr_sites_refresh_snapshot (sr_ss_cap_<key>),
 	### through the inner container's datacontext, as the Rivals rows do
 	### (gui_modding_guide.md gotcha #15): its visible is on the outer
-	### container, so an empty slot is never read. 24 icon + 4 + 200 name + 4 +
-	### the holder, in the 480 column.
+	### container, so an empty slot is never read. Then the colony fleets on
+	### their way there (simple and full colonies; slices 2-3 design § 8) and
+	### the Target button (§ 3: sr_colony_target_sgui, scope:site = the world's
+	### index; Clear on our target). The fleets read "count·months": how many
+	### are on their way and the months until the first lands, highlighted
+	### when the first is ours. 24 icon + 180 name + 124 holder + 64 inbound +
+	### 60 button + 4 × 4 spacing + 2 × 4 margin = 476, in the 480 column. The
+	### instances are generated (te_sr_solar_system_rows,
+	### sr_sites_generated_rows.gui).
 	type te_sr_site_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -2450,72 +2458,154 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 200 24 }
+			size = { 180 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 200
+				max_width = 180
 				align = left|nobaseline
 				using = fontsize_medium
 				elide = right
 				block "site_name" {}
 			}
 		}
-		textbox = {
+		widget = {
+			size = { 124 24 }
 			parentanchor = vcenter
-			autoresize = yes
-			max_width = 240
-			align = left|nobaseline
-			using = fontsize_medium
-			elide = right
-			default_format = "#v"
-			text = "je_space_race_widget_ss_ours"
-			block "site_ours_visible" {}
-		}
-		flowcontainer = {
-			parentanchor = vcenter
-			ignoreinvisible = yes
-			block "site_other_visible" {}
 
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#v"
+				text = "je_space_race_widget_ss_ours"
+				block "site_ours_visible" {}
+			}
 			flowcontainer = {
-				direction = horizontal
-				spacing = 4
+				parentanchor = left|vcenter
 				ignoreinvisible = yes
-				block "site_context" {}
+				block "site_other_visible" {}
 
-				widget = {
-					size = { 28 24 }
-					parentanchor = vcenter
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					ignoreinvisible = yes
+					block "site_context" {}
 
-					tiny_flag = {
-						parentanchor = center
-						datacontext = "[State.GetCountry]"
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[State.GetCountry]"
+						}
 					}
 				}
 			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				text = "je_space_race_widget_ss_unknown"
+				block "site_unknown_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#v"
+				text = "je_space_race_widget_ss_target"
+				block "site_target_mark_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#grey"
+				text = "je_space_race_widget_ss_unclaimed"
+				block "site_unclaimed_visible" {}
+			}
 		}
-		textbox = {
+		### Fleets on their way: the colonization entry's icon and their number;
+		### on hover the first's landing and whether it is ours.
+		widget = {
+			size = { 64 24 }
 			parentanchor = vcenter
-			autoresize = yes
-			max_width = 240
-			align = left|nobaseline
-			using = fontsize_medium
-			elide = right
-			text = "je_space_race_widget_ss_unknown"
-			block "site_unknown_visible" {}
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 2
+				ignoreinvisible = yes
+				parentanchor = left|vcenter
+				block "site_inbound" {}
+
+				icon = {
+					size = { 16 16 }
+					parentanchor = vcenter
+					texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+				}
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					max_width = 46
+					align = left|nobaseline
+					using = fontsize_small
+					elide = right
+					default_format = "#v"
+					block "site_inbound_ours" {}
+				}
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					max_width = 46
+					align = left|nobaseline
+					using = fontsize_small
+					elide = right
+					block "site_inbound_rival" {}
+				}
+			}
 		}
-		textbox = {
+		button = {
+			using = default_button_action
+			size = { 60 24 }
 			parentanchor = vcenter
-			autoresize = yes
-			max_width = 240
-			align = left|nobaseline
-			using = fontsize_medium
-			elide = right
-			default_format = "#grey"
-			text = "je_space_race_widget_ss_unclaimed"
-			block "site_unclaimed_visible" {}
+			block "site_target_button" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 56
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_ss_target_button"
+				block "site_target_set_visible" {}
+			}
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 56
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_ss_target_clear"
+				block "site_target_clear_visible" {}
+			}
 		}
 	}
 
@@ -2555,869 +2645,392 @@ types space_race_widget_types
 				text = "je_space_race_widget_solar_system_note"
 			}
 
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_inner"
+			### Every world under its location, generated from the site table
+			### (gui/journal_entry_widgets/sr_sites_generated_rows.gui).
+			te_sr_solar_system_rows = {}
+		}
+	}
+
+	### One fleet slot in Colony Fleets: the colonization entry's icon, the world
+	### it is bound for (sr_cf_slot_<n>_name, generated custom loc) and when it
+	### lands. 24 + 180 + 236 + 2 × 4 spacing + 2 × 4 margin = 456. Instances in
+	### te_sr_cf_slot_rows (sr_sites_generated_rows.gui), one per slot.
+	type te_sr_cf_slot_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "slot_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "slot_name" {}
+			}
+		}
+		widget = {
+			size = { 236 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 236
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "slot_eta" {}
+			}
+		}
+	}
+
+	### Colony Fleets (solar colonization; slices 2-3 design §§ 3, 8): where our
+	### next colony fleet goes (our target, or the programme's own pick), the
+	### drive it flies on, and under simple and full colonies our fleets in
+	### flight, one row per slot. Open by default; the flag is
+	### sr_panel_fleets_closed.
+	type te_sr_sec_colony_fleets = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		spacing = 2
+		visible = "[JournalEntry.IsActive]"
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_fleets_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_fleets_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_fleets_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_fleets_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_fleets_closed'))]"
+
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_target'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_cf_destination_target"
+			}
+			te_sr_note = {
+				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_target'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)0' ) )]"
+				text = "je_space_race_widget_cf_destination_auto"
+			}
+			te_sr_note = {
+				visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_target'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ) )]"
+				text = "je_space_race_widget_cf_destination_auto_contested"
+			}
+			te_sr_note = {
+				tooltip = "je_space_race_widget_cf_drive_tt"
+				text = "je_space_race_widget_cf_drive_line"
+			}
+			te_sr_value_row = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_cf_in_flight_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_cf_in_flight_figure"
+				}
+			}
+			te_sr_cf_slot_rows = {}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_cf_races_only_note"
+			}
+		}
+	}
+
+	### One colony we hold in Settlers: its icon and name, its people and room
+	### (K figures: "12.5K / 40K"), the module levels its people can crew (AGI
+	### under Artificial General Intelligence), and its priority, a button that
+	### steps it (sr_colony_priority_sgui, scope:site = the world's index).
+	### 24 + 180 + 110 + 40 + 70 + 4 × 4 spacing + 2 × 4 margin = 448.
+	### Instances in te_sr_settler_rows (sr_sites_generated_rows.gui).
+	type te_sr_settler_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "settler_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "settler_icon" {}
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "settler_name" {}
+			}
+		}
+		widget = {
+			size = { 110 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_settlers_people_tt"
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 110
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#v"
+				block "settler_people" {}
+			}
+		}
+		widget = {
+			size = { 40 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_settlers_crews_tt"
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 40
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "settler_crews" {}
+			}
+			textbox = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 40
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				text = "je_space_race_widget_settlers_agi"
+			}
+		}
+		button = {
+			using = default_button_action
+			size = { 70 24 }
+			parentanchor = vcenter
+			block "settler_priority_button" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 64
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_emig_prio_0"
+				block "prio_0_visible" {}
+			}
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 64
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_emig_prio_1"
+				block "prio_1_visible" {}
+			}
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 64
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_emig_prio_2"
+				block "prio_2_visible" {}
+			}
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 64
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_emig_prio_3"
+				block "prio_3_visible" {}
+			}
+		}
+	}
+
+	### Settlers (solar colonization, simple and full colonies; slices 2-3
+	### design § 10): the emigration programme (sr_settlers_sgui: op 0 down,
+	### op 1 up), the emigrants it sends, the nation's people off Earth and
+	### their bonus, crews, then every colony we hold. Open by default; the
+	### flag is sr_panel_settlers_closed.
+	type te_sr_sec_settlers = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		spacing = 2
+		visible = "[And( JournalEntry.IsActive, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ) )]"
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_settlers_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_settlers_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_settlers_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_settlers_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_settlers_closed'))]"
+
+			te_sr_note = {
+				text = "je_space_race_widget_settlers_note"
+			}
+
+			### The programme: op 0 down, op 1 up, beside the level, as funding is.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				ignoreinvisible = yes
+				margin = { 4 1 }
+
+				textbox = {
+					text = "je_space_race_widget_emig_label"
+					size = { 110 26 }
+					align = left|nobaseline
+					using = fontsize_medium
+					parentanchor = vcenter
+					elide = right
+				}
+
+				button_icon_minus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					enabled = "[GetScriptedGui('sr_settlers_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[GetScriptedGui('sr_settlers_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[GetScriptedGui('sr_settlers_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				}
+
+				widget = {
+					size = { 84 26 }
+					parentanchor = vcenter
+
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)0' )]"
+						text = "je_space_race_widget_emig_level_0"
+						size = { 84 26 }
+						align = center|nobaseline
+						using = fontsize_medium
+						elide = right
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)1' )]"
+						text = "je_space_race_widget_emig_level_1"
+						size = { 84 26 }
+						align = center|nobaseline
+						using = fontsize_medium
+						elide = right
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)2' )]"
+						text = "je_space_race_widget_emig_level_2"
+						size = { 84 26 }
+						align = center|nobaseline
+						using = fontsize_medium
+						elide = right
+					}
+					textbox = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_emig_level'), '(CFixedPoint)3' )]"
+						text = "je_space_race_widget_emig_level_3"
+						size = { 84 26 }
+						align = center|nobaseline
+						using = fontsize_medium
+						elide = right
+					}
+				}
+
+				button_icon_plus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					enabled = "[GetScriptedGui('sr_settlers_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[GetScriptedGui('sr_settlers_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[GetScriptedGui('sr_settlers_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				}
 			}
 
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_emig_month_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_emig_month_label"
 				}
-				blockoverride "site_name" {
-					text = "sr_site_name_venus"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_venus').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)0' )]"
+				blockoverride "row_value" {
+					text = "je_space_race_widget_emig_month_figure"
 				}
 			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_mercury.dds"
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_offworld_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_offworld_label"
 				}
-				blockoverride "site_name" {
-					text = "sr_site_name_mercury"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_mercury').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)0' )]"
+				blockoverride "row_value" {
+					text = "je_space_race_widget_offworld_figure"
 				}
 			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_mars"
-				}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_settlers_crews_note"
 			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_valles_marineris"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_valles_marineris').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)0' )]"
-				}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_agi'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_settlers_agi_note"
 			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_olympus_mons"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_olympus_mons').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)0' )]"
-				}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_settlers_empty"
 			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_hellas_planitia"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_hellas_planitia').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_utopia_planitia"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_utopia_planitia').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_arcadia_planitia"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_arcadia_planitia').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_asteroids"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_ceres"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_ceres').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_vesta"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_vesta').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_psyche"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_psyche').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_pallas"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_pallas').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_hygiea"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_hygiea').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_jupiter"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_io"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_io').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_europa"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_europa').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_ganymede"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_ganymede').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_callisto"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_callisto').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_himalia"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_himalia').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_amalthea"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_amalthea').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_saturn"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_titan"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_titan').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_enceladus"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_enceladus').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_rhea"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_rhea').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_mimas"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_mimas').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_iapetus"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_iapetus').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_uranus"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_titania"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_titania').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_oberon"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_oberon').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_miranda"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_miranda').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_ariel"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_ariel').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_neptune"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_triton"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_triton').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_proteus"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_proteus').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_ss_loc_kuiper"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_pluto"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_pluto').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_eris"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_eris').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_makemake"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_makemake').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_haumea"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_haumea').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)0' )]"
-				}
-			}
-
-			te_sr_site_row = {
-				blockoverride "site_icon" {
-					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-				}
-				blockoverride "site_name" {
-					text = "sr_site_name_sedna"
-				}
-				blockoverride "site_ours_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "site_other_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "site_context" {
-					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_sedna').GetState]"
-				}
-				blockoverride "site_unknown_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "site_unclaimed_visible" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)0' )]"
-				}
-			}
+			te_sr_settler_rows = {}
 		}
 	}
 
@@ -5561,6 +5174,8 @@ types space_race_widget_types
 		}
 
 		te_sr_sec_colonies = {}
+		te_sr_sec_colony_fleets = {}
+		te_sr_sec_settlers = {}
 		te_sr_sec_solar_system = {}
 	}
 

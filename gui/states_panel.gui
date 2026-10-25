@@ -2572,6 +2572,41 @@ types state_panel_types
 							}
 						}
 
+						### On a grid that spans markets: what this state's market
+						### sends (Exports) or receives (Imports) across the
+						### border, net, a week (te_grid_market_net).
+						te_state_tile_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_MARKET_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_MARKET"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_market_flow_disp')|K]#!"
+							}
+						}
+
+						### The receiving market's station that passes the
+						### import through (te_grid_import).
+						te_state_tile_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_import_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_PASS_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_PASS"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_import_disp')|K]#!"
+							}
+						}
+
 						te_state_tile_row = {
 							blockoverride "row_tooltip" {
 								tooltip = "TE_STATE_GRID_ROW_EFFICIENCY_TT"

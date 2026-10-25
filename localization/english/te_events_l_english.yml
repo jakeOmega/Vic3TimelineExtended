@@ -5098,6 +5098,12 @@
  space_race_events.91.d:0 "The government that founded [ROOT.GetCountry.GetCustom('sr_site_notice_heir_name')][ROOT.GetCountry.GetCustom('sr_site_notice_heir_more')] is gone, and its settlers have turned to the capital it was run from, which is ours now. The colony's specialization and its discoveries pass to us with it."
  space_race_events.91.f:0 "\"They asked who pays for the oxygen now. We told them we do.\"\n\n— Office of Extraplanetary Affairs"
  space_race_events.91.t:0 "Heirs to a Fallen Programme"
+ space_race_events.92.a:0 "Note it in the log."
+ space_race_events.92.d_diverted:0 "Our colony fleet reached [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] to find another power's settlement already standing there. Rather than turn back, its commander took the fleet on to [ROOT.GetCountry.GetCustom('sr_cf_notice_founded_name')], still unclaimed, and founded our colony there."
+ space_race_events.92.d_lost:0 "Our colony fleet reached [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] to find it, and every other world within its reach, already claimed. With no free ground to land on and no propellant to go further, the expedition is lost."
+ space_race_events.92.f:0 "\"We had the right charts and the right ships. We left too late.\"\n\n— Mission Control"
+ space_race_events.92.t_diverted:0 "Another Flag Already Flies"
+ space_race_events.92.t_lost:0 "A Fleet With Nowhere to Land"
 
 #
 # SURVEILLANCE_EVENTS
@@ -5672,6 +5678,14 @@
  te_debug_space_race.2.f:0 "\"Write it down, all of it. Somebody will want to know who owned what.\""
  te_debug_space_race.2.r:0 "Release our first colony, as a dead holder with no heir would"
  te_debug_space_race.2.t:0 "Colony Record Console"
+ te_debug_space_race.3.a:0 "Log our fleets, the fleets bound for each world and every colony's people"
+ te_debug_space_race.3.b:0 "Send a fleet now to the first world we may target, at no cost"
+ te_debug_space_race.3.c:0 "Land every fleet in flight now"
+ te_debug_space_race.3.d:0 "Console-only shortcuts for testing colony fleets and settlers under Simple and Full Colonies. The lines go to debug.log as TE_SR_FLEETS and TE_SR_SETTLERS."
+ te_debug_space_race.3.e:0 "Set emigration to High and send this month's settlers now"
+ te_debug_space_race.3.f:0 "\"Every ship in the sky, and every soul on every rock. Count them.\""
+ te_debug_space_race.3.g:0 "Fill our colonies to half their room"
+ te_debug_space_race.3.t:0 "Colony Fleets Console"
 
 #
 # TE_DEBUG_UN
