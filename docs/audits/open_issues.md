@@ -284,6 +284,15 @@ Filtered from log triage via `docs/audits/mod_known_noise.md`.
 
 **Fix:** find the country first: on an autosave from such a session, list the countries with queued construction and their states and construction (`scripts/analysis/save_country_probe.py`). If they are stateless countries, it is vanilla's estimate and moves to `docs/vanilla/vanilla_known_bugs.md`; if they are construction-market countries, it is ours.
 
+### L29. A decree's country_trigger checked with no country
+**Files:** `common/decrees/extra_decrees.txt` (any decree with a `country_trigger`; `decree_medical_outreach` so far)
+
+**Problem (2026-10-25):** now and then the engine evaluates a decree's `country_trigger` with the null country, and the trigger fails at its opening line: `untyped trigger [ Scoped object of type 'country' is not valid (Country  (4294967295)) ]`. Vanilla's decrees fail the same way in the same second. Once on 2026-10-25 (Medical Outreach, line 287); the archived observer runs logged it about as often as vanilla's decrees (as line 281, before the decree's comments grew).
+
+Filtered from log triage via `docs/audits/mod_known_noise.md`.
+
+**Fix:** none in script: the root is invalid before the trigger's first line runs. Tracked so a rise in the count shows.
+
 ---
 
 ## Vanilla 1.13.7 patch impact (2026-05-27)
