@@ -131,12 +131,13 @@ class MethodTest(unittest.TestCase):
              "goods_input_grid_power_add", "goods_output_grid_power_add")
 
     def test_base_method_carries_one_unit_of_each_line(self):
-        # level_scaled, so a station that loses staff still moves what its grid asks.
+        # unscaled: level_scaled lines still ran at the building's occupancy (2026-10-25).
         method = _code(_top_level(_read(PMS), "pm_grid_transfer_base"))
         self.assertNotIn("workforce_scaled", method)
-        scaled = _sub(method, "level_scaled")
+        unscaled = _sub(method, "unscaled")
         for line in self.LINES:
-            self.assertRegex(scaled, rf"\b{line} = 1\b", line)
+            self.assertRegex(unscaled, rf"\b{line} = 1\b", line)
+            self.assertNotRegex(_sub(method, "level_scaled"), rf"\b{line}\b", line)
 
     def test_a_built_station_is_online_whatever_its_staffing(self):
         # An empty station keeps its order and modifiers, so it runs from its first hire.
@@ -153,12 +154,14 @@ class MethodTest(unittest.TestCase):
         settle = _code(_top_level(_read(EFFECTS), "te_grid_settle_market_effect"))
         self.assertGreaterEqual(settle.count("te_grid_station_staffed = yes"), 6)
 
-    def test_level_scaled_self_check_reads_the_order_before_it_is_overwritten(self):
+    def test_staffing_self_check_reads_the_order_before_it_is_overwritten(self):
         balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
-        self.assertLess(balance.index("te_grid_level_scaled_selfcheck_effect = yes"),
+        self.assertLess(balance.index("te_grid_staffing_selfcheck_effect = yes"),
                         balance.index("name = te_grid_factor "))
-        check = _code(_top_level(_read(EFFECTS), "te_grid_level_scaled_selfcheck_effect"))
+        check = _code(_top_level(_read(EFFECTS), "te_grid_staffing_selfcheck_effect"))
+        self.assertIn("has_global_variable = te_grid_us_collect", check)
         self.assertIn("occupancy < 0.5", check)
+        self.assertIn("occupancy >= 0.9", check)
         self.assertIn("te_grid_station_staffed_throughout = yes", check)
         self.assertIn("TE_GRID empty_station", check)
         # Staffing is recorded after the checks read last month's record.
@@ -166,8 +169,31 @@ class MethodTest(unittest.TestCase):
         self.assertIn("set_variable = te_grid_staffed", flow)
         conservation = _code(_top_level(_read(EFFECTS), "te_grid_conservation_selfcheck_effect"))
         self.assertIn("te_grid_station_staffed_throughout = no", conservation)
-        self.assertIn("TE_SELF_CHECK OK grid_level_scaled", check)
-        self.assertIn("TE_SELF_CHECK BROKEN grid_level_scaled", check)
+
+    def test_unscaled_self_check_compares_groups_after_a_factor_reset(self):
+        # The first run after the switch resets every factor and arms; later runs count and judge.
+        balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
+        reset = balance.index("has_global_variable = te_grid_unscaled_armed")
+        self.assertLess(balance.index("name = te_grid_factor value = te_grid_station_factor_value"), reset)
+        self.assertIn("set_variable = { name = te_grid_factor value = 1 }", balance[reset:])
+        world = _code(_top_level(_read(EFFECTS), "te_grid_world_update_effect"))
+        self.assertLess(world.index("te_grid_unscaled_selfcheck_start_effect = yes"),
+                        world.index("te_grid_balance_region_effect = yes"))
+        self.assertLess(world.index("te_grid_balance_region_effect = yes"),
+                        world.index("te_grid_unscaled_selfcheck_end_effect = yes"))
+        start = _code(_top_level(_read(EFFECTS), "te_grid_unscaled_selfcheck_start_effect"))
+        self.assertIn("has_global_variable = te_grid_unscaled_armed", start)
+        end = _code(_top_level(_read(EFFECTS), "te_grid_unscaled_selfcheck_end_effect"))
+        self.assertIn("global_var:te_grid_us_low_n >= 3", end)
+        self.assertIn("global_var:te_grid_us_full_n >= 3", end)
+        self.assertIn("te_grid_us_share_ratio_g >= 0.75", end)
+        self.assertIn("TE_SELF_CHECK OK grid_unscaled", end)
+        self.assertIn("TE_SELF_CHECK BROKEN grid_unscaled", end)
+        self.assertIn("set_global_variable = te_grid_unscaled_armed", end)
+        values = _read(VALUES)
+        for name in ("te_grid_us_low_share_g", "te_grid_us_quarter_share_g",
+                     "te_grid_us_full_share_g", "te_grid_us_share_ratio_g"):
+            self.assertRegex(values, rf"(?m)^{name} = \{{", name)
 
 
 class FlowModifierTest(unittest.TestCase):
