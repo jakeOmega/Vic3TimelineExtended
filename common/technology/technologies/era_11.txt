@@ -12,7 +12,6 @@
 	modifier = {
 		country_institution_ministry_of_science_max_investment_add = 1
 		country_st_res_small_arms_decay_add = -0.002
-		country_grid_transmission_efficiency_add = 0.05
 	}
 
 	unlocking_technologies = {
@@ -77,7 +76,7 @@ smart_grids = {
 	modifier = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_voting_power_mult = 0.2
-		country_grid_transmission_efficiency_add = 0.05
+		country_grid_transmission_efficiency_add = 0.03
 	}
 
 	unlocking_technologies = {

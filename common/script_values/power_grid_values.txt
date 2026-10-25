@@ -88,8 +88,8 @@ te_grid_local_consumption_value = {
 }
 
 # The state's grid transmission efficiency: its owner's
-# country_grid_transmission_efficiency_add (0.6 in base_values, 1 with all
-# five technologies that raise it), between 0.1 and 1.
+# country_grid_transmission_efficiency_add (0.75 in base_values, 1 with all
+# six technologies that raise it), between 0.1 and 1.
 te_grid_state_efficiency_value = {
 	value = 1
 	if = {

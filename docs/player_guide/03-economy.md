@@ -432,12 +432,13 @@ Transmission Efficiency is the share that arrives:
 
 | Technology | Era | Efficiency |
 |---|---|---|
-| Electrical Capacitors | 4 | 60% |
-| Rural Electrification | 6 | 80% |
-| Transistors | 7 | 85% |
-| Clean Energy Technologies | 9 | 90% |
-| Smart Grids | 11 | 95% |
-| Modern Material Science | 11 | 100% |
+| Electrical Capacitors | 4 | 75% |
+| Rural Electrification | 6 | 85% |
+| Transistors | 7 | 90% |
+| Microprocessor | 8 | 92% |
+| Clean Energy Technologies | 9 | 95% |
+| Smart Grids | 11 | 98% |
+| Quantum Materials | 12 | 100% |
 
 Losses make sharing cost the senders more than the receivers gain, so an early
 grid evens out less than a late one.

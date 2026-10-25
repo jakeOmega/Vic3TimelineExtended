@@ -6,8 +6,8 @@
 	state_building_grid_transfer_station_max_level_add = 1
 	country_building_grid_transfer_station_require_subsidies_bool = yes
 	# Power grids: the share of downloaded Grid Power a station turns back into
-	# Electricity. Five technologies raise it to 1 (power_grid_values.txt).
-	country_grid_transmission_efficiency_add = 0.6
+	# Electricity. Six technologies raise it to 1 (power_grid_values.txt).
+	country_grid_transmission_efficiency_add = 0.75
 	state_building_un_headquarters_max_level_add = 1
 
 	# Homeland creation/removal base thresholds (state-level; modified by laws, techs, decrees, buildings)
