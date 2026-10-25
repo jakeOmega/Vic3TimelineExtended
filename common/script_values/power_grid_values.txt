@@ -135,8 +135,9 @@ te_grid_state_efficiency_value = {
 
 # The station's Undersea Cable Range in Sea Nodes: its building's read of
 # building_grid_undersea_cable_range_add, which holds the HVDC Undersea
-# Interconnector's 1 and any line a technology or law of the owner adds. 0
-# without a station.
+# Interconnector's 1 and the owner's technologies' (+1 each from Smart Grids
+# and Quantum Materials). 0 without a station. It counts only where the
+# station lays a cable (te_grid_has_interconnector).
 te_grid_cable_range_value = {
 	value = 0
 	every_scope_building = {
@@ -434,8 +435,8 @@ te_grid_interconnector_disp = {
 	}
 }
 
-# The station's Undersea Cable Range, for the tile: 0 in a state with no coast,
-# where it lays no cable.
+# The station's Undersea Cable Range, for the tile: 0 where it lays no cable
+# (no cable method, or a state with no coast), whatever its technologies add.
 te_grid_cable_range_disp = {
 	value = 0
 	if = {
@@ -621,6 +622,10 @@ te_grid_chk_month_g = { value = global_var:te_grid_chk_month }
 
 te_grid_chk_ordered_g = { value = global_var:te_grid_chk_ordered }
 te_grid_chk_moved_g = { value = global_var:te_grid_chk_moved }
+
+# Whether the first station on the HVDC Undersea Interconnector read its
+# Undersea Cable (1) or not (0), for TE_SELF_CHECK grid_cable_range.
+te_grid_chk_cable_g = { value = global_var:te_grid_chk_cable }
 
 # What a station moved over what it was ordered, for TE_SELF_CHECK
 # grid_level_scaled.

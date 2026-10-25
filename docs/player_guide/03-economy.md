@@ -428,17 +428,18 @@ After a change, such as a new power plant or a new station, the grid takes a
 few months to settle.
 
 Some of the power a short state receives is lost on the way. Grid
-Transmission Efficiency is the share that arrives:
+Transmission Efficiency is the share that arrives. The last three
+technologies also set how far an undersea cable reaches (below):
 
-| Technology | Era | Efficiency |
-|---|---|---|
-| Electrical Capacitors | 4 | 75% |
-| Rural Electrification | 6 | 85% |
-| Transistors | 7 | 90% |
-| Microprocessor | 8 | 92% |
-| Clean Energy Technologies | 9 | 95% |
-| Smart Grids | 11 | 98% |
-| Quantum Materials | 12 | 100% |
+| Technology | Era | Efficiency | Cable range |
+|---|---|---|---|
+| Electrical Capacitors | 4 | 75% | — |
+| Rural Electrification | 6 | 85% | — |
+| Transistors | 7 | 90% | — |
+| Microprocessor | 8 | 92% | — |
+| Clean Energy Technologies | 9 | 95% | 1 Sea Node |
+| Smart Grids | 11 | 98% | 2 Sea Nodes |
+| Quantum Materials | 12 | 100% | 3 Sea Nodes |
 
 Losses make sharing cost the senders more than the receivers gain, so an early
 grid evens out less than a late one.
@@ -459,19 +460,22 @@ Two things join grids that don't touch:
 
 - With Clean Energy Technologies, a station can switch to the HVDC Undersea
 Interconnector method. It costs Electronic Components and more engineers,
-and lays an undersea cable with an Undersea Cable Range of 1 Sea Node. Two
-stations with cables join their grids when either one's range reaches the
-other: at 1, states on the same Sea Node. Each point of range more crosses
-one more Sea Node, landing on a coast that touches both on the way; no
-technology adds range yet. The cable joins your own grids across the sea,
-such as a mainland and a colony in your market, or a partner's under a Grid
-Interconnection Agreement. The method does nothing in a state with no coast.
+and lays an Undersea Cable with an Undersea Cable Range of 1 Sea Node.
+Smart Grids and Quantum Materials add 1 each, but only to stations that lay a
+cable: a station without the method gets none. Two stations with cables join
+their grids when either one's range reaches the other: at 1, states on the
+same Sea Node. Each point of range more crosses one more Sea Node, landing
+on a coast that touches both on the way. The cable joins your own grids
+across the sea, such as a mainland and a colony in your market, or a
+partner's under a Grid Interconnection Agreement. The method does nothing in
+a state with no coast.
 The AI switches a coastal station when a grid of its own, or a partner's, is
 within its cable's reach, and back when none is.
 - The Grid Interconnection Agreement treaty article (from Intergovernmental
-Organizations, between two countries that share a border or a Sea Node) joins
-both countries' stations where they border, and their cables across the sea.
-The two can be in one market or in two.
+Organizations) joins both countries' stations where they border, and their
+cables across the sea. It can be signed between two countries that share a
+border or a Sea Node, or whose cables already reach each other, which shows
+up to a month after both are laid. The two can be in one market or in two.
 
 A grid that joins two markets sends power across the border from the market
 with more to spare to the one with less. Because Grid Power's price is fixed,

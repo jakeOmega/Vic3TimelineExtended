@@ -44,18 +44,32 @@ te_grid_station_staffed_throughout = {
 	te_grid_station_staffed = yes
 }
 
-# State scope. The state's station has an undersea cable: an Undersea Cable
-# Range of 1 or more (te_grid_cable_range_value; the HVDC Undersea
-# Interconnector gives 1), on a coast. It joins the station to another with a
-# cable across the sea (te_grid_sea_link, te_grid_cable_links_effect).
+# State scope. The state's station has an undersea cable: it lays one
+# (te_grid_lays_cable, the HVDC Undersea Interconnector's Undersea Cable) with
+# a range of 1 or more (te_grid_cable_range_value), on a coast. It joins the
+# station to another with a cable across the sea (te_grid_sea_link,
+# te_grid_cable_links_effect).
 te_grid_has_interconnector = {
 	is_coastal = yes
+	te_grid_lays_cable = yes
 	te_grid_cable_range_value >= 1
+}
+
+# State scope. The state's station lays an undersea cable: its building reads
+# building_grid_undersea_cable_bool, which a cable method gives. A technology's
+# range adds to a cable; it lays none. TE_SELF_CHECK grid_cable_range checks
+# the read.
+te_grid_lays_cable = {
+	any_scope_building = {
+		is_building_type = building_grid_transfer_station
+		modifier:building_grid_undersea_cable_bool = yes
+	}
 }
 
 # State scope. The state's station runs the HVDC Undersea Interconnector, the
 # method the AI switches (te_grid_ai_interconnectors_effect). Whether a station
-# has a cable is te_grid_has_interconnector: a technology could give one.
+# has a cable is te_grid_has_interconnector, which reads the method's
+# modifiers, not the method.
 te_grid_runs_hvdc_method = {
 	any_scope_building = {
 		is_building_type = building_grid_transfer_station

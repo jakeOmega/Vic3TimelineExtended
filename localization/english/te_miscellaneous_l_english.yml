@@ -7701,7 +7701,7 @@
  te_grid_cable_link_line:0 "[THIS.GetState.GetName] ([THIS.GetState.GetOwner.GetName])"
  te_grid_cables_intro:0 "Joined by cable to:"
  te_grid_cables_none:0 "No station with a cable of its own is in range of this one, or none we may join. Our own stations in this [concept_market_area] are on the grid already and aren't counted."
- te_grid_interconnection_border_tt:0 "Both countries share a border or a sea"
+ te_grid_interconnection_border_tt:0 "Both countries share a border or a [concept_sea_node], or their undersea cables reach each other"
  te_grid_market_exports:0 "Exports"
  te_grid_market_imports:0 "Imports"
  te_grid_market_receive_more:0 "receive more than they send"

@@ -11,8 +11,9 @@ monthly pulse is wired. Since cross-market interconnection: Grid Power has a
 fixed price, a link between two countries needs no shared market, and a
 receiving market's pass-through rides the Grid Power lines only and cancels out
 of every readback the balancing takes. Since undersea cable ranges: a cable is
-an Undersea Cable Range on a coast, which the HVDC method gives, and the build
-walks the sea far enough that either end's range joins the two.
+the HVDC method's Undersea Cable with a range on a coast, technologies only
+lengthen it, the build walks the sea far enough that either end's range joins
+the two, and cables that reach each other let the agreement be signed.
 
 Run: python3 test_power_grid.py
 """
@@ -498,19 +499,24 @@ class CrossMarketTest(unittest.TestCase):
 
 class CableRangeTest(unittest.TestCase):
     """Undersea cables: the HVDC Undersea Interconnector gives a station an
-    Undersea Cable Range of one Sea Node, a script-only building modifier any
-    technology or method could add to, and the cable link reads the range."""
+    Undersea Cable (a script-only building boolean) with a range of one Sea
+    Node, which Smart Grids and Quantum Materials lengthen, and the cable link
+    reads the two, not the method."""
 
     SGUIS = os.path.join(COMMON, "scripted_guis", "te_grid_sguis.txt")
 
-    def test_range_is_a_script_only_building_type(self):
+    def test_cable_and_range_are_script_only_building_types(self):
         body = _code(_top_level(_read(TYPES), "building_grid_undersea_cable_range_add"))
         self.assertRegex(body, r"\bscript_only = yes\b")
         self.assertRegex(body, r"\bdecimals = 0\b")
         self.assertRegex(body, r"\bpercent = no\b")
+        cable = _code(_top_level(_read(TYPES), "building_grid_undersea_cable_bool"))
+        self.assertRegex(cable, r"\bboolean = yes\b")
+        self.assertRegex(cable, r"\bscript_only = yes\b")
 
     def test_method_gives_one_and_the_ai_reckons_with_the_same(self):
         hvdc = _code(_top_level(_read(PMS), "pm_grid_hvdc_interconnector"))
+        self.assertIn("building_grid_undersea_cable_bool = yes", _sub(hvdc, "unscaled"))
         m = re.search(r"\bbuilding_grid_undersea_cable_range_add = (\d+)", _sub(hvdc, "unscaled"))
         self.assertIsNotNone(m)
         self.assertEqual(m.group(1), "1")
@@ -518,12 +524,17 @@ class CableRangeTest(unittest.TestCase):
         self.assertIsNotNone(ai)
         self.assertEqual(ai.group(1), m.group(1))
 
-    def test_a_cable_is_a_range_on_a_coast_not_the_method(self):
+    def test_a_cable_is_the_cable_and_a_range_on_a_coast_not_the_method(self):
         triggers = _code(_read(TRIGGERS))
         has = _top_level(triggers, "te_grid_has_interconnector")
         self.assertIn("is_coastal = yes", has)
+        # A technology's range lengthens a cable; only the cable modifier lays one.
+        self.assertIn("te_grid_lays_cable = yes", has)
         self.assertIn("te_grid_cable_range_value >= 1", has)
         self.assertNotIn("has_active_production_method", has)
+        lays = _top_level(triggers, "te_grid_lays_cable")
+        self.assertIn("is_building_type = building_grid_transfer_station", lays)
+        self.assertIn("modifier:building_grid_undersea_cable_bool = yes", lays)
         self.assertIn("has_active_production_method = pm_grid_hvdc_interconnector",
                       _top_level(triggers, "te_grid_runs_hvdc_method"))
         value = _code(_top_level(_read(VALUES), "te_grid_cable_range_value"))
@@ -580,6 +591,9 @@ class CableRangeTest(unittest.TestCase):
         self.assertIn("te_grid_sea_reach_clear_effect = yes", ai)
         wanted = _code(_top_level(_read(TRIGGERS), "te_grid_ai_interconnector_wanted"))
         self.assertIn("variable = te_grid_sea_reach", wanted)
+        # The walk grows with range, so a station is judged twice a year, not monthly.
+        self.assertIn("NOT = { has_variable = te_grid_ai_hvdc_checked }", ai)
+        self.assertIn("set_variable = { name = te_grid_ai_hvdc_checked value = yes days = 180 }", ai)
 
     def test_cable_links_are_rebuilt_each_run(self):
         effects = _code(_read(EFFECTS))
@@ -593,12 +607,49 @@ class CableRangeTest(unittest.TestCase):
         links = _top_level(effects, "te_grid_cable_links_effect")
         self.assertIn("is_in_same_market_area = scope:te_grid_link_from", links)
 
-    def test_self_check_reads_the_methods_range(self):
+    def test_self_check_reads_the_methods_cable_and_range(self):
         effects = _code(_read(EFFECTS))
         self.assertIn("te_grid_cable_range_selfcheck_effect = yes", _top_level(effects, "te_grid_world_update_effect"))
-        check = _read(EFFECTS)[_read(EFFECTS).index("te_grid_cable_range_selfcheck_effect = {"):]
+        check = _top_level(_read(EFFECTS), "te_grid_cable_range_selfcheck_effect")
+        self.assertIn("te_grid_lays_cable = yes", check)
+        self.assertIn("te_grid_cable_range_value >= te_grid_hvdc_method_range", check)
         self.assertIn("TE_SELF_CHECK OK grid_cable_range", check)
         self.assertIn("TE_SELF_CHECK BROKEN grid_cable_range", check)
+
+    RANGE_TECHS = {"smart_grids": 1, "quantum_materials": 1}
+
+    def test_smart_grids_and_quantum_materials_lengthen_the_cable(self):
+        found = {}
+        for name in sorted(os.listdir(TECH_DIR)):
+            text = _code(_read(os.path.join(TECH_DIR, name)))
+            for m in re.finditer(r"(?m)^(\w+) = \{", text):
+                body = _block_from(text, m.end())
+                r = re.search(r"\bbuilding_grid_undersea_cable_range_add = (\d+)", body)
+                if r:
+                    found[m.group(1)] = int(r.group(1))
+                # A technology lengthens cables; it never lays one.
+                self.assertNotIn("building_grid_undersea_cable_bool", body, m.group(1))
+        self.assertEqual(found, self.RANGE_TECHS)
+
+    def test_agreement_reads_the_cables_that_reach_each_other(self):
+        effects = _code(_read(EFFECTS))
+        run = _top_level(effects, "te_grid_world_update_effect")
+        self.assertIn("clear_variable_list = te_grid_cable_reach", run)
+        self.assertLess(run.index("clear_variable_list = te_grid_cable_reach"), run.index("while"))
+        links = _top_level(effects, "te_grid_cable_links_effect")
+        self.assertIn("te_grid_add_cable_reach_effect = yes", links)
+        # Any other country's cable in range, partner or not: that is what lets the two sign.
+        reach_pass = links[links.rindex("every_in_global_list"):]
+        self.assertIn("NOT = { owner = scope:te_grid_link_from.owner }", reach_pass)
+        self.assertIn("te_grid_cable_in_range = yes", reach_pass)
+        self.assertNotIn("te_grid_sea_link", reach_pass)
+        add = _top_level(effects, "te_grid_add_cable_reach_effect")
+        self.assertEqual(add.count("is_target_in_variable_list = { name = te_grid_cable_reach"), 2)
+        article = _code(_top_level(_read(ARTICLE), "grid_interconnection_agreement"))
+        self.assertIn("is_target_in_variable_list = { name = te_grid_cable_reach target = scope:other_country }",
+                      _sub(article, "possible"))
+        self.assertIn("is_target_in_variable_list = { name = te_grid_cable_reach target = scope:te_treaty_partner }",
+                      _sub(article, "inherent_accept_score"))
 
     def test_tile_has_a_sea_cables_row_naming_the_links(self):
         panel = _read(STATES_PANEL)
@@ -683,6 +734,7 @@ class LocalizationTest(unittest.TestCase):
                     "TE_STATE_GRID_ROW_PASS_TT", "te_grid_market_exports", "te_grid_market_imports",
                     "te_grid_market_send_more", "te_grid_market_receive_more",
                     "building_grid_undersea_cable_range_add", "building_grid_undersea_cable_range_add_desc",
+                    "building_grid_undersea_cable_bool", "building_grid_undersea_cable_bool_desc",
                     "TE_STATE_GRID_ROW_CABLES", "TE_STATE_GRID_ROW_CABLES_TT", "te_grid_cable_link_line",
                     "te_grid_cables_intro", "te_grid_cables_none"):
             self.assertIn(key, keys)
