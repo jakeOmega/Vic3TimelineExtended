@@ -47,7 +47,8 @@ treats Anarchy as electoral). Not on Oligarchy, which grants no voting power.
 Republic — the electoral rule is what produces two parties; federal Germany and
 presidential Brazil are multi-party.)* No `parent` law: a group's view of it
 comes from its party's size, not its ideology, so sponsorship
-(`would_sponsor`: a member of one of the two largest parties) and the events'
+(`would_sponsor`: a member of one of the two largest parties, once their
+groups hold 60% of the clout) and the events'
 approval effects carry it. Repealable at vanilla's
 `legitimacy_to_repeal_amendment`; the AI never repeals it.
 
@@ -74,12 +75,18 @@ so the first two to form become the two.
 
 ### Join-weight terms
 
-Appended to the end of every party's `join_weight` (after vanilla's
-multipliers, so the sizes are what they say), for the eleven vanilla parties
-through the generated INJECT and for the mod's three in their own files:
+Added to every party's `join_weight`, for the eleven vanilla parties through
+the generated INJECT and for the mod's three in their own files:
 
-- one of the two largest: `te_fptp_major_party_join_weight` = **+5** ("big tent"),
-- any other party: `te_fptp_minor_party_join_weight` = **−20**,
+- one of the two largest: `te_fptp_major_party_join_weight` = **+5** ("big
+  tent"), just ahead of vanilla's party-size chain (×2 with at most one prior
+  member for a group that isn't powerful, ×0.5 with two, ×0 with three or
+  more). After the chain it would be a flat +5 for every group once a party
+  had three members, whatever its fit; ahead of it, a party still fills up at
+  three groups and fit still picks the major. So the two majors hold at most
+  six groups between them.
+- any other party: `te_fptp_minor_party_join_weight` = **−20**, after every
+  multiplier, so it is the full size,
 
 only while the amendment is in force and two majors are marked. *(Builder's
 call: −20 is twice vanilla's −10 and the largest ordinary term vanilla uses;
@@ -90,12 +97,15 @@ The generated copies drop vanilla's `usa_two_party_system` terms.
 ### Who has it
 
 - **The USA** from 1836 (history, `GLOBAL`), with the Democrats and Whigs
-  marked as its two majors so day one matches vanilla.
+  marked as its two majors so the parties formed at game start see the terms
+  before the first monthly ranking.
 - **A once-per-country seed** on the first monthly pulse gives it to any
   country vanilla's term covered (North America, Yankee or Dixie primary
   culture, Presidential Republic or a variant, an allowed voting law): the
   Confederacy when it forms, Texas, and the USA in a save from before this
-  change. Once only, so a repeal sticks. *(Builder's call: no other country
+  change. Once only, so a repeal sticks. Never for a revolution's rebels,
+  who start with no mod variables: the winner inherits the nation's seed mark
+  instead of being handed back an amendment the nation had repealed. *(Builder's call: no other country
   starts with it; Britain is a candidate for later.)*
 - **Enactment debate** (`te_fptp_events.2`, pooled in `on_law_checkpoint_debate`
   as `extra_law_events.87` is): while an allowed voting law is enacted in a
@@ -110,6 +120,11 @@ The generated copies drop vanilla's `usa_two_party_system` terms.
   Keeping attaches it to the new law; declining adopts proportional
   representation (the variable goes). Moving to a law without elections keeps
   the variable, so the question comes back with elections.
+- **A civil war's end** (`te_fptp_repair_after_civil_war`, in
+  `te_civil_war_on_won`): the rebels hold the law they fought for from the
+  outbreak, so no law activates at the end; when the winner inherits
+  `te_fptp_var` on an allowed voting law without the amendment, the same
+  keep-or-drop event asks.
 
 `te_fptp_var` is kept by the monthly pulse: set while the amendment is in
 force, removed when the country sits on an allowed voting law without it
@@ -119,7 +134,8 @@ force, removed when the country sits on an allowed voting law without it
 
 - `TE_SELF_CHECK OK|BROKEN fptp_major_parties`, once a game, the first time a
   country with three or more active parties refreshes: exactly two parties
-  marked, none unmarked outranking the second, and the second's clout above 0.
+  marked, no unmarked party larger than either marked one (compared pairwise,
+  not through the ordering being checked), and the second's clout above 0.
   BROKEN means the ranking (`ordered_active_party` by a script value, or the
   `every_member` clout sum) failed; the fallback is ranking by `momentum`.
 - Play-test list: `docs/testing/first-past-the-post-playtest.md` (the terms in
