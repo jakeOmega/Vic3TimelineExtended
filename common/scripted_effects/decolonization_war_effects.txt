@@ -776,6 +776,8 @@ decol_iw_open_talks = {
 			NOT = { has_variable = decol_iw_talks_$N$ }
 		}
 		set_variable = { name = decol_iw_talks_$N$ value = 0 }
+		# The rebels' notice names us.
+		save_scope_as = decol_iw_talks_metropole
 		var:decol_iw_rebels_$N$ ?= { save_scope_as = decol_iw_talks_rebels }
 		scope:decol_iw_talks_rebels ?= { post_notification = decol_iw_talks_opened_notice }
 		decol_iw_write_row = { N = $N$ }

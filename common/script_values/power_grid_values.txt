@@ -131,6 +131,26 @@ te_grid_state_efficiency_value = {
 	max = 1
 }
 
+# --- Undersea cables ------------------------------------------------------------
+
+# The station's Undersea Cable Range in Sea Nodes: its building's read of
+# building_grid_undersea_cable_range_add, which holds the HVDC Undersea
+# Interconnector's 1 and the owner's technologies' (+1 each from Smart Grids
+# and Quantum Materials). 0 without a station. It counts only where the
+# station lays a cable (te_grid_has_interconnector).
+te_grid_cable_range_value = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		add = modifier:building_grid_undersea_cable_range_add
+	}
+}
+
+# The range the HVDC Undersea Interconnector gives, for the AI's switch, which
+# asks what a station would reach with the method. Equal to the method's line
+# (power_grid_pms.txt; test_power_grid.py holds the two together).
+te_grid_hvdc_method_range = 1
+
 # --- This month's flow --------------------------------------------------------
 
 # Read during te_grid_balance_region_effect, from the state variables it sets
@@ -415,6 +435,29 @@ te_grid_interconnector_disp = {
 	}
 }
 
+# The station's Undersea Cable Range, for the tile: 0 where it lays no cable
+# (no cable method, or a state with no coast), whatever its technologies add.
+te_grid_cable_range_disp = {
+	value = 0
+	if = {
+		limit = { te_grid_has_interconnector = yes }
+		value = te_grid_cable_range_value
+	}
+}
+
+# The stations the station's cable joins to its grid from other groups this
+# month (te_grid_cable_links, set by the balancing).
+te_grid_cable_count_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_cable_links }
+		every_in_list = {
+			variable = te_grid_cable_links
+			add = 1
+		}
+	}
+}
+
 # On a grid that spans markets: 1 while this state's market's stations on it
 # send more Grid Power across the border than they receive, 2 while they
 # receive more, 0 otherwise (te_grid_market_net, set by the balancing).
@@ -579,6 +622,10 @@ te_grid_chk_month_g = { value = global_var:te_grid_chk_month }
 
 te_grid_chk_ordered_g = { value = global_var:te_grid_chk_ordered }
 te_grid_chk_moved_g = { value = global_var:te_grid_chk_moved }
+
+# Whether the first station on the HVDC Undersea Interconnector read its
+# Undersea Cable (1) or not (0), for TE_SELF_CHECK grid_cable_range.
+te_grid_chk_cable_g = { value = global_var:te_grid_chk_cable }
 
 # What a station moved over what it was ordered, for TE_SELF_CHECK
 # grid_level_scaled.

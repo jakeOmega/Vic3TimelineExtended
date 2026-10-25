@@ -2493,9 +2493,10 @@ types state_panel_types
 
 			### POWER GRID (power grids phase 2): on a state with a Grid
 			### Transfer Station. Its mode (sending, receiving, idle, offline),
-			### the Electricity it moves a week, its grid's size and the owner's
-			### transmission efficiency; the tile's hover explains them and gives
-			### the grid's supply against its demand.
+			### the Electricity it moves a week, its grid's size, its undersea
+			### cable's links and the owner's transmission efficiency; the
+			### tile's hover explains them and gives the grid's supply against
+			### its demand.
 			state_panel_status_item_small = {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_tile_shown'), '(CFixedPoint)0')]"
 				tooltip = "TE_STATE_GRID_TT"
@@ -2569,6 +2570,24 @@ types state_panel_types
 							}
 							blockoverride "row_value" {
 								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!"
+							}
+						}
+
+						### On a station with an undersea cable: how many
+						### stations of other groups the cable joins to this
+						### grid (te_grid_cable_links). The hover names them.
+						te_state_tile_row = {
+							blockoverride "row_visible" {
+								visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0')]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_STATE_GRID_ROW_CABLES_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_STATE_GRID_ROW_CABLES"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_cable_count_disp')|0]#!"
 							}
 						}
 
