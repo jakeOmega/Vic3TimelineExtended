@@ -635,14 +635,6 @@
   "en": "Under the Excavation Concession, part of the find stands in [SCOPE.sCountry('gm_arch_host').GetName]'s state as its monument, and the masterpiece, half its levels, goes on display in our capital as a trophy. [SCOPE.sCountry('gm_arch_host').GetNameNoFormatting] may one day ask for it back",
   "es": "Bajo la Concesión de excavación, parte del hallazgo se alza en el estado de [SCOPE.sCountry('gm_arch_host').GetName] como su monumento, y la obra maestra, con la mitad de sus niveles, se expone en nuestra capital como trofeo. Algún día [SCOPE.sCountry('gm_arch_host').GetNameNoFormatting] podría reclamarla"
  },
- "arch_events.2.d": {
-  "en": "The glory is ours, the stones are theirs",
-  "es": "La gloria es nuestra, las piedras son suyas"
- },
- "arch_events.2.d.tt": {
-  "en": "The finds stay with [SCOPE.sCountry('gm_arch_host').GetName], where the monument stands. Our scholars gain Foreign Scholarship: +10 [concept_prestige] and +1 [concept_cultural_pull] for ten years",
-  "es": "Los hallazgos se quedan con [SCOPE.sCountry('gm_arch_host').GetName], donde se alza el monumento. Nuestros eruditos obtienen Erudición extranjera: +10 [concept_prestige|l] y +1 [concept_cultural_pull|l] durante diez años"
- },
  "arch_events.2.e": {
   "en": "They have taken the best of it",
   "es": "Se han llevado lo mejor"
@@ -650,14 +642,6 @@
  "arch_events.2.e.tt": {
   "en": "Half the levels stand in our state as its monument. [SCOPE.sCountry('gm_arch_sponsor').GetName] has shipped the other half to its capital as a trophy, which we may claim back with a Return Cultural Property treaty",
   "es": "La mitad de los niveles se alza en nuestro estado como su monumento. [SCOPE.sCountry('gm_arch_sponsor').GetName] ha enviado la otra mitad a su capital como trofeo, y podemos reclamarla con un tratado de devolución de bienes culturales"
- },
- "arch_events.2.f": {
-  "en": "It stays where it belongs",
-  "es": "Se queda donde corresponde"
- },
- "arch_events.2.f.tt": {
-  "en": "The monument stands in our state at its full levels. [SCOPE.sCountry('gm_arch_sponsor').GetName] takes home only the credit",
-  "es": "El monumento se alza en nuestro estado con todos sus niveles. [SCOPE.sCountry('gm_arch_sponsor').GetName] solo se lleva a casa el mérito"
  },
  "arch_events.2.f_concession": {
   "en": "\\\"Forty crates for the forward hold. Handle as glass. Do not stack.\\\" The harbour clerk signed the manifest without looking up, while the cranes swung the crates aboard: plaster, straw, and inside them the best of three seasons' digging, chosen piece by piece in a long afternoon of bargaining with the host's inspectors. \\\"Half each, they agreed. The half that fits in a crate is ours, and the half that doesn't is theirs. Everyone was very civilised about it.\\\"\\n\\n— a clerk at the port of embarkation",
@@ -678,6 +662,22 @@
  "arch_events.2.f_ruined": {
   "en": "\\\"We were promised a palace by the summer, and the contractor delivered.\\\" The young archaeologist turned a shard over in the light. \\\"Every floor was blown through with dynamite to reach whatever lay underneath, and every wall went out as rubble. What stood on those floors, who lived there and how, went out in the spoil carts with it. Some day somebody will sift those heaps for what we threw away, and curse every one of our names.\\\"\\n\\n— a junior member of the excavation",
   "es": "«Nos prometieron un palacio para el verano, y el contratista cumplió.» El joven arqueólogo dio la vuelta a un fragmento a la luz. «Cada suelo fue reventado con dinamita para llegar a lo que hubiera debajo, y cada muro salió convertido en escombros. Lo que había sobre esos suelos, quién vivió allí y cómo, salió con ellos en los carros de escombros. Algún día alguien cribará esos montones en busca de lo que tiramos y maldecirá todos y cada uno de nuestros nombres.»\\n\\n— un miembro subalterno de la excavación"
+ },
+ "arch_events.2.g": {
+  "en": "The glory is ours, the stones are theirs",
+  "es": "La gloria es nuestra, las piedras son suyas"
+ },
+ "arch_events.2.g.tt": {
+  "en": "The finds stay with [SCOPE.sCountry('gm_arch_host').GetName], where the monument stands. Our scholars gain Foreign Scholarship: +10 [concept_prestige] and +1 [concept_cultural_pull] for ten years",
+  "es": "Los hallazgos se quedan con [SCOPE.sCountry('gm_arch_host').GetName], donde se alza el monumento. Nuestros eruditos obtienen Erudición extranjera: +10 [concept_prestige|l] y +1 [concept_cultural_pull|l] durante diez años"
+ },
+ "arch_events.2.h": {
+  "en": "It stays where it belongs",
+  "es": "Se queda donde corresponde"
+ },
+ "arch_events.2.h.tt": {
+  "en": "The monument stands in our state at its full levels. [SCOPE.sCountry('gm_arch_sponsor').GetName] takes home only the credit",
+  "es": "El monumento se alza en nuestro estado con todos sus niveles. [SCOPE.sCountry('gm_arch_sponsor').GetName] solo se lleva a casa el mérito"
  },
  "arch_events.2.ruined.tt": {
   "en": "The dig was hasty: half the levels were lost before anyone recorded them",
