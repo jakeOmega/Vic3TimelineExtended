@@ -165,3 +165,64 @@ te_debug_space_race.2 = { # REVIEWED 2026-10-25: console-only test event (`event
 		sr_sites_global_monthly = yes
 	}
 }
+
+# Colony fleets and settlers (slices 2-3 design § 12), simple and full colonies.
+te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event te_debug_space_race.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/colony_valles_marineris.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.3.t
+	desc = te_debug_space_race.3.d
+	flavor = te_debug_space_race.3.f
+
+	# Our fleets, every world's inbound record and people: TE_SR_FLEETS and
+	# TE_SR_SETTLERS lines.
+	option = {
+		name = te_debug_space_race.3.a
+		default_option = yes
+		sr_cf_debug_log = yes
+	}
+
+	# A fleet now for the first world we may target, the bar unchanged.
+	option = {
+		name = te_debug_space_race.3.b
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_cf_has_free_slot = yes
+		}
+		sr_cf_debug_dispatch_first = yes
+	}
+
+	# Every fleet in flight lands now (the colony_fleet_arrival self-check).
+	option = {
+		name = te_debug_space_race.3.c
+		trigger = { sr_colonies_contested_enabled = yes }
+		sr_cf_debug_land_all_now = yes
+	}
+
+	# Emigration on High, and this month's settlers sent now (the
+	# emigration_batch self-check).
+	option = {
+		name = te_debug_space_race.3.e
+		trigger = { sr_colonies_contested_enabled = yes }
+		sr_emig_set_level = { LEVEL = 3 }
+		sr_emig_month = yes
+	}
+
+	# Our colonies filled to half their room (the off-world bonus).
+	option = {
+		name = te_debug_space_race.3.g
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_cf_debug_half_fill = yes
+		sr_emig_refresh_modifiers = yes
+	}
+}

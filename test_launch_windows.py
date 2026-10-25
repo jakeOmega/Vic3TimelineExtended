@@ -521,6 +521,105 @@ class DebugLineTest(unittest.TestCase):
                     self.assertIn(name, copied)
 
 
+class TransitTest(unittest.TestCase):
+    """Transit times by drive (solar colonization slices 2-3 design § 2): the chemical era's Hohmann times,
+    fusion faster with windows still mattering, the torch months to the outer planets; and the script
+    reads every table back for every month."""
+
+    # The scope's minimum-energy times (§ 5.3), in months: "about 4 months to Mercury, 5 to Venus, 8 to 9
+    # to Mars, 15 to Ceres, 2.7 years to Jupiter, 6 to Saturn, 16 to Uranus, 31 to Neptune and 45 to Pluto".
+    # Pluto is past its mean distance for most of the span, so its median transfer runs longer.
+    CHEMICAL = {"mercury": (3, 5), "venus": (4, 6), "mars": (8, 10), "ceres": (14, 17), "jupiter": (30, 36),
+                "saturn": (68, 78), "uranus": (180, 200), "neptune": (355, 380), "kuiper": (480, 660)}
+
+    def test_chemical_is_the_scope_s_hohmann_times(self):
+        chemical = {p.body.key: p.transit["chemical"][0] for p in plans()[0]}
+        chemical.update({t.body.key: t.transit["chemical"] for t in glw.plan_transit_all()})
+        for key, (lo, hi) in self.CHEMICAL.items():
+            with self.subTest(body=key):
+                self.assertGreaterEqual(chemical[key], lo)
+                self.assertLessEqual(chemical[key], hi)
+        for p in plans()[0]:
+            self.assertEqual(set(p.transit["chemical"].values()), {glw.months_of(p.hohmann_days)}, p.body.key)
+
+    def test_a_better_drive_is_never_slower_and_each_is_at_least_a_month(self):
+        keys = [d.key for d in glw.DRIVES]
+        for p in plans()[0]:
+            for off in p.transit["chemical"]:
+                months = [p.transit[k][off] for k in keys]
+                with self.subTest(body=p.body.key, offset=off):
+                    self.assertEqual(months, sorted(months, reverse=True))
+                    self.assertGreaterEqual(min(months), 1)
+        for t in glw.plan_transit_all():
+            months = [t.transit[k] for k in keys]
+            self.assertEqual(months, sorted(months, reverse=True))
+
+    def test_fusion_is_well_under_hohmann_in_a_window_and_the_torch_takes_months(self):
+        for p in plans()[0]:
+            with self.subTest(body=p.body.key):
+                window = [p.transit["fusion"][o] for o in (-1, 0, 1)]
+                self.assertLess(max(window), p.transit["chemical"][0])
+                if p.body.key in ("jupiter", "saturn", "uranus", "neptune", "kuiper"):
+                    self.assertLess(max(window), p.transit["chemical"][0] * 0.6)
+                self.assertLessEqual(max(p.transit["torch"].values()), 14)
+                self.assertLessEqual(max(p.transit["antimatter"].values()), 5)
+        # Windows still matter for fusion to the far worlds: off-window is slower.
+        for key in ("saturn", "uranus", "neptune"):
+            p = plan(key)
+            far = max(p.transit["fusion"][o] for o in p.transit["fusion"] if abs(o) >= 4)
+            self.assertGreater(far, 2 * p.transit["fusion"][0], key)
+
+    def test_the_script_reads_back_every_transit_table_every_month(self):
+        interp = interpreter()
+        _, first, last = plans()
+        for p in plans()[0]:
+            key = p.body.key
+            optima = [w.optimum_month for w in p.windows]
+            with self.subTest(body=key):
+                self.assertEqual(interp.value(f"sr_transit_chemical_{key}", first), p.transit["chemical"][0])
+                for month in range(first, last + 1, 7):
+                    nxt = next(o for o in optima if o + 1 >= month)
+                    prev = max((o for o in optima if o < nxt), default=None)
+                    nearest = prev if prev is not None and month - prev <= nxt - month else nxt
+                    for drive in glw.DRIVES[1:]:
+                        self.assertEqual(interp.value(f"sr_transit_{drive.key}_{key}", month),
+                                         p.transit[drive.key][month - nearest], (drive.key, month))
+        for t in glw.plan_transit_all():
+            for drive in glw.DRIVES:
+                self.assertEqual(interp.value(f"sr_transit_{drive.key}_{t.body.key}", first), t.transit[drive.key])
+
+    def test_the_cache_holds_each_drive_and_the_reader_picks_by_drive_level(self):
+        windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
+        cache = _block(windows, "sr_launch_window_cache_body")
+        for drive in glw.DRIVES[1:]:
+            self.assertIn(f"set_global_variable = {{ name = sr_window_transit_{drive.key}_$BODY$ "
+                          f"value = sr_transit_{drive.key}_$BODY$ }}", cache)
+        values = _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for b in list(glw.BODIES) + list(glw.TRANSIT_ONLY):
+            reader = _block(values, f"sr_transit_months_{b.key}")
+            with self.subTest(body=b.key):
+                self.assertIn(f"value = sr_transit_chemical_{b.key}", reader)
+                self.assertEqual(re.findall(r"sr_drive_level >= (\d)", reader), ["3", "2", "1"])
+        level = _block(_strip(_raw("common", "script_values", "sr_launch_window_values.txt")), "sr_drive_level")
+        for tech in ("compact_fusion_reactors", "fusion_power"):
+            self.assertIn(f"has_technology_researched = {tech}", level)
+        self.assertIn("sr_launch_has_antimatter = yes", level)
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        self.assertIn("sr_launch_has_antimatter = yes", _block(triggers, "sr_launch_has_fusion"))
+        self.assertIn("building_antimatter_facility", _block(triggers, "sr_launch_has_antimatter"))
+
+    def test_a_targeted_departure_weighs_its_own_body_s_wait(self):
+        triggers = _strip(_raw("common", "scripted_triggers", "sr_launch_window_triggers.txt"))
+        paid = _block(triggers, "sr_launch_target_departs_paid")
+        self.assertIn("sr_launch_months_cost_$BODY$ <= sr_launch_target_months_allowed_$BODY$", paid)
+        values = _strip(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+        for b in glw.BODIES:
+            allowed = _block(values, f"sr_launch_target_months_allowed_{b.key}")
+            self.assertIn(f"value = sr_window_wait_months_{b.key}", allowed)
+            cost = _block(values, f"sr_launch_target_cost_{b.key}")
+            self.assertIn(f"sr_launch_target_departs_paid = {{ BODY = {b.key} }}", cost)
+
+
 class StagedBankTest(unittest.TestCase):
     """A programme with no colony restarts its bar when it stops (its entry fails, deactivates or runs
     `immediate` again); the whole fleets it had staged are kept apart and come back (review L2)."""

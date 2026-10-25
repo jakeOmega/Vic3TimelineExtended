@@ -46,3 +46,26 @@ sr_site_notice_heir_more = {
 		localization_key = sr_site_notice_none
 	}
 }
+
+# The drive our colony fleets fly on (sr_drive_level; slices 2-3 design § 1),
+# for Colony Fleets.
+sr_cf_drive_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { sr_drive_level >= 3 }
+		localization_key = sr_cf_drive_antimatter
+	}
+	text = {
+		trigger = { sr_drive_level >= 2 }
+		localization_key = sr_cf_drive_torch
+	}
+	text = {
+		trigger = { sr_drive_level >= 1 }
+		localization_key = sr_cf_drive_fusion
+	}
+	text = {
+		localization_key = sr_cf_drive_chemical
+	}
+}

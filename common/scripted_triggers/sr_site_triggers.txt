@@ -36,3 +36,37 @@ sr_site_can_hold = {
 	is_country_alive = yes
 	NOT = { is_country_type = decentralized }
 }
+
+# ---- Colony fleets (slices 2-3 design) -------------------------------------------
+# Country scope. A fleet slot is free (six: sr_colony_fleet_effects.txt).
+sr_cf_has_free_slot = {
+	OR = {
+		NOT = { has_variable = sr_cf_1_site }
+		NOT = { has_variable = sr_cf_2_site }
+		NOT = { has_variable = sr_cf_3_site }
+		NOT = { has_variable = sr_cf_4_site }
+		NOT = { has_variable = sr_cf_5_site }
+		NOT = { has_variable = sr_cf_6_site }
+	}
+}
+
+# The inner worlds (stages 1 and 2) are not all claimed, so Solar Colonization
+# still reaches a world without Deep Space Exploration (the entry's `possible`,
+# the two mission decisions). Races only: the stage is at most 2, as before.
+# Simple and full, where the stages are no locks: an inner world is unclaimed
+# (design § 9). Any scope.
+sr_colonization_inner_open = {
+	OR = {
+		AND = {
+			NOT = { sr_colonies_contested_enabled = yes }
+			OR = {
+				NOT = { has_global_variable = sr_colonization_stage }
+				global_var:sr_colonization_stage <= 2
+			}
+		}
+		AND = {
+			sr_colonies_contested_enabled = yes
+			sr_sites_inner_unclaimed = yes
+		}
+	}
+}

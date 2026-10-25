@@ -46,6 +46,11 @@ sr_launch_windows_refresh_cache = {
 sr_launch_window_cache_body = {
 	set_global_variable = { name = sr_window_wait_$BODY$ value = sr_window_months_to_next_$BODY$ }
 	set_global_variable = { name = sr_window_cost_$BODY$ value = sr_launch_premium_$BODY$ }
+	# A colony fleet's transit leaving this month, by drive (slices 2-3 design
+	# § 2; chemical is a constant): read by sr_transit_months_<body>.
+	set_global_variable = { name = sr_window_transit_fusion_$BODY$ value = sr_transit_fusion_$BODY$ }
+	set_global_variable = { name = sr_window_transit_torch_$BODY$ value = sr_transit_torch_$BODY$ }
+	set_global_variable = { name = sr_window_transit_antimatter_$BODY$ value = sr_transit_antimatter_$BODY$ }
 	if = {
 		limit = { sr_window_open_$BODY$ = yes }
 		set_global_variable = { name = sr_window_is_open_$BODY$ value = yes }
@@ -75,7 +80,34 @@ sr_launch_windows_ensure_cache = {
 sr_launch_month = {
 	sr_launch_restore_banked_fleets = yes
 	sr_launch_windows_ensure_cache = yes
+	# A target (the Solar System list's Target button; sr_colony_fleet_effects.txt)
+	# that a rival claimed first is dropped: the programme picks for itself again.
 	if = {
+		limit = {
+			has_variable = sr_cf_target
+			NOT = { sr_cf_target_valid = yes }
+		}
+		remove_variable = sr_cf_target
+	}
+	# Simple and full colonies: a colony fleet travels and claims on arrival
+	# (slices 2-3 design § 4).
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_cf_launch_month = yes
+	}
+	# Races only with a target (the owner's D19): founded at once, at the
+	# stage's goal, when its body can be reached this month.
+	else_if = {
+		limit = { has_variable = sr_cf_target }
+		if = {
+			limit = { sr_cf_target_ready = yes }
+			sr_cf_found_target_now = yes
+		}
+		else = {
+			sr_launch_note_held = yes
+		}
+	}
+	else_if = {
 		limit = { sr_launch_fleet_ready = yes }
 		# Read before the colony effect, which may advance the stage and raise the goal.
 		set_variable = { name = sr_goal_before_colony value = sr_launch_fleet_cost }
@@ -87,19 +119,10 @@ sr_launch_month = {
 		}
 		remove_variable = sr_goal_before_colony
 	}
-	else_if = {
-		limit = {
-			has_variable = sr_progress_solar_colonization
-			var:sr_progress_solar_colonization >= sr_solar_colonization_goal
-			NOT = { has_global_variable = sr_all_colonies_complete }
-		}
+	else = {
 		# A full bar held by closed windows: the window_gate self-check's
 		# evidence that the gate has held a fleet (below). Debug only.
-		if = {
-			limit = { NOT = { has_variable = sr_launch_held_months } }
-			set_variable = { name = sr_launch_held_months value = 0 }
-		}
-		change_variable = { name = sr_launch_held_months add = 1 }
+		sr_launch_note_held = yes
 	}
 }
 

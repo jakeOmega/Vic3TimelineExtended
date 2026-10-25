@@ -74,6 +74,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/sr_sites_display_generated.txt",
     "common/customizable_localization/sr_sites_generated_custom_loc.txt",
     "common/buildings/sr_site_buildings_generated.txt",
+    "gui/journal_entry_widgets/sr_sites_generated_rows.gui",
     "common/power_bloc_principles/te_principle_slot_gates_generated.txt",
     "common/scripted_effects/te_pb_remove_principle_generated.txt",
     "common/scripted_effects/te_region_area_generated.txt",

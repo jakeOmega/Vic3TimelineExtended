@@ -1,0 +1,225 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — colony population: emigration, crews, the bonus
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md
+# (slice 2 of the scope, § 10). Simple and full colonies only.
+#
+# Each world's people are on its global record (sr_site_pop_<key>), so a
+# cession or an heir takes them along; growth runs in the world's monthly step
+# (sr_site_monthly_<key>). The holder's emigration programme (sr_emig_level:
+# 0 Off, 1 Low, 2 Steady, 3 High) takes people from the Space Program's state
+# each month and shares them by its priorities (sr_emig_prio_<key>: 0 Closed,
+# 1 Low, unset Normal, 3 High) times each colony's free room. The per-world
+# parts are generated (sr_emig_distribute, sr_emig_weight_<key>,
+# sr_emig_step_prio_from_scope); this file holds the rest.
+# ============================================================================
+
+# ---- The month's emigrants (the entry's pulse) --------------------------------
+# Country scope. Batches of sr_emig_batch_people (half middle strata, half
+# lower; kill_population_in_state takes a constant), as many as the level
+# sends and the open colonies have room for. People taken from Earth and not
+# booked as known kills are read by the Demographics census as emigrants,
+# which is what they are.
+sr_emig_month = {
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_emig_batches_now >= 1
+			sr_has_space_program = yes
+		}
+		set_local_variable = { name = sr_emig_batches value = sr_emig_batches_now }
+		set_local_variable = { name = sr_emig_weight_sum value = sr_emig_weight_total }
+		random_scope_building = {
+			limit = { is_building_type = building_space_program }
+			state = { save_scope_as = sr_emig_state }
+		}
+		if = {
+			limit = { exists = scope:sr_emig_state }
+			set_local_variable = {
+				name = sr_emig_sent
+				value = {
+					value = local_var:sr_emig_batches
+					multiply = sr_emig_batch_people
+				}
+			}
+			scope:sr_emig_state = {
+				set_global_variable = { name = sr_emig_log_before_now value = state_population }
+				while = {
+					count = local_var:sr_emig_batches
+					kill_population_in_state = { value = 250 strata = middle }
+					kill_population_in_state = { value = 250 strata = lower }
+				}
+				set_global_variable = { name = sr_emig_log_after_now value = state_population }
+			}
+			sr_emig_distribute = yes
+			set_variable = { name = sr_emig_last_sent value = local_var:sr_emig_sent }
+			sr_emig_self_check = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_emig_last_sent }
+		remove_variable = sr_emig_last_sent
+	}
+}
+
+# ---- Self-check: emigration_batch (design § 12) -------------------------------------
+# Country scope, after the first month's batches: OK when the Space Program's
+# state lost at least 90% of what was sent (both read in the same run, so a
+# month's births can't hide it); BROKEN otherwise, with the numbers: the
+# filter removed less, or state_population reads the change only later.
+sr_emig_self_check = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_emig_batch_checked } }
+		set_global_variable = { name = sr_emig_batch_checked value = yes }
+		set_global_variable = { name = sr_emig_log_sent_now value = local_var:sr_emig_sent }
+		if = {
+			limit = { sr_emig_log_fell >= sr_emig_log_fell_needed }
+			debug_log = "TE_SELF_CHECK OK emigration_batch before=[GetGlobalVariable('sr_emig_log_before_now').GetValue|0] after=[GetGlobalVariable('sr_emig_log_after_now').GetValue|0] sent=[GetGlobalVariable('sr_emig_log_sent_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the Space Program's state lost the batches it sent) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN emigration_batch before=[GetGlobalVariable('sr_emig_log_before_now').GetValue|0] after=[GetGlobalVariable('sr_emig_log_after_now').GetValue|0] sent=[GetGlobalVariable('sr_emig_log_sent_now').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state lost less than 90% of the emigrants sent: the strata filter removed fewer, or state_population reads the change later; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# ---- The programme and the priorities --------------------------------------------------
+# Country scope. LEVEL 0-3; the entry's modifiers follow at once.
+sr_emig_set_level = {
+	set_variable = { name = sr_emig_level value = $LEVEL$ }
+	if = {
+		limit = { var:sr_emig_level <= 0 }
+		remove_variable = sr_emig_level
+	}
+	sr_emig_refresh_modifiers = yes
+}
+
+# Country scope, the Settlers section's - and + (scope:op 0 and 1).
+sr_emig_step_level = {
+	if = {
+		limit = { scope:op = 0 }
+		if = {
+			limit = { sr_emig_level_value <= 1 }
+			sr_emig_set_level = { LEVEL = 0 }
+		}
+		else_if = {
+			limit = { sr_emig_level_value = 2 }
+			sr_emig_set_level = { LEVEL = 1 }
+		}
+		else = {
+			sr_emig_set_level = { LEVEL = 2 }
+		}
+	}
+	else = {
+		if = {
+			limit = { sr_emig_level_value = 0 }
+			sr_emig_set_level = { LEVEL = 1 }
+		}
+		else_if = {
+			limit = { sr_emig_level_value = 1 }
+			sr_emig_set_level = { LEVEL = 2 }
+		}
+		else = {
+			sr_emig_set_level = { LEVEL = 3 }
+		}
+	}
+}
+
+# Country scope. A colony's priority steps Normal -> High -> Closed -> Low ->
+# Normal (the row's button; sr_emig_step_prio_from_scope).
+sr_emig_step_prio = {
+	if = {
+		limit = { NOT = { has_variable = sr_emig_prio_$KEY$ } }
+		set_variable = { name = sr_emig_prio_$KEY$ value = 3 }
+	}
+	else_if = {
+		limit = { var:sr_emig_prio_$KEY$ = 3 }
+		set_variable = { name = sr_emig_prio_$KEY$ value = 0 }
+	}
+	else_if = {
+		limit = { var:sr_emig_prio_$KEY$ = 0 }
+		set_variable = { name = sr_emig_prio_$KEY$ value = 1 }
+	}
+	else = {
+		remove_variable = sr_emig_prio_$KEY$
+	}
+}
+
+# ---- The entry's two modifiers (design § 10.3, § 10.5) ------------------------------
+# Country scope. Both on the solar colonization entry at a multiplier, each
+# removed first (a same-name add_modifier stacks), re-applied here only: from
+# the entry's pulse monthly and when the programme's level changes. The
+# multipliers read the country through `owner` (they resolve in the entry's
+# scope, je_multiplier_scope_audit).
+sr_emig_refresh_modifiers = {
+	je:je_space_race_solar_colonization ?= {
+		if = {
+			limit = { has_modifier = sr_emigration_programme }
+			remove_modifier = sr_emigration_programme
+		}
+		if = {
+			limit = { has_modifier = sr_offworld_population }
+			remove_modifier = sr_offworld_population
+		}
+	}
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_emig_level_value >= 1
+		}
+		je:je_space_race_solar_colonization ?= {
+			add_modifier = { name = sr_emigration_programme multiplier = sr_emig_upkeep_units }
+		}
+	}
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_offworld_pop_total >= sr_offworld_bonus_minimum
+		}
+		je:je_space_race_solar_colonization ?= {
+			add_modifier = { name = sr_offworld_population multiplier = sr_offworld_bonus_units }
+		}
+	}
+}
+
+# ---- AI (design § 10.6) ---------------------------------------------------------------------
+# Country scope, from the entry's pulse; once a year. Off in default, without
+# a Space Program or with no open colony that has room for a batch; Steady
+# for a top-three space power with a positive weekly income; Low otherwise.
+# Priorities stay Normal: the weights by free room fill the emptiest first.
+sr_emig_ai_review = {
+	if = {
+		limit = {
+			is_ai = yes
+			sr_colonies_contested_enabled = yes
+			NOT = { has_variable = sr_emig_ai_reviewed }
+		}
+		set_variable = { name = sr_emig_ai_reviewed value = yes days = 360 }
+		if = {
+			limit = {
+				OR = {
+					in_default = yes
+					NOT = { sr_has_space_program = yes }
+					sr_emig_open_room_total < sr_emig_batch_people
+				}
+			}
+			if = {
+				limit = { sr_emig_level_value >= 1 }
+				sr_emig_set_level = { LEVEL = 0 }
+			}
+		}
+		else_if = {
+			limit = {
+				sr_ai_should_participate = yes
+				net_fixed_income > 0
+			}
+			if = {
+				limit = { NOT = { sr_emig_level_value = 2 } }
+				sr_emig_set_level = { LEVEL = 2 }
+			}
+		}
+		else_if = {
+			limit = { NOT = { sr_emig_level_value = 1 } }
+			sr_emig_set_level = { LEVEL = 1 }
+		}
+	}
+}

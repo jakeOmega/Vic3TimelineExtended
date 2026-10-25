@@ -220,7 +220,18 @@ sr_sites_global_monthly = {
 		set_global_variable = { name = sr_sites_initialized value = yes }
 		set_global_variable = { name = sr_sites_grace value = yes days = 45 }
 	}
+	# Colony fleets land first (simple and full; sr_colony_fleet_effects.txt), so
+	# the world's step syncs the colonies they founded; then the inbound record
+	# and the stage follow the month's landings.
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_cf_global_arrivals = yes
+	}
 	sr_sites_monthly = yes
+	if = {
+		limit = { sr_colonies_contested_enabled = yes }
+		sr_cf_global_after = yes
+	}
 	sr_sites_refresh_players = yes
 }
 
