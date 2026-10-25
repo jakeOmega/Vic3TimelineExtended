@@ -57,8 +57,9 @@ te_demog_census_off_desc = {
 # family does nothing, since the census carries it through its ages and who works.
 # So under Full the replaced family's name ends in a tag saying so, and the
 # women's-work family's whole name and description change to what the census reads
-# it as, "Women's Work (Workforce Ratio)": the reading in force comes first (owner,
-# 2026-10-25). Under Display only and Disabled the lines apply as written and both
+# it as, "Women's Work": the reading in force comes first (owner, 2026-10-25; it read
+# "Women's Work (Workforce Ratio)" until the women's-rights laws' Women's Work Outside
+# the Home line went). Under Display only and Disabled the lines apply as written and both
 # read plain Workforce Ratio. A state the census hasn't stepped yet keeps the flat
 # lines for up to a year; the names are per country. A release's effects gate reads
 # always = no, so the Full names never show there.

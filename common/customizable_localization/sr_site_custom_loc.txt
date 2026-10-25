@@ -1,0 +1,48 @@
+﻿# The notices' "and other worlds besides" (space_race_events.90 / .91): the
+# first world each way is named (sr_sites_generated_custom_loc.txt), any more
+# are only noted. Each branch has_variable-guarded.
+
+sr_site_notice_gained_more = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_gained_more
+		}
+		localization_key = sr_site_notice_more_text
+	}
+	text = {
+		localization_key = sr_site_notice_none
+	}
+}
+
+sr_site_notice_lost_more = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_lost_more
+		}
+		localization_key = sr_site_notice_more_text
+	}
+	text = {
+		localization_key = sr_site_notice_none
+	}
+}
+
+sr_site_notice_heir_more = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = sr_site_notice_heir_more
+		}
+		localization_key = sr_site_notice_more_text
+	}
+	text = {
+		localization_key = sr_site_notice_none
+	}
+}

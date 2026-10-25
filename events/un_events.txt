@@ -4427,7 +4427,7 @@ un_events.41 = {
 	duration = 3
 
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_docket_topic_open_asat = yes
 		has_technology_researched = space_exploration

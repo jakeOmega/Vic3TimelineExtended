@@ -468,6 +468,11 @@ profile mixes three kinds of migrant:
 | **Families** | parents with children; few over 60 | about half | cheaper transport (`paddle_steamer`, `railways`, `combustion_engine` and the mod's aviation techs); women's rights at the origin, since women can move on their own account; the time a migration has been running (chain migration: the men send for their families) |
 | **Refugees** | everyone | about half | war, devastation, turmoil and Violent Hostility at the origin |
 
+*Changed 2026-10-25 (owner):* women's rights no longer raise the families' weight (women who can move on their own
+account move as labour migrants, not as families), and the labour migrants' women's share reads the census's own count
+of women among the destination's workers in place of the women's-rights laws' share (`docs/systems/mod_systems.md`
+§ The census, Flows).
+
 **Labour migrants' women's share follows the destination's jobs.**
 - Mines, logging, plantations, construction, railways and the army draw men.
 - Textiles, light industry and services draw women, as far as the destination's women's-rights laws let women work

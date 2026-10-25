@@ -25916,8 +25916,8 @@
   "es": "$state_working_adult_ratio_add_desc$. Donde el censo demográfico fija la población activa de un estado, este efecto se interpreta como trabajo de las mujeres."
  },
  "te_demog_wf_womens_full": {
-  "en": "Women’s Work #grey ($state_working_adult_ratio_add$)#!",
-  "es": "Trabajo de las mujeres #grey ($state_working_adult_ratio_add$)#!"
+  "en": "Women’s Work",
+  "es": "Trabajo de las mujeres"
  },
  "te_demog_wk_bill": {
   "en": "Pension Bill",

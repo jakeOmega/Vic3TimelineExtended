@@ -1472,6 +1472,45 @@ types treaty_draft_panel_types
 					}
 				}
 
+				### BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
+				vbox = {
+					visible = "[And(ArticleDraft.RequiresInput('building_type'), Not(ArticleDraft.HasType('acquire_monopoly_for_company')))]"
+					layoutpolicy_horizontal = preferred
+					margin = { 0 5 }
+					spacing = 5
+
+					button = {
+						tooltip = "ARTICLE_DRAFT_CLICK_TO_CHANGE"
+						enabled = "[ArticleDraft.CanBeModified]"
+						size = { 145 30 }
+						datacontext = "[ArticleDraft.GetBuildingType]"
+						using = default_button
+
+						block "right_click_menu_onclick" {
+							onclick = "[RightClickMenuManager.Close]"
+							onclick = "[RightClickMenuManager.ToggleArticleDraftInput(TreatyDraft.Self, ArticleDraft.Self, Country.Self, PdxGuiWidget.AccessSelf, 'article_input_right_click_menu_left')]"
+						}
+
+						textbox = {
+							text = "[BuildingType.GetNameNoFormatting]"
+							parentanchor = vcenter
+							autoresize = yes
+							align = nobaseline
+							max_width = 145
+							margin_left = 30
+							using = elide_fontsize_min
+						}
+
+						button = {
+							texture = "[BuildingType.GetIcon]"
+							parentanchor = vcenter
+							size = { 32 32 }
+							position = { -5 0 }
+							alwaystransparent = yes
+						}
+					}
+				}
+
 				### LAW TYPE INPUT GENERIC
 				button = {
 					visible = "[ArticleDraft.RequiresInput('law_type')]"

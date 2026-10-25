@@ -26164,8 +26164,8 @@
   "de": "$state_working_adult_ratio_add_desc$. Wo die demografische Volkszählung die Arbeitskräfte eines Staates festlegt, liest sie diesen Effekt stattdessen als Frauenarbeit."
  },
  "te_demog_wf_womens_full": {
-  "en": "Women’s Work #grey ($state_working_adult_ratio_add$)#!",
-  "de": "Frauenarbeit #grey ($state_working_adult_ratio_add$)#!"
+  "en": "Women’s Work",
+  "de": "Frauenarbeit"
  },
  "te_demog_wk_bill": {
   "en": "Pension Bill",

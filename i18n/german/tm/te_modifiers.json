@@ -5083,14 +5083,6 @@
   "en": "How far cheaper, faster travel lets migrants bring their families, so more of the people moving to or from a state go as whole families rather than as young workers alone. Used by the census on the Demographics tab.[GetPlayer.GetCustom('te_demog_census_off_desc')]",
   "de": "Wie weit billigere, schnellere Reisen es Migranten ermöglichen, ihre Familien mitzubringen, sodass mehr der Menschen, die in einen Staat oder aus ihm ziehen, als ganze Familien statt nur als junge Arbeitskräfte reisen. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
  },
- "state_female_work_share_add": {
-  "en": "Women’s Work Outside the Home[GetPlayer.GetCustom('te_demog_census_off_name')]",
-  "de": "Erwerbsarbeit von Frauen außer Haus[GetPlayer.GetCustom('te_demog_census_off_name')]"
- },
- "state_female_work_share_add_desc": {
-  "en": "Women's share of the people who work outside the home, on top of the tenth they hold under any law. It sets how many of the workers moving to or from a state are women, how often migrants move as families, since women with rights can move on their own account, and how far women's paid work delays marriage. Under the Demographics rule's Full setting the census shares deaths at work between women and men by its own count of the women at work; otherwise by this share. Used by the census on the Demographics tab.[GetPlayer.GetCustom('te_demog_census_off_desc')]",
-  "de": "Der Anteil der Frauen an den Menschen, die außer Haus arbeiten, zusätzlich zu dem Zehntel, das sie unter jedem Gesetz innehaben. Er bestimmt, wie viele der Arbeitskräfte, die in einen Staat oder aus ihm ziehen, Frauen sind, wie oft Migranten als Familien ziehen, da Frauen mit Rechten auf eigene Faust umziehen können, und wie stark die bezahlte Arbeit von Frauen die Heirat hinauszögert. Bei der Einstellung „Voll“ der Demografie-Regel verteilt die Volkszählung die Todesfälle bei der Arbeit nach ihrer eigenen Zählung der arbeitenden Frauen auf Frauen und Männer; andernfalls nach diesem Anteil. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
- },
  "state_fertility_means_add": {
   "en": "Fertility Control[GetPlayer.GetCustom('te_demog_census_off_name')]",
   "de": "Geburtenkontrolle[GetPlayer.GetCustom('te_demog_census_off_name')]"

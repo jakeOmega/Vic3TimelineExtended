@@ -22,7 +22,7 @@
 # ============================================================================
 te_decision_debris_removal = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = reusable_rocketry
 		sr_has_space_program = yes
 		te_debris_best_removal_off = yes

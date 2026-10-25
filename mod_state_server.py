@@ -9614,6 +9614,7 @@ POST_LOAD_REGENERATORS = [
     ("gen_covert_tech_theft",         "scripts.generators.gen_covert_tech_theft"),
     ("gen_seabed_basins",             "scripts.generators.gen_seabed_basins"),
     ("gen_launch_windows",            "scripts.generators.gen_launch_windows"),
+    ("gen_solar_sites",               "scripts.generators.gen_solar_sites"),
     ("organize_loc",                  "organize_loc"),
     ("gen_event_inventory",           "gen_event_inventory"),
     # Keep LAST: prepend UTF-8 BOM to any mod .txt the generators above (or a
