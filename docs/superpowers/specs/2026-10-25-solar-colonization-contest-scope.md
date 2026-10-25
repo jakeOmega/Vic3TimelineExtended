@@ -578,19 +578,25 @@ jointly by a power bloc; Resort Colony tourism drawing on the colonies held.
 
 ## 11. Open calls
 
-Answered calls are in § Decisions. Still open:
+Fourth round (owner, 2026-10-25), now settled:
 
-- **D2** Interplanetary Trade Networks: replace it, or grant it to every colony
-  holder.
-- **D18** A site's other specialization: buildable later as a second
-  specialization module, or excluded by the founding choice.
-- **D19** Races only: keep the random draw from the stage, or let colony fleets
-  pick their site there too (with instant founding).
-- **F9** How Space Command chooses what it builds: a production method per role,
-  or orders from the panel.
-- **F10** Do warships screen carriers and tenders in battle, as vanilla's naval
-  screening does, or are losses spread by strength?
-- **F11** Tenders: a class of their own that pools supply and propellant, or no
-  pooling (the strict minimum).
-- **M1** The site quality grades and the room scale, checked against the
-  Deep-Sea Mine's output per construction point.
+- **D2** Either way; the networks were a capstone for a race that ended, and
+  colonies that are fought over, destroyed and refounded need one less. Slices 0
+  and 1 keep today's grant (every holder once all 34 are claimed, including one
+  that gains a colony by cession later); replacing it can come with a later
+  slice.
+- **D18** Specialization slots: a site has a fixed budget of specialization
+  levels (four, say) to share between its two specializations: one at level 4,
+  both at 2, or 1 and 3.
+- **D19** Races only lets players pick their site too.
+- **F9** Panel orders, leaning; a production method per role is acceptable.
+- **F10** Warships screen carriers and tenders; a stance that lets a fleet drop
+  the screen can come later, as the postures do.
+- **F11** Tenders pool supply and propellant for the fleet.
+- **M1** Set the grades and the room at a first guess and tune them in
+  play-tests.
+- **Marines as garrisons** give fleets another job: moving marines between
+  colonies to garrison them.
+
+Nothing is open that blocks slices 0 and 1. Their design:
+`2026-10-25-solar-colonization-holders-and-cession-design.md`.

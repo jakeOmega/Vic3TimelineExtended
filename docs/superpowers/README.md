@@ -44,7 +44,8 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 
 | Doc | Status | What's left |
 |-----|--------|-------------|
-| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, fleets with a location and real transit times, blockades and sieges), colony population as crews, modules and Extraplanetary Bases from colonies, and four levels of the Space Race rule | Scoping menu, nothing built; three rounds of the owner's answers folded in (§ Decisions) | The open calls in §11; then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
+| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, fleets with a location and real transit times, blockades and sieges), colony population as crews, modules and Extraplanetary Bases from colonies, and four levels of the Space Race rule | Scoping menu, nothing built; four rounds of the owner's answers folded in (§ Decisions, § 11) | The open calls in §11; then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
+| [specs/2026-10-25-solar-colonization-holders-and-cession-design.md](specs/2026-10-25-solar-colonization-holders-and-cession-design.md): slices 0 and 1, a holder record for every world (the panel's Solar System list, a dead holder's colonies passing to its capital's owner), four settings of the Space Race rule, and the Cede Colony treaty article; [plan](plans/2026-10-25-solar-colonization-holders-and-cession.md) | Design and plan, nothing built | The owner's review of the design's § 16; then Tasks 1-10 |
 
 ## Archived — `archive/`
 
