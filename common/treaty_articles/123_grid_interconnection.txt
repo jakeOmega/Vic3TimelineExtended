@@ -9,7 +9,8 @@
 # owner's partners are listed at the start of a run
 # (te_grid_refresh_partners_effect), and a station joins a partner's
 # bordering station into one grid (te_grid_land_link), or one across the sea
-# when both run an HVDC Undersea Interconnector (te_grid_sea_link). The two
+# when both have an undersea cable and either's range reaches the other
+# (te_grid_sea_link, te_grid_cable_in_range). The two
 # may be in different markets: Grid Power has a fixed price, so the power
 # that crosses is paid for at it, the sending market's stations paid for all
 # they sell and the receiving market's paying for all they buy
@@ -50,16 +51,22 @@ grid_interconnection_agreement = {
 		}
 		has_technology_researched = electrical_capacitors
 		scope:other_country = { has_technology_researched = electrical_capacitors }
-		# A land border, or a sea between them: an agreement across the sea
-		# joins stations running an HVDC Undersea Interconnector
-		# (te_grid_sea_link).
+		# A land border, a Sea Node between them, or undersea cables that
+		# reach each other: an agreement across the sea joins stations with
+		# cables (te_grid_sea_link). A trigger can't walk the sea farther than
+		# one Sea Node, so cables that reach farther are read from the list the
+		# monthly balancing keeps (te_grid_cable_reach,
+		# te_grid_add_cable_reach_effect), up to a month late.
 		custom_tooltip = {
 			text = te_grid_interconnection_border_tt
-			any_scope_state = {
-				OR = {
-					any_neighbouring_state = { owner = scope:other_country }
-					any_sea_node_adjacent_state = { owner = scope:other_country }
+			OR = {
+				any_scope_state = {
+					OR = {
+						any_neighbouring_state = { owner = scope:other_country }
+						any_sea_node_adjacent_state = { owner = scope:other_country }
+					}
 				}
+				is_target_in_variable_list = { name = te_grid_cable_reach target = scope:other_country }
 			}
 		}
 	}
@@ -131,21 +138,25 @@ grid_interconnection_agreement = {
 				}
 			}
 			# The agreement joins grids where both have a station across the
-			# border, or across a sea for interconnectors.
+			# border, or across a sea for interconnectors, or cables that reach
+			# each other farther out (te_grid_cable_reach).
 			if = {
 				limit = {
-					any_scope_state = {
-						has_building = building_grid_transfer_station
-						OR = {
-							any_neighbouring_state = {
-								owner = scope:te_treaty_partner
-								has_building = building_grid_transfer_station
-							}
-							any_sea_node_adjacent_state = {
-								owner = scope:te_treaty_partner
-								has_building = building_grid_transfer_station
+					OR = {
+						any_scope_state = {
+							has_building = building_grid_transfer_station
+							OR = {
+								any_neighbouring_state = {
+									owner = scope:te_treaty_partner
+									has_building = building_grid_transfer_station
+								}
+								any_sea_node_adjacent_state = {
+									owner = scope:te_treaty_partner
+									has_building = building_grid_transfer_station
+								}
 							}
 						}
+						is_target_in_variable_list = { name = te_grid_cable_reach target = scope:te_treaty_partner }
 					}
 				}
 				add = {

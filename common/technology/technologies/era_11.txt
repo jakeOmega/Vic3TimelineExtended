@@ -77,6 +77,8 @@ smart_grids = {
 		state_bureaucracy_population_base_cost_factor_mult = 2
 		country_voting_power_mult = 0.2
 		country_grid_transmission_efficiency_add = 0.03
+		# Undersea supergrids: an interconnector's cable crosses one more Sea Node
+		building_grid_undersea_cable_range_add = 1
 	}
 
 	unlocking_technologies = {
