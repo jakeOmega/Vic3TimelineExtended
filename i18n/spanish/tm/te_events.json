@@ -435,6 +435,34 @@
   "en": "The Farm Is Not to Be Cut",
   "es": "La granja no debe dividirse"
  },
+ "amendment_petition_events.21.t": {
+  "en": "The Writ Suspended",
+  "es": "Suspendido el hábeas corpus"
+ },
+ "amendment_petition_events.22.t": {
+  "en": "Let the People Choose Their Judges",
+  "es": "Que el pueblo elija a sus jueces"
+ },
+ "amendment_petition_events.23.t": {
+  "en": "Courts for the Merchants",
+  "es": "Tribunales para los comerciantes"
+ },
+ "amendment_petition_events.24.t": {
+  "en": "Twelve Good Citizens",
+  "es": "Doce buenos ciudadanos"
+ },
+ "amendment_petition_events.25.t": {
+  "en": "Courts-Martial for Rebels",
+  "es": "Consejos de guerra para los rebeldes"
+ },
+ "amendment_petition_events.26.t": {
+  "en": "Justice of the Party",
+  "es": "La justicia del partido"
+ },
+ "amendment_petition_events.27.t": {
+  "en": "A Human Signature",
+  "es": "Una firma humana"
+ },
  "amendment_petition_events.3.a": {
   "en": "Print the laws in both tongues.",
   "es": "Imprimamos las leyes en ambas lenguas."

@@ -1023,6 +1023,14 @@
   "en": "An [concept_amendment] levying a progressive duty on great estates as they pass. It raises no standing revenue; it lowers the target of the [concept_inheritance_concentration] by #v 30#!. Not with the Birthright Endowment, which levies the duty itself.",
   "de": "Ein [concept_amendment], der eine progressive Abgabe auf große Vermögen beim Erbgang erhebt. Er bringt keine laufenden Einnahmen; er senkt das Ziel der [concept_inheritance_concentration] um #v 30#!. Nicht zusammen mit dem Grunderbe, das die Abgabe selbst erhebt."
  },
+ "amendment_judicial_elections": {
+  "en": "Judicial Elections",
+  "de": "Richterwahlen"
+ },
+ "amendment_jury_trials": {
+  "en": "Jury Trials",
+  "de": "Geschworenengerichte"
+ },
  "amendment_langreform_advisory_panel_desc": {
   "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
   "de": "Ein Gremium von Gelehrten veröffentlicht maßgebliche Richtlinien zum Sprachgebrauch, die moralisches Gewicht tragen, aber keine Gesetzeskraft haben."
@@ -1151,6 +1159,10 @@
   "en": "An [concept_amendment] carving out exceptions for 'military necessity' in humanitarian regulations, appeasing the armed forces at the cost of international reputation.",
   "de": "Ein [concept_amendment], der Ausnahmen für „militärische Notwendigkeit“ in humanitären Vorschriften schafft und damit die Streitkräfte besänftigt, auf Kosten des internationalen Ansehens."
  },
+ "amendment_military_tribunals": {
+  "en": "Military Tribunals for Civilians",
+  "de": "Militärgerichte für Zivilisten"
+ },
  "amendment_minority_script_preservation_desc": {
   "en": "An [concept_amendment] requiring that minority writing systems be taught alongside the reformed national script in regions where they are traditionally used.",
   "de": "Ein [concept_amendment], der vorschreibt, dass in Regionen, in denen sie traditionell verwendet werden, Minderheitenschriftsysteme neben der reformierten Nationalschrift gelehrt werden."
@@ -1170,6 +1182,10 @@
  "amendment_official_bilingualism_desc": {
   "en": "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both.",
   "de": "Ein [concept_amendment], der die am weitesten verbreitete Minderheitensprache neben der Nationalsprache zur Mitamtssprache erklärt, mit allen staatlichen Dienstleistungen in beiden Sprachen."
+ },
+ "amendment_peoples_tribunals": {
+  "en": "People’s Tribunals",
+  "de": "Volkstribunale"
  },
  "amendment_perpetual_trusts": {
   "en": "Perpetual Dynastic Trusts",
@@ -6291,6 +6307,18 @@
   "en": "Cadet Sons in the Colonies",
   "de": "Nachgeborene Söhne in den Kolonien"
  },
+ "inh_cohort_enterprise": {
+  "en": "A Cohort of Founders",
+  "de": "Eine Gründergeneration"
+ },
+ "inh_cohort_schooled": {
+  "en": "A Schooled Cohort",
+  "de": "Eine gebildete Generation"
+ },
+ "inh_commune_repartition": {
+  "en": "Repartitioned Holdings",
+  "de": "Neu verteilter Besitz"
+ },
  "inh_concentrated_property": {
   "en": "Concentrated Property",
   "de": "Konzentriertes Eigentum"
@@ -6322,6 +6350,14 @@
  "inh_dynasty_founded": {
   "en": "A New Dynasty",
   "de": "Eine neue Dynastie"
+ },
+ "inh_estates_audited": {
+  "en": "Estate Audits",
+  "de": "Nachlassprüfungen"
+ },
+ "inh_estates_overlooked": {
+  "en": "Hidden Estates",
+  "de": "Verborgene Nachlässe"
  },
  "inh_fewer_children": {
   "en": "Fewer Heirs",
@@ -9887,6 +9923,10 @@
   "en": "With the race run, the rockets, crews and contractors that once competed for milestones haul ore from the asteroids. Each point of monthly space race progress our sources still give adds +5% Extraplanetary Base throughput, up to +50%, recalculated every month. Funding and progress bonuses do not count.",
   "de": "Nachdem das Rennen gelaufen ist, holen die Raketen, Besatzungen und Auftragnehmer, die einst um Meilensteine konkurrierten, Erz von den Asteroiden. Jeder Punkt monatlichen Fortschritts im Wettlauf ins All, den unsere Quellen noch liefern, erhöht den Durchsatz der Außerplanetaren Stützpunkte um +5%, bis zu +50%, jeden Monat neu berechnet. Finanzierungs- und Fortschrittsboni zählen nicht."
  },
+ "sr_emigration_programme": {
+  "en": "Emigration Programme",
+  "de": "Auswanderungsprogramm"
+ },
  "sr_engineering_breakthrough": {
   "en": "Engineering Breakthrough",
   "de": "Technischer Durchbruch"
@@ -10047,6 +10087,10 @@
   "en": "A space mission failure has set back progress and damaged public confidence in the program.",
   "de": "Ein fehlgeschlagener Weltraumeinsatz hat den Fortschritt zurückgeworfen und das Vertrauen der Öffentlichkeit in das Programm beschädigt."
  },
+ "sr_module_upkeep": {
+  "en": "Colony Modules",
+  "de": "Koloniemodule"
+ },
  "sr_moon_base": {
   "en": "Lunar Base Established",
   "de": "Mondbasis errichtet"
@@ -10074,6 +10118,10 @@
  "sr_moon_landing_desc": {
   "en": "Our astronauts have walked on the Moon.",
   "de": "Unsere Astronauten haben den Mond betreten."
+ },
+ "sr_offworld_population": {
+  "en": "Off-World Population",
+  "de": "Bevölkerung außerhalb der Erde"
  },
  "sr_orbital": {
   "en": "Orbital Flight Achieved",
@@ -10866,6 +10914,10 @@
  "te_authority_drain": {
   "en": "Cabinet Authority Eroded",
   "de": "Kabinettsautorität geschwunden"
+ },
+ "te_cede_colony": {
+  "en": "Cede Colony",
+  "de": "Kolonie abtreten"
  },
  "te_construction_market_capacity_modifier_desc": {
   "en": "Applies the effects of this construction-focused modifier.",

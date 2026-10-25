@@ -3323,6 +3323,10 @@
   "en": "Increases the maximum number of levels that [GetBuildingType('building_great_indian_railway_jamalpur_works').GetName] can expand to in this state",
   "es": "Aumenta el número máximo de niveles a los que puede ampliarse [GetBuildingType('building_great_indian_railway_jamalpur_works').GetName] en este estado"
  },
+ "state_building_grid_hvdc_interconnector_max_level_add": {
+  "en": "[GetBuildingType('building_grid_hvdc_interconnector').GetName] Max Level",
+  "es": "Nivel máximo de [GetBuildingType('building_grid_hvdc_interconnector').GetName]"
+ },
  "state_building_grid_transfer_station_max_level_add": {
   "en": "[GetBuildingType('building_grid_transfer_station').GetName] Max Level",
   "es": "Nivel máximo de [GetBuildingType('building_grid_transfer_station').GetName]"

@@ -955,6 +955,10 @@
   "en": "Great Indian Railway Jamalpur Works",
   "es": "Talleres Great Indian Railway Jamalpur"
  },
+ "building_grid_hvdc_interconnector": {
+  "en": "HVDC Undersea Interconnector",
+  "es": "Interconector submarino HVDC"
+ },
  "building_grid_transfer_station": {
   "en": "Grid Transfer Station",
   "es": "Estación de transferencia de red"
@@ -962,6 +966,10 @@
  "building_grid_transfer_station_desc": {
   "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach through an $pm_grid_hvdc_interconnector$ or a $grid_interconnection_agreement$. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$, losing some on the way (#b Grid Transmission Efficiency#!). A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
   "es": "Conecta este Estado con su [concept_power_grid|l]: nuestras demás estaciones en la misma [concept_market_area|l] y las estaciones a las que llegan mediante $pm_grid_hvdc_interconnector$ o $grid_interconnection_agreement$. Cada mes la red reparte su $electricity$ para que todos los Estados conectados tengan la misma proporción entre oferta y demanda. Un Estado con energía de sobra la envía a la red como @grid_power! $grid_power$, y un Estado con déficit toma $grid_power$ y lo convierte de nuevo en $electricity$, perdiendo algo por el camino (#b Eficiencia de transmisión de la red#!). Una red no saca más de lo que mete. Una por Estado. Nuestra primera estación en un área de mercado puede ir en cualquiera de nuestros Estados de allí; cada una de las siguientes debe limitar con un Estado nuestro que ya tenga una. Siempre subvencionada."
+ },
+ "building_grid_undersea_cable_range_add": {
+  "en": "Undersea Cable Range",
+  "es": "Alcance del cable submarino"
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -2086,6 +2094,142 @@
  "building_specialty_alloy_metal_mine_throughput_add_desc": {
   "en": "$building_specialty_alloy_metal_mine$ building [concept_throughput]",
   "es": "[concept_throughput] del edificio $building_specialty_alloy_metal_mine$"
+ },
+ "building_sr_site_amalthea": {
+  "en": "$sr_site_name_amalthea$ Colony",
+  "es": "Colonia de $sr_site_name_amalthea$"
+ },
+ "building_sr_site_arcadia_planitia": {
+  "en": "$sr_site_name_arcadia_planitia$ Colony",
+  "es": "Colonia de $sr_site_name_arcadia_planitia$"
+ },
+ "building_sr_site_ariel": {
+  "en": "$sr_site_name_ariel$ Colony",
+  "es": "Colonia de $sr_site_name_ariel$"
+ },
+ "building_sr_site_callisto": {
+  "en": "$sr_site_name_callisto$ Colony",
+  "es": "Colonia de $sr_site_name_callisto$"
+ },
+ "building_sr_site_ceres": {
+  "en": "$sr_site_name_ceres$ Colony",
+  "es": "Colonia de $sr_site_name_ceres$"
+ },
+ "building_sr_site_enceladus": {
+  "en": "$sr_site_name_enceladus$ Colony",
+  "es": "Colonia de $sr_site_name_enceladus$"
+ },
+ "building_sr_site_eris": {
+  "en": "$sr_site_name_eris$ Colony",
+  "es": "Colonia de $sr_site_name_eris$"
+ },
+ "building_sr_site_europa": {
+  "en": "$sr_site_name_europa$ Colony",
+  "es": "Colonia de $sr_site_name_europa$"
+ },
+ "building_sr_site_ganymede": {
+  "en": "$sr_site_name_ganymede$ Colony",
+  "es": "Colonia de $sr_site_name_ganymede$"
+ },
+ "building_sr_site_haumea": {
+  "en": "$sr_site_name_haumea$ Colony",
+  "es": "Colonia de $sr_site_name_haumea$"
+ },
+ "building_sr_site_hellas_planitia": {
+  "en": "$sr_site_name_hellas_planitia$ Colony",
+  "es": "Colonia de $sr_site_name_hellas_planitia$"
+ },
+ "building_sr_site_himalia": {
+  "en": "$sr_site_name_himalia$ Colony",
+  "es": "Colonia de $sr_site_name_himalia$"
+ },
+ "building_sr_site_hygiea": {
+  "en": "$sr_site_name_hygiea$ Colony",
+  "es": "Colonia de $sr_site_name_hygiea$"
+ },
+ "building_sr_site_iapetus": {
+  "en": "$sr_site_name_iapetus$ Colony",
+  "es": "Colonia de $sr_site_name_iapetus$"
+ },
+ "building_sr_site_io": {
+  "en": "$sr_site_name_io$ Colony",
+  "es": "Colonia de $sr_site_name_io$"
+ },
+ "building_sr_site_makemake": {
+  "en": "$sr_site_name_makemake$ Colony",
+  "es": "Colonia de $sr_site_name_makemake$"
+ },
+ "building_sr_site_mercury": {
+  "en": "$sr_site_name_mercury$ Colony",
+  "es": "Colonia de $sr_site_name_mercury$"
+ },
+ "building_sr_site_mimas": {
+  "en": "$sr_site_name_mimas$ Colony",
+  "es": "Colonia de $sr_site_name_mimas$"
+ },
+ "building_sr_site_miranda": {
+  "en": "$sr_site_name_miranda$ Colony",
+  "es": "Colonia de $sr_site_name_miranda$"
+ },
+ "building_sr_site_oberon": {
+  "en": "$sr_site_name_oberon$ Colony",
+  "es": "Colonia de $sr_site_name_oberon$"
+ },
+ "building_sr_site_olympus_mons": {
+  "en": "$sr_site_name_olympus_mons$ Colony",
+  "es": "Colonia de $sr_site_name_olympus_mons$"
+ },
+ "building_sr_site_pallas": {
+  "en": "$sr_site_name_pallas$ Colony",
+  "es": "Colonia de $sr_site_name_pallas$"
+ },
+ "building_sr_site_pluto": {
+  "en": "$sr_site_name_pluto$ Colony",
+  "es": "Colonia de $sr_site_name_pluto$"
+ },
+ "building_sr_site_proteus": {
+  "en": "$sr_site_name_proteus$ Colony",
+  "es": "Colonia de $sr_site_name_proteus$"
+ },
+ "building_sr_site_psyche": {
+  "en": "$sr_site_name_psyche$ Colony",
+  "es": "Colonia de $sr_site_name_psyche$"
+ },
+ "building_sr_site_rhea": {
+  "en": "$sr_site_name_rhea$ Colony",
+  "es": "Colonia de $sr_site_name_rhea$"
+ },
+ "building_sr_site_sedna": {
+  "en": "$sr_site_name_sedna$ Colony",
+  "es": "Colonia de $sr_site_name_sedna$"
+ },
+ "building_sr_site_titan": {
+  "en": "$sr_site_name_titan$ Colony",
+  "es": "Colonia de $sr_site_name_titan$"
+ },
+ "building_sr_site_titania": {
+  "en": "$sr_site_name_titania$ Colony",
+  "es": "Colonia de $sr_site_name_titania$"
+ },
+ "building_sr_site_triton": {
+  "en": "$sr_site_name_triton$ Colony",
+  "es": "Colonia de $sr_site_name_triton$"
+ },
+ "building_sr_site_utopia_planitia": {
+  "en": "$sr_site_name_utopia_planitia$ Colony",
+  "es": "Colonia de $sr_site_name_utopia_planitia$"
+ },
+ "building_sr_site_valles_marineris": {
+  "en": "$sr_site_name_valles_marineris$ Colony",
+  "es": "Colonia de $sr_site_name_valles_marineris$"
+ },
+ "building_sr_site_venus": {
+  "en": "$sr_site_name_venus$ Colony",
+  "es": "Colonia de $sr_site_name_venus$"
+ },
+ "building_sr_site_vesta": {
+  "en": "$sr_site_name_vesta$ Colony",
+  "es": "Colonia de $sr_site_name_vesta$"
  },
  "building_standard_oil_refinery": {
   "en": "Standard Oil Refinery",

@@ -4584,20 +4584,12 @@
   "es": "Montaje ecológico"
  },
  "pm_grid_hvdc_interconnector": {
-  "en": "HVDC Undersea Interconnector",
-  "es": "Interconector submarino HVDC"
+  "en": "HVDC Cable",
+  "es": "Cable HVDC"
  },
  "pm_grid_hvdc_interconnector_desc": {
   "en": "A high-voltage direct-current cable joins this station to any station running one across the sea, in a state that shares a sea with this one: our own, or a country we have a $grid_interconnection_agreement$ with in our [concept_market]. Their grids become one. It does nothing in a state with no coast.",
   "es": "Un cable de corriente continua de alta tensión une esta central con cualquier central que tenga uno al otro lado del mar, en un estado que comparta mar con este, ya sea nuestro o de un país con el que tengamos un $grid_interconnection_agreement$ en nuestro [concept_market|l]. Sus redes se convierten en una sola. No hace nada en un estado sin costa."
- },
- "pm_grid_no_interconnector": {
-  "en": "No Interconnector",
-  "es": "Sin interconector"
- },
- "pm_grid_no_interconnector_desc": {
-  "en": "The station joins only the grid it is connected to by land.",
-  "es": "La central solo se une a la red a la que está conectada por tierra."
  },
  "pm_grid_transfer_base": {
   "en": "Substation",
@@ -5035,6 +5027,18 @@
   "en": "Late-era whalers with electronic prey [concept_detection] and magnetic drive propulsion outproduce diesel fleets at the cost of meaningful [concept_pollution_system] and fuel demand.",
   "es": "Los balleneros de la última era, con [concept_detection|l] electrónica de presas y propulsión magnética, superan en producción a las flotas diésel a costa de una [concept_pollution_system|l] considerable y de una gran demanda de combustible."
  },
+ "pm_maintenance_graded_heavy": {
+  "en": "Heavy Maintenance",
+  "es": "Mantenimiento pesado"
+ },
+ "pm_maintenance_graded_light": {
+  "en": "Light Maintenance",
+  "es": "Mantenimiento ligero"
+ },
+ "pm_maintenance_graded_standard": {
+  "en": "Standard Maintenance",
+  "es": "Mantenimiento estándar"
+ },
  "pm_maintenance_heavy": {
   "en": "Heavy Maintenance",
   "es": "Mantenimiento pesado"
@@ -5378,6 +5382,10 @@
  "pm_monument_crown_desc": {
   "en": "Dynastic portraits, a royal box, a procession that passes beneath it. Lends legitimacy while the country is crowned, and becomes contested if the crown falls. #R The dedication is permanent.#!",
   "es": "Retratos dinásticos, un palco real, una procesión que pasa bajo él. Aporta legitimidad mientras el país tenga corona y pasa a ser objeto de disputa si la corona cae. #R La dedicatoria es permanente.#!"
+ },
+ "pm_monument_historic": {
+  "en": "To History",
+  "es": "A la historia"
  },
  "pm_monument_industrial": {
   "en": "Great Exhibition Hall",
@@ -6846,6 +6854,26 @@
  "pm_spacex_starbase": {
   "en": "Starbase",
   "es": "Starbase"
+ },
+ "pm_sr_fabrication_fusion_shipyards": {
+  "en": "Fusion Shipyards",
+  "es": "Astilleros de fusión"
+ },
+ "pm_sr_fabrication_lunar_foundries": {
+  "en": "Lunar Foundries",
+  "es": "Fundiciones lunares"
+ },
+ "pm_sr_fabrication_none": {
+  "en": "No Module Fabrication",
+  "es": "Sin fabricación de módulos"
+ },
+ "pm_sr_fabrication_orbital_assembly": {
+  "en": "Orbital Assembly",
+  "es": "Ensamblaje orbital"
+ },
+ "pm_sr_site_marker": {
+  "en": "Colony Record",
+  "es": "Registro de la colonia"
  },
  "pm_st_res_hub_reserve": {
   "en": "Reserve Control",
@@ -8631,6 +8659,10 @@
   "en": "Maintenance",
   "es": "Mantenimiento"
  },
+ "pmg_maintenance_graded": {
+  "en": "Maintenance",
+  "es": "Mantenimiento"
+ },
  "pmg_maintenance_heavy": {
   "en": "Maintenance",
   "es": "Mantenimiento"
@@ -9095,9 +9127,17 @@
   "en": "Debris Removal",
   "es": "Retirada de basura espacial"
  },
+ "pmg_space_program_module_fabrication": {
+  "en": "Module Fabrication",
+  "es": "Fabricación de módulos"
+ },
  "pmg_spacex_starbase": {
   "en": "Starbase",
   "es": "Starbase"
+ },
+ "pmg_sr_site_marker": {
+  "en": "Colony",
+  "es": "Colonia"
  },
  "pmg_st_res_hub": {
   "en": "Hub Reserve",

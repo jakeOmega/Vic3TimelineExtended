@@ -347,6 +347,14 @@
   "en": "The social movement journal entries are active. As nations research the relevant technologies, they work through civil rights, human augmentation debates, digital rights and surveillance, the post-scarcity transition, and mental health awareness.",
   "es": "Las anotaciones en el diario de movimientos sociales están activas. A medida que las naciones investigan las tecnologías pertinentes, se enfrentan a los derechos civiles, los debates sobre la mejora humana, los derechos digitales y la vigilancia, la transición a la posescasez y la concienciación sobre la salud mental."
  },
+ "setting_space_race_colonies_full": {
+  "en": "[concept_space_race]: Full Colonies",
+  "es": "[concept_space_race]: colonias completas"
+ },
+ "setting_space_race_colonies_simple": {
+  "en": "[concept_space_race]: Simple Colonies",
+  "es": "[concept_space_race]: colonias simples"
+ },
  "setting_space_race_disabled": {
   "en": "[concept_space_race] Disabled",
   "es": "[concept_space_race] desactivada"
@@ -356,8 +364,8 @@
   "es": "Las anotaciones en el diario de la [concept_space_race|l] están desactivadas. Las tecnologías espaciales aún se pueden investigar, pero el sistema de competición por hitos, los programas de financiación y los eventos de la carrera espacial están inactivos."
  },
  "setting_space_race_enabled": {
-  "en": "[concept_space_race] Enabled",
-  "es": "[concept_space_race] activada"
+  "en": "[concept_space_race]: Races Only",
+  "es": "[concept_space_race]: solo carreras"
  },
  "setting_space_race_enabled_desc": {
   "en": "The [concept_space_race] journal entries are active. [Concept('concept_great_power', 'Great powers')] and [Concept('concept_major_power', 'major powers')] compete through a milestone-based progression from suborbital flight to interstellar probes, with funding levels affecting progress speed.",

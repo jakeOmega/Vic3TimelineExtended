@@ -127,6 +127,34 @@
   "en": "Colonial Claims Renounced",
   "es": "Reivindicaciones coloniales abandonadas"
  },
+ "notification_decol_iw_accords_notice_name": {
+  "en": "The Accords Are Agreed",
+  "es": "Acuerdos alcanzados"
+ },
+ "notification_decol_iw_allied_arms_notice_name": {
+  "en": "Arms from a Friend",
+  "es": "Armas de un amigo"
+ },
+ "notification_decol_iw_intervention_notice_name": {
+  "en": "A Great Power Intervenes",
+  "es": "Una gran potencia interviene"
+ },
+ "notification_decol_iw_talks_opened_notice_name": {
+  "en": "Talks Begin",
+  "es": "Empiezan las negociaciones"
+ },
+ "notification_decol_iw_war_begins_notice_name": {
+  "en": "A War of Independence",
+  "es": "Una guerra de independencia"
+ },
+ "notification_decol_iw_war_unstarted_notice_name": {
+  "en": "No War Came",
+  "es": "No hubo guerra"
+ },
+ "notification_decol_iw_war_won_rebels_notice_name": {
+  "en": "Independence Won",
+  "es": "Independencia conquistada"
+ },
  "notification_decol_truce_proposal_accepted_notice_desc": {
   "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
   "es": "[SCOPE.sCountry('truce_responder').GetName] ha aceptado nuestra oferta: una tregua de cinco años vincula ahora a nuestras dos naciones."

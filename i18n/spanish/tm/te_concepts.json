@@ -1023,6 +1023,14 @@
   "en": "An [concept_amendment] levying a progressive duty on great estates as they pass. It raises no standing revenue; it lowers the target of the [concept_inheritance_concentration] by #v 30#!. Not with the Birthright Endowment, which levies the duty itself.",
   "es": "Una [concept_amendment|l] que grava con un impuesto progresivo las grandes herencias al transmitirse. No genera ingresos fijos; reduce en #v 30#! el objetivo de la [concept_inheritance_concentration|l]. No se combina con la Dotación de nacimiento, que ya establece el impuesto por sí misma."
  },
+ "amendment_judicial_elections": {
+  "en": "Judicial Elections",
+  "es": "Elecciones judiciales"
+ },
+ "amendment_jury_trials": {
+  "en": "Jury Trials",
+  "es": "Juicios con jurado"
+ },
  "amendment_langreform_advisory_panel_desc": {
   "en": "A panel of scholars publishes authoritative guidelines on language use, carrying moral weight without force of law.",
   "es": "Un panel de eruditos publica directrices autorizadas sobre el uso de la lengua, con peso moral pero sin fuerza de ley."
@@ -1151,6 +1159,10 @@
   "en": "An [concept_amendment] carving out exceptions for 'military necessity' in humanitarian regulations, appeasing the armed forces at the cost of international reputation.",
   "es": "Una [concept_amendment|l] que introduce excepciones por «necesidad militar» en las regulaciones humanitarias, lo que apacigua a las fuerzas armadas a costa de la reputación internacional."
  },
+ "amendment_military_tribunals": {
+  "en": "Military Tribunals for Civilians",
+  "es": "Tribunales militares para civiles"
+ },
  "amendment_minority_script_preservation_desc": {
   "en": "An [concept_amendment] requiring that minority writing systems be taught alongside the reformed national script in regions where they are traditionally used.",
   "es": "Una [concept_amendment|l] que exige que los sistemas de escritura de las minorías se enseñen junto con la escritura nacional reformada en las regiones donde se usan tradicionalmente."
@@ -1170,6 +1182,10 @@
  "amendment_official_bilingualism_desc": {
   "en": "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both.",
   "es": "Una [concept_amendment|l] que establece la lengua minoritaria más hablada como cooficial junto a la lengua nacional, con todos los servicios del gobierno disponibles en ambas."
+ },
+ "amendment_peoples_tribunals": {
+  "en": "People’s Tribunals",
+  "es": "Tribunales populares"
  },
  "amendment_perpetual_trusts": {
   "en": "Perpetual Dynastic Trusts",
@@ -6291,6 +6307,18 @@
   "en": "Cadet Sons in the Colonies",
   "es": "Hijos segundones en las colonias"
  },
+ "inh_cohort_enterprise": {
+  "en": "A Cohort of Founders",
+  "es": "Una generación de fundadores"
+ },
+ "inh_cohort_schooled": {
+  "en": "A Schooled Cohort",
+  "es": "Una generación instruida"
+ },
+ "inh_commune_repartition": {
+  "en": "Repartitioned Holdings",
+  "es": "Propiedades redistribuidas"
+ },
  "inh_concentrated_property": {
   "en": "Concentrated Property",
   "es": "Propiedad concentrada"
@@ -6322,6 +6350,14 @@
  "inh_dynasty_founded": {
   "en": "A New Dynasty",
   "es": "Una nueva dinastía"
+ },
+ "inh_estates_audited": {
+  "en": "Estate Audits",
+  "es": "Auditorías de herencias"
+ },
+ "inh_estates_overlooked": {
+  "en": "Hidden Estates",
+  "es": "Herencias ocultas"
  },
  "inh_fewer_children": {
   "en": "Fewer Heirs",
@@ -9887,6 +9923,10 @@
   "en": "With the race run, the rockets, crews and contractors that once competed for milestones haul ore from the asteroids. Each point of monthly space race progress our sources still give adds +5% Extraplanetary Base throughput, up to +50%, recalculated every month. Funding and progress bonuses do not count.",
   "es": "Una vez terminada la carrera, los cohetes, las tripulaciones y los contratistas que antes competían por hitos transportan mineral desde los asteroides. Cada punto de progreso mensual de la carrera espacial que aún aportan nuestras fuentes suma +5% de rendimiento de la Base extraplanetaria, hasta +50%, recalculado cada mes. La financiación y las bonificaciones de progreso no cuentan."
  },
+ "sr_emigration_programme": {
+  "en": "Emigration Programme",
+  "es": "Programa de emigración"
+ },
  "sr_engineering_breakthrough": {
   "en": "Engineering Breakthrough",
   "es": "Gran avance en ingeniería"
@@ -10047,6 +10087,10 @@
   "en": "A space mission failure has set back progress and damaged public confidence in the program.",
   "es": "El fracaso de una misión espacial ha frenado el progreso y ha dañado la confianza pública en el programa."
  },
+ "sr_module_upkeep": {
+  "en": "Colony Modules",
+  "es": "Módulos coloniales"
+ },
  "sr_moon_base": {
   "en": "Lunar Base Established",
   "es": "Base lunar establecida"
@@ -10074,6 +10118,10 @@
  "sr_moon_landing_desc": {
   "en": "Our astronauts have walked on the Moon.",
   "es": "Nuestros astronautas han caminado sobre la Luna."
+ },
+ "sr_offworld_population": {
+  "en": "Off-World Population",
+  "es": "Población fuera de la Tierra"
  },
  "sr_orbital": {
   "en": "Orbital Flight Achieved",
@@ -10866,6 +10914,10 @@
  "te_authority_drain": {
   "en": "Cabinet Authority Eroded",
   "es": "Autoridad del gabinete erosionada"
+ },
+ "te_cede_colony": {
+  "en": "Cede Colony",
+  "es": "Ceder colonia"
  },
  "te_construction_market_capacity_modifier_desc": {
   "en": "Applies the effects of this construction-focused modifier.",

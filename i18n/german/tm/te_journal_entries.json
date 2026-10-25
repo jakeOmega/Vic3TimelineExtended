@@ -423,33 +423,33 @@
   "en": "#lore unknown#!",
   "de": "#lore unbekannt#!"
  },
+ "je_colonial_empire_bloc_member_line": {
+  "en": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! people",
+  "de": "[SCOPE.sState('ce_bloc_member').GetName]: #v [SCOPE.sState('ce_bloc_member').MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! Menschen"
+ },
+ "je_colonial_empire_btn_accords": {
+  "en": "Accords Signed",
+  "de": "Abkommen unterzeichnet"
+ },
+ "je_colonial_empire_btn_dominion": {
+  "en": "Dominion",
+  "de": "Dominion"
+ },
+ "je_colonial_empire_btn_in_talks": {
+  "en": "In Talks",
+  "de": "In Verhandlungen"
+ },
  "je_colonial_empire_btn_open_choice": {
   "en": "Review Options",
   "de": "Optionen überprüfen"
  },
- "je_colonial_empire_candidates_eligible": {
-  "en": "Eligible territories",
-  "de": "Geeignete Gebiete"
+ "je_colonial_empire_btn_open_talks": {
+  "en": "Open Talks",
+  "de": "Verhandlungen aufnehmen"
  },
- "je_colonial_empire_candidates_eligible_tt": {
-  "en": "Territories the three decisions can offer: overseas, populous enough, and not a homeland of our cultures. Updated monthly.",
-  "de": "Gebiete, die die drei Entscheidungen anbieten können: in Übersee, bevölkerungsreich genug und nicht das Heimatland unserer Kulturen. Monatlich aktualisiert."
- },
- "je_colonial_empire_candidates_largest": {
-  "en": "Largest",
-  "de": "Größtes"
- },
- "je_colonial_empire_candidates_largest_tt": {
-  "en": "The most populous eligible territory, which the decisions offer first.",
-  "de": "Das bevölkerungsreichste infrage kommende Gebiet, das die Entscheidungen zuerst anbieten."
- },
- "je_colonial_empire_candidates_round_table": {
-  "en": "Round Table could accept",
-  "de": "Runder Tisch könnte annehmen"
- },
- "je_colonial_empire_candidates_round_table_tt": {
-  "en": "Of those, the territories with no severely unaccepted population, which a Round Table Conference requires.",
-  "de": "Davon die Gebiete ohne kaum akzeptierte Bevölkerung, die eine Konferenz am Runden Tisch voraussetzt."
+ "je_colonial_empire_btn_release": {
+  "en": "Release",
+  "de": "Entlassen"
  },
  "je_colonial_empire_complete_tt": {
   "en": "Completes when the Colonial Stability bar holds at #G 100#! for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] sustained months (current: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]#!). Drops below 100 reset the counter. Alternatively, completes when the Imperial Federation Act is taken; that decision separately requires sustaining the Solidified band (bar ≥ 90) for [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months (current: #v [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0] / [ROOT.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]#!) plus the Act's other prerequisites.",
@@ -482,26 +482,6 @@
  "je_colonial_empire_decision_planned_tt": {
   "en": "Wind up the entire colonial empire at once. Every eligible territory is listed for confirmation before anything is released, and you can withdraw.",
   "de": "Das gesamte Kolonialreich auf einmal abwickeln. Jedes infrage kommende Gebiet wird zur Bestätigung aufgelistet, bevor etwas freigegeben wird, und der Vorgang lässt sich abbrechen."
- },
- "je_colonial_empire_decision_release": {
-  "en": "Release a Colonial Territory",
-  "de": "Ein koloniales Gebiet freigeben"
- },
- "je_colonial_empire_decision_release_tt": {
-  "en": "A unilateral grant of independence to one colony and the states around it. You will be shown up to three candidates, with what each release would cost you, and can withdraw without releasing anything.",
-  "de": "Eine einseitige Gewährung der Unabhängigkeit an eine Kolonie und die Staaten um sie herum. Gezeigt werden bis zu drei Kandidaten, mit den Kosten, die die jeweilige Freigabe verursachen würde; ein Abbruch ohne jede Freigabe ist möglich."
- },
- "je_colonial_empire_decision_round_table": {
-  "en": "Round Table Conference",
-  "de": "Konferenz am Runden Tisch"
- },
- "je_colonial_empire_decision_round_table_tt": {
-  "en": "A negotiated transition for one well-accepted colony. It needs more than 200 [concept_authority] and angers the [GetInterestGroupVariant('ig_landowners',GetPlayer).GetName], but the new country starts on better terms with us, and the boost to [concept_colonial_stability] lasts longer than after a unilateral release. You will be shown up to three candidates and can withdraw.",
-  "de": "Ein ausgehandelter Übergang für eine gut akzeptierte Kolonie. Er erfordert mehr als 200 [concept_authority] und verärgert die [GetInterestGroupVariant('ig_landowners',GetPlayer).GetName], doch das neue Land startet in besserem Einvernehmen mit uns, und der Schub für die [concept_colonial_stability] hält länger an als nach einer einseitigen Freigabe. Gezeigt werden bis zu drei Kandidaten, und ein Abbruch ist möglich."
- },
- "je_colonial_empire_decisions_header": {
-  "en": "Decolonization",
-  "de": "Dekolonisierung"
  },
  "je_colonial_empire_desc": {
   "en": "The age of [concept_decolonization_system] is at hand. Whether through direct overseas possessions or colonial subjects, choose between integration, devolution, or repression for our overseas holdings.",
@@ -594,6 +574,14 @@
  "je_colonial_empire_history_header": {
   "en": "History",
   "de": "Verlauf"
+ },
+ "je_colonial_empire_holdings_header": {
+  "en": "Colonial Holdings",
+  "de": "Kolonialbesitz"
+ },
+ "je_colonial_empire_holdings_whole": {
+  "en": "The Whole Empire",
+  "de": "Das ganze Reich"
  },
  "je_colonial_empire_how_bar_1": {
   "en": "The bar runs from 0 to 100 and moves once a month by the sum of everything acting on it, but never by more than ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] either way, so no single shock can empty it. Hover the bar at the top for every term with its current value; Why Stability Is Moving adds them up by group.",
@@ -843,6 +831,26 @@
   "en": "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
   "de": "#O Das Kolonialreich steht unter Druck.#! Wachsende Spannungen und internationaler Druck bedrohen unsere Kontrolle."
  },
+ "je_colonial_empire_subject_head_gdp": {
+  "en": "GDP",
+  "de": "BIP"
+ },
+ "je_colonial_empire_subject_head_kind": {
+  "en": "Kind",
+  "de": "Art"
+ },
+ "je_colonial_empire_subject_head_name": {
+  "en": "Subject",
+  "de": "Klientelland"
+ },
+ "je_colonial_empire_subject_reason_other": {
+  "en": "A colonial subject.",
+  "de": "Ein koloniales Klientelland."
+ },
+ "je_colonial_empire_subjects_more": {
+  "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects_more')|0] more",
+  "de": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects_more')|0] weitere"
+ },
  "je_colonial_empire_supporter_entry_tt": {
   "en": "#G Supporting#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)",
   "de": "#G Unterstützend#! — [THIS.GetCountry.GetName] (@prestige! #v [THIS.GetCountry.GetPrestige|0]#!)"
@@ -850,10 +858,6 @@
  "je_colonial_empire_territories_caption": {
   "en": "#lore Largest GDP first. A lit icon: counted as a colony. A red figure: the test that makes it one.#!",
   "de": "#lore Größtes BIP zuerst. Ein leuchtendes Symbol: wird als Kolonie gezählt. Eine rote Zahl: der Test, der es dazu macht.#!"
- },
- "je_colonial_empire_territories_header": {
-  "en": "Eligible Territories",
-  "de": "Geeignete Gebiete"
  },
  "je_colonial_empire_territories_more": {
   "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_more')|0] more",
@@ -895,14 +899,6 @@
   "en": "Every territory the decolonization decisions can offer: overseas, not a [concept_homeland] of our cultures, and with at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people. Updated monthly.",
   "de": "Jedes Gebiet, das die Dekolonisierungsentscheidungen anbieten können: in Übersee, kein [concept_homeland] unserer Kulturen und mit mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern. Monatlich aktualisiert."
  },
- "je_colonial_empire_territory_head_pop": {
-  "en": "People",
-  "de": "Einwohner"
- },
- "je_colonial_empire_territory_head_pop_tt": {
-  "en": "Its population.",
-  "de": "Seine Bevölkerung."
- },
  "je_colonial_empire_territory_head_primary": {
   "en": "Primary",
   "de": "Primär"
@@ -922,10 +918,6 @@
  "je_colonial_empire_territory_not_colony_tt": {
   "en": "#header Not counted as a colony#!\\nIt meets neither test, so it adds no [concept_colonial_overreach]. The decisions can still release it.",
   "de": "#header Wird nicht als Kolonie gezählt#!\\nEs erfüllt keinen der beiden Tests und erhöht daher die [concept_colonial_overreach] nicht. Die Entscheidungen können es dennoch freigeben."
- },
- "je_colonial_empire_territory_pop_tt": {
-  "en": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! people. A territory is eligible from #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#!.",
-  "de": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_population')|D]#! Einwohner. Ein Gebiet kommt ab #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! infrage."
  },
  "je_colonial_empire_territory_primary_bad_tt": {
   "en": "#v [State.MakeScope.ScriptValue('colonial_territory_disp_primary')|%0]#! of its people are of our primary cultures (last month).\\nThe indigenous test: another culture is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of its people and accepted below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('acceptance_status_4')|0]#!. #R Met: it counts as a colony.#!",
@@ -958,6 +950,18 @@
  "je_colonial_empire_voluntary_fail_tt": {
   "en": "Ends when all qualifying colonial territories have been voluntarily released — no overseas states or colonial subjects remain — while the Colonial Stability bar is still above zero.",
   "de": "Endet, wenn alle infrage kommenden Kolonialterritorien freiwillig entlassen wurden — es bleiben keine überseeischen Staaten oder Kolonialvasallen mehr — solange die Leiste der Kolonialen Stabilität noch über null steht."
+ },
+ "je_colonial_empire_war_head_backers": {
+  "en": "Backers",
+  "de": "Unterstützer"
+ },
+ "je_colonial_empire_war_head_months": {
+  "en": "Months",
+  "de": "Monate"
+ },
+ "je_colonial_empire_war_head_name": {
+  "en": "Fighting us",
+  "de": "Kämpft gegen uns"
  },
  "je_covert_warfare": {
   "en": "Covert Warfare",
@@ -2591,6 +2595,38 @@
   "en": "#bold Approach#!",
   "de": "#bold Vorgehensweise#!"
  },
+ "je_space_race_widget_cf_in_flight_figure": {
+  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] of 6",
+  "de": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_in_flight')|0] von 6"
+ },
+ "je_space_race_widget_cf_in_flight_label": {
+  "en": "Fleets in flight",
+  "de": "Flotten unterwegs"
+ },
+ "je_space_race_widget_cf_slot_1_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])",
+  "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_1_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_2_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_year')|0])",
+  "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_2_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_3_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_year')|0])",
+  "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_3_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_4_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_year')|0])",
+  "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_4_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_5_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_year')|0])",
+  "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_5_year')|0])"
+ },
+ "je_space_race_widget_cf_slot_6_eta": {
+  "en": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_months')|0]#! months ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_year')|0])",
+  "de": "in #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_months')|0]#! Monaten ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cf_slot_6_year')|0])"
+ },
  "je_space_race_widget_colonies_empty": {
   "en": "We hold no colony yet. Each one we found is listed here under its stage, with the specialization we chose. Hover a colony for its permanent effects.",
   "de": "Wir besitzen noch keine Kolonie. Jede, die wir gründen, wird hier unter ihrer Stufe aufgeführt, mit der Spezialisierung, die wir gewählt haben. Fahren Sie über eine Kolonie, um ihre dauerhaften Effekte zu sehen."
@@ -2626,6 +2662,50 @@
  "je_space_race_widget_control_header": {
   "en": "Mission Control",
   "de": "Missionskontrolle"
+ },
+ "je_space_race_widget_ebase_label": {
+  "en": "Extraplanetary Base levels / room",
+  "de": "Stufen / Raum des Außerplanetaren Stützpunkts"
+ },
+ "je_space_race_widget_emig_label": {
+  "en": "Emigration",
+  "de": "Auswanderung"
+ },
+ "je_space_race_widget_emig_level_0": {
+  "en": "Off",
+  "de": "Aus"
+ },
+ "je_space_race_widget_emig_level_1": {
+  "en": "Low",
+  "de": "Gering"
+ },
+ "je_space_race_widget_emig_level_2": {
+  "en": "Steady",
+  "de": "Stetig"
+ },
+ "je_space_race_widget_emig_level_3": {
+  "en": "High",
+  "de": "Hoch"
+ },
+ "je_space_race_widget_emig_month_label": {
+  "en": "Settlers a month",
+  "de": "Siedler pro Monat"
+ },
+ "je_space_race_widget_emig_prio_0": {
+  "en": "Closed",
+  "de": "Geschlossen"
+ },
+ "je_space_race_widget_emig_prio_1": {
+  "en": "Low",
+  "de": "Niedrig"
+ },
+ "je_space_race_widget_emig_prio_2": {
+  "en": "Normal",
+  "de": "Normal"
+ },
+ "je_space_race_widget_emig_prio_3": {
+  "en": "High",
+  "de": "Hoch"
  },
  "je_space_race_widget_eta_interstellar_probe": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_interstellar_probe')|0] months",
@@ -2666,6 +2746,14 @@
  "je_space_race_widget_eta_tt": {
   "en": "Months left at this month's pace. Setbacks are not counted, so the real wait is usually longer.",
   "de": "Verbleibende Monate bei dem Tempo dieses Monats. Rückschläge sind nicht eingerechnet, die tatsächliche Wartezeit ist daher meist länger."
+ },
+ "je_space_race_widget_fab_label": {
+  "en": "Fabrication a month / in stock",
+  "de": "Fertigung pro Monat / auf Lager"
+ },
+ "je_space_race_widget_fleets_header": {
+  "en": "Colony Fleets",
+  "de": "Kolonieflotten"
  },
  "je_space_race_widget_funding_label": {
   "en": "#bold Programme funding#! (each level draws on innovation)",
@@ -2711,6 +2799,14 @@
   "en": "Funding",
   "de": "Finanzierung"
  },
+ "je_space_race_widget_how_sub_orbit": {
+  "en": "Satellites and Debris",
+  "de": "Satelliten und Schrott"
+ },
+ "je_space_race_widget_how_sub_powers": {
+  "en": "Space Powers",
+  "de": "Raumfahrtmächte"
+ },
  "je_space_race_widget_how_sub_programme": {
   "en": "The Programme",
   "de": "Das Programm"
@@ -2722,6 +2818,62 @@
  "je_space_race_widget_how_sub_setbacks": {
   "en": "Setbacks",
   "de": "Rückschläge"
+ },
+ "je_space_race_widget_mod_upkeep_label": {
+  "en": "Module upkeep (throughput)",
+  "de": "Modulunterhalt (Durchsatz)"
+ },
+ "je_space_race_widget_modules_col_b": {
+  "en": "II",
+  "de": "II"
+ },
+ "je_space_race_widget_modules_col_def": {
+  "en": "Def",
+  "de": "Vert."
+ },
+ "je_space_race_widget_modules_col_hab": {
+  "en": "Hab",
+  "de": "Hab."
+ },
+ "je_space_race_widget_modules_col_port": {
+  "en": "Port",
+  "de": "Hafen"
+ },
+ "je_space_race_widget_modules_col_staffing": {
+  "en": "Crew",
+  "de": "Besatzung"
+ },
+ "je_space_race_widget_modules_header": {
+  "en": "Colony Modules",
+  "de": "Koloniemodule"
+ },
+ "je_space_race_widget_mq_header": {
+  "en": "Queue",
+  "de": "Warteschlange"
+ },
+ "je_space_race_widget_offworld_label": {
+  "en": "People off Earth",
+  "de": "Menschen außerhalb der Erde"
+ },
+ "je_space_race_widget_orbit_header": {
+  "en": "Orbit",
+  "de": "Orbit"
+ },
+ "je_space_race_widget_orbit_moratorium_label": {
+  "en": "Anti-Satellite Moratorium",
+  "de": "Antisatelliten-Moratorium"
+ },
+ "je_space_race_widget_orbit_satellites_label": {
+  "en": "Our Satellites",
+  "de": "Unsere Satelliten"
+ },
+ "je_space_race_widget_orbit_strike_label": {
+  "en": "Our Anti-Satellite Strike",
+  "de": "Unser Antisatellitenschlag"
+ },
+ "je_space_race_widget_orbit_strikes_label": {
+  "en": "Anti-Satellite Strikes So Far",
+  "de": "Bisherige Antisatellitenschläge"
  },
  "je_space_race_widget_ov_ambitious_interstellar_probe": {
   "en": "Ambitious −[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_cost_ambitious_interstellar_probe')|0]/wk",
@@ -2858,6 +3010,54 @@
  "je_space_race_widget_pace_tt": {
   "en": "#header Progress per Month#!\\nEvery running milestone gains this much each month, whatever its approach: what is added, times one plus the multiplier, and never less than 0.5.\\n$TOOLTIP_DELIMITER$\\n#title Added each month:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_add')]\\n#title Multiplier:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_mult')]\\n$TOOLTIP_DELIMITER$\\n#bold Pace:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress')|1]#! a month",
   "de": "#header Fortschritt pro Monat#!\\nJeder laufende Meilenstein gewinnt jeden Monat so viel, unabhängig von seinem Ansatz: der Zuwachs mal eins plus dem Multiplikator, und nie weniger als 0,5.\\n$TOOLTIP_DELIMITER$\\n#title Monatlicher Zuwachs:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_add')]\\n#title Multiplikator:#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_space_race_progress_mult')]\\n$TOOLTIP_DELIMITER$\\n#bold Tempo:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress')|1]#! im Monat"
+ },
+ "je_space_race_widget_power_lead_none": {
+  "en": "Nothing under way",
+  "de": "Nichts im Gange"
+ },
+ "je_space_race_widget_power_prog_interstellar": {
+  "en": "#bold Interstellar Probe#! — [State.GetCountry.GetCustom('sr_power_prog_interstellar')]",
+  "de": "#bold Interstellare Sonde#! — [State.GetCountry.GetCustom('sr_power_prog_interstellar')]"
+ },
+ "je_space_race_widget_power_prog_mars_landing": {
+  "en": "#bold Mars Landing#! — [State.GetCountry.GetCustom('sr_power_prog_mars_landing')]",
+  "de": "#bold Marslandung#! — [State.GetCountry.GetCustom('sr_power_prog_mars_landing')]"
+ },
+ "je_space_race_widget_power_prog_moon_base": {
+  "en": "#bold Moon Base#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]",
+  "de": "#bold Mondbasis#! — [State.GetCountry.GetCustom('sr_power_prog_moon_base')]"
+ },
+ "je_space_race_widget_power_prog_moon_landing": {
+  "en": "#bold Moon Landing#! — [State.GetCountry.GetCustom('sr_power_prog_moon_landing')]",
+  "de": "#bold Mondlandung#! — [State.GetCountry.GetCustom('sr_power_prog_moon_landing')]"
+ },
+ "je_space_race_widget_power_prog_orbital": {
+  "en": "#bold Orbital Flight#! — [State.GetCountry.GetCustom('sr_power_prog_orbital')]",
+  "de": "#bold Orbitalflug#! — [State.GetCountry.GetCustom('sr_power_prog_orbital')]"
+ },
+ "je_space_race_widget_power_prog_probe": {
+  "en": "#bold Deep-Space Probe#! — [State.GetCountry.GetCustom('sr_power_prog_probe')]",
+  "de": "#bold Tiefraumsonde#! — [State.GetCountry.GetCustom('sr_power_prog_probe')]"
+ },
+ "je_space_race_widget_power_prog_solar_colonization": {
+  "en": "#bold Solar System Colonization#! — [State.GetCountry.GetCustom('sr_power_prog_solar_colonization')]",
+  "de": "#bold Besiedlung des Sonnensystems#! — [State.GetCountry.GetCustom('sr_power_prog_solar_colonization')]"
+ },
+ "je_space_race_widget_power_prog_suborbital": {
+  "en": "#bold Suborbital Flight#! — [State.GetCountry.GetCustom('sr_power_prog_suborbital')]",
+  "de": "#bold Suborbitalflug#! — [State.GetCountry.GetCustom('sr_power_prog_suborbital')]"
+ },
+ "je_space_race_widget_powers_header": {
+  "en": "Space Powers",
+  "de": "Raumfahrtmächte"
+ },
+ "je_space_race_widget_powers_more": {
+  "en": "+[GetPlayer.MakeScope.ScriptValue('sr_disp_power_more')|0] more",
+  "de": "+[GetPlayer.MakeScope.ScriptValue('sr_disp_power_more')|0] weitere"
+ },
+ "je_space_race_widget_powers_others": {
+  "en": "Other Powers",
+  "de": "Andere Mächte"
  },
  "je_space_race_widget_profile_header": {
   "en": "Mission Profile",
@@ -3090,6 +3290,78 @@
  "je_space_race_widget_setbacks_label": {
   "en": "Setbacks So Far",
   "de": "Bisherige Rückschläge"
+ },
+ "je_space_race_widget_settlers_agi": {
+  "en": "AGI",
+  "de": "AGI"
+ },
+ "je_space_race_widget_settlers_header": {
+  "en": "Settlers",
+  "de": "Siedler"
+ },
+ "je_space_race_widget_shipments_label": {
+  "en": "Shipments waiting / in flight",
+  "de": "Lieferungen wartend / unterwegs"
+ },
+ "je_space_race_widget_solar_system_header": {
+  "en": "Solar System",
+  "de": "Sonnensystem"
+ },
+ "je_space_race_widget_ss_loc_asteroids": {
+  "en": "The Asteroid Belt",
+  "de": "Der Asteroidengürtel"
+ },
+ "je_space_race_widget_ss_loc_inner": {
+  "en": "Mercury and Venus",
+  "de": "Merkur und Venus"
+ },
+ "je_space_race_widget_ss_loc_jupiter": {
+  "en": "Jupiter",
+  "de": "Jupiter"
+ },
+ "je_space_race_widget_ss_loc_kuiper": {
+  "en": "The Kuiper Belt and Beyond",
+  "de": "Der Kuipergürtel und darüber hinaus"
+ },
+ "je_space_race_widget_ss_loc_mars": {
+  "en": "Mars",
+  "de": "Mars"
+ },
+ "je_space_race_widget_ss_loc_neptune": {
+  "en": "Neptune",
+  "de": "Neptun"
+ },
+ "je_space_race_widget_ss_loc_saturn": {
+  "en": "Saturn",
+  "de": "Saturn"
+ },
+ "je_space_race_widget_ss_loc_uranus": {
+  "en": "Uranus",
+  "de": "Uranus"
+ },
+ "je_space_race_widget_ss_ours": {
+  "en": "Ours",
+  "de": "Unsere"
+ },
+ "je_space_race_widget_ss_target": {
+  "en": "Our target",
+  "de": "Unser Ziel"
+ },
+ "je_space_race_widget_ss_target_button": {
+  "en": "Target",
+  "de": "Anvisieren"
+ },
+ "je_space_race_widget_ss_target_clear": {
+  "en": "Clear",
+  "de": "Aufheben"
+ },
+ "je_space_race_widget_ss_unclaimed": {
+  "en": "Unclaimed",
+  "de": "Unbeansprucht"
+ },
+ "je_space_race_widget_ss_unknown": {
+  "en": "Another power",
+  "de": "Eine andere Macht"
  },
  "je_space_race_widget_standard_label": {
   "en": "Standard",
@@ -7127,6 +7399,10 @@
   "en": "#bold Case strength#!",
   "de": "#bold Fallstärke#!"
  },
+ "je_un_record_council_header": {
+  "en": "Our Permanent Seat",
+  "de": "Unser ständiger Sitz"
+ },
  "je_un_record_covert": {
   "en": "Covert operations",
   "de": "Verdeckte Operationen"
@@ -7134,6 +7410,10 @@
  "je_un_record_defiance": {
   "en": "Defiance",
   "de": "Missachtung"
+ },
+ "je_un_record_expulsion": {
+  "en": "#tooltippable Case for expelling us#!",
+  "de": "#tooltippable Gründe für unseren Ausschluss#!"
  },
  "je_un_record_infamy": {
   "en": "Infamy",
@@ -7170,6 +7450,10 @@
  "je_un_record_supports_sanctions": {
   "en": "Sanctions, at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#!",
   "de": "Sanktionen, bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_threshold_sanctions')|0]#!"
+ },
+ "je_un_record_veto": {
+  "en": "#tooltippable Veto record#!",
+  "de": "#tooltippable Veto-Bilanz#!"
  },
  "je_un_record_violation": {
   "en": "Violated mandates",

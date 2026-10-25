@@ -1763,10 +1763,6 @@
   "en": "Must be outside the capital's region and all neighboring regions.",
   "de": "Muss außerhalb der Hauptstadtregion und aller angrenzenden Regionen liegen."
  },
- "IS_OVERSEAS_FROM_OVERLORD_CAPITAL_TT": {
-  "en": "Must be outside the [concept_overlord]'s capital region and all neighboring regions.",
-  "de": "Muss außerhalb der Hauptstadtregion des [concept_overlord] und aller angrenzenden Regionen liegen."
- },
  "IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT": {
   "en": "Must be a populous non-[concept_homeland] territory with a significant low-acceptance local population.",
   "de": "Muss ein bevölkerungsreiches Gebiet sein, das kein [concept_homeland] ist und eine bedeutende lokale Bevölkerung mit geringer Akzeptanz aufweist."
@@ -2202,86 +2198,6 @@
  "SR_PROBE_VENUS_CHOSEN_TT": {
   "en": "Our probe will target Venus, studying its atmosphere and greenhouse dynamics. The atmospheric data will accelerate our research and the wider space-race program for ten years, fading over that time.",
   "de": "Unsere Sonde wird die Venus anvisieren und ihre Atmosphäre und Treibhausdynamik untersuchen. Die Atmosphärendaten beschleunigen zehn Jahre lang unsere Forschung und das gesamte Programm des Wettlaufs ins All und klingen dabei allmählich ab."
- },
- "SR_PROGRESS_ADD_10_TT": {
-  "en": "#G +10#! [concept_space_race] mission progress",
-  "de": "#G +10#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_12_TT": {
-  "en": "#G +12#! [concept_space_race] mission progress",
-  "de": "#G +12#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_15_TT": {
-  "en": "#G +15#! [concept_space_race] mission progress",
-  "de": "#G +15#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_20_TT": {
-  "en": "#G +20#! [concept_space_race] mission progress",
-  "de": "#G +20#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_25_TT": {
-  "en": "#G +25#! [concept_space_race] mission progress",
-  "de": "#G +25#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_2_TT": {
-  "en": "#G +2#! [concept_space_race] mission progress",
-  "de": "#G +2#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_30_TT": {
-  "en": "#G +30#! [concept_space_race] mission progress",
-  "de": "#G +30#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_3_TT": {
-  "en": "#G +3#! [concept_space_race] mission progress",
-  "de": "#G +3#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_4_TT": {
-  "en": "#G +4#! [concept_space_race] mission progress",
-  "de": "#G +4#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_5_TT": {
-  "en": "#G +5#! [concept_space_race] mission progress",
-  "de": "#G +5#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_6_TT": {
-  "en": "#G +6#! [concept_space_race] mission progress",
-  "de": "#G +6#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_7_TT": {
-  "en": "#G +7#! [concept_space_race] mission progress",
-  "de": "#G +7#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_ADD_8_TT": {
-  "en": "#G +8#! [concept_space_race] mission progress",
-  "de": "#G +8#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_LOSE_15_PERCENT_TT": {
-  "en": "#R Lose 15%#! of current [concept_space_race] mission progress (in Solar System Colonization, of one colony's progress at most: fleets staged in orbit are safe)",
-  "de": "#R Verlust von 15%#! des aktuellen Missionsfortschritts im [concept_space_race] (bei der Besiedlung des Sonnensystems höchstens des Fortschritts einer Kolonie: im Orbit bereitgestellte Flotten sind sicher)"
- },
- "SR_PROGRESS_LOSE_25_PERCENT_TT": {
-  "en": "#R Lose 25%#! of current [concept_space_race] mission progress (in Solar System Colonization, of one colony's progress at most: fleets staged in orbit are safe)",
-  "de": "#R Verlust von 25%#! des aktuellen Missionsfortschritts im [concept_space_race] (bei der Besiedlung des Sonnensystems höchstens des Fortschritts einer Kolonie: im Orbit bereitgestellte Flotten sind sicher)"
- },
- "SR_PROGRESS_SUBTRACT_10_TT": {
-  "en": "#R -10#! [concept_space_race] mission progress",
-  "de": "#R -10#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_SUBTRACT_3_TT": {
-  "en": "#R -3#! [concept_space_race] mission progress",
-  "de": "#R -3#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_SUBTRACT_4_TT": {
-  "en": "#R -4#! [concept_space_race] mission progress",
-  "de": "#R -4#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_SUBTRACT_6_TT": {
-  "en": "#R -6#! [concept_space_race] mission progress",
-  "de": "#R -6#! Missionsfortschritt im [concept_space_race]"
- },
- "SR_PROGRESS_SUBTRACT_8_TT": {
-  "en": "#R -8#! [concept_space_race] mission progress",
-  "de": "#R -8#! Missionsfortschritt im [concept_space_race]"
  },
  "SR_SAFE_APPROACH_DESC": {
   "en": "Proceed methodically and carefully. Slower progress, but minimal risk of catastrophic failure.",
@@ -3499,6 +3415,10 @@
   "en": "#bold [concept_migration_crowding]#!\\n\\nPopulation: #v [State.GetPopulationSize|Kv]#!\\nCrowding Threshold: #v [State.MakeScope.ScriptValue('migration_crowding_threshold_pop')|Kv]#!\\nMigration Pull Penalty: #R -[State.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#!\\n\\n#bold Crowding Threshold#! = ([concept_arable_land] × 10K + [concept_urban_engineering] × 1K) × (1 + Tolerance)\\n[concept_arable_land]: #v [State.MakeScope.ScriptValue('arable_land_base')|0]#! × 10K = #v [State.MakeScope.ScriptValue('migration_crowding_land_pop')|Kv]#!\\n[concept_urban_engineering]: [State.GetModifier.GetValueWithBreakdownFor('state_building_construction_sector_max_level_add')] × 1K = #G +[State.MakeScope.ScriptValue('migration_crowding_urban_engineering_capacity')|K]#!\\n$state_migration_crowding_density_mult$: [State.GetModifier.GetValueWithBreakdownFor('state_migration_crowding_density_mult')]\\n\\n#bold Crowding Ratio:#! #v [State.MakeScope.ScriptValue('migration_crowding_ratio')|%0]#!\\n0% is the floor where crowding starts. 100% is the 10x density knee where the formula switches from quadratic growth to a linear tail. Values above 100% mean the state is already in that linear tail.\\n\\n#bold How the curve works:#!\\nFrom the floor up to the 10x knee, crowding scales as #v 4.5 × r²#!, so the penalty ramps in gradually. Beyond the knee, it becomes #v 9 × r - 4.5#!, adding a steady #R 10 percentage points#! of migration-pull penalty for each extra 1x density above the knee.\\n\\nExamples:\\n· At the floor: #R 0%#! penalty\\n· At the 10x knee: #R 45%#! penalty\\n· At 20x density: #R 145%#! penalty\\n\\nMore [concept_urban_engineering] (from the early urban technologies, $urbanization$ to $elevator$) or higher $state_migration_crowding_density_mult$ (from the Ministry of Urban Planning, the Urban Planning principles, civil highways and later technologies; national parks, forests and wildlife refuges lower it) raises the threshold, shifting the state back toward the floor so the same population produces a smaller penalty.",
   "de": "#bold [concept_migration_crowding]#!\\n\\nBevölkerung: #v [State.GetPopulationSize|Kv]#!\\nÜberlastungsschwelle: #v [State.MakeScope.ScriptValue('migration_crowding_threshold_pop')|Kv]#!\\nMigrationssog-Strafe: #R -[State.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#!\\n\\n#bold Überlastungsschwelle#! = ([concept_arable_land] × 10K + [concept_urban_engineering] × 1K) × (1 + Toleranz)\\n[concept_arable_land]: #v [State.MakeScope.ScriptValue('arable_land_base')|0]#! × 10K = #v [State.MakeScope.ScriptValue('migration_crowding_land_pop')|Kv]#!\\n[concept_urban_engineering]: [State.GetModifier.GetValueWithBreakdownFor('state_building_construction_sector_max_level_add')] × 1K = #G +[State.MakeScope.ScriptValue('migration_crowding_urban_engineering_capacity')|K]#!\\n$state_migration_crowding_density_mult$: [State.GetModifier.GetValueWithBreakdownFor('state_migration_crowding_density_mult')]\\n\\n#bold Überlastungsquote:#! #v [State.MakeScope.ScriptValue('migration_crowding_ratio')|%0]#!\\n0% ist die Untergrenze, ab der die Überlastung einsetzt. 100% ist der 10-fache-Dichte-Knickpunkt, an dem die Formel von quadratischem Wachstum in einen linearen Verlauf übergeht. Werte über 100% bedeuten, dass sich der Staat bereits in diesem linearen Verlauf befindet.\\n\\n#bold Wie die Kurve funktioniert:#!\\nVon der Untergrenze bis zum 10-fachen Knickpunkt skaliert die Überlastung als #v 4,5 × r²#!, sodass die Strafe allmählich ansteigt. Jenseits des Knickpunkts wird sie zu #v 9 × r - 4,5#! und fügt für jede weitere 1-fache Dichte über dem Knickpunkt gleichmäßig #R 10 Prozentpunkte#! Migrationssog-Strafe hinzu.\\n\\nBeispiele:\\n· An der Untergrenze: #R 0%#! Strafe\\n· Am 10-fachen Knickpunkt: #R 45%#! Strafe\\n· Bei 20-facher Dichte: #R 145%#! Strafe\\n\\nMehr [concept_urban_engineering] (aus den frühen urbanen Technologien, von $urbanization$ bis $elevator$) oder eine höhere $state_migration_crowding_density_mult$ (durch das Stadtplanungsministerium, die Prinzipien der Stadtplanung, zivile Fernstraßen und spätere Technologien; Nationalparks, Wälder und Wildschutzgebiete senken sie) hebt die Schwelle an und verschiebt den Staat zurück in Richtung Untergrenze, sodass dieselbe Bevölkerung eine geringere Strafe verursacht."
  },
+ "TE_STATE_GRID_ROW_CABLES": {
+  "en": "Sea cables",
+  "de": "Seekabel"
+ },
  "TE_STATE_GRID_ROW_EFFICIENCY": {
   "en": "Efficiency",
   "de": "Effizienz"
@@ -3530,6 +3450,10 @@
  "TE_STATE_GRID_ROW_MOVED_TT": {
   "en": "#b Flow#!\\nThe $electricity$ this station sends to its grid, or delivers to this state after losses, a week: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!.",
   "de": "#b Fluss#!\\nDie Menge an $electricity$, die diese Station pro Woche an ihr Netz sendet oder nach Verlusten an diesen Staat liefert: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!."
+ },
+ "TE_STATE_GRID_ROW_PASS": {
+  "en": "Pass-through",
+  "de": "Durchleitung"
  },
  "TE_STATE_GRID_ROW_SIZE": {
   "en": "Grid size",
@@ -4131,6 +4055,22 @@
   "en": "Enemy communications disruption",
   "de": "Feindliche Kommunikationsstörung"
  },
+ "WAR_SUPPORT_TE_DECOL_CONDEMNED": {
+  "en": "The world condemns it",
+  "de": "Die Welt verurteilt ihn"
+ },
+ "WAR_SUPPORT_TE_DECOL_FOREIGN_ARMS": {
+  "en": "Foreign arms",
+  "de": "Ausländische Waffen"
+ },
+ "WAR_SUPPORT_TE_DECOL_INDEPENDENCE": {
+  "en": "Fighting for independence",
+  "de": "Kampf um die Unabhängigkeit"
+ },
+ "WAR_SUPPORT_TE_DECOL_SETTLERS": {
+  "en": "Settlers to defend",
+  "de": "Siedler, die es zu verteidigen gilt"
+ },
  "WAR_SUPPORT_TE_NUCLEAR_SHADOW": {
   "en": "Enemy nuclear arsenal",
   "de": "Feindliches Nukleararsenal"
@@ -4339,6 +4279,14 @@
   "en": "Environmental Grandfather Clause",
   "de": "Umweltrechtlicher Bestandsschutz"
  },
+ "amendment_habeas_corpus_suspension": {
+  "en": "Suspension of Habeas Corpus",
+  "de": "Aussetzung des Habeas Corpus"
+ },
+ "amendment_human_in_the_loop": {
+  "en": "Human-in-the-Loop Appeals",
+  "de": "Berufung vor menschlichen Richtern"
+ },
  "amendment_langreform_advisory_panel": {
   "en": "Language Advisory Panel",
   "de": "Sprachbeirat"
@@ -4438,6 +4386,10 @@
  "amendment_minority_script_preservation": {
   "en": "Minority Script Preservation",
   "de": "Erhalt der Minderheitenschriften"
+ },
+ "amendment_mixed_commercial_courts": {
+  "en": "Mixed Commercial Courts",
+  "de": "Gemischte Handelsgerichte"
  },
  "amendment_national_champion_exemption": {
   "en": "National Champion Exemption",
@@ -6591,6 +6543,10 @@
   "en": "Private Megastructure Facility",
   "de": "Private Megastruktur-Anlage"
  },
+ "bg_sr_colony_sites": {
+  "en": "Solar System Colonies",
+  "de": "Kolonien im Sonnensystem"
+ },
  "big_money_election_modifier": {
   "en": "Big Money Election",
   "de": "Wahlkampf des großen Geldes"
@@ -7643,6 +7599,10 @@
   "en": "Add Multicultural Ideology to Intelligentsia",
   "de": "Multikulturelle Ideologie zu den Intellektuellen hinzufügen"
  },
+ "country_amendment_lapses_at_peace_bool": {
+  "en": "Lapses at Peace",
+  "de": "Erlischt im Frieden"
+ },
  "country_banking_lock_asset_relief_bool": {
   "en": "Locks [Concept('concept_asset_relief_program', 'Asset Relief Program')]",
   "de": "Sperrt [Concept('concept_asset_relief_program', 'Vermögensentlastungsprogramm')]"
@@ -7742,6 +7702,10 @@
  "country_court_challenges_ignored_bool": {
   "en": "Courts Can’t Challenge the Government",
   "de": "Gerichte können die Regierung nicht anfechten"
+ },
+ "country_court_reviews_forced_laws_bool": {
+  "en": "Courts Review Forced Laws",
+  "de": "Gerichte prüfen durchgesetzte Gesetze"
  },
  "country_homelands_can_change_bool": {
   "en": "Homelands Can Change",
@@ -8579,6 +8543,50 @@
   "en": "Data Protection Strengthened",
   "de": "Datenschutz gestärkt"
  },
+ "decol_iw_accords_mandate_modifier": {
+  "en": "The General’s Peace",
+  "de": "Der Frieden des Generals"
+ },
+ "decol_iw_accords_modifier": {
+  "en": "The Accords",
+  "de": "Die Abkommen"
+ },
+ "decol_iw_allied_arms_modifier": {
+  "en": "Allied Arms",
+  "de": "Waffen von Verbündeten"
+ },
+ "decol_iw_fighters_modifier": {
+  "en": "Fighting for Independence",
+  "de": "Kampf um die Unabhängigkeit"
+ },
+ "decol_iw_foreign_arms_modifier": {
+  "en": "Foreign Arms",
+  "de": "Ausländische Waffen"
+ },
+ "decol_iw_general_mandate_modifier": {
+  "en": "The General’s Mandate",
+  "de": "Das Mandat des Generals"
+ },
+ "decol_iw_hold_the_line_modifier": {
+  "en": "Holding the Line",
+  "de": "Die Stellung halten"
+ },
+ "decol_iw_lost_modifier": {
+  "en": "The Flag Came Down",
+  "de": "Die Flagge wurde eingeholt"
+ },
+ "decol_iw_negotiation_modifier": {
+  "en": "Negotiated Handover",
+  "de": "Ausgehandelte Übergabe"
+ },
+ "decol_iw_officers_crushed_modifier": {
+  "en": "The Officers Crushed",
+  "de": "Die Offiziere zerschlagen"
+ },
+ "decol_iw_war_name": {
+  "en": "War of Independence",
+  "de": "Unabhängigkeitskrieg"
+ },
  "decolonization_confirm_planned_tt_header": {
   "en": "The following overseas colonial territories will be released as independent nations:",
   "de": "Die folgenden überseeischen Kolonialgebiete werden als unabhängige Nationen entlassen:"
@@ -8626,6 +8634,14 @@
  "disestablishment_religious_movement_modifier": {
   "en": "Disestablishment Pressure",
   "de": "Druck zur Kirchentrennung"
+ },
+ "dp_te_colonial_war": {
+  "en": "War of Independence",
+  "de": "Unabhängigkeitskrieg"
+ },
+ "dp_te_independence_war": {
+  "en": "War of Independence",
+  "de": "Unabhängigkeitskrieg"
  },
  "drugs_shortage_pharma_drive": {
   "en": "Pharmaceutical Production Drive",
@@ -9955,14 +9971,6 @@
   "en": "#b State Ceremonial#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]",
   "de": "#b Staatszeremoniell#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
  },
- "gm_button_policy_mothballed": {
-  "en": "Mothballed",
-  "de": "Eingemottet"
- },
- "gm_button_policy_mothballed_tooltip": {
-  "en": "#b Mothballed#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]",
-  "de": "#b Eingemottet#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
- },
  "gm_button_policy_open": {
   "en": "Open to the Public",
   "de": "Öffentlich zugänglich"
@@ -9970,14 +9978,6 @@
  "gm_button_policy_open_tooltip": {
   "en": "#b Open to the Public#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]",
   "de": "#b Öffentlich zugänglich#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
- },
- "gm_button_policy_standard": {
-  "en": "Standard",
-  "de": "Standard"
- },
- "gm_button_policy_standard_tooltip": {
-  "en": "#b Standard#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]",
-  "de": "#b Standard#!\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
  },
  "gm_button_preserve": {
   "en": "Keep as Heritage",
@@ -11443,6 +11443,14 @@
   "en": "the $gm_skin_landmark_alexander_column$",
   "de": "die $gm_skin_landmark_alexander_column$"
  },
+ "gm_landmark_alhambra_evt": {
+  "en": "the $gm_skin_landmark_alhambra$",
+  "de": "die $gm_skin_landmark_alhambra$"
+ },
+ "gm_landmark_amphitheatre_of_el_djem_evt": {
+  "en": "the $gm_skin_landmark_amphitheatre_of_el_djem$",
+  "de": "das $gm_skin_landmark_amphitheatre_of_el_djem$"
+ },
  "gm_landmark_antikythera_mechanism_desc": {
   "en": "A geared bronze calculator of the second century BC, hauled by sponge divers from a Roman wreck off Antikythera in 1901. It modelled the motions of the Sun, the Moon and the planets.",
   "de": "Ein Rechengerät aus Bronzezahnrädern des 2. Jahrhunderts v. Chr., das Schwammtaucher 1901 aus einem römischen Wrack vor Antikythera bargen. Es bildete die Bewegungen von Sonne, Mond und Planeten nach."
@@ -11479,6 +11487,10 @@
   "en": "The great cannon that guarded Algiers harbour from 1542, taken by the French in 1830 and set up in the arsenal at Brest as a column crowned with a cockerel.",
   "de": "Die große Kanone, die ab 1542 den Hafen von Algier bewachte, 1830 von den Franzosen genommen und im Arsenal von Brest als von einem Hahn gekrönte Säule aufgestellt."
  },
+ "gm_landmark_basilica_of_saint_francis_evt": {
+  "en": "the $gm_skin_landmark_basilica_of_saint_francis$",
+  "de": "die $gm_skin_landmark_basilica_of_saint_francis$"
+ },
  "gm_landmark_basilica_of_superga_desc": {
   "en": "Vowed by Victor Amadeus II during the siege of Turin in 1706 and raised 1717–1731 on the hill above the city. The House of Savoy is buried beneath it.",
   "de": "Von Viktor Amadeus II. während der Belagerung Turins 1706 gelobt und 1717–1731 auf dem Hügel über der Stadt errichtet. Das Haus Savoyen ist unter ihr bestattet."
@@ -11498,6 +11510,10 @@
  "gm_landmark_brandenburg_gate_evt": {
   "en": "the $gm_skin_landmark_brandenburg_gate$",
   "de": "das $gm_skin_landmark_brandenburg_gate$"
+ },
+ "gm_landmark_buddhas_of_bamiyan_evt": {
+  "en": "the $gm_skin_landmark_buddhas_of_bamiyan$",
+  "de": "die $gm_skin_landmark_buddhas_of_bamiyan$"
  },
  "gm_landmark_bukgwan_victory_stele_desc": {
   "en": "Raised at Kilju in 1707 to the volunteer army that defeated the Japanese invaders in Hamgyong in 1592.",
@@ -11543,6 +11559,18 @@
   "en": "the $gm_skin_landmark_cenotaph_of_maximilian$",
   "de": "der $gm_skin_landmark_cenotaph_of_maximilian$"
  },
+ "gm_landmark_charminar_evt": {
+  "en": "the $gm_skin_landmark_charminar$",
+  "de": "der $gm_skin_landmark_charminar$"
+ },
+ "gm_landmark_chateau_de_chambord_evt": {
+  "en": "the $gm_skin_landmark_chateau_de_chambord$",
+  "de": "das $gm_skin_landmark_chateau_de_chambord$"
+ },
+ "gm_landmark_citadel_of_aleppo_evt": {
+  "en": "the $gm_skin_landmark_citadel_of_aleppo$",
+  "de": "die $gm_skin_landmark_citadel_of_aleppo$"
+ },
  "gm_landmark_dead_sea_scrolls_desc": {
   "en": "Scrolls from the caves above Qumran, found by Bedouin shepherds from 1947: the oldest manuscripts of the Hebrew Bible yet known.",
   "de": "Schriftrollen aus den Höhlen oberhalb von Qumran, ab 1947 von Beduinenhirten gefunden: die ältesten bekannten Handschriften der Hebräischen Bibel."
@@ -11571,6 +11599,10 @@
   "en": "the $gm_skin_landmark_golestan_palace$",
   "de": "der $gm_skin_landmark_golestan_palace$"
  },
+ "gm_landmark_grand_palace_bangkok_evt": {
+  "en": "the $gm_skin_landmark_grand_palace_bangkok$",
+  "de": "der $gm_skin_landmark_grand_palace_bangkok$"
+ },
  "gm_landmark_great_zimbabwe_desc": {
   "en": "Walls of dressed stone laid without mortar by the kings of Zimbabwe from the eleventh century, the Great Enclosure's conical tower among them. Carved soapstone birds stand on pillars in the ruins on the hill.",
   "de": "Mauern aus behauenem Stein, die die Könige von Simbabwe ab dem elften Jahrhundert ohne Mörtel setzten, darunter der kegelförmige Turm der Großen Umfriedung. Geschnitzte Specksteinvögel stehen auf Pfeilern in den Ruinen auf dem Hügel."
@@ -11586,6 +11618,10 @@
  "gm_landmark_horses_of_saint_mark_evt": {
   "en": "the $gm_skin_landmark_horses_of_saint_mark$",
   "de": "die $gm_skin_landmark_horses_of_saint_mark$"
+ },
+ "gm_landmark_humble_administrators_garden_evt": {
+  "en": "the $gm_skin_landmark_humble_administrators_garden$",
+  "de": "der $gm_skin_landmark_humble_administrators_garden$"
  },
  "gm_landmark_imperial_city_of_hue_desc": {
   "en": "The Nguyen emperors' citadel at Huế, begun under Gia Long in 1804. Minh Mang finished its Meridian Gate in 1833.",
@@ -11603,6 +11639,10 @@
   "en": "the $gm_skin_landmark_ishtar_gate_babylon$",
   "de": "das $gm_skin_landmark_ishtar_gate_babylon$"
  },
+ "gm_landmark_itsukushima_shrine_evt": {
+  "en": "the $gm_skin_landmark_itsukushima_shrine$",
+  "de": "der $gm_skin_landmark_itsukushima_shrine$"
+ },
  "gm_landmark_jantar_mantar_desc": {
   "en": "Finished in 1734 for Maharaja Jai Singh II, founder of Jaipur: instruments of stone, built at the scale of buildings, for reading the sun and the stars.",
   "de": "1734 für Maharadscha Jai Singh II., den Gründer von Jaipur, vollendet: Instrumente aus Stein, in der Größe von Gebäuden gebaut, um Sonne und Sterne abzulesen."
@@ -11619,6 +11659,14 @@
   "en": "the $gm_skin_landmark_jardim_botanico$",
   "de": "der $gm_skin_landmark_jardim_botanico$"
  },
+ "gm_landmark_jeronimos_monastery_evt": {
+  "en": "the $gm_skin_landmark_jeronimos_monastery$",
+  "de": "das $gm_skin_landmark_jeronimos_monastery$"
+ },
+ "gm_landmark_kazan_kremlin_evt": {
+  "en": "the $gm_skin_landmark_kazan_kremlin$",
+  "de": "der $gm_skin_landmark_kazan_kremlin$"
+ },
  "gm_landmark_klungkung_palace_desc": {
   "en": "The palace of the Dewa Agung at Klungkung, paramount king of Bali, with the Kertha Gosa hall of justice painted with scenes of heaven and hell.",
   "de": "Der Palast des Dewa Agung in Klungkung, des obersten Königs von Bali, mit der Gerichtshalle Kertha Gosa, bemalt mit Szenen von Himmel und Hölle."
@@ -11630,6 +11678,10 @@
  "gm_landmark_lascaux_caves_desc": {
   "en": "A cave in the Dordogne where hunters of the Palaeolithic painted bulls, horses and deer, found by four boys and a dog in 1940.",
   "de": "Eine Höhle in der Dordogne, in der Jäger der Altsteinzeit Stiere, Pferde und Hirsche malten, 1940 von vier Jungen und einem Hund entdeckt."
+ },
+ "gm_landmark_leshan_giant_buddha_evt": {
+  "en": "the $gm_skin_landmark_leshan_giant_buddha$",
+  "de": "der $gm_skin_landmark_leshan_giant_buddha$"
  },
  "gm_landmark_liberty_column_desc": {
   "en": "Raised 1792–1797 to the reform of 1788 that ended adscription, which had bound Danish peasants to their estates.",
@@ -11655,6 +11707,10 @@
   "en": "the $gm_skin_landmark_lion_of_saint_mark$",
   "de": "der $gm_skin_landmark_lion_of_saint_mark$"
  },
+ "gm_landmark_longmen_grottoes_evt": {
+  "en": "the $gm_skin_landmark_longmen_grottoes$",
+  "de": "die $gm_skin_landmark_longmen_grottoes$"
+ },
  "gm_landmark_luxor_obelisk_desc": {
   "en": "One of the two obelisks of Ramesses II before the temple of Luxor, given to France by Muhammad Ali in 1830 and raised on the Place de la Concorde in 1836.",
   "de": "Einer der beiden Obelisken Ramses' II. vor dem Tempel von Luxor, 1830 von Muhammad Ali Frankreich geschenkt und 1836 auf der Place de la Concorde aufgestellt."
@@ -11667,6 +11723,14 @@
   "en": "The Inca citadel on a ridge above the Urubamba, left overgrown after the conquest. Hiram Bingham brought it to the world's notice in 1911 and Yale carried off its finds.",
   "de": "Die Inka-Zitadelle auf einem Bergrücken über dem Urubamba, nach der Eroberung überwuchert zurückgelassen. Hiram Bingham machte sie 1911 der Welt bekannt, und Yale schaffte ihre Funde fort."
  },
+ "gm_landmark_marksburg_evt": {
+  "en": "the $gm_skin_landmark_marksburg$",
+  "de": "die $gm_skin_landmark_marksburg$"
+ },
+ "gm_landmark_mausoleum_of_sultan_sanjar_evt": {
+  "en": "the $gm_skin_landmark_mausoleum_of_sultan_sanjar$",
+  "de": "das $gm_skin_landmark_mausoleum_of_sultan_sanjar$"
+ },
  "gm_landmark_mawangdui_tombs_desc": {
   "en": "Han tombs of the Marquis of Dai's family near Changsha, opened in 1972. His wife Lady Xin Zhui lay in a wonderfully preserved state among silk banners and a library of manuscripts on silk.",
   "de": "Han-zeitliche Gräber der Familie des Marquis von Dai bei Changsha, 1972 geöffnet. Seine Frau Lady Xin Zhui lag in wunderbar erhaltenem Zustand zwischen Seidenbannern und einer Bibliothek von Handschriften auf Seide."
@@ -11674,6 +11738,10 @@
  "gm_landmark_mawangdui_tombs_evt": {
   "en": "the $gm_skin_landmark_mawangdui_tombs$",
   "de": "die $gm_skin_landmark_mawangdui_tombs$"
+ },
+ "gm_landmark_merida_theatre_evt": {
+  "en": "the $gm_skin_landmark_merida_theatre$",
+  "de": "das $gm_skin_landmark_merida_theatre$"
  },
  "gm_landmark_mesha_stele_desc": {
   "en": "A basalt stone King Mesha of Moab raised at Dibon around 840 BC, telling in his own words how he threw off the rule of Israel.",
@@ -11683,9 +11751,21 @@
   "en": "the $gm_skin_landmark_mesha_stele$",
   "de": "die $gm_skin_landmark_mesha_stele$"
  },
+ "gm_landmark_mezquita_of_cordoba_evt": {
+  "en": "the $gm_skin_landmark_mezquita_of_cordoba$",
+  "de": "die $gm_skin_landmark_mezquita_of_cordoba$"
+ },
+ "gm_landmark_mogao_caves_evt": {
+  "en": "the $gm_skin_landmark_mogao_caves$",
+  "de": "die $gm_skin_landmark_mogao_caves$"
+ },
  "gm_landmark_mohenjo_daro_desc": {
   "en": "A city of the Indus civilization, laid out on a grid of streets in baked brick around 2500 BC. Its ruins were recognised for what they were in 1921.",
   "de": "Eine Stadt der Indus-Kultur, um 2500 v. Chr. in gebranntem Ziegel auf einem Straßenraster angelegt. Ihre Ruinen wurden 1921 als das erkannt, was sie waren."
+ },
+ "gm_landmark_moscow_kremlin_evt": {
+  "en": "the $gm_skin_landmark_moscow_kremlin$",
+  "de": "der $gm_skin_landmark_moscow_kremlin$"
  },
  "gm_landmark_muhammad_ali_mosque_desc": {
   "en": "A great mosque in the Ottoman manner on the summit of Cairo's Citadel, its walls faced in alabaster, which Muhammad Ali Pasha raised for himself and his dynasty.",
@@ -11694,6 +11774,10 @@
  "gm_landmark_muhammad_ali_mosque_evt": {
   "en": "the $gm_skin_landmark_muhammad_ali_mosque$",
   "de": "die $gm_skin_landmark_muhammad_ali_mosque$"
+ },
+ "gm_landmark_musalla_of_herat_evt": {
+  "en": "the $gm_skin_landmark_musalla_of_herat$",
+  "de": "die $gm_skin_landmark_musalla_of_herat$"
  },
  "gm_landmark_mycenae_grave_circle_desc": {
   "en": "Agamemnon's citadel behind the Lion Gate. Schliemann opened the shaft graves of Grave Circle A in 1876 and found gold masks, among them the one he called Agamemnon's.",
@@ -11743,6 +11827,10 @@
   "en": "the $gm_skin_landmark_obelisks_of_karnak$",
   "de": "die $gm_skin_landmark_obelisks_of_karnak$"
  },
+ "gm_landmark_old_city_of_sanaa_evt": {
+  "en": "the $gm_skin_landmark_old_city_of_sanaa$",
+  "de": "die $gm_skin_landmark_old_city_of_sanaa$"
+ },
  "gm_landmark_olympia_desc": {
   "en": "The sanctuary of Zeus in Elis, where the Games were held. A German expedition dug it from 1875 and found the Hermes of Praxiteles in the Temple of Hera.",
   "de": "Das Heiligtum des Zeus in Elis, wo die Spiele stattfanden. Eine deutsche Expedition grub es ab 1875 aus und fand im Tempel der Hera den Hermes des Praxiteles."
@@ -11766,6 +11854,10 @@
  "gm_landmark_palace_of_knossos_evt": {
   "en": "the $gm_skin_landmark_palace_of_knossos$",
   "de": "der $gm_skin_landmark_palace_of_knossos$"
+ },
+ "gm_landmark_palais_des_papes_evt": {
+  "en": "the $gm_skin_landmark_palais_des_papes$",
+  "de": "der $gm_skin_landmark_palais_des_papes$"
  },
  "gm_landmark_palmyra_desc": {
   "en": "Queen Zenobia's caravan city, whose colonnaded street and temple of Bel stand in the desert between Homs and the Euphrates. Villagers live inside the temple's walls.",
@@ -11803,6 +11895,22 @@
   "en": "The Roman town at the foot of Vesuvius, buried by the eruption of AD 79 with its streets, shops, houses and frescoes. Bourbon diggers began in 1748, and Giuseppe Fiorelli's house-by-house work from 1863 made it the model of an excavation.",
   "de": "Die römische Stadt am Fuß des Vesuvs, beim Ausbruch im Jahr 79 n. Chr. mit ihren Straßen, Läden, Häusern und Fresken begraben. Bourbonische Ausgräber begannen 1748, und Giuseppe Fiorellis Arbeit Haus für Haus ab 1863 machte sie zum Vorbild einer Ausgrabung."
  },
+ "gm_landmark_pont_du_gard_evt": {
+  "en": "the $gm_skin_landmark_pont_du_gard$",
+  "de": "der $gm_skin_landmark_pont_du_gard$"
+ },
+ "gm_landmark_potala_palace_evt": {
+  "en": "the $gm_skin_landmark_potala_palace$",
+  "de": "der $gm_skin_landmark_potala_palace$"
+ },
+ "gm_landmark_pyramids_of_giza_evt": {
+  "en": "the $gm_skin_landmark_pyramids_of_giza$",
+  "de": "die $gm_skin_landmark_pyramids_of_giza$"
+ },
+ "gm_landmark_pyramids_of_meroe_evt": {
+  "en": "the $gm_skin_landmark_pyramids_of_meroe$",
+  "de": "die $gm_skin_landmark_pyramids_of_meroe$"
+ },
  "gm_landmark_red_fort_desc": {
   "en": "Shah Jahan's fortress-palace at Delhi, finished in 1648, where the Mughal emperor still holds court.",
   "de": "Der Festungspalast Schah Jahans in Delhi, 1648 vollendet, wo der Mogulkaiser noch immer Hof hält."
@@ -11810,6 +11918,10 @@
  "gm_landmark_red_fort_evt": {
   "en": "the $gm_skin_landmark_red_fort$",
   "de": "$gm_skin_landmark_red_fort$"
+ },
+ "gm_landmark_registan_evt": {
+  "en": "the $gm_skin_landmark_registan$",
+  "de": "der $gm_skin_landmark_registan$"
  },
  "gm_landmark_rosetta_stone_desc": {
   "en": "A decree of 196 BC in hieroglyphs, Demotic and Greek, found by French soldiers at Rosetta in 1799. Britain took it under the capitulation of 1801, and Champollion read the hieroglyphs from it in 1822.",
@@ -11867,6 +11979,10 @@
   "en": "the $gm_skin_landmark_royal_tombs_of_sipan$",
   "de": "die $gm_skin_landmark_royal_tombs_of_sipan$"
  },
+ "gm_landmark_saint_sophia_kiev_evt": {
+  "en": "the $gm_skin_landmark_saint_sophia_kiev$",
+  "de": "die $gm_skin_landmark_saint_sophia_kiev$"
+ },
  "gm_landmark_sans_souci_palace_desc": {
   "en": "Built 1810–1813 for Henri Christophe, King Henry I of Haiti, whose kingdom ended with him in 1820.",
   "de": "1810–1813 für Henri Christophe, König Heinrich I. von Haiti, erbaut, dessen Königreich 1820 mit ihm endete."
@@ -11886,6 +12002,10 @@
  "gm_landmark_shalimar_gardens_evt": {
   "en": "the $gm_skin_landmark_shalimar_gardens$",
   "de": "die $gm_skin_landmark_shalimar_gardens$"
+ },
+ "gm_landmark_shore_temple_evt": {
+  "en": "the $gm_skin_landmark_shore_temple$",
+  "de": "der $gm_skin_landmark_shore_temple$"
  },
  "gm_landmark_sidon_necropolis_desc": {
   "en": "The tombs of the kings of Sidon. Ernest Renan's mission found Phoenician sarcophagi there in 1855, and Hamdi Bey found the sarcophagus called Alexander's in 1887.",
@@ -11923,6 +12043,10 @@
   "en": "the $gm_skin_landmark_teatro_di_san_carlo$",
   "de": "das $gm_skin_landmark_teatro_di_san_carlo$"
  },
+ "gm_landmark_temple_of_confucius_evt": {
+  "en": "the $gm_skin_landmark_temple_of_confucius$",
+  "de": "der $gm_skin_landmark_temple_of_confucius$"
+ },
  "gm_landmark_temple_of_dendera_desc": {
   "en": "The temple of Hathor at Dendera. Its stone zodiac was cut from a chapel ceiling in 1821 and sold to Louis XVIII.",
   "de": "Der Tempel der Hathor in Dendera. Sein steinerner Tierkreis wurde 1821 aus einer Kapellendecke geschnitten und an Ludwig XVIII. verkauft."
@@ -11938,6 +12062,10 @@
  "gm_landmark_temple_of_heaven_evt": {
   "en": "the $gm_skin_landmark_temple_of_heaven$",
   "de": "der $gm_skin_landmark_temple_of_heaven$"
+ },
+ "gm_landmark_temple_of_seti_abydos_evt": {
+  "en": "the $gm_skin_landmark_temple_of_seti_abydos$",
+  "de": "der $gm_skin_landmark_temple_of_seti_abydos$"
  },
  "gm_landmark_temples_of_baalbek_desc": {
   "en": "The Roman temples of Heliopolis, with Jupiter's six standing columns and the temple of Bacchus. Local legend says Solomon raised them, and in the Middle Ages their precinct was walled as a citadel.",
@@ -12023,6 +12151,10 @@
   "en": "the $gm_skin_landmark_uffizi_gallery$",
   "de": "die $gm_skin_landmark_uffizi_gallery$"
  },
+ "gm_landmark_valley_of_the_temples_evt": {
+  "en": "the $gm_skin_landmark_valley_of_the_temples$",
+  "de": "das $gm_skin_landmark_valley_of_the_temples$"
+ },
  "gm_landmark_venus_de_milo_desc": {
   "en": "A marble Aphrodite found by a farmer on Milos in 1820, bought by the French ambassador and given to Louis XVIII.",
   "de": "Eine Marmor-Aphrodite, 1820 von einem Bauern auf Milos gefunden, vom französischen Botschafter gekauft und Ludwig XVIII. geschenkt."
@@ -12047,6 +12179,10 @@
   "en": "King Ludwig of Bavaria's hall of fame: a marble Doric temple on a hill above the Danube near Regensburg, holding the busts and plaques of the great figures of German history.",
   "de": "Die Ruhmeshalle König Ludwigs von Bayern: ein dorischer Marmortempel auf einem Hügel über der Donau bei Regensburg, der die Büsten und Gedenktafeln der großen Gestalten der deutschen Geschichte beherbergt."
  },
+ "gm_landmark_walls_of_tallinn_evt": {
+  "en": "the $gm_skin_landmark_walls_of_tallinn$",
+  "de": "die $gm_skin_landmark_walls_of_tallinn$"
+ },
  "gm_landmark_washington_monument_baltimore_desc": {
   "en": "Begun in 1815 and finished in 1829: the first great monument to George Washington.",
   "de": "1815 begonnen und 1829 vollendet: das erste große Denkmal für George Washington."
@@ -12070,6 +12206,10 @@
  "gm_landmark_xanthos_desc": {
   "en": "The chief city of ancient Lycia, with its pillar tombs and the fallen Nereid Monument, a temple-tomb once ringed with statues of sea nymphs. Twice its people chose death over surrender.",
   "de": "Die Hauptstadt des antiken Lykiens mit ihren Pfeilergräbern und dem eingestürzten Nereidenmonument, einem Tempelgrab, das einst von Statuen von Meeresnymphen umringt war. Zweimal wählten ihre Bewohner den Tod statt der Kapitulation."
+ },
+ "gm_landmark_yungang_grottoes_evt": {
+  "en": "the $gm_skin_landmark_yungang_grottoes$",
+  "de": "die $gm_skin_landmark_yungang_grottoes$"
  },
  "gm_leave_contested_tt": {
   "en": "Decide later, from the monument's row on the Grand Monuments tab of the Timeline Extended window. While it stands contested it lends nothing but visitors, and #v [THIS.GetState.GetCustom('gm_base_ig_name')]#! resent it.",
@@ -12399,6 +12539,10 @@
   "en": "From the [concept_grandeur] of our grand opera houses, counted together.",
   "de": "Aus der [concept_grandeur] unserer großen Opernhäuser, zusammengerechnet."
  },
+ "gm_national_education": {
+  "en": "Grand Monuments: $gm_policy_education$",
+  "de": "Große Monumente: $gm_policy_education$"
+ },
  "gm_national_industrial": {
   "en": "Great Exhibition Halls",
   "de": "Großartige Ausstellungshallen"
@@ -12430,6 +12574,10 @@
  "gm_national_prestige_desc": {
   "en": "From the [concept_grandeur] of every monument we own that is not contested, heritage included.",
   "de": "Aus der [concept_grandeur] jedes nicht umstrittenen Monuments in unserem Besitz, Erbe eingeschlossen."
+ },
+ "gm_national_prestige_pct": {
+  "en": "Grand Monuments",
+  "de": "Große Monumente"
  },
  "gm_national_promise": {
   "en": "A Promise Kept",
@@ -12551,33 +12699,25 @@
   "en": "The monument policy becomes #b State Ceremonial#!. Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5; tourism from each monument ×0.5. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
   "de": "Die Monumentpolitik wird zu #b Staatszeremoniell#!. Legitimität und Autorität aus Monumenten für die Krone, die Republik, die Revolution und den Staatschef ×1,5; Tourismus aus jedem Monument ×0,5. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
  },
+ "gm_policy_culture": {
+  "en": "Cultural Promotion",
+  "de": "Kulturförderung"
+ },
  "gm_policy_current_tt": {
   "en": "It is not the policy already in force",
   "de": "Es ist nicht die bereits geltende Politik"
+ },
+ "gm_policy_education": {
+  "en": "Public Education",
+  "de": "Volksbildung"
  },
  "gm_policy_effects_ceremonial": {
   "en": "Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5; tourism from each monument ×0.5.",
   "de": "Legitimität und Autorität aus Monumenten für die Krone, die Republik, die Revolution und den Staatschef ×1,5; Tourismus aus jedem Monument ×0,5."
  },
- "gm_policy_effects_mothballed": {
-  "en": "No maintenance; prestige and cultural pull from monuments ×0.5; each monument's tourism and local effect ×0.5; no anniversaries.",
-  "de": "Kein Unterhalt; Prestige und kulturelle Anziehungskraft aus Monumenten ×0,5; Tourismus und lokale Wirkung jedes Monuments ×0,5; keine Jahrestage."
- },
  "gm_policy_effects_open": {
   "en": "Tourism Industry throughput from each monument ×1.5 and anniversaries about twice as often; maintenance ×1.5.",
   "de": "Durchsatz der Tourismusindustrie aus jedem Monument ×1,5 und Jahrestage etwa doppelt so oft; Unterhalt ×1,5."
- },
- "gm_policy_effects_standard": {
-  "en": "Our monuments give and cost what they always do.",
-  "de": "Unsere Monumente bringen und kosten wie gewohnt."
- },
- "gm_policy_mothballed": {
-  "en": "Mothballed",
-  "de": "Eingemottet"
- },
- "gm_policy_mothballed_effect_tt": {
-  "en": "The monument policy becomes #b Mothballed#!. No maintenance; prestige and cultural pull from monuments ×0.5; each monument's tourism and local effect ×0.5; no anniversaries. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
-  "de": "Die Monumentpolitik wird zu #b Eingemottet#!. Kein Unterhalt; Prestige und kulturelle Anziehungskraft aus Monumenten ×0,5; Tourismus und lokale Wirkung jedes Monuments ×0,5; keine Jahrestage. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
  },
  "gm_policy_open": {
   "en": "Open to the Public",
@@ -12586,14 +12726,6 @@
  "gm_policy_open_effect_tt": {
   "en": "The monument policy becomes #b Open to the Public#!. Tourism Industry throughput from each monument ×1.5 and anniversaries about twice as often; maintenance ×1.5. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
   "de": "Die Monumentpolitik wird zu #b Öffentlich zugänglich#!. Durchsatz der Tourismusindustrie aus jedem Monument ×1,5 und Jahrestage etwa doppelt so oft; Unterhalt ×1,5. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
- },
- "gm_policy_standard": {
-  "en": "Standard",
-  "de": "Standard"
- },
- "gm_policy_standard_effect_tt": {
-  "en": "The monument policy becomes #b Standard#!. Our monuments give and cost what they always do. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
-  "de": "Die Monumentpolitik wird zu #b Standard#!. Unsere Monumente bringen und kosten wie gewohnt. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
  },
  "gm_policy_upkeep_mothballed": {
   "en": "Mothballed",
@@ -12999,9 +13131,25 @@
   "en": "Memorial Bell Tower",
   "de": "Gedenkglockenturm"
  },
+ "gm_skin_landmark_aachen_cathedral": {
+  "en": "Aachen Cathedral",
+  "de": "Aachener Dom"
+ },
+ "gm_skin_landmark_abu_simbel": {
+  "en": "Abu Simbel",
+  "de": "Abu Simbel"
+ },
  "gm_skin_landmark_alexander_column": {
   "en": "Alexander Column",
   "de": "Alexandersäule"
+ },
+ "gm_skin_landmark_alhambra": {
+  "en": "Alhambra",
+  "de": "Alhambra"
+ },
+ "gm_skin_landmark_amphitheatre_of_el_djem": {
+  "en": "Amphitheatre of El Djem",
+  "de": "Amphitheater von El Djem"
  },
  "gm_skin_landmark_antikythera_mechanism": {
   "en": "Antikythera Mechanism",
@@ -13023,6 +13171,10 @@
   "en": "Baba Merzoug",
   "de": "Baba Merzoug"
  },
+ "gm_skin_landmark_basilica_of_saint_francis": {
+  "en": "Basilica of Saint Francis",
+  "de": "Basilika San Francesco"
+ },
  "gm_skin_landmark_basilica_of_superga": {
   "en": "Basilica of Superga",
   "de": "Basilika von Superga"
@@ -13031,13 +13183,25 @@
   "en": "Bodrum Castle",
   "de": "Burg Bodrum"
  },
+ "gm_skin_landmark_borobudur": {
+  "en": "Borobudur",
+  "de": "Borobudur"
+ },
  "gm_skin_landmark_brandenburg_gate": {
   "en": "Brandenburg Gate",
   "de": "Brandenburger Tor"
  },
+ "gm_skin_landmark_buddhas_of_bamiyan": {
+  "en": "Buddhas of Bamiyan",
+  "de": "Buddha-Statuen von Bamiyan"
+ },
  "gm_skin_landmark_bukgwan_victory_stele": {
   "en": "Bukgwan Victory Stele",
   "de": "Bukgwan-Siegesstele"
+ },
+ "gm_skin_landmark_bulguksa": {
+  "en": "Bulguksa",
+  "de": "Bulguksa"
  },
  "gm_skin_landmark_bunker_hill_monument": {
   "en": "Bunker Hill Monument",
@@ -13059,6 +13223,34 @@
   "en": "Cenotaph of Maximilian I",
   "de": "Kenotaph Maximilians I."
  },
+ "gm_skin_landmark_changdeokgung": {
+  "en": "Changdeokgung",
+  "de": "Changdeokgung"
+ },
+ "gm_skin_landmark_charminar": {
+  "en": "Charminar",
+  "de": "Charminar"
+ },
+ "gm_skin_landmark_chateau_de_chambord": {
+  "en": "Château de Chambord",
+  "de": "Schloss Chambord"
+ },
+ "gm_skin_landmark_chichen_itza": {
+  "en": "Chichén Itzá",
+  "de": "Chichén Itzá"
+ },
+ "gm_skin_landmark_chogha_zanbil": {
+  "en": "Chogha Zanbil",
+  "de": "Tschogha Zanbil"
+ },
+ "gm_skin_landmark_citadel_of_aleppo": {
+  "en": "Citadel of Aleppo",
+  "de": "Zitadelle von Aleppo"
+ },
+ "gm_skin_landmark_cyrene": {
+  "en": "Cyrene",
+  "de": "Kyrene"
+ },
  "gm_skin_landmark_dead_sea_scrolls": {
   "en": "Dead Sea Scrolls",
   "de": "Schriftrollen vom Toten Meer"
@@ -13071,6 +13263,18 @@
   "en": "Delphi",
   "de": "Delphi"
  },
+ "gm_skin_landmark_diocletians_palace": {
+  "en": "Diocletian's Palace",
+  "de": "Diokletianpalast"
+ },
+ "gm_skin_landmark_ephesus": {
+  "en": "Ephesus",
+  "de": "Ephesos"
+ },
+ "gm_skin_landmark_fasil_ghebbi": {
+  "en": "Fasil Ghebbi",
+  "de": "Fasil Ghebbi"
+ },
  "gm_skin_landmark_gobekli_tepe": {
   "en": "Göbekli Tepe",
   "de": "Göbekli Tepe"
@@ -13079,13 +13283,33 @@
   "en": "Golestan Palace",
   "de": "Golestan-Palast"
  },
+ "gm_skin_landmark_grand_palace_bangkok": {
+  "en": "Grand Palace",
+  "de": "Großer Palast"
+ },
  "gm_skin_landmark_great_zimbabwe": {
   "en": "Great Zimbabwe",
   "de": "Groß-Simbabwe"
  },
+ "gm_skin_landmark_gwalior_fort": {
+  "en": "Gwalior Fort",
+  "de": "Festung Gwalior"
+ },
+ "gm_skin_landmark_hampi": {
+  "en": "Hampi",
+  "de": "Hampi"
+ },
+ "gm_skin_landmark_hattusa": {
+  "en": "Hattusa",
+  "de": "Hattuša"
+ },
  "gm_skin_landmark_horses_of_saint_mark": {
   "en": "Horses of Saint Mark",
   "de": "Pferde von San Marco"
+ },
+ "gm_skin_landmark_humble_administrators_garden": {
+  "en": "Humble Administrator's Garden",
+  "de": "Garten des Bescheidenen Beamten"
  },
  "gm_skin_landmark_imperial_city_of_hue": {
   "en": "Imperial City of Huế",
@@ -13095,6 +13319,14 @@
   "en": "Ishtar Gate of Babylon",
   "de": "Ischtar-Tor von Babylon"
  },
+ "gm_skin_landmark_itchan_kala": {
+  "en": "Itchan Kala",
+  "de": "Itchan Kala"
+ },
+ "gm_skin_landmark_itsukushima_shrine": {
+  "en": "Itsukushima Shrine",
+  "de": "Itsukushima-Schrein"
+ },
  "gm_skin_landmark_jantar_mantar": {
   "en": "Jantar Mantar",
   "de": "Jantar Mantar"
@@ -13102,6 +13334,22 @@
  "gm_skin_landmark_jardim_botanico": {
   "en": "Jardim Botânico",
   "de": "Jardim Botânico"
+ },
+ "gm_skin_landmark_jeronimos_monastery": {
+  "en": "Jerónimos Monastery",
+  "de": "Hieronymus-Kloster"
+ },
+ "gm_skin_landmark_kazan_kremlin": {
+  "en": "Kazan Kremlin",
+  "de": "Kasaner Kreml"
+ },
+ "gm_skin_landmark_khajuraho": {
+  "en": "Khajuraho",
+  "de": "Khajuraho"
+ },
+ "gm_skin_landmark_kinkaku_ji": {
+  "en": "Kinkaku-ji",
+  "de": "Kinkaku-ji"
  },
  "gm_skin_landmark_klungkung_palace": {
   "en": "Klungkung Palace",
@@ -13115,6 +13363,14 @@
   "en": "Lascaux",
   "de": "Lascaux"
  },
+ "gm_skin_landmark_leptis_magna": {
+  "en": "Leptis Magna",
+  "de": "Leptis Magna"
+ },
+ "gm_skin_landmark_leshan_giant_buddha": {
+  "en": "Leshan Giant Buddha",
+  "de": "Großer Buddha von Leshan"
+ },
  "gm_skin_landmark_liberty_column": {
   "en": "Liberty Column",
   "de": "Freiheitssäule"
@@ -13127,6 +13383,10 @@
   "en": "Lion of Saint Mark",
   "de": "Löwe von San Marco"
  },
+ "gm_skin_landmark_longmen_grottoes": {
+  "en": "Longmen Grottoes",
+  "de": "Longmen-Grotten"
+ },
  "gm_skin_landmark_luxor_obelisk": {
   "en": "Luxor Obelisk",
   "de": "Obelisk von Luxor"
@@ -13135,21 +13395,65 @@
   "en": "Machu Picchu",
   "de": "Machu Picchu"
  },
+ "gm_skin_landmark_marksburg": {
+  "en": "Marksburg",
+  "de": "Marksburg"
+ },
+ "gm_skin_landmark_mausoleum_of_sultan_sanjar": {
+  "en": "Mausoleum of Sultan Sanjar",
+  "de": "Mausoleum des Sultans Sandschar"
+ },
  "gm_skin_landmark_mawangdui_tombs": {
   "en": "Mawangdui Tombs",
   "de": "Gräber von Mawangdui"
+ },
+ "gm_skin_landmark_merida_theatre": {
+  "en": "Roman Theatre of Mérida",
+  "de": "Römisches Theater von Mérida"
  },
  "gm_skin_landmark_mesha_stele": {
   "en": "Mesha Stele",
   "de": "Mescha-Stele"
  },
+ "gm_skin_landmark_meteora": {
+  "en": "Meteora",
+  "de": "Meteora"
+ },
+ "gm_skin_landmark_mezquita_of_cordoba": {
+  "en": "Mezquita of Córdoba",
+  "de": "Mezquita von Córdoba"
+ },
+ "gm_skin_landmark_mogao_caves": {
+  "en": "Mogao Library Cave",
+  "de": "Bibliothekshöhle von Mogao"
+ },
  "gm_skin_landmark_mohenjo_daro": {
   "en": "Mohenjo-daro",
   "de": "Mohenjo-Daro"
  },
+ "gm_skin_landmark_mont_saint_michel": {
+  "en": "Mont-Saint-Michel",
+  "de": "Mont-Saint-Michel"
+ },
+ "gm_skin_landmark_monte_alban": {
+  "en": "Monte Albán",
+  "de": "Monte Albán"
+ },
+ "gm_skin_landmark_moscow_kremlin": {
+  "en": "Moscow Kremlin",
+  "de": "Moskauer Kreml"
+ },
+ "gm_skin_landmark_mount_nemrut": {
+  "en": "Mount Nemrut",
+  "de": "Nemrut Dağı"
+ },
  "gm_skin_landmark_muhammad_ali_mosque": {
   "en": "Muhammad Ali Mosque",
   "de": "Muhammad-Ali-Moschee"
+ },
+ "gm_skin_landmark_musalla_of_herat": {
+  "en": "Musalla of Herat",
+  "de": "Musalla von Herat"
  },
  "gm_skin_landmark_mycenae_grave_circle": {
   "en": "Mycenae",
@@ -13158,6 +13462,10 @@
  "gm_skin_landmark_nag_hammadi_library": {
   "en": "Nag Hammadi Library",
   "de": "Nag-Hammadi-Bibliothek"
+ },
+ "gm_skin_landmark_naqsh_e_jahan_square": {
+  "en": "Naqsh-e Jahan Square",
+  "de": "Naqsch-e-Dschahan-Platz"
  },
  "gm_skin_landmark_nelsons_column": {
   "en": "Nelson's Column",
@@ -13179,6 +13487,10 @@
   "en": "Obelisks of Karnak",
   "de": "Obelisken von Karnak"
  },
+ "gm_skin_landmark_old_city_of_sanaa": {
+  "en": "Old City of Sana'a",
+  "de": "Altstadt von Sanaa"
+ },
  "gm_skin_landmark_olympia": {
   "en": "Olympia",
   "de": "Olympia"
@@ -13194,6 +13506,10 @@
  "gm_skin_landmark_palace_of_knossos": {
   "en": "Palace of Knossos",
   "de": "Palast von Knossos"
+ },
+ "gm_skin_landmark_palais_des_papes": {
+  "en": "Palais des Papes",
+  "de": "Papstpalast von Avignon"
  },
  "gm_skin_landmark_palmyra": {
   "en": "Palmyra",
@@ -13211,6 +13527,10 @@
   "en": "Persepolis",
   "de": "Persepolis"
  },
+ "gm_skin_landmark_petra": {
+  "en": "Petra",
+  "de": "Petra"
+ },
  "gm_skin_landmark_piraeus_lion": {
   "en": "Piraeus Lion",
   "de": "Piräus-Löwe"
@@ -13219,9 +13539,29 @@
   "en": "Pompeii",
   "de": "Pompeji"
  },
+ "gm_skin_landmark_pont_du_gard": {
+  "en": "Pont du Gard",
+  "de": "Pont du Gard"
+ },
+ "gm_skin_landmark_potala_palace": {
+  "en": "Potala Palace",
+  "de": "Potala-Palast"
+ },
+ "gm_skin_landmark_pyramids_of_giza": {
+  "en": "Pyramids of Giza",
+  "de": "Pyramiden von Gizeh"
+ },
+ "gm_skin_landmark_pyramids_of_meroe": {
+  "en": "Pyramids of Meroë",
+  "de": "Pyramiden von Meroe"
+ },
  "gm_skin_landmark_red_fort": {
   "en": "Red Fort",
   "de": "Rotes Fort"
+ },
+ "gm_skin_landmark_registan": {
+  "en": "Registan",
+  "de": "Registan"
  },
  "gm_skin_landmark_rosetta_stone": {
   "en": "Rosetta Stone",
@@ -13251,6 +13591,10 @@
   "en": "Royal Tombs of Sipán",
   "de": "Königsgräber von Sipán"
  },
+ "gm_skin_landmark_saint_sophia_kiev": {
+  "en": "Saint Sophia Cathedral",
+  "de": "Sophienkathedrale"
+ },
  "gm_skin_landmark_sans_souci_palace": {
   "en": "Sans-Souci Palace",
   "de": "Palast Sans-Souci"
@@ -13262,6 +13606,14 @@
  "gm_skin_landmark_shalimar_gardens": {
   "en": "Shalimar Gardens",
   "de": "Shalimar-Gärten"
+ },
+ "gm_skin_landmark_shibam": {
+  "en": "Shibam",
+  "de": "Shibam"
+ },
+ "gm_skin_landmark_shore_temple": {
+  "en": "Shore Temple of Mahabalipuram",
+  "de": "Ufertempel von Mahabalipuram"
  },
  "gm_skin_landmark_sidon_necropolis": {
   "en": "Royal Necropolis of Sidon",
@@ -13279,9 +13631,17 @@
   "en": "Sutton Hoo",
   "de": "Sutton Hoo"
  },
+ "gm_skin_landmark_swayambhunath": {
+  "en": "Swayambhunath",
+  "de": "Swayambhunath"
+ },
  "gm_skin_landmark_teatro_di_san_carlo": {
   "en": "Teatro di San Carlo",
   "de": "Teatro di San Carlo"
+ },
+ "gm_skin_landmark_temple_of_confucius": {
+  "en": "Temple of Confucius",
+  "de": "Konfuziustempel"
  },
  "gm_skin_landmark_temple_of_dendera": {
   "en": "Temple of Dendera",
@@ -13291,17 +13651,33 @@
   "en": "Temple of Heaven",
   "de": "Himmelstempel"
  },
+ "gm_skin_landmark_temple_of_seti_abydos": {
+  "en": "Temple of Seti I at Abydos",
+  "de": "Tempel Sethos’ I. in Abydos"
+ },
  "gm_skin_landmark_temples_of_baalbek": {
   "en": "Temples of Baalbek",
   "de": "Tempel von Baalbek"
+ },
+ "gm_skin_landmark_teotihuacan": {
+  "en": "Teotihuacan",
+  "de": "Teotihuacán"
  },
  "gm_skin_landmark_terracotta_army": {
   "en": "Terracotta Army",
   "de": "Terrakottaarmee"
  },
+ "gm_skin_landmark_tikal": {
+  "en": "Tikal",
+  "de": "Tikal"
+ },
  "gm_skin_landmark_tipus_tiger": {
   "en": "Tipu's Tiger",
   "de": "Tipus Tiger"
+ },
+ "gm_skin_landmark_todai_ji": {
+  "en": "Tōdai-ji",
+  "de": "Tōdai-ji"
  },
  "gm_skin_landmark_tomb_of_alexander": {
   "en": "Tomb of Alexander the Great",
@@ -13339,6 +13715,10 @@
   "en": "Uffizi",
   "de": "Uffizien"
  },
+ "gm_skin_landmark_valley_of_the_temples": {
+  "en": "Valley of the Temples",
+  "de": "Tal der Tempel"
+ },
  "gm_skin_landmark_venus_de_milo": {
   "en": "Venus de Milo",
   "de": "Venus von Milo"
@@ -13355,6 +13735,10 @@
   "en": "Walhalla",
   "de": "Walhalla"
  },
+ "gm_skin_landmark_walls_of_tallinn": {
+  "en": "Walls of Tallinn",
+  "de": "Stadtmauer von Tallinn"
+ },
  "gm_skin_landmark_washington_monument": {
   "en": "Washington Monument",
   "de": "Washington-Denkmal"
@@ -13363,6 +13747,10 @@
   "en": "Baltimore's Washington Monument",
   "de": "Washington-Denkmal in Baltimore"
  },
+ "gm_skin_landmark_windsor_castle": {
+  "en": "Windsor Castle",
+  "de": "Windsor Castle"
+ },
  "gm_skin_landmark_winged_victory_of_samothrace": {
   "en": "Winged Victory of Samothrace",
   "de": "Nike von Samothrake"
@@ -13370,6 +13758,10 @@
  "gm_skin_landmark_xanthos": {
   "en": "Xanthos",
   "de": "Xanthos"
+ },
+ "gm_skin_landmark_yungang_grottoes": {
+  "en": "Yungang Grottoes",
+  "de": "Yungang-Grotten"
  },
  "gm_skin_reason_arabic_tt": {
   "en": "One of our primary cultures speaks $language_arabic$.",
@@ -13984,8 +14376,8 @@
   "de": "Sie besitzen ein Großes Monument oder eines im Bau, haben eine Gelegenheit offen, halten eine Trophäe oder haben eine im Ausland verwahrt"
  },
  "gm_upkeep": {
-  "en": "Monument Upkeep",
-  "de": "Monumentunterhalt"
+  "en": "No Monument Upkeep",
+  "de": "Kein Monumentunterhalt"
  },
  "gm_upkeep_desc": {
   "en": "The upkeep of the levels the monuments here were built with, paid by their one finished building: half again as much under Open to the Public, nothing while Mothballed.",
@@ -19651,6 +20043,22 @@
   "en": "#bold Approach cost:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]#! innovation a week, on top of funding (as much as one more funding level).",
   "de": "#bold Kosten des Vorgehens:#! #R −[SCOPE.GetRootScope.ScriptValue('sr_disp_cost_safe_suborbital')|0]#! Innovation pro Woche, zusätzlich zur Finanzierung (so viel wie eine weitere Finanzierungsstufe)."
  },
+ "sr_cf_drive_antimatter": {
+  "en": "Antimatter",
+  "de": "Antimaterie"
+ },
+ "sr_cf_drive_chemical": {
+  "en": "Chemical",
+  "de": "Chemisch"
+ },
+ "sr_cf_drive_fusion": {
+  "en": "Fusion",
+  "de": "Fusion"
+ },
+ "sr_cf_drive_torch": {
+  "en": "Fusion torch",
+  "de": "Fusionsfackel"
+ },
  "sr_choice_mars_direct": {
   "en": "Direct Mars Landing",
   "de": "Direkte Marslandung"
@@ -20151,6 +20559,18 @@
   "en": "A Visitor Preserved in Vesta: Materials Processing",
   "de": "Ein Besucher, bewahrt in Vesta: Materialverarbeitung"
  },
+ "sr_ebase_room_bonus": {
+  "en": "Extraplanetary Base Room",
+  "de": "Raum des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_room_penalty": {
+  "en": "Extraplanetary Base Room",
+  "de": "Raum des Außerplanetaren Stützpunkts"
+ },
+ "sr_emig_at_lowest_tt": {
+  "en": "Emigration is already off.",
+  "de": "Die Auswanderung ist bereits ausgeschaltet."
+ },
  "sr_facility_fire_damage": {
   "en": "Facility Fire Damage",
   "de": "Brandschäden an der Anlage"
@@ -20218,6 +20638,26 @@
  "sr_moon_base_scientific": {
   "en": "Scientific Lunar Outpost",
   "de": "Wissenschaftlicher Mondaußenposten"
+ },
+ "sr_mq_module_a": {
+  "en": "Specialization I",
+  "de": "Spezialisierung I"
+ },
+ "sr_mq_module_b": {
+  "en": "Specialization II",
+  "de": "Spezialisierung II"
+ },
+ "sr_mq_module_def": {
+  "en": "Defences",
+  "de": "Verteidigungsanlagen"
+ },
+ "sr_mq_module_hab": {
+  "en": "Habitat",
+  "de": "Habitat"
+ },
+ "sr_mq_module_port": {
+  "en": "Spaceport",
+  "de": "Raumhafen"
  },
  "sr_no_colonies_to_maintain_tt": {
   "en": "No solar system colonies have been established.",
@@ -20354,6 +20794,150 @@
  "sr_sea_of_tranquility": {
   "en": "Sea of Tranquility Landing",
   "de": "Landung im Meer der Ruhe"
+ },
+ "sr_site_name_amalthea": {
+  "en": "Amalthea",
+  "de": "Amalthea"
+ },
+ "sr_site_name_arcadia_planitia": {
+  "en": "Arcadia Planitia",
+  "de": "Arcadia Planitia"
+ },
+ "sr_site_name_ariel": {
+  "en": "Ariel",
+  "de": "Ariel"
+ },
+ "sr_site_name_callisto": {
+  "en": "Callisto",
+  "de": "Kallisto"
+ },
+ "sr_site_name_ceres": {
+  "en": "Ceres",
+  "de": "Ceres"
+ },
+ "sr_site_name_enceladus": {
+  "en": "Enceladus",
+  "de": "Enceladus"
+ },
+ "sr_site_name_eris": {
+  "en": "Eris",
+  "de": "Eris"
+ },
+ "sr_site_name_europa": {
+  "en": "Europa",
+  "de": "Europa"
+ },
+ "sr_site_name_ganymede": {
+  "en": "Ganymede",
+  "de": "Ganymed"
+ },
+ "sr_site_name_haumea": {
+  "en": "Haumea",
+  "de": "Haumea"
+ },
+ "sr_site_name_hellas_planitia": {
+  "en": "Hellas Planitia",
+  "de": "Hellas Planitia"
+ },
+ "sr_site_name_himalia": {
+  "en": "Himalia",
+  "de": "Himalia"
+ },
+ "sr_site_name_hygiea": {
+  "en": "10 Hygiea",
+  "de": "10 Hygiea"
+ },
+ "sr_site_name_iapetus": {
+  "en": "Iapetus",
+  "de": "Iapetus"
+ },
+ "sr_site_name_io": {
+  "en": "Io",
+  "de": "Io"
+ },
+ "sr_site_name_makemake": {
+  "en": "Makemake",
+  "de": "Makemake"
+ },
+ "sr_site_name_mercury": {
+  "en": "Mercury",
+  "de": "Merkur"
+ },
+ "sr_site_name_mimas": {
+  "en": "Mimas",
+  "de": "Mimas"
+ },
+ "sr_site_name_miranda": {
+  "en": "Miranda",
+  "de": "Miranda"
+ },
+ "sr_site_name_oberon": {
+  "en": "Oberon",
+  "de": "Oberon"
+ },
+ "sr_site_name_olympus_mons": {
+  "en": "Olympus Mons",
+  "de": "Olympus Mons"
+ },
+ "sr_site_name_pallas": {
+  "en": "2 Pallas",
+  "de": "2 Pallas"
+ },
+ "sr_site_name_pluto": {
+  "en": "Pluto-Charon",
+  "de": "Pluto-Charon"
+ },
+ "sr_site_name_proteus": {
+  "en": "Proteus",
+  "de": "Proteus"
+ },
+ "sr_site_name_psyche": {
+  "en": "16 Psyche",
+  "de": "16 Psyche"
+ },
+ "sr_site_name_rhea": {
+  "en": "Rhea",
+  "de": "Rhea"
+ },
+ "sr_site_name_sedna": {
+  "en": "Sedna",
+  "de": "Sedna"
+ },
+ "sr_site_name_titan": {
+  "en": "Titan",
+  "de": "Titan"
+ },
+ "sr_site_name_titania": {
+  "en": "Titania",
+  "de": "Titania"
+ },
+ "sr_site_name_triton": {
+  "en": "Triton",
+  "de": "Triton"
+ },
+ "sr_site_name_unknown": {
+  "en": "a colony",
+  "de": "eine Kolonie"
+ },
+ "sr_site_name_utopia_planitia": {
+  "en": "Utopia Planitia",
+  "de": "Utopia Planitia"
+ },
+ "sr_site_name_valles_marineris": {
+  "en": "Valles Marineris",
+  "de": "Valles Marineris"
+ },
+ "sr_site_name_venus": {
+  "en": "Venus Cloud Habitat",
+  "de": "Venus-Wolkenhabitat"
+ },
+ "sr_site_name_vesta": {
+  "en": "4 Vesta",
+  "de": "4 Vesta"
+ },
+ "sr_site_notice_more_text": {
+  "en": " and other worlds besides",
+  "de": " und weitere Welten"
  },
  "sr_solar_colony_established_tt": {
   "en": "A new colony has been established in the solar system.",
@@ -21823,6 +22407,30 @@
   "en": "Apply the chosen map-mode overlay to every state on the map for #b 5 in-game days#!.",
   "de": "Wendet das gewählte Kartenmodus-Overlay für #b 5 Spieltage#! auf jeden Staat der Karte an."
  },
+ "te_asat_moratorium_bound": {
+  "en": "Bound",
+  "de": "Gebunden"
+ },
+ "te_asat_moratorium_not_adopted": {
+  "en": "Not Adopted",
+  "de": "Nicht beschlossen"
+ },
+ "te_asat_moratorium_not_bound": {
+  "en": "Not Bound",
+  "de": "Nicht gebunden"
+ },
+ "te_asat_satellites_disrupted": {
+  "en": "#R Disrupted#!",
+  "de": "#R Gestört#!"
+ },
+ "te_asat_satellites_intact": {
+  "en": "#G Intact#!",
+  "de": "#G Intakt#!"
+ },
+ "te_asat_satellites_none": {
+  "en": "None in Orbit",
+  "de": "Keine im Orbit"
+ },
  "te_asat_strike_action": {
   "en": "Anti-Satellite Strike",
   "de": "Antisatellitenschlag"
@@ -22034,6 +22642,10 @@
  "te_capital_controls_fatigue_desc": {
   "en": "Capital controls kept on in peacetime. The owners of the capital being held at home resent it more with every year, and money that cannot go where it earns most is invested worse. Frozen during a crisis; fades once controls are lifted.",
   "de": "Kapitalverkehrskontrollen, die im Frieden aufrechterhalten werden. Die Besitzer des im Land festgehaltenen Kapitals empfinden das mit jedem Jahr als lästiger, und Geld, das nicht dorthin fließen kann, wo es am meisten einbringt, wird schlechter angelegt. Während einer Krise eingefroren; verblasst, sobald die Kontrollen aufgehoben werden."
+ },
+ "te_cede_colony_ai_give": {
+  "en": "Gives up a colony",
+  "de": "Gibt eine Kolonie ab"
  },
  "te_clear_map_mode_overlays_tt": {
   "en": "Remove the active map-mode overlay from every state.",
@@ -26327,21 +26939,21 @@
   "en": "The exchange rate is under par. What this country sells abroad is cheap and what it buys is dear — by one and a quarter per cent for every point of the index.",
   "de": "Der Wechselkurs liegt unter pari. Was dieses Land ins Ausland verkauft, ist günstig, und was es kauft, ist teuer — um jeweils ein und ein viertel Prozent für jeden Punkt des Index."
  },
+ "te_grid_cables_intro": {
+  "en": "Joined by cable to:",
+  "de": "Per Kabel verbunden mit:"
+ },
  "te_grid_interconnection_border_tt": {
   "en": "Both countries share a border or a sea",
   "de": "Beide Länder teilen sich eine Grenze oder ein Meer"
  },
- "te_grid_interconnection_same_market_tt": {
-  "en": "Both countries are in the same [concept_market]",
-  "de": "Beide Länder sind auf demselben [concept_market]"
+ "te_grid_market_exports": {
+  "en": "Exports",
+  "de": "Exporte"
  },
- "te_grid_interconnector_no": {
-  "en": "None",
-  "de": "Keine"
- },
- "te_grid_interconnector_yes": {
-  "en": "HVDC Undersea",
-  "de": "HGÜ-Seekabel"
+ "te_grid_market_imports": {
+  "en": "Imports",
+  "de": "Importe"
  },
  "te_grid_mode_idle": {
   "en": "Idle",
@@ -26563,6 +27175,46 @@
   "en": "Captured Court",
   "de": "Vereinnahmtes Gericht"
  },
+ "te_jud_bench_restored": {
+  "en": "Bench Restored",
+  "de": "Richterbank wiederhergestellt"
+ },
+ "te_jud_case_dred_scott": {
+  "en": "Property in Persons Upheld",
+  "de": "Eigentum an Menschen bestätigt"
+ },
+ "te_jud_case_election_respected": {
+  "en": "Election Ruling Respected",
+  "de": "Wahlurteil respektiert"
+ },
+ "te_jud_case_emergency": {
+  "en": "State of Emergency",
+  "de": "Ausnahmezustand"
+ },
+ "te_jud_case_free_soil": {
+  "en": "Free Soil Ruling",
+  "de": "Urteil zum freien Boden"
+ },
+ "te_jud_case_freedom_of_contract": {
+  "en": "Freedom of Contract",
+  "de": "Vertragsfreiheit"
+ },
+ "te_jud_case_judges_resign": {
+  "en": "The Judges Resigned",
+  "de": "Die Richter traten zurück"
+ },
+ "te_jud_case_necessity": {
+  "en": "Doctrine of Necessity",
+  "de": "Doktrin der Notwendigkeit"
+ },
+ "te_jud_case_otsu_overruled": {
+  "en": "Sentence Dictated Abroad",
+  "de": "Im Ausland diktiertes Urteil"
+ },
+ "te_jud_case_otsu_upheld": {
+  "en": "The Law Before Power",
+  "de": "Recht vor Macht"
+ },
  "te_jud_constitutional_challenge": {
   "en": "Constitutional Challenge",
   "de": "Verfassungsbeschwerde"
@@ -26571,9 +27223,37 @@
   "en": "Court Overhaul",
   "de": "Gerichtsumbau"
  },
+ "te_jud_court_packed": {
+  "en": "Packed Court",
+  "de": "Aufgestockte Richterbank"
+ },
+ "te_jud_packing_cost": {
+  "en": "Packing the Court",
+  "de": "Aufstockung der Richterbank"
+ },
+ "te_jud_protests_dispersed": {
+  "en": "Protests Dispersed",
+  "de": "Proteste aufgelöst"
+ },
+ "te_jud_ruling_defied": {
+  "en": "Ruling Defied",
+  "de": "Urteil missachtet"
+ },
+ "te_jud_ruling_obeyed": {
+  "en": "Ruling Obeyed",
+  "de": "Urteil befolgt"
+ },
+ "te_jud_ruling_unreversed": {
+  "en": "Act Struck Down",
+  "de": "Gesetz aufgehoben"
+ },
  "te_jud_supremacy_challenge": {
   "en": "Judicial Review",
   "de": "Gerichtliche Normenkontrolle"
+ },
+ "te_jud_tenure_promised": {
+  "en": "Judges’ Tenure Promised",
+  "de": "Unabsetzbarkeit der Richter zugesichert"
  },
  "te_jud_unelected_authority": {
   "en": "Supremacy of Statute",
@@ -27374,6 +28054,14 @@
  "te_open_map_mode_survey": {
   "en": "Open Map-Mode Survey",
   "de": "Kartenmodus-Übersicht öffnen"
+ },
+ "te_orbit_strike_not_ready": {
+  "en": "Not Ready",
+  "de": "Nicht bereit"
+ },
+ "te_orbit_strike_ready": {
+  "en": "#G Ready#!",
+  "de": "#G Bereit#!"
  },
  "te_orbital_network_disrupted": {
   "en": "Orbital Network Disrupted",
@@ -28398,6 +29086,10 @@
  "te_window_grand_monuments_open_journal_tt": {
   "en": "Opens $je_grand_monuments$ in the journal.",
   "de": "Öffnet $je_grand_monuments$ im Journal."
+ },
+ "te_window_space_race_idle_header": {
+  "en": "Milestones",
+  "de": "Meilensteine"
  },
  "te_window_space_race_open_journal_tt": {
   "en": "Opens this entry in the journal.",
@@ -30506,6 +31198,22 @@
  "war_crime_tribunal_modifier": {
   "en": "War Crimes Tribunal",
   "de": "Kriegsverbrechertribunal"
+ },
+ "war_goal_te_colonial_independence": {
+  "en": "Independence from [WAR_GOAL_DRAFT.GetTarget.GetName]",
+  "de": "Unabhängigkeit von [WAR_GOAL_DRAFT.GetTarget.GetName]"
+ },
+ "war_goal_te_colonial_independence_type_name": {
+  "en": "Colonial Independence",
+  "de": "Koloniale Unabhängigkeit"
+ },
+ "war_goal_te_colonial_reconquest": {
+  "en": "Reconquer [WAR_GOAL_DRAFT.GetTarget.GetName]",
+  "de": "[WAR_GOAL_DRAFT.GetTarget.GetName] zurückerobern"
+ },
+ "war_goal_te_colonial_reconquest_type_name": {
+  "en": "Reconquest",
+  "de": "Rückeroberung"
  },
  "war_goal_te_reunify_country": {
   "en": "Reunify with [WAR_GOAL_DRAFT.GetTarget.GetName]",
