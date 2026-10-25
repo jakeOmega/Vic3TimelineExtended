@@ -547,7 +547,7 @@ te_debug_demog.4 = {
 			limit = {
 				state_region = { has_variable = te_probe_owner_region }
 			}
-			debug_log = "TE_DEMOG_PROBE_OWNER after name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_DEMOG_PROBE_OWNER after name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTagName] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 			if = {
 				limit = { has_variable = te_probe_owner_var }

@@ -525,7 +525,7 @@ gm_mon_adopt_for_winner = {
 			has_variable = gm_tr_raised_by
 			scope:gm_tmp_mon_winner = { has_variable = gm_cw_loser }
 			scope:gm_tmp_mon_winner.var:gm_cw_loser ?= { save_temporary_scope_as = gm_tmp_mon_loser }
-			var:gm_tr_raised_by = scope:gm_tmp_mon_loser
+			var:gm_tr_raised_by ?= scope:gm_tmp_mon_loser
 		}
 		set_variable = { name = gm_tr_raised_by value = scope:gm_tmp_mon_winner }
 	}
