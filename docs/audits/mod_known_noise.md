@@ -133,9 +133,10 @@ retain law Intrusive Surveillance System
 retain law Total War
 retain law State Secrets
 retain law Penal Labor Camps
+retain law Constitutional Review
 ```
 
-Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, …), and init-order transients for the four lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets / Penal Labor Camps, first in `lawgroup_criminal_justice` since #520; 146 countries at the 2026-10-10 start) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
+Vanilla 1.13.9 added load-time validation of active laws against `unlocking_technologies`. Two by-design mod cases (details at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`): deliberate historical seeds in `common/history/extra_history.txt` (Gold Standard, Kriegsministerium, the USA's Constitutional Review, …), and init-order transients for the four lawgroups whose menu-ordered first law is tech-gated (Intrusive Surveillance / Total War / State Secrets / Penal Labor Camps, first in `lawgroup_criminal_justice` since #520; 146 countries at the 2026-10-10 start) — the engine assigns first-in-group before `extra_history.txt` GLOBAL replaces them with the tech-free baselines, so final state is correct. Signatures enumerate these known laws ONLY, so a new law name appearing in this warning class still surfaces in triage. Tracked at `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`.
 
 ### `jomini_eventmanager.cpp:376` — console-only debug test events reported orphaned
 - source: `jomini_eventmanager.cpp:376`

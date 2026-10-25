@@ -1505,6 +1505,7 @@ A market can span several **market areas**, its contiguous pieces (a country and
 - `set_country_type = decentralized` turns a country into uncolonized land.
 - There is NO `kill_country` effect. To remove a country: `annex` it or `set_country_type = decentralized`.
 - Country types: `recognized`, `colonial`, `unrecognized`, `decentralized`, `company`.
+- **A `decentralized` country takes no events or journal entries** (`has_events = no` in vanilla's `00_country_types.txt`). An `add_journal_entry` on one logs `Country 'X' cannot have events/journal entries due to 'has_events = no'` and does nothing; guard it with `NOT = { is_country_type = decentralized }`. It can still own buildings and hold mod state: Great Zimbabwe's landmark is seeded for the Mashona (in game, Rozvi), and the Grand Monuments refresh's JE add errored for them (2026-10-25).
 
 ## Monument vs Expandable Buildings
 
