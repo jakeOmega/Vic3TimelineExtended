@@ -50,28 +50,6 @@ INJECT:law_restricted_child_labor = {
 INJECT:law_women_own_property = {
 	modifier = {
 		state_natural_fertility_mult = -0.05	# the census's natural fertility (demographics phase 2 step 4)
-		state_female_work_share_add = 0.2	# the census's women at work: 0.1 + it (modifier-types stage 3)
-	}
-}
-
-# Women's share of the workforce (modifier-types design, stage 3, 2026-10-19): the census reads 0.1 + the law's line,
-# for the labour migrants' women, the family migrants' weight and Late Marriage's women's work; outside Full it also
-# splits deaths at work. No Women's Rights carries none.
-INJECT:law_women_in_the_fields = {
-	modifier = {
-		state_female_work_share_add = 0.15
-	}
-}
-
-INJECT:law_women_in_the_workplace = {
-	modifier = {
-		state_female_work_share_add = 0.35
-	}
-}
-
-INJECT:law_womens_suffrage = {
-	modifier = {
-		state_female_work_share_add = 0.37
 	}
 }
 

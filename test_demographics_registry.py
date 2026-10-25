@@ -824,7 +824,6 @@ def _engine_for(inp, year, pop, effects=None, engine=None, real_multipliers=Fals
     fixtures = {
         "year": float(year),
         "state_population": float(pop),
-        "te_demog_female_work_share": demographics_model.female_work_share(inp),
         "te_demog_means": demographics_model.means(inp),
         f"modifier:{P.NATURAL_FERTILITY_TYPE}": inp.mods.get(P.NATURAL_FERTILITY_TYPE, 0.0),
         # phase 2 step 1: the owner's reads te_demog_work_setup makes (WORK_DEFAULTS), from the model
@@ -1085,6 +1084,9 @@ class TestCohortScript(unittest.TestCase):
             eng.vars.update(te_dg_f1840=ring.faw, te_dg_m1840=ring.fam)
         else:
             eng.vars.update(te_dg_faw=ring.faw, te_dg_fam=ring.fam)
+        # the last count of women among the workers, which the step reads (te_demog_women_worker_share, 2026-10-25)
+        if ring.fws_work is not None:
+            eng.vars["te_dg_fws_wk"] = ring.fws_work
         for c in range(len(P.MIGRANT_CLASSES)):
             eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
         # the last count's bands, which the deaths-by-cause estimate reads (issue #1029)
@@ -3974,28 +3976,27 @@ class TestPracticesScript(unittest.TestCase):
 
     def test_the_targets_match_the_model(self):
         """Impartible inheritance is the laws' Late Marriage line since 2026-10-17: Primogeniture's, or Undivided Farm
-        Succession's on Forced Heirship, from the game files; women's paid work reads the women's-rights laws' share at
-        work since 2026-10-19 (modifier-types stage 3)."""
-        types = (P.LM_FARMS_TYPE, P.FEMALE_WORK_SHARE_TYPE)
+        Succession's on Forced Heirship, from the game files; women's paid work reads women's share of the workers, the
+        census's own count at the last count, since 2026-10-25 (the women's-rights laws' share before)."""
+        types = (P.LM_FARMS_TYPE,)
         lines = DM.load_carriers(types=types)
-        for laws, undivided, agr, fjob, lit, contra, access in (
-                ({"law_no_womens_rights"}, False, 0.6, 0.1, 0.2, 0.0, 0.0),
-                ({"law_primogeniture", "law_women_in_the_workplace"}, False, 0.5, 0.3, 0.6, 0.2, 0.18),
-                ({"law_equal_inheritance", "law_protected_class"}, True, 0.4, 0.4, 0.9, 0.35, 0.5),
-                ({"law_protected_class"}, False, 0.1, 0.5, 1.0, 0.45, 1.0)):
+        for laws, undivided, agr, fjob, lit, contra, access, women in (
+                ({"law_no_womens_rights"}, False, 0.6, 0.1, 0.2, 0.0, 0.0, 0.06),
+                ({"law_primogeniture", "law_women_in_the_workplace"}, False, 0.5, 0.3, 0.6, 0.2, 0.18, 0.3),
+                ({"law_equal_inheritance", "law_protected_class"}, True, 0.4, 0.4, 0.9, 0.35, 0.5, 0.42),
+                ({"law_protected_class"}, False, 0.1, 0.5, 1.0, 0.45, 1.0, 0.55)):
             got = DM.totals(lines, laws=laws, types=types,
                             amendments={"amendment_undivided_farm_succession"} if undivided else ())
-            farms, women = got[P.LM_FARMS_TYPE], got[P.FEMALE_WORK_SHARE_TYPE]
+            farms = got[P.LM_FARMS_TYPE]
             self.assertEqual(farms, 0.15 if undivided or "law_primogeniture" in laws else 0.0, sorted(laws))
             inp = demographics_model.Inputs(literacy=lit, laws=frozenset(laws), agrarian_share=agr,
-                                            female_job_share=fjob,
+                                            female_job_share=fjob, work_female_share=women,
                                             mods={P.CONTRACEPTION_TYPE: contra, P.ACCESS_TYPE: access,
-                                                  P.LM_FARMS_TYPE: farms, P.FEMALE_WORK_SHARE_TYPE: women})
+                                                  P.LM_FARMS_TYPE: farms})
             eng = _OwnerEngine({f"modifier:{P.CONTRACEPTION_TYPE}": contra, f"modifier:{P.ACCESS_TYPE}": access,
-                                f"modifier:{P.LM_FARMS_TYPE}": farms, f"modifier:{P.FEMALE_WORK_SHARE_TYPE}": women},
-                               laws=laws)
+                                f"modifier:{P.LM_FARMS_TYPE}": farms}, laws=laws)
             # the access medicine has reached, at its target here (a seed's): the model reads the same
-            eng.vars.update(te_dg_lit=lit, te_dg_agr_share=agr, te_dg_fjob_share=fjob,
+            eng.vars.update(te_dg_lit=lit, te_dg_agr_share=agr, te_dg_fjob_share=fjob, te_dg_fws_wk=women,
                             te_dg_acc=demographics_model.medicine_targets(inp)["access"])
             for state, region in (("STATE_POSEN", "region_eastern_europe"), ("STATE_KANTO", "region_northeast_asia")):
                 eng.place = (state, region)
@@ -4113,6 +4114,9 @@ class TestPracticesScript(unittest.TestCase):
         bs = demographics_model.practice_drift(1.0, 0.7)
         self.assertAlmostEqual(eng.vars["te_dg_pr_lm"], lm, places=9)
         self.assertAlmostEqual(eng.vars["te_dg_pr_bs"], bs, places=9)
+        # each seed counted women among its own workers, which moves its life expectancy and so its children per woman
+        # a little (te_demog_women_worker_share, 2026-10-25): the same count in both leaves only the practices
+        eng.vars["te_dg_fws_wk"] = plain.vars["te_dg_fws_wk"]
         for e in (eng, plain):
             e.call("te_demog_prepare")
         terms = (1 - P.PRACTICE_CUT["lm"] * lm) * (1 - P.PRACTICE_CUT["bs"] * bs)
@@ -4687,8 +4691,8 @@ class TestCountry(unittest.TestCase):
     def three(self):
         return [dict(s) for s in self._three]
 
-    def country(self, states, ai=False, fws=0.25, **kwargs):
-        return _CountryEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": fws},
+    def country(self, states, ai=False, **kwargs):
+        return _CountryEngine(states=states, fixtures={"year": 1900.0},
                               triggers={"is_ai": ai, "te_demog_cohorts_run": True}, **kwargs)
 
     def test_a_country_has_stepped_when_a_state_has(self):
@@ -4852,15 +4856,18 @@ class TestCountry(unittest.TestCase):
         self.assertAlmostEqual(eng.locals["te_dg_tfr"], model, places=6)
 
     def test_projection_reads_the_womens_work_share_from_the_states(self):
-        """Any state of the country gives the owner's share; the work multiplier is split as
-        te_demog_prepare does it, on the people-weighted average of the states' multipliers."""
+        """The outline splits the work multiplier as te_demog_prepare does, on the people-weighted averages of the
+        states' multipliers and of their women's share of the workers (te_demog_women_worker_share: each state's own
+        count; 2026-10-25, when it stopped reading the owner's law's share, which split it even under Full)."""
         states = self.three()
         pm = sum(s["te_dg_people"] for s in states)
         work = sum(s["te_dg_m_work"] * s["te_dg_people"] for s in states) / pm
-        for fws in (0.1, 0.45):
-            eng = self.country([dict(s) for s in states], fws=fws)
+        for shares in ((0.1, 0.2, 0.3), (0.45, 0.05, 0.4)):
+            counted = [dict(s, te_dg_fws_wk=f) for s, f in zip(states, shares)]
+            fws = sum(f * s["te_dg_people"] for s, f in zip(states, shares)) / pm
+            eng = self.country(counted)
             eng.call("te_demog_country_census")
-            self.assertAlmostEqual(eng.locals["te_dg_fws"], fws)
+            self.assertAlmostEqual(eng.locals["te_dg_fws"], fws, places=6)
             self.assertAlmostEqual(eng.locals["te_dg_m_work_f"], work * fws * 2, places=6)
             self.assertAlmostEqual(eng.locals["te_dg_m_work_m"], (1 - fws) * work * 2, places=6)
         body = _block(_text(EFFECTS), "te_demog_country_census")
@@ -5830,7 +5837,7 @@ class TestHistory(unittest.TestCase):
 
     def census(self, tracked, states):
         stub = {"te_demog_history_record": "set_variable = { name = hist_median value = var:te_dg_median }"}
-        eng = _CountryEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+        eng = _CountryEngine(states=states, fixtures={"year": 1900.0},
                              triggers={"is_ai": True, "te_demog_cohorts_run": True,
                                        "te_history_country_is_tracked": tracked}, effects=stub)
         eng.call("te_demog_country_census")
@@ -6530,9 +6537,9 @@ class TestModifierTypes(unittest.TestCase):
         self.assertNotIn(P.DIFFUSION_TYPE, engine)
 
     def test_the_migrant_profiles_types_are_registered_named_and_read(self):
-        """Stage 3 (2026-10-19): women's share of the workforce and families among migrants are census-only state types,
-        and the generated values read them as the model does (the base plus the laws' line, at most 1; the techs' line),
-        never the laws or the techs."""
+        """Stage 3 (2026-10-19): families among migrants is a census-only state type, and the generated values read it as
+        the model does (the techs' line), never the techs. Its other type, the women's-rights laws' women's share of the
+        workforce, went on 2026-10-25 (the census's own count of women among its workers took its place)."""
         text, loc = _text(TYPES_FILE), _text(MODIFIERS_LOC)
         engine = {line.split("|")[1] for line in _text(ENGINE_MODIFIERS).splitlines() if line.count("|") >= 2}
         for name in P.MIGRANT_PROFILE_TYPES:
@@ -6545,9 +6552,8 @@ class TestModifierTypes(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \".*Used by the census on the Demographics tab\."
                                   r"\[GetPlayer\.GetCustom\('te_demog_census_off_desc'\)\]\"$", name)
             self.assertNotIn(name, engine, name)
-        # a typographic apostrophe: the engine pastes a modifier's name into a quoted tooltip argument (loc_render_audit)
-        self.assertIn(f"{P.FEMALE_WORK_SHARE_TYPE}:0 \"Women\u2019s Work Outside the Home"
-                      "[GetPlayer.GetCustom('te_demog_census_off_name')]\"", loc)
+        self.assertNotRegex(text, r"(?m)^state_female_work_share_add\s*=")
+        self.assertNotRegex(loc, r"(?m)^ state_female_work_share_add(_desc)?:")
         lines = DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES)
         everything = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
                                 "jet_engine_technology"})
@@ -6558,11 +6564,7 @@ class TestModifierTypes(unittest.TestCase):
                 inp = demographics_model.Inputs(laws=laws, techs=techs, mods=DM.totals(
                     lines, techs, laws, types=P.MIGRANT_PROFILE_TYPES))
                 eng = _Engine({f"modifier:{name}": inp.mods[name] for name in P.MIGRANT_PROFILE_TYPES})
-                self.assertAlmostEqual(eng.number("te_demog_female_work_share"),
-                                       demographics_model.female_work_share(inp))
                 self.assertAlmostEqual(eng.number("te_demog_family_transport"), inp.mods[P.FAMILY_MIGRATION_TYPE])
-        self.assertEqual(_Engine({f"modifier:{P.FEMALE_WORK_SHARE_TYPE}": 3.0}).number("te_demog_female_work_share"),
-                         1.0, "at most 1, as the model")
 
     def test_health_care_access_is_a_concept(self):
         self.assertIn("concept_health_care_access = {}",
@@ -6596,9 +6598,9 @@ class TestModifierTypes(unittest.TestCase):
         for name in ("wa_share", "at_work", "pensioners", "need", "old_age", "low_share", "wbase", "wf_engine"):
             self.assertIn(f"te_debug_demog_work_{name}", line, name)
         self.assertIn("te_debug_demog_work_wf_target", line)
-        # stage 3 of the modifier-types design (2026-10-19): the migrant profile's women at work and families
+        # the migrant profile's women's share of the workers (2026-10-25) and families (modifier-types stage 3)
         for read in ("te_debug_demog_pension_var", "te_demog_pension_kind", "te_demog_child_work",
-                     "te_demog_female_work_share", "te_demog_family_transport",
+                     "te_demog_women_worker_share", "te_demog_family_transport",
                      "te_debug_demog_womens_mod", "te_debug_demog_replaced_mod", "te_debug_demog_part_m_mod",
                      "te_debug_demog_part_mod", "te_debug_demog_cap_mod", "te_demog_line_working_adults_applied"):
             self.assertIn(read, line)
@@ -6678,7 +6680,8 @@ class TestCausesInTheStep(unittest.TestCase):
         eng.call("te_demog_medicine_drift")
         eng.call("te_demog_prepare")
         med = demographics_model.medicine_drift(demographics_model.medicine_targets(self.INP0), self.INP1)
-        drifted = dataclasses.replace(self.INP1, medicine=med)
+        # and the seed's count of women among the workers, which splits the year's work deaths (2026-10-25)
+        drifted = dataclasses.replace(self.INP1, medicine=med, work_female_share=eng.vars["te_dg_fws_wk"])
         want = demographics_model.cause_multipliers(drifted)
         for cause, var in (("infection", "te_dg_m_inf"), ("external", "te_dg_m_ext"), ("chronic", "te_dg_m_chr")):
             self.assertAlmostEqual(eng.vars[var], want[cause], places=9, msg=cause)

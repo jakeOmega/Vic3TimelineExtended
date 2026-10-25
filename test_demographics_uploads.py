@@ -92,6 +92,9 @@ def _engine(ring, inp, pop, owner_vars, full=True, real_multipliers=False, trunc
     eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=ring.scale,
                     te_dg_year=float(YEAR), te_dg_people=ring.total, te_dg_raw=ring.total / ring.scale,
                     te_dg_sex_balance=M.structure(ring)["men_per_100_women"], te_dg_faw=ring.faw, te_dg_fam=ring.fam)
+    # the last count of women among the workers, which the step reads (te_demog_women_worker_share, 2026-10-25)
+    if ring.fws_work is not None:
+        eng.vars["te_dg_fws_wk"] = ring.fws_work
     for c in range(len(P.MIGRANT_CLASSES)):
         eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = ring.class_f[c], ring.class_m[c]
     for b, (bf, bm) in enumerate(zip(*M.band_sums(ring))):

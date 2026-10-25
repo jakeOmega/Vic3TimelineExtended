@@ -373,9 +373,10 @@ What the offline evidence already says (2026-10-12):
     Rich-today inputs (a 2020-like structure) and B on the 1953 save's revenue over GDP (median 0.27 among the 15
     largest economies). Keep a plain-text save of a rich country around 2000-2020 (debug mode) and run
     `demographics_harness.py workforce SAVE`-style checks on it; `pensions SAVE` reads its revenue over GDP.
-11. **Work deaths' split.** Under Full, option r's `fws_wk=` (the census's women among workers 15-64) replaces
-    `fws_law=` in the split at the next step: about 0.17 in a 1836 farming state (No Women's Rights' 0.1), about 0.46
-    under Protected Class (0.48). The Causes of Death section's work row still adds up.
+11. **Work deaths' split.** Under Full, option r's `fws_wk=` (the census's women among workers 15-64) splits work
+    deaths at the next step: about 0.17 in a 1836 farming state (No Women's Rights' 0.1), about 0.46 under Protected
+    Class (0.48). Since 2026-10-25 under Display only too, and option r logs `fws=` beside it, the same figure once the
+    state has a count (§ Women's share of the workers). The Causes of Death section's work row still adds up.
 12. **A revolution that wins** under Full, the old government holding Raised and a bill: at once the winner shows the
     same pension age and position, the Trade Unions' −2 modifier, the Old-Age Pensions expense and the health bill; its
     states' "Census: Workforce" continues the old values (option r's `w=` on the capital) rather than the flat lines.
@@ -804,6 +805,9 @@ script value, as the other factors), so no self-check. What only the game can sh
 
 ## Women at work and families among migrants on their carriers (modifier-types stage 3, 2026-10-19)
 
+Since 2026-10-25 the women's-rights laws carry no Women's Work Outside the Home line: the census's own count of women
+among its workers took its place (§ Women's share of the workers, below, which replaces this section's law half).
+
 The migrant profile's two inputs were a `has_law` ladder and a `has_technology_researched` ladder; they are now
 census-only types on their carriers, so each law's and technology's tooltip says what it does (`docs/systems/mod_systems.md`
 § The census, Flows). The values are the old tables', so no figure moves, except that Commercial Aviation and Jet Engine
@@ -811,16 +815,38 @@ Technology now add families too, which moves a late-game state's migrant profile
 state type on a tech's or law's `modifier` read in state scope is check a (option l, 2026-10-10), and a mod tech carrying
 a census type is the Contraceptive Pill's. So no self-check. What only the game can show:
 
-1. **The tooltips.** Women in the Fields "Women's Work Outside the Home +15%", Women Own Property +20%, Women in the
-   Workplace +35%, Women's Suffrage +37%, Protected Class +38%; No Women's Rights shows no such line. Paddle Steamer and
-   Railways "Families Among Migrants +10%", Combustion Engine +15% (beside its Deaths from Violence and Accidents line),
-   Commercial Aviation and Jet Engine Technology +5%. None shows a raw key, each hover gives its description, and
-   `debug.log` holds no `Unknown modifier type` for them.
-2. **The capital's reads (option l, any rule).** `TE_DEMOG_WORK` logs `fws=` (0.10 under No Women's Rights, 0.48 under
-   Protected Class) and `fam_mig=` (0.20 with Paddle Steamer and Railways, 0.45 with all five: the techs' lines alone, without the families' 0.2 base).
+1. **The tooltips.** Paddle Steamer and Railways "Families Among Migrants +10%", Combustion Engine +15% (beside its
+   Deaths from Violence and Accidents line), Commercial Aviation and Jet Engine Technology +5%. None shows a raw key,
+   each hover gives its description, and `debug.log` holds no `Unknown modifier type` for them.
+2. **The capital's reads (option l, any rule).** `TE_DEMOG_WORK` logs `fam_mig=` (0.20 with Paddle Steamer and
+   Railways, 0.45 with all five: the techs' lines alone, without the families' base).
 3. **The census reads them (Full or Display only).** A state with net migration keeps the profile it had before the
    change, unless its owner has an aviation tech: there the young-adult bulge of its arrivals or departures is a little
    flatter.
+
+## Women's share of the workers (2026-10-25)
+
+The census's own count of women among its workers (`te_dg_fws_wk`; before a count, what the sexes' rates give:
+`te_demog_women_worker_share`) now splits work deaths under Display only as under Full, and sets the labour migrants'
+women's share and Late Marriage's women's-work term under both. The women's-rights laws' Women's Work Outside the Home
+line went, and so did the families' women's-rights term (`docs/systems/mod_systems.md` § The census, Flows). No new
+engine fact: the count has run under both settings since phase 2 step 2, and the new value reads script values the
+panel already shows, so no self-check. What only the game can show:
+
+1. **The tooltips.** Women in the Fields, Women Own Property, Women in the Workplace, Women's Suffrage and Protected
+   Class show no "Women's Work Outside the Home" line, and `debug.log` holds no `Unknown modifier type` for
+   `state_female_work_share_add`.
+2. **The capital's reads (option l, either rule).** `TE_DEMOG_WORK`'s `fws=` is the census's count: about 0.17 in a 1836
+   farming state (0.10 before, No Women's Rights' share), about 0.4 to 0.46 under Protected Class with the late
+   technologies.
+3. **Display only.** A farming state's Causes of Death work row: women's share of the work deaths moves from 10% to about
+   17%, and the row still adds up.
+4. **Migration (either rule).** In a state with net migration and three in ten jobs women-typical, about a quarter of
+   the labour migrants are women under Women in the Fields (18% before) and about a fifth under Women's Suffrage
+   without the late technologies (a quarter before). Under Women in the Workplace, Women's Suffrage or Protected Class
+   the families' share of migrants is 15 or 16 points lower than before; under No Women's Rights it is unchanged.
+5. **The outline.** The Demographics tab's twenty-year outline splits work deaths by its states' counts, not by the
+   owner's law, so under Full it agrees with the states' own Causes of Death rows.
 
 ## Wealth Concentration's remaining shocks, r > g and the Inequality effect (2026-10-19)
 

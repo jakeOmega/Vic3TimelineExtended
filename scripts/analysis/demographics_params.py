@@ -284,8 +284,9 @@ HEALTH_NEED_CAP = 1.0
 HEALTH_TECHS = ("modern_pharmaceuticals", "telemedicine", "personalized_medicine", "genetic_engineering",
                 "molecular_assemblers", "biological_immortality")
 HEALTH_TECH_STEP = 0.05
-# Work deaths follow the participation model under Full (§2.5): women's share of the census's own workers aged
-# WORK_SPLIT_AGES (first, last), from the last count; the laws' share (female_work_share) before one.
+# Work deaths follow the participation model (§2.5): women's share of the census's own workers aged WORK_SPLIT_AGES
+# (first, last), from the last count; before one, the share the sexes' rates give (women_worker_share). Under Full
+# alone until 2026-10-25, the women's-rights laws' own share outside it.
 WORK_SPLIT_AGES = (15, 64)
 # The AI's yearly pulse (§2.2, §9): the same weights for every country; is_ai only decides whom the pulse acts for. A
 # bill over PENSION_AI_BILL_HIGH of revenue, or debt over PENSION_AI_DEBT of its ceiling, pushes toward the cheaper
@@ -440,7 +441,8 @@ PRACTICE_EROSION_SPAN = 0.2
 PRACTICE_EROSION_ACCESS = {"lm": 0.0, "bs": 0.3}
 PRACTICE_ACCESS_SPAN = 0.5
 # Late Marriage's drivers (call 6): impartible inheritance x the agrarian share; women's paid work before marriage,
-# x the women's job share x the law's women's work share / FULL_FEMALE_WORK_SHARE. Impartible inheritance is a
+# x the women's job share x women's share of the workers / WOMEN_WORKER_PARITY (women_worker_share; the women's-rights
+# laws' own share / 0.48 until 2026-10-25). Impartible inheritance is a
 # census-only type (since 2026-10-17, so its tooltip says it), 0.15 on Primogeniture (extra_laws.txt) and on Undivided
 # Farm Succession (extra_amendments.txt, an amendment: load_carriers' kind "amendment"). The two never meet: the
 # amendment sits only on Forced Heirship and Customary Inheritance.
@@ -640,11 +642,6 @@ DIFFUSION_BASE = 0.1
 DIFFUSION_MAX = 1.0
 MEDICINE_SNAP = 0.005
 MEDICAL_OUTREACH_DIFFUSION = 0.2   # decree_medical_outreach's line (a test pins the decree to it)
-
-# Women's share of the workforce (§2.4, §2.5): this base plus the women's-rights laws' FEMALE_WORK_SHARE_TYPE line (stage 3
-# of the modifier-types design, 2026-10-19, below), for the migrant profile, Late Marriage's women's work and, outside
-# Full, splitting work deaths.
-FEMALE_WORK_SHARE_DEFAULT = 0.1
 
 # ---- War dead and migrants (§2.5) -------------------------------------------------
 # The war dead come from the conscription pool's ages (phase 2 step 4, below: POOL_FROM, POOL_TO), 95% of them men.
@@ -872,9 +869,14 @@ MIGRANT_PROFILE = {
     "refugee": {"weights": [0.27, 0.05, 0.3, 0.25, 0.13]},
 }
 LABOUR_FEMALE_SHARE_MIN, LABOUR_FEMALE_SHARE_MAX = 0.1, 0.6
-FAMILY_BASE = 0.2                 # families' weight before transport (FAMILY_MIGRATION_TYPE), rights and chain migration
-FAMILY_RIGHTS_WEIGHT = 0.2        # x women's work share / FULL_FEMALE_WORK_SHARE
-FULL_FEMALE_WORK_SHARE = 0.48     # Protected Class's share: women's rights at their fullest
+# Women's share of the workers at which women work as much as men: the labour kind's women's share and Late Marriage's
+# women's work read women_worker_share over it (2026-10-25; they read the women's-rights laws' own share over Protected
+# Class's 0.48 before)
+WOMEN_WORKER_PARITY = 0.5
+# Families' weight before transport (FAMILY_MIGRATION_TYPE) and chain migration. 0.2 until 2026-10-25, when the women's
+# rights term (0.2 x the laws' share / 0.48) went: women who can move on their own account don't make families move
+# more. The 0.0417 it gave No Women's Rights stays here, so a state under that law books families as before.
+FAMILY_BASE = 0.2417
 CHAIN_STEP, CHAIN_CAP = 0.02, 0.2  # per consecutive year of net inflow, at most
 CRISIS_AT_WAR = 0.3               # refugees' weight while the owner is at war, before devastation and turmoil
 # ---- The residual's booking keeps the structure plausible (migrant booking, 2026-10-12) ---------------------------
@@ -1063,18 +1065,16 @@ LX_POLITICS_LABOR = 0.10
 PENSION_AI_GAP = 0.2
 PENSION_AI_GAP_LOW = 0.1
 
-# ---- The migrant profile's inputs as modifier types (modifier-types design, stage 3, 2026-10-19) ----
-# docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md. Two census-only state types
-# (demographics_modifier_types.txt) on their carriers in the game files, which demographics_modifiers.py resolves; they
-# replaced the FEMALE_WORK_SHARE law table and the FAMILY_TRANSPORT_TECHS table. Women's share of the workforce is
-# FEMALE_WORK_SHARE_DEFAULT + the women's-rights law's line, at most 1 (Women in the Fields 0.15, Women Own Property
-# 0.20, Women in the Workplace 0.35, Women's Suffrage 0.37, Protected Class 0.38: the old table less the base), so
-# FULL_FEMALE_WORK_SHARE is the base plus Protected Class's line. The family kind's weight takes the transport
-# technologies' line on top of FAMILY_BASE: Paddle Steamer and Railways 0.10, Combustion Engine 0.15, and the aviation
-# techs §2.5 names, Commercial Aviation and Jet Engine Technology 0.05 each (owner, 2026-10-19).
-FEMALE_WORK_SHARE_TYPE = "state_female_work_share_add"
+# ---- The migrant profile's input as a modifier type (modifier-types design, stage 3, 2026-10-19) ----
+# docs/superpowers/archive/specs/2026-10-09-demographics-modifier-types-design.md. A census-only state type
+# (demographics_modifier_types.txt) on its carriers in the game files, which demographics_modifiers.py resolves; it
+# replaced the FAMILY_TRANSPORT_TECHS table. The family kind's weight takes the transport technologies' line on top of
+# FAMILY_BASE: Paddle Steamer and Railways 0.10, Combustion Engine 0.15, and the aviation techs §2.5 names, Commercial
+# Aviation and Jet Engine Technology 0.05 each (owner, 2026-10-19). Stage 3's other type, the women's-rights laws'
+# women's share of the workforce (state_female_work_share_add), went on 2026-10-25: the census's own count of women
+# among its workers (women_worker_share) took its place, and the families' rights term went with it.
 FAMILY_MIGRATION_TYPE = "state_family_migration_add"
-MIGRANT_PROFILE_TYPES = (FEMALE_WORK_SHARE_TYPE, FAMILY_MIGRATION_TYPE)
+MIGRANT_PROFILE_TYPES = (FAMILY_MIGRATION_TYPE,)
 DEMOG_TYPES = DEMOG_TYPES + MIGRANT_PROFILE_TYPES
 
 # ---- Internal Resettlement's known moves (2026-10-19) ----
@@ -1103,10 +1103,10 @@ RESETTLE_KINDS = {
 }
 # Each programme's movers as (kind, weight, women's share) parts, the weights summing to 1. The family and refugee kinds
 # split evenly (None: the kind's own share); the labour kind takes the women's share given, or "jobs": the destination's
-# jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's rights x the range; no
-# balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls, 2026-10-19; Penal Transportation's class
-# split (above) was confirmed on 2026-10-20, and the Development Program's 60/40 was being confirmed as this was built:
-# one edit here if it changes.
+# jobs, as the residual's labour kind (LABOUR_FEMALE_SHARE_MIN + its female_job_share x women's share of its workers /
+# WOMEN_WORKER_PARITY x the range; no balance ramp, LABOUR_BALANCE_*: a known move is not an estimate). Owner calls,
+# 2026-10-19; Penal Transportation's class split (above) was confirmed on 2026-10-20, and the Development Program's
+# 60/40 was being confirmed as this was built: one edit here if it changes.
 RESETTLE_PROFILES = {
     "land_grants": (("family", 1.0, None),),
     "military_colonies": (("labour", 0.5, 0.2), ("family", 0.5, None)),   # half the labour kind at 80% men, half families

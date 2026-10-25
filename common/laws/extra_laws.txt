@@ -4269,7 +4269,6 @@ law_protected_class = {
 		state_demog_womens_work_ratio_add = 0.2	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_demog_absorbed_birth_rate_mult = -0.1
 		state_natural_fertility_mult = -0.15	# the census's natural fertility (demographics phase 2 step 4)
-		state_female_work_share_add = 0.38	# the census's women at work: 0.1 + it (modifier-types stage 3)
 		state_dependent_political_participation_add = 0.5
 	}
 }
