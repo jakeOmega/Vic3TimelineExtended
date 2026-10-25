@@ -306,7 +306,7 @@ te_debug_colonial_empire.3 = { # REVIEWED 2026-10-09: console-only test event (`
 # logs each country that holds a non-homeland state of 100,000 people or more,
 # and each such state's parts of the test. grep TE_CE_CENSUS in debug.log. For
 # the play-test and the 1836 holdings table of the design (docs/superpowers/
-# specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 1.5).
+# archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 1.5).
 te_debug_colonial_empire.4 = { # REVIEWED 2026-10-24: console-only test event (`event te_debug_colonial_empire.4`); never fired by script on purpose
 	type = country_event
 	placement = ROOT

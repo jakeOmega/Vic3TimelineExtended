@@ -15,7 +15,7 @@ read them. Older saves migrate by dropping the flag.
 **Tech Stack:** Paradox script (`common/`, `gui/`, `localization/`), Python unittest (`test_grand_monument_registry.py`,
 `test_grand_monuments_layout.py`), the player guide build (`scripts/build_player_guide.py`).
 
-**Spec:** `docs/superpowers/specs/2026-10-23-gm-policy-prestige-design.md` (read it whole first). The heritage spec it
+**Spec:** `docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md` (read it whole first). The heritage spec it
 amends is `docs/superpowers/specs/2026-10-23-tourism-heritage-design.md`.
 
 ## Global Constraints

@@ -344,7 +344,7 @@ colonial_collapse_unattached = {
 #      disparity signal);
 #   6. not settled land (last: it walks the pops).
 # Does NOT include acceptance/integration checks beyond those signals; those
-# are context-dependent. Design: docs/superpowers/specs/
+# are context-dependent. Design: docs/superpowers/archive/specs/
 # 2026-10-24-colonial-criteria-and-independence-wars-design.md § 1.
 # Scope: state
 is_overseas_colonial_state = {
