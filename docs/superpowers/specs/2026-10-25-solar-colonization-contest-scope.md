@@ -3,52 +3,94 @@
 Drafted 2026-10-25 from the owner's brief: colonies can be contested, captured or
 destroyed; colonies hold people taken from Earth; colonies can be built up with
 modules; space fleets and marines; anything else that fits. Revised the same day
-with the owner's first answers (§ Decisions). This is a scoping document, a menu
-with a build order, not yet a design. Nothing is built. The calls still open are
-in § 11. Read `docs/systems/mod_systems.md` § Space Race and
+through three rounds of the owner's answers (§ Decisions). This is a scoping
+document, a menu with a build order, not yet a design. Nothing is built. The
+calls still open are in § 11. Read `docs/systems/mod_systems.md` § Space Race and
 `docs/player_guide/16-space.md` § Colonizing the solar system first; this
 document assumes both.
 
 ## Decisions (owner, 2026-10-25)
 
+**Holding and contest**
+
 - **A dead holder's colonies pass to the owner of its last capital**, for the
-  first version. Later they may become **free colonies** by default (perhaps
-  under the UN), which can be brought into the fold by force, diplomacy or trade
-  (§ 6.5).
+  first version, under every setting but off (races only included). Later they
+  may become **free colonies** by default, perhaps under the UN (§ 6.5).
+- **Cession by treaty, one article per body at least**; better, one article that
+  picks the colony, if hidden per-site building types can serve as its input
+  (§ 6.1). Otherwise the receiver picks the ceded sites.
 - **An occupied colony goes back at the peace unless a cession is enforced**, as
   occupied land does (§ 6.3).
-- **Fleets are objects, not one national score**: a handful of numbers
-  (strength, delta-v, fuel, ship types, whatever proves useful), a location and a
-  timer. A fleet is either at a celestial body or in transit with an arrival
-  date. Combat happens only at a body; nothing is intercepted in transit, at
-  least for now. Large enough to be a phase of its own (§ 5).
 - **A blockade needs only to beat the enemy's mobile forces, not the colony's
   defences.** The blockader stands off, out of the defences' reach, close enough
   to intercept anything coming or going (§ 6.2).
-- **Emigration has priorities**: a player building up Mars shouldn't see most of
-  their people go to Venus (§ 7).
-- **Extraplanetary Bases are tied to colonies** (no more unlimited bases), but
-  the total extraction space offers is huge. Powers fight over a site because it
-  is good (much output per Launch Capacity), or to deny it to a rival, almost
-  never because space is tapped out (§ 8.2).
+- **Interdiction in peace: yes** (§ 6.2).
+- **Destroying a colony is allowed**, at a price in infamy, UN standing and years
+  ruined, and later in the autonomy of the destroyer's own colonies. It is easier
+  than capture: it is easier to throw something fast at a colony than to land
+  marines on it (§ 6.3).
+- **Free colonies wait and trade, at first** (§ 6.5).
 - **Covert operations, colonies breaking away, abandonment and an outer-space
   convention against seizure are in** (§§ 6.4–6.6).
-- **Space operations outside a war:** the owner leans yes, undecided (D5,
-  § 6.2 has a proposal).
-- **The setting is part of the Space Race rule, at four levels**: off, races
-  only (today's system), simple colonies, full colonies. **Full is the default**
-  once the system is ready (§ 9).
-- **The dead-holder rule probably applies under races only too** (§ 9).
+- **Interplanetary Trade Networks** is replaced, or given to every colony holder
+  (D2, open between the two).
 
-Second round, the same day:
+**Fleets**
 
-- **Population is crews for modules** (§ 7). With Artificial General
-  Intelligence (era 12, the production tree's last technology, perhaps a capstone
-  era 13 later) colonies no longer need people to run them.
-- **Transfer times are real** (§ 5.3). Fusion drives in eras 11 and especially 12
-  (very high specific impulse, decent thrust) make travel quick. If fusion torches
-  are ten years off, sending a colony to Uranus by chemical rocket may be
-  foolish, which needs colony fleets to travel too (§ 5.6, F4 to confirm).
+- **Fleets are objects, not one national score**: numbers, a location and a
+  timer. A fleet is at a location or in transit with an arrival date. Combat
+  happens only at a location; nothing is intercepted in transit, at least for
+  now. A phase of its own (§ 5).
+- **About nine fleets per country**, enough for one per location: Earth with the
+  Moon, Mercury with Venus, Mars, the Asteroid Belt, Jupiter, Saturn, Uranus,
+  Neptune and the Kuiper Belt (§ 5.1).
+- **Fleet numbers come in pairs, capacity and current**: a fleet is refuelled and
+  resupplied (§ 5.1). The owner's first idea for composition: a handful of ship
+  types or tiers, each with a known delta-v cap, supply and marines, and
+  strength tracked per type; the fleet's delta-v and supply are the minimum
+  across its types, its marines the sum.
+- **Transfer times are real** (§ 5.3), with fusion drives in eras 11 and
+  especially 12 (very high specific impulse, decent thrust) making travel quick.
+  **Antimatter is a drive step of its own**, perhaps with antimatter-capable fleet
+  power gated by the antimatter megaproject, the Antimatter Containment Facility.
+- **Combat follows Lanchester's square law**, at least until a play-test (§ 5.4).
+- **Earth and the Moon (the Moon Base) are one location and a battleground**,
+  and battles there add to the orbital debris index (§ 5.4).
+
+**Colonization**
+
+- **Colony fleets travel too and claim on arrival.** If a fleet's site is taken
+  before it arrives, it takes another free site at the same body; with none, the
+  investment is lost (§ 5.6). Sending a colony to Uranus by chemical rocket when
+  fusion torches are ten years off may be foolish.
+- **Transfer times are the lock**, not the five stages, under simple and full
+  (§ 5.6).
+- **A colony fleet targets its destination**; today's random draw from the stage
+  goes (§ 5.6).
+
+**Population and modules**
+
+- **Population is crews for modules** (§ 7). With Artificial General Intelligence
+  (era 12, the production tree's last technology), modules need no crews at all.
+  If an era 13 capstone comes, it can take that role.
+- **Emigration has priorities**: a player building up Mars shouldn't see most of
+  their people go to Venus (§ 7).
+- **Who emigrates**: by stratum or by profession, either is fine. Colonies are
+  melting pots; emigration policies by culture (only accepted pops, or exiling
+  unaccepted ones) can be explored later (§ 7).
+- **A specialization is probably just a module type** (§ 8.1).
+- **Upkeep is input multipliers** on the building that does the work, as the mod
+  has done before (§ 8.1).
+- **Extraplanetary Bases are tied to colonies**, with huge total room. Powers
+  fight over a site because it is good, or to deny it, almost never because
+  space is tapped out. The Deep-Sea Mine stays the cheaper build, which is most
+  of what keeps the Global Commons balance (§ 8.2).
+
+**The rule**
+
+- **Four levels of the Space Race rule**: off, races only (today's system),
+  simple colonies, full colonies. **Full is the default** once the system is
+  ready (§ 9).
 
 ## 1. What a colony is today
 
@@ -73,8 +115,8 @@ So a site can never change hands; annexing its holder removes it from the game
 (the journal entry and its modifiers go, the flag stays); and a colony has no
 population, buildings or defence of its own. Revolutions are handled: the winner
 inherits `<modifier>_held` and `sr_colony_count`, and `sr_repair_after_civil_war`
-rebuilds the modifiers. A colony fleet founds its colony the month it departs; no
-travel time is modelled.
+rebuilds the modifiers. A colony fleet founds its colony the month it departs, at
+a random free site of the current stage.
 
 Only the top three AI powers make space progress (the rank gate in
 `docs/player_guide/16-space.md` § Joining the space race), so few AI countries
@@ -86,15 +128,17 @@ ever happens to the AI and never by it.
 | Need | Precedent in this repo |
 |---|---|
 | Move an abstract commons asset between countries, as a sale, a gift or a war goal | The five seabed lease articles, `common/treaty_articles/122_seabed_lease.txt`: one directed article per basin, `quantity` input, `can_be_enforced` + `giftable`. Its header: "Enforceable, so a war's winner can impose one: this is the earlier design's Seize Seabed Claims war goal." `test_seabed_leases.py` holds them alike |
+| A treaty article that picks one item of a type | Vanilla `acquire_monopoly_for_company`: `required_inputs = { company building_type }`, a `building_type_valid_trigger`, and `usage_limit = once_per_side_with_same_inputs`, so one treaty can carry the article several times with different inputs |
 | A stored country that may have died | `banking_rescue_donor_exists` (`common/scripted_triggers/banking_debt_triggers.txt:67`): `exists = var:x` plus `is_country_alive = yes` |
 | Remove people in batches and count them | Internal Resettlement's deaths in transit, `kill_population_in_state` with `pop_type` / `strata` filters (`common/scripted_effects/resettlement_effects.txt:253`; the value is a constant). `create_pop` (state scope) brings people back |
 | Transfer times and delta-v to each body | `scripts/generators/gen_launch_windows.py` computes every body's Hohmann time of flight and solves Lambert's problem for the delta-v of transfers between 0.25 and 2.6 times it (`TOF_RANGE`); today it emits only the windows and the off-window premiums |
 | Departures to a body only in its window | Launch windows: `sr_launch_site_departs = { BODY = … }`, `sr_window_open_<body>`, the three propulsion steps (`common/scripted_triggers/sr_launch_window_triggers.txt`) |
+| Upkeep as an input multiplier | Funding levels raise the Space Program's throughput (and so its Launch Capacity bill); the era-12 logistics methods use `goods_input_launch_capacity_mult` (`common/production_methods/te_global_commons_logistics_pms.txt:36`, registered in `mod_entity_modifier_types.txt:599`) |
 | A hostile act in space short of war, with UN consequences | The anti-satellite strike (`common/diplomatic_actions/te_asat_strike_action.txt`, dossier ground `un_dos_asat`, the moratorium `un_events.41`) |
 | A covert operation against a rival programme | `covert_space_espionage_action`, one of 15 operations on the `covert_op_start = { TYPE = … }` pattern (`common/diplomatic_actions/covert_operations.txt:2086`) |
 | Building room that comes from an abstract holding, as a soft cap | Seabed licences gating the Deep-Sea Mine (`te_seabed_gate`, `building_ocean_mine`'s `possible`) |
 | A custom war goal with an `on_enforced` effect | `te_colonial_reconquest` (`common/war_goal_types/te_colonial_reconquest.txt`) |
-| Space military already in the tech tree | Space Militarization (era 11, Orbital Bombardment units), Orbital Weapon Platforms (era 12, the Orbital Battlestation, five levels of combat bonuses), Directed Energy Weapons, Muon-Catalyzed Fusion Reactors. The UN outer-space regime already bars a battlestation (`un_regime_effects.txt:253`) |
+| Space military already in the tech tree | Space Militarization (era 11, Orbital Bombardment units), Orbital Weapon Platforms (era 12, the Orbital Battlestation, five levels of combat bonuses), Directed Energy Weapons, Fusion Power, Muon-Catalyzed Fusion Reactors, Antimatter Production (the Antimatter Containment Facility megaproject and the Antimatter Engine). The UN outer-space regime already bars a battlestation (`un_regime_effects.txt:253`) |
 | A shared cost of fighting in orbit | The orbital debris index (`te_orbital_debris_effects.txt`), which anti-satellite strikes raise |
 | Per-site code from one table | `gen_launch_windows.py`, `gen_seabed_basins.py` (post-load regenerators) |
 | Programme levels instead of per-item buttons | The Colonial Empire's programmes at levels 0–3, stepped by an AI review (`mod_systems.md` § Colonial Programmes) |
@@ -110,212 +154,261 @@ ever happens to the AI and never by it.
   records in script (§ 5), not formations.
 - `kill_population_in_state` takes a constant, so emigration goes in fixed
   batches (resettlement does the same).
-- Treaty articles run `on_entry_into_force`, take a `quantity`, and with
-  `can_be_enforced` become war goals with no war goal type of our own.
+- Treaty articles run `on_entry_into_force`, take a `quantity` or a
+  `building_type`, and with `can_be_enforced` become war goals with no war goal
+  type of our own.
+- `has_game_rule` tests a setting's flags, and one setting can carry several
+  (§ 9).
 
 **To verify (a self-check each, per the house rule):**
 
 - A global variable holding a country after that country is annexed: does
   `exists` fail, or does `is_country_alive` have to catch it? Guard with both, as
   banking does, and log `TE_SELF_CHECK` on the first dead holder.
-- Whether `kill_population_in_state` takes a culture filter, if we want to record
-  who emigrated.
+- **Hidden building types as a treaty input** (§ 6.1). Vanilla's only
+  `building_type_valid_trigger` is `always = yes`, so it is unproven what scopes
+  the trigger sees (the building type, the source country). Also: whether a
+  building type that can never be built is still offered by the treaty designer;
+  what it must declare (a building group, a production method group); whether it
+  shows in other lists (the production overview, the encyclopedia); and which of
+  the mod's audits need to skip it.
 - How a script event can move war support (`add_war_support_change` is listed in
   `vanilla_war_reference.md` § 13) if occupied colonies and space battles are to
   count in a war.
-- Which modifier, if any, can add a weekly Launch Capacity input to the Space
-  Program for module and fleet upkeep; failing that, upkeep is money under
-  Programme Costs.
-- How far a scripted GUI can go for fleet orders (pick a fleet, pick a body,
+- How far a scripted GUI can go for fleet orders (pick a fleet, pick a location,
   confirm) before it needs a generated widget per fleet slot.
+- Later, not now: whether `kill_population_in_state` takes a culture filter, for
+  emigration policies by culture (§ 7).
 
 ## 4. Foundation: a site record that names its holder
 
 Everything else needs this, and it fixes the annexation hole on its own.
 
 - **Per-site state lives in global variables keyed by site, with the holder as a
-  pointer:** `sr_site_holder_<site>` (a country), `sr_site_spec_<site>` (1 or 2,
-  the chosen specialization) and `sr_site_status_<site>` (held, occupied,
-  blockaded, derelict, ruined, free). Later slices add population, modules and
-  integrity beside them. A transfer then repoints one variable; whatever the site
-  holds stays with the site.
+  pointer:** `sr_site_holder_<site>` (a country), `sr_site_spec_<site>` (the
+  specialization chosen at founding) and `sr_site_status_<site>` (held,
+  occupied, blockaded, derelict, ruined, free). Later slices add population,
+  modules and integrity beside them. A transfer then repoints one variable;
+  whatever the site holds stays with the site.
 - **The journal entry's modifiers become a projection of the record.** One sync
-  effect per site puts the specialization on the holder's entry and takes it off
-  everyone else's. `<modifier>_held` stays as the revolution-proof mirror.
-- **Generate the 34 sites from one table** (body, stage, event, the two
+  effect per site puts the colony's modifiers on the holder's entry and takes
+  them off everyone else's. `<modifier>_held` stays as the revolution-proof
+  mirror.
+- **Generate the 34 sites from one table** (body, location, event, the two
   specializations, the discovery seed, and later room, mining quality and module
   slots), as the launch windows are. Today's `sr_establish_colony_effect` and
   `sr_check_colony_stage_effect` become generator output, and the table is what
-  the cession articles, the panel and the tests read.
+  the cession article, the panel and the tests read.
 - **Old saves migrate themselves**: each specialization names its site, so the
   `<modifier>_held` variables say who holds what. A monthly pass builds the holder
   record wherever it is missing.
 - **A dead holder's colonies pass to whoever owns its last capital's state
-  region** (recorded yearly on the holder). With no owner there, or none running
-  a programme, the site becomes derelict: the next fleet that can reach it
-  claims it, at a discount, whatever the current stage. Free colonies (§ 6.5)
-  can replace this default later.
+  region** (recorded yearly on the holder), under every setting but off. With no
+  owner there, or none running a programme, the site becomes derelict: the next
+  fleet that can reach it claims it, at a discount. Free colonies (§ 6.5) can
+  replace this default later.
 - **A revolution's winner** repoints the holder records in the existing
   `te_civil_war_on_won` hook when the original tag dies.
+- **Interplanetary Trade Networks** is replaced, or granted to every colony
+  holder rather than only to those holding one when the last site was claimed
+  (D2).
 - **Panel:** a Solar System section listing every site with its holder's flag,
-  next to Our Colonies.
+  next to Our Colonies. Under simple and full it is also where a colony fleet's
+  destination is picked (§ 5.6).
 
 ## 5. Fleets (a phase of its own)
 
 ### 5.1 What a fleet is
 
-A fleet is a record on its country: a few numbers, a location and a timer.
+A fleet is a record on its country: its ships by class, a few pooled stores, a
+location and, in transit, a destination and an arrival date.
 
-- **Fixed slots, a handful per country** (`sr_fleet_<n>_*`, n = 1 to 4, say), so
-  the panel shows one row per fleet and the code for each slot is generated. A
-  slot is empty, at a body, or in transit.
-- **The numbers** (F2), a first cut:
-  - **Strength** of its warships, what it fights with;
-  - **Marines**, what it takes a colony with (§ 6.3);
-  - **Delta-v**, the budget its drives allow, which buys transit speed (§ 5.3);
-  - **Supply**, months it can stay away from a friendly spaceport before
-    strength starts to fall; topped up at Earth or at a Spaceport module (§ 8).
-  Ship types, if they come, are mixes of these (a tanker raises supply, a troop
-  carrier marines), not separate combat rules.
-- **Locations** are bodies, not sites: Earth orbit (home), and the window bodies
-  the generator already lists (Mars, Venus, each asteroid, the Jupiter, Saturn,
-  Uranus and Neptune systems, the Kuiper Belt) plus Mercury. A fleet at Jupiter
-  can act on any of the six Jupiter sites.
-- **Fleets are built at Earth** by a government building (working name Space
-  Command, unlocked by Space Militarization): its levels set how much strength
-  and how many marines it can put into orbit a year, and its production methods
-  (chemical, fusion and antimatter drives) the delta-v of what it launches. It
-  employs officers, engineers and servicemen and consumes Launch Capacity and
-  Advanced Materials. The Orbital Battlestation adds strength at Earth orbit
-  only. Merging and splitting fleets at the same body is a matter of moving
-  numbers between slots.
+- **Nine slots per country** (`sr_fleet_<n>_*`, generated per slot), one for each
+  location, so a power can keep a fleet everywhere it has interests. The panel
+  shows one row per fleet. A slot is empty, at a location, or in transit.
+- **Locations** are the owner's nine: Earth with the Moon (home, and the Moon
+  Base), Mercury with Venus, Mars, the Asteroid Belt, Jupiter, Saturn, Uranus,
+  Neptune and the Kuiper Belt. A fleet at a location can act on any site there.
+  Departures still follow the window of the body a fleet heads for (Venus, or one
+  asteroid, has its own).
+- **Ship classes**, a handful (six to eight), each with fixed figures in a table:
+  - its drive generation (chemical, fusion, fusion torch, antimatter), which sets
+    its **delta-v capacity**;
+  - its role: a **warship** (combat strength), an **assault carrier** (marines
+    per point of strength) or, optionally, a **tender** (supply and propellant
+    for the others);
+  - its **supply endurance**, the months it lasts away from a friendly port.
+- **What a fleet records**, each as capacity and current where it can run down:
+  - **strength per class**, current and full (damage is the gap);
+  - **propellant**, the delta-v it has left against what its classes allow;
+  - **supply**, the months it has left against its endurance;
+  - **marines**, current and capacity.
+- **What the fleet can do follows from its classes**, as the owner proposed:
+  - its delta-v capacity is the **minimum** over the classes it holds: the
+    slowest ship sets the pace, so a fleet mixing chemical hulls with torches
+    travels like a chemical fleet, which is the reason to retire old hulls;
+  - its endurance is the **minimum** over its classes, unless it carries tenders,
+    whose stores top up the others;
+  - its marines are the **sum**;
+  - its combat strength is the sum of each class's strength times its combat
+    factor.
+- **How the numbers move:**
+  - **Strength** is built at Earth by Space Command (below), lost in battle, and
+    repaired at Earth or at a friendly Spaceport (§ 8.1) over months.
+  - **Propellant** is spent on each transfer, the delta-v that transfer needs
+    (§ 5.3), and refilled at Earth or at a Spaceport; a Spaceport at a
+    volatile-rich site (Ceres, Europa) that makes propellant is worth fighting
+    over.
+  - **Supply** runs down each month away from Earth or a friendly Spaceport and
+    refills there; at zero, the fleet loses strength.
+  - **Marines** are spent on a seizure (they become the occupied colony's
+    garrison) and replenished at Earth.
+- **Space Command** (working name; a government building unlocked by Space
+  Militarization) builds strength at Earth. Its levels set how much it launches a
+  year, its methods which drive generation, each gated by its technology:
+  Fusion Power, Muon-Catalyzed Fusion Reactors, and Antimatter Production with
+  the Antimatter Containment Facility built (the owner's suggestion). Which role
+  it builds is F9. It employs officers, engineers and servicemen, and its upkeep
+  is its inputs (Launch Capacity, Advanced Materials, fuel). The Orbital
+  Battlestation adds strength at Earth only.
+- **Merging and splitting** fleets at the same location moves numbers between
+  slots.
 
 ### 5.2 Movement
 
-An order sends a fleet from its body to another. It leaves in that body's launch
-window, or outside it at the premium with Asteroid Mining, or any month with
-Muon-Catalyzed Fusion Reactors, the colony fleets' own three steps. While it is
-in transit it can be neither attacked nor recalled, and the destination's holder
-sees it coming (an alert with the arrival date), which is the time it has to
-reinforce.
+An order sends a fleet to another location. Chemical fleets leave in the
+destination body's launch window, or outside it at the premium with Asteroid
+Mining; torch fleets leave any month, as today's rule for Muon-Catalyzed Fusion
+Reactors. While in transit a fleet can be neither attacked nor recalled, and the
+destination's holders see it coming (an alert with the arrival date), which is
+the time they have to reinforce.
 
-### 5.3 Real transit times, bought with delta-v (owner's decision)
+### 5.3 Real transit times, bought with delta-v
 
 Minimum-energy (Hohmann) transfers take about 4 months to Mercury, 5 to Venus, 8
 to 9 to Mars, 15 to Ceres, 2.7 years to Jupiter, 6 to Saturn, 16 to Uranus, 31
 to Neptune and 45 to Pluto. Those are the chemical era's times, unchanged.
 
-Propulsion is a ladder of drives, each with a delta-v budget and a thrust:
-
 | Drive | Technology | Travel |
 |---|---|---|
 | Chemical | (the Space Program's start) | Hohmann transfers in launch windows, a little faster at a premium (Asteroid Mining) |
 | Fusion | Fusion Power (era 11, military) | Very high specific impulse, modest thrust: well under Hohmann times, windows still matter for the far worlds |
-| Fusion torch | Muon-Catalyzed Fusion Reactors (era 12, military) | Very high specific impulse and decent thrust: near-straight-line trips, months to the outer planets, no windows (today's rule for this technology) |
-| Antimatter (optional) | Antimatter Production (era 12, military) | Faster still |
+| Fusion torch | Muon-Catalyzed Fusion Reactors (era 12, military) | Very high specific impulse and decent thrust: near-straight-line trips, months to the outer planets, no windows |
+| Antimatter | Antimatter Production (era 12, military), with the Antimatter Containment Facility | Faster still |
 
 For chemical and the slower fusion transfers, the generator's Lambert solver
 already tabulates delta-v against time of flight by departure date, and can emit
 the transit time each drive's delta-v buys per body and month. Its grid stops at
-a quarter of the Hohmann time, so torch transfers use the brachistochrone
-instead (accelerate to the midpoint, decelerate the rest: time from the
-distance on the departure date, which the generator's ephemerides give, and the
-drive's acceleration, capped by its delta-v).
+a quarter of the Hohmann time, so torch and antimatter transfers use the
+brachistochrone instead (accelerate to the midpoint, decelerate the rest: time
+from the distance on the departure date, which the generator's ephemerides give,
+and the drive's acceleration, capped by its delta-v).
 
 So chemical fleets fight only in the inner system and the outer colonies are
-defended by distance until fusion. Propulsion tech decides space war and the
+defended by distance until fusion. Propulsion decides space war and the
 colonization of the outer worlds, and delta-v is the number on a fleet that
 means something.
 
-### 5.4 Combat at a body
+### 5.4 Combat at a location
 
-Each month, at each body, the hostile forces there fight: fleets in the same
-posture band (§ 6.2) and, for fleets that close in, the colonies' defences.
-Losses follow strength on a simple rule (Lanchester's square law is the usual
-model of ranged combat: each side's losses in proportion to the other's strength
-squared, so concentration pays). No interception in transit. Battles in Earth
-orbit add to the orbital debris index (F6), so fighting at home has a cost
-everyone shares.
+Each month, at each location, the hostile forces there fight: fleets in the
+same posture band (§ 6.2) and, for fleets that close in, the colonies'
+defences. Losses follow Lanchester's square law (each side's losses in
+proportion to the other's strength squared, so concentration pays), spread over
+the classes by strength, until a play-test says otherwise. Whether warships
+screen carriers and tenders, as vanilla's naval screening does, is F10. No
+interception in transit. Battles at Earth and the Moon add to the orbital debris
+index, so fighting at home has a cost everyone shares.
 
 ### 5.5 AI
 
 A monthly review per space power, as the Colonial Empire's programmes are
-stepped: keep a fleet at each body where it holds a colony under threat; at war,
-send its strongest fleet against the enemy body where it outmatches the defence
-and the transit is short; recall a fleet low on supply. The AI is the largest
-risk in this phase: it has to judge a war it can't see on the map.
+stepped: keep a fleet at each location where it holds a colony under threat; at
+war, send its strongest fleet against the enemy location where it outmatches the
+defence and the transit is short; recall a fleet low on supply or propellant.
+The AI is the largest risk in this phase: it has to judge a war it can't see on
+the map.
 
-### 5.6 Colony fleets travel too (F4)
+### 5.6 Colony fleets travel too
 
-If transit is real for warships, it has to be for colony fleets, or a chemical
-launch to Uranus would arrive the month it left. Under simple and full:
+Under simple and full colonies:
 
-- **A colony fleet claims its site on arrival, not on departure.** It leaves with
-  a destination site and the transit time its drive buys. The first fleet to
-  arrive takes the site; a later one retargets to a free site at the same body,
-  or waits in orbit for orders. A chemical fleet to Uranus can be overtaken by a
-  torch launched a decade later.
-- **What waits in transit is visible**: the panel lists our fleets en route and
-  their arrival dates, and rivals' fleets bound for a body we want.
-- **The stages may give way to distance (F7).** Today the outer stages open
-  only when the inner ones are full. With real transit times the outer worlds
-  gate themselves, so the stages could become a plain order of the site table
-  rather than a lock. Races only keeps the stages and instant founding.
-- The tables this needs are the same ones fleets need, so colony transit is
-  built first (slice 3 in § 10) and the fleets phase reuses them.
+- **A colony fleet picks its destination.** The player chooses the site from the
+  Solar System list; the AI scores sites by quality, distance and rivals en
+  route. Today's random draw from the stage goes. Whether races only keeps the
+  draw is D19.
+- **It claims its site on arrival, not on departure.** It leaves with the transit
+  time its drive buys (§ 5.3). The first fleet to arrive takes the site; a later
+  one takes another free site at the same body, and with none, its investment is
+  lost. A chemical fleet to Uranus can be overtaken by a torch launched a decade
+  later.
+- **Transfer times are the lock.** The five stages stop being locks: the outer
+  worlds gate themselves by distance. Races only keeps the stages and instant
+  founding.
+- **What is in transit is visible**: the panel lists our fleets en route with
+  their arrival dates, and rivals' fleets bound for a site we want.
+- The transit tables are the same ones warships need, so colony transit is built
+  first (slice 3 in § 10) and the fleets phase reuses them.
 
 ## 6. Contest
 
 ### 6.1 Cession by treaty
 
-One directed treaty article per body group (Mars, the Asteroid Belt, Venus,
-Mercury, Jupiter, Saturn, Uranus, Neptune, the Kuiper Belt: nine), with
-`quantity` as the number of colonies ceded there, `can_be_enforced` and
-`giftable`, as the seabed lease is built. It gives a **sale** (paired with a
-Money Transfer the other way), a **gift** to an ally or a subject, and a **war
-goal**, through enforcement: beat a holder on Earth and take its Mars colonies in
-the peace. A cession is permanent. Population and modules go with the site. The
-article can't let the giver pick which sites go, so the receiver picks in a
-follow-up event (recommended, D4) or a fixed rule does.
+**Preferred: one Cede Colony article that picks the site.** One directed article,
+`required_inputs = { building_type }`, with one hidden building type per site
+(never buildable) standing for the colony, and a `building_type_valid_trigger`
+offering only the sites the source holds. `once_per_side_with_same_inputs` lets
+a treaty cede several colonies. It is `can_be_enforced` and `giftable`, as the
+seabed lease is, so it gives a **sale** (paired with a Money Transfer the other
+way), a **gift** to an ally or a subject, and a **war goal**: beat a holder on
+Earth and take the colony you want in the peace. It rests on the engine checks
+in § 3.
 
-### 6.2 Postures at a body, and blockade
+**Fallback: one article per body** (nine), with `quantity` as the number ceded
+there, and the receiver picking which in a follow-up event.
 
-A fleet at a body holds one of three postures:
+Either way a cession is permanent, and population and modules go with the site.
 
-- **Station** (the default at a body where we hold a colony): defends our
-  colonies there, fights any enemy fleet at the body.
+### 6.2 Postures at a location, and blockade
+
+A fleet at a location holds one of three postures:
+
+- **Station** (the default where we hold a colony): defends our colonies there,
+  fights any enemy fleet at the location.
 - **Stand off** (blockade): stays out of the colonies' defences' reach and fights
   only enemy fleets standing off or stationed there. Once no enemy fleet
   contests it, it intercepts everything going to or from the enemy colonies at
-  the body: emigrants, module deliveries, resupply, and mined output shipped to
-  Earth (so a blockaded mining colony's Extraplanetary Base room stops counting
-  for its holder, § 8.2). Research data is radioed home and can't be
+  the location: emigrants, module deliveries, resupply, and mined output shipped
+  to Earth (so a blockaded mining colony's Extraplanetary Base room stops
+  counting for its holder, § 8.2). Research data is radioed home and can't be
   intercepted, so a science colony keeps its specialization; a blockade hurts
   mining and logistics colonies, not observatories.
 - **Close in** (assault): enters the defences' reach, fights fleets and
   defences together, and wears down the colony's integrity (§ 6.3).
 
-**Outside a war (D5), proposed:** movement and standing off are allowed in
-peace, as an **interdiction** (the Cuban quarantine of 1962 is the model): infamy,
-a UN dossier item like the anti-satellite strike, and a casus belli for the
-target. No shot is fired in peace; closing in, combat between fleets, seizure and
-destruction need a war. A peaceful interdiction that meets the target's
+**Interdiction in peace** (owner's decision): movement and standing off are
+allowed in peace, on the model of the Cuban quarantine of 1962. It costs infamy,
+it is a UN dossier item as the anti-satellite strike is, and it gives the target
+a casus belli. No shot is fired in peace; closing in, combat between fleets,
+seizure and destruction need a war. An interdiction that meets the target's
 stationed fleet is a standoff, and the first shot is a declaration of war.
 
 ### 6.3 Seizure, occupation and destruction
 
-A fleet closing in on a colony whose defences it outmatches brings the colony's
-integrity down month by month; the holder can resupply or reinforce only through
-the body's windows, which is what makes the outer worlds hard to hold and hard to
-take. At zero integrity the attacker chooses:
-
-- **Seize**, with enough marines: the colony is **occupied**. It gives its
-  specialization to no one, counts for the occupier's war support, and goes back
-  at the peace unless a cession article for its body is enforced (owner's
-  decision). Cession stays the one way a colony changes hands in war; occupation
-  is how you make the enemy sign it.
-- **Destroy**: the colony and its people are lost, the site is ruined for some
-  years, then claimable again. Infamy and a UN item (D7).
+- **Seize.** A fleet closing in on a colony whose defences it outmatches brings
+  the colony's integrity down month by month. The holder can resupply or
+  reinforce only through the body's windows (until fusion), which is what makes
+  the outer worlds hard to hold and hard to take. At zero integrity, with enough
+  marines, the colony is **occupied**: it gives its modifiers to no one, its
+  occupier's marines garrison it, it counts for the occupier's war support, and
+  it goes back at the peace unless a Cede Colony article for it is enforced.
+  Cession stays the one way a colony changes hands in war; occupation is how you
+  make the enemy sign it.
+- **Destroy.** Easier than seizure: no marines, and it needs only to outmatch the
+  defences for a few months of bombardment, not to grind integrity to zero.
+  The colony and its people are lost, and the site is ruined for years before it
+  can be claimed again. The price: infamy, a UN item, and, once autonomy exists
+  (§ 6.5), a rise in the autonomy of the destroyer's own colonies.
 
 ### 6.4 Covert operations
 
@@ -327,16 +420,18 @@ framework is there.
 ### 6.5 Free colonies, and colonies that leave on their own
 
 A **free colony** is a site with people and no holder. It gives no one its
-specialization. With population (§ 7), each colony gains an autonomy figure that
-rises with its people, its distance, the months it goes without resupply, and its
-holder's wars and repression; at a threshold an event lets its holder grant a
-charter (keep it, at a cost), garrison it, or let it go free. A free colony can
-be brought into the fold: by force (seize it), by diplomacy (a treaty it accepts
-when its autonomy is low and relations high) or by trade (a standing trade link
-that pays both sides and pulls it closer). The UN can be its guarantor: under the
-outer-space convention, seizing a free colony is a dossier item. Later, a dead
-holder's colonies can become free by default instead of passing to the capital's
-owner.
+modifiers. Each colony gains an autonomy figure that rises with its people, its
+distance, the months it goes without resupply, and its holder's wars,
+repression and destruction of other colonies; at a threshold an event lets its
+holder grant a charter (keep it, at a cost), garrison it, or let it go free.
+
+**First version (owner's lean): free colonies wait and trade.** A free colony
+trades with powers that send it supply, which pays both sides and pulls it
+closer to its trading partner; it can be reclaimed by force. Diplomacy (a treaty
+it accepts when its autonomy is low and relations are high), taking sides, and
+growing into an actor of its own come later, as does the UN as its guarantor
+(seizing a free colony a dossier item) and free colonies as the default for a
+dead holder's.
 
 ### 6.6 Abandonment, and the outer-space convention
 
@@ -351,33 +446,31 @@ seizing and destroying colonies, with violations on the dossier.
   disasters and events.
 - **Emigration is one national programme with per-colony priorities.** The
   programme's level (0–3) sets how many leave each month, in batches, from the
-  state that holds the Space Program (`kill_population_in_state`); Launch
-  Capacity use rises with the level. Each colony has a priority (closed, low,
-  normal, high; new colonies start at normal), and each month's emigrants are
-  shared by priority times free room. A player building up Mars sets Mars high
-  and Venus low, and never has to touch the rest. The AI sets priorities in its
-  review.
-- **Who leaves** (D10): by stratum, or the profession the colony needs
-  (academics to a research site, engineers to a mining one), which makes
-  emigration cost qualified people rather than just heads.
-- **People are crews (owner's decision).** Every module and specialization
-  level above the first needs people to run, as a building needs employees. A
-  founded colony is an automated outpost that runs its first specialization level
-  with a skeleton crew; everything past that is limited by its population. A
-  Habitat module raises the room for people. So the chain is Habitat, then
-  people, then modules, then output, and each step is worth defending. The
-  specialization does not also scale with the head count, which would count
-  people twice.
-- **Artificial General Intelligence ends the need for crews.** With it
-  (`artificial_intelligence`, era 12, production, the tree's last technology),
-  modules run without people and only the site's slots limit them. Emigration
-  then matters for what people bring beyond work: the nation's off-world
-  population gives a small prestige and cultural pull bonus, and it is what
-  autonomy (§ 6.5) and independence grow from. Whether AGI removes crews or only
-  cuts them, and whether a later era 13 capstone takes that role, is open (P2).
+  state that holds the Space Program (`kill_population_in_state`); its upkeep is
+  an input multiplier on the Space Program. Each colony has a priority (closed,
+  low, normal, high; new colonies start at normal), and each month's emigrants
+  are shared by priority times free room. A player building up Mars sets Mars
+  high and Venus low, and never has to touch the rest. The AI sets priorities in
+  its review.
+- **Who leaves**: by stratum to start (the owner is fine with stratum or
+  profession). Colonies are melting pots and keep no culture. Emigration policies
+  by culture, such as sending only accepted pops or exiling unaccepted ones, can
+  come later (the culture filter check in § 3).
+- **People are crews.** Every module and specialization level above the first
+  needs people to run, as a building needs employees. A founded colony is an
+  automated outpost that runs its first module with a skeleton crew; everything
+  past that is limited by its population. A Habitat module raises the room for
+  people. So the chain is Habitat, then people, then modules, then output, and
+  each step is worth defending.
+- **Artificial General Intelligence removes the crew requirement entirely**
+  (`artificial_intelligence`, era 12, production; an era 13 capstone can take
+  that role if one comes). Modules then run without people and only the site's
+  slots limit them. People still matter: the nation's off-world population gives
+  a small prestige and cultural pull bonus, and it is what autonomy (§ 6.5)
+  grows from.
 - **The scale stays small beside Earth.** 34 colonies at a million each is a
   rounding error for a great power of the 2080s, so the cost is Launch Capacity
-  and the qualified people, not the head count.
+  and the people taken, not the head count.
 - A destroyed colony's people die. An evacuation option brings them back with
   `create_pop` in the capital.
 - Optional: the Demographics census counts emigrants as an exit.
@@ -386,17 +479,22 @@ seizing and destroying colonies, with violations on the dossier.
 
 ### 8.1 Modules
 
-- **Specialization levels**: each colony's chosen specialization gets levels 1 to
-  3, bought with money and Launch Capacity; the level becomes part of its
-  multiplier. The 68 modifiers that exist already do the work.
+- **A specialization is a module type** (the owner's lean). Each site offers its
+  two specializations as site-specific modules, with levels 1 to 3, whose
+  modifiers are the 68 that exist, times the level. The founding event installs
+  the chosen one at level 1, as an automated outpost. Whether the other can be
+  built later, or the founding choice excludes it, is D18.
 - **Three generic modules**, with slots per site from the site table (Mars more,
-  Mimas fewer): **Habitat** (room and growth for people), **Defences** (siege
-  resistance, what a closing fleet must beat), **Spaceport** (resupplies our
-  fleets at the body, so a stand-off there costs no supply; resupply of the
-  colony outside windows; a candidate for the propellant depots the launch
-  windows already describe).
+  Mimas fewer): **Habitat** (room and growth for people), **Defences** (what a
+  closing fleet must beat), **Spaceport** (repairs, refuels and resupplies our
+  fleets at the location, so a stand-off there costs no supply; resupplies the
+  colony outside windows; makes propellant at a volatile-rich site; a candidate
+  for the propellant depots the launch windows already describe).
 - A module ships in its body's launch window and is built over months; a
-  blockade stops the delivery. Upkeep is weekly, under Programme Costs.
+  blockade stops the delivery.
+- **Upkeep is an input multiplier** on the building doing the work (owner): the
+  Space Program for colony modules, Space Command for fleets, as funding already
+  raises the Space Program's Launch Capacity bill.
 
 ### 8.2 Extraplanetary Bases from colonies
 
@@ -418,10 +516,11 @@ seabed licences, with a steep throughput penalty past the room rather than a ban
   throughput, re-applied monthly from the quality of the levels actually built,
   best room first; a blockaded or occupied site's room drops out. A single
   refresh site, per the house rule.
-- This changes the Global Commons balance between the Extraplanetary Base and
-  the Deep-Sea Mine (`2026-10-16-global-commons-design.md` § 1): the quality
-  grades have to be set so that the era-12 flip still happens. Under the races only
-  setting (§ 9), bases stay unlimited as today.
+- **The Global Commons balance** (`2026-10-16-global-commons-design.md` § 1)
+  rests mostly on the Deep-Sea Mine being much cheaper to build (owner), so the
+  quality grades are unlikely to break the era-12 flip; a check of the two
+  buildings' output per construction point at the grades settles it. Under races
+  only (§ 9), bases stay unlimited as today.
 
 ## 9. The game rule: four levels of the Space Race rule
 
@@ -432,8 +531,8 @@ rule of its own. The line between simple and full is fleets:
 | Setting | What it has |
 |---|---|
 | Off | No space race (today's `space_race_disabled`) |
-| Races only | Solar System Colonization as today: first come, first served, instant founding, the stages, colonies never change hands by treaty or war, Extraplanetary Bases unlimited. The holder record exists underneath, and the dead-holder rule applies (owner: probably) |
-| Simple colonies | Races only, plus cession by treaty (sale, gift, war goal), population, emigration and crews, modules, Extraplanetary Bases from colonies, colony fleets that travel, covert operations, free colonies and abandonment. Colonies change hands only at the peace table, or by agreement |
+| Races only | Solar System Colonization as today: first come, first served, instant founding at a random site of the stage, the stages, colonies never change hands by treaty or war, Extraplanetary Bases unlimited. The holder record exists underneath, and the dead-holder rule applies |
+| Simple colonies | Races only, plus cession by treaty (sale, gift, war goal), population, emigration and crews, modules, Extraplanetary Bases from colonies, colony fleets that pick their site and travel, distance in place of the stages, covert operations, free colonies and abandonment. Colonies change hands only at the peace table, or by agreement |
 | Full colonies | Simple, plus fleets: movement, postures, blockade, interdiction in peace, sieges, seizure and destruction. **The default** once the system is ready |
 
 **How it reads in script.** `has_game_rule` tests a setting's flags, and a
@@ -462,16 +561,16 @@ section.
 
 | Slice | What | Size |
 |---|---|---|
-| 0 | Foundation (§ 4): holder records, the site generator, migration, the dead-holder rule, the Solar System list. Every setting but off | Medium |
-| 1 | The four-level rule (§ 9) and cession articles (§ 6.1) | Small to medium |
+| 0 | Foundation (§ 4): holder records, the site generator, migration, the dead-holder rule, the Solar System list, Interplanetary Trade Networks (D2). Every setting but off | Medium |
+| 1 | The four-level rule (§ 9) and the Cede Colony article (§ 6.1), starting with the hidden-building-type check; the per-body fallback if it fails | Small to medium |
 | 2 | Population, emigration with priorities, crews and AGI (§ 7) | Medium |
-| 3 | Transit tables in the launch-window generator (§ 5.3) and colony fleets that claim on arrival (§ 5.6) | Medium |
-| 4 | Modules (§ 8.1) and Extraplanetary Bases from colonies (§ 8.2) | Medium to large (the balance) |
-| 5 | Covert operations, free colonies, autonomy, abandonment, colony life events (§§ 6.4–6.6). Simple becomes the default | Medium |
-| 6 | **The fleets phase** (§ 5, § 6.2–6.3): 6a the fleet record, Space Command and movement on slice 3's tables; 6b combat at bodies, postures, blockade, seizure and destruction, settlement at the peace; 6c interdiction in peace, the AI. Full becomes the default | Large, the riskiest |
+| 3 | Transit tables in the launch-window generator (§ 5.3); colony fleets that pick their site, travel and claim on arrival; distance in place of the stages (§ 5.6) | Medium |
+| 4 | Modules with specializations as modules (§ 8.1) and Extraplanetary Bases from colonies (§ 8.2) | Medium to large (the balance) |
+| 5 | Covert operations, free colonies (waiting and trade), autonomy, abandonment, colony life events (§§ 6.4–6.6). Simple becomes the default | Medium |
+| 6 | **The fleets phase** (§ 5, §§ 6.2–6.3): 6a the fleet record, ship classes, Space Command and movement on slice 3's tables; 6b combat at locations, postures, blockade, seizure and destruction, settlement at the peace; 6c interdiction in peace, the AI. Full becomes the default | Large, the riskiest |
 
 Slices 0 and 1 already let a war on Earth take colonies. Slice 6 is a phase of
-its own, as the owner expects, and its parts can ship as separate PRs.
+its own, and its parts can ship as separate PRs.
 
 Other ideas, not in the order: colony events (the first birth on Mars, a strike,
 a dome breach); a Mars terraforming megaproject lasting decades; colonies held
@@ -481,36 +580,17 @@ jointly by a power bloc; Resort Colony tourism drawing on the colonies held.
 
 Answered calls are in § Decisions. Still open:
 
-- **D2** Interplanetary Trade Networks once colonies can change hands: kept by
-  everyone who held a colony when the 34th was claimed, or held only while
-  holding one.
-- **D3** Cession unit: one article per body group with a quantity (nine,
-  recommended), or one per site (34).
-- **D4** Who picks the ceded sites: the receiver in an event (recommended), or a
-  fixed rule.
-- **D5** Space operations in peace: the interdiction of § 6.2 (movement and
-  stand-off only, with infamy, a UN item and a casus belli), or none.
-- **D7** Destroying a colony: allowed? Its price in infamy, UN standing and years
-  ruined.
-- **D10** Who emigrates: by stratum, or the profession the colony needs.
-- **D11** If population scales specializations: the curve, and what an empty
-  colony gives.
-- **D14** What a free colony can do: only wait to be brought back, or trade,
-  take sides, and grow into an actor of its own.
-- **D16** Confirm that the dead-holder rule applies under races only (the owner:
-  probably). It is a change of hands, but it fixes colonies vanishing.
-- **F1** How many fleet slots per country.
-- **F2** A fleet's numbers: strength, marines, delta-v and supply, or fewer; ship
-  types or none.
-- **F4** Confirm that colony fleets claim on arrival under simple and full
-  (§ 5.6), and what a fleet does when its site is taken first.
-- **F5** The combat rule: Lanchester's square law, or something flatter.
-- **F6** Earth orbit as a battleground that adds to the debris index, or home
-  only.
-- **F7** Under simple and full, keep the five stages as locks, or let transit
-  times gate the outer worlds and drop the locks.
-- **F8** Is Antimatter Production a drive step of its own after the torch?
-- **P2** Does AGI remove crews or only cut them, and is that the era 13
-  capstone's job if one comes?
-- **M1** The site quality grades and the room scale; the Global Commons flip
-  must survive them.
+- **D2** Interplanetary Trade Networks: replace it, or grant it to every colony
+  holder.
+- **D18** A site's other specialization: buildable later as a second
+  specialization module, or excluded by the founding choice.
+- **D19** Races only: keep the random draw from the stage, or let colony fleets
+  pick their site there too (with instant founding).
+- **F9** How Space Command chooses what it builds: a production method per role,
+  or orders from the panel.
+- **F10** Do warships screen carriers and tenders in battle, as vanilla's naval
+  screening does, or are losses spread by strength?
+- **F11** Tenders: a class of their own that pools supply and propellant, or no
+  pooling (the strict minimum).
+- **M1** The site quality grades and the room scale, checked against the
+  Deep-Sea Mine's output per construction point.
