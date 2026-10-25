@@ -2,8 +2,9 @@
 # The base appeal each state's monuments take (tourism heritage spec 2026-10-23 § 6.3), from
 # scripts/generators/data/tourism_heritage_moves.csv. A move counts only while the monuments that take it
 # can exist: a vanilla wonder's always, a landmark's while the Grand Monuments rule is on and the 1836
-# landmarks were seeded, a site's while the rule is on. Re-run the generator after editing the CSV;
-# test_tourism_heritage.py fails when this file is stale.
+# landmarks were seeded (a To History landmark's while gm_landmarks_seeded_2 says they were), a site's
+# while the rule is on. Re-run the generator after editing the CSV; test_tourism_heritage.py fails
+# when this file is stale.
 
 # State scope. Read by tourism_bonus_from_base_appeal (tourism.txt); 0-1, as base_tourism_appeal_value is.
 tourism_heritage_moved = {

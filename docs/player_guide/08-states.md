@@ -203,7 +203,7 @@ Three sources on the card set a state's output bonus:
 
 | Source | Bonus |
 |---|---|
-| Base Appeal | A score for each state region, from its scenery, climate and townscape. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. A region's historical monuments count under Monuments and in its Grand Monuments instead, so their share goes with them: Attica's Acropolis takes 40 of its 100, and Base Appeal reads +60% while the Parthenon gives it back. The tooltip says how much has moved. |
+| Base Appeal | A score for each state region, from its scenery, climate and townscape. It runs up to +100%; Wyoming scores 90%, Nebraska 20%, and any region without its own score gets 20%. A region's historical monuments count under Monuments and in its Grand Monuments instead, so their share goes with them: Attica's Acropolis takes 40 of its 100, and Base Appeal reads +60% while the Parthenon gives it back; Lower Egypt's pyramids take 50 and the Pyramids of Giza give it back. Ruins still buried, such as Teotihuacan, take theirs until they are dug up. The tooltip says how much has moved. |
 | Cities | +100% for the largest city in the world, 5% less for each place below it, nothing below 20th. See [World city rankings](#world-city-rankings). |
 | Monuments | +10% for each monument. The wonders that stood in 1836 give more: the Taj Mahal +40%, Angkor Wat +30%, and Hagia Sophia, the Vatican, the Forbidden City, Saint Basil's Cathedral and the White House +20%; the Great Mosque of Djenné gives +20% once rebuilt in Eastern Mali. |
 

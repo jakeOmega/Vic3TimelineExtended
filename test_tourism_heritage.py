@@ -1,4 +1,4 @@
-"""Tourism heritage (docs/superpowers/specs/2026-10-23-tourism-heritage-design.md).
+"""Tourism heritage (docs/superpowers/archive/specs/2026-10-23-tourism-heritage-design.md).
 
 Monuments give tourism as an output bonus, as base appeal does (§ 5), and the
 heritage a monument stands for comes off base appeal through a gated term (§ 6).

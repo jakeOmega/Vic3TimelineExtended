@@ -3,12 +3,14 @@
 
 A state's base tourism appeal (base_tourism_appeal_value, common/script_values/
 tourism.txt) was scored partly on its historical monuments, which the Grand
-Monuments and the vanilla wonders count again (docs/superpowers/specs/
+Monuments and the vanilla wonders count again (docs/superpowers/archive/specs/
 2026-10-23-tourism-heritage-design.md). The scores keep their values; the
 points each monument stands for come off through tourism_heritage_moved, read by
 tourism_bonus_from_base_appeal, and only while the monuments that take them can
 exist (§ 6.3): a vanilla wonder's always, a landmark's while the Grand Monuments
-rule is on and the 1836 landmarks were seeded, a site's while the rule is on.
+rule is on and the 1836 landmarks were seeded (a To History landmark's, while
+the seeding that placed them set gm_landmarks_seeded_2), a site's while the rule
+is on.
 
 The moves are scripts/generators/data/tourism_heritage_moves.csv (state, points,
 monument, kind, reason); rows with 0 points are the revisit lists, kept for pass
@@ -80,8 +82,9 @@ def render(moves):
         "# The base appeal each state's monuments take (tourism heritage spec 2026-10-23 § 6.3), from",
         "# scripts/generators/data/tourism_heritage_moves.csv. A move counts only while the monuments that take it",
         "# can exist: a vanilla wonder's always, a landmark's while the Grand Monuments rule is on and the 1836",
-        "# landmarks were seeded, a site's while the rule is on. Re-run the generator after editing the CSV;",
-        "# test_tourism_heritage.py fails when this file is stale.",
+        "# landmarks were seeded (a To History landmark's while gm_landmarks_seeded_2 says they were), a site's",
+        "# while the rule is on. Re-run the generator after editing the CSV; test_tourism_heritage.py fails",
+        "# when this file is stale.",
         "",
         "# State scope. Read by tourism_bonus_from_base_appeal (tourism.txt); 0-1, as base_tourism_appeal_value is.",
         "tourism_heritage_moved = {",
