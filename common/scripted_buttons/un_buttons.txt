@@ -357,19 +357,19 @@ un_propose_expulsion_button = {
 		}
 		# Less interesting when our own UN authority is weak
 		if = { limit = { has_global_variable = un_authority global_var:un_authority < 30 } add = -15 }
-		# Never a motion with no case: the members weigh the target's veto
-		# record against its standing and service (un_expulsion_case), and a
-		# motion that stands on nothing would fail at the cost of the
-		# sponsor's influence. The motion names the member with the strongest
-		# case (un_propose_expulsion_select_target), so any one will do.
+		# Only a motion the Assembly is likely to carry: the members add the
+		# target's case (un_expulsion_case) to their lean, and above 10 a
+		# neutral member votes yes four times in five. A failed motion costs
+		# the sponsor's influence and closes the topic for ten years, which
+		# shields every vetoer. The motion names the candidate with the
+		# strongest case (un_propose_expulsion_select_target), so any one
+		# above the floor will do.
 		if = {
 			limit = {
 				NOT = {
 					any_country = {
-						NOT = { this = ROOT }
-						is_un_permanent_member = yes
-						has_modifier = un_veto_isolation_modifier
-						un_expulsion_case > 0
+						un_expulsion_candidate = yes
+						un_expulsion_case > root.un_expulsion_ai_case_floor
 					}
 				}
 			}

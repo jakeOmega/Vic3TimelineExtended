@@ -88,11 +88,7 @@ un_propose_sanctions_select_target = {
 # Scope: the proposing country
 un_propose_expulsion_select_target = {
 	ordered_country = {
-		limit = {
-			NOT = { this = ROOT }
-			is_un_permanent_member = yes
-			has_modifier = un_veto_isolation_modifier
-		}
+		limit = { un_expulsion_candidate = yes }
 		# The strongest case for expulsion first (owner, 2026-10-24); every
 		# permanent member is a great power, so country_rank tied them all.
 		order_by = un_expulsion_case

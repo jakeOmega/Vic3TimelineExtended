@@ -128,6 +128,8 @@ un_expulsion_case_service_cap = { value = -10 }
 # The proposer would take the seat (un_expulsion_next_in_line): the members
 # hold the seat grab against it a little.
 un_lean_expulsion_seat_grab = { value = -5 }
+# The AI tables a motion only against a case above this (un_expulsion_ai_case_floor).
+un_expulsion_ai_case_floor_base = { value = 10 }
 
 # ---- The dossier: reads ---------------------------------------------------------
 
@@ -246,6 +248,31 @@ un_expulsion_case = {
 	value = un_disp_veto_record
 	add = un_expulsion_case_standing_term
 	add = un_expulsion_case_service_term
+}
+
+# The case an AI needs before it tables a motion to expel: the base, and the
+# seat grab's cost on top when the seat would come to it.
+# Scope: country (the prospective proposer)
+un_expulsion_ai_case_floor = {
+	value = un_expulsion_ai_case_floor_base
+	if = {
+		limit = { un_expulsion_next_in_line = yes }
+		subtract = un_lean_expulsion_seat_grab
+	}
+}
+
+# 1 while this country holds a permanent seat and has a veto record: Our
+# Record's Our Permanent Seat block.
+# Scope: country
+un_disp_expulsion_exposed = {
+	value = 0
+	if = {
+		limit = {
+			is_un_permanent_member = yes
+			has_variable = un_veto_record
+		}
+		value = 1
+	}
 }
 
 # Scope: country

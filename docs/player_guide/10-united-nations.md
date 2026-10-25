@@ -259,7 +259,7 @@ of the members with a vote and cannot be vetoed. If it carries you lose the seat
 and 5 standing, stay a member, carry UN Withdrawal Consequences for ten years,
 and lose your standing benefits for five.
 
-Each veto also adds 5 to your **veto record**, which fades by 5% a year. A
+Each veto outside Moribund also adds 5 to your **veto record**, which fades by 5% a year. A
 motion to expel is weighed on its own case, not the case that decides
 condemnations and sanctions: your veto record, −10 for Exemplary standing or −5
 for Respected (+5 for Poor, +10 for Disgraced), and −5 each for hosting the
@@ -317,7 +317,7 @@ The other eight are:
 | Request a Peacekeeping Deployment | A member at war or with a devastated state, for its own territory | A peacekeeping mission. Major-power members that voted and take part (a yes vote, or a no vote they then accept) contribute and pay for it, and cannot leave the Peacekeeping programme for ten years; nobody else is asked. |
 | Request Humanitarian Aid | A member with a state below 8 standard of living or devastated | An aid mission; major-power members that voted and take part pay for ten years. |
 | Charter Reform | A major power, once the charter is ripe | The next reform. |
-| Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years | The seat is stripped. |
+| Motion to Expel a Permanent Member | Any member, against a permanent member that vetoed within five years and is not its ally, overlord or subject | The seat is stripped. |
 
 From Strong, sanctions also become embargoes: each major-power member with
 diplomatic relevance to the target that voted for them (at Supranational, every
