@@ -12,8 +12,8 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 
 - **Deploy** per CLAUDE.md, "Play-testing unmerged work" (or from `main`). Check the playset has no Workshop copy of
   the mod.
-- **Rule.** The Demographics (Experimental) rule is chosen in the lobby: Disabled (the default, and every release),
-  Display only, or Full. Each item names its setting.
+- **Rule.** The Demographics (Experimental) rule is chosen in the lobby: Full (the default since 2026-10-25),
+  Display only, or Disabled (every release leaves the rule out and the census off). Each item names its setting.
 - **Console.** Vic3's console has no `effect` command: the census's console is `event te_debug_demog.1`, on the
   player's country, with lettered options (the list is at the top of `events/te_debug_demog_events.txt`).
 - **Logs.** Read `debug.log`, not `error.log`. Grep it for `TE_SELF_CHECK` first, then `TE_DEMOG`.

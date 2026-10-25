@@ -252,8 +252,8 @@ uses the ranking.
 ## Demographics
 
 The census is experimental, and released versions of the mod leave it out. A
-development build offers it as the Demographics (Experimental) game rule, off by
-default: set it to Full or Display only when you start a new game. A save from
+development build offers it as the Demographics (Experimental) game rule, set to
+Full by default: choose Display only or Disabled when you start a new game. A save from
 an earlier version keeps it off. With it off, some laws, technologies and
 decrees still list lines only the census reads, such as Contraception or Health
 Care Access; their names end in (Demographics off), since they do nothing. The
@@ -361,8 +361,8 @@ Missouri and Arkansas, also starts with the surplus of men the 1840 census found
 there, and so do the Old Southwest and Florida.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
-follow the base game's rules, and the tab reports what they produce. Disabled,
-the default, also removes the census and both tabs. Wealth Concentration and its
+follow the base game's rules, and the tab reports what they produce. Disabled
+also removes the census and both tabs. Wealth Concentration and its
 effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
