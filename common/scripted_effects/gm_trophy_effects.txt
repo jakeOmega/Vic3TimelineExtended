@@ -77,6 +77,8 @@ gm_state_tr_take = {
 	clear_saved_scope = gm_tr_taker
 	clear_saved_scope = gm_tr_victim
 	save_scope_as = gm_tr_state
+	# The state the notices name (gm_tr_notify_taking).
+	save_scope_as = gm_tr_notice_state
 	$WHO$ = { save_scope_as = gm_tr_taker }
 	owner = { save_scope_as = gm_tr_victim }
 	if = {
@@ -396,6 +398,8 @@ gm_tr_take_from_site = {
 			scope:gm_tr_taker = { exists = capital }
 		}
 		scope:gm_tr_moving = { set_variable = { name = gm_tr_tmp_g value = gm_mon_grandeur } }
+		# The site it is carried off from, for the notices (gm_tr_notify_taking).
+		var:gm_tr_site ?= { save_scope_as = gm_tr_notice_state }
 		scope:gm_tr_taker = {
 			capital = { save_scope_as = gm_tr_site_state }
 			set_variable = { name = gm_tr_tmp_grandeur value = scope:gm_tr_moving.var:gm_tr_tmp_g }
@@ -434,6 +438,7 @@ gm_tr_return_home = {
 	clear_saved_scope = gm_tr_giver
 	save_scope_as = gm_tr_moving
 	var:gm_tr_origin ?= {
+		save_scope_as = gm_tr_notice_state
 		owner = { save_scope_as = gm_tr_receiver }
 	}
 	var:gm_tr_site ?= {
@@ -1008,6 +1013,7 @@ gm_tr_monthly_one = {
 			NOT = { has_variable = gm_tr_home_notified }
 		}
 		set_variable = gm_tr_home_notified
+		var:gm_tr_origin ?= { save_scope_as = gm_tr_notice_state }
 		scope:gm_tr_ai_holder = { post_notification = gm_tr_home_reach_notice }
 	}
 	if = {
@@ -1057,6 +1063,7 @@ gm_tr_monthly_one = {
 					}
 				}
 				set_variable = { name = gm_tr_reach_by value = scope:gm_tr_occupier }
+				var:gm_tr_site = { save_scope_as = gm_tr_notice_state }
 				scope:gm_tr_occupier = { post_notification = gm_tr_site_reach_notice }
 			}
 		}

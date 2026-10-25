@@ -345,11 +345,14 @@ un_mission_volunteer = {
 	un_mission_volunteer_tooltip = yes
 	hidden_effect = {
 		un_mission_add_contributor = yes
+		# The host's notice names us and the mission's state.
+		save_scope_as = un_msn_notice_member
 		scope:un_msn_new ?= {
 			if = {
 				limit = { NOT = { un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = scope:un_msn_volunteer } } }
 				add_to_variable_list = { name = un_msn_volunteers target = scope:un_msn_volunteer }
 			}
+			var:un_msn_state ?= { save_scope_as = un_msn_notice_state }
 			var:un_msn_host ?= { post_notification = un_mission_reinforced_notice }
 		}
 		un_mission_service_refresh = yes
@@ -465,7 +468,10 @@ un_mission_withdraw = {
 	}
 	custom_tooltip = un_mission_withdraw_final_tt
 	hidden_effect = {
+		# The host's notice names us and the mission's state.
+		save_scope_as = un_msn_notice_member
 		scope:un_msn_new ?= {
+			var:un_msn_state ?= { save_scope_as = un_msn_notice_state }
 			if = {
 				limit = { un_mission_served_by = { WHO = scope:un_msn_leaver } }
 				remove_list_variable = { name = un_msn_contributors target = scope:un_msn_leaver }

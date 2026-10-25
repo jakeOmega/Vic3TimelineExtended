@@ -2824,8 +2824,11 @@ covert_ai_manage_priorities = {
 # The bloc audience is guarded on the TARGET actually having a bloc: two
 # countries that are both in none can otherwise read as being in the same one,
 # which would hit every unaligned country on the map.
+# The notice names both countries: the operator as scope:covert_exposure_operator,
+# the target as scope:detected_by_country.
 # Scope: country (the operator); scope:detected_by_country = the target
 covert_exposure_third_party_blowback = {
+	save_scope_as = covert_exposure_operator
 	custom_tooltip = {
 		text = covert_exposure_third_party_tt
 		every_country = {

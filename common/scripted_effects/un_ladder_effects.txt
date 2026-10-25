@@ -748,6 +748,7 @@ un_leave_organisation = {
 # asked to join, stay out, or oppose (un_events.31).
 # Scope: the convening country
 un_conference_open = {
+	ROOT = { save_scope_as = un_conference_convener }
 	set_global_variable = { name = un_founding_conference value = ROOT }
 	set_global_variable = { name = un_conference_months value = 0 }
 	add_modifier = {
