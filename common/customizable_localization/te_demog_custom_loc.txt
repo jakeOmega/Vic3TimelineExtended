@@ -55,10 +55,13 @@ te_demog_census_off_desc = {
 # Full the census's first step in a state clears them: it reads the women's-work
 # family as women's participation (te_demog_women_rate_law), and the replaced
 # family does nothing, since the census carries it through its ages and who works.
-# So under Full each type's name ends in a tag saying which; under Display only and
-# Disabled the lines apply as written and the name is plain. A state the census
-# hasn't stepped yet keeps the flat lines for up to a year; the tag is per country.
-# A release's effects gate reads always = no, so the tag never shows there.
+# So under Full the replaced family's name ends in a tag saying so, and the
+# women's-work family's whole name and description change to what the census reads
+# it as, "Women's Work (Workforce Ratio)": the reading in force comes first (owner,
+# 2026-10-25). Under Display only and Disabled the lines apply as written and both
+# read plain Workforce Ratio. A state the census hasn't stepped yet keeps the flat
+# lines for up to a year; the names are per country. A release's effects gate reads
+# always = no, so the Full names never show there.
 te_demog_wf_replaced_name = {
 	type = country
 	random_valid = no
@@ -79,11 +82,25 @@ te_demog_wf_womens_name = {
 
 	text = {
 		trigger = { te_demog_effects_run = yes }
-		localization_key = te_demog_wf_womens_tag
+		localization_key = te_demog_wf_womens_full
 	}
 	text = {
 		trigger = { always = yes }
-		localization_key = te_demog_census_off_none
+		localization_key = te_demog_wf_plain
+	}
+}
+
+te_demog_wf_womens_desc = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_effects_run = yes }
+		localization_key = te_demog_wf_womens_desc_full
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_wf_womens_desc_plain
 	}
 }
 
