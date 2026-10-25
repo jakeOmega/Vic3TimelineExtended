@@ -60,6 +60,7 @@
 # ---- Phase 1: All UN members vote on the proposed resolution ----
 un_vote.1 = {
 	# REVIEWED 2026-09-25 (system_ungated): the generic vote event names every resolution topic; each topic is raised by its own gated docket item
+	# REVIEWED 2026-10-25 (unchosen_self_action): "our veto record" shows only to an expulsion motion's target, which must carry un_veto_isolation_modifier (un_expulsion_candidate), added only in its own veto option (un_vote_cast_effects)
 	type = country_event
 	placement = ROOT
 

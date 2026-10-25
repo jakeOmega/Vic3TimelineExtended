@@ -48,6 +48,24 @@ un_permanent_seat_candidate = {
 	NOT = { un_representation_suspended = yes }
 }
 
+# Whether THIS country is next in line for a permanent seat: the candidate with
+# the most prestige, which is who a carried motion to expel seats at once
+# (un_vote.2) and the monthly fill seats first. A motion's proposer that is
+# next in line would take the seat it moves to strip: the AI weighs that when
+# it tables one (un_propose_expulsion_button), and the members lean against
+# it a little (un_lean_proposer).
+# Scope: country
+un_expulsion_next_in_line = {
+	un_permanent_seat_candidate = yes
+	NOT = {
+		any_country = {
+			NOT = { this = prev }
+			un_permanent_seat_candidate = yes
+			prestige > prev.prestige
+		}
+	}
+}
+
 # Whether open permanent seats are being filled: the UN exists and the signing
 # period that follows a founding is over. Until then only the founder is
 # seated, so a great power that answers the charter a few days after the AI

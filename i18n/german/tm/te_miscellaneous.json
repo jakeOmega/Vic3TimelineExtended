@@ -7748,8 +7748,8 @@
   "de": "Heimatländer können sich ändern"
  },
  "country_longevity_care_banned_bool": {
-  "en": "Longevity Care Banned",
-  "de": "Langlebigkeitsmedizin verboten"
+  "en": "Longevity Care Banned[GetPlayer.GetCustom('te_demog_census_off_name')]",
+  "de": "Langlebigkeitsmedizin verboten[GetPlayer.GetCustom('te_demog_census_off_name')]"
  },
  "country_nuclear_disarmament_bool": {
   "en": "Nuclear Disarmament",
@@ -22550,6 +22550,14 @@
  "te_demog_census_more_men_desc": {
   "en": "This state has more than 110 men for every 100 women aged 20 to 59, as a frontier or a mining district does. Men with no wives or families are quicker to radicalism and to violence. Full at 130 men and stronger above, up to twice at 170; the census on the Demographics tab sets its strength each year.",
   "de": "Dieser Staat hat mehr als 110 Männer auf 100 Frauen im Alter von 20 bis 59, wie es bei einer Grenzregion oder einem Bergbaubezirk der Fall ist. Männer ohne Frauen und Familien neigen schneller zu Radikalismus und Gewalt. Volle Wirkung bei 130 Männern, darüber stärker, bis zum Doppelten bei 170; die Volkszählung auf dem Reiter „Demografie“ legt ihre Stärke jedes Jahr fest."
+ },
+ "te_demog_census_off_note": {
+  "en": "\\n\\nThe Demographics (Experimental) game rule is off, so no census runs and this does nothing.",
+  "de": "\\n\\nDie Spielregel Demografie (experimentell) ist ausgeschaltet: Es läuft keine Volkszählung, daher bewirkt dies nichts."
+ },
+ "te_demog_census_off_tag": {
+  "en": " #grey (Demographics off)#!",
+  "de": " #grey (Demografie aus)#!"
  },
  "te_demog_census_wealth_down": {
   "en": "Census: Deaths by Wealth",

@@ -4128,8 +4128,8 @@
   "es": "Permite que las asignaciones de [concept_homeland|l] cambien con el tiempo según qué culturas habitan mayoritariamente un estado."
  },
  "country_longevity_care_banned_bool_desc": {
-  "en": "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.",
-  "es": "Nadie tiene a su alcance la medicina de la longevidad. Quienes la reciben la dejan a medida que la prohibición se impone, y sus cuerpos conservan los años que les ahorró. Lo usa el censo en la pestaña de Demografía."
+  "en": "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[GetPlayer.GetCustom('te_demog_census_off_desc')]",
+  "es": "Nadie tiene a su alcance la medicina de la longevidad. Quienes la reciben la dejan a medida que la prohibición se impone, y sus cuerpos conservan los años que les ahorró. Lo usa el censo en la pestaña de Demografía.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
  },
  "country_nuclear_disarmament_bool_desc": {
   "en": "This country has agreed to give up its nuclear weapons.",
