@@ -286,27 +286,37 @@ convention effects do.
 ## Space race setbacks
 
 Each month, every running milestone rolls against its setback risk. A hit fires an event about that milestone, and what it costs depends on
-the approach.
+the approach. Setbacks cost months of progress: a month is your monthly pace
+when the setback struck, and each option's tooltip gives the months and the
+progress they come to. Changing funding while the event waits doesn't change
+either.
 
 On an Ambitious approach you get a mission failure: an explosion on the pad, a
 lost probe, a habitat breach, a computer that aborts the landing. Most options
-cost 25% of that milestone's progress, give Space Mission Failure (−2% prestige
+cost 4 months of that milestone's progress, at the faster Ambitious pace, give Space Mission Failure (−2% prestige
 and −25 innovation cap, fading over five years) and radicalize some academics.
 They also start a six-month safety period during which none of your milestones
 can suffer another setback, although they keep moving at full pace; the panel
 reads Shielded, with the months left, and shows the risk as 0%. One
 option usually adds a Temporary Safety Review, which fades over ten years, and
 in some events also switches the milestone to Safe. Another usually presses on
-with a further flat loss of progress and more radicals, and no safety period.
+with 5 or 6 months lost, more radicals and no safety period.
 Now and then the roll brings An Unexpected Breakthrough instead: no progress is
 lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
 On a Safe or Standard approach you get a minor setback: missing parts, bad weather, a
-scandal, a quarrel with a foreign supplier. It costs 15% of the milestone's
-progress plus a few points, with no lasting modifier and no safety period. A few
-setbacks, on any approach, also cut the Space Program's throughput for some
-months. In Solar System Colonization the 25% or 15% is of one colony's progress
-at most, so fleets staged in orbit are never lost to a setback.
+scandal, a quarrel with a foreign supplier. It costs 1 to 4 months of the
+milestone's progress, usually 2 or 3, with no lasting modifier and no safety
+period. A few setbacks, on any approach, also cut the Space Program's throughput
+for some months. A setback never takes more progress than the milestone has, and
+in Solar System Colonization never more than one colony's, so fleets staged in
+orbit are never lost to a setback.
+
+Because the cost is counted in months, setbacks cost the same share of time on
+every milestone, whatever its goal or your pace; later milestones are harder
+only because their risk is higher. On Standard, setbacks add roughly a sixth to
+a milestone's time at 5% risk and two fifths at 10%. Safe roughly halves that.
+Ambitious loses about as much time as Standard, from a pace half again as fast.
 
 A setback never ends a milestone; it only costs time. Two things do: dropping
 below major power, or losing the production method or building the milestone
@@ -315,8 +325,8 @@ needs.
 ## First-to-finish rewards
 
 When a milestone completes, its event plays and every other recognized country
-gets a notice two weeks later, from which it can push its own program by 3
-points or congratulate you for better relations. The finisher keeps a permanent
+gets a notice two weeks later, from which it can push every milestone it has
+under way by a month of progress or congratulate you for better relations. The finisher keeps a permanent
 reward. The first country to finish a milestone gets the larger version; anyone
 who finishes it later gets the smaller one.
 
@@ -585,8 +595,9 @@ country's networks without the debris (see [The covert operations](11-influence.
 Besides the choice, setback and completion events above, the space race has
 yearly events for programs under way. Some are hard science problems, such as
 radiation or orbital debris; others are discoveries, such as water on Mars.
-Their options add progress to the milestones they concern, usually a few points
-and never more than 30, and some also bring loyalists, radicals or better
+Their options add progress to the milestones they concern, usually 1 to 3
+months of it, counted at your pace when the event fires as setbacks are; a few
+cost a month or more instead. Some also bring loyalists, radicals or better
 relations. A handful tie the race to other systems: the SpaceX company, a
 Tourism Industry, the United Nations, the Extraplanetary Base and the Space
 Elevator. They are listed in [Space race event

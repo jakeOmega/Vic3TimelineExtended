@@ -1785,9 +1785,12 @@ Setting a shared variable as a proxy (e.g. `sr_funding_level = var:sr_funding_<m
 
 ### Per-JE Helper Effects
 For events that don't know which milestone they're associated with (generic failure events, cross-milestone events), use helper effects with proxy values:
-- `sr_boost_active_milestones`: Set `sr_progress_boost`, call effect — adds to ALL active milestones
+- `sr_boost_active_milestones = { MONTHS = N }` — adds N months of progress to ALL active milestones; `sr_setback_lose_months = { MONTHS = N }` takes them from the failed one (`scope:sr_setback_<m>`)
 - Per-JE boolean flags (`sr_failed_<m>`): Set in pulse, checked by effects in events
 - Multi-milestone events: Expand single `change_variable` into per-JE `if` blocks checking `has_variable = sr_active_<m>`
+
+### Size a Progress Event in Months of the Pace, Not in Points or a Share of the Bar
+Where a system rolls a risk every month against a progress bar, an event that takes a share of the progress, or a flat number of points, does not scale. The number of setbacks grows with the months a bar takes (goal ÷ pace), and a share of progress grows with the goal, so a slow programme on a long bar settles where its pace equals its losses and never finishes; a flat amount sized for the first bar means nothing on a bar 12 times longer. The space race had both until 2026-10-25 (simulated on Standard, the Mars Landing at a pace of 4 a month took 880 months on average against 113 without setbacks). Size the effect in months of the pace instead: the expected slowdown is then risk × months, the same on every bar. Record the pace in the event's `immediate` (`sr_record_event_pace`) and compute from that, or a player can cut funding while the event waits and lose less. Pattern: `space_race_effects.txt` → *Progress in months*.
 
 ## Per-Entity State: Script Containers, Not Slot-Numbered Variables (1.13.10+)
 
