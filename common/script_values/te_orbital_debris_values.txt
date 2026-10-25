@@ -16,9 +16,11 @@
 #   te_debris_cleaners        how many countries removed debris last month
 #   te_debris_top_cleaner     the country that removed the most (absent with none)
 #   te_debris_programs        running Space Programs counted last month
-# and by the strike (te_asat_strike_effect), for the UN phase:
+# and by the strike (te_asat_strike_effect), for the UN phase and the Space
+# Race tab's Orbit section:
 #   te_asat_last_strike_month te_history_month_index of the last strike
 #   te_asat_strikes_total     strikes since the game began
+#   te_asat_last_striker, te_asat_last_target   the last strike's two countries
 #
 # Country variable te_asat_struck_month: when the country was last struck
 # (the action's 12-month cooldown on a target). Everything else per country is
@@ -465,4 +467,65 @@ te_debris_disp_kessler = {
 		limit = { te_debris_index >= te_debris_kessler_threshold }
 		value = 1
 	}
+}
+
+# ---- Display reads (the Space Race tab's Orbit section) -----------------------------
+# The Timeline Extended window's Space Race tab (te_sr_sec_orbit,
+# space_race_widget.gui) reads these through GetPlayer.MakeScope: shown
+# whatever milestone runs, or none. Scope: country (the viewer).
+
+# Months left on our orbital network's disruption, 0 while it is intact. The
+# timed modifier says whether it lasts; its recorded end month
+# (te_asat_disrupted_until) says how long, at least 1 while it does.
+te_asat_disp_disrupted_months = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_orbital_network_disrupted }
+		value = {
+			value = te_asat_disruption_months_left
+			min = 1
+		}
+	}
+}
+
+# Our satellites, for the Our Satellites row's hover: 0 nothing in orbit a
+# strike can hit, 1 intact, 2 intact and inside the action's 12-month cooldown
+# on its target, 3 disrupted. The word on the row is te_asat_satellites_state
+# (te_orbital_debris_custom_loc.txt), on the same tests.
+te_asat_disp_satellites = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_orbital_network_disrupted }
+		value = 3
+	}
+	else_if = {
+		limit = {
+			te_asat_has_orbital_assets = yes
+			te_asat_struck_recently = yes
+		}
+		value = 2
+	}
+	else_if = {
+		limit = { te_asat_has_orbital_assets = yes }
+		value = 1
+	}
+}
+
+# Anti-satellite strikes since the game began, and months since the last.
+# Scope: any
+te_asat_disp_strikes_total = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_asat_strikes_total }
+		add = global_var:te_asat_strikes_total
+	}
+}
+te_asat_disp_months_since_last = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_asat_last_strike_month }
+		value = te_history_month_index
+		subtract = global_var:te_asat_last_strike_month
+	}
+	min = 0
 }

@@ -1,8 +1,8 @@
 ﻿# Space Race On-Actions
 
 # Once a month per country (not per journal entry): the inactive-milestone
-# cleanup, the revolution backstop, the post-race dividend and the global
-# failure-cooldown tick.
+# cleanup, the revolution backstop, the post-race dividend, a player's Space
+# Powers standings and the global failure-cooldown tick.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action
@@ -84,6 +84,20 @@ space_race_on_action = {
 				limit = { sr_cost_modifiers_missing = yes }
 				sr_recalculate_cost = yes
 			}
+		}
+		# The Space Powers standings on the Space Race tab
+		# (space_race_effects.txt): players in the race, a month at a time.
+		if = {
+			limit = {
+				is_player = yes
+				sr_space_race_on = yes
+				sr_in_space_race = yes
+			}
+			sr_powers_refresh = yes
+		}
+		else_if = {
+			limit = { has_variable = sr_power_total }
+			sr_powers_clear = yes
 		}
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }

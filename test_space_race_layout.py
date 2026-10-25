@@ -63,7 +63,8 @@ OLD_FLAGS = [f"sr_panel_rivals_{m}" for m in CONTROLLED] + \
             [f"sr_panel_programme_{m}" for m in ALL]
 HOW_KEYS = ["je_space_race_widget_how_approach", "je_space_race_widget_how_funding",
             "je_space_race_widget_how_setbacks", "je_space_race_widget_how_first",
-            "je_space_race_widget_how_rivals", "je_space_race_widget_how_programme"]
+            "je_space_race_widget_how_rivals", "je_space_race_widget_how_programme",
+            "je_space_race_widget_how_powers", "je_space_race_widget_how_orbit"]
 IS_SHOWN_OP0 = ("ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
                 ".AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )")
 
@@ -259,8 +260,9 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         # two live sections per milestone, solar colonization's Our Colonies,
-        # Colony Fleets, Settlers and Solar System, and the shared reference
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 5)
+        # Colony Fleets, Settlers and Solar System, the shared reference, and
+        # the Space Race tab's Space Powers and Orbit
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 7)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -569,6 +571,167 @@ class InterstellarCellTest(unittest.TestCase):
             with self.subTest(state=n):
                 self.assertRegex(doc, rf"(?m)^\| {n} \| [^|]+\| [^|]+\| `{texture}\.dds` \|$")
 
+
+
+# The furthest milestone a Space Powers row estimates, by code (sr_power_lead_code).
+LEAD = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+        "interstellar_probe", "solar_colonization"]
+EFFECTS = os.path.join(REPO, "common", "scripted_effects", "space_race_effects.txt")
+VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
+TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "space_race_triggers.txt")
+ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
+
+
+class SpacePowersTest(unittest.TestCase):
+    """The Space Race tab's Space Powers (owner, 2026-10-25: see the AI rivals'
+    progress with or without a milestone running): our row, then eight slots
+    the monthly refresh fills, then "+N more"."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.section = _type_body(cls.gui, "te_sr_sec_powers")
+
+    def test_our_row_then_eight_slots(self):
+        rows = re.split(r"\bte_sr_power_row = \{", self.section)[1:]
+        self.assertEqual(len(rows), 9)
+        self.assertIn('datacontext = "[GetPlayer.GetCapital]"', rows[0])
+        self.assertIn("te_sr_power_lead_own = {}", rows[0])
+        self.assertNotIn("row_visible", rows[0])
+        for n, row in enumerate(rows[1:], start=1):
+            with self.subTest(slot=n):
+                self.assertIn(f"datacontext = \"[GetPlayer.MakeScope.Var('sr_power_{n}').GetState]\"", row)
+                self.assertIn(f"ScriptValue('sr_disp_power_total'), '(CFixedPoint){n}' )", row)
+                self.assertIn("te_sr_power_lead_band = {}", row)
+        more = self.section[self.section.index("je_space_race_widget_powers_more") - 400:]
+        self.assertIn("'(CFixedPoint)9'", more)
+        self.assertIn("GetScriptedGui('sr_powers_sgui').ExecuteTooltip", more)
+
+    def test_the_refresh_fills_the_eight_slots(self):
+        effects = _read(EFFECTS)
+        refresh = _block(effects, "sr_powers_refresh")
+        self.assertEqual(re.findall(r"sr_power_slot = \{ N = (\d) POS = (\d) \}", refresh),
+                         [(str(n), str(n - 1)) for n in range(1, 9)])
+        for m in LEAD:
+            self.assertIn(f"sr_power_fuzz_base = {{ MILESTONE = {m}", refresh)
+        self.assertIn("order_by = sr_power_rank_score", _block(effects, "sr_power_slot"))
+        clear = _block(effects, "sr_powers_clear")
+        for name in ["sr_power_total"] + [f"sr_power_{n}" for n in range(1, 9)]:
+            self.assertIn(f"remove_variable = {name} }}", clear)
+        # players in the race, monthly
+        pulse = _read(ON_ACTIONS)
+        self.assertRegex(pulse, r"is_player = yes\s+sr_space_race_on = yes\s+sr_in_space_race = yes\s+\}\s+"
+                                r"sr_powers_refresh = yes")
+        listed = _block(_read(TRIGGERS), "sr_is_space_power")
+        for cond in ("NOT = { THIS = ROOT }", "sr_in_space_race = yes", "exists = capital"):
+            self.assertIn(cond, listed)
+
+    def test_each_estimate_column_shows_one_text_per_code(self):
+        for column, prefix in (("te_sr_power_lead_band", "je_space_race_widget_power_lead_"),
+                               ("te_sr_power_lead_own", "je_space_race_widget_power_own_")):
+            with self.subTest(column=column):
+                body = _type_body(self.gui, column)
+                found = re.findall(r"ScriptValue\('sr_disp_power_lead'\), '\(CFixedPoint\)(\d)' \)\]\"\s+"
+                                   r"text = \"(\w+)\"", body)
+                self.assertEqual(found, [("0", "je_space_race_widget_power_lead_none")]
+                                 + [(str(c), prefix + m) for c, m in enumerate(LEAD, start=1)])
+        own = _type_body(self.gui, "te_sr_power_lead_own")
+        for m in LEAD:
+            self.assertIn(f"ScriptValue('sr_disp_progress_frac_{m}')", _loc(f"je_space_race_widget_power_own_{m}"))
+            band = _loc(f"je_space_race_widget_power_lead_{m}")
+            for end in ("lo", "hi"):
+                self.assertIn(f"AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('sr_disp_rival_{end}_{m}')", band)
+        self.assertNotIn("sr_disp_rival", own)
+
+    def test_the_lead_code_follows_the_journal_order(self):
+        body = _strip_comments(_block(_read(VALUES), "sr_power_lead_code"))
+        found = re.findall(r"limit = \{ (?:has_variable = sr_active_(\w+)|sr_(solar_colonization)_running = yes) \} value = (\d)", body)
+        self.assertEqual([(a or b, int(c)) for a, b, c in found],
+                         list(reversed([(m, c) for c, m in enumerate(LEAD, start=1)])))
+
+    def test_eight_icons_in_journal_order(self):
+        row = _type_body(self.gui, "te_sr_power_row")
+        found = re.findall(r"\bte_sr_power_cell(_interstellar)? = \{", row)
+        cells = re.split(r"\bte_sr_power_cell(?:_interstellar)? = \{", row)[1:]
+        names = []
+        for suffix, cell in zip(found, cells):
+            if suffix:
+                names.append("interstellar")
+            else:
+                names.append(re.search(r'tooltip = "je_space_race_widget_power_prog_(\w+)"', cell).group(1))
+        self.assertEqual(names, ROW)
+        for m, cell in zip(names, cells):
+            if m == "interstellar":
+                continue
+            with self.subTest(milestone=m):
+                self.assertIn(f'texture = "gfx/interface/icons/event_icons/je_space_race_{m}.dds"', cell)
+                self.assertEqual(_milestones_named(cell), {m})
+                self.assertIn(f"State.GetCountry.MakeScope.ScriptValue('sr_disp_prog_{m}')", cell)
+                self.assertEqual('blockoverride "first"' in cell, m in RACING)
+        # 8 cells and their spacing, then the estimate column, inside the 480 row
+        cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_power_cell")).group(1))
+        column = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_power_lead_band")).group(1))
+        spacing = int(re.search(r"direction = horizontal\s+spacing = (\d+)", row).group(1))
+        self.assertLessEqual(len(ROW) * cell + len(ROW) * spacing + column, 480)
+
+    def test_a_rows_hover_names_its_own_powers_state(self):
+        """In the third person: a row says what its own power holds, never
+        "another power got there first", which is the viewer's word."""
+        custom = _read(CUSTOM_LOC)
+        for m in [r for r in ROW if r != "interstellar"] + ["interstellar"]:
+            with self.subTest(milestone=m):
+                body = _block(custom, f"sr_power_prog_{m}")
+                self.assertNotIn("sr_global_first", body)
+                self.assertNotIn("sr_prog_state_taken", body)
+                key = "je_space_race_widget_power_prog_" + m
+                self.assertIn(f"State.GetCountry.GetCustom('sr_power_prog_{m}')", _loc(key))
+
+
+class OrbitTest(unittest.TestCase):
+    """The Space Race tab's Orbit section: debris and the anti-satellite strike,
+    read on the player, so it shows with no journal entry behind it."""
+
+    def test_rows_and_their_sources(self):
+        body = _type_body(_read(GUI), "te_sr_sec_orbit")
+        self.assertIn("te_sr_debris_row = {}", body)
+        self.assertEqual(re.findall(r'text = "(je_space_race_widget_orbit_\w+_label)"', body),
+                         [f"je_space_race_widget_orbit_{r}_label" for r in ("satellites", "strikes", "moratorium", "strike")])
+        self.assertNotIn("JournalEntry", body)
+
+    def test_the_debris_row_reads_the_player(self):
+        """Mission Control's debris row is also the Orbit section's, outside
+        any journal entry: every key it renders roots on GetPlayer."""
+        for key in ("te_debris_row", "te_debris_row_tt", "te_debris_row_tt_cleaners",
+                    "te_debris_row_tt_hazardous", "te_debris_row_tt_kessler"):
+            with self.subTest(key=key):
+                self.assertNotIn("JournalEntry", _loc(key))
+                self.assertIn("GetPlayer", _loc(key))
+
+    def test_the_satellite_codes_match_the_hover(self):
+        values = _read(os.path.join(REPO, "common", "script_values", "te_orbital_debris_values.txt"))
+        body = _strip_comments(_block(values, "te_asat_disp_satellites"))
+        self.assertEqual(re.findall(r"value = (\d)", body), ["0", "3", "2", "1"])
+        hover = _loc("te_orbit_satellites_tt")
+        for code, word in ((3, "disrupted"), (2, "cooldown"), (1, "exposed"), (0, "none")):
+            self.assertIn(f"'(CFixedPoint){code}' ), 'te_orbit_satellites_tt_{word}' )", hover)
+            self.assertTrue(_loc(f"te_orbit_satellites_tt_{word}"))
+
+    def test_the_strike_records_who_struck_whom(self):
+        effect = _read(os.path.join(REPO, "common", "scripted_effects", "te_orbital_debris_effects.txt"))
+        strike = _block(effect, "te_asat_strike_effect")
+        self.assertIn("set_global_variable = { name = te_asat_last_striker value = ROOT }", strike)
+        self.assertIn("set_global_variable = { name = te_asat_last_target value = scope:te_asat_target }", strike)
+        sguis = _read(os.path.join(REPO, "common", "scripted_guis", "te_orbital_debris_sguis.txt"))
+        record = _block(sguis, "te_asat_record_sgui")
+        for name in ("te_asat_last_striker", "te_asat_last_target"):
+            self.assertIn(f"exists = global_var:{name}", record)
+        # the readiness check is the action's own: what it asks of the striker
+        ready = _block(sguis, "te_asat_strike_ready_sgui")
+        action = _read(os.path.join(REPO, "common", "diplomatic_actions", "te_asat_strike_action.txt"))
+        for cond in ("has_technology_researched = guided_missiles", "sr_has_space_program = yes"):
+            self.assertIn(cond, ready)
+            self.assertIn(cond, action)
+        self.assertIn("te_asat_has_orbital_assets = yes", ready)
 
 
 # Textures the widget uses as they are: vanilla's, used as vanilla uses them.

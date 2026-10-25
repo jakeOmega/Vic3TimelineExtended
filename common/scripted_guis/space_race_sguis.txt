@@ -30,8 +30,9 @@
 # docs/guides/scripting_best_practices.md, "Journal-Entry Buttons Are the AI's
 # Only Path".
 #
-# sr_rivals_sgui at the bottom is display-only: it is called through
-# ExecuteTooltip and never Execute, and its is_valid is always = no.
+# sr_rivals_sgui and sr_powers_sgui at the bottom are display-only: they are
+# called through ExecuteTooltip and never Execute, and their is_valid is
+# always = no.
 # ============================================================================
 
 sr_milestone_suborbital_sgui = {
@@ -561,6 +562,31 @@ sr_rivals_sgui = {
 		}
 		else = {
 			sr_rivals_participants_base = { MILESTONE = solar_colonization }
+		}
+	}
+}
+
+# Every other power in the race, for the Space Powers section's "+N more"
+# (the Space Race tab of the Timeline Extended window; sr_powers_refresh lists
+# the first eight as rows). Walked only on hover. Each line is the power's name
+# and how many entries it has achieved (sr_power_achieved, the rows' icons in a
+# figure). ROOT is the viewer, so sr_is_space_power leaves it out.
+sr_powers_sgui = {
+	scope = country
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+		custom_tooltip_no_bullet = sr_powers_intro
+		every_country = {
+			limit = { sr_is_space_power = yes }
+			custom_tooltip = sr_powers_entry
 		}
 	}
 }
