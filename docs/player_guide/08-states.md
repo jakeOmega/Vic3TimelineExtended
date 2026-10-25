@@ -86,9 +86,12 @@ and tolerance figures for their sources.
 | Modern Urban Planning, Advanced Structural Engineering | +20% each |
 | Urban Planning power bloc principle | +25% at tiers I to III, +50% at IV, +100% at V, plus +5% per Ministry of Urban Planning level (+10% at IV, +20% at V) |
 | National Park building on National Park, National Forest or National Wildlife Refuge | −5%, −7.5% or −10% per level, scaled by staffing |
+| Metropolitan Crowding, under the Demographics rule's Full setting (see [The urban pattern and a planned capital](#the-urban-pattern-and-a-planned-capital)) | Up to −10%: it starts when more than 40% of the state's urban people live in its largest city and is full at 60% |
+| Green Belt or Urban Sprawl, from the Overspill event (see [Demographic events](#demographic-events)) | −10% or +20%, for twenty years |
 
 Ministries are explained in [Ministries](06-politics.md#ministries). The same
-tolerance also raises the densities that open and close a resettlement frontier.
+tolerance multiplies the densities that open and close a resettlement frontier
+(see [The Settlement Authority](#the-settlement-authority)).
 
 ## Dynamic homelands
 
@@ -742,10 +745,19 @@ frontier, measured over the whole state region whoever owns each part:
 - an existing one keeps running, and can add levels, until the region reaches
 10 people per km².
 
-Both densities scale with Migration Crowding Tolerance, and the building's
-requirements show the region's current density against them. In an 1836 start
-the open frontiers include the American West, Siberia, the Kazakh steppe,
-Hokkaido and the Argentine pampas.
+These figures hold at a world population of one billion, about the world's
+population at the 1836 start, and grow in proportion to it: at two billion
+people they are 4 and 20. A frontier is thin compared with the rest of the
+world, so it closes only when its region fills faster than the world grows.
+
+[Migration Crowding Tolerance](#raising-crowding-tolerance) multiplies both
+densities as it does the crowding threshold: at +50% tolerance and one billion
+people they are 3 and 15. The tolerance that counts is that of the state the
+Authority stands in, although the density is the whole region's, so two owners
+of one region can face different limits. The building's requirements show the
+region's current density against each limit, with the two multipliers. In an
+1836 start the open frontiers include the American West, Siberia, the Kazakh
+steppe, Hokkaido and the Argentine pampas.
 
 An Authority can have up to 5 levels. Nationalism, Civilizing Mission, Mass
 Propaganda, Keynesian Economics and Civil Rights Movement each add 5, to a
@@ -881,7 +893,8 @@ event list](19-appendix-events.md#resettlement-event-list).
 
 The AI values a Settlement Authority on an open frontier when one of its states
 has more than 10% of its workforce out of work or migration crowding, and on any
-frontier emptier than 0.5 people per km². It stops founding new ones once it has
-three. It issues the Recruitment Drive in states with more than 10% of the
+frontier emptier than 0.5 people per km² (at one billion people, scaled with
+world population like the frontier densities). It stops founding new ones once
+it has three. It issues the Recruitment Drive in states with more than 10% of the
 workforce out of work or a crowding penalty above 10%. The mod gives the coercive programs a low AI weight, but only
 the AI Voluntary Only rule guarantees that AI countries stay off them.

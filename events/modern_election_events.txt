@@ -2548,7 +2548,20 @@ modern_election_events.28 = {
 	placement = ROOT
 
 	title = modern_election_events.28.t
-	desc = modern_election_events.28.d
+	# Names the governing party running the machine (scope:govt_party), when
+	# a party of the government is standing.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:govt_party }
+				desc = modern_election_events.28.d_named
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = modern_election_events.28.d
+			}
+		}
+	}
 	flavor = modern_election_events.28.f
 
 	event_image = { texture = "gfx/event_pictures/grassroots_canvassing.dds" }

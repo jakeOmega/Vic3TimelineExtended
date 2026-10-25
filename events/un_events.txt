@@ -1203,6 +1203,8 @@ un_events.7 = {
 		# A flat token (redesign phase 6): the old multiplier read
 		# prev.var:temp_giver_gdp, which does not survive the engine
 		# re-reading it (§1.4).
+		# The notice names us, as option A's un_events.101 does.
+		save_scope_as = aid_donor
 		scope:crisis_country = {
 			post_notification = un_humanitarian_token_received
 			add_modifier = {
