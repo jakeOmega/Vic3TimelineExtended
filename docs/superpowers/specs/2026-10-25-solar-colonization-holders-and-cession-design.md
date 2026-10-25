@@ -339,7 +339,7 @@ to name a colony in the treaty designer.
 
 ### 11.2 The article
 
-`te_cede_colony` (`common/treaty_articles/123_cede_colony.txt`), modelled on
+`te_cede_colony` (`common/treaty_articles/124_cede_colony.txt`), modelled on
 vanilla `state_transfer` and the seabed lease:
 
 - `kind = directed`, `cost = 0`, `maintenance_paid_by = source_country`,
@@ -483,3 +483,34 @@ the self-checks confirm.
 8. **Solar System is closed by default** (43 lines); Our Colonies stays open.
 9. **A holder without the milestones keeps its colony and its modifiers but
    can't colonize**, and its panel reads Idle.
+
+## 17. As built (2026-10-25)
+
+Where the build departs from the sections above, and why:
+
+- **The article is `124_cede_colony.txt`**: `123_` was taken (Grid Interconnection).
+- **The monthly country pulse's gate is not widened** (§ 4). The global monthly
+  step writes the `_held` variables and the entry's modifiers itself, and the
+  entry's `immediate` syncs on activation, so a holder that never ran a
+  programme is covered without touching the gate
+  `test_space_race_civil_war.py` pins.
+- **A Solar System row shows the holder's flag only** (§ 9), its name on hover
+  (vanilla's `tiny_flag`): a 48-character name would end in "..." in the row
+  (`test_space_race_labels.py`).
+- **The panel's `sr_disp_site_<key>` have a generated file of their own**,
+  `common/script_values/sr_sites_display_generated.txt`: display values live only
+  in display files, never beside values script reads (`test_space_race_layout.py`).
+- **The notices** (§ 12) keep one variable per side (`sr_site_notice_gained`,
+  `_lost`, `_heir`) with a generated name each, not a cause variable: `.90` covers
+  every cession by treaty (a war's enforced article is a treaty too) and `.91` an
+  heir's world. A treaty that moves several worlds names the first each way and
+  notes the rest.
+- **`sr_grant_colony_modifier` runs the dispatcher inside `hidden_effect`**: the
+  record is bookkeeping behind the modifier the option already shows
+  (`silent_variable_audit`).
+- **A transfer's cause is part of the effect it calls** (`sr_site_gained_<cause>`,
+  `sr_site_lost_<cause>`: treaty, heir, quiet), and each world saves its own
+  scopes (`scope:sr_site_to_<key>`, `scope:sr_site_from_<key>`), so two worlds moved
+  in one script run never share one.
+- **A released world is a fresh world**: its specialization and discovery records
+  are cleared with its holder, for its next founder to choose again.

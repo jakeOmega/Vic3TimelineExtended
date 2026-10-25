@@ -1296,7 +1296,7 @@ un_propose_asat_qualifies = {
 
 # Scope: the proposing country
 un_propose_asat_available = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { un_propose_asat_in_force = yes }
 }

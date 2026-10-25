@@ -31,7 +31,7 @@ sr_launch_has_depots = {
 # Launch windows bind this country: the space race rule is on and it has no
 # fusion drives.
 sr_launch_windows_apply = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	NOT = { sr_launch_has_fusion = yes }
 }
 

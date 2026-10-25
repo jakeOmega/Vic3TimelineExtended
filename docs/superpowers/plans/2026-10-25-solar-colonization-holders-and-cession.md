@@ -8,7 +8,7 @@
 
 **Tech stack:** Paradox script (`common/`, `events/`), Victoria 3 GUI, localization YAML, Python 3.11/3.12 `unittest`.
 
-**Spec:** `docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`. Scope: `docs/superpowers/specs/2026-10-25-solar-colonization-contest-scope.md`.
+**Spec:** `docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`. Built 2026-10-25; where the build departs from the steps below, the design's § 17 (As built) says how and why. Scope: `docs/superpowers/specs/2026-10-25-solar-colonization-contest-scope.md`.
 
 ## Global constraints
 
@@ -52,7 +52,7 @@
 | `common/game_rules/extra_game_rules.txt` | 7 | Four settings |
 | 22 files with `has_game_rule = space_race_enabled` | 7 | → `sr_space_race_on = yes` |
 | `common/building_groups/sr_site_groups.txt` | 8 | Create: `bg_sr_colony_sites` |
-| `common/treaty_articles/123_cede_colony.txt` | 8 | Create: `te_cede_colony` |
+| `common/treaty_articles/124_cede_colony.txt` | 8 | Create: `te_cede_colony` |
 | `events/space_race_events.txt` | 4, 8 | `.91`, `.90` |
 | `events/te_debug_space_race_events.txt` | 6 | `te_debug_space_race.2` |
 | `test_solar_sites.py` | 1–8 | Create |
@@ -163,7 +163,7 @@
 - [ ] **8.1** `common/building_groups/sr_site_groups.txt`: `bg_sr_colony_sites`, shown nowhere (copy the fields of an existing hidden group; `is_shown_in_outliner = no`).
 - [ ] **8.2** Generator, `common/buildings/sr_site_buildings_generated.txt`: 34 `building_sr_site_<key>` (design § 11.1). If the engine requires a production method group, add one shared marker group and method in a hand-written file with no modifiers, and confirm `pm_employment_audit --strict` and `prestige_good_roster_audit --strict` pass (exempt them in the audits if needed, with the reason).
 - [ ] **8.3** Generator: `sr_cede_site_input_valid` (trigger, `root` the source): `OR` over the sites of `AND = { scope:input = bt:building_sr_site_<key> global_var:sr_site_holder_<key> ?= root }`. `sr_cede_colony_apply` (effect): per site, if `scope:article_options.input_building_type ?= bt:building_sr_site_<key>` and the holder is still `scope:sr_cede_source`, save `scope:sr_site_new_holder`, transfer, set `sr_cede_matched`; after the sites, the `cede_colony_input` self-check (OK if matched, BROKEN if not). `sr_cede_ai_input_value` (value, `scope:article.input_building_type`): 20 + 5 × stage.
-- [ ] **8.4** `common/treaty_articles/123_cede_colony.txt`: the article (design § 11.2), including the `ai` and `wargoal` blocks. `python3 treaty_evaluation_scope_audit.py --strict` and `python3 treaty_leverage_side_audit.py --strict`.
+- [ ] **8.4** `common/treaty_articles/124_cede_colony.txt`: the article (design § 11.2), including the `ai` and `wargoal` blocks. `python3 treaty_evaluation_scope_audit.py --strict` and `python3 treaty_leverage_side_audit.py --strict`.
 - [ ] **8.5** `events/space_race_events.txt`: `.90` (design § 12), with a triggered description for treaty and for peace (`sr_site_notice_cause`).
 - [ ] **8.6** Loc: the article's name, description, effects description and short description; the 34 building types' names ("$sr_site_name_<key>$ Colony") and descriptions; the AI's score descriptions; `.90`.
 - [ ] **8.7** Tests: the article's flags, usage limit, input and the filter's call; every site in the filter and the apply; the building types all `potential = { always = no }` with loc. Audits: `loc_coverage_audit`, `loc_render_audit`, `script_loc_reference_audit`, `duplicate_key_audit`, `--strict`. Commit: "Cede Colony: a treaty article that moves a named colony".

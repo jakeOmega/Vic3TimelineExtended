@@ -1,0 +1,15 @@
+﻿# Solar System Colonization's site building types (common/buildings/
+# sr_site_buildings_generated.txt): never built, they only name a world in
+# Cede Colony's treaty designer. Shown nowhere.
+bg_sr_colony_sites = {
+	category = development
+	is_shown_in_outliner = no
+	always_possible = yes
+	economy_of_scale = no
+	urbanization = 0
+	infrastructure_usage_per_level = 0
+	fired_pops_become_radical = no
+	should_auto_expand = {
+		always = no
+	}
+}

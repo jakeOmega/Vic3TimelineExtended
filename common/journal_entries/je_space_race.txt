@@ -66,7 +66,7 @@ je_space_race_suborbital = {
 	}
 
 	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = rocketry
 		is_great_or_major_power = yes
 		# The rebels of a running revolution start no programme of their own.
@@ -1010,7 +1010,7 @@ je_space_race_interstellar_probe = {
 	}
 
 	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_variable = sr_completed_probe
 		has_variable = sr_completed_mars_landing
 		has_technology_researched = compact_fusion_reactors
@@ -1158,7 +1158,7 @@ je_space_race_interstellar_results = {
 	}
 
 	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_variable = sr_probe_launched
 	}
 
@@ -1287,7 +1287,7 @@ je_space_race_solar_colonization = {
 	# colony, one given by treaty or inherited from a dead holder included
 	# (colony record design § 8): the entry holds the colony's modifiers.
 	is_shown_when_inactive = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		OR = {
 			sr_has_space_colony = yes
 			AND = {

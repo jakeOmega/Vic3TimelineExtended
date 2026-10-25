@@ -37,7 +37,7 @@ sr_ai_should_participate = {
 #   $PREREQ$  — prior milestone token (e.g. suborbital, orbital, moon_landing)
 #   $TECH$    — technology required (e.g. guided_missiles, space_exploration)
 sr_milestone_followup_is_shown = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	has_variable = sr_completed_$PREREQ$
 	has_technology_researched = $TECH$
 }

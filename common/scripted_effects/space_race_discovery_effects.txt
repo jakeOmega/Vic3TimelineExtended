@@ -49,7 +49,7 @@ sr_finish_colony_discovery = {
 sr_monthly_colony_discoveries = {
 	if = {
 		limit = {
-			has_game_rule = space_race_enabled
+			sr_space_race_on = yes
 			sr_has_space_colony = yes
 			NOT = { has_variable = sr_discovery_cooldown }
 		}

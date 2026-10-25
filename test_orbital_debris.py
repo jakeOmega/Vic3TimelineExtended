@@ -255,7 +255,7 @@ class StrikeTest(unittest.TestCase):
     def test_requirements(self):
         body = block(self.action, "te_asat_strike_action")
         potential = block(body, "potential")
-        self.assertIn("has_game_rule = space_race_enabled", potential)
+        self.assertIn("sr_space_race_on = yes", potential)
         self.assertIn("has_technology_researched = guided_missiles", potential)
         possible = block(body, "possible")
         for test in ("has_war_with = scope:target_country", "sr_has_space_program = yes",
@@ -304,7 +304,7 @@ class WiringTest(unittest.TestCase):
         self.assertIn("te_debris_global_monthly_on_action", block(text, "on_monthly_pulse"))
         self.assertIn("te_debris_country_monthly_on_action", block(text, "on_monthly_pulse_country"))
         for name in ("te_debris_global_monthly_on_action", "te_debris_country_monthly_on_action"):
-            self.assertIn("space_race_enabled", block(text, name))
+            self.assertIn("sr_space_race_on = yes", block(text, name))
 
     def test_one_refresh_site_each(self):
         """te_orbital_debris and te_debris_cleaner_prestige are added in one place."""

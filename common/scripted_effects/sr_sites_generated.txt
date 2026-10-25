@@ -8324,6 +8324,353 @@ sr_sites_refresh_snapshot = {
 	else_if = { limit = { has_variable = sr_ss_cap_sedna } remove_variable = sr_ss_cap_sedna }
 }
 
+# ===== Cede Colony (common/treaty_articles/124_cede_colony.txt) =====
+# on_entry_into_force, with scope:sr_cede_source and scope:sr_cede_target
+# saved. The world whose building type is the input, if the source still
+# holds it, goes to the target.
+sr_cede_colony_apply = {
+	if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_valles_marineris
+			global_var:sr_site_holder_valles_marineris ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_valles_marineris }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_valles_marineris }
+		sr_site_transfer_valles_marineris = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_olympus_mons
+			global_var:sr_site_holder_olympus_mons ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_olympus_mons }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_olympus_mons }
+		sr_site_transfer_olympus_mons = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_hellas_planitia
+			global_var:sr_site_holder_hellas_planitia ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_hellas_planitia }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_hellas_planitia }
+		sr_site_transfer_hellas_planitia = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_utopia_planitia
+			global_var:sr_site_holder_utopia_planitia ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_utopia_planitia }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_utopia_planitia }
+		sr_site_transfer_utopia_planitia = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_arcadia_planitia
+			global_var:sr_site_holder_arcadia_planitia ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_arcadia_planitia }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_arcadia_planitia }
+		sr_site_transfer_arcadia_planitia = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_ceres
+			global_var:sr_site_holder_ceres ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_ceres }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_ceres }
+		sr_site_transfer_ceres = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_vesta
+			global_var:sr_site_holder_vesta ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_vesta }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_vesta }
+		sr_site_transfer_vesta = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_psyche
+			global_var:sr_site_holder_psyche ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_psyche }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_psyche }
+		sr_site_transfer_psyche = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_pallas
+			global_var:sr_site_holder_pallas ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_pallas }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_pallas }
+		sr_site_transfer_pallas = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_hygiea
+			global_var:sr_site_holder_hygiea ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_hygiea }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_hygiea }
+		sr_site_transfer_hygiea = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_io
+			global_var:sr_site_holder_io ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_io }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_io }
+		sr_site_transfer_io = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_europa
+			global_var:sr_site_holder_europa ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_europa }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_europa }
+		sr_site_transfer_europa = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_ganymede
+			global_var:sr_site_holder_ganymede ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_ganymede }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_ganymede }
+		sr_site_transfer_ganymede = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_callisto
+			global_var:sr_site_holder_callisto ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_callisto }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_callisto }
+		sr_site_transfer_callisto = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_himalia
+			global_var:sr_site_holder_himalia ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_himalia }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_himalia }
+		sr_site_transfer_himalia = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_amalthea
+			global_var:sr_site_holder_amalthea ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_amalthea }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_amalthea }
+		sr_site_transfer_amalthea = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_venus
+			global_var:sr_site_holder_venus ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_venus }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_venus }
+		sr_site_transfer_venus = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_mercury
+			global_var:sr_site_holder_mercury ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_mercury }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_mercury }
+		sr_site_transfer_mercury = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_titan
+			global_var:sr_site_holder_titan ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_titan }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_titan }
+		sr_site_transfer_titan = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_enceladus
+			global_var:sr_site_holder_enceladus ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_enceladus }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_enceladus }
+		sr_site_transfer_enceladus = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_rhea
+			global_var:sr_site_holder_rhea ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_rhea }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_rhea }
+		sr_site_transfer_rhea = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_mimas
+			global_var:sr_site_holder_mimas ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_mimas }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_mimas }
+		sr_site_transfer_mimas = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_iapetus
+			global_var:sr_site_holder_iapetus ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_iapetus }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_iapetus }
+		sr_site_transfer_iapetus = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_titania
+			global_var:sr_site_holder_titania ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_titania }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_titania }
+		sr_site_transfer_titania = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_oberon
+			global_var:sr_site_holder_oberon ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_oberon }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_oberon }
+		sr_site_transfer_oberon = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_miranda
+			global_var:sr_site_holder_miranda ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_miranda }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_miranda }
+		sr_site_transfer_miranda = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_ariel
+			global_var:sr_site_holder_ariel ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_ariel }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_ariel }
+		sr_site_transfer_ariel = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_triton
+			global_var:sr_site_holder_triton ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_triton }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_triton }
+		sr_site_transfer_triton = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_proteus
+			global_var:sr_site_holder_proteus ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_proteus }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_proteus }
+		sr_site_transfer_proteus = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_pluto
+			global_var:sr_site_holder_pluto ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_pluto }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_pluto }
+		sr_site_transfer_pluto = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_eris
+			global_var:sr_site_holder_eris ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_eris }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_eris }
+		sr_site_transfer_eris = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_makemake
+			global_var:sr_site_holder_makemake ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_makemake }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_makemake }
+		sr_site_transfer_makemake = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_haumea
+			global_var:sr_site_holder_haumea ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_haumea }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_haumea }
+		sr_site_transfer_haumea = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	else_if = {
+		limit = {
+			scope:article_options.input_building_type ?= bt:building_sr_site_sedna
+			global_var:sr_site_holder_sedna ?= scope:sr_cede_source
+		}
+		scope:sr_cede_target = { save_scope_as = sr_site_to_sedna }
+		scope:sr_cede_source = { save_scope_as = sr_site_from_sedna }
+		sr_site_transfer_sedna = { CAUSE = treaty }
+		set_local_variable = { name = sr_cede_matched value = 1 }
+	}
+	sr_cede_colony_self_check = yes
+}
 
 # ===== Console helpers (te_debug_space_race.2) =====
 # Log every world's record.

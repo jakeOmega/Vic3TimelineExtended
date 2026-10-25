@@ -36,3 +36,25 @@ still reaches the milestones.
    worlds read "Unclaimed" (`TE_SR_SITES released <world>` in `debug.log`). Every other world keeps its holder.
 7. **A holder without the milestones.** Give a colony (option c) to a great power that has not landed on Mars: its
    Solar System Colonization opens, reads Idle, bills nothing and shows the colony in Our Colonies.
+
+## Cede Colony and the rule (slice 1)
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN cede_colony_input: …` | once a game, the first Cede Colony that enters into force | the article's input building type named a world the source held, and the world moved | no world matched: `input_building_type` did not read back, or `scope:input = bt:<type>` / `?= bt:<type>` does not compare building types | one article per body group with a `quantity` and the receiver picking the worlds in an event, as the seabed lease (scope § 6.1's fallback) |
+
+1. **The rule.** The setup screen's Space Race rule offers Full Colonies, Simple Colonies, Races Only (the default) and
+   Disabled. Under each of the first three every space race entry appears as before; under Disabled none does.
+2. **The designer.** Under Simple Colonies, open a treaty with a country that holds a colony: Cede Colony lists that
+   country's colonies by name and icon ("Valles Marineris Colony"), and only those. Under Races Only the article does
+   not appear.
+3. **The building types appear nowhere else**: not in the build menu, the production overview, the encyclopedia, a
+   company's or an industry charter's list. If one does, note where.
+4. **A sale.** Cede one of our colonies for a Money Transfer to an AI great power: it accepts when the money is large
+   enough, the colony moves on ratification, both sides get "A Colony Changes Hands", and the receiver's Our Colonies
+   and Solar System list show it.
+5. **A swap**: one colony each way in one treaty moves both.
+6. **A war goal.** In a diplomatic play against a colony holder, add Cede Colony as a war goal (maneuvers 5, infamy
+   10). Enforced in the peace, the colony moves.
+7. **The AI.** In an observer run past the first colonies, an AI holding a colony with no space programme (an heir's)
+   offers it; AI powers in the race ask for colonies; neither spams the treaty screen.

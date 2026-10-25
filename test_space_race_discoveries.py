@@ -65,7 +65,8 @@ class ScriptState:
                 result = arg in self.globals
             elif key == 'NOT':
                 result = not self.matches(arg)
-            elif key == 'has_game_rule':
+            elif key in ('has_game_rule', 'sr_space_race_on'):
+                # The Space Race rule, read through its gate (sr_site_triggers.txt).
                 result = self.enabled
             elif key == 'sr_has_space_colony':
                 result = self.colony

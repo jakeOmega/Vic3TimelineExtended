@@ -11,7 +11,8 @@ table. These tests hold:
   and every modifier the founding and discovery events grant; every global
   variable read guarded;
 - the shared helpers' contracts (the sync removes only what is there);
-- the journal entry's conditions and the panel's rows.
+- the journal entry's conditions, the rule's four settings and its gate,
+  Cede Colony's article and the panel's rows.
 """
 
 import os
@@ -53,6 +54,7 @@ GENERATED = {
     gss.TRIGGERS_OUT: "triggers",
     gss.VALUES_OUT: "values",
     gss.DISPLAY_OUT: "display values",
+    gss.BUILDINGS_OUT: "buildings",
     gss.CUSTOM_LOC_OUT: "custom loc",
 }
 
@@ -270,6 +272,66 @@ class EntryTest(unittest.TestCase):
         self.assertNotIn("sr_all_colonies_complete", _block(entry, "possible"))
         running = _block(_raw("common", "scripted_triggers", "space_race_triggers.txt"), "sr_solar_colonization_running")
         self.assertIn("sr_solar_colonization_qualified = yes", running)
+
+
+class RuleTest(unittest.TestCase):
+    def test_four_settings_and_the_old_name_kept(self):
+        rules = _raw("common", "game_rules", "extra_game_rules.txt")
+        body = _block(rules, "space_race_rule")
+        settings = re.findall(r"(?m)^\t(\w+) = \{", body)
+        self.assertEqual(settings, ["space_race_colonies_full", "space_race_colonies_simple",
+                                    "space_race_enabled", "space_race_disabled"])
+        self.assertIn("default = space_race_enabled", body)
+        for setting in settings:
+            self.assertIn(f"flag = {setting}", _block(body, setting))
+
+    def test_no_bare_check_of_races_only(self):
+        gate = _block(_raw("common", "scripted_triggers", "sr_site_triggers.txt"), "sr_space_race_on")
+        self.assertIn("has_game_rule = space_race_enabled", gate)
+        offenders = []
+        for top in ("common", "events", "gui"):
+            for dirpath, _, files in os.walk(os.path.join(REPO, top)):
+                for name in files:
+                    if not name.endswith((".txt", ".gui")):
+                        continue
+                    path = os.path.join(dirpath, name)
+                    text = _strip(open(path, encoding="utf-8-sig", errors="replace").read())
+                    count = text.count("has_game_rule = space_race_enabled")
+                    if name == "sr_site_triggers.txt":
+                        count -= 1
+                    if count:
+                        offenders.append(os.path.relpath(path, REPO))
+        self.assertEqual(offenders, [])
+
+
+class CedeColonyTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.article = _block(_raw("common", "treaty_articles", "124_cede_colony.txt"), "te_cede_colony")
+
+    def test_the_article_s_shape(self):
+        self.assertIn("kind = directed", self.article)
+        self.assertIn("usage_limit = once_per_side_with_same_inputs", self.article)
+        flags = _block(self.article, "flags")
+        self.assertIn("can_be_enforced", flags)
+        self.assertIn("giftable", flags)
+        self.assertIn("building_type", _block(self.article, "required_inputs"))
+        self.assertIn("sr_cede_site_input_valid = yes", _block(self.article, "building_type_valid_trigger"))
+        self.assertIn("sr_colonies_contested_enabled = yes", _block(self.article, "visible"))
+        self.assertIn("sr_cede_colony_apply = yes", _block(self.article, "on_entry_into_force"))
+
+    def test_every_world_can_be_named_and_moved(self):
+        buildings = _raw(str(gss.BUILDINGS_OUT))
+        valid = _block(_raw(str(gss.TRIGGERS_OUT)), "sr_cede_site_input_valid")
+        apply = _block(_raw(str(gss.EFFECTS_OUT)), "sr_cede_colony_apply")
+        for site in gss.SITES:
+            building = gss.site_building(site)
+            with self.subTest(site=site.key):
+                body = _block(buildings, building)
+                self.assertIn("always = no", _block(body, "potential"))
+                self.assertIn(f"scope:input = bt:{building} global_var:sr_site_holder_{site.key} ?= root", valid)
+                self.assertIn(f"input_building_type ?= bt:{building}", apply)
+                self.assertIn(f"sr_site_transfer_{site.key} = {{ CAUSE = treaty }}", apply)
 
 
 class PanelTest(unittest.TestCase):

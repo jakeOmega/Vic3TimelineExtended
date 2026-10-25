@@ -477,7 +477,7 @@ te_decision_establish_strategic_reserve = {
 # ============================================================================
 te_decision_found_space_program = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = rocketry
 		is_great_or_major_power = yes
 		is_revolutionary = no
@@ -562,7 +562,7 @@ te_decision_found_space_program = {
 # ============================================================================
 te_decision_space_mission_moon = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = space_exploration
 		sr_has_space_program = yes
 		modifier:country_sr_earth_orbit_program_bool = yes
@@ -608,7 +608,7 @@ te_decision_space_mission_moon = {
 
 te_decision_space_mission_mars = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = knowledge_economy
 		sr_has_space_program = yes
 		modifier:country_sr_moon_mission_program_bool = yes
@@ -658,7 +658,7 @@ te_decision_space_mission_mars = {
 
 te_decision_space_mission_solar = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = directed_energy_weapons
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
@@ -715,7 +715,7 @@ te_decision_space_mission_solar = {
 
 te_decision_space_mission_deep_space = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = space_colonization
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
@@ -771,7 +771,7 @@ te_decision_space_mission_deep_space = {
 
 te_decision_space_mission_interstellar = {
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = compact_fusion_reactors
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
