@@ -160,11 +160,21 @@ un_propose_sanctions_possible = {
 # Scope: the proposing country
 un_propose_expulsion_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
-	any_country = {
-		has_modifier = un_veto_isolation_modifier	# rarest test first
-		NOT = { this = ROOT }
-		is_un_permanent_member = yes
-	}
+	any_country = { un_expulsion_candidate = yes }
+}
+
+# Whether the scoped country may be named in a motion to expel: a permanent
+# member that has vetoed within five years (un_veto_isolation_modifier), and
+# not the proposer's ally, overlord or subject (un_justice_not_proposer_bloc,
+# the arms embargo's and credentials' rule; 2026-10-24). The availability, the
+# possibility, the pick (un_propose_expulsion_select_target) and the AI's
+# tabling weight all read this, so they agree.
+# Scope: the prospective target; ROOT = the prospective proposer
+un_expulsion_candidate = {
+	has_modifier = un_veto_isolation_modifier	# rarest test first
+	NOT = { this = ROOT }
+	is_un_permanent_member = yes
+	un_justice_not_proposer_bloc = yes
 }
 
 # Scope: the proposing country
@@ -191,11 +201,7 @@ un_propose_expulsion_possible = {
 		text = un_representation_table_tt
 		NOT = { un_representation_suspended = yes }
 	}
-	any_country = {
-		NOT = { this = ROOT }
-		is_un_permanent_member = yes
-		has_modifier = un_veto_isolation_modifier
-	}
+	any_country = { un_expulsion_candidate = yes }
 	un_propose_can_afford_sponsor_punitive = yes
 }
 
