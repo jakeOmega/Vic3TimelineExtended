@@ -2373,7 +2373,9 @@ gm_state_choose_building_skin = {
 # the radicals come once a month however many levels finished. $AMOUNT$ is
 # read on the owner: a state's variable is passed as prev.var:, and nothing is
 # called between the owner block's opening and the read, so prev is the state.
+# The notice names the state (scope:gm_vanity_state).
 gm_state_vanity_backlash_for = {
+	save_scope_as = gm_vanity_state
 	add_radicals_in_state = { value = 0.005 }
 	owner = { gm_init_ledgers = yes }
 	owner = {

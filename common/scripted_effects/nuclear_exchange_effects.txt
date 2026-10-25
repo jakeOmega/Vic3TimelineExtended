@@ -101,6 +101,8 @@ nd_exchange_weekly_update = {
 					limit = { nd_exchange_war_pending_days >= 14 }
 					nd_log_context = yes
 					debug_log = "TE_NUCLEAR: type=action; action=exchange_end_war_failed; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
+					# We are the side that refused (war-pending 1); the notice names us.
+					save_scope_as = nd_exchange_refusing
 					post_notification = nd_exchange_war_failed
 					scope:nd_exchange_enemy = { post_notification = nd_exchange_war_failed }
 					nd_exchange_close = yes
