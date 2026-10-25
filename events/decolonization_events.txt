@@ -1557,8 +1557,8 @@ decolonization_events.13 = {
 	}
 
 	# Option E: Fight. Below bar 40 the suppression is a war of independence
-	# (decolonization_events.70's Fight): the rebels form and we go to war with
-	# them the next day.
+	# (decolonization_events.70's Fight): the rebels form, and the next day
+	# they open the play that becomes the war.
 	option = {
 		name = decolonization_events.13.e
 		trigger = {
@@ -4722,7 +4722,8 @@ decolonization_events.404 = {
 # ============================================================================
 # WARS OF INDEPENDENCE (70-80)
 # A colony declares independence (.70): concede, negotiate or fight. Fight
-# opens a war of reconquest the next day (.71). It ends in Order Restored
+# forms the rebels, who open their play against us the next day (.71) and
+# are at war with us some three weeks later. It ends in Order Restored
 # (.72), The Flag Comes Down (.73) or, after talks (.80 opens them from the
 # panel), the Accords (.76). The great powers take sides (.74 anti-colonial,
 # .79 pro-colonial), a long war can break the home front (.75), and the
@@ -4905,7 +4906,8 @@ decolonization_events.70 = {
 		decol_iw_after_choice = yes
 	}
 
-	# Fight: the rebels form, and we go to war with them the next day. No gate
+	# Fight: the rebels form, and their play against us becomes a war in some
+	# three weeks. No gate
 	# but a free record (three wars at once).
 	option = {
 		name = decolonization_events.70.c
