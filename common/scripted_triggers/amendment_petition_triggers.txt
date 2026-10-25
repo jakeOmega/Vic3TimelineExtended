@@ -24,7 +24,7 @@ te_ap_window_open = {
 #
 #  A petition amends the law in force. While another law of the same group
 #  is being enacted, the amendment would leave with the outgoing law, and
-#  the enactment events (extra_law_events.28–34, .87–.90,
+#  the enactment events (extra_law_events.28–34, .87–.90, te_fptp_events.2,
 #  inheritance_events.10–.13, te_judiciary_events.20–.22) already offer
 #  amendments to the incoming one. Each list names every law in the group,
 #  variants included (law_crownland_diets); a law added to a group later
@@ -146,6 +146,25 @@ te_ap_enacting_in_inheritance = {
 
 te_ap_enacting_in_judiciary = {
 	te_jud_enacting_judiciary_law = yes
+}
+
+te_ap_enacting_in_distribution_of_power = {
+	OR = {
+		is_enacting_law = law_type:law_autocracy
+		is_enacting_law = law_type:law_bakufu
+		is_enacting_law = law_type:law_neo_absolutism
+		is_enacting_law = law_type:law_technocracy
+		is_enacting_law = law_type:law_oligarchy
+		is_enacting_law = law_type:law_organic_regulation
+		is_enacting_law = law_type:law_elder_council
+		is_enacting_law = law_type:law_landed_voting
+		is_enacting_law = law_type:law_wealth_voting
+		is_enacting_law = law_type:law_census_voting
+		is_enacting_law = law_type:law_universal_suffrage
+		is_enacting_law = law_type:law_anarchy
+		is_enacting_law = law_type:law_single_party_state
+		is_enacting_law = law_type:law_algorithmic_governance
+	}
 }
 
 # ----------------------------------------------------------------------
@@ -451,6 +470,14 @@ te_ap_law_ok_human_in_the_loop = {
 		NOT = { has_amendment = amendment_type:amendment_human_in_the_loop }
 	}
 	NOT = { te_ap_enacting_in_judiciary = yes }
+}
+
+# First Past the Post (common/amendments/te_first_past_the_post.txt); the
+# host laws are te_fptp_allowed_voting_law's.
+te_ap_law_ok_first_past_the_post = {
+	te_fptp_on_allowed_voting_law = yes
+	NOT = { te_fptp_in_force = yes }
+	NOT = { te_ap_enacting_in_distribution_of_power = yes }
 }
 
 # ----------------------------------------------------------------------

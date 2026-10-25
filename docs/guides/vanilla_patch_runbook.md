@@ -146,6 +146,7 @@ The auto-generators read vanilla and emit mod files. Re-running them after a van
 python3 vanilla_parsed.py build                      # vanilla_parsed/ (committed vanilla parse; `git diff vanilla_parsed/` = what vanilla changed, parsed)
 python3 apply_ideologies.py                          # common/ideologies/modified.txt
 python3 ig_feminism.py                               # common/interest_groups/zz_te_ig_female_chance.txt
+python3 scripts/generators/gen_party_join_weights.py  # common/parties/zz_te_party_join_weights.txt (fails loudly if a party's join_weight loses its size chain)
 python3 pop_needs_curves.py                          # common/buy_packages/00_buy_packages.txt
 python3 resources.py                                 # map_data/state_regions/*.txt
 python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
