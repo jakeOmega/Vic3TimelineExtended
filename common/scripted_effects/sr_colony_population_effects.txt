@@ -28,7 +28,6 @@ sr_emig_month = {
 			sr_has_space_program = yes
 		}
 		set_local_variable = { name = sr_emig_batches value = sr_emig_batches_now }
-		set_local_variable = { name = sr_emig_weight_sum value = sr_emig_weight_total }
 		random_scope_building = {
 			limit = { is_building_type = building_space_program }
 			state = { save_scope_as = sr_emig_state }
@@ -83,14 +82,15 @@ sr_emig_self_check = {
 }
 
 # ---- The programme and the priorities --------------------------------------------------
-# Country scope. LEVEL 0-3; the entry's modifiers follow at once.
+# Country scope. LEVEL 0-3. The caller refreshes the entry's modifiers, once
+# per effect (sr_emig_refresh_modifiers): the button below, and the entry's
+# pulse after the AI's review.
 sr_emig_set_level = {
 	set_variable = { name = sr_emig_level value = $LEVEL$ }
 	if = {
 		limit = { var:sr_emig_level <= 0 }
 		remove_variable = sr_emig_level
 	}
-	sr_emig_refresh_modifiers = yes
 }
 
 # Country scope, the Settlers section's - and + (scope:op 0 and 1).
@@ -122,6 +122,7 @@ sr_emig_step_level = {
 			sr_emig_set_level = { LEVEL = 3 }
 		}
 	}
+	sr_emig_refresh_modifiers = yes
 }
 
 # Country scope. A colony's priority steps Normal -> High -> Closed -> Low ->
@@ -147,9 +148,11 @@ sr_emig_step_prio = {
 # ---- The entry's two modifiers (design § 10.3, § 10.5) ------------------------------
 # Country scope. Both on the solar colonization entry at a multiplier, each
 # removed first (a same-name add_modifier stacks), re-applied here only: from
-# the entry's pulse monthly and when the programme's level changes. The
-# multipliers read the country through `owner` (they resolve in the entry's
-# scope, je_multiplier_scope_audit).
+# the entry's pulse monthly, after the AI's review, and from the Settlers
+# button. Run it at most once per effect: whether has_modifier sees an
+# add_modifier made earlier in the same effect is unverified, so a second run
+# could skip the removal and stack a copy. The multipliers read the country
+# through `owner` (they resolve in the entry's scope, je_multiplier_scope_audit).
 sr_emig_refresh_modifiers = {
 	je:je_space_race_solar_colonization ?= {
 		if = {

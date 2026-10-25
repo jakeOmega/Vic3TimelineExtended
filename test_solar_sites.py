@@ -610,6 +610,50 @@ class PopulationTest(unittest.TestCase):
         for call in ("sr_emig_ai_review = yes", "sr_emig_month = yes", "sr_emig_refresh_modifiers = yes"):
             self.assertIn(call, pulse)
 
+    def test_the_entry_s_modifiers_refresh_once_per_effect(self):
+        # Whether has_modifier sees an add_modifier made earlier in the same
+        # effect is unverified, so a second refresh in one effect could skip
+        # the removal and stack a copy: the AI's review sets the level in the
+        # same pulse that refreshes afterwards.
+        refresh = "sr_emig_refresh_modifiers = yes"
+        self.assertNotIn(refresh, _block(self.population, "sr_emig_set_level"))
+        self.assertNotIn(refresh, _block(self.population, "sr_emig_ai_review"))
+        step = _block(self.population, "sr_emig_step_level")
+        self.assertEqual(step.count(refresh), 1)
+        self.assertGreater(step.index(refresh), step.rindex("sr_emig_set_level"))
+        je = _strip(_raw("common", "journal_entries", "je_space_race.txt"))
+        pulse = _block(_block(je, "je_space_race_solar_colonization"), "on_monthly_pulse")
+        self.assertEqual(pulse.count(refresh), 1)
+        self.assertGreater(pulse.index(refresh), pulse.index("sr_emig_ai_review = yes"))
+        debug = _strip(_raw("events", "te_debug_space_race_events.txt"))
+        for option in re.findall(r"(?ms)^\toption = \{\n(.*?)^\t\}", debug):
+            if "sr_emig_set_level" in option:
+                with self.subTest(option=option.split()[2]):
+                    self.assertEqual(option.count(refresh), 1)
+
+    def test_every_settler_sent_lands(self):
+        # A colony capped at its free room passes the rest on: passes share
+        # what is left among the colonies with room until everyone has landed.
+        distribute = _block(self.effects, "sr_emig_distribute")
+        self.assertIn("set_local_variable = { name = sr_emig_left value = local_var:sr_emig_sent }", distribute)
+        loop = _block(distribute, "while")
+        limit = _block(loop, "limit")
+        self.assertIn("local_var:sr_emig_left >= 1", limit)
+        self.assertIn(f"local_var:sr_emig_passes < {len(gss.SITES)}", limit)
+        self.assertIn("sr_emig_weight_total > 0", limit)
+        self.assertIn("change_local_variable = { name = sr_emig_passes add = 1 }", loop)
+        self.assertIn("set_local_variable = { name = sr_emig_weight_sum value = sr_emig_weight_total }", loop)
+        self.assertNotIn("sr_emig_weight_sum", _block(self.population, "sr_emig_month"))
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"multiply = sr_emig_weight_{k}", loop)
+                self.assertIn(f"max = sr_site_free_room_{k}", loop)
+                self.assertIn(f"change_global_variable = {{ name = sr_site_pop_{k} add = local_var:sr_emig_share }}", loop)
+        self.assertEqual(loop.count("value = local_var:sr_emig_pass\n"), len(gss.SITES))
+        self.assertEqual(loop.count("change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }"),
+                         len(gss.SITES))
+
 
 if __name__ == "__main__":
     unittest.main()

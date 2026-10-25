@@ -413,6 +413,20 @@ Where the build departs from the sections above, and why:
   worth a hundredth of a percent.
 - **The console is a new event**, `te_debug_space_race.3`, rather than more options
   on `.2`.
+- **The automatic pick's −60 counts every fleet on its way** (§ 7), ours
+  included: `sr_cf_beaten_<key>` reads the world's inbound record, which holds
+  every country's fleets. A second fleet of ours to a world one of ours already
+  reaches first would arrive to find it taken.
+- **Emigration shares run in passes** (§ 10.3, `sr_emig_distribute`). A colony
+  capped at its free room passes the rest on, and the next pass shares what is
+  left among the colonies with room, so every settler sent lands; the month never
+  sends more than the open colonies' room. One pass capped shares and dropped the
+  excess, so people left Earth and landed nowhere when the room ran short.
+- **The entry's modifiers refresh once per effect.** `sr_emig_set_level` doesn't
+  refresh them; its callers do (the Settlers button, and the entry's pulse after
+  the AI's review), because whether `has_modifier` sees an `add_modifier` made
+  earlier in the same effect is unverified, and a second refresh could stack a
+  copy.
 - **Number range.** The weights (priority × free room, people) and the capital
   state's population stay far inside the script's 64-bit fixed point
   (`scripting_best_practices.md`, units of 1e-5, a ceiling near 9×10^13);

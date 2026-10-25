@@ -505,10 +505,11 @@ The stages are not locks: a fleet can leave for any unclaimed world, and distanc
 gates the outer system instead. A world costs its own stage's progress, 400 for
 Mars and the asteroids up to 650 for the Kuiper Belt. Without a choice of yours,
 the program sends each fleet to the best world it can reach within 15 years:
-nearer, cheaper and inner worlds first, and away from worlds another country's
-fleet will reach first. So a chemical program settles Mars, the asteroids and
-Jupiter, and waits for better drives before Uranus. AI programs pick the same
-way. You can still choose a world farther out by hand.
+nearer, cheaper and inner worlds first, and away from worlds a fleet already on
+its way, yours or another country's, will reach first. So a chemical program
+settles Mars, the asteroids and Jupiter, and waits for better drives before
+Uranus. AI programs pick the same way. You can still choose a world farther out
+by hand.
 
 Each world's row in the Solar System list shows the fleets on their way, as the
 number of fleets and the months until the first lands, in a brighter color when
@@ -521,10 +522,11 @@ progress it cost. Either way an event tells you.
 ### Colony settlers
 
 Under Simple Colonies and Full Colonies, colonies hold people. A colony starts as
-an automated outpost with no one in it and grows by about 2.4% a year up to its
-room, from 10,000 people on the smallest moons and the farthest dwarf planets to
-50,000 at Valles Marineris and the Hellas and Utopia plains. The Settlers section
-of Solar System Colonization sets how many settlers you send from Earth:
+an automated outpost with no one in it, so it grows only once settlers arrive:
+then by about 2.4% a year up to its room, from 10,000 people on the smallest
+moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
+and Utopia plains. The Settlers section of Solar System Colonization sets how
+many settlers you send from Earth:
 
 | Emigration | Settlers a month | Launch Capacity bill |
 |---|---|---|
@@ -538,8 +540,9 @@ strata and half from the lower, and only while your colonies have room; that
 state's census counts them as emigrants. Each colony's row shows its people and
 room and a priority button that steps through Normal, High, Closed and Low. A
 colony's share of each month's settlers is its priority (Closed none, Low 1,
-Normal 2, High 4) times its free room, so set the colony you are building up to
-High and the ones you don't want settled to Closed.
+Normal 2, High 4) times its free room, and a colony that fills up passes the rest
+of its share to the others. So set the colony you are building up to High and the
+ones you don't want settled to Closed.
 
 People are crews: the Crews figure counts how many module levels a colony's
 people can run, one for every 5,000. A colony's founding specialization runs

@@ -213,6 +213,7 @@ te_debug_space_race.3 = { # REVIEWED 2026-10-25: console-only test event (`event
 		trigger = { sr_colonies_contested_enabled = yes }
 		sr_emig_set_level = { LEVEL = 3 }
 		sr_emig_month = yes
+		sr_emig_refresh_modifiers = yes
 	}
 
 	# Our colonies filled to half their room (the off-world bonus).

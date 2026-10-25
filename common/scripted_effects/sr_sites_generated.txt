@@ -14192,483 +14192,534 @@ sr_sites_recompute_stage = {
 # ===== Population (slices 2-3 design § 10) =====
 # The month's emigrants (local_var:sr_emig_sent, people), shared out among
 # THIS's colonies by weight (sr_emig_weight_<key>) over the sum
-# (local_var:sr_emig_weight_sum), each capped at its free room.
+# (local_var:sr_emig_weight_sum), each capped at its free room. A colony
+# the cap holds back passes the rest on: the next pass shares what is left
+# among the colonies with room (a full colony weighs 0). The month never
+# sends more than the open colonies' free room, and each pass either lands
+# everyone left or fills a colony, so every settler lands within one pass
+# per world (34).
 sr_emig_distribute = {
-	if = {
-		limit = { sr_emig_weight_valles_marineris > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_valles_marineris } } set_global_variable = { name = sr_site_pop_valles_marineris value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_valles_marineris
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_valles_marineris
-			}
+	set_local_variable = { name = sr_emig_left value = local_var:sr_emig_sent }
+	set_local_variable = { name = sr_emig_passes value = 0 }
+	while = {
+		limit = {
+			local_var:sr_emig_left >= 1
+			local_var:sr_emig_passes < 34
+			sr_emig_weight_total > 0
 		}
-		change_global_variable = { name = sr_site_pop_valles_marineris add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_olympus_mons > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_olympus_mons } } set_global_variable = { name = sr_site_pop_olympus_mons value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_olympus_mons
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_olympus_mons
+		change_local_variable = { name = sr_emig_passes add = 1 }
+		set_local_variable = { name = sr_emig_pass value = local_var:sr_emig_left }
+		set_local_variable = { name = sr_emig_weight_sum value = sr_emig_weight_total }
+		if = {
+			limit = { sr_emig_weight_valles_marineris > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_valles_marineris } } set_global_variable = { name = sr_site_pop_valles_marineris value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_valles_marineris
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_valles_marineris
+				}
 			}
+			change_global_variable = { name = sr_site_pop_valles_marineris add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_olympus_mons add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_hellas_planitia > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_hellas_planitia } } set_global_variable = { name = sr_site_pop_hellas_planitia value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_hellas_planitia
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_hellas_planitia
+		if = {
+			limit = { sr_emig_weight_olympus_mons > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_olympus_mons } } set_global_variable = { name = sr_site_pop_olympus_mons value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_olympus_mons
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_olympus_mons
+				}
 			}
+			change_global_variable = { name = sr_site_pop_olympus_mons add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_hellas_planitia add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_utopia_planitia > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_utopia_planitia } } set_global_variable = { name = sr_site_pop_utopia_planitia value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_utopia_planitia
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_utopia_planitia
+		if = {
+			limit = { sr_emig_weight_hellas_planitia > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_hellas_planitia } } set_global_variable = { name = sr_site_pop_hellas_planitia value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_hellas_planitia
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_hellas_planitia
+				}
 			}
+			change_global_variable = { name = sr_site_pop_hellas_planitia add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_utopia_planitia add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_arcadia_planitia > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_arcadia_planitia } } set_global_variable = { name = sr_site_pop_arcadia_planitia value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_arcadia_planitia
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_arcadia_planitia
+		if = {
+			limit = { sr_emig_weight_utopia_planitia > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_utopia_planitia } } set_global_variable = { name = sr_site_pop_utopia_planitia value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_utopia_planitia
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_utopia_planitia
+				}
 			}
+			change_global_variable = { name = sr_site_pop_utopia_planitia add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_arcadia_planitia add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_ceres > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_ceres } } set_global_variable = { name = sr_site_pop_ceres value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_ceres
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_ceres
+		if = {
+			limit = { sr_emig_weight_arcadia_planitia > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_arcadia_planitia } } set_global_variable = { name = sr_site_pop_arcadia_planitia value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_arcadia_planitia
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_arcadia_planitia
+				}
 			}
+			change_global_variable = { name = sr_site_pop_arcadia_planitia add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_ceres add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_vesta > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_vesta } } set_global_variable = { name = sr_site_pop_vesta value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_vesta
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_vesta
+		if = {
+			limit = { sr_emig_weight_ceres > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_ceres } } set_global_variable = { name = sr_site_pop_ceres value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_ceres
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_ceres
+				}
 			}
+			change_global_variable = { name = sr_site_pop_ceres add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_vesta add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_psyche > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_psyche } } set_global_variable = { name = sr_site_pop_psyche value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_psyche
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_psyche
+		if = {
+			limit = { sr_emig_weight_vesta > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_vesta } } set_global_variable = { name = sr_site_pop_vesta value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_vesta
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_vesta
+				}
 			}
+			change_global_variable = { name = sr_site_pop_vesta add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_psyche add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_pallas > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_pallas } } set_global_variable = { name = sr_site_pop_pallas value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_pallas
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_pallas
+		if = {
+			limit = { sr_emig_weight_psyche > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_psyche } } set_global_variable = { name = sr_site_pop_psyche value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_psyche
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_psyche
+				}
 			}
+			change_global_variable = { name = sr_site_pop_psyche add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_pallas add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_hygiea > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_hygiea } } set_global_variable = { name = sr_site_pop_hygiea value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_hygiea
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_hygiea
+		if = {
+			limit = { sr_emig_weight_pallas > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_pallas } } set_global_variable = { name = sr_site_pop_pallas value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_pallas
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_pallas
+				}
 			}
+			change_global_variable = { name = sr_site_pop_pallas add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_hygiea add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_io > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_io } } set_global_variable = { name = sr_site_pop_io value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_io
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_io
+		if = {
+			limit = { sr_emig_weight_hygiea > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_hygiea } } set_global_variable = { name = sr_site_pop_hygiea value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_hygiea
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_hygiea
+				}
 			}
+			change_global_variable = { name = sr_site_pop_hygiea add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_io add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_europa > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_europa } } set_global_variable = { name = sr_site_pop_europa value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_europa
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_europa
+		if = {
+			limit = { sr_emig_weight_io > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_io } } set_global_variable = { name = sr_site_pop_io value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_io
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_io
+				}
 			}
+			change_global_variable = { name = sr_site_pop_io add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_europa add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_ganymede > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_ganymede } } set_global_variable = { name = sr_site_pop_ganymede value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_ganymede
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_ganymede
+		if = {
+			limit = { sr_emig_weight_europa > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_europa } } set_global_variable = { name = sr_site_pop_europa value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_europa
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_europa
+				}
 			}
+			change_global_variable = { name = sr_site_pop_europa add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_ganymede add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_callisto > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_callisto } } set_global_variable = { name = sr_site_pop_callisto value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_callisto
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_callisto
+		if = {
+			limit = { sr_emig_weight_ganymede > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_ganymede } } set_global_variable = { name = sr_site_pop_ganymede value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_ganymede
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_ganymede
+				}
 			}
+			change_global_variable = { name = sr_site_pop_ganymede add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_callisto add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_himalia > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_himalia } } set_global_variable = { name = sr_site_pop_himalia value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_himalia
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_himalia
+		if = {
+			limit = { sr_emig_weight_callisto > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_callisto } } set_global_variable = { name = sr_site_pop_callisto value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_callisto
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_callisto
+				}
 			}
+			change_global_variable = { name = sr_site_pop_callisto add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_himalia add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_amalthea > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_amalthea } } set_global_variable = { name = sr_site_pop_amalthea value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_amalthea
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_amalthea
+		if = {
+			limit = { sr_emig_weight_himalia > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_himalia } } set_global_variable = { name = sr_site_pop_himalia value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_himalia
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_himalia
+				}
 			}
+			change_global_variable = { name = sr_site_pop_himalia add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_amalthea add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_venus > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_venus } } set_global_variable = { name = sr_site_pop_venus value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_venus
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_venus
+		if = {
+			limit = { sr_emig_weight_amalthea > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_amalthea } } set_global_variable = { name = sr_site_pop_amalthea value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_amalthea
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_amalthea
+				}
 			}
+			change_global_variable = { name = sr_site_pop_amalthea add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_venus add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_mercury > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_mercury } } set_global_variable = { name = sr_site_pop_mercury value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_mercury
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_mercury
+		if = {
+			limit = { sr_emig_weight_venus > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_venus } } set_global_variable = { name = sr_site_pop_venus value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_venus
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_venus
+				}
 			}
+			change_global_variable = { name = sr_site_pop_venus add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_mercury add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_titan > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_titan } } set_global_variable = { name = sr_site_pop_titan value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_titan
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_titan
+		if = {
+			limit = { sr_emig_weight_mercury > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_mercury } } set_global_variable = { name = sr_site_pop_mercury value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_mercury
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_mercury
+				}
 			}
+			change_global_variable = { name = sr_site_pop_mercury add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_titan add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_enceladus > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_enceladus } } set_global_variable = { name = sr_site_pop_enceladus value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_enceladus
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_enceladus
+		if = {
+			limit = { sr_emig_weight_titan > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_titan } } set_global_variable = { name = sr_site_pop_titan value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_titan
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_titan
+				}
 			}
+			change_global_variable = { name = sr_site_pop_titan add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_enceladus add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_rhea > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_rhea } } set_global_variable = { name = sr_site_pop_rhea value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_rhea
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_rhea
+		if = {
+			limit = { sr_emig_weight_enceladus > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_enceladus } } set_global_variable = { name = sr_site_pop_enceladus value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_enceladus
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_enceladus
+				}
 			}
+			change_global_variable = { name = sr_site_pop_enceladus add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_rhea add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_mimas > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_mimas } } set_global_variable = { name = sr_site_pop_mimas value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_mimas
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_mimas
+		if = {
+			limit = { sr_emig_weight_rhea > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_rhea } } set_global_variable = { name = sr_site_pop_rhea value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_rhea
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_rhea
+				}
 			}
+			change_global_variable = { name = sr_site_pop_rhea add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_mimas add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_iapetus > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_iapetus } } set_global_variable = { name = sr_site_pop_iapetus value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_iapetus
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_iapetus
+		if = {
+			limit = { sr_emig_weight_mimas > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_mimas } } set_global_variable = { name = sr_site_pop_mimas value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_mimas
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_mimas
+				}
 			}
+			change_global_variable = { name = sr_site_pop_mimas add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_iapetus add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_titania > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_titania } } set_global_variable = { name = sr_site_pop_titania value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_titania
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_titania
+		if = {
+			limit = { sr_emig_weight_iapetus > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_iapetus } } set_global_variable = { name = sr_site_pop_iapetus value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_iapetus
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_iapetus
+				}
 			}
+			change_global_variable = { name = sr_site_pop_iapetus add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_titania add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_oberon > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_oberon } } set_global_variable = { name = sr_site_pop_oberon value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_oberon
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_oberon
+		if = {
+			limit = { sr_emig_weight_titania > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_titania } } set_global_variable = { name = sr_site_pop_titania value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_titania
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_titania
+				}
 			}
+			change_global_variable = { name = sr_site_pop_titania add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_oberon add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_miranda > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_miranda } } set_global_variable = { name = sr_site_pop_miranda value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_miranda
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_miranda
+		if = {
+			limit = { sr_emig_weight_oberon > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_oberon } } set_global_variable = { name = sr_site_pop_oberon value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_oberon
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_oberon
+				}
 			}
+			change_global_variable = { name = sr_site_pop_oberon add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_miranda add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_ariel > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_ariel } } set_global_variable = { name = sr_site_pop_ariel value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_ariel
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_ariel
+		if = {
+			limit = { sr_emig_weight_miranda > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_miranda } } set_global_variable = { name = sr_site_pop_miranda value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_miranda
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_miranda
+				}
 			}
+			change_global_variable = { name = sr_site_pop_miranda add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_ariel add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_triton > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_triton } } set_global_variable = { name = sr_site_pop_triton value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_triton
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_triton
+		if = {
+			limit = { sr_emig_weight_ariel > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_ariel } } set_global_variable = { name = sr_site_pop_ariel value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_ariel
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_ariel
+				}
 			}
+			change_global_variable = { name = sr_site_pop_ariel add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_triton add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_proteus > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_proteus } } set_global_variable = { name = sr_site_pop_proteus value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_proteus
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_proteus
+		if = {
+			limit = { sr_emig_weight_triton > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_triton } } set_global_variable = { name = sr_site_pop_triton value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_triton
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_triton
+				}
 			}
+			change_global_variable = { name = sr_site_pop_triton add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_proteus add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_pluto > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_pluto } } set_global_variable = { name = sr_site_pop_pluto value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_pluto
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_pluto
+		if = {
+			limit = { sr_emig_weight_proteus > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_proteus } } set_global_variable = { name = sr_site_pop_proteus value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_proteus
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_proteus
+				}
 			}
+			change_global_variable = { name = sr_site_pop_proteus add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_pluto add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_eris > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_eris } } set_global_variable = { name = sr_site_pop_eris value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_eris
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_eris
+		if = {
+			limit = { sr_emig_weight_pluto > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_pluto } } set_global_variable = { name = sr_site_pop_pluto value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_pluto
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_pluto
+				}
 			}
+			change_global_variable = { name = sr_site_pop_pluto add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_eris add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_makemake > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_makemake } } set_global_variable = { name = sr_site_pop_makemake value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_makemake
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_makemake
+		if = {
+			limit = { sr_emig_weight_eris > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_eris } } set_global_variable = { name = sr_site_pop_eris value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_eris
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_eris
+				}
 			}
+			change_global_variable = { name = sr_site_pop_eris add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_makemake add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_haumea > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_haumea } } set_global_variable = { name = sr_site_pop_haumea value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_haumea
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_haumea
+		if = {
+			limit = { sr_emig_weight_makemake > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_makemake } } set_global_variable = { name = sr_site_pop_makemake value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_makemake
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_makemake
+				}
 			}
+			change_global_variable = { name = sr_site_pop_makemake add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_haumea add = local_var:sr_emig_share }
-	}
-	if = {
-		limit = { sr_emig_weight_sedna > 0 }
-		if = { limit = { NOT = { has_global_variable = sr_site_pop_sedna } } set_global_variable = { name = sr_site_pop_sedna value = 0 } }
-		set_local_variable = {
-			name = sr_emig_share
-			value = {
-				value = local_var:sr_emig_sent
-				multiply = sr_emig_weight_sedna
-				divide = local_var:sr_emig_weight_sum
-				max = sr_site_free_room_sedna
+		if = {
+			limit = { sr_emig_weight_haumea > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_haumea } } set_global_variable = { name = sr_site_pop_haumea value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_haumea
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_haumea
+				}
 			}
+			change_global_variable = { name = sr_site_pop_haumea add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
 		}
-		change_global_variable = { name = sr_site_pop_sedna add = local_var:sr_emig_share }
+		if = {
+			limit = { sr_emig_weight_sedna > 0 }
+			if = { limit = { NOT = { has_global_variable = sr_site_pop_sedna } } set_global_variable = { name = sr_site_pop_sedna value = 0 } }
+			set_local_variable = {
+				name = sr_emig_share
+				value = {
+					value = local_var:sr_emig_pass
+					multiply = sr_emig_weight_sedna
+					divide = local_var:sr_emig_weight_sum
+					max = sr_site_free_room_sedna
+				}
+			}
+			change_global_variable = { name = sr_site_pop_sedna add = local_var:sr_emig_share }
+			change_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }
+		}
 	}
 }
 
