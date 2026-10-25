@@ -8,10 +8,12 @@
 # (common/scripted_effects/power_grid_effects.txt) reads it: each station
 # owner's partners are listed at the start of a run
 # (te_grid_refresh_partners_effect), and a station joins a partner's
-# bordering station in the same market area into one grid
-# (te_grid_land_link), or one across the sea when both run an HVDC Undersea
-# Interconnector (te_grid_sea_link). Only countries in one market: Grid
-# Power is priced in its market and isn't traded between markets.
+# bordering station into one grid (te_grid_land_link), or one across the sea
+# when both run an HVDC Undersea Interconnector (te_grid_sea_link). The two
+# may be in different markets: Grid Power has a fixed price, so the power
+# that crosses is paid for at it, the sending market's stations paid for all
+# they sell and the receiving market's paying for all they buy
+# (te_grid_cross_market_effect).
 # =================================================================
 grid_interconnection_agreement = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/grid_interconnection_agreement.dds"
@@ -48,10 +50,6 @@ grid_interconnection_agreement = {
 		}
 		has_technology_researched = electrical_capacitors
 		scope:other_country = { has_technology_researched = electrical_capacitors }
-		custom_tooltip = {
-			text = te_grid_interconnection_same_market_tt
-			market = scope:other_country.market
-		}
 		# A land border, or a sea between them: an agreement across the sea
 		# joins stations running an HVDC Undersea Interconnector
 		# (te_grid_sea_link).
@@ -61,20 +59,6 @@ grid_interconnection_agreement = {
 				OR = {
 					any_neighbouring_state = { owner = scope:other_country }
 					any_sea_node_adjacent_state = { owner = scope:other_country }
-				}
-			}
-		}
-	}
-
-	# One market: Grid Power is priced per market, so an agreement between
-	# countries that have left each other's market joins nothing. It breaks
-	# rather than charging both sides for nothing.
-	requirement_to_maintain = {
-		trigger = {
-			custom_tooltip = {
-				text = te_grid_interconnection_same_market_tt
-				scope:first_country = {
-					market = scope:second_country.market
 				}
 			}
 		}

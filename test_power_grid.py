@@ -1,4 +1,4 @@
-"""Power grids, phase 1: the Grid Transfer Station and Grid Power.
+"""Power grids: the Grid Transfer Station, Grid Power and the balancing.
 
 Static checks on the pieces the engine gives no warning for when they are
 wrong: the station's method keeps its 1-unit lines of both goods (the flow
@@ -7,7 +7,10 @@ right pair of lines, every Grid Power goods modifier is registered (a mod good
 gets none from vanilla), base_values carries the one-per-state cap and the
 mandatory subsidy, the modifiers are applied with local-variable multipliers
 (a var: or script value there would resolve against the country), and the
-monthly pulse is wired.
+monthly pulse is wired. Since cross-market interconnection: Grid Power has a
+fixed price, a link between two countries needs no shared market, and a
+receiving market's pass-through rides the Grid Power lines only and cancels out
+of every readback the balancing takes.
 
 Run: python3 test_power_grid.py
 """
@@ -76,6 +79,11 @@ class GoodTest(unittest.TestCase):
         self.assertRegex(good, r"\bcost = 30\b")
         self.assertRegex(good, r"\btradeable = no\b")
         self.assertNotRegex(good, r"\blocal = yes\b")
+
+    def test_grid_power_has_a_fixed_price(self):
+        # A grid that spans markets sells more than it buys in one market and the
+        # reverse in the other; at a fixed price that is how the power is paid for.
+        self.assertRegex(_code(_top_level(_read(GOODS), "grid_power")), r"\bfixed_price = yes\b")
 
     def test_grid_power_has_a_texticon(self):
         self.assertRegex(_read(TEXTICONS), r"icon = grid_power\b")
@@ -221,11 +229,14 @@ class BalancingTest(unittest.TestCase):
         self.assertIn("is_target_in_variable_list = { name = te_grid_partners", triggers)
         refresh = _code(_top_level(_read(EFFECTS), "te_grid_refresh_partners_effect"))
         self.assertIn("has_type = grid_interconnection_agreement", refresh)
-        # Between two countries, a link also takes one market (Grid Power is priced per market).
-        sea = _top_level(triggers, "te_grid_sea_link")
-        self.assertIn("market = $FROM$.market", sea)
-        land = _top_level(triggers, "te_grid_land_link")
-        self.assertIn("is_in_same_market_area = $FROM$", land)
+
+    def test_links_between_countries_need_no_shared_market(self):
+        triggers = _code(_read(TRIGGERS))
+        for name in ("te_grid_sea_link", "te_grid_land_link", "te_grid_ai_interconnector_wanted"):
+            link = _top_level(triggers, name)
+            self.assertIn("te_grid_owners_interconnected", link, name)
+            self.assertNotRegex(link, r"\bmarket = ", name)
+        self.assertNotIn("is_in_same_market_area", _top_level(triggers, "te_grid_land_link"))
 
     @staticmethod
     def solve(states, passes=4):
@@ -300,10 +311,12 @@ class EfficiencyTest(unittest.TestCase):
 
 
 class TreatyAndTileTest(unittest.TestCase):
-    def test_article_is_mutual_and_needs_one_market(self):
+    def test_article_is_mutual_and_joins_any_two_markets(self):
         article = _code(_top_level(_read(ARTICLE), "grid_interconnection_agreement"))
         self.assertRegex(article, r"\bkind = mutual\b")
-        self.assertIn("market = scope:other_country.market", _sub(article, "possible"))
+        self.assertNotIn("market", _sub(article, "possible"))
+        # Nothing breaks it when the two leave each other's market.
+        self.assertNotIn("requirement_to_maintain", article)
         # A root-only proposal chance (treaty_evaluation_scope_audit).
         self.assertNotIn("scope:", _sub(article, "evaluation_chance"))
 
@@ -368,6 +381,83 @@ class AITest(unittest.TestCase):
             self.assertIn(check, site)
 
 
+class CrossMarketTest(unittest.TestCase):
+    def setUp(self):
+        self.effects = _code(_read(EFFECTS))
+        self.values = _code(_read(VALUES))
+
+    def test_markets_settle_after_every_flow_is_set_and_before_the_orders(self):
+        balance = _top_level(self.effects, "te_grid_balance_region_effect")
+        settle = balance.index("te_grid_cross_market_effect = yes")
+        self.assertLess(balance.rindex("name = te_grid_flow value = var:te_grid_next_flow"), settle)
+        self.assertLess(settle, balance.index("te_grid_set_station_flow_effect = yes"))
+        # The self-checks read last month's pass-through before it is overwritten.
+        for check in ("te_grid_import_selfcheck_effect", "te_grid_fixed_price_selfcheck_effect"):
+            self.assertLess(balance.index(f"{check} = yes"), settle)
+
+    def test_only_a_receiving_market_passes_its_import_through(self):
+        settle = _top_level(self.effects, "te_grid_settle_market_effect")
+        self.assertIn("change_local_variable = { name = te_grid_market_sum add = var:te_grid_flow }", settle)
+        self.assertIn("set_variable = { name = te_grid_import value = 0 }", settle)
+        tail = settle[settle.rindex("limit = { local_var:te_grid_market_sum < 0 }"):]
+        self.assertIn("scope:te_grid_import_host", tail)
+        self.assertIn("change_variable = { name = te_grid_import multiply = -1 }", tail)
+        # A grid within one market, an idle station and a gone one keep no pass-through.
+        clear = _top_level(self.effects, "te_grid_clear_cross_market_effect")
+        for name in ("te_grid_import", "te_grid_market_net"):
+            self.assertIn(f"remove_variable = {name}", clear)
+        for caller in ("te_grid_idle_station_effect", "te_grid_clear_state_effect"):
+            self.assertIn("te_grid_clear_cross_market_effect = yes", _top_level(self.effects, caller))
+
+    def test_pass_through_rides_the_grid_power_lines_only(self):
+        for name in ("te_grid_upload_power_mult_value", "te_grid_download_mult_value"):
+            self.assertIn("add = var:te_grid_import_command", _top_level(self.values, name), name)
+        for name in ("te_grid_upload_mult_value", "te_grid_download_supply_mult_value"):
+            self.assertNotIn("te_grid_import", _top_level(self.values, name), name)
+        apply = _top_level(self.effects, "te_grid_set_station_modifiers_effect")
+        self.assertRegex(apply, r"name = modifier_grid_station_upload\n\s*multiplier = local_var:te_grid_upload_power_mult\b")
+        self.assertRegex(apply, r"name = modifier_grid_station_upload_electricity\n\s*multiplier = local_var:te_grid_upload_electricity_mult\b")
+        # Every path that applies the modifiers sets the Grid Power out multiplier.
+        for caller in ("te_grid_set_station_flow_effect", "te_grid_idle_station_effect"):
+            self.assertIn("name = te_grid_upload_power_mult", _top_level(self.effects, caller), caller)
+
+    def test_readbacks_leave_the_pass_through_out(self):
+        # A pass-through adds the same to both Grid Power lines, so the difference is
+        # the station's own flow.
+        self.assertIn("subtract = te_grid_downloaded", _top_level(self.values, "te_grid_own_uploaded"))
+        self.assertIn("subtract = te_grid_uploaded", _top_level(self.values, "te_grid_own_downloaded"))
+        for name in ("te_grid_local_production_value", "te_grid_local_consumption_value",
+                     "te_grid_station_factor_value"):
+            body = _top_level(self.values, name)
+            self.assertNotRegex(body, r"\bte_grid_(up|down)loaded\b", name)
+            self.assertRegex(body, r"\bte_grid_own_(up|down)loaded\b", name)
+        verdict = _top_level(self.effects, "te_grid_conservation_verdict_effect")
+        self.assertNotRegex(verdict, r"\badd = te_grid_(up|down)loaded\b")
+
+    @staticmethod
+    def settle(members):
+        """Per market, the net Grid Power its members on the grid move (+ sent),
+        and the pass-through the balancing gives a receiving market."""
+        nets = {}
+        for market, flow in members:
+            nets[market] = nets.get(market, 0.0) + flow
+        return nets, {m: -n for m, n in nets.items() if n < 0}
+
+    def test_a_spanning_grid_crosses_what_one_market_sends_and_another_receives(self):
+        solve = BalancingTest.solve
+        # Market A has the plants; market B's two states have none.
+        states = [(5000, 1000, 0.9, "A"), (800, 1000, 0.9, "A"), (0, 1500, 0.8, "B"), (100, 900, 0.8, "B")]
+        r, targets = solve([(lp, lc, eff) for lp, lc, eff, _ in states])
+        nets, passes = self.settle([(m, t) for (_, _, _, m), t in zip(states, targets)])
+        self.assertAlmostEqual(sum(nets.values()), 0, places=6)
+        self.assertGreater(nets["A"], 0)
+        self.assertEqual(set(passes), {"B"})
+        # B sells nothing of its own; with its pass-through it sells half what it buys.
+        sold = sum(t for (_, _, _, m), t in zip(states, targets) if m == "B" and t > 0) + passes["B"]
+        bought = -sum(t for (_, _, _, m), t in zip(states, targets) if m == "B" and t < 0) + passes["B"]
+        self.assertGreaterEqual(sold / bought, 0.5 - 1e-9)
+
+
 class LocalizationTest(unittest.TestCase):
     def test_every_new_key_is_localized(self):
         keys = set()
@@ -384,7 +474,10 @@ class LocalizationTest(unittest.TestCase):
                     "grid_interconnection_agreement", "grid_interconnection_agreement_desc",
                     "grid_interconnection_agreement_effects_desc", "grid_interconnection_agreement_article_short_desc",
                     "treaty_name_grid_interconnection_treaty", "treaty_name_country_adj_country_adj_power_pool",
-                    "TE_STATE_GRID_STATUS", "TE_STATE_GRID_TT", "AI_GRID_STATIONS_MEET"):
+                    "TE_STATE_GRID_STATUS", "TE_STATE_GRID_TT", "AI_GRID_STATIONS_MEET",
+                    "TE_STATE_GRID_ROW_MARKET", "TE_STATE_GRID_ROW_MARKET_TT", "TE_STATE_GRID_ROW_PASS",
+                    "TE_STATE_GRID_ROW_PASS_TT", "te_grid_market_exports", "te_grid_market_imports",
+                    "te_grid_market_send_more", "te_grid_market_receive_more"):
             self.assertIn(key, keys)
 
 
