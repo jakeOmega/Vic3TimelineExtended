@@ -5051,10 +5051,6 @@
   "en": "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it carries this effect its own way instead: through its ages (who is old, when they retire, how many children there are) or through who works.",
   "es": "$state_working_adult_ratio_add_desc$. Donde el censo demográfico fija la población activa de un estado, este efecto se incorpora a su manera: mediante sus edades (quién es mayor, cuándo se jubilan, cuántos niños hay) o mediante quién trabaja."
  },
- "state_demog_womens_work_ratio_add_desc": {
-  "en": "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it reads this effect as women's work instead.",
-  "es": "$state_working_adult_ratio_add_desc$. Donde el censo demográfico fija la población activa de un estado, este efecto se interpreta como trabajo de las mujeres."
- },
  "state_desired_fertility_mult": {
   "en": "Desired Family Size[GetPlayer.GetCustom('te_demog_census_off_name')]",
   "es": "Tamaño de familia deseado[GetPlayer.GetCustom('te_demog_census_off_name')]"
