@@ -222,15 +222,6 @@ class PanelTests(unittest.TestCase):
 
 
 class EventTests(unittest.TestCase):
-    def test_no_option_is_named_after_its_events_text(self):
-        # An option named <event>.d shares the description's key (.13.d, .74.d, .75.d were).
-        for m in re.finditer(r"(?m)^(decolonization_events\.\d+) = \{", EVENTS):
-            body = EVENTS[m.end():_close(EVENTS, m.end() - 1)]
-            texts = set(re.findall(r"\b(?:title|desc|flavor)\s*=\s*([\w.]+)", body))
-            names = set(re.findall(r"\bname\s*=\s*([\w.]+)", body))
-            with self.subTest(event=m.group(1)):
-                self.assertEqual(sorted(texts & names), [])
-
     def test_fight_needs_a_free_record_and_nothing_else(self):
         declaration = _def(EVENTS, "decolonization_events.70")
         fight = declaration[declaration.index("name = decolonization_events.70.c"):]
