@@ -291,6 +291,31 @@ pm_monument_athletic = {
 	}
 }
 
+# To History (tourism heritage spec 2026-10-23 § 7): a landmark of 1836 or a dug
+# site that stands for the heritage it took off its state's base appeal. Its
+# tourism, prestige and cultural pull and nothing more: no local or national
+# effect of its own, no interest group's stance. Timeless, so it always fits,
+# a conquest never contests it, and with nothing to contest Pull Down and
+# Rededicate never reach it. Seeded on the building (gm_seed_landmarks) or
+# carried in a site's records (gm_arch_seed_site); the ceremony never offers
+# it, so a monument a player builds can't take it (call 6).
+pm_monument_historic = {
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_monument_undedicated
+		pm_monument_historic
+	}
+
+	building_modifiers = {
+		unscaled = {
+			building_employment_laborers_add = 200
+			building_employment_clerks_add = 50
+		}
+	}
+}
+
 # The construction site (grand_monument_site.txt): nothing in, nothing out.
 pm_grand_monument_site = {
 	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"

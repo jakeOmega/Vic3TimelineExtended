@@ -34,12 +34,6 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [specs/2026-10-08-inheritance-laws-design.md](specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events) | Partial: built in #822, balanced in #843 | §5's three second-wave events: *The Hidden Estates* (State as Universal Heir), *The Empty Holding* (Possession by Use), *The First Cohort* (Birthright Endowment) |
 | [specs/2026-10-17-judiciary-design.md](specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock) | Partial: phase 1 built (#1022, #1025; plan archived); the Nation tab hand-off shipped (#1021) | Phase 2, defying the court (challenge, comply, defy or pack); phase 3, seven amendments; phase 4, landmark cases. Each gets its own plan after the phase 1 play-test |
 
-### Grand Monuments and tourism
-
-| Doc | Status | What's left |
-|-----|--------|-------------|
-| [specs/2026-10-23-tourism-heritage-design.md](specs/2026-10-23-tourism-heritage-design.md): monument tourism becomes output, and the heritage a monument stands for leaves the state's base appeal while the monument can exist (pass 1); its moves and new monuments are in the two CSVs beside it | Partial: phase 1 built (#1118; plan archived). Phase 2 waited for the monument policy and prestige pass, which shipped in #1121 | Phase 2, the To History dedication (counted at half under every policy, the policy spec's § 4.5) and the new landmarks of Appendix B with their moves; phase 3, the new archaeology sites of Appendix C. Pass 2 (townscapes, § 11) is a later project |
-
 ### Space Race
 
 | Doc | Status | What's left |
@@ -148,8 +142,9 @@ Everything below has shipped. PR numbers are the main build first, then follow-u
 | [plans/2026-10-18-grand-monument-sites-plan-a.md](archive/plans/2026-10-18-grand-monument-sites-plan-a.md): size in records, construction sites, level-1 monuments | #1057, #1058 |
 | [plans/2026-10-18-grand-monument-sites-plan-b.md](archive/plans/2026-10-18-grand-monument-sites-plan-b.md): grandeur set by world wealth | #1059 |
 | [plans/2026-10-18-gm-sites-inventory/](archive/plans/2026-10-18-gm-sites-inventory/): four read-only code maps behind the sites plans (line numbers are as of `823dc25c`) | — |
-| [plans/2026-10-23-tourism-heritage-phase1.md](archive/plans/2026-10-23-tourism-heritage-phase1.md): tourism heritage phase 1, monument tourism as output and the heritage of existing monuments out of base appeal (the spec stays active) | #1118 |
+| [plans/2026-10-23-tourism-heritage-phase1.md](archive/plans/2026-10-23-tourism-heritage-phase1.md): tourism heritage phase 1, monument tourism as output and the heritage of existing monuments out of base appeal | #1118 |
 | [specs/2026-10-23-gm-policy-prestige-design.md](archive/specs/2026-10-23-gm-policy-prestige-design.md) and [plan](archive/plans/2026-10-23-gm-policy-prestige.md): four monument policies, each best at one thing; no upkeep, so Mothballed and Standard go; prestige +10 and +1% a step | #1121 |
+| [specs/2026-10-23-tourism-heritage-design.md](archive/specs/2026-10-23-tourism-heritage-design.md), with its [moves](archive/specs/2026-10-23-tourism-heritage-moves.csv) and [monuments](archive/specs/2026-10-23-tourism-heritage-monuments.csv): monument tourism as output, and the heritage a monument stands for leaves base appeal while the monument can exist; the To History dedication, 51 landmarks of 1836 and 14 sites (pass 1; its As built notes record the builder's corrections; pass 2, townscapes, is a later project) | #1118, #1139 |
 
 ### Global Commons and seabed claims
 
