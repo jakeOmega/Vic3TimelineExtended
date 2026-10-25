@@ -558,9 +558,9 @@ Interest groups sponsor amendments to the mod's laws as they do for base-game
 laws, and every one of them also comes with an event or another way into the
 game: most are offered by enactment events as the price of passage, and most can
 also be asked for later, on a law already in force (see [Amendment
-petitions](#amendment-petitions)). Three
+petitions](#amendment-petitions)). Four
 amendments attach to base-game laws: the Spoils System, Corporate Security
-Powers and Civilian Oversight. Under the Legislated Tax Code rule's legislated
+Powers, Civilian Oversight and First Past the Post. Under the Legislated Tax Code rule's legislated
 settings the tax rates are amendments to the Legislated Tax Code law, and only tax
 bills change them (see [Taxation (experimental)](05-tax-code.md)).
 
@@ -585,6 +585,7 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Legislative Override Capacity −0.5; radicalism rises 10% slower for Second-Rate Citizen and Open Prejudice pops; −5% turmoil penalties; the sponsoring group gains 10% political strength. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
+| First Past the Post | Landed, Wealth or Census Voting, Universal Suffrage, Anarchy | Interest groups join the two largest parties far more readily than any other (see [Two-party politics](#two-party-politics)); 25% less legitimacy lost to disagreement inside the government; −5 legitimacy. Members of the two largest parties sponsor it, and The Winner Takes All event offers it while a voting law is enacted |
 | Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
 | Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
 | Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
@@ -706,6 +707,31 @@ Protected Class, the higher LGBTQ+ Rights laws and related technologies.
 
 All three need a voting franchise and take national names in some countries,
 such as Die Grünen or Movimento 5 Stelle.
+
+### Two-party politics
+
+The First Past the Post amendment gives each seat to whoever tops the poll, so a
+vote for a small party is wasted. While it is on your voting law, the two
+parties whose members hold the most clout win interest groups more easily (+5
+affiliation) and every other party far less easily (−20). A third party forms
+only around a group that fits it strongly. The party affiliation tooltips show
+both lines. The two are re-ranked every month, so a party that gains clout can
+take a major party's place at the next campaign. Until two parties exist the
+amendment does nothing to parties.
+
+Each major party is a broad coalition, so the government loses 25% less
+legitimacy to disagreement inside it, and 5 legitimacy for the voters left
+without a winning party. The United States starts with the amendment, and the
+Confederacy gains it if the Civil War breaks out; it replaces the base game's
+fixed two-party rule for American countries.
+
+A law's amendments leave with it, so when you change voting law, the Counting
+the Votes event asks whether to keep first past the post. Keeping it puts it on
+the new law; declining adopts proportional representation, and later changes of
+voting law don't ask again. Moving to a law without elections and back asks
+again. Other countries adopt it through The Winner Takes All event while a
+voting law is enacted, or the Two Parties Are Enough petition. You can repeal it
+when legitimacy is high enough, as with other amendments; the AI keeps it.
 
 ### New political movements
 
