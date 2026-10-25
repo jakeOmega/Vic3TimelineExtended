@@ -3678,6 +3678,13 @@ country_enactment_success_chance_law_ministry_of_culture_add = {
 	percent = yes
 }
 
+# The Free Soil Case's ruling (te_jud_case_free_soil, te_judiciary_modifiers.txt):
+# vanilla registers this pattern for six laws only, and Slavery Banned isn't one.
+country_enactment_success_chance_law_slavery_banned_add = {
+	color = good
+	percent = yes
+}
+
 
 # === Religions (per-religion SoL for mod custom religions) ===
 # The engine code-generates state_<religion>_standard_of_living_add only for vanilla
