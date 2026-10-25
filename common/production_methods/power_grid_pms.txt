@@ -7,23 +7,27 @@
 # station's upload and download modifiers are _mult modifiers that scale these
 # lines. Idle, both modifiers sit at -1 and every line is zero.
 #
-# The four lines are level_scaled, not workforce_scaled: a station moves what
-# the balancing asks of it however few staff it has, so a station that loses
-# workers to migration or better jobs doesn't cut its state off its grid. It
-# runs subsidized whatever it moves. A station with no staff keeps its order
-# and modifiers and runs again from its first hire; an empty building is
-# expected to run none of its lines. TE_SELF_CHECK grid_level_scaled and
-# TE_GRID empty_station (power_grid_effects.txt) test both.
+# The four lines are unscaled (the station is always level 1, so they are the
+# same size as level_scaled ones), so that a station moves what the balancing
+# asks of it however few staff it has, and one that loses workers to migration
+# or better jobs doesn't cut its state off its grid. level_scaled lines, from
+# 2026-10-25, still ran at the building's occupancy: Arkansas ran 20.7% of its
+# setting with 20.8% of its staff, and later 19.9% with 20.0%. Whether
+# unscaled ones escape that is unverified: TE_SELF_CHECK grid_unscaled and
+# TE_GRID empty_station (power_grid_effects.txt) test it. A station with no
+# staff keeps its order and modifiers and runs again from its first hire.
 # ============================================================================
 
 pm_grid_transfer_base = {
 	texture = "gfx/interface/icons/production_method_icons/power_plant.dds"
 	building_modifiers = {
-		level_scaled = {
+		unscaled = {
 			goods_input_electricity_add = 1
 			goods_output_electricity_add = 1
 			goods_input_grid_power_add = 1
 			goods_output_grid_power_add = 1
+		}
+		level_scaled = {
 			building_employment_engineers_add = 500
 			building_employment_clerks_add = 500
 		}
