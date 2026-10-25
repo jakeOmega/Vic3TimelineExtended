@@ -92,8 +92,8 @@ Everything below has shipped. PR numbers are the main build first, then follow-u
 | [specs/2026-10-09-tax-code-light-design.md](archive/specs/2026-10-09-tax-code-light-design.md): the Light Tax Code setting | #845 |
 | [specs/2026-10-01-bureaucracy-laws-design.md](archive/specs/2026-10-01-bureaucracy-laws-design.md): machine administration vs. machine rule, Contracted and Communal Administration, the Spoils System | #623, #625 (#638) |
 | [specs/2026-10-04-policing-laws-design.md](archive/specs/2026-10-04-policing-laws-design.md): Private Policing and its amendments | #697 |
-| [specs/2026-10-08-inheritance-laws-design.md](archive/specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events; the second wave of events in its § 11) | #822, #843, #PRNUM |
-| [specs/2026-10-17-judiciary-design.md](archive/specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock); phases 2–4 (defying the court, seven amendments, landmark cases) as built in its § 14 | #1022 (#1025, #1021), #PRNUM |
+| [specs/2026-10-08-inheritance-laws-design.md](archive/specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events; the second wave of events in its § 11) | #822, #843, #1154 |
+| [specs/2026-10-17-judiciary-design.md](archive/specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock); phases 2–4 (defying the court, seven amendments, landmark cases) as built in its § 14 | #1022 (#1025, #1021), #1154 |
 | [plans/2026-10-17-judiciary-phase1.md](archive/plans/2026-10-17-judiciary-phase1.md): Judiciary phase 1 | #1022 (#1025) |
 | [plans/2026-10-02-drugs-phase-2-healthcare-demand.md](archive/plans/2026-10-02-drugs-phase-2-healthcare-demand.md): the Healthcare need and opium plantation penalties | #656 (#657, #658) |
 
