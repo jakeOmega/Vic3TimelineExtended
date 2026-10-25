@@ -359,5 +359,6 @@ Where the build departs from the sections above, and why:
 - **The queue is first in first out** (owner, 2026-10-25, on the PR), not the
   round-robin over colonies of § 5's first draft: twenty places in order, a
   list in the panel with a remove button per entry (`sr_colony_module_queue_sgui`),
-  the per-world counts kept for the caps. No reordering control: a move-up
-  button would need markup no mod panel has used yet.
+  the per-world counts kept for the caps. No reordering control yet: a move-up
+  button (the mod's construction panel already carries vanilla's) is the
+  follow-up jakeOmega/Vic3TimelineExtended#1159.
