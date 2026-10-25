@@ -1024,7 +1024,7 @@
  TE_STATE_GRID_ROW_HUB_TT:0 "#b Hub#!\nThe grid's largest producer of $electricity$: #v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!. Every state on a grid names the same hub, so it tells grids apart."
  TE_STATE_GRID_ROW_HUB_VALUE:0 "#v [State.MakeScope.Var('te_grid_hub').GetState.GetName]#!"
  TE_STATE_GRID_ROW_MODE:0 "Mode"
- TE_STATE_GRID_ROW_MODE_TT:0 "#b Mode#!\n#v Sending#!: this state has more $electricity$ for its demand than the grid as a whole, and its station sends the spare as $grid_power$.\n#v Receiving#!: it has less, and its station buys $grid_power$ and turns it into $electricity$.\n#v Idle#!: it has as much as the grid, or the grid has nothing to share.\n#v Offline#!: the station is less than a quarter staffed, or hasn't been balanced yet. It joins its grid at the next month's balancing."
+ TE_STATE_GRID_ROW_MODE_TT:0 "#b Mode#!\n#v Sending#!: this state has more $electricity$ for its demand than the grid as a whole, and its station sends the spare as $grid_power$.\n#v Receiving#!: it has less, and its station buys $grid_power$ and turns it into $electricity$.\n#v Idle#!: it has as much as the grid, or the grid has nothing to share.\n#v Offline#!: the station hasn't been balanced yet. It joins its grid at the next month's balancing.\nA station moves its full share however few staff it has. With none at all it moves nothing, and starts again as soon as it hires."
  TE_STATE_GRID_ROW_MODE_VALUE:0 "#v $TE_STATE_GRID_MODE_NAME$#!"
  TE_STATE_GRID_ROW_MOVED:0 "Flow"
  TE_STATE_GRID_ROW_MOVED_TT:0 "#b Flow#!\nThe $electricity$ this station sends to its grid, or delivers to this state after losses, a week: #v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|1]#!."

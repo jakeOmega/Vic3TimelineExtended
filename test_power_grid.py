@@ -116,11 +116,44 @@ class BuildingTest(unittest.TestCase):
 
 
 class MethodTest(unittest.TestCase):
+    LINES = ("goods_input_electricity_add", "goods_output_electricity_add",
+             "goods_input_grid_power_add", "goods_output_grid_power_add")
+
     def test_base_method_carries_one_unit_of_each_line(self):
-        scaled = _sub(_top_level(_read(PMS), "pm_grid_transfer_base"), "workforce_scaled")
-        for line in ("goods_input_electricity_add", "goods_output_electricity_add",
-                     "goods_input_grid_power_add", "goods_output_grid_power_add"):
+        # level_scaled, so a station that loses staff still moves what its grid asks.
+        method = _code(_top_level(_read(PMS), "pm_grid_transfer_base"))
+        self.assertNotIn("workforce_scaled", method)
+        scaled = _sub(method, "level_scaled")
+        for line in self.LINES:
             self.assertRegex(scaled, rf"\b{line} = 1\b", line)
+
+    def test_a_built_station_is_online_whatever_its_staffing(self):
+        # An empty station keeps its order and modifiers, so it runs from its first hire.
+        online = _code(_top_level(_read(TRIGGERS), "te_grid_station_online"))
+        self.assertIn("level >= 1", online)
+        self.assertNotIn("occupancy", online)
+
+    def test_a_station_that_moved_nothing_keeps_its_factor(self):
+        # Measured, an empty week would clamp the factor to 0.2 and the first hire would move 5x.
+        factor = _code(_top_level(_read(VALUES), "te_grid_station_factor_value"))
+        self.assertIn("te_grid_uploaded > 0", factor)
+        self.assertIn("te_grid_downloaded > 0", factor)
+
+    def test_level_scaled_self_check_reads_the_order_before_it_is_overwritten(self):
+        balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
+        self.assertLess(balance.index("te_grid_level_scaled_selfcheck_effect = yes"),
+                        balance.index("name = te_grid_factor "))
+        check = _code(_top_level(_read(EFFECTS), "te_grid_level_scaled_selfcheck_effect"))
+        self.assertIn("occupancy < 0.5", check)
+        self.assertIn("te_grid_station_staffed_throughout = yes", check)
+        self.assertIn("TE_GRID empty_station", check)
+        # Staffing is recorded after the checks read last month's record.
+        flow = _code(_top_level(_read(EFFECTS), "te_grid_set_station_flow_effect"))
+        self.assertIn("set_variable = te_grid_staffed", flow)
+        conservation = _code(_top_level(_read(EFFECTS), "te_grid_conservation_selfcheck_effect"))
+        self.assertIn("te_grid_station_staffed_throughout = no", conservation)
+        self.assertIn("TE_SELF_CHECK OK grid_level_scaled", check)
+        self.assertIn("TE_SELF_CHECK BROKEN grid_level_scaled", check)
 
 
 class FlowModifierTest(unittest.TestCase):

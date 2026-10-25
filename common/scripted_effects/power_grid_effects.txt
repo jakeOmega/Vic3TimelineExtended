@@ -31,6 +31,7 @@
 #   te_grid_command  the Grid Power asked of the station's method (0 idle)
 #   te_grid_factor   share of the order the station moved last time measured
 #   te_grid_delivery the efficiency the station's download was set to
+#   te_grid_staffed  the station had staff at the last run (self-checks only)
 #   te_grid_upload_electricity_mult / te_grid_download_electricity_mult
 #                    the Electricity modifiers' multipliers as applied, net of
 #                    the station's other Electricity bonuses
@@ -351,6 +352,7 @@ te_grid_balance_region_effect = {
 	set_local_variable = { name = te_grid_members value = 0 }
 	every_in_global_list = {
 		variable = te_grid_region
+		te_grid_level_scaled_selfcheck_effect = yes
 		set_variable = { name = te_grid_factor value = te_grid_station_factor_value }
 		set_variable = { name = te_grid_local_production value = te_grid_local_production_value }
 		set_variable = { name = te_grid_local_consumption value = te_grid_local_consumption_value }
@@ -471,6 +473,16 @@ te_grid_set_station_flow_effect = {
 	set_local_variable = { name = te_grid_download_mult value = te_grid_download_mult_value }
 	set_local_variable = { name = te_grid_download_supply_mult value = te_grid_download_supply_mult_value }
 	te_grid_apply_station_modifiers_effect = yes
+	# Whether it had staff at this run, for next month's self-checks
+	# (te_grid_station_staffed_throughout).
+	if = {
+		limit = { te_grid_station_staffed = yes }
+		set_variable = te_grid_staffed
+	}
+	else_if = {
+		limit = { has_variable = te_grid_staffed }
+		remove_variable = te_grid_staffed
+	}
 }
 
 # State scope. A station that can't take part this month moves nothing. Its
@@ -653,6 +665,10 @@ te_grid_clear_state_effect = {
 		limit = { has_variable = te_grid_hub }
 		remove_variable = te_grid_hub
 	}
+	if = {
+		limit = { has_variable = te_grid_staffed }
+		remove_variable = te_grid_staffed
+	}
 }
 
 # ---- Self-checks and info ------------------------------------------------------
@@ -674,9 +690,10 @@ te_grid_dispatch_info_effect = {
 # first grid with a station uploading and another downloading at least 100 a
 # week each, compare what its stations moved last week, in Grid Power (which
 # losses don't touch). The balancing sets uploads equal to downloads and
-# corrects each order for its station's staffing, so they should agree.
+# corrects each order for what its station fell short last time, so they
+# should agree.
 #   OK      the two within 10% of each other.
-#   BROKEN  further apart: the staffing correction (te_grid_station_factor_value)
+#   BROKEN  further apart: the shortfall correction (te_grid_station_factor_value)
 #           does not hold, or something else makes or buys Grid Power.
 #   BROKEN grid_readback  both read 0: sg:grid_power reports nothing for a
 #           station's state, and the balancing has no measure of its own flows.
@@ -700,6 +717,16 @@ te_grid_conservation_selfcheck_effect = {
 				var:te_grid_flow < 0
 				has_variable = te_grid_command
 				var:te_grid_command >= 100
+			}
+			# A station with no staff moves nothing, so a grid with one doesn't
+			# balance until it hires (and a grid of new, empty stations would
+			# read as BROKEN grid_readback): every station had staff at last
+			# month's run and has now.
+			NOT = {
+				any_in_global_list = {
+					variable = te_grid_region
+					te_grid_station_staffed_throughout = no
+				}
 			}
 		}
 		# Last week's flows balance only within last month's grid: skip a grid
@@ -752,7 +779,81 @@ te_grid_conservation_verdict_effect = {
 		debug_log = "TE_SELF_CHECK OK grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0]: a grid uploads what it downloads)"
 	}
 	else = {
-		debug_log = "TE_SELF_CHECK BROKEN grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0], more than 10% apart: the staffing correction does not hold or something else trades Grid Power; see docs/testing/power-grid-playtest.md)"
+		debug_log = "TE_SELF_CHECK BROKEN grid_conservation (uploaded=[SCOPE.ScriptValue('te_grid_chk_uploaded_g')|0] downloaded=[SCOPE.ScriptValue('te_grid_chk_downloaded_g')|0] across stations=[SCOPE.ScriptValue('te_grid_chk_stations_g')|0], more than 10% apart: the shortfall correction does not hold or something else trades Grid Power; see docs/testing/power-grid-playtest.md)"
+	}
+}
+
+# State scope, a member of the grid being balanced, before its factor, its
+# order and its te_grid_staffed are overwritten. Two once-a-game lines on what
+# the station moved last week against last month's order (te_grid_uploaded or
+# te_grid_downloaded over te_grid_command). A station off the grid last month
+# was ordered nothing, so neither judges it.
+#
+# TE_SELF_CHECK grid_level_scaled: the first station under half staffed, with
+# staff at last month's run and now, that was ordered to move 100 or more. The
+# method's lines are level_scaled (power_grid_pms.txt), so staffing shouldn't
+# cut them.
+#   OK      it moved 75% or more: a level_scaled goods line runs in full
+#           however few staff the building has.
+#   BROKEN  less: the engine cuts the lines with staffing after all. The factor
+#           still makes up for a station well staffed, but one with a handful
+#           of staff can't move what it is asked (the factor stops at 0.2).
+#           Fallback: an occupancy >= 0.25 floor in te_grid_station_online,
+#           the gate before 2026-10-25.
+#
+# TE_GRID empty_station, info: the first station that had no staff at last
+# month's run and has none now, and was ordered to move 100 or more. An empty building
+# is expected to run none of its lines, so its grid's uploads and downloads
+# differ by its share until it hires. moved=0 confirms that; more says the
+# engine runs level_scaled lines in an empty building, and nothing is lost.
+te_grid_level_scaled_selfcheck_effect = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_level_scaled_checked }
+			has_variable = te_grid_command
+			var:te_grid_command >= 100
+			has_variable = te_grid_flow
+			NOT = { var:te_grid_flow = 0 }
+			te_grid_station_staffed_throughout = yes
+			any_scope_building = {
+				is_building_type = building_grid_transfer_station
+				occupancy < 0.5
+			}
+		}
+		set_global_variable = te_grid_level_scaled_checked
+		te_grid_chk_read_moved_effect = yes
+		if = {
+			limit = { te_grid_chk_moved_share_g >= 0.75 }
+			debug_log = "TE_SELF_CHECK OK grid_level_scaled (a station under half staffed moved=[SCOPE.ScriptValue('te_grid_chk_moved_g')|0] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] Grid Power: staffing doesn't cut its level-scaled lines)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN grid_level_scaled (a station under half staffed moved=[SCOPE.ScriptValue('te_grid_chk_moved_g')|0] of ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] Grid Power, under 75%: the engine cuts level-scaled goods lines with staffing; see docs/testing/power-grid-playtest.md)"
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_grid_empty_station_logged }
+			has_variable = te_grid_command
+			var:te_grid_command >= 100
+			has_variable = te_grid_flow
+			NOT = { var:te_grid_flow = 0 }
+			NOT = { has_variable = te_grid_staffed }
+			te_grid_station_staffed = no
+		}
+		set_global_variable = te_grid_empty_station_logged
+		te_grid_chk_read_moved_effect = yes
+		debug_log = "TE_GRID empty_station moved=[SCOPE.ScriptValue('te_grid_chk_moved_g')|0] ordered=[SCOPE.ScriptValue('te_grid_chk_ordered_g')|0] (a station with no staff at last month's balancing and none now; moved=0 means an empty building runs none of its level-scaled lines)"
+	}
+}
+
+# State scope, in te_grid_level_scaled_selfcheck_effect: last month's order and
+# what the station moved in its direction last week, as globals for the lines.
+te_grid_chk_read_moved_effect = {
+	set_global_variable = { name = te_grid_chk_ordered value = var:te_grid_command }
+	set_global_variable = { name = te_grid_chk_moved value = te_grid_uploaded }
+	if = {
+		limit = { var:te_grid_flow < 0 }
+		set_global_variable = { name = te_grid_chk_moved value = te_grid_downloaded }
 	}
 }
 
