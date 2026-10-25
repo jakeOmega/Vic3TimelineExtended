@@ -366,7 +366,9 @@ class GateScriptTest(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
         cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
-        cls.colony = _block(cls.effects, "sr_establish_colony_effect")
+        # The draw is generated from the site table (gen_solar_sites.py).
+        cls.colony = _block(_strip(_raw("common", "scripted_effects", "sr_sites_generated.txt")),
+                            "sr_establish_colony_effect")
         cls.site_body = {site: b.key for b in glw.BODIES for site in b.sites}
 
     def test_every_colony_site_is_drawn_through_its_window_body(self):

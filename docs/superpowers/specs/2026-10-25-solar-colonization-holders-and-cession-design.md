@@ -475,8 +475,11 @@ the self-checks confirm.
    change to an old save.
 6. **Cede Colony is permanent** (no lease), costs no influence, and its war goal
    is flat (maneuvers 5, infamy 10).
-7. **The AI sells only colonies it holds without a programme**, and asks for
-   colonies only while it runs one.
+7. **The AI proposes a sale only of a colony it holds without a programme, and
+   asks for one only while it runs one.** That governs only what it brings up
+   on its own. Acceptance has no programme test: any AI weighs a cession by its
+   score, so a racing power accepts an offer that pays more than the colony is
+   worth to it (owner's question, 2026-10-25).
 8. **Solar System is closed by default** (43 lines); Our Colonies stays open.
 9. **A holder without the milestones keeps its colony and its modifiers but
    can't colonize**, and its panel reads Idle.

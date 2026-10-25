@@ -68,6 +68,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_triggers/sr_launch_windows_generated.txt",
     "common/script_values/tourism_heritage_generated.txt",
     "common/script_values/sr_launch_windows_generated.txt",
+    "common/scripted_effects/sr_sites_generated.txt",
     "common/power_bloc_principles/te_principle_slot_gates_generated.txt",
     "common/scripted_effects/te_pb_remove_principle_generated.txt",
     "common/scripted_effects/te_region_area_generated.txt",

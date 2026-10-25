@@ -201,7 +201,8 @@ class DiscoveryTests(unittest.TestCase):
             self.assertEqual(state.chances, [])
 
     def test_every_seed_belongs_to_its_actual_claim(self):
-        text = (ROOT / 'common/scripted_effects/space_race_effects.txt').read_text('utf-8-sig')
+        # The draw is generated from the site table (gen_solar_sites.py).
+        text = (ROOT / 'common/scripted_effects/sr_sites_generated.txt').read_text('utf-8-sig')
         for key, site in SITES.items():
             with self.subTest(discovery=key):
                 marker = f'sr_seed_colony_discovery = {{ DISCOVERY = {key} }}'
