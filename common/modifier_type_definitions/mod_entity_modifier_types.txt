@@ -1614,6 +1614,12 @@ state_building_grid_transfer_station_max_level_add = {
 	percent = no
 }
 
+# One HVDC Undersea Interconnector per state, from base_values.
+state_building_grid_hvdc_interconnector_max_level_add = {
+	color = good
+	percent = no
+}
+
 # The share of downloaded Grid Power a Grid Transfer Station turns back into
 # Electricity: 0.75 in base_values, raised by Rural Electrification (+0.1),
 # Transistors (+0.05), Microprocessor (+0.02), Clean Energy Technologies
@@ -1627,23 +1633,11 @@ country_grid_transmission_efficiency_add = {
 	script_only = yes
 }
 
-# A Grid Transfer Station lays an undersea cable: the HVDC Undersea
-# Interconnector gives it. A station with a cable on a coast joins its grid
-# to a station with a cable of its own within range of either end
-# (building_grid_undersea_cable_range_add). Read by script only
-# (te_grid_lays_cable).
-building_grid_undersea_cable_bool = {
-	color = good
-	boolean = yes
-	script_only = yes
-}
-
-# How many Sea Nodes a Grid Transfer Station's undersea cable crosses: 1 from
-# the HVDC Undersea Interconnector, +1 each from Smart Grids and Quantum
-# Materials. It counts only on a station that lays a cable
-# (building_grid_undersea_cable_bool), so technology lengthens cables rather
-# than handing them out. Building scope, so a technology or law adds to it
-# from the country. Read by script only (te_grid_cable_range_value).
+# How many Sea Nodes an HVDC Undersea Interconnector's cable crosses: 1 from
+# its method, +1 each from Smart Grids and Quantum Materials. Read only on the
+# interconnector (te_grid_cable_range_value), so technology lengthens cables
+# rather than handing them out. Building scope, so a technology or law adds to
+# it from the country. Read by script only.
 building_grid_undersea_cable_range_add = {
 	decimals = 0
 	color = good

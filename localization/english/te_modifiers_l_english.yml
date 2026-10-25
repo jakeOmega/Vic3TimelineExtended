@@ -911,6 +911,8 @@
  state_building_gran_azucarera_aranjuez_refinery_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_gran_azucarera_aranjuez_refinery').GetName] can expand to in this state"
  state_building_great_indian_railway_jamalpur_works_max_level_add:0 "[GetBuildingType('building_great_indian_railway_jamalpur_works').GetName] Max Level"
  state_building_great_indian_railway_jamalpur_works_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_great_indian_railway_jamalpur_works').GetName] can expand to in this state"
+ state_building_grid_hvdc_interconnector_max_level_add:0 "[GetBuildingType('building_grid_hvdc_interconnector').GetName] Max Level"
+ state_building_grid_hvdc_interconnector_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_grid_hvdc_interconnector').GetName] can expand to in this state"
  state_building_grid_transfer_station_max_level_add:0 "[GetBuildingType('building_grid_transfer_station').GetName] Max Level"
  state_building_grid_transfer_station_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_grid_transfer_station').GetName] can expand to in this state"
  state_building_guinness_st_james_gate_brewery_max_level_add:0 "[GetBuildingType('building_guinness_st_james_gate_brewery').GetName] Max Level"

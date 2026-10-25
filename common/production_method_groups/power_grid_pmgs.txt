@@ -9,13 +9,12 @@ pmg_grid_transfer_station = {
 	}
 }
 
-# Whether the station also runs an HVDC Undersea Interconnector, which joins its
-# grid to another interconnector station's across the sea
-# (te_grid_sea_link). The first method is the default.
+# The HVDC Undersea Interconnector's cable (building_grid_hvdc_interconnector,
+# power_grid.txt), which joins its station's grid to another station's with a
+# cable across the sea (te_grid_sea_link).
 pmg_grid_interconnector = {
 	texture = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
 	production_methods = {
-		pm_grid_no_interconnector
 		pm_grid_hvdc_interconnector
 	}
 }

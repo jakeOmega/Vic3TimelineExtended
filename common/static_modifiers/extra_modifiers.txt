@@ -5,6 +5,7 @@
 	state_building_strategic_reserve_hub_max_level_add = 1
 	state_building_grid_transfer_station_max_level_add = 1
 	country_building_grid_transfer_station_require_subsidies_bool = yes
+	state_building_grid_hvdc_interconnector_max_level_add = 1
 	# Power grids: the share of downloaded Grid Power a station turns back into
 	# Electricity. Six technologies raise it to 1 (power_grid_values.txt).
 	country_grid_transmission_efficiency_add = 0.75

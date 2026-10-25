@@ -366,6 +366,7 @@ When adding a new building or good, always check:
 3. Does the building use the `has_max_level` pattern? → Register `state_building_{name}_max_level_add`.
 4. Add localization for all registered modifier names.
 5. Give it a `background` (the building panel's art) as well as an `icon`, even if it is never built. Every vanilla building has one. One without logs `Database type <building> has missing texture` (`guitexturehandler.h:155`) once per launch. The mod's default is `gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds`. The line names no slot, and it took from May to October 2026 to find which one was missing: #1108 cleared it for the Grid Transfer Station, and the Strategic Reserve hub, which has one, never logged it while the silo, which had none, did.
+6. Is it government funded (`bg_public_infrastructure`, `bg_government`)? → Give it an `ai_value`. Without one it gets the engine's `GOVERNMENT_BUILDING_BASE_VALUE` (1000), so the construction AI raises it wherever `possible` allows. A building only script should place takes `ai_value = 0` and a script pass that queues it (`start_building_construction`): the HVDC Undersea Interconnector (`te_grid_ai_interconnectors_effect`), which joins nothing on a coast with no grid across the sea.
 
 ### Script-Only Modifiers as Cross-System Tags / Capability Bands
 
