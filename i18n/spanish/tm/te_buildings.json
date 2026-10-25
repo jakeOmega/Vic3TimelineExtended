@@ -936,8 +936,8 @@
   "es": "Gran monumento (en construcción)"
  },
  "building_grand_monument_site_desc": {
-  "en": "A Grand Monument being built. Each level adds to the monument it will be; it has no upkeep and no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built.",
-  "es": "Un Gran monumento en construcción. Cada nivel suma al monumento que llegará a ser; no tiene mantenimiento ni efectos hasta que se inaugura, desde su tarjeta en la vista del Estado o desde la pestaña Grandes monumentos, una vez que ya no se construye nada más aquí. La inauguración termina el monumento con los niveles construidos."
+  "en": "A Grand Monument being built. Each level adds to the monument it will be; it has no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built.",
+  "es": "Un Gran monumento en construcción. Cada nivel suma al monumento que llegará a ser; no tiene efectos hasta que se inaugura, desde su tarjeta en la vista del Estado o desde la pestaña Grandes monumentos, una vez que ya no se construye nada más aquí. La inauguración termina el monumento con los niveles construidos."
  },
  "building_graphite_mine": {
   "en": "Graphite Mine",
@@ -959,17 +959,25 @@
   "en": "HVDC Undersea Interconnector",
   "es": "Interconector submarino HVDC"
  },
+ "building_grid_hvdc_interconnector_desc": {
+  "en": "Lays a high-voltage direct-current cable across the sea from this state's $building_grid_transfer_station$. It joins the station's [concept_power_grid] to that of any station with a cable of its own within reach, counted in [Concept('concept_sea_node', '$concept_sea_nodes$')] by its $building_grid_undersea_cable_range_add$: one of ours, or one of a country we have a $grid_interconnection_agreement$ with. Two cables join when either one's range reaches the other. Needs a $building_grid_transfer_station$ in the state, and joins nothing without one. One per state, on a coast.",
+  "es": "Tiende un cable de corriente continua de alta tensión a través del mar desde la $building_grid_transfer_station$ de este estado. Une la [concept_power_grid|l] de la estación con la de cualquier estación que tenga un cable propio a su alcance, medido en [Concept('concept_sea_node', '$concept_sea_nodes$')|l] por su $building_grid_undersea_cable_range_add$: una nuestra o una de un país con el que tengamos un $grid_interconnection_agreement$. Dos cables se unen cuando el alcance de cualquiera de los dos llega al otro. Necesita una $building_grid_transfer_station$ en el estado, y sin ella no une nada. Uno por estado, en la costa."
+ },
  "building_grid_transfer_station": {
   "en": "Grid Transfer Station",
   "es": "Estación de transferencia de red"
  },
  "building_grid_transfer_station_desc": {
-  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach through an $pm_grid_hvdc_interconnector$ or a $grid_interconnection_agreement$. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$, losing some on the way (#b Grid Transmission Efficiency#!). A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
-  "es": "Conecta este Estado con su [concept_power_grid|l]: nuestras demás estaciones en la misma [concept_market_area|l] y las estaciones a las que llegan mediante $pm_grid_hvdc_interconnector$ o $grid_interconnection_agreement$. Cada mes la red reparte su $electricity$ para que todos los Estados conectados tengan la misma proporción entre oferta y demanda. Un Estado con energía de sobra la envía a la red como @grid_power! $grid_power$, y un Estado con déficit toma $grid_power$ y lo convierte de nuevo en $electricity$, perdiendo algo por el camino (#b Eficiencia de transmisión de la red#!). Una red no saca más de lo que mete. Una por Estado. Nuestra primera estación en un área de mercado puede ir en cualquiera de nuestros Estados de allí; cada una de las siguientes debe limitar con un Estado nuestro que ya tenga una. Siempre subvencionada."
+  "en": "Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid shares its $electricity$ so that every state on it has the same ratio of supply to demand. A state with power to spare sends it to the grid as @grid_power! $grid_power$, and a short state takes $grid_power$ and turns it back into $electricity$, losing some on the way (#b Grid Transmission Efficiency#!). A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.",
+  "es": "Conecta este Estado con su [concept_power_grid|l]: nuestras demás estaciones en la misma [concept_market_area|l] y las estaciones a las que llegan por cable submarino ($building_grid_hvdc_interconnector$) o mediante un $grid_interconnection_agreement$. Cada mes la red reparte su $electricity$ para que todos los Estados conectados tengan la misma proporción entre oferta y demanda. Un Estado con energía de sobra la envía a la red como @grid_power! $grid_power$, y un Estado con déficit toma $grid_power$ y lo convierte de nuevo en $electricity$, perdiendo algo por el camino (#b Eficiencia de transmisión de la red#!). Una red no saca más de lo que mete. Una por Estado. Nuestra primera estación en un área de mercado puede ir en cualquiera de nuestros Estados de allí; cada una de las siguientes debe limitar con un Estado nuestro que ya tenga una. Siempre subvencionada."
  },
  "building_grid_undersea_cable_range_add": {
   "en": "Undersea Cable Range",
   "es": "Alcance del cable submarino"
+ },
+ "building_grid_undersea_cable_range_add_desc": {
+  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
+  "es": "Cuántos [Concept('concept_sea_node', '$concept_sea_nodes$')|l] puede cruzar el cable de un $building_grid_hvdc_interconnector$. Con 1, el cable llega a los estados costeros de un $concept_sea_node$ que toque este estado. Cada punto más cruza un $concept_sea_node$ más, hasta llegar a una costa que toque ambos. Solo cuenta en un $building_grid_hvdc_interconnector$: la tecnología alarga un cable, pero no tiende ninguno."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -2099,137 +2107,273 @@
   "en": "$sr_site_name_amalthea$ Colony",
   "es": "Colonia de $sr_site_name_amalthea$"
  },
+ "building_sr_site_amalthea_desc": {
+  "en": "The colony on $sr_site_name_amalthea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_amalthea$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_arcadia_planitia": {
   "en": "$sr_site_name_arcadia_planitia$ Colony",
   "es": "Colonia de $sr_site_name_arcadia_planitia$"
+ },
+ "building_sr_site_arcadia_planitia_desc": {
+  "en": "The colony on $sr_site_name_arcadia_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_arcadia_planitia$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_ariel": {
   "en": "$sr_site_name_ariel$ Colony",
   "es": "Colonia de $sr_site_name_ariel$"
  },
+ "building_sr_site_ariel_desc": {
+  "en": "The colony on $sr_site_name_ariel$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_ariel$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_callisto": {
   "en": "$sr_site_name_callisto$ Colony",
   "es": "Colonia de $sr_site_name_callisto$"
+ },
+ "building_sr_site_callisto_desc": {
+  "en": "The colony on $sr_site_name_callisto$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_callisto$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_ceres": {
   "en": "$sr_site_name_ceres$ Colony",
   "es": "Colonia de $sr_site_name_ceres$"
  },
+ "building_sr_site_ceres_desc": {
+  "en": "The colony on $sr_site_name_ceres$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_ceres$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_enceladus": {
   "en": "$sr_site_name_enceladus$ Colony",
   "es": "Colonia de $sr_site_name_enceladus$"
+ },
+ "building_sr_site_enceladus_desc": {
+  "en": "The colony on $sr_site_name_enceladus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_enceladus$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_eris": {
   "en": "$sr_site_name_eris$ Colony",
   "es": "Colonia de $sr_site_name_eris$"
  },
+ "building_sr_site_eris_desc": {
+  "en": "The colony on $sr_site_name_eris$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_eris$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_europa": {
   "en": "$sr_site_name_europa$ Colony",
   "es": "Colonia de $sr_site_name_europa$"
+ },
+ "building_sr_site_europa_desc": {
+  "en": "The colony on $sr_site_name_europa$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_europa$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_ganymede": {
   "en": "$sr_site_name_ganymede$ Colony",
   "es": "Colonia de $sr_site_name_ganymede$"
  },
+ "building_sr_site_ganymede_desc": {
+  "en": "The colony on $sr_site_name_ganymede$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_ganymede$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_haumea": {
   "en": "$sr_site_name_haumea$ Colony",
   "es": "Colonia de $sr_site_name_haumea$"
+ },
+ "building_sr_site_haumea_desc": {
+  "en": "The colony on $sr_site_name_haumea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_haumea$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_hellas_planitia": {
   "en": "$sr_site_name_hellas_planitia$ Colony",
   "es": "Colonia de $sr_site_name_hellas_planitia$"
  },
+ "building_sr_site_hellas_planitia_desc": {
+  "en": "The colony on $sr_site_name_hellas_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_hellas_planitia$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_himalia": {
   "en": "$sr_site_name_himalia$ Colony",
   "es": "Colonia de $sr_site_name_himalia$"
+ },
+ "building_sr_site_himalia_desc": {
+  "en": "The colony on $sr_site_name_himalia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_himalia$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_hygiea": {
   "en": "$sr_site_name_hygiea$ Colony",
   "es": "Colonia de $sr_site_name_hygiea$"
  },
+ "building_sr_site_hygiea_desc": {
+  "en": "The colony on $sr_site_name_hygiea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_hygiea$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_iapetus": {
   "en": "$sr_site_name_iapetus$ Colony",
   "es": "Colonia de $sr_site_name_iapetus$"
+ },
+ "building_sr_site_iapetus_desc": {
+  "en": "The colony on $sr_site_name_iapetus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_iapetus$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_io": {
   "en": "$sr_site_name_io$ Colony",
   "es": "Colonia de $sr_site_name_io$"
  },
+ "building_sr_site_io_desc": {
+  "en": "The colony on $sr_site_name_io$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_io$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_makemake": {
   "en": "$sr_site_name_makemake$ Colony",
   "es": "Colonia de $sr_site_name_makemake$"
+ },
+ "building_sr_site_makemake_desc": {
+  "en": "The colony on $sr_site_name_makemake$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_makemake$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_mercury": {
   "en": "$sr_site_name_mercury$ Colony",
   "es": "Colonia de $sr_site_name_mercury$"
  },
+ "building_sr_site_mercury_desc": {
+  "en": "The colony on $sr_site_name_mercury$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_mercury$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_mimas": {
   "en": "$sr_site_name_mimas$ Colony",
   "es": "Colonia de $sr_site_name_mimas$"
+ },
+ "building_sr_site_mimas_desc": {
+  "en": "The colony on $sr_site_name_mimas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_mimas$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_miranda": {
   "en": "$sr_site_name_miranda$ Colony",
   "es": "Colonia de $sr_site_name_miranda$"
  },
+ "building_sr_site_miranda_desc": {
+  "en": "The colony on $sr_site_name_miranda$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_miranda$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_oberon": {
   "en": "$sr_site_name_oberon$ Colony",
   "es": "Colonia de $sr_site_name_oberon$"
+ },
+ "building_sr_site_oberon_desc": {
+  "en": "The colony on $sr_site_name_oberon$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_oberon$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_olympus_mons": {
   "en": "$sr_site_name_olympus_mons$ Colony",
   "es": "Colonia de $sr_site_name_olympus_mons$"
  },
+ "building_sr_site_olympus_mons_desc": {
+  "en": "The colony on $sr_site_name_olympus_mons$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_olympus_mons$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_pallas": {
   "en": "$sr_site_name_pallas$ Colony",
   "es": "Colonia de $sr_site_name_pallas$"
+ },
+ "building_sr_site_pallas_desc": {
+  "en": "The colony on $sr_site_name_pallas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_pallas$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_pluto": {
   "en": "$sr_site_name_pluto$ Colony",
   "es": "Colonia de $sr_site_name_pluto$"
  },
+ "building_sr_site_pluto_desc": {
+  "en": "The colony on $sr_site_name_pluto$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_pluto$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_proteus": {
   "en": "$sr_site_name_proteus$ Colony",
   "es": "Colonia de $sr_site_name_proteus$"
+ },
+ "building_sr_site_proteus_desc": {
+  "en": "The colony on $sr_site_name_proteus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_proteus$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_psyche": {
   "en": "$sr_site_name_psyche$ Colony",
   "es": "Colonia de $sr_site_name_psyche$"
  },
+ "building_sr_site_psyche_desc": {
+  "en": "The colony on $sr_site_name_psyche$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_psyche$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_rhea": {
   "en": "$sr_site_name_rhea$ Colony",
   "es": "Colonia de $sr_site_name_rhea$"
+ },
+ "building_sr_site_rhea_desc": {
+  "en": "The colony on $sr_site_name_rhea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_rhea$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_sedna": {
   "en": "$sr_site_name_sedna$ Colony",
   "es": "Colonia de $sr_site_name_sedna$"
  },
+ "building_sr_site_sedna_desc": {
+  "en": "The colony on $sr_site_name_sedna$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_sedna$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_titan": {
   "en": "$sr_site_name_titan$ Colony",
   "es": "Colonia de $sr_site_name_titan$"
+ },
+ "building_sr_site_titan_desc": {
+  "en": "The colony on $sr_site_name_titan$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_titan$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_titania": {
   "en": "$sr_site_name_titania$ Colony",
   "es": "Colonia de $sr_site_name_titania$"
  },
+ "building_sr_site_titania_desc": {
+  "en": "The colony on $sr_site_name_titania$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_titania$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_triton": {
   "en": "$sr_site_name_triton$ Colony",
   "es": "Colonia de $sr_site_name_triton$"
+ },
+ "building_sr_site_triton_desc": {
+  "en": "The colony on $sr_site_name_triton$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_triton$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_utopia_planitia": {
   "en": "$sr_site_name_utopia_planitia$ Colony",
   "es": "Colonia de $sr_site_name_utopia_planitia$"
  },
+ "building_sr_site_utopia_planitia_desc": {
+  "en": "The colony on $sr_site_name_utopia_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_utopia_planitia$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_valles_marineris": {
   "en": "$sr_site_name_valles_marineris$ Colony",
   "es": "Colonia de $sr_site_name_valles_marineris$"
+ },
+ "building_sr_site_valles_marineris_desc": {
+  "en": "The colony on $sr_site_name_valles_marineris$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_valles_marineris$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_sr_site_venus": {
   "en": "$sr_site_name_venus$ Colony",
   "es": "Colonia de $sr_site_name_venus$"
  },
+ "building_sr_site_venus_desc": {
+  "en": "The colony on $sr_site_name_venus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_venus$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
+ },
  "building_sr_site_vesta": {
   "en": "$sr_site_name_vesta$ Colony",
   "es": "Colonia de $sr_site_name_vesta$"
+ },
+ "building_sr_site_vesta_desc": {
+  "en": "The colony on $sr_site_name_vesta$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.",
+  "es": "La colonia de $sr_site_name_vesta$, nombrada aquí para que el artículo de tratado Ceder colonia pueda pasarla de un país a otro. Nunca se construye."
  },
  "building_standard_oil_refinery": {
   "en": "Standard Oil Refinery",
@@ -2492,8 +2636,8 @@
   "es": "Un conjunto de hoteles, complejos turísticos y servicios que atienden a los visitantes y generan ingresos de [concept_tourism_system|l] gracias al atractivo natural y cultural del Estado."
  },
  "building_tourism_industry_throughput_add_desc": {
-  "en": "A multiplier affecting the efficiency of $building_tourism_industry$ in this state, influenced by ports, transit, art, parks, and monuments.",
-  "es": "Un multiplicador que afecta a la eficiencia de $building_tourism_industry$ en este Estado, influido por los puertos, el tránsito, el arte, los parques y los monumentos."
+  "en": "A multiplier affecting the efficiency of $building_tourism_industry$ in this state, influenced by its spare infrastructure, art and parks.",
+  "es": "Un multiplicador que afecta a la eficiencia de $building_tourism_industry$ en este Estado, influido por sus infraestructuras excedentes, el arte y los parques."
  },
  "building_toyota_kaikan_plant": {
   "en": "Toyota Kaikan Museum & Plant",
