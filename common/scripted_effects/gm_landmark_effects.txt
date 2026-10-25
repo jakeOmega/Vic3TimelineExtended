@@ -327,6 +327,20 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = aachen_cathedral }
 	gm_debug_log_landmark = { KEY = basilica_of_saint_francis }
 	gm_debug_log_landmark = { KEY = walls_of_tallinn }
+	gm_debug_log_landmark = { KEY = ephesus }
+	gm_debug_log_landmark = { KEY = tikal }
+	gm_debug_log_landmark = { KEY = chichen_itza }
+	gm_debug_log_landmark = { KEY = teotihuacan }
+	gm_debug_log_landmark = { KEY = monte_alban }
+	gm_debug_log_landmark = { KEY = leptis_magna }
+	gm_debug_log_landmark = { KEY = cyrene }
+	gm_debug_log_landmark = { KEY = merida_theatre }
+	gm_debug_log_landmark = { KEY = chogha_zanbil }
+	gm_debug_log_landmark = { KEY = hattusa }
+	gm_debug_log_landmark = { KEY = mount_nemrut }
+	gm_debug_log_landmark = { KEY = mogao_caves }
+	gm_debug_log_landmark = { KEY = khajuraho }
+	gm_debug_log_landmark = { KEY = hampi }
 }
 
 gm_debug_log_landmark = {

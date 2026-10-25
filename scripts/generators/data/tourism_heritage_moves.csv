@@ -86,6 +86,20 @@ STATE_RHINELAND,20,marksburg,new_landmark,the Rhine Gorge castles
 STATE_NORTH_RHINE,20,aachen_cathedral,new_landmark,Aachen and Cologne
 STATE_UMBRIA,20,basilica_of_saint_francis,new_landmark,Assisi
 STATE_TALINN,20,walls_of_tallinn,new_landmark,the walled city
+STATE_AYDIN,20,ephesus,new_site,Ephesus (Pergamon's site is a gain when dug)
+STATE_GUATEMALA,20,tikal,new_site,Tikal
+STATE_YUCATAN,20,chichen_itza,new_site,"Chichén Itzá, Tulum"
+STATE_MEXICO,30,teotihuacan,new_site,Teotihuacan
+STATE_OAXACA,20,monte_alban,new_site,Monte Albán
+STATE_TRIPOLI,30,leptis_magna,new_site,"Leptis Magna, Sabratha"
+STATE_LIBYA,20,cyrene,new_site,Cyrene
+STATE_EXTREMADURA,20,merida_theatre,new_site,Roman Mérida
+STATE_KHUZESTAN,20,chogha_zanbil,new_site,"Susa, Chogha Zanbil"
+STATE_ANKARA,30,hattusa,new_site,Hattusa
+STATE_DIYARBAKIR,20,mount_nemrut,new_site,the Nemrut statues
+STATE_GANSU,20,mogao_caves,new_site,the Mogao Caves
+STATE_BUNDELKHAND,20,khajuraho,new_site,Khajuraho
+STATE_KURNOOL,10,hampi,new_site,"Hampi, the comment's notable ruins (Bellary, where Hampi lies, is Kurnool's)"
 STATE_SYRIA,0,,revisit,10 points: Krak des Chevaliers (the residue after Palmyra's 20; Damascus is townscape)
 STATE_GOTLAND,0,,revisit,10 points: Visby (below floor after the scenery check: Gotland's coast scores like Scania's: its old score left little for Visby)
 STATE_WALES,0,,revisit,10 points: castles (below floor after the scenery check: Snowdonia and the coast carry most of the score)
@@ -125,7 +139,7 @@ STATE_ALENTEJO,0,,revisit,"10 points: megaliths, Évora's temple (below floor)"
 STATE_MURCIA,0,,revisit,10 points: Cartagena (below floor)
 STATE_GUJARAT,0,,revisit,"10 points: Indus Valley sites (Dholavira, Lothal) (below floor (archaeology candidates))"
 STATE_BOMBAY,0,,revisit,"10 points: Ajanta and Ellora, Elephanta (below floor; Ajanta and Ellora lie in Hyderabad's lands)"
-STATE_KURNOOL,0,,revisit,10 points: notable ruins (below floor; see Hampi)
+STATE_MYSORE,0,,revisit,"20 points: ruins of Hampi (credited as nearby: Hampi lies in Kurnool, whose site takes Kurnool's 10)"
 STATE_EAST_HAUSALAND,0,,revisit,10 points: walled Kano (below floor)
 STATE_SENEGAL,0,,revisit,10 points: Gorée (below floor)
 STATE_NEJD,0,,revisit,10 points: Diriyah (below floor; ruined in 1818)

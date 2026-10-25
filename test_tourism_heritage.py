@@ -184,7 +184,11 @@ class HeritageMoves(unittest.TestCase):
                             # Nara, in Kansai, whose score never credited it.
                             "STATE_LOWER_EGYPT": 50, "STATE_KYOTO": 60, "STATE_KANSAI": 90, "STATE_TRANSJORDAN": 60,
                             "STATE_ISFAHAN": 55, "STATE_UZBEKIA": 50, "STATE_YEMEN": 60, "STATE_SICILY": 75,
-                            "STATE_DALMATIA": 70}.items():
+                            "STATE_DALMATIA": 70,
+                            # Phase 3 (Appendix A): ruins come off until dug. Hampi lies in Kurnool (Bellary) and
+                            # takes the 10 Kurnool's comment gives its ruins; Mysore credited it as nearby and keeps 75.
+                            "STATE_MEXICO": 65, "STATE_ANKARA": 40, "STATE_TRIPOLI": 45, "STATE_KURNOOL": 50,
+                            "STATE_MYSORE": 75}.items():
             self.assertEqual(scores[state] - moved[state], left, state)
 
 

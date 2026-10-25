@@ -1418,6 +1418,22 @@ LANDMARKS = (
     Landmark("aachen_cathedral", "STATE_NORTH_RHINE", "PRU", "historic", "hall", ("faith_catholic", "faith"), 3),
     Landmark("basilica_of_saint_francis", "STATE_UMBRIA", "PAP", "historic", "hall", ("faith_catholic", "faith"), 3),
     Landmark("walls_of_tallinn", "STATE_TALINN", "UBD", "historic", "gate", ("heritage_gothic", "tower"), 3),
+    # Added 2026-10-25 (tourism heritage spec 2026-10-23 § 9, Appendix C): buried, To History when dug,
+    # each taking the base appeal of the ruins it stands for. Hampi lies in Kurnool (Bellary), not Mysore.
+    Landmark("ephesus", "STATE_AYDIN", None, "historic", "colonnade", ("heritage_greek", "stoa"), 3, False, False, True),
+    Landmark("tikal", "STATE_GUATEMALA", None, "historic", "pyramid", ("heritage_mayan", "pyramid"), 3, False, False, True),
+    Landmark("chichen_itza", "STATE_YUCATAN", None, "historic", "pyramid", ("heritage_mayan", "pyramid"), 3, False, False, True),
+    Landmark("teotihuacan", "STATE_MEXICO", None, "historic", "pyramid", ("heritage_nahuatl", "pyramid"), 6, False, False, True),
+    Landmark("monte_alban", "STATE_OAXACA", None, "historic", "pyramid", ("heritage_nahuatl", "pyramid"), 3, False, False, True),
+    Landmark("leptis_magna", "STATE_TRIPOLI", None, "historic", "forum", ("heritage_latin", "forum"), 6, False, False, True),
+    Landmark("cyrene", "STATE_LIBYA", None, "historic", "pantheon", ("heritage_greek", "pantheon"), 3, False, False, True),
+    Landmark("merida_theatre", "STATE_EXTREMADURA", None, "historic", "forum", ("heritage_latin", "stadium"), 3, False, False, True),
+    Landmark("chogha_zanbil", "STATE_KHUZESTAN", None, "historic", "pyramid", ("heritage_avestan", "gate"), 3, False, False, True),
+    Landmark("hattusa", "STATE_ANKARA", None, "historic", "gate", ("generic", "gate"), 6, False, False, True),
+    Landmark("mount_nemrut", "STATE_DIYARBAKIR", None, "historic", "statue", ("generic", "statue"), 3, False, False, True),
+    Landmark("mogao_caves", "STATE_GANSU", None, "historic", "rock_cut", ("faith_mahayana", "faith"), 3, False, False, True),
+    Landmark("khajuraho", "STATE_BUNDELKHAND", None, "historic", "pillar", ("faith_hindu", "faith"), 3, False, False, True),
+    Landmark("hampi", "STATE_KURNOOL", None, "historic", "pillar", ("heritage_sanskrit", "pillar"), 3, False, False, True),
 )
 PLACED_LANDMARKS = tuple(lm for lm in LANDMARKS if lm.placed)
 LANDMARK_CODE_BASE = 1_000_000
@@ -1469,6 +1485,10 @@ BUILT = {
     "itchan_kala": 1800, "mausoleum_of_sultan_sanjar": 1157, "kazan_kremlin": 1562, "saint_sophia_kiev": 1037,
     "diocletians_palace": 305, "marksburg": 1283, "aachen_cathedral": 805, "basilica_of_saint_francis": 1253,
     "walls_of_tallinn": 1355,
+    # To History sites, buried until the game (tourism heritage phase 3).
+    "ephesus": -550, "tikal": 750, "chichen_itza": 1000, "teotihuacan": 200, "monte_alban": -500,
+    "leptis_magna": 200, "cyrene": -630, "merida_theatre": -16, "chogha_zanbil": -1250, "hattusa": -1650,
+    "mount_nemrut": -62, "mogao_caves": 1000, "khajuraho": 1000, "hampi": 1500,
 }
 
 
@@ -3741,6 +3761,9 @@ PLACEHOLDER_PICTURES = (
     "humble_administrators_garden", "longmen_grottoes", "registan", "itchan_kala", "mausoleum_of_sultan_sanjar",
     "kazan_kremlin", "saint_sophia_kiev", "diocletians_palace", "marksburg", "aachen_cathedral",
     "basilica_of_saint_francis", "walls_of_tallinn",
+    # To History sites, buried until the game (tourism heritage phase 3).
+    "ephesus", "tikal", "chichen_itza", "teotihuacan", "monte_alban", "leptis_magna", "cyrene", "merida_theatre",
+    "chogha_zanbil", "hattusa", "mount_nemrut", "mogao_caves", "khajuraho", "hampi",
 )
 
 

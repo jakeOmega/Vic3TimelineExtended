@@ -280,6 +280,20 @@ gm_state_picture_landmarks = {
 	gm_state_picture_landmark = { KEY = aachen_cathedral CODE = 300 }
 	gm_state_picture_landmark = { KEY = basilica_of_saint_francis CODE = 300 }
 	gm_state_picture_landmark = { KEY = walls_of_tallinn CODE = 221 }
+	gm_state_picture_landmark = { KEY = ephesus CODE = 182 }
+	gm_state_picture_landmark = { KEY = tikal CODE = 230 }
+	gm_state_picture_landmark = { KEY = chichen_itza CODE = 230 }
+	gm_state_picture_landmark = { KEY = teotihuacan CODE = 200 }
+	gm_state_picture_landmark = { KEY = monte_alban CODE = 200 }
+	gm_state_picture_landmark = { KEY = leptis_magna CODE = 102 }
+	gm_state_picture_landmark = { KEY = cyrene CODE = 180 }
+	gm_state_picture_landmark = { KEY = merida_theatre CODE = 441 }
+	gm_state_picture_landmark = { KEY = chogha_zanbil CODE = 150 }
+	gm_state_picture_landmark = { KEY = hattusa CODE = 14 }
+	gm_state_picture_landmark = { KEY = mount_nemrut CODE = 13 }
+	gm_state_picture_landmark = { KEY = mogao_caves CODE = 308 }
+	gm_state_picture_landmark = { KEY = khajuraho CODE = 312 }
+	gm_state_picture_landmark = { KEY = hampi CODE = 120 }
 }
 
 gm_state_picture_landmark = {

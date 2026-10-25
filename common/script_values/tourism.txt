@@ -221,7 +221,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_GUATEMALA }
-		value = 90 # Heart of the Mayan civilization (Tikal), stunning highlands, volcanoes, and jungle.
+		value = 90 # Heart of the Mayan civilization (Tikal), stunning highlands, volcanoes, and jungle. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HONDURAS }
@@ -545,11 +545,11 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_YUCATAN }
-		value = 95 # Chichen Itza, Tulum, and countless other Mayan ruins, plus cenotes and a world-class Caribbean coastline.
+		value = 95 # Chichen Itza, Tulum, and countless other Mayan ruins, plus cenotes and a world-class Caribbean coastline. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_MEXICO }
-		value = 95 # Mexico City (Tenochtitlan), Teotihuacan, and other major pre-Columbian sites. Cultural and historical heart of the nation.
+		value = 95 # Mexico City (Tenochtitlan), Teotihuacan, and other major pre-Columbian sites. Cultural and historical heart of the nation. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_JALISCO }
@@ -789,7 +789,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_TRIPOLI }
-		value = 75 # Roman ruins of Leptis Magna and Sabratha are top-tier. Desert landscapes.
+		value = 75 # Roman ruins of Leptis Magna and Sabratha are top-tier. Desert landscapes. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LIBYAN_DESERT }
@@ -797,7 +797,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_LIBYA }
-		value = 80 # Greek ruins of Cyrene are world-class. Green Mountain (Jebel Akhdar) and coastline.
+		value = 80 # Greek ruins of Cyrene are world-class. Green Mountain (Jebel Akhdar) and coastline. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_UPPER_EGYPT }
@@ -1049,7 +1049,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_EXTREMADURA }
-		value = 50 # Roman ruins (Merida) but largely arid plains.
+		value = 50 # Roman ruins (Merida) but largely arid plains. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_VALENCIA }
@@ -1617,7 +1617,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KHUZESTAN }
-		value = 70 # Ancient Elamite capital of Susa and ziggurat of Chogha Zanbil.
+		value = 70 # Ancient Elamite capital of Susa and ziggurat of Chogha Zanbil. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_FARS }
@@ -1693,7 +1693,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_AYDIN }
-		value = 90 # Ancient Greek sites like Ephesus and Pergamon, beautiful Aegean coast.
+		value = 90 # Ancient Greek sites like Ephesus and Pergamon, beautiful Aegean coast. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KONYA }
@@ -1721,7 +1721,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ANKARA }
-		value = 70 # Anatolian plateau, Hittite capital of Hattusa.
+		value = 70 # Anatolian plateau, Hittite capital of Hattusa. (30 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KANDAHAR }
@@ -1745,7 +1745,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_DIYARBAKIR }
-		value = 70 # Historic walled city on the Tigris, Mount Nemrut statues nearby.
+		value = 70 # Historic walled city on the Tigris, Mount Nemrut statues nearby. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ERZURUM }
@@ -1937,7 +1937,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_GANSU }
-		value = 70 # Key section of the Silk Road with Mogao Caves at Dunhuang.
+		value = 70 # Key section of the Silk Road with Mogao Caves at Dunhuang. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_QINGHAI }
@@ -2493,7 +2493,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_OAXACA }
-		value = 85 # Zapotec ruins (Monte Alb�n), unique culture, and Pacific coast.
+		value = 85 # Zapotec ruins (Monte Alb�n), unique culture, and Pacific coast. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_SHENGJING }
@@ -2673,7 +2673,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_BUNDELKHAND }
-		value = 65 # Temples of Khajuraho are a major draw.
+		value = 65 # Temples of Khajuraho are a major draw. (20 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else_if = {
 		limit = { state_region = s:STATE_HILL_PUNJAB }
@@ -2681,7 +2681,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KURNOOL }
-		value = 60 # Inland region of Andhra, with some notable ruins.
+		value = 60 # Inland region of Andhra, with some notable ruins. (10 moved to monuments: tourism_heritage_generated.txt)
 	}
 	else = {
 		# Default value for any state not explicitly listed

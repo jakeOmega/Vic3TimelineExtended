@@ -95,3 +95,17 @@ Change the entry, re-render, review, then `write`. The GUI needs no edit unless 
 | aachen_cathedral | `landmark_aachen_cathedral__hall.dds` | `faith_catholic__faith` |
 | basilica_of_saint_francis | `landmark_basilica_of_saint_francis__hall.dds` | `faith_catholic__faith` |
 | walls_of_tallinn | `landmark_walls_of_tallinn__gate.dds` | `heritage_gothic__tower` |
+| ephesus | `landmark_ephesus__colonnade.dds` | `heritage_greek__stoa` |
+| tikal | `landmark_tikal__pyramid.dds` | `heritage_mayan__pyramid` |
+| chichen_itza | `landmark_chichen_itza__pyramid.dds` | `heritage_mayan__pyramid` |
+| teotihuacan | `landmark_teotihuacan__pyramid.dds` | `heritage_nahuatl__pyramid` |
+| monte_alban | `landmark_monte_alban__pyramid.dds` | `heritage_nahuatl__pyramid` |
+| leptis_magna | `landmark_leptis_magna__forum.dds` | `heritage_latin__forum` |
+| cyrene | `landmark_cyrene__pantheon.dds` | `heritage_greek__pantheon` |
+| merida_theatre | `landmark_merida_theatre__forum.dds` | `heritage_latin__stadium` |
+| chogha_zanbil | `landmark_chogha_zanbil__pyramid.dds` | `heritage_avestan__gate` |
+| hattusa | `landmark_hattusa__gate.dds` | `generic__gate` |
+| mount_nemrut | `landmark_mount_nemrut__statue.dds` | `generic__statue` |
+| mogao_caves | `landmark_mogao_caves__rock_cut.dds` | `faith_mahayana__faith` |
+| khajuraho | `landmark_khajuraho__pillar.dds` | `faith_hindu__faith` |
+| hampi | `landmark_hampi__pillar.dds` | `heritage_sanskrit__pillar` |

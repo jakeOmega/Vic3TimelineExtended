@@ -329,5 +329,61 @@ tourism_heritage_moved = {
 		limit = { state_region = s:STATE_TALINN }
 		if = { limit = { gm_system_enabled = yes has_global_variable = gm_landmarks_seeded_2 } add = 20 }
 	}
+	else_if = {
+		limit = { state_region = s:STATE_AYDIN }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GUATEMALA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_YUCATAN }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_MEXICO }
+		if = { limit = { gm_system_enabled = yes } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_OAXACA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TRIPOLI }
+		if = { limit = { gm_system_enabled = yes } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_LIBYA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_EXTREMADURA }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KHUZESTAN }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_ANKARA }
+		if = { limit = { gm_system_enabled = yes } add = 30 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_DIYARBAKIR }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_GANSU }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_BUNDELKHAND }
+		if = { limit = { gm_system_enabled = yes } add = 20 }
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KURNOOL }
+		if = { limit = { gm_system_enabled = yes } add = 10 }
+	}
 	divide = 100
 }
