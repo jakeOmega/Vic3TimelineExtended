@@ -63,17 +63,16 @@ te_demog_wf_engine_target = {
 	}
 }
 
-# Women's share of work deaths (§2.5; demographics_model.work_death_share): under Full the census's own count of women
-# among the workers at the work deaths' ages at the last count (te_dg_fws_wk, te_demog_work_finish_step2), else the laws'
-# share (te_demog_female_work_share, generated: 0.1 + state_female_work_share_add). te_demog_prepare reads it; the flows
-# keep the laws' share.
-te_demog_work_death_share = {
-	value = te_demog_female_work_share
+# Women's share of the workers (§2.5; demographics_model.women_worker_share): the census's own count of women among the
+# workers at the work deaths' ages at the last count (te_dg_fws_wk, te_demog_work_finish_step2), else, before a count,
+# what the sexes' rates give equal numbers of working-age women and men. te_demog_prepare reads it: it splits work
+# deaths, and the flows' labour kind and Late Marriage's women's work read it (te_dg_fws). Until 2026-10-25 only Full
+# split deaths by the count, and the flows and Late Marriage read the women's-rights laws' own share everywhere.
+te_demog_women_worker_share = {
+	value = te_demog_wk_women_rate
+	divide = { value = te_demog_wk_women_rate add = te_demog_wk_men_rate min = 0.0001 }
 	if = {
-		limit = {
-			te_demog_effects_run = yes
-			has_variable = te_dg_fws_wk
-		}
+		limit = { has_variable = te_dg_fws_wk }
 		value = var:te_dg_fws_wk
 	}
 }

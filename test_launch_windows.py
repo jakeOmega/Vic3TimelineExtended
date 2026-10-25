@@ -366,7 +366,9 @@ class GateScriptTest(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))
         cls.windows = _strip(_raw("common", "scripted_effects", "sr_launch_window_effects.txt"))
-        cls.colony = _block(cls.effects, "sr_establish_colony_effect")
+        # The draw is generated from the site table (gen_solar_sites.py).
+        cls.colony = _block(_strip(_raw("common", "scripted_effects", "sr_sites_generated.txt")),
+                            "sr_establish_colony_effect")
         cls.site_body = {site: b.key for b in glw.BODIES for site in b.sites}
 
     def test_every_colony_site_is_drawn_through_its_window_body(self):
@@ -374,7 +376,10 @@ class GateScriptTest(unittest.TestCase):
                               r"trigger_event", self.colony, re.S)
         sites = {site for _, site, _ in branches}
         self.assertEqual(sites, set(self.site_body) | set(glw.UNGATED_SITES))
-        self.assertEqual(len(branches), 34)
+        # Each stage also draws the released worlds of the stages before it
+        # (colony record design § 6): a world is listed once per stage from its own.
+        stage_of = {site: b.stage for b in glw.BODIES for site in b.sites} | dict(glw.UNGATED_SITES)
+        self.assertEqual(len(branches), sum(6 - stage_of[site] for site in sites))
         for trigger, site, effect in branches:
             with self.subTest(site=site):
                 self.assertIn(f"NOT = {{ has_global_variable = sr_colony_{site} }}", trigger)
@@ -387,13 +392,14 @@ class GateScriptTest(unittest.TestCase):
                     self.assertEqual(re.findall(r"sr_launch_window_gate_check = \{ BODY = (\w+) \}", effect), [body])
 
     def test_each_stage_holds_its_bodies_sites(self):
-        draws = self.colony[:self.colony.index("change_variable = { name = sr_colony_count")]
+        draws = self.colony[:self.colony.index("local_var:sr_colonies_claimed_before < sr_total_global_colonies")]
         stages = re.split(r"global_var:sr_colonization_stage = (\d)", draws)
         for i in range(1, len(stages), 2):
             stage, body = int(stages[i]), stages[i + 1]
             drawn = set(re.findall(r"name = sr_colony_(\w+) value = yes", body))
-            expected = {s for b in glw.BODIES if b.stage == stage for s in b.sites}
-            expected |= {s for s, st in glw.UNGATED_SITES.items() if st == stage}
+            # Its own worlds, and the released worlds of the stages before it.
+            expected = {s for b in glw.BODIES if b.stage <= stage for s in b.sites}
+            expected |= {s for s, st in glw.UNGATED_SITES.items() if st <= stage}
             with self.subTest(stage=stage):
                 self.assertEqual(drawn, expected)
 

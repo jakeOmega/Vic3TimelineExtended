@@ -47,7 +47,18 @@ the panel each cause's deaths on top (te_dg_dc_<c>_top), and te_dg_dc_ontop and 
 recorded numbers only rich_full's Causes of Death slices move: its window ran above the census's rate with no split by
 cause, so what was its Added on Top slice now spreads over the four natural causes by the estimate (and the fit moves
 in its last place). Its ring, births and deaths, which the scales reach, are as they were: with no split, one scale.
-rich_full alone was re-recorded on this tree."""
+rich_full alone was re-recorded on this tree.
+
+Women's share of the workers (2026-10-25) changes every census case on purpose. The census's own count of women among
+its workers (te_dg_fws_wk, else the sexes' rates before a count: te_demog_women_worker_share) splits work deaths under
+every setting the census runs, and Late Marriage's women's work reads it (te_demog_pr_target_lm,
+WOMEN_WORKERS_DIGESTS); the women's-rights laws' share went (te_demog_female_work_share), and with it the families'
+rights term (WOMEN_WORKERS_REMOVED; te_demog_k_family_base takes No Women's Rights' 0.0417). So the seed's and the
+step's split move in the Display-only case too, which now holds step 2's figures (and every name added since step 1,
+when it was last recorded), and every Late Marriage target. The
+model's cases move with them: the model's step reads the ring's last count (Ring.fws_work), and RICH's Protected Class
+no longer stands for 48% of the workers (its inputs hold no women's-work line, so its women are about 5%). The five
+census and model cases were re-recorded on this tree (TE_RECORD_GOLDEN_CASES); the lines' two cases are as they were."""
 
 import functools
 import hashlib
@@ -214,6 +225,15 @@ RATE_FLOOR_DIGESTS = {
     ("generated_values", "te_demog_pop_death_mult"):
         "58ceeec452f3b205b3f49a8d5e0fd16300684cdb251c6aef4a3b852593a880ea",
 }
+# Women's share of the workers (2026-10-25; the docstring): Late Marriage's women's work reads the census's count over
+# parity, and the families' weight takes No Women's Rights' part of the retired rights term
+WOMEN_WORKERS_DIGESTS = {
+    ("generated_values", "te_demog_k_family_base"): "6f26d9a5fc7324a0931bb84c8145eb57b7f48c49f00c743200cb1afb30dc63d7",
+    ("generated_values", "te_demog_pr_target_lm"): "2264b061bc4f22584c7a149857a963264ce47e99486a7ce7836f9f05c49a7b27",
+}
+WOMEN_WORKERS_REMOVED = {("generated_values", "te_demog_female_work_share"),
+                         ("generated_values", "te_demog_k_family_rights_weight"),
+                         ("generated_values", "te_demog_k_full_female_work_share")}
 # The safeguards pass (owner, 2026-10-20): chronic treatment's cap 0.85 to 0.99, no floor but 0 on a cause's laws factor
 # (was 0.2), no ceiling on crowding's infection term (was +50%), the means' cap 1 (was 0.95), and the life table's open last
 # interval (te_demog_life_table passes its last group's rates to te_demog_lt_finish, whose survivors at 150 live on at
@@ -349,6 +369,12 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
             for case in FULL_CASES:
                 golden["cases"][case] = cls.now["cases"][case]
             GOLDEN.write_text(json.dumps(golden, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        if os.environ.get("TE_RECORD_GOLDEN_CASES"):
+            # the named cases alone (comma-separated), as women's share of the workers re-recorded five (the docstring)
+            golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
+            for case in os.environ["TE_RECORD_GOLDEN_CASES"].split(","):
+                golden["cases"][case] = cls.now["cases"][case]
+            GOLDEN.write_text(json.dumps(golden, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         cls.golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
 
     def test_every_recorded_output_is_unchanged(self):
@@ -381,12 +407,11 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                              set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
-    def test_the_full_cases_hold_step_twos_split(self):
-        """The re-recorded Full cases hold step 2's figures (te_dg_fws_wk splits their work deaths); the Display-only
-        case holds none of them, so a golden recorded before step 2 would fail here."""
-        for case in FULL_CASES:
+    def test_the_census_cases_hold_step_twos_split(self):
+        """The re-recorded census cases hold step 2's figures (te_dg_fws_wk splits their work deaths), the Display-only
+        case too since women's share of the workers (2026-10-25), so a golden recorded before either would fail here."""
+        for case in FULL_CASES + ("farm_display_only",):
             self.assertTrue(STEP2_VARS <= set(self.golden["cases"][case]["vars"]), case)
-        self.assertFalse(STEP2_VARS & set(self.golden["cases"]["farm_display_only"]["vars"]))
 
     def test_the_census_term_is_recorded(self):
         """The Full cases hold the census's own modifiers, so a change to M would show."""
@@ -402,7 +427,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 if (key, name) in LAW_LINE_MOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
-                if (key, name) in RATE_FLOOR_REMOVED | CAUSES_ON_TOP_REMOVED:
+                if (key, name) in RATE_FLOOR_REMOVED | CAUSES_ON_TOP_REMOVED | WOMEN_WORKERS_REMOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
@@ -415,6 +440,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = RATE_FLOOR_DIGESTS.get((key, name), want)
                 want = SAFEGUARDS_DIGESTS.get((key, name), want)
                 want = CAUSES_ON_TOP_DIGESTS.get((key, name), want)
+                want = WOMEN_WORKERS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

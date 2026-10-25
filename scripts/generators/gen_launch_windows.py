@@ -728,7 +728,7 @@ def render_triggers(plans: list[BodyPlan]) -> str:
 
 
 def _in_play(name: str, stage: int, sites: tuple[str, ...]) -> list[str]:
-    lines = [f"{name} = {{", f"\tsr_current_colonization_stage = {stage}"]
+    lines = [f"{name} = {{", f"\tsr_current_colonization_stage >= {stage}"]
     if len(sites) == 1:
         lines.append(f"\tNOT = {{ has_global_variable = sr_colony_{sites[0]} }}")
     else:
@@ -813,9 +813,11 @@ VALUES_PREAMBLE = """# Launch windows for Solar System Colonization (Global Comm
 # The optima's dates are in docs/engine/launch_windows_report.md.
 """
 
-IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body is in the current colonization stage
-# and has a site nobody has claimed (the sites are the generator's BODIES
-# table; space_race_effects.txt's sr_establish_colony_effect draws them).
+IN_PLAY_PREAMBLE = """# sr_window_body_in_play_<body>: the body's stage has been reached and it has a
+# site nobody has claimed (the sites are the generator's BODIES table;
+# sr_sites_generated.txt's sr_establish_colony_effect draws them). An earlier
+# stage's body is in play only while a world of it is released (a dead holder
+# with no heir, colony record design § 6): those stages are full otherwise.
 # Any scope. sr_window_mercury_in_play: the same for Mercury, never gated.
 """
 

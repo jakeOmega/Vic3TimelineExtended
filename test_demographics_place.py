@@ -70,7 +70,7 @@ class TestStrength(unittest.TestCase):
             s = dict(R.TestCountry._three[0])
             s["te_dg_urban"] = float(u) * 100_000
             states.append(s)
-        eng = _PlaceEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+        eng = _PlaceEngine(states=states, fixtures={"year": 1900.0},
                            triggers={"is_ai": False, "te_demog_cohorts_run": True})
         eng.call("te_demog_country_census")
         return eng, states

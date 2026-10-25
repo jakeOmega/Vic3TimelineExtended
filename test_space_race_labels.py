@@ -219,7 +219,7 @@ def _render(value):
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
-MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty)"
+MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note)"
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -259,14 +259,23 @@ CELLS = {
     "rival band in words (te_sr_rival_row)": (
         ("te_sr_rival_row", 'block "row_range"'),
         r"je_space_race_widget_rival_range_\w+"),
-    "colony stage heading (te_sr_subheader)": (
+    "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_colonies_stage_\d"),
+        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+)"),
+    "a world's holder: ours (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
+        r"je_space_race_widget_ss_ours"),
+    "a world's holder: unknown (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_unknown"'),
+        r"je_space_race_widget_ss_unknown"),
+    "a world's holder: none (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_unclaimed"'),
+        r"je_space_race_widget_ss_unclaimed"),
     "programme label (te_sr_ov_programme)": (
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
 }
-SECTION_HEADERS = r"je_space_race_widget_(control_header|rivals_header|colonies_header|how_header)"
+SECTION_HEADERS = r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header)"
 
 
 def _cell(gui, type_name, marker):

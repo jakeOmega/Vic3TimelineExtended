@@ -535,12 +535,12 @@ te_demog_prepare = {
 	set_local_variable = { name = te_dg_m_ext value = te_demog_mult_external }
 	set_local_variable = { name = te_dg_m_chr value = te_demog_mult_chronic }
 	set_local_variable = { name = te_dg_mmr value = te_demog_mult_maternal }
-	set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
-	# demographics_model.work_split: the work multiplier x 2 x each sex's share; under Full the census's own count of
-	# women among the workers at the last count (phase 2 step 2, §2.5; te_demog_work_death_share), the flows keep the laws'
-	set_local_variable = { name = te_dg_fws_d value = te_demog_work_death_share }
-	set_local_variable = { name = te_dg_m_work_f value = { value = te_demog_mult_work multiply = local_var:te_dg_fws_d multiply = 2 } }
-	set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws_d multiply = te_demog_mult_work multiply = 2 } }
+	# women's share of the workers: the census's own count at the last count, or the sexes' rates before one (phase 2
+	# step 2, §2.5; te_demog_women_worker_share). demographics_model.work_split: the work multiplier x 2 x each sex's
+	# share; the flows' labour kind reads it too
+	set_local_variable = { name = te_dg_fws value = te_demog_women_worker_share }
+	set_local_variable = { name = te_dg_m_work_f value = { value = te_demog_mult_work multiply = local_var:te_dg_fws multiply = 2 } }
+	set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = te_demog_mult_work multiply = 2 } }
 	set_variable = { name = te_dg_m_inf value = local_var:te_dg_m_inf }
 	set_variable = { name = te_dg_m_ext value = local_var:te_dg_m_ext }
 	set_variable = { name = te_dg_m_chr value = local_var:te_dg_m_chr }
@@ -1467,13 +1467,13 @@ te_demog_flows = {
 	}
 	# the profile (demographics_model.migrant_profile)
 	set_local_variable = { name = te_dg_refugee value = te_demog_crisis }
-	set_local_variable = { name = te_dg_rights value = { value = local_var:te_dg_fws divide = { value = te_demog_k_full_female_work_share min = 0.01 } } }
+	# women's share of the workers over parity: the labour kind's women follow it and the jobs (2026-10-25)
+	set_local_variable = { name = te_dg_wpar value = { value = local_var:te_dg_fws divide = { value = te_demog_k_women_worker_parity min = 0.01 } } }
 	set_local_variable = {
 		name = te_dg_family
 		value = {
 			value = te_demog_k_family_base
 			add = te_demog_family_transport
-			add = { value = local_var:te_dg_rights multiply = te_demog_k_family_rights_weight }
 			add = { value = var:te_dg_inflow_years multiply = te_demog_k_chain_step max = te_demog_k_chain_cap }
 			max = { value = 1 subtract = local_var:te_dg_refugee }
 			min = 0
@@ -1486,7 +1486,7 @@ te_demog_flows = {
 			value = te_demog_k_labour_female_max
 			subtract = te_demog_k_labour_female_min
 			multiply = var:te_dg_fjob_share
-			multiply = local_var:te_dg_rights
+			multiply = local_var:te_dg_wpar
 			add = te_demog_k_labour_female_min
 			min = te_demog_k_labour_female_min
 			max = te_demog_k_labour_female_max
@@ -2473,6 +2473,7 @@ te_demog_set_trend = {
 te_demog_country_census = {
 	te_demog_reset_country_bands = yes
 	set_local_variable = { name = te_dg_seeded value = 0 }
+	set_local_variable = { name = te_dg_c_fws_w value = 0 }
 	set_local_variable = { name = te_dg_c_people value = 0 }
 	set_local_variable = { name = te_dg_c_pm value = 0 }
 	set_local_variable = { name = te_dg_c_births value = 0 }
@@ -2527,11 +2528,9 @@ te_demog_country_census = {
 		te_demog_lx_country_add = yes
 		set_local_variable = { name = te_dg_c_s_um value = { value = var:te_dg_urban divide = 100000 } }
 		change_local_variable = { name = te_dg_seeded add = 1 }
-		# the women's share of the workforce is the owner's law's line, which every state reads alike: any state gives it
-		if = {
-			limit = { local_var:te_dg_seeded = 1 }
-			set_local_variable = { name = te_dg_fws value = te_demog_female_work_share }
-		}
+		# women's share of the workers, by people, for the outline's work deaths: each state's own (2026-10-25: the
+		# owner's law's share, which split them even under Full, where each step splits them by the census's count)
+		change_local_variable = { name = te_dg_c_fws_w add = { value = te_demog_women_worker_share multiply = local_var:te_dg_c_s_pm } }
 		change_local_variable = { name = te_dg_c_people add = var:te_dg_people }
 		change_local_variable = { name = te_dg_c_pm add = local_var:te_dg_c_s_pm }
 		change_local_variable = { name = te_dg_c_births add = var:te_dg_births }
@@ -2730,6 +2729,7 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_m_ext value = var:te_dg_m_ext }
 			set_local_variable = { name = te_dg_m_chr value = var:te_dg_m_chr }
 			set_local_variable = { name = te_dg_c_work value = var:te_dg_m_work }
+			set_local_variable = { name = te_dg_fws value = { value = local_var:te_dg_c_fws_w divide = { value = local_var:te_dg_c_pm min = 0.00001 } } }
 			set_local_variable = { name = te_dg_m_work_f value = { value = local_var:te_dg_c_work multiply = local_var:te_dg_fws multiply = 2 } }
 			set_local_variable = { name = te_dg_m_work_m value = { value = 1 subtract = local_var:te_dg_fws multiply = local_var:te_dg_c_work multiply = 2 } }
 			set_local_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_model_w divide = { value = local_var:te_dg_c_women min = 1 } } }

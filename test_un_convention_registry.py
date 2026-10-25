@@ -143,7 +143,7 @@ CONVENTIONS = (
                ("global_commons_enabled", "un_chamber_global_commons_rule_sgui"), False),
     Convention("asat", "un_agency_unoda", "un_asat_moratorium_modifier", "country",
                32, 41, 1411, "un_asat_refusal_modifier",
-               (), ("space_race_enabled", "un_chamber_space_race_rule_sgui"), False),
+               (), ("sr_space_race_on", "un_chamber_space_race_rule_sgui"), False),
 )
 
 KEYS = tuple(c.key for c in CONVENTIONS)
@@ -676,7 +676,11 @@ class RuleGateTests(unittest.TestCase):
         cls.rows = _widget_rows()
 
     def _rules(self, body):
-        return set(re.findall(r"has_game_rule\s*=\s*(\w+)", body))
+        # A rule read through its scripted gate counts as the rule: the Space
+        # Race rule has four settings, read only through sr_space_race_on
+        # (common/scripted_triggers/sr_site_triggers.txt).
+        rules = set(re.findall(r"has_game_rule\s*=\s*(\w+)", body))
+        return rules | set(re.findall(r"\b(sr_space_race_on)\s*=\s*yes", body))
 
     def test_the_gate_is_at_every_entrance(self):
         for c in CONVENTIONS:

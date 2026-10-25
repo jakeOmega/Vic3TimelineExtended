@@ -34,6 +34,13 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [specs/2026-10-08-inheritance-laws-design.md](specs/2026-10-08-inheritance-laws-design.md): the inheritance group redesign (new laws, four amendments, Wealth Concentration, rural births, generation events) | Partial: built in #822, balanced in #843 | §5's three second-wave events: *The Hidden Estates* (State as Universal Heir), *The Empty Holding* (Possession by Use), *The First Cohort* (Birthright Endowment) |
 | [specs/2026-10-17-judiciary-design.md](specs/2026-10-17-judiciary-design.md): the Judiciary law group (six court laws, Judicial Independence, entrenchment, overhaul shock) | Partial: phase 1 built (#1022, #1025; plan archived); the Nation tab hand-off shipped (#1021) | Phase 2, defying the court (challenge, comply, defy or pack); phase 3, seven amendments; phase 4, landmark cases. Each gets its own plan after the phase 1 play-test |
 
+### Space Race
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, fleets with a location and real transit times, blockades and sieges), colony population as crews, modules and Extraplanetary Bases from colonies, and four levels of the Space Race rule | Scoping menu, nothing built; four rounds of the owner's answers folded in (§ Decisions, § 11) | The open calls in §11; then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
+| [specs/2026-10-25-solar-colonization-holders-and-cession-design.md](specs/2026-10-25-solar-colonization-holders-and-cession-design.md): slices 0 and 1, a holder record for every world (the panel's Solar System list, a dead holder's colonies passing to its capital's owner), four settings of the Space Race rule, and the Cede Colony treaty article; [plan](plans/2026-10-25-solar-colonization-holders-and-cession.md) | Built 2026-10-25 (slices 0 and 1, one PR); as built in the design's § 17 | The play-test list (`docs/testing/solar-colonies-playtest.md`) and its three self-checks; then the scope's slices 2-6 |
+
 ## Archived — `archive/`
 
 Everything below has shipped. PR numbers are the main build first, then follow-ups.

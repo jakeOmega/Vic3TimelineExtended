@@ -5088,6 +5088,16 @@
  space_race_events.83.d:0 "The Mars mission architecture must be decided. A direct landing puts boots on the surface fastest but carries enormous risk. An orbital-first approach establishes a station in Mars orbit before attempting a landing, building experience methodically. Sending robotic precursors to prepare a landing site and cache supplies is safest but slowest, and may allow rivals to land first."
  space_race_events.83.f:0 "\"Direct is bold. Orbital-first is smart. Robotic precursors are safe. We can only pick one, and whichever we choose defines a generation.\"\n\n— Mars Architecture Review Board"
  space_race_events.83.t:0 "The Mars Strategy"
+ space_race_events.90.a:0 "Update the charts."
+ space_race_events.90.d_gained:0 "Under the treaty, [ROOT.GetCountry.GetCustom('sr_site_notice_gained_name')][ROOT.GetCountry.GetCustom('sr_site_notice_gained_more')] now answers to us. Its settlers, its works and everything it has found are ours to run, and its specialization serves [ROOT.GetCountry.GetAdjective] interests from today."
+ space_race_events.90.d_lost:0 "Under the treaty, [ROOT.GetCountry.GetCustom('sr_site_notice_lost_name')][ROOT.GetCountry.GetCustom('sr_site_notice_lost_more')] has passed out of our hands. The settlers stay where they are. Their reports now go to another capital."
+ space_race_events.90.d_swap:0 "The treaty has redrawn our map of the solar system. [ROOT.GetCountry.GetCustom('sr_site_notice_gained_name')][ROOT.GetCountry.GetCustom('sr_site_notice_gained_more')] now answers to us, and [ROOT.GetCountry.GetCustom('sr_site_notice_lost_name')][ROOT.GetCountry.GetCustom('sr_site_notice_lost_more')] has passed to our partner."
+ space_race_events.90.f:0 "\"They changed the flag on the mast this morning. Nothing else changed. The air still has to be made, the ice still has to be cut, and Earth is still twenty light-minutes away.\"\n\n— Colony Administrator"
+ space_race_events.90.t:0 "A Colony Changes Hands"
+ space_race_events.91.a:0 "Welcome them."
+ space_race_events.91.d:0 "The government that founded [ROOT.GetCountry.GetCustom('sr_site_notice_heir_name')][ROOT.GetCountry.GetCustom('sr_site_notice_heir_more')] is gone, and its settlers have turned to the capital it was run from, which is ours now. The colony's specialization and its discoveries pass to us with it."
+ space_race_events.91.f:0 "\"They asked who pays for the oxygen now. We told them we do.\"\n\n— Office of Extraplanetary Affairs"
+ space_race_events.91.t:0 "Heirs to a Fallen Programme"
 
 #
 # SURVEILLANCE_EVENTS
@@ -5654,6 +5664,14 @@
  te_debug_space_race.1.l:0 "Remove my $building_space_program$ (to try the decision that founds one; every running milestone fails)"
  te_debug_space_race.1.t:0 "Space Race Test Console"
  te_debug_space_race.1.z:0 "Close"
+ te_debug_space_race.2.a:0 "Log every world's record"
+ te_debug_space_race.2.b:0 "Claim the first unclaimed world for us"
+ te_debug_space_race.2.c:0 "Give our first colony to the largest other great power, as Cede Colony would"
+ te_debug_space_race.2.d:0 "Console-only shortcuts for testing the colony record, which names who holds each world. None of these can happen in normal play.\n\nThe log writes one TE_SR_SITES line per world to debug.log. To test a holder dying, annex a country that holds a colony with the console's own annex command, then run the monthly step."
+ te_debug_space_race.2.e:0 "Run the colony record's monthly step now"
+ te_debug_space_race.2.f:0 "\"Write it down, all of it. Somebody will want to know who owned what.\""
+ te_debug_space_race.2.r:0 "Release our first colony, as a dead holder with no heir would"
+ te_debug_space_race.2.t:0 "Colony Record Console"
 
 #
 # TE_DEBUG_UN

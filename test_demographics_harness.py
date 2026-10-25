@@ -1583,18 +1583,23 @@ class TestRebook(unittest.TestCase):
             self.assertEqual(out_save, 0.0)
 
     def test_the_profiles_carriers_reach_the_inputs(self):
-        # the rebook reads the women's work share and the families' line from the game files (modifier-types stage 3)
+        # the rebook reads the families' line (modifier-types stage 3) and the women's-work participation lines from the
+        # game files, and women's share of the workers from the save's count where it holds one (2026-10-25)
         import demographics_rebook as RB
         techs = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
                            "jet_engine_technology"})
         self.assertEqual(RB.transport_techs(), techs)
-        self.assertEqual(RB.women_laws(), frozenset({"law_women_in_the_fields", "law_women_own_property",
-                                                     "law_women_in_the_workplace", "law_womens_suffrage",
-                                                     "law_protected_class"}))
+        self.assertLessEqual({"law_women_in_the_fields", "law_women_own_property", "law_women_in_the_workplace",
+                              "law_womens_suffrage", "law_protected_class"}, RB.women_laws())
         country = {"laws": frozenset({"law_protected_class"}), "techs": techs, "at_war": False}
         inp = RB.inputs({"owner": "3", "vars": {}}, None, country, 1990, {})
-        self.assertAlmostEqual(M.female_work_share(inp), 0.48, places=9)
+        self.assertAlmostEqual(inp.mods[P.WOMENS_WORK_TYPE], 0.2, places=9)
+        self.assertAlmostEqual(M.women_worker_share(inp), M.women_worker_share(
+            M.Inputs(mods={P.WOMENS_WORK_TYPE: 0.2})), places=9)
         self.assertAlmostEqual(inp.mods[P.FAMILY_MIGRATION_TYPE], 0.45, places=9)
+        counted = RB.inputs({"owner": "3", "vars": {"te_dg_fws_wk": 0.41, "te_dg_low_share": 0.3}}, None, country,
+                            1990, {})
+        self.assertEqual((M.women_worker_share(counted), counted.low_share), (0.41, 0.3))
 
     def test_a_seed_in_the_save_seeds_the_walk(self):
         with tempfile.TemporaryDirectory() as tmp:

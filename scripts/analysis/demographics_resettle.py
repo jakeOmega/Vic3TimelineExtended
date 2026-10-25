@@ -45,12 +45,12 @@ def kind_women(kind):
     return 0.5
 
 
-def labour_female_share(female_job_share, female_work_share):
-    """The labour kind's women's share at a destination by its jobs, as the residual's labour kind takes it before the
-    balance ramp (demographics_model.migrant_profile; the script's te_demog_rs_labour_f)."""
-    rights = female_work_share / max(P.FULL_FEMALE_WORK_SHARE, 0.01)
+def labour_female_share(female_job_share, women_worker_share):
+    """The labour kind's women's share at a destination by its jobs and women's share of its workers, as the residual's
+    labour kind takes it before the balance ramp (demographics_model.migrant_profile; the script's te_demog_rs_labour_f)."""
+    women = women_worker_share / max(P.WOMEN_WORKER_PARITY, 0.01)
     lo, hi = P.LABOUR_FEMALE_SHARE_MIN, P.LABOUR_FEMALE_SHARE_MAX
-    return M.clamp((hi - lo) * female_job_share * rights + lo, lo, hi)
+    return M.clamp((hi - lo) * female_job_share * women + lo, lo, hi)
 
 
 def programme_shares(programme, labour_f=P.LABOUR_FEMALE_SHARE_MIN):
@@ -273,7 +273,7 @@ def known_rows(inp=None, years=10, arrivals=10000.0, destination=100000.0, sourc
     mortality (the registry's 5%, 15%, 1%), no other migration: men per 100 women aged 20-59 and the median age."""
     inp = inp or _stand_in()
     mortality = mortality or {"penal_transportation": 0.05, "special_settlements": 0.15, "rustication": 0.01}
-    lf = labour_female_share(inp.female_job_share, M.female_work_share(inp))
+    lf = labour_female_share(inp.female_job_share, M.women_worker_share(inp))
     out = []
     for programme in P.RESETTLE_PROGRAMMES:
         dest, src = M.seed(inp, 1836, destination), M.seed(inp, 1836, source)

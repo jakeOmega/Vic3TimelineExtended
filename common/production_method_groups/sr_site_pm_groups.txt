@@ -1,0 +1,9 @@
+﻿# The one production method group of Solar System Colonization's site building
+# types (common/buildings/sr_site_buildings_generated.txt), which are never
+# built: they only name a world in Cede Colony's treaty designer.
+pmg_sr_site_marker = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_sr_site_marker
+	}
+}

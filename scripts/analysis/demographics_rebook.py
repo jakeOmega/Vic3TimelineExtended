@@ -35,22 +35,27 @@ import demographics_save_inputs as S
 
 STEP_VARS = ("te_dg_year", "te_dg_stepped", "te_dg_people", "te_dg_net_migration", "te_dg_inflow_years",
              "te_dg_sol", "te_dg_lit", "te_dg_urban_share", "te_dg_fjob_share", "te_dg_wtfr", "te_dg_agr_share",
-             "te_dg_in_turm", "te_dg_rs_net")
+             "te_dg_in_turm", "te_dg_rs_net", "te_dg_fws_wk", "te_dg_low_share")
 BAND_VARS = tuple(f"te_dg_b{s}{b}" for s in "fm" for b in range(P.BANDS))
 RING_VARS = (("te_dg_scale", "te_dg_pf", "te_dg_pm", "te_dg_pa")
              + tuple(f"te_dg_{s}{k}" for s in "fm" for k in range(P.RING_YEARS)))
 
 
+# What the migrant profile reads from the game files: the transport technologies' families (modifier-types stage 3)
+# and the women's-work participation lines, from which the sexes' rates give women's share of the workers where a
+# save holds no count of it (te_dg_fws_wk; demographics_model.women_worker_share, 2026-10-25)
+PROFILE_TYPES = P.MIGRANT_PROFILE_TYPES + (P.WOMENS_WORK_TYPE,)
+
+
 @functools.lru_cache(maxsize=None)
 def migrant_lines():
-    """The migrant profile's two types' carriers in the game files (modifier-types stage 3): the women's-rights laws'
-    share of women at work and the transport technologies' families, read once."""
-    return tuple(DM.load_carriers(types=P.MIGRANT_PROFILE_TYPES))
+    """The carriers of PROFILE_TYPES in the game files, read once."""
+    return tuple(DM.load_carriers(types=PROFILE_TYPES))
 
 
 def women_laws():
-    """The laws a save's countries keep: those carrying the women's work share."""
-    return frozenset(c.key for c in migrant_lines() if c.type == P.FEMALE_WORK_SHARE_TYPE)
+    """The laws a save's countries keep: those carrying a women's-work participation line."""
+    return frozenset(c.key for c in migrant_lines() if c.type == P.WOMENS_WORK_TYPE and c.kind == "law")
 
 
 def transport_techs():
@@ -139,19 +144,20 @@ def _transport(known, cid, year):
 
 def inputs(rec, prev, country, year, known):
     """The model's Inputs for a state's step from its stored walk (and the step before's chain-migration count, which
-    the profile read before the step counted this year). The profile's two types are the totals the laws' and
-    technologies' lines give (migrant_lines)."""
+    the profile read before the step counted this year). The profile's types are the totals the laws' and
+    technologies' lines give (migrant_lines); women's share of the workers is the save's count where it holds one."""
     v = rec["vars"]
     laws = country["laws"] if country else frozenset()
     techs = (country["techs"] | _transport(known, rec["owner"], year)) if country else frozenset()
-    mods = DM.totals(migrant_lines(), techs, laws, types=P.MIGRANT_PROFILE_TYPES)
+    mods = DM.totals(migrant_lines(), techs, laws, types=PROFILE_TYPES)
     crisis = (rec.get("devastation", 0.0) / 100.0 + v.get("te_dg_in_turm", 0.0)
               + (P.CRISIS_AT_WAR if country and country["at_war"] else 0.0))
     return M.Inputs(sol=v.get("te_dg_sol", 8.0), literacy=v.get("te_dg_lit", 0.2),
                     urban_share=v.get("te_dg_urban_share", 0.1), laws=laws, techs=techs, mods=mods,
                     female_job_share=v.get("te_dg_fjob_share", 0.0), crisis=M.clamp(crisis, 0.0, 1.0),
                     inflow_years=int((prev or {}).get("vars", {}).get("te_dg_inflow_years", 0)),
-                    wealth_tfr=v.get("te_dg_wtfr"), agrarian_share=v.get("te_dg_agr_share", 0.0))
+                    wealth_tfr=v.get("te_dg_wtfr"), agrarian_share=v.get("te_dg_agr_share", 0.0),
+                    work_female_share=v.get("te_dg_fws_wk"), low_share=v.get("te_dg_low_share", 0.0))
 
 
 def ring_from(rec):

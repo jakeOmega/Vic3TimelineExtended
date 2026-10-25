@@ -207,8 +207,10 @@ class TestWorkforceTerm(unittest.TestCase):
 
 
 class TestWorkDeathSplit(unittest.TestCase):
-    """§2.5: under Full the census's own count of women among the workers at 15-64 at the last count splits work
-    deaths; outside Full, and before a count, the law table does. The flows keep the law's share."""
+    """§2.5: the census's own count of women among the workers at 15-64 at the last count splits work deaths, and the
+    flows and Late Marriage read it too, under every setting the census runs; before a count, what the sexes' rates give
+    (te_demog_women_worker_share). Until 2026-10-25 only Full split deaths by the count, and the women's-rights laws'
+    share did the rest."""
 
     FARM = dict(sol=8, literacy=0.1, urban_share=0.05, laws=frozenset({"law_no_womens_rights",
                                                                         "law_child_labor_allowed"}))
@@ -228,23 +230,41 @@ class TestWorkDeathSplit(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_fws_wk"], want["fws_work"], places=3)
         self.assertAlmostEqual(eng.vars["te_dg_wk_past"], want["past"], places=4)
 
-    def test_under_full_the_step_splits_by_it(self):
-        inp, eng = self._step(full=True)
-        share = eng.vars["te_dg_fws_wk"]
-        eng.fixtures.update(year=1837.0, state_population=251000.0)
-        eng.call("te_demog_step_begin")
-        work = eng.vars["te_dg_m_work"]
-        self.assertAlmostEqual(eng.locals["te_dg_m_work_f"], work * 2 * share, places=4)
-        self.assertAlmostEqual(eng.locals["te_dg_m_work_m"], work * 2 * (1 - share), places=4)
-        self.assertNotAlmostEqual(share, M.female_work_share(inp), places=2)
-        self.assertAlmostEqual(eng.locals["te_dg_fws"], M.female_work_share(inp), msg="the flows keep the law's")
+    def test_the_step_splits_by_it_under_either_setting(self):
+        for full in (True, False):
+            with self.subTest(full=full):
+                inp, eng = self._step(full=full)
+                share = eng.vars["te_dg_fws_wk"]
+                eng.fixtures.update(year=1837.0, state_population=251000.0)
+                eng.call("te_demog_step_begin")
+                work = eng.vars["te_dg_m_work"]
+                self.assertAlmostEqual(eng.locals["te_dg_m_work_f"], work * 2 * share, places=4)
+                self.assertAlmostEqual(eng.locals["te_dg_m_work_m"], work * 2 * (1 - share), places=4)
+                self.assertAlmostEqual(eng.locals["te_dg_fws"], share, msg="the flows read the count too")
+                # the count follows the ring, not the rates' even split (the lower strata's women work at 0.14 here)
+                self.assertNotAlmostEqual(share, M.women_worker_share(inp), places=3)
 
-    def test_outside_full_the_law_table_splits(self):
+    def test_before_a_count_the_rates_split(self):
         inp, eng = self._step(full=False)
+        del eng.vars["te_dg_fws_wk"]
         eng.fixtures.update(year=1837.0, state_population=251000.0)
         eng.call("te_demog_step_begin")
+        self.assertAlmostEqual(eng.locals["te_dg_fws"], M.women_worker_share(inp), places=6)
         self.assertAlmostEqual(eng.locals["te_dg_m_work_f"],
-                               eng.vars["te_dg_m_work"] * 2 * M.female_work_share(inp), places=4)
+                               eng.vars["te_dg_m_work"] * 2 * M.women_worker_share(inp), places=4)
+
+    def test_the_share_before_a_count_is_the_models(self):
+        """te_demog_women_worker_share without a count: the sexes' rates with the participation inputs, as
+        demographics_model.women_worker_share (sex_rates) gives them."""
+        for mods, low in (({}, 0.0), ({}, 0.85), ({P.WOMENS_WORK_TYPE: 0.15}, 0.3), ({P.WOMENS_WORK_TYPE: 0.5}, 0.0),
+                          ({P.WOMENS_WORK_TYPE: 0.2, P.PARTICIPATION_TYPE: 0.014, P.MALE_PARTICIPATION_TYPE: 0.021},
+                           0.5)):
+            with self.subTest(mods=mods, low=low):
+                inp = M.Inputs(low_share=low, mods=dict(mods), **self.FARM)
+                eng = _engine_for(inp, 1836, 250000.0)
+                self.assertNotIn("te_dg_fws_wk", eng.vars)
+                self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_women_worker_share")),
+                                       M.women_worker_share(inp), places=9)
 
     def test_the_model_twin(self):
         inp = M.Inputs(laws=frozenset({"law_protected_class"}), work_female_share=0.42)
