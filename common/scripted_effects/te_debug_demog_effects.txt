@@ -605,7 +605,7 @@ te_debug_demog_probe_owner_start = {
 			state_region = { set_variable = te_probe_owner_region }
 			set_global_variable = { name = te_probe_owner_to value = scope:te_probe_owner_to }
 			set_global_variable = te_probe_owner_on
-			debug_log = "TE_DEMOG_PROBE_OWNER before name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_DEMOG_PROBE_OWNER before name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTagName] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 			set_state_owner = scope:te_probe_owner_to
 		}
@@ -619,7 +619,7 @@ te_debug_demog_probe_owner_start = {
 # THIS = ROOT = the state in on_state_owner_change, under its new owner (te_on_state_owner_change, only while
 # global_var:te_probe_owner_on is set): what it holds of the state the probe stamped.
 te_debug_demog_probe_owner_hook = {
-	debug_log = "TE_DEMOG_PROBE_OWNER hook name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTag] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+	debug_log = "TE_DEMOG_PROBE_OWNER hook name=[THIS.GetState.GetNameNoFormatting] id=[THIS.GetState.GetID] owner=[THIS.GetState.GetOwner.GetTagName] var=[THIS.ScriptValue('te_debug_demog_probe_owner_var')|0] year=[THIS.ScriptValue('te_debug_demog_probe_owner_year')|0] lm=[THIS.ScriptValue('te_debug_demog_probe_owner_lm')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
 	debug_log_scopes = yes
 }
 
@@ -650,7 +650,7 @@ te_debug_demog_province_change = {
 		}
 		if = {
 			limit = { local_var:te_dg_prov_log = 1 }
-			debug_log = "TE_INFO demog_province_change provinces=[THIS.Var('te_dg_provinces').GetValue|0]->[THIS.ScriptValue('te_demog_state_provinces')|0] people=[THIS.Var('te_dg_pop_last').GetValue|0]->[THIS.ScriptValue('te_debug_demog_province_people')|0] owner=[THIS.GetState.GetOwner.GetTag] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_INFO demog_province_change provinces=[THIS.Var('te_dg_provinces').GetValue|0]->[THIS.ScriptValue('te_demog_state_provinces')|0] people=[THIS.Var('te_dg_pop_last').GetValue|0]->[THIS.ScriptValue('te_debug_demog_province_people')|0] owner=[THIS.GetState.GetOwner.GetTagName] state=[THIS.GetState.GetNameNoFormatting] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

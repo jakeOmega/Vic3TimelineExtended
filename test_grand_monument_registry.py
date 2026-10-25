@@ -1022,7 +1022,7 @@ class ContestTests(unittest.TestCase):
         self.assertIn("set_variable = { name = gm_cw_loser value = scope:te_cw_loser days = 30 }", repair)
         self.assertIn("set_variable = { name = gm_cw_adopting value = yes days = 30 }", repair)
         adopt = squash(block(self.e, "gm_state_adopt_for_winner"))
-        self.assertIn("var:gm_raised_by = scope:gm_tmp_loser", adopt)
+        self.assertIn("var:gm_raised_by ?= scope:gm_tmp_loser", adopt)
         self.assertIn("set_variable = { name = gm_raised_by value = owner }", adopt)
 
     def test_ledger_helper_covers_every_ig(self):
