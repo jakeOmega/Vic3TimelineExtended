@@ -525,5 +525,44 @@ class TestWorkforceReaders(unittest.TestCase):
         self.assertEqual(by_key["contraceptive_pill"].kind, "technology")
 
 
+class TestCensusOffNames(unittest.TestCase):
+    """With the census off, every census-only type's name and description say so (te_demog_custom_loc.txt)."""
+
+    NAME = "[GetPlayer.GetCustom('te_demog_census_off_name')]"
+    DESC = "[GetPlayer.GetCustom('te_demog_census_off_desc')]"
+
+    @classmethod
+    def setUpClass(cls):
+        types = (ROOT / "common/modifier_type_definitions/demographics_modifier_types.txt").read_text(encoding="utf-8-sig")
+        cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", types)
+        cls.loc = {}
+        for path in (ROOT / "localization/english").glob("*.yml"):
+            for m in re.finditer(r'(?m)^ ([\w.\-]+):\d* "(.*)"\s*$', path.read_text(encoding="utf-8-sig")):
+                cls.loc[m.group(1)] = m.group(2)
+        cls.custom = (ROOT / "common/customizable_localization/te_demog_custom_loc.txt").read_text(encoding="utf-8-sig")
+
+    def test_every_census_type_ends_in_the_tag(self):
+        self.assertGreater(len(self.types), 40)
+        for name in self.types:
+            self.assertTrue(self.loc.get(name, "").endswith(self.NAME), name)
+            self.assertTrue(self.loc.get(name + "_desc", "").endswith(self.DESC), name + "_desc")
+
+    def test_no_other_modifier_carries_the_tag(self):
+        """An engine line or a Wealth Concentration term works with the census off, so its name has no tag."""
+        tagged = {k for k, v in self.loc.items() if self.NAME in v or self.DESC in v}
+        self.assertEqual(tagged, set(self.types) | {t + "_desc" for t in self.types})
+
+    def test_the_tag_shows_only_while_the_census_doesnt_run(self):
+        for entry, key in (("te_demog_census_off_name", "te_demog_census_off_tag"),
+                           ("te_demog_census_off_desc", "te_demog_census_off_note")):
+            block = re.search(rf"(?ms)^{entry} = \{{(.*?)^\}}", self.custom)
+            self.assertIsNotNone(block, entry)
+            texts = re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+            self.assertEqual(texts, [("te_demog_cohorts_run = yes", "te_demog_census_off_none"),
+                                     ("always = yes", key)], entry)
+            self.assertTrue(self.loc[key], key)
+        self.assertEqual(self.loc["te_demog_census_off_none"], "")
+
+
 if __name__ == "__main__":
     unittest.main()

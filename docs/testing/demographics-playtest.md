@@ -1386,3 +1386,23 @@ a white dot; all three pips have a dark rim.
 3. **Drawn outside the column.** The pips are placed above their column (negative positions); if they don't show at
    all, the engine clips a child to its parent, and the lane needs the pips moved into the plot's own box.
 4. **The key.** The key above the charts shows the same three pips at the same sizes.
+
+## The census's inputs with the rule off (2026-10-24)
+
+Under Disabled, every census-only modifier's name ends in a grey "(Demographics off)" and its hover in a note that no
+census runs (`te_demog_custom_loc.txt`, through `[GetPlayer.GetCustom('te_demog_census_off_name')]` in the name). The
+name has no scope of its own, so the call goes through `GetPlayer`, as vanilla's `concept_enactment_phase_ingame_added`
+does; no modifier name in vanilla or the mod has used it before.
+
+1. **Disabled.** A new game with the rule on Disabled: Vulcanization's tooltip reads "Contraception (Demographics
+   off)", the tag grey and one space after the name, and the line's hover ends in "The Demographics (Experimental) game
+   rule is off, so no census runs and this does nothing." The Medical Outreach decree (Spread of Medicine) and Public
+   Health Insurance (Health Care Access) read the same. Longevity Care Banned, a boolean, shows the tag after its name.
+2. **Full and Display only.** The same tooltips with no tag and no note, and no trailing space before a colon on the
+   Nation tab's census rows (Rural Exemption from the Birth Limit).
+3. **German or Spanish.** With the game in German, the name is the translation with "(Demografie aus)" after it, not the
+   English name.
+4. **The log.** `error.log` has no `not valid for 'te_demog_census_off_name'` or `_desc` burst (the Banking Cycle title's
+   `GetPlayer.GetCustom` writes one, `docs/audits/open_issues.md` L11). If it does, or the tag shows a raw key, the
+   fallback is the release's: comment the lines out of a build that ships with the census off
+   (`scripts/release/comment_out_census_inputs.py`), and take the calls back out of the loc.
