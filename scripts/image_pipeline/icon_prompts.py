@@ -1009,6 +1009,8 @@ ICONS: dict[str, dict[str, dict]] = {
         # Power grids (#1107), on the power plant's icon until now. A substation, not a plant:
         # FLUX puts chimneys on anything called a plant.
         "building_grid_transfer_station": {"subject": "an electrical substation yard: rows of big grey transformers and steel lattice gantries strung with high-voltage lines behind a wire fence, the lines leaving on tall steel pylons across green fields, loosely hand-painted with visible brush strokes", "seed": 0},
+        # The station's method until 2026-10-25, now a building of its own, on that method's icon until painted.
+        "building_grid_hvdc_interconnector": {"subject": "a coastal HVDC converter station: a large plain grey hall beside a row of tall white valve towers on a rocky shore, a thick black power cable running from it down the beach into blue sea, loosely hand-painted with visible brush strokes", "seed": None},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -2082,7 +2084,8 @@ ICONS: dict[str, dict[str, dict]] = {
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
     },
-    # Power grids (#1109): the station's HVDC Undersea Interconnector, on vanilla's electric engines until now.
+    # Power grids (#1109): the HVDC Undersea Interconnector's cable (the station's method until 2026-10-25),
+    # on vanilla's electric engines until now.
     # A cable bent under the waves with a bolt over it read as a life ring or a hook.
     "production_method": {
         "pm_grid_hvdc_interconnector": {"subject": "the cut end of a fat round undersea power cable showing three round cores inside it, lying above three thick wavy lines of sea water", "seed": 1},

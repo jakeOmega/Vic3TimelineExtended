@@ -5,11 +5,11 @@
 # grows from one country's stations in one market area (France's and French
 # Algeria's are two groups although they share a market) and joins:
 #   - another group across the sea, where both ends have an undersea cable
-#     (an Undersea Cable Range, building_grid_undersea_cable_range_add, of 1
-#     or more: the HVDC Undersea Interconnector, pm_grid_hvdc_interconnector,
-#     gives 1) and either end's range reaches the other, counted in Sea
-#     Nodes: within one country, or between two with a Grid Interconnection
-#     Agreement;
+#     (an HVDC Undersea Interconnector, building_grid_hvdc_interconnector,
+#     built beside the station, whose Undersea Cable Range,
+#     building_grid_undersea_cable_range_add, is 1 or more) and either end's
+#     range reaches the other, counted in Sea Nodes: within one country, or
+#     between two with a Grid Interconnection Agreement;
 #   - a neighbouring group of another country across a land border, when the
 #     two have a Grid Interconnection Agreement.
 # Once a month each grid shares its Electricity so that every member state
@@ -237,58 +237,56 @@ te_grid_refresh_partners_effect = {
 	}
 }
 
-# Country scope, an AI country. The AI never picks a method that only costs,
-# so script runs its interconnectors: a coastal online station switches to the
-# HVDC Undersea Interconnector when a station its cable would reach would join
-# it to another grid (te_grid_ai_interconnector_wanted), and back when none
-# would within the range it has. Its reach with the method is its range now
-# plus the method's (te_grid_hvdc_method_range). A switch retools the station,
-# so one is tried at most once a year (te_grid_ai_hvdc_tried), in case the
-# engine's own method choice undoes it. The walk grows with range (three Sea
-# Nodes with Smart Grids and Quantum Materials, from about 30 states at one
-# to a few hundred), so a station is judged at most every six months
+# Country scope, an AI country. The construction AI won't build what earns
+# nothing (the interconnector's ai_value is 0, since at the government
+# building default it would raise cables on every coast), so script builds
+# its HVDC Undersea Interconnectors: at a coastal online station with none,
+# when a station within the reach one there would have
+# (te_grid_ai_cable_reach_value, walked by te_grid_sea_reach_effect) would
+# join it to another grid (te_grid_ai_interconnector_wanted). One a month at
+# most, as government construction, while none of its own is still being
+# built and its government queue is under a year: once the far end has a
+# cable too, the next run joins the two grids. It never demolishes one: a
+# cable that joins nothing now may again when an agreement returns, and
+# rebuilding costs 400 points. The walk grows with range (three Sea Nodes
+# with Smart Grids and Quantum Materials, from about 30 states at one to a
+# few hundred), so a station is judged at most every six months
 # (te_grid_ai_hvdc_checked) rather than monthly.
 te_grid_ai_interconnectors_effect = {
 	if = {
-		limit = { has_technology_researched = clean_energy_technologies }
+		limit = {
+			has_technology_researched = clean_energy_technologies
+			in_default = no
+			construction_queue_government_duration < 52
+			NOT = {
+				any_scope_building = {
+					is_building_type = building_grid_hvdc_interconnector
+					level < 1
+				}
+			}
+		}
+		set_local_variable = { name = te_grid_ai_hvdc_queued value = 0 }
 		every_scope_state = {
 			limit = {
 				is_coastal = yes
 				te_grid_station_online = yes
-				NOT = { has_variable = te_grid_ai_hvdc_tried }
+				te_grid_state_has_interconnector = no
 				NOT = { has_variable = te_grid_ai_hvdc_checked }
 			}
-			set_variable = { name = te_grid_ai_hvdc_checked value = yes days = 180 }
-			save_scope_as = te_grid_ai_end
-			set_local_variable = { name = te_grid_sea_radius value = te_grid_cable_range_value }
+			# Once one is queued, the rest wait for next month unjudged.
 			if = {
-				limit = { te_grid_runs_hvdc_method = no }
-				change_local_variable = { name = te_grid_sea_radius add = te_grid_hvdc_method_range }
+				limit = { local_var:te_grid_ai_hvdc_queued = 0 }
+				set_variable = { name = te_grid_ai_hvdc_checked value = yes days = 180 }
+				save_scope_as = te_grid_ai_end
+				set_local_variable = { name = te_grid_sea_radius value = te_grid_ai_cable_reach_value }
+				te_grid_sea_reach_effect = yes
+				if = {
+					limit = { te_grid_ai_interconnector_wanted = yes }
+					set_local_variable = { name = te_grid_ai_hvdc_queued value = 1 }
+					start_building_construction = building_grid_hvdc_interconnector
+				}
+				te_grid_sea_reach_clear_effect = yes
 			}
-			te_grid_sea_reach_effect = yes
-			if = {
-				limit = {
-					te_grid_runs_hvdc_method = no
-					te_grid_ai_interconnector_wanted = yes
-				}
-				set_variable = { name = te_grid_ai_hvdc_tried value = yes days = 365 }
-				activate_production_method = {
-					building_type = building_grid_transfer_station
-					production_method = pm_grid_hvdc_interconnector
-				}
-			}
-			else_if = {
-				limit = {
-					te_grid_runs_hvdc_method = yes
-					NOT = { te_grid_ai_interconnector_wanted = yes }
-				}
-				set_variable = { name = te_grid_ai_hvdc_tried value = yes days = 365 }
-				activate_production_method = {
-					building_type = building_grid_transfer_station
-					production_method = pm_grid_no_interconnector
-				}
-			}
-			te_grid_sea_reach_clear_effect = yes
 		}
 	}
 }
@@ -1121,39 +1119,41 @@ te_grid_dispatch_info_effect = {
 }
 
 # State scope, an online station. TE_SELF_CHECK grid_cable_range, once a game:
-# the first station running the HVDC Undersea Interconnector reads the
-# method's Undersea Cable and Undersea Cable Range back from its building
-# (te_grid_lays_cable and te_grid_cable_range_value, modifier: on the
-# building). The wonders' construction sites read a method's custom building
-# line the same way, but from a workforce_scaled block; these are unscaled,
-# and no building-scope boolean has been read in the mod before.
-#   OK      it lays a cable, with at least the method's range
-#           (te_grid_hvdc_method_range).
-#   BROKEN  either read falls short: no station has a cable and no grid
-#           joins across the sea. The line says which (cable=0 or 1).
+# the first state with a built HVDC Undersea Interconnector reads the method's
+# Undersea Cable Range back from the building (te_grid_cable_range_value,
+# modifier: on the building). The wonders' construction sites read a method's
+# custom building line the same way, but from a workforce_scaled block; this
+# one is unscaled. The technologies' share, read from the station, is taken
+# off first (te_grid_chk_method_range_value), so Smart Grids can't pass for
+# the method.
+#   OK      the method adds at least its range (te_grid_hvdc_method_range).
+#   BROKEN  it adds less: an interconnector without technology has no range,
+#           so no cable joins a grid. The line prints the interconnector's
+#           range and the technologies' (tech=, from the station; 0 with Smart
+#           Grids researched means a technology's building line reaches no
+#           building).
+# Judged at the run after the one that first sees it built
+# (te_grid_chk_cable_seen), so one finished the day before a run, whose
+# modifiers may not have settled, can't read BROKEN.
 te_grid_cable_range_selfcheck_effect = {
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_grid_cable_range_checked }
-			te_grid_runs_hvdc_method = yes
-		}
-		set_global_variable = te_grid_cable_range_checked
-		set_global_variable = { name = te_grid_chk_cable value = 0 }
-		if = {
-			limit = { te_grid_lays_cable = yes }
-			set_global_variable = { name = te_grid_chk_cable value = 1 }
+			te_grid_lays_cable = yes
 		}
 		if = {
-			limit = {
-				te_grid_lays_cable = yes
-				te_grid_cable_range_value >= te_grid_hvdc_method_range
+			limit = { has_variable = te_grid_chk_cable_seen }
+			set_global_variable = te_grid_cable_range_checked
+			if = {
+				limit = { te_grid_chk_method_range_value >= te_grid_hvdc_method_range }
+				debug_log = "TE_SELF_CHECK OK grid_cable_range (an HVDC Undersea Interconnector reads range=[THIS.ScriptValue('te_grid_cable_range_value')|1] Sea Nodes with tech=[THIS.ScriptValue('te_grid_tech_cable_range_value')|1] from technology: the method's unscaled building line reaches modifier:)"
 			}
-			debug_log = "TE_SELF_CHECK OK grid_cable_range (a station on the HVDC Undersea Interconnector reads cable=1 range=[THIS.ScriptValue('te_grid_cable_range_value')|0] Sea Nodes: the method's unscaled building lines reach modifier:)"
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN grid_cable_range (an HVDC Undersea Interconnector reads range=[THIS.ScriptValue('te_grid_cable_range_value')|1] Sea Nodes with tech=[THIS.ScriptValue('te_grid_tech_cable_range_value')|1] from technology, against the method's 1 on top: no cable joins a grid without technology; see docs/testing/power-grid-playtest.md)"
+			}
 		}
-		else = {
-			debug_log = "TE_SELF_CHECK BROKEN grid_cable_range (a station on the HVDC Undersea Interconnector reads cable=[THIS.ScriptValue('te_grid_chk_cable_g')|0] range=[THIS.ScriptValue('te_grid_cable_range_value')|0] Sea Nodes, against the method's cable=1 range=1: no cable joins a grid; see docs/testing/power-grid-playtest.md)"
-		}
-		remove_global_variable = te_grid_chk_cable
+		# Refreshed every run until the check is done, then left to lapse.
+		set_variable = { name = te_grid_chk_cable_seen value = yes days = 45 }
 	}
 }
 

@@ -45,36 +45,31 @@ te_grid_station_staffed_throughout = {
 	te_grid_station_staffed = yes
 }
 
-# State scope. The state's station has an undersea cable: it lays one
-# (te_grid_lays_cable, the HVDC Undersea Interconnector's Undersea Cable) with
-# a range of 1 or more (te_grid_cable_range_value), on a coast. It joins the
-# station to another with a cable across the sea (te_grid_sea_link,
-# te_grid_cable_links_effect).
+# State scope. The state has an HVDC Undersea Interconnector, built, under
+# construction or queued (te_grid_state_has_station's read), so the AI queues
+# no second one.
+te_grid_state_has_interconnector = {
+	any_scope_building = { is_building_type = building_grid_hvdc_interconnector }
+}
+
+# State scope. The state's station has an undersea cable: the state lays one
+# (te_grid_lays_cable, a built HVDC Undersea Interconnector) with a range of 1
+# or more (te_grid_cable_range_value), on a coast. It joins the station to
+# another with a cable across the sea (te_grid_sea_link,
+# te_grid_cable_links_effect). The balancing reads it only on a state whose
+# station is online, so an interconnector left without one joins nothing.
 te_grid_has_interconnector = {
 	is_coastal = yes
 	te_grid_lays_cable = yes
 	te_grid_cable_range_value >= 1
 }
 
-# State scope. The state's station lays an undersea cable: its building reads
-# building_grid_undersea_cable_bool, which a cable method gives. A technology's
-# range adds to a cable; it lays none. TE_SELF_CHECK grid_cable_range checks
-# the read.
+# State scope. The state lays an undersea cable: its HVDC Undersea
+# Interconnector is built. One queued exists at level 0 and lays none yet.
 te_grid_lays_cable = {
 	any_scope_building = {
-		is_building_type = building_grid_transfer_station
-		modifier:building_grid_undersea_cable_bool = yes
-	}
-}
-
-# State scope. The state's station runs the HVDC Undersea Interconnector, the
-# method the AI switches (te_grid_ai_interconnectors_effect). Whether a station
-# has a cable is te_grid_has_interconnector, which reads the method's
-# modifiers, not the method.
-te_grid_runs_hvdc_method = {
-	any_scope_building = {
-		is_building_type = building_grid_transfer_station
-		has_active_production_method = pm_grid_hvdc_interconnector
+		is_building_type = building_grid_hvdc_interconnector
+		level >= 1
 	}
 }
 

@@ -133,12 +133,28 @@ te_grid_state_efficiency_value = {
 
 # --- Undersea cables ------------------------------------------------------------
 
-# The station's Undersea Cable Range in Sea Nodes: its building's read of
-# building_grid_undersea_cable_range_add, which holds the HVDC Undersea
-# Interconnector's 1 and the owner's technologies' (+1 each from Smart Grids
-# and Quantum Materials). 0 without a station. It counts only where the
-# station lays a cable (te_grid_has_interconnector).
+# The state's Undersea Cable Range in Sea Nodes: its HVDC Undersea
+# Interconnector's read of building_grid_undersea_cable_range_add, which holds
+# the method's 1 and the owner's technologies' (+1 each from Smart Grids and
+# Quantum Materials). 0 without an interconnector. It counts only where the
+# interconnector is built, on a coast (te_grid_has_interconnector).
 te_grid_cable_range_value = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_grid_hvdc_interconnector }
+		add = modifier:building_grid_undersea_cable_range_add
+	}
+}
+
+# The range the HVDC Undersea Interconnector's method gives, for the AI, which
+# asks what a station would reach with one. Equal to the method's line
+# (power_grid_pms.txt; test_power_grid.py holds the two together).
+te_grid_hvdc_method_range = 1
+
+# The owner's technologies' share of a cable's range (Smart Grids, Quantum
+# Materials), read from the state's station, which they reach as they do every
+# building. 0 without a station.
+te_grid_tech_cable_range_value = {
 	value = 0
 	every_scope_building = {
 		limit = { is_building_type = building_grid_transfer_station }
@@ -146,10 +162,17 @@ te_grid_cable_range_value = {
 	}
 }
 
-# The range the HVDC Undersea Interconnector gives, for the AI's switch, which
-# asks what a station would reach with the method. Equal to the method's line
-# (power_grid_pms.txt; test_power_grid.py holds the two together).
-te_grid_hvdc_method_range = 1
+# The range an HVDC Undersea Interconnector in the state would have, for the
+# AI's choice of where to build one: the range of the one there, else the
+# method's plus the technologies'.
+te_grid_ai_cable_reach_value = {
+	value = te_grid_cable_range_value
+	if = {
+		limit = { te_grid_lays_cable = no }
+		value = te_grid_hvdc_method_range
+		add = te_grid_tech_cable_range_value
+	}
+}
 
 # --- This month's flow --------------------------------------------------------
 
@@ -436,8 +459,8 @@ te_grid_interconnector_disp = {
 	}
 }
 
-# The station's Undersea Cable Range, for the tile: 0 where it lays no cable
-# (no cable method, or a state with no coast), whatever its technologies add.
+# The state's Undersea Cable Range, for the tile: 0 where it lays no cable
+# (no built HVDC Undersea Interconnector, or a state with no coast).
 te_grid_cable_range_disp = {
 	value = 0
 	if = {
@@ -621,12 +644,16 @@ te_grid_chk_larger_g = {
 
 te_grid_chk_month_g = { value = global_var:te_grid_chk_month }
 
+# What the HVDC Undersea Interconnector's method adds to the state's cable
+# range: the interconnector's read less the technologies' (the station's), for
+# TE_SELF_CHECK grid_cable_range.
+te_grid_chk_method_range_value = {
+	value = te_grid_cable_range_value
+	subtract = te_grid_tech_cable_range_value
+}
+
 te_grid_chk_ordered_g = { value = global_var:te_grid_chk_ordered }
 te_grid_chk_moved_g = { value = global_var:te_grid_chk_moved }
-
-# Whether the first station on the HVDC Undersea Interconnector read its
-# Undersea Cable (1) or not (0), for TE_SELF_CHECK grid_cable_range.
-te_grid_chk_cable_g = { value = global_var:te_grid_chk_cable }
 
 # TE_GRID staffing: how many stations sit in each staffing band.
 te_grid_st_quarter_g = { value = global_var:te_grid_st_quarter }

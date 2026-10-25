@@ -77,7 +77,7 @@ building:
 |---|---|
 | 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the tech metals mines (lithium, nickel and cobalt, rare earths, platinum group metals), every other mine once it runs a mechanized pump; Railways, Ports and Power Plants on their early methods |
 | 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries; Railways, Ports and Power Plants on their middle methods |
-| 0.15 | Highways, Airports, Network Infrastructure, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, Oil Rigs; Railways and Ports on their latest methods |
+| 0.15 | Highways, Airports, Network Infrastructure, Hydro Plants, Renewable Energy Plants, Grid Transfer Stations, HVDC Undersea Interconnectors, Oil Rigs; Railways and Ports on their latest methods |
 | 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
 
 Railways, Ports and Power Plants pay by the method they run, because a level on
@@ -461,19 +461,20 @@ beyond what it earns.
 
 Two things join grids that don't touch:
 
-- With Clean Energy Technologies, a station can switch to the HVDC Undersea
-Interconnector method. It costs Electronic Components and more engineers,
-and lays an Undersea Cable with an Undersea Cable Range of 1 Sea Node.
-Smart Grids and Quantum Materials add 1 each, but only to stations that lay a
-cable: a station without the method gets none. Two stations with cables join
-their grids when either one's range reaches the other: at 1, states on the
-same Sea Node. Each point of range more crosses one more Sea Node, landing
-on a coast that touches both on the way. The cable joins your own grids
-across the sea, such as a mainland and a colony in your market, or a
-partner's under a Grid Interconnection Agreement. The method does nothing in
-a state with no coast.
-The AI switches a coastal station when a grid of its own, or a partner's, is
-within its cable's reach, and back when none is.
+- With Clean Energy Technologies, you can build an HVDC Undersea
+Interconnector in a coastal state that has a station, built or queued: one
+per state, for 400 construction. Your government pays its engineers and
+Electronic Components. It lays an undersea cable with an
+Undersea Cable Range of 1 Sea Node. Smart Grids and Quantum Materials add 1
+each, but only to interconnectors: a station without one has no cable. Two
+cables join their grids when either one's range reaches the other: at 1,
+states on the same Sea Node. Each point of range more crosses one more Sea
+Node, landing on a coast that touches both on the way. The cable joins your
+own grids across the sea, such as a mainland and a colony in your market, or
+a partner's under a Grid Interconnection Agreement. It needs a cable at both
+ends, and it joins nothing once its state's station is gone.
+The AI builds one at a coastal station when a grid of its own, or a
+partner's, is within its cable's reach, one at a time.
 - The Grid Interconnection Agreement treaty article (from Intergovernmental
 Organizations) joins both countries' stations where they border, and their
 cables across the sea. It can be signed between two countries that share a
@@ -493,7 +494,7 @@ the market from running short of Grid Power.
 The state panel shows a Power Grid tile on a state with a station: whether its
 station is sending or receiving, the grid's hub (its largest producer, which
 names the grid), the Electricity the station moves a week, how many states
-its grid has and your transmission efficiency. A station with a cable also
+its grid has and your transmission efficiency. A state with a cable also
 shows Sea cables, how many stations from other grids its cable joins to this
 one; the hover names them and gives the cable's range. On a grid that joins two
 markets it also shows the Exports or Imports of the state's market across the

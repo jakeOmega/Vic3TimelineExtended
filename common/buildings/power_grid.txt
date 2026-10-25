@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# Power Grid: the Grid Transfer Station
+# Power Grid: the Grid Transfer Station and the HVDC Undersea Interconnector
 # ============================================================================
 # One station per state. It turns the state's spare Electricity into Grid
 # Power for the market, or Grid Power from the market into Electricity where
@@ -35,7 +35,6 @@ building_grid_transfer_station = {
 
 	production_method_groups = {
 		pmg_grid_transfer_station
-		pmg_grid_interconnector
 		pmg_maintenance_heavy
 	}
 
@@ -47,7 +46,8 @@ building_grid_transfer_station = {
 	# market area may go in any of its states there; every later one in that
 	# market area must border a state of the same country that has one. A
 	# country's stations in one market area are one group of a grid
-	# (te_grid_add_group_effect); interconnectors and agreements join groups.
+	# (te_grid_add_group_effect); undersea cables (the HVDC Undersea
+	# Interconnector, below) and agreements join groups.
 	# A queued station counts
 	# (te_grid_state_has_station): has_building misses one until it is built,
 	# which let a second first station be queued beside it.
@@ -81,4 +81,71 @@ building_grid_transfer_station = {
 	ai_value = {
 		value = te_grid_station_ai_value
 	}
+}
+
+# ============================================================================
+# The HVDC Undersea Interconnector
+# ============================================================================
+# The state's undersea cable: built beside a Grid Transfer Station on a coast,
+# it joins the station's grid to any station with a cable of its own within
+# range of either end (te_grid_has_interconnector, te_grid_sea_link). Its
+# method gives the range (building_grid_undersea_cable_range_add), to which
+# Smart Grids and Quantum Materials add. It does nothing without a station: the
+# balancing reads it only on a state whose station is online.
+#
+# Until 2026-10-25 it was a production method of the station. As a building it
+# is easier to find and to read: the cable shows among the state's buildings,
+# and its range on its own modifiers. Government funded, like the Strategic
+# Reserve's buildings, since it earns nothing: the government pays its
+# engineers and its Electronic Components.
+# ============================================================================
+
+building_grid_hvdc_interconnector = {
+	building_group = bg_public_infrastructure
+	# Placeholder: the method's cable icon until the icon pipeline paints one
+	# (scripts/image_pipeline/icon_prompts.py).
+	icon = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	# One level per state (state_building_grid_hvdc_interconnector_max_level_add
+	# in base_values), counted per state, not per state region, as the station.
+	has_max_level = yes
+	ignore_stateregion_max_level = yes
+
+	unlocking_technologies = {
+		clean_energy_technologies
+	}
+
+	production_method_groups = {
+		pmg_grid_interconnector
+		pmg_maintenance_heavy
+	}
+
+	# 400 points, a Port's tier: a cable across the sea is a large project,
+	# where the station it lands at is cheap.
+	required_construction = construction_cost_medium
+
+	# A cable lands on a coast: a state with none isn't offered one, as with
+	# the Port.
+	potential = {
+		is_coastal = yes
+	}
+
+	# The cable carries the station's power, so the state needs a station,
+	# built or queued (te_grid_state_has_station), the way a later station
+	# counts a queued neighbour.
+	possible = {
+		custom_tooltip = {
+			text = te_grid_hvdc_needs_station_tt
+			te_grid_state_has_station = yes
+		}
+	}
+
+	# GOVERNMENT_BUILDING_BASE_VALUE (1000) is what a government building with
+	# no ai_value gets, which would raise cables on coasts with nothing across
+	# the sea. The AI builds one where a station its cable would reach would
+	# join its grid to another (te_grid_ai_interconnectors_effect).
+	ai_value = 0
 }
