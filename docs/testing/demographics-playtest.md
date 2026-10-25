@@ -1410,12 +1410,18 @@ does; no modifier name in vanilla or the mod has used it before.
 ## The Workforce Ratio lines under Full (2026-10-24)
 
 Under Full, the two moved Workforce Ratio families name what the census does with them instead
-(`te_demog_wf_replaced_name`, `te_demog_wf_womens_name` in `te_demog_custom_loc.txt`), by the same `GetPlayer.GetCustom`
-call as the section above.
+(`te_demog_wf_replaced_name`, `te_demog_wf_womens_name` and `te_demog_wf_womens_desc` in `te_demog_custom_loc.txt`), by
+the same `GetPlayer.GetCustom` call as the section above. The women's-work family's name is the call alone, so it reads
+women's work first (owner, 2026-10-25).
 
 1. **Full.** Old Age Pension's institution effects read "Workforce Ratio (replaced by the census)", the tag grey;
-   Women's Suffrage reads "Workforce Ratio (read as women’s work)". The Nation tab's women's-work row carries the same tag.
-2. **Display only and Disabled.** The same tooltips read plain "Workforce Ratio", with no trailing space.
+   Women's Suffrage reads "Women’s Work (Workforce Ratio)", the parenthesis grey, and the line's description, where the
+   game shows one (the Nation tab row's tooltip), starts "How far women's rights" and names +35%, not a raw
+   `ScriptValue` call. The Nation tab's women's-work row reads "Women’s Work (Workforce Ratio): …".
+2. **Display only and Disabled.** The same tooltips read plain "Workforce Ratio", with no trailing space, and the
+   women's-work description starts with the base game's "The ratio of Workforce to Dependents". If the name is blank
+   or a raw key here, the macro in `te_demog_wf_plain` doesn't expand through custom loc: write the vanilla name's text
+   into the key instead.
 3. **The log.** As above: no `not valid for 'te_demog_wf_` burst in `error.log`.
 
 ## The birth and death lines under Full (2026-10-25)

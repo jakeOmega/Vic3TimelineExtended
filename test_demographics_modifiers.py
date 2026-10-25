@@ -570,31 +570,53 @@ class TestCensusOffNames(unittest.TestCase):
 
 
 class TestWorkforceLineNames(unittest.TestCase):
-    """Under Full, the two moved Workforce Ratio families' names say what the census does with them instead."""
-
-    FAMILIES = {"state_demog_replaced_ratio_add": ("te_demog_wf_replaced_name", "te_demog_wf_replaced_tag"),
-                "state_demog_womens_work_ratio_add": ("te_demog_wf_womens_name", "te_demog_wf_womens_tag")}
+    """Under Full, the two moved Workforce Ratio families' names say what the census does with them instead: the
+    replaced family's in a tag after Workforce Ratio, the women's-work family's by reading women's work first (owner,
+    2026-10-25)."""
 
     @classmethod
     def setUpClass(cls):
         cls.loc, cls.custom = _rule_loc()
 
-    def test_both_families_end_in_their_tag(self):
+    def _texts(self, entry):
+        block = re.search(rf"(?ms)^{entry} = \{{(.*?)^\}}", self.custom)
+        self.assertIsNotNone(block, entry)
+        return re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+
+    def test_these_are_the_two_families(self):
         moved = (ROOT / "common/modifier_type_definitions/demographics_workforce_line_types.txt").read_text(
             encoding="utf-8-sig")
-        self.assertEqual(set(re.findall(r"(?m)^(\w+)\s*=\s*\{", moved)), set(self.FAMILIES))
-        for name, (entry, _) in self.FAMILIES.items():
-            self.assertEqual(self.loc[name], f"$state_working_adult_ratio_add$[GetPlayer.GetCustom('{entry}')]", name)
+        self.assertEqual(set(re.findall(r"(?m)^(\w+)\s*=\s*\{", moved)),
+                         {"state_demog_replaced_ratio_add", "state_demog_womens_work_ratio_add"})
 
-    def test_the_tag_shows_only_under_full(self):
-        for entry, key in self.FAMILIES.values():
-            block = re.search(rf"(?ms)^{entry} = \{{(.*?)^\}}", self.custom)
-            self.assertIsNotNone(block, entry)
-            texts = re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
-            self.assertEqual(texts, [("te_demog_effects_run = yes", key), ("always = yes", "te_demog_census_off_none")],
-                             entry)
-            # the rendered name is pasted into a quoted tooltip argument (loc_render_audit): no straight apostrophe
-            self.assertTrue(self.loc[key] and "'" not in self.loc[key], key)
+    def test_the_replaced_family_ends_in_its_tag_only_under_full(self):
+        self.assertEqual(self.loc["state_demog_replaced_ratio_add"],
+                         "$state_working_adult_ratio_add$[GetPlayer.GetCustom('te_demog_wf_replaced_name')]")
+        self.assertEqual(self._texts("te_demog_wf_replaced_name"),
+                         [("te_demog_effects_run = yes", "te_demog_wf_replaced_tag"),
+                          ("always = yes", "te_demog_census_off_none")])
+        # the rendered name is pasted into a quoted tooltip argument (loc_render_audit): no straight apostrophe
+        tag = self.loc["te_demog_wf_replaced_tag"]
+        self.assertTrue(tag and "'" not in tag)
+
+    def test_the_womens_work_family_reads_womens_work_first_under_full(self):
+        self.assertEqual(self.loc["state_demog_womens_work_ratio_add"],
+                         "[GetPlayer.GetCustom('te_demog_wf_womens_name')]")
+        self.assertEqual(self.loc["state_demog_womens_work_ratio_add_desc"],
+                         "[GetPlayer.GetCustom('te_demog_wf_womens_desc')]")
+        self.assertEqual(self._texts("te_demog_wf_womens_name"),
+                         [("te_demog_effects_run = yes", "te_demog_wf_womens_full"),
+                          ("always = yes", "te_demog_wf_plain")])
+        self.assertEqual(self._texts("te_demog_wf_womens_desc"),
+                         [("te_demog_effects_run = yes", "te_demog_wf_womens_desc_full"),
+                          ("always = yes", "te_demog_wf_womens_desc_plain")])
+        full = self.loc["te_demog_wf_womens_full"]
+        self.assertTrue(full.startswith("Women’s Work"), full)
+        self.assertIn("$state_working_adult_ratio_add$", full)
+        self.assertNotIn("'", full)  # pasted into a quoted tooltip argument, as above
+        self.assertEqual(self.loc["te_demog_wf_plain"], "$state_working_adult_ratio_add$")
+        self.assertTrue(self.loc["te_demog_wf_womens_desc_plain"].startswith("$state_working_adult_ratio_add_desc$"))
+        self.assertFalse(self.loc["te_demog_wf_womens_desc_full"].startswith("$state_working_adult_ratio_add"))
 
 
 class TestBirthDeathLineNames(unittest.TestCase):
