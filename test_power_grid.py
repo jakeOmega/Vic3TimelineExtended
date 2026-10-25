@@ -131,13 +131,17 @@ class MethodTest(unittest.TestCase):
              "goods_input_grid_power_add", "goods_output_grid_power_add")
 
     def test_base_method_carries_one_unit_of_each_line(self):
-        # unscaled: level_scaled lines still ran at the building's occupancy (2026-10-25).
+        # A station moves its staffing's share whatever the block (2026-10-25), so the
+        # lines sit in unscaled and the job is made very attractive to keep it staffed.
         method = _code(_top_level(_read(PMS), "pm_grid_transfer_base"))
         self.assertNotIn("workforce_scaled", method)
         unscaled = _sub(method, "unscaled")
         for line in self.LINES:
             self.assertRegex(unscaled, rf"\b{line} = 1\b", line)
             self.assertNotRegex(_sub(method, "level_scaled"), rf"\b{line}\b", line)
+        m = re.search(r"\bbuilding_job_attractiveness_mult = (\S+)", unscaled)
+        self.assertIsNotNone(m)
+        self.assertGreaterEqual(float(m.group(1)), 1)
 
     def test_a_built_station_is_online_whatever_its_staffing(self):
         # An empty station keeps its order and modifiers, so it runs from its first hire.
@@ -154,46 +158,35 @@ class MethodTest(unittest.TestCase):
         settle = _code(_top_level(_read(EFFECTS), "te_grid_settle_market_effect"))
         self.assertGreaterEqual(settle.count("te_grid_station_staffed = yes"), 6)
 
-    def test_staffing_self_check_reads_the_order_before_it_is_overwritten(self):
+    def test_staffing_tally_reads_before_the_order_is_overwritten(self):
         balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
         self.assertLess(balance.index("te_grid_staffing_selfcheck_effect = yes"),
                         balance.index("name = te_grid_factor "))
+        # The experiment's one-off factor reset is gone: the factor is measured every run.
+        self.assertNotIn("te_grid_unscaled_armed", balance)
         check = _code(_top_level(_read(EFFECTS), "te_grid_staffing_selfcheck_effect"))
-        self.assertIn("has_global_variable = te_grid_us_collect", check)
-        self.assertIn("occupancy < 0.5", check)
-        self.assertIn("occupancy >= 0.9", check)
-        self.assertIn("te_grid_station_staffed_throughout = yes", check)
+        self.assertIn("has_global_variable = te_grid_staffing_collect", check)
+        for band in ("occupancy < 0.25", "occupancy < 0.5", "occupancy < 0.9"):
+            self.assertIn(band, check)
         self.assertIn("TE_GRID empty_station", check)
+        world = _code(_top_level(_read(EFFECTS), "te_grid_world_update_effect"))
+        self.assertLess(world.index("te_grid_staffing_info_start_effect = yes"),
+                        world.index("te_grid_balance_region_effect = yes"))
+        self.assertLess(world.index("te_grid_balance_region_effect = yes"),
+                        world.index("te_grid_staffing_info_end_effect = yes"))
+        start = _code(_top_level(_read(EFFECTS), "te_grid_staffing_info_start_effect"))
+        self.assertIn("global_var:te_grid_staffing_runs >= 13", start)
+        end = _code(_top_level(_read(EFFECTS), "te_grid_staffing_info_end_effect"))
+        self.assertIn("TE_GRID staffing", end)
+        self.assertIn("set_global_variable = te_grid_staffing_logged", end)
+        values = _read(VALUES)
+        for name in ("te_grid_st_quarter_g", "te_grid_st_half_g", "te_grid_st_most_g", "te_grid_st_full_g"):
+            self.assertRegex(values, rf"(?m)^{name} = \{{", name)
         # Staffing is recorded after the checks read last month's record.
         flow = _code(_top_level(_read(EFFECTS), "te_grid_set_station_flow_effect"))
         self.assertIn("set_variable = te_grid_staffed", flow)
         conservation = _code(_top_level(_read(EFFECTS), "te_grid_conservation_selfcheck_effect"))
         self.assertIn("te_grid_station_staffed_throughout = no", conservation)
-
-    def test_unscaled_self_check_compares_groups_after_a_factor_reset(self):
-        # The first run after the switch resets every factor and arms; later runs count and judge.
-        balance = _code(_top_level(_read(EFFECTS), "te_grid_balance_region_effect"))
-        reset = balance.index("has_global_variable = te_grid_unscaled_armed")
-        self.assertLess(balance.index("name = te_grid_factor value = te_grid_station_factor_value"), reset)
-        self.assertIn("set_variable = { name = te_grid_factor value = 1 }", balance[reset:])
-        world = _code(_top_level(_read(EFFECTS), "te_grid_world_update_effect"))
-        self.assertLess(world.index("te_grid_unscaled_selfcheck_start_effect = yes"),
-                        world.index("te_grid_balance_region_effect = yes"))
-        self.assertLess(world.index("te_grid_balance_region_effect = yes"),
-                        world.index("te_grid_unscaled_selfcheck_end_effect = yes"))
-        start = _code(_top_level(_read(EFFECTS), "te_grid_unscaled_selfcheck_start_effect"))
-        self.assertIn("has_global_variable = te_grid_unscaled_armed", start)
-        end = _code(_top_level(_read(EFFECTS), "te_grid_unscaled_selfcheck_end_effect"))
-        self.assertIn("global_var:te_grid_us_low_n >= 3", end)
-        self.assertIn("global_var:te_grid_us_full_n >= 3", end)
-        self.assertIn("te_grid_us_share_ratio_g >= 0.75", end)
-        self.assertIn("TE_SELF_CHECK OK grid_unscaled", end)
-        self.assertIn("TE_SELF_CHECK BROKEN grid_unscaled", end)
-        self.assertIn("set_global_variable = te_grid_unscaled_armed", end)
-        values = _read(VALUES)
-        for name in ("te_grid_us_low_share_g", "te_grid_us_quarter_share_g",
-                     "te_grid_us_full_share_g", "te_grid_us_share_ratio_g"):
-            self.assertRegex(values, rf"(?m)^{name} = \{{", name)
 
 
 class FlowModifierTest(unittest.TestCase):
