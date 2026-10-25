@@ -11979,6 +11979,10 @@
   "en": "the $gm_skin_landmark_royal_tombs_of_sipan$",
   "de": "die $gm_skin_landmark_royal_tombs_of_sipan$"
  },
+ "gm_landmark_saint_sophia_kiev_desc": {
+  "en": "The cathedral Yaroslav the Wise raised in Kyiv in 1037, its domes rebuilt in the Ukrainian Baroque, its mosaics and frescoes those of the eleventh century.",
+  "de": "Die Kathedrale, die Jaroslaw der Weise 1037 in Kiew errichten ließ, mit im ukrainischen Barock wiederaufgebauten Kuppeln und Mosaiken und Fresken aus dem elften Jahrhundert."
+ },
  "gm_landmark_saint_sophia_kiev_evt": {
   "en": "the $gm_skin_landmark_saint_sophia_kiev$",
   "de": "die $gm_skin_landmark_saint_sophia_kiev$"
@@ -12002,6 +12006,14 @@
  "gm_landmark_shalimar_gardens_evt": {
   "en": "the $gm_skin_landmark_shalimar_gardens$",
   "de": "die $gm_skin_landmark_shalimar_gardens$"
+ },
+ "gm_landmark_shibam_desc": {
+  "en": "A walled town of some five hundred mud-brick tower houses up to eight storeys tall on the floor of the Wadi Hadhramaut, most of them rebuilt after a flood in the sixteenth century.",
+  "de": "Eine ummauerte Stadt mit etwa fünfhundert Lehmziegel-Turmhäusern von bis zu acht Stockwerken im Talgrund des Wadi Hadramaut, die meisten nach einer Flut im sechzehnten Jahrhundert wiederaufgebaut."
+ },
+ "gm_landmark_shore_temple_desc": {
+  "en": "Granite temples on the beach at Mahabalipuram, built by the Pallava kings around 700, with the rock-cut shrines and carved boulders of their old port around them.",
+  "de": "Granittempel am Strand von Mahabalipuram, um 700 von den Pallava-Königen erbaut, umgeben von den Felsentempeln und behauenen Felsblöcken ihres alten Hafens."
  },
  "gm_landmark_shore_temple_evt": {
   "en": "the $gm_skin_landmark_shore_temple$",
@@ -12035,6 +12047,10 @@
   "en": "An Anglo-Saxon ship burial under a mound in Suffolk, opened in 1939, with a warrior's helmet and regalia that may have belonged to King Rædwald.",
   "de": "Ein angelsächsisches Schiffsgrab unter einem Hügel in Suffolk, 1939 geöffnet, mit dem Helm eines Kriegers und Insignien, die König Rædwald gehört haben könnten."
  },
+ "gm_landmark_swayambhunath_desc": {
+  "en": "A white stupa painted with the eyes of the Buddha on a hill above Kathmandu, one of the oldest shrines of the valley and its temple cities.",
+  "de": "Eine weiße Stupa, bemalt mit den Augen des Buddha, auf einem Hügel über Kathmandu, eines der ältesten Heiligtümer des Tals und seiner Tempelstädte."
+ },
  "gm_landmark_teatro_di_san_carlo_desc": {
   "en": "Opened by Charles of Bourbon in 1737 and rebuilt within a year of the fire of 1816: the oldest opera house still in use.",
   "de": "1737 von Karl von Bourbon eröffnet und binnen eines Jahres nach dem Brand von 1816 wiederaufgebaut: das älteste noch genutzte Opernhaus."
@@ -12042,6 +12058,10 @@
  "gm_landmark_teatro_di_san_carlo_evt": {
   "en": "the $gm_skin_landmark_teatro_di_san_carlo$",
   "de": "das $gm_skin_landmark_teatro_di_san_carlo$"
+ },
+ "gm_landmark_temple_of_confucius_desc": {
+  "en": "The temple at Qufu, the Master's home town, where offerings have been made to him since the fifth century BC, rebuilt for the Ming emperors after a fire in 1499.",
+  "de": "Der Tempel in Qufu, der Heimatstadt des Meisters, wo ihm seit dem fünften Jahrhundert v. Chr. Opfer dargebracht werden, für die Ming-Kaiser nach einem Brand im Jahr 1499 wiederaufgebaut."
  },
  "gm_landmark_temple_of_confucius_evt": {
   "en": "the $gm_skin_landmark_temple_of_confucius$",
@@ -12063,6 +12083,10 @@
   "en": "the $gm_skin_landmark_temple_of_heaven$",
   "de": "der $gm_skin_landmark_temple_of_heaven$"
  },
+ "gm_landmark_temple_of_seti_abydos_desc": {
+  "en": "The temple Seti I raised to Osiris and the kings before him at Abydos, finished by his son Ramesses II, its walls carved with the finest reliefs of the New Kingdom and a list of seventy-six kings.",
+  "de": "Der Tempel, den Sethos I. in Abydos für Osiris und die Könige vor ihm errichten ließ, von seinem Sohn Ramses II. vollendet, mit den schönsten Reliefs des Neuen Reiches an den Wänden und einer Liste von sechsundsiebzig Königen."
+ },
  "gm_landmark_temple_of_seti_abydos_evt": {
   "en": "the $gm_skin_landmark_temple_of_seti_abydos$",
   "de": "der $gm_skin_landmark_temple_of_seti_abydos$"
@@ -12075,6 +12099,10 @@
   "en": "the $gm_skin_landmark_temples_of_baalbek$",
   "de": "die $gm_skin_landmark_temples_of_baalbek$"
  },
+ "gm_landmark_teotihuacan_desc": {
+  "en": "The city of the Pyramids of the Sun and the Moon on the Avenue of the Dead, home to perhaps a hundred thousand people around 500 and in ruins long before the Aztecs named it.",
+  "de": "Die Stadt der Sonnen- und der Mondpyramide an der Straße der Toten, um 500 Heimat von vielleicht hunderttausend Menschen und längst eine Ruine, als die Azteken ihr ihren Namen gaben."
+ },
  "gm_landmark_terracotta_army_desc": {
   "en": "The army of the First Emperor of Qin: thousands of life-sized warriors, chariots and horses in pits beside his burial mound, found by farmers digging a well in 1974.",
   "de": "Die Armee des Ersten Kaisers von Qin: Tausende lebensgroße Krieger, Streitwagen und Pferde in Gruben neben seinem Grabhügel, 1974 von Bauern beim Brunnengraben gefunden."
@@ -12083,9 +12111,17 @@
   "en": "the $gm_skin_landmark_terracotta_army$",
   "de": "die $gm_skin_landmark_terracotta_army$"
  },
+ "gm_landmark_tikal_desc": {
+  "en": "The greatest city of the Classic Maya, in the forests of Petén, its temple pyramids rising above the canopy over plazas abandoned in the tenth century.",
+  "de": "Die größte Stadt der klassischen Maya in den Wäldern des Petén, deren Tempelpyramiden über das Blätterdach und über im zehnten Jahrhundert verlassene Plätze ragen."
+ },
  "gm_landmark_tipus_tiger_desc": {
   "en": "A wooden tiger mauling a European soldier, made for Tipu Sultan of Mysore and taken when Seringapatam fell in 1799. It growls in the East India Company's museum in London.",
   "de": "Ein hölzerner Tiger, der einen europäischen Soldaten zerfleischt, für Tipu Sultan von Mysore gebaut und beim Fall von Seringapatam 1799 erbeutet. Er knurrt im Museum der Ostindien-Kompanie in London."
+ },
+ "gm_landmark_todai_ji_desc": {
+  "en": "The temple Emperor Shōmu founded at Nara, consecrated in 752, whose Great Buddha Hall, rebuilt in 1709, is the largest wooden building in the world.",
+  "de": "Der Tempel, den Kaiser Shōmu in Nara gründete und der 752 geweiht wurde; seine 1709 wiederaufgebaute Halle des Großen Buddha ist das größte Holzgebäude der Welt."
  },
  "gm_landmark_tomb_of_alexander_desc": {
   "en": "The tomb in Alexandria where the Ptolemies displayed the body of Alexander the Great, last seen in late antiquity and long since lost under the city.",
@@ -12151,6 +12187,10 @@
   "en": "the $gm_skin_landmark_uffizi_gallery$",
   "de": "die $gm_skin_landmark_uffizi_gallery$"
  },
+ "gm_landmark_valley_of_the_temples_desc": {
+  "en": "Seven Doric temples of the Greek city of Akragas on a ridge below Agrigento, raised in the fifth century BC. The Temple of Concord stands whole because it was made a church in the sixth century AD.",
+  "de": "Sieben dorische Tempel der griechischen Stadt Akragas auf einem Höhenzug unterhalb von Agrigent, im fünften Jahrhundert v. Chr. errichtet. Der Concordiatempel steht unversehrt, weil er im sechsten Jahrhundert n. Chr. zur Kirche gemacht wurde."
+ },
  "gm_landmark_valley_of_the_temples_evt": {
   "en": "the $gm_skin_landmark_valley_of_the_temples$",
   "de": "das $gm_skin_landmark_valley_of_the_temples$"
@@ -12179,6 +12219,10 @@
   "en": "King Ludwig of Bavaria's hall of fame: a marble Doric temple on a hill above the Danube near Regensburg, holding the busts and plaques of the great figures of German history.",
   "de": "Die Ruhmeshalle König Ludwigs von Bayern: ein dorischer Marmortempel auf einem Hügel über der Donau bei Regensburg, der die Büsten und Gedenktafeln der großen Gestalten der deutschen Geschichte beherbergt."
  },
+ "gm_landmark_walls_of_tallinn_desc": {
+  "en": "The medieval walls of Tallinn, called Reval, with towers such as Fat Margaret and Kiek in de Kök round the old Hanseatic town below Toompea hill.",
+  "de": "Die mittelalterlichen Mauern von Tallinn, genannt Reval, mit Türmen wie der Dicken Margarete und Kiek in de Kök rund um die alte Hansestadt unterhalb des Domberges."
+ },
  "gm_landmark_walls_of_tallinn_evt": {
   "en": "the $gm_skin_landmark_walls_of_tallinn$",
   "de": "die $gm_skin_landmark_walls_of_tallinn$"
@@ -12195,6 +12239,10 @@
   "en": "the $gm_skin_landmark_washington_monument$",
   "de": "das $gm_skin_landmark_washington_monument$"
  },
+ "gm_landmark_windsor_castle_desc": {
+  "en": "A royal fortress on a chalk bluff above the Thames, begun by William the Conqueror around 1070 and rebuilt in the Gothic style for George IV by Jeffry Wyatville from 1824.",
+  "de": "Eine königliche Festung auf einem Kreidefelsen über der Themse, um 1070 von Wilhelm dem Eroberer begonnen und ab 1824 von Jeffry Wyatville für Georg IV. im gotischen Stil umgebaut."
+ },
  "gm_landmark_winged_victory_of_samothrace_desc": {
   "en": "A marble Nike from the Sanctuary of the Great Gods on Samothrace, found in pieces in 1863 by the French consul Champoiseau and sent to the Louvre.",
   "de": "Eine Marmor-Nike aus dem Heiligtum der Großen Götter auf Samothrake, 1863 vom französischen Konsul Champoiseau in Stücken gefunden und in den Louvre geschickt."
@@ -12206,6 +12254,10 @@
  "gm_landmark_xanthos_desc": {
   "en": "The chief city of ancient Lycia, with its pillar tombs and the fallen Nereid Monument, a temple-tomb once ringed with statues of sea nymphs. Twice its people chose death over surrender.",
   "de": "Die Hauptstadt des antiken Lykiens mit ihren Pfeilergräbern und dem eingestürzten Nereidenmonument, einem Tempelgrab, das einst von Statuen von Meeresnymphen umringt war. Zweimal wählten ihre Bewohner den Tod statt der Kapitulation."
+ },
+ "gm_landmark_yungang_grottoes_desc": {
+  "en": "Some 250 caves and niches with over fifty thousand Buddhas carved into the sandstone cliffs near Datong under the Northern Wei, from 460.",
+  "de": "Rund 250 Höhlen und Nischen mit mehr als fünfzigtausend Buddhas, ab 460 unter den Nördlichen Wei in die Sandsteinfelsen bei Datong gehauen."
  },
  "gm_landmark_yungang_grottoes_evt": {
   "en": "the $gm_skin_landmark_yungang_grottoes$",
@@ -12543,6 +12595,10 @@
   "en": "Grand Monuments: $gm_policy_education$",
   "de": "Große Monumente: $gm_policy_education$"
  },
+ "gm_national_education_desc": {
+  "en": "From the [concept_grandeur] of every monument we own that is not contested, while the monument policy is $gm_policy_education$.",
+  "de": "Aus der [concept_grandeur] jedes nicht umstrittenen Monuments in unserem Besitz, solange die Monumentpolitik „$gm_policy_education$“ lautet."
+ },
  "gm_national_industrial": {
   "en": "Great Exhibition Halls",
   "de": "Großartige Ausstellungshallen"
@@ -12578,6 +12634,10 @@
  "gm_national_prestige_pct": {
   "en": "Grand Monuments",
   "de": "Große Monumente"
+ },
+ "gm_national_prestige_pct_desc": {
+  "en": "From the [concept_grandeur] of every monument we own that is not contested, heritage included: a share of our prestige for each step.",
+  "de": "Aus der [concept_grandeur] jedes nicht umstrittenen Monuments in unserem Besitz, Erbe eingeschlossen: ein Anteil an unserem Prestige für jeden Schritt."
  },
  "gm_national_promise": {
   "en": "A Promise Kept",
@@ -12696,12 +12756,32 @@
   "de": "Staatszeremoniell"
  },
  "gm_policy_ceremonial_effect_tt": {
-  "en": "The monument policy becomes #b State Ceremonial#!. Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5; tourism from each monument ×0.5. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
-  "de": "Die Monumentpolitik wird zu #b Staatszeremoniell#!. Legitimität und Autorität aus Monumenten für die Krone, die Republik, die Revolution und den Staatschef ×1,5; Tourismus aus jedem Monument ×0,5. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+  "en": "The monument policy becomes #b $gm_policy_ceremonial$#!. Legitimacy and the Leader's authority from monuments also count a quarter of the [concept_grandeur] of every monument that is not contested, heritage and trophies included, one dedicated $pm_monument_historic$ at half. The other policies' effects stop. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
+  "de": "Die Monumentpolitik wird zu #b $gm_policy_ceremonial$#!. Legitimität und die Autorität des Staatschefs aus Monumenten zählen zusätzlich ein Viertel der [concept_grandeur] jedes nicht umstrittenen Monuments, Erbe und Trophäen eingeschlossen, ein Monument mit der Widmung „$pm_monument_historic$“ zur Hälfte. Die Effekte der anderen Politiken enden. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+ },
+ "gm_policy_ceremonial_tt_line": {
+  "en": "\\n$gm_policy_ceremonial$: #v +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_ceremonial')|0]#! from ceremonies at all our monuments, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_ceremonial_share')|%0]#! of the [concept_grandeur] of every one not contested[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )].",
+  "de": "\\n$gm_policy_ceremonial$: #v +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_ceremonial')|0]#! durch Zeremonien an allen unseren Monumenten, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_ceremonial_share')|%0]#! der [concept_grandeur] jedes nicht umstrittenen Monuments[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )]."
  },
  "gm_policy_culture": {
   "en": "Cultural Promotion",
   "de": "Kulturförderung"
+ },
+ "gm_policy_culture_effect_tt": {
+  "en": "The monument policy becomes #b $gm_policy_culture$#!. [concept_cultural_pull] from monuments ×1.5, the share from monuments dedicated $pm_monument_historic$ ×1.25. The other policies' effects stop. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
+  "de": "Die Monumentpolitik wird zu #b $gm_policy_culture$#!. [concept_cultural_pull] aus Monumenten ×1,5, der Anteil aus Monumenten mit der Widmung „$pm_monument_historic$“ ×1,25. Die Effekte der anderen Politiken enden. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+ },
+ "gm_policy_culture_prestige_effect_tt": {
+  "en": "The monument policy becomes #b $gm_policy_culture$#!. [concept_prestige] from monuments ×1.5, the share from monuments dedicated $pm_monument_historic$ ×1.25. With $rule_cultural_hegemony_rule$ off, cultural pull does nothing, so $gm_policy_culture$ raises prestige instead. The other policies' effects stop. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
+  "de": "Die Monumentpolitik wird zu #b $gm_policy_culture$#!. [concept_prestige] aus Monumenten ×1,5, der Anteil aus Monumenten mit der Widmung „$pm_monument_historic$“ ×1,25. Ist „$rule_cultural_hegemony_rule$“ ausgeschaltet, bewirkt die kulturelle Anziehungskraft nichts, daher steigert „$gm_policy_culture$“ stattdessen das Prestige. Die Effekte der anderen Politiken enden. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+ },
+ "gm_policy_culture_standing_tt_line": {
+  "en": "\\n$gm_policy_culture$ multiplies it by #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture_standing')|2]#![SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )].",
+  "de": "\\n$gm_policy_culture$ multipliziert das mit #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture_standing')|2]#![SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )]."
+ },
+ "gm_policy_culture_tt_line": {
+  "en": "\\n$gm_policy_culture$ multiplies it by #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture')|1]#!.",
+  "de": "\\n$gm_policy_culture$ multipliziert das mit #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_culture')|1]#!."
  },
  "gm_policy_current_tt": {
   "en": "It is not the policy already in force",
@@ -12711,21 +12791,45 @@
   "en": "Public Education",
   "de": "Volksbildung"
  },
+ "gm_policy_education_effect_tt": {
+  "en": "The monument policy becomes #b $gm_policy_education$#!. Education access in every state, from the [concept_grandeur] of every monument that is not contested, one dedicated $pm_monument_historic$ at half. The other policies' effects stop. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
+  "de": "Die Monumentpolitik wird zu #b $gm_policy_education$#!. Bildungszugang in jedem Staat, aus der [concept_grandeur] jedes nicht umstrittenen Monuments, ein Monument mit der Widmung „$pm_monument_historic$“ zur Hälfte. Die Effekte der anderen Politiken enden. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+ },
  "gm_policy_effects_ceremonial": {
-  "en": "Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5; tourism from each monument ×0.5.",
-  "de": "Legitimität und Autorität aus Monumenten für die Krone, die Republik, die Revolution und den Staatschef ×1,5; Tourismus aus jedem Monument ×0,5."
+  "en": "Legitimacy and the Leader's authority from monuments also count a quarter of the [concept_grandeur] of every monument that is not contested, heritage and trophies included, one dedicated $pm_monument_historic$ at half.",
+  "de": "Legitimität und die Autorität des Staatschefs aus Monumenten zählen zusätzlich ein Viertel der [concept_grandeur] jedes nicht umstrittenen Monuments, Erbe und Trophäen eingeschlossen, ein Monument mit der Widmung „$pm_monument_historic$“ zur Hälfte."
+ },
+ "gm_policy_effects_culture": {
+  "en": "[concept_cultural_pull] from monuments ×1.5, the share from monuments dedicated $pm_monument_historic$ ×1.25.",
+  "de": "[concept_cultural_pull] aus Monumenten ×1,5, der Anteil aus Monumenten mit der Widmung „$pm_monument_historic$“ ×1,25."
+ },
+ "gm_policy_effects_culture_prestige": {
+  "en": "[concept_prestige] from monuments ×1.5, the share from monuments dedicated $pm_monument_historic$ ×1.25.",
+  "de": "[concept_prestige] aus Monumenten ×1,5, der Anteil aus Monumenten mit der Widmung „$pm_monument_historic$“ ×1,25."
+ },
+ "gm_policy_effects_education": {
+  "en": "[concept_education_access] in every state, #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_education')|%0]#! for each step of the [concept_grandeur] of every monument that is not contested, one dedicated $pm_monument_historic$ at half.",
+  "de": "[concept_education_access] in jedem Staat, #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_step_education')|%0]#! für jeden Schritt der [concept_grandeur] jedes nicht umstrittenen Monuments, ein Monument mit der Widmung „$pm_monument_historic$“ zur Hälfte."
  },
  "gm_policy_effects_open": {
-  "en": "Tourism Industry throughput from each monument ×1.5 and anniversaries about twice as often; maintenance ×1.5.",
-  "de": "Durchsatz der Tourismusindustrie aus jedem Monument ×1,5 und Jahrestage etwa doppelt so oft; Unterhalt ×1,5."
+  "en": "Tourism output from each monument ×1.5, from one dedicated $pm_monument_historic$ ×1.25.",
+  "de": "Tourismusertrag aus jedem Monument ×1,5, aus einem Monument mit der Widmung „$pm_monument_historic$“ ×1,25."
+ },
+ "gm_policy_history_half_clause": {
+  "en": ", counting monuments dedicated $pm_monument_historic$ at half",
+  "de": ", wobei Monumente mit der Widmung „$pm_monument_historic$“ zur Hälfte zählen"
  },
  "gm_policy_open": {
   "en": "Open to the Public",
   "de": "Öffentlich zugänglich"
  },
  "gm_policy_open_effect_tt": {
-  "en": "The monument policy becomes #b Open to the Public#!. Tourism Industry throughput from each monument ×1.5 and anniversaries about twice as often; maintenance ×1.5. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
-  "de": "Die Monumentpolitik wird zu #b Öffentlich zugänglich#!. Durchsatz der Tourismusindustrie aus jedem Monument ×1,5 und Jahrestage etwa doppelt so oft; Unterhalt ×1,5. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+  "en": "The monument policy becomes #b $gm_policy_open$#!. Tourism output from each monument ×1.5, from one dedicated $pm_monument_historic$ ×1.25. The other policies' effects stop. National effects change at once, each monument's own at the start of next month. After this, the policy cannot change for #v 60#! months; a first choice starts no wait.",
+  "de": "Die Monumentpolitik wird zu #b $gm_policy_open$#!. Tourismusertrag aus jedem Monument ×1,5, aus einem Monument mit der Widmung „$pm_monument_historic$“ ×1,25. Die Effekte der anderen Politiken enden. Nationale Effekte ändern sich sofort, die der einzelnen Monumente zu Beginn des nächsten Monats. Danach kann die Politik #v 60#! Monate lang nicht geändert werden; eine erste Wahl löst keine Wartezeit aus."
+ },
+ "gm_policy_prestige_tt_line": {
+  "en": "\\n$gm_policy_culture$ multiplies it by #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_prestige_standing')|2]#![SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )], since cultural pull does nothing with $rule_cultural_hegemony_rule$ off.",
+  "de": "\\n$gm_policy_culture$ multipliziert das mit #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_policy_factor_prestige_standing')|2]#![SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_historic'), '(CFixedPoint)0' ), 'gm_policy_history_half_clause', 'te_tt_blank' )], da die kulturelle Anziehungskraft bei ausgeschalteter „$rule_cultural_hegemony_rule$“ nichts bewirkt."
  },
  "gm_policy_upkeep_mothballed": {
   "en": "Mothballed",
@@ -12788,8 +12892,8 @@
   "de": "Fertiggestellt: #v [State.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen · Alter: #G +[State.MakeScope.ScriptValue('gm_state_primary_age')|1]#!"
  },
  "gm_row_frozen_tt": {
-  "en": "#b Finished#!\\nIt was dedicated at the levels built, and its size is its record now: nothing built later joins it. It grows grander as it ages: by 2% of its starting grandeur a year while its message stands or it is kept as heritage, half that under Mothballed, and not at all while it is contested. Its anniversaries and opportunities add to it too. More building in this state is a new construction site, and a new monument.",
-  "de": "#b Fertiggestellt#!\\nEs wurde mit den gebauten Stufen gewidmet, und seine Größe ist nun festgeschrieben: Was später gebaut wird, schließt sich ihm nicht an. Es gewinnt mit dem Alter an Grandeur: um 2% seiner Ausgangs-Grandeur pro Jahr, solange seine Botschaft Bestand hat oder es als Erbe bewahrt wird, halb so viel unter „Eingemottet“ und gar nicht, solange es umstritten ist. Auch seine Jahrestage und Gelegenheiten mehren sie. Weiteres Bauen in diesem Staat ist eine neue Baustelle und ein neues Monument."
+  "en": "#b Finished#!\\nIt was dedicated at the levels built, and its size is its record now: nothing built later joins it. It grows grander as it ages: by 2% of its starting grandeur a year while its message stands or it is kept as heritage, and not at all while it is contested. Its anniversaries and opportunities add to it too. More building in this state is a new construction site, and a new monument.",
+  "de": "#b Fertiggestellt#!\\nEs wurde mit den gebauten Stufen gewidmet, und seine Größe ist nun festgeschrieben: Was später gebaut wird, schließt sich ihm nicht an. Es gewinnt mit dem Alter an Grandeur: um 2% seiner Ausgangs-Grandeur pro Jahr, solange seine Botschaft Bestand hat oder es als Erbe bewahrt wird, und gar nicht, solange es umstritten ist. Auch seine Jahrestage und Gelegenheiten mehren sie. Weiteres Bauen in diesem Staat ist eine neue Baustelle und ein neues Monument."
  },
  "gm_row_landmark": {
   "en": "Historical monument",
@@ -12840,8 +12944,8 @@
   "de": "Altertum der Ahnen"
  },
  "gm_sig_antiquity_effect": {
-  "en": "#G +1#! [concept_cultural_pull], and #G +10%#! Tourism Industry throughput in its state; the $ig_intelligentsia$ approve",
-  "de": "#G +1#! [Concept('concept_cultural_pull','kulturelle Anziehungskraft')] und #G +10%#! Durchsatz der Tourismusindustrie in seinem Staat; die $ig_intelligentsia$ befürworten es"
+  "en": "#G +1#! [concept_cultural_pull], and #G +5%#! tourism output in its state; the $ig_intelligentsia$ approve",
+  "de": "#G +1#! [Concept('concept_cultural_pull','kulturelle Anziehungskraft')] und #G +5%#! Tourismusertrag in seinem Staat; die $ig_intelligentsia$ befürworten es"
  },
  "gm_sig_archive": {
   "en": "Epigraphic Archive",
@@ -12864,8 +12968,8 @@
   "de": "#G +2%#! [concept_innovation]; die $ig_intelligentsia$ befürworten es"
  },
  "gm_sig_first_emperor_effect": {
-  "en": "$gm_sig_antiquity$'s effect, and #G +25%#! Tourism Industry throughput in its state",
-  "de": "Wirkung von $gm_sig_antiquity$ und #G +25%#! Durchsatz der Tourismusindustrie in seinem Staat"
+  "en": "$gm_sig_antiquity$'s effect, and #G +10%#! tourism output in its state",
+  "de": "Wirkung von $gm_sig_antiquity$ und #G +10%#! Tourismusertrag in seinem Staat"
  },
  "gm_sig_glory_of_athens_effect": {
   "en": "$gm_sig_antiquity$'s effect, and #G +2%#! [concept_influence]",
@@ -12976,8 +13080,8 @@
   "de": "#v [State.MakeScope.ScriptValue('gm_state_site_level')|0]#! Stufen gebaut, #v [State.MakeScope.ScriptValue('gm_state_disp_site_grandeur')|1]#! [concept_grandeur]"
  },
  "gm_site_row_detail_tt": {
-  "en": "#b Being built#!\\nEvery level built here adds to the grandeur of the monument it will be, counted at the start of each month. It has no upkeep and no effects until it is dedicated. The dedication finishes it at the levels built; anything built here after is a monument of its own.",
-  "de": "#b Im Bau#!\\nJede hier gebaute Stufe trägt zur Grandeur des Monuments bei, das es werden wird, gezählt zu Beginn jedes Monats. Es hat keinen Unterhalt und keine Wirkungen, bis es gewidmet wird. Die Widmung stellt es mit den gebauten Stufen fertig; was hier danach gebaut wird, ist ein eigenes Monument."
+  "en": "#b Being built#!\\nEvery level built here adds to the grandeur of the monument it will be, counted at the start of each month. It has no effects until it is dedicated. The dedication finishes it at the levels built; anything built here after is a monument of its own.",
+  "de": "#b Im Bau#!\\nJede hier gebaute Stufe trägt zur Grandeur des Monuments bei, das es werden wird, gezählt zu Beginn jedes Monats. Es hat keine Wirkungen, bis es gewidmet wird. Die Widmung stellt es mit den gebauten Stufen fertig; was hier danach gebaut wird, ist ein eigenes Monument."
  },
  "gm_site_row_rate": {
   "en": "A level finished now adds #v [State.MakeScope.ScriptValue('gm_world_rate_value')|3]#! [concept_grandeur] (#v [State.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]#! in 1836)",
@@ -13848,8 +13952,8 @@
   "de": "#b [concept_grandeur]#! #v [State.MakeScope.ScriptValue('gm_state_grandeur')|0]#!\\nDie Stufe dieses Monuments. Was es diesem Staat bringt, wächst in Schritten: Der nächste ist bei #v [State.MakeScope.ScriptValue('gm_state_disp_next_step')|0]#! abgeschlossen, und der Balken zeigt, wie weit der Schritt, der gerade gefüllt wird, gekommen ist. Seine Grandeur zählt auch für die nationalen Effekte, die auf dem Reiter „Große Monumente“ des Fensters „Timeline Extended“ aufgeführt sind."
  },
  "gm_state_grandeur_tt_many": {
-  "en": "#b [concept_grandeur]#! #v [State.MakeScope.ScriptValue('gm_state_grandeur')|1]#!\\nEvery monument standing here together: the first one's own #v [State.MakeScope.ScriptValue('gm_state_primary_grandeur')|1]#! (#v [State.MakeScope.ScriptValue('gm_state_primary_start')|1]#! from its #v [State.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels and #v [State.MakeScope.ScriptValue('gm_state_primary_age')|1]#! from its years) and #v [State.MakeScope.ScriptValue('gm_state_secondary_grandeur')|1]#! more, listed below. The Tourism Industry throughput here grows with all of it in steps: the next completes at #v [State.MakeScope.ScriptValue('gm_state_disp_next_step')|0]#!, and the bar shows how far the step now being filled has come. Each dedication's own effect here counts the grandeur of the monuments that carry it. Their grandeur also counts toward the national effects, listed on the Grand Monuments tab of the Timeline Extended window.",
-  "de": "#b [concept_grandeur]#! #v [State.MakeScope.ScriptValue('gm_state_grandeur')|1]#!\\nAlle hier stehenden Monumente zusammen: die eigene des ersten #v [State.MakeScope.ScriptValue('gm_state_primary_grandeur')|1]#! (#v [State.MakeScope.ScriptValue('gm_state_primary_start')|1]#! aus seinen #v [State.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen und #v [State.MakeScope.ScriptValue('gm_state_primary_age')|1]#! aus seinen Jahren) und weitere #v [State.MakeScope.ScriptValue('gm_state_secondary_grandeur')|1]#!, unten aufgeführt. Der Durchsatz der Tourismusindustrie wächst hier mit all dem in Schritten: Der nächste ist bei #v [State.MakeScope.ScriptValue('gm_state_disp_next_step')|0]#! abgeschlossen, und der Balken zeigt, wie weit der Schritt, der gerade gefüllt wird, gekommen ist. Die eigene Wirkung jeder Widmung zählt hier die Grandeur der Monumente, die sie tragen. Deren Grandeur zählt auch für die nationalen Effekte, die auf dem Reiter „Große Monumente“ des Fensters „Timeline Extended“ aufgeführt sind."
+  "en": "#b [concept_grandeur]#! #v [State.MakeScope.ScriptValue('gm_state_grandeur')|1]#!\\nEvery monument standing here together: the first one's own #v [State.MakeScope.ScriptValue('gm_state_primary_grandeur')|1]#! (#v [State.MakeScope.ScriptValue('gm_state_primary_start')|1]#! from its #v [State.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels and #v [State.MakeScope.ScriptValue('gm_state_primary_age')|1]#! from its years) and #v [State.MakeScope.ScriptValue('gm_state_secondary_grandeur')|1]#! more, listed below. The tourism output here grows with all of it in steps: the next completes at #v [State.MakeScope.ScriptValue('gm_state_disp_next_step')|0]#!, and the bar shows how far the step now being filled has come. Each dedication's own effect here counts the grandeur of the monuments that carry it. Their grandeur also counts toward the national effects, listed on the Grand Monuments tab of the Timeline Extended window.",
+  "de": "#b [concept_grandeur]#! #v [State.MakeScope.ScriptValue('gm_state_grandeur')|1]#!\\nAlle hier stehenden Monumente zusammen: die eigene des ersten #v [State.MakeScope.ScriptValue('gm_state_primary_grandeur')|1]#! (#v [State.MakeScope.ScriptValue('gm_state_primary_start')|1]#! aus seinen #v [State.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! Stufen und #v [State.MakeScope.ScriptValue('gm_state_primary_age')|1]#! aus seinen Jahren) und weitere #v [State.MakeScope.ScriptValue('gm_state_secondary_grandeur')|1]#!, unten aufgeführt. Der Tourismusertrag wächst hier mit all dem in Schritten: Der nächste ist bei #v [State.MakeScope.ScriptValue('gm_state_disp_next_step')|0]#! abgeschlossen, und der Balken zeigt, wie weit der Schritt, der gerade gefüllt wird, gekommen ist. Die eigene Wirkung jeder Widmung zählt hier die Grandeur der Monumente, die sie tragen. Deren Grandeur zählt auch für die nationalen Effekte, die auf dem Reiter „Große Monumente“ des Fensters „Timeline Extended“ aufgeführt sind."
  },
  "gm_state_grandeur_tt_one": {
   "en": "#b [concept_grandeur]#! #v [State.MakeScope.ScriptValue('gm_state_grandeur')|1]#!\\nIts #v [State.MakeScope.ScriptValue('gm_state_primary_start')|1]#! from its #v [State.MakeScope.ScriptValue('gm_state_primary_levels')|0]#! levels and #v [State.MakeScope.ScriptValue('gm_state_primary_age')|1]#! from its years. What it gives this state grows in steps: the next completes at #v [State.MakeScope.ScriptValue('gm_state_disp_next_step')|0]#!, and the bar shows how far the step now being filled has come. Its grandeur also counts toward the national effects, listed on the Grand Monuments tab of the Timeline Extended window.",
@@ -13868,8 +13972,8 @@
   "de": "Archiv: Universitäten"
  },
  "gm_state_local_tt": {
-  "en": "#b [State.GetCustom('gm_local_effect_label')]#! [State.GetCustom('gm_local_effect_value')]\\nWhat its dedication, #v [State.GetCustom('gm_dedication_name')]#!, does in this state, whatever the monument's status. It grows with each step of its [concept_grandeur]. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies it by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!.",
-  "de": "#b [State.GetCustom('gm_local_effect_label')]#! [State.GetCustom('gm_local_effect_value')]\\nWas seine Widmung, #v [State.GetCustom('gm_dedication_name')]#!, in diesem Staat bewirkt, unabhängig vom Status des Monuments. Die Wirkung wächst mit jedem Schritt seiner [concept_grandeur]. Die Monumentpolitik, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multipliziert sie mit #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!."
+  "en": "#b [State.GetCustom('gm_local_effect_label')]#! [State.GetCustom('gm_local_effect_value')]\\nWhat its dedication, #v [State.GetCustom('gm_dedication_name')]#!, does in this state, whatever the monument's status. It grows with each step of its [concept_grandeur].",
+  "de": "#b [State.GetCustom('gm_local_effect_label')]#! [State.GetCustom('gm_local_effect_value')]\\nWas seine Widmung, #v [State.GetCustom('gm_dedication_name')]#!, in diesem Staat bewirkt, unabhängig vom Status des Monuments. Die Wirkung wächst mit jedem Schritt seiner [concept_grandeur]."
  },
  "gm_state_mon_header": {
   "en": "Also Standing Here",
@@ -13892,16 +13996,20 @@
   "de": "Öffnet den Reiter „Große Monumente“ des Fensters „Timeline Extended“."
  },
  "gm_state_sig_tourism_tt": {
-  "en": "#b Tourism Industry throughput#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_tourism')|%0]#!\\nFrom the monuments here that carry $gm_sig_antiquity$ on the dedication it was given on, whatever their status: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_antiquity')|%0]#! for each step of their [concept_grandeur], counted together, and #G +[State.MakeScope.ScriptValue('gm_step_sig_local_first_emperor')|%0]#! more a step for $gm_sig_first_emperor$. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies it by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!.",
-  "de": "#b Durchsatz der Tourismusindustrie#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_tourism')|%0]#!\\nVon den Monumenten hier, die $gm_sig_antiquity$ auf der Widmung tragen, auf der sie verliehen wurde, gleich welchen Status sie haben: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_antiquity')|%0]#! für jeden Schritt ihrer [concept_grandeur], zusammengezählt, und #G +[State.MakeScope.ScriptValue('gm_step_sig_local_first_emperor')|%0]#! mehr je Schritt für $gm_sig_first_emperor$. Die Monumentpolitik, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multipliziert das mit #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!."
+  "en": "#b $goods_output_tourism_mult$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_tourism')|%0]#!\\nFrom the monuments here that carry $gm_sig_antiquity$ on the dedication it was given on, whatever their status: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_antiquity')|%0]#! for each step of their [concept_grandeur], counted together, and #G +[State.MakeScope.ScriptValue('gm_step_sig_local_first_emperor')|%0]#! more a step for $gm_sig_first_emperor$. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies it by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism')|1]#!.",
+  "de": "#b $goods_output_tourism_mult$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_tourism')|%0]#!\\nVon den Monumenten hier, die $gm_sig_antiquity$ auf der Widmung tragen, auf der sie verliehen wurde, gleich welchen Status sie haben: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_antiquity')|%0]#! für jeden Schritt ihrer [concept_grandeur], zusammengezählt, und #G +[State.MakeScope.ScriptValue('gm_step_sig_local_first_emperor')|%0]#! mehr je Schritt für $gm_sig_first_emperor$. Die Monumentpolitik, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multipliziert das mit #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism')|1]#!."
  },
  "gm_state_sig_university_tt": {
-  "en": "#b $building_university$ throughput#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_university')|%0]#!\\nFrom the monuments here that carry $gm_sig_archive$ on the dedication it was given on, whatever their status: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_archive')|%0]#! for each step of their [concept_grandeur], counted together. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies it by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!.",
-  "de": "#b Durchsatz der $building_university$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_university')|%0]#!\\nVon den Monumenten hier, die $gm_sig_archive$ auf der Widmung tragen, auf der sie verliehen wurde, gleich welchen Status sie haben: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_archive')|%0]#! für jeden Schritt ihrer [concept_grandeur], zusammengezählt. Die Monumentpolitik, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multipliziert das mit #v ×[State.MakeScope.ScriptValue('gm_policy_factor_local')|1]#!."
+  "en": "#b $building_university$ throughput#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_university')|%0]#!\\nFrom the monuments here that carry $gm_sig_archive$ on the dedication it was given on, whatever their status: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_archive')|%0]#! for each step of their [concept_grandeur], counted together.",
+  "de": "#b Durchsatz der $building_university$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_sig_university')|%0]#!\\nVon den Monumenten hier, die $gm_sig_archive$ auf der Widmung tragen, auf der sie verliehen wurde, gleich welchen Status sie haben: #G +[State.MakeScope.ScriptValue('gm_step_sig_local_archive')|%0]#! für jeden Schritt ihrer [concept_grandeur], zusammengezählt."
+ },
+ "gm_state_tourism_history_clause": {
+  "en": ", counting monuments dedicated $pm_monument_historic$ here at half what the policy adds",
+  "de": ", wobei Monumente mit der Widmung „$pm_monument_historic$“ hier nur zur Hälfte von dem zählen, was die Politik hinzufügt"
  },
  "gm_state_tourism_tt": {
-  "en": "#b $building_tourism_industry_throughput_add$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_tourism')|%0]#!\\nVisitors come to see it, whatever it honours: #G +[State.MakeScope.ScriptValue('gm_step_tourism')|%0]#! for each step of its [concept_grandeur]. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies that by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism')|1]#!.\\nThe tourism card above does not count it among its monuments; it is in the card's #bold All modifiers#! line.",
-  "de": "#b $building_tourism_industry_throughput_add$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_tourism')|%0]#!\\nBesucher kommen, um es zu sehen, gleich was es ehrt: #G +[State.MakeScope.ScriptValue('gm_step_tourism')|%0]#! für jeden Schritt seiner [concept_grandeur]. Die Monumentpolitik, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multipliziert das mit #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism')|1]#!.\\nDie Tourismuskarte oben zählt es nicht zu ihren Monumenten; es steckt in der Zeile #bold Alle Modifikatoren#! der Karte."
+  "en": "#b $goods_output_tourism_mult$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_tourism')|%0]#!\\nVisitors come to see it, whatever it honours: #G +[State.MakeScope.ScriptValue('gm_step_tourism')|%0]#! for each step of its [concept_grandeur]. The monument policy, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multiplies that by #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism_here')|2]#![SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('gm_state_historic_grandeur'), '(CFixedPoint)0' ), 'gm_state_tourism_history_clause', 'te_tt_blank' )].\\nThe tourism card above does not count it among its monuments; it is in the card's #bold All modifiers#! line.",
+  "de": "#b $goods_output_tourism_mult$#! #G +[State.MakeScope.ScriptValue('gm_state_disp_tourism')|%0]#!\\nBesucher kommen, um es zu sehen, gleich was es ehrt: #G +[State.MakeScope.ScriptValue('gm_step_tourism')|%0]#! für jeden Schritt seiner [concept_grandeur]. Die Monumentpolitik, #v [State.GetOwner.GetCustom('gm_policy_name')]#!, multipliziert das mit #v ×[State.MakeScope.ScriptValue('gm_policy_factor_tourism_here')|2]#![SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('gm_state_historic_grandeur'), '(CFixedPoint)0' ), 'gm_state_tourism_history_clause', 'te_tt_blank' )].\\nDie Tourismuskarte oben zählt es nicht zu ihren Monumenten; es steckt in der Zeile #bold Alle Modifikatoren#! der Karte."
  },
  "gm_state_tr_header": {
   "en": "Trophies on Display",
@@ -14380,8 +14488,8 @@
   "de": "Kein Monumentunterhalt"
  },
  "gm_upkeep_desc": {
-  "en": "The upkeep of the levels the monuments here were built with, paid by their one finished building: half again as much under Open to the Public, nothing while Mothballed.",
-  "de": "Der Unterhalt der Stufen, mit denen die Monumente hier gebaut wurden, gezahlt von ihrem einen fertigen Gebäude: anderthalbmal so viel bei „Öffentlich zugänglich“, nichts bei „Eingemottet“."
+  "en": "Grand Monuments cost nothing to maintain: this cancels the building's maintenance.",
+  "de": "Große Monumente kosten keinen Unterhalt: Dies gleicht den Unterhalt des Gebäudes aus."
  },
  "gov_corporate_state_autocracy": {
   "en": "Corporate Autocracy",
@@ -19420,16 +19528,16 @@
   "de": "Städte, die schon vor der Ankunft der Siedler angelegt wurden, beschleunigen den Bau hier. Es wächst mit den monatlich ankommenden Siedlern und erreicht ab #b 2.000#! im Monat volle Stärke."
  },
  "resettlement_possible_open_frontier_tt": {
-  "en": "This region is an open frontier: fewer than #b [SCOPE.ScriptValue('resettlement_frontier_open_density')|1]#! people per km² (now #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!)",
-  "de": "Diese Region ist eine offene Grenzregion: weniger als #b [SCOPE.ScriptValue('resettlement_frontier_open_density')|1]#! Menschen pro km² (derzeit #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!)"
+  "en": "This region is an open frontier: fewer than #b [SCOPE.ScriptValue('resettlement_frontier_open_density')|1]#! people per km² (now #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!). The limit is #b [SCOPE.ScriptValue('resettlement_frontier_open_base')|0]#! at a world population of one billion, ×#b [SCOPE.ScriptValue('resettlement_world_population_scale')|2]#! for today's world population and ×#b [SCOPE.ScriptValue('resettlement_crowding_scale')|2]#! for this state's $state_migration_crowding_density_mult$",
+  "de": "Diese Region ist eine offene Grenzregion: weniger als #b [SCOPE.ScriptValue('resettlement_frontier_open_density')|1]#! Menschen pro km² (derzeit #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!). Der Grenzwert beträgt #b [SCOPE.ScriptValue('resettlement_frontier_open_base')|0]#! bei einer Weltbevölkerung von einer Milliarde, ×#b [SCOPE.ScriptValue('resettlement_world_population_scale')|2]#! für die heutige Weltbevölkerung und ×#b [SCOPE.ScriptValue('resettlement_crowding_scale')|2]#! für die $state_migration_crowding_density_mult$ dieses Staates"
  },
  "resettlement_possible_rule_tt": {
   "en": "Internal resettlement is enabled in the game rules",
   "de": "Interne Umsiedlung ist in den Spielregeln aktiviert"
  },
  "resettlement_possible_still_open_tt": {
-  "en": "This frontier is not yet closed: fewer than #b [SCOPE.ScriptValue('resettlement_frontier_close_density')|1]#! people per km² (now #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!)",
-  "de": "Diese Grenzregion ist noch nicht geschlossen: weniger als #b [SCOPE.ScriptValue('resettlement_frontier_close_density')|1]#! Menschen pro km² (derzeit #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!)"
+  "en": "This frontier is not yet closed: fewer than #b [SCOPE.ScriptValue('resettlement_frontier_close_density')|1]#! people per km² (now #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!). The limit is #b [SCOPE.ScriptValue('resettlement_frontier_close_base')|0]#! at a world population of one billion, ×#b [SCOPE.ScriptValue('resettlement_world_population_scale')|2]#! for today's world population and ×#b [SCOPE.ScriptValue('resettlement_crowding_scale')|2]#! for this state's $state_migration_crowding_density_mult$",
+  "de": "Diese Grenzregion ist noch nicht geschlossen: weniger als #b [SCOPE.ScriptValue('resettlement_frontier_close_density')|1]#! Menschen pro km² (derzeit #b [SCOPE.ScriptValue('resettlement_frontier_density')|1]#!). Der Grenzwert beträgt #b [SCOPE.ScriptValue('resettlement_frontier_close_base')|0]#! bei einer Weltbevölkerung von einer Milliarde, ×#b [SCOPE.ScriptValue('resettlement_world_population_scale')|2]#! für die heutige Weltbevölkerung und ×#b [SCOPE.ScriptValue('resettlement_crowding_scale')|2]#! für die $state_migration_crowding_density_mult$ dieses Staates"
  },
  "resettlement_programme_bonus_pm_line": {
   "en": "\\n\\nIts effects on this state, including faster incorporation and colony growth, grow with the settlers arriving each month and are at full strength from #b 2,000#! a month.",
@@ -20059,6 +20167,18 @@
   "en": "Fusion torch",
   "de": "Fusionsfackel"
  },
+ "sr_cf_notice_where_tt": {
+  "en": "The Solar System list shows the fleets on their way to each world, and when the first lands.",
+  "de": "Die Liste „Sonnensystem“ zeigt die Flotten auf dem Weg zu jeder Welt und wann die erste landet."
+ },
+ "sr_cf_target_clear_tt": {
+  "en": "The programme chooses where our next colony fleet goes.",
+  "de": "Das Programm wählt, wohin unsere nächste Kolonieflotte fliegt."
+ },
+ "sr_cf_target_set_tt": {
+  "en": "Our next colony fleet goes to this world.",
+  "de": "Unsere nächste Kolonieflotte fliegt zu dieser Welt."
+ },
  "sr_choice_mars_direct": {
   "en": "Direct Mars Landing",
   "de": "Direkte Marslandung"
@@ -20563,13 +20683,33 @@
   "en": "Extraplanetary Base Room",
   "de": "Raum des Außerplanetaren Stützpunkts"
  },
+ "sr_ebase_room_full_tt": {
+  "en": "Our Extraplanetary Base levels, built and queued, are within our room: 10 levels from the near-Earth asteroids and the room of each colony we hold",
+  "de": "Unsere Stufen der Außerplanetaren Stützpunkte, gebaut und in der Warteschlange, liegen innerhalb unseres Raums: 10 Stufen von den erdnahen Asteroiden und der Raum jeder Kolonie, die wir halten"
+ },
  "sr_ebase_room_penalty": {
   "en": "Extraplanetary Base Room",
   "de": "Raum des Außerplanetaren Stützpunkts"
  },
+ "sr_emig_at_highest_tt": {
+  "en": "Emigration is already at High.",
+  "de": "Die Auswanderung steht bereits auf „Hoch“."
+ },
  "sr_emig_at_lowest_tt": {
   "en": "Emigration is already off.",
   "de": "Die Auswanderung ist bereits ausgeschaltet."
+ },
+ "sr_emig_level_down_tt": {
+  "en": "Send fewer settlers each month.",
+  "de": "Jeden Monat weniger Siedler entsenden."
+ },
+ "sr_emig_level_up_tt": {
+  "en": "Send more settlers each month.",
+  "de": "Jeden Monat mehr Siedler entsenden."
+ },
+ "sr_emig_priority_step_tt": {
+  "en": "Step this colony's priority for settlers: Normal, High, Closed, Low.",
+  "de": "Die Priorität dieser Kolonie für Siedler weiterschalten: Normal, Hoch, Geschlossen, Niedrig."
  },
  "sr_facility_fire_damage": {
   "en": "Facility Fire Damage",
@@ -20627,6 +20767,38 @@
   "en": "Catastrophic Space Mission Failure",
   "de": "Katastrophales Scheitern der Weltraummission"
  },
+ "sr_mod_cannot_queue_tt": {
+  "en": "We hold this colony, its founding specialization is chosen, the queue has a free place (of 20), and the module has room: four levels between the two specializations, and the colony's slots for Habitats, Spaceports and Defences, counting what is queued and on its way",
+  "de": "Wir halten diese Kolonie, ihre Gründungsspezialisierung ist gewählt, die Warteschlange hat einen freien Platz (von 20), und das Modul hat Raum: vier Stufen zwischen den beiden Spezialisierungen sowie die Plätze der Kolonie für Habitate, Raumhäfen und Verteidigungsanlagen, wobei Eingereihtes und bereits Unterwegs befindliches mitgezählt wird"
+ },
+ "sr_mod_clear_queue_tt": {
+  "en": "Remove all of this colony's modules from the queue. Modules already built or on their way still arrive.",
+  "de": "Alle Module dieser Kolonie aus der Warteschlange entfernen. Bereits gebaute oder unterwegs befindliche Module treffen weiterhin ein."
+ },
+ "sr_mod_nothing_queued_tt": {
+  "en": "Nothing is queued at this colony",
+  "de": "Für diese Kolonie steht nichts in der Warteschlange"
+ },
+ "sr_mod_queue_def_tt": {
+  "en": "Queue Defences. They do nothing until space fleets are in the game.",
+  "de": "Verteidigungsanlagen in die Warteschlange stellen. Sie bewirken nichts, bis es Raumflotten im Spiel gibt."
+ },
+ "sr_mod_queue_hab_tt": {
+  "en": "Queue a Habitat: half of the colony's starting room again for people.",
+  "de": "Ein Habitat in die Warteschlange stellen: noch einmal die Hälfte des Anfangsraums der Kolonie für Menschen."
+ },
+ "sr_mod_queue_port_tt": {
+  "en": "Queue a Spaceport. It does nothing until space fleets are in the game.",
+  "de": "Einen Raumhafen in die Warteschlange stellen. Er bewirkt nichts, bis es Raumflotten im Spiel gibt."
+ },
+ "sr_mod_queue_spec_a_tt": {
+  "en": "Queue one more level of this colony's first specialization.",
+  "de": "Eine weitere Stufe der ersten Spezialisierung dieser Kolonie in die Warteschlange stellen."
+ },
+ "sr_mod_queue_spec_b_tt": {
+  "en": "Queue one more level of this colony's second specialization.",
+  "de": "Eine weitere Stufe der zweiten Spezialisierung dieser Kolonie in die Warteschlange stellen."
+ },
  "sr_moon_base_industrial": {
   "en": "Industrial Lunar Facility",
   "de": "Industrielle Mondanlage"
@@ -20658,6 +20830,10 @@
  "sr_mq_module_port": {
   "en": "Spaceport",
   "de": "Raumhafen"
+ },
+ "sr_mq_remove_tt": {
+  "en": "Remove this module from the queue. The ones behind it move up.",
+  "de": "Dieses Modul aus der Warteschlange entfernen. Die dahinter rücken nach."
  },
  "sr_no_colonies_to_maintain_tt": {
   "en": "No solar system colonies have been established.",
@@ -20694,6 +20870,18 @@
  "sr_pace_note_standard": {
   "en": "The standard approach: the programme's own pace and the milestone's base setback risk, with no approach cost.",
   "de": "Das Standardvorgehen: das eigene Tempo des Programms und das Grundrisiko für Rückschläge des Meilensteins, ohne Kosten des Vorgehens."
+ },
+ "sr_power_state_data_received": {
+  "en": "#G launched, and its data received#!",
+  "de": "#G gestartet, und seine Daten sind eingetroffen#!"
+ },
+ "sr_power_state_first": {
+  "en": "#G achieved, first in the world#!",
+  "de": "#G erreicht, weltweit zuerst#!"
+ },
+ "sr_power_state_launched": {
+  "en": "#Y launched; its data is still on its way#!",
+  "de": "#Y gestartet; seine Daten sind noch unterwegs#!"
  },
  "sr_probe_astro_wonders_data": {
   "en": "Interstellar Data: Astrophysical Wonders",
@@ -20938,6 +21126,10 @@
  "sr_site_notice_more_text": {
   "en": " and other worlds besides",
   "de": " und weitere Welten"
+ },
+ "sr_site_notice_where_tt": {
+  "en": "Solar System Colonization's Solar System list shows every world and who holds it.",
+  "de": "Die Liste „Sonnensystem“ der „Besiedlung des Sonnensystems“ zeigt jede Welt und wer sie hält."
  },
  "sr_solar_colony_established_tt": {
   "en": "A new colony has been established in the solar system.",
@@ -21266,6 +21458,10 @@
  "sr_window_verdict_waits": {
   "en": "our approach waits for a window",
   "de": "unser Ansatz wartet auf ein Fenster"
+ },
+ "sr_world_left_to_claim_tt": {
+  "en": "A world in the solar system is unclaimed",
+  "de": "Eine Welt im Sonnensystem ist noch unbeansprucht"
  },
  "st_res_aeroplanes_store_flow": {
   "en": "Strategic Reserve Aeroplanes Intake",
@@ -22411,6 +22607,18 @@
   "en": "Bound",
   "de": "Gebunden"
  },
+ "te_asat_moratorium_detail_bound": {
+  "en": "In force, and we are a party: an anti-satellite strike of ours costs twice the infamy and twice the case strength at the UN.",
+  "de": "In Kraft, und wir sind Vertragspartei: Ein Antisatellitenschlag von uns kostet doppelt so viel Verrufenheit und doppelt so viel Fallstärke bei den UN."
+ },
+ "te_asat_moratorium_detail_not_adopted": {
+  "en": "The United Nations has not adopted it. Once a country has struck another's satellites, it can come before the General Assembly.",
+  "de": "Die Vereinten Nationen haben es nicht angenommen. Sobald ein Land die Satelliten eines anderen angegriffen hat, kann es vor die Generalversammlung kommen."
+ },
+ "te_asat_moratorium_detail_not_bound": {
+  "en": "In force, but we are not a party: a strike of ours costs the usual infamy and case strength.",
+  "de": "In Kraft, aber wir sind keine Vertragspartei: Ein Schlag von uns kostet die übliche Verrufenheit und Fallstärke."
+ },
  "te_asat_moratorium_not_adopted": {
   "en": "Not Adopted",
   "de": "Nicht beschlossen"
@@ -22418,6 +22626,18 @@
  "te_asat_moratorium_not_bound": {
   "en": "Not Bound",
   "de": "Nicht gebunden"
+ },
+ "te_asat_record_last": {
+  "en": "The last: [SCOPE.sCountry('te_asat_disp_striker').GetName] struck the satellites of [SCOPE.sCountry('te_asat_disp_target').GetName], #v [GetPlayer.MakeScope.ScriptValue('te_asat_disp_months_since_last')|0]#! months ago.",
+  "de": "Der letzte: [SCOPE.sCountry('te_asat_disp_striker').GetAltName('NOM')] hat die Satelliten [SCOPE.sCountry('te_asat_disp_target').GetAltName('GEN')] vor #v [GetPlayer.MakeScope.ScriptValue('te_asat_disp_months_since_last')|0]#! Monaten angegriffen."
+ },
+ "te_asat_record_last_unnamed": {
+  "en": "The last was #v [GetPlayer.MakeScope.ScriptValue('te_asat_disp_months_since_last')|0]#! months ago.",
+  "de": "Der letzte war vor #v [GetPlayer.MakeScope.ScriptValue('te_asat_disp_months_since_last')|0]#! Monaten."
+ },
+ "te_asat_record_none": {
+  "en": "No country has struck another's satellites yet.",
+  "de": "Noch kein Land hat die Satelliten eines anderen angegriffen."
  },
  "te_asat_satellites_disrupted": {
   "en": "#R Disrupted#!",
@@ -22447,6 +22667,18 @@
   "en": "Launch an Anti-Satellite Strike",
   "de": "Einen Antisatellitenschlag starten"
  },
+ "te_asat_targets_entry_cooldown": {
+  "en": "[THIS.GetCountry.GetName]: struck #v [THIS.GetCountry.MakeScope.ScriptValue('te_asat_months_since_struck')|0]#! months ago, open to a strike again in #v [THIS.GetCountry.MakeScope.ScriptValue('te_asat_cooldown_left')|0]#! months",
+  "de": "[THIS.GetCountry.GetAltName('NOM')|U]: vor #v [THIS.GetCountry.MakeScope.ScriptValue('te_asat_months_since_struck')|0]#! Monaten angegriffen, in #v [THIS.GetCountry.MakeScope.ScriptValue('te_asat_cooldown_left')|0]#! Monaten wieder für einen Schlag offen"
+ },
+ "te_asat_targets_intro": {
+  "en": "We are at war with these countries, which have something in orbit to strike:",
+  "de": "Wir befinden uns im Krieg mit diesen Ländern, die etwas im Orbit haben, das angegriffen werden kann:"
+ },
+ "te_asat_targets_none": {
+  "en": "We are at war with no country that has anything in orbit to strike.",
+  "de": "Wir befinden uns mit keinem Land im Krieg, das etwas im Orbit hat, das angegriffen werden kann."
+ },
  "te_asat_tt_at_war": {
   "en": "We are at war with them",
   "de": "Wir befinden uns mit ihnen im Krieg"
@@ -22466,6 +22698,10 @@
  "te_asat_tt_effect_relations": {
   "en": "Relations #R [GetPlayer.MakeScope.ScriptValue('te_asat_relations')|0]#! with every other country that uses orbit",
   "de": "Beziehungen #R [GetPlayer.MakeScope.ScriptValue('te_asat_relations')|0]#! zu jedem anderen Land, das den Orbit nutzt"
+ },
+ "te_asat_tt_guided_missiles": {
+  "en": "We have researched Guided Missiles",
+  "de": "Wir haben Lenkraketen erforscht"
  },
  "te_asat_tt_not_struck_recently": {
   "en": "No one has struck their satellites in the last #v [GetPlayer.MakeScope.ScriptValue('te_asat_cooldown_months')|0]#! months",
@@ -22647,6 +22883,18 @@
   "en": "Gives up a colony",
   "de": "Gibt eine Kolonie ab"
  },
+ "te_cede_colony_ai_worth_gained": {
+  "en": "What the colony is worth to us",
+  "de": "Was uns die Kolonie wert ist"
+ },
+ "te_cede_colony_ai_worth_gained_idle": {
+  "en": "What the colony is worth to us, without a space programme",
+  "de": "Was uns die Kolonie wert ist, ohne Raumfahrtprogramm"
+ },
+ "te_cede_colony_ai_worth_lost": {
+  "en": "What the colony is worth to us",
+  "de": "Was uns die Kolonie wert ist"
+ },
  "te_clear_map_mode_overlays_tt": {
   "en": "Remove the active map-mode overlay from every state.",
   "de": "Entfernt das aktive Kartenmodus-Overlay von jedem Staat."
@@ -22696,20 +22944,20 @@
   "de": "Orbitale Säuberungsmission"
  },
  "te_debris_row_tt": {
-  "en": "#header Orbital Debris#!\\nLow orbits: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_low_value')|1]#!, cleared by drag in a few years. High orbits: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_high_value')|1]#!, which stay for a century.\\n$TOOLTIP_DELIMITER$\\nAt this level, every country that uses orbit has #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_risk_pct')|0]%#! setback risk, #R −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_pace_pct')|1]%#! space race pace, and #R −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_throughput_pct')|1]%#! [concept_throughput] for its Extraplanetary Bases, Space Elevators, Orbital Battlestations and Solar Receivers.[AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_hazardous'), '(CFixedPoint)0' ), 'te_debris_row_tt_hazardous' )][AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_kessler'), '(CFixedPoint)0' ), 'te_debris_row_tt_kessler' )]\\n$TOOLTIP_DELIMITER$\\n[AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ), 'te_debris_row_tt_cleaners' )][AddLocalizationIf( Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ) ), 'te_debris_row_tt_no_cleaners' )]",
-  "de": "#header Weltraumschrott#!\\nNiedrige Umlaufbahnen: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_low_value')|1]#!, durch Luftwiderstand in wenigen Jahren geräumt. Hohe Umlaufbahnen: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_high_value')|1]#!, der ein Jahrhundert lang bleibt.\\n$TOOLTIP_DELIMITER$\\nBei diesem Stand hat jedes Land, das den Orbit nutzt, #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_risk_pct')|0]%#! Rückschlagrisiko, #R −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_pace_pct')|1]%#! Tempo im Wettlauf ins All und #R −[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_throughput_pct')|1]%#! [concept_throughput] für seine Außerplanetaren Stützpunkte, Weltraumaufzüge, Orbitalen Kampfstationen und Solarempfänger.[AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_hazardous'), '(CFixedPoint)0' ), 'te_debris_row_tt_hazardous' )][AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_kessler'), '(CFixedPoint)0' ), 'te_debris_row_tt_kessler' )]\\n$TOOLTIP_DELIMITER$\\n[AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ), 'te_debris_row_tt_cleaners' )][AddLocalizationIf( Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ) ), 'te_debris_row_tt_no_cleaners' )]"
+  "en": "#header Orbital Debris#!\\nLow orbits: #v [GetPlayer.MakeScope.ScriptValue('te_debris_low_value')|1]#!, cleared by drag in a few years. High orbits: #v [GetPlayer.MakeScope.ScriptValue('te_debris_high_value')|1]#!, which stay for a century.\\n$TOOLTIP_DELIMITER$\\nAt this level, every country that uses orbit has #R +[GetPlayer.MakeScope.ScriptValue('te_debris_disp_risk_pct')|0]%#! setback risk, #R −[GetPlayer.MakeScope.ScriptValue('te_debris_disp_pace_pct')|1]%#! space race pace, and #R −[GetPlayer.MakeScope.ScriptValue('te_debris_disp_throughput_pct')|1]%#! [concept_throughput] for its Extraplanetary Bases, Space Elevators, Orbital Battlestations and Solar Receivers.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_hazardous'), '(CFixedPoint)0' ), 'te_debris_row_tt_hazardous' )][AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_kessler'), '(CFixedPoint)0' ), 'te_debris_row_tt_kessler' )]\\n$TOOLTIP_DELIMITER$\\n[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ), 'te_debris_row_tt_cleaners' )][AddLocalizationIf( Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ) ), 'te_debris_row_tt_no_cleaners' )]",
+  "de": "#header Weltraumschrott#!\\nNiedrige Umlaufbahnen: #v [GetPlayer.MakeScope.ScriptValue('te_debris_low_value')|1]#!, durch Luftwiderstand in wenigen Jahren geräumt. Hohe Umlaufbahnen: #v [GetPlayer.MakeScope.ScriptValue('te_debris_high_value')|1]#!, der ein Jahrhundert lang bleibt.\\n$TOOLTIP_DELIMITER$\\nBei diesem Stand hat jedes Land, das den Orbit nutzt, #R +[GetPlayer.MakeScope.ScriptValue('te_debris_disp_risk_pct')|0]%#! Rückschlagrisiko, #R −[GetPlayer.MakeScope.ScriptValue('te_debris_disp_pace_pct')|1]%#! Tempo im Wettlauf ins All und #R −[GetPlayer.MakeScope.ScriptValue('te_debris_disp_throughput_pct')|1]%#! [concept_throughput] für seine Außerplanetaren Stützpunkte, Weltraumaufzüge, Orbitalen Kampfstationen und Solarempfänger.[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_hazardous'), '(CFixedPoint)0' ), 'te_debris_row_tt_hazardous' )][AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_kessler'), '(CFixedPoint)0' ), 'te_debris_row_tt_kessler' )]\\n$TOOLTIP_DELIMITER$\\n[AddLocalizationIf( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ), 'te_debris_row_tt_cleaners' )][AddLocalizationIf( Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_debris_disp_cleaners'), '(CFixedPoint)0' ) ), 'te_debris_row_tt_no_cleaners' )]"
  },
  "te_debris_row_tt_cleaners": {
-  "en": "Removed last month: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_removal_world')|2]#! by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners')|0]#! countries, the most by [GetGlobalVariable('te_debris_top_cleaner').GetCountry.GetName]. Ours: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_removal_country')|2]#! a month.",
-  "de": "Im letzten Monat beseitigt: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_removal_world')|2]#! durch #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_disp_cleaners')|0]#! Länder, die meisten durch [GetGlobalVariable('te_debris_top_cleaner').GetCountry.GetAltName('AKK')]. Unser Anteil: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_removal_country')|2]#! pro Monat."
+  "en": "Removed last month: #v [GetPlayer.MakeScope.ScriptValue('te_debris_disp_removal_world')|2]#! by #v [GetPlayer.MakeScope.ScriptValue('te_debris_disp_cleaners')|0]#! countries, the most by [GetGlobalVariable('te_debris_top_cleaner').GetCountry.GetName]. Ours: #v [GetPlayer.MakeScope.ScriptValue('te_debris_removal_country')|2]#! a month.",
+  "de": "Im letzten Monat beseitigt: #v [GetPlayer.MakeScope.ScriptValue('te_debris_disp_removal_world')|2]#! durch #v [GetPlayer.MakeScope.ScriptValue('te_debris_disp_cleaners')|0]#! Länder, die meisten durch [GetGlobalVariable('te_debris_top_cleaner').GetCountry.GetAltName('AKK')]. Unser Anteil: #v [GetPlayer.MakeScope.ScriptValue('te_debris_removal_country')|2]#! pro Monat."
  },
  "te_debris_row_tt_hazardous": {
-  "en": "\\nEach Space Elevator risks a #bold ribbon strike#! every month: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_ribbon_chance')|1]%#! now.",
-  "de": "\\nJeder Weltraumaufzug riskiert jeden Monat einen #bold Kabeltreffer#!: derzeit #R [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_ribbon_chance')|1]%#!."
+  "en": "\\nEach Space Elevator risks a #bold ribbon strike#! every month: #R [GetPlayer.MakeScope.ScriptValue('te_debris_ribbon_chance')|1]%#! now.",
+  "de": "\\nJeder Weltraumaufzug riskiert jeden Monat einen #bold Kabeltreffer#!: derzeit #R [GetPlayer.MakeScope.ScriptValue('te_debris_ribbon_chance')|1]%#!."
  },
  "te_debris_row_tt_kessler": {
-  "en": "\\n#R Kessler Cascade:#! collisions add #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_kessler_rate')|1]#! to the high orbits each month until removal brings the index under #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_kessler_threshold')|0]#!.",
-  "de": "\\n#R Kessler-Syndrom:#! Kollisionen fügen den hohen Umlaufbahnen jeden Monat #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_kessler_rate')|1]#! hinzu, bis die Beseitigung den Index unter #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_debris_kessler_threshold')|0]#! drückt."
+  "en": "\\n#R Kessler Cascade:#! collisions add #R +[GetPlayer.MakeScope.ScriptValue('te_debris_kessler_rate')|1]#! to the high orbits each month until removal brings the index under #v [GetPlayer.MakeScope.ScriptValue('te_debris_kessler_threshold')|0]#!.",
+  "de": "\\n#R Kessler-Syndrom:#! Kollisionen fügen den hohen Umlaufbahnen jeden Monat #R +[GetPlayer.MakeScope.ScriptValue('te_debris_kessler_rate')|1]#! hinzu, bis die Beseitigung den Index unter #v [GetPlayer.MakeScope.ScriptValue('te_debris_kessler_threshold')|0]#! drückt."
  },
  "te_debris_row_tt_no_cleaners": {
   "en": "Nobody is removing debris. A Space Program can, from Reusable Rocketry on: the #bold Debris Removal#! methods, or the decision #bold Begin Orbital Debris Removal#!.",
@@ -26943,9 +27191,17 @@
   "en": "Joined by cable to:",
   "de": "Per Kabel verbunden mit:"
  },
+ "te_grid_cables_none": {
+  "en": "No station with a cable of its own is in range of this one, or none we may join. Our own stations in this [concept_market_area] are on the grid already and aren't counted.",
+  "de": "Keine Station mit eigenem Kabel liegt in Reichweite dieser Station, oder keine, an die wir uns anschließen dürfen. Unsere eigenen Stationen in diesem [concept_market_area] sind bereits am Netz und werden nicht mitgezählt."
+ },
+ "te_grid_hvdc_needs_station_tt": {
+  "en": "Has a $building_grid_transfer_station$, built or queued",
+  "de": "Hat eine $building_grid_transfer_station$, gebaut oder in der Warteschlange"
+ },
  "te_grid_interconnection_border_tt": {
-  "en": "Both countries share a border or a sea",
-  "de": "Beide Länder teilen sich eine Grenze oder ein Meer"
+  "en": "Both countries share a border or a [concept_sea_node], or their undersea cables reach each other",
+  "de": "Beide Länder teilen sich eine Grenze oder ein Meer ([concept_sea_node]), oder ihre Seekabel reichen bis zueinander"
  },
  "te_grid_market_exports": {
   "en": "Exports",
@@ -26954,6 +27210,14 @@
  "te_grid_market_imports": {
   "en": "Imports",
   "de": "Importe"
+ },
+ "te_grid_market_receive_more": {
+  "en": "receive more than they send",
+  "de": "empfangen mehr, als sie senden"
+ },
+ "te_grid_market_send_more": {
+  "en": "send more than they receive",
+  "de": "senden mehr, als sie empfangen"
  },
  "te_grid_mode_idle": {
   "en": "Idle",
@@ -27171,6 +27435,10 @@
   "en": "Our bloc situation permits this war of reunification: we are not in a [concept_power_bloc], we lead one ourselves, or our [Concept('concept_power_bloc_leader', 'bloc leader')] has endorsed the war. A member asks for that blessing with the #b $irr_seek_war_blessing$#! diplomatic action on the country it would fight; a war on the bloc leader itself cannot be blessed.",
   "de": "Unsere Blocksituation erlaubt diesen Wiedervereinigungskrieg: Wir sind in keinem [concept_power_bloc], führen selbst einen an, oder unser [Concept('concept_power_bloc_leader', 'Blockanführer')] hat dem Krieg zugestimmt. Ein Mitglied erbittet diese Zustimmung mit der diplomatischen Aktion #b $irr_seek_war_blessing$#! gegenüber dem Land, das es bekämpfen würde; ein Krieg gegen den Blockanführer selbst kann nicht gesegnet werden."
  },
+ "te_jud_act_upheld": {
+  "en": "Act Upheld by the Courts",
+  "de": "Gesetz von den Gerichten bestätigt"
+ },
  "te_jud_algorithmic_capture": {
   "en": "Captured Court",
   "de": "Vereinnahmtes Gericht"
@@ -27234,6 +27502,18 @@
  "te_jud_protests_dispersed": {
   "en": "Protests Dispersed",
   "de": "Proteste aufgelöst"
+ },
+ "te_jud_review_large_tt": {
+  "en": "Once the law passes it goes to the courts, which strike it down if [concept_judicial_independence] is at least #v 30#! when they rule.",
+  "de": "Sobald das Gesetz verabschiedet ist, geht es an die Gerichte, die es aufheben, wenn die [concept_judicial_independence] zum Zeitpunkt ihres Urteils mindestens #v 30#! beträgt."
+ },
+ "te_jud_review_medium_tt": {
+  "en": "Once the law passes it goes to the courts, which strike it down if [concept_judicial_independence] is at least #v 60#! when they rule.",
+  "de": "Sobald das Gesetz verabschiedet ist, geht es an die Gerichte, die es aufheben, wenn die [concept_judicial_independence] zum Zeitpunkt ihres Urteils mindestens #v 60#! beträgt."
+ },
+ "te_jud_review_small_tt": {
+  "en": "Once the law passes it goes to the courts, which strike it down if [concept_judicial_independence] is at least #v 90#! when they rule.",
+  "de": "Sobald das Gesetz verabschiedet ist, geht es an die Gerichte, die es aufheben, wenn die [concept_judicial_independence] zum Zeitpunkt ihres Urteils mindestens #v 90#! beträgt."
  },
  "te_jud_ruling_defied": {
   "en": "Ruling Defied",
@@ -28055,6 +28335,30 @@
   "en": "Open Map-Mode Survey",
   "de": "Kartenmodus-Übersicht öffnen"
  },
+ "te_orbit_moratorium_tt": {
+  "en": "#header Moratorium on Destructive Anti-Satellite Tests#!\\n[GetPlayer.GetCustom('te_asat_moratorium_detail')]",
+  "de": "#header Moratorium für zerstörerische Antisatellitentests#!\\n[GetPlayer.GetCustom('te_asat_moratorium_detail')]"
+ },
+ "te_orbit_satellites_tt": {
+  "en": "#header Our Satellites#!\\n[AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)3' ), 'te_orbit_satellites_tt_disrupted' )][AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)2' ), 'te_orbit_satellites_tt_cooldown' )][AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)1' ), 'te_orbit_satellites_tt_exposed' )][AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)0' ), 'te_orbit_satellites_tt_none' )]",
+  "de": "#header Unsere Satelliten#!\\n[AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)3' ), 'te_orbit_satellites_tt_disrupted' )][AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)2' ), 'te_orbit_satellites_tt_cooldown' )][AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)1' ), 'te_orbit_satellites_tt_exposed' )][AddLocalizationIf( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_asat_disp_satellites'), '(CFixedPoint)0' ), 'te_orbit_satellites_tt_none' )]"
+ },
+ "te_orbit_satellites_tt_cooldown": {
+  "en": "Intact. We were struck #v [GetPlayer.MakeScope.ScriptValue('te_asat_months_since_struck')|0]#! months ago, and no one can strike us again for #v [GetPlayer.MakeScope.ScriptValue('te_asat_cooldown_left')|0]#! months.",
+  "de": "Intakt. Wir wurden vor #v [GetPlayer.MakeScope.ScriptValue('te_asat_months_since_struck')|0]#! Monaten angegriffen, und für #v [GetPlayer.MakeScope.ScriptValue('te_asat_cooldown_left')|0]#! Monate kann uns niemand erneut angreifen."
+ },
+ "te_orbit_satellites_tt_disrupted": {
+  "en": "An anti-satellite strike has disrupted our orbital network for about #v [GetPlayer.MakeScope.ScriptValue('te_asat_disp_disrupted_months')|0]#! more months, half as badly if we had an Orbital Battlestation when it struck: [GetStaticModifier('te_orbital_network_disrupted').GetDesc]",
+  "de": "Ein Antisatellitenschlag stört unser Orbitalnetz noch etwa #v [GetPlayer.MakeScope.ScriptValue('te_asat_disp_disrupted_months')|0]#! Monate lang, nur halb so stark, wenn wir bei dem Schlag eine Orbitale Kampfstation hatten: [GetStaticModifier('te_orbital_network_disrupted').GetDesc]"
+ },
+ "te_orbit_satellites_tt_exposed": {
+  "en": "Intact. Any country at war with us that has Guided Missiles and a Space Program can strike them, disrupting our orbital network for a year, or six months once our Space Program runs the Mars Mission or a later one.",
+  "de": "Intakt. Jedes Land, das mit uns im Krieg steht und Lenkraketen sowie ein Raumfahrtprogramm besitzt, kann sie angreifen und unser Orbitalnetz für ein Jahr stören, oder für sechs Monate, sobald unser Raumfahrtprogramm die Mars-Mission oder eine spätere durchführt."
+ },
+ "te_orbit_satellites_tt_none": {
+  "en": "We have nothing in orbit an anti-satellite strike can hit: no Space Program, Space Elevator, Orbital Solar Collector or Orbital Battlestation.",
+  "de": "Wir haben nichts im Orbit, das ein Antisatellitenschlag treffen kann: kein Raumfahrtprogramm, keinen Weltraumaufzug, keinen Orbitalen Sonnenkollektor und keine Orbitale Kampfstation."
+ },
  "te_orbit_strike_not_ready": {
   "en": "Not Ready",
   "de": "Nicht bereit"
@@ -28062,6 +28366,18 @@
  "te_orbit_strike_ready": {
   "en": "#G Ready#!",
   "de": "#G Bereit#!"
+ },
+ "te_orbit_strike_tt_not_ready": {
+  "en": "#header Our Anti-Satellite Strike#!\\nTo strike another country's satellites, we need:\\n[GetScriptedGui('te_asat_strike_ready_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]",
+  "de": "#header Unser Antisatellitenschlag#!\\nUm die Satelliten eines anderen Landes anzugreifen, brauchen wir:\\n[GetScriptedGui('te_asat_strike_ready_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+ },
+ "te_orbit_strike_tt_ready": {
+  "en": "#header Our Anti-Satellite Strike#!\\nA hostile diplomatic action against a country we are at war with, taken from the Diplomacy panel. It disrupts their orbital network, costs us infamy, relations and case strength at the UN, and leaves debris that every country in orbit flies through, us included.\\n$TOOLTIP_DELIMITER$\\n[GetScriptedGui('te_asat_strike_ready_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]",
+  "de": "#header Unser Antisatellitenschlag#!\\nEine feindselige diplomatische Aktion gegen ein Land, mit dem wir im Krieg sind, ausgeführt über das Diplomatiefenster. Sie stört deren Orbitalnetz, kostet uns Verrufenheit, Beziehungen und Fallstärke bei den UN und hinterlässt Weltraumschrott, den jedes Land im Orbit durchfliegt, uns eingeschlossen.\\n$TOOLTIP_DELIMITER$\\n[GetScriptedGui('te_asat_strike_ready_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+ },
+ "te_orbit_strikes_tt": {
+  "en": "#header Anti-Satellite Strikes#!\\n[GetScriptedGui('te_asat_record_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]\\nEach strike adds #R +[GetPlayer.MakeScope.ScriptValue('te_asat_debris_low')|0]#! [concept_orbital_debris] in low orbits and #R +[GetPlayer.MakeScope.ScriptValue('te_asat_debris_high')|0]#! in high orbits.",
+  "de": "#header Antisatellitenschläge#!\\n[GetScriptedGui('te_asat_record_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]\\nJeder Schlag fügt #R +[GetPlayer.MakeScope.ScriptValue('te_asat_debris_low')|0]#! [concept_orbital_debris] in niedrigen Umlaufbahnen und #R +[GetPlayer.MakeScope.ScriptValue('te_asat_debris_high')|0]#! in hohen Umlaufbahnen hinzu."
  },
  "te_orbital_network_disrupted": {
   "en": "Orbital Network Disrupted",
@@ -28955,9 +29271,13 @@
   "en": "Your cultural pull, your programmes and where you stand. These are the journal entry's own panels: a change made here shows there too.",
   "de": "Ihre kulturelle Anziehungskraft, Ihre Programme und wo Sie stehen. Dies sind die eigenen Panels des Journaleintrags: Eine hier vorgenommene Änderung zeigt sich auch dort."
  },
+ "te_state_tourism_appeal_moved_line": {
+  "en": "\\n\\n#v [State.MakeScope.ScriptValue('tourism_heritage_moved')|0%]#! of it is counted in its monuments instead (Monuments below, and a $building_grand_monument$'s line in #bold All modifiers#!), or in ruins still to be dug, and goes with them.",
+  "de": "\\n\\n#v [State.MakeScope.ScriptValue('tourism_heritage_moved')|0%]#! davon werden stattdessen bei den Monumenten des Staates gezählt (Monumente unten und die Zeile #bold Alle Modifikatoren#! für ein $building_grand_monument$) oder bei noch auszugrabenden Ruinen und gehen mit ihnen."
+ },
  "te_state_tourism_appeal_tt": {
-  "en": "#bold [concept_tourism_base_appeal]#!\\nA fixed score for each state, set by its landscape, climate and history. Nothing changes it.\\n\\nMaximum: #v +100%#!",
-  "de": "#bold [concept_tourism_base_appeal]#!\\nEin fester Wert für jeden Staat, festgelegt durch Landschaft, Klima und Geschichte. Nichts verändert ihn.\\n\\nMaximum: #v +100%#!"
+  "en": "#bold [concept_tourism_base_appeal]#!\\nA score for each state, set by its landscape, climate and townscape.[SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('tourism_heritage_moved'), '(CFixedPoint)0'), 'te_state_tourism_appeal_moved_line', 'te_state_tourism_appeal_none_line')]\\n\\nMaximum: #v +100%#!",
+  "de": "#bold [concept_tourism_base_appeal]#!\\nEin Wert für jeden Staat, festgelegt durch Landschaft, Klima und Stadtbild.[SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('tourism_heritage_moved'), '(CFixedPoint)0'), 'te_state_tourism_appeal_moved_line', 'te_state_tourism_appeal_none_line')]\\n\\nMaximum: #v +100%#!"
  },
  "te_state_tourism_applied_label": {
   "en": "All modifiers",
@@ -28984,12 +29304,12 @@
   "de": "#bold [concept_tourism_infrastructure]#!\\nDie [concept_infrastructure], die dieser Staat erzeugt, abzüglich dessen, was seine Gebäude verbrauchen. Jeder zusätzliche Punkt bringt weniger als der vorherige: #v +25%#! bei 10.000, #v +50%#! bei 30.000 und #v +75%#! bei 90.000.\\n\\nMaximum: #v +100%#! (wird angenähert, nie erreicht)"
  },
  "te_state_tourism_monuments_tt": {
-  "en": "#bold [concept_tourism_monuments]#!\\nA $building_skyscraper$ adds #v +10%#!, and every monument #v +25%#!. There is no maximum.\\n\\nA $building_grand_monument$ is not counted here: its bonus is a separate modifier, included in the #bold All modifiers#! line below.",
-  "de": "#bold [concept_tourism_monuments]#!\\nEin $building_skyscraper$ fügt #v +10%#! hinzu, und jedes Monument #v +25%#!. Es gibt kein Maximum.\\n\\nEin $building_grand_monument$ wird hier nicht mitgezählt: Sein Bonus ist ein eigener Modifikator, der in der Zeile #bold Alle Modifikatoren#! unten enthalten ist."
+  "en": "#bold [concept_tourism_monuments]#!\\nEvery monument adds #v +10%#!. The wonders that stood in 1836 add more, because the heritage they stand for is counted here instead of in [concept_tourism_base_appeal]: the $building_taj_mahal$ #v +40%#!, $building_angkor_wat$ #v +30%#!, and $building_hagia_sophia$, $building_vatican_city$, the $building_forbidden_city$, $building_saint_basils_cathedral$ and the $building_white_house$ #v +20%#! each, as does the $building_mosque_of_djenne$ once rebuilt. There is no maximum.\\n\\nA $building_grand_monument$ is not counted here: its bonus is a separate modifier, included in the output #bold All modifiers#! line below.",
+  "de": "#bold [concept_tourism_monuments]#!\\nJedes Monument fügt #v +10%#! hinzu. Die Wunderbauwerke, die 1836 bereits standen, fügen mehr hinzu, weil das Kulturerbe, für das sie stehen, hier statt in der [concept_tourism_base_appeal] gezählt wird: $building_taj_mahal$ #v +40%#!, $building_angkor_wat$ #v +30%#!, und $building_hagia_sophia$, $building_vatican_city$, $building_forbidden_city$, $building_saint_basils_cathedral$ und $building_white_house$ je #v +20%#!, ebenso $building_mosque_of_djenne$ nach dem Wiederaufbau. Es gibt kein Maximum.\\n\\nEin $building_grand_monument$ wird hier nicht mitgezählt: Sein Bonus ist ein eigener Modifikator, der in der Ertragszeile #bold Alle Modifikatoren#! unten enthalten ist."
  },
  "te_state_tourism_output_applied_tt": {
-  "en": "#bold [concept_tourism_output] on this state#!\\nEvery modifier on this state that changes tourism output: the sources above, as last applied, plus any others, such as airports, pollution and [concept_turmoil]. Hover the value for the full breakdown.\\n\\nThe sources above are re-applied each month, so a change there shows up here after the next monthly update.",
-  "de": "#bold [concept_tourism_output] in diesem Staat#!\\nJeder Modifikator in diesem Staat, der den Tourismusertrag verändert: die obigen Quellen, wie zuletzt angewendet, sowie alle weiteren, etwa Flughäfen, Verschmutzung und [concept_turmoil]. Fahren Sie mit der Maus über den Wert für die vollständige Aufschlüsselung.\\n\\nDie obigen Quellen werden jeden Monat neu angewendet, sodass eine Änderung dort erst nach der nächsten monatlichen Aktualisierung hier erscheint."
+  "en": "#bold [concept_tourism_output] on this state#!\\nEvery modifier on this state that changes tourism output: the sources above, as last applied, plus any others, such as a $building_grand_monument$, airports, pollution and [concept_turmoil]. Hover the value for the full breakdown.\\n\\nThe sources above are re-applied each month, so a change there shows up here after the next monthly update.",
+  "de": "#bold [concept_tourism_output] in diesem Staat#!\\nJeder Modifikator in diesem Staat, der den Tourismusertrag verändert: die obigen Quellen, wie zuletzt angewendet, sowie alle weiteren, etwa ein $building_grand_monument$, Flughäfen, Verschmutzung und [concept_turmoil]. Fahren Sie mit der Maus über den Wert für die vollständige Aufschlüsselung.\\n\\nDie obigen Quellen werden jeden Monat neu angewendet, sodass eine Änderung dort erst nach der nächsten monatlichen Aktualisierung hier erscheint."
  },
  "te_state_tourism_output_tt": {
   "en": "#bold [concept_tourism_output]#!\\n$concept_tourism_output_desc$\\n\\nThe sources below come to #v [State.MakeScope.ScriptValue('total_tourism_output_bonus_percent')|+=0%]#!. It is applied to the state as a modifier and refreshed each month. The bar under each source shows how close it is to its maximum.",
@@ -28999,9 +29319,13 @@
   "en": "#bold [concept_tourism_parks]#!\\nA $building_national_park$ adds #v +25%#!, rising with the state's [concept_tourism_base_appeal] to #v +37.5%#! at the highest appeal.\\n\\nMaximum: #v +37.5%#!",
   "de": "#bold [concept_tourism_parks]#!\\nEin $building_national_park$ fügt #v +25%#! hinzu und steigt mit der [concept_tourism_base_appeal] des Staates bei höchster Attraktivität auf #v +37,5%#!.\\n\\nMaximum: #v +37,5%#!"
  },
+ "te_state_tourism_skyscraper_tt": {
+  "en": "#bold $building_skyscraper$#!\\nA $building_skyscraper$ adds #v +10%#! throughput.",
+  "de": "#bold $building_skyscraper$#!\\nEin $building_skyscraper$ fügt #v +10%#! Durchsatz hinzu."
+ },
  "te_state_tourism_throughput_applied_tt": {
-  "en": "#bold [concept_tourism_throughput] on this state#!\\nEvery modifier on this state that changes tourism throughput: the sources above, as last applied, plus any others, such as decrees and a $building_grand_monument$. Hover the value for the full breakdown.\\n\\nThe sources above are re-applied each month, so a change there shows up here after the next monthly update.",
-  "de": "#bold [concept_tourism_throughput] in diesem Staat#!\\nJeder Modifikator in diesem Staat, der den Tourismusdurchsatz verändert: die obigen Quellen, wie zuletzt angewendet, sowie alle weiteren, etwa Dekrete und ein $building_grand_monument$. Fahren Sie mit der Maus über den Wert für die vollständige Aufschlüsselung.\\n\\nDie obigen Quellen werden jeden Monat neu angewendet, sodass eine Änderung dort erst nach der nächsten monatlichen Aktualisierung hier erscheint."
+  "en": "#bold [concept_tourism_throughput] on this state#!\\nEvery modifier on this state that changes tourism throughput: the sources above, as last applied, plus any others, such as decrees and events. Hover the value for the full breakdown.\\n\\nThe sources above are re-applied each month, so a change there shows up here after the next monthly update.",
+  "de": "#bold [concept_tourism_throughput] in diesem Staat#!\\nJeder Modifikator in diesem Staat, der den Tourismusdurchsatz verändert: die obigen Quellen, wie zuletzt angewendet, sowie alle weiteren, etwa Dekrete und Ereignisse. Fahren Sie mit der Maus über den Wert für die vollständige Aufschlüsselung.\\n\\nDie obigen Quellen werden jeden Monat neu angewendet, sodass eine Änderung dort erst nach der nächsten monatlichen Aktualisierung hier erscheint."
  },
  "te_state_tourism_throughput_tt": {
   "en": "#bold [concept_tourism_throughput]#!\\n$concept_tourism_throughput_desc$\\n\\nThe sources below come to #v [State.MakeScope.ScriptValue('total_tourism_throughput_bonus_percent')|+=0%]#!. It is applied to the state as a modifier and refreshed each month. The bar under each source shows how close it is to its maximum.",
@@ -29091,6 +29415,10 @@
   "en": "Milestones",
   "de": "Meilensteine"
  },
+ "te_window_space_race_idle_note": {
+  "en": "No milestone is under way. The next appears in the journal once its technology is researched and the milestones before it are achieved; hover our programme's icons under Space Powers for where each stands.",
+  "de": "Kein Meilenstein läuft. Der nächste erscheint im Journal, sobald seine Technologie erforscht und die Meilensteine davor erreicht sind; fahren Sie mit der Maus über die Symbole unseres Programms unter „Raumfahrtmächte“, um zu sehen, wo jeder steht."
+ },
  "te_window_space_race_open_journal_tt": {
   "en": "Opens this entry in the journal.",
   "de": "Öffnet diesen Eintrag im Journal."
@@ -29152,12 +29480,12 @@
   "de": "Wettlauf ins All"
  },
  "te_window_tab_space_race_locked_tt": {
-  "en": "#b Space Race#!\\nNot open yet. It opens while a milestone is under way. The first, $je_space_race_suborbital$, starts once:\\n",
-  "de": "#b Wettlauf ins All#!\\nNoch nicht geöffnet. Er öffnet sich, solange ein Meilenstein läuft. Der erste, $je_space_race_suborbital$, beginnt, sobald:\\n"
+  "en": "#b Space Race#!\\nNot open yet. It opens with our first milestone and stays open from then on. The first, $je_space_race_suborbital$, starts once:\\n",
+  "de": "#b Wettlauf ins All#!\\nNoch nicht geöffnet. Er öffnet sich mit unserem ersten Meilenstein und bleibt danach offen. Der erste, $je_space_race_suborbital$, beginnt, sobald:\\n"
  },
  "te_window_tab_space_race_tt": {
-  "en": "Each milestone under way, with its overview, Mission Control and rivals. These are the journal entries' own panels: a change made here shows there too.",
-  "de": "Jeder laufende Meilenstein mit Übersicht, Missionskontrolle und Rivalen. Dies sind die eigenen Bereiche der Journaleinträge: Eine Änderung hier erscheint auch dort."
+  "en": "Every power in the space race and the state of orbit, then each milestone under way, with its overview, Mission Control and rivals. The milestones are the journal entries' own panels: a change made here shows there too.",
+  "de": "Jede Macht im Wettlauf ins All und der Zustand des Orbits, dann jeder laufende Meilenstein mit Übersicht, Missionskontrolle und Rivalen. Die Meilensteine sind die eigenen Bereiche der Journaleinträge: Eine Änderung hier erscheint auch dort."
  },
  "too_much_private_construction": {
   "en": "Excess [concept_private_construction]",
@@ -31203,6 +31531,18 @@
   "en": "Independence from [WAR_GOAL_DRAFT.GetTarget.GetName]",
   "de": "Unabhängigkeit von [WAR_GOAL_DRAFT.GetTarget.GetName]"
  },
+ "war_goal_te_colonial_independence_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetTarget.GetName] accepts the independence [WAR_GOAL_DRAFT.GetHolder.GetName] declared and gives up the colony.",
+  "de": "[WAR_GOAL_DRAFT.GetTarget.GetName] erkennt die Unabhängigkeit an, die [WAR_GOAL_DRAFT.GetHolder.GetName] erklärt hat, und gibt die Kolonie auf."
+ },
+ "war_goal_te_colonial_independence_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by helping them keep the independence they declared from [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "de": "Wir versuchen, [WAR_GOAL_DRAFT.GetHolder.GetName] zu überzeugen, sich unserer Seite anzuschließen, indem wir helfen, die erklärte Unabhängigkeit von [WAR_GOAL_DRAFT.GetTarget.GetName] zu wahren."
+ },
+ "war_goal_te_colonial_independence_type_desc": {
+  "en": "Keep the independence a colony declared. Holding its own land does not enforce it: only the colonial power's capitulation or a peace ends the war.",
+  "de": "Die von einer Kolonie erklärte Unabhängigkeit wahren. Das Halten des eigenen Landes erzwingt sie nicht: Nur die Kapitulation der Kolonialmacht oder ein Frieden beendet den Krieg."
+ },
  "war_goal_te_colonial_independence_type_name": {
   "en": "Colonial Independence",
   "de": "Koloniale Unabhängigkeit"
@@ -31210,6 +31550,18 @@
  "war_goal_te_colonial_reconquest": {
   "en": "Reconquer [WAR_GOAL_DRAFT.GetTarget.GetName]",
   "de": "[WAR_GOAL_DRAFT.GetTarget.GetName] zurückerobern"
+ },
+ "war_goal_te_colonial_reconquest_desc": {
+  "en": "[WAR_GOAL_DRAFT.GetHolder.GetName] takes back the colony that declared itself [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "de": "[WAR_GOAL_DRAFT.GetHolder.GetName] holt sich die Kolonie zurück, die sich zu [WAR_GOAL_DRAFT.GetTarget.GetName] erklärt hat."
+ },
+ "war_goal_te_colonial_reconquest_sway_desc": {
+  "en": "Try to convince [WAR_GOAL_DRAFT.GetHolder.GetName] to join our side by helping them take back [WAR_GOAL_DRAFT.GetTarget.GetName].",
+  "de": "Wir versuchen, [WAR_GOAL_DRAFT.GetHolder.GetName] zu überzeugen, sich unserer Seite anzuschließen, indem wir helfen, [WAR_GOAL_DRAFT.GetTarget.GetName] zurückzuholen."
+ },
+ "war_goal_te_colonial_reconquest_type_desc": {
+  "en": "Take back a colony that declared its independence. Holding its land does not enforce it: only its capitulation or a peace ends the war.",
+  "de": "Eine Kolonie zurückholen, die ihre Unabhängigkeit erklärt hat. Das Halten ihres Landes erzwingt dies nicht: Nur ihre Kapitulation oder ein Frieden beendet den Krieg."
  },
  "war_goal_te_colonial_reconquest_type_name": {
   "en": "Reconquest",

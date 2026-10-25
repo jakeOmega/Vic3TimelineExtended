@@ -8319,6 +8319,18 @@
   "en": "Much of the money ends up with whoever sold the goods: every state's [concept_inheritance_concentration] rises by #v 3#!.",
   "es": "Gran parte del dinero acaba en manos de quien vendió los bienes: la [concept_inheritance_concentration|l] de todos los estados aumenta en #v 3#!."
  },
+ "inheritance_events.16.d": {
+  "en": "The first young adults to receive the $amendment_birthright_endowment$'s capital stake have had it for a few years now. Some paid for an apprenticeship or a degree, some opened a shop, and a good many spent it. The duty on the great estates pays for every stake, and the people who pay that duty want to know what it is buying.",
+  "es": "Los primeros jóvenes adultos que recibieron la parte de capital de la $amendment_birthright_endowment$ la tienen ya desde hace unos años. Unos pagaron un aprendizaje o una carrera, otros abrieron un negocio, y no pocos se lo gastaron. El impuesto sobre los grandes patrimonios financia cada parte, y quienes pagan ese impuesto quieren saber qué compran con él."
+ },
+ "inheritance_events.16.f": {
+  "en": "\\\"When a young couple begin the world, the difference is exceedingly great whether they begin with nothing or with fifteen pounds apiece.\\\" (Thomas Paine, Agrarian Justice, 1797)",
+  "es": "«Cuando una pareja joven empieza su vida, la diferencia es enorme según empiece sin nada o con quince libras cada uno.» (Thomas Paine, Justicia agraria, 1797)"
+ },
+ "inheritance_events.16.t": {
+  "en": "The First Cohort",
+  "es": "La primera promoción"
+ },
  "inheritance_events.2.a": {
   "en": "Buy them commissions in the army.",
   "es": "Comprarles un cargo en el ejército."
@@ -10828,8 +10840,8 @@
   "es": "Negociar la independencia editorial."
  },
  "modern_election_events.13.d": {
-  "en": "The most powerful newspaper [concept_magnate] in [ROOT.GetCountry.GetNameNoFlag] has thrown the weight of their media empire behind a party. Morning editions across the nation trumpet the endorsement in bold headlines, while editorial pages dutifully fall in line. The rival press scrambles to respond, but the sheer volume of coverage is overwhelming.",
-  "es": "El [concept_magnate|l] de prensa más poderoso de [ROOT.GetCountry.GetNameNoFlag] ha puesto el peso de su imperio mediático detrás de un partido. Las ediciones matutinas de toda la nación proclaman el respaldo en grandes titulares, mientras las páginas editoriales cierran filas con docilidad. La prensa rival se apresura a responder, pero el mero volumen de la cobertura es abrumador."
+  "en": "The most powerful newspaper [concept_magnate] in [ROOT.GetCountry.GetNameNoFlag] has thrown the weight of their media empire behind the [SCOPE.sParty('press_party').GetName]. Morning editions across the nation trumpet the endorsement in bold headlines, while editorial pages dutifully fall in line. The rival press scrambles to respond, but the sheer volume of coverage is overwhelming.",
+  "es": "El [concept_magnate|l] de prensa más poderoso de [ROOT.GetCountry.GetNameNoFlag] ha puesto el peso de su imperio mediático detrás del partido [SCOPE.sParty('press_party').GetName]. Las ediciones matutinas de toda la nación proclaman el respaldo en grandes titulares, mientras las páginas editoriales cierran filas con docilidad. La prensa rival se apresura a responder, pero el mero volumen de la cobertura es abrumador."
  },
  "modern_election_events.13.f": {
   "en": "\\\"Did you see the morning editions?\\\"\\n\\n\\\"All eight of them. All identical. The headline writers must have been issued the headline.\\\"\\n\\n\\\"And the opposition's response?\\\"\\n\\n\\\"Page fourteen of the one paper still owned by someone else. Three column inches. Below the racing results.\\\"",
@@ -11214,6 +11226,10 @@
  "modern_election_events.28.d": {
   "en": "It has come to light that a major party's campaign strategy is being managed not by human operatives, but by a machine learning system. The AI analyzes polling data, crafts messaging, allocates resources, and even writes speeches. The rival parties are outraged — though several have quietly begun procurement enquiries of their own.",
   "es": "Ha salido a la luz que la estrategia de campaña de un gran partido no la gestionan operadores humanos, sino un sistema de aprendizaje automático. La IA analiza datos de encuestas, elabora mensajes, asigna recursos e incluso escribe discursos. Los partidos rivales están indignados, aunque varios han iniciado discretamente sus propias gestiones de adquisición."
+ },
+ "modern_election_events.28.d_named": {
+  "en": "It has come to light that the campaign strategy of the [SCOPE.sParty('govt_party').GetName] is being managed not by human operatives, but by a machine learning system. The AI analyzes polling data, crafts messaging, allocates resources, and even writes speeches. The rival parties are outraged — though several have quietly begun procurement enquiries of their own.",
+  "es": "Ha salido a la luz que la estrategia de campaña del partido [SCOPE.sParty('govt_party').GetName] no la dirigen operadores humanos, sino un sistema de aprendizaje automático. La IA analiza los datos de las encuestas, elabora los mensajes, asigna los recursos e incluso escribe discursos. Los partidos rivales están indignados, aunque varios han empezado discretamente a hacer sus propias indagaciones para adquirir uno."
  },
  "modern_election_events.28.f": {
   "en": "\\\"There is no campaign manager.\\\"\\n\\n\\\"What do you mean, there is no campaign manager?\\\"\\n\\n\\\"The campaign manager was fired three weeks ago. The decisions are being made by the analytics system. The polling has improved. Nobody on the staff is comfortable saying so out loud.\\\"",
@@ -11948,8 +11964,8 @@
   "es": "Dejarlo como está, por ahora"
  },
  "monument_events.2.a.tt": {
-  "en": "The work stands as it is, with no upkeep and no effects, and more may be built on it. Its Dedicate button, on its state's card and under Awaiting Dedication, holds the ceremony again when we are ready.\\n\\n$monument_events.2.common_tt$",
-  "es": "La obra queda como está, sin mantenimiento ni efectos, y se puede construir más sobre ella. Su botón Dedicar, en la ficha de su estado y en Pendientes de dedicación, vuelve a celebrar la ceremonia cuando estemos listos.\\n\\n$monument_events.2.common_tt$"
+  "en": "The work stands as it is, with no effects, and more may be built on it. Its Dedicate button, on its state's card and under Awaiting Dedication, holds the ceremony again when we are ready.\\n\\n$monument_events.2.common_tt$",
+  "es": "La obra queda como está, sin efectos, y se puede construir más sobre ella. Su botón Dedicar, en la ficha de su estado y en Pendientes de dedicación, vuelve a celebrar la ceremonia cuando estemos listos.\\n\\n$monument_events.2.common_tt$"
  },
  "monument_events.2.b": {
   "en": "Dedicate it to the republic",
@@ -11968,8 +11984,8 @@
   "es": "Un gran santuario de nuestra fe. Los $ig_devout$ aprueban, y #v $interest_group_ig_devout_pop_attraction_mult$#! #G +[SCOPE.GetRootScope.ScriptValue('gm_step_national_religious')|%0]#! por cada nivel de [concept_grandeur|l], que se suma al de nuestros demás santuarios. En [SCOPE.sState('monument_state').GetName]: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_local_religious')|%0]#! $state_conversion_mult$ por cada nivel propio.\\n\\nSi el país abandona la fe a la que honra, o adopta el Ateísmo de Estado, pasa a estar #R en disputa#!. Si el estado pasa a otro país, pasa a ser patrimonio.\\n\\n$monument_events.2.common_tt$"
  },
  "monument_events.2.common_tt": {
-  "en": "Every monument: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! prestige for each step of standing [concept_grandeur], counted with our other monuments, and #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $building_tourism_industry_throughput_add$ in [SCOPE.sState('monument_state').GetName] for each step of its own.",
-  "es": "Todo monumento: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! de prestigio por cada nivel de [concept_grandeur|l] en pie, que se suma al de nuestros demás monumentos, y #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $building_tourism_industry_throughput_add$ en [SCOPE.sState('monument_state').GetName] por cada nivel propio."
+  "en": "Every monument: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! and #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige_pct')|%0]#! prestige for each step of standing [concept_grandeur], counted with our other monuments, and #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $goods_output_tourism_mult$ in [SCOPE.sState('monument_state').GetName] for each step of its own.",
+  "es": "Todo monumento: #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige')|0]#! y #G +[SCOPE.GetRootScope.ScriptValue('gm_step_prestige_pct')|%0]#! de prestigio por cada nivel de [concept_grandeur|l] en pie, que se suma al de nuestros demás monumentos, y #G +[SCOPE.GetRootScope.ScriptValue('gm_step_tourism')|%0]#! $goods_output_tourism_mult$ en [SCOPE.sState('monument_state').GetName] por cada nivel propio."
  },
  "monument_events.2.d": {
   "en": "The work is finished. Stone, glass and iron stand in [SCOPE.sState('monument_state').GetName] where there was nothing, paid for out of a treasury that could think of no better use for the money. What remains is to say what it is for — and a thing built to outlast us is only told what it is for once. Dedicated, it is finished as it stands: it will grow grander with the years, not with more stone, and whatever is built here after will be a monument of its own.",
@@ -20495,6 +20511,70 @@
   "en": "The Mars Strategy",
   "es": "La estrategia de Marte"
  },
+ "space_race_events.90.a": {
+  "en": "Update the charts.",
+  "es": "Actualicemos las cartas."
+ },
+ "space_race_events.90.d_gained": {
+  "en": "Under the treaty, [ROOT.GetCountry.GetCustom('sr_site_notice_gained_name')][ROOT.GetCountry.GetCustom('sr_site_notice_gained_more')] now answers to us. Its settlers, its works and everything it has found are ours to run, and its specialization serves [ROOT.GetCountry.GetAdjective] interests from today.",
+  "es": "En virtud del tratado, [ROOT.GetCountry.GetCustom('sr_site_notice_gained_name')][ROOT.GetCountry.GetCustom('sr_site_notice_gained_more')] pasa a depender de nosotros. Sus colonos, sus obras y todo lo que ha descubierto quedan a nuestro cargo, y su especialización sirve desde hoy a los intereses del Estado [ROOT.GetCountry.GetAdjective]."
+ },
+ "space_race_events.90.d_lost": {
+  "en": "Under the treaty, [ROOT.GetCountry.GetCustom('sr_site_notice_lost_name')][ROOT.GetCountry.GetCustom('sr_site_notice_lost_more')] has passed out of our hands. The settlers stay where they are. Their reports now go to another capital.",
+  "es": "En virtud del tratado, [ROOT.GetCountry.GetCustom('sr_site_notice_lost_name')][ROOT.GetCountry.GetCustom('sr_site_notice_lost_more')] ha salido de nuestras manos. Los colonos se quedan donde están. Sus informes van ahora a otra capital."
+ },
+ "space_race_events.90.d_swap": {
+  "en": "The treaty has redrawn our map of the solar system. [ROOT.GetCountry.GetCustom('sr_site_notice_gained_name')][ROOT.GetCountry.GetCustom('sr_site_notice_gained_more')] now answers to us, and [ROOT.GetCountry.GetCustom('sr_site_notice_lost_name')][ROOT.GetCountry.GetCustom('sr_site_notice_lost_more')] has passed to our partner.",
+  "es": "El tratado ha redibujado nuestro mapa del sistema solar. [ROOT.GetCountry.GetCustom('sr_site_notice_gained_name')][ROOT.GetCountry.GetCustom('sr_site_notice_gained_more')] depende ahora de nosotros, y [ROOT.GetCountry.GetCustom('sr_site_notice_lost_name')][ROOT.GetCountry.GetCustom('sr_site_notice_lost_more')] ha pasado a nuestro socio."
+ },
+ "space_race_events.90.f": {
+  "en": "\\\"They changed the flag on the mast this morning. Nothing else changed. The air still has to be made, the ice still has to be cut, and Earth is still twenty light-minutes away.\\\"\\n\\n— Colony Administrator",
+  "es": "«Esta mañana cambiaron la bandera del mástil. Nada más ha cambiado. Todavía hay que fabricar el aire, todavía hay que cortar el hielo, y la Tierra sigue a veinte minutos luz.»\\n\\n— Administrador de la colonia"
+ },
+ "space_race_events.90.t": {
+  "en": "A Colony Changes Hands",
+  "es": "Una colonia cambia de manos"
+ },
+ "space_race_events.91.a": {
+  "en": "Welcome them.",
+  "es": "Démosles la bienvenida."
+ },
+ "space_race_events.91.d": {
+  "en": "The government that founded [ROOT.GetCountry.GetCustom('sr_site_notice_heir_name')][ROOT.GetCountry.GetCustom('sr_site_notice_heir_more')] is gone, and its settlers have turned to the capital it was run from, which is ours now. The colony's specialization and its discoveries pass to us with it.",
+  "es": "El gobierno que fundó [ROOT.GetCountry.GetCustom('sr_site_notice_heir_name')][ROOT.GetCountry.GetCustom('sr_site_notice_heir_more')] ya no existe, y sus colonos se han vuelto hacia la capital desde la que se dirigía, que ahora es la nuestra. La especialización de la colonia y sus descubrimientos pasan a nosotros con ella."
+ },
+ "space_race_events.91.f": {
+  "en": "\\\"They asked who pays for the oxygen now. We told them we do.\\\"\\n\\n— Office of Extraplanetary Affairs",
+  "es": "«Preguntaron quién paga ahora el oxígeno. Les dijimos que nosotros.»\\n\\n— Oficina de Asuntos Extraplanetarios"
+ },
+ "space_race_events.91.t": {
+  "en": "Heirs to a Fallen Programme",
+  "es": "Herederos de un programa caído"
+ },
+ "space_race_events.92.a": {
+  "en": "Note it in the log.",
+  "es": "Anotémoslo en el registro."
+ },
+ "space_race_events.92.d_diverted": {
+  "en": "Our colony fleet reached [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] to find another power's settlement already standing there. Rather than turn back, its commander took the fleet on to [ROOT.GetCountry.GetCustom('sr_cf_notice_founded_name')], still unclaimed, and founded our colony there.",
+  "es": "Nuestra flota colonial llegó a [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] y se encontró con que allí ya se alzaba el asentamiento de otra potencia. En lugar de dar media vuelta, su comandante llevó la flota hasta [ROOT.GetCountry.GetCustom('sr_cf_notice_founded_name')], todavía sin reclamar, y fundó allí nuestra colonia."
+ },
+ "space_race_events.92.d_lost": {
+  "en": "Our colony fleet reached [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] to find it, and every other world within its reach, already claimed. With no free ground to land on and no propellant to go further, the expedition is lost.",
+  "es": "Nuestra flota colonial llegó a [ROOT.GetCountry.GetCustom('sr_cf_notice_target_name')] y descubrió que ese mundo, como todos los demás a su alcance, ya estaba reclamado. Sin terreno libre donde posarse ni combustible para ir más lejos, la expedición está perdida."
+ },
+ "space_race_events.92.f": {
+  "en": "\\\"We had the right charts and the right ships. We left too late.\\\"\\n\\n— Mission Control",
+  "es": "«Teníamos las cartas y las naves adecuadas. Partimos demasiado tarde.»\\n\\n— Control de misión"
+ },
+ "space_race_events.92.t_diverted": {
+  "en": "Another Flag Already Flies",
+  "es": "Ya ondea otra bandera"
+ },
+ "space_race_events.92.t_lost": {
+  "en": "A Fleet With Nowhere to Land",
+  "es": "Una flota sin lugar donde posarse"
+ },
  "surveillance_events.1.a": {
   "en": "Protect the whistleblower",
   "es": "Proteger al denunciante"
@@ -20655,6 +20735,10 @@
   "en": "The foreign espionage operation our counterintelligence recently exposed was only the part we could see. Tracing its infrastructure, analysts have found that the same service had been conducting systematic cyber-espionage against our government and critical infrastructure for far longer than anyone suspected. The breach is extensive and has compromised sensitive data.",
   "es": "La operación de espionaje extranjera que nuestra contrainteligencia expuso hace poco era solo la parte que podíamos ver. Al rastrear su infraestructura, los analistas han descubierto que ese mismo servicio llevaba realizando un ciberespionaje sistemático contra nuestro gobierno y nuestras infraestructuras críticas mucho más tiempo del que nadie sospechaba. La brecha es extensa y ha comprometido datos sensibles."
  },
+ "surveillance_events.5.d_exposed_named": {
+  "en": "The espionage operation of [SCOPE.sCountry('surv_cyber_spy').GetName] that our counterintelligence recently exposed was only the part we could see. Tracing its infrastructure, analysts have found that the same service had been conducting systematic cyber-espionage against our government and critical infrastructure for far longer than anyone suspected. The breach is extensive and has compromised sensitive data.",
+  "es": "La operación de espionaje de [SCOPE.sCountry('surv_cyber_spy').GetName] que nuestra contrainteligencia descubrió hace poco era solo la parte que podíamos ver. Al rastrear su infraestructura, los analistas han comprobado que ese mismo servicio llevaba mucho más tiempo de lo que nadie sospechaba realizando ciberespionaje sistemático contra nuestro gobierno y nuestras infraestructuras críticas. La brecha es extensa y ha comprometido datos sensibles."
+ },
  "surveillance_events.5.f": {
   "en": "The breach was discovered on a Monday. By Thursday, the analysts had mapped its extent. By Friday, they wished they hadn't.\\n\\n\\\"How long had they been inside?\\\" the minister asked.\\n\\n\\\"Two years. Possibly three. The earliest indicators of presence predate our current logging system.\\\"\\n\\n\\\"And what did they take?\\\"\\n\\n\\\"Everything they could find. Personnel files. Operational records. The complete schedule of cabinet meetings. They knew when you would be where, and with whom, for the last eighteen months.\\\"\\n\\n\\\"And what did they do with what they took?\\\"\\n\\n\\\"That is the question we cannot answer. The answer is in the consequences of decisions you have already made, and we have no way of unpicking which of those decisions were affected.\\\"",
   "es": "La brecha se descubrió un lunes. Para el jueves, los analistas habían trazado su alcance. Para el viernes, deseaban no haberlo hecho.\\n\\n—¿Cuánto tiempo llevaban dentro? —preguntó el ministro.\\n\\n—Dos años. Quizá tres. Los primeros indicios de presencia son anteriores a nuestro sistema de registro actual.\\n\\n—¿Y qué se llevaron?\\n\\n—Todo lo que pudieron encontrar. Expedientes de personal. Registros operativos. El calendario completo de las reuniones del gabinete. Sabían dónde estaría usted y con quién durante los últimos dieciocho meses.\\n\\n—¿Y qué hicieron con lo que se llevaron?\\n\\n—Esa es la pregunta a la que no podemos responder. La respuesta está en las consecuencias de decisiones que usted ya ha tomado, y no tenemos forma de desentrañar cuáles de esas decisiones se vieron afectadas."
@@ -20756,8 +20840,8 @@
   "es": "Borrar todas las posturas coloniales"
  },
  "te_debug_colonial_empire.2.d": {
-  "en": "Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider.",
-  "es": "Solo para consola. Configura la presión de las grandes potencias en cada nivel de escalada y abre cada una de las tres confirmaciones de descolonización mediante el mismo efecto compartido que usan el widget y el botón de la IA. No se libera nada hasta que eliges una opción en la confirmación, y cada una ofrece Reconsiderar."
+  "en": "Console-only. Sets up great-power pressure at each escalation step, and opens each decolonization confirmation through the same shared effect the panel's buttons use: the three decisions, and the Colonial Holdings section's per-territory and per-subject ones. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider.",
+  "es": "Solo para consola. Configura la presión de las grandes potencias en cada nivel de escalada y abre cada confirmación de descolonización mediante el mismo efecto compartido que usan los botones del panel: las tres decisiones y las de la sección Posesiones coloniales, por territorio y por súbdito. No se libera nada hasta que eliges una opción en la confirmación, y cada una ofrece Reconsiderar."
  },
  "te_debug_colonial_empire.2.e": {
   "en": "Open: Round Table Conference",
@@ -20770,6 +20854,18 @@
  "te_debug_colonial_empire.2.g": {
   "en": "Log the decolonization diagnostics",
   "es": "Registrar los diagnósticos de descolonización"
+ },
+ "te_debug_colonial_empire.2.h": {
+  "en": "Open: Release the largest territory (.402)",
+  "es": "Abrir: liberar el mayor territorio (.402)"
+ },
+ "te_debug_colonial_empire.2.i": {
+  "en": "Open: Free the largest direct colonial subject (.403)",
+  "es": "Abrir: liberar al mayor súbdito colonial directo (.403)"
+ },
+ "te_debug_colonial_empire.2.j": {
+  "en": "Open: Dominion for the largest direct colony (.404)",
+  "es": "Abrir: Dominio para la mayor colonia directa (.404)"
  },
  "te_debug_colonial_empire.2.opt_d": {
   "en": "Open: Release a Colonial Territory",
@@ -20806,6 +20902,26 @@
  "te_debug_colonial_empire.3.t": {
   "en": "TEST: Programme Costs and the AI Review",
   "es": "PRUEBA: Costes de los programas y revisión de la IA"
+ },
+ "te_debug_colonial_empire.4.a": {
+  "en": "Census of every country (to debug.log)",
+  "es": "Censo de todos los países (en debug.log)"
+ },
+ "te_debug_colonial_empire.4.b": {
+  "en": "Census of us only",
+  "es": "Censo solo de nuestro país"
+ },
+ "te_debug_colonial_empire.4.d": {
+  "en": "Console-only. Re-runs the monthly separation pass and writes the colony test to debug.log, one TE_CE_CENSUS line per country and one per non-[concept_homeland] state of 100,000 people or more: separated from the capital, a people of no shared [concept_heritage_trait], settled land, unincorporated, the two acceptance and living-standards signals, eligible for release, and a colony.",
+  "es": "Solo para consola. Vuelve a ejecutar el paso mensual de separación y escribe la prueba de colonia en debug.log: una línea TE_CE_CENSUS por país y otra por cada estado que no sea [concept_homeland|l] y tenga 100 000 habitantes o más: separado de la capital, un pueblo sin [concept_heritage_trait|l] compartido, tierra de colonos, no incorporado, las dos señales de aceptación y de nivel de vida, apto para la liberación y colonia."
+ },
+ "te_debug_colonial_empire.4.f": {
+  "en": "The surveyors unroll the maps of empire.",
+  "es": "Los agrimensores despliegan los mapas del imperio."
+ },
+ "te_debug_colonial_empire.4.t": {
+  "en": "TEST: Colony Census",
+  "es": "PRUEBA: censo de colonias"
  },
  "te_debug_covert.1.a": {
   "en": "Funding 0 - Dormant",
@@ -22427,6 +22543,102 @@
   "en": "Close",
   "es": "Cerrar"
  },
+ "te_debug_space_race.2.a": {
+  "en": "Log every world's record",
+  "es": "Escribir en el log la ficha de cada mundo"
+ },
+ "te_debug_space_race.2.b": {
+  "en": "Claim the first unclaimed world for us",
+  "es": "Reclamar para nosotros el primer mundo sin reclamar"
+ },
+ "te_debug_space_race.2.c": {
+  "en": "Give our first colony to the largest other great power, as Cede Colony would",
+  "es": "Entregar nuestra primera colonia a la mayor de las demás grandes potencias, como haría Ceder colonia"
+ },
+ "te_debug_space_race.2.d": {
+  "en": "Console-only shortcuts for testing the colony record, which names who holds each world. None of these can happen in normal play.\\n\\nThe log writes one TE_SR_SITES line per world to debug.log. To test a holder dying, annex a country that holds a colony with the console's own annex command, then run the monthly step.",
+  "es": "Atajos solo para consola para probar el registro de colonias, que indica quién posee cada mundo. Ninguno de ellos puede ocurrir en una partida normal.\\n\\nEl registro escribe en debug.log una línea TE_SR_SITES por mundo. Para probar la muerte de un titular, anexiona un país que tenga una colonia con el comando de anexión propio de la consola y ejecuta después el paso mensual."
+ },
+ "te_debug_space_race.2.e": {
+  "en": "Run the colony record's monthly step now",
+  "es": "Ejecutar ahora el paso mensual del registro de colonias"
+ },
+ "te_debug_space_race.2.f": {
+  "en": "\\\"Write it down, all of it. Somebody will want to know who owned what.\\\"",
+  "es": "«Anótalo todo. Alguien querrá saber quién era dueño de qué.»"
+ },
+ "te_debug_space_race.2.r": {
+  "en": "Release our first colony, as a dead holder with no heir would",
+  "es": "Liberar nuestra primera colonia, como haría un titular muerto sin heredero"
+ },
+ "te_debug_space_race.2.t": {
+  "en": "Colony Record Console",
+  "es": "Consola del registro de colonias"
+ },
+ "te_debug_space_race.3.a": {
+  "en": "Log our fleets, the fleets bound for each world and every colony's people",
+  "es": "Escribir en el log nuestras flotas, las flotas rumbo a cada mundo y los habitantes de cada colonia"
+ },
+ "te_debug_space_race.3.b": {
+  "en": "Send a fleet now to the first world we may target, at no cost",
+  "es": "Enviar ahora una flota al primer mundo que podamos elegir como objetivo, sin coste"
+ },
+ "te_debug_space_race.3.c": {
+  "en": "Land every fleet in flight now",
+  "es": "Hacer aterrizar ahora todas las flotas en vuelo"
+ },
+ "te_debug_space_race.3.d": {
+  "en": "Console-only shortcuts for testing colony fleets and settlers under Simple and Full Colonies. The lines go to debug.log as TE_SR_FLEETS and TE_SR_SETTLERS.",
+  "es": "Atajos solo para consola para probar las flotas coloniales y los colonos con colonias simples y colonias completas. Las líneas se escriben en debug.log como TE_SR_FLEETS y TE_SR_SETTLERS."
+ },
+ "te_debug_space_race.3.e": {
+  "en": "Set emigration to High and send this month's settlers now",
+  "es": "Fijar la emigración en Alta y enviar ya los colonos de este mes"
+ },
+ "te_debug_space_race.3.f": {
+  "en": "\\\"Every ship in the sky, and every soul on every rock. Count them.\\\"",
+  "es": "«Cada nave del cielo y cada alma de cada roca. Cuéntalas todas.»"
+ },
+ "te_debug_space_race.3.g": {
+  "en": "Fill our colonies to half their room",
+  "es": "Llenar nuestras colonias hasta la mitad de su espacio"
+ },
+ "te_debug_space_race.3.t": {
+  "en": "Colony Fleets Console",
+  "es": "Consola de flotas coloniales"
+ },
+ "te_debug_space_race.4.a": {
+  "en": "Log every colony's modules",
+  "es": "Escribir en el log los módulos de cada colonia"
+ },
+ "te_debug_space_race.4.b": {
+  "en": "Fill our fabrication stock",
+  "es": "Llenar nuestras existencias de fabricación"
+ },
+ "te_debug_space_race.4.c": {
+  "en": "Queue one of each module at our first colony and fabricate now",
+  "es": "Poner en cola un módulo de cada tipo en nuestra primera colonia y fabricar ya"
+ },
+ "te_debug_space_race.4.d": {
+  "en": "Console-only shortcuts for testing colony modules and Extraplanetary Base room under Simple and Full Colonies. The lines go to debug.log as TE_SR_MODULES.",
+  "es": "Atajos solo para consola para probar los módulos coloniales y el espacio de la Base extraplanetaria con colonias simples y colonias completas. Las líneas se escriben en debug.log como TE_SR_MODULES."
+ },
+ "te_debug_space_race.4.e": {
+  "en": "Land every one of our module shipments now",
+  "es": "Hacer aterrizar ahora todos nuestros envíos de módulos"
+ },
+ "te_debug_space_race.4.f": {
+  "en": "\\\"Bolt it on, wire it up, and someone find me five thousand people.\\\"",
+  "es": "«Atorníllalo, conéctalo, y que alguien me consiga cinco mil personas.»"
+ },
+ "te_debug_space_race.4.g": {
+  "en": "Recompute our Extraplanetary Base room now",
+  "es": "Recalcular ahora el espacio de nuestra Base extraplanetaria"
+ },
+ "te_debug_space_race.4.t": {
+  "en": "Colony Modules Console",
+  "es": "Consola de módulos coloniales"
+ },
  "te_debug_un.1.a": {
   "en": "Found the United Nations and seat the powers",
   "es": "Fundar las Naciones Unidas y dar asiento a las potencias"
@@ -22886,6 +23098,314 @@
  "te_inflation.1.t": {
   "en": "Not Worth the Paper",
   "es": "No vale ni el papel"
+ },
+ "te_judiciary_events.20.a": {
+  "en": "Let the voters choose the judges.",
+  "es": "Que los votantes elijan a los jueces."
+ },
+ "te_judiciary_events.20.b": {
+  "en": "The bench is no place for candidates.",
+  "es": "El tribunal no es lugar para candidatos."
+ },
+ "te_judiciary_events.20.d": {
+  "en": "As [SCOPE.sLaw('current_law_scope').GetName] goes through the legislature, the [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] want an [concept_amendment] added: judges should stand for election like every other official. Their votes would make the bill easier to pass.",
+  "es": "Mientras [SCOPE.sLaw('current_law_scope').GetName] se tramita en la legislatura, los [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] quieren que se añada una [concept_amendment|l]: los jueces deberían presentarse a elecciones como cualquier otro cargo público. Sus votos facilitarían la aprobación del proyecto de ley."
+ },
+ "te_judiciary_events.20.d_carry": {
+  "en": "The courts we have now face the voters, and the rule will lapse with the law that carries it. The [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to carry it over, and their votes would make the bill easier to pass.",
+  "es": "Los jueces de nuestros tribunales actuales se presentan ante los votantes, y la norma decaerá con la ley que la contiene. Los [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] quieren que [SCOPE.sLaw('current_law_scope').GetName] la mantenga, y sus votos facilitarían la aprobación del proyecto de ley."
+ },
+ "te_judiciary_events.20.f": {
+  "en": "Mississippi began electing its judges in 1832. By the Civil War most of the states had followed.",
+  "es": "Misisipi empezó a elegir a sus jueces en 1832. En la guerra de Secesión, la mayoría de los estados había seguido su ejemplo."
+ },
+ "te_judiciary_events.20.t": {
+  "en": "Who Judges the Judges?",
+  "es": "¿Quién juzga a los jueces?"
+ },
+ "te_judiciary_events.21.a": {
+  "en": "Citizens will sit in judgement.",
+  "es": "Que los ciudadanos se sienten a juzgar."
+ },
+ "te_judiciary_events.21.b": {
+  "en": "Trained judges, not juries.",
+  "es": "Jueces formados, no jurados."
+ },
+ "te_judiciary_events.21.d": {
+  "en": "The [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] will back [SCOPE.sLaw('current_law_scope').GetName] if it sends serious cases to a jury of citizens. The judges are less keen: a jury does not have to give reasons.",
+  "es": "Los [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] apoyarán [SCOPE.sLaw('current_law_scope').GetName] si envía los casos graves ante un jurado de ciudadanos. A los jueces les entusiasma menos: un jurado no tiene que dar razones."
+ },
+ "te_judiciary_events.21.d_carry": {
+  "en": "Our courts already try serious cases before juries, and the rule will lapse with the law that carries it. The [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] want [SCOPE.sLaw('current_law_scope').GetName] to keep the juries, and will back it if it does.",
+  "es": "Nuestros tribunales ya juzgan los casos graves con jurado, y la norma decaerá con la ley que la contiene. Los [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] quieren que [SCOPE.sLaw('current_law_scope').GetName] mantenga los jurados, y la apoyarán si lo hace."
+ },
+ "te_judiciary_events.21.f": {
+  "en": "Russia's judicial statutes of 1864 brought trial by jury with them, along with judges who couldn't be removed.",
+  "es": "Los estatutos judiciales rusos de 1864 trajeron consigo el juicio con jurado y jueces inamovibles."
+ },
+ "te_judiciary_events.21.t": {
+  "en": "The Jury Question",
+  "es": "La cuestión del jurado"
+ },
+ "te_judiciary_events.22.a": {
+  "en": "Every appeal goes to a human judge.",
+  "es": "Toda apelación pasa a un juez humano."
+ },
+ "te_judiciary_events.22.b": {
+  "en": "The machine is more consistent than any judge.",
+  "es": "La máquina es más coherente que cualquier juez."
+ },
+ "te_judiciary_events.22.d": {
+  "en": "[SCOPE.sLaw('current_law_scope').GetName] would have models decide routine cases. The [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] will back it on one condition: anyone who loses before the machine may appeal to a human judge. That would give back part of the savings.",
+  "es": "[SCOPE.sLaw('current_law_scope').GetName] haría que unos modelos resolvieran los casos rutinarios. Los [SCOPE.gsInterestGroup('amendment_sponsor_ig').GetName] la apoyarán con una condición: quien pierda ante la máquina podrá apelar ante un juez humano. Eso devolvería parte del ahorro."
+ },
+ "te_judiciary_events.22.f": {
+  "en": "\\\"The data subject shall have the right not to be subject to a decision based solely on automated processing.\\\" (General Data Protection Regulation, art. 22)",
+  "es": "«Todo interesado tendrá derecho a no ser objeto de una decisión basada únicamente en el tratamiento automatizado.» (Reglamento General de Protección de Datos, art. 22)"
+ },
+ "te_judiciary_events.22.t": {
+  "en": "A Right to a Human Judge",
+  "es": "Derecho a un juez humano"
+ },
+ "te_judiciary_events.3.a": {
+  "en": "We will comply with the ruling.",
+  "es": "Acataremos el fallo."
+ },
+ "te_judiciary_events.3.b": {
+  "en": "The court has made its decision. Now let it enforce it.",
+  "es": "El tribunal ha tomado su decisión. Que ahora la haga cumplir."
+ },
+ "te_judiciary_events.3.c": {
+  "en": "Add judges who understand the nation's needs.",
+  "es": "Añadamos jueces que entiendan las necesidades de la nación."
+ },
+ "te_judiciary_events.3.d": {
+  "en": "We forced [SCOPE.sLaw('te_jud_struck_law').GetName] through without the legislature's consent, and the challenge to it has reached the highest court. Today it struck the act down. Our opponents are calling it the law's victory over the government. Our supporters are calling it the judges' victory over the people. Either way, the ruling now needs an answer.",
+  "es": "Impusimos [SCOPE.sLaw('te_jud_struck_law').GetName] sin el consentimiento de la legislatura, y la impugnación ha llegado al tribunal supremo. Hoy ha anulado la ley. Nuestros opositores lo llaman la victoria de la ley sobre el gobierno. Nuestros partidarios lo llaman la victoria de los jueces sobre el pueblo. Sea como sea, el fallo exige ahora una respuesta."
+ },
+ "te_judiciary_events.3.f": {
+  "en": "\\\"It is emphatically the province and duty of the judicial department to say what the law is.\\\" (Chief Justice John Marshall, Marbury v. Madison, 1803)",
+  "es": "«Es enfáticamente competencia y deber del poder judicial decir cuál es la ley.» (Juez presidente John Marshall, Marbury contra Madison, 1803)"
+ },
+ "te_judiciary_events.3.t": {
+  "en": "The Court Strikes Down the Act",
+  "es": "El tribunal anula la ley"
+ },
+ "te_judiciary_events.30.a": {
+  "en": "Property in persons is protected.",
+  "es": "Se protege la propiedad sobre las personas."
+ },
+ "te_judiciary_events.30.b": {
+  "en": "No one may be held as property.",
+  "es": "Nadie puede ser tenido como propiedad."
+ },
+ "te_judiciary_events.30.c": {
+  "en": "That is a question for the legislature.",
+  "es": "Eso es una cuestión para la legislatura."
+ },
+ "te_judiciary_events.30.d": {
+  "en": "An enslaved man who was taken to a free district and brought back has sued for his freedom, and the case has reached the highest court. The abolitionists want the court to say that free soil makes free people; the slaveholders want it to say that property is property wherever its owner goes. The ruling will be read in every plantation house and every meeting hall in the country.",
+  "es": "Un hombre esclavizado que fue llevado a un distrito libre y devuelto ha demandado por su libertad, y el caso ha llegado al tribunal supremo. Los abolicionistas quieren que el tribunal declare que la tierra libre hace libres a las personas; los esclavistas quieren que declare que la propiedad es propiedad vaya donde vaya su dueño. El fallo se leerá en cada casa de plantación y en cada sala de reuniones del país."
+ },
+ "te_judiciary_events.30.f": {
+  "en": "\\\"The state of slavery is of such a nature that it is incapable of being introduced on any reasons, moral or political, but only by positive law.\\\" (Lord Mansfield, Somerset v. Stewart, 1772)",
+  "es": "«La esclavitud es de tal naturaleza que no puede introducirse por razones morales ni políticas, sino solo por el derecho positivo.» (Lord Mansfield, Somerset contra Stewart, 1772)"
+ },
+ "te_judiciary_events.30.t": {
+  "en": "The Free Soil Case",
+  "es": "El caso de la tierra libre"
+ },
+ "te_judiciary_events.31.a": {
+  "en": "The law sets the sentence.",
+  "es": "La ley fija la condena."
+ },
+ "te_judiciary_events.31.b": {
+  "en": "Give them the sentence they demand.",
+  "es": "Démosles la condena que exigen."
+ },
+ "te_judiciary_events.31.d": {
+  "en": "A guard has attacked a visiting envoy of [SCOPE.sCountry('te_jud_pressing_power').GetName], and its government demands his execution. Our ministers are afraid of what [SCOPE.sCountry('te_jud_pressing_power').GetName] will do if it doesn't get it. Our code does not allow a death sentence for the crime, and the chief judge has said so.",
+  "es": "Un guardia ha atacado a un enviado de [SCOPE.sCountry('te_jud_pressing_power').GetName] en visita oficial, y su gobierno exige su ejecución. Nuestros ministros temen lo que hará [SCOPE.sCountry('te_jud_pressing_power').GetName] si no la obtiene. Nuestro código no permite la pena de muerte para ese delito, y el juez presidente así lo ha dicho."
+ },
+ "te_judiciary_events.31.f": {
+  "en": "In 1891 a Japanese policeman wounded the visiting Russian tsarevich at Ōtsu. The cabinet wanted him hanged. Chief Justice Kojima Iken held that the law did not allow it, and the court sentenced him to life.",
+  "es": "En 1891, un policía japonés hirió en Ōtsu al zarévich ruso, que estaba de visita. El gabinete quería ahorcarlo. El presidente del tribunal, Kojima Iken, sostuvo que la ley no lo permitía, y el tribunal lo condenó a cadena perpetua."
+ },
+ "te_judiciary_events.31.t": {
+  "en": "The Ōtsu Case",
+  "es": "El caso de Ōtsu"
+ },
+ "te_judiciary_events.32.a": {
+  "en": "We accept the ruling.",
+  "es": "Aceptamos el fallo."
+ },
+ "te_judiciary_events.32.b": {
+  "en": "Add judges who will uphold the law.",
+  "es": "Añadamos jueces que confirmen la ley."
+ },
+ "te_judiciary_events.32.c": {
+  "en": "Lean on the court until it changes its mind.",
+  "es": "Presionemos al tribunal hasta que cambie de parecer."
+ },
+ "te_judiciary_events.32.d": {
+  "en": "The highest court has found a freedom of contract in the constitution: a worker may agree to any hours and any wage, and a law that forbids the bargain takes away the worker's liberty. On that reading our labor laws are void. The unions are in the streets, and the employers are already posting new terms.",
+  "es": "El tribunal supremo ha hallado en la constitución una libertad de contratación: un trabajador puede pactar cualquier jornada y cualquier salario, y una ley que prohíba el trato le quita su libertad. Con esa lectura, nuestras leyes laborales son nulas. Los sindicatos están en las calles y los empresarios ya anuncian nuevas condiciones."
+ },
+ "te_judiciary_events.32.f": {
+  "en": "In 1905 the Supreme Court struck down New York's limit on bakers' hours in Lochner v. New York. In 1937 Roosevelt proposed six more justices; that spring the court upheld a minimum wage, \\\"the switch in time that saved nine\\\".",
+  "es": "En 1905, en Lochner contra Nueva York, el Tribunal Supremo anuló el límite de horas de los panaderos de Nueva York. En 1937, Roosevelt propuso seis jueces más; esa primavera el tribunal confirmó un salario mínimo, «el cambio a tiempo que salvó a nueve»."
+ },
+ "te_judiciary_events.32.t": {
+  "en": "Freedom of Contract",
+  "es": "Libertad de contratación"
+ },
+ "te_judiciary_events.33.a": {
+  "en": "We respect the ruling and stand again.",
+  "es": "Respetamos el fallo y nos presentaremos de nuevo."
+ },
+ "te_judiciary_events.33.b": {
+  "en": "Declare an emergency.",
+  "es": "Declaremos el estado de emergencia."
+ },
+ "te_judiciary_events.33.d": {
+  "en": "The election is over and the government has its majority, but a court has found that our leader won by corrupt practice and voided the result. The [SCOPE.gsInterestGroup('te_jud_ruling_ig').GetName] call the ruling a judicial coup. The opposition calls it the law at work.",
+  "es": "Las elecciones han terminado y el gobierno tiene su mayoría, pero un tribunal ha determinado que nuestro líder ganó mediante prácticas corruptas y ha anulado el resultado. Los [SCOPE.gsInterestGroup('te_jud_ruling_ig').GetName] califican el fallo de golpe judicial. La oposición lo llama la ley en acción."
+ },
+ "te_judiciary_events.33.f": {
+  "en": "In June 1975 the Allahabad High Court voided Indira Gandhi's election to parliament. Two weeks later she declared a state of emergency, and ruled by decree until 1977.",
+  "es": "En junio de 1975, el Tribunal Superior de Allahabad anuló la elección parlamentaria de Indira Gandhi. Dos semanas después declaró el estado de emergencia y gobernó por decreto hasta 1977."
+ },
+ "te_judiciary_events.33.t": {
+  "en": "The Voided Election",
+  "es": "Las elecciones anuladas"
+ },
+ "te_judiciary_events.34.a": {
+  "en": "Necessity knows no law.",
+  "es": "La necesidad no conoce ley."
+ },
+ "te_judiciary_events.34.b": {
+  "en": "The judges resign rather than say so.",
+  "es": "Los jueces dimiten antes que decirlo."
+ },
+ "te_judiciary_events.34.d": {
+  "en": "The new regime has put itself above the courts, and now it asks them to say that it was lawful to do so. The constitution it set aside gives them no grounds. The government's lawyers say that a revolution that succeeds makes its own law, and that the courts can either accept it or close.",
+  "es": "El nuevo régimen se ha situado por encima de los tribunales y ahora les pide que declaren que era legal hacerlo. La constitución que dejó de lado no les da ningún fundamento. Los abogados del gobierno dicen que una revolución que triunfa crea su propio derecho, y que los tribunales pueden aceptarlo o cerrar."
+ },
+ "te_judiciary_events.34.f": {
+  "en": "In 1955 Pakistan's Federal Court upheld the governor-general's dissolution of the assembly, and in 1958 a military coup, on the doctrine of necessity. The Supreme Court disowned the doctrine in 1972.",
+  "es": "En 1955, el Tribunal Federal de Pakistán confirmó la disolución de la asamblea por el gobernador general y, en 1958, un golpe militar, con la doctrina de la necesidad. El Tribunal Supremo repudió esa doctrina en 1972."
+ },
+ "te_judiciary_events.34.t": {
+  "en": "The Doctrine of Necessity",
+  "es": "La doctrina de la necesidad"
+ },
+ "te_judiciary_events.35.a": {
+  "en": "Grant a house of justice.",
+  "es": "Concedamos una casa de justicia."
+ },
+ "te_judiciary_events.35.b": {
+  "en": "The clergy's courts suffice.",
+  "es": "Bastan los tribunales del clero."
+ },
+ "te_judiciary_events.35.d": {
+  "en": "Merchants, students and some of the clergy have taken sanctuary in a shrine and will not leave. Their first demand is not bread or lower taxes but a house of justice: a court that applies a written law, the same for everyone, and which the governors cannot overrule.",
+  "es": "Comerciantes, estudiantes y parte del clero se han refugiado en un santuario y no quieren salir. Su primera exigencia no es pan ni menores impuestos, sino una casa de justicia: un tribunal que aplique una ley escrita, igual para todos, y que los gobernadores no puedan desautorizar."
+ },
+ "te_judiciary_events.35.f": {
+  "en": "In 1905 the merchants and clergy of Tehran took sanctuary and demanded an adalatkhaneh, a house of justice, from the shah. A year later they had a constitution.",
+  "es": "En 1905, los comerciantes y el clero de Teherán se refugiaron en un santuario y exigieron al sah una adalatkhaneh, una casa de justicia. Un año después tenían una constitución."
+ },
+ "te_judiciary_events.35.t": {
+  "en": "A House of Justice",
+  "es": "Una casa de justicia"
+ },
+ "te_judiciary_events.36.a": {
+  "en": "Open courts beside the religious ones.",
+  "es": "Abramos tribunales junto a los religiosos."
+ },
+ "te_judiciary_events.36.b": {
+  "en": "Codify the law and give it new courts.",
+  "es": "Codifiquemos la ley y démosle nuevos tribunales."
+ },
+ "te_judiciary_events.36.c": {
+  "en": "The religious courts suffice.",
+  "es": "Bastan los tribunales religiosos."
+ },
+ "te_judiciary_events.36.d": {
+  "en": "Our reformers say the empire's law is too scattered to govern by: every judge rules from his own reading of the sources. They propose either new courts beside the religious ones for commerce and crime, or one written code for everything, applied by judges trained to it. The clergy say the law was complete long before the reformers were born.",
+  "es": "Nuestros reformistas dicen que el derecho del imperio está demasiado disperso para gobernar con él: cada juez falla según su propia lectura de las fuentes. Proponen o bien nuevos tribunales junto a los religiosos para el comercio y los delitos, o bien un único código escrito para todo, aplicado por jueces formados en él. El clero dice que la ley era completa mucho antes de que nacieran los reformistas."
+ },
+ "te_judiciary_events.36.f": {
+  "en": "The Ottoman reformers opened commercial courts in 1840 and the Nizamiye courts in 1864, and between 1869 and 1876 wrote the Mecelle, a civil code drawn from Islamic law.",
+  "es": "Los reformistas otomanos abrieron tribunales de comercio en 1840 y los tribunales Nizamiye en 1864, y entre 1869 y 1876 redactaron la Mecelle, un código civil extraído del derecho islámico."
+ },
+ "te_judiciary_events.36.t": {
+  "en": "Courts for a New Code",
+  "es": "Tribunales para un nuevo código"
+ },
+ "te_judiciary_events.4.a": {
+  "en": "The act stands.",
+  "es": "La ley se mantiene."
+ },
+ "te_judiciary_events.4.d": {
+  "en": "The challenge to [SCOPE.sLaw('te_jud_struck_law').GetName], which we forced past the legislature, has reached the highest court. The judges found that the government acted within its powers. The act stands, and it now carries the court's approval as well as ours.",
+  "es": "La impugnación de [SCOPE.sLaw('te_jud_struck_law').GetName], que impusimos sin contar con la legislatura, ha llegado al tribunal supremo. Los jueces han determinado que el gobierno actuó dentro de sus competencias. La ley se mantiene y cuenta ahora con la aprobación del tribunal además de la nuestra."
+ },
+ "te_judiciary_events.4.f": {
+  "en": "\\\"The court does not sit to decide whether the act was wise, only whether it was lawful.\\\"",
+  "es": "«El tribunal no se reúne para decidir si la ley fue sensata, sino solo si fue legal.»"
+ },
+ "te_judiciary_events.4.t": {
+  "en": "The Court Upholds the Act",
+  "es": "El tribunal confirma la ley"
+ },
+ "te_judiciary_events.5.a": {
+  "en": "Make it law: the courts apply the statute as written.",
+  "es": "Convirtámoslo en ley: los tribunales aplicarán las leyes tal como están escritas."
+ },
+ "te_judiciary_events.5.b": {
+  "en": "Keep the enlarged bench.",
+  "es": "Mantengamos el tribunal ampliado."
+ },
+ "te_judiciary_events.5.c": {
+  "en": "Restore the old bench.",
+  "es": "Restauremos el antiguo tribunal."
+ },
+ "te_judiciary_events.5.d": {
+  "en": "A year has passed since we added judges to the highest court. The new bench has given us no trouble, but the arrangement is awkward: the constitution still says the courts may strike down our laws, and only the judges' gratitude says they won't. Our ministers propose to settle it by law, so that the courts apply statutes as written and review none of them. Others say the court should never have been packed at all.",
+  "es": "Ha pasado un año desde que añadimos jueces al tribunal supremo. Los nuevos magistrados no nos han dado problemas, pero la situación es incómoda: la constitución sigue diciendo que los tribunales pueden anular nuestras leyes, y solo la gratitud de los jueces garantiza que no lo harán. Nuestros ministros proponen zanjarlo por ley, de modo que los tribunales apliquen las leyes tal como están escritas y no revisen ninguna. Otros dicen que el tribunal no debió copararse jamás."
+ },
+ "te_judiciary_events.5.f": {
+  "en": "\\\"Is it not equally a question of who shall be the judge?\\\"",
+  "es": "«¿No es igualmente una cuestión de quién será el juez?»"
+ },
+ "te_judiciary_events.5.t": {
+  "en": "The Enlarged Bench",
+  "es": "El tribunal ampliado"
+ },
+ "te_judiciary_events.6.a": {
+  "en": "Let them march.",
+  "es": "Que marchen."
+ },
+ "te_judiciary_events.6.b": {
+  "en": "Clear the streets.",
+  "es": "Despejemos las calles."
+ },
+ "te_judiciary_events.6.c": {
+  "en": "Promise the judges their tenure.",
+  "es": "Prometamos a los jueces su inamovilidad."
+ },
+ "te_judiciary_events.6.d": {
+  "en": "Lawyers in black coats are marching on the courts, and teachers, students and shopkeepers are marching with them. They say our reform of the judiciary has put the government above the law, and they will stay in the streets until the judges we removed are back on the bench.",
+  "es": "Abogados con toga negra marchan sobre los tribunales, y con ellos marchan maestros, estudiantes y tenderos. Dicen que nuestra reforma del poder judicial ha puesto al gobierno por encima de la ley, y que seguirán en las calles hasta que los jueces que destituimos vuelvan a su puesto."
+ },
+ "te_judiciary_events.6.f": {
+  "en": "\\\"Long live the rule of law.\\\"",
+  "es": "«Viva el Estado de derecho.»"
+ },
+ "te_judiciary_events.6.t": {
+  "en": "Lawyers in the Streets",
+  "es": "Abogados en las calles"
  },
  "te_lolr.1.a": {
   "en": "We gave our word. Pay.",
@@ -25128,8 +25648,8 @@
   "es": "[SCOPE.sCountry('un_vote_proposer').GetName] ha presentado ante la Asamblea General una moción que pide la expulsión de [SCOPE.sCountry('un_vote_target').GetName] del [concept_un_security_council]. La moción cita abusos recientes del [concept_un_veto|l] y exige que [SCOPE.sCountry('un_vote_target').GetName] renuncie a su escaño de [concept_un_permanent_member|l]. Al ser una [concept_un_resolution_recommendatory|l] no vetable, la moción requiere una #G supermayoría de 2/3#! para aprobarse."
  },
  "un_vote.1.d_expulsion_target": {
-  "en": "An ill-conceived motion has been put before the General Assembly: [SCOPE.sCountry('un_vote_proposer').GetName] is calling for our expulsion from the [concept_un_security_council], citing our principled exercise of the [concept_un_veto]. The motion requires a #G 2/3 supermajority#! to pass — sufficient delegations remain in our orbit to defeat it.",
-  "es": "Se ha presentado ante la Asamblea General una moción descabellada: [SCOPE.sCountry('un_vote_proposer').GetName] pide nuestra expulsión del [concept_un_security_council], citando nuestro ejercicio de principios del [concept_un_veto|l]. La moción requiere una #G supermayoría de 2/3#! para aprobarse: quedan delegaciones suficientes en nuestra órbita para derrotarla."
+  "en": "An ill-conceived motion has been put before the General Assembly: [SCOPE.sCountry('un_vote_proposer').GetName] is calling for our expulsion from the [concept_un_security_council], citing our principled exercise of the [concept_un_veto]. It needs a #G 2/3 supermajority#! of the members with a vote, and no member presumes in its favour: each weighs our veto record against our standing and our service to the United Nations. The Delegations list in the chamber shows where they lean.",
+  "es": "Se ha presentado ante la Asamblea General una moción descabellada: [SCOPE.sCountry('un_vote_proposer').GetName] pide nuestra expulsión del [concept_un_security_council], citando nuestro ejercicio de principios del [concept_un_veto|l]. Necesita una #G supermayoría de 2/3#! de los miembros con voto, y ningún miembro parte de una presunción a su favor: cada uno sopesa nuestro historial de vetos frente a nuestra posición y nuestro servicio a las Naciones Unidas. La lista de Delegaciones de la cámara muestra hacia dónde se inclinan."
  },
  "un_vote.1.d_food_reserve": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has moved that the General Assembly found a World Food Reserve. Members with a Strategic Reserve could pledge part of their grain to it, and every new UN aid mission would draw on the pledges to feed the state it serves. The UN would also answer for hunger: while the Reserve stands, famine among the members' people would weigh on its authority, and the absence of famine would add to it.",
