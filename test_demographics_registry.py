@@ -1035,7 +1035,9 @@ class TestCohortScript(unittest.TestCase):
             fixtures = {"te_demog_crisis": flows["crisis"]}
         stub = None
         if stub_flows:
-            prof = demographics_model.migrant_profile(inp)
+            # the profile as the model's step reads it: with the ring's last count of women among the workers
+            prof = demographics_model.migrant_profile(
+                inp if inp.work_female_share is not None else dataclasses.replace(inp, work_female_share=ring.fws_work))
             locals_ = {
                 # the people, which the Causes of Death slices take (issue #1029), then the rates the sweep reads
                 "te_dg_war": war_dead,
@@ -1204,7 +1206,8 @@ class TestCohortScript(unittest.TestCase):
         split and profile, and it consumed what was pending."""
         inp = _with_migrant_lines(dataclasses.replace(
             self.INP, techs=self.INP.techs | flows.get("techs", frozenset()), crisis=flows["crisis"],
-            inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"]))
+            inflow_years=flows.get("inflow_years") or 0, female_job_share=flows["fjob_share"],
+            work_female_share=eng.ring_before.fws_work))   # the last count the step read (2026-10-25)
         sign = 1 if eng.locals["te_dg_mig_in"] > 0 else -1 if eng.locals["te_dg_mig_out"] > 0 else 0
         prof = demographics_model.migrant_profile(inp, eng.balance_before, sign)
         # the booking's rates (te_demog_migrant_rates, 2026-10-12): each class and sex's, plus the flat one
