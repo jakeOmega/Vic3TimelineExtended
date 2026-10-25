@@ -23143,6 +23143,10 @@
   "en": "The birth and death effects of this state's laws, technologies and institutions.",
   "de": "Die Geburten- und Sterbeeffekte der Gesetze, Technologien und Institutionen dieses Staates."
  },
+ "te_demog_line_tag": {
+  "en": " #grey (Demographics)#!",
+  "de": " #grey (Demografie)#!"
+ },
  "te_demog_line_wealth_deaths_down": {
   "en": "Laws and Institutions",
   "de": "Gesetze und Institutionen"

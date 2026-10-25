@@ -1417,3 +1417,15 @@ call as the section above.
    Women's Suffrage reads "Workforce Ratio (read as women’s work)". The Nation tab's women's-work row carries the same tag.
 2. **Display only and Disabled.** The same tooltips read plain "Workforce Ratio", with no trailing space.
 3. **The log.** As above: no `not valid for 'te_demog_wf_` burst in `error.log`.
+
+## The birth and death lines under Full (2026-10-25)
+
+Under Full, the moved birth and mortality lines on laws, technologies and institutions keep their vanilla names with a
+grey "(Demographics)" after them (`te_demog_line_name` in `te_demog_custom_loc.txt`; owner, 2026-10-25).
+
+1. **Full.** Women's Suffrage reads "Birth Rate (Demographics)"; Public Health Insurance's institution effects read
+   "Mortality (Demographics)". In German, the base game's own name for Birth Rate, then "(Demografie)".
+2. **Display only and Disabled.** The same lines read plain "Birth Rate" and "Mortality".
+3. **Unmoved lines.** A state's own birth rate and mortality tooltips, and pops' lines such as severe starvation, keep
+   vanilla's names: only the moved types carry the tag.
+4. **The log.** As above: no `not valid for 'te_demog_line_name'` burst in `error.log`.

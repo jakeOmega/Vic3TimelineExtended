@@ -86,3 +86,29 @@ te_demog_wf_womens_name = {
 		localization_key = te_demog_census_off_none
 	}
 }
+
+# ============================================================================
+# DEMOGRAPHICS — the moved birth and death lines while the census sets them
+# ============================================================================
+# The engine's birth and mortality lines on laws, technologies and institutions sit
+# on script-only types (demographics_engine_line_types.txt) whose names are the
+# vanilla ones: Birth Rate, Mortality, the professions' mortality. The mod
+# re-applies them flat under Display only and Disabled (te_demog_lines_refresh).
+# Under Full the census folds the absorbed family into its own rates and applies
+# the on-top family at its rate (te_demog_rates_refresh), so the lines still act,
+# through the census. Under Full each name ends in "(Demographics)" to say so
+# (owner, 2026-10-25); otherwise it is plain. Per country, like the Workforce Ratio
+# tags: a state the census hasn't stepped keeps the flat lines for up to a year.
+te_demog_line_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_demog_effects_run = yes }
+		localization_key = te_demog_line_tag
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_demog_census_off_none
+	}
+}

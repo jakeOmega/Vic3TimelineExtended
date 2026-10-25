@@ -597,5 +597,32 @@ class TestWorkforceLineNames(unittest.TestCase):
             self.assertTrue(self.loc[key] and "'" not in self.loc[key], key)
 
 
+class TestBirthDeathLineNames(unittest.TestCase):
+    """Under Full, the moved birth and death lines' names end in "(Demographics)" (owner, 2026-10-25)."""
+
+    CALL = "[GetPlayer.GetCustom('te_demog_line_name')]"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, cls.custom = _rule_loc()
+        cls.types = re.findall(r"(?m)^(\w+)\s*=\s*\{", (
+            ROOT / "common/modifier_type_definitions/demographics_engine_line_types.txt").read_text(encoding="utf-8-sig"))
+
+    def test_every_line_type_keeps_its_vanilla_name_and_ends_in_the_tag(self):
+        self.assertGreaterEqual(len(self.types), 9)
+        for name in self.types:
+            self.assertRegex(self.loc[name], rf"^\$state_\w+_mult\${re.escape(self.CALL)}$", name)
+        tagged = {k for k, v in self.loc.items() if self.CALL in v}
+        self.assertEqual(tagged, set(self.types))
+
+    def test_the_tag_shows_only_under_full(self):
+        block = re.search(r"(?ms)^te_demog_line_name = \{(.*?)^\}", self.custom)
+        self.assertIsNotNone(block)
+        texts = re.findall(r"trigger = \{ (.*?) \}\s*localization_key = (\w+)", block.group(1))
+        self.assertEqual(texts, [("te_demog_effects_run = yes", "te_demog_line_tag"),
+                                 ("always = yes", "te_demog_census_off_none")])
+        self.assertEqual(self.loc["te_demog_line_tag"], " #grey (Demographics)#!")
+
+
 if __name__ == "__main__":
     unittest.main()

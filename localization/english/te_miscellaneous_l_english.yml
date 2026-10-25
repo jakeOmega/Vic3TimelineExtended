@@ -6433,6 +6433,7 @@
  te_demog_line_peasants_deaths_down_desc:0 "The birth and death effects of this state's laws, technologies and institutions."
  te_demog_line_peasants_deaths_up:0 "Laws and Institutions"
  te_demog_line_peasants_deaths_up_desc:0 "The birth and death effects of this state's laws, technologies and institutions."
+ te_demog_line_tag:0 " #grey (Demographics)#!"
  te_demog_line_wealth_deaths_down:0 "Laws and Institutions"
  te_demog_line_wealth_deaths_down_desc:0 "The birth and death effects of this state's laws, technologies and institutions."
  te_demog_line_wealth_deaths_up:0 "Laws and Institutions"

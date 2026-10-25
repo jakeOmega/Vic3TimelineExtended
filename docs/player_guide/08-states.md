@@ -274,7 +274,8 @@ An effect on some of a state's people, such as severe starvation, applies to
 their rate in the base game. Private Health Insurance's cut for the wealthy
 works at the census's rate, and no pop's deaths fall below half of it. A state's
 birth rate and mortality tooltips show the census's part as Census: Births and
-Census: Deaths.
+Census: Deaths. The Birth Rate and Mortality lines it takes over, on most laws and
+technologies, end in (Demographics).
 
 Under Full the census also sets each state's workforce, from who is of working
 age and how many of them work. The working ages run from 15 (children of 10 to
