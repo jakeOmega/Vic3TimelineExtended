@@ -40,6 +40,13 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 |-----|--------|-------------|
 | [specs/2026-10-23-tourism-heritage-design.md](specs/2026-10-23-tourism-heritage-design.md): monument tourism becomes output, and the heritage a monument stands for leaves the state's base appeal while the monument can exist (pass 1); its moves and new monuments are in the two CSVs beside it | Partial: phase 1 built (#1118; plan archived). Phase 2 waited for the monument policy and prestige pass, which shipped in #1121 | Phase 2, the To History dedication (counted at half under every policy, the policy spec's § 4.5) and the new landmarks of Appendix B with their moves; phase 3, the new archaeology sites of Appendix C. Pass 2 (townscapes, § 11) is a later project |
 
+### Space Race
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-10-25-solar-colonization-contest-scope.md](specs/2026-10-25-solar-colonization-contest-scope.md): scope for contested solar colonies (holder records, cession by treaty, fleets with a location and real transit times, blockades and sieges), colony population as crews, modules and Extraplanetary Bases from colonies, and four levels of the Space Race rule | Scoping menu, nothing built; four rounds of the owner's answers folded in (§ Decisions, § 11) | The open calls in §11; then a design for the chosen slices, starting with slice 0 (the holder record, which also fixes colonies vanishing when their holder is annexed) |
+| [specs/2026-10-25-solar-colonization-holders-and-cession-design.md](specs/2026-10-25-solar-colonization-holders-and-cession-design.md): slices 0 and 1, a holder record for every world (the panel's Solar System list, a dead holder's colonies passing to its capital's owner), four settings of the Space Race rule, and the Cede Colony treaty article; [plan](plans/2026-10-25-solar-colonization-holders-and-cession.md) | Built 2026-10-25 (slices 0 and 1, one PR); as built in the design's § 17 | The play-test list (`docs/testing/solar-colonies-playtest.md`) and its three self-checks; then the scope's slices 2-6 |
+
 ## Archived — `archive/`
 
 Everything below has shipped. PR numbers are the main build first, then follow-ups.

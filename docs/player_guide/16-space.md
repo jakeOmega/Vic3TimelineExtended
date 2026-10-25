@@ -7,7 +7,9 @@ milestones keeps a larger permanent reward than anyone who follows. The entries
 start to appear once you research Rocketry in era 6, but you need a Space
 Program building, unlocked by Guided Missiles in era 7, before any of them can
 make progress. The Space Race game rule controls the system; with it off, the
-journal entries and their events never appear.
+journal entries and their events never appear. Its Simple Colonies and Full
+Colonies settings also let a colony change hands (see [Ceding a
+colony](#ceding-a-colony)).
 
 ## Joining the space race
 
@@ -449,6 +451,43 @@ when it saves at least half as many, and Safe always waits for a window. A fleet
 that leaves outside a window spends the goal plus the premium. In practice a fast
 program launches just after a window closes rather than wait two years for Mars,
 and almost never just before one, when waiting is cheap.
+
+### Who holds a colony
+
+Every world records which country holds it. Solar System Colonization's Solar
+System section, closed until you open it, lists all 34 under their places in the
+solar system: Ours, the holder's flag (hover it for the country's name, click it
+to open the country), Another power, or Unclaimed.
+
+A colony stays with its holder until the holder is gone, or, under Simple
+Colonies and Full Colonies, until a treaty moves it ([Ceding a
+colony](#ceding-a-colony)). When a holder is annexed, each of its colonies passes, with its
+specialization and its discoveries, to whoever owns the state region of its last
+capital. If no country there can take it, the world reads Unclaimed again: the
+next colony fleet that can reach it claims it, at the current stage's cost, even
+when its stage is long past or the race is over. When a revolution wins, the new
+government holds the old one's colonies at once.
+
+A country that comes to hold a colony this way, or by treaty, gets Solar System
+Colonization for it even without a space program. Without the Moon Base and the
+Mars Landing it keeps the colony and its specialization but founds no more, and
+the entry reads Idle and costs nothing.
+
+### Ceding a colony
+
+With the Space Race rule on Simple Colonies or Full Colonies, the Cede Colony
+treaty article moves one colony from the conceding country to the other. The
+treaty draft lists the conceding country's colonies by name, such as Valles
+Marineris Colony. The colony moves when the treaty comes into force and stays
+moved when the treaty ends, with its specialization and its discoveries. The
+article costs no influence, and a treaty can carry it once for each colony, in
+either direction, so two countries can swap colonies, or sell one for a Money
+Transfer. It can also be demanded as a war goal, for 5 maneuvers and 10 infamy.
+
+AI powers in the race ask for colonies; an AI that holds a colony with no space
+program of its own offers it. Any AI accepts a cession when the rest of the
+treaty pays more than the colony is worth to it, which rises with the world's
+stage, from Mars and the asteroids to the Kuiper Belt.
 
 ### Rare colony discoveries
 

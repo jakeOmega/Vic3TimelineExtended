@@ -2401,6 +2401,1005 @@ types space_race_widget_types
 		}
 	}
 
+	### One world in Solar System (te_sr_sec_solar_system): its icon and name,
+	### then who holds it: "Ours", the holder's flag (vanilla's tiny_flag: the
+	### country's name on hover, the country on click; a 48-character name would
+	### not fit the row), "Another power" (a holder with no capital to show), or
+	### "Unclaimed", each on one equality test of sr_disp_site_<key>
+	### (sr_sites_display_generated.txt). The flag reads the holder's capital,
+	### stored on the viewer by sr_sites_refresh_snapshot (sr_ss_cap_<key>),
+	### through the inner container's datacontext, as the Rivals rows do
+	### (gui_modding_guide.md gotcha #15): its visible is on the outer
+	### container, so an empty slot is never read. 24 icon + 4 + 200 name + 4 +
+	### the holder, in the 480 column.
+	type te_sr_site_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "site_icon" {}
+			}
+		}
+		widget = {
+			size = { 200 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 200
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "site_name" {}
+			}
+		}
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			max_width = 240
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			default_format = "#v"
+			text = "je_space_race_widget_ss_ours"
+			block "site_ours_visible" {}
+		}
+		flowcontainer = {
+			parentanchor = vcenter
+			ignoreinvisible = yes
+			block "site_other_visible" {}
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				ignoreinvisible = yes
+				block "site_context" {}
+
+				widget = {
+					size = { 28 24 }
+					parentanchor = vcenter
+
+					tiny_flag = {
+						parentanchor = center
+						datacontext = "[State.GetCountry]"
+					}
+				}
+			}
+		}
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			max_width = 240
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			text = "je_space_race_widget_ss_unknown"
+			block "site_unknown_visible" {}
+		}
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			max_width = 240
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			default_format = "#grey"
+			text = "je_space_race_widget_ss_unclaimed"
+			block "site_unclaimed_visible" {}
+		}
+	}
+
+	### Solar System (solar colonization only): every world, under its
+	### location (the owner's nine, less Earth and the Moon), with who holds it
+	### (design § 9). Rows in gen_solar_sites.panel_order(), written from the
+	### table and held to it by test_solar_sites.py. Closed by default (43
+	### lines): the flag is sr_panel_solar_system_open, client-side like the
+	### rest, so a fresh client shows the header only.
+	type te_sr_sec_solar_system = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		spacing = 2
+		visible = "[JournalEntry.IsActive]"
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_solar_system_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_solar_system_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_solar_system_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('sr_panel_solar_system_open')]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[GetVariableSystem.Exists('sr_panel_solar_system_open')]"
+
+			te_sr_note = {
+				text = "je_space_race_widget_solar_system_note"
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_inner"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_venus"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_venus').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mercury.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_mercury"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_mercury').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_mars"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_valles_marineris"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_valles_marineris').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_olympus_mons"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_olympus_mons').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_hellas_planitia"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_hellas_planitia').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_utopia_planitia"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_utopia_planitia').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_arcadia_planitia"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_arcadia_planitia').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_asteroids"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_ceres"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_ceres').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_vesta"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_vesta').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_psyche"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_psyche').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_pallas"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_pallas').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_hygiea"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_hygiea').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_jupiter"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_io"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_io').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_europa"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_europa').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_ganymede"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_ganymede').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_callisto"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_callisto').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_himalia"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_himalia').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_amalthea"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_amalthea').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_saturn"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_titan"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_titan').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_enceladus"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_enceladus').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_rhea"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_rhea').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_mimas"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_mimas').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_iapetus"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_iapetus').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_uranus"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_titania"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_titania').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_oberon"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_oberon').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_miranda"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_miranda').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_ariel"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_ariel').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_neptune"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_triton"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_triton').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_proteus"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_proteus').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_ss_loc_kuiper"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_pluto"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_pluto').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_eris"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_eris').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_makemake"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_makemake').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_haumea"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_haumea').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)0' )]"
+				}
+			}
+
+			te_sr_site_row = {
+				blockoverride "site_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				}
+				blockoverride "site_name" {
+					text = "sr_site_name_sedna"
+				}
+				blockoverride "site_ours_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "site_other_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "site_context" {
+					datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_sedna').GetState]"
+				}
+				blockoverride "site_unknown_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "site_unclaimed_visible" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)0' )]"
+				}
+			}
+		}
+	}
+
 	### Everything a returning player checks, open by default.
 	type te_sr_status_sections = flowcontainer {
 		direction = vertical
@@ -3933,6 +4932,7 @@ types space_race_widget_types
 		}
 
 		te_sr_sec_colonies = {}
+		te_sr_sec_solar_system = {}
 	}
 
 }

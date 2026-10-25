@@ -1,6 +1,6 @@
 # Diplomacy
 
-The mod adds 40 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 41 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
 of power bloc principles, and ten late-game formable countries. None of this has
 a game rule or journal entry of its own: it works through the base game's treaty
@@ -130,6 +130,7 @@ The remaining articles belong to systems with chapters of their own.
 | Require UN Membership | United Nations | [The United Nations](10-united-nations.md) |
 | Enforce Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
 | Lease Pacific, Atlantic, Indian, Arctic and Southern Seabed Claims | Global Commons | [The extended timeline](02-timeline.md#leasing-seabed-claims) |
+| Cede Colony | Space Race set to Simple Colonies or Full Colonies | [The space race](16-space.md#ceding-a-colony) |
 | Grid Interconnection Agreement | None | [Economy and construction](03-economy.md#power-grids) |
 
 ### Treaty article events

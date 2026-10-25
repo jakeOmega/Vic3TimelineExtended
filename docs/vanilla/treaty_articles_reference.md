@@ -952,6 +952,18 @@ Seabed claims phase 2 (`docs/superpowers/archive/specs/2026-10-17-seabed-claims-
 
 ---
 
+## Cede Colony
+
+Solar System Colonization, slice 1 (`docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md` § 11; `mod_systems.md` § Space Race → *The colony record*). File `common/treaty_articles/124_cede_colony.txt`: one **directed** article, `te_cede_colony`, under the Space Race rule's simple and full settings (`sr_colonies_contested_enabled`).
+
+- **The input is a building type.** Each world has a building type that is never built (`building_sr_site_<key>`, `common/buildings/sr_site_buildings_generated.txt`, `potential = { always = no }`), only so the designer can name it: `required_inputs = { building_type }`, as vanilla's `acquire_monopoly_for_company`. `building_type_valid_trigger` (root the source, `scope:input` the candidate) offers only the worlds the source holds (`sr_cede_site_input_valid`, generated). Unverified in game: that the designer lists a never-buildable type, and that `scope:input = bt:<type>` and `input_building_type` compare and read back (the `cede_colony_input` self-check).
+- **One-shot and permanent**, as vanilla's `state_transfer`: `cost = 0`, `maintenance_paid_by = source_country`, nothing on break or withdrawal. `usage_limit = once_per_side_with_same_inputs`: one treaty cedes several colonies, either way.
+- **The hook only dispatches.** `on_entry_into_force` saves the parties and guards against the designer's preview pass; `sr_cede_colony_apply` moves the input's world if the source still holds it (`sr_site_transfer_<key>`: the record, the projection onto both, the receiver's entry, the notices).
+- **AI.** `treaty_categories = { expansion }`, `article_ai_usage = { offer request }`; `evaluation_chance` reads ROOT only (asks while a space power in the race, offers only a colony held without a programme); `inherent_accept_score`: the giver −10 and minus the world's worth (`sr_cede_ai_input_value`, 20 plus 5 a stage, from `scope:article.input_building_type`), the receiver plus the worth, half without a programme.
+- **War goal.** `can_be_enforced`: the seabed lease's `control_any_target_incorporated_state` contestion, maneuvers 5 and infamy 10, flat.
+
+---
+
 ## Priority & Dependency Order
 
 | Priority | Article | Complexity | Dependencies |

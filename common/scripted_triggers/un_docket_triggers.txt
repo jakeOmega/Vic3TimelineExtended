@@ -705,7 +705,7 @@ un_docket_antarctic_candidate = {
 # (te_asat_last_strike_month, which the strike records). No moratorium under
 # the disabled space race rule.
 un_docket_topic_open_asat = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	custom_tooltip = {
 		text = un_asat_strike_seen_tt
 		has_global_variable = te_asat_last_strike_month

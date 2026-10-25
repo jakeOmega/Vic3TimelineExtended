@@ -13,6 +13,8 @@ space_race_on_action = {
 	effect = {
 		sr_cleanup_inactive_space_race_milestones = yes
 		sr_monthly_colony_discoveries = yes
+		# The site_receiver_entry self-check (sr_site_effects.txt).
+		sr_site_receiver_check_step = yes
 		# What a revolution's winner keeps (space_race_effects.txt): the
 		# backstop that puts the entries' modifiers back, and the probe result's
 		# record, which also migrates a save from before the record existed.

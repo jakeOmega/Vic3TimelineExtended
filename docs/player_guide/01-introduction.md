@@ -84,7 +84,7 @@ turn a default system off.
 | Global Warming | Enabled | Greenhouse emissions, rising temperatures, climate events and climate policies. | [Climate and pollution](15-climate.md) |
 | United Nations | Enabled | Founding and joining the UN, its votes, resolutions and agencies. | [The United Nations](10-united-nations.md) |
 | Nuclear Weapons | Enabled | Nuclear programs, arsenals, doctrine, crises, strikes and the nuclear taboo. | [Nuclear weapons](14-nuclear.md) |
-| Space Race | Enabled | The space race milestones and their events. | [The space race](16-space.md) |
+| Space Race | Races Only | *Races Only*: the space race milestones and their events, with colonies that stay with their holder. *Simple Colonies*: as Races Only, and a colony can change hands by the Cede Colony treaty article, sold, given or demanded in a war. *Full Colonies*: plays as Simple Colonies for now. *Disabled*: no space race. | [The space race](16-space.md) |
 | Decolonization | Enabled | Colonial stability, the decolonization journal entry and its events. | [Colonial empires and decolonization](12-decolonization.md) |
 | Cultural Hegemony | Enabled | The competition for global cultural influence. | [Cultural hegemony and covert warfare](11-influence.md) |
 | Covert Warfare | Enabled | Intelligence agencies and covert operations against other countries. | [Cultural hegemony and covert warfare](11-influence.md) |

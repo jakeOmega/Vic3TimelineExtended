@@ -41,7 +41,7 @@ te_asat_strike_action = {
 	should_notify_third_parties = yes
 
 	potential = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_technology_researched = guided_missiles
 	}
 
