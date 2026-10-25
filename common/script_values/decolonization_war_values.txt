@@ -5,7 +5,7 @@
 # negotiated with, or fought; a colonial subject's independence war and a
 # colonial secession are fought too. The records, the settle and the endings are
 # in common/scripted_effects/decolonization_war_effects.txt; the design in
-# docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
+# docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md
 # § 2. Every figure here is a first proposal for the play-test.
 # ============================================================================
 

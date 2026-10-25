@@ -2,7 +2,7 @@
 # WARS OF INDEPENDENCE — the tests
 #
 # Records, settle and endings: common/scripted_effects/decolonization_war_effects.txt.
-# Design: docs/superpowers/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
+# Design: docs/superpowers/archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 2.
 # ============================================================================
 
 # Slot $N$ (1-3) of our war records is free. Scope: country (us).
