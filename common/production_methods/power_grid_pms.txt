@@ -6,18 +6,24 @@
 # goods from a method's modifier blocks, not from a runtime add_modifier, so the
 # station's upload and download modifiers are _mult modifiers that scale these
 # lines. Idle, both modifiers sit at -1 and every line is zero.
+#
+# The four lines are level_scaled, not workforce_scaled: a station moves what
+# the balancing asks of it however few staff it has, so a station that loses
+# workers to migration or better jobs doesn't cut its state off its grid. It
+# runs subsidized whatever it moves. A station with no staff keeps its order
+# and modifiers and runs again from its first hire; an empty building is
+# expected to run none of its lines. TE_SELF_CHECK grid_level_scaled and
+# TE_GRID empty_station (power_grid_effects.txt) test both.
 # ============================================================================
 
 pm_grid_transfer_base = {
 	texture = "gfx/interface/icons/production_method_icons/power_plant.dds"
 	building_modifiers = {
-		workforce_scaled = {
+		level_scaled = {
 			goods_input_electricity_add = 1
 			goods_output_electricity_add = 1
 			goods_input_grid_power_add = 1
 			goods_output_grid_power_add = 1
-		}
-		level_scaled = {
 			building_employment_engineers_add = 500
 			building_employment_clerks_add = 500
 		}

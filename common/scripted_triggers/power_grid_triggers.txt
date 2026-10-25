@@ -10,16 +10,38 @@ te_grid_state_has_station = {
 	any_scope_building = { is_building_type = building_grid_transfer_station }
 }
 
-# State scope. The state's Grid Transfer Station is built and at least a
-# quarter staffed, so it takes part in its grid's balancing this month. A
-# station still under construction or barely staffed is set idle instead: it
-# could move little of what the balance would ask of it.
+# State scope. The state's Grid Transfer Station is built, so it takes part in
+# its grid's balancing this month; one still under construction is set idle.
+# Staffing doesn't matter: the method's goods lines are level_scaled
+# (power_grid_pms.txt), and a station with no staff keeps its order and its
+# modifiers, so it moves its share from its first hire rather than from the
+# next month's balancing. An empty building is expected to run none of its
+# lines, so until then its grid's uploads and downloads differ by its share.
+# Until 2026-10-25 the lines were workforce_scaled and a station needed a
+# quarter of its staff, so one that lost workers dropped its state off the grid.
 te_grid_station_online = {
 	any_scope_building = {
 		is_building_type = building_grid_transfer_station
 		level >= 1
-		occupancy >= 0.25
 	}
+}
+
+# State scope. The state's station has staff now.
+te_grid_station_staffed = {
+	any_scope_building = {
+		is_building_type = building_grid_transfer_station
+		occupancy > 0
+	}
+}
+
+# State scope, a member of the grid being balanced, before its figures are
+# overwritten. The station had staff at last month's run (te_grid_staffed, set
+# by te_grid_set_station_flow_effect) and has staff now, so it most likely ran
+# all last week, and the self-checks can judge what it moved. A station that
+# sat empty moved nothing, which says nothing about the balancing.
+te_grid_station_staffed_throughout = {
+	has_variable = te_grid_staffed
+	te_grid_station_staffed = yes
 }
 
 # State scope. The state's station runs an HVDC Undersea Interconnector, which

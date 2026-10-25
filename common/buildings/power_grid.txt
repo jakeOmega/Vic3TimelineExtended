@@ -7,6 +7,8 @@
 # goods; te_grid_world_update_effect (power_grid_effects.txt) picks the
 # direction every month and scales that side with the upload or download
 # modifier (power_grid_modifiers.txt), the Strategic Reserve Hub's pattern.
+# Those lines are level_scaled, so a station that loses staff still moves what
+# its grid asks, and one with none runs again from its first hire.
 #
 # Private infrastructure that always runs subsidized
 # (country_building_grid_transfer_station_require_subsidies_bool in
