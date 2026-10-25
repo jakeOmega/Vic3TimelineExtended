@@ -6,9 +6,27 @@
 
 # ---- The frontier (§6) -----------------------------------------------------
 # People per km² below which a new Settlement Authority may be built, and at
-# which one closes. Both scale with state_migration_crowding_density_mult.
+# which one closes, at the reference world population. Both scale with
+# state_migration_crowding_density_mult and in proportion to world population.
 resettlement_frontier_open_base = 2
 resettlement_frontier_close_base = 10
+# The AI's bonus for an emptier frontier (building_resettlement_colony's
+# ai_value), at the reference world population.
+resettlement_frontier_empty_base = 0.5
+
+# The world population at which the bases above apply: about the 1836 start's,
+# where the frontier was calibrated. The world's land averages about 9 people
+# per km² at this population, so a frontier opens below about a fifth of the
+# average and closes near it. A frontier is thin relative to the world, so it
+# closes when its region fills faster than the world grows, not because
+# everyone everywhere grew.
+resettlement_frontier_reference_population = 1000000000
+
+# Any scope. World population ÷ the reference: 2 at two billion people.
+resettlement_world_population_scale = {
+	value = global_population
+	divide = resettlement_frontier_reference_population
+}
 
 # State scope. Everyone in this state's region, whoever owns each part: the
 # frontier is geographic, so a split region is measured as one.
@@ -51,11 +69,18 @@ resettlement_crowding_scale = {
 resettlement_frontier_open_density = {
 	value = resettlement_frontier_open_base
 	multiply = resettlement_crowding_scale
+	multiply = resettlement_world_population_scale
 }
 
 resettlement_frontier_close_density = {
 	value = resettlement_frontier_close_base
 	multiply = resettlement_crowding_scale
+	multiply = resettlement_world_population_scale
+}
+
+resettlement_frontier_empty_density = {
+	value = resettlement_frontier_empty_base
+	multiply = resettlement_world_population_scale
 }
 
 # State scope. Positive while a new Authority may be built here.
@@ -67,6 +92,12 @@ resettlement_frontier_open_margin = {
 # State scope. Positive while an existing Authority keeps running.
 resettlement_frontier_close_margin = {
 	value = resettlement_frontier_close_density
+	subtract = resettlement_frontier_density
+}
+
+# State scope. Positive while the frontier is empty enough for the AI's bonus.
+resettlement_frontier_empty_margin = {
+	value = resettlement_frontier_empty_density
 	subtract = resettlement_frontier_density
 }
 
