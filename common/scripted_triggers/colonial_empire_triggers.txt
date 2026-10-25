@@ -598,7 +598,7 @@ ce_entry_unlocked = {
 # Used by decolonization_events.51 (the conscription crisis of a colonial war).
 decol_fighting_colonial_war = {
 	is_at_war = yes
-	save_scope_as = decol_cw_metropole
+	save_temporary_scope_as = decol_cw_metropole
 	OR = {
 		has_modifier = colonial_crackdown_modifier
 		any_enemy_in_war = {
