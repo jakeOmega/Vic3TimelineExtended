@@ -22,6 +22,47 @@ sr_space_race_participant = {
 	}
 }
 
+# The country holds one of the nine space race entries active.
+# has_journal_entry counts active entries only. Scope: country
+sr_holds_space_race_entry = {
+	OR = {
+		has_journal_entry = je_space_race_suborbital
+		has_journal_entry = je_space_race_orbital
+		has_journal_entry = je_space_race_moon_landing
+		has_journal_entry = je_space_race_probe
+		has_journal_entry = je_space_race_moon_base
+		has_journal_entry = je_space_race_mars_landing
+		has_journal_entry = je_space_race_interstellar_probe
+		has_journal_entry = je_space_race_interstellar_results
+		has_journal_entry = je_space_race_solar_colonization
+	}
+}
+
+# The country is in the space race for good: it has run a milestone
+# (sr_space_race_participant, variables a revolution's winner inherits), or it
+# holds an entry (a colony given by treaty opens Solar System Colonization's
+# without one). From then on the Timeline Extended window's Space Race tab
+# stays open, with or without a milestone running
+# (te_window_space_race_tab_sgui), and the Space Powers standings list it
+# (sr_is_space_power) and refresh for it (sr_powers_refresh). Scope: country
+sr_in_space_race = {
+	OR = {
+		sr_space_race_participant = yes
+		sr_holds_space_race_entry = yes
+	}
+}
+
+# Another country the Space Powers standings list: in the race, with a capital
+# for its row to read (gotcha #11), and not ROOT, the viewer. Every one, not
+# only the top three by ranking as the Rivals rows (sr_is_rival): a power
+# outside them makes no progress, but what it achieved stands.
+# Scope: the country tested; ROOT the viewer.
+sr_is_space_power = {
+	NOT = { THIS = ROOT }
+	sr_in_space_race = yes
+	exists = capital
+}
+
 # AI participation gate: only the top ~3 countries by prestige should pursue space race
 # Players can always participate regardless
 sr_ai_should_participate = {

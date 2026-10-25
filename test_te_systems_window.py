@@ -449,8 +449,20 @@ class StripTest(unittest.TestCase):
                 for body in (gate, unlock):
                     self.assertIn("is_valid", body)
                     self.assertNotIn("scope:", body)    # scope-free (gotcha #22)
+        # The Space Race tab stays open once the country is in the race: it has
+        # run a milestone, or holds one of the nine entries (owner, 2026-10-25).
         sr = _txt_block(self.sguis, "te_window_space_race_tab_sgui")
-        self.assertEqual(re.findall(r"has_journal_entry = je_space_race_(\w+)", sr), SR)
+        self.assertIn("sr_in_space_race = yes", sr)
+        sr_triggers = _read(os.path.join(TRIGGERS, "space_race_triggers.txt"))
+        self.assertEqual(re.findall(r"has_journal_entry = je_space_race_(\w+)",
+                                    _txt_block(sr_triggers, "sr_holds_space_race_entry")), SR)
+        in_race = _txt_block(sr_triggers, "sr_in_space_race")
+        for cond in ("sr_space_race_participant = yes", "sr_holds_space_race_entry = yes"):
+            self.assertIn(cond, in_race)
+        idle = _txt_block(self.sguis, "te_window_space_race_idle_sgui")
+        for cond in ("sr_space_race_on = yes", "sr_in_space_race = yes", "NOT = { sr_holds_space_race_entry = yes }"):
+            self.assertIn(cond, idle)
+        self.assertNotIn("scope:", idle)
         self.assertIn("has_journal_entry = je_colonial_empire", _txt_block(self.sguis, "te_window_colonial_empire_tab_sgui"))
         self.assertIn("has_journal_entry = je_grand_monuments", _txt_block(self.sguis, "te_window_grand_monuments_tab_sgui"))
         # no journal entry: open once the country has taken part in a sharing
@@ -582,6 +594,30 @@ class TabContentTest(unittest.TestCase):
             self.assertNotIn("scripted_progress_bar", entry)
             for name in re.findall(r"scripted_button = (\w+)", entry):
                 self.assertRegex(_txt_block(buttons, name), r"visible = \{[^}]*is_ai = yes", name)
+
+    def test_space_powers_and_orbit_come_first_and_read_no_entry(self):
+        """The tab's own sections, under its gate, above every entry's block:
+        they read the player, so they show between milestones too."""
+        tab = self._tab("space_race")
+        summary = _named(self.gui, "te_systems_window_space_race_summary")
+        self.assertIn(f'visible = "[{_gate("te_window_space_race_tab_sgui")}]"', summary)
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", summary, re.M), ["te_sr_sec_powers", "te_sr_sec_orbit"])
+        self.assertIn("minimumsize = { 520 -1 }", summary)
+        self.assertNotIn("GetPlayerJournalEntry", summary)
+        first_entry = tab.index("GetPlayerJournalEntry")
+        self.assertLess(tab.index(summary), first_entry)
+        # one note in the entries' place while none runs
+        idle = _named(self.gui, "te_systems_window_space_race_idle")
+        self.assertIn(f'visible = "[{_gate("te_window_space_race_idle_sgui")}]"', idle)
+        self.assertLess(tab.index(idle), first_entry)
+        self.assertIn('text = "te_window_space_race_idle_note"', idle)
+        widgets = _read(os.path.join(WIDGETS, "space_race_widget.gui"))
+        for name in ("te_sr_sec_powers", "te_sr_sec_orbit"):
+            self.assertIn(f"type {name} = flowcontainer", widgets)
+            body = _type_body(widgets, name)
+            self.assertNotIn("JournalEntry", body)
+            # never mounted in the journal: only the tab composes them
+            self.assertEqual(widgets.count(f"{name} = {{}}"), 0)
 
     def test_the_milestone_types_are_the_journal_roots_bodies(self):
         """Each controlled milestone's roots are thin wrappers around its own

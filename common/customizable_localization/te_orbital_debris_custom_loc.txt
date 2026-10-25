@@ -29,3 +29,70 @@ te_debris_tier = {
 		localization_key = te_debris_tier_clear
 	}
 }
+
+# ============================================================================
+# The Space Race tab's Orbit section (te_sr_sec_orbit, space_race_widget.gui):
+# the state words of two rows, and the Moratorium row's hover. Every branch
+# reads the country's own modifiers and buildings or globals, so they are safe
+# for any country, and every target key is plain text: the hovers' numbers are
+# in their outer keys (te_orbit_satellites_tt, on te_asat_disp_satellites).
+# ============================================================================
+
+# Our Satellites: whether a strike has disrupted our orbital network
+# (te_orbital_network_disrupted, te_asat_strike_effect), and whether we have
+# anything a strike could hit (te_asat_has_orbital_assets).
+te_asat_satellites_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_modifier = te_orbital_network_disrupted }
+		localization_key = te_asat_satellites_disrupted
+	}
+	text = {
+		trigger = { te_asat_has_orbital_assets = yes }
+		localization_key = te_asat_satellites_intact
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_asat_satellites_none
+	}
+}
+
+# The Moratorium on Destructive Anti-Satellite Tests: not adopted, or in force
+# (UNODA), with us bound by it or not (te_asat_moratorium_party).
+te_asat_moratorium_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_global_variable = un_agency_unoda } }
+		localization_key = te_asat_moratorium_not_adopted
+	}
+	text = {
+		trigger = { te_asat_moratorium_party = yes }
+		localization_key = te_asat_moratorium_bound
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_asat_moratorium_not_bound
+	}
+}
+
+te_asat_moratorium_detail = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_global_variable = un_agency_unoda } }
+		localization_key = te_asat_moratorium_detail_not_adopted
+	}
+	text = {
+		trigger = { te_asat_moratorium_party = yes }
+		localization_key = te_asat_moratorium_detail_bound
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_asat_moratorium_detail_not_bound
+	}
+}

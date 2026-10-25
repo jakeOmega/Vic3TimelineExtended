@@ -826,6 +826,54 @@ sr_rival_est_open_solar_colonization = {
 	max = 1
 }
 
+# ======= The Space Powers standings (display) =======
+# The Space Race tab of the Timeline Extended window lists every power in the
+# race (sr_powers_refresh, space_race_effects.txt). Both values read only what
+# the rows' programme icons show, never progress, so the order leaks nothing.
+
+# A power's furthest milestone under way, as a code: 0 none, then
+# je_space_race.txt's order, 1 Suborbital Flight to 7 the Interstellar Probe,
+# and 8 Solar System Colonization while it colonizes. The wait for the probe's
+# data has no progress to estimate, so it is left out. Scope: country
+sr_power_lead_code = {
+	value = 0
+	if = { limit = { sr_solar_colonization_running = yes } value = 8 }
+	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 7 }
+	else_if = { limit = { has_variable = sr_active_mars_landing } value = 6 }
+	else_if = { limit = { has_variable = sr_active_moon_base } value = 5 }
+	else_if = { limit = { has_variable = sr_active_probe } value = 4 }
+	else_if = { limit = { has_variable = sr_active_moon_landing } value = 3 }
+	else_if = { limit = { has_variable = sr_active_orbital } value = 2 }
+	else_if = { limit = { has_variable = sr_active_suborbital } value = 1 }
+}
+
+# How many of the eight entries with a goal a power has achieved: the rows'
+# lit icons as a figure, for the "+N more" list (sr_powers_sgui). Scope: country
+sr_power_achieved = {
+	value = 0
+	if = { limit = { has_variable = sr_completed_suborbital } add = 1 }
+	if = { limit = { has_variable = sr_completed_orbital } add = 1 }
+	if = { limit = { has_variable = sr_completed_moon_landing } add = 1 }
+	if = { limit = { has_variable = sr_completed_probe } add = 1 }
+	if = { limit = { has_variable = sr_completed_moon_base } add = 1 }
+	if = { limit = { has_variable = sr_completed_mars_landing } add = 1 }
+	if = { limit = { has_variable = sr_completed_interstellar_probe } add = 1 }
+	if = { limit = { has_variable = sr_completed_solar_colonization } add = 1 }
+}
+
+# The standings' order: 100 for each entry achieved, 2 for each colony held
+# (at most 68, so colonies never outrank a milestone) and the furthest
+# milestone under way. Scope: country
+sr_power_rank_score = {
+	value = sr_power_achieved
+	multiply = 100
+	add = sr_power_lead_code
+	add = {
+		value = sr_colony_count_value
+		multiply = 2
+	}
+}
+
 # ======= Space Program mission bills (AI decisions) =======
 # The weekly Launch Capacity bill of each mission at full staffing, for the AI
 # weights of te_decision_found_space_program and te_decision_space_mission_*

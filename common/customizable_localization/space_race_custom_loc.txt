@@ -12,6 +12,9 @@
 #                   dropped, because the panel now shows those numbers itself.
 #   sr_prog_<m>     the state of one entry of the programme row, the tooltip of
 #                   its icon (the icon itself reads sr_disp_prog_<m>).
+#   sr_power_prog_<m>  the same for another power's row in Space Powers (the
+#                   Space Race tab of the Timeline Extended window), in the
+#                   third person: what that power holds, never "taken".
 #
 # The pace sentence (sr_pace_note_*) is no longer chosen here: the overview's
 # state icon reads sr_disp_status_<m> (from sr_<m>_last_status, whose single
@@ -534,6 +537,177 @@ sr_prog_interstellar_probe = {
 # never set (see the notes in space_race_effects.txt and space_race_sguis.txt).
 # Reading them made the engine log "used but is never set" at load.
 sr_prog_solar_colonization = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_completed_solar_colonization }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_solar_colonization }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+# ---- Another power's programme (Space Powers rows) ---------------------------
+# The tests of sr_prog_<m> less "another power got there first": a row says
+# what its own power holds. Read through State.GetCountry, the row's power.
+
+sr_power_prog_suborbital = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_was_first_suborbital }
+		localization_key = sr_power_state_first
+	}
+	text = {
+		trigger = { has_variable = sr_completed_suborbital }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_suborbital }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+sr_power_prog_orbital = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_was_first_orbital }
+		localization_key = sr_power_state_first
+	}
+	text = {
+		trigger = { has_variable = sr_completed_orbital }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_orbital }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+sr_power_prog_moon_landing = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_was_first_moon_landing }
+		localization_key = sr_power_state_first
+	}
+	text = {
+		trigger = { has_variable = sr_completed_moon_landing }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_moon_landing }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+sr_power_prog_probe = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_was_first_probe }
+		localization_key = sr_power_state_first
+	}
+	text = {
+		trigger = { has_variable = sr_completed_probe }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_probe }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+sr_power_prog_moon_base = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_was_first_moon_base }
+		localization_key = sr_power_state_first
+	}
+	text = {
+		trigger = { has_variable = sr_completed_moon_base }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_moon_base }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+sr_power_prog_mars_landing = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_was_first_mars_landing }
+		localization_key = sr_power_state_first
+	}
+	text = {
+		trigger = { has_variable = sr_completed_mars_landing }
+		localization_key = sr_prog_state_done
+	}
+	text = {
+		trigger = { has_variable = sr_active_mars_landing }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+# The Interstellar Probe and the wait for its data, the four states of the
+# programme row's shared cell (sr_disp_prog_interstellar); its flag marks a
+# first (sr_disp_prog_interstellar_probe).
+sr_power_prog_interstellar = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_interstellar_results_received }
+		localization_key = sr_power_state_data_received
+	}
+	text = {
+		trigger = { has_variable = sr_probe_launched }
+		localization_key = sr_power_state_launched
+	}
+	text = {
+		trigger = { has_variable = sr_active_interstellar_probe }
+		localization_key = sr_prog_state_running
+	}
+	text = {
+		localization_key = sr_prog_state_open
+	}
+}
+
+sr_power_prog_solar_colonization = {
 	type = country
 	random_valid = no
 

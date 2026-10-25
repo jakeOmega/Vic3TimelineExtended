@@ -1109,3 +1109,31 @@ sr_disp_rival_more_solar_colonization = {
 	subtract = 5
 	min = 0
 }
+
+# ---- Space Powers: the standings on the Space Race tab -----------------------
+# Read by te_sr_sec_powers (the Timeline Extended window's Space Race tab).
+# The viewer's count of other powers (sr_power_total, written monthly by
+# sr_powers_refresh), -1 until the first refresh, so the panel can tell "not
+# listed yet" from "nobody else", and how many there are beyond the eight rows.
+sr_disp_power_total = {
+	value = -1
+	if = { limit = { has_variable = sr_power_total } value = var:sr_power_total }
+}
+sr_disp_power_more = {
+	value = sr_disp_power_total
+	subtract = 8
+	min = 0
+}
+# A row's furthest milestone under way (0 none, 1-8 je_space_race.txt's
+# order), which picks the row's estimate. Scope: the row's power.
+sr_disp_power_lead = {
+	value = sr_power_lead_code
+}
+# A row's name hover: entries achieved (of the eight with a goal) and colonies
+# held. Scope: the row's power.
+sr_disp_power_achieved = {
+	value = sr_power_achieved
+}
+sr_disp_power_colonies = {
+	value = sr_colony_count_value
+}

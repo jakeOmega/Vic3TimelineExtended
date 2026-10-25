@@ -114,10 +114,13 @@ sections below it. An entry that hasn't started yet shows only its status text.
 
 The same panels appear on the Space Race tab of the Timeline Extended window,
 which the button under the sidebar's Map List opens, and a change made in one
-shows in the other. The tab shows every milestone you have under way, each
-under its own name and followed by an Open Journal Entry button, then How the
-Space Race Works once at the end. It is grayed until your first milestone
-starts; hover it for what is still missing.
+shows in the other. The tab is grayed until your first milestone starts; hover
+it for what is still missing. From then on it stays open, whether or not a
+milestone is under way. It opens with two sections of its own, Space Powers and
+Orbit (see [The Space Race tab](#the-space-race-tab)), then shows every
+milestone you have under way, each under its own name and followed by an Open
+Journal Entry button, and How the Space Race Works once at the end. While no
+milestone is under way, a note stands in their place.
 
 ![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Programme row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
 
@@ -152,7 +155,7 @@ Three sections follow the overview:
 |---|---|---|
 | Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
 | Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
-| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals and the programme. |
+| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals, the programme, space powers, and satellites and debris. |
 
 A rival's progress is an estimate. The first five rivals each show a band
 reaching 25% of the goal to either side of a marker, which always contains the
@@ -194,6 +197,35 @@ find.
 A new milestone starts on the Standard approach at funding level 1. It moves at
 your program's pace and rolls against its base setback risk from its first
 month.
+
+### The Space Race tab
+
+The Space Race tab of the Timeline Extended window opens with two sections that
+don't belong to any milestone, so you can follow the race between milestones
+too. Both start open.
+
+Space Powers puts your own program first, then every other power that has
+started the race, furthest along first: the most milestones achieved, then the
+most colonies and the furthest milestone under way. Each row is the country's name, its program as the same
+eight icons as the Programme row (lit once achieved, with a flag for a first,
+half-lit while under way, faint otherwise) and its furthest milestone under way
+with its progress, as in "Moon Landing: 35%–85%". Your own progress is exact.
+Another power's is an estimate, in the same band as the Rivals rows, which an
+agent network in its country narrows. Hover an icon for that milestone's state
+and the name for the milestones achieved and colonies held. The other powers are
+listed afresh at the start of each month: the first eight as rows, the rest when
+you hover the line below them. Unlike Rivals, the list includes AI powers
+outside the top three of the world ranking, whose programs have stalled.
+
+Orbit gathers what anti-satellite strikes and debris mean for you now:
+
+| Row | Shows |
+|---|---|
+| Orbital Debris | The index and its tier, as in Mission Control (see [Orbital debris](#orbital-debris)). |
+| Our Satellites | Intact, Disrupted or None in Orbit. Hover it for the months a disruption has left, or how long until anyone can strike you again. |
+| Anti-Satellite Strikes So Far | The strikes since the game began. Hover it for who struck whom last, and when. |
+| Anti-Satellite Moratorium | Not Adopted, Bound or Not Bound (see [The anti-satellite moratorium](10-united-nations.md#the-anti-satellite-moratorium)). |
+| Our Anti-Satellite Strike | Ready once you have Guided Missiles and a Space Program. Hover it for what is missing, or for the countries at war with you that have something in orbit to strike, each marked if it was struck in the last 12 months. |
 
 ### Standard, Safe and Ambitious approaches
 
@@ -549,8 +581,9 @@ high orbits stays for a century, losing 0.05% a month. Every running Space
 Program adds 0.01 to the low orbits each month, so six programs keep about 4
 points up, and each [anti-satellite strike](#the-anti-satellite-strike) adds 6
 to each part. Mission Control shows the index on every milestone's panel, as
-"Orbital Debris: 12.3 (Clear)". Hover it for the two parts, what the index
-costs you now and who is cleaning it up.
+"Orbital Debris: 12.3 (Clear)", and so does the Space Race tab's Orbit section.
+Hover it for the two parts, what the index costs you now and who is cleaning it
+up.
 
 | Tier | Index | What changes |
 |---|---|---|
@@ -613,6 +646,9 @@ Anti-Satellite Strike is a diplomatic action against a country you are at war
 with. It needs Guided Missiles (era 7), a Space Program of your own, and a
 target with a Space Program, a Space Elevator, an Orbital Solar Collector or an
 Orbital Battlestation. A country can be struck once every 12 months, by anyone.
+The Orbit section of the [Space Race tab](#the-space-race-tab) shows whether
+you could strike and whom, the state of your own satellites, and the last
+strike anywhere.
 
 | Who | What the strike does |
 |---|---|
