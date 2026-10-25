@@ -35,7 +35,20 @@ document assumes both.
   convention against seizure are in** (§§ 6.4–6.6).
 - **Space operations outside a war:** the owner leans yes, undecided (D5,
   § 6.2 has a proposal).
-- **The game rule is a three-way choice, off / simple / full** (§ 9).
+- **The setting is part of the Space Race rule, at four levels**: off, races
+  only (today's system), simple colonies, full colonies. **Full is the default**
+  once the system is ready (§ 9).
+- **The dead-holder rule probably applies under races only too** (§ 9).
+
+Second round, the same day:
+
+- **Population is crews for modules** (§ 7). With Artificial General
+  Intelligence (era 12, the production tree's last technology, perhaps a capstone
+  era 13 later) colonies no longer need people to run them.
+- **Transfer times are real** (§ 5.3). Fusion drives in eras 11 and especially 12
+  (very high specific impulse, decent thrust) make travel quick. If fusion torches
+  are ten years off, sending a colony to Uranus by chemical rocket may be
+  foolish, which needs colony fleets to travel too (§ 5.6, F4 to confirm).
 
 ## 1. What a colony is today
 
@@ -186,19 +199,33 @@ in transit it can be neither attacked nor recalled, and the destination's holder
 sees it coming (an alert with the arrival date), which is the time it has to
 reinforce.
 
-### 5.3 Transit time from delta-v
+### 5.3 Real transit times, bought with delta-v (owner's decision)
 
 Minimum-energy (Hohmann) transfers take about 4 months to Mercury, 5 to Venus, 8
 to 9 to Mars, 15 to Ceres, 2.7 years to Jupiter, 6 to Saturn, 16 to Uranus, 31
-to Neptune and 45 to Pluto. A fleet with delta-v to spare takes a faster, costlier
-transfer: the generator's Lambert solver already tabulates delta-v against time
-of flight, and can emit, per body, the transit time a given delta-v buys.
-Chemical fleets then fight only in the inner system; the outer colonies are
-defended by distance until fusion drives cut Jupiter to months. That makes
-propulsion tech decide space war, as it should, and makes delta-v the number
-that means something. The Lambert grid stops at a quarter of the Hohmann time,
-so fusion-era transfers need it widened or a straight-line (brachistochrone)
-approximation (F3).
+to Neptune and 45 to Pluto. Those are the chemical era's times, unchanged.
+
+Propulsion is a ladder of drives, each with a delta-v budget and a thrust:
+
+| Drive | Technology | Travel |
+|---|---|---|
+| Chemical | (the Space Program's start) | Hohmann transfers in launch windows, a little faster at a premium (Asteroid Mining) |
+| Fusion | Fusion Power (era 11, military) | Very high specific impulse, modest thrust: well under Hohmann times, windows still matter for the far worlds |
+| Fusion torch | Muon-Catalyzed Fusion Reactors (era 12, military) | Very high specific impulse and decent thrust: near-straight-line trips, months to the outer planets, no windows (today's rule for this technology) |
+| Antimatter (optional) | Antimatter Production (era 12, military) | Faster still |
+
+For chemical and the slower fusion transfers, the generator's Lambert solver
+already tabulates delta-v against time of flight by departure date, and can emit
+the transit time each drive's delta-v buys per body and month. Its grid stops at
+a quarter of the Hohmann time, so torch transfers use the brachistochrone
+instead (accelerate to the midpoint, decelerate the rest: time from the
+distance on the departure date, which the generator's ephemerides give, and the
+drive's acceleration, capped by its delta-v).
+
+So chemical fleets fight only in the inner system and the outer colonies are
+defended by distance until fusion. Propulsion tech decides space war and the
+colonization of the outer worlds, and delta-v is the number on a fleet that
+means something.
 
 ### 5.4 Combat at a body
 
@@ -217,6 +244,25 @@ stepped: keep a fleet at each body where it holds a colony under threat; at war,
 send its strongest fleet against the enemy body where it outmatches the defence
 and the transit is short; recall a fleet low on supply. The AI is the largest
 risk in this phase: it has to judge a war it can't see on the map.
+
+### 5.6 Colony fleets travel too (F4)
+
+If transit is real for warships, it has to be for colony fleets, or a chemical
+launch to Uranus would arrive the month it left. Under simple and full:
+
+- **A colony fleet claims its site on arrival, not on departure.** It leaves with
+  a destination site and the transit time its drive buys. The first fleet to
+  arrive takes the site; a later one retargets to a free site at the same body,
+  or waits in orbit for orders. A chemical fleet to Uranus can be overtaken by a
+  torch launched a decade later.
+- **What waits in transit is visible**: the panel lists our fleets en route and
+  their arrival dates, and rivals' fleets bound for a body we want.
+- **The stages may give way to distance (F7).** Today the outer stages open
+  only when the inner ones are full. With real transit times the outer worlds
+  gate themselves, so the stages could become a plain order of the site table
+  rather than a lock. Races only keeps the stages and instant founding.
+- The tables this needs are the same ones fleets need, so colony transit is
+  built first (slice 3 in § 10) and the fleets phase reuses them.
 
 ## 6. Contest
 
@@ -314,19 +360,21 @@ seizing and destroying colonies, with violations on the dossier.
 - **Who leaves** (D10): by stratum, or the profession the colony needs
   (academics to a research site, engineers to a mining one), which makes
   emigration cost qualified people rather than just heads.
-- **What people do** (P1). Three shapes, and they can combine:
-  - **Crews** (recommended as the core): every module and specialization level
-    above the first needs people to run, as a building needs employees. A
-    founded colony is an automated outpost that runs its first specialization
-    level with a skeleton crew; everything past that is limited by its
-    population. A Habitat module raises the room for people. So the chain is
-    Habitat, then people, then modules, then output, and each step is worth
-    defending.
-  - **Scaling**: the specialization's modifier grows with the head count on a
-    soft curve. Simpler, but it double-counts with crews; pick one.
-  - **Intrinsic**: the nation's off-world population as a whole gives a small
-    prestige and cultural pull bonus, and is what autonomy (§ 6.5) and
-    independence grow from.
+- **People are crews (owner's decision).** Every module and specialization
+  level above the first needs people to run, as a building needs employees. A
+  founded colony is an automated outpost that runs its first specialization level
+  with a skeleton crew; everything past that is limited by its population. A
+  Habitat module raises the room for people. So the chain is Habitat, then
+  people, then modules, then output, and each step is worth defending. The
+  specialization does not also scale with the head count, which would count
+  people twice.
+- **Artificial General Intelligence ends the need for crews.** With it
+  (`artificial_intelligence`, era 12, production, the tree's last technology),
+  modules run without people and only the site's slots limit them. Emigration
+  then matters for what people bring beyond work: the nation's off-world
+  population gives a small prestige and cultural pull bonus, and it is what
+  autonomy (§ 6.5) and independence grow from. Whether AGI removes crews or only
+  cuts them, and whether a later era 13 capstone takes that role, is open (P2).
 - **The scale stays small beside Earth.** 34 colonies at a million each is a
   rounding error for a great power of the 2080s, so the cost is Launch Capacity
   and the qualified people, not the head count.
@@ -372,21 +420,40 @@ seabed licences, with a steep throughput penalty past the room rather than a ban
   refresh site, per the house rule.
 - This changes the Global Commons balance between the Extraplanetary Base and
   the Deep-Sea Mine (`2026-10-16-global-commons-design.md` § 1): the quality
-  grades have to be set so that the era-12 flip still happens. Under the rule's
-  off setting (§ 9), bases stay unlimited as today.
+  grades have to be set so that the era-12 flip still happens. Under the races only
+  setting (§ 9), bases stay unlimited as today.
 
-## 9. The game rule: off, simple, full
+## 9. The game rule: four levels of the Space Race rule
 
-A proposed split, with the line between simple and full at fleets:
+None of this makes sense without the space race, so it is a setting of the
+existing `space_race_rule` (`common/game_rules/extra_game_rules.txt:140`), not a
+rule of its own. The line between simple and full is fleets:
 
 | Setting | What it has |
 |---|---|
-| Off | Solar System Colonization as today: first come, first served, colonies never change hands, Extraplanetary Bases unlimited. The holder record exists underneath, and the dead-holder rule applies (D16) |
-| Simple | Off, plus cession by treaty (sale, gift, war goal), population and emigration, modules, Extraplanetary Bases from colonies, covert operations, free colonies and abandonment. Colonies change hands only at the peace table, or by agreement |
-| Full | Simple, plus fleets: movement, postures, blockade, interdiction in peace, sieges, seizure and destruction |
+| Off | No space race (today's `space_race_disabled`) |
+| Races only | Solar System Colonization as today: first come, first served, instant founding, the stages, colonies never change hands by treaty or war, Extraplanetary Bases unlimited. The holder record exists underneath, and the dead-holder rule applies (owner: probably) |
+| Simple colonies | Races only, plus cession by treaty (sale, gift, war goal), population, emigration and crews, modules, Extraplanetary Bases from colonies, colony fleets that travel, covert operations, free colonies and abandonment. Colonies change hands only at the peace table, or by agreement |
+| Full colonies | Simple, plus fleets: movement, postures, blockade, interdiction in peace, sieges, seizure and destruction. **The default** once the system is ready |
 
-Two balances follow: Extraplanetary Bases unlimited (off) and from colonies
-(simple, full). Both need checking, and the guide has to describe both.
+**How it reads in script.** `has_game_rule` tests a setting's flags, and a
+setting can carry several (today's off setting carries four). So every setting
+but off keeps `flag = space_race_enabled`, and the 61 existing
+`has_game_rule = space_race_enabled` checks in 22 files keep working untouched.
+Simple and full add `flag = sr_colonies_contested`, full adds
+`flag = sr_colonies_full`, and new script reads those through scripted gates
+(`sr_colonies_contested_enabled`, `sr_colonies_full_enabled`), as Demographics
+reads its three-level rule.
+
+**Saves and the default.** A save records its setting by name. Keeping the name
+`space_race_enabled` for races only means a save from before the change keeps
+today's colonies, which is the Global Commons precedent ("a save from before it
+keeps the uncapped mine"). While the system is built, the default stays races
+only, so a half-built slice never reaches a new game: simple becomes the
+default when slice 5 ships, full when the fleets phase does.
+
+Two balances follow: Extraplanetary Bases unlimited (races only) and from
+colonies (simple, full). Both need checking, and the guide has to describe both.
 
 ## 10. Build order
 
@@ -395,20 +462,20 @@ section.
 
 | Slice | What | Size |
 |---|---|---|
-| 0 | Foundation (§ 4): holder records, the site generator, migration, the dead-holder rule, the Solar System list. All settings | Medium |
-| 1 | The game rule (§ 9) and cession articles (§ 6.1) | Small to medium |
-| 2 | Population, emigration with priorities, crews (§ 7) | Medium |
-| 3 | Modules (§ 8.1) and Extraplanetary Bases from colonies (§ 8.2) | Medium to large (the balance) |
-| 4 | Covert operations, free colonies, autonomy, abandonment, colony life events (§§ 6.4–6.6) | Medium |
-| 5 | **The fleets phase** (§ 5, § 6.2–6.3): 5a the fleet record, Space Command and movement with transit by delta-v; 5b combat at bodies, postures, blockade, seizure and destruction, settlement at the peace; 5c interdiction in peace, the AI | Large, the riskiest |
+| 0 | Foundation (§ 4): holder records, the site generator, migration, the dead-holder rule, the Solar System list. Every setting but off | Medium |
+| 1 | The four-level rule (§ 9) and cession articles (§ 6.1) | Small to medium |
+| 2 | Population, emigration with priorities, crews and AGI (§ 7) | Medium |
+| 3 | Transit tables in the launch-window generator (§ 5.3) and colony fleets that claim on arrival (§ 5.6) | Medium |
+| 4 | Modules (§ 8.1) and Extraplanetary Bases from colonies (§ 8.2) | Medium to large (the balance) |
+| 5 | Covert operations, free colonies, autonomy, abandonment, colony life events (§§ 6.4–6.6). Simple becomes the default | Medium |
+| 6 | **The fleets phase** (§ 5, § 6.2–6.3): 6a the fleet record, Space Command and movement on slice 3's tables; 6b combat at bodies, postures, blockade, seizure and destruction, settlement at the peace; 6c interdiction in peace, the AI. Full becomes the default | Large, the riskiest |
 
-Slices 0 and 1 already let a war on Earth take colonies. Slice 5 is a phase of
+Slices 0 and 1 already let a war on Earth take colonies. Slice 6 is a phase of
 its own, as the owner expects, and its parts can ship as separate PRs.
 
 Other ideas, not in the order: colony events (the first birth on Mars, a strike,
 a dome breach); a Mars terraforming megaproject lasting decades; colonies held
-jointly by a power bloc; Resort Colony tourism drawing on the colonies held;
-colony fleets that found their colony on arrival rather than on departure (F4).
+jointly by a power bloc; Resort Colony tourism drawing on the colonies held.
 
 ## 11. Open calls
 
@@ -430,19 +497,20 @@ Answered calls are in § Decisions. Still open:
   colony gives.
 - **D14** What a free colony can do: only wait to be brought back, or trade,
   take sides, and grow into an actor of its own.
-- **D16** Does the dead-holder rule apply under the off setting too (it fixes
-  colonies vanishing), or is off exactly today?
-- **D17** The rule's default setting.
+- **D16** Confirm that the dead-holder rule applies under races only (the owner:
+  probably). It is a change of hands, but it fixes colonies vanishing.
 - **F1** How many fleet slots per country.
 - **F2** A fleet's numbers: strength, marines, delta-v and supply, or fewer; ship
   types or none.
-- **F3** Transit times: real (from the generator, 16 years to Uranus by chemical
-  rocket), or compressed for play.
-- **F4** Colony fleets: keep founding on departure, or found on arrival like
-  fleets.
+- **F4** Confirm that colony fleets claim on arrival under simple and full
+  (§ 5.6), and what a fleet does when its site is taken first.
 - **F5** The combat rule: Lanchester's square law, or something flatter.
 - **F6** Earth orbit as a battleground that adds to the debris index, or home
   only.
-- **P1** What people do: crews (recommended), scaling, intrinsic, or a mix.
+- **F7** Under simple and full, keep the five stages as locks, or let transit
+  times gate the outer worlds and drop the locks.
+- **F8** Is Antimatter Production a drive step of its own after the torch?
+- **P2** Does AGI remove crews or only cut them, and is that the era 13
+  capstone's job if one comes?
 - **M1** The site quality grades and the room scale; the Global Commons flip
   must survive them.
