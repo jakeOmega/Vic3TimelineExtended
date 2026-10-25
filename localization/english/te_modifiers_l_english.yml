@@ -1428,7 +1428,7 @@
  state_metro_share_add:0 "Metropolitan Share Target[GetPlayer.GetCustom('te_demog_census_off_name')]"
  state_metro_share_add_desc:0 "Points on the target of the share of a state's urban people who live in its largest city: green belts and new towns spread them over more places. Used by the census on a state's Demographics subtab.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
  state_migration_crowding_density_mult:0 "[concept_migration_crowding] Tolerance"
- state_migration_crowding_density_mult_desc:0 "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. Improved by urban planning, [concept_infrastructure], and modern transportation."
+ state_migration_crowding_density_mult_desc:0 "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. It multiplies the densities that open and close an [concept_internal_resettlement] frontier in the same way. Improved by urban planning, [concept_infrastructure], and modern transportation."
  state_min_cultural_acceptance_delta_add:0 "Minimum Local Acceptance"
  state_min_cultural_acceptance_delta_add_desc:0 "A change in the minimum local cultural acceptance that can be applied in a [concept_state]."
  state_monthly_loyalists_add:0 "Monthly [Concept('concept_loyalist','$concept_loyalists$')]"

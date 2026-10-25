@@ -960,7 +960,9 @@ shows the numbers.
 
 1. **1836.** In a new game, the Settlement Authority's build requirements on an open frontier (Siberia, the American
    West) read an opening density a little above 2 (world population over a billion) and a closing density about five
-   times it; Migration Crowding Tolerance raises both as before.
+   times it; Migration Crowding Tolerance raises both as before. The line's second sentence (2026-10-25) renders the
+   base (2, or 10 on a state that has one), "×1.xx for today's world population" and "×1.xx for this state's Migration
+   Crowding Tolerance" with numbers, not raw keys, and base × the two factors matches the limit shown (to rounding).
 2. **Late game.** On a save with about 4 billion people, the same tooltip reads about 4× the 1836 figures before
    tolerance, and `event te_debug_resettlement.1` (option d) logs the same thresholds in its `TE_RESETTLEMENT: frontier`
    lines.
