@@ -6,6 +6,7 @@
 building_gm_name_carrier_anchor = {
 	building_group = bg_grand_monuments
 	icon = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	city_type = city
 	levels_per_mesh = -1
 
