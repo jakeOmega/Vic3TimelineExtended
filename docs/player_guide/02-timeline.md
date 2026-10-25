@@ -645,7 +645,7 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-Forty-two monuments already stand when a game begins, among them the Arc de
+Ninety-three monuments already stand when a game begins, among them the Arc de
 Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
 Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
 Jaipur. Nineteen stand where the great powers' armies and collectors took the
@@ -654,7 +654,12 @@ Xanthos, the Temples of Baalbek, Palmyra, the Mesha Stele, the Arch of
 Ctesiphon, the Obelisks of Karnak, the royal palaces of Benin, Kumasi and
 Abomey, Great Zimbabwe, Persepolis, the Red Fort in Delhi, the
 Bukgwan Victory Stele in Korea, the Imperial City of Huế and Klungkung Palace
-on Bali. Most monuments to a crown or a republic stand in countries that still
+on Bali. Fifty-one are the great sites of the past that draw visitors to their
+states, among them the Pyramids of Giza, Petra, Abu Simbel, the Alhambra,
+Windsor Castle, Kinkaku-ji, the Potala Palace, Borobudur and the Registan in
+Samarkand. They stand [To History](#monument-dedications) and carry the tourism
+their state's Base Appeal leaves to them (see [Tourism
+output](08-states.md#tourism-output)). Most monuments to a crown or a republic stand in countries that still
 honor them; two start contested: the Lion of Saint Mark, the old Venetian
 Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
 Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
@@ -823,6 +828,15 @@ dedicates its monuments once nothing more is queued for them.
 | Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
 | Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
 | Grand Stadium | Television Broadcasting | Trade Unions | | 10% lower turmoil effects, up to 50% |
+| To History | Only the historical monuments that carry it | | | |
+
+To History is the dedication of fifty-one historical monuments standing in 1836
+and of fourteen buried sites once they are dug up. No ceremony offers it. It
+gives the tourism, prestige and cultural pull every monument gives and nothing
+more: it honors nothing that can fall, so no change of government or conquest
+contests it, and it can't be pulled down or rededicated. An army can still carry
+it, or a piece of it, off as a [trophy](#monument-trophies). Every monument
+policy counts it at half.
 
 Legitimacy counts the grandeur of all your monuments to the Crown, the Republic,
 the Revolution and the Leader together, in steps of 10, and only while each
@@ -1050,10 +1064,10 @@ years, but your first choice starts no wait.
 
 | Policy | Gives | When it is worth it |
 |---|---|---|
-| Open to the Public | Tourism output from each monument ×1.5, the tourism of Ancestral Antiquity and the First Emperor's Army included. | Monuments that stand beside a Tourism Industry. |
-| State Ceremonial | Legitimacy and the Leader's authority from monuments also count a quarter of the grandeur of every monument you hold that is not contested, heritage and trophies included, whatever it honors. | Low legitimacy. |
-| Cultural Promotion | Cultural pull from monuments ×1.5, Ancestral Antiquity's included. With the Cultural Hegemony rule off, prestige from monuments ×1.5 instead. | The policy until you choose another. |
-| Public Education | +1% education access in every state for each step of standing grandeur, in steps of 10, 20, 30 and so on. | Literacy still well short of what your people could reach. |
+| Open to the Public | Tourism output from each monument ×1.5, from a monument To History ×1.25, the tourism of Ancestral Antiquity and the First Emperor's Army included. | Monuments that stand beside a Tourism Industry. |
+| State Ceremonial | Legitimacy and the Leader's authority from monuments also count a quarter of the grandeur of every monument you hold that is not contested, heritage and trophies included, whatever it honors; a monument To History counts at half. | Low legitimacy. |
+| Cultural Promotion | Cultural pull from monuments ×1.5, Ancestral Antiquity's included, and the share of it from monuments To History ×1.25. With the Cultural Hegemony rule off, prestige from monuments instead, on the same terms. | The policy until you choose another. |
+| Public Education | +1% education access in every state for each step of standing grandeur, a monument To History counting half, in steps of 10, 20, 30 and so on. | Literacy still well short of what your people could reach. |
 
 No policy changes maintenance, which Grand Monuments don't need, or ageing,
 anniversaries or what a dedication does in its own state.
@@ -1184,11 +1198,11 @@ ally or a power bloc partner.
 
 ### Buried sites
 
-Thirty-five monuments lie buried when a game begins, and a country that holds
+Fifty monuments lie buried when a game begins, and a country that holds
 the ground, or the right to dig it by treaty, can dig them up: Nineveh's
 library, Troy, Mycenae, Olympia, Delphi, Knossos, the Pergamon Altar, the Ishtar
 Gate of Babylon, Machu Picchu, the tombs of Tutankhamun and Philip II, the
-Terracotta Army, Göbekli Tepe and others. A dug-up site is a historical monument
+Terracotta Army, Göbekli Tepe, Ephesus, Teotihuacan, Hattusa and others. A dug-up site is a historical monument
 like those standing at the start. It keeps its name and look, and an army can
 carry it off as a [trophy](#monument-trophies).
 
@@ -1232,7 +1246,10 @@ or the treaty that let you dig there ends, and whoever may dig it next can take
 it up from where it stopped.
 
 A finished dig stands in the state it was dug in, To the Nation, at the site's
-levels (5 to 15). With no monument there it is a new one; otherwise it stands
+levels (5 to 15). Fourteen sites stand To History instead, at 3 or 6 levels:
+the ruins whose visitors their state's Base Appeal leaves out until they are
+dug, such as Ephesus, Tikal, Chichén Itzá, Teotihuacan, Leptis Magna and the
+library cave at Mogao. With no monument there it is a new one; otherwise it stands
 beside the one there as [several monuments in one state](#several-monuments-in-one-state).
 An event tells you how it went, again with the place, the find and its history.
 The AI, at peace and out of default, starts a dig now and then, never runs
@@ -1274,7 +1291,7 @@ pause construction first.
 
 ### Monument anniversaries
 
-Every dedication has an anniversary event that can fire once a monument of that
+Every dedication but To History has an anniversary event that can fire once a monument of that
 dedication reaches level 3 and still fits. Each offers a choice between two
 benefits, usually for two interest groups, and the only cost is money. A
 contested or heritage monument holds no anniversaries.

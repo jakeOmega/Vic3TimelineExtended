@@ -33,3 +33,7 @@ Change the entry, re-render, review, then `write`. The GUI needs no edit unless 
 **Open question.** At 36 px the stele can read as a gravestone. #586 queued an obelisk alternative (`gm_part/obelisk`). If it is adopted, the four status files keep their names, so only the "Shows" column above changes.
 
 **Monument pictures (2026-10-11).** Each monument's row and its state card also show a picture of its style and form, from `gfx/interface/icons/gm_pictures/` (80 files, `<skin>__<form>.dds`, framed like the building icons). They are not status icons: the `gm_picture` type and the `PICTURES` table in `test_grand_monument_registry.py` list them, and the status badge sits over the picture's corner.
+
+**Landmarks on a stand-in picture (art backlog).** A landmark shows its own picture, `gm_pictures/landmark_<key>__<form>.dds` at code 1,000,000 + its `LANDMARKS` row, once one is drawn; until then it shows the stand-in pair named in its row. `PLACEHOLDER_PICTURES` in `test_grand_monument_registry.py` lists these keys, and its test fails if a landmark drawn since is still listed or one with no picture is missing, here or there. To add one: draw the file, add its `PICTURES` row and its `gm_picture` icon, set its code in `gm_state_picture_landmarks`, and take its key out of the tuple and this list.
+
+None at the moment: every landmark has its own picture.

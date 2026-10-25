@@ -62,6 +62,57 @@ gm_seed_landmarks = {
 	gm_seed_landmark = { KEY = xanthos STATE = STATE_KONYA TAG = TUR DEDICATION = civic FORM = rock_cut LEVEL = 5 BUILT = -390 }
 	gm_seed_landmark = { KEY = mesha_stele STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = war_memorial FORM = stele LEVEL = 5 BUILT = -840 }
 	gm_seed_landmark = { KEY = arch_of_ctesiphon STATE = STATE_BAGHDAD TAG = TUR DEDICATION = civic FORM = arch LEVEL = 5 BUILT = 540 }
+	gm_seed_landmark = { KEY = pyramids_of_giza STATE = STATE_LOWER_EGYPT TAG = EGY DEDICATION = historic FORM = pyramid LEVEL = 15 BUILT = -2560 }
+	gm_seed_landmark = { KEY = petra STATE = STATE_TRANSJORDAN TAG = EGY DEDICATION = historic FORM = rock_cut LEVEL = 3 BUILT = -100 }
+	gm_seed_landmark = { KEY = moscow_kremlin STATE = STATE_MOSCOW TAG = RUS DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1495 }
+	gm_seed_landmark = { KEY = fasil_ghebbi STATE = STATE_GONDER TAG = BGM DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1636 }
+	gm_seed_landmark = { KEY = valley_of_the_temples STATE = STATE_SICILY TAG = SIC DEDICATION = historic FORM = pantheon LEVEL = 3 BUILT = -500 }
+	gm_seed_landmark = { KEY = borobudur STATE = STATE_CENTRAL_JAVA TAG = DEI DEDICATION = historic FORM = gate LEVEL = 3 BUILT = 825 }
+	gm_seed_landmark = { KEY = old_city_of_sanaa STATE = STATE_YEMEN TAG = ZAI DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 600 }
+	gm_seed_landmark = { KEY = shibam STATE = STATE_YEMEN TAG = KAT DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1530 }
+	gm_seed_landmark = { KEY = amphitheatre_of_el_djem STATE = STATE_TUNISIA TAG = TUN DEDICATION = historic FORM = forum LEVEL = 3 BUILT = 238 }
+	gm_seed_landmark = { KEY = abu_simbel STATE = STATE_EGYPTIAN_DESERT TAG = EGY DEDICATION = historic FORM = rock_cut LEVEL = 10 BUILT = -1264 }
+	gm_seed_landmark = { KEY = temple_of_seti_abydos STATE = STATE_MIDDLE_EGYPT TAG = EGY DEDICATION = historic FORM = colonnade LEVEL = 3 BUILT = -1290 }
+	gm_seed_landmark = { KEY = pyramids_of_meroe STATE = STATE_DONGOLA TAG = EGY DEDICATION = historic FORM = pyramid LEVEL = 6 BUILT = -300 }
+	gm_seed_landmark = { KEY = windsor_castle STATE = STATE_HOME_COUNTIES TAG = GBR DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1070 }
+	gm_seed_landmark = { KEY = pont_du_gard STATE = STATE_LANGUEDOC TAG = FRA DEDICATION = historic FORM = arch LEVEL = 3 BUILT = 50 }
+	gm_seed_landmark = { KEY = palais_des_papes STATE = STATE_PROVENCE TAG = FRA DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1364 }
+	gm_seed_landmark = { KEY = mont_saint_michel STATE = STATE_NORMANDY TAG = FRA DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1228 }
+	gm_seed_landmark = { KEY = chateau_de_chambord STATE = STATE_ORLEANS TAG = FRA DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1547 }
+	gm_seed_landmark = { KEY = jeronimos_monastery STATE = STATE_ESTREMADURA TAG = POR DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1601 }
+	gm_seed_landmark = { KEY = alhambra STATE = STATE_UPPER_ANDALUSIA TAG = SPA DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1354 }
+	gm_seed_landmark = { KEY = mezquita_of_cordoba STATE = STATE_LOWER_ANDALUSIA TAG = SPA DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 987 }
+	gm_seed_landmark = { KEY = shore_temple STATE = STATE_MADRAS TAG = BIC DEDICATION = historic FORM = pillar LEVEL = 3 BUILT = 700 }
+	gm_seed_landmark = { KEY = charminar STATE = STATE_HYDERABAD TAG = HYD DEDICATION = historic FORM = gate LEVEL = 3 BUILT = 1591 }
+	gm_seed_landmark = { KEY = gwalior_fort STATE = STATE_MALWA TAG = GWA DEDICATION = historic FORM = gate LEVEL = 3 BUILT = 1486 }
+	gm_seed_landmark = { KEY = meteora STATE = STATE_THESSALIA TAG = TUR DEDICATION = historic FORM = memorial_church LEVEL = 3 BUILT = 1382 }
+	gm_seed_landmark = { KEY = citadel_of_aleppo STATE = STATE_ALEPPO TAG = EGY DEDICATION = historic FORM = gate LEVEL = 6 BUILT = 1213 }
+	gm_seed_landmark = { KEY = naqsh_e_jahan_square STATE = STATE_ISFAHAN TAG = PER DEDICATION = historic FORM = hall LEVEL = 10 BUILT = 1629 }
+	gm_seed_landmark = { KEY = buddhas_of_bamiyan STATE = STATE_CENTRAL_HIGHLANDS TAG = KAB DEDICATION = historic FORM = statue LEVEL = 3 BUILT = 570 }
+	gm_seed_landmark = { KEY = musalla_of_herat STATE = STATE_HERAT TAG = HER DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1417 }
+	gm_seed_landmark = { KEY = grand_palace_bangkok STATE = STATE_BANGKOK TAG = SIA DEDICATION = historic FORM = hall LEVEL = 6 BUILT = 1782 }
+	gm_seed_landmark = { KEY = changdeokgung STATE = STATE_SEOUL TAG = KOR DEDICATION = historic FORM = hall LEVEL = 6 BUILT = 1610 }
+	gm_seed_landmark = { KEY = bulguksa STATE = STATE_BUSAN TAG = KOR DEDICATION = historic FORM = pagoda LEVEL = 3 BUILT = 774 }
+	gm_seed_landmark = { KEY = kinkaku_ji STATE = STATE_KYOTO TAG = JAP DEDICATION = historic FORM = pagoda LEVEL = 10 BUILT = 1397 }
+	gm_seed_landmark = { KEY = todai_ji STATE = STATE_KANSAI TAG = JAP DEDICATION = historic FORM = hall LEVEL = 5 BUILT = 752 }
+	gm_seed_landmark = { KEY = itsukushima_shrine STATE = STATE_CHUGOKU TAG = JAP DEDICATION = historic FORM = gate LEVEL = 3 BUILT = 1168 }
+	gm_seed_landmark = { KEY = potala_palace STATE = STATE_LHASA TAG = TIB DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1694 }
+	gm_seed_landmark = { KEY = swayambhunath STATE = STATE_HIMALAYAS TAG = NEP DEDICATION = historic FORM = pagoda LEVEL = 3 BUILT = 460 }
+	gm_seed_landmark = { KEY = leshan_giant_buddha STATE = STATE_SICHUAN TAG = CHI DEDICATION = historic FORM = statue LEVEL = 3 BUILT = 803 }
+	gm_seed_landmark = { KEY = temple_of_confucius STATE = STATE_SHANDONG TAG = CHI DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1499 }
+	gm_seed_landmark = { KEY = yungang_grottoes STATE = STATE_SHANXI TAG = CHI DEDICATION = historic FORM = rock_cut LEVEL = 3 BUILT = 494 }
+	gm_seed_landmark = { KEY = humble_administrators_garden STATE = STATE_SUZHOU TAG = CHI DEDICATION = historic FORM = pagoda LEVEL = 3 BUILT = 1513 }
+	gm_seed_landmark = { KEY = longmen_grottoes STATE = STATE_HENAN TAG = CHI DEDICATION = historic FORM = rock_cut LEVEL = 3 BUILT = 675 }
+	gm_seed_landmark = { KEY = registan STATE = STATE_UZBEKIA TAG = BUK DEDICATION = historic FORM = gate LEVEL = 10 BUILT = 1660 }
+	gm_seed_landmark = { KEY = itchan_kala STATE = STATE_KHIVA TAG = KHI DEDICATION = historic FORM = gate LEVEL = 6 BUILT = 1800 }
+	gm_seed_landmark = { KEY = mausoleum_of_sultan_sanjar STATE = STATE_MERZ TAG = BUK DEDICATION = historic FORM = mausoleum LEVEL = 3 BUILT = 1157 }
+	gm_seed_landmark = { KEY = kazan_kremlin STATE = STATE_KAZAN TAG = RUS DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1562 }
+	gm_seed_landmark = { KEY = saint_sophia_kiev STATE = STATE_KIEV TAG = RUS DEDICATION = historic FORM = memorial_church LEVEL = 3 BUILT = 1037 }
+	gm_seed_landmark = { KEY = diocletians_palace STATE = STATE_DALMATIA TAG = AUS DEDICATION = historic FORM = colonnade LEVEL = 3 BUILT = 305 }
+	gm_seed_landmark = { KEY = marksburg STATE = STATE_RHINELAND TAG = PRU DEDICATION = historic FORM = tower LEVEL = 3 BUILT = 1283 }
+	gm_seed_landmark = { KEY = aachen_cathedral STATE = STATE_NORTH_RHINE TAG = PRU DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 805 }
+	gm_seed_landmark = { KEY = basilica_of_saint_francis STATE = STATE_UMBRIA TAG = PAP DEDICATION = historic FORM = hall LEVEL = 3 BUILT = 1253 }
+	gm_seed_landmark = { KEY = walls_of_tallinn STATE = STATE_TALINN TAG = UBD DEDICATION = historic FORM = gate LEVEL = 3 BUILT = 1355 }
 }
 
 # The part of $STATE$ that $TAG$ holds in the 1836 history. An owner that
@@ -225,6 +276,71 @@ gm_debug_log_landmarks = {
 	gm_debug_log_landmark = { KEY = muhammad_ali_mosque }
 	gm_debug_log_landmark = { KEY = nelsons_column }
 	gm_debug_log_landmark = { KEY = washington_monument }
+	gm_debug_log_landmark = { KEY = pyramids_of_giza }
+	gm_debug_log_landmark = { KEY = petra }
+	gm_debug_log_landmark = { KEY = moscow_kremlin }
+	gm_debug_log_landmark = { KEY = fasil_ghebbi }
+	gm_debug_log_landmark = { KEY = valley_of_the_temples }
+	gm_debug_log_landmark = { KEY = borobudur }
+	gm_debug_log_landmark = { KEY = old_city_of_sanaa }
+	gm_debug_log_landmark = { KEY = shibam }
+	gm_debug_log_landmark = { KEY = amphitheatre_of_el_djem }
+	gm_debug_log_landmark = { KEY = abu_simbel }
+	gm_debug_log_landmark = { KEY = temple_of_seti_abydos }
+	gm_debug_log_landmark = { KEY = pyramids_of_meroe }
+	gm_debug_log_landmark = { KEY = windsor_castle }
+	gm_debug_log_landmark = { KEY = pont_du_gard }
+	gm_debug_log_landmark = { KEY = palais_des_papes }
+	gm_debug_log_landmark = { KEY = mont_saint_michel }
+	gm_debug_log_landmark = { KEY = chateau_de_chambord }
+	gm_debug_log_landmark = { KEY = jeronimos_monastery }
+	gm_debug_log_landmark = { KEY = alhambra }
+	gm_debug_log_landmark = { KEY = mezquita_of_cordoba }
+	gm_debug_log_landmark = { KEY = shore_temple }
+	gm_debug_log_landmark = { KEY = charminar }
+	gm_debug_log_landmark = { KEY = gwalior_fort }
+	gm_debug_log_landmark = { KEY = meteora }
+	gm_debug_log_landmark = { KEY = citadel_of_aleppo }
+	gm_debug_log_landmark = { KEY = naqsh_e_jahan_square }
+	gm_debug_log_landmark = { KEY = buddhas_of_bamiyan }
+	gm_debug_log_landmark = { KEY = musalla_of_herat }
+	gm_debug_log_landmark = { KEY = grand_palace_bangkok }
+	gm_debug_log_landmark = { KEY = changdeokgung }
+	gm_debug_log_landmark = { KEY = bulguksa }
+	gm_debug_log_landmark = { KEY = kinkaku_ji }
+	gm_debug_log_landmark = { KEY = todai_ji }
+	gm_debug_log_landmark = { KEY = itsukushima_shrine }
+	gm_debug_log_landmark = { KEY = potala_palace }
+	gm_debug_log_landmark = { KEY = swayambhunath }
+	gm_debug_log_landmark = { KEY = leshan_giant_buddha }
+	gm_debug_log_landmark = { KEY = temple_of_confucius }
+	gm_debug_log_landmark = { KEY = yungang_grottoes }
+	gm_debug_log_landmark = { KEY = humble_administrators_garden }
+	gm_debug_log_landmark = { KEY = longmen_grottoes }
+	gm_debug_log_landmark = { KEY = registan }
+	gm_debug_log_landmark = { KEY = itchan_kala }
+	gm_debug_log_landmark = { KEY = mausoleum_of_sultan_sanjar }
+	gm_debug_log_landmark = { KEY = kazan_kremlin }
+	gm_debug_log_landmark = { KEY = saint_sophia_kiev }
+	gm_debug_log_landmark = { KEY = diocletians_palace }
+	gm_debug_log_landmark = { KEY = marksburg }
+	gm_debug_log_landmark = { KEY = aachen_cathedral }
+	gm_debug_log_landmark = { KEY = basilica_of_saint_francis }
+	gm_debug_log_landmark = { KEY = walls_of_tallinn }
+	gm_debug_log_landmark = { KEY = ephesus }
+	gm_debug_log_landmark = { KEY = tikal }
+	gm_debug_log_landmark = { KEY = chichen_itza }
+	gm_debug_log_landmark = { KEY = teotihuacan }
+	gm_debug_log_landmark = { KEY = monte_alban }
+	gm_debug_log_landmark = { KEY = leptis_magna }
+	gm_debug_log_landmark = { KEY = cyrene }
+	gm_debug_log_landmark = { KEY = merida_theatre }
+	gm_debug_log_landmark = { KEY = chogha_zanbil }
+	gm_debug_log_landmark = { KEY = hattusa }
+	gm_debug_log_landmark = { KEY = mount_nemrut }
+	gm_debug_log_landmark = { KEY = mogao_caves }
+	gm_debug_log_landmark = { KEY = khajuraho }
+	gm_debug_log_landmark = { KEY = hampi }
 }
 
 gm_debug_log_landmark = {
@@ -254,6 +370,7 @@ gm_debug_log_landmark = {
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = scientific }
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = industrial }
 			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = athletic }
+			gm_debug_log_landmark_pm = { KEY = $KEY$ PM = historic }
 		}
 	}
 	else = {

@@ -16,7 +16,7 @@ read them. Older saves migrate by dropping the flag.
 `test_grand_monuments_layout.py`), the player guide build (`scripts/build_player_guide.py`).
 
 **Spec:** `docs/superpowers/archive/specs/2026-10-23-gm-policy-prestige-design.md` (read it whole first). The heritage spec it
-amends is `docs/superpowers/specs/2026-10-23-tourism-heritage-design.md`.
+amends is `docs/superpowers/archive/specs/2026-10-23-tourism-heritage-design.md`.
 
 ## Global Constraints
 
@@ -463,7 +463,7 @@ for p in ("open", "ceremonial", "culture", "education"):
 - Modify: `docs/player_guide/Vic3TimelineExtended_Player_Guide.pdf` (rebuilt)
 - Modify: `docs/systems/mod_systems.md` (the "Monument policy" bullet, line 1459; the ageing bullet's Mothballed
   clause, line 1462; the prestige figure)
-- Modify: `docs/superpowers/specs/2026-10-23-tourism-heritage-design.md`:
+- Modify: `docs/superpowers/archive/specs/2026-10-23-tourism-heritage-design.md`:
   - § 7: the To History rule from the policy spec § 4.5, with its upkeep line marked moot;
   - § 13: phase 2's gate is this pass;
   - § 15: resolved, and the Mothballed line corrected.
