@@ -6,6 +6,8 @@ Flag kinds: **unresolved-helper-call** is an unknown name in call form (`x = yes
 
 **effect-in-trigger** is a known effect where the engine reads triggers — a scripted trigger's body, a `limit`, `trigger`, `possible`, `is_shown`, `can_*` or other trigger block (#1142). The engine logs `Unknown trigger type` at load and drops the line; a scope saved there takes `save_temporary_scope_as`, not `save_scope_as`. **trigger-in-effect** is the mirror image: a trigger in an `immediate`, `option`, `effect`, `on_*` or scripted effect body. Both read the effect-only and trigger-only names in `docs/engine/effect_trigger_context_keys.txt` and the mod's own scripted effects and triggers.
 
+**unterminated-string** is a quoted string the file ends inside, or one running over more lines than any vanilla string does: almost always a stray `"` at or just above the line named, which turns the rest of the file into text the other checks can't read.
+
 - Catalog size: **7536**
 - Context catalog: **3657** effect-only, **2595** trigger-only names
 - Flags (unreviewed): **0**
