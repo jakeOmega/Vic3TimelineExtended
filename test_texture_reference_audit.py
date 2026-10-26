@@ -511,7 +511,9 @@ class DeclarationTests(_Fixture):
         expected = {("static_modifiers", "icon"): 32, ("production_methods", "texture"): 1,
                     ("production_method_groups", "texture"): 1}
         got = {(folder, f): len(names) for folder, d in gaps.items() for f, names in d.items() if names}
-        self.assertEqual(got, expected)
+        self.assertEqual(got, expected,
+                         "a vanilla entity of a DECLARED_FIELDS type no longer declares its field: "
+                         "read it (an engine default? a dummy?), then drop the field or update the count")
         self.assertIn("pmg_dummy", gaps["production_method_groups"]["texture"])
         self.assertIn("buildings", gaps)  # the snapshot holds the logged type
         self.assertGreaterEqual(len(gaps), 20)
