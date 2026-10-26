@@ -105,6 +105,15 @@ widget = { text = "[Localize('LABEL')] # { } \\"quoted\\""
 }''')
         self.assertEqual({('loc_keys', 'TYPO'), ('script_values', 'typo')}, set(self.errors(self.run_audit())))
 
+    def test_scripted_constant_is_not_a_script_value(self):
+        self.write('vanilla_parsed/common/script_values.json', json.dumps({}))
+        self.write('common/script_values/consts.txt', '@only_const = 3\nreal_value = { value = @only_const }\n')
+        self.gui('''widget = {
+ value = "[Scope.ScriptValue('only_const')]"
+ other = "[Scope.ScriptValue('real_value')]"
+}''')
+        self.assertEqual([('script_values', 'only_const')], self.errors(self.run_audit()))
+
     def test_saved_scope_not_hidden_by_unrelated_sgui(self):
         self.write('common/scripted_guis/other.txt', 'other = { saved_scopes = { typo } }')
         self.gui('''widget = {
