@@ -106,7 +106,7 @@ The directory has its own [`vanilla/CLAUDE.md`](vanilla/CLAUDE.md) — a condens
 
 ## Engine Reference & Auto-Generated Dumps — `engine/`
 
-All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Most regenerate on `POST /reload`; the engine dumps below regenerate from the engine-doc snapshots at server start, and `engine/effect_trigger_valid_keys.txt` is a **one-shot bootstrap** refreshed by hand on a vanilla bump (`effect_trigger_validity_audit.py bootstrap`) — never per reload.
+All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Most regenerate on `POST /reload`; the engine dumps below regenerate from the engine-doc snapshots at server start, and `engine/effect_trigger_valid_keys.txt` and `engine/effect_trigger_context_keys.txt` are **one-shot bootstraps** refreshed by hand on a vanilla bump (`effect_trigger_validity_audit.py bootstrap` / `bootstrap-context`) — never per reload.
 
 ### Mod data dumps
 
@@ -162,6 +162,7 @@ All files in this directory are `[auto-gen]` (see `auto_generated_files.md`). Mo
 | [`engine/orphaned_event_report.md`](engine/orphaned_event_report.md) | `is_triggered_only` events no dispatch path ever references |
 | [`engine/effect_trigger_validity_report.md`](engine/effect_trigger_validity_report.md) | Effect/trigger keywords absent from the frozen valid-key catalog |
 | [`engine/effect_trigger_valid_keys.txt`](engine/effect_trigger_valid_keys.txt) | The frozen catalog that report reads. **One-shot bootstrap**, not regenerated per reload — refresh on a vanilla bump via `effect_trigger_validity_audit.py bootstrap` |
+| [`engine/effect_trigger_context_keys.txt`](engine/effect_trigger_context_keys.txt) | The effect-only and trigger-only names behind the same report's context check (#1142). **One-shot bootstrap** — refresh on a vanilla bump via `effect_trigger_validity_audit.py bootstrap-context` |
 | [`engine/duplicate_key_report.md`](engine/duplicate_key_report.md) | Repeated scalar keys *inside* one block (the engine only warns on top-level entity collisions) |
 | [`engine/attitude_key_report.md`](engine/attitude_key_report.md) | `attitude = <bareword>` values outside the engine's fixed 15-key catalog — silently never match |
 | [`engine/error_log_digest.md`](engine/error_log_digest.md) | Mod-only summary of `error.log` + diff vs. `error.1.log` (gitignored) |

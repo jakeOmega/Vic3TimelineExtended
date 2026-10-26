@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.14.5",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "c3ff1dde2637b88a",
- "built_at": "2026-10-11T18:32:12+00:00",
+ "parser_fingerprint": "4852fdf1454c1204",
+ "built_at": "2026-10-26T19:47:54+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -39,6 +39,11 @@
    "dir": "game/common/political_movements",
    "file": "common/political_movements.json",
    "entities": 39
+  },
+  "Parties": {
+   "dir": "game/common/parties",
+   "file": "common/parties.json",
+   "entities": 12
   },
   "Battle Conditions": {
    "dir": "game/common/battle_conditions",
@@ -1927,6 +1932,54 @@
   "game/common/modifier_type_definitions/99_todo_sort_into_other_files.txt": {
    "size": 47477,
    "sha256": "f3412884c57274f20dec983592c44d9d2550e658fd4e7e7fd8b2cabf3a18ec17"
+  },
+  "game/common/parties/agrarian_party.txt": {
+   "size": 14250,
+   "sha256": "5d40c77aab621d59a20d063fc6222c5d39891c12c264412bbd2d0e955d2f24cc"
+  },
+  "game/common/parties/anarchist_party.txt": {
+   "size": 7676,
+   "sha256": "c82f93efa4e75b490a4c362a962a5f33ff0065d4d077dc560d164b662e100dce"
+  },
+  "game/common/parties/communist_party.txt": {
+   "size": 14254,
+   "sha256": "779a799ba73f50fdcefbd7782e5d719943af747d6c2781d0054eafec82aaa81c"
+  },
+  "game/common/parties/conservative_party.txt": {
+   "size": 27823,
+   "sha256": "6aa468990bacd9423d34bc0d54b6ee1b6cdf415aacb8bb9316d0725c9a4a84fb"
+  },
+  "game/common/parties/fascist_party.txt": {
+   "size": 16348,
+   "sha256": "eb272ca22bb342634ff177a6a781f7e60361e51d185d0fdd3011dd7c231e63ae"
+  },
+  "game/common/parties/free_trade_party.txt": {
+   "size": 16611,
+   "sha256": "c0e8a7b4d8274f03ff4b81adc27c867bde6904f2541d27b14a5284f5fba128d6"
+  },
+  "game/common/parties/liberal_party.txt": {
+   "size": 26762,
+   "sha256": "24517a25ac1be81a4ef532b1a535f16bcf2d815f8d8079b2e9ee36a8930fea20"
+  },
+  "game/common/parties/military_party.txt": {
+   "size": 11752,
+   "sha256": "daca160516953d43e1b0f190d88bd3d394d22eb3d17500e07cff9f82ebbc0654"
+  },
+  "game/common/parties/radical_party.txt": {
+   "size": 16781,
+   "sha256": "fc9252edc3d8c789714b6f264d9645fb6a98ebc02a6ce2be162214b229c1e419"
+  },
+  "game/common/parties/religious_party.txt": {
+   "size": 12045,
+   "sha256": "d500fcf26eb269c70b4e544e9ec6e2ce5f42eb83c158793cd8f33c15e722a9ab"
+  },
+  "game/common/parties/revolutionary_party.txt": {
+   "size": 533,
+   "sha256": "094dad717c4bcab78abb60d62238d152a30a94b14c35cbe97380617c9044e4ef"
+  },
+  "game/common/parties/social_democrats_party.txt": {
+   "size": 17298,
+   "sha256": "77e0fd9640a39ee037761aaa9853e0a686c8f7538d3c233d2f42297c6b06d5c4"
   },
   "game/common/political_movements/00_ideological_movements.txt": {
    "size": 144121,

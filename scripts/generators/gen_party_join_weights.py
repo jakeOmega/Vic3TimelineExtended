@@ -23,8 +23,12 @@ machine with the game; ``--check`` writes nothing and exits 1 when the
 committed file is stale. Not run on /reload. The header records the game
 version the lines came from; test_first_past_the_post.py fails when it differs
 from the committed vanilla snapshot's (vanilla_parsed/manifest.json), so a
-vanilla patch forces a rerun. CI can't compare the restated lines with vanilla
-itself, because parties aren't in the snapshot (#1164): that is --check's job.
+vanilla patch forces a rerun. The same test holds the restated lines to the
+snapshot's parties (vanilla_parsed/common/parties.json, #1164) in values,
+descs, lines dropped or added, and order within one key. The snapshot keeps no
+order across keys, so a restated `else_if` moved under another `if`, or a step
+moved past a term of another key, passes CI: only --check (or the test's
+game-files comparison, which skips without the game) catches it.
 """
 
 from __future__ import annotations

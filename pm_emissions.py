@@ -13,7 +13,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 import re
 
-from paradox_file_parser import ParadoxFileParser
+from paradox_file_parser import INJECT_DIRECTIVES, ParadoxFileParser, directive_prefixes
 
 STATE_MODIFIER = "state_greenhouse_gas_emissions_add"
 ATMOSPHERIC_MODIFIER = "state_atmospheric_carbon_capture_add"
@@ -48,7 +48,9 @@ NETTED_FUEL = {
 EXEMPT_METHODS = {
     "pm_st_res_hub_reserve": "Goods flow is a reserve stockpile, not burnt fuel.",
 }
-_DEFINITION = re.compile(r"(?m)^((?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?[\w-]+)\s*=\s*\{")
+# A definition, with any of the six merge directives (paradox_file_parser).
+_DEFINITION = re.compile(
+    r"(?m)^((?:" + "|".join(map(re.escape, directive_prefixes)) + r")?[\w-]+)\s*=\s*\{")
 
 
 def unwrap(value):
@@ -199,7 +201,7 @@ def plan_outputs(state, root):
         edits = []
         for match in _DEFINITION.finditer(masked):
             directive, name = parser._split_directive(match[1])
-            if directive == "INJECT":
+            if directive in INJECT_DIRECTIVES:
                 continue
             if name in owned:
                 raise ValueError(f"Duplicate owned production method: {name}")

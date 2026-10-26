@@ -240,7 +240,7 @@ def plan_outputs(state, root):
         edits = []
         for match in emissions._DEFINITION.finditer(masked):
             directive, name = parser._split_directive(match[1])
-            if directive == "INJECT":
+            if directive in emissions.INJECT_DIRECTIVES:
                 continue
             owned.add(name)
             end = emissions._end(masked, match.end() - 1)

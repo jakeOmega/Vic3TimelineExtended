@@ -310,7 +310,7 @@ All under `docs/engine/`:
 - `engine_coverage_report.md` — output of `/validate/engine-coverage`.
 - `error_log_digest.md` — game-log digest (gitignored, machine-local).
 - `event_image_inventory.md` — events ↔ image/video map (gitignored, machine-local).
-- `*_report.md` — one per post-load audit (magnitude, modifier visibility, loc coverage, concept references, loc accessors, mod structure, loc render, `any_*` limits, iterator limits, modifier multiplier vars, PM employment, orphaned events, effect/trigger validity, duplicate keys, attitude keys) plus `kill_character_audit.md`. `effect_trigger_valid_keys.txt` is the one exception in this folder: a hand-refreshed bootstrap catalog, not a per-reload dump.
+- `*_report.md` — one per post-load audit (magnitude, modifier visibility, loc coverage, concept references, loc accessors, mod structure, loc render, `any_*` limits, iterator limits, modifier multiplier vars, PM employment, orphaned events, effect/trigger validity, duplicate keys, attitude keys) plus `kill_character_audit.md`. `effect_trigger_valid_keys.txt` and `effect_trigger_context_keys.txt` are the exceptions in this folder: hand-refreshed bootstrap catalogs, not per-reload dumps.
 
 **Player guide:** `player_guide/` holds the player-facing guide: numbered Markdown chapters, the Typst page template, `STYLE.md` (house style) and the built PDF. `scripts/build_player_guide.py` builds the PDF (needs `requirements-docs.txt`); `scripts/analysis/check_player_guide_style.py` lints the chapters. Both run in CI (the build as `--check`, which fails if the PDF is older than its sources).
 
