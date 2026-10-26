@@ -138,6 +138,10 @@ class Interpreter:
                 acc = math.floor(acc + 1e-9)
             elif key == "round":
                 acc = round(acc)
+            elif key == "modulo":
+                # C++'s % keeps the dividend's sign; the generated phases keep it positive.
+                assert acc >= 0, "a negative dividend"
+                acc = acc % self.number(value, month)
             else:
                 raise AssertionError(f"unsupported script value step {key}")
         return acc
@@ -300,7 +304,7 @@ class GeneratedFilesTest(unittest.TestCase):
                          f"stale: {result['changed_files']}; run python3 scripts/generators/gen_launch_windows.py")
 
     def test_one_bom_and_the_auto_generated_header(self):
-        for rel in (glw.TRIGGERS_OUT, glw.VALUES_OUT):
+        for rel in (glw.TRIGGERS_OUT, glw.VALUES_OUT, glw.LEGS_OUT):
             data = (glw.ROOT / rel).read_bytes()
             with self.subTest(file=str(rel)):
                 self.assertTrue(data.startswith(b"\xef\xbb\xbf# AUTO-GENERATED"))
@@ -618,6 +622,165 @@ class TransitTest(unittest.TestCase):
             self.assertIn(f"value = sr_window_wait_months_{b.key}", allowed)
             cost = _block(values, f"sr_launch_target_cost_{b.key}")
             self.assertIn(f"sr_launch_target_departs_paid = {{ BODY = {b.key} }}", cost)
+
+
+_LEGS = None
+
+
+def legs():
+    global _LEGS
+    if _LEGS is None:
+        _LEGS = glw.plan_legs()
+    return _LEGS
+
+
+def legs_interpreter():
+    values = parse_file(_raw("common", "script_values", "sr_launch_windows_generated.txt"))
+    values.update(parse_file(_raw("common", "script_values", "sr_fleet_legs_generated.txt")))
+    triggers = parse_file(_raw("common", "scripted_triggers", "sr_launch_windows_generated.txt"))
+    return Interpreter(values, triggers)
+
+
+class FleetLegsTest(unittest.TestCase):
+    """The fleets' legs between the nine locations (solar colonization slice 6 design § 1.2): every
+    ordered pair and drive has its readers; a better drive is never slower; Earth's outbound months are
+    the colony fleets' transit; the script's mean-cycle phase is the generator's for every month."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip(_raw("common", "script_values", "sr_fleet_legs_generated.txt"))
+        cls.names = set(re.findall(r"(?m)^(sr_leg_\w+) = \{", cls.text))
+
+    def test_nine_locations_and_every_ordered_pair_by_kind(self):
+        self.assertEqual([loc.key for loc in glw.LOCATIONS],
+                         ["earth", "inner", "mars", "asteroids", "jupiter", "saturn", "uranus", "neptune", "kuiper"])
+        self.assertEqual([loc.code for loc in glw.LOCATIONS], list(range(1, 10)))
+        self.assertEqual({loc.key: loc.body for loc in glw.LOCATIONS}["inner"], "venus")
+        self.assertEqual({loc.key: loc.body for loc in glw.LOCATIONS}["asteroids"], "ceres")
+        kinds = [k for _, _, k in glw.LEGS]
+        self.assertEqual(len(glw.LEGS), 72)
+        self.assertEqual(kinds.count("exact"), 8)
+        self.assertEqual(kinds.count("cycle"), 8 + 12)  # every return, and the inner four's 12 ordered pairs
+        self.assertEqual(kinds.count("fixed"), 44)
+
+    def test_every_ordered_pair_and_drive_has_both_readers(self):
+        for a, b, _ in glw.LEGS:
+            for drive in glw.DRIVES:
+                for name in ("months", "dv", "months_rapid", "dv_rapid"):
+                    stem, rapid = (name.split("_") + [""])[:2]
+                    reader = f"sr_leg_{stem}_{'rapid_' if rapid else ''}{drive.key}_{a}_{b}"
+                    with self.subTest(reader=reader):
+                        self.assertIn(reader, self.names)
+
+    def test_a_better_drive_is_never_slower(self):
+        keys = [d.key for d in glw.DRIVES]
+        for p in legs():
+            for off in p.months["chemical"]:
+                months = [p.months[k][off] for k in keys]
+                with self.subTest(leg=(p.a, p.b), offset=off):
+                    self.assertEqual(months, sorted(months, reverse=True))
+                    self.assertGreaterEqual(min(months), 1)
+
+    def test_earth_s_outbound_months_are_the_colony_fleets_transit(self):
+        bodies = {p.body.key: p for p in plans()[0]}
+        for p in legs():
+            if p.kind != "exact":
+                continue
+            body = glw.LOCATION[p.b].body
+            for drive in glw.DRIVES:
+                with self.subTest(leg=p.b, drive=drive.key):
+                    self.assertEqual(p.months[drive.key], bodies[body].transit[drive.key])
+                    self.assertEqual(_block(self.text, f"sr_leg_months_{drive.key}_earth_{p.b}").strip(),
+                                     f"value = sr_transit_{drive.key}_{body}")
+                    if len({glw._dv_text(drive, v) for v in p.dv[drive.key].values()}) > 1:
+                        self.assertIn(f"sr_launch_offset_{body}",
+                                      _block(self.text, f"sr_leg_dv_{drive.key}_earth_{p.b}"))
+
+    def test_the_phase_is_integer_arithmetic_on_a_positive_dividend(self):
+        game_start = glw.month_index(1836, 1)
+        _, _, last = plans()
+        for p in legs():
+            if p.kind != "cycle":
+                continue
+            with self.subTest(leg=(p.a, p.b)):
+                self.assertGreaterEqual(100 * (game_start - glw.LEG_BASE_MONTH) + p.epoch, 0)
+                self.assertLess(100 * (last - glw.LEG_BASE_MONTH) + p.epoch, 2_000_000)
+                self.assertTrue(0 <= p.epoch < p.cycle)
+                for phase in range(p.cycle):
+                    folded = glw.fold_phase(phase, p.cycle)
+                    self.assertTrue(-p.cycle / 2 <= folded < p.cycle / 2)
+
+    def test_the_script_reads_back_every_leg_every_month(self):
+        interp = legs_interpreter()
+        _, first, last = plans()
+        bodies = {p.body.key: p for p in plans()[0]}
+        for p in legs():
+            with self.subTest(leg=(p.a, p.b)):
+                if p.kind == "fixed":
+                    for drive in glw.DRIVES:
+                        self.assertEqual(interp.value(f"sr_leg_months_{drive.key}_{p.a}_{p.b}", first),
+                                         p.months[drive.key][0])
+                    continue
+                for month in range(first, last + 1, 1 if p.kind == "cycle" else 5):
+                    if p.kind == "cycle":
+                        phase = interp.value(f"sr_leg_phase_{p.a}_{p.b}", month)
+                        self.assertEqual(phase, glw.leg_phase(month, p.epoch, p.cycle), month)
+                        off = glw.leg_offset(month, p.epoch, p.cycle)
+                    else:
+                        off = interp.value(f"sr_launch_offset_{glw.LOCATION[p.b].body}", month)
+                    for drive in glw.DRIVES:
+                        months = interp.value(f"sr_leg_months_{drive.key}_{p.a}_{p.b}", month)
+                        dv = interp.value(f"sr_leg_dv_{drive.key}_{p.a}_{p.b}", month)
+                        self.assertEqual(months, p.months[drive.key][off], (drive.key, month))
+                        self.assertAlmostEqual(dv, float(glw._dv_text(drive, p.dv[drive.key][off])), places=6,
+                                               msg=(drive.key, month))
+                    rapid = interp.value(f"sr_leg_months_rapid_antimatter_{p.a}_{p.b}", month)
+                    self.assertEqual(rapid, max(1, math.ceil(0.75 * p.months["antimatter"][off])), month)
+        self.assertTrue(bodies)
+
+    def test_rapid_response_flies_one_drive_ahead(self):
+        for a, b, _ in glw.LEGS:
+            for i, drive in enumerate(glw.DRIVES[:-1]):
+                ahead = glw.DRIVES[i + 1].key
+                with self.subTest(leg=(a, b), drive=drive.key):
+                    self.assertEqual(_block(self.text, f"sr_leg_months_rapid_{drive.key}_{a}_{b}").strip(),
+                                     f"value = sr_leg_months_{ahead}_{a}_{b}")
+                    self.assertEqual(_block(self.text, f"sr_leg_dv_rapid_{drive.key}_{a}_{b}").strip(),
+                                     f"value = sr_leg_dv_{ahead}_{a}_{b}")
+
+    def test_the_fixed_legs_medians_lie_in_their_sampled_range(self):
+        for p in legs():
+            if p.kind != "fixed":
+                continue
+            for drive in glw.DRIVES:
+                m_lo, m_hi, dv_lo, dv_hi = p.sampled_range[drive.key]
+                with self.subTest(leg=(p.a, p.b), drive=drive.key):
+                    self.assertLessEqual(p.months[drive.key][0], m_hi)
+                    self.assertGreaterEqual(p.dv[drive.key][0], dv_lo - 1e-9)
+                    self.assertLessEqual(p.dv[drive.key][0], dv_hi + 1e-9)
+                    if drive.key == "chemical":
+                        self.assertGreaterEqual(p.months[drive.key][0], m_lo)
+
+    def test_a_planet_s_capture_orbit_by_hand(self):
+        # Mars: GM 42,828.37 km^3/s^2, periapsis a tenth of its 3,389.5 km radius up, e = 0.9. At an
+        # excess speed of 2.65 km/s the hyperbola's periapsis speed is sqrt(2.65^2 + 2 GM / rp) = 5.4773
+        # and the capture orbit's sqrt(GM (1 + e) / rp) = 4.6722: 0.805 km/s either way.
+        self.assertAlmostEqual(float(glw.system_dv("mars", 2.65)), 0.805, places=3)
+        self.assertEqual(float(glw.system_dv("ceres", 2.65)), 2.65)  # a rendezvous
+        self.assertAlmostEqual(float(glw.parking_dv(2.94)), 3.6, places=1)  # Earth to Mars, the textbook 3.6
+
+    def test_the_chemical_drive_s_reach(self):
+        """Design § 2: 12 km/s is a round trip to Mars or Venus, one way to Jupiter."""
+        by = {(p.a, p.b): p for p in legs()}
+        trip = lambda a, b: by[(a, b)].dv["chemical"][0]  # noqa: E731
+        self.assertLess(trip("earth", "mars") + trip("mars", "earth"), 12)
+        self.assertLess(trip("earth", "inner") + trip("inner", "earth"), 12)
+        self.assertLess(trip("earth", "jupiter"), 12)
+        self.assertGreater(trip("earth", "jupiter") + trip("jupiter", "earth"), 12)
+
+    def test_the_file_stays_a_sane_size(self):
+        lines = _raw("common", "script_values", "sr_fleet_legs_generated.txt").count("\n")
+        self.assertLess(lines, 15_000)
 
 
 class StagedBankTest(unittest.TestCase):
