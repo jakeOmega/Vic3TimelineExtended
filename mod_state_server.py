@@ -61,6 +61,7 @@ import annotators
 import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
 import tech_unlocks_lib
 import vanilla_parsed
+import external_mod_overlap  # GET /external-mod-overlap (#1170)
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
 # /scripted-helpers/unresolved, /script-args and /pm-employment can call them
@@ -5076,6 +5077,13 @@ class DataNotLoaded(_ServiceNotReady):
         }, 503)
 
 
+def _overlap_vanilla_index():
+    """Vanilla for /external-mod-overlap: the game files when installed (with
+    file names), else the committed vanilla_parsed/ snapshot (#1170)."""
+    return external_mod_overlap.VanillaIndex(
+        game_common=os.path.join(base_game_path, "game", "common"))
+
+
 def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
     """Resolve a caller-supplied path param to an absolute path guaranteed to
     live under `mod_path`. Raises BadRequest (400) otherwise.
@@ -5871,6 +5879,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movement-stances": lambda: self._movement_stances(rest, params),
             "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
+            # Another mod's entries that land on ours, and which side wins (#1170)
+            "external-mod-overlap": lambda: self._external_mod_overlap(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
             "modifier-grants": lambda: self._modifier_grants(rest, params),
@@ -6029,6 +6039,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
+                {"path": "/external-mod-overlap?path=<mod root>&trace=false", "desc": "Read-only compatibility check of another mod (a Workshop folder or any mod root) against this one (#1170): keys of common/ databases both define with a load-order verdict (ours_wiped / theirs_wiped / both_merge / both_wiped / order_depends_on_case / depends_on_playset / undetermined), defines both set, shared on_action hooks and effect conflicts, event namespaces and ids, English loc keys, and same-path files (gui/ included). Also `python3 external_mod_overlap.py <root>`."},
                 {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
                 {"path": "/placeholder-icons", "desc": "Classify every mod-set icon: borrowed vanilla, shared, unique, stand-in or missing."},
                 {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
@@ -8661,6 +8672,28 @@ class ModStateHandler(BaseHTTPRequestHandler):
             return {"type": "Script Values", "id": svid, "raw": serialize(svs[svid])}
 
         return [{"type": "Script Values", "id": svid} for svid in svs]
+
+    # ---- another mod's overlap with ours (#1170) ---------------------------
+    def _external_mod_overlap(self, parts, params):
+        """GET /external-mod-overlap?path=<mod root>[&trace=false]
+
+        Read-only: scans the other mod's folder and this mod's, reports the
+        entries both define and which side the load order keeps. The logic and
+        the load-order model live in external_mod_overlap.py."""
+        if parts:
+            raise NotFound("/".join(["external-mod-overlap", *parts]))
+        usage = "GET /external-mod-overlap?path=<mod root>[&trace=false]"
+        try:
+            root = external_mod_overlap.validate_root((params.get("path") or [""])[0])
+        except ValueError as exc:
+            raise BadRequest(str(exc), usage=usage)
+        if os.path.realpath(root) == os.path.realpath(mod_path):
+            raise BadRequest(f"{root} is this mod; pass another mod's root", usage=usage)
+        trace = (params.get("trace") or ["true"])[0].lower()
+        if trace not in ("true", "false"):
+            raise BadRequest(f"trace must be true or false, got {trace!r}", usage=usage)
+        return external_mod_overlap.analyze(
+            root, mod_path, vanilla=_overlap_vanilla_index(), include_trace=trace == "true")
 
     # ---- mod-vs-vanilla diff ----------------------------------------------
     def _diff(self, parts, params):
