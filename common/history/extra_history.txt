@@ -120,9 +120,10 @@ GLOBAL = {
 		activate_law = law_type:law_constitutional_review
 		set_variable = { name = te_judicial_independence value = 60 }
 		# First Past the Post (te_fptp_effects.txt): plurality voting, with the
-		# Democrats and the Whigs marked as the two largest parties so the first
-		# campaign comes before the monthly ranking. Replaces vanilla's
-		# culture-based usa_two_party_system join-weight term.
+		# Democrats and the Whigs marked as the two largest parties so the
+		# parties formed at game start see the terms before the first monthly
+		# ranking takes over. Replaces vanilla's culture-based
+		# usa_two_party_system join-weight term.
 		active_law:lawgroup_distribution_of_power ?= { # Census Voting
 			add_amendment = {
 				type = amendment_first_past_the_post

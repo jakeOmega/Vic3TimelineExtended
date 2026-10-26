@@ -23088,8 +23088,8 @@
   "es": "Repartamos los escaños por representación proporcional."
  },
  "te_fptp_events.1.b.tt": {
-  "en": "First Past the Post ends: smaller parties can win interest groups again, and later changes of voting law won't ask about it.",
-  "es": "Termina el Escrutinio mayoritario uninominal: los partidos más pequeños vuelven a poder atraer a grupos de interés, y los cambios posteriores de ley electoral no volverán a plantear la cuestión."
+  "en": "First Past the Post ends: smaller parties can win interest groups again, and a later change of voting law won't bring it back.",
+  "es": "Termina el Escrutinio mayoritario uninominal: los partidos más pequeños vuelven a poder atraer a grupos de interés, y un cambio posterior de ley electoral no lo restablecerá."
  },
  "te_fptp_events.1.d": {
   "en": "The new voting law has taken effect, and the old rule for counting votes has lapsed with the law it was attached to. The [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] want each seat to go, as before, to whoever tops the poll in the district. Reformers say this is the moment to share out the seats by each party's share of the vote, so that no vote is wasted.",

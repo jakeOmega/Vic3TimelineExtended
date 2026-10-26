@@ -23088,8 +23088,8 @@
   "de": "Die Sitze nach Stimmenanteil verteilen."
  },
  "te_fptp_events.1.b.tt": {
-  "en": "First Past the Post ends: smaller parties can win interest groups again, and later changes of voting law won't ask about it.",
-  "de": "Die Relative Mehrheitswahl endet: Kleinere Parteien können wieder Interessengruppen für sich gewinnen, und spätere Änderungen des Wahlrechts stellen die Frage nicht erneut."
+  "en": "First Past the Post ends: smaller parties can win interest groups again, and a later change of voting law won't bring it back.",
+  "de": "Die Relative Mehrheitswahl endet: Kleinere Parteien können wieder Interessengruppen für sich gewinnen, und eine spätere Änderung des Wahlrechts bringt sie nicht zurück."
  },
  "te_fptp_events.1.d": {
   "en": "The new voting law has taken effect, and the old rule for counting votes has lapsed with the law it was attached to. The [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] want each seat to go, as before, to whoever tops the poll in the district. Reformers say this is the moment to share out the seats by each party's share of the vote, so that no vote is wasted.",

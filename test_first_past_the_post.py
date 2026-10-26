@@ -107,9 +107,11 @@ class GeneratorTest(unittest.TestCase):
 
 
 class CommittedFileTest(unittest.TestCase):
-    """The committed file is what the generator writes from the vanilla lines it
-    restates. The generator needs the game files (its --check compares against
-    them); this is the check CI can run."""
+    """What CI can check of the committed file. Parties aren't in vanilla_parsed/
+    (#1164), so nothing here compares the restated lines with vanilla itself:
+    the generator's --check does that on a machine with the game. The header's
+    game version is held to the snapshot's, so a vanilla patch (which rebuilds
+    the snapshot) fails here until the generator is rerun."""
 
     @classmethod
     def setUpClass(cls):
@@ -130,10 +132,27 @@ class CommittedFileTest(unittest.TestCase):
         body = self.text.split("\n", 8)[-1]  # past the header, which names it
         self.assertNotIn("usa_two_party_system", body)
 
+    def test_header_version_matches_the_snapshot(self):
+        with open(os.path.join(ROOT, "vanilla_parsed", "manifest.json"), encoding="utf-8") as file:
+            snapshot = json.load(file)["game_version"]
+        self.assertEqual(
+            self._version(),
+            snapshot,
+            "zz_te_party_join_weights.txt was restated from another game version: "
+            "run scripts/generators/gen_party_join_weights.py on a machine with the game.",
+        )
+
+    def _version(self):
+        match = re.search(r"^# Restated from vanilla (\S+)\.$", self.text, flags=re.MULTILINE)
+        self.assertIsNotNone(match, "the header doesn't name the game version")
+        return match.group(1)
+
     def test_matches_a_fresh_generation(self):
-        """Take the mod's two terms out of each committed block, rebuild a vanilla
-        file from what is left, and regenerate: a hand edit or a generator
-        change without a rerun shows up here."""
+        """Take the mod's two terms out of each committed block, rebuild a file
+        from what is left, and regenerate. This catches a hand edit to the mod's
+        terms, their placement or the formatting, and a generator change without
+        a rerun. It can't catch a hand edit to a restated vanilla line, since the
+        rebuilt file carries the edit too."""
         with tempfile.TemporaryDirectory() as tmp:
             for party in self.parties:
                 chunks = g.top_level_chunks(_block("\n".join(_block(self.text, f"INJECT:{party}")), "join_weight"))
@@ -147,7 +166,7 @@ class CommittedFileTest(unittest.TestCase):
                 with open(os.path.join(tmp, f"{party}.txt"), "w", encoding="utf-8-sig") as file:
                     file.write(f"{party} = {{\njoin_weight = {{\n" + "\n".join(vanilla) + "\n}\n}\n")
             self.assertEqual(
-                g.build_file(tmp),
+                g.build_file(tmp, self._version()),
                 self.text,
                 "zz_te_party_join_weights.txt is stale: run scripts/generators/gen_party_join_weights.py",
             )
@@ -197,6 +216,12 @@ class PartyCoverageTest(unittest.TestCase):
             if m
         }
         self.assertEqual(pairs, {(t, t) for t in self.types})
+
+    def test_history_marks_name_party_types(self):
+        history = _read("common/history/extra_history.txt")
+        marks = set(re.findall(r"set_variable = te_fptp_major_(\w+_party)\b", history))
+        self.assertEqual(marks, {"conservative_party", "liberal_party"})
+        self.assertLessEqual(marks, self.types)
 
     def test_mod_parties_carry_both_terms(self):
         for party in MOD_PARTIES:
