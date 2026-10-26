@@ -1101,6 +1101,27 @@ class FreeColoniesTest(unittest.TestCase):
                     self.assertIn(f"trigger = {{ has_variable = {var} }}", event)
                     self.assertIn(f"sr_site_clear_event_var = {{ VAR = {var} }}", _block(event, "after"))
 
+    def test_colony_life_stays_rare(self):
+        # Owner, 2026-10-26: a few two-option events seen too often break
+        # immersion. The first child once per nation; a strike or a breach
+        # starts ten quiet years for both; chances in whole percents.
+        month = _block(self.shared, "sr_life_month")
+        first = month[:month.index("space_race_events.95")]
+        self.assertIn("NOT = { has_variable = sr_life_first_child_done }", first)
+        self.assertIn("set_variable = { name = sr_life_first_child_done value = yes }", first)
+        for before, event in (("space_race_events.95", "space_race_events.96"),
+                              ("space_race_events.96", "space_race_events.97")):
+            roll = month[month.index(before):month.index(event)]
+            with self.subTest(event=event):
+                self.assertIn("NOT = { has_variable = sr_life_cooldown }", roll)
+                self.assertIn("sr_life_start_cooldown = yes", roll)
+        self.assertIn("name = sr_life_cooldown value = yes days = 3650",
+                      _block(self.shared, "sr_life_start_cooldown"))
+        self.assertEqual(self._number("sr_life_strike_chance"), 1)
+        self.assertEqual(self._number("sr_life_breach_chance"), 1)
+        self.assertIn("chance = 50", month[month.index("chance = sr_life_breach_chance"):])
+        self.assertNotRegex(month, r"chance = \d+\.\d")
+
     def test_the_autonomy_and_free_rows_follow_the_table(self):
         for row_type in ("te_sr_autonomy_rows", "te_sr_free_rows"):
             rows = self.rows[self.rows.index(f"type {row_type} = flowcontainer {{"):]

@@ -219,20 +219,25 @@ leaves a modifier on its target.
 ## 7. Colony life
 
 Three events, under simple and full, from the holder's entry pulse, one
-pending at a time (`sr_life_pending`, 60 days); each names its world
-(`sr_life_site`, a country variable, read by generated custom loc):
+pending at a time (`sr_life_site_pending`, 60 days); each names its world
+(`sr_life_site`, a country variable, read by generated custom loc). They are
+kept rare (owner, 2026-10-26: a few two-option events seen too often break
+immersion): about one every fifteen years per nation, four or so in a late game.
 
-- **`.95` The First Child of <World>**, when a colony first holds 2,000
-  people: *a citizen of our nation* (+5% prestige for five years, −5
-  autonomy) or *a child of <World>* (+10% prestige for five years, +5 autonomy).
-- **`.96` A Strike at <World>**, 2% a month for a holder of a colony of
+- **`.95` The First Child of <World>**, once per nation, when its first colony
+  holds 2,000 people: *a citizen of our nation* (+5% prestige for five years,
+  −5 autonomy) or *a child of <World>* (+10% prestige for five years, +5
+  autonomy).
+- **`.96` A Strike at <World>**, 1% a month for a holder of a colony of
   10,000 people or more (the colony drawn among those): *meet their demands*
   (+5% Space Program throughput for three years, −5 autonomy) or *break the
   strike* (+10 autonomy).
-- **`.97` A Dome Breach at <World>**, 1% a month for a holder of a colony of
+- **`.97` A Dome Breach at <World>**, 0.5% a month for a holder of a colony of
   5,000 or more: a tenth of its people die; *rebuild at once* (+10% Space
   Program throughput for a year, −5 autonomy) or *leave it to the colonists*
   (+10 autonomy).
+
+A strike or a breach starts a ten-year cooldown on both (`sr_life_cooldown`).
 
 ## 8. The rule's default
 
@@ -297,7 +302,8 @@ ties with every free colony we supply (a petition next month).
 6. **Survey Colony Defences and the convention wait for slice 6** (Non-goals).
 7. **The AI never abandons**, and never supplies more than two free colonies.
 8. **Life events are per country, not per colony**: a nation of ten colonies
-   strikes as often as one of a single large colony.
+   strikes as often as one of a single large colony, and the first child is
+   the nation's, once.
 
 ## 13. Build order
 
@@ -337,6 +343,13 @@ open:
   nor a garrison, and Both for one with each.
 - **Free colony trade shows as a count and research** ("2 · +2.0%") in a 130-wide
   value cell; the influence is on hover.
+- **Colony life is rarer than § 7's first draft** (owner, 2026-10-26, on the
+  PR): the first draft fired the first child at every colony and rolled a
+  strike at 2% and a breach at 1% a month with no cooldown, about twenty events
+  in a 60-year late game. Now the first child is once per nation, the chances
+  are 1% and 0.5%, and either starts ten quiet years. The breach's half percent
+  is rolled as 1% then 50%, since no fractional `random` chance is used in the
+  mod or vanilla.
 - **The covert operations** were built on the registry's pattern
   (`test_covert_op_registry.py`), each with no target modifier and its own block
   in `covert_ops_apply_all_phase_effects`; mod_systems.md § Covert Warfare

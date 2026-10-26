@@ -88,12 +88,18 @@ sr_cov_sabotage_share = { value = 0.01 }
 sr_cov_sabotage_autonomy = { value = 0.25 }
 
 # ---- Colony life (design § 7) -------------------------------------------------------
-# The people a colony needs for each event, the monthly chances (percent, for a
-# holder of such a colony) and the share of its people a dome breach kills.
+# The people a colony needs for each event, the monthly chances (whole percents,
+# for a holder of such a colony, outside the ten-year cooldown a strike or a
+# breach starts; sr_life_month rolls the breach's chance and then 50%, so it is
+# half a percent) and the share of its people a dome breach kills. Outside the
+# cooldown a strike comes about once in eight years and a breach once in
+# sixteen; with ten quiet years after each, a nation sees one about every
+# fifteen years, four or so in a late game. The first child fires once per
+# nation.
 sr_life_first_child_people = { value = 2000 }
 sr_life_strike_people = { value = 10000 }
 sr_life_breach_people = { value = 5000 }
-sr_life_strike_chance = { value = 2 }
+sr_life_strike_chance = { value = 1 }
 sr_life_breach_chance = { value = 1 }
 sr_life_breach_share = { value = 0.1 }
 

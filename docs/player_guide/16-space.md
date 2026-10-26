@@ -787,13 +787,14 @@ Covert operations reach colonies too: Incite Colonial Autonomy raises the
 autonomy of every colony the target holds, and Sabotage Colony kills a share of
 the people of its largest (see [The covert operations](11-influence.md#the-covert-operations)).
 
-**Colony life.** Three events come with growing colonies: the First Child of a
-colony that reaches 2,000 people (prestige, and a choice between pulling the
-colony closer or letting it be proud of itself), a Strike at a colony of 10,000
-or more, and a Dome Breach at a colony of 5,000 or more, which kills a tenth of
-its people. Paying for the strike or the repairs costs Space Program throughput
-for a while and lowers the colony's autonomy; leaving the colonists to it raises
-it.
+**Colony life.** Three rare events come with growing colonies. The First Child
+fires once, when your first colony reaches 2,000 people: prestige, and a choice
+between pulling the colony closer or letting it be proud of itself. A Strike can
+come at a colony of 10,000 or more and a Dome Breach, which kills a tenth of a
+colony's people, at one of 5,000 or more; after either, neither comes again for
+ten years, so a nation sees one about every fifteen years. Paying for the strike
+or the repairs costs Space Program throughput for a while and lowers the
+colony's autonomy; leaving the colonists to it raises it.
 
 ### Rare colony discoveries
 

@@ -319,9 +319,14 @@ sr_colony_evacuation_self_check = {
 }
 
 # ---- Colony life (design § 7) -------------------------------------------------------
-# Country scope, the entry's pulse: at most one life event open at a time
-# (sr_life_site, cleared by the event or after 60 days): the first child of a world that has just reached its
-# people, else, by chance, a strike or a dome breach at a colony large enough.
+# Country scope, the entry's pulse. Kept rare (owner, 2026-10-26: a few
+# two-option events seen too often break immersion): the first child once per
+# nation (sr_life_first_child_done), for its first colony to reach
+# sr_life_first_child_people; a strike or a dome breach by chance, at a colony
+# large enough, at most one in sr_life_cooldown's ten years. One life event is
+# open at a time (sr_life_site, cleared by the event or after 60 days).
+# `random`'s chance takes whole percents here (no fractional chance is used in
+# the mod or vanilla), so the breach's half a percent is 1% then 50%.
 sr_life_month = {
 	if = {
 		limit = {
@@ -329,20 +334,27 @@ sr_life_month = {
 			sr_has_space_colony = yes
 			NOT = { has_variable = sr_life_site }
 		}
-		sr_life_first_child_pick = yes
+		if = {
+			limit = { NOT = { has_variable = sr_life_first_child_done } }
+			sr_life_first_child_pick = yes
+		}
 		if = {
 			limit = { has_variable = sr_life_site }
+			set_variable = { name = sr_life_first_child_done value = yes }
 			set_variable = { name = sr_life_site_pending value = yes days = 60 }
 			trigger_event = { id = space_race_events.95 }
 		}
 		else_if = {
-			limit = { sr_life_has_colony = { MIN = sr_life_strike_people } }
+			limit = {
+				NOT = { has_variable = sr_life_cooldown }
+				sr_life_has_colony = { MIN = sr_life_strike_people }
+			}
 			random = {
 				chance = sr_life_strike_chance
 				sr_life_pick = { MIN = sr_life_strike_people }
 				if = {
 					limit = { has_variable = sr_life_site }
-					set_variable = { name = sr_life_site_pending value = yes days = 60 }
+					sr_life_start_cooldown = yes
 					trigger_event = { id = space_race_events.96 }
 				}
 			}
@@ -350,19 +362,30 @@ sr_life_month = {
 		if = {
 			limit = {
 				NOT = { has_variable = sr_life_site }
+				NOT = { has_variable = sr_life_cooldown }
 				sr_life_has_colony = { MIN = sr_life_breach_people }
 			}
 			random = {
 				chance = sr_life_breach_chance
-				sr_life_pick = { MIN = sr_life_breach_people }
-				if = {
-					limit = { has_variable = sr_life_site }
-					set_variable = { name = sr_life_site_pending value = yes days = 60 }
-					trigger_event = { id = space_race_events.97 }
+				random = {
+					chance = 50
+					sr_life_pick = { MIN = sr_life_breach_people }
+					if = {
+						limit = { has_variable = sr_life_site }
+						sr_life_start_cooldown = yes
+						trigger_event = { id = space_race_events.97 }
+					}
 				}
 			}
 		}
 	}
+}
+
+# Country scope: a strike or a dome breach has fired. Its world stays open for
+# 60 days, and neither can fire again for ten years.
+sr_life_start_cooldown = {
+	set_variable = { name = sr_life_site_pending value = yes days = 60 }
+	set_variable = { name = sr_life_cooldown value = yes days = 3650 }
 }
 
 # Country scope: an event about the world INDEX opens. VAR (sr_aut_site,
