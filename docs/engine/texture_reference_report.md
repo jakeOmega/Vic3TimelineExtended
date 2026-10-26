@@ -13,8 +13,9 @@ Flagged in `common/`, `events/` and `gui/`, for any value that starts with
 - `unrooted`, `unknown_extension`, `backslash`, `whitespace`: a path that
   doesn't start at `gfx/`, has an unknown extension, uses `\`, or has spaces
   around it inside its quotes;
-- `undeclared`: a mod entity (plain or `REPLACE:`, with its `INJECT:`s) that
-  declares no art in a field its type needs (see *Declarations checked*).
+- `undeclared`: a mod entity (its last `REPLACE:`, else a plain definition
+  with its `INJECT:`s) that declares no art in a field its type needs (see
+  *Declarations checked*).
 
 The engine logs a miss only when it first renders the asset. Vanilla comes
 from the install when there is one, else from
@@ -46,9 +47,13 @@ _None._
 
 ## Declarations checked
 
-Each mod entity in these `common/` folders must declare the field. An entity
-the mod only `INJECT:`s into is vanilla's. Why each is checked, and the types
-and fields left out, are in `texture_reference_audit.py`'s docstring.
+Each mod entity in these `common/` folders must declare the field. A
+`REPLACE:` counts alone (every `INJECT:` applies before it and is lost); an
+entity the mod only `INJECT:`s into is vanilla's. Only `buildings` and
+`static_modifiers` have a log line behind them; the rest are vanilla
+convention, and an entity that is never shown opts out with a tag. Why each
+is checked, and the types and fields left out, are in
+`texture_reference_audit.py`'s docstring.
 
 - `acceptance_statuses`: `background`, `large_icon`, `small_icon`
 - `ai_strategic_region_stance_types`: `icon`
