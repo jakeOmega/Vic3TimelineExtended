@@ -1,0 +1,139 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: shared triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# (slice 6). Full Colonies only. The per-slot and per-location triggers are
+# generated (common/scripted_triggers/sr_fleets_generated.txt, from
+# scripts/generators/gen_space_fleets.py).
+# ============================================================================
+
+# State scope. The state is under its owner's control (design § 5.1). Vanilla
+# keeps buildings working in an occupied state, so this test is the only thing
+# that stops Space Command building, the Orbital Battlestation fighting, and
+# (6d) the batteries firing and the launch site launching, in a state its owner
+# doesn't control. Every read of those buildings goes through it.
+sr_state_held_by_owner = {
+	controller = owner
+}
+
+# Country scope. It has a Space Command, anywhere (its levels count only in the
+# states it controls: sr_sc_rate).
+sr_has_space_command = {
+	any_scope_building = {
+		is_building_type = building_space_command
+	}
+}
+
+# Country scope. A fleet power (design § 4): a fleet, or a Space Command to
+# build one, under Full Colonies. The monthly steps walk only these, through
+# the global list sr_fleet_powers.
+sr_fleet_power = {
+	sr_colonies_full_enabled = yes
+	OR = {
+		sr_fl_has_any = yes
+		sr_has_space_command = yes
+	}
+}
+
+# Country scope, Space Command's can_build_government: a player's government
+# always may; an AI's up to sr_sc_ai_cap levels counting those queued, while it
+# is a top-three space power, out of default, with a positive weekly income
+# (design § 14).
+sr_sc_may_build_government = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_sc_ai_cap_tt
+			sr_ai_should_participate = yes
+			in_default = no
+			net_fixed_income > 0
+			sr_sc_queued_levels < sr_sc_ai_cap
+		}
+	}
+}
+
+# Country scope. The ship_construction self-check's subject (design § 18): a
+# Space Command at half staff or more in a state its owner controls.
+sr_sc_qualifies = {
+	any_scope_building = {
+		is_building_type = building_space_command
+		occupancy >= 0.5
+		state = { sr_state_held_by_owner = yes }
+	}
+}
+
+# ---- Combat (6b; sr_fleet_combat_effects.txt) -------------------------------------------------
+# Country scope, the attacker. A world it may close in on (KEY): claimed, not
+# ruined, and free (§ 9.5), or held by a country at war with it and not
+# occupied, or occupied by a country at war with it (a liberation).
+sr_site_hostile_target = {
+	has_global_variable = sr_colony_$KEY$
+	NOT = { has_global_variable = sr_site_ruined_$KEY$ }
+	OR = {
+		has_global_variable = sr_site_free_$KEY$
+		AND = {
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			global_var:sr_site_holder_$KEY$ ?= { has_war_with = prev }
+		}
+		AND = {
+			has_global_variable = sr_site_occupier_$KEY$
+			global_var:sr_site_occupier_$KEY$ ?= { has_war_with = prev }
+		}
+	}
+}
+
+# Country scope, a power at the location being fought over (its sr_cb_* record
+# standing). It fought this month: it lost strength, or its enemies did.
+sr_cb_fought = {
+	has_variable = sr_cb_present
+	OR = {
+		AND = {
+			has_variable = sr_cb_lost
+			var:sr_cb_lost > 0
+		}
+		sr_cb_enemy_lost > 0
+	}
+}
+
+# It holds orbit there: stationed or standing off (a blockade's test, § 8).
+sr_cb_holds_orbit = {
+	has_variable = sr_cb_present
+	sr_cb_hold_value > 0
+}
+
+# It closes in to destroy the world KEY with its fire on defences above the
+# Defences' own, and no hostile fleet is stationed against it (§ 9.3).
+sr_cb_destroys = {
+	has_variable = sr_cb_dfd_$KEY$
+	var:sr_cb_dfd_$KEY$ > sr_site_def_fire_$KEY$
+	sr_cb_hs_value <= 0
+}
+
+# It closes in to seize the world KEY with marines above its garrison and
+# militia, and no hostile fleet is stationed against it (§ 9.1).
+sr_cb_seizes = {
+	has_variable = sr_cb_mar_$KEY$
+	var:sr_cb_mar_$KEY$ > sr_site_garrison_need_$KEY$
+	sr_cb_hs_value <= 0
+}
+
+# Country scope. An Orbital Battlestation, and one in a state it controls,
+# which alone fights for it (§ 7.5, § 5.1).
+sr_has_battlestation = {
+	any_scope_building = {
+		is_building_type = building_orbital_battlestation
+	}
+}
+
+sr_battlestation_held = {
+	any_scope_building = {
+		is_building_type = building_orbital_battlestation
+		state = { sr_state_held_by_owner = yes }
+	}
+}
+
+# Country scope. A party to the outer-space convention (6c): no one yet, so the
+# prices of force are single until the convention exists.
+sr_colony_convention_party = {
+	always = no
+}

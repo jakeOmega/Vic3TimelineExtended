@@ -23,6 +23,10 @@ DISPLAY = os.path.join(REPO, "common", "script_values", "space_race_display_valu
 SITES_DISPLAY = os.path.join(REPO, "common", "script_values", "sr_sites_display_generated.txt")
 # The per-world and per-slot rows that read them (gen_solar_sites.py too).
 SITES_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
+# The fleets (slice 6): a hand-written file of panel figures and a generated one.
+FLEETS_DISPLAY = (os.path.join(REPO, "common", "script_values", "sr_fleet_display_values.txt"),
+                  os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
+FLEETS_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")
 CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "space_race_custom_loc.txt")
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -261,9 +265,10 @@ class FlagTest(unittest.TestCase):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         # two live sections per milestone, solar colonization's Our Colonies,
         # Colony Fleets, Settlers, Colony Modules, Colony Autonomy and Solar
-        # System, the shared reference, and the Space Race tab's Space Powers
-        # and Orbit
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 9)
+        # System, the shared reference, the Space Race tab's Space Powers and
+        # Orbit, and under Full Colonies Space Command, Fleets, Locations and
+        # Colony Defences (slice 6)
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 13)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -818,9 +823,10 @@ class DisplayValuesTest(unittest.TestCase):
         cls.values = _read(DISPLAY)
         cls.names = set(re.findall(r"(?m)^(sr_disp_\w+) = \{", cls.values))
         cls.site_names = set(re.findall(r"(?m)^(sr_disp_\w+) = \{", _read(SITES_DISPLAY)))
+        cls.site_names |= set(re.findall(r"(?m)^(sr_disp_\w+) = \{", "\n".join(_read(p) for p in FLEETS_DISPLAY)))
 
     def test_every_value_the_panel_reads_exists(self):
-        used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)", _read(GUI) + _read(SITES_ROWS)))
+        used = set(re.findall(r"ScriptValue\('(sr_disp_\w+)'\)", _read(GUI) + _read(SITES_ROWS) + _read(FLEETS_ROWS)))
         for key in re.findall(r"ScriptValue\('(sr_disp_\w+)'\)",
                               "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))):
             used.add(key)
@@ -860,7 +866,7 @@ class DisplayValuesTest(unittest.TestCase):
     def test_no_value_is_read_by_script(self):
         for sub in ("common", "events"):
             for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
-                if os.path.samefile(path, DISPLAY) or os.path.samefile(path, SITES_DISPLAY):
+                if any(os.path.samefile(path, p) for p in (DISPLAY, SITES_DISPLAY, *FLEETS_DISPLAY)):
                     continue
                 hit = re.search(r"\bsr_disp_\w+", _strip_comments(_read(path)))
                 self.assertIsNone(hit, f"{path} reads {hit and hit.group(0)}")

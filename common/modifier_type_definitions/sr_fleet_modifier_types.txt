@@ -1,0 +1,16 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: modifier types (fleets design § 5)
+# ============================================================================
+# Script-only state types: the engine consumes nothing, and script_only does
+# not hide them from tooltips (barracks_training_modifier_types.txt), so a
+# method's tooltip and the state's modifiers show what a level does. The
+# script sums them over the states their owner controls.
+
+# Fleet strength Space Command builds a month (sr_space_command_pms.txt), read
+# by sr_sc_rate (sr_fleet_values.txt). Workforce-scaled: staffing is in it.
+state_sr_ship_construction_add = {
+	color = good
+	percent = no
+	decimals = 1
+	script_only = yes
+}

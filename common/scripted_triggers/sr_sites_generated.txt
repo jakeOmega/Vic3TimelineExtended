@@ -120,6 +120,7 @@ sr_sites_inner_unclaimed = {
 #   sr_cf_beaten_<key>      a fleet already on its way lands no later than ours would
 sr_cf_targetable_valles_marineris = {
 	NOT = { has_global_variable = sr_colony_valles_marineris }
+	NOT = { has_global_variable = sr_site_ruined_valles_marineris }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -139,6 +140,7 @@ sr_cf_beaten_valles_marineris = {
 }
 sr_cf_targetable_olympus_mons = {
 	NOT = { has_global_variable = sr_colony_olympus_mons }
+	NOT = { has_global_variable = sr_site_ruined_olympus_mons }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -158,6 +160,7 @@ sr_cf_beaten_olympus_mons = {
 }
 sr_cf_targetable_hellas_planitia = {
 	NOT = { has_global_variable = sr_colony_hellas_planitia }
+	NOT = { has_global_variable = sr_site_ruined_hellas_planitia }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -177,6 +180,7 @@ sr_cf_beaten_hellas_planitia = {
 }
 sr_cf_targetable_utopia_planitia = {
 	NOT = { has_global_variable = sr_colony_utopia_planitia }
+	NOT = { has_global_variable = sr_site_ruined_utopia_planitia }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -196,6 +200,7 @@ sr_cf_beaten_utopia_planitia = {
 }
 sr_cf_targetable_arcadia_planitia = {
 	NOT = { has_global_variable = sr_colony_arcadia_planitia }
+	NOT = { has_global_variable = sr_site_ruined_arcadia_planitia }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -215,6 +220,7 @@ sr_cf_beaten_arcadia_planitia = {
 }
 sr_cf_targetable_ceres = {
 	NOT = { has_global_variable = sr_colony_ceres }
+	NOT = { has_global_variable = sr_site_ruined_ceres }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -234,6 +240,7 @@ sr_cf_beaten_ceres = {
 }
 sr_cf_targetable_vesta = {
 	NOT = { has_global_variable = sr_colony_vesta }
+	NOT = { has_global_variable = sr_site_ruined_vesta }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -253,6 +260,7 @@ sr_cf_beaten_vesta = {
 }
 sr_cf_targetable_psyche = {
 	NOT = { has_global_variable = sr_colony_psyche }
+	NOT = { has_global_variable = sr_site_ruined_psyche }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -272,6 +280,7 @@ sr_cf_beaten_psyche = {
 }
 sr_cf_targetable_pallas = {
 	NOT = { has_global_variable = sr_colony_pallas }
+	NOT = { has_global_variable = sr_site_ruined_pallas }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -291,6 +300,7 @@ sr_cf_beaten_pallas = {
 }
 sr_cf_targetable_hygiea = {
 	NOT = { has_global_variable = sr_colony_hygiea }
+	NOT = { has_global_variable = sr_site_ruined_hygiea }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 1 }
 		sr_colonies_contested_enabled = yes
@@ -310,6 +320,7 @@ sr_cf_beaten_hygiea = {
 }
 sr_cf_targetable_io = {
 	NOT = { has_global_variable = sr_colony_io }
+	NOT = { has_global_variable = sr_site_ruined_io }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -329,6 +340,7 @@ sr_cf_beaten_io = {
 }
 sr_cf_targetable_europa = {
 	NOT = { has_global_variable = sr_colony_europa }
+	NOT = { has_global_variable = sr_site_ruined_europa }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -348,6 +360,7 @@ sr_cf_beaten_europa = {
 }
 sr_cf_targetable_ganymede = {
 	NOT = { has_global_variable = sr_colony_ganymede }
+	NOT = { has_global_variable = sr_site_ruined_ganymede }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -367,6 +380,7 @@ sr_cf_beaten_ganymede = {
 }
 sr_cf_targetable_callisto = {
 	NOT = { has_global_variable = sr_colony_callisto }
+	NOT = { has_global_variable = sr_site_ruined_callisto }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -386,6 +400,7 @@ sr_cf_beaten_callisto = {
 }
 sr_cf_targetable_himalia = {
 	NOT = { has_global_variable = sr_colony_himalia }
+	NOT = { has_global_variable = sr_site_ruined_himalia }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -405,6 +420,7 @@ sr_cf_beaten_himalia = {
 }
 sr_cf_targetable_amalthea = {
 	NOT = { has_global_variable = sr_colony_amalthea }
+	NOT = { has_global_variable = sr_site_ruined_amalthea }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -424,6 +440,7 @@ sr_cf_beaten_amalthea = {
 }
 sr_cf_targetable_venus = {
 	NOT = { has_global_variable = sr_colony_venus }
+	NOT = { has_global_variable = sr_site_ruined_venus }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 2 }
 		sr_colonies_contested_enabled = yes
@@ -443,6 +460,7 @@ sr_cf_beaten_venus = {
 }
 sr_cf_targetable_mercury = {
 	NOT = { has_global_variable = sr_colony_mercury }
+	NOT = { has_global_variable = sr_site_ruined_mercury }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
 		AND = {
@@ -468,6 +486,7 @@ sr_cf_beaten_mercury = {
 }
 sr_cf_targetable_titan = {
 	NOT = { has_global_variable = sr_colony_titan }
+	NOT = { has_global_variable = sr_site_ruined_titan }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
 		AND = {
@@ -493,6 +512,7 @@ sr_cf_beaten_titan = {
 }
 sr_cf_targetable_enceladus = {
 	NOT = { has_global_variable = sr_colony_enceladus }
+	NOT = { has_global_variable = sr_site_ruined_enceladus }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
 		AND = {
@@ -518,6 +538,7 @@ sr_cf_beaten_enceladus = {
 }
 sr_cf_targetable_rhea = {
 	NOT = { has_global_variable = sr_colony_rhea }
+	NOT = { has_global_variable = sr_site_ruined_rhea }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
 		AND = {
@@ -543,6 +564,7 @@ sr_cf_beaten_rhea = {
 }
 sr_cf_targetable_mimas = {
 	NOT = { has_global_variable = sr_colony_mimas }
+	NOT = { has_global_variable = sr_site_ruined_mimas }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
 		AND = {
@@ -568,6 +590,7 @@ sr_cf_beaten_mimas = {
 }
 sr_cf_targetable_iapetus = {
 	NOT = { has_global_variable = sr_colony_iapetus }
+	NOT = { has_global_variable = sr_site_ruined_iapetus }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 3 }
 		AND = {
@@ -593,6 +616,7 @@ sr_cf_beaten_iapetus = {
 }
 sr_cf_targetable_titania = {
 	NOT = { has_global_variable = sr_colony_titania }
+	NOT = { has_global_variable = sr_site_ruined_titania }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
 		AND = {
@@ -618,6 +642,7 @@ sr_cf_beaten_titania = {
 }
 sr_cf_targetable_oberon = {
 	NOT = { has_global_variable = sr_colony_oberon }
+	NOT = { has_global_variable = sr_site_ruined_oberon }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
 		AND = {
@@ -643,6 +668,7 @@ sr_cf_beaten_oberon = {
 }
 sr_cf_targetable_miranda = {
 	NOT = { has_global_variable = sr_colony_miranda }
+	NOT = { has_global_variable = sr_site_ruined_miranda }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
 		AND = {
@@ -668,6 +694,7 @@ sr_cf_beaten_miranda = {
 }
 sr_cf_targetable_ariel = {
 	NOT = { has_global_variable = sr_colony_ariel }
+	NOT = { has_global_variable = sr_site_ruined_ariel }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
 		AND = {
@@ -693,6 +720,7 @@ sr_cf_beaten_ariel = {
 }
 sr_cf_targetable_triton = {
 	NOT = { has_global_variable = sr_colony_triton }
+	NOT = { has_global_variable = sr_site_ruined_triton }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
 		AND = {
@@ -718,6 +746,7 @@ sr_cf_beaten_triton = {
 }
 sr_cf_targetable_proteus = {
 	NOT = { has_global_variable = sr_colony_proteus }
+	NOT = { has_global_variable = sr_site_ruined_proteus }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 4 }
 		AND = {
@@ -743,6 +772,7 @@ sr_cf_beaten_proteus = {
 }
 sr_cf_targetable_pluto = {
 	NOT = { has_global_variable = sr_colony_pluto }
+	NOT = { has_global_variable = sr_site_ruined_pluto }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
 		AND = {
@@ -768,6 +798,7 @@ sr_cf_beaten_pluto = {
 }
 sr_cf_targetable_eris = {
 	NOT = { has_global_variable = sr_colony_eris }
+	NOT = { has_global_variable = sr_site_ruined_eris }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
 		AND = {
@@ -793,6 +824,7 @@ sr_cf_beaten_eris = {
 }
 sr_cf_targetable_makemake = {
 	NOT = { has_global_variable = sr_colony_makemake }
+	NOT = { has_global_variable = sr_site_ruined_makemake }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
 		AND = {
@@ -818,6 +850,7 @@ sr_cf_beaten_makemake = {
 }
 sr_cf_targetable_haumea = {
 	NOT = { has_global_variable = sr_colony_haumea }
+	NOT = { has_global_variable = sr_site_ruined_haumea }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
 		AND = {
@@ -843,6 +876,7 @@ sr_cf_beaten_haumea = {
 }
 sr_cf_targetable_sedna = {
 	NOT = { has_global_variable = sr_colony_sedna }
+	NOT = { has_global_variable = sr_site_ruined_sedna }
 	OR = {
 		AND = { NOT = { sr_colonies_contested_enabled = yes } sr_current_colonization_stage >= 5 }
 		AND = {

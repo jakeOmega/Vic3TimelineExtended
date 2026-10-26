@@ -368,3 +368,137 @@ te_debug_space_race.5 = { # REVIEWED 2026-10-26: console-only test event (`event
 		sr_aut_debug_abandon_ask = yes
 	}
 }
+
+te_debug_space_race.6 = { # REVIEWED 2026-10-26: console-only test event (`event te_debug_space_race.6`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/orbital_battlestation_construction.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.6.t
+	desc = te_debug_space_race.6.d
+	flavor = te_debug_space_race.6.f
+
+	# Our fleets and every location's forces: TE_SR_FLEET lines.
+	option = {
+		name = te_debug_space_race.6.a
+		default_option = yes
+		sr_fl_debug_log_all = yes
+		sr_loc_debug_log = yes
+	}
+
+	# 100 strength of each role at Earth, in our home fleet, propellant and
+	# supply full.
+	option = {
+		name = te_debug_space_race.6.b
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_find_home = yes
+		if = {
+			limit = { local_var:sr_fl_n > 0 }
+			sr_fl_by_local = { DO = debug_strength }
+			sr_fl_by_local = { DO = fill }
+		}
+		sr_loc_rebuild = yes
+	}
+
+	# Every fleet of ours in transit lands now.
+	option = {
+		name = te_debug_space_race.6.c
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_each_slot = { DO = debug_land }
+		sr_loc_rebuild = yes
+	}
+
+	# Propellant and supply full, every fleet of ours.
+	option = {
+		name = te_debug_space_race.6.e
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_each_slot = { DO = fill }
+	}
+
+	# Our fleets' drive one up (the nation's is unchanged: a docked fleet refits
+	# back to it).
+	option = {
+		name = te_debug_space_race.6.g
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_fl_each_slot = { DO = debug_drive }
+	}
+
+	# 6b: our first colony's integrity to 0; the month's combat now.
+	option = {
+		name = te_debug_space_race.6.h
+		trigger = {
+			sr_colonies_full_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		sr_site_by_index = { DO = debug_integrity }
+	}
+	option = {
+		name = te_debug_space_race.6.i
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_combat_global_monthly = yes
+	}
+
+	# 6b: our first colony occupied by the strongest power we are at war with, or
+	# returned if it is occupied.
+	option = {
+		name = te_debug_space_race.6.j
+		trigger = {
+			sr_colonies_full_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		sr_site_by_index = { DO = debug_occupy }
+	}
+
+	# The upkeep_inputs probe (design § 18): the generic building_goods_input_mult,
+	# then, in a second run, the three good-specific multipliers, at +50% on our
+	# Space Command (or Space Program); te_debug_space_race.7 logs the after
+	# figure fourteen days later and removes it.
+	option = {
+		name = te_debug_space_race.6.k
+		trigger = {
+			NOT = { has_variable = sr_fl_probe_candidate }
+			OR = {
+				sr_has_space_command = yes
+				sr_has_space_program = yes
+			}
+		}
+		sr_fl_probe_upkeep = { CANDIDATE = sr_fleet_upkeep CODE = 1 }
+	}
+	option = {
+		name = te_debug_space_race.6.l
+		trigger = {
+			NOT = { has_variable = sr_fl_probe_candidate }
+			OR = {
+				sr_has_space_command = yes
+				sr_has_space_program = yes
+			}
+		}
+		sr_fl_probe_upkeep = { CANDIDATE = sr_fleet_upkeep_goods CODE = 2 }
+	}
+}
+
+# The upkeep_inputs probe's end (te_debug_space_race.6 options k and l): the after
+# line and the candidate removed. Hidden.
+te_debug_space_race.7 = { # REVIEWED 2026-10-26: fired only by the console's probe (sr_fl_probe_upkeep), fourteen days on
+	type = country_event
+	hidden = yes
+
+	trigger = { has_variable = sr_fl_probe_candidate }
+
+	immediate = {
+		if = {
+			limit = { var:sr_fl_probe_candidate = 1 }
+			sr_fl_probe_upkeep_end = { CANDIDATE = sr_fleet_upkeep }
+		}
+		else = {
+			sr_fl_probe_upkeep_end = { CANDIDATE = sr_fleet_upkeep_goods }
+		}
+	}
+}

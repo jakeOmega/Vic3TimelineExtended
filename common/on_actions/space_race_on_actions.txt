@@ -18,6 +18,12 @@ space_race_on_action = {
 			limit = { has_technology_researched = asteroid_mining }
 			sr_ebase_refresh = yes
 		}
+		# Fleets (solar colonization slice 6, sr_fleet_effects.txt): a fleet
+		# power's month under Full Colonies, Space Command's construction first.
+		if = {
+			limit = { sr_fleet_power = yes }
+			sr_fl_country_month = yes
+		}
 		sr_cleanup_inactive_space_race_milestones = yes
 		sr_monthly_colony_discoveries = yes
 		# The site_receiver_entry self-check (sr_site_effects.txt).

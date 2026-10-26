@@ -929,7 +929,7 @@ sr_emig_prio_weight_valles_marineris = {
 }
 sr_emig_weight_valles_marineris = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = sr_emig_prio_weight_valles_marineris multiply = sr_site_free_room_valles_marineris }
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } value = sr_emig_prio_weight_valles_marineris multiply = sr_site_free_room_valles_marineris }
 }
 sr_site_base_room_olympus_mons = { value = 40000 }
 sr_site_room_olympus_mons = {
@@ -964,7 +964,7 @@ sr_emig_prio_weight_olympus_mons = {
 }
 sr_emig_weight_olympus_mons = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = sr_emig_prio_weight_olympus_mons multiply = sr_site_free_room_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } value = sr_emig_prio_weight_olympus_mons multiply = sr_site_free_room_olympus_mons }
 }
 sr_site_base_room_hellas_planitia = { value = 50000 }
 sr_site_room_hellas_planitia = {
@@ -999,7 +999,7 @@ sr_emig_prio_weight_hellas_planitia = {
 }
 sr_emig_weight_hellas_planitia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = sr_emig_prio_weight_hellas_planitia multiply = sr_site_free_room_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } value = sr_emig_prio_weight_hellas_planitia multiply = sr_site_free_room_hellas_planitia }
 }
 sr_site_base_room_utopia_planitia = { value = 50000 }
 sr_site_room_utopia_planitia = {
@@ -1034,7 +1034,7 @@ sr_emig_prio_weight_utopia_planitia = {
 }
 sr_emig_weight_utopia_planitia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = sr_emig_prio_weight_utopia_planitia multiply = sr_site_free_room_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } value = sr_emig_prio_weight_utopia_planitia multiply = sr_site_free_room_utopia_planitia }
 }
 sr_site_base_room_arcadia_planitia = { value = 40000 }
 sr_site_room_arcadia_planitia = {
@@ -1069,7 +1069,7 @@ sr_emig_prio_weight_arcadia_planitia = {
 }
 sr_emig_weight_arcadia_planitia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = sr_emig_prio_weight_arcadia_planitia multiply = sr_site_free_room_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } value = sr_emig_prio_weight_arcadia_planitia multiply = sr_site_free_room_arcadia_planitia }
 }
 sr_site_base_room_ceres = { value = 40000 }
 sr_site_room_ceres = {
@@ -1104,7 +1104,7 @@ sr_emig_prio_weight_ceres = {
 }
 sr_emig_weight_ceres = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_ceres ?= this } value = sr_emig_prio_weight_ceres multiply = sr_site_free_room_ceres }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } value = sr_emig_prio_weight_ceres multiply = sr_site_free_room_ceres }
 }
 sr_site_base_room_vesta = { value = 25000 }
 sr_site_room_vesta = {
@@ -1139,7 +1139,7 @@ sr_emig_prio_weight_vesta = {
 }
 sr_emig_weight_vesta = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_vesta ?= this } value = sr_emig_prio_weight_vesta multiply = sr_site_free_room_vesta }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } value = sr_emig_prio_weight_vesta multiply = sr_site_free_room_vesta }
 }
 sr_site_base_room_psyche = { value = 20000 }
 sr_site_room_psyche = {
@@ -1174,7 +1174,7 @@ sr_emig_prio_weight_psyche = {
 }
 sr_emig_weight_psyche = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_psyche ?= this } value = sr_emig_prio_weight_psyche multiply = sr_site_free_room_psyche }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } value = sr_emig_prio_weight_psyche multiply = sr_site_free_room_psyche }
 }
 sr_site_base_room_pallas = { value = 20000 }
 sr_site_room_pallas = {
@@ -1209,7 +1209,7 @@ sr_emig_prio_weight_pallas = {
 }
 sr_emig_weight_pallas = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_pallas ?= this } value = sr_emig_prio_weight_pallas multiply = sr_site_free_room_pallas }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } value = sr_emig_prio_weight_pallas multiply = sr_site_free_room_pallas }
 }
 sr_site_base_room_hygiea = { value = 15000 }
 sr_site_room_hygiea = {
@@ -1244,7 +1244,7 @@ sr_emig_prio_weight_hygiea = {
 }
 sr_emig_weight_hygiea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = sr_emig_prio_weight_hygiea multiply = sr_site_free_room_hygiea }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } value = sr_emig_prio_weight_hygiea multiply = sr_site_free_room_hygiea }
 }
 sr_site_base_room_io = { value = 15000 }
 sr_site_room_io = {
@@ -1279,7 +1279,7 @@ sr_emig_prio_weight_io = {
 }
 sr_emig_weight_io = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_io ?= this } value = sr_emig_prio_weight_io multiply = sr_site_free_room_io }
+	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } value = sr_emig_prio_weight_io multiply = sr_site_free_room_io }
 }
 sr_site_base_room_europa = { value = 30000 }
 sr_site_room_europa = {
@@ -1314,7 +1314,7 @@ sr_emig_prio_weight_europa = {
 }
 sr_emig_weight_europa = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_europa ?= this } value = sr_emig_prio_weight_europa multiply = sr_site_free_room_europa }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } value = sr_emig_prio_weight_europa multiply = sr_site_free_room_europa }
 }
 sr_site_base_room_ganymede = { value = 40000 }
 sr_site_room_ganymede = {
@@ -1349,7 +1349,7 @@ sr_emig_prio_weight_ganymede = {
 }
 sr_emig_weight_ganymede = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = sr_emig_prio_weight_ganymede multiply = sr_site_free_room_ganymede }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } value = sr_emig_prio_weight_ganymede multiply = sr_site_free_room_ganymede }
 }
 sr_site_base_room_callisto = { value = 40000 }
 sr_site_room_callisto = {
@@ -1384,7 +1384,7 @@ sr_emig_prio_weight_callisto = {
 }
 sr_emig_weight_callisto = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_callisto ?= this } value = sr_emig_prio_weight_callisto multiply = sr_site_free_room_callisto }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } value = sr_emig_prio_weight_callisto multiply = sr_site_free_room_callisto }
 }
 sr_site_base_room_himalia = { value = 10000 }
 sr_site_room_himalia = {
@@ -1419,7 +1419,7 @@ sr_emig_prio_weight_himalia = {
 }
 sr_emig_weight_himalia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_himalia ?= this } value = sr_emig_prio_weight_himalia multiply = sr_site_free_room_himalia }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } value = sr_emig_prio_weight_himalia multiply = sr_site_free_room_himalia }
 }
 sr_site_base_room_amalthea = { value = 10000 }
 sr_site_room_amalthea = {
@@ -1454,7 +1454,7 @@ sr_emig_prio_weight_amalthea = {
 }
 sr_emig_weight_amalthea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = sr_emig_prio_weight_amalthea multiply = sr_site_free_room_amalthea }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } value = sr_emig_prio_weight_amalthea multiply = sr_site_free_room_amalthea }
 }
 sr_site_base_room_venus = { value = 30000 }
 sr_site_room_venus = {
@@ -1489,7 +1489,7 @@ sr_emig_prio_weight_venus = {
 }
 sr_emig_weight_venus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_venus ?= this } value = sr_emig_prio_weight_venus multiply = sr_site_free_room_venus }
+	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } value = sr_emig_prio_weight_venus multiply = sr_site_free_room_venus }
 }
 sr_site_base_room_mercury = { value = 25000 }
 sr_site_room_mercury = {
@@ -1524,7 +1524,7 @@ sr_emig_prio_weight_mercury = {
 }
 sr_emig_weight_mercury = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_mercury ?= this } value = sr_emig_prio_weight_mercury multiply = sr_site_free_room_mercury }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } value = sr_emig_prio_weight_mercury multiply = sr_site_free_room_mercury }
 }
 sr_site_base_room_titan = { value = 40000 }
 sr_site_room_titan = {
@@ -1559,7 +1559,7 @@ sr_emig_prio_weight_titan = {
 }
 sr_emig_weight_titan = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_titan ?= this } value = sr_emig_prio_weight_titan multiply = sr_site_free_room_titan }
+	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } value = sr_emig_prio_weight_titan multiply = sr_site_free_room_titan }
 }
 sr_site_base_room_enceladus = { value = 20000 }
 sr_site_room_enceladus = {
@@ -1594,7 +1594,7 @@ sr_emig_prio_weight_enceladus = {
 }
 sr_emig_weight_enceladus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = sr_emig_prio_weight_enceladus multiply = sr_site_free_room_enceladus }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } value = sr_emig_prio_weight_enceladus multiply = sr_site_free_room_enceladus }
 }
 sr_site_base_room_rhea = { value = 20000 }
 sr_site_room_rhea = {
@@ -1629,7 +1629,7 @@ sr_emig_prio_weight_rhea = {
 }
 sr_emig_weight_rhea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_rhea ?= this } value = sr_emig_prio_weight_rhea multiply = sr_site_free_room_rhea }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } value = sr_emig_prio_weight_rhea multiply = sr_site_free_room_rhea }
 }
 sr_site_base_room_mimas = { value = 10000 }
 sr_site_room_mimas = {
@@ -1664,7 +1664,7 @@ sr_emig_prio_weight_mimas = {
 }
 sr_emig_weight_mimas = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_mimas ?= this } value = sr_emig_prio_weight_mimas multiply = sr_site_free_room_mimas }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } } value = sr_emig_prio_weight_mimas multiply = sr_site_free_room_mimas }
 }
 sr_site_base_room_iapetus = { value = 15000 }
 sr_site_room_iapetus = {
@@ -1699,7 +1699,7 @@ sr_emig_prio_weight_iapetus = {
 }
 sr_emig_weight_iapetus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = sr_emig_prio_weight_iapetus multiply = sr_site_free_room_iapetus }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } } value = sr_emig_prio_weight_iapetus multiply = sr_site_free_room_iapetus }
 }
 sr_site_base_room_titania = { value = 20000 }
 sr_site_room_titania = {
@@ -1734,7 +1734,7 @@ sr_emig_prio_weight_titania = {
 }
 sr_emig_weight_titania = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_titania ?= this } value = sr_emig_prio_weight_titania multiply = sr_site_free_room_titania }
+	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } } value = sr_emig_prio_weight_titania multiply = sr_site_free_room_titania }
 }
 sr_site_base_room_oberon = { value = 20000 }
 sr_site_room_oberon = {
@@ -1769,7 +1769,7 @@ sr_emig_prio_weight_oberon = {
 }
 sr_emig_weight_oberon = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_oberon ?= this } value = sr_emig_prio_weight_oberon multiply = sr_site_free_room_oberon }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } } value = sr_emig_prio_weight_oberon multiply = sr_site_free_room_oberon }
 }
 sr_site_base_room_miranda = { value = 10000 }
 sr_site_room_miranda = {
@@ -1804,7 +1804,7 @@ sr_emig_prio_weight_miranda = {
 }
 sr_emig_weight_miranda = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_miranda ?= this } value = sr_emig_prio_weight_miranda multiply = sr_site_free_room_miranda }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } } value = sr_emig_prio_weight_miranda multiply = sr_site_free_room_miranda }
 }
 sr_site_base_room_ariel = { value = 15000 }
 sr_site_room_ariel = {
@@ -1839,7 +1839,7 @@ sr_emig_prio_weight_ariel = {
 }
 sr_emig_weight_ariel = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_ariel ?= this } value = sr_emig_prio_weight_ariel multiply = sr_site_free_room_ariel }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } value = sr_emig_prio_weight_ariel multiply = sr_site_free_room_ariel }
 }
 sr_site_base_room_triton = { value = 20000 }
 sr_site_room_triton = {
@@ -1874,7 +1874,7 @@ sr_emig_prio_weight_triton = {
 }
 sr_emig_weight_triton = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_triton ?= this } value = sr_emig_prio_weight_triton multiply = sr_site_free_room_triton }
+	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } value = sr_emig_prio_weight_triton multiply = sr_site_free_room_triton }
 }
 sr_site_base_room_proteus = { value = 10000 }
 sr_site_room_proteus = {
@@ -1909,7 +1909,7 @@ sr_emig_prio_weight_proteus = {
 }
 sr_emig_weight_proteus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_proteus ?= this } value = sr_emig_prio_weight_proteus multiply = sr_site_free_room_proteus }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } value = sr_emig_prio_weight_proteus multiply = sr_site_free_room_proteus }
 }
 sr_site_base_room_pluto = { value = 20000 }
 sr_site_room_pluto = {
@@ -1944,7 +1944,7 @@ sr_emig_prio_weight_pluto = {
 }
 sr_emig_weight_pluto = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_pluto ?= this } value = sr_emig_prio_weight_pluto multiply = sr_site_free_room_pluto }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } value = sr_emig_prio_weight_pluto multiply = sr_site_free_room_pluto }
 }
 sr_site_base_room_eris = { value = 10000 }
 sr_site_room_eris = {
@@ -1979,7 +1979,7 @@ sr_emig_prio_weight_eris = {
 }
 sr_emig_weight_eris = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_eris ?= this } value = sr_emig_prio_weight_eris multiply = sr_site_free_room_eris }
+	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } value = sr_emig_prio_weight_eris multiply = sr_site_free_room_eris }
 }
 sr_site_base_room_makemake = { value = 10000 }
 sr_site_room_makemake = {
@@ -2014,7 +2014,7 @@ sr_emig_prio_weight_makemake = {
 }
 sr_emig_weight_makemake = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_makemake ?= this } value = sr_emig_prio_weight_makemake multiply = sr_site_free_room_makemake }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } } value = sr_emig_prio_weight_makemake multiply = sr_site_free_room_makemake }
 }
 sr_site_base_room_haumea = { value = 10000 }
 sr_site_room_haumea = {
@@ -2049,7 +2049,7 @@ sr_emig_prio_weight_haumea = {
 }
 sr_emig_weight_haumea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_haumea ?= this } value = sr_emig_prio_weight_haumea multiply = sr_site_free_room_haumea }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } } value = sr_emig_prio_weight_haumea multiply = sr_site_free_room_haumea }
 }
 sr_site_base_room_sedna = { value = 10000 }
 sr_site_room_sedna = {
@@ -2084,7 +2084,7 @@ sr_emig_prio_weight_sedna = {
 }
 sr_emig_weight_sedna = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_sedna ?= this } value = sr_emig_prio_weight_sedna multiply = sr_site_free_room_sedna }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } } value = sr_emig_prio_weight_sedna multiply = sr_site_free_room_sedna }
 }
 
 # Country scope: the sum of THIS's emigration weights; the free room of the
@@ -2278,6 +2278,7 @@ sr_site_mult_b_valles_marineris = {
 	value = sr_site_lvl_b_value_valles_marineris
 	multiply = sr_site_staffing_valles_marineris
 	multiply = sr_site_charter_factor_valles_marineris
+	if = { limit = { has_global_variable = sr_site_blockaded_valles_marineris } multiply = 0 }
 }
 sr_site_spec_built_valles_marineris = { value = sr_site_lvl_a_value_valles_marineris add = sr_site_lvl_b_value_valles_marineris }
 sr_site_generic_built_valles_marineris = {
@@ -2362,6 +2363,7 @@ sr_site_mult_b_olympus_mons = {
 	value = sr_site_lvl_b_value_olympus_mons
 	multiply = sr_site_staffing_olympus_mons
 	multiply = sr_site_charter_factor_olympus_mons
+	if = { limit = { has_global_variable = sr_site_blockaded_olympus_mons } multiply = 0 }
 }
 sr_site_spec_built_olympus_mons = { value = sr_site_lvl_a_value_olympus_mons add = sr_site_lvl_b_value_olympus_mons }
 sr_site_generic_built_olympus_mons = {
@@ -2525,11 +2527,13 @@ sr_site_mult_a_utopia_planitia = {
 	value = sr_site_lvl_a_value_utopia_planitia
 	multiply = sr_site_staffing_utopia_planitia
 	multiply = sr_site_charter_factor_utopia_planitia
+	if = { limit = { has_global_variable = sr_site_blockaded_utopia_planitia } multiply = 0 }
 }
 sr_site_mult_b_utopia_planitia = {
 	value = sr_site_lvl_b_value_utopia_planitia
 	multiply = sr_site_staffing_utopia_planitia
 	multiply = sr_site_charter_factor_utopia_planitia
+	if = { limit = { has_global_variable = sr_site_blockaded_utopia_planitia } multiply = 0 }
 }
 sr_site_spec_built_utopia_planitia = { value = sr_site_lvl_a_value_utopia_planitia add = sr_site_lvl_b_value_utopia_planitia }
 sr_site_generic_built_utopia_planitia = {
@@ -2693,6 +2697,7 @@ sr_site_mult_a_ceres = {
 	value = sr_site_lvl_a_value_ceres
 	multiply = sr_site_staffing_ceres
 	multiply = sr_site_charter_factor_ceres
+	if = { limit = { has_global_variable = sr_site_blockaded_ceres } multiply = 0 }
 }
 sr_site_mult_b_ceres = {
 	value = sr_site_lvl_b_value_ceres
@@ -2777,6 +2782,7 @@ sr_site_mult_a_vesta = {
 	value = sr_site_lvl_a_value_vesta
 	multiply = sr_site_staffing_vesta
 	multiply = sr_site_charter_factor_vesta
+	if = { limit = { has_global_variable = sr_site_blockaded_vesta } multiply = 0 }
 }
 sr_site_mult_b_vesta = {
 	value = sr_site_lvl_b_value_vesta
@@ -2861,6 +2867,7 @@ sr_site_mult_a_psyche = {
 	value = sr_site_lvl_a_value_psyche
 	multiply = sr_site_staffing_psyche
 	multiply = sr_site_charter_factor_psyche
+	if = { limit = { has_global_variable = sr_site_blockaded_psyche } multiply = 0 }
 }
 sr_site_mult_b_psyche = {
 	value = sr_site_lvl_b_value_psyche
@@ -2945,6 +2952,7 @@ sr_site_mult_a_pallas = {
 	value = sr_site_lvl_a_value_pallas
 	multiply = sr_site_staffing_pallas
 	multiply = sr_site_charter_factor_pallas
+	if = { limit = { has_global_variable = sr_site_blockaded_pallas } multiply = 0 }
 }
 sr_site_mult_b_pallas = {
 	value = sr_site_lvl_b_value_pallas
@@ -3029,11 +3037,13 @@ sr_site_mult_a_hygiea = {
 	value = sr_site_lvl_a_value_hygiea
 	multiply = sr_site_staffing_hygiea
 	multiply = sr_site_charter_factor_hygiea
+	if = { limit = { has_global_variable = sr_site_blockaded_hygiea } multiply = 0 }
 }
 sr_site_mult_b_hygiea = {
 	value = sr_site_lvl_b_value_hygiea
 	multiply = sr_site_staffing_hygiea
 	multiply = sr_site_charter_factor_hygiea
+	if = { limit = { has_global_variable = sr_site_blockaded_hygiea } multiply = 0 }
 }
 sr_site_spec_built_hygiea = { value = sr_site_lvl_a_value_hygiea add = sr_site_lvl_b_value_hygiea }
 sr_site_generic_built_hygiea = {
@@ -3113,6 +3123,7 @@ sr_site_mult_a_io = {
 	value = sr_site_lvl_a_value_io
 	multiply = sr_site_staffing_io
 	multiply = sr_site_charter_factor_io
+	if = { limit = { has_global_variable = sr_site_blockaded_io } multiply = 0 }
 }
 sr_site_mult_b_io = {
 	value = sr_site_lvl_b_value_io
@@ -3454,6 +3465,7 @@ sr_site_mult_b_himalia = {
 	value = sr_site_lvl_b_value_himalia
 	multiply = sr_site_staffing_himalia
 	multiply = sr_site_charter_factor_himalia
+	if = { limit = { has_global_variable = sr_site_blockaded_himalia } multiply = 0 }
 }
 sr_site_spec_built_himalia = { value = sr_site_lvl_a_value_himalia add = sr_site_lvl_b_value_himalia }
 sr_site_generic_built_himalia = {
@@ -3538,6 +3550,7 @@ sr_site_mult_b_amalthea = {
 	value = sr_site_lvl_b_value_amalthea
 	multiply = sr_site_staffing_amalthea
 	multiply = sr_site_charter_factor_amalthea
+	if = { limit = { has_global_variable = sr_site_blockaded_amalthea } multiply = 0 }
 }
 sr_site_spec_built_amalthea = { value = sr_site_lvl_a_value_amalthea add = sr_site_lvl_b_value_amalthea }
 sr_site_generic_built_amalthea = {
@@ -3622,6 +3635,7 @@ sr_site_mult_b_venus = {
 	value = sr_site_lvl_b_value_venus
 	multiply = sr_site_staffing_venus
 	multiply = sr_site_charter_factor_venus
+	if = { limit = { has_global_variable = sr_site_blockaded_venus } multiply = 0 }
 }
 sr_site_spec_built_venus = { value = sr_site_lvl_a_value_venus add = sr_site_lvl_b_value_venus }
 sr_site_generic_built_venus = {
@@ -3701,11 +3715,13 @@ sr_site_mult_a_mercury = {
 	value = sr_site_lvl_a_value_mercury
 	multiply = sr_site_staffing_mercury
 	multiply = sr_site_charter_factor_mercury
+	if = { limit = { has_global_variable = sr_site_blockaded_mercury } multiply = 0 }
 }
 sr_site_mult_b_mercury = {
 	value = sr_site_lvl_b_value_mercury
 	multiply = sr_site_staffing_mercury
 	multiply = sr_site_charter_factor_mercury
+	if = { limit = { has_global_variable = sr_site_blockaded_mercury } multiply = 0 }
 }
 sr_site_spec_built_mercury = { value = sr_site_lvl_a_value_mercury add = sr_site_lvl_b_value_mercury }
 sr_site_generic_built_mercury = {
@@ -3785,6 +3801,7 @@ sr_site_mult_a_titan = {
 	value = sr_site_lvl_a_value_titan
 	multiply = sr_site_staffing_titan
 	multiply = sr_site_charter_factor_titan
+	if = { limit = { has_global_variable = sr_site_blockaded_titan } multiply = 0 }
 }
 sr_site_mult_b_titan = {
 	value = sr_site_lvl_b_value_titan
@@ -3874,6 +3891,7 @@ sr_site_mult_b_enceladus = {
 	value = sr_site_lvl_b_value_enceladus
 	multiply = sr_site_staffing_enceladus
 	multiply = sr_site_charter_factor_enceladus
+	if = { limit = { has_global_variable = sr_site_blockaded_enceladus } multiply = 0 }
 }
 sr_site_spec_built_enceladus = { value = sr_site_lvl_a_value_enceladus add = sr_site_lvl_b_value_enceladus }
 sr_site_generic_built_enceladus = {
@@ -3953,6 +3971,7 @@ sr_site_mult_a_rhea = {
 	value = sr_site_lvl_a_value_rhea
 	multiply = sr_site_staffing_rhea
 	multiply = sr_site_charter_factor_rhea
+	if = { limit = { has_global_variable = sr_site_blockaded_rhea } multiply = 0 }
 }
 sr_site_mult_b_rhea = {
 	value = sr_site_lvl_b_value_rhea
@@ -4126,6 +4145,7 @@ sr_site_mult_b_iapetus = {
 	value = sr_site_lvl_b_value_iapetus
 	multiply = sr_site_staffing_iapetus
 	multiply = sr_site_charter_factor_iapetus
+	if = { limit = { has_global_variable = sr_site_blockaded_iapetus } multiply = 0 }
 }
 sr_site_spec_built_iapetus = { value = sr_site_lvl_a_value_iapetus add = sr_site_lvl_b_value_iapetus }
 sr_site_generic_built_iapetus = {
@@ -4205,6 +4225,7 @@ sr_site_mult_a_titania = {
 	value = sr_site_lvl_a_value_titania
 	multiply = sr_site_staffing_titania
 	multiply = sr_site_charter_factor_titania
+	if = { limit = { has_global_variable = sr_site_blockaded_titania } multiply = 0 }
 }
 sr_site_mult_b_titania = {
 	value = sr_site_lvl_b_value_titania
@@ -4462,6 +4483,7 @@ sr_site_mult_b_ariel = {
 	value = sr_site_lvl_b_value_ariel
 	multiply = sr_site_staffing_ariel
 	multiply = sr_site_charter_factor_ariel
+	if = { limit = { has_global_variable = sr_site_blockaded_ariel } multiply = 0 }
 }
 sr_site_spec_built_ariel = { value = sr_site_lvl_a_value_ariel add = sr_site_lvl_b_value_ariel }
 sr_site_generic_built_ariel = {
@@ -4541,6 +4563,7 @@ sr_site_mult_a_triton = {
 	value = sr_site_lvl_a_value_triton
 	multiply = sr_site_staffing_triton
 	multiply = sr_site_charter_factor_triton
+	if = { limit = { has_global_variable = sr_site_blockaded_triton } multiply = 0 }
 }
 sr_site_mult_b_triton = {
 	value = sr_site_lvl_b_value_triton
@@ -4630,6 +4653,7 @@ sr_site_mult_b_proteus = {
 	value = sr_site_lvl_b_value_proteus
 	multiply = sr_site_staffing_proteus
 	multiply = sr_site_charter_factor_proteus
+	if = { limit = { has_global_variable = sr_site_blockaded_proteus } multiply = 0 }
 }
 sr_site_spec_built_proteus = { value = sr_site_lvl_a_value_proteus add = sr_site_lvl_b_value_proteus }
 sr_site_generic_built_proteus = {
@@ -4714,6 +4738,7 @@ sr_site_mult_b_pluto = {
 	value = sr_site_lvl_b_value_pluto
 	multiply = sr_site_staffing_pluto
 	multiply = sr_site_charter_factor_pluto
+	if = { limit = { has_global_variable = sr_site_blockaded_pluto } multiply = 0 }
 }
 sr_site_spec_built_pluto = { value = sr_site_lvl_a_value_pluto add = sr_site_lvl_b_value_pluto }
 sr_site_generic_built_pluto = {
@@ -4793,6 +4818,7 @@ sr_site_mult_a_eris = {
 	value = sr_site_lvl_a_value_eris
 	multiply = sr_site_staffing_eris
 	multiply = sr_site_charter_factor_eris
+	if = { limit = { has_global_variable = sr_site_blockaded_eris } multiply = 0 }
 }
 sr_site_mult_b_eris = {
 	value = sr_site_lvl_b_value_eris
@@ -4966,6 +4992,7 @@ sr_site_mult_b_haumea = {
 	value = sr_site_lvl_b_value_haumea
 	multiply = sr_site_staffing_haumea
 	multiply = sr_site_charter_factor_haumea
+	if = { limit = { has_global_variable = sr_site_blockaded_haumea } multiply = 0 }
 }
 sr_site_spec_built_haumea = { value = sr_site_lvl_a_value_haumea add = sr_site_lvl_b_value_haumea }
 sr_site_generic_built_haumea = {
@@ -5118,40 +5145,40 @@ sr_mod_upkeep_levels = {
 # near-Earth 10 and every colony it holds.
 sr_ebase_room_total = {
 	value = 10
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } add = 40 }
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } add = 30 }
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } add = 40 }
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } add = 40 }
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } add = 30 }
-	if = { limit = { global_var:sr_site_holder_ceres ?= this } add = 40 }
-	if = { limit = { global_var:sr_site_holder_vesta ?= this } add = 40 }
-	if = { limit = { global_var:sr_site_holder_psyche ?= this } add = 60 }
-	if = { limit = { global_var:sr_site_holder_pallas ?= this } add = 30 }
-	if = { limit = { global_var:sr_site_holder_hygiea ?= this } add = 20 }
-	if = { limit = { global_var:sr_site_holder_io ?= this } add = 20 }
-	if = { limit = { global_var:sr_site_holder_europa ?= this } add = 20 }
-	if = { limit = { global_var:sr_site_holder_ganymede ?= this } add = 30 }
-	if = { limit = { global_var:sr_site_holder_callisto ?= this } add = 30 }
-	if = { limit = { global_var:sr_site_holder_himalia ?= this } add = 20 }
-	if = { limit = { global_var:sr_site_holder_amalthea ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_venus ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_mercury ?= this } add = 40 }
-	if = { limit = { global_var:sr_site_holder_titan ?= this } add = 20 }
-	if = { limit = { global_var:sr_site_holder_enceladus ?= this } add = 15 }
-	if = { limit = { global_var:sr_site_holder_rhea ?= this } add = 20 }
-	if = { limit = { global_var:sr_site_holder_mimas ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_iapetus ?= this } add = 15 }
-	if = { limit = { global_var:sr_site_holder_titania ?= this } add = 15 }
-	if = { limit = { global_var:sr_site_holder_oberon ?= this } add = 15 }
-	if = { limit = { global_var:sr_site_holder_miranda ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_ariel ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_triton ?= this } add = 15 }
-	if = { limit = { global_var:sr_site_holder_proteus ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_pluto ?= this } add = 15 }
-	if = { limit = { global_var:sr_site_holder_eris ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = 10 }
-	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = 10 }
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = 40 }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = 30 }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = 40 }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = 40 }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = 30 }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } add = 40 }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } add = 40 }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } add = 60 }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } add = 30 }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } add = 20 }
+	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } add = 20 }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } add = 20 }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } add = 30 }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } add = 30 }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } add = 20 }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } add = 40 }
+	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } add = 20 }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } add = 15 }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } add = 20 }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } } add = 15 }
+	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } } add = 15 }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } } add = 15 }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } add = 15 }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } add = 15 }
+	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } } add = 10 }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } } add = 10 }
 }
 
 # ===== Autonomy and free colonies (slice 5 design §§ 2-3) =====
@@ -5177,6 +5204,7 @@ sr_site_aut_drift_valles_marineris = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_valles_marineris } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_valles_marineris = {
 	value = 1
@@ -5216,6 +5244,7 @@ sr_site_aut_drift_olympus_mons = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_olympus_mons } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_olympus_mons } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_olympus_mons = {
 	value = 1
@@ -5255,6 +5284,7 @@ sr_site_aut_drift_hellas_planitia = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_hellas_planitia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_hellas_planitia } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_hellas_planitia = {
 	value = 1
@@ -5294,6 +5324,7 @@ sr_site_aut_drift_utopia_planitia = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_utopia_planitia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_utopia_planitia } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_utopia_planitia = {
 	value = 1
@@ -5333,6 +5364,7 @@ sr_site_aut_drift_arcadia_planitia = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_arcadia_planitia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_arcadia_planitia } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_arcadia_planitia = {
 	value = 1
@@ -5372,6 +5404,7 @@ sr_site_aut_drift_ceres = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_ceres } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_ceres } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_ceres = {
 	value = 1
@@ -5411,6 +5444,7 @@ sr_site_aut_drift_vesta = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_vesta } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_vesta } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_vesta = {
 	value = 1
@@ -5450,6 +5484,7 @@ sr_site_aut_drift_psyche = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_psyche } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_psyche } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_psyche = {
 	value = 1
@@ -5489,6 +5524,7 @@ sr_site_aut_drift_pallas = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_pallas } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_pallas } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_pallas = {
 	value = 1
@@ -5528,6 +5564,7 @@ sr_site_aut_drift_hygiea = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_hygiea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_hygiea } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_hygiea = {
 	value = 1
@@ -5567,6 +5604,7 @@ sr_site_aut_drift_io = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_io } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_io } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_io = {
 	value = 1
@@ -5606,6 +5644,7 @@ sr_site_aut_drift_europa = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_europa } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_europa } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_europa = {
 	value = 1
@@ -5645,6 +5684,7 @@ sr_site_aut_drift_ganymede = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_ganymede } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_ganymede } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_ganymede = {
 	value = 1
@@ -5684,6 +5724,7 @@ sr_site_aut_drift_callisto = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_callisto } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_callisto } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_callisto = {
 	value = 1
@@ -5723,6 +5764,7 @@ sr_site_aut_drift_himalia = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_himalia } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_himalia } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_himalia = {
 	value = 1
@@ -5762,6 +5804,7 @@ sr_site_aut_drift_amalthea = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_amalthea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_amalthea } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_amalthea = {
 	value = 1
@@ -5801,6 +5844,7 @@ sr_site_aut_drift_venus = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_venus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_venus } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_venus = {
 	value = 1
@@ -5840,6 +5884,7 @@ sr_site_aut_drift_mercury = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_mercury } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_mercury } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_mercury = {
 	value = 1
@@ -5879,6 +5924,7 @@ sr_site_aut_drift_titan = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_titan } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_titan } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_titan = {
 	value = 1
@@ -5918,6 +5964,7 @@ sr_site_aut_drift_enceladus = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_enceladus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_enceladus } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_enceladus = {
 	value = 1
@@ -5957,6 +6004,7 @@ sr_site_aut_drift_rhea = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_rhea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_rhea } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_rhea = {
 	value = 1
@@ -5996,6 +6044,7 @@ sr_site_aut_drift_mimas = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_mimas } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_mimas } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_mimas = {
 	value = 1
@@ -6035,6 +6084,7 @@ sr_site_aut_drift_iapetus = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_iapetus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_iapetus } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_iapetus = {
 	value = 1
@@ -6074,6 +6124,7 @@ sr_site_aut_drift_titania = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_titania } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_titania } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_titania = {
 	value = 1
@@ -6113,6 +6164,7 @@ sr_site_aut_drift_oberon = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_oberon } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_oberon } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_oberon = {
 	value = 1
@@ -6152,6 +6204,7 @@ sr_site_aut_drift_miranda = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_miranda } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_miranda } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_miranda = {
 	value = 1
@@ -6191,6 +6244,7 @@ sr_site_aut_drift_ariel = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_ariel } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_ariel } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_ariel = {
 	value = 1
@@ -6230,6 +6284,7 @@ sr_site_aut_drift_triton = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_triton } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_triton } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_triton = {
 	value = 1
@@ -6269,6 +6324,7 @@ sr_site_aut_drift_proteus = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_proteus } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_proteus } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_proteus = {
 	value = 1
@@ -6308,6 +6364,7 @@ sr_site_aut_drift_pluto = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_pluto } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_pluto } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_pluto = {
 	value = 1
@@ -6347,6 +6404,7 @@ sr_site_aut_drift_eris = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_eris } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_eris } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_eris = {
 	value = 1
@@ -6386,6 +6444,7 @@ sr_site_aut_drift_makemake = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_makemake } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_makemake } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_makemake = {
 	value = 1
@@ -6425,6 +6484,7 @@ sr_site_aut_drift_haumea = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_haumea } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_haumea } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_haumea = {
 	value = 1
@@ -6464,6 +6524,7 @@ sr_site_aut_drift_sedna = {
 	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
 	if = { limit = { has_global_variable = sr_site_garrison_sedna } add = sr_aut_garrisoned }
 	if = { limit = { has_global_variable = sr_site_charter_sedna } add = sr_aut_chartered }
+	if = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } add = sr_aut_destroyed_colony }
 }
 sr_site_charter_factor_sedna = {
 	value = 1
@@ -6600,4 +6661,1727 @@ sr_garrison_count = {
 	if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_garrison_makemake } add = 1 }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_garrison_haumea } add = 1 }
 	if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_garrison_sedna } add = 1 }
+}
+
+# ===== Fleets: defences, integrity, marines, occupation (slice 6 design §§ 7-10) =====
+# Per world, any scope:
+#   sr_site_marines_value_<key>    battalions standing there (the holder's; the
+#                                  occupier's while occupied)
+#   sr_site_integrity_value_<key>  0-100, 100 while unset
+#   sr_site_militia_value_<key>    a battalion a sr_militia_people, at least one
+#   sr_site_garrison_need_<key>    the marines a seizure must exceed: garrison and militia
+#   sr_site_def_fire_<key>         its Defences' fire on fleets closing in: 15 a level x
+#                                  1.5 (+25% Orbital Weapon Platforms, its holder's) x
+#                                  integrity; nothing while occupied
+#   sr_site_hardness_<key>         50 + 50 a Defences level
+#   sr_site_target_strength_<key>  what draws a closing-in fleet's defence fire from
+#                                  stationed hostiles: its Defences and its hull
+#   sr_site_ws_weight_<key>        its weight in war support, 0.1 to 0.25 by its people
+sr_site_marines_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris } value = global_var:sr_site_marines_valles_marineris }
+}
+sr_site_integrity_value_valles_marineris = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_valles_marineris } value = global_var:sr_site_integrity_valles_marineris }
+}
+sr_site_militia_value_valles_marineris = {
+	value = sr_site_pop_value_valles_marineris
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_valles_marineris = {
+	value = sr_site_marines_value_valles_marineris
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_militia_value_valles_marineris }
+}
+sr_site_def_fire_valles_marineris = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_def_value_valles_marineris > 0 }
+		value = sr_site_def_value_valles_marineris
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_valles_marineris divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_valles_marineris = {
+	value = sr_site_def_value_valles_marineris
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_valles_marineris = {
+	value = sr_site_def_value_valles_marineris
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_valles_marineris = {
+	value = sr_site_pop_value_valles_marineris
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons } value = global_var:sr_site_marines_olympus_mons }
+}
+sr_site_integrity_value_olympus_mons = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_olympus_mons } value = global_var:sr_site_integrity_olympus_mons }
+}
+sr_site_militia_value_olympus_mons = {
+	value = sr_site_pop_value_olympus_mons
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_olympus_mons = {
+	value = sr_site_marines_value_olympus_mons
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_militia_value_olympus_mons }
+}
+sr_site_def_fire_olympus_mons = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_def_value_olympus_mons > 0 }
+		value = sr_site_def_value_olympus_mons
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_olympus_mons divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_olympus_mons = {
+	value = sr_site_def_value_olympus_mons
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_olympus_mons = {
+	value = sr_site_def_value_olympus_mons
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_olympus_mons = {
+	value = sr_site_pop_value_olympus_mons
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia } value = global_var:sr_site_marines_hellas_planitia }
+}
+sr_site_integrity_value_hellas_planitia = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_hellas_planitia } value = global_var:sr_site_integrity_hellas_planitia }
+}
+sr_site_militia_value_hellas_planitia = {
+	value = sr_site_pop_value_hellas_planitia
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_hellas_planitia = {
+	value = sr_site_marines_value_hellas_planitia
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_militia_value_hellas_planitia }
+}
+sr_site_def_fire_hellas_planitia = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_def_value_hellas_planitia > 0 }
+		value = sr_site_def_value_hellas_planitia
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_hellas_planitia divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_hellas_planitia = {
+	value = sr_site_def_value_hellas_planitia
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_hellas_planitia = {
+	value = sr_site_def_value_hellas_planitia
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_hellas_planitia = {
+	value = sr_site_pop_value_hellas_planitia
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia } value = global_var:sr_site_marines_utopia_planitia }
+}
+sr_site_integrity_value_utopia_planitia = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_utopia_planitia } value = global_var:sr_site_integrity_utopia_planitia }
+}
+sr_site_militia_value_utopia_planitia = {
+	value = sr_site_pop_value_utopia_planitia
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_utopia_planitia = {
+	value = sr_site_marines_value_utopia_planitia
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_militia_value_utopia_planitia }
+}
+sr_site_def_fire_utopia_planitia = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_def_value_utopia_planitia > 0 }
+		value = sr_site_def_value_utopia_planitia
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_utopia_planitia divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_utopia_planitia = {
+	value = sr_site_def_value_utopia_planitia
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_utopia_planitia = {
+	value = sr_site_def_value_utopia_planitia
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_utopia_planitia = {
+	value = sr_site_pop_value_utopia_planitia
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia } value = global_var:sr_site_marines_arcadia_planitia }
+}
+sr_site_integrity_value_arcadia_planitia = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_arcadia_planitia } value = global_var:sr_site_integrity_arcadia_planitia }
+}
+sr_site_militia_value_arcadia_planitia = {
+	value = sr_site_pop_value_arcadia_planitia
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_arcadia_planitia = {
+	value = sr_site_marines_value_arcadia_planitia
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_militia_value_arcadia_planitia }
+}
+sr_site_def_fire_arcadia_planitia = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_def_value_arcadia_planitia > 0 }
+		value = sr_site_def_value_arcadia_planitia
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_arcadia_planitia divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_arcadia_planitia = {
+	value = sr_site_def_value_arcadia_planitia
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_arcadia_planitia = {
+	value = sr_site_def_value_arcadia_planitia
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_arcadia_planitia = {
+	value = sr_site_pop_value_arcadia_planitia
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_ceres } value = global_var:sr_site_marines_ceres }
+}
+sr_site_integrity_value_ceres = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_ceres } value = global_var:sr_site_integrity_ceres }
+}
+sr_site_militia_value_ceres = {
+	value = sr_site_pop_value_ceres
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_ceres = {
+	value = sr_site_marines_value_ceres
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_militia_value_ceres }
+}
+sr_site_def_fire_ceres = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_ceres } sr_site_def_value_ceres > 0 }
+		value = sr_site_def_value_ceres
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_ceres divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_ceres = {
+	value = sr_site_def_value_ceres
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_ceres = {
+	value = sr_site_def_value_ceres
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_ceres = {
+	value = sr_site_pop_value_ceres
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_vesta } value = global_var:sr_site_marines_vesta }
+}
+sr_site_integrity_value_vesta = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_vesta } value = global_var:sr_site_integrity_vesta }
+}
+sr_site_militia_value_vesta = {
+	value = sr_site_pop_value_vesta
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_vesta = {
+	value = sr_site_marines_value_vesta
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_militia_value_vesta }
+}
+sr_site_def_fire_vesta = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_vesta } sr_site_def_value_vesta > 0 }
+		value = sr_site_def_value_vesta
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_vesta divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_vesta = {
+	value = sr_site_def_value_vesta
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_vesta = {
+	value = sr_site_def_value_vesta
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_vesta = {
+	value = sr_site_pop_value_vesta
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_psyche } value = global_var:sr_site_marines_psyche }
+}
+sr_site_integrity_value_psyche = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_psyche } value = global_var:sr_site_integrity_psyche }
+}
+sr_site_militia_value_psyche = {
+	value = sr_site_pop_value_psyche
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_psyche = {
+	value = sr_site_marines_value_psyche
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_militia_value_psyche }
+}
+sr_site_def_fire_psyche = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_psyche } sr_site_def_value_psyche > 0 }
+		value = sr_site_def_value_psyche
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_psyche divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_psyche = {
+	value = sr_site_def_value_psyche
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_psyche = {
+	value = sr_site_def_value_psyche
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_psyche = {
+	value = sr_site_pop_value_psyche
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_pallas } value = global_var:sr_site_marines_pallas }
+}
+sr_site_integrity_value_pallas = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_pallas } value = global_var:sr_site_integrity_pallas }
+}
+sr_site_militia_value_pallas = {
+	value = sr_site_pop_value_pallas
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_pallas = {
+	value = sr_site_marines_value_pallas
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_militia_value_pallas }
+}
+sr_site_def_fire_pallas = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_pallas } sr_site_def_value_pallas > 0 }
+		value = sr_site_def_value_pallas
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_pallas divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_pallas = {
+	value = sr_site_def_value_pallas
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_pallas = {
+	value = sr_site_def_value_pallas
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_pallas = {
+	value = sr_site_pop_value_pallas
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_hygiea } value = global_var:sr_site_marines_hygiea }
+}
+sr_site_integrity_value_hygiea = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_hygiea } value = global_var:sr_site_integrity_hygiea }
+}
+sr_site_militia_value_hygiea = {
+	value = sr_site_pop_value_hygiea
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_hygiea = {
+	value = sr_site_marines_value_hygiea
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_militia_value_hygiea }
+}
+sr_site_def_fire_hygiea = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } sr_site_def_value_hygiea > 0 }
+		value = sr_site_def_value_hygiea
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_hygiea divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_hygiea = {
+	value = sr_site_def_value_hygiea
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_hygiea = {
+	value = sr_site_def_value_hygiea
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_hygiea = {
+	value = sr_site_pop_value_hygiea
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_io } value = global_var:sr_site_marines_io }
+}
+sr_site_integrity_value_io = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_io } value = global_var:sr_site_integrity_io }
+}
+sr_site_militia_value_io = {
+	value = sr_site_pop_value_io
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_io = {
+	value = sr_site_marines_value_io
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_militia_value_io }
+}
+sr_site_def_fire_io = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_io } sr_site_def_value_io > 0 }
+		value = sr_site_def_value_io
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_io divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_io = {
+	value = sr_site_def_value_io
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_io = {
+	value = sr_site_def_value_io
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_io = {
+	value = sr_site_pop_value_io
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_europa } value = global_var:sr_site_marines_europa }
+}
+sr_site_integrity_value_europa = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_europa } value = global_var:sr_site_integrity_europa }
+}
+sr_site_militia_value_europa = {
+	value = sr_site_pop_value_europa
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_europa = {
+	value = sr_site_marines_value_europa
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_militia_value_europa }
+}
+sr_site_def_fire_europa = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_europa } sr_site_def_value_europa > 0 }
+		value = sr_site_def_value_europa
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_europa divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_europa = {
+	value = sr_site_def_value_europa
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_europa = {
+	value = sr_site_def_value_europa
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_europa = {
+	value = sr_site_pop_value_europa
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_ganymede } value = global_var:sr_site_marines_ganymede }
+}
+sr_site_integrity_value_ganymede = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_ganymede } value = global_var:sr_site_integrity_ganymede }
+}
+sr_site_militia_value_ganymede = {
+	value = sr_site_pop_value_ganymede
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_ganymede = {
+	value = sr_site_marines_value_ganymede
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_militia_value_ganymede }
+}
+sr_site_def_fire_ganymede = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_def_value_ganymede > 0 }
+		value = sr_site_def_value_ganymede
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_ganymede divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_ganymede = {
+	value = sr_site_def_value_ganymede
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_ganymede = {
+	value = sr_site_def_value_ganymede
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_ganymede = {
+	value = sr_site_pop_value_ganymede
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_callisto } value = global_var:sr_site_marines_callisto }
+}
+sr_site_integrity_value_callisto = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_callisto } value = global_var:sr_site_integrity_callisto }
+}
+sr_site_militia_value_callisto = {
+	value = sr_site_pop_value_callisto
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_callisto = {
+	value = sr_site_marines_value_callisto
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_militia_value_callisto }
+}
+sr_site_def_fire_callisto = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_def_value_callisto > 0 }
+		value = sr_site_def_value_callisto
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_callisto divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_callisto = {
+	value = sr_site_def_value_callisto
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_callisto = {
+	value = sr_site_def_value_callisto
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_callisto = {
+	value = sr_site_pop_value_callisto
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_himalia } value = global_var:sr_site_marines_himalia }
+}
+sr_site_integrity_value_himalia = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_himalia } value = global_var:sr_site_integrity_himalia }
+}
+sr_site_militia_value_himalia = {
+	value = sr_site_pop_value_himalia
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_himalia = {
+	value = sr_site_marines_value_himalia
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_militia_value_himalia }
+}
+sr_site_def_fire_himalia = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_def_value_himalia > 0 }
+		value = sr_site_def_value_himalia
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_himalia divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_himalia = {
+	value = sr_site_def_value_himalia
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_himalia = {
+	value = sr_site_def_value_himalia
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_himalia = {
+	value = sr_site_pop_value_himalia
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_amalthea } value = global_var:sr_site_marines_amalthea }
+}
+sr_site_integrity_value_amalthea = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_amalthea } value = global_var:sr_site_integrity_amalthea }
+}
+sr_site_militia_value_amalthea = {
+	value = sr_site_pop_value_amalthea
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_amalthea = {
+	value = sr_site_marines_value_amalthea
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_militia_value_amalthea }
+}
+sr_site_def_fire_amalthea = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_def_value_amalthea > 0 }
+		value = sr_site_def_value_amalthea
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_amalthea divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_amalthea = {
+	value = sr_site_def_value_amalthea
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_amalthea = {
+	value = sr_site_def_value_amalthea
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_amalthea = {
+	value = sr_site_pop_value_amalthea
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_venus } value = global_var:sr_site_marines_venus }
+}
+sr_site_integrity_value_venus = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_venus } value = global_var:sr_site_integrity_venus }
+}
+sr_site_militia_value_venus = {
+	value = sr_site_pop_value_venus
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_venus = {
+	value = sr_site_marines_value_venus
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_militia_value_venus }
+}
+sr_site_def_fire_venus = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_venus } sr_site_def_value_venus > 0 }
+		value = sr_site_def_value_venus
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_venus divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_venus = {
+	value = sr_site_def_value_venus
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_venus = {
+	value = sr_site_def_value_venus
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_venus = {
+	value = sr_site_pop_value_venus
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_mercury } value = global_var:sr_site_marines_mercury }
+}
+sr_site_integrity_value_mercury = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_mercury } value = global_var:sr_site_integrity_mercury }
+}
+sr_site_militia_value_mercury = {
+	value = sr_site_pop_value_mercury
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_mercury = {
+	value = sr_site_marines_value_mercury
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_militia_value_mercury }
+}
+sr_site_def_fire_mercury = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_mercury } sr_site_def_value_mercury > 0 }
+		value = sr_site_def_value_mercury
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_mercury divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_mercury = {
+	value = sr_site_def_value_mercury
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_mercury = {
+	value = sr_site_def_value_mercury
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_mercury = {
+	value = sr_site_pop_value_mercury
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_titan } value = global_var:sr_site_marines_titan }
+}
+sr_site_integrity_value_titan = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_titan } value = global_var:sr_site_integrity_titan }
+}
+sr_site_militia_value_titan = {
+	value = sr_site_pop_value_titan
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_titan = {
+	value = sr_site_marines_value_titan
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_militia_value_titan }
+}
+sr_site_def_fire_titan = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_titan } sr_site_def_value_titan > 0 }
+		value = sr_site_def_value_titan
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_titan divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_titan = {
+	value = sr_site_def_value_titan
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_titan = {
+	value = sr_site_def_value_titan
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_titan = {
+	value = sr_site_pop_value_titan
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_enceladus } value = global_var:sr_site_marines_enceladus }
+}
+sr_site_integrity_value_enceladus = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_enceladus } value = global_var:sr_site_integrity_enceladus }
+}
+sr_site_militia_value_enceladus = {
+	value = sr_site_pop_value_enceladus
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_enceladus = {
+	value = sr_site_marines_value_enceladus
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_militia_value_enceladus }
+}
+sr_site_def_fire_enceladus = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_def_value_enceladus > 0 }
+		value = sr_site_def_value_enceladus
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_enceladus divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_enceladus = {
+	value = sr_site_def_value_enceladus
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_enceladus = {
+	value = sr_site_def_value_enceladus
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_enceladus = {
+	value = sr_site_pop_value_enceladus
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_rhea } value = global_var:sr_site_marines_rhea }
+}
+sr_site_integrity_value_rhea = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_rhea } value = global_var:sr_site_integrity_rhea }
+}
+sr_site_militia_value_rhea = {
+	value = sr_site_pop_value_rhea
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_rhea = {
+	value = sr_site_marines_value_rhea
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_militia_value_rhea }
+}
+sr_site_def_fire_rhea = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_def_value_rhea > 0 }
+		value = sr_site_def_value_rhea
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_rhea divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_rhea = {
+	value = sr_site_def_value_rhea
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_rhea = {
+	value = sr_site_def_value_rhea
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_rhea = {
+	value = sr_site_pop_value_rhea
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_mimas } value = global_var:sr_site_marines_mimas }
+}
+sr_site_integrity_value_mimas = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_mimas } value = global_var:sr_site_integrity_mimas }
+}
+sr_site_militia_value_mimas = {
+	value = sr_site_pop_value_mimas
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_mimas = {
+	value = sr_site_marines_value_mimas
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_militia_value_mimas }
+}
+sr_site_def_fire_mimas = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_def_value_mimas > 0 }
+		value = sr_site_def_value_mimas
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_mimas divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_mimas = {
+	value = sr_site_def_value_mimas
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_mimas = {
+	value = sr_site_def_value_mimas
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_mimas = {
+	value = sr_site_pop_value_mimas
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_iapetus } value = global_var:sr_site_marines_iapetus }
+}
+sr_site_integrity_value_iapetus = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_iapetus } value = global_var:sr_site_integrity_iapetus }
+}
+sr_site_militia_value_iapetus = {
+	value = sr_site_pop_value_iapetus
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_iapetus = {
+	value = sr_site_marines_value_iapetus
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_militia_value_iapetus }
+}
+sr_site_def_fire_iapetus = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_def_value_iapetus > 0 }
+		value = sr_site_def_value_iapetus
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_iapetus divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_iapetus = {
+	value = sr_site_def_value_iapetus
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_iapetus = {
+	value = sr_site_def_value_iapetus
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_iapetus = {
+	value = sr_site_pop_value_iapetus
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_titania } value = global_var:sr_site_marines_titania }
+}
+sr_site_integrity_value_titania = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_titania } value = global_var:sr_site_integrity_titania }
+}
+sr_site_militia_value_titania = {
+	value = sr_site_pop_value_titania
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_titania = {
+	value = sr_site_marines_value_titania
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_militia_value_titania }
+}
+sr_site_def_fire_titania = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_titania } sr_site_def_value_titania > 0 }
+		value = sr_site_def_value_titania
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_titania divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_titania = {
+	value = sr_site_def_value_titania
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_titania = {
+	value = sr_site_def_value_titania
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_titania = {
+	value = sr_site_pop_value_titania
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_oberon } value = global_var:sr_site_marines_oberon }
+}
+sr_site_integrity_value_oberon = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_oberon } value = global_var:sr_site_integrity_oberon }
+}
+sr_site_militia_value_oberon = {
+	value = sr_site_pop_value_oberon
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_oberon = {
+	value = sr_site_marines_value_oberon
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_militia_value_oberon }
+}
+sr_site_def_fire_oberon = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_def_value_oberon > 0 }
+		value = sr_site_def_value_oberon
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_oberon divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_oberon = {
+	value = sr_site_def_value_oberon
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_oberon = {
+	value = sr_site_def_value_oberon
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_oberon = {
+	value = sr_site_pop_value_oberon
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_miranda } value = global_var:sr_site_marines_miranda }
+}
+sr_site_integrity_value_miranda = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_miranda } value = global_var:sr_site_integrity_miranda }
+}
+sr_site_militia_value_miranda = {
+	value = sr_site_pop_value_miranda
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_miranda = {
+	value = sr_site_marines_value_miranda
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_militia_value_miranda }
+}
+sr_site_def_fire_miranda = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_def_value_miranda > 0 }
+		value = sr_site_def_value_miranda
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_miranda divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_miranda = {
+	value = sr_site_def_value_miranda
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_miranda = {
+	value = sr_site_def_value_miranda
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_miranda = {
+	value = sr_site_pop_value_miranda
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_ariel } value = global_var:sr_site_marines_ariel }
+}
+sr_site_integrity_value_ariel = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_ariel } value = global_var:sr_site_integrity_ariel }
+}
+sr_site_militia_value_ariel = {
+	value = sr_site_pop_value_ariel
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_ariel = {
+	value = sr_site_marines_value_ariel
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_militia_value_ariel }
+}
+sr_site_def_fire_ariel = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_def_value_ariel > 0 }
+		value = sr_site_def_value_ariel
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_ariel divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_ariel = {
+	value = sr_site_def_value_ariel
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_ariel = {
+	value = sr_site_def_value_ariel
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_ariel = {
+	value = sr_site_pop_value_ariel
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_triton } value = global_var:sr_site_marines_triton }
+}
+sr_site_integrity_value_triton = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_triton } value = global_var:sr_site_integrity_triton }
+}
+sr_site_militia_value_triton = {
+	value = sr_site_pop_value_triton
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_triton = {
+	value = sr_site_marines_value_triton
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_militia_value_triton }
+}
+sr_site_def_fire_triton = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_triton } sr_site_def_value_triton > 0 }
+		value = sr_site_def_value_triton
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_triton divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_triton = {
+	value = sr_site_def_value_triton
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_triton = {
+	value = sr_site_def_value_triton
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_triton = {
+	value = sr_site_pop_value_triton
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_proteus } value = global_var:sr_site_marines_proteus }
+}
+sr_site_integrity_value_proteus = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_proteus } value = global_var:sr_site_integrity_proteus }
+}
+sr_site_militia_value_proteus = {
+	value = sr_site_pop_value_proteus
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_proteus = {
+	value = sr_site_marines_value_proteus
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_militia_value_proteus }
+}
+sr_site_def_fire_proteus = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_proteus } sr_site_def_value_proteus > 0 }
+		value = sr_site_def_value_proteus
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_proteus divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_proteus = {
+	value = sr_site_def_value_proteus
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_proteus = {
+	value = sr_site_def_value_proteus
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_proteus = {
+	value = sr_site_pop_value_proteus
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_pluto } value = global_var:sr_site_marines_pluto }
+}
+sr_site_integrity_value_pluto = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_pluto } value = global_var:sr_site_integrity_pluto }
+}
+sr_site_militia_value_pluto = {
+	value = sr_site_pop_value_pluto
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_pluto = {
+	value = sr_site_marines_value_pluto
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_militia_value_pluto }
+}
+sr_site_def_fire_pluto = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_pluto } sr_site_def_value_pluto > 0 }
+		value = sr_site_def_value_pluto
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_pluto divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_pluto = {
+	value = sr_site_def_value_pluto
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_pluto = {
+	value = sr_site_def_value_pluto
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_pluto = {
+	value = sr_site_pop_value_pluto
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_eris } value = global_var:sr_site_marines_eris }
+}
+sr_site_integrity_value_eris = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_eris } value = global_var:sr_site_integrity_eris }
+}
+sr_site_militia_value_eris = {
+	value = sr_site_pop_value_eris
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_eris = {
+	value = sr_site_marines_value_eris
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_militia_value_eris }
+}
+sr_site_def_fire_eris = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_eris } sr_site_def_value_eris > 0 }
+		value = sr_site_def_value_eris
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_eris divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_eris = {
+	value = sr_site_def_value_eris
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_eris = {
+	value = sr_site_def_value_eris
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_eris = {
+	value = sr_site_pop_value_eris
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_makemake } value = global_var:sr_site_marines_makemake }
+}
+sr_site_integrity_value_makemake = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_makemake } value = global_var:sr_site_integrity_makemake }
+}
+sr_site_militia_value_makemake = {
+	value = sr_site_pop_value_makemake
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_makemake = {
+	value = sr_site_marines_value_makemake
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_militia_value_makemake }
+}
+sr_site_def_fire_makemake = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_makemake } sr_site_def_value_makemake > 0 }
+		value = sr_site_def_value_makemake
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_makemake divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_makemake = {
+	value = sr_site_def_value_makemake
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_makemake = {
+	value = sr_site_def_value_makemake
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_makemake = {
+	value = sr_site_pop_value_makemake
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_haumea } value = global_var:sr_site_marines_haumea }
+}
+sr_site_integrity_value_haumea = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_haumea } value = global_var:sr_site_integrity_haumea }
+}
+sr_site_militia_value_haumea = {
+	value = sr_site_pop_value_haumea
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_haumea = {
+	value = sr_site_marines_value_haumea
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_militia_value_haumea }
+}
+sr_site_def_fire_haumea = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_haumea } sr_site_def_value_haumea > 0 }
+		value = sr_site_def_value_haumea
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_haumea divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_haumea = {
+	value = sr_site_def_value_haumea
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_haumea = {
+	value = sr_site_def_value_haumea
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_haumea = {
+	value = sr_site_pop_value_haumea
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+sr_site_marines_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_sedna } value = global_var:sr_site_marines_sedna }
+}
+sr_site_integrity_value_sedna = {
+	value = sr_integrity_full
+	if = { limit = { has_global_variable = sr_site_integrity_sedna } value = global_var:sr_site_integrity_sedna }
+}
+sr_site_militia_value_sedna = {
+	value = sr_site_pop_value_sedna
+	divide = sr_militia_people
+	floor = yes
+	min = 1
+}
+# A seizure must exceed the garrison and the militia; a liberation, the
+# occupier's garrison alone (its people are the holder's).
+sr_site_garrison_need_sedna = {
+	value = sr_site_marines_value_sedna
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_sedna } } add = sr_site_militia_value_sedna }
+}
+sr_site_def_fire_sedna = {
+	value = 0
+	if = {
+		limit = { NOT = { has_global_variable = sr_site_occupier_sedna } sr_site_def_value_sedna > 0 }
+		value = sr_site_def_value_sedna
+		multiply = sr_def_strength_per_level
+		multiply = sr_def_fire_factor
+		if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
+		multiply = { value = sr_site_integrity_value_sedna divide = sr_integrity_full }
+	}
+}
+sr_site_hardness_sedna = {
+	value = sr_site_def_value_sedna
+	multiply = sr_def_hardness_per_level
+	add = sr_def_hardness_base
+}
+sr_site_target_strength_sedna = {
+	value = sr_site_def_value_sedna
+	multiply = sr_def_strength_per_level
+	add = sr_def_hull_strength
+}
+sr_site_ws_weight_sedna = {
+	value = sr_site_pop_value_sedna
+	divide = sr_ws_colony_full_people
+	max = 1
+	multiply = sr_ws_colony_growth
+	add = sr_ws_colony_base
+}
+
+# Country scope: war support from occupied colonies (design § 10), a beat: each
+# world THIS occupies from a holder it is at war with, less each of its own an
+# enemy occupies. The fleets' month stores it (sr_ws_colonies_net), so the
+# injection reads one variable.
+sr_ws_colonies_sum = {
+	value = 0
+	if = { limit = { global_var:sr_site_occupier_valles_marineris ?= this global_var:sr_site_holder_valles_marineris ?= { has_war_with = root } } add = sr_site_ws_weight_valles_marineris }
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this global_var:sr_site_occupier_valles_marineris ?= { has_war_with = root } } subtract = sr_site_ws_weight_valles_marineris }
+	if = { limit = { global_var:sr_site_occupier_olympus_mons ?= this global_var:sr_site_holder_olympus_mons ?= { has_war_with = root } } add = sr_site_ws_weight_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this global_var:sr_site_occupier_olympus_mons ?= { has_war_with = root } } subtract = sr_site_ws_weight_olympus_mons }
+	if = { limit = { global_var:sr_site_occupier_hellas_planitia ?= this global_var:sr_site_holder_hellas_planitia ?= { has_war_with = root } } add = sr_site_ws_weight_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this global_var:sr_site_occupier_hellas_planitia ?= { has_war_with = root } } subtract = sr_site_ws_weight_hellas_planitia }
+	if = { limit = { global_var:sr_site_occupier_utopia_planitia ?= this global_var:sr_site_holder_utopia_planitia ?= { has_war_with = root } } add = sr_site_ws_weight_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this global_var:sr_site_occupier_utopia_planitia ?= { has_war_with = root } } subtract = sr_site_ws_weight_utopia_planitia }
+	if = { limit = { global_var:sr_site_occupier_arcadia_planitia ?= this global_var:sr_site_holder_arcadia_planitia ?= { has_war_with = root } } add = sr_site_ws_weight_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this global_var:sr_site_occupier_arcadia_planitia ?= { has_war_with = root } } subtract = sr_site_ws_weight_arcadia_planitia }
+	if = { limit = { global_var:sr_site_occupier_ceres ?= this global_var:sr_site_holder_ceres ?= { has_war_with = root } } add = sr_site_ws_weight_ceres }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this global_var:sr_site_occupier_ceres ?= { has_war_with = root } } subtract = sr_site_ws_weight_ceres }
+	if = { limit = { global_var:sr_site_occupier_vesta ?= this global_var:sr_site_holder_vesta ?= { has_war_with = root } } add = sr_site_ws_weight_vesta }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this global_var:sr_site_occupier_vesta ?= { has_war_with = root } } subtract = sr_site_ws_weight_vesta }
+	if = { limit = { global_var:sr_site_occupier_psyche ?= this global_var:sr_site_holder_psyche ?= { has_war_with = root } } add = sr_site_ws_weight_psyche }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this global_var:sr_site_occupier_psyche ?= { has_war_with = root } } subtract = sr_site_ws_weight_psyche }
+	if = { limit = { global_var:sr_site_occupier_pallas ?= this global_var:sr_site_holder_pallas ?= { has_war_with = root } } add = sr_site_ws_weight_pallas }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this global_var:sr_site_occupier_pallas ?= { has_war_with = root } } subtract = sr_site_ws_weight_pallas }
+	if = { limit = { global_var:sr_site_occupier_hygiea ?= this global_var:sr_site_holder_hygiea ?= { has_war_with = root } } add = sr_site_ws_weight_hygiea }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this global_var:sr_site_occupier_hygiea ?= { has_war_with = root } } subtract = sr_site_ws_weight_hygiea }
+	if = { limit = { global_var:sr_site_occupier_io ?= this global_var:sr_site_holder_io ?= { has_war_with = root } } add = sr_site_ws_weight_io }
+	if = { limit = { global_var:sr_site_holder_io ?= this global_var:sr_site_occupier_io ?= { has_war_with = root } } subtract = sr_site_ws_weight_io }
+	if = { limit = { global_var:sr_site_occupier_europa ?= this global_var:sr_site_holder_europa ?= { has_war_with = root } } add = sr_site_ws_weight_europa }
+	if = { limit = { global_var:sr_site_holder_europa ?= this global_var:sr_site_occupier_europa ?= { has_war_with = root } } subtract = sr_site_ws_weight_europa }
+	if = { limit = { global_var:sr_site_occupier_ganymede ?= this global_var:sr_site_holder_ganymede ?= { has_war_with = root } } add = sr_site_ws_weight_ganymede }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this global_var:sr_site_occupier_ganymede ?= { has_war_with = root } } subtract = sr_site_ws_weight_ganymede }
+	if = { limit = { global_var:sr_site_occupier_callisto ?= this global_var:sr_site_holder_callisto ?= { has_war_with = root } } add = sr_site_ws_weight_callisto }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this global_var:sr_site_occupier_callisto ?= { has_war_with = root } } subtract = sr_site_ws_weight_callisto }
+	if = { limit = { global_var:sr_site_occupier_himalia ?= this global_var:sr_site_holder_himalia ?= { has_war_with = root } } add = sr_site_ws_weight_himalia }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this global_var:sr_site_occupier_himalia ?= { has_war_with = root } } subtract = sr_site_ws_weight_himalia }
+	if = { limit = { global_var:sr_site_occupier_amalthea ?= this global_var:sr_site_holder_amalthea ?= { has_war_with = root } } add = sr_site_ws_weight_amalthea }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this global_var:sr_site_occupier_amalthea ?= { has_war_with = root } } subtract = sr_site_ws_weight_amalthea }
+	if = { limit = { global_var:sr_site_occupier_venus ?= this global_var:sr_site_holder_venus ?= { has_war_with = root } } add = sr_site_ws_weight_venus }
+	if = { limit = { global_var:sr_site_holder_venus ?= this global_var:sr_site_occupier_venus ?= { has_war_with = root } } subtract = sr_site_ws_weight_venus }
+	if = { limit = { global_var:sr_site_occupier_mercury ?= this global_var:sr_site_holder_mercury ?= { has_war_with = root } } add = sr_site_ws_weight_mercury }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this global_var:sr_site_occupier_mercury ?= { has_war_with = root } } subtract = sr_site_ws_weight_mercury }
+	if = { limit = { global_var:sr_site_occupier_titan ?= this global_var:sr_site_holder_titan ?= { has_war_with = root } } add = sr_site_ws_weight_titan }
+	if = { limit = { global_var:sr_site_holder_titan ?= this global_var:sr_site_occupier_titan ?= { has_war_with = root } } subtract = sr_site_ws_weight_titan }
+	if = { limit = { global_var:sr_site_occupier_enceladus ?= this global_var:sr_site_holder_enceladus ?= { has_war_with = root } } add = sr_site_ws_weight_enceladus }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this global_var:sr_site_occupier_enceladus ?= { has_war_with = root } } subtract = sr_site_ws_weight_enceladus }
+	if = { limit = { global_var:sr_site_occupier_rhea ?= this global_var:sr_site_holder_rhea ?= { has_war_with = root } } add = sr_site_ws_weight_rhea }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this global_var:sr_site_occupier_rhea ?= { has_war_with = root } } subtract = sr_site_ws_weight_rhea }
+	if = { limit = { global_var:sr_site_occupier_mimas ?= this global_var:sr_site_holder_mimas ?= { has_war_with = root } } add = sr_site_ws_weight_mimas }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this global_var:sr_site_occupier_mimas ?= { has_war_with = root } } subtract = sr_site_ws_weight_mimas }
+	if = { limit = { global_var:sr_site_occupier_iapetus ?= this global_var:sr_site_holder_iapetus ?= { has_war_with = root } } add = sr_site_ws_weight_iapetus }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this global_var:sr_site_occupier_iapetus ?= { has_war_with = root } } subtract = sr_site_ws_weight_iapetus }
+	if = { limit = { global_var:sr_site_occupier_titania ?= this global_var:sr_site_holder_titania ?= { has_war_with = root } } add = sr_site_ws_weight_titania }
+	if = { limit = { global_var:sr_site_holder_titania ?= this global_var:sr_site_occupier_titania ?= { has_war_with = root } } subtract = sr_site_ws_weight_titania }
+	if = { limit = { global_var:sr_site_occupier_oberon ?= this global_var:sr_site_holder_oberon ?= { has_war_with = root } } add = sr_site_ws_weight_oberon }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this global_var:sr_site_occupier_oberon ?= { has_war_with = root } } subtract = sr_site_ws_weight_oberon }
+	if = { limit = { global_var:sr_site_occupier_miranda ?= this global_var:sr_site_holder_miranda ?= { has_war_with = root } } add = sr_site_ws_weight_miranda }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this global_var:sr_site_occupier_miranda ?= { has_war_with = root } } subtract = sr_site_ws_weight_miranda }
+	if = { limit = { global_var:sr_site_occupier_ariel ?= this global_var:sr_site_holder_ariel ?= { has_war_with = root } } add = sr_site_ws_weight_ariel }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this global_var:sr_site_occupier_ariel ?= { has_war_with = root } } subtract = sr_site_ws_weight_ariel }
+	if = { limit = { global_var:sr_site_occupier_triton ?= this global_var:sr_site_holder_triton ?= { has_war_with = root } } add = sr_site_ws_weight_triton }
+	if = { limit = { global_var:sr_site_holder_triton ?= this global_var:sr_site_occupier_triton ?= { has_war_with = root } } subtract = sr_site_ws_weight_triton }
+	if = { limit = { global_var:sr_site_occupier_proteus ?= this global_var:sr_site_holder_proteus ?= { has_war_with = root } } add = sr_site_ws_weight_proteus }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this global_var:sr_site_occupier_proteus ?= { has_war_with = root } } subtract = sr_site_ws_weight_proteus }
+	if = { limit = { global_var:sr_site_occupier_pluto ?= this global_var:sr_site_holder_pluto ?= { has_war_with = root } } add = sr_site_ws_weight_pluto }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this global_var:sr_site_occupier_pluto ?= { has_war_with = root } } subtract = sr_site_ws_weight_pluto }
+	if = { limit = { global_var:sr_site_occupier_eris ?= this global_var:sr_site_holder_eris ?= { has_war_with = root } } add = sr_site_ws_weight_eris }
+	if = { limit = { global_var:sr_site_holder_eris ?= this global_var:sr_site_occupier_eris ?= { has_war_with = root } } subtract = sr_site_ws_weight_eris }
+	if = { limit = { global_var:sr_site_occupier_makemake ?= this global_var:sr_site_holder_makemake ?= { has_war_with = root } } add = sr_site_ws_weight_makemake }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this global_var:sr_site_occupier_makemake ?= { has_war_with = root } } subtract = sr_site_ws_weight_makemake }
+	if = { limit = { global_var:sr_site_occupier_haumea ?= this global_var:sr_site_holder_haumea ?= { has_war_with = root } } add = sr_site_ws_weight_haumea }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this global_var:sr_site_occupier_haumea ?= { has_war_with = root } } subtract = sr_site_ws_weight_haumea }
+	if = { limit = { global_var:sr_site_occupier_sedna ?= this global_var:sr_site_holder_sedna ?= { has_war_with = root } } add = sr_site_ws_weight_sedna }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this global_var:sr_site_occupier_sedna ?= { has_war_with = root } } subtract = sr_site_ws_weight_sedna }
 }

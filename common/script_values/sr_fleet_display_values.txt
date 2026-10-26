@@ -1,0 +1,60 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: the panel's figures
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# § 16. Read by the GUI only (gui/journal_entry_widgets/space_race_widget.gui,
+# the Space Command, Fleets and Colony Defences sections), as
+# space_race_display_values.txt's sr_disp_* are; no script reads them. The
+# per-slot and per-location ones are generated (sr_fleets_display_generated.txt).
+# The viewer's scope.
+# ============================================================================
+
+# 1 under Full Colonies: the fleets' sections show.
+sr_disp_colonies_full = {
+	value = 0
+	if = { limit = { sr_colonies_full_enabled = yes } value = 1 }
+}
+
+# Space Command: strength built last month, its levels in the states we
+# control, the fleets' strength now and at full, and the upkeep on its inputs
+# in percent.
+sr_disp_sc_rate = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_built_last } value = var:sr_sc_built_last }
+}
+sr_disp_sc_levels = {
+	value = sr_sc_levels
+}
+sr_disp_fl_strength = {
+	value = sr_fl_strength_total
+}
+sr_disp_fl_strength_full = {
+	value = sr_fl_strength_full_total
+}
+sr_disp_sc_upkeep_pct = {
+	value = sr_fleet_upkeep_units_value
+}
+
+# The notices (space_race_events.100 and .101), read in their text: months
+# until a hostile fleet lands; a battle's strength lost, dealt and left.
+sr_disp_fl_alert_months = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_alert_arrive }
+		value = var:sr_fl_alert_arrive
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+sr_disp_battle_lost = {
+	value = 0
+	if = { limit = { has_variable = sr_battle_lost } value = var:sr_battle_lost }
+}
+sr_disp_battle_dealt = {
+	value = 0
+	if = { limit = { has_variable = sr_battle_dealt } value = var:sr_battle_dealt }
+}
+sr_disp_battle_left = {
+	value = 0
+	if = { limit = { has_variable = sr_battle_left } value = var:sr_battle_left }
+}

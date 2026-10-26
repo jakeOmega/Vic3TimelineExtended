@@ -86,6 +86,18 @@ class Site:
     def index(self) -> int:
         return SITES.index(self) + 1
 
+    @property
+    def propellant(self) -> bool:
+        """Water or volatiles to crack: a Spaceport here refills a fleet fully
+        (slice 6 design § 2)."""
+        return self.key in PROPELLANT_WORLDS
+
+    @property
+    def ships(self) -> tuple[bool, bool]:
+        """Which of its two specializations ship goods to Earth, and so run at
+        nothing while it is blockaded (slice 6 design § 8)."""
+        return SHIPPING[self.key]
+
 
 def _s(key, name, stage, location, body, event, specs, discoveries, kind, room, slots, ebase_room, ebase_grade):
     return Site(key, name, stage, location, body, event, tuple(specs), tuple(discoveries), kind, room,
@@ -133,6 +145,30 @@ SITES: tuple[Site, ...] = (
     _s("haumea", "Haumea", 5, "kuiper", "kuiper", 33, ("dynamics", "rings"), (), "dwarf", 10, 1, 10, -40),
     _s("sedna", "Sedna", 5, "kuiper", "kuiper", 34, ("outpost", "interstellar"), (), "dwarf", 10, 1, 10, -45),
 )
+
+# Propellant worlds (slice 6 design § 2): water or volatiles to crack, so a
+# Spaceport there refills a fleet fully; any other Spaceport refills a quarter.
+PROPELLANT_WORLDS = frozenset({"utopia_planitia", "ceres", "europa", "ganymede", "callisto", "titan",
+                               "enceladus", "rhea", "triton", "pluto"})
+
+# The specializations that ship goods to Earth (slice 6 design § 8), (first,
+# second) in option order: those whose goods and throughput terms
+# (building_*_throughput_add, goods_output_*_mult) outnumber their research
+# terms (country_tech_research_speed_mult, country_military_tech_research_speed_mult,
+# country_weekly_innovation_max_add), a tie going to the first term. A
+# blockade stops these and leaves research, which is radioed home, running.
+# Hand-checked 2026-10-26; test_solar_sites.py re-derives it from the modifiers.
+SHIPPING: dict[str, tuple[bool, bool]] = {
+    "valles_marineris": (False, True), "olympus_mons": (False, True), "hellas_planitia": (False, False),
+    "utopia_planitia": (True, True), "arcadia_planitia": (False, False), "ceres": (True, False),
+    "vesta": (True, False), "psyche": (True, False), "pallas": (True, False), "hygiea": (True, True),
+    "io": (True, False), "europa": (False, False), "ganymede": (False, False), "callisto": (False, False),
+    "himalia": (False, True), "amalthea": (False, True), "venus": (False, True), "mercury": (True, True),
+    "titan": (True, False), "enceladus": (False, True), "rhea": (True, False), "mimas": (False, False),
+    "iapetus": (False, True), "titania": (True, False), "oberon": (False, False), "miranda": (False, False),
+    "ariel": (False, True), "triton": (True, False), "proteus": (False, True), "pluto": (False, True),
+    "eris": (True, False), "makemake": (False, False), "haumea": (False, True), "sedna": (False, False),
+}
 
 # The panel's locations, in its order (the owner's nine less Earth and the
 # Moon, where no world is colonized). Mercury and Venus share one.
@@ -411,6 +447,7 @@ def _sync(site: Site) -> list[str]:
         "\t\t\tOR = {",
         f"\t\t\t\tNOT = {{ has_global_variable = sr_site_holder_{k} }}",
         f"\t\t\t\tNOT = {{ global_var:sr_site_mirror_{k} ?= global_var:sr_site_holder_{k} }}",
+        f"\t\t\t\thas_global_variable = sr_site_occupier_{k}",
         "\t\t\t}",
         "\t\t}",
         f"\t\tglobal_var:sr_site_mirror_{k} ?= {{",
@@ -421,9 +458,13 @@ def _sync(site: Site) -> list[str]:
         "\t\t}",
         f"\t\tremove_global_variable = sr_site_mirror_{k}",
         "\t}",
-        "\t# The holder shows it.",
+        "\t# The holder shows it, unless it is occupied (slice 6 design § 9.2: an occupied",
+        "\t# world gives its modifiers to no one).",
         "\tif = {",
-        f"\t\tlimit = {{ global_var:sr_site_holder_{k} ?= {{ is_country_alive = yes }} }}",
+        "\t\tlimit = {",
+        f"\t\t\tglobal_var:sr_site_holder_{k} ?= {{ is_country_alive = yes }}",
+        f"\t\t\tNOT = {{ has_global_variable = sr_site_occupier_{k} }}",
+        "\t\t}",
         f"\t\tglobal_var:sr_site_holder_{k} = {{ sr_site_mirror_on_{k} = yes }}",
         f"\t\tset_global_variable = {{ name = sr_site_mirror_{k} value = global_var:sr_site_holder_{k} }}",
         "\t}",
@@ -449,6 +490,10 @@ def _release(site: Site) -> list[str]:
     out += [f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}"
             for var in slice5_vars(site)]
     out += [f"\tsr_site_clear_ties_{k} = yes"]
+    # Slice 6: its marines are lost, its integrity, occupation and blockade cleared
+    # (a ruin is set after the release, by the destruction itself).
+    out += [f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}"
+            for var in slice6_vars(site)]
     out += [f'\tdebug_log = "TE_SR_SITES released {k}"', "}"]
     return out
 
@@ -465,6 +510,11 @@ def _transfer(site: Site) -> list[str]:
         f"\t\tset_global_variable = {{ name = sr_site_holder_{k} value = scope:sr_site_to_{k} }}",
         "\t\t# The garrison is its holder's and goes home (slice 5 design § 1).",
         f"\t\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} remove_global_variable = sr_site_garrison_{k} }}",
+        f"\t\tif = {{ limit = {{ has_global_variable = sr_site_garrison_due_{k} }} remove_global_variable = sr_site_garrison_due_{k} }}",
+        "\t\t# A treaty ends an occupation (slice 6 design § 9.2); an heir takes the world",
+        "\t\t# occupied. Marines stay with an ally of their owner, else go home (§ 9.6).",
+        f"\t\tsr_site_transfer_marines = {{ KEY = {k} }}",
+        f"\t\tsr_site_transfer_occupation_$CAUSE$ = {{ KEY = {k} }}",
         f"\t\tsr_site_sync_{k} = yes",
         f"\t\tscope:sr_site_to_{k} = {{ sr_site_gained_$CAUSE$ = {{ INDEX = {site.index} }} }}",
         f"\t\tscope:sr_site_from_{k} ?= {{",
@@ -525,8 +575,14 @@ def _monthly(site: Site) -> list[str]:
         f'\t\t\t\tdebug_log = "TE_SELF_CHECK BROKEN site_dead_holder {k}: the heir did not take it"',
         "\t\t\t}",
         "\t\t}",
-        "\t\t# No heir: a world with people becomes a free colony under simple and full",
-        "\t\t# (slice 5 design § 5), any other is released.",
+        "\t\t# No heir: an occupied world passes to its occupier (slice 6 design § 9.2); a",
+        "\t\t# world with people becomes a free colony under simple and full (slice 5",
+        "\t\t# design § 5), any other is released.",
+        "\t\telse_if = {",
+        f"\t\t\tlimit = {{ global_var:sr_site_occupier_{k} ?= {{ sr_site_can_hold = yes }} }}",
+        f"\t\t\tglobal_var:sr_site_occupier_{k} = {{ save_scope_as = sr_site_to_{k} }}",
+        f"\t\t\tsr_site_transfer_{k} = {{ CAUSE = heir }}",
+        "\t\t}",
         "\t\telse = {",
         f"\t\t\tsr_site_free_or_release_{k} = yes",
         "\t\t}",
@@ -590,6 +646,20 @@ def _monthly(site: Site) -> list[str]:
         f"\t\t\tglobal_var:sr_site_holder_{k} ?= {{ is_country_alive = yes }}",
         "\t\t}",
         f"\t\tglobal_var:sr_site_holder_{k} = {{ sr_site_aut_step_{k} = yes }}",
+        "\t}",
+        "\t# 8. Full colonies (slice 6 design §§ 7.3, 9): a garrison waiting for its marines,",
+        "\t# integrity regained, an occupation returned at the peace.",
+        "\tif = {",
+        "\t\tlimit = { sr_colonies_full_enabled = yes }",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ has_global_variable = sr_site_garrison_due_{k} }}",
+        f"\t\t\tsr_site_garrison_due_step = {{ KEY = {k} INDEX = {site.index} }}",
+        "\t\t}",
+        f"\t\tsr_site_integrity_step = {{ KEY = {k} }}",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ has_global_variable = sr_site_occupier_{k} }}",
+        f"\t\t\tsr_site_occupation_step = {{ KEY = {k} INDEX = {site.index} }}",
+        "\t\t}",
         "\t}",
         "}",
     ]
@@ -657,7 +727,8 @@ def render_migration() -> list[str]:
 def render_repoint() -> list[str]:
     out = ["# ===== A revolution's winner (sr_repair_after_civil_war) =====",
            "# ROOT the winner. When the rebels won, every world the old government held",
-           "# is the winner's at once (the dead-holder rule would reach it a month later).",
+           "# is the winner's at once (the dead-holder rule would reach it a month later),",
+           "# and every world it occupied (slice 6) stays occupied, by the winner.",
            "sr_sites_repoint_loser = {",
            "\tif = {",
            "\t\tlimit = {",
@@ -671,6 +742,10 @@ def render_repoint() -> list[str]:
                 f"\t\t\tlimit = {{ global_var:sr_site_holder_{k} ?= scope:te_cw_loser }}",
                 f"\t\t\tset_global_variable = {{ name = sr_site_holder_{k} value = ROOT }}",
                 f"\t\t\tsr_site_sync_{k} = yes",
+                "\t\t}",
+                "\t\tif = {",
+                f"\t\t\tlimit = {{ global_var:sr_site_occupier_{k} ?= scope:te_cw_loser }}",
+                f"\t\t\tset_global_variable = {{ name = sr_site_occupier_{k} value = ROOT }}",
                 "\t\t}"]
     out += ["\t}", "}"]
     return out
@@ -688,7 +763,14 @@ def render_snapshot() -> list[str]:
                 f"\t\tglobal_var:sr_site_holder_{k} = {{ save_scope_as = sr_ss_holder }}",
                 f"\t\tset_variable = {{ name = sr_ss_cap_{k} value = scope:sr_ss_holder.capital }}",
                 "\t}",
-                f"\telse_if = {{ limit = {{ has_variable = sr_ss_cap_{k} }} remove_variable = sr_ss_cap_{k} }}"]
+                f"\telse_if = {{ limit = {{ has_variable = sr_ss_cap_{k} }} remove_variable = sr_ss_cap_{k} }}",
+                # The occupier's, for Colony Defences' flag (slice 6 design § 16).
+                "\tif = {",
+                f"\t\tlimit = {{ global_var:sr_site_occupier_{k} ?= {{ is_country_alive = yes exists = capital }} }}",
+                f"\t\tglobal_var:sr_site_occupier_{k} = {{ save_scope_as = sr_ss_occupier }}",
+                f"\t\tset_variable = {{ name = sr_ss_occ_{k} value = scope:sr_ss_occupier.capital }}",
+                "\t}",
+                f"\telse_if = {{ limit = {{ has_variable = sr_ss_occ_{k} }} remove_variable = sr_ss_occ_{k} }}"]
     out.append("}")
     return out
 
@@ -1133,6 +1215,7 @@ def render_fleet_triggers() -> list[str]:
         k, tb = site.key, transit_body(site)
         out += [f"sr_cf_targetable_{k} = {{",
                 f"\tNOT = {{ has_global_variable = sr_colony_{k} }}",
+                f"\tNOT = {{ has_global_variable = sr_site_ruined_{k} }}",
                 "\tOR = {",
                 f"\t\tAND = {{ NOT = {{ sr_colonies_contested_enabled = yes }} sr_current_colonization_stage >= {site.stage} }}"]
         if site.stage <= 2:
@@ -1203,7 +1286,7 @@ def render_values() -> str:
                    f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} }}")
     out += ["}", ""]
     out += (render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
-            + [""] + render_autonomy_values())
+            + [""] + render_autonomy_values() + [""] + render_slice6_values())
     return "\n".join(out) + "\n"
 
 
@@ -1305,7 +1388,7 @@ def render_population_values() -> list[str]:
                 "}",
                 f"sr_emig_weight_{k} = {{",
                 "\tvalue = 0",
-                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} "
+                f"\tif = {{ limit = {{ {site_serves(site)} }} "
                 f"value = sr_emig_prio_weight_{k} multiply = sr_site_free_room_{k} }}",
                 "}"]
     out += ["", "# Country scope: the sum of THIS's emigration weights; the free room of the",
@@ -1386,12 +1469,15 @@ def render_module_values() -> list[str]:
                 f"\t\tdivide = sr_site_levels_{k}",
                 "\t}",
                 "}"]
-        for slot in ("a", "b"):
+        for slot, ships in zip(("a", "b"), site.ships):
             out += [f"sr_site_mult_{slot}_{k} = {{",
                     f"\tvalue = sr_site_lvl_{slot}_value_{k}",
                     f"\tmultiply = sr_site_staffing_{k}",
-                    f"\tmultiply = sr_site_charter_factor_{k}",
-                    "}"]
+                    f"\tmultiply = sr_site_charter_factor_{k}"]
+            if ships:
+                # A blockade stops what it ships to Earth (slice 6 design § 8).
+                out.append(f"\tif = {{ limit = {{ has_global_variable = sr_site_blockaded_{k} }} multiply = 0 }}")
+            out.append("}")
         out += [f"sr_site_spec_built_{k} = {{ value = sr_site_lvl_a_value_{k} add = sr_site_lvl_b_value_{k} }}",
                 f"sr_site_generic_built_{k} = {{",
                 *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}" for i, t in enumerate(GENERIC_TYPES)],
@@ -1411,7 +1497,7 @@ def render_module_values() -> list[str]:
             "# Country scope: THIS's Extraplanetary Base room, in levels (design § 9): the",
             f"# near-Earth {NEAR_EARTH_ROOM} and every colony it holds.",
             "sr_ebase_room_total = {", f"\tvalue = {NEAR_EARTH_ROOM}"]
-    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = {s.ebase_room} }}" for s in SITES]
+    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = {s.ebase_room} }}" for s in SITES]
     out.append("}")
     return out
 
@@ -1422,7 +1508,12 @@ def _module_install(site: Site) -> list[str]:
            "# the world while its cap has room, else lost (design § 6).",
            f"sr_mod_install_{k} = {{",
            "\tif = {",
-           f"\t\tlimit = {{ has_global_variable = sr_colony_{k} }}"]
+           "\t\tlimit = {",
+           f"\t\t\thas_global_variable = sr_colony_{k}",
+           "\t\t\t# A shipment landing at a blockaded or occupied world is lost (slice 6 design § 8).",
+           f"\t\t\tNOT = {{ has_global_variable = sr_site_blockaded_{k} }}",
+           f"\t\t\tNOT = {{ has_global_variable = sr_site_occupier_{k} }}",
+           "\t\t}"]
     first = True
     for t in ("a", "b", *GENERIC_TYPES):
         if t in ("a", "b"):
@@ -1436,6 +1527,12 @@ def _module_install(site: Site) -> list[str]:
                 "\t\t}"]
         first = False
     out += [f"\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+            "\t\t# Repairs come with it (slice 6 design § 7.3).",
+            "\t\tif = {",
+            f"\t\t\tlimit = {{ has_global_variable = sr_site_integrity_{k} }}",
+            f"\t\t\tset_global_variable = {{ name = sr_site_integrity_{k} value = {{ value = global_var:sr_site_integrity_{k} "
+            "add = sr_integrity_module_landing max = sr_integrity_full } }",
+            "\t\t}",
             f"\t\tsr_site_sync_{k} = yes", "\t}", "}"]
     return out
 
@@ -1644,7 +1741,7 @@ def render_module_effects() -> list[str]:
         room = NEAR_EARTH_ROOM if tier is None else tier.ebase_room
         grade = 0 if tier is None else tier.ebase_grade
         name = "near-Earth" if tier is None else tier.name
-        held = "" if tier is None else f" global_var:sr_site_holder_{tier.key} ?= this"
+        held = "" if tier is None else f" {site_serves(tier)}"
         out += [f"\t# {name}: {room} levels at {grade:+d}%",
                 "\tif = {",
                 f"\t\tlimit = {{ local_var:sr_eb_left > 0{held} }}",
@@ -1761,7 +1858,8 @@ def render_module_triggers() -> list[str]:
 # { KEY = <key> } (hand-written in sr_colony_autonomy_effects.txt). Each names
 # $KEY$, so every one takes the dispatcher's one argument (script_argument_audit).
 SITE_ACTIONS = ("aut_add", "charter", "garrison", "let_go", "abandon_home", "abandon_free",
-                "rejoin", "decline", "breach", "sabotage", "toggle_supply", "debug_aut")
+                "rejoin", "decline", "breach", "sabotage", "toggle_supply", "debug_aut",
+                "debug_integrity", "debug_occupy")
 
 
 def slice5_vars(site: Site) -> list[str]:
@@ -1770,6 +1868,21 @@ def slice5_vars(site: Site) -> list[str]:
     return [f"sr_site_free_{k}", f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}",
             f"sr_site_aut_asked_{k}", f"sr_site_contact_{k}", f"sr_site_suppliers_{k}", f"sr_site_born_{k}",
             f"sr_site_petition_{k}"]
+
+
+def slice6_vars(site: Site) -> list[str]:
+    """The world's slice 6 globals (fleets design §§ 7-9), cleared by a release."""
+    k = site.key
+    return [f"sr_site_marines_{k}", f"sr_site_garrison_due_{k}", f"sr_site_integrity_{k}", f"sr_site_occupier_{k}",
+            f"sr_site_blockaded_{k}", f"sr_site_bombard_{k}", f"sr_site_under_assault_{k}"]
+
+
+def site_serves(site: Site) -> str:
+    """THIS holds the world and it serves THIS: not occupied, not blockaded
+    (slice 6 design § 8: settlers, base room and shipments stop)."""
+    k = site.key
+    return (f"global_var:sr_site_holder_{k} ?= this NOT = {{ has_global_variable = sr_site_blockaded_{k} }} "
+            f"NOT = {{ has_global_variable = sr_site_occupier_{k} }}")
 
 
 def _autonomy_world(site: Site) -> list[str]:
@@ -1791,7 +1904,8 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\tif = {{ limit = {{ has_global_variable = sr_site_holder_{k} }} remove_global_variable = sr_site_holder_{k} }}",
         f"\tsr_site_sync_{k} = yes",
         *[f"\tif = {{ limit = {{ has_global_variable = {v} }} remove_global_variable = {v} }}"
-          for v in (f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}", f"sr_site_aut_asked_{k}")],
+          for v in (f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}", f"sr_site_aut_asked_{k}",
+                    *slice6_vars(site))],
         "\tsr_sites_refresh_players = yes",
         f'\tdebug_log = "TE_SR_SITES {k} is a free colony"',
         "}",
@@ -1906,6 +2020,12 @@ def render_autonomy_effects() -> list[str]:
             "# gains sr_cov_incite_autonomy_base x the multiplier a month.",
             "sr_cov_incite_autonomy = {",
             "\tset_local_variable = { name = sr_aut_delta value = { value = sr_cov_incite_autonomy_base multiply = local_var:sr_cov_mult } }"]
+    for site in SITES:
+        out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{site.key} ?= this }} sr_site_aut_add_at = {{ KEY = {site.key} }} }}")
+    out += ["}", "",
+            "# local_var:sr_aut_delta points of autonomy at every colony THIS holds (the",
+            "# resentment a colony's destruction stirs at its destroyer's own; slice 6 design § 9.3).",
+            "sr_site_aut_add_all = {"]
     for site in SITES:
         out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{site.key} ?= this }} sr_site_aut_add_at = {{ KEY = {site.key} }} }}")
     out += ["}", "",
@@ -2076,6 +2196,8 @@ def render_autonomy_values() -> list[str]:
                 "\tif = { limit = { is_at_war = yes } add = sr_aut_at_war }",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} add = sr_aut_garrisoned }}",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} add = sr_aut_chartered }}",
+                "\tif = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } "
+                "add = sr_aut_destroyed_colony }",
                 "}",
                 f"sr_site_charter_factor_{k} = {{",
                 "\tvalue = 1",
@@ -2102,6 +2224,85 @@ def render_autonomy_values() -> list[str]:
     out += ["}", "sr_garrison_count = {", "\tvalue = 0"]
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this has_global_variable = sr_site_garrison_{s.key} }} add = 1 }}"
             for s in SITES]
+    out.append("}")
+    return out
+
+
+def render_slice6_values() -> list[str]:
+    """Fleets, combat and occupation (slice 6 design §§ 7-10), per world."""
+    out = ["# ===== Fleets: defences, integrity, marines, occupation (slice 6 design §§ 7-10) =====",
+           "# Per world, any scope:",
+           "#   sr_site_marines_value_<key>    battalions standing there (the holder's; the",
+           "#                                  occupier's while occupied)",
+           "#   sr_site_integrity_value_<key>  0-100, 100 while unset",
+           "#   sr_site_militia_value_<key>    a battalion a sr_militia_people, at least one",
+           "#   sr_site_garrison_need_<key>    the marines a seizure must exceed: garrison and militia",
+           "#   sr_site_def_fire_<key>         its Defences' fire on fleets closing in: 15 a level x",
+           "#                                  1.5 (+25% Orbital Weapon Platforms, its holder's) x",
+           "#                                  integrity; nothing while occupied",
+           "#   sr_site_hardness_<key>         50 + 50 a Defences level",
+           "#   sr_site_target_strength_<key>  what draws a closing-in fleet's defence fire from",
+           "#                                  stationed hostiles: its Defences and its hull",
+           "#   sr_site_ws_weight_<key>        its weight in war support, 0.1 to 0.25 by its people"]
+    for site in SITES:
+        k = site.key
+        out += _opt_var(f"sr_site_marines_value_{k}", f"sr_site_marines_{k}")
+        out += [f"sr_site_integrity_value_{k} = {{",
+                "\tvalue = sr_integrity_full",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_integrity_{k} }} value = global_var:sr_site_integrity_{k} }}",
+                "}",
+                f"sr_site_militia_value_{k} = {{",
+                f"\tvalue = sr_site_pop_value_{k}",
+                "\tdivide = sr_militia_people",
+                "\tfloor = yes",
+                "\tmin = 1",
+                "}",
+                "# A seizure must exceed the garrison and the militia; a liberation, the",
+                "# occupier's garrison alone (its people are the holder's).",
+                f"sr_site_garrison_need_{k} = {{",
+                f"\tvalue = sr_site_marines_value_{k}",
+                f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} add = sr_site_militia_value_{k} }}",
+                "}",
+                f"sr_site_def_fire_{k} = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} sr_site_def_value_{k} > 0 }}",
+                f"\t\tvalue = sr_site_def_value_{k}",
+                "\t\tmultiply = sr_def_strength_per_level",
+                "\t\tmultiply = sr_def_fire_factor",
+                f"\t\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = orbital_weapon_platforms }} }} "
+                "multiply = 1.25 }",
+                f"\t\tmultiply = {{ value = sr_site_integrity_value_{k} divide = sr_integrity_full }}",
+                "\t}",
+                "}",
+                f"sr_site_hardness_{k} = {{",
+                f"\tvalue = sr_site_def_value_{k}",
+                "\tmultiply = sr_def_hardness_per_level",
+                "\tadd = sr_def_hardness_base",
+                "}",
+                f"sr_site_target_strength_{k} = {{",
+                f"\tvalue = sr_site_def_value_{k}",
+                "\tmultiply = sr_def_strength_per_level",
+                "\tadd = sr_def_hull_strength",
+                "}",
+                f"sr_site_ws_weight_{k} = {{",
+                f"\tvalue = sr_site_pop_value_{k}",
+                "\tdivide = sr_ws_colony_full_people",
+                "\tmax = 1",
+                "\tmultiply = sr_ws_colony_growth",
+                "\tadd = sr_ws_colony_base",
+                "}"]
+    out += ["", "# Country scope: war support from occupied colonies (design § 10), a beat: each",
+            "# world THIS occupies from a holder it is at war with, less each of its own an",
+            "# enemy occupies. The fleets' month stores it (sr_ws_colonies_net), so the",
+            "# injection reads one variable.",
+            "sr_ws_colonies_sum = {", "\tvalue = 0"]
+    for site in SITES:
+        k = site.key
+        out += [f"\tif = {{ limit = {{ global_var:sr_site_occupier_{k} ?= this global_var:sr_site_holder_{k} ?= {{ has_war_with = root }} }} "
+                f"add = sr_site_ws_weight_{k} }}",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this global_var:sr_site_occupier_{k} ?= {{ has_war_with = root }} }} "
+                f"subtract = sr_site_ws_weight_{k} }}"]
     out.append("}")
     return out
 
@@ -2187,16 +2388,18 @@ def render_display() -> str:
            "# te_sr_sec_solar_system), from gen_solar_sites.SITES. Read by the GUI only,",
            "# as space_race_display_values.txt's sr_disp_* are. 0 unclaimed, 1 ours,",
            "# 2 another's (its capital snapshot to show), 3 another's without one,",
-           "# 4 a free colony (slice 5 design § 9).",
+           "# 4 a free colony (slice 5 design § 9), 5 occupied, 6 ruined (slice 6 design § 16).",
            "# The viewer's scope."]
     for site in SITES:
         k = site.key
         out += [f"sr_disp_site_{k} = {{",
                 "\tvalue = 0",
-                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = 1 }}",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 5 }}",
+                f"\telse_if = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = 1 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_holder_{k} has_variable = sr_ss_cap_{k} }} value = 2 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_holder_{k} }} value = 3 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_free_{k} }} value = 4 }}",
+                f"\telse_if = {{ limit = {{ has_global_variable = sr_site_ruined_{k} }} value = 6 }}",
                 "}"]
     out += ["",
             "# Colony fleets and population (slices 2-3 design §§ 3, 8, 10), per world:",
@@ -2322,7 +2525,8 @@ def render_custom_loc() -> str:
     out = [HEADER.rstrip("\n"),
            "# A world's name from its index (gen_solar_sites.SITES order), for the",
            "# notices (space_race_events.90 / .91 / .92), the Colony Fleets section, the",
-           "# module queue and slice 5's events (.93 to .99); then each queue place's module.",
+           "# module queue, slice 5's events (.93 to .99) and slice 6's (.102 to .107);",
+           "# then each queue place's module.",
            "# Each branch has_variable-guarded.",
            ""]
     names = [("sr_site_notice_gained_name", "sr_site_notice_gained"),
@@ -2341,7 +2545,12 @@ def render_custom_loc() -> str:
              ("sr_abandon_site_name", "sr_abandon_site"),
              ("sr_freed_site_name", "sr_freed_site"),
              ("sr_petition_site_name", "sr_petition_site"),
-             ("sr_life_site_name", "sr_life_site")]
+             ("sr_life_site_name", "sr_life_site"),
+             # Slice 6's events (fleets design § 9): each one's world.
+             ("sr_occ_site_name", "sr_occ_site"),
+             ("sr_destroyed_site_name", "sr_destroyed_site"),
+             ("sr_seized_free_site_name", "sr_seized_free_site"),
+             ("sr_garrison_lapsed_site_name", "sr_garrison_lapsed_site")]
     for name, var in names:
         out += [f"{name} = {{", "\ttype = country", "\trandom_valid = no", ""]
         for site in SITES:
@@ -2408,6 +2617,8 @@ def _site_row(site: Site) -> list[str]:
     out += _override("site_target_mark_visible", f'visible = "[And( {_eq(disp, 0)}, {_eq(target, 2)} )]"')
     out += _override("site_unclaimed_visible", f'visible = "[And( {_eq(disp, 0)}, Not( {_eq(target, 2)} ) )]"')
     out += _override("site_free_visible", f'visible = "[{_eq(disp, 4)}]"')
+    out += _override("site_occupied_visible", f'visible = "[{_eq(disp, 5)}]"')
+    out += _override("site_ruined_visible", f'visible = "[{_eq(disp, 6)}]"')
     out += _override("site_inbound", f'visible = "[{_ge(inbound, 1)}]"', 'tooltip = "je_space_race_widget_ss_inbound_tt"')
     out += _override("site_inbound_ours", f'visible = "[{_eq(ours, 1)}]"', f'raw_text = "{figure}"')
     out += _override("site_inbound_rival", f'visible = "[{_eq(ours, 0)}]"', f'raw_text = "{figure}"')

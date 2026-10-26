@@ -46,9 +46,10 @@ FORMERLY_GATED = ("election_interference", "financial_subversion", "infrastructu
 WARTIME = ("infrastructure_sabotage", "comms_disruption")
 BREAKABLE = tuple(t for t in FORMERLY_GATED if t not in WARTIME)
 # Operations added since, whose AI was written to stay off friends from the
-# start (solar colonization slice 5). Unlike the four above, the AI does not
-# call them off when the target turns friend: their break reasons are their own.
-AI_SPARES_FRIENDS = ("incite_autonomy", "sabotage_colony")
+# start (solar colonization slices 5 and 6). Unlike the four above, the AI does
+# not call them off when the target turns friend: their break reasons are their
+# own.
+AI_SPARES_FRIENDS = ("incite_autonomy", "sabotage_colony", "survey_defences")
 
 FRIEND_WARNING = "covert_friend_target_warning_tt"
 RELATIONS_TOOLTIPS = ("iw_no_good_relations_tt", "iw_no_cordial_relations_tt")

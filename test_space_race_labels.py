@@ -33,6 +33,7 @@ GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui"
 # The per-world and per-slot rows (gen_solar_sites.py) pass keys into the row
 # types above, so their keys are measured against those types' cells.
 ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
+FLEET_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")  # gen_space_fleets.py
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
 SITES_VALUES = os.path.join(REPO, "common", "script_values", "sr_sites_generated.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -61,6 +62,10 @@ UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_pct: a level past the first per m
 EBASE_LEVELS = 9999       # sr_disp_ebase_levels / _room: 770 levels of room in all; four digits
 FREE_WORLDS = 34          # sr_disp_free_supplied_count: at most every world
 FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units (5) x 1%
+SC_RATE_CEILING = 99.9    # sr_disp_sc_rate: 2 a level a month at most; ten levels for an AI, more for a player
+FLEET_STRENGTH = 99_999   # sr_disp_fl_strength / _full: every fleet's, unbounded by script; five digits
+FLEET_UPKEEP_PCT = 9999   # sr_disp_sc_upkeep_pct: full strength / 10 (sr_fleet_upkeep_points)
+MIX_WEIGHT = 3            # sr_disp_sc_mix_<role>: sr_sc_mix_max
 
 
 def _read(path):
@@ -211,8 +216,10 @@ def _longest_figure(name):
         return FUNDING_CEILING
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
-    if re.fullmatch(r"sr_disp_cf_slot_\d_months", name):
+    if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left", name):
         return TRANSIT_CEILING
+    if re.fullmatch(r"sr_disp_sc_mix_\w+", name):
+        return MIX_WEIGHT
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
         return END_YEAR
     fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
@@ -223,7 +230,9 @@ def _longest_figure(name):
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
              "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
              "sr_disp_ebase_room": EBASE_LEVELS, "sr_disp_free_supplied_count": FREE_WORLDS,
-             "sr_disp_free_trade_research": FREE_TRADE_RESEARCH}
+             "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
+             "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
+             "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -256,7 +265,8 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
              r"|cf_destination_\w+|cf_drive_line|cf_races_only_note|settlers_note|settlers_crews_note"
-             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none)|modules_note|autonomy_note|free_empty)")
+             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none)|modules_note|autonomy_note|free_empty"
+             r"|sc_note|space_fleets_note|space_fleets_empty|defences_note)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -276,12 +286,12 @@ CELLS = {
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
-        r"|ebase_label|free_trade_label)"),
+        r"|ebase_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
         r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure"
-        r"|free_trade_figure)"),
+        r"|free_trade_figure|sc_rate_figure|sc_strength_figure|sc_upkeep_figure)"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -302,7 +312,7 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others|mq_header|free_header)"),
+        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others|mq_header|free_header|sc_mix_header)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
@@ -360,9 +370,50 @@ CELLS = {
     "programme label (te_sr_ov_programme)": (
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
+    # The fleets (slice 6, Full Colonies).
+    **{f"the fleets' {col} column head (te_sr_fleet_header_row)": (
+        ("te_sr_fleet_header_row", f'text = "je_space_race_widget_fl_col_{col}"'), f"je_space_race_widget_fl_col_{col}")
+       for col in ("where", "strength", "drive", "dv", "supply", "marines")},
+    "a fleet's orders (te_sr_fl_button)": (
+        ("te_sr_fl_button", 'block "fl_btn_label"'),
+        r"je_space_race_widget_fl_(go|merge|detach|land|embark)"),
+    "a fleet's refit (te_sr_fleet_row)": (
+        ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_refit"'),
+        r"je_space_race_widget_fl_refit"),
+    "a fleet's landing (te_sr_fleet_row)": (
+        ("te_sr_fleet_row", 'block "fl_transit"'),
+        r"je_space_race_widget_fl_\d_transit"),
+    "a fleet's posture (te_sr_fleet_row)": (
+        ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_posture_1"'),
+        r"je_space_race_widget_fl_posture_\d"),
+    "seize or destroy (te_sr_fleet_row)": (
+        ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_seize"'),
+        r"je_space_race_widget_fl_(seize|destroy)"),
+    **{f"the locations' {col} column head (te_sr_location_header_row)": (
+        ("te_sr_location_header_row", f'text = "je_space_race_widget_loc_col_{col}"'), f"je_space_race_widget_loc_col_{col}")
+       for col in ("where", "ours", "others", "inbound", "status")},
+    "a location's status (te_sr_location_row)": (
+        ("te_sr_location_row", 'text = "je_space_race_widget_loc_status_blockading"'),
+        r"je_space_race_widget_loc_status_\w+"),
+    "a colony's defence status (te_sr_defence_row)": (
+        ("te_sr_defence_row", 'text = "je_space_race_widget_def_status_calm"'),
+        r"je_space_race_widget_def_status_(calm|blockaded|assault)"),
+    "an occupied colony (te_sr_defence_row)": (
+        ("te_sr_defence_row", 'text = "je_space_race_widget_def_status_occupied"'),
+        r"je_space_race_widget_def_status_occupied"),
+    "a world's holder: occupied (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_occupied"'),
+        r"je_space_race_widget_ss_occupied"),
+    "a world's holder: ruined (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_ruined"'),
+        r"je_space_race_widget_ss_ruined"),
+    "the build mix (te_sr_sc_mix_button)": (
+        ("te_sr_sc_mix_button", 'block "mix_label"'),
+        r"je_space_race_widget_sc_mix_(war|rapid|siege|carrier|tender)"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
-                   r"|fleets_header|settlers_header|modules_header|autonomy_header|powers_header|orbit_header)")
+                   r"|fleets_header|settlers_header|modules_header|autonomy_header|powers_header|orbit_header"
+                   r"|sc_header|space_fleets_header|locations_header|defences_header)")
 
 
 def _cell(gui, type_name, marker):
@@ -388,7 +439,7 @@ class LabelBudgetTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(GUI)
-        cls.keys = _shown_keys(cls.gui + _read(ROWS))
+        cls.keys = _shown_keys(cls.gui + _read(ROWS) + _read(FLEET_ROWS))
 
     def _fits(self, key, width, font):
         text = _render(_loc(key))

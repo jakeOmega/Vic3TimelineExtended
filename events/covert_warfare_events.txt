@@ -288,6 +288,10 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 16 }
 				covert_op_burn = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action TARGET = scope:detected_by_country CODE = 16 }
 			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 17 }
+				covert_op_burn = { TYPE = survey_defences ACTION = covert_survey_defences_action TARGET = scope:detected_by_country CODE = 17 }
+			}
 
 			# The defender's public turns on the interest groups friendly to
 			# us (covert_backlash_public). Here and not in covert_warfare.2,

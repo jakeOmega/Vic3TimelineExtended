@@ -1426,6 +1426,13 @@ sr_repair_after_civil_war = {
 	sr_sync_probe_data = yes
 	# The worlds the old government held are the winner's (sr_sites_generated.txt).
 	sr_sites_repoint_loser = yes
+	# Its fleets are the winner's (the sr_fl_* variables are inherited): it
+	# joins the fleet powers now, not at its next monthly pulse; the loser's
+	# entry is pruned (sr_fl_prune_powers).
+	if = {
+		limit = { sr_fleet_power = yes }
+		sr_fl_join_powers = yes
+	}
 }
 
 # The interstellar probe's result: one of four permanent country modifiers,

@@ -37,6 +37,7 @@
  covert_sabotage_colony_action_pact_desc:0 "We are sabotaging the most populous colony of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_secure_material_action_pact_desc:0 "We are searching for loose nuclear material in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_space_espionage_action_pact_desc:0 "We are stealing space programme designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ covert_survey_defences_action_pact_desc:0 "We are surveying the colony defences of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  decolonize_diplo_action:0 "Decolonize"
  decolonize_diplo_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has initiated [concept_decolonization_system] of [TARGET_COUNTRY.GetName]."
  decolonize_diplo_action_action_notification_name:0 "Decolonization"

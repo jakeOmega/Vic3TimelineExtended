@@ -888,7 +888,12 @@ class ModulesTest(unittest.TestCase):
             f"multiply = {gss.OVERFLOW_GRADE} add = local_var:sr_eb_sum }} }}\n\t}}"))
         room = _block(self.values, "sr_ebase_room_total")
         self.assertIn(f"value = {gss.NEAR_EARTH_ROOM}", room)
-        self.assertEqual(sum(int(n) for n in re.findall(r"\?= this \} add = (\d+)", room)), 760)
+        # Each world's room counts while it serves its holder (gss.site_serves:
+        # held, not blockaded, not occupied; slice 6).
+        self.assertEqual(sum(int(n) for n in re.findall(r"sr_site_occupier_\w+ \} \} add = (\d+)", room)), 760)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(gss.site_serves(site), room)
 
     def test_the_refresh_averages_over_every_level(self):
         refresh = _block(self.modules, "sr_ebase_refresh")
@@ -1063,9 +1068,12 @@ class FreeColoniesTest(unittest.TestCase):
                               _block(self.effects, f"sr_site_transfer_{site.key}"))
 
     def test_every_dispatched_helper_exists_and_names_its_key(self):
+        # The fleets' console actions (slice 6) live with the fleets.
+        fleets = _strip(_raw("common", "scripted_effects", "sr_fleet_effects.txt"))
         for action in gss.SITE_ACTIONS:
             with self.subTest(action=action):
-                body = _block(self.shared, f"sr_site_{action}_at")
+                home = fleets if action in ("debug_integrity", "debug_occupy") else self.shared
+                body = _block(home, f"sr_site_{action}_at")
                 self.assertIn("$KEY$", body)
         for dispatcher in ("sr_site_by_index", "sr_site_by_scope"):
             body = _block(self.effects, dispatcher)

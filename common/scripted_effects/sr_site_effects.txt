@@ -275,6 +275,12 @@ sr_sites_global_monthly = {
 		# Colony modules leave and land (sr_colony_module_effects.txt), so the
 		# world's step below syncs the modules that landed.
 		sr_ms_global_month = yes
+		# Full colonies: fleets land, then the month's fighting, before the
+		# worlds' step (slice 6 design § 6; sr_fleet_effects.txt).
+		if = {
+			limit = { sr_colonies_full_enabled = yes }
+			sr_fl_global_month = yes
+		}
 	}
 	sr_sites_monthly = yes
 	if = {
