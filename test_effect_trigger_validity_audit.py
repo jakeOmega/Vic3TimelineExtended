@@ -474,6 +474,19 @@ class EffectInTriggerTests(unittest.TestCase):
             [("set_variable", "effect-in-trigger", 7)],
         )
 
+    def test_hash_inside_a_string_is_not_a_comment(self):
+        # `"#b …#!"` loc formatting: a `#` in a string must not cut the line,
+        # or its closing quote reads as an open string that blanks the file.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n"
+            "\t\tcustom_tooltip = { text = \"#b Warning#!\" }  # REVIEWED 2026-10-26: x\n"
+            "\t\tif = { limit = { set_variable = y } }\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("set_variable", "effect-in-trigger", 4)],
+        )
+
     def test_reviewed_suppresses(self):
         result = _ctx_audit({"common/scripted_triggers/t.txt": (
             "te_t = {\n\tsave_scope_as = x  # REVIEWED 2026-10-26: test\n}\n"

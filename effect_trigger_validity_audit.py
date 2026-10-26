@@ -391,23 +391,33 @@ class AuditResult:
     coverage: dict = field(default_factory=dict)
 
 
-_QUOTE_RE = re.compile(r'"[^"]*"')
+def _split_code(line: str, in_quote: bool = False) -> tuple[str, str, bool]:
+    """Return (code, comment, in_quote) for one line.
 
-
-def _strip_comment(line: str) -> tuple[str, str]:
-    """Return (code, comment). Splits on the first `#` (good enough for script —
-    `#` inside quoted strings is vanishingly rare in effect files)."""
-    idx = line.find("#")
-    if idx == -1:
-        return line, ""
-    return line[:idx], line[idx:]
-
-
-def _strip_quotes(code: str) -> str:
-    """Blank out double-quoted spans. LHS keys are never quoted, and the legit
-    Vic3 scripted-value-call form (`"funcname(ARG)" < N`) lives inside quotes —
-    removing quoted spans drops those false positives without losing real keys."""
-    return _QUOTE_RE.sub(lambda m: " " * len(m.group(0)), code)
+    `code` keeps every offset of the line up to the comment but blanks quoted
+    text, quotes included: LHS keys are never quoted, and the legit Vic3
+    scripted-value-call form (`"funcname(ARG)" < N`) lives inside quotes. A `#`
+    starts the comment only outside a string (`text = "#b Warning#!"` is no
+    comment), and a string still open at the end of the line runs on into the
+    next, which `in_quote` carries (vanilla's two-line `CRITERIA = "NOT = { … }`
+    in neighbor_events.txt)."""
+    if not in_quote and '"' not in line:    # the common case
+        idx = line.find("#")
+        if idx == -1:
+            return line, "", False
+        return line[:idx], line[idx:], False
+    out: list[str] = []
+    for i, ch in enumerate(line):
+        if ch == '"':
+            in_quote = not in_quote
+            out.append(" ")
+        elif in_quote:
+            out.append(" ")
+        elif ch == "#":
+            return "".join(out), line[i:], False
+        else:
+            out.append(ch)
+    return "".join(out), "", in_quote
 
 
 def parse_reviewed_comment(comment: str | None) -> dict | None:
@@ -566,23 +576,10 @@ def _scan_lines(
     skip_depth: int | None = None
     # `name =` ending a line whose `{` opens the next one.
     carry: tuple[str, str] | None = None
-    # Inside a quoted string that runs on from an earlier line (vanilla's
-    # `CRITERIA = "NOT = { … }` + `… "` in neighbor_events.txt).
+    # Inside a quoted string that runs on from an earlier line.
     in_quote = False
     for lineno, raw in enumerate(lines, 1):
-        code, comment = _strip_comment(raw)
-        if in_quote:
-            end = code.find('"')
-            if end == -1:
-                code = " " * len(code)
-            else:
-                code = " " * (end + 1) + code[end + 1:]
-                in_quote = False
-        code = _strip_quotes(code)
-        start = code.find('"')
-        if start != -1:     # an unpaired quote opens a string the next line ends
-            code = code[:start] + " " * (len(code) - start)
-            in_quote = True
+        code, comment, in_quote = _split_code(raw, in_quote)
         depth = len(stack)
 
         if skip_depth is not None:
