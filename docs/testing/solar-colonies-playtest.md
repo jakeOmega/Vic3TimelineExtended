@@ -286,3 +286,52 @@ generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep`
     old government occupied stays occupied by the winner.
 22. **Panel.** Every new section opens and closes and no label ends in "...". The fleet row's orders line fits on
     one line; a full nine-slot Fleets section and the Locations list stay readable.
+
+## Interdiction, the AI's offence and the outer-space convention (slice 6, part 6c)
+
+Design: the fleets design's §§ 12–14 (§ 23 records what was built and where it departs). Full Colonies, as for 6a and
+6b. Console option m of `event te_debug_space_race.6` starts an interdiction with our first fleet that may make one.
+No new self-check: the script sees everything here, and the two engine questions (the war goal's scopes, the AI's
+choices) are read by eye. `TE_SR_COMBAT interdiction begun …` lines log each interdiction, one for each side.
+
+1. **The Interdict posture.** A fleet at a location where a country at peace with us, and not our ally (no alliance or
+   defensive pact), holds a colony: the posture button steps Station → Stand off → Close in (only with a hostile world
+   there) → Interdict → Station, and its hover names the price when Interdict is next. Where only allies or enemies
+   hold colonies, Interdict is skipped. The target button, while interdicting, steps through the worlds of countries
+   we may interdict.
+2. **The price.** Entering Interdict: our infamy +5, our UN record's "Hostile acts in space" +10, once for that fleet
+   and that country (stepping the target to another country's world pays again; staying put pays nothing more).
+3. **The blockade.** With none of the target's fleets there, from the next month its colonies at that location read
+   Interdicted in its Colony Defences and Locations, and ours reads Interdicting; settlers and modules stop arriving,
+   a mining specialization stops, an observatory keeps running, and its Extraplanetary Base room drops out (as step 13
+   of 6a/6b). Its other colonies elsewhere are untouched, and a third country's colonies at the same location too.
+4. **The standoff.** The target stations or stands off a fleet there: the blockade lifts the next month, and nobody
+   fires (no battle report, no losses).
+5. **The target's notice.** From the target's seat (a second player, since the AI never interdicts): "Our Colonies
+   at <location> Interdicted", naming the interdictor.
+6. **Cede Colony's war goal against an interdictor (engine read).** As the target, within five years: start a play
+   against the interdictor with Cede Colony as a war goal. The war goal's infamy reads 0, with the line "They
+   interdicted our colonies in peace". The same war goal against anyone else, or against the interdictor after five
+   years, costs its 10. If it reads 10 against the interdictor, the war goal's `infamy` block doesn't see
+   `scope:target_country` or `root` as vanilla's Money Transfer reads them: record it, and fall back to halving the
+   article's AI score instead (plan C1.3).
+7. **The interdiction's end.** Declare war on the target: the fleet stands off and blockades it as an enemy. Or sign
+   an alliance or defensive pact with it, or let the world change hands: the fleet stands off and Interdicted clears.
+8. **The AI answers an interdiction.** Interdict an AI's colonies: within a few months it sends a fleet there (if one
+   can reach it within six months) and stations it, and the blockade turns into a standoff.
+9. **The AI attacks at war.** In an observer run, or at war with an AI fleet power that outmatches us somewhere within
+   a year's flight: once a month at most it sends one docked fleet to the nearest location with an enemy colony where
+   it is at least 1.5 times the enemy's fleets and Defences there. On arrival it closes in on the colony with the most
+   people and modules (if its marines exceed the garrison and militia) or stands off and blockades. It never toggles
+   Destroy, never attacks a free colony and never picks Interdict. It brings the fleet home when short of supply or
+   propellant, or when the enemy's fleets there outmatch it.
+10. **The convention in the chamber.** At Full Colonies, with the UN founded and a colony held somewhere, the chamber's
+    Table a Resolution list shows "Convention on the Settlement of Outer Space" (under Simple Colonies or Races Only the
+    row is hidden); a member holding a colony may table it; its hover gives the terms. After a seizure or destruction
+    the docket offers it ("A Convention on the Settlement of Outer Space", with the cause line naming who did it) to
+    a member holding a colony, never the actor. Carried, the overview's COPUOS lights, parties carry "Outer Space
+    Settlement Convention" (+2% prestige × enforcement), and a party's Destroy price tooltip and free-colony price
+    read 40 and 20 infamy (twice the 20 and 10). Refusing it in the proposer event leaves "Refused the Outer Space
+    Settlement Convention".
+11. **Placeholder art.** The convention's topic icon in the session strip and COPUOS's agency icon are copies of space
+    cooperation's and UNOOSA's; new art drops in under the same names.

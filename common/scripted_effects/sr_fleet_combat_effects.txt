@@ -364,6 +364,81 @@ sr_cb_charge_interdict = {
 	}
 }
 
+# A revolution's winner continues the nation (ROOT, from sr_repair_after_civil_war,
+# scope:te_cw_loser the old government): variables merge in, variable lists
+# don't. So the loser's casus belli list comes to the winner (it keeps
+# sr_interdiction_recent, a variable), the winner joins every list that named
+# the loser, and every fleet that interdicted the loser now names the winner,
+# so the next month's check charges no new price.
+sr_icpt_repair_after_civil_war = {
+	if = {
+		limit = { exists = scope:te_cw_loser }
+		if = {
+			limit = { scope:te_cw_loser = { has_variable_list = sr_interdiction_targets } }
+			scope:te_cw_loser = {
+				every_in_list = {
+					variable = sr_interdiction_targets
+					save_temporary_scope_as = sr_icpt_carried
+					ROOT = {
+						if = {
+							limit = { NOT = { sr_interdicted_recently = { TARGET = scope:sr_icpt_carried } } }
+							add_to_variable_list = { name = sr_interdiction_targets target = scope:sr_icpt_carried }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_global_variable_list = sr_fleet_powers }
+			every_in_global_list = {
+				variable = sr_fleet_powers
+				limit = { is_country_alive = yes }
+				if = {
+					limit = {
+						has_variable_list = sr_interdiction_targets
+						is_target_in_variable_list = { name = sr_interdiction_targets target = scope:te_cw_loser }
+						NOT = { is_target_in_variable_list = { name = sr_interdiction_targets target = ROOT } }
+					}
+					add_to_variable_list = { name = sr_interdiction_targets target = ROOT }
+				}
+				sr_fl_each_slot = { DO = icpt_repoint }
+			}
+		}
+	}
+}
+
+sr_fl_icpt_repoint_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_icpt
+			var:sr_fl_$N$_icpt = scope:te_cw_loser
+		}
+		set_variable = { name = sr_fl_$N$_icpt value = ROOT }
+	}
+}
+
+# Console (te_debug_space_race.6, 6c): the first of our fleets that may
+# interdict (local_var:sr_fl_debug_done not yet set) begins an interdiction of
+# the first world there it may interdict, at its price, as the posture button
+# would.
+sr_fl_debug_icpt_at = {
+	if = {
+		limit = {
+			NOT = { has_local_variable = sr_fl_debug_done }
+			sr_fl_$N$_has_interdict_world = yes
+		}
+		set_local_variable = { name = sr_fl_debug_done value = 1 }
+		set_variable = { name = sr_fl_$N$_posture value = 4 }
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		if = {
+			limit = { NOT = { sr_fl_$N$_target_interdictable = yes } }
+			sr_fl_step_icpt_target_at = { N = $N$ }
+		}
+		sr_fl_charge_icpt_at = { N = $N$ }
+		sr_icpt_rebuild = yes
+	}
+}
+
 # Country scope, from sr_icpt_rebuild (KEY, LOC): an interdicting slot's
 # target world, while it may still be interdicted, puts its holder on our
 # list for the location (sr_icpt_<loc>), which the blockade reads.

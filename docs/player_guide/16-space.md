@@ -901,6 +901,7 @@ Earth):
 | Station | Every enemy fleet there | Guard your colonies. A fleet arriving where you hold a colony stations |
 | Stand off | Enemy fleets that stand off or are stationed, out of the colonies' guns | Blockade an enemy's colonies |
 | Close in | The target world's Defences and the enemy fleets stationed there | Seize or destroy a colony |
+| Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its world | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
 At Earth every fleet fights every enemy fleet, and an Orbital Battlestation
 fights for its owner (25 strength a level, regaining 10% a month; none in a
@@ -932,14 +933,50 @@ Seize or Destroy button:
 | Destroy | Three months closing in with more fire than its Defences | The colony and everyone in it are lost, and the world lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at
-once, and seizing it makes it yours at autonomy 60. Without Survey Colony
+once, and seizing it makes it yours at autonomy 60. A party to the
+[Convention on the Settlement of Outer Space](10-united-nations.md#the-outer-space-convention)
+pays twice the infamy and twice the UN record for destroying a colony or
+closing in on a free one. Seizing a colony at war costs a party no more than
+anyone else. Without Survey Colony
 Defences against its holder, the target's hover gives a world's Defences only
 roughly, and its integrity and marines not at all.
 
+### Interdiction
+
+You can blockade a rival's colonies without going to war, as the United States
+quarantined Cuba in 1962. Send a fleet to a location where a country at peace
+with you, and not your ally (no alliance or defensive pact), holds a colony, and
+step its posture to Interdict; the target button picks which country's world.
+While none of that country's fleets is stationed or standing off there, its
+colonies at that location are blockaded as an enemy's would be, and its
+Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,
+the two fleets face each other and nothing is blockaded; firing on it needs a
+war.
+
+| You pay, for each fleet and each country it interdicts | The country you interdict gains |
+|---|---|
+| 5 infamy, and 10 on your UN record of hostile acts in space | A warning, and a casus belli: for five years, demanding one of your colonies with Cede Colony costs it no infamy |
+
+An interdiction ends, and the fleet stands off, when its target goes to war
+with you, signs an alliance or defensive pact with you, or no longer holds a
+colony there. A world that passes to another country at peace with you is a new
+interdiction, at the same price. In a war against the country you were
+interdicting, your fleet standing off blockades it anyway, now as an enemy.
+
+### How the AI fights in space
+
 AI fleet powers keep their fleets at home in peace, send their strongest fleet
 to defend a location where they hold colonies when an enemy fleet is there or on
-its way, bring fleets home short of supply or propellant, and land marines for
-the garrisons they order. They never destroy colonies or attack free ones.
+its way, or when a fleet interdicts them there, bring fleets home short of
+supply or propellant, and land marines for the garrisons they order. At war,
+once a month, an AI sends one fleet from a dock to the nearest enemy location
+within a year's flight, when the fleet is at least half again as strong as the
+enemy's fleets and its colonies' Defences there and can fly home again or dock
+there. It closes in on the enemy colony with the most people and modules,
+to seize it when its marines outnumber the garrison and militia, and otherwise
+stands off to blockade. It comes home once the enemy's fleets there outmatch
+its own. An AI never destroys a colony, never attacks a free one and never
+interdicts.
 
 ## After the space race
 

@@ -277,6 +277,20 @@ class CivilWarTest(unittest.TestCase):
             with self.subTest(site=site.key):
                 self.assertIn(f"set_global_variable = {{ name = sr_site_occupier_{site.key} value = ROOT }}", repoint)
 
+    def test_the_winner_keeps_the_interdiction_records(self):
+        """Variable lists don't pass to a revolution's winner: the casus belli
+        list is carried over, and other powers' records that name the old
+        government are repointed (6c)."""
+        repair = _block(_strip(_raw(SPACE_RACE_EFFECTS)), "sr_repair_after_civil_war")
+        self.assertIn("sr_icpt_repair_after_civil_war = yes", repair)
+        body = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_icpt_repair_after_civil_war")
+        self.assertIn("exists = scope:te_cw_loser", body)
+        self.assertIn("add_to_variable_list = { name = sr_interdiction_targets target = scope:sr_icpt_carried }", body)
+        self.assertIn("add_to_variable_list = { name = sr_interdiction_targets target = ROOT }", body)
+        self.assertIn("sr_fl_each_slot = { DO = icpt_repoint }", body)
+        self.assertIn("set_variable = { name = sr_fl_$N$_icpt value = ROOT }",
+                      _block(_strip(_raw(COMBAT_EFFECTS)), "sr_fl_icpt_repoint_at"))
+
     def test_a_release_clears_every_slice_6_record(self):
         effects = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
         for site in gss.SITES:
@@ -374,14 +388,14 @@ class InterdictionTest(unittest.TestCase):
         self.assertIn("icpt", gsf.SLOT_VARS)
 
     def test_the_ai_never_interdicts(self):
-        """No AI order sets Interdict: only the posture step does, and the AI
-        never calls it (design § 14)."""
+        """No AI order sets Interdict: only the posture step and the console do,
+        and the AI calls neither (design § 14)."""
         texts = {"hand": self.combat + _strip(_raw(FLEET_EFFECTS)), "generated": self.generated}
         for label, text in texts.items():
             with self.subTest(file=label):
                 setters = [m.start() for m in re.finditer(r"_posture value = 4 \}", text)]
                 owners = {re.findall(r"(?m)^(\w+) = \{", text[:i])[-1] for i in setters}
-                self.assertLessEqual(owners, {"sr_fl_step_posture_at"})
+                self.assertLessEqual(owners, {"sr_fl_step_posture_at", "sr_fl_debug_icpt_at"})
         ai = ""
         for text in (self.generated, self.combat, _strip(_raw(FLEET_EFFECTS))):
             names = re.findall(r"(?m)^(sr_fl_ai_\w+) = \{", text)

@@ -107,7 +107,7 @@ SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_months", "dv", "supply", "m
 SLOT_ACTIONS = ("clear", "month", "arrive", "note", "build", "new_at_earth", "take_marines", "go", "step_pick", "merge",
                 "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
-                "ai_assault")
+                "ai_assault", "debug_icpt", "icpt_repoint")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
