@@ -3,69 +3,15 @@ from collections import defaultdict
 from pathlib import Path
 
 import tech_unlocks_lib
-from mod_state import ModState
+from mod_state import ModState, entity_paths
 from path_constants import base_game_path, doc_path, mod_path
 
-_BASE_COMMON = os.path.join(base_game_path, "game", "common")
-_MOD_COMMON = os.path.join(mod_path, "common")
+# Every entity type ModState knows, vanilla and mod-only, from mod_state's
+# tables: the same pair the server builds. Standalone runs (this script,
+# mod_structure_audit's CLI, gen_event_inventory) import them from here, since
+# importing mod_state_server would load the whole server.
+base_game_paths, mod_paths = entity_paths(base_game_path, mod_path)
 
-base_game_paths = {
-    "Building Groups": os.path.join(_BASE_COMMON, "building_groups"),
-    "Buildings": os.path.join(_BASE_COMMON, "buildings"),
-    "Technologies": os.path.join(_BASE_COMMON, "technology", "technologies"),
-    "PM Groups": os.path.join(_BASE_COMMON, "production_method_groups"),
-    "PMs": os.path.join(_BASE_COMMON, "production_methods"),
-    "Ideologies": os.path.join(_BASE_COMMON, "ideologies"),
-    "Battle Conditions": os.path.join(_BASE_COMMON, "battle_conditions"),
-    "Buy Packages": os.path.join(_BASE_COMMON, "buy_packages"),
-    "Character Interactions": os.path.join(_BASE_COMMON, "character_interactions"),
-    "Character Traits": os.path.join(_BASE_COMMON, "character_traits"),
-    "Combat Unit Groups": os.path.join(_BASE_COMMON, "combat_unit_groups"),
-    "Combat Unit Types": os.path.join(_BASE_COMMON, "combat_unit_types"),
-    "Company Types": os.path.join(_BASE_COMMON, "company_types"),
-    "Diplomatic Actions": os.path.join(_BASE_COMMON, "diplomatic_actions"),
-    "Diplomatic Plays": os.path.join(_BASE_COMMON, "diplomatic_plays"),
-    "Goods": os.path.join(_BASE_COMMON, "goods"),
-    "Institutions": os.path.join(_BASE_COMMON, "institutions"),
-    "Interest Groups": os.path.join(_BASE_COMMON, "interest_groups"),
-    "Law Groups": os.path.join(_BASE_COMMON, "law_groups"),
-    "Laws": os.path.join(_BASE_COMMON, "laws"),
-    "Mobilization Option Groups": os.path.join(_BASE_COMMON, "mobilization_option_groups"),
-    "Mobilization Options": os.path.join(_BASE_COMMON, "mobilization_options"),
-    "Modifier Types": os.path.join(_BASE_COMMON, "modifier_type_definitions"),
-    "Modifiers": os.path.join(_BASE_COMMON, "static_modifiers"),
-    "Pop Needs": os.path.join(_BASE_COMMON, "pop_needs"),
-    "Subject Types": os.path.join(_BASE_COMMON, "subject_types"),
-}
-
-mod_paths = {
-    "Building Groups": os.path.join(_MOD_COMMON, "building_groups"),
-    "Buildings": os.path.join(_MOD_COMMON, "buildings"),
-    "Technologies": os.path.join(_MOD_COMMON, "technology", "technologies"),
-    "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
-    "PMs": os.path.join(_MOD_COMMON, "production_methods"),
-    "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
-    "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
-    "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
-    "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
-    "Character Traits": os.path.join(_MOD_COMMON, "character_traits"),
-    "Combat Unit Groups": os.path.join(_MOD_COMMON, "combat_unit_groups"),
-    "Combat Unit Types": os.path.join(_MOD_COMMON, "combat_unit_types"),
-    "Company Types": os.path.join(_MOD_COMMON, "company_types"),
-    "Diplomatic Actions": os.path.join(_MOD_COMMON, "diplomatic_actions"),
-    "Diplomatic Plays": os.path.join(_MOD_COMMON, "diplomatic_plays"),
-    "Goods": os.path.join(_MOD_COMMON, "goods"),
-    "Institutions": os.path.join(_MOD_COMMON, "institutions"),
-    "Interest Groups": os.path.join(_MOD_COMMON, "interest_groups"),
-    "Laws": os.path.join(_MOD_COMMON, "laws"),
-    "Law Groups": os.path.join(_MOD_COMMON, "law_groups"),
-    "Mobilization Option Groups": os.path.join(_MOD_COMMON, "mobilization_option_groups"),
-    "Mobilization Options": os.path.join(_MOD_COMMON, "mobilization_options"),
-    "Modifier Types": os.path.join(_MOD_COMMON, "modifier_type_definitions"),
-    "Modifiers": os.path.join(_MOD_COMMON, "static_modifiers"),
-    "Pop Needs": os.path.join(_MOD_COMMON, "pop_needs"),
-    "Subject Types": os.path.join(_MOD_COMMON, "subject_types"),
-}
 
 def _format_description(desc, indent="\t\t"):
     """Render a localized description as one or more indented lines.

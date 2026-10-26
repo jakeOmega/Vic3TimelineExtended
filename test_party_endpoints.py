@@ -1,17 +1,21 @@
 """Political parties in ModState and the server (#1164): the type's
 registration, an injected join_weight replacing the field, /raw/Party/<key>,
-and GET /parties. No game install needed."""
+and GET /parties; the entity-path tables every type comes from, a party's icon
+in /placeholder-icons and /duplicate-images, and /gui/render-paths/Parties
+(#1183). No game install needed."""
 import json
+import os
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
+import mod_state_script
 import mod_state_server as mss
 import party_catalog
 import vanilla_parsed
-from mod_state import VANILLA_COMMON_DIRS, ModState
+from mod_state import MOD_ONLY_DIRS, VANILLA_COMMON_DIRS, ModState, entity_paths
 from paradox_file_parser import ParadoxFileParser
 
 REPO = Path(__file__).resolve().parent
@@ -139,6 +143,27 @@ class RegistrationTests(unittest.TestCase):
         self.assertEqual(len(vanilla), manifest["entity_types"]["Parties"]["entities"])
         self.assertIn("social_democrat_party", vanilla)  # in social_democrats_party.txt
         self.assertIn("revolutionary_party", vanilla)
+
+    def test_path_tables_cover_every_type(self):
+        # Both modules build their tables with mod_state.entity_paths (#1183):
+        # mod_state_script's once listed 26 of the types by hand, so its
+        # standalone users (mod_structure_audit's CLI, gen_event_inventory)
+        # read no parties, journal entries or events.
+        self.assertFalse(set(VANILLA_COMMON_DIRS) & set(MOD_ONLY_DIRS))
+        for module in (mss, mod_state_script):
+            with self.subTest(module=module.__name__):
+                self.assertEqual(set(module.base_game_paths), set(VANILLA_COMMON_DIRS))
+                self.assertEqual(set(module.mod_paths), set(VANILLA_COMMON_DIRS) | set(MOD_ONLY_DIRS))
+        self.assertEqual(mod_state_script.base_game_paths, mss.base_game_paths)
+        self.assertEqual(mod_state_script.mod_paths, mss.mod_paths)
+
+    def test_entity_paths_roots(self):
+        base, mod = entity_paths("/g", "/m")
+        self.assertEqual(base["Technologies"], os.path.join("/g", "game", "common", "technology", "technologies"))
+        self.assertEqual(mod["Parties"], os.path.join("/m", "common", "parties"))
+        self.assertEqual(mod["On Actions"], os.path.join("/m", "common", "on_actions"))
+        self.assertEqual(mod["Events"], os.path.join("/m", "events"))
+        self.assertNotIn("Events", base)
 
     def test_raw_type_name_resolves_singular_and_plural(self):
         known = list(VANILLA_COMMON_DIRS)
