@@ -23,9 +23,9 @@ committed `vanilla_parsed/` snapshot (`common/script_values.json`). A scalar
 name. A scripted constant (`@foo = 3`) does not, and neither does an
 `INJECT:`, `REPLACE:`, `TRY_INJECT:` or `TRY_REPLACE:` name: it edits a
 definition that has to exist elsewhere, in the mod or vanilla, and that
-definition is what resolves the read. (`gui_reference_audit` scans the same
-depth-0 keys for its `.gui` check but still counts `INJECT:` and `REPLACE:`
-names as definitions.) No game install is needed. A missing snapshot raises
+definition is what resolves the read. The rule is
+`gui_reference_audit.defined_names`, shared with that audit's `.gui` check
+(#1180). No game install is needed. A missing snapshot raises
 rather than flagging every vanilla name, and so does a scan that finds no loc
 file at all, so a wrong path can't pass as clean.
 
@@ -60,7 +60,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from gui_reference_audit import IDENT, masks
+from gui_reference_audit import defined_names
 from mod_state import split_loc_line
 
 CHECK = "loc_script_value"
@@ -78,10 +78,6 @@ _CALL_RE = re.compile(
     r"\bScriptValue\(\s*(?:(?P<q>\\?[\"'])(?P<arg>[^\"'\\]*)(?P=q)\s*\))?"
 )
 _NAME_RE = re.compile(r"[A-Za-z_]\w*")
-# Depth-0 keys. The lookbehind keeps out a scripted constant (`@foo = 5`) and
-# any name behind a merge directive (`INJECT:foo`, `TRY_REPLACE:foo`), which
-# edits a definition found elsewhere; only the `*_OR_CREATE:` forms define.
-_DEF_RE = re.compile(rf"[{{}}]|(?<![@\w:])(?:(?:INJECT|REPLACE)_OR_CREATE:)?({IDENT})\s*=")
 _TAGGED_REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
 )
@@ -123,15 +119,7 @@ def mod_script_value_names(mod_path: str | Path) -> set[str]:
     names: set[str] = set()
     folder = Path(mod_path) / SCRIPT_VALUE_DIR
     for path in sorted(folder.rglob("*.txt")):
-        syntax = masks(path.read_text(encoding="utf-8-sig", errors="replace"))[1]
-        depth = 0
-        for tok in _DEF_RE.finditer(syntax):
-            if tok[0] == "{":
-                depth += 1
-            elif tok[0] == "}":
-                depth -= 1
-            elif depth == 0:
-                names.add(tok[1])
+        names |= defined_names(path.read_text(encoding="utf-8-sig", errors="replace"))
     return names
 
 

@@ -16,6 +16,8 @@ import tempfile
 import unittest
 from unittest import mock
 
+import gui_reference_audit
+import loc_script_value_audit
 from loc_script_value_audit import (
     CHECK, REPORT_PATH, audit, main, mod_script_value_names, regenerate, render_report,
 )
@@ -75,6 +77,10 @@ class DefinitionTests(_Fixture):
             mod_script_value_names(self.root),
             {"mod_block_sv", "mod_scalar_sv", "created_sv", "recreated_sv", "sub_sv"},
         )
+
+    def test_definition_rule_is_shared_with_gui_reference_audit(self):
+        # #1180: one helper, so the two audits can't drift on what defines.
+        self.assertIs(loc_script_value_audit.defined_names, gui_reference_audit.defined_names)
 
     def test_missing_snapshot_raises(self):
         os.remove(os.path.join(self.root, "vanilla_parsed", "common", "script_values.json"))

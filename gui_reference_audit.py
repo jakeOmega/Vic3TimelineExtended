@@ -15,10 +15,18 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from paradox_file_parser import directive_prefixes
+
 BOM = b"\xef\xbb\xbf"
 IDENT = r"[A-Za-z_][\w.\-]*"
 LEX = re.compile(r'"(?:\\.|[^"\\])*"|#[^\n]*', re.S)
 OPEN = re.compile(rf"({IDENT})\s*=\s*\{{")
+# Of the six merge directives, only the *_OR_CREATE forms create the entry they
+# name. INJECT:, REPLACE: and their TRY_ forms edit an entry that has to be
+# defined elsewhere (#1180). The lookbehind keeps out a scripted constant
+# (`@foo = 3`) and a name right after any other directive's colon.
+_CREATING = "|".join(re.escape(p) for p in directive_prefixes if p.endswith("_OR_CREATE:"))
+_DEFINITION = re.compile(rf"[{{}}]|(?<![@\w:])(?:{_CREATING})?({IDENT})\s*=")
 CALLS = {
     "scripted_guis": "GetScriptedGui",
     "script_values": "ScriptValue",
@@ -76,6 +84,29 @@ def masks(text: str) -> tuple[str, str]:
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig")
+
+
+def defined_names(text: str) -> set[str]:
+    """Names a database file (`common/script_values/` and the like) defines.
+
+    Its depth-0 keys: a scalar `foo = 1` counts (a script value can be one),
+    and so does a name behind `INJECT_OR_CREATE:` or `REPLACE_OR_CREATE:`.
+    A scripted constant (`@foo = 3`) doesn't, and nor does a name behind
+    `INJECT:`, `REPLACE:`, `TRY_INJECT:` or `TRY_REPLACE:`: it edits an entry
+    that must exist elsewhere, in the mod or vanilla, and that entry is what
+    resolves a read. `loc_script_value_audit` uses this too, so the two audits
+    can't disagree on what a definition is.
+    """
+    names: set[str] = set()
+    depth = 0
+    for token in _DEFINITION.finditer(masks(text)[1]):
+        if token[0] == "{":
+            depth += 1
+        elif token[0] == "}":
+            depth -= 1
+        elif depth == 0:
+            names.add(token[1])
+    return names
 
 
 def blocks(syntax: str):
@@ -151,19 +182,9 @@ class Index:
                     self.vanilla_read.add(kind)
                 for path in sorted(folder.rglob("*.txt")):
                     text = read(path)
-                    code, syntax = masks(text)
-                    # Scalars count too: foo = 1 is a script-value definition.
-                    # A scripted constant (@foo = 3) is not one: the lookbehind
-                    # keeps `foo` from matching after the `@`.
-                    depth = 0
-                    for token in re.finditer(rf"[{{}}]|(?<![@\w])(?:INJECT:|REPLACE:)?({IDENT})\s*=", syntax):
-                        if token[0] == "{":
-                            depth += 1
-                        elif token[0] == "}":
-                            depth -= 1
-                        elif depth == 0:
-                            self.keys[kind].add(token[1])
+                    self.keys[kind] |= defined_names(text)
                     if kind == "scripted_guis":
+                        code, syntax = masks(text)
                         for name, opening, start, end in blocks(syntax):
                             saved, shown = set(), ""
                             for child, _, a, b in blocks(syntax[start:end]):
