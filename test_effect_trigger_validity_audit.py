@@ -278,6 +278,281 @@ class BootstrapCatalogTests(unittest.TestCase):
         self.assertIn("some_vanilla_value", catalog)
 
 
+# --- #1142: effects in trigger context and the reverse ----------------------
+
+# A union catalog for the context fixtures below, and the two context sets.
+CTX_VALID = VALID | {
+    "is_at_war", "save_scope_as", "save_temporary_scope_as", "has_modifier",
+    "any_enemy_in_war", "is_subject_of", "has_variable", "set_variable",
+    "custom_tooltip", "text", "every_country", "any_country", "random_country",
+    "ai_chance", "base", "modifier", "option", "immediate", "trigger",
+    "type", "else", "add_radicals", "strata", "gdp", "is_shown",
+}
+CTX_KEYS = {
+    "effect_only": {"save_scope_as", "set_variable", "every_country",
+                    "random_country", "add_modifier", "if", "else",
+                    "trigger_event", "add_radicals"},
+    "trigger_only": {"is_at_war", "has_modifier", "any_enemy_in_war",
+                     "is_subject_of", "has_variable", "any_country"},
+}
+
+# decol_fighting_colonial_war as #1130 shipped it (colonial_empire_triggers.txt
+# before 7d2df7ea8): `save_scope_as` is an effect, so the trigger parser
+# dropped the line and every scope:decol_cw_metropole read failed.
+BROKEN_DECOL_TRIGGER = """decol_fighting_colonial_war = {
+\tis_at_war = yes
+\tsave_scope_as = decol_cw_metropole
+\tOR = {
+\t\thas_modifier = colonial_crackdown_modifier
+\t\tany_enemy_in_war = {
+\t\t\tOR = {
+\t\t\t\tAND = {
+\t\t\t\t\tis_subject_of = scope:decol_cw_metropole
+\t\t\t\t\tis_qualifying_colonial_subject = yes
+\t\t\t\t}
+\t\t\t\tvar:decol_iw_metropole ?= scope:decol_cw_metropole
+\t\t\t}
+\t\t}
+\t}
+}
+"""
+_QUALIFYING = "is_qualifying_colonial_subject = {\n\tis_at_war = yes\n}\n"
+
+
+def _ctx_audit(files: dict[str, str]):
+    return eva.audit(_Mod(files).root, valid_keys=CTX_VALID, context_keys=CTX_KEYS)
+
+
+class EffectInTriggerTests(unittest.TestCase):
+    def test_save_scope_as_in_scripted_trigger_flags(self):
+        # The regression fixture: one flag, on the save_scope_as line.
+        result = _ctx_audit({
+            "common/scripted_triggers/colonial_empire_triggers.txt":
+                _QUALIFYING + BROKEN_DECOL_TRIGGER,
+        })
+        flags = [f for f in result.flags if not f.exemption]
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in flags],
+            [("save_scope_as", "effect-in-trigger", 6)],
+        )
+
+    def test_save_temporary_scope_as_passes(self):
+        fixed = BROKEN_DECOL_TRIGGER.replace(
+            "save_scope_as =", "save_temporary_scope_as ="
+        )
+        result = _ctx_audit({
+            "common/scripted_triggers/colonial_empire_triggers.txt":
+                _QUALIFYING + fixed,
+        })
+        self.assertEqual(_flagged(result), set())
+
+    def test_committed_catalog_rejects_save_scope_as_in_a_trigger(self):
+        # Against the real committed catalogs: a re-bootstrap that lost
+        # save_scope_as from [effect_only] would reopen #1142.
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({
+            "common/scripted_triggers/colonial_empire_triggers.txt":
+                _QUALIFYING + BROKEN_DECOL_TRIGGER,
+        })
+        result = eva.audit(
+            mod.root,
+            valid_keys=eva.load_catalog(here),
+            context_keys=eva.load_context_catalog(here),
+        )
+        self.assertEqual(
+            {(f.keyword, f.kind) for f in result.flags},
+            {("save_scope_as", "effect-in-trigger")},
+        )
+
+    def test_effect_in_event_limit_flags(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tif = {\n\t\t\tlimit = {\n"
+            "\t\t\t\tset_variable = x\n\t\t\t}\n\t\t\tset_variable = y\n"
+            "\t\t}\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("set_variable", "effect-in-trigger", 5)],
+        )
+
+    def test_effect_in_event_immediate_passes(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tsave_scope_as = x\n"
+            "\t\tevery_country = { set_variable = y }\n\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_inline_limit_and_negation_on_one_line(self):
+        # Context follows the braces within a line: the effect after the
+        # limit closes is fine, the one inside NOT in the limit is not.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n"
+            "\t\tif = { limit = { NOT = { save_scope_as = x } } set_variable = y }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), {("save_scope_as", "effect-in-trigger")})
+
+    def test_trigger_iterator_body_and_effect_iterator(self):
+        # Inside any_* the context stays trigger, so a random_* there flags.
+        result = _ctx_audit({"common/scripted_triggers/t.txt": (
+            "te_t = {\n\tany_country = {\n\t\trandom_country = { is_at_war = yes }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), {("random_country", "effect-in-trigger")})
+
+    def test_event_trigger_and_option_gate_are_trigger_context(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\ttype = country_event\n\ttrigger = { set_variable = a }\n"
+            "\toption = {\n\t\tname = my.1.a\n\t\ttrigger = { has_variable = b }\n"
+            "\t\tis_shown = { add_modifier = { name = c } }\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            _flagged(result),
+            {("set_variable", "effect-in-trigger"),
+             ("add_modifier", "effect-in-trigger")},
+        )
+
+    def test_custom_tooltip_takes_its_parents_context(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\ttrigger = {\n\t\tcustom_tooltip = { text = t has_variable = a }\n"
+            "\t}\n\timmediate = {\n\t\tcustom_tooltip = { text = t set_variable = b }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_script_value_compared_in_a_trigger_is_neutral(self):
+        # `x > { … }` is a script value: its `if` is math, not an effect.
+        result = _ctx_audit({"common/scripted_triggers/t.txt": (
+            "te_t = {\n\tgdp > {\n\t\tvalue = 5\n"
+            "\t\tif = { limit = { is_at_war = yes } add = 1 }\n\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_ai_weight_modifier_is_neutral(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\toption = {\n\t\tname = my.1.a\n"
+            "\t\tai_chance = { base = 1 modifier = { trigger = { is_at_war = yes } add = 2 } }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_mod_scripted_effect_called_from_a_trigger_flags(self):
+        result = _ctx_audit({
+            "common/scripted_effects/s.txt": "te_do = {\n\tset_variable = x\n}\n",
+            "common/scripted_triggers/t.txt": "te_check = {\n\tte_do = yes\n}\n",
+        })
+        self.assertEqual(_flagged(result), {("te_do", "effect-in-trigger")})
+
+    def test_name_in_both_mod_databases_is_not_checked(self):
+        result = _ctx_audit({
+            "common/scripted_effects/s.txt": "te_both = {\n\tset_variable = x\n}\n",
+            "common/scripted_triggers/t.txt": "te_both = {\n\tis_at_war = yes\n}\n"
+            "te_check = {\n\tte_both = yes\n}\n",
+        })
+        self.assertEqual(_flagged(result), set())
+
+    def test_journal_entry_complete_is_trigger_context(self):
+        result = _ctx_audit({"common/journal_entries/j.txt": (
+            "je_x = {\n\tcomplete = { set_variable = x }\n"
+            "\ton_complete = { set_variable = y }\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.line) for f in result.flags], [("set_variable", 2)]
+        )
+
+    def test_multiline_string_keys_are_not_read(self):
+        # vanilla neighbor_events.txt: a trigger passed as a two-line string.
+        # Its keys are text, not script, and its braces don't count.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tte_helper = {\n"
+            "\t\t\tCRITERIA = \"NOT = { has_variable = x }\n"
+            "\t\t\tgdp > 5\"\n\t\t}\n\t\tif = { limit = { set_variable = y } }\n"
+            "\t}\n}\n"
+        ), "common/scripted_effects/s.txt": "te_helper = {\n\tsave_scope_as = z\n}\n"})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("set_variable", "effect-in-trigger", 7)],
+        )
+
+    def test_reviewed_suppresses(self):
+        result = _ctx_audit({"common/scripted_triggers/t.txt": (
+            "te_t = {\n\tsave_scope_as = x  # REVIEWED 2026-10-26: test\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+        self.assertEqual(
+            [(f.keyword, f.kind) for f in result.flags],
+            [("save_scope_as", "effect-in-trigger")],
+        )
+
+
+class TriggerInEffectTests(unittest.TestCase):
+    def test_trigger_in_scripted_effect_body_flags(self):
+        result = _ctx_audit({"common/scripted_effects/s.txt": (
+            "te_fx = {\n\thas_variable = x\n\tif = { limit = { has_variable = x } }\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("has_variable", "trigger-in-effect", 2)],
+        )
+
+    def test_trigger_iterator_in_immediate_flags(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tany_country = { is_at_war = yes }\n\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), {("any_country", "trigger-in-effect")})
+
+    def test_mod_scripted_trigger_called_from_an_effect_flags(self):
+        result = _ctx_audit({
+            "common/scripted_triggers/t.txt": "te_check = {\n\tis_at_war = yes\n}\n",
+            "events/e.txt": "my.1 = {\n\toption = {\n\t\tname = my.1.a\n"
+            "\t\tte_check = yes\n\t}\n}\n",
+        })
+        self.assertEqual(_flagged(result), {("te_check", "trigger-in-effect")})
+
+    def test_effect_argument_not_in_trigger_only_passes(self):
+        # `strata` is a trigger vanilla also passes to add_radicals, so the
+        # bootstrap leaves it out of trigger_only; it must not flag.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tadd_radicals = { value = 1 strata = lower }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+
+class ContextCatalogTests(unittest.TestCase):
+    def test_bootstrap_and_load(self):
+        game = tempfile.mkdtemp()
+        docs = tempfile.mkdtemp()
+        mod = tempfile.mkdtemp()
+        with open(os.path.join(docs, "effects.log"), "w", encoding="utf-8") as f:
+            f.write("# Effect Documentation\n## save_scope_as\nx\n## set_variable\n"
+                    "## custom_tooltip\n## add_radicals\n")
+        with open(os.path.join(docs, "triggers.log"), "w", encoding="utf-8") as f:
+            f.write("# Trigger Documentation\n## has_variable\n## custom_tooltip\n"
+                    "## strata\n")
+        for rel, text in {
+            # `strata` as an effect argument: vanilla uses it in effect context.
+            "game/events/e.txt": "v.1 = {\n\timmediate = {\n"
+                "\t\tadd_radicals = { value = 1 strata = lower }\n\t}\n}\n",
+            "game/common/scripted_effects/x.txt": "v_fx = {\n\tset_variable = a\n}\n",
+            "game/common/scripted_triggers/y.txt": "v_tg = {\n\thas_variable = a\n}\n",
+        }.items():
+            p = os.path.join(game, rel)
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            with open(p, "w", encoding="utf-8-sig") as f:
+                f.write(text)
+        info = eva.bootstrap_context_catalog(game, mod, docs)
+        cat = eva.load_context_catalog(mod)
+        self.assertEqual(cat["effect_only"],
+                         {"save_scope_as", "set_variable", "add_radicals", "v_fx"})
+        self.assertEqual(cat["trigger_only"], {"has_variable", "v_tg"})
+        self.assertEqual(info["dropped_as_used_by_vanilla"]["trigger_only"], ["strata"])
+
+    def test_missing_catalog_loads_empty(self):
+        cat = eva.load_context_catalog(tempfile.mkdtemp())
+        self.assertEqual(cat, {"effect_only": set(), "trigger_only": set()})
+
+
 class SuppressionTests(unittest.TestCase):
     def test_reviewed_partitions_flag(self):
         m = _Mod(
@@ -301,7 +576,9 @@ class RenderReportTests(unittest.TestCase):
                          exemption={"date": "2026-09-18", "rationale": "action field"}),
             ],
             coverage={"files_scanned": 262, "roots_scanned": 16, "keys_checked": 109392,
-                      "catalog_size": 7145, "mod_defined_names": 2650, "flags": 2},
+                      "catalog_size": 7145, "effect_only_catalog_size": 3657,
+                      "trigger_only_catalog_size": 2595, "mod_defined_names": 2650,
+                      "flags": 2},
         )
         report = eva.render_report(result, "/mod")
         self.assertIn(
@@ -310,6 +587,10 @@ class RenderReportTests(unittest.TestCase):
         self.assertNotIn("a.txt:128", report)
         self.assertIn("— events/e.txt:5 —", report)  # unreviewed keeps its line
         self.assertIn("- Catalog size: **7145**\n", report)
+        self.assertIn(
+            "- Context catalog: **3657** effect-only, **2595** trigger-only names\n",
+            report,
+        )
         for gone in ("Roots scanned", "files scanned", "keys checked", "mod-defined names",
                      "109392", "2650"):
             self.assertNotIn(gone, report)
