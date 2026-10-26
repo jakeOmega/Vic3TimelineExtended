@@ -1077,7 +1077,9 @@ te_debug_demog_work_census_line = {
 #                           workforce. BROKEN: it is another figure again, and the conversion is wrong for every reader;
 #                           take unemployment_share_read's fallback (docs/testing/demographics-playtest.md). The same
 #                           comparison as unemployment_share_read (te_unemployment_effects.txt), made from the census's
-#                           walk: one engine fact, read twice.
+#                           walk: one engine fact, read twice. Not while the engine's figure is still 0: on 2026-10-25
+#                           the first census state's walk counted 0.070 idle on 8 January 1836, before the engine had
+#                           computed any, and the check read a false BROKEN (read=0.000).
 te_debug_demog_conscription_selfcheck_start = {
 	if = {
 		limit = {
@@ -1107,6 +1109,7 @@ te_debug_demog_unemployment_selfcheck = {
 			has_variable = te_dg_wf_engine
 			var:te_dg_unemp_walk > 0.02
 			var:te_dg_wf_engine > 0.05
+			te_debug_demog_unemp_engine_read > 0
 		}
 		set_global_variable = { name = te_demog_selfcheck_unemp_done value = yes }
 		set_variable = { name = te_dg_chk_unemp_read value = te_debug_demog_unemp_engine_read }

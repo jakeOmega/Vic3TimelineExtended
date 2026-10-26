@@ -422,12 +422,12 @@ grand_monuments_rule = {
 # Full runs the cohort model and, from phase 2, applies its effects; Display only
 # runs the cohorts and the panel but applies only the equilibrium's births and
 # deaths; Disabled runs neither. In phase 1 nothing is applied, so Full and Display
-# only behave the same. Off by default while the census is experimental (owner,
-# 2026-10-10). Every check is written positively (te_demog_cohorts_run,
+# only behave the same. Full by default (owner, 2026-10-25; off by default from
+# 2026-10-10 while the census was experimental). Every check is written positively (te_demog_cohorts_run,
 # te_demog_effects_run name the settings that run), so a save from before the rule
 # existed, which stores no value for it, reads as Disabled.
 demographics_rule = {
-	default = demographics_disabled
+	default = demographics_full
 
 	demographics_full = {
 		flag = demographics_full

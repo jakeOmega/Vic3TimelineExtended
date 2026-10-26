@@ -250,10 +250,10 @@ te_debug_demog_up_selfcheck = {
 				var:te_dg_up_chk_self = 1
 				var:te_dg_up_chk_n = 1
 			}
-			debug_log = "TE_SELF_CHECK OK primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetName] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetNameNoFormatting] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetName] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] (self 1 and states 1 expected: owner = var:te_dg_primate_of doesn't compare a state's owner with a stored country; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetNameNoFormatting] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] (self 1 and states 1 expected: owner = var:te_dg_primate_of doesn't compare a state's owner with a stored country; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 		remove_variable = te_dg_up_chk_n
@@ -287,7 +287,7 @@ te_debug_demog_pc_selfcheck_start = {
 			limit = { has_modifier = moved_capital_recently }
 			set_variable = { name = te_dg_pc_chk_penalty value = 1 }
 		}
-		debug_log = "TE_SELF_CHECK START planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetName] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log = "TE_SELF_CHECK START planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetNameNoFormatting] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetNameNoFormatting] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
 		trigger_event = { id = te_debug_demog.60 days = 7 }
 	}

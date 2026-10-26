@@ -1915,6 +1915,15 @@ SecondBest.Lookup().IsValid()
 
 An engine assertion with no script frame, once in a 27-minute session (2026-10-05). The same second error.log logged the registered `<unknown>:0` null-country line (`Country  (4294967295)`), so the engine was ranking against a country that no longer existed. Not actionable from script.
 
+### `pdx_assert.cpp:641` — `Country.IsValid()`
+- source: `pdx_assert.cpp:641`
+
+```
+Assertion failed: Country.IsValid()
+```
+
+An engine assertion with no script frame, about once a session: eight seconds after loading a save on 2026-10-25, with nothing in error.log that second. Six occurrences in the archived runs, each in a second whose other lines are vanilla only (the default AI strategy's `Invalid right side during comparison 's'` for a stateless country, a Barracks downsize assert, a revolution's `get_ruler_for` with no ruler), never a mod frame. Not actionable from script. The `LeftCountry` / `RightCountry` asserts are a separate entry; this signature doesn't match them.
+
 ### `pdx_assert.cpp:641` — game-state access assert at the first ticks of a session
 - source: `pdx_assert.cpp:641`
 

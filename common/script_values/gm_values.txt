@@ -2105,11 +2105,12 @@ gm_state_merge_check_was = {
 # A level's starting grandeur is gm_level_grandeur_1836 times world GDP in 1836
 # over world GDP when it is counted (gm_state_count_site_levels), so the same
 # share of the world's wealth buys the same grandeur in any era. The 1836 figure
-# is one constant for every save (spec §5): every country's latest GDP summed
-# from a Timeline Extended save of 1836.1.20 came to 334,465,286
-# (TE_SELF_CHECK gm_world_base compares a new game's first pass with it).
+# is one constant for every save (spec §5), read as the rate reads it
+# (global_gdp_script_value): 402,505,869 at a new game's first pass, February
+# 1836 (TE_SELF_CHECK gm_world_base, 2026-10-25). The first figure, 334,000,000,
+# summed every country's latest GDP from a save of 1836.1.20 and read a sixth low.
 gm_world_gdp_1836 = {
-	value = 334000000
+	value = 402500000
 }
 
 # The grandeur a level adds in 1836 (owner, 2026-10-19: five, up from one): the

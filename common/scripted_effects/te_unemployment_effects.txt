@@ -13,7 +13,7 @@ te_unemp_share_yearly = {
 # THIS = a state: walk its pops once and store the workforce's share of its people (te_unemp_wf_share), the share
 # of its workforce with no workplace (te_unemp_share_exact), and the counts Construction Cost Scaling sums over a
 # country (te_unemp_wf_count, te_unemp_slack_count, te_unemp_peasant_count: people). The census's walk counts the same
-# workforce (te_demog_work_walk_pop), but only where the census runs, and Demographics is off by default. Leaves its
+# workforce (te_demog_work_walk_pop), but only where the census runs, and the Demographics rule can be Disabled. Leaves its
 # sums in locals for te_unemp_share_selfcheck. A state with no people keeps what it had.
 te_unemp_share_refresh = {
 	set_local_variable = { name = te_unemp_w_pop value = 0 }

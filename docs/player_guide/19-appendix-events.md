@@ -37,7 +37,7 @@ Authority where it fires.
 ## Demographic event list
 
 These are the events behind [Demographic events](08-states.md#demographic-events)
-in States and population, under the Demographics (Experimental) rule's Full
+in States and population, under the Demographics rule's Full
 setting. Each fires when the census crosses its threshold, at most once in 25
 years (the Last Generation? once a game). Money costs are a share of your yearly
 gross income; modifiers last ten years unless the table says otherwise.

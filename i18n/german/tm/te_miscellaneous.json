@@ -23996,8 +23996,8 @@
   "de": "Dieser Staat hat mehr als 110 Männer auf 100 Frauen im Alter von 20 bis 59, wie es bei einer Grenzregion oder einem Bergbaubezirk der Fall ist. Männer ohne Frauen und Familien neigen schneller zu Radikalismus und Gewalt. Volle Wirkung bei 130 Männern, darüber stärker, bis zum Doppelten bei 170; die Volkszählung auf dem Reiter „Demografie“ legt ihre Stärke jedes Jahr fest."
  },
  "te_demog_census_off_note": {
-  "en": "\\n\\nThe Demographics (Experimental) game rule is off, so no census runs and this does nothing.",
-  "de": "\\n\\nDie Spielregel Demografie (experimentell) ist ausgeschaltet: Es läuft keine Volkszählung, daher bewirkt dies nichts."
+  "en": "\\n\\nThe Demographics game rule is off, so no census runs and this does nothing.",
+  "de": "\\n\\nDie Spielregel Demografie ist ausgeschaltet: Es läuft keine Volkszählung, daher bewirkt dies nichts."
  },
  "te_demog_census_off_tag": {
   "en": " #grey (Demographics off)#!",
@@ -25188,12 +25188,12 @@
   "de": "#b Überfüllung#!\\nÜberlastung verlagert Wachstum in Satellitenstädte und Nebenstädte: bis zu #v -10#!, wenn die [concept_migration_crowding] ihre Obergrenze erreicht, das Zehnfache der Referenzdichte."
  },
  "te_demog_mt_bar_gateway": {
-  "en": "Port or Finance",
-  "de": "Hafen oder Finanzen"
+  "en": "Trade and Finance",
+  "de": "Handel und Finanzen"
  },
  "te_demog_mt_bar_gateway_tt": {
-  "en": "#b Port or Finance#!\\n#v +30#! in a [concept_world_market_hub], its market area's one port to the world market (New York, Buenos Aires), and #v +1#! for each level of $building_financial_district$, up to #v +10#!.",
-  "de": "#b Hafen oder Finanzen#!\\n#v +30#! in einem [concept_world_market_hub], dem einzigen Hafen seines Marktgebiets zum Weltmarkt (New York, Buenos Aires), und #v +1#! für jede Stufe von $building_financial_district$, bis zu #v +10#!."
+  "en": "#b Trade and Finance#!\\n#v +30#! in a [concept_world_market_hub], the state through which its market area trades with the world, and #v +1#! for each level of $building_financial_district$, up to #v +10#!.",
+  "de": "#b Handel und Finanzen#!\\n#v +30#! in einem [concept_world_market_hub], dem Staat, über den sein Marktgebiet mit der Welt handelt, und #v +1#! für jede Stufe von $building_financial_district$, bis zu #v +10#!."
  },
  "te_demog_mt_bar_infra": {
   "en": "Infrastructure",

@@ -103,10 +103,10 @@ def _block(text, name):
 
 
 class TestRule(unittest.TestCase):
-    def test_three_settings_default_disabled(self):
-        # Off by default until the census is ready to ship (owner, 2026-10-10)
+    def test_three_settings_default_full(self):
+        # On by default (owner, 2026-10-25); off from 2026-10-10 while the census was experimental
         body = _block(_text(RULES), "demographics_rule")
-        self.assertIn("default = demographics_disabled", body)
+        self.assertIn("default = demographics_full", body)
         for setting in ("demographics_full", "demographics_display_only", "demographics_disabled"):
             self.assertIn(f"{setting} = {{", body)
 
