@@ -19,6 +19,7 @@ docs/
 ├── data/                     (machine-readable inputs / baselines)
 ├── archive/                  (deferred / completed / orphaned reference)
 ├── testing/                  (probe runbooks, capability ledgers and play-test runbooks for in-game checks)
+├── releases/                 (release notes: each GitHub release's body as <version>.md, from 1.1.9)
 └── superpowers/              (specs/ design specs and plans/ implementation plans; finished ones in archive/; index in README.md)
 ```
 
@@ -44,6 +45,7 @@ Build with `scripts/build_player_guide.py` (pandoc + Typst from `requirements-do
 | [`guides/gui_modding_guide.md`](guides/gui_modding_guide.md) | Widget types, layout, data binding, scripted GUIs, standalone panels, tooltips, format specifiers, GetVariableSystem | Creating or modifying GUI panels |
 | [`guides/python_tools.md`](guides/python_tools.md) | All Python scripts, mod state server API, every endpoint, AI-agent workflow | Using Python tools or the mod state server |
 | [`guides/vanilla_patch_runbook.md`](guides/vanilla_patch_runbook.md) | Step-by-step process for absorbing a new vanilla patch into the mod | Updating the mod after a vanilla version bump |
+| [`guides/release_checklist.md`](guides/release_checklist.md) | Cutting a release: pre-release checks, the release branch that strips the Demographics census, deploy and upload, tag and GitHub release, the Workshop description's guide link and length | Before a release |
 | [`guides/quick_reference_ids.md`](guides/quick_reference_ids.md) | Vanilla law / IG / pop / strata IDs, script values, modifier durations | Looking up game IDs or script-value names quickly |
 
 ## Mod Systems — `systems/`
