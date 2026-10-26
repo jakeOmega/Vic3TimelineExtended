@@ -239,6 +239,15 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 ideology_lawgroup_audit.py --strict
 
+      # Effect and trigger names the engine doesn't know, and known ones in the
+      # wrong kind of block: an effect where triggers are read (save_scope_as in
+      # a scripted trigger) or the reverse. The engine logs either at load and
+      # drops the line (#1142). Reads only the committed catalogs under
+      # docs/engine/.
+      - name: Audit — effect and trigger names, and the context they're used in
+        if: ${{ !cancelled() }}
+        run: python3 effect_trigger_validity_audit.py --strict
+
       # Mod callees only here: vanilla scripted effects and triggers come from
       # the game files, which CI doesn't have. A reload on a machine with the
       # game checks calls to vanilla's too.
