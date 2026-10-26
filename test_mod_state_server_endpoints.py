@@ -2116,11 +2116,43 @@ class ExternalModStateEndpointTests(unittest.TestCase):
 
     def test_a_reload_drops_the_layered_states(self):
         mss._overlap_state_cache["x"] = object()
-        with mock.patch.object(mss, "_choose_vanilla_source",
-                               side_effect=RuntimeError("stop after the cache step")):
+        # No cached vanilla loc: mod_only falls back to a full load, which
+        # stops at the patched raise before any file is read or written.
+        with mock.patch.object(mss, "_VANILLA_LOC_CACHE", None), \
+                mock.patch.object(mss, "_choose_vanilla_source",
+                                  side_effect=RuntimeError("stop after the cache step")):
             with self.assertRaises(RuntimeError):
                 mss._load_mod_state(mod_only=True)
         self.assertEqual(mss._overlap_state_cache, {})
+
+    def test_the_post_load_reparse_drops_the_layered_states(self):
+        mss._overlap_state_cache["x"] = object()
+        stub = mock.Mock()
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(mss, "_VANILLA_LOC_CACHE", None), \
+                mock.patch.object(mss, "mod_path", tmp):
+            self.assertIsNone(mss._reparse_mod_after_writes(stub))
+        stub.reload_mod.assert_called_once()
+        self.assertEqual(mss._overlap_state_cache, {})
+
+
+class OverlapVanillaIndexTests(unittest.TestCase):
+    """_overlap_vanilla_index follows the vanilla the server parsed (#1184)."""
+
+    def test_a_stale_snapshot_keeps_the_vanilla_index_on_it(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "game", "common"))
+            with mock.patch.object(mss, "base_game_path", tmp), \
+                    mock.patch.dict(mss._overlap_vanilla_cache, clear=True):
+                for source, uses_game in (
+                    ({"kind": "vanilla_parsed", "freshness": {"fresh": False}}, False),
+                    ({"kind": "vanilla_parsed", "freshness": {"fresh": True}}, True),
+                    ({"kind": "game_files"}, True),
+                ):
+                    with self.subTest(source=source), \
+                            mock.patch.object(mss, "_vanilla_source", source):
+                        index = mss._overlap_vanilla_index()
+                        self.assertEqual(index.game_common is not None, uses_game)
 
 
 class PmEmploymentEndpointTests(unittest.TestCase):

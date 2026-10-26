@@ -281,12 +281,19 @@ SERVER_TYPES = {
 # itself repeats across vanilla's files and is no registry), `template X`,
 # `layer X { }` and a `texticon = { icon = X }`. `local_template` is
 # file-local and left out. Keywords match in any case (vanilla writes `Types`).
-_GUI_DEF_RES = (
-    ("type", re.compile(rf"(?i:\btype)\s+({GUI_IDENT})\s*=")),
-    ("template", re.compile(rf"(?i:\btemplate)\s+({GUI_IDENT})")),
-    ("layer", re.compile(rf"(?i:\blayer)\s+({GUI_IDENT})\s*\{{")),
+# Each kind: its keyword (matched on the syntax mask, so not inside a comment
+# or string) and what must follow the name. A name is a bare identifier or a
+# quoted one (vanilla: `template "logo_letter_v"`, `types "production_method_items"`).
+# The whitespace before a name is matched on the comment-free text, where a
+# quoted name is still there (the syntax mask blanks it to spaces).
+_GUI_DEF_KINDS = (
+    ("type", re.compile(r"(?i:\btype)\b"), re.compile(r"\s*=")),
+    ("template", re.compile(r"(?i:\btemplate)\b"), None),
+    ("layer", re.compile(r"(?i:\blayer)\b"), re.compile(r"\s*\{")),
 )
-_GUI_TYPES_RE = re.compile(rf"(?i:\btypes)\s+({GUI_IDENT})\s*\{{")
+_GUI_TYPES_KW = re.compile(r"(?i:\btypes)\b")
+_GUI_NAME_RE = re.compile(rf'\s+(?:"([^"\n]+)"|({GUI_IDENT}))')
+_GUI_VALUE_RE = re.compile(rf'\s*(?:"([^"\n]+)"|({GUI_IDENT}))')
 _GUI_TEXTICON_RE = re.compile(r"(?i:\btexticon)\s*=\s*\{")
 # Which of two definitions the game keeps is unprobed, so the report gives no
 # winner (LOAD_ORDER_MODEL covers common/ only).
@@ -501,36 +508,50 @@ class GuiDef:
 
 
 def scan_gui(text: str) -> list[GuiDef]:
-    """Every global GUI name `text` defines, in file order. Comments and
-    strings are masked first (gui_reference_audit.masks), so a commented-out
-    `#type x = ...` or `template` in a tooltip string isn't one."""
-    syntax = gui_masks(text.lstrip("﻿"))[1]
+    """Every global GUI name `text` defines, in file order. Keywords are found
+    on gui_reference_audit.masks' syntax mask, so a commented-out `#type x =
+    ...` or a `template` in a tooltip string isn't one; the name is read from
+    the comment-free text at the same offset, so a quoted name counts."""
+    code, syntax = gui_masks(text.lstrip("﻿"))
 
     def line_at(offset: int) -> int:
         return syntax.count("\n", 0, offset) + 1
 
+    def name_after(kw: re.Pattern, follow: Optional[re.Pattern]):
+        """(name, its offset, the offset after it) for each `kw` followed
+        by a name and then `follow`."""
+        for m in kw.finditer(syntax):
+            n = _GUI_NAME_RE.match(code, m.end())
+            if not n or (follow and not follow.match(syntax, n.end())):
+                continue
+            g = 1 if n.group(1) is not None else 2
+            yield n.group(g), n.start(g), n.end()
+
     groups = []
-    for m in _GUI_TYPES_RE.finditer(syntax):
-        groups.append((m.end() - 1, _brace_end(syntax, m.end() - 1), m.group(1)))
+    for name, _start, end in name_after(_GUI_TYPES_KW, re.compile(r"\s*\{")):
+        brace = syntax.index("{", end)
+        groups.append((brace, _brace_end(syntax, brace), name))
     out = []
-    for kind, rx in _GUI_DEF_RES:
-        for m in rx.finditer(syntax):
+    for kind, kw, follow in _GUI_DEF_KINDS:
+        for name, start, _end in name_after(kw, follow):
             group = None
             if kind == "type":
-                group = next((g for start, end, g in groups if start < m.start() < end), None)
-            out.append(GuiDef(kind, m.group(1), line_at(m.start(1)), group))
+                group = next((g for a, b, g in groups if a < start < b), None)
+            out.append(GuiDef(kind, name, line_at(start), group))
     for m in _GUI_TEXTICON_RE.finditer(syntax):
         end = _brace_end(syntax, m.end() - 1)
-        body = syntax[m.end():end]
         # The block's own `icon =`, not one inside a nested block.
         depth = 0
-        for tok in re.finditer(rf"[{{}}]|\bicon\s*=\s*({GUI_IDENT})", body):
+        for tok in re.finditer(r"[{}]|\bicon\s*=", syntax[m.end():end]):
             if tok.group(0) == "{":
                 depth += 1
             elif tok.group(0) == "}":
                 depth -= 1
             elif depth == 0:
-                out.append(GuiDef("texticon", tok.group(1), line_at(m.end() + tok.start(1))))
+                n = _GUI_VALUE_RE.match(code, m.end() + tok.end())
+                if n:
+                    g = 1 if n.group(1) is not None else 2
+                    out.append(GuiDef("texticon", n.group(g), line_at(n.start(g))))
                 break
     return sorted(out, key=lambda d: (d.line, d.kind, d.name))
 
@@ -1013,15 +1034,29 @@ class VanillaIndex:
         self._cache[key] = out
         return out
 
-    def _snapshot_keys(self, db: str) -> Optional[set]:
-        if not self.snapshot_dir:
-            return None
+    def _load_manifest(self) -> dict:
         if self._manifest is None:
             try:
                 with open(os.path.join(self.snapshot_dir, "manifest.json"), encoding="utf-8") as f:
                     self._manifest = json.load(f)
             except (OSError, ValueError):
                 self._manifest = {}
+        return self._manifest
+
+    def snapshot_files(self, db: str) -> Optional[list]:
+        """Vanilla's file paths within `db`, from the snapshot manifest's
+        `sources`, when there are no game files (the snapshot records no keys
+        per file). None with the game files, or keys given."""
+        if self.game_common or self._keys is not None or not self.snapshot_dir:
+            return None
+        prefix = f"game/common/{db}/"
+        return sorted(p[len(prefix):] for p in (self._load_manifest().get("sources") or {})
+                      if p.startswith(prefix))
+
+    def _snapshot_keys(self, db: str) -> Optional[set]:
+        if not self.snapshot_dir:
+            return None
+        self._load_manifest()
         for _et, info in (self._manifest.get("entity_types") or {}).items():
             if info.get("dir") == f"game/common/{db}":
                 try:
@@ -1404,12 +1439,15 @@ def gui_type_collisions(ours_root: str, ours_files: Iterable[str], theirs_root: 
         if not any(op.casefold() != tp.casefold() for op, _ in o_defs for tp, _ in t_defs):
             continue
         o_first, t_first = min(p for p, _ in o_defs), min(p for p, _ in t_defs)
+        # `same_file`: each side's first-sorting definition is in a file both ship.
+        first = ("same_file" if o_first.casefold() == t_first.casefold()
+                 else OURS if o_first < t_first else THEIRS)
         row = {
             "kind": kind,
             "name": name,
             "ours": refs(o_defs),
             "theirs": refs(t_defs),
-            "sorts_first": OURS if o_first < t_first else THEIRS,
+            "sorts_first": first,
             "in_vanilla": None if v is None else (kind, name) in v,
         }
         if v and (kind, name) in v:

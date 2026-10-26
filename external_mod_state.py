@@ -39,8 +39,18 @@ Scope:
   first, as external_mod_overlap's snapshot fallback has it). The server keeps
   no vanilla for scripted effects, triggers, GUIs and progress bars; without
   the game, vanilla is taken as absent there (`vanilla_source: unavailable`).
+  Without the game files the snapshot names vanilla's files but not their
+  keys: a file of theirs at a vanilla path is listed in
+  `replaced_vanilla_files`, and vanilla's keys keep the server's value with
+  a `caveat`.
 - A file that doesn't parse is listed in `parse_failures`, and a key with a
-  definition in it keeps the server's value (status `parse_failed`).
+  definition in it keeps the server's value (status `parse_failed`). So does
+  a key one file repeats (`repeated_in_file`: two bare copies, or a repeated
+  directive beside another one on the key), since the parser keeps one body
+  per key and file. INJECTs alone fold in order and REPLACEs alone keep the
+  last, as the engine applies them.
+- A folder the other mod has that isn't layered gives its reason on the
+  per-type and per-key routes too, not only in `not_layered`.
 """
 from __future__ import annotations
 
@@ -48,12 +58,14 @@ import copy
 import json
 import os
 import time
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Optional
 
 import external_mod_overlap as emo
 from external_mod_overlap import OURS, THEIRS, VANILLA, Op
 from mod_state import VANILLA_COMMON_DIRS, parser_for
+from paradox_file_parser import INJECT_DIRECTIVES, REPLACE_DIRECTIVES
 
 # Folder kinds (external_mod_overlap.rule_for) whose keys merge as one
 # database entry each; the others aren't layered.
@@ -68,12 +80,29 @@ _NOT_LAYERED_REASON = {
 }
 # A status per recomputed key, against the model's load of this mod without
 # the other one.
-STATUSES = ("changed", "added", "removed", "undetermined", "parse_failed", "unchanged",
-            "not_created")
+STATUSES = ("changed", "added", "removed", "undetermined", "parse_failed", "repeated_in_file",
+            "unchanged", "not_created")
+# simulate()'s effects, by what replaying one does to the value.
+_SETS_VALUE = frozenset({"created", "redefined", "replaced"})
+_NO_VALUE_CHANGE = frozenset({"dropped_duplicate", "skipped_no_entry", "error_no_entry"})
 # Status lists longer than this are cut in the summary (the per-type
 # endpoint lists every key).
 _SUMMARY_LIST_CAP = 200
 _ABSENT = object()
+# A directive one file may repeat with nothing else on the key: the parser's
+# one body (INJECTs folded in order, the last REPLACE) is the engine's result.
+_FOLDABLE = INJECT_DIRECTIVES | REPLACE_DIRECTIVES
+_REPLACED_VANILLA_CAVEAT = (
+    "Without the game files, vanilla's file names come from the snapshot manifest, which "
+    "records no keys per file: a file of theirs at a vanilla file's path replaces it whole, "
+    "but which of vanilla's keys go with it isn't known, so they keep the server's value.")
+_SCOPE = (
+    "Only the keys the other mod defines, and keys in a file of ours or vanilla's at a path it "
+    "also ships, are recomputed; every other key is the server's own value (/raw). Events, "
+    "on_actions, defines, history, gui and localization aren't layered. " + _REPLACED_VANILLA_CAVEAT
+    + " A key one file repeats (two bare copies, or a repeated directive beside another one on "
+    "the key) is `repeated_in_file` and keeps the server's value: the parser keeps one body per "
+    "key and file.")
 _STATE_HOLDS = {
     "later_mod": "theirs",
     "bare_duplicate": emo.FIRST_WINS,
@@ -128,6 +157,7 @@ class KeyResult:
     candidates: list = field(default_factory=list)   # undetermined: one row per scenario
     state_holds: Optional[dict] = None
     failures: list = field(default_factory=list)
+    caveat: Optional[str] = None
 
     def as_dict(self) -> dict:
         out = {
@@ -155,7 +185,9 @@ class KeyResult:
             out["state_holds"] = self.state_holds
             out["candidates"] = self.candidates
         if self.failures:
-            out["parse_failures"] = self.failures
+            out["parse_failures" if self.status == "parse_failed" else "problems"] = self.failures
+        if self.caveat:
+            out["caveat"] = self.caveat
         return out
 
     def row(self) -> dict:
@@ -175,6 +207,9 @@ class TypeLayer:
     rule: dict
     server_holds_vanilla: bool = True
     keys: dict = field(default_factory=dict)    # key -> KeyResult
+    # Without the game files: vanilla files theirs replaces by path, whose
+    # keys the snapshot doesn't record.
+    replaced_vanilla_files: list = field(default_factory=list)
 
     def summary(self) -> dict:
         out = {"entity_type": self.entity_type, "dir": f"common/{self.db}",
@@ -184,6 +219,9 @@ class TypeLayer:
             out["server_holds_vanilla"] = False
             out["note"] = ("the server parses no vanilla for this type, so server_value lacks "
                            "vanilla's definitions and server_matches_model leaves them out too")
+        if self.replaced_vanilla_files:
+            out["replaced_vanilla_files"] = self.replaced_vanilla_files
+            out["replaced_vanilla_note"] = _REPLACED_VANILLA_CAVEAT
         by: dict = {}
         for kr in self.keys.values():
             by.setdefault(kr.status, []).append(kr.key)
@@ -213,10 +251,15 @@ class LayeredState:
     parse_failures: list
     scan_warnings: list
     built_in_s: float = 0.0
+    # Server entity types whose folder the other mod has but that aren't
+    # layered: {entity type: {dir, reason}}.
+    not_layered_types: dict = field(default_factory=dict)
 
     def summary(self) -> dict:
         by: dict = {}
         differs = 0
+        replaced = [{"entity_type": et, "file": f, "note": _REPLACED_VANILLA_CAVEAT}
+                    for et in sorted(self.types) for f in self.types[et].replaced_vanilla_files]
         for layer in self.types.values():
             for kr in layer.keys.values():
                 by[kr.status] = by.get(kr.status, 0) + 1
@@ -231,29 +274,33 @@ class LayeredState:
                 "see": emo.LOAD_ORDER_DOC,
             },
             "state_holds": _STATE_HOLDS,
-            "scope": "Only the keys the other mod defines, and keys in a file of ours or "
-                     "vanilla's at a path it also ships, are recomputed; every other key is "
-                     "the server's own value (/raw). Events, on_actions, defines, history, "
-                     "gui and localization aren't layered.",
+            "scope": _SCOPE,
             "summary": {
                 "entity_types_layered": len(self.types),
                 "keys_layered": sum(len(t.keys) for t in self.types.values()),
                 "by_status": {s: by[s] for s in STATUSES if s in by},
                 "server_differs_from_model": differs,
                 "not_layered": len(self.not_layered),
+                "replaced_vanilla_files": len(replaced),
                 "parse_failures": len(self.parse_failures),
                 "scan_warnings": len(self.scan_warnings),
             },
             "entity_types": [self.types[et].summary() for et in sorted(self.types)],
             "not_layered": self.not_layered,
+            "replaced_vanilla_files": replaced,
             "parse_failures": self.parse_failures,
         }
+
+    def _not_layered(self, et: str) -> Optional[str]:
+        row = self.not_layered_types.get(et)
+        return f"{row['dir']} isn't layered: {row['reason']}" if row else None
 
     def entity_type(self, et: str) -> dict:
         layer = self.types.get(et)
         if layer is None:
             return {"entity_type": et, "layered": False,
-                    "reason": "the other mod defines nothing the server parses as this type",
+                    "reason": self._not_layered(et)
+                    or "the other mod defines nothing the server parses as this type",
                     "keys": []}
         return {**layer.summary(), "layered": True,
                 "keys": [layer.keys[k].row() for k in sorted(layer.keys)]}
@@ -264,13 +311,24 @@ class LayeredState:
         layer = self.types.get(et)
         if layer is not None and key in layer.keys:
             return layer.keys[key].as_dict()
-        data = self.mod_state.get_data(et)
-        if data is None or key not in data:
+        data = self.mod_state.get_data(et) or {}
+        unlayered = self._not_layered(et)
+        if unlayered:
+            # The other mod may define this key; the layered state can't say.
+            return {"type": et, "id": key, "layered": False, "reason": unlayered,
+                    "present": key in data,
+                    "value": to_json(data[key]) if key in data else None}
+        if key not in data:
             return None
-        return {"type": et, "id": key, "layered": False,
-                "reason": "the other mod doesn't define it or replace its file: the server's "
-                          "own value",
-                "present": True, "value": to_json(data[key])}
+        out = {"type": et, "id": key, "layered": False,
+               "reason": "the other mod doesn't define it or replace its file: the server's "
+                         "own value",
+               "present": True, "value": to_json(data[key])}
+        base = self.mod_state.base_parsers.get(et)
+        if layer is not None and layer.replaced_vanilla_files and base and key in base.data:
+            out["caveat"] = _REPLACED_VANILLA_CAVEAT
+            out["replaced_vanilla_files"] = layer.replaced_vanilla_files
+        return out
 
 
 # ---------------------------------------------------------------------------
@@ -323,11 +381,13 @@ def _replay(et: str, key: str, ordered: list, bare_rule: str, value_of) -> tuple
     parser = parser_for(et)
     for op, step in zip(ordered, trace):
         effect = step["effect"]
-        if effect in ("created", "redefined", "replaced"):
+        if effect in _SETS_VALUE:
             parser.data.pop(key, None)
             parser.merge_data({key: copy.deepcopy(value_of(op))})
         elif effect == "injected":
             parser.merge_data({f"INJECT:{key}": copy.deepcopy(value_of(op))})
+        elif effect not in _NO_VALUE_CHANGE:
+            raise ValueError(f"simulate() effect {effect!r} has no replay rule")
     return parser.data.get(key, _ABSENT), trace
 
 
@@ -405,18 +465,38 @@ def _outcomes(et, key, o_ops, v_arg, rule, o_files, value_of) -> dict:
     return out
 
 
-def _ops(side: str, scan: emo.DbScan, keys: set) -> dict:
-    """{key: [(Op, raw key)]} for `keys`, one Op per raw key per file (the
-    parser folds a file's repeated INJECTs into one value)."""
-    out: dict = {}
-    for key in keys:
+_REPEATED_ERROR = (
+    "this file defines the key more than once (two bare copies, or a repeated directive beside "
+    "another one on the key). The engine keeps the first bare copy and applies each directive "
+    "in turn, but the parser keeps one body per key and file, so the layered value can't be "
+    "built from it: the key keeps the server's value")
+
+
+def _file_ops(side: str, db: str, key: str, defs) -> tuple[list, list]:
+    """([(Op, raw key)], problems) for one side's definitions of `key`,
+    `defs` being (path, line, directive) in file order. One Op per raw key
+    per file. The parser folds a file's repeated INJECTs into one body, in
+    order, and keeps the last of repeated REPLACEs; when the file holds no
+    other definition of the key that is the engine's result too. Any other
+    repeat is a problem (_REPEATED_ERROR): a bare copy the engine keeps first
+    and the parser last, or directives whose order one body loses."""
+    by_file: dict = {}
+    for path, line, directive in defs:
+        by_file.setdefault(path, []).append((line, directive))
+    ops, problems = [], []
+    for path, rows in by_file.items():
+        counts = Counter(d for _line, d in rows)
+        for d, n in counts.items():
+            if n > 1 and not (len(counts) == 1 and d in _FOLDABLE):
+                problems.append({"side": side, "file": _ref(db, Op(side, path, 0)),
+                                 "lines": [ln for ln, dd in rows if dd == d], "directive": d,
+                                 "error": _REPEATED_ERROR})
         seen = set()
-        for path, e in scan.entries.get(key, []):
-            if (path, e.raw_key) in seen:
-                continue
-            seen.add((path, e.raw_key))
-            out.setdefault(key, []).append((Op(side, path, e.line, e.directive), e.raw_key))
-    return out
+        for line, d in rows:
+            if d not in seen:
+                seen.add(d)
+                ops.append((Op(side, path, line, d), f"{d}:{key}" if d else key))
+    return ops, problems
 
 
 def _layer_db(ms, et: str, db: str, rule, ours_root: str, o_files: list, theirs_root: str,
@@ -432,26 +512,29 @@ def _layer_db(ms, et: str, db: str, rule, ours_root: str, o_files: list, theirs_
     keys = set(t_scan.entries)
     # A file of ours or vanilla's at a path theirs ships is replaced whole.
     keys |= {k for k, lst in o_scan.entries.items() if any(p.casefold() in t_cf for p, _ in lst)}
-    v_scan = vanilla.scan(db) or {}
-    keys |= {k for k, lst in v_scan.items() if any(p.casefold() in t_cf for p, _ in lst)}
+    v_scan = vanilla.scan(db)
+    replaced = []
+    if v_scan is None:
+        # No game files: the snapshot names vanilla's files but not their keys.
+        snap = {p.casefold(): p for p in (vanilla.snapshot_files(db) or [])}
+        replaced = sorted(f"game/common/{db}/{snap[p.casefold()]}" for p in t_files
+                          if p.casefold() in snap)
+    keys |= {k for k, lst in (v_scan or {}).items() if any(p.casefold() in t_cf for p, _ in lst)}
 
     values = _Values(et, db, {OURS: ours_root, THEIRS: theirs_root}, vanilla, failures)
     server_data = ms.get_data(et) or {}
     base_data = ms.base_parsers[et].data if server_has_vanilla else {}
-    o_ops, t_ops = _ops(OURS, o_scan, keys), _ops(THEIRS, t_scan, keys)
-    layer = TypeLayer(et, db, vanilla_source, rule.as_dict(), server_holds_vanilla)
+    layer = TypeLayer(et, db, vanilla_source, rule.as_dict(), server_holds_vanilla,
+                      replaced_vanilla_files=replaced)
     for key in sorted(keys):
-        raw_keys: dict = {}
-        key_failures = []
         v = vanilla.ops(db, key)
-        v_ops = []
-        if v:
-            for op in v:
-                raw = f"{op.directive}:{key}" if op.directive else key
-                raw_keys[op] = raw
-                v_ops.append(op)
-        for op, raw in (*o_ops.get(key, []), *t_ops.get(key, [])):
-            raw_keys[op] = raw
+        v_ops, v_prob = _file_ops(VANILLA, db, key, [(op.path, op.line, op.directive)
+                                                     for op in v]) if v else ([], [])
+        o_ops, o_prob = _file_ops(OURS, db, key, [(p, e.line, e.directive)
+                                                  for p, e in o_scan.entries.get(key, [])])
+        t_ops, t_prob = _file_ops(THEIRS, db, key, [(p, e.line, e.directive)
+                                                    for p, e in t_scan.entries.get(key, [])])
+        raw_keys = {op: raw for op, raw in (*v_ops, *o_ops, *t_ops)}
 
         def value_of(op, _raw=raw_keys, _key=key):
             if op.side == VANILLA and op.path is None:
@@ -460,6 +543,7 @@ def _layer_db(ms, et: str, db: str, rule, ours_root: str, o_files: list, theirs_
             return data.get(_raw[op]) if data else None
 
         # A definition whose value can't be read: the key keeps the server's.
+        key_failures = []
         for op in raw_keys:
             if op.side == VANILLA and op.path is None:
                 ok = _key_in(base_data, key)
@@ -471,20 +555,24 @@ def _layer_db(ms, et: str, db: str, rule, ours_root: str, o_files: list, theirs_
                                      "error": "the definition's value couldn't be read"})
         server_value = server_data.get(key, _ABSENT)
         in_vanilla = None if v is None else bool(v)
-        if key_failures:
+        problems = [*v_prob, *o_prob, *t_prob]
+        if key_failures or problems:
             layer.keys[key] = KeyResult(
-                entity_type=et, db=db, key=key, status="parse_failed", in_state=server_value,
-                server=server_value, server_matches_model=None, without_them=[],
-                definitions=_definitions(db, list(raw_keys)), load=[], in_vanilla=in_vanilla,
-                failures=key_failures)
+                entity_type=et, db=db, key=key,
+                status="parse_failed" if key_failures else "repeated_in_file",
+                in_state=server_value, server=server_value, server_matches_model=None,
+                without_them=[], definitions=_definitions(db, list(raw_keys)), load=[],
+                in_vanilla=in_vanilla, failures=key_failures or problems)
             continue
         # Vanilla unknown (no game files, no server vanilla for this type):
         # taken as absent, as /raw shows the type.
-        v_arg = v_ops if v else False
-        layer.keys[key] = _layer_key(
-            et, db, key, rule, [op for op, _ in o_ops.get(key, [])],
-            [op for op, _ in t_ops.get(key, [])], v_arg, o_scan.files, t_scan.files,
-            value_of, server_value, in_vanilla, server_holds_vanilla)
+        v_arg = [op for op, _ in v_ops] if v else False
+        kr = _layer_key(
+            et, db, key, rule, [op for op, _ in o_ops], [op for op, _ in t_ops], v_arg,
+            o_scan.files, t_scan.files, value_of, server_value, in_vanilla, server_holds_vanilla)
+        if replaced and v and any(op.path is None for op in v):
+            kr.caveat = _REPLACED_VANILLA_CAVEAT
+        layer.keys[key] = kr
     return layer
 
 
@@ -507,29 +595,36 @@ def build(ms, theirs_root: str, ours_root: str, vanilla=None) -> LayeredState:
     failures: list = []
     warnings: list = []
     not_layered: list = []
+    not_layered_types: dict = {}
     types: dict = {}
+
+    def skip(dir_: str, reason: str, et: Optional[str]) -> None:
+        not_layered.append({"dir": dir_, "reason": reason})
+        if et and et in ms.mod_parsers:
+            not_layered_types[et] = {"dir": dir_, "reason": reason}
+
     for db in sorted(t_common):
         rule = emo.rule_for(db)
         et = emo.SERVER_TYPES.get(db)
         if rule.kind not in _LAYERED_KINDS:
-            not_layered.append({"dir": f"common/{db}", "reason": _NOT_LAYERED_REASON[rule.kind]})
+            skip(f"common/{db}", _NOT_LAYERED_REASON[rule.kind], et)
             continue
         if et is None or et not in ms.mod_parsers:
-            not_layered.append({"dir": f"common/{db}",
-                                "reason": "the server doesn't parse this folder"})
+            skip(f"common/{db}", "the server doesn't parse this folder", None)
             continue
         if not any(p.endswith(".txt") for p in t_common[db]):
             continue
         types[et] = _layer_db(ms, et, db, rule, ours_root, o_common.get(db, []), theirs_root,
                               t_common[db], vanilla, failures, warnings)
-    for top, reason in (
+    for top, reason, et in (
         ("events/", "a duplicated event id keeps the copy read first, and which of two mods' "
-                    "copies that is is unknown: see `event_id_collisions`"),
-        ("localization/", "two loc files of one kind give no known winner: see `loc_collisions`"),
-        ("gui/", "see `path_collisions` and `gui_type_collisions`"),
+                    "copies that is is unknown: see `event_id_collisions`", "Events"),
+        ("localization/", "two loc files of one kind give no known winner: see `loc_collisions`",
+         None),
+        ("gui/", "see `path_collisions` and `gui_type_collisions`", None),
     ):
         if any(p.startswith(top) for p in their_files):
-            not_layered.append({"dir": top.rstrip("/"), "reason": reason})
+            skip(top.rstrip("/"), reason, et)
 
     layered = copy.copy(ms)
     layered.mod_parsers = dict(ms.mod_parsers)
@@ -546,4 +641,5 @@ def build(ms, theirs_root: str, ours_root: str, vanilla=None) -> LayeredState:
         layered.mod_parsers[et] = parser
     return LayeredState(mod_state=layered, path=theirs_root, mod_name=emo.read_mod_name(theirs_root),
                         types=types, not_layered=not_layered, parse_failures=failures,
-                        scan_warnings=warnings, built_in_s=time.monotonic() - t0)
+                        scan_warnings=warnings, built_in_s=time.monotonic() - t0,
+                        not_layered_types=not_layered_types)

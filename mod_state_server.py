@@ -5112,12 +5112,20 @@ def _overlap_vanilla_index():
     """Vanilla for /external-mod-overlap: the game files when installed (with
     file names), else the committed vanilla_parsed/ snapshot (#1170). Kept
     until a reload that re-reads vanilla (not mod_only), so a folder read
-    from /mnt/c once is not read again on the next request."""
+    from /mnt/c once is not read again on the next request.
+
+    A server loaded from a snapshot that isn't fresh against the installed
+    game (VIC3_VANILLA_SOURCE=vanilla_parsed) reads the snapshot here too, so
+    /state's vanilla values are the vanilla behind server_value (#1184). A
+    fresh snapshot is the game files' parse, so the game files serve."""
     game_common = os.path.join(base_game_path, "game", "common")
-    if game_common not in _overlap_vanilla_cache:
-        _overlap_vanilla_cache[game_common] = external_mod_overlap.VanillaIndex(
-            game_common=game_common)
-    return _overlap_vanilla_cache[game_common]
+    if (_vanilla_source.get("kind") == "vanilla_parsed"
+            and not (_vanilla_source.get("freshness") or {}).get("fresh")):
+        game_common = None
+    key = game_common or "<vanilla_parsed>"
+    if key not in _overlap_vanilla_cache:
+        _overlap_vanilla_cache[key] = external_mod_overlap.VanillaIndex(game_common=game_common)
+    return _overlap_vanilla_cache[key]
 
 
 # GET /external-mod-overlap/state: one LayeredState per mod root, newest
