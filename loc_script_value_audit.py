@@ -13,24 +13,32 @@ What is checked
 Every `ScriptValue('name')` in `localization/english/**/*.yml`, `replace/`
 included. `te_unused_l_english.yml` is skipped: it is `organize_loc` output
 holding keys nothing references, so a dead read there is harmless, and a
-tag on a key that drifts into it is not judged either. The double-quoted
-form is accepted too; inside a loc value it can only be written escaped,
-`ScriptValue(\\"name\\")`.
+tag on a key that drifts into it is not judged either. The escaped
+double-quoted form, `ScriptValue(\\"name\\")`, is checked too.
 
 A name resolves when it is a top-level key of a mod file under
-`common/script_values/` (a scalar `foo = 1` counts, and an `INJECT:` /
-`REPLACE:` prefix is stripped, the same depth-0 scan `gui_reference_audit`
-uses) or of vanilla's, read from the committed `vanilla_parsed/` snapshot
-(`common/script_values.json`). No game install is needed. A missing snapshot
-raises rather than flagging every vanilla name.
+`common/script_values/` (subfolders included) or of vanilla's, read from the
+committed `vanilla_parsed/` snapshot (`common/script_values.json`). A scalar
+`foo = 1` counts, and so does an `INJECT_OR_CREATE:` / `REPLACE_OR_CREATE:`
+name. A scripted constant (`@foo = 3`) does not, and neither does an
+`INJECT:`, `REPLACE:`, `TRY_INJECT:` or `TRY_REPLACE:` name: it edits a
+definition that has to exist elsewhere, in the mod or vanilla, and that
+definition is what resolves the read. (`gui_reference_audit` scans the same
+depth-0 keys for its `.gui` check but still counts `INJECT:` and `REPLACE:`
+names as definitions.) No game install is needed. A missing snapshot raises
+rather than flagging every vanilla name, and so does a scan that finds no loc
+file at all, so a wrong path can't pass as clean.
 
-Skipped: an argument that is not a quoted literal identifier, such as
-`ScriptValue(Concatenate(...))` or a name built from `$PARAM$`. The report's
-summary counts them (`dynamic_skipped`).
+Skipped as dynamic, and counted in the summary (`dynamic_skipped`): an
+argument that is not a quoted literal identifier. That covers
+`ScriptValue(Concatenate(...))`, a name built from `$PARAM$`, a dotted or
+hyphenated name, and an unescaped `ScriptValue("x")`, whose first `"` ends the
+loc value as the audit reads it (`check_localization_files.py` rejects that
+line anyway).
 
 `.gui` files are not scanned here: `gui_reference_audit` resolves
-`ScriptValue('x')` in `gui/**/*.gui` against the same definitions and fails
-CI with `--strict`.
+`ScriptValue('x')` in `gui/**/*.gui` against the mod's script values and the
+same snapshot, and fails CI with `--strict`.
 
 Suppression is check-tagged, trailing on the loc line (the engine ignores
 anything after the closing quote):
@@ -62,16 +70,18 @@ SCRIPT_VALUE_DIR = os.path.join("common", "script_values")
 VANILLA_SNAPSHOT = os.path.join("vanilla_parsed", "common", "script_values.json")
 REPORT_PATH = os.path.join("docs", "engine", "loc_script_value_report.md")
 
-# `ScriptValue(` and, when present, a quoted argument: `'x'`, `"x"` or the
-# escaped `\"x\"` a loc value has to use. A call whose argument isn't quoted
+# `ScriptValue(` and, when present, a quoted argument: `'x'` or the escaped
+# `\"x\"` a loc value has to use (a bare `"` never gets here, since
+# split_loc_line ends the value at it). A call whose argument isn't quoted
 # (`Concatenate(...)`, a bare scope) leaves `arg` unset and is skipped.
 _CALL_RE = re.compile(
     r"\bScriptValue\(\s*(?:(?P<q>\\?[\"'])(?P<arg>[^\"'\\]*)(?P=q)\s*\))?"
 )
 _NAME_RE = re.compile(r"[A-Za-z_]\w*")
-# Same depth-0 key scan as gui_reference_audit.Index: scalars count, and a
-# merge prefix is stripped. The lookbehind keeps `@constant = 5` out.
-_DEF_RE = re.compile(rf"[{{}}]|(?<![@\w])(?:INJECT:|REPLACE:)?({IDENT})\s*=")
+# Depth-0 keys. The lookbehind keeps out a scripted constant (`@foo = 5`) and
+# any name behind a merge directive (`INJECT:foo`, `TRY_REPLACE:foo`), which
+# edits a definition found elsewhere; only the `*_OR_CREATE:` forms define.
+_DEF_RE = re.compile(rf"[{{}}]|(?<![@\w:])(?:(?:INJECT|REPLACE)_OR_CREATE:)?({IDENT})\s*=")
 _TAGGED_REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
 )
@@ -154,15 +164,13 @@ def _loc_files(mod_path: Path):
             yield path
 
 
-def audit(mod_path: str | Path | None = None, script_values: set[str] | None = None) -> AuditResult:
-    """Scan the mod's English loc. `script_values` overrides the defined names
-    (mod + vanilla snapshot) for tests."""
+def audit(mod_path: str | Path | None = None) -> AuditResult:
+    """Scan the mod's English loc against the mod's and vanilla's script values."""
     if mod_path is None:
         from path_constants import mod_path as _default
         mod_path = _default
     root = Path(mod_path)
-    if script_values is None:
-        script_values = mod_script_value_names(root) | vanilla_script_value_names(root)
+    script_values = mod_script_value_names(root) | vanilla_script_value_names(root)
     result = AuditResult(script_values_indexed=len(script_values))
 
     for path in _loc_files(root):
@@ -188,6 +196,11 @@ def audit(mod_path: str | Path | None = None, script_values: set[str] | None = N
                 result.flags.append(Flag(rel, lineno, key, name, exemption=tag))
             if tag and not missing:
                 result.stale_tags.append(StaleTag(rel, lineno, key))
+    if not result.loc_files_scanned:
+        # A wrong mod path or an emptied loc folder would otherwise pass as clean.
+        raise FileNotFoundError(
+            f"no loc file to scan under {root / LOC_DIR} (te_unused_l_english.yml is skipped)"
+        )
     return result
 
 
