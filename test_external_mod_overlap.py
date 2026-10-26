@@ -43,8 +43,9 @@ IN_VANILLA = [Op(VANILLA, None, 0)]   # vanilla has it, file unknown (snapshot)
 
 
 def unknown_engine(test):
-    """Put back the unknowns the 2026-10-26 probe settled, for `test`'s
-    duration, so the code that simulates them stays tested."""
+    """Unset every KNOWN_* setting for `test`'s duration, the ones the
+    2026-10-26 probes settled and the ones they left open alike, so the code
+    that simulates them stays tested."""
     for name in ("KNOWN_FILE_ORDER", "KNOWN_LOAD_READING", "KNOWN_OR_CREATE_PHASE",
                  "KNOWN_TRY_PHASE"):
         patch = mock.patch.object(emo, name, None)
@@ -410,6 +411,14 @@ class OrderHelperTests(unittest.TestCase):
         creation = emo.order_for_reading([*ops, Op(VANILLA, "m.txt", 1)], "ascii",
                                          "creations_first", "creation")
         self.assertEqual([o.path for o in creation], ["m.txt", "b.txt", "c.txt", "d.txt", "a.txt"])
+
+    def test_the_two_phase_unknowns_together(self):
+        # own_family with a bare definition sends the REPLACE_OR_CREATE to the
+        # end; early sends the TRY_REPLACE ahead of the INJECTs.
+        ops = [theirs("b.txt", "REPLACE_OR_CREATE"), ours("a.txt", "TRY_REPLACE"),
+               ours("c.txt", "INJECT"), Op(VANILLA, "m.txt", 1)]
+        ordered = emo.order_for_reading(ops, "ascii", "creations_first", "own_family", "early")
+        self.assertEqual([o.path for o in ordered], ["m.txt", "a.txt", "c.txt", "b.txt"])
 
     def test_directive_phases_cover_each_directive_once(self):
         phases = emo.DIRECTIVE_PHASES
