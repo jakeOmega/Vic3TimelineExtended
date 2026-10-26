@@ -265,6 +265,12 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
 
+      # ScriptValue('x') in a loc value naming no script value renders 0. The
+      # .gui half is gui_reference_audit's, above.
+      - name: Audit — loc ScriptValue reads that name no script value
+        if: ${{ !cancelled() }}
+        run: python3 loc_script_value_audit.py --strict
+
       # Needs no game: the CLI builds a ModState from the committed
       # vanilla_parsed/ snapshot and its English loc. This is the check that
       # catches a mod-introduced entity (a modifier type, a PM, a building) with
