@@ -26,9 +26,7 @@ from typing import Iterator
 # can declare `unlocking_technologies = { ... }`.
 #
 # `entity_type` matches the `ms.mod_parsers` keys used by mod_state_server
-# (see `base_game_paths` in that file). `parties/` is mod-only and isn't
-# in mod_parsers; we still index it so annotators that target "Parties"
-# would work if registered later.
+# (see `base_game_paths` in that file), "Parties" included since #1164.
 UNLOCK_SOURCES: list[tuple[str, str]] = [
     ("Buildings",            "buildings"),
     ("Combat Unit Types",    "combat_unit_types"),
