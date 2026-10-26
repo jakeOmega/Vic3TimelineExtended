@@ -106,6 +106,7 @@ FOREIGN_CHECKS = frozenset({
     "amendment_reachability",  # amendment_reachability_audit (an add_amendment line in an event)
     "ideology_lawgroup",  # ideology_lawgroup_audit
     "script_argument",  # script_argument_audit (a call line in an event)
+    "texture_reference",  # texture_reference_audit (an asset path's line in an event)
 })
 
 # ---------------------------------------------------------------------------
