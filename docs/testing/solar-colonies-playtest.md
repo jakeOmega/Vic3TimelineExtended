@@ -198,6 +198,20 @@ probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC`, 
 | `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
 | `TE_SR_PROBE upkeep_inputs candidate=… before=… after=…` | console options k and l, fourteen days apart | see the probe below | | |
 
+**What checks itself, and what needs a hand.**
+
+- **Logged with no input:** start a game at Full Colonies and grep `error.log` and `debug.log` for the new files
+  (`sr_fleet*`, `sr_fleets_generated*`, `space_race_events.txt`, `covert_operations.txt`): script errors in them show at
+  load. `ship_construction` logs by itself once any country has run a Space Command at half staff for a month: an AI
+  space power in an observer run, or you.
+- **Logged after one action:**
+  - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
+  - The probe needs console options k and l, and a read of the input tooltip.
+  - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
+  - `TE_SR_COMBAT` lines log every occupation, liberation, seizure and destruction as it happens.
+- **Set up by hand and read by eye:** steps 1 to 22 below. Console option b gives a fleet, h and i force an assault
+  and a month's combat, and j an occupation, which shortens most of them.
+
 **The upkeep probe (open call, owner).** The fleets' upkeep ships as `sr_fleet_upkeep_goods`, the three good-specific
 input multipliers (Launch Capacity, Advanced Materials, electricity), which the mod already uses. The design prefers
 `sr_fleet_upkeep`, the generic `building_goods_input_mult`, which follows any change to the methods, but the owner
