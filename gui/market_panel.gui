@@ -160,6 +160,9 @@ types market_panel
 				# te_tab_buttons_six defaults both halves of an unused slot to
 				# `visible = no`, so each visibility block tests the gate as well as
 				# the tab. Gates: common/scripted_guis/te_system_tab_sguis.txt.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown
+				# otherwise logs a null-country error every frame (2026-10-25).
 				#
 				# Which market. This panel also opens other markets, and both tabs
 				# read the player's journal entries whichever it shows. Climate is on
@@ -185,10 +188,10 @@ types market_panel
 					onclick = "[InformationPanel.SelectTab('te_global_warming')]"
 				}
 				blockoverride "fifth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_global_warming'), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_global_warming'), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_global_warming') ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_global_warming') ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_market_tab_global_warming"
@@ -205,10 +208,10 @@ types market_panel
 					onclick = "[InformationPanel.SelectTab('te_strategic_reserve')]"
 				}
 				blockoverride "sixth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_strategic_reserve'), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_strategic_reserve'), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "sixth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_strategic_reserve') ), And( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_strategic_reserve') ), And( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) ) ) )]"
 				}
 				blockoverride "sixth_button_selected" {
 					text = "te_market_tab_strategic_reserve"

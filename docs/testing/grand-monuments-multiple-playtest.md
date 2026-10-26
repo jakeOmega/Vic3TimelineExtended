@@ -70,6 +70,7 @@ GUI has stacked a type's icons over another type inside one widget before, so th
 | **Our Monuments.** Open the journal entry's Our Monuments, and the Timeline Extended window's Grand Monuments tab. | A row per state's primary as before, then a row per secondary with where it stands. A change in one shows in the other. | |
 | **A civil war.** Have a civil war's winner take such a state. | The rows are back within a month (the pass rebuilds the lists). | Rows missing for good: check `gm_mon_lists_written`. |
 | **Pictures.** A returned landmark whose picture was drawn later. | It shows the right picture within a month. | |
+| **An observer** (log triage 2026-10-25). Type `observe`, open the state view of a state with a monument, a monument beside it and a trophy on display, then the market panel. | The cards and the market tabs look as a player's do, without Carry It Off. error.log has no `gm_trophy_sguis.txt:19` or `:55`, `gm_monument_sguis.txt:15`, or `te_system_tab_sguis.txt:223` or `:269` line. | A line still logged every frame: `And` evaluates its second argument after all. Wrap the button in a container whose `visible` is `Not( GetMetaPlayer.IsObserver )` (`gui_modding_guide.md`, gotcha 42), and fix the guide's note. |
 
 ## Civil wars (2026-10-25, #1136)
 
