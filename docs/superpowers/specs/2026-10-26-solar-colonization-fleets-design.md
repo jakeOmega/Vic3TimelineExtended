@@ -350,9 +350,13 @@ Space Program, expandable, `can_build_private` no.
 
 - **Construction**, `sr_sc_rate` (country value): each Space Command's level ×
   occupancy × its method's rate, read from the building in script (§ Engine
-  facts), counting only buildings in states their owner controls (§ 5.1). Not a workforce-scaled modifier: the fleet's upkeep raises Space
-  Command's throughput (below), and a modifier would feed that back into
-  construction.
+  facts), counting only buildings in states their owner controls (§ 5.1).
+  Not a workforce-scaled modifier, as the batteries' figures are (§ 15): the
+  fleet's upkeep raises Space Command's throughput (below), a workforce-scaled
+  modifier scales with throughput (slice 4's fabrication does), so it would
+  feed the upkeep back into construction and its tooltip would overstate the
+  rate. Each method's description states its rate a level instead, and the
+  Space Command section shows the month's figure.
 - **The build mix** (F9, panel orders): five weights 0 to 3,
   `sr_sc_mix_<role>`, warships 2, carriers 1, tenders 1, siege and rapid 0 to
   start. The month's construction is shared by weight and added to the **home
@@ -702,23 +706,34 @@ A monthly review per AI country with a fleet or a Space Command
   | Kinetic Interceptors | Space Militarization | 1 point of fire on hostile fleets at Earth; each point fired adds 0.02 low debris |
   | Ground Lasers | Directed Energy Weapons (electricity input) | 2 points of fire, no debris; **in peace**, clears 0.01 from the low pool |
 
-  Batteries fire in the Earth battle (§ 7.1) and take no losses. Their fire is
-  counted in script, state by state, so a battery in a state its owner doesn't
-  control fires for no one (§ 5.1).
+  Batteries fire in the Earth battle (§ 7.1) and take no losses.
+- **The figures are modifiers the player can read** (owner, on the PR). Each
+  method carries its fire, and Ground Lasers its sweep, as script-only,
+  workforce-scaled **state** modifiers in its `state_modifiers`:
+  `state_orbital_battery_fire_add` ("Fire on Hostile Fleets at Earth") and
+  `state_orbital_debris_sweep_add` ("Low-Orbit Debris Swept in Peace"). So the
+  method's tooltip and the state's modifiers show what a level does (a
+  `script_only` type still renders in tooltips,
+  `scripting_best_practices.md`), and staffing is in the number already. The
+  script decides when they count: `sr_battery_fire` and `sr_battery_sweep`
+  (country values) sum `modifier:state_…` over the states that pass
+  `sr_state_held_by_owner` (§ 5.1), the sweep only while the country is at war
+  with no one. That is the barracks training methods' pattern
+  (`state_reserve_battalions_add`, read in `barracks_training_values.txt:29`).
+  One field each, no building-scoped copy, which the game would list a second
+  time.
 - **Low-orbit sweeping** (owner's addition). Ground-based lasers that ablate
   small debris until it de-orbits are a real proposal for low orbit (NASA's
   ORION study of the 1990s and later laser-broom studies), and can't reach the
   debris high above. So Ground Lasers clear only the **low pool**, and only in
-  peace: `sr_battery_sweep` (country value, the batteries' levels × occupancy on
-  Ground Lasers in states their owner controls, while it is at war with no
-  one), summed in `te_debris_global_monthly` and taken from the low pool alone.
-  It is counted in script, as construction and fire are, rather than a
-  production method's country modifier: a method's modifier would still reach
-  its owner from an occupied state (§ 5.1) and can't switch off in war. Ten
-  levels clear 0.1 a month, beside Laser Broom's 0.15 from the
-  Space Program and the low pool's own 1.5% decay: a help against
-  everyday clutter, no cure for a Kessler cascade, which lives in the high
-  pool.
+  peace: every country's `sr_battery_sweep` is summed in
+  `te_debris_global_monthly` and taken from the low pool alone. A state
+  modifier summed in script, not a country modifier like the Space Program's
+  removal methods: a method's country modifier would still reach its owner
+  from an occupied state (§ 5.1) and couldn't switch off in war. Ten levels
+  clear 0.1 a month, beside Laser Broom's 0.15 from the Space Program and the
+  low pool's own 1.5% decay: a help against everyday clutter, no cure for a
+  Kessler cascade, which lives in the high pool.
 - **Blockading Earth**: § 8's rule at Earth. A hostile fleet standing off at
   Earth with no fleet of the target there blockades the target: no colony
   fleet, module shipment, settler or fleet leaves Earth (Launch from the
@@ -860,6 +875,10 @@ our Earth by the largest rival.
     the launch site is my extension of it, the same rule applied to the
     building every launch leaves from. An occupied colony's Defences likewise
     fire for no one (§ 9.2).
+18. **The batteries' figures are state modifiers the script sums** (§ 15, the
+    owner's suggestion), and Space Command's rate is in its methods'
+    descriptions rather than a modifier (§ 5), because its upkeep raises its
+    throughput.
 
 ## 21. Build order
 
