@@ -8,8 +8,11 @@ document, a menu with a build order, not yet a design. Slices 0 and 1 are built
 (`2026-10-25-solar-colonization-holders-and-cession-design.md`), slices 2 and
 3 (`2026-10-25-solar-colonization-population-and-transit-design.md`), slice
 4 (`2026-10-25-solar-colonization-modules-and-bases-design.md`), and slice 5
-(`2026-10-26-solar-colonization-free-colonies-design.md`). The calls still
-open are in § 11. Read `docs/systems/mod_systems.md` § Space Race and
+(`2026-10-26-solar-colonization-free-colonies-design.md`). Slice 6, the
+fleets phase, is designed in four parts, 6a to 6d
+(`2026-10-26-solar-colonization-fleets-design.md`, with its plan
+`../plans/2026-10-26-solar-colonization-fleets.md`), from the fifth round of
+§ 11. Read `docs/systems/mod_systems.md` § Space Race and
 `docs/player_guide/16-space.md` § Colonizing the solar system first; this
 document assumes both.
 
@@ -553,7 +556,8 @@ reads its three-level rule.
 today's colonies, which is the Global Commons precedent ("a save from before it
 keeps the uncapped mine"). While the system is built, the default stays races
 only, so a half-built slice never reaches a new game: simple becomes the
-default when slice 5 ships, full when the fleets phase does.
+default when slice 5 ships, full when the fleets phase's last part (6d,
+Earth orbit) does (owner, 2026-10-26).
 
 Two balances follow: Extraplanetary Bases unlimited (races only) and from
 colonies (simple, full). Both need checking, and the guide has to describe both.
@@ -571,7 +575,7 @@ section.
 | 3 | Transit tables in the launch-window generator (§ 5.3); colony fleets that pick their site, travel and claim on arrival; distance in place of the stages (§ 5.6) | Medium |
 | 4 | Modules with specializations as modules (§ 8.1) and Extraplanetary Bases from colonies (§ 8.2) | Medium to large (the balance) |
 | 5 | Covert operations, free colonies (waiting and trade), autonomy, abandonment, colony life events (§§ 6.4–6.6). Simple becomes the default | Medium |
-| 6 | **The fleets phase** (§ 5, §§ 6.2–6.3): 6a the fleet record, ship classes, Space Command and movement on slice 3's tables; 6b combat at locations, postures, blockade, seizure and destruction, settlement at the peace; 6c interdiction in peace, the AI. Full becomes the default | Large, the riskiest |
+| 6 | **The fleets phase** (§ 5, §§ 6.2–6.3; designed in `2026-10-26-solar-colonization-fleets-design.md`): 6a the fleet record, ship roles, Space Command and movement on legs between the nine locations; 6b combat at locations, postures, blockade away from Earth, seizure and destruction, settlement at the peace, war support, the AI's defence; 6c interdiction in peace, the AI's offence, the outer-space convention; 6d Earth orbit (blockading Earth, the ground reserve, ground-to-orbit batteries, fire support in the ground war). Full becomes the default with 6d | Large, the riskiest |
 
 Slices 0 and 1 already let a war on Earth take colonies. Slice 6 is a phase of
 its own, and its parts can ship as separate PRs.
@@ -604,3 +608,34 @@ Fourth round (owner, 2026-10-25), now settled:
 
 Nothing is open that blocks slices 0 and 1. Their design:
 `2026-10-25-solar-colonization-holders-and-cession-design.md`.
+
+Fifth round (owner, 2026-10-26, the fleets interview), now settled; the
+design is `2026-10-26-solar-colonization-fleets-design.md`:
+
+- **Four parts**, 6a to 6d, one design and one plan, each part its own PR.
+- **Ship roles, not drive classes** (replacing § 5.1's classes by drive
+  generation): a drive is a national unlock, and a fleet takes it in a refit
+  when it next docks at Earth or one of our Spaceports. Old hulls are not worth
+  scrapping under the square law, so tracking them per drive would mostly be
+  bookkeeping.
+- **Five roles**: warships, assault carriers, tenders, siege ships (strong
+  against colony defences) and rapid response ships (a drive ahead, weak in
+  combat).
+- **Legs**: exact windows from Earth; mean-cycle windows home and among
+  Mercury and Venus, Mars, the Belt and Jupiter; fixed medians beyond.
+  "Include it only where it matters most."
+- **Propellant in km/s** from the generator's tables.
+- **Earth orbit is a part of its own (6d)**: no blockade at Earth before it.
+  Then a blockade stops launches and holding orbit supports the ground war,
+  and so that a small blockade can't hold a power for a whole war, new hulls
+  wait in a ground reserve and launch together, and ground-to-orbit batteries
+  fire on fleets at Earth (with lasers, sweeping low-orbit debris in peace).
+- **War support** from occupied colonies (0.1 to 0.25 a beat, growing with the
+  colony) and from battles, both kept small beside the war on Earth.
+- **The AI** defends and attacks at war; it never interdicts in peace.
+- **Space Command** is a building, where the Space Program stands.
+- **Marines are the garrison** under Full Colonies.
+- **Full becomes the default with 6d.**
+- **The outer-space convention** follows the Moratorium, and members holding a
+  colony can also table it.
+- **A free colony seized is ours at once.**
