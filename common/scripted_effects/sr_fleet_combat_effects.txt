@@ -2,15 +2,16 @@
 # SOLAR SYSTEM COLONIZATION — fleets: combat, blockade, seizure, destruction
 # ============================================================================
 # Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
-# (slice 6b, §§ 7-11, 14). Full Colonies only.
+# (slice 6b, §§ 7-11, 14; 6c, §§ 12-14). Full Colonies only.
 #
 # Each month, from the global step (sr_fl_global_month, after the fleets land
 # and before the worlds' step), at each of the nine locations
 # (sr_combat_at = { LOC CODE }):
 #   0. every power's forces there by posture into country variables (sr_cb_*):
 #      strength and fire on fleets by posture (1 station, 2 stand off, 3 close
-#      in; at Earth every fleet counts as stationed, since everything there
-#      engages everything), and for each world its closing-in fleets target,
+#      in; 4 interdict, 6c, fights as standing off; at Earth every fleet counts
+#      as stationed, since everything there engages everything), and for each
+#      world its closing-in fleets target,
 #      their strength, fire on defences, marines and fire to destroy;
 #   1. each world's closing-in strength (global sr_cb_c_<key>);
 #   2. each power's engaged hostile strength by posture (sr_cb_e1..3: station
@@ -28,7 +29,9 @@
 #   5. each world: integrity, seizure, destruction, blockade (sr_site_*_step);
 #   6. the records cleared.
 # Hostile means at war (has_war_with); a fleet closing in on a free colony is
-# hostile to its Defences alone (§ 9.5). The per-location and per-world blocks
+# hostile to its Defences alone (§ 9.5). An interdiction (6c, § 12) fires no
+# shot: it blockades the worlds of the country it interdicts, a country at
+# peace with its interdictor (sr_icpt_<loc>, sr_site_blockade_step). The per-location and per-world blocks
 # are generated (sr_fleets_generated.txt); the numbers are sr_fleet_values.txt's.
 # ============================================================================
 
@@ -156,6 +159,13 @@ sr_fl_gather_at = {
 			sr_fl_check_target_at = { N = $N$ }
 			set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
 		}
+		# Interdicting (6c) fights as standing off; a target no longer to be
+		# interdicted (a war, an alliance, the world gone) ends it first.
+		if = {
+			limit = { local_var:sr_cb_p = 4 }
+			sr_fl_check_icpt_at = { N = $N$ }
+			set_local_variable = { name = sr_cb_p value = 2 }
+		}
 		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
 		set_local_variable = { name = sr_cb_s value = sr_fl_$N$_strength }
 		set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality } }
@@ -227,6 +237,7 @@ sr_fl_apply_losses_at = {
 		set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
 		if = { limit = { local_var:sr_cb_code = 1 } set_local_variable = { name = sr_cb_p value = 1 } }
 		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		if = { limit = { local_var:sr_cb_p = 4 } set_local_variable = { name = sr_cb_p value = 2 } }
 		set_local_variable = { name = sr_fl_loss value = 0 }
 		if = {
 			limit = { local_var:sr_cb_p = 1 sr_cb_s1_value > 0 }
@@ -272,6 +283,173 @@ sr_cb_check_target = {
 		set_variable = { name = sr_fl_$N$_posture value = 2 }
 		remove_variable = sr_fl_$N$_target
 		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+	}
+}
+
+# An interdicting slot (6c) whose target world KEY may no longer be interdicted
+# (its holder at war with us, now our ally, or the world taken, freed or gone)
+# stands off: at war, that blockades its holder anyway. A world that changed
+# hands to another country at peace with us is a new interdiction, at its price.
+sr_cb_check_icpt = {
+	if = {
+		limit = { NOT = { sr_site_interdict_target = { KEY = $KEY$ } } }
+		sr_fl_end_icpt = { N = $N$ }
+	}
+	else = {
+		sr_cb_charge_interdict = { N = $N$ KEY = $KEY$ }
+	}
+}
+
+# Slot N's interdiction ends: it stands off, its target and its record cleared,
+# and our interdiction lists rebuilt.
+sr_fl_end_icpt = {
+	set_variable = { name = sr_fl_$N$_posture value = 2 }
+	if = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }
+	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
+	sr_icpt_rebuild = yes
+}
+
+# ---- Interdiction in peace (6c, design § 12) ----------------------------------------------------
+# Country scope, the interdictor; slot N interdicts the holder of the world KEY.
+# When it begins (per fleet and target: sr_fl_<n>_icpt holds the country it
+# interdicts), it costs 5 infamy and 10 on the UN dossier's hostile acts in
+# space, and gives the target its casus belli: the interdictor keeps the list
+# of countries it interdicted (sr_interdiction_targets) while
+# sr_interdiction_recent (five years, renewed by each new interdiction) stands,
+# and Cede Colony's war goal costs them no infamy against it. The target hears
+# of it (.105).
+sr_cb_charge_interdict = {
+	global_var:sr_site_holder_$KEY$ ?= { save_scope_as = sr_icpt_target }
+	if = {
+		limit = {
+			exists = scope:sr_icpt_target
+			OR = {
+				NOT = { has_variable = sr_fl_$N$_icpt }
+				NOT = { var:sr_fl_$N$_icpt = scope:sr_icpt_target }
+			}
+		}
+		set_variable = { name = sr_fl_$N$_icpt value = scope:sr_icpt_target }
+		change_infamy = sr_interdiction_infamy
+		un_dossier_record = { RECORD = space POINTS = sr_interdiction_dossier }
+		if = {
+			limit = {
+				NOT = { has_variable = sr_interdiction_recent }
+				has_variable_list = sr_interdiction_targets
+			}
+			clear_variable_list = sr_interdiction_targets
+		}
+		if = {
+			limit = { NOT = { sr_interdicted_recently = { TARGET = scope:sr_icpt_target } } }
+			add_to_variable_list = { name = sr_interdiction_targets target = scope:sr_icpt_target }
+		}
+		set_variable = { name = sr_interdiction_recent value = yes days = 1825 }
+		save_scope_as = sr_icpt_power
+		set_local_variable = { name = sr_icpt_loc value = sr_fl_$N$_loc_value }
+		# A debug line reads no local variable or saved scope: the location
+		# goes through a global, and each side logs its own tag.
+		set_global_variable = { name = sr_cb_log_loc value = local_var:sr_icpt_loc }
+		debug_log = "TE_SR_COMBAT interdiction begun at location [GetGlobalVariable('sr_cb_log_loc').GetValue|0] by [THIS.GetCountry.GetTagName]"
+		scope:sr_icpt_target = {
+			debug_log = "TE_SR_COMBAT interdiction at location [GetGlobalVariable('sr_cb_log_loc').GetValue|0] against [THIS.GetCountry.GetTagName]"
+			if = {
+				limit = {
+					is_player = yes
+					NOT = { has_variable = sr_icpt_alert_loc }
+				}
+				set_variable = { name = sr_icpt_alert_loc value = local_var:sr_icpt_loc }
+				set_variable = { name = sr_icpt_alert_by value = scope:sr_icpt_power }
+				trigger_event = { id = space_race_events.105 days = 1 }
+			}
+		}
+	}
+}
+
+# A revolution's winner continues the nation (ROOT, from sr_repair_after_civil_war,
+# scope:te_cw_loser the old government): variables merge in, variable lists
+# don't. So the loser's casus belli list comes to the winner (it keeps
+# sr_interdiction_recent, a variable), the winner joins every list that named
+# the loser, and every fleet that interdicted the loser now names the winner,
+# so the next month's check charges no new price.
+sr_icpt_repair_after_civil_war = {
+	if = {
+		limit = { exists = scope:te_cw_loser }
+		if = {
+			limit = { scope:te_cw_loser = { has_variable_list = sr_interdiction_targets } }
+			scope:te_cw_loser = {
+				every_in_list = {
+					variable = sr_interdiction_targets
+					save_temporary_scope_as = sr_icpt_carried
+					ROOT = {
+						if = {
+							limit = { NOT = { sr_interdicted_recently = { TARGET = scope:sr_icpt_carried } } }
+							add_to_variable_list = { name = sr_interdiction_targets target = scope:sr_icpt_carried }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_global_variable_list = sr_fleet_powers }
+			every_in_global_list = {
+				variable = sr_fleet_powers
+				limit = { is_country_alive = yes }
+				if = {
+					limit = {
+						has_variable_list = sr_interdiction_targets
+						is_target_in_variable_list = { name = sr_interdiction_targets target = scope:te_cw_loser }
+						NOT = { is_target_in_variable_list = { name = sr_interdiction_targets target = ROOT } }
+					}
+					add_to_variable_list = { name = sr_interdiction_targets target = ROOT }
+				}
+				sr_fl_each_slot = { DO = icpt_repoint }
+			}
+		}
+	}
+}
+
+sr_fl_icpt_repoint_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_icpt
+			var:sr_fl_$N$_icpt = scope:te_cw_loser
+		}
+		set_variable = { name = sr_fl_$N$_icpt value = ROOT }
+	}
+}
+
+# Console (te_debug_space_race.6, 6c): the first of our fleets that may
+# interdict (local_var:sr_fl_debug_done not yet set) begins an interdiction of
+# the first world there it may interdict, at its price, as the posture button
+# would.
+sr_fl_debug_icpt_at = {
+	if = {
+		limit = {
+			NOT = { has_local_variable = sr_fl_debug_done }
+			sr_fl_$N$_has_interdict_world = yes
+		}
+		set_local_variable = { name = sr_fl_debug_done value = 1 }
+		set_variable = { name = sr_fl_$N$_posture value = 4 }
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		if = {
+			limit = { NOT = { sr_fl_$N$_target_interdictable = yes } }
+			sr_fl_step_icpt_target_at = { N = $N$ }
+		}
+		sr_fl_charge_icpt_at = { N = $N$ }
+		sr_icpt_rebuild = yes
+	}
+}
+
+# Country scope, from sr_icpt_rebuild (KEY, LOC): an interdicting slot's
+# target world, while it may still be interdicted, puts its holder on our
+# list for the location (sr_icpt_<loc>), which the blockade reads.
+sr_icpt_note = {
+	if = {
+		limit = { sr_site_interdict_target = { KEY = $KEY$ } }
+		global_var:sr_site_holder_$KEY$ = { save_temporary_scope_as = sr_icpt_victim }
+		if = {
+			limit = { NOT = { sr_icpt_interdicts_at = { LOC = $LOC$ } } }
+			add_to_variable_list = { name = sr_icpt_$LOC$ target = scope:sr_icpt_victim }
+		}
 	}
 }
 
@@ -507,6 +685,7 @@ sr_site_occupy = {
 	if = { limit = { has_global_variable = sr_site_bombard_$KEY$ } remove_global_variable = sr_site_bombard_$KEY$ }
 	sr_site_sync_$KEY$ = yes
 	sr_site_occupation_notice = { KEY = $KEY$ INDEX = $INDEX$ KIND = 1 }
+	sr_colony_un_on_seizure = yes
 	sr_sites_refresh_players = yes
 	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
 	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] occupied by [THIS.GetCountry.GetTagName]"
@@ -550,6 +729,7 @@ sr_site_take_free = {
 		sr_site_event_open = { VAR = sr_seized_free_site INDEX = $INDEX$ }
 		trigger_event = { id = space_race_events.104 days = 1 }
 	}
+	sr_colony_un_on_seizure = yes
 	sr_sites_refresh_players = yes
 	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
 	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] (a free colony) seized by [THIS.GetCountry.GetTagName]"
@@ -578,6 +758,7 @@ sr_site_destroy = {
 	}
 	change_infamy = sr_destroy_infamy_cost
 	un_dossier_record = { RECORD = space POINTS = sr_destroy_dossier_cost }
+	sr_colony_un_on_seizure = yes
 	set_local_variable = { name = sr_aut_delta value = sr_destroy_autonomy_now }
 	sr_site_aut_add_all = yes
 	set_variable = {
@@ -735,10 +916,13 @@ sr_site_integrity_step = {
 	}
 }
 
-# Global scope, from the location's step (KEY): a world is blockaded (§ 8)
-# when a fleet at war with its holder stands off there and no fleet of its
-# holder is stationed or standing off there. Not at Earth (6d). An occupied
-# world, or a free one, is never blockaded.
+# Global scope, from the location's step (KEY, LOC): a world is blockaded (§ 8)
+# when a fleet at war with its holder stands off there, or (6c, § 12) a fleet
+# interdicting its holder does (sr_icpt_<loc>), and no fleet of its holder is
+# stationed or standing off there: an interdiction that meets the target's
+# fleet is a standoff. Not at Earth (6d). An occupied world, or a free one, is
+# never blockaded. sr_site_interdicted_<key> marks a blockade by interdiction
+# alone, no enemy standing off, for the panel.
 sr_site_blockade_step = {
 	if = {
 		limit = {
@@ -747,11 +931,15 @@ sr_site_blockade_step = {
 				is_country_alive = yes
 				NOT = { sr_cb_holds_orbit = yes }
 				has_global_variable_list = sr_fleet_powers
+				save_temporary_scope_as = sr_icpt_victim
 				any_in_global_list = {
 					variable = sr_fleet_powers
 					has_variable = sr_cb_present
 					sr_cb_s2_value > 0
-					has_war_with = prev
+					OR = {
+						has_war_with = prev
+						sr_icpt_interdicts_at = { LOC = $LOC$ }
+					}
 				}
 			}
 		}
@@ -760,20 +948,51 @@ sr_site_blockade_step = {
 			set_global_variable = { name = sr_site_blockaded_$KEY$ value = yes }
 			sr_sites_refresh_players = yes
 		}
+		if = {
+			limit = {
+				global_var:sr_site_holder_$KEY$ ?= {
+					NOT = {
+						any_in_global_list = {
+							variable = sr_fleet_powers
+							has_variable = sr_cb_present
+							sr_cb_s2_value > 0
+							has_war_with = prev
+						}
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { has_global_variable = sr_site_interdicted_$KEY$ } }
+				set_global_variable = { name = sr_site_interdicted_$KEY$ value = yes }
+			}
+		}
+		else_if = {
+			limit = { has_global_variable = sr_site_interdicted_$KEY$ }
+			remove_global_variable = sr_site_interdicted_$KEY$
+		}
 	}
 	else_if = {
-		limit = { has_global_variable = sr_site_blockaded_$KEY$ }
-		remove_global_variable = sr_site_blockaded_$KEY$
+		limit = {
+			OR = {
+				has_global_variable = sr_site_blockaded_$KEY$
+				has_global_variable = sr_site_interdicted_$KEY$
+			}
+		}
+		if = { limit = { has_global_variable = sr_site_blockaded_$KEY$ } remove_global_variable = sr_site_blockaded_$KEY$ }
+		if = { limit = { has_global_variable = sr_site_interdicted_$KEY$ } remove_global_variable = sr_site_interdicted_$KEY$ }
 		sr_sites_refresh_players = yes
 	}
 }
 
-# ---- Orders that need a war (design §§ 7, 9) -------------------------------------------------------
+# ---- Orders (design §§ 7, 9, 12) ------------------------------------------------------------------
 # Country scope (sr_fleet_sguis.txt, $N$): the posture steps Station, Stand off,
-# Close in. Closing in needs a target: the first hostile world at the location
-# when none is set (sr_fl_<n>_has_hostile_world); with none, it goes back to
-# Station. Closing in on a free colony begins the price (§ 9.4) once per fleet
-# and world.
+# Close in, Interdict. Closing in needs a target: the first hostile world at the
+# location when none is set (sr_fl_<n>_has_hostile_world); with none, it is
+# skipped. Closing in on a free colony begins the price (§ 9.4) once per fleet
+# and world. Interdicting (6c, § 12) needs a world of a country at peace with
+# us and not our ally (sr_fl_<n>_has_interdict_world), the first such when the
+# target is not one; it begins the interdiction's price (sr_cb_charge_interdict)
+# once per fleet and target. With neither, it goes back to Station.
 sr_fl_step_posture_at = {
 	set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
 	if = {
@@ -793,14 +1012,29 @@ sr_fl_step_posture_at = {
 					NOT = { sr_fl_$N$_target_hostile = yes }
 				}
 			}
-			sr_fl_step_target_at = { N = $N$ }
+			sr_fl_step_hostile_target_at = { N = $N$ }
 		}
 		sr_fl_charge_free_at = { N = $N$ }
+	}
+	else_if = {
+		limit = {
+			local_var:sr_cb_p <= 3
+			sr_fl_$N$_has_interdict_world = yes
+		}
+		set_variable = { name = sr_fl_$N$_posture value = 4 }
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		if = {
+			limit = { NOT = { sr_fl_$N$_target_interdictable = yes } }
+			sr_fl_step_icpt_target_at = { N = $N$ }
+		}
+		sr_fl_charge_icpt_at = { N = $N$ }
 	}
 	else = {
 		set_variable = { name = sr_fl_$N$_posture value = 1 }
 		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+		if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 	}
+	sr_icpt_rebuild = yes
 }
 
 sr_fl_toggle_destroy_at = {
@@ -896,6 +1130,26 @@ sr_fl_ai_defend = {
 	}
 	sr_fl_each_slot = { DO = ai_recall }
 	sr_fl_ai_defend_all = yes
+}
+
+# ---- The AI's offence at war (design § 14, 6c) ----------------------------------------------------
+# Country scope, an AI fleet power's month, after the defence: at war, one
+# docked fleet free of the defence goes to attack a location within twelve
+# months' leg where it outmatches the enemy's force 1.5 times over, with the
+# propellant for the leg home or a dock of ours there (sr_fl_ai_attack_all,
+# generated); every fleet at a location with an enemy world, and no colony of
+# ours threatened there, closes in on the world of most worth to seize it when
+# its marines suffice, else stands off (sr_fl_ai_assault_at). It never destroys
+# a colony, never closes in on a free one, and never interdicts: Interdict is
+# no AI posture. Every order passes the same sr_fl_<n>_may_depart_<loc> a
+# player's does, and the recall (sr_fl_ai_recall_at) brings home first a fleet
+# short of supply or of the propellant home.
+sr_fl_ai_attack = {
+	if = {
+		limit = { is_at_war = yes }
+		sr_fl_ai_attack_all = yes
+		sr_fl_each_slot = { DO = ai_assault }
+	}
 }
 
 # A fleet away and undocked, short of supply (under three months) or of the

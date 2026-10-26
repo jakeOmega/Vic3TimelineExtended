@@ -675,6 +675,17 @@ un_vote_apply_treaty_modifier = {
 		un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
 		custom_tooltip = un_asat_terms_tt
 	}
+	# The Convention on the Settlement of Outer Space (solar colonization fleets
+	# design § 13): country-scoped, so the fleets' prices of force read it
+	# without a je: hop (sr_colony_convention_party).
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_colony_protection }
+			NOT = { has_modifier = un_colony_protection_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
+		custom_tooltip = un_colony_protection_terms_tt
+	}
 	# The convention regimes (redesign phase 5, §5.3): read our terms now —
 	# the member modifiers at the current E, and whatever the regimes make us
 	# win or pay (un_regime_effects.txt; the chamber's Our Obligations lists
@@ -826,6 +837,15 @@ un_apply_ratified_conventions = {
 			NOT = { has_modifier = un_asat_moratorium_modifier }
 		}
 		un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+	}
+	# The Convention on the Settlement of Outer Space (COPUOS in force).
+	# Country-scoped.
+	if = {
+		limit = {
+			has_global_variable = un_agency_copuos
+			NOT = { has_modifier = un_colony_protection_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
 	}
 	# The joiner's terms under the regimes in force (redesign phase 5).
 	un_regime_refresh_country = yes

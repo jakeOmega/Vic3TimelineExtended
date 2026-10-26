@@ -17,11 +17,11 @@
 # can propose: they are the AI's only proposal path, and hiding a scripted
 # button from humans alone has no verified mechanism in this engine.
 #
-# The sixteen conventions (human rights, ICC, NPT, climate, pandemic, refugee,
+# The seventeen conventions (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
 # nuclear material, cultural diversity, the prohibition of nuclear weapons,
-# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium)
-# deliberately have NO button.
+# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium, the
+# settlement of outer space) deliberately have NO button.
 # A human tables one from the chamber (ops 7-17 of un_chamber_propose_sgui);
 # the AI reaches them only through the docket's offers (un_docket_effects.txt),
 # which pace the floor. A button here would give the AI an ai_chance path that

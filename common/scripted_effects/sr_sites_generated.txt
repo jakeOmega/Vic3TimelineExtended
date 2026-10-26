@@ -1557,6 +1557,7 @@ sr_site_release_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_blockaded_valles_marineris } remove_global_variable = sr_site_blockaded_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_bombard_valles_marineris } remove_global_variable = sr_site_bombard_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_under_assault_valles_marineris } remove_global_variable = sr_site_under_assault_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_interdicted_valles_marineris } remove_global_variable = sr_site_interdicted_valles_marineris }
 	debug_log = "TE_SR_SITES released valles_marineris"
 }
 # Moves Valles Marineris to scope:sr_site_to_valles_marineris; scope:sr_site_from_valles_marineris, when saved,
@@ -1819,6 +1820,7 @@ sr_site_release_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_blockaded_olympus_mons } remove_global_variable = sr_site_blockaded_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_bombard_olympus_mons } remove_global_variable = sr_site_bombard_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_under_assault_olympus_mons } remove_global_variable = sr_site_under_assault_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_interdicted_olympus_mons } remove_global_variable = sr_site_interdicted_olympus_mons }
 	debug_log = "TE_SR_SITES released olympus_mons"
 }
 # Moves Olympus Mons to scope:sr_site_to_olympus_mons; scope:sr_site_from_olympus_mons, when saved,
@@ -2081,6 +2083,7 @@ sr_site_release_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_hellas_planitia } remove_global_variable = sr_site_blockaded_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_bombard_hellas_planitia } remove_global_variable = sr_site_bombard_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_under_assault_hellas_planitia } remove_global_variable = sr_site_under_assault_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_interdicted_hellas_planitia } remove_global_variable = sr_site_interdicted_hellas_planitia }
 	debug_log = "TE_SR_SITES released hellas_planitia"
 }
 # Moves Hellas Planitia to scope:sr_site_to_hellas_planitia; scope:sr_site_from_hellas_planitia, when saved,
@@ -2343,6 +2346,7 @@ sr_site_release_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_utopia_planitia } remove_global_variable = sr_site_blockaded_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_bombard_utopia_planitia } remove_global_variable = sr_site_bombard_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_under_assault_utopia_planitia } remove_global_variable = sr_site_under_assault_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_interdicted_utopia_planitia } remove_global_variable = sr_site_interdicted_utopia_planitia }
 	debug_log = "TE_SR_SITES released utopia_planitia"
 }
 # Moves Utopia Planitia to scope:sr_site_to_utopia_planitia; scope:sr_site_from_utopia_planitia, when saved,
@@ -2605,6 +2609,7 @@ sr_site_release_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_arcadia_planitia } remove_global_variable = sr_site_blockaded_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_bombard_arcadia_planitia } remove_global_variable = sr_site_bombard_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_under_assault_arcadia_planitia } remove_global_variable = sr_site_under_assault_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_interdicted_arcadia_planitia } remove_global_variable = sr_site_interdicted_arcadia_planitia }
 	debug_log = "TE_SR_SITES released arcadia_planitia"
 }
 # Moves Arcadia Planitia to scope:sr_site_to_arcadia_planitia; scope:sr_site_from_arcadia_planitia, when saved,
@@ -2867,6 +2872,7 @@ sr_site_release_ceres = {
 	if = { limit = { has_global_variable = sr_site_blockaded_ceres } remove_global_variable = sr_site_blockaded_ceres }
 	if = { limit = { has_global_variable = sr_site_bombard_ceres } remove_global_variable = sr_site_bombard_ceres }
 	if = { limit = { has_global_variable = sr_site_under_assault_ceres } remove_global_variable = sr_site_under_assault_ceres }
+	if = { limit = { has_global_variable = sr_site_interdicted_ceres } remove_global_variable = sr_site_interdicted_ceres }
 	debug_log = "TE_SR_SITES released ceres"
 }
 # Moves Ceres to scope:sr_site_to_ceres; scope:sr_site_from_ceres, when saved,
@@ -3129,6 +3135,7 @@ sr_site_release_vesta = {
 	if = { limit = { has_global_variable = sr_site_blockaded_vesta } remove_global_variable = sr_site_blockaded_vesta }
 	if = { limit = { has_global_variable = sr_site_bombard_vesta } remove_global_variable = sr_site_bombard_vesta }
 	if = { limit = { has_global_variable = sr_site_under_assault_vesta } remove_global_variable = sr_site_under_assault_vesta }
+	if = { limit = { has_global_variable = sr_site_interdicted_vesta } remove_global_variable = sr_site_interdicted_vesta }
 	debug_log = "TE_SR_SITES released vesta"
 }
 # Moves 4 Vesta to scope:sr_site_to_vesta; scope:sr_site_from_vesta, when saved,
@@ -3391,6 +3398,7 @@ sr_site_release_psyche = {
 	if = { limit = { has_global_variable = sr_site_blockaded_psyche } remove_global_variable = sr_site_blockaded_psyche }
 	if = { limit = { has_global_variable = sr_site_bombard_psyche } remove_global_variable = sr_site_bombard_psyche }
 	if = { limit = { has_global_variable = sr_site_under_assault_psyche } remove_global_variable = sr_site_under_assault_psyche }
+	if = { limit = { has_global_variable = sr_site_interdicted_psyche } remove_global_variable = sr_site_interdicted_psyche }
 	debug_log = "TE_SR_SITES released psyche"
 }
 # Moves 16 Psyche to scope:sr_site_to_psyche; scope:sr_site_from_psyche, when saved,
@@ -3653,6 +3661,7 @@ sr_site_release_pallas = {
 	if = { limit = { has_global_variable = sr_site_blockaded_pallas } remove_global_variable = sr_site_blockaded_pallas }
 	if = { limit = { has_global_variable = sr_site_bombard_pallas } remove_global_variable = sr_site_bombard_pallas }
 	if = { limit = { has_global_variable = sr_site_under_assault_pallas } remove_global_variable = sr_site_under_assault_pallas }
+	if = { limit = { has_global_variable = sr_site_interdicted_pallas } remove_global_variable = sr_site_interdicted_pallas }
 	debug_log = "TE_SR_SITES released pallas"
 }
 # Moves 2 Pallas to scope:sr_site_to_pallas; scope:sr_site_from_pallas, when saved,
@@ -3894,6 +3903,7 @@ sr_site_release_hygiea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_hygiea } remove_global_variable = sr_site_blockaded_hygiea }
 	if = { limit = { has_global_variable = sr_site_bombard_hygiea } remove_global_variable = sr_site_bombard_hygiea }
 	if = { limit = { has_global_variable = sr_site_under_assault_hygiea } remove_global_variable = sr_site_under_assault_hygiea }
+	if = { limit = { has_global_variable = sr_site_interdicted_hygiea } remove_global_variable = sr_site_interdicted_hygiea }
 	debug_log = "TE_SR_SITES released hygiea"
 }
 # Moves 10 Hygiea to scope:sr_site_to_hygiea; scope:sr_site_from_hygiea, when saved,
@@ -4156,6 +4166,7 @@ sr_site_release_io = {
 	if = { limit = { has_global_variable = sr_site_blockaded_io } remove_global_variable = sr_site_blockaded_io }
 	if = { limit = { has_global_variable = sr_site_bombard_io } remove_global_variable = sr_site_bombard_io }
 	if = { limit = { has_global_variable = sr_site_under_assault_io } remove_global_variable = sr_site_under_assault_io }
+	if = { limit = { has_global_variable = sr_site_interdicted_io } remove_global_variable = sr_site_interdicted_io }
 	debug_log = "TE_SR_SITES released io"
 }
 # Moves Io to scope:sr_site_to_io; scope:sr_site_from_io, when saved,
@@ -4439,6 +4450,7 @@ sr_site_release_europa = {
 	if = { limit = { has_global_variable = sr_site_blockaded_europa } remove_global_variable = sr_site_blockaded_europa }
 	if = { limit = { has_global_variable = sr_site_bombard_europa } remove_global_variable = sr_site_bombard_europa }
 	if = { limit = { has_global_variable = sr_site_under_assault_europa } remove_global_variable = sr_site_under_assault_europa }
+	if = { limit = { has_global_variable = sr_site_interdicted_europa } remove_global_variable = sr_site_interdicted_europa }
 	debug_log = "TE_SR_SITES released europa"
 }
 # Moves Europa to scope:sr_site_to_europa; scope:sr_site_from_europa, when saved,
@@ -4701,6 +4713,7 @@ sr_site_release_ganymede = {
 	if = { limit = { has_global_variable = sr_site_blockaded_ganymede } remove_global_variable = sr_site_blockaded_ganymede }
 	if = { limit = { has_global_variable = sr_site_bombard_ganymede } remove_global_variable = sr_site_bombard_ganymede }
 	if = { limit = { has_global_variable = sr_site_under_assault_ganymede } remove_global_variable = sr_site_under_assault_ganymede }
+	if = { limit = { has_global_variable = sr_site_interdicted_ganymede } remove_global_variable = sr_site_interdicted_ganymede }
 	debug_log = "TE_SR_SITES released ganymede"
 }
 # Moves Ganymede to scope:sr_site_to_ganymede; scope:sr_site_from_ganymede, when saved,
@@ -4963,6 +4976,7 @@ sr_site_release_callisto = {
 	if = { limit = { has_global_variable = sr_site_blockaded_callisto } remove_global_variable = sr_site_blockaded_callisto }
 	if = { limit = { has_global_variable = sr_site_bombard_callisto } remove_global_variable = sr_site_bombard_callisto }
 	if = { limit = { has_global_variable = sr_site_under_assault_callisto } remove_global_variable = sr_site_under_assault_callisto }
+	if = { limit = { has_global_variable = sr_site_interdicted_callisto } remove_global_variable = sr_site_interdicted_callisto }
 	debug_log = "TE_SR_SITES released callisto"
 }
 # Moves Callisto to scope:sr_site_to_callisto; scope:sr_site_from_callisto, when saved,
@@ -5204,6 +5218,7 @@ sr_site_release_himalia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_himalia } remove_global_variable = sr_site_blockaded_himalia }
 	if = { limit = { has_global_variable = sr_site_bombard_himalia } remove_global_variable = sr_site_bombard_himalia }
 	if = { limit = { has_global_variable = sr_site_under_assault_himalia } remove_global_variable = sr_site_under_assault_himalia }
+	if = { limit = { has_global_variable = sr_site_interdicted_himalia } remove_global_variable = sr_site_interdicted_himalia }
 	debug_log = "TE_SR_SITES released himalia"
 }
 # Moves Himalia to scope:sr_site_to_himalia; scope:sr_site_from_himalia, when saved,
@@ -5445,6 +5460,7 @@ sr_site_release_amalthea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_amalthea } remove_global_variable = sr_site_blockaded_amalthea }
 	if = { limit = { has_global_variable = sr_site_bombard_amalthea } remove_global_variable = sr_site_bombard_amalthea }
 	if = { limit = { has_global_variable = sr_site_under_assault_amalthea } remove_global_variable = sr_site_under_assault_amalthea }
+	if = { limit = { has_global_variable = sr_site_interdicted_amalthea } remove_global_variable = sr_site_interdicted_amalthea }
 	debug_log = "TE_SR_SITES released amalthea"
 }
 # Moves Amalthea to scope:sr_site_to_amalthea; scope:sr_site_from_amalthea, when saved,
@@ -5707,6 +5723,7 @@ sr_site_release_venus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_venus } remove_global_variable = sr_site_blockaded_venus }
 	if = { limit = { has_global_variable = sr_site_bombard_venus } remove_global_variable = sr_site_bombard_venus }
 	if = { limit = { has_global_variable = sr_site_under_assault_venus } remove_global_variable = sr_site_under_assault_venus }
+	if = { limit = { has_global_variable = sr_site_interdicted_venus } remove_global_variable = sr_site_interdicted_venus }
 	debug_log = "TE_SR_SITES released venus"
 }
 # Moves Venus Cloud Habitat to scope:sr_site_to_venus; scope:sr_site_from_venus, when saved,
@@ -5969,6 +5986,7 @@ sr_site_release_mercury = {
 	if = { limit = { has_global_variable = sr_site_blockaded_mercury } remove_global_variable = sr_site_blockaded_mercury }
 	if = { limit = { has_global_variable = sr_site_bombard_mercury } remove_global_variable = sr_site_bombard_mercury }
 	if = { limit = { has_global_variable = sr_site_under_assault_mercury } remove_global_variable = sr_site_under_assault_mercury }
+	if = { limit = { has_global_variable = sr_site_interdicted_mercury } remove_global_variable = sr_site_interdicted_mercury }
 	debug_log = "TE_SR_SITES released mercury"
 }
 # Moves Mercury to scope:sr_site_to_mercury; scope:sr_site_from_mercury, when saved,
@@ -6231,6 +6249,7 @@ sr_site_release_titan = {
 	if = { limit = { has_global_variable = sr_site_blockaded_titan } remove_global_variable = sr_site_blockaded_titan }
 	if = { limit = { has_global_variable = sr_site_bombard_titan } remove_global_variable = sr_site_bombard_titan }
 	if = { limit = { has_global_variable = sr_site_under_assault_titan } remove_global_variable = sr_site_under_assault_titan }
+	if = { limit = { has_global_variable = sr_site_interdicted_titan } remove_global_variable = sr_site_interdicted_titan }
 	debug_log = "TE_SR_SITES released titan"
 }
 # Moves Titan to scope:sr_site_to_titan; scope:sr_site_from_titan, when saved,
@@ -6493,6 +6512,7 @@ sr_site_release_enceladus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_enceladus } remove_global_variable = sr_site_blockaded_enceladus }
 	if = { limit = { has_global_variable = sr_site_bombard_enceladus } remove_global_variable = sr_site_bombard_enceladus }
 	if = { limit = { has_global_variable = sr_site_under_assault_enceladus } remove_global_variable = sr_site_under_assault_enceladus }
+	if = { limit = { has_global_variable = sr_site_interdicted_enceladus } remove_global_variable = sr_site_interdicted_enceladus }
 	debug_log = "TE_SR_SITES released enceladus"
 }
 # Moves Enceladus to scope:sr_site_to_enceladus; scope:sr_site_from_enceladus, when saved,
@@ -6734,6 +6754,7 @@ sr_site_release_rhea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_rhea } remove_global_variable = sr_site_blockaded_rhea }
 	if = { limit = { has_global_variable = sr_site_bombard_rhea } remove_global_variable = sr_site_bombard_rhea }
 	if = { limit = { has_global_variable = sr_site_under_assault_rhea } remove_global_variable = sr_site_under_assault_rhea }
+	if = { limit = { has_global_variable = sr_site_interdicted_rhea } remove_global_variable = sr_site_interdicted_rhea }
 	debug_log = "TE_SR_SITES released rhea"
 }
 # Moves Rhea to scope:sr_site_to_rhea; scope:sr_site_from_rhea, when saved,
@@ -6975,6 +6996,7 @@ sr_site_release_mimas = {
 	if = { limit = { has_global_variable = sr_site_blockaded_mimas } remove_global_variable = sr_site_blockaded_mimas }
 	if = { limit = { has_global_variable = sr_site_bombard_mimas } remove_global_variable = sr_site_bombard_mimas }
 	if = { limit = { has_global_variable = sr_site_under_assault_mimas } remove_global_variable = sr_site_under_assault_mimas }
+	if = { limit = { has_global_variable = sr_site_interdicted_mimas } remove_global_variable = sr_site_interdicted_mimas }
 	debug_log = "TE_SR_SITES released mimas"
 }
 # Moves Mimas to scope:sr_site_to_mimas; scope:sr_site_from_mimas, when saved,
@@ -7216,6 +7238,7 @@ sr_site_release_iapetus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_iapetus } remove_global_variable = sr_site_blockaded_iapetus }
 	if = { limit = { has_global_variable = sr_site_bombard_iapetus } remove_global_variable = sr_site_bombard_iapetus }
 	if = { limit = { has_global_variable = sr_site_under_assault_iapetus } remove_global_variable = sr_site_under_assault_iapetus }
+	if = { limit = { has_global_variable = sr_site_interdicted_iapetus } remove_global_variable = sr_site_interdicted_iapetus }
 	debug_log = "TE_SR_SITES released iapetus"
 }
 # Moves Iapetus to scope:sr_site_to_iapetus; scope:sr_site_from_iapetus, when saved,
@@ -7478,6 +7501,7 @@ sr_site_release_titania = {
 	if = { limit = { has_global_variable = sr_site_blockaded_titania } remove_global_variable = sr_site_blockaded_titania }
 	if = { limit = { has_global_variable = sr_site_bombard_titania } remove_global_variable = sr_site_bombard_titania }
 	if = { limit = { has_global_variable = sr_site_under_assault_titania } remove_global_variable = sr_site_under_assault_titania }
+	if = { limit = { has_global_variable = sr_site_interdicted_titania } remove_global_variable = sr_site_interdicted_titania }
 	debug_log = "TE_SR_SITES released titania"
 }
 # Moves Titania to scope:sr_site_to_titania; scope:sr_site_from_titania, when saved,
@@ -7719,6 +7743,7 @@ sr_site_release_oberon = {
 	if = { limit = { has_global_variable = sr_site_blockaded_oberon } remove_global_variable = sr_site_blockaded_oberon }
 	if = { limit = { has_global_variable = sr_site_bombard_oberon } remove_global_variable = sr_site_bombard_oberon }
 	if = { limit = { has_global_variable = sr_site_under_assault_oberon } remove_global_variable = sr_site_under_assault_oberon }
+	if = { limit = { has_global_variable = sr_site_interdicted_oberon } remove_global_variable = sr_site_interdicted_oberon }
 	debug_log = "TE_SR_SITES released oberon"
 }
 # Moves Oberon to scope:sr_site_to_oberon; scope:sr_site_from_oberon, when saved,
@@ -7960,6 +7985,7 @@ sr_site_release_miranda = {
 	if = { limit = { has_global_variable = sr_site_blockaded_miranda } remove_global_variable = sr_site_blockaded_miranda }
 	if = { limit = { has_global_variable = sr_site_bombard_miranda } remove_global_variable = sr_site_bombard_miranda }
 	if = { limit = { has_global_variable = sr_site_under_assault_miranda } remove_global_variable = sr_site_under_assault_miranda }
+	if = { limit = { has_global_variable = sr_site_interdicted_miranda } remove_global_variable = sr_site_interdicted_miranda }
 	debug_log = "TE_SR_SITES released miranda"
 }
 # Moves Miranda to scope:sr_site_to_miranda; scope:sr_site_from_miranda, when saved,
@@ -8201,6 +8227,7 @@ sr_site_release_ariel = {
 	if = { limit = { has_global_variable = sr_site_blockaded_ariel } remove_global_variable = sr_site_blockaded_ariel }
 	if = { limit = { has_global_variable = sr_site_bombard_ariel } remove_global_variable = sr_site_bombard_ariel }
 	if = { limit = { has_global_variable = sr_site_under_assault_ariel } remove_global_variable = sr_site_under_assault_ariel }
+	if = { limit = { has_global_variable = sr_site_interdicted_ariel } remove_global_variable = sr_site_interdicted_ariel }
 	debug_log = "TE_SR_SITES released ariel"
 }
 # Moves Ariel to scope:sr_site_to_ariel; scope:sr_site_from_ariel, when saved,
@@ -8463,6 +8490,7 @@ sr_site_release_triton = {
 	if = { limit = { has_global_variable = sr_site_blockaded_triton } remove_global_variable = sr_site_blockaded_triton }
 	if = { limit = { has_global_variable = sr_site_bombard_triton } remove_global_variable = sr_site_bombard_triton }
 	if = { limit = { has_global_variable = sr_site_under_assault_triton } remove_global_variable = sr_site_under_assault_triton }
+	if = { limit = { has_global_variable = sr_site_interdicted_triton } remove_global_variable = sr_site_interdicted_triton }
 	debug_log = "TE_SR_SITES released triton"
 }
 # Moves Triton to scope:sr_site_to_triton; scope:sr_site_from_triton, when saved,
@@ -8704,6 +8732,7 @@ sr_site_release_proteus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_proteus } remove_global_variable = sr_site_blockaded_proteus }
 	if = { limit = { has_global_variable = sr_site_bombard_proteus } remove_global_variable = sr_site_bombard_proteus }
 	if = { limit = { has_global_variable = sr_site_under_assault_proteus } remove_global_variable = sr_site_under_assault_proteus }
+	if = { limit = { has_global_variable = sr_site_interdicted_proteus } remove_global_variable = sr_site_interdicted_proteus }
 	debug_log = "TE_SR_SITES released proteus"
 }
 # Moves Proteus to scope:sr_site_to_proteus; scope:sr_site_from_proteus, when saved,
@@ -8966,6 +8995,7 @@ sr_site_release_pluto = {
 	if = { limit = { has_global_variable = sr_site_blockaded_pluto } remove_global_variable = sr_site_blockaded_pluto }
 	if = { limit = { has_global_variable = sr_site_bombard_pluto } remove_global_variable = sr_site_bombard_pluto }
 	if = { limit = { has_global_variable = sr_site_under_assault_pluto } remove_global_variable = sr_site_under_assault_pluto }
+	if = { limit = { has_global_variable = sr_site_interdicted_pluto } remove_global_variable = sr_site_interdicted_pluto }
 	debug_log = "TE_SR_SITES released pluto"
 }
 # Moves Pluto-Charon to scope:sr_site_to_pluto; scope:sr_site_from_pluto, when saved,
@@ -9207,6 +9237,7 @@ sr_site_release_eris = {
 	if = { limit = { has_global_variable = sr_site_blockaded_eris } remove_global_variable = sr_site_blockaded_eris }
 	if = { limit = { has_global_variable = sr_site_bombard_eris } remove_global_variable = sr_site_bombard_eris }
 	if = { limit = { has_global_variable = sr_site_under_assault_eris } remove_global_variable = sr_site_under_assault_eris }
+	if = { limit = { has_global_variable = sr_site_interdicted_eris } remove_global_variable = sr_site_interdicted_eris }
 	debug_log = "TE_SR_SITES released eris"
 }
 # Moves Eris to scope:sr_site_to_eris; scope:sr_site_from_eris, when saved,
@@ -9448,6 +9479,7 @@ sr_site_release_makemake = {
 	if = { limit = { has_global_variable = sr_site_blockaded_makemake } remove_global_variable = sr_site_blockaded_makemake }
 	if = { limit = { has_global_variable = sr_site_bombard_makemake } remove_global_variable = sr_site_bombard_makemake }
 	if = { limit = { has_global_variable = sr_site_under_assault_makemake } remove_global_variable = sr_site_under_assault_makemake }
+	if = { limit = { has_global_variable = sr_site_interdicted_makemake } remove_global_variable = sr_site_interdicted_makemake }
 	debug_log = "TE_SR_SITES released makemake"
 }
 # Moves Makemake to scope:sr_site_to_makemake; scope:sr_site_from_makemake, when saved,
@@ -9689,6 +9721,7 @@ sr_site_release_haumea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_haumea } remove_global_variable = sr_site_blockaded_haumea }
 	if = { limit = { has_global_variable = sr_site_bombard_haumea } remove_global_variable = sr_site_bombard_haumea }
 	if = { limit = { has_global_variable = sr_site_under_assault_haumea } remove_global_variable = sr_site_under_assault_haumea }
+	if = { limit = { has_global_variable = sr_site_interdicted_haumea } remove_global_variable = sr_site_interdicted_haumea }
 	debug_log = "TE_SR_SITES released haumea"
 }
 # Moves Haumea to scope:sr_site_to_haumea; scope:sr_site_from_haumea, when saved,
@@ -9930,6 +9963,7 @@ sr_site_release_sedna = {
 	if = { limit = { has_global_variable = sr_site_blockaded_sedna } remove_global_variable = sr_site_blockaded_sedna }
 	if = { limit = { has_global_variable = sr_site_bombard_sedna } remove_global_variable = sr_site_bombard_sedna }
 	if = { limit = { has_global_variable = sr_site_under_assault_sedna } remove_global_variable = sr_site_under_assault_sedna }
+	if = { limit = { has_global_variable = sr_site_interdicted_sedna } remove_global_variable = sr_site_interdicted_sedna }
 	debug_log = "TE_SR_SITES released sedna"
 }
 # Moves Sedna to scope:sr_site_to_sedna; scope:sr_site_from_sedna, when saved,
@@ -26376,6 +26410,7 @@ sr_site_set_free_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_blockaded_valles_marineris } remove_global_variable = sr_site_blockaded_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_bombard_valles_marineris } remove_global_variable = sr_site_bombard_valles_marineris }
 	if = { limit = { has_global_variable = sr_site_under_assault_valles_marineris } remove_global_variable = sr_site_under_assault_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_interdicted_valles_marineris } remove_global_variable = sr_site_interdicted_valles_marineris }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES valles_marineris is a free colony"
 }
@@ -26488,6 +26523,7 @@ sr_site_set_free_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_blockaded_olympus_mons } remove_global_variable = sr_site_blockaded_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_bombard_olympus_mons } remove_global_variable = sr_site_bombard_olympus_mons }
 	if = { limit = { has_global_variable = sr_site_under_assault_olympus_mons } remove_global_variable = sr_site_under_assault_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_interdicted_olympus_mons } remove_global_variable = sr_site_interdicted_olympus_mons }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES olympus_mons is a free colony"
 }
@@ -26600,6 +26636,7 @@ sr_site_set_free_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_hellas_planitia } remove_global_variable = sr_site_blockaded_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_bombard_hellas_planitia } remove_global_variable = sr_site_bombard_hellas_planitia }
 	if = { limit = { has_global_variable = sr_site_under_assault_hellas_planitia } remove_global_variable = sr_site_under_assault_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_interdicted_hellas_planitia } remove_global_variable = sr_site_interdicted_hellas_planitia }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES hellas_planitia is a free colony"
 }
@@ -26712,6 +26749,7 @@ sr_site_set_free_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_utopia_planitia } remove_global_variable = sr_site_blockaded_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_bombard_utopia_planitia } remove_global_variable = sr_site_bombard_utopia_planitia }
 	if = { limit = { has_global_variable = sr_site_under_assault_utopia_planitia } remove_global_variable = sr_site_under_assault_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_interdicted_utopia_planitia } remove_global_variable = sr_site_interdicted_utopia_planitia }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES utopia_planitia is a free colony"
 }
@@ -26824,6 +26862,7 @@ sr_site_set_free_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_arcadia_planitia } remove_global_variable = sr_site_blockaded_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_bombard_arcadia_planitia } remove_global_variable = sr_site_bombard_arcadia_planitia }
 	if = { limit = { has_global_variable = sr_site_under_assault_arcadia_planitia } remove_global_variable = sr_site_under_assault_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_interdicted_arcadia_planitia } remove_global_variable = sr_site_interdicted_arcadia_planitia }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES arcadia_planitia is a free colony"
 }
@@ -26936,6 +26975,7 @@ sr_site_set_free_ceres = {
 	if = { limit = { has_global_variable = sr_site_blockaded_ceres } remove_global_variable = sr_site_blockaded_ceres }
 	if = { limit = { has_global_variable = sr_site_bombard_ceres } remove_global_variable = sr_site_bombard_ceres }
 	if = { limit = { has_global_variable = sr_site_under_assault_ceres } remove_global_variable = sr_site_under_assault_ceres }
+	if = { limit = { has_global_variable = sr_site_interdicted_ceres } remove_global_variable = sr_site_interdicted_ceres }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES ceres is a free colony"
 }
@@ -27048,6 +27088,7 @@ sr_site_set_free_vesta = {
 	if = { limit = { has_global_variable = sr_site_blockaded_vesta } remove_global_variable = sr_site_blockaded_vesta }
 	if = { limit = { has_global_variable = sr_site_bombard_vesta } remove_global_variable = sr_site_bombard_vesta }
 	if = { limit = { has_global_variable = sr_site_under_assault_vesta } remove_global_variable = sr_site_under_assault_vesta }
+	if = { limit = { has_global_variable = sr_site_interdicted_vesta } remove_global_variable = sr_site_interdicted_vesta }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES vesta is a free colony"
 }
@@ -27160,6 +27201,7 @@ sr_site_set_free_psyche = {
 	if = { limit = { has_global_variable = sr_site_blockaded_psyche } remove_global_variable = sr_site_blockaded_psyche }
 	if = { limit = { has_global_variable = sr_site_bombard_psyche } remove_global_variable = sr_site_bombard_psyche }
 	if = { limit = { has_global_variable = sr_site_under_assault_psyche } remove_global_variable = sr_site_under_assault_psyche }
+	if = { limit = { has_global_variable = sr_site_interdicted_psyche } remove_global_variable = sr_site_interdicted_psyche }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES psyche is a free colony"
 }
@@ -27272,6 +27314,7 @@ sr_site_set_free_pallas = {
 	if = { limit = { has_global_variable = sr_site_blockaded_pallas } remove_global_variable = sr_site_blockaded_pallas }
 	if = { limit = { has_global_variable = sr_site_bombard_pallas } remove_global_variable = sr_site_bombard_pallas }
 	if = { limit = { has_global_variable = sr_site_under_assault_pallas } remove_global_variable = sr_site_under_assault_pallas }
+	if = { limit = { has_global_variable = sr_site_interdicted_pallas } remove_global_variable = sr_site_interdicted_pallas }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES pallas is a free colony"
 }
@@ -27384,6 +27427,7 @@ sr_site_set_free_hygiea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_hygiea } remove_global_variable = sr_site_blockaded_hygiea }
 	if = { limit = { has_global_variable = sr_site_bombard_hygiea } remove_global_variable = sr_site_bombard_hygiea }
 	if = { limit = { has_global_variable = sr_site_under_assault_hygiea } remove_global_variable = sr_site_under_assault_hygiea }
+	if = { limit = { has_global_variable = sr_site_interdicted_hygiea } remove_global_variable = sr_site_interdicted_hygiea }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES hygiea is a free colony"
 }
@@ -27496,6 +27540,7 @@ sr_site_set_free_io = {
 	if = { limit = { has_global_variable = sr_site_blockaded_io } remove_global_variable = sr_site_blockaded_io }
 	if = { limit = { has_global_variable = sr_site_bombard_io } remove_global_variable = sr_site_bombard_io }
 	if = { limit = { has_global_variable = sr_site_under_assault_io } remove_global_variable = sr_site_under_assault_io }
+	if = { limit = { has_global_variable = sr_site_interdicted_io } remove_global_variable = sr_site_interdicted_io }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES io is a free colony"
 }
@@ -27608,6 +27653,7 @@ sr_site_set_free_europa = {
 	if = { limit = { has_global_variable = sr_site_blockaded_europa } remove_global_variable = sr_site_blockaded_europa }
 	if = { limit = { has_global_variable = sr_site_bombard_europa } remove_global_variable = sr_site_bombard_europa }
 	if = { limit = { has_global_variable = sr_site_under_assault_europa } remove_global_variable = sr_site_under_assault_europa }
+	if = { limit = { has_global_variable = sr_site_interdicted_europa } remove_global_variable = sr_site_interdicted_europa }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES europa is a free colony"
 }
@@ -27720,6 +27766,7 @@ sr_site_set_free_ganymede = {
 	if = { limit = { has_global_variable = sr_site_blockaded_ganymede } remove_global_variable = sr_site_blockaded_ganymede }
 	if = { limit = { has_global_variable = sr_site_bombard_ganymede } remove_global_variable = sr_site_bombard_ganymede }
 	if = { limit = { has_global_variable = sr_site_under_assault_ganymede } remove_global_variable = sr_site_under_assault_ganymede }
+	if = { limit = { has_global_variable = sr_site_interdicted_ganymede } remove_global_variable = sr_site_interdicted_ganymede }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES ganymede is a free colony"
 }
@@ -27832,6 +27879,7 @@ sr_site_set_free_callisto = {
 	if = { limit = { has_global_variable = sr_site_blockaded_callisto } remove_global_variable = sr_site_blockaded_callisto }
 	if = { limit = { has_global_variable = sr_site_bombard_callisto } remove_global_variable = sr_site_bombard_callisto }
 	if = { limit = { has_global_variable = sr_site_under_assault_callisto } remove_global_variable = sr_site_under_assault_callisto }
+	if = { limit = { has_global_variable = sr_site_interdicted_callisto } remove_global_variable = sr_site_interdicted_callisto }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES callisto is a free colony"
 }
@@ -27944,6 +27992,7 @@ sr_site_set_free_himalia = {
 	if = { limit = { has_global_variable = sr_site_blockaded_himalia } remove_global_variable = sr_site_blockaded_himalia }
 	if = { limit = { has_global_variable = sr_site_bombard_himalia } remove_global_variable = sr_site_bombard_himalia }
 	if = { limit = { has_global_variable = sr_site_under_assault_himalia } remove_global_variable = sr_site_under_assault_himalia }
+	if = { limit = { has_global_variable = sr_site_interdicted_himalia } remove_global_variable = sr_site_interdicted_himalia }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES himalia is a free colony"
 }
@@ -28056,6 +28105,7 @@ sr_site_set_free_amalthea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_amalthea } remove_global_variable = sr_site_blockaded_amalthea }
 	if = { limit = { has_global_variable = sr_site_bombard_amalthea } remove_global_variable = sr_site_bombard_amalthea }
 	if = { limit = { has_global_variable = sr_site_under_assault_amalthea } remove_global_variable = sr_site_under_assault_amalthea }
+	if = { limit = { has_global_variable = sr_site_interdicted_amalthea } remove_global_variable = sr_site_interdicted_amalthea }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES amalthea is a free colony"
 }
@@ -28168,6 +28218,7 @@ sr_site_set_free_venus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_venus } remove_global_variable = sr_site_blockaded_venus }
 	if = { limit = { has_global_variable = sr_site_bombard_venus } remove_global_variable = sr_site_bombard_venus }
 	if = { limit = { has_global_variable = sr_site_under_assault_venus } remove_global_variable = sr_site_under_assault_venus }
+	if = { limit = { has_global_variable = sr_site_interdicted_venus } remove_global_variable = sr_site_interdicted_venus }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES venus is a free colony"
 }
@@ -28280,6 +28331,7 @@ sr_site_set_free_mercury = {
 	if = { limit = { has_global_variable = sr_site_blockaded_mercury } remove_global_variable = sr_site_blockaded_mercury }
 	if = { limit = { has_global_variable = sr_site_bombard_mercury } remove_global_variable = sr_site_bombard_mercury }
 	if = { limit = { has_global_variable = sr_site_under_assault_mercury } remove_global_variable = sr_site_under_assault_mercury }
+	if = { limit = { has_global_variable = sr_site_interdicted_mercury } remove_global_variable = sr_site_interdicted_mercury }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES mercury is a free colony"
 }
@@ -28392,6 +28444,7 @@ sr_site_set_free_titan = {
 	if = { limit = { has_global_variable = sr_site_blockaded_titan } remove_global_variable = sr_site_blockaded_titan }
 	if = { limit = { has_global_variable = sr_site_bombard_titan } remove_global_variable = sr_site_bombard_titan }
 	if = { limit = { has_global_variable = sr_site_under_assault_titan } remove_global_variable = sr_site_under_assault_titan }
+	if = { limit = { has_global_variable = sr_site_interdicted_titan } remove_global_variable = sr_site_interdicted_titan }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES titan is a free colony"
 }
@@ -28504,6 +28557,7 @@ sr_site_set_free_enceladus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_enceladus } remove_global_variable = sr_site_blockaded_enceladus }
 	if = { limit = { has_global_variable = sr_site_bombard_enceladus } remove_global_variable = sr_site_bombard_enceladus }
 	if = { limit = { has_global_variable = sr_site_under_assault_enceladus } remove_global_variable = sr_site_under_assault_enceladus }
+	if = { limit = { has_global_variable = sr_site_interdicted_enceladus } remove_global_variable = sr_site_interdicted_enceladus }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES enceladus is a free colony"
 }
@@ -28616,6 +28670,7 @@ sr_site_set_free_rhea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_rhea } remove_global_variable = sr_site_blockaded_rhea }
 	if = { limit = { has_global_variable = sr_site_bombard_rhea } remove_global_variable = sr_site_bombard_rhea }
 	if = { limit = { has_global_variable = sr_site_under_assault_rhea } remove_global_variable = sr_site_under_assault_rhea }
+	if = { limit = { has_global_variable = sr_site_interdicted_rhea } remove_global_variable = sr_site_interdicted_rhea }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES rhea is a free colony"
 }
@@ -28728,6 +28783,7 @@ sr_site_set_free_mimas = {
 	if = { limit = { has_global_variable = sr_site_blockaded_mimas } remove_global_variable = sr_site_blockaded_mimas }
 	if = { limit = { has_global_variable = sr_site_bombard_mimas } remove_global_variable = sr_site_bombard_mimas }
 	if = { limit = { has_global_variable = sr_site_under_assault_mimas } remove_global_variable = sr_site_under_assault_mimas }
+	if = { limit = { has_global_variable = sr_site_interdicted_mimas } remove_global_variable = sr_site_interdicted_mimas }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES mimas is a free colony"
 }
@@ -28840,6 +28896,7 @@ sr_site_set_free_iapetus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_iapetus } remove_global_variable = sr_site_blockaded_iapetus }
 	if = { limit = { has_global_variable = sr_site_bombard_iapetus } remove_global_variable = sr_site_bombard_iapetus }
 	if = { limit = { has_global_variable = sr_site_under_assault_iapetus } remove_global_variable = sr_site_under_assault_iapetus }
+	if = { limit = { has_global_variable = sr_site_interdicted_iapetus } remove_global_variable = sr_site_interdicted_iapetus }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES iapetus is a free colony"
 }
@@ -28952,6 +29009,7 @@ sr_site_set_free_titania = {
 	if = { limit = { has_global_variable = sr_site_blockaded_titania } remove_global_variable = sr_site_blockaded_titania }
 	if = { limit = { has_global_variable = sr_site_bombard_titania } remove_global_variable = sr_site_bombard_titania }
 	if = { limit = { has_global_variable = sr_site_under_assault_titania } remove_global_variable = sr_site_under_assault_titania }
+	if = { limit = { has_global_variable = sr_site_interdicted_titania } remove_global_variable = sr_site_interdicted_titania }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES titania is a free colony"
 }
@@ -29064,6 +29122,7 @@ sr_site_set_free_oberon = {
 	if = { limit = { has_global_variable = sr_site_blockaded_oberon } remove_global_variable = sr_site_blockaded_oberon }
 	if = { limit = { has_global_variable = sr_site_bombard_oberon } remove_global_variable = sr_site_bombard_oberon }
 	if = { limit = { has_global_variable = sr_site_under_assault_oberon } remove_global_variable = sr_site_under_assault_oberon }
+	if = { limit = { has_global_variable = sr_site_interdicted_oberon } remove_global_variable = sr_site_interdicted_oberon }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES oberon is a free colony"
 }
@@ -29176,6 +29235,7 @@ sr_site_set_free_miranda = {
 	if = { limit = { has_global_variable = sr_site_blockaded_miranda } remove_global_variable = sr_site_blockaded_miranda }
 	if = { limit = { has_global_variable = sr_site_bombard_miranda } remove_global_variable = sr_site_bombard_miranda }
 	if = { limit = { has_global_variable = sr_site_under_assault_miranda } remove_global_variable = sr_site_under_assault_miranda }
+	if = { limit = { has_global_variable = sr_site_interdicted_miranda } remove_global_variable = sr_site_interdicted_miranda }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES miranda is a free colony"
 }
@@ -29288,6 +29348,7 @@ sr_site_set_free_ariel = {
 	if = { limit = { has_global_variable = sr_site_blockaded_ariel } remove_global_variable = sr_site_blockaded_ariel }
 	if = { limit = { has_global_variable = sr_site_bombard_ariel } remove_global_variable = sr_site_bombard_ariel }
 	if = { limit = { has_global_variable = sr_site_under_assault_ariel } remove_global_variable = sr_site_under_assault_ariel }
+	if = { limit = { has_global_variable = sr_site_interdicted_ariel } remove_global_variable = sr_site_interdicted_ariel }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES ariel is a free colony"
 }
@@ -29400,6 +29461,7 @@ sr_site_set_free_triton = {
 	if = { limit = { has_global_variable = sr_site_blockaded_triton } remove_global_variable = sr_site_blockaded_triton }
 	if = { limit = { has_global_variable = sr_site_bombard_triton } remove_global_variable = sr_site_bombard_triton }
 	if = { limit = { has_global_variable = sr_site_under_assault_triton } remove_global_variable = sr_site_under_assault_triton }
+	if = { limit = { has_global_variable = sr_site_interdicted_triton } remove_global_variable = sr_site_interdicted_triton }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES triton is a free colony"
 }
@@ -29512,6 +29574,7 @@ sr_site_set_free_proteus = {
 	if = { limit = { has_global_variable = sr_site_blockaded_proteus } remove_global_variable = sr_site_blockaded_proteus }
 	if = { limit = { has_global_variable = sr_site_bombard_proteus } remove_global_variable = sr_site_bombard_proteus }
 	if = { limit = { has_global_variable = sr_site_under_assault_proteus } remove_global_variable = sr_site_under_assault_proteus }
+	if = { limit = { has_global_variable = sr_site_interdicted_proteus } remove_global_variable = sr_site_interdicted_proteus }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES proteus is a free colony"
 }
@@ -29624,6 +29687,7 @@ sr_site_set_free_pluto = {
 	if = { limit = { has_global_variable = sr_site_blockaded_pluto } remove_global_variable = sr_site_blockaded_pluto }
 	if = { limit = { has_global_variable = sr_site_bombard_pluto } remove_global_variable = sr_site_bombard_pluto }
 	if = { limit = { has_global_variable = sr_site_under_assault_pluto } remove_global_variable = sr_site_under_assault_pluto }
+	if = { limit = { has_global_variable = sr_site_interdicted_pluto } remove_global_variable = sr_site_interdicted_pluto }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES pluto is a free colony"
 }
@@ -29736,6 +29800,7 @@ sr_site_set_free_eris = {
 	if = { limit = { has_global_variable = sr_site_blockaded_eris } remove_global_variable = sr_site_blockaded_eris }
 	if = { limit = { has_global_variable = sr_site_bombard_eris } remove_global_variable = sr_site_bombard_eris }
 	if = { limit = { has_global_variable = sr_site_under_assault_eris } remove_global_variable = sr_site_under_assault_eris }
+	if = { limit = { has_global_variable = sr_site_interdicted_eris } remove_global_variable = sr_site_interdicted_eris }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES eris is a free colony"
 }
@@ -29848,6 +29913,7 @@ sr_site_set_free_makemake = {
 	if = { limit = { has_global_variable = sr_site_blockaded_makemake } remove_global_variable = sr_site_blockaded_makemake }
 	if = { limit = { has_global_variable = sr_site_bombard_makemake } remove_global_variable = sr_site_bombard_makemake }
 	if = { limit = { has_global_variable = sr_site_under_assault_makemake } remove_global_variable = sr_site_under_assault_makemake }
+	if = { limit = { has_global_variable = sr_site_interdicted_makemake } remove_global_variable = sr_site_interdicted_makemake }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES makemake is a free colony"
 }
@@ -29960,6 +30026,7 @@ sr_site_set_free_haumea = {
 	if = { limit = { has_global_variable = sr_site_blockaded_haumea } remove_global_variable = sr_site_blockaded_haumea }
 	if = { limit = { has_global_variable = sr_site_bombard_haumea } remove_global_variable = sr_site_bombard_haumea }
 	if = { limit = { has_global_variable = sr_site_under_assault_haumea } remove_global_variable = sr_site_under_assault_haumea }
+	if = { limit = { has_global_variable = sr_site_interdicted_haumea } remove_global_variable = sr_site_interdicted_haumea }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES haumea is a free colony"
 }
@@ -30072,6 +30139,7 @@ sr_site_set_free_sedna = {
 	if = { limit = { has_global_variable = sr_site_blockaded_sedna } remove_global_variable = sr_site_blockaded_sedna }
 	if = { limit = { has_global_variable = sr_site_bombard_sedna } remove_global_variable = sr_site_bombard_sedna }
 	if = { limit = { has_global_variable = sr_site_under_assault_sedna } remove_global_variable = sr_site_under_assault_sedna }
+	if = { limit = { has_global_variable = sr_site_interdicted_sedna } remove_global_variable = sr_site_interdicted_sedna }
 	sr_sites_refresh_players = yes
 	debug_log = "TE_SR_SITES sedna is a free colony"
 }

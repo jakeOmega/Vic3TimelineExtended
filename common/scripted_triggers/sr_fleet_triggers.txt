@@ -82,6 +82,52 @@ sr_site_hostile_target = {
 	}
 }
 
+# Country scope, the AI (6c, design § 14). A world its offence may close in on
+# (KEY): a hostile one (sr_site_hostile_target: held by a country at war with
+# it, or one of its own an enemy occupies), never a free colony.
+sr_site_ai_attack_target = {
+	sr_site_hostile_target = { KEY = $KEY$ }
+	NOT = { has_global_variable = sr_site_free_$KEY$ }
+}
+
+# Country scope, the interdictor (6c, design § 12). A world it may interdict
+# (KEY): a colony, not ruined, free or occupied, whose holder is another
+# country it is at peace with and not allied to (no alliance or defensive pact;
+# owner, 2026-10-26). Its fleet standing off there under the Interdict posture
+# blockades that holder's colonies at the location while no fleet of the
+# holder holds orbit there (sr_site_blockade_step).
+sr_site_interdict_target = {
+	has_global_variable = sr_colony_$KEY$
+	NOT = { has_global_variable = sr_site_ruined_$KEY$ }
+	NOT = { has_global_variable = sr_site_free_$KEY$ }
+	NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+	save_temporary_scope_as = sr_icpt_by
+	global_var:sr_site_holder_$KEY$ ?= {
+		is_country_alive = yes
+		NOT = { this = scope:sr_icpt_by }
+		NOT = { has_war_with = scope:sr_icpt_by }
+		NOT = { has_treaty_alliance_with = { TARGET = scope:sr_icpt_by } }
+		NOT = { has_treaty_defensive_pact_with = { TARGET = scope:sr_icpt_by } }
+	}
+}
+
+# Country scope, the interdictor. It holds TARGET (a country) to account for
+# an interdiction within five years: Cede Colony's war goal against it costs
+# TARGET no infamy (124_cede_colony.txt reads the same record).
+sr_interdicted_recently = {
+	has_variable = sr_interdiction_recent
+	has_variable_list = sr_interdiction_targets
+	is_target_in_variable_list = { name = sr_interdiction_targets target = $TARGET$ }
+}
+
+# Country scope. It interdicts the country of the scope saved as
+# sr_icpt_victim at LOC this month (its sr_icpt_<loc> list, rebuilt with the
+# location records: sr_icpt_rebuild).
+sr_icpt_interdicts_at = {
+	has_variable_list = sr_icpt_$LOC$
+	is_target_in_variable_list = { name = sr_icpt_$LOC$ target = scope:sr_icpt_victim }
+}
+
 # Country scope, a power at the location being fought over (its sr_cb_* record
 # standing). It fought this month: it lost strength, or its enemies did.
 sr_cb_fought = {
@@ -132,8 +178,15 @@ sr_battlestation_held = {
 	}
 }
 
-# Country scope. A party to the outer-space convention (6c): no one yet, so the
-# prices of force are single until the convention exists.
+# Country scope. A party to the Convention on the Settlement of Outer Space in
+# force (6c, design § 13): its member modifier, or the mirror a revolution's
+# winner keeps (un_state_effects.txt). A party's destruction of a colony, and
+# its assault on a free one, cost twice the infamy and twice the case
+# (sr_fleet_values.txt's prices of force).
 sr_colony_convention_party = {
-	always = no
+	has_global_variable = un_agency_copuos
+	OR = {
+		has_modifier = un_colony_protection_modifier
+		has_variable = un_colony_protection_modifier_on
+	}
 }

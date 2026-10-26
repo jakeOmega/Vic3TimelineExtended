@@ -306,6 +306,77 @@ sr_fl_1_target_hostile = {
 		AND = { var:sr_fl_1_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_1_has_interdict_world = {
+	has_variable = sr_fl_1_loc
+	OR = {
+		AND = { var:sr_fl_1_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_1_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_1_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_1_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_1_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_1_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_1_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_1_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_1_target_interdictable = {
+	has_variable = sr_fl_1_target
+	OR = {
+		AND = { var:sr_fl_1_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_1_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_1_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_1_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_1_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_1_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_1_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_1_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_1_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_1_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_1_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_1_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_1_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_1_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_1_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_1_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_1_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_1_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_1_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_1_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_1_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_1_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_1_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_1_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_1_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_1_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_1_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_1_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_1_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_1_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_1_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_1_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_1_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_1_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_1_interdicting = { sr_fl_1_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_1_can_target = {
+	OR = {
+		AND = { sr_fl_1_posture_value = 4 sr_fl_1_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_1_posture_value = 4 } sr_fl_1_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_1_next_interdict = {
+	sr_fl_1_has_interdict_world = yes
+	OR = {
+		sr_fl_1_posture_value = 3
+		AND = { sr_fl_1_posture_value = 2 NOT = { sr_fl_1_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_1_ai_free = {
 	has_variable = sr_fl_1_loc
@@ -406,6 +477,110 @@ sr_fl_1_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_kuiper add = sr_fl_1_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_inner = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_inner = yes
+	sr_fl_1_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_inner add = sr_fl_1_return_dv_inner }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_mars = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_mars = yes
+	sr_fl_1_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_mars add = sr_fl_1_return_dv_mars }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_asteroids = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_asteroids = yes
+	sr_fl_1_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_asteroids add = sr_fl_1_return_dv_asteroids }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_jupiter = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_jupiter = yes
+	sr_fl_1_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_jupiter add = sr_fl_1_return_dv_jupiter }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_saturn = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_saturn = yes
+	sr_fl_1_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_saturn add = sr_fl_1_return_dv_saturn }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_uranus = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_uranus = yes
+	sr_fl_1_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_uranus add = sr_fl_1_return_dv_uranus }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_neptune = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_neptune = yes
+	sr_fl_1_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_neptune add = sr_fl_1_return_dv_neptune }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_1_ai_attacks_kuiper = {
+	sr_fl_1_docked = yes
+	sr_fl_1_may_depart_kuiper = yes
+	sr_fl_1_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_1_dv_value >= { value = sr_fl_1_leg_dv_kuiper add = sr_fl_1_return_dv_kuiper }
+	}
+	sr_fl_1_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 2 ---
@@ -709,6 +884,77 @@ sr_fl_2_target_hostile = {
 		AND = { var:sr_fl_2_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_2_has_interdict_world = {
+	has_variable = sr_fl_2_loc
+	OR = {
+		AND = { var:sr_fl_2_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_2_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_2_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_2_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_2_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_2_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_2_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_2_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_2_target_interdictable = {
+	has_variable = sr_fl_2_target
+	OR = {
+		AND = { var:sr_fl_2_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_2_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_2_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_2_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_2_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_2_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_2_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_2_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_2_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_2_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_2_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_2_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_2_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_2_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_2_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_2_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_2_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_2_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_2_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_2_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_2_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_2_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_2_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_2_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_2_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_2_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_2_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_2_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_2_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_2_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_2_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_2_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_2_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_2_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_2_interdicting = { sr_fl_2_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_2_can_target = {
+	OR = {
+		AND = { sr_fl_2_posture_value = 4 sr_fl_2_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_2_posture_value = 4 } sr_fl_2_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_2_next_interdict = {
+	sr_fl_2_has_interdict_world = yes
+	OR = {
+		sr_fl_2_posture_value = 3
+		AND = { sr_fl_2_posture_value = 2 NOT = { sr_fl_2_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_2_ai_free = {
 	has_variable = sr_fl_2_loc
@@ -809,6 +1055,110 @@ sr_fl_2_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_kuiper add = sr_fl_2_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_inner = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_inner = yes
+	sr_fl_2_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_inner add = sr_fl_2_return_dv_inner }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_mars = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_mars = yes
+	sr_fl_2_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_mars add = sr_fl_2_return_dv_mars }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_asteroids = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_asteroids = yes
+	sr_fl_2_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_asteroids add = sr_fl_2_return_dv_asteroids }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_jupiter = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_jupiter = yes
+	sr_fl_2_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_jupiter add = sr_fl_2_return_dv_jupiter }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_saturn = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_saturn = yes
+	sr_fl_2_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_saturn add = sr_fl_2_return_dv_saturn }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_uranus = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_uranus = yes
+	sr_fl_2_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_uranus add = sr_fl_2_return_dv_uranus }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_neptune = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_neptune = yes
+	sr_fl_2_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_neptune add = sr_fl_2_return_dv_neptune }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_2_ai_attacks_kuiper = {
+	sr_fl_2_docked = yes
+	sr_fl_2_may_depart_kuiper = yes
+	sr_fl_2_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_2_dv_value >= { value = sr_fl_2_leg_dv_kuiper add = sr_fl_2_return_dv_kuiper }
+	}
+	sr_fl_2_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 3 ---
@@ -1112,6 +1462,77 @@ sr_fl_3_target_hostile = {
 		AND = { var:sr_fl_3_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_3_has_interdict_world = {
+	has_variable = sr_fl_3_loc
+	OR = {
+		AND = { var:sr_fl_3_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_3_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_3_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_3_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_3_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_3_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_3_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_3_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_3_target_interdictable = {
+	has_variable = sr_fl_3_target
+	OR = {
+		AND = { var:sr_fl_3_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_3_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_3_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_3_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_3_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_3_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_3_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_3_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_3_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_3_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_3_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_3_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_3_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_3_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_3_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_3_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_3_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_3_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_3_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_3_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_3_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_3_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_3_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_3_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_3_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_3_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_3_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_3_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_3_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_3_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_3_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_3_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_3_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_3_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_3_interdicting = { sr_fl_3_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_3_can_target = {
+	OR = {
+		AND = { sr_fl_3_posture_value = 4 sr_fl_3_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_3_posture_value = 4 } sr_fl_3_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_3_next_interdict = {
+	sr_fl_3_has_interdict_world = yes
+	OR = {
+		sr_fl_3_posture_value = 3
+		AND = { sr_fl_3_posture_value = 2 NOT = { sr_fl_3_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_3_ai_free = {
 	has_variable = sr_fl_3_loc
@@ -1212,6 +1633,110 @@ sr_fl_3_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_kuiper add = sr_fl_3_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_inner = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_inner = yes
+	sr_fl_3_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_inner add = sr_fl_3_return_dv_inner }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_mars = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_mars = yes
+	sr_fl_3_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_mars add = sr_fl_3_return_dv_mars }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_asteroids = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_asteroids = yes
+	sr_fl_3_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_asteroids add = sr_fl_3_return_dv_asteroids }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_jupiter = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_jupiter = yes
+	sr_fl_3_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_jupiter add = sr_fl_3_return_dv_jupiter }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_saturn = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_saturn = yes
+	sr_fl_3_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_saturn add = sr_fl_3_return_dv_saturn }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_uranus = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_uranus = yes
+	sr_fl_3_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_uranus add = sr_fl_3_return_dv_uranus }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_neptune = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_neptune = yes
+	sr_fl_3_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_neptune add = sr_fl_3_return_dv_neptune }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_3_ai_attacks_kuiper = {
+	sr_fl_3_docked = yes
+	sr_fl_3_may_depart_kuiper = yes
+	sr_fl_3_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_3_dv_value >= { value = sr_fl_3_leg_dv_kuiper add = sr_fl_3_return_dv_kuiper }
+	}
+	sr_fl_3_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 4 ---
@@ -1515,6 +2040,77 @@ sr_fl_4_target_hostile = {
 		AND = { var:sr_fl_4_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_4_has_interdict_world = {
+	has_variable = sr_fl_4_loc
+	OR = {
+		AND = { var:sr_fl_4_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_4_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_4_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_4_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_4_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_4_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_4_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_4_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_4_target_interdictable = {
+	has_variable = sr_fl_4_target
+	OR = {
+		AND = { var:sr_fl_4_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_4_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_4_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_4_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_4_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_4_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_4_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_4_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_4_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_4_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_4_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_4_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_4_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_4_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_4_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_4_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_4_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_4_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_4_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_4_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_4_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_4_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_4_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_4_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_4_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_4_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_4_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_4_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_4_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_4_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_4_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_4_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_4_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_4_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_4_interdicting = { sr_fl_4_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_4_can_target = {
+	OR = {
+		AND = { sr_fl_4_posture_value = 4 sr_fl_4_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_4_posture_value = 4 } sr_fl_4_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_4_next_interdict = {
+	sr_fl_4_has_interdict_world = yes
+	OR = {
+		sr_fl_4_posture_value = 3
+		AND = { sr_fl_4_posture_value = 2 NOT = { sr_fl_4_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_4_ai_free = {
 	has_variable = sr_fl_4_loc
@@ -1615,6 +2211,110 @@ sr_fl_4_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_kuiper add = sr_fl_4_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_inner = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_inner = yes
+	sr_fl_4_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_inner add = sr_fl_4_return_dv_inner }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_mars = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_mars = yes
+	sr_fl_4_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_mars add = sr_fl_4_return_dv_mars }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_asteroids = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_asteroids = yes
+	sr_fl_4_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_asteroids add = sr_fl_4_return_dv_asteroids }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_jupiter = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_jupiter = yes
+	sr_fl_4_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_jupiter add = sr_fl_4_return_dv_jupiter }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_saturn = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_saturn = yes
+	sr_fl_4_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_saturn add = sr_fl_4_return_dv_saturn }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_uranus = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_uranus = yes
+	sr_fl_4_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_uranus add = sr_fl_4_return_dv_uranus }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_neptune = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_neptune = yes
+	sr_fl_4_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_neptune add = sr_fl_4_return_dv_neptune }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_4_ai_attacks_kuiper = {
+	sr_fl_4_docked = yes
+	sr_fl_4_may_depart_kuiper = yes
+	sr_fl_4_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_4_dv_value >= { value = sr_fl_4_leg_dv_kuiper add = sr_fl_4_return_dv_kuiper }
+	}
+	sr_fl_4_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 5 ---
@@ -1918,6 +2618,77 @@ sr_fl_5_target_hostile = {
 		AND = { var:sr_fl_5_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_5_has_interdict_world = {
+	has_variable = sr_fl_5_loc
+	OR = {
+		AND = { var:sr_fl_5_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_5_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_5_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_5_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_5_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_5_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_5_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_5_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_5_target_interdictable = {
+	has_variable = sr_fl_5_target
+	OR = {
+		AND = { var:sr_fl_5_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_5_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_5_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_5_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_5_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_5_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_5_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_5_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_5_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_5_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_5_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_5_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_5_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_5_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_5_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_5_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_5_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_5_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_5_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_5_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_5_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_5_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_5_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_5_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_5_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_5_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_5_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_5_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_5_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_5_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_5_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_5_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_5_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_5_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_5_interdicting = { sr_fl_5_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_5_can_target = {
+	OR = {
+		AND = { sr_fl_5_posture_value = 4 sr_fl_5_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_5_posture_value = 4 } sr_fl_5_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_5_next_interdict = {
+	sr_fl_5_has_interdict_world = yes
+	OR = {
+		sr_fl_5_posture_value = 3
+		AND = { sr_fl_5_posture_value = 2 NOT = { sr_fl_5_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_5_ai_free = {
 	has_variable = sr_fl_5_loc
@@ -2018,6 +2789,110 @@ sr_fl_5_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_kuiper add = sr_fl_5_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_inner = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_inner = yes
+	sr_fl_5_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_inner add = sr_fl_5_return_dv_inner }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_mars = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_mars = yes
+	sr_fl_5_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_mars add = sr_fl_5_return_dv_mars }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_asteroids = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_asteroids = yes
+	sr_fl_5_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_asteroids add = sr_fl_5_return_dv_asteroids }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_jupiter = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_jupiter = yes
+	sr_fl_5_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_jupiter add = sr_fl_5_return_dv_jupiter }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_saturn = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_saturn = yes
+	sr_fl_5_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_saturn add = sr_fl_5_return_dv_saturn }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_uranus = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_uranus = yes
+	sr_fl_5_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_uranus add = sr_fl_5_return_dv_uranus }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_neptune = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_neptune = yes
+	sr_fl_5_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_neptune add = sr_fl_5_return_dv_neptune }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_5_ai_attacks_kuiper = {
+	sr_fl_5_docked = yes
+	sr_fl_5_may_depart_kuiper = yes
+	sr_fl_5_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_5_dv_value >= { value = sr_fl_5_leg_dv_kuiper add = sr_fl_5_return_dv_kuiper }
+	}
+	sr_fl_5_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 6 ---
@@ -2321,6 +3196,77 @@ sr_fl_6_target_hostile = {
 		AND = { var:sr_fl_6_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_6_has_interdict_world = {
+	has_variable = sr_fl_6_loc
+	OR = {
+		AND = { var:sr_fl_6_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_6_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_6_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_6_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_6_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_6_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_6_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_6_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_6_target_interdictable = {
+	has_variable = sr_fl_6_target
+	OR = {
+		AND = { var:sr_fl_6_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_6_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_6_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_6_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_6_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_6_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_6_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_6_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_6_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_6_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_6_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_6_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_6_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_6_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_6_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_6_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_6_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_6_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_6_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_6_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_6_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_6_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_6_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_6_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_6_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_6_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_6_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_6_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_6_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_6_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_6_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_6_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_6_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_6_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_6_interdicting = { sr_fl_6_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_6_can_target = {
+	OR = {
+		AND = { sr_fl_6_posture_value = 4 sr_fl_6_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_6_posture_value = 4 } sr_fl_6_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_6_next_interdict = {
+	sr_fl_6_has_interdict_world = yes
+	OR = {
+		sr_fl_6_posture_value = 3
+		AND = { sr_fl_6_posture_value = 2 NOT = { sr_fl_6_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_6_ai_free = {
 	has_variable = sr_fl_6_loc
@@ -2421,6 +3367,110 @@ sr_fl_6_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_kuiper add = sr_fl_6_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_inner = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_inner = yes
+	sr_fl_6_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_inner add = sr_fl_6_return_dv_inner }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_mars = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_mars = yes
+	sr_fl_6_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_mars add = sr_fl_6_return_dv_mars }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_asteroids = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_asteroids = yes
+	sr_fl_6_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_asteroids add = sr_fl_6_return_dv_asteroids }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_jupiter = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_jupiter = yes
+	sr_fl_6_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_jupiter add = sr_fl_6_return_dv_jupiter }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_saturn = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_saturn = yes
+	sr_fl_6_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_saturn add = sr_fl_6_return_dv_saturn }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_uranus = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_uranus = yes
+	sr_fl_6_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_uranus add = sr_fl_6_return_dv_uranus }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_neptune = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_neptune = yes
+	sr_fl_6_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_neptune add = sr_fl_6_return_dv_neptune }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_6_ai_attacks_kuiper = {
+	sr_fl_6_docked = yes
+	sr_fl_6_may_depart_kuiper = yes
+	sr_fl_6_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_6_dv_value >= { value = sr_fl_6_leg_dv_kuiper add = sr_fl_6_return_dv_kuiper }
+	}
+	sr_fl_6_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 7 ---
@@ -2724,6 +3774,77 @@ sr_fl_7_target_hostile = {
 		AND = { var:sr_fl_7_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_7_has_interdict_world = {
+	has_variable = sr_fl_7_loc
+	OR = {
+		AND = { var:sr_fl_7_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_7_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_7_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_7_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_7_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_7_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_7_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_7_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_7_target_interdictable = {
+	has_variable = sr_fl_7_target
+	OR = {
+		AND = { var:sr_fl_7_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_7_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_7_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_7_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_7_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_7_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_7_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_7_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_7_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_7_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_7_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_7_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_7_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_7_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_7_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_7_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_7_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_7_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_7_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_7_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_7_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_7_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_7_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_7_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_7_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_7_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_7_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_7_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_7_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_7_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_7_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_7_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_7_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_7_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_7_interdicting = { sr_fl_7_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_7_can_target = {
+	OR = {
+		AND = { sr_fl_7_posture_value = 4 sr_fl_7_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_7_posture_value = 4 } sr_fl_7_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_7_next_interdict = {
+	sr_fl_7_has_interdict_world = yes
+	OR = {
+		sr_fl_7_posture_value = 3
+		AND = { sr_fl_7_posture_value = 2 NOT = { sr_fl_7_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_7_ai_free = {
 	has_variable = sr_fl_7_loc
@@ -2824,6 +3945,110 @@ sr_fl_7_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_kuiper add = sr_fl_7_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_inner = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_inner = yes
+	sr_fl_7_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_inner add = sr_fl_7_return_dv_inner }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_mars = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_mars = yes
+	sr_fl_7_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_mars add = sr_fl_7_return_dv_mars }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_asteroids = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_asteroids = yes
+	sr_fl_7_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_asteroids add = sr_fl_7_return_dv_asteroids }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_jupiter = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_jupiter = yes
+	sr_fl_7_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_jupiter add = sr_fl_7_return_dv_jupiter }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_saturn = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_saturn = yes
+	sr_fl_7_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_saturn add = sr_fl_7_return_dv_saturn }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_uranus = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_uranus = yes
+	sr_fl_7_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_uranus add = sr_fl_7_return_dv_uranus }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_neptune = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_neptune = yes
+	sr_fl_7_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_neptune add = sr_fl_7_return_dv_neptune }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_7_ai_attacks_kuiper = {
+	sr_fl_7_docked = yes
+	sr_fl_7_may_depart_kuiper = yes
+	sr_fl_7_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_7_dv_value >= { value = sr_fl_7_leg_dv_kuiper add = sr_fl_7_return_dv_kuiper }
+	}
+	sr_fl_7_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 8 ---
@@ -3127,6 +4352,77 @@ sr_fl_8_target_hostile = {
 		AND = { var:sr_fl_8_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_8_has_interdict_world = {
+	has_variable = sr_fl_8_loc
+	OR = {
+		AND = { var:sr_fl_8_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_8_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_8_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_8_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_8_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_8_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_8_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_8_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_8_target_interdictable = {
+	has_variable = sr_fl_8_target
+	OR = {
+		AND = { var:sr_fl_8_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_8_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_8_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_8_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_8_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_8_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_8_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_8_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_8_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_8_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_8_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_8_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_8_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_8_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_8_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_8_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_8_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_8_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_8_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_8_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_8_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_8_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_8_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_8_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_8_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_8_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_8_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_8_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_8_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_8_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_8_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_8_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_8_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_8_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_8_interdicting = { sr_fl_8_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_8_can_target = {
+	OR = {
+		AND = { sr_fl_8_posture_value = 4 sr_fl_8_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_8_posture_value = 4 } sr_fl_8_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_8_next_interdict = {
+	sr_fl_8_has_interdict_world = yes
+	OR = {
+		sr_fl_8_posture_value = 3
+		AND = { sr_fl_8_posture_value = 2 NOT = { sr_fl_8_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_8_ai_free = {
 	has_variable = sr_fl_8_loc
@@ -3227,6 +4523,110 @@ sr_fl_8_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_kuiper add = sr_fl_8_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_inner = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_inner = yes
+	sr_fl_8_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_inner add = sr_fl_8_return_dv_inner }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_mars = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_mars = yes
+	sr_fl_8_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_mars add = sr_fl_8_return_dv_mars }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_asteroids = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_asteroids = yes
+	sr_fl_8_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_asteroids add = sr_fl_8_return_dv_asteroids }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_jupiter = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_jupiter = yes
+	sr_fl_8_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_jupiter add = sr_fl_8_return_dv_jupiter }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_saturn = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_saturn = yes
+	sr_fl_8_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_saturn add = sr_fl_8_return_dv_saturn }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_uranus = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_uranus = yes
+	sr_fl_8_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_uranus add = sr_fl_8_return_dv_uranus }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_neptune = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_neptune = yes
+	sr_fl_8_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_neptune add = sr_fl_8_return_dv_neptune }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_8_ai_attacks_kuiper = {
+	sr_fl_8_docked = yes
+	sr_fl_8_may_depart_kuiper = yes
+	sr_fl_8_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_8_dv_value >= { value = sr_fl_8_leg_dv_kuiper add = sr_fl_8_return_dv_kuiper }
+	}
+	sr_fl_8_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # --- Slot 9 ---
@@ -3530,6 +4930,77 @@ sr_fl_9_target_hostile = {
 		AND = { var:sr_fl_9_target = 34 sr_site_hostile_target = { KEY = sedna } }
 	}
 }
+# 6c: a world at its location it may interdict (a country at peace with us,
+# not our ally, holds it); its target is one; it interdicts.
+sr_fl_9_has_interdict_world = {
+	has_variable = sr_fl_9_loc
+	OR = {
+		AND = { var:sr_fl_9_loc = 2 OR = { sr_site_interdict_target = { KEY = venus } sr_site_interdict_target = { KEY = mercury } } }
+		AND = { var:sr_fl_9_loc = 3 OR = { sr_site_interdict_target = { KEY = valles_marineris } sr_site_interdict_target = { KEY = olympus_mons } sr_site_interdict_target = { KEY = hellas_planitia } sr_site_interdict_target = { KEY = utopia_planitia } sr_site_interdict_target = { KEY = arcadia_planitia } } }
+		AND = { var:sr_fl_9_loc = 4 OR = { sr_site_interdict_target = { KEY = ceres } sr_site_interdict_target = { KEY = vesta } sr_site_interdict_target = { KEY = psyche } sr_site_interdict_target = { KEY = pallas } sr_site_interdict_target = { KEY = hygiea } } }
+		AND = { var:sr_fl_9_loc = 5 OR = { sr_site_interdict_target = { KEY = io } sr_site_interdict_target = { KEY = europa } sr_site_interdict_target = { KEY = ganymede } sr_site_interdict_target = { KEY = callisto } sr_site_interdict_target = { KEY = himalia } sr_site_interdict_target = { KEY = amalthea } } }
+		AND = { var:sr_fl_9_loc = 6 OR = { sr_site_interdict_target = { KEY = titan } sr_site_interdict_target = { KEY = enceladus } sr_site_interdict_target = { KEY = rhea } sr_site_interdict_target = { KEY = mimas } sr_site_interdict_target = { KEY = iapetus } } }
+		AND = { var:sr_fl_9_loc = 7 OR = { sr_site_interdict_target = { KEY = titania } sr_site_interdict_target = { KEY = oberon } sr_site_interdict_target = { KEY = miranda } sr_site_interdict_target = { KEY = ariel } } }
+		AND = { var:sr_fl_9_loc = 8 OR = { sr_site_interdict_target = { KEY = triton } sr_site_interdict_target = { KEY = proteus } } }
+		AND = { var:sr_fl_9_loc = 9 OR = { sr_site_interdict_target = { KEY = pluto } sr_site_interdict_target = { KEY = eris } sr_site_interdict_target = { KEY = makemake } sr_site_interdict_target = { KEY = haumea } sr_site_interdict_target = { KEY = sedna } } }
+	}
+}
+sr_fl_9_target_interdictable = {
+	has_variable = sr_fl_9_target
+	OR = {
+		AND = { var:sr_fl_9_target = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { var:sr_fl_9_target = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { var:sr_fl_9_target = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { var:sr_fl_9_target = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { var:sr_fl_9_target = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { var:sr_fl_9_target = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { var:sr_fl_9_target = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { var:sr_fl_9_target = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { var:sr_fl_9_target = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { var:sr_fl_9_target = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { var:sr_fl_9_target = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { var:sr_fl_9_target = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { var:sr_fl_9_target = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { var:sr_fl_9_target = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { var:sr_fl_9_target = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { var:sr_fl_9_target = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { var:sr_fl_9_target = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { var:sr_fl_9_target = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { var:sr_fl_9_target = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { var:sr_fl_9_target = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { var:sr_fl_9_target = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { var:sr_fl_9_target = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { var:sr_fl_9_target = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { var:sr_fl_9_target = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { var:sr_fl_9_target = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { var:sr_fl_9_target = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { var:sr_fl_9_target = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { var:sr_fl_9_target = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { var:sr_fl_9_target = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { var:sr_fl_9_target = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { var:sr_fl_9_target = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { var:sr_fl_9_target = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { var:sr_fl_9_target = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { var:sr_fl_9_target = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_9_interdicting = { sr_fl_9_posture_value = 4 }
+# The target button: interdicting, the worlds it may interdict; else the
+# hostile worlds.
+sr_fl_9_can_target = {
+	OR = {
+		AND = { sr_fl_9_posture_value = 4 sr_fl_9_has_interdict_world = yes }
+		AND = { NOT = { sr_fl_9_posture_value = 4 } sr_fl_9_has_hostile_world = yes }
+	}
+}
+# The posture button's next step is Interdict (its price, in the tooltip).
+sr_fl_9_next_interdict = {
+	sr_fl_9_has_interdict_world = yes
+	OR = {
+		sr_fl_9_posture_value = 3
+		AND = { sr_fl_9_posture_value = 2 NOT = { sr_fl_9_has_hostile_world = yes } }
+	}
+}
 # The AI's: at Earth, or where no world of ours is threatened.
 sr_fl_9_ai_free = {
 	has_variable = sr_fl_9_loc
@@ -3630,6 +5101,110 @@ sr_fl_9_ai_reaches_kuiper = {
 		sr_loc_port_kuiper = yes
 		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_kuiper add = sr_fl_9_return_dv_kuiper }
 	}
+}
+# 6c: it may attack Mercury and Venus: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_inner = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_inner = yes
+	sr_fl_9_leg_months_inner <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_inner = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_inner add = sr_fl_9_return_dv_inner }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_inner multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack Mars: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_mars = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_mars = yes
+	sr_fl_9_leg_months_mars <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_mars = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_mars add = sr_fl_9_return_dv_mars }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_mars multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Asteroid Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_asteroids = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_asteroids = yes
+	sr_fl_9_leg_months_asteroids <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_asteroids = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_asteroids add = sr_fl_9_return_dv_asteroids }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_asteroids multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Jupiter system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_jupiter = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_jupiter = yes
+	sr_fl_9_leg_months_jupiter <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_jupiter = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_jupiter add = sr_fl_9_return_dv_jupiter }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_jupiter multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Saturn system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_saturn = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_saturn = yes
+	sr_fl_9_leg_months_saturn <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_saturn = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_saturn add = sr_fl_9_return_dv_saturn }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_saturn multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Uranus system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_uranus = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_uranus = yes
+	sr_fl_9_leg_months_uranus <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_uranus = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_uranus add = sr_fl_9_return_dv_uranus }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_uranus multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Neptune system: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_neptune = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_neptune = yes
+	sr_fl_9_leg_months_neptune <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_neptune = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_neptune add = sr_fl_9_return_dv_neptune }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_neptune multiply = sr_fl_ai_attack_margin }
+}
+# 6c: it may attack the Kuiper Belt: docked, within sr_fl_ai_attack_months' leg, able to
+# come home again or dock there, and outmatching the enemy's force there
+# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.
+sr_fl_9_ai_attacks_kuiper = {
+	sr_fl_9_docked = yes
+	sr_fl_9_may_depart_kuiper = yes
+	sr_fl_9_leg_months_kuiper <= sr_fl_ai_attack_months
+	OR = {
+		sr_loc_port_kuiper = yes
+		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_kuiper add = sr_fl_9_return_dv_kuiper }
+	}
+	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
 # ===== Per world: Survey Colony Defences (6b, design § 11) =====
@@ -3954,15 +5529,35 @@ sr_loc_garrison_due_inner = {
 		AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_garrison_due_mercury }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_inner = {
 	sr_loc_held_inner = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_inner sr_fl_any_bound = { CODE = 2 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_inner sr_fl_any_bound = { CODE = 2 } }
+			}
+			sr_icpt_interdicts_at = { LOC = inner }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_inner = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = venus }
+		sr_site_ai_attack_target = { KEY = mercury }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_inner = {
+	has_variable = sr_fl_at_inner
+	var:sr_fl_at_inner >= sr_loc_ai_enemy_fleets_inner
 }
 sr_loc_held_mars = {
 	OR = {
@@ -4005,15 +5600,38 @@ sr_loc_garrison_due_mars = {
 		AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } has_global_variable = sr_site_garrison_due_arcadia_planitia }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_mars = {
 	sr_loc_held_mars = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_mars sr_fl_any_bound = { CODE = 3 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_mars sr_fl_any_bound = { CODE = 3 } }
+			}
+			sr_icpt_interdicts_at = { LOC = mars }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_mars = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = valles_marineris }
+		sr_site_ai_attack_target = { KEY = olympus_mons }
+		sr_site_ai_attack_target = { KEY = hellas_planitia }
+		sr_site_ai_attack_target = { KEY = utopia_planitia }
+		sr_site_ai_attack_target = { KEY = arcadia_planitia }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_mars = {
+	has_variable = sr_fl_at_mars
+	var:sr_fl_at_mars >= sr_loc_ai_enemy_fleets_mars
 }
 sr_loc_held_asteroids = {
 	OR = {
@@ -4056,15 +5674,38 @@ sr_loc_garrison_due_asteroids = {
 		AND = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } has_global_variable = sr_site_garrison_due_hygiea }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_asteroids = {
 	sr_loc_held_asteroids = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_asteroids sr_fl_any_bound = { CODE = 4 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_asteroids sr_fl_any_bound = { CODE = 4 } }
+			}
+			sr_icpt_interdicts_at = { LOC = asteroids }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_asteroids = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = ceres }
+		sr_site_ai_attack_target = { KEY = vesta }
+		sr_site_ai_attack_target = { KEY = psyche }
+		sr_site_ai_attack_target = { KEY = pallas }
+		sr_site_ai_attack_target = { KEY = hygiea }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_asteroids = {
+	has_variable = sr_fl_at_asteroids
+	var:sr_fl_at_asteroids >= sr_loc_ai_enemy_fleets_asteroids
 }
 sr_loc_held_jupiter = {
 	OR = {
@@ -4113,15 +5754,39 @@ sr_loc_garrison_due_jupiter = {
 		AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } has_global_variable = sr_site_garrison_due_amalthea }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_jupiter = {
 	sr_loc_held_jupiter = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_jupiter sr_fl_any_bound = { CODE = 5 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_jupiter sr_fl_any_bound = { CODE = 5 } }
+			}
+			sr_icpt_interdicts_at = { LOC = jupiter }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_jupiter = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = io }
+		sr_site_ai_attack_target = { KEY = europa }
+		sr_site_ai_attack_target = { KEY = ganymede }
+		sr_site_ai_attack_target = { KEY = callisto }
+		sr_site_ai_attack_target = { KEY = himalia }
+		sr_site_ai_attack_target = { KEY = amalthea }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_jupiter = {
+	has_variable = sr_fl_at_jupiter
+	var:sr_fl_at_jupiter >= sr_loc_ai_enemy_fleets_jupiter
 }
 sr_loc_held_saturn = {
 	OR = {
@@ -4166,15 +5831,38 @@ sr_loc_garrison_due_saturn = {
 		AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } has_global_variable = sr_site_garrison_due_iapetus }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_saturn = {
 	sr_loc_held_saturn = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_saturn sr_fl_any_bound = { CODE = 6 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_saturn sr_fl_any_bound = { CODE = 6 } }
+			}
+			sr_icpt_interdicts_at = { LOC = saturn }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_saturn = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = titan }
+		sr_site_ai_attack_target = { KEY = enceladus }
+		sr_site_ai_attack_target = { KEY = rhea }
+		sr_site_ai_attack_target = { KEY = mimas }
+		sr_site_ai_attack_target = { KEY = iapetus }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_saturn = {
+	has_variable = sr_fl_at_saturn
+	var:sr_fl_at_saturn >= sr_loc_ai_enemy_fleets_saturn
 }
 sr_loc_held_uranus = {
 	OR = {
@@ -4208,15 +5896,37 @@ sr_loc_garrison_due_uranus = {
 		AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } has_global_variable = sr_site_garrison_due_ariel }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_uranus = {
 	sr_loc_held_uranus = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_uranus sr_fl_any_bound = { CODE = 7 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_uranus sr_fl_any_bound = { CODE = 7 } }
+			}
+			sr_icpt_interdicts_at = { LOC = uranus }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_uranus = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = titania }
+		sr_site_ai_attack_target = { KEY = oberon }
+		sr_site_ai_attack_target = { KEY = miranda }
+		sr_site_ai_attack_target = { KEY = ariel }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_uranus = {
+	has_variable = sr_fl_at_uranus
+	var:sr_fl_at_uranus >= sr_loc_ai_enemy_fleets_uranus
 }
 sr_loc_held_neptune = {
 	OR = {
@@ -4247,15 +5957,35 @@ sr_loc_garrison_due_neptune = {
 		AND = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } has_global_variable = sr_site_garrison_due_proteus }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_neptune = {
 	sr_loc_held_neptune = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_neptune sr_fl_any_bound = { CODE = 8 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_neptune sr_fl_any_bound = { CODE = 8 } }
+			}
+			sr_icpt_interdicts_at = { LOC = neptune }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_neptune = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = triton }
+		sr_site_ai_attack_target = { KEY = proteus }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_neptune = {
+	has_variable = sr_fl_at_neptune
+	var:sr_fl_at_neptune >= sr_loc_ai_enemy_fleets_neptune
 }
 sr_loc_held_kuiper = {
 	OR = {
@@ -4298,13 +6028,36 @@ sr_loc_garrison_due_kuiper = {
 		AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } has_global_variable = sr_site_garrison_due_sedna }
 	}
 }
-# A world of ours there, and an enemy fleet there or on its way (design § 14).
+# A world of ours there, and an enemy fleet there or on its way (design § 14),
+# or (6c) a fleet interdicting us there.
 sr_fl_ai_threatened_kuiper = {
 	sr_loc_held_kuiper = yes
+	save_temporary_scope_as = sr_icpt_victim
 	any_in_global_list = {
 		variable = sr_fleet_powers
 		is_country_alive = yes
-		has_war_with = prev
-		OR = { has_variable = sr_fl_at_kuiper sr_fl_any_bound = { CODE = 9 } }
+		OR = {
+			AND = {
+				has_war_with = prev
+				OR = { has_variable = sr_fl_at_kuiper sr_fl_any_bound = { CODE = 9 } }
+			}
+			sr_icpt_interdicts_at = { LOC = kuiper }
+		}
 	}
+}
+# 6c: a world there the AI may attack: held by a country at war with us, or
+# ours under an enemy's occupation; never a free colony (design § 14).
+sr_loc_ai_target_kuiper = {
+	OR = {
+		sr_site_ai_attack_target = { KEY = pluto }
+		sr_site_ai_attack_target = { KEY = eris }
+		sr_site_ai_attack_target = { KEY = makemake }
+		sr_site_ai_attack_target = { KEY = haumea }
+		sr_site_ai_attack_target = { KEY = sedna }
+	}
+}
+# ... and our fleets there are a match for the enemy's (the AI stays).
+sr_fl_ai_holds_kuiper = {
+	has_variable = sr_fl_at_kuiper
+	var:sr_fl_at_kuiper >= sr_loc_ai_enemy_fleets_kuiper
 }

@@ -94,6 +94,51 @@ sr_battle_loc_name = {
 	}
 }
 
+sr_icpt_alert_loc_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 1 }
+		localization_key = sr_loc_name_earth
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 2 }
+		localization_key = sr_loc_name_inner
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 3 }
+		localization_key = sr_loc_name_mars
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 4 }
+		localization_key = sr_loc_name_asteroids
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 5 }
+		localization_key = sr_loc_name_jupiter
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 6 }
+		localization_key = sr_loc_name_saturn
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 7 }
+		localization_key = sr_loc_name_uranus
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 8 }
+		localization_key = sr_loc_name_neptune
+	}
+	text = {
+		trigger = { has_variable = sr_icpt_alert_loc var:sr_icpt_alert_loc = 9 }
+		localization_key = sr_loc_name_kuiper
+	}
+	text = {
+		localization_key = sr_site_name_unknown
+	}
+}
+
 sr_fl_1_where_name = {
 	type = country
 	random_valid = no

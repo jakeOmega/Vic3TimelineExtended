@@ -153,6 +153,7 @@ sr_fl_dispatch = {
 	if = { limit = { has_variable = sr_fl_$N$_posture } remove_variable = sr_fl_$N$_posture }
 	if = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }
 	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 	if = { limit = { has_variable = sr_fl_dest_pick_$N$ } remove_variable = sr_fl_dest_pick_$N$ }
 	sr_fl_dispatch_alert = { LOC = $LOC$ CODE = $CODE$ }
 	sr_loc_rebuild = yes
@@ -335,9 +336,9 @@ sr_fl_take_marines_at = {
 }
 
 # ---- The location records (design § 4) ---------------------------------------------------------
-# Global scope, or any: cleared, then every power's slots counted again; then
-# the strongest two powers at each location. On every departure and arrival,
-# and monthly.
+# Global scope, or any: cleared, then every power's slots counted again, and its
+# interdiction lists (6c, sr_icpt_rebuild); then the strongest two powers at
+# each location. On every departure and arrival, and monthly.
 sr_loc_rebuild = {
 	sr_loc_clear_records = yes
 	if = {
@@ -347,6 +348,7 @@ sr_loc_rebuild = {
 			limit = { is_country_alive = yes }
 			sr_loc_clear_country = yes
 			sr_fl_each_slot = { DO = note }
+			sr_icpt_rebuild = yes
 		}
 		sr_loc_rank = yes
 	}
@@ -556,11 +558,13 @@ sr_site_transfer_marines = {
 # its marines land on arrival, sr_fl_arrive_at), and a fleet with nothing left
 # to do away from Earth comes home. Every order passes the same
 # sr_fl_<n>_may_depart_<loc> a player's does. The defence's rules (6b) are
-# sr_fl_ai_defend (sr_fleet_combat_effects.txt).
+# sr_fl_ai_defend, the offence's (6c) sr_fl_ai_attack
+# (sr_fleet_combat_effects.txt).
 sr_fl_ai_review = {
 	sr_fl_ai_defend = yes
 	sr_fl_ai_send_garrisons = yes
 	sr_fl_each_slot = { DO = ai_home }
+	sr_fl_ai_attack = yes
 }
 
 # ---- Self-checks (design § 18) ---------------------------------------------------------------------

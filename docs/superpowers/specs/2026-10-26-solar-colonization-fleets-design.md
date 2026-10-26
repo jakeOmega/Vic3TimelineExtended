@@ -1009,3 +1009,79 @@ open:
   state modifier reaching `modifier:` (`ship_construction`), arrivals in their
   month (`fleet_leg`), the generic input multiplier (the probe), and
   `controller = owner` for an occupied state (step 20).
+
+## 23. As built: part 6c (2026-10-26)
+
+6c (interdiction in peace, the AI's offence, the outer-space convention) shipped
+as one PR, its three tasks a commit each. Where the build departs from §§ 12 to
+14, or fills in what they leave open:
+
+- **Interdiction is its own posture, Interdict** (owner, 2026-10-26). Read
+  literally, § 12 would have every fleet standing off blockade every holder at
+  peace with it there; but a fleet arriving where we hold no colony stands off
+  (§ 6), so it would interdict every bystander on arrival, price and casus belli
+  included, and the AI's wartime blockades would interdict neutrals. So the
+  posture button steps Station, Stand off, Close in, Interdict, and Interdict is
+  offered only where a country at peace with us holds a world. Its target is one
+  of that country's worlds, and it blockades that country's colonies at the
+  location. Stand off keeps 6b's meaning, a blockade of enemies only. Interdict
+  fights as Stand off.
+- **Never against an ally** (owner, 2026-10-26): no alliance or defensive pact
+  (`has_treaty_alliance_with`, `has_treaty_defensive_pact_with`). A free,
+  occupied or ruined world can't be interdicted.
+- **The price is charged on the order**, as a free colony's is (6b), not on the
+  first month of the blockade: once per fleet and target country
+  (`sr_fl_<n>_icpt`). Stepping the target to another country's world, or the
+  world passing to another country at peace with us, is a new interdiction and
+  pays again; leaving the posture ends it, and coming back pays again.
+- **The casus belli is a list, not one country.** The interdictor keeps
+  `sr_interdiction_targets`, every country it interdicted, while
+  `sr_interdiction_recent` (five years, renewed by each new interdiction)
+  stands; the list is cleared at the next interdiction once it has lapsed. So
+  interdicting a second country doesn't take the first one's casus belli away.
+  `sr_interdiction_target`, the design's single country, isn't kept.
+- **Cede Colony's war goal reads `root` as its holder and
+  `scope:target_country` as the country it is pressed against**, as vanilla's
+  Money Transfer does (its `INFAMY_TARGET_COUNTRY_DEDUCTION_FACTOR` asks whether
+  `scope:target_country` started a play against `root`). The infamy is
+  multiplied by 0, with its own breakdown line. A play-test row checks the
+  scopes (the fallback is plan C1.3's).
+- **An interdiction ends** (the fleet stands off) when its target goes to war
+  with us, becomes our ally, or no longer holds the world. At war, standing off
+  blockades it anyway.
+- **The panel** gains Interdicted and Interdicting on the Locations rows
+  (`sr_site_interdicted_<key>` marks a blockade by interdiction alone) and
+  Interdicted on Colony Defences; the Locations status cell widens to 106, so
+  the row fills the 480 column.
+- **The convention has no scripted button** (owner, 2026-10-26: "I meant one of
+  the human GUI buttons"). Every convention reaches the AI only through the
+  docket, which paces the floor (`un_buttons.txt`); this one is offered as
+  Assembly business and by docket item 17. A player tables it from the
+  chamber's Table a Resolution row.
+- **The convention exists under Full Colonies only**, the setting where fleets
+  can take and destroy colonies. The registry's rule test reads
+  `sr_colonies_full_enabled` as the rule. Its topic is open once some country
+  holds a colony; a proposer must hold one. Its agency is COPUOS (UNOOSA is the
+  space cooperation convention's). Its topic and agency icons are copies of
+  space cooperation's and UNOOSA's, under their own names.
+- **What the convention doubles:** destroying a colony and closing in on a free
+  one (6b's prices, which already read `sr_colony_convention_party`). Seizing a
+  colony at war costs nothing in 6b, so twice nothing is still nothing, and
+  interdiction isn't doubled (§ 13 doesn't name it).
+- **The AI's offence**, under-specified in § 14, is: at most one order a month,
+  from a docked fleet free of the defence, to the first location in table order
+  (nearest first) with a world it may attack; "the enemy's fleets" it must
+  outmatch 1.5 times over include the Defences and hulls of the enemy worlds
+  there (`sr_site_target_strength_<key>`), so it doesn't fly into a fortress.
+  A world's worth is a point a 10,000 people plus a point a module level. It
+  stays while its strength there matches the enemy's fleets and otherwise comes
+  home; the recall (supply, propellant) still runs first. A fleet interdicting
+  the AI counts as a threat, so its defence stations a fleet there.
+- **A revolution's winner keeps interdiction's records.** Variable lists don't
+  pass to it, so `sr_icpt_repair_after_civil_war` (from
+  `sr_repair_after_civil_war`) copies the old government's casus belli list,
+  adds the winner to every list that named the old government, and repoints the
+  fleets that interdicted it, so no new price is charged. The `sr_icpt_<loc>`
+  lists are rebuilt monthly anyway.
+- **The console** gains option m, an interdiction by our first fleet that may
+  make one.

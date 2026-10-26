@@ -1,4 +1,4 @@
-"""Space fleets (solar colonization slice 6, parts 6a and 6b): the generator's
+"""Space fleets (solar colonization slice 6, parts 6a to 6c): the generator's
 output, the hand-written files' contract with it, and the rules a play test
 can't see in one evening.
 
@@ -35,6 +35,8 @@ SPACE_RACE_EFFECTS = ROOT / "common/scripted_effects/space_race_effects.txt"
 ON_ACTIONS = ROOT / "common/on_actions/space_race_on_actions.txt"
 COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 DEBUG_EVENTS = ROOT / "events/te_debug_space_race_events.txt"
+CEDE_COLONY = ROOT / "common/treaty_articles/124_cede_colony.txt"
+SPACE_RACE_EVENTS = ROOT / "events/space_race_events.txt"
 
 
 def _raw(path):
@@ -275,6 +277,20 @@ class CivilWarTest(unittest.TestCase):
             with self.subTest(site=site.key):
                 self.assertIn(f"set_global_variable = {{ name = sr_site_occupier_{site.key} value = ROOT }}", repoint)
 
+    def test_the_winner_keeps_the_interdiction_records(self):
+        """Variable lists don't pass to a revolution's winner: the casus belli
+        list is carried over, and other powers' records that name the old
+        government are repointed (6c)."""
+        repair = _block(_strip(_raw(SPACE_RACE_EFFECTS)), "sr_repair_after_civil_war")
+        self.assertIn("sr_icpt_repair_after_civil_war = yes", repair)
+        body = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_icpt_repair_after_civil_war")
+        self.assertIn("exists = scope:te_cw_loser", body)
+        self.assertIn("add_to_variable_list = { name = sr_interdiction_targets target = scope:sr_icpt_carried }", body)
+        self.assertIn("add_to_variable_list = { name = sr_interdiction_targets target = ROOT }", body)
+        self.assertIn("sr_fl_each_slot = { DO = icpt_repoint }", body)
+        self.assertIn("set_variable = { name = sr_fl_$N$_icpt value = ROOT }",
+                      _block(_strip(_raw(COMBAT_EFFECTS)), "sr_fl_icpt_repoint_at"))
+
     def test_a_release_clears_every_slice_6_record(self):
         effects = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
         for site in gss.SITES:
@@ -282,6 +298,198 @@ class CivilWarTest(unittest.TestCase):
             for name in gss.slice6_vars(site):
                 with self.subTest(site=site.key, var=name):
                     self.assertIn(name, release)
+
+
+class InterdictionTest(unittest.TestCase):
+    """6c (design § 12; owner, 2026-10-26): an explicit Interdict posture against
+    one country at peace with us and not our ally, its price once per fleet and
+    target, and a blockade that only it or an enemy standing off can make."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+
+    def test_only_a_country_at_peace_and_not_an_ally_may_be_interdicted(self):
+        body = _block(self.triggers, "sr_site_interdict_target")
+        for line in ("NOT = { has_global_variable = sr_site_free_$KEY$ }",
+                     "NOT = { has_global_variable = sr_site_occupier_$KEY$ }",
+                     "NOT = { has_global_variable = sr_site_ruined_$KEY$ }",
+                     "NOT = { this = scope:sr_icpt_by }",
+                     "NOT = { has_war_with = scope:sr_icpt_by }",
+                     "NOT = { has_treaty_alliance_with = { TARGET = scope:sr_icpt_by } }",
+                     "NOT = { has_treaty_defensive_pact_with = { TARGET = scope:sr_icpt_by } }"):
+            with self.subTest(line=line):
+                self.assertIn(line, body)
+
+    def test_the_posture_steps_through_interdict_and_back_to_station(self):
+        body = _block(self.combat, "sr_fl_step_posture_at")
+        self.assertRegex(body, r"local_var:sr_cb_p <= 3\s*sr_fl_\$N\$_has_interdict_world = yes\s*\}\s*"
+                               r"set_variable = \{ name = sr_fl_\$N\$_posture value = 4 \}")
+        self.assertIn("sr_fl_charge_icpt_at = { N = $N$ }", body)
+        # Leaving Interdict ends the interdiction's record.
+        station = body[body.rindex("else = {"):]
+        self.assertIn("value = 1", station)
+        self.assertIn("remove_variable = sr_fl_$N$_icpt", station)
+        self.assertTrue(body.rstrip().endswith("sr_icpt_rebuild = yes"))
+
+    def test_interdict_fights_as_standing_off(self):
+        for name in ("sr_fl_gather_at", "sr_fl_apply_losses_at"):
+            with self.subTest(helper=name):
+                self.assertRegex(_block(self.combat, name),
+                                 r"limit = \{ local_var:sr_cb_p = 4 \}[^}]*\}?\s*"
+                                 r"(?:sr_fl_check_icpt_at = \{ N = \$N\$ \}\s*)?"
+                                 r"set_local_variable = \{ name = sr_cb_p value = 2 \}")
+
+    def test_the_price_is_charged_once_per_fleet_and_target(self):
+        body = _block(self.combat, "sr_cb_charge_interdict")
+        self.assertIn("NOT = { var:sr_fl_$N$_icpt = scope:sr_icpt_target }", body)
+        self.assertIn("set_variable = { name = sr_fl_$N$_icpt value = scope:sr_icpt_target }", body)
+        self.assertIn("change_infamy = sr_interdiction_infamy", body)
+        self.assertIn("un_dossier_record = { RECORD = space POINTS = sr_interdiction_dossier }", body)
+        self.assertIn("set_variable = { name = sr_interdiction_recent value = yes days = 1825 }", body)
+        self.assertIn("trigger_event = { id = space_race_events.105 days = 1 }", body)
+        values = _raw(FLEET_VALUES)
+        self.assertEqual(_number(values, "sr_interdiction_infamy"), 5)
+        self.assertEqual(_number(values, "sr_interdiction_dossier"), 10)
+
+    def test_the_lists_hold_only_interdicting_slots_at_their_own_location(self):
+        body = _block(self.generated, "sr_icpt_rebuild")
+        for lc in gsf.LOCATIONS[1:]:
+            with self.subTest(loc=lc.key):
+                self.assertIn(f"clear_variable_list = sr_icpt_{lc.key}", body)
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertIn(f"limit = {{ has_variable = sr_fl_{n}_loc has_variable = sr_fl_{n}_target "
+                              f"sr_fl_{n}_posture_value = 4 }}", body)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"var:sr_fl_1_loc = {gsf.CODE[site.location]} var:sr_fl_1_target = {site.index} }}\n"
+                              f"\t\t\tsr_icpt_note = {{ KEY = {site.key} LOC = {site.location} }}", body)
+        # Rebuilt with the location records, on each order and when one ends.
+        self.assertIn("sr_icpt_rebuild = yes", _block(_strip(_raw(FLEET_EFFECTS)), "sr_loc_rebuild"))
+        self.assertIn("sr_icpt_rebuild = yes", _block(self.combat, "sr_fl_end_icpt"))
+        self.assertIn("sr_icpt_rebuild = yes", _block(self.generated, "sr_fl_step_target_at"))
+
+    def test_a_blockade_needs_an_enemy_or_an_interdiction_and_no_holder_fleet(self):
+        body = _block(self.combat, "sr_site_blockade_step")
+        self.assertIn("NOT = { sr_cb_holds_orbit = yes }", body)
+        self.assertRegex(body, r"OR = \{\s*has_war_with = prev\s*sr_icpt_interdicts_at = \{ LOC = \$LOC\$ \}\s*\}")
+        for lc in gsf.LOCATIONS[1:]:
+            for site in gsf.worlds_at(lc.key):
+                with self.subTest(site=site.key):
+                    self.assertIn(f"sr_site_blockade_step = {{ KEY = {site.key} LOC = {lc.key} }}",
+                                  _block(self.generated, f"sr_cb_worlds_after_{lc.key}"))
+
+    def test_a_departure_ends_the_interdiction(self):
+        self.assertIn("remove_variable = sr_fl_$N$_icpt", _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_dispatch"))
+        self.assertIn("icpt", gsf.SLOT_VARS)
+
+    def test_the_ai_never_interdicts(self):
+        """No AI order sets Interdict: only the posture step and the console do,
+        and the AI calls neither (design § 14)."""
+        texts = {"hand": self.combat + _strip(_raw(FLEET_EFFECTS)), "generated": self.generated}
+        for label, text in texts.items():
+            with self.subTest(file=label):
+                setters = [m.start() for m in re.finditer(r"_posture value = 4 \}", text)]
+                owners = {re.findall(r"(?m)^(\w+) = \{", text[:i])[-1] for i in setters}
+                self.assertLessEqual(owners, {"sr_fl_step_posture_at", "sr_fl_debug_icpt_at"})
+        ai = ""
+        for text in (self.generated, self.combat, _strip(_raw(FLEET_EFFECTS))):
+            names = re.findall(r"(?m)^(sr_fl_ai_\w+) = \{", text)
+            self.assertTrue(names)
+            ai += "".join(_block(text, name) for name in names)
+        self.assertNotIn("step_posture", ai)
+        self.assertNotIn("interdict", ai)
+
+    def test_cede_colony_costs_no_infamy_against_an_interdictor(self):
+        wargoal = _block("x = {" + _strip(_raw(CEDE_COLONY)).split("wargoal = {", 1)[1], "x")
+        infamy = _block("x = {" + wargoal.split("infamy = {", 1)[1], "x")
+        self.assertRegex(infamy, r"scope:target_country \?= \{ sr_interdicted_recently = \{ TARGET = root \} \}"
+                                 r"\s*\}\s*multiply = \{\s*desc = \"INFAMY_SR_INTERDICTOR\"\s*value = 0")
+        recently = _block(self.triggers, "sr_interdicted_recently")
+        self.assertIn("has_variable = sr_interdiction_recent", recently)
+        self.assertIn("is_target_in_variable_list = { name = sr_interdiction_targets target = $TARGET$ }", recently)
+
+    def test_the_target_is_told(self):
+        event = _block(_strip(_raw(SPACE_RACE_EVENTS)), "space_race_events.105")
+        self.assertIn("trigger = { has_variable = sr_icpt_alert_loc }", event)
+        self.assertIn("event_image", event)
+        self.assertIn("remove_variable = sr_icpt_alert_loc", event)
+
+
+class AiOffenceTest(unittest.TestCase):
+    """6c (design § 14): the AI attacks at war, through the checks a player's
+    orders pass, never destroying, never taking a free colony, never
+    interdicting; an interdiction of its colonies is a threat it answers."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+
+    def test_it_attacks_only_at_war_after_the_defence(self):
+        self.assertRegex(_block(self.combat, "sr_fl_ai_attack"),
+                         r"limit = \{ is_at_war = yes \}\s*sr_fl_ai_attack_all = yes\s*sr_fl_each_slot = \{ DO = ai_assault \}")
+        review = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_ai_review")
+        self.assertLess(review.index("sr_fl_ai_defend = yes"), review.index("sr_fl_ai_attack = yes"))
+
+    def test_every_attack_order_passes_a_player_s_checks_and_can_come_home(self):
+        attack = _block(self.generated, "sr_fl_ai_attack_all")
+        for lc in gsf.LOCATIONS[1:]:
+            for n in range(1, gsf.SLOTS + 1):
+                with self.subTest(loc=lc.key, slot=n):
+                    self.assertIn(f"sr_fl_{n}_ai_free = yes sr_fl_{n}_ai_attacks_{lc.key} = yes", attack)
+                    body = _block(self.gen_triggers, f"sr_fl_{n}_ai_attacks_{lc.key}")
+                    for line in (f"sr_fl_{n}_docked = yes", f"sr_fl_{n}_may_depart_{lc.key} = yes",
+                                 f"sr_fl_{n}_leg_months_{lc.key} <= sr_fl_ai_attack_months",
+                                 f"sr_loc_port_{lc.key} = yes",
+                                 f"sr_fl_{n}_dv_value >= {{ value = sr_fl_{n}_leg_dv_{lc.key} add = sr_fl_{n}_return_dv_{lc.key} }}",
+                                 f"sr_fl_{n}_strength >= {{ value = sr_loc_ai_enemy_force_{lc.key} multiply = sr_fl_ai_attack_margin }}"):
+                        self.assertIn(line, body)
+        # One order a month at most.
+        self.assertEqual(attack.count("set_local_variable = { name = sr_fl_ai_sent value = 1 }"),
+                         (len(gsf.LOCATIONS) - 1) * gsf.SLOTS)
+        self.assertEqual(attack.count("limit = { local_var:sr_fl_ai_sent = 0 "), len(gsf.LOCATIONS) - 1)
+        values = _raw(FLEET_VALUES)
+        self.assertEqual(_number(values, "sr_fl_ai_attack_months"), 12)
+        self.assertEqual(_number(values, "sr_fl_ai_attack_margin"), 1.5)
+
+    def test_it_never_destroys_or_takes_a_free_colony(self):
+        target = _block(self.triggers, "sr_site_ai_attack_target")
+        self.assertIn("sr_site_hostile_target = { KEY = $KEY$ }", target)
+        self.assertIn("NOT = { has_global_variable = sr_site_free_$KEY$ }", target)
+        assault = _block(self.generated, "sr_fl_ai_assault_at")
+        self.assertIn("remove_variable = sr_fl_$N$_destroy", assault)
+        self.assertNotIn("set_variable = { name = sr_fl_$N$_destroy", assault)
+        self.assertNotIn("sr_site_hostile_target", assault)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"sr_site_ai_attack_target = {{ KEY = {site.key} }} sr_site_ai_worth_{site.key} > local_var:sr_ai_best",
+                              assault)
+
+    def test_it_closes_in_to_seize_only_with_the_marines_for_it(self):
+        assault = _block(self.generated, "sr_fl_ai_assault_at")
+        self.assertRegex(assault, r"limit = \{ sr_fl_\$N\$_marines_value > local_var:sr_ai_need \}\s*"
+                                  r"set_variable = \{ name = sr_fl_\$N\$_posture value = 3 \}")
+        self.assertRegex(assault, r"else = \{\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \}")
+
+    def test_an_interdiction_of_its_colonies_is_a_threat(self):
+        for lc in gsf.LOCATIONS[1:]:
+            with self.subTest(loc=lc.key):
+                body = _block(self.gen_triggers, f"sr_fl_ai_threatened_{lc.key}")
+                self.assertIn("save_temporary_scope_as = sr_icpt_victim", body)
+                self.assertIn(f"sr_icpt_interdicts_at = {{ LOC = {lc.key} }}", body)
+
+    def test_a_fleet_attacking_and_holding_its_own_stays(self):
+        home = _block(self.generated, "sr_fl_ai_home_at")
+        for lc in gsf.LOCATIONS[1:]:
+            with self.subTest(loc=lc.key):
+                self.assertIn(f"NOT = {{ AND = {{ sr_loc_ai_target_{lc.key} = yes sr_fl_ai_holds_{lc.key} = yes }} }}", home)
 
 
 if __name__ == "__main__":

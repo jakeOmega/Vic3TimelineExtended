@@ -193,7 +193,9 @@ sr_fleet_embark_sgui = {
 }
 
 # 6b: the posture steps Station, Stand off, Close in (close in needs a hostile
-# world there: at war with its holder, or free).
+# world there: at war with its holder, or free); 6c: then Interdict (a world
+# there of a country at peace with us, not our ally; its price is in the
+# tooltip when that is the next step).
 sr_fleet_posture_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -220,13 +222,19 @@ sr_fleet_posture_sgui = {
 			limit = { sr_fl_op_check = { TEST = closes_on_free } }
 			custom_tooltip = sr_fl_free_price_tt
 		}
+		if = {
+			limit = { sr_fl_op_check = { TEST = next_interdict } }
+			custom_tooltip = sr_fl_interdict_price_tt
+		}
 		hidden_effect = {
 			sr_fl_by_op = { DO = step_posture }
 		}
 	}
 }
 
-# The world it closes in on: the next hostile world at its location.
+# The world it closes in on: the next hostile world at its location; while it
+# interdicts (6c), the next world it may interdict, a new country's at the
+# interdiction's price.
 sr_fleet_target_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -243,12 +251,18 @@ sr_fleet_target_sgui = {
 	is_valid = {
 		custom_tooltip = {
 			text = sr_fl_no_target_tt
-			sr_fl_op_check = { TEST = has_hostile_world }
+			sr_fl_op_check = { TEST = can_target }
 		}
 	}
 
 	effect = {
-		custom_tooltip = sr_fl_target_tt
+		if = {
+			limit = { sr_fl_op_check = { TEST = interdicting } }
+			custom_tooltip = sr_fl_icpt_target_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_target_tt
+		}
 		hidden_effect = {
 			sr_fl_by_op = { DO = step_target }
 		}

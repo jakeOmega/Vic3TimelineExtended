@@ -1,0 +1,36 @@
+﻿# ============================================================================
+# A COLONY SEIZED OR DESTROYED — THE UN'S HOOK
+# ============================================================================
+# docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md § 13.
+# Called by the fleets' seizure, destruction and free-colony seizure
+# (sr_fleet_combat_effects.txt: sr_site_occupy, sr_site_destroy,
+# sr_site_take_free), after each has booked its own costs.
+#
+#   sr_colony_un_on_seizure   the seizer or destroyer (THIS)
+#
+# The act becomes docket business: the situation "A colony seized or
+# destroyed" (item 17, un_docket_effects.txt), which raises the Convention on
+# the Settlement of Outer Space while it is not in force. The actor is not
+# offered it (un_propose_colony_protection_qualifies). A liberation, or an
+# occupation's return at the peace, raises nothing.
+#
+# WHO WRITES WHAT
+#   un_dkt_colony_pending (global, 730 days)   the actor, until the docket
+#                                              takes the act up or it goes
+#                                              stale (an item that opens a
+#                                              resolution waits for a free
+#                                              floor, as the strike's does)
+#   un_dkt_colony_actor (country, 730 days)    on the actor
+# ============================================================================
+
+# Scope: the seizer or destroyer
+sr_colony_un_on_seizure = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			sr_colonies_full_enabled = yes
+		}
+		set_variable = { name = un_dkt_colony_actor value = 1 days = 730 }
+		set_global_variable = { name = un_dkt_colony_pending value = THIS days = 730 }
+	}
+}
