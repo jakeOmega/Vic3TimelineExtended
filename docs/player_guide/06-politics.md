@@ -413,8 +413,8 @@ below 50. The Inheritance group's description shows the score and where it is
 heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
 shows what sets the target. A state's Wealth Concentration tile, on the state
 panel, shows its own score and the modifiers it carries from it and from the
-inheritance law. With the census off (the only choice in released
-versions) the tab is gone, but Wealth Concentration and all
+inheritance law. With the census off (the rule's Disabled setting)
+the tab is gone, but Wealth Concentration and all
 its effects still run and the group's description still shows the score.
 
 The farming effects follow the share of Peasants and Farmers in each state.
@@ -913,8 +913,8 @@ again. Decentralized countries are exempt.
 
 ## New decrees
 
-The mod adds 15 decrees, and development builds a 16th under the Demographics
-rule's Full setting. They cost authority like the base game's, 100 unless noted,
+The mod adds 16 decrees, one of them only under the Demographics rule's Full
+setting. They cost authority like the base game's, 100 unless noted,
 scaled by your rank.
 
 | Decree | Unlocked by | Effect in the state |
@@ -927,7 +927,7 @@ scaled by your rank.
 | Pollution Control | Pollution Control | −50% pollution |
 | Cultural Integration | | +5 cultural acceptance a year |
 | Natalism Initiative | Mass Media | +15% birth rate |
-| Medical Outreach (development builds only; Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and population](08-states.md#demographics) |
+| Medical Outreach (Demographics, Full only) | Medical Degrees | New medicine reaches the state faster; see [States and population](08-states.md#demographics) |
 | Tax Breaks (50) | Keynesian Economics | −50% taxes, fewer radicals, more migration |
 | Trade Reform | Containerization | +25% trade advantage and capacity, lower tariffs |
 | Anti-Terrorism Campaign | Terrorism and Antiterrorism | Fewer radicals from movements, less turmoil |
