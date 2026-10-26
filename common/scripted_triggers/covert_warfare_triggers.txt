@@ -49,6 +49,8 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_cultivate_assets_action
 		is_diplomatic_action_type = covert_secure_material_action
 		is_diplomatic_action_type = covert_counterintel_support_action
+		is_diplomatic_action_type = covert_incite_autonomy_action
+		is_diplomatic_action_type = covert_sabotage_colony_action
 	}
 }
 
@@ -336,6 +338,8 @@ covert_code_tier_moderate = {
 		var:$VAR$ = 0
 		var:$VAR$ = 1
 		var:$VAR$ = 6
+		# Inciting colonial autonomy: a colony's own politics.
+		var:$VAR$ = 15
 	}
 }
 
@@ -347,6 +351,8 @@ covert_code_tier_severe = {
 		var:$VAR$ = 8
 		var:$VAR$ = 9
 		var:$VAR$ = 10
+		# Colony sabotage: people killed in the target's colony.
+		var:$VAR$ = 16
 	}
 }
 

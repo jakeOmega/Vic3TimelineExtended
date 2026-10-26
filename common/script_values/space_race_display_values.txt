@@ -1181,6 +1181,21 @@ sr_disp_agi = {
 	if = { limit = { has_technology_researched = artificial_intelligence } value = 1 }
 }
 
+# ======= Autonomy and free colonies (slice 5 design § 9) =======
+# Colony Autonomy (te_sr_sec_autonomy); the per-world values are generated
+# (sr_sites_display_generated.txt). The free colonies we supply, and the
+# research speed and influence their trade gives us, in percent.
+sr_disp_free_supplied_count = {
+	value = sr_free_supply_count
+}
+sr_disp_free_trade_research = {
+	value = sr_free_trade_units
+}
+sr_disp_free_trade_influence = {
+	value = sr_free_trade_units
+	multiply = 2
+}
+
 # ======= Colony modules (colony modules design § 11) =======
 # Colony Modules (te_sr_sec_modules); the per-world values are generated
 # (sr_sites_display_generated.txt). The month's fabrication points, and the

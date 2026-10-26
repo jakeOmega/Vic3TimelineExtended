@@ -226,3 +226,76 @@ sr_colony_module_queue_sgui = {
 		}
 	}
 }
+
+# Colony Autonomy (slice 5 design § 4): abandon one of our colonies, after the
+# question (space_race_events.93), which names it through sr_abandon_site.
+sr_colony_abandon_sgui = {
+	scope = country
+	saved_scopes = { site }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		sr_cf_scope_site_held = yes
+		NOT = { has_variable = sr_abandon_site }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = sr_abandon_ask_tt
+			sr_site_abandon_ask_from_scope = yes
+			trigger_event = { id = space_race_events.93 }
+		}
+	}
+}
+
+# Free Colonies (slice 5 design § 3): start or stop supplying a free colony. The
+# entry's modifiers follow at once (Free Colony Supply and Trade).
+sr_free_supply_sgui = {
+	scope = country
+	saved_scopes = { site }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	# A supply can always be stopped; starting one needs the means.
+	is_valid = {
+		OR = {
+			sr_free_scope_site_supplied = yes
+			AND = {
+				sr_free_scope_site_free = yes
+				sr_free_can_supply = yes
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_free_scope_site_supplied = yes }
+			custom_tooltip = {
+				text = sr_free_supply_stop_tt
+				sr_site_by_scope = { DO = toggle_supply }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = sr_free_supply_start_tt
+				sr_site_by_scope = { DO = toggle_supply }
+			}
+		}
+		sr_emig_refresh_modifiers = yes
+	}
+}

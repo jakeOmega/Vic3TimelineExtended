@@ -310,7 +310,7 @@ From level 3, idle networks also decay half as fast.
 
 ### The covert operations
 
-There are fifteen operations: fourteen run against another country, and one,
+There are seventeen operations: sixteen run against another country, and one,
 Counterintelligence Support, helps a friend. Every operation against another
 country needs a free slot, room under the per-type limit, no operation of the
 same type already running against that target, funding of at least 1, a target
@@ -349,6 +349,8 @@ have agencies of their own.
 | Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
+| Incite Colonial Autonomy | Every colony the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony; Simple or Full Colonies setting of the Space Race rule | 50 |
+| Sabotage Colony | The target's most populous colony loses 1% of its people a month and gains 0.25 autonomy | Target holds a colony; Simple or Full Colonies; Seasoned Tradecraft | 100 |
 | Counterintelligence Support | Target: +8 economic, military and ideological covert defense. You: nothing | Target is a friend and has no other protector | 25 |
 
 An operation uses its influence for as long as it runs, more the worse the
@@ -371,8 +373,8 @@ Election Interference cuts electoral confidence by 5% once establishing and 10% 
 country hosting UN [electoral observers](10-united-nations.md#electoral-observers),
 which also catch it more often. Bubble pressure is
 explained in [Banking and monetary policy](04-banking.md), nuclear programs and
-loose warheads in [Nuclear weapons](14-nuclear.md), and milestones in [The space
-race](16-space.md).
+loose warheads in [Nuclear weapons](14-nuclear.md), and milestones, colonies and
+their autonomy in [The space race](16-space.md).
 
 #### Stealing technology
 
@@ -461,7 +463,7 @@ the drift. Standing an operation down costs nothing.
 | Untested | 0 | |
 | Fledgling | 20 | |
 | Established | 40 | Priority 3 |
-| Seasoned | 60 | Regime Change and Nuclear Programme Sabotage |
+| Seasoned | 60 | Regime Change, Nuclear Programme Sabotage and Sabotage Colony |
 | Veteran | 80 | One more operation of each type |
 
 Each tier above Untested adds 5% to your intelligence capacity and makes your
@@ -495,8 +497,8 @@ the establishing phase the costs are:
 | Exposure tier | Operations | Recall and apologize | Deny everything |
 |---|---|---|---|
 | Routine espionage | Industrial, Military and Space Programme Espionage, Cultivate Assets, Secure Loose Material | +1 infamy, −5 relations | +0.5 infamy, −10 relations |
-| Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign | +2 infamy, −10 relations | +1 infamy, −20 relations |
-| Attempt to bring down a government | Ideological Subversion, Destabilization, Regime Change, Nuclear Programme Sabotage | +4 infamy, −20 relations | +2 infamy, −40 relations |
+| Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign, Incite Colonial Autonomy | +2 infamy, −10 relations | +1 infamy, −20 relations |
+| Attempt to bring down a government | Ideological Subversion, Destabilization, Regime Change, Nuclear Programme Sabotage, Sabotage Colony | +4 infamy, −20 relations | +2 infamy, −40 relations |
 | Wartime sabotage, exposed during the war | Infrastructure Sabotage, Communications Disruption | Nothing | Nothing |
 | Wartime sabotage, exposed before the war | The same | +4 infamy, −10 relations | +2 infamy, −20 relations |
 
@@ -595,7 +597,7 @@ An operation runs until one of these happens:
 - A truce with the target begins (not for Counterintelligence Support).
 - The target of Counterintelligence Support stops being a friend.
 - A wartime operation's war ends, or its diplomatic play ends without one.
-- Something it needs goes: the target's elections, its political movements, its lead in space, the last technology you could steal from it, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. The technologies named in the operations table and Tradecraft only gate the launch.
+- Something it needs goes: the target's elections, its political movements, its lead in space, its last colony, the last technology you could steal from it, its missing warheads or its nuclear program (frozen by treaty, held at an arsenal ceiling or while it dismantles, or given up), your rivalry, or your power bloc lead over a target outside the bloc. The technologies named in the operations table and Tradecraft only gate the launch.
 
 A war with the target does not end a peacetime operation.
 
@@ -612,24 +614,28 @@ level 5 for a great power at war. They launch rarely. Peacetime operations come
 mostly from major and great powers, aimed at rivals or countries they feel
 antagonistic or domineering toward; espionage goes to countries with technology
 to steal or ahead in space, and a funded AI at war or in a play uses the wartime
-operations. Upkeep grows with the operator's GDP, not the target's, so an AI
-leaves a country with less than a tenth of its GDP alone unless its gold
-reserves are at least half full and its budget is in surplus. Espionage,
-Nuclear Programme Sabotage and Secure Loose Material ignore the target's size,
-and so does a wartime operation against a country the AI is losing to. The AI
+operations. An AI that holds a colony or runs a space milestone incites autonomy
+in the colonies of countries that are not its friends, and sabotages them only
+when the colony's holder is its rival or at war with it. Upkeep grows with the
+operator's GDP, not the target's, so an AI leaves a country with less than a
+tenth of its GDP alone unless its gold reserves are at least half full and its
+budget is in surplus. Espionage, Nuclear Programme Sabotage, Secure Loose
+Material and the two colony operations ignore the target's size, and so does a
+wartime operation against a country the AI is losing to. The AI
 raises priority to 2 against rivals and to 3 when a great power is at war with
 the target. Once launched, an operation stays until it is fully operational,
 unless it is exposed or something it needs goes. After that the AI calls it off
 only when its reason has gone: no rivalry either way, no hostile attitude and
-relations above poor, or no space milestone of its own under way, or when its
-influence runs into deficit. It launches an operation that uses influence only
+relations above poor, or no space milestone of its own under way (for the colony
+operations, no milestone and no colony of its own), or when its influence runs
+into deficit. It launches an operation that uses influence only
 while it holds 300 or more. It stops Cultivate Assets once its network reaches
-75. It needs Seasoned Tradecraft for the two most severe operations, as you do,
-so it rarely launches them.
+75. It needs Seasoned Tradecraft for Regime Change, Nuclear Programme Sabotage
+and Sabotage Colony, as you do, so it rarely launches them.
 
 The AI doesn't start Election Interference, Financial Subversion, Infrastructure
-Sabotage, Communications Disruption, Ideological Subversion or Destabilization
-against a friend, and calls off Election Interference, Financial Subversion,
+Sabotage, Communications Disruption, Ideological Subversion, Destabilization or
+either colony operation against a friend, and calls off Election Interference, Financial Subversion,
 Ideological Subversion and Destabilization once they are fully operational and
 the target has become a friend. Its other operations have no friend test: it
 still spies on friends, and pays when it is exposed. An AI with a Covert Warfare

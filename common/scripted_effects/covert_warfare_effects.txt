@@ -1431,6 +1431,8 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
 	covert_op_sync = { TYPE = secure_material ACTION = covert_secure_material_action DEFENSE_MOD = country_covert_defense_military_add CODE = 13 }
 	covert_op_sync = { TYPE = counterintel_support ACTION = covert_counterintel_support_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
+	covert_op_sync = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 15 }
+	covert_op_sync = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action DEFENSE_MOD = country_covert_defense_military_add CODE = 16 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1769,6 +1771,48 @@ covert_ops_apply_all_phase_effects = {
 			}
 		}
 
+		# ---- Incite Colonial Autonomy (solar colonization slice 5): no
+		#      modifier. Once established, every colony the target holds gains
+		#      autonomy each month, sr_cov_incite_autonomy_base x the
+		#      operation's phase x priority (sr_cov_incite_autonomy,
+		#      sr_sites_generated.txt; it reads local_var:sr_cov_mult). Several
+		#      operators' campaigns add up. ----
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_incite_autonomy
+				covert_op_is_established = yes
+			}
+			set_local_variable = { name = sr_cov_mult value = covert_op_effect_mult }
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					sr_cov_incite_autonomy = yes
+				}
+			}
+		}
+
+		# ---- Colony Sabotage (solar colonization slice 5): no modifier.
+		#      Once established, the target's most populous colony loses
+		#      sr_cov_sabotage_share of its people each month and gains
+		#      sr_cov_sabotage_autonomy autonomy, both x phase x priority
+		#      (sr_cov_sabotage_colony, sr_sites_generated.txt; reads
+		#      local_var:sr_cov_mult). ----
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_sabotage_colony
+				covert_op_is_established = yes
+			}
+			set_local_variable = { name = sr_cov_mult value = covert_op_effect_mult }
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					sr_cov_sabotage_colony = yes
+				}
+			}
+		}
+
 		# The applied-priority snapshot just moved: recharge upkeep from it.
 		covert_refresh_priority_cost = yes
 	}
@@ -2083,6 +2127,14 @@ covert_watch_start = {
 		else_if = {
 			limit = { scope:iw_caught_op = { has_tag = iw_op_secure_material } }
 			covert_watch_record_create = { TYPE = secure_material }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_incite_autonomy } }
+			covert_watch_record_create = { TYPE = incite_autonomy }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_sabotage_colony } }
+			covert_watch_record_create = { TYPE = sabotage_colony }
 		}
 	}
 }

@@ -288,3 +288,83 @@ te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event
 		debug_log = "TE_SR_MODULES Extraplanetary Base room: [THIS.Var('sr_ebase_room').GetValue|0] levels, grade [THIS.Var('sr_ebase_grade').GetValue|2]% over [THIS.ScriptValue('sr_ebase_levels')|0] built"
 	}
 }
+
+te_debug_space_race.5 = { # REVIEWED 2026-10-26: console-only test event (`event te_debug_space_race.5`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/mars_communication_room.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = te_debug_space_race.5.t
+	desc = te_debug_space_race.5.d
+	flavor = te_debug_space_race.5.f
+
+	# Every world's autonomy, freedom and ties: TE_SR_AUTONOMY lines.
+	option = {
+		name = te_debug_space_race.5.a
+		default_option = yes
+		sr_aut_debug_log = yes
+	}
+
+	# Our first colony's autonomy to 80, its cooldown cleared: the next month's
+	# step asks us (space_race_events.94).
+	option = {
+		name = te_debug_space_race.5.b
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		set_local_variable = { name = sr_aut_delta value = 80 }
+		sr_site_by_index = { DO = debug_aut }
+	}
+
+	# Our first colony let go now: a free colony, ties 50 with us.
+	option = {
+		name = te_debug_space_race.5.c
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		sr_site_by_index = { DO = let_go }
+	}
+
+	# Every free colony supplied by us, then the entry's modifiers.
+	option = {
+		name = te_debug_space_race.5.e
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_free_any = yes
+		}
+		sr_free_debug_supply_all = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
+	# Full ties with every free colony we supply: a petition in the next
+	# month's step.
+	option = {
+		name = te_debug_space_race.5.g
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_free_any = yes
+		}
+		sr_free_debug_full_ties = yes
+	}
+
+	# Our first colony's abandonment question (space_race_events.93).
+	option = {
+		name = te_debug_space_race.5.h
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+			NOT = { has_variable = sr_abandon_site }
+		}
+		sr_aut_debug_first_held = yes
+		sr_aut_debug_abandon_ask = yes
+	}
+}

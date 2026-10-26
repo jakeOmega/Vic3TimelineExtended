@@ -6,8 +6,9 @@ modules; space fleets and marines; anything else that fits. Revised the same day
 through three rounds of the owner's answers (§ Decisions). This is a scoping
 document, a menu with a build order, not yet a design. Slices 0 and 1 are built
 (`2026-10-25-solar-colonization-holders-and-cession-design.md`), slices 2 and
-3 (`2026-10-25-solar-colonization-population-and-transit-design.md`), and slice
-4 (`2026-10-25-solar-colonization-modules-and-bases-design.md`). The calls still
+3 (`2026-10-25-solar-colonization-population-and-transit-design.md`), slice
+4 (`2026-10-25-solar-colonization-modules-and-bases-design.md`), and slice 5
+(`2026-10-26-solar-colonization-free-colonies-design.md`). The calls still
 open are in § 11. Read `docs/systems/mod_systems.md` § Space Race and
 `docs/player_guide/16-space.md` § Colonizing the solar system first; this
 document assumes both.

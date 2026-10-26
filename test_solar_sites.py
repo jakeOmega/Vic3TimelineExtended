@@ -282,7 +282,7 @@ class RuleTest(unittest.TestCase):
         settings = re.findall(r"(?m)^\t(\w+) = \{", body)
         self.assertEqual(settings, ["space_race_colonies_full", "space_race_colonies_simple",
                                     "space_race_enabled", "space_race_disabled"])
-        self.assertIn("default = space_race_enabled", body)
+        self.assertIn("default = space_race_colonies_simple", body)
         for setting in settings:
             self.assertIn(f"flag = {setting}", _block(body, setting))
 
@@ -935,6 +935,7 @@ class ModulesTest(unittest.TestCase):
 
     def test_the_module_rows_follow_the_table(self):
         rows = self.rows[self.rows.index("type te_sr_module_rows = flowcontainer {"):]
+        rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
         names = re.findall(r'text = "sr_site_name_(\w+)"', rows)
         self.assertEqual(names, [s.key for s in gss.panel_order()])
         for site in gss.SITES:
@@ -948,6 +949,169 @@ class ModulesTest(unittest.TestCase):
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {gss.MODULE_AI_VALUE} }}", value)
+
+
+class FreeColoniesTest(unittest.TestCase):
+    """Autonomy, free colonies, abandonment, the covert hooks and colony life
+    (slice 5, 2026-10-26-solar-colonization-free-colonies-design.md)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(str(gss.EFFECTS_OUT)))
+        cls.triggers = _strip(_raw(str(gss.TRIGGERS_OUT)))
+        cls.values = _strip(_raw(str(gss.VALUES_OUT)))
+        cls.display = _strip(_raw(str(gss.DISPLAY_OUT)))
+        cls.shared = _strip(_raw("common", "scripted_effects", "sr_colony_autonomy_effects.txt"))
+        cls.numbers = _strip(_raw("common", "script_values", "sr_colony_autonomy_values.txt"))
+        cls.events = _strip(_raw("events", "space_race_events.txt"))
+        cls.rows = _raw(str(gss.GUI_OUT))
+        cls.custom_loc = _raw(str(gss.CUSTOM_LOC_OUT))
+
+    def _number(self, name):
+        return float(re.search(rf"(?m)^{name} = \{{ value = (-?[\d.]+) \}}", self.numbers).group(1))
+
+    def test_every_world_has_its_slice_5_blocks(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                for name in (f"sr_site_free_or_release_{k}", f"sr_site_set_free_{k}", f"sr_site_rejoin_{k}",
+                             f"sr_site_clear_ties_{k}", f"sr_site_free_step_{k}", f"sr_site_aut_step_{k}"):
+                    self.assertRegex(self.effects, rf"(?m)^{name} = \{{")
+                for name in (f"sr_site_autonomy_value_{k}", f"sr_site_months_since_contact_{k}",
+                             f"sr_site_aut_drift_{k}", f"sr_site_charter_factor_{k}", f"sr_site_suppliers_value_{k}",
+                             f"sr_free_ties_value_{k}", f"sr_free_trade_share_{k}"):
+                    self.assertRegex(self.values, rf"(?m)^{name} = \{{")
+                self.assertRegex(self.triggers, rf"(?m)^sr_free_may_petition_{k} = \{{")
+                for name in (f"sr_disp_site_aut_{k}", f"sr_disp_site_aut_drift_{k}", f"sr_disp_site_aut_status_{k}",
+                             f"sr_disp_free_{k}", f"sr_disp_free_ties_{k}", f"sr_disp_free_supplied_{k}"):
+                    self.assertRegex(self.display, rf"(?m)^{name} = \{{")
+
+    def test_a_release_clears_the_whole_slice_5_record(self):
+        for site in gss.SITES:
+            release = _block(self.effects, f"sr_site_release_{site.key}")
+            with self.subTest(site=site.key):
+                for var in gss.slice5_vars(site):
+                    self.assertIn(f"remove_global_variable = {var}", release)
+                self.assertIn(f"sr_site_clear_ties_{site.key} = yes", release)
+
+    def test_a_free_colony_keeps_its_people_and_modules(self):
+        for site in gss.SITES:
+            k = site.key
+            free = _block(self.effects, f"sr_site_set_free_{k}")
+            with self.subTest(site=k):
+                self.assertIn(f"set_global_variable = {{ name = sr_site_free_{k} value = yes }}", free)
+                self.assertIn(f"remove_global_variable = sr_site_holder_{k}", free)
+                self.assertIn(f"sr_site_sync_{k} = yes", free)
+                for kept in [f"sr_site_pop_{k}", f"sr_colony_{k}", f"sr_site_spec_{k}", *gss.module_vars(site)]:
+                    self.assertNotIn(f"remove_global_variable = {kept} ", free + " ")
+                for gone in (f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}"):
+                    self.assertIn(f"remove_global_variable = {gone}", free)
+
+    def test_the_monthly_step_spares_a_free_colony_and_grows_it_only_supplied(self):
+        for site in gss.SITES:
+            k = site.key
+            monthly = _block(self.effects, f"sr_site_monthly_{k}")
+            with self.subTest(site=k):
+                # The adopt-or-release branch skips a free colony, which would be released after the grace.
+                adopt = monthly[monthly.index("random_country"):]
+                limit = monthly[:monthly.index("random_country")]
+                self.assertIn(f"NOT = {{ has_global_variable = sr_site_free_{k} }}", limit[limit.rindex("else_if"):])
+                self.assertIn(f"sr_site_release_{k} = yes", adopt)
+                # No heir: free or released, never straight to a release.
+                self.assertIn(f"sr_site_free_or_release_{k} = yes", monthly)
+                # Growth needs a supplier at a free colony.
+                growth = monthly[monthly.index(f"multiply = {1 + gss.GROWTH_PER_MONTH}") - 600:]
+                self.assertIn(f"sr_site_suppliers_value_{k} >= 1", growth)
+                self.assertIn(f"sr_site_free_step_{k} = yes", monthly)
+                self.assertIn(f"sr_site_aut_step_{k} = yes", monthly)
+                self.assertLess(monthly.index(f"sr_site_free_step_{k} = yes"), monthly.index(f"sr_site_suppliers_value_{k} >= 1"))
+                choice = _block(self.effects, f"sr_site_free_or_release_{k}")
+                self.assertIn("sr_colonies_contested_enabled = yes", choice)
+                self.assertIn(f"sr_site_pop_value_{k} >= sr_free_colony_minimum", choice)
+
+    def test_autonomy_breaks_at_100_and_asks_at_75_once_in_five_years(self):
+        self.assertEqual(self._number("sr_aut_ask_level"), 75)
+        self.assertEqual(self._number("sr_aut_break_level"), 100)
+        for site in gss.SITES:
+            k = site.key
+            step = _block(self.effects, f"sr_site_aut_step_{k}")
+            with self.subTest(site=k):
+                self.assertIn(f"add = sr_site_aut_drift_{k}", step)
+                self.assertIn("min = 0", step)
+                self.assertIn("max = sr_aut_break_level", step)
+                self.assertLess(step.index("sr_aut_break_away"), step.index("sr_aut_ask ="))
+                self.assertIn(f"name = sr_site_aut_asked_{k} value = yes days = 1825", step)
+                drift = _block(self.values, f"sr_site_aut_drift_{k}")
+                for term in ("sr_aut_home_pull", "sr_aut_per_10k_people", "sr_aut_per_transit_month",
+                             "sr_aut_distance_cap", "sr_aut_no_contact", "sr_aut_at_war", "sr_aut_garrisoned",
+                             "sr_aut_chartered"):
+                    self.assertIn(term, drift)
+                self.assertIn(f"sr_transit_months_{gss.transit_body(site)}", drift)
+
+    def test_the_charter_scales_the_specializations(self):
+        self.assertEqual(self._number("sr_aut_charter_share"), 0.8)
+        for site in gss.SITES:
+            for slot in ("a", "b"):
+                with self.subTest(site=site.key, slot=slot):
+                    self.assertIn(f"multiply = sr_site_charter_factor_{site.key}",
+                                  _block(self.values, f"sr_site_mult_{slot}_{site.key}"))
+
+    def test_the_garrison_goes_home_with_a_cession(self):
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"remove_global_variable = sr_site_garrison_{site.key}",
+                              _block(self.effects, f"sr_site_transfer_{site.key}"))
+
+    def test_every_dispatched_helper_exists_and_names_its_key(self):
+        for action in gss.SITE_ACTIONS:
+            with self.subTest(action=action):
+                body = _block(self.shared, f"sr_site_{action}_at")
+                self.assertIn("$KEY$", body)
+        for dispatcher in ("sr_site_by_index", "sr_site_by_scope"):
+            body = _block(self.effects, dispatcher)
+            self.assertEqual(body.count("sr_site_$DO$_at = { KEY = "), len(gss.SITES))
+        # Every DO a caller passes is one of them.
+        used = set()
+        for text in (self.events, self.shared, self.effects,
+                     _strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt")),
+                     _strip(_raw("events", "te_debug_space_race_events.txt"))):
+            used |= set(re.findall(r"sr_site_by_(?:index|scope) = \{ DO = (\w+) \}", text))
+        self.assertTrue(used)
+        self.assertLessEqual(used, set(gss.SITE_ACTIONS))
+
+    def test_the_covert_hooks_reach_every_world(self):
+        incite = _block(self.effects, "sr_cov_incite_autonomy")
+        sabotage = _block(self.effects, "sr_cov_sabotage_colony")
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"global_var:sr_site_holder_{site.key} ?= this", incite)
+                self.assertIn(f"sr_site_pop_value_{site.key} > local_var:sr_cov_best", sabotage)
+        self.assertIn("local_var:sr_cov_mult", incite)
+        self.assertIn("local_var:sr_cov_mult", sabotage)
+        self.assertIn("sr_site_by_index = { DO = sabotage }", sabotage)
+
+    def test_each_event_names_its_world_and_clears_it(self):
+        names = {"sr_abandon_site": 93, "sr_aut_site": 94, "sr_life_site": (95, 96, 97), "sr_freed_site": 98,
+                 "sr_petition_site": 99}
+        for var, ids in names.items():
+            self.assertIn(f"{var}_name = {{", self.custom_loc)
+            for n in (ids if isinstance(ids, tuple) else (ids,)):
+                with self.subTest(event=n):
+                    event = _block(self.events, f"space_race_events.{n}")
+                    self.assertIn(f"trigger = {{ has_variable = {var} }}", event)
+                    self.assertIn(f"sr_site_clear_event_var = {{ VAR = {var} }}", _block(event, "after"))
+
+    def test_the_autonomy_and_free_rows_follow_the_table(self):
+        for row_type in ("te_sr_autonomy_rows", "te_sr_free_rows"):
+            rows = self.rows[self.rows.index(f"type {row_type} = flowcontainer {{"):]
+            rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
+            with self.subTest(rows=row_type):
+                self.assertEqual(re.findall(r'text = "sr_site_name_(\w+)"', rows), [s.key for s in gss.panel_order()])
+        solar = self.rows[self.rows.index("type te_sr_solar_system_rows"):]
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"has_global_variable = sr_site_free_{site.key} }} value = 4", self.display)
+        self.assertEqual(solar.count('blockoverride "site_free_visible"'), len(gss.SITES))
 
 
 if __name__ == "__main__":

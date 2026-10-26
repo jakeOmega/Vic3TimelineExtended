@@ -2923,3 +2923,411 @@ sr_mod_scope_has_queue = {
 		AND = { scope:site = 34 sr_mq_any_sedna = yes }
 	}
 }
+
+# ===== Autonomy and free colonies (slice 5 design) =====
+# Some world is a free colony. Any scope.
+sr_free_any = {
+	OR = {
+		has_global_variable = sr_site_free_valles_marineris
+		has_global_variable = sr_site_free_olympus_mons
+		has_global_variable = sr_site_free_hellas_planitia
+		has_global_variable = sr_site_free_utopia_planitia
+		has_global_variable = sr_site_free_arcadia_planitia
+		has_global_variable = sr_site_free_ceres
+		has_global_variable = sr_site_free_vesta
+		has_global_variable = sr_site_free_psyche
+		has_global_variable = sr_site_free_pallas
+		has_global_variable = sr_site_free_hygiea
+		has_global_variable = sr_site_free_io
+		has_global_variable = sr_site_free_europa
+		has_global_variable = sr_site_free_ganymede
+		has_global_variable = sr_site_free_callisto
+		has_global_variable = sr_site_free_himalia
+		has_global_variable = sr_site_free_amalthea
+		has_global_variable = sr_site_free_venus
+		has_global_variable = sr_site_free_mercury
+		has_global_variable = sr_site_free_titan
+		has_global_variable = sr_site_free_enceladus
+		has_global_variable = sr_site_free_rhea
+		has_global_variable = sr_site_free_mimas
+		has_global_variable = sr_site_free_iapetus
+		has_global_variable = sr_site_free_titania
+		has_global_variable = sr_site_free_oberon
+		has_global_variable = sr_site_free_miranda
+		has_global_variable = sr_site_free_ariel
+		has_global_variable = sr_site_free_triton
+		has_global_variable = sr_site_free_proteus
+		has_global_variable = sr_site_free_pluto
+		has_global_variable = sr_site_free_eris
+		has_global_variable = sr_site_free_makemake
+		has_global_variable = sr_site_free_haumea
+		has_global_variable = sr_site_free_sedna
+	}
+}
+
+# THIS holds a colony of at least MIN people (the life events).
+sr_life_has_colony = {
+	OR = {
+		AND = { global_var:sr_site_holder_valles_marineris ?= this sr_site_pop_value_valles_marineris >= $MIN$ }
+		AND = { global_var:sr_site_holder_olympus_mons ?= this sr_site_pop_value_olympus_mons >= $MIN$ }
+		AND = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_pop_value_hellas_planitia >= $MIN$ }
+		AND = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_pop_value_utopia_planitia >= $MIN$ }
+		AND = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_pop_value_arcadia_planitia >= $MIN$ }
+		AND = { global_var:sr_site_holder_ceres ?= this sr_site_pop_value_ceres >= $MIN$ }
+		AND = { global_var:sr_site_holder_vesta ?= this sr_site_pop_value_vesta >= $MIN$ }
+		AND = { global_var:sr_site_holder_psyche ?= this sr_site_pop_value_psyche >= $MIN$ }
+		AND = { global_var:sr_site_holder_pallas ?= this sr_site_pop_value_pallas >= $MIN$ }
+		AND = { global_var:sr_site_holder_hygiea ?= this sr_site_pop_value_hygiea >= $MIN$ }
+		AND = { global_var:sr_site_holder_io ?= this sr_site_pop_value_io >= $MIN$ }
+		AND = { global_var:sr_site_holder_europa ?= this sr_site_pop_value_europa >= $MIN$ }
+		AND = { global_var:sr_site_holder_ganymede ?= this sr_site_pop_value_ganymede >= $MIN$ }
+		AND = { global_var:sr_site_holder_callisto ?= this sr_site_pop_value_callisto >= $MIN$ }
+		AND = { global_var:sr_site_holder_himalia ?= this sr_site_pop_value_himalia >= $MIN$ }
+		AND = { global_var:sr_site_holder_amalthea ?= this sr_site_pop_value_amalthea >= $MIN$ }
+		AND = { global_var:sr_site_holder_venus ?= this sr_site_pop_value_venus >= $MIN$ }
+		AND = { global_var:sr_site_holder_mercury ?= this sr_site_pop_value_mercury >= $MIN$ }
+		AND = { global_var:sr_site_holder_titan ?= this sr_site_pop_value_titan >= $MIN$ }
+		AND = { global_var:sr_site_holder_enceladus ?= this sr_site_pop_value_enceladus >= $MIN$ }
+		AND = { global_var:sr_site_holder_rhea ?= this sr_site_pop_value_rhea >= $MIN$ }
+		AND = { global_var:sr_site_holder_mimas ?= this sr_site_pop_value_mimas >= $MIN$ }
+		AND = { global_var:sr_site_holder_iapetus ?= this sr_site_pop_value_iapetus >= $MIN$ }
+		AND = { global_var:sr_site_holder_titania ?= this sr_site_pop_value_titania >= $MIN$ }
+		AND = { global_var:sr_site_holder_oberon ?= this sr_site_pop_value_oberon >= $MIN$ }
+		AND = { global_var:sr_site_holder_miranda ?= this sr_site_pop_value_miranda >= $MIN$ }
+		AND = { global_var:sr_site_holder_ariel ?= this sr_site_pop_value_ariel >= $MIN$ }
+		AND = { global_var:sr_site_holder_triton ?= this sr_site_pop_value_triton >= $MIN$ }
+		AND = { global_var:sr_site_holder_proteus ?= this sr_site_pop_value_proteus >= $MIN$ }
+		AND = { global_var:sr_site_holder_pluto ?= this sr_site_pop_value_pluto >= $MIN$ }
+		AND = { global_var:sr_site_holder_eris ?= this sr_site_pop_value_eris >= $MIN$ }
+		AND = { global_var:sr_site_holder_makemake ?= this sr_site_pop_value_makemake >= $MIN$ }
+		AND = { global_var:sr_site_holder_haumea ?= this sr_site_pop_value_haumea >= $MIN$ }
+		AND = { global_var:sr_site_holder_sedna ?= this sr_site_pop_value_sedna >= $MIN$ }
+	}
+}
+
+# Per world, country scope: THIS may receive the free colony's petition: it supplies
+# it with full ties, can hold a colony, and has no petition open.
+sr_free_may_petition_valles_marineris = {
+	has_variable = sr_free_supply_valles_marineris
+	sr_free_ties_value_valles_marineris >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_olympus_mons = {
+	has_variable = sr_free_supply_olympus_mons
+	sr_free_ties_value_olympus_mons >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_hellas_planitia = {
+	has_variable = sr_free_supply_hellas_planitia
+	sr_free_ties_value_hellas_planitia >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_utopia_planitia = {
+	has_variable = sr_free_supply_utopia_planitia
+	sr_free_ties_value_utopia_planitia >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_arcadia_planitia = {
+	has_variable = sr_free_supply_arcadia_planitia
+	sr_free_ties_value_arcadia_planitia >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_ceres = {
+	has_variable = sr_free_supply_ceres
+	sr_free_ties_value_ceres >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_vesta = {
+	has_variable = sr_free_supply_vesta
+	sr_free_ties_value_vesta >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_psyche = {
+	has_variable = sr_free_supply_psyche
+	sr_free_ties_value_psyche >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_pallas = {
+	has_variable = sr_free_supply_pallas
+	sr_free_ties_value_pallas >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_hygiea = {
+	has_variable = sr_free_supply_hygiea
+	sr_free_ties_value_hygiea >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_io = {
+	has_variable = sr_free_supply_io
+	sr_free_ties_value_io >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_europa = {
+	has_variable = sr_free_supply_europa
+	sr_free_ties_value_europa >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_ganymede = {
+	has_variable = sr_free_supply_ganymede
+	sr_free_ties_value_ganymede >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_callisto = {
+	has_variable = sr_free_supply_callisto
+	sr_free_ties_value_callisto >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_himalia = {
+	has_variable = sr_free_supply_himalia
+	sr_free_ties_value_himalia >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_amalthea = {
+	has_variable = sr_free_supply_amalthea
+	sr_free_ties_value_amalthea >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_venus = {
+	has_variable = sr_free_supply_venus
+	sr_free_ties_value_venus >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_mercury = {
+	has_variable = sr_free_supply_mercury
+	sr_free_ties_value_mercury >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_titan = {
+	has_variable = sr_free_supply_titan
+	sr_free_ties_value_titan >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_enceladus = {
+	has_variable = sr_free_supply_enceladus
+	sr_free_ties_value_enceladus >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_rhea = {
+	has_variable = sr_free_supply_rhea
+	sr_free_ties_value_rhea >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_mimas = {
+	has_variable = sr_free_supply_mimas
+	sr_free_ties_value_mimas >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_iapetus = {
+	has_variable = sr_free_supply_iapetus
+	sr_free_ties_value_iapetus >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_titania = {
+	has_variable = sr_free_supply_titania
+	sr_free_ties_value_titania >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_oberon = {
+	has_variable = sr_free_supply_oberon
+	sr_free_ties_value_oberon >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_miranda = {
+	has_variable = sr_free_supply_miranda
+	sr_free_ties_value_miranda >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_ariel = {
+	has_variable = sr_free_supply_ariel
+	sr_free_ties_value_ariel >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_triton = {
+	has_variable = sr_free_supply_triton
+	sr_free_ties_value_triton >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_proteus = {
+	has_variable = sr_free_supply_proteus
+	sr_free_ties_value_proteus >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_pluto = {
+	has_variable = sr_free_supply_pluto
+	sr_free_ties_value_pluto >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_eris = {
+	has_variable = sr_free_supply_eris
+	sr_free_ties_value_eris >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_makemake = {
+	has_variable = sr_free_supply_makemake
+	sr_free_ties_value_makemake >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_haumea = {
+	has_variable = sr_free_supply_haumea
+	sr_free_ties_value_haumea >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+sr_free_may_petition_sedna = {
+	has_variable = sr_free_supply_sedna
+	sr_free_ties_value_sedna >= sr_free_ties_full
+	sr_site_can_hold = yes
+	NOT = { has_variable = sr_petition_site }
+}
+
+# THIS's event world (VAR, a country variable holding its index) holds at least MIN
+# people (space_race_events.93).
+sr_site_var_people = {
+	has_variable = $VAR$
+	OR = {
+		AND = { var:$VAR$ = 1 sr_site_pop_value_valles_marineris >= $MIN$ }
+		AND = { var:$VAR$ = 2 sr_site_pop_value_olympus_mons >= $MIN$ }
+		AND = { var:$VAR$ = 3 sr_site_pop_value_hellas_planitia >= $MIN$ }
+		AND = { var:$VAR$ = 4 sr_site_pop_value_utopia_planitia >= $MIN$ }
+		AND = { var:$VAR$ = 5 sr_site_pop_value_arcadia_planitia >= $MIN$ }
+		AND = { var:$VAR$ = 6 sr_site_pop_value_ceres >= $MIN$ }
+		AND = { var:$VAR$ = 7 sr_site_pop_value_vesta >= $MIN$ }
+		AND = { var:$VAR$ = 8 sr_site_pop_value_psyche >= $MIN$ }
+		AND = { var:$VAR$ = 9 sr_site_pop_value_pallas >= $MIN$ }
+		AND = { var:$VAR$ = 10 sr_site_pop_value_hygiea >= $MIN$ }
+		AND = { var:$VAR$ = 11 sr_site_pop_value_io >= $MIN$ }
+		AND = { var:$VAR$ = 12 sr_site_pop_value_europa >= $MIN$ }
+		AND = { var:$VAR$ = 13 sr_site_pop_value_ganymede >= $MIN$ }
+		AND = { var:$VAR$ = 14 sr_site_pop_value_callisto >= $MIN$ }
+		AND = { var:$VAR$ = 15 sr_site_pop_value_himalia >= $MIN$ }
+		AND = { var:$VAR$ = 16 sr_site_pop_value_amalthea >= $MIN$ }
+		AND = { var:$VAR$ = 17 sr_site_pop_value_venus >= $MIN$ }
+		AND = { var:$VAR$ = 18 sr_site_pop_value_mercury >= $MIN$ }
+		AND = { var:$VAR$ = 19 sr_site_pop_value_titan >= $MIN$ }
+		AND = { var:$VAR$ = 20 sr_site_pop_value_enceladus >= $MIN$ }
+		AND = { var:$VAR$ = 21 sr_site_pop_value_rhea >= $MIN$ }
+		AND = { var:$VAR$ = 22 sr_site_pop_value_mimas >= $MIN$ }
+		AND = { var:$VAR$ = 23 sr_site_pop_value_iapetus >= $MIN$ }
+		AND = { var:$VAR$ = 24 sr_site_pop_value_titania >= $MIN$ }
+		AND = { var:$VAR$ = 25 sr_site_pop_value_oberon >= $MIN$ }
+		AND = { var:$VAR$ = 26 sr_site_pop_value_miranda >= $MIN$ }
+		AND = { var:$VAR$ = 27 sr_site_pop_value_ariel >= $MIN$ }
+		AND = { var:$VAR$ = 28 sr_site_pop_value_triton >= $MIN$ }
+		AND = { var:$VAR$ = 29 sr_site_pop_value_proteus >= $MIN$ }
+		AND = { var:$VAR$ = 30 sr_site_pop_value_pluto >= $MIN$ }
+		AND = { var:$VAR$ = 31 sr_site_pop_value_eris >= $MIN$ }
+		AND = { var:$VAR$ = 32 sr_site_pop_value_makemake >= $MIN$ }
+		AND = { var:$VAR$ = 33 sr_site_pop_value_haumea >= $MIN$ }
+		AND = { var:$VAR$ = 34 sr_site_pop_value_sedna >= $MIN$ }
+	}
+}
+
+# The scripted GUIs' world (scope:site): a free colony; one THIS supplies.
+sr_free_scope_site_free = {
+	OR = {
+		AND = { scope:site = 1 has_global_variable = sr_site_free_valles_marineris }
+		AND = { scope:site = 2 has_global_variable = sr_site_free_olympus_mons }
+		AND = { scope:site = 3 has_global_variable = sr_site_free_hellas_planitia }
+		AND = { scope:site = 4 has_global_variable = sr_site_free_utopia_planitia }
+		AND = { scope:site = 5 has_global_variable = sr_site_free_arcadia_planitia }
+		AND = { scope:site = 6 has_global_variable = sr_site_free_ceres }
+		AND = { scope:site = 7 has_global_variable = sr_site_free_vesta }
+		AND = { scope:site = 8 has_global_variable = sr_site_free_psyche }
+		AND = { scope:site = 9 has_global_variable = sr_site_free_pallas }
+		AND = { scope:site = 10 has_global_variable = sr_site_free_hygiea }
+		AND = { scope:site = 11 has_global_variable = sr_site_free_io }
+		AND = { scope:site = 12 has_global_variable = sr_site_free_europa }
+		AND = { scope:site = 13 has_global_variable = sr_site_free_ganymede }
+		AND = { scope:site = 14 has_global_variable = sr_site_free_callisto }
+		AND = { scope:site = 15 has_global_variable = sr_site_free_himalia }
+		AND = { scope:site = 16 has_global_variable = sr_site_free_amalthea }
+		AND = { scope:site = 17 has_global_variable = sr_site_free_venus }
+		AND = { scope:site = 18 has_global_variable = sr_site_free_mercury }
+		AND = { scope:site = 19 has_global_variable = sr_site_free_titan }
+		AND = { scope:site = 20 has_global_variable = sr_site_free_enceladus }
+		AND = { scope:site = 21 has_global_variable = sr_site_free_rhea }
+		AND = { scope:site = 22 has_global_variable = sr_site_free_mimas }
+		AND = { scope:site = 23 has_global_variable = sr_site_free_iapetus }
+		AND = { scope:site = 24 has_global_variable = sr_site_free_titania }
+		AND = { scope:site = 25 has_global_variable = sr_site_free_oberon }
+		AND = { scope:site = 26 has_global_variable = sr_site_free_miranda }
+		AND = { scope:site = 27 has_global_variable = sr_site_free_ariel }
+		AND = { scope:site = 28 has_global_variable = sr_site_free_triton }
+		AND = { scope:site = 29 has_global_variable = sr_site_free_proteus }
+		AND = { scope:site = 30 has_global_variable = sr_site_free_pluto }
+		AND = { scope:site = 31 has_global_variable = sr_site_free_eris }
+		AND = { scope:site = 32 has_global_variable = sr_site_free_makemake }
+		AND = { scope:site = 33 has_global_variable = sr_site_free_haumea }
+		AND = { scope:site = 34 has_global_variable = sr_site_free_sedna }
+	}
+}
+sr_free_scope_site_supplied = {
+	OR = {
+		AND = { scope:site = 1 has_variable = sr_free_supply_valles_marineris }
+		AND = { scope:site = 2 has_variable = sr_free_supply_olympus_mons }
+		AND = { scope:site = 3 has_variable = sr_free_supply_hellas_planitia }
+		AND = { scope:site = 4 has_variable = sr_free_supply_utopia_planitia }
+		AND = { scope:site = 5 has_variable = sr_free_supply_arcadia_planitia }
+		AND = { scope:site = 6 has_variable = sr_free_supply_ceres }
+		AND = { scope:site = 7 has_variable = sr_free_supply_vesta }
+		AND = { scope:site = 8 has_variable = sr_free_supply_psyche }
+		AND = { scope:site = 9 has_variable = sr_free_supply_pallas }
+		AND = { scope:site = 10 has_variable = sr_free_supply_hygiea }
+		AND = { scope:site = 11 has_variable = sr_free_supply_io }
+		AND = { scope:site = 12 has_variable = sr_free_supply_europa }
+		AND = { scope:site = 13 has_variable = sr_free_supply_ganymede }
+		AND = { scope:site = 14 has_variable = sr_free_supply_callisto }
+		AND = { scope:site = 15 has_variable = sr_free_supply_himalia }
+		AND = { scope:site = 16 has_variable = sr_free_supply_amalthea }
+		AND = { scope:site = 17 has_variable = sr_free_supply_venus }
+		AND = { scope:site = 18 has_variable = sr_free_supply_mercury }
+		AND = { scope:site = 19 has_variable = sr_free_supply_titan }
+		AND = { scope:site = 20 has_variable = sr_free_supply_enceladus }
+		AND = { scope:site = 21 has_variable = sr_free_supply_rhea }
+		AND = { scope:site = 22 has_variable = sr_free_supply_mimas }
+		AND = { scope:site = 23 has_variable = sr_free_supply_iapetus }
+		AND = { scope:site = 24 has_variable = sr_free_supply_titania }
+		AND = { scope:site = 25 has_variable = sr_free_supply_oberon }
+		AND = { scope:site = 26 has_variable = sr_free_supply_miranda }
+		AND = { scope:site = 27 has_variable = sr_free_supply_ariel }
+		AND = { scope:site = 28 has_variable = sr_free_supply_triton }
+		AND = { scope:site = 29 has_variable = sr_free_supply_proteus }
+		AND = { scope:site = 30 has_variable = sr_free_supply_pluto }
+		AND = { scope:site = 31 has_variable = sr_free_supply_eris }
+		AND = { scope:site = 32 has_variable = sr_free_supply_makemake }
+		AND = { scope:site = 33 has_variable = sr_free_supply_haumea }
+		AND = { scope:site = 34 has_variable = sr_free_supply_sedna }
+	}
+}

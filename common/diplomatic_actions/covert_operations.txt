@@ -42,23 +42,26 @@
 # The AI is kept off friends with the six operations that used to be refused
 # at good relations (election interference, financial subversion,
 # infrastructure sabotage, communications disruption, ideological subversion,
-# destabilization); the others keep the AI logic they had.
+# destabilization) and with the two colony operations, which were written
+# that way (incite colonial autonomy, sabotage colony); the others keep the AI
+# logic they had.
 # test_covert_friend.py holds the rule.
 #
 # AI DESIGN:
 # - Low evaluation_chance (0.02–0.05) — strategic long-term decisions, not
 #   re-evaluated every tick. Prevents spammy on/off toggling.
 # - will_propose guards: country rank, financial health (in_default = no),
-#   attitude/rivalry requirement, IC advantage for some ops, and, for the six
-#   operations named under FRIENDS, a target that is not a friend.
+#   attitude/rivalry requirement, IC advantage for some ops, and, for the
+#   eight operations named under FRIENDS, a target that is not a friend.
 # - propose_score scales with rivalry, rank, ruler personality.
 # - Wartime ops have higher eval chance — urgency justifies faster decisions.
 # - Ruler personality: aggressive rulers more likely, cautious less.
 # - Target size: upkeep scales with the operator's GDP, so an operation whose
 #   payoff scales with the target's size takes covert_ai_target_worth_the_upkeep
 #   (covert_warfare_triggers.txt): no much weaker target without money to burn.
-#   Espionage, nuclear programme sabotage and secure loose material don't take
-#   it; test_covert_ai_targets.py holds the two lists.
+#   Espionage, nuclear programme sabotage, secure loose material and the two
+#   colony operations don't take it; test_covert_ai_targets.py holds the two
+#   lists.
 # - Influence: a costed operation launches only with covert_ai_influence_floor
 #   available (covert_ai_can_spare_influence), and a breakable one, once
 #   settled, is also called off while influence is in deficit. What breaking
@@ -68,9 +71,9 @@
 #   operation until it is fully operational (covert_ai_op_settled), then ends
 #   it only once its reason has gone, judged more loosely than at launch:
 #   hostility (covert_ai_hostility_gone), nothing left to steal, no milestone
-#   of our own, influence in deficit, or (election interference, financial
-#   subversion, ideological subversion, destabilization) a target that has
-#   become a friend. Wartime operations, influence campaign, secure loose
+#   of our own, no stake in space at all (the colony operations), influence
+#   in deficit, or (election interference, financial subversion, ideological
+#   subversion, destabilization) a target that has become a friend. Wartime operations, influence campaign, secure loose
 #   material and counterintelligence support are never called off by choice;
 #   their requirement_to_maintain ends them. Cultivate assets also stops once its network reaches
 #   covert_cultivate_ai_net_done. Launch-only tests (free slot, intelligence
@@ -2750,6 +2753,382 @@ covert_counterintel_support_action = {
 			# A subject's security is ours.
 			if = {
 				limit = { scope:target_country = { is_subject_of = ROOT } }
+				add = 5
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# INCITE COLONIAL AUTONOMY (solar colonization slice 5,
+# docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md § 6)
+# ----------------------------------------------------------------------------
+# Agitators, money and a story about home rule, carried out to the target's
+# colonies in the solar system. No modifier: once established, every colony
+# the target holds gains autonomy each month, sr_cov_incite_autonomy_base
+# (0.5) x the operation's phase x priority (1 to 3.2), through the space
+# race's sr_cov_incite_autonomy (covert_ops_apply_all_phase_effects). A colony
+# at 100 breaks away and becomes a free colony. Moderate tier: meddling in how
+# the target governs its own. Only under the Space Race rule's simple and
+# full colony settings (sr_colonies_contested_enabled), where colonies have
+# autonomy; lapses when the target holds no colony.
+covert_incite_autonomy_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_incite_autonomy_action.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_incite_autonomy_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
+		covert_op_start = { TYPE = incite_autonomy DEFENSE_MOD = country_covert_defense_ideological_add CODE = 15 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		sr_colonies_contested_enabled = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
+			text = covert_op_capacity_incite_autonomy_tt
+			covert_ops_type_below_cap = { TYPE = covert_incite_autonomy_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_incite_autonomy_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_holds_space_colony_tt
+			scope:target_country = { sr_has_space_colony = yes }
+		}
+	}
+
+	pact = {
+		cost = 50 # influence, moderate tier (INFLUENCE, file header)
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# Nothing left to incite once the target's last colony has gone, freed,
+		# ceded or abandoned: the operation ends by itself.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_holds_space_colony_tt
+					scope:target_country = { sr_has_space_colony = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = incite_autonomy } }
+		auto_break_effect = { covert_op_end = { TYPE = incite_autonomy } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
+		}
+
+		# A rival in the solar system: the target holds a colony while we hold
+		# one or run a milestone of our own. Not against a friend.
+		will_propose = {
+			scope:target_country = { sr_has_space_colony = yes }
+			OR = {
+				sr_has_space_colony = yes
+				sr_has_running_milestone = yes
+			}
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_incite_autonomy_action }
+		}
+
+		# Kept until fully operational, then until we have no stake in space
+		# left (no colony, no milestone running) or influence runs into
+		# deficit (the target's colonies are a requirement_to_maintain)
+		will_break = {
+			covert_ai_op_settled = { TYPE = incite_autonomy TARGET = scope:target_country }
+			OR = {
+				NOR = {
+					sr_has_space_colony = yes
+					sr_has_running_milestone = yes
+				}
+				influence < 0
+			}
+		}
+
+		propose_score = {
+			value = 5
+			# A rival's colonies are the ones worth setting free.
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 5
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# SABOTAGE COLONY (solar colonization slice 5,
+# docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md § 6)
+# ----------------------------------------------------------------------------
+# Failed seals, poisoned stores and air that runs out, in the target's most
+# populous colony. No modifier: once established, that colony loses
+# sr_cov_sabotage_share (1%) of its people each month and gains
+# sr_cov_sabotage_autonomy (0.25) autonomy, both x the operation's phase x
+# priority (1 to 3.2), through the space race's sr_cov_sabotage_colony
+# (covert_ops_apply_all_phase_effects). Severe tier: people die. Needs a
+# Seasoned agency to launch (possible only: a running operation survives the
+# agency's score falling, as nuclear sabotage does). Only under the simple and
+# full colony settings; lapses when the target holds no colony.
+covert_sabotage_colony_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_sabotage_colony_action.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_sabotage_colony_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
+		covert_op_start = { TYPE = sabotage_colony DEFENSE_MOD = country_covert_defense_military_add CODE = 16 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		sr_colonies_contested_enabled = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
+			text = covert_op_capacity_sabotage_colony_tt
+			covert_ops_type_below_cap = { TYPE = covert_sabotage_colony_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_sabotage_colony_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_holds_space_colony_tt
+			scope:target_country = { sr_has_space_colony = yes }
+		}
+		custom_tooltip = {
+			text = iw_severe_ops_need_tradecraft_tt
+			covert_tradecraft_unlocks_severe_ops = yes
+		}
+	}
+
+	pact = {
+		cost = 100 # influence, severe tier (INFLUENCE, file header)
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# The Tradecraft gate is launch-only: a running operation survives the
+		# agency's score falling below Seasoned. Nothing left to sabotage once
+		# the target's last colony has gone: the operation ends by itself.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_holds_space_colony_tt
+					scope:target_country = { sr_has_space_colony = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = sabotage_colony } }
+		auto_break_effect = { covert_op_end = { TYPE = sabotage_colony } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
+		}
+
+		# Incite's test, against a rival or an enemy at war with us only.
+		will_propose = {
+			scope:target_country = { sr_has_space_colony = yes }
+			OR = {
+				sr_has_space_colony = yes
+				sr_has_running_milestone = yes
+			}
+			OR = {
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				has_war_with = scope:target_country
+			}
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_sabotage_colony_action }
+		}
+
+		# Kept until fully operational, then until the hostility is gone, we
+		# have no stake in space left (no colony, no milestone running) or
+		# influence runs into deficit
+		will_break = {
+			covert_ai_op_settled = { TYPE = sabotage_colony TARGET = scope:target_country }
+			OR = {
+				covert_ai_hostility_gone = { TARGET = scope:target_country }
+				NOR = {
+					sr_has_space_colony = yes
+					sr_has_running_milestone = yes
+				}
+				influence < 0
+			}
+		}
+
+		propose_score = {
+			value = 5
+			if = {
+				limit = { has_war_with = scope:target_country }
+				add = 10
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
 				add = 5
 			}
 		}

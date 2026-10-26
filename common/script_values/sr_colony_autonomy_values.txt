@@ -1,0 +1,126 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — autonomy, free colonies, colony life: the numbers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md
+# (slice 5 of the scope). Simple and full colonies only. The per-world values
+# that read these are generated (sr_sites_generated.txt's sr_site_aut_drift_<key>,
+# sr_site_charter_factor_<key>, sr_free_trade_share_<key>); the effects are in
+# sr_colony_autonomy_effects.txt. First guesses, to tune in play.
+# ============================================================================
+
+# ---- Autonomy (design § 2): the thresholds, in points of 0-100 -----------------------
+# At sr_aut_ask_level the holder is asked (space_race_events.94), once in five
+# years per world; at sr_aut_break_level the colony breaks away.
+sr_aut_ask_level = { value = 75 }
+sr_aut_break_level = { value = 100 }
+
+# The drift's terms, in points a month (sr_site_aut_drift_<key>, holder scope).
+# The pull of home, always.
+sr_aut_home_pull = { value = -0.25 }
+# A 10,000 of the colony's people.
+sr_aut_per_10k_people = { value = 0.05 }
+# A month of the holder's transit to the world's body (its drive), at most the cap.
+sr_aut_per_transit_month = { value = 0.01 }
+sr_aut_distance_cap = { value = 0.5 }
+# More than sr_aut_no_contact_months since settlers, a module or a founding landed.
+sr_aut_no_contact_months = { value = 12 }
+sr_aut_no_contact = { value = 0.25 }
+# The holder at war.
+sr_aut_at_war = { value = 0.25 }
+# A garrison's resentment, for its ten years; a charter's self-government, for good.
+sr_aut_garrisoned = { value = 0.2 }
+sr_aut_chartered = { value = -0.4 }
+
+# The autonomy event's answers (space_race_events.94): what each takes off now,
+# and the share of its specializations a chartered colony keeps working for its
+# holder (sr_site_charter_factor_<key>, in sr_site_mult_<a|b>_<key>).
+sr_aut_charter_cut = { value = -30 }
+sr_aut_garrison_cut = { value = -25 }
+sr_aut_charter_share = { value = 0.8 }
+
+# A free colony that rejoins starts here.
+sr_aut_rejoin_level = { value = 20 }
+
+# ---- Free colonies (design § 3) -----------------------------------------------------
+# A world needs this many people to stand as a free colony: below it a dead
+# holder's world is released, and an outpost can only be closed.
+sr_free_colony_minimum = { value = 1000 }
+
+# Ties, 0-100, per supplier: gained each month of supply, lost each month
+# without; at full ties the colony asks to join (space_race_events.99). A colony
+# let go amicably starts at sr_free_ties_amicable with its old holder, and a
+# declined petition falls back to it.
+sr_free_ties_gain_month = { value = 2 }
+sr_free_ties_decay_month = { value = 1 }
+sr_free_ties_full = { value = 100 }
+sr_free_ties_amicable = { value = 50 }
+
+# Trade (Free Colony Trade on the supplier's entry): a unit a this many of the
+# colony's people, shared among its suppliers, at most sr_free_trade_max_units.
+sr_free_trade_people_per_unit = { value = 20000 }
+sr_free_trade_max_units = { value = 5 }
+
+# The AI supplies at most this many free colonies (sr_free_ai_review).
+sr_free_ai_max = { value = 2 }
+
+# The entry's three modifiers' multipliers (sr_emig_refresh_modifiers). They
+# resolve in the entry's scope, so they read the country through owner
+# (je_multiplier_scope_audit).
+sr_free_supply_units = {
+	value = 0
+	owner = { add = sr_free_supply_count }
+}
+sr_free_trade_units_entry = {
+	value = 0
+	owner = { add = sr_free_trade_units }
+}
+sr_garrison_units = {
+	value = 0
+	owner = { add = sr_garrison_count }
+}
+
+# ---- Covert operations (design § 6) -------------------------------------------------
+# A month, times the operation's phase x priority multiplier (1 to 3.2):
+# Incite Colonial Autonomy's autonomy at every colony of the target; Sabotage
+# Colony's share of the target's most populous colony's people, and its autonomy.
+sr_cov_incite_autonomy_base = { value = 0.5 }
+sr_cov_sabotage_share = { value = 0.01 }
+sr_cov_sabotage_autonomy = { value = 0.25 }
+
+# ---- Colony life (design § 7) -------------------------------------------------------
+# The people a colony needs for each event, the monthly chances (percent, for a
+# holder of such a colony) and the share of its people a dome breach kills.
+sr_life_first_child_people = { value = 2000 }
+sr_life_strike_people = { value = 10000 }
+sr_life_breach_people = { value = 5000 }
+sr_life_strike_chance = { value = 2 }
+sr_life_breach_chance = { value = 1 }
+sr_life_breach_share = { value = 0.1 }
+
+# ---- Evacuation (design § 4) --------------------------------------------------------
+# create_pop takes a constant size, so evacuees come home in batches of this
+# many (the remainder of a batch stays behind and is lost with the world).
+sr_evac_batch_people = { value = 1000 }
+
+# The colony_evacuation self-check's reading (sr_colony_evacuate): how much the
+# capital state grew, and 90% of what was sent. Any scope; the globals are set
+# just before.
+sr_evac_log_rose = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = sr_evac_log_before
+			has_global_variable = sr_evac_log_after
+		}
+		value = global_var:sr_evac_log_after
+		subtract = global_var:sr_evac_log_before
+	}
+}
+sr_evac_log_rose_needed = {
+	value = 0
+	if = {
+		limit = { has_global_variable = sr_evac_log_sent }
+		value = global_var:sr_evac_log_sent
+		multiply = 0.9
+	}
+}

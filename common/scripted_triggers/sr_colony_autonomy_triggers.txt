@@ -1,0 +1,17 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — autonomy and free colonies: shared triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md
+# (slice 5). The per-world triggers are generated (sr_sites_generated.txt); the
+# effects are in common/scripted_effects/sr_colony_autonomy_effects.txt.
+# ============================================================================
+
+# Country scope. THIS may supply a free colony (design § 3): simple or full
+# colonies, its programme's entry, where the supply and trade modifiers go, and
+# a Space Program to ship from.
+sr_free_can_supply = {
+	is_country_alive = yes
+	sr_colonies_contested_enabled = yes
+	has_journal_entry = je_space_race_solar_colonization
+	sr_has_space_program = yes
+}

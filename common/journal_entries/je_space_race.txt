@@ -1516,13 +1516,18 @@ je_space_race_solar_colonization = {
 			# Colony population (simple and full; slices 2-3 design § 10): the
 			# AI's yearly review, the month's emigrants; colony modules (colony
 			# modules design §§ 5, 10): the AI's yearly review, the month's
-			# fabrication; then the entry's three modifiers. A colony holder's
-			# entry is always open, so this runs for every holder, programme or
-			# not.
+			# fabrication; autonomy and free colonies (slice 5 design §§ 3, 7):
+			# event worlds left stale cleared, the AI's yearly supply review, the
+			# month's colony life; then the entry's six modifiers. A colony
+			# holder's entry is always open, so this runs for every holder,
+			# programme or not.
 			sr_emig_ai_review = yes
 			sr_emig_month = yes
 			sr_mod_ai_review = yes
 			sr_mod_month = yes
+			sr_site_events_clear_stale = yes
+			sr_free_ai_review = yes
+			sr_life_month = yes
 			sr_emig_refresh_modifiers = yes
 		}
 	}

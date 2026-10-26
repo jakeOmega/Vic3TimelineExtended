@@ -145,7 +145,8 @@ sr_emig_step_prio = {
 	}
 }
 
-# ---- The entry's three modifiers (design § 10.3, § 10.5; colony modules design § 8) --
+# ---- The entry's six modifiers (design § 10.3, § 10.5; colony modules design § 8;
+# slice 5 design §§ 2-3: free colony supply and trade, colonial garrisons) --
 # Country scope. All on the solar colonization entry at a multiplier, each
 # removed first (a same-name add_modifier stacks), re-applied here only: from
 # the entry's pulse monthly, after the AI's review, and from the Settlers
@@ -166,6 +167,18 @@ sr_emig_refresh_modifiers = {
 		if = {
 			limit = { has_modifier = sr_module_upkeep }
 			remove_modifier = sr_module_upkeep
+		}
+		if = {
+			limit = { has_modifier = sr_free_colony_supply }
+			remove_modifier = sr_free_colony_supply
+		}
+		if = {
+			limit = { has_modifier = sr_free_colony_trade }
+			remove_modifier = sr_free_colony_trade
+		}
+		if = {
+			limit = { has_modifier = sr_colonial_garrisons }
+			remove_modifier = sr_colonial_garrisons
 		}
 	}
 	if = {
@@ -193,6 +206,33 @@ sr_emig_refresh_modifiers = {
 		}
 		je:je_space_race_solar_colonization ?= {
 			add_modifier = { name = sr_module_upkeep multiplier = sr_mod_upkeep_units }
+		}
+	}
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_free_supply_count >= 1
+		}
+		je:je_space_race_solar_colonization ?= {
+			add_modifier = { name = sr_free_colony_supply multiplier = sr_free_supply_units }
+		}
+	}
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_free_trade_units > 0
+		}
+		je:je_space_race_solar_colonization ?= {
+			add_modifier = { name = sr_free_colony_trade multiplier = sr_free_trade_units_entry }
+		}
+	}
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_garrison_count >= 1
+		}
+		je:je_space_race_solar_colonization ?= {
+			add_modifier = { name = sr_colonial_garrisons multiplier = sr_garrison_units }
 		}
 	}
 }

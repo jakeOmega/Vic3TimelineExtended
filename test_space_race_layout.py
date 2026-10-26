@@ -260,9 +260,10 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         # two live sections per milestone, solar colonization's Our Colonies,
-        # Colony Fleets, Settlers, Colony Modules and Solar System, the shared
-        # reference, and the Space Race tab's Space Powers and Orbit
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 8)
+        # Colony Fleets, Settlers, Colony Modules, Colony Autonomy and Solar
+        # System, the shared reference, and the Space Race tab's Space Powers
+        # and Orbit
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 9)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))

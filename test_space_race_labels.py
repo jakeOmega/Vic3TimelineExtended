@@ -59,6 +59,8 @@ FAB_STOCK = 200           # sr_disp_fab_stock: sr_mod_fab_stock_cap
 SHIP_SLOTS = 8            # sr_disp_ms_waiting / _flying: gen_solar_sites.SHIP_SLOTS
 UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_pct: a level past the first per module, 34 worlds x 7 at most
 EBASE_LEVELS = 9999       # sr_disp_ebase_levels / _room: 770 levels of room in all; four digits
+FREE_WORLDS = 34          # sr_disp_free_supplied_count: at most every world
+FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units (5) x 1%
 
 
 def _read(path):
@@ -220,7 +222,8 @@ def _longest_figure(name):
              "sr_disp_fab_rate": FAB_RATE_CEILING, "sr_disp_fab_stock": FAB_STOCK,
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
              "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
-             "sr_disp_ebase_room": EBASE_LEVELS}
+             "sr_disp_ebase_room": EBASE_LEVELS, "sr_disp_free_supplied_count": FREE_WORLDS,
+             "sr_disp_free_trade_research": FREE_TRADE_RESEARCH}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -253,7 +256,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
              r"|cf_destination_\w+|cf_drive_line|cf_races_only_note|settlers_note|settlers_crews_note"
-             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none)|modules_note)")
+             r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none)|modules_note|autonomy_note|free_empty)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -273,11 +276,12 @@ CELLS = {
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
-        r"|ebase_label)"),
+        r"|ebase_label|free_trade_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
-        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure)"),
+        r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure"
+        r"|free_trade_figure)"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -298,7 +302,7 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others|mq_header)"),
+        r"je_space_race_widget_(colonies_stage_\d|ss_loc_\w+|powers_others|mq_header|free_header)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),
@@ -311,6 +315,18 @@ CELLS = {
     "a power's estimate (te_sr_power_lead_text, the Space Race tab)": (
         ("te_sr_power_lead_text", None),
         r"je_space_race_widget_power_(lead|own)_\w+"),
+    "a world's holder: free (te_sr_site_row)": (
+        ("te_sr_site_row", 'text = "je_space_race_widget_ss_free"'),
+        r"je_space_race_widget_ss_free"),
+    "a colony's status (te_sr_autonomy_row)": (
+        ("te_sr_autonomy_row", 'text = "je_space_race_widget_autonomy_status_none"'),
+        r"je_space_race_widget_autonomy_status_\w+"),
+    "the Abandon button (te_sr_autonomy_row)": (
+        ("te_sr_autonomy_row", 'text = "je_space_race_widget_autonomy_abandon"'),
+        r"je_space_race_widget_autonomy_abandon"),
+    "the Supply and Stop buttons (te_sr_free_row)": (
+        ("te_sr_free_row", 'text = "je_space_race_widget_free_supply"'),
+        r"je_space_race_widget_free_(supply|stop)"),
     "a world's holder: our target (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_target"'),
         r"je_space_race_widget_ss_target"),
@@ -346,7 +362,7 @@ CELLS = {
         r"je_space_race_widget_programme_header"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
-                   r"|fleets_header|settlers_header|modules_header|powers_header|orbit_header)")
+                   r"|fleets_header|settlers_header|modules_header|autonomy_header|powers_header|orbit_header)")
 
 
 def _cell(gui, type_name, marker):

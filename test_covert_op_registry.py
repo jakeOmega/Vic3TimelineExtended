@@ -52,6 +52,8 @@ OPS = (
     ("cultivate_assets", 12, "ideological", "mild", None),
     ("secure_material", 13, "military", "mild", None),
     ("counterintel_support", 14, "ideological", "mild", "covert_counterintel_support"),
+    ("incite_autonomy", 15, "ideological", "moderate", None),
+    ("sabotage_colony", 16, "military", "severe", None),
 )
 
 # Operations that work FOR their target, not against it: Counterintelligence
@@ -73,9 +75,11 @@ PLACEHOLDER_ICON = {"counterintel_support": "cultivate_assets"}
 
 # Types with no target marker that still act in the monthly pulse, on
 # something that is not a modifier: secure material finds warheads in the
-# loose pool (nuclear_loose_effects.txt). Every other marker-less type
-# (cultivate assets) acts on nothing but its network.
-ACTS_WITHOUT_MODIFIER = {"secure_material"}
+# loose pool (nuclear_loose_effects.txt); inciting colonial autonomy and
+# colony sabotage move the target's colonies' autonomy and people (the space
+# race's sr_cov_* hooks). Every other marker-less type (cultivate assets) acts
+# on nothing but its network.
+ACTS_WITHOUT_MODIFIER = {"secure_material", "incite_autonomy", "sabotage_colony"}
 
 TIER_NAMES = ("mild", "moderate", "severe", "war")
 NUMBER_WORDS = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
