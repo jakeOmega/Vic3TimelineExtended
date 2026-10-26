@@ -44,6 +44,10 @@ INSTALL = {
     "game/gfx/interface/icons/Mixed_Case.dds": "",
     "game/gfx/event_pictures/base.bk2": "",
     "game/gfx/models/ship.mesh": "",
+    "game/gfx/event_pictures/placeholder scene.bk2": "",
+    "game/gfx/coat_of_arms/patterns/pattern_solid.tga": "",
+    "game/gfx/coat_of_arms/colored_emblems/ce_solid.dds": "",
+    "game/gfx/interface/icons/Shared.dds": "",
     "game/gfx/media_aliases/media_aliases.txt": ALIASES,
     "jomini/gfx/FX/jomini_thing.shader": "",
     "clausewitz/gfx/FX/pdxgui_default.shader": "",
@@ -54,7 +58,8 @@ INSTALL = {
     "launcher/launcher-settings.json": json.dumps({"rawVersion": "9.9.9"}),
 }
 
-MOD_FILES = {"gfx/interface/icons/te_mod_icon.dds", "gfx/interface/icons/TE_Upper.dds"}
+MOD_FILES = {"gfx/interface/icons/te_mod_icon.dds", "gfx/interface/icons/TE_Upper.dds",
+             "gfx/interface/icons/SHARED.dds"}
 
 
 class _Fixture(unittest.TestCase):
@@ -113,9 +118,57 @@ class ResolutionTests(_Fixture):
         self.assertEqual(r.flags[0].key, "icon")
         self.assertEqual(r.failing, 1)
 
-    def test_path_without_gfx_root_is_checked(self):
+    def test_path_without_gfx_root_is_unrooted(self):
         r = self.run_audit({"events/e.txt": 'e.1 = { event_image = { texture = "interface/icons/a.dds" } }\n'})
-        self.assertEqual([f.kind for f in r.flags], ["missing"])
+        self.assertEqual([f.kind for f in r.flags], ["unrooted"])
+
+    def test_planted_breakages_flag(self):
+        # Each was skipped, not flagged, before the review (I2).
+        r = self.run_audit({"common/static_modifiers/m.txt": (
+            'm = {\n'
+            '\ticon = "modifier_coins_negative.dds"\n'
+            '\tvideo = "foo.bk2"\n'
+            '\ticon = "gfx/interface/icons/a.dss"\n'
+            '\ticon = "gfx/interface/icons/a"\n'
+            '\ticon = "gfx\\interface\\icons\\a.dds"\n'
+            '\ticon = "gfx\\interface\\icons\\nope.dds"\n'
+            '}\n')})
+        self.assertEqual([(f.line, f.kind) for f in r.flags], [
+            (2, "unrooted"), (3, "unrooted"), (4, "unknown_extension"), (5, "unknown_extension"),
+            (6, "backslash"), (7, "backslash")])
+        self.assertEqual([(f.detail, f.fixed_status) for f in r.flags[4:]], [
+            ("gfx/interface/icons/a.dds", "vanilla"), ("gfx/interface/icons/nope.dds", "missing")])
+        self.assertIn("which resolves", tra.describe(r.flags[4]))
+        self.assertIn("doesn't resolve either", tra.describe(r.flags[5]))
+        self.assertEqual(r.failing, 6)
+
+    def test_coat_of_arms_bare_names(self):
+        r = self.run_audit({
+            "common/coat_of_arms/coat_of_arms/c.txt": (
+                'C = {\n'
+                '\tpattern = "pattern_solid.tga"\n'
+                '\tcolored_emblem = { texture = "ce_solid.dds" }\n'
+                '\tcolored_emblem = { texture = "ce_nope.dds" }\n'
+                '}\n'),
+            "common/defines/d.txt": 'NGraphics = { PREVIEW_BACKGROUND_PATTERN = "pattern_solid.tga" }\n',
+            "common/static_modifiers/m.txt": 'm = { icon = "ce_solid.dds" }\n',
+        })
+        self.assertEqual([(f.file, f.line, f.kind) for f in r.flags], [
+            ("common/coat_of_arms/coat_of_arms/c.txt", 4, "missing"),
+            ("common/static_modifiers/m.txt", 1, "unrooted")])
+        self.assertEqual(r.resolved, {"vanilla": 3})
+
+    def test_untracked_file_on_disk(self):
+        _tree(self.mod, {"gfx/interface/icons/te_new.dds": ""})
+        index, _ = tra.build_index(self.mod, source="install", base=self.install, mod_files=MOD_FILES)
+        r = self.run_audit({"common/x.txt": 'a = "gfx/interface/icons/te_new.dds"\n'}, index)
+        self.assertEqual([(f.kind, f.detail) for f in r.flags], [("missing", "untracked")])
+        self.assertIn("git add", tra.describe(r.flags[0]))
+
+    def test_mod_file_wins_the_case_fold(self):
+        r = self.run_audit({"common/x.txt": 'a = "gfx/interface/icons/shared.dds"\n'})
+        self.assertEqual([(f.kind, f.detail) for f in r.flags],
+                         [("case_mismatch", "gfx/interface/icons/SHARED.dds")])
 
     def test_case_mismatch_is_an_error(self):
         r = self.run_audit({"common/x.txt": (
@@ -175,12 +228,41 @@ class ScanTests(_Fixture):
         r = self.run_audit({"common/x.txt": (
             'a = "gfx/interface/icons/$ICON$.dds"\n'
             'b = "gfx/[GetIcon].dds"\n'
-            'c = "ce_solid.dds"\n'
-            'd = "gfx/models/ship.mesh"\n')})
+            'c = "gfx/models/ship.mesh"\n'
+            'd = { video = $VIDEO$ }\n')})
         self.assertEqual(r.flags, [])
         self.assertEqual([(s.line, s.kind) for s in r.skipped],
-                         [(1, "templated"), (2, "templated"), (3, "relative"), (4, "other_extension")])
+                         [(1, "templated"), (2, "templated"), (3, "other_extension"), (4, "templated")])
         self.assertEqual(r.references_checked, 0)
+
+    def test_display_text_is_not_a_path(self):
+        r = self.run_audit({"gui/g.gui": (
+            'w = {\n'
+            '\traw_text = "flag_power_large.dds"\n'
+            '\traw_text = "gfx/interface/nope.dds"\n'
+            '\tdesc = "see the file nope.dds"\n'
+            '}\n')})
+        self.assertEqual(r.flags, [])
+        self.assertEqual(r.references_checked, 0)
+
+    def test_whitespace_in_and_around_paths(self):
+        r = self.run_audit({"events/e.txt": (
+            'e.1 = {\n'
+            '\tevent_image = { video = "gfx/event_pictures/placeholder scene.bk2" }\n'
+            '\ticon = "gfx/interface/icons/a.dds "\n'
+            '\ticon = " gfx/interface/icons/nope.dds"\n'
+            '}\n')})
+        self.assertEqual([(f.line, f.kind, f.detail, f.fixed_status) for f in r.flags], [
+            (3, "whitespace", "gfx/interface/icons/a.dds", "vanilla"),
+            (4, "whitespace", "gfx/interface/icons/nope.dds", "missing")])
+        self.assertEqual(r.resolved, {"vanilla": 1})
+
+    def test_operators_keep_the_key(self):
+        r = self.run_audit({"common/x.txt": (
+            'a = { icon ?= "gfx/nope1.dds" }\n'
+            'b = { icon?="gfx/nope2.dds" limit = { x >= 5 y != z } }\n')})
+        self.assertEqual([(f.key, f.value) for f in r.flags],
+                         [("icon", "gfx/nope1.dds"), ("icon", "gfx/nope2.dds")])
 
     def test_comments_text_and_quotes(self):
         r = self.run_audit({"common/x.txt": (
@@ -254,6 +336,8 @@ class SuppressionTests(_Fixture):
         self.assertEqual(r.flags, [])
         self.assertEqual([(t.file, t.line) for t in r.stale_tags], [("common/x.txt", 1), ("common/x.txt", 2)])
         self.assertEqual(r.failing, 2)
+        self.assertEqual(tra.summary(r)["unreviewed"], 2)
+        self.assertEqual(tra.summary(r)["stale_tags"], 2)
         self.assertIn("## Stale tags", tra.render_report(r))
 
     def test_tag_on_dlc_only_is_not_stale(self):
@@ -308,6 +392,36 @@ class CatalogTests(_Fixture):
         with self.assertRaises(FileNotFoundError):
             tra.build_index(self.mod, source="catalog", mod_files=MOD_FILES)
 
+    def test_install_listing_is_cached_per_install_state(self):
+        calls = []
+        real = tra.scan_install
+
+        def counting(base):
+            calls.append(base)
+            return real(base)
+
+        self.addCleanup(tra._INSTALL_CACHE.clear)
+        tra._INSTALL_CACHE.clear()
+        with mock.patch.object(tra, "scan_install", side_effect=counting):
+            tra.build_index(self.mod, source="install", base=self.install, mod_files=MOD_FILES)
+            tra.build_index(self.mod, source="install", base=self.install, mod_files=MOD_FILES)
+            self.assertEqual(len(calls), 1)
+            _tree(self.install, {"launcher/launcher-settings.json": json.dumps({"rawVersion": "9.9.10"})})
+            tra.build_index(self.mod, source="install", base=self.install, mod_files=MOD_FILES)
+            self.assertEqual(len(calls), 2)
+            _tree(self.install, {"game/dlc/dlc002_new/gfx/x.dds": ""})
+            tra.build_index(self.mod, source="install", base=self.install, mod_files=MOD_FILES)
+            self.assertEqual(len(calls), 3)
+
+    def test_committed_catalog_matches_the_vanilla_snapshot(self):
+        # A vanilla bump that rebuilds vanilla_parsed/ but skips --bootstrap
+        # leaves CI resolving against the old file list; fail it here.
+        root = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(root, "vanilla_parsed", "manifest.json"), encoding="utf-8") as fh:
+            snapshot = json.load(fh)["game_version"]
+        self.assertEqual(tra.catalog_version(root), snapshot,
+                         "re-run `python3 texture_reference_audit.py --bootstrap` on the game install")
+
     def test_committed_catalog_parses(self):
         root = os.path.dirname(os.path.abspath(__file__))
         paths, aliases = tra.load_catalog(root)
@@ -325,6 +439,15 @@ class GitTests(unittest.TestCase):
             subprocess.run(["git", "-C", mod, "add", "gfx/tracked.dds", "gfx/sub/also.dds"], check=True)
             os.remove(os.path.join(mod, "gfx", "tracked.dds"))  # a sparse checkout
             self.assertEqual(tra.mod_gfx_files(mod), {"gfx/tracked.dds", "gfx/sub/also.dds"})
+
+    def test_mod_aliases_read_from_the_index_when_off_disk(self):
+        with tempfile.TemporaryDirectory() as mod:
+            _tree(mod, {"gfx/media_aliases/te.txt": "te_alias = { video = \"x\" }\n"})
+            subprocess.run(["git", "init", "-q", mod], check=True)
+            subprocess.run(["git", "-C", mod, "add", "gfx/media_aliases/te.txt"], check=True)
+            os.remove(os.path.join(mod, "gfx", "media_aliases", "te.txt"))
+            files = tra.mod_gfx_files(mod)
+            self.assertEqual(tra.mod_media_aliases(mod, files), {"te_alias"})
 
     def test_outside_git_falls_back_to_the_disk(self):
         with tempfile.TemporaryDirectory() as mod:

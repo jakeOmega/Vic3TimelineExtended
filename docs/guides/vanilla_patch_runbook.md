@@ -163,7 +163,7 @@ python3 scripts/generators/gen_capital_bloc_names.py # capital-city power bloc n
 
 Re-bootstrap the effect/trigger catalog **after** the engine-doc summaries (`effects_summary.txt` / `triggers_summary.txt`) are refreshed in step 3, since it unions those names with vanilla's effect-corpus keywords. A stale catalog produces false positives (new vanilla effects flagged as unknown).
 
-Re-bootstrap the asset catalog too, then run `python3 texture_reference_audit.py --strict`: a texture or video vanilla renamed or dropped shows as `missing` wherever the mod names it (its `gui/` overrides included), and `git diff docs/engine/vanilla_asset_paths.txt | grep '^-'` lists every removed path. Until it is rebuilt, CI resolves against the old file list, and a reload with the game reports `catalog_stale`.
+Re-bootstrap the asset catalog too, then run `python3 texture_reference_audit.py --strict`: a texture or video vanilla renamed or dropped shows as `missing` wherever the mod names it (its `gui/` overrides included), and `git diff docs/engine/vanilla_asset_paths.txt | grep '^-'` lists every removed path. Until it is rebuilt, a reload with the game warns `catalog_stale`, and once `vanilla_parsed/` is rebuilt CI fails `test_texture_reference_audit`, which wants the catalog's game version to match the snapshot's.
 
 Rebuild `vanilla_parsed/` first. Until you do, the server notices that the game version and files no longer match the snapshot, parses the game files instead on every start (slower), and says so in `/status` `vanilla_source` and the reload `warnings`. Cloud sessions without a game install keep serving the old vanilla until the rebuilt snapshot is committed. See `docs/guides/python_tools.md` § "Vanilla data source".
 
