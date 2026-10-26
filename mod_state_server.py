@@ -185,6 +185,7 @@ ENTITY_TYPE_TO_DATATYPE: dict[str, str] = {
     "Institutions": "Institution",
     "Game Concepts": "Concept",
     "Country Formation": "CountryFormation",
+    "Parties": "Party",
 }
 
 # Field role -> set of GUI accessor method names that render that field.
@@ -2759,6 +2760,7 @@ _IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
     ("Interest Group Traits",   "icon"),
     ("Harvest Condition Types", "icon"),
     ("Power Bloc Identities",   "icon"),
+    ("Parties",                 "icon"),
 ]
 
 # YAML file → canonical entity-type-name mapping. The YAML is keyed by lowercase
@@ -2877,16 +2879,22 @@ def _image_content_hash(rel_path: str) -> str:
 
 def _entity_image(raw, field: str) -> str | None:
     """An entity's `field` as a path, without the quotes the parser keeps (so
-    it matches the unquoted paths in the YAML allowlist), or None."""
+    it matches the unquoted paths in the YAML allowlist), or None.
+
+    A party's icon is a block, `icon = { default = "/gfx/…" }`: its `default`
+    is the path. A leading `/` is dropped, as the engine reads the path from
+    the game root either way; joined as is, it would resolve nowhere."""
     data = get_entity_data(raw)
     if not isinstance(data, dict):
         return None
     image = get_field(data, field)
+    if isinstance(image, dict):
+        image = get_field(image, "default")
     if not isinstance(image, str):
         return None
     if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
         image = image[1:-1]
-    return image or None
+    return image.lstrip("/") or None
 
 
 def _principle_group_of() -> dict[str, str]:

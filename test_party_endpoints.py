@@ -410,5 +410,73 @@ class PartiesEndpointTests(unittest.TestCase):
                                  "from_influential_supporting_member")
 
 
+# A party's icon is a block, and vanilla's paths start with a slash.
+ICON_VANILLA = """
+agrarian_party = {
+	icon = {
+		default = "/gfx/interface/icons/political_parties/agrarians.dds"
+	}
+}
+"""
+ICON_MOD = """
+green_party = {
+	color = { 1 2 3 }
+	icon = {
+		default = "/gfx/interface/icons/political_parties/agrarians.dds"
+	}
+}
+"""
+AGRARIANS = "gfx/interface/icons/political_parties/agrarians.dds"
+
+
+class PartyIconTests(unittest.TestCase):
+    """/placeholder-icons and /duplicate-images read a party's
+    `icon = { default = … }` (#1183)."""
+
+    def setUp(self):
+        tmp, root, state = _state(ICON_VANILLA, ICON_MOD)
+        self.addCleanup(tmp.cleanup)
+        patcher = mock.patch.multiple(mss, ms=state, mod_path=str(root / "mod"),
+                                      mod_paths={"Parties": str(root / "mod" / "common" / "parties")})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_borrowed_vanilla_icon(self):
+        report = mss._find_placeholder_icons(
+            types=["Parties"], standin_patterns=[], allowlist={}, vanilla_gfx=True,
+            origin=lambda path: ("vanilla", "/game/" + path) if path == AGRARIANS else None,
+            hasher=lambda path: f"path:{path}")
+        self.assertEqual(report["summary"]["Parties"]["borrowed_vanilla"], 1)
+        [entry] = report["entities"]  # the untouched vanilla party isn't listed
+        self.assertEqual((entry["key"], entry["field"], entry["path"], entry["status"]),
+                         ("green_party", "icon", AGRARIANS, "borrowed_vanilla"))
+        self.assertEqual(entry["shared_with"], ["agrarian_party"])
+        self.assertEqual((entry["file"], entry["line"]),
+                         (os.path.join("common", "parties", "00_parties.txt"), 4))
+
+    def test_duplicate_images_clusters_the_mod_party_with_its_donor(self):
+        report = mss._find_duplicate_images(types=["Parties"], allowlist={},
+                                            hasher=lambda path: f"path:{path}")
+        self.assertEqual([(c["images"], c["entities"]) for c in report["flagged"]],
+                         [([AGRARIANS], ["agrarian_party", "green_party"])])
+
+
+class PartyRenderPathTests(unittest.TestCase):
+    def test_render_paths_walks_party_accessors(self):
+        self.assertEqual(mss.ENTITY_TYPE_TO_DATATYPE["Parties"], "Party")
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "parties.gui").write_text(
+                'icon = { texture = "[Party.GetIcon]" }\n'
+                'textbox = { text = "[Party.GetName]" }\n', encoding="utf-8")
+            index = mss._build_gui_render_index([(tmp, tmp)])
+        handler = object.__new__(mss.ModStateHandler)
+        with mock.patch.object(mss, "_GUI_RENDER_INDEX", index):
+            icon = handler._gui(["render-paths", "Parties"], {"field": ["icon"]})
+            name = handler._gui(["render-paths", "Parties"], {"field": ["name"]})
+        self.assertEqual((icon["datatype"], icon["methods_matched"]), ("Party", ["GetIcon"]))
+        self.assertEqual([(s["file"], s["line"]) for s in icon["sites"]], [("parties.gui", 1)])
+        self.assertEqual([(s["file"], s["line"]) for s in name["sites"]], [("parties.gui", 2)])
+
+
 if __name__ == "__main__":
     unittest.main()
