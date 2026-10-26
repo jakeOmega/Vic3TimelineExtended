@@ -170,13 +170,26 @@ class VerdictTests(unittest.TestCase):
         # read first. Nothing on record tells the two apart.
         res = resolve([ours("a.txt", "INJECT")], [theirs("z.txt")], False, FIRST_WINS)
         self.assertEqual(res["verdict"], UNDETERMINED)
-        self.assertEqual(res["depends_on"], ["creations_first"])
-        by_pass = {s["creations_first"]: s["verdict"] for s in res["verdict_by_scenario"]}
-        self.assertEqual(by_pass, {False: OURS_WIPED, True: BOTH_MERGE})
+        self.assertEqual(res["depends_on"], ["load_reading"])
+        by_pass = {s["load_reading"]: s["verdict"] for s in res["verdict_by_scenario"]}
+        self.assertEqual(by_pass, {"vanilla_first": OURS_WIPED, "creations_first": BOTH_MERGE})
 
     def test_creations_first_changes_nothing_for_a_vanilla_key(self):
         res = resolve([ours("a.txt", "INJECT")], [theirs("z.txt")], IN_VANILLA, FIRST_WINS)
         self.assertEqual(res["verdict"], THEIRS_WIPED)
+
+    def test_bare_copy_sorting_before_vanillas_file_is_undetermined(self):
+        # Demography's laws/00_welfare.txt restates vanilla laws bare, but
+        # vanilla's are now in 02_welfare.txt: with vanilla first their copy
+        # is a dropped duplicate; reading every bare definition by name first,
+        # theirs is the one that stays.
+        vanilla = [Op(VANILLA, "02_welfare.txt", 10)]
+        res = resolve([ours("sol_injections.txt", "INJECT")], [theirs("00_welfare.txt")],
+                      vanilla, FIRST_WINS)
+        self.assertEqual(res["verdict"], UNDETERMINED)
+        by_reading = {s["load_reading"]: s["verdict"] for s in res["verdict_by_scenario"]}
+        self.assertEqual(by_reading, {"vanilla_first": THEIRS_WIPED,
+                                      "creations_first": BOTH_MERGE})
 
     def test_a_mod_file_at_vanilla_path_removes_vanilla_even_without_the_key(self):
         # Their 00_x.txt replaces vanilla's whole file, so vanilla's copy of

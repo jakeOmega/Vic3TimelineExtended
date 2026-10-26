@@ -36,12 +36,16 @@ What the repo records, and where:
    (`common/character_traits/extra_character_traits.txt`) sort before
    vanilla's `personality_traits.txt`, yet no debug log on hand (2026-10-26,
    two of them runs that loaded that file) has a `gamedatabase.h:395` line
-   (inject_to_missing, game_log_reader.py). That fits two readings: vanilla's
-   files load before every mod's, or every bare definition is read before
-   any directive applies. They differ only for a directive on a key that a
-   bare definition in a later-sorting file creates, which no file of this
-   mod does, so the logs can't tell them apart: such a key is simulated both
-   ways (`creations_first`) and is `undetermined` if the answers differ.
+   (inject_to_missing, game_log_reader.py). That fits two readings
+   (`load_reading`): `vanilla_first`, vanilla's files load before every
+   mod's; or `creations_first`, every bare definition (vanilla's and the
+   mods', in file-name order) is read before any directive applies. They
+   differ for a directive on a key that a later-sorting bare definition
+   creates, which no file of this mod does, and for a mod's bare definition
+   in a file that sorts before vanilla's (Demography's `00_welfare.txt`
+   against vanilla's renamed `02_welfare.txt`: dropped, or the copy that
+   stays). Nothing on record tells them apart, so a key with a bare
+   definition is simulated both ways and is `undetermined` if they differ.
 2. A file at the same relative path in a later-loaded mod replaces the
    earlier one whole. Which of two mods loads later is the playset's order,
    which this tool can't see: verdict `depends_on_playset`. A mod file at a
@@ -435,14 +439,24 @@ def same_path(a: str, b: str) -> bool:
     return a.casefold() == b.casefold()
 
 
-def sort_ops(ops: Iterable[Op], casefold: bool) -> list[Op]:
-    """Load order: vanilla's definitions first (model point 1), then the mods'
-    by file name in ASCII order (`casefold=False`) or case-folded, then by
-    line."""
+def sort_ops(ops: Iterable[Op], casefold: bool, vanilla_first: bool = True) -> list[Op]:
+    """Load order: by file name in ASCII order (`casefold=False`) or
+    case-folded, then by line. With `vanilla_first`, vanilla's definitions
+    come before every mod's (model point 1); without, vanilla's files take
+    their place by name. A vanilla definition of unknown file comes first
+    either way."""
     def key(op: Op):
         name = op.path or ""
-        return (op.side != VANILLA, name.casefold() if casefold else name, name, op.line)
+        first = op.side != VANILLA if vanilla_first else op.path is not None
+        return (first, name.casefold() if casefold else name, name, op.line)
     return sorted(ops, key=key)
+
+
+def creations_first(ordered: list[Op]) -> list[Op]:
+    """The `creations_first` reading: every bare definition (vanilla's
+    included) in load order, then every directive in load order."""
+    return ([o for o in ordered if o.directive is None]
+            + [o for o in ordered if o.directive is not None])
 
 
 def simulate(ops_in_order: list[Op], bare_rule: str) -> tuple[frozenset, list[dict]]:
@@ -554,17 +568,15 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     ours_shadowed = {o.path.casefold() for o in ours if o.path} & t_files
     theirs_shadowed = {t.path.casefold() for t in theirs if t.path} & o_files
     shared = ours_shadowed | theirs_shadowed
-    mod_ops = [*ours, *theirs]
-    mixed = (any(o.directive is None for o in mod_ops)
-             and any(o.directive is not None for o in mod_ops))
+    any_bare = any(o.directive is None for o in (*ours, *theirs))
     dims = {
         "file_order": ["ascii", "case_folded"],
         "later_mod": ["theirs", "ours"] if shared else [None],
         "in_vanilla": [True, False] if vanilla is None else [bool(vanilla)],
         "bare_duplicate": [FIRST_WINS, LAST_WINS] if bare_rule == UNKNOWN else [bare_rule],
-        # Model point 1's second reading: every bare definition is read
-        # before any directive applies. Only matters when both kinds are here.
-        "creations_first": [False, True] if mixed else [False],
+        # Model point 1's two readings; they only differ when a mod defines
+        # the key bare.
+        "load_reading": ["vanilla_first", "creations_first"] if any_bare else ["vanilla_first"],
     }
     names = list(dims)
     # Each scenario's outcome: the verdict plus which of each side's
@@ -588,10 +600,11 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
             ops += [t for t in theirs if not (t.path and t.path.casefold() in theirs_shadowed)]
         else:
             ops += [*ours, *theirs]
-        ordered = sort_ops(ops, sc["file_order"] == "case_folded")
-        if sc["creations_first"]:
-            ordered = ([o for o in ordered if o.side == VANILLA or o.directive is None]
-                       + [o for o in ordered if o.side != VANILLA and o.directive is not None])
+        casefold = sc["file_order"] == "case_folded"
+        if sc["load_reading"] == "creations_first":
+            ordered = creations_first(sort_ops(ops, casefold, vanilla_first=False))
+        else:
+            ordered = sort_ops(ops, casefold)
         surviving, trace = simulate(ordered, sc["bare_duplicate"])
         results[combo] = (
             verdict_for(surviving),
@@ -1091,10 +1104,12 @@ LOAD_ORDER_MODEL = {
                   "create it; applied in load order",
     "bare_duplicate": "per folder, in `dirs[].rule`: first_wins (Duplicated key X will not be "
                       "created), last_wins (script_values), unknown (both tried)",
-    "vanilla_first": "vanilla's definitions are in place before any mod's, whatever the file "
-                     "names (the mod's INJECT:cautious in extra_character_traits.txt sorts before "
-                     "vanilla's personality_traits.txt and logs no inject_to_missing); a mod file "
-                     "at vanilla's path replaces vanilla's file",
+    "load_reading": "vanilla's definitions are in place before any mod's INJECT, whatever the "
+                    "file names (the mod's INJECT:cautious in extra_character_traits.txt sorts "
+                    "before vanilla's personality_traits.txt and logs no inject_to_missing). "
+                    "Either vanilla loads first (vanilla_first) or every bare definition is read "
+                    "before any directive (creations_first); a key with a bare definition is "
+                    "tried both ways. A mod file at vanilla's path replaces vanilla's file",
     "events": "a duplicated event id keeps the copy read first, but events aren't read in "
               "file-name order (log-triage SKILL.md, 2026-05-24): undetermined",
     "localization": "replace/ beats a file outside it; otherwise undetermined",
