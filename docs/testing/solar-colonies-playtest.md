@@ -182,3 +182,93 @@ for `TE_SR_SITES <world> is a free colony`.
    country holding a colony under Simple Colonies, and not under Races Only; once established, the target's colonies'
    autonomy climbs (Incite) or its largest colony loses people (Sabotage).
 10. **Old saves.** A save from before this change keeps its Space Race setting; its colonies start at autonomy 0.
+
+## Fleets, Space Command, combat and seizure (slice 6, parts 6a and 6b)
+
+Design: `docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md` (§ 22 records what was built and where
+it departs). Everything here needs the Space Race rule at Full Colonies; under Simple Colonies and Races Only none of
+it shows. The console is `event te_debug_space_race.6` (log our fleets and every location's forces; 100 strength of
+each role at Earth; land our fleets now; fill propellant and supply; our fleets' drive one up; our first colony's
+integrity to 0; this month's combat now; occupy our first colony by our strongest enemy, or return it; the two upkeep
+probes). Grep `debug.log` for `TE_SELF_CHECK`, then `TE_SR_FLEET`, `TE_SR_LOC`, `TE_SR_COMBAT` and `TE_SR_PROBE`.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN ship_construction country=… rate=…` | once a game, a month after a Space Command first runs at half staff or more in a state its owner controls | `sr_sc_rate`, the sum of `modifier:state_sr_ship_construction_add` over the states its owner controls, reads above 0: a production method's workforce-scaled `state_modifiers` reach the state | it reads 0 | compute the rate in script, level × occupancy × the method's rate by `has_active_production_method`, and state the rates in the methods' descriptions |
+| `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
+| `TE_SR_PROBE upkeep_inputs candidate=… before=… after=…` | console options k and l, fourteen days apart | see the probe below | | |
+
+**The upkeep probe (open call, owner).** The fleets' upkeep ships as `sr_fleet_upkeep_goods`, the three good-specific
+input multipliers (Launch Capacity, Advanced Materials, electricity), which the mod already uses. The design prefers
+`sr_fleet_upkeep`, the generic `building_goods_input_mult`, which follows any change to the methods, but the owner
+recalls trouble with it. With a Space Command (or, before one, a Space Program) built: option k, wait fourteen days,
+read the Space Command's input tooltip and the two `TE_SR_PROBE` lines (the market's Launch Capacity buy orders before
+and after; a jump of about half the building's bill means the candidate worked). Then option l and the same. If the
+generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep` and record the answer in
+`docs/guides/scripting_best_practices.md`.
+
+1. **The rule.** Under Simple Colonies, no Space Command building, no Space Command, Fleets or Colony Defences
+   sections, no Survey Colony Defences operation, and `.94`'s Send a garrison works as slice 5 built it. Switch to Full.
+2. **Space Command.** Research Space Militarization: Space Command can be built by the government, and only in a state
+   with a Space Program. Its four methods (Orbital Shipyards, Fusion Yards, Torch Yards, Antimatter Yards) each show
+   "Fleet Strength Built a Month" scaled by staffing. Staffed, the panel's Space Command section reads the strength
+   built last month and the levels; the home fleet appears at Earth in Fleets; `ship_construction` logs OK.
+3. **The build mix.** Each role's button steps 0, 1, 2, 3, 0; the next month's construction follows the weights
+   (option a's per-role figures, or the strength hover).
+4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep, +1% for every 10 strength at
+   full, and the section's Upkeep figure matches. Nothing else's inputs change.
+5. **Orders.** Pick a destination (the button steps through the other eight; its hover gives the leg's months and
+   km/s), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
+   at Earth outside Mars's window, for instance). In transit the row reads "→ Mars" and its landing month; on landing
+   `fleet_leg` logs OK and the months flown match `docs/engine/launch_windows_report.md`.
+6. **Docking and refits.** A fleet back at Earth refills propellant and supply, repairs 20% of its damage a month, and
+   refits to a newer drive (Refit shows three months). A fleet at our colony with a Spaceport repairs 10% a level, and
+   refills propellant by 25% a month only on a world that makes it (Utopia Planitia, Ceres, Europa, Ganymede, Callisto,
+   Titan, Enceladus, Rhea, Triton, Pluto). Away from a dock, supply counts down; at zero the fleet loses 5% a month.
+7. **Merge, detach, marines.** Merge two fleets at one location; detach half of one into a free slot. At Earth the
+   carriers fill with marines (2 battalions a point of carrier strength); Land puts them at our colony there (Colony
+   Defences shows them), Embark takes them back.
+8. **Garrisons under Full.** Answer a demand for self-government (`.94`, option b of `te_debug_space_race.5`) with a
+   garrison: nothing changes until a fleet lands 2 battalions there within a year, then the garrison takes effect as in
+   slice 5. Without one, "Garrison for <World> Never Came" after a year.
+9. **The location records.** Locations lists the nine locations with our strength, the strongest other power's flag
+   and everyone else's strength, the inbound fleets ("count·months", highlighted when ours lands first). Compare
+   option a's `TE_SR_LOC` lines.
+10. **The AI.** In an observer run with Full Colonies: AI space powers in the top three build Space Command (a few
+    levels, never in default or with a negative income), garrison their colonies under Full, and bring fleets home
+    short of supply or propellant.
+11. **A hostile fleet's alert.** An AI at war with us sends a fleet to a location where we hold a colony (or, from a
+    second player's seat, send one): we get "Hostile Fleet Bound for <location>" with the months to its landing.
+12. **Combat.** Two fleets at war at one location, both Station: each month both lose strength by the square law
+    (losses = 0.1 × the other side's fire, fire = strength × role factor × quality; 100 against 50 ends near 87 left).
+    "Battle Over <location>" reports our losses, theirs and what's left, at most once a month; the location's status
+    reads Battle; screens (warships, rapid response) take the losses before carriers and tenders. At Earth, any
+    Orbital Battlestation fights for its owner (25 strength a level) and regains 10% a month; a battle there adds
+    debris (Orbit section).
+13. **Postures and blockade.** Stand off at an enemy's colony with no enemy fleet holding orbit: its row in their
+    Colony Defences, and our Locations row, read Blockaded / Blockading; their settlers and modules stop arriving,
+    a mining or shipping specialization's modifier goes to nothing while an observatory's keeps running, and its
+    Extraplanetary Base room drops out.
+14. **Assault and seizure.** Close in on an enemy's colony (the target button steps through hostile worlds; its hover
+    gives the target's Defences as a range, exact with Survey Colony Defences): its Defences fire back and its
+    integrity falls; at 0, with more marines than its garrison and militia, "<World> Occupied" to both sides. It
+    gives its holder nothing, shows Occupied with the occupier's flag, and the war-support breakdown shows "Colonies
+    occupied in space". At the peace it returns ("<World> Returned"), unless a Cede Colony article took it.
+15. **Liberation.** The holder closing in with more marines than the occupier's garrison frees it ("Liberated").
+16. **Destruction.** Toggle To destroy and close in for three months with no enemy fleet stationed: "<World>
+    Destroyed", the destroyer's infamy +20, its UN record's "Hostile acts in space" +20, its own colonies +10
+    autonomy and a ten-year drift term; the world reads Ruined and no colony fleet can target it for 25 years.
+17. **Free colonies by force.** Close in on a free colony, no war needed: 10 infamy at once; at integrity 0 with marines
+    above its militia it is ours at autonomy 60, and its suppliers are told.
+18. **War support.** In a war with battles in space, the breakdown shows "Battles in space" (±0.1, ±0.25 in a rout)
+    for thirty days after each battle month.
+19. **Survey Colony Defences.** Against a colony holder at Full: once established, our fleets' target hover shows the
+    target world's Defences, integrity and marines exactly, and our fire on its defences is higher (compare option
+    i's `TE_SR_COMBAT` figures with and without).
+20. **Occupied states (§ 5.1).** Occupy, province by province, a state holding a Space Command or the Orbital
+    Battlestation: note the month construction stops and the battlestation stops fighting, and that both resume when
+    the state is retaken.
+21. **Revolutions.** A fleet power whose revolutionaries win: the winner has its fleets the same day, and a world the
+    old government occupied stays occupied by the winner.
+22. **Panel.** Every new section opens and closes and no label ends in "...". The fleet row's orders line fits on
+    one line; a full nine-slot Fleets section and the Locations list stay readable.

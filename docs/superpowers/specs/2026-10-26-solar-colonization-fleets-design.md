@@ -935,3 +935,77 @@ our Earth by the largest rival.
 The plan, `../plans/2026-10-26-solar-colonization-fleets.md`: four parts,
 6a to 6d, each a PR that plays on its own and ships its AI, tests, docs,
 player guide section and play-test rows.
+
+## 22. As built: parts 6a and 6b (2026-10-26)
+
+6a (fleets, Space Command, movement) and 6b (combat, blockade, seizure,
+destruction) shipped as one PR (owner, 2026-10-26: "6a and 6b together").
+Where the build departs from the sections above, or fills in what they leave
+open:
+
+- **The legs have their own generated file**,
+  `common/script_values/sr_fleet_legs_generated.txt`, from
+  `gen_launch_windows.py` beside the window tables, so the window file stays
+  the colony fleets' alone. A leg between two bodies (no Earth end) uses the
+  pair's **mean synodic cycle**: its phase is the months since 1800 modulo the
+  synodic period, and its months and delta-v are a binary range tree over the
+  phase in hundredths, so there is no negative rounding to guard. Phase buckets
+  no whole month reaches take the nearest sampled offset. The torch and
+  antimatter legs are brachistochrones any month. The rapid-response reader for
+  antimatter, already the fastest drive, is three quarters of the months, at
+  least one.
+- **Space Command is `bg_government`** (§ 5 allowed for it): vanilla's
+  `bg_military` is only the parent of the army and navy groups (barracks and
+  naval bases, tied to formations and conscription) and holds no building of
+  its own, and the mod's Military Base is `bg_government` too.
+- **Antimatter Yards needs only Antimatter Production.** A production method
+  can't require another building (`unlocking_production_methods` reads the
+  same building's other groups), so the Antimatter Containment Facility gates
+  the drive (`sr_launch_has_antimatter`), not the yards.
+- **The upkeep ships as `sr_fleet_upkeep_goods`**, the three good-specific
+  multipliers (§ 5's fallback), because the `upkeep_inputs` probe needs a
+  game. The generic `sr_fleet_upkeep` is defined and the console probes both;
+  switching is one line in `sr_fl_upkeep_apply` (play-test list).
+- **The fleet powers list** is joined from the monthly country pulse (a fleet or
+  a Space Command under Full) and pruned one dead country a month, since an
+  entry can't leave a list while the list is walked. A revolution's winner
+  joins it at the civil war's end, and inherits any occupation the old
+  government held (`sr_sites_repoint_loser`).
+- **Stand off is allowed anywhere**, but it blockades only a world whose holder
+  is at war with the fleet's owner and has no fleet of its own holding orbit
+  there. A free colony is never blockaded.
+- **A world's Defences share their fire among the fleets closing in on it by
+  strength, and the closing-in fleets' fire on defences is shared between the
+  world and the stationed hostile fleets they also engage**, the world counting
+  as `sr_def_hull_strength` (15) × (Defences + 1). So a world with no Defences
+  still soaks a share of the fire aimed at it and its integrity falls.
+- **Integrity regains in the world's step**, after the month's combat, and
+  only in a month with no assault on it; `sr_site_under_assault_<key>` is the
+  month of the last assault rather than a flag, so the panel reads "Under
+  assault" for the month after the fighting too.
+- **Liberation needs marines above the occupier's garrison only**: an occupied
+  world's militia are the holder's people and don't fight their liberators.
+- **Marines going home** (a cession to a non-ally, an occupation's end) board
+  our first fleet at Earth, up to its carriers' room; with none at Earth they
+  are lost.
+- **The panel's collapse flags** are `sr_panel_space_command_closed`,
+  `sr_panel_space_fleets_closed`, `sr_panel_locations_closed` and
+  `sr_panel_defences_closed` (`sr_panel_fleets_closed` was already Colony
+  Fleets').
+- **Hovers.** The destination button's hover is the leg to the destination
+  picked (months, km/s), and the target button's is what we know of the target
+  world, in place of the scripted GUIs' own tooltips.
+- **Survey Colony Defences** keeps its record on the operator: the list of
+  countries it surveys (`sr_cov_survey_targets`), the strongest operation's
+  multiplier and a 35-day marker, rebuilt by the covert pulse, so several
+  operators can survey one target and a survey whose funding stops lapses.
+  Without it, the target hover gives the world's Defences as a range of one
+  either side and its integrity and marines as unknown.
+- **An argument is one token.** The debris and battlestation figures reach
+  their helpers through a local variable and a script value (#1096); and no
+  debug line carries a `$PARAM$`: the console's fleet lines are literal per slot
+  and the combat lines log a world's index through a global.
+- **Unverified engine facts** go to the play-test list: the workforce-scaled
+  state modifier reaching `modifier:` (`ship_construction`), arrivals in their
+  month (`fleet_leg`), the generic input multiplier (the probe), and
+  `controller = owner` for an occupied state (step 20).

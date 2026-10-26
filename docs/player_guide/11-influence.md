@@ -351,6 +351,7 @@ have agencies of their own.
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
 | Incite Colonial Autonomy | Every colony the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony; Simple or Full Colonies setting of the Space Race rule | 50 |
 | Sabotage Colony | The target's most populous colony loses 1% of its people a month and gains 0.25 autonomy | Target holds a colony; Simple or Full Colonies; Seasoned Tradecraft | 100 |
+| Survey Colony Defences | Your fleets fire 20% harder on the defences of the target's colonies, and your Fleets panel shows their Defences, integrity and marines | Target holds a colony; Full Colonies setting | 50 |
 | Counterintelligence Support | Target: +8 economic, military and ideological covert defense. You: nothing | Target is a friend and has no other protector | 25 |
 
 An operation uses its influence for as long as it runs, more the worse the
@@ -497,7 +498,7 @@ the establishing phase the costs are:
 | Exposure tier | Operations | Recall and apologize | Deny everything |
 |---|---|---|---|
 | Routine espionage | Industrial, Military and Space Programme Espionage, Cultivate Assets, Secure Loose Material | +1 infamy, −5 relations | +0.5 infamy, −10 relations |
-| Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign, Incite Colonial Autonomy | +2 infamy, −10 relations | +1 infamy, −20 relations |
+| Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign, Incite Colonial Autonomy, Survey Colony Defences | +2 infamy, −10 relations | +1 infamy, −20 relations |
 | Attempt to bring down a government | Ideological Subversion, Destabilization, Regime Change, Nuclear Programme Sabotage, Sabotage Colony | +4 infamy, −20 relations | +2 infamy, −40 relations |
 | Wartime sabotage, exposed during the war | Infrastructure Sabotage, Communications Disruption | Nothing | Nothing |
 | Wartime sabotage, exposed before the war | The same | +4 infamy, −10 relations | +2 infamy, −20 relations |
@@ -616,18 +617,20 @@ antagonistic or domineering toward; espionage goes to countries with technology
 to steal or ahead in space, and a funded AI at war or in a play uses the wartime
 operations. An AI that holds a colony or runs a space milestone incites autonomy
 in the colonies of countries that are not its friends, and sabotages them only
-when the colony's holder is its rival or at war with it. Upkeep grows with the
+when the colony's holder is its rival or at war with it. An AI with fleets of
+its own surveys the colony defences of a rival or an enemy. Upkeep grows with the
 operator's GDP, not the target's, so an AI leaves a country with less than a
 tenth of its GDP alone unless its gold reserves are at least half full and its
 budget is in surplus. Espionage, Nuclear Programme Sabotage, Secure Loose
-Material and the two colony operations ignore the target's size, and so does a
+Material and the colony operations ignore the target's size, and so does a
 wartime operation against a country the AI is losing to. The AI
 raises priority to 2 against rivals and to 3 when a great power is at war with
 the target. Once launched, an operation stays until it is fully operational,
 unless it is exposed or something it needs goes. After that the AI calls it off
 only when its reason has gone: no rivalry either way, no hostile attitude and
 relations above poor, or no space milestone of its own under way (for the colony
-operations, no milestone and no colony of its own), or when its influence runs
+operations, no milestone and no colony of its own; for the defences survey, no
+fleets of its own, or peace and no hostility), or when its influence runs
 into deficit. It launches an operation that uses influence only
 while it holds 300 or more. It stops Cultivate Assets once its network reaches
 75. It needs Seasoned Tradecraft for Regime Change, Nuclear Programme Sabotage
@@ -635,7 +638,7 @@ and Sabotage Colony, as you do, so it rarely launches them.
 
 The AI doesn't start Election Interference, Financial Subversion, Infrastructure
 Sabotage, Communications Disruption, Ideological Subversion, Destabilization or
-either colony operation against a friend, and calls off Election Interference, Financial Subversion,
+any colony operation against a friend, and calls off Election Interference, Financial Subversion,
 Ideological Subversion and Destabilization once they are fully operational and
 the target has become a friend. Its other operations have no friend test: it
 still spies on friends, and pays when it is exposed. An AI with a Covert Warfare

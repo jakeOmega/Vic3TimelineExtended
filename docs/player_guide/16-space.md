@@ -16,6 +16,9 @@ flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers),
 [Colony modules](#colony-modules), [Extraplanetary Base
 room](#extraplanetary-base-room), [Ceding a colony](#ceding-a-colony) and
 [Colony autonomy and free colonies](#colony-autonomy-and-free-colonies)).
+Full Colonies adds warships in space: fleets you build, move between the
+planets and fight with, to blockade, seize or destroy colonies (see [Space
+fleets](#space-fleets)).
 
 ## Joining the space race
 
@@ -604,8 +607,8 @@ listed in the Colony Modules section of Solar System Colonization:
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports and Defences: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
-| Spaceport | Nothing yet: it is for the space fleets, which are not in the game yet | The colony's slots |
-| Defences | Nothing yet, for the same reason | The colony's slots |
+| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a world that makes propellant. Under Simple Colonies, nothing | The colony's slots |
+| Defences | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
 
 The founding event has to be answered before you can add a specialization
 level. Each row's buttons add one more level of a module to the end of your
@@ -698,7 +701,9 @@ next colony fleet that can reach it claims it, at the current stage's cost, even
 when its stage is long past or the race is over. Under Simple Colonies and Full
 Colonies a colony of 1,000 people or more becomes a free colony instead (see
 [Colony autonomy and free colonies](#colony-autonomy-and-free-colonies)). When a revolution wins, the new
-government holds the old one's colonies at once.
+government holds the old one's colonies at once. Under Full Colonies an enemy
+can also occupy a colony in a war, which keeps its holder but gives it nothing
+until the peace (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)).
 
 A country that comes to hold a colony this way, or by treaty, gets Solar System
 Colonization for it even without a space program. Without the Moon Base and the
@@ -753,7 +758,9 @@ choose:
 | Let it go | It becomes a free colony, on good terms with you | — |
 
 A charter settles a colony for good at a fifth of its output; a garrison buys
-ten years and costs Launch Capacity. A colony that reaches 100 declares itself
+ten years and costs Launch Capacity. Under Full Colonies a garrison is real
+troops: it takes effect only once a fleet lands two marine battalions at the
+colony, within a year of the order, or the order lapses. A colony that reaches 100 declares itself
 free whatever you chose. A charter stays with the colony when it changes hands;
 a garrison goes home. AI powers grant a charter while they race, garrison while
 at war, and let a colony go when they run no colonization program.
@@ -784,8 +791,10 @@ supplying it brings it back in about two years; one that broke away starts at
 colonies and accept a colony that asks.
 
 Covert operations reach colonies too: Incite Colonial Autonomy raises the
-autonomy of every colony the target holds, and Sabotage Colony kills a share of
-the people of its largest (see [The covert operations](11-influence.md#the-covert-operations)).
+autonomy of every colony the target holds, Sabotage Colony kills a share of
+the people of its largest, and under Full Colonies Survey Colony Defences
+shows your fleets the target's colony defences and sharpens their fire on them
+(see [The covert operations](11-influence.md#the-covert-operations)).
 
 **Colony life.** Three rare events come with growing colonies. The First Child
 fires once, when your first colony reaches 2,000 people: prestige, and a choice
@@ -817,6 +826,120 @@ biological finds include living microbes and ancient microbial fossils; other
 finds establish geological features or chemical processes. Their probabilities
 are game rules, not estimates of how likely those discoveries are in the real
 solar system.
+
+## Space fleets
+
+Under the Space Race rule's Full Colonies setting, countries build warships in
+space, and the Solar System Colonization panel gains three sections: Space
+Command, Fleets and Colony Defences. Nothing here exists under Simple Colonies.
+
+### Space Command
+
+Space Command is a government building, unlocked by Space Militarization and
+built only in a state with a Space Program. Each level builds fleet strength
+every month, by its production method:
+
+| Method | Technology | Strength a level a month |
+|---|---|---|
+| Orbital Shipyards | Space Militarization | 0.5 |
+| Fusion Yards | Fusion Power | 1 |
+| Torch Yards | Muon-Catalyzed Fusion Reactors | 1.5 |
+| Antimatter Yards | Antimatter Production | 2 |
+
+The figure is scaled by staffing, and the method's tooltip shows it as Fleet
+Strength Built a Month. A Space Command in a state you don't control builds
+nothing. The month's strength joins your home fleet at Earth, shared among five
+roles by the build mix, whose buttons step each role's weight from 0 to 3:
+
+| Role | Fire on fleets | Fire on colony defences | Months of supply | Also |
+|---|---|---|---|---|
+| Warship | 1 | 1 | 18 | Takes losses first |
+| Rapid response | 0.5 | 0.5 | 12 | Takes losses first; a fleet of these alone flies one drive faster |
+| Siege ship | 0.5 | 2 | 18 | |
+| Assault carrier | 0.25 | 0.25 | 12 | Carries 2 marine battalions a point of strength |
+| Tender | 0.1 | 0.1 | 36 | Adds propellant and supply to its fleet |
+
+Fleets cost upkeep as more of every input Space Command uses: 1% for every 10
+points of strength at full. A large fleet makes the yards dearer to run, not
+slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
+Production each raise your fleets' fire by a quarter.
+
+### Moving fleets
+
+The Fleets section lists your fleets, up to nine, with where each is, its
+strength now and at full (hover it for its ships), its drive, its propellant in
+km/s, its months of supply and its marines. A fleet can be at one of nine
+locations: Earth Orbit, Mercury & Venus, Mars, the Asteroid Belt, Jupiter,
+Saturn, Uranus, Neptune and the Kuiper Belt.
+
+| Order | What it does |
+|---|---|
+| The destination button | Steps through the other locations; its hover gives the trip's months and propellant |
+| Go | Sends the fleet. It can't leave when the trip departs in a later month (a chemical or fusion fleet leaving Earth follows the launch windows) or when its propellant doesn't cover the trip |
+| Merge | Joins another of your fleets at the same location |
+| Detach | Splits half of each role into a new fleet |
+| Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
+
+A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
+your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
+propellant only on a world that makes it, such as Utopia Planitia, Ceres, Europa
+or Titan), damage is repaired, and a fleet on an older drive refits to your best
+in three months. Away from a dock supply runs down, and a fleet without it loses
+5% of its strength a month. Marines fill up at Earth only. A fleet that arrives
+where you hold a colony counts as contact for the colony's autonomy. When an
+enemy fleet sets out for a location where you hold a colony, you are warned
+with the months until it arrives.
+
+### Battles in space
+
+Each month, fleets of countries at war fight at every location where they meet.
+What a fleet fights depends on its posture, set by the posture button (away from
+Earth):
+
+| Posture | Fights | Use it to |
+|---|---|---|
+| Station | Every enemy fleet there | Guard your colonies. A fleet arriving where you hold a colony stations |
+| Stand off | Enemy fleets that stand off or are stationed, out of the colonies' guns | Blockade an enemy's colonies |
+| Close in | The target world's Defences and the enemy fleets stationed there | Seize or destroy a colony |
+
+At Earth every fleet fights every enemy fleet, and an Orbital Battlestation
+fights for its owner (25 strength a level, regaining 10% a month; none in a
+state its owner doesn't control). Losses follow the square law: each side loses
+in proportion to the other's fire, so concentration pays (100 strength against
+50 ends with about 87 left). Warships and rapid response take the losses before
+the other roles, and half of every loss is damage a dock repairs. A battle at
+Earth adds to orbital debris. A battle report comes after each month of
+fighting, and the war support breakdown shows Battles in space.
+
+### Blockade, seizure and destruction
+
+A colony is blockaded when an enemy fleet stands off at its location and none
+of its holder's fleets holds orbit there. Settlers and modules stop reaching it,
+it gives its holder no Extraplanetary Base room, and a specialization that
+ships goods home (mining, industry, propellant) stops; research and observatory
+specializations keep running. The Colony Defences section lists your colonies
+with their Defences, integrity, marines and status.
+
+A fleet closing in on a world brings its integrity down, from 100 to 0, faster
+with siege ships and against fewer Defences; the world's Defences fire back.
+Integrity returns by 5 a month when the attack stops, 10 with a Spaceport. At
+0, with no enemy fleet stationed there, the fleet's next step depends on its
+Seize or Destroy button:
+
+| Choice | Needs | What follows | Price |
+|---|---|---|---|
+| Seize | More marines than the world's garrison and militia (a battalion for every 20,000 people, at least one) | The world is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more marines than the occupier's garrison | None |
+| Destroy | Three months closing in with more fire than its Defences | The colony and everyone in it are lost, and the world lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
+
+A free colony can be attacked without a war: closing in costs 10 infamy at
+once, and seizing it makes it yours at autonomy 60. Without Survey Colony
+Defences against its holder, the target's hover gives a world's Defences only
+roughly, and its integrity and marines not at all.
+
+AI fleet powers keep their fleets at home in peace, send their strongest fleet
+to defend a location where they hold colonies when an enemy fleet is there or on
+its way, bring fleets home short of supply or propellant, and land marines for
+the garrisons they order. They never destroy colonies or attack free ones.
 
 ## After the space race
 
