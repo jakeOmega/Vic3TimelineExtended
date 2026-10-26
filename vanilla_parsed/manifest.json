@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.14.5",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "c3ff1dde2637b88a",
- "built_at": "2026-10-11T18:32:12+00:00",
+ "parser_fingerprint": "53e4545e6d37dfae",
+ "built_at": "2026-10-26T18:24:03+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
