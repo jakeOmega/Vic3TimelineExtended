@@ -1057,6 +1057,26 @@ sr_fl_ai_defend = {
 	sr_fl_ai_defend_all = yes
 }
 
+# ---- The AI's offence at war (design § 14, 6c) ----------------------------------------------------
+# Country scope, an AI fleet power's month, after the defence: at war, one
+# docked fleet free of the defence goes to attack a location within twelve
+# months' leg where it outmatches the enemy's force 1.5 times over, with the
+# propellant for the leg home or a dock of ours there (sr_fl_ai_attack_all,
+# generated); every fleet at a location with an enemy world, and no colony of
+# ours threatened there, closes in on the world of most worth to seize it when
+# its marines suffice, else stands off (sr_fl_ai_assault_at). It never destroys
+# a colony, never closes in on a free one, and never interdicts: Interdict is
+# no AI posture. Every order passes the same sr_fl_<n>_may_depart_<loc> a
+# player's does, and the recall (sr_fl_ai_recall_at) brings home first a fleet
+# short of supply or of the propellant home.
+sr_fl_ai_attack = {
+	if = {
+		limit = { is_at_war = yes }
+		sr_fl_ai_attack_all = yes
+		sr_fl_each_slot = { DO = ai_assault }
+	}
+}
+
 # A fleet away and undocked, short of supply (under three months) or of the
 # propellant home with a margin, goes home now.
 sr_fl_ai_recall_at = {

@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, build, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, build, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -2362,40 +2362,41 @@ sr_fl_ai_send_garrisons = {
 }
 
 # A fleet away from Earth with nothing to do there (no garrison due, no world of
-# ours under threat) comes home when it can.
+# ours under threat, and (6c) no enemy world it is attacking while its fleets
+# there are a match for the enemy's) comes home when it can.
 sr_fl_ai_home_at = {
 	if = {
 		limit = { has_variable = sr_fl_$N$_loc NOT = { var:sr_fl_$N$_loc = 1 } sr_fl_$N$_may_depart_earth = yes }
 		if = {
-			limit = { var:sr_fl_$N$_loc = 2 NOT = { sr_loc_garrison_due_inner = yes } NOT = { sr_fl_ai_threatened_inner = yes } }
+			limit = { var:sr_fl_$N$_loc = 2 NOT = { sr_loc_garrison_due_inner = yes } NOT = { sr_fl_ai_threatened_inner = yes } NOT = { AND = { sr_loc_ai_target_inner = yes sr_fl_ai_holds_inner = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 3 NOT = { sr_loc_garrison_due_mars = yes } NOT = { sr_fl_ai_threatened_mars = yes } }
+			limit = { var:sr_fl_$N$_loc = 3 NOT = { sr_loc_garrison_due_mars = yes } NOT = { sr_fl_ai_threatened_mars = yes } NOT = { AND = { sr_loc_ai_target_mars = yes sr_fl_ai_holds_mars = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 4 NOT = { sr_loc_garrison_due_asteroids = yes } NOT = { sr_fl_ai_threatened_asteroids = yes } }
+			limit = { var:sr_fl_$N$_loc = 4 NOT = { sr_loc_garrison_due_asteroids = yes } NOT = { sr_fl_ai_threatened_asteroids = yes } NOT = { AND = { sr_loc_ai_target_asteroids = yes sr_fl_ai_holds_asteroids = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 5 NOT = { sr_loc_garrison_due_jupiter = yes } NOT = { sr_fl_ai_threatened_jupiter = yes } }
+			limit = { var:sr_fl_$N$_loc = 5 NOT = { sr_loc_garrison_due_jupiter = yes } NOT = { sr_fl_ai_threatened_jupiter = yes } NOT = { AND = { sr_loc_ai_target_jupiter = yes sr_fl_ai_holds_jupiter = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 6 NOT = { sr_loc_garrison_due_saturn = yes } NOT = { sr_fl_ai_threatened_saturn = yes } }
+			limit = { var:sr_fl_$N$_loc = 6 NOT = { sr_loc_garrison_due_saturn = yes } NOT = { sr_fl_ai_threatened_saturn = yes } NOT = { AND = { sr_loc_ai_target_saturn = yes sr_fl_ai_holds_saturn = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 7 NOT = { sr_loc_garrison_due_uranus = yes } NOT = { sr_fl_ai_threatened_uranus = yes } }
+			limit = { var:sr_fl_$N$_loc = 7 NOT = { sr_loc_garrison_due_uranus = yes } NOT = { sr_fl_ai_threatened_uranus = yes } NOT = { AND = { sr_loc_ai_target_uranus = yes sr_fl_ai_holds_uranus = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 8 NOT = { sr_loc_garrison_due_neptune = yes } NOT = { sr_fl_ai_threatened_neptune = yes } }
+			limit = { var:sr_fl_$N$_loc = 8 NOT = { sr_loc_garrison_due_neptune = yes } NOT = { sr_fl_ai_threatened_neptune = yes } NOT = { AND = { sr_loc_ai_target_neptune = yes sr_fl_ai_holds_neptune = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 		else_if = {
-			limit = { var:sr_fl_$N$_loc = 9 NOT = { sr_loc_garrison_due_kuiper = yes } NOT = { sr_fl_ai_threatened_kuiper = yes } }
+			limit = { var:sr_fl_$N$_loc = 9 NOT = { sr_loc_garrison_due_kuiper = yes } NOT = { sr_fl_ai_threatened_kuiper = yes } NOT = { AND = { sr_loc_ai_target_kuiper = yes sr_fl_ai_holds_kuiper = yes } } }
 			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
 		}
 	}
@@ -8115,6 +8116,859 @@ sr_fl_ai_defend_kuiper = {
 		else_if = {
 			limit = { local_var:sr_fl_n = 9 }
 			sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 }
+		}
+	}
+}
+
+# ===== The AI's offence (6c; sr_fl_ai_attack, sr_fleet_combat_effects.txt) =====
+# One order a month at most: to the first location (table order) with a world
+# it may attack and none of its fleets there or on the way, the strongest of
+# its docked fleets free of the defence that reaches and outmatches it
+# (sr_fl_<n>_ai_attacks_<loc>).
+sr_fl_ai_attack_all = {
+	set_local_variable = { name = sr_fl_ai_sent value = 0 }
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_inner = yes NOT = { sr_fl_any_at_or_bound = { CODE = 2 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_inner = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_inner = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_inner = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_inner = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_inner = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_inner = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_inner = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_inner = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_inner = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = inner CODE = 2 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_mars = yes NOT = { sr_fl_any_at_or_bound = { CODE = 3 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_mars = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_mars = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_mars = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_mars = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_mars = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_mars = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_mars = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_mars = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_mars = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = mars CODE = 3 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_asteroids = yes NOT = { sr_fl_any_at_or_bound = { CODE = 4 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_asteroids = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_asteroids = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_asteroids = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_asteroids = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_asteroids = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_asteroids = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_asteroids = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_asteroids = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_asteroids = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = asteroids CODE = 4 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_jupiter = yes NOT = { sr_fl_any_at_or_bound = { CODE = 5 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_jupiter = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_jupiter = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_jupiter = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_jupiter = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_jupiter = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_jupiter = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_jupiter = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_jupiter = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_jupiter = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = jupiter CODE = 5 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_saturn = yes NOT = { sr_fl_any_at_or_bound = { CODE = 6 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_saturn = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_saturn = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_saturn = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_saturn = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_saturn = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_saturn = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_saturn = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_saturn = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_saturn = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = saturn CODE = 6 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_uranus = yes NOT = { sr_fl_any_at_or_bound = { CODE = 7 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_uranus = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_uranus = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_uranus = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_uranus = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_uranus = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_uranus = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_uranus = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_uranus = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_uranus = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = uranus CODE = 7 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_neptune = yes NOT = { sr_fl_any_at_or_bound = { CODE = 8 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_neptune = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_neptune = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_neptune = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_neptune = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_neptune = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_neptune = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_neptune = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_neptune = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_neptune = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = neptune CODE = 8 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_kuiper = yes NOT = { sr_fl_any_at_or_bound = { CODE = 9 } } }
+		set_local_variable = { name = sr_fl_best value = 0 }
+		set_local_variable = { name = sr_fl_n value = 0 }
+		if = {
+			limit = { sr_fl_1_ai_free = yes sr_fl_1_ai_attacks_kuiper = yes sr_fl_1_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+			set_local_variable = { name = sr_fl_n value = 1 }
+		}
+		if = {
+			limit = { sr_fl_2_ai_free = yes sr_fl_2_ai_attacks_kuiper = yes sr_fl_2_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+			set_local_variable = { name = sr_fl_n value = 2 }
+		}
+		if = {
+			limit = { sr_fl_3_ai_free = yes sr_fl_3_ai_attacks_kuiper = yes sr_fl_3_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+			set_local_variable = { name = sr_fl_n value = 3 }
+		}
+		if = {
+			limit = { sr_fl_4_ai_free = yes sr_fl_4_ai_attacks_kuiper = yes sr_fl_4_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+			set_local_variable = { name = sr_fl_n value = 4 }
+		}
+		if = {
+			limit = { sr_fl_5_ai_free = yes sr_fl_5_ai_attacks_kuiper = yes sr_fl_5_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+			set_local_variable = { name = sr_fl_n value = 5 }
+		}
+		if = {
+			limit = { sr_fl_6_ai_free = yes sr_fl_6_ai_attacks_kuiper = yes sr_fl_6_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+			set_local_variable = { name = sr_fl_n value = 6 }
+		}
+		if = {
+			limit = { sr_fl_7_ai_free = yes sr_fl_7_ai_attacks_kuiper = yes sr_fl_7_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+			set_local_variable = { name = sr_fl_n value = 7 }
+		}
+		if = {
+			limit = { sr_fl_8_ai_free = yes sr_fl_8_ai_attacks_kuiper = yes sr_fl_8_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+			set_local_variable = { name = sr_fl_n value = 8 }
+		}
+		if = {
+			limit = { sr_fl_9_ai_free = yes sr_fl_9_ai_attacks_kuiper = yes sr_fl_9_strength > local_var:sr_fl_best }
+			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+			set_local_variable = { name = sr_fl_n value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_fl_n = 1 }
+			sr_fl_dispatch = { N = 1 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 2 }
+			sr_fl_dispatch = { N = 2 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 3 }
+			sr_fl_dispatch = { N = 3 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 4 }
+			sr_fl_dispatch = { N = 4 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 5 }
+			sr_fl_dispatch = { N = 5 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 6 }
+			sr_fl_dispatch = { N = 6 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 7 }
+			sr_fl_dispatch = { N = 7 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 8 }
+			sr_fl_dispatch = { N = 8 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_fl_n = 9 }
+			sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 }
+			set_local_variable = { name = sr_fl_ai_sent value = 1 }
+		}
+	}
+}
+
+# A slot at a location where we hold no threatened colony and there is a world
+# it may attack: it closes in on the one of most worth (sr_site_ai_worth_<key>)
+# to seize it when its marines exceed the world's garrison and militia, else it
+# stands off and blockades. Never to destroy (design § 14).
+sr_fl_ai_assault_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_loc NOT = { var:sr_fl_$N$_loc = 1 } }
+		set_local_variable = { name = sr_ai_tgt value = 0 }
+		set_local_variable = { name = sr_ai_need value = 0 }
+		set_local_variable = { name = sr_ai_best value = -1 }
+		if = {
+			limit = { var:sr_fl_$N$_loc = 2 NOT = { sr_fl_ai_threatened_inner = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = venus } sr_site_ai_worth_venus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_venus } set_local_variable = { name = sr_ai_tgt value = 17 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_venus } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = mercury } sr_site_ai_worth_mercury > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_mercury } set_local_variable = { name = sr_ai_tgt value = 18 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_mercury } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 3 NOT = { sr_fl_ai_threatened_mars = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = valles_marineris } sr_site_ai_worth_valles_marineris > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_valles_marineris } set_local_variable = { name = sr_ai_tgt value = 1 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_valles_marineris } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = olympus_mons } sr_site_ai_worth_olympus_mons > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_olympus_mons } set_local_variable = { name = sr_ai_tgt value = 2 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_olympus_mons } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = hellas_planitia } sr_site_ai_worth_hellas_planitia > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_hellas_planitia } set_local_variable = { name = sr_ai_tgt value = 3 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_hellas_planitia } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = utopia_planitia } sr_site_ai_worth_utopia_planitia > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_utopia_planitia } set_local_variable = { name = sr_ai_tgt value = 4 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_utopia_planitia } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = arcadia_planitia } sr_site_ai_worth_arcadia_planitia > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_arcadia_planitia } set_local_variable = { name = sr_ai_tgt value = 5 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_arcadia_planitia } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 4 NOT = { sr_fl_ai_threatened_asteroids = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = ceres } sr_site_ai_worth_ceres > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_ceres } set_local_variable = { name = sr_ai_tgt value = 6 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_ceres } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = vesta } sr_site_ai_worth_vesta > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_vesta } set_local_variable = { name = sr_ai_tgt value = 7 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_vesta } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = psyche } sr_site_ai_worth_psyche > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_psyche } set_local_variable = { name = sr_ai_tgt value = 8 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_psyche } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = pallas } sr_site_ai_worth_pallas > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_pallas } set_local_variable = { name = sr_ai_tgt value = 9 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_pallas } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = hygiea } sr_site_ai_worth_hygiea > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_hygiea } set_local_variable = { name = sr_ai_tgt value = 10 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_hygiea } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 5 NOT = { sr_fl_ai_threatened_jupiter = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = io } sr_site_ai_worth_io > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_io } set_local_variable = { name = sr_ai_tgt value = 11 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_io } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = europa } sr_site_ai_worth_europa > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_europa } set_local_variable = { name = sr_ai_tgt value = 12 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_europa } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = ganymede } sr_site_ai_worth_ganymede > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_ganymede } set_local_variable = { name = sr_ai_tgt value = 13 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_ganymede } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = callisto } sr_site_ai_worth_callisto > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_callisto } set_local_variable = { name = sr_ai_tgt value = 14 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_callisto } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = himalia } sr_site_ai_worth_himalia > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_himalia } set_local_variable = { name = sr_ai_tgt value = 15 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_himalia } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = amalthea } sr_site_ai_worth_amalthea > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_amalthea } set_local_variable = { name = sr_ai_tgt value = 16 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_amalthea } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 6 NOT = { sr_fl_ai_threatened_saturn = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = titan } sr_site_ai_worth_titan > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_titan } set_local_variable = { name = sr_ai_tgt value = 19 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_titan } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = enceladus } sr_site_ai_worth_enceladus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_enceladus } set_local_variable = { name = sr_ai_tgt value = 20 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_enceladus } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = rhea } sr_site_ai_worth_rhea > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_rhea } set_local_variable = { name = sr_ai_tgt value = 21 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_rhea } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = mimas } sr_site_ai_worth_mimas > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_mimas } set_local_variable = { name = sr_ai_tgt value = 22 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_mimas } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = iapetus } sr_site_ai_worth_iapetus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_iapetus } set_local_variable = { name = sr_ai_tgt value = 23 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_iapetus } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 7 NOT = { sr_fl_ai_threatened_uranus = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = titania } sr_site_ai_worth_titania > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_titania } set_local_variable = { name = sr_ai_tgt value = 24 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_titania } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = oberon } sr_site_ai_worth_oberon > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_oberon } set_local_variable = { name = sr_ai_tgt value = 25 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_oberon } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = miranda } sr_site_ai_worth_miranda > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_miranda } set_local_variable = { name = sr_ai_tgt value = 26 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_miranda } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = ariel } sr_site_ai_worth_ariel > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_ariel } set_local_variable = { name = sr_ai_tgt value = 27 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_ariel } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 8 NOT = { sr_fl_ai_threatened_neptune = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = triton } sr_site_ai_worth_triton > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_triton } set_local_variable = { name = sr_ai_tgt value = 28 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_triton } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = proteus } sr_site_ai_worth_proteus > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_proteus } set_local_variable = { name = sr_ai_tgt value = 29 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_proteus } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 9 NOT = { sr_fl_ai_threatened_kuiper = yes } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = pluto } sr_site_ai_worth_pluto > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_pluto } set_local_variable = { name = sr_ai_tgt value = 30 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_pluto } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = eris } sr_site_ai_worth_eris > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_eris } set_local_variable = { name = sr_ai_tgt value = 31 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_eris } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = makemake } sr_site_ai_worth_makemake > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_makemake } set_local_variable = { name = sr_ai_tgt value = 32 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_makemake } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = haumea } sr_site_ai_worth_haumea > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_haumea } set_local_variable = { name = sr_ai_tgt value = 33 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_haumea } }
+			if = { limit = { sr_site_ai_attack_target = { KEY = sedna } sr_site_ai_worth_sedna > local_var:sr_ai_best } set_local_variable = { name = sr_ai_best value = sr_site_ai_worth_sedna } set_local_variable = { name = sr_ai_tgt value = 34 } set_local_variable = { name = sr_ai_need value = sr_site_garrison_need_sedna } }
+		}
+		if = {
+			limit = { local_var:sr_ai_tgt > 0 }
+			if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+			if = {
+				limit = { sr_fl_$N$_marines_value > local_var:sr_ai_need }
+				set_variable = { name = sr_fl_$N$_posture value = 3 }
+				set_variable = { name = sr_fl_$N$_target value = local_var:sr_ai_tgt }
+			}
+			else = {
+				set_variable = { name = sr_fl_$N$_posture value = 2 }
+				if = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }
+			}
 		}
 	}
 }

@@ -82,6 +82,14 @@ sr_site_hostile_target = {
 	}
 }
 
+# Country scope, the AI (6c, design § 14). A world its offence may close in on
+# (KEY): a hostile one (sr_site_hostile_target: held by a country at war with
+# it, or one of its own an enemy occupies), never a free colony.
+sr_site_ai_attack_target = {
+	sr_site_hostile_target = { KEY = $KEY$ }
+	NOT = { has_global_variable = sr_site_free_$KEY$ }
+}
+
 # Country scope, the interdictor (6c, design § 12). A world it may interdict
 # (KEY): a colony, not ruined, free or occupied, whose holder is another
 # country it is at peace with and not allied to (no alliance or defensive pact;

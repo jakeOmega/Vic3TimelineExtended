@@ -406,5 +406,77 @@ class InterdictionTest(unittest.TestCase):
         self.assertIn("remove_variable = sr_icpt_alert_loc", event)
 
 
+class AiOffenceTest(unittest.TestCase):
+    """6c (design § 14): the AI attacks at war, through the checks a player's
+    orders pass, never destroying, never taking a free colony, never
+    interdicting; an interdiction of its colonies is a threat it answers."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+
+    def test_it_attacks_only_at_war_after_the_defence(self):
+        self.assertRegex(_block(self.combat, "sr_fl_ai_attack"),
+                         r"limit = \{ is_at_war = yes \}\s*sr_fl_ai_attack_all = yes\s*sr_fl_each_slot = \{ DO = ai_assault \}")
+        review = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_ai_review")
+        self.assertLess(review.index("sr_fl_ai_defend = yes"), review.index("sr_fl_ai_attack = yes"))
+
+    def test_every_attack_order_passes_a_player_s_checks_and_can_come_home(self):
+        attack = _block(self.generated, "sr_fl_ai_attack_all")
+        for lc in gsf.LOCATIONS[1:]:
+            for n in range(1, gsf.SLOTS + 1):
+                with self.subTest(loc=lc.key, slot=n):
+                    self.assertIn(f"sr_fl_{n}_ai_free = yes sr_fl_{n}_ai_attacks_{lc.key} = yes", attack)
+                    body = _block(self.gen_triggers, f"sr_fl_{n}_ai_attacks_{lc.key}")
+                    for line in (f"sr_fl_{n}_docked = yes", f"sr_fl_{n}_may_depart_{lc.key} = yes",
+                                 f"sr_fl_{n}_leg_months_{lc.key} <= sr_fl_ai_attack_months",
+                                 f"sr_loc_port_{lc.key} = yes",
+                                 f"sr_fl_{n}_dv_value >= {{ value = sr_fl_{n}_leg_dv_{lc.key} add = sr_fl_{n}_return_dv_{lc.key} }}",
+                                 f"sr_fl_{n}_strength >= {{ value = sr_loc_ai_enemy_force_{lc.key} multiply = sr_fl_ai_attack_margin }}"):
+                        self.assertIn(line, body)
+        # One order a month at most.
+        self.assertEqual(attack.count("set_local_variable = { name = sr_fl_ai_sent value = 1 }"),
+                         (len(gsf.LOCATIONS) - 1) * gsf.SLOTS)
+        self.assertEqual(attack.count("limit = { local_var:sr_fl_ai_sent = 0 "), len(gsf.LOCATIONS) - 1)
+        values = _raw(FLEET_VALUES)
+        self.assertEqual(_number(values, "sr_fl_ai_attack_months"), 12)
+        self.assertEqual(_number(values, "sr_fl_ai_attack_margin"), 1.5)
+
+    def test_it_never_destroys_or_takes_a_free_colony(self):
+        target = _block(self.triggers, "sr_site_ai_attack_target")
+        self.assertIn("sr_site_hostile_target = { KEY = $KEY$ }", target)
+        self.assertIn("NOT = { has_global_variable = sr_site_free_$KEY$ }", target)
+        assault = _block(self.generated, "sr_fl_ai_assault_at")
+        self.assertIn("remove_variable = sr_fl_$N$_destroy", assault)
+        self.assertNotIn("set_variable = { name = sr_fl_$N$_destroy", assault)
+        self.assertNotIn("sr_site_hostile_target", assault)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"sr_site_ai_attack_target = {{ KEY = {site.key} }} sr_site_ai_worth_{site.key} > local_var:sr_ai_best",
+                              assault)
+
+    def test_it_closes_in_to_seize_only_with_the_marines_for_it(self):
+        assault = _block(self.generated, "sr_fl_ai_assault_at")
+        self.assertRegex(assault, r"limit = \{ sr_fl_\$N\$_marines_value > local_var:sr_ai_need \}\s*"
+                                  r"set_variable = \{ name = sr_fl_\$N\$_posture value = 3 \}")
+        self.assertRegex(assault, r"else = \{\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \}")
+
+    def test_an_interdiction_of_its_colonies_is_a_threat(self):
+        for lc in gsf.LOCATIONS[1:]:
+            with self.subTest(loc=lc.key):
+                body = _block(self.gen_triggers, f"sr_fl_ai_threatened_{lc.key}")
+                self.assertIn("save_temporary_scope_as = sr_icpt_victim", body)
+                self.assertIn(f"sr_icpt_interdicts_at = {{ LOC = {lc.key} }}", body)
+
+    def test_a_fleet_attacking_and_holding_its_own_stays(self):
+        home = _block(self.generated, "sr_fl_ai_home_at")
+        for lc in gsf.LOCATIONS[1:]:
+            with self.subTest(loc=lc.key):
+                self.assertIn(f"NOT = {{ AND = {{ sr_loc_ai_target_{lc.key} = yes sr_fl_ai_holds_{lc.key} = yes }} }}", home)
+
+
 if __name__ == "__main__":
     unittest.main()

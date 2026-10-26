@@ -558,11 +558,13 @@ sr_site_transfer_marines = {
 # its marines land on arrival, sr_fl_arrive_at), and a fleet with nothing left
 # to do away from Earth comes home. Every order passes the same
 # sr_fl_<n>_may_depart_<loc> a player's does. The defence's rules (6b) are
-# sr_fl_ai_defend (sr_fleet_combat_effects.txt).
+# sr_fl_ai_defend, the offence's (6c) sr_fl_ai_attack
+# (sr_fleet_combat_effects.txt).
 sr_fl_ai_review = {
 	sr_fl_ai_defend = yes
 	sr_fl_ai_send_garrisons = yes
 	sr_fl_each_slot = { DO = ai_home }
+	sr_fl_ai_attack = yes
 }
 
 # ---- Self-checks (design § 18) ---------------------------------------------------------------------
