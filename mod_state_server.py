@@ -137,6 +137,7 @@ mod_paths = {
     "PMs": os.path.join(_MOD_COMMON, "production_methods"),
     "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
     "Political Movements": os.path.join(_MOD_COMMON, "political_movements"),
+    "Parties": os.path.join(_MOD_COMMON, "parties"),
     "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
     "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
     "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
@@ -203,6 +204,7 @@ startup_elapsed: float = 0.0
 engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
 _company_catalog_cache: tuple[ModState, list[dict]] | None = None
+_party_catalog_cache: tuple[ModState, list[dict]] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -4231,6 +4233,31 @@ def _company_catalog():
     return rows
 
 
+def _party_catalog():
+    """party_catalog rows for the loaded state, cached on `ms` like
+    _company_catalog (a reload clears it). The vanilla side's files are the
+    game's, or the snapshot's JSON when vanilla came from vanilla_parsed/."""
+    global _party_catalog_cache
+    import party_catalog
+
+    parties = ms.get_data("Parties") if ms is not None else None
+    if not parties:
+        raise DataNotLoaded("Parties")
+    if _party_catalog_cache is not None and _party_catalog_cache[0] is ms:
+        return _party_catalog_cache[1]
+    vanilla_parser = ms.base_parsers.get("Parties")
+    vanilla = (vanilla_parser.data if vanilla_parser is not None else None) or {}
+    if _vanilla_source.get("kind") == "vanilla_parsed":
+        sites = [party_catalog.snapshot_site(vanilla)] if vanilla else []
+    else:
+        sites = party_catalog.directory_sites(
+            base_game_paths.get("Parties"), base_game_path, "vanilla")
+    sites += party_catalog.directory_sites(mod_paths.get("Parties"), mod_path, "mod")
+    rows = party_catalog.party_rows(parties, vanilla, sites)
+    _party_catalog_cache = (ms, rows)
+    return rows
+
+
 def _data_contains_string(obj, needle):
     """Recursively check if *needle* appears as a string value anywhere in the data tree."""
     if isinstance(obj, str):
@@ -5869,6 +5896,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movements": lambda: self._movements(rest),
             # Analytical endpoints
             "movement-stances": lambda: self._movement_stances(rest, params),
+            # Party types and their merged join_weight terms (#1164)
+            "parties": lambda: self._parties(rest, params),
             "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
@@ -5997,6 +6026,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
+                {"path": "/parties/<key?>?desc=<desc>", "desc": "Party types (mod ∪ vanilla, #1164): source vanilla|mod|both, defining files, the file whose join_weight the merged party carries (an injected join_weight replaces the field), and join_weight_terms, the desc of each term in source order (a desc-less term as `value = 0` / `if = {...}`). ?desc= keeps the parties naming it; /<key> adds per-term detail. Merged AST: /raw/Parties/<key>."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
@@ -7612,6 +7642,23 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if out is None:
             raise NotFound(lawgroup)
         return out
+
+    def _parties(self, parts, params):
+        """GET /parties[?desc=<desc>], GET /parties/<key> (#1164): who defines
+        each party and the descs of its merged join_weight, in source order
+        (party_catalog.py)."""
+        rows = _party_catalog()
+        if parts:
+            row = next((r for r in rows if r["key"] == parts[0]), None)
+            if row is None:
+                raise NotFound(parts[0])
+            return json.loads(json.dumps(row))  # a copy: the cached row stays as built
+        desc = (params.get("desc") or [None])[0]
+        return [
+            {k: v for k, v in row.items() if k != "terms"}
+            for row in rows
+            if desc is None or desc in row["join_weight_terms"]
+        ]
 
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
@@ -9800,6 +9847,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     None.
     """
     global _tech_unlocks_index_cache, _last_validation_report, _company_catalog_cache
+    global _party_catalog_cache
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -9816,6 +9864,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
                 mod_state.add_localization(loc_dir)
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
+        _party_catalog_cache = None
         _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
@@ -10124,7 +10173,7 @@ _vanilla_source_warnings: list[dict] = []
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _company_catalog_cache
+    global _company_catalog_cache, _party_catalog_cache
     global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
@@ -10172,6 +10221,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     _last_validation_report = None
     _tech_unlocks_index_cache = None
     _company_catalog_cache = None
+    _party_catalog_cache = None
     _invalidate_call_index()
     _annotator_compute_cache.clear()
 
