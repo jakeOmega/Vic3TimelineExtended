@@ -105,16 +105,24 @@ value (`icon = {}` doesn't); a key inside a bare `{ }` list item isn't the
 entity's; a directive on a nested key (`REPLACE:icon`) is dropped from its name.
 
 Which definitions count (`_final_definition`):
-  * Every INJECT on a key applies before any REPLACE on it, whichever file
-    sorts first (#1185's probe), so the last-sorting `REPLACE:`
-    (`TRY_REPLACE:`, `REPLACE_OR_CREATE:`) is the final entry: only its own
-    fields count, the INJECTs are lost. A REPLACE restates the whole entity:
-    `REPLACE:pmg_aeroplanes` dropped vanilla's `texture`.
-  * Otherwise a plain definition is checked with its `INJECT:`s.
-  * With neither, an `INJECT_OR_CREATE:` creates the entity when vanilla has
-    none of that name (or the snapshot doesn't hold the folder, where it's
-    checked as if it created one; a tag clears a false positive).
-  * An `INJECT:` / `TRY_INJECT:` alone is into vanilla's entity, or into none
+  * A plain `REPLACE:` applies after every INJECT and TRY_INJECT on its key,
+    whichever file sorts first (#1185's probes), so the last one is the final
+    entry: only its own fields count, the INJECTs are lost. It restates the
+    whole entity: `REPLACE:pmg_aeroplanes` dropped vanilla's `texture`. With a
+    plain REPLACE present, this rule wins.
+  * A `TRY_REPLACE:` applies in load order (files in ASCII order of name), so
+    an INJECT in a later file lands on it: its fields count with the INJECTs
+    that sort after it. Whether one sorting after an INJECT wipes it is
+    unprobed, so the earlier INJECTs don't count (errs toward flagging).
+  * A `REPLACE_OR_CREATE:` or `INJECT_OR_CREATE:` applies up front, after the
+    plain definitions and before every INJECT, even from a later file, so the
+    INJECTs land on it and count. A REPLACE_OR_CREATE drops a plain
+    definition's fields; an INJECT_OR_CREATE merges into it, or with no plain
+    one creates the entity when vanilla has none of that name (or the
+    snapshot doesn't hold the folder, where it's checked as if it created
+    one; a tag clears a false positive).
+  * Otherwise a plain definition is checked with its `INJECT:`s, and an
+    `INJECT:` / `TRY_INJECT:` alone is into vanilla's entity, or into none
     (the engine's `inject_to_missing` line), and isn't the mod's to check.
   * A field vanilla's entity of the same name also lacks is exempt
     (`REPLACE:country_gdp_construction`; vanilla's has no icon either), read
@@ -201,9 +209,9 @@ import re
 import subprocess
 from dataclasses import dataclass, field
 
-# Merge directives: `INJECT:x` adds to an existing entity, `REPLACE:x`
-# restates it whole.
-from paradox_file_parser import REPLACE_DIRECTIVES, directive_prefixes
+# Merge directives (`INJECT:x`, `REPLACE:x`, ...); `_final_definition` says
+# how the engine applies them.
+from paradox_file_parser import directive_prefixes
 
 CHECK = "texture_reference"
 SCAN = (("common", ".txt"), ("events", ".txt"), ("gui", ".gui"))
@@ -772,30 +780,60 @@ def load_vanilla_snapshot(mod_path: str) -> VanillaSnapshot:
     return snap
 
 
-_CREATE_DIRECTIVES = frozenset({"INJECT_OR_CREATE", "REPLACE_OR_CREATE"})
+_INJECTS = frozenset({"INJECT", "TRY_INJECT"})
+
+
+def load_order(d: Definition) -> tuple:
+    """Where a definition falls in the engine's load order: a type's files are
+    one list in ASCII order of file name, whatever their subfolder, and a
+    file is read top to bottom."""
+    return (d.file.rsplit("/", 1)[-1], d.file, d.line)
+
+
+def _fields(*groups) -> frozenset[str]:
+    return frozenset().union(*(d.fields for g in groups for d in g))
 
 
 def _final_definition(ds: list[Definition], vanilla: VanillaSnapshot,
                       folder: str, name: str) -> tuple[Definition, frozenset[str]] | None:
     """(the definition a flag goes on, the fields the loaded entity has), or
-    None when the entity isn't the mod's to check.
+    None when the entity isn't the mod's to check. #1185's probes, on one key:
 
-    Every INJECT on a key applies before any REPLACE on it, whichever file
-    sorts first (#1185), so the last-sorting REPLACE is the final entry and
-    the INJECTs are lost. Otherwise a plain definition takes its INJECTs. With
-    neither, an `INJECT_OR_CREATE` creates the entity when vanilla has none of
-    that name (or the snapshot doesn't hold the folder); an INJECT alone is
-    into vanilla's entity, or into none (the engine's `inject_to_missing`)."""
-    order = sorted(ds, key=lambda d: (d.file, d.line))
-    replaces = [d for d in order if d.directive in REPLACE_DIRECTIVES]
-    if replaces:
-        return replaces[-1], replaces[-1].fields
-    plain = [d for d in order if d.directive is None]
-    if plain:
-        return plain[0], frozenset().union(*(d.fields for d in ds))
-    creates = [d for d in order if d.directive in _CREATE_DIRECTIVES]
+      * A plain `REPLACE:` applies after every INJECT and TRY_INJECT,
+        whichever file sorts first: the last one's own fields are the entry,
+        the INJECTs are lost. It wins over every rule below.
+      * A `TRY_REPLACE:` applies in load order, so an INJECT in a later file
+        lands on it. Whether one that sorts after an INJECT wipes it is
+        unprobed: only the INJECTs after the last TRY_REPLACE count, which
+        errs toward flagging (a tag clears it).
+      * A `REPLACE_OR_CREATE:` / `INJECT_OR_CREATE:` applies up front, after
+        the plain definitions and before every INJECT, even from a later file:
+        the INJECTs land on it. A REPLACE_OR_CREATE replaces a plain
+        definition; an INJECT_OR_CREATE merges into it, or, with none in the
+        mod, creates the entity when vanilla has none of that name (or the
+        snapshot doesn't hold the folder).
+      * Otherwise a plain definition takes every INJECT, and an INJECT alone
+        is into vanilla's entity, or into none (the engine's
+        `inject_to_missing`)."""
+    order = sorted(ds, key=load_order)
+    by = {k: [d for d in order if d.directive == k]
+          for k in (None, "REPLACE", "TRY_REPLACE", "REPLACE_OR_CREATE", "INJECT_OR_CREATE")}
+    injects = [d for d in order if d.directive in _INJECTS]
+    if by["REPLACE"]:
+        last = by["REPLACE"][-1]
+        return last, last.fields
+    if by["TRY_REPLACE"]:
+        last = by["TRY_REPLACE"][-1]
+        later = [d for d in injects if load_order(d) > load_order(last)]
+        return last, _fields([last], later)
+    if by["REPLACE_OR_CREATE"]:
+        last = by["REPLACE_OR_CREATE"][-1]
+        return last, _fields([last], by["INJECT_OR_CREATE"], injects)
+    if by[None]:
+        return by[None][0], _fields(order)
+    creates = by["INJECT_OR_CREATE"]
     if creates and not (vanilla.covers(folder) and name in vanilla.names[folder]):
-        return creates[0], frozenset().union(*(d.fields for d in ds))
+        return creates[0], _fields(order)
     return None
 
 
@@ -1191,9 +1229,8 @@ def render_report(result: AuditResult) -> str:
         "- `unrooted`, `unknown_extension`, `backslash`, `whitespace`: a path that",
         "  doesn't start at `gfx/`, has an unknown extension, uses `\\`, or has spaces",
         "  around it inside its quotes;",
-        "- `undeclared`: a mod entity (its last `REPLACE:`, else a plain definition",
-        "  with its `INJECT:`s) that declares no art in a field its type needs (see",
-        "  *Declarations checked*).",
+        "- `undeclared`: a mod entity, as its definitions load, that declares no art",
+        "  in a field its type needs (see *Declarations checked*).",
         "",
         "The engine logs a miss only when it first renders the asset. Vanilla comes",
         "from the install when there is one, else from",
@@ -1249,8 +1286,10 @@ def render_report(result: AuditResult) -> str:
 
     out += ["## Declarations checked", "",
             "Each mod entity in these `common/` folders must declare the field. A",
-            "`REPLACE:` counts alone (every `INJECT:` applies before it and is lost); an",
-            "entity the mod only `INJECT:`s into is vanilla's. Only `buildings` and",
+            "plain `REPLACE:` counts alone (every `INJECT:` applies before it and is lost),",
+            "a `TRY_REPLACE:` with the `INJECT:`s that sort after it, an `*_OR_CREATE:` or",
+            "a plain definition with them all; an entity the mod only `INJECT:`s into is",
+            "vanilla's. Only `buildings` and",
             "`static_modifiers` have a log line behind them; the rest are vanilla",
             "convention, and an entity that is never shown opts out with a tag. Why each",
             "is checked, and the types and fields left out, are in",

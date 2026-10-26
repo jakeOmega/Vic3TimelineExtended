@@ -451,6 +451,43 @@ class DeclarationTests(_Fixture):
                     ("common/laws/" + ("a.txt" if first is replace else "b.txt"), 1,
                      "REPLACE:law_foo", "icon", False)])
 
+    def _two_files(self, first: str, second: str, names=("a.txt", "b.txt")):
+        shutil.rmtree(os.path.join(self.mod, "common"), ignore_errors=True)
+        return self.run_audit({f"common/laws/{names[0]}": first, f"common/laws/{names[1]}": second})
+
+    def test_an_or_create_takes_every_inject_whatever_the_file_order(self):
+        # #1185: an *_OR_CREATE applies after the plain definitions and before
+        # every INJECT, even from a later file, so the INJECTs land on it.
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        for create in ('REPLACE_OR_CREATE:law_foo = { group = g }\n',
+                       'INJECT_OR_CREATE:law_foo = { group = g }\n'):
+            for first, second in ((inject, create), (create, inject)):
+                with self.subTest(create=create.split(":")[0], create_first=first is create):
+                    self.assertEqual(self.flagged(self._two_files(first, second)), [])
+        # A REPLACE_OR_CREATE drops a plain definition's fields.
+        r = self._two_files('law_foo = { icon = "gfx/interface/icons/a.dds" }\n',
+                            'REPLACE_OR_CREATE:law_foo = { group = g }\n')
+        self.assertEqual(self.flagged(r), ["REPLACE_OR_CREATE:law_foo"])
+
+    def test_a_try_replace_takes_only_the_injects_that_sort_after_it(self):
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        try_replace = 'TRY_REPLACE:law_foo = { group = g }\n'
+        self.assertEqual(self.flagged(self._two_files(try_replace, inject)), [])
+        # Sorting before it, the INJECT may be wiped (unprobed): flag.
+        self.assertEqual(self.flagged(self._two_files(inject, try_replace)), ["TRY_REPLACE:law_foo"])
+        # The order is the file name's, whatever the subfolder: zz/a_try.txt loads before b_inject.txt.
+        self.assertEqual(self.flagged(self._two_files(try_replace, inject, ("zz/a_try.txt", "b_inject.txt"))), [])
+        # Later in the same file counts too.
+        self.assertEqual(self.flagged(self._two_files(try_replace + inject, "")), [])
+
+    def test_a_plain_replace_beats_the_other_directives(self):
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        for other in ('REPLACE_OR_CREATE:law_foo = { icon = "gfx/interface/icons/a.dds" }\n',
+                      'TRY_REPLACE:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'):
+            with self.subTest(other=other.split(":")[0]):
+                r = self._two_files(other + inject, 'REPLACE:law_foo = { group = g }\n')
+                self.assertEqual(self.flagged(r), ["REPLACE:law_foo"])
+
     def test_the_last_replace_is_the_entry(self):
         r = self.run_audit({
             "common/laws/a.txt": 'law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
