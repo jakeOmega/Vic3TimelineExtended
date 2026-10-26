@@ -1,9 +1,10 @@
 """Unit tests for loc_script_value_audit (#1120).
 
 Each fixture is a throwaway mod tree: a vanilla snapshot JSON, mod script
-value files and English loc. The crux is what counts as a definition (any
-depth-0 key, scalars and merge prefixes included), which arguments are
-skipped as dynamic, and the tagged suppression, stale tags included.
+value files and English loc. The crux is what counts as a definition (a
+depth-0 key, scalars and `*_OR_CREATE:` names included, but not a constant or
+a name behind INJECT/REPLACE), which arguments are skipped as dynamic, and the
+tagged suppression, stale tags included.
 """
 from __future__ import annotations
 
@@ -26,8 +27,14 @@ mod_block_sv = {
 \tnested_not_top = 2
 }
 mod_scalar_sv = 5
-INJECT:injected_sv = { add = 1 }
-REPLACE:replaced_sv = { value = 2 }
+INJECT:vanilla_sv = { add = 1 }
+REPLACE:mod_block_sv = { value = 2 }
+INJECT:inject_only_sv = { add = 1 }
+REPLACE:replace_only_sv = { value = 2 }
+TRY_INJECT:try_inject_only_sv = { add = 1 }
+TRY_REPLACE:try_replace_only_sv = { value = 2 }
+INJECT_OR_CREATE:created_sv = { value = 3 }
+REPLACE_OR_CREATE:recreated_sv = { value = 4 }
 @const_not_sv = 3
 """
 
@@ -53,6 +60,7 @@ class _Fixture(unittest.TestCase):
                   "w", encoding="utf-8") as fh:
             json.dump({"vanilla_sv": ["=", "1"]}, fh)
         _write(self.root, "common/script_values/te_test_values.txt", SCRIPT_VALUES)
+        _write(self.root, "common/script_values/sub/te_sub_values.txt", "sub_sv = 1\n")
 
     def loc(self, *lines: str, name: str = "te_test_l_english.yml") -> None:
         _write(self.root, f"localization/english/{name}", _loc(*lines))
@@ -62,15 +70,22 @@ class _Fixture(unittest.TestCase):
 
 
 class DefinitionTests(_Fixture):
-    def test_depth_zero_keys_scalars_and_merge_prefixes(self):
+    def test_depth_zero_keys_scalars_and_or_create_names(self):
         self.assertEqual(
             mod_script_value_names(self.root),
-            {"mod_block_sv", "mod_scalar_sv", "injected_sv", "replaced_sv"},
+            {"mod_block_sv", "mod_scalar_sv", "created_sv", "recreated_sv", "sub_sv"},
         )
 
     def test_missing_snapshot_raises(self):
         os.remove(os.path.join(self.root, "vanilla_parsed", "common", "script_values.json"))
         self.loc("k:0 \"[ScriptValue('vanilla_sv')]\"")
+        with self.assertRaises(FileNotFoundError):
+            self.run_audit()
+
+    def test_no_loc_file_raises(self):
+        with self.assertRaises(FileNotFoundError):
+            self.run_audit()
+        self.loc("k:0 \"[ScriptValue('gone_sv')]\"", name="te_unused_l_english.yml")
         with self.assertRaises(FileNotFoundError):
             self.run_audit()
 
@@ -98,11 +113,28 @@ class FlagTests(_Fixture):
         self.loc("k:0 \"[ScriptValue('mod_scalar_sv')]\"")
         self.assertEqual(self.run_audit().flags, [])
 
-    def test_inject_and_replace_names_resolve(self):
-        self.loc("k:0 \"[ScriptValue('injected_sv')] [ScriptValue('replaced_sv')]\"")
+    def test_subfolder_definition_resolves(self):
+        self.loc("k:0 \"[ScriptValue('sub_sv')]\"")
         r = self.run_audit()
         self.assertEqual(r.flags, [])
-        self.assertEqual(r.refs_checked, 2)
+        self.assertEqual(r.refs_checked, 1)
+
+    def test_merge_targets_and_or_create_names_resolve(self):
+        # vanilla_sv is injected and mod_block_sv replaced; each resolves
+        # through its own definition.
+        self.loc("k:0 \"[ScriptValue('vanilla_sv')] [ScriptValue('mod_block_sv')] "
+                 "[ScriptValue('created_sv')] [ScriptValue('recreated_sv')]\"")
+        r = self.run_audit()
+        self.assertEqual(r.flags, [])
+        self.assertEqual(r.refs_checked, 4)
+
+    def test_inject_or_replace_with_no_base_is_flagged(self):
+        self.loc("k:0 \"[ScriptValue('inject_only_sv')] [ScriptValue('replace_only_sv')] "
+                 "[ScriptValue('try_inject_only_sv')] [ScriptValue('try_replace_only_sv')]\"")
+        self.assertEqual(
+            [f.name for f in self.run_audit().flags],
+            ["inject_only_sv", "replace_only_sv", "try_inject_only_sv", "try_replace_only_sv"],
+        )
 
     def test_nested_key_and_constant_are_not_definitions(self):
         self.loc("k:0 \"[ScriptValue('nested_not_top')] [ScriptValue('const_not_sv')]\"")
@@ -113,15 +145,24 @@ class FlagTests(_Fixture):
         self.loc('k:0 "[ScriptValue(\\"gone_sv\\")] [ScriptValue(\\"vanilla_sv\\")]"')
         self.assertEqual([f.name for f in self.run_audit().flags], ["gone_sv"])
 
+    def test_whitespace_inside_the_parentheses(self):
+        self.loc('k:0 "[ScriptValue( \'gone_sv\' )] [ScriptValue(  \\"vanilla_sv\\"  )]"')
+        r = self.run_audit()
+        self.assertEqual([f.name for f in r.flags], ["gone_sv"])
+        self.assertEqual((r.refs_checked, r.dynamic_skipped), (2, 0))
+
     def test_dynamic_arguments_are_skipped(self):
         self.loc(
             "k1:0 \"[ScriptValue(Concatenate('gone','_sv'))]\"",
             "k2:0 \"[ScriptValue('te_$KIND$_sv')]\"",
             "k3:0 \"[ScriptValue('$gone_key$')]\"",
+            "k4:0 \"[ScriptValue('gone.dotted')] [ScriptValue('gone-hyphen')]\"",
+            # An unescaped quote ends the value as split_loc_line reads it.
+            'k5:0 "[ScriptValue("gone_sv")]"',
         )
         r = self.run_audit()
         self.assertEqual(r.flags, [])
-        self.assertEqual(r.dynamic_skipped, 3)
+        self.assertEqual(r.dynamic_skipped, 6)
         self.assertEqual(r.refs_checked, 0)
 
     def test_repeated_name_on_a_line_is_one_flag(self):
@@ -131,13 +172,14 @@ class FlagTests(_Fixture):
         self.assertEqual(r.refs_checked, 2)
 
     def test_te_unused_is_skipped_flags_and_tags(self):
+        self.loc("k:0 \"[ScriptValue('vanilla_sv')]\"")
         self.loc(
             "k:0 \"[ScriptValue('gone_sv')]\"",
             "k2:0 \"plain\" # REVIEWED 2026-10-26 (loc_script_value): stale but unscanned",
             name="te_unused_l_english.yml",
         )
         r = self.run_audit()
-        self.assertEqual((r.flags, r.stale_tags, r.loc_files_scanned), ([], [], 0))
+        self.assertEqual((r.flags, r.stale_tags, r.loc_files_scanned), ([], [], 1))
 
     def test_replace_folder_is_scanned(self):
         _write(self.root, "localization/english/replace/te_over_l_english.yml",
