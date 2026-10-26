@@ -3361,7 +3361,7 @@ Design: `docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-desi
 
 ## War Support Feeds (1.14 hook)
 
-Vanilla 1.14 computes each country's weekly war support change in `common/script_values/war_support_values.txt`; its last term, `war_support_from_journal_entries`, is the only slot that accepts a per-line `desc` key. The mod injects into it from **`common/script_values/zz_te_war_support_injections.txt`** (`INJECT:war_support_from_journal_entries`; `zz_` so the file sorts after the vanilla target — INJECT errors if the target does not exist yet). `root` = country, `scope:war` = the war being evaluated; no randomness; it runs per country per war per beat, so conditions are `has_modifier` / pact / war-participant checks only. Labels live in `te_miscellaneous_l_english.yml` (`WAR_SUPPORT_TE_*`).
+Vanilla 1.14 computes each country's weekly war support change in `common/script_values/war_support_values.txt`; its last term, `war_support_from_journal_entries`, is the only slot that accepts a per-line `desc` key. The mod injects into it from **`common/script_values/zz_te_war_support_injections.txt`** (`INJECT:war_support_from_journal_entries`; the `zz_` prefix was a hedge: directives apply after every bare definition, so an INJECT needn't sort after its target, `scripting_best_practices.md` § Load Order (probed 2026-10-26), fact 4). `root` = country, `scope:war` = the war being evaluated; no randomness; it runs per country per war per beat, so conditions are `has_modifier` / pact / war-participant checks only. Labels live in `te_miscellaneous_l_english.yml` (`WAR_SUPPORT_TE_*`).
 
 | System | Condition (root = country) | Per beat |
 |---|---|---|
