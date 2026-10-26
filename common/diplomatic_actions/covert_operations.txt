@@ -3134,3 +3134,187 @@ covert_sabotage_colony_action = {
 		}
 	}
 }
+
+# ----------------------------------------------------------------------------
+# SURVEY COLONY DEFENCES (solar colonization slice 6,
+# docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md § 11)
+# ----------------------------------------------------------------------------
+# Agents in the target's colonies and its tracking network, mapping their
+# guns, their hulls and the marines that hold them. No modifier: once
+# established, the operator's fleets fire +20% x the operation's phase x
+# priority (1 to 3.2) on the defences of every colony the target holds, and
+# the operator's Fleets panel shows those colonies' Defences, integrity and
+# marines exactly, through the space race's sr_cov_survey_reset and
+# sr_cov_survey_defences (covert_ops_apply_all_phase_effects; read by
+# sr_cov_surveys_<key>, sr_fleets_generated.txt). Moderate tier: reading a
+# rival's defences, not attacking them. Only under Full Colonies, where fleets
+# fight; lapses when the target holds no colony.
+covert_survey_defences_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_survey_defences_action.dds"
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_survey_defences_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		if = {
+			limit = { covert_is_friend = { TARGET = scope:target_country } }
+			custom_tooltip = {
+				text = covert_friend_target_warning_tt
+			}
+		}
+		covert_op_start = { TYPE = survey_defences DEFENSE_MOD = country_covert_defense_military_add CODE = 17 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		sr_colonies_full_enabled = yes
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
+			text = covert_op_capacity_survey_defences_tt
+			covert_ops_type_below_cap = { TYPE = covert_survey_defences_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_survey_defences_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_holds_space_colony_tt
+			scope:target_country = { sr_has_space_colony = yes }
+		}
+	}
+
+	pact = {
+		cost = 50 # influence, moderate tier (INFLUENCE, file header)
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# Nothing left to survey once the target's last colony has gone: the
+		# operation ends by itself.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_holds_space_colony_tt
+					scope:target_country = { sr_has_space_colony = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = survey_defences } }
+		auto_break_effect = { covert_op_end = { TYPE = survey_defences } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
+		}
+
+		# A fleet power of our own, against a rival or an enemy at war with us
+		# that holds a colony: the defences our fleets may have to break.
+		will_propose = {
+			scope:target_country = { sr_has_space_colony = yes }
+			sr_fleet_power = yes
+			OR = {
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				has_war_with = scope:target_country
+			}
+			NOT = { covert_is_friend = { TARGET = scope:target_country } }
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			# Its influence, with some to spare
+			covert_ai_can_spare_influence = { TYPE = covert_survey_defences_action }
+		}
+
+		# Kept until fully operational, then until we have no fleets left to
+		# use it, the hostility is gone (and we are not at war with the
+		# target) or influence runs into deficit
+		will_break = {
+			covert_ai_op_settled = { TYPE = survey_defences TARGET = scope:target_country }
+			OR = {
+				sr_fleet_power = no
+				AND = {
+					NOT = { has_war_with = scope:target_country }
+					covert_ai_hostility_gone = { TARGET = scope:target_country }
+				}
+				influence < 0
+			}
+		}
+
+		propose_score = {
+			value = 5
+			if = {
+				limit = { has_war_with = scope:target_country }
+				add = 10
+			}
+		}
+	}
+}

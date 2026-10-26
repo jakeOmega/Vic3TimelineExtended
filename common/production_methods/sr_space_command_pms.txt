@@ -1,0 +1,132 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — Space Command's methods (fleets design § 5)
+# ============================================================================
+# pmg_space_command_yards (sr_space_command_pmgs.txt). Each method carries the
+# fleet strength a level builds a month as a workforce-scaled state modifier,
+# state_sr_ship_construction_add (script-only: the engine consumes nothing; it
+# still renders in the method's tooltip and the state's modifiers), which
+# sr_sc_rate sums over the states the country controls. One field, no
+# building-scoped copy, which the game would list a second time.
+#
+#   method              gate                              strength/level/mo  Launch Cap./wk  Adv. Mat./wk  electricity/wk
+#   Orbital Shipyards   space_militarization              0.5                500             10            -
+#   Fusion Yards        fusion_power                      1.0                600             15            -
+#   Torch Yards         compact_fusion_reactors           1.5                600             15            200
+#   Antimatter Yards    antimatter_production             2.0                700             20            400
+#
+# Antimatter Yards needs only its technology: a method can't require another
+# building (unlocking_production_methods reads the same building's other
+# groups), so the Antimatter Containment Facility gates the drive
+# (sr_launch_has_antimatter), not the yards. Every level employs 500 officers,
+# 2,000 engineers and 2,500 machinists.
+# ============================================================================
+
+pm_sr_space_command_orbital_shipyards = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
+
+	unlocking_technologies = {
+		space_militarization
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_launch_capacity_add = 500
+			goods_input_advanced_materials_add = 10
+		}
+
+		level_scaled = {
+			building_employment_officers_add = 500
+			building_employment_engineers_add = 2000
+			building_employment_machinists_add = 2500
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_sr_ship_construction_add = 0.5
+		}
+	}
+}
+
+pm_sr_space_command_fusion_yards = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p1.dds"
+
+	unlocking_technologies = {
+		fusion_power
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_launch_capacity_add = 600
+			goods_input_advanced_materials_add = 15
+		}
+
+		level_scaled = {
+			building_employment_officers_add = 500
+			building_employment_engineers_add = 2000
+			building_employment_machinists_add = 2500
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_sr_ship_construction_add = 1
+		}
+	}
+}
+
+pm_sr_space_command_torch_yards = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p2.dds"
+
+	unlocking_technologies = {
+		compact_fusion_reactors
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_launch_capacity_add = 600
+			goods_input_advanced_materials_add = 15
+			goods_input_electricity_add = 200
+		}
+
+		level_scaled = {
+			building_employment_officers_add = 500
+			building_employment_engineers_add = 2000
+			building_employment_machinists_add = 2500
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_sr_ship_construction_add = 1.5
+		}
+	}
+}
+
+pm_sr_space_command_antimatter_yards = {
+	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p3.dds"
+
+	unlocking_technologies = {
+		antimatter_production
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_launch_capacity_add = 700
+			goods_input_advanced_materials_add = 20
+			goods_input_electricity_add = 400
+		}
+
+		level_scaled = {
+			building_employment_officers_add = 500
+			building_employment_engineers_add = 2000
+			building_employment_machinists_add = 2500
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_sr_ship_construction_add = 2
+		}
+	}
+}

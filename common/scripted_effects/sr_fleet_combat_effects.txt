@@ -1,0 +1,917 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: combat, blockade, seizure, destruction
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# (slice 6b, §§ 7-11, 14). Full Colonies only.
+#
+# Each month, from the global step (sr_fl_global_month, after the fleets land
+# and before the worlds' step), at each of the nine locations
+# (sr_combat_at = { LOC CODE }):
+#   0. every power's forces there by posture into country variables (sr_cb_*):
+#      strength and fire on fleets by posture (1 station, 2 stand off, 3 close
+#      in; at Earth every fleet counts as stationed, since everything there
+#      engages everything), and for each world its closing-in fleets target,
+#      their strength, fire on defences, marines and fire to destroy;
+#   1. each world's closing-in strength (global sr_cb_c_<key>);
+#   2. each power's engaged hostile strength by posture (sr_cb_e1..3: station
+#      engages every hostile fleet, stand off the stationed and standing off,
+#      close in the stationed and closing in) and its fire per point engaged
+#      (sr_cb_r1..3 = fire / engaged);
+#   3. its losses (Lanchester's square law, § 7.2): posture p loses
+#      k x its strength x the hostiles' fire per point engaged, summed over the
+#      postures that engage it (sr_cb_l1..3), and closing in on a world, the
+#      world's Defences' fire shared by strength (sr_cb_ld_<key>), so each
+#      fleet's losses are exactly the fire allocated to it;
+#   4. the losses applied slot by slot (screens first, half destroyed, half
+#      damage: sr_fl_take_losses_at), the Orbital Battlestation's share at
+#      Earth, debris at Earth, war support's battle record, the notice;
+#   5. each world: integrity, seizure, destruction, blockade (sr_site_*_step);
+#   6. the records cleared.
+# Hostile means at war (has_war_with); a fleet closing in on a free colony is
+# hostile to its Defences alone (§ 9.5). The per-location and per-world blocks
+# are generated (sr_fleets_generated.txt); the numbers are sr_fleet_values.txt's.
+# ============================================================================
+
+# ---- The month (global scope) -------------------------------------------------------------
+sr_combat_global_monthly = {
+	sr_combat_at = { LOC = earth CODE = 1 }
+	sr_combat_at = { LOC = inner CODE = 2 }
+	sr_combat_at = { LOC = mars CODE = 3 }
+	sr_combat_at = { LOC = asteroids CODE = 4 }
+	sr_combat_at = { LOC = jupiter CODE = 5 }
+	sr_combat_at = { LOC = saturn CODE = 6 }
+	sr_combat_at = { LOC = uranus CODE = 7 }
+	sr_combat_at = { LOC = neptune CODE = 8 }
+	sr_combat_at = { LOC = kuiper CODE = 9 }
+}
+
+sr_combat_at = {
+	set_local_variable = { name = sr_cb_code value = $CODE$ }
+	# 0. Forces.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes }
+		sr_cb_clear_$LOC$ = yes
+		if = {
+			limit = { has_variable = sr_fl_at_$LOC$ }
+			sr_fl_each_slot = { DO = gather }
+		}
+		if = {
+			limit = { local_var:sr_cb_code = 1 }
+			sr_cb_battlestation_gather = yes
+		}
+	}
+	# 1. Each world's closing-in strength.
+	sr_cb_world_sums_$LOC$ = yes
+	# 2. Engaged strength and fire per point engaged.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present }
+		set_variable = { name = sr_cb_e1 value = sr_cb_e1_value }
+		set_variable = { name = sr_cb_e2 value = sr_cb_e2_value }
+		set_variable = { name = sr_cb_e3 value = sr_cb_e3_value }
+		set_variable = { name = sr_cb_hs value = sr_cb_hs_calc }
+		set_variable = { name = sr_cb_r1 value = 0 }
+		set_variable = { name = sr_cb_r2 value = 0 }
+		set_variable = { name = sr_cb_r3 value = 0 }
+		if = { limit = { var:sr_cb_e1 > 0 } set_variable = { name = sr_cb_r1 value = { value = sr_cb_f1_value divide = var:sr_cb_e1 } } }
+		if = { limit = { var:sr_cb_e2 > 0 } set_variable = { name = sr_cb_r2 value = { value = sr_cb_f2_value divide = var:sr_cb_e2 } } }
+		if = { limit = { var:sr_cb_e3 > 0 } set_variable = { name = sr_cb_r3 value = { value = sr_cb_f3_value divide = var:sr_cb_e3 } } }
+	}
+	# 3. Losses.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present }
+		set_variable = { name = sr_cb_l1 value = { value = sr_cb_s1_value multiply = sr_cb_hostile_r1_value multiply = sr_fleet_k } }
+		set_variable = { name = sr_cb_l2 value = { value = sr_cb_s2_value multiply = sr_cb_hostile_r2_value multiply = sr_fleet_k } }
+		set_variable = { name = sr_cb_l3 value = { value = sr_cb_s3_value multiply = sr_cb_hostile_r3_value multiply = sr_fleet_k } }
+		sr_cb_def_losses_$LOC$ = yes
+		set_variable = { name = sr_cb_before value = sr_cb_all_value }
+		set_variable = { name = sr_cb_lost value = { value = var:sr_cb_l1 add = var:sr_cb_l2 add = var:sr_cb_l3 add = sr_cb_ld_total_$LOC$ } }
+	}
+	# 4. Applied; the records.
+	set_local_variable = { name = sr_cb_debris value = 0 }
+	set_local_variable = { name = sr_cb_battle value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present }
+		if = {
+			limit = { var:sr_cb_lost > 0 }
+			set_local_variable = { name = sr_cb_battle value = 1 }
+			sr_fl_each_slot = { DO = apply_losses }
+			if = {
+				limit = { local_var:sr_cb_code = 1 }
+				sr_cb_battlestation_losses = yes
+				change_local_variable = { name = sr_cb_debris add = var:sr_cb_lost }
+			}
+		}
+		sr_cb_battle_record = { CODE = $CODE$ }
+	}
+	if = {
+		limit = { local_var:sr_cb_battle = 1 }
+		set_global_variable = { name = sr_loc_battle_$LOC$ value = te_history_month_index }
+	}
+	if = {
+		limit = { local_var:sr_cb_debris > 0 }
+		# An argument is one token (a block there breaks the file: #1096), so the
+		# two shares go through local variables.
+		set_local_variable = {
+			name = sr_cb_debris_low
+			value = { value = local_var:sr_cb_debris multiply = sr_battle_debris_low }
+		}
+		set_local_variable = {
+			name = sr_cb_debris_high
+			value = { value = local_var:sr_cb_debris multiply = sr_battle_debris_high }
+		}
+		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = local_var:sr_cb_debris_high }
+	}
+	# 5. Each world.
+	sr_cb_worlds_after_$LOC$ = yes
+	# 6. Cleared.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present }
+		sr_cb_clear_$LOC$ = yes
+	}
+	sr_cb_world_clear_$LOC$ = yes
+	sr_loc_rebuild = yes
+}
+
+# ---- One slot's part ($N$; the power's scope) ---------------------------------------------------
+# 0. A slot at the location (local_var:sr_cb_code) adds its strength and fire
+# to its posture's (at Earth, stationed); closing in, to its target world's too.
+# A target no longer hostile (a peace made, the world taken) turns it to Stand
+# off first.
+sr_fl_gather_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_loc
+			var:sr_fl_$N$_loc = local_var:sr_cb_code
+			sr_fl_$N$_strength > 0
+		}
+		set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
+		if = { limit = { local_var:sr_cb_code = 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		if = {
+			limit = { local_var:sr_cb_p = 3 }
+			sr_fl_check_target_at = { N = $N$ }
+			set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
+		}
+		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		set_local_variable = { name = sr_cb_s value = sr_fl_$N$_strength }
+		set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality } }
+		if = {
+			limit = { local_var:sr_cb_p = 1 }
+			sr_cb_add = { VAR = sr_cb_s1 AMOUNT = local_var:sr_cb_s }
+			sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_f }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_p = 2 }
+			sr_cb_add = { VAR = sr_cb_s2 AMOUNT = local_var:sr_cb_s }
+			sr_cb_add = { VAR = sr_cb_f2 AMOUNT = local_var:sr_cb_f }
+		}
+		else = {
+			sr_cb_add = { VAR = sr_cb_s3 AMOUNT = local_var:sr_cb_s }
+			sr_cb_add = { VAR = sr_cb_f3 AMOUNT = local_var:sr_cb_f }
+			sr_fl_gather_target_at = { N = $N$ }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_cb_present } }
+			set_variable = { name = sr_cb_present value = yes }
+		}
+	}
+}
+
+# The slot's target world KEY (it closes in on it): its strength, its fire on
+# defences (x quality, x Survey Colony Defences' edge against the holder), and
+# its marines to seize or its fire to destroy.
+sr_cb_add_target = {
+	sr_cb_add = { VAR = sr_cb_s3_$KEY$ AMOUNT = local_var:sr_cb_s }
+	set_local_variable = {
+		name = sr_cb_fd
+		value = {
+			value = sr_fl_$N$_fire_defences
+			multiply = sr_fleet_quality
+			multiply = sr_cb_edge_$KEY$
+		}
+	}
+	sr_cb_add = { VAR = sr_cb_fd3_$KEY$ AMOUNT = local_var:sr_cb_fd }
+	if = {
+		limit = { has_variable = sr_fl_$N$_destroy }
+		sr_cb_add = { VAR = sr_cb_dfd_$KEY$ AMOUNT = local_var:sr_cb_fd }
+	}
+	else_if = {
+		limit = { sr_fl_$N$_marines_value > 0 }
+		sr_cb_add = { VAR = sr_cb_mar_$KEY$ AMOUNT = sr_fl_$N$_marines_value }
+	}
+}
+
+# Country scope: AMOUNT more on the combat record VAR.
+sr_cb_add = {
+	if = {
+		limit = { NOT = { has_variable = $VAR$ } }
+		set_variable = { name = $VAR$ value = 0 }
+	}
+	change_variable = { name = $VAR$ add = $AMOUNT$ }
+}
+
+# 4. The slot's losses: its posture's, by its share of that posture's strength,
+# and closing in, the target's Defences' too, by its share of ours closing in
+# on it.
+sr_fl_apply_losses_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_loc
+			var:sr_fl_$N$_loc = local_var:sr_cb_code
+			sr_fl_$N$_strength > 0
+		}
+		set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
+		if = { limit = { local_var:sr_cb_code = 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
+		set_local_variable = { name = sr_fl_loss value = 0 }
+		if = {
+			limit = { local_var:sr_cb_p = 1 sr_cb_s1_value > 0 }
+			set_local_variable = { name = sr_fl_loss value = { value = var:sr_cb_l1 multiply = sr_fl_$N$_strength divide = sr_cb_s1_value } }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_p = 2 sr_cb_s2_value > 0 }
+			set_local_variable = { name = sr_fl_loss value = { value = var:sr_cb_l2 multiply = sr_fl_$N$_strength divide = sr_cb_s2_value } }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_p = 3 sr_cb_s3_value > 0 }
+			set_local_variable = { name = sr_fl_loss value = { value = var:sr_cb_l3 multiply = sr_fl_$N$_strength divide = sr_cb_s3_value } }
+			sr_fl_target_loss_at = { N = $N$ }
+		}
+		if = {
+			limit = { local_var:sr_fl_loss > 0 }
+			set_local_variable = { name = sr_fl_loss value = { value = local_var:sr_fl_loss max = sr_fl_$N$_strength } }
+			sr_fl_take_losses_at = { N = $N$ }
+		}
+	}
+}
+
+# The share of the target KEY's Defences' fire this slot takes (added to
+# local_var:sr_fl_loss).
+sr_cb_add_target_loss = {
+	if = {
+		limit = {
+			has_variable = sr_cb_ld_$KEY$
+			has_variable = sr_cb_s3_$KEY$
+			var:sr_cb_s3_$KEY$ > 0
+		}
+		change_local_variable = {
+			name = sr_fl_loss
+			add = { value = var:sr_cb_ld_$KEY$ multiply = sr_fl_$N$_strength divide = var:sr_cb_s3_$KEY$ }
+		}
+	}
+}
+
+# A closing-in slot whose target world KEY is no longer a hostile one stands off.
+sr_cb_check_target = {
+	if = {
+		limit = { NOT = { sr_site_hostile_target = { KEY = $KEY$ } } }
+		set_variable = { name = sr_fl_$N$_posture value = 2 }
+		remove_variable = sr_fl_$N$_target
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+	}
+}
+
+# ---- The Orbital Battlestation (design § 7.5) -------------------------------------------------
+# Country scope, at Earth: 25 warship strength a level, fighting for its
+# owner while its state is under its control (§ 5.1), regaining 10% of full a
+# month (sr_cb_battlestation_month). Its losses take nothing from the building.
+sr_cb_battlestation_gather = {
+	if = {
+		limit = { sr_battlestation_held = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_battlestation_strength } }
+			set_variable = { name = sr_battlestation_strength value = sr_battlestation_full }
+		}
+		if = {
+			limit = { var:sr_battlestation_strength > 0 }
+			sr_cb_add = { VAR = sr_cb_s1 AMOUNT = var:sr_battlestation_strength }
+			sr_cb_add = { VAR = sr_cb_f1 AMOUNT = sr_battlestation_fire }
+			set_variable = { name = sr_cb_bs value = var:sr_battlestation_strength }
+			if = {
+				limit = { NOT = { has_variable = sr_cb_present } }
+				set_variable = { name = sr_cb_present value = yes }
+			}
+		}
+	}
+}
+
+sr_cb_battlestation_losses = {
+	if = {
+		limit = {
+			has_variable = sr_cb_bs
+			sr_cb_s1_value > 0
+		}
+		set_variable = {
+			name = sr_battlestation_strength
+			value = {
+				value = var:sr_cb_l1
+				multiply = var:sr_cb_bs
+				divide = sr_cb_s1_value
+				multiply = -1
+				add = var:sr_battlestation_strength
+				min = 0
+			}
+		}
+	}
+}
+
+# Country scope, the fleets' month: the battlestation regains strength while
+# its state is held; with none, its record goes.
+sr_cb_battlestation_month = {
+	if = {
+		limit = { sr_battlestation_held = yes }
+		set_variable = {
+			name = sr_battlestation_strength
+			value = {
+				value = sr_battlestation_full
+				multiply = sr_battlestation_regain
+				add = sr_battlestation_strength_value
+				max = sr_battlestation_full
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_variable = sr_battlestation_strength
+			NOT = { sr_has_battlestation = yes }
+		}
+		remove_variable = sr_battlestation_strength
+	}
+}
+
+# ---- The month's records (a power at the location; design §§ 7.4, 10) ---------------------------
+# War support's battle record: a month in which we fought, +0.1 a beat for
+# thirty days when the enemy lost the larger share of its strength, -0.1 when
+# we did; +-0.25 when a side's fleet there was destroyed outright. A player
+# who fought gets the battle report (.101), once a month.
+sr_cb_battle_record = {
+	if = {
+		limit = { sr_cb_fought = yes }
+		set_local_variable = { name = sr_cb_ours value = 0 }
+		if = {
+			limit = { var:sr_cb_before > 0 }
+			set_local_variable = { name = sr_cb_ours value = { value = var:sr_cb_lost divide = var:sr_cb_before } }
+		}
+		set_local_variable = { name = sr_cb_theirs value = sr_cb_enemy_lost_share }
+		if = {
+			limit = { local_var:sr_cb_theirs >= 0.99 }
+			set_variable = { name = sr_ws_battle value = sr_ws_battle_rout days = 30 }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_ours >= 0.99 }
+			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle_rout multiply = -1 } days = 30 }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_theirs > local_var:sr_cb_ours }
+			set_variable = { name = sr_ws_battle value = sr_ws_battle days = 30 }
+		}
+		else = {
+			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle multiply = -1 } days = 30 }
+		}
+		if = {
+			limit = {
+				is_player = yes
+				NOT = { has_variable = sr_battle_notice_pending }
+			}
+			set_variable = { name = sr_battle_notice_pending value = yes days = 25 }
+			set_variable = { name = sr_battle_loc value = $CODE$ }
+			set_variable = { name = sr_battle_lost value = var:sr_cb_lost }
+			set_variable = { name = sr_battle_dealt value = sr_cb_enemy_lost }
+			set_variable = { name = sr_battle_left value = { value = var:sr_cb_before subtract = var:sr_cb_lost min = 0 } }
+			trigger_event = { id = space_race_events.101 days = 1 }
+		}
+	}
+}
+
+# ---- A world's month (global scope; KEY, INDEX; generated sr_cb_worlds_after_<loc>) --------------
+# Integrity falls by 100 x k x the defence fire aimed at it / its hardness; at
+# 0, the closing-in power with the most marines above its garrison and militia,
+# and no hostile fleet stationed against it, seizes it (§ 9.1); a power
+# closing in to destroy with its fire above the Defences' for three months
+# running destroys it (§ 9.3).
+sr_site_assault_step = {
+	set_local_variable = { name = sr_cb_fd value = sr_cb_fd_total_$KEY$ }
+	if = {
+		limit = { local_var:sr_cb_fd > 0 }
+		set_global_variable = { name = sr_site_under_assault_$KEY$ value = te_history_month_index }
+		set_global_variable = {
+			name = sr_site_integrity_$KEY$
+			value = {
+				value = local_var:sr_cb_fd
+				multiply = sr_fleet_k
+				multiply = 100
+				divide = sr_site_hardness_$KEY$
+				multiply = -1
+				add = sr_site_integrity_value_$KEY$
+				min = 0
+			}
+		}
+	}
+	# Destruction.
+	if = {
+		limit = {
+			has_global_variable_list = sr_fleet_powers
+			any_in_global_list = {
+				variable = sr_fleet_powers
+				sr_cb_destroys = { KEY = $KEY$ }
+			}
+		}
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_cb_destroys = { KEY = $KEY$ } }
+			order_by = var:sr_cb_dfd_$KEY$
+			position = 0
+			save_temporary_scope_as = sr_cb_destroyer_$KEY$
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_site_bombard_$KEY$ } }
+			set_global_variable = { name = sr_site_bombard_$KEY$ value = 0 }
+		}
+		change_global_variable = { name = sr_site_bombard_$KEY$ add = 1 }
+		if = {
+			limit = { global_var:sr_site_bombard_$KEY$ >= sr_destroy_months }
+			scope:sr_cb_destroyer_$KEY$ = { sr_site_destroy = { KEY = $KEY$ INDEX = $INDEX$ } }
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = sr_site_bombard_$KEY$ }
+		remove_global_variable = sr_site_bombard_$KEY$
+	}
+	# Seizure.
+	if = {
+		limit = {
+			has_global_variable = sr_colony_$KEY$
+			sr_site_integrity_value_$KEY$ <= 0
+			has_global_variable_list = sr_fleet_powers
+			any_in_global_list = {
+				variable = sr_fleet_powers
+				sr_cb_seizes = { KEY = $KEY$ }
+			}
+		}
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_cb_seizes = { KEY = $KEY$ } }
+			order_by = var:sr_cb_mar_$KEY$
+			position = 0
+			save_temporary_scope_as = sr_cb_seizer_$KEY$
+		}
+		scope:sr_cb_seizer_$KEY$ = { sr_site_seize = { KEY = $KEY$ INDEX = $INDEX$ } }
+	}
+}
+
+# Country scope, the seizer (THIS), at the world KEY: its marines needed land
+# (one more battalion than the garrison and militia, at most what it brought)
+# and the world is taken. A free colony is ours at once (§ 9.4); an occupied
+# world taken by its holder or one not at war with the holder is liberated
+# (§ 9.2); any other is occupied.
+sr_site_seize = {
+	set_local_variable = {
+		name = sr_cb_pay
+		value = {
+			value = sr_site_garrison_need_$KEY$
+			add = 1
+			max = var:sr_cb_mar_$KEY$
+		}
+	}
+	set_local_variable = { name = sr_cb_landed value = local_var:sr_cb_pay }
+	sr_fl_spend_marines_$KEY$ = yes
+	if = {
+		limit = { has_global_variable = sr_site_free_$KEY$ }
+		sr_site_take_free = { KEY = $KEY$ INDEX = $INDEX$ }
+	}
+	else_if = {
+		limit = {
+			has_global_variable = sr_site_occupier_$KEY$
+			OR = {
+				global_var:sr_site_holder_$KEY$ ?= this
+				global_var:sr_site_holder_$KEY$ ?= { NOT = { has_war_with = prev } }
+			}
+		}
+		sr_site_liberate = { KEY = $KEY$ INDEX = $INDEX$ }
+	}
+	else = {
+		sr_site_occupy = { KEY = $KEY$ INDEX = $INDEX$ }
+	}
+}
+
+# THIS occupies the world KEY: its landed marines are the garrison, the
+# holder's are lost; the world gives its modifiers to no one (the sync), and
+# counts in war support (§ 10).
+sr_site_occupy = {
+	set_global_variable = { name = sr_site_occupier_$KEY$ value = this }
+	set_global_variable = { name = sr_site_marines_$KEY$ value = local_var:sr_cb_landed }
+	if = { limit = { has_global_variable = sr_site_bombard_$KEY$ } remove_global_variable = sr_site_bombard_$KEY$ }
+	sr_site_sync_$KEY$ = yes
+	sr_site_occupation_notice = { KEY = $KEY$ INDEX = $INDEX$ KIND = 1 }
+	sr_sites_refresh_players = yes
+	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
+	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] occupied by [THIS.GetCountry.GetTagName]"
+}
+
+# THIS (the holder, or one not at war with it) frees the world KEY: the
+# occupier's garrison is gone, the liberators' marines stand there.
+sr_site_liberate = {
+	sr_site_occupation_notice = { KEY = $KEY$ INDEX = $INDEX$ KIND = 3 }
+	remove_global_variable = sr_site_occupier_$KEY$
+	set_global_variable = { name = sr_site_marines_$KEY$ value = local_var:sr_cb_landed }
+	sr_site_sync_$KEY$ = yes
+	sr_sites_refresh_players = yes
+	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
+	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] liberated by [THIS.GetCountry.GetTagName]"
+}
+
+# THIS takes the free colony KEY (§ 9.4): ours at once, at autonomy 60, every
+# country's ties to it cleared, its suppliers told (.104).
+sr_site_take_free = {
+	every_country = {
+		limit = {
+			is_player = yes
+			has_variable = sr_free_supply_$KEY$
+			NOT = { this = prev }
+		}
+		sr_site_event_open = { VAR = sr_seized_free_site INDEX = $INDEX$ }
+		trigger_event = { id = space_race_events.104 days = 1 }
+	}
+	remove_global_variable = sr_site_free_$KEY$
+	if = { limit = { has_global_variable = sr_site_suppliers_$KEY$ } remove_global_variable = sr_site_suppliers_$KEY$ }
+	sr_site_clear_ties_$KEY$ = yes
+	set_global_variable = { name = sr_site_holder_$KEY$ value = this }
+	set_global_variable = { name = sr_site_autonomy_$KEY$ value = sr_free_seized_autonomy }
+	set_global_variable = { name = sr_site_contact_$KEY$ value = te_history_month_index }
+	set_global_variable = { name = sr_site_marines_$KEY$ value = local_var:sr_cb_landed }
+	sr_site_sync_$KEY$ = yes
+	sr_site_gained_quiet = { INDEX = $INDEX$ }
+	if = {
+		limit = { is_player = yes }
+		sr_site_event_open = { VAR = sr_seized_free_site INDEX = $INDEX$ }
+		trigger_event = { id = space_race_events.104 days = 1 }
+	}
+	sr_sites_refresh_players = yes
+	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
+	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] (a free colony) seized by [THIS.GetCountry.GetTagName]"
+}
+
+# Country scope, the destroyer (THIS), the world KEY (§ 9.3): the colony and its
+# people lost and the world ruined for 25 years; 20 infamy (twice for a party
+# to the outer-space convention), 20 on the UN dossier's hostile acts in
+# space, and its own colonies' resentment: +10 autonomy at once and a drift
+# term for ten years. Both sides are told (.103).
+sr_site_destroy = {
+	global_var:sr_site_holder_$KEY$ ?= {
+		if = {
+			limit = {
+				is_country_alive = yes
+				is_player = yes
+			}
+			sr_site_event_open = { VAR = sr_destroyed_site INDEX = $INDEX$ }
+			trigger_event = { id = space_race_events.103 days = 1 }
+		}
+	}
+	if = {
+		limit = { is_player = yes }
+		sr_site_event_open = { VAR = sr_destroyed_site INDEX = $INDEX$ }
+		trigger_event = { id = space_race_events.103 days = 1 }
+	}
+	change_infamy = sr_destroy_infamy_cost
+	un_dossier_record = { RECORD = space POINTS = sr_destroy_dossier_cost }
+	set_local_variable = { name = sr_aut_delta value = sr_destroy_autonomy_now }
+	sr_site_aut_add_all = yes
+	set_variable = {
+		name = sr_destroyed_colony_until
+		value = {
+			value = te_history_month_index
+			add = 120
+		}
+	}
+	sr_site_release_$KEY$ = yes
+	set_global_variable = { name = sr_site_ruined_$KEY$ value = yes days = 9125 }
+	sr_sites_recompute_stage = yes
+	sr_sites_refresh_players = yes
+	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
+	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] destroyed by [THIS.GetCountry.GetTagName]"
+}
+
+# The holder's and the occupier's notice (.102): KIND 1 occupied, 2 returned
+# at the peace, 3 liberated. Called with the occupier still recorded.
+sr_site_occupation_notice = {
+	global_var:sr_site_holder_$KEY$ ?= {
+		if = {
+			limit = {
+				is_country_alive = yes
+				is_player = yes
+				NOT = { has_variable = sr_occ_site }
+			}
+			sr_site_event_open = { VAR = sr_occ_site INDEX = $INDEX$ }
+			set_variable = { name = sr_occ_kind value = $KIND$ }
+			trigger_event = { id = space_race_events.102 days = 1 }
+		}
+	}
+	global_var:sr_site_occupier_$KEY$ ?= {
+		if = {
+			limit = {
+				is_country_alive = yes
+				is_player = yes
+				NOT = { has_variable = sr_occ_site }
+			}
+			sr_site_event_open = { VAR = sr_occ_site INDEX = $INDEX$ }
+			set_variable = { name = sr_occ_kind value = $KIND$ }
+			trigger_event = { id = space_race_events.102 days = 1 }
+		}
+	}
+}
+
+# Global scope, the world's step (KEY, INDEX): an occupation goes back at the
+# peace (§ 9.2): the occupier and the holder no longer at war, or the occupier
+# gone. Its garrison comes home.
+sr_site_occupation_step = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { global_var:sr_site_occupier_$KEY$ ?= { is_country_alive = yes } }
+				NOT = { has_global_variable = sr_site_holder_$KEY$ }
+				global_var:sr_site_occupier_$KEY$ ?= global_var:sr_site_holder_$KEY$
+				global_var:sr_site_occupier_$KEY$ ?= {
+					NOT = { has_war_with = global_var:sr_site_holder_$KEY$ }
+				}
+			}
+		}
+		sr_site_end_occupation = { KEY = $KEY$ INDEX = $INDEX$ KIND = 2 }
+	}
+}
+
+sr_site_end_occupation = {
+	sr_site_occupation_notice = { KEY = $KEY$ INDEX = $INDEX$ KIND = $KIND$ }
+	if = {
+		limit = {
+			has_global_variable = sr_site_marines_$KEY$
+			NOT = { global_var:sr_site_occupier_$KEY$ ?= global_var:sr_site_holder_$KEY$ }
+		}
+		global_var:sr_site_occupier_$KEY$ ?= {
+			if = {
+				limit = { is_country_alive = yes }
+				sr_fl_marines_home = { AMOUNT = sr_site_marines_value_$KEY$ }
+			}
+		}
+		remove_global_variable = sr_site_marines_$KEY$
+	}
+	remove_global_variable = sr_site_occupier_$KEY$
+	sr_site_sync_$KEY$ = yes
+	sr_sites_refresh_players = yes
+}
+
+# From sr_site_transfer_<key>: a treaty ends an occupation, so a Cede Colony
+# enforced in the peace moves the world first and it stays where the treaty
+# put it (§ 9.2); an heir takes it occupied, unless the heir is its occupier;
+# an adoption leaves it as it is.
+sr_site_transfer_occupation_treaty = {
+	if = {
+		limit = { has_global_variable = sr_site_occupier_$KEY$ }
+		sr_site_end_occupation_quiet = { KEY = $KEY$ }
+	}
+}
+
+sr_site_transfer_occupation_heir = {
+	if = {
+		limit = { global_var:sr_site_occupier_$KEY$ ?= global_var:sr_site_holder_$KEY$ }
+		remove_global_variable = sr_site_occupier_$KEY$
+	}
+}
+
+sr_site_transfer_occupation_quiet = {
+	if = {
+		limit = { global_var:sr_site_occupier_$KEY$ ?= global_var:sr_site_holder_$KEY$ }
+		remove_global_variable = sr_site_occupier_$KEY$
+	}
+}
+
+# A treaty's end of an occupation: the garrison home, no notice (the treaty's
+# own says where the world went).
+sr_site_end_occupation_quiet = {
+	if = {
+		limit = {
+			has_global_variable = sr_site_marines_$KEY$
+			NOT = { global_var:sr_site_occupier_$KEY$ ?= global_var:sr_site_holder_$KEY$ }
+		}
+		global_var:sr_site_occupier_$KEY$ ?= {
+			if = {
+				limit = { is_country_alive = yes }
+				sr_fl_marines_home = { AMOUNT = sr_site_marines_value_$KEY$ }
+			}
+		}
+		remove_global_variable = sr_site_marines_$KEY$
+	}
+	remove_global_variable = sr_site_occupier_$KEY$
+}
+
+# Global scope, the world's step: integrity comes back while nothing assaults
+# it (5 a month, 10 with a Spaceport; § 7.3). The assault mark is the month it
+# was last assaulted, kept for the panel; a month's step after one regains.
+sr_site_integrity_step = {
+	if = {
+		limit = {
+			has_global_variable = sr_site_integrity_$KEY$
+			NOT = {
+				AND = {
+					has_global_variable = sr_site_under_assault_$KEY$
+					global_var:sr_site_under_assault_$KEY$ >= te_history_month_index
+				}
+			}
+		}
+		if = {
+			limit = { sr_site_port_value_$KEY$ >= 1 }
+			set_global_variable = { name = sr_site_integrity_$KEY$ value = { value = global_var:sr_site_integrity_$KEY$ add = sr_integrity_regain_port } }
+		}
+		else = {
+			set_global_variable = { name = sr_site_integrity_$KEY$ value = { value = global_var:sr_site_integrity_$KEY$ add = sr_integrity_regain } }
+		}
+		if = {
+			limit = { global_var:sr_site_integrity_$KEY$ >= sr_integrity_full }
+			remove_global_variable = sr_site_integrity_$KEY$
+		}
+	}
+}
+
+# Global scope, from the location's step (KEY): a world is blockaded (§ 8)
+# when a fleet at war with its holder stands off there and no fleet of its
+# holder is stationed or standing off there. Not at Earth (6d). An occupied
+# world, or a free one, is never blockaded.
+sr_site_blockade_step = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			global_var:sr_site_holder_$KEY$ ?= {
+				is_country_alive = yes
+				NOT = { sr_cb_holds_orbit = yes }
+				has_global_variable_list = sr_fleet_powers
+				any_in_global_list = {
+					variable = sr_fleet_powers
+					has_variable = sr_cb_present
+					sr_cb_s2_value > 0
+					has_war_with = prev
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_variable = sr_site_blockaded_$KEY$ } }
+			set_global_variable = { name = sr_site_blockaded_$KEY$ value = yes }
+			sr_sites_refresh_players = yes
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = sr_site_blockaded_$KEY$ }
+		remove_global_variable = sr_site_blockaded_$KEY$
+		sr_sites_refresh_players = yes
+	}
+}
+
+# ---- Orders that need a war (design §§ 7, 9) -------------------------------------------------------
+# Country scope (sr_fleet_sguis.txt, $N$): the posture steps Station, Stand off,
+# Close in. Closing in needs a target: the first hostile world at the location
+# when none is set (sr_fl_<n>_has_hostile_world); with none, it goes back to
+# Station. Closing in on a free colony begins the price (§ 9.4) once per fleet
+# and world.
+sr_fl_step_posture_at = {
+	set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
+	if = {
+		limit = { local_var:sr_cb_p <= 1 }
+		set_variable = { name = sr_fl_$N$_posture value = 2 }
+	}
+	else_if = {
+		limit = {
+			local_var:sr_cb_p = 2
+			sr_fl_$N$_has_hostile_world = yes
+		}
+		set_variable = { name = sr_fl_$N$_posture value = 3 }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = sr_fl_$N$_target }
+					NOT = { sr_fl_$N$_target_hostile = yes }
+				}
+			}
+			sr_fl_step_target_at = { N = $N$ }
+		}
+		sr_fl_charge_free_at = { N = $N$ }
+	}
+	else = {
+		set_variable = { name = sr_fl_$N$_posture value = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+	}
+}
+
+sr_fl_toggle_destroy_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_destroy }
+		remove_variable = sr_fl_$N$_destroy
+	}
+	else = {
+		set_variable = { name = sr_fl_$N$_destroy value = yes }
+	}
+}
+
+# The free colony KEY's price, when slot N begins closing in on it: 10 infamy
+# (twice for a party to the convention) and 10 on the UN dossier's hostile
+# acts in space; once per fleet and world (sr_fl_<n>_charged).
+sr_cb_charge_free = {
+	if = {
+		limit = {
+			has_global_variable = sr_site_free_$KEY$
+			OR = {
+				NOT = { has_variable = sr_fl_$N$_charged }
+				NOT = { var:sr_fl_$N$_charged = $INDEX$ }
+			}
+		}
+		set_variable = { name = sr_fl_$N$_charged value = $INDEX$ }
+		change_infamy = sr_free_assault_infamy_cost
+		un_dossier_record = { RECORD = space POINTS = sr_free_assault_dossier_cost }
+	}
+}
+
+# ---- Alerts (design § 17) ---------------------------------------------------------------------------
+# Country scope, the fleet's owner, from sr_fl_dispatch: every player at war
+# with it that holds a colony at LOC hears it is coming (.100), with its
+# landing month.
+sr_fl_dispatch_alert = {
+	if = {
+		limit = { sr_colonies_full_enabled = yes }
+		every_country = {
+			limit = {
+				is_player = yes
+				has_war_with = prev
+				sr_loc_held_$LOC$ = yes
+			}
+			prev = { save_temporary_scope_as = sr_fl_alert_power }
+			set_variable = { name = sr_fl_alert_loc value = $CODE$ }
+			set_variable = { name = sr_fl_alert_arrive value = local_var:sr_fl_alert_arr }
+			set_variable = { name = sr_fl_alert_by value = scope:sr_fl_alert_power }
+			trigger_event = { id = space_race_events.100 days = 1 }
+		}
+	}
+}
+
+# ---- War support (design § 10) ------------------------------------------------------------------------
+# Country scope, the fleets' month: occupied colonies' row, one variable for the
+# injection (zz_te_war_support_injections.txt) to read.
+sr_fl_ws_refresh = {
+	if = {
+		limit = { is_at_war = yes }
+		set_variable = { name = sr_ws_colonies_net value = sr_ws_colonies_sum }
+	}
+	else_if = {
+		limit = { has_variable = sr_ws_colonies_net }
+		remove_variable = sr_ws_colonies_net
+	}
+	sr_cb_battlestation_month = yes
+}
+
+# ---- The AI's defence (design § 14, 6b) -------------------------------------------------------------
+# Country scope, an AI fleet power's month. At war the mix is warships 3,
+# siege 1, carriers 1, tenders 1; at peace the start mix. A fleet short of
+# supply or of the propellant to come home is recalled first; then each
+# location where it holds colonies and an enemy fleet is present or on its way
+# gets its strongest available fleet, stationed, if that fleet arrives within
+# six months or before the first hostile landing, and can come home again or
+# dock there (sr_fl_ai_defend_<loc>, generated). Every order passes the same
+# sr_fl_<n>_may_depart_<loc> a player's does.
+sr_fl_ai_defend = {
+	if = {
+		limit = { is_at_war = yes }
+		set_variable = { name = sr_sc_mix_war value = 3 }
+		set_variable = { name = sr_sc_mix_siege value = 1 }
+		set_variable = { name = sr_sc_mix_carrier value = 1 }
+		set_variable = { name = sr_sc_mix_tender value = 1 }
+		set_variable = { name = sr_sc_mix_rapid value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_sc_mix_war }
+		remove_variable = sr_sc_mix_war
+		if = { limit = { has_variable = sr_sc_mix_siege } remove_variable = sr_sc_mix_siege }
+		if = { limit = { has_variable = sr_sc_mix_carrier } remove_variable = sr_sc_mix_carrier }
+		if = { limit = { has_variable = sr_sc_mix_tender } remove_variable = sr_sc_mix_tender }
+		if = { limit = { has_variable = sr_sc_mix_rapid } remove_variable = sr_sc_mix_rapid }
+	}
+	sr_fl_each_slot = { DO = ai_recall }
+	sr_fl_ai_defend_all = yes
+}
+
+# A fleet away and undocked, short of supply (under three months) or of the
+# propellant home with a margin, goes home now.
+sr_fl_ai_recall_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_loc
+			NOT = { var:sr_fl_$N$_loc = 1 }
+			NOT = { sr_fl_$N$_docked = yes }
+			sr_fl_$N$_may_depart_earth = yes
+			OR = {
+				sr_fl_$N$_supply_value < 3
+				sr_fl_$N$_dv_value < { value = sr_fl_$N$_leg_dv_earth multiply = 1.25 }
+			}
+		}
+		sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
+	}
+}

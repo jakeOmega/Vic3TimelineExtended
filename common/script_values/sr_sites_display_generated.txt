@@ -3,245 +3,313 @@
 # te_sr_sec_solar_system), from gen_solar_sites.SITES. Read by the GUI only,
 # as space_race_display_values.txt's sr_disp_* are. 0 unclaimed, 1 ours,
 # 2 another's (its capital snapshot to show), 3 another's without one,
-# 4 a free colony (slice 5 design § 9).
+# 4 a free colony (slice 5 design § 9), 5 occupied, 6 ruined (slice 6 design § 16).
 # The viewer's scope.
 sr_disp_site_valles_marineris = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_valles_marineris } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_valles_marineris has_variable = sr_ss_cap_valles_marineris } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_valles_marineris } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_valles_marineris } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_valles_marineris } value = 6 }
 }
 sr_disp_site_olympus_mons = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_olympus_mons } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_olympus_mons has_variable = sr_ss_cap_olympus_mons } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_olympus_mons } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_olympus_mons } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_olympus_mons } value = 6 }
 }
 sr_disp_site_hellas_planitia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_hellas_planitia } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_hellas_planitia has_variable = sr_ss_cap_hellas_planitia } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_hellas_planitia } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_hellas_planitia } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_hellas_planitia } value = 6 }
 }
 sr_disp_site_utopia_planitia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_utopia_planitia } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_utopia_planitia has_variable = sr_ss_cap_utopia_planitia } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_utopia_planitia } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_utopia_planitia } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_utopia_planitia } value = 6 }
 }
 sr_disp_site_arcadia_planitia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_arcadia_planitia } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_arcadia_planitia has_variable = sr_ss_cap_arcadia_planitia } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_arcadia_planitia } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_arcadia_planitia } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_arcadia_planitia } value = 6 }
 }
 sr_disp_site_ceres = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_ceres ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_ceres } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_ceres ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_ceres has_variable = sr_ss_cap_ceres } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_ceres } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_ceres } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_ceres } value = 6 }
 }
 sr_disp_site_vesta = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_vesta ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_vesta } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_vesta ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_vesta has_variable = sr_ss_cap_vesta } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_vesta } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_vesta } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_vesta } value = 6 }
 }
 sr_disp_site_psyche = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_psyche ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_psyche } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_psyche ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_psyche has_variable = sr_ss_cap_psyche } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_psyche } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_psyche } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_psyche } value = 6 }
 }
 sr_disp_site_pallas = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_pallas ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_pallas } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_pallas ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_pallas has_variable = sr_ss_cap_pallas } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_pallas } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_pallas } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_pallas } value = 6 }
 }
 sr_disp_site_hygiea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_hygiea } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_hygiea ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_hygiea has_variable = sr_ss_cap_hygiea } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_hygiea } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_hygiea } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_hygiea } value = 6 }
 }
 sr_disp_site_io = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_io ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_io } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_io ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_io has_variable = sr_ss_cap_io } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_io } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_io } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_io } value = 6 }
 }
 sr_disp_site_europa = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_europa ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_europa } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_europa ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_europa has_variable = sr_ss_cap_europa } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_europa } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_europa } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_europa } value = 6 }
 }
 sr_disp_site_ganymede = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_ganymede } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_ganymede ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_ganymede has_variable = sr_ss_cap_ganymede } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_ganymede } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_ganymede } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_ganymede } value = 6 }
 }
 sr_disp_site_callisto = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_callisto ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_callisto } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_callisto ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_callisto has_variable = sr_ss_cap_callisto } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_callisto } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_callisto } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_callisto } value = 6 }
 }
 sr_disp_site_himalia = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_himalia ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_himalia } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_himalia ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_himalia has_variable = sr_ss_cap_himalia } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_himalia } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_himalia } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_himalia } value = 6 }
 }
 sr_disp_site_amalthea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_amalthea } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_amalthea ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_amalthea has_variable = sr_ss_cap_amalthea } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_amalthea } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_amalthea } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_amalthea } value = 6 }
 }
 sr_disp_site_venus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_venus ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_venus } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_venus ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_venus has_variable = sr_ss_cap_venus } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_venus } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_venus } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_venus } value = 6 }
 }
 sr_disp_site_mercury = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_mercury ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_mercury } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_mercury ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_mercury has_variable = sr_ss_cap_mercury } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_mercury } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_mercury } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_mercury } value = 6 }
 }
 sr_disp_site_titan = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_titan ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_titan } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_titan ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_titan has_variable = sr_ss_cap_titan } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_titan } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_titan } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_titan } value = 6 }
 }
 sr_disp_site_enceladus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_enceladus } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_enceladus ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_enceladus has_variable = sr_ss_cap_enceladus } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_enceladus } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_enceladus } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_enceladus } value = 6 }
 }
 sr_disp_site_rhea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_rhea ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_rhea } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_rhea ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_rhea has_variable = sr_ss_cap_rhea } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_rhea } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_rhea } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_rhea } value = 6 }
 }
 sr_disp_site_mimas = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_mimas ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_mimas } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_mimas ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_mimas has_variable = sr_ss_cap_mimas } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_mimas } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_mimas } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_mimas } value = 6 }
 }
 sr_disp_site_iapetus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_iapetus } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_iapetus ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_iapetus has_variable = sr_ss_cap_iapetus } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_iapetus } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_iapetus } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_iapetus } value = 6 }
 }
 sr_disp_site_titania = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_titania ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_titania } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_titania ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_titania has_variable = sr_ss_cap_titania } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_titania } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_titania } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_titania } value = 6 }
 }
 sr_disp_site_oberon = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_oberon ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_oberon } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_oberon ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_oberon has_variable = sr_ss_cap_oberon } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_oberon } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_oberon } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_oberon } value = 6 }
 }
 sr_disp_site_miranda = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_miranda ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_miranda } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_miranda ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_miranda has_variable = sr_ss_cap_miranda } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_miranda } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_miranda } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_miranda } value = 6 }
 }
 sr_disp_site_ariel = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_ariel ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_ariel } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_ariel ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_ariel has_variable = sr_ss_cap_ariel } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_ariel } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_ariel } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_ariel } value = 6 }
 }
 sr_disp_site_triton = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_triton ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_triton } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_triton ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_triton has_variable = sr_ss_cap_triton } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_triton } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_triton } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_triton } value = 6 }
 }
 sr_disp_site_proteus = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_proteus ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_proteus } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_proteus ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_proteus has_variable = sr_ss_cap_proteus } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_proteus } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_proteus } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_proteus } value = 6 }
 }
 sr_disp_site_pluto = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_pluto ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_pluto } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_pluto ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_pluto has_variable = sr_ss_cap_pluto } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_pluto } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_pluto } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_pluto } value = 6 }
 }
 sr_disp_site_eris = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_eris ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_eris } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_eris ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_eris has_variable = sr_ss_cap_eris } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_eris } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_eris } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_eris } value = 6 }
 }
 sr_disp_site_makemake = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_makemake ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_makemake } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_makemake ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_makemake has_variable = sr_ss_cap_makemake } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_makemake } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_makemake } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_makemake } value = 6 }
 }
 sr_disp_site_haumea = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_haumea ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_haumea } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_haumea ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_haumea has_variable = sr_ss_cap_haumea } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_haumea } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_haumea } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_haumea } value = 6 }
 }
 sr_disp_site_sedna = {
 	value = 0
-	if = { limit = { global_var:sr_site_holder_sedna ?= this } value = 1 }
+	if = { limit = { has_global_variable = sr_site_occupier_sedna } value = 5 }
+	else_if = { limit = { global_var:sr_site_holder_sedna ?= this } value = 1 }
 	else_if = { limit = { has_global_variable = sr_site_holder_sedna has_variable = sr_ss_cap_sedna } value = 2 }
 	else_if = { limit = { has_global_variable = sr_site_holder_sedna } value = 3 }
 	else_if = { limit = { has_global_variable = sr_site_free_sedna } value = 4 }
+	else_if = { limit = { has_global_variable = sr_site_ruined_sedna } value = 6 }
 }
 
 # Colony fleets and population (slices 2-3 design §§ 3, 8, 10), per world:

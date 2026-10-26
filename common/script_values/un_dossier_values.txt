@@ -17,6 +17,9 @@
 #                       Assembly under the Non-Proliferation Treaty (#448)
 #   un_dos_asat         destructive anti-satellite strikes (Global Commons
 #                       § 6.3, te_asat_strike_effect)
+#   un_dos_space        hostile acts in space: a colony destroyed, a free
+#                       colony assaulted (solar colonization fleets design
+#                       §§ 9.3-9.4), weighted per act
 #
 # Their sum, with the infamy term, is the CASE STRENGTH (0-100). A punitive
 # topic can be tabled against a country only when its case reaches the topic's
@@ -74,6 +77,9 @@ un_dos_points_npt_breach = { value = 30 }
 # § 6.3): debris every user of orbit shares. Twice as much from a party to the
 # Moratorium (te_asat_case_points, te_orbital_debris_values.txt).
 un_dos_points_asat = { value = 15 }
+# Hostile acts in space (solar colonization fleets design §§ 9.3-9.4): the acts
+# write their own weights (sr_destroy_dossier, sr_free_assault_dossier in
+# sr_fleet_values.txt); this is the ground's mark for the tests and the panel.
 
 # The grounds each punitive topic needs.
 un_case_threshold_condemn = { value = 30 }
@@ -169,6 +175,10 @@ un_case_strength = {
 		limit = { has_variable = un_dos_asat }
 		add = var:un_dos_asat
 	}
+	if = {
+		limit = { has_variable = un_dos_space }
+		add = var:un_dos_space
+	}
 	# The Supranational standing case against an outsider, or a member
 	# building a bomb outside the Non-Proliferation Treaty (redesign phase 5,
 	# #804; un_teeth_values.txt): 0 for everyone else.
@@ -235,6 +245,13 @@ un_disp_dos_asat = {
 	if = {
 		limit = { has_variable = un_dos_asat }
 		add = var:un_dos_asat
+	}
+}
+un_disp_dos_space = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_space }
+		add = var:un_dos_space
 	}
 }
 

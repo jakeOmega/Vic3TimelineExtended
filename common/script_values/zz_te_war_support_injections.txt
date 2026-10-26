@@ -25,6 +25,30 @@
 # desc keys live in localization/english/te_miscellaneous_l_english.yml.
 
 INJECT:war_support_from_journal_entries = {
+	# ---- Space (solar colonization fleets design § 10) ----
+	# Occupied colonies (each world we occupy from an enemy, less each of ours an
+	# enemy occupies, 0.1 to 0.25 by its people) and the month's battles (+-0.1,
+	# +-0.25 for a fleet destroyed, for thirty days), one country variable each,
+	# refreshed by the fleets' monthly step (sr_fl_ws_refresh,
+	# sr_cb_battle_record). A colony is a rounding error beside a city on Earth.
+	if = {
+		limit = {
+			has_variable = sr_ws_colonies_net
+			NOT = { var:sr_ws_colonies_net = 0 }
+		}
+		add = {
+			value = var:sr_ws_colonies_net
+			desc = "WAR_SUPPORT_TE_SPACE_COLONIES"
+		}
+	}
+	if = {
+		limit = { has_variable = sr_ws_battle }
+		add = {
+			value = var:sr_ws_battle
+			desc = "WAR_SUPPORT_TE_SPACE_BATTLES"
+		}
+	}
+
 	# ---- World War (je_world_war) ----
 	# The phase modifiers are applied to the journal entry, not the country
 	# (world_war_je.txt), so a country-scope has_modifier never sees them.

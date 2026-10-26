@@ -40,7 +40,7 @@ GATES = {
 # No technology: the journal entry is their gate, or they have one of
 # their own (a technology to steal, a war or play with the target, a target
 # ahead in space, a proliferating programme, loose warheads, a colony in the
-# solar system).
+# solar system, a fleet of our own).
 UNGATED = {
     "cultivate_assets",
     "industrial_espionage",
@@ -51,6 +51,7 @@ UNGATED = {
     "secure_material",
     "incite_autonomy",
     "sabotage_colony",
+    "survey_defences",
     # Defence shouldn't wait on technology the attacker may not need
     # (spec § C, my call 9).
     "counterintel_support",

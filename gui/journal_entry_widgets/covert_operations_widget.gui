@@ -590,6 +590,11 @@ types covert_operations_widget_types
 					visible = "[ScriptContainer.HasTag('iw_op_sabotage_colony')]"
 					texture = "gfx/interface/icons/diplomatic_action_icons/covert_sabotage_colony_action.dds"
 				}
+				icon = {
+					size = { 32 32 }
+					visible = "[ScriptContainer.HasTag('iw_op_survey_defences')]"
+					texture = "gfx/interface/icons/diplomatic_action_icons/covert_survey_defences_action.dds"
+				}
 			}
 
 			widget_je_covert_operation_text = {
@@ -659,6 +664,10 @@ types covert_operations_widget_types
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_sabotage_colony')]"
 				text = "je_iw_op_row_sabotage_colony"
+			}
+			widget_je_covert_operation_text = {
+				visible = "[ScriptContainer.HasTag('iw_op_survey_defences')]"
+				text = "je_iw_op_row_survey_defences"
 			}
 		}
 
@@ -866,6 +875,14 @@ types covert_operations_widget_types
 					visible = "[ScriptContainer.HasTag('iw_op_sabotage_colony')]"
 				}
 			}
+			covert_op_stand_down_button = {
+				blockoverride "sd_context" {
+					datacontext = "[GetScriptedGui('covert_stand_down_survey_defences_sgui')]"
+				}
+				blockoverride "sd_visible" {
+					visible = "[ScriptContainer.HasTag('iw_op_survey_defences')]"
+				}
+			}
 		}
 	}
 
@@ -1040,6 +1057,11 @@ types covert_operations_widget_types
 							visible = "[ScriptContainer.HasTag('iw_known_sabotage_colony')]"
 							texture = "gfx/interface/icons/diplomatic_action_icons/covert_sabotage_colony_action.dds"
 						}
+						icon = {
+							size = { 32 32 }
+							visible = "[ScriptContainer.HasTag('iw_known_survey_defences')]"
+							texture = "gfx/interface/icons/diplomatic_action_icons/covert_survey_defences_action.dds"
+						}
 					}
 
 					widget_je_covert_known_op_name = {
@@ -1121,6 +1143,11 @@ types covert_operations_widget_types
 						visible = "[ScriptContainer.HasTag('iw_known_sabotage_colony')]"
 						text = "iw_op_name_sabotage_colony"
 						tooltip = "iw_op_exposed_desc_sabotage_colony"
+					}
+					widget_je_covert_known_op_name = {
+						visible = "[ScriptContainer.HasTag('iw_known_survey_defences')]"
+						text = "iw_op_name_survey_defences"
+						tooltip = "iw_op_exposed_desc_survey_defences"
 					}
 				}
 			}

@@ -1,0 +1,322 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: the panel's scripted GUIs
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# § 16. The buttons of the Fleets rows (gui/journal_entry_widgets/
+# sr_fleets_generated_rows.gui, one per slot, which pass the slot as scope:op)
+# and of Space Command's build mix (scope:op the role: 1 warships, 2 rapid
+# response, 3 siege ships, 4 assault carriers, 5 tenders). Full Colonies only;
+# player-only: the AI orders its fleets through the same effects from its
+# monthly review (sr_fl_ai_review). Each is_valid is the trigger its effect's
+# dispatcher checks (sr_fl_<n>_can_go and the rest, generated).
+# ============================================================================
+
+# A fleet's destination button: the next location, skipping where it is.
+sr_fleet_pick_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_pick_step_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = step_pick }
+		}
+	}
+}
+
+# Go: the fleet leaves for its picked destination, spending the leg's delta-v.
+sr_fleet_go_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_pick_tt
+			sr_fl_op_check = { TEST = picked }
+		}
+		custom_tooltip = {
+			text = sr_fl_refitting_tt
+			NOT = { sr_fl_op_check = { TEST = refitting } }
+		}
+		custom_tooltip = {
+			text = sr_fl_short_tt
+			sr_fl_op_check = { TEST = can_go }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_go_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = go }
+		}
+	}
+}
+
+# Merge into the next fleet of ours at the same location.
+sr_fleet_merge_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_partner_tt
+			sr_fl_op_check = { TEST = can_merge }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_merge_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = merge }
+		}
+	}
+}
+
+# Detach half of each role into an empty slot.
+sr_fleet_detach_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_detach_tt
+			sr_fl_op_check = { TEST = can_detach }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_detach_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = detach }
+		}
+	}
+}
+
+# Land the marines aboard at a colony of ours here; take ours back aboard.
+sr_fleet_land_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_land_tt
+			sr_fl_op_check = { TEST = can_land }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_land_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = land }
+		}
+	}
+}
+
+sr_fleet_embark_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_embark_tt
+			sr_fl_op_check = { TEST = can_embark }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_embark_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = embark }
+		}
+	}
+}
+
+# 6b: the posture steps Station, Stand off, Close in (close in needs a hostile
+# world there: at war with its holder, or free).
+sr_fleet_posture_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_not_at_location_tt
+			sr_fl_op_check = { TEST = at_location }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_posture_tt
+		if = {
+			limit = { sr_fl_op_check = { TEST = closes_on_free } }
+			custom_tooltip = sr_fl_free_price_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = step_posture }
+		}
+	}
+}
+
+# The world it closes in on: the next hostile world at its location.
+sr_fleet_target_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_target_tt
+			sr_fl_op_check = { TEST = has_hostile_world }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_target_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = step_target }
+		}
+	}
+}
+
+# Seize or destroy the target (§ 9.3: destruction is quicker, and costs
+# infamy, a UN case and our own colonies' loyalty).
+sr_fleet_destroy_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_no_target_tt
+			sr_fl_op_check = { TEST = target_hostile }
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_fl_op_check = { TEST = destroying } }
+			custom_tooltip = sr_fl_seize_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_destroy_price_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = toggle_destroy }
+		}
+	}
+}
+
+# Space Command's build mix: a role's weight steps 0, 1, 2, 3, 0.
+sr_sc_mix_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		custom_tooltip = sr_sc_mix_step_tt
+		hidden_effect = {
+			if = { limit = { scope:op = 1 } sr_sc_mix_step = { ROLE = war } }
+			else_if = { limit = { scope:op = 2 } sr_sc_mix_step = { ROLE = rapid } }
+			else_if = { limit = { scope:op = 3 } sr_sc_mix_step = { ROLE = siege } }
+			else_if = { limit = { scope:op = 4 } sr_sc_mix_step = { ROLE = carrier } }
+			else_if = { limit = { scope:op = 5 } sr_sc_mix_step = { ROLE = tender } }
+		}
+	}
+}

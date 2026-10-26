@@ -1,0 +1,288 @@
+"""Space fleets (solar colonization slice 6, parts 6a and 6b): the generator's
+output, the hand-written files' contract with it, and the rules a play test
+can't see in one evening.
+
+Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md.
+The legs are tested in test_launch_windows.py (FleetLegsTest), the panel's
+labels in test_space_race_labels.py and its figures in
+test_space_race_layout.py.
+
+Run: python3 -m unittest test_space_fleets -v
+"""
+
+import math
+import re
+import sys
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / "scripts" / "generators"))
+
+import gen_solar_sites as gss  # noqa: E402
+import gen_space_fleets as gsf  # noqa: E402
+
+FLEET_EFFECTS = ROOT / "common/scripted_effects/sr_fleet_effects.txt"
+COMBAT_EFFECTS = ROOT / "common/scripted_effects/sr_fleet_combat_effects.txt"
+FLEET_VALUES = ROOT / "common/script_values/sr_fleet_values.txt"
+FLEET_TRIGGERS = ROOT / "common/scripted_triggers/sr_fleet_triggers.txt"
+SGUIS = ROOT / "common/scripted_guis/sr_fleet_sguis.txt"
+BUILDING = ROOT / "common/buildings/sr_space_command.txt"
+METHODS = ROOT / "common/production_methods/sr_space_command_pms.txt"
+STATIC = ROOT / "common/static_modifiers/space_race_modifiers.txt"
+SITE_EFFECTS = ROOT / "common/scripted_effects/sr_site_effects.txt"
+SPACE_RACE_EFFECTS = ROOT / "common/scripted_effects/space_race_effects.txt"
+ON_ACTIONS = ROOT / "common/on_actions/space_race_on_actions.txt"
+COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
+DEBUG_EVENTS = ROOT / "events/te_debug_space_race_events.txt"
+
+
+def _raw(path):
+    return Path(path).read_text(encoding="utf-8-sig")
+
+
+def _strip(text):
+    return re.sub(r"#[^\n]*", "", text)
+
+
+def _block(text, name):
+    m = re.search(rf"(?m)^{re.escape(name)}\s*=\s*\{{", text)
+    assert m, f"no block {name}"
+    depth = 0
+    for i in range(m.end() - 1, len(text)):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[m.end():i]
+    raise AssertionError(f"unclosed {name}")
+
+
+def _number(text, name):
+    return float(re.search(rf"(?m)^{name} = \{{ value = ([\d.]+) \}}", text).group(1))
+
+
+class GeneratedFilesTest(unittest.TestCase):
+    def test_generated_files_are_current(self):
+        result = gsf.regenerate(dry_run=True)
+        self.assertFalse(result["changed"],
+                         f"stale: {result['changed_files']}; run python3 scripts/generators/gen_space_fleets.py")
+
+    def test_one_bom_and_the_auto_generated_header(self):
+        for rel in gsf.plan_outputs():
+            data = (gsf.ROOT / rel).read_bytes()
+            with self.subTest(file=str(rel)):
+                self.assertTrue(data.startswith(b"\xef\xbb\xbf# AUTO-GENERATED"))
+                self.assertFalse(data[3:].startswith(b"\xef\xbb\xbf"))
+
+
+class DebugLineTest(unittest.TestCase):
+    """No $PARAM$ inside a debug_log string: the engine mangles it
+    (scripting_best_practices.md, "No $PARAM$ inside the string")."""
+
+    def test_no_parameter_inside_a_debug_line(self):
+        for path in (FLEET_EFFECTS, COMBAT_EFFECTS, gsf.ROOT / gsf.EFFECTS_OUT, DEBUG_EVENTS):
+            for line in re.findall(r'debug_log = "([^"]*)"', _raw(path)):
+                with self.subTest(file=path.name, line=line[:60]):
+                    self.assertNotIn("$", line)
+
+
+class SlotTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.hand = _strip(_raw(FLEET_EFFECTS)) + _strip(_raw(COMBAT_EFFECTS))
+
+    def test_every_slot_action_is_defined(self):
+        for action in gsf.SLOT_ACTIONS:
+            with self.subTest(action=action):
+                self.assertRegex(self.generated + self.hand, rf"(?m)^sr_fl_{action}_at = \{{")
+
+    def test_every_dispatcher_reaches_every_slot(self):
+        for dispatcher in ("sr_fl_each_slot", "sr_fl_by_op", "sr_fl_by_local"):
+            with self.subTest(dispatcher=dispatcher):
+                body = _block(self.generated, dispatcher)
+                for n in range(1, gsf.SLOTS + 1):
+                    self.assertIn(f"sr_fl_$DO$_at = {{ N = {n} }}", body)
+
+    def test_every_do_a_caller_passes_is_an_action(self):
+        texts = self.generated + self.hand + _strip(_raw(SGUIS)) + _strip(_raw(DEBUG_EVENTS))
+        for do in set(re.findall(r"sr_fl_(?:each_slot|by_op|by_local) = \{ DO = (\w+) \}", texts)):
+            with self.subTest(do=do):
+                self.assertIn(do, gsf.SLOT_ACTIONS)
+
+    def test_a_cleared_slot_clears_every_variable(self):
+        clear = _block(self.generated, "sr_fl_clear_at")
+        for name in (*gsf.SLOT_VARS, *[r.key for r in gsf.ROLES], *[f"{r.key}_full" for r in gsf.ROLES]):
+            with self.subTest(var=name):
+                self.assertIn(f"sr_fl_$N$_{name}", clear)
+
+
+class RolesTest(unittest.TestCase):
+    def test_the_roles_figures_are_the_values_file_s(self):
+        values = _raw(FLEET_VALUES)
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertEqual(_number(values, f"sr_fl_fire_fleets_{role.key}"), role.fire_fleets)
+                self.assertEqual(_number(values, f"sr_fl_fire_defences_{role.key}"), role.fire_defences)
+                self.assertEqual(_number(values, f"sr_fl_endurance_{role.key}"), role.endurance)
+        self.assertEqual(_number(values, "sr_fl_marines_per_carrier"),
+                         next(r.marines for r in gsf.ROLES if r.key == "carrier"))
+
+    def test_screens_take_the_losses_first(self):
+        """A month's loss falls on the screens up to their strength, the rest on
+        the screened roles, each role by its share of its group (§ 3, F10)."""
+        body = _block(_strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)), "sr_fl_take_losses_at")
+        self.assertIn("name = sr_fl_on_screens value = { value = local_var:sr_fl_loss max = local_var:sr_fl_screens }", body)
+        self.assertIn("name = sr_fl_on_screened value = { value = local_var:sr_fl_loss subtract = local_var:sr_fl_on_screens",
+                      body)
+        for role in gsf.ROLES:
+            group = "screens" if role.screen else "screened"
+            with self.subTest(role=role.key):
+                self.assertRegex(body, rf"value = local_var:sr_fl_on_{group} multiply = sr_fl_\$N\$_{role.key}_value "
+                                       rf"divide = local_var:sr_fl_{group} max = sr_fl_\$N\$_{role.key}_value \}} \}}"
+                                       rf"\s*sr_fl_cut_role = \{{ N = \$N\$ ROLE = {role.key} \}}")
+
+
+class FullColoniesGateTest(unittest.TestCase):
+    """Everything here runs and shows under Full Colonies only."""
+
+    def test_the_monthly_steps(self):
+        self.assertRegex(_strip(_raw(SITE_EFFECTS)),
+                         r"limit = \{ sr_colonies_full_enabled = yes \}\s*sr_fl_global_month = yes")
+        self.assertIn("sr_colonies_full_enabled = yes", _block(_strip(_raw(FLEET_TRIGGERS)), "sr_fleet_power"))
+        self.assertRegex(_strip(_raw(ON_ACTIONS)),
+                         r"limit = \{ sr_fleet_power = yes \}\s*sr_fl_country_month = yes")
+
+    def test_the_building(self):
+        building = _block(_strip(_raw(BUILDING)), "building_space_command")
+        self.assertIn("sr_colonies_full_enabled = yes", _block("x = {" + building.split("potential = {", 1)[1], "x"))
+
+    def test_every_scripted_gui_and_the_survey(self):
+        sguis = _strip(_raw(SGUIS))
+        names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
+        self.assertEqual(len(names), 10)
+        for name in names:
+            with self.subTest(sgui=name):
+                self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
+        survey = _block(_strip(_raw(COVERT_ACTIONS)), "covert_survey_defences_action")
+        self.assertIn("sr_colonies_full_enabled = yes", survey.split("possible = {", 1)[0])
+
+
+class OccupiedStateTest(unittest.TestCase):
+    """§ 5.1: a building in a state its owner doesn't control counts for no one."""
+
+    def test_construction_counts_only_states_held_by_their_owner(self):
+        rate = _block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate")
+        self.assertRegex(rate, r"every_scope_state = \{\s*limit = \{ sr_state_held_by_owner = yes \}\s*"
+                               r"add = modifier:state_sr_ship_construction_add")
+
+    def test_the_battlestation_fights_only_from_a_held_state(self):
+        gather = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_cb_battlestation_gather")
+        self.assertIn("sr_battlestation_held = yes", gather)
+        self.assertIn("sr_state_held_by_owner = yes", _block(_strip(_raw(FLEET_TRIGGERS)), "sr_battlestation_held"))
+
+
+class UpkeepTest(unittest.TestCase):
+    def test_the_goods_upkeep_covers_every_input_of_every_method(self):
+        inputs = set(re.findall(r"goods_input_(\w+)_add = ", _raw(METHODS)))
+        upkeep = set(re.findall(r"goods_input_(\w+)_mult = 0\.01", _block(_raw(STATIC), "sr_fleet_upkeep_goods")))
+        self.assertEqual(inputs, upkeep)
+        self.assertEqual(inputs, {"launch_capacity", "advanced_materials", "electricity"})
+
+    def test_the_upkeep_is_on_the_building_and_refreshed_once(self):
+        apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
+        self.assertIn("is_building_type = building_space_command", apply)
+        self.assertLess(apply.index("remove_modifier = sr_fleet_upkeep_goods"), apply.index("add_modifier"))
+        calls = re.findall(r"sr_fl_upkeep_apply = yes", _strip(_raw(FLEET_EFFECTS)))
+        self.assertEqual(len(calls), 1)
+
+
+class ShippingTest(unittest.TestCase):
+    """gss.SHIPPING, re-derived from the specializations' modifiers: goods and
+    throughput terms outnumbering research terms, a tie to the first term."""
+
+    GOODS = re.compile(r"building_\w*throughput_add|goods_output_\w+_mult")
+    RESEARCH = re.compile(r"country_tech_research_speed_mult|country_military_tech_research_speed_mult"
+                          r"|country_weekly_innovation_max_add")
+
+    def _ships(self, text, name):
+        keys = re.findall(r"(?m)^\s*(\w+) =", _block(text, name))
+        terms = [k for k in keys if self.GOODS.fullmatch(k) or self.RESEARCH.fullmatch(k)]
+        goods = sum(1 for k in terms if self.GOODS.fullmatch(k))
+        if goods != len(terms) - goods:
+            return goods > len(terms) - goods
+        return bool(terms) and bool(self.GOODS.fullmatch(terms[0]))
+
+    def test_the_table_follows_the_rule(self):
+        text = _raw(STATIC)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertEqual(tuple(self._ships(text, m) for m in gss.spec_modifiers(site)), site.ships)
+
+    def test_a_blockade_stops_a_shipping_specialization_only(self):
+        values = _raw(gss.ROOT / gss.VALUES_OUT)
+        for site in gss.SITES:
+            for slot, ships in zip(("a", "b"), site.ships):
+                with self.subTest(site=site.key, slot=slot):
+                    body = _block(values, f"sr_site_mult_{slot}_{site.key}")
+                    blockade = f"has_global_variable = sr_site_blockaded_{site.key} }} multiply = 0"
+                    self.assertEqual(blockade in body, ships)
+
+
+class CombatModelTest(unittest.TestCase):
+    """The square law as the combat step applies it (§ 7.2), with the script's
+    own k: each side loses k x the other side's fire a month."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.k = _number(_raw(FLEET_VALUES), "sr_fleet_k")
+
+    def _fight(self, a, b, fire=1.0, months=240):
+        for _ in range(months):
+            if a <= 0 or b <= 0:
+                break
+            a, b = max(0.0, a - self.k * b * fire), max(0.0, b - self.k * a * fire)
+        return a, b
+
+    def test_concentration_pays(self):
+        a, b = self._fight(100.0, 50.0)
+        self.assertEqual(b, 0.0)
+        # The continuous law gives sqrt(100^2 - 50^2) = 86.6; monthly steps a few points less.
+        self.assertAlmostEqual(a, math.sqrt(100 ** 2 - 50 ** 2), delta=5)
+
+    def test_equal_fleets_destroy_each_other(self):
+        minimum = _number(_raw(FLEET_VALUES), "sr_fl_minimum_strength")
+        a, b = self._fight(100.0, 100.0)
+        self.assertLess(max(a, b), minimum)
+
+    def test_the_losses_formula_is_k_times_strength_times_fire_per_point(self):
+        values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT)) + _strip(_raw(FLEET_VALUES))
+        self.assertIn("sr_fleet_k", values)
+        combat = _strip(_raw(COMBAT_EFFECTS))
+        self.assertIn("multiply = sr_fleet_k", combat)
+
+
+class CivilWarTest(unittest.TestCase):
+    def test_the_winner_joins_the_fleet_powers_at_once(self):
+        repair = _block(_strip(_raw(SPACE_RACE_EFFECTS)), "sr_repair_after_civil_war")
+        self.assertRegex(repair, r"limit = \{ sr_fleet_power = yes \}\s*sr_fl_join_powers = yes")
+
+    def test_the_winner_keeps_the_old_government_s_occupations(self):
+        repoint = _block(_strip(_raw(gss.ROOT / gss.EFFECTS_OUT)), "sr_sites_repoint_loser")
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertIn(f"set_global_variable = {{ name = sr_site_occupier_{site.key} value = ROOT }}", repoint)
+
+    def test_a_release_clears_every_slice_6_record(self):
+        effects = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
+        for site in gss.SITES:
+            release = _block(effects, f"sr_site_release_{site.key}")
+            for name in gss.slice6_vars(site):
+                with self.subTest(site=site.key, var=name):
+                    self.assertIn(name, release)
+
+
+if __name__ == "__main__":
+    unittest.main()

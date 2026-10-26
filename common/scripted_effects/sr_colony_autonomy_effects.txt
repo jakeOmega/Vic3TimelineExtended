@@ -113,13 +113,26 @@ sr_site_charter_at = {
 	}
 }
 
-# ... a garrison, for ten years.
+# ... a garrison, for ten years. Under Full Colonies the garrison is marines
+# a fleet must land (slice 6 design § 9.6): the answer sets a year's due date,
+# and the garrison takes effect once two battalions stand there
+# (sr_site_garrison_due_step, sr_fleet_effects.txt).
 sr_site_garrison_at = {
 	if = {
 		limit = { global_var:sr_site_holder_$KEY$ ?= this }
-		set_global_variable = { name = sr_site_garrison_$KEY$ value = yes days = 3650 }
-		set_local_variable = { name = sr_aut_delta value = sr_aut_garrison_cut }
-		sr_site_aut_add_at = { KEY = $KEY$ }
+		if = {
+			limit = { sr_colonies_full_enabled = yes }
+			set_global_variable = {
+				name = sr_site_garrison_due_$KEY$
+				value = {
+					value = te_history_month_index
+					add = sr_garrison_due_months
+				}
+			}
+		}
+		else = {
+			sr_site_garrison_take_effect = { KEY = $KEY$ }
+		}
 	}
 }
 

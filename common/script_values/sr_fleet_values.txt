@@ -1,0 +1,389 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: the numbers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# (slice 6 of the scope). Full Colonies only. Every number the fleets' script
+# reads is here; the per-slot and per-location values that read them are
+# generated (common/script_values/sr_fleets_generated.txt, from
+# scripts/generators/gen_space_fleets.py), and the panel's figures are in
+# sr_fleet_display_values.txt. First guesses, to tune in play (design § 20).
+# ============================================================================
+
+# ---- Drives and propellant (design § 2) -------------------------------------------
+# A fleet's propellant capacity in km/s by the drive it flies on (its own,
+# sr_fl_<n>_drive; one ahead for rapid response hulls alone), before its
+# tenders: chemical, fusion, the torch, antimatter.
+sr_fl_capacity_chemical = { value = 12 }
+sr_fl_capacity_fusion = { value = 60 }
+sr_fl_capacity_torch = { value = 1000 }
+sr_fl_capacity_antimatter = { value = 5000 }
+
+# A docked fleet on an older drive than the nation's refits for this many
+# months (design § 2), in which it can't depart.
+sr_fl_refit_months = { value = 3 }
+
+# The share of its capacity a fleet refills each month at a Spaceport that is
+# not on a propellant world (propellant shipped up from Earth; design § 2).
+sr_fl_port_refill_share = { value = 0.25 }
+
+# ---- Ship roles (design § 3) --------------------------------------------------------
+# Fire on fleets, fire on defences and endurance (months) per role, and the
+# marine battalions a point of assault carrier strength carries. The roles'
+# table is gen_space_fleets.ROLES; test_space_fleets.py holds the two equal.
+sr_fl_fire_fleets_war = { value = 1 }
+sr_fl_fire_fleets_rapid = { value = 0.5 }
+sr_fl_fire_fleets_siege = { value = 0.5 }
+sr_fl_fire_fleets_carrier = { value = 0.25 }
+sr_fl_fire_fleets_tender = { value = 0.1 }
+sr_fl_fire_defences_war = { value = 1 }
+sr_fl_fire_defences_rapid = { value = 0.5 }
+sr_fl_fire_defences_siege = { value = 2 }
+sr_fl_fire_defences_carrier = { value = 0.25 }
+sr_fl_fire_defences_tender = { value = 0.1 }
+sr_fl_endurance_war = { value = 18 }
+sr_fl_endurance_rapid = { value = 12 }
+sr_fl_endurance_siege = { value = 18 }
+sr_fl_endurance_carrier = { value = 12 }
+sr_fl_endurance_tender = { value = 36 }
+sr_fl_marines_per_carrier = { value = 2 }
+
+# ---- Supply, attrition and repair (design § 4) -------------------------------------
+# Out of supply, a fleet loses this share of its strength a month (destroyed).
+sr_fl_attrition_share = { value = 0.05 }
+# Docked, a fleet regains this share of its strength's gap a month: at Earth,
+# and a Spaceport level (the best of ours at the location).
+sr_fl_repair_earth = { value = 0.2 }
+sr_fl_repair_port_level = { value = 0.1 }
+# A battle's losses: this share destroyed (strength now and at full both
+# fall), the rest damage (strength now falls; repair brings it back).
+sr_fl_loss_destroyed_share = { value = 0.5 }
+# A slot whose strength falls below this is gone.
+sr_fl_minimum_strength = { value = 0.05 }
+
+# ---- Space Command (design § 5) ------------------------------------------------------
+# The build mix's weights, 0 to 3 (sr_sc_mix_<role>), at the start: warships
+# 2, assault carriers 1, tenders 1, siege and rapid response 0.
+sr_sc_mix_start_war = { value = 2 }
+sr_sc_mix_start_rapid = { value = 0 }
+sr_sc_mix_start_siege = { value = 0 }
+sr_sc_mix_start_carrier = { value = 1 }
+sr_sc_mix_start_tender = { value = 1 }
+sr_sc_mix_max = { value = 3 }
+
+# Country scope. Fleet strength Space Command builds a month: the methods'
+# workforce-scaled state modifier, summed over the states the country controls
+# (design § 5.1: nothing is built in an occupied state). Staffing is in the
+# number already.
+sr_sc_rate = {
+	value = 0
+	every_scope_state = {
+		limit = { sr_state_held_by_owner = yes }
+		add = modifier:state_sr_ship_construction_add
+	}
+}
+
+# The upkeep: Space Command's input goods rise 1% for every this many points
+# of fleet strength in service, at full (design § 5).
+sr_fleet_upkeep_points = { value = 10 }
+
+# Country scope. The upkeep's multiplier, set on the country before it is
+# applied to each Space Command building (sr_fl_upkeep_refresh).
+sr_fleet_upkeep_units_value = {
+	value = sr_fl_strength_full_total
+	divide = sr_fleet_upkeep_points
+}
+
+# The AI's Space Command: up to 2 + its colonies levels, at most 10 (design § 14).
+sr_sc_ai_base_levels = { value = 2 }
+sr_sc_ai_max_levels = { value = 10 }
+
+# Country scope. The AI's cap, and its Space Command levels built and queued.
+sr_sc_ai_cap = {
+	value = sr_sc_ai_base_levels
+	if = { limit = { has_variable = sr_colony_count } add = var:sr_colony_count }
+	max = sr_sc_ai_max_levels
+}
+
+sr_sc_queued_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_space_command }
+			add = level_after_queued_constructions
+		}
+	}
+}
+
+# Country scope. Its Space Command levels in the states it controls.
+sr_sc_levels = {
+	value = 0
+	every_scope_state = {
+		limit = { sr_state_held_by_owner = yes }
+		every_scope_building = {
+			limit = { is_building_type = building_space_command }
+			add = level
+		}
+	}
+}
+
+# ---- Marines and garrisons (design § 9.6) ---------------------------------------------
+# A garrison under Full Colonies takes effect once this many battalions stand
+# at the world, and lapses after this many months unanswered.
+sr_garrison_marines_needed = { value = 2 }
+sr_garrison_due_months = { value = 12 }
+
+# ---- Combat (design § 7) ----------------------------------------------------------------
+# Lanchester's square law: a month, each side loses k x the other's fire.
+sr_fleet_k = { value = 0.1 }
+# Fleet quality: +25% for each of Directed Energy Weapons, Orbital Weapon
+# Platforms and Antimatter Production. Country scope.
+sr_fleet_quality_step = { value = 0.25 }
+sr_fleet_quality = {
+	value = 1
+	if = { limit = { has_technology_researched = directed_energy_weapons } add = sr_fleet_quality_step }
+	if = { limit = { has_technology_researched = orbital_weapon_platforms } add = sr_fleet_quality_step }
+	if = { limit = { has_technology_researched = antimatter_production } add = sr_fleet_quality_step }
+}
+
+# Colony Defences (design § 7.3): strength a level, its fire factor (+25%
+# with Orbital Weapon Platforms), and the hardness integrity is measured by:
+# 50 and 50 a Defences level. A world under no assault regains integrity.
+sr_def_strength_per_level = { value = 15 }
+sr_def_fire_factor = { value = 1.5 }
+sr_def_hardness_base = { value = 50 }
+sr_def_hardness_per_level = { value = 50 }
+sr_integrity_regain = { value = 5 }
+sr_integrity_regain_port = { value = 10 }
+sr_integrity_module_landing = { value = 25 }
+sr_integrity_full = { value = 100 }
+# A world's own hull, domes and power, as a share of a closing-in fleet's
+# defence fire against stationed hostiles: an undefended world still takes fire.
+sr_def_hull_strength = { value = 15 }
+
+# Any scope, a holder's: its Defences' fire factor.
+sr_def_quality = {
+	value = sr_def_fire_factor
+	if = {
+		limit = { has_technology_researched = orbital_weapon_platforms }
+		multiply = 1.25
+	}
+}
+
+# The Orbital Battlestation (design § 7.5): warship strength a level, and the
+# share of its full strength it regains a month.
+sr_battlestation_per_level = { value = 25 }
+sr_battlestation_regain = { value = 0.1 }
+
+# Debris at Earth (design § 7.4): low and high pool added per point of
+# strength lost in a battle there.
+sr_battle_debris_low = { value = 0.05 }
+sr_battle_debris_high = { value = 0.02 }
+
+# ---- Seizure, occupation and destruction (design § 9) ----------------------------------
+# A world's militia: a battalion a this many people, at least one.
+sr_militia_people = { value = 20000 }
+# Destruction: consecutive months closing in to destroy; the destroyer's
+# infamy and UN case; the resentment at its own colonies (now, and a drift
+# term for ten years); a ruined world can't be founded for 25 years.
+sr_destroy_months = { value = 3 }
+sr_destroy_infamy = { value = 20 }
+sr_destroy_dossier = { value = 20 }
+sr_destroy_autonomy_now = { value = 10 }
+sr_aut_destroyed_colony = { value = 0.2 }
+# A free colony: the infamy and UN case when a fleet begins closing in, and
+# the autonomy it starts at once seized.
+sr_free_assault_infamy = { value = 10 }
+sr_free_assault_dossier = { value = 10 }
+sr_free_seized_autonomy = { value = 60 }
+
+# ---- War support (design § 10) -------------------------------------------------------------
+# An occupied colony's weight, a beat: 0.1, rising by 0.15 as its people
+# reach 75,000.
+sr_ws_colony_base = { value = 0.1 }
+sr_ws_colony_growth = { value = 0.15 }
+sr_ws_colony_full_people = { value = 75000 }
+# A month's battle: who lost the larger share, and a fleet destroyed outright.
+sr_ws_battle = { value = 0.1 }
+sr_ws_battle_rout = { value = 0.25 }
+
+# ---- Survey Colony Defences (design § 11) ---------------------------------------------------
+# Our fire on the target's defences: +20% x the operation's multiplier.
+sr_cov_survey_edge = { value = 0.2 }
+
+# ---- The upkeep_inputs probe (design § 18) ------------------------------------------------
+# Country scope: its market's Launch Capacity buy orders (te_debug_space_race.6).
+sr_fl_probe_lc_orders = {
+	value = 0
+	market = {
+		mg:launch_capacity = {
+			add = market_goods_buy_orders
+		}
+	}
+}
+
+# ---- The combat record's reads (6b; sr_fleet_combat_effects.txt) -----------------------------
+# Country scope, a power at the location being fought over, while its sr_cb_*
+# record stands (one location at a time). Strength and fire by posture.
+sr_cb_s1_value = { value = 0 if = { limit = { has_variable = sr_cb_s1 } value = var:sr_cb_s1 } }
+sr_cb_s2_value = { value = 0 if = { limit = { has_variable = sr_cb_s2 } value = var:sr_cb_s2 } }
+sr_cb_s3_value = { value = 0 if = { limit = { has_variable = sr_cb_s3 } value = var:sr_cb_s3 } }
+sr_cb_f1_value = { value = 0 if = { limit = { has_variable = sr_cb_f1 } value = var:sr_cb_f1 } }
+sr_cb_f2_value = { value = 0 if = { limit = { has_variable = sr_cb_f2 } value = var:sr_cb_f2 } }
+sr_cb_f3_value = { value = 0 if = { limit = { has_variable = sr_cb_f3 } value = var:sr_cb_f3 } }
+sr_cb_hs_value = { value = 0 if = { limit = { has_variable = sr_cb_hs } value = var:sr_cb_hs } }
+sr_cb_all_value = {
+	value = sr_cb_s1_value
+	add = sr_cb_s2_value
+	add = sr_cb_s3_value
+}
+sr_cb_hold_value = {
+	value = sr_cb_s1_value
+	add = sr_cb_s2_value
+}
+sr_cb_assault_value = {
+	value = sr_cb_s1_value
+	add = sr_cb_s3_value
+}
+
+# The hostile strength each posture engages (design § 7.1): stationed, every
+# hostile fleet; standing off, the hostiles stationed or standing off; closing
+# in, the hostiles stationed or closing in. sr_cb_hs_calc: the hostiles
+# stationed, which draw a closing-in fleet's defence fire and bar a seizure.
+sr_cb_e1_value = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = sr_cb_all_value
+	}
+}
+sr_cb_e2_value = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = sr_cb_hold_value
+	}
+}
+sr_cb_e3_value = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = sr_cb_assault_value
+	}
+}
+sr_cb_hs_calc = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = sr_cb_s1_value
+	}
+}
+
+# The hostiles' fire per point engaged that reaches each of our postures:
+# stationed, all three of theirs; standing off, their stationed and standing
+# off; closing in, their stationed and closing in. Times our strength there
+# and k, our losses (the square law: each fleet's fire shared by strength among
+# what it engages, so the losses sum to the fire).
+sr_cb_hostile_r1_value = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = var:sr_cb_r1
+		add = var:sr_cb_r2
+		add = var:sr_cb_r3
+	}
+}
+sr_cb_hostile_r2_value = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = var:sr_cb_r1
+		add = var:sr_cb_r2
+	}
+}
+sr_cb_hostile_r3_value = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_war_with = prev }
+		add = var:sr_cb_r1
+		add = var:sr_cb_r3
+	}
+}
+
+# The hostiles' losses this month, and their share of their strength.
+sr_cb_enemy_lost = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_variable = sr_cb_lost has_war_with = prev }
+		add = var:sr_cb_lost
+	}
+}
+sr_cb_enemy_before = {
+	value = 0
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_cb_present has_variable = sr_cb_before has_war_with = prev }
+		add = var:sr_cb_before
+	}
+}
+sr_cb_enemy_lost_share = {
+	value = 0
+	if = {
+		limit = { sr_cb_enemy_before > 0 }
+		value = sr_cb_enemy_lost
+		divide = sr_cb_enemy_before
+	}
+}
+
+# ---- The Orbital Battlestation (design § 7.5), country scope ------------------------------------
+# Full strength: 25 warship strength a level, in the states the owner controls.
+sr_battlestation_full = {
+	value = 0
+	every_scope_state = {
+		limit = { sr_state_held_by_owner = yes }
+		every_scope_building = {
+			limit = { is_building_type = building_orbital_battlestation }
+			add = { value = level multiply = sr_battlestation_per_level }
+		}
+	}
+}
+# Its fire, for the gather (an argument is one token, so not a block there).
+sr_battlestation_fire = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_battlestation_strength }
+		value = var:sr_battlestation_strength
+		multiply = sr_fleet_quality
+	}
+}
+
+sr_battlestation_strength_value = {
+	value = 0
+	if = { limit = { has_variable = sr_battlestation_strength } value = var:sr_battlestation_strength }
+}
+
+# ---- The prices of force in space (design §§ 9.3-9.4), country scope ------------------------------
+# Twice for a party to the outer-space convention (6c; sr_colony_convention_party).
+sr_destroy_infamy_cost = {
+	value = sr_destroy_infamy
+	if = { limit = { sr_colony_convention_party = yes } multiply = 2 }
+}
+sr_destroy_dossier_cost = {
+	value = sr_destroy_dossier
+	if = { limit = { sr_colony_convention_party = yes } multiply = 2 }
+}
+sr_free_assault_infamy_cost = {
+	value = sr_free_assault_infamy
+	if = { limit = { sr_colony_convention_party = yes } multiply = 2 }
+}
+sr_free_assault_dossier_cost = {
+	value = sr_free_assault_dossier
+	if = { limit = { sr_colony_convention_party = yes } multiply = 2 }
+}

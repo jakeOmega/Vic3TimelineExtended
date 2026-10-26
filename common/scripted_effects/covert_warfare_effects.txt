@@ -1433,6 +1433,7 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = counterintel_support ACTION = covert_counterintel_support_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 14 }
 	covert_op_sync = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 15 }
 	covert_op_sync = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action DEFENSE_MOD = country_covert_defense_military_add CODE = 16 }
+	covert_op_sync = { TYPE = survey_defences ACTION = covert_survey_defences_action DEFENSE_MOD = country_covert_defense_military_add CODE = 17 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1813,6 +1814,28 @@ covert_ops_apply_all_phase_effects = {
 			}
 		}
 
+		# ---- Survey Colony Defences (solar colonization slice 6): no
+		#      modifier. The operator's survey record is rebuilt each month:
+		#      cleared (sr_cov_survey_reset), then each established survey adds
+		#      its target and multiplier (sr_cov_survey_defences, reading
+		#      local_var:sr_cov_mult), so our fleets fire harder on the target's
+		#      colony defences and our panel shows their figures. ----
+		sr_cov_survey_reset = yes
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_survey_defences
+				covert_op_is_established = yes
+			}
+			set_local_variable = { name = sr_cov_mult value = covert_op_effect_mult }
+			var:iw_target ?= {
+				if = {
+					limit = { is_country_alive = yes }
+					sr_cov_survey_defences = yes
+				}
+			}
+		}
+
 		# The applied-priority snapshot just moved: recharge upkeep from it.
 		covert_refresh_priority_cost = yes
 	}
@@ -2135,6 +2158,10 @@ covert_watch_start = {
 		else_if = {
 			limit = { scope:iw_caught_op = { has_tag = iw_op_sabotage_colony } }
 			covert_watch_record_create = { TYPE = sabotage_colony }
+		}
+		else_if = {
+			limit = { scope:iw_caught_op = { has_tag = iw_op_survey_defences } }
+			covert_watch_record_create = { TYPE = survey_defences }
 		}
 	}
 }

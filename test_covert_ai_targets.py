@@ -39,7 +39,8 @@ GATED = {
 }
 # The payoff is our research or space progress, the threat removed, or a
 # friend protected (counterintelligence support: aimed at weaker friends). The
-# colony operations' payoff is the target's colonies, not its size.
+# colony operations' payoff is the target's colonies, not its size, and the
+# defences survey's our own fleets' fight.
 EXEMPT = {
     "counterintel_support",
     "industrial_espionage",
@@ -49,6 +50,7 @@ EXEMPT = {
     "secure_material",
     "incite_autonomy",
     "sabotage_colony",
+    "survey_defences",
 }
 WARTIME = {"infrastructure_sabotage", "comms_disruption"}
 
@@ -78,6 +80,7 @@ BREAK_WHEN = {
     "space_espionage": ["sr_has_running_milestone = no"],
     "incite_autonomy": [NO_SPACE_STAKE, "influence < 0"],
     "sabotage_colony": [HOSTILITY_GONE, NO_SPACE_STAKE, "influence < 0"],
+    "survey_defences": ["sr_fleet_power = no", HOSTILITY_GONE, "influence < 0"],
 }
 # Never by choice: requirement_to_maintain ends them when their purpose goes.
 NEVER_BREAK = {

@@ -2157,6 +2157,14 @@ types un_chamber_widget_types
 					}
 				}
 				un_chamber_value_row = {
+					blockoverride "row_label" {
+						text = "je_un_record_space"
+					}
+					blockoverride "row_value" {
+						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dos_space')|1]"
+					}
+				}
+				un_chamber_value_row = {
 					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_case_standing_term'), '(CFixedPoint)0' )]"
 					tooltip = "je_un_record_standing_tt"
 					blockoverride "row_label" {
