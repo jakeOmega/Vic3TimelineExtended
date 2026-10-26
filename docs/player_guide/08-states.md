@@ -253,7 +253,8 @@ uses the ranking.
 
 The census is experimental. The Demographics game rule controls it, set to
 Full by default: choose Display only or Disabled when you start a new game. A save from
-an earlier version keeps it off. With it off, some laws, technologies and
+an earlier version keeps the setting it was started with: off, unless you
+chose otherwise. With it off, some laws, technologies and
 decrees still list lines only the census reads, such as Contraception or Health
 Care Access; their names end in (Demographics off), since they do nothing. The
 rest of this section describes the census with the rule on.

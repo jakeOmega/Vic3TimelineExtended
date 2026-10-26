@@ -184,8 +184,8 @@
   "es": "Completo"
  },
  "setting_demographics_full_desc": {
-  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births and deaths. It takes over the birth and death effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top. The workforce follows the game's own rules.",
-  "es": "Experimental. Cada estado lleva un censo de su población por edad y sexo, que se muestra en el panel de Demografía, y es el censo el que determina sus nacimientos y muertes. Asume los efectos sobre natalidad y mortalidad que figuran en la mayoría de las leyes y tecnologías, y los de la inanición leve; la inanición grave, la guerra y otras crisis se aplican además. La fuerza laboral sigue las reglas propias del juego."
+  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births, deaths and workforce. It takes over the birth, death and workforce effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top.",
+  "es": "Experimental. Cada estado lleva un censo de su población por edad y sexo, que se muestra en el panel de Demografía, y es el censo el que determina sus nacimientos, sus muertes y su mano de obra. Asume los efectos sobre natalidad, mortalidad y mano de obra que figuran en la mayoría de las leyes y tecnologías, y los de la inanición leve; la inanición grave, la guerra y otras crisis se aplican además."
  },
  "setting_free_market_construction_disabled": {
   "en": "Free Market Construction Disabled",
