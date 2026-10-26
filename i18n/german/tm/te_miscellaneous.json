@@ -23996,8 +23996,8 @@
   "de": "Dieser Staat hat mehr als 110 Männer auf 100 Frauen im Alter von 20 bis 59, wie es bei einer Grenzregion oder einem Bergbaubezirk der Fall ist. Männer ohne Frauen und Familien neigen schneller zu Radikalismus und Gewalt. Volle Wirkung bei 130 Männern, darüber stärker, bis zum Doppelten bei 170; die Volkszählung auf dem Reiter „Demografie“ legt ihre Stärke jedes Jahr fest."
  },
  "te_demog_census_off_note": {
-  "en": "\\n\\nThe Demographics (Experimental) game rule is off, so no census runs and this does nothing.",
-  "de": "\\n\\nDie Spielregel Demografie (experimentell) ist ausgeschaltet: Es läuft keine Volkszählung, daher bewirkt dies nichts."
+  "en": "\\n\\nThe Demographics game rule is off, so no census runs and this does nothing.",
+  "de": "\\n\\nDie Spielregel Demografie ist ausgeschaltet: Es läuft keine Volkszählung, daher bewirkt dies nichts."
  },
  "te_demog_census_off_tag": {
   "en": " #grey (Demographics off)#!",

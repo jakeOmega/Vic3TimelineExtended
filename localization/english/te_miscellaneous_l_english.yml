@@ -6648,7 +6648,7 @@
  te_demog_census_more_men:0 "Census: More Men"
  te_demog_census_more_men_desc:0 "This state has more than 110 men for every 100 women aged 20 to 59, as a frontier or a mining district does. Men with no wives or families are quicker to radicalism and to violence. Full at 130 men and stronger above, up to twice at 170; the census on the Demographics tab sets its strength each year."
  te_demog_census_off_none:0 ""
- te_demog_census_off_note:0 "\n\nThe Demographics (Experimental) game rule is off, so no census runs and this does nothing."
+ te_demog_census_off_note:0 "\n\nThe Demographics game rule is off, so no census runs and this does nothing."
  te_demog_census_off_tag:0 " #grey (Demographics off)#!"
  te_demog_census_wealth_down:0 "Census: Deaths by Wealth"
  te_demog_census_wealth_down_desc:0 "Under the census, Private Health Insurance's cut in deaths for the wealthy works at the census's death rate, and no pop's deaths fall below half of it."

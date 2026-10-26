@@ -252,7 +252,7 @@ uses the ranking.
 ## Demographics
 
 The census is experimental, and released versions of the mod leave it out. A
-development build offers it as the Demographics (Experimental) game rule, set to
+development build offers it as the Demographics game rule, set to
 Full by default: choose Display only or Disabled when you start a new game. A save from
 an earlier version keeps it off. With it off, some laws, technologies and
 decrees still list lines only the census reads, such as Contraception or Health
@@ -265,7 +265,7 @@ Demographics tab in the Population panel, beside the base game's four, and a
 Demographics subtab on the state panel's Population section. The tab is open
 from the first day.
 
-Under the Demographics (Experimental) rule's Full setting, the census sets each
+Under the Demographics rule's Full setting, the census sets each
 state's births and deaths from its age structure, children per woman and causes
 of death, described below. From its first step in a state, the Laws and
 Institutions lines (see [State panel additions](#state-panel-additions)) go. The effects the census models become part of its own
