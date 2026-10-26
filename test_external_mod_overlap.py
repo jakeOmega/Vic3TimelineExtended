@@ -45,7 +45,7 @@ IN_VANILLA = [Op(VANILLA, None, 0)]   # vanilla has it, file unknown (snapshot)
 def unknown_engine(test):
     """Put back the unknowns the 2026-10-26 probe settled, for `test`'s
     duration, so the code that simulates them stays tested."""
-    for name in ("KNOWN_FILE_ORDER", "KNOWN_LOAD_READING"):
+    for name in ("KNOWN_FILE_ORDER", "KNOWN_LOAD_READING", "KNOWN_OR_CREATE_PHASE"):
         patch = mock.patch.object(emo, name, None)
         patch.start()
         test.addCleanup(patch.stop)
@@ -214,24 +214,21 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual(res["verdict"], BOTH_WIPED)
         self.assertEqual([s["effect"] for s in res["trace"]], ["error_no_entry", "skipped_no_entry"])
 
-    def test_or_create_beside_a_bare_definition_is_undetermined(self):
+    def test_or_create_beside_a_bare_definition_applies_up_front(self):
         # Realism AI's shape: vanilla defines the key, their REPLACE_OR_CREATE
-        # (u…) meets our REPLACE (t…). With the creations it applies before
-        # ours; with the REPLACEs, after it. Unprobed, so both are simulated.
+        # (u…) meets our REPLACE (t…). Probe round 4: an *_OR_CREATE applies
+        # before the INJECTs even when the key exists, so our REPLACE has the
+        # last word.
         res = resolve([ours("te_vanilla_country_names.txt", "REPLACE")],
                       [theirs("usfp_dynamic_country_names.txt", "REPLACE_OR_CREATE")],
                       IN_VANILLA, FIRST_WINS)
-        self.assertEqual(res["verdict"], UNDETERMINED)
-        self.assertEqual(res["depends_on"], ["or_create_phase"])
-        by_phase = {s["or_create_phase"]: s["verdict"] for s in res["verdict_by_scenario"]}
-        self.assertEqual(by_phase, {"creation": THEIRS_WIPED, "own_family": OURS_WIPED})
-
-    def test_or_create_phase_known_gives_one_verdict(self):
-        with mock.patch.object(emo, "KNOWN_OR_CREATE_PHASE", "creation"):
-            res = resolve([ours("te_vanilla_country_names.txt", "REPLACE")],
-                          [theirs("usfp_dynamic_country_names.txt", "REPLACE_OR_CREATE")],
-                          IN_VANILLA, FIRST_WINS)
         self.assertEqual(res["verdict"], THEIRS_WIPED)
+
+    def test_their_or_create_lands_before_our_inject(self):
+        # CMF's shape: their REPLACE_OR_CREATE of a vanilla key, our INJECT.
+        res = resolve([ours("a_ours.txt", "INJECT")], [theirs("z_theirs.txt", "REPLACE_OR_CREATE")],
+                      IN_VANILLA, FIRST_WINS)
+        self.assertEqual(res["verdict"], BOTH_MERGE)
 
     def test_inject_finds_the_entry_a_later_or_create_makes(self):
         # Probe rounds 1 and 2: INJECT:x in a_ with REPLACE_OR_CREATE:x in b_
@@ -320,6 +317,17 @@ class UnknownEngineTests(unittest.TestCase):
         by_reading = {s["load_reading"]: s["verdict"] for s in res["verdict_by_scenario"]}
         self.assertEqual(by_reading, {"vanilla_first": BOTH_MERGE, "interleaved": OURS_WIPED,
                                       "creations_first": BOTH_MERGE})
+
+    def test_or_create_phase_unknown_is_undetermined(self):
+        # With the round-4 answer put back, the two readings disagree.
+        res = resolve([ours("te_vanilla_country_names.txt", "REPLACE")],
+                      [theirs("usfp_dynamic_country_names.txt", "REPLACE_OR_CREATE")],
+                      IN_VANILLA, FIRST_WINS)
+        self.assertEqual(res["verdict"], UNDETERMINED)
+        self.assertIn("or_create_phase", res["depends_on"])
+        rows = {s["or_create_phase"]: s["verdict"] for s in res["verdict_by_scenario"]
+                if s.get("load_reading", "creations_first") == "creations_first"}
+        self.assertEqual(rows, {"creation": THEIRS_WIPED, "own_family": OURS_WIPED})
 
     def test_two_deciding_unknowns_are_undetermined(self):
         # Theirs ships our file (without the key), and their REPLACE sorts

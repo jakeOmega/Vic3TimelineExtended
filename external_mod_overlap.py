@@ -126,9 +126,9 @@ LOAD_ORDER_MODEL = {
     },
     "directive_phases": {
         "status": "probed",
-        "claim": "Directives apply in phases, not in one file-ordered pass: an *_OR_CREATE that "
-                 "finds no entry creates it before any INJECT applies, even from a later-sorting "
-                 "file; then every INJECT/TRY_INJECT, in file order; then every REPLACE/"
+        "claim": "Directives apply in phases, not in one file-ordered pass: every *_OR_CREATE "
+                 "first (creating its entry if there is none), even from a later-sorting file; "
+                 "then every INJECT/TRY_INJECT, in file order; then every REPLACE/"
                  "TRY_REPLACE. So on one key a REPLACE's body is the final entry whichever file "
                  "sorts first, and every INJECT on that key is lost. TRY_* are taken to share "
                  "their plain form's phase, and REPLACEs among themselves to apply in file order "
@@ -136,13 +136,14 @@ LOAD_ORDER_MODEL = {
         "see": f"{LOAD_ORDER_DOC}, facts 7-9. Setting: KNOWN_LOAD_READING.",
     },
     "or_create_with_bare": {
-        "status": "unknown",
-        "claim": "Where an *_OR_CREATE applies when a bare definition of its key exists too: in "
-                 "the creation phase like one that finds no entry (`creation`), or with its own "
-                 "family, an INJECT_OR_CREATE among the INJECTs and a REPLACE_OR_CREATE among the "
-                 "REPLACEs (`own_family`). Both are simulated; they differ when a REPLACE_OR_CREATE "
-                 "meets a plain REPLACE or an INJECT.",
-        "see": f"{LOAD_ORDER_DOC} (not probed). Setting: KNOWN_OR_CREATE_PHASE.",
+        "status": "probed",
+        "claim": "An *_OR_CREATE applies up front even when a bare definition of its key exists: "
+                 "after every bare definition, before any plain INJECT, from a later-sorting file "
+                 "too (`creation`). So a REPLACE_OR_CREATE replaces a vanilla body before INJECTs "
+                 "land on it, and a plain REPLACE still replaces it. The rejected reading, each "
+                 "applying with its own family (`own_family`), stays simulated when "
+                 "KNOWN_OR_CREATE_PHASE is unset.",
+        "see": f"{LOAD_ORDER_DOC}, fact 7. Setting: KNOWN_OR_CREATE_PHASE.",
     },
     "bare_duplicate_script_values": {
         "status": "probed",
@@ -256,10 +257,10 @@ DIRECTIVE_PHASES = (
 )
 OR_CREATE_DIRECTIVES = DIRECTIVE_PHASES[0]
 # Where an *_OR_CREATE applies when a bare definition of its key exists too
-# (LOAD_ORDER_MODEL["or_create_with_bare"]): with the creations, or with its
-# own family's phase. One that finds no entry creates it first either way.
+# (LOAD_ORDER_MODEL["or_create_with_bare"]): with the creations (probed), or
+# with its own family's phase. One that finds no entry creates it first either way.
 OR_CREATE_PHASES = ("creation", "own_family")
-KNOWN_OR_CREATE_PHASE: Optional[str] = None
+KNOWN_OR_CREATE_PHASE: Optional[str] = "creation"  # probed (round 4)
 # Who wins between two bare definitions of one key, per common/ folder.
 BARE_DUPLICATE_RULES = {
     **{d: FIRST_WINS for d in DIGEST_INJECT_DIRS},   # LOAD_ORDER_MODEL["bare_duplicate"]
