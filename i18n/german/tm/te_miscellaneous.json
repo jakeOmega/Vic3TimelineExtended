@@ -25188,12 +25188,12 @@
   "de": "#b Überfüllung#!\\nÜberlastung verlagert Wachstum in Satellitenstädte und Nebenstädte: bis zu #v -10#!, wenn die [concept_migration_crowding] ihre Obergrenze erreicht, das Zehnfache der Referenzdichte."
  },
  "te_demog_mt_bar_gateway": {
-  "en": "Port or Finance",
-  "de": "Hafen oder Finanzen"
+  "en": "Trade and Finance",
+  "de": "Handel und Finanzen"
  },
  "te_demog_mt_bar_gateway_tt": {
-  "en": "#b Port or Finance#!\\n#v +30#! in a [concept_world_market_hub], its market area's one port to the world market (New York, Buenos Aires), and #v +1#! for each level of $building_financial_district$, up to #v +10#!.",
-  "de": "#b Hafen oder Finanzen#!\\n#v +30#! in einem [concept_world_market_hub], dem einzigen Hafen seines Marktgebiets zum Weltmarkt (New York, Buenos Aires), und #v +1#! für jede Stufe von $building_financial_district$, bis zu #v +10#!."
+  "en": "#b Trade and Finance#!\\n#v +30#! in a [concept_world_market_hub], the state through which its market area trades with the world, and #v +1#! for each level of $building_financial_district$, up to #v +10#!.",
+  "de": "#b Handel und Finanzen#!\\n#v +30#! in einem [concept_world_market_hub], dem Staat, über den sein Marktgebiet mit der Welt handelt, und #v +1#! für jede Stufe von $building_financial_district$, bis zu #v +10#!."
  },
  "te_demog_mt_bar_infra": {
   "en": "Infrastructure",
