@@ -184,8 +184,8 @@
   "de": "Voll"
  },
  "setting_demographics_full_desc": {
-  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births and deaths. It takes over the birth and death effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top. The workforce follows the game's own rules.",
-  "de": "Experimentell. Jeder Staat führt eine Volkszählung seiner Bevölkerung nach Alter und Geschlecht, die auf der Demografie-Tafel angezeigt wird, und die Volkszählung bestimmt seine Geburten und Todesfälle. Sie übernimmt die Geburten- und Sterblichkeitseffekte, die die meisten Gesetze und Technologien aufführen, sowie die des leichten Hungers; schwerer Hunger, Krieg und andere Schocks wirken weiterhin zusätzlich. Die Arbeitskräfte folgen den Regeln des Spiels."
+  "en": "Experimental. Every state keeps a census of its people by age and sex, shown on the Demographics panel, and the census sets its births, deaths and workforce. It takes over the birth, death and workforce effects that most laws and technologies list, and mild starvation's; severe starvation, war and other shocks still apply on top.",
+  "de": "Experimentell. Jeder Staat führt eine Volkszählung seiner Bevölkerung nach Alter und Geschlecht, die auf der Demografie-Tafel angezeigt wird, und die Volkszählung bestimmt seine Geburten, Todesfälle und Arbeitskräfte. Sie übernimmt die Geburten-, Sterblichkeits- und Arbeitskräfteeffekte, die die meisten Gesetze und Technologien aufführen, sowie die des leichten Hungers; schwerer Hunger, Krieg und andere Schocks wirken weiterhin zusätzlich."
  },
  "setting_free_market_construction_disabled": {
   "en": "Free Market Construction Disabled",
