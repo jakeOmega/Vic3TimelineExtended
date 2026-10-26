@@ -153,8 +153,10 @@ class Index:
                     text = read(path)
                     code, syntax = masks(text)
                     # Scalars count too: foo = 1 is a script-value definition.
+                    # A scripted constant (@foo = 3) is not one: the lookbehind
+                    # keeps `foo` from matching after the `@`.
                     depth = 0
-                    for token in re.finditer(rf"[{{}}]|(?:INJECT:|REPLACE:)?({IDENT})\s*=", syntax):
+                    for token in re.finditer(rf"[{{}}]|(?<![@\w])(?:INJECT:|REPLACE:)?({IDENT})\s*=", syntax):
                         if token[0] == "{":
                             depth += 1
                         elif token[0] == "}":
