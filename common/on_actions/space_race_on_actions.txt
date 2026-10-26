@@ -24,6 +24,20 @@ space_race_on_action = {
 			limit = { sr_fleet_power = yes }
 			sr_fl_country_month = yes
 		}
+		# Earth orbit (slice 6d, sr_earth_orbit_effects.txt): a player told when
+		# its Earth is blockaded, or its launch site lost and back.
+		if = {
+			limit = {
+				is_player = yes
+				sr_colonies_full_enabled = yes
+				OR = {
+					sr_has_space_program = yes
+					sr_fleet_power = yes
+					has_variable = sr_launch_site_noted
+				}
+			}
+			sr_earth_notice_step = yes
+		}
 		sr_cleanup_inactive_space_race_milestones = yes
 		sr_monthly_colony_discoveries = yes
 		# The site_receiver_entry self-check (sr_site_effects.txt).

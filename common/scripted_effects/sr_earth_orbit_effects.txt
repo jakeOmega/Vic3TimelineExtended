@@ -181,3 +181,60 @@ sr_battery_sweep_self_check = {
 		}
 	}
 }
+
+# ---- Earth blockaded, the launch site lost (design § 15) -----------------------------------------
+# Country scope, a player under Full Colonies with a space programme or a
+# fleet, from the country pulse (space_race_on_actions.txt): told once when
+# its Earth is blockaded (.106, naming the strongest blockader), and when its
+# launch site is lost and again when it is back (.108). The blockade and the
+# occupation are read live (sr_earth_blockaded, sr_launch_site_lost); these
+# records only mark what the player has already heard.
+sr_earth_notice_step = {
+	if = {
+		limit = { sr_earth_blockaded = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_earth_blockade_noted } }
+			set_variable = { name = sr_earth_blockade_noted value = yes }
+			save_temporary_scope_as = sr_earth_victim
+			ordered_in_global_list = {
+				variable = sr_fleet_powers
+				limit = {
+					is_country_alive = yes
+					has_war_with = scope:sr_earth_victim
+					has_variable = sr_fl_at_earth
+				}
+				order_by = var:sr_fl_at_earth
+				position = 0
+				save_temporary_scope_as = sr_earth_blockader
+			}
+			if = {
+				limit = { exists = scope:sr_earth_blockader }
+				set_variable = { name = sr_earth_blockade_by value = scope:sr_earth_blockader }
+				trigger_event = { id = space_race_events.106 days = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_earth_blockade_noted }
+		remove_variable = sr_earth_blockade_noted
+	}
+	if = {
+		limit = { sr_launch_site_lost = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_launch_site_noted } }
+			set_variable = { name = sr_launch_site_noted value = yes }
+			set_variable = { name = sr_launch_site_kind value = 1 }
+			trigger_event = { id = space_race_events.108 days = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_launch_site_noted }
+		remove_variable = sr_launch_site_noted
+		# Back under our control; a Space Program lost with its state is no return.
+		if = {
+			limit = { sr_has_space_program = yes }
+			set_variable = { name = sr_launch_site_kind value = 2 }
+			trigger_event = { id = space_race_events.108 days = 1 }
+		}
+	}
+}

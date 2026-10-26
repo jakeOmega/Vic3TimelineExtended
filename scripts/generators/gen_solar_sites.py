@@ -1526,7 +1526,12 @@ def _module_install(site: Site) -> list[str]:
                 "\t\t\tset_local_variable = { name = sr_ms_installed value = 1 }",
                 "\t\t}"]
         first = False
-    out += [f"\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+    out += ["\t\t# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then",
+            "\t\t# none of its colonies has contact).",
+            "\t\tif = {",
+            "\t\t\tlimit = { NOT = { sr_earth_blockaded = yes } }",
+            f"\t\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+            "\t\t}",
             "\t\t# Repairs come with it (slice 6 design § 7.3).",
             "\t\tif = {",
             f"\t\t\tlimit = {{ has_global_variable = sr_site_integrity_{k} }}",

@@ -1070,6 +1070,12 @@ types sr_fleets_generated_rows_types
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_earth'), '(CFixedPoint)5' )]"
 			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_earth'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_earth'), '(CFixedPoint)7' )]"
+			}
 		}
 
 		te_sr_location_row = {
@@ -1113,6 +1119,12 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_inner'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_inner'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_inner'), '(CFixedPoint)7' )]"
 			}
 		}
 
@@ -1158,6 +1170,12 @@ types sr_fleets_generated_rows_types
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_mars'), '(CFixedPoint)5' )]"
 			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_mars'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_mars'), '(CFixedPoint)7' )]"
+			}
 		}
 
 		te_sr_location_row = {
@@ -1201,6 +1219,12 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_asteroids'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_asteroids'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_asteroids'), '(CFixedPoint)7' )]"
 			}
 		}
 
@@ -1246,6 +1270,12 @@ types sr_fleets_generated_rows_types
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_jupiter'), '(CFixedPoint)5' )]"
 			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_jupiter'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_jupiter'), '(CFixedPoint)7' )]"
+			}
 		}
 
 		te_sr_location_row = {
@@ -1289,6 +1319,12 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_saturn'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_saturn'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_saturn'), '(CFixedPoint)7' )]"
 			}
 		}
 
@@ -1334,6 +1370,12 @@ types sr_fleets_generated_rows_types
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_uranus'), '(CFixedPoint)5' )]"
 			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_uranus'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_uranus'), '(CFixedPoint)7' )]"
+			}
 		}
 
 		te_sr_location_row = {
@@ -1378,6 +1420,12 @@ types sr_fleets_generated_rows_types
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_neptune'), '(CFixedPoint)5' )]"
 			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_neptune'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_neptune'), '(CFixedPoint)7' )]"
+			}
 		}
 
 		te_sr_location_row = {
@@ -1421,6 +1469,12 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_interdicting_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_kuiper'), '(CFixedPoint)5' )]"
+			}
+			blockoverride "loc_earth_blockaded_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_kuiper'), '(CFixedPoint)6' )]"
+			}
+			blockoverride "loc_earth_blockading_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_kuiper'), '(CFixedPoint)7' )]"
 			}
 		}
 	}

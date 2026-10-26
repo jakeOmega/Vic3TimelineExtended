@@ -63,6 +63,11 @@ sr_fleet_go_sgui = {
 			text = sr_fl_refitting_tt
 			NOT = { sr_fl_op_check = { TEST = refitting } }
 		}
+		# 6d: nothing leaves a blockaded Earth or an occupied launch site.
+		custom_tooltip = {
+			text = sr_fl_earth_barred_tt
+			NOT = { sr_fl_op_check = { TEST = earth_barred } }
+		}
 		custom_tooltip = {
 			text = sr_fl_short_tt
 			sr_fl_op_check = { TEST = can_go }

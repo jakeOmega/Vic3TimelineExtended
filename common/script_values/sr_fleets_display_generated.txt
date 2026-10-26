@@ -671,10 +671,13 @@ sr_disp_loc_inbound_ours_kuiper = {
 
 # Per location, the viewer's status there (6b): 1 a battle this month or last,
 # 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of
-# ours interdicted (blockaded by a country at peace with us), 5 we interdict.
+# ours interdicted (blockaded by a country at peace with us), 5 we interdict;
+# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's.
 sr_disp_loc_status_earth = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_battle_earth global_var:sr_loc_battle_earth >= { value = te_history_month_index subtract = 1 } } value = 1 }
+	else_if = { limit = { sr_earth_blockaded = yes } value = 6 }
+	else_if = { limit = { has_variable = sr_fl_at_earth is_at_war = yes any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }
 }
 sr_disp_loc_status_inner = {
 	value = 0

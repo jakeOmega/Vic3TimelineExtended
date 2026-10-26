@@ -68,3 +68,14 @@ sr_disp_reserve_auto = {
 	value = 0
 	if = { limit = { sr_reserve_auto_on = yes } value = 1 }
 }
+
+# 6d: 1 while our Earth is blockaded; 1 while our launch site is occupied
+# (Space Command's notes).
+sr_disp_earth_blockaded = {
+	value = 0
+	if = { limit = { sr_earth_blockaded = yes } value = 1 }
+}
+sr_disp_launch_site_lost = {
+	value = 0
+	if = { limit = { sr_launch_site_lost = yes } value = 1 }
+}

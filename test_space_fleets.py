@@ -42,6 +42,9 @@ BATTERY = ROOT / "common/buildings/sr_orbital_defense_battery.txt"
 BATTERY_METHODS = ROOT / "common/production_methods/sr_orbital_defense_battery_pms.txt"
 MODIFIER_TYPES = ROOT / "common/modifier_type_definitions/sr_fleet_modifier_types.txt"
 DEBRIS_EFFECTS = ROOT / "common/scripted_effects/te_orbital_debris_effects.txt"
+COLONY_FLEET_EFFECTS = ROOT / "common/scripted_effects/sr_colony_fleet_effects.txt"
+MODULE_EFFECTS = ROOT / "common/scripted_effects/sr_colony_module_effects.txt"
+POPULATION_EFFECTS = ROOT / "common/scripted_effects/sr_colony_population_effects.txt"
 
 
 def _raw(path):
@@ -642,6 +645,77 @@ class BatteryTest(unittest.TestCase):
         self.assertIn("every_in_global_list = {\n\t\t\tvariable = sr_fleet_powers", step)
         self.assertNotIn("every_country", step)
         self.assertIn("sr_has_battery = yes", _block(_strip(_raw(FLEET_TRIGGERS)), "sr_fleet_power"))
+
+
+class EarthBlockadeTest(unittest.TestCase):
+    """6d (design §§ 5.1, 15): a fleet at war with us at Earth and none of ours
+    there, or an occupied launch site, stops every launch; Launch from the
+    reserve reads only the occupation half, and so does fabrication."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+
+    def test_the_tests_are_full_colonies_only(self):
+        for name in ("sr_earth_blockaded", "sr_launch_site_lost"):
+            with self.subTest(trigger=name):
+                self.assertIn("sr_colonies_full_enabled = yes", _block(self.triggers, name))
+        barred = _block(self.triggers, "sr_launches_barred")
+        self.assertIn("sr_earth_blockaded = yes", barred)
+        self.assertIn("sr_launch_site_lost = yes", barred)
+        blockaded = _block(self.triggers, "sr_earth_blockaded")
+        self.assertIn("NOT = { has_variable = sr_fl_at_earth }", blockaded)
+        self.assertIn("sr_earth_hostile_present = yes", blockaded)
+        lost = _block(self.triggers, "sr_launch_site_lost")
+        self.assertIn("is_building_type = building_space_program", lost)
+        self.assertIn("state = { sr_state_held_by_owner = yes }", lost)
+
+    def test_every_departure_reads_the_one_test(self):
+        launch = _block(_strip(_raw(COLONY_FLEET_EFFECTS)), "sr_cf_launch_month")
+        self.assertRegex(launch, r"^\s*if = \{\s*limit = \{ sr_launches_barred = yes \}\s*sr_launch_note_held = yes")
+        step = _block(_strip(_raw(MODULE_EFFECTS)), "sr_ms_step_slot")
+        self.assertRegex(step, r"limit = \{ NOT = \{ sr_launches_barred = yes \} \}\s*sr_ms_departure_by_index = yes")
+        self.assertEqual(step.count("sr_ms_departure_by_index"), 1)
+        emig = _block(_strip(_raw(POPULATION_EFFECTS)), "sr_emig_month")
+        self.assertIn("NOT = { sr_launches_barred = yes }", _block("x = {" + emig.split("limit = {", 1)[1], "x"))
+        for n in range(1, gsf.SLOTS + 1):
+            for lc in gsf.LOCATIONS[1:]:
+                with self.subTest(slot=n, loc=lc.key):
+                    self.assertIn(f"NOT = {{ AND = {{ var:sr_fl_{n}_loc = 1 sr_launches_barred = yes }} }}",
+                                  _block(self.gen_triggers, f"sr_fl_{n}_may_depart_{lc.key}"))
+
+    def test_fabrication_and_the_reserve_read_only_the_occupation(self):
+        month = _block(_strip(_raw(MODULE_EFFECTS)), "sr_mod_month")
+        self.assertEqual(month.count("NOT = { sr_launch_site_lost = yes }"), 2)
+        self.assertNotIn("sr_launches_barred", month)
+        for name in ("sr_reserve_may_launch",):
+            self.assertNotIn("sr_launches_barred", _block(self.triggers, name))
+
+    def test_no_contact_while_earth_is_blockaded(self):
+        arrival = _block(self.generated, "sr_fl_arrival_contact_at")
+        self.assertTrue(arrival.strip().startswith("if = {\n\t\tlimit = { NOT = { sr_earth_blockaded = yes } }"))
+        sites = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertRegex(_block(sites, f"sr_mod_install_{site.key}"),
+                                 r"limit = \{ NOT = \{ sr_earth_blockaded = yes \} \}\s*"
+                                 rf"set_global_variable = \{{ name = sr_site_contact_{site.key} ")
+
+    def test_players_are_told(self):
+        on = _strip(_raw(ON_ACTIONS))
+        self.assertRegex(on, r"is_player = yes\s*sr_colonies_full_enabled = yes[^}]*\{[^}]*\}[^}]*\}\s*sr_earth_notice_step = yes")
+        step = _block(_strip(_raw(EARTH_EFFECTS)), "sr_earth_notice_step")
+        self.assertIn("trigger_event = { id = space_race_events.106 days = 1 }", step)
+        self.assertEqual(step.count("trigger_event = { id = space_race_events.108 days = 1 }"), 2)
+        events = _strip(_raw(SPACE_RACE_EVENTS))
+        for event, var in (("space_race_events.106", "sr_earth_blockade_by"), ("space_race_events.108", "sr_launch_site_kind")):
+            body = _block(events, event)
+            with self.subTest(event=event):
+                self.assertIn("event_image", body)
+                self.assertIn(f"trigger = {{ has_variable = {var} }}", body)
+                self.assertIn(f"remove_variable = {var}", body)
 
 
 if __name__ == "__main__":

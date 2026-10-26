@@ -266,7 +266,7 @@ def _render(value):
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
              r"|cf_destination_\w+|cf_drive_line|cf_races_only_note|settlers_note|settlers_crews_note"
              r"|settlers_agi_note|settlers_empty|powers_(?:more|pending|none)|modules_note|autonomy_note|free_empty"
-             r"|sc_note|space_fleets_note|space_fleets_empty|defences_note)")
+             r"|sc_note|sc_blockaded_note|sc_site_lost_note|space_fleets_note|space_fleets_empty|defences_note)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (

@@ -4466,6 +4466,31 @@ types space_race_widget_types
 				text = "je_space_race_widget_loc_status_interdicting"
 				block "loc_interdicting_visible" {}
 			}
+			### 6d: Earth's own blockade, ours or an enemy's.
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#R"
+				tooltip = "je_space_race_widget_loc_earth_blockaded_tt"
+				text = "je_space_race_widget_loc_status_earth_blockaded"
+				block "loc_earth_blockaded_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#v"
+				tooltip = "je_space_race_widget_loc_earth_blockading_tt"
+				text = "je_space_race_widget_loc_status_earth_blockading"
+				block "loc_earth_blockading_visible" {}
+			}
 		}
 	}
 
@@ -4519,6 +4544,15 @@ types space_race_widget_types
 
 			te_sr_note = {
 				text = "je_space_race_widget_sc_note"
+			}
+			### 6d: nothing leaves Earth (design § 15).
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_blockaded'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_sc_blockaded_note"
+			}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_launch_site_lost'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_sc_site_lost_note"
 			}
 			te_sr_value_row = {
 				tooltip = "je_space_race_widget_sc_rate_tt"

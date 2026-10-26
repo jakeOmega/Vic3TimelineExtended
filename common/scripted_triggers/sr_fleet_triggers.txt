@@ -225,6 +225,31 @@ sr_launch_site_lost = {
 	}
 }
 
+# Country scope, under Full Colonies. Its Earth is blockaded (design § 15, §
+# 8's rule at Earth): a fleet of a country at war with it is at Earth and none
+# of its own is. Every fleet at Earth engages every other (§ 7.1), so posture
+# doesn't enter; its batteries and its Orbital Battlestation fire on the
+# blockaders but are no fleet holding orbit. Read live from the location
+# records (sr_fl_at_earth, rebuilt on every arrival and departure), so a
+# country with no fleet of its own, a colony holder, is blockaded too.
+sr_earth_blockaded = {
+	sr_colonies_full_enabled = yes
+	NOT = { has_variable = sr_fl_at_earth }
+	sr_earth_hostile_present = yes
+}
+
+# Country scope. Nothing leaves Earth (design § 15): no colony fleet, module
+# shipment, settler or fleet departing Earth. Blockaded, or the launch site
+# occupied; Launch from the reserve reads only the second (sr_reserve_may_launch),
+# and module fabrication only the second too (sr_mod_month). Every departure
+# path reads this one test.
+sr_launches_barred = {
+	OR = {
+		sr_earth_blockaded = yes
+		sr_launch_site_lost = yes
+	}
+}
+
 # Country scope. Launch (the panel's, the AI's): hulls on the ground, the
 # launch site held (a blockade in orbit doesn't stop it: that is what the
 # reserve is for), and a slot to take them: an empty one, or a fleet of ours

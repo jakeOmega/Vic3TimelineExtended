@@ -402,9 +402,18 @@ def render_slot_triggers(n: int) -> list[str]:
                 f"\tNOT = {{ var:{loc} = {b.code} }}",
                 f"\tNOT = {{ {var(n, 'refitting')} = yes }}",
                 f"\t{var(n, 'strength')} >= sr_fl_minimum_strength",
-                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}",
-                "}"]
-    out += ["# The panel's Go: its picked destination may be flown now.",
+                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}"]
+        if b.code != EARTH:
+            # 6d (design § 15): nothing leaves Earth blockaded or with the launch site lost.
+            out.append(f"\tNOT = {{ AND = {{ var:{loc} = {EARTH} sr_launches_barred = yes }} }}")
+        out.append("}")
+    out += ["# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).",
+            f"{var(n, 'earth_barred')} = {{",
+            f"\thas_variable = {loc}",
+            f"\tvar:{loc} = {EARTH}",
+            "\tsr_launches_barred = yes",
+            "}",
+            "# The panel's Go: its picked destination may be flown now.",
             f"{var(n, 'can_go')} = {{",
             f"\thas_variable = sr_fl_dest_pick_{n}",
             "\tOR = {"]
@@ -796,8 +805,11 @@ def render_location_effects() -> list[str]:
     out += _chain(cases, else_body=["set_variable = { name = sr_fl_$N$_posture value = 2 }"])
     out += ["}", "",
             "# On arrival, contact for every world of ours at the location (slice 5's",
-            "# sr_site_contact_<key>), unless it is blockaded or occupied.",
-            "sr_fl_arrival_contact_at = {"]
+            "# sr_site_contact_<key>), unless it is blockaded or occupied, or (6d) our",
+            "# Earth is blockaded: then none of our colonies has contact (design § 15).",
+            "sr_fl_arrival_contact_at = {",
+            "\tif = {",
+            "\t\tlimit = { NOT = { sr_earth_blockaded = yes } }"]
     cases = []
     for lc in LOCATIONS[1:]:
         body = []
@@ -807,8 +819,8 @@ def render_location_effects() -> list[str]:
                      f"NOT = {{ has_global_variable = sr_site_blockaded_{k} }} }} "
                      f"set_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }} }}"]
         cases.append((f"var:sr_fl_$N$_loc = {lc.code}", body))
-    out += _chain(cases)
-    out += ["}", "",
+    out += _chain(cases, 2)
+    out += ["\t}", "}", "",
             "# The panel's Go: the picked destination, flown if it may be.",
             "sr_fl_go_at = {"]
     out += _chain([(f"has_variable = sr_fl_dest_pick_$N$ var:sr_fl_dest_pick_$N$ = {b.code} sr_fl_$N$_may_depart_{b.key} = yes",
@@ -1335,7 +1347,8 @@ def render_display() -> str:
                 "}"]
     out += ["", "# Per location, the viewer's status there (6b): 1 a battle this month or last,",
             "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of",
-            "# ours interdicted (blockaded by a country at peace with us), 5 we interdict."]
+            "# ours interdicted (blockaded by a country at peace with us), 5 we interdict;",
+            "# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's."]
     for lc in LOCATIONS:
         k = lc.key
         ws = worlds_at(k)
@@ -1355,6 +1368,10 @@ def render_display() -> str:
                     f"\telse_if = {{ limit = {{ has_variable = sr_fl_at_{k} OR = {{ {theirs} }} }} value = 3 }}",
                     f"\telse_if = {{ limit = {{ has_variable_list = sr_icpt_{k} any_in_list = {{ variable = sr_icpt_{k} "
                     "is_country_alive = yes } } value = 5 }"]
+        if lc.code == EARTH:
+            out += ["\telse_if = { limit = { sr_earth_blockaded = yes } value = 6 }",
+                    "\telse_if = { limit = { has_variable = sr_fl_at_earth is_at_war = yes "
+                    "any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }"]
         out.append("}")
     out += ["",
             "# Colony Defences (6b), per world: 1 while ours (or ours occupied), its integrity",
@@ -1555,6 +1572,8 @@ def _location_row(lc: glw.Location) -> list[str]:
     out += _override("loc_blockading_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 3)}]"')
     out += _override("loc_interdicted_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 4)}]"')
     out += _override("loc_interdicting_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 5)}]"')
+    out += _override("loc_earth_blockaded_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 6)}]"')
+    out += _override("loc_earth_blockading_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 7)}]"')
     return out + ["\t\t}"]
 
 
