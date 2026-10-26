@@ -312,6 +312,7 @@ _CURATED_VALID: frozenset[str] = frozenset({
     "modulo",   # script-value math operator (modulo = N)
     "round_to", # script-value math operator (round_to = N)
     "controller",  # province/state -> country scope link (event_targets.log); vanilla script never uses it (trophies' occupation read)
+    "member",   # create_power_bloc = { member = scope:x } (effects.log 1.14.5); vanilla passes it only in common/history/, outside SCAN_ROOTS
 })
 # Mod dirs whose top-level names are *callable* anywhere: scripted effects and
 # triggers are invoked as `name = yes` / `name = { ARG = v }`, on-actions are
