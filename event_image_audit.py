@@ -28,8 +28,8 @@ Scope / caveats:
   audit cannot see, so those are skipped.
 - **Declaration, not resolution.** This checks that an event *declares* art, not
   that the texture or video file exists. A `texture` path typo still renders the
-  same magenta blob. Resolving them needs the vanilla install for `.bk2` videos,
-  which CI does not have — tracked separately.
+  same magenta blob; `texture_reference_audit` resolves the path, and checks
+  that a `video` names a media alias (#1156).
 
 Suppress an intentional flag with an inline `# REVIEWED YYYY-MM-DD: rationale`
 comment on the event's opening `<id> = {` line.

@@ -9710,6 +9710,7 @@ POST_LOAD_AUDITS = [
     ("script_argument_audit",         "script_argument_audit"),
     ("modifier_duration_audit",       "modifier_duration_audit"),
     ("loc_script_value_audit",        "loc_script_value_audit"),
+    ("texture_reference_audit",       "texture_reference_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
@@ -9744,8 +9745,11 @@ PARTIAL_VANILLA_FILE_REGENERATORS = {
 
 # Return-dict keys whose nonzero values indicate "actionable issue surfaced
 # by this generator." Audits use a small set of conventional names; if a new
-# audit invents one, add it here so the warning fires automatically.
-_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails")
+# audit invents one, add it here so the warning fires automatically. A bool
+# True counts (it is an int): texture_reference_audit's `catalog_stale` says
+# the committed asset catalog no longer matches the install, so CI resolves
+# against stale vanilla until `--bootstrap` reruns.
+_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails", "catalog_stale")
 
 # Most-recent post-load run's actionable findings. Reset on every
 # _run_post_load_generators call. Read by /reload POST handler so callers
