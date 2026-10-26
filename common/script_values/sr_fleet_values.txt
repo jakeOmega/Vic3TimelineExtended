@@ -196,6 +196,14 @@ sr_free_assault_infamy = { value = 10 }
 sr_free_assault_dossier = { value = 10 }
 sr_free_seized_autonomy = { value = 60 }
 
+# ---- Interdiction in peace (design § 12, 6c) ---------------------------------------------------
+# When a fleet begins interdicting a country (per fleet and target): the
+# interdictor's infamy and UN case. Its target's casus belli (Cede Colony's
+# war goal free of infamy against it, 124_cede_colony.txt) lasts five years,
+# sr_interdiction_recent's days (sr_cb_charge_interdict).
+sr_interdiction_infamy = { value = 5 }
+sr_interdiction_dossier = { value = 10 }
+
 # ---- War support (design § 10) -------------------------------------------------------------
 # An occupied colony's weight, a beat: 0.1, rising by 0.15 as its people
 # reach 75,000.

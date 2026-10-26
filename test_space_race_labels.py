@@ -397,7 +397,7 @@ CELLS = {
         r"je_space_race_widget_loc_status_\w+"),
     "a colony's defence status (te_sr_defence_row)": (
         ("te_sr_defence_row", 'text = "je_space_race_widget_def_status_calm"'),
-        r"je_space_race_widget_def_status_(calm|blockaded|assault)"),
+        r"je_space_race_widget_def_status_(calm|blockaded|assault|interdicted)"),
     "an occupied colony (te_sr_defence_row)": (
         ("te_sr_defence_row", 'text = "je_space_race_widget_def_status_occupied"'),
         r"je_space_race_widget_def_status_occupied"),

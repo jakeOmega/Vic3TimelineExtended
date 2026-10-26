@@ -4178,6 +4178,16 @@ types space_race_widget_types
 					text = "je_space_race_widget_fl_posture_3"
 					block "fl_posture_3_visible" {}
 				}
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 100
+					elide = right
+					using = fontsize_small
+					text = "je_space_race_widget_fl_posture_4"
+					block "fl_posture_4_visible" {}
+				}
 			}
 			button = {
 				using = default_button_action
@@ -4263,7 +4273,7 @@ types space_race_widget_types
 			tooltip = "je_space_race_widget_loc_inbound_tt"
 		}
 		textbox = {
-			size = { 88 20 }
+			size = { 106 20 }
 			align = left|nobaseline
 			using = fontsize_small
 			elide = right
@@ -4276,8 +4286,9 @@ types space_race_widget_types
 	### gotcha #15) and every other power's strength there, exact (fleets in
 	### space are seen), the fleets on their way ("count·months", highlighted
 	### when the first is ours), and from 6b its status (a battle this month, our
-	### colonies there blockaded, our blockade of an enemy's). 150 + 56 + 80 +
-	### 64 + 88 + 4 × 4 + 2 × 4 = 462. Instances in te_sr_location_rows
+	### colonies there blockaded, our blockade of an enemy's; from 6c, our
+	### colonies interdicted, our interdiction). 150 + 56 + 80 + 64 + 106 +
+	### 4 × 4 + 2 × 4 = 480, the column. Instances in te_sr_location_rows
 	### (sr_fleets_generated_rows.gui).
 	type te_sr_location_row = flowcontainer {
 		direction = horizontal
@@ -4392,13 +4403,13 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 88 24 }
+			size = { 106 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 88
+				max_width = 106
 				align = left|nobaseline
 				using = fontsize_small
 				elide = right
@@ -4410,7 +4421,7 @@ types space_race_widget_types
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 88
+				max_width = 106
 				align = left|nobaseline
 				using = fontsize_small
 				elide = right
@@ -4422,7 +4433,7 @@ types space_race_widget_types
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 88
+				max_width = 106
 				align = left|nobaseline
 				using = fontsize_small
 				elide = right
@@ -4430,6 +4441,30 @@ types space_race_widget_types
 				tooltip = "je_space_race_widget_loc_blockading_tt"
 				text = "je_space_race_widget_loc_status_blockading"
 				block "loc_blockading_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#R"
+				tooltip = "je_space_race_widget_loc_interdicted_tt"
+				text = "je_space_race_widget_loc_status_interdicted"
+				block "loc_interdicted_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#v"
+				tooltip = "je_space_race_widget_loc_interdicting_tt"
+				text = "je_space_race_widget_loc_status_interdicting"
+				block "loc_interdicting_visible" {}
 			}
 		}
 	}
@@ -4750,6 +4785,18 @@ types space_race_widget_types
 				tooltip = "je_space_race_widget_loc_blockaded_tt"
 				text = "je_space_race_widget_def_status_blockaded"
 				block "def_blockaded_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#R"
+				tooltip = "je_space_race_widget_loc_interdicted_tt"
+				text = "je_space_race_widget_def_status_interdicted"
+				block "def_interdicted_visible" {}
 			}
 			textbox = {
 				parentanchor = left|vcenter

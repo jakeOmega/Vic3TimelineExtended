@@ -111,6 +111,7 @@ sr_fl_clear_at = {
 	if = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }
 	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 	if = { limit = { has_variable = sr_fl_$N$_charged } remove_variable = sr_fl_$N$_charged }
+	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 	if = { limit = { has_variable = sr_fl_$N$_war } remove_variable = sr_fl_$N$_war }
 	if = { limit = { has_variable = sr_fl_$N$_rapid } remove_variable = sr_fl_$N$_rapid }
 	if = { limit = { has_variable = sr_fl_$N$_siege } remove_variable = sr_fl_$N$_siege }
@@ -2961,9 +2962,24 @@ sr_fl_charge_free_at = {
 	}
 }
 
-# The target button: the next hostile world at the slot's location after its
-# target (table order), else the first; none clears it.
+# The target button (6c): interdicting, the next world here it may interdict,
+# at the interdiction's price when its holder is a new one; else the next
+# hostile world.
 sr_fl_step_target_at = {
+	if = {
+		limit = { sr_fl_$N$_posture_value = 4 }
+		sr_fl_step_icpt_target_at = { N = $N$ }
+		sr_fl_charge_icpt_at = { N = $N$ }
+		sr_icpt_rebuild = yes
+	}
+	else = {
+		sr_fl_step_hostile_target_at = { N = $N$ }
+	}
+}
+
+# The hostile step: the next hostile world at the slot's location after its
+# target (table order), else the first; none clears it.
+sr_fl_step_hostile_target_at = {
 	set_local_variable = { name = sr_fl_tgt value = 0 }
 	if = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }
 	set_local_variable = { name = sr_fl_next value = 0 }
@@ -3073,6 +3089,1665 @@ sr_fl_step_target_at = {
 	}
 }
 
+# The interdiction's step (6c): the next world at the slot's location it may
+# interdict, else the first; none ends the interdiction (it stands off).
+sr_fl_step_icpt_target_at = {
+	set_local_variable = { name = sr_fl_tgt value = 0 }
+	if = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }
+	set_local_variable = { name = sr_fl_next value = 0 }
+	if = {
+		limit = { has_variable = sr_fl_$N$_loc }
+		if = {
+			limit = { var:sr_fl_$N$_loc = 2 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 17 sr_site_interdict_target = { KEY = venus } } set_local_variable = { name = sr_fl_next value = 17 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 18 sr_site_interdict_target = { KEY = mercury } } set_local_variable = { name = sr_fl_next value = 18 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = venus } } set_local_variable = { name = sr_fl_next value = 17 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = mercury } } set_local_variable = { name = sr_fl_next value = 18 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 3 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 1 sr_site_interdict_target = { KEY = valles_marineris } } set_local_variable = { name = sr_fl_next value = 1 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 2 sr_site_interdict_target = { KEY = olympus_mons } } set_local_variable = { name = sr_fl_next value = 2 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 3 sr_site_interdict_target = { KEY = hellas_planitia } } set_local_variable = { name = sr_fl_next value = 3 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 4 sr_site_interdict_target = { KEY = utopia_planitia } } set_local_variable = { name = sr_fl_next value = 4 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 5 sr_site_interdict_target = { KEY = arcadia_planitia } } set_local_variable = { name = sr_fl_next value = 5 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = valles_marineris } } set_local_variable = { name = sr_fl_next value = 1 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = olympus_mons } } set_local_variable = { name = sr_fl_next value = 2 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = hellas_planitia } } set_local_variable = { name = sr_fl_next value = 3 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = utopia_planitia } } set_local_variable = { name = sr_fl_next value = 4 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = arcadia_planitia } } set_local_variable = { name = sr_fl_next value = 5 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 4 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 6 sr_site_interdict_target = { KEY = ceres } } set_local_variable = { name = sr_fl_next value = 6 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 7 sr_site_interdict_target = { KEY = vesta } } set_local_variable = { name = sr_fl_next value = 7 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 8 sr_site_interdict_target = { KEY = psyche } } set_local_variable = { name = sr_fl_next value = 8 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 9 sr_site_interdict_target = { KEY = pallas } } set_local_variable = { name = sr_fl_next value = 9 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 10 sr_site_interdict_target = { KEY = hygiea } } set_local_variable = { name = sr_fl_next value = 10 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = ceres } } set_local_variable = { name = sr_fl_next value = 6 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = vesta } } set_local_variable = { name = sr_fl_next value = 7 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = psyche } } set_local_variable = { name = sr_fl_next value = 8 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = pallas } } set_local_variable = { name = sr_fl_next value = 9 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = hygiea } } set_local_variable = { name = sr_fl_next value = 10 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 5 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 11 sr_site_interdict_target = { KEY = io } } set_local_variable = { name = sr_fl_next value = 11 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 12 sr_site_interdict_target = { KEY = europa } } set_local_variable = { name = sr_fl_next value = 12 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 13 sr_site_interdict_target = { KEY = ganymede } } set_local_variable = { name = sr_fl_next value = 13 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 14 sr_site_interdict_target = { KEY = callisto } } set_local_variable = { name = sr_fl_next value = 14 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 15 sr_site_interdict_target = { KEY = himalia } } set_local_variable = { name = sr_fl_next value = 15 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 16 sr_site_interdict_target = { KEY = amalthea } } set_local_variable = { name = sr_fl_next value = 16 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = io } } set_local_variable = { name = sr_fl_next value = 11 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = europa } } set_local_variable = { name = sr_fl_next value = 12 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = ganymede } } set_local_variable = { name = sr_fl_next value = 13 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = callisto } } set_local_variable = { name = sr_fl_next value = 14 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = himalia } } set_local_variable = { name = sr_fl_next value = 15 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = amalthea } } set_local_variable = { name = sr_fl_next value = 16 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 6 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 19 sr_site_interdict_target = { KEY = titan } } set_local_variable = { name = sr_fl_next value = 19 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 20 sr_site_interdict_target = { KEY = enceladus } } set_local_variable = { name = sr_fl_next value = 20 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 21 sr_site_interdict_target = { KEY = rhea } } set_local_variable = { name = sr_fl_next value = 21 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 22 sr_site_interdict_target = { KEY = mimas } } set_local_variable = { name = sr_fl_next value = 22 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 23 sr_site_interdict_target = { KEY = iapetus } } set_local_variable = { name = sr_fl_next value = 23 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = titan } } set_local_variable = { name = sr_fl_next value = 19 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = enceladus } } set_local_variable = { name = sr_fl_next value = 20 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = rhea } } set_local_variable = { name = sr_fl_next value = 21 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = mimas } } set_local_variable = { name = sr_fl_next value = 22 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = iapetus } } set_local_variable = { name = sr_fl_next value = 23 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 7 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 24 sr_site_interdict_target = { KEY = titania } } set_local_variable = { name = sr_fl_next value = 24 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 25 sr_site_interdict_target = { KEY = oberon } } set_local_variable = { name = sr_fl_next value = 25 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 26 sr_site_interdict_target = { KEY = miranda } } set_local_variable = { name = sr_fl_next value = 26 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 27 sr_site_interdict_target = { KEY = ariel } } set_local_variable = { name = sr_fl_next value = 27 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = titania } } set_local_variable = { name = sr_fl_next value = 24 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = oberon } } set_local_variable = { name = sr_fl_next value = 25 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = miranda } } set_local_variable = { name = sr_fl_next value = 26 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = ariel } } set_local_variable = { name = sr_fl_next value = 27 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 8 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 28 sr_site_interdict_target = { KEY = triton } } set_local_variable = { name = sr_fl_next value = 28 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 29 sr_site_interdict_target = { KEY = proteus } } set_local_variable = { name = sr_fl_next value = 29 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = triton } } set_local_variable = { name = sr_fl_next value = 28 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = proteus } } set_local_variable = { name = sr_fl_next value = 29 } }
+		}
+		else_if = {
+			limit = { var:sr_fl_$N$_loc = 9 }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 30 sr_site_interdict_target = { KEY = pluto } } set_local_variable = { name = sr_fl_next value = 30 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 31 sr_site_interdict_target = { KEY = eris } } set_local_variable = { name = sr_fl_next value = 31 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 32 sr_site_interdict_target = { KEY = makemake } } set_local_variable = { name = sr_fl_next value = 32 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 33 sr_site_interdict_target = { KEY = haumea } } set_local_variable = { name = sr_fl_next value = 33 } }
+			if = { limit = { local_var:sr_fl_next = 0 local_var:sr_fl_tgt < 34 sr_site_interdict_target = { KEY = sedna } } set_local_variable = { name = sr_fl_next value = 34 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = pluto } } set_local_variable = { name = sr_fl_next value = 30 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = eris } } set_local_variable = { name = sr_fl_next value = 31 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = makemake } } set_local_variable = { name = sr_fl_next value = 32 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = haumea } } set_local_variable = { name = sr_fl_next value = 33 } }
+			if = { limit = { local_var:sr_fl_next = 0 sr_site_interdict_target = { KEY = sedna } } set_local_variable = { name = sr_fl_next value = 34 } }
+		}
+	}
+	if = {
+		limit = { local_var:sr_fl_next > 0 }
+		set_variable = { name = sr_fl_$N$_target value = local_var:sr_fl_next }
+	}
+	else_if = {
+		limit = { sr_fl_$N$_posture_value = 4 }
+		sr_fl_end_icpt = { N = $N$ }
+	}
+}
+
+# Interdicting the target world's holder begins its price (sr_cb_charge_interdict),
+# once per fleet and target; checked monthly (sr_cb_check_icpt).
+sr_fl_charge_icpt_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 1 }
+		sr_cb_charge_interdict = { N = $N$ KEY = valles_marineris }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 2 }
+		sr_cb_charge_interdict = { N = $N$ KEY = olympus_mons }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 3 }
+		sr_cb_charge_interdict = { N = $N$ KEY = hellas_planitia }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 4 }
+		sr_cb_charge_interdict = { N = $N$ KEY = utopia_planitia }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 5 }
+		sr_cb_charge_interdict = { N = $N$ KEY = arcadia_planitia }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 6 }
+		sr_cb_charge_interdict = { N = $N$ KEY = ceres }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 7 }
+		sr_cb_charge_interdict = { N = $N$ KEY = vesta }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 8 }
+		sr_cb_charge_interdict = { N = $N$ KEY = psyche }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 9 }
+		sr_cb_charge_interdict = { N = $N$ KEY = pallas }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 10 }
+		sr_cb_charge_interdict = { N = $N$ KEY = hygiea }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 11 }
+		sr_cb_charge_interdict = { N = $N$ KEY = io }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 12 }
+		sr_cb_charge_interdict = { N = $N$ KEY = europa }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 13 }
+		sr_cb_charge_interdict = { N = $N$ KEY = ganymede }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 14 }
+		sr_cb_charge_interdict = { N = $N$ KEY = callisto }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 15 }
+		sr_cb_charge_interdict = { N = $N$ KEY = himalia }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 16 }
+		sr_cb_charge_interdict = { N = $N$ KEY = amalthea }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 17 }
+		sr_cb_charge_interdict = { N = $N$ KEY = venus }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 18 }
+		sr_cb_charge_interdict = { N = $N$ KEY = mercury }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 19 }
+		sr_cb_charge_interdict = { N = $N$ KEY = titan }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 20 }
+		sr_cb_charge_interdict = { N = $N$ KEY = enceladus }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 21 }
+		sr_cb_charge_interdict = { N = $N$ KEY = rhea }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 22 }
+		sr_cb_charge_interdict = { N = $N$ KEY = mimas }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 23 }
+		sr_cb_charge_interdict = { N = $N$ KEY = iapetus }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 24 }
+		sr_cb_charge_interdict = { N = $N$ KEY = titania }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 25 }
+		sr_cb_charge_interdict = { N = $N$ KEY = oberon }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 26 }
+		sr_cb_charge_interdict = { N = $N$ KEY = miranda }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 27 }
+		sr_cb_charge_interdict = { N = $N$ KEY = ariel }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 28 }
+		sr_cb_charge_interdict = { N = $N$ KEY = triton }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 29 }
+		sr_cb_charge_interdict = { N = $N$ KEY = proteus }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 30 }
+		sr_cb_charge_interdict = { N = $N$ KEY = pluto }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 31 }
+		sr_cb_charge_interdict = { N = $N$ KEY = eris }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 32 }
+		sr_cb_charge_interdict = { N = $N$ KEY = makemake }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 33 }
+		sr_cb_charge_interdict = { N = $N$ KEY = haumea }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = 34 }
+		sr_cb_charge_interdict = { N = $N$ KEY = sedna }
+	}
+}
+sr_fl_check_icpt_at = {
+	if = {
+		limit = { NOT = { has_variable = sr_fl_$N$_target } }
+		sr_fl_end_icpt = { N = $N$ }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 1 }
+		sr_cb_check_icpt = { N = $N$ KEY = valles_marineris }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 2 }
+		sr_cb_check_icpt = { N = $N$ KEY = olympus_mons }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 3 }
+		sr_cb_check_icpt = { N = $N$ KEY = hellas_planitia }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 4 }
+		sr_cb_check_icpt = { N = $N$ KEY = utopia_planitia }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 5 }
+		sr_cb_check_icpt = { N = $N$ KEY = arcadia_planitia }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 6 }
+		sr_cb_check_icpt = { N = $N$ KEY = ceres }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 7 }
+		sr_cb_check_icpt = { N = $N$ KEY = vesta }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 8 }
+		sr_cb_check_icpt = { N = $N$ KEY = psyche }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 9 }
+		sr_cb_check_icpt = { N = $N$ KEY = pallas }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 10 }
+		sr_cb_check_icpt = { N = $N$ KEY = hygiea }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 11 }
+		sr_cb_check_icpt = { N = $N$ KEY = io }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 12 }
+		sr_cb_check_icpt = { N = $N$ KEY = europa }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 13 }
+		sr_cb_check_icpt = { N = $N$ KEY = ganymede }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 14 }
+		sr_cb_check_icpt = { N = $N$ KEY = callisto }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 15 }
+		sr_cb_check_icpt = { N = $N$ KEY = himalia }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 16 }
+		sr_cb_check_icpt = { N = $N$ KEY = amalthea }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 17 }
+		sr_cb_check_icpt = { N = $N$ KEY = venus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 18 }
+		sr_cb_check_icpt = { N = $N$ KEY = mercury }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 19 }
+		sr_cb_check_icpt = { N = $N$ KEY = titan }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 20 }
+		sr_cb_check_icpt = { N = $N$ KEY = enceladus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 21 }
+		sr_cb_check_icpt = { N = $N$ KEY = rhea }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 22 }
+		sr_cb_check_icpt = { N = $N$ KEY = mimas }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 23 }
+		sr_cb_check_icpt = { N = $N$ KEY = iapetus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 24 }
+		sr_cb_check_icpt = { N = $N$ KEY = titania }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 25 }
+		sr_cb_check_icpt = { N = $N$ KEY = oberon }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 26 }
+		sr_cb_check_icpt = { N = $N$ KEY = miranda }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 27 }
+		sr_cb_check_icpt = { N = $N$ KEY = ariel }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 28 }
+		sr_cb_check_icpt = { N = $N$ KEY = triton }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 29 }
+		sr_cb_check_icpt = { N = $N$ KEY = proteus }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 30 }
+		sr_cb_check_icpt = { N = $N$ KEY = pluto }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 31 }
+		sr_cb_check_icpt = { N = $N$ KEY = eris }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 32 }
+		sr_cb_check_icpt = { N = $N$ KEY = makemake }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 33 }
+		sr_cb_check_icpt = { N = $N$ KEY = haumea }
+	}
+	else_if = {
+		limit = { var:sr_fl_$N$_target = 34 }
+		sr_cb_check_icpt = { N = $N$ KEY = sedna }
+	}
+}
+
+# Country scope: our interdiction lists (sr_icpt_<loc>, the countries our
+# fleets interdict at each location), rebuilt from every interdicting slot with
+# the location records (sr_loc_rebuild) and on every posture or target order.
+sr_icpt_rebuild = {
+	if = { limit = { has_variable_list = sr_icpt_inner } clear_variable_list = sr_icpt_inner }
+	if = { limit = { has_variable_list = sr_icpt_mars } clear_variable_list = sr_icpt_mars }
+	if = { limit = { has_variable_list = sr_icpt_asteroids } clear_variable_list = sr_icpt_asteroids }
+	if = { limit = { has_variable_list = sr_icpt_jupiter } clear_variable_list = sr_icpt_jupiter }
+	if = { limit = { has_variable_list = sr_icpt_saturn } clear_variable_list = sr_icpt_saturn }
+	if = { limit = { has_variable_list = sr_icpt_uranus } clear_variable_list = sr_icpt_uranus }
+	if = { limit = { has_variable_list = sr_icpt_neptune } clear_variable_list = sr_icpt_neptune }
+	if = { limit = { has_variable_list = sr_icpt_kuiper } clear_variable_list = sr_icpt_kuiper }
+	if = {
+		limit = { has_variable = sr_fl_1_loc has_variable = sr_fl_1_target sr_fl_1_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_1_loc = 3 var:sr_fl_1_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 3 var:sr_fl_1_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 3 var:sr_fl_1_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 3 var:sr_fl_1_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 3 var:sr_fl_1_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 4 var:sr_fl_1_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 4 var:sr_fl_1_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 4 var:sr_fl_1_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 4 var:sr_fl_1_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 4 var:sr_fl_1_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 5 var:sr_fl_1_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 5 var:sr_fl_1_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 5 var:sr_fl_1_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 5 var:sr_fl_1_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 5 var:sr_fl_1_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 5 var:sr_fl_1_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 2 var:sr_fl_1_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 2 var:sr_fl_1_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 6 var:sr_fl_1_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 6 var:sr_fl_1_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 6 var:sr_fl_1_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 6 var:sr_fl_1_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 6 var:sr_fl_1_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 7 var:sr_fl_1_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 7 var:sr_fl_1_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 7 var:sr_fl_1_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 7 var:sr_fl_1_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 8 var:sr_fl_1_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 8 var:sr_fl_1_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 9 var:sr_fl_1_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 9 var:sr_fl_1_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 9 var:sr_fl_1_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 9 var:sr_fl_1_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_1_loc = 9 var:sr_fl_1_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_2_loc has_variable = sr_fl_2_target sr_fl_2_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_2_loc = 3 var:sr_fl_2_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 3 var:sr_fl_2_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 3 var:sr_fl_2_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 3 var:sr_fl_2_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 3 var:sr_fl_2_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 4 var:sr_fl_2_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 4 var:sr_fl_2_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 4 var:sr_fl_2_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 4 var:sr_fl_2_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 4 var:sr_fl_2_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 5 var:sr_fl_2_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 5 var:sr_fl_2_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 5 var:sr_fl_2_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 5 var:sr_fl_2_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 5 var:sr_fl_2_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 5 var:sr_fl_2_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 2 var:sr_fl_2_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 2 var:sr_fl_2_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 6 var:sr_fl_2_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 6 var:sr_fl_2_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 6 var:sr_fl_2_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 6 var:sr_fl_2_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 6 var:sr_fl_2_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 7 var:sr_fl_2_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 7 var:sr_fl_2_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 7 var:sr_fl_2_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 7 var:sr_fl_2_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 8 var:sr_fl_2_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 8 var:sr_fl_2_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 9 var:sr_fl_2_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 9 var:sr_fl_2_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 9 var:sr_fl_2_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 9 var:sr_fl_2_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_2_loc = 9 var:sr_fl_2_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_3_loc has_variable = sr_fl_3_target sr_fl_3_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_3_loc = 3 var:sr_fl_3_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 3 var:sr_fl_3_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 3 var:sr_fl_3_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 3 var:sr_fl_3_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 3 var:sr_fl_3_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 4 var:sr_fl_3_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 4 var:sr_fl_3_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 4 var:sr_fl_3_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 4 var:sr_fl_3_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 4 var:sr_fl_3_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 5 var:sr_fl_3_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 5 var:sr_fl_3_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 5 var:sr_fl_3_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 5 var:sr_fl_3_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 5 var:sr_fl_3_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 5 var:sr_fl_3_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 2 var:sr_fl_3_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 2 var:sr_fl_3_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 6 var:sr_fl_3_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 6 var:sr_fl_3_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 6 var:sr_fl_3_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 6 var:sr_fl_3_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 6 var:sr_fl_3_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 7 var:sr_fl_3_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 7 var:sr_fl_3_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 7 var:sr_fl_3_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 7 var:sr_fl_3_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 8 var:sr_fl_3_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 8 var:sr_fl_3_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 9 var:sr_fl_3_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 9 var:sr_fl_3_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 9 var:sr_fl_3_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 9 var:sr_fl_3_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_3_loc = 9 var:sr_fl_3_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_4_loc has_variable = sr_fl_4_target sr_fl_4_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_4_loc = 3 var:sr_fl_4_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 3 var:sr_fl_4_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 3 var:sr_fl_4_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 3 var:sr_fl_4_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 3 var:sr_fl_4_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 4 var:sr_fl_4_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 4 var:sr_fl_4_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 4 var:sr_fl_4_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 4 var:sr_fl_4_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 4 var:sr_fl_4_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 5 var:sr_fl_4_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 5 var:sr_fl_4_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 5 var:sr_fl_4_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 5 var:sr_fl_4_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 5 var:sr_fl_4_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 5 var:sr_fl_4_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 2 var:sr_fl_4_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 2 var:sr_fl_4_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 6 var:sr_fl_4_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 6 var:sr_fl_4_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 6 var:sr_fl_4_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 6 var:sr_fl_4_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 6 var:sr_fl_4_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 7 var:sr_fl_4_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 7 var:sr_fl_4_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 7 var:sr_fl_4_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 7 var:sr_fl_4_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 8 var:sr_fl_4_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 8 var:sr_fl_4_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 9 var:sr_fl_4_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 9 var:sr_fl_4_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 9 var:sr_fl_4_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 9 var:sr_fl_4_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_4_loc = 9 var:sr_fl_4_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_5_loc has_variable = sr_fl_5_target sr_fl_5_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_5_loc = 3 var:sr_fl_5_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 3 var:sr_fl_5_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 3 var:sr_fl_5_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 3 var:sr_fl_5_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 3 var:sr_fl_5_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 4 var:sr_fl_5_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 4 var:sr_fl_5_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 4 var:sr_fl_5_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 4 var:sr_fl_5_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 4 var:sr_fl_5_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 5 var:sr_fl_5_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 5 var:sr_fl_5_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 5 var:sr_fl_5_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 5 var:sr_fl_5_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 5 var:sr_fl_5_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 5 var:sr_fl_5_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 2 var:sr_fl_5_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 2 var:sr_fl_5_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 6 var:sr_fl_5_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 6 var:sr_fl_5_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 6 var:sr_fl_5_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 6 var:sr_fl_5_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 6 var:sr_fl_5_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 7 var:sr_fl_5_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 7 var:sr_fl_5_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 7 var:sr_fl_5_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 7 var:sr_fl_5_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 8 var:sr_fl_5_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 8 var:sr_fl_5_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 9 var:sr_fl_5_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 9 var:sr_fl_5_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 9 var:sr_fl_5_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 9 var:sr_fl_5_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_5_loc = 9 var:sr_fl_5_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_6_loc has_variable = sr_fl_6_target sr_fl_6_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_6_loc = 3 var:sr_fl_6_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 3 var:sr_fl_6_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 3 var:sr_fl_6_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 3 var:sr_fl_6_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 3 var:sr_fl_6_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 4 var:sr_fl_6_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 4 var:sr_fl_6_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 4 var:sr_fl_6_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 4 var:sr_fl_6_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 4 var:sr_fl_6_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 5 var:sr_fl_6_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 5 var:sr_fl_6_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 5 var:sr_fl_6_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 5 var:sr_fl_6_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 5 var:sr_fl_6_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 5 var:sr_fl_6_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 2 var:sr_fl_6_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 2 var:sr_fl_6_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 6 var:sr_fl_6_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 6 var:sr_fl_6_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 6 var:sr_fl_6_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 6 var:sr_fl_6_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 6 var:sr_fl_6_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 7 var:sr_fl_6_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 7 var:sr_fl_6_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 7 var:sr_fl_6_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 7 var:sr_fl_6_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 8 var:sr_fl_6_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 8 var:sr_fl_6_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 9 var:sr_fl_6_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 9 var:sr_fl_6_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 9 var:sr_fl_6_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 9 var:sr_fl_6_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_6_loc = 9 var:sr_fl_6_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_7_loc has_variable = sr_fl_7_target sr_fl_7_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_7_loc = 3 var:sr_fl_7_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 3 var:sr_fl_7_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 3 var:sr_fl_7_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 3 var:sr_fl_7_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 3 var:sr_fl_7_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 4 var:sr_fl_7_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 4 var:sr_fl_7_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 4 var:sr_fl_7_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 4 var:sr_fl_7_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 4 var:sr_fl_7_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 5 var:sr_fl_7_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 5 var:sr_fl_7_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 5 var:sr_fl_7_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 5 var:sr_fl_7_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 5 var:sr_fl_7_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 5 var:sr_fl_7_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 2 var:sr_fl_7_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 2 var:sr_fl_7_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 6 var:sr_fl_7_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 6 var:sr_fl_7_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 6 var:sr_fl_7_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 6 var:sr_fl_7_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 6 var:sr_fl_7_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 7 var:sr_fl_7_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 7 var:sr_fl_7_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 7 var:sr_fl_7_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 7 var:sr_fl_7_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 8 var:sr_fl_7_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 8 var:sr_fl_7_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 9 var:sr_fl_7_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 9 var:sr_fl_7_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 9 var:sr_fl_7_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 9 var:sr_fl_7_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_7_loc = 9 var:sr_fl_7_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_8_loc has_variable = sr_fl_8_target sr_fl_8_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_8_loc = 3 var:sr_fl_8_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 3 var:sr_fl_8_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 3 var:sr_fl_8_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 3 var:sr_fl_8_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 3 var:sr_fl_8_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 4 var:sr_fl_8_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 4 var:sr_fl_8_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 4 var:sr_fl_8_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 4 var:sr_fl_8_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 4 var:sr_fl_8_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 5 var:sr_fl_8_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 5 var:sr_fl_8_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 5 var:sr_fl_8_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 5 var:sr_fl_8_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 5 var:sr_fl_8_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 5 var:sr_fl_8_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 2 var:sr_fl_8_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 2 var:sr_fl_8_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 6 var:sr_fl_8_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 6 var:sr_fl_8_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 6 var:sr_fl_8_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 6 var:sr_fl_8_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 6 var:sr_fl_8_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 7 var:sr_fl_8_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 7 var:sr_fl_8_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 7 var:sr_fl_8_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 7 var:sr_fl_8_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 8 var:sr_fl_8_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 8 var:sr_fl_8_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 9 var:sr_fl_8_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 9 var:sr_fl_8_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 9 var:sr_fl_8_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 9 var:sr_fl_8_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_8_loc = 9 var:sr_fl_8_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+	if = {
+		limit = { has_variable = sr_fl_9_loc has_variable = sr_fl_9_target sr_fl_9_posture_value = 4 }
+		if = {
+			limit = { var:sr_fl_9_loc = 3 var:sr_fl_9_target = 1 }
+			sr_icpt_note = { KEY = valles_marineris LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 3 var:sr_fl_9_target = 2 }
+			sr_icpt_note = { KEY = olympus_mons LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 3 var:sr_fl_9_target = 3 }
+			sr_icpt_note = { KEY = hellas_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 3 var:sr_fl_9_target = 4 }
+			sr_icpt_note = { KEY = utopia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 3 var:sr_fl_9_target = 5 }
+			sr_icpt_note = { KEY = arcadia_planitia LOC = mars }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 4 var:sr_fl_9_target = 6 }
+			sr_icpt_note = { KEY = ceres LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 4 var:sr_fl_9_target = 7 }
+			sr_icpt_note = { KEY = vesta LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 4 var:sr_fl_9_target = 8 }
+			sr_icpt_note = { KEY = psyche LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 4 var:sr_fl_9_target = 9 }
+			sr_icpt_note = { KEY = pallas LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 4 var:sr_fl_9_target = 10 }
+			sr_icpt_note = { KEY = hygiea LOC = asteroids }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 5 var:sr_fl_9_target = 11 }
+			sr_icpt_note = { KEY = io LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 5 var:sr_fl_9_target = 12 }
+			sr_icpt_note = { KEY = europa LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 5 var:sr_fl_9_target = 13 }
+			sr_icpt_note = { KEY = ganymede LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 5 var:sr_fl_9_target = 14 }
+			sr_icpt_note = { KEY = callisto LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 5 var:sr_fl_9_target = 15 }
+			sr_icpt_note = { KEY = himalia LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 5 var:sr_fl_9_target = 16 }
+			sr_icpt_note = { KEY = amalthea LOC = jupiter }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 2 var:sr_fl_9_target = 17 }
+			sr_icpt_note = { KEY = venus LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 2 var:sr_fl_9_target = 18 }
+			sr_icpt_note = { KEY = mercury LOC = inner }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 6 var:sr_fl_9_target = 19 }
+			sr_icpt_note = { KEY = titan LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 6 var:sr_fl_9_target = 20 }
+			sr_icpt_note = { KEY = enceladus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 6 var:sr_fl_9_target = 21 }
+			sr_icpt_note = { KEY = rhea LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 6 var:sr_fl_9_target = 22 }
+			sr_icpt_note = { KEY = mimas LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 6 var:sr_fl_9_target = 23 }
+			sr_icpt_note = { KEY = iapetus LOC = saturn }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 7 var:sr_fl_9_target = 24 }
+			sr_icpt_note = { KEY = titania LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 7 var:sr_fl_9_target = 25 }
+			sr_icpt_note = { KEY = oberon LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 7 var:sr_fl_9_target = 26 }
+			sr_icpt_note = { KEY = miranda LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 7 var:sr_fl_9_target = 27 }
+			sr_icpt_note = { KEY = ariel LOC = uranus }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 8 var:sr_fl_9_target = 28 }
+			sr_icpt_note = { KEY = triton LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 8 var:sr_fl_9_target = 29 }
+			sr_icpt_note = { KEY = proteus LOC = neptune }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 9 var:sr_fl_9_target = 30 }
+			sr_icpt_note = { KEY = pluto LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 9 var:sr_fl_9_target = 31 }
+			sr_icpt_note = { KEY = eris LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 9 var:sr_fl_9_target = 32 }
+			sr_icpt_note = { KEY = makemake LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 9 var:sr_fl_9_target = 33 }
+			sr_icpt_note = { KEY = haumea LOC = kuiper }
+		}
+		else_if = {
+			limit = { var:sr_fl_9_loc = 9 var:sr_fl_9_target = 34 }
+			sr_icpt_note = { KEY = sedna LOC = kuiper }
+		}
+	}
+}
+
 # --- Earth and the Moon ---
 sr_cb_clear_earth = {
 	if = { limit = { has_variable = sr_cb_present } remove_variable = sr_cb_present }
@@ -3162,9 +4837,9 @@ sr_cb_def_losses_inner = {
 }
 sr_cb_worlds_after_inner = {
 	sr_site_assault_step = { KEY = venus INDEX = 17 }
-	sr_site_blockade_step = { KEY = venus }
+	sr_site_blockade_step = { KEY = venus LOC = inner }
 	sr_site_assault_step = { KEY = mercury INDEX = 18 }
-	sr_site_blockade_step = { KEY = mercury }
+	sr_site_blockade_step = { KEY = mercury LOC = inner }
 }
 
 # --- Mars ---
@@ -3255,15 +4930,15 @@ sr_cb_def_losses_mars = {
 }
 sr_cb_worlds_after_mars = {
 	sr_site_assault_step = { KEY = valles_marineris INDEX = 1 }
-	sr_site_blockade_step = { KEY = valles_marineris }
+	sr_site_blockade_step = { KEY = valles_marineris LOC = mars }
 	sr_site_assault_step = { KEY = olympus_mons INDEX = 2 }
-	sr_site_blockade_step = { KEY = olympus_mons }
+	sr_site_blockade_step = { KEY = olympus_mons LOC = mars }
 	sr_site_assault_step = { KEY = hellas_planitia INDEX = 3 }
-	sr_site_blockade_step = { KEY = hellas_planitia }
+	sr_site_blockade_step = { KEY = hellas_planitia LOC = mars }
 	sr_site_assault_step = { KEY = utopia_planitia INDEX = 4 }
-	sr_site_blockade_step = { KEY = utopia_planitia }
+	sr_site_blockade_step = { KEY = utopia_planitia LOC = mars }
 	sr_site_assault_step = { KEY = arcadia_planitia INDEX = 5 }
-	sr_site_blockade_step = { KEY = arcadia_planitia }
+	sr_site_blockade_step = { KEY = arcadia_planitia LOC = mars }
 }
 
 # --- the Asteroid Belt ---
@@ -3354,15 +5029,15 @@ sr_cb_def_losses_asteroids = {
 }
 sr_cb_worlds_after_asteroids = {
 	sr_site_assault_step = { KEY = ceres INDEX = 6 }
-	sr_site_blockade_step = { KEY = ceres }
+	sr_site_blockade_step = { KEY = ceres LOC = asteroids }
 	sr_site_assault_step = { KEY = vesta INDEX = 7 }
-	sr_site_blockade_step = { KEY = vesta }
+	sr_site_blockade_step = { KEY = vesta LOC = asteroids }
 	sr_site_assault_step = { KEY = psyche INDEX = 8 }
-	sr_site_blockade_step = { KEY = psyche }
+	sr_site_blockade_step = { KEY = psyche LOC = asteroids }
 	sr_site_assault_step = { KEY = pallas INDEX = 9 }
-	sr_site_blockade_step = { KEY = pallas }
+	sr_site_blockade_step = { KEY = pallas LOC = asteroids }
 	sr_site_assault_step = { KEY = hygiea INDEX = 10 }
-	sr_site_blockade_step = { KEY = hygiea }
+	sr_site_blockade_step = { KEY = hygiea LOC = asteroids }
 }
 
 # --- the Jupiter system ---
@@ -3464,17 +5139,17 @@ sr_cb_def_losses_jupiter = {
 }
 sr_cb_worlds_after_jupiter = {
 	sr_site_assault_step = { KEY = io INDEX = 11 }
-	sr_site_blockade_step = { KEY = io }
+	sr_site_blockade_step = { KEY = io LOC = jupiter }
 	sr_site_assault_step = { KEY = europa INDEX = 12 }
-	sr_site_blockade_step = { KEY = europa }
+	sr_site_blockade_step = { KEY = europa LOC = jupiter }
 	sr_site_assault_step = { KEY = ganymede INDEX = 13 }
-	sr_site_blockade_step = { KEY = ganymede }
+	sr_site_blockade_step = { KEY = ganymede LOC = jupiter }
 	sr_site_assault_step = { KEY = callisto INDEX = 14 }
-	sr_site_blockade_step = { KEY = callisto }
+	sr_site_blockade_step = { KEY = callisto LOC = jupiter }
 	sr_site_assault_step = { KEY = himalia INDEX = 15 }
-	sr_site_blockade_step = { KEY = himalia }
+	sr_site_blockade_step = { KEY = himalia LOC = jupiter }
 	sr_site_assault_step = { KEY = amalthea INDEX = 16 }
-	sr_site_blockade_step = { KEY = amalthea }
+	sr_site_blockade_step = { KEY = amalthea LOC = jupiter }
 }
 
 # --- the Saturn system ---
@@ -3565,15 +5240,15 @@ sr_cb_def_losses_saturn = {
 }
 sr_cb_worlds_after_saturn = {
 	sr_site_assault_step = { KEY = titan INDEX = 19 }
-	sr_site_blockade_step = { KEY = titan }
+	sr_site_blockade_step = { KEY = titan LOC = saturn }
 	sr_site_assault_step = { KEY = enceladus INDEX = 20 }
-	sr_site_blockade_step = { KEY = enceladus }
+	sr_site_blockade_step = { KEY = enceladus LOC = saturn }
 	sr_site_assault_step = { KEY = rhea INDEX = 21 }
-	sr_site_blockade_step = { KEY = rhea }
+	sr_site_blockade_step = { KEY = rhea LOC = saturn }
 	sr_site_assault_step = { KEY = mimas INDEX = 22 }
-	sr_site_blockade_step = { KEY = mimas }
+	sr_site_blockade_step = { KEY = mimas LOC = saturn }
 	sr_site_assault_step = { KEY = iapetus INDEX = 23 }
-	sr_site_blockade_step = { KEY = iapetus }
+	sr_site_blockade_step = { KEY = iapetus LOC = saturn }
 }
 
 # --- the Uranus system ---
@@ -3653,13 +5328,13 @@ sr_cb_def_losses_uranus = {
 }
 sr_cb_worlds_after_uranus = {
 	sr_site_assault_step = { KEY = titania INDEX = 24 }
-	sr_site_blockade_step = { KEY = titania }
+	sr_site_blockade_step = { KEY = titania LOC = uranus }
 	sr_site_assault_step = { KEY = oberon INDEX = 25 }
-	sr_site_blockade_step = { KEY = oberon }
+	sr_site_blockade_step = { KEY = oberon LOC = uranus }
 	sr_site_assault_step = { KEY = miranda INDEX = 26 }
-	sr_site_blockade_step = { KEY = miranda }
+	sr_site_blockade_step = { KEY = miranda LOC = uranus }
 	sr_site_assault_step = { KEY = ariel INDEX = 27 }
-	sr_site_blockade_step = { KEY = ariel }
+	sr_site_blockade_step = { KEY = ariel LOC = uranus }
 }
 
 # --- the Neptune system ---
@@ -3717,9 +5392,9 @@ sr_cb_def_losses_neptune = {
 }
 sr_cb_worlds_after_neptune = {
 	sr_site_assault_step = { KEY = triton INDEX = 28 }
-	sr_site_blockade_step = { KEY = triton }
+	sr_site_blockade_step = { KEY = triton LOC = neptune }
 	sr_site_assault_step = { KEY = proteus INDEX = 29 }
-	sr_site_blockade_step = { KEY = proteus }
+	sr_site_blockade_step = { KEY = proteus LOC = neptune }
 }
 
 # --- the Kuiper Belt ---
@@ -3810,15 +5485,15 @@ sr_cb_def_losses_kuiper = {
 }
 sr_cb_worlds_after_kuiper = {
 	sr_site_assault_step = { KEY = pluto INDEX = 30 }
-	sr_site_blockade_step = { KEY = pluto }
+	sr_site_blockade_step = { KEY = pluto LOC = kuiper }
 	sr_site_assault_step = { KEY = eris INDEX = 31 }
-	sr_site_blockade_step = { KEY = eris }
+	sr_site_blockade_step = { KEY = eris LOC = kuiper }
 	sr_site_assault_step = { KEY = makemake INDEX = 32 }
-	sr_site_blockade_step = { KEY = makemake }
+	sr_site_blockade_step = { KEY = makemake LOC = kuiper }
 	sr_site_assault_step = { KEY = haumea INDEX = 33 }
-	sr_site_blockade_step = { KEY = haumea }
+	sr_site_blockade_step = { KEY = haumea LOC = kuiper }
 	sr_site_assault_step = { KEY = sedna INDEX = 34 }
-	sr_site_blockade_step = { KEY = sedna }
+	sr_site_blockade_step = { KEY = sedna LOC = kuiper }
 }
 
 # The seizer's marines spent at the world (local_var:sr_cb_pay), from its slots

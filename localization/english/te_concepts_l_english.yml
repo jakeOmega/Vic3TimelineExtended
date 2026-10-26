@@ -140,6 +140,7 @@
  HE_ENABLE_RADICAL:0 "Radical Mentors"
  HE_ENABLE_REGRESSIVE:0 "Regressive Mentors"
  HIGH_LITERACY:0 "High Literacy"
+ INFAMY_SR_INTERDICTOR:0 "They interdicted our colonies in peace"
  LAW_HUMAN_PURITY:0 "Has enacted $law_human_purity$"
  LAW_REGULATED_AUGMENTATION:0 "Has enacted $law_regulated_augmentation_market$"
  LAW_UNRESTRICTED_AUGMENTATION:0 "Has enacted $law_unrestricted_augmentation$"
