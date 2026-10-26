@@ -5880,7 +5880,7 @@
 #
  te_fptp_events.1.a:0 "Whoever tops the poll takes the seat, as before."
  te_fptp_events.1.b:0 "Share out the seats by the vote."
- te_fptp_events.1.b.tt:0 "First Past the Post ends: smaller parties can win interest groups again, and later changes of voting law won't ask about it."
+ te_fptp_events.1.b.tt:0 "First Past the Post ends: smaller parties can win interest groups again, and a later change of voting law won't bring it back."
  te_fptp_events.1.d:0 "The new voting law has taken effect, and the old rule for counting votes has lapsed with the law it was attached to. The [SCOPE.gsInterestGroup('te_fptp_sponsor_ig').GetName] want each seat to go, as before, to whoever tops the poll in the district. Reformers say this is the moment to share out the seats by each party's share of the vote, so that no vote is wasted."
  te_fptp_events.1.f:0 "\"Under the old rule,\" the clerk explained, \"the man with the most votes wins, and the others go home.\"\n\n\"And under the new one?\"\n\n\"The others come too, in proportion. You will need a larger hall.\""
  te_fptp_events.1.t:0 "Counting the Votes"

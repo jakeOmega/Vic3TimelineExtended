@@ -138,6 +138,7 @@ te_civil_war_on_won = {
 		te_demog_pc_repair_after_civil_war = yes	# Demographics: a planned capital's cooldown and building cost
 		te_demog_pension_repair_after_civil_war = yes	# Demographics: the pension setting and the bills
 		te_demog_um_repair_after_civil_war = yes	# Demographics: the nation's uploaded minds and their two modifiers
+		te_fptp_repair_after_civil_war = yes		# First Past the Post: ask whether to keep it
 		te_civil_war_repoint_uprisings = yes
 		te_civil_war_clear = yes
 	}

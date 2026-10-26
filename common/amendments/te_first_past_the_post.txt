@@ -40,9 +40,12 @@ amendment_first_past_the_post = {
 		always = yes
 	}
 
-	# Members of the two largest parties back it during an enactment.
+	# Members of the two largest parties back it during an enactment, once those
+	# parties hold most of the clout (as the petition asks), so negotiation
+	# doesn't spread it to every multi-party AI democracy.
 	would_sponsor = {
 		has_variable = te_fptp_major_member
+		owner = { te_fptp_major_clout >= 0.6 }
 	}
 
 	ai_will_revoke = {

@@ -99,9 +99,10 @@ te_fptp_events.1 = {
 # ======================================================================
 #  2 – The Winner Takes All  (First Past the Post – Amendment)
 #  The enactment way in: while a voting law the amendment allows is
-#  enacted in a country with two parties and no first past the post, the
-#  strongest group in one of the two largest parties asks for it. Pooled
-#  in on_law_checkpoint_debate beside the other amendment events.
+#  enacted in a country whose two largest parties hold most of the clout
+#  (as would_sponsor and the petition ask) and no first past the post, the
+#  strongest group in one of them asks for it. Pooled in
+#  on_law_checkpoint_debate beside the other amendment events.
 # ======================================================================
 te_fptp_events.2 = {
 	type = country_event
@@ -127,6 +128,7 @@ te_fptp_events.2 = {
 		te_fptp_enacting_allowed_voting_law = yes
 		NOT = { has_variable = te_fptp_var }
 		has_variable = te_fptp_two_majors
+		te_fptp_major_clout >= 0.6
 		any_interest_group = { has_variable = te_fptp_major_member }
 		NOT = {
 			currently_enacting_law = {

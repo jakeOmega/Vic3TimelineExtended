@@ -15,12 +15,23 @@
 # pulse, not inside join_weight: every group re-picks its party at once when a
 # campaign starts, so "largest right now" is undefined there.
 
-# Country scope. The monthly pulse (te_fptp_country_pulse).
+# Country scope. The monthly pulse (te_fptp_country_pulse). The tracking runs
+# before the seed: whether has_amendment sees an add_amendment made earlier in
+# the same effect is unread, and after the seed it could take the te_fptp_var
+# the seed had just set. Parties need a voting franchise, so only a country
+# with one is ranked; one that lost it drops its marks.
 te_fptp_monthly = {
-	te_fptp_seed = yes
 	te_fptp_track_held = yes
-	te_fptp_refresh_major_parties = yes
-	te_fptp_selfcheck = yes
+	te_fptp_seed = yes
+	if = {
+		limit = { country_has_voting_franchise = yes }
+		te_fptp_refresh_major_parties = yes
+		te_fptp_selfcheck = yes
+	}
+	else_if = {
+		limit = { has_variable = te_fptp_two_majors }
+		te_fptp_clear_major_marks = yes
+	}
 }
 
 # Country scope. Ranks the active parties by their members' clout and marks the
@@ -145,10 +156,18 @@ te_fptp_clear_major_marks = {
 # term covered (te_fptp_seed_eligible) gets the amendment, so it keeps a
 # two-party system: the Confederacy when it forms, Texas, and the USA in a save
 # from before the amendment existed (a new game's USA has it from history).
-# Once only, so a repeal sticks.
+# Once only, so a repeal sticks. Not for a revolution's rebels: they start with
+# no mod variables, so a seed would hand a winning revolution back the
+# amendment the nation had repealed; the winner inherits the nation's
+# te_fptp_seed_checked instead (scripting_best_practices.md, "A value a country
+# pulse seeds where it is missing"). Secessionists, such as the Confederacy,
+# are a new nation and are seeded.
 te_fptp_seed = {
 	if = {
-		limit = { NOT = { has_variable = te_fptp_seed_checked } }
+		limit = {
+			NOT = { has_variable = te_fptp_seed_checked }
+			NOT = { is_revolutionary = yes }
+		}
 		set_variable = te_fptp_seed_checked
 		if = {
 			limit = {
@@ -182,6 +201,22 @@ te_fptp_track_held = {
 			te_fptp_on_allowed_voting_law = yes
 		}
 		remove_variable = te_fptp_var
+	}
+}
+
+# Country scope, the winner of a civil war (te_civil_war_on_won). A
+# revolution's winner continues the nation: when the nation held first past the
+# post (te_fptp_var, which the merge hands to a winner that lacked it) and the
+# winner's voting law allows it but lacks it, ask whether to keep it, as a
+# change of voting law does. A no-op for a winner that holds it.
+te_fptp_repair_after_civil_war = {
+	if = {
+		limit = {
+			has_variable = te_fptp_var
+			te_fptp_on_allowed_voting_law = yes
+			NOT = { te_fptp_in_force = yes }
+		}
+		trigger_event = { id = te_fptp_events.1 popup = yes }
 	}
 }
 
@@ -226,8 +261,10 @@ te_fptp_save_outsider = {
 
 # Country scope, after te_fptp_refresh_major_parties. Once a game, the first
 # time a country with three or more parties is ranked:
-#   OK      exactly two parties marked, none unmarked larger than the second,
-#           and the second's clout above 0
+#   OK      exactly two parties marked, no unmarked party larger than either
+#           marked one (compared pairwise, so it doesn't lean on the ordering it
+#           checks), the comparison's positive control at least 1 (else the
+#           comparison didn't read), and the second's clout above 0
 #   BROKEN  the ranking failed: ordered_active_party by a script value, or the
 #           every_member clout sum. Fallback: rank by momentum
 #           (docs/testing/first-past-the-post-playtest.md).
@@ -246,6 +283,7 @@ te_fptp_selfcheck = {
 		set_global_variable = { name = te_fptp_chk_second value = var:te_fptp_chk_second }
 		set_global_variable = { name = te_fptp_chk_marked value = te_fptp_marked_party_count }
 		set_global_variable = { name = te_fptp_chk_outranked value = te_fptp_outranking_minor_count }
+		set_global_variable = { name = te_fptp_chk_control value = te_fptp_outranked_control_count }
 		set_global_variable = {
 			name = te_fptp_chk_parties
 			value = {
@@ -257,12 +295,13 @@ te_fptp_selfcheck = {
 			limit = {
 				global_var:te_fptp_chk_marked = 2
 				global_var:te_fptp_chk_outranked = 0
+				global_var:te_fptp_chk_control >= 1
 				var:te_fptp_chk_second > 0
 			}
 			debug_log = "TE_SELF_CHECK OK fptp_major_parties (two largest of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0] marked; second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2])"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN fptp_major_parties (of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0], marked=[SCOPE.ScriptValue('te_fptp_chk_marked_g')|0] (want 2), unmarked larger than the second=[SCOPE.ScriptValue('te_fptp_chk_outranked_g')|0] (want 0), second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2] (want above 0): ordered_active_party by te_fptp_party_clout or its every_member sum failed; see docs/testing/first-past-the-post-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN fptp_major_parties (of parties=[SCOPE.ScriptValue('te_fptp_chk_parties_g')|0], marked=[SCOPE.ScriptValue('te_fptp_chk_marked_g')|0] (want 2), unmarked larger than a marked one=[SCOPE.ScriptValue('te_fptp_chk_outranked_g')|0] (want 0), control=[SCOPE.ScriptValue('te_fptp_chk_control_g')|0] (want 1 or more; 0 means the pairwise comparison didn't read, not the ranking), second's clout=[SCOPE.ScriptValue('te_fptp_chk_second_g')|2] (want above 0): ordered_active_party by te_fptp_party_clout or its every_member sum failed; see docs/testing/first-past-the-post-playtest.md)"
 		}
 		remove_variable = te_fptp_chk_second
 	}
