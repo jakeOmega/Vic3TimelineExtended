@@ -541,9 +541,12 @@ class TestSelfCheck(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK OK metro_world_market_hub", body)
         self.assertIn("TE_SELF_CHECK BROKEN metro_world_market_hub", body)
         self.assertIn("metro_world_market_hub", _text(PLAYTEST))
-        # review M1 (2026-10-20): OK needs hubs, every hub with a Port and some Port states that aren't hubs
-        for cond in ("var:te_dg_mt_chk_hubs > 0", "var:te_dg_mt_chk_hub_noport = 0", "var:te_dg_mt_chk_port_nohub > 0"):
+        # review M1 (2026-10-20): OK needs hubs and some Port states that aren't hubs. Not every hub with a Port: the
+        # base game puts a hub in a market capital without one (2026-10-25: 100 of 234), so that count is printed only
+        for cond in ("var:te_dg_mt_chk_hubs > 0", "var:te_dg_mt_chk_port_nohub > 0",
+                     "var:te_dg_mt_chk_hubs <= var:te_dg_mt_chk_countries"):
             self.assertIn(cond, body)
+        self.assertNotIn("var:te_dg_mt_chk_hub_noport = 0", body)
         self.assertIn("b:building_port ?= { level > 0 }", body)
         self.assertNotIn("te_debug_demog_mt_hub_most", body + _text(METRO_VALUES))
 

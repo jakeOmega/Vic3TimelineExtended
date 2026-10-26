@@ -1039,6 +1039,11 @@ class ContestTests(unittest.TestCase):
         self.assertIn("every_state = { " + repoint + " }", repair[dead:alive])
         for lst in ("gm_monuments", "gm_trophies", "gm_shadows"):
             self.assertIn(f"gm_cw_repoint_list = {{ LIST = {lst} }}", repair[dead:alive])
+        # And a shadow's last owner, which an orphan settles by: else a merge of
+        # the two sides' parts of its state loses it (2026-10-25, Haiti).
+        self.assertIn("every_in_global_list = { variable = gm_shadows "
+                      "limit = { var:gm_sh_owner ?= scope:te_cw_loser } "
+                      "set_variable = { name = gm_sh_owner value = root } }", repair[dead:alive])
         one = squash(block(self.e, "gm_cw_repoint_list"))
         self.assertIn("every_in_global_list = { variable = $LIST$ "
                       "limit = { var:gm_tr_raised_by ?= scope:te_cw_loser } "
@@ -7067,14 +7072,15 @@ class RateTests(unittest.TestCase):
     """Sites spec 2026-10-18 §3.2 (Plan B): a level's starting grandeur is
     world GDP in 1836 over world GDP when it is counted, times the grandeur a
     level adds in 1836 (owner, 2026-10-19: five), to the nearest thousandth and
-    at least 0.001. The 1836 figure is a constant (spec §5): 334,465,286 summed
-    from a Timeline Extended save of 1836.1.20, every country's latest GDP."""
+    at least 0.001. The 1836 figure is a constant (spec §5): 402,505,869, the
+    rate's own read at a new game's first pass (gm_world_base, 2026-10-25); the
+    first, 334,465,286 from a save's GDP records, read a sixth low."""
 
     def body(self, path, name):
         return squash(strip_comments(block(read(path), name)))
 
     def test_the_rate(self):
-        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 334000000")
+        self.assertEqual(self.body(VALUES, "gm_world_gdp_1836"), "value = 402500000")
         self.assertEqual(self.body(VALUES, "gm_world_rate_now"),
                          "value = 1 if = { limit = { global_gdp_script_value > 0 } value = gm_world_gdp_1836 "
                          "divide = global_gdp_script_value min = 0.00001 }")

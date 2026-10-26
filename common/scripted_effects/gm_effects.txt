@@ -1451,6 +1451,18 @@ gm_repair_after_civil_war = {
 			gm_cw_repoint_list = { LIST = gm_monuments }
 			gm_cw_repoint_list = { LIST = gm_trophies }
 			gm_cw_repoint_list = { LIST = gm_shadows }
+			# A shadow's last owner too (gm_sh_owner): an orphan settles in the
+			# part of its region its last owner holds, and once the winner's and
+			# the loser's parts of a monument's state merge, the dead loser holds
+			# none. Haiti's Sans Souci Palace was lost that way (2026-10-25).
+			if = {
+				limit = { has_global_variable_list = gm_shadows }
+				every_in_global_list = {
+					variable = gm_shadows
+					limit = { var:gm_sh_owner ?= scope:te_cw_loser }
+					set_variable = { name = gm_sh_owner value = root }
+				}
+			}
 		}
 		else = {
 			every_scope_state = {

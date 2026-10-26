@@ -61,6 +61,8 @@ A fixed item is struck through with the commit that fixed it.
 | **The AI tops up.** Watch an AI country seize an opportunity in a save past 1950 (observer). | It queues at most 100 levels, dedicates the site, then queues what is still missing until the opportunity is met or runs out. | It stops after the first site: `gm_com_monthly`'s top-up did not run. |
 | **Rededicate beside.** Rededicate a contested monument that stands beside another. | The ceremony asks; dedicated, it stands first at half its levels. | It stands first but nothing asks: `gm_state_start_ceremony` refused while the swap's restore stood. |
 
+**2026-10-25:** `gm_world_base` read BROKEN in a new game: world GDP 402,505,869 at the first pass (February 1836) against the constant's 334,000,000, which had summed a save's GDP records. The constant is now 402,500,000, the rate's own read. In 1836 a level now adds the 5 grandeur the rule says (it added about 4.15), and every count after that is a fifth higher than before, in running saves too.
+
 ## The 1/n curve (owner, 2026-10-19)
 
 | Check | Expect | If it fails |
@@ -86,6 +88,8 @@ absorbed part, and before or after the merge; and what colonizing a decentralize
 | **Colonization.** Colonize the last province of a decentralized nation's part of a state that a landmark stands in (Great Zimbabwe, `STATE_ZAMBEZI`, Mashona). | The same adoption as a merge, if the building comes along. | Nothing adopted: note what happened to the part's building. |
 | **A revolt keeps the monument whole.** As France, let the Paris Commune rise (it takes one province of Île-de-France), or lose part of a monument's state to any revolt. | The Arc de Triomphe stays whole in France's part, its levels and grandeur unchanged; the rebels' part has no Grand Monument (`TE_MONUMENTS: a Grand Monument building no record describes ... is removed` if the engine copied the building there). When the parts merge again, nothing changes. | The monument appears in the rebels' part too: `gm_state_stray_building` did not hold (an orphan in the region, or a mark it should not have). |
 | **No loss in ordinary play.** A monument whose state changes hands whole (no other part held by the new owner). | Nothing changes: the state survives, and its shadow is refreshed in place. | |
+
+**2026-10-25: a civil war's winner.** `monument_merge_kept` read BROKEN when the Haitian Liberal Revolt won (1861): Sans Souci Palace's shadow was lost (5 levels recorded, no building in Haiti). The revolt's part of the state held a copy of the building, which the stray pass removed while the loser's part still existed. The two parts then merged and the loser's part went, and the shadow looked for its last owner's part (`gm_sh_owner`): the loser, dead. `gm_repair_after_civil_war` now repoints a dead loser's shadows' last owner to the winner too, so the winner's merged part raises the monument again (`gm_state_raise_orphan`: a new building, its records put back). Check: a revolt that takes part of a monument's state and wins (Haiti, or the Paris Commune); the monument stands again in the winner's state within a month, and `monument_merge_kept` reads OK.
 
 ## Dedicate (owner, 2026-10-18)
 
