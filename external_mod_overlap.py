@@ -21,6 +21,10 @@ The report:
   and `localization/replace/english/`).
 - `path_collisions`: a file at the same relative path in both mods (any
   folder: `gui/`, `common/`, `gfx/`, ...).
+- `gui_type_collisions`: a GUI `type`, `template`, `layer` or `texticon`
+  name both mods define in different files (#1184). Those share one global
+  registry; which definition the game keeps is unprobed (`gui_load_order`),
+  so a row says which file sorts first and claims no winner.
 
 The load-order model is `LOAD_ORDER_MODEL` below: each engine claim, how sure
 it is, and where its evidence is (the facts themselves are written once, in
@@ -56,6 +60,8 @@ from dataclasses import dataclass, field
 from itertools import product
 from typing import Iterable, Optional
 
+from gui_reference_audit import IDENT as GUI_IDENT
+from gui_reference_audit import masks as gui_masks
 from mod_state import VANILLA_COMMON_DIRS, split_loc_line
 from paradox_file_parser import (
     INJECT_DIRECTIVES,
@@ -266,6 +272,28 @@ SERVER_TYPES = {
     "scripted_progress_bars": "Scripted Progress Bars",
     "on_actions": "On Actions",
 }
+# GUI names that land in one global registry whichever file defines them
+# (#1184): `type X = base` (inside a `types Group { }` block; the group name
+# itself repeats across vanilla's files and is no registry), `template X`,
+# `layer X { }` and a `texticon = { icon = X }`. `local_template` is
+# file-local and left out. Keywords match in any case (vanilla writes `Types`).
+_GUI_DEF_RES = (
+    ("type", re.compile(rf"(?i:\btype)\s+({GUI_IDENT})\s*=")),
+    ("template", re.compile(rf"(?i:\btemplate)\s+({GUI_IDENT})")),
+    ("layer", re.compile(rf"(?i:\blayer)\s+({GUI_IDENT})\s*\{{")),
+)
+_GUI_TYPES_RE = re.compile(rf"(?i:\btypes)\s+({GUI_IDENT})\s*\{{")
+_GUI_TEXTICON_RE = re.compile(r"(?i:\btexticon)\s*=\s*\{")
+# Which of two definitions the game keeps is unprobed, so the report gives no
+# winner (LOAD_ORDER_MODEL covers common/ only).
+GUI_LOAD_ORDER = {
+    "status": "unprobed",
+    "claim": "Which of two definitions of one GUI type, template, layer or text icon the "
+             "game keeps, and in what order it reads gui/ files, hasn't been probed. "
+             "`sorts_first` is the ASCII order of the paths under gui/, not a winner.",
+    "see": f"{LOAD_ORDER_DOC} covers common/ databases only.",
+}
+
 _SKIP_ROOT_DIRS = frozenset({".git", ".metadata", ".github", ".venv", "__pycache__"})
 # Files the game doesn't read (notes, Python), left out of path_collisions.
 _NOT_GAME_FILES = (".md", ".info", ".py", ".pyc")
@@ -438,6 +466,66 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
     if depth > 0:
         warnings.append(f"{depth} block(s) still open at the end of the file")
     return entries, warnings
+
+
+def _brace_end(syntax: str, open_at: int) -> int:
+    """The offset just past the brace that closes the one at `open_at` (the
+    end of the text when it never closes)."""
+    depth, i, n = 0, open_at, len(syntax)
+    while i < n:
+        c = syntax[i]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return n
+
+
+@dataclass(frozen=True)
+class GuiDef:
+    """One name a .gui file puts in a global registry (_GUI_DEF_RES)."""
+    kind: str             # type | template | layer | texticon
+    name: str
+    line: int
+    group: Optional[str] = None   # a type's `types Group { }` block
+
+
+def scan_gui(text: str) -> list[GuiDef]:
+    """Every global GUI name `text` defines, in file order. Comments and
+    strings are masked first (gui_reference_audit.masks), so a commented-out
+    `#type x = ...` or `template` in a tooltip string isn't one."""
+    syntax = gui_masks(text.lstrip("﻿"))[1]
+
+    def line_at(offset: int) -> int:
+        return syntax.count("\n", 0, offset) + 1
+
+    groups = []
+    for m in _GUI_TYPES_RE.finditer(syntax):
+        groups.append((m.end() - 1, _brace_end(syntax, m.end() - 1), m.group(1)))
+    out = []
+    for kind, rx in _GUI_DEF_RES:
+        for m in rx.finditer(syntax):
+            group = None
+            if kind == "type":
+                group = next((g for start, end, g in groups if start < m.start() < end), None)
+            out.append(GuiDef(kind, m.group(1), line_at(m.start(1)), group))
+    for m in _GUI_TEXTICON_RE.finditer(syntax):
+        end = _brace_end(syntax, m.end() - 1)
+        body = syntax[m.end():end]
+        # The block's own `icon =`, not one inside a nested block.
+        depth = 0
+        for tok in re.finditer(rf"[{{}}]|\bicon\s*=\s*({GUI_IDENT})", body):
+            if tok.group(0) == "{":
+                depth += 1
+            elif tok.group(0) == "}":
+                depth -= 1
+            elif depth == 0:
+                out.append(GuiDef("texticon", tok.group(1), line_at(m.end() + tok.start(1))))
+                break
+    return sorted(out, key=lambda d: (d.line, d.kind, d.name))
 
 
 def read_text(path: str) -> str:
@@ -828,6 +916,22 @@ class VanillaIndex:
             return None
         return self._game_entries(db)
 
+    def gui_defs(self) -> Optional[dict]:
+        """{(kind, name): [(path under gui/, GuiDef)]} for vanilla's `game/gui`
+        (scan_gui), or None without the game files. Read once."""
+        if not self.game_common:
+            return None
+        key = ("gui",)
+        if key not in self._cache:
+            out: dict = defaultdict(list)
+            base = os.path.join(os.path.dirname(self.game_common), "gui")
+            for rel in list_files(base) if os.path.isdir(base) else []:
+                if rel.endswith(".gui"):
+                    for d in scan_gui(read_text(os.path.join(base, rel))):
+                        out[(d.kind, d.name)].append((rel, d))
+            self._cache[key] = out
+        return self._cache[key]
+
     def _load(self, db: str):
         if db in self._cache:
             return self._cache[db]
@@ -1216,6 +1320,67 @@ def path_collisions(ours_root: str, their_files: list[str]) -> list[dict]:
     return rows
 
 
+def _scan_gui_files(root: str, files: Iterable[str]) -> dict:
+    """{(kind, name): [(path under gui/, GuiDef)]} for a mod's .gui files
+    (`files` relative to `root`)."""
+    out: dict = defaultdict(list)
+    for rel in files:
+        if not (rel.startswith("gui/") and rel.lower().endswith(".gui")):
+            continue
+        try:
+            text = read_text(os.path.join(root, *rel.split("/")))
+        except OSError:
+            continue
+        for d in scan_gui(text):
+            out[(d.kind, d.name)].append((rel[len("gui/"):], d))
+    return out
+
+
+def gui_type_collisions(ours_root: str, ours_files: Iterable[str], theirs_root: str,
+                        theirs_files: Iterable[str], vanilla: Optional[VanillaIndex]) -> list[dict]:
+    """GUI types, templates, layers and text icons both mods define in
+    different files (#1184). A name both define only in one file both ship is
+    left to path_collisions: only one of the two files loads. No winner is
+    given (GUI_LOAD_ORDER)."""
+    ours_files, theirs_files = list(ours_files), list(theirs_files)
+    o, t = _scan_gui_files(ours_root, ours_files), _scan_gui_files(theirs_root, theirs_files)
+    shared = ({p.casefold() for p in ours_files if p.startswith("gui/")}
+              & {p.casefold() for p in theirs_files if p.startswith("gui/")})
+    v = vanilla.gui_defs() if vanilla is not None else None
+
+    def refs(defs):
+        out = []
+        for path, d in defs:
+            ref = {"file": f"gui/{path}", "line": d.line}
+            if d.group:
+                ref["group"] = d.group
+            out.append(ref)
+        return out
+
+    rows = []
+    for kind, name in sorted(set(o) & set(t)):
+        o_defs, t_defs = o[(kind, name)], t[(kind, name)]
+        if not any(op.casefold() != tp.casefold() for op, _ in o_defs for tp, _ in t_defs):
+            continue
+        o_first, t_first = min(p for p, _ in o_defs), min(p for p, _ in t_defs)
+        row = {
+            "kind": kind,
+            "name": name,
+            "ours": refs(o_defs),
+            "theirs": refs(t_defs),
+            "sorts_first": OURS if o_first < t_first else THEIRS,
+            "in_vanilla": None if v is None else (kind, name) in v,
+        }
+        if v and (kind, name) in v:
+            row["vanilla"] = [{"file": f"game/gui/{p}", "line": d.line} for p, d in v[(kind, name)]]
+        both = sorted({f"gui/{p}" for p, _ in (*o_defs, *t_defs) if f"gui/{p}".casefold() in shared})
+        if both:
+            # The playset order also decides which copy of these files loads.
+            row["files_both_ship"] = both
+        rows.append(row)
+    return rows
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -1266,6 +1431,11 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
         loc_rows = loc_collisions(ours_root, o_loc, theirs_root, t_loc)
 
     paths = path_collisions(ours_root, their_files)
+    t_gui = [p for p in their_files if p.startswith("gui/")]
+    gui_rows = []
+    if t_gui:
+        gui_rows = gui_type_collisions(ours_root, list_files(ours_root, "gui", git_fallback=True),
+                                       theirs_root, t_gui, vanilla)
     by_verdict = Counter(c["verdict"] for c in collisions)
     return {
         "mod_name": read_mod_name(theirs_root),
@@ -1282,9 +1452,12 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
             "event_namespace_collisions": len(ns_rows),
             "event_id_collisions": len(id_rows),
             "path_collisions": len(paths),
+            "gui_type_collisions": len(gui_rows),
             "scan_warnings": len(warnings),
         },
         "path_collisions": paths,
+        "gui_type_collisions": gui_rows,
+        "gui_load_order": GUI_LOAD_ORDER,
         "key_collisions": collisions,
         "defines": defines,
         "additive_hooks": hooks,
@@ -1338,6 +1511,11 @@ def _print_summary(report: dict) -> None:
     print(f"path collisions: {s['path_collisions']}")
     for p in report["path_collisions"]:
         print(f"  {p['path']}")
+    print(f"gui names both define (load order unprobed): {s['gui_type_collisions']}")
+    for g in report["gui_type_collisions"]:
+        o = ", ".join(f"{r['file']}:{r['line']}" for r in g["ours"])
+        t = ", ".join(f"{r['file']}:{r['line']}" for r in g["theirs"])
+        print(f"  {g['kind']} {g['name']}  theirs: {t}  ours: {o}  sorts first: {g['sorts_first']}")
     if report["scan_warnings"]:
         print(f"scan warnings: {len(report['scan_warnings'])}")
 

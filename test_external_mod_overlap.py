@@ -649,6 +649,115 @@ class InputTests(unittest.TestCase):
             self.assertEqual(emo.main([tmp]), 2)   # an empty folder
 
 
+GUI_SAMPLE = """\
+@width = 10
+Types my_panel_types
+{
+\ttype shared_type = widget {
+\t\tname = "type fake_in_string = x"
+\t}
+\t#type commented_out = widget { }
+\ttype Other_Type = shared_type { }
+}
+template shared_template { size = { 1 1 } }
+local_template file_local { }
+layer layer_mine
+{
+\tpriority = 1
+}
+texticon = {
+\ticonsize = { texture = "gfx/x.dds" }
+\ticon = mine_icon
+}
+widget = { layer = layer_mine using = shared_template }
+"""
+
+
+class GuiScanTests(unittest.TestCase):
+    def test_scan_gui(self):
+        defs = emo.scan_gui(GUI_SAMPLE)
+        self.assertEqual([(d.kind, d.name, d.line, d.group) for d in defs], [
+            ("type", "shared_type", 4, "my_panel_types"),
+            ("type", "Other_Type", 8, "my_panel_types"),
+            ("template", "shared_template", 10, None),
+            ("layer", "layer_mine", 12, None),
+            ("texticon", "mine_icon", 18, None),
+        ])
+
+
+def build_fake_gui_mods(tmp):
+    """Two mods whose gui/ trees define the same names: in different files
+    (a collision), and only in a file both ship (left to path_collisions)."""
+    o, t = os.path.join(tmp, "ours"), os.path.join(tmp, "theirs")
+    _write(o, "gui/construction_panel.gui",
+           "types construction_panel {\n\ttype construction_panel = window { }\n}\n"
+           "template shared_template { }\n")
+    _write(t, "gui/PSC_construction_panel.gui",
+           "types construction_panel\n{\n\ttype construction_panel = window { }\n}\n")
+    _write(o, "gui/zzz_extra_texticons.gui", "texticon = { icon = shared_icon }\n")
+    _write(t, "gui/scripted_widgets/a_icons.gui", "texticon = {\n\ticon = shared_icon\n}\n")
+    # Both ship gui/topbar.gui: only one of them loads.
+    _write(o, "gui/topbar.gui", "template shared_template { }\ntemplate only_topbar { }\n")
+    _write(t, "gui/topbar.gui", "template only_topbar { }\n")
+    _write(t, "gui/b_templates.gui", "template shared_template { }\n")
+    return o, t
+
+
+class GuiCollisionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.ours_root, cls.theirs_root = build_fake_gui_mods(cls._tmp.name)
+        game = os.path.join(cls._tmp.name, "game")
+        _write(game, "common/laws/00_laws.txt", "law_a = { }\n")
+        _write(game, "gui/construction_panel.gui",
+               "types construction_panel {\n\n\ttype construction_panel = window { }\n}\n")
+        cls.report = emo.analyze(cls.theirs_root, cls.ours_root, vanilla=emo.VanillaIndex(
+            game_common=os.path.join(game, "common"), snapshot_dir=None))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tmp.cleanup()
+
+    def test_rows(self):
+        rows = {(r["kind"], r["name"]): r for r in self.report["gui_type_collisions"]}
+        self.assertEqual(set(rows), {("type", "construction_panel"), ("texticon", "shared_icon"),
+                                     ("template", "shared_template")})
+        row = rows[("type", "construction_panel")]
+        self.assertEqual(row["ours"], [{"file": "gui/construction_panel.gui", "line": 2,
+                                        "group": "construction_panel"}])
+        self.assertEqual(row["theirs"], [{"file": "gui/PSC_construction_panel.gui", "line": 3,
+                                          "group": "construction_panel"}])
+        # PSC_ sorts before construction_ in ASCII order (uppercase first).
+        self.assertEqual(row["sorts_first"], THEIRS)
+        self.assertTrue(row["in_vanilla"])
+        self.assertEqual(row["vanilla"], [{"file": "game/gui/construction_panel.gui", "line": 3}])
+        self.assertNotIn("winner", row)
+        self.assertNotIn("verdict", row)
+        icon = rows[("texticon", "shared_icon")]
+        self.assertEqual(icon["theirs"], [{"file": "gui/scripted_widgets/a_icons.gui", "line": 2}])
+        self.assertEqual(icon["sorts_first"], THEIRS)   # scripted_widgets/ < zzz_
+        self.assertIs(icon["in_vanilla"], False)
+        # Ours defines it in topbar.gui (a file both ship) and in
+        # construction_panel.gui; theirs in b_templates.gui.
+        tpl = rows[("template", "shared_template")]
+        self.assertEqual(tpl["files_both_ship"], ["gui/topbar.gui"])
+        self.assertEqual(tpl["sorts_first"], THEIRS)
+
+    def test_a_name_only_in_a_file_both_ship_is_a_path_collision(self):
+        names = [r["name"] for r in self.report["gui_type_collisions"]]
+        self.assertNotIn("only_topbar", names)
+        self.assertIn("gui/topbar.gui", [p["path"] for p in self.report["path_collisions"]])
+
+    def test_load_order_is_unprobed(self):
+        self.assertEqual(self.report["gui_load_order"]["status"], "unprobed")
+        self.assertEqual(self.report["summary"]["gui_type_collisions"], 3)
+
+    def test_without_the_game_in_vanilla_is_unknown(self):
+        report = emo.analyze(self.theirs_root, self.ours_root, vanilla={})
+        self.assertTrue(all(r["in_vanilla"] is None for r in report["gui_type_collisions"]))
+
+
 class VanillaIndexTests(unittest.TestCase):
     def test_game_files_give_file_names(self):
         with tempfile.TemporaryDirectory() as tmp:
