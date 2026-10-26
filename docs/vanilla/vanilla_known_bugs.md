@@ -325,6 +325,27 @@ add_modifier effect [ Wrong scope for effect: none
 
 Vanilla political-movement event references `event_target:relevant_state` where it's not bound in the immediate scope; cascade emits "unset scope" + `add_loyalists_in_state` / `add_modifier` "Wrong scope for effect: none". Single root cause, three log lines — recognize as one vanilla bug, not three.
 
+### `events/agitators_events/exiles_events_02.txt:677` — an exile event reads interest-group leaders with no guard
+- stack: vanilla only
+
+```
+Could not get leader of interest group
+Event target link 'leader' returned an unset scope
+```
+
+Vanilla's exile event reads `leader` on every interest group of the country without checking it has one. On 2026-10-25 (1915) it fired for India, whose groups' leaders had been deleted (the Indian-revolution entry, `00_code_on_actions.txt:5440`): five unset `leader` lines and one `Could not get leader` line a group. The mod doesn't override the file.
+
+### `events/neighbor_events.txt:627, 628` — `neighbor_neighbor_state` unset
+- stack: vanilla only
+
+```
+Undefined event target 'neighbor_neighbor_state'
+Event target link 'scope' returned an unset scope
+add_radicals_in_state effect [ Wrong scope for effect: none, expected state ]
+```
+
+Vanilla's neighbour event reads a saved state it didn't save in that branch, and the radicals effect after it runs on no state. Once on 2026-10-25. The mod doesn't override the file.
+
 ### `events/agitators_events/coup_events.txt:983`/`:984` — `Undefined event target 'legacy_of_democracy_state'` cascading into wrong-scope effects
 
 ```
