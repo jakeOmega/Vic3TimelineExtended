@@ -5110,8 +5110,8 @@ _overlap_vanilla_cache: dict = {}
 def _overlap_vanilla_index():
     """Vanilla for /external-mod-overlap: the game files when installed (with
     file names), else the committed vanilla_parsed/ snapshot (#1170). Kept
-    for the server's life, so a folder read from /mnt/c once is not read
-    again; restart after a game patch."""
+    until a reload that re-reads vanilla (not mod_only), so a folder read
+    from /mnt/c once is not read again on the next request."""
     game_common = os.path.join(base_game_path, "game", "common")
     if game_common not in _overlap_vanilla_cache:
         _overlap_vanilla_cache[game_common] = external_mod_overlap.VanillaIndex(
@@ -6077,7 +6077,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
-                {"path": "/external-mod-overlap?path=<mod root>&trace=false", "desc": "Read-only compatibility check of another mod (a Workshop folder or any mod root) against this one (#1170): keys of common/ databases both define with a load-order verdict (ours_wiped / theirs_wiped / both_merge / both_wiped / order_depends_on_case / depends_on_playset / undetermined), defines both set, shared on_action hooks and effect conflicts, event namespaces and ids, English loc keys, and same-path files (gui/ included). Also `python3 external_mod_overlap.py <root>`."},
+                {"path": "/external-mod-overlap?path=<mod root>&trace=true", "desc": "Read-only compatibility check of another mod (a Workshop folder or any mod root) against this one (#1170): keys of common/ databases both define with a load-order verdict (ours_wiped / theirs_wiped / both_merge / both_wiped / depends_on_playset / undetermined; facts: scripting_best_practices.md § Load Order (probed 2026-10-26)), defines both set, shared on_action hooks and effect conflicts, event namespaces and ids, English loc keys, and same-path files (gui/ included). Also `python3 external_mod_overlap.py <root>`."},
                 {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
                 {"path": "/placeholder-icons", "desc": "Classify every mod-set icon: borrowed vanilla, shared, unique, stand-in or missing."},
                 {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
@@ -8730,21 +8730,21 @@ class ModStateHandler(BaseHTTPRequestHandler):
 
     # ---- another mod's overlap with ours (#1170) ---------------------------
     def _external_mod_overlap(self, parts, params):
-        """GET /external-mod-overlap?path=<mod root>[&trace=false]
+        """GET /external-mod-overlap?path=<mod root>[&trace=true]
 
         Read-only: scans the other mod's folder and this mod's, reports the
         entries both define and which side the load order keeps. The logic and
         the load-order model live in external_mod_overlap.py."""
         if parts:
             raise NotFound("/".join(["external-mod-overlap", *parts]))
-        usage = "GET /external-mod-overlap?path=<mod root>[&trace=false]"
+        usage = "GET /external-mod-overlap?path=<mod root>[&trace=true]"
         try:
             root = external_mod_overlap.validate_root((params.get("path") or [""])[0])
         except ValueError as exc:
             raise BadRequest(str(exc), usage=usage)
         if os.path.realpath(root) == os.path.realpath(mod_path):
             raise BadRequest(f"{root} is this mod; pass another mod's root", usage=usage)
-        trace = (params.get("trace") or ["true"])[0].lower()
+        trace = (params.get("trace") or ["false"])[0].lower()
         if trace not in ("true", "false"):
             raise BadRequest(f"trace must be true or false, got {trace!r}", usage=usage)
         return external_mod_overlap.analyze(
@@ -10237,6 +10237,8 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
             logger.error(f"Failed to reload mod state: {e}\n{traceback.format_exc()}")
             raise
     else:
+        # Vanilla is re-read: drop the overlap endpoint's vanilla index too.
+        _overlap_vanilla_cache.clear()
         _vanilla_source, _vanilla_source_warnings = _choose_vanilla_source()
         for w in _vanilla_source_warnings:
             logger.warning(f"[vanilla] {w['detail']}")

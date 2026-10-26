@@ -26,6 +26,10 @@ INJECT_DIRECTIVES = frozenset({"INJECT", "TRY_INJECT", "INJECT_OR_CREATE"})
 REPLACE_DIRECTIVES = frozenset({"REPLACE", "TRY_REPLACE", "REPLACE_OR_CREATE"})
 # Directives that do nothing when the entry they name doesn't exist.
 TRY_DIRECTIVES = frozenset({"TRY_INJECT", "TRY_REPLACE"})
+# A directive key inside a block (`INJECT:x = { REPLACE:field = ... }`) gets
+# the same treatment. That is this parser's convention, not engine-verified:
+# the digest describes entry-level keys only, and neither vanilla nor the mod
+# nests one.
 
 
 class ParadoxFileParser:

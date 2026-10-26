@@ -1,6 +1,6 @@
 """Which of another mod's entries land on this mod's, and which side wins (#1170).
 
-    python3 external_mod_overlap.py <mod root> [--ours <root>] [--json]
+    python3 external_mod_overlap.py <mod root> [--ours <root>] [--json] [--trace]
 
 `<mod root>` is a Workshop folder (`.../workshop/content/529340/<id>`) or any
 mod root. Nothing is written anywhere. `GET /external-mod-overlap?path=<root>`
@@ -10,91 +10,33 @@ The report:
 
 - `key_collisions`: a top-level key of a `common/<dir>` database both mods
   define, with each side's file, line and directive, whether vanilla has it,
-  and a `verdict` worked out from the load-order model below.
+  and a `verdict` from the load-order model.
 - `defines`: an `N*` block key both mods set (never an `@name`: those are
   file-local), and whose file is read later.
-- `additive_hooks` / `on_action_conflicts`: on_actions both mods hook. The
-  `events` and `on_actions` lists add up; an `effect` block overwrites
-  (`docs/guides/scripting_best_practices.md` § "Extending Vanilla On-Actions
-  Safely"), so a hook where both set one is a conflict.
+- `additive_hooks` / `on_action_conflicts`: on_actions both mods hook, and a
+  field both set that doesn't add up (`effect`).
 - `event_namespace_collisions`, `event_id_collisions`: shared `namespace =`
   declarations and event ids.
-- `loc_collisions`: `localization/english` keys both define.
+- `loc_collisions`: English loc keys both define (`localization/english/`
+  and `localization/replace/english/`).
 - `path_collisions`: a file at the same relative path in both mods (any
-  folder: `gui/`, `common/`, `gfx/`, ...). Whichever mod the playset loads
-  later replaces the other's file whole.
+  folder: `gui/`, `common/`, `gfx/`, ...).
 
-## Load-order model
-
-What the repo records, and where:
-
-1. Within one `common/<dir>`, mods' files are read as one tree in file-name
-   order. *Assumed*, not documented by Paradox (`scripting_best_practices.md`
-   § "War Support Hook": "alphabetical load order across the merged tree is
-   assumed"). Vanilla's definitions are in place before any mod's, whatever
-   the file names: this mod's `INJECT:cautious` and `INJECT:reckless`
-   (`common/character_traits/extra_character_traits.txt`) sort before
-   vanilla's `personality_traits.txt`, yet no debug log on hand (2026-10-26,
-   two of them runs that loaded that file) has a `gamedatabase.h:395` line
-   (inject_to_missing, game_log_reader.py). That fits two readings
-   (`load_reading`): `vanilla_first`, vanilla's files load before every
-   mod's; or `creations_first`, every bare definition (vanilla's and the
-   mods', in file-name order) is read before any directive applies. They
-   differ for a directive on a key that a later-sorting bare definition
-   creates, which no file of this mod does, and for a mod's bare definition
-   in a file that sorts before vanilla's (Demography's `00_welfare.txt`
-   against vanilla's renamed `02_welfare.txt`: dropped, or the copy that
-   stays). Nothing on record tells them apart, so a key with a bare
-   definition is simulated both ways and is `undetermined` if they differ.
-2. A file at the same relative path in a later-loaded mod replaces the
-   earlier one whole. Which of two mods loads later is the playset's order,
-   which this tool can't see: verdict `depends_on_playset`. A mod file at a
-   vanilla file's path replaces vanilla's, so vanilla's definitions in it are
-   gone.
-3. Whether the engine sorts file names in ASCII order (`MoG_x.txt` before
-   `extra_x.txt`) or case-folded (after it) is unknown: when the two orders
-   give different outcomes the verdict is `order_depends_on_case`.
-4. Directives (Modding-Digests 1.12.0 `inject_types.md`; the engine docs
-   dumps don't list them): `INJECT`/`REPLACE` act on an existing entry and
-   error when there is none; `TRY_INJECT`/`TRY_REPLACE` skip it silently;
-   `INJECT_OR_CREATE`/`REPLACE_OR_CREATE` create it. They apply in load order:
-   a REPLACE wipes everything before it, an INJECT adds to what is there.
-5. A bare definition of a key that already exists, in a database the digest
-   lists, is dropped: `Duplicated key X will not be created` (1.12.0
-   `breaking_changes.md`; `scripting_best_practices.md` § "Top-Level Database
-   Collisions"). The first definition wins. `common/static_modifiers` behaves
-   this way too (same section; the mod INJECTs every vanilla one).
-6. `common/script_values`: a bare redefinition replaces the earlier one
-   (`scripting_best_practices.md` § "Vanilla Script-Value Overrides"; the
-   mod's `common/script_values/modified.txt` restates 16 vanilla values bare).
-   The 1.12 digest lists script values among the databases above, so this
-   rests on the mod's working overrides rather than on Paradox's word.
-7. Directories nobody has recorded a rule for (`scripted_effects`,
-   `scripted_triggers`, `game_rules`, ...): both rules are tried, and when
-   they disagree the verdict is `undetermined`.
-8. Defines: per key, the later file's value wins (the mod's `extra_defines.txt`
-   overrides vanilla's `00_defines.txt` that way).
-9. Events: a duplicated event id keeps the copy read first (`Previous` in the
-   `Duplicated event ID` log line), but the mod's `te_formation_overrides.txt`
-   was read before vanilla's `misc_unifications.txt`, which is not file-name
-   order (`.claude/skills/log-triage/SKILL.md`, 2026-05-24). Which of two mods'
-   copies survives is unknown.
-10. Localization: a key in a `replace/` folder overrides one outside it
-    (`docs/guides/python_tools.md`, Localization note). Between two files of
-    the same kind the engine logs `Key X defined in multiple files`; which copy
-    it keeps isn't recorded, so the report gives `later_file` and no winner.
+The load-order model is `LOAD_ORDER_MODEL` below: each engine claim, how sure
+it is, and where its evidence is (the facts themselves are written once, in
+`LOAD_ORDER_DOC`). The probed ones are settings (`KNOWN_FILE_ORDER`,
+`KNOWN_LOAD_READING`, `BARE_DUPLICATE_RULES`); what is still unknown is
+simulated every way (`resolve`), and an in-game answer is a one-line change
+to a setting.
 
 Verdicts: `ours_wiped`, `theirs_wiped`, `both_merge` (both sides' content
 reaches the final entry; `ours_lost`/`theirs_lost` still list a definition
 that doesn't, such as the first of two INJECTs around a REPLACE),
-`both_wiped`, and, when the unknowns above change the outcome,
-`order_depends_on_case`, `depends_on_playset` or `undetermined` (with
-`depends_on` and `verdict_by_scenario`).
-
-Vanilla (`in_vanilla`) comes from the game files when they are installed
-(with file names, so a mod file at vanilla's path is seen to replace it),
-else from the committed `vanilla_parsed/` snapshot (keys only), else it is
-`null` and both answers are tried.
+`both_wiped`, and, when an unknown changes the outcome, `depends_on_playset`
+or `undetermined` (with `depends_on` and `verdict_by_scenario`).
+`order_depends_on_case` (ASCII vs case-folded file order) can't occur while
+`KNOWN_FILE_ORDER` is set, and the rows' `order_depends_on_case` flag is then
+always false.
 
 The scan is a light top-level scanner rather than ParadoxFileParser: it needs
 each key's file, line and directive, which the parser drops, and it must
@@ -118,7 +60,6 @@ from mod_state import VANILLA_COMMON_DIRS, split_loc_line
 from paradox_file_parser import (
     INJECT_DIRECTIVES,
     REPLACE_DIRECTIVES,
-    ParadoxFileParser,
 )
 
 REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -127,7 +68,7 @@ SNAPSHOT_DIR = os.path.join(REPO_ROOT, "vanilla_parsed")
 OURS, THEIRS, VANILLA = "ours", "theirs", "vanilla"
 
 # Verdicts. The first four are the issue's; the rest say why a verdict can't
-# be given (see the module docstring).
+# be given.
 OURS_WIPED = "ours_wiped"
 THEIRS_WIPED = "theirs_wiped"
 BOTH_MERGE = "both_merge"
@@ -138,9 +79,111 @@ UNDETERMINED = "undetermined"
 
 FIRST_WINS, LAST_WINS, UNKNOWN = "first_wins", "last_wins", "unknown"
 
-# Databases that take the six directives and drop a bare duplicate (Modding-
-# Digests 1.12.0 inject_types.md, `common/` entries; `technology` there covers
-# both `technology/eras` and `technology/technologies`).
+
+# ---------------------------------------------------------------------------
+# The load-order model: each engine claim this module rests on, how sure it
+# is, and where its evidence is written. The facts themselves live in one
+# place, LOAD_ORDER_DOC; correct them there and here together. Status:
+#   probed      read in game by the 2026-10-26 load-order probe
+#   documented  Paradox, the Modding-Digests or a repo doc says so
+#   unprobed    the working rule, not checked in game
+#   unknown     simulated every way
+# ---------------------------------------------------------------------------
+LOAD_ORDER_DOC = "docs/guides/scripting_best_practices.md § Load Order (probed 2026-10-26)"
+LOAD_ORDER_MODEL = {
+    "file_order": {
+        "status": "probed",
+        "claim": "File names compare in plain ASCII byte order (B_ before a_, p_ before pa_).",
+        "see": f"{LOAD_ORDER_DOC}, fact 1. Setting: KNOWN_FILE_ORDER.",
+    },
+    "interleaving": {
+        "status": "probed",
+        "claim": "Within a common/ database, vanilla's and every mod's files are one "
+                 "ASCII-ordered list; vanilla is not read first.",
+        "see": f"{LOAD_ORDER_DOC}, fact 2. Setting: KNOWN_LOAD_READING.",
+    },
+    "bare_duplicate": {
+        "status": "probed",
+        "claim": "A bare definition of a key that already exists is dropped (gamedatabase.h:378 "
+                 "`Duplicated key X will not be created from file:`): the first one wins.",
+        "see": f"{LOAD_ORDER_DOC}, fact 3 (static_modifiers, scripted_effects); for the other "
+               "Modding-Digests 1.12.0 inject_types.md folders, breaking_changes.md (no implicit "
+               "overwrites). Setting: BARE_DUPLICATE_RULES.",
+    },
+    "directives": {
+        "status": "documented",
+        "claim": "INJECT/REPLACE act on an existing entry and error when there is none "
+                 "(gamedatabase.h:395); TRY_INJECT/TRY_REPLACE skip it; "
+                 "INJECT_OR_CREATE/REPLACE_OR_CREATE create it. A REPLACE wipes what came "
+                 "before it, an INJECT adds to it.",
+        "see": f"Modding-Digests 1.12.0 inject_types.md; the :395 text, {LOAD_ORDER_DOC}, fact 4.",
+    },
+    "directives_deferred": {
+        "status": "probed",
+        "claim": "Directives apply after every bare definition has been read, so an INJECT "
+                 "needn't sort after its target. Among themselves they are taken to apply in "
+                 "file order (unprobed).",
+        "see": f"{LOAD_ORDER_DOC}, fact 4. Setting: KNOWN_LOAD_READING.",
+    },
+    "bare_duplicate_script_values": {
+        "status": "unprobed",
+        "claim": "A bare duplicate script value logs nothing; the last one wins, per the mod's "
+                 "practice (16 vanilla values restated bare in common/script_values/modified.txt).",
+        "see": f"{LOAD_ORDER_DOC}, fact 5; § Vanilla Script-Value Overrides.",
+    },
+    "bare_duplicate_other": {
+        "status": "unknown",
+        "claim": "Which bare definition wins in a folder not probed and not in inject_types.md "
+                 "(scripted_triggers, scripted_rules, game_rules, ...): both are simulated.",
+        "see": f"{LOAD_ORDER_DOC} (not probed). Setting: BARE_DUPLICATE_RULES.",
+    },
+    "same_path": {
+        "status": "documented",
+        "claim": "A later-loaded mod's file at the same relative path replaces the earlier one "
+                 "whole, and a mod file at a vanilla file's path replaces vanilla's. Which of two "
+                 "mods loads later is the playset's order: both are simulated.",
+        "see": "gui_modding_guide.md (two mods overriding one .gui: only one loads); the mod's "
+               "own same-path overrides (common/scripted_rules/00_scripted_rules.txt).",
+    },
+    "events": {
+        "status": "probed",
+        "claim": "Events aren't read in the common/ order; a duplicated event id keeps the copy "
+                 "read first. Which of two mods' copies that is: unknown.",
+        "see": f"{LOAD_ORDER_DOC}, fact 6.",
+    },
+    "defines": {
+        "status": "unprobed",
+        "claim": "Per define key, the later file's value wins.",
+        "see": "The mod's extra_defines.txt overrides vanilla's 00_defines.txt that way.",
+    },
+    "on_actions": {
+        "status": "documented",
+        "claim": "An on_action's events and on_actions lists add up across files; an effect "
+                 "block overwrites (the later file's wins). Other fields: unknown.",
+        "see": "scripting_best_practices.md § Extending Vanilla On-Actions Safely.",
+    },
+    "localization": {
+        "status": "documented",
+        "claim": "A key in a replace/ folder (localization/english/replace/ or "
+                 "localization/replace/english/) overrides one outside it; between two files "
+                 "of the same kind the winner is unknown.",
+        "see": "python_tools.md (Localization note); vanilla_known_bugs.md (`Key X defined in "
+               "multiple files`).",
+    },
+    "vanilla_source": {
+        "status": "n/a",
+        "claim": "in_vanilla comes from the game files when the game is installed (with file "
+                 "names; a folder vanilla lacks means false), else from the committed "
+                 "vanilla_parsed/ snapshot (keys only: vanilla's file name is unknown, so its "
+                 "definition is put first, which vanilla's 0*_ names make right for most), else "
+                 "it is null and both answers are tried.",
+        "see": "",
+    },
+}
+
+# Databases that take the six directives (Modding-Digests 1.12.0
+# inject_types.md, `common/` entries; `technology` there covers both
+# `technology/eras` and `technology/technologies`).
 DIGEST_INJECT_DIRS = frozenset("""
 acceptance_statuses ai_strategies amendments battle_conditions building_groups
 buildings buy_packages character_interactions character_templates
@@ -171,15 +214,35 @@ modifier_type_definitions ethnicities scripted_guis scripted_lists
 scripted_modifiers achievements
 """.split())
 
+# ---------------------------------------------------------------------------
+# What is known, as settings. None (or a folder missing from
+# BARE_DUPLICATE_RULES) is an unknown that resolve() simulates every way; an
+# in-game answer is a one-line change here (and its LOAD_ORDER_MODEL entry).
+# ---------------------------------------------------------------------------
+FILE_ORDERS = ("ascii", "lower_folded", "upper_folded")
+KNOWN_FILE_ORDER: Optional[str] = "ascii"         # LOAD_ORDER_MODEL["file_order"]
+# vanilla_first: vanilla's files, then the mods'. interleaved: one name-ordered
+# list, applied in order. creations_first: every bare definition (vanilla's and
+# the mods', interleaved by name) first, then the directives in file order.
+LOAD_READINGS = ("vanilla_first", "interleaved", "creations_first")
+KNOWN_LOAD_READING: Optional[str] = "creations_first"  # ["interleaving"], ["directives_deferred"]
+# Who wins between two bare definitions of one key, per common/ folder.
+BARE_DUPLICATE_RULES = {
+    **{d: FIRST_WINS for d in DIGEST_INJECT_DIRS},   # LOAD_ORDER_MODEL["bare_duplicate"]
+    "static_modifiers": FIRST_WINS,                  # probed
+    "scripted_effects": FIRST_WINS,                  # probed
+    "script_values": LAST_WINS,                      # ["bare_duplicate_script_values"]
+}
+
 # `common/` folders whose subfolders are separate databases.
 CONTAINER_DIRS = frozenset({"coat_of_arms", "history", "technology", "terrain_manipulators"})
 # Folders whose entries sit one level down, inside a wrapper block both mods
 # repeat (`colors = { ... }`): the wrapper is merged, its children collide.
 WRAPPER_DIRS = {"named_colors": "colors"}
 
-# on_action fields: lists that add up across files, and blocks that overwrite
-# (scripting_best_practices.md § "Extending Vanilla On-Actions Safely"). Any
-# other field both mods set is reported with an unknown rule.
+# on_action fields that add up across files, and blocks that overwrite
+# (LOAD_ORDER_MODEL["on_actions"]). Any other field both mods set is reported
+# with an unknown rule.
 ADDITIVE_ON_ACTION_FIELDS = frozenset({"events", "on_actions"})
 OVERWRITING_ON_ACTION_FIELDS = frozenset({"effect"})
 
@@ -190,7 +253,10 @@ _DIRECTIVE_RE = re.compile(
 )
 _UNKNOWN_PREFIX_RE = re.compile(r"^[A-Z][A-Z_]*:")
 _EVENT_ID_RE = re.compile(r"^[\w\-]+\.[\w\-]+$")
+# English loc folders; a key in a replace/ one overrides (LOAD_ORDER_MODEL["localization"]).
 _LOC_DIR = "localization/english"
+_LOC_REPLACE_DIR = "localization/replace/english"
+_LOC_DIRS = (_LOC_DIR, _LOC_REPLACE_DIR)
 # The mod state server's entity type for a folder, for /raw/<type>/<key>.
 SERVER_TYPES = {
     **{rel: et for et, rel in VANILLA_COMMON_DIRS.items()},
@@ -203,6 +269,9 @@ SERVER_TYPES = {
 _SKIP_ROOT_DIRS = frozenset({".git", ".metadata", ".github", ".venv", "__pycache__"})
 # Files the game doesn't read (notes, Python), left out of path_collisions.
 _NOT_GAME_FILES = (".md", ".info", ".py", ".pyc")
+# What makes a folder a mod root (validate_root).
+_MOD_MARKERS = (".metadata/metadata.json", "descriptor.mod")
+_MOD_DIRS = ("common", "events", "gui", "localization")
 
 
 # ---------------------------------------------------------------------------
@@ -213,7 +282,7 @@ _NOT_GAME_FILES = (".md", ".info", ".py", ".pyc")
 class DirRule:
     kind: str          # database | script_values | defines | on_actions | additive | wrapper | unknown
     bare_duplicate: str  # first_wins | last_wins | unknown | n/a
-    source: str
+    source: str        # a LOAD_ORDER_MODEL key, or a short reason
 
     def as_dict(self) -> dict:
         return {"kind": self.kind, "bare_duplicate": self.bare_duplicate, "source": self.source}
@@ -221,30 +290,22 @@ class DirRule:
 
 def rule_for(db: str) -> DirRule:
     """How the engine merges two definitions of one key in `db` (a folder
-    relative to `common/`), with the source of the rule."""
+    relative to `common/`); `source` names the LOAD_ORDER_MODEL entry."""
     if db == "defines":
-        return DirRule("defines", "n/a", "the later file's value wins per key (assumed: the mod's "
-                       "extra_defines.txt overrides vanilla 00_defines.txt that way)")
+        return DirRule("defines", "n/a", "defines")
     if db == "on_actions":
-        return DirRule("on_actions", "n/a", "scripting_best_practices.md § Extending Vanilla "
-                       "On-Actions Safely: events/on_actions lists add up, effect overwrites")
+        return DirRule("on_actions", "n/a", "on_actions")
     if db.split("/")[0] == "history":
         return DirRule("additive", "n/a", "history blocks are effects; every file's run")
-    if db == "script_values":
-        return DirRule("script_values", LAST_WINS, "scripting_best_practices.md § Vanilla "
-                       "Script-Value Overrides; common/script_values/modified.txt restates vanilla "
-                       "values bare (the 1.12 digest lists script_values as first-wins)")
     if db in WRAPPER_DIRS:
         return DirRule("wrapper", UNKNOWN, f"entries sit inside `{WRAPPER_DIRS[db]} = {{ }}`, "
                        "which both mods repeat; how a repeated entry merges isn't recorded")
-    if db in DIGEST_INJECT_DIRS:
-        return DirRule("database", FIRST_WINS, "Modding-Digests 1.12.0 inject_types.md + "
-                       "breaking_changes.md: `Duplicated key X will not be created`")
-    if db == "static_modifiers":
-        return DirRule("database", FIRST_WINS, "scripting_best_practices.md § Top-Level Database "
-                       "Collisions (not in the 1.12 digest list)")
-    return DirRule("unknown", UNKNOWN, "no rule recorded for this folder: both tried")
-
+    rule = BARE_DUPLICATE_RULES.get(db, UNKNOWN)
+    if db == "script_values":
+        return DirRule("script_values", rule, "bare_duplicate_script_values")
+    if rule == UNKNOWN:
+        return DirRule("unknown", UNKNOWN, "bare_duplicate_other")
+    return DirRule("database", rule, "bare_duplicate")
 
 def split_common_path(rel_in_common: str) -> Optional[tuple[str, str]]:
     """(database, path within it) for a file path relative to `common/`, or
@@ -277,11 +338,36 @@ def split_directive(raw_key: str) -> tuple[Optional[str], str]:
     return (m.group(1), m.group(2)) if m else (None, raw_key)
 
 
+def strip_comment(line: str) -> str:
+    """`line` without its `# ...` comment. A `#` inside a quoted string isn't
+    one, and a backslash escapes the character after it inside a string, so
+    `"say \\"hi # there\\""` keeps its `#` (ParadoxFileParser._strip_comment
+    flips on every quote). A quote that never closes falls back to cutting at
+    the first `#`, as the parser does."""
+    first = line.find("#")
+    if first == -1:
+        return line
+    in_string, i, n = False, 0, len(line)
+    while i < n:
+        c = line[i]
+        if in_string:
+            if c == "\\":
+                i += 2
+                continue
+            if c == '"':
+                in_string = False
+        elif c == '"':
+            in_string = True
+        elif c == "#":
+            return line[:i]
+        i += 1
+    return line[:first] if in_string else line
+
+
 def _tokens(text: str) -> list[tuple[str, int]]:
     out = []
     for lineno, raw in enumerate(text.splitlines(), 1):
-        code = ParadoxFileParser._strip_comment(raw)
-        out.extend((m.group(), lineno) for m in _TOKEN_RE.finditer(code))
+        out.extend((m.group(), lineno) for m in _TOKEN_RE.finditer(strip_comment(raw)))
     return out
 
 
@@ -363,10 +449,13 @@ def read_text(path: str) -> str:
 # File listing
 # ---------------------------------------------------------------------------
 
-def list_files(root: str, top: Optional[str] = None) -> list[str]:
+def list_files(root: str, top: Optional[str] = None, git_fallback: bool = False) -> list[str]:
     """Every file under `root` (or `root/top`), as posix paths relative to
-    `root`, skipping dot-folders. A folder missing on disk but tracked by git
-    (a sparse worktree's gfx/) is listed from `git ls-files`."""
+    `root`, skipping dot-folders. With `git_fallback`, a folder missing on
+    disk but tracked by git (a sparse worktree's gfx/) is listed from `git
+    ls-files`. Only this mod's own root may ask for that: git reads the
+    repository's config (core.fsmonitor, hooks), so running it in another
+    mod's folder could run that mod's code."""
     base = os.path.join(root, top) if top else root
     out = []
     if os.path.isdir(base):
@@ -376,9 +465,11 @@ def list_files(root: str, top: Optional[str] = None) -> list[str]:
             for name in sorted(filenames):
                 out.append(name if rel_dir == "." else f"{rel_dir}/{name}")
         return out
-    if top and os.path.exists(os.path.join(root, ".git")):
+    if git_fallback and top and os.path.exists(os.path.join(root, ".git")):
         try:
-            res = subprocess.run(["git", "-C", root, "ls-files", "-z", "--", top],
+            res = subprocess.run(["git", "-c", "core.fsmonitor=false", "-c",
+                                  "core.hooksPath=/dev/null", "-C", root, "ls-files", "-z",
+                                  "--", top],
                                  capture_output=True, text=True, timeout=60)
         except (OSError, subprocess.SubprocessError):
             return out
@@ -439,29 +530,53 @@ def same_path(a: str, b: str) -> bool:
     return a.casefold() == b.casefold()
 
 
-def sort_ops(ops: Iterable[Op], casefold: bool, vanilla_first: bool = True) -> list[Op]:
-    """Load order: by file name in ASCII order (`casefold=False`) or
-    case-folded, then by line. With `vanilla_first`, vanilla's definitions
-    come before every mod's (model point 1); without, vanilla's files take
-    their place by name. A vanilla definition of unknown file comes first
-    either way."""
+def name_key(name: str, order: str) -> str:
+    """`name` as FILE_ORDERS' `order` compares it."""
+    if order == "lower_folded":
+        return name.lower()
+    if order == "upper_folded":
+        return name.upper()
+    return name
+
+
+def file_orders() -> tuple:
+    """The file-name orders still possible (LOAD_ORDER_MODEL["file_order"])."""
+    return (KNOWN_FILE_ORDER,) if KNOWN_FILE_ORDER else FILE_ORDERS
+
+
+def load_readings() -> tuple:
+    """The load readings still possible (LOAD_ORDER_MODEL["interleaving"], ["directives_deferred"])."""
+    return (KNOWN_LOAD_READING,) if KNOWN_LOAD_READING else LOAD_READINGS
+
+
+def sort_ops(ops: Iterable[Op], order: str = "ascii", vanilla_first: bool = True) -> list[Op]:
+    """Load order: by file name compared the `order` way (FILE_ORDERS), then
+    by line. With `vanilla_first`, vanilla's definitions come before every
+    mod's; without, vanilla's files take their place by name. A vanilla
+    definition of unknown file (the snapshot) comes first either way."""
     def key(op: Op):
         name = op.path or ""
         first = op.side != VANILLA if vanilla_first else op.path is not None
-        return (first, name.casefold() if casefold else name, name, op.line)
+        return (first, name_key(name, order), name, op.line)
     return sorted(ops, key=key)
 
 
-def creations_first(ordered: list[Op]) -> list[Op]:
-    """The `creations_first` reading: every bare definition (vanilla's
-    included) in load order, then every directive in load order."""
-    return ([o for o in ordered if o.directive is None]
-            + [o for o in ordered if o.directive is not None])
+def order_for_reading(ops: list[Op], order: str, reading: str) -> list[Op]:
+    """`ops` in load order under one of LOAD_READINGS."""
+    if reading == "vanilla_first":
+        return sort_ops(ops, order, vanilla_first=True)
+    ordered = sort_ops(ops, order, vanilla_first=False)
+    if reading == "creations_first":
+        # Every bare definition (vanilla's included) first, then every directive.
+        return ([o for o in ordered if o.directive is None]
+                + [o for o in ordered if o.directive is not None])
+    return ordered
 
 
 def simulate(ops_in_order: list[Op], bare_rule: str) -> tuple[frozenset, list[dict]]:
-    """Apply each definition in order. Returns (the definitions whose content
-    is in the final entry, trace). `bare_rule` is FIRST_WINS or LAST_WINS."""
+    """Apply each definition in order (LOAD_ORDER_MODEL["directives"],
+    ["bare_duplicate"]). Returns (the definitions whose content is in the final
+    entry, trace). `bare_rule` is FIRST_WINS or LAST_WINS."""
     surviving: set = set()
     present = False
     trace = []
@@ -509,8 +624,8 @@ def verdict_for(surviving: Iterable[Op]) -> str:
     return BOTH_WIPED
 
 
-def _later_side(ours: list[Op], theirs: list[Op], casefold: bool) -> str:
-    last = sort_ops([*ours, *theirs], casefold)[-1]
+def _later_side(ours: list[Op], theirs: list[Op], order: str) -> str:
+    last = sort_ops([*ours, *theirs], order)[-1]
     other = theirs if last.side == OURS else ours
     if last.path and any(o.path and same_path(o.path, last.path) for o in other):
         return "same_path"
@@ -519,19 +634,20 @@ def _later_side(ours: list[Op], theirs: list[Op], casefold: bool) -> str:
 
 def later_file(ours: list[Op], theirs: list[Op]) -> str:
     """Whose last definition is read later: ours, theirs, same_path (one file
-    both ship) or depends_on_case."""
-    a, b = _later_side(ours, theirs, False), _later_side(ours, theirs, True)
-    return a if a == b else "depends_on_case"
+    both ship) or depends_on_case (the file orders disagree)."""
+    sides = {_later_side(ours, theirs, order) for order in file_orders()}
+    return sides.pop() if len(sides) == 1 else "depends_on_case"
 
 
 def order_depends_on_case(ours: list[Op], theirs: list[Op]) -> bool:
-    """True when some file of ours and some file of theirs sort one way in
-    ASCII order and the other way case-folded."""
+    """True when some file of ours and some file of theirs sort one way under
+    one of the possible file orders and the other way under another."""
+    orders = file_orders()
     for o in ours:
         for t in theirs:
             if not (o.path and t.path) or same_path(o.path, t.path):
                 continue
-            if (o.path < t.path) != (o.path.casefold() < t.path.casefold()):
+            if len({name_key(o.path, x) < name_key(t.path, x) for x in orders}) > 1:
                 return True
     return False
 
@@ -548,9 +664,10 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     database, defining this key or not (a file at the other mod's or
     vanilla's path replaces it either way); default: the ops' own paths.
 
-    Every combination of the unknowns is simulated: ASCII vs case-folded file
-    order, which mod the playset loads later (only when both ship a file at
-    the same path), whether vanilla has the key, and the bare-duplicate rule.
+    Every combination of the unknowns is simulated: the file-name order
+    (file_orders()), which mod the playset loads later (only when one ships a
+    file at a path where the other defines the key), whether vanilla has the
+    key, the bare-duplicate rule, and the load reading (load_readings()).
     When they all agree that is the verdict; otherwise the verdict names the
     one unknown that changes it (order_depends_on_case, depends_on_playset),
     or `undetermined`; `depends_on` names the unknowns that change it.
@@ -558,7 +675,8 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     Returns {verdict, later_file, order_depends_on_case, ours_lost,
     theirs_lost (definitions whose content doesn't reach the final entry),
     trace_scenario, trace} or, when the scenarios disagree, {verdict,
-    depends_on, verdict_by_scenario, ...}."""
+    depends_on, verdict_by_scenario (one row per combination of the deciding
+    unknowns), ...}."""
     o_files = {p.casefold() for p in (ours_files if ours_files is not None
                                        else [o.path for o in ours if o.path])}
     t_files = {p.casefold() for p in (theirs_files if theirs_files is not None
@@ -568,15 +686,12 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     ours_shadowed = {o.path.casefold() for o in ours if o.path} & t_files
     theirs_shadowed = {t.path.casefold() for t in theirs if t.path} & o_files
     shared = ours_shadowed | theirs_shadowed
-    any_bare = any(o.directive is None for o in (*ours, *theirs))
     dims = {
-        "file_order": ["ascii", "case_folded"],
+        "file_order": list(file_orders()),
         "later_mod": ["theirs", "ours"] if shared else [None],
         "in_vanilla": [True, False] if vanilla is None else [bool(vanilla)],
         "bare_duplicate": [FIRST_WINS, LAST_WINS] if bare_rule == UNKNOWN else [bare_rule],
-        # Model point 1's two readings; they only differ when a mod defines
-        # the key bare.
-        "load_reading": ["vanilla_first", "creations_first"] if any_bare else ["vanilla_first"],
+        "load_reading": list(load_readings()),
     }
     names = list(dims)
     # Each scenario's outcome: the verdict plus which of each side's
@@ -584,9 +699,9 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     # INJECTs differs from one that keeps both even when both read both_merge.
     results = {}
     traces = {}
+    mod_paths = o_files | t_files
     for combo in product(*(dims[n] for n in names)):
         sc = dict(zip(names, combo))
-        mod_paths = o_files | t_files
         ops = []
         if sc["in_vanilla"]:
             vops = vanilla if isinstance(vanilla, list) and vanilla else [Op(VANILLA, None, 0)]
@@ -600,11 +715,7 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
             ops += [t for t in theirs if not (t.path and t.path.casefold() in theirs_shadowed)]
         else:
             ops += [*ours, *theirs]
-        casefold = sc["file_order"] == "case_folded"
-        if sc["load_reading"] == "creations_first":
-            ordered = creations_first(sort_ops(ops, casefold, vanilla_first=False))
-        else:
-            ordered = sort_ops(ops, casefold)
+        ordered = order_for_reading(ops, sc["file_order"], sc["load_reading"])
         surviving, trace = simulate(ordered, sc["bare_duplicate"])
         results[combo] = (
             verdict_for(surviving),
@@ -628,7 +739,7 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
         out["theirs_lost"] = list(theirs_lost)
         return out
 
-    def changes_verdict(idx: int) -> bool:
+    def changes_outcome(idx: int) -> bool:
         """Some scenario's outcome changes when only dimension `idx` does."""
         return any(
             results[combo[:idx] + (alt,) + combo[idx + 1:]] != outcome
@@ -636,7 +747,7 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
             for alt in dims[names[idx]]
         )
 
-    deciding = [n for i, n in enumerate(names) if len(dims[n]) > 1 and changes_verdict(i)]
+    deciding = [n for i, n in enumerate(names) if len(dims[n]) > 1 and changes_outcome(i)]
     if deciding == ["file_order"]:
         out["verdict"] = ORDER_DEPENDS_ON_CASE
     elif deciding == ["later_mod"]:
@@ -644,11 +755,14 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     else:
         out["verdict"] = UNDETERMINED
     out["depends_on"] = deciding
-    out["verdict_by_scenario"] = [
-        {**{n: v for n, v in zip(names, combo) if len(dims[n]) > 1},
-         "verdict": verdict, "ours_lost": list(ours_lost), "theirs_lost": list(theirs_lost)}
-        for combo, (verdict, ours_lost, theirs_lost) in results.items()
-    ]
+    # The outcome is a function of the deciding unknowns alone (any other one
+    # never changes it), so one row per combination of them says it all.
+    rows = {}
+    for combo, (verdict, ours_lost, theirs_lost) in results.items():
+        key = tuple(v for n, v in zip(names, combo) if n in deciding)
+        rows.setdefault(key, {**dict(zip(deciding, key)), "verdict": verdict,
+                              "ours_lost": list(ours_lost), "theirs_lost": list(theirs_lost)})
+    out["verdict_by_scenario"] = list(rows.values())
     return out
 
 
@@ -674,9 +788,10 @@ def resolve_later_wins(ours: list[Op], theirs: list[Op]) -> dict:
 
 class VanillaIndex:
     """Which keys vanilla defines per database: from the game files when
-    `game_common` exists (with file names), else from the `vanilla_parsed/`
-    snapshot (keys only), else unknown. `keys` ({db: iterable}) replaces both,
-    for tests."""
+    `game_common` exists (with file names; a folder vanilla lacks has no
+    keys), else from the `vanilla_parsed/` snapshot (keys only), else unknown
+    (LOAD_ORDER_MODEL["vanilla_source"]). `keys` ({db: iterable}) replaces
+    both, for tests."""
 
     def __init__(self, game_common: Optional[str] = None, snapshot_dir: Optional[str] = SNAPSHOT_DIR,
                  keys: Optional[dict] = None):
@@ -720,7 +835,8 @@ class VanillaIndex:
         if self._keys is not None:
             if db in self._keys:
                 result = ("given", {k: [Op(VANILLA, None, 0)] for k in self._keys[db]})
-        elif self.game_common and os.path.isdir(self._game_dir(db)):
+        elif self.game_common:
+            # A folder vanilla doesn't have means no vanilla key, not unknown.
             entries = self._game_entries(db)
             result = ("game_files", {
                 k: [Op(VANILLA, path, e.line, e.directive) for path, e in lst]
@@ -813,10 +929,11 @@ def _scan_db(root: str, db: str, files: list[str], warnings: list, side: str) ->
     return out
 
 
-def _common_files(root: str) -> dict[str, list[str]]:
-    """{database: [path within it]} for a mod's `common/`."""
+def _common_files(root: str, git_fallback: bool = False) -> dict[str, list[str]]:
+    """{database: [path within it]} for a mod's `common/` (git_fallback: see
+    list_files; this mod's root only)."""
     out: dict = defaultdict(list)
-    for rel in list_files(root, "common"):
+    for rel in list_files(root, "common", git_fallback):
         split = split_common_path(rel[len("common/"):])
         if split:
             out[split[0]].append(split[1])
@@ -993,10 +1110,23 @@ def event_collisions(ours_root: str, ours_files, theirs_root: str, theirs_files,
             "theirs": t_ids[event_id],
             "later_file": res["later_file"],
             "verdict": DEPENDS_ON_PLAYSET if res["winner"] == DEPENDS_ON_PLAYSET else UNDETERMINED,
-            "rule": "the copy read first survives (Duplicated event ID ... Previous Location); "
-                    "events aren't read in file-name order, so which is first is unknown",
+            "rule": "the copy read first survives; events aren't read in file-name order, so "
+                    "which is first is unknown (LOAD_ORDER_MODEL['events'])",
         })
     return namespaces, id_rows
+
+
+def _loc_sub(rel: str) -> tuple[str, bool]:
+    """(path within its English loc folder, whether it is a replace/ file)
+    for a file under one of _LOC_DIRS."""
+    if rel.startswith(_LOC_REPLACE_DIR + "/"):
+        return "replace/" + rel[len(_LOC_REPLACE_DIR) + 1:], True
+    sub = rel[len(_LOC_DIR) + 1:]
+    return sub, sub.split("/")[0] == "replace"
+
+
+def _loc_files(files: Iterable[str]) -> list[str]:
+    return [p for p in files if any(p.startswith(d + "/") for d in _LOC_DIRS)]
 
 
 def _scan_loc(root: str, files: list[str]) -> dict:
@@ -1004,7 +1134,7 @@ def _scan_loc(root: str, files: list[str]) -> dict:
     for rel in files:
         if not rel.endswith(".yml"):
             continue
-        sub = rel[len(_LOC_DIR) + 1:]
+        sub, replace = _loc_sub(rel)
         try:
             text = read_text(os.path.join(root, *rel.split("/")))
         except OSError:
@@ -1014,7 +1144,7 @@ def _scan_loc(root: str, files: list[str]) -> dict:
             if parsed is None:
                 continue
             key, value, _trailing = parsed
-            keys[key] = {"file": rel, "line": lineno, "replace": sub.split("/")[0] == "replace",
+            keys[key] = {"file": rel, "line": lineno, "replace": replace,
                          "_sub": sub, "_value": value.strip()}
     return keys
 
@@ -1026,13 +1156,12 @@ def loc_collisions(ours_root, ours_files, theirs_root, theirs_files) -> list[dic
         a, b = o[key], t[key]
         if a["replace"] != b["replace"]:
             winner, lf = (OURS if a["replace"] else THEIRS), None
-            basis = "replace/ overrides a file outside it"
+            basis = "a replace/ file overrides one outside it (LOAD_ORDER_MODEL['localization'])"
         else:
             res = resolve_later_wins([Op(OURS, a["_sub"], a["line"])], [Op(THEIRS, b["_sub"], b["line"])])
             lf = res["later_file"]
             winner = DEPENDS_ON_PLAYSET if res["winner"] == DEPENDS_ON_PLAYSET else UNDETERMINED
-            basis = ("the engine logs `Key X defined in multiple files`; which copy it keeps "
-                     "isn't recorded")
+            basis = "which of two same-kind files wins is unknown (LOAD_ORDER_MODEL['localization'])"
         rows.append({
             "key": key,
             "ours": {k: v for k, v in a.items() if not k.startswith("_")},
@@ -1058,12 +1187,12 @@ def path_collisions(ours_root: str, their_files: list[str]) -> list[dict]:
     tops = sorted({p.split("/")[0] for p in their_files})
     ours = {}
     for top in tops:
-        for p in list_files(ours_root, top):
+        for p in list_files(ours_root, top, git_fallback=True):
             ours.setdefault(p.casefold(), p)
     need_english = any(_our_loc_deploy_name(p) for p in their_files)
     english = {}
     if need_english:
-        english = {p.casefold(): p for p in list_files(ours_root, _LOC_DIR)}
+        english = {p.casefold(): p for p in list_files(ours_root, _LOC_DIR, git_fallback=True)}
     rows = []
     for p in their_files:
         if p.lower().endswith(_NOT_GAME_FILES):
@@ -1091,34 +1220,10 @@ def path_collisions(ours_root: str, their_files: list[str]) -> list[dict]:
 # Entry point
 # ---------------------------------------------------------------------------
 
-LOAD_ORDER_MODEL = {
-    "file_order": "within a common/ folder, every mod's files are read as one tree in file-name "
-                  "order (assumed: scripting_best_practices.md § War Support Hook)",
-    "same_path": "a later-loaded mod's file at the same relative path replaces the earlier one "
-                 "whole; the playset decides which mod is later, so such keys are "
-                 "depends_on_playset",
-    "case": "ASCII vs case-folded file-name order is unknown; a key whose outcome differs is "
-            "order_depends_on_case",
-    "directives": "Modding-Digests 1.12.0 inject_types.md: INJECT/REPLACE error on a missing "
-                  "entry, TRY_INJECT/TRY_REPLACE skip it, INJECT_OR_CREATE/REPLACE_OR_CREATE "
-                  "create it; applied in load order",
-    "bare_duplicate": "per folder, in `dirs[].rule`: first_wins (Duplicated key X will not be "
-                      "created), last_wins (script_values), unknown (both tried)",
-    "load_reading": "vanilla's definitions are in place before any mod's INJECT, whatever the "
-                    "file names (the mod's INJECT:cautious in extra_character_traits.txt sorts "
-                    "before vanilla's personality_traits.txt and logs no inject_to_missing). "
-                    "Either vanilla loads first (vanilla_first) or every bare definition is read "
-                    "before any directive (creations_first); a key with a bare definition is "
-                    "tried both ways. A mod file at vanilla's path replaces vanilla's file",
-    "events": "a duplicated event id keeps the copy read first, but events aren't read in "
-              "file-name order (log-triage SKILL.md, 2026-05-24): undetermined",
-    "localization": "replace/ beats a file outside it; otherwise undetermined",
-}
-
-
 def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = None,
-            include_trace: bool = True) -> dict:
-    """The overlap report for the mod at `theirs_root` against `ours_root`."""
+            include_trace: bool = False) -> dict:
+    """The overlap report for the mod at `theirs_root` against `ours_root`.
+    Only `ours_root` is ever listed through git (list_files)."""
     if vanilla is None:
         vanilla = VanillaIndex.default()
     elif isinstance(vanilla, dict):
@@ -1127,7 +1232,7 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
     warnings: list = []
 
     t_common = _common_files(theirs_root)
-    o_common = _common_files(ours_root)
+    o_common = _common_files(ours_root, git_fallback=True)
     dirs, collisions = [], []
     defines, hooks, oa_conflicts = [], [], []
     for db in sorted(t_common):
@@ -1151,13 +1256,14 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
     t_events = [p for p in their_files if p.startswith("events/")]
     ns_rows, id_rows = [], []
     if t_events:
-        o_events = list_files(ours_root, "events")
+        o_events = list_files(ours_root, "events", git_fallback=True)
         ns_rows, id_rows = event_collisions(ours_root, o_events, theirs_root, t_events, warnings)
 
-    t_loc = [p for p in their_files if p.startswith(_LOC_DIR + "/")]
+    t_loc = _loc_files(their_files)
     loc_rows = []
     if t_loc:
-        loc_rows = loc_collisions(ours_root, list_files(ours_root, _LOC_DIR), theirs_root, t_loc)
+        o_loc = [p for d in _LOC_DIRS for p in list_files(ours_root, d, git_fallback=True)]
+        loc_rows = loc_collisions(ours_root, o_loc, theirs_root, t_loc)
 
     paths = path_collisions(ours_root, their_files)
     by_verdict = Counter(c["verdict"] for c in collisions)
@@ -1193,12 +1299,22 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
 
 
 def validate_root(path: Optional[str]) -> str:
-    """The mod root to scan, or ValueError with the reason."""
+    """The mod root to scan, or ValueError with the reason. A folder with no
+    `.metadata/metadata.json`, no `descriptor.mod` and none of `common/`,
+    `events/`, `gui/`, `localization/` is refused: that is the Workshop folder
+    with the mod's id left off, or some other folder, and walking it gives a
+    clean report of nothing (and holds the single-threaded server)."""
     if not path:
         raise ValueError("pass the mod's root folder: ?path=<mod root>")
     path = os.path.expanduser(path)
     if not os.path.isdir(path):
         raise ValueError(f"not a directory: {path}")
+    if not (any(os.path.isfile(os.path.join(path, m)) for m in _MOD_MARKERS)
+            or any(os.path.isdir(os.path.join(path, d)) for d in _MOD_DIRS)):
+        raise ValueError(
+            f"not a mod root: {path} has no .metadata/metadata.json, descriptor.mod, "
+            "common/, events/, gui/ or localization/ (a Workshop mod is "
+            ".../workshop/content/529340/<id>)")
     return os.path.abspath(path)
 
 
@@ -1231,14 +1347,15 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("path", help="the other mod's root folder")
     ap.add_argument("--ours", default=REPO_ROOT, help="this mod's root (default: this checkout)")
     ap.add_argument("--json", action="store_true", help="print the full report as JSON")
-    ap.add_argument("--no-trace", action="store_true", help="leave out each collision's trace")
+    ap.add_argument("--trace", action="store_true",
+                    help="add each collision's simulated load (first scenario)")
     args = ap.parse_args(argv)
     try:
         root = validate_root(args.path)
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    report = analyze(root, os.path.abspath(args.ours), include_trace=not args.no_trace)
+    report = analyze(root, os.path.abspath(args.ours), include_trace=args.trace)
     if args.json:
         json.dump(report, sys.stdout, indent=1, ensure_ascii=False)
         print()
