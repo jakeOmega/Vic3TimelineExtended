@@ -9698,8 +9698,11 @@ PARTIAL_VANILLA_FILE_REGENERATORS = {
 
 # Return-dict keys whose nonzero values indicate "actionable issue surfaced
 # by this generator." Audits use a small set of conventional names; if a new
-# audit invents one, add it here so the warning fires automatically.
-_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails")
+# audit invents one, add it here so the warning fires automatically. A bool
+# True counts (it is an int): texture_reference_audit's `catalog_stale` says
+# the committed asset catalog no longer matches the install, so CI resolves
+# against stale vanilla until `--bootstrap` reruns.
+_POST_LOAD_WARN_KEYS = ("unreviewed", "hard_fails", "catalog_stale")
 
 # Most-recent post-load run's actionable findings. Reset on every
 # _run_post_load_generators call. Read by /reload POST handler so callers
