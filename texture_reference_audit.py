@@ -56,6 +56,8 @@ Kinds:
     a typo such as `.dss`.
   * `backslash` (error): `\\` separators. Vanilla's script uses `/` only.
   * `whitespace` (error): spaces around a path inside its quotes.
+  * `undeclared` (error): an entity that names no art in a field its type
+    needs (Declarations, below).
   * `dlc_only` (warning, never fails `--strict`): the file, or the alias, is
     only in a DLC's folder, so a player without that DLC gets the
     missing-texture placeholder. Fine in a DLC-gated event; vanilla does it.
@@ -89,6 +91,70 @@ without `--bootstrap` doesn't pass. The listing is cached per install state
 for the server's lifetime. The catalog holds the DLCs installed on the
 machine that built it.
 
+Declarations (#1182)
+-------------------
+A path check can't see a field nobody wrote. #1143's 36 buildings named no
+`background` at all, and the engine logged `Database type <key> has missing
+texture` (`guitexturehandler.h:155`) once per launch for each. So, for each
+entity type in `DECLARED_FIELDS`, every entity the mod defines in
+`common/<folder>/` must declare the field with a non-empty value (`undeclared`,
+an error), on the entity's own opening line for suppression. A field is a key
+in the entity's block or a `/` path into a nested one
+(`combat_unit_image/texture`); a block counts as declared.
+
+  * A plain or `REPLACE:` entity must declare it itself, since a REPLACE
+    restates the whole entity: `REPLACE:pmg_aeroplanes` dropped vanilla's
+    `texture`. Exempt only when vanilla's entity of that name lacks it too
+    (`REPLACE:country_gdp_construction`; vanilla's has no icon either), read
+    from `vanilla_parsed/` (`vanilla_gaps`), so CI and a reload agree.
+  * `INJECT:` (`TRY_INJECT:`, `INJECT_OR_CREATE:`) merges into its base. When
+    the mod defines the base, the base and its INJECTs are checked as one;
+    otherwise the base is vanilla's (or missing, which the engine's
+    `inject_to_missing` line reports), and isn't the mod's to check.
+  * No `building_group` fallback: no vanilla or mod building group declares
+    any art field (vanilla's `buildings.md` documents `background` on the
+    building, "Background texture for building registry items"), and the
+    Grand Monuments name-carrier anchor logged the line in `bg_grand_monuments`,
+    whose other buildings all declare one.
+
+Which types and fields, and the evidence (checked 2026-10-26 on 1.14.5): every
+`game/common/` type with three or more vanilla entities was scanned for the
+art-like fields (`icon`, `texture`, `background`, `*_texture`, `*_icon`, ...)
+every vanilla entity declares, and the logs (`debug`/`error` and their rotated
+generations) and `git log` for `has missing texture` and `VFSOpen Error` lines
+an undeclared field caused. Two fields are logged: `buildings` `background`
+(load time, above) and `static_modifiers` `icon` (an empty-path
+`VFSOpen Error:  not found` each time a list draws the modifier, 9023f1588 and
+7870ddb2b). Vanilla declares the second on 6,096 of 6,128; the rest are the
+engine's own (`base_values`, the infamy and tax bands, ...), five in
+`104_modifiers.txt`, and a test modifier, all exempt by name. `production_methods`
+and `production_method_groups` `texture` are on every vanilla entity but
+`pm_dummy` and `pmg_dummy` (00_dummy.txt); a group's is the building panel's
+icon for a mixed configuration (`production_method_groups.md`). No log line has
+been seen for either. The rest are on every vanilla entity of their type
+(`DECLARED_FIELDS` gives the count); `test_texture_reference_audit` fails when a
+rebuilt `vanilla_parsed/` no longer bears one out.
+
+Considered and left out:
+  * `journal_entries` `icon`: optional, the engine falls back to
+    `JOURNAL_ENTRY_ICON_DEFAULT` (`journal_entries.md`); 7 vanilla entries
+    have none.
+  * `harvest_condition_types` `map_texture`: "default - none"
+    (`harvest_condition_types.md`); the mod's three market conditions have none
+    on purpose.
+  * `terrain` `textures`: "extra textures that could be used in specific cases"
+    (`01_terrain.txt`).
+  * `buildings` `icon`: 14 vanilla monuments have none, and none logs.
+  * `diplomatic_actions` `texture` (27 of 55 in vanilla). The lens toolbar icon
+    the engine derives from the action's key is `test_diplomatic_action_lens_icons`'s.
+  * `character_interactions` `icon` (13/21), `game_concepts` `texture`
+    (261/613), `cultures` `seal_and_signature_texture` (181/317),
+    `coat_of_arms` `pattern` (96%): not universal. `decisions`, `amendments`,
+    `political_movements` and `technology/eras` declare no art field in vanilla.
+  * Non-art fields every vanilla entity has (`game_rules`'s and `pop_needs`'
+    `default`).
+  * Events: `event_image_audit` checks that a visible event declares art.
+
 Overlap with other audits: `event_image_audit` checks that a visible event
 declares art, not that the file exists. `scripts/analysis/check_gui_lint.py`
 only warns that a texture no mod file names is "unproven", on the `.gui` files
@@ -96,7 +162,8 @@ a branch changed. `gui_reference_audit` doesn't look at textures. So this audit
 covers `gui/` too. Not covered: `'gfx/...'` literals inside a GUI `[...]`
 expression (none in the mod as of 2026-10-26).
 
-Suppression is check-tagged, on the path's line:
+Suppression is check-tagged, on the path's line, or for `undeclared` on the
+entity's opening `<name> = {` line:
 
     # REVIEWED YYYY-MM-DD (texture_reference): rationale
 
@@ -114,6 +181,10 @@ import os
 import re
 import subprocess
 from dataclasses import dataclass, field
+
+# A merge directive (`INJECT:x`) adds to an existing entity; the rest
+# (`REPLACE:x`, ...) restate it whole.
+from paradox_file_parser import INJECT_DIRECTIVES, directive_prefixes
 
 CHECK = "texture_reference"
 SCAN = (("common", ".txt"), ("events", ".txt"), ("gui", ".gui"))
@@ -149,7 +220,78 @@ CATALOG_REL = os.path.join("docs", "engine", "vanilla_asset_paths.txt")
 REPORT_REL = os.path.join("docs", "engine", "texture_reference_report.md")
 
 ERROR_KINDS = ("missing", "case_mismatch", "unknown_media_alias", "unrooted",
-               "unknown_extension", "backslash", "whitespace")
+               "unknown_extension", "backslash", "whitespace", "undeclared")
+
+# Art fields the engine needs on every entity of a type: {folder under
+# common/: (fields, evidence)}. A field is a key in the entity's block, or a
+# `/` path into a nested one. Counts are vanilla's entities that declare it
+# over all of them, on 1.14.5; the module docstring says what was checked and
+# what was left out.
+_ALL = "on every vanilla entity of its type"
+DECLARED_FIELDS: dict[str, tuple[tuple[str, ...], str]] = {
+    "buildings": (("background",),
+                  "the building panel's art, on every vanilla building (115); one without logs "
+                  "`Database type <key> has missing texture` at load (#1108, #1143)"),
+    "static_modifiers": (("icon",),
+                         "on 6,096 of vanilla's 6,128 (the rest are engine-applied); one without logs "
+                         "an empty-path `VFSOpen Error` whenever a modifier list draws it"),
+    "production_methods": (("texture",), "on 435 of vanilla's 436 (not `pm_dummy`)"),
+    "production_method_groups": (("texture",),
+                                 "the building panel's icon for a mixed configuration, on 196 of "
+                                 "vanilla's 197 (not `pmg_dummy`)"),
+    "acceptance_statuses": (("background", "large_icon", "small_icon"), f"{_ALL} (5)"),
+    "ai_strategic_region_stance_types": (("icon",), f"{_ALL} (4)"),
+    "ai_strategies": (("icon",), f"{_ALL} (35)"),
+    "alert_types": (("texture",), f"{_ALL} (69)"),
+    "battle_conditions": (("icon",), f"{_ALL} (21)"),
+    "character_roles": (("texture",), f"{_ALL} (10)"),
+    "character_traits": (("texture",), f"{_ALL} (121)"),
+    "cohesion_levels": (("background_texture",), f"{_ALL} (5)"),
+    "combat_unit_experience_levels": (("icon",), f"{_ALL} (5)"),
+    "combat_unit_groups": (("icon",), f"{_ALL} (4)"),
+    "combat_unit_types": (("combat_unit_image/texture",), f"{_ALL} (19)"),
+    "commander_orders": (("texture",), f"{_ALL} (12)"),
+    "commander_ranks": (("texture",), f"{_ALL} (6)"),
+    "company_charter_types": (("icon",), f"{_ALL} (5)"),
+    "company_types": (("icon", "background"), f"{_ALL} (221)"),
+    "decrees": (("texture",), f"{_ALL} (11)"),
+    "diplomatic_plays": (("texture",), f"{_ALL} (53)"),
+    "goods": (("texture",), f"{_ALL} (53)"),
+    "harvest_condition_types": (("icon",), f"{_ALL} (22)"),
+    "ideologies": (("icon",), f"{_ALL} (172)"),
+    "institutions": (("icon", "background_texture"), f"{_ALL} (7)"),
+    "interest_group_traits": (("icon",), f"{_ALL} (99)"),
+    "interest_groups": (("texture",), f"{_ALL} (8)"),
+    "interest_tier_types": (("icon", "small_icon"), f"{_ALL} (6)"),
+    "laws": (("icon",), f"{_ALL} (138)"),
+    "liberty_desire_levels": (("background_texture",), f"{_ALL} (3)"),
+    "messages": (("texture",), f"{_ALL} (475)"),
+    "military_formation_flags": (("icon",), f"{_ALL} (30)"),
+    "mobilization_option_groups": (("icon",), f"{_ALL} (6)"),
+    "mobilization_options": (("texture",), f"{_ALL} (18)"),
+    "naval_battle_conditions": (("icon",), f"{_ALL} (7)"),
+    "naval_mission_types": (("icon", "map_texture"), f"{_ALL} (9)"),
+    "objectives": (("icon", "enabled_background"), f"{_ALL} (5)"),
+    "parties": (("icon",), f"{_ALL} (12)"),
+    "political_lobbies": (("texture",), f"{_ALL} (4)"),
+    "political_movement_categories": (("icon",), f"{_ALL} (5)"),
+    "pop_types": (("texture",), f"{_ALL} (15)"),
+    "power_bloc_identities": (("icon", "background"), f"{_ALL} (6)"),
+    "power_bloc_map_textures": (("texture",), f"{_ALL} (18)"),
+    "power_bloc_principles": (("icon", "background"), f"{_ALL} (69)"),
+    "prestige_goods": (("texture",), f"{_ALL} (72)"),
+    "religions": (("icon",), f"{_ALL} (17)"),
+    "ship_groups": (("icon",), f"{_ALL} (4)"),
+    "ship_modification_slots": (("icon",), f"{_ALL} (7)"),
+    "ship_modifications": (("icon",), f"{_ALL} (271)"),
+    "ship_types": (("icon", "profile_texture"), f"{_ALL} (22)"),
+    "ship_veterancy_levels": (("icon",), f"{_ALL} (5)"),
+    "state_traits": (("icon",), f"{_ALL} (239)"),
+    "technology/technologies": (("texture",), f"{_ALL} (179)"),
+    "treaty_articles": (("icon",), f"{_ALL} (34)"),
+    "war_goal_types": (("icon",), f"{_ALL} (39)"),
+}
+VANILLA_SNAPSHOT_DIR = "vanilla_parsed"
 WARN_KINDS = ("dlc_only",)
 SKIP_KINDS = ("templated", "other_extension")
 
@@ -193,6 +335,18 @@ class Skipped:
 class StaleTag:
     file: str
     line: int
+
+
+@dataclass
+class Definition:
+    """One top-level `name = { }` in a `DECLARED_FIELDS` folder. `fields`:
+    the `/`-joined key path of every non-empty value and every block in it."""
+    folder: str
+    name: str  # without its directive
+    directive: str | None  # `INJECT`, `REPLACE`, ..., or None
+    file: str
+    line: int
+    fields: frozenset[str]
 
 
 @dataclass
@@ -279,6 +433,9 @@ class AuditResult:
     resolved: dict[str, int] = field(default_factory=dict)  # mod / vanilla / alias
     source: str = "given"
     catalog_stale: bool | None = None  # None: not compared (no install)
+    entities_checked: int = 0  # mod entities a DECLARED_FIELDS check applied to
+    # Fields left undeclared as vanilla's entity of the same name leaves them.
+    vanilla_precedent: list[tuple[str, str, str]] = field(default_factory=list)
 
     @property
     def failing(self) -> int:
@@ -378,10 +535,15 @@ def classify(key: str | None, value: str, rel: str = "") -> tuple[str, str] | No
     return "unknown_extension", norm
 
 
-def scan_text(text: str, rel: str, index: AssetIndex, result: AuditResult) -> None:
-    """Append one file's flags, skips and stale tags to `result`."""
-    tags = dict(iter_tags(text))
-    used: set[int] = set()
+def scan_text(text: str, rel: str, index: AssetIndex, result: AuditResult,
+              tags: dict[int, dict] | None = None, used: set[int] | None = None) -> None:
+    """Append one file's path flags and skips to `result`. `tags` (the file's
+    `iter_tags`) and `used` (the tagged lines a flag consumed) are shared with
+    the declaration check; without them, stale tags are appended here."""
+    own = tags is None
+    if own:
+        tags = dict(iter_tags(text))
+        used = set()
     for line, key, value in iter_values(text):
         cat = classify(key, value, rel)
         if cat is None:
@@ -413,8 +575,171 @@ def scan_text(text: str, rel: str, index: AssetIndex, result: AuditResult) -> No
         if exemption:
             used.add(line)
         result.flags.append(Flag(rel, line, key, value, status, detail, exemption, fixed))
-    for line in sorted(set(tags) - used):
-        result.stale_tags.append(StaleTag(rel, line))
+    if own:
+        for line in sorted(set(tags) - used):
+            result.stale_tags.append(StaleTag(rel, line))
+
+
+# --- declarations ------------------------------------------------------------
+
+def declared_folder(rel: str) -> str | None:
+    """The `DECLARED_FIELDS` folder a `common/` file belongs to, or None."""
+    if not rel.startswith("common/") or not rel.endswith(".txt"):
+        return None
+    sub = rel[len("common/"):]
+    for folder in DECLARED_FIELDS:
+        if sub.startswith(folder + "/"):
+            return folder
+    return None
+
+
+def split_directive(name: str) -> tuple[str | None, str]:
+    """(`INJECT`, `x`) for `INJECT:x`; (None, name) without a directive."""
+    for prefix in directive_prefixes:
+        if name.startswith(prefix):
+            return prefix[:-1], name[len(prefix):]
+    return None, name
+
+
+def iter_entities(text: str):
+    """Yield `(name, line, fields)` for each top-level `name = { ... }`:
+    `fields` holds the `/`-joined key path of every non-empty value and every
+    block inside it (`icon`, `combat_unit_image/texture`). `@constants` and
+    top-level scalars are not entities."""
+    starts = [0] + [m.end() for m in re.finditer(r"\n", text)]
+    toks = [(m.group(), m.start()) for m in _TOKEN_RE.finditer(text) if m.group()[0] != "#"]
+    n = len(toks)
+    i = 0
+    while i < n:
+        tok, pos = toks[i]
+        if not (i + 2 < n and toks[i + 1][0] in _OPS and toks[i + 2][0] == "{"
+                and tok not in _OPS and tok not in "{}"):
+            i += 1
+            continue
+        fields: set[str] = set()
+        path: list[str | None] = []  # enclosing block keys; None for a bare `{`
+        j = i + 3
+        depth = 1
+        while j < n and depth:
+            t = toks[j][0]
+            if t == "{":
+                depth += 1
+                path.append(None)
+            elif t == "}":
+                depth -= 1
+                if path:
+                    path.pop()
+            elif t not in _OPS and j + 2 < n and toks[j + 1][0] in _OPS:
+                key = "/".join([p for p in path if p] + [t])
+                val = toks[j + 2][0]
+                if val == "{":
+                    fields.add(key)
+                    path.append(t)
+                    depth += 1
+                elif val.strip('"').strip():
+                    fields.add(key)
+                j += 3
+                continue
+            j += 1
+        if not tok.startswith("@"):
+            yield tok.strip('"'), bisect.bisect_right(starts, pos), frozenset(fields)
+        i = j
+
+
+def collect_definitions(text: str, rel: str, folder: str) -> list[Definition]:
+    out = []
+    for raw, line, fields in iter_entities(text):
+        directive, name = split_directive(raw)
+        out.append(Definition(folder, name, directive, rel, line, fields))
+    return out
+
+
+def _json_values(node):
+    """The values of a `vanilla_parsed` key: `["=", v]`, or a list of those
+    for a repeated key."""
+    if isinstance(node, list) and node and isinstance(node[0], str) and node[0] in _OPS:
+        return [node[1]] if len(node) > 1 else []
+    if isinstance(node, list):
+        return [v for item in node for v in _json_values(item)]
+    return [node]
+
+
+def json_declares(body, field_path: str) -> bool:
+    """Whether a `vanilla_parsed` entity body has a non-empty value (or a
+    block) at `field_path`."""
+    head, _, rest = field_path.partition("/")
+    if not isinstance(body, dict) or head not in body:
+        return False
+    for v in _json_values(body[head]):
+        if rest:
+            if json_declares(v, rest):
+                return True
+        elif isinstance(v, (dict, list)) or (isinstance(v, str) and v.strip('"').strip()):
+            return True
+    return False
+
+
+def load_vanilla_gaps(mod_path: str) -> dict[str, dict[str, frozenset[str]]]:
+    """{folder: {field: vanilla entities that don't declare it}}, from the
+    committed `vanilla_parsed/` snapshot, for each `DECLARED_FIELDS` folder it
+    holds. A folder it doesn't hold gets no entry: by the registry's premise,
+    every vanilla entity there declares its fields. Empty without a snapshot."""
+    root = os.path.join(mod_path, VANILLA_SNAPSHOT_DIR)
+    try:
+        with open(os.path.join(root, "manifest.json"), encoding="utf-8") as fh:
+            manifest = json.load(fh)
+    except (OSError, ValueError):
+        return {}
+    files = {info.get("dir", "").removeprefix("game/common/"): info.get("file")
+             for info in manifest.get("entity_types", {}).values()}
+    gaps: dict[str, dict[str, frozenset[str]]] = {}
+    for folder, (fields, _why) in DECLARED_FIELDS.items():
+        rel = files.get(folder)
+        if not rel:
+            continue
+        try:
+            with open(os.path.join(root, rel), encoding="utf-8") as fh:
+                data = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        gaps[folder] = {}
+        for f in fields:
+            gaps[folder][f] = frozenset(
+                name for name, node in data.items()
+                if not any(json_declares(v, f) for v in _json_values(node)))
+    return gaps
+
+
+def check_declarations(defs: list[Definition], gaps: dict[str, dict[str, frozenset[str]]],
+                       tags: dict[str, dict[int, dict]], used: dict[str, set[int]],
+                       result: AuditResult) -> None:
+    """Append an `undeclared` flag for each mod entity that lacks a field its
+    type needs. An entity's definitions (the plain or REPLACE one, and its
+    INJECTs) are checked as one; an entity the mod only INJECTs into is
+    vanilla's."""
+    by_entity: dict[tuple[str, str], list[Definition]] = {}
+    for d in defs:
+        by_entity.setdefault((d.folder, d.name), []).append(d)
+    for (folder, name), ds in sorted(by_entity.items()):
+        owners = sorted((d for d in ds if d.directive not in INJECT_DIRECTIVES),
+                        key=lambda d: (d.file, d.line))
+        if not owners:
+            continue
+        result.entities_checked += 1
+        have = frozenset().union(*(d.fields for d in ds))
+        fields, why = DECLARED_FIELDS[folder]
+        for f in fields:
+            if f in have:
+                continue
+            if name in gaps.get(folder, {}).get(f, ()):
+                result.vanilla_precedent.append((folder, name, f))
+                continue
+            owner = owners[0]
+            exemption = tags.get(owner.file, {}).get(owner.line)
+            if exemption:
+                used.setdefault(owner.file, set()).add(owner.line)
+            raw = f"{owner.directive}:{name}" if owner.directive else name
+            result.flags.append(Flag(owner.file, owner.line, f, raw, "undeclared", why, exemption))
 
 
 def iter_scan_files(mod_path: str):
@@ -693,20 +1018,37 @@ def build_index(mod_path: str, source: str = "auto", base: str | None = None,
 # --- audit -----------------------------------------------------------------
 
 def audit(mod_path: str | None = None, index: AssetIndex | None = None,
-          source: str = "auto") -> AuditResult:
+          source: str = "auto",
+          vanilla_gaps: dict[str, dict[str, frozenset[str]]] | None = None) -> AuditResult:
+    """`vanilla_gaps`: `load_vanilla_gaps`'s map, read from `mod_path` when
+    None."""
     if mod_path is None:
         from path_constants import mod_path as _default
         mod_path = _default
     stale = None
     if index is None:
         index, stale = build_index(mod_path, source)
+    if vanilla_gaps is None:
+        vanilla_gaps = load_vanilla_gaps(mod_path)
     result = AuditResult(source=index.source, catalog_stale=stale)
+    tags: dict[str, dict[int, dict]] = {}
+    used: dict[str, set[int]] = {}
+    defs: list[Definition] = []
     for abs_p, rel in iter_scan_files(mod_path):
         text = _read(abs_p)
         if text is None:
             continue
         result.files_audited += 1
-        scan_text(text, rel, index, result)
+        tags[rel] = dict(iter_tags(text))
+        used[rel] = set()
+        scan_text(text, rel, index, result, tags[rel], used[rel])
+        folder = declared_folder(rel)
+        if folder:
+            defs += collect_definitions(text, rel, folder)
+    check_declarations(defs, vanilla_gaps, tags, used, result)
+    for rel in sorted(tags):
+        for line in sorted(set(tags[rel]) - used[rel]):
+            result.stale_tags.append(StaleTag(rel, line))
     result.flags.sort(key=lambda f: (f.file, f.line, f.value))
     result.skipped.sort(key=lambda s: (s.file, s.line, s.value))
     result.stale_tags.sort(key=lambda t: (t.file, t.line))
@@ -714,6 +1056,8 @@ def audit(mod_path: str | None = None, index: AssetIndex | None = None,
 
 
 def describe(f: Flag) -> str:
+    if f.kind == "undeclared":
+        return f"`{f.value}` declares no `{f.key}`, which its type needs: {f.detail}"
     ref = f"`{f.key} = {f.value}`" if f.key else f"`{f.value}`"
     if f.kind == "missing":
         if f.detail == "untracked":
@@ -761,7 +1105,9 @@ def render_report(result: AuditResult) -> str:
         "- `unknown_media_alias`: a `video = name` that names no media alias;",
         "- `unrooted`, `unknown_extension`, `backslash`, `whitespace`: a path that",
         "  doesn't start at `gfx/`, has an unknown extension, uses `\\`, or has spaces",
-        "  around it inside its quotes.",
+        "  around it inside its quotes;",
+        "- `undeclared`: a mod entity (plain or `REPLACE:`, with its `INJECT:`s) that",
+        "  declares no art in a field its type needs (see *Declarations checked*).",
         "",
         "The engine logs a miss only when it first renders the asset. Vanilla comes",
         "from the install when there is one, else from",
@@ -770,8 +1116,10 @@ def render_report(result: AuditResult) -> str:
         "Fix: point the field at an existing file (list the vanilla folder for the",
         "closest by name and meaning), write the path from `gfx/` with `/`, fix the",
         "casing, `git add` a file that is on disk but untracked, or add the art.",
+        "For `undeclared`, add the field (a `REPLACE:` restates vanilla's).",
         "",
-        "Suppress a deliberate case on the path's line:",
+        "Suppress a deliberate case on the path's line, or for `undeclared` on the",
+        "entity's opening `<name> = {` line:",
         "`# REVIEWED YYYY-MM-DD (texture_reference): why`",
         "",
         "## Unreviewed flags",
@@ -813,6 +1161,19 @@ def render_report(result: AuditResult) -> str:
                 for f in exemp]
         out.append("")
 
+    out += ["## Declarations checked", "",
+            "Each mod entity in these `common/` folders must declare the field. An entity",
+            "the mod only `INJECT:`s into is vanilla's. Why each is checked, and the types",
+            "and fields left out, are in `texture_reference_audit.py`'s docstring.",
+            ""]
+    out += [f"- `{folder}`: {', '.join(f'`{x}`' for x in fields)}"
+            for folder, (fields, _why) in sorted(DECLARED_FIELDS.items())]
+    out.append("")
+    if result.vanilla_precedent:
+        out += ["Undeclared as vanilla's entity of the same name is, so not flagged:", ""]
+        out += [f"- `{folder}` `{name}`: `{f}`" for folder, name, f in sorted(result.vanilla_precedent)]
+        out.append("")
+
     out += ["## Skipped", "",
             "Not resolved: `templated` (built from `$PARAM$` or a `[...]` expression) and",
             "`other_extension` (a `gfx/` path to a mesh, entity, animation or other file",
@@ -852,6 +1213,9 @@ def summary(result: AuditResult) -> dict:
         **{f"skipped_{k}": sum(1 for s in result.skipped if s.kind == k) for k in SKIP_KINDS},
         "files_audited": result.files_audited,
         "references_checked": result.references_checked,
+        "undeclared": sum(1 for f in result.flags if f.kind == "undeclared" and not f.exemption),
+        "entities_checked": result.entities_checked,
+        "vanilla_precedent": len(result.vanilla_precedent),
         "resolved": dict(sorted(result.resolved.items())),
         "vanilla_source": result.source,
         "catalog_stale": result.catalog_stale,

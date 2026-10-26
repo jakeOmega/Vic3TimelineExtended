@@ -12,7 +12,9 @@ Flagged in `common/`, `events/` and `gui/`, for any value that starts with
 - `unknown_media_alias`: a `video = name` that names no media alias;
 - `unrooted`, `unknown_extension`, `backslash`, `whitespace`: a path that
   doesn't start at `gfx/`, has an unknown extension, uses `\`, or has spaces
-  around it inside its quotes.
+  around it inside its quotes;
+- `undeclared`: a mod entity (plain or `REPLACE:`, with its `INJECT:`s) that
+  declares no art in a field its type needs (see *Declarations checked*).
 
 The engine logs a miss only when it first renders the asset. Vanilla comes
 from the install when there is one, else from
@@ -21,8 +23,10 @@ from the install when there is one, else from
 Fix: point the field at an existing file (list the vanilla folder for the
 closest by name and meaning), write the path from `gfx/` with `/`, fix the
 casing, `git add` a file that is on disk but untracked, or add the art.
+For `undeclared`, add the field (a `REPLACE:` restates vanilla's).
 
-Suppress a deliberate case on the path's line:
+Suppress a deliberate case on the path's line, or for `undeclared` on the
+entity's opening `<name> = {` line:
 `# REVIEWED YYYY-MM-DD (texture_reference): why`
 
 ## Unreviewed flags
@@ -39,6 +43,72 @@ _None._
 ## Reviewed exemptions
 
 _None._
+
+## Declarations checked
+
+Each mod entity in these `common/` folders must declare the field. An entity
+the mod only `INJECT:`s into is vanilla's. Why each is checked, and the types
+and fields left out, are in `texture_reference_audit.py`'s docstring.
+
+- `acceptance_statuses`: `background`, `large_icon`, `small_icon`
+- `ai_strategic_region_stance_types`: `icon`
+- `ai_strategies`: `icon`
+- `alert_types`: `texture`
+- `battle_conditions`: `icon`
+- `buildings`: `background`
+- `character_roles`: `texture`
+- `character_traits`: `texture`
+- `cohesion_levels`: `background_texture`
+- `combat_unit_experience_levels`: `icon`
+- `combat_unit_groups`: `icon`
+- `combat_unit_types`: `combat_unit_image/texture`
+- `commander_orders`: `texture`
+- `commander_ranks`: `texture`
+- `company_charter_types`: `icon`
+- `company_types`: `icon`, `background`
+- `decrees`: `texture`
+- `diplomatic_plays`: `texture`
+- `goods`: `texture`
+- `harvest_condition_types`: `icon`
+- `ideologies`: `icon`
+- `institutions`: `icon`, `background_texture`
+- `interest_group_traits`: `icon`
+- `interest_groups`: `texture`
+- `interest_tier_types`: `icon`, `small_icon`
+- `laws`: `icon`
+- `liberty_desire_levels`: `background_texture`
+- `messages`: `texture`
+- `military_formation_flags`: `icon`
+- `mobilization_option_groups`: `icon`
+- `mobilization_options`: `texture`
+- `naval_battle_conditions`: `icon`
+- `naval_mission_types`: `icon`, `map_texture`
+- `objectives`: `icon`, `enabled_background`
+- `parties`: `icon`
+- `political_lobbies`: `texture`
+- `political_movement_categories`: `icon`
+- `pop_types`: `texture`
+- `power_bloc_identities`: `icon`, `background`
+- `power_bloc_map_textures`: `texture`
+- `power_bloc_principles`: `icon`, `background`
+- `prestige_goods`: `texture`
+- `production_method_groups`: `texture`
+- `production_methods`: `texture`
+- `religions`: `icon`
+- `ship_groups`: `icon`
+- `ship_modification_slots`: `icon`
+- `ship_modifications`: `icon`
+- `ship_types`: `icon`, `profile_texture`
+- `ship_veterancy_levels`: `icon`
+- `state_traits`: `icon`
+- `static_modifiers`: `icon`
+- `technology/technologies`: `texture`
+- `treaty_articles`: `icon`
+- `war_goal_types`: `icon`
+
+Undeclared as vanilla's entity of the same name is, so not flagged:
+
+- `static_modifiers` `country_gdp_construction`: `icon`
 
 ## Skipped
 
