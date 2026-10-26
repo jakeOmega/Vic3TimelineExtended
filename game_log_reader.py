@@ -87,6 +87,8 @@ EXTERNAL_MOD_SOURCE_FILES: frozenset[str] = frozenset({
 # dead until #254).
 SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     "gamedatabase.h:378": "duplicated_key",
+    # `You are trying to inject/replace to a non-existing entry: X:Inject in
+    # the file ...` (read in game, scripting_best_practices.md § Load Order).
     "gamedatabase.h:395": "inject_to_missing",
     "pdx_persistent_reader.cpp:268": "script_parse_error",
     "jomini_trigger.cpp:721": "inconsistent_trigger_scope",

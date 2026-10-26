@@ -1996,6 +1996,69 @@ class MovementEndpointTests(unittest.TestCase):
                          ["lawgroup_privacy"])
 
 
+class ExternalModOverlapEndpointTests(unittest.TestCase):
+    """GET /external-mod-overlap through do_GET (#1170), on
+    test_external_mod_overlap's two fake mods."""
+
+    def setUp(self):
+        import external_mod_overlap as emo
+        import test_external_mod_overlap as temo
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.ours, self.theirs = temo.build_fake_mods(tmp.name)
+        self.missing = os.path.join(tmp.name, "missing")
+        self.empty = os.path.join(tmp.name, "empty")
+        os.makedirs(self.empty)
+        vanilla = emo.VanillaIndex(keys=temo.FAKE_VANILLA)
+        for patch in (mock.patch.object(mss, "mod_path", self.ours),
+                      mock.patch.object(mss, "_overlap_vanilla_index", return_value=vanilla)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_report(self):
+        status, body = self.get(f"/external-mod-overlap?path={quote(self.theirs)}")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["mod_name"], "Fake Pop Mod")
+        verdicts = {c["key"]: c["verdict"] for c in body["key_collisions"]}
+        self.assertEqual(verdicts, {"law_a": "ours_wiped", "great_power": "both_merge",
+                                    "state_turmoil": "both_merge",
+                                    "decree_x": "depends_on_playset"})
+        self.assertNotIn("trace", body["key_collisions"][0])
+        self.assertEqual([p["path"] for p in body["path_collisions"]][0],
+                         "common/decrees/modified.txt")
+        status, body = self.get(f"/external-mod-overlap?path={quote(self.theirs)}&trace=true")
+        self.assertEqual(status, 200)
+        self.assertIn("trace", body["key_collisions"][0])
+
+    def test_errors(self):
+        for path, status in (
+            ("/external-mod-overlap", 400),
+            (f"/external-mod-overlap?path={quote(self.missing)}", 400),
+            (f"/external-mod-overlap?path={quote(self.empty)}", 400),
+            (f"/external-mod-overlap?path={quote(self.ours)}", 400),
+            (f"/external-mod-overlap?path={quote(self.theirs)}&trace=maybe", 400),
+            (f"/external-mod-overlap/extra?path={quote(self.theirs)}", 404),
+        ):
+            with self.subTest(path=path):
+                status_got, body = self.get(path)
+                self.assertEqual(status_got, status)
+                self.assertIn("error", body)
+
+    def test_a_full_reload_drops_the_vanilla_index(self):
+        mss._overlap_vanilla_cache["x"] = object()
+        self.addCleanup(mss._overlap_vanilla_cache.clear)
+        with mock.patch.object(mss, "_choose_vanilla_source",
+                               side_effect=RuntimeError("stop after the cache step")):
+            with self.assertRaises(RuntimeError):
+                mss._load_mod_state()
+        self.assertEqual(mss._overlap_vanilla_cache, {})
+
+
 class PmEmploymentEndpointTests(unittest.TestCase):
     """GET /pm-employment through do_GET (#990), on test_pm_employment_audit's
     fixture."""
