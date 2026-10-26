@@ -787,7 +787,7 @@ gm_state_tr_monthly = {
 # state (gm_trophy_values.txt, Occupation), and only an enemy can occupy.
 gm_state_tr_find_occupier = {
 	save_temporary_scope_as = gm_tmp_tr_site
-	owner = {
+	owner ?= {
 		random_enemy_in_war = {
 			limit = {
 				save_temporary_scope_as = gm_tmp_tr_enemy
@@ -974,11 +974,14 @@ gm_tr_repair_places = {
 gm_tr_monthly_one = {
 	clear_saved_scope = gm_tr_ai_holder
 	clear_saved_scope = gm_tr_ai_claimant
+	# owner ?=: a state can stand ownerless for a pulse while a revolt's part
+	# merges back (2026-10-25: six trophies, the month France's revolution
+	# ended); gm_tr_repair_places finds it again once it is gone.
 	var:gm_tr_site ?= {
-		owner = { save_scope_as = gm_tr_ai_holder }
+		owner ?= { save_scope_as = gm_tr_ai_holder }
 	}
 	var:gm_tr_origin ?= {
-		owner = { save_scope_as = gm_tr_ai_claimant }
+		owner ?= { save_scope_as = gm_tr_ai_claimant }
 	}
 	if = {
 		limit = {
@@ -1127,7 +1130,8 @@ gm_tr_list_one = {
 			add_to_variable_list = { name = gm_trophies_here target = scope:gm_tr_listing }
 			gm_tr_count_add = { VAR = gm_tr_here_count ADD = 1 }
 			gm_tr_count_add = { VAR = gm_tr_here_grandeur ADD = scope:gm_tr_listing.var:gm_tr_grandeur }
-			owner = {
+			# An ownerless state for a pulse (gm_tr_monthly_one)
+			owner ?= {
 				gm_tr_country_listed = yes
 				add_to_variable_list = { name = gm_trophies_held target = scope:gm_tr_listing }
 				change_variable = { name = gm_tr_held_count add = 1 }
@@ -1142,7 +1146,7 @@ gm_tr_list_one = {
 			gm_tr_holder_owns_origin = no
 		}
 		var:gm_tr_origin = {
-			owner = {
+			owner ?= {
 				gm_tr_country_listed = yes
 				add_to_variable_list = { name = gm_trophies_abroad target = scope:gm_tr_listing }
 				change_variable = { name = gm_tr_abroad_count add = 1 }
