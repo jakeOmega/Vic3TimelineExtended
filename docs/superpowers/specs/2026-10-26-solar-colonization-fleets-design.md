@@ -151,10 +151,18 @@ ideas).
   (`common/script_values/zz_te_war_support_injections.txt`): root the
   country, `scope:war` the war, one `add = { value desc }` per row, no
   `every_country` and no randomness.
-- A building's `has_active_production_method`, `level` and `occupancy` read in
-  building scope (`te_aipm_selfcheck_on_actions.txt:38`, `docs/engine/triggers_parsed.txt` § occupancy),
-  reached from the country with `every_scope_state` / `every_scope_building`
-  (`solar_receiver_slots_remaining`).
+- A production method's `state_modifiers = { workforce_scaled = { … } }` on a
+  script-only state type, read in state scope as `modifier:<type>` (the
+  barracks training methods' `state_reserve_battalions_add`,
+  `barracks_training_values.txt:29`); a `script_only` type still renders in
+  tooltips (`scripting_best_practices.md`).
+- `add_modifier` in building scope, from `every_scope_building`, at
+  `multiplier = root.var:<x>` (`resettlement_refresh_destination_readout`,
+  `resettlement_effects.txt:495`, confirmed in game 2026-09-27; the Orbital
+  Battlestation's progress, `extra_on_actions.txt:3091`); and
+  `building_goods_input_mult`, the building-masked multiplier on a building's
+  goods consumed (`docs/engine/modifiers_summary.txt`; vanilla's
+  `mobilized_battalion_consumption` sets it to 1 on a mobilized barracks).
 - A government building whose `can_build_government` reads the country, so the
   AI builds no further than a script value allows (slice 4's
   `sr_ebase_may_build_government`).
@@ -172,8 +180,9 @@ ideas).
 
 **Unverified, each with a self-check or a play-test row (§ 18):**
 
-- That Space Command's levels × occupancy × method rate, read in script, gives
-  its construction (`ship_construction`).
+- That Space Command's methods' state modifier reaches its state and reads
+  above 0 once staffed (`ship_construction`), and that the upkeep on the
+  building raises its input bill and not its output (a play-test row).
 - That a fleet lands in the month its leg's table gives (`fleet_leg`, on
   `colony_fleet_arrival`'s pattern).
 - That a war goal's `infamy` block sees `scope:target_country` and `root` in a
@@ -348,15 +357,16 @@ Space Program, expandable, `can_build_private` no.
 | Torch Yards | Muon-Catalyzed Fusion Reactors | 1.5 | Launch Capacity 600, Advanced Materials 15, electricity 200 | same |
 | Antimatter Yards | Antimatter Production and an Antimatter Containment Facility | 2.0 | Launch Capacity 700, Advanced Materials 20, electricity 400 | same |
 
-- **Construction**, `sr_sc_rate` (country value): each Space Command's level ×
-  occupancy × its method's rate, read from the building in script (§ Engine
-  facts), counting only buildings in states their owner controls (§ 5.1).
-  Not a workforce-scaled modifier, as the batteries' figures are (§ 15): the
-  fleet's upkeep raises Space Command's throughput (below), a workforce-scaled
-  modifier scales with throughput (slice 4's fabrication does), so it would
-  feed the upkeep back into construction and its tooltip would overstate the
-  rate. Each method's description states its rate a level instead, and the
-  Space Command section shows the month's figure.
+- **Construction is a modifier the player can read**, as the batteries'
+  figures are (§ 15). Each method carries its rate as a script-only,
+  workforce-scaled state modifier in its `state_modifiers`,
+  `state_sr_ship_construction_add` ("Fleet Strength Built a Month"), so the
+  method's tooltip shows what a level builds and staffing is in the number.
+  `sr_sc_rate` (country value) sums `modifier:state_sr_ship_construction_add`
+  over the states that pass `sr_state_held_by_owner` (§ 5.1). This works only
+  because the upkeep below scales inputs, not throughput: a workforce-scaled
+  modifier follows throughput (slice 4's fabrication does), so an upkeep on
+  throughput would feed the fleet's size back into its own construction.
 - **The build mix** (F9, panel orders): five weights 0 to 3,
   `sr_sc_mix_<role>`, warships 2, carriers 1, tenders 1, siege and rapid 0 to
   start. The month's construction is shared by weight and added to the **home
@@ -364,11 +374,18 @@ Space Program, expandable, `can_build_private` no.
   at Earth when there is none; nothing is built with all nine slots away from
   Earth). New strength comes at full, with the nation's drive; joining a fleet
   on an older drive it takes that fleet's drive until the fleet refits.
-- **Upkeep** (the house rule: upkeep is an input multiplier on the building
-  that does the work): `sr_fleet_upkeep`, a country static modifier at
-  multiplier = full strength in service ÷ 10, +1% Space Command throughput a
-  unit, refreshed monthly from the country pulse (its one refresh site;
-  `gen_nation_tab.py` gains its row).
+- **Upkeep scales Space Command's inputs** (the house rule: upkeep is an
+  input multiplier on the building that does the work; owner, on the PR: the
+  inputs, not throughput). `sr_fleet_upkeep`, a static modifier
+  (`building_goods_input_mult` +1% a unit), sits on the Space Command building
+  itself, at multiplier = `root.var:sr_fleet_upkeep_units` (full strength in
+  service ÷ 10, set on the country first). The fleets' monthly country step
+  refreshes it, removed first, its one refresh site. It can't be a country
+  modifier: `building_goods_input_mult` is building-masked, so on the country
+  it would raise the inputs of every building the country owns. So a fleet of
+  300 makes Space Command consume 30% more goods, and builds no faster for it.
+  The building's panel shows the line. `gen_nation_tab.py` lists it under
+  `NOT_ON_COUNTRY`.
 - **The Orbital Battlestation** fights at Earth (6b, § 7.5).
 
 ### 5.1 Occupied states
@@ -804,9 +821,10 @@ options' records in `custom_tooltip`s (`silent_variable_audit`):
 Added to `docs/testing/solar-colonies-playtest.md`:
 
 - **`ship_construction`** (6a): a month after a Space Command first runs at half
-  staff or more: OK when `sr_sc_rate` is above 0, BROKEN otherwise (fallback:
-  a workforce-scaled country modifier on the method, accepting that upkeep
-  feeds construction).
+  staff or more in a state its owner controls: OK when `sr_sc_rate` is above
+  0, BROKEN otherwise (fallback: compute the rate in script, level ×
+  occupancy × the method's rate by `has_active_production_method`, and state
+  it in the methods' descriptions).
 - **`fleet_leg`** (6a): the first fleet that lands logs its leg, its drive, the
   months flown against the table; BROKEN if it landed two or more months late
   (fallback: land fleets from the country pulse as well).
@@ -849,7 +867,7 @@ our Earth by the largest rival.
 2. **The roles' figures** (§ 3), and **screens first** for losses.
 3. **Lanchester's k = 0.1 a month**, quality +25% a technology.
 4. **Space Command's rates** 0.5 to 2 strength a level a month; 5,000 jobs a
-   level; upkeep +1% throughput a 10 points of fleet.
+   level; upkeep +1% of its input goods a 10 points of fleet.
 5. **Integrity**: hardness 50 + 50 a Defences level; regains 5 a month.
 6. **Seizure needs integrity 0 and marines above garrison and militia**; a
    battalion of militia a 20,000 people.
@@ -875,10 +893,11 @@ our Earth by the largest rival.
     the launch site is my extension of it, the same rule applied to the
     building every launch leaves from. An occupied colony's Defences likewise
     fire for no one (§ 9.2).
-18. **The batteries' figures are state modifiers the script sums** (§ 15, the
-    owner's suggestion), and Space Command's rate is in its methods'
-    descriptions rather than a modifier (§ 5), because its upkeep raises its
-    throughput.
+18. **Space Command's rate and the batteries' figures are state modifiers the
+    script sums** (§§ 5, 15, the owner's suggestions on the PR), and **the
+    fleet's upkeep is a modifier on the Space Command building that raises its
+    input goods** (`building_goods_input_mult`), so a bigger fleet costs more
+    and builds no faster.
 
 ## 21. Build order
 
