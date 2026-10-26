@@ -14,6 +14,13 @@ definition whose `join_weight` the merged entity carries (`"terms_order":
 loaded from `vanilla_parsed/`), or doesn't reproduce the merged field, they
 come from the merged entity instead (`"terms_order": "by_key"`).
 
+Which block carries the field follows ModState's INJECT rules. A definition or
+`REPLACE:` of the party sets it, or leaves the party without one. Inside an
+`INJECT:` of the party, `join_weight` and `REPLACE:join_weight` replace it,
+while `INJECT:join_weight` merges into it, after which no single file carries
+it. A row names no `join_weight_file` when no file's block reproduces the
+merged field.
+
 `join_weight_terms` is flat: one string per desc, in order. A term (one
 top-level entry of the field: `value`, `add`, `multiply`, `if`, `else_if`,
 ...) contributes its desc; a branch whose nested blocks carry several descs
@@ -34,14 +41,12 @@ logger = logging.getLogger(__name__)
 FIELD = "join_weight"
 SNAPSHOT_FILE = "vanilla_parsed/common/parties.json"
 _REPLACING = (None, "REPLACE", "REPLACE_OR_CREATE")
+_PARSER = ParadoxFileParser()
 
 
 def split_directive(raw_key):
-    """(`INJECT`|`REPLACE`|`REPLACE_OR_CREATE`|None, key) for a top-level key."""
-    head, sep, tail = raw_key.partition(":")
-    if sep and head in ("INJECT", "REPLACE", "REPLACE_OR_CREATE"):
-        return head, tail
-    return None, raw_key
+    """(`INJECT`|`REPLACE`|`REPLACE_OR_CREATE`|None, key), as the parser splits it."""
+    return _PARSER._split_directive(raw_key)
 
 
 def entries(block):
@@ -74,6 +79,17 @@ def field(block, name):
     for key, value in entries(block):
         if key == name:
             found = value
+    return found
+
+
+def _field_write(block):
+    """(directive, value) of the last entry in `block` that names the field,
+    with or without a directive (`REPLACE:join_weight`), or None."""
+    found = None
+    for key, value in entries(block):
+        directive, name = split_directive(key)
+        if name == FIELD:
+            found = (directive, value)
     return found
 
 
@@ -182,9 +198,9 @@ def party_rows(merged, vanilla, sites):
 
     Row: {"key", "source": "vanilla"|"mod"|"both", "files": [{"source",
     "file", "directive"?}], "join_weight_file": the site whose join_weight
-    the merged party carries (or None), "terms_order": "source"|"by_key",
-    "join_weight_terms": [...], "terms": the per-term detail}."""
-    normalizer = ParadoxFileParser()
+    the merged party carries, or None when no site's block reproduces the
+    merged field, "terms_order": "source"|"by_key", "join_weight_terms": [...],
+    "terms": the per-term detail}."""
     rows = []
     for key in sorted(merged):
         files = []
@@ -197,21 +213,24 @@ def party_rows(merged, vanilla, sites):
                 ref = _site_ref(site, directive)
                 if ref not in files:
                     files.append(ref)
-                found = field(value, FIELD)
-                # A definition or REPLACE sets the whole party; an INJECT
-                # naming join_weight replaces that field (see the module doc).
+                write = _field_write(value)
                 if directive in _REPLACING:
-                    carrier = (ref, found, site["ordered"]) if found is not None else None
-                elif found is not None:
-                    carrier = (ref, found, site["ordered"])
+                    # A definition or REPLACE sets the whole party.
+                    carrier = None if write is None else (ref, write[1], site["ordered"])
+                elif write is None:
+                    pass  # an INJECT that leaves the field alone
+                elif write[0] == "INJECT":
+                    carrier = None  # merged into the field: no one block carries it
+                else:
+                    carrier = (ref, write[1], site["ordered"])
         touched = any(ref["source"] == "mod" for ref in files)
         if key not in vanilla:
             source = "mod"
         else:
             source = "both" if touched else "vanilla"
         merged_field = field(merged[key], FIELD)
-        if (carrier is not None and carrier[2]
-                and normalizer._normalize_fully(carrier[1]) == merged_field):
+        matches = carrier is not None and _PARSER._normalize_fully(carrier[1]) == merged_field
+        if matches and carrier[2]:
             order, term_list = "source", terms(carrier[1])
         else:
             order, term_list = "by_key", terms(merged_field) if merged_field is not None else []
@@ -219,7 +238,7 @@ def party_rows(merged, vanilla, sites):
             "key": key,
             "source": source,
             "files": files,
-            "join_weight_file": carrier[0] if carrier is not None else None,
+            "join_weight_file": carrier[0] if matches else None,
             "terms_order": order,
             "join_weight_terms": flat_terms(term_list),
             "terms": term_list,

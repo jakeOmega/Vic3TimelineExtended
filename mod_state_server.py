@@ -204,6 +204,7 @@ startup_elapsed: float = 0.0
 engine_docs: dict = {}  # Parsed engine documentation (effects, triggers, etc.)
 dev_reference_docs: dict = {}  # .md files from base game common/ dirs
 _company_catalog_cache: tuple[ModState, list[dict]] | None = None
+_party_catalog_cache: tuple[ModState, list[dict]] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -4232,6 +4233,31 @@ def _company_catalog():
     return rows
 
 
+def _party_catalog():
+    """party_catalog rows for the loaded state, cached on `ms` like
+    _company_catalog (a reload clears it). The vanilla side's files are the
+    game's, or the snapshot's JSON when vanilla came from vanilla_parsed/."""
+    global _party_catalog_cache
+    import party_catalog
+
+    parties = ms.get_data("Parties") if ms is not None else None
+    if not parties:
+        raise DataNotLoaded("Parties")
+    if _party_catalog_cache is not None and _party_catalog_cache[0] is ms:
+        return _party_catalog_cache[1]
+    vanilla_parser = ms.base_parsers.get("Parties")
+    vanilla = (vanilla_parser.data if vanilla_parser is not None else None) or {}
+    if _vanilla_source.get("kind") == "vanilla_parsed":
+        sites = [party_catalog.snapshot_site(vanilla)] if vanilla else []
+    else:
+        sites = party_catalog.directory_sites(
+            base_game_paths.get("Parties"), base_game_path, "vanilla")
+    sites += party_catalog.directory_sites(mod_paths.get("Parties"), mod_path, "mod")
+    rows = party_catalog.party_rows(parties, vanilla, sites)
+    _party_catalog_cache = (ms, rows)
+    return rows
+
+
 def _data_contains_string(obj, needle):
     """Recursively check if *needle* appears as a string value anywhere in the data tree."""
     if isinstance(obj, str):
@@ -5872,7 +5898,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movement-stances": lambda: self._movement_stances(rest, params),
             # Party types and their merged join_weight terms (#1164)
             "parties": lambda: self._parties(rest, params),
-            "references":lambda: self._references(rest),
+            "references": lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
@@ -7621,25 +7647,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         """GET /parties[?desc=<desc>], GET /parties/<key> (#1164): who defines
         each party and the descs of its merged join_weight, in source order
         (party_catalog.py)."""
-        import party_catalog
-
-        parties = ms.get_data("Parties")
-        if not parties:
-            raise DataNotLoaded("Parties")
-        vanilla_parser = ms.base_parsers.get("Parties")
-        vanilla = (vanilla_parser.data if vanilla_parser is not None else None) or {}
-        if _vanilla_source.get("kind") == "vanilla_parsed":
-            sites = [party_catalog.snapshot_site(vanilla)] if vanilla else []
-        else:
-            sites = party_catalog.directory_sites(
-                base_game_paths.get("Parties"), base_game_path, "vanilla")
-        sites += party_catalog.directory_sites(mod_paths.get("Parties"), mod_path, "mod")
-        rows = party_catalog.party_rows(parties, vanilla, sites)
+        rows = _party_catalog()
         if parts:
             row = next((r for r in rows if r["key"] == parts[0]), None)
             if row is None:
                 raise NotFound(parts[0])
-            return row
+            return json.loads(json.dumps(row))  # a copy: the cached row stays as built
         desc = (params.get("desc") or [None])[0]
         return [
             {k: v for k, v in row.items() if k != "terms"}
@@ -9829,6 +9842,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
     None.
     """
     global _tech_unlocks_index_cache, _last_validation_report, _company_catalog_cache
+    global _party_catalog_cache
     t0 = time.monotonic()
     try:
         mod_state.reload_mod(mod_paths)
@@ -9845,6 +9859,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
                 mod_state.add_localization(loc_dir)
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
+        _party_catalog_cache = None
         _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
@@ -10153,7 +10168,7 @@ _vanilla_source_warnings: list[dict] = []
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _company_catalog_cache
+    global _company_catalog_cache, _party_catalog_cache
     global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
@@ -10201,6 +10216,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     _last_validation_report = None
     _tech_unlocks_index_cache = None
     _company_catalog_cache = None
+    _party_catalog_cache = None
     _invalidate_call_index()
     _annotator_compute_cache.clear()
 

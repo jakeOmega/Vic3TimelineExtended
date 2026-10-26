@@ -2,6 +2,7 @@
 registration, an injected join_weight replacing the field, /raw/Party/<key>,
 and GET /parties. No game install needed."""
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +15,8 @@ from mod_state import VANILLA_COMMON_DIRS, ModState
 from paradox_file_parser import ParadoxFileParser
 
 REPO = Path(__file__).resolve().parent
+sys.path.insert(0, str(REPO / "scripts" / "generators"))
+import gen_party_join_weights  # noqa: E402
 
 # Vanilla-shaped: a base value, a branch with two descs (one repeated), a
 # desc-less step, a culture term, and an if/else_if pair whose else_if the
@@ -75,6 +78,24 @@ mod_party = {
 }
 """
 
+# No `value` line on either side: the one shape ModState merges instead of
+# replacing (ParadoxFileParser._is_script_value_field needs a `value` line on
+# one side). No vanilla or mod party is shaped like this.
+NO_VALUE_VANILLA = """
+plain_party = {
+	join_weight = {
+		add = { value = 2 desc = "from_x" }
+	}
+}
+"""
+NO_VALUE_INJECT = """
+INJECT:plain_party = {
+	join_weight = {
+		add = { value = 1 desc = "from_z" }
+	}
+}
+"""
+
 EXPECTED_EXAMPLE_TERMS = [
     "base_value", "from_a", "from_b", "from_one_prior_member",
     "from_two_prior_members", "if = {...}", "mod_penalty",
@@ -115,7 +136,7 @@ class RegistrationTests(unittest.TestCase):
         self.assertEqual(manifest["entity_types"]["Parties"]["file"], "common/parties.json")
         state, _ = _committed_state()
         vanilla = state.base_parsers["Parties"].data
-        self.assertEqual(len(vanilla), 12)
+        self.assertEqual(len(vanilla), manifest["entity_types"]["Parties"]["entities"])
         self.assertIn("social_democrat_party", vanilla)  # in social_democrats_party.txt
         self.assertIn("revolutionary_party", vanilla)
 
@@ -159,6 +180,36 @@ class InjectReplacesJoinWeightTests(unittest.TestCase):
         self.assertIn("name", merged)
         self.assertIn("color", merged)
 
+    def test_a_value_line_on_the_injected_side_alone_replaces(self):
+        tmp, _root, state = _state(NO_VALUE_VANILLA, NO_VALUE_INJECT.replace(
+            'add = { value = 1 desc = "from_z" }', 'value = 5\n\t\tadd = { value = 1 desc = "from_z" }'))
+        self.addCleanup(tmp.cleanup)
+        merged = _norm(state.get_data("Parties")["plain_party"][1]["join_weight"])
+        self.assertNotIn("from_x", merged)
+        self.assertIn("from_z", merged)
+
+    def test_no_value_line_on_either_side_merges(self):
+        # The gap the rule leaves: the two `add` blocks merge like a modifier
+        # block, values summed (2 + 1) under the injected desc, where the
+        # engine would read the injected block alone (1).
+        tmp, _root, state = _state(NO_VALUE_VANILLA, NO_VALUE_INJECT)
+        self.addCleanup(tmp.cleanup)
+        merged = state.get_data("Parties")["plain_party"][1]["join_weight"][1]
+        self.assertEqual(merged["add"][1]["value"], ("=", "3"))
+        self.assertEqual(merged["add"][1]["desc"], ("=", '"from_z"'))
+
+    def test_nested_replace_and_inject_of_the_field(self):
+        replace = 'INJECT:example_party = {\n\tREPLACE:join_weight = { add = { value = 1 desc = "probe" } }\n}\n'
+        tmp, _root, state = _state(VANILLA, replace)
+        self.addCleanup(tmp.cleanup)
+        self.assertEqual(set(state.get_data("Parties")["example_party"][1]["join_weight"][1]), {"add"})
+        inject = 'INJECT:example_party = {\n\tINJECT:join_weight = { add = { value = 1 desc = "probe" } }\n}\n'
+        tmp, _root, state = _state(VANILLA, inject)
+        self.addCleanup(tmp.cleanup)
+        merged = _norm(state.get_data("Parties")["example_party"][1]["join_weight"])
+        self.assertIn("probe", merged)
+        self.assertIn("base_value", merged)
+
     def test_committed_injects_replace_the_snapshots_fields(self):
         state, _ = _committed_state()
         merged = state.get_data("Parties")
@@ -166,7 +217,8 @@ class InjectReplacesJoinWeightTests(unittest.TestCase):
         injects = {party_catalog.split_directive(k)[1]: v
                    for k, v in party_catalog.raw_entries(text)
                    if party_catalog.split_directive(k)[0] == "INJECT"}
-        self.assertEqual(len(injects), 11)
+        vanilla = state.base_parsers["Parties"].data
+        self.assertEqual(set(injects), set(vanilla) - gen_party_join_weights.SKIPPED_PARTIES)
         normalizer = ParadoxFileParser()
         for party, block in injects.items():
             with self.subTest(party=party):
@@ -177,13 +229,17 @@ class InjectReplacesJoinWeightTests(unittest.TestCase):
 
 class PartiesEndpointTests(unittest.TestCase):
     def setUp(self):
-        self.tmp, self.root, self.state = _state(VANILLA, INJECT)
-        self.addCleanup(self.tmp.cleanup)
+        self.use(VANILLA, INJECT)
+        self.handler = object.__new__(mss.ModStateHandler)
+
+    def use(self, vanilla_text, mod_text):
+        """Serve a ModState of these two party files, read from the game files."""
+        tmp, self.root, self.state = _state(vanilla_text, mod_text)
+        self.addCleanup(tmp.cleanup)
         self.patch(ms=self.state, mod_path=str(self.root / "mod"), base_game_path=str(self.root / "game"),
                    mod_paths={"Parties": str(self.root / "mod" / "common" / "parties")},
                    base_game_paths={"Parties": str(self.root / "game" / "common" / "parties")},
-                   _vanilla_source={"kind": "game_files"})
-        self.handler = object.__new__(mss.ModStateHandler)
+                   _vanilla_source={"kind": "game_files"}, _party_catalog_cache=None)
 
     def patch(self, **values):
         patcher = mock.patch.multiple(mss, **values)
@@ -254,6 +310,46 @@ class PartiesEndpointTests(unittest.TestCase):
         self.assertEqual(rows["example_party"]["terms_order"], "source")
         self.assertEqual(rows["example_party"]["join_weight_terms"], EXPECTED_EXAMPLE_TERMS)
 
+    def test_nested_replace_of_the_field_carries_it(self):
+        self.use(VANILLA, (
+            "INJECT:example_party = {\n\tREPLACE:join_weight = {\n"
+            '\t\tif = { limit = { always = yes } add = { value = 1 desc = "a" } }\n'
+            '\t\telse_if = { limit = { always = no } add = { value = 2 desc = "b" } }\n'
+            '\t\tif = { limit = { always = yes } add = { value = 3 desc = "c" } }\n'
+            "\t}\n}\n"))
+        row = self.rows()["example_party"]
+        self.assertEqual(row["join_weight_file"],
+                         {"source": "mod", "file": "common/parties/00_parties.txt", "directive": "INJECT"})
+        self.assertEqual((row["terms_order"], row["join_weight_terms"]), ("source", ["a", "b", "c"]))
+
+    def test_no_carrier_when_no_file_reproduces_the_field(self):
+        # An INJECT:join_weight merges into vanilla's field, and so does an
+        # injected block when neither side has a `value` line: no one file
+        # holds the merged field, so the row names none and falls back.
+        for vanilla_text, mod_text, key in (
+            (VANILLA, 'INJECT:example_party = {\n\tINJECT:join_weight = { add = { value = 1 desc = "probe" } }\n}\n',
+             "example_party"),
+            (NO_VALUE_VANILLA, NO_VALUE_INJECT, "plain_party"),
+        ):
+            with self.subTest(party=key):
+                self.use(vanilla_text, mod_text)
+                row = self.rows()[key]
+                self.assertIsNone(row["join_weight_file"])
+                self.assertEqual(row["terms_order"], "by_key")
+                self.assertEqual(len(row["files"]), 2)
+
+    def test_rows_are_cached_until_the_state_changes(self):
+        with mock.patch.object(party_catalog, "directory_sites", wraps=party_catalog.directory_sites) as spy:
+            self.rows()
+            self.request("/parties/example_party")
+            self.assertEqual(spy.call_count, 2)  # vanilla's files and the mod's, once
+            self.use(VANILLA, INJECT)
+            self.rows()
+            self.assertEqual(spy.call_count, 4)
+        # A detail request hands out a copy, not the cached row.
+        self.request("/parties/example_party")[1]["terms"].clear()
+        self.assertTrue(self.request("/parties/example_party")[1]["terms"])
+
     def test_raw_party_alias(self):
         status, body = self.request("/raw/Party/example_party")
         self.assertEqual(status, 200)
@@ -264,12 +360,20 @@ class PartiesEndpointTests(unittest.TestCase):
         state, mod_dirs = _committed_state()
         self.patch(ms=state, mod_path=str(REPO), mod_paths=mod_dirs, _vanilla_source={"kind": "vanilla_parsed"})
         rows = self.rows()
-        self.assertEqual(len(rows), 15)
-        self.assertEqual({k for k, r in rows.items() if r["source"] == "mod"},
-                         {"green_party", "populist_party", "technocratic_party"})
-        self.assertEqual({k for k, r in rows.items() if r["source"] == "vanilla"}, {"revolutionary_party"})
+        vanilla = set(state.base_parsers["Parties"].data)
+        defined, named = set(), set()
+        for path in sorted((REPO / "common" / "parties").glob("*.txt")):
+            for raw_key, _value in party_catalog.raw_entries(path.read_text(encoding="utf-8-sig")):
+                directive, key = party_catalog.split_directive(raw_key)
+                named.add(key)
+                if directive is None:
+                    defined.add(key)
+        self.assertEqual(set(rows), vanilla | defined)
+        self.assertEqual({k for k, r in rows.items() if r["source"] == "mod"}, defined - vanilla)
+        self.assertLessEqual({"green_party", "populist_party", "technocratic_party"}, defined - vanilla)
+        self.assertEqual({k for k, r in rows.items() if r["source"] == "vanilla"}, vanilla - named)
         fptp = set(self.rows("?desc=te_fptp_major_party_join"))
-        self.assertEqual(fptp, set(rows) - {"revolutionary_party"})
+        self.assertEqual(fptp, set(rows) - gen_party_join_weights.SKIPPED_PARTIES)
         self.assertEqual(self.rows("?desc=usa_two_party_system"), {})
         for key in fptp:
             terms = rows[key]["join_weight_terms"]
