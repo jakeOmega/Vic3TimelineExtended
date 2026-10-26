@@ -137,6 +137,7 @@ mod_paths = {
     "PMs": os.path.join(_MOD_COMMON, "production_methods"),
     "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
     "Political Movements": os.path.join(_MOD_COMMON, "political_movements"),
+    "Parties": os.path.join(_MOD_COMMON, "parties"),
     "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
     "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
     "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
