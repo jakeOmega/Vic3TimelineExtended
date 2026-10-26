@@ -165,6 +165,7 @@ INJECT:pmg_base_building_shipyard = {
 	}
 }
 REPLACE:pmg_aeroplanes = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_aeroplane_production
 		pm_aeroplane_production_2
@@ -188,6 +189,7 @@ INJECT:pmg_telephones_category = {
 	}
 }
 REPLACE:pmg_radios_category = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {
 		pm_radios
 		pm_vhf_and_uhf_transmission
@@ -1675,6 +1677,7 @@ REPLACE_OR_CREATE:pmg_base_building_mind_upload_nexus = {
 #==================================================
 
 pmg_base_building_antimatter_facility_construction_site = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_facility_construction_paused
 		pm_antimatter_facility_construction_slow
@@ -1684,18 +1687,21 @@ pmg_base_building_antimatter_facility_construction_site = {
 }
 
 pmg_base_building_antimatter_facility = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_facility
 	}
 }
 
 pmg_base_building_antimatter_engine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_engine
 	}
 }
 
 pmg_base_building_antimatter_warhead_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
 		pm_antimatter_warhead_plant
 	}
