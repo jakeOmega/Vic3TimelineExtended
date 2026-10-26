@@ -160,6 +160,37 @@ REPLACE:mod_base = { x = 1 }
             self.assertIn((kind, 'inject_only'), errors)
             self.assertIn((kind, 'try_replace_only'), errors)
 
+    def test_directive_with_space_after_the_colon(self):
+        defined, targets = audit.depth0_names('INJECT: spaced = { x = 1 }\n'
+                                              'REPLACE_OR_CREATE: made = { x = 1 }\n')
+        self.assertEqual(({'made'}, {'spaced'}), (defined, targets))
+        self.assertEqual({'made'}, audit.defined_names('INJECT: spaced = { x = 1 }\n'
+                                                       'REPLACE_OR_CREATE: made = { x = 1 }\n'))
+
+    def test_merge_target_warns_offline_and_errors_with_vanilla(self):
+        # No snapshot covers scripted GUIs or custom loc: offline, a name the
+        # mod only INJECTs is presumed vanilla (a warning); once vanilla's
+        # files are read it must be defined there.
+        self.write('common/scripted_guis/inject.txt', 'INJECT:vanilla_sgui = { is_shown = { always = yes } }\n')
+        self.write('common/customizable_localization/inject.txt',
+                   'REPLACE:vanilla_cloc = { text = { localization_key = LABEL } }\n')
+        self.gui('''widget = {
+ a = "[GetScriptedGui('vanilla_sgui')]"
+ b = "[Scope.GetCustom('vanilla_cloc')]"
+}''')
+        result = self.run_audit()
+        self.assertEqual([], self.errors(result))
+        presumed = [(f.kind, f.name) for f in result.flags if 'presumed vanilla' in f.detail]
+        self.assertEqual([('scripted_guis', 'vanilla_sgui'), ('custom_loc', 'vanilla_cloc')], presumed)
+        vanilla = self.root.parent / 'vanilla'
+        for directory in ('scripted_guis', 'customizable_localization'):
+            (vanilla / 'game/common' / directory).mkdir(parents=True)
+        self.assertEqual([('scripted_guis', 'vanilla_sgui'), ('custom_loc', 'vanilla_cloc')],
+                         self.errors(self.run_audit(vanilla)))
+        self.write('game/common/scripted_guis/v.txt', 'vanilla_sgui = { }\n', base=vanilla)
+        self.write('game/common/customizable_localization/v.txt', 'vanilla_cloc = { }\n', base=vanilla)
+        self.assertEqual([], self.run_audit(vanilla).flags)
+
     def test_inject_of_a_snapshot_name_resolves_offline(self):
         # No game install: an INJECT: of a vanilla script value or static
         # modifier still resolves through the committed snapshot.

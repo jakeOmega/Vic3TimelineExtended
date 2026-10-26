@@ -20,7 +20,12 @@ Every `ScriptValue('name')` in
   key that drifts into it is not judged either.
 - a quoted string in `common/**/*.txt` or `events/**/*.txt`. Text in a `#`
   comment is not read, and a `#` inside a string doesn't start one (the
-  lexer `gui_reference_audit` uses for its masks).
+  lexer `gui_reference_audit` uses for its masks). Its limits: a backslash
+  escapes the next character, so a string ending in `\\"` doesn't end there,
+  and that string or one left unterminated runs on and swallows every later
+  read in the file (no `\\"` appears in common/ or events/ today). A read in a
+  top-level `@x = "..."` is named after the key before it, since a constant
+  isn't a key.
 
 The escaped double-quoted form, `ScriptValue(\\"name\\")`, is checked too.
 
