@@ -72,6 +72,12 @@ Races only and Simple Colonies are unchanged.
   chamber or the AI by its button.
 - **A free colony seized is ours at once**: closing in on one needs no war
   (there is no one to make peace with) but costs infamy and a UN dossier item.
+- **Occupied states** (owner, after the interview): nothing is built, launched
+  or fired from a state its owner doesn't control. Space Command, the
+  ground-to-orbit batteries and the Orbital Battlestation in an occupied state
+  count for no one: not their owner, and not the occupier, whose gain is the
+  denial (§ 5.1). Vanilla keeps buildings working under occupation
+  (`vanilla_war_reference.md` § Occupation), so the script must test it.
 
 Kept from the scope (§ Decisions, § 11): fleets are records with a location
 and a timer; nine slots; capacity and current; no interception in transit;
@@ -155,6 +161,10 @@ ideas).
 - A treaty article's war goal `infamy` is a script value with `add = { desc value }`
   (`common/treaty_articles/124_cede_colony.txt:170`).
 - `te_debris_add = { LOW HIGH }` (`te_orbital_debris_effects.txt:54`).
+- A state's `controller` link, compared to a country (`controller = scope:x`,
+  `gm_trophy_values.txt:101`). Buildings in an occupied state go on working
+  and supplying their market in vanilla (`vanilla_war_reference.md`
+  § Occupation), so every count in § 5.1 tests the controller itself.
 - The covert framework's registry (`test_covert_op_registry.py`; Incite
   Colonial Autonomy is code 15, Sabotage Colony 16) and the UN convention
   registry (`test_un_convention_registry.py`, which names the sixty-odd sites
@@ -169,11 +179,12 @@ ideas).
 - That a war goal's `infamy` block sees `scope:target_country` and `root` in a
   treaty article's war goal, so Cede Colony can cost nothing against an
   interdictor (a play-test row: the war goal's infamy reads 0).
-- That the battery method's workforce-scaled `country_orbital_debris_low_removal_add`
-  reaches its country (`battery_debris_removal`, on `debris_removal`'s
-  pattern).
 - That the war-support breakdown shows the new rows by their `desc` (a
   play-test row).
+- When a partly occupied state's `controller` turns to the occupier (at half
+  its provinces, as war-goal control counts it, or only at all of them): a
+  play-test row occupies a Space Command state province by province and notes
+  the month construction stops.
 
 ## 1. Locations and legs
 
@@ -320,7 +331,8 @@ gone):
   inbound record). A country with a fleet at a location carries
   `sr_fl_at_<loc>` (its summed strength there), so combat reads one number per
   country and location. A global variable list, `sr_fleet_powers`, holds every
-  country with a fleet, so the monthly steps never walk `every_country`.
+  country with a fleet, a Space Command or (6d) a battery, so the monthly steps
+  never walk `every_country`.
 
 ## 5. Space Command
 
@@ -338,7 +350,7 @@ Space Program, expandable, `can_build_private` no.
 
 - **Construction**, `sr_sc_rate` (country value): each Space Command's level ×
   occupancy × its method's rate, read from the building in script (§ Engine
-  facts). Not a workforce-scaled modifier: the fleet's upkeep raises Space
+  facts), counting only buildings in states their owner controls (§ 5.1). Not a workforce-scaled modifier: the fleet's upkeep raises Space
   Command's throughput (below), and a modifier would feed that back into
   construction.
 - **The build mix** (F9, panel orders): five weights 0 to 3,
@@ -354,6 +366,28 @@ Space Program, expandable, `can_build_private` no.
   unit, refreshed monthly from the country pulse (its one refresh site;
   `gen_nation_tab.py` gains its row).
 - **The Orbital Battlestation** fights at Earth (6b, § 7.5).
+
+### 5.1 Occupied states
+
+One trigger, `sr_state_held_by_owner` (state scope: its `controller` is its
+owner), gates every Earth building this design counts:
+
+| Building | Part | In a state its owner doesn't control |
+|---|---|---|
+| Space Command | 6a | adds nothing to `sr_sc_rate`: no strength is built there |
+| The Orbital Battlestation | 6b | doesn't fight at Earth for its owner, and doesn't regain strength |
+| Ground-to-orbit batteries | 6d | don't fire, and their lasers don't sweep |
+| The Space Program (the launch site) | 6d | its owner launches nothing (§ 15: colony fleets, module shipments, settlers, fleets from Earth and the reserve) and fabricates no modules |
+
+The occupier gets nothing from them. The yards, batteries and launch site are
+staffed by the owner's people and fed by its market, and vanilla gives an
+occupier no building's output. What the occupier gains is that its enemy has
+lost them, which also gives a land war a way to shut down a space programme.
+They work again the month the state is back under its owner's control.
+
+The space race's own milestones (`je_space_race_*`) are unchanged: they read
+the Space Program as before. Stopping those under occupation would be a
+change to the race, not to the fleets.
 
 ## 6. Orders and movement (6a)
 
@@ -440,7 +474,8 @@ At Earth only: its owner's battlestation fights in every battle there as 25
 warship strength a level (five levels at most, Orbital Weapon Platforms'
 building), losing strength as a fleet does and regaining 10% of full a month.
 It never moves and is never destroyed: its losses take nothing from the
-building.
+building. In a state its owner doesn't control it neither fights nor recovers
+(§ 5.1).
 
 ## 8. Blockade (6b; at Earth from 6d)
 
@@ -482,6 +517,9 @@ stay aboard.
   modifiers to no one (the sync unmirrors it, as it does a free colony), its
   Extraplanetary Base room counts for no one, its people stay, nothing is
   founded or shipped there, and it counts in the war's war support (§ 10).
+  Its Defences fire for no one, as an occupied state's buildings work for no
+  one (§ 5.1): the occupier holds it with its garrison, and a liberation
+  fights the occupier's fleets and garrison, not the world's own guns.
 - **It goes back at the peace**: each month the global step returns every
   occupied world whose occupier and holder are no longer at war (the record
   cleared, the world synced, both told, `.102`). A Cede Colony article for it
@@ -664,15 +702,20 @@ A monthly review per AI country with a fleet or a Space Command
   | Kinetic Interceptors | Space Militarization | 1 point of fire on hostile fleets at Earth; each point fired adds 0.02 low debris |
   | Ground Lasers | Directed Energy Weapons (electricity input) | 2 points of fire, no debris; **in peace**, clears 0.01 from the low pool |
 
-  Batteries fire in the Earth battle (§ 7.1) and take no losses; a battery in a
-  state the enemy occupies doesn't fire.
+  Batteries fire in the Earth battle (§ 7.1) and take no losses. Their fire is
+  counted in script, state by state, so a battery in a state its owner doesn't
+  control fires for no one (§ 5.1).
 - **Low-orbit sweeping** (owner's addition). Ground-based lasers that ablate
   small debris until it de-orbits are a real proposal for low orbit (NASA's
   ORION study of the 1990s and later laser-broom studies), and can't reach the
-  debris high above. So Ground Lasers clear only the **low pool**
-  (`country_orbital_debris_low_removal_add`, a new script-only type, summed in
-  `te_debris_global_monthly` and taken from the low pool alone), and only in
-  peace. Ten levels clear 0.1 a month, beside Laser Broom's 0.15 from the
+  debris high above. So Ground Lasers clear only the **low pool**, and only in
+  peace: `sr_battery_sweep` (country value, the batteries' levels × occupancy on
+  Ground Lasers in states their owner controls, while it is at war with no
+  one), summed in `te_debris_global_monthly` and taken from the low pool alone.
+  It is counted in script, as construction and fire are, rather than a
+  production method's country modifier: a method's modifier would still reach
+  its owner from an occupied state (§ 5.1) and can't switch off in war. Ten
+  levels clear 0.1 a month, beside Laser Broom's 0.15 from the
   Space Program and the low pool's own 1.5% decay: a help against
   everyday clutter, no cure for a Kessler cascade, which lives in the high
   pool.
@@ -680,6 +723,12 @@ A monthly review per AI country with a fleet or a Space Command
   Earth with no fleet of the target there blockades the target: no colony
   fleet, module shipment, settler or fleet leaves Earth (Launch from the
   reserve still can), and none of its colonies has contact.
+- **The launch site occupied** (§ 5.1): while its Space Program's state isn't
+  under its control, a country launches nothing at all. No colony fleet,
+  module shipment, settler, fleet departure from Earth or reserve launch, and
+  no module fabrication. Unlike a blockade in orbit, no Launch breaks it: the
+  state has to be retaken. Every departure trigger reads one test,
+  `sr_launches_barred` (blockaded at Earth, or the launch site occupied).
 - **Orbital fire support**: at war, a country whose fleets at Earth outmatch
   the hostile fleets there (or face none while it has some) gets
   `sr_orbital_superiority` (+10% unit offense, +5% unit defense) at
@@ -746,9 +795,10 @@ Added to `docs/testing/solar-colonies-playtest.md`:
 - **`fleet_leg`** (6a): the first fleet that lands logs its leg, its drive, the
   months flown against the table; BROKEN if it landed two or more months late
   (fallback: land fleets from the country pulse as well).
-- **`battery_debris_removal`** (6d): the first month a country runs Ground
-  Lasers in peace: OK when `modifier:country_orbital_debris_low_removal_add` is
-  above 0 (fallback: give the removal from script, by method and occupancy).
+- **`battery_sweep`** (6d): the first month the world's step takes a sweep:
+  logs the low pool before and after and the sum of `sr_battery_sweep`; BROKEN
+  if the low pool fell by less than the sum (beyond its decay) or the high pool
+  moved.
 
 Play-test rows: every section and button; the destination's hover figures
 against the report; a refit; a battle's losses against the square law; a
@@ -757,7 +807,10 @@ at nothing, an observatory still running); seizure and the return at the peace;
 destruction and the ruin; the war-support breakdown's two rows; Cede Colony's
 war goal at 0 infamy against an interdictor; the convention in the chamber;
 the reserve breaking a blockade; batteries firing; orbital superiority in a land
-battle's breakdown.
+battle's breakdown; occupied states (§ 5.1): occupy, province by province, a
+state holding Space Command, a battery, the battlestation or the Space Program,
+and note the month each stops (construction, fire, the Earth battle, every
+launch) and that each resumes when the state is retaken.
 
 **Console**: `te_debug_space_race.6`, its options grown part by part: log our
 fleets and every location's forces; give us 100 strength of each role at
@@ -801,6 +854,12 @@ our Earth by the largest rival.
     "never interdicts").
 16. **One dossier ground for space**, `un_dos_space`, rather than one per act:
     the dossier keeps one record a kind of wrong (six today).
+17. **Occupied buildings count for no one, the occupier included** (§ 5.1),
+    and **an occupied launch site stops every launch and module fabrication**
+    (§ 15), under Full Colonies. The owner's note named the new buildings;
+    the launch site is my extension of it, the same rule applied to the
+    building every launch leaves from. An occupied colony's Defences likewise
+    fire for no one (§ 9.2).
 
 ## 21. Build order
 
