@@ -13,12 +13,14 @@ each one does (created, dropped_duplicate, redefined, replaced, injected,
 skipped), and this module replays those steps with the parsed values,
 merging an INJECT the way ModState does (`ParadoxFileParser.merge_data`, so a
 script value appends its steps). With the probed settings that is one ASCII
-file order with vanilla's files interleaved, bare definitions first (the
-first wins, per BARE_DUPLICATE_RULES), then the directives.
+file order with vanilla's files interleaved, bare definitions first (which
+one wins per folder is BARE_DUPLICATE_RULES), then the directives in the
+order `order_for_reading()` gives them. Nothing here restates the order, so
+a change to the model's settings or readings carries through.
 
 Where an unknown changes a key's value (a file both mods ship: which one the
-playset loads later; a folder whose bare-duplicate rule isn't recorded, such
-as scripted_triggers), the key's status is `undetermined`, its entry lists
+playset loads later; a folder whose bare-duplicate rule BARE_DUPLICATE_RULES
+doesn't record), the key's status is `undetermined`, its entry lists
 every candidate, and the layered state holds the first scenario's value,
 which `state_holds` names: the other mod loaded later, and the first bare
 definition winning.

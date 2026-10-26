@@ -292,10 +292,13 @@ _GUI_TEXTICON_RE = re.compile(r"(?i:\btexticon)\s*=\s*\{")
 # winner (LOAD_ORDER_MODEL covers common/ only).
 GUI_LOAD_ORDER = {
     "status": "unprobed",
-    "claim": "Which of two definitions of one GUI type, template, layer or text icon the "
-             "game keeps, and in what order it reads gui/ files, hasn't been probed. "
-             "`sorts_first` is the ASCII order of the paths under gui/, not a winner.",
-    "see": f"{LOAD_ORDER_DOC} covers common/ databases only.",
+    "claim": "Which of two mods' definitions of one GUI type, template, layer or text icon "
+             "the game keeps, and in what order it reads gui/ files, hasn't been probed. "
+             "`sorts_first` is the ASCII order of the paths under gui/, not a winner. A mod's "
+             "redefinition of a vanilla type from a file of its own does beat vanilla's (seen "
+             "in game 2026-10-18), but its 00_te_ file sorts before vanilla's, so that fits "
+             "both first-read-wins and mods-after-vanilla.",
+    "see": f"gui_modding_guide.md gotcha 30; {LOAD_ORDER_DOC} covers common/ databases only.",
 }
 
 _SKIP_ROOT_DIRS = frozenset({".git", ".metadata", ".github", ".venv", "__pycache__"})

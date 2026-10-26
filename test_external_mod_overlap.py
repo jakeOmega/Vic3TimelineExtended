@@ -787,7 +787,8 @@ def build_fake_layer_mods(tmp):
            "shared_mod = { x_add = 1 }\nours_first = { y_add = 1 }\n")
     _write(t, "common/static_modifiers/a_their_mods.txt", "shared_mod = { x_add = 2 }\n")
     _write(t, "common/static_modifiers/zz_their_mods.txt", "ours_first = { y_add = 2 }\n")
-    # A bare duplicate in a folder whose rule isn't recorded.
+    # A bare duplicate in a folder whose rule isn't recorded (the tests
+    # take scripted_triggers' rule out of BARE_DUPLICATE_RULES).
     _write(o, "common/scripted_triggers/te_triggers.txt", "shared_trigger = { always = yes }\n")
     _write(t, "common/scripted_triggers/zz_triggers.txt",
            "shared_trigger = { always = no }\nREPLACE:vanilla_trigger = { always = no }\n")
@@ -821,7 +822,12 @@ class LayeredStateTests(unittest.TestCase):
         cls.game, cls.ours_root, cls.theirs_root = build_fake_layer_mods(cls._tmp.name)
         cls.ms = fake_layer_mod_state(cls.game, cls.ours_root)
         cls.vanilla = emo.VanillaIndex(game_common=cls.game, snapshot_dir=None)
-        cls.state = ems.build(cls.ms, cls.theirs_root, cls.ours_root, vanilla=cls.vanilla)
+        # scripted_triggers stands in for a folder whose bare-duplicate rule
+        # isn't recorded: put that unknown back for the build, whatever
+        # BARE_DUPLICATE_RULES says about the folder itself.
+        with mock.patch.dict(emo.BARE_DUPLICATE_RULES):
+            emo.BARE_DUPLICATE_RULES.pop("scripted_triggers", None)
+            cls.state = ems.build(cls.ms, cls.theirs_root, cls.ours_root, vanilla=cls.vanilla)
 
     @classmethod
     def tearDownClass(cls):
@@ -845,6 +851,18 @@ class LayeredStateTests(unittest.TestCase):
         laws = self.state.mod_state.get_data("Laws")
         self.assertIn("b_add", laws["te_law"][1]["modifier"][1])
         self.assertNotIn("b_add", self.ms.get_data("Laws")["te_law"][1]["modifier"][1])
+
+    def test_the_order_comes_from_the_model(self):
+        # Nothing restates the load order: reverse what order_for_reading
+        # returns and their INJECT runs before our entry exists.
+        original = emo.order_for_reading
+        with mock.patch.object(emo, "order_for_reading",
+                               lambda ops, order, reading: original(ops, order, reading)[::-1]):
+            state = self.ems.build(self.ms, self.theirs_root, self.ours_root, vanilla=self.vanilla)
+        e = state.entity("Laws", "te_law")
+        self.assertEqual([(s["side"], s["effect"]) for s in e["load"]],
+                         [(THEIRS, "error_no_entry"), (OURS, "created")])
+        self.assertNotIn("b_add", e["value"][1]["modifier"][1])
 
     def test_bare_duplicates_first_wins(self):
         theirs_wins = self.entry("Modifiers", "shared_mod")
