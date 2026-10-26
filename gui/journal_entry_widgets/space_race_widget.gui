@@ -4547,6 +4547,55 @@ types space_race_widget_types
 					text = "je_space_race_widget_sc_upkeep_figure"
 				}
 			}
+			### 6d: the ground reserve (design § 15), Launch and its toggle.
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_sc_reserve_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_sc_reserve_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_sc_reserve_figure"
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				te_sr_sc_mix_button = {
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_reserve_launch_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_reserve_launch_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('sr_reserve_launch_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_launch"
+					}
+				}
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)1' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_auto_on"
+					}
+				}
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)0' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_auto_off"
+					}
+				}
+			}
 			te_sr_subheader = {
 				blockoverride "subheader_text" {
 					text = "je_space_race_widget_sc_mix_header"

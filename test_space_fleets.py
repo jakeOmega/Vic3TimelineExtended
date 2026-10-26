@@ -1,4 +1,4 @@
-"""Space fleets (solar colonization slice 6, parts 6a to 6c): the generator's
+"""Space fleets (solar colonization slice 6, parts 6a to 6d): the generator's
 output, the hand-written files' contract with it, and the rules a play test
 can't see in one evening.
 
@@ -37,6 +37,7 @@ COVERT_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 DEBUG_EVENTS = ROOT / "events/te_debug_space_race_events.txt"
 CEDE_COLONY = ROOT / "common/treaty_articles/124_cede_colony.txt"
 SPACE_RACE_EVENTS = ROOT / "events/space_race_events.txt"
+EARTH_EFFECTS = ROOT / "common/scripted_effects/sr_earth_orbit_effects.txt"
 
 
 def _raw(path):
@@ -164,7 +165,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 10)
+        self.assertEqual(len(names), 12)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -490,6 +491,72 @@ class AiOffenceTest(unittest.TestCase):
         for lc in gsf.LOCATIONS[1:]:
             with self.subTest(loc=lc.key):
                 self.assertIn(f"NOT = {{ AND = {{ sr_loc_ai_target_{lc.key} = yes sr_fl_ai_holds_{lc.key} = yes }} }}", home)
+
+
+class GroundReserveTest(unittest.TestCase):
+    """6d (design § 15): Space Command builds into a reserve on the ground, which
+    goes up together, by Launch at any time or by itself while no hostile fleet
+    is at Earth; a blockade can't stop a Launch, an occupied launch site can."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fleet = _strip(_raw(FLEET_EFFECTS))
+        cls.earth = _strip(_raw(EARTH_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+
+    def test_construction_joins_the_reserve(self):
+        month = _block(self.fleet, "sr_sc_month")
+        self.assertRegex(month, r"limit = \{ local_var:sr_sc_points > 0 \}\s*sr_reserve_build = yes")
+        self.assertTrue(month.rstrip().endswith("sr_reserve_auto_step = yes"))
+        self.assertNotIn("sr_fl_find_home", month)
+        build = _block(self.generated, "sr_reserve_build")
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertIn(f"multiply = sr_sc_mix_share_{role.key}", build)
+                self.assertIn(f"change_variable = {{ name = sr_reserve_{role.key} add = local_var:sr_sc_share }}", build)
+        total = _block(self.values, "sr_reserve_total")
+        self.assertEqual(len(re.findall(r"add = sr_reserve_\w+_value", total)), len(gsf.ROLES))
+
+    def test_a_launch_takes_the_whole_reserve(self):
+        body = _block(self.generated, "sr_fl_reserve_in_at")
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertIn(f"sr_fl_add_role = {{ N = $N$ ROLE = {role.key} AMOUNT = var:sr_reserve_{role.key} }}", body)
+                self.assertIn(f"remove_variable = sr_reserve_{role.key}", body)
+        self.assertIn("sr_fl_fill_at = { N = $N$ }", body)
+
+    def test_it_launches_itself_only_with_no_hostile_fleet_at_earth(self):
+        auto = _block(self.earth, "sr_reserve_auto_step")
+        for line in ("sr_reserve_auto_on = yes", "NOT = { sr_earth_hostile_present = yes }",
+                     "NOT = { sr_launch_site_lost = yes }", "sr_fl_find_home = yes",
+                     "sr_fl_by_local = { DO = reserve_in }"):
+            with self.subTest(line=line):
+                self.assertIn(line, auto)
+        self.assertIn("NOT = { has_variable = sr_reserve_auto }", _block(self.triggers, "sr_reserve_auto_on"))
+
+    def test_a_blockade_cannot_stop_a_launch(self):
+        may = _block(self.triggers, "sr_reserve_may_launch")
+        self.assertIn("NOT = { sr_launch_site_lost = yes }", may)
+        self.assertNotIn("blockade", may)
+        self.assertNotIn("sr_launches_barred", may)
+        sgui = _block(_strip(_raw(SGUIS)), "sr_reserve_launch_sgui")
+        self.assertIn("sr_reserve_may_launch = yes", sgui)
+        self.assertIn("sr_reserve_launch = yes", sgui)
+
+    def test_the_reserve_pays_upkeep_and_keeps_its_power_on_the_list(self):
+        self.assertIn("add = sr_reserve_total", _block(_strip(_raw(FLEET_VALUES)), "sr_fleet_upkeep_units_value"))
+        self.assertIn("sr_reserve_total > 0", _block(self.triggers, "sr_fleet_power"))
+
+    def test_the_ai_launches_when_it_matches_the_enemy_at_earth(self):
+        self.assertTrue(_block(self.fleet, "sr_fl_ai_review").strip().startswith("sr_fl_ai_reserve = yes"))
+        ai = _block(self.earth, "sr_fl_ai_reserve")
+        self.assertIn("sr_reserve_may_launch = yes", ai)
+        self.assertIn("sr_fl_ai_reserve_matches = yes", ai)
+        self.assertIn("sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth",
+                      _block(self.triggers, "sr_fl_ai_reserve_matches"))
+        self.assertIn("sr_loc_ai_enemy_fleets_earth = {", self.values)
 
 
 if __name__ == "__main__":

@@ -232,7 +232,7 @@ def _longest_figure(name):
              "sr_disp_ebase_room": EBASE_LEVELS, "sr_disp_free_supplied_count": FREE_WORLDS,
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
-             "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT}
+             "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -286,12 +286,12 @@ CELLS = {
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_month_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
-        r"|ebase_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label)"),
+        r"|ebase_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
         r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure"
-        r"|free_trade_figure|sc_rate_figure|sc_strength_figure|sc_upkeep_figure)"),
+        r"|free_trade_figure|sc_rate_figure|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure)"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -407,9 +407,9 @@ CELLS = {
     "a world's holder: ruined (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ruined"'),
         r"je_space_race_widget_ss_ruined"),
-    "the build mix (te_sr_sc_mix_button)": (
+    "the build mix, Launch and Auto (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_mix_(war|rapid|siege|carrier|tender)"),
+        r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off)"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|settlers_header|modules_header|autonomy_header|powers_header|orbit_header"

@@ -104,14 +104,14 @@ SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_months", "dv", "supply", "m
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
-SLOT_ACTIONS = ("clear", "month", "arrive", "note", "build", "new_at_earth", "take_marines", "go", "step_pick", "merge",
+SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick", "merge",
                 "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
-                "ai_assault", "debug_icpt", "icpt_repoint")
+                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
-# per world closing in.
+# per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
-           "l1", "l2", "l3", "before", "lost", "bs")
+           "l1", "l2", "l3", "before", "lost", "bs", "kf")
 CB_WORLD_VARS = ("s3", "fd3", "mar", "dfd", "ld")
 
 
@@ -282,6 +282,10 @@ def render_values() -> str:
         if r.key == "war":
             out.append("\telse = { value = 1 }")
         out.append("}")
+    out += ["", "# ===== The ground reserve (6d, design § 15), country scope: each role's strength",
+            "# built and not yet launched (sr_reserve_<role>), all at full, and their sum. =====",
+            *[line for r in ROLES for line in _opt(f"sr_reserve_{r.key}_value", f"sr_reserve_{r.key}")],
+            "sr_reserve_total = {", "\tvalue = 0", *[f"\tadd = sr_reserve_{r.key}_value" for r in ROLES], "}"]
     out += ["", "# ===== Combat (6b), per world =====",
             "#   sr_cb_closing_<key>   strength closing in on it, every power's (any scope)",
             "#   sr_cb_fd_total_<key>  the defence fire aimed at it: each power's, shared with",
@@ -312,16 +316,18 @@ def render_values() -> str:
                "}"]],
             "", "# ===== Per location, country scope: the AI's offence (6c, design § 14) =====",
             "#   sr_loc_ai_enemy_fleets_<loc>  the strength of every fleet there of a country",
-            "#                                 at war with us",
+            "#                                 at war with us (at Earth too: 6d's blockade,",
+            "#                                 the reserve's launch and orbital superiority)",
             "#   sr_loc_ai_enemy_force_<loc>   ... and the Defences and hull of each world there",
             "#                                 we may attack (sr_site_target_strength_<key>)",
-            *[line for lc in LOCATIONS[1:] for line in
+            *[line for lc in LOCATIONS for line in
               [f"sr_loc_ai_enemy_fleets_{lc.key} = {{", "\tvalue = 0",
                "\tif = {", "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
                "\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
                f"\t\t\tlimit = {{ is_country_alive = yes has_war_with = prev has_variable = sr_fl_at_{lc.key} }}",
-               f"\t\t\tadd = var:sr_fl_at_{lc.key}", "\t\t}", "\t}", "}",
-               f"sr_loc_ai_enemy_force_{lc.key} = {{", f"\tvalue = sr_loc_ai_enemy_fleets_{lc.key}",
+               f"\t\t\tadd = var:sr_fl_at_{lc.key}", "\t\t}", "\t}", "}"]],
+            *[line for lc in LOCATIONS[1:] for line in
+              [f"sr_loc_ai_enemy_force_{lc.key} = {{", f"\tvalue = sr_loc_ai_enemy_fleets_{lc.key}",
                *[f"\tif = {{ limit = {{ sr_site_ai_attack_target = {{ KEY = {w.key} }} }} add = sr_site_target_strength_{w.key} }}"
                  for w in worlds_at(lc.key)],
                "}"]],
@@ -542,6 +548,10 @@ def render_triggers() -> str:
         out += [f"\t\tAND = {{ has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = $CODE$ }}",
                 f"\t\tAND = {{ has_variable = {var(n, 'dest')} var:{var(n, 'dest')} = $CODE$ }}"]
     out += ["\t}", "}",
+            "# ... at it.",
+            "sr_fl_any_at = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = $CODE$ }}" for n in range(1, SLOTS + 1)]
+    out += ["\t}", "}",
             "# ... bound for it.",
             "sr_fl_any_bound = {", "\tOR = {"]
     out += [f"\t\tAND = {{ has_variable = {var(n, 'dest')} var:{var(n, 'dest')} = $CODE$ }}" for n in range(1, SLOTS + 1)]
@@ -631,16 +641,38 @@ def render_role_effects() -> list[str]:
     names = [*SLOT_VARS, *[r.key for r in ROLES], *[f"{r.key}_full" for r in ROLES]]
     out += [f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_{x} }} remove_variable = sr_fl_$N$_{x} }}" for x in names]
     out += ["}", "",
-            "# The month's construction into the slot (local_var:sr_sc_points), shared by the",
-            "# build mix; new strength comes at full.",
-            "sr_fl_build_at = {"]
+            "# The month's construction (local_var:sr_sc_points) into the ground reserve (6d,",
+            "# design § 15), shared by the build mix; it reaches orbit at full when launched.",
+            "sr_reserve_build = {"]
     for r in ROLES:
         out += ["\tif = {",
                 f"\t\tlimit = {{ sr_sc_mix_share_{r.key} > 0 }}",
                 f"\t\tset_local_variable = {{ name = sr_sc_share value = {{ value = local_var:sr_sc_points "
                 f"multiply = sr_sc_mix_share_{r.key} }} }}",
-                f"\t\tsr_fl_add_role = {{ N = $N$ ROLE = {r.key} AMOUNT = local_var:sr_sc_share }}",
+                f"\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+                f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
+                f"\t\tchange_variable = {{ name = sr_reserve_{r.key} add = local_var:sr_sc_share }}",
                 "\t}"]
+    out += ["}", "",
+            "# The whole reserve into the slot at Earth (a launch: sr_earth_orbit_effects.txt),",
+            "# at full, then its propellant, supply and marines to capacity, as a month",
+            "# docked at Earth would give it.",
+            "sr_fl_reserve_in_at = {"]
+    for r in ROLES:
+        out += ["\tif = {",
+                f"\t\tlimit = {{ sr_reserve_{r.key}_value > 0 }}",
+                f"\t\tsr_fl_add_role = {{ N = $N$ ROLE = {r.key} AMOUNT = var:sr_reserve_{r.key} }}",
+                "\t}",
+                f"\tif = {{ limit = {{ has_variable = sr_reserve_{r.key} }} remove_variable = sr_reserve_{r.key} }}"]
+    out += ["\tsr_fl_fill_at = { N = $N$ }",
+            "\tset_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }",
+            "}", "",
+            "# Console: 100 strength of each role into the reserve (te_debug_space_race.6).",
+            "sr_reserve_debug_fill = {"]
+    for r in ROLES:
+        out += [f"\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+                f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
+                f"\tchange_variable = {{ name = sr_reserve_{r.key} add = 100 }}"]
     out += ["}", "",
             "# Docked: each role regains local_var:sr_fl_share of its gap to full.",
             "sr_fl_repair_roles_at = {"]
@@ -1364,7 +1396,9 @@ def render_display() -> str:
     out += ["", "# Our fleets, for the section's empty note.",
             "sr_disp_fl_count = { value = sr_fl_count }",
             "", "# The build mix's weights (Space Command).",
-            *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES]]
+            *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES],
+            "", "# The ground reserve by role (6d; Space Command's Reserve hover).",
+            *[f"sr_disp_reserve_{r.key} = {{ value = sr_reserve_{r.key}_value }}" for r in ROLES]]
     return "\n".join(out) + "\n"
 
 

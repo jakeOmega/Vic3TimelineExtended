@@ -9490,6 +9490,37 @@ sr_sc_mix_share_tender = {
 	if = { limit = { sr_sc_mix_total > 0 } value = sr_sc_mix_tender_value divide = sr_sc_mix_total }
 }
 
+# ===== The ground reserve (6d, design § 15), country scope: each role's strength
+# built and not yet launched (sr_reserve_<role>), all at full, and their sum. =====
+sr_reserve_war_value = {
+	value = 0
+	if = { limit = { has_variable = sr_reserve_war } value = var:sr_reserve_war }
+}
+sr_reserve_rapid_value = {
+	value = 0
+	if = { limit = { has_variable = sr_reserve_rapid } value = var:sr_reserve_rapid }
+}
+sr_reserve_siege_value = {
+	value = 0
+	if = { limit = { has_variable = sr_reserve_siege } value = var:sr_reserve_siege }
+}
+sr_reserve_carrier_value = {
+	value = 0
+	if = { limit = { has_variable = sr_reserve_carrier } value = var:sr_reserve_carrier }
+}
+sr_reserve_tender_value = {
+	value = 0
+	if = { limit = { has_variable = sr_reserve_tender } value = var:sr_reserve_tender }
+}
+sr_reserve_total = {
+	value = 0
+	add = sr_reserve_war_value
+	add = sr_reserve_rapid_value
+	add = sr_reserve_siege_value
+	add = sr_reserve_carrier_value
+	add = sr_reserve_tender_value
+}
+
 # ===== Combat (6b), per world =====
 #   sr_cb_closing_<key>   strength closing in on it, every power's (any scope)
 #   sr_cb_fd_total_<key>  the defence fire aimed at it: each power's, shared with
@@ -10547,9 +10578,21 @@ sr_cb_ld_total_kuiper = {
 
 # ===== Per location, country scope: the AI's offence (6c, design § 14) =====
 #   sr_loc_ai_enemy_fleets_<loc>  the strength of every fleet there of a country
-#                                 at war with us
+#                                 at war with us (at Earth too: 6d's blockade,
+#                                 the reserve's launch and orbital superiority)
 #   sr_loc_ai_enemy_force_<loc>   ... and the Defences and hull of each world there
 #                                 we may attack (sr_site_target_strength_<key>)
+sr_loc_ai_enemy_fleets_earth = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = sr_fleet_powers }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_war_with = prev has_variable = sr_fl_at_earth }
+			add = var:sr_fl_at_earth
+		}
+	}
+}
 sr_loc_ai_enemy_fleets_inner = {
 	value = 0
 	if = {
@@ -10560,11 +10603,6 @@ sr_loc_ai_enemy_fleets_inner = {
 			add = var:sr_fl_at_inner
 		}
 	}
-}
-sr_loc_ai_enemy_force_inner = {
-	value = sr_loc_ai_enemy_fleets_inner
-	if = { limit = { sr_site_ai_attack_target = { KEY = venus } } add = sr_site_target_strength_venus }
-	if = { limit = { sr_site_ai_attack_target = { KEY = mercury } } add = sr_site_target_strength_mercury }
 }
 sr_loc_ai_enemy_fleets_mars = {
 	value = 0
@@ -10577,14 +10615,6 @@ sr_loc_ai_enemy_fleets_mars = {
 		}
 	}
 }
-sr_loc_ai_enemy_force_mars = {
-	value = sr_loc_ai_enemy_fleets_mars
-	if = { limit = { sr_site_ai_attack_target = { KEY = valles_marineris } } add = sr_site_target_strength_valles_marineris }
-	if = { limit = { sr_site_ai_attack_target = { KEY = olympus_mons } } add = sr_site_target_strength_olympus_mons }
-	if = { limit = { sr_site_ai_attack_target = { KEY = hellas_planitia } } add = sr_site_target_strength_hellas_planitia }
-	if = { limit = { sr_site_ai_attack_target = { KEY = utopia_planitia } } add = sr_site_target_strength_utopia_planitia }
-	if = { limit = { sr_site_ai_attack_target = { KEY = arcadia_planitia } } add = sr_site_target_strength_arcadia_planitia }
-}
 sr_loc_ai_enemy_fleets_asteroids = {
 	value = 0
 	if = {
@@ -10595,14 +10625,6 @@ sr_loc_ai_enemy_fleets_asteroids = {
 			add = var:sr_fl_at_asteroids
 		}
 	}
-}
-sr_loc_ai_enemy_force_asteroids = {
-	value = sr_loc_ai_enemy_fleets_asteroids
-	if = { limit = { sr_site_ai_attack_target = { KEY = ceres } } add = sr_site_target_strength_ceres }
-	if = { limit = { sr_site_ai_attack_target = { KEY = vesta } } add = sr_site_target_strength_vesta }
-	if = { limit = { sr_site_ai_attack_target = { KEY = psyche } } add = sr_site_target_strength_psyche }
-	if = { limit = { sr_site_ai_attack_target = { KEY = pallas } } add = sr_site_target_strength_pallas }
-	if = { limit = { sr_site_ai_attack_target = { KEY = hygiea } } add = sr_site_target_strength_hygiea }
 }
 sr_loc_ai_enemy_fleets_jupiter = {
 	value = 0
@@ -10615,15 +10637,6 @@ sr_loc_ai_enemy_fleets_jupiter = {
 		}
 	}
 }
-sr_loc_ai_enemy_force_jupiter = {
-	value = sr_loc_ai_enemy_fleets_jupiter
-	if = { limit = { sr_site_ai_attack_target = { KEY = io } } add = sr_site_target_strength_io }
-	if = { limit = { sr_site_ai_attack_target = { KEY = europa } } add = sr_site_target_strength_europa }
-	if = { limit = { sr_site_ai_attack_target = { KEY = ganymede } } add = sr_site_target_strength_ganymede }
-	if = { limit = { sr_site_ai_attack_target = { KEY = callisto } } add = sr_site_target_strength_callisto }
-	if = { limit = { sr_site_ai_attack_target = { KEY = himalia } } add = sr_site_target_strength_himalia }
-	if = { limit = { sr_site_ai_attack_target = { KEY = amalthea } } add = sr_site_target_strength_amalthea }
-}
 sr_loc_ai_enemy_fleets_saturn = {
 	value = 0
 	if = {
@@ -10634,14 +10647,6 @@ sr_loc_ai_enemy_fleets_saturn = {
 			add = var:sr_fl_at_saturn
 		}
 	}
-}
-sr_loc_ai_enemy_force_saturn = {
-	value = sr_loc_ai_enemy_fleets_saturn
-	if = { limit = { sr_site_ai_attack_target = { KEY = titan } } add = sr_site_target_strength_titan }
-	if = { limit = { sr_site_ai_attack_target = { KEY = enceladus } } add = sr_site_target_strength_enceladus }
-	if = { limit = { sr_site_ai_attack_target = { KEY = rhea } } add = sr_site_target_strength_rhea }
-	if = { limit = { sr_site_ai_attack_target = { KEY = mimas } } add = sr_site_target_strength_mimas }
-	if = { limit = { sr_site_ai_attack_target = { KEY = iapetus } } add = sr_site_target_strength_iapetus }
 }
 sr_loc_ai_enemy_fleets_uranus = {
 	value = 0
@@ -10654,13 +10659,6 @@ sr_loc_ai_enemy_fleets_uranus = {
 		}
 	}
 }
-sr_loc_ai_enemy_force_uranus = {
-	value = sr_loc_ai_enemy_fleets_uranus
-	if = { limit = { sr_site_ai_attack_target = { KEY = titania } } add = sr_site_target_strength_titania }
-	if = { limit = { sr_site_ai_attack_target = { KEY = oberon } } add = sr_site_target_strength_oberon }
-	if = { limit = { sr_site_ai_attack_target = { KEY = miranda } } add = sr_site_target_strength_miranda }
-	if = { limit = { sr_site_ai_attack_target = { KEY = ariel } } add = sr_site_target_strength_ariel }
-}
 sr_loc_ai_enemy_fleets_neptune = {
 	value = 0
 	if = {
@@ -10672,11 +10670,6 @@ sr_loc_ai_enemy_fleets_neptune = {
 		}
 	}
 }
-sr_loc_ai_enemy_force_neptune = {
-	value = sr_loc_ai_enemy_fleets_neptune
-	if = { limit = { sr_site_ai_attack_target = { KEY = triton } } add = sr_site_target_strength_triton }
-	if = { limit = { sr_site_ai_attack_target = { KEY = proteus } } add = sr_site_target_strength_proteus }
-}
 sr_loc_ai_enemy_fleets_kuiper = {
 	value = 0
 	if = {
@@ -10687,6 +10680,56 @@ sr_loc_ai_enemy_fleets_kuiper = {
 			add = var:sr_fl_at_kuiper
 		}
 	}
+}
+sr_loc_ai_enemy_force_inner = {
+	value = sr_loc_ai_enemy_fleets_inner
+	if = { limit = { sr_site_ai_attack_target = { KEY = venus } } add = sr_site_target_strength_venus }
+	if = { limit = { sr_site_ai_attack_target = { KEY = mercury } } add = sr_site_target_strength_mercury }
+}
+sr_loc_ai_enemy_force_mars = {
+	value = sr_loc_ai_enemy_fleets_mars
+	if = { limit = { sr_site_ai_attack_target = { KEY = valles_marineris } } add = sr_site_target_strength_valles_marineris }
+	if = { limit = { sr_site_ai_attack_target = { KEY = olympus_mons } } add = sr_site_target_strength_olympus_mons }
+	if = { limit = { sr_site_ai_attack_target = { KEY = hellas_planitia } } add = sr_site_target_strength_hellas_planitia }
+	if = { limit = { sr_site_ai_attack_target = { KEY = utopia_planitia } } add = sr_site_target_strength_utopia_planitia }
+	if = { limit = { sr_site_ai_attack_target = { KEY = arcadia_planitia } } add = sr_site_target_strength_arcadia_planitia }
+}
+sr_loc_ai_enemy_force_asteroids = {
+	value = sr_loc_ai_enemy_fleets_asteroids
+	if = { limit = { sr_site_ai_attack_target = { KEY = ceres } } add = sr_site_target_strength_ceres }
+	if = { limit = { sr_site_ai_attack_target = { KEY = vesta } } add = sr_site_target_strength_vesta }
+	if = { limit = { sr_site_ai_attack_target = { KEY = psyche } } add = sr_site_target_strength_psyche }
+	if = { limit = { sr_site_ai_attack_target = { KEY = pallas } } add = sr_site_target_strength_pallas }
+	if = { limit = { sr_site_ai_attack_target = { KEY = hygiea } } add = sr_site_target_strength_hygiea }
+}
+sr_loc_ai_enemy_force_jupiter = {
+	value = sr_loc_ai_enemy_fleets_jupiter
+	if = { limit = { sr_site_ai_attack_target = { KEY = io } } add = sr_site_target_strength_io }
+	if = { limit = { sr_site_ai_attack_target = { KEY = europa } } add = sr_site_target_strength_europa }
+	if = { limit = { sr_site_ai_attack_target = { KEY = ganymede } } add = sr_site_target_strength_ganymede }
+	if = { limit = { sr_site_ai_attack_target = { KEY = callisto } } add = sr_site_target_strength_callisto }
+	if = { limit = { sr_site_ai_attack_target = { KEY = himalia } } add = sr_site_target_strength_himalia }
+	if = { limit = { sr_site_ai_attack_target = { KEY = amalthea } } add = sr_site_target_strength_amalthea }
+}
+sr_loc_ai_enemy_force_saturn = {
+	value = sr_loc_ai_enemy_fleets_saturn
+	if = { limit = { sr_site_ai_attack_target = { KEY = titan } } add = sr_site_target_strength_titan }
+	if = { limit = { sr_site_ai_attack_target = { KEY = enceladus } } add = sr_site_target_strength_enceladus }
+	if = { limit = { sr_site_ai_attack_target = { KEY = rhea } } add = sr_site_target_strength_rhea }
+	if = { limit = { sr_site_ai_attack_target = { KEY = mimas } } add = sr_site_target_strength_mimas }
+	if = { limit = { sr_site_ai_attack_target = { KEY = iapetus } } add = sr_site_target_strength_iapetus }
+}
+sr_loc_ai_enemy_force_uranus = {
+	value = sr_loc_ai_enemy_fleets_uranus
+	if = { limit = { sr_site_ai_attack_target = { KEY = titania } } add = sr_site_target_strength_titania }
+	if = { limit = { sr_site_ai_attack_target = { KEY = oberon } } add = sr_site_target_strength_oberon }
+	if = { limit = { sr_site_ai_attack_target = { KEY = miranda } } add = sr_site_target_strength_miranda }
+	if = { limit = { sr_site_ai_attack_target = { KEY = ariel } } add = sr_site_target_strength_ariel }
+}
+sr_loc_ai_enemy_force_neptune = {
+	value = sr_loc_ai_enemy_fleets_neptune
+	if = { limit = { sr_site_ai_attack_target = { KEY = triton } } add = sr_site_target_strength_triton }
+	if = { limit = { sr_site_ai_attack_target = { KEY = proteus } } add = sr_site_target_strength_proteus }
 }
 sr_loc_ai_enemy_force_kuiper = {
 	value = sr_loc_ai_enemy_fleets_kuiper

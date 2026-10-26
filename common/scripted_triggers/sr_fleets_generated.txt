@@ -5466,6 +5466,20 @@ sr_fl_any_at_or_bound = {
 		AND = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = $CODE$ }
 	}
 }
+# ... at it.
+sr_fl_any_at = {
+	OR = {
+		AND = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = $CODE$ }
+		AND = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = $CODE$ }
+		AND = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = $CODE$ }
+		AND = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = $CODE$ }
+		AND = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = $CODE$ }
+		AND = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = $CODE$ }
+		AND = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = $CODE$ }
+		AND = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = $CODE$ }
+		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = $CODE$ }
+	}
+}
 # ... bound for it.
 sr_fl_any_bound = {
 	OR = {

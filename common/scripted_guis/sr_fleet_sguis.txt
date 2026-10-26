@@ -334,3 +334,72 @@ sr_sc_mix_sgui = {
 		}
 	}
 }
+
+# 6d: Launch: the whole ground reserve into orbit as one fleet at Earth, any
+# month, blockade or not (design § 15). Only an occupied launch site stops it.
+sr_reserve_launch_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_reserve_empty_tt
+			sr_reserve_total > 0
+		}
+		custom_tooltip = {
+			text = sr_launch_site_lost_tt
+			NOT = { sr_launch_site_lost = yes }
+		}
+		custom_tooltip = {
+			text = sr_reserve_no_slot_tt
+			sr_reserve_may_launch = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_reserve_launch_tt
+		hidden_effect = {
+			sr_reserve_launch = yes
+		}
+	}
+}
+
+# 6d: the reserve's toggle: on (the default), it launches itself each month
+# while no hostile fleet is at Earth; off, it waits for Launch.
+sr_reserve_auto_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { sr_reserve_auto_on = yes }
+			custom_tooltip = sr_reserve_auto_off_tt
+		}
+		else = {
+			custom_tooltip = sr_reserve_auto_on_tt
+		}
+		hidden_effect = {
+			sr_reserve_toggle_auto = yes
+		}
+	}
+}

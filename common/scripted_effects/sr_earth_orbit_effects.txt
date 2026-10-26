@@ -1,0 +1,92 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: Earth orbit (slice 6d)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# (§§ 5.1, 14, 15). Full Colonies only. A blockade must not be able to hold a
+# power for a whole war (owner: two ships in orbit must not beat thirty built
+# one at a time), so:
+#   - the ground reserve: Space Command's construction waits on the ground
+#     (sr_reserve_<role>) and goes up together, by Launch or, with no hostile
+#     fleet at Earth, by itself each month;
+#   - ground-to-orbit batteries fire on hostile fleets at Earth every month,
+#     and with lasers sweep low-orbit debris in peace;
+#   - Earth can be blockaded: a fleet at war with us at Earth and none of ours
+#     there stops our launches, as an occupied launch site stops them;
+#   - holding Earth orbit at war gives fire support on the ground.
+# The numbers are sr_fleet_values.txt's; the per-role blocks are generated
+# (sr_fleets_generated.txt, scripts/generators/gen_space_fleets.py).
+# ============================================================================
+
+# ---- The ground reserve (design § 15) ------------------------------------------------------
+# Country scope, from sr_sc_month after the month's construction joined the
+# reserve: with the toggle on (sr_reserve_auto, on by default), no hostile
+# fleet at Earth and the launch site held, the whole reserve joins the home
+# fleet, the lowest slot at Earth not refitting, else a new slot there: 6a's
+# behaviour. With all nine slots away from Earth it waits on the ground.
+sr_reserve_auto_step = {
+	if = {
+		limit = {
+			sr_reserve_total > 0
+			sr_reserve_auto_on = yes
+			NOT = { sr_earth_hostile_present = yes }
+			NOT = { sr_launch_site_lost = yes }
+		}
+		sr_fl_find_home = yes
+		if = {
+			limit = { local_var:sr_fl_n > 0 }
+			sr_fl_by_local = { DO = reserve_in }
+		}
+	}
+}
+
+# Country scope. Launch (sr_reserve_launch_sgui; the AI, sr_fl_ai_reserve): the
+# whole reserve into orbit as one fleet, any month, blockade or not: the lowest
+# empty slot, created at Earth, else our first fleet at Earth. The caller has
+# checked sr_reserve_may_launch (only the launch site's occupation stops it).
+sr_reserve_launch = {
+	sr_fl_find_empty = yes
+	if = {
+		limit = { local_var:sr_fl_n > 0 }
+		sr_fl_by_local = { DO = new_at_earth }
+	}
+	else = {
+		sr_fl_find_at_earth = yes
+	}
+	if = {
+		limit = { local_var:sr_fl_n > 0 }
+		sr_fl_by_local = { DO = reserve_in }
+		sr_loc_rebuild = yes
+	}
+}
+
+# Country scope (sr_reserve_auto_sgui): the toggle. Off is recorded as 0;
+# on is the variable's absence, the default.
+sr_reserve_toggle_auto = {
+	if = {
+		limit = { sr_reserve_auto_on = yes }
+		set_variable = { name = sr_reserve_auto value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_reserve_auto }
+		remove_variable = sr_reserve_auto
+	}
+}
+
+# ---- The AI (design § 14, 6d) --------------------------------------------------------------
+# Country scope, an AI fleet power's month (sr_fl_ai_review). It keeps the
+# toggle on, so with no enemy at Earth the reserve has already gone up with
+# the month's construction. With an enemy fleet at Earth it launches the
+# reserve once the reserve and its fleets there match the enemy's, so it never
+# feeds hulls up one month's worth at a time.
+sr_fl_ai_reserve = {
+	if = {
+		limit = {
+			sr_reserve_may_launch = yes
+			OR = {
+				NOT = { sr_earth_hostile_present = yes }
+				sr_fl_ai_reserve_matches = yes
+			}
+		}
+		sr_reserve_launch = yes
+	}
+}

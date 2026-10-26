@@ -32,6 +32,8 @@ sr_fleet_power = {
 	OR = {
 		sr_fl_has_any = yes
 		sr_has_space_command = yes
+		# 6d: hulls in its ground reserve.
+		sr_reserve_total > 0
 	}
 }
 
@@ -189,4 +191,54 @@ sr_colony_convention_party = {
 		has_modifier = un_colony_protection_modifier
 		has_variable = un_colony_protection_modifier_on
 	}
+}
+
+# ---- Earth orbit (6d; sr_earth_orbit_effects.txt) ---------------------------------------------
+# Country scope. The ground reserve launches itself each month (design § 15):
+# its toggle, on by default (sr_reserve_auto absent or 1).
+sr_reserve_auto_on = {
+	OR = {
+		NOT = { has_variable = sr_reserve_auto }
+		var:sr_reserve_auto > 0
+	}
+}
+
+# Country scope. A fleet of a country at war with it is at Earth (the location
+# records, sr_fl_at_earth, rebuilt on every arrival and departure).
+sr_earth_hostile_present = {
+	sr_loc_ai_enemy_fleets_earth > 0
+}
+
+# Country scope, under Full Colonies. Its launch site is lost (design § 5.1,
+# § 15): it has a Space Program, and none in a state it controls. Vanilla keeps
+# the building working under occupation, so this test is what stops every
+# launch and module fabrication; only retaking the state lifts it.
+sr_launch_site_lost = {
+	sr_colonies_full_enabled = yes
+	sr_has_space_program = yes
+	NOT = {
+		any_scope_building = {
+			is_building_type = building_space_program
+			state = { sr_state_held_by_owner = yes }
+		}
+	}
+}
+
+# Country scope. Launch (the panel's, the AI's): hulls on the ground, the
+# launch site held (a blockade in orbit doesn't stop it: that is what the
+# reserve is for), and a slot to take them: an empty one, or a fleet of ours
+# at Earth.
+sr_reserve_may_launch = {
+	sr_reserve_total > 0
+	NOT = { sr_launch_site_lost = yes }
+	OR = {
+		sr_fl_has_free_slot = yes
+		sr_fl_any_at = { CODE = 1 }
+	}
+}
+
+# Country scope, the AI (design § 14): its reserve and its fleets at Earth
+# match the enemy's fleets there.
+sr_fl_ai_reserve_matches = {
+	sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth
 }

@@ -58,3 +58,13 @@ sr_disp_battle_left = {
 	value = 0
 	if = { limit = { has_variable = sr_battle_left } value = var:sr_battle_left }
 }
+
+# 6d: the ground reserve's strength, and 1 while it launches itself (the
+# toggle on).
+sr_disp_reserve = {
+	value = sr_reserve_total
+}
+sr_disp_reserve_auto = {
+	value = 0
+	if = { limit = { sr_reserve_auto_on = yes } value = 1 }
+}

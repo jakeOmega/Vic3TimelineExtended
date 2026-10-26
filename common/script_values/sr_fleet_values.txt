@@ -87,9 +87,12 @@ sr_sc_rate = {
 sr_fleet_upkeep_points = { value = 10 }
 
 # Country scope. The upkeep's multiplier, set on the country before it is
-# applied to each Space Command building (sr_fl_upkeep_refresh).
+# applied to each Space Command building (sr_fl_upkeep_refresh). The ground
+# reserve (6d) counts: hulls kept on the ground cost the same as in orbit, so
+# holding them back saves nothing.
 sr_fleet_upkeep_units_value = {
 	value = sr_fl_strength_full_total
+	add = sr_reserve_total
 	divide = sr_fleet_upkeep_points
 }
 
@@ -401,4 +404,12 @@ sr_free_assault_infamy_cost = {
 sr_free_assault_dossier_cost = {
 	value = sr_free_assault_dossier
 	if = { limit = { sr_colony_convention_party = yes } multiply = 2 }
+}
+
+# ---- Earth orbit (design §§ 14-15, 6d), country scope ----------------------------------------------
+# The ground reserve and our fleets at Earth: what a Launch would put up
+# against the enemy there (the AI's launch rule, sr_fl_ai_reserve).
+sr_earth_reserve_and_ours = {
+	value = sr_reserve_total
+	if = { limit = { has_variable = sr_fl_at_earth } add = var:sr_fl_at_earth }
 }

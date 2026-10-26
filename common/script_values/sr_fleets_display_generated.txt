@@ -2382,3 +2382,10 @@ sr_disp_sc_mix_rapid = { value = sr_sc_mix_rapid_value }
 sr_disp_sc_mix_siege = { value = sr_sc_mix_siege_value }
 sr_disp_sc_mix_carrier = { value = sr_sc_mix_carrier_value }
 sr_disp_sc_mix_tender = { value = sr_sc_mix_tender_value }
+
+# The ground reserve by role (6d; Space Command's Reserve hover).
+sr_disp_reserve_war = { value = sr_reserve_war_value }
+sr_disp_reserve_rapid = { value = sr_reserve_rapid_value }
+sr_disp_reserve_siege = { value = sr_reserve_siege_value }
+sr_disp_reserve_carrier = { value = sr_reserve_carrier_value }
+sr_disp_reserve_tender = { value = sr_reserve_tender_value }
