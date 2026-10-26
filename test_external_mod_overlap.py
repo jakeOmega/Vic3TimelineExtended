@@ -143,7 +143,8 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual(res["depends_on"], ["in_vanilla"])
 
     def test_try_replace_with_no_entry_does_nothing(self):
-        res = resolve([ours("z.txt")], [theirs("a.txt", "TRY_REPLACE")], False, FIRST_WINS)
+        res = resolve([ours("z.txt", "REPLACE_OR_CREATE")], [theirs("a.txt", "TRY_REPLACE")],
+                      False, FIRST_WINS)
         self.assertEqual(res["verdict"], THEIRS_WIPED)
         self.assertEqual(res["trace"][0]["effect"], "skipped_no_entry")
 
@@ -162,6 +163,20 @@ class VerdictTests(unittest.TestCase):
                       vanilla, FIRST_WINS)
         self.assertEqual(res["verdict"], BOTH_MERGE)
         self.assertEqual(res["trace"][0]["side"], VANILLA)
+
+    def test_directive_before_the_other_mods_creation_is_undetermined(self):
+        # Our INJECT sorts before their bare creation of a non-vanilla key: it
+        # errors if files apply in order, and lands if every bare definition is
+        # read first. Nothing on record tells the two apart.
+        res = resolve([ours("a.txt", "INJECT")], [theirs("z.txt")], False, FIRST_WINS)
+        self.assertEqual(res["verdict"], UNDETERMINED)
+        self.assertEqual(res["depends_on"], ["creations_first"])
+        by_pass = {s["creations_first"]: s["verdict"] for s in res["verdict_by_scenario"]}
+        self.assertEqual(by_pass, {False: OURS_WIPED, True: BOTH_MERGE})
+
+    def test_creations_first_changes_nothing_for_a_vanilla_key(self):
+        res = resolve([ours("a.txt", "INJECT")], [theirs("z.txt")], IN_VANILLA, FIRST_WINS)
+        self.assertEqual(res["verdict"], THEIRS_WIPED)
 
     def test_a_mod_file_at_vanilla_path_removes_vanilla_even_without_the_key(self):
         # Their 00_x.txt replaces vanilla's whole file, so vanilla's copy of

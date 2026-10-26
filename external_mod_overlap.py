@@ -36,7 +36,12 @@ What the repo records, and where:
    (`common/character_traits/extra_character_traits.txt`) sort before
    vanilla's `personality_traits.txt`, yet no debug log on hand (2026-10-26,
    two of them runs that loaded that file) has a `gamedatabase.h:395` line
-   (inject_to_missing, game_log_reader.py).
+   (inject_to_missing, game_log_reader.py). That fits two readings: vanilla's
+   files load before every mod's, or every bare definition is read before
+   any directive applies. They differ only for a directive on a key that a
+   bare definition in a later-sorting file creates, which no file of this
+   mod does, so the logs can't tell them apart: such a key is simulated both
+   ways (`creations_first`) and is `undetermined` if the answers differ.
 2. A file at the same relative path in a later-loaded mod replaces the
    earlier one whole. Which of two mods loads later is the playset's order,
    which this tool can't see: verdict `depends_on_playset`. A mod file at a
@@ -549,11 +554,17 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     ours_shadowed = {o.path.casefold() for o in ours if o.path} & t_files
     theirs_shadowed = {t.path.casefold() for t in theirs if t.path} & o_files
     shared = ours_shadowed | theirs_shadowed
+    mod_ops = [*ours, *theirs]
+    mixed = (any(o.directive is None for o in mod_ops)
+             and any(o.directive is not None for o in mod_ops))
     dims = {
         "file_order": ["ascii", "case_folded"],
         "later_mod": ["theirs", "ours"] if shared else [None],
         "in_vanilla": [True, False] if vanilla is None else [bool(vanilla)],
         "bare_duplicate": [FIRST_WINS, LAST_WINS] if bare_rule == UNKNOWN else [bare_rule],
+        # Model point 1's second reading: every bare definition is read
+        # before any directive applies. Only matters when both kinds are here.
+        "creations_first": [False, True] if mixed else [False],
     }
     names = list(dims)
     # Each scenario's outcome: the verdict plus which of each side's
@@ -577,8 +588,11 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
             ops += [t for t in theirs if not (t.path and t.path.casefold() in theirs_shadowed)]
         else:
             ops += [*ours, *theirs]
-        surviving, trace = simulate(sort_ops(ops, sc["file_order"] == "case_folded"),
-                                    sc["bare_duplicate"])
+        ordered = sort_ops(ops, sc["file_order"] == "case_folded")
+        if sc["creations_first"]:
+            ordered = ([o for o in ordered if o.side == VANILLA or o.directive is None]
+                       + [o for o in ordered if o.side != VANILLA and o.directive is not None])
+        surviving, trace = simulate(ordered, sc["bare_duplicate"])
         results[combo] = (
             verdict_for(surviving),
             tuple(o for o in ours if o not in surviving),

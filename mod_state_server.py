@@ -5077,11 +5077,19 @@ class DataNotLoaded(_ServiceNotReady):
         }, 503)
 
 
+_overlap_vanilla_cache: dict = {}
+
+
 def _overlap_vanilla_index():
     """Vanilla for /external-mod-overlap: the game files when installed (with
-    file names), else the committed vanilla_parsed/ snapshot (#1170)."""
-    return external_mod_overlap.VanillaIndex(
-        game_common=os.path.join(base_game_path, "game", "common"))
+    file names), else the committed vanilla_parsed/ snapshot (#1170). Kept
+    for the server's life, so a folder read from /mnt/c once is not read
+    again; restart after a game patch."""
+    game_common = os.path.join(base_game_path, "game", "common")
+    if game_common not in _overlap_vanilla_cache:
+        _overlap_vanilla_cache[game_common] = external_mod_overlap.VanillaIndex(
+            game_common=game_common)
+    return _overlap_vanilla_cache[game_common]
 
 
 def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
