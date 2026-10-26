@@ -62,6 +62,7 @@ import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
 import tech_unlocks_lib
 import vanilla_parsed
 import external_mod_overlap  # GET /external-mod-overlap (#1170)
+import external_mod_state  # GET /external-mod-overlap/state (#1184)
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
 # /scripted-helpers/unresolved, /script-args and /pm-employment can call them
@@ -5119,6 +5120,28 @@ def _overlap_vanilla_index():
     return _overlap_vanilla_cache[game_common]
 
 
+# GET /external-mod-overlap/state: one LayeredState per mod root, newest
+# last. It holds the server's ModState's parsers, so every reload drops it.
+_overlap_state_cache: dict = {}
+_OVERLAP_STATE_CACHE_SIZE = 4
+
+
+def _overlap_state(root: str, refresh: bool = False):
+    """(the LayeredState for the mod at `root`, whether it came from the
+    cache): this mod's ModState with that mod's common/ entries layered in by
+    the probed load order (#1184)."""
+    key = os.path.realpath(root)
+    if not refresh and key in _overlap_state_cache:
+        _overlap_state_cache[key] = _overlap_state_cache.pop(key)
+        return _overlap_state_cache[key], True
+    state = external_mod_state.build(ms, root, mod_path, vanilla=_overlap_vanilla_index())
+    _overlap_state_cache.pop(key, None)
+    _overlap_state_cache[key] = state
+    while len(_overlap_state_cache) > _OVERLAP_STATE_CACHE_SIZE:
+        _overlap_state_cache.pop(next(iter(_overlap_state_cache)))
+    return state, False
+
+
 def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
     """Resolve a caller-supplied path param to an absolute path guaranteed to
     live under `mod_path`. Raises BadRequest (400) otherwise.
@@ -6078,6 +6101,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
                 {"path": "/external-mod-overlap?path=<mod root>&trace=true", "desc": "Read-only compatibility check of another mod (a Workshop folder or any mod root) against this one (#1170): keys of common/ databases both define with a load-order verdict (ours_wiped / theirs_wiped / both_merge / both_wiped / depends_on_playset / undetermined; facts: scripting_best_practices.md § Load Order (probed 2026-10-26)), defines both set, shared on_action hooks and effect conflicts, event namespaces and ids, English loc keys, and same-path files (gui/ included). Also `python3 external_mod_overlap.py <root>`."},
+                {"path": "/external-mod-overlap/state[/<EntityType>[/<key>]]?path=<mod root>&refresh=true", "desc": "This mod's ModState with another mod's common/ entries layered in by the probed load order (#1184): the summary (keys recomputed per entity type, by status: changed / added / removed / undetermined / parse_failed / unchanged / not_created), one type's keys, or one key's merged entry (value as /raw gives it, the server's value, every definition, the simulated load, and every candidate when an unknown decides it). Cached per path until a reload."},
                 {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
                 {"path": "/placeholder-icons", "desc": "Classify every mod-set icon: borrowed vanilla, shared, unique, stand-in or missing."},
                 {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
@@ -8731,24 +8755,61 @@ class ModStateHandler(BaseHTTPRequestHandler):
     # ---- another mod's overlap with ours (#1170) ---------------------------
     def _external_mod_overlap(self, parts, params):
         """GET /external-mod-overlap?path=<mod root>[&trace=true]
+        GET /external-mod-overlap/state[/<EntityType>[/<key>]]?path=<mod root>[&refresh=true]
 
         Read-only: scans the other mod's folder and this mod's, reports the
         entries both define and which side the load order keeps. The logic and
-        the load-order model live in external_mod_overlap.py."""
+        the load-order model live in external_mod_overlap.py. `/state` is
+        this mod's ModState with the other mod's common/ entries layered in by
+        that model (external_mod_state.py, #1184): the summary, one entity
+        type's recomputed keys, or one key's merged entry (its value as /raw
+        gives it, the server's value, every definition and the simulated
+        load, and every candidate when an unknown decides it)."""
+        if parts and parts[0] == "state":
+            return self._external_mod_state(parts[1:], params)
         if parts:
             raise NotFound("/".join(["external-mod-overlap", *parts]))
         usage = "GET /external-mod-overlap?path=<mod root>[&trace=true]"
+        root = self._overlap_root(params, usage)
+        trace = self._bool_param(params, "trace", usage)
+        return external_mod_overlap.analyze(
+            root, mod_path, vanilla=_overlap_vanilla_index(), include_trace=trace)
+
+    def _overlap_root(self, params, usage):
         try:
             root = external_mod_overlap.validate_root((params.get("path") or [""])[0])
         except ValueError as exc:
             raise BadRequest(str(exc), usage=usage)
         if os.path.realpath(root) == os.path.realpath(mod_path):
             raise BadRequest(f"{root} is this mod; pass another mod's root", usage=usage)
-        trace = (params.get("trace") or ["false"])[0].lower()
-        if trace not in ("true", "false"):
-            raise BadRequest(f"trace must be true or false, got {trace!r}", usage=usage)
-        return external_mod_overlap.analyze(
-            root, mod_path, vanilla=_overlap_vanilla_index(), include_trace=trace == "true")
+        return root
+
+    @staticmethod
+    def _bool_param(params, name, usage):
+        value = (params.get(name) or ["false"])[0].lower()
+        if value not in ("true", "false"):
+            raise BadRequest(f"{name} must be true or false, got {value!r}", usage=usage)
+        return value == "true"
+
+    def _external_mod_state(self, parts, params):
+        usage = ("GET /external-mod-overlap/state[/<EntityType>[/<key>]]"
+                 "?path=<mod root>[&refresh=true]")
+        if len(parts) > 2:
+            raise NotFound("/".join(["external-mod-overlap", "state", *parts]))
+        root = self._overlap_root(params, usage)
+        refresh = self._bool_param(params, "refresh", usage)
+        if ms is None:
+            raise DataNotLoaded("ModState")
+        etype = self._resolve_entity_type_or_404(parts[0]) if parts else None
+        state, cached = _overlap_state(root, refresh)
+        if etype is None:
+            return {**state.summary(), "cached": cached}
+        if len(parts) == 1:
+            return {**state.entity_type(etype), "cached": cached}
+        entry = state.entity(etype, parts[1])
+        if entry is None:
+            raise NotFound(parts[1])
+        return {**entry, "cached": cached}
 
     # ---- mod-vs-vanilla diff ----------------------------------------------
     def _diff(self, parts, params):
@@ -9907,6 +9968,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
         _party_catalog_cache = None
+        _overlap_state_cache.clear()
         _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
@@ -10230,6 +10292,8 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
         mode_tag += " (audits-only)"
     logger.info(f"Loading mod state{mode_tag}…")
     t0 = time.time()
+    # Layered states hold the old ModState's parsers (#1184).
+    _overlap_state_cache.clear()
 
     if mod_only:
         try:

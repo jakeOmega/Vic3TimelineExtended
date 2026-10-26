@@ -2059,6 +2059,70 @@ class ExternalModOverlapEndpointTests(unittest.TestCase):
         self.assertEqual(mss._overlap_vanilla_cache, {})
 
 
+class ExternalModStateEndpointTests(unittest.TestCase):
+    """GET /external-mod-overlap/state through do_GET (#1184), on
+    test_external_mod_overlap's layered-state fixture."""
+
+    def setUp(self):
+        import external_mod_overlap as emo
+        import test_external_mod_overlap as temo
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        game, self.ours, self.theirs = temo.build_fake_layer_mods(tmp.name)
+        fake_ms = temo.fake_layer_mod_state(game, self.ours)
+        vanilla = emo.VanillaIndex(game_common=game, snapshot_dir=None)
+        for patch in (mock.patch.object(mss, "mod_path", self.ours),
+                      mock.patch.object(mss, "ms", fake_ms),
+                      mock.patch.object(mss, "_overlap_vanilla_index", return_value=vanilla),
+                      mock.patch.dict(mss._overlap_state_cache, clear=True)):
+            patch.start()
+            self.addCleanup(patch.stop)
+        self.q = f"path={quote(self.theirs)}"
+
+    def get(self, path):
+        handler = _CapturingHandler(path)
+        handler.do_GET()
+        return handler.last
+
+    def test_summary_type_and_key(self):
+        status, body = self.get(f"/external-mod-overlap/state?{self.q}")
+        self.assertEqual(status, 200)
+        self.assertFalse(body["cached"])
+        self.assertIn("Laws", [t["entity_type"] for t in body["entity_types"]])
+        status, body = self.get(f"/external-mod-overlap/state/laws?{self.q}")
+        self.assertEqual(status, 200)
+        self.assertTrue(body["cached"])
+        self.assertEqual(body["entity_type"], "Laws")
+        self.assertIn({"key": "te_law", "status": "changed"}, body["keys"])
+        status, body = self.get(f"/external-mod-overlap/state/Laws/te_law?{self.q}")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["value"][1]["modifier"][1]["b_add"], ["=", "2"])
+        status, body = self.get(f"/external-mod-overlap/state/Laws/te_law?{self.q}&refresh=true")
+        self.assertFalse(body["cached"])
+
+    def test_errors(self):
+        for path, status in (
+            ("/external-mod-overlap/state", 400),
+            (f"/external-mod-overlap/state?path={quote(self.ours)}", 400),
+            (f"/external-mod-overlap/state?{self.q}&refresh=maybe", 400),
+            (f"/external-mod-overlap/state/NoSuchType?{self.q}", 404),
+            (f"/external-mod-overlap/state/Laws/law_missing?{self.q}", 404),
+            (f"/external-mod-overlap/state/Laws/te_law/extra?{self.q}", 404),
+        ):
+            with self.subTest(path=path):
+                status_got, body = self.get(path)
+                self.assertEqual(status_got, status)
+                self.assertIn("error", body)
+
+    def test_a_reload_drops_the_layered_states(self):
+        mss._overlap_state_cache["x"] = object()
+        with mock.patch.object(mss, "_choose_vanilla_source",
+                               side_effect=RuntimeError("stop after the cache step")):
+            with self.assertRaises(RuntimeError):
+                mss._load_mod_state(mod_only=True)
+        self.assertEqual(mss._overlap_state_cache, {})
+
+
 class PmEmploymentEndpointTests(unittest.TestCase):
     """GET /pm-employment through do_GET (#990), on test_pm_employment_audit's
     fixture."""

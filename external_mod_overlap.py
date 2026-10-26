@@ -26,6 +26,10 @@ The report:
   registry; which definition the game keeps is unprobed (`gui_load_order`),
   so a row says which file sorts first and claims no winner.
 
+`external_mod_state.py` replays this model with the parsed values to layer
+the other mod into a copy of the server's ModState (`GET
+/external-mod-overlap/state`); `scenario_loads()` is the part both share.
+
 The load-order model is `LOAD_ORDER_MODEL` below: each engine claim, how sure
 it is, and where its evidence is (the facts themselves are written once, in
 `LOAD_ORDER_DOC`). The probed ones are settings (`KNOWN_FILE_ORDER`,
@@ -740,31 +744,16 @@ def order_depends_on_case(ours: list[Op], theirs: list[Op]) -> bool:
     return False
 
 
-def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
-            ours_files: Optional[Iterable[str]] = None,
-            theirs_files: Optional[Iterable[str]] = None) -> dict:
-    """The verdict for one key both mods define.
+def scenario_loads(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
+                   ours_files: Optional[Iterable[str]] = None,
+                   theirs_files: Optional[Iterable[str]] = None) -> tuple[dict, list]:
+    """Every combination of the unknowns resolve() simulates, each with the
+    definitions it reads in load order. Arguments as resolve()'s.
 
-    `vanilla`: None (unknown whether vanilla has the key), False (it doesn't),
-    or a list of vanilla Ops (path None when only the snapshot is known).
-    `bare_rule`: FIRST_WINS, LAST_WINS or UNKNOWN (both tried).
-    `ours_files`, `theirs_files`: every file path each mod ships in the
-    database, defining this key or not (a file at the other mod's or
-    vanilla's path replaces it either way); default: the ops' own paths.
-
-    Every combination of the unknowns is simulated: the file-name order
-    (file_orders()), which mod the playset loads later (only when one ships a
-    file at a path where the other defines the key), whether vanilla has the
-    key, the bare-duplicate rule, and the load reading (load_readings()).
-    When they all agree that is the verdict; otherwise the verdict names the
-    one unknown that changes it (order_depends_on_case, depends_on_playset),
-    or `undetermined`; `depends_on` names the unknowns that change it.
-
-    Returns {verdict, later_file, order_depends_on_case, ours_lost,
-    theirs_lost (definitions whose content doesn't reach the final entry),
-    trace_scenario, trace} or, when the scenarios disagree, {verdict,
-    depends_on, verdict_by_scenario (one row per combination of the deciding
-    unknowns), ...}."""
+    Returns (dims, loads): `dims` maps each unknown to the values still
+    possible (one value when it is known), and `loads` holds one
+    (combo, ordered Ops, bare-duplicate rule) per combination, `combo` being
+    a tuple in `dims`' order. external_mod_state replays these with values."""
     o_files = {p.casefold() for p in (ours_files if ours_files is not None
                                        else [o.path for o in ours if o.path])}
     t_files = {p.casefold() for p in (theirs_files if theirs_files is not None
@@ -782,12 +771,8 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
         "load_reading": list(load_readings()),
     }
     names = list(dims)
-    # Each scenario's outcome: the verdict plus which of each side's
-    # definitions didn't survive, so a scenario that loses one of our two
-    # INJECTs differs from one that keeps both even when both read both_merge.
-    results = {}
-    traces = {}
     mod_paths = o_files | t_files
+    loads = []
     for combo in product(*(dims[n] for n in names)):
         sc = dict(zip(names, combo))
         ops = []
@@ -804,7 +789,60 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
         else:
             ops += [*ours, *theirs]
         ordered = order_for_reading(ops, sc["file_order"], sc["load_reading"])
-        surviving, trace = simulate(ordered, sc["bare_duplicate"])
+        loads.append((combo, ordered, sc["bare_duplicate"]))
+    return dims, loads
+
+
+def deciding_unknowns(dims: dict, results: dict) -> list[str]:
+    """The unknowns in `dims` whose value alone changes some scenario's
+    outcome; `results` maps each scenario_loads combo to its outcome."""
+    names = list(dims)
+
+    def changes_outcome(idx: int) -> bool:
+        return any(
+            results[combo[:idx] + (alt,) + combo[idx + 1:]] != outcome
+            for combo, outcome in results.items()
+            for alt in dims[names[idx]]
+        )
+
+    return [n for i, n in enumerate(names) if len(dims[n]) > 1 and changes_outcome(i)]
+
+
+def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
+            ours_files: Optional[Iterable[str]] = None,
+            theirs_files: Optional[Iterable[str]] = None) -> dict:
+    """The verdict for one key both mods define.
+
+    `vanilla`: None (unknown whether vanilla has the key), False (it doesn't),
+    or a list of vanilla Ops (path None when only the snapshot is known).
+    `bare_rule`: FIRST_WINS, LAST_WINS or UNKNOWN (both tried).
+    `ours_files`, `theirs_files`: every file path each mod ships in the
+    database, defining this key or not (a file at the other mod's or
+    vanilla's path replaces it either way); default: the ops' own paths.
+
+    Every combination of the unknowns is simulated (scenario_loads): the
+    file-name order (file_orders()), which mod the playset loads later (only
+    when one ships a file at a path where the other defines the key), whether
+    vanilla has the key, the bare-duplicate rule, and the load reading
+    (load_readings()). When they all agree that is the verdict; otherwise the
+    verdict names the one unknown that changes it (order_depends_on_case,
+    depends_on_playset), or `undetermined`; `depends_on` names the unknowns
+    that change it.
+
+    Returns {verdict, later_file, order_depends_on_case, ours_lost,
+    theirs_lost (definitions whose content doesn't reach the final entry),
+    trace_scenario, trace} or, when the scenarios disagree, {verdict,
+    depends_on, verdict_by_scenario (one row per combination of the deciding
+    unknowns), ...}."""
+    dims, loads = scenario_loads(ours, theirs, vanilla, bare_rule, ours_files, theirs_files)
+    names = list(dims)
+    # Each scenario's outcome: the verdict plus which of each side's
+    # definitions didn't survive, so a scenario that loses one of our two
+    # INJECTs differs from one that keeps both even when both read both_merge.
+    results = {}
+    traces = {}
+    for combo, ordered, bare_duplicate in loads:
+        surviving, trace = simulate(ordered, bare_duplicate)
         results[combo] = (
             verdict_for(surviving),
             tuple(o for o in ours if o not in surviving),
@@ -827,15 +865,7 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
         out["theirs_lost"] = list(theirs_lost)
         return out
 
-    def changes_outcome(idx: int) -> bool:
-        """Some scenario's outcome changes when only dimension `idx` does."""
-        return any(
-            results[combo[:idx] + (alt,) + combo[idx + 1:]] != outcome
-            for combo, outcome in results.items()
-            for alt in dims[names[idx]]
-        )
-
-    deciding = [n for i, n in enumerate(names) if len(dims[n]) > 1 and changes_outcome(i)]
+    deciding = deciding_unknowns(dims, results)
     if deciding == ["file_order"]:
         out["verdict"] = ORDER_DEPENDS_ON_CASE
     elif deciding == ["later_mod"]:
@@ -888,6 +918,14 @@ class VanillaIndex:
         self._keys = {db: set(v) for db, v in keys.items()} if keys is not None else None
         self._cache: dict = {}
         self._manifest = None
+        # external_mod_state's parses of vanilla files ({path: (data, error)}),
+        # kept as long as the index is.
+        self.parsed_files: dict = {}
+
+    def game_file(self, db: str, path: str) -> Optional[str]:
+        """The absolute path of a vanilla file in `db` (a path within it), or
+        None without the game files."""
+        return os.path.join(self._game_dir(db), *path.split("/")) if self.game_common else None
 
     @classmethod
     def default(cls) -> "VanillaIndex":
