@@ -252,6 +252,15 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 modifier_duration_audit.py --strict
 
+      # Vanilla's file list comes from the committed catalog
+      # docs/engine/vanilla_asset_paths.txt (no game here), the mod's from
+      # `git ls-files gfx/`, which lists every texture this sparse checkout
+      # leaves off the disk. The engine logs a missing texture only on first
+      # render.
+      - name: Audit — asset paths in script that name no file
+        if: ${{ !cancelled() }}
+        run: python3 texture_reference_audit.py --strict
+
       - name: Audit — loc keys named in script that no loc file defines
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
