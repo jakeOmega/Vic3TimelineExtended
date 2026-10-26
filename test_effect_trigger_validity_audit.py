@@ -1,5 +1,7 @@
 """Tests for effect_trigger_validity_audit (issue #146)."""
 
+import contextlib
+import io
 import os
 import tempfile
 import unittest
@@ -287,6 +289,10 @@ CTX_VALID = VALID | {
     "custom_tooltip", "text", "every_country", "any_country", "random_country",
     "ai_chance", "base", "modifier", "option", "immediate", "trigger",
     "type", "else", "add_radicals", "strata", "gdp", "is_shown",
+    "create_power_bloc", "cede_state_trigger", "should_be_pinned_by_default",
+    "accept_effect", "will_propose_with_states", "will_select_as_first_state",
+    "non_fulfillment", "conditions", "weekly", "owner", "ai_will_do", "exists",
+    "ruler", "on_monthly_pulse", "random_list",
 }
 CTX_KEYS = {
     "effect_only": {"save_scope_as", "set_variable", "every_country",
@@ -487,6 +493,128 @@ class EffectInTriggerTests(unittest.TestCase):
             [("set_variable", "effect-in-trigger", 4)],
         )
 
+    def test_bare_trigger_in_an_option_weight_is_neutral(self):
+        # A weight modifier inside an option holds bare triggers, not effects.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\toption = {\n\t\tname = my.1.a\n"
+            "\t\tai_chance = { base = 1 modifier = { is_at_war = yes add = 2 } }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_random_list_weight_modifier_is_neutral(self):
+        # `modifier` alone: a random_list weight inside effect context.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\trandom_list = {\n"
+            "\t\t\t10 = { modifier = { is_at_war = yes add = 5 } set_variable = x }\n"
+            "\t\t}\n\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_trigger_suffix_block_in_an_effect_is_trigger_context(self):
+        # decolonization.txt passes `cede_state_trigger = { … }` to an effect.
+        result = _ctx_audit({"common/scripted_effects/s.txt": (
+            "te_fx = {\n\tcreate_power_bloc = {\n"
+            "\t\tcede_state_trigger = { has_variable = y }\n\t}\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_should_on_and_effect_suffix_blocks(self):
+        result = _ctx_audit({
+            "common/journal_entries/j.txt": "je_x = {\n"
+            "\tshould_be_pinned_by_default = { set_variable = a }\n"
+            "\ton_monthly_pulse = { has_variable = b }\n}\n",
+            "common/diplomatic_actions/d.txt": "da_x = {\n"
+            "\taccept_effect = { has_variable = c }\n}\n",
+        })
+        self.assertEqual(
+            sorted((f.keyword, f.kind, os.path.basename(f.file), f.line)
+                   for f in result.flags),
+            [("has_variable", "trigger-in-effect", "d.txt", 2),
+             ("has_variable", "trigger-in-effect", "j.txt", 3),
+             ("set_variable", "effect-in-trigger", "j.txt", 2)],
+        )
+
+    def test_diplomatic_action_and_treaty_trigger_blocks(self):
+        result = _ctx_audit({
+            "common/diplomatic_actions/d.txt": "da_x = {\n"
+            "\twill_propose_with_states = { set_variable = a }\n"
+            "\twill_select_as_first_state = { set_variable = b }\n}\n",
+            "common/treaty_articles/t.txt": "ta_x = {\n\tnon_fulfillment = {\n"
+            "\t\tconditions = {\n\t\t\tweekly = { set_variable = c }\n"
+            "\t\t}\n\t}\n}\n",
+        })
+        self.assertEqual(
+            sorted((os.path.basename(f.file), f.line) for f in result.flags),
+            [("d.txt", 2), ("d.txt", 3), ("t.txt", 4)],
+        )
+
+    def test_ai_will_do_holds_triggers(self):
+        # Vanilla laws and character interactions: `ai_will_do = { exists =
+        # ruler }`, bare triggers rather than a weight.
+        result = _ctx_audit({"common/laws/l.txt": (
+            "law_x = {\n\tai_will_do = { exists = ruler }\n}\n"
+            "law_y = {\n\tai_will_do = { save_scope_as = z }\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("save_scope_as", "effect-in-trigger", 5)],
+        )
+
+    def test_block_opened_on_the_next_line(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tif = {\n\t\t\tlimit =\n"
+            "\t\t\t{ set_variable = x }\n\t\t}\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.line) for f in result.flags], [("set_variable", 5)]
+        )
+
+    def test_guarded_scope_change_inherits(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\towner ?= { has_variable = a }\n"
+            "\t\tif = { limit = { owner ?= { set_variable = b } } }\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            _flagged(result),
+            {("has_variable", "trigger-in-effect"),
+             ("set_variable", "effect-in-trigger")},
+        )
+
+    def test_reviewed_after_a_string_suppresses(self):
+        # The comment starts after the string's closing quote, `#` inside it
+        # included.
+        result = _ctx_audit({"common/scripted_triggers/t.txt": (
+            "te_t = {\n\tcustom_tooltip = { text = \"a#b\" save_scope_as = y }"
+            "  # REVIEWED 2026-10-26: test\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+        self.assertEqual(
+            [(f.keyword, f.kind) for f in result.flags],
+            [("save_scope_as", "effect-in-trigger")],
+        )
+
+    def test_commented_out_effect_after_a_string_in_a_limit(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tif = {\n"
+            "\t\t\tlimit = { custom_tooltip = { text = \"t\" } } # save_scope_as = y\n"
+            "\t\t}\n\t}\n}\n"
+        )})
+        self.assertEqual(result.flags, [])
+
+    def test_run_on_string_continuation_is_text(self):
+        # The continuation line's key and brace belong to the string.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tte_helper = {\n"
+            "\t\t\tCRITERIA = \"NOT = {\n"
+            "\t\t\thas_variable = x }\"\n\t\t}\n"
+            "\t\tif = { limit = { set_variable = y } }\n\t}\n}\n"
+        ), "common/scripted_effects/s.txt": "te_helper = {\n\tsave_scope_as = z\n}\n"})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("set_variable", "effect-in-trigger", 7)],
+        )
+
     def test_reviewed_suppresses(self):
         result = _ctx_audit({"common/scripted_triggers/t.txt": (
             "te_t = {\n\tsave_scope_as = x  # REVIEWED 2026-10-26: test\n}\n"
@@ -530,6 +658,90 @@ class TriggerInEffectTests(unittest.TestCase):
             "\t}\n}\n"
         )})
         self.assertEqual(_flagged(result), set())
+
+
+class ModHelperOverlapTests(unittest.TestCase):
+    def test_catalog_name_the_mod_defines_on_the_other_side_passes(self):
+        # A mod scripted trigger named like a vanilla scripted effect (and the
+        # reverse) is valid where the mod's own definition is read.
+        keys = {"effect_only": {"v_shared_fx"}, "trigger_only": {"v_shared_tg"}}
+        mod = _Mod({
+            "common/scripted_triggers/t.txt": "v_shared_fx = {\n\tis_at_war = yes\n}\n"
+            "te_check = {\n\tv_shared_fx = yes\n}\n",
+            "common/scripted_effects/s.txt": "v_shared_tg = {\n\tset_variable = x\n}\n"
+            "te_do = {\n\tv_shared_tg = yes\n}\n",
+        })
+        result = eva.audit(mod.root, valid_keys=CTX_VALID, context_keys=keys)
+        self.assertEqual(_flagged(result), set())
+
+
+class UnterminatedStringTests(unittest.TestCase):
+    def test_file_ending_inside_a_string_flags_its_opening_line(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tcustom_tooltip = { text = \"t }\n"
+            "\t\tif = { limit = { set_variable = y } }\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("string to end of file", "unterminated-string", 3)],
+        )
+
+    def test_stray_quote_mid_file_flags_where_it_opens(self):
+        # Two stray quotes: the file ends outside a string, but the first
+        # "string" runs from line 3 to the next quote, on line 7.
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tcustom_tooltip = { text = \"t }\n"
+            "\t\tsave_scope_as = a\n\t\tsave_scope_as = b\n"
+            "\t\tsave_scope_as = c\n\t\tcustom_tooltip = { text = t\" }\n"
+            "\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("string over 5 lines", "unterminated-string", 3)],
+        )
+
+    def test_two_line_string_passes(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tte_helper = {\n"
+            "\t\t\tCRITERIA = \"NOT = { has_variable = x }\n"
+            "\t\t\tgdp > 5\"\n\t\t}\n\t}\n}\n"
+        ), "common/scripted_effects/s.txt": "te_helper = {\n\tsave_scope_as = z\n}\n"})
+        self.assertEqual(result.flags, [])
+
+    def test_long_string_reviewed_on_its_closing_line(self):
+        result = _ctx_audit({"events/e.txt": (
+            "my.1 = {\n\timmediate = {\n\t\tte_helper = {\n"
+            "\t\t\tCRITERIA = \"a\n\t\t\tb\n\t\t\tc\n"
+            "\t\t\td\"  # REVIEWED 2026-10-26: a four-line criteria string\n"
+            "\t\t}\n\t}\n}\n"
+        ), "common/scripted_effects/s.txt": "te_helper = {\n\tsave_scope_as = z\n}\n"})
+        self.assertEqual(_flagged(result), set())
+        self.assertEqual(
+            [(f.kind, f.line) for f in result.flags], [("unterminated-string", 4)]
+        )
+
+
+class StrictExitTests(unittest.TestCase):
+    def _mod(self, event_body: str) -> str:
+        mod = _Mod({
+            "events/e.txt": "my.1 = {\n" + event_body + "}\n",
+            "docs/engine/effect_trigger_valid_keys.txt":
+                "\n".join(sorted(CTX_VALID)) + "\n",
+            "docs/engine/effect_trigger_context_keys.txt":
+                "[effect_only]\nset_variable\n[trigger_only]\nhas_variable\n",
+        })
+        return mod.root
+
+    def test_strict_fails_on_an_unreviewed_flag(self):
+        root = self._mod("\ttrigger = { set_variable = x }\n")
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(eva.main(["--strict"], mod_path=root), 1)
+            self.assertEqual(eva.main([], mod_path=root), 0)
+
+    def test_strict_passes_a_clean_tree(self):
+        root = self._mod("\timmediate = { set_variable = x }\n")
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(eva.main(["--strict"], mod_path=root), 0)
 
 
 class ContextCatalogTests(unittest.TestCase):
