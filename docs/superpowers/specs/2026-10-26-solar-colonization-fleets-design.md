@@ -181,8 +181,11 @@ ideas).
 **Unverified, each with a self-check or a play-test row (§ 18):**
 
 - That Space Command's methods' state modifier reaches its state and reads
-  above 0 once staffed (`ship_construction`), and that the upkeep on the
-  building raises its input bill and not its output (a play-test row).
+  above 0 once staffed (`ship_construction`).
+- **That `building_goods_input_mult` on a building raises its input goods**
+  (the owner recalls trouble with it), against the good-specific multipliers
+  known to work: the `upkeep_inputs` probe, run before the upkeep is written
+  (§ 5, § 18).
 - That a fleet lands in the month its leg's table gives (`fleet_leg`, on
   `colony_fleet_arrival`'s pattern).
 - That a war goal's `infamy` block sees `scope:target_country` and `root` in a
@@ -386,6 +389,21 @@ Space Program, expandable, `can_build_private` no.
   300 makes Space Command consume 30% more goods, and builds no faster for it.
   The building's panel shows the line. `gen_nation_tab.py` lists it under
   `NOT_ON_COUNTRY`.
+- **`building_goods_input_mult` is checked first, and has a fallback.** The
+  owner recalls trouble with it in this mod before (nothing in the repo
+  records what), while the good-specific multipliers are known to work. So 6a
+  opens with a probe (§ 18) that puts each candidate on a building at a large
+  multiplier and reads the result. The preferred one,
+  `building_goods_input_mult`, covers every input with one line and follows
+  any change to the methods. The fallback, `sr_fleet_upkeep_goods`, carries
+  `goods_input_launch_capacity_mult`, `goods_input_advanced_materials_mult`
+  and `goods_input_electricity_mult` at +1% each. All three are registered by
+  the mod (`mod_entity_modifier_types.txt:599`, `:558`, `:528`), and a test
+  keeps the list in step with the methods' input goods. Either way it sits on
+  the building, never the country: the good-specific types are building-masked
+  too, and on the country would raise every building's use of those goods.
+  The answer goes into `scripting_best_practices.md`, so the next system
+  needn't ask.
 - **The Orbital Battlestation** fights at Earth (6b, § 7.5).
 
 ### 5.1 Occupied states
@@ -828,6 +846,18 @@ Added to `docs/testing/solar-colonies-playtest.md`:
 - **`fleet_leg`** (6a): the first fleet that lands logs its leg, its drive, the
   months flown against the table; BROKEN if it landed two or more months late
   (fallback: land fleets from the country pulse as well).
+- **The `upkeep_inputs` probe** (6a, before the upkeep is written): a console
+  option puts one candidate (`sr_fleet_upkeep`, then in a second run
+  `sr_fleet_upkeep_goods`) at multiplier 50 (+50% inputs) on our Space
+  Command, or on our Space Program before one is built (it buys Launch
+  Capacity too). It logs the market's Launch Capacity buy orders
+  (`market_goods_buy_orders`) and, through a follow-up event fourteen days
+  later, logs them again and removes the modifier: `TE_SR_PROBE upkeep_inputs
+  <candidate> before=… after=…`. The owner reads the building's input
+  tooltip (the definitive read; the market is the cross-check) and records
+  which works. Not a once-a-game self-check: the building's goods use can't be
+  read from script, and the market's buy orders move with every other buyer,
+  so only a large, deliberate jump reads clearly.
 - **`battery_sweep`** (6d): the first month the world's step takes a sweep:
   logs the low pool before and after and the sum of `sr_battery_sweep`; BROKEN
   if the low pool fell by less than the sum (beyond its decay) or the high pool
@@ -896,7 +926,8 @@ our Earth by the largest rival.
 18. **Space Command's rate and the batteries' figures are state modifiers the
     script sums** (§§ 5, 15, the owner's suggestions on the PR), and **the
     fleet's upkeep is a modifier on the Space Command building that raises its
-    input goods** (`building_goods_input_mult`), so a bigger fleet costs more
+    input goods** (`building_goods_input_mult` if the probe shows it works,
+    else the three good-specific multipliers), so a bigger fleet costs more
     and builds no faster.
 
 ## 21. Build order
