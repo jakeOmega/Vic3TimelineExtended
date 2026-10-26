@@ -38,6 +38,10 @@ DEBUG_EVENTS = ROOT / "events/te_debug_space_race_events.txt"
 CEDE_COLONY = ROOT / "common/treaty_articles/124_cede_colony.txt"
 SPACE_RACE_EVENTS = ROOT / "events/space_race_events.txt"
 EARTH_EFFECTS = ROOT / "common/scripted_effects/sr_earth_orbit_effects.txt"
+BATTERY = ROOT / "common/buildings/sr_orbital_defense_battery.txt"
+BATTERY_METHODS = ROOT / "common/production_methods/sr_orbital_defense_battery_pms.txt"
+MODIFIER_TYPES = ROOT / "common/modifier_type_definitions/sr_fleet_modifier_types.txt"
+DEBRIS_EFFECTS = ROOT / "common/scripted_effects/te_orbital_debris_effects.txt"
 
 
 def _raw(path):
@@ -557,6 +561,87 @@ class GroundReserveTest(unittest.TestCase):
         self.assertIn("sr_earth_reserve_and_ours >= sr_loc_ai_enemy_fleets_earth",
                       _block(self.triggers, "sr_fl_ai_reserve_matches"))
         self.assertIn("sr_loc_ai_enemy_fleets_earth = {", self.values)
+
+
+class BatteryTest(unittest.TestCase):
+    """6d (design § 15): ground-to-orbit batteries fire on hostile fleets at
+    Earth, and Ground Lasers sweep the low debris pool in peace; both figures
+    are state modifiers the script sums over the states the owner controls."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.methods = _strip(_raw(BATTERY_METHODS))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.earth = _strip(_raw(EARTH_EFFECTS))
+
+    def test_the_building(self):
+        building = _block(_strip(_raw(BATTERY)), "building_orbital_defense_battery")
+        self.assertIn("sr_colonies_full_enabled = yes", _block("x = {" + building.split("potential = {", 1)[1], "x"))
+        self.assertIn("space_militarization", _block("x = {" + building.split("unlocking_technologies = {", 1)[1], "x"))
+        self.assertIn("owner ?= { sr_battery_may_build_government = yes }", building)
+        self.assertIn("pmg_orbital_defense_battery", building)
+
+    def test_each_method_carries_its_figures_as_state_modifiers_only(self):
+        expected = {"pm_orbital_battery_kinetic": {"state_orbital_battery_fire_add": 1.0},
+                    "pm_orbital_battery_lasers": {"state_orbital_battery_fire_add": 2.0,
+                                                  "state_orbital_debris_sweep_add": 0.01}}
+        for pm, figures in expected.items():
+            body = _block(self.methods, pm)
+            state = _block("x = {" + body.split("state_modifiers = {", 1)[1], "x")
+            with self.subTest(pm=pm):
+                self.assertIn("workforce_scaled", state)
+                self.assertEqual({k: float(v) for k, v in re.findall(r"(state_orbital_\w+) = ([\d.]+)", state)}, figures)
+                building = _block("x = {" + body.split("building_modifiers = {", 1)[1], "x")
+                self.assertNotIn("orbital_battery", building)
+                self.assertNotIn("debris", building)
+        self.assertIn("directed_energy_weapons", _block(self.methods, "pm_orbital_battery_lasers"))
+        self.assertIn("goods_input_electricity_add", _block(self.methods, "pm_orbital_battery_lasers"))
+
+    def test_the_types_are_script_only_with_their_decimals(self):
+        types = _strip(_raw(MODIFIER_TYPES))
+        for name, decimals in (("state_orbital_battery_fire_add", 1), ("state_orbital_debris_sweep_add", 2)):
+            body = _block(types, name)
+            with self.subTest(type=name):
+                self.assertIn("script_only = yes", body)
+                self.assertIn(f"decimals = {decimals}", body)
+
+    def test_fire_and_sweep_count_only_states_held_by_their_owner(self):
+        for name, mod in (("sr_battery_fire", "state_orbital_battery_fire_add"),
+                          ("sr_battery_fire_kinetic", "state_orbital_battery_fire_add"),
+                          ("sr_battery_sweep", "state_orbital_debris_sweep_add")):
+            body = _block(self.values, name)
+            with self.subTest(value=name):
+                self.assertRegex(body, r"every_scope_state = \{\s*limit = \{\s*sr_state_held_by_owner = yes")
+                self.assertIn(f"add = modifier:{mod}", body)
+        self.assertRegex(_block(self.values, "sr_battery_sweep"), r"limit = \{ is_at_war = no \}")
+        # Nothing else reads the two types.
+        for path in (FLEET_EFFECTS, COMBAT_EFFECTS, EARTH_EFFECTS, FLEET_TRIGGERS, gsf.ROOT / gsf.VALUES_OUT):
+            with self.subTest(file=path.name):
+                self.assertNotIn("modifier:state_orbital", _strip(_raw(path)))
+
+    def test_batteries_fire_in_the_earth_battle_and_take_no_losses(self):
+        at = _block(self.combat, "sr_combat_at")
+        self.assertRegex(at, r"limit = \{ local_var:sr_cb_code = 1 \}\s*sr_cb_battlestation_gather = yes\s*"
+                             r"sr_cb_battery_gather = yes")
+        gather = _block(self.combat, "sr_cb_battery_gather")
+        self.assertIn("sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_bf }", gather)
+        self.assertNotIn("sr_cb_s1", gather)
+        self.assertIn("set_variable = { name = sr_cb_kf value = sr_battery_fire_kinetic }", gather)
+        self.assertIn("kf", gsf.CB_VARS)
+        self.assertIn("te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }", at)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_debris_low"), 0.02)
+
+    def test_the_sweep_takes_from_the_low_pool_alone_after_removal(self):
+        monthly = _block(_strip(_raw(DEBRIS_EFFECTS)), "te_debris_global_monthly")
+        self.assertLess(monthly.index("te_debris_removal_month"), monthly.index("sr_battery_sweep_step = yes"))
+        self.assertLess(monthly.index("sr_battery_sweep_step = yes"), monthly.index("te_debris_clamp_pools = yes"))
+        step = _block(self.earth, "sr_battery_sweep_step")
+        self.assertIn("name = orbital_debris_low", step)
+        self.assertNotRegex(step, r"name = orbital_debris_high\b")
+        self.assertIn("every_in_global_list = {\n\t\t\tvariable = sr_fleet_powers", step)
+        self.assertNotIn("every_country", step)
+        self.assertIn("sr_has_battery = yes", _block(_strip(_raw(FLEET_TRIGGERS)), "sr_fleet_power"))
 
 
 if __name__ == "__main__":
