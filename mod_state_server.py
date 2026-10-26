@@ -5870,7 +5870,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "movements": lambda: self._movements(rest),
             # Analytical endpoints
             "movement-stances": lambda: self._movement_stances(rest, params),
-            "references": lambda: self._references(rest),
+            # Party types and their merged join_weight terms (#1164)
+            "parties": lambda: self._parties(rest, params),
+            "references":lambda: self._references(rest),
             "diff": lambda: self._diff(rest, params),
             "tech-tree": lambda: self._tech_tree(rest),
             "modifier-search": lambda: self._modifier_search(params),
@@ -5998,6 +6000,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/ideologies/<id?>", "desc": "Ideology defs and IG-stance maps."},
                 {"path": "/movements/<id?>", "desc": "Political movements (mod ∪ vanilla): category, ideology, set_core_ideology alternates, creation_trigger keys and tech gate (#838)."},
                 {"path": "/movement-stances?lawgroup=<g>|law=<l>[&current=<law>]", "desc": "Each movement's stance on every law of a group (variants take the parent's; unnamed laws neutral) and two readings of backing: unbacked_laws (no movement rates the law approve or better) and never_backed_laws (no movement rates it above any other law of the group); current= (mode=comparative) lists the laws each rates above it. /movement-stances/gaps: law groups no movement rates, and every group's unbacked and never-backed laws (#838)."},
+                {"path": "/parties/<key?>?desc=<desc>", "desc": "Party types (mod ∪ vanilla, #1164): source vanilla|mod|both, defining files, the file whose join_weight the merged party carries (an injected join_weight replaces the field), and join_weight_terms, the desc of each term in source order (a desc-less term as `value = 0` / `if = {...}`). ?desc= keeps the parties naming it; /<key> adds per-term detail. Merged AST: /raw/Parties/<key>."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
                 {"path": "/journal-entries/<id?>", "desc": "Journal entries (mod-only)."},
@@ -7613,6 +7616,36 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if out is None:
             raise NotFound(lawgroup)
         return out
+
+    def _parties(self, parts, params):
+        """GET /parties[?desc=<desc>], GET /parties/<key> (#1164): who defines
+        each party and the descs of its merged join_weight, in source order
+        (party_catalog.py)."""
+        import party_catalog
+
+        parties = ms.get_data("Parties")
+        if not parties:
+            raise DataNotLoaded("Parties")
+        vanilla_parser = ms.base_parsers.get("Parties")
+        vanilla = (vanilla_parser.data if vanilla_parser is not None else None) or {}
+        if _vanilla_source.get("kind") == "vanilla_parsed":
+            sites = [party_catalog.snapshot_site(vanilla)] if vanilla else []
+        else:
+            sites = party_catalog.directory_sites(
+                base_game_paths.get("Parties"), base_game_path, "vanilla")
+        sites += party_catalog.directory_sites(mod_paths.get("Parties"), mod_path, "mod")
+        rows = party_catalog.party_rows(parties, vanilla, sites)
+        if parts:
+            row = next((r for r in rows if r["key"] == parts[0]), None)
+            if row is None:
+                raise NotFound(parts[0])
+            return row
+        desc = (params.get("desc") or [None])[0]
+        return [
+            {k: v for k, v in row.items() if k != "terms"}
+            for row in rows
+            if desc is None or desc in row["join_weight_terms"]
+        ]
 
     # ---- analytical: references -------------------------------------------
     def _references(self, parts):
