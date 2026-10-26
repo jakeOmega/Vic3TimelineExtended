@@ -162,6 +162,13 @@ types un_layout_widget_types
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)32' )]"
 							texture = "gfx/interface/icons/un_icons/topic_asat.dds"
 						}
+						# The outer-space convention (solar colonization fleets § 13):
+						# for now a copy of space cooperation's icon, under its own name.
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)33' )]"
+							texture = "gfx/interface/icons/un_icons/topic_colony_protection.dds"
+						}
 						# Phase 7 (§0.12): each topic's icon is, for now, a copy of its
 						# nearest older topic's, under its own name, so new art drops in.
 						icon = {

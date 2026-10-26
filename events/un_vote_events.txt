@@ -145,6 +145,10 @@ un_vote.1 = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
 			}
 			triggered_desc = {
+				desc = un_vote.1.t_colony_protection
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+			}
+			triggered_desc = {
 				desc = un_vote.1.t_icc
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 			}
@@ -304,6 +308,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_asat
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_colony_protection
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_icc
@@ -839,6 +847,14 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
 				desc = un_vote.2.d_asat_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection has_tag = un_res_passed } }
+				desc = un_vote.2.d_colony_protection_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+				desc = un_vote.2.d_colony_protection_failed
 			}
 			# International Criminal Court - Passed (vetoed: symbolic censure only)
 			triggered_desc = {
@@ -1792,6 +1808,17 @@ un_vote.2 = {
 				set_global_variable = un_agency_unoda
 			}
 
+			# ---- The Convention on the Settlement of Outer Space (solar
+			#      colonization fleets design § 13): a party's destruction of a
+			#      colony, or assault on a free one, costs twice the infamy and
+			#      the case; parties gain prestige ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+				custom_tooltip = un_vote_colony_protection_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_copuos
+			}
+
 			# ---- Convention on Cultural Diversity (redesign phase 7, §0.12
 			#      item 5): parties' minorities assimilate and lose their
 			#      homelands more slowly, trailing parties feel the hegemon's
@@ -2409,6 +2436,15 @@ un_vote.3 = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_asat }
 					has_variable = un_dkt_asat_struck
+				}
+				add = 50
+			}
+			# The outer-space convention: a power whose fleets have just seized
+			# or destroyed a colony keeps its hands free
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_colony_protection }
+					has_variable = un_dkt_colony_actor
 				}
 				add = 50
 			}

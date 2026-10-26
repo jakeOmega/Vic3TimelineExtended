@@ -3,7 +3,7 @@
 # ============================================================================
 # What each of the seven member-initiated topics actually does when tabled:
 # the costs and cooldowns it takes, the target it names, and the
-# un_resolution_open call that opens the vote. The sixteen conventions follow at
+# un_resolution_open call that opens the vote. The seventeen conventions follow at
 # the bottom of the file, with their own header.
 #
 # Extracted word for word out of each scripted button's `effect` in
@@ -383,7 +383,7 @@ un_propose_lift_sanctions_effect = {
 }
 
 # ============================================================================
-# THE SIXTEEN CONVENTIONS
+# THE SEVENTEEN CONVENTIONS
 # ============================================================================
 # Human rights, ICC, NPT, climate, pandemic, refugee, heritage,
 # decolonization, space, the law of the sea, the physical protection of
@@ -884,4 +884,21 @@ un_propose_asat_effect = {
 	custom_tooltip = un_vote_initiated_tt
 	un_propose_own_motion_costs = yes
 	un_propose_asat_table = yes
+}
+
+# The Convention on the Settlement of Outer Space (solar colonization fleets
+# design § 13): the scientists for it, the armed forces against a limit on
+# what the fleets may do.
+un_propose_colony_protection_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = colony_protection }
+	}
+}
+
+un_propose_colony_protection_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_colony_protection_table = yes
 }

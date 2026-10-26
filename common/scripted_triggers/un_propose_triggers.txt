@@ -29,11 +29,11 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE SIXTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# THE SEVENTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
 # nuclear material, cultural diversity, the prohibition of nuclear weapons,
-# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium) are
-# at the bottom of the file. The docket raises them for everyone through the proposer events in
+# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium, the
+# settlement of outer space) are at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
 # through the docket, which paces the floor (un_docket_effects.txt), and a
@@ -634,9 +634,9 @@ un_propose_lift_sanctions_possible = {
 }
 
 # ============================================================================
-# THE SIXTEEN CONVENTIONS
+# THE SEVENTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-19, 29, 31 and 32 of
+# Tabled on our own motion from the chamber (ops 7-19, 29 and 31-33 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -1306,4 +1306,50 @@ un_propose_asat_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_asat = yes
 	un_propose_asat_qualifies = yes
+}
+
+# ---- The Convention on the Settlement of Outer Space (COPUOS) ----
+# Solar colonization's fleets (docs/superpowers/specs/
+# 2026-10-26-solar-colonization-fleets-design.md § 13; the 1979 Moon
+# Agreement's ambition). Raised by a colony's seizure or destruction (the
+# docket's item 17) and as Assembly business. A party that destroys a colony
+# or seizes a free one pays twice the infamy and twice the case
+# (sr_colony_convention_party, which the fleets read). It forbids nothing.
+# The Space Race rule's Full Colonies and a colony held somewhere are global
+# gates (un_docket_topic_open_colony_protection).
+# Scope: any
+un_propose_colony_protection_in_force = {
+	has_global_variable = un_agency_copuos
+}
+
+# Scope: the prospective proposer: a member that holds a colony, and not the
+# one whose seizure or destruction raised it.
+un_propose_colony_protection_qualifies = {
+	sr_has_space_colony = yes
+	custom_tooltip = {
+		text = un_propose_colony_protection_not_actor_tt
+		NOT = { has_variable = un_dkt_colony_actor }
+	}
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_colony_protection_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_colony_protection_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_colony_protection_available = {
+	sr_colonies_full_enabled = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_colony_protection_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_colony_protection_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_colony_protection = yes
+	un_propose_colony_protection_qualifies = yes
 }

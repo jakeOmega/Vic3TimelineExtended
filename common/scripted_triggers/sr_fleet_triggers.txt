@@ -170,8 +170,15 @@ sr_battlestation_held = {
 	}
 }
 
-# Country scope. A party to the outer-space convention (6c): no one yet, so the
-# prices of force are single until the convention exists.
+# Country scope. A party to the Convention on the Settlement of Outer Space in
+# force (6c, design § 13): its member modifier, or the mirror a revolution's
+# winner keeps (un_state_effects.txt). A party's destruction of a colony, and
+# its assault on a free one, cost twice the infamy and twice the case
+# (sr_fleet_values.txt's prices of force).
 sr_colony_convention_party = {
-	always = no
+	has_global_variable = un_agency_copuos
+	OR = {
+		has_modifier = un_colony_protection_modifier
+		has_variable = un_colony_protection_modifier_on
+	}
 }

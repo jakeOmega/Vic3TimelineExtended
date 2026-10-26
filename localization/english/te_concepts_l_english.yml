@@ -2956,6 +2956,8 @@
  un_coexistence_modifier:0 "Peaceful Coexistence Advocate"
  un_coexistence_modifier_desc:0 "This country has called for peaceful coexistence between rival ideological blocs at the United Nations."
  un_colonial_defender_modifier_desc:0 "This country is defending colonial development programs at the UN, strengthening domestic authority but losing international reputation."
+ un_colony_protection_modifier_desc:0 "This country is party to the Convention on the Settlement of Outer Space, which earns it [concept_prestige]. Destroying a colony, or closing in on a free one, costs it twice the infamy and twice the case strength. The prestige is scaled by UN enforcement; the doubling is not."
+ un_colony_protection_refusal_modifier_desc:0 "This country refused to table the Convention on the Settlement of Outer Space and cannot propose it while this penalty lasts."
  un_condemnation_leader_modifier_desc:0 "This country led a condemnation resolution at the UN General Assembly, enhancing its diplomatic reputation. Having claimed the moral high ground, its own aggressive acts are read more harshly — [concept_infamy] generation rises."
  un_condemned_isolation_modifier_desc:0 "A strong United Nations has condemned this country. Other countries are less willing to sign treaties with it or to back it in a diplomatic play."
  un_condemned_modifier:0 "Condemned by UN General Assembly"

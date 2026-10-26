@@ -350,6 +350,7 @@ un_authority_log_reason_line = {
 		un_authority_log_reason_case = { CODE = 1381 KEY = je_un_led_reason_1381 }
 		un_authority_log_reason_case = { CODE = 1401 KEY = je_un_led_reason_1401 }
 		un_authority_log_reason_case = { CODE = 1411 KEY = je_un_led_reason_1411 }
+		un_authority_log_reason_case = { CODE = 1421 KEY = je_un_led_reason_1421 }
 	}
 	else_if = {
 		limit = { var:un_led_reason >= 100 }
@@ -518,6 +519,7 @@ un_authority_log_resolution_lines = {
 	un_authority_log_topic_case = { TOPIC = narcotics KEY = je_un_led_topic_narcotics }
 	un_authority_log_topic_case = { TOPIC = antarctic KEY = je_un_led_topic_antarctic }
 	un_authority_log_topic_case = { TOPIC = asat KEY = je_un_led_topic_asat }
+	un_authority_log_topic_case = { TOPIC = colony_protection KEY = je_un_led_topic_colony_protection }
 	un_authority_log_topic_case = { TOPIC = icc KEY = je_un_led_topic_icc }
 	un_authority_log_topic_case = { TOPIC = peacekeeping_request KEY = je_un_led_topic_peacekeeping_request }
 	un_authority_log_topic_case = { TOPIC = aid_request KEY = je_un_led_topic_aid_request }

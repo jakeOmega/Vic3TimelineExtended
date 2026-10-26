@@ -610,6 +610,7 @@ sr_site_occupy = {
 	if = { limit = { has_global_variable = sr_site_bombard_$KEY$ } remove_global_variable = sr_site_bombard_$KEY$ }
 	sr_site_sync_$KEY$ = yes
 	sr_site_occupation_notice = { KEY = $KEY$ INDEX = $INDEX$ KIND = 1 }
+	sr_colony_un_on_seizure = yes
 	sr_sites_refresh_players = yes
 	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
 	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] occupied by [THIS.GetCountry.GetTagName]"
@@ -653,6 +654,7 @@ sr_site_take_free = {
 		sr_site_event_open = { VAR = sr_seized_free_site INDEX = $INDEX$ }
 		trigger_event = { id = space_race_events.104 days = 1 }
 	}
+	sr_colony_un_on_seizure = yes
 	sr_sites_refresh_players = yes
 	set_global_variable = { name = sr_cb_log_world value = $INDEX$ }
 	debug_log = "TE_SR_COMBAT world [GetGlobalVariable('sr_cb_log_world').GetValue|0] (a free colony) seized by [THIS.GetCountry.GetTagName]"
@@ -681,6 +683,7 @@ sr_site_destroy = {
 	}
 	change_infamy = sr_destroy_infamy_cost
 	un_dossier_record = { RECORD = space POINTS = sr_destroy_dossier_cost }
+	sr_colony_un_on_seizure = yes
 	set_local_variable = { name = sr_aut_delta value = sr_destroy_autonomy_now }
 	sr_site_aut_add_all = yes
 	set_variable = {

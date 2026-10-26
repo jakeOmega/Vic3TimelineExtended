@@ -28,8 +28,10 @@
 #   15    an Antarctic station    a country's first research station        a proposer (un_events.40, the Antarctic Treaty)
 #   16    an anti-satellite       a destructive strike, last 2 years        a proposer (un_events.41, the Moratorium on
 #         strike                                                            Destructive Anti-Satellite Tests)
+#   17    a colony seized or      a colony occupied, destroyed or a free    a proposer (un_events.42, the Convention on
+#         destroyed               one taken, last 2 years                   the Settlement of Outer Space)
 #
-# Items 1-3, 6-11, 13, 15 and 16 open a resolution if accepted, so they wait
+# Items 1-3, 6-11, 13 and 15-17 open a resolution if accepted, so they wait
 # for a free floor (un_docket_floor_free: no vote in session, no recess). Items
 # 4, 5, 12 and 14 open none and are taken up whatever the floor is doing.
 #
@@ -64,6 +66,10 @@
 #   un_dkt_asat_pending (global, 2 years)  item 16: the striker, written by
 #                                      te_asat_un_on_strike (te_asat_un_hooks.txt);
 #                                      un_dkt_asat_struck on the striker
+#   un_dkt_colony_pending (global, 2 years)  item 17: the country that seized or
+#                                      destroyed a colony, written by
+#                                      sr_colony_un_on_seizure (sr_colony_un_hooks.txt);
+#                                      un_dkt_colony_actor on it
 # ============================================================================
 
 # ---- Grievances (the hooks) ------------------------------------------------------------
@@ -381,6 +387,17 @@ un_docket_scan = {
 			}
 			un_docket_consider = { TYPE = 16 SCORE = un_docket_score_asat }
 		}
+		# 17. A colony seized or destroyed, while the Convention on the
+		# Settlement of Outer Space is open (solar colonization fleets design
+		# § 13).
+		if = {
+			limit = {
+				has_global_variable = un_dkt_colony_pending
+				un_docket_topic_open_colony_protection = yes
+				any_country = { un_docket_may_propose_colony_protection = yes }
+			}
+			un_docket_consider = { TYPE = 17 SCORE = un_docket_score_colony_protection }
+		}
 	}
 
 	# ---- Business that opens no resolution ----
@@ -528,6 +545,13 @@ un_docket_scan = {
 		remove_global_variable = un_dkt_asat_pending
 		un_docket_log = { TYPE = 16 }
 		un_docket_offer_topic = { TOPIC = asat EVENT = un_events.41 }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 17 }
+		global_var:un_dkt_colony_pending ?= { save_scope_as = un_dkt_subject }
+		remove_global_variable = un_dkt_colony_pending
+		un_docket_log = { TYPE = 17 }
+		un_docket_offer_topic = { TOPIC = colony_protection EVENT = un_events.42 }
 	}
 
 	remove_global_variable = un_dkt_best
@@ -865,6 +889,13 @@ un_docket_take_up_agenda = {
 				any_country = { un_docket_may_propose_nuclear_ban = yes }
 			}
 			un_docket_offer_topic = { TOPIC = nuclear_ban EVENT = un_events.38 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_colony_protection = yes
+				any_country = { un_docket_may_propose_colony_protection = yes }
+			}
+			un_docket_offer_topic = { TOPIC = colony_protection EVENT = un_events.42 }
 		}
 	}
 }

@@ -32,7 +32,8 @@
 #                          un_cultural_diversity_modifier, un_nuclear_ban_modifier,
 #                          un_narcotics_control_modifier,
 #                          un_antarctic_treaty_modifier,
-#                          un_asat_moratorium_modifier
+#                          un_asat_moratorium_modifier,
+#                          un_colony_protection_modifier
 #
 # Not mirrored, because the monthly pulse derives them from the above:
 # un_member_privileges_modifier, un_membership_benefits_modifier,
@@ -227,6 +228,7 @@ un_state_restore_all = {
 		un_convention_country_restore = { MODIFIER = un_nuclear_ban_modifier }
 		un_convention_country_restore = { MODIFIER = un_antarctic_treaty_modifier }
 		un_convention_country_restore = { MODIFIER = un_asat_moratorium_modifier }
+		un_convention_country_restore = { MODIFIER = un_colony_protection_modifier }
 
 		if = {
 			limit = { un_hq_is_host = yes }
@@ -379,6 +381,7 @@ un_state_forget_conventions = {
 	un_state_forget = { MODIFIER = un_nuclear_ban_modifier }
 	un_state_forget = { MODIFIER = un_antarctic_treaty_modifier }
 	un_state_forget = { MODIFIER = un_asat_moratorium_modifier }
+	un_state_forget = { MODIFIER = un_colony_protection_modifier }
 }
 
 # The pulse's turn on a pending entry that still lacks something: rebuild, and
@@ -461,6 +464,7 @@ un_state_reconcile = {
 	un_state_reconcile_country = { MODIFIER = un_nuclear_ban_modifier }
 	un_state_reconcile_country = { MODIFIER = un_antarctic_treaty_modifier }
 	un_state_reconcile_country = { MODIFIER = un_asat_moratorium_modifier }
+	un_state_reconcile_country = { MODIFIER = un_colony_protection_modifier }
 }
 
 # ---- The headquarters host across a revolution ------------------------------------------

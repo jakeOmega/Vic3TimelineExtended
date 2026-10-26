@@ -240,6 +240,7 @@ un_regime_any_convention = {
 		has_global_variable = un_agency_tpnw
 		has_global_variable = un_agency_ats
 		has_global_variable = un_agency_unoda
+		has_global_variable = un_agency_copuos
 	}
 }
 
@@ -296,6 +297,7 @@ un_chamber_party_to_a_convention = {
 		has_modifier = un_nuclear_ban_modifier
 		has_modifier = un_antarctic_treaty_modifier
 		has_modifier = un_asat_moratorium_modifier
+		has_modifier = un_colony_protection_modifier
 		has_modifier = un_regime_colonial_pressure_modifier
 		has_modifier = un_regime_colony_liberty_modifier
 	}

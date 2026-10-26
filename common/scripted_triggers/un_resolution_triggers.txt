@@ -254,6 +254,7 @@ un_resolution_is_convention = {
 		has_tag = un_topic_nuclear_ban
 		has_tag = un_topic_antarctic
 		has_tag = un_topic_asat
+		has_tag = un_topic_colony_protection
 		AND = {
 			has_tag = un_topic_icc
 			NOT = { has_tag = un_res_vetoed }
