@@ -9662,6 +9662,7 @@ POST_LOAD_AUDITS = [
     ("ideology_lawgroup_audit",       "ideology_lawgroup_audit"),
     ("script_argument_audit",         "script_argument_audit"),
     ("modifier_duration_audit",       "modifier_duration_audit"),
+    ("loc_script_value_audit",        "loc_script_value_audit"),
     ("texture_reference_audit",       "texture_reference_audit"),
 ]
 
