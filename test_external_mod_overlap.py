@@ -94,30 +94,39 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual(res["verdict"], BOTH_MERGE)
         self.assertEqual(res["ours_lost"], [])
 
-    def test_both_merge_inject_after_their_replace(self):
+    def test_their_earlier_replace_still_wipes_our_inject(self):
+        # Every INJECT applies before any REPLACE (probe round 3), so a REPLACE
+        # in a file that sorts first still has the last word.
         res = resolve([ours("zz.txt", "INJECT")], [theirs("aa.txt", "REPLACE")],
                       IN_VANILLA, FIRST_WINS)
-        self.assertEqual(res["verdict"], BOTH_MERGE)
+        self.assertEqual(res["verdict"], OURS_WIPED)
+        self.assertEqual([s["effect"] for s in res["trace"]], ["created", "injected", "replaced"])
 
-    def test_both_merge_with_one_of_ours_lost(self):
-        # Our first INJECT sorts before their REPLACE, the second after it.
+    def test_injects_on_both_sides_of_a_replace_are_both_lost(self):
+        # One INJECT sorts before their REPLACE, the other after it: neither survives.
         res = resolve([ours("a.txt", "INJECT"), ours("z.txt", "INJECT")],
                       [theirs("m.txt", "REPLACE")], IN_VANILLA, FIRST_WINS)
+        self.assertEqual(res["verdict"], OURS_WIPED)
+        self.assertEqual(res["ours_lost"], [ours("a.txt", "INJECT"), ours("z.txt", "INJECT")])
+
+    def test_both_merge_inject_and_or_create(self):
+        res = resolve([ours("a.txt", "INJECT")], [theirs("b.txt", "INJECT_OR_CREATE")],
+                      IN_VANILLA, FIRST_WINS)
         self.assertEqual(res["verdict"], BOTH_MERGE)
-        self.assertEqual(res["ours_lost"], [ours("a.txt", "INJECT")])
 
     def test_both_wiped_two_bare_redefinitions_of_vanilla(self):
         res = resolve([ours("a.txt")], [theirs("b.txt")], IN_VANILLA, FIRST_WINS)
         self.assertEqual(res["verdict"], BOTH_WIPED)
 
-    def test_spa_country_ranks_resolve_in_ascii_order(self):
+    def test_spa_country_ranks_their_try_replace_wipes_our_inject(self):
         # `MoG_SPA_country_ranks.txt` sorts before `extra_country_ranks.txt`
-        # in ASCII order (M < e), so our INJECT lands on their REPLACE.
+        # in ASCII order (M < e), so our file is read later, but the INJECT
+        # applies before their TRY_REPLACE all the same.
         res = resolve([ours("extra_country_ranks.txt", "INJECT")],
                       [theirs("MoG_SPA_country_ranks.txt", "TRY_REPLACE")],
                       IN_VANILLA, FIRST_WINS)
-        self.assertEqual(res["verdict"], BOTH_MERGE)
-        self.assertEqual(res["ours_lost"], [])
+        self.assertEqual(res["verdict"], OURS_WIPED)
+        self.assertEqual(res["ours_lost"], [ours("extra_country_ranks.txt", "INJECT")])
         self.assertEqual(res["later_file"], OURS)
         self.assertFalse(res["order_depends_on_case"])
 
@@ -184,17 +193,53 @@ class VerdictTests(unittest.TestCase):
         self.assertEqual(res["verdict"], UNDETERMINED)
         self.assertEqual(res["depends_on"], ["in_vanilla"])
 
-    def test_try_replace_with_no_entry_does_nothing(self):
+    def test_try_directives_with_no_entry_do_nothing(self):
+        res = resolve([ours("a.txt", "TRY_INJECT")], [theirs("b.txt", "TRY_REPLACE")],
+                      False, FIRST_WINS)
+        self.assertEqual(res["verdict"], BOTH_WIPED)
+        self.assertEqual([s["effect"] for s in res["trace"]],
+                         ["skipped_no_entry", "skipped_no_entry"])
+
+    def test_or_create_comes_before_try_replace_in_an_earlier_file(self):
+        # Our REPLACE_OR_CREATE creates the entry in its own phase, so their
+        # TRY_REPLACE (a.txt sorts first) finds it and replaces it.
         res = resolve([ours("z.txt", "REPLACE_OR_CREATE")], [theirs("a.txt", "TRY_REPLACE")],
                       False, FIRST_WINS)
-        self.assertEqual(res["verdict"], THEIRS_WIPED)
-        self.assertEqual(res["trace"][0]["effect"], "skipped_no_entry")
+        self.assertEqual(res["verdict"], OURS_WIPED)
+        self.assertEqual([s["effect"] for s in res["trace"]], ["created", "replaced"])
 
     def test_plain_inject_with_no_entry_errors(self):
-        res = resolve([ours("a.txt", "INJECT")], [theirs("b.txt", "INJECT_OR_CREATE")],
+        res = resolve([ours("a.txt", "INJECT")], [theirs("b.txt", "TRY_INJECT")],
                       False, FIRST_WINS)
-        self.assertEqual(res["verdict"], OURS_WIPED)
-        self.assertEqual([s["effect"] for s in res["trace"]], ["error_no_entry", "created"])
+        self.assertEqual(res["verdict"], BOTH_WIPED)
+        self.assertEqual([s["effect"] for s in res["trace"]], ["error_no_entry", "skipped_no_entry"])
+
+    def test_or_create_beside_a_bare_definition_is_undetermined(self):
+        # Realism AI's shape: vanilla defines the key, their REPLACE_OR_CREATE
+        # (u…) meets our REPLACE (t…). With the creations it applies before
+        # ours; with the REPLACEs, after it. Unprobed, so both are simulated.
+        res = resolve([ours("te_vanilla_country_names.txt", "REPLACE")],
+                      [theirs("usfp_dynamic_country_names.txt", "REPLACE_OR_CREATE")],
+                      IN_VANILLA, FIRST_WINS)
+        self.assertEqual(res["verdict"], UNDETERMINED)
+        self.assertEqual(res["depends_on"], ["or_create_phase"])
+        by_phase = {s["or_create_phase"]: s["verdict"] for s in res["verdict_by_scenario"]}
+        self.assertEqual(by_phase, {"creation": THEIRS_WIPED, "own_family": OURS_WIPED})
+
+    def test_or_create_phase_known_gives_one_verdict(self):
+        with mock.patch.object(emo, "KNOWN_OR_CREATE_PHASE", "creation"):
+            res = resolve([ours("te_vanilla_country_names.txt", "REPLACE")],
+                          [theirs("usfp_dynamic_country_names.txt", "REPLACE_OR_CREATE")],
+                          IN_VANILLA, FIRST_WINS)
+        self.assertEqual(res["verdict"], THEIRS_WIPED)
+
+    def test_inject_finds_the_entry_a_later_or_create_makes(self):
+        # Probe rounds 1 and 2: INJECT:x in a_ with REPLACE_OR_CREATE:x in b_
+        # and no other definition logged no gamedatabase.h:395 line.
+        res = resolve([ours("a.txt", "INJECT")], [theirs("b.txt", "REPLACE_OR_CREATE")],
+                      False, FIRST_WINS)
+        self.assertEqual(res["verdict"], BOTH_MERGE)
+        self.assertEqual([s["effect"] for s in res["trace"]], ["created", "injected"])
 
     def test_a_mod_file_at_vanilla_path_removes_vanilla_even_without_the_key(self):
         # Their 00_x.txt replaces vanilla's whole file, so vanilla's copy of
@@ -231,8 +276,9 @@ class UnknownEngineTests(unittest.TestCase):
 
     def test_order_depends_on_case(self):
         # `MoG_x.txt` sorts before `extra_x.txt` in ASCII order (M < e) and
-        # after it folded either way.
-        res = resolve([ours("extra_country_ranks.txt", "INJECT")],
+        # after it folded either way; of two REPLACEs the later one's body is
+        # the entry, under every load reading.
+        res = resolve([ours("extra_country_ranks.txt", "REPLACE")],
                       [theirs("MoG_SPA_country_ranks.txt", "TRY_REPLACE")],
                       IN_VANILLA, FIRST_WINS)
         self.assertEqual(res["verdict"], ORDER_DEPENDS_ON_CASE)
@@ -240,7 +286,7 @@ class UnknownEngineTests(unittest.TestCase):
         self.assertEqual(res["later_file"], "depends_on_case")
         self.assertEqual(res["depends_on"], ["file_order"])
         by_order = {s["file_order"]: s["verdict"] for s in res["verdict_by_scenario"]}
-        self.assertEqual(by_order, {"ascii": BOTH_MERGE, "lower_folded": OURS_WIPED,
+        self.assertEqual(by_order, {"ascii": THEIRS_WIPED, "lower_folded": OURS_WIPED,
                                     "upper_folded": OURS_WIPED})
 
     def test_upper_and_lower_folding_differ_on_underscore(self):
@@ -277,14 +323,14 @@ class UnknownEngineTests(unittest.TestCase):
 
     def test_two_deciding_unknowns_are_undetermined(self):
         # Theirs ships our file (without the key), and their REPLACE sorts
-        # before our INJECT only in ASCII order: both the playset and the
-        # file order change the outcome.
-        res = resolve([ours("extra.txt", "INJECT")], [theirs("MoG.txt", "REPLACE")], IN_VANILLA,
+        # before ours only in ASCII order: both the playset and the file
+        # order change the outcome.
+        res = resolve([ours("extra.txt", "REPLACE")], [theirs("MoG.txt", "REPLACE")], IN_VANILLA,
                       FIRST_WINS, ours_files=["extra.txt"], theirs_files=["extra.txt", "MoG.txt"])
         self.assertEqual(res["verdict"], UNDETERMINED)
         self.assertEqual(res["depends_on"], ["file_order", "later_mod"])
         rows = {(s["file_order"], s["later_mod"]): s["verdict"] for s in res["verdict_by_scenario"]}
-        self.assertEqual(rows[("ascii", "ours")], BOTH_MERGE)
+        self.assertEqual(rows[("ascii", "ours")], THEIRS_WIPED)
         self.assertEqual(rows[("lower_folded", "ours")], OURS_WIPED)
         self.assertEqual(rows[("ascii", "theirs")], OURS_WIPED)
 
@@ -308,6 +354,36 @@ class OrderHelperTests(unittest.TestCase):
         ordered = emo.order_for_reading(ops, "ascii", "creations_first")
         self.assertEqual([(o.side, o.directive) for o in ordered],
                          [(VANILLA, None), (THEIRS, None), (OURS, "INJECT")])
+
+    def test_creations_first_applies_directives_in_phases(self):
+        # Probe rounds 1-3: *_OR_CREATE, then the INJECTs, then the REPLACEs,
+        # each phase in file order, whatever order the files sort in.
+        ops = [ours("a.txt", "REPLACE"), theirs("b.txt", "INJECT"), ours("c.txt", "TRY_REPLACE"),
+               theirs("d.txt", "REPLACE_OR_CREATE"), ours("e.txt", "TRY_INJECT"),
+               Op(VANILLA, "m.txt", 1)]
+        ordered = emo.order_for_reading(ops, "ascii", "creations_first")
+        self.assertEqual([o.path for o in ordered],
+                         ["m.txt", "d.txt", "b.txt", "e.txt", "a.txt", "c.txt"])
+
+    def test_own_family_or_create_phase(self):
+        # With a bare definition there, each *_OR_CREATE joins its family's
+        # phase; with none, the first one still creates the entry up front.
+        ops = [ours("a.txt", "REPLACE"), theirs("b.txt", "REPLACE_OR_CREATE"),
+               ours("c.txt", "INJECT_OR_CREATE"), theirs("d.txt", "INJECT")]
+        with_bare = emo.order_for_reading([*ops, Op(VANILLA, "m.txt", 1)], "ascii",
+                                          "creations_first", "own_family")
+        self.assertEqual([o.path for o in with_bare], ["m.txt", "c.txt", "d.txt", "a.txt", "b.txt"])
+        without = emo.order_for_reading(ops, "ascii", "creations_first", "own_family")
+        self.assertEqual([o.path for o in without], ["b.txt", "c.txt", "d.txt", "a.txt"])
+        creation = emo.order_for_reading([*ops, Op(VANILLA, "m.txt", 1)], "ascii",
+                                         "creations_first", "creation")
+        self.assertEqual([o.path for o in creation], ["m.txt", "b.txt", "c.txt", "d.txt", "a.txt"])
+
+    def test_directive_phases_cover_each_directive_once(self):
+        phases = emo.DIRECTIVE_PHASES
+        self.assertEqual(sum(len(p) for p in phases), len(frozenset().union(*phases)))
+        self.assertEqual(frozenset().union(*phases),
+                         emo.INJECT_DIRECTIVES | emo.REPLACE_DIRECTIVES)
 
     def test_order_depends_on_case_needs_an_unknown_order(self):
         self.assertFalse(emo.order_depends_on_case([ours("extra.txt")], [theirs("MoG.txt")]))
@@ -335,7 +411,9 @@ class RuleTests(unittest.TestCase):
         self.assertEqual(emo.rule_for("static_modifiers").bare_duplicate, FIRST_WINS)
         self.assertEqual(emo.rule_for("scripted_effects").bare_duplicate, FIRST_WINS)
         self.assertEqual(emo.rule_for("script_values").bare_duplicate, LAST_WINS)
-        self.assertEqual(emo.rule_for("scripted_triggers").bare_duplicate, UNKNOWN)
+        self.assertEqual(emo.rule_for("scripted_triggers").bare_duplicate, FIRST_WINS)
+        self.assertEqual(emo.rule_for("scripted_rules").bare_duplicate, FIRST_WINS)
+        self.assertEqual(emo.rule_for("game_rules").bare_duplicate, UNKNOWN)
         self.assertEqual(emo.rule_for("history/countries").kind, "additive")
         self.assertEqual(emo.rule_for("defines").kind, "defines")
         self.assertEqual(emo.rule_for("on_actions").kind, "on_actions")
@@ -490,7 +568,7 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(self.report["mod_name"], "Fake Pop Mod")
         self.assertEqual(self.report["summary"]["key_collisions"], 4)
         self.assertEqual(self.report["summary"]["by_verdict"],
-                         {BOTH_MERGE: 2, DEPENDS_ON_PLAYSET: 1, OURS_WIPED: 1})
+                         {BOTH_MERGE: 1, DEPENDS_ON_PLAYSET: 1, OURS_WIPED: 2})
 
     def test_key_collision_row(self):
         row = self.collision("law_a")
@@ -505,7 +583,8 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(row["later_file"], THEIRS)
         self.assertEqual(row["fields_both_set"], ["group"])
         self.assertNotIn("trace", row)   # opt-in
-        self.assertEqual(self.collision("great_power")["verdict"], BOTH_MERGE)
+        # Their TRY_REPLACE applies after our INJECT, whichever file sorts first.
+        self.assertEqual(self.collision("great_power")["verdict"], OURS_WIPED)
         self.assertEqual(self.collision("state_turmoil")["verdict"], BOTH_MERGE)
 
     def test_a_file_shipped_at_our_path_reaches_the_verdict(self):
