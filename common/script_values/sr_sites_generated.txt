@@ -2213,6 +2213,7 @@ sr_mod_spec_budget = { value = 4 }
 #   sr_site_staffing_<key>        1 with the crews, AGI or under races only; else
 #                                  (crews + 1) / levels (design § 4)
 #   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing
+#                                  x the charter's share (slice 5 design § 2)
 #   sr_site_<spec|generic>_built_<key>  the levels against each cap
 # Country scope, counting THIS's queue and every shipment on its way:
 #   sr_mod_spec_used_<key>, sr_mod_slots_used_<key>
@@ -2271,10 +2272,12 @@ sr_site_staffing_valles_marineris = {
 sr_site_mult_a_valles_marineris = {
 	value = sr_site_lvl_a_value_valles_marineris
 	multiply = sr_site_staffing_valles_marineris
+	multiply = sr_site_charter_factor_valles_marineris
 }
 sr_site_mult_b_valles_marineris = {
 	value = sr_site_lvl_b_value_valles_marineris
 	multiply = sr_site_staffing_valles_marineris
+	multiply = sr_site_charter_factor_valles_marineris
 }
 sr_site_spec_built_valles_marineris = { value = sr_site_lvl_a_value_valles_marineris add = sr_site_lvl_b_value_valles_marineris }
 sr_site_generic_built_valles_marineris = {
@@ -2353,10 +2356,12 @@ sr_site_staffing_olympus_mons = {
 sr_site_mult_a_olympus_mons = {
 	value = sr_site_lvl_a_value_olympus_mons
 	multiply = sr_site_staffing_olympus_mons
+	multiply = sr_site_charter_factor_olympus_mons
 }
 sr_site_mult_b_olympus_mons = {
 	value = sr_site_lvl_b_value_olympus_mons
 	multiply = sr_site_staffing_olympus_mons
+	multiply = sr_site_charter_factor_olympus_mons
 }
 sr_site_spec_built_olympus_mons = { value = sr_site_lvl_a_value_olympus_mons add = sr_site_lvl_b_value_olympus_mons }
 sr_site_generic_built_olympus_mons = {
@@ -2435,10 +2440,12 @@ sr_site_staffing_hellas_planitia = {
 sr_site_mult_a_hellas_planitia = {
 	value = sr_site_lvl_a_value_hellas_planitia
 	multiply = sr_site_staffing_hellas_planitia
+	multiply = sr_site_charter_factor_hellas_planitia
 }
 sr_site_mult_b_hellas_planitia = {
 	value = sr_site_lvl_b_value_hellas_planitia
 	multiply = sr_site_staffing_hellas_planitia
+	multiply = sr_site_charter_factor_hellas_planitia
 }
 sr_site_spec_built_hellas_planitia = { value = sr_site_lvl_a_value_hellas_planitia add = sr_site_lvl_b_value_hellas_planitia }
 sr_site_generic_built_hellas_planitia = {
@@ -2517,10 +2524,12 @@ sr_site_staffing_utopia_planitia = {
 sr_site_mult_a_utopia_planitia = {
 	value = sr_site_lvl_a_value_utopia_planitia
 	multiply = sr_site_staffing_utopia_planitia
+	multiply = sr_site_charter_factor_utopia_planitia
 }
 sr_site_mult_b_utopia_planitia = {
 	value = sr_site_lvl_b_value_utopia_planitia
 	multiply = sr_site_staffing_utopia_planitia
+	multiply = sr_site_charter_factor_utopia_planitia
 }
 sr_site_spec_built_utopia_planitia = { value = sr_site_lvl_a_value_utopia_planitia add = sr_site_lvl_b_value_utopia_planitia }
 sr_site_generic_built_utopia_planitia = {
@@ -2599,10 +2608,12 @@ sr_site_staffing_arcadia_planitia = {
 sr_site_mult_a_arcadia_planitia = {
 	value = sr_site_lvl_a_value_arcadia_planitia
 	multiply = sr_site_staffing_arcadia_planitia
+	multiply = sr_site_charter_factor_arcadia_planitia
 }
 sr_site_mult_b_arcadia_planitia = {
 	value = sr_site_lvl_b_value_arcadia_planitia
 	multiply = sr_site_staffing_arcadia_planitia
+	multiply = sr_site_charter_factor_arcadia_planitia
 }
 sr_site_spec_built_arcadia_planitia = { value = sr_site_lvl_a_value_arcadia_planitia add = sr_site_lvl_b_value_arcadia_planitia }
 sr_site_generic_built_arcadia_planitia = {
@@ -2681,10 +2692,12 @@ sr_site_staffing_ceres = {
 sr_site_mult_a_ceres = {
 	value = sr_site_lvl_a_value_ceres
 	multiply = sr_site_staffing_ceres
+	multiply = sr_site_charter_factor_ceres
 }
 sr_site_mult_b_ceres = {
 	value = sr_site_lvl_b_value_ceres
 	multiply = sr_site_staffing_ceres
+	multiply = sr_site_charter_factor_ceres
 }
 sr_site_spec_built_ceres = { value = sr_site_lvl_a_value_ceres add = sr_site_lvl_b_value_ceres }
 sr_site_generic_built_ceres = {
@@ -2763,10 +2776,12 @@ sr_site_staffing_vesta = {
 sr_site_mult_a_vesta = {
 	value = sr_site_lvl_a_value_vesta
 	multiply = sr_site_staffing_vesta
+	multiply = sr_site_charter_factor_vesta
 }
 sr_site_mult_b_vesta = {
 	value = sr_site_lvl_b_value_vesta
 	multiply = sr_site_staffing_vesta
+	multiply = sr_site_charter_factor_vesta
 }
 sr_site_spec_built_vesta = { value = sr_site_lvl_a_value_vesta add = sr_site_lvl_b_value_vesta }
 sr_site_generic_built_vesta = {
@@ -2845,10 +2860,12 @@ sr_site_staffing_psyche = {
 sr_site_mult_a_psyche = {
 	value = sr_site_lvl_a_value_psyche
 	multiply = sr_site_staffing_psyche
+	multiply = sr_site_charter_factor_psyche
 }
 sr_site_mult_b_psyche = {
 	value = sr_site_lvl_b_value_psyche
 	multiply = sr_site_staffing_psyche
+	multiply = sr_site_charter_factor_psyche
 }
 sr_site_spec_built_psyche = { value = sr_site_lvl_a_value_psyche add = sr_site_lvl_b_value_psyche }
 sr_site_generic_built_psyche = {
@@ -2927,10 +2944,12 @@ sr_site_staffing_pallas = {
 sr_site_mult_a_pallas = {
 	value = sr_site_lvl_a_value_pallas
 	multiply = sr_site_staffing_pallas
+	multiply = sr_site_charter_factor_pallas
 }
 sr_site_mult_b_pallas = {
 	value = sr_site_lvl_b_value_pallas
 	multiply = sr_site_staffing_pallas
+	multiply = sr_site_charter_factor_pallas
 }
 sr_site_spec_built_pallas = { value = sr_site_lvl_a_value_pallas add = sr_site_lvl_b_value_pallas }
 sr_site_generic_built_pallas = {
@@ -3009,10 +3028,12 @@ sr_site_staffing_hygiea = {
 sr_site_mult_a_hygiea = {
 	value = sr_site_lvl_a_value_hygiea
 	multiply = sr_site_staffing_hygiea
+	multiply = sr_site_charter_factor_hygiea
 }
 sr_site_mult_b_hygiea = {
 	value = sr_site_lvl_b_value_hygiea
 	multiply = sr_site_staffing_hygiea
+	multiply = sr_site_charter_factor_hygiea
 }
 sr_site_spec_built_hygiea = { value = sr_site_lvl_a_value_hygiea add = sr_site_lvl_b_value_hygiea }
 sr_site_generic_built_hygiea = {
@@ -3091,10 +3112,12 @@ sr_site_staffing_io = {
 sr_site_mult_a_io = {
 	value = sr_site_lvl_a_value_io
 	multiply = sr_site_staffing_io
+	multiply = sr_site_charter_factor_io
 }
 sr_site_mult_b_io = {
 	value = sr_site_lvl_b_value_io
 	multiply = sr_site_staffing_io
+	multiply = sr_site_charter_factor_io
 }
 sr_site_spec_built_io = { value = sr_site_lvl_a_value_io add = sr_site_lvl_b_value_io }
 sr_site_generic_built_io = {
@@ -3173,10 +3196,12 @@ sr_site_staffing_europa = {
 sr_site_mult_a_europa = {
 	value = sr_site_lvl_a_value_europa
 	multiply = sr_site_staffing_europa
+	multiply = sr_site_charter_factor_europa
 }
 sr_site_mult_b_europa = {
 	value = sr_site_lvl_b_value_europa
 	multiply = sr_site_staffing_europa
+	multiply = sr_site_charter_factor_europa
 }
 sr_site_spec_built_europa = { value = sr_site_lvl_a_value_europa add = sr_site_lvl_b_value_europa }
 sr_site_generic_built_europa = {
@@ -3255,10 +3280,12 @@ sr_site_staffing_ganymede = {
 sr_site_mult_a_ganymede = {
 	value = sr_site_lvl_a_value_ganymede
 	multiply = sr_site_staffing_ganymede
+	multiply = sr_site_charter_factor_ganymede
 }
 sr_site_mult_b_ganymede = {
 	value = sr_site_lvl_b_value_ganymede
 	multiply = sr_site_staffing_ganymede
+	multiply = sr_site_charter_factor_ganymede
 }
 sr_site_spec_built_ganymede = { value = sr_site_lvl_a_value_ganymede add = sr_site_lvl_b_value_ganymede }
 sr_site_generic_built_ganymede = {
@@ -3337,10 +3364,12 @@ sr_site_staffing_callisto = {
 sr_site_mult_a_callisto = {
 	value = sr_site_lvl_a_value_callisto
 	multiply = sr_site_staffing_callisto
+	multiply = sr_site_charter_factor_callisto
 }
 sr_site_mult_b_callisto = {
 	value = sr_site_lvl_b_value_callisto
 	multiply = sr_site_staffing_callisto
+	multiply = sr_site_charter_factor_callisto
 }
 sr_site_spec_built_callisto = { value = sr_site_lvl_a_value_callisto add = sr_site_lvl_b_value_callisto }
 sr_site_generic_built_callisto = {
@@ -3419,10 +3448,12 @@ sr_site_staffing_himalia = {
 sr_site_mult_a_himalia = {
 	value = sr_site_lvl_a_value_himalia
 	multiply = sr_site_staffing_himalia
+	multiply = sr_site_charter_factor_himalia
 }
 sr_site_mult_b_himalia = {
 	value = sr_site_lvl_b_value_himalia
 	multiply = sr_site_staffing_himalia
+	multiply = sr_site_charter_factor_himalia
 }
 sr_site_spec_built_himalia = { value = sr_site_lvl_a_value_himalia add = sr_site_lvl_b_value_himalia }
 sr_site_generic_built_himalia = {
@@ -3501,10 +3532,12 @@ sr_site_staffing_amalthea = {
 sr_site_mult_a_amalthea = {
 	value = sr_site_lvl_a_value_amalthea
 	multiply = sr_site_staffing_amalthea
+	multiply = sr_site_charter_factor_amalthea
 }
 sr_site_mult_b_amalthea = {
 	value = sr_site_lvl_b_value_amalthea
 	multiply = sr_site_staffing_amalthea
+	multiply = sr_site_charter_factor_amalthea
 }
 sr_site_spec_built_amalthea = { value = sr_site_lvl_a_value_amalthea add = sr_site_lvl_b_value_amalthea }
 sr_site_generic_built_amalthea = {
@@ -3583,10 +3616,12 @@ sr_site_staffing_venus = {
 sr_site_mult_a_venus = {
 	value = sr_site_lvl_a_value_venus
 	multiply = sr_site_staffing_venus
+	multiply = sr_site_charter_factor_venus
 }
 sr_site_mult_b_venus = {
 	value = sr_site_lvl_b_value_venus
 	multiply = sr_site_staffing_venus
+	multiply = sr_site_charter_factor_venus
 }
 sr_site_spec_built_venus = { value = sr_site_lvl_a_value_venus add = sr_site_lvl_b_value_venus }
 sr_site_generic_built_venus = {
@@ -3665,10 +3700,12 @@ sr_site_staffing_mercury = {
 sr_site_mult_a_mercury = {
 	value = sr_site_lvl_a_value_mercury
 	multiply = sr_site_staffing_mercury
+	multiply = sr_site_charter_factor_mercury
 }
 sr_site_mult_b_mercury = {
 	value = sr_site_lvl_b_value_mercury
 	multiply = sr_site_staffing_mercury
+	multiply = sr_site_charter_factor_mercury
 }
 sr_site_spec_built_mercury = { value = sr_site_lvl_a_value_mercury add = sr_site_lvl_b_value_mercury }
 sr_site_generic_built_mercury = {
@@ -3747,10 +3784,12 @@ sr_site_staffing_titan = {
 sr_site_mult_a_titan = {
 	value = sr_site_lvl_a_value_titan
 	multiply = sr_site_staffing_titan
+	multiply = sr_site_charter_factor_titan
 }
 sr_site_mult_b_titan = {
 	value = sr_site_lvl_b_value_titan
 	multiply = sr_site_staffing_titan
+	multiply = sr_site_charter_factor_titan
 }
 sr_site_spec_built_titan = { value = sr_site_lvl_a_value_titan add = sr_site_lvl_b_value_titan }
 sr_site_generic_built_titan = {
@@ -3829,10 +3868,12 @@ sr_site_staffing_enceladus = {
 sr_site_mult_a_enceladus = {
 	value = sr_site_lvl_a_value_enceladus
 	multiply = sr_site_staffing_enceladus
+	multiply = sr_site_charter_factor_enceladus
 }
 sr_site_mult_b_enceladus = {
 	value = sr_site_lvl_b_value_enceladus
 	multiply = sr_site_staffing_enceladus
+	multiply = sr_site_charter_factor_enceladus
 }
 sr_site_spec_built_enceladus = { value = sr_site_lvl_a_value_enceladus add = sr_site_lvl_b_value_enceladus }
 sr_site_generic_built_enceladus = {
@@ -3911,10 +3952,12 @@ sr_site_staffing_rhea = {
 sr_site_mult_a_rhea = {
 	value = sr_site_lvl_a_value_rhea
 	multiply = sr_site_staffing_rhea
+	multiply = sr_site_charter_factor_rhea
 }
 sr_site_mult_b_rhea = {
 	value = sr_site_lvl_b_value_rhea
 	multiply = sr_site_staffing_rhea
+	multiply = sr_site_charter_factor_rhea
 }
 sr_site_spec_built_rhea = { value = sr_site_lvl_a_value_rhea add = sr_site_lvl_b_value_rhea }
 sr_site_generic_built_rhea = {
@@ -3993,10 +4036,12 @@ sr_site_staffing_mimas = {
 sr_site_mult_a_mimas = {
 	value = sr_site_lvl_a_value_mimas
 	multiply = sr_site_staffing_mimas
+	multiply = sr_site_charter_factor_mimas
 }
 sr_site_mult_b_mimas = {
 	value = sr_site_lvl_b_value_mimas
 	multiply = sr_site_staffing_mimas
+	multiply = sr_site_charter_factor_mimas
 }
 sr_site_spec_built_mimas = { value = sr_site_lvl_a_value_mimas add = sr_site_lvl_b_value_mimas }
 sr_site_generic_built_mimas = {
@@ -4075,10 +4120,12 @@ sr_site_staffing_iapetus = {
 sr_site_mult_a_iapetus = {
 	value = sr_site_lvl_a_value_iapetus
 	multiply = sr_site_staffing_iapetus
+	multiply = sr_site_charter_factor_iapetus
 }
 sr_site_mult_b_iapetus = {
 	value = sr_site_lvl_b_value_iapetus
 	multiply = sr_site_staffing_iapetus
+	multiply = sr_site_charter_factor_iapetus
 }
 sr_site_spec_built_iapetus = { value = sr_site_lvl_a_value_iapetus add = sr_site_lvl_b_value_iapetus }
 sr_site_generic_built_iapetus = {
@@ -4157,10 +4204,12 @@ sr_site_staffing_titania = {
 sr_site_mult_a_titania = {
 	value = sr_site_lvl_a_value_titania
 	multiply = sr_site_staffing_titania
+	multiply = sr_site_charter_factor_titania
 }
 sr_site_mult_b_titania = {
 	value = sr_site_lvl_b_value_titania
 	multiply = sr_site_staffing_titania
+	multiply = sr_site_charter_factor_titania
 }
 sr_site_spec_built_titania = { value = sr_site_lvl_a_value_titania add = sr_site_lvl_b_value_titania }
 sr_site_generic_built_titania = {
@@ -4239,10 +4288,12 @@ sr_site_staffing_oberon = {
 sr_site_mult_a_oberon = {
 	value = sr_site_lvl_a_value_oberon
 	multiply = sr_site_staffing_oberon
+	multiply = sr_site_charter_factor_oberon
 }
 sr_site_mult_b_oberon = {
 	value = sr_site_lvl_b_value_oberon
 	multiply = sr_site_staffing_oberon
+	multiply = sr_site_charter_factor_oberon
 }
 sr_site_spec_built_oberon = { value = sr_site_lvl_a_value_oberon add = sr_site_lvl_b_value_oberon }
 sr_site_generic_built_oberon = {
@@ -4321,10 +4372,12 @@ sr_site_staffing_miranda = {
 sr_site_mult_a_miranda = {
 	value = sr_site_lvl_a_value_miranda
 	multiply = sr_site_staffing_miranda
+	multiply = sr_site_charter_factor_miranda
 }
 sr_site_mult_b_miranda = {
 	value = sr_site_lvl_b_value_miranda
 	multiply = sr_site_staffing_miranda
+	multiply = sr_site_charter_factor_miranda
 }
 sr_site_spec_built_miranda = { value = sr_site_lvl_a_value_miranda add = sr_site_lvl_b_value_miranda }
 sr_site_generic_built_miranda = {
@@ -4403,10 +4456,12 @@ sr_site_staffing_ariel = {
 sr_site_mult_a_ariel = {
 	value = sr_site_lvl_a_value_ariel
 	multiply = sr_site_staffing_ariel
+	multiply = sr_site_charter_factor_ariel
 }
 sr_site_mult_b_ariel = {
 	value = sr_site_lvl_b_value_ariel
 	multiply = sr_site_staffing_ariel
+	multiply = sr_site_charter_factor_ariel
 }
 sr_site_spec_built_ariel = { value = sr_site_lvl_a_value_ariel add = sr_site_lvl_b_value_ariel }
 sr_site_generic_built_ariel = {
@@ -4485,10 +4540,12 @@ sr_site_staffing_triton = {
 sr_site_mult_a_triton = {
 	value = sr_site_lvl_a_value_triton
 	multiply = sr_site_staffing_triton
+	multiply = sr_site_charter_factor_triton
 }
 sr_site_mult_b_triton = {
 	value = sr_site_lvl_b_value_triton
 	multiply = sr_site_staffing_triton
+	multiply = sr_site_charter_factor_triton
 }
 sr_site_spec_built_triton = { value = sr_site_lvl_a_value_triton add = sr_site_lvl_b_value_triton }
 sr_site_generic_built_triton = {
@@ -4567,10 +4624,12 @@ sr_site_staffing_proteus = {
 sr_site_mult_a_proteus = {
 	value = sr_site_lvl_a_value_proteus
 	multiply = sr_site_staffing_proteus
+	multiply = sr_site_charter_factor_proteus
 }
 sr_site_mult_b_proteus = {
 	value = sr_site_lvl_b_value_proteus
 	multiply = sr_site_staffing_proteus
+	multiply = sr_site_charter_factor_proteus
 }
 sr_site_spec_built_proteus = { value = sr_site_lvl_a_value_proteus add = sr_site_lvl_b_value_proteus }
 sr_site_generic_built_proteus = {
@@ -4649,10 +4708,12 @@ sr_site_staffing_pluto = {
 sr_site_mult_a_pluto = {
 	value = sr_site_lvl_a_value_pluto
 	multiply = sr_site_staffing_pluto
+	multiply = sr_site_charter_factor_pluto
 }
 sr_site_mult_b_pluto = {
 	value = sr_site_lvl_b_value_pluto
 	multiply = sr_site_staffing_pluto
+	multiply = sr_site_charter_factor_pluto
 }
 sr_site_spec_built_pluto = { value = sr_site_lvl_a_value_pluto add = sr_site_lvl_b_value_pluto }
 sr_site_generic_built_pluto = {
@@ -4731,10 +4792,12 @@ sr_site_staffing_eris = {
 sr_site_mult_a_eris = {
 	value = sr_site_lvl_a_value_eris
 	multiply = sr_site_staffing_eris
+	multiply = sr_site_charter_factor_eris
 }
 sr_site_mult_b_eris = {
 	value = sr_site_lvl_b_value_eris
 	multiply = sr_site_staffing_eris
+	multiply = sr_site_charter_factor_eris
 }
 sr_site_spec_built_eris = { value = sr_site_lvl_a_value_eris add = sr_site_lvl_b_value_eris }
 sr_site_generic_built_eris = {
@@ -4813,10 +4876,12 @@ sr_site_staffing_makemake = {
 sr_site_mult_a_makemake = {
 	value = sr_site_lvl_a_value_makemake
 	multiply = sr_site_staffing_makemake
+	multiply = sr_site_charter_factor_makemake
 }
 sr_site_mult_b_makemake = {
 	value = sr_site_lvl_b_value_makemake
 	multiply = sr_site_staffing_makemake
+	multiply = sr_site_charter_factor_makemake
 }
 sr_site_spec_built_makemake = { value = sr_site_lvl_a_value_makemake add = sr_site_lvl_b_value_makemake }
 sr_site_generic_built_makemake = {
@@ -4895,10 +4960,12 @@ sr_site_staffing_haumea = {
 sr_site_mult_a_haumea = {
 	value = sr_site_lvl_a_value_haumea
 	multiply = sr_site_staffing_haumea
+	multiply = sr_site_charter_factor_haumea
 }
 sr_site_mult_b_haumea = {
 	value = sr_site_lvl_b_value_haumea
 	multiply = sr_site_staffing_haumea
+	multiply = sr_site_charter_factor_haumea
 }
 sr_site_spec_built_haumea = { value = sr_site_lvl_a_value_haumea add = sr_site_lvl_b_value_haumea }
 sr_site_generic_built_haumea = {
@@ -4977,10 +5044,12 @@ sr_site_staffing_sedna = {
 sr_site_mult_a_sedna = {
 	value = sr_site_lvl_a_value_sedna
 	multiply = sr_site_staffing_sedna
+	multiply = sr_site_charter_factor_sedna
 }
 sr_site_mult_b_sedna = {
 	value = sr_site_lvl_b_value_sedna
 	multiply = sr_site_staffing_sedna
+	multiply = sr_site_charter_factor_sedna
 }
 sr_site_spec_built_sedna = { value = sr_site_lvl_a_value_sedna add = sr_site_lvl_b_value_sedna }
 sr_site_generic_built_sedna = {
@@ -5083,4 +5152,1452 @@ sr_ebase_room_total = {
 	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = 10 }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = 10 }
 	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = 10 }
+}
+
+# ===== Autonomy and free colonies (slice 5 design §§ 2-3) =====
+# Per world, any scope: its autonomy (0 absent), the months since contact from
+# Earth, the charter's share of its specializations, a free colony's suppliers.
+# Holder scope: its autonomy's drift a month (the terms are
+# sr_colony_autonomy_values.txt's). Country scope: THIS's ties with a free
+# colony and its share of the colony's trade, in units.
+sr_site_autonomy_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_valles_marineris } value = global_var:sr_site_autonomy_valles_marineris }
+}
+sr_site_months_since_contact_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_valles_marineris } value = te_history_month_index subtract = global_var:sr_site_contact_valles_marineris }
+	min = 0
+}
+sr_site_aut_drift_valles_marineris = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_valles_marineris divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_valles_marineris > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_valles_marineris } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } add = sr_aut_chartered }
+}
+sr_site_charter_factor_valles_marineris = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_valles_marineris } value = global_var:sr_site_suppliers_valles_marineris }
+}
+sr_free_ties_value_valles_marineris = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_valles_marineris } value = var:sr_free_ties_valles_marineris }
+}
+sr_free_trade_share_valles_marineris = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_valles_marineris has_global_variable = sr_site_free_valles_marineris }
+		value = sr_site_pop_value_valles_marineris
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_valles_marineris min = 1 }
+	}
+}
+sr_site_autonomy_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_olympus_mons } value = global_var:sr_site_autonomy_olympus_mons }
+}
+sr_site_months_since_contact_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_olympus_mons } value = te_history_month_index subtract = global_var:sr_site_contact_olympus_mons }
+	min = 0
+}
+sr_site_aut_drift_olympus_mons = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_olympus_mons divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_olympus_mons > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_olympus_mons } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_olympus_mons } add = sr_aut_chartered }
+}
+sr_site_charter_factor_olympus_mons = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_olympus_mons } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_olympus_mons } value = global_var:sr_site_suppliers_olympus_mons }
+}
+sr_free_ties_value_olympus_mons = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_olympus_mons } value = var:sr_free_ties_olympus_mons }
+}
+sr_free_trade_share_olympus_mons = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_olympus_mons has_global_variable = sr_site_free_olympus_mons }
+		value = sr_site_pop_value_olympus_mons
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_olympus_mons min = 1 }
+	}
+}
+sr_site_autonomy_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_hellas_planitia } value = global_var:sr_site_autonomy_hellas_planitia }
+}
+sr_site_months_since_contact_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_hellas_planitia } value = te_history_month_index subtract = global_var:sr_site_contact_hellas_planitia }
+	min = 0
+}
+sr_site_aut_drift_hellas_planitia = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_hellas_planitia divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_hellas_planitia > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_hellas_planitia } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_hellas_planitia } add = sr_aut_chartered }
+}
+sr_site_charter_factor_hellas_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_hellas_planitia } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_hellas_planitia } value = global_var:sr_site_suppliers_hellas_planitia }
+}
+sr_free_ties_value_hellas_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_hellas_planitia } value = var:sr_free_ties_hellas_planitia }
+}
+sr_free_trade_share_hellas_planitia = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_hellas_planitia has_global_variable = sr_site_free_hellas_planitia }
+		value = sr_site_pop_value_hellas_planitia
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_hellas_planitia min = 1 }
+	}
+}
+sr_site_autonomy_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_utopia_planitia } value = global_var:sr_site_autonomy_utopia_planitia }
+}
+sr_site_months_since_contact_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_utopia_planitia } value = te_history_month_index subtract = global_var:sr_site_contact_utopia_planitia }
+	min = 0
+}
+sr_site_aut_drift_utopia_planitia = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_utopia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_utopia_planitia > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_utopia_planitia } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_utopia_planitia } add = sr_aut_chartered }
+}
+sr_site_charter_factor_utopia_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_utopia_planitia } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_utopia_planitia } value = global_var:sr_site_suppliers_utopia_planitia }
+}
+sr_free_ties_value_utopia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_utopia_planitia } value = var:sr_free_ties_utopia_planitia }
+}
+sr_free_trade_share_utopia_planitia = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_utopia_planitia has_global_variable = sr_site_free_utopia_planitia }
+		value = sr_site_pop_value_utopia_planitia
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_utopia_planitia min = 1 }
+	}
+}
+sr_site_autonomy_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_arcadia_planitia } value = global_var:sr_site_autonomy_arcadia_planitia }
+}
+sr_site_months_since_contact_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_arcadia_planitia } value = te_history_month_index subtract = global_var:sr_site_contact_arcadia_planitia }
+	min = 0
+}
+sr_site_aut_drift_arcadia_planitia = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_arcadia_planitia divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_mars multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_arcadia_planitia > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_arcadia_planitia } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_arcadia_planitia } add = sr_aut_chartered }
+}
+sr_site_charter_factor_arcadia_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_arcadia_planitia } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_arcadia_planitia } value = global_var:sr_site_suppliers_arcadia_planitia }
+}
+sr_free_ties_value_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_arcadia_planitia } value = var:sr_free_ties_arcadia_planitia }
+}
+sr_free_trade_share_arcadia_planitia = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_arcadia_planitia has_global_variable = sr_site_free_arcadia_planitia }
+		value = sr_site_pop_value_arcadia_planitia
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_arcadia_planitia min = 1 }
+	}
+}
+sr_site_autonomy_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_ceres } value = global_var:sr_site_autonomy_ceres }
+}
+sr_site_months_since_contact_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_ceres } value = te_history_month_index subtract = global_var:sr_site_contact_ceres }
+	min = 0
+}
+sr_site_aut_drift_ceres = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_ceres divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_ceres multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_ceres > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_ceres } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_ceres } add = sr_aut_chartered }
+}
+sr_site_charter_factor_ceres = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_ceres } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_ceres } value = global_var:sr_site_suppliers_ceres }
+}
+sr_free_ties_value_ceres = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_ceres } value = var:sr_free_ties_ceres }
+}
+sr_free_trade_share_ceres = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_ceres has_global_variable = sr_site_free_ceres }
+		value = sr_site_pop_value_ceres
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_ceres min = 1 }
+	}
+}
+sr_site_autonomy_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_vesta } value = global_var:sr_site_autonomy_vesta }
+}
+sr_site_months_since_contact_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_vesta } value = te_history_month_index subtract = global_var:sr_site_contact_vesta }
+	min = 0
+}
+sr_site_aut_drift_vesta = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_vesta divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_vesta multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_vesta > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_vesta } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_vesta } add = sr_aut_chartered }
+}
+sr_site_charter_factor_vesta = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_vesta } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_vesta } value = global_var:sr_site_suppliers_vesta }
+}
+sr_free_ties_value_vesta = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_vesta } value = var:sr_free_ties_vesta }
+}
+sr_free_trade_share_vesta = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_vesta has_global_variable = sr_site_free_vesta }
+		value = sr_site_pop_value_vesta
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_vesta min = 1 }
+	}
+}
+sr_site_autonomy_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_psyche } value = global_var:sr_site_autonomy_psyche }
+}
+sr_site_months_since_contact_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_psyche } value = te_history_month_index subtract = global_var:sr_site_contact_psyche }
+	min = 0
+}
+sr_site_aut_drift_psyche = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_psyche divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_psyche multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_psyche > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_psyche } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_psyche } add = sr_aut_chartered }
+}
+sr_site_charter_factor_psyche = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_psyche } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_psyche } value = global_var:sr_site_suppliers_psyche }
+}
+sr_free_ties_value_psyche = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_psyche } value = var:sr_free_ties_psyche }
+}
+sr_free_trade_share_psyche = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_psyche has_global_variable = sr_site_free_psyche }
+		value = sr_site_pop_value_psyche
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_psyche min = 1 }
+	}
+}
+sr_site_autonomy_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_pallas } value = global_var:sr_site_autonomy_pallas }
+}
+sr_site_months_since_contact_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_pallas } value = te_history_month_index subtract = global_var:sr_site_contact_pallas }
+	min = 0
+}
+sr_site_aut_drift_pallas = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_pallas divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_pallas multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_pallas > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_pallas } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_pallas } add = sr_aut_chartered }
+}
+sr_site_charter_factor_pallas = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_pallas } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_pallas } value = global_var:sr_site_suppliers_pallas }
+}
+sr_free_ties_value_pallas = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_pallas } value = var:sr_free_ties_pallas }
+}
+sr_free_trade_share_pallas = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_pallas has_global_variable = sr_site_free_pallas }
+		value = sr_site_pop_value_pallas
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_pallas min = 1 }
+	}
+}
+sr_site_autonomy_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_hygiea } value = global_var:sr_site_autonomy_hygiea }
+}
+sr_site_months_since_contact_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_hygiea } value = te_history_month_index subtract = global_var:sr_site_contact_hygiea }
+	min = 0
+}
+sr_site_aut_drift_hygiea = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_hygiea divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_hygiea multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_hygiea > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_hygiea } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_hygiea } add = sr_aut_chartered }
+}
+sr_site_charter_factor_hygiea = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_hygiea } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_hygiea } value = global_var:sr_site_suppliers_hygiea }
+}
+sr_free_ties_value_hygiea = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_hygiea } value = var:sr_free_ties_hygiea }
+}
+sr_free_trade_share_hygiea = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_hygiea has_global_variable = sr_site_free_hygiea }
+		value = sr_site_pop_value_hygiea
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_hygiea min = 1 }
+	}
+}
+sr_site_autonomy_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_io } value = global_var:sr_site_autonomy_io }
+}
+sr_site_months_since_contact_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_io } value = te_history_month_index subtract = global_var:sr_site_contact_io }
+	min = 0
+}
+sr_site_aut_drift_io = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_io divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_io > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_io } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_io } add = sr_aut_chartered }
+}
+sr_site_charter_factor_io = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_io } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_io } value = global_var:sr_site_suppliers_io }
+}
+sr_free_ties_value_io = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_io } value = var:sr_free_ties_io }
+}
+sr_free_trade_share_io = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_io has_global_variable = sr_site_free_io }
+		value = sr_site_pop_value_io
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_io min = 1 }
+	}
+}
+sr_site_autonomy_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_europa } value = global_var:sr_site_autonomy_europa }
+}
+sr_site_months_since_contact_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_europa } value = te_history_month_index subtract = global_var:sr_site_contact_europa }
+	min = 0
+}
+sr_site_aut_drift_europa = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_europa divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_europa > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_europa } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_europa } add = sr_aut_chartered }
+}
+sr_site_charter_factor_europa = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_europa } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_europa } value = global_var:sr_site_suppliers_europa }
+}
+sr_free_ties_value_europa = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_europa } value = var:sr_free_ties_europa }
+}
+sr_free_trade_share_europa = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_europa has_global_variable = sr_site_free_europa }
+		value = sr_site_pop_value_europa
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_europa min = 1 }
+	}
+}
+sr_site_autonomy_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_ganymede } value = global_var:sr_site_autonomy_ganymede }
+}
+sr_site_months_since_contact_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_ganymede } value = te_history_month_index subtract = global_var:sr_site_contact_ganymede }
+	min = 0
+}
+sr_site_aut_drift_ganymede = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_ganymede divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_ganymede > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_ganymede } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_ganymede } add = sr_aut_chartered }
+}
+sr_site_charter_factor_ganymede = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_ganymede } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_ganymede } value = global_var:sr_site_suppliers_ganymede }
+}
+sr_free_ties_value_ganymede = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_ganymede } value = var:sr_free_ties_ganymede }
+}
+sr_free_trade_share_ganymede = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_ganymede has_global_variable = sr_site_free_ganymede }
+		value = sr_site_pop_value_ganymede
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_ganymede min = 1 }
+	}
+}
+sr_site_autonomy_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_callisto } value = global_var:sr_site_autonomy_callisto }
+}
+sr_site_months_since_contact_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_callisto } value = te_history_month_index subtract = global_var:sr_site_contact_callisto }
+	min = 0
+}
+sr_site_aut_drift_callisto = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_callisto divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_callisto > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_callisto } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_callisto } add = sr_aut_chartered }
+}
+sr_site_charter_factor_callisto = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_callisto } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_callisto } value = global_var:sr_site_suppliers_callisto }
+}
+sr_free_ties_value_callisto = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_callisto } value = var:sr_free_ties_callisto }
+}
+sr_free_trade_share_callisto = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_callisto has_global_variable = sr_site_free_callisto }
+		value = sr_site_pop_value_callisto
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_callisto min = 1 }
+	}
+}
+sr_site_autonomy_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_himalia } value = global_var:sr_site_autonomy_himalia }
+}
+sr_site_months_since_contact_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_himalia } value = te_history_month_index subtract = global_var:sr_site_contact_himalia }
+	min = 0
+}
+sr_site_aut_drift_himalia = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_himalia divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_himalia > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_himalia } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_himalia } add = sr_aut_chartered }
+}
+sr_site_charter_factor_himalia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_himalia } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_himalia } value = global_var:sr_site_suppliers_himalia }
+}
+sr_free_ties_value_himalia = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_himalia } value = var:sr_free_ties_himalia }
+}
+sr_free_trade_share_himalia = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_himalia has_global_variable = sr_site_free_himalia }
+		value = sr_site_pop_value_himalia
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_himalia min = 1 }
+	}
+}
+sr_site_autonomy_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_amalthea } value = global_var:sr_site_autonomy_amalthea }
+}
+sr_site_months_since_contact_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_amalthea } value = te_history_month_index subtract = global_var:sr_site_contact_amalthea }
+	min = 0
+}
+sr_site_aut_drift_amalthea = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_amalthea divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_jupiter multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_amalthea > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_amalthea } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_amalthea } add = sr_aut_chartered }
+}
+sr_site_charter_factor_amalthea = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_amalthea } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_amalthea } value = global_var:sr_site_suppliers_amalthea }
+}
+sr_free_ties_value_amalthea = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_amalthea } value = var:sr_free_ties_amalthea }
+}
+sr_free_trade_share_amalthea = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_amalthea has_global_variable = sr_site_free_amalthea }
+		value = sr_site_pop_value_amalthea
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_amalthea min = 1 }
+	}
+}
+sr_site_autonomy_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_venus } value = global_var:sr_site_autonomy_venus }
+}
+sr_site_months_since_contact_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_venus } value = te_history_month_index subtract = global_var:sr_site_contact_venus }
+	min = 0
+}
+sr_site_aut_drift_venus = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_venus divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_venus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_venus > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_venus } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_venus } add = sr_aut_chartered }
+}
+sr_site_charter_factor_venus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_venus } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_venus } value = global_var:sr_site_suppliers_venus }
+}
+sr_free_ties_value_venus = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_venus } value = var:sr_free_ties_venus }
+}
+sr_free_trade_share_venus = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_venus has_global_variable = sr_site_free_venus }
+		value = sr_site_pop_value_venus
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_venus min = 1 }
+	}
+}
+sr_site_autonomy_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_mercury } value = global_var:sr_site_autonomy_mercury }
+}
+sr_site_months_since_contact_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_mercury } value = te_history_month_index subtract = global_var:sr_site_contact_mercury }
+	min = 0
+}
+sr_site_aut_drift_mercury = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_mercury divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_mercury multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_mercury > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_mercury } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_mercury } add = sr_aut_chartered }
+}
+sr_site_charter_factor_mercury = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_mercury } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_mercury } value = global_var:sr_site_suppliers_mercury }
+}
+sr_free_ties_value_mercury = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_mercury } value = var:sr_free_ties_mercury }
+}
+sr_free_trade_share_mercury = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_mercury has_global_variable = sr_site_free_mercury }
+		value = sr_site_pop_value_mercury
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_mercury min = 1 }
+	}
+}
+sr_site_autonomy_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_titan } value = global_var:sr_site_autonomy_titan }
+}
+sr_site_months_since_contact_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_titan } value = te_history_month_index subtract = global_var:sr_site_contact_titan }
+	min = 0
+}
+sr_site_aut_drift_titan = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_titan divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_titan > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_titan } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_titan } add = sr_aut_chartered }
+}
+sr_site_charter_factor_titan = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_titan } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_titan } value = global_var:sr_site_suppliers_titan }
+}
+sr_free_ties_value_titan = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_titan } value = var:sr_free_ties_titan }
+}
+sr_free_trade_share_titan = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_titan has_global_variable = sr_site_free_titan }
+		value = sr_site_pop_value_titan
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_titan min = 1 }
+	}
+}
+sr_site_autonomy_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_enceladus } value = global_var:sr_site_autonomy_enceladus }
+}
+sr_site_months_since_contact_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_enceladus } value = te_history_month_index subtract = global_var:sr_site_contact_enceladus }
+	min = 0
+}
+sr_site_aut_drift_enceladus = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_enceladus divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_enceladus > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_enceladus } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_enceladus } add = sr_aut_chartered }
+}
+sr_site_charter_factor_enceladus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_enceladus } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_enceladus } value = global_var:sr_site_suppliers_enceladus }
+}
+sr_free_ties_value_enceladus = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_enceladus } value = var:sr_free_ties_enceladus }
+}
+sr_free_trade_share_enceladus = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_enceladus has_global_variable = sr_site_free_enceladus }
+		value = sr_site_pop_value_enceladus
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_enceladus min = 1 }
+	}
+}
+sr_site_autonomy_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_rhea } value = global_var:sr_site_autonomy_rhea }
+}
+sr_site_months_since_contact_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_rhea } value = te_history_month_index subtract = global_var:sr_site_contact_rhea }
+	min = 0
+}
+sr_site_aut_drift_rhea = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_rhea divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_rhea > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_rhea } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_rhea } add = sr_aut_chartered }
+}
+sr_site_charter_factor_rhea = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_rhea } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_rhea } value = global_var:sr_site_suppliers_rhea }
+}
+sr_free_ties_value_rhea = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_rhea } value = var:sr_free_ties_rhea }
+}
+sr_free_trade_share_rhea = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_rhea has_global_variable = sr_site_free_rhea }
+		value = sr_site_pop_value_rhea
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_rhea min = 1 }
+	}
+}
+sr_site_autonomy_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_mimas } value = global_var:sr_site_autonomy_mimas }
+}
+sr_site_months_since_contact_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_mimas } value = te_history_month_index subtract = global_var:sr_site_contact_mimas }
+	min = 0
+}
+sr_site_aut_drift_mimas = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_mimas divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_mimas > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_mimas } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_mimas } add = sr_aut_chartered }
+}
+sr_site_charter_factor_mimas = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_mimas } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_mimas } value = global_var:sr_site_suppliers_mimas }
+}
+sr_free_ties_value_mimas = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_mimas } value = var:sr_free_ties_mimas }
+}
+sr_free_trade_share_mimas = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_mimas has_global_variable = sr_site_free_mimas }
+		value = sr_site_pop_value_mimas
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_mimas min = 1 }
+	}
+}
+sr_site_autonomy_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_iapetus } value = global_var:sr_site_autonomy_iapetus }
+}
+sr_site_months_since_contact_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_iapetus } value = te_history_month_index subtract = global_var:sr_site_contact_iapetus }
+	min = 0
+}
+sr_site_aut_drift_iapetus = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_iapetus divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_saturn multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_iapetus > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_iapetus } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_iapetus } add = sr_aut_chartered }
+}
+sr_site_charter_factor_iapetus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_iapetus } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_iapetus } value = global_var:sr_site_suppliers_iapetus }
+}
+sr_free_ties_value_iapetus = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_iapetus } value = var:sr_free_ties_iapetus }
+}
+sr_free_trade_share_iapetus = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_iapetus has_global_variable = sr_site_free_iapetus }
+		value = sr_site_pop_value_iapetus
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_iapetus min = 1 }
+	}
+}
+sr_site_autonomy_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_titania } value = global_var:sr_site_autonomy_titania }
+}
+sr_site_months_since_contact_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_titania } value = te_history_month_index subtract = global_var:sr_site_contact_titania }
+	min = 0
+}
+sr_site_aut_drift_titania = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_titania divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_titania > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_titania } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_titania } add = sr_aut_chartered }
+}
+sr_site_charter_factor_titania = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_titania } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_titania } value = global_var:sr_site_suppliers_titania }
+}
+sr_free_ties_value_titania = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_titania } value = var:sr_free_ties_titania }
+}
+sr_free_trade_share_titania = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_titania has_global_variable = sr_site_free_titania }
+		value = sr_site_pop_value_titania
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_titania min = 1 }
+	}
+}
+sr_site_autonomy_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_oberon } value = global_var:sr_site_autonomy_oberon }
+}
+sr_site_months_since_contact_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_oberon } value = te_history_month_index subtract = global_var:sr_site_contact_oberon }
+	min = 0
+}
+sr_site_aut_drift_oberon = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_oberon divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_oberon > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_oberon } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_oberon } add = sr_aut_chartered }
+}
+sr_site_charter_factor_oberon = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_oberon } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_oberon } value = global_var:sr_site_suppliers_oberon }
+}
+sr_free_ties_value_oberon = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_oberon } value = var:sr_free_ties_oberon }
+}
+sr_free_trade_share_oberon = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_oberon has_global_variable = sr_site_free_oberon }
+		value = sr_site_pop_value_oberon
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_oberon min = 1 }
+	}
+}
+sr_site_autonomy_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_miranda } value = global_var:sr_site_autonomy_miranda }
+}
+sr_site_months_since_contact_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_miranda } value = te_history_month_index subtract = global_var:sr_site_contact_miranda }
+	min = 0
+}
+sr_site_aut_drift_miranda = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_miranda divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_miranda > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_miranda } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_miranda } add = sr_aut_chartered }
+}
+sr_site_charter_factor_miranda = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_miranda } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_miranda } value = global_var:sr_site_suppliers_miranda }
+}
+sr_free_ties_value_miranda = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_miranda } value = var:sr_free_ties_miranda }
+}
+sr_free_trade_share_miranda = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_miranda has_global_variable = sr_site_free_miranda }
+		value = sr_site_pop_value_miranda
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_miranda min = 1 }
+	}
+}
+sr_site_autonomy_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_ariel } value = global_var:sr_site_autonomy_ariel }
+}
+sr_site_months_since_contact_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_ariel } value = te_history_month_index subtract = global_var:sr_site_contact_ariel }
+	min = 0
+}
+sr_site_aut_drift_ariel = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_ariel divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_uranus multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_ariel > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_ariel } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_ariel } add = sr_aut_chartered }
+}
+sr_site_charter_factor_ariel = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_ariel } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_ariel } value = global_var:sr_site_suppliers_ariel }
+}
+sr_free_ties_value_ariel = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_ariel } value = var:sr_free_ties_ariel }
+}
+sr_free_trade_share_ariel = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_ariel has_global_variable = sr_site_free_ariel }
+		value = sr_site_pop_value_ariel
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_ariel min = 1 }
+	}
+}
+sr_site_autonomy_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_triton } value = global_var:sr_site_autonomy_triton }
+}
+sr_site_months_since_contact_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_triton } value = te_history_month_index subtract = global_var:sr_site_contact_triton }
+	min = 0
+}
+sr_site_aut_drift_triton = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_triton divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_triton > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_triton } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_triton } add = sr_aut_chartered }
+}
+sr_site_charter_factor_triton = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_triton } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_triton } value = global_var:sr_site_suppliers_triton }
+}
+sr_free_ties_value_triton = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_triton } value = var:sr_free_ties_triton }
+}
+sr_free_trade_share_triton = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_triton has_global_variable = sr_site_free_triton }
+		value = sr_site_pop_value_triton
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_triton min = 1 }
+	}
+}
+sr_site_autonomy_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_proteus } value = global_var:sr_site_autonomy_proteus }
+}
+sr_site_months_since_contact_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_proteus } value = te_history_month_index subtract = global_var:sr_site_contact_proteus }
+	min = 0
+}
+sr_site_aut_drift_proteus = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_proteus divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_neptune multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_proteus > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_proteus } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_proteus } add = sr_aut_chartered }
+}
+sr_site_charter_factor_proteus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_proteus } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_proteus } value = global_var:sr_site_suppliers_proteus }
+}
+sr_free_ties_value_proteus = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_proteus } value = var:sr_free_ties_proteus }
+}
+sr_free_trade_share_proteus = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_proteus has_global_variable = sr_site_free_proteus }
+		value = sr_site_pop_value_proteus
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_proteus min = 1 }
+	}
+}
+sr_site_autonomy_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_pluto } value = global_var:sr_site_autonomy_pluto }
+}
+sr_site_months_since_contact_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_pluto } value = te_history_month_index subtract = global_var:sr_site_contact_pluto }
+	min = 0
+}
+sr_site_aut_drift_pluto = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_pluto divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_pluto > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_pluto } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_pluto } add = sr_aut_chartered }
+}
+sr_site_charter_factor_pluto = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_pluto } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_pluto } value = global_var:sr_site_suppliers_pluto }
+}
+sr_free_ties_value_pluto = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_pluto } value = var:sr_free_ties_pluto }
+}
+sr_free_trade_share_pluto = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_pluto has_global_variable = sr_site_free_pluto }
+		value = sr_site_pop_value_pluto
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_pluto min = 1 }
+	}
+}
+sr_site_autonomy_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_eris } value = global_var:sr_site_autonomy_eris }
+}
+sr_site_months_since_contact_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_eris } value = te_history_month_index subtract = global_var:sr_site_contact_eris }
+	min = 0
+}
+sr_site_aut_drift_eris = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_eris divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_eris > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_eris } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_eris } add = sr_aut_chartered }
+}
+sr_site_charter_factor_eris = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_eris } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_eris } value = global_var:sr_site_suppliers_eris }
+}
+sr_free_ties_value_eris = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_eris } value = var:sr_free_ties_eris }
+}
+sr_free_trade_share_eris = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_eris has_global_variable = sr_site_free_eris }
+		value = sr_site_pop_value_eris
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_eris min = 1 }
+	}
+}
+sr_site_autonomy_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_makemake } value = global_var:sr_site_autonomy_makemake }
+}
+sr_site_months_since_contact_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_makemake } value = te_history_month_index subtract = global_var:sr_site_contact_makemake }
+	min = 0
+}
+sr_site_aut_drift_makemake = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_makemake divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_makemake > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_makemake } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_makemake } add = sr_aut_chartered }
+}
+sr_site_charter_factor_makemake = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_makemake } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_makemake } value = global_var:sr_site_suppliers_makemake }
+}
+sr_free_ties_value_makemake = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_makemake } value = var:sr_free_ties_makemake }
+}
+sr_free_trade_share_makemake = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_makemake has_global_variable = sr_site_free_makemake }
+		value = sr_site_pop_value_makemake
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_makemake min = 1 }
+	}
+}
+sr_site_autonomy_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_haumea } value = global_var:sr_site_autonomy_haumea }
+}
+sr_site_months_since_contact_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_haumea } value = te_history_month_index subtract = global_var:sr_site_contact_haumea }
+	min = 0
+}
+sr_site_aut_drift_haumea = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_haumea divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_haumea > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_haumea } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_haumea } add = sr_aut_chartered }
+}
+sr_site_charter_factor_haumea = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_haumea } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_haumea } value = global_var:sr_site_suppliers_haumea }
+}
+sr_free_ties_value_haumea = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_haumea } value = var:sr_free_ties_haumea }
+}
+sr_free_trade_share_haumea = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_haumea has_global_variable = sr_site_free_haumea }
+		value = sr_site_pop_value_haumea
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_haumea min = 1 }
+	}
+}
+sr_site_autonomy_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_autonomy_sedna } value = global_var:sr_site_autonomy_sedna }
+}
+sr_site_months_since_contact_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_contact_sedna } value = te_history_month_index subtract = global_var:sr_site_contact_sedna }
+	min = 0
+}
+sr_site_aut_drift_sedna = {
+	value = sr_aut_home_pull
+	add = { value = sr_site_pop_value_sedna divide = 10000 multiply = sr_aut_per_10k_people }
+	add = { value = sr_transit_months_kuiper multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }
+	if = { limit = { sr_site_months_since_contact_sedna > sr_aut_no_contact_months } add = sr_aut_no_contact }
+	if = { limit = { is_at_war = yes } add = sr_aut_at_war }
+	if = { limit = { has_global_variable = sr_site_garrison_sedna } add = sr_aut_garrisoned }
+	if = { limit = { has_global_variable = sr_site_charter_sedna } add = sr_aut_chartered }
+}
+sr_site_charter_factor_sedna = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_charter_sedna } value = sr_aut_charter_share }
+}
+sr_site_suppliers_value_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_suppliers_sedna } value = global_var:sr_site_suppliers_sedna }
+}
+sr_free_ties_value_sedna = {
+	value = 0
+	if = { limit = { has_variable = sr_free_ties_sedna } value = var:sr_free_ties_sedna }
+}
+sr_free_trade_share_sedna = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_free_supply_sedna has_global_variable = sr_site_free_sedna }
+		value = sr_site_pop_value_sedna
+		divide = sr_free_trade_people_per_unit
+		divide = { value = sr_site_suppliers_value_sedna min = 1 }
+	}
+}
+
+# Country scope: THIS's trade from the free colonies it supplies (units, at most
+# sr_free_trade_max_units), the free colonies it supplies, its garrisoned colonies.
+sr_free_trade_units = {
+	value = 0
+	add = sr_free_trade_share_valles_marineris
+	add = sr_free_trade_share_olympus_mons
+	add = sr_free_trade_share_hellas_planitia
+	add = sr_free_trade_share_utopia_planitia
+	add = sr_free_trade_share_arcadia_planitia
+	add = sr_free_trade_share_ceres
+	add = sr_free_trade_share_vesta
+	add = sr_free_trade_share_psyche
+	add = sr_free_trade_share_pallas
+	add = sr_free_trade_share_hygiea
+	add = sr_free_trade_share_io
+	add = sr_free_trade_share_europa
+	add = sr_free_trade_share_ganymede
+	add = sr_free_trade_share_callisto
+	add = sr_free_trade_share_himalia
+	add = sr_free_trade_share_amalthea
+	add = sr_free_trade_share_venus
+	add = sr_free_trade_share_mercury
+	add = sr_free_trade_share_titan
+	add = sr_free_trade_share_enceladus
+	add = sr_free_trade_share_rhea
+	add = sr_free_trade_share_mimas
+	add = sr_free_trade_share_iapetus
+	add = sr_free_trade_share_titania
+	add = sr_free_trade_share_oberon
+	add = sr_free_trade_share_miranda
+	add = sr_free_trade_share_ariel
+	add = sr_free_trade_share_triton
+	add = sr_free_trade_share_proteus
+	add = sr_free_trade_share_pluto
+	add = sr_free_trade_share_eris
+	add = sr_free_trade_share_makemake
+	add = sr_free_trade_share_haumea
+	add = sr_free_trade_share_sedna
+	max = sr_free_trade_max_units
+}
+sr_free_supply_count = {
+	value = 0
+	if = { limit = { has_variable = sr_free_supply_valles_marineris has_global_variable = sr_site_free_valles_marineris } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_olympus_mons has_global_variable = sr_site_free_olympus_mons } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_hellas_planitia has_global_variable = sr_site_free_hellas_planitia } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_utopia_planitia has_global_variable = sr_site_free_utopia_planitia } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_arcadia_planitia has_global_variable = sr_site_free_arcadia_planitia } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_ceres has_global_variable = sr_site_free_ceres } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_vesta has_global_variable = sr_site_free_vesta } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_psyche has_global_variable = sr_site_free_psyche } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_pallas has_global_variable = sr_site_free_pallas } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_hygiea has_global_variable = sr_site_free_hygiea } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_io has_global_variable = sr_site_free_io } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_europa has_global_variable = sr_site_free_europa } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_ganymede has_global_variable = sr_site_free_ganymede } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_callisto has_global_variable = sr_site_free_callisto } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_himalia has_global_variable = sr_site_free_himalia } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_amalthea has_global_variable = sr_site_free_amalthea } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_venus has_global_variable = sr_site_free_venus } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_mercury has_global_variable = sr_site_free_mercury } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_titan has_global_variable = sr_site_free_titan } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_enceladus has_global_variable = sr_site_free_enceladus } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_rhea has_global_variable = sr_site_free_rhea } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_mimas has_global_variable = sr_site_free_mimas } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_iapetus has_global_variable = sr_site_free_iapetus } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_titania has_global_variable = sr_site_free_titania } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_oberon has_global_variable = sr_site_free_oberon } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_miranda has_global_variable = sr_site_free_miranda } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_ariel has_global_variable = sr_site_free_ariel } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_triton has_global_variable = sr_site_free_triton } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_proteus has_global_variable = sr_site_free_proteus } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_pluto has_global_variable = sr_site_free_pluto } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_eris has_global_variable = sr_site_free_eris } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_makemake has_global_variable = sr_site_free_makemake } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_haumea has_global_variable = sr_site_free_haumea } add = 1 }
+	if = { limit = { has_variable = sr_free_supply_sedna has_global_variable = sr_site_free_sedna } add = 1 }
+}
+sr_garrison_count = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_garrison_valles_marineris } add = 1 }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_garrison_olympus_mons } add = 1 }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_garrison_hellas_planitia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_garrison_utopia_planitia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_garrison_arcadia_planitia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_garrison_ceres } add = 1 }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_garrison_vesta } add = 1 }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_garrison_psyche } add = 1 }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_garrison_pallas } add = 1 }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_garrison_hygiea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_garrison_io } add = 1 }
+	if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_garrison_europa } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_garrison_ganymede } add = 1 }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_garrison_callisto } add = 1 }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_garrison_himalia } add = 1 }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_garrison_amalthea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_garrison_venus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_garrison_mercury } add = 1 }
+	if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_garrison_titan } add = 1 }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_garrison_enceladus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_garrison_rhea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_garrison_mimas } add = 1 }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_garrison_iapetus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_garrison_titania } add = 1 }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_garrison_oberon } add = 1 }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_garrison_miranda } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_garrison_ariel } add = 1 }
+	if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_garrison_triton } add = 1 }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_garrison_proteus } add = 1 }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_garrison_pluto } add = 1 }
+	if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_garrison_eris } add = 1 }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_garrison_makemake } add = 1 }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_garrison_haumea } add = 1 }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_garrison_sedna } add = 1 }
 }

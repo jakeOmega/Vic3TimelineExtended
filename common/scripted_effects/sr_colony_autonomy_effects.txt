@@ -1,0 +1,462 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — autonomy, free colonies, abandonment, colony life
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md
+# (slice 5 of the scope, §§ 6.4-6.6). Simple and full colonies only.
+#
+# A held colony's autonomy (sr_site_autonomy_<key>, 0-100) drifts each month in
+# the world's step (sr_site_aut_step_<key>, generated); at 75 its holder is asked
+# (space_race_events.94: a charter, a garrison, or let it go), at 100 it breaks
+# away. A free colony (sr_site_free_<key>) is a claimed world with no holder: it
+# keeps its people and modules, shows its modifiers to no one, grows only while
+# supplied, and its suppliers' ties (sr_free_ties_<key>, country) grow until it
+# asks to join one (space_race_events.99). The per-world blocks and the
+# dispatchers are generated (sr_sites_generated.txt, from
+# scripts/generators/gen_solar_sites.py); the numbers are in
+# common/script_values/sr_colony_autonomy_values.txt; this file holds the rest.
+#
+# A dispatcher reaches a world's helper as sr_site_<DO>_at = { KEY = <key> }:
+# sr_site_by_index (local_var:sr_site_idx, a world's index in
+# gen_solar_sites.SITES) and sr_site_by_scope (scope:site, the scripted GUIs').
+# ============================================================================
+
+# ---- Free colonies: supply and ties (design § 3) ---------------------------------
+# Country scope, from a free world's month (sr_site_free_step_<key>): THIS
+# supplied it, so its ties grow; THIS did not, so they wear down, and go at 0.
+sr_free_ties_gain = {
+	set_variable = {
+		name = sr_free_ties_$KEY$
+		value = {
+			value = sr_free_ties_value_$KEY$
+			add = sr_free_ties_gain_month
+			max = sr_free_ties_full
+		}
+	}
+}
+
+sr_free_ties_decay = {
+	if = {
+		limit = { has_variable = sr_free_ties_$KEY$ }
+		if = {
+			limit = { var:sr_free_ties_$KEY$ <= sr_free_ties_decay_month }
+			remove_variable = sr_free_ties_$KEY$
+		}
+		else = {
+			set_variable = {
+				name = sr_free_ties_$KEY$
+				value = {
+					value = var:sr_free_ties_$KEY$
+					subtract = sr_free_ties_decay_month
+				}
+			}
+		}
+	}
+}
+
+# Country scope: the free colony INDEX asks to join THIS (its supplier with the
+# strongest full ties; sr_free_may_petition_<key> has checked none is open).
+sr_free_petition = {
+	sr_site_event_open = { VAR = sr_petition_site INDEX = $INDEX$ }
+	trigger_event = { id = space_race_events.99 }
+}
+
+# ---- Autonomy's thresholds (design § 2) --------------------------------------------
+# Country scope, the holder, from the world's step: autonomy at 75 (the world's
+# five-year cooldown is set; sr_aut_site names it in the event).
+sr_aut_ask = {
+	sr_site_event_open = { VAR = sr_aut_site INDEX = $INDEX$ }
+	trigger_event = { id = space_race_events.94 }
+}
+
+# Country scope, the holder: autonomy at 100, the colony breaks away. A player
+# hears it (space_race_events.98), once for the first world a month breaks.
+sr_aut_break_away = {
+	sr_site_set_free_$KEY$ = yes
+	if = {
+		limit = {
+			is_player = yes
+			NOT = { has_variable = sr_freed_site }
+		}
+		sr_site_event_open = { VAR = sr_freed_site INDEX = $INDEX$ }
+		trigger_event = { id = space_race_events.98 days = 1 }
+	}
+}
+
+# ---- A world's helpers (sr_site_by_index, sr_site_by_scope) --------------------------
+# Each names $KEY$, the dispatchers' one argument.
+
+# Any scope: local_var:sr_aut_delta points of autonomy at a held world, within 0-100.
+sr_site_aut_add_at = {
+	if = {
+		limit = { has_global_variable = sr_site_holder_$KEY$ }
+		set_global_variable = {
+			name = sr_site_autonomy_$KEY$
+			value = {
+				value = sr_site_autonomy_value_$KEY$
+				add = local_var:sr_aut_delta
+				min = 0
+				max = sr_aut_break_level
+			}
+		}
+	}
+}
+
+# Country scope, the holder (space_race_events.94): a charter, for good. The
+# world syncs at once, so its specializations show at the charter's share.
+sr_site_charter_at = {
+	if = {
+		limit = { global_var:sr_site_holder_$KEY$ ?= this }
+		set_global_variable = { name = sr_site_charter_$KEY$ value = yes }
+		set_local_variable = { name = sr_aut_delta value = sr_aut_charter_cut }
+		sr_site_aut_add_at = { KEY = $KEY$ }
+		sr_site_sync_$KEY$ = yes
+	}
+}
+
+# ... a garrison, for ten years.
+sr_site_garrison_at = {
+	if = {
+		limit = { global_var:sr_site_holder_$KEY$ ?= this }
+		set_global_variable = { name = sr_site_garrison_$KEY$ value = yes days = 3650 }
+		set_local_variable = { name = sr_aut_delta value = sr_aut_garrison_cut }
+		sr_site_aut_add_at = { KEY = $KEY$ }
+	}
+}
+
+# ... let it go: free, on good terms with us.
+sr_site_let_go_at = {
+	if = {
+		limit = { global_var:sr_site_holder_$KEY$ ?= this }
+		sr_site_set_free_$KEY$ = yes
+		set_variable = { name = sr_free_ties_$KEY$ value = sr_free_ties_amicable }
+	}
+}
+
+# Country scope, the holder (space_race_events.93): its people home to the
+# capital, the world released.
+sr_site_abandon_home_at = {
+	if = {
+		limit = { global_var:sr_site_holder_$KEY$ ?= this }
+		set_local_variable = { name = sr_evac_people value = sr_site_pop_value_$KEY$ }
+		sr_colony_evacuate = yes
+		sr_site_release_$KEY$ = yes
+	}
+}
+
+# ... its people left to govern themselves.
+sr_site_abandon_free_at = {
+	if = {
+		limit = {
+			global_var:sr_site_holder_$KEY$ ?= this
+			sr_site_pop_value_$KEY$ >= sr_free_colony_minimum
+		}
+		sr_site_set_free_$KEY$ = yes
+		set_variable = { name = sr_free_ties_$KEY$ value = sr_free_ties_amicable }
+	}
+}
+
+# Country scope, the petition's addressee (space_race_events.99): welcome it ...
+sr_site_rejoin_at = {
+	if = {
+		limit = {
+			has_global_variable = sr_site_free_$KEY$
+			sr_site_can_hold = yes
+		}
+		sr_site_rejoin_$KEY$ = yes
+	}
+}
+
+# ... or not now: the ties fall back.
+sr_site_decline_at = {
+	if = {
+		limit = { has_variable = sr_free_ties_$KEY$ }
+		set_variable = { name = sr_free_ties_$KEY$ value = sr_free_ties_amicable }
+	}
+}
+
+# Country scope, the holder (space_race_events.97's immediate): a dome breach
+# kills sr_life_breach_share of the world's people, recorded as sr_life_lost for
+# the event's text.
+sr_site_breach_at = {
+	set_variable = {
+		name = sr_life_lost
+		value = {
+			value = sr_site_pop_value_$KEY$
+			multiply = sr_life_breach_share
+			floor = yes
+		}
+	}
+	if = {
+		limit = { has_global_variable = sr_site_pop_$KEY$ }
+		set_global_variable = {
+			name = sr_site_pop_$KEY$
+			value = {
+				value = sr_site_pop_value_$KEY$
+				subtract = var:sr_life_lost
+				min = 0
+			}
+		}
+	}
+}
+
+# Country scope, Sabotage Colony's target (sr_cov_sabotage_colony): its most
+# populous world loses local_var:sr_cov_share of its people and gains
+# local_var:sr_aut_delta autonomy.
+sr_site_sabotage_at = {
+	if = {
+		limit = { has_global_variable = sr_site_pop_$KEY$ }
+		set_global_variable = {
+			name = sr_site_pop_$KEY$
+			value = {
+				value = 1
+				subtract = local_var:sr_cov_share
+				multiply = sr_site_pop_value_$KEY$
+				min = 0
+			}
+		}
+	}
+	sr_site_aut_add_at = { KEY = $KEY$ }
+}
+
+# Country scope (sr_free_supply_sgui): THIS starts or stops supplying a free colony.
+sr_site_toggle_supply_at = {
+	if = {
+		limit = { has_variable = sr_free_supply_$KEY$ }
+		remove_variable = sr_free_supply_$KEY$
+	}
+	else_if = {
+		limit = { has_global_variable = sr_site_free_$KEY$ }
+		set_variable = { name = sr_free_supply_$KEY$ value = yes }
+	}
+}
+
+# Console (te_debug_space_race.5): the world's autonomy set to local_var:sr_aut_delta,
+# and its five-year cooldown cleared, so the next month's step asks.
+sr_site_debug_aut_at = {
+	set_global_variable = { name = sr_site_autonomy_$KEY$ value = local_var:sr_aut_delta }
+	if = {
+		limit = { has_global_variable = sr_site_aut_asked_$KEY$ }
+		remove_global_variable = sr_site_aut_asked_$KEY$
+	}
+}
+
+# ---- Evacuation (design § 4) --------------------------------------------------------
+# Country scope, with local_var:sr_evac_people: the evacuees come home to the
+# capital in batches of sr_evac_batch_people, as the capital's largest pop's
+# culture and religion. create_pop is unverified at run time (nothing in the mod
+# or vanilla's parsed script calls it outside history), so the first evacuation
+# checks the capital grew (colony_evacuation, design § 11).
+sr_colony_evacuate = {
+	if = {
+		limit = {
+			exists = capital
+			local_var:sr_evac_people >= sr_evac_batch_people
+		}
+		set_local_variable = {
+			name = sr_evac_batches
+			value = {
+				value = local_var:sr_evac_people
+				divide = sr_evac_batch_people
+				floor = yes
+			}
+		}
+		capital = {
+			ordered_scope_pop = {
+				order_by = total_size
+				max = 1
+				check_range_bounds = no
+				culture = { save_scope_as = sr_evac_culture }
+				religion = { save_scope_as = sr_evac_religion }
+			}
+		}
+		if = {
+			limit = {
+				exists = scope:sr_evac_culture
+				exists = scope:sr_evac_religion
+			}
+			capital = {
+				set_global_variable = { name = sr_evac_log_before value = state_population }
+				while = {
+					count = local_var:sr_evac_batches
+					create_pop = {
+						culture = scope:sr_evac_culture
+						religion = scope:sr_evac_religion
+						size = 1000
+					}
+				}
+				set_global_variable = { name = sr_evac_log_after value = state_population }
+			}
+			set_global_variable = {
+				name = sr_evac_log_sent
+				value = {
+					value = local_var:sr_evac_batches
+					multiply = sr_evac_batch_people
+				}
+			}
+			sr_colony_evacuation_self_check = yes
+		}
+	}
+}
+
+# ---- Self-check: colony_evacuation (design § 11) ------------------------------------------
+# Country scope, after the first evacuation's batches: OK when the capital state
+# grew by at least 90% of the people sent home (both read in the same run);
+# BROKEN otherwise, with the numbers: create_pop made fewer, or none, or
+# state_population reads the change only later. The fallback is the evacuees
+# lost, as a release always lost them.
+sr_colony_evacuation_self_check = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_evac_checked } }
+		set_global_variable = { name = sr_evac_checked value = yes }
+		if = {
+			limit = { sr_evac_log_rose >= sr_evac_log_rose_needed }
+			debug_log = "TE_SELF_CHECK OK colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the capital gained the evacuees) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the capital gained less than 90% of the evacuees: create_pop made fewer or none, or state_population reads the change later; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}
+
+# ---- Colony life (design § 7) -------------------------------------------------------
+# Country scope, the entry's pulse. Kept rare (owner, 2026-10-26: a few
+# two-option events seen too often break immersion): the first child once per
+# nation (sr_life_first_child_done), for its first colony to reach
+# sr_life_first_child_people; a strike or a dome breach by chance, at a colony
+# large enough, at most one in sr_life_cooldown's ten years. One life event is
+# open at a time (sr_life_site, cleared by the event or after 60 days).
+# `random`'s chance takes whole percents here (no fractional chance is used in
+# the mod or vanilla), so the breach's half a percent is 1% then 50%.
+sr_life_month = {
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+			NOT = { has_variable = sr_life_site }
+		}
+		if = {
+			limit = { NOT = { has_variable = sr_life_first_child_done } }
+			sr_life_first_child_pick = yes
+		}
+		if = {
+			limit = { has_variable = sr_life_site }
+			set_variable = { name = sr_life_first_child_done value = yes }
+			set_variable = { name = sr_life_site_pending value = yes days = 60 }
+			trigger_event = { id = space_race_events.95 }
+		}
+		else_if = {
+			limit = {
+				NOT = { has_variable = sr_life_cooldown }
+				sr_life_has_colony = { MIN = sr_life_strike_people }
+			}
+			random = {
+				chance = sr_life_strike_chance
+				sr_life_pick = { MIN = sr_life_strike_people }
+				if = {
+					limit = { has_variable = sr_life_site }
+					sr_life_start_cooldown = yes
+					trigger_event = { id = space_race_events.96 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = sr_life_site }
+				NOT = { has_variable = sr_life_cooldown }
+				sr_life_has_colony = { MIN = sr_life_breach_people }
+			}
+			random = {
+				chance = sr_life_breach_chance
+				random = {
+					chance = 50
+					sr_life_pick = { MIN = sr_life_breach_people }
+					if = {
+						limit = { has_variable = sr_life_site }
+						sr_life_start_cooldown = yes
+						trigger_event = { id = space_race_events.97 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Country scope: a strike or a dome breach has fired. Its world stays open for
+# 60 days, and neither can fire again for ten years.
+sr_life_start_cooldown = {
+	set_variable = { name = sr_life_site_pending value = yes days = 60 }
+	set_variable = { name = sr_life_cooldown value = yes days = 3650 }
+}
+
+# Country scope: an event about the world INDEX opens. VAR (sr_aut_site,
+# sr_abandon_site, sr_freed_site, sr_petition_site) names the world for the
+# event's custom loc and options, and blocks another event of its kind until the
+# event's after block clears it; VAR_pending lets sr_site_events_clear_stale
+# clear one whose event never showed (60 days).
+sr_site_event_open = {
+	set_variable = { name = $VAR$ value = $INDEX$ }
+	set_variable = { name = $VAR$_pending value = yes days = 60 }
+}
+
+# Country scope, the entry's pulse: an event's world kept past its 60 days (its
+# event never showed, so its after block never ran) is cleared, so the next
+# event of its kind can open.
+sr_site_events_clear_stale = {
+	sr_site_clear_stale_var = { VAR = sr_aut_site }
+	sr_site_clear_stale_var = { VAR = sr_abandon_site }
+	sr_site_clear_stale_var = { VAR = sr_freed_site }
+	sr_site_clear_stale_var = { VAR = sr_petition_site }
+	sr_site_clear_stale_var = { VAR = sr_life_site }
+}
+
+sr_site_clear_stale_var = {
+	if = {
+		limit = {
+			has_variable = $VAR$
+			NOT = { has_variable = $VAR$_pending }
+		}
+		remove_variable = $VAR$
+	}
+}
+
+# Country scope: an event's world (VAR, a country variable holding its index)
+# into local_var:sr_site_idx for sr_site_by_index.
+sr_site_idx_from = {
+	set_local_variable = { name = sr_site_idx value = 0 }
+	if = {
+		limit = { has_variable = $VAR$ }
+		set_local_variable = { name = sr_site_idx value = var:$VAR$ }
+	}
+}
+
+# Clear an event's world once the event has shown it (its after block).
+sr_site_clear_event_var = {
+	if = { limit = { has_variable = $VAR$ } remove_variable = $VAR$ }
+}
+
+# ---- AI (design §§ 2-3) -------------------------------------------------------------------
+# Country scope, from the entry's pulse; once a year. An AI space power among the
+# top three, out of default and with a positive weekly income, supplies up to
+# sr_free_ai_max free colonies, stopping none it supplies; any other AI stops.
+sr_free_ai_review = {
+	if = {
+		limit = {
+			is_ai = yes
+			sr_colonies_contested_enabled = yes
+			NOT = { has_variable = sr_free_ai_reviewed }
+		}
+		set_variable = { name = sr_free_ai_reviewed value = yes days = 360 }
+		if = {
+			limit = {
+				sr_free_can_supply = yes
+				in_default = no
+				sr_ai_should_participate = yes
+				net_fixed_income > 0
+			}
+			sr_free_ai_supply_pick = yes
+		}
+		else = {
+			sr_free_stop_all = yes
+		}
+	}
+}

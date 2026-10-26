@@ -141,3 +141,44 @@ module at our first colony and fabricate now; land our shipments now; recompute 
    module, queue Habitats and specialization levels, never Spaceports or Defences, and switch it off with nothing
    queued.
 9. **Cession.** A colony ceded with modules keeps them; a module on its way when it was ceded lands for the new holder.
+
+## Autonomy, free colonies, abandonment and colony life (slice 5)
+
+Design: `docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md`. Simple Colonies is now the
+Space Race rule's default. The console is `event te_debug_space_race.5` (log every world's autonomy, freedom and ties;
+set our first colony's autonomy to 80; let our first colony go; supply every free colony; full ties with every free
+colony we supply; ask whether to abandon our first colony). Grep `debug.log` for `TE_SR_AUTONOMY` after option a, and
+for `TE_SR_SITES <world> is a free colony`.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN colony_evacuation before=… after=… sent=…` | once a game, the first time a player brings a colony's people home (Abandon, then Bring them home) | `create_pop` with the capital's largest pop's culture and religion made the evacuees in the capital: it grew by at least 90% of them | it grew less: `create_pop` made fewer or none at run time, or `state_population` reads the change only later | if the state grows a month later, nothing to do; if `create_pop` fails, the evacuees are lost, as a release always lost them: drop the batches and say so in Bring them home's tooltip |
+
+1. **The section.** Under Simple Colonies, Solar System Colonization shows Colony Autonomy below Colony Modules: one
+   row per colony we hold, with its autonomy, its drift a month (the drift's terms on hover), Ruled / Charter /
+   Garrison / Both, and Abandon; then Free Colonies. Check no label ends in "...".
+2. **The demand.** Option b, then wait a month: "<World> Demands Self-Government" names the world. A charter drops
+   autonomy by 30, the row reads Charter, and the specialization's line in the entry's modifiers shrinks to 80%; a
+   garrison drops it by 25, the row reads Garrison and the entry shows Colonial Garrisons (+2% Space Program
+   throughput); letting it go frees it.
+3. **Breaking away.** Set a colony's autonomy to 100 with Incite Colonial Autonomy or by waiting at war: the next
+   month it reads Free in the Solar System list, its specialization leaves our entry, and a player holder gets
+   "<World> Declares Itself Free".
+4. **Abandoning.** Abandon (or option h) asks first. Bring them home releases the world (Unclaimed in Solar System)
+   and logs `colony_evacuation`; the capital's population rises by the colony's people, in whole thousands. Leave them
+   to govern themselves makes it Free, with our ties at 50. An outpost of fewer than 1,000 people offers only Close
+   the outpost.
+5. **Free colonies.** Supply a free colony: the entry shows Free Colony Supply (+3% Space Program throughput) and Free
+   Colony Trade, the colony's people grow again, and our ties climb 2 a month. At 100 (option g, then a month) "<World>
+   Asks to Join Us": welcome it and it is ours again at autonomy 20, with its people and modules.
+6. **A dead holder.** `annex <TAG>` an AI holder whose capital region nobody can take a colony for: a world with 1,000
+   people or more reads Free, not Unclaimed.
+7. **Colony life.** Our first colony to reach 2,000 people gets "The First Child of <World>", and no later colony
+   does. Strikes and dome breaches come rarely, at colonies of 10,000 and 5,000 people, and never within ten years of
+   the last one (`sr_life_cooldown`). A dome breach names the people lost, and Settlers shows the colony smaller.
+8. **The AI.** In an observer run, AI space powers answer the demand with charters, supply up to two free colonies,
+   and welcome a colony that asks to join.
+9. **Covert operations.** Incite Colonial Autonomy and Sabotage Colony appear in the diplomatic actions against a
+   country holding a colony under Simple Colonies, and not under Races Only; once established, the target's colonies'
+   autonomy climbs (Incite) or its largest colony loses people (Sabotage).
+10. **Old saves.** A save from before this change keeps its Space Race setting; its colonies start at autonomy 0.

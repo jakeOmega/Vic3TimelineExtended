@@ -296,6 +296,17 @@ Both modes accept `?prefix=<namespace>` / `?file=events/foo.txt` filters.
 
 After editing modifier or event files, `POST /reload` to refresh the server's view before re-running.
 
+### How Often a Recurring Event Fires
+
+Before an event that fires by chance ships, count how often a player sees it in one game. A monthly chance of p% is about 12p% a year; multiply by the years it can fire (a late-game system runs 50 to 80 years), and for a yearly pool by `chance_to_happen` times the event's share of the weights. A flavour event with two or three options that a player sees more than four or five times a game reads as noise and breaks immersion (owner, 2026-10-26).
+
+- **A "first" moment fires once**: once per nation (a country flag), not once per colony, state or building. The tenth "first child born" is no longer a first.
+- **Give a family of events one shared cooldown**: a country variable with `days`, set when any of them fires and tested in every roll's `limit`, so a strike doesn't land the month after a disaster.
+- **Keep one open at a time** where the events share a variable that names their subject.
+- **`random`'s `chance` takes whole percents here.** Neither the mod nor vanilla uses a fractional chance, so get below 1% by nesting (`chance = 1`, then `chance = 50` inside it) rather than writing `chance = 0.5`.
+
+The solar colony life events were drafted at 2% and 1% a month with no cooldown and a first child at every colony: about twenty in a 60-year late game. Once per nation for the first child, a ten-year shared cooldown and 1% / 0.5% a month bring it to about four (`sr_life_month`, `common/scripted_effects/sr_colony_autonomy_effects.txt`).
+
 ### Toggle vs Cooldown Design Preference
 - **For policy choices reflecting long-term strategic orientations, prefer toggles over one-shot actions with cooldowns.**
 - **Toggle pattern:** Two button pairs — "Enable X" (visible when NOT active) and "Disable X" (visible when active). The "Enable" button adds a permanent modifier. The "Disable" button removes it. Ongoing effects are processed in the relevant pulse.

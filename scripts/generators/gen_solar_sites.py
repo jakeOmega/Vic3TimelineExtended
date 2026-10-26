@@ -1,7 +1,11 @@
 """Solar System Colonization's 34 worlds, from one table.
 
 Every per-world block of the colony record is written from ``SITES`` below.
-Design: ``docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md``.
+Design: ``docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md``
+(slices 0-1), ``...-population-and-transit-design.md`` (slices 2-3),
+``...-modules-and-bases-design.md`` (slice 4) and
+``2026-10-26-solar-colonization-free-colonies-design.md`` (slice 5: autonomy,
+free colonies, abandonment, the covert hooks, colony life).
 
 The global record is the truth: ``sr_site_holder_<key>`` (the holder, a
 country), ``sr_site_spec_<key>`` (1 or 2, the specialization chosen in the
@@ -9,7 +13,9 @@ founding event), ``sr_site_region_<key>`` (the holder's capital state region),
 ``sr_site_mirror_<key>`` (the country whose variables show the site), and per
 discovery ``sr_site_disc_<d>`` (1 or 2) and ``sr_site_disc_<d>_pending``. The
 holder's ``<modifier>_held`` variables and its journal entry's modifiers are the
-projection, written by ``sr_site_sync_<key>``.
+projection, written by ``sr_site_sync_<key>``. Slice 5 adds ``sr_site_free_<key>``
+(a free colony: claimed, no holder), ``sr_site_autonomy_<key>`` and the rest of
+``slice5_vars()``, all cleared by a release.
 
 Outputs:
 
@@ -439,6 +445,10 @@ def _release(site: Site) -> list[str]:
     for d in site.discoveries:
         out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{d} }} remove_global_variable = sr_site_disc_{d} }}",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{d}_pending }} remove_global_variable = sr_site_disc_{d}_pending }}"]
+    # Slice 5: a released world is free of autonomy, freedom and ties too.
+    out += [f"\tif = {{ limit = {{ has_global_variable = {var} }} remove_global_variable = {var} }}"
+            for var in slice5_vars(site)]
+    out += [f"\tsr_site_clear_ties_{k} = yes"]
     out += [f'\tdebug_log = "TE_SR_SITES released {k}"', "}"]
     return out
 
@@ -453,6 +463,8 @@ def _transfer(site: Site) -> list[str]:
         "\tif = {",
         f"\t\tlimit = {{ scope:sr_site_to_{k} ?= {{ is_country_alive = yes }} }}",
         f"\t\tset_global_variable = {{ name = sr_site_holder_{k} value = scope:sr_site_to_{k} }}",
+        "\t\t# The garrison is its holder's and goes home (slice 5 design § 1).",
+        f"\t\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} remove_global_variable = sr_site_garrison_{k} }}",
         f"\t\tsr_site_sync_{k} = yes",
         f"\t\tscope:sr_site_to_{k} = {{ sr_site_gained_$CAUSE$ = {{ INDEX = {site.index} }} }}",
         f"\t\tscope:sr_site_from_{k} ?= {{",
@@ -513,15 +525,19 @@ def _monthly(site: Site) -> list[str]:
         f'\t\t\t\tdebug_log = "TE_SELF_CHECK BROKEN site_dead_holder {k}: the heir did not take it"',
         "\t\t\t}",
         "\t\t}",
+        "\t\t# No heir: a world with people becomes a free colony under simple and full",
+        "\t\t# (slice 5 design § 5), any other is released.",
         "\t\telse = {",
-        f"\t\t\tsr_site_release_{k} = yes",
+        f"\t\t\tsr_site_free_or_release_{k} = yes",
         "\t\t}",
         "\t}",
-        "\t# 3. A claim with no holder: a country showing it adopts it; after the grace, released.",
+        "\t# 3. A claim with no holder (a free colony aside): a country showing it adopts it;",
+        "\t# after the grace, released.",
         "\telse_if = {",
         "\t\tlimit = {",
         f"\t\t\thas_global_variable = sr_colony_{k}",
         f"\t\t\tNOT = {{ has_global_variable = sr_site_holder_{k} }}",
+        f"\t\t\tNOT = {{ has_global_variable = sr_site_free_{k} }}",
         "\t\t}",
         "\t\trandom_country = {",
         "\t\t\tlimit = {",
@@ -541,12 +557,22 @@ def _monthly(site: Site) -> list[str]:
         "\t}",
         "\t# 4. The projection.",
         f"\tsr_site_sync_{k} = yes",
-        "\t# 5. Growth, up to the room (simple and full; slices 2-3 design § 10.2).",
+        "\t# 5. A free colony: its suppliers, their ties, a petition (slice 5 design § 3).",
+        "\tif = {",
+        f"\t\tlimit = {{ has_global_variable = sr_site_free_{k} }}",
+        f"\t\tsr_site_free_step_{k} = yes",
+        "\t}",
+        "\t# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2); at a",
+        "\t# free colony only while someone supplies it.",
         "\tif = {",
         "\t\tlimit = {",
         "\t\t\tsr_colonies_contested_enabled = yes",
         f"\t\t\thas_global_variable = sr_site_pop_{k}",
         f"\t\t\tglobal_var:sr_site_pop_{k} > 0",
+        "\t\t\tOR = {",
+        f"\t\t\t\tNOT = {{ has_global_variable = sr_site_free_{k} }}",
+        f"\t\t\t\tsr_site_suppliers_value_{k} >= 1",
+        "\t\t\t}",
         "\t\t}",
         "\t\tset_global_variable = {",
         f"\t\t\tname = sr_site_pop_{k}",
@@ -556,6 +582,14 @@ def _monthly(site: Site) -> list[str]:
         f"\t\t\t\tmax = sr_site_room_{k}",
         "\t\t\t}",
         "\t\t}",
+        "\t}",
+        "\t# 7. A held colony's autonomy (simple and full; slice 5 design § 2).",
+        "\tif = {",
+        "\t\tlimit = {",
+        "\t\t\tsr_colonies_contested_enabled = yes",
+        f"\t\t\tglobal_var:sr_site_holder_{k} ?= {{ is_country_alive = yes }}",
+        "\t\t}",
+        f"\t\tglobal_var:sr_site_holder_{k} = {{ sr_site_aut_step_{k} = yes }}",
         "\t}",
         "}",
     ]
@@ -813,6 +847,7 @@ def _found(site: Site) -> list[str]:
            f"sr_site_found_{k} = {{",
            f"\tset_global_variable = {{ name = sr_colony_{k} value = yes }}",
            f"\tset_global_variable = {{ name = sr_site_holder_{k} value = this }}",
+           f"\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
            f"\tsr_site_sync_{k} = yes"]
     out += [f"\tsr_seed_colony_discovery = {{ DISCOVERY = {d} }}" for d in site.discoveries]
     out += ["\tsr_cf_open_entry = yes",
@@ -1019,6 +1054,7 @@ def render_population_effects() -> list[str]:
                 "\t\t\t\t}",
                 "\t\t\t}",
                 f"\t\t\tchange_global_variable = {{ name = sr_site_pop_{k} add = local_var:sr_emig_share }}",
+                f"\t\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
                 "\t\t\tchange_local_variable = { name = sr_emig_left subtract = local_var:sr_emig_share }",
                 "\t\t}"]
     out += ["\t}", "}", "",
@@ -1045,7 +1081,8 @@ def render_effects() -> str:
         parts += _sync(site) + _mirror_on(site) + _unmirror(site) + _release(site) + _transfer(site) + _monthly(site)
     parts += ["", *render_dispatcher(), "", *render_monthly_list(), "", *render_migration(), "",
               *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
-              "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects()]
+              "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects(),
+              "", *render_autonomy_effects()]
     return "\n".join(parts) + "\n"
 
 
@@ -1069,7 +1106,7 @@ def render_triggers() -> str:
             "\tOR = {"]
     out += [f"\t\tNOT = {{ has_global_variable = sr_colony_{s.key} }}" for s in SITES]
     out += ["\t}", "}", ""]
-    out += render_fleet_triggers() + [""] + render_module_triggers()
+    out += render_fleet_triggers() + [""] + render_module_triggers() + [""] + render_autonomy_triggers()
     return "\n".join(out) + "\n"
 
 
@@ -1165,7 +1202,8 @@ def render_values() -> str:
         out.append(f"\tif = {{ limit = {{ scope:article.input_building_type ?= bt:{site_building(site)} }} value = {worth} "
                    f"add = {{ value = sr_site_extra_levels_{site.key} multiply = {MODULE_AI_VALUE} }} }}")
     out += ["}", ""]
-    out += render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
+    out += (render_fleet_values() + [""] + render_population_values() + [""] + render_module_values()
+            + [""] + render_autonomy_values())
     return "\n".join(out) + "\n"
 
 
@@ -1306,6 +1344,7 @@ def render_module_values() -> list[str]:
            "#   sr_site_staffing_<key>        1 with the crews, AGI or under races only; else",
            "#                                  (crews + 1) / levels (design § 4)",
            "#   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing",
+           "#                                  x the charter's share (slice 5 design § 2)",
            "#   sr_site_<spec|generic>_built_<key>  the levels against each cap",
            "# Country scope, counting THIS's queue and every shipment on its way:",
            "#   sr_mod_spec_used_<key>, sr_mod_slots_used_<key>"]
@@ -1351,6 +1390,7 @@ def render_module_values() -> list[str]:
             out += [f"sr_site_mult_{slot}_{k} = {{",
                     f"\tvalue = sr_site_lvl_{slot}_value_{k}",
                     f"\tmultiply = sr_site_staffing_{k}",
+                    f"\tmultiply = sr_site_charter_factor_{k}",
                     "}"]
         out += [f"sr_site_spec_built_{k} = {{ value = sr_site_lvl_a_value_{k} add = sr_site_lvl_b_value_{k} }}",
                 f"sr_site_generic_built_{k} = {{",
@@ -1395,7 +1435,8 @@ def _module_install(site: Site) -> list[str]:
                 "\t\t\tset_local_variable = { name = sr_ms_installed value = 1 }",
                 "\t\t}"]
         first = False
-    out += [f"\t\tsr_site_sync_{k} = yes", "\t}", "}"]
+    out += [f"\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+            f"\t\tsr_site_sync_{k} = yes", "\t}", "}"]
     return out
 
 
@@ -1712,12 +1753,441 @@ def render_module_triggers() -> list[str]:
     return out
 
 
+# ---------------------------------------------------------------------------
+# Autonomy, free colonies, abandonment, covert hooks, colony life (slice 5 design)
+# ---------------------------------------------------------------------------
+
+# The helpers a by-index or by-scope dispatcher reaches, as sr_site_<do>_at =
+# { KEY = <key> } (hand-written in sr_colony_autonomy_effects.txt). Each names
+# $KEY$, so every one takes the dispatcher's one argument (script_argument_audit).
+SITE_ACTIONS = ("aut_add", "charter", "garrison", "let_go", "abandon_home", "abandon_free",
+                "rejoin", "decline", "breach", "sabotage", "toggle_supply", "debug_aut")
+
+
+def slice5_vars(site: Site) -> list[str]:
+    """The world's slice 5 globals, cleared by a release (design § 1)."""
+    k = site.key
+    return [f"sr_site_free_{k}", f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}",
+            f"sr_site_aut_asked_{k}", f"sr_site_contact_{k}", f"sr_site_suppliers_{k}", f"sr_site_born_{k}",
+            f"sr_site_petition_{k}"]
+
+
+def _autonomy_world(site: Site) -> list[str]:
+    k, i = site.key, site.index
+    return [
+        "# A dead holder's world with no heir: free when it holds people (simple and full), else released.",
+        f"sr_site_free_or_release_{k} = {{",
+        "\tif = {",
+        f"\t\tlimit = {{ sr_colonies_contested_enabled = yes sr_site_pop_value_{k} >= sr_free_colony_minimum }}",
+        f"\t\tsr_site_set_free_{k} = yes",
+        "\t}",
+        "\telse = {",
+        f"\t\tsr_site_release_{k} = yes",
+        "\t}",
+        "}",
+        f"# {site.name} becomes a free colony: no holder; its people, modules and discoveries stay.",
+        f"sr_site_set_free_{k} = {{",
+        f"\tset_global_variable = {{ name = sr_site_free_{k} value = yes }}",
+        f"\tif = {{ limit = {{ has_global_variable = sr_site_holder_{k} }} remove_global_variable = sr_site_holder_{k} }}",
+        f"\tsr_site_sync_{k} = yes",
+        *[f"\tif = {{ limit = {{ has_global_variable = {v} }} remove_global_variable = {v} }}"
+          for v in (f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}", f"sr_site_aut_asked_{k}")],
+        "\tsr_sites_refresh_players = yes",
+        f'\tdebug_log = "TE_SR_SITES {k} is a free colony"',
+        "}",
+        f"# THIS takes {site.name} back from freedom (the petition, design § 3).",
+        f"sr_site_rejoin_{k} = {{",
+        f"\tif = {{ limit = {{ has_global_variable = sr_site_free_{k} }} remove_global_variable = sr_site_free_{k} }}",
+        f"\tset_global_variable = {{ name = sr_site_holder_{k} value = this }}",
+        f"\tset_global_variable = {{ name = sr_site_autonomy_{k} value = sr_aut_rejoin_level }}",
+        f"\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+        f"\tif = {{ limit = {{ has_global_variable = sr_site_suppliers_{k} }} remove_global_variable = sr_site_suppliers_{k} }}",
+        f"\tsr_site_clear_ties_{k} = yes",
+        f"\tsr_site_sync_{k} = yes",
+        f"\tsr_site_gained_quiet = {{ INDEX = {i} }}",
+        "\tsr_sites_refresh_players = yes",
+        "}",
+        f"# Every country's supply of {site.name} and ties with it.",
+        f"sr_site_clear_ties_{k} = {{",
+        "\tevery_country = {",
+        f"\t\tlimit = {{ OR = {{ has_variable = sr_free_supply_{k} has_variable = sr_free_ties_{k} }} }}",
+        f"\t\tif = {{ limit = {{ has_variable = sr_free_supply_{k} }} remove_variable = sr_free_supply_{k} }}",
+        f"\t\tif = {{ limit = {{ has_variable = sr_free_ties_{k} }} remove_variable = sr_free_ties_{k} }}",
+        "\t}",
+        "}",
+        f"# {site.name} free, its month (the global step): its suppliers counted, their ties",
+        "# grown and every other country's worn down, contact from a supplier, and once a",
+        "# year a petition to the supplier with full ties.",
+        f"sr_site_free_step_{k} = {{",
+        f"\tset_global_variable = {{ name = sr_site_suppliers_{k} value = 0 }}",
+        "\tevery_country = {",
+        f"\t\tlimit = {{ OR = {{ has_variable = sr_free_supply_{k} has_variable = sr_free_ties_{k} }} }}",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ has_variable = sr_free_supply_{k} sr_free_can_supply = yes }}",
+        f"\t\t\tchange_global_variable = {{ name = sr_site_suppliers_{k} add = 1 }}",
+        f"\t\t\tsr_free_ties_gain = {{ KEY = {k} }}",
+        "\t\t}",
+        "\t\telse = {",
+        f"\t\t\tif = {{ limit = {{ has_variable = sr_free_supply_{k} }} remove_variable = sr_free_supply_{k} }}",
+        f"\t\t\tsr_free_ties_decay = {{ KEY = {k} }}",
+        "\t\t}",
+        "\t}",
+        "\tif = {",
+        f"\t\tlimit = {{ sr_site_suppliers_value_{k} >= 1 }}",
+        f"\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+        "\t}",
+        "\tif = {",
+        "\t\tlimit = {",
+        f"\t\t\tNOT = {{ has_global_variable = sr_site_petition_{k} }}",
+        f"\t\t\tany_country = {{ sr_free_may_petition_{k} = yes }}",
+        "\t\t}",
+        f"\t\tset_global_variable = {{ name = sr_site_petition_{k} value = yes days = 365 }}",
+        "\t\tordered_country = {",
+        f"\t\t\tlimit = {{ sr_free_may_petition_{k} = yes }}",
+        f"\t\t\torder_by = sr_free_ties_value_{k}",
+        "\t\t\tmax = 1",
+        f"\t\t\tsr_free_petition = {{ INDEX = {i} }}",
+        "\t\t}",
+        "\t}",
+        "}",
+        f"# THIS holds {site.name}: its autonomy for the month, then its thresholds (design § 2).",
+        f"sr_site_aut_step_{k} = {{",
+        f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_contact_{k} }} }} "
+        f"set_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }} }}",
+        "\tset_global_variable = {",
+        f"\t\tname = sr_site_autonomy_{k}",
+        "\t\tvalue = {",
+        f"\t\t\tvalue = sr_site_autonomy_value_{k}",
+        f"\t\t\tadd = sr_site_aut_drift_{k}",
+        "\t\t\tmin = 0",
+        "\t\t\tmax = sr_aut_break_level",
+        "\t\t}",
+        "\t}",
+        "\tif = {",
+        f"\t\tlimit = {{ sr_site_autonomy_value_{k} >= sr_aut_break_level }}",
+        f"\t\tsr_aut_break_away = {{ KEY = {k} INDEX = {i} }}",
+        "\t}",
+        "\telse_if = {",
+        "\t\tlimit = {",
+        f"\t\t\tsr_site_autonomy_value_{k} >= sr_aut_ask_level",
+        f"\t\t\tNOT = {{ has_global_variable = sr_site_aut_asked_{k} }}",
+        "\t\t\tNOT = { has_variable = sr_aut_site }",
+        "\t\t}",
+        f"\t\tset_global_variable = {{ name = sr_site_aut_asked_{k} value = yes days = 1825 }}",
+        f"\t\tsr_aut_ask = {{ INDEX = {i} }}",
+        "\t}",
+        "}",
+    ]
+
+
+def render_autonomy_effects() -> list[str]:
+    out = ["# ===== Autonomy, free colonies, abandonment, colony life (slice 5 design) =====",
+           "# Per world: free or release, freedom, a rejoin, the ties' clearing, a free world's",
+           "# month and a held world's autonomy; then dispatchers by index and by scope, the",
+           "# covert hooks, the life events' draw, the AI's supply pick and the console's",
+           "# helpers. The shared parts are hand-written in sr_colony_autonomy_effects.txt."]
+    for site in SITES:
+        out += ["", f"# --- {site.name} ---"]
+        out += _autonomy_world(site)
+    out += ["",
+            "# A world's helper by its index (local_var:sr_site_idx): sr_site_<DO>_at = { KEY = <key> },",
+            f"# DO one of {', '.join(SITE_ACTIONS)} (sr_colony_autonomy_effects.txt)."]
+    out += _by_index("sr_site_by_index", "local_var:sr_site_idx", "sr_site_$DO$_at = {{ KEY = {k} }}")
+    out += ["", "# ... by the scripted GUIs' world (scope:site)."]
+    out += _by_index("sr_site_by_scope", "scope:site", "sr_site_$DO$_at = {{ KEY = {k} }}")
+    out += ["", "# The Abandon button's world (scope:site, sr_colony_abandon_sgui) names the question's",
+            "# world (space_race_events.93)."]
+    out += _by_index("sr_site_abandon_ask_from_scope", "scope:site",
+                     "sr_site_event_open = {{ VAR = sr_abandon_site INDEX = {i} }}")
+    # Covert hooks (design § 6), country scope = the operation's target.
+    out += ["",
+            "# Incite Colonial Autonomy (covert_ops_apply_all_phase_effects; THIS the target,",
+            "# local_var:sr_cov_mult the operation's phase x priority): every colony THIS holds",
+            "# gains sr_cov_incite_autonomy_base x the multiplier a month.",
+            "sr_cov_incite_autonomy = {",
+            "\tset_local_variable = { name = sr_aut_delta value = { value = sr_cov_incite_autonomy_base multiply = local_var:sr_cov_mult } }"]
+    for site in SITES:
+        out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{site.key} ?= this }} sr_site_aut_add_at = {{ KEY = {site.key} }} }}")
+    out += ["}", "",
+            "# Sabotage Colony (the same pass): THIS's most populous colony, the first in table order",
+            "# on a tie, loses sr_cov_sabotage_share x the multiplier of its people and gains",
+            "# sr_cov_sabotage_autonomy x the multiplier autonomy.",
+            "sr_cov_sabotage_colony = {",
+            "\tset_local_variable = { name = sr_site_idx value = 0 }",
+            "\tset_local_variable = { name = sr_cov_best value = 0 }"]
+    for site in SITES:
+        k = site.key
+        out += ["\tif = {",
+                f"\t\tlimit = {{ global_var:sr_site_holder_{k} ?= this sr_site_pop_value_{k} > local_var:sr_cov_best }}",
+                f"\t\tset_local_variable = {{ name = sr_cov_best value = sr_site_pop_value_{k} }}",
+                f"\t\tset_local_variable = {{ name = sr_site_idx value = {site.index} }}",
+                "\t}"]
+    out += ["\tif = {",
+            "\t\tlimit = { local_var:sr_site_idx >= 1 }",
+            "\t\tset_local_variable = { name = sr_aut_delta value = { value = sr_cov_sabotage_autonomy multiply = local_var:sr_cov_mult } }",
+            "\t\tset_local_variable = { name = sr_cov_share value = { value = sr_cov_sabotage_share multiply = local_var:sr_cov_mult max = 1 } }",
+            "\t\tsr_site_by_index = { DO = sabotage }",
+            "\t}",
+            "}", "",
+            "# Colony life (design § 7): one of THIS's colonies of at least MIN people, drawn",
+            "# evenly, into sr_life_site; nothing when none qualifies.",
+            "sr_life_pick = {",
+            "\trandom_list = {"]
+    for site in SITES:
+        k = site.key
+        out += ["\t\t1 = {",
+                f"\t\t\ttrigger = {{ global_var:sr_site_holder_{k} ?= this sr_site_pop_value_{k} >= $MIN$ }}",
+                f"\t\t\tset_variable = {{ name = sr_life_site value = {site.index} }}",
+                "\t\t}"]
+    out += ["\t}", "}", "",
+            "# The first of THIS's colonies to reach sr_life_first_child_people with no child's",
+            "# event yet: marked, into sr_life_site.",
+            "sr_life_first_child_pick = {"]
+    for n, site in enumerate(SITES):
+        k = site.key
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                "\t\tlimit = {",
+                f"\t\t\tglobal_var:sr_site_holder_{k} ?= this",
+                f"\t\t\tsr_site_pop_value_{k} >= sr_life_first_child_people",
+                f"\t\t\tNOT = {{ has_global_variable = sr_site_born_{k} }}",
+                "\t\t}",
+                f"\t\tset_global_variable = {{ name = sr_site_born_{k} value = yes }}",
+                f"\t\tset_variable = {{ name = sr_life_site value = {site.index} }}",
+                "\t}"]
+    out += ["}", "",
+            "# The AI's supply review (sr_free_ai_review): free colonies THIS doesn't supply, in",
+            "# table order, while it supplies fewer than sr_free_ai_max.",
+            "sr_free_ai_supply_pick = {"]
+    for site in SITES:
+        k = site.key
+        out += ["\tif = {",
+                "\t\tlimit = {",
+                f"\t\t\thas_global_variable = sr_site_free_{k}",
+                f"\t\t\tNOT = {{ has_variable = sr_free_supply_{k} }}",
+                "\t\t\tsr_free_supply_count < sr_free_ai_max",
+                "\t\t}",
+                f"\t\tset_variable = {{ name = sr_free_supply_{k} value = yes }}",
+                "\t}"]
+    out += ["}", "# ... and every free colony THIS supplies, stopped.",
+            "sr_free_stop_all = {"]
+    out += [f"\tif = {{ limit = {{ has_variable = sr_free_supply_{s.key} }} remove_variable = sr_free_supply_{s.key} }}"
+            for s in SITES]
+    out += ["}", "",
+            "# Console (te_debug_space_race.5): every world's autonomy, freedom and ties.",
+            "sr_aut_debug_log = {"]
+    for site in SITES:
+        k = site.key
+        out += ["\tif = {",
+                f"\t\tlimit = {{ has_global_variable = sr_site_free_{k} }}",
+                f"\t\tdebug_log = \"TE_SR_AUTONOMY {k}: free, [GetGlobalVariable('sr_site_pop_{k}').GetValue|0] people, "
+                f"[THIS.MakeScope.ScriptValue('sr_site_suppliers_value_{k}')|0] suppliers, our ties "
+                f"[THIS.MakeScope.ScriptValue('sr_free_ties_value_{k}')|0]\"",
+                "\t}",
+                "\telse_if = {",
+                f"\t\tlimit = {{ has_global_variable = sr_site_holder_{k} }}",
+                f"\t\tdebug_log = \"TE_SR_AUTONOMY {k}: held, autonomy [THIS.MakeScope.ScriptValue('sr_site_autonomy_value_{k}')|1], "
+                f"[THIS.MakeScope.ScriptValue('sr_site_months_since_contact_{k}')|0] months since contact\"",
+                "\t}"]
+    out += ["}", "",
+            "# Console: our first colony, as local_var:sr_site_idx (0 with none).",
+            "sr_aut_debug_first_held = {",
+            "\tset_local_variable = { name = sr_site_idx value = 0 }"]
+    for n, site in enumerate(SITES):
+        out += ["\tif = {" if n == 0 else "\telse_if = {",
+                f"\t\tlimit = {{ global_var:sr_site_holder_{site.key} ?= this }}",
+                f"\t\tset_local_variable = {{ name = sr_site_idx value = {site.index} }}",
+                "\t}"]
+    out += ["}", "",
+            "# Console: the abandonment question for the world in local_var:sr_site_idx.",
+            "sr_aut_debug_abandon_ask = {"]
+    out += _index_chain("local_var:sr_site_idx", "sr_site_event_open = {{ VAR = sr_abandon_site INDEX = {i} }}")
+    out += ["\tif = { limit = { has_variable = sr_abandon_site } trigger_event = { id = space_race_events.93 } }",
+            "}", "",
+            "# Console: every free colony supplied by THIS, and its ties with each set full.",
+            "sr_free_debug_supply_all = {"]
+    for site in SITES:
+        k = site.key
+        out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_free_{k} }} "
+                f"set_variable = {{ name = sr_free_supply_{k} value = yes }} }}"]
+    out += ["}", "sr_free_debug_full_ties = {"]
+    for site in SITES:
+        k = site.key
+        out += [f"\tif = {{ limit = {{ has_variable = sr_free_supply_{k} }} "
+                f"set_variable = {{ name = sr_free_ties_{k} value = sr_free_ties_full }} }}"]
+    out.append("}")
+    return out
+
+
+def render_autonomy_triggers() -> list[str]:
+    out = ["# ===== Autonomy and free colonies (slice 5 design) =====",
+           "# Some world is a free colony. Any scope.",
+           "sr_free_any = {", "\tOR = {"]
+    out += [f"\t\thas_global_variable = sr_site_free_{s.key}" for s in SITES]
+    out += ["\t}", "}", "",
+            "# THIS holds a colony of at least MIN people (the life events).",
+            "sr_life_has_colony = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_pop_value_{s.key} >= $MIN$ }}" for s in SITES]
+    out += ["\t}", "}", "",
+            "# Per world, country scope: THIS may receive the free colony's petition: it supplies",
+            "# it with full ties, can hold a colony, and has no petition open."]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_free_may_petition_{k} = {{",
+                f"\thas_variable = sr_free_supply_{k}",
+                f"\tsr_free_ties_value_{k} >= sr_free_ties_full",
+                "\tsr_site_can_hold = yes",
+                "\tNOT = { has_variable = sr_petition_site }",
+                "}"]
+    out += ["", "# THIS's event world (VAR, a country variable holding its index) holds at least MIN",
+            "# people (space_race_events.93).",
+            "sr_site_var_people = {", "\thas_variable = $VAR$", "\tOR = {"]
+    out += [f"\t\tAND = {{ var:$VAR$ = {s.index} sr_site_pop_value_{s.key} >= $MIN$ }}" for s in SITES]
+    out += ["\t}", "}"]
+    out += ["", "# The scripted GUIs' world (scope:site): a free colony; one THIS supplies.",
+            "sr_free_scope_site_free = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} has_global_variable = sr_site_free_{s.key} }}" for s in SITES]
+    out += ["\t}", "}", "sr_free_scope_site_supplied = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ scope:site = {s.index} has_variable = sr_free_supply_{s.key} }}" for s in SITES]
+    out += ["\t}", "}"]
+    return out
+
+
+def render_autonomy_values() -> list[str]:
+    out = ["# ===== Autonomy and free colonies (slice 5 design §§ 2-3) =====",
+           "# Per world, any scope: its autonomy (0 absent), the months since contact from",
+           "# Earth, the charter's share of its specializations, a free colony's suppliers.",
+           "# Holder scope: its autonomy's drift a month (the terms are",
+           "# sr_colony_autonomy_values.txt's). Country scope: THIS's ties with a free",
+           "# colony and its share of the colony's trade, in units."]
+    for site in SITES:
+        k, tb = site.key, transit_body(site)
+        out += _opt_var(f"sr_site_autonomy_value_{k}", f"sr_site_autonomy_{k}")
+        out += [f"sr_site_months_since_contact_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_contact_{k} }} "
+                f"value = te_history_month_index subtract = global_var:sr_site_contact_{k} }}",
+                "\tmin = 0",
+                "}",
+                f"sr_site_aut_drift_{k} = {{",
+                "\tvalue = sr_aut_home_pull",
+                f"\tadd = {{ value = sr_site_pop_value_{k} divide = 10000 multiply = sr_aut_per_10k_people }}",
+                f"\tadd = {{ value = sr_transit_months_{tb} multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }}",
+                f"\tif = {{ limit = {{ sr_site_months_since_contact_{k} > sr_aut_no_contact_months }} add = sr_aut_no_contact }}",
+                "\tif = { limit = { is_at_war = yes } add = sr_aut_at_war }",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} add = sr_aut_garrisoned }}",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} add = sr_aut_chartered }}",
+                "}",
+                f"sr_site_charter_factor_{k} = {{",
+                "\tvalue = 1",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} value = sr_aut_charter_share }}",
+                "}"]
+        out += _opt_var(f"sr_site_suppliers_value_{k}", f"sr_site_suppliers_{k}")
+        out += _opt_var(f"sr_free_ties_value_{k}", f"sr_free_ties_{k}", global_=False)
+        out += [f"sr_free_trade_share_{k} = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ has_variable = sr_free_supply_{k} has_global_variable = sr_site_free_{k} }}",
+                f"\t\tvalue = sr_site_pop_value_{k}",
+                "\t\tdivide = sr_free_trade_people_per_unit",
+                f"\t\tdivide = {{ value = sr_site_suppliers_value_{k} min = 1 }}",
+                "\t}",
+                "}"]
+    out += ["", "# Country scope: THIS's trade from the free colonies it supplies (units, at most",
+            "# sr_free_trade_max_units), the free colonies it supplies, its garrisoned colonies.",
+            "sr_free_trade_units = {", "\tvalue = 0"]
+    out += [f"\tadd = sr_free_trade_share_{s.key}" for s in SITES]
+    out += ["\tmax = sr_free_trade_max_units", "}", "sr_free_supply_count = {", "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ has_variable = sr_free_supply_{s.key} has_global_variable = sr_site_free_{s.key} }} add = 1 }}"
+            for s in SITES]
+    out += ["}", "sr_garrison_count = {", "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this has_global_variable = sr_site_garrison_{s.key} }} add = 1 }}"
+            for s in SITES]
+    out.append("}")
+    return out
+
+
+def render_autonomy_display() -> list[str]:
+    out = ["",
+           "# Colony Autonomy (slice 5 design § 9), per world:",
+           "#   sr_disp_site_aut_<key>        its autonomy, whole",
+           "#   sr_disp_site_aut_drift_<key>  its drift a month, ours only (0 otherwise)",
+           "#   sr_disp_site_aut_status_<key> 0 nothing, 1 chartered, 2 garrisoned, 3 both",
+           "#   sr_disp_free_<key>            1 while it is a free colony",
+           "#   sr_disp_free_ties_<key>       our ties with it, whole",
+           "#   sr_disp_free_supplied_<key>   1 while we supply it"]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_disp_site_aut_{k} = {{", f"\tvalue = sr_site_autonomy_value_{k}", "\tfloor = yes", "}",
+                f"sr_disp_site_aut_drift_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = sr_site_aut_drift_{k} }}",
+                "}",
+                f"sr_disp_site_aut_status_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} add = 1 }}",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} add = 2 }}",
+                "}",
+                f"sr_disp_free_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_free_{k} }} value = 1 }}",
+                "}",
+                f"sr_disp_free_ties_{k} = {{", f"\tvalue = sr_free_ties_value_{k}", "\tfloor = yes", "}",
+                f"sr_disp_free_supplied_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_free_supply_{k} }} value = 1 }}",
+                "}"]
+    out += ["", "# The free colonies, for the section's empty note.",
+            "sr_disp_free_count = {", "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_free_{s.key} }} add = 1 }}" for s in SITES]
+    out.append("}")
+    return out
+
+
+def _autonomy_row(site: Site) -> list[str]:
+    k = site.key
+    status = f"sr_disp_site_aut_status_{k}"
+    out = ["\t\tte_sr_autonomy_row = {"]
+    out += _override("aut_visible", f'visible = "[{_eq(f"sr_disp_site_{k}", 1)}]"')
+    out += _override("aut_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("aut_name", f'text = "sr_site_name_{k}"')
+    out += _override("aut_figure", f'raw_text = "[{_sv(f"sr_disp_site_aut_{k}")}|0]%"')
+    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|+=2]"')
+    out += _override("aut_none_visible", f'visible = "[{_eq(status, 0)}]"')
+    out += _override("aut_charter_visible", f'visible = "[{_eq(status, 1)}]"')
+    out += _override("aut_garrison_visible", f'visible = "[{_eq(status, 2)}]"')
+    out += _override("aut_both_visible", f'visible = "[{_eq(status, 3)}]"')
+    out += _override("aut_abandon_button",
+                     f'enabled = "{_sgui_call("sr_colony_abandon_sgui", "IsValid", site)}"',
+                     f'onclick = "{_sgui_call("sr_colony_abandon_sgui", "Execute", site)}"',
+                     f'tooltip = "{_sgui_call("sr_colony_abandon_sgui", "ExecuteTooltip", site)}"')
+    return out + ["\t\t}"]
+
+
+def _free_row(site: Site) -> list[str]:
+    k = site.key
+    supplied = f"sr_disp_free_supplied_{k}"
+    out = ["\t\tte_sr_free_row = {"]
+    out += _override("free_visible", f'visible = "[{_eq(f"sr_disp_free_{k}", 1)}]"')
+    out += _override("free_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("free_name", f'text = "sr_site_name_{k}"')
+    out += _override("free_people", f'raw_text = "[{_sv(f"sr_disp_site_pop_{k}")}|K]"')
+    out += _override("free_ties", f'raw_text = "[{_sv(f"sr_disp_free_ties_{k}")}|0]"')
+    out += _override("free_supply_button",
+                     f'enabled = "{_sgui_call("sr_free_supply_sgui", "IsValid", site)}"',
+                     f'onclick = "{_sgui_call("sr_free_supply_sgui", "Execute", site)}"',
+                     f'tooltip = "{_sgui_call("sr_free_supply_sgui", "ExecuteTooltip", site)}"')
+    out += _override("free_supply_visible", f'visible = "[{_eq(supplied, 0)}]"')
+    out += _override("free_stop_visible", f'visible = "[{_eq(supplied, 1)}]"')
+    return out + ["\t\t}"]
+
+
 def render_display() -> str:
     out = [HEADER.rstrip("\n"),
            "# The panel's Solar System rows (gui/journal_entry_widgets/space_race_widget.gui,",
            "# te_sr_sec_solar_system), from gen_solar_sites.SITES. Read by the GUI only,",
            "# as space_race_display_values.txt's sr_disp_* are. 0 unclaimed, 1 ours,",
-           "# 2 another's (its capital snapshot to show), 3 another's without one.",
+           "# 2 another's (its capital snapshot to show), 3 another's without one,",
+           "# 4 a free colony (slice 5 design § 9).",
            "# The viewer's scope."]
     for site in SITES:
         k = site.key
@@ -1726,6 +2196,7 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} value = 1 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_holder_{k} has_variable = sr_ss_cap_{k} }} value = 2 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_holder_{k} }} value = 3 }}",
+                f"\telse_if = {{ limit = {{ has_global_variable = sr_site_free_{k} }} value = 4 }}",
                 "}"]
     out += ["",
             "# Colony fleets and population (slices 2-3 design §§ 3, 8, 10), per world:",
@@ -1806,6 +2277,7 @@ def render_display() -> str:
                 "\tmultiply = 100",
                 "\tfloor = yes",
                 "}"]
+    out += render_autonomy_display()
     return "\n".join(out) + "\n"
 
 
@@ -1849,8 +2321,8 @@ def render_buildings() -> str:
 def render_custom_loc() -> str:
     out = [HEADER.rstrip("\n"),
            "# A world's name from its index (gen_solar_sites.SITES order), for the",
-           "# notices (space_race_events.90 / .91 / .92), the Colony Fleets section and the",
-           "# module queue; then each queue place's module.",
+           "# notices (space_race_events.90 / .91 / .92), the Colony Fleets section, the",
+           "# module queue and slice 5's events (.93 to .99); then each queue place's module.",
            "# Each branch has_variable-guarded.",
            ""]
     names = [("sr_site_notice_gained_name", "sr_site_notice_gained"),
@@ -1863,7 +2335,13 @@ def render_custom_loc() -> str:
              ("sr_cf_notice_target_name", "sr_cf_notice_target"),
              ("sr_cf_notice_founded_name", "sr_cf_notice_founded"),
              # The module queue (slice 4 design § 11): each place's world.
-             *[(f"sr_mq_{n}_world_name", f"sr_mq_{n}_site") for n in range(1, QUEUE_SLOTS + 1)]]
+             *[(f"sr_mq_{n}_world_name", f"sr_mq_{n}_site") for n in range(1, QUEUE_SLOTS + 1)],
+             # Slice 5's events (design § 10): each one's world.
+             ("sr_aut_site_name", "sr_aut_site"),
+             ("sr_abandon_site_name", "sr_abandon_site"),
+             ("sr_freed_site_name", "sr_freed_site"),
+             ("sr_petition_site_name", "sr_petition_site"),
+             ("sr_life_site_name", "sr_life_site")]
     for name, var in names:
         out += [f"{name} = {{", "\ttype = country", "\trandom_valid = no", ""]
         for site in SITES:
@@ -1929,6 +2407,7 @@ def _site_row(site: Site) -> list[str]:
     out += _override("site_unknown_visible", f'visible = "[{_eq(disp, 3)}]"')
     out += _override("site_target_mark_visible", f'visible = "[And( {_eq(disp, 0)}, {_eq(target, 2)} )]"')
     out += _override("site_unclaimed_visible", f'visible = "[And( {_eq(disp, 0)}, Not( {_eq(target, 2)} ) )]"')
+    out += _override("site_free_visible", f'visible = "[{_eq(disp, 4)}]"')
     out += _override("site_inbound", f'visible = "[{_ge(inbound, 1)}]"', 'tooltip = "je_space_race_widget_ss_inbound_tt"')
     out += _override("site_inbound_ours", f'visible = "[{_eq(ours, 1)}]"', f'raw_text = "{figure}"')
     out += _override("site_inbound_rival", f'visible = "[{_eq(ours, 0)}]"', f'raw_text = "{figure}"')
@@ -2019,8 +2498,10 @@ def render_gui() -> str:
            "### space_race_widget.gui: te_sr_site_row (Solar System, every world under its",
            "### location, in panel_order()), te_sr_settler_row (Settlers, every world, shown",
            "### while ours), te_sr_cf_slot_row (Colony Fleets, one per fleet slot),",
-           "### te_sr_mq_row (Colony Modules' queue, one per place) and te_sr_module_row",
-           "### (Colony Modules, every world, shown while ours). Each",
+           "### te_sr_mq_row (Colony Modules' queue, one per place), te_sr_module_row",
+           "### (Colony Modules, every world, shown while ours), te_sr_autonomy_row (Colony",
+           "### Autonomy, every world, shown while ours) and te_sr_free_row (Free Colonies,",
+           "### every world, shown while free; slice 5 design § 9). Each",
            "### value is a display value of sr_sites_display_generated.txt, the scripted",
            "### GUIs are in sr_colony_sguis.txt.",
            "",
@@ -2067,6 +2548,20 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for site in panel_order():
         out += [""] + _module_row(site)
+    out += ["\t}", "",
+            "\ttype te_sr_autonomy_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for site in panel_order():
+        out += [""] + _autonomy_row(site)
+    out += ["\t}", "",
+            "\ttype te_sr_free_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for site in panel_order():
+        out += [""] + _free_row(site)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

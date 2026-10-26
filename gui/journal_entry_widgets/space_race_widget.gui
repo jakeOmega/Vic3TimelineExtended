@@ -2426,7 +2426,7 @@ types space_race_widget_types
 	### then who holds it: "Ours", the holder's flag (vanilla's tiny_flag: the
 	### country's name on hover, the country on click; a 48-character name would
 	### not fit the row), "Another power" (a holder with no capital to show),
-	### "Our target" or "Unclaimed", each on one equality test of
+	### "Our target", "Unclaimed" or "Free" (a free colony, slice 5), each on one equality test of
 	### sr_disp_site_<key> and sr_disp_site_target_<key>
 	### (sr_sites_display_generated.txt). The flag reads the holder's capital,
 	### stored on the viewer by sr_sites_refresh_snapshot (sr_ss_cap_<key>),
@@ -2539,6 +2539,18 @@ types space_race_widget_types
 				default_format = "#grey"
 				text = "je_space_race_widget_ss_unclaimed"
 				block "site_unclaimed_visible" {}
+			}
+			### A free colony (slice 5 design § 9): claimed, no holder.
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				tooltip = "je_space_race_widget_ss_free_tt"
+				text = "je_space_race_widget_ss_free"
+				block "site_free_visible" {}
 			}
 		}
 		### Fleets on their way: the colonization entry's icon and their number;
@@ -3031,6 +3043,298 @@ types space_race_widget_types
 				text = "je_space_race_widget_settlers_empty"
 			}
 			te_sr_settler_rows = {}
+		}
+	}
+
+	### One colony we hold in Colony Autonomy (simple and full colonies; slice 5
+	### design § 9): its icon and name, its autonomy (0-100) and its drift a month
+	### (the drift's terms on hover), its status (Charter, Garrison or both), and
+	### Abandon (sr_colony_abandon_sgui, scope:site = the world's index), which asks
+	### first (space_race_events.93). 24 + 180 + 40 + 44 + 72 + 66 + 5 × 4 spacing
+	### + 2 × 4 margin = 454, in the 480 column. Instances in te_sr_autonomy_rows
+	### (sr_sites_generated_rows.gui).
+	type te_sr_autonomy_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "aut_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "aut_icon" {}
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "aut_name" {}
+			}
+		}
+		widget = {
+			size = { 40 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_autonomy_figure_tt"
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 40
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#v"
+				block "aut_figure" {}
+			}
+		}
+		widget = {
+			size = { 44 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_autonomy_drift_tt"
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 44
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				block "aut_drift" {}
+			}
+		}
+		widget = {
+			size = { 72 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 72
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#grey"
+				text = "je_space_race_widget_autonomy_status_none"
+				block "aut_none_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 72
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				tooltip = "je_space_race_widget_autonomy_charter_tt"
+				text = "je_space_race_widget_autonomy_status_charter"
+				block "aut_charter_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 72
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				tooltip = "je_space_race_widget_autonomy_garrison_tt"
+				text = "je_space_race_widget_autonomy_status_garrison"
+				block "aut_garrison_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 72
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				tooltip = "je_space_race_widget_autonomy_both_tt"
+				text = "je_space_race_widget_autonomy_status_both"
+				block "aut_both_visible" {}
+			}
+		}
+		button = {
+			using = default_button_action
+			size = { 66 24 }
+			parentanchor = vcenter
+			block "aut_abandon_button" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 62
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_autonomy_abandon"
+			}
+		}
+	}
+
+	### One free colony in Colony Autonomy's Free Colonies (slice 5 design §§ 3,
+	### 9): its icon and name, its people (K figures), our ties with it (0-100;
+	### at 100 it asks to join us), and Supply or Stop (sr_free_supply_sgui,
+	### scope:site = the world's index). 24 + 180 + 56 + 44 + 66 + 4 × 4 spacing
+	### + 2 × 4 margin = 394. Instances in te_sr_free_rows (sr_sites_generated_rows.gui).
+	type te_sr_free_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "free_visible" {}
+
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				parentanchor = center
+				block "free_icon" {}
+			}
+		}
+		widget = {
+			size = { 180 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "free_name" {}
+			}
+		}
+		widget = {
+			size = { 56 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_free_people_tt"
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 56
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#v"
+				block "free_people" {}
+			}
+		}
+		widget = {
+			size = { 44 24 }
+			parentanchor = vcenter
+			tooltip = "je_space_race_widget_free_ties_tt"
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 44
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "free_ties" {}
+			}
+		}
+		button = {
+			using = default_button_action
+			size = { 66 24 }
+			parentanchor = vcenter
+			block "free_supply_button" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 62
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_free_supply"
+				block "free_supply_visible" {}
+			}
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 62
+				elide = right
+				using = fontsize_small
+				text = "je_space_race_widget_free_stop"
+				block "free_stop_visible" {}
+			}
+		}
+	}
+
+	### Colony Autonomy (solar colonization, simple and full colonies; slice 5
+	### design § 9): every colony we hold, with its autonomy, status and Abandon;
+	### then the free colonies, with our ties and Supply. Open by default; the
+	### flag is sr_panel_autonomy_closed.
+	type te_sr_sec_autonomy = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		spacing = 2
+		visible = "[And( JournalEntry.IsActive, EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ) )]"
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_autonomy_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_autonomy_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_autonomy_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_autonomy_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_autonomy_closed'))]"
+
+			te_sr_note = {
+				text = "je_space_race_widget_autonomy_note"
+			}
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_free_trade_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_free_trade_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_free_trade_figure"
+				}
+			}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_settlers_empty"
+			}
+			te_sr_autonomy_rows = {}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_free_header"
+				}
+			}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_free_count'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_free_empty"
+			}
+			te_sr_free_rows = {}
 		}
 	}
 
@@ -5645,6 +5949,7 @@ types space_race_widget_types
 		te_sr_sec_colony_fleets = {}
 		te_sr_sec_settlers = {}
 		te_sr_sec_modules = {}
+		te_sr_sec_autonomy = {}
 		te_sr_sec_solar_system = {}
 	}
 

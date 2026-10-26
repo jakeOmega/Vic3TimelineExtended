@@ -7,13 +7,15 @@ milestones keeps a larger permanent reward than anyone who follows. The entries
 start to appear once you research Rocketry in era 6, but you need a Space
 Program building, unlocked by Guided Missiles in era 7, before any of them can
 make progress. The Space Race game rule controls the system; with it off, the
-journal entries and their events never appear. Its Simple Colonies and Full
-Colonies settings also make colony fleets take months or years to arrive, give
-colonies settlers and modules, tie Extraplanetary Bases to the room colonies
-give, and let a colony change hands (see [Colony fleets in
+journal entries and their events never appear. Its Simple Colonies setting, the
+default, and its Full Colonies setting also make colony fleets take months or
+years to arrive, give colonies settlers and modules, tie Extraplanetary Bases to
+the room colonies give, let a colony change hands, and let colonies grow
+restless and break away (see [Colony fleets in
 flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers),
 [Colony modules](#colony-modules), [Extraplanetary Base
-room](#extraplanetary-base-room) and [Ceding a colony](#ceding-a-colony)).
+room](#extraplanetary-base-room), [Ceding a colony](#ceding-a-colony) and
+[Colony autonomy and free colonies](#colony-autonomy-and-free-colonies)).
 
 ## Joining the space race
 
@@ -588,8 +590,8 @@ modules](#colony-modules)).
 
 Your people off Earth give Off-World Population on Solar System Colonization:
 +1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
-A colony's people go with it when it changes hands, and are lost if it is
-released. AI programs set Emigration to Steady while they are in the top three
+A colony's people go with it when it changes hands, stay on it when it becomes
+a free colony, and are lost if it is released. AI programs set Emigration to Steady while they are in the top three
 of the space race with money to spare, to Low otherwise, and to Off in default
 or when their colonies are full.
 
@@ -688,11 +690,14 @@ to open the country), Another power, or Unclaimed.
 
 A colony stays with its holder until the holder is gone, or, under Simple
 Colonies and Full Colonies, until a treaty moves it ([Ceding a
-colony](#ceding-a-colony)). When a holder is annexed, each of its colonies passes, with its
+colony](#ceding-a-colony)) or it leaves on its own ([Colony autonomy and free
+colonies](#colony-autonomy-and-free-colonies)). When a holder is annexed, each of its colonies passes, with its
 specialization and its discoveries, to whoever owns the state region of its last
 capital. If no country there can take it, the world reads Unclaimed again: the
 next colony fleet that can reach it claims it, at the current stage's cost, even
-when its stage is long past or the race is over. When a revolution wins, the new
+when its stage is long past or the race is over. Under Simple Colonies and Full
+Colonies a colony of 1,000 people or more becomes a free colony instead (see
+[Colony autonomy and free colonies](#colony-autonomy-and-free-colonies)). When a revolution wins, the new
 government holds the old one's colonies at once.
 
 A country that comes to hold a colony this way, or by treaty, gets Solar System
@@ -715,6 +720,81 @@ AI powers in the race ask for colonies; an AI that holds a colony with no space
 program of its own offers it. Any AI accepts a cession when the rest of the
 treaty pays more than the colony is worth to it, which rises with the world's
 stage, from Mars and the asteroids to the Kuiper Belt.
+
+### Colony autonomy and free colonies
+
+Under Simple Colonies and Full Colonies, every colony you hold has an autonomy
+figure from 0 to 100, listed in the Colony Autonomy section of Solar System
+Colonization with how much it moves each month. It changes every month:
+
+| What moves it | A month |
+|---|---|
+| The pull of home | −0.25 |
+| Its people | +0.05 for every 10,000 |
+| Its distance: the months your drive takes to reach it | +0.01 a month of transit, at most +0.5 |
+| No settlers or module has landed for more than a year | +0.25 |
+| You are at war | +0.25 |
+| A garrison | +0.2 |
+| A charter | −0.4 |
+
+So a Mars colony that keeps receiving settlers barely moves, while a large
+colony at Saturn on chemical rockets gains about five points a year. Better
+drives bring the outer colonies closer: with a fusion torch the distance all but
+disappears. Keep settlers or modules arriving, on Low emigration if nothing
+else, so that no colony goes a year without contact.
+
+At 75, the colony demands self-government, once in five years at most, and you
+choose:
+
+| Choice | Now | After |
+|---|---|---|
+| Grant a charter | −30 autonomy | For good: its specializations work at 80% for you, and its autonomy falls 0.4 a month |
+| Send a garrison | −25 autonomy | For ten years: +2% Space Program throughput a garrisoned colony (Colonial Garrisons), and the colony's resentment adds 0.2 a month |
+| Let it go | It becomes a free colony, on good terms with you | — |
+
+A charter settles a colony for good at a fifth of its output; a garrison buys
+ten years and costs Launch Capacity. A colony that reaches 100 declares itself
+free whatever you chose. A charter stays with the colony when it changes hands;
+a garrison goes home. AI powers grant a charter while they race, garrison while
+at war, and let a colony go when they run no colonization program.
+
+**Abandoning a colony.** Each colony's row has an Abandon button, which asks
+first. You can bring its people home to your capital, releasing the world and
+losing its modules, or, with 1,000 people or more, leave them to govern
+themselves as a free colony. An outpost with almost no one in it can only be
+closed. The AI never abandons a colony.
+
+**Free colonies.** A free colony keeps its people, modules and discoveries but
+has no holder, so nobody gets its specialization. The Solar System list shows it
+as Free, and Colony Autonomy lists every one with its people and your ties with
+it. Click Supply on a free colony to send it supplies:
+
+| Supplying a free colony | |
+|---|---|
+| Costs | +3% Space Program throughput for each colony you supply (Free Colony Supply) |
+| Earns | Free Colony Trade: +1% research speed and +2% influence for every 20,000 of its people, shared among its suppliers, up to five times |
+| Ties | +2 a month while you supply it, −1 a month when you don't |
+
+A free colony grows only while someone supplies it. When your ties with it
+reach 100, it asks to join you, once a year at most: welcome it and it is yours
+again at autonomy 20, with its people and modules; decline and your ties fall
+back to 50. A colony you let go or leave free starts at ties 50 with you, so
+supplying it brings it back in about two years; one that broke away starts at
+0. AI powers in the top three with money to spare supply up to two free
+colonies and accept a colony that asks.
+
+Covert operations reach colonies too: Incite Colonial Autonomy raises the
+autonomy of every colony the target holds, and Sabotage Colony kills a share of
+the people of its largest (see [The covert operations](11-influence.md#the-covert-operations)).
+
+**Colony life.** Three rare events come with growing colonies. The First Child
+fires once, when your first colony reaches 2,000 people: prestige, and a choice
+between pulling the colony closer or letting it be proud of itself. A Strike can
+come at a colony of 10,000 or more and a Dome Breach, which kills a tenth of a
+colony's people, at one of 5,000 or more; after either, neither comes again for
+ten years, so a nation sees one about every fifteen years. Paying for the strike
+or the repairs costs Space Program throughput for a while and lowers the
+colony's autonomy; leaving the colonists to it raises it.
 
 ### Rare colony discoveries
 

@@ -255,6 +255,51 @@ sr_module_upkeep = {
 	building_space_program_throughput_add = 0.01
 }
 
+# ======= Solar System Colonization - autonomy and free colonies (slice 5;
+# docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md)
+# On the entry, each at a multiplier and re-applied monthly with the three
+# above by sr_emig_refresh_modifiers: supplying free colonies is the Space
+# Program's Launch Capacity bill (a unit a colony supplied); their trade a unit
+# a 20,000 of a colony's people, shared among its suppliers, at most five
+# (sr_free_trade_units); a garrison's upkeep a unit a garrisoned colony.
+sr_free_colony_supply = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.03
+}
+
+sr_free_colony_trade = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tech_research_speed_mult = 0.01
+	country_influence_mult = 0.02
+}
+
+sr_colonial_garrisons = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.02
+}
+
+# Colony life (slice 5 design § 7): timed, on the country, from the events'
+# options (space_race_events.95 to .97).
+sr_birth_citizen = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+}
+
+sr_birth_native = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.10
+}
+
+sr_strike_settlement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.05
+}
+
+sr_dome_breach_repairs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	building_space_program_throughput_add = 0.10
+}
+
 # Extraplanetary Base room (colony modules design § 9): unit country modifiers,
 # one at a time, at multiplier = the average grade of the country's base levels
 # in percent, past its room at -50%. The one refresh site is sr_ebase_refresh

@@ -4641,3 +4641,415 @@ space_race_events.92 = {
 		sr_cf_clear_notice = yes
 	}
 }
+
+# ===== Solar System Colonization, slice 5: autonomy, free colonies, colony life =====
+# Design: docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md.
+# Each names its world through a country variable holding the world's index
+# (sr_abandon_site, sr_aut_site, sr_life_site, sr_freed_site, sr_petition_site),
+# read by generated custom loc (sr_sites_generated_custom_loc.txt) and by the
+# options through sr_site_by_index (sr_colony_autonomy_effects.txt). The after
+# block clears it, so the next event of its kind can open.
+
+# Abandon <World>? From the Abandon button (sr_colony_abandon_sgui).
+space_race_events.93 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/mars_dusty_landing.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.93.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { sr_site_var_people = { VAR = sr_abandon_site MIN = sr_evac_batch_people } }
+				desc = space_race_events.93.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = space_race_events.93.d_outpost
+			}
+		}
+	}
+	flavor = space_race_events.93.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_abandon_site }
+
+	# Bring them home: the world released, its people to the capital.
+	option = {
+		name = space_race_events.93.a
+		trigger = { sr_site_var_people = { VAR = sr_abandon_site MIN = sr_evac_batch_people } }
+		custom_tooltip = {
+			text = sr_abandon_home_tt
+			sr_site_idx_from = { VAR = sr_abandon_site }
+			sr_site_by_index = { DO = abandon_home }
+		}
+	}
+
+	# An outpost with (almost) no one in it: closed.
+	option = {
+		name = space_race_events.93.e
+		trigger = {
+			NOT = { sr_site_var_people = { VAR = sr_abandon_site MIN = sr_evac_batch_people } }
+		}
+		custom_tooltip = {
+			text = sr_abandon_close_tt
+			sr_site_idx_from = { VAR = sr_abandon_site }
+			sr_site_by_index = { DO = abandon_home }
+		}
+	}
+
+	# Leave them to govern themselves: a free colony.
+	option = {
+		name = space_race_events.93.b
+		trigger = { sr_site_var_people = { VAR = sr_abandon_site MIN = sr_free_colony_minimum } }
+		custom_tooltip = {
+			text = sr_abandon_free_tt
+			sr_site_idx_from = { VAR = sr_abandon_site }
+			sr_site_by_index = { DO = abandon_free }
+		}
+	}
+
+	option = {
+		name = space_race_events.93.c
+		default_option = yes
+		# REVIEWED 2026-10-26 (no_effect_option): keeping the colony is the choice; the tooltip says so
+		custom_tooltip = sr_abandon_keep_tt
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_abandon_site }
+	}
+}
+
+# <World> Demands Self-Government: a colony's autonomy has reached 75
+# (sr_site_aut_step_<key>, once in five years per world).
+space_race_events.94 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/mars_communication_room.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.94.t
+	desc = space_race_events.94.d
+	flavor = space_race_events.94.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_aut_site }
+
+	# A charter: it keeps the colony, at a share of its output, for good.
+	option = {
+		name = space_race_events.94.a
+		default_option = yes
+		custom_tooltip = {
+			text = sr_aut_charter_tt
+			sr_site_idx_from = { VAR = sr_aut_site }
+			sr_site_by_index = { DO = charter }
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { sr_ai_should_participate = yes }
+				add = 40
+			}
+		}
+	}
+
+	# A garrison: ten years, an upkeep, and resentment.
+	option = {
+		name = space_race_events.94.b
+		custom_tooltip = {
+			text = sr_aut_garrison_tt
+			sr_site_idx_from = { VAR = sr_aut_site }
+			sr_site_by_index = { DO = garrison }
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 60
+			}
+		}
+	}
+
+	# Let it go: a free colony, on good terms with us.
+	option = {
+		name = space_race_events.94.c
+		custom_tooltip = {
+			text = sr_aut_let_go_tt
+			sr_site_idx_from = { VAR = sr_aut_site }
+			sr_site_by_index = { DO = let_go }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { NOT = { sr_solar_colonization_running = yes } }
+				add = 60
+			}
+		}
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_aut_site }
+	}
+}
+
+# The First Child of <World>: a colony first holds sr_life_first_child_people
+# (sr_life_month, sr_life_first_child_pick).
+space_race_events.95 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_utopia_planitia.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = space_race_events.95.t
+	desc = space_race_events.95.d
+	flavor = space_race_events.95.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_life_site }
+
+	# A citizen of our nation: prestige, and the colony closer to home.
+	option = {
+		name = space_race_events.95.a
+		default_option = yes
+		# A same-name add_modifier stacks: a second one within the term replaces the first.
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = sr_birth_citizen }
+				remove_modifier = sr_birth_citizen
+			}
+		}
+		add_modifier = { name = sr_birth_citizen months = 60 }
+		custom_tooltip = {
+			text = sr_life_autonomy_down_5_tt
+			set_local_variable = { name = sr_aut_delta value = -5 }
+			sr_site_idx_from = { VAR = sr_life_site }
+			sr_site_by_index = { DO = aut_add }
+		}
+		ai_chance = { base = 2 }
+	}
+
+	# A child of <World>: more prestige, and the colony prouder of itself.
+	option = {
+		name = space_race_events.95.b
+		# A same-name add_modifier stacks: a second one within the term replaces the first.
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = sr_birth_native }
+				remove_modifier = sr_birth_native
+			}
+		}
+		add_modifier = { name = sr_birth_native months = 60 }
+		custom_tooltip = {
+			text = sr_life_autonomy_up_5_tt
+			set_local_variable = { name = sr_aut_delta value = 5 }
+			sr_site_idx_from = { VAR = sr_life_site }
+			sr_site_by_index = { DO = aut_add }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_life_site }
+	}
+}
+
+# A Strike at <World> (sr_life_month): a colony of sr_life_strike_people or more.
+space_race_events.96 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_vesta.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.96.t
+	desc = space_race_events.96.d
+	flavor = space_race_events.96.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_life_site }
+
+	# Meet their demands: a dearer Space Program for three years.
+	option = {
+		name = space_race_events.96.a
+		default_option = yes
+		# A same-name add_modifier stacks: a second one within the term replaces the first.
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = sr_strike_settlement }
+				remove_modifier = sr_strike_settlement
+			}
+		}
+		add_modifier = { name = sr_strike_settlement months = 36 }
+		custom_tooltip = {
+			text = sr_life_autonomy_down_5_tt
+			set_local_variable = { name = sr_aut_delta value = -5 }
+			sr_site_idx_from = { VAR = sr_life_site }
+			sr_site_by_index = { DO = aut_add }
+		}
+		ai_chance = { base = 2 }
+	}
+
+	# Break the strike: the colony remembers.
+	option = {
+		name = space_race_events.96.b
+		custom_tooltip = {
+			text = sr_life_autonomy_up_10_tt
+			set_local_variable = { name = sr_aut_delta value = 10 }
+			sr_site_idx_from = { VAR = sr_life_site }
+			sr_site_by_index = { DO = aut_add }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_life_site }
+	}
+}
+
+# A Dome Breach at <World> (sr_life_month): a colony of sr_life_breach_people or
+# more loses a tenth of its people when the event fires.
+space_race_events.97 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/radiation_hazard_space.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	title = space_race_events.97.t
+	desc = space_race_events.97.d
+	flavor = space_race_events.97.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_life_site }
+
+	immediate = {
+		sr_site_idx_from = { VAR = sr_life_site }
+		sr_site_by_index = { DO = breach }
+	}
+
+	# Rebuild at once: a year's dearer Space Program.
+	option = {
+		name = space_race_events.97.a
+		default_option = yes
+		# A same-name add_modifier stacks: a second one within the term replaces the first.
+		hidden_effect = {
+			if = {
+				limit = { has_modifier = sr_dome_breach_repairs }
+				remove_modifier = sr_dome_breach_repairs
+			}
+		}
+		add_modifier = { name = sr_dome_breach_repairs months = 12 }
+		custom_tooltip = {
+			text = sr_life_autonomy_down_5_tt
+			set_local_variable = { name = sr_aut_delta value = -5 }
+			sr_site_idx_from = { VAR = sr_life_site }
+			sr_site_by_index = { DO = aut_add }
+		}
+		ai_chance = { base = 2 }
+	}
+
+	# Leave it to the colonists: they rebuild, and remember who didn't.
+	option = {
+		name = space_race_events.97.b
+		custom_tooltip = {
+			text = sr_life_autonomy_up_10_tt
+			set_local_variable = { name = sr_aut_delta value = 10 }
+			sr_site_idx_from = { VAR = sr_life_site }
+			sr_site_by_index = { DO = aut_add }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_life_site }
+		if = { limit = { has_variable = sr_life_lost } remove_variable = sr_life_lost }
+	}
+}
+
+# <World> Declares Itself Free: a colony's autonomy reached 100 (sr_aut_break_away,
+# players only).
+space_race_events.98 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_olympus_mons.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = space_race_events.98.t
+	desc = space_race_events.98.d
+	flavor = space_race_events.98.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_freed_site }
+
+	option = {
+		name = space_race_events.98.a
+		default_option = yes
+		custom_tooltip = sr_freed_supply_tt
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_freed_site }
+	}
+}
+
+# <World> Asks to Join Us: a free colony's ties with its supplier are full
+# (sr_site_free_step_<key>, once a year per world).
+space_race_events.99 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/space_cooperation_station.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
+
+	title = space_race_events.99.t
+	desc = space_race_events.99.d
+	flavor = space_race_events.99.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_petition_site }
+
+	option = {
+		name = space_race_events.99.a
+		default_option = yes
+		custom_tooltip = {
+			text = sr_petition_accept_tt
+			sr_site_idx_from = { VAR = sr_petition_site }
+			sr_site_by_index = { DO = rejoin }
+		}
+		ai_chance = { base = 20 }
+	}
+
+	option = {
+		name = space_race_events.99.b
+		custom_tooltip = {
+			text = sr_petition_decline_tt
+			sr_site_idx_from = { VAR = sr_petition_site }
+			sr_site_by_index = { DO = decline }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_petition_site }
+	}
+}
