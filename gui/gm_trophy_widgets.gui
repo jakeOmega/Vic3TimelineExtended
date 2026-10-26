@@ -24,7 +24,10 @@
 ### * Numbers come from ScriptValue reads: the country's gm_tr_disp_* and the
 ###   container's gm_tr_disp_* (gm_trophy_values.txt), every one guarded.
 ### * Buttons pass the row's state as gm_state or its trophy as gm_tr, and are
-###   shown by their scripted GUI's is_shown (gm_trophy_sguis.txt).
+###   shown by their scripted GUI's is_shown (gm_trophy_sguis.txt). The
+###   buttons on the state card check Not( GetMetaPlayer.IsObserver ) first:
+###   an observer has no GetPlayer, and the is_shown logs a null-country
+###   error every frame the card draws (log triage 2026-10-25).
 ### * The collapse flags say their default: *_closed sections are open until
 ###   closed (test_grand_monuments_layout.py).
 
@@ -97,7 +100,7 @@ types gm_trophy_widget_types
 		parentanchor = hcenter
 		margin_top = 4
 		datacontext = "[GetScriptedGui('gm_tr_take_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
+		visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End )]"
 		tooltip = "gm_button_tr_take_tooltip"
@@ -2284,7 +2287,7 @@ types gm_trophy_widget_types
 		gm_tr_button = {
 			blockoverride "tr_button" {
 				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End ) )]"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				tooltip = "gm_button_tr_take_site_tooltip"
@@ -2327,7 +2330,7 @@ types gm_trophy_widget_types
 			}
 			blockoverride "tr_button" {
 				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+				visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End ) )]"
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
 				tooltip = "gm_button_tr_take_site_tooltip"
@@ -2578,7 +2581,7 @@ types gm_trophy_widget_types
 		parentanchor = hcenter
 		margin_top = 2
 		datacontext = "[GetScriptedGui('gm_mon_take_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		visible = "[And( Not( GetMetaPlayer.IsObserver ), ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End ) )]"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
 		tooltip = "gm_mon_take_button_tooltip"
