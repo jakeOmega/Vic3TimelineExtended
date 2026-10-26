@@ -30,10 +30,11 @@ te_cc_yearly_update = {
 # old save's half-walked first year), a walked workforce of at least 100,000 and a slack between 2% and 98%: the
 # slack the pulse just stored (te_country_slack_share, summed from the states' stored counts) against a fresh walk
 # of every pop in the country, counted by the same rule (te_unemp_count_pop).
-#   OK      within 5 points, with some peasants in the fresh count: the states' counts are stored and summed as
-#           meant (each is up to a year old, which explains a point or two). The recount shares the walk's rule, so
-#           it can't catch a rule that never matches; a peasant count of 0 can, since every country has
-#           subsistence farming, so it reads BROKEN.
+#   OK      within 10 points, with some peasants in the fresh count: the states' counts are stored and summed as
+#           meant (each is up to a year old: in a new game's first year, as the economy hires, that moved Orta
+#           Zhuz's peasant share 5.3 points, and a dropped state or a peasant branch that never matches moves it
+#           tens of points or to 0). The recount shares the walk's rule, so it can't catch a rule that never
+#           matches; a peasant count of 0 can, since every country has subsistence farming, so it reads BROKEN.
 #   BROKEN  anything else: the sum or the stored counts aren't what the walk counted, or the peasant branch never
 #           matches. The fallback is in the playtest row.
 te_cc_slack_selfcheck = {
@@ -74,8 +75,8 @@ te_cc_slack_selfcheck = {
 		}
 		if = {
 			limit = {
-				var:te_cc_chk_diff <= 0.05
-				var:te_cc_chk_diff >= -0.05
+				var:te_cc_chk_diff <= 0.10
+				var:te_cc_chk_diff >= -0.10
 				var:te_cc_chk_fresh_peasants > 0
 			}
 			debug_log = "TE_SELF_CHECK OK construction_slack_read country=[THIS.GetCountry.GetTagName] slack=[THIS.Var('te_cc_slack').GetValue|3] fresh=[THIS.Var('te_cc_chk_fresh').GetValue|3] peasants=[THIS.Var('te_cc_peasants').GetValue|3] fresh_peasants=[THIS.Var('te_cc_chk_fresh_peasants').GetValue|3] walked_wf=[THIS.Var('te_cc_chk_walked_wf').GetValue|0] fresh_wf=[THIS.Var('te_cc_chk_wf').GetValue|0] target=[THIS.Var('te_cc_chk_target').GetValue|3] factor=[THIS.Var('te_cc_slack_factor').GetValue|3] gdppc=[THIS.Var('te_cc_gdppc').GetValue|2] gdp_part=[THIS.Var('te_cc_gdp_part').GetValue|3] (the states' stored counts sum to the country's slack, so the scaling reads the slack it means) date=[TimeKeeper.GetCurrentDate.GetString]"

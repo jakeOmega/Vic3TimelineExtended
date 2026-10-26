@@ -134,8 +134,9 @@ class TheSelfCheck(unittest.TestCase):
 
     def test_it_recounts_by_the_walks_own_rule(self):
         self.assertIn("every_scope_state = { every_scope_pop = { te_unemp_count_pop = yes } }", self.body)
-        # a peasant count of 0 reads BROKEN: the recount shares the walk's rule, so only this catches a dead branch
-        self.assertIn("var:te_cc_chk_diff <= 0.05 var:te_cc_chk_diff >= -0.05 var:te_cc_chk_fresh_peasants > 0",
+        # a peasant count of 0 reads BROKEN: the recount shares the walk's rule, so only this catches a dead branch.
+        # 10 points, not 5: a new game's first year moves the peasant share 5.3 points (log triage 2026-10-25)
+        self.assertIn("var:te_cc_chk_diff <= 0.10 var:te_cc_chk_diff >= -0.10 var:te_cc_chk_fresh_peasants > 0",
                       self.body)
         self.assertIn("TE_SELF_CHECK OK construction_slack_read", self.body)
         self.assertIn("TE_SELF_CHECK BROKEN construction_slack_read", self.body)
