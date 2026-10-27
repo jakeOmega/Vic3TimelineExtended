@@ -1428,7 +1428,7 @@
  je_space_race_widget_ss_all:0 "All 34 worlds shown"
  je_space_race_widget_ss_filtered:0 "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! of 34 worlds shown"
  je_space_race_widget_ss_free:0 "Free"
- je_space_race_widget_ss_free_tt:0 "#header Free#!\nA [concept_sr_free_colony]: no one holds it. Any space program can supply it from Colony Autonomy."
+ je_space_race_widget_ss_free_tt:0 "#header Free#!\nA [concept_sr_free_colony]: no one holds it. Any space program can supply it from the Colonies section's Autonomy view."
  je_space_race_widget_ss_inbound_tt:0 "#header Colony Fleets on Their Way#!\nThe first figure is how many [concept_sr_colony_fleet]s are flying to this world, the second the months until the first lands. Highlighted when the first is ours. The first to land claims the world."
  je_space_race_widget_ss_loc_asteroids:0 "The Asteroid Belt"
  je_space_race_widget_ss_loc_inner:0 "Mercury and Venus"

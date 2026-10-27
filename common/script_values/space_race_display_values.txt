@@ -1037,7 +1037,8 @@ sr_disp_power_colonies = {
 }
 
 # ======= Colony fleets and population (slices 2-3 design §§ 3, 8, 10) =======
-# Colony Fleets and Settlers (te_sr_sec_colony_fleets, te_sr_sec_settlers); the
+# Colony Fleets and the Colonies table's People view (te_sr_sec_colony_fleets,
+# te_sr_sec_colonies); the
 # per-world and per-slot values are generated (sr_sites_display_generated.txt).
 # 1 under simple and full colonies, where colony fleets travel and colonies
 # hold people.
@@ -1080,7 +1081,7 @@ sr_disp_agi = {
 }
 
 # ======= Autonomy and free colonies (slice 5 design § 9) =======
-# Colony Autonomy (te_sr_sec_autonomy); the per-world values are generated
+# The Colonies table's Autonomy view (te_sr_sec_colonies); the per-world values are generated
 # (sr_sites_display_generated.txt). The free colonies we supply, and the
 # research speed and influence their trade gives us, in percent.
 sr_disp_free_supplied_count = {
@@ -1095,7 +1096,7 @@ sr_disp_free_trade_influence = {
 }
 
 # ======= Colony modules (colony modules design § 11) =======
-# Colony Modules (te_sr_sec_modules); the per-world values are generated
+# The Colonies table's Modules view (te_sr_sec_colonies); the per-world values are generated
 # (sr_sites_display_generated.txt). The month's fabrication points, and the
 # stock waiting for a module.
 sr_disp_fab_rate = {

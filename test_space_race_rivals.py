@@ -129,7 +129,7 @@ class RefreshTest(unittest.TestCase):
         for line in ("min = 0", "max = 40", "check_range_bounds = no"):
             self.assertIn(line, walk)
         self.assertNotIn("position", walk)
-        self.assertIn("capital = { save_temporary_scope_as = sr_rival_capital }", walk)
+        self.assertIn("capital = { save_scope_as = sr_rival_capital }", walk)
         self.assertIn("add_to_variable_list = { name = sr_rivals_list_$MILESTONE$ target = scope:sr_rival_capital }",
                       walk)
         self.assertNotIn("sr_rival_slot", self.effects)

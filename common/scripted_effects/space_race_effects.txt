@@ -1079,7 +1079,7 @@ sr_rivals_estimate_refresh_base = {
 				min = 0
 				max = 40
 				check_range_bounds = no
-				capital = { save_temporary_scope_as = sr_rival_capital }
+				capital = { save_scope_as = sr_rival_capital }
 				scope:sr_rivals_viewer = {
 					add_to_variable_list = { name = sr_rivals_list_$MILESTONE$ target = scope:sr_rival_capital }
 				}
@@ -1175,7 +1175,7 @@ sr_powers_refresh = {
 			min = 0
 			max = 40
 			check_range_bounds = no
-			capital = { save_temporary_scope_as = sr_power_capital }
+			capital = { save_scope_as = sr_power_capital }
 			scope:sr_powers_viewer = {
 				add_to_variable_list = { name = sr_powers_list target = scope:sr_power_capital }
 			}
