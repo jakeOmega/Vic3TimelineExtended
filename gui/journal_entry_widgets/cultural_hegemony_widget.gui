@@ -2934,6 +2934,11 @@ types cultural_hegemony_widget_types
 			ch_note = {
 				text = "je_ch_how_models"
 			}
+			### Which model a country that fits several counts as: once here, not
+			### on every legend swatch's hover.
+			ch_note = {
+				text = "ch_model_order_tt"
+			}
 			ch_subheader = {
 				blockoverride "subheader_text" {
 					text = "je_ch_how_sub_benchmark"
