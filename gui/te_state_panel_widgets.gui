@@ -738,8 +738,11 @@ types te_state_panel_widget_types
 					spacing = 10
 
 					### STATUS — one code each (gotcha #23), as Our Monuments' rows.
+					### 120 x 144: the 120 x 120 picture, then 24 px under it for
+					### gm_row_status's word, set at gm_fontsize_overview (16) since
+					### the Grand Monuments type-size pass (it was 12 in 20 px).
 					widget = {
-						size = { 120 140 }
+						size = { 120 144 }
 
 						gm_picture = {
 							size = { 120 120 }
@@ -752,7 +755,7 @@ types te_state_panel_widget_types
 								texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
 							}
 							blockoverride "status_size" {
-								size = { 120 140 }
+								size = { 120 144 }
 							}
 						}
 						gm_row_status = {
@@ -762,7 +765,7 @@ types te_state_panel_widget_types
 								texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
 							}
 							blockoverride "status_size" {
-								size = { 120 140 }
+								size = { 120 144 }
 							}
 						}
 						gm_row_status = {
@@ -772,7 +775,7 @@ types te_state_panel_widget_types
 								texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
 							}
 							blockoverride "status_size" {
-								size = { 120 140 }
+								size = { 120 144 }
 							}
 						}
 						gm_row_status = {
@@ -782,7 +785,7 @@ types te_state_panel_widget_types
 								texture = "gfx/interface/icons/gm_icons/status_contested.dds"
 							}
 							blockoverride "status_size" {
-								size = { 120 140 }
+								size = { 120 144 }
 							}
 						}
 					}
