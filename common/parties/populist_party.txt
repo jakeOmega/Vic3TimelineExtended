@@ -107,7 +107,7 @@ populist_party = {
 	}
 
 	icon = {
-		default = "/gfx/interface/icons/political_parties/radical.dds"
+		default = "/gfx/interface/icons/political_parties/populist_party.dds"
 	}
 
 	unlocking_technologies = {
