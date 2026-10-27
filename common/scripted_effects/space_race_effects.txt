@@ -1433,6 +1433,8 @@ sr_repair_after_civil_war = {
 		limit = { sr_fleet_power = yes }
 		sr_fl_join_powers = yes
 	}
+	# Interdiction's records that name the old government (6c).
+	sr_icpt_repair_after_civil_war = yes
 }
 
 # The interstellar probe's result: one of four permanent country modifiers,

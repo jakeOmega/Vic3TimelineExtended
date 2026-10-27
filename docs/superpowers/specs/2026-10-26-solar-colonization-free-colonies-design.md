@@ -1,7 +1,7 @@
 # Solar System Colonization, slice 5: autonomy, free colonies, abandonment, covert operations and colony life — design
 
 Drafted 2026-10-26. Slice 5 of the scope in
-`2026-10-25-solar-colonization-contest-scope.md` (§ 10: "Covert operations,
+`docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md` (§ 10: "Covert operations,
 free colonies (waiting and trade), autonomy, abandonment, colony life events
 (§§ 6.4–6.6). Simple becomes the default"), whose § Decisions and § 11 record
 the owner's calls; this design assumes them and the records of slices 0 to 4

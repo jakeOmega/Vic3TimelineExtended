@@ -66,3 +66,19 @@ un_narcotics_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.03
 }
+
+# The Convention on the Settlement of Outer Space (COPUOS; solar colonization
+# fleets design § 13). Country-scoped at x E. Its other terms are not here: a
+# party's destruction of a colony, or its assault on a free one, costs twice
+# the infamy and twice the case strength (sr_colony_convention_party, which the
+# fleets' prices of force read). It forbids nothing.
+un_colony_protection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+}
+
+# Decaying penalty for refusing to table it (un_events.42, option C).
+un_colony_protection_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}

@@ -126,6 +126,7 @@ un_rep_convention_snapshot = {
 	un_rep_convention_mark = { AGENCY = tpnw }
 	un_rep_convention_mark = { AGENCY = ats }
 	un_rep_convention_mark = { AGENCY = unoda }
+	un_rep_convention_mark = { AGENCY = copuos }
 }
 
 # Parameters: $AGENCY$. Scope: country
@@ -155,6 +156,7 @@ un_rep_convention_forget = {
 	un_rep_convention_unmark = { AGENCY = tpnw }
 	un_rep_convention_unmark = { AGENCY = ats }
 	un_rep_convention_unmark = { AGENCY = unoda }
+	un_rep_convention_unmark = { AGENCY = copuos }
 }
 
 # Parameters: $AGENCY$. Scope: country

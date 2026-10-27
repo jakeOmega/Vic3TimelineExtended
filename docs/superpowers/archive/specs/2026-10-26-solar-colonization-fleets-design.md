@@ -5,10 +5,10 @@ Drafted 2026-10-26 from an interview with the owner. Slice 6 of the scope in
 § 5 and §§ 6.2–6.3), whose § Decisions and § 11 record the owner's earlier
 calls; the interview's answers are below and in the scope's § 11 (fifth
 round). This design assumes the records of slices 0 to 5
-(`2026-10-25-solar-colonization-holders-and-cession-design.md`,
-`2026-10-25-solar-colonization-population-and-transit-design.md`,
-`2026-10-25-solar-colonization-modules-and-bases-design.md`,
-`2026-10-26-solar-colonization-free-colonies-design.md`). The plan is
+(`docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md`,
+`docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md`,
+`docs/superpowers/specs/2026-10-25-solar-colonization-modules-and-bases-design.md`,
+`docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md`). The plan is
 `../plans/2026-10-26-solar-colonization-fleets.md`: four parts, each its own
 PR.
 
@@ -1009,3 +1009,159 @@ open:
   state modifier reaching `modifier:` (`ship_construction`), arrivals in their
   month (`fleet_leg`), the generic input multiplier (the probe), and
   `controller = owner` for an occupied state (step 20).
+
+## 23. As built: part 6c (2026-10-26)
+
+6c (interdiction in peace, the AI's offence, the outer-space convention) shipped
+as one PR, its three tasks a commit each. Where the build departs from §§ 12 to
+14, or fills in what they leave open:
+
+- **Interdiction is its own posture, Interdict** (owner, 2026-10-26). Read
+  literally, § 12 would have every fleet standing off blockade every holder at
+  peace with it there; but a fleet arriving where we hold no colony stands off
+  (§ 6), so it would interdict every bystander on arrival, price and casus belli
+  included, and the AI's wartime blockades would interdict neutrals. So the
+  posture button steps Station, Stand off, Close in, Interdict, and Interdict is
+  offered only where a country at peace with us holds a world. Its target is one
+  of that country's worlds, and it blockades that country's colonies at the
+  location. Stand off keeps 6b's meaning, a blockade of enemies only. Interdict
+  fights as Stand off.
+- **Never against an ally** (owner, 2026-10-26): no alliance or defensive pact
+  (`has_treaty_alliance_with`, `has_treaty_defensive_pact_with`). A free,
+  occupied or ruined world can't be interdicted.
+- **The price is charged on the order**, as a free colony's is (6b), not on the
+  first month of the blockade: once per fleet and target country
+  (`sr_fl_<n>_icpt`). Stepping the target to another country's world, or the
+  world passing to another country at peace with us, is a new interdiction and
+  pays again; leaving the posture ends it, and coming back pays again.
+- **The casus belli is a list, not one country.** The interdictor keeps
+  `sr_interdiction_targets`, every country it interdicted, while
+  `sr_interdiction_recent` (five years, renewed by each new interdiction)
+  stands; the list is cleared at the next interdiction once it has lapsed. So
+  interdicting a second country doesn't take the first one's casus belli away.
+  `sr_interdiction_target`, the design's single country, isn't kept.
+- **Cede Colony's war goal reads `root` as its holder and
+  `scope:target_country` as the country it is pressed against**, as vanilla's
+  Money Transfer does (its `INFAMY_TARGET_COUNTRY_DEDUCTION_FACTOR` asks whether
+  `scope:target_country` started a play against `root`). The infamy is
+  multiplied by 0, with its own breakdown line. A play-test row checks the
+  scopes (the fallback is plan C1.3's).
+- **An interdiction ends** (the fleet stands off) when its target goes to war
+  with us, becomes our ally, or no longer holds the world. At war, standing off
+  blockades it anyway.
+- **The panel** gains Interdicted and Interdicting on the Locations rows
+  (`sr_site_interdicted_<key>` marks a blockade by interdiction alone) and
+  Interdicted on Colony Defences; the Locations status cell widens to 106, so
+  the row fills the 480 column.
+- **The convention has no scripted button** (owner, 2026-10-26: "I meant one of
+  the human GUI buttons"). Every convention reaches the AI only through the
+  docket, which paces the floor (`un_buttons.txt`); this one is offered as
+  Assembly business and by docket item 17. A player tables it from the
+  chamber's Table a Resolution row.
+- **The convention exists under Full Colonies only**, the setting where fleets
+  can take and destroy colonies. The registry's rule test reads
+  `sr_colonies_full_enabled` as the rule. Its topic is open once some country
+  holds a colony; a proposer must hold one. Its agency is COPUOS (UNOOSA is the
+  space cooperation convention's). Its topic and agency icons are copies of
+  space cooperation's and UNOOSA's, under their own names.
+- **What the convention doubles:** destroying a colony and closing in on a free
+  one (6b's prices, which already read `sr_colony_convention_party`). Seizing a
+  colony at war costs nothing in 6b, so twice nothing is still nothing, and
+  interdiction isn't doubled (§ 13 doesn't name it).
+- **The AI's offence**, under-specified in § 14, is: at most one order a month,
+  from a docked fleet free of the defence, to the first location in table order
+  (nearest first) with a world it may attack; "the enemy's fleets" it must
+  outmatch 1.5 times over include the Defences and hulls of the enemy worlds
+  there (`sr_site_target_strength_<key>`), so it doesn't fly into a fortress.
+  A world's worth is a point a 10,000 people plus a point a module level. It
+  stays while its strength there matches the enemy's fleets and otherwise comes
+  home; the recall (supply, propellant) still runs first. A fleet interdicting
+  the AI counts as a threat, so its defence stations a fleet there.
+- **A revolution's winner keeps interdiction's records.** Variable lists don't
+  pass to it, so `sr_icpt_repair_after_civil_war` (from
+  `sr_repair_after_civil_war`) copies the old government's casus belli list,
+  adds the winner to every list that named the old government, and repoints the
+  fleets that interdicted it, so no new price is charged. The `sr_icpt_<loc>`
+  lists are rebuilt monthly anyway.
+- **The console** gains option m, an interdiction by our first fleet that may
+  make one.
+
+## 24. As built: part 6d (2026-10-27)
+
+6d (Earth orbit; Full Colonies the default) shipped as one PR, its tasks a commit
+each. Where the build departs from §§ 5.1, 14 and 15, or fills in what they leave
+open:
+
+- **Construction always goes to the reserve.** `sr_sc_month` puts the month's
+  strength into `sr_reserve_<role>` by the build mix; Auto (`sr_reserve_auto`,
+  absent or 1, on by default) sends the whole reserve into the home fleet the same
+  month while no hostile fleet is at Earth and the launch site is held. With all
+  nine slots away from Earth it waits on the ground, where 6a lost the month's
+  construction. The reserve counts in the upkeep (`sr_fleet_upkeep_units_value`),
+  so keeping hulls on the ground with Auto off saves nothing, and it keeps its
+  owner on the fleet powers list.
+- **Launch** takes the lowest empty slot, created at Earth, else our first fleet
+  at Earth (a refitting one included), and fills its propellant, supply and
+  marines, as a month docked at Earth would. Only an occupied launch site stops
+  it (`sr_reserve_may_launch` reads `sr_launch_site_lost`, not the blockade).
+- **The batteries** are `building_orbital_defense_battery` ("Ground-to-Orbit
+  Battery"), `bg_government`, with no `possible` (any state; an occupied one
+  counts for no one through the sums). Inputs and jobs are first guesses:
+  Kinetic Interceptors 25 Launch Capacity and 10 Electronic Components a level a
+  week, Ground Lasers 200 electricity and 15 Electronic Components, each 1,000
+  jobs a level. Their fire joins the owner's Earth side as fire without
+  strength, so they take no losses and hold no orbit: a blockade of Earth stands
+  while they wear it down. Their fire isn't raised by `sr_fleet_quality` (the
+  method's figure is what fires). Kinetic debris (0.02 low a point) is laid only
+  in a month with a hostile fleet to fire on (`sr_cb_kf`, the engaged strength
+  above 0).
+- **The AI's batteries**: `can_build_government` holds an AI to wars with a
+  country that has fleets, up to five levels (`sr_battery_ai_max_levels`, a first
+  guess); the group has no `ai_selection`, and `sr_fl_ai_batteries` switches the
+  method with `activate_production_method` (Ground Lasers at war and in peace from
+  Cluttered, with Directed Energy Weapons; Kinetic Interceptors otherwise), only
+  when a battery runs the other one.
+- **The sweep** runs in `te_debris_global_monthly` after the world's removal and
+  before the ceiling (`sr_battery_sweep_step`). The `battery_sweep` self-check is
+  armed on the first country at peace running Ground Lasers at half staff in a
+  state it controls, and judged a month later if one still qualifies (re-armed
+  otherwise), so a sweep that never reaches the pool reads BROKEN rather than
+  logging nothing.
+- **Earth's blockade** (`sr_earth_blockaded`) is read live from the location
+  records, not stored: a fleet of a country at war with us at Earth and none of
+  ours there. Posture doesn't enter (§ 15 says "standing off", but at Earth every
+  fleet engages every other and the panel shows no posture there). The
+  battlestation and the batteries don't lift it, nor an ally's fleet (§ 8's
+  rule). Read live, it blockades a colony holder with no fleets of its own, who
+  is never on the fleet powers list; a power leaving that list now clears its
+  `sr_fl_at_<loc>`, so no stale figure lifts a blockade.
+- **What it stops**: the departure paths read `sr_launches_barred`
+  (`sr_cf_launch_month`, the module shipments' departure in `sr_ms_step_slot`,
+  `sr_emig_month`, `sr_fl_<n>_may_depart_<loc>` from Earth, with its own line in
+  Go's tooltip). Module fabrication reads only the occupation half: in a blockade
+  modules are still made and wait at Earth. "None of its colonies has contact"
+  is built as no contact recorded while blockaded, from a fleet's arrival at any
+  location and from a module's landing.
+- **Notices.** `.106` comes once a blockade, naming the strongest blockader; there
+  is no notice when it lifts (the panel shows it). The launch site has a notice of
+  its own, `.108`, lost and back (the plan's "a player is told once"), from
+  `sr_earth_notice_step` in the country pulse for players under Full with a
+  Space Program or a fleet. A Space Program lost with its state is no return.
+- **Orbital superiority** counts fleets only, ours and the hostile ones at Earth
+  (`sr_fl_at_earth`, `sr_loc_ai_enemy_fleets_earth`, which now covers Earth); the
+  battlestation and batteries don't add to the margin. It stays in the country's
+  modifier list beside the anti-satellite strike's disruption (`KEEP_IN_LIST` in
+  `gen_nation_tab.py`). A country that stops being a fleet power has it removed
+  by the country pulse, since the refresh no longer runs for it.
+- **The AI's launch** also fires with no enemy at Earth (it covers an Auto the AI
+  never switches off), and comes first in its review, so the defence can send
+  what it put up.
+- **The panel**: Space Command's Reserve row (roles on hover), Launch and Auto:
+  on / off, and red notes while Earth is blockaded or the launch site lost;
+  Earth's Locations row reads Blockaded (status 6) or Blockading (7, an enemy
+  with no fleet at Earth while ours is there).
+- **The default**: `space_race_rule`'s default is `space_race_colonies_full`,
+  and its description, which still said fleets were planned, describes them.
+- **The console** gains options n (100 of each role into the reserve) and o (the
+  strongest country at war with us, by prestige, puts a fleet of 100 of each role
+  at Earth).

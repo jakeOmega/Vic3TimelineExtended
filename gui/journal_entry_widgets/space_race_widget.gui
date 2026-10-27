@@ -4178,6 +4178,16 @@ types space_race_widget_types
 					text = "je_space_race_widget_fl_posture_3"
 					block "fl_posture_3_visible" {}
 				}
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 100
+					elide = right
+					using = fontsize_small
+					text = "je_space_race_widget_fl_posture_4"
+					block "fl_posture_4_visible" {}
+				}
 			}
 			button = {
 				using = default_button_action
@@ -4263,7 +4273,7 @@ types space_race_widget_types
 			tooltip = "je_space_race_widget_loc_inbound_tt"
 		}
 		textbox = {
-			size = { 88 20 }
+			size = { 106 20 }
 			align = left|nobaseline
 			using = fontsize_small
 			elide = right
@@ -4276,8 +4286,9 @@ types space_race_widget_types
 	### gotcha #15) and every other power's strength there, exact (fleets in
 	### space are seen), the fleets on their way ("count·months", highlighted
 	### when the first is ours), and from 6b its status (a battle this month, our
-	### colonies there blockaded, our blockade of an enemy's). 150 + 56 + 80 +
-	### 64 + 88 + 4 × 4 + 2 × 4 = 462. Instances in te_sr_location_rows
+	### colonies there blockaded, our blockade of an enemy's; from 6c, our
+	### colonies interdicted, our interdiction). 150 + 56 + 80 + 64 + 106 +
+	### 4 × 4 + 2 × 4 = 480, the column. Instances in te_sr_location_rows
 	### (sr_fleets_generated_rows.gui).
 	type te_sr_location_row = flowcontainer {
 		direction = horizontal
@@ -4392,13 +4403,13 @@ types space_race_widget_types
 			}
 		}
 		widget = {
-			size = { 88 24 }
+			size = { 106 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 88
+				max_width = 106
 				align = left|nobaseline
 				using = fontsize_small
 				elide = right
@@ -4410,7 +4421,7 @@ types space_race_widget_types
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 88
+				max_width = 106
 				align = left|nobaseline
 				using = fontsize_small
 				elide = right
@@ -4422,7 +4433,7 @@ types space_race_widget_types
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 88
+				max_width = 106
 				align = left|nobaseline
 				using = fontsize_small
 				elide = right
@@ -4430,6 +4441,55 @@ types space_race_widget_types
 				tooltip = "je_space_race_widget_loc_blockading_tt"
 				text = "je_space_race_widget_loc_status_blockading"
 				block "loc_blockading_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#R"
+				tooltip = "je_space_race_widget_loc_interdicted_tt"
+				text = "je_space_race_widget_loc_status_interdicted"
+				block "loc_interdicted_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#v"
+				tooltip = "je_space_race_widget_loc_interdicting_tt"
+				text = "je_space_race_widget_loc_status_interdicting"
+				block "loc_interdicting_visible" {}
+			}
+			### 6d: Earth's own blockade, ours or an enemy's.
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#R"
+				tooltip = "je_space_race_widget_loc_earth_blockaded_tt"
+				text = "je_space_race_widget_loc_status_earth_blockaded"
+				block "loc_earth_blockaded_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 106
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#v"
+				tooltip = "je_space_race_widget_loc_earth_blockading_tt"
+				text = "je_space_race_widget_loc_status_earth_blockading"
+				block "loc_earth_blockading_visible" {}
 			}
 		}
 	}
@@ -4485,6 +4545,15 @@ types space_race_widget_types
 			te_sr_note = {
 				text = "je_space_race_widget_sc_note"
 			}
+			### 6d: nothing leaves Earth (design § 15).
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_blockaded'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_sc_blockaded_note"
+			}
+			te_sr_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_launch_site_lost'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_sc_site_lost_note"
+			}
 			te_sr_value_row = {
 				tooltip = "je_space_race_widget_sc_rate_tt"
 				blockoverride "row_label" {
@@ -4510,6 +4579,55 @@ types space_race_widget_types
 				}
 				blockoverride "row_value" {
 					text = "je_space_race_widget_sc_upkeep_figure"
+				}
+			}
+			### 6d: the ground reserve (design § 15), Launch and its toggle.
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_sc_reserve_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_sc_reserve_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_sc_reserve_figure"
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				te_sr_sc_mix_button = {
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_reserve_launch_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_reserve_launch_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('sr_reserve_launch_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_launch"
+					}
+				}
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)1' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_auto_on"
+					}
+				}
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)0' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_auto_off"
+					}
 				}
 			}
 			te_sr_subheader = {
@@ -4750,6 +4868,18 @@ types space_race_widget_types
 				tooltip = "je_space_race_widget_loc_blockaded_tt"
 				text = "je_space_race_widget_def_status_blockaded"
 				block "def_blockaded_visible" {}
+			}
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 124
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+				default_format = "#R"
+				tooltip = "je_space_race_widget_loc_interdicted_tt"
+				text = "je_space_race_widget_def_status_interdicted"
+				block "def_interdicted_visible" {}
 			}
 			textbox = {
 				parentanchor = left|vcenter

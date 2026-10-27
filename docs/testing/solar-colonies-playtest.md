@@ -43,8 +43,9 @@ still reaches the milestones.
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN cede_colony_input: …` | once a game, the first Cede Colony that enters into force | the article's input building type named a world the source held, and the world moved | no world matched: `input_building_type` did not read back, or `scope:input = bt:<type>` / `?= bt:<type>` does not compare building types | one article per body group with a `quantity` and the receiver picking the worlds in an event, as the seabed lease (scope § 6.1's fallback) |
 
-1. **The rule.** The setup screen's Space Race rule offers Full Colonies, Simple Colonies, Races Only (the default) and
-   Disabled. Under each of the first three every space race entry appears as before; under Disabled none does.
+1. **The rule.** The setup screen's Space Race rule offers Full Colonies (the default since slice 6d), Simple
+   Colonies, Races Only and Disabled. Under each of the first three every space race entry appears as before; under
+   Disabled none does.
 2. **The designer.** Under Simple Colonies, open a treaty with a country that holds a colony: Cede Colony lists that
    country's colonies by name and icon ("Valles Marineris Colony"), and only those. The list, the picked colony under
    it, the draft row and the signed treaty's row are the mod's own widgets (vanilla shows a building type only for a
@@ -185,7 +186,7 @@ for `TE_SR_SITES <world> is a free colony`.
 
 ## Fleets, Space Command, combat and seizure (slice 6, parts 6a and 6b)
 
-Design: `docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md` (§ 22 records what was built and where
+Design: `docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md` (§ 22 records what was built and where
 it departs). Everything here needs the Space Race rule at Full Colonies; under Simple Colonies and Races Only none of
 it shows. The console is `event te_debug_space_race.6` (log our fleets and every location's forces; 100 strength of
 each role at Earth; land our fleets now; fill propellant and supply; our fleets' drive one up; our first colony's
@@ -286,3 +287,98 @@ generic one raises every input, switch `sr_fl_upkeep_apply` to `sr_fleet_upkeep`
     old government occupied stays occupied by the winner.
 22. **Panel.** Every new section opens and closes and no label ends in "...". The fleet row's orders line fits on
     one line; a full nine-slot Fleets section and the Locations list stay readable.
+
+## Interdiction, the AI's offence and the outer-space convention (slice 6, part 6c)
+
+Design: the fleets design's §§ 12–14 (§ 23 records what was built and where it departs). Full Colonies, as for 6a and
+6b. Console option m of `event te_debug_space_race.6` starts an interdiction with our first fleet that may make one.
+No new self-check: the script sees everything here, and the two engine questions (the war goal's scopes, the AI's
+choices) are read by eye. `TE_SR_COMBAT interdiction begun …` lines log each interdiction, one for each side.
+
+1. **The Interdict posture.** A fleet at a location where a country at peace with us, and not our ally (no alliance or
+   defensive pact), holds a colony: the posture button steps Station → Stand off → Close in (only with a hostile world
+   there) → Interdict → Station, and its hover names the price when Interdict is next. Where only allies or enemies
+   hold colonies, Interdict is skipped. The target button, while interdicting, steps through the worlds of countries
+   we may interdict.
+2. **The price.** Entering Interdict: our infamy +5, our UN record's "Hostile acts in space" +10, once for that fleet
+   and that country (stepping the target to another country's world pays again; staying put pays nothing more).
+3. **The blockade.** With none of the target's fleets there, from the next month its colonies at that location read
+   Interdicted in its Colony Defences and Locations, and ours reads Interdicting; settlers and modules stop arriving,
+   a mining specialization stops, an observatory keeps running, and its Extraplanetary Base room drops out (as step 13
+   of 6a/6b). Its other colonies elsewhere are untouched, and a third country's colonies at the same location too.
+4. **The standoff.** The target stations or stands off a fleet there: the blockade lifts the next month, and nobody
+   fires (no battle report, no losses).
+5. **The target's notice.** From the target's seat (a second player, since the AI never interdicts): "Our Colonies
+   at <location> Interdicted", naming the interdictor.
+6. **Cede Colony's war goal against an interdictor (engine read).** As the target, within five years: start a play
+   against the interdictor with Cede Colony as a war goal. The war goal's infamy reads 0, with the line "They
+   interdicted our colonies in peace". The same war goal against anyone else, or against the interdictor after five
+   years, costs its 10. If it reads 10 against the interdictor, the war goal's `infamy` block doesn't see
+   `scope:target_country` or `root` as vanilla's Money Transfer reads them: record it, and fall back to halving the
+   article's AI score instead (plan C1.3).
+7. **The interdiction's end.** Declare war on the target: the fleet stands off and blockades it as an enemy. Or sign
+   an alliance or defensive pact with it, or let the world change hands: the fleet stands off and Interdicted clears.
+8. **The AI answers an interdiction.** Interdict an AI's colonies: within a few months it sends a fleet there (if one
+   can reach it within six months) and stations it, and the blockade turns into a standoff.
+9. **The AI attacks at war.** In an observer run, or at war with an AI fleet power that outmatches us somewhere within
+   a year's flight: once a month at most it sends one docked fleet to the nearest location with an enemy colony where
+   it is at least 1.5 times the enemy's fleets and Defences there. On arrival it closes in on the colony with the most
+   people and modules (if its marines exceed the garrison and militia) or stands off and blockades. It never toggles
+   Destroy, never attacks a free colony and never picks Interdict. It brings the fleet home when short of supply or
+   propellant, or when the enemy's fleets there outmatch it.
+10. **The convention in the chamber.** At Full Colonies, with the UN founded and a colony held somewhere, the chamber's
+    Table a Resolution list shows "Convention on the Settlement of Outer Space" (under Simple Colonies or Races Only the
+    row is hidden); a member holding a colony may table it; its hover gives the terms. After a seizure or destruction
+    the docket offers it ("A Convention on the Settlement of Outer Space", with the cause line naming who did it) to
+    a member holding a colony, never the actor. Carried, the overview's COPUOS lights, parties carry "Outer Space
+    Settlement Convention" (+2% prestige × enforcement), and a party's Destroy price tooltip and free-colony price
+    read 40 and 20 infamy (twice the 20 and 10). Refusing it in the proposer event leaves "Refused the Outer Space
+    Settlement Convention".
+11. **Placeholder art.** The convention's topic icon in the session strip and COPUOS's agency icon are copies of space
+    cooperation's and UNOOSA's; new art drops in under the same names.
+
+## Earth orbit: the ground reserve, batteries, Earth's blockade and fire support (slice 6, part 6d)
+
+Design: the fleets design's §§ 5.1, 14 and 15 (§ 24 records what was built and where it departs). Full Colonies,
+which is now the Space Race rule's default for a new game; a save keeps its own setting. Console options of
+`event te_debug_space_race.6`: n fills our ground reserve (100 of each role), o has the strongest country at war with
+us put a fleet of 100 of each role at Earth (with none of ours there, a blockade).
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN battery_sweep sweep=… low_before=… low_after=… high_before=… high_after=…` | once a game, a month after a country at peace first runs Ground Lasers at half staff or more in a state it controls | the world's debris step took a sweep, the low pool fell by all of it (or to 0) and the high pool didn't move | the low pool fell by less, the high pool moved, or (`sweep=0`) nothing was swept: the method's state modifier doesn't reach the state | compute the sweep in script, level × occupancy × 0.01 by `has_active_production_method`, as `ship_construction`'s fallback does |
+
+1. **The reserve.** With a Space Command running and no enemy fleet at Earth, Space Command's Reserve row stays near
+   0 and the home fleet grows each month, as before (Auto: on). Switch Auto off: the Reserve grows a month at a time,
+   its hover gives the roles, and the home fleet stops growing. Launch puts it all up as one fleet at Earth, with
+   full propellant, supply and marines. The upkeep figure counts the reserve too.
+2. **The reserve against a blockade.** At war, console option o (our fleets away from Earth): the Locations row for
+   Earth reads Blockaded, Space Command shows the red note, and "Earth Orbit Blockaded" arrives naming the enemy.
+   Auto holds the reserve on the ground. Launch still works: the new fleet fights at Earth the next month and the
+   blockade lifts while it survives. An AI blockaded this way launches once its reserve and its fleets at Earth match
+   the enemy's there.
+3. **What a blockade stops.** While Earth reads Blockaded: no colony fleet leaves (a full bar waits), module
+   shipments wait at Earth, settlers stop, Go on a fleet at Earth is greyed with "Nothing leaves Earth", and our
+   colonies' autonomy counts months without contact (no fleet arrival or module landing renews it). Modules are still
+   fabricated, and a fleet already away can still move between other locations.
+4. **Batteries.** Build a Ground-to-Orbit Battery (Space Militarization) in a few states. Its method's tooltip and the
+   state's modifiers show "Fire on Hostile Fleets at Earth" (and with Ground Lasers "Low-Orbit Debris Swept in Peace",
+   +0.01 a level, not +0). With an enemy fleet at Earth the battle report comes each month and the enemy loses about
+   0.1 × the batteries' fire a month; the batteries lose nothing and don't lift a blockade. Kinetic Interceptors raise
+   the low debris pool a little (0.02 a point fired); Ground Lasers don't.
+5. **Sweeping.** At peace with Ground Lasers running, the Orbit row's low pool falls each month by 0.01 a level beyond
+   its decay and the high pool is untouched; at war the sweep stops. The `battery_sweep` line above reads OK.
+6. **Orbital superiority.** At war with our fleets at Earth and the enemy's weaker there (or absent): our country's
+   modifiers list "Orbital Superiority" and a land battle's offense and defense breakdowns show it, up to +10% and +5%
+   at a margin of 1 (our strength there twice the enemy's, or 10 above none). It goes at the peace, or when the enemy
+   outmatches us at Earth.
+7. **Occupied states** (design § 5.1). Occupy, province by province, the state of our Space Program, then a battery's:
+   note the month each stops (every launch, module fabrication, the reserve's Launch; the batteries' fire and sweep)
+   and that each resumes when the state is retaken. "Our Launch Site Is Occupied" arrives once, and "Our Launch Site
+   Is Ours Again" when it is back. Record at how many provinces `controller` turned, as for Space Command (6a/6b's
+   step 20).
+8. **The AI's batteries.** In an observer run: an AI builds batteries only while at war with a country that has
+   fleets, up to five levels, and switches to Ground Lasers at war or once debris is Cluttered when it has Directed
+   Energy Weapons. Whether the building's own AI then keeps the method it was given is a watch item.
+9. **The default.** A new game's setup screen shows Full Colonies selected for the Space Race rule, its description
+   naming fleets, blockades of Earth and batteries. A save from before keeps its setting.

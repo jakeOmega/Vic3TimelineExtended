@@ -1,17 +1,21 @@
 """Political parties in ModState and the server (#1164): the type's
 registration, an injected join_weight replacing the field, /raw/Party/<key>,
-and GET /parties. No game install needed."""
+and GET /parties; the entity-path tables every type comes from, a party's icon
+in /placeholder-icons and /duplicate-images, and /gui/render-paths/Parties
+(#1183). No game install needed."""
 import json
+import os
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
+import mod_state_script
 import mod_state_server as mss
 import party_catalog
 import vanilla_parsed
-from mod_state import VANILLA_COMMON_DIRS, ModState
+from mod_state import MOD_ONLY_DIRS, VANILLA_COMMON_DIRS, ModState, entity_paths
 from paradox_file_parser import ParadoxFileParser
 
 REPO = Path(__file__).resolve().parent
@@ -139,6 +143,27 @@ class RegistrationTests(unittest.TestCase):
         self.assertEqual(len(vanilla), manifest["entity_types"]["Parties"]["entities"])
         self.assertIn("social_democrat_party", vanilla)  # in social_democrats_party.txt
         self.assertIn("revolutionary_party", vanilla)
+
+    def test_path_tables_cover_every_type(self):
+        # Both modules build their tables with mod_state.entity_paths (#1183):
+        # mod_state_script's once listed 26 of the types by hand, so its
+        # standalone users (mod_structure_audit's CLI, gen_event_inventory)
+        # read no parties, journal entries or events.
+        self.assertFalse(set(VANILLA_COMMON_DIRS) & set(MOD_ONLY_DIRS))
+        for module in (mss, mod_state_script):
+            with self.subTest(module=module.__name__):
+                self.assertEqual(set(module.base_game_paths), set(VANILLA_COMMON_DIRS))
+                self.assertEqual(set(module.mod_paths), set(VANILLA_COMMON_DIRS) | set(MOD_ONLY_DIRS))
+        self.assertEqual(mod_state_script.base_game_paths, mss.base_game_paths)
+        self.assertEqual(mod_state_script.mod_paths, mss.mod_paths)
+
+    def test_entity_paths_roots(self):
+        base, mod = entity_paths("/g", "/m")
+        self.assertEqual(base["Technologies"], os.path.join("/g", "game", "common", "technology", "technologies"))
+        self.assertEqual(mod["Parties"], os.path.join("/m", "common", "parties"))
+        self.assertEqual(mod["On Actions"], os.path.join("/m", "common", "on_actions"))
+        self.assertEqual(mod["Events"], os.path.join("/m", "events"))
+        self.assertNotIn("Events", base)
 
     def test_raw_type_name_resolves_singular_and_plural(self):
         known = list(VANILLA_COMMON_DIRS)
@@ -383,6 +408,74 @@ class PartiesEndpointTests(unittest.TestCase):
                 self.assertEqual(terms[-1], "te_fptp_minor_party_join")
                 self.assertEqual(terms[terms.index("te_fptp_major_party_join") + 1],
                                  "from_influential_supporting_member")
+
+
+# A party's icon is a block, and vanilla's paths start with a slash.
+ICON_VANILLA = """
+agrarian_party = {
+	icon = {
+		default = "/gfx/interface/icons/political_parties/agrarians.dds"
+	}
+}
+"""
+ICON_MOD = """
+green_party = {
+	color = { 1 2 3 }
+	icon = {
+		default = "/gfx/interface/icons/political_parties/agrarians.dds"
+	}
+}
+"""
+AGRARIANS = "gfx/interface/icons/political_parties/agrarians.dds"
+
+
+class PartyIconTests(unittest.TestCase):
+    """/placeholder-icons and /duplicate-images read a party's
+    `icon = { default = … }` (#1183)."""
+
+    def setUp(self):
+        tmp, root, state = _state(ICON_VANILLA, ICON_MOD)
+        self.addCleanup(tmp.cleanup)
+        patcher = mock.patch.multiple(mss, ms=state, mod_path=str(root / "mod"),
+                                      mod_paths={"Parties": str(root / "mod" / "common" / "parties")})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_borrowed_vanilla_icon(self):
+        report = mss._find_placeholder_icons(
+            types=["Parties"], standin_patterns=[], allowlist={}, vanilla_gfx=True,
+            origin=lambda path: ("vanilla", "/game/" + path) if path == AGRARIANS else None,
+            hasher=lambda path: f"path:{path}")
+        self.assertEqual(report["summary"]["Parties"]["borrowed_vanilla"], 1)
+        [entry] = report["entities"]  # the untouched vanilla party isn't listed
+        self.assertEqual((entry["key"], entry["field"], entry["path"], entry["status"]),
+                         ("green_party", "icon", AGRARIANS, "borrowed_vanilla"))
+        self.assertEqual(entry["shared_with"], ["agrarian_party"])
+        self.assertEqual((entry["file"], entry["line"]),
+                         (os.path.join("common", "parties", "00_parties.txt"), 4))
+
+    def test_duplicate_images_clusters_the_mod_party_with_its_donor(self):
+        report = mss._find_duplicate_images(types=["Parties"], allowlist={},
+                                            hasher=lambda path: f"path:{path}")
+        self.assertEqual([(c["images"], c["entities"]) for c in report["flagged"]],
+                         [([AGRARIANS], ["agrarian_party", "green_party"])])
+
+
+class PartyRenderPathTests(unittest.TestCase):
+    def test_render_paths_walks_party_accessors(self):
+        self.assertEqual(mss.ENTITY_TYPE_TO_DATATYPE["Parties"], "Party")
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "parties.gui").write_text(
+                'icon = { texture = "[Party.GetIcon]" }\n'
+                'textbox = { text = "[Party.GetName]" }\n', encoding="utf-8")
+            index = mss._build_gui_render_index([(tmp, tmp)])
+        handler = object.__new__(mss.ModStateHandler)
+        with mock.patch.object(mss, "_GUI_RENDER_INDEX", index):
+            icon = handler._gui(["render-paths", "Parties"], {"field": ["icon"]})
+            name = handler._gui(["render-paths", "Parties"], {"field": ["name"]})
+        self.assertEqual((icon["datatype"], icon["methods_matched"]), ("Party", ["GetIcon"]))
+        self.assertEqual([(s["file"], s["line"]) for s in icon["sites"]], [("parties.gui", 1)])
+        self.assertEqual([(s["file"], s["line"]) for s in name["sites"]], [("parties.gui", 2)])
 
 
 if __name__ == "__main__":

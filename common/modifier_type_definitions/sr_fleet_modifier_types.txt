@@ -14,3 +14,22 @@ state_sr_ship_construction_add = {
 	decimals = 1
 	script_only = yes
 }
+
+# 6d: a ground-to-orbit battery's fire on hostile fleets at Earth a month, and
+# Ground Lasers' low-orbit debris swept a month in peace
+# (sr_orbital_defense_battery_pms.txt), read by sr_battery_fire and
+# sr_battery_sweep (sr_fleet_values.txt). The sweep takes two decimals, so
+# 0.01 a level doesn't render as +0.
+state_orbital_battery_fire_add = {
+	color = good
+	percent = no
+	decimals = 1
+	script_only = yes
+}
+
+state_orbital_debris_sweep_add = {
+	color = good
+	percent = no
+	decimals = 2
+	script_only = yes
+}

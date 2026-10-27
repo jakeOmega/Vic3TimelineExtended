@@ -143,11 +143,12 @@ decolonization_rule = {
 # has one flag, named after it; script reads the rule through the gates in
 # common/scripted_triggers/sr_site_triggers.txt (sr_space_race_on,
 # sr_colonies_contested_enabled, sr_colonies_full_enabled), never through a
-# bare has_game_rule = space_race_enabled, which is races only alone. Simple
-# colonies is the default from slice 5 (scope § 9; free colonies design § 8);
-# a save records its setting by name, so one from before keeps races only.
+# bare has_game_rule = space_race_enabled, which is races only alone. Full
+# colonies is the default from slice 6d (fleets design § 15, owner: "Full
+# Colonies becomes the default when 6d ships"), after simple colonies from
+# slice 5; a save records its setting by name, so one from before keeps its own.
 space_race_rule = {
-	default = space_race_colonies_simple
+	default = space_race_colonies_full
 
 	space_race_colonies_full = {
 		flag = space_race_colonies_full

@@ -286,9 +286,11 @@ TOPIC_ICONS = ["topic_condemn", "topic_sanctions", "topic_expulsion", "topic_man
                # §0.12a, code 30.
                "topic_lift_sanctions",
                # The Global Commons (2026-10-16-global-commons-design.md §4, §6.5), codes 31-32.
-               "topic_antarctic", "topic_asat"]
+               "topic_antarctic", "topic_asat",
+               # Solar colonization's fleets (2026-10-26-solar-colonization-fleets-design.md § 13), code 33.
+               "topic_colony_protection"]
 AGENCY_KEYS = ["who", "unesco", "icj", "unhrc", "iaea", "unep", "unhcr", "unoosa", "itlos", "icc", "cppnm",
-               "ccd", "tpnw", "incb", "ats", "unoda"]
+               "ccd", "tpnw", "incb", "ats", "unoda", "copuos"]
 # Icons the UN GUI uses as they are: vanilla's, used as vanilla uses them, and
 # the headquarters building's own. Everything else is the UN's own art.
 VANILLA_KEPT = {"generic_icons/transparent.dds", "generic_icons/trend_up.dds", "generic_icons/trend_down.dds",
