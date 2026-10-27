@@ -781,11 +781,11 @@ class WidthBudgetTest(unittest.TestCase):
     def check_rows(self, typ, blocks):
         rows = self.instances(typ)
         self.assertTrue(rows, typ)
-        for block, cell in blocks.items():
+        for name, cell in blocks.items():
             for body in rows:
-                for expression in self.overrides(body, block):
+                for expression in self.overrides(body, name):
                     for key in self.keys_in(expression):
-                        with self.subTest(row=typ, block=block, key=key):
+                        with self.subTest(row=typ, block=name, key=key):
                             self.fits(key, cell)
 
     def test_type_sizes_are_the_templates(self):
@@ -868,11 +868,11 @@ class WidthBudgetTest(unittest.TestCase):
     def test_goods_and_customs_names(self):
         """Every catalog good's name in its cell; a name a font draws wider has
         itself on hover (NameWidthTest)."""
-        for typ, path, block, goods in (("te_tax_good_row", WORKBENCH, "good_name", gen.consumption_catalog()),
+        for typ, path, name, goods in (("te_tax_good_row", WORKBENCH, "good_name", gen.consumption_catalog()),
                                         ("te_tax_customs_row", WORKBENCH, "good_name", gen.customs_catalog()),
                                         ("te_tax_review_customs_line", REVIEW, "good_name", gen.customs_catalog()),
                                         ("te_tax_review_line", REVIEW, "line_label", gen.consumption_catalog())):
-            cell = self.type_cell(path, typ, block)
+            cell = self.type_cell(path, typ, name)
             for good in goods:
                 with self.subTest(row=typ, good=good):
                     self.fits(good, cell)
@@ -899,8 +899,8 @@ class WidthBudgetTest(unittest.TestCase):
         for ig in gen.IGS:
             with self.subTest(promise_ig=ig):
                 self.fits(f"ig_{ig}", self.cell(row, 'block "obl_ig"'))
-        for block in ("obl_what", "obl_state"):
-            box = brace_block(row, row.rindex("textbox = {", 0, row.index(f'block "{block}"')))
+        for name in ("obl_what", "obl_state"):
+            box = brace_block(row, row.rindex("textbox = {", 0, row.index(f'block "{name}"')))
             self.assertIn("multiline = yes", box)
             self.assertNotIn("elide", box)
 

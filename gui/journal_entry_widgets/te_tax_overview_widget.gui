@@ -625,7 +625,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_wage"
-					tooltip = "te_tax_en_since_wage"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_en_wage_since'), '(CFixedPoint)-1' ), 'te_tax_en_since_none', 'te_tax_en_since_wage' )]"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_wage_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -639,7 +639,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_div"
-					tooltip = "te_tax_en_since_div"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_en_div_since'), '(CFixedPoint)-1' ), 'te_tax_en_since_none', 'te_tax_en_since_div' )]"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_div_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -653,7 +653,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_land"
-					tooltip = "te_tax_en_since_land"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_en_land_since'), '(CFixedPoint)-1' ), 'te_tax_en_since_none', 'te_tax_en_since_land' )]"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_land_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -667,7 +667,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_head"
-					tooltip = "te_tax_en_since_head"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_en_head_since'), '(CFixedPoint)-1' ), 'te_tax_en_since_none', 'te_tax_en_since_head' )]"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_head_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -681,7 +681,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_cons"
-					tooltip = "te_tax_en_since_cons"
+					tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_en_cons_since'), '(CFixedPoint)-1' ), 'te_tax_en_since_none', 'te_tax_en_since_cons' )]"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_cons_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"

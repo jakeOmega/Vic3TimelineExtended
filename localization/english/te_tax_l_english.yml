@@ -55,6 +55,7 @@
  te_tax_en_since_div:0 "In force since #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_div_since_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_en_div_since_mo')|0]#!."
  te_tax_en_since_head:0 "In force since #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_head_since_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_en_head_since_mo')|0]#!."
  te_tax_en_since_land:0 "In force since #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_land_since_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_en_land_since_mo')|0]#!."
+ te_tax_en_since_none:0 "In force since the code took over."
  te_tax_en_since_wage:0 "In force since #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_wage_since_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_en_wage_since_mo')|0]#!."
  te_tax_en_sunset_cons:0 "→ #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_cons_succ_rate')|%0]#! from #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_cons_exp_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_en_cons_exp_mo')|0]#!"
  te_tax_en_sunset_div:0 "→ #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_div_succ_rate')|%1]#! from #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_en_div_exp_y')|0].[GetPlayer.MakeScope.ScriptValue('te_tax_view_en_div_exp_mo')|0]#!"
