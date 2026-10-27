@@ -19,7 +19,7 @@
 
 building_space_command = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/building_orbital_battlestation.dds"
+	icon = "gfx/interface/icons/building_icons/building_space_command.dds"
 	city_type = city
 	levels_per_mesh = -1
 
