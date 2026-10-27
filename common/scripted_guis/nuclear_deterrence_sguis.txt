@@ -5,11 +5,12 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and seventeen DISPLAY handlers: the six
-# yes/no questions and names below (nd_umbrella_sgui draws the umbrella
-# line), three that hide the moves our side cannot
+# Reserve / nuclear programme pattern), and eighteen DISPLAY handlers: the
+# seven yes/no questions and names below (nd_umbrella_sgui draws the umbrella
+# line, nd_loose_sgui the warheads unaccounted for, nd_crisis_opponent_sgui
+# the crisis headline), three that hide the moves our side cannot
 # make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
-# nd_crisis_private_sgui), and three that print script-built text
+# nd_crisis_private_sgui), and four that print script-built text
 # (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
 # nd_crisis_next_pressure_sgui, nd_risk_breakdown_sgui) — plus the World
 # Crises list's gate and row hovers (nd_world_crises_sgui,

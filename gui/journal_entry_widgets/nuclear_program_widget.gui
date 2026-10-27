@@ -677,10 +677,10 @@ types nuclear_program_widget_types
 	### The world's ten largest arsenals as the world estimates them (open: a
 	### live list, the owner's rule of 2026-09-29), as a table (NUC-14): a
 	### datamodel over nd_powers, the capitals update_nuclear_powers_ranking
-	### keeps on the panel's global store each week, largest first. Drawn from
+	### keeps on the panel's global store each month, largest first. Drawn from
 	### the world's first warhead, which is when the nuclear taboo is born,
 	### once the store exists (nd_powers_listed_sgui), so the datamodel never
-	### reads a store the first weekly ranking has not made yet.
+	### reads a store the first ranking has not made yet.
 	type te_nuclear_sec_powers = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter

@@ -347,7 +347,8 @@ nuclear_program_refresh_state_effect = {
 # datamodel (NUC-14 of the 2026-10-27 GUI audit), reading each country through
 # its capital (gui_modding_guide.md gotcha #15): its flag, the estimate and its
 # public doctrine, our own row tinted. Our exact count is the overview's.
-# Called from je_nuclear_program on_weekly_pulse.
+# Called once a month for the world (nd_taboo_monthly_update), and by the
+# console harness (te_debug_nuclear_effects.txt).
 update_nuclear_powers_ranking = {
 	nd_lists_store_ensure = yes
 	global_var:nd_lists_store ?= {

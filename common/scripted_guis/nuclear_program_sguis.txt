@@ -65,8 +65,9 @@
 # IS THE LEADERBOARD'S LIST THERE? — display only
 # ---------------------------------------------------------------------------
 # Scope-free: the panel's global store exists (update_nuclear_powers_ranking
-# makes it at its first weekly run), so the Nuclear Powers datamodel never
-# reads a store that is not there yet.
+# makes it at the world's first monthly step after the first warhead, or a
+# crisis's refresh earlier), so the Nuclear Powers datamodel never reads a
+# store that is not there yet.
 nd_powers_listed_sgui = {
 	scope = country
 	is_shown = {

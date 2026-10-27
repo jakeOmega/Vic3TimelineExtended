@@ -2002,20 +2002,14 @@ types nuclear_deterrence_widget_types
 			}
 			nd_choice_row = {
 				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					size = { 360 30 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
+				blockoverride "choice_name" {
 					text = "nd_taboo_w_lift_label"
 					tooltip = "nd_taboo_w_lift_tt"
 				}
-				button = {
-					using = default_button_action
-					size = { 110 30 }
-					parentanchor = vcenter
+				blockoverride "button_text" {
 					text = "nd_taboo_w_btn_lift"
+				}
+				blockoverride "button_binding" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ) ) )]"
@@ -2023,20 +2017,14 @@ types nuclear_deterrence_widget_types
 			}
 			nd_choice_row = {
 				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					size = { 360 30 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
+				blockoverride "choice_name" {
 					text = "nd_taboo_w_dismantle_label"
 					tooltip = "nd_taboo_w_dismantle_tt"
 				}
-				button = {
-					using = default_button_action
-					size = { 110 30 }
-					parentanchor = vcenter
+				blockoverride "button_text" {
 					text = "nd_taboo_w_btn_dismantle"
+				}
+				blockoverride "button_binding" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ) ) )]"
@@ -2044,20 +2032,14 @@ types nuclear_deterrence_widget_types
 			}
 			nd_choice_row = {
 				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					size = { 360 30 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
+				blockoverride "choice_name" {
 					text = "nd_taboo_w_halt_label"
 					tooltip = "nd_taboo_w_halt_tt"
 				}
-				button = {
-					using = default_button_action
-					size = { 110 30 }
-					parentanchor = vcenter
+				blockoverride "button_text" {
 					text = "nd_taboo_w_btn_halt"
+				}
+				blockoverride "button_binding" {
 					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ) ) )]"

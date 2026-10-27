@@ -761,6 +761,10 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 30 \}", _type_body(det, "nd_choice_row"))], [358, 110])
         self._fits(_block_texts(det, "choice_name"), 358, ROW, "choice")
         self._fits(_block_texts(det, "button_text"), 110, ROW, "button")
+        # Every instance fills the type's blocks: a child added straight into the
+        # widget would sit at 0,0 over the type's own row.
+        for t, block in (("nd_choice_row", "choice_name"), ("nd_readiness_row", "level_name")):
+            self.assertEqual(len(re.findall(rf"\b{t} = \{{", det)), det.count(f'blockoverride "{block}"'), t)
 
     def test_the_readiness_table(self):
         det = _read(DETERRENCE)
