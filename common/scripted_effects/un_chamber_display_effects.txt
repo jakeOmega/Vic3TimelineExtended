@@ -417,10 +417,12 @@ un_chamber_veto_line = {
 	}
 }
 
-# What passage would do, reusing the very tooltips un_vote.2 shows when the
-# outcome is applied (un_vote_<topic>_passed_tt / ..._passed_vetoed_tt in
-# localization/english/te_miscellaneous_l_english.yml) so the numbers here can
-# never drift from the ones the event actually applies.
+# What passage would do, in one clause per topic (je_un_chamber_conseq_<tag>;
+# the 2026-10-27 audit, UN-6), with the topic's terms on hover over "Its
+# terms" (je_un_terms_<topic>_tt), which carry every figure. The clause states
+# no number the terms do not, so nothing here can drift from what un_vote.2
+# applies; the event keeps its own fuller texts (un_vote_<topic>_passed_tt in
+# te_miscellaneous_l_english.yml).
 # Scope: resolution container
 un_chamber_consequences_line = {
 	if = {
