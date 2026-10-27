@@ -988,7 +988,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_ov_nat_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/population.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_natural_change.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_nat"
@@ -4881,7 +4881,7 @@ types te_demographics_widgets
 				te_demog_ov_cell = {
 					tooltip = "te_demog_st_nat_tt"
 					blockoverride "icon" {
-						texture = "gfx/interface/icons/generic_icons/population.dds"
+						texture = "gfx/interface/icons/demographics_icons/ov_natural_change.dds"
 					}
 					blockoverride "caption" {
 						text = "te_demog_ov_nat"

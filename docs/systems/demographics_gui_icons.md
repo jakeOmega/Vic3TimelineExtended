@@ -1,6 +1,6 @@
 # Demographics GUI: Icons
 
-The Demographics tab's overview and the state subtab's draw eight icon cells each, two to a row, the way Banking's overview does (issue #1029; `gui_style_guide.md` rule 4). The History section marks its census years with three pips. The Leading Cause of Death cell and the three pips have their own icons (2026-10-22), and six more cells since icon batch 6 (2026-10-27); Natural Change is still a vanilla placeholder, chosen to read at its size. Rule 10 asks for this list: what each icon stands for, what the final art should show and where it goes. The pie's slice colours and the trend arrows are not placeholders (below).
+The Demographics tab's overview and the state subtab's draw eight icon cells each, two to a row, the way Banking's overview does (issue #1029; `gui_style_guide.md` rule 4). The History section marks its census years with three pips. The Leading Cause of Death cell and the three pips have their own icons (2026-10-22), and the other seven cells since icon batch 6 (2026-10-27). Rule 10 asks for this list: what each icon stands for, what the final art should show and where it goes. The pie's slice colours and the trend arrows are not placeholders (below).
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/te_demographics_widgets.gui`: the cells in `te_demog_overview` (the country) and `te_state_demog_overview` (a state), each in its cell's `icon` block, and the pips in `te_demog_hist_pips` and its key, `te_demog_hist_pip_legend`. No script reads the paths. Each cell has one icon, but for the Leading Cause of Death, whose `icon_layers` block draws the leading cause's own icon over the same spot once deaths by cause are counted (below); the trend arrow beside a reading changes too, picked by a `te_demog_trend_*` code. `IconsTest` in `test_demographics_layout.py` holds each row below to the markup, both overviews alike, and fails on a cell, cause or pip whose texture the doc doesn't list.
 
@@ -16,7 +16,7 @@ An Icon that is its row's File is final; any other is a vanilla placeholder.
 
 | Cell | Icon | Final art | File |
 |---|---|---|---|
-| Natural Change | `gfx/interface/icons/generic_icons/population.dds` | a cradle and a gravestone on a balance beam | `gfx/interface/icons/demographics_icons/ov_natural_change.dds` |
+| Natural Change | `gfx/interface/icons/demographics_icons/ov_natural_change.dds` | a cradle beside a headstone | `gfx/interface/icons/demographics_icons/ov_natural_change.dds` |
 | Net Migration | `gfx/interface/icons/demographics_icons/ov_migration.dds` | a figure with a bundle on a stick, walking past a two-way arrow | `gfx/interface/icons/demographics_icons/ov_migration.dds` |
 | Life Expectancy | `gfx/interface/icons/demographics_icons/ov_life_expectancy.dds` | an hourglass with a green heart in its upper bulb | `gfx/interface/icons/demographics_icons/ov_life_expectancy.dds` |
 | Leading Cause of Death | `gfx/interface/icons/demographics_icons/ov_leading_cause.dds` | a plain grey headstone with red flowers at its foot, until deaths by cause are first counted; then the leading cause's icon (below) | `gfx/interface/icons/demographics_icons/ov_leading_cause.dds` |
