@@ -21,12 +21,12 @@ tooltip breaks the numbers down.
 
 | Tile | Shown | What it tells you |
 |---|---|---|
-| Homeland Dynamics | Always | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why nothing can change. |
+| Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
 | Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
-| Solar Collector | Once your country has one | Receiver slots available and generated (3 per staffed level). A megaproject; see [The extended timeline](02-timeline.md). |
-| Antimatter Facility | Once your country has one | Engine and warhead-plant slots available and generated (5 per staffed level). |
+| Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
+| Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
 | Seabed Licences | On a coastal state, once your country has had its first share of seabed licences | The state's ocean basin, the licences its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licences](02-timeline.md#seabed-licences). |
 | UN Mission | While a UN mission works in the state | The mission's type, months, strength and progress; see [The United Nations](10-united-nations.md). |
 | Tourism card | Always | Tourism output and throughput from each source, with a bar toward each source's cap. |

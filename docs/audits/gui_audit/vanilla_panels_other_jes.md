@@ -39,7 +39,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 ## Findings
 
 ### VAN-1. Construction Market: an always-open intro paragraph, and the explainer written twice
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The intro and the toggle's name were applied in #1202; in the 2026-10-27 wave (`wave/gui-vanilla`) the concept says what the market is and points to the panel's How the Construction Market Works, which keeps the detail and now names retooling.
 - **Category:** over-explaining / spread-out/redundant
 - **Where:** `gui/construction_panel.gui:1006-1014` (intro textbox under the section header), `:1297-1328`
   (How-it-works toggle); loc `TE_CM_SECTION_INTRO` (`te_miscellaneous_l_english.yml:955`),
@@ -62,6 +62,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-2. Construction Market read-out: six sentences that should be a label/value table
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): six label/value rows (`te_cm_stat_row`, a `te_state_stat_row` in the panel's body font, 150 + 330), "Capped" and "Shortage" as red words, each row's hover kept and its label underlined. `test_vanilla_panel_additions.py` holds every label and value to its column.
 - **Category:** style / list
 - **Where:** `gui/construction_panel.gui:1230-1293` (LIVE READ-OUT, six left-aligned multiline textboxes);
   loc `TE_CM_STAT_GOVERNMENT` (`:960`), `TE_CM_STAT_BUDGET` (`:956`), `TE_CM_STAT_BUDGET_STEP` (`:957`),
@@ -83,6 +84,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-3. Construction Market tooltips: the same three rules restated in five or six tooltips
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): a new concept, `concept_te_construction_queue_cap`, which the two purchase tooltips and the government row's hover link instead of restating the cap; the phase-in is explained once (the step row's hover) and in one sentence on Fixed Budget; the AI sentence moved to How it Works.
 - **Category:** spread-out/redundant / over-explaining
 - **Where:** loc `TE_CM_PURCHASE_TT` (`:953`), `TE_CM_BUDGET_PURCHASE_TT` (`:944`), `TE_CM_MODE_BUDGET_TT`
   (`:950`), `TE_CM_STAT_BUDGET_TT` (`:959`), `TE_CM_STAT_BUDGET_STEP_TT` (`:958`), `TE_CM_STAT_GOVERNMENT_TT`
@@ -105,6 +107,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-4. Direct Construction section: an always-open paragraph that ends with a developer note
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): one sentence, the roadmap note gone. Whether a Site can be built from the panel is play-test item 6 (`docs/testing/vanilla-panels-other-jes-playtest.md`).
 - **Category:** over-explaining / other
 - **Where:** `gui/construction_panel.gui:1356-1364`; loc `TE_DC_SECTION_INTRO` (`te_miscellaneous_l_english.yml:973`)
 - **Now:** with the Free Market Construction rule off, the panel opens with a five-sentence paragraph ("The
@@ -123,7 +126,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** medium (the "state view only" claim needs a play-test check)
 
 ### VAN-5. Migration Crowding tile: the hover is a lesson in the curve, and repeats the tile
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202 (the loc part was the whole of it): the hover is the formula with this state's terms and the ratio; the curve and its examples are in the concept. No further change needed.
 - **Category:** over-explaining
 - **Where:** `gui/states_panel.gui:2242-2311` (tile); loc `TE_STATE_CROWDING_TT` (`te_miscellaneous_l_english.yml:1019`),
   `concept_migration_crowding_desc` (`te_concepts_l_english.yml:843`)
@@ -144,7 +147,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-6. Homeland Dynamics tile: rules in prose, rate units that disagree, and a tile that is always there
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. (a) and (b) in the 2026-10-27 wave (`wave/gui-vanilla`): the hover is a table in "% a year", the multipliers a list, the rules in `concept_homeland_dynamics_desc`. (c) by the owner's decision (2026-10-27): the tile is hidden where `te_homeland_relevant = 0` and kept for the paused cases; the "nothing to change" line and its key are gone.
 - **Category:** over-explaining / style / spread-out
 - **Where:** `gui/states_panel.gui:2156-2169`, `gui/te_state_panel_widgets.gui:985-1165`; loc `TE_STATE_HOMELAND_TT`
   (`te_miscellaneous_l_english.yml:1042`), `TE_HOMELAND_TRACK_ACTIVE` (`:1004`), `TE_HOMELAND_REMOVAL_TRACK_ACTIVE`
@@ -172,6 +175,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high (a, b), medium (c)
 
 ### VAN-7. Solar Collector / Antimatter tiles: country-wide figures repeated in every state, and again on hover
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the tiles show only in a state holding a building of their chain (`te_state_solar_tile_shown`, `te_state_antimatter_tile_shown`), so the country-wide figures are no longer read in every state; the hovers keep In Use and Reserved and the one-line rule, with no blank line; the receiver's and sub-buildings' build tooltips give the free slots.
 - **Category:** spread-out/redundant
 - **Where:** `gui/states_panel.gui:2313-2389`; loc `TE_STATE_SOLAR_TT` (`:1062`), `TE_STATE_ANTIMATTER_TT` (`:1008`),
   `TE_STATE_POINTS_ROW_AVAILABLE`/`_GENERATED` (`:1043-1044`)
@@ -193,6 +197,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** medium (that the tile is redundant per state is certain; where the figure belongs is a design call)
 
 ### VAN-8. Seabed Licences tile: a five-basin table written as text, in every coastal state
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the hover keeps the country line and Room to build, and points to the Seabed tab for each basin. The basin display values it read (`te_seabed_world_records_disp_*`) are now unused.
 - **Category:** list / spread-out/redundant
 - **Where:** `gui/states_panel.gui:2390-2492`; loc `TE_STATE_SEABED_TT` (`:1059`)
 - **Now:** the hover prints, for each of five basins, "Pacific: 3, 1; 12 of 40 (weight 4.2)" — four
@@ -209,7 +214,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** medium (overlaps the Seabed tab's findings; the tile is a vanilla-panel insertion)
 
 ### VAN-9. UN Mission tile: every kind's success rule in one sentence, though the state has one kind
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): "Succeeds" and "Fails" print this mission's kind only (`TE_STATE_UN_SUCCESS_*`, `TE_STATE_UN_FAIL_*`).
 - **Category:** over-explaining / list
 - **Where:** `gui/states_panel.gui:2640-2716`; loc `TE_STATE_UN_MISSION_TT` (`:1066`)
 - **Now:** the last paragraph is one 90-word sentence: "A peacekeeping mission succeeds after two years of
@@ -223,6 +228,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-10. State tiles' per-row hovers are not marked hoverable
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): `te_state_stat_row` has a `label_format` block, off by default (most rows sit in a tile whose one hover covers them); every row with a hover of its own (a `row_tooltip`, or a `te_state_meter` around it) underlines its label: the Seabed, Power Grid and Wealth rows, the tourism meters and footer, and the Grand Monument card's hovered rows. `test_vanilla_panel_additions.py` holds the two in step.
 - **Category:** hidden info
 - **Where:** `gui/te_state_panel_widgets.gui:27-82` (`te_state_stat_row`'s label/value textboxes have no
   `default_format = "#tooltippable"`); rows with their own `row_tooltip`: the Power Grid tile's seven rows
@@ -239,7 +245,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-11. Tourism card: headers inline their concept's description, and two tooltip pairs repeat each other
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202 (a, b, c); the meters' underlines came with VAN-10. No further change needed.
 - **Category:** over-explaining / list
 - **Where:** `gui/te_state_panel_widgets.gui:265-522`; loc `te_state_tourism_output_tt` (`:8530`),
   `te_state_tourism_throughput_tt` (`:8535`), `te_state_tourism_output_applied_tt` (`:8529`),
@@ -259,6 +265,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-12. Arable Land tile hover: repeats the rows, then explains the split-state accounting
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the four figure lines only.
 - **Category:** over-explaining
 - **Where:** `gui/states_panel.gui:2171-2216`; loc `TE_STATE_ARABLE_TT` (`:1013`)
 - **Now:** the tile shows Total, Regional and Multiplier; the hover shows Total, Geographic Base, Regional
@@ -271,6 +278,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### VAN-13. Power bloc: the locked principle slots are a model; one small inconsistency
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the "It is ranked …" sentence is gone.
 - **Category:** other (positive) / style
 - **Where:** `gui/power_bloc_panel.gui:1546-1735`; loc `te_pb_locked_slot_3_tt`…`_8_tt`,
   `te_pb_locked_slot_sources_tt` (`te_miscellaneous_l_english.yml:8266-8272`), sgui
@@ -285,7 +293,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### JE-1. State Collapse: the entry never says what the collapse does, and frames it as a goal
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. The reason was rewritten in #1202; in the 2026-10-27 wave (`wave/gui-vanilla`) it renders Failed State's modifier lines, the entry has a status ("Weeks to Collapse", `state_collapse_weeks_left`), and the goal line is `je_state_collapse_complete_tt`.
 - **Category:** hidden info / over-explaining
 - **Where:** `common/journal_entries/timeline_extended_journal_entries.txt:1-81` (`je_state_collapse`);
   loc `je_state_collapse_reason` (`te_journal_entries_l_english.yml:1335`), `je_state_collapse_desc` (`:1334`);
@@ -311,6 +319,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### JE-2. Create New Religion: the Proclaim button hides everything it does, and the builder has no "where am I"
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): (a) Proclaim's effect is open, with the scope bookkeeping in a `hidden_effect` and the exile and conversions as one line each; (b) the 140 builder buttons' effects are `hidden_effect`s; (c) every condition is a `CNR_REQ_*_TT` requirement; (d) a status per step; (e) in #1202; (f) the leading space is gone (an IG trait's modifiers have no loc accessor by key). The totalitarian unhappy trait's stray social-democratic economy, a copy slip, is removed.
 - **Category:** hidden info / style
 - **Where:** `common/journal_entries/timeline_extended_journal_entries.txt:83-280`;
   `common/scripted_buttons/timeline_extended_scripted_buttons.txt:965-5880` (the select/deselect, back/next
@@ -345,6 +354,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
   button tooltip's behaviour as `civil_rights_buttons.txt`'s header documents it)
 
 ### JE-3. World War: the number that drives everything is never shown, and greyed buttons print raw script
+- **Status:** done. (c) in #1202; in the 2026-10-27 wave (`wave/gui-vanilla`) (a) a status line prints the tension, (b) every condition is its own requirement line with the current reading, and (d) the descs keep their flavour sentence.
 - **Category:** hidden info / style
 - **Where:** `common/journal_entries/world_war_je.txt:43-130` (`status_desc`); `common/scripted_buttons/world_war_buttons.txt`
   (`possible` blocks of `ww_rearm_button`, `ww_appease_button`, `ww_total_war_economy_button`,
@@ -378,6 +388,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high (a, c, d), medium-high (b: how the engine prints `has_variable` is from memory, not a screenshot)
 
 ### JE-4. Civil Rights: the endings depend on months nobody can see
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): one flavour sentence per tier, the months each policy has run, and the ending the movement would reach if it won or collapsed now (`cr_win_ending_now`, `cr_fail_ending_now`, held to on_complete / on_fail by a test). One name per policy, the bar's: Grassroots Organizing, Federal Protection.
 - **Category:** hidden info
 - **Where:** `common/journal_entries/je_civil_rights.txt:91-128` (`status_desc`), `:152-191` (`on_complete`
   dispatch on `cr_*_months`), `:256-320` (the monthly counters); loc `je_civil_rights_status_*`
@@ -399,7 +410,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### JE-5. Heir Education: a manual in the description, button text that repeats the engine's lines, one hidden cost
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done. (a) and (c) in #1202; in the 2026-10-27 wave (`wave/gui-vanilla`) (b) the enable descs say what the focus trains and can yield, the ideologies as a list, and (d) each skill focus shows the innovation cost each advance applies, as engine lines (`show_as_tooltip`).
 - **Category:** over-explaining / spread-out/redundant / hidden info
 - **Where:** `common/journal_entries/je_heir_education.txt`; `common/scripted_buttons/heir_education_buttons.txt`;
   loc `je_heir_education_reason` (`te_journal_entries_l_english.yml:397`), `HE_ENABLE_*_DESC` /
@@ -426,6 +437,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### JE-6. The four "debate" entries: status lines restate the law, and don't say what is still missing
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): each status says what is still missing ("Next: …"). Post-Scarcity's steps were wrong: its law needs only its technology, so the statuses now name the technology, then the law. Digital Rights' in-between laws are no longer coloured.
 - **Category:** hidden info / style
 - **Where:** `je_digital_rights.txt`, `je_post_scarcity.txt`, `je_mental_health.txt`, `je_human_augmentation.txt`
   (`status_desc` blocks); loc `te_journal_entries_l_english.yml:6-10` (augmentation), `:371-373` (digital
@@ -447,7 +459,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** medium
 
 ### JE-7. Human Augmentation's reason links the power-bloc concept by mistake
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done in #1202. No further change needed.
 - **Category:** style / other
 - **Where:** loc `je_human_augmentation_reason` (`te_journal_entries_l_english.yml:404`)
 - **Now:** "The divide between enhanced and natural citizens threatens social [concept_power_bloc_cohesion]."
@@ -458,6 +470,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** high
 
 ### JE-8. Mental Health's fail condition reads in days, and `_desc` keys shadow `_reason`
+- **Status:** partly done. (a) done in the 2026-10-27 wave (`wave/gui-vanilla`): the fail condition is one line, `je_mental_health_fail_tt`. (b) deferred: where a journal entry's `_desc` renders needs the game (play-test item 14); the actionable lines the debate entries' `_desc` carried are now in their statuses (JE-6), and `loc_coverage_audit` still requires `_desc` until the check.
 - **Category:** other
 - **Where:** `common/journal_entries/je_mental_health.txt:84-96` `fail` (`scope:journal_entry.journal_entry_age >= 3650`); every mod JE's
   `je_*_desc` key (e.g. `je_mental_health_crisis_desc`, `te_journal_entries_l_english.yml:573`)
@@ -476,6 +489,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** low-medium (rendering not seen in game)
 
 ### JE-9. Tax-code overrides of vanilla entries: three goal lines that can never be met under the rule
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the rule branch holds only the counts-as lines; `test_tax_code_bypass.py` now expects that.
 - **Category:** other (noise)
 - **Where:** `common/journal_entries/te_tax_vanilla_je_overrides.txt:36-55` (and the same block in
   `je_imperialism_of_promise`, `je_portugal_regeneration`)

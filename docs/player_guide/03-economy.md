@@ -125,16 +125,16 @@ National Queue tab.
 
 ![The Construction Market section under Fixed Budget. The government spends £40.0M a week and buys 3,042 points, still closing on the 3,075 the budget buys at today's price; private investors take 84% of construction and the market is short.](images/construction_market.png)
 
-| Line | What it shows |
+| Row | What it shows |
 |---|---|
 | Fixed Quantity / Fixed Budget | Whether you set the government purchase as a number of points or as weekly spending. The lit button is the mode in force; click the other to switch. |
 | Purchase control | The government purchase you have set. Fixed Quantity: click for ±1, Shift+Click ±10, Ctrl+Click ±100, Alt+Click ±1,000; right-click on the plus adds 10,000. Fixed Budget: click for ±£1,000, Shift+Click ±£10,000, Ctrl+Click ±£100,000, Alt+Click ±£1,000,000; right-click on the plus adds £10,000,000. In both, right-click on the minus sets 0. |
-| Government buys | Points bought this week and the approximate treasury cost. "Capped at what the queue can use" appears when your setting is higher than the queue can take. |
-| Your budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
-| Still moving toward it | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
-| Private investors buy | Points investors bought this week and the share of construction going to private projects. |
+| Government buys | Points bought this week and the approximate treasury cost. A red "Capped" appears when your setting is higher than the queue can take (the Queue Cap). |
+| Budget buys | Fixed Budget only: how many points a week your budget buys at today's price, which is where the government purchase is heading. |
+| Still closing | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
+| Private buys | Points investors bought this week and the share of construction going to private projects. |
 | Price | What one construction point costs now: the market price, raised by Construction Cost Scaling in rich countries with few idle workers. |
-| Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply: the price rises, but you still get all the construction you buy. |
+| On sale / wanted | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "Shortage" marks demand above supply: the price rises, but you still get all the construction you buy. |
 
 ### Fixed quantity or fixed budget
 
