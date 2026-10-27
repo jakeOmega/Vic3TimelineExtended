@@ -208,6 +208,54 @@ class VotingDetailsRowTableTest(unittest.TestCase):
         self.assertIn("un_chamber_history_has_entry", set(_TOP_LEVEL.findall(_read(RESOLUTION_TRIGGERS))))
 
 
+class ArchiveRowTableTest(unittest.TestCase):
+    """The archive's brief rows (the 2026-10-27 audit, UN-16): one per
+    position, each passing its position to the row's IsValid, text and the
+    card on its hover."""
+
+    @classmethod
+    def setUpClass(cls):
+        sguis = _read(SGUIS)
+        brief = _block(sguis, "un_chamber_history_brief_row_sgui")
+        cls.valid = _branches(_sub_block(brief, "is_valid"))
+        cls.effect = _branches(_sub_block(brief, "effect"))
+        cls.card = _branches(_sub_block(_block(sguis, "un_chamber_history_card_row_sgui"), "effect"))
+        cls.rows = []
+        widget = _read(WIDGET)
+        for m in re.finditer(r"un_chamber_text\s*=\s*\{", widget):
+            block = _braced(widget, m.end() - 1)
+            if "un_chamber_history_brief_row_sgui').ExecuteTooltip" in block:
+                cls.rows.append([int(op) for op in _WIDGET_OP.findall(block)])
+
+    def test_the_widget_has_one_row_per_position(self):
+        self.assertEqual(sorted(ops[0] for ops in self.rows), list(range(HISTORY_ROWS)))
+        for ops in self.rows:
+            self.assertEqual(len(ops), 3, ops)
+            self.assertEqual(len(set(ops)), 1, ops)
+
+    def test_each_op_reads_its_own_position(self):
+        for name, branches in (("brief", self.effect), ("card", self.card)):
+            self.assertEqual(sorted(branches), list(range(HISTORY_ROWS)), name)
+            for op in range(HISTORY_ROWS):
+                with self.subTest(switch=name, op=op):
+                    self.assertEqual(
+                        re.findall(rf"un_chamber_history_{name}_row\s*=\s*\{{\s*POSITION\s*=\s*(\d+)\s+COUNT\s*=\s*(\d+)\s*\}}",
+                                   branches[op]),
+                        [(str(op), str(op + 1))],
+                    )
+        for op in range(HISTORY_ROWS):
+            with self.subTest(op=op):
+                self.assertEqual(
+                    re.findall(r"un_chamber_history_has_entry\s*=\s*\{\s*COUNT\s*=\s*(\d+)\s*\}", self.valid[op]),
+                    [str(op + 1)],
+                )
+
+    def test_the_names_exist(self):
+        display = set(_TOP_LEVEL.findall(_read(DISPLAY)))
+        for name in ("un_chamber_history_brief_row", "un_chamber_history_card_row", "un_chamber_history_entry"):
+            self.assertIn(name, display)
+
+
 class MissionContributorLinesTest(unittest.TestCase):
     """A mission's contributors print from the mission's scope (gotcha #27)."""
 

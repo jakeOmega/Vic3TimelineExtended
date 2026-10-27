@@ -995,40 +995,397 @@ un_chamber_in_session_sgui = {
 	}
 }
 
-# Closed resolutions, newest first. Read straight out of the bounded
-# un_resolution_history global list, so pruning in un_resolution_archive is
-# invisible here: no index, count or cap is assumed. The `has_tag`
-# emptiness probe also covers a list variable that still exists after its
-# last entry was evicted.
-#
-# `max` here is a rendering ceiling, not the history cap: it is set far above
-# anything un_resolution_archive can leave behind (only one vote runs at a
-# time and a closed resolution holds its topic cooldown for 5-10 years, so a
-# handful of entries can outlive the 25-entry cap at most). It is stated
-# explicitly only because an ordered_ iterator's default span is ambiguous —
-# vanilla writes `max` out whenever the count matters (ep2_iwakura_events.txt:306).
-un_chamber_history_sgui = {
+# The archive, one short row per resolution, newest first (the 2026-10-27
+# audit, UN-16): its title and how it ended, and the rest of its card on the
+# row's hover (un_chamber_history_card_row_sgui). op = its place in the
+# archive, 0-29, as in un_chamber_history_details_row_sgui below, whose
+# is_valid says the same; the widget repeats the op table
+# (test_un_chamber_mission_slots.py). Each row is its own ExecuteTooltip, so a
+# country named on two resolutions is named on each (gotcha #27).
+un_chamber_history_brief_row_sgui = {
 	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_has_entry = { COUNT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_has_entry = { COUNT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_has_entry = { COUNT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_has_entry = { COUNT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_has_entry = { COUNT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_has_entry = { COUNT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_has_entry = { COUNT = 7 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_has_entry = { COUNT = 8 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_has_entry = { COUNT = 9 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_has_entry = { COUNT = 10 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_has_entry = { COUNT = 11 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_has_entry = { COUNT = 12 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_has_entry = { COUNT = 13 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_has_entry = { COUNT = 14 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_has_entry = { COUNT = 15 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_has_entry = { COUNT = 16 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_has_entry = { COUNT = 17 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_has_entry = { COUNT = 18 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_has_entry = { COUNT = 19 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_has_entry = { COUNT = 20 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_has_entry = { COUNT = 21 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_has_entry = { COUNT = 22 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_has_entry = { COUNT = 23 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_has_entry = { COUNT = 24 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_has_entry = { COUNT = 25 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_has_entry = { COUNT = 26 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_has_entry = { COUNT = 27 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_has_entry = { COUNT = 28 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_has_entry = { COUNT = 29 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_has_entry = { COUNT = 30 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
 
 	effect = {
 		if = {
-			limit = {
-				has_global_variable_list = un_resolution_history
-				any_in_global_list = {
-					variable = un_resolution_history
-					has_tag = un_resolution
-				}
-			}
-			ordered_in_global_list = {
-				variable = un_resolution_history
-				order_by = un_res_recency_order
-				max = 100
-				check_range_bounds = no
-				un_chamber_history_entry = yes
-			}
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_brief_row = { POSITION = 0 COUNT = 1 }
 		}
-		else = {
-			custom_tooltip_no_bullet = je_un_chamber_no_history
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_brief_row = { POSITION = 1 COUNT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_brief_row = { POSITION = 2 COUNT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_brief_row = { POSITION = 3 COUNT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_brief_row = { POSITION = 4 COUNT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_brief_row = { POSITION = 5 COUNT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_brief_row = { POSITION = 6 COUNT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_brief_row = { POSITION = 7 COUNT = 8 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_brief_row = { POSITION = 8 COUNT = 9 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_brief_row = { POSITION = 9 COUNT = 10 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_brief_row = { POSITION = 10 COUNT = 11 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_brief_row = { POSITION = 11 COUNT = 12 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_brief_row = { POSITION = 12 COUNT = 13 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_brief_row = { POSITION = 13 COUNT = 14 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_brief_row = { POSITION = 14 COUNT = 15 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_brief_row = { POSITION = 15 COUNT = 16 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_brief_row = { POSITION = 16 COUNT = 17 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_brief_row = { POSITION = 17 COUNT = 18 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_brief_row = { POSITION = 18 COUNT = 19 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_brief_row = { POSITION = 19 COUNT = 20 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_brief_row = { POSITION = 20 COUNT = 21 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_brief_row = { POSITION = 21 COUNT = 22 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_brief_row = { POSITION = 22 COUNT = 23 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_brief_row = { POSITION = 23 COUNT = 24 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_brief_row = { POSITION = 24 COUNT = 25 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_brief_row = { POSITION = 25 COUNT = 26 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_brief_row = { POSITION = 26 COUNT = 27 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_brief_row = { POSITION = 27 COUNT = 28 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_brief_row = { POSITION = 28 COUNT = 29 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_brief_row = { POSITION = 29 COUNT = 30 }
+		}
+	}
+}
+
+# The card behind a brief row: everything the archive keeps of it but its
+# ballot. Read only as the row's tooltip.
+un_chamber_history_card_row_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_card_row = { POSITION = 0 COUNT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_card_row = { POSITION = 1 COUNT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_card_row = { POSITION = 2 COUNT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_card_row = { POSITION = 3 COUNT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_card_row = { POSITION = 4 COUNT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_card_row = { POSITION = 5 COUNT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_card_row = { POSITION = 6 COUNT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_card_row = { POSITION = 7 COUNT = 8 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_card_row = { POSITION = 8 COUNT = 9 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_card_row = { POSITION = 9 COUNT = 10 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_card_row = { POSITION = 10 COUNT = 11 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_card_row = { POSITION = 11 COUNT = 12 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_card_row = { POSITION = 12 COUNT = 13 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_card_row = { POSITION = 13 COUNT = 14 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_card_row = { POSITION = 14 COUNT = 15 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_card_row = { POSITION = 15 COUNT = 16 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_card_row = { POSITION = 16 COUNT = 17 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_card_row = { POSITION = 17 COUNT = 18 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_card_row = { POSITION = 18 COUNT = 19 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_card_row = { POSITION = 19 COUNT = 20 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_card_row = { POSITION = 20 COUNT = 21 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_card_row = { POSITION = 21 COUNT = 22 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_card_row = { POSITION = 22 COUNT = 23 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_card_row = { POSITION = 23 COUNT = 24 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_card_row = { POSITION = 24 COUNT = 25 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_card_row = { POSITION = 25 COUNT = 26 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_card_row = { POSITION = 26 COUNT = 27 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_card_row = { POSITION = 27 COUNT = 28 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_card_row = { POSITION = 28 COUNT = 29 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_card_row = { POSITION = 29 COUNT = 30 }
 		}
 	}
 }
@@ -1040,7 +1397,8 @@ un_chamber_history_sgui = {
 # the effect renders it. One row each, because in one block the tooltip
 # engine gathers every ballot line of a country under its first appearance
 # (gui_modding_guide.md gotcha #27). 30 rows cover the 25-entry cap and the
-# handful of entries that can outlive it (see un_chamber_history_sgui); the
+# handful of entries that can outlive it (only one vote runs at a time and a
+# closed resolution holds its topic cooldown for 5-10 years); the
 # widget's rows repeat the op table (test_un_chamber_mission_slots.py).
 # The widget keeps this behind its own collapsed-by-default toggle, since
 # ExecuteTooltip re-renders every frame the widget is visible.
@@ -1309,7 +1667,8 @@ un_chamber_history_details_row_sgui = {
 #
 # `max` is a rendering ceiling, not the register cap
 # (un_mandate_registry_cap = 12): stated explicitly only because an ordered_
-# iterator's default span is ambiguous, same as un_chamber_history_sgui.
+# iterator's default span is ambiguous (vanilla writes `max` out whenever the
+# count matters, ep2_iwakura_events.txt:306).
 un_chamber_mandates_sgui = {
 	scope = country
 

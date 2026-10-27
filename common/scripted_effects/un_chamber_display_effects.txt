@@ -855,6 +855,44 @@ un_chamber_history_details_row = {
 	}
 }
 
+# One brief row of the archive (the 2026-10-27 audit, UN-16): the resolution
+# at $POSITION$ (0-based, newest first), if the archive holds $COUNT$
+# ($POSITION$ + 1), by its title and how it ended. The card is the row's
+# hover (un_chamber_history_card_row).
+# Parameters: $POSITION$, $COUNT$
+# Scope: country (the viewer)
+un_chamber_history_brief_row = {
+	if = {
+		limit = { un_chamber_history_has_entry = { COUNT = $COUNT$ } }
+		ordered_in_global_list = {
+			variable = un_resolution_history
+			limit = { has_tag = un_resolution }
+			order_by = un_res_recency_order
+			position = $POSITION$
+			check_range_bounds = no
+			un_chamber_topic_line = yes
+			un_chamber_outcome_line = yes
+		}
+	}
+}
+
+# The card behind brief row $POSITION$: un_chamber_history_entry.
+# Parameters: $POSITION$, $COUNT$
+# Scope: country (the viewer)
+un_chamber_history_card_row = {
+	if = {
+		limit = { un_chamber_history_has_entry = { COUNT = $COUNT$ } }
+		ordered_in_global_list = {
+			variable = un_resolution_history
+			limit = { has_tag = un_resolution }
+			order_by = un_res_recency_order
+			position = $POSITION$
+			check_range_bounds = no
+			un_chamber_history_entry = yes
+		}
+	}
+}
+
 # One archived resolution, as rendered in the history list.
 # Scope: resolution container (closed)
 un_chamber_history_entry = {
