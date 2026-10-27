@@ -406,7 +406,8 @@ mines and claims to rivals' mines and the rivals' claims a buildup could win;
 Weight is your share of the basin's claim weight; +1 licence is about how much
 more naval power projection would win you one more licence at the next sharing,
 a figure that is enough and often more than needed. Click a basin to see its claimants, largest
-share first, with your own row and its Relinquish button. A Seabed Licences
+share first, each with its mines, claims and share of the weight in columns,
+and your own row with its Relinquish button. A Seabed Licences
 tile on every coastal state's panel shows that state's basin, the licences its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
