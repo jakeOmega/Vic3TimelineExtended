@@ -130,6 +130,9 @@ concept_construction_cost_scaling = {}
 concept_te_construction_market = {
 	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
 }
+concept_te_construction_queue_cap = {
+	texture = "gfx/interface/icons/goods_icons/construction_good.dds"
+}
 concept_migration_crowding = {
 	texture = "gfx/interface/icons/generic_icons/population.dds"
 }

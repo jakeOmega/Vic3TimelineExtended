@@ -878,6 +878,34 @@ types construction_panel
 		}
 	}
 
+	### MOD: one line of the construction market's read-out (GUI audit VAN-2):
+	### the label in a fixed column, the value right-aligned in the next, so
+	### the figures end at one x. te_state_stat_row (te_state_panel_widgets.gui)
+	### in this panel's own body font (no fontsize template, as its other
+	### textboxes), 150 + 4 + 330 = 484 of the 530 the section's text runs to.
+	### test_vanilla_panel_additions.py holds every label and value to its column.
+	### Every row has a hover of its own, so every label is underlined.
+	type te_cm_stat_row = te_state_stat_row {
+		parentanchor = hcenter
+		blockoverride "row_icon" {}
+		blockoverride "row_font" {}
+		blockoverride "label_format" {
+			default_format = "#tooltippable"
+		}
+		blockoverride "label_size" {
+			size = { 150 26 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 150
+		}
+		blockoverride "value_size" {
+			size = { 330 26 }
+		}
+		blockoverride "value_max_width" {
+			max_width = 330
+		}
+	}
+
 	type construction_panel = default_block_window_two_lines {
 		name = "construction_panel"
 
@@ -1228,67 +1256,92 @@ types construction_panel
 						}
 					}
 
-					### LIVE READ-OUT
+					### LIVE READ-OUT: a label/value table (te_cm_stat_row above); the
+					### budget rows only in Fixed Budget, the step row while the
+					### purchase is still moving toward what the budget buys.
 					flowcontainer = {
 						parentanchor = hcenter
 						direction = vertical
+						ignoreinvisible = yes
 						margin_top = 5
-						spacing = 3
+						spacing = 2
 
-						textbox = {
-							text = "TE_CM_STAT_GOVERNMENT"
-							tooltip = "TE_CM_STAT_GOVERNMENT_TT"
-							autoresize = yes
-							multiline = yes
-							max_width = @panel_width_minus_10
-							align = left|nobaseline
+						te_cm_stat_row = {
+							blockoverride "row_tooltip" {
+								tooltip = "TE_CM_STAT_GOVERNMENT_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_CM_STAT_GOVERNMENT"
+							}
+							blockoverride "row_value" {
+								text = "TE_CM_STAT_GOVERNMENT_VALUE"
+							}
 						}
 
-						textbox = {
-							visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							text = "TE_CM_STAT_BUDGET"
-							tooltip = "TE_CM_STAT_BUDGET_TT"
-							autoresize = yes
-							multiline = yes
-							max_width = @panel_width_minus_10
-							align = left|nobaseline
+						te_cm_stat_row = {
+							blockoverride "row_visible" {
+								visible = "[GetScriptedGui('te_construction_market_budget_mode_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_CM_STAT_BUDGET_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_CM_STAT_BUDGET"
+							}
+							blockoverride "row_value" {
+								text = "TE_CM_STAT_BUDGET_VALUE"
+							}
 						}
 
-						textbox = {
-							visible = "[GetScriptedGui('te_construction_market_budget_stepping_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							text = "TE_CM_STAT_BUDGET_STEP"
-							tooltip = "TE_CM_STAT_BUDGET_STEP_TT"
-							autoresize = yes
-							multiline = yes
-							max_width = @panel_width_minus_10
-							align = left|nobaseline
+						te_cm_stat_row = {
+							blockoverride "row_visible" {
+								visible = "[GetScriptedGui('te_construction_market_budget_stepping_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							}
+							blockoverride "row_tooltip" {
+								tooltip = "TE_CM_STAT_BUDGET_STEP_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_CM_STAT_BUDGET_STEP"
+							}
+							blockoverride "row_value" {
+								text = "TE_CM_STAT_BUDGET_STEP_VALUE"
+							}
 						}
 
-						textbox = {
-							text = "TE_CM_STAT_PRIVATE"
-							tooltip = "TE_CM_STAT_PRIVATE_TT"
-							autoresize = yes
-							multiline = yes
-							max_width = @panel_width_minus_10
-							align = left|nobaseline
+						te_cm_stat_row = {
+							blockoverride "row_tooltip" {
+								tooltip = "TE_CM_STAT_PRIVATE_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_CM_STAT_PRIVATE"
+							}
+							blockoverride "row_value" {
+								text = "TE_CM_STAT_PRIVATE_VALUE"
+							}
 						}
 
-						textbox = {
-							text = "TE_CM_STAT_PRICE"
-							tooltip = "TE_CM_STAT_PRICE_TT"
-							autoresize = yes
-							multiline = yes
-							max_width = @panel_width_minus_10
-							align = left|nobaseline
+						te_cm_stat_row = {
+							blockoverride "row_tooltip" {
+								tooltip = "TE_CM_STAT_PRICE_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_CM_STAT_PRICE"
+							}
+							blockoverride "row_value" {
+								text = "TE_CM_STAT_PRICE_VALUE"
+							}
 						}
 
-						textbox = {
-							text = "TE_CM_STAT_MARKET"
-							tooltip = "TE_CM_STAT_MARKET_TT"
-							autoresize = yes
-							multiline = yes
-							max_width = @panel_width_minus_10
-							align = left|nobaseline
+						te_cm_stat_row = {
+							blockoverride "row_tooltip" {
+								tooltip = "TE_CM_STAT_MARKET_TT"
+							}
+							blockoverride "row_label" {
+								text = "TE_CM_STAT_MARKET"
+							}
+							blockoverride "row_value" {
+								text = "TE_CM_STAT_MARKET_VALUE"
+							}
 						}
 					}
 

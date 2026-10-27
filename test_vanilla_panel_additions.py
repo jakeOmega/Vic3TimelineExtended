@@ -1,0 +1,171 @@
+"""The mod's additions to vanilla panels (GUI audit 2026-10-27, slice VAN).
+
+- The construction market's read-out is a label/value table (VAN-2) whose
+  labels and values fit their columns at the panel's body font.
+- A state-view row with a hover of its own underlines its label, and a row
+  without one does not (VAN-10, gui_style_guide.md rule 3).
+- The Homeland Dynamics tile shows only where a homeland can change (VAN-6c,
+  owner decision 2026-10-27).
+"""
+
+import json
+import os
+import re
+import unittest
+
+REPO = os.path.dirname(os.path.abspath(__file__))
+CONSTRUCTION = os.path.join(REPO, "gui", "construction_panel.gui")
+STATES = os.path.join(REPO, "gui", "states_panel.gui")
+WIDGETS = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
+LOC_DIR = os.path.join(REPO, "localization", "english")
+
+# gui_style_guide.md rule 3: the serif body face runs about 10 units a
+# character at 20, so 8.5 at the 17 of this panel's body text, plus 10%.
+UNITS_17 = 8.5
+MARGIN = 1.1
+# The widest a number in these rows prints: a quantity with one decimal and a
+# thousands separator, a sum at |1* ("123.4M"), a share at "100%".
+QUANTITY = "12,345.6"
+MONEY = "123.4M"
+ICON = 20  # an @money! icon, in units
+
+
+def _read(path):
+    with open(path, encoding="utf-8-sig") as f:
+        return f.read()
+
+
+def _block_from(text, start):
+    j = text.index("{", start)
+    depth = 0
+    for k in range(j, len(text)):
+        if text[k] == "{":
+            depth += 1
+        elif text[k] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[j:k + 1]
+    raise AssertionError("unbalanced block")
+
+
+def _loc():
+    with open(os.path.join(REPO, "vanilla_parsed", "localization_english.json"), encoding="utf-8") as f:
+        keys = dict(json.load(f))
+    for name in sorted(os.listdir(LOC_DIR)):
+        if name.endswith(".yml"):
+            for line in _read(os.path.join(LOC_DIR, name)).splitlines():
+                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+                if m:
+                    keys[m.group(1)] = m.group(2)
+    return keys
+
+
+def _instances(text, type_names):
+    """(type, body) of every instance `<type> = {` of the named types."""
+    pattern = re.compile(r"(?m)^\t+(%s) = \{" % "|".join(type_names))
+    return [(m.group(1), _block_from(text, m.end() - 1)) for m in pattern.finditer(text)]
+
+
+class ConstructionMarketTableTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _read(CONSTRUCTION)
+        cls.loc = _loc()
+        m = re.search(r"type te_cm_stat_row = te_state_stat_row \{", cls.text)
+        cls.assertTrue(cls, m)
+        cls.row_type = _block_from(cls.text, m.end() - 1)
+
+    def column(self, block):
+        body = re.search(r'blockoverride "%s" \{\s*max_width = (\d+)' % block, self.row_type)
+        self.assertIsNotNone(body, block)
+        return int(body.group(1))
+
+    def shown(self, key):
+        v = self.loc[key]
+        v = re.sub(r"\[SelectLocalization\([^\]]*'(\w+)', '' \)\]", lambda m: self.loc[m.group(1)], v)
+        icons = len(re.findall(r"@\w+!", v))
+        v = re.sub(r"\[[^\[\]]*\|1\*\]", MONEY, v)
+        v = re.sub(r"\[[^\[\]]*\|0\]#?!?%", "100%", v)
+        v = re.sub(r"\[[^\[\]]*\]", QUANTITY, v)
+        v = re.sub(r"#[A-Za-z_]+(?:;\S*)? ", "", v).replace("#!", "")
+        v = re.sub(r"@\w+!", "", v)
+        return v, icons
+
+    def test_rows_are_the_table(self):
+        rows = _instances(self.text, ["te_cm_stat_row"])
+        self.assertEqual(len(rows), 6)
+        self.assertNotRegex(self.text, r'text = "TE_CM_STAT_\w+"\s*tooltip')
+        # The panel's own body font: the row type sets no fontsize template.
+        self.assertRegex(self.row_type, r'blockoverride "row_font" \{\}')
+        self.assertIn('default_format = "#tooltippable"', self.row_type)
+        for _, body in rows:
+            label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body).group(1)
+            with self.subTest(row=label):
+                self.assertIn('tooltip = "%s_TT"' % label, body)
+                self.assertIn('text = "%s_VALUE"' % label, body)
+                self.assertIn(label + "_TT", self.loc)
+
+    def test_labels_and_values_fit(self):
+        label_width = self.column("label_max_width")
+        value_width = self.column("value_max_width")
+        for _, body in _instances(self.text, ["te_cm_stat_row"]):
+            label = re.search(r'blockoverride "row_label" \{\s*text = "(\w+)"', body).group(1)
+            for key, width in ((label, label_width), (label + "_VALUE", value_width)):
+                text, icons = self.shown(key)
+                need = len(text) * UNITS_17 * MARGIN + icons * ICON
+                with self.subTest(key=key):
+                    self.assertLessEqual(need, width, f"{key} shows {text!r}: {need:.0f} units in {width}")
+
+
+class StateRowUnderlineTest(unittest.TestCase):
+    ROWS = ["te_state_stat_row", "te_state_tile_row", "te_state_tile_word_row", "te_state_wide_row", "te_state_gm_row"]
+
+    def rows(self):
+        for path in (STATES, WIDGETS):
+            text = _read(path)
+            meters = [_block_from(text, m.end() - 1) for m in re.finditer(r"(?m)^\t+te_state_meter = \{", text)]
+            for kind, body in _instances(text, self.ROWS):
+                in_meter = any(body in meter for meter in meters)
+                yield os.path.basename(path), kind, body, in_meter
+
+    def test_a_row_with_its_own_hover_is_underlined(self):
+        seen = 0
+        for name, kind, body, in_meter in self.rows():
+            own_hover = 'blockoverride "row_tooltip"' in body or in_meter
+            underlined = re.search(r'blockoverride "label_format" \{\s*default_format = "#tooltippable"', body)
+            # The homeland project row's hover is its own label (the culture's
+            # name, which can elide), not a hover of its own to find.
+            if "te_homeland_project_culture_sgui" in body:
+                self.assertIsNone(underlined)
+                continue
+            with self.subTest(file=name, row=body[:160]):
+                self.assertEqual(bool(underlined), own_hover)
+            seen += own_hover
+        self.assertGreaterEqual(seen, 25)
+
+    def test_the_row_type_leaves_the_label_plain(self):
+        text = _read(WIDGETS)
+        m = re.search(r"type te_state_stat_row = flowcontainer \{", text)
+        body = _block_from(text, m.end() - 1)
+        self.assertIn('block "label_format" {}', body)
+
+
+class HomelandTileTest(unittest.TestCase):
+    def test_hidden_where_nothing_can_change(self):
+        text = _read(STATES)
+        at = text.index('tooltip = "TE_STATE_HOMELAND_TT"')
+        tile = text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+        self.assertIn("te_homeland_relevant", tile)
+        self.assertIn("visible", tile)
+        self.assertNotIn("TE_HOMELAND_NOTHING_TO_CHANGE", _read(WIDGETS))
+
+    def test_one_unit_for_the_rate(self):
+        loc = _loc()
+        for key in ("TE_STATE_HOMELAND_TT", "TE_HOMELAND_TRACK_ACTIVE", "TE_HOMELAND_REMOVAL_TRACK_ACTIVE"):
+            with self.subTest(key=key):
+                self.assertIn("a year", loc[key])
+                self.assertNotIn("points", loc[key])
+
+
+if __name__ == "__main__":
+    unittest.main()
