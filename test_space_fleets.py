@@ -155,6 +155,42 @@ class RolesTest(unittest.TestCase):
                                        rf"\s*sr_fl_cut_role = \{{ N = \$N\$ ROLE = {role.key} \}}")
 
 
+class RoleConceptTest(unittest.TestCase):
+    """One short concept per ship role (the owner, 2026-10-27), holding the
+    role's figures from the table; the ship role concept lists them all and
+    each build-mix button names its own."""
+
+    CONCEPT = {"war": "warship", "rapid": "rapid", "siege": "siege", "carrier": "carrier", "tender": "tender"}
+
+    @staticmethod
+    def _loc(key):
+        for path in (ROOT / "localization/english").glob("*.yml"):
+            m = re.search(rf'^ {re.escape(key)}:\d* "(.*)"\s*$', path.read_text(encoding="utf-8-sig"), re.M)
+            if m:
+                return m.group(1)
+        raise AssertionError(f"no loc {key}")
+
+    @staticmethod
+    def _fig(x):
+        return f"#v {x:g}#!"
+
+    def test_each_role_has_its_concept_with_its_figures(self):
+        concepts = _raw(ROOT / "common/game_concepts/extra_concepts.txt")
+        ship_role = self._loc("concept_sr_ship_role_desc")
+        for role in gsf.ROLES:
+            key = f"concept_sr_role_{self.CONCEPT[role.key]}"
+            with self.subTest(role=role.key):
+                self.assertRegex(concepts, rf"(?m)^{key} = \{{\}}$")
+                self._loc(key)
+                desc = self._loc(f"{key}_desc")
+                for figure in (role.fire_fleets, role.fire_defences, role.endurance):
+                    self.assertIn(self._fig(figure), desc)
+                if role.marines:
+                    self.assertIn(self._fig(role.marines), desc)
+                self.assertIn(f"[{key}]", ship_role)
+                self.assertIn(f"[{key}]", self._loc(f"sr_sc_mix_step_{role.key}_tt"))
+
+
 class FullColoniesGateTest(unittest.TestCase):
     """Everything here runs and shows under Full Colonies only."""
 

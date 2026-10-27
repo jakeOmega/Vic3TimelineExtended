@@ -9,11 +9,11 @@
 ### DATA. No journal entry, so every read goes through GetPlayer.MakeScope:
 ### the guarded *_disp_* script values (te_global_commons_seabed_values.txt),
 ### which read 0 where a variable is missing, under the tab's gate
-### (te_window_seabed_tab_sgui) on a parent in the window. The rivals are the
-### Cultural Hegemony leaderboard's shape (gotcha #15): te_seabed_rival_row_sgui
-### prints each ranked country from its global, and each flag reads the
-### ranked country's capital stored on the player (te_seabed_rkcap_<b>_<n>),
-### shown only while te_seabed_rkcap_count_<b> says that seat is filled.
+### (te_window_seabed_tab_sgui) on a parent in the window. A basin's rivals
+### are a datamodel of the player's list te_seabed_rk_list_<b>, the other
+### claimants' capitals, largest share first (te_seabed_rank_list; audit
+### SEA-3): each item reaches its country through State.GetCountry (gotcha
+### #15).
 ###
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_seabed_fontsize_*, below; rule 3); test_seabed_layout.py
@@ -376,11 +376,9 @@ types te_seabed_widget_types
 	### (vanilla's tiny flag: the full name on hover, the country on click) and
 	### the name, elided, then Mines, Claims and Weight, and in our own row the
 	### basin's Relinquish or Claim Again. 8 + 28 + 4 + 136 + 4 + 56 + 4 + 60 + 4
-	### + 64 + 110 = 478, in the 480 column; the heads span the same widths. A rival's figures read its country through the
-	### capital stored on us (te_seabed_rkcap_<b>_<n>, gotcha #15), shown only
-	### while te_seabed_rkcap_count_<b> says the seat is filled; a ranked
-	### rival with no stored capital keeps the line te_seabed_rival_row_sgui
-	### prints, which wraps.
+	### + 64 + 110 = 478, in the 480 column; the heads span the same widths. Every
+	### rival is a row, an item of the basin's list of capitals
+	### (te_seabed_rk_list_<b>), its figures read through State.GetCountry.
 	type te_seabed_rival_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -483,46 +481,30 @@ types te_seabed_widget_types
 		}
 	}
 
-	### A rival's row: its columns while its seat is filled, else its line.
+	### A rival's row: an item of the basin's claimant list
+	### (te_seabed_rk_list_<b>, its capital the item's datacontext; audit
+	### SEA-3), its columns read through State.GetCountry.
 	type te_seabed_rival_row = flowcontainer {
-		direction = vertical
+		direction = horizontal
 		ignoreinvisible = yes
 		margin_left = 8
-		datacontext = "[GetScriptedGui('te_seabed_rival_row_sgui')]"
-		block "row_visible" {}
 
-		flowcontainer = {
-			ignoreinvisible = yes
-			block "seat_visible" {}
-
-			te_seabed_rival_cells = {
-				block "row_context" {}
-				blockoverride "flag_context" {
-					datacontext = "[State.GetCountry]"
-				}
-				blockoverride "cell_name" {
-					raw_text = "[State.GetCountry.GetNameNoFormatting]"
-				}
-				blockoverride "cell_mines" {
-					block "rival_mines" {}
-				}
-				blockoverride "cell_claims" {
-					block "rival_claims" {}
-				}
-				blockoverride "cell_weight" {
-					block "rival_weight" {}
-				}
+		te_seabed_rival_cells = {
+			blockoverride "flag_context" {
+				datacontext = "[State.GetCountry]"
 			}
-		}
-		textbox = {
-			autoresize = yes
-			multiline = yes
-			maximumsize = { 472 -1 }
-			margin_left = 32
-			align = left|nobaseline
-			using = te_seabed_fontsize_row
-			block "seat_missing_visible" {}
-			block "row_text" {}
+			blockoverride "cell_name" {
+				raw_text = "[State.GetCountry.GetNameNoFormatting]"
+			}
+			blockoverride "cell_mines" {
+				block "rival_mines" {}
+			}
+			blockoverride "cell_claims" {
+				block "rival_claims" {}
+			}
+			blockoverride "cell_weight" {
+				block "rival_weight" {}
+			}
 		}
 	}
 
@@ -909,160 +891,25 @@ types te_seabed_widget_types
 				visible = "[GetVariableSystem.Exists('te_seabed_rivals_pacific_open')]"
 
 				te_seabed_rival_head = {}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_1').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)1' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_2').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)2' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_3').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)3' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_4').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)4' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_5').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)5' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_6').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)6' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_pacific')]"
+
+					item = {
+						te_seabed_rival_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "rival_mines" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
+							}
+							blockoverride "rival_claims" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
+							}
+							blockoverride "rival_weight" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
+							}
+						}
 					}
 				}
 				te_seabed_rival_us = {
@@ -1098,15 +945,6 @@ types te_seabed_widget_types
 					blockoverride "us_weight" {
 						raw_text = "[GetPlayer.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_pacific'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_pacific"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1171,160 +1009,25 @@ types te_seabed_widget_types
 				visible = "[GetVariableSystem.Exists('te_seabed_rivals_atlantic_open')]"
 
 				te_seabed_rival_head = {}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_1').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)1' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_2').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)2' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_3').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)3' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_4').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)4' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_5').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)5' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_6').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)6' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_atlantic')]"
+
+					item = {
+						te_seabed_rival_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "rival_mines" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
+							}
+							blockoverride "rival_claims" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
+							}
+							blockoverride "rival_weight" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
+							}
+						}
 					}
 				}
 				te_seabed_rival_us = {
@@ -1360,15 +1063,6 @@ types te_seabed_widget_types
 					blockoverride "us_weight" {
 						raw_text = "[GetPlayer.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_atlantic'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_atlantic"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1433,160 +1127,25 @@ types te_seabed_widget_types
 				visible = "[GetVariableSystem.Exists('te_seabed_rivals_indian_open')]"
 
 				te_seabed_rival_head = {}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_1').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)1' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_2').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)2' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_3').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)3' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_4').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)4' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_5').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)5' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_6').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)6' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_indian')]"
+
+					item = {
+						te_seabed_rival_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "rival_mines" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
+							}
+							blockoverride "rival_claims" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
+							}
+							blockoverride "rival_weight" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
+							}
+						}
 					}
 				}
 				te_seabed_rival_us = {
@@ -1622,15 +1181,6 @@ types te_seabed_widget_types
 					blockoverride "us_weight" {
 						raw_text = "[GetPlayer.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_indian'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_indian"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1695,160 +1245,25 @@ types te_seabed_widget_types
 				visible = "[GetVariableSystem.Exists('te_seabed_rivals_arctic_open')]"
 
 				te_seabed_rival_head = {}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_1').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)1' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_2').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)2' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_3').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)3' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_4').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)4' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_5').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)5' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)46' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_6').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)6' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)46' ) ).End )]"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_arctic')]"
+
+					item = {
+						te_seabed_rival_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "rival_mines" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
+							}
+							blockoverride "rival_claims" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
+							}
+							blockoverride "rival_weight" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
+							}
+						}
 					}
 				}
 				te_seabed_rival_us = {
@@ -1884,15 +1299,6 @@ types te_seabed_widget_types
 					blockoverride "us_weight" {
 						raw_text = "[GetPlayer.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_arctic'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_arctic"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1957,160 +1363,25 @@ types te_seabed_widget_types
 				visible = "[GetVariableSystem.Exists('te_seabed_rivals_southern_open')]"
 
 				te_seabed_rival_head = {}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_1').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)1' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)52' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_2').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)2' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)52' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)53' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_3').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)3' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)53' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)54' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_4').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)4' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)54' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)55' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_5').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)5' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)55' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)56' ) ).End )]"
-					}
-					blockoverride "seat_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_6').GetState]"
-					}
-					blockoverride "rival_mines" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
-					}
-					blockoverride "rival_claims" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
-					}
-					blockoverride "rival_weight" {
-						raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
-					}
-					blockoverride "seat_missing_visible" {
-						visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)6' ) )]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)56' ) ).End )]"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_southern')]"
+
+					item = {
+						te_seabed_rival_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "rival_mines" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
+							}
+							blockoverride "rival_claims" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
+							}
+							blockoverride "rival_weight" {
+								raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
+							}
+						}
 					}
 				}
 				te_seabed_rival_us = {
@@ -2146,15 +1417,6 @@ types te_seabed_widget_types
 					blockoverride "us_weight" {
 						raw_text = "[GetPlayer.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_southern'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_southern"
 				}
 			}
 			flowcontainer = {
