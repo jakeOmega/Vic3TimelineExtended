@@ -424,9 +424,11 @@ types te_nation_widget_types
 				margin_top = 6
 				spacing = 4
 
+				### No hover of its own: the label's concept says how the score
+				### moves, and the ceiling's line sits under the bar (2026-10-27
+				### audit, NAT-4).
 				te_nation_row = {
 					text = "te_nation_jud_row"
-					tooltip = "te_nation_jud_row_tt"
 				}
 				te_nation_target_bar = {
 					blockoverride "high" {
@@ -631,8 +633,10 @@ types te_nation_widget_types
 				parentanchor = hcenter
 				size = { 520 38 }
 			}
+			### "Label: value": how many of the country's modifiers the lists
+			### hold, so the collapsed panel says what it holds (NAT-2).
 			blockoverride "left_text" {
-				text = "te_nation_sources_header"
+				text = "te_nation_sources_header_count"
 			}
 			blockoverride "onclick" {
 				onclick = "[GetVariableSystem.Toggle('te_nation_sources_open')]"
