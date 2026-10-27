@@ -274,9 +274,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
 
-      # ScriptValue('x') in a loc value naming no script value renders 0. The
-      # .gui half is gui_reference_audit's, above.
-      - name: Audit — loc ScriptValue reads that name no script value
+      # ScriptValue('x') in a loc value or a script string (common/, events/)
+      # naming no script value renders 0. The .gui half is
+      # gui_reference_audit's, above.
+      - name: Audit — loc and script-string ScriptValue reads that name no script value
         if: ${{ !cancelled() }}
         run: python3 loc_script_value_audit.py --strict
 

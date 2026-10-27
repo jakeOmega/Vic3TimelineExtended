@@ -41,6 +41,9 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from gui_reference_audit import defined_names  # noqa: E402
+
 IDENT_BRACE = re.compile(r"\b([A-Za-z_]\w*)\s*=\s*\{")
 IDENT_PROP = re.compile(r"\b([A-Za-z_]\w*)[ \t]*=[ \t]*(?![ \t{])")
 BLOCKOVERRIDE = re.compile(r'blockoverride\s+"(\w+)"')
@@ -161,10 +164,11 @@ class Linter:
         return [os.path.relpath(p, self.repo) for p in glob.glob(self._path(pattern), recursive=True)]
 
     def _top_level_keys(self, pattern):
+        # gui_reference_audit's rule (#1180): depth-0 keys, but not a name
+        # behind INJECT:/REPLACE:, which resolves through its own definition.
         keys = set()
         for p in self._glob(pattern):
-            text = strip_comments(_read(self._path(p)))
-            keys.update(re.findall(r"^(?:INJECT:|REPLACE:)?([\w.\-]+)\s*=", text, re.M))
+            keys |= defined_names(_read(self._path(p)))
         return keys
 
     def _vanilla(self, rel):
