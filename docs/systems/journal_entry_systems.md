@@ -19,7 +19,7 @@ Simulates a realistic financial cycle with boom/bust mechanics, including specul
 - **Crash detection:** Asymmetric — higher probability in frenzy/boom when bubble pressure is high
 - **Contagion:** Crash spreads via trade agreements, customs unions, adjacency, economic dependence, market share, to countries no more than 20 times the crashing economy's GDP (`banking_contagion_min_source_gdp`, 5% of the target's GDP). Event `minor_events_timelineextended.7` fires to connected countries, after the hidden `.9` has rolled for them (a scare is shown only once in two years).
 - **Fiscal policy:** `financial_cycle_government_fiscal_policy_effect` recalculated monthly based on budget
-- **Text by economy:** the title and the description follow the economic system law (command economy, cooperative ownership, anything else). Both are customizable localization in `common/customizable_localization/zzz_extra_custom_loc.txt`: `te_banking_cycle_title` behind `je_banking_cycle`, and `te_banking_cycle_reason` behind the engine's implicit `je_banking_cycle_reason`, which picks `je_banking_cycle_reason_command_economy` / `_cooperative_ownership` / `_market`. The two variants had been unreferenced since `be165ed6` and were wired back on 2026-09-26. `progress_desc` branches on the same two laws with `triggered_desc`. `status_desc` is empty while the entry is active and keeps one line (`banking_cycle_status_not_started`) for an entry shown before it starts: the phase, momentum and bubble paragraphs repeated the overview and went in play-test round 2 (2026-09-29), and the three monthly modifier totals with their breakdowns (`BANKING_CURR_MODIFIERS`) moved into the tooltips of the overview's next-month ranges (2026-10-07; see `mod_systems.md` § Policy Dashboard).
+- **Text by economy:** the title and the description follow the economic system law (command economy, cooperative ownership, anything else). Both are customizable localization in `common/customizable_localization/zzz_extra_custom_loc.txt`: `te_banking_cycle_title` behind `je_banking_cycle`, and `te_banking_cycle_reason` behind the engine's implicit `je_banking_cycle_reason`, which picks `je_banking_cycle_reason_command_economy` / `_cooperative_ownership` / `_market`. The two variants had been unreferenced since `be165ed6` and were wired back on 2026-09-26. It has no `progress_desc` since the GUI audit (BNK-7, 2026-10-27): the line repeated the overview's Budget cell, out of a total that left out the banking union's point. `status_desc` is empty while the entry is active and keeps one line (`banking_cycle_status_not_started`) for an entry shown before it starts: the phase, momentum and bubble paragraphs repeated the overview and went in play-test round 2 (2026-09-29), and the three monthly modifier totals with their breakdowns (`BANKING_CURR_MODIFIERS`) moved into the tooltips of the overview's next-month ranges (2026-10-07; see `mod_systems.md` § Policy Dashboard).
 
 ### Variables
 | Variable | Range | Description |
@@ -100,10 +100,7 @@ Part of the reference sections in `custom_widget_container_3`, open by default i
 - **Ranges:** 1 / 5 / 20 years, held in the GUI variable system only. Retention is 240 monthly samples.
 - **No gameplay effect.** Recording is additive and `hidden_effect`-wrapped; the widget's only clicks write GUI variables. Full data model, caps and the "how to add a series" recipe: `docs/systems/mod_systems.md` → **History Store and Charts**.
 
-**Budget system:** All tools spend from a shared `country_banking_intervention_max_add` pool. The JE's `progress_desc` shows the economy-appropriate label:
-- Market → "Free Intervention Points"
-- Command Economy → "Free Planning Budget"
-- Cooperative → "Free Council Mandate Points"
+**Budget system:** All tools spend from a shared `country_banking_intervention_max_add` pool. The overview's Budget cell shows the points used and free; the free figure's hover breaks it down by grant and tool (`banking_dash_budget_free_tt`).
 
 ### Modifiers
 - Phase modifiers: `financial_cycle_phase_{panic|downturn|stagnation|expansion|boom|frenzy}`

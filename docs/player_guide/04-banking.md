@@ -276,10 +276,8 @@ tables in this chapter use the full names.
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
 and a power bloc's banking union 1 more. The overview's Budget box shows how
-many are in use and how many are free, and the journal entry repeats the free
-points as Free Intervention Points: a
-command economy calls it the Free Planning Budget and a cooperative the Free
-Council Mandate Points.
+many are in use and how many are free. Hover the free figure to see what each
+grant adds and what each active tool holds.
 
 Switching a tool on has its own price: the lending tools charge the treasury
 0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
