@@ -427,6 +427,9 @@ colonial_assim_startup_weeks = 13
 # country_authority_cost_add (300) over the three levels. The raise gate
 # (colonial_empire_possible_garrison_up) and the widget's cost line read it.
 colonial_garrison_authority_per_level = 100
+# Infamy on starting the garrison (colonial_programme_garrison_up's step from
+# level 0 to 1); its row's hover prints it.
+colonial_garrison_start_infamy = 5
 
 # Assimilation's authority upkeep per level: colonial_cultural_assimilation_modifier's
 # 100 over the three levels, rounded up. The AI's raise check reads it.
@@ -720,10 +723,19 @@ colonial_stability_term_non_gp = {
 # holds the stance, so no gate is needed. The two escalations are flat and
 # fire on the condemners' share of great-power prestige
 # (colonial_gp_condemner_prestige_share), not on how many of them there are.
-# They stack: at two-thirds both apply.
+# They stack: at two-thirds both apply. The per-power factors are named, so
+# International Pressure's table (colonial_empire_gp_row) weighs each power
+# with the same figure the bar does.
+colonial_gp_condemnation_per_power = -0.6
+colonial_gp_support_per_power = 0.3
+# And the two escalations' flat losses, which International Pressure's
+# escalation lines print.
+colonial_gp_isolation_loss = -1.0
+colonial_gp_consensus_loss = -2.0
+
 colonial_stability_term_gp_condemnation = {
 	value = colonial_gp_condemnation_weight
-	multiply = -0.6
+	multiply = colonial_gp_condemnation_per_power
 }
 
 colonial_stability_term_gp_high_pressure = {
@@ -740,7 +752,7 @@ colonial_stability_term_gp_high_pressure = {
 			}
 			colonial_gp_condemner_prestige_share >= 0.333
 		}
-		add = -1.0
+		add = colonial_gp_isolation_loss
 	}
 }
 
@@ -756,13 +768,13 @@ colonial_stability_term_gp_extreme_pressure = {
 			}
 			colonial_gp_condemner_prestige_share >= 0.667
 		}
-		add = -2.0
+		add = colonial_gp_consensus_loss
 	}
 }
 
 colonial_stability_term_gp_support = {
 	value = colonial_gp_support_weight
-	multiply = 0.3
+	multiply = colonial_gp_support_per_power
 }
 
 # --- Programme effectiveness (aggregated modifiers; see
@@ -1756,8 +1768,8 @@ colonial_empire_disp_next_tick = {
 # The list shows them as release blocs: a territory and the states a release
 # would take with it (colonial_empire_mark_release_blocs in
 # colonial_empire_display_effects.txt). colonial_empire_refresh_display stores
-# the eight largest blocs by GDP as their seed states,
-# colonial_empire_territory_1..8 (players only); the rows read the bloc's
+# every bloc by GDP as its seed state, the variable list
+# colonial_empire_blocs (players only); the rows read the bloc's
 # figures from the seed through colonial_bloc_disp_* below, which the refresh
 # summed from each member's colonial_territory_disp_* (each reading the
 # entry's own triggers, so a row cannot disagree with the entry).
@@ -2145,41 +2157,20 @@ colonial_bloc_overreach_without = {
 	multiply = colonial_overreach_per_ratio
 }
 
-# SCOPE: country. How many rows are stored (the slots are filled 1, 2, ... in
-# order), and how many release blocs the rows leave out.
-colonial_empire_disp_territory_rows = {
+# SCOPE: country. Whether the list holds a row yet (colonial_empire_blocs,
+# every release bloc since CE-1 of the 2026-10-27 GUI audit): 1 or 0, for the
+# pending line below. The panel draws the list itself.
+colonial_empire_territory_rows_stored = {
 	value = 0
 	if = {
-		limit = { has_variable = colonial_empire_territory_1 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_2 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_3 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_4 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_5 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_6 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_7 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_territory_8 }
-		add = 1
+		limit = {
+			has_variable_list = colonial_empire_blocs
+			any_in_list = {
+				variable = colonial_empire_blocs
+				exists = this
+			}
+		}
+		value = 1
 	}
 }
 
@@ -2191,29 +2182,14 @@ colonial_empire_disp_territories_eligible = {
 	}
 }
 
-colonial_empire_disp_territories_more = {
-	value = 0
-	if = {
-		limit = { has_variable = colonial_empire_bloc_count }
-		value = var:colonial_empire_bloc_count
-	}
-	subtract = colonial_empire_disp_territory_rows
-	min = 0
-	if = {
-		limit = { colonial_empire_disp_territory_rows < 1 }
-		value = 0
-	}
-}
-
 # 1 while there are eligible territories but no stored rows: a save upgraded
-# mid-entry, until the next monthly assessment. The list says so instead of
-# counting them all as "+N more".
+# mid-entry, until the next monthly assessment. The list says so.
 colonial_empire_disp_territories_pending = {
 	value = 0
 	if = {
 		limit = {
 			colonial_empire_disp_territories_eligible > 0
-			colonial_empire_disp_territory_rows < 1
+			colonial_empire_territory_rows_stored < 1
 		}
 		value = 1
 	}
@@ -2225,10 +2201,10 @@ colonial_empire_disp_territories_pending = {
 # The overview's holdings line counts what keeps je_colonial_empire running
 # (its `possible`): the colonies (is_overseas_colonial_state) and the colonial
 # subjects (is_qualifying_colonial_subject), from the monthly snapshot
-# colonial_empire_refresh_display takes. The subject list stores the first
-# eight subjects by GDP as their capitals (colonial_empire_subject_1..8); each
-# row reads its subject through the stored state, with vanilla's own getters
-# for its kind and liberty desire and these values for the rest.
+# colonial_empire_refresh_display takes. The subject list stores every subject
+# by GDP as its capital (the variable list colonial_empire_subject_capitals,
+# CE-1); each row reads its subject through the stored state, with vanilla's
+# own getters for its kind and liberty desire and these values for the rest.
 # ============================================================================
 
 # SCOPE: country (the empire). 0 before the first snapshot.
@@ -2248,48 +2224,21 @@ colonial_empire_disp_subjects = {
 	}
 }
 
-# How many subject rows are stored (the slots are filled 1, 2, ... in order),
-# and how many subjects the rows leave out.
-colonial_empire_disp_subject_rows = {
+# How many programmes run, at any level: the overview's Programmes cell.
+colonial_empire_disp_programmes_running = {
 	value = 0
 	if = {
-		limit = { has_variable = colonial_empire_subject_1 }
+		limit = { colonial_invest_level_value >= 1 }
 		add = 1
 	}
 	if = {
-		limit = { has_variable = colonial_empire_subject_2 }
+		limit = { colonial_garrison_level_value >= 1 }
 		add = 1
 	}
 	if = {
-		limit = { has_variable = colonial_empire_subject_3 }
+		limit = { colonial_assim_level_value >= 1 }
 		add = 1
 	}
-	if = {
-		limit = { has_variable = colonial_empire_subject_4 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_subject_5 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_subject_6 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_subject_7 }
-		add = 1
-	}
-	if = {
-		limit = { has_variable = colonial_empire_subject_8 }
-		add = 1
-	}
-}
-
-colonial_empire_disp_subjects_more = {
-	value = colonial_empire_disp_subjects
-	subtract = colonial_empire_disp_subject_rows
-	min = 0
 }
 
 # SCOPE: country (a subject, reached through its stored capital).
@@ -2308,5 +2257,83 @@ colonial_subject_disp_can_be_dominion = {
 			can_increase_autonomy = yes
 		}
 		value = 1
+	}
+}
+
+# ============================================================================
+# INTERNATIONAL PRESSURE'S TABLE (CE-2 of the 2026-10-27 GUI audit)
+#
+# SCOPE: script container, a great power's row (colonial_empire_gp_row in
+# colonial_empire_display_effects.txt). Each figure is the monthly
+# assessment's, guarded: the stance (-1 condemning, 1 supporting), the power's
+# prestige then, and its signed weight on stability a month.
+# ============================================================================
+colonial_gp_row_disp_stance = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_gp_stance }
+		value = var:ce_gp_stance
+	}
+}
+
+colonial_gp_row_disp_prestige = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_gp_prestige }
+		value = var:ce_gp_prestige
+	}
+}
+
+colonial_gp_row_disp_weight = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_gp_weight }
+		value = var:ce_gp_weight
+	}
+}
+
+# The power's prestige against ours, the factor before the sign: its weight
+# over the per-power figure, for the row's hover.
+colonial_gp_row_disp_factor = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = ce_gp_weight
+			has_variable = ce_gp_stance
+		}
+		value = var:ce_gp_weight
+		if = {
+			limit = { var:ce_gp_stance < 0 }
+			divide = colonial_gp_condemnation_per_power
+		}
+		else = {
+			divide = colonial_gp_support_per_power
+		}
+	}
+}
+
+# SCOPE: country (the empire). How many great powers condemn and how many back
+# us, counted off the table's rows: the overview's Great Powers cell.
+colonial_empire_disp_gp_condemners = {
+	value = 0
+	if = {
+		limit = { has_variable_list = colonial_empire_gp_rows }
+		every_in_list = {
+			variable = colonial_empire_gp_rows
+			limit = { colonial_gp_row_disp_stance < 0 }
+			add = 1
+		}
+	}
+}
+
+colonial_empire_disp_gp_supporters = {
+	value = 0
+	if = {
+		limit = { has_variable_list = colonial_empire_gp_rows }
+		every_in_list = {
+			variable = colonial_empire_gp_rows
+			limit = { colonial_gp_row_disp_stance > 0 }
+			add = 1
+		}
 	}
 }

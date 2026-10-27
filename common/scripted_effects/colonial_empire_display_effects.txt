@@ -201,88 +201,56 @@ colonial_empire_refresh_display = {
 
 		# --- Eligible territories, for the Colonial Holdings list -----------
 		# One row per release bloc (colonial_empire_mark_release_blocs: a
-		# territory and the states a release would take with it), the eight
-		# largest by the bloc's GDP stored as their seed states
-		# (colonial_empire_territory_1..8) for the panel's rows, which read the
-		# bloc's figures from the seed (colonial_bloc_disp_* in
+		# territory and the states a release would take with it), every bloc
+		# by its GDP, largest first: the seeds in colonial_empire_blocs, which
+		# the panel's datamodel draws in this order (CE-1 of the 2026-10-27
+		# GUI audit: eight fixed slots and a "+N more" hover before), each row
+		# reading its bloc's figures from the seed (colonial_bloc_disp_* in
 		# colonial_empire_values.txt). Players only: no AI reads a panel.
-		remove_variable = colonial_empire_territory_1
-		remove_variable = colonial_empire_territory_2
-		remove_variable = colonial_empire_territory_3
-		remove_variable = colonial_empire_territory_4
-		remove_variable = colonial_empire_territory_5
-		remove_variable = colonial_empire_territory_6
-		remove_variable = colonial_empire_territory_7
-		remove_variable = colonial_empire_territory_8
+		clear_variable_list = colonial_empire_blocs
 		set_variable = { name = colonial_empire_bloc_count value = 0 }
 		if = {
 			limit = { is_player = yes }
 			colonial_empire_mark_release_blocs = yes
-			colonial_empire_territory_slot = { N = 1 POS = 0 }
-			colonial_empire_territory_slot = { N = 2 POS = 1 }
-			colonial_empire_territory_slot = { N = 3 POS = 2 }
-			colonial_empire_territory_slot = { N = 4 POS = 3 }
-			colonial_empire_territory_slot = { N = 5 POS = 4 }
-			colonial_empire_territory_slot = { N = 6 POS = 5 }
-			colonial_empire_territory_slot = { N = 7 POS = 6 }
-			colonial_empire_territory_slot = { N = 8 POS = 7 }
+			ordered_scope_state = {
+				limit = { has_variable = colonial_bloc_seed }
+				order_by = colonial_bloc_disp_gdp
+				max = 1000
+				check_range_bounds = no
+				owner = {
+					add_to_variable_list = { name = colonial_empire_blocs target = prev }
+				}
+			}
 		}
 
 		# --- Colonial subjects, for the Colonial Holdings list --------------
-		# The first eight qualifying subjects by GDP, each stored as its capital
-		# (colonial_empire_subject_1..8): gotcha #11, the panel reaches a country
-		# through a stored state (the Space Race rivals' and the covert
-		# networks' shape). Players only, each slot taken only while the count
-		# reaches it (colonial_empire_subject_slot), as for the territories.
-		remove_variable = colonial_empire_subject_1
-		remove_variable = colonial_empire_subject_2
-		remove_variable = colonial_empire_subject_3
-		remove_variable = colonial_empire_subject_4
-		remove_variable = colonial_empire_subject_5
-		remove_variable = colonial_empire_subject_6
-		remove_variable = colonial_empire_subject_7
-		remove_variable = colonial_empire_subject_8
+		# Every qualifying subject by GDP, largest first, stored as its capital
+		# in colonial_empire_subject_capitals: gotcha #11, the panel reaches a
+		# country through a stored state (the Space Race rivals' and the covert
+		# networks' shape). Players only, as for the territories.
+		clear_variable_list = colonial_empire_subject_capitals
 		if = {
 			limit = { is_player = yes }
-			colonial_empire_subject_slot = { N = 1 POS = 0 }
-			colonial_empire_subject_slot = { N = 2 POS = 1 }
-			colonial_empire_subject_slot = { N = 3 POS = 2 }
-			colonial_empire_subject_slot = { N = 4 POS = 3 }
-			colonial_empire_subject_slot = { N = 5 POS = 4 }
-			colonial_empire_subject_slot = { N = 6 POS = 5 }
-			colonial_empire_subject_slot = { N = 7 POS = 6 }
-			colonial_empire_subject_slot = { N = 8 POS = 7 }
+			save_scope_as = ce_subject_empire
+			ordered_subject_or_below = {
+				limit = {
+					is_qualifying_colonial_subject = yes
+					exists = capital
+				}
+				order_by = gdp
+				max = 1000
+				check_range_bounds = no
+				capital = { save_scope_as = colonial_empire_subject_capital }
+				scope:ce_subject_empire = {
+					add_to_variable_list = { name = colonial_empire_subject_capitals target = scope:colonial_empire_subject_capital }
+				}
+			}
 		}
-	}
-}
 
-# One line of the "+N more" hover on the territory list
-# (colonial_empire_territories_sgui): the release bloc at position $POS$
-# (0-based) by its GDP, named from the country's own scope, gui_modding_guide
-# gotcha #27's shape (a): the pick is saved and the line printed at country
-# scope, and only while the count reaches the position (gotcha #25; and see
-# the note on `check_range_bounds` in colonial_empire_refresh_display).
-# Country scope.
-colonial_empire_more_territory_line = {
-	if = {
-		limit = {
-			has_variable = colonial_empire_bloc_count
-			var:colonial_empire_bloc_count > $POS$
-		}
-		ordered_scope_state = {
-			limit = { has_variable = colonial_bloc_seed }
-			order_by = colonial_bloc_disp_gdp
-			position = $POS$
-			check_range_bounds = no
-			save_temporary_scope_as = colonial_empire_more_state
-		}
-		if = {
-			limit = { scope:colonial_empire_more_state = { colonial_bloc_disp_extra > 0 } }
-			custom_tooltip = je_colonial_empire_territory_more_line_bloc
-		}
-		else = {
-			custom_tooltip = je_colonial_empire_territory_more_line
-		}
+		# --- The great powers pressing us, for International Pressure -----
+		# A row per great power with a stance, condemners first, each by its
+		# prestige (CE-2): colonial_empire_refresh_gp_rows.
+		colonial_empire_refresh_gp_rows = yes
 	}
 }
 
@@ -477,58 +445,113 @@ colonial_bloc_add_member = {
 	}
 }
 
-# Slot $N$ (1-8) of the territory list: the seed of the release bloc at
-# position $POS$ ($N$ - 1) by the bloc's GDP. Only while that many blocs exist,
-# because an ordered_ position past the end of the list clamps to the last
-# element instead of skipping (the note in
-# colonial_empire_effect_release_territory). colonial_empire_subject_slot's
-# shape: the pick saved inside the iterator, the slot set after it.
+# ---------------------------------------------------------------------------
+# INTERNATIONAL PRESSURE: the great powers' table (CE-2 of the 2026-10-27 GUI
+# audit; a script-built roster before)
+#
+# One script container per great power with a stance (gp_anti_colonial_stance
+# or gp_pro_colonial_stance, never the empire itself): its capital (the panel
+# reaches the country through it, gotcha #11), its stance (-1 condemning, 1
+# supporting), its prestige and its signed monthly weight on stability, the
+# one term of colonial_stability_term_gp_condemnation or _support that power
+# makes (its prestige over ours, clamped to 0.25-2, times
+# colonial_gp_condemnation_per_power or colonial_gp_support_per_power). The
+# weight is relative to our prestige, so it is the empire's to store, not the
+# power's. Condemners first, each group by prestige, largest first; the
+# panel's datamodel draws colonial_empire_gp_rows in that order.
+#
+# The rows are a month's snapshot, as the drift groups are: a capital that
+# changes hands between assessments shows its new owner until the next one
+# (any release or step refreshes it sooner).
+#
+# Last month's containers are destroyed first, from a temporary copy (never
+# mutate a persistent list while iterating it), and the entry's cleanup does
+# the same (colonial_empire_clear_gp_rows). Players only: no AI reads a panel.
 # Scope: country (the empire), inside colonial_empire_refresh_display.
-colonial_empire_territory_slot = {
+# ---------------------------------------------------------------------------
+colonial_empire_refresh_gp_rows = {
+	colonial_empire_clear_gp_rows = yes
 	if = {
-		limit = { var:colonial_empire_bloc_count >= $N$ }
-		ordered_scope_state = {
-			limit = { has_variable = colonial_bloc_seed }
-			order_by = colonial_bloc_disp_gdp
-			position = $POS$
+		limit = { is_player = yes }
+		save_scope_as = ce_gp_empire
+		ordered_country = {
+			limit = {
+				NOT = { this = scope:ce_gp_empire }
+				country_rank >= rank_value:great_power
+				has_variable = gp_anti_colonial_stance
+			}
+			order_by = prestige
+			max = 1000
 			check_range_bounds = no
-			save_scope_as = colonial_empire_territory_pick
+			colonial_empire_gp_row = { STANCE = -1 PER = colonial_gp_condemnation_per_power }
 		}
-		set_variable = {
-			name = colonial_empire_territory_$N$
-			value = scope:colonial_empire_territory_pick
+		ordered_country = {
+			limit = {
+				NOT = { this = scope:ce_gp_empire }
+				country_rank >= rank_value:great_power
+				has_variable = gp_pro_colonial_stance
+			}
+			order_by = prestige
+			max = 1000
+			check_range_bounds = no
+			colonial_empire_gp_row = { STANCE = 1 PER = colonial_gp_support_per_power }
 		}
 	}
 }
 
-# Slot $N$ (1-8) of the Colonial Holdings subject list: the capital of the
-# qualifying subject at GDP position $POS$ ($N$ - 1), among those with a
-# capital, so the slots fill 1, 2, ... without a gap. Only while that many
-# exist, because an ordered_ position past the end of the list clamps to the
-# last element instead of skipping (sr_rival_slot's shape).
-# Scope: country (the empire), inside colonial_empire_refresh_display.
-colonial_empire_subject_slot = {
+# Country scope: the empire. Its great-power rows and their containers go.
+# Hidden: the entry's on_complete and on_fail run it through the cleanup, and
+# the panel renders those as tooltips.
+colonial_empire_clear_gp_rows = {
+	hidden_effect = {
+		if = {
+			limit = { has_variable_list = colonial_empire_gp_rows }
+			every_in_list = {
+				variable = colonial_empire_gp_rows
+				add_to_temporary_list = ce_gp_old_rows
+			}
+			clear_variable_list = colonial_empire_gp_rows
+			every_in_list = {
+				list = ce_gp_old_rows
+				destroy_container = yes
+			}
+		}
+	}
+}
+
+# Country scope: a great power with a stance; scope:ce_gp_empire the empire.
+# Its row's container, as the header says. A power with no capital has no row.
+colonial_empire_gp_row = {
+	save_scope_as = ce_gp_power
 	if = {
-		limit = {
-			any_subject_or_below = {
-				is_qualifying_colonial_subject = yes
-				exists = capital
-				count >= $N$
-			}
+		limit = { exists = capital }
+		capital = { save_scope_as = ce_gp_capital }
+		clear_saved_scope = ce_gp_new
+		create_container = {
+			tags = { ce_gp_row }
+			parent = scope:ce_gp_empire
+			save_scope_as = ce_gp_new
 		}
-		ordered_subject_or_below = {
-			limit = {
-				is_qualifying_colonial_subject = yes
-				exists = capital
+		if = {
+			limit = { exists = scope:ce_gp_new }
+			scope:ce_gp_new = {
+				set_variable = { name = ce_gp_capital value = scope:ce_gp_capital }
+				set_variable = { name = ce_gp_stance value = $STANCE$ }
+				set_variable = { name = ce_gp_prestige value = scope:ce_gp_power.prestige }
+				set_variable = {
+					name = ce_gp_weight
+					value = {
+						value = scope:ce_gp_power.prestige
+						divide = { value = scope:ce_gp_empire.prestige min = 1 }
+						min = 0.25
+						max = 2
+						multiply = $PER$
+					}
+				}
 			}
-			order_by = gdp
-			position = $POS$
-			check_range_bounds = no
-			capital = { save_scope_as = colonial_empire_subject_capital }
-		}
-		set_variable = {
-			name = colonial_empire_subject_$N$
-			value = scope:colonial_empire_subject_capital
+			scope:ce_gp_empire = {
+				add_to_variable_list = { name = colonial_empire_gp_rows target = scope:ce_gp_new }
+			}
 		}
 	}
 }

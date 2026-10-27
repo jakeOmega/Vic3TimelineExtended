@@ -81,6 +81,11 @@ concept_colonial_stability = {}
 # Colonial Empire panel terms (gui/journal_entry_widgets/colonial_empire_widget.gui)
 concept_colonial_band = {}
 concept_colonial_overreach = {}
+# What a colonial territory, an overseas colony and a colonial subject are,
+# defined once (the 2026-10-27 GUI audit, CE-4: written out five times before).
+concept_colonial_territory = {}
+concept_overseas_colony = {}
+concept_colonial_subject = {}
 concept_united_nations_system = {}
 concept_un_general_assembly = {}
 concept_un_represented = {}
