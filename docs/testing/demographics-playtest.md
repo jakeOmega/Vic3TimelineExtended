@@ -1500,3 +1500,29 @@ The owner's new 1836 game under Full (from 17:29, to about 1877) printed these v
 - OK: `primate_state_flag`, `pop_workforce_read` (0.249), `workforce_ratio_scale`, `famine_reserves_absorbed`,
   `working_conditions_read`, `malaria_trait_read`, `fl_neighbours_read`, `neighbouring_state_reads`,
   `cause_deaths_estimate`, `cause_tags_read`.
+
+## The ring's 300 years and the pyramid past 85 (issue #1075, 2026-10-27)
+
+No self-check: every read the build makes is proven (`modulo` on the census year, as the open slot's; the GUI's
+`Multiply_CFixedPoint`, `SelectLocalization` in a text and `GreaterThanOrEqualTo_CFixedPoint` on a stored variable).
+`mod_systems.md` § The ring's 300 years has the design.
+
+1. **A save from before, re-filed** (any rule with the census on). Load the France → European Union autosave of
+   2057-11-01, made before this build, and play a year. Each state re-files its ring at its own next step
+   (`te_dg_ring` appears, 300): its people and the 85+ band are what they were (the step's own births, deaths and
+   migrants aside), and Franche-Comté's pool of 9.4 million at a mean age of 165 shows in its 150–199 row, its pool
+   (`te_dg_pf`, `te_dg_pm`) at 0. `scripts/analysis/save_country_probe.py --states` on a save a year on reads no pool
+   past 1% of any state's people.
+2. **The rows past 85** (any rule). In that game, Île-de-France's subtab and the European Union's tab draw rows past 85
+   in 85+'s place (85–99, 100–124 and up, the highest labelled "N+"), each bar per five years of age; the hover
+   gives the people in the row and says how the bar is drawn. The
+   Biological button's view splits by biological age, with fewer rows. No "Failed to fetch variable" line in
+   `error.log` with the pyramid open on a split state and an unsplit one.
+3. **An ordinary pyramid.** A new 1836 game, and a 2000 save: every pyramid ends at 85+ as before, with the outline
+   on it.
+4. **Cost.** The benchmark (`event te_debug_demog.1`, option d) in the 2057 save and in an 1836 game: a plain state's
+   step costs about 30% more statements than before in the test interpreter (16,200 to 20,900, nobody past 150);
+   a late state with people past 150 up to twice the occupied slots. The issue's estimate was a few percent of a
+   month's tick at worst.
+5. **Save size.** The 2057 save as plain text before and after a year: up to about 300 more ring variables and a few
+   dozen row variables in each state with people past 150.

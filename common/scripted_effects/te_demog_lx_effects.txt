@@ -12,7 +12,7 @@
 #   te_dg_s<j>, te_dg_d<j>  per five-year birth band j (ring slot / 5), adults only: the share of its people who have
 #                       been in longevity care, and their mean deficit (calendar less biological age). A band with no
 #                       adult has neither, so its next cohorts start afresh at 25
-#   te_dg_lx_ps, te_dg_lx_pd  the pool's (150 and over), likewise
+#   te_dg_lx_ps, te_dg_lx_pd  the pool's (300 and over), likewise
 #   te_dg_elig          eligibility E, the share within reach of longevity care, drifting toward its target (§4.2) at
 #                       the medical diffusion rate both ways
 #   te_dg_cover         cover c, the share of the ever-treated still in care: falls with E in proportion, returns first
@@ -604,7 +604,7 @@ te_demog_lx_deaths = {
 	set_local_variable = { name = te_dg_m2 value = { value = local_var:te_dg_lx_t2m add = local_var:te_dg_lx_u2m } }
 }
 
-# THIS = a state, in te_demog_fold_slot while te_dg_lx_t, before the pool changes (demographics_model.lx_fold): the age-150
+# THIS = a state, in te_demog_fold_slot while te_dg_lx_t, before the pool changes (demographics_model.lx_fold): the age-300
 # cohort of slot $S$ joins the pool, whose treated share and deficit take its band's (the open band's locals).
 te_demog_lx_fold_merge = {
 	set_local_variable = { name = te_dg_lx_pb value = { value = var:te_dg_pf add = var:te_dg_pm multiply = local_var:te_dg_s } }

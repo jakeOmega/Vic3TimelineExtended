@@ -375,7 +375,7 @@ them, and some break the figure down for your capital.
 |---|---|
 | Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
 | Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
-| Population pyramid | Men per 100 women, then people by five-year age band, with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
+| Population pyramid | Men per 100 women, then people by five-year age band (wider rows past 85 where many live past 100), with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short. |
 | Longevity | Once longevity care exists: Living to 100, the mean biological age beside the calendar one, the share of people within the care's reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
@@ -402,7 +402,15 @@ baby boom or a gap.
 The pyramid has a row for each five years of age, from 0 to 4 at the bottom to 85
 and over at the top, with men on the left and women on the right. A wide base
 means many children; a column that narrows slowly means few births and long
-lives. Hover a row for the numbers. The pale outline behind the bars carries
+lives. Hover a row for the numbers.
+
+Where people aged 100 and over make up at least 1% of a state or country, its top
+row splits into wider rows: 85 to 99, 100 to 124, 125 to 149, 150 to 199, 200 to
+249, 250 to 299, and 300 and over. A row shows while the people of its age and
+older are at least 1% of the people, and the highest row shown also holds
+everyone older. A row wider than five years is drawn per five years of age, so
+its bar compares with the rows below it; hover it for the people in it. These
+rows have no outline. The biological view splits the same way by biological age. The pale outline behind the bars carries
 your people twenty years forward at the census's own birth and death rates for
 this year, five years at a time. It leaves out migration and holds the rates where they are, so it
 shows where today's course leads, not a forecast. Only your own country gets it.

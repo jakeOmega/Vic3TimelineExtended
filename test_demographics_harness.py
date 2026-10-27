@@ -28,6 +28,8 @@ ANCHORS = ROOT / "test_fixtures" / "demographics" / "history_anchors.csv"
 CONSOLE = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
+# one in-game step's replay lines: the head, then each ten slots' before and after lines (the ring's years / 10 each)
+REPLAY_LINES = 1 + 2 * P.RING_YEARS // 10
 
 
 class TestPredict(unittest.TestCase):
@@ -431,7 +433,7 @@ class TestHarness(unittest.TestCase):
                 "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
                 "m_work_f": work_f, "m_work_m": work_m, "inf_ad": M.infection_adult(inp), "profile": prof}
         lines = H.format_replay("TEST", 1837, before, head, after)
-        self.assertEqual(len(lines), 31)
+        self.assertEqual(len(lines), REPLAY_LINES)
         self.assertIn("pop=2_10_0", lines[0])
         blocks = H.parse_replay(lines)
         self.assertEqual(len(blocks), 1)
@@ -464,7 +466,7 @@ class TestHarness(unittest.TestCase):
         before = M.seed(inp, 1836, 1_000_000)
         after = copy.deepcopy(before)
         M.step(after, inp, 1837, engine_pop=1_000_000)
-        after.f[(1837 - 30) % 150] *= 1.5   # the script got one cohort wrong
+        after.f[(1837 - 30) % P.RING_YEARS] *= 1.5   # the script got one cohort wrong
         qf, qm, mmr = M.group_rates(inp)
         mult = M.cause_multipliers(inp)
         work_f, work_m = M.work_split(inp, mult["work"])
@@ -504,7 +506,7 @@ class TestHarness(unittest.TestCase):
 
     def _step_lines(self, pop=2_000_000, pop_after=2_010_000, war=500, mig=-3000, logged_mmr=True,
                     drop_after=False):
-        """The 31 lines of one in-game step: the model stepped from its own seed.
+        """The REPLAY_LINES lines of one in-game step: the model stepped from its own seed.
 
         drop_after writes the after cohorts under half a person as 0, as the game drops them.
         """
@@ -521,7 +523,7 @@ class TestHarness(unittest.TestCase):
         return [re.sub(r"\b(f|m)=(\S+)", zero, x) if " after " in x else x for x in lines]
 
     def _good_lines(self):
-        """The 31 lines of one correct in-game step at 2 million people."""
+        """The REPLAY_LINES lines of one correct in-game step at 2 million people."""
         return self._step_lines()
 
     def _replay_cli(self, lines, *flags):
@@ -542,14 +544,14 @@ class TestHarness(unittest.TestCase):
 
     def test_replay_cli_rejects_a_block_missing_its_last_after_lines(self):
         lines = self._good_lines()
-        self.assertEqual(len(lines), 31)
+        self.assertEqual(len(lines), REPLAY_LINES)
         code, out = self._replay_cli(lines[:-5])
         self.assertEqual(code, 1, out)
         self.assertIn("MISMATCH (incomplete:", out)
         self.assertIn("after", out)
 
     def test_replay_cli_rejects_a_block_with_no_after_lines(self):
-        code, out = self._replay_cli(self._good_lines()[:16])
+        code, out = self._replay_cli(self._good_lines()[:1 + P.RING_YEARS // 10])
         self.assertEqual(code, 1, out)
         self.assertIn("MISMATCH (incomplete:", out)
         self.assertIn("after pool missing", out)
@@ -792,7 +794,7 @@ class TestConsoleReplayLines(unittest.TestCase):
         for mig, kills in ((-3000, 0), (4000, 250)):
             with self.subTest(mig=mig):
                 lines = self._console_lines(mig, kills)
-                self.assertEqual(len(lines), 31)
+                self.assertEqual(len(lines), REPLAY_LINES)
                 self.assertFalse([x for x in lines if "[" in x[len(LOG_PREFIX):]], "an unresolved template")
                 blocks = H.parse_replay(lines)
                 self.assertEqual(len(blocks), 1)
@@ -1549,7 +1551,8 @@ class TestRebook(unittest.TestCase):
             v = {"te_dg_year": float(year), "te_dg_stepped": 0.0 if i == 0 else 1.0, "te_dg_people": people,
                  "te_dg_net_migration": 0.0 if i == 0 else rate * people, "te_dg_sol": 8.0, "te_dg_lit": 0.1,
                  "te_dg_urban_share": 0.05, "te_dg_fjob_share": 0.02, "te_dg_inflow_years": 0.0,
-                 "te_dg_scale": ring.scale, "te_dg_pf": 0.0, "te_dg_pm": 0.0, "te_dg_pa": 150.0}
+                 "te_dg_scale": ring.scale, "te_dg_pf": 0.0, "te_dg_pm": 0.0, "te_dg_pa": float(P.RING_YEARS),
+                 "te_dg_ring": float(P.RING_YEARS)}
             v.update({f"te_dg_b{s}{b}": 1000.0 for s in "fm" for b in range(P.BANDS)})
             state = {"country": "3", "region": "STATE_TEST", "devastation": 0.0, "vars": v}
             if i == 0:

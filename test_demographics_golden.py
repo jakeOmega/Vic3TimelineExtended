@@ -58,7 +58,17 @@ step's split move in the Display-only case too, which now holds step 2's figures
 when it was last recorded), and every Late Marriage target. The
 model's cases move with them: the model's step reads the ring's last count (Ring.fws_work), and RICH's Protected Class
 no longer stands for 48% of the workers (its inputs hold no women's-work line, so its women are about 5%). The five
-census and model cases were re-recorded on this tree (TE_RECORD_GOLDEN_CASES); the lines' two cases are as they were."""
+census and model cases were re-recorded on this tree (TE_RECORD_GOLDEN_CASES); the lines' two cases are as they were.
+
+The ring's 300 years (issue #1075) re-files every slot and changes no number. The cases were recorded on the 150-year
+ring: each recorded slot compares re-filed as te_demog_ring_migrate re-files a save's (the cohort of age a from slot
+(Y - a) mod 150 to (Y - a) mod 300, Y the cases' last count, 1837; RING300_YEAR), and nobody in them is 150 or more, so
+the sweep's new ages hold nobody and every recorded value stays. New names (RING300_VARS): te_dg_ring, and the people
+past the pyramid's row starts past 85 (te_dg_of<i>, te_dg_om<i>), which the farm cases hold for their few aged 100 (the
+rows themselves don't show: under 1% of the people). The sweeps, the slots' normalisation and the bands' blocks that
+carry the rows are held to their new digests (RING300_DIGESTS). The model's rich case, whose ring keeps a few survivors
+past 150 (under a billionth of a person each, to age 169), ages them in their own slots instead of the pool, and its
+births and deaths moved by -1.9e-11 of themselves; it alone was re-recorded on this tree (TE_RECORD_GOLDEN_CASES)."""
 
 import functools
 import hashlib
@@ -251,6 +261,39 @@ SAFEGUARDS_DIGESTS = {
     ("generated_values", "te_demog_treatment_target_chronic"):
         "41fdf5c92606c931702efb29e240f2e378966a156fd3c442ec4236c04ceaa310",
 }
+# The ring's 300 years (issue #1075; the docstring): the cases' last count, for re-filing their recorded slots; the new
+# names; the blocks the ring's length or the rows past 85 rewrote
+RING300_YEAR = 1837
+RING300_VARS = {"te_dg_ring", "te_dg_pyr_top"} | {f"te_dg_{k}{s}{i}" for k in ("o", "px") for s in "fm"
+                                                  for i in range(len(P.OLD_ROWS))}
+RING300_DIGESTS = {
+    # the sweeps, the slots' normalisation and the replay's ring lines run over 300 slots
+    ("generated_effects", "te_demog_sweep"): "eddf05eee7a6fb9fe0d3ad9641ff9ff9b3d6dc4ce645b02fadbeb474ba212fe7",
+    ("generated_effects", "te_demog_seed_sweep"): "fe22c425de633aa1fea5b1edac1a8228710891ffb3ae70b3b9238b8d3000a362",
+    ("generated_effects", "te_demog_normalize_slots"): "5ae92f56e09c1773a111a680542325477ddf561c53a877eda672b67c9baf66b6",
+    ("generated_effects", "te_demog_debug_log_ring_before"):
+        "00500221bcd238c5258bc618f87ba316447fa7769b349acf1409c58e84c914de",
+    ("generated_effects", "te_demog_debug_log_ring_after"):
+        "9b934aa10780d25c8cdc01c4790528f1e4b7febaa8b886bcb461375458a4d21c",
+    # the bands' blocks carry the rows past 85 beside the bands
+    ("generated_effects", "te_demog_normalize_bands"): "139ce6ae78d9c410308d2f4cbf4c0095fc1faf4dcc6e4a301740a4066829d0ef",
+    ("generated_effects", "te_demog_scale_bands"): "b669c91510a30f84d938918c39ea755aa8a99cfeb2c53c33fcaa9996be1a55be",
+    ("generated_effects", "te_demog_add_bands_to_root"):
+        "6c0d4825584eb5089d3464641964ba087af5477e1af8d65ddd600a68763c9d83",
+    ("generated_effects", "te_demog_reset_country_bands"):
+        "f4a032062b67769cb25ad877d56f9593c00a4b65c58d7f8874bb1fc890638b15",
+}
+
+
+def _ring300(name):
+    """A slot's name on the 150-year ring as the 300-year ring files the same cohort (te_demog_ring_migrate)."""
+    m = re.fullmatch(r"te_dg_([fm])(\d+)", name)
+    if not m or int(m.group(2)) >= M.OLD_RING_YEARS:
+        return name
+    age = (RING300_YEAR - int(m.group(2))) % M.OLD_RING_YEARS
+    return f"te_dg_{m.group(1)}{(RING300_YEAR - age) % P.RING_YEARS}"
+
+
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -389,6 +432,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                     if name in CAUSES_ON_TOP_GONE:
                         self.assertNotIn(name, self.now["cases"][case][kind], f"{case}: {name} is back")
                         continue
+                    name = _ring300(name)
                     self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
                     now = self.now["cases"][case][kind][name]
                     if isinstance(value, float) and isinstance(now, float):
@@ -402,8 +446,9 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS
-                             - SAFETY_VARS - CAUSE_DEATH_VARS,
+            recorded = {_ring300(name) for name in rec["vars"]}
+            self.assertEqual(set(now["vars"]) - recorded - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS
+                             - SAFETY_VARS - CAUSE_DEATH_VARS - RING300_VARS,
                              set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
@@ -441,6 +486,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = SAFEGUARDS_DIGESTS.get((key, name), want)
                 want = CAUSES_ON_TOP_DIGESTS.get((key, name), want)
                 want = WOMEN_WORKERS_DIGESTS.get((key, name), want)
+                want = RING300_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

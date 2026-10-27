@@ -428,7 +428,8 @@ class TestRing(unittest.TestCase):
         self.assertLess(abs(after["men_per_100_women"] - before["men_per_100_women"]), 0.5)
 
     def test_a_birth_cohort_does_not_spread(self):
-        """Extra men born in 1800 stay in one slot for 120 years, then fold into the pool."""
+        """Extra men born in 1800 stay in one slot for 120 years, and fold into the pool at the ring's last age (300 since
+        issue #1075), when the slot takes that year's births."""
         # one women's share of the workers for both: the extra men would move each ring's own count, and through it
         # every cohort's work deaths (women_worker_share), which is the census's, not the ring's
         inp = dataclasses.replace(AGRARIAN_1836, work_female_share=M.women_worker_share(AGRARIAN_1836))
@@ -443,7 +444,7 @@ class TestRing(unittest.TestCase):
         self.assertEqual(ring.age_of_slot(marked), 120)
         self.assertGreater(diffs[marked], 0.0)
         self.assertLess(sum(abs(d) for i, d in enumerate(diffs) if i != marked), 1e-6)
-        for year in range(1921, 1951):
+        for year in range(1921, 1800 + P.RING_YEARS + 1):
             M.step(ring, inp, year)
             M.step(twin, inp, year)
         self.assertEqual(ring.age_of_slot(marked), 0)

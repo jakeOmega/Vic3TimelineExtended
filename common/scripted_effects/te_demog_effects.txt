@@ -43,11 +43,13 @@
 #                       districts, company headquarters), Wealth Concentration's input
 #
 # The census (Task 8: te_demog_seed, te_demog_step), when te_demog_cohorts_run:
-#   te_dg_f<k>, te_dg_m<k>  women and men in ring slot k (0-149, the birth year
-#                       mod 150), before te_dg_scale; a slot nobody holds has no
+#   te_dg_f<k>, te_dg_m<k>  women and men in ring slot k (0-299, the birth year
+#                       mod 300), before te_dg_scale; a slot nobody holds has no
 #                       variable and the step skips it
-#   te_dg_pf, te_dg_pm  the pool (ages 150 and over), before te_dg_scale
+#   te_dg_pf, te_dg_pm  the pool (ages 300 and over), before te_dg_scale
 #   te_dg_pa            the pool's mean age
+#   te_dg_ring          the ring's years, 300 (issue #1075): a census without it was taken on the 150-year
+#                       ring and is re-filed at its next step (te_demog_ring_migrate)
 #   te_dg_scale         the ring to the engine's population, applied to the
 #                       cohorts at the next step (lazily)
 #   te_dg_raw           the ring's total before te_dg_scale
@@ -56,8 +58,13 @@
 #   te_dg_provinces     the state's provinces at its last census pulse (te_demog_state_census): a change
 #                       logs TE_INFO demog_province_change and moves no number
 #   te_dg_bf<b>, te_dg_bm<b>  people in band b (0-4 ... 80-84, 85+)
-#   te_dg_cf<c>, te_dg_cm<c>  people in migrant class c by age 0-148 (0-14,
-#                       15-17, 18-35, 36-59, 60-148): next step's flow shares
+#   te_dg_of<i>, te_dg_om<i>  issue #1075: people aged 100, 125, 150, 200, 250 and 300 (the pool) and over, i = 1-6
+#                       (demographics_params.OLD_ROWS), only where anyone is: the pyramid's rows past 85
+#   te_dg_pyr_top, te_dg_pxf<i>, te_dg_pxm<i>  where those rows show (the people past row 1's start, 100, are 1% or
+#                       more of the people): the top row shown, and each row's people, i = 0 (85-99) to 6, the top row
+#                       everyone from its start and the rows above it 0 (te_demog_old_rows_show); a country's the same
+#   te_dg_cf<c>, te_dg_cm<c>  people in migrant class c by age 0-298 (0-14,
+#                       15-17, 18-35, 36-59, 60-298): next step's flow shares
 #   te_dg_fam, te_dg_faw  the conscription pool (phase 2 step 4; the consequences design §4.1-4.2): men of calendar
 #                       age 20 or more and biological age 39 or less (te_demog_k_pool_from, _to), and the women of
 #                       the same ages, after the step: the conscription term's input and next step's war shares.
@@ -96,7 +103,8 @@
 #   te_dg_dc_<c>_top    each cause's deaths on top of the census (inf, chr, ext, work, war; owner, 2026-10-22)
 #   te_dg_count_mi      the month of the state's last count (te_history_month_index), for its next count
 #   te_dg_pyr_max       the pyramid's scale, the largest band (a country's also of
-#                       its outline), stored at the census for the panel's bars
+#                       its outline), stored at the census for the panel's bars; past 85 the rows
+#                       it shows, each per five years of age (demographics_params.OLD_ROW_DRAW)
 #   te_dg_cbr_model, te_dg_cdr_model, te_dg_tfr_model, te_dg_bz, te_dg_dz, te_dg_eb_target,
 #   te_dg_ed_target     phase 2 step 4, te_demog_rate_effects.txt: the model's own rates, the
 #                       step's on-top scales and the target they were measured against
@@ -177,6 +185,8 @@
 # (under fast mode's clock, a day after each of its steps instead):
 #   te_dg_census_year   the year of the country's last census (absent = census pending)
 #   te_dg_cbf<b>, te_dg_cbm<b>  people in band b, the sum of its states' te_dg_bf<b>, te_dg_bm<b>
+#   te_dg_cof<i>, te_dg_com<i>  people past the pyramid's row starts, its states' te_dg_of<i>, te_dg_om<i> summed, and
+#                       the rows it shows, te_dg_pyr_top, te_dg_pxf<i>, te_dg_pxm<i>, as a state's (issue #1075)
 #   te_dg_median, te_dg_young_share, te_dg_working_share, te_dg_old_share, te_dg_dependency,
 #   te_dg_sex_balance, te_dg_w1549  from those bands, as a state's (te_demog_store_figures)
 #   te_dg_tfr           the states' weighted by their women aged 15-49
@@ -736,7 +746,9 @@ te_demog_seed = {
 	set_variable = { name = te_dg_mig_raw value = 0 }
 	set_variable = { name = te_dg_pf value = 0 }
 	set_variable = { name = te_dg_pm value = 0 }
-	set_variable = { name = te_dg_pa value = 150 }
+	set_variable = { name = te_dg_pa value = 300 }
+	# the ring's years (issue #1075): a seed writes every slot of the 300-year ring
+	set_variable = { name = te_dg_ring value = 300 }
 	te_demog_seed_sweep = yes
 	te_demog_close_accumulators = yes
 	# phase 2 step 1's figures, from the raw ring, whole here (D4): a seed has no newborns apart from age 0
@@ -807,7 +819,7 @@ te_demog_seed_p1 = {
 	}
 }
 
-# Pass 2: slots 149 .. open + 1, ages open + 1 .. 149.
+# Pass 2: slots 299 .. open + 1, ages open + 1 .. 299.
 te_demog_seed_p2 = {
 	if = {
 		limit = { local_var:te_dg_open < $S$ }
@@ -815,7 +827,7 @@ te_demog_seed_p2 = {
 	}
 }
 
-# demographics_model.seed's loop body. Age local_var:te_dg_age (0-149) in slot $S$:
+# demographics_model.seed's loop body. Age local_var:te_dg_age (0-299) in slot $S$:
 # survivors x growth factor^age. An age fewer than 1 in 100,000 newborns reach
 # stays empty (and a re-seed clears it), so the step skips the slot (spec §1).
 # The group is the age's own (the seed writes the people of age a, then survives
@@ -920,6 +932,8 @@ te_demog_reset_accumulators = {
 	set_local_variable = { name = te_dg_lx_t value = 0 }
 	# phase 3: the births' ages, for the mean age at childbirth
 	set_local_variable = { name = te_dg_bage value = 0 }
+	# the pyramid's rows past 85 (issue #1075; generated)
+	te_demog_old_rows_reset = yes
 }
 
 # Before the people of local_var:te_dg_age are added: close the band or the
@@ -929,14 +943,23 @@ te_demog_reset_accumulators = {
 te_demog_age_boundaries = {
 	if = {
 		limit = { local_var:te_dg_age = local_var:te_dg_next_band }
-		te_demog_flush_band = yes
-		change_local_variable = { name = te_dg_band add = 1 }
-		set_local_variable = { name = te_dg_acc_bf value = 0 }
-		set_local_variable = { name = te_dg_acc_bm value = 0 }
-		change_local_variable = { name = te_dg_next_band add = 5 }
 		if = {
-			limit = { local_var:te_dg_band >= 17 }
-			set_local_variable = { name = te_dg_next_band value = 999 }
+			limit = { local_var:te_dg_band < 17 }
+			te_demog_flush_band = yes
+			change_local_variable = { name = te_dg_band add = 1 }
+			set_local_variable = { name = te_dg_acc_bf value = 0 }
+			set_local_variable = { name = te_dg_acc_bm value = 0 }
+			change_local_variable = { name = te_dg_next_band add = 5 }
+			# the last band, 85 and over, runs to the ring's end, past the pyramid's row starts (issue #1075)
+			if = {
+				limit = { local_var:te_dg_band >= 17 }
+				set_local_variable = { name = te_dg_next_band value = 100 }
+				set_local_variable = { name = te_dg_orow value = 1 }
+			}
+		}
+		# a row's start inside 85 and over: the band's people so far (generated; te_demog_old_rows_close)
+		else = {
+			te_demog_old_row_mark = yes
 		}
 	}
 	if = {
@@ -977,7 +1000,7 @@ te_demog_age_boundaries = {
 }
 
 # Slot $S$'s stored people into the running sums: the raw total and the bands at
-# every age; the class and pool sums only to age 148, since the age-149 cohort
+# every age; the class and pool sums only to age 298, since the age-299 cohort
 # folds next year instead of flowing (demographics_model._refresh_denominators).
 # The pool (phase 2 step 4, demographics_model.in_pool) reads step 1's two indexes: the calendar age te_dg_age from
 # te_demog_k_pool_from (legal adulthood) and the biological one te_dg_ab to te_demog_k_pool_to (fitness).
@@ -986,7 +1009,7 @@ te_demog_accumulate_slot = {
 	change_local_variable = { name = te_dg_acc_bf add = var:te_dg_f$S$ }
 	change_local_variable = { name = te_dg_acc_bm add = var:te_dg_m$S$ }
 	if = {
-		limit = { local_var:te_dg_age <= 148 }
+		limit = { local_var:te_dg_age <= 298 }
 		change_local_variable = { name = te_dg_acc_cf add = var:te_dg_f$S$ }
 		change_local_variable = { name = te_dg_acc_cm add = var:te_dg_m$S$ }
 		# phase 3: in the late sweep by part, each at its own biological age (te_demog_lx_pool_sums)
@@ -1020,6 +1043,8 @@ te_demog_close_accumulators = {
 	change_local_variable = { name = te_dg_acc_bf add = var:te_dg_pf }
 	change_local_variable = { name = te_dg_acc_bm add = var:te_dg_pm }
 	change_local_variable = { name = te_dg_raw add = { value = var:te_dg_pf add = var:te_dg_pm } }
+	# the people past each of the pyramid's row starts past 85, from the last band's sums (issue #1075; generated)
+	te_demog_old_rows_close = yes
 	te_demog_flush_band = yes
 	te_demog_flush_class = yes
 	set_variable = { name = te_dg_faw value = local_var:te_dg_acc_faw }
@@ -1226,7 +1251,7 @@ te_demog_work_slot_step2 = {
 }
 
 # After the sweep and the step's newborns (local_var:te_dg_wk_born: a step's births, 0 in a seed), with local_var:te_dg_raw
-# whole (D4): the pool (age 150, at the last biological band) and the newborns (health need only) join the sums, then
+# whole (D4): the pool (age 300, at the last biological band) and the newborns (health need only) join the sums, then
 # the figures. The pool is past the end of the working ages where a pension law ends them; with none they have no end
 # (D10), so it counts in the working ages, as demographics_model.work_figures has it.
 te_demog_work_finish = {
@@ -1255,7 +1280,7 @@ te_demog_work_finish = {
 	}
 }
 
-# The pool's part (locals te_dg_wk_f, te_dg_wk_m) at age 150 (te_demog_work_finish; phase 3 splits it in two in the late
+# The pool's part (locals te_dg_wk_f, te_dg_wk_m) at age 300 (te_demog_work_finish; phase 3 splits it in two in the late
 # sweep): past the end of the working ages where a pension law ends them, in them otherwise; its workers, and those past
 # the end (phase 2 step 2).
 te_demog_work_pool_part = {
@@ -1263,7 +1288,7 @@ te_demog_work_pool_part = {
 	change_local_variable = { name = te_dg_acc_need add = { value = local_var:te_dg_wk_p multiply = local_var:te_dg_needw } }
 	set_local_variable = { name = te_dg_wk_sh value = 1 }
 	if = {
-		limit = { local_var:te_dg_wa_end <= 150 }
+		limit = { local_var:te_dg_wa_end <= 300 }
 		if = {
 			limit = { local_var:te_dg_pens_on > 0 }
 			set_local_variable = { name = te_dg_wk_sh value = te_demog_k_after_pension_share }
@@ -1287,7 +1312,7 @@ te_demog_work_pool_part = {
 		}
 	}
 	if = {
-		limit = { local_var:te_dg_wa_end <= 150 }
+		limit = { local_var:te_dg_wa_end <= 300 }
 		change_local_variable = {
 			name = te_dg_acc_past
 			add = {
@@ -1786,6 +1811,8 @@ te_demog_step = {
 # did over the window, each cause by its own deaths on top (te_demog_on_top_scales, phase 2 step 4; owner,
 # 2026-10-22).
 te_demog_step_begin = {
+	# a census taken on the 150-year ring is re-filed on the 300-year ring first (issue #1075; below)
+	te_demog_ring_check = yes
 	# medicine moves its share of the gap, then the practices theirs, then the year's rates use them
 	te_demog_medicine_drift = yes
 	# phase 3: the neighbouring states' shares, which each practice's step closes part of the gap to (generated)
@@ -1809,6 +1836,233 @@ te_demog_step_begin = {
 		te_demog_cause_deaths_estimate = yes
 	}
 	te_demog_on_top_scales = yes
+}
+
+# ---- The ring's 300 years (issue #1075) ----------------------------------------------------------------------------
+# Until issue #1075 the ring held ages 0-149 (slot = birth year mod 150) and the pool 150 and over. A state whose census was
+# taken then has no te_dg_ring; its next step re-files it first (te_demog_step_begin), and the console's replay and
+# benchmark before they turn its census year back. A seed writes the new ring whole and the marker with it.
+te_demog_ring_check = {
+	if = {
+		limit = {
+			has_variable = te_dg_year
+			NOT = { has_variable = te_dg_ring }
+		}
+		te_demog_ring_migrate = yes
+	}
+}
+
+# THIS = a state whose census is on the 150-year ring (demographics_model.ring_migrate). Y = the last count's year, whose
+# newborns are in slot Y mod 150 (local te_dg_r3_o). A cohort of age a moves from slot (Y - a) mod 150 to (Y - a) mod 300:
+# where Y mod 300 is under 150 the slots above te_dg_r3_o move up 150 and the rest stay, and where it is 150 or more the
+# slots at or below it move (te_dg_r3_hi 1). The late game's five-year birth bands move with their slots, the band holding
+# the open slot with its oldest cohorts (its others are children: generated, te_demog_ring_migrate_slots and _bands). The
+# pool goes to its mean age rounded, at least 150, with its treated share and deficit merged into that age's band by
+# people (owner, 2026-10-20: something simple), when that age is under 300; the pool then holds the ages from 300, which
+# nobody reaches in play. The age-149 cohort and the pool's people, which folded before and flow now, join the last
+# migrant class's sums. The conscription pool's sums (te_dg_fam, te_dg_faw) wait for the step's count.
+te_demog_ring_migrate = {
+	set_local_variable = { name = te_dg_r3_o value = { value = var:te_dg_year modulo = 150 } }
+	set_local_variable = { name = te_dg_r3_y value = { value = var:te_dg_year modulo = 300 } }
+	set_local_variable = { name = te_dg_r3_hi value = 0 }
+	if = {
+		limit = { local_var:te_dg_r3_y >= 150 }
+		set_local_variable = { name = te_dg_r3_hi value = 1 }
+	}
+	# the age-149 cohort's slot, and the people it and the pool add to the last class (scaled, as the class sums are)
+	set_local_variable = { name = te_dg_r3_k149 value = { value = local_var:te_dg_r3_o add = 1 modulo = 150 } }
+	set_local_variable = { name = te_dg_r3_cf value = 0 }
+	set_local_variable = { name = te_dg_r3_cm value = 0 }
+	te_demog_ring_migrate_slots = yes
+	te_demog_ring_migrate_bands = yes
+	set_local_variable = { name = te_dg_r3_pool value = { value = var:te_dg_pf add = var:te_dg_pm } }
+	set_local_variable = { name = te_dg_r3_age value = 300 }
+	if = {
+		limit = { local_var:te_dg_r3_pool > 0 }
+		set_local_variable = { name = te_dg_r3_age value = { value = var:te_dg_pa add = 0.5 floor = yes min = 150 } }
+	}
+	if = {
+		limit = {
+			local_var:te_dg_r3_pool > 0
+			local_var:te_dg_r3_age < 300
+		}
+		# the pool's slot and band
+		set_local_variable = { name = te_dg_r3_kp value = { value = var:te_dg_year subtract = local_var:te_dg_r3_age modulo = 300 } }
+		set_local_variable = { name = te_dg_r3_jp value = { value = local_var:te_dg_r3_kp divide = 5 floor = yes } }
+		set_local_variable = { name = te_dg_r3_ps value = 0 }
+		set_local_variable = { name = te_dg_r3_pd value = 0 }
+		if = {
+			limit = { has_variable = te_dg_lx_ps }
+			set_local_variable = { name = te_dg_r3_ps value = var:te_dg_lx_ps }
+		}
+		if = {
+			limit = { has_variable = te_dg_lx_pd }
+			set_local_variable = { name = te_dg_r3_pd value = var:te_dg_lx_pd }
+		}
+		te_demog_ring_migrate_pool_bands = yes
+		# an age of 298 or less flows at the next step; 299 folds
+		if = {
+			limit = { local_var:te_dg_r3_age <= 298 }
+			change_local_variable = { name = te_dg_r3_cf add = { value = var:te_dg_pf multiply = var:te_dg_scale } }
+			change_local_variable = { name = te_dg_r3_cm add = { value = var:te_dg_pm multiply = var:te_dg_scale } }
+		}
+		set_variable = { name = te_dg_pf value = 0 }
+		set_variable = { name = te_dg_pm value = 0 }
+	}
+	# the last migrant class (generated)
+	te_demog_ring_migrate_class = yes
+	# a pool left (a mean age of 300 or more) keeps its age and its treated share and deficit
+	if = {
+		limit = { var:te_dg_pf <= 0 var:te_dg_pm <= 0 }
+		set_variable = { name = te_dg_pa value = 300 }
+		if = {
+			limit = { has_variable = te_dg_lx_ps }
+			remove_variable = te_dg_lx_ps
+		}
+		if = {
+			limit = { has_variable = te_dg_lx_pd }
+			remove_variable = te_dg_lx_pd
+		}
+	}
+	set_variable = { name = te_dg_ring value = 300 }
+}
+
+# Old slot $S$ (generated, te_demog_ring_migrate_slots): to slot $T$ = $S$ + 150 where its cohort's birth year mod 300 is
+# 150 or more; the age-149 cohort's people into the last class's sums wherever it goes.
+te_demog_ring_migrate_slot = {
+	if = {
+		limit = {
+			has_variable = te_dg_f$S$
+			local_var:te_dg_r3_k149 = $S$
+		}
+		change_local_variable = { name = te_dg_r3_cf add = { value = var:te_dg_f$S$ multiply = var:te_dg_scale } }
+		change_local_variable = { name = te_dg_r3_cm add = { value = var:te_dg_m$S$ multiply = var:te_dg_scale } }
+	}
+	if = {
+		limit = {
+			has_variable = te_dg_f$S$
+			OR = {
+				AND = {
+					local_var:te_dg_r3_hi = 0
+					local_var:te_dg_r3_o < $S$
+				}
+				AND = {
+					local_var:te_dg_r3_hi = 1
+					NOT = { local_var:te_dg_r3_o < $S$ }
+				}
+			}
+		}
+		set_variable = { name = te_dg_f$T$ value = var:te_dg_f$S$ }
+		set_variable = { name = te_dg_m$T$ value = var:te_dg_m$S$ }
+		remove_variable = te_dg_f$S$
+		remove_variable = te_dg_m$S$
+	}
+}
+
+# Old birth band $J$ (generated, te_demog_ring_migrate_bands): its treated share and deficit to band $T$ = $J$ + 30 where its
+# top slot $TOP$ moves (so the open slot's band goes with its oldest cohorts).
+te_demog_ring_migrate_band = {
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					local_var:te_dg_r3_hi = 0
+					local_var:te_dg_r3_o < $TOP$
+				}
+				AND = {
+					local_var:te_dg_r3_hi = 1
+					NOT = { local_var:te_dg_r3_o < $TOP$ }
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = te_dg_s$J$ }
+			set_variable = { name = te_dg_s$T$ value = var:te_dg_s$J$ }
+			remove_variable = te_dg_s$J$
+		}
+		if = {
+			limit = { has_variable = te_dg_d$J$ }
+			set_variable = { name = te_dg_d$T$ value = var:te_dg_d$J$ }
+			remove_variable = te_dg_d$J$
+		}
+	}
+}
+
+# New birth band $J$, slots $S0$-$S4$ (generated, te_demog_ring_migrate_pool_bands): where the pool goes (te_dg_r3_jp), the
+# band's treated share and deficit take the pool's by people, and the pool's people go to its slot (te_dg_r3_kp, which
+# held nobody: the ring's ages from 150 were empty).
+te_demog_ring_migrate_pool_band = {
+	if = {
+		limit = { local_var:te_dg_r3_jp = $J$ }
+		set_local_variable = { name = te_dg_r3_bn value = 0 }
+		te_demog_ring_migrate_people = { S = $S0$ }
+		te_demog_ring_migrate_people = { S = $S1$ }
+		te_demog_ring_migrate_people = { S = $S2$ }
+		te_demog_ring_migrate_people = { S = $S3$ }
+		te_demog_ring_migrate_people = { S = $S4$ }
+		set_local_variable = { name = te_dg_r3_sj value = 0 }
+		set_local_variable = { name = te_dg_r3_dj value = 0 }
+		if = {
+			limit = { has_variable = te_dg_s$J$ }
+			set_local_variable = { name = te_dg_r3_sj value = var:te_dg_s$J$ }
+		}
+		if = {
+			limit = { has_variable = te_dg_d$J$ }
+			set_local_variable = { name = te_dg_r3_dj value = var:te_dg_d$J$ }
+		}
+		set_local_variable = {
+			name = te_dg_r3_tr
+			value = {
+				value = local_var:te_dg_r3_sj
+				multiply = local_var:te_dg_r3_bn
+				add = { value = local_var:te_dg_r3_ps multiply = local_var:te_dg_r3_pool }
+			}
+		}
+		if = {
+			limit = { local_var:te_dg_r3_tr > 0 }
+			set_variable = {
+				name = te_dg_d$J$
+				value = {
+					value = local_var:te_dg_r3_dj
+					multiply = local_var:te_dg_r3_sj
+					multiply = local_var:te_dg_r3_bn
+					add = { value = local_var:te_dg_r3_pd multiply = local_var:te_dg_r3_ps multiply = local_var:te_dg_r3_pool }
+					divide = { value = local_var:te_dg_r3_tr min = 0.00001 }
+				}
+			}
+			set_variable = {
+				name = te_dg_s$J$
+				value = { value = local_var:te_dg_r3_tr divide = { value = local_var:te_dg_r3_bn add = local_var:te_dg_r3_pool min = 0.00001 } }
+			}
+		}
+		te_demog_ring_migrate_pool_slot = { S = $S0$ }
+		te_demog_ring_migrate_pool_slot = { S = $S1$ }
+		te_demog_ring_migrate_pool_slot = { S = $S2$ }
+		te_demog_ring_migrate_pool_slot = { S = $S3$ }
+		te_demog_ring_migrate_pool_slot = { S = $S4$ }
+	}
+}
+
+te_demog_ring_migrate_people = {
+	if = {
+		limit = { has_variable = te_dg_f$S$ }
+		change_local_variable = { name = te_dg_r3_bn add = { value = var:te_dg_f$S$ add = var:te_dg_m$S$ } }
+	}
+}
+
+te_demog_ring_migrate_pool_slot = {
+	if = {
+		limit = { local_var:te_dg_r3_kp = $S$ }
+		if = {
+			limit = { has_variable = te_dg_f$S$ }
+			change_variable = { name = te_dg_f$S$ add = var:te_dg_pf }
+			change_variable = { name = te_dg_m$S$ add = var:te_dg_pm }
+		}
+		else = {
+			set_variable = { name = te_dg_f$S$ value = var:te_dg_pf }
+			set_variable = { name = te_dg_m$S$ value = var:te_dg_pm }
+		}
+	}
 }
 
 # The step's second half: the sweep over the ring with the locals te_demog_step_begin set,
@@ -1858,7 +2112,7 @@ te_demog_slot_p1 = {
 	}
 }
 
-# Pass 2: slots 149 .. open, ages open + 1 .. 150 (the open slot last).
+# Pass 2: slots 299 .. open, ages open + 1 .. 300 (the open slot last).
 te_demog_slot_p2 = {
 	if = {
 		limit = { NOT = { local_var:te_dg_open > $S$ } }
@@ -1866,7 +2120,7 @@ te_demog_slot_p2 = {
 	}
 }
 
-# demographics_model.step's loop over a = 1 .. 150. The people now aged
+# demographics_model.step's loop over a = 1 .. 300. The people now aged
 # local_var:te_dg_age lived through rate age te_dg_r (a - 1) this year: its group's
 # rates and its migrant class. Boundaries and rate trackers advance at every
 # slot; only an occupied slot is aged.
@@ -1907,7 +2161,7 @@ te_demog_slot = {
 		te_demog_rs_youth_hook = yes
 	}
 	if = {
-		limit = { local_var:te_dg_age = 150 }
+		limit = { local_var:te_dg_age = 300 }
 		te_demog_fold_slot = { S = $S$ }
 	}
 	else_if = {
@@ -1918,7 +2172,7 @@ te_demog_slot = {
 	change_local_variable = { name = te_dg_r add = 1 }
 }
 
-# demographics_model.step's body for a < 150: one cohort through the year.
+# demographics_model.step's body for a < 300: one cohort through the year.
 te_demog_age_slot = {
 	set_local_variable = { name = te_dg_f value = { value = var:te_dg_f$S$ multiply = local_var:te_dg_s } }
 	set_local_variable = { name = te_dg_m value = { value = var:te_dg_m$S$ multiply = local_var:te_dg_s } }
@@ -2007,7 +2261,7 @@ te_demog_age_slot = {
 	}
 }
 
-# demographics_model.step's a == 150 and its pool lines. Age 150: the slot's people
+# demographics_model.step's a == 300 and its pool lines. Age 300: the slot's people
 # join the pool, which ages, loses the year's kills and dies at the last group's
 # rates; the slot takes this year's births (it is the sweep's last).
 te_demog_fold_slot = {
@@ -2036,7 +2290,7 @@ te_demog_fold_slot = {
 			value = var:te_dg_pa
 			add = 1
 			multiply = local_var:te_dg_pool
-			add = { value = local_var:te_dg_old multiply = 150 }
+			add = { value = local_var:te_dg_old multiply = 300 }
 			divide = { value = local_var:te_dg_pool add = local_var:te_dg_old min = 0.00001 }
 		}
 	}
@@ -2401,6 +2655,9 @@ te_demog_state_figures = {
 		set_variable = { name = te_dg_mig_rate value = { value = var:te_dg_net_migration divide = { value = var:te_dg_people min = 1 } multiply = 1000 } }
 	}
 	te_demog_set_trend = yes
+	# the pyramid's rows past 85, where people live long enough to fill them (issue #1075; generated)
+	set_local_variable = { name = te_dg_or_people value = var:te_dg_people }
+	te_demog_old_rows_show = { CUM = te_dg_o BAND = te_dg_b PX = te_dg_px TOP = te_dg_pyr_top }
 	# the state pyramid's scale, once here instead of in every bar's range each frame
 	set_variable = { name = te_dg_pyr_max value = te_demog_state_pyramid_max }
 }
@@ -2605,6 +2862,8 @@ te_demog_country_census = {
 	}
 	if = {
 		limit = { local_var:te_dg_seeded > 0 }
+		# the people past each of the pyramid's row starts past 85 (issue #1075; generated)
+		te_demog_country_old_rows_store = yes
 		# last year's figures, when they came from a step (te_demog_keep_figures)
 		te_demog_keep_figures = yes
 		if = {
@@ -2735,6 +2994,9 @@ te_demog_country_census = {
 			set_local_variable = { name = te_dg_tfr value = { value = local_var:te_dg_c_tfr_model_w divide = { value = local_var:te_dg_c_women min = 1 } } }
 			te_demog_project = yes
 		}
+		# the pyramid's rows past 85, where people live long enough to fill them (issue #1075; generated)
+		set_local_variable = { name = te_dg_or_people value = local_var:te_dg_c_people }
+		te_demog_old_rows_show = { CUM = te_dg_co BAND = te_dg_cb PX = te_dg_px TOP = te_dg_pyr_top }
 		# the pyramid's scale, once here instead of in every bar's range each frame
 		set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }
 		# phase 3: the biological pyramid where any state has one, the scale over both (te_demog_lx_effects.txt)

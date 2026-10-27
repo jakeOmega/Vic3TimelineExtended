@@ -240,10 +240,14 @@ class TestGenerated(unittest.TestCase):
         names = [f"te_dg_b{s}{b}" for b in range(P.BANDS) for s in "fm"]
         names += [f"te_dg_c{s}{c}" for c in range(len(P.MIGRANT_CLASSES)) for s in "fm"]
         names += ["te_dg_faw", "te_dg_fam"]   # the pool's sums (phase 2 step 4), which replaced the 18-40 sums
-        for name in names:
+        # the people past the pyramid's row starts past 85 (issue #1075), each pair where it exists
+        rows = [f"te_dg_o{s}{i}" for i in range(1, len(P.OLD_ROWS)) for s in "fm"]
+        for name in names + rows:
             self.assertEqual(body.count(f"change_variable = {{ name = {name} multiply = local_var:te_dg_norm_e5 }}"), 1, name)
             self.assertEqual(body.count(f"change_variable = {{ name = {name} divide = 100000 }}"), 1, name)
-        self.assertEqual(body.count("change_variable"), 2 * len(names))
+        for i in range(1, len(P.OLD_ROWS)):
+            self.assertIn(f"limit = {{ has_variable = te_dg_of{i} }}", body)
+        self.assertEqual(body.count("change_variable"), 2 * len(names + rows))
 
     def test_maternal_comment_says_it_is_a_rate(self):
         head = self.values.split("te_demog_mult_maternal = {", 1)[0].rsplit("\n\n", 1)[-1]

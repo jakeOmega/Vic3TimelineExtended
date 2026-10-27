@@ -336,7 +336,7 @@ def parse_replay(lines):
                         cur[kind][sex][first + i] = float(v or 0)
                 if "pool_f" in fields:
                     cur[kind]["pool"] = (float(fields["pool_f"] or 0), float(fields["pool_m"] or 0),
-                                         float(fields["pool_age"] or 150))
+                                         float(fields["pool_age"] or P.RING_YEARS))
             except (KeyError, ValueError) as e:
                 cur["errors"].append(f"unreadable {kind} line (from={fields.get('from', '?')}): {type(e).__name__} {e}")
     return blocks
@@ -406,7 +406,7 @@ def replay_block(b):
     for k in range(P.RING_YEARS):
         ring.f[k] = b["before"]["f"].get(k, 0.0) * pop_last / 1000.0
         ring.m[k] = b["before"]["m"].get(k, 0.0) * pop_last / 1000.0
-    pf, pm, page = b["before"].get("pool", (0.0, 0.0, 150.0))
+    pf, pm, page = b["before"].get("pool", (0.0, 0.0, float(P.RING_YEARS)))
     ring.pool_f, ring.pool_m, ring.pool_age = pf * pop_last / 1000.0, pm * pop_last / 1000.0, page
     M._refresh_denominators(ring)
     ring.total = ring.people()

@@ -55,12 +55,14 @@
 # read te_dg_people and te_dg_scale, which the sweep rewrites, so the before lines
 # must come first. A step reads the ring as last year's; te_dg_year goes back to last
 # year first, so the census reads as a state about to step does. Run twice in one
-# year, the second step ages this year's newborns as if they were 150 (both here and
+# year, the second step ages this year's newborns as if they were 300 (both here and
 # in the model, so the replay still matches): use a save you can throw away, or
 # re-seed afterwards (option c). Each run also drifts the census's medicine and the practices one
 # more step (te_demog_medicine_drift and te_demog_practices_step in te_demog_step_begin), a year's
 # spread and drift on top of the yearly ones.
 te_debug_demog_replay = {
+	# a census on the 150-year ring is re-filed at its own year before that year goes back (issue #1075)
+	te_demog_ring_check = yes
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes
 	set_variable = { name = te_dg_dbg_war value = local_var:te_dg_war }
@@ -261,7 +263,7 @@ te_debug_demog_reseed_late = {
 # three passes; debug.log's timestamps (whole seconds) around each pass time it (spec
 # §14 Q9's late-game re-run). Each state's census year goes back a year first, so every
 # pass is a second step in the same year and leaves the census wrong (this year's newborns
-# folded into the over-150 pool); after the timed passes, untimed, every state with a census
+# folded into the over-300 pool); after the timed passes, untimed, every state with a census
 # is seeded again from its population now, so the save stays playable.
 te_debug_demog_benchmark = {
 	set_local_variable = { name = te_dg_dbg_n value = 0 }
@@ -321,6 +323,8 @@ te_debug_demog_bench_walk = {
 te_debug_demog_bench_pass = {
 	every_state = {
 		limit = { te_demog_has_census = yes }
+		# a census on the 150-year ring is re-filed at its own year first (issue #1075)
+		te_demog_ring_check = yes
 		set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 		te_demog_step = yes
 	}
