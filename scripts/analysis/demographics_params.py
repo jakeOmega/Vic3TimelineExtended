@@ -9,18 +9,23 @@ Units. Death rates are yearly probabilities per 100,000 people, fertility shapes
 (scripting_best_practices.md: values are stored in units of 1e-5).
 """
 
-RING_YEARS = 150            # spec §1: slots reach about age 150; 150+ folds into a pool
+# spec §1: one slot per single year of age, the people past the ring's last in a pool. 150 until issue #1075 (owner,
+# 2026-10-20): ages 0-299 since, so nobody a player can reach falls into the pool (someone born in 1836 is 264 in 2100),
+# and a save from before re-files its ring at its state's next step (te_demog_ring_migrate).
+RING_YEARS = 300
 COHORT_WIDTH = 1            # spec §1 decision rule; owner to confirm (§13). Only 1 is built.
 FEMALE_BIRTH_PER_100K = 48780   # 100 girls per 205 births (§3)
 MALE_BIRTH_PER_100K = 51220
 
-# Abridged age groups (start, width). Rates are constant inside a group.
+# Abridged age groups (start, width). Rates are constant inside a group. They stop at 145-149, inside the ring (issue
+# #1075): every base rate is flat from 110, so the last group's rates hold at every older rate age, as the pool's did
+# when the ring ended at 150; the life tables close at 150 on them (LT_TAIL_RATE_MIN's note).
 GROUPS = [(0, 1), (1, 4)] + [(a, 5) for a in range(5, 150, 5)]
 GROUP_STARTS = [g[0] for g in GROUPS]
 
 
 def group_of(age):
-    """Index into GROUPS for a rate age 0..149 (150+ uses the last group)."""
+    """Index into GROUPS for a rate age 0..149 (150 and over use the last group)."""
     age = min(age, 149)
     for i in range(len(GROUPS) - 1, -1, -1):
         if age >= GROUPS[i][0]:
@@ -859,8 +864,9 @@ LIVE_WORKFORCE_LINES = frozenset({
     ("extra_companies_flavored.txt", "company_rosen_association"),
     ("unique_pms.txt", "pm_rosen_association_hq"),
 })
-# Age classes for migrant profiles: (first age, last age) by rate age (the age before the step).
-MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, 150)]
+# Age classes for migrant profiles: (first age, last age) by rate age (the age before the step). The last class runs to
+# the ring's end, so the people past 150 move with the rest of the old since the ring's 300 years (issue #1075).
+MIGRANT_CLASSES = [(0, 14), (15, 17), (18, 35), (36, 59), (60, RING_YEARS)]
 # Share of each kind's migrants per class (each kind's weights sum to 1). The family and refugee
 # kinds split evenly between women and men; the labour kind's split is the LABOUR_FEMALE_SHARE range.
 MIGRANT_PROFILE = {
@@ -939,6 +945,20 @@ GINI_SHOWN_EQUALITY = 0.7
 # ---- Display ----------------------------------------------------------------------
 BAND_WIDTH = 5
 BANDS = 18          # 0-4 ... 80-84, then 85+
+# The pyramid's rows past 85 (issue #1075; owner, 2026-10-20: show the late game's ages, gated on people being in them).
+# The census keeps 85+ as its last band for every figure; the pyramid can split it into rows starting at OLD_ROWS, the
+# last the pool (RING_YEARS and over). A row past 85-99 shows while the people of its age and over are OLD_ROW_GATE or
+# more of all the people, so an 1836-2000 pyramid ends at 85+ as before; the highest row shown takes everyone older
+# ("125+"). A row of more than five years draws its people per five years of age, as wide as the rows below it
+# (OLD_ROW_DRAW); the pool's row, open-ended, at its count, as 85+ is. The census stores each state's and country's
+# people aged OLD_ROWS[i] and over, i >= 1 (te_dg_o<f|m><i>, the country's te_dg_co<f|m><i>, only where someone is),
+# and, where the pyramid splits, the rows it shows (te_dg_pyr_top, te_dg_px<f|m><i>); the biological pyramid the same
+# by biological age (te_dg_bo, te_dg_cbo, te_dg_bpyr_top, te_dg_bpx).
+OLD_ROWS = tuple(a for a in (85, 100, 125, 150, 200, 250) if a < RING_YEARS) + (RING_YEARS,)
+OLD_ROW_GATE = 0.01
+OLD_ROW_WIDTHS = tuple(b - a for a, b in zip(OLD_ROWS, OLD_ROWS[1:])) + (BAND_WIDTH,)
+OLD_ROW_DRAW = tuple(round(BAND_WIDTH / w, 5) for w in OLD_ROW_WIDTHS)
+assert OLD_ROWS[0] == BAND_WIDTH * (BANDS - 1), "the rows split the pyramid's last band"
 
 # ---- Phase 2 step 3b: the census reads the Family Policy measures and laws ------------------------------------
 # docs/superpowers/archive/specs/2026-10-12-demographics-phase2-consequences-design.md §3.2, §3.5. Six script-only state types
@@ -983,8 +1003,9 @@ AGEING_RATE_LINES = {"mrna_therapeutics": -0.10, "personalized_medicine": -0.10,
                      "synthetic_biology": -0.05, "biological_immortality": -0.70}
 REJUVENATION_LINES = {"biological_immortality": 0.03}
 # Who is treated (§1.2-§1.3, call 8): a treated share te_dg_s<j> and their mean deficit te_dg_d<j> (calendar less
-# biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 30), adults only: a cohort
-# reaching LX_JOIN_AGE joins at the state's eligibility E. The pool (150+) keeps its own (te_dg_lx_ps, te_dg_lx_pd).
+# biological age) per five-year birth band j = slot // LX_BAND_WIDTH (birth year / 5 mod 60), adults only: a cohort
+# reaching LX_JOIN_AGE joins at the state's eligibility E. The pool (RING_YEARS and over) keeps its own (te_dg_lx_ps,
+# te_dg_lx_pd).
 LX_JOIN_AGE = 25
 LX_BAND_WIDTH = 5
 LX_BANDS = RING_YEARS // LX_BAND_WIDTH
@@ -1148,29 +1169,29 @@ RESETTLE_PROFILES = {
 # Tennessee 98.8, Ohio 107.2. Indiana (107.7) stays as one of the first build's West: the 110 rule is for additions.
 FRONTIER_1840_WHITE = {
     "STATE_MICHIGAN": {(15, 19): (10887, 10819), (20, 29): (22759, 18706), (30, 39): (16025, 11864),
-                       (40, 49): (8276, 6109), (50, 59): (4442, 3394), (60, 149): (2629, 1985)},
+                       (40, 49): (8276, 6109), (50, 59): (4442, 3394), (60, RING_YEARS - 1): (2629, 1985)},
     "STATE_INDIANA": {(15, 19): (36599, 36904), (20, 29): (60002, 55176), (30, 39): (37565, 32708),
-                      (40, 49): (21678, 19967), (50, 59): (13789, 10759), (60, 149): (9086, 7319)},
+                      (40, 49): (21678, 19967), (50, 59): (13789, 10759), (60, RING_YEARS - 1): (9086, 7319)},
     "STATE_ILLINOIS": {(15, 19): (24876, 24078), (20, 29): (52580, 38823), (30, 39): (31428, 22676),
-                       (40, 49): (15809, 12712), (50, 59): (8755, 6514), (60, 149): (5084, 4032)},
+                       (40, 49): (15809, 12712), (50, 59): (8755, 6514), (60, RING_YEARS - 1): (5084, 4032)},
     "STATE_MISSOURI": {(15, 19): (16784, 16952), (20, 29): (33772, 26330), (30, 39): (20568, 14889),
-                       (40, 49): (11384, 8580), (50, 59): (5620, 4259), (60, 149): (3469, 2808)},
+                       (40, 49): (11384, 8580), (50, 59): (5620, 4259), (60, RING_YEARS - 1): (3469, 2808)},
     "STATE_ARKANSAS": {(15, 19): (3863, 3911), (20, 29): (8532, 5881), (30, 39): (5129, 3317),
-                       (40, 49): (2751, 1715), (50, 59): (1194, 805), (60, 149): (727, 504)},
+                       (40, 49): (2751, 1715), (50, 59): (1194, 805), (60, RING_YEARS - 1): (727, 504)},
     "STATE_IOWA": {(15, 19): (2179, 2064), (20, 29): (6207, 3789), (30, 39): (3310, 1865),             # Iowa Territory
-                   (40, 49): (1512, 979), (50, 59): (698, 494), (60, 149): (357, 245)},
+                   (40, 49): (1512, 979), (50, 59): (698, 494), (60, RING_YEARS - 1): (357, 245)},
     "STATE_WISCONSIN": {(15, 19): (1344, 1200), (20, 29): (6328, 2713), (30, 39): (3348, 1423),        # Wisconsin Territory
-                        (40, 49): (1191, 612), (50, 59): (554, 360), (60, 149): (269, 175)},
+                        (40, 49): (1191, 612), (50, 59): (554, 360), (60, RING_YEARS - 1): (269, 175)},
     # the Old Southwest and Florida (owner, 2026-10-20): 1840c-04.pdf PDF pp.5-6, 9-10, 13-14 (Compendium pp.52-61) and
     # 1840c-06.pdf pp.13-14 (pp.96-97)
     "STATE_MISSISSIPPI": {(15, 19): (8662, 8911), (20, 29): (20084, 14464), (30, 39): (11995, 7847),
-                          (40, 49): (6001, 4284), (50, 59): (3289, 2250), (60, 149): (2044, 1580)},
+                          (40, 49): (6001, 4284), (50, 59): (3289, 2250), (60, RING_YEARS - 1): (2044, 1580)},
     "STATE_ALABAMA": {(15, 19): (16222, 17911), (20, 29): (31455, 25574), (30, 39): (19340, 15152),
-                      (40, 49): (11783, 9184), (50, 59): (6024, 4647), (60, 149): (4223, 3518)},
+                      (40, 49): (11783, 9184), (50, 59): (6024, 4647), (60, RING_YEARS - 1): (4223, 3518)},
     "STATE_LOUISIANA": {(15, 19): (7218, 7947), (20, 29): (20795, 13602), (30, 39): (16304, 7907),
-                        (40, 49): (7940, 4099), (50, 59): (3309, 1967), (60, 149): (1762, 1315)},
+                        (40, 49): (7940, 4099), (50, 59): (3309, 1967), (60, RING_YEARS - 1): (1762, 1315)},
     "STATE_FLORIDA": {(15, 19): (1305, 1322), (20, 29): (4388, 2220), (30, 39): (2801, 1219),         # Florida Territory
-                      (40, 49): (1193, 704), (50, 59): (530, 354), (60, 149): (317, 218)},
+                      (40, 49): (1193, 704), (50, 59): (530, 354), (60, RING_YEARS - 1): (317, 218)},
 }
 # The census counts free whites; the game's 1836 state also holds enslaved and free Black people and Native nations
 # (Arkansas's state region takes in the Cherokee, Iowa's the Sauk and Meskwaki and the Dakota), whose numbers of men
@@ -1313,8 +1334,9 @@ MT_FERTILITY = 0.10
 # The life tables (demographics_model.life_table, te_demog_lt_finish) sum person-years over GROUPS, which end at 145-149;
 # the survivors at 150 live on at the death rate past 150, q a year (per 100,000): l150 x (1 - q/2) / q more person-years
 # (life_table's mid-year convention for an open interval), in e0 and in e65 (owner, 2026-10-20). q is the last group's
-# in the plain table and the untreated's; in the late game's treated and blended tables the rate the pool (150+) dies
-# at, its treated part at its biological rate age. LT_TAIL_RATE_MIN floors q: one per 100,000, the fixed point's
+# in the plain table and the untreated's; in the late game's treated and blended tables the rate the pool (RING_YEARS
+# and over) dies at, its treated part at its biological rate age, and the table's own last group's where the pool is
+# empty, as it is in play since the ring's 300 years (issue #1075): the last group then holds every rate age from 145. LT_TAIL_RATE_MIN floors q: one per 100,000, the fixed point's
 # smallest step for a yearly probability, so the tail is at most about 100,000 years and stays inside the script's
 # range (survivors at a radix of 100,000 x 100,000 / q). The old-age threshold still reads the table to 150.
 LT_TAIL_RATE_MIN = 1.0

@@ -11,7 +11,7 @@
 #   a    replay: step the capital's census one year now and log it (TE_DEMOG_REPLAY);
 #        `scripts/analysis/demographics_harness.py replay debug.log` checks it against
 #        the model. A second run in the same year steps again (the census year goes
-#        back by one first) and folds this year's newborns into the over-150 pool:
+#        back by one first) and folds this year's newborns into the over-300 pool:
 #        use a save you can throw away, or re-seed after (c)
 #   b    start or stop the census log: at each yearly census a TE_DEMOG_CENSUS: line per
 #        country of a million people or more (scripts/analysis/

@@ -506,12 +506,77 @@ def seed_bands(o):
     o("")
 
 
+def _old_row_moves(o, scale=None):
+    """The treated part's moves between the pyramid's rows past 85 (issue #1075): out of every row its calendar age
+    local_var:te_dg_age is past the start of, into every row its biological age local_var:te_dg_lx_ab_t is past, in the
+    running sums te_dg_lx_mo<f|m><i> of the people past each row's start (demographics_model.lx_bio_old_rows)."""
+    rows = range(1, len(P.OLD_ROWS))
+
+    def nest(var, op, i):
+        if i >= len(P.OLD_ROWS):
+            return
+        o("if = {")
+        o(f"limit = {{ local_var:{var} >= {P.OLD_ROWS[i]} }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_mof{i} {op} = local_var:te_dg_lx_aft }}")
+        o(f"change_local_variable = {{ name = te_dg_lx_mom{i} {op} = local_var:te_dg_lx_amt }}")
+        nest(var, op, i + 1)
+        o("}")
+    nest("te_dg_age", "subtract", rows[0])
+    nest("te_dg_lx_ab_t", "add", rows[0])
+
+
+def _store_pair(o, name, f, m):
+    from gen_demographics import _store_pair as store
+    store(o, name, f, m)
+
+
+def _bio_scale(o, band, rows, last):
+    """Raise te_dg_pyr_max over the biological pyramid as drawn: its bands below 85, and its rows past 85 where it splits
+    85 and over (each per five years of age), else its last band."""
+    from gen_demographics import lit
+    for b in range(last):
+        for s in "fm":
+            o(f"if = {{ limit = {{ var:{band}{s}{b} > var:te_dg_pyr_max }} set_variable = {{ name = te_dg_pyr_max "
+              f"value = var:{band}{s}{b} }} }}")
+    o("if = {")
+    o(f"limit = {{ has_variable = {rows}f0 }}")
+    for i, d in enumerate(P.OLD_ROW_DRAW):
+        for s in "fm":
+            drawn = f"var:{rows}{s}{i}" if d == 1 else f"{{ value = var:{rows}{s}{i} multiply = {lit(d)} }}"
+            o(f"set_local_variable = {{ name = te_dg_or_d value = {drawn} }}")
+            o("if = { limit = { local_var:te_dg_or_d > var:te_dg_pyr_max } set_variable = { name = te_dg_pyr_max "
+              "value = local_var:te_dg_or_d } }")
+    o("}")
+    o("else = {")
+    for s in "fm":
+        o(f"if = {{ limit = {{ var:{band}{s}{last} > var:te_dg_pyr_max }} set_variable = {{ name = te_dg_pyr_max "
+          f"value = var:{band}{s}{last} }} }}")
+    o("}")
+
+
+def _old_rows_clear(o, cum, px, top):
+    """The biological pyramid's rows past 85 gone: its people past each row's start and the rows it showed."""
+    for i in range(1, len(P.OLD_ROWS)):
+        o(f"if = {{ limit = {{ has_variable = {cum}f{i} }} remove_variable = {cum}f{i} remove_variable = {cum}m{i} }}")
+    o("if = {")
+    o(f"limit = {{ has_variable = {top} }}")
+    o(f"remove_variable = {top}")
+    for i in range(len(P.OLD_ROWS)):
+        for s in "fm":
+            o(f"remove_variable = {px}{s}{i}")
+    o("}")
+
+
 def bio_bands(o):
     from gen_demographics import tree
     starts = [P.BAND_WIDTH * b for b in range(P.BANDS)]
+    rows = range(1, len(P.OLD_ROWS))
+    last = P.BANDS - 1
     o("# THIS = a state, in the late sweep's accumulation: the treated part (locals te_dg_lx_aft, te_dg_lx_amt) moves from its")
     o("# calendar band local_var:te_dg_band to the band of its biological age local_var:te_dg_lx_ab_t, in the biological")
-    o("# pyramid's running moves te_dg_lx_mv<f|m><band> (§6.2: each cohort's treated part at its biological band).")
+    o("# pyramid's running moves te_dg_lx_mv<f|m><band> (§6.2: each cohort's treated part at its biological band), and")
+    o("# between the rows past 85 by its calendar age local_var:te_dg_age and its biological one (te_dg_lx_mo<f|m><i>, issue")
+    o("# #1075).")
     o("te_demog_lx_bio_move = {")
 
     def out_leaf(o, b):
@@ -523,6 +588,7 @@ def bio_bands(o):
         o(f"change_local_variable = {{ name = te_dg_lx_mvf{b} add = local_var:te_dg_lx_aft }}")
         o(f"change_local_variable = {{ name = te_dg_lx_mvm{b} add = local_var:te_dg_lx_amt }}")
     _threshold_tree(o, "te_dg_lx_ab_t", starts, in_leaf)
+    _old_row_moves(o)
     o("}")
     o("")
     o("# THIS = a state, before the late sweep: the biological pyramid's moves at 0.")
@@ -530,17 +596,30 @@ def bio_bands(o):
     for b in range(P.BANDS):
         for s in "fm":
             o(f"set_local_variable = {{ name = te_dg_lx_mv{s}{b} value = 0 }}")
+    for i in rows:
+        for s in "fm":
+            o(f"set_local_variable = {{ name = te_dg_lx_mo{s}{i} value = 0 }}")
     o("}")
     o("")
     o("# THIS = a state, after a late step's scale (te_demog_step_finish): the biological pyramid's bands te_dg_bb<f|m><band>,")
-    o("# the calendar ones with the moves at the new scale, and the pyramid's scale over both.")
+    o("# the calendar ones with the moves at the new scale; its people past each row's start past 85, te_dg_bo<f|m><i>, the")
+    o("# calendar ones (te_dg_o<f|m><i>) with theirs, where anyone is, and the rows it shows (te_dg_bpyr_top, te_dg_bpx<f|m><i>;")
+    o("# issue #1075); and the pyramid's scale over both views.")
     o("te_demog_lx_bio_bands_store = {")
     for b in range(P.BANDS):
         for s in "fm":
             o(f"set_variable = {{ name = te_dg_bb{s}{b} value = {{ value = local_var:te_dg_lx_mv{s}{b} "
               f"multiply = local_var:te_dg_new_scale add = var:te_dg_b{s}{b} min = 0 }} }}")
-            o(f"if = {{ limit = {{ var:te_dg_bb{s}{b} > var:te_dg_pyr_max }} set_variable = {{ name = te_dg_pyr_max "
-              f"value = var:te_dg_bb{s}{b} }} }}")
+    for i in rows:
+        for s in "fm":
+            o(f"set_local_variable = {{ name = te_dg_or{s} value = {{ value = local_var:te_dg_lx_mo{s}{i} "
+              "multiply = local_var:te_dg_new_scale } }")
+            o(f"if = {{ limit = {{ has_variable = te_dg_o{s}{i} }} change_local_variable = {{ name = te_dg_or{s} "
+              f"add = var:te_dg_o{s}{i} }} }}")
+        _store_pair(o, f"te_dg_bo{{s}}{i}", "local_var:te_dg_orf", "local_var:te_dg_orm")
+    o("set_local_variable = { name = te_dg_or_people value = var:te_dg_people }")
+    o("te_demog_old_rows_show = { CUM = te_dg_bo BAND = te_dg_bb PX = te_dg_bpx TOP = te_dg_bpyr_top }")
+    _bio_scale(o, "te_dg_bb", "te_dg_bpx", last)
     o("}")
     o("")
     o("# THIS = a state: its biological pyramid, gone (a seed; the late game's end).")
@@ -551,6 +630,7 @@ def bio_bands(o):
         for s in "fm":
             o(f"remove_variable = te_dg_bb{s}{b}")
     o("}")
+    _old_rows_clear(o, "te_dg_bo", "te_dg_bpx", "te_dg_bpyr_top")
     o("}")
     o("")
     o("# THIS = ROOT = a country, in te_demog_country_census: whether any of its states has a biological pyramid")
@@ -565,10 +645,14 @@ def bio_bands(o):
     for b in range(P.BANDS):
         for s in "fm":
             o(f"set_local_variable = {{ name = te_dg_c_bb{s}{b} value = 0 }}")
+    for i in rows:
+        for s in "fm":
+            o(f"set_local_variable = {{ name = te_dg_c_bo{s}{i} value = 0 }}")
     o("}")
     o("}")
     o("")
-    o("# THIS = a census state in the country's loop: its biological bands, or its calendar ones where it has none.")
+    o("# THIS = a census state in the country's loop: its biological bands and rows past 85, or its calendar ones where it")
+    o("# has none.")
     o("te_demog_lx_country_bio_add = {")
     o("if = {")
     o("limit = { local_var:te_dg_c_lx_bion > 0 }")
@@ -578,31 +662,48 @@ def bio_bands(o):
     for b in range(P.BANDS):
         for s in "fm":
             o(f"change_local_variable = {{ name = te_dg_c_bb{s}{b} add = var:te_dg_bb{s}{b} }}")
+    for i in rows:
+        o(f"if = {{ limit = {{ has_variable = te_dg_bof{i} }} change_local_variable = {{ name = te_dg_c_bof{i} "
+          f"add = var:te_dg_bof{i} }} change_local_variable = {{ name = te_dg_c_bom{i} add = var:te_dg_bom{i} }} }}")
     o("}")
     o("else = {")
     for b in range(P.BANDS):
         for s in "fm":
             o(f"change_local_variable = {{ name = te_dg_c_bb{s}{b} add = var:te_dg_b{s}{b} }}")
+    for i in rows:
+        o(f"if = {{ limit = {{ has_variable = te_dg_of{i} }} change_local_variable = {{ name = te_dg_c_bof{i} "
+          f"add = var:te_dg_of{i} }} change_local_variable = {{ name = te_dg_c_bom{i} add = var:te_dg_om{i} }} }}")
     o("}")
     o("}")
     o("}")
     o("")
-    o("# THIS = ROOT = a country after its loop: the biological pyramid te_dg_cbb<f|m><band> where any of its states has one")
-    o("# (the scale over both), else none.")
+    o("# THIS = ROOT = a country after its loop: the biological pyramid te_dg_cbb<f|m><band>, its rows past 85 (te_dg_cbo,")
+    o("# te_dg_bpyr_top, te_dg_bpx) where any of its states has one (the scale over both views), else none.")
     o("te_demog_lx_country_bio_store = {")
     o("if = {")
     o("limit = { local_var:te_dg_c_lx_bbn > 0 }")
     for b in range(P.BANDS):
         for s in "fm":
             o(f"set_variable = {{ name = te_dg_cbb{s}{b} value = local_var:te_dg_c_bb{s}{b} }}")
-            o(f"if = {{ limit = {{ var:te_dg_cbb{s}{b} > var:te_dg_pyr_max }} set_variable = {{ name = te_dg_pyr_max "
-              f"value = var:te_dg_cbb{s}{b} }} }}")
+    for i in rows:
+        _store_pair(o, f"te_dg_cbo{{s}}{i}", f"local_var:te_dg_c_bof{i}", f"local_var:te_dg_c_bom{i}")
+    # its people, over its bands (the same people as the calendar pyramid's)
+    o("set_local_variable = { name = te_dg_or_people value = 0 }")
+    for b in range(P.BANDS):
+        o(f"change_local_variable = {{ name = te_dg_or_people add = {{ value = local_var:te_dg_c_bbf{b} "
+          f"add = local_var:te_dg_c_bbm{b} }} }}")
+    o("te_demog_old_rows_show = { CUM = te_dg_cbo BAND = te_dg_cbb PX = te_dg_bpx TOP = te_dg_bpyr_top }")
+    _bio_scale(o, "te_dg_cbb", "te_dg_bpx", last)
     o("}")
     o("else_if = {")
     o("limit = { has_variable = te_dg_cbbf0 }")
     for b in range(P.BANDS):
         for s in "fm":
             o(f"remove_variable = te_dg_cbb{s}{b}")
+    o("}")
+    o("if = {")
+    o("limit = { local_var:te_dg_c_lx_bbn <= 0 }")
+    _old_rows_clear(o, "te_dg_cbo", "te_dg_bpx", "te_dg_bpyr_top")
     o("}")
     o("}")
     o("")

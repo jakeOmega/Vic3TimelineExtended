@@ -254,6 +254,10 @@ how old their body is, not the year they were born.
   pyramid's top.
 - **So the ring runs to about 150 from 1836** (owner, provisional). The extra slots sit empty, and are skipped, until
   someone lives that long. The benchmark (§14 Q9) found them cheap: an empty slot costs one variable check.
+- **Since issue #1075 (2026-10-27) it runs to 299**, the pool from 300: in the owner's 2057 game 98 million people sat
+  in the 150-and-over pool with no ages. A census taken on the 150-year ring is re-filed at its next step, and the
+  pyramid splits 85 and over into rows where people live past 100 (`docs/systems/mod_systems.md`, § The ring's 300
+  years and the pyramid past 85).
 
 ## 2. The age model
 

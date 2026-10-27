@@ -37,7 +37,7 @@ STEP_VARS = ("te_dg_year", "te_dg_stepped", "te_dg_people", "te_dg_net_migration
              "te_dg_sol", "te_dg_lit", "te_dg_urban_share", "te_dg_fjob_share", "te_dg_wtfr", "te_dg_agr_share",
              "te_dg_in_turm", "te_dg_rs_net", "te_dg_fws_wk", "te_dg_low_share")
 BAND_VARS = tuple(f"te_dg_b{s}{b}" for s in "fm" for b in range(P.BANDS))
-RING_VARS = (("te_dg_scale", "te_dg_pf", "te_dg_pm", "te_dg_pa")
+RING_VARS = (("te_dg_scale", "te_dg_pf", "te_dg_pm", "te_dg_pa", "te_dg_ring")
              + tuple(f"te_dg_{s}{k}" for s in "fm" for k in range(P.RING_YEARS)))
 
 
@@ -161,7 +161,8 @@ def inputs(rec, prev, country, year, known):
 
 
 def ring_from(rec):
-    """The census's ring as the save holds it: the slots before their scale, the pool and its age."""
+    """The census's ring as the save holds it: the slots before their scale, the pool and its age. A save from before
+    issue #1075 (no te_dg_ring) holds the 150-year ring, re-filed here as its next step would (ring_migrate)."""
     v = rec["vars"]
     ring = M.Ring(year=int(v["te_dg_year"]))
     for s, slots in rec["ring"].items():
@@ -169,7 +170,10 @@ def ring_from(rec):
         for k, value in slots.items():
             side[int(k)] = value
     ring.scale = v.get("te_dg_scale", 1.0)
-    ring.pool_f, ring.pool_m, ring.pool_age = v.get("te_dg_pf", 0.0), v.get("te_dg_pm", 0.0), v.get("te_dg_pa", 150.0)
+    ring.pool_f, ring.pool_m = v.get("te_dg_pf", 0.0), v.get("te_dg_pm", 0.0)
+    ring.pool_age = v.get("te_dg_pa", float(P.RING_YEARS if "te_dg_ring" in v else M.OLD_RING_YEARS))
+    if "te_dg_ring" not in v:
+        M.ring_migrate(ring)
     M._refresh_denominators(ring)
     ring.total = ring.people()
     return ring

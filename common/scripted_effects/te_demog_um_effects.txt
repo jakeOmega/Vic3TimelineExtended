@@ -8,7 +8,7 @@
 # who faces death from infection or chronic illness uploads instead, within the country's capacity (1,000,000 minds a
 # level). The engine counts the death and the ring loses the person, as before (M still aims at the census's deaths
 # with the uploads in them); the step books the uploads into the country's pool of minds. Nothing here touches the
-# ring, the 150+ pool or the migration residual. Under Display and Disabled nothing books and the Nexus produces as
+# ring, the 300+ pool or the migration residual. Under Display and Disabled nothing books and the Nexus produces as
 # it does today; a pool kept from Full stays as it was.
 #
 # State variables (a census state of a country that hosts minds, from its first step under Full):

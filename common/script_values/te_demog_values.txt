@@ -150,10 +150,11 @@ te_demog_fast_deaths_applied = {
 	}
 }
 
-# The open slot this year: year mod 150 (spec §1; demographics_model.step's open_k).
+# The open slot this year: year mod 300, the ring's years (spec §1; demographics_model.step's open_k; 150 until issue
+# #1075).
 te_demog_open_slot = {
 	value = te_demog_year
-	modulo = 150
+	modulo = 300
 }
 
 # State scope: desired fertility as a factor (spec §2.3; demographics_model.fertility):

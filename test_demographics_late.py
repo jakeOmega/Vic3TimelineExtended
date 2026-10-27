@@ -7,6 +7,7 @@ deficits, eligibility and cover, the life tables, the work figures and the consc
 behaviour against the design (§1.2-§1.5, §4.2): selection, ageing, the pull, joining, a ban, the seed.
 """
 
+import copy
 import dataclasses
 import functools
 import random
@@ -66,9 +67,9 @@ def _ring(inp, seed=1, pool=(30.0, 20.0), late=True):
     ring.f = [x * ring.scale / 1.02 for x in ring.f]
     ring.m = [x * ring.scale / 1.02 for x in ring.m]
     ring.scale = 1.02
-    ring.f[(YEAR + 1) % N], ring.m[(YEAR + 1) % N] = 40.0, 25.0      # aged 149 now, folds at the step
+    ring.f[(YEAR + 1) % N], ring.m[(YEAR + 1) % N] = 40.0, 25.0      # aged N - 1 now, folds at the step
     ring.f[(YEAR + 2) % N], ring.m[(YEAR + 2) % N] = 30.0, 20.0
-    ring.pool_f, ring.pool_m, ring.pool_age = pool[0], pool[1], 152.5
+    ring.pool_f, ring.pool_m, ring.pool_age = pool[0], pool[1], N + 2.5
     # the script holds no cohort under half a person (te_demog_age_slot drops it): neither does this ring
     for k in range(N):
         if ring.f[k] * ring.scale + ring.m[k] * ring.scale < 0.5:
@@ -109,7 +110,8 @@ def _engine(ring, inp, pop, war_dead=0.0, kills=0.0, migration=0.0, truncate=Fal
         if ring.f[k] or ring.m[k]:
             eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = ring.f[k], ring.m[k]
     eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=ring.scale,
-                    te_dg_year=float(YEAR), te_dg_people=ring.total, te_dg_raw=ring.total / ring.scale,
+                    te_dg_year=float(YEAR), te_dg_ring=float(P.RING_YEARS), te_dg_people=ring.total,
+                    te_dg_raw=ring.total / ring.scale,
                     te_dg_sex_balance=M.structure(ring)["men_per_100_women"], te_dg_faw=ring.faw, te_dg_fam=ring.fam)
     # the last count of women among the workers, which the step reads (te_demog_women_worker_share, 2026-10-25)
     if ring.fws_work is not None:
@@ -194,9 +196,23 @@ class TestLateGameScript(unittest.TestCase):
                 got = eng.vars[f"te_dg_bb{s}{b}"] - eng.vars[f"te_dg_b{s}{b}"]
                 self.assertLess(abs(got - (bio[b] - cal[b])), 1.0, f"biological band {b} ({s}): {got} vs {bio[b] - cal[b]}")
                 self.assertGreaterEqual(eng.vars["te_dg_pyr_max"], eng.vars[f"te_dg_bb{s}{b}"])
-        # the mean ages: the model keeps the cohorts the script drops under half a person
-        self.close(eng.vars["te_dg_lx_age"], lx["mean_age"], 1e-5, "mean age")
-        self.close(eng.vars["te_dg_lx_bio"], lx["mean_bio"], 1e-5, "mean biological age")
+        # the mean ages over the cohorts the script kept (it drops a cohort under half a person, which the model keeps:
+        # on the 300-year ring many more of them reach old ages instead of the pool)
+        people = cal = deficit = 0.0
+        for a, f, m in ring.by_age():
+            if a == N:
+                sh, bio = (ring.lx_ps or 0.0), ring.pool_age - (ring.lx_pd or 0.0)
+                a = ring.pool_age
+            elif f"te_dg_f{(ring.year - a) % N}" in eng.vars:
+                sh, bio = ring.lx_slot.get((ring.year - a) % N, (0.0, a))
+            else:
+                continue
+            people += f + m
+            cal += (f + m) * a
+            deficit += (f + m) * sh * (a - bio)
+        self.close(eng.vars["te_dg_lx_age"], cal / people, 1e-5, "mean age")
+        self.close(eng.vars["te_dg_lx_bio"], (cal - deficit) / people, 1e-5, "mean biological age")
+        self.close(eng.vars["te_dg_lx_age"], lx["mean_age"], 1e-4, "mean age, every cohort")
         # the conscription pool's sums, before the new scale (the script's raw total leaves out the cohorts it dropped)
         self.close(eng.vars["te_dg_fam"] / eng.vars["te_dg_scale"], ring.fam / ring.scale, 1e-8, "the pool's men")
         self.close(eng.vars["te_dg_faw"] / eng.vars["te_dg_scale"], ring.faw / ring.scale, 1e-8, "the pool's women")
@@ -208,7 +224,11 @@ class TestLateGameScript(unittest.TestCase):
 
     def work(self, eng, ring, inp):
         qf, qm, _ = M.group_rates(dataclasses.replace(inp, medicine=ring.medicine))
-        want = M.work_figures(ring, inp, M.old_age(qf, qm))
+        # over the cohorts the script kept (it drops one under half a person; the model keeps it)
+        kept = copy.copy(ring)
+        kept.f = [x if f"te_dg_f{k}" in eng.vars else 0.0 for k, x in enumerate(ring.f)]
+        kept.m = [x if f"te_dg_f{k}" in eng.vars else 0.0 for k, x in enumerate(ring.m)]
+        want = M.work_figures(kept, inp, M.old_age(qf, qm))
         for name in ("wa_share", "at_work", "pensioners", "need"):
             self.close(eng.vars[f"te_dg_{name}"], want[name], 1e-5, name)
 

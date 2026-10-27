@@ -224,7 +224,7 @@ class TestStepWithKnownMoves(unittest.TestCase):
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = ring.f[k] * ring.scale, ring.m[k] * ring.scale
         balance = M.structure(ring)["men_per_100_women"]
         eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=1.0,
-                        te_dg_year=YEAR, te_dg_people=ring.total, te_dg_raw=ring.total, te_dg_sex_balance=balance,
+                        te_dg_year=YEAR, te_dg_ring=float(P.RING_YEARS), te_dg_people=ring.total, te_dg_raw=ring.total, te_dg_sex_balance=balance,
                         te_dg_faw=ring.faw, te_dg_fam=ring.fam, te_dg_pop_last=ring.total, te_dg_eb=eb, te_dg_ed=ed,
                         te_dg_fjob_share=fjob)
         # the last count of women among the workers, which the step reads (te_demog_women_worker_share, 2026-10-25)

@@ -941,8 +941,9 @@ class TestCohortScript(unittest.TestCase):
         gui = _text(ROOT / "gui" / "te_demographics_widgets.gui")
         self.assertNotIn("ScriptValue('te_demog_pyramid_max')", gui)
         self.assertNotIn("ScriptValue('te_demog_state_pyramid_max')", gui)
-        # 4 in the row type and 2 in each of the state's 18 rows; phase 3 adds the state's 18 biological rows (late-game §6.2)
-        self.assertEqual(gui.count("Var('te_dg_pyr_max').GetValue"), 76)
+        # 4 in the row type and 2 in each of the state's 18 rows; phase 3 adds the state's 18 biological rows (late-game §6.2),
+        # and issue #1075 the rows past 85 of each of the state's two views
+        self.assertEqual(gui.count("Var('te_dg_pyr_max').GetValue"), 76 + 2 * 2 * len(P.OLD_ROWS))
         census = _block(_text(EFFECTS), "te_demog_country_census")
         self.assertGreater(census.index("set_variable = { name = te_dg_pyr_max value = te_demog_pyramid_max }"),
                            census.index("te_demog_project = yes"), "after the outline, which shares the scale")
@@ -1080,7 +1081,8 @@ class TestCohortScript(unittest.TestCase):
             if before[0][k] or before[1][k]:
                 eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = before[0][k], before[1][k]
         eng.vars.update(te_dg_pf=ring.pool_f, te_dg_pm=ring.pool_m, te_dg_pa=ring.pool_age, te_dg_scale=scale,
-                        te_dg_year=self.YEAR, te_dg_people=ring.total, te_dg_raw=ring.total / scale,
+                        te_dg_year=self.YEAR, te_dg_ring=float(P.RING_YEARS), te_dg_people=ring.total,
+                        te_dg_raw=ring.total / scale,
                         te_dg_sex_balance=balance)
         if old_census:
             eng.vars.update(te_dg_f1840=ring.faw, te_dg_m1840=ring.fam)
