@@ -56,6 +56,13 @@ he_enable_admin_focus = {
 			add_modifier = { name = heir_ed_trait_focus_active }
 		}
 		heir_education_admin_ig_reaction = yes
+		# Each advance of this study costs innovation (heir_ed_gain_admin,
+		# heir_education_effects.txt, which applies it): shown here as the
+		# engine's own lines (GUI audit JE-5). Keep the duration in step.
+		custom_tooltip = HE_SKILL_ADVANCE_COST_TT
+		show_as_tooltip = {
+			add_modifier = { name = heir_education_innovation_cost days = 30 }
+		}
 	}
 }
 
@@ -142,6 +149,13 @@ he_enable_diplo_focus = {
 			add_modifier = { name = heir_ed_trait_focus_active }
 		}
 		heir_education_diplo_ig_reaction = yes
+		# Each advance of this study costs innovation (heir_ed_gain_diplo,
+		# heir_education_effects.txt, which applies it): shown here as the
+		# engine's own lines (GUI audit JE-5). Keep the duration in step.
+		custom_tooltip = HE_SKILL_ADVANCE_COST_TT
+		show_as_tooltip = {
+			add_modifier = { name = heir_education_innovation_cost days = 30 }
+		}
 	}
 }
 
@@ -228,6 +242,13 @@ he_enable_military_focus = {
 			add_modifier = { name = heir_ed_trait_focus_active }
 		}
 		heir_education_military_ig_reaction = yes
+		# Each advance of this study costs innovation (heir_ed_gain_military,
+		# heir_education_effects.txt, which applies it): shown here as the
+		# engine's own lines (GUI audit JE-5). Keep the duration in step.
+		custom_tooltip = HE_SKILL_ADVANCE_COST_TT
+		show_as_tooltip = {
+			add_modifier = { name = heir_education_innovation_cost days = 30 }
+		}
 	}
 }
 

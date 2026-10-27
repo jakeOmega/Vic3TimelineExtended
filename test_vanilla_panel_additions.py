@@ -8,6 +8,8 @@
   owner decision 2026-10-27).
 - Civil Rights' status names the ending the movement would reach now (JE-4),
   through script values that mirror the entry's on_complete and on_fail.
+- Heir Education's skill buttons preview the innovation cost each advance
+  applies, at the duration the advance applies it for (JE-5).
 """
 
 import json
@@ -22,6 +24,8 @@ WIDGETS = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 CIVIL_RIGHTS = os.path.join(REPO, "common", "journal_entries", "je_civil_rights.txt")
 CR_VALUES = os.path.join(REPO, "common", "script_values", "civil_rights_values.txt")
+HE_BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "heir_education_buttons.txt")
+HE_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "heir_education_effects.txt")
 
 # gui_style_guide.md rule 3: the serif body face runs about 10 units a
 # character at 20, so 8.5 at the 17 of this panel's body text, plus 10%.
@@ -198,6 +202,24 @@ class CivilRightsEndingMirrorTest(unittest.TestCase):
 
     def test_fail(self):
         self.check("on_fail", "cr_fail_ending_now")
+
+
+class HeirEducationCostPreviewTest(unittest.TestCase):
+    def test_each_skill_button_previews_its_advance_cost(self):
+        buttons = _read(HE_BUTTONS)
+        effects = _read(HE_EFFECTS)
+        for skill in ("admin", "diplo", "military"):
+            with self.subTest(skill=skill):
+                m = re.search(r"(?m)^heir_ed_gain_%s = \{" % skill, effects)
+                gain = _block_from(effects, m.end() - 1)
+                applied = re.search(r"add_modifier = \{ name = heir_education_innovation_cost days = (\d+) \}", gain)
+                m = re.search(r"(?m)^he_enable_%s_focus = \{" % skill, buttons)
+                button = _block_from(buttons, m.end() - 1)
+                shown = re.search(r"show_as_tooltip = \{\s*add_modifier = \{ name = heir_education_innovation_cost days = (\d+) \}", button)
+                self.assertIsNotNone(applied)
+                self.assertIsNotNone(shown)
+                self.assertEqual(shown.group(1), applied.group(1))
+                self.assertIn("custom_tooltip = HE_SKILL_ADVANCE_COST_TT", button)
 
 
 if __name__ == "__main__":
