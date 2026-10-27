@@ -222,7 +222,7 @@ KIND_OBL_FULFILLED, KIND_OBL_BREACHED, KIND_OBL_RENEGOTIATED, KIND_OBL_RELEASED 
 # A kept, broken or renegotiated promise records its group in the entry's _inst
 # (te_tax_history_push_promise, te_tax_obligation_effects.txt), and its history line names
 # the group: te_tax_hist_promise_<outcome>_<ig> (GUI audit TAX-21).
-# A month index beyond any game date: te_tax_view_obl_next_due_raw's "no deadline".
+# A month index beyond any game date: te_tax_view_obl_next_due's starting point, lowered by each deadline.
 NO_DEADLINE = 999999
 PROMISE_OUTCOME_KINDS = {KIND_OBL_FULFILLED: ("kept", "was kept"), KIND_OBL_BREACHED: ("broken", "was broken"),
                          KIND_OBL_RENEGOTIATED: ("renegotiated", "was renegotiated")}
@@ -940,17 +940,17 @@ def _overview_views():
                      f"var:te_tax_o{n}_state = {OBL_MAINTAINING} has_variable = te_tax_o{n}_fails "
                      f"var:te_tax_o{n}_fails > 0 }} add = 1 }}")
     lines.append("}")
-    # The earliest deadline: a large sentinel, lowered (`max =`, an upper bound) by each slot being
-    # delivered; the view turns the sentinel back into -1.
-    lines += ["te_tax_view_obl_next_due_raw = {", f"\tvalue = {NO_DEADLINE}"]
-    for n in OBLIGATION_SLOTS:
-        lines.append(f"\tif = {{ limit = {{ {_is_open(f'te_tax_o{n}_on')} has_variable = te_tax_o{n}_state "
-                     f"var:te_tax_o{n}_state = {OBL_DELIVERING} has_variable = te_tax_o{n}_deadline }} "
-                     f"max = var:te_tax_o{n}_deadline }}")
-    lines.append("}")
-    lines += ["te_tax_view_obl_next_due = {", "\tvalue = -1",
-              f"\tif = {{ limit = {{ has_variable = te_tax_schema te_tax_view_obl_next_due_raw < {NO_DEADLINE} }} "
-              "value = te_tax_view_obl_next_due_raw }", "}"]
+    # The earliest deadline: while any slot is being delivered, a large sentinel lowered
+    # (`max =`, an upper bound) by each such slot's deadline; -1 while none is.
+    delivering = {n: (f"{_is_open(f'te_tax_o{n}_on')} has_variable = te_tax_o{n}_state "
+                      f"var:te_tax_o{n}_state = {OBL_DELIVERING} has_variable = te_tax_o{n}_deadline")
+                  for n in OBLIGATION_SLOTS}
+    lines += ["te_tax_view_obl_next_due = {", "\tvalue = -1", "\tif = {",
+              "\t\tlimit = { has_variable = te_tax_schema OR = { "
+              + " ".join(f"AND = {{ {cond} }}" for cond in delivering.values()) + " } }",
+              f"\t\tvalue = {NO_DEADLINE}"]
+    lines += [f"\t\tif = {{ limit = {{ {cond} }} max = var:te_tax_o{n}_deadline }}" for n, cond in delivering.items()]
+    lines += ["\t}", "}"]
     lines += _split_month("te_tax_view_obl_next_due", "te_tax_view_obl_next_due", "has_variable = te_tax_schema")
     lines += ["", "# How many parts of the open draft a passed bill or an outside change moved since the draft",
               "# changed them: each waits on its Accept before the draft can be introduced."]
@@ -1170,11 +1170,11 @@ def _workbench_views():
         lines += _view(f"te_tax_view_p{slot}_goods_changed", 0, on,
                        [f"if = {{ limit = {{ has_variable = {p}_g_{good} var:{p}_g_{good} >= 0 }} add = 1 }}"
                         for good in goods])
-        # Which goods it taxes (1) or exempts (0), -1 for a good it leaves alone, and how many of
-        # each (GUI audit TAX-12: the passed bill's goods as icons).
+        # Which goods it taxes (1) or exempts (2; stored as 0), 0 for a good it leaves alone, and
+        # how many of each (GUI audit TAX-12: the passed bill's goods as icons).
         for good in goods:
-            lines += _view(f"te_tax_view_p{slot}_g_{good}", -1, f"{on} has_variable = {p}_g_{good} var:{p}_g_{good} >= 0",
-                           [f"value = var:{p}_g_{good}"])
+            lines += _view(f"te_tax_view_p{slot}_g_{good}", 0, f"{on} has_variable = {p}_g_{good} var:{p}_g_{good} >= 0",
+                           ["value = 2", f"if = {{ limit = {{ var:{p}_g_{good} = 1 }} value = 1 }}"])
         for name, value in (("taxed", 1), ("exempt", 0)):
             lines += _view(f"te_tax_view_p{slot}_goods_{name}", 0, on,
                            [f"if = {{ limit = {{ has_variable = {p}_g_{good} var:{p}_g_{good} = {value} }} add = 1 }}"
@@ -1360,7 +1360,7 @@ def _history_views():
              "# version for an entry that changed the code (CODE_CHANGE_KINDS), else 0, the row's",
              "# \"v8\" (GUI audit TAX-21)."]
     for i in range(1, HISTORY_SIZE + 1):
-        for field, default in (("kind", 0), ("inst", 0), ("month", -1), ("version", -1)):
+        for field, default in (("kind", 0), ("inst", 0), ("month", -1), ("version", 0)):
             lines += [f"te_tax_view_hist_{i}_{field} = {{", f"\tvalue = {default}"]
             for head in range(1, HISTORY_SIZE + 1):
                 variable = f"te_tax_h{(head - i) % HISTORY_SIZE + 1}_{field}"
@@ -4499,13 +4499,13 @@ def generated_rows():
         lines += [
             "",
             f"\t### The goods passed bill {slot} taxes and exempts, as icons (te_tax_view_p{slot}_g_<good>:",
-            "\t### 1 taxed, 0 exempted, -1 left alone), each set under its label.",
+            "\t### 1 taxed, 2 exempted, 0 left alone), each set under its label.",
             f"\ttype te_tax_pk_goods_icons_{slot} = flowcontainer {{",
             "\t\tdirection = vertical",
             "\t\tignoreinvisible = yes",
             "\t\tspacing = 2",
         ]
-        for name, value in (("taxed", 1), ("exempt", 0)):
+        for name, value in (("taxed", 1), ("exempt", 2)):
             count = _gui_view(f"te_tax_view_p{slot}_goods_{name}", "NotEqualTo_CFixedPoint", 0)
             lines += [
                 "\t\tflowcontainer = {",
