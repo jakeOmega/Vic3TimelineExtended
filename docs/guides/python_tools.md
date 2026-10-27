@@ -170,6 +170,21 @@ Defensive pattern: make the regex match BOTH the legacy untagged form and the ta
 | `mod_state_client.py` | CLI client for the mod state server. | `python mod_state_client.py <command> [args]` |
 | `mod_state_script.py` | Generates text reference docs (`docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt`) from parsed mod state. This is also called automatically when the mod state server starts or reloads. | `python mod_state_script.py` |
 
+### Running the suite
+
+`.venv/bin/python -m pytest -n auto test_*.py` runs every test file in parallel (pytest-xdist, one worker per CPU).
+CI's "Unit tests" step adds `--dist loadfile`, which runs each file whole, in order, on one worker, and `--durations=25`,
+which lists the slowest tests in the log. Don't use `--dist loadscope` here. It splits a file's classes into batches,
+and pytest runs `tearDownModule` after each batch, so `test_econ_save_series` deleted its temporary directory before
+its later classes ran (five files define `setUpModule` or `tearDownModule`). The tests are plain `unittest` classes, so
+`python3 -m unittest discover -s . -p 'test_*.py'` runs the same tests one at a time. The two totals differ by about 20:
+a class whose `setUpClass` raises `SkipTest` (no game install) is one skip to unittest and one per test to pytest.
+
+Cache what a test helper parses when tests call it in a loop. `test_demographics_registry`'s `_raw_blocks` re-read
+about 2 MB of script for every `_Engine`, and some tests build one per loop pass: about 700 s of the Demographics
+tests' 900, two fifths of the suite. Its cache keys each file's parse on (path, mtime, size) and hands each caller a new
+dict (2026-10-27).
+
 ### Reusing another test file's helpers
 
 Import a `TestCase` class through its module (`import test_demographics_registry as R`, then

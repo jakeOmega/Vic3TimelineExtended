@@ -70,17 +70,27 @@ jobs:
           # `ruff>=0.5,<1` is right for a developer machine, but a new ruff
           # release can add rules (or change an existing one's behaviour) and
           # redden CI on a commit that changed nothing. Bump this deliberately,
-          # after running `ruff check .` locally on the new version.
-          python3 -m pip install "ruff==0.15.8"
+          # after running `ruff check .` locally on the new version. pytest and
+          # pytest-xdist (the unit-test runner) are pinned for the same reason.
+          python3 -m pip install "ruff==0.15.8" "pytest==9.1.1" "pytest-xdist==3.8.0"
           ruff --version
 
       - name: Byte-compile every Python file
         if: ${{ !cancelled() }}
         run: python3 -m compileall -q .
 
+      # The tests are unittest classes; pytest runs them unchanged, one worker
+      # per CPU (-n auto). --dist loadfile runs each file whole, in order, on one
+      # worker, as unittest does: under loadscope a file's classes are split into
+      # batches, and pytest runs tearDownModule after each, so
+      # test_econ_save_series lost its temporary directory midway. Run one at a
+      # time, as before, this step took 16-24 minutes (October 2026).
+      # --durations=25 lists the slowest tests, so a new slow one shows in the
+      # log. `python3 -m unittest discover -s . -p 'test_*.py'` still runs the
+      # same tests serially.
       - name: Unit tests
         if: ${{ !cancelled() }}
-        run: python3 -m unittest discover -s . -p 'test_*.py'
+        run: python3 -m pytest -n auto --dist loadfile -p no:cacheprovider --durations=25 -q test_*.py
 
       # Bare `ruff check .` on purpose — the rule set lives in ruff.toml
       # (`[lint] select = ["F"]`), so this is byte-for-byte the command the
