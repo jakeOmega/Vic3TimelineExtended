@@ -226,7 +226,9 @@ ch_show_sgui = {
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 3 }
 			has_variable = ch_sol
-			var:ch_sol > 0
+			# Either sign: a standard of living below the world average takes pull
+			# away, and the row must show it so the lines add up to the Raw Score.
+			NOT = { var:ch_sol = 0 }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 4 }

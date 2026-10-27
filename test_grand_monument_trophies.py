@@ -372,9 +372,10 @@ class ConsequenceTests(unittest.TestCase):
         self.assertIn("gm_tr_country_monthly = yes", squash(block(e, "gm_country_monthly")))
         self.assertEqual(squash(block(read(TR_EFFECTS), "gm_tr_country_monthly")), "gm_tick_boon = { SRC = homecoming }")
         L = loc()
-        for key in ("gm_boon_homecoming", "gm_boon_homecoming_desc", "gm_boon_homecoming_effect"):
+        for key in ("gm_boon_homecoming", "gm_boon_homecoming_desc"):
             self.assertIn(key, L)
-        self.assertTrue(L["gm_boon_homecoming_effect"].startswith("#G +5#!"))
+        # The boon's row renders the modifier itself, so its figure cannot drift (GUI audit, 2026-10-27).
+        self.assertIn("[GetStaticModifier('gm_boon_homecoming').GetDesc]", L["gm_je_tt_boon_homecoming"])
 
     def test_the_ai_follows_law_stances(self):
         minded = squash(block(read(TR_TRIGGERS), "gm_tr_ig_looting_minded"))
