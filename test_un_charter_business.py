@@ -481,7 +481,7 @@ class LocTests(unittest.TestCase):
         loc = _loc()
         for key in ("un_charter_needs_reform_1_tt", "un_charter_needs_reform_2_tt",
                     "je_un_chamber_propose_needs_reform_1", "je_un_chamber_propose_needs_reform_2",
-                    "je_un_chamber_sub_propose_justice", "je_un_chamber_sub_propose_institutions",
+                    "je_un_chamber_sub_propose_ready", "je_un_chamber_sub_propose_shelved",
                     "je_un_chamber_outcome_passed_vetoed_blocked"):
             with self.subTest(key=key):
                 self.assertIn(key, loc)

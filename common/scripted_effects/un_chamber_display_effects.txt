@@ -1837,10 +1837,10 @@ un_chamber_propose_nuclear_ban_row = {
 }
 
 # The docket (redesign phase 4): what it last took up, and when it takes up the
-# next item. Root-level lines only.
+# next item. Root-level lines only. How the docket works is the Docket
+# concept's, linked from the subheading (the 2026-10-27 audit, UN-8).
 # Scope: country
 un_chamber_docket_block = {
-	custom_tooltip_no_bullet = je_un_chamber_docket_intro
 	if = {
 		limit = { has_global_variable = un_dkt_last_type }
 		un_chamber_docket_last_line = yes
