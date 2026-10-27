@@ -3214,6 +3214,24 @@ types banking_dashboard_widget_types
 			margin = { 6 4 }
 		}
 
+		### No points free (GUI audit BNK-12): each greyed Enable button says
+		### why in its own tooltip, and this says it once, above the rows, so
+		### the reason and what to do about it sit with the tools. Its hover is
+		### the overview's points-free breakdown.
+		textbox = {
+			visible = "[GetScriptedGui('banking_dash_no_points_free').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "banking_dash_no_points_note"
+			tooltip = "banking_dash_budget_free_tt"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			parentanchor = hcenter
+			align = center|nobaseline
+			using = banking_dash_fontsize_row
+			margin = { 6 4 }
+		}
+
 		### Prudential Regulation
 		flowcontainer = {
 			direction = vertical
