@@ -18,7 +18,7 @@
 # test_seabed_leases.py.
 # ============================================================================
 te_seabed_lease_pacific = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_pacific.dds"
 	kind = directed
 	cost = 25
 
@@ -231,7 +231,7 @@ te_seabed_lease_pacific = {
 }
 
 te_seabed_lease_atlantic = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_atlantic.dds"
 	kind = directed
 	cost = 25
 
@@ -444,7 +444,7 @@ te_seabed_lease_atlantic = {
 }
 
 te_seabed_lease_indian = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_indian.dds"
 	kind = directed
 	cost = 25
 
@@ -657,7 +657,7 @@ te_seabed_lease_indian = {
 }
 
 te_seabed_lease_arctic = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_arctic.dds"
 	kind = directed
 	cost = 25
 
@@ -870,7 +870,7 @@ te_seabed_lease_arctic = {
 }
 
 te_seabed_lease_southern = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/goods_transfer_treaties.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_southern.dds"
 	kind = directed
 	cost = 25
 

@@ -590,8 +590,8 @@ decision Begin Orbital Debris Removal and wait a month.
 5. **The ceiling.** Console to Kessler Cascade, then strike several times (or option c again):
    the index stops at 100, and the high pool keeps its share (the low pool gives way).
 6. **The anti-satellite strike.** At war with a country that has a Space Program: the action
-   Anti-Satellite Strike appears in its diplomatic actions (and in the lens bar, with the
-   placeholder icon), greyed with each failing requirement's line until all hold. The
+   Anti-Satellite Strike appears in its diplomatic actions (and in the lens bar, with its
+   missile-and-satellite icon), greyed with each failing requirement's line until all hold. The
    confirmation box lists the network penalty (and its six-month and half-strength cases),
    the infamy, the case strength, the relations and the debris. After the strike: the target
    holds Orbital Network Disrupted for a year (half strength with a Battlestation, six months
@@ -624,12 +624,13 @@ decision Begin Orbital Debris Removal and wait a month.
     of when the strike's would have (`te_asat_rebuild_disruption`'s ladder of 30-day literals;
     it passed a computed duration, read as 0 days, until 2026-10-23).
 
-### Placeholder art
+### Art
 
-| Where | Now | Final art (icon-pipeline subject) | Proposed path |
-|---|---|---|---|
-| `te_asat_strike_action`'s `texture` | `diplomatic_action_icons/covert_space_espionage_action.dds` | an interceptor missile streaking up toward a small satellite that is breaking into fragments | `gfx/interface/icons/diplomatic_action_icons/te_asat_strike_action.dds` |
-| the lens bar | `lens_toolbar_icons/te_asat_strike_action.dds`, a byte copy of the same placeholder | the same picture (the pipeline's lens copy) | unchanged |
-| `pm_debris_active_removal` | `cat_star_purple_p1.dds` | a small servicer spacecraft grappling a dead satellite with a robotic arm | `gfx/interface/icons/production_method_icons/debris_active_removal.dds` |
-| `pm_debris_laser_broom` | `cat_star_purple_p2.dds` | a ground observatory dome firing a thin green laser beam up at a tiny tumbling fragment | `gfx/interface/icons/production_method_icons/debris_laser_broom.dds` |
-| `pm_debris_fusion_sweepers` | `cat_rocket_purple_p5.dds` | a fusion-drive tug with a wide mesh net gathering debris in orbit | `gfx/interface/icons/production_method_icons/debris_fusion_sweepers.dds` |
+Painted in icon batch 6 (2026-10-27); until then each borrowed another icon or a `cat_*` glyph.
+
+| Where | Shows | File |
+|---|---|---|
+| `te_asat_strike_action`'s `texture`, and the lens bar's copy | an interceptor missile striking a gold-foil satellite in a burst of fire | `gfx/interface/icons/diplomatic_action_icons/te_asat_strike_action.dds`, `lens_toolbar_icons/te_asat_strike_action.dds` |
+| `pm_debris_active_removal` | a spacecraft gripping a dead satellite with a jointed arm | `gfx/interface/icons/production_method_icons/pm_debris_active_removal.dds` |
+| `pm_debris_laser_broom` | an observatory dome, its tube aimed at a small fragment | `gfx/interface/icons/production_method_icons/pm_debris_laser_broom.dds` |
+| `pm_debris_fusion_sweepers` | a rocket towing a net of rocks | `gfx/interface/icons/production_method_icons/pm_debris_fusion_sweepers.dds` |

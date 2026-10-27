@@ -72,7 +72,7 @@ FRIENDLY = {"counterintel_support"}
 # lens_toolbar_icons byte copy, then deletes the entry, which re-arms the
 # icon and lens tests for that type. Until then the engine logs a VFSOpen
 # error for the missing lens icon once a session.
-PLACEHOLDER_ICON = {"counterintel_support": "cultivate_assets"}
+PLACEHOLDER_ICON = {}
 
 # Types with no target marker that still act in the monthly pulse, on
 # something that is not a modifier: secure material finds warheads in the

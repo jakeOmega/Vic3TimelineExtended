@@ -2610,9 +2610,7 @@ covert_secure_material_action = {
 # covert_op_create): a named modifier does not stack with itself, so a second
 # protector could only overwrite the first.
 covert_counterintel_support_action = {
-	# PLACEHOLDER: cultivate assets' art until an icon pass draws this one
-	# (test_covert_op_registry.PLACEHOLDER_ICON; the lens icon is missing too).
-	texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/covert_counterintel_support_action.dds"
 	groups = {
 		general
 	}

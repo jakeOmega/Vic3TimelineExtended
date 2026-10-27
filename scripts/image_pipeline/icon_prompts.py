@@ -103,6 +103,15 @@ defaults (September 2026, ~350 icons):
   germ as a cabbage (give a virus spaced stalks with red tips).
 - A lattice pylon or tower is all thin lines and vanishes at a goods text
   icon's 25 px: give it thick girders and something solid in front.
+- A clear glass dome cuts out to its frame alone, a birdcage (four seeds of a
+  colony habitat, batch 6): tint the glass ("blue-tinted panes") or keep it
+  small on something solid.
+- "Tug" draws a sea tugboat with a fishing net, even in space: name the craft
+  ("a squat cylindrical rocket spacecraft").
+- In a silhouette, a drafting compass inside a circle or gear reads as an A in
+  a circle, vanilla's Anarchist party mark.
+- A balance beam with things hung from its ends is a hairline with specks at
+  44 px: set the two things side by side instead.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -523,6 +532,16 @@ CATEGORIES = {
         folder="production_method_icons", size=208, mode="emboss", fill=0.865,
         entity_dir="common/production_methods", field="texture",
         color=(259, 238, 201), color_bottom=(211, 158, 115), style=SILHOUETTE),
+    # Political parties (100 px, `icon = { default = "/gfx/..." }`): vanilla's 12 are
+    # embossed silver-tan silhouettes on transparency, uncompressed with mips. Measured:
+    # the shape spans 0.87 of the side (median), its top quarter (164,154,134) and its
+    # bottom quarter (99,82,61), the production methods' palette a shade darker, so
+    # `color` and `color_bottom` are theirs scaled by the ratio. GUI-hosted in effect:
+    # `wire` reads only a `field = "..."` line, and a party's icon is a block, so the
+    # three `default =` lines are edited by hand.
+    "party": dict(
+        folder="political_parties", size=100, mode="emboss", fill=0.87, gui=(),
+        color=(246, 231, 201), color_bottom=(180, 149, 111), style=SILHOUETTE),
 }
 
 
@@ -781,6 +800,12 @@ ICONS: dict[str, dict[str, dict]] = {
         # Power grids (#1109), on Transit Rights' crates until now.
         # Not household plugs (round 1), nor a spark over a brass fitting, which read as a gas flame (round 2).
         "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 2},
+        # Solar colonization (#1172), on vanilla's Transfer State until now.
+        "te_cede_colony": {"subject": "an open bronze hand holding out a small round grey moon rock with a gold-framed glass dome habitat standing on it", "seed": 1},
+        # Global Commons (#1107-#1160): the five basins' leases are one template (test_seabed_leases.py),
+        # so each has its own file of one picture; on vanilla's goods transfer crates until now.
+        **{f"te_seabed_lease_{basin}": {"subject": "a heavy brass key lying on a small heap of round black manganese nodules on a patch of sandy seabed", "seed": 1}
+           for basin in ("pacific", "atlantic", "indian", "arctic", "southern")},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -805,6 +830,18 @@ ICONS: dict[str, dict[str, dict]] = {
         "covert_space_espionage_action": {"subject": "a grey rocket standing on its launch pad with a small brass spy camera on a tripod aimed at it", "seed": 1},
         "covert_cultivate_assets_action": {"subject": "two hands in shadow exchanging a sealed brown envelope", "seed": 3},
         "covert_secure_material_action": {"subject": "a black-gloved hand gripping the handle of a lead-lined steel case marked with a radiation trefoil", "seed": 2},
+        # Later operations, each on an older one's art until now (counterintelligence support on
+        # cultivate assets', the three solar-colony ones on byte copies). A round shield read as a
+        # plate or a porthole before (batch 3): give it a boss and a rim.
+        "covert_counterintel_support_action": {"subject": "a black-gloved hand holding up a round steel shield with a thick raised rim and a domed central boss, guarding", "seed": 1},
+        "covert_incite_autonomy_action": {"subject": "a black-gloved hand planting a small plain bright green cloth flag on a round grey moon rock that has a small gold-framed glass dome on it", "seed": 2},
+        # Round 1's glass dome cut out as a birdcage on all four seeds: the air runs out of a tank instead.
+        "covert_sabotage_colony_action": {"subject": "a black-gloved hand turning a big red valve wheel on top of a tall dented silver oxygen tank standing on a round grey moon rock", "seed": 2},
+        "covert_survey_defences_action": {"subject": "a small brass spy camera on a tripod aimed at a squat grey domed fortress with two gun turrets, standing on a round grey moon rock", "seed": 1},
+        # Not a covert operation: no glove. FLUX will not break things, so the strike is a burst.
+        "te_asat_strike_action": {"subject": "a slim grey interceptor missile on a bright orange flame trail striking a small gold-foil satellite with blue solar panel wings, a burst of orange fire and flying metal shards where they meet", "seed": 3},
+        # Global Commons, on vanilla's Raise Payments until now.
+        "te_seabed_administer_claims": {"subject": "a large bronze hand scooping up a heap of round black deep-sea mineral nodules from a small square of sandy seabed", "seed": 1},
         # Other actions that had no icon.
         "decolonize_diplo_action": {"subject": "an open brass birdcage with a small bird flying out of its door", "seed": 1},
         "annex_subject_peaceful": {"subject": "two small stone houses joined under a single shared roof", "seed": 1},
@@ -1010,7 +1047,14 @@ ICONS: dict[str, dict[str, dict]] = {
         # FLUX puts chimneys on anything called a plant.
         "building_grid_transfer_station": {"subject": "an electrical substation yard: rows of big grey transformers and steel lattice gantries strung with high-voltage lines behind a wire fence, the lines leaving on tall steel pylons across green fields, loosely hand-painted with visible brush strokes", "seed": 0},
         # The station's method until 2026-10-25, now a building of its own, on that method's icon until painted.
-        "building_grid_hvdc_interconnector": {"subject": "a coastal HVDC converter station: a large plain grey hall beside a row of tall white valve towers on a rocky shore, a thick black power cable running from it down the beach into blue sea, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_grid_hvdc_interconnector": {"subject": "a coastal HVDC converter station: a large plain grey hall beside a row of tall white valve towers on a rocky shore, a thick black power cable running from it down the beach into blue sea, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Solar colonization slice 6 (#1179), on the Military Base's and the Battlestation's icons
+        # until now. Both stand on the ground, so the building style, not ORBIT.
+        "building_orbital_defense_battery": {"subject": "a ground-to-orbit missile battery: a fenced concrete compound with a row of open round interceptor silos, a tall radar dish and a low bunker, one slim grey missile rising from a silo on a plume of white smoke, loosely hand-painted with visible brush strokes", "seed": 1},
+        "building_space_command": {"subject": "a military space command base: a long low concrete headquarters with two white radar domes and a big dish antenna, beside a tall rocket assembly hangar and a launch tower holding a grey rocket, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Grand Monuments sites (#1058), on the finished monument's icon until now, as the megaproject
+        # sites were before batch 2.
+        "building_grand_monument_site": {"subject": "a grand monument under construction: a half-built stone column wrapped in wooden scaffolding with a timber crane beside it, blocks of cut stone stacked on an unfinished paved plaza, loosely hand-painted with visible brush strokes", "seed": 2},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -1086,6 +1130,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": 0},
         "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": 1},
         "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": 0},
+        # Demographics (#894), on Emergency Relief's icon until now.
+        # Round 1's bags read as luggage: nothing said medicine.
+        "decree_medical_outreach": {"subject": "a black leather doctor's bag with a silver stethoscope draped over it and a big red map pin stuck upright into its top", "seed": 2},
     },
     # The four mod-added laws still on another law's icon.
     "law": {
@@ -1098,13 +1145,14 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
-        # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md)
-        "law_executive_tribunals": {"subject": "a royal crown resting on top of a closed leather-bound law book", "seed": None},
-        "law_religious_courts": {"subject": "a thick holy book lying open on a carved wooden lectern, a string of prayer beads draped across its pages", "seed": None},
-        "law_statutory_courts": {"subject": "a stack of three thick bound law codes with a judge's curled white wig resting on top", "seed": None},
-        "law_constitutional_review": {"subject": "a long parchment charter unrolled and pinned flat by two brass weights, a large red wax seal at its foot", "seed": None},
-        "law_judicial_supremacy": {"subject": "a pair of large brass balance scales on a marble pedestal, one pan holding a small rolled scroll and sitting lower than the other", "seed": None},
-        "law_algorithmic_jurisprudence": {"subject": "a pair of brass balance scales whose central pillar is a computer chip with glowing circuit traces running out along the beam", "seed": None},
+        # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md). Closed
+        # books with plain covers: an open book or an unrolled charter gets written on.
+        "law_executive_tribunals": {"subject": "a royal crown resting on top of a thick closed leather-bound book with a plain unmarked cover", "seed": 2},
+        "law_religious_courts": {"subject": "a thick closed book with a plain unmarked leather cover and brass corners resting on a carved wooden lectern, a long string of prayer beads draped over it", "seed": 3},
+        "law_statutory_courts": {"subject": "a stack of three thick bound books with plain unmarked spines, a judge's curled grey wig resting on top", "seed": 2},
+        "law_constitutional_review": {"subject": "a big brass magnifying glass lying across a thick closed book with a plain unmarked cover and a large red wax seal on it", "seed": 0},
+        "law_judicial_supremacy": {"subject": "a pair of large brass balance scales on a marble pedestal, one pan holding a small rolled scroll and sitting lower than the other", "seed": 2},
+        "law_algorithmic_jurisprudence": {"subject": "a pair of brass balance scales whose central pillar is a computer chip with glowing circuit traces running out along the beam", "seed": 1},
         # The ministries all shared national_bank.dds's picture (spec, mod placeholders audit).
         "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
         "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},
@@ -1730,6 +1778,15 @@ ICONS: dict[str, dict[str, dict]] = {
                         "now": f"{_GI}/goods_icons/electricity.dds"},
         "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": 1,
                         "now": f"{_GI}/institution_icons/health_service.dds"},
+        # Global Commons and solar colonization agencies, byte copies of UNEP's and UNOOSA's until now.
+        # The penguin has no real holes: `solid` keeps its pale belly from being cut out.
+        "agency_ats": {"subject": "a standing emperor penguin with a black back, a pale cream belly and a bright yellow-orange patch on its neck", "seed": 2, "solid": True,
+                       "now": f"{_GI}/un_icons/agency_unep.dds"},
+        # The anti-satellite moratorium. A satellite side-on is a speck: an angled boxy one.
+        "agency_unoda": {"subject": "a chunky boxy gold-foil satellite seen at an angle from above, two short wide blue solar panels and a small dish antenna", "seed": 1,
+                         "now": f"{_GI}/un_icons/agency_unoosa.dds"},
+        "agency_copuos": {"subject": "a round grey moon rock with a gold-framed dome of blue-tinted glass panes standing on it", "seed": 2,
+                          "now": f"{_GI}/un_icons/agency_unoosa.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
         # War, condemned: the mandate's crossed swords under vanilla's red cross.
         # A lone sword was too thin at 40 px, and a gauntlet read as a mug.
@@ -1775,7 +1832,14 @@ ICONS: dict[str, dict[str, dict]] = {
                ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"),
                ("cultural_diversity", "ccd", f"{_GI}/goods_icons/fine_art.dds"),
                ("nuclear_ban", "tpnw", f"{_GI}/goods_icons/electricity.dds"),
-               ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
+               ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"),
+               ("antarctic", "ats", f"{_GI}/un_icons/topic_climate.dds"),
+               ("asat", "unoda", f"{_GI}/un_icons/topic_space.dds"),
+               ("colony_protection", "copuos", f"{_GI}/un_icons/topic_space.dds"))},
+        # The petition to lift sanctions, a copy of Sanctions' crate until now. FLUX will not
+        # break the chain: the padlock hangs open and the chain lies loose.
+        "topic_lift_sanctions": {"subject": "a plain unmarked wooden crate with a heavy iron chain lying loose on the ground beside it and an open iron padlock hanging from the chain", "seed": 2,
+                                 "now": f"{_GI}/un_icons/topic_sanctions.dds"},
         # Phase 7 topics that are no agency's, until now byte copies of older topics.
         # Round 1 drew a clock and a box under the map, no scales: name the two pans.
         "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": 1,
@@ -2089,6 +2153,12 @@ ICONS: dict[str, dict[str, dict]] = {
     # A cable bent under the waves with a bolt over it read as a life ring or a hook.
     "production_method": {
         "pm_grid_hvdc_interconnector": {"subject": "the cut end of a fat round undersea power cable showing three round cores inside it, lying above three thick wavy lines of sea water", "seed": 1},
+        # Orbital debris removal (Global Commons), on cat_* glyphs until now. Thick beams:
+        # the emboss turns a thin one into a hairline.
+        "pm_debris_active_removal": {"subject": "a small boxy spacecraft reaching out a thick jointed robotic arm to grip a tumbling dead satellite with one broad solar panel", "seed": 3},
+        "pm_debris_laser_broom": {"subject": "an observatory dome on the ground firing one thick straight laser beam up at a small jagged rock fragment", "seed": 1},
+        # "Space tug" drew a sea tugboat with a fishing net on all four seeds.
+        "pm_debris_fusion_sweepers": {"subject": "a squat cylindrical rocket spacecraft with a big round engine bell and stubby fins, towing a wide round net bulging with jagged rocks behind it on a thick cable", "seed": 3},
     },
     # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
     # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.
@@ -2117,6 +2187,23 @@ ICONS: dict[str, dict[str, dict]] = {
         # The war dead, not war: two crossed sabres were thin at 44 px.
         "cause_war": {"subject": "an empty dented steel army helmet resting on the butt of a rifle stuck upright in a mound of earth", "seed": 1,
                       "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # The other seven overview cells, on vanilla icons until now; subjects from the doc's Final art.
+        # Round 1's balance beam was a hairline with specks on it at 44 px: the two objects alone.
+        "ov_natural_change": {"subject": "a small wooden baby cradle with a blue blanket standing side by side with a small rounded grey headstone, both the same height", "seed": 0,
+                              "now": f"{_GI}/generic_icons/population.dds"},
+        "ov_migration": {"subject": "a small traveller in a brown coat and hat walking to the right, a cloth bundle tied to a stick over his shoulder", "seed": 1,
+                         "now": f"{_GI}/state_status_icons/mass_migration_target.dds"},
+        # Gold sand and a dark frame: a clear pale glass bulb is lost in the cut-out.
+        "ov_life_expectancy": {"subject": "a chunky hourglass with a dark wooden frame and amber-tinted glass, golden sand running down, a small bright green heart inside its upper bulb", "seed": 0,
+                               "now": f"{_GI}/diplomatic_treaties_articles_icons/healthcare_aid.dds"},
+        "ov_fertility": {"subject": "a wooden baby cradle on curved rockers with a soft pink blanket folded over its side", "seed": 2,
+                         "now": f"{_GI}/decree/decree_natalism_initiative.dds"},
+        "ov_median_age": {"subject": "a dark wooden walking cane with a curved handle crossed with a red and yellow child's rattle", "seed": 3,
+                          "now": f"{_GI}/generic_icons/clock.dds"},
+        "ov_working_age": {"subject": "a steel claw hammer with a wooden handle leaning against a brown leather briefcase", "seed": 3,
+                           "now": f"{_GI}/institution_icons/institution_ministry_of_labor.dds"},
+        "ov_gini": {"subject": "three stacks of plain gold coins each stamped with a small star, one stack tall and two short", "seed": 0,
+                    "now": f"{_GI}/generic_icons/money.dds"},
     },
     "demog_pip": {
         # s0 came out broken.
@@ -2129,6 +2216,18 @@ ICONS: dict[str, dict[str, dict]] = {
                       "now": f"{_GI}/generic_icons/information.dds"},
         "pip_famine": {"subject": "an empty round bowl seen from the side with a spoon resting across its rim", "seed": 2,
                        "now": f"{_GI}/generic_icons/goods_shortage.dds"},
+    },
+    # The mod's three parties, on vanilla parties' icons until now (`now`). Thick shapes:
+    # the emboss turns thin parts into hairlines at 100 px.
+    "party": {
+        # The European Greens' sunflower; a leaf would echo the Agrarians' clover.
+        "green_party": {"subject": "a sunflower head with a ring of thick rounded petals around a big round centre, on a short thick stem with one broad leaf", "seed": 3,
+                        "now": f"{_GI}/political_parties/agrarians.dds"},
+        "populist_party": {"subject": "a big megaphone bullhorn with a thick handle, its wide bell pointing up to the right", "seed": 3,
+                           "now": f"{_GI}/political_parties/radical.dds"},
+        # Round 1's compass in a gear read as an A in a circle, vanilla's Anarchist mark, at 32 px.
+        "technocratic_party": {"subject": "a thick toothed gear wheel with a big round light bulb set in its centre", "seed": 0,
+                               "now": f"{_GI}/political_parties/liberal.dds"},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
@@ -3073,6 +3172,10 @@ ICONS.update({
                                  marks=[{"draw": "arrow", "dir": "up", "colour": "green"}]),
         "phase_boom": _bank(f"{_TM}/modifier_coins_positive.dds", tint="gold",
                             marks=[{"draw": "arrow", "dir": "up", "colour": "blue"}]),
+        # Not Started (2026-10-17): the bank front alone, centred, no mark; the overview dims it,
+        # as it dimmed Stable's until now.
+        "phase_not_started": {"from": "banking_part/bank", "base": {"scale": 0.88, "at": (0.5, 0.5)},
+                              "now": f"{_GI}/banking_icons/phase_stable.dds"},
         "phase_frenzy": _bank(f"{_TM}/modifier_fire_positive.dds", tint="gold",
                               marks=[{"draw": "arrow", "dir": "up", "colour": "red", "double": True, "scale": 0.58},
                                      {"part": "banking_part/coin", "at": (0.2, 0.86), "scale": 0.22},

@@ -102,9 +102,7 @@ building_grid_transfer_station = {
 
 building_grid_hvdc_interconnector = {
 	building_group = bg_public_infrastructure
-	# Placeholder: the method's cable icon until the icon pipeline paints one
-	# (scripts/image_pipeline/icon_prompts.py).
-	icon = "gfx/interface/icons/production_method_icons/pm_grid_hvdc_interconnector.dds"
+	icon = "gfx/interface/icons/building_icons/building_grid_hvdc_interconnector.dds"
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
 	city_type = city
 	levels_per_mesh = -1
