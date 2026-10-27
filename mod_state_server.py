@@ -37,7 +37,7 @@ from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 
-from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines, iter_script_files
+from mod_state import ModState, entity_paths, iter_loc_lines, iter_script_files
 from paradox_file_parser import ParadoxFileParser
 import path_constants
 from path_constants import (
@@ -115,7 +115,11 @@ _parser_logger.addHandler(_file_handler)
 _server_start_time: float = 0.0  # set in main()
 
 # ---------------------------------------------------------------------------
-# Path configuration (mirrors mod_state_script.py)
+# Path configuration
+#
+# Built by mod_state.entity_paths from VANILLA_COMMON_DIRS (the one list of
+# vanilla entity types; vanilla_parsed snapshots exactly the same set) and
+# MOD_ONLY_DIRS. mod_state_script.py builds the same pair.
 #
 # Use forward slashes everywhere; path_constants exposes Linux-rooted paths,
 # and the win-style backslash trick from the pre-WSL repo no longer works.
@@ -123,79 +127,7 @@ _server_start_time: float = 0.0  # set in main()
 _BASE_COMMON = os.path.join(base_game_path, "game", "common")
 _MOD_COMMON = os.path.join(mod_path, "common")
 
-# Built from mod_state.VANILLA_COMMON_DIRS, the one list of vanilla entity
-# types — vanilla_parsed snapshots exactly the same set.
-base_game_paths = {
-    entity_type: os.path.join(_BASE_COMMON, *rel.split("/"))
-    for entity_type, rel in VANILLA_COMMON_DIRS.items()
-}
-
-mod_paths = {
-    "Building Groups": os.path.join(_MOD_COMMON, "building_groups"),
-    "Buildings": os.path.join(_MOD_COMMON, "buildings"),
-    "Technologies": os.path.join(_MOD_COMMON, "technology", "technologies"),
-    "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
-    "PMs": os.path.join(_MOD_COMMON, "production_methods"),
-    "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
-    "Political Movements": os.path.join(_MOD_COMMON, "political_movements"),
-    "Parties": os.path.join(_MOD_COMMON, "parties"),
-    "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
-    "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
-    "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
-    "Character Traits": os.path.join(_MOD_COMMON, "character_traits"),
-    "Combat Unit Groups": os.path.join(_MOD_COMMON, "combat_unit_groups"),
-    "Combat Unit Types": os.path.join(_MOD_COMMON, "combat_unit_types"),
-    "Company Types": os.path.join(_MOD_COMMON, "company_types"),
-    "Diplomatic Actions": os.path.join(_MOD_COMMON, "diplomatic_actions"),
-    "Diplomatic Plays": os.path.join(_MOD_COMMON, "diplomatic_plays"),
-    "Goods": os.path.join(_MOD_COMMON, "goods"),
-    "Government Types": os.path.join(_MOD_COMMON, "government_types"),
-    "Institutions": os.path.join(_MOD_COMMON, "institutions"),
-    "Interest Groups": os.path.join(_MOD_COMMON, "interest_groups"),
-    "Laws": os.path.join(_MOD_COMMON, "laws"),
-    "Law Groups": os.path.join(_MOD_COMMON, "law_groups"),
-    "Messages": os.path.join(_MOD_COMMON, "messages"),
-    "Mobilization Option Groups": os.path.join(_MOD_COMMON, "mobilization_option_groups"),
-    "Mobilization Options": os.path.join(_MOD_COMMON, "mobilization_options"),
-    "Modifier Types": os.path.join(_MOD_COMMON, "modifier_type_definitions"),
-    "Modifiers": os.path.join(_MOD_COMMON, "static_modifiers"),
-    "Pop Needs": os.path.join(_MOD_COMMON, "pop_needs"),
-    "Subject Types": os.path.join(_MOD_COMMON, "subject_types"),
-    "Script Values": os.path.join(_MOD_COMMON, "script_values"),
-    "Scripted Effects": os.path.join(_MOD_COMMON, "scripted_effects"),
-    "Scripted Triggers": os.path.join(_MOD_COMMON, "scripted_triggers"),
-    "Scripted Buttons": os.path.join(_MOD_COMMON, "scripted_buttons"),
-    "Scripted GUIs": os.path.join(_MOD_COMMON, "scripted_guis"),
-    "Scripted Progress Bars": os.path.join(_MOD_COMMON, "scripted_progress_bars"),
-    "Ship Types": os.path.join(_MOD_COMMON, "ship_types"),
-    "Ship Groups": os.path.join(_MOD_COMMON, "ship_groups"),
-    "Ship Modifications": os.path.join(_MOD_COMMON, "ship_modifications"),
-    "Ship Modification Slots": os.path.join(_MOD_COMMON, "ship_modification_slots"),
-    "Ship Name Definitions": os.path.join(_MOD_COMMON, "ship_name_definitions"),
-    "Journal Entries": os.path.join(_MOD_COMMON, "journal_entries"),
-    "Journal Entry Groups": os.path.join(_MOD_COMMON, "journal_entry_groups"),
-    "Decisions": os.path.join(_MOD_COMMON, "decisions"),
-    "Country Formation": os.path.join(_MOD_COMMON, "country_formation"),
-    "On Actions": os.path.join(_MOD_COMMON, "on_actions"),
-    "Treaty Articles": os.path.join(_MOD_COMMON, "treaty_articles"),
-    "Religions": os.path.join(_MOD_COMMON, "religions"),
-    "Decrees": os.path.join(_MOD_COMMON, "decrees"),
-    "Principles": os.path.join(_MOD_COMMON, "power_bloc_principles"),
-    "Principle Groups": os.path.join(_MOD_COMMON, "power_bloc_principle_groups"),
-    "Amendments": os.path.join(_MOD_COMMON, "amendments"),
-    "Interest Group Traits": os.path.join(_MOD_COMMON, "interest_group_traits"),
-    "Harvest Condition Types": os.path.join(_MOD_COMMON, "harvest_condition_types"),
-    "Power Bloc Identities": os.path.join(_MOD_COMMON, "power_bloc_identities"),
-    "Events": os.path.join(mod_path, "events"),
-    # Mod-side counterparts of the new vocabularies (most are vanilla-only, but
-    # listed so the mod can override them in future).
-    "Cultures": os.path.join(_MOD_COMMON, "cultures"),
-    "Country Ranks": os.path.join(_MOD_COMMON, "country_ranks"),
-    "Discrimination Traits": os.path.join(_MOD_COMMON, "discrimination_traits"),
-    "Pop Types": os.path.join(_MOD_COMMON, "pop_types"),
-    "Terrains": os.path.join(_MOD_COMMON, "terrain"),
-    "Game Concepts": os.path.join(_MOD_COMMON, "game_concepts"),
-}
+base_game_paths, mod_paths = entity_paths(base_game_path, mod_path)
 
 # ---------------------------------------------------------------------------
 # Globals
@@ -253,6 +185,7 @@ ENTITY_TYPE_TO_DATATYPE: dict[str, str] = {
     "Institutions": "Institution",
     "Game Concepts": "Concept",
     "Country Formation": "CountryFormation",
+    "Parties": "Party",
 }
 
 # Field role -> set of GUI accessor method names that render that field.
@@ -2827,6 +2760,7 @@ _IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
     ("Interest Group Traits",   "icon"),
     ("Harvest Condition Types", "icon"),
     ("Power Bloc Identities",   "icon"),
+    ("Parties",                 "icon"),
 ]
 
 # YAML file → canonical entity-type-name mapping. The YAML is keyed by lowercase
@@ -2945,16 +2879,22 @@ def _image_content_hash(rel_path: str) -> str:
 
 def _entity_image(raw, field: str) -> str | None:
     """An entity's `field` as a path, without the quotes the parser keeps (so
-    it matches the unquoted paths in the YAML allowlist), or None."""
+    it matches the unquoted paths in the YAML allowlist), or None.
+
+    A party's icon is a block, `icon = { default = "/gfx/…" }`: its `default`
+    is the path. A leading `/` is dropped, as the engine reads the path from
+    the game root either way; joined as is, it would resolve nowhere."""
     data = get_entity_data(raw)
     if not isinstance(data, dict):
         return None
     image = get_field(data, field)
+    if isinstance(image, dict):
+        image = get_field(image, "default")
     if not isinstance(image, str):
         return None
     if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
         image = image[1:-1]
-    return image or None
+    return image.lstrip("/") or None
 
 
 def _principle_group_of() -> dict[str, str]:
