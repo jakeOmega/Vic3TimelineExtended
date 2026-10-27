@@ -69,7 +69,9 @@ class ConfidenceTerm(unittest.TestCase):
         tip = re.search(r'^ banking_dash_mon_fx_tt:0 "(.*)"$', loc, re.M).group(1)
         self.assertIn("ScriptValue('te_mon_fx_term_confidence')", tip)
         self.assertNotIn("ScriptValue('te_mon_fx_term_inflation')", tip)
-        self.assertIn('not won by deflating', tip)
+        # The why moved to How Banking Works, The Exchange Rate (GUI audit BNK-1).
+        how = re.search(r'^ banking_dash_how_fx:0 "(.*)"$', loc, re.M).group(1)
+        self.assertIn('not won by deflating', how)
 
 
 if __name__ == '__main__':

@@ -262,7 +262,7 @@ and each heading opens or closes its section:
 | Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
 | Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
-| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate, the stance and what borrowing costs. |
+| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
 
 Each tool's name is underlined: hover it for what the tool does, its full name
 and what it requires. A grayed button means you cannot use the tool now, and
@@ -552,7 +552,8 @@ The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg 
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
-the detail behind its figure. Your Policy Stance and price band are in the
+its reading and what moves it; How Banking Works has the rules behind each
+group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
 
 ![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)

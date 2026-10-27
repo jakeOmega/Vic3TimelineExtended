@@ -596,8 +596,10 @@ class TooltipNumbers(unittest.TestCase):
         return match.group(1)
 
     def test_mandate_tooltip_states_the_slope_the_cap_and_each_mandates_rule(self):
+        # The rule moved from the Mandate row's tooltip to How Banking Works,
+        # The Mandates (GUI audit BNK-1, 2026-10-27).
         per_pp, cap = constants()
-        text = self.loc('banking_dash_mon_mandate_tt')
+        text = self.loc('banking_dash_how_mandates_floor')
         self.assertEqual(per_pp, 1.0, 'retuned: edit the tooltip, the player guide and §0.12')
         self.assertEqual(cap, 5.0, 'retuned: edit the tooltip, the player guide and §0.12')
         self.assertIn('#b one point#! of upward pressure on prices for every point it would have cut below the floor', text)

@@ -302,7 +302,13 @@ class Text(unittest.TestCase):
         return match.group(1)
 
     def test_tooltips_read_the_share_and_the_least_step(self):
-        for key in ('banking_dash_mon_rate_tt', 'banking_dash_mon_target_tt', 'banking_dash_ro_rate_source_mandate'):
+        # The Policy Rate row no longer repeats the drift (GUI audit BNK-9,
+        # 2026-10-27): the Target row beside it reads it, and the rate's row
+        # points there.
+        self.assertIn('$banking_dash_mon_target_label$', self.loc('banking_dash_mon_rate_tt'))
+        self.assertNotIn('te_mon_drift_gap_share_pct', self.loc('banking_dash_mon_rate_tt'))
+        self.assertIn("ScriptValue('te_mon_emergency_cut_factor')", self.loc('banking_dash_mon_target_tt'))
+        for key in ('banking_dash_mon_target_tt', 'banking_dash_ro_rate_source_mandate'):
             text = self.loc(key)
             self.assertIn("ScriptValue('te_mon_drift_gap_share_pct')|0]%#!", text, key)
             self.assertIn("ScriptValue('te_mon_drift_step')|2]#! of a point", text, key)

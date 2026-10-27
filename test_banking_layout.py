@@ -33,7 +33,16 @@ CATEGORIES = {
     "banking_dash_system_command": ["plan", "allocation", "admin", "pool"],
     "banking_dash_system_coop": ["surplus", "investment", "council", "membership"],
 }
-MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_stance", "banking_dash_how_borrowing"]
+# The rules the Monetary Policy row tooltips used to teach are here since the
+# GUI audit (BNK-1, 2026-10-27): the mandates, gold, the exchange rate, the
+# international arrangements and prices.
+MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_rate_none", "banking_dash_how_stance",
+                "banking_dash_how_mandates", "banking_dash_how_mandates_change", "banking_dash_how_mandates_floor",
+                "banking_dash_how_gold", "banking_dash_how_gold_flow", "banking_dash_how_peg",
+                "banking_dash_how_fx", "banking_dash_how_fx_effects", "banking_dash_how_fx_fixed",
+                "banking_dash_how_anchor", "banking_dash_how_treaty_peg", "banking_dash_how_backstops",
+                "banking_dash_how_union", "banking_dash_how_union_terms", "banking_dash_how_borrowing",
+                "banking_dash_how_prices", "banking_dash_how_expected", "banking_dash_how_printing"]
 GENERAL_HOW = ["banking_dash_how_cycle", "banking_dash_how_cycle_moves", "banking_dash_how_crashes",
                "banking_dash_how_budget"]
 
