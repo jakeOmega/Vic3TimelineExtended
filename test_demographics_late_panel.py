@@ -19,7 +19,7 @@ SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_lx_sguis.txt"
 
 
 def _loc():
-    return dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(LOC)))
+    return dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"(?:\s*#[^"]*)?$', _text(LOC)))
 
 
 class TestLatePanel(unittest.TestCase):
