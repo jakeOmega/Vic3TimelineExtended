@@ -23,7 +23,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 
 | Slice | Detail file | Findings | Loc fixes applied | Issue |
 |---|---|---|---|---|
-| Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 | #1203 |
+| Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 (19 done in the wave, 2 needed no more) | 14 | #1203 |
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | #1204 |
 | United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | #1205 |
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | #1206 |
@@ -194,29 +194,29 @@ Each table lists every finding in the slice. "(loc part done)" means this PR app
 
 Top priorities: the Monetary Policy row tooltips are essays that open with their label's concept word for word; the rules belong in five new How topics (BNK-1). Each mandate button should say what its mandate does (BNK-2). Five external tools print raw triggers when greyed (BNK-3). History markers print a tool's whole current tooltip (BNK-4). The Breakdown tab's tooltips are generic or repeat pool figures on every row (BNK-17–19).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| BNK-1 | Monetary Policy row tooltips: definitions duplicated from the label's concept, mechanics taught in live tooltips | over-explaining / spread-out | large |
-| BNK-2 | The mandate buttons don't say what their mandate does | spread-out | medium |
-| BNK-3 | Five external tools: the greyed Enable tooltip prints raw trigger internals | hidden info / style | medium |
-| BNK-4 | History chart tooltips: full current tool tooltips per marker (five with broken accessors); cycle bars show no reading | over-explaining / hidden info / possible bug | medium |
-| BNK-5 | Intervention descriptions restate the lines printed under them; Open-Market Operations states its requirement and its inflation cost twice (loc part done) | over-explaining / style | quick |
-| BNK-6 | Effect prose where engine modifier lines are preferred | style | medium |
-| BNK-7 | The JE's progress line repeats the overview's Budget cell, with a different total, and shows while dormant | spread-out/redundant | quick |
-| BNK-8 | Budget tooltip and concept credit "economic-system laws" with points they don't grant (loc part done) | other | quick |
-| BNK-9 | The rate-drift rule is stated in three tooltips and two concepts (loc part done) | over-explaining / redundant | quick–medium |
-| BNK-10 | The top bar's phase tooltip says "The bar shows…" and "(see below)" (loc part done) | style / context | quick |
-| BNK-11 | Active Policies: in-force tools named as orders, no time left on timed tools, OMO listed twice | style / hidden info / redundant | quick–medium |
-| BNK-12 | Available Interventions: "no points free" is said 40 times, never once above the rows | style | medium |
-| BNK-13 | Lists: Monetary Union holdouts and Backstops are counts and sums, not lists | list | large |
-| BNK-14 | Monthly treasury payments of three tools appear nowhere in the Budget panel | hidden info | medium–large |
-| BNK-15 | One thing, several names (loc part done) | style | quick–medium |
-| BNK-16 | The JE's description paragraph is a how-to, shown under the panel in the JE only | over-explaining | quick |
-| BNK-17 | Breakdown: one generic tooltip on 29 rows describes other rows | over-explaining / hidden info | medium |
-| BNK-18 | Breakdown: each institution row repeats seven pool-level figures and a formula | over-explaining / redundant | medium |
-| BNK-19 | Breakdown: the same mechanics sentence on every source, group, arrow and pie | over-explaining | quick |
-| BNK-20 | Breakdown: "How the Breakdown Works" is one text block, smaller than the house type, and mixes UI help with accounting | style / over-explaining | medium |
-| BNK-21 | Breakdown mirror line in every cost modifier: shorter label | style | quick |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| BNK-1 | Monetary Policy row tooltips: definitions duplicated from the label's concept, mechanics taught in live tooltips | over-explaining / spread-out | large | done |
+| BNK-2 | The mandate buttons don't say what their mandate does | spread-out | medium | done |
+| BNK-3 | Five external tools: the greyed Enable tooltip prints raw trigger internals | hidden info / style | medium | done |
+| BNK-4 | History chart tooltips: full current tool tooltips per marker (five with broken accessors); cycle bars show no reading | over-explaining / hidden info / possible bug | medium | done |
+| BNK-5 | Intervention descriptions restate the lines printed under them; Open-Market Operations states its requirement and its inflation cost twice (loc part done) | over-explaining / style | quick | done |
+| BNK-6 | Effect prose where engine modifier lines are preferred | style | medium | done (display-only modifiers) |
+| BNK-7 | The JE's progress line repeats the overview's Budget cell, with a different total, and shows while dormant | spread-out/redundant | quick | done |
+| BNK-8 | Budget tooltip and concept credit "economic-system laws" with points they don't grant (loc part done) | other | quick | no change needed (#1202 did it) |
+| BNK-9 | The rate-drift rule is stated in three tooltips and two concepts (loc part done) | over-explaining / redundant | quick–medium | done |
+| BNK-10 | The top bar's phase tooltip says "The bar shows…" and "(see below)" (loc part done) | style / context | quick | no change needed (#1202 did it) |
+| BNK-11 | Active Policies: in-force tools named as orders, no time left on timed tools, OMO listed twice | style / hidden info / redundant | quick–medium | done |
+| BNK-12 | Available Interventions: "no points free" is said 40 times, never once above the rows | style | medium | done |
+| BNK-13 | Lists: Monetary Union holdouts and Backstops are counts and sums, not lists | list | large | done |
+| BNK-14 | Monthly treasury payments of three tools appear nowhere in the Budget panel | hidden info | medium–large | done (tooltip route) |
+| BNK-15 | One thing, several names (loc part done) | style | quick–medium | done |
+| BNK-16 | The JE's description paragraph is a how-to, shown under the panel in the JE only | over-explaining | quick | done |
+| BNK-17 | Breakdown: one generic tooltip on 29 rows describes other rows | over-explaining / hidden info | medium | done |
+| BNK-18 | Breakdown: each institution row repeats seven pool-level figures and a formula | over-explaining / redundant | medium | done |
+| BNK-19 | Breakdown: the same mechanics sentence on every source, group, arrow and pie | over-explaining | quick | done |
+| BNK-20 | Breakdown: "How the Breakdown Works" is one text block, smaller than the house type, and mixes UI help with accounting | style / over-explaining | medium | done |
+| BNK-21 | Breakdown mirror line in every cost modifier: shorter label | style | quick | done |
 
 ### Legislated Tax Code ([detail](gui_audit/tax_code.md), #1204)
 

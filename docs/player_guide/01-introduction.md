@@ -104,8 +104,9 @@ The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
 and expandable lists. Groups start collapsed; click an arrow to see their
 components. Entries are ordered from largest to smallest amount at each level.
 The tab is available under every game-rule setting.
-Colors and percentages match across the pies and lists; hover an institution
-for its allocation. Investment Pool Transfer and the construction it funds are
+Colors and percentages match across the pies and lists. Hover a tax, tariff,
+welfare or interest amount for the Overview's graph of it, an institution for
+its share of the pool, and Administration for the pool itself. Investment Pool Transfer and the construction it funds are
 private spending, so they are excluded from the totals and Construction Goods.
 
 Taxes groups the individual tax receipts. Military expands into Army and Navy,
@@ -129,7 +130,9 @@ Nations and other journal systems appear under Programme Costs, and so does the
 Space Program building's running cost, in the Space Race row. Expand it and
 hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources
-such as innovation are outside this weekly money breakdown.
+such as innovation are outside this weekly money breakdown. The banking tools
+that pay monthly are named under the Banking row and under the Overview's
+expenses as Banking Tools, Paid Monthly.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and

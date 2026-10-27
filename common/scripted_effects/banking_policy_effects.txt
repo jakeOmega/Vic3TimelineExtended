@@ -13,9 +13,13 @@
 # (banking_nonmod_monthly_label / _lifted_label / _war_end_label: "Each month:",
 # "After lifting:", "When the war ends:"). The dashboard row tooltip
 # (banking_dash_tt_cb_*) splices the same keys under its modifier list. A new
-# tool whose pulse does more than its modifier adds a key here and there too;
-# test_banking_external_tools.NonModifierTooltipTest pins the figures in the
-# text to the script values.
+# tool whose pulse does more than its modifier adds a key here and there too.
+# Where the work is a figure, the line prints it as modifier lines (GUI audit
+# BNK-6): "Each month:" over the display-only banking_monthly_<tool> static
+# modifier's [GetStaticModifier(...).GetDesc], with prose left only for what no
+# figure says ("Operations stop if the treasury cannot pay").
+# test_banking_external_tools.NonModifierTooltipTest pins the prose's figures,
+# and DisplayModifierTest the display modifiers', to the script values.
 
 # The "Raise Policy Rate" pair used to open this file. It is deleted
 # (monetary_policy_design.md §18): the policy rate is a country variable the
@@ -301,6 +305,12 @@ banking_effect_cb_disable_reserve_requirements = {
 banking_effect_cb_bank_holiday = {
 	te_history_record_banking_marker = { MARK = on_cb_bank_holiday }
 	je:je_banking_cycle = { add_modifier = { name = banking_bank_holiday days = 90 } }
+	# The Active Policies row's "N days left" (GUI audit BNK-11): the term
+	# above, counted down by the weekly pulse (banking_cycle_weekly_effects),
+	# which drops it once the holiday is over however it ended.
+	hidden_effect = {
+		set_variable = { name = banking_bank_holiday_days_left value = 90 }
+	}
 	custom_tooltip = {
 		text = banking_bank_holiday_cooldown_set_tt
 		set_variable = { name = banking_bank_holiday_cooldown days = 1825 }

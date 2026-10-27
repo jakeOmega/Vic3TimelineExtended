@@ -321,21 +321,23 @@ banking_mon_control_sgui = {
 		}
 		else_if = {
 			limit = { scope:op = 4 }
-			te_mon_effect_set_mandate = { MANDATE = 1 TT = banking_mon_mandate_set_tt }
+			te_mon_effect_set_mandate = { MANDATE = 1 TT = banking_mon_mandate_set_dual_tt }
 		}
 		else_if = {
 			limit = { scope:op = 5 }
-			te_mon_effect_set_mandate = { MANDATE = 2 TT = banking_mon_mandate_set_tt }
+			te_mon_effect_set_mandate = { MANDATE = 2 TT = banking_mon_mandate_set_growth_tt }
 		}
 		else_if = {
 			limit = { scope:op = 6 }
-			# Peg defence gets its own line: its rule points outside the country,
-			# at the world reference rate the dashboard now shows as a row.
+			# Each mandate's button says what its rule does (GUI audit BNK-2), then
+			# the shared price of a looser one (banking_mon_mandate_cost_tt). Peg
+			# defence's points outside the country, at the world rate, and sits
+			# off the looseness ladder, so it has no price line.
 			te_mon_effect_set_mandate = { MANDATE = 3 TT = banking_mon_mandate_peg_set_tt }
 		}
 		else_if = {
 			limit = { scope:op = 14 }
-			te_mon_effect_set_mandate = { MANDATE = 4 TT = banking_mon_mandate_set_tt }
+			te_mon_effect_set_mandate = { MANDATE = 4 TT = banking_mon_mandate_set_inflation_tt }
 		}
 		else_if = {
 			limit = { scope:op = 7 }
@@ -668,6 +670,20 @@ banking_mon_shows_union = {
 		has_variable = te_mon_union_refusers
 		has_variable = te_mon_union_lock_months
 		has_variable = te_mon_overvaluation
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ...and its members, a row each, under it? For the bloc's leader only, the
+# one that pays for them and can press them (GUI audit BNK-13).
+banking_mon_shows_union_members = {
+	scope = country
+	is_shown = {
+		is_power_bloc_leader = yes
+		te_mon_bloc_union_tier_1_plus = yes
+		has_variable = te_mon_union_holdouts
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }

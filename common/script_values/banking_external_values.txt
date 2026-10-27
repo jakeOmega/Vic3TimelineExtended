@@ -136,3 +136,38 @@ banking_external_purchase_cash = {
 	}
 	min = 0
 }
+
+# What the three tools that pay monthly take from the treasury this month,
+# outside the weekly budget (add_treasury in banking_external_monthly_update):
+# the Breakdown's Banking row and the Overview's expenses name it (GUI audit
+# BNK-14). The same figures as the payments: sterilization, import financing
+# (its next month's cost) and the surrender purchase. Display only.
+banking_external_monthly_payments = {
+	value = banking_external_monthly_sterilization_display
+	add = banking_external_monthly_import_display
+	add = banking_external_monthly_surrender_display
+}
+
+banking_external_monthly_sterilization_display = {
+	value = 0
+	if = {
+		limit = { banking_tool_sterilize_inflows_active = yes }
+		value = banking_external_sterilization_cost
+	}
+}
+
+banking_external_monthly_import_display = {
+	value = 0
+	if = {
+		limit = { banking_tool_emergency_import_financing_active = yes }
+		value = banking_external_import_cost
+	}
+}
+
+banking_external_monthly_surrender_display = {
+	value = 0
+	if = {
+		limit = { banking_tool_fx_surrender_active = yes }
+		value = banking_external_surrender_purchase
+	}
+}

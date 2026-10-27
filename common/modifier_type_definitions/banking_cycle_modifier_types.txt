@@ -74,8 +74,8 @@ country_weekly_investment_pool_mult = {
 }
 
 # Per-tool banking-cycle button lock modifiers. When set on a country (typically
-# via a banking law), the corresponding cb_* button is greyed in the UI with a
-# "Tool not available under your current banking law" tooltip. Players see each
+# via a banking law), the corresponding cb_* button is greyed in the UI, its
+# condition list unticking "Your banking law allows this tool". Players see each
 # active lock as a red "Locks: <Tool>" line in the law's modifier block tooltip.
 country_banking_lock_open_market_ops_bool  = { color = bad  boolean = yes }
 country_banking_lock_directed_credit_bool  = { color = bad  boolean = yes }
@@ -250,6 +250,116 @@ country_credit_standing_floor_add = {
 # printing te_neutral_error, not the width of the band it lives in), so it is
 # safe on a law tooltip.
 country_bank_forecast_error_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# ============================================================================
+# Display fields: what a tool or a control does that no engine modifier carries
+# ============================================================================
+# GUI audit BNK-6 (2026-10-27): the owner prefers coloured, bulleted modifier
+# lines to prose. Some work is done by the monetary pulse, not by a modifier:
+# it reads whether a tool is on and moves gold, the exchange rate, pressure or
+# the treasury itself. Each such figure is a field of one of these types, set
+# on a DISPLAY-ONLY static modifier (common/static_modifiers/extra_modifiers.txt,
+# "Display-only modifiers"), which a tooltip prints with
+# [GetStaticModifier('x').GetDesc]. Nothing applies those modifiers and
+# nothing reads these types: the figures the script uses stay in its script
+# values, and test_banking_external_tools.DisplayModifierTest holds each field
+# to its script value, so text and effect cannot drift.
+#
+# A multiplier field is the change to a pull, −75% for a quarter of it left.
+
+# Capital Controls (Outflows): te_mon_controls_damp_value.
+country_te_mon_rate_gap_pull_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Restrict Speculative Inflows: banking_external_inflow_factor.
+country_te_mon_inflow_pull_mult = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Sterilize Capital Inflows: banking_external_sterilized_factor.
+country_te_mon_inflow_price_pressure_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# A month's charge to the treasury, as a share of annual GDP: Sterilize
+# Capital Inflows (banking_external_sterilization_share) and Emergency Import
+# Financing (banking_external_import_share, before it rises).
+country_te_mon_treasury_cost_gdp_add = {
+	color = bad
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Limit Foreign-Currency Borrowing: banking_external_fx_protection_step.
+country_te_mon_fx_debt_protection_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Foreign Exchange Surrender: banking_external_surrender_share, at most.
+country_te_mon_reserve_purchase_gdp_add = {
+	color = good
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Open-Market Operations: te_mon_qe_pressure, in vanilla's interest scale like
+# country_inflation_pressure_add (0.01 = 1pp), and counted apart from it.
+country_te_mon_asset_purchase_pressure_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# One step of Monetise Deficit: te_mon_monetisation_pressure, counted apart
+# from country_inflation_pressure_add as asset purchases are...
+country_te_mon_printing_pressure_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# ...and te_mon_monetisation_gdp_share, the money it creates in a year.
+country_te_mon_minting_gdp_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# A step looser on the mandate: te_mon_mandate_loosen_expectation.
+country_te_mon_expected_inflation_add = {
 	color = bad
 	percent = yes
 	decimals = 1

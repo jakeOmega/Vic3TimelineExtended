@@ -482,7 +482,8 @@ class BudgetWiringTests(unittest.TestCase):
                 self.assertEqual(definitions[mirror]["decimals"], native["decimals"], mirror)
                 self.assertEqual(definitions[mirror]["prefix"], native["prefix"], mirror)
                 self.assertEqual(definitions[mirror]["color"], "neutral", mirror)
-                self.assertIn(f' {mirror}:0 "Counted in the Budget Breakdown under {label}"\n', loc)
+                # A short tag (GUI audit BNK-21): the line sits beside the native one.
+                self.assertIn(f' {mirror}:0 "Breakdown: {label}"\n', loc)
                 desc = re.search(rf'^ {mirror}_desc:0 "(.*)"$', loc, re.M).group(1)
                 self.assertIn(f"${gen.NATIVE[side]}$ line already includes this amount", desc)
 
@@ -550,6 +551,167 @@ class BudgetWiringTests(unittest.TestCase):
         for branch in ("army", "navy"):
             self.assertIn(f"AddScope('{branch}_support_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{branch}_support_actual')))", gen.scope("expense"))
             self.assertTrue(f"add = scope:{branch}_support_actual" in values, f"{branch} support must use its cached sum")
+
+
+LAYOUT = ROOT / "gui/te_budget_breakdown.gui"
+
+
+def _loc():
+    out = {}
+    for path in sorted((ROOT / "localization/english").glob("*.yml")):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+            if m:
+                out[m.group(1)] = m.group(2)
+    return out
+
+
+class BreakdownTooltipTest(unittest.TestCase):
+    """GUI audit BNK-17 to BNK-19 (2026-10-27): each row's hover is about that
+    row, and the rules are said once, in How the Breakdown Works."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = _loc()
+        cls.gui = gen.generated_gui()
+
+    def rows(self, side):
+        for node, _ in gen.walk(gen.tree(side)):
+            body = self.gui[self.gui.index(f"type te_budget_{side}_row_{node.key} = flowcontainer {{"):]
+            yield node, body[:body.index("\n\t}")]
+
+    def test_every_row_has_its_own_hover(self):
+        for side in ("income", "expense"):
+            for node, body in self.rows(side):
+                with self.subTest(side=side, row=node.key):
+                    self.assertNotIn("te_budget_chart_row_tt", body)
+                    template = gen.TOOLTIP_TEMPLATES[side].get(node.key)
+                    tip = re.search(r'tooltip = "(\w+)"', body.split("blockoverride")[0])
+                    if template and not node.children:
+                        # vanilla's graph, on the amount as the Overview has it
+                        self.assertIsNone(tip)
+                        self.assertIn(f'using = {template} }}', body)
+                        self.assertIn('blockoverride "label_format" {}', body)
+                    else:
+                        self.assertIsNotNone(tip)
+                        self.assertIn(tip.group(1), self.loc)
+                        self.assertNotIn('blockoverride "label_format"', body)
+        self.assertNotIn("te_budget_chart_row_tt", self.loc)
+
+    def test_templates_are_the_overviews_own(self):
+        panel = (ROOT / "gui/budget_panel.gui").read_text(encoding="utf-8-sig")
+        for side in ("income", "expense"):
+            for key, template in gen.TOOLTIP_TEMPLATES[side].items():
+                with self.subTest(side=side, row=key):
+                    self.assertIn(f"using = {template}\n", panel)
+
+    def test_source_rows_end_on_their_sources(self):
+        for side in ("income", "expense"):
+            for key in gen.SOURCES[side]:
+                tip = self.loc[f"te_budget_chart_source_{side}_{key}_tt"]
+                with self.subTest(side=side, source=key):
+                    self.assertTrue(tip.endswith(f"GetDescFor('{gen.source_type(side, key)}')]"), tip)
+                    self.assertNotIn("\\n\\n", tip)
+        banking = self.loc["te_budget_chart_source_expense_banking_tt"]
+        self.assertIn("ScriptValue('banking_external_monthly_payments')", banking)
+
+    def test_institution_rows_give_their_share_and_the_group_the_pool(self):
+        for key in gen.institutions():
+            tip = self.loc[f"te_budget_chart_{key}_tt"]
+            with self.subTest(institution=key):
+                self.assertIn(f"te_budget_expense_{key}", tip)
+                self.assertNotIn("te_budget_administration_cost", tip)
+                self.assertNotIn("×", tip)
+        group = self.loc["te_budget_chart_administration_group_tt"]
+        for figure in ("te_budget_administration_cost", "te_budget_produced_bureaucracy",
+                       "GetInstitutionInvestmentBureaucracyCost", "te_budget_institution_pool"):
+            self.assertIn(figure, group)
+        self.assertIn('tooltip = "te_budget_chart_administration_group_tt"', self.gui)
+
+    def test_short_generic_hovers(self):
+        for key in ("pie_tt", "expand_tt", "group_tt"):
+            self.assertLessEqual(len(self.loc["te_budget_chart_" + key]), 80, key)
+
+
+class BreakdownHowItWorksTest(unittest.TestCase):
+    """GUI audit BNK-20: How the Breakdown Works is subheaded notes in the
+    generator's order, with no UI help the panel already shows."""
+
+    def test_the_topics_are_drawn_in_order(self):
+        gui = LAYOUT.read_text(encoding="utf-8-sig")
+        drawn = re.findall(r'text = "te_budget_chart_(how_\w+)"', gui)
+        expected = [k for sub, _, note, _ in gen.HOW_TOPICS for k in (sub, note)]
+        self.assertEqual(drawn, expected)
+        self.assertNotIn("te_budget_chart_how_text", gui)
+        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_breakdown_panel"))
+        self.assertRegex(gui[first:first + 200], r'blockoverride "subheader_margin" \{\}')
+
+    def test_no_ui_help(self):
+        text = " ".join(note for _, _, _, note in gen.HOW_TOPICS)
+        for gone in ("Click the arrow", "largest to smallest", "colors stay fixed", "palette"):
+            self.assertNotIn(gone, text)
+
+
+class BreakdownWidthBudgetTest(unittest.TestCase):
+    """GUI audit BNK-20: the Breakdown is on the house ladder (rows 17,
+    subheadings 20), and its cells hold their text at that size. Units as
+    test_banking_layout.WidthBudgetTest's: 10 a character at 20, scaled, plus
+    10%."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = LAYOUT.read_text(encoding="utf-8-sig")
+        cls.sizes = {m.group(1): int(m.group(2)) for m in re.finditer(
+            r"template te_budget_fontsize_(\w+) \{\s*fontsize = (\d+)", cls.gui)}
+
+    def per_char(self, font):
+        return 10.0 / 20 * self.sizes[font] * 1.1
+
+    def test_the_ladder(self):
+        self.assertEqual(self.sizes, {"row": 17, "heading": 20})
+        row = self.gui[self.gui.index("type te_budget_chart_row"):self.gui.index("type te_budget_how_subheader")]
+        self.assertNotIn("fontsize_medium", row)
+        self.assertEqual(row.count("using = te_budget_fontsize_row"), 3)
+        note = self.gui[self.gui.index("type te_budget_how_note"):self.gui.index("type te_budget_breakdown_panel")]
+        self.assertIn("using = te_budget_fontsize_row", note)
+        self.assertIn("using = te_budget_fontsize_heading",
+                      self.gui[self.gui.index("type te_budget_how_subheader"):self.gui.index("type te_budget_how_note")])
+
+    def test_the_row_adds_up(self):
+        row = self.gui[self.gui.index("type te_budget_chart_row"):self.gui.index("type te_budget_how_subheader")]
+        width = int(re.search(r"minimumsize = \{ (\d+) 28 \}", row).group(1))
+        label = int(re.search(r'block "label_width" \{ minimumsize = \{ (\d+) 28 \}', row).group(1))
+        self.assertEqual(label, gen.LABEL_WIDTH)
+        toggle = int(re.search(r"widget = \{ size = \{ (\d+) 28 \}", row).group(1))
+        swatch = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", row).group(1))
+        amount, share = (int(w) for w in re.findall(r"textbox = \{\s*size = \{ (\d+) 28 \}", row))
+        cells = [0, toggle, swatch, label, amount, share]   # the indent is 0 at depth 0
+        spacing = int(re.search(r"spacing = (\d+)", row).group(1))
+        self.assertEqual(sum(cells) + spacing * (len(cells) - 1), width)
+        self.assertLessEqual(width, 520)
+
+    def test_amounts_and_shares_fit(self):
+        row = self.gui[self.gui.index("type te_budget_chart_row"):self.gui.index("type te_budget_how_subheader")]
+        amount, share = (int(w) for w in re.findall(r"textbox = \{\s*size = \{ (\d+) 28 \}", row))
+        # the widest a weekly amount prints (|D: three digits, a decimal and a unit) and a share
+        self.assertLessEqual(len("-£999.9M") * self.per_char("row"), amount)
+        self.assertLessEqual(len("100.0%") * self.per_char("row"), share)
+
+    def test_most_labels_fit_one_line(self):
+        """The label wraps (multiline), so a long institution name does not
+        elide; the row's own labels fit one line at depth 1."""
+        loc = _loc()
+        vanilla = json.loads((ROOT / "vanilla_parsed/localization_english.json").read_text(encoding="utf-8"))
+        vanilla = dict(vanilla) if not isinstance(vanilla, dict) else vanilla
+        for side in ("income", "expense"):
+            for node, ancestors in gen.walk(gen.tree(side)):
+                if node.key.startswith("institution_"):
+                    continue
+                text = loc.get(node.label) or vanilla.get(node.label)
+                self.assertIsNotNone(text, node.label)
+                text = re.sub(r"\[[^\]]*\]|#\w+ |#!|\$\w+\$", "", text)
+                with self.subTest(label=node.label):
+                    self.assertLessEqual(len(text) * self.per_char("row"), gen.LABEL_WIDTH - 14 * len(ancestors))
 
 
 if __name__ == "__main__":

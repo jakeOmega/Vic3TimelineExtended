@@ -262,7 +262,7 @@ and each heading opens or closes its section:
 | Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
 | Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
-| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate, the stance and what borrowing costs. |
+| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
 
 Each tool's name is underlined: hover it for what the tool does, its full name
 and what it requires. A grayed button means you cannot use the tool now, and
@@ -276,10 +276,8 @@ tables in this chapter use the full names.
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
 and a power bloc's banking union 1 more. The overview's Budget box shows how
-many are in use and how many are free, and the journal entry repeats the free
-points as Free Intervention Points: a
-command economy calls it the Free Planning Budget and a cooperative the Free
-Council Mandate Points.
+many are in use and how many are free. Hover the free figure to see what each
+grant adds and what each active tool holds.
 
 Switching a tool on has its own price: the lending tools charge the treasury
 0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
@@ -498,12 +496,13 @@ Emergency Liquidity Program still refunds 1% of GDP when that closes it.
 ### Banking history charts
 
 The History section starts open in both the journal entry and the Banking tab.
-It charts the last 1 Year, 5 Years or 20 Years month by month: Cycle Value,
-Cycle Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
+It charts the last 1 Year, 5 Years or 20 Years month by month: Banking Cycle
+Value, Banking Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
 Inflation and the Exchange Rate Index under the full Banking System. Markers
 flag policy changes, including tools a change of economic system switches off,
-and crashes, including imported ones. History is kept for the player and for
-major powers and above.
+and crashes, including imported ones. Hover a bar for that month's phase or
+band and the policies switched on or off. History is kept for the player and
+for major powers and above.
 
 ## Financial regulation laws
 
@@ -553,7 +552,8 @@ The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg 
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
-the detail behind its figure. Your Policy Stance and price band are in the
+its reading and what moves it; How Banking Works has the rules behind each
+group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
 
 ![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)
@@ -693,7 +693,7 @@ fade after a return to Neutral.
 ### What your government pays to borrow
 
 Rate You Pay shows the yearly interest on your debt. It adds up the market yield
-(the higher of your policy rate and the World Reference Rate plus expected
+(the higher of your policy rate and the Reference Rate plus expected
 inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
 
@@ -705,7 +705,7 @@ cycle phase, crisis tools, banking events, bankruptcy, a debt load past a
 quarter of your credit limit (up to +4 points at the limit), expectations that
 have strayed from target, money printing and a weak currency.
 
-The World Reference Rate is 3% for every country, 2.5% once any great power has
+The Reference Rate is 3% for every country, 2.5% once any great power has
 Macroeconomics and 2% once one has Globalization. The World Rate is the real
 interest rate of the great powers that set their own; gold flows and exchange
 rates are measured against it.
@@ -945,7 +945,10 @@ worsens your credit standing for ten years, costs investment pool, relations and
 bloc cohesion, and bars you for ten years. A leader can Press for Convergence at
 50 influence per holdout, which waives the debt condition and puts The Question
 of the Common Currency to each holdout; one that refuses costs the bloc cohesion
-and gains Monetary Independence. Power blocs in general are covered in [Power
+and gains Monetary Independence. Under the Monetary Union row a leader sees each
+member: adopted, holding out, or holding out and set to refuse, with what backing
+it costs. The Backstops row lists each treaty partner the same way, received and
+extended. Power blocs in general are covered in [Power
 bloc principles and
 identities](09-diplomacy.md#power-bloc-principles-and-identities).
 
@@ -979,7 +982,7 @@ mandates, inflation,
 exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
 or currency boards.
 
-You still borrow at a rate of your own: the World Reference Rate, a point more
+You still borrow at a rate of your own: the Reference Rate, a point more
 without a national bank, plus credit standing and risk premium, so a Panic still
 raises your interest. Open-Market Operations needs only Keynesian Economics,
 four points and a law that allows it, and The Gold Window Closes, a

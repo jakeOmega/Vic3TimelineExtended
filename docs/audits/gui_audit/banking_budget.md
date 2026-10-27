@@ -16,6 +16,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 ## Findings
 
 ### BNK-1. Monetary Policy row tooltips: definitions duplicated from the label's concept, mechanics taught in live tooltips
+- **Wave status (2026-10-27):** done. The 27 Monetary Policy row tooltips give the reading and its breakdown, under 700 characters of prose each (`mandate_tt` 3,811 → 269 characters, `pegconf_tt` 2,384 → 638). How Banking Works gained The Mandates, Gold and the Peg, The Exchange Rate, International Arrangements and Prices, following the section's own subheadings, and What Borrowing Costs now explains instead of repeating its concept. The pinned sentences moved with their rules (`test_monetary_bank_qe`, `test_monetary_fx_confidence`).
 - **Category:** over-explaining / spread-out
 - **Where:** `gui/journal_entry_widgets/banking_dashboard_widget.gui:2096-2966` (te_banking_sec_monetary). Loc by length: `banking_dash_mon_mandate_tt` 3,849 (1570), `_pegconf_tt` 2,438 (1597), `_paid_tt` 2,071 (1585), `_fx_effect_tt` 1,918 (1544), `_union_tt` 1,794 (1646), `_goldflow_tt` 1,639 (1555), `_fx_tt` 1,609 (1552), `_expected_tt` 1,606 (1536), `_anchor_tt` 1,528 (1501), `_worldrate_tt` 1,463 (1663), `_backstops_tt` 1,445 (1510), `_premium_tt` 1,349 (1602), `_rate_tt` 1,273 (1617), `_inflation_tt` 1,199 (1563), `_anchorpeg_tt` 1,050 (1506), `_delegation_tt` 994 (1533), `_bankgold_tt` 959 (1518), `_target_tt` 950 (1633), `_standing_tt` 939 (1624).
 - **Now:** Every row's label is already a concept (`test_banking_layout.test_row_labels_are_concepts`), so hovering the word shows the definition. The row tooltip then repeats that definition word for word before its own content. Pairs that match verbatim or near-verbatim: `_expected_tt` / `concept_banking_expected_inflation_desc`, `_inflation_tt` / `concept_banking_inflation_desc`, `_world_tt` / `concept_banking_reference_rate_desc`, `_worldrate_tt` / `concept_banking_world_rate_desc`, `_standing_tt` / `concept_banking_credit_standing_desc`, `_premium_tt` / `concept_banking_risk_premium_desc`, `_bankgold_tt` / `concept_banking_bank_gold_desc`, `_goldflow_tt` / `concept_banking_gold_flow_desc`, `_monetise_tt` / `concept_banking_monetisation_desc`, `_delegation_tt` / `concept_banking_delegation_desc`, `_mandate_tt` / `concept_banking_mandate_desc`, `_target_tt` / `concept_banking_rate_target_desc`, `_fx_tt` / `concept_banking_exchange_rate_desc`, `_anchor_tt` / `concept_banking_monetary_anchor_desc`, `_union_tt` / `concept_banking_monetary_union_desc`. After that come rule tables in prose: peg confidence's monthly ±3/−2/+2 ladder; union tiers, adoption and exit terms; three ways to be anchored; swap-line repayment and lender-of-last-resort decay; all four mandates' behaviour. There is advice too ("#lore A government that intends to inflate away a war debt should not want that law.#!"). How Banking Works (`banking_layout_widget.gui:34-132`) covers the cycle, crashes, budget, rate and borrowing, but has no topic for Prices, the Exchange Rate, Gold and the Peg, Arrangements or the Mandates. So the hardest mechanics live only in live tooltips, and the How section's "What Borrowing Costs" (`banking_dash_how_borrowing`, 1446) duplicates `concept_banking_rate_paid_desc` instead.
@@ -32,6 +33,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-2. The mandate buttons don't say what their mandate does
+- **Wave status (2026-10-27):** done. Each mandate button has its own key (`banking_mon_mandate_set_inflation_tt`, `_dual_tt`, `_growth_tt`, `_peg_set_tt`): the rule, then the shared price of a looser one (`banking_mon_mandate_cost_tt`, printed as modifier lines, BNK-6). The row tooltip names the mandate in force and whether it is locked; Out of Room is in How Banking Works, The Mandates.
 - **Where:** `banking_dashboard_widget.gui:2367-2418` (the 2×2 mandate grid); `common/scripted_guis/te_monetary_sguis.txt:324-338`; loc `banking_mon_mandate_set_tt` (1856), `banking_mon_mandate_peg_set_tt` (1855), `banking_dash_mon_mandate_tt` (1570)
 - **Now:** Inflation Targeting (op 14), Dual Mandate (op 4) and Growth (op 5) all pass `TT = banking_mon_mandate_set_tt`: "Changes the rule your central bank follows, from the next monthly update. The mandate is then fixed for a year, and a looser rule than the bank runs now raises expected inflation and the risk premium for a while." Only Peg Defence has its own line. The effect's own header (`te_monetary_effects.txt:3768`) says "$TT$ exists because each mandate's button says what that rule does". So to compare rules the player reads the 3,849-character row tooltip. Action and information are split.
 - **Proposed:** Four keys, `banking_mon_mandate_set_inflation_tt`, `_dual_tt`, `_growth_tt` and the existing `_peg_set_tt`. Each holds that mandate's paragraph from `banking_dash_mon_mandate_tt` (its "answers for prices alone…" etc. text, cut to two sentences), then the shared cost line. Pass them at `te_monetary_sguis.txt:324/328/338`. Then cut the row tooltip to "#header Mandate#!\nThe rule a delegated or independent bank follows. Now: [JournalEntry.GetCountry.GetCustom('te_mon_mandate_name')]." plus the "Changing it" and "By law" lines. The "Out of room" asset-purchase paragraph goes to How Banking Works → The Mandates; `concept_banking_asset_purchases_desc` already says half of it. The readout's `banking_dash_ro_mandate_tt` (1759) is the right length for the row.
@@ -39,6 +41,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-3. Five external tools: the greyed Enable tooltip prints raw trigger internals
+- **Wave status (2026-10-27):** done. Every condition of the five tools is a `custom_tooltip` phrased as a requirement; `banking_external_available` and the tool's own `_active = no`, always ticked while the row shows, are `hidden_trigger`s. The two law-lock lines (`banking_button_locked_by_law_tt`, `_capital_controls_tt`) read as requirements too.
 - **Category:** hidden info / style
 - **Where:** `common/scripted_triggers/banking_policy_triggers.txt:1177-1269` (`banking_external_available`, `banking_external_eligible_*`, `banking_possible_cb_restrict_inflows / sterilize_inflows / foreign_borrowing_limits / fx_surrender / emergency_import_financing`), rendered by `banking_dash_action_button`'s `IsValidTooltip` (`banking_dashboard_widget.gui:222`)
 - **Now:** These conditions are bare: `banking_external_available = yes` (it expands to `te_mon_full_system`, `banking_is_market_economy`, `te_banking_cycle_running`), `te_mon_has_dial = yes`, `te_mon_has_gold_flows = yes`, `banking_tool_*_active = no`, `banking_external_export_share > 0`, `te_mon_gold_inflow_room > 0` and `te_mon_in_financial_crisis = yes`. The last expands to `has_variable = finance_cycle_value`, `var:te_peg_confidence <= 40` and more. None has loc, so a greyed button lists internal names and variable comparisons. Every older tool (`banking_possible_cb_open_market_ops`, `…_moral_suasion`, :138-205) wraps each test in a `custom_tooltip` phrased as a condition. That is the style `te_monetary_sguis.txt:65-70` documents.
@@ -47,6 +50,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium-high. The rendering of bare scripted triggers in `IsValidTooltip` is engine behaviour, so check one greyed button in game.
 
 ### BNK-4. History chart tooltips: full current tool tooltips per marker (five with broken accessors); cycle bars show no reading
+- **Wave status (2026-10-27):** done. (a) A marker prints the policy's name under "adopted" or "withdrawn"; a verb-named button is named by its modifier. (b) The three cycle charts' bars name the month's phase or band through an `AddLocalizationIf` chain over the stored reading; `test_banking_layout.HistoryBandTest` holds the chains to the overview's words.
 - **Category:** over-explaining / hidden info / possible bug
 - **Where:** `common/scripted_guis/te_history_scripted_gui.txt:45-435` (`custom_tooltip = te_hist_mk_enabled` + `custom_tooltip = banking_dash_tt_<tool>`, 76 branches); loc `te_hist_tt_bank_value_row` / `_momentum_row` / `_bubble_row` (7955-7959); `banking_history_widget.gui:246-366`
 - **Now (a):** Hovering a bar from a month when a tool changed prints "Policy adopted this month:" and then the tool's entire dashboard tooltip: header, description, **"Requires: At least N free points"** (today's condition, not that month's), the modifier list, the not-a-modifier lines and, for five tools, **live figures from today** (`Held in peacetime for`, `Current FX debt protection`, `Monthly treasury cost`, …). A month with three changes stacks three such tooltips. Five of those keys, `banking_dash_tt_cb_{capital_controls_outflow, emergency_import_financing, foreign_borrowing_limits, fx_surrender, sterilize_inflows}`, read `JournalEntry.GetCountry.MakeScope.ScriptValue(…)`. The comment at `common/script_values/te_monetary_script_values.txt:1594-1600` says that in this history `custom_tooltip` context "a GUI ScriptValue accessor would not resolve and would log a data-system error every render". It is the reason the OMO figure is written out in words.
@@ -57,6 +61,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** (a) high on the over-explaining, medium on the broken accessors (from the repo's own documented rule, not seen in game); (b) medium
 
 ### BNK-5. Intervention descriptions restate the lines printed under them; Open-Market Operations states its requirement and its inflation cost twice
+- **Wave status (2026-10-27):** done. The two Open-Market Operations conditions are condition-length; both developer comments are updated (the OMO figure is now a display modifier field, BNK-6).
 - **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
 - **Category:** over-explaining / style
 - **Where:** `CB_STERILIZE_INFLOWS_DESC` (155), `CB_RESTRICT_INFLOWS_DESC` (154), `CB_FX_SURRENDER_DESC` (147), `CB_FOREIGN_BORROWING_LIMITS_DESC` (146), `CB_EMERGENCY_IMPORT_FINANCING_DESC` (140), `CB_CAPITAL_CONTROLS_OUT_DESC` (83), `CB_OPEN_MARKET_OPS_DESC` (150), `banking_omo_inflation_cost_tt` (1898), `banking_omo_rate_floor_tt` (1899), `banking_omo_unbacked_money_tt` (1900); spliced by `banking_dash_tt_cb_*` (1792-1813)
@@ -66,6 +71,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-6. Effect prose where engine modifier lines are preferred
+- **Wave status (2026-10-27):** done, by display-only static modifiers rather than fields on the applied ones: `banking_monthly_<tool>` for the seven tools' monthly work, `te_mon_monetisation_step`, `te_mon_mandate_loosen_step`, over ten display-only `script_only` types. Spliced through the existing `banking_nonmod_*` lines, they keep those lines' gates (the full Banking System, a war's end), which fields on the applied modifiers would not. `DisplayModifierTest` holds each field to its script value. `banking_bank_holiday_radicals_tt` stays prose: radicals are an effect (`add_radicals`), which the Enable button's own tooltip renders natively.
 - **Category:** style
 - **Where:** `banking_nonmod_*_tt` (1883-1897), spliced into `banking_dash_tt_cb_*` and printed by `custom_tooltip` in `banking_policy_effects.txt`; `banking_mon_monetise_step_tt` (1857, the Monetise Deficit ± buttons); `banking_mon_mandate_set_tt` (1856) and the "Changing it" paragraph of `banking_dash_mon_mandate_tt` (the price of a looser mandate); `banking_bank_holiday_radicals_tt` (1329)
 - **Now:** Paragraphs carry modifier-shaped effects. `banking_mon_monetise_step_tt`, for example: "Every step is worth about 1% of a year's economic output in newly minted money… about 2.5% on inflation… and 0.5% on everything you borrow". The mandate cost reads "For each step looser, expected inflation rises by 0.5 points and the risk premium by 0.5 points, fading over two years". The not-a-modifier lines read "Each month: three quarters of the price pressure from gold coming in is offset…". The tool's static modifier sits right above them as a coloured, bulleted list.
@@ -79,6 +85,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium (the direction matches the owner's stated preference; each figure's exact modifier form is a design call)
 
 ### BNK-7. The JE's progress line repeats the overview's Budget cell, with a different total, and shows while dormant
+- **Wave status (2026-10-27):** done. `progress_desc` is gone; its breakdown is in the Budget cell's free-points hover.
 - **Category:** spread-out/redundant
 - **Where:** `common/journal_entries/je_banking.txt:241-256` (`progress_desc`); loc `banking_cycle_progress_desc` / `_command` / `_coop` (`te_concepts_l_english.yml:408-410`); drawn by `gui/journal_entry.gui:821` whatever the `progressbar = no`
 - **Now:** "Free Intervention Points: [free, with breakdown]/[ScriptValue('banking_law_base_points_value')]". The overview's Budget cell shows "N used / M free", where M is out of `banking_display_points_total`, which includes the banking union's +1 (`extra_script_values.txt:3356-3367`, `te_mon_union_banking_union`). With a banking union the JE line reads e.g. "8/7". It also shows for a dormant entry, where the overview hides the budget on purpose ("Row 2 waits too: its budget is for the tools", `banking_dashboard_widget.gui:717`). Style rule 1 says the status text must not repeat the overview, and the JE's comment at :258 says the status text was removed for that reason. The progress line survived.
@@ -87,6 +94,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-8. Budget tooltip and concept credit "economic-system laws" with points they don't grant
+- **Wave status (2026-10-27):** no further change needed: the loc part applied in #1202 was the whole fix.
 - **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
 - **Category:** other (accuracy)
 - **Where:** `banking_dash_budget_tt` (1382), `concept_banking_intervention_budget_desc` (`te_concepts_l_english.yml:715`)
@@ -96,6 +104,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-9. The rate-drift rule is stated in three tooltips and two concepts
+- **Wave status (2026-10-27):** done. The Target row alone gives the drift, now with the emergency-cut factor; the Policy Rate row points at it (`test_monetary_rate_reach` updated).
 - **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
 - **Category:** over-explaining / redundant
 - **Where:** `banking_dash_mon_rate_tt` (1617), `banking_dash_mon_target_tt` (1633), `banking_mon_step_tt` (1859, the ± buttons' ExecuteTooltip), `concept_banking_policy_rate_desc` and `concept_banking_rate_target_desc`
@@ -105,6 +114,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-10. The top bar's phase tooltip says "The bar shows…" and "(see below)"
+- **Wave status (2026-10-27):** no further change needed: the loc part applied in #1202 was the whole fix.
 - **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
 - **Category:** style / context
 - **Where:** `banking_dash_top_phase_tt` (1791) splices `banking_dash_phase_tt_body` (1727); the type is at `banking_dashboard_widget.gui:1135-1195` and the instance at `gui/topbar.gui:601`
@@ -114,6 +124,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-11. Active Policies: in-force tools named as orders, no time left on timed tools, OMO listed twice
+- **Wave status (2026-10-27):** done. `banking_dash_name_active_*` names for the seven verb-named tools (the modifiers renamed to match), and the Bank Holiday row counts its days left from a weekly counter. Open-Market Operations stays in both places on purpose: Active Policies is the whole list of what holds points, and the Monetary Policy copy is the action beside the rate.
 - **Category:** style / hidden info / redundant
 - **Where:** `banking_dashboard_widget.gui:1205-1969` (te_banking_sec_active); OMO also at :2430 (under the rate target); names `CB_BANK_HOLIDAY` "Declare a Bank Holiday", `CB_RESERVE_REQUIREMENTS` "Raise Reserve Requirements", `CB_RAISE_MARGIN_REQ`, `CB_EXPAND_DEPOSIT_GUARANTEE`, `CB_RESTRICT_INFLOWS`, `CB_STERILIZE_INFLOWS`, `banking_dash_name_cb_foreign_borrowing_limits` "Limit Foreign Borrowing"
 - **Now:** The list of what is in force reads "Declare a Bank Holiday [Disable]" and "Raise Reserve Requirements [Disable]". There is already a precedent for an active-row name: `banking_dash_name_active_cb_directed_credit_*` ("Credit to Agriculture"). A Bank Holiday runs `days = 90` (`banking_policy_effects.txt:303`), and the 90-day reopen bonus depends on staying shut the full term, but the row never shows days left. A running OMO appears twice, here and under the rate target, each with a Disable button.
@@ -125,6 +136,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium-high
 
 ### BNK-12. Available Interventions: "no points free" is said 40 times, never once above the rows
+- **Wave status (2026-10-27):** done. A note above the rows at 0 points, with the points-free breakdown on hover.
 - **Category:** style (rule 6)
 - **Where:** `banking_dashboard_widget.gui:3174-3209` (the heading and the dormant note); `banking_dash_budget_free_tt` (1380)
 - **Now:** At 0 points free every Enable button is greyed, and each tooltip says why. The section says it once only in the dormant case (`banking_dash_dormant_tools_note`).
@@ -133,6 +145,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium-high
 
 ### BNK-13. Lists: Monetary Union holdouts and Backstops are counts and sums, not lists
+- **Wave status (2026-10-27):** done. Backstops lists each partner received and extended (lists of capitals kept by the arrangement discovery, costs on the partner); a bloc leader sees each member under Monetary Union with a status word and its cost.
 - **Category:** list
 - **Where:** `banking_dash_mon_union_value` → `banking_dash_mon_union_state_leader` / `_pressing` (1639-1641): "your currency — N holdouts (M would refuse)". `banking_dash_mon_backstops_value` (1512): "−X received, +Y extended". Rows at `banking_dashboard_widget.gui:2668-2696`.
 - **Now:** A bloc leader deciding whether to Press for Convergence sees how many members hold out, not which, or which would refuse. A country with several monetary treaties sees summed premium points, not which partner backs it or whom it backs. The 1,445-character Backstops tooltip explains the rules instead.
@@ -145,6 +158,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium (check `GetPowerBloc` from a JE datacontext in game)
 
 ### BNK-14. Monthly treasury payments of three tools appear nowhere in the Budget panel
+- **Wave status (2026-10-27):** done, by the tooltip route: the Breakdown's Banking row names the month's payments, and the Overview's expenses end on a Banking Tools, Paid Monthly line while one runs. The modifier route would move the payments into the weekly budget, a gameplay change, so it is left to the owner.
 - **Category:** hidden info
 - **Where:** `common/scripted_effects/banking_external_effects.txt:24-60` (`add_treasury = banking_external_sterilization_payment`, `banking_external_import_payment`, `banking_external_surrender_payment`); Breakdown source tooltip `te_budget_chart_source_expense_banking_tt`
 - **Now:** Sterilize Capital Inflows, Emergency Import Financing and FX Surrender take money from the treasury every month with `add_treasury`. That never reaches the weekly budget, so neither the Overview nor the Breakdown's Banking row shows it. The Breakdown says outright that "One-time treasury payments … are excluded". The only place the cost shows is the tool's own tooltip ("Monthly treasury cost: £X").
@@ -153,6 +167,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high on the gap, medium on the fix
 
 ### BNK-15. One thing, several names
+- **Wave status (2026-10-27):** done for the names: Price Pressure, Wage Pressure, Reference Rate, Banking Cycle Value and Banking Momentum on the charts, Counter-cyclical Buffer, one form for the point lines, the Banking Cycle in the panel's text, and a budget concept that names the command and cooperative tools. The spelling pass is left to the wave's separate sweep (the owner chose American).
 - **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
 - **Category:** style
 - **Where:** labels, concepts and tooltip headers across the section
@@ -178,6 +193,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high (that they differ); the chosen names are suggestions
 
 ### BNK-16. The JE's description paragraph is a how-to, shown under the panel in the JE only
+- **Wave status (2026-10-27):** done. One framing sentence per economy.
 - **Category:** over-explaining
 - **Where:** `je_banking_cycle_reason_market` (`te_journal_entries_l_english.yml:18`), via `te_banking_cycle_reason` (`common/customizable_localization/zzz_extra_custom_loc.txt:25`), rendered open at `gui/journal_entry.gui:749` below the widgets; `je_banking_cycle_desc` (:14) says the same in one line
 - **Now:** About 690 characters: "Steer the cycle with the policy rate, macroprudential tightening, targeted bailouts, and open-market operations; [concept_fx_swap_lines] are arranged… Apply measured regulatory tightening and liquidity drains… Expect political trade-offs…" That is strategy advice in a live, always-open block, below How Banking Works. The command and cooperative variants (:16-17) are shorter but the same kind.
@@ -186,6 +202,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium (flavour is the owner's call)
 
 ### BNK-17. Breakdown: one generic tooltip on 29 rows describes other rows
+- **Wave status (2026-10-27):** done. Rows with an Overview figure take that row's graph template on their amount; every other leaf has its own line (`ROW_TOOLTIPS`); `row_tt` is gone.
 - **Category:** over-explaining / hidden info
 - **Where:** `scripts/generators/gen_budget_breakdown.py:377-383` (the default `tooltip = "te_budget_chart_row_tt"`) and `:148` (its text); output `gui/te_budget_generated_charts.gui` (29 uses); loc `te_budget_chart_row_tt` (`te_budget_l_english.yml:93`)
 - **Now:** Income Tax, Poll Tax, Tariffs, Minting, Welfare, Subsidies, Interest, Construction Goods and the rest all show: "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration, and the Space Program… Other Income and Other Expenses reconcile…". It says nothing about the row hovered. Meanwhile vanilla's Overview gives each of these rows a tooltip with a graph, through templates the mod's `budget_panel.gui` already uses: `tax_income_tooltip_with_graph`, `tax_poll_tooltip_with_graph`, `tariffs_tooltip_with_graph`, `minting_tooltip_with_graph`, `welfare_payments_expense_tooltip_with_graph`, `interest_expense_tooltip_with_graph`, … (30 of them).
@@ -197,6 +214,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium-high
 
 ### BNK-18. Breakdown: each institution row repeats seven pool-level figures and a formula
+- **Wave status (2026-10-27):** done.
 - **Category:** over-explaining / redundant
 - **Where:** `gen_budget_breakdown.py:505-517`; loc `te_budget_chart_institution_*_tt` (24 keys, `te_budget_l_english.yml:57-80`)
 - **Now:** Every institution's tooltip lists Current level, Administration cost, Bureaucracy produced, Institution bureaucracy use, Institution pool and Total institution levels, all the same in every row except the level, then "Allocated cost", then the formula "Administration cost × institution bureaucracy use ÷ bureaucracy produced, capped…; then institution pool × current level ÷ total institution levels."
@@ -205,6 +223,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-19. Breakdown: the same mechanics sentence on every source, group, arrow and pie
+- **Wave status (2026-10-27):** done.
 - **Category:** over-explaining
 - **Where:** `gen_budget_breakdown.py:147` (`pie_tt`), `:158` (`expand_tt`), `:160` (`group_tt`), `:497-503` (every `te_budget_chart_source_*_tt`)
 - **Now:**
@@ -221,6 +240,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** high
 
 ### BNK-20. Breakdown: "How the Breakdown Works" is one text block, smaller than the house type, and mixes UI help with accounting
+- **Wave status (2026-10-27):** done. Five subheaded notes (`HOW_TOPICS`) at the house ladder through the tab's own templates (`te_budget_fontsize_row` 17, `_heading` 20); the row is 500 wide with a 291 label column; `BreakdownWidthBudgetTest`.
 - **Category:** style (How-it-works structure) / over-explaining
 - **Where:** `gui/te_budget_breakdown.gui:53-74`; `te_budget_chart_how_text` (generator `:150`); `te_budget_chart_materials_tt` (`:159`); rows at `te_budget_breakdown.gui:17-38`
 - **Now:**
@@ -236,6 +256,7 @@ Scope read: `banking_layout_widget.gui`, `banking_dashboard_widget.gui` (all sec
 - **Confidence:** medium-high (type size: medium; the Breakdown postdates the 2026-10-13/17 passes, which named Banking's panels)
 
 ### BNK-21. Breakdown mirror line in every cost modifier: shorter label
+- **Wave status (2026-10-27):** done. "Breakdown: <system>".
 - **Category:** style
 - **Where:** `gen_budget_breakdown.py:487`; loc `country_te_budget_expense_*_add` (`te_budget_l_english.yml:7-46`)
 - **Now:** Every banking event charge's modifier tooltip shows its amount twice: "Government Expenses +£X" and "Counted in the Budget Breakdown under Banking +£X". That is a documented trade-off (`docs/systems/budget_breakdown.md` §"Journal systems"). The second line is long.
