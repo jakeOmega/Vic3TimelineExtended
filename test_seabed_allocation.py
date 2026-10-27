@@ -15,6 +15,9 @@ What must hold:
   share left (review H1) and never takes a licence no share paid for;
 - a basin over its pool (an old save) never grows;
 - a power with no coast in a basin gets a small share there;
+- a coastal country without the technology is weighed, and its share waits
+  for it: no claims, no room, and the first mover gets only what its weight
+  wins against everyone's;
 - no licence in use is taken away (entitlement >= holdings), and room is
   never negative after a sharing.
 
@@ -147,14 +150,17 @@ class PoolsHoldTest(unittest.TestCase):
 
     def test_pools_fill(self):
         """After a sharing with claimants, every pool is fully shared, under
-        either regime (an unclaimed reserved half joins the open half)."""
+        either regime (an unclaimed reserved half joins the open half): the
+        entitlements and the shares waiting for countries without the
+        technology."""
         rng = random.Random(6)
         for k in range(40):
             world = m.random_world(rng, regime=m.REGULATED if k % 2 else m.OPEN)
             m.yearly_pass(world)
             for b in m.BASINS:
                 if any(c.weight[b] > 0 for c in world.countries.values() if c.alive):
-                    self.assertEqual(sum(c.ent[b] for c in world.countries.values() if c.alive), m.POOLS[b], b)
+                    self.assertEqual(sum(c.ent[b] + c.wait[b] for c in world.countries.values() if c.alive),
+                                     m.POOLS[b], b)
 
 
 class GrandfatheredTest(unittest.TestCase):
@@ -509,6 +515,155 @@ class RegulatedTest(unittest.TestCase):
         self.assertEqual(sum(ent.values()), m.POOLS["pacific"])
         # the other two parties still share what is left of the reserved half
         self.assertGreater(ent[1], ent[3])
+
+
+class WaitingShareTest(unittest.TestCase):
+    """Every coastal country is weighed; one without the technology weighs at
+    LATENT_FACTOR and its share waits for it (the model's header). The anti-goal
+    the claimants-only sharing broke: the first country with the technology was
+    handed every pool and could queue it all before a rival caught up."""
+
+    def _world(self, *, first_policy=m.SPONSOR, regime=m.OPEN):
+        """0: the first mover; 1: a rival of the same size; 2: an eligible minor.
+        All three in the Pacific, and nobody but 0 has the technology."""
+        countries = {0: m.Country(0, policy=first_policy, navy=200),
+                     1: m.Country(1, policy=m.SPONSOR, navy=200, tech=False),
+                     2: m.Country(2, policy=m.SPONSOR, navy=5, tech=False, eligible=True)}
+        states, sid = {}, 0
+        for owner, n in ((0, 10), (1, 10), (2, 3)):
+            for _ in range(n):
+                states[sid] = m.State(sid, "pacific", owner, ports=2)
+                sid += 1
+        return m.World(countries, states, regime=regime)
+
+    def _queue_all_room(self, world, cid):
+        """Queue levels in the country's states while the gate lets them in,
+        then record, as a builder racing for the pool would."""
+        for s in world.owned(cid):
+            while m.can_build(world, cid, s):
+                s.levels += 1
+                s.queued += 1
+        m.record_country(world, cid)
+
+    def test_a_lone_first_mover_gets_only_its_weighted_share(self):
+        world = self._world()
+        m.yearly_pass(world)
+        c = world.countries
+        w_first = c[0].weight["pacific"]
+        w_all = sum(x.weight["pacific"] for x in c.values())
+        self.assertAlmostEqual(c[1].weight["pacific"], w_first * m.LATENT_FACTOR)
+        self.assertLess(c[0].ent["pacific"], m.POOLS["pacific"])
+        self.assertLessEqual(abs(c[0].ent["pacific"] - m.POOLS["pacific"] * w_first / w_all), 1)
+        self.assertEqual(sum(x.ent["pacific"] + x.wait["pacific"] for x in c.values()), m.POOLS["pacific"])
+        for cid in (1, 2):           # a waiting share is no claim, and nobody's entitlement
+            self.assertEqual(c[cid].ent["pacific"], 0)
+            self.assertEqual(c[cid].unbuilt["pacific"], 0)
+            self.assertGreater(c[cid].wait["pacific"], 0)
+        # a distant basin: the first mover's twentieth of a navy is no longer
+        # the whole pool, even where nobody has coast, and much less beside a
+        # coastal country without the technology
+        far = c[0].weight["atlantic"]
+        self.assertLessEqual(abs(c[0].ent["atlantic"] - m.POOLS["atlantic"] * far
+                                 / sum(x.weight["atlantic"] for x in c.values())), 1)
+        before = c[0].ent["atlantic"]
+        self.assertLess(before, m.POOLS["atlantic"])
+        world.states[100] = m.State(100, "atlantic", 1)
+        m.yearly_pass(world)
+        self.assertLess(c[0].ent["atlantic"], before)
+
+    def test_the_head_start_is_bounded_by_the_latent_factor(self):
+        """Against an equal rival without the technology, the first mover's
+        share is 1 / (1 + LATENT_FACTOR) of what the two of them share; once
+        the rival has it on the same policy, half."""
+        countries = {0: m.Country(0, policy=m.SPONSOR, navy=100),
+                     1: m.Country(1, policy=m.SPONSOR, navy=100, tech=False)}
+        states = {i: m.State(i, "pacific", i % 2, ports=1) for i in range(10)}
+        world = m.World(countries, states)
+        m.yearly_pass(world)
+        pool = m.POOLS["pacific"]
+        self.assertLessEqual(abs(world.countries[0].ent["pacific"] - pool / (1 + m.LATENT_FACTOR)), 1)
+        self.assertLessEqual(world.countries[0].ent["pacific"], pool * min(1, 0.5 / m.LATENT_FACTOR) + 1)
+
+    def test_a_lone_first_mover_cannot_lock_the_basin(self):
+        """The anti-goal: the first mover queues everything the gate lets it,
+        before anyone else has the technology. The rival and the minor still
+        share what it couldn't take, as soon as they research it; and under
+        the Regulated regime the minor's reserved half waited for it."""
+        for regime in (m.OPEN, m.REGULATED):
+            world = self._world(regime=regime)
+            m.yearly_pass(world)
+            first = world.countries[0].ent["pacific"]
+            self._queue_all_room(world, 0)
+            self.assertEqual(world.basin_records("pacific"), first, regime)
+            self.assertLess(first, m.POOLS["pacific"] * 0.9, regime)
+            for cid in (1, 2):
+                world.countries[cid].tech = True
+            m.yearly_pass(world, first_of_year=False)               # the reshare a month later
+            ent = {cid: world.countries[cid].ent["pacific"] for cid in world.countries}
+            self.assertEqual(ent[0], first, regime)                  # its licences are its own, for good
+            self.assertEqual(ent[1] + ent[2], m.POOLS["pacific"] - first, regime)
+            self.assertGreater(ent[1], 0, regime)
+            self.assertGreater(ent[2], 0, regime)
+            if regime == m.REGULATED:
+                self.assertGreaterEqual(ent[2], m.POOLS["pacific"] // 2 - first // 2 - 1, regime)
+
+    def test_the_reserved_half_waits_for_an_eligible_party(self):
+        """Regulated, the only claimant not eligible: the reserved half no
+        longer joins the open half while an eligible party without the
+        technology has weight; the claimant shares the open half only."""
+        world = self._world(regime=m.REGULATED)
+        m.yearly_pass(world)
+        open_half = m.POOLS["pacific"] - m.POOLS["pacific"] // 2
+        self.assertLessEqual(world.countries[0].ent["pacific"], open_half)
+        self.assertGreaterEqual(world.countries[2].wait["pacific"], m.POOLS["pacific"] // 2)
+
+    def test_a_newcomer_turns_its_waiting_share_into_claims(self):
+        world = self._world()
+        m.yearly_pass(world)
+        waiting = world.countries[1].wait["pacific"]
+        world.countries[1].tech = True
+        world.countries[1].policy = m.SURVEY                         # the factor it waited at
+        m.yearly_pass(world, first_of_year=False)
+        c = world.countries[1]
+        self.assertEqual(c.wait["pacific"], 0)
+        self.assertEqual(c.ent["pacific"], c.unbuilt["pacific"])
+        self.assertLessEqual(abs(c.ent["pacific"] - waiting), 1)
+        self.assertGreater(m.room(world, 1), 0)
+
+    def test_a_holder_without_the_technology_holds_and_waits(self):
+        """A conqueror without the technology keeps its licences; its share
+        above them waits, and it has no claims."""
+        world = self._world()
+        world.states[10].levels = 3                                  # in the rival's state
+        m.on_state_owner_change(world, world.states[10], 1)          # recorded against no share
+        m.yearly_pass(world)
+        c = world.countries[1]
+        self.assertEqual(c.held["pacific"], 3)
+        self.assertEqual(c.ent["pacific"], 3)
+        self.assertEqual(c.unbuilt["pacific"], 0)
+        self.assertGreater(c.wait["pacific"], 0)
+
+    def test_random_worlds_keep_waiting_shares_out_of_use(self):
+        """Over random worlds: a country without the technology never holds a
+        claim or room after a sharing, and the pools hold with its share in
+        them."""
+        rng = random.Random(27)
+        for k in range(WORLDS):
+            world = m.random_world(rng, regime=(m.OPEN, m.REGULATED, m.SCRAMBLE)[k % 3])
+
+            def check(w, when):
+                if when != "pass":
+                    return
+                for c in w.countries.values():
+                    if c.alive and not c.tech:
+                        self.assertEqual(sum(c.unbuilt.values()), 0)
+                        self.assertLessEqual(m.room(w, c.cid), 0)
+                    if c.tech or not c.alive:
+                        self.assertEqual(sum(c.wait.values()), 0)
+                for b in m.BASINS:
+                    self.assertLessEqual(sum(c.ent[b] + c.wait[b] for c in w.countries.values() if c.alive),
+                                         max(m.POOLS[b], w.basin_records(b)), b)
+            run(world, rng, 6, check=check)
 
 
 class WaterFillingTest(unittest.TestCase):

@@ -97,6 +97,7 @@ class ConstantsTest(unittest.TestCase):
         self.assertEqual(literal(self.values, "te_seabed_station_weight"), m.STATION_WEIGHT)
         self.assertEqual(literal(self.values, "te_seabed_assertive_navy_mult"), m.ASSERTIVE_NAVY_MULT)
         self.assertEqual(literal(self.values, "te_seabed_uninc_coast"), m.UNINCORPORATED_COAST)
+        self.assertEqual(literal(self.values, "te_seabed_latent_factor"), m.LATENT_FACTOR)
         for policy, key in ((m.SURVEY, "survey"), (m.SPONSOR, "sponsor"), (m.UNILATERAL, "unilateral")):
             self.assertEqual(literal(self.values, f"te_seabed_policy_factor_{key}"), m.POLICY_FACTOR[policy], key)
 
@@ -142,7 +143,7 @@ class ModelNamesTest(unittest.TestCase):
                   "te_seabed_sh", "te_seabed_lease_src", "te_seabed_lease_n", "te_seabed_lease_built",
                   "te_seabed_lease_unused", "te_seabed_subj_unused", "te_seabed_pass_built",
                   "te_seabed_pass_unused", "te_seabed_own_claims", "te_seabed_lease_past",
-                  "te_seabed_pass_to", "te_seabed_part"}
+                  "te_seabed_pass_to", "te_seabed_part", "te_seabed_wait"}
         named = {n.rstrip("_") for n in named}
         everything = (defined("scripted_effects") | defined("scripted_triggers") | defined("script_values")
                       | defined("diplomatic_actions"))
@@ -227,6 +228,70 @@ class YearlyPassOrderTest(unittest.TestCase):
         self.assertIn("te_seabed_global_monthly = yes", block(on, "te_seabed_global_monthly_on_action"))
         self.assertRegex(on, r"on_monthly_pulse = \{\s*on_actions = \{\s*te_seabed_global_monthly_on_action")
         self.assertIn("te_seabed_yearly_pass = yes", block(read(EFFECTS), "te_seabed_global_monthly"))
+
+
+class WaitingShareScriptTest(unittest.TestCase):
+    """Model: yearly_pass's waiting countries (the model's header, "countries
+    without the technology"): every coastal country is weighed, one without
+    Abyssal Plain Mining at te_seabed_latent_factor, and its share above its
+    holdings waits in te_seabed_wait_<basin> with no claims."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = strip_comments(read(EFFECTS))
+        cls.values = strip_comments(read(VALUES))
+        cls.passbody = block(cls.effects, "te_seabed_yearly_pass")
+
+    def test_the_waiting_trigger_is_the_models(self):
+        body = strip_comments(block(read(TRIGGERS), "te_seabed_waits"))
+        self.assertIn("any_scope_state = { is_coastal = yes }", body)
+        self.assertIn("NOT = { te_seabed_takes_part = yes }", body)
+
+    def test_the_factor(self):
+        body = block(self.values, "te_seabed_claim_factor")
+        self.assertIn("value = te_seabed_latent_factor", body)
+        self.assertIn("has_technology_researched = abyssal_plain_mining", body)
+        self.assertIn("value = te_seabed_policy_factor", body)
+        self.assertIn("value = te_seabed_claim_factor", block(self.effects, "te_seabed_compute_weights"))
+        self.assertNotIn("te_seabed_policy_factor", block(self.effects, "te_seabed_compute_weights"))
+
+    def test_the_pass_weighs_every_coastal_country(self):
+        body = self.passbody
+        basins = body[:body.index("te_seabed_ensure_state_basin")]
+        self.assertIn("any_scope_state = { is_coastal = yes }", basins)
+        self.assertNotIn("te_seabed_takes_part", basins)
+        self.assertNotIn("te_seabed_zero_weights", body)
+        order = ["set_variable = te_seabed_part", "te_seabed_waits = yes", "set_variable = te_seabed_wpart",
+                 "te_seabed_compute_weights = yes", "te_seabed_wait_weights = yes",
+                 "te_seabed_fit_floors = { B = pacific }", "te_seabed_clear_waits = yes",
+                 "remove_variable = te_seabed_wpart", "te_seabed_world_totals = { B = pacific }"]
+        at = [body.index(s) for s in order]
+        self.assertEqual(at, sorted(at))
+
+    def test_waiting_countries_hold_nothing_and_freeze_at_nothing(self):
+        body = block(self.effects, "te_seabed_wait_reset")
+        for var in ("te_seabed_sh_$B$", "te_seabed_fz_$B$"):
+            self.assertIn(f"set_variable = {{ name = {var} value = 0 }}", body)
+        self.assertIn("te_seabed_compute_weights = yes", block(self.effects, "te_seabed_wait_weights"))
+
+    def test_the_sharing_takes_them_in_and_gives_them_no_claims(self):
+        share = block(self.effects, "te_seabed_share_basin")
+        self.assertIn("has_variable = te_seabed_wpart", share[:share.index("set_variable = te_seabed_act_$B$")])
+        rnd = block(self.effects, "te_seabed_share_round")
+        final = rnd[rnd.index("te_seabed_readout = { B = $B$ }"):]
+        self.assertIn("has_variable = te_seabed_wpart", final)
+        wait_at = final.index("name = te_seabed_wait_$B$")
+        self.assertLess(final.index("has_technology_researched = abyssal_plain_mining"), wait_at)
+        self.assertLess(wait_at, final.index("max = var:te_seabed_sh_$B$"))
+        self.assertLess(final.index("max = var:te_seabed_sh_$B$"), final.index("name = te_seabed_unbuilt_$B$"))
+        self.assertIn("remove_variable = te_seabed_act_$B$", final)
+
+    def test_world_totals_count_the_waiting(self):
+        body = block(self.effects, "te_seabed_world_totals")
+        self.assertIn("name = te_seabed_world_wait_$B$ add = var:te_seabed_wait_$B$", body)
+        self.assertIn("name = te_seabed_world_w_$B$ add = var:te_seabed_w_$B$", body[body.index("te_seabed_world_wait_$B$ add"):])
+        for b in m.BASINS:
+            self.assertIn(f"subtract = te_seabed_wait_world_disp_{b}", block(self.values, f"te_seabed_rival_claims_{b}"))
 
 
 class ReviewFixesTest(unittest.TestCase):
@@ -582,7 +647,7 @@ class PanelDataTest(unittest.TestCase):
                      "global_var:te_seabed_rem_res_$B$", "global_var:te_seabed_wsum_res_$B$",
                      "has_variable = te_seabed_rsv_$B$", "ceiling = yes",
                      "te_seabed_distant_navy_share", "var:te_seabed_coast_$B$", "var:te_seabed_coast_all",
-                     "te_seabed_policy_factor", "te_seabed_assertive_navy_mult"):
+                     "te_seabed_claim_factor", "te_seabed_assertive_navy_mult"):
             self.assertIn(term, ro)
         self.assertIn(f"> {m.READOUT_FULL_BELOW}", ro)
         self.assertIn("name = te_seabed_need_navy_$B$ value = -1", ro)

@@ -19,6 +19,10 @@
 #   country  te_seabed_unbuilt_<basin>    entitled and unused
 #            te_seabed_held_<basin>       records in its states (yearly)
 #            te_seabed_ent_<basin>        entitlement (yearly)
+#            te_seabed_wait_<basin>       without Abyssal Plain Mining: its
+#                                         share above its holdings, waiting
+#                                         for the technology; no claim
+#                                         (yearly; absent for a claimant)
 #            te_seabed_w_<basin>          claim weight (yearly)
 #            te_seabed_home_<basin>       flag: borders the basin
 #            te_seabed_policy(_prev)      1 Survey, 2 Sponsor, 3 Unilateral
@@ -74,10 +78,21 @@
 #                                         (the UN hook writes it)
 #            te_seabed_records_<basin>    the world's records (yearly)
 #            te_seabed_world_w_<basin>    the world's claim weight (yearly)
+#            te_seabed_world_wait_<basin> the shares waiting for countries
+#                                         without the technology (yearly)
 #            te_seabed_first_claimant     the country the rush event names
 #            te_seabed_rush_announced,    flags: the rush event sent; the
 #            te_seabed_full_<basin>,      basin told it is fully licensed;
 #            te_seabed_claimed_seeded     the claimed marks seeded
+#
+# EVERY COASTAL COUNTRY IS WEIGHED (the owner, 2026-10-27; model: the header's
+# "countries without the technology"). A sharing among claimants alone handed
+# the first one every pool. One without Abyssal Plain Mining weighs at
+# te_seabed_latent_factor (te_seabed_claim_factor) and its share above its
+# holdings waits for it in te_seabed_wait_<basin>, no claim. A coastal country
+# with no other part in the sharing only waits (te_seabed_waits, flagged
+# te_seabed_wpart during the pass): it is weighed and shared, and records
+# nothing.
 #
 # ONE DEPARTURE FROM THE SPEC'S WORDING: a level is recorded as soon as it is
 # queued (its building's level_after_queued_constructions), not when it is
@@ -725,9 +740,10 @@ te_seabed_yearly_pass = {
 		limit = { has_global_variable = te_seabed_reshare }
 		remove_global_variable = te_seabed_reshare
 	}
-	# 1. State basins on coastal states without one.
+	# 1. State basins on coastal states without one: every coastal country's,
+	# since every one is weighed.
 	every_country = {
-		limit = { te_seabed_takes_part = yes }
+		limit = { any_scope_state = { is_coastal = yes } }
 		every_scope_state = {
 			limit = { is_coastal = yes }
 			te_seabed_ensure_state_basin = yes
@@ -735,11 +751,19 @@ te_seabed_yearly_pass = {
 	}
 	# 2. The regime.
 	te_seabed_un_update_regime = yes
-	# 3. Every participant records, so every level is held.
+	# 3. Every participant records, so every level is held; the coastal
+	# countries with no other part only wait (model: waits).
 	every_country = {
 		limit = { te_seabed_takes_part = yes }
 		set_variable = te_seabed_part
 		te_seabed_record_country = yes
+	}
+	every_country = {
+		limit = {
+			NOT = { has_variable = te_seabed_part }
+			te_seabed_waits = yes
+		}
+		set_variable = te_seabed_wpart
 	}
 	te_seabed_cap_check = yes
 	# 3b. The holding fee's snapshots, at the year's first sharing.
@@ -764,20 +788,19 @@ te_seabed_yearly_pass = {
 	}
 	te_seabed_lease_shift_held = yes
 	# 5. The floors (the year's first sharing only; a mid-year one honours
-	# January's) and weights.
+	# January's) and weights, a participant without the technology's at
+	# te_seabed_latent_factor; then the countries that only wait.
 	every_country = {
 		limit = { has_variable = te_seabed_part }
 		if = {
 			limit = { has_global_variable = te_seabed_first_of_year }
 			te_seabed_set_floors = yes
 		}
-		if = {
-			limit = { te_seabed_is_claimant = yes }
-			te_seabed_compute_weights = yes
-		}
-		else = {
-			te_seabed_zero_weights = yes
-		}
+		te_seabed_compute_weights = yes
+	}
+	every_country = {
+		limit = { has_variable = te_seabed_wpart }
+		te_seabed_wait_weights = yes
 	}
 	# 6. Each pool, its floors fitted first.
 	te_seabed_fit_floors = { B = pacific }
@@ -792,18 +815,39 @@ te_seabed_yearly_pass = {
 	te_seabed_share_basin = { B = southern }
 	# 7. A country that takes no part loses any share it had (it lost its
 	# coast, or its records): its unbuilt share would otherwise stand beside
-	# the pool just shared.
+	# the pool just shared. One that now only waits (it lost its records and
+	# has no technology) was just shared a waiting share and no claims, and
+	# keeps it. A country that neither takes part nor waits (no coast) loses
+	# a waiting share it had.
 	every_country = {
 		limit = {
 			has_variable = te_seabed_shared
 			NOT = { has_variable = te_seabed_part }
 		}
-		te_seabed_clear_shares = yes
+		if = {
+			limit = { has_variable = te_seabed_wpart }
+			remove_variable = te_seabed_shared
+		}
+		else = {
+			te_seabed_clear_shares = yes
+		}
+	}
+	every_country = {
+		limit = {
+			has_variable = te_seabed_wait_pacific
+			NOT = { has_variable = te_seabed_part }
+			NOT = { has_variable = te_seabed_wpart }
+		}
+		te_seabed_clear_waits = yes
 	}
 	every_country = {
 		limit = { has_variable = te_seabed_part }
 		set_variable = te_seabed_shared
 		remove_variable = te_seabed_part
+	}
+	every_country = {
+		limit = { has_variable = te_seabed_wpart }
+		remove_variable = te_seabed_wpart
 	}
 	# 7b. Leases: those no longer standing go, the rest are topped up; then
 	# subjects under Administer Seabed Claims pass their claims again.
@@ -883,7 +927,9 @@ te_seabed_compute_held = {
 
 # Country scope. Model: compute_weights (§ 2.3; seabed claims spec § 5.1):
 # every coastal state counts, an unincorporated one at te_seabed_uninc_coast
-# in the coast term and the navy's spread; its ports count in full.
+# in the coast term and the navy's spread; its ports count in full. The
+# factor is the policy's, or te_seabed_latent_factor without the technology
+# (te_seabed_claim_factor).
 te_seabed_compute_weights = {
 	set_local_variable = { name = te_sb_wn_all value = 0 }
 	te_seabed_weight_reset = { B = pacific }
@@ -910,7 +956,7 @@ te_seabed_compute_weights = {
 	}
 	set_variable = { name = te_seabed_coast_all value = local_var:te_sb_wn_all }
 	set_local_variable = { name = te_sb_navy value = te_seabed_navy_effective }
-	set_local_variable = { name = te_sb_factor value = te_seabed_policy_factor }
+	set_local_variable = { name = te_sb_factor value = te_seabed_claim_factor }
 	te_seabed_weight_set = { B = pacific }
 	te_seabed_weight_set = { B = atlantic }
 	te_seabed_weight_set = { B = indian }
@@ -993,14 +1039,50 @@ te_seabed_weight_set = {
 	}
 }
 
-# Country scope: a participant that is no claimant (holdings only) claims
-# nothing.
-te_seabed_zero_weights = {
-	te_seabed_zero_weight = { B = pacific }
-	te_seabed_zero_weight = { B = atlantic }
-	te_seabed_zero_weight = { B = indian }
-	te_seabed_zero_weight = { B = arctic }
-	te_seabed_zero_weight = { B = southern }
+# Country scope: a coastal country that only waits (te_seabed_wpart, the
+# yearly pass's step 5). Model: yearly_pass's waiting countries. It holds
+# nothing and no floor protects it, so the sharing freezes it at nothing;
+# then its weights, at te_seabed_latent_factor (te_seabed_claim_factor).
+te_seabed_wait_weights = {
+	te_seabed_wait_reset = { B = pacific }
+	te_seabed_wait_reset = { B = atlantic }
+	te_seabed_wait_reset = { B = indian }
+	te_seabed_wait_reset = { B = arctic }
+	te_seabed_wait_reset = { B = southern }
+	te_seabed_compute_weights = yes
+}
+
+# The holdings the sharing reads, 0; a former participant's floor and
+# holdings cleared (a country that has only ever waited never gets them).
+te_seabed_wait_reset = {
+	set_variable = { name = te_seabed_sh_$B$ value = 0 }
+	set_variable = { name = te_seabed_fz_$B$ value = 0 }
+	if = {
+		limit = { has_variable = te_seabed_held_$B$ }
+		set_variable = { name = te_seabed_held_$B$ value = 0 }
+	}
+	if = {
+		limit = { has_variable = te_seabed_floor_$B$ }
+		te_seabed_clear_floor = { B = $B$ }
+	}
+}
+
+# Country scope: no part in the sharing and no coast to wait with (the
+# yearly pass's step 7): its waiting shares and weights go.
+te_seabed_clear_waits = {
+	te_seabed_clear_wait = { B = pacific }
+	te_seabed_clear_wait = { B = atlantic }
+	te_seabed_clear_wait = { B = indian }
+	te_seabed_clear_wait = { B = arctic }
+	te_seabed_clear_wait = { B = southern }
+}
+
+te_seabed_clear_wait = {
+	if = {
+		limit = { has_variable = te_seabed_wait_$B$ }
+		remove_variable = te_seabed_wait_$B$
+	}
+	te_seabed_zero_weight = { B = $B$ }
 }
 
 te_seabed_zero_weight = {
@@ -1046,7 +1128,8 @@ te_seabed_clear_share = {
 
 # No scope. Water-fill pool $B$ (§ 2.4 step 2; § 3.2). Participants are the
 # countries marked te_seabed_part with weight or holdings here (te_seabed_sh_$B$,
-# after the leases' shift). Under the
+# after the leases' shift), and those that only wait (te_seabed_wpart), with
+# weight here and nothing to freeze at. Under the
 # Regulated regime the pool is a reserved half (eligible parties only) and an
 # open half (everyone), filled together: a country's tentative entitlement is
 # its share of each half it claims in, and it is frozen when its holdings
@@ -1058,7 +1141,10 @@ te_seabed_clear_share = {
 te_seabed_share_basin = {
 	every_country = {
 		limit = {
-			has_variable = te_seabed_part
+			OR = {
+				has_variable = te_seabed_part
+				has_variable = te_seabed_wpart
+			}
 			OR = {
 				var:te_seabed_w_$B$ > 0
 				var:te_seabed_sh_$B$ > 0
@@ -2452,8 +2538,9 @@ te_seabed_floor_check_basin = {
 }
 
 # No scope. Model: share_basin's fold_unclaimed. A reserved half no active
-# claimant is eligible for joins the open half (review L1), so each pool is
-# always fully shared.
+# country is eligible for joins the open half (review L1), so each pool is
+# always fully shared. An eligible party without the technology is active
+# (it waits), so its reserved half waits with it.
 te_seabed_share_fold_unclaimed = {
 	if = {
 		limit = {
@@ -2571,7 +2658,9 @@ te_seabed_share_rebalance = {
 # the leftovers (the pool less the frozen amounts less the floors) one each
 # by largest remainder; a frozen country's is what it was frozen at (its
 # holdings or its floor); and unbuilt = entitlement - held (te_seabed_sh_$B$)
-# for every participant.
+# for every claimant. A country without the technology, participant or
+# waiting, keeps its holdings as its entitlement and no claims, and the rest
+# of its share waits for it (te_seabed_wait_$B$).
 te_seabed_share_round = {
 	te_seabed_share_fold_unclaimed = { B = $B$ }
 	te_seabed_share_tentative = { B = $B$ }
@@ -2647,10 +2736,39 @@ te_seabed_share_round = {
 	}
 	te_seabed_readout = { B = $B$ }
 	every_country = {
-		limit = { has_variable = te_seabed_part }
+		limit = {
+			OR = {
+				has_variable = te_seabed_part
+				has_variable = te_seabed_wpart
+			}
+		}
 		if = {
 			limit = { NOT = { has_variable = te_seabed_act_$B$ } }
 			set_variable = { name = te_seabed_ent_$B$ value = var:te_seabed_fz_$B$ }
+		}
+		if = {
+			limit = { has_technology_researched = abyssal_plain_mining }
+			if = {
+				limit = { has_variable = te_seabed_wait_$B$ }
+				remove_variable = te_seabed_wait_$B$
+			}
+		}
+		else = {
+			set_variable = {
+				name = te_seabed_wait_$B$
+				value = {
+					value = var:te_seabed_ent_$B$
+					subtract = var:te_seabed_sh_$B$
+					min = 0
+				}
+			}
+			set_variable = {
+				name = te_seabed_ent_$B$
+				value = {
+					value = var:te_seabed_ent_$B$
+					max = var:te_seabed_sh_$B$
+				}
+			}
 		}
 		set_variable = {
 			name = te_seabed_unbuilt_$B$
@@ -2849,7 +2967,7 @@ te_seabed_readout = {
 					set_local_variable = {
 						name = te_sb_ro_per
 						value = {
-							value = te_seabed_policy_factor
+							value = te_seabed_claim_factor
 							multiply = local_var:te_sb_ro_mult
 							multiply = var:te_seabed_coast_$B$
 							divide = var:te_seabed_coast_all
@@ -2860,7 +2978,7 @@ te_seabed_readout = {
 					set_local_variable = {
 						name = te_sb_ro_per
 						value = {
-							value = te_seabed_policy_factor
+							value = te_seabed_claim_factor
 							multiply = local_var:te_sb_ro_mult
 							multiply = te_seabed_distant_navy_share
 						}
@@ -2889,11 +3007,22 @@ te_seabed_world_totals = {
 	set_global_variable = { name = te_seabed_records_$B$ value = 0 }
 	set_global_variable = { name = te_seabed_world_w_$B$ value = 0 }
 	set_global_variable = { name = te_seabed_world_unbuilt_$B$ value = 0 }
+	set_global_variable = { name = te_seabed_world_wait_$B$ value = 0 }
 	every_country = {
 		limit = { has_variable = te_seabed_shared }
 		change_global_variable = { name = te_seabed_records_$B$ add = var:te_seabed_held_$B$ }
 		change_global_variable = { name = te_seabed_world_w_$B$ add = var:te_seabed_w_$B$ }
 		change_global_variable = { name = te_seabed_world_unbuilt_$B$ add = var:te_seabed_unbuilt_$B$ }
+	}
+	# The countries without the technology: their shares wait, and their
+	# weight is part of the basin's (the panel's Weight %, the AI's estimate).
+	every_country = {
+		limit = { has_variable = te_seabed_wait_$B$ }
+		change_global_variable = { name = te_seabed_world_wait_$B$ add = var:te_seabed_wait_$B$ }
+		if = {
+			limit = { NOT = { has_variable = te_seabed_shared } }
+			change_global_variable = { name = te_seabed_world_w_$B$ add = var:te_seabed_w_$B$ }
+		}
 	}
 	set_global_variable = {
 		name = te_seabed_ceiling_$B$

@@ -287,6 +287,18 @@ even in that save, and the scale comes from those lines.
     first share at one sharing, check each notice names its own country (the scope is saved again
     for each). (c) A basin's licences all held: "The <Basin> Ocean Is Fully Licensed" to each
     player with a share there or coast on it (one with coast and no mines there too), once; destroy or downsize a level and refill it for the second.
+30. **Countries without the technology wait for their share** (owner, 2026-10-27; model:
+    `WaitingShareTest`). The month after the first country researches Abyssal Plain Mining, open its
+    Seabed tab: its share in each basin is what its weight wins against every coastal country's,
+    not the whole pool, and each basin's pool hover lists "Waiting for countries without Abyssal
+    Plain Mining" beside rivals' claims; the figures, with our mines and claims, add up to the pool.
+    The Weight % reads our weight against everyone's, those waiting included. A coastal country
+    without the technology gets no Seabed tab, no State Panel tile and no new-claimant notice; when
+    it researches the technology, the next month's sharing turns its waiting share into claims (its
+    tab opens, and a notice names it to the players already in the basin). Under the Regulated
+    regime, with the poorer parties still without the technology, the first claimant's share stays
+    within the open half. Check the yearly sharing's month doesn't hitch: it now weighs and
+    water-fills every coastal country, not only the claimants.
 
 ### Engine facts the build assumes, unverified
 

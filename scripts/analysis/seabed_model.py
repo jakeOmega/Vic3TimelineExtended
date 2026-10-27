@@ -24,6 +24,24 @@ THE STATE (as the script keeps it)
   licences its overlord built on its passed claims / those still unused).
 - Global: te_seabed_regime (1 Open, 2 Regulated, 3 Scramble).
 
+COUNTRIES WITHOUT THE TECHNOLOGY WAIT FOR THEIR SHARE (the owner, 2026-10-27).
+Claim weight is relative, so a sharing among claimants alone handed the first
+country with Abyssal Plain Mining every pool in full, distant basins
+included, and whatever it queued before a rival caught up was its licences
+for good. So every sharing weighs every coastal country. One without the
+technology weighs at LATENT_FACTOR (te_seabed_latent_factor) in place of its
+policy factor, and its entitlement above its holdings waits for it
+(te_seabed_wait_<basin>): it is no claim, so no level, lease or pact can use
+it, and the country's claims stay 0 until it researches the technology, when
+the next sharing gives it claims by weight. A coastal country with no other
+part in the sharing (no technology, no licences) only waits
+(te_seabed_waits): it is weighed and shared, records nothing and holds no
+claims. A
+participant without the technology (a holder) is weighed the same way and
+keeps no claims either. The first mover's head start is now bounded: its
+share is what its weight wins against everyone's, at most 1 / LATENT_FACTOR
+times its share once all have the technology on the same policy.
+
 THE HOLDING FEE (seabed claims spec § 2.1). At the year's first sharing every
 coastal state keeps its count of licences on unbuilt levels, and the one
 before (te_seabed_unb_snap1, te_seabed_unb_snap2; te_seabed_take_snapshots).
@@ -140,8 +158,9 @@ pool. Licences carry no half: a record is a record. This keeps the invariant
 (Σ entitlements = the pool, or the frozen holdings if they exceed it) with
 no attribution to store, and a party that holds more than its reserved
 share spills into the open half instead of starving the other parties.
-A reserved half that no active claimant is eligible for joins the open half
-(review L1), so each pool is always fully shared.
+A reserved half that no active country is eligible for joins the open half
+(review L1), so each pool is always fully shared; an eligible party without
+the technology is active, so the reserved half waits with it.
 """
 
 from __future__ import annotations
@@ -160,6 +179,7 @@ SURVEY, SPONSOR, UNILATERAL = 1, 2, 3
 # te_seabed_policy_factor_* / te_seabed_coast_weight / te_seabed_distant_navy_share /
 # te_seabed_station_weight / te_seabed_navy_assertive_mult
 POLICY_FACTOR = {SURVEY: 0.25, SPONSOR: 1.0, UNILATERAL: 1.0}
+LATENT_FACTOR = 0.25                 # te_seabed_latent_factor: a coastal country without the technology, in place of its policy factor
 COAST_WEIGHT = 2
 DISTANT_NAVY_SHARE = 0.05
 STATION_WEIGHT = 5
@@ -188,6 +208,7 @@ class Country:
     unbuilt: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     held: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
     ent: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))
+    wait: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))      # te_seabed_wait_<basin>: no technology, share above holdings
     weight: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0.0))
     floor: dict = field(default_factory=lambda: dict.fromkeys(BASINS, 0))   # te_seabed_floor_<basin>; 0 = none
     relinquished: dict = field(default_factory=lambda: dict.fromkeys(BASINS, False))   # te_seabed_relinq_<basin>
@@ -497,6 +518,14 @@ def takes_part(world: World, cid) -> bool:
                                  or any(s.records() > 0 or s.levels > 0 for s in world.owned(cid)))
 
 
+def waits(world: World, cid) -> bool:
+    """te_seabed_waits: a coastal country with no other part in the sharing
+    (no Abyssal Plain Mining, no licences). It is weighed and its share waits
+    for it, but it records nothing and holds no claims."""
+    return (world.alive(cid) and not takes_part(world, cid)
+            and any(s.coastal for s in world.owned(cid)))
+
+
 def _coast(s: State) -> float:
     """te_seabed_weight_tally's count for a coastal state: 1, or
     UNINCORPORATED_COAST unincorporated."""
@@ -507,15 +536,16 @@ def compute_weights(world: World, cid) -> dict:
     """te_seabed_compute_weights (§ 2.3, spec § 5.1). Home basin: (2 × coastal
     states + port levels + navy × its share of coastal states) × policy factor,
     unincorporated states counting UNINCORPORATED_COAST in both counts;
-    distant: 0.05 × navy × policy factor. Unilateral Licensing or the Scramble
-    doubles the navy. +5 Southern with an Antarctic station; Southern 0 for a
-    country the Antarctic Treaty bars."""
+    distant: 0.05 × navy × policy factor, LATENT_FACTOR in its place for a
+    country without the technology (te_seabed_claim_factor). Unilateral
+    Licensing or the Scramble doubles the navy. +5 Southern with an Antarctic
+    station; Southern 0 for a country the Antarctic Treaty bars."""
     c = world.countries[cid]
     v = world.v
     home = [s for s in world.owned(cid) if s.coastal]
     total = sum(_coast(s) for s in home)
     navy = c.navy * (ASSERTIVE_NAVY_MULT if (c.policy == UNILATERAL or world.regime == SCRAMBLE) else 1)
-    factor = POLICY_FACTOR[c.policy]
+    factor = POLICY_FACTOR[c.policy] if c.tech else LATENT_FACTOR
     w = {}
     for b in BASINS:
         n = sum(_coast(s) for s in home if s.basin == b)
@@ -579,8 +609,9 @@ def share_basin(world: World, b: str, part: list) -> dict:
     frozen_res = {}                                                  # te_seabed_dr_<b>: its reserved-half debit
 
     def fold_unclaimed():
-        """te_seabed_share_fold_unclaimed: a reserved half no active claimant
-        is eligible for joins the open half (review L1)."""
+        """te_seabed_share_fold_unclaimed: a reserved half no active country
+        is eligible for joins the open half (review L1); a waiting party is
+        active."""
         nonlocal rem_res, rem_open
         if rem_res > 0 and not any(elig[i] and w[i] > 0 for i in active):
             rem_open = v(rem_open + rem_res)
@@ -719,7 +750,7 @@ def need_navy(world: World, cid, b: str) -> int | None:
     if x is None:
         return None
     c = world.countries[cid]
-    factor = POLICY_FACTOR[c.policy]
+    factor = POLICY_FACTOR[c.policy] if c.tech else LATENT_FACTOR      # te_seabed_claim_factor
     mult = ASSERTIVE_NAVY_MULT if (c.policy == UNILATERAL or world.regime == SCRAMBLE) else 1
     home = [s for s in world.owned(cid) if s.coastal]
     n = sum(_coast(s) for s in home if s.basin == b)
@@ -1067,12 +1098,16 @@ def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
     coastal state takes its fee snapshots (te_seabed_take_snapshots); (4) held,
     the leases' shift (te_seabed_lease_shift_held), and at the year's first
     sharing the floors (te_seabed_set_floors); (5) weights; (6) sharing; (7)
-    unbuilt = entitlement - sh, and every country that takes no part loses any
-    stale share and floor; (8) te_seabed_settle_leases, then
-    te_seabed_pass_subject_claims."""
+    unbuilt = entitlement - sh for a claimant, and for a country without the
+    technology its waiting share (entitlement - sh) and no claims; every
+    country that takes no part loses any stale share and floor; (8)
+    te_seabed_settle_leases, then te_seabed_pass_subject_claims. The coastal
+    countries that only wait (te_seabed_waits) are weighed in (5) and shared
+    in (6), and nothing else."""
     holders = {s.owner for s in world.states.values() if s.records() > 0 or s.levels > 0}
     part = sorted(cid for cid in world.countries
                   if world.alive(cid) and (is_claimant(world, cid) or cid in holders))
+    waiting = sorted(cid for cid in world.countries if cid not in part and waits(world, cid))
     for cid in part:
         record_country(world, cid)
     if first_of_year:
@@ -1089,19 +1124,34 @@ def yearly_pass(world: World, *, first_of_year: bool = True) -> None:
         c = world.countries[cid]
         if first_of_year:
             set_floors(world, cid)
-        c.weight = compute_weights(world, cid) if is_claimant(world, cid) else dict.fromkeys(BASINS, 0.0)
+        c.weight = compute_weights(world, cid)
+    for cid in waiting:              # te_seabed_wait_weights: holds nothing, protected by nothing
+        c = world.countries[cid]
+        c.held = dict.fromkeys(BASINS, 0)
+        c.sh = dict.fromkeys(BASINS, 0)
+        c.floor = dict.fromkeys(BASINS, 0)
+        c.floor_prot = dict.fromkeys(BASINS, 0)
+        c.weight = compute_weights(world, cid)
     for b in BASINS:
-        ent = share_basin(world, b, [cid for cid in part
+        ent = share_basin(world, b, [cid for cid in part + waiting
                                      if world.countries[cid].weight[b] > 0 or world.countries[cid].sh[b] > 0])
-        for cid in part:
+        for cid in part + waiting:
             c = world.countries[cid]
-            c.ent[b] = ent.get(cid, 0)
+            e = ent.get(cid, 0)
+            if c.tech:
+                c.ent[b] = e
+                c.wait[b] = 0
+            else:                    # its share waits for the technology: no claims
+                c.ent[b] = min(e, c.sh[b])
+                c.wait[b] = e - c.ent[b]
             c.unbuilt[b] = c.ent[b] - c.sh[b]
             c.lease_unused[b] = 0    # the sharing re-divides leased and passed claims too
             c.subj_unused[b] = 0
             c.pass_unused[b] = 0
     for cid, c in world.countries.items():
-        if cid not in part:
+        if cid not in part and cid not in waiting:
+            c.wait = dict.fromkeys(BASINS, 0)
+            c.weight = dict.fromkeys(BASINS, 0.0)
             c.unbuilt = dict.fromkeys(BASINS, 0)
             c.held = dict.fromkeys(BASINS, 0)
             c.sh = dict.fromkeys(BASINS, 0)

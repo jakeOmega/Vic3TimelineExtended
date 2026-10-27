@@ -302,10 +302,13 @@ pool of licences. A coastal state belongs to the basin its sea lane opens onto.
 | Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
 | Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
 
-Every January the pools are shared out by claim weight among the countries with
-Abyssal Plain Mining. A country that has just researched it gets its share the
-month after, and that sharing divides every pool again, so your own share can
-move in the middle of a year. In a basin where you have coastal states, your
+Every January the pools are shared out by claim weight among every coastal
+country. A country without Abyssal Plain Mining counts at a quarter of its
+weight, and its share waits for it: no one can build on it. Researching the
+technology first gives you a head start, then, and every other coastal country
+keeps a share for when it catches up. A country that has just researched it
+gets its share as claims the month after, and that sharing divides every pool
+again, so your own share can move in the middle of a year. In a basin where you have coastal states, your
 weight counts those states twice, their port levels, and your naval power
 projection, scaled to about one unit a warship (the weight hover shows the
 divisor), in proportion to the coast you have there; an unincorporated state
