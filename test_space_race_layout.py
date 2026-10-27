@@ -36,7 +36,7 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 
 RACING = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
           "interstellar_probe"]
-CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in sr_rivals_sgui op order
+CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in je_space_race.txt's order
 ALL = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
        "interstellar_probe", "interstellar_results", "solar_colonization"]  # journal order
 # The programme row: one icon per entry, except that the Interstellar Probe and
@@ -237,15 +237,15 @@ class RootTest(unittest.TestCase):
                     self.assertIn(f"datacontext = \"[GetScriptedGui('sr_milestone_{m}_sgui')]\"", root)
                     self.assertEqual(_milestones_named(root), {m})
 
-    def test_rivals_op_matches_the_scripted_gui(self):
-        sgui = _block(_read(SGUIS), "sr_rivals_sgui")
-        for op, m in enumerate(CONTROLLED):
+    def test_each_root_lists_its_own_rivals(self):
+        """Audit SPC-9: Rivals is a datamodel of the milestone's own list, so
+        the "+N more" scripted GUI went."""
+        self.assertNotIn("sr_rivals_sgui", _read(SGUIS))
+        for m in CONTROLLED:
             with self.subTest(milestone=m):
                 root = _root(self.gui, f"widget_je_space_race_{m}")
-                self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' )", root)
-                if op < len(CONTROLLED) - 1:
-                    self.assertRegex(sgui, rf"scope:op = {op} \}}\s*sr_rivals_participants_base = \{{ MILESTONE = {m} \}}")
-        self.assertRegex(sgui, r"else = \{\s*sr_rivals_participants_base = \{ MILESTONE = solar_colonization \}")
+                lists = set(re.findall(r"GetList\('sr_rivals_list_(\w+)'\)", root))
+                self.assertEqual(lists, {m})
 
     def test_the_first_line_left_the_rivals_list(self):
         """The overview's First cell carries it; the list names participants only."""
@@ -702,38 +702,43 @@ ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.t
 
 class SpacePowersTest(unittest.TestCase):
     """The Space Race tab's Space Powers (owner, 2026-10-25: see the AI rivals'
-    progress with or without a milestone running): our row, then eight slots
-    the monthly refresh fills, then "+N more"."""
+    progress with or without a milestone running): our row, then every other
+    power, a datamodel of the list the monthly refresh fills (audit SPC-9)."""
 
     @classmethod
     def setUpClass(cls):
         cls.gui = _read(GUI)
         cls.section = _type_body(cls.gui, "te_sr_sec_powers")
 
-    def test_our_row_then_eight_slots(self):
+    def test_our_row_then_the_list(self):
         rows = re.split(r"\bte_sr_power_row = \{", self.section)[1:]
-        self.assertEqual(len(rows), 9)
+        self.assertEqual(len(rows), 2)
         self.assertIn('datacontext = "[GetPlayer.GetCapital]"', rows[0])
         self.assertIn("te_sr_power_lead_own = {}", rows[0])
-        self.assertNotIn("row_visible", rows[0])
-        for n, row in enumerate(rows[1:], start=1):
-            with self.subTest(slot=n):
-                self.assertIn(f"datacontext = \"[GetPlayer.MakeScope.Var('sr_power_{n}').GetState]\"", row)
-                self.assertIn(f"ScriptValue('sr_disp_power_total'), '(CFixedPoint){n}' )", row)
-                self.assertIn("te_sr_power_lead_band = {}", row)
-        more = self.section[self.section.index("je_space_race_widget_powers_more") - 400:]
-        self.assertIn("'(CFixedPoint)9'", more)
-        self.assertIn("GetScriptedGui('sr_powers_sgui').ExecuteTooltip", more)
+        self.assertRegex(self.section, r'datamodel = "\[GetPlayer\.MakeScope\.GetList\(\'sr_powers_list\'\)\]"\s*'
+                                       r'item = \{\s*te_sr_power_row = \{\s*datacontext = "\[Scope\.GetState\]"')
+        self.assertIn("te_sr_power_lead_band = {}", rows[1])
+        self.assertNotIn("row_visible", _type_body(self.gui, "te_sr_power_row"))
+        self.assertNotIn("sr_powers_sgui", self.gui)
+        self.assertNotIn("powers_more", self.section)
+        # pending (the refresh has not run) and none still read the count
+        self.assertIn("ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' )", self.section)
 
-    def test_the_refresh_fills_the_eight_slots(self):
+    def test_the_refresh_fills_the_list(self):
         effects = _read(EFFECTS)
         refresh = _block(effects, "sr_powers_refresh")
-        self.assertEqual(re.findall(r"sr_power_slot = \{ N = (\d) POS = (\d) \}", refresh),
-                         [(str(n), str(n - 1)) for n in range(1, 9)])
         for m in LEAD:
             self.assertIn(f"sr_power_fuzz_base = {{ MILESTONE = {m}", refresh)
-        self.assertIn("order_by = sr_power_rank_score", _block(effects, "sr_power_slot"))
+        self.assertLess(refresh.index("sr_powers_clear = yes"), refresh.index("ordered_country"))
+        walk = refresh[refresh.index("ordered_country"):]
+        for line in ("limit = { sr_is_space_power = yes }", "order_by = sr_power_rank_score", "min = 0",
+                     "max = 40", "check_range_bounds = no",
+                     "add_to_variable_list = { name = sr_powers_list target = scope:sr_power_capital }"):
+            self.assertIn(line, walk)
+        self.assertNotIn("sr_power_slot", effects)
+        self.assertIn("sr_powers_list_selfcheck = yes", refresh)
         clear = _block(effects, "sr_powers_clear")
+        self.assertIn("clear_variable_list = sr_powers_list", clear)
         for name in ["sr_power_total"] + [f"sr_power_{n}" for n in range(1, 9)]:
             self.assertIn(f"remove_variable = {name} }}", clear)
         # players in the race, monthly
@@ -743,6 +748,17 @@ class SpacePowersTest(unittest.TestCase):
         listed = _block(_read(TRIGGERS), "sr_is_space_power")
         for cond in ("NOT = { THIS = ROOT }", "sr_in_space_race = yes", "exists = capital"):
             self.assertIn(cond, listed)
+
+    def test_the_list_self_check(self):
+        """TE_SELF_CHECK sr_powers_list: once a game, OK and BROKEN, with the
+        count, and only when two or more powers can tell a walk from a pick."""
+        check = _block(_read(EFFECTS), "sr_powers_list_selfcheck")
+        self.assertIn("NOT = { has_global_variable = sr_selfcheck_powers_list_done }", check)
+        self.assertIn("set_global_variable = { name = sr_selfcheck_powers_list_done value = yes }", check)
+        self.assertIn("var:sr_power_total >= 2", check)
+        self.assertIn('debug_log = "TE_SELF_CHECK OK sr_powers_list', check)
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN sr_powers_list', check)
+        self.assertIn("docs/testing/space-race-playtest.md", check)
 
     def test_each_estimate_column_shows_one_text_per_code(self):
         for column, prefix in (("te_sr_power_lead_band", "je_space_race_widget_power_lead_"),

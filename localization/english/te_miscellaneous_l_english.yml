@@ -6149,7 +6149,6 @@
  sr_reserve_empty_tt:0 "The reserve holds hulls"
  sr_reserve_launch_tt:0 "The whole reserve goes up as one fleet at Earth, with full propellant, supply and marines. It can launch through a blockade."
  sr_reserve_no_slot_tt:0 "A fleet slot is free, or a fleet of ours is at Earth to take the reserve"
- sr_rivals_entry_gone:0 "a power that no longer exists"
  sr_rivals_first_claimed:0 "#R Another power has already claimed this milestone.#! Finishing it still earns a permanent reward, but the lesser one."
  sr_rivals_first_open:0 "#G Nobody has claimed this milestone yet.#! Whoever finishes first keeps the larger reward for good."
  sr_sc_ai_cap_tt:0 "An AI country builds Space Command only while it is a leading space power, out of default, with a positive income, and up to a cap that grows with its space program."

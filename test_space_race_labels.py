@@ -297,7 +297,7 @@ def _render(value):
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
-MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty|solar_system_note"
+MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty"
              r"|howc_(?!sub_)\w+)")
 CELLS = {

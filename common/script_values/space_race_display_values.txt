@@ -130,7 +130,7 @@ sr_disp_progress_frac_interstellar_results = {
 # ---- Whether another power has claimed "the first" --------------------------
 # 1 once sr_global_first_<m> is set. While our own entry runs we have not
 # finished the milestone, so a set flag is always someone else's. Solar
-# colonization has no first (space_race_effects.txt, sr_rivals_participants_base).
+# colonization has no first (space_race_effects.txt, sr_rivals_estimate_refresh).
 sr_disp_first_claimed_suborbital = {
 	value = 0
 	if = { limit = { has_global_variable = sr_global_first_suborbital } value = 1 }
@@ -769,9 +769,9 @@ sr_disp_rival_band = {
 	}
 }
 
-# Per milestone: the estimate (the marker), the band's ends, and the viewer's
-# count of rivals (sr_rival_total_<m>, written by sr_rivals_estimate_refresh)
-# with how many there are beyond the five rows.
+# Per milestone: the estimate (the marker) and the band's ends, for each rival
+# the Rivals list holds (sr_rivals_list_<m>, written by
+# sr_rivals_estimate_refresh).
 sr_disp_rival_est_suborbital = {
 	value = 0
 	scope:sr_rival = {
@@ -801,15 +801,6 @@ sr_disp_rival_hi_suborbital = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_suborbital = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_suborbital } value = var:sr_rival_total_suborbital }
-}
-sr_disp_rival_more_suborbital = {
-	value = sr_disp_rival_total_suborbital
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_orbital = {
 	value = 0
@@ -841,15 +832,6 @@ sr_disp_rival_hi_orbital = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_orbital = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_orbital } value = var:sr_rival_total_orbital }
-}
-sr_disp_rival_more_orbital = {
-	value = sr_disp_rival_total_orbital
-	subtract = 5
-	min = 0
-}
 sr_disp_rival_est_moon_landing = {
 	value = 0
 	scope:sr_rival = {
@@ -879,15 +861,6 @@ sr_disp_rival_hi_moon_landing = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_moon_landing = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_moon_landing } value = var:sr_rival_total_moon_landing }
-}
-sr_disp_rival_more_moon_landing = {
-	value = sr_disp_rival_total_moon_landing
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_probe = {
 	value = 0
@@ -919,15 +892,6 @@ sr_disp_rival_hi_probe = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_probe = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_probe } value = var:sr_rival_total_probe }
-}
-sr_disp_rival_more_probe = {
-	value = sr_disp_rival_total_probe
-	subtract = 5
-	min = 0
-}
 sr_disp_rival_est_moon_base = {
 	value = 0
 	scope:sr_rival = {
@@ -957,15 +921,6 @@ sr_disp_rival_hi_moon_base = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_moon_base = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_moon_base } value = var:sr_rival_total_moon_base }
-}
-sr_disp_rival_more_moon_base = {
-	value = sr_disp_rival_total_moon_base
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_mars_landing = {
 	value = 0
@@ -997,15 +952,6 @@ sr_disp_rival_hi_mars_landing = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_mars_landing = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_mars_landing } value = var:sr_rival_total_mars_landing }
-}
-sr_disp_rival_more_mars_landing = {
-	value = sr_disp_rival_total_mars_landing
-	subtract = 5
-	min = 0
-}
 sr_disp_rival_est_interstellar_probe = {
 	value = 0
 	scope:sr_rival = {
@@ -1035,15 +981,6 @@ sr_disp_rival_hi_interstellar_probe = {
 	add = sr_disp_rival_band
 	min = 0
 	max = 1
-}
-sr_disp_rival_total_interstellar_probe = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_interstellar_probe } value = var:sr_rival_total_interstellar_probe }
-}
-sr_disp_rival_more_interstellar_probe = {
-	value = sr_disp_rival_total_interstellar_probe
-	subtract = 5
-	min = 0
 }
 sr_disp_rival_est_solar_colonization = {
 	value = 0
@@ -1075,29 +1012,15 @@ sr_disp_rival_hi_solar_colonization = {
 	min = 0
 	max = 1
 }
-sr_disp_rival_total_solar_colonization = {
-	value = 0
-	if = { limit = { has_variable = sr_rival_total_solar_colonization } value = var:sr_rival_total_solar_colonization }
-}
-sr_disp_rival_more_solar_colonization = {
-	value = sr_disp_rival_total_solar_colonization
-	subtract = 5
-	min = 0
-}
 
 # ---- Space Powers: the standings on the Space Race tab -----------------------
 # Read by te_sr_sec_powers (the Timeline Extended window's Space Race tab).
 # The viewer's count of other powers (sr_power_total, written monthly by
 # sr_powers_refresh), -1 until the first refresh, so the panel can tell "not
-# listed yet" from "nobody else", and how many there are beyond the eight rows.
+# listed yet" from "nobody else". The rows are the list sr_powers_list.
 sr_disp_power_total = {
 	value = -1
 	if = { limit = { has_variable = sr_power_total } value = var:sr_power_total }
-}
-sr_disp_power_more = {
-	value = sr_disp_power_total
-	subtract = 8
-	min = 0
 }
 # A row's furthest milestone under way (0 none, 1-8 je_space_race.txt's
 # order), which picks the row's estimate. Scope: the row's power.
