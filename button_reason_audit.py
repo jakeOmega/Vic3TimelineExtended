@@ -15,8 +15,8 @@ requirement reads as a requirement, never as a raw trigger name. Two checks:
     `blockoverride`, on its instance, the instance's other overrides and the
     type's definition. A tooltip that branches on the same `IsValid(…)` to a
     reason of its own (`SelectLocalization( ….IsValid(…), 'ok', 'why_not' )`)
-    counts as a reason. Not flagged: a scripted GUI with no `is_valid`, which
-    never greys the button.
+    counts as a reason. Not flagged: a scripted GUI with no `is_valid`, or one
+    holding only `always = yes`, which never greys the button.
 
 `raw_condition`
     A condition `IsValidTooltip` (or a scripted button's tooltip) prints as
@@ -272,6 +272,16 @@ def _block(stmts: list[Stmt], key: str) -> Stmt | None:
     return None
 
 
+def _never_greys(sgui: Stmt) -> bool:
+    """A scripted GUI with no `is_valid`, or one that holds only `always =
+    yes`, is always valid: its button never greys."""
+    valid = _block(sgui.children, "is_valid")
+    if valid is None:
+        return True
+    tests = [st for st in valid.children if st.key]
+    return all(st.key == "always" and st.value == "yes" for st in tests)
+
+
 def _rendered_sguis(root: Path, trees: dict[str, gui_tree.Node]) -> set[str]:
     names: set[str] = set()
     for rel, tree in trees.items():
@@ -426,8 +436,8 @@ def audit(mod_path: str | Path | None = None) -> AuditResult:
             names: list[str] = []
             for where, tooltips, inst_sgui in _contexts(node, types, instances):
                 sgui = name or inst_sgui
-                if sgui in sguis and _block(sguis[sgui][1].children, "is_valid") is None:
-                    continue  # never greys
+                if sgui in sguis and _never_greys(sguis[sgui][1]):
+                    continue
                 result.buttons_checked += 1
                 if any(_gives_reason(t, loc) for t in tooltips):
                     continue

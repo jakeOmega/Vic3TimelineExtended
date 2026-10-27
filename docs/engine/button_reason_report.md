@@ -15,7 +15,7 @@ Suppress a deliberate case on the flagged line:
 `# REVIEWED YYYY-MM-DD (missing_reason): why` on the `enabled` line, or
 `# REVIEWED YYYY-MM-DD (raw_condition): why` on the test's line.
 
-## Unreviewed `missing_reason` (501)
+## Unreviewed `missing_reason` (492)
 
 ### `gui/add_consumption_tax_menu.gui` (1)
 
@@ -27,12 +27,10 @@ Suppress a deliberate case on the flagged line:
 - lines 1933, 1953, 1973, 1993, 2013, 2033, 2054, 2079, 2099, 2119, 2139, 2159, 2179, 2200: `te_tax_native_tariff_controls_sgui` — greyed with no `IsValidTooltip` in its tooltip
 - lines 2243, 2277, 2310, 2343, 2376: `te_tax_native_controls_sgui` — greyed with no `IsValidTooltip` in its tooltip, in 1 instance(s): `gui/budget_panel.gui:1804`
 
-### `gui/construction_panel.gui` (4)
+### `gui/construction_panel.gui` (2)
 
 - line 1124: `te_construction_market_decrease_target_1` — greyed with no `IsValidTooltip` in its tooltip
-- line 1160: `te_construction_market_increase_target_1` — greyed with no `IsValidTooltip` in its tooltip
 - line 1184: `te_construction_market_decrease_budget_1000` — greyed with no `IsValidTooltip` in its tooltip
-- line 1219: `te_construction_market_increase_budget_1000` — greyed with no `IsValidTooltip` in its tooltip
 
 ### `gui/goods_panel.gui` (1)
 
@@ -42,12 +40,10 @@ Suppress a deliberate case on the flagged line:
 
 - line 1614: `gm_name_use_sgui` — greyed with no `IsValidTooltip` in its tooltip
 
-### `gui/journal_entry_widgets/space_race_widget.gui` (10)
+### `gui/journal_entry_widgets/space_race_widget.gui` (3)
 
 - lines 2988, 3034: `sr_settlers_sgui` — greyed with no `IsValidTooltip` in its tooltip
 - line 4620: `sr_reserve_launch_sgui` — greyed with no `IsValidTooltip` in its tooltip
-- lines 4631, 4642: `sr_reserve_auto_sgui` — greyed with no `IsValidTooltip` in its tooltip
-- lines 4663, 4673, 4683, 4693, 4703: `sr_sc_mix_sgui` — greyed with no `IsValidTooltip` in its tooltip
 
 ### `gui/journal_entry_widgets/sr_fleets_generated_rows.gui` (81)
 
@@ -279,8 +275,8 @@ _None._
 
 ## Coverage
 
-- total flags: 670
-- unreviewed: 670
+- total flags: 661
+- unreviewed: 661
 - exempted: 0
 - stale tags: 0
 

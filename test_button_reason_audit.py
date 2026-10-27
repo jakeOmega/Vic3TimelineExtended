@@ -31,6 +31,10 @@ te_free_sgui = {
 \tscope = country
 \teffect = { }
 }
+te_always_sgui = {
+\tscope = country
+\tis_valid = { always = yes }
+}
 te_raw_sgui = {
 \tscope = country
 \tis_valid = {
@@ -141,8 +145,9 @@ class MissingReasonTests(_Fixture):
                  f'tooltip = "[SelectLocalization( {GO}.IsValid( {SCOPE} ), \'te_plain_tt\', \'te_req_tt\' )]" }}\n')
         self.assertEqual(self.missing(), [])
 
-    def test_no_is_valid_never_greys(self):
-        self.gui('button = { enabled = "[GetScriptedGui(\'te_free_sgui\').IsValid( GuiScope.End )]" }\n')
+    def test_no_is_valid_or_always_yes_never_greys(self):
+        self.gui('button = { enabled = "[GetScriptedGui(\'te_free_sgui\').IsValid( GuiScope.End )]" }\n'
+                 'button = { enabled = "[GetScriptedGui(\'te_always_sgui\').IsValid( GuiScope.End )]" }\n')
         self.assertEqual(self.missing(), [])
 
     def test_no_tooltip_at_all_is_flagged(self):
@@ -205,10 +210,10 @@ class RawConditionTests(_Fixture):
         rows = [r for r in self.raw() if r[2] == "te_raw_sgui is_valid"]
         self.assertEqual(len(rows), 1)
         file, line, _owner, detail = rows[0]
-        self.assertEqual((file, line), ("common/scripted_guis/te_test_sguis.txt", 14))
-        self.assertIn("line 15: `var:te_points > 2`", detail)
-        self.assertIn("line 17: `te_raw_trigger = yes` reaches `has_global_variable = te_started`", detail)
-        self.assertIn("line 21: `te_sv >= 3`", detail)
+        self.assertEqual((file, line), ("common/scripted_guis/te_test_sguis.txt", 18))
+        self.assertIn("line 19: `var:te_points > 2`", detail)
+        self.assertIn("line 21: `te_raw_trigger = yes` reaches `has_global_variable = te_started`", detail)
+        self.assertIn("line 25: `te_sv >= 3`", detail)
         # Covered: the custom_tooltip, the clean trigger, the trigger_if's limit.
         self.assertNotIn("te_other", detail)
         self.assertNotIn("te_clean_trigger", detail)
