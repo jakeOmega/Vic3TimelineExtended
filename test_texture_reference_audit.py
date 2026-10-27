@@ -351,6 +351,333 @@ class SuppressionTests(_Fixture):
         self.assertIn(tra.CHECK, event_context_audit.FOREIGN_CHECKS)
 
 
+BG = 'background = "gfx/interface/icons/a.dds"'
+
+
+def _install_common() -> str | None:
+    """`<base_game_path>/game/common`, or None with no install (CI)."""
+    try:
+        base = path_constants.base_game_path
+    except Exception:  # an unconfigured machine: path_constants raises
+        return None
+    common = os.path.join(str(base or ""), "game", "common")
+    return common if os.path.isdir(common) else None
+
+
+# DECLARED_FIELDS folders vanilla_parsed/ doesn't hold.
+UNCOVERED = ["acceptance_statuses", "ai_strategic_region_stance_types", "ai_strategies", "alert_types",
+             "character_roles", "cohesion_levels", "combat_unit_experience_levels", "commander_orders",
+             "commander_ranks", "company_charter_types", "interest_tier_types", "liberty_desire_levels",
+             "military_formation_flags", "naval_battle_conditions", "naval_mission_types", "objectives",
+             "political_lobbies", "political_movement_categories", "power_bloc_map_textures",
+             "prestige_goods", "ship_veterancy_levels", "state_traits", "war_goal_types"]
+
+
+class DeclarationTests(_Fixture):
+    """#1182: an entity that names no art in a field its type needs."""
+
+    def run_audit(self, files, index=None, vanilla=None):
+        _tree(self.mod, files)
+        return tra.audit(mod_path=self.mod, index=index or self.index,
+                         vanilla=vanilla or tra.VanillaSnapshot())
+
+    def flagged(self, result):
+        return [f.value for f in result.flags if f.kind == "undeclared"]
+
+    def undeclared(self, result):
+        return [(f.file, f.line, f.value, f.key, bool(f.exemption))
+                for f in result.flags if f.kind == "undeclared"]
+
+    def test_building_without_background_flags(self):
+        r = self.run_audit({"common/buildings/b.txt": (
+            '﻿# a comment = { }\n'
+            'building_ok = {\n'
+            '\ticon = "gfx/interface/icons/a.dds"\n'
+            f'\t{BG}\n'
+            '}\n'
+            'building_none = {\n'
+            '\tbuilding_group = bg_x\n'
+            '\ticon = "gfx/interface/icons/a.dds"\n'
+            '}\n'
+            'building_empty = { background = "" }\n')})
+        self.assertEqual(self.undeclared(r), [
+            ("common/buildings/b.txt", 6, "building_none", "background", False),
+            ("common/buildings/b.txt", 10, "building_empty", "background", False)])
+        self.assertEqual(r.failing, 2)
+        self.assertEqual(r.entities_checked, 3)
+        self.assertIn("`building_none` declares no `background`", tra.render_report(r))
+        self.assertEqual(tra.summary(r)["undeclared"], 2)
+
+    def test_inject_into_vanilla_is_not_the_mods(self):
+        r = self.run_audit({"common/buildings/b.txt": 'INJECT:building_vanilla_farm = { level = 2 }\n'})
+        self.assertEqual(self.undeclared(r), [])
+        self.assertEqual(r.entities_checked, 0)
+
+    def test_inject_into_a_mod_entity_counts_with_its_base(self):
+        r = self.run_audit({
+            "common/buildings/a.txt": 'building_x = { icon = x }\nbuilding_y = { icon = y }\n',
+            "common/buildings/b.txt": f'INJECT:building_x = {{ {BG} }}\nINJECT:building_y = {{ level = 2 }}\n'})
+        # building_x gets its background from the INJECT; building_y from nowhere,
+        # flagged on its own opening line rather than the INJECT's.
+        self.assertEqual(self.undeclared(r), [("common/buildings/a.txt", 2, "building_y", "background", False)])
+
+    def test_replace_restates_the_whole_entity(self):
+        files = {"common/production_method_groups/g.txt": (
+            'REPLACE:pmg_aeroplanes = {\n'
+            '\tproduction_methods = { pm_a }\n'
+            '}\n'
+            'REPLACE:pmg_dummy = { production_methods = { pm_dummy } }\n')}
+        r = self.run_audit(files)
+        self.assertEqual([v for _f, _l, v, _k, _e in self.undeclared(r)],
+                         ["REPLACE:pmg_aeroplanes", "REPLACE:pmg_dummy"])
+        # Vanilla's own pmg_dummy has no texture: the REPLACE may leave it out too.
+        r = self.run_audit(files, vanilla=tra.VanillaSnapshot(
+            names={"production_method_groups": frozenset({"pmg_aeroplanes", "pmg_dummy"})},
+            gaps={"production_method_groups": {"texture": frozenset({"pmg_dummy"})}}))
+        self.assertEqual([v for _f, _l, v, _k, _e in self.undeclared(r)], ["REPLACE:pmg_aeroplanes"])
+        self.assertEqual(r.vanilla_precedent, [("production_method_groups", "pmg_dummy", "texture")])
+        self.assertIn("`pmg_dummy`: `texture`", tra.render_report(r))
+
+    def test_a_replace_drops_every_inject_whatever_the_file_order(self):
+        # #1185's probe: every INJECT on a key applies before any REPLACE on
+        # it, so the REPLACE's body is the final entry.
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        replace = 'REPLACE:law_foo = { group = g }\n'
+        for first, second in ((inject, replace), (replace, inject)):
+            with self.subTest(replace_sorts_first=first is replace):
+                shutil.rmtree(os.path.join(self.mod, "common"), ignore_errors=True)
+                r = self.run_audit({"common/laws/a.txt": first, "common/laws/b.txt": second})
+                self.assertEqual(self.undeclared(r), [
+                    ("common/laws/" + ("a.txt" if first is replace else "b.txt"), 1,
+                     "REPLACE:law_foo", "icon", False)])
+
+    def _two_files(self, first: str, second: str, names=("a.txt", "b.txt")):
+        shutil.rmtree(os.path.join(self.mod, "common"), ignore_errors=True)
+        return self.run_audit({f"common/laws/{names[0]}": first, f"common/laws/{names[1]}": second})
+
+    def test_an_or_create_takes_every_inject_whatever_the_file_order(self):
+        # #1185: an *_OR_CREATE applies after the plain definitions and before
+        # every INJECT, even from a later file, so the INJECTs land on it.
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        for create in ('REPLACE_OR_CREATE:law_foo = { group = g }\n',
+                       'INJECT_OR_CREATE:law_foo = { group = g }\n'):
+            for first, second in ((inject, create), (create, inject)):
+                with self.subTest(create=create.split(":")[0], create_first=first is create):
+                    self.assertEqual(self.flagged(self._two_files(first, second)), [])
+        # A REPLACE_OR_CREATE drops a plain definition's fields.
+        r = self._two_files('law_foo = { icon = "gfx/interface/icons/a.dds" }\n',
+                            'REPLACE_OR_CREATE:law_foo = { group = g }\n')
+        self.assertEqual(self.flagged(r), ["REPLACE_OR_CREATE:law_foo"])
+
+    def test_a_try_replace_takes_only_the_injects_that_sort_after_it(self):
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        try_replace = 'TRY_REPLACE:law_foo = { group = g }\n'
+        self.assertEqual(self.flagged(self._two_files(try_replace, inject)), [])
+        # Sorting before it, the INJECT may be wiped (unprobed): flag.
+        self.assertEqual(self.flagged(self._two_files(inject, try_replace)), ["TRY_REPLACE:law_foo"])
+        # The order is the file name's, whatever the subfolder: zz/a_try.txt loads before b_inject.txt.
+        self.assertEqual(self.flagged(self._two_files(try_replace, inject, ("zz/a_try.txt", "b_inject.txt"))), [])
+        # Later in the same file counts too.
+        self.assertEqual(self.flagged(self._two_files(try_replace + inject, "")), [])
+
+    def test_a_plain_replace_beats_the_other_directives(self):
+        inject = 'INJECT:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+        for other in ('REPLACE_OR_CREATE:law_foo = { icon = "gfx/interface/icons/a.dds" }\n',
+                      'TRY_REPLACE:law_foo = { icon = "gfx/interface/icons/a.dds" }\n'):
+            with self.subTest(other=other.split(":")[0]):
+                r = self._two_files(other + inject, 'REPLACE:law_foo = { group = g }\n')
+                self.assertEqual(self.flagged(r), ["REPLACE:law_foo"])
+
+    def test_the_last_replace_is_the_entry(self):
+        r = self.run_audit({
+            "common/laws/a.txt": 'law_foo = { icon = "gfx/interface/icons/a.dds" }\n'
+                                 'REPLACE:law_foo = { icon = "gfx/interface/icons/a.dds" }\n',
+            "common/laws/b.txt": 'REPLACE:law_foo = { group = g }\n'
+                                 'REPLACE:law_bar = { group = g }\n'
+                                 'REPLACE:law_bar = { icon = "gfx/interface/icons/a.dds" }\n'})
+        self.assertEqual(self.undeclared(r), [("common/laws/b.txt", 1, "REPLACE:law_foo", "icon", False)])
+
+    def test_inject_or_create(self):
+        files = {"common/laws/l.txt": ('INJECT_OR_CREATE:law_new = { group = g }\n'
+                                       'INJECT_OR_CREATE:law_vanilla = { group = g }\n')}
+        # The snapshot holds `laws`: law_new is created (so checked), law_vanilla merged into vanilla's.
+        r = self.run_audit(files, vanilla=tra.VanillaSnapshot(
+            names={"laws": frozenset({"law_vanilla"})}, gaps={"laws": {"icon": frozenset()}}))
+        self.assertEqual(self.flagged(r), ["INJECT_OR_CREATE:law_new"])
+        self.assertEqual(r.entities_checked, 1)
+        # A folder the snapshot doesn't hold: both count as creating their entity.
+        r = self.run_audit(files)
+        self.assertEqual(self.flagged(r), ["INJECT_OR_CREATE:law_new", "INJECT_OR_CREATE:law_vanilla"])
+        # An INJECT_OR_CREATE beside a plain definition merges into it.
+        r = self.run_audit({"common/laws/l.txt": ('law_new = { group = g }\n'
+                                                  'INJECT_OR_CREATE:law_new = { icon = "gfx/interface/icons/a.dds" }\n'
+                                                  'INJECT_OR_CREATE:law_vanilla = { icon = "gfx/interface/icons/a.dds" }\n')})
+        self.assertEqual((self.flagged(r), r.entities_checked), ([], 2))
+
+    def test_empty_and_misplaced_fields_are_undeclared(self):
+        r = self.run_audit({"common/laws/l.txt": (
+            'law_empty_block = { icon = {} }\n'
+            'law_empty_nested = { icon = { default = "" } }\n'
+            'law_bare = { { icon = "gfx/interface/icons/a.dds" } }\n'
+            'law_list = { icon = { "gfx/interface/icons/a.dds" } }\n'
+            'law_block = { icon = { default = "gfx/interface/icons/a.dds" } }\n')})
+        self.assertEqual(self.flagged(r), ["law_empty_block", "law_empty_nested", "law_bare"])
+
+    def test_a_directive_on_a_nested_key_is_dropped(self):
+        r = self.run_audit({"common/laws/l.txt": (
+            'law_x = { group = g }\n'
+            'INJECT:law_x = { REPLACE:icon = "gfx/interface/icons/a.dds" }\n')})
+        self.assertEqual(self.flagged(r), [])
+
+    def test_no_building_group_fallback(self):
+        # Neither vanilla nor the mod gives a building group art; the
+        # name-carrier anchor logged the line in a group whose other buildings
+        # all declare one.
+        r = self.run_audit({
+            "common/building_groups/g.txt": f'bg_x = {{ {BG} }}\n',
+            "common/buildings/b.txt": (f'building_sibling = {{ building_group = bg_x {BG} }}\n'
+                                       'building_x = { building_group = bg_x }\n')})
+        self.assertEqual([v for _f, _l, v, _k, _e in self.undeclared(r)], ["building_x"])
+
+    def test_nested_field_and_block_values(self):
+        r = self.run_audit({
+            "common/combat_unit_types/c.txt": (
+                'unit_ok = {\n'
+                '\tcombat_unit_image = { trigger = { always = yes } texture = "gfx/interface/icons/a.dds" }\n'
+                '}\n'
+                'unit_none = { combat_unit_image = { trigger = { always = yes } } }\n'
+                'unit_wrong_level = { texture = "gfx/interface/icons/a.dds" }\n'),
+            "common/parties/p.txt": 'party_ok = { icon = { default = "gfx/interface/icons/a.dds" } }\n'})
+        self.assertEqual([(v, k) for _f, _l, v, k, _e in self.undeclared(r)],
+                         [("unit_none", "combat_unit_image/texture"),
+                          ("unit_wrong_level", "combat_unit_image/texture")])
+
+    def test_only_registered_folders_and_real_entities(self):
+        r = self.run_audit({
+            "common/technology/eras/e.txt": 'era_9 = { technology_cost = 1 }\n',
+            "common/technology/technologies/t.txt": (
+                '@cost = 5\nscalar = 3\n'
+                'tech_ok = { texture = "gfx/interface/icons/a.dds" era = era_1 }\n'
+                'tech_none = { era = era_1 }\n'),
+            "common/building_groups/g.txt": 'bg_y = { category = urban }\n'})
+        self.assertEqual([v for _f, _l, v, _k, _e in self.undeclared(r)], ["tech_none"])
+        self.assertEqual(r.entities_checked, 2)
+
+    def test_tag_on_the_opening_line(self):
+        r = self.run_audit({"common/buildings/b.txt": (
+            'building_never_built = { # REVIEWED 2026-10-26 (texture_reference): never shown\n'
+            '\tbuilding_group = bg_x\n'
+            '}\n'
+            'building_tag_inside = {\n'
+            '\tbuilding_group = bg_x # REVIEWED 2026-10-26 (texture_reference): wrong line\n'
+            '}\n'
+            'building_untagged = { # REVIEWED 2026-10-26: another audit\'s\n'
+            '}\n')})
+        self.assertEqual([(v, e) for _f, _l, v, _k, e in self.undeclared(r)],
+                         [("building_never_built", True), ("building_tag_inside", False),
+                          ("building_untagged", False)])
+        self.assertEqual(r.flags[0].exemption["rationale"], "never shown")
+        # The tag inside the body suppresses nothing.
+        self.assertEqual([(t.file, t.line) for t in r.stale_tags], [("common/buildings/b.txt", 5)])
+        self.assertEqual(r.failing, 3)
+
+    def test_stale_tag_on_an_entity_that_declares(self):
+        r = self.run_audit({"common/buildings/b.txt": (
+            f'building_fixed = {{ # REVIEWED 2026-10-26 (texture_reference): art pending\n\t{BG}\n}}\n')})
+        self.assertEqual(r.flags, [])
+        self.assertEqual([t.line for t in r.stale_tags], [1])
+        self.assertEqual(r.failing, 1)
+
+    def test_one_tag_covers_a_path_and_a_declaration_on_its_line(self):
+        r = self.run_audit({"common/buildings/b.txt": (
+            'building_x = { icon = "gfx/nope.dds" } # REVIEWED 2026-10-26 (texture_reference): both pending\n')})
+        self.assertEqual(sorted(f.kind for f in r.flags), ["missing", "undeclared"])
+        self.assertTrue(all(f.exemption for f in r.flags))
+        self.assertEqual((r.failing, r.stale_tags), (0, []))
+
+    def test_load_vanilla_snapshot(self):
+        snap = os.path.join(self.mod, "vanilla_parsed")
+        _tree(snap, {
+            "manifest.json": json.dumps({"entity_types": {
+                "Modifiers": {"dir": "game/common/static_modifiers", "file": "common/modifiers.json"},
+                "Combat Unit Types": {"dir": "game/common/combat_unit_types",
+                                      "file": "common/combat_unit_types.json"},
+                "Laws": {"dir": "game/common/laws", "file": "common/laws.json"}}}),
+            "common/modifiers.json": json.dumps({
+                "with_icon": ["=", {"icon": ["=", "gfx/a.dds"]}],
+                "base_values": ["=", {"country_x_add": ["=", "1"]}],
+                "empty_icon": ["=", {"icon": ["=", "\"\""]}],
+                "empty_block": ["=", {"icon": ["=", {}]}]}),
+            "common/combat_unit_types.json": json.dumps({
+                "repeated": ["=", {"combat_unit_image": [
+                    ["=", {"trigger": ["=", {}]}],
+                    ["=", {"texture": ["=", "\"gfx/b.dds\""]}]]}],
+                "none": ["=", {"combat_unit_image": ["=", {"trigger": ["=", {}]}]}]}),
+            "common/laws.json": "not json"})
+        v = tra.load_vanilla_snapshot(self.mod)
+        self.assertEqual(v.gaps, {"static_modifiers": {"icon": frozenset({"base_values", "empty_icon", "empty_block"})},
+                                  "combat_unit_types": {"combat_unit_image/texture": frozenset({"none"})}})
+        self.assertEqual(v.names["combat_unit_types"], frozenset({"repeated", "none"}))
+        self.assertTrue(v.covers("static_modifiers"))
+        self.assertFalse(v.covers("laws"))  # unreadable
+        self.assertIn("laws", v.uncovered())
+        empty = tra.load_vanilla_snapshot(os.path.join(self._tmp, "nowhere"))
+        self.assertEqual((empty.names, empty.gaps), ({}, {}))
+
+    def test_committed_snapshot_bears_the_registry_out(self):
+        # Each field is on every vanilla entity of its type but for these
+        # (DECLARED_FIELDS' premise). A vanilla bump that rebuilds
+        # vanilla_parsed/ and adds an exception fails here, for the folders the
+        # snapshot holds; the uncovered ones are the install test's below.
+        root = os.path.dirname(os.path.abspath(__file__))
+        v = tra.load_vanilla_snapshot(root)
+        expected = {("static_modifiers", "icon"): 32, ("production_methods", "texture"): 1,
+                    ("production_method_groups", "texture"): 1}
+        got = {(folder, f): len(names) for folder, d in v.gaps.items() for f, names in d.items() if names}
+        self.assertEqual(got, expected,
+                         "a vanilla entity of a DECLARED_FIELDS type the snapshot holds no longer "
+                         "declares its field: read it (an engine default? a dummy?), then drop the "
+                         "field or update the count. The uncovered folders are checked only by "
+                         "test_uncovered_folders_in_the_install, on a machine with the game")
+        self.assertIn("pmg_dummy", v.gaps["production_method_groups"]["texture"])
+        # The registered folders vanilla_parsed/ doesn't hold: no snapshot check
+        # and no vanilla-precedent exemption there. Adding a folder to either
+        # side changes this list on purpose.
+        self.assertEqual(v.uncovered(), UNCOVERED)
+
+    @unittest.skipUnless(_install_common(), "needs the game install")
+    def test_uncovered_folders_in_the_install(self):
+        # What the snapshot test can't see: every vanilla entity of an uncovered
+        # folder still declares its fields. Re-run after a vanilla bump.
+        common = _install_common()
+        defs = []
+        for folder in UNCOVERED:
+            for root, _dirs, names in os.walk(os.path.join(common, folder)):
+                for name in sorted(names):
+                    if name.endswith(".txt"):
+                        path = os.path.join(root, name)
+                        defs += tra.collect_definitions(tra._read(path) or "", os.path.relpath(path, common), folder)
+        self.assertGreater(len(defs), 300)
+        r = tra.AuditResult()
+        tra.check_declarations(defs, tra.VanillaSnapshot(), {}, {}, r)
+        self.assertEqual([(f.file, f.value, f.key) for f in r.flags], [],
+                         "a vanilla entity no longer declares its field: drop the field or exempt it")
+
+    def test_fields_with_an_engine_default_stay_out(self):
+        # Optional by vanilla's own readmes: a JE falls back to
+        # JOURNAL_ENTRY_ICON_DEFAULT, a harvest condition's map pattern is
+        # "default - none", a terrain's `textures` are extras.
+        self.assertNotIn("journal_entries", tra.DECLARED_FIELDS)
+        self.assertNotIn("terrain", tra.DECLARED_FIELDS)
+        # Kept: treaty_articles.md's "icon (default: empty)" is the parse default it
+        # gives every field, not a fallback image (docstring).
+        self.assertEqual(tra.DECLARED_FIELDS["treaty_articles"][0], ("icon",))
+        self.assertEqual(tra.DECLARED_FIELDS["harvest_condition_types"][0], ("icon",))
+        self.assertEqual(tra.DECLARED_FIELDS["buildings"][0], ("background",))  # not `icon`
+        for folder, (fields, why) in tra.DECLARED_FIELDS.items():
+            self.assertTrue(fields and why, folder)
+
+
 class CatalogTests(_Fixture):
     def test_bootstrap_round_trip_and_agreement(self):
         info = tra.bootstrap_catalog(self.install, self.mod)
