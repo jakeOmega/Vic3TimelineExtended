@@ -14,27 +14,43 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 
 ## Contents
 
-- [What this PR changes](#what-this-pr-changes)
+- [The follow-up wave (2026-10-27)](#the-follow-up-wave-2026-10-27)
+- [What this PR changes](#what-this-pr-changes): #1202's own fixes
 - [Cross-cutting findings](#cross-cutting-findings): the patterns that recur across systems, best fixed as one pass or one shared type
 - [Work list by system](#work-list-by-system): the open findings, a table per slice
 - [Decisions for the owner](#decisions-for-the-owner)
 - [Tests that pin what would change](#tests-that-pin-what-would-change)
 - [Tooling that would keep this from coming back](#tooling-that-would-keep-this-from-coming-back)
 
-| Slice | Detail file | Findings | Loc fixes applied | Issue |
-|---|---|---|---|---|
-| Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 (19 done in the wave, 2 needed no more) | 14 | #1203 |
-| Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 (23 done, TAX-21 in part, 2 needed no more) | 30 | #1204 |
-| United Nations | [`un.md`](gui_audit/un.md) | 26 (25 done, UN-15 in part) | 18 | #1205 |
-| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done) | 39 | #1206 |
-| Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 (all done, 2026-10-27 wave; GW-12 has placeholder art) | 40 | #1207 |
-| Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
-| Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 (all done, 2026-10-27) | 73 | #1209 |
-| Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 (all done, 2026-10-27) | 29 | #1210 |
-| Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | #1211 |
-| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 (21 done, 1 partly done) | 27 | #1212 |
+| Slice | Detail file | Findings | Loc fixes in #1202 | Follow-up wave | Issue |
+|---|---|---|---|---|---|
+| Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 | 19 done, 2 needed no more | #1203 |
+| Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | 23 done, TAX-21 in part, 2 needed no more | #1204 |
+| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | 25 done, UN-15 in part | #1205 |
+| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | all done | #1206 |
+| Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | all done (GW-12 on placeholder art) | #1207 |
+| Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | 20 done, 1 needed no more | #1208 |
+| Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | all done | #1209 |
+| Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 | 29 | all done | #1210 |
+| Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | all done or needed no more | #1211 |
+| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 | 21 done, JE-8 in part | #1212 |
+
+## The follow-up wave (2026-10-27)
+
+After the owner answered the [decisions](#decisions-for-the-owner), one agent per slice implemented that slice's open findings, quick, medium and large, and a twelfth built the four audits of #1213. The work tables below and each detail file give every finding's status. What is still open:
+
+- **UN-15:** mission contributors as flag rows. It needs a second copy of the mission register, kept in step on every mission path, and a list read not yet proven in game, for at most eight names. The owner wanted it only if it was straightforward, so it waits.
+- **TAX-21:** history rows show the code version and the promise's group, but not what each entry changed, which would need more stored fields.
+- **JE-8 (b):** whether a journal entry's `_desc` renders anywhere needs the game (its play-test list, item 14).
+- **Art:** placeholders stand in for a credibility icon (Nuclear), two Global Warming policy icons, a warship icon and the Defense and Modules cells' icons (Space). The player guide's screenshots of the Nuclear, UN, Cultural Hegemony, Covert, Global Warming, Strategic Reserve and solar-colonization panels show the old layouts.
+
+The owner also settled four points the wave raised. The Banking tools that paid the treasury monthly (BNK-14) are charged weekly in the budget, at a quarter of the monthly cost; FX Surrender stays monthly, since its payment is the gold it buys. Open-Market Operations stays in both places (BNK-11). The Covert network rows became a table (COV-12). Seabed claimants are a list per basin, and each ship role has a short concept (SEA-3, SPC-3). One request came in mid-wave: once the viewing player has researched Abyssal Plain Mining, every coastal state shows its ocean basin (VAN-8b).
+
+Everything the wave built rests on the offline checks only. Each slice added what only the game can show to its system's play-test list in `docs/testing/`, and `TE_SELF_CHECK` lines mark the list reads that nothing had proven before (`ce_subject_row`, `ch_board_rows`, `gw_top_emitters_list`, `sr_powers_list`, `seabed_claimant_list`).
 
 ## What this PR changes
+
+This section and the cross-cutting findings describe #1202 as it merged. The follow-up wave's status is in the table above and the work tables.
 
 **Loc text rewritten in place (about 330 keys, no key renamed or added).** Every `[...]` data expression a new value keeps or adds is copied from the key itself or from a sibling that renders in the same context. Two tests pinned an old value and are updated with it (`test_cultural_hegemony_layout`, `test_grand_monument_trophies`). The kinds:
 
