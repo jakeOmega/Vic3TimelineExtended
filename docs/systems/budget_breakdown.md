@@ -71,6 +71,19 @@ Response and Archaeological Digs each have a separate expense category. UN grant
 sales, war-profit taxes and spectrum auctions have separate income categories.
 Hover a row for the engine's applied modifier sources and amounts.
 
+Each row's hover is about that row (GUI audit, 2026-10-27). A row with the
+same figure as an Overview row (the taxes, tariffs, minting, welfare,
+subsidies, interest, the diplomatic and treaty flows) carries the Overview's own
+graph template, `TOOLTIP_TEMPLATES` in the generator, on its amount as the
+Overview does. Every other leaf has a line of its own (`ROW_TOOLTIPS`), a
+group says it includes the rows below, and an institution gives its level and
+share of the institution pool, whose figures are on the Administration group's
+row once. The rules are stated once, in How the Breakdown Works, as subheaded
+notes (`HOW_TOPICS`, drawn by `gui/te_budget_breakdown.gui`). The tab's rows
+and notes are 17 and its subheadings 20 (`te_budget_fontsize_row` /
+`_heading`), with a 291 label column that wraps rather than elides
+(`test_budget_breakdown.BreakdownWidthBudgetTest`).
+
 Each contributing static modifier has a `script_only` accounting field with
 the same coefficient as its native `country_expenses_add` or
 `country_tax_income_add`. The engine applies the same multiplier, stacking,
@@ -96,7 +109,8 @@ modifier-type key hides a field (vanilla's
 `common/modifier_type_definitions/modifier_types.md` documents them all, and
 `boolean = yes`, the one display that drops the number, accepts only `yes`).
 The generator therefore makes the second line read as a label: it is named
-"Counted in the Budget Breakdown under <system>", its description says the
+"Breakdown: <system>" (shortened from "Counted in the Budget Breakdown under
+<system>" in the 2026-10-27 GUI audit), its description says the
 native line (Government Expenses or Tax Income) already includes the amount,
 and it is printed with the native type's `decimals` and prefix, so both lines
 show the same figure. It stays `color = neutral`, so it is not tinted red or
@@ -109,7 +123,12 @@ scaled to the economy) is fixed when applied, so no script value holds what
 they charge now.
 
 Only money in the weekly budget is included. One-time `add_treasury` payments
-and costs in innovation, influence or other resources are excluded. For example,
+and costs in innovation, influence or other resources are excluded. Banking's
+three tools that pay monthly with `add_treasury` (Sterilize Capital Inflows,
+Emergency Import Financing, FX Surrender) are named outside the sums: a line
+under the Banking row's weekly amount (`OUTSIDE_THE_BUDGET`) and a "Banking
+Tools, Paid Monthly" line under the Overview's expenses, both reading
+`banking_external_monthly_payments`. For example,
 Space Race's recurring `sr_space_program_cost` spends innovation, not money;
 its monetary debris-clearance response is attributed to Space Race. Space Race
 also carries the Space Program building's own running cost (below), which is
@@ -253,7 +272,11 @@ Engine rendering and accounting still require an in-game check:
    charges, refunds and removal. On an existing save, verify modifier-definition
    changes are picked up; otherwise let the owning system refresh its modifier.
 9. Hover a source modifier (Colonial Development Spending, a banking charge, a
-   UN grant). Its Government Expenses or Tax Income line and its "Counted in
-   the Budget Breakdown under …" line must show the same figure, the second
+   UN grant). Its Government Expenses or Tax Income line and its "Breakdown: …"
+   line must show the same figure, the second
    untinted. Then hover that system's Breakdown row and check the source list
    from `GetDescFor` reads sensibly under the row's own header.
+10. Hover the amount of Income Taxes, Tariffs, Welfare and Interest: each shows
+   the Overview's graph tooltip (a vanilla template on a row's amount textbox,
+   as the Overview has it). If one renders nothing, move the `using` onto the
+   row flowcontainer, or back to a row tooltip of its own.

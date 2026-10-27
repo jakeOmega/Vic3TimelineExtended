@@ -6661,6 +6661,8 @@
  te_backstop_provider_outranks_tt:0 "The provider outranks the recipient, or has the larger GDP"
  te_banking_cycle_started_tt:0 "Your [concept_banking_cycle] has started"
  te_banking_unlock_urban_center_tt:0 "An $building_urban_center$ at level 5 or higher"
+ te_budget_banking_monthly:0 "Banking Tools, Paid Monthly"
+ te_budget_banking_monthly_tt:0 "#header Banking Tools, Paid Monthly#!\nPaid from the treasury once a month, outside the weekly expenses above: @money![GetPlayer.MakeScope.ScriptValue('banking_external_monthly_payments')|D] this month.\n$TOOLTIP_DELIMITER$\n$CB_STERILIZE_INFLOWS$: @money![GetPlayer.MakeScope.ScriptValue('banking_external_monthly_sterilization_display')|D]\n$CB_EMERGENCY_IMPORT_FINANCING$: @money![GetPlayer.MakeScope.ScriptValue('banking_external_monthly_import_display')|D]\n$CB_FX_SURRENDER$: @money![GetPlayer.MakeScope.ScriptValue('banking_external_monthly_surrender_display')|D]"
  te_budget_banking_open_journal_tt:0 "Opens $je_banking_cycle$ in the journal, which adds the entry's description."
  te_budget_tab_banking:0 "Banking"
  te_budget_tab_banking_locked_tt:0 "#b Banking#!\nNot open yet. It opens with the $je_banking_cycle$ journal entry, which every country holds from the first weeks of the game, and the rebels of a revolution only once they win."
