@@ -17,7 +17,7 @@
 
 building_orbital_defense_battery = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/building_military_base.dds"
+	icon = "gfx/interface/icons/building_icons/building_orbital_defense_battery.dds"
 	city_type = city
 	levels_per_mesh = -1
 

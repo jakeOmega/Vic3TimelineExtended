@@ -629,9 +629,9 @@ group, Module Fabrication, which starts on No Module Fabrication:
 
 Each module costs 100 points, so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Fabrication builds the queue
-in order, first in first out: the module at the top is next. To move a module
-up, remove the ones ahead of it and queue them again. Up to 200 points wait in
-stock while nothing is queued.
+in order, first in first out: the module at the top is next. The arrow on each
+line from the second on moves that module up a place; Alt+Click moves it to the
+top. Up to 200 points wait in stock while nothing is queued.
 
 A finished module waits at Earth for its world's launch window, or leaves at
 once with a fusion torch or antimatter drive, and lands after the transit your

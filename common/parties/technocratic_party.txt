@@ -52,7 +52,7 @@ technocratic_party = {
 	}
 
 	icon = {
-		default = "/gfx/interface/icons/political_parties/liberal.dds"
+		default = "/gfx/interface/icons/political_parties/technocratic_party.dds"
 	}
 
 	unlocking_technologies = {

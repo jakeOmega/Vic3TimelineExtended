@@ -734,7 +734,7 @@ types banking_dashboard_widget_types
 					icon = {
 						size = { 100% 100% }
 						alpha = 0.4
-						texture = "gfx/interface/icons/banking_icons/phase_stable.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_not_started.dds"
 					}
 				}
 				blockoverride "word" {

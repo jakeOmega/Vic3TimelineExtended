@@ -13,7 +13,7 @@
 # (sr_colonies_contested_enabled).
 # ============================================================================
 te_cede_colony = {
-	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/transfer_state.dds"
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/te_cede_colony.dds"
 	kind = directed
 	cost = 0
 

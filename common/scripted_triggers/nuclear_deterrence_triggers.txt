@@ -207,6 +207,7 @@ nd_readiness_locked = {
 # country we cover? Retaliation is permitted under every doctrine, including
 # no first use.
 nd_was_struck_by = {
+	save_temporary_scope_as = nd_wsb_self
 	OR = {
 		# Outside war, permission is pair-specific and ends with the exchange.
 		AND = {
@@ -218,8 +219,23 @@ nd_was_struck_by = {
 			has_war_with = $ENEMY$
 			OR = {
 				AND = { has_variable = nuked_by_country var:nuked_by_country ?= $ENEMY$ }
+				# A state of ours still carrying a strike's aftermath, struck by
+				# $ENEMY$ or by a country fighting us in a war $ENEMY$ is in.
+				# The state names its striker (nd_struck_by, set by
+				# nuclear_industrial_strike and nuclear_tactical_strike). A
+				# terror detonation names nobody, so its aftermath licenses
+				# nothing; nor does a strike by a country we are not fighting,
+				# or one from an earlier war (nd_country_monthly_cleanup).
+				# The aftermath alone used to count, whoever caused it (#526).
 				any_scope_state = {
 					OR = { has_modifier = nuclear_strike_aftermath has_modifier = tactical_nuke_aftermath }
+					var:nd_struck_by ?= {
+						has_war_with = scope:nd_wsb_self
+						any_scope_war = {
+							is_war_participant = scope:nd_wsb_self
+							is_war_participant = $ENEMY$
+						}
+					}
 				}
 				nd_covered_country_struck_by = { ENEMY = $ENEMY$ }
 			}

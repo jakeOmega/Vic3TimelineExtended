@@ -236,7 +236,7 @@ Maybe a define macro is missing
 Vanilla defines that reference macros which aren't always set. Cosmetic warning during startup. Confirmed examples include `CIVIL_WAR_UPRISING_STATE_EXCESSIVE_ARMY_FRACTION`, `BUILDING_MAX_PROFIT_TO_PAUSE_HIRES`, `HIGH_POP_THRESHOLD`, `ROLE_RULER`, `MIN_COMBAT_UNITS_FOR_MULTIPLE_COMMANDERS_*`, `RETIRE_COMMANDER_INTERACTION_KEY`, `COMMANDER_DESIRED_RANK_DISPARITY_*`, and (new in 1.13.9, `00_graphics.txt`) `FLAGSHIP_DECORATION_LOCATOR` — vanilla emits one entry per macro per startup. (Signature narrowed to `common/defines/00_` so a *mod* define warning from extra_defines.txt still surfaces in triage — an earlier revision wrongly listed the mod's own `WORLD_MARKET_MONOPOLY_MIN_SHARE` here; that define was dead config and has been removed from extra_defines.txt.)
 
 ### `common/laws/00_distribution_of_power.txt:1` — `set_only_legal_party_from_ig` + `remove_ruling_interest_group` on invalid IG
-- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors)
+- reviewed: helper anchor, signature cannot match a mod call (the mod calls only `inherit_free_elections_effect` from this file, for Anarchy's Tradition of Free Elections, and it runs nothing but `add_amendment`; the signature is `set_only_legal_party_from_ig` and `remove_ruling_interest_group` errors). The mod's law-consistency cascade (`te_fix_inconsistent_laws`, from `on_law_activated`) can activate `law_single_party_state`, so these errors can carry its frames, but they are still vanilla's unguarded `on_activate` (2026-10-27: one of three activations that session came through the cascade)
 
 ```
 Error: set_only_legal_party_from_ig effect [ Invalid target interestgroup ]
@@ -1115,10 +1115,13 @@ These entries are filtered via the `- source: \`<cpp_file:line>\`` registry mech
 - source: `pdx_persistent_reader.cpp:268`
 
 ```
-Failed to read key reference
+in file: "save games/
+in file: "" near line
 ```
 
 Loading a save (e.g. `save games/autosave_exit.v3`) whose serialized data references keys that don't resolve in the current entity state — observed for `headlines_all_minor_events` and `superpower`. Save-migration noise from older-version or cross-mod-state saves; the engine falls back gracefully. Not a current-content bug. (`headlines_*` is the vanilla headlines system; `superpower` is a stale serialized reference.)
+
+The signature names the file a save load reports (a save, or none), not the message. The same source and message report a script file's literal-key field given something it can't read at load, and those are real. Until 2026-10-27 the signature was `Failed to read key reference`, which tagged `create_pop`'s `culture = scope:sr_evac_culture` in sr_colony_autonomy_effects.txt as save noise (#1194 found it through its PostValidate line instead).
 
 ### `character_templates_utils.cpp:1814` — vanilla character missing last-name loc
 - source: `character_templates_utils.cpp:1814`

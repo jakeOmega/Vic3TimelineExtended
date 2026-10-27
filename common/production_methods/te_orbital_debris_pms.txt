@@ -35,7 +35,7 @@ pm_debris_removal_none = {
 # manager a reason to switch removal on at any debris level, around the
 # decision te_decision_debris_removal and its index gate (spec § 6.4).
 pm_debris_active_removal = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_debris_active_removal.dds"
 
 	unlocking_technologies = {
 		reusable_rocketry
@@ -60,7 +60,7 @@ pm_debris_active_removal = {
 }
 
 pm_debris_laser_broom = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_debris_laser_broom.dds"
 
 	unlocking_technologies = {
 		directed_energy_weapons
@@ -86,7 +86,7 @@ pm_debris_laser_broom = {
 }
 
 pm_debris_fusion_sweepers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_debris_fusion_sweepers.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors

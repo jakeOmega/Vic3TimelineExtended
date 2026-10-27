@@ -52,7 +52,6 @@ At 36 px. Funding picks its icon by whether `covert_funding_level_display` is 0,
 ## Not from this set
 
 - **Operation rows:** each row's icon is that operation's own diplomatic-action icon (`gfx/interface/icons/diplomatic_action_icons/covert_<type>_action.dds`).
-- **Counterintelligence Support** has no art yet: its action icon and row borrow Cultivate Assets' (`PLACEHOLDER_ICON` in `test_covert_op_registry.py`), and its lens icon is missing. The art to make, for both: the series' black glove holding up a round steel shield, guarding rather than taking (the operation protects a friend's service). Add it to the `diplomatic_action` category in `icon_prompts.py`, then delete the `PLACEHOLDER_ICON` entry.
 - **Network rows:** each row leads with the target's flag, vanilla's `flag` widget.
 - **Arrows and markers:** the trend arrows and the Tradecraft bar's marker are vanilla's (`trend_up` / `trend_down` / `trend_nochange`, `progressbar_marker`), as in the UN's panels.
 - **The Funding Levels table:** its tint is a flat colour on `white.dds`, not an icon.
