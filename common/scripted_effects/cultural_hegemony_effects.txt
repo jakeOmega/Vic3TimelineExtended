@@ -153,6 +153,30 @@ ch_board_rebuild = {
 		ch_board_row_write = { N = 9 }
 		ch_board_row_write = { N = 10 }
 	}
+	# Self-check, once a game (docs/testing/cultural-hegemony-playtest.md): the
+	# store was made and the leader's row listed with its capital. Only once
+	# the leader exists and has a capital, so OK cannot pass on an empty board.
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_selfcheck_ch_board_done }
+			has_global_variable = ch_rank_1
+			global_var:ch_rank_1 ?= { exists = capital }
+		}
+		set_global_variable = { name = te_selfcheck_ch_board_done value = yes }
+		if = {
+			limit = {
+				global_var:ch_board_store ?= {
+					has_variable_list = ch_board
+					any_in_list = { variable = ch_board count >= 1 }
+				}
+				global_var:ch_board_row_1 ?= { has_variable = ch_board_capital }
+			}
+			debug_log = "TE_SELF_CHECK OK ch_board_rows ranked=[GetGlobalVariable('ch_ranked_total').GetValue|0] (the board store lists the leader's row with its capital) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN ch_board_rows ranked=[GetGlobalVariable('ch_ranked_total').GetValue|0] (a leader with a capital is ranked, but the board store lists no row for it: the board draws nothing; take the fallback in docs/testing/cultural-hegemony-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
 }
 
 # Rank $N$'s row, written from inside the ranked country (PREV is the country
