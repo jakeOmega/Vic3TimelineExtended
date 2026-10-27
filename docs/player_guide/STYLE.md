@@ -155,6 +155,12 @@ used literally (a *key* on the keyboard, the *landscape* of a map), add
 suppression to keep a phrase the rule is right about. CI runs the lint with
 `--strict`.
 
+Spelling has its own script, shared with the localization:
+`python3 scripts/analysis/check_loc_spelling.py --check` lists the British
+spellings left in the chapters and the loc, and a run without `--check` fixes
+them (official names such as the Kenyatta International Convention Centre
+keep theirs).
+
 ## Building the PDF
 
 ```sh

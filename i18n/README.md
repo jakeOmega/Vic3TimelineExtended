@@ -34,7 +34,7 @@ A new language needs a row in each table it differs in, a `BRIEF.md` (copy the n
 
 A translation stays attached to the English it was made from. When that English changes, the key is **stale**:
 
-- a small change keeps the old translation until the next run. For text of six words or more, that means the same numbers and at least 85% similarity; for shorter text (names, labels), only case, spacing or final punctuation may differ.
+- a small change keeps the old translation until the next run. For text of six words or more, that means the same numbers and at least 85% similarity; for shorter text (names, labels), only case, spacing or final punctuation may differ. A change of spelling only, British to American as `scripts/analysis/check_loc_spelling.py` makes it (Licence to License), is small at any length.
 - anything larger ships English until the key is translated again.
 
 The next `prepare` offers a stale key again, with the English its translation was made from and that translation as comments above the line (BRIEF.md § Updated lines), so the agent edits the translation rather than starting over. Developer test benches (`DEV_ONLY_FILES` in the script) are never offered.
