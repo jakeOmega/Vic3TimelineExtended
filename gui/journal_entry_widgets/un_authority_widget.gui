@@ -187,6 +187,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -244,6 +245,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -301,6 +303,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -358,6 +361,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -415,6 +419,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -472,6 +477,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -529,6 +535,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -578,6 +585,7 @@ types un_authority_widget_types
 						size = { 170 14 }
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -608,6 +616,7 @@ types un_authority_widget_types
 						size = { 170 14 }
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter

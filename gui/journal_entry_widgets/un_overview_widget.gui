@@ -711,7 +711,7 @@ types un_overview_widget_types
 				visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 				### Authority and where it is heading (gui_style_guide.md rule 5; the
-				### 2026-10-27 audit, UN-17). Three fixed cells, 116 + 180 + 160 and two 8 px
+				### 2026-10-27 audit, UN-17). Three fixed cells, 116 + 150 + 190 and two 8 px
 				### gaps = 472. The bar, bottom to top: its own background and frame; the
 				### fill, pale (alpha 0.4), to the higher of authority and its target; the
 				### fill, solid, to the lower. So a rise shows past the solid fill and a fall
@@ -733,13 +733,13 @@ types un_overview_widget_types
 							max_width = 116
 							elide = right
 							align = left|nobaseline
-							using = un_fontsize_row
+							using = un_fontsize_overview
 							default_format = "#tooltippable"
 							text = "je_un_ov_authority_label"
 						}
 					}
 					widget = {
-						size = { 180 18 }
+						size = { 150 18 }
 						parentanchor = vcenter
 
 						default_progressbar_horizontal = {
@@ -777,16 +777,16 @@ types un_overview_widget_types
 						}
 					}
 					widget = {
-						size = { 160 24 }
+						size = { 190 24 }
 						parentanchor = vcenter
 
 						textbox = {
 							parentanchor = left|vcenter
 							autoresize = yes
-							max_width = 160
+							max_width = 190
 							elide = right
 							align = left|nobaseline
-							using = un_fontsize_row
+							using = un_fontsize_overview
 							text = "je_un_ov_authority_value"
 						}
 					}
@@ -851,6 +851,7 @@ types un_overview_widget_types
 					minimumsize = { 480 -1 }
 
 					textbox = {
+						using = un_fontsize_overview
 						default_format = "#tooltippable"
 						autoresize = yes
 						parentanchor = hcenter
@@ -938,6 +939,7 @@ types un_overview_widget_types
 					minimumsize = { 480 -1 }
 
 					textbox = {
+						using = un_fontsize_overview
 						autoresize = yes
 						parentanchor = hcenter
 						align = hcenter|nobaseline
@@ -1175,6 +1177,7 @@ types un_overview_widget_types
 						texture = "gfx/interface/icons/building_icons/building_un_headquarters.dds"
 					}
 					textbox = {
+						using = un_fontsize_overview
 						autoresize = yes
 						multiline = yes
 						maximumsize = { 460 -1 }

@@ -294,6 +294,7 @@ types un_layout_widget_types
 								}
 							}
 							textbox = {
+								using = un_fontsize_row
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
@@ -324,6 +325,7 @@ types un_layout_widget_types
 								}
 							}
 							textbox = {
+								using = un_fontsize_row
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
