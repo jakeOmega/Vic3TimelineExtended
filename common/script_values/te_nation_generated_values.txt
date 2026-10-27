@@ -29,6 +29,14 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = banking_external_import_charge }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = banking_external_sterilization_charge }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = ch_cultural_program_funding_cost }
 		add = 1
 	}

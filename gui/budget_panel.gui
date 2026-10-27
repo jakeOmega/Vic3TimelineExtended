@@ -1121,26 +1121,6 @@ types budget
 								alpha = "[TransparentIfZero(GetPlayer.GetModifier.GetValueFor('country_expenses_add'))]"
 							}
 						}
-
-						### MOD: Banking tools' monthly payments (GUI audit BNK-14) ###
-						### Sterilize Capital Inflows, Emergency Import Financing and FX
-						### Surrender pay from the treasury once a month with add_treasury,
-						### which no weekly figure above includes. Shown only while one runs,
-						### as a month's figure, with the parts on hover.
-						tax_exp_frame = {
-							visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('banking_external_monthly_payments'), '(CFixedPoint)0' )]"
-
-							blockoverride "text" {
-								text = "te_budget_banking_monthly"
-								tooltip = "te_budget_banking_monthly_tt"
-								default_format = "#tooltippable"
-							}
-
-							blockoverride "text_2" {
-								raw_text = "#N @money!-[GetPlayer.MakeScope.ScriptValue('banking_external_monthly_payments')|D-]#! a month"
-							}
-						}
-						### END MOD ###
 					}
 				}
 

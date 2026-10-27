@@ -56,6 +56,8 @@ class Script:
         self.cash_delta = 0
         self.pending_removals = set()
         self.shown = []
+        # The weekly bills' charge modifiers: name -> multiplier (BNK-14).
+        self.charges = {}
 
     def number(self, value):
         if isinstance(value, list):
@@ -81,6 +83,9 @@ class Script:
                     matched = False
             elif key == 'desc':
                 continue
+            elif key == 'owner':
+                # A JE-scope multiplier reads its owner, which is this country.
+                n = self.value(val, n)
             else:
                 x = self.number(val)
                 operations = {'value': lambda: x, 'add': lambda: n+x,
@@ -191,7 +196,13 @@ class Script:
                 else:
                     self.tools.discard(tool)
             elif key == 'add_modifier':
-                self.tools.add(self.field(val, 'name').removeprefix('banking_'))
+                name = self.field(val, 'name')
+                if name.endswith('_charge'):
+                    self.charges[name] = self.number(self.field(val, 'multiplier'))
+                else:
+                    self.tools.add(name.removeprefix('banking_'))
+            elif key == 'remove_modifier_if_exists_effect':
+                self.charges.pop(self.field(val, 'MODIFIER'), None)
             elif key in ('te_history_record_banking_marker', 'te_demog_wc_shock'):
                 # other systems' calls (the history chart, Wealth Concentration's crash shock):
                 # no banking state
@@ -280,6 +291,43 @@ class ExternalPolicyScenarios(unittest.TestCase):
                 self.assertGreaterEqual(s.inputs['gold_reserves'], 0)
                 if cash < 600:
                     self.assertNotIn('emergency_import_financing', s.tools)
+
+    def test_the_two_bills_are_weekly_charges_at_a_quarter_of_the_month(self):
+        """The owner, 2026-10-27 (BNK-14): Sterilize Capital Inflows and
+        Emergency Import Financing pay a weekly government expense of a
+        month's cost / 4, not a monthly add_treasury, so the budget shows them;
+        FX Surrender's purchase stays monthly, one sum moved treasury to vault."""
+        s = Script(cash=1e6)
+        sterile = 'banking_external_sterilization_charge'
+        imports = 'banking_external_import_charge'
+        s.effect('banking_effect_cb_sterilize_inflows')
+        s.effect('banking_effect_cb_emergency_import_financing')
+        self.assertEqual(s.inputs['gold_reserves'], 1e6)            # nothing debited at once
+        self.assertAlmostEqual(s.charges[sterile], s.number('banking_external_sterilization_cost') / 4)
+        self.assertAlmostEqual(s.charges[imports], s.number('banking_external_import_cost') / 4)
+        s.tools.update(('sterilize_inflows', 'emergency_import_financing'))
+        first = s.number('banking_external_import_cost')
+        s.effect('banking_external_monthly_update')
+        self.assertEqual(s.inputs['gold_reserves'], 1e6)            # and nothing each month
+        self.assertAlmostEqual(s.charges[imports], first / 4)       # this month's rate, then the rise
+        for _ in range(12):
+            s.effect('banking_external_monthly_update')
+        self.assertAlmostEqual(s.charges[imports], s.number('banking_external_import_cost') / 4)
+        self.assertGreater(s.charges[imports], first / 4)
+        s.effect('banking_effect_cb_disable_sterilize_inflows')
+        s.effect('banking_effect_cb_disable_emergency_import_financing')
+        self.assertEqual(s.charges, {})
+        effects = (ROOT/'common/scripted_effects/banking_external_effects.txt').read_text(encoding='utf-8-sig')
+        policy = (ROOT/'common/scripted_effects/banking_policy_effects.txt').read_text(encoding='utf-8-sig')
+        self.assertNotIn('banking_external_sterilization_payment', effects + policy)
+        self.assertNotIn('banking_external_import_payment', effects + policy)
+        self.assertIn('add_treasury = banking_external_surrender_payment', effects)
+        # one refresh site each, and a change of economic system ends both
+        self.assertEqual(effects.count('name = banking_external_sterilization_charge'), 1)
+        self.assertEqual(effects.count('name = banking_external_import_charge'), 1)
+        strip = (ROOT/'common/scripted_effects/extra_effects.txt').read_text(encoding='utf-8-sig')
+        self.assertIn('banking_external_end_charges = yes',
+                      strip.split('remove_banking_market_modifiers_effect = {', 1)[1].split('\n}', 1)[0])
 
     def test_import_cost_escalates_caps_and_cannot_be_reset_by_toggling(self):
         s = Script(cash=1e6)
@@ -485,16 +533,19 @@ class NonModifierTooltipTest(unittest.TestCase):
         self.assertIn('to #v %g%%#! after #v %d#! months' % (100 * cap, months),
                       t('banking_nonmod_foreign_borrowing_limits_tt'))
 
+        self.assertIn('#v %.2f%%#! of annual GDP a month' % (100 * v('banking_external_sterilization_share')),
+                      t('banking_nonmod_sterilize_inflows_tt'))
+
         gdp, fatigue_cap = s.inputs['gdp'], v('banking_external_import_fatigue_cap')
         costs = []
         for months_funded in (0, fatigue_cap):
             s.vars['banking_external_import_months'] = months_funded
             costs.append(100 * v('banking_external_import_cost') / gdp)
         del s.vars['banking_external_import_months']
-        self.assertIn('to #v %.2f%%#! after #v %d#! funded months' % (costs[1], fatigue_cap),
-                      t('banking_nonmod_emergency_import_financing_tt'))
-        self.assertTrue(math.isclose(costs[0] / 100, display_modifiers()['banking_monthly_emergency_import_financing']
-                                     ['country_te_mon_treasury_cost_gdp_add'], rel_tol=1e-9))
+        self.assertIn('costs #v %.2f%%#! of annual GDP, rising to #v %.2f%%#! after #v %d#! funded months'
+                      % (*costs, fatigue_cap), t('banking_nonmod_emergency_import_financing_tt'))
+        for key in ('banking_nonmod_sterilize_inflows_tt', 'banking_nonmod_emergency_import_financing_tt'):
+            self.assertIn('weekly government expense, a quarter of it a week', t(key))
 
         holiday = s.effects['banking_effect_cb_bank_holiday']
         cooldown = next(val for key, _, val in holiday
@@ -526,8 +577,6 @@ class DisplayModifierTest(unittest.TestCase):
               v('banking_external_inflow_factor') - 1)
         close(m['banking_monthly_sterilize_inflows']['country_te_mon_inflow_price_pressure_mult'],
               v('banking_external_sterilized_factor') - 1)
-        close(m['banking_monthly_sterilize_inflows']['country_te_mon_treasury_cost_gdp_add'],
-              v('banking_external_sterilization_share'))
         close(m['banking_monthly_foreign_borrowing_limits']['country_te_mon_fx_debt_protection_add'],
               v('banking_external_fx_protection_step'))
         close(m['banking_monthly_fx_surrender']['country_te_mon_reserve_purchase_gdp_add'],
@@ -567,7 +616,6 @@ class DisplayModifierTest(unittest.TestCase):
             'banking_monthly_sterilize_inflows': 'banking_nonmod_sterilize_inflows_tt',
             'banking_monthly_foreign_borrowing_limits': 'banking_nonmod_foreign_borrowing_limits_tt',
             'banking_monthly_fx_surrender': 'banking_nonmod_fx_surrender_tt',
-            'banking_monthly_emergency_import_financing': 'banking_nonmod_emergency_import_financing_tt',
             'te_mon_monetisation_step': 'banking_mon_monetise_step_tt',
             'te_mon_mandate_loosen_step': 'banking_mon_mandate_cost_tt',
         }

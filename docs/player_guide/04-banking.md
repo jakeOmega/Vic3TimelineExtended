@@ -282,8 +282,9 @@ grant adds and what each active tool holds.
 Switching a tool on has its own price: the lending tools charge the treasury
 0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
 (Outflows) costs infamy and great-power relations. Sterilize Capital Inflows and
-Emergency Import Financing charge cash on activation and each month; their
-tooltips show the current monthly cost.
+Emergency Import Financing add a weekly government expense while they run, a
+quarter of their monthly rate, so a year costs 13 months' worth. It shows in the
+Budget panel under Banking, and their tooltips show the current weekly cost.
 
 ### Market economy banking tools
 
@@ -441,10 +442,10 @@ Established. The tooltips show their current costs and restrictions.
 | Intervention | What you gain | What you pay or give up |
 |---|---|---|
 | Restrict Speculative Inflows | Halves incoming speculative gold and the upward exchange-rate pressure from a positive real-rate gap. Gold can still leave at its usual speed. | Slower reserve accumulation, −3% bureaucracy and slightly slower credit growth. Bubble pressure also falls. |
-| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP in cash on activation and each month, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
+| Sterilize Capital Inflows | Removes 75% of the inflation pressure from incoming gold. | 0.01% of annual GDP a month, charged weekly as a government expense, with slightly slower credit growth and less bubble pressure. Foreign lenders retain their claims on the vault, and outgoing gold still causes deflation. |
 | Limit Foreign-Currency Borrowing | Gradually reduces the risk premium caused by a weak currency, reaching half that component after about 24 months. | Adds 0.25 percentage points of risk premium while active and slows credit growth. Protection takes time to build; it also takes about 24 months to disappear after you lift the limits. |
 | Foreign Exchange Surrender Requirement | Buys gold for the central bank with treasury cash, without adding Borrowed Gold that foreign lenders can withdraw. | −10% export advantage and −3% bureaucracy, plus the cash spent on reserves. Purchases stop at the vault's capacity and cannot exceed available cash. |
-| Emergency Import Financing | +15% import advantage while a financial crisis lasts. | Cash on activation and each month: initially 0.05% of annual GDP, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
+| Emergency Import Financing | +15% import advantage while a financial crisis lasts. | A weekly government expense of a quarter of the monthly rate: initially 0.05% of annual GDP a month, rising to 0.10% after 12 funded months. Holds 3 intervention points. |
 
 Surrender purchases depend on your market's exports. The monthly cap is 0.05%
 of annual GDP when export reliance is above 30%, half that amount above 10%,
@@ -459,7 +460,9 @@ ships through a blockade. The tool ends when the crisis passes or you cannot
 fund it. Each inactive month removes one month of its accumulated surcharge;
 switching it off and back on does not reset the cost.
 
-Sterilize Capital Inflows ends if you cannot fund it. Both it and Foreign
+Sterilize Capital Inflows ends if the treasury cannot cover a month of it. The
+surrender requirement's purchases stay monthly: the treasury pays the same day,
+and the same sum, as the vault receives. Both it and Foreign
 Exchange Surrender Requirement end when you lose the conditions for convertible
 gold flows, including a suspension of convertibility. Other tools are lifted
 when their law or monetary requirements no longer hold. Restrict Speculative

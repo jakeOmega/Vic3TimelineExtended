@@ -64,9 +64,16 @@ banking_external_sterilization_cost = {
 	multiply = banking_external_sterilization_share
 	min = 0
 }
-banking_external_sterilization_payment = {
+# A month's sterilization bill, charged a quarter of it a week as a government
+# expense (banking_external_charge_sterilization, owner 2026-10-27). The
+# multiplier is evaluated in the entry's scope, so it reads the owner.
+banking_external_sterilization_weekly_charge = {
 	value = banking_external_sterilization_cost
-	multiply = -1
+	divide = 4
+}
+banking_external_sterilization_weekly_charge_for_je = {
+	value = 0
+	owner = { add = banking_external_sterilization_weekly_charge }
 }
 banking_external_surrender_purchase = {
 	value = gdp
@@ -101,9 +108,14 @@ banking_external_import_cost = {
 	multiply = gdp
 	min = 0
 }
-banking_external_import_payment = {
+# ...and import financing's, at this month's escalated cost.
+banking_external_import_weekly_charge = {
 	value = banking_external_import_cost
-	multiply = -1
+	divide = 4
+}
+banking_external_import_weekly_charge_for_je = {
+	value = 0
+	owner = { add = banking_external_import_weekly_charge }
 }
 
 banking_external_real_gap = {
@@ -124,6 +136,8 @@ banking_external_combined_import_cost = {
 	}
 }
 
+# The cash FX Surrender may spend: what the treasury holds less a month of the
+# other two tools' bills, which their weekly charges will draw.
 banking_external_purchase_cash = {
 	value = gold_reserves
 	if = {
@@ -137,34 +151,11 @@ banking_external_purchase_cash = {
 	min = 0
 }
 
-# What the three tools that pay monthly take from the treasury this month,
-# outside the weekly budget (add_treasury in banking_external_monthly_update):
-# the Breakdown's Banking row and the Overview's expenses name it (GUI audit
-# BNK-14). The same figures as the payments: sterilization, import financing
-# (its next month's cost) and the surrender purchase. Display only.
-banking_external_monthly_payments = {
-	value = banking_external_monthly_sterilization_display
-	add = banking_external_monthly_import_display
-	add = banking_external_monthly_surrender_display
-}
-
-banking_external_monthly_sterilization_display = {
-	value = 0
-	if = {
-		limit = { banking_tool_sterilize_inflows_active = yes }
-		value = banking_external_sterilization_cost
-	}
-}
-
-banking_external_monthly_import_display = {
-	value = 0
-	if = {
-		limit = { banking_tool_emergency_import_financing_active = yes }
-		value = banking_external_import_cost
-	}
-}
-
-banking_external_monthly_surrender_display = {
+# What FX Surrender pays from the treasury this month for the bank's gold, once
+# a month and outside the weekly budget (banking_external_purchase_reserves):
+# the Breakdown's Banking row names it (GUI audit BNK-14). The other two
+# tools' bills are weekly expenses, in the budget. Display only.
+banking_external_surrender_purchase_display = {
 	value = 0
 	if = {
 		limit = { banking_tool_fx_surrender_active = yes }

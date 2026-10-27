@@ -209,7 +209,7 @@ Top priorities: the Monetary Policy row tooltips are essays that open with their
 | BNK-11 | Active Policies: in-force tools named as orders, no time left on timed tools, OMO listed twice | style / hidden info / redundant | quick–medium | done |
 | BNK-12 | Available Interventions: "no points free" is said 40 times, never once above the rows | style | medium | done |
 | BNK-13 | Lists: Monetary Union holdouts and Backstops are counts and sums, not lists | list | large | done |
-| BNK-14 | Monthly treasury payments of three tools appear nowhere in the Budget panel | hidden info | medium–large | done (tooltip route) |
+| BNK-14 | Monthly treasury payments of three tools appear nowhere in the Budget panel | hidden info | medium–large | done (weekly charges; FX Surrender's purchase stays monthly) |
 | BNK-15 | One thing, several names (loc part done) | style | quick–medium | done |
 | BNK-16 | The JE's description paragraph is a how-to, shown under the panel in the JE only | over-explaining | quick | done |
 | BNK-17 | Breakdown: one generic tooltip on 29 rows describes other rows | over-explaining / hidden info | medium | done |
