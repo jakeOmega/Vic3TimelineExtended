@@ -496,6 +496,105 @@ un_chamber_mission_slot_sgui = {
 	}
 }
 
+# The row's Send button at all (the 2026-10-27 audit, UN-15): never on an
+# electoral mission, which takes no contingents, nor on our own, which we
+# cannot serve. Read as IsValid, like the rows (gotcha #22). Never executed.
+un_chamber_mission_joinable_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_joinable = { SLOT = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_joinable = { SLOT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_joinable = { SLOT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_joinable = { SLOT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_joinable = { SLOT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_joinable = { SLOT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_joinable = { SLOT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_joinable = { SLOT = 7 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+}
+
+# Whether we may send a contingent anywhere: the country-wide part of the
+# Send button's test (un_mission_volunteer_eligible). While it fails, every
+# row's button hides and the refusal is said once above the rows
+# (un_chamber_mission_refusal_sgui). A root-only yes/no GUI.
+un_chamber_mission_volunteer_sgui = {
+	scope = country
+
+	is_shown = {
+		un_mission_volunteer_eligible = yes
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+# The line above the rows when we can send no contingent to any mission: the
+# first reason, of the four un_mission_volunteer_eligible asks. Shown only
+# while a mission is in the field.
+un_chamber_mission_refusal_sgui = {
+	scope = country
+
+	is_shown = {
+		NOT = { un_mission_volunteer_eligible = yes }
+		has_global_variable_list = un_mission_registry
+		any_in_global_list = {
+			variable = un_mission_registry
+			has_tag = un_msn_active
+		}
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+		if = {
+			limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_member
+		}
+		else_if = {
+			limit = { un_representation_suspended = yes }
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_suspended
+		}
+		else_if = {
+			limit = { country_rank < rank_value:major_power }
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_rank
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_mission_refusal_sanctions
+		}
+	}
+}
+
 # Join: send a contingent to the mission in the slot. The same rule and the
 # same writer as the AI's (un_mission_ai_monthly).
 un_chamber_mission_join_sgui = {

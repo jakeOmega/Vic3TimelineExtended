@@ -102,6 +102,10 @@ class MissionSlotTableTest(unittest.TestCase):
             body = _block(sguis, sgui)
             cls.switches[(sgui, "is_valid")] = _branches(_sub_block(body, "is_valid"))
             cls.switches[(sgui, "effect")] = _branches(_sub_block(body, "effect"))
+        # Whether a row can ever take our contingent (the 2026-10-27 audit,
+        # UN-15): never executed, so it has no effect switch.
+        cls.switches[("un_chamber_mission_joinable_sgui", "is_valid")] = _branches(
+            _sub_block(_block(sguis, "un_chamber_mission_joinable_sgui"), "is_valid"))
         cls.rows = _widget_rows(_read(WIDGET), "un_chamber_mission_row")
         cls.assign = _block(_read(MISSION_EFFECTS), "un_mission_assign_slot")
 
@@ -110,9 +114,10 @@ class MissionSlotTableTest(unittest.TestCase):
 
     def test_each_row_passes_one_slot_everywhere(self):
         for ops in self.rows:
-            # row visible and text; Join visible, enabled, onclick and the
-            # tooltip's two calls; Withdraw visible, onclick and tooltip
-            self.assertEqual(len(ops), 10, ops)
+            # row visible and text; Join visible (joinable, not serving),
+            # enabled, onclick and the tooltip's two calls; Withdraw visible,
+            # onclick and tooltip
+            self.assertEqual(len(ops), 11, ops)
             self.assertEqual(len(set(ops)), 1, f"a mission row mixes slots {ops}")
 
     def test_every_switch_maps_op_to_the_same_slot(self):
@@ -123,6 +128,7 @@ class MissionSlotTableTest(unittest.TestCase):
             ("un_chamber_mission_join_sgui", "effect"): "un_mission_slot_volunteer",
             ("un_chamber_mission_withdraw_sgui", "is_valid"): "un_mission_slot_served",
             ("un_chamber_mission_withdraw_sgui", "effect"): "un_mission_slot_withdraw",
+            ("un_chamber_mission_joinable_sgui", "is_valid"): "un_mission_slot_joinable",
         }
         for key, call in expected.items():
             branches = self.switches[key]
@@ -131,6 +137,16 @@ class MissionSlotTableTest(unittest.TestCase):
                 for op, branch in branches.items():
                     found = re.findall(r"\b(\w+)\s*=\s*\{\s*SLOT\s*=\s*(\d+)\s*\}", branch)
                     self.assertEqual(found, [(call, str(op))], f"op {op}")
+
+    def test_each_row_reads_its_own_slots_figures(self):
+        widget = _read(WIDGET)
+        rows = [_braced(widget, m.end() - 1) for m in re.finditer(
+            r"^\t+un_chamber_mission_row\s*=\s*\{", widget, re.M)]
+        for row in rows:
+            op = _WIDGET_OP.findall(row)[0]
+            with self.subTest(slot=op):
+                self.assertEqual(set(re.findall(r"un_disp_msn_slot_(\d+)_", row)), {op})
+                self.assertEqual(set(re.findall(r"je_un_chamber_mission_slot_(\d+)_", row)), {op})
 
     def test_slots_are_assigned_lowest_first_and_all_of_them(self):
         pairs = re.findall(

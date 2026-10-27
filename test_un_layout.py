@@ -405,7 +405,7 @@ def _modifier_name(mod):
 class MissionButtonsTest(unittest.TestCase):
     def test_send_and_bring_home_are_centred(self):
         row = _type_body(_read(CHAMBER), "un_chamber_mission_row")
-        buttons = re.findall(r"button = \{\s*using = default_button_action\s*size = \{ 200 28 \}\s*(parentanchor = \w+)?", row)
+        buttons = re.findall(r"button = \{\s*using = default_button_action\s*size = \{ 236 30 \}\s*(parentanchor = \w+)?", row)
         self.assertEqual(buttons, ["parentanchor = hcenter"] * 2)
 
 

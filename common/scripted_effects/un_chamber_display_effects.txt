@@ -2617,11 +2617,10 @@ un_chamber_mission_entry = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation_gone
 	}
+	# An active mission's progress is its row's bar, with the month and
+	# strength beside it (the 2026-10-27 audit, UN-15); an ended one says how
+	# it ended.
 	if = {
-		limit = { has_tag = un_msn_active }
-		custom_tooltip_no_bullet = je_un_chamber_mission_active
-	}
-	else_if = {
 		limit = { has_tag = un_msn_succeeded }
 		custom_tooltip_no_bullet = je_un_chamber_mission_succeeded
 	}
@@ -2629,7 +2628,8 @@ un_chamber_mission_entry = {
 		limit = { has_tag = un_msn_failed }
 		custom_tooltip_no_bullet = je_un_chamber_mission_failed
 	}
-	else = {
+	else_if = {
+		limit = { NOT = { has_tag = un_msn_active } }
 		custom_tooltip_no_bullet = je_un_chamber_mission_lapsed
 	}
 	# The contributors, largest economy first. Each name is printed from the

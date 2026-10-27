@@ -344,6 +344,20 @@ un_mission_slot_can_volunteer = {
 	}
 }
 
+# The mission in slot $SLOT$ could ever take a contingent from the scoped
+# country: it is not an electoral mission (staffed from the budget) and not
+# the country's own. The chamber's rows hide Send where this fails.
+# Scope: country
+un_mission_slot_joinable = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		un_mission_in_slot = { SLOT = $SLOT$ }
+		NOT = { has_tag = un_msn_electoral }
+		un_mission_not_hosted_by = { WHO = ROOT }
+	}
+}
+
 # The scoped country serves in the mission in slot $SLOT$, and so may bring
 # its contingent home.
 # Scope: country

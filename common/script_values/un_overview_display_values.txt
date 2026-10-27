@@ -997,3 +997,15 @@ un_disp_topics_in_force = {
 		add = 1
 	}
 }
+
+# How many Delegations rows, from the top, have their member's capital
+# mirrored on us for the row's flag (un_deleg_mirror_flags). Row N's flag
+# shows when this is above N.
+# Scope: country (the viewer)
+un_disp_deleg_cap_count = {
+	value = 0
+	if = {
+		limit = { has_variable = un_deleg_cap_count }
+		value = var:un_deleg_cap_count
+	}
+}
