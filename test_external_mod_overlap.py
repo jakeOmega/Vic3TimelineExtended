@@ -649,6 +649,440 @@ class InputTests(unittest.TestCase):
             self.assertEqual(emo.main([tmp]), 2)   # an empty folder
 
 
+GUI_SAMPLE = """\
+@width = 10
+Types my_panel_types
+{
+\ttype shared_type = widget {
+\t\tname = "type fake_in_string = x"
+\t}
+\t#type commented_out = widget { }
+\ttype Other_Type = shared_type { }
+}
+template shared_template { size = { 1 1 } }
+local_template file_local { }
+layer layer_mine
+{
+\tpriority = 1
+}
+texticon = {
+\ticonsize = { texture = "gfx/x.dds" }
+\ticon = mine_icon
+}
+widget = { layer = layer_mine using = shared_template }
+template "quoted_template" { }
+types "quoted_group" { type in_quoted_group = widget { } }
+texticon = { icon = "quoted_icon" }
+"""
+
+
+class GuiScanTests(unittest.TestCase):
+    def test_scan_gui(self):
+        defs = emo.scan_gui(GUI_SAMPLE)
+        self.assertEqual([(d.kind, d.name, d.line, d.group) for d in defs], [
+            ("type", "shared_type", 4, "my_panel_types"),
+            ("type", "Other_Type", 8, "my_panel_types"),
+            ("template", "shared_template", 10, None),
+            ("layer", "layer_mine", 12, None),
+            ("texticon", "mine_icon", 18, None),
+            # Quoted names (vanilla's in_game_menu_logo.gui, goods_panel.gui).
+            ("template", "quoted_template", 21, None),
+            ("type", "in_quoted_group", 22, "quoted_group"),
+            ("texticon", "quoted_icon", 23, None),
+        ])
+
+
+def build_fake_gui_mods(tmp):
+    """Two mods whose gui/ trees define the same names: in different files
+    (a collision), and only in a file both ship (left to path_collisions)."""
+    o, t = os.path.join(tmp, "ours"), os.path.join(tmp, "theirs")
+    _write(o, "gui/construction_panel.gui",
+           "types construction_panel {\n\ttype construction_panel = window { }\n}\n"
+           "template shared_template { }\n")
+    _write(t, "gui/PSC_construction_panel.gui",
+           "types construction_panel\n{\n\ttype construction_panel = window { }\n}\n")
+    _write(o, "gui/zzz_extra_texticons.gui", "texticon = { icon = shared_icon }\n")
+    _write(t, "gui/scripted_widgets/a_icons.gui", "texticon = {\n\ticon = shared_icon\n}\n")
+    # Both ship gui/topbar.gui: only one of them loads.
+    _write(o, "gui/topbar.gui", "template shared_template { }\ntemplate only_topbar { }\n"
+           "template both_shared { }\n")
+    _write(t, "gui/topbar.gui", "template only_topbar { }\ntemplate both_shared { }\n")
+    # Ours also defines both_shared elsewhere: each side's first copy is in
+    # the file both ship.
+    _write(o, "gui/zz_ours.gui", "template both_shared { }\n")
+    _write(t, "gui/b_templates.gui", "template shared_template { }\n")
+    return o, t
+
+
+class GuiCollisionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.ours_root, cls.theirs_root = build_fake_gui_mods(cls._tmp.name)
+        game = os.path.join(cls._tmp.name, "game")
+        _write(game, "common/laws/00_laws.txt", "law_a = { }\n")
+        _write(game, "gui/construction_panel.gui",
+               "types construction_panel {\n\n\ttype construction_panel = window { }\n}\n")
+        cls.report = emo.analyze(cls.theirs_root, cls.ours_root, vanilla=emo.VanillaIndex(
+            game_common=os.path.join(game, "common"), snapshot_dir=None))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tmp.cleanup()
+
+    def test_rows(self):
+        rows = {(r["kind"], r["name"]): r for r in self.report["gui_type_collisions"]}
+        self.assertEqual(set(rows), {("type", "construction_panel"), ("texticon", "shared_icon"),
+                                     ("template", "shared_template"), ("template", "both_shared")})
+        self.assertEqual(rows[("template", "both_shared")]["sorts_first"], "same_file")
+        row = rows[("type", "construction_panel")]
+        self.assertEqual(row["ours"], [{"file": "gui/construction_panel.gui", "line": 2,
+                                        "group": "construction_panel"}])
+        self.assertEqual(row["theirs"], [{"file": "gui/PSC_construction_panel.gui", "line": 3,
+                                          "group": "construction_panel"}])
+        # PSC_ sorts before construction_ in ASCII order (uppercase first).
+        self.assertEqual(row["sorts_first"], THEIRS)
+        self.assertTrue(row["in_vanilla"])
+        self.assertEqual(row["vanilla"], [{"file": "game/gui/construction_panel.gui", "line": 3}])
+        self.assertNotIn("winner", row)
+        self.assertNotIn("verdict", row)
+        icon = rows[("texticon", "shared_icon")]
+        self.assertEqual(icon["theirs"], [{"file": "gui/scripted_widgets/a_icons.gui", "line": 2}])
+        self.assertEqual(icon["sorts_first"], THEIRS)   # scripted_widgets/ < zzz_
+        self.assertIs(icon["in_vanilla"], False)
+        # Ours defines it in topbar.gui (a file both ship) and in
+        # construction_panel.gui; theirs in b_templates.gui.
+        tpl = rows[("template", "shared_template")]
+        self.assertEqual(tpl["files_both_ship"], ["gui/topbar.gui"])
+        self.assertEqual(tpl["sorts_first"], THEIRS)
+
+    def test_a_name_only_in_a_file_both_ship_is_a_path_collision(self):
+        names = [r["name"] for r in self.report["gui_type_collisions"]]
+        self.assertNotIn("only_topbar", names)
+        self.assertIn("gui/topbar.gui", [p["path"] for p in self.report["path_collisions"]])
+
+    def test_load_order_is_unprobed(self):
+        self.assertEqual(self.report["gui_load_order"]["status"], "unprobed")
+        self.assertEqual(self.report["summary"]["gui_type_collisions"], 4)
+
+    def test_without_the_game_in_vanilla_is_unknown(self):
+        report = emo.analyze(self.theirs_root, self.ours_root, vanilla={})
+        self.assertTrue(all(r["in_vanilla"] is None for r in report["gui_type_collisions"]))
+
+
+LAYER_TYPES = {"Laws": "laws", "Modifiers": "static_modifiers", "Script Values": "script_values",
+               "Scripted Triggers": "scripted_triggers", "Decrees": "decrees",
+               "On Actions": "on_actions"}
+# Types the server parses from the mod only.
+MOD_ONLY_TYPES = {"Scripted Triggers", "On Actions"}
+
+
+def build_fake_layer_mods(tmp):
+    """Vanilla game files, `ours` and `theirs`, for the layered state
+    (#1184): (game common dir, ours root, theirs root)."""
+    game, o, t = (os.path.join(tmp, d) for d in ("game", "ours", "theirs"))
+    _write(game, "common/laws/00_laws.txt",
+           "law_v = { group = lawgroup_x modifier = { v_add = 1 } }\n"
+           "law_rebare = { group = lawgroup_x }\n"
+           "law_x2 = { group = lawgroup_x }\nlaw_y = { group = lawgroup_x }\n"
+           "law_z = { group = lawgroup_x }\n")
+    _write(game, "common/decrees/00_decrees.txt", "decree_v = { cost = 1 }\n")
+    _write(game, "common/script_values/00_values.txt", "sv_v = { value = 1 add = 2 }\n")
+    # Their INJECT, in a file that sorts before ours, lands on our bare entry:
+    # directives apply after every bare definition.
+    _write(o, "common/laws/te_laws.txt",
+           "te_law = { group = lawgroup_x modifier = { a_add = 1 } }\n"
+           "law_rebare = { group = lawgroup_ours }\n")
+    _write(t, "common/laws/a_their_laws.txt",
+           "INJECT:te_law = { modifier = { b_add = 2 } }\n"
+           "INJECT:law_rebare = { icon = x }\n"
+           "TRY_INJECT:law_nowhere = { icon = x }\n"
+           "law_theirs = { group = lawgroup_x }\n")
+    _write(t, "common/laws/zz_broken.txt", "law_broken = { = }\n")
+    # Keys one file repeats: two bare copies (the engine keeps the first,
+    # the parser the last), INJECT/REPLACE/INJECT, and two INJECTs alone
+    # (folded in order, which is what the engine does).
+    _write(t, "common/laws/b_their_dups.txt",
+           "law_dup = { icon = first }\nlaw_dup = { icon = second }\n"
+           "INJECT:law_y = { a = 1 }\nREPLACE:law_y = { b = 1 }\nINJECT:law_y = { c = 1 }\n"
+           "INJECT:law_x2 = { modifier = { p_add = 1 } }\n"
+           "INJECT:law_x2 = { modifier = { q_add = 1 } }\n"
+           "REPLACE:law_z = { icon = one }\nREPLACE:law_z = { icon = two }\n")
+    # An on_action hook: on_actions aren't layered.
+    _write(o, "common/on_actions/te_on_actions.txt", "on_monthly_pulse = { events = { te.1 } }\n")
+    _write(t, "common/on_actions/zz.txt", "on_monthly_pulse = { events = { mog.1 } }\n"
+           "only_theirs_hook = { events = { mog.2 } }\n")
+    # Bare duplicates (static modifiers: the first one wins).
+    _write(o, "common/static_modifiers/te_mods.txt",
+           "shared_mod = { x_add = 1 }\nours_first = { y_add = 1 }\n")
+    _write(t, "common/static_modifiers/a_their_mods.txt", "shared_mod = { x_add = 2 }\n")
+    _write(t, "common/static_modifiers/zz_their_mods.txt", "ours_first = { y_add = 2 }\n")
+    # A bare duplicate in a folder whose rule isn't recorded (the tests
+    # take scripted_triggers' rule out of BARE_DUPLICATE_RULES).
+    _write(o, "common/scripted_triggers/te_triggers.txt", "shared_trigger = { always = yes }\n")
+    _write(t, "common/scripted_triggers/zz_triggers.txt",
+           "shared_trigger = { always = no }\nREPLACE:vanilla_trigger = { always = no }\n")
+    # The server keeps no vanilla scripted triggers; the game files do.
+    _write(game, "common/scripted_triggers/00_triggers.txt", "vanilla_trigger = { always = yes }\n")
+    # Their file at vanilla's path drops decree_v; one at ours, our decree.
+    _write(t, "common/decrees/00_decrees.txt", "decree_w = { cost = 2 }\n")
+    _write(o, "common/decrees/te_decrees.txt", "decree_ours = { cost = 3 }\n")
+    _write(t, "common/decrees/te_decrees.txt", "decree_w2 = { cost = 4 }\n")
+    # An INJECT into a script value appends its steps.
+    _write(t, "common/script_values/zz_values.txt", "INJECT:sv_v = { multiply = 3 }\n")
+    _write(t, "common/defines/zz_defines.txt", "NGame = { X = 1 }\n")
+    _write(t, "common/acceptance_statuses/zz.txt", "status_x = { }\n")
+    _write(t, "events/their_events.txt", "namespace = mog\n")
+    return os.path.join(game, "common"), o, t
+
+
+def fake_layer_mod_state(game_common, ours_root):
+    from mod_state import ModState
+    return ModState({et: os.path.join(game_common, d) for et, d in LAYER_TYPES.items()
+                     if et not in MOD_ONLY_TYPES},
+                    {et: os.path.join(ours_root, "common", d) for et, d in LAYER_TYPES.items()})
+
+
+class LayeredStateTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import external_mod_state as ems
+        cls.ems = ems
+        cls._tmp = tempfile.TemporaryDirectory()
+        cls.game, cls.ours_root, cls.theirs_root = build_fake_layer_mods(cls._tmp.name)
+        cls.ms = fake_layer_mod_state(cls.game, cls.ours_root)
+        cls.vanilla = emo.VanillaIndex(game_common=cls.game, snapshot_dir=None)
+        # scripted_triggers stands in for a folder whose bare-duplicate rule
+        # isn't recorded: put that unknown back for the build, whatever
+        # BARE_DUPLICATE_RULES says about the folder itself.
+        with mock.patch.dict(emo.BARE_DUPLICATE_RULES):
+            emo.BARE_DUPLICATE_RULES.pop("scripted_triggers", None)
+            cls.state = ems.build(cls.ms, cls.theirs_root, cls.ours_root, vanilla=cls.vanilla)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tmp.cleanup()
+
+    def entry(self, et, key):
+        return self.state.entity(et, key)
+
+    def test_their_inject_lands_on_our_entry(self):
+        e = self.entry("Laws", "te_law")
+        self.assertEqual(e["status"], "changed")
+        self.assertEqual(e["value"], ["=", {"group": ["=", "lawgroup_x"],
+                                            "modifier": ["=", {"a_add": ["=", "1"],
+                                                               "b_add": ["=", "2"]}]}])
+        self.assertEqual(e["server_value"][1]["modifier"], ["=", {"a_add": ["=", "1"]}])
+        self.assertTrue(e["server_matches_model"])
+        self.assertEqual([(s["side"], s["effect"]) for s in e["load"]],
+                         [(OURS, "created"), (THEIRS, "injected")])
+        self.assertEqual(e["definitions"][0]["file"], "common/laws/a_their_laws.txt")
+        # The layered ModState holds it; the server's is untouched.
+        laws = self.state.mod_state.get_data("Laws")
+        self.assertIn("b_add", laws["te_law"][1]["modifier"][1])
+        self.assertNotIn("b_add", self.ms.get_data("Laws")["te_law"][1]["modifier"][1])
+
+    def test_the_order_comes_from_the_model(self):
+        # Nothing restates the load order: reverse what order_for_reading
+        # returns and their INJECT runs before our entry exists.
+        original = emo.order_for_reading
+        with mock.patch.object(emo, "order_for_reading",
+                               lambda ops, order, reading: original(ops, order, reading)[::-1]):
+            state = self.ems.build(self.ms, self.theirs_root, self.ours_root, vanilla=self.vanilla)
+        e = state.entity("Laws", "te_law")
+        self.assertEqual([(s["side"], s["effect"]) for s in e["load"]],
+                         [(THEIRS, "error_no_entry"), (OURS, "created")])
+        self.assertNotIn("b_add", e["value"][1]["modifier"][1])
+
+    def test_bare_duplicates_first_wins(self):
+        theirs_wins = self.entry("Modifiers", "shared_mod")
+        self.assertEqual(theirs_wins["status"], "changed")
+        self.assertEqual(theirs_wins["value"], ["=", {"x_add": ["=", "2"]}])
+        self.assertEqual([s["effect"] for s in theirs_wins["load"]],
+                         ["created", "dropped_duplicate"])
+        ours_wins = self.entry("Modifiers", "ours_first")
+        self.assertEqual(ours_wins["status"], "unchanged")
+        self.assertEqual(ours_wins["value"], ["=", {"y_add": ["=", "1"]}])
+
+    def test_new_and_skipped_keys(self):
+        self.assertEqual(self.entry("Laws", "law_theirs")["status"], "added")
+        nowhere = self.entry("Laws", "law_nowhere")
+        self.assertEqual(nowhere["status"], "not_created")
+        self.assertFalse(nowhere["present"])
+        self.assertEqual(nowhere["load"][0]["effect"], "skipped_no_entry")
+
+    def test_unknown_bare_rule_gives_candidates(self):
+        e = self.entry("Scripted Triggers", "shared_trigger")
+        self.assertEqual(e["status"], "undetermined")
+        self.assertEqual(e["depends_on"], ["bare_duplicate"])
+        by = {c["scenario"]["bare_duplicate"]: c["value"] for c in e["candidates"]}
+        self.assertEqual(by[FIRST_WINS], ["=", {"always": ["=", "yes"]}])
+        self.assertEqual(by[LAST_WINS], ["=", {"always": ["=", "no"]}])
+        self.assertEqual(e["state_holds"], {"bare_duplicate": FIRST_WINS})
+        self.assertEqual(e["value"], by[FIRST_WINS])
+        self.assertEqual(self.ems._STATE_HOLDS["bare_duplicate"], FIRST_WINS)
+
+    def test_a_type_the_server_holds_no_vanilla_for(self):
+        e = self.entry("Scripted Triggers", "vanilla_trigger")
+        self.assertEqual(e["status"], "changed")
+        self.assertTrue(e["in_vanilla"])
+        self.assertEqual([(s["side"], s["effect"]) for s in e["load"]],
+                         [(VANILLA, "created"), (THEIRS, "replaced")])
+        # The server's mod-only view has no entry, and that matches the
+        # model with vanilla left out.
+        self.assertFalse(e["server_present"])
+        self.assertTrue(e["server_matches_model"])
+        layer = self.state.entity_type("Scripted Triggers")
+        self.assertFalse(layer["server_holds_vanilla"])
+
+    def test_same_path_files(self):
+        # Their 00_decrees.txt replaces vanilla's, which held decree_v.
+        removed = self.entry("Decrees", "decree_v")
+        self.assertEqual(removed["status"], "removed")
+        self.assertTrue(removed["server_present"])
+        # Their te_decrees.txt lands on ours: the playset decides.
+        e = self.entry("Decrees", "decree_ours")
+        self.assertEqual(e["status"], "undetermined")
+        self.assertEqual(e["depends_on"], ["later_mod"])
+        by = {c["scenario"]["later_mod"]: c["present"] for c in e["candidates"]}
+        self.assertEqual(by, {"theirs": False, "ours": True})
+        self.assertEqual(e["state_holds"], {"later_mod": "theirs"})
+        self.assertNotIn("decree_ours", self.state.mod_state.get_data("Decrees"))
+        self.assertEqual(self.ems._STATE_HOLDS["later_mod"], "theirs")
+
+    def test_script_value_inject_appends_steps(self):
+        e = self.entry("Script Values", "sv_v")
+        self.assertEqual(e["status"], "changed")
+        self.assertEqual(e["value"][1]["multiply"], ["=", "3"])
+        self.assertEqual(e["value"][1]["value"], ["=", "1"])
+        self.assertEqual(e["definitions"][0]["file"], "game/common/script_values/00_values.txt")
+
+    def test_server_merge_that_differs_from_the_model_is_flagged(self):
+        # Our bare law_rebare sorts after vanilla's file: the engine drops
+        # it, ModState keeps it.
+        e = self.entry("Laws", "law_rebare")
+        self.assertFalse(e["server_matches_model"])
+        self.assertEqual(e["server_value"][1]["group"], ["=", "lawgroup_ours"])
+        self.assertEqual(e["value"][1]["group"], ["=", "lawgroup_x"])
+        self.assertEqual(e["model_without_them"][0][1]["group"], ["=", "lawgroup_x"])
+        laws = next(t for t in self.state.summary()["entity_types"] if t["entity_type"] == "Laws")
+        self.assertEqual(laws["server_differs_from_model"], ["law_rebare"])
+
+    def test_a_file_that_does_not_parse(self):
+        e = self.entry("Laws", "law_broken")
+        self.assertEqual(e["status"], "parse_failed")
+        self.assertFalse(e["present"])
+        self.assertEqual([f["file"] for f in self.state.parse_failures],
+                         ["common/laws/zz_broken.txt"])
+
+    def test_unlayered_key_is_the_servers(self):
+        e = self.entry("Laws", "law_v")
+        self.assertFalse(e["layered"])
+        self.assertEqual(e["value"], ["=", {"group": ["=", "lawgroup_x"],
+                                            "modifier": ["=", {"v_add": ["=", "1"]}]}])
+        self.assertIsNone(self.entry("Laws", "law_missing"))
+
+    def test_summary(self):
+        s = self.state.summary()
+        self.assertEqual(s["model"]["load_reading"], ["creations_first"])
+        dirs = {n["dir"]: n["reason"] for n in s["not_layered"]}
+        self.assertEqual(set(dirs), {"common/defines", "common/acceptance_statuses", "events",
+                                     "common/on_actions"})
+        self.assertEqual({t["entity_type"] for t in s["entity_types"]},
+                         set(LAYER_TYPES) - {"On Actions"})
+        laws = self.state.entity_type("Laws")
+        self.assertEqual({r["key"]: r["status"] for r in laws["keys"]},
+                         {"te_law": "changed", "law_rebare": "changed", "law_nowhere": "not_created",
+                          "law_theirs": "added", "law_broken": "parse_failed",
+                          "law_dup": "repeated_in_file", "law_y": "repeated_in_file",
+                          "law_x2": "changed", "law_z": "changed"})
+        self.assertFalse(self.state.entity_type("Goods")["layered"])
+        # shared_trigger, decree_ours, and decree_w2 (their te_decrees.txt
+        # loads only if they come later).
+        self.assertEqual(s["summary"]["by_status"]["undetermined"], 3)
+        decrees = next(t for t in s["entity_types"] if t["entity_type"] == "Decrees")
+        self.assertEqual(decrees["undetermined"], ["decree_ours", "decree_w2"])
+
+    def test_a_folder_that_is_not_layered_says_so(self):
+        reason = "common/on_actions isn't layered: "
+        layer = self.state.entity_type("On Actions")
+        self.assertFalse(layer["layered"])
+        self.assertTrue(layer["reason"].startswith(reason))
+        hook = self.entry("On Actions", "on_monthly_pulse")
+        self.assertFalse(hook["layered"])
+        self.assertTrue(hook["reason"].startswith(reason))
+        self.assertTrue(hook["present"])
+        # A hook only they define: not a 404, the folder isn't layered.
+        theirs_only = self.entry("On Actions", "only_theirs_hook")
+        self.assertFalse(theirs_only["present"])
+        self.assertTrue(theirs_only["reason"].startswith(reason))
+
+    def test_a_key_one_file_repeats(self):
+        dup = self.entry("Laws", "law_dup")
+        self.assertEqual(dup["status"], "repeated_in_file")
+        self.assertFalse(dup["present"])   # the server's value: no entry
+        self.assertEqual(dup["problems"][0]["file"], "common/laws/b_their_dups.txt")
+        self.assertEqual(dup["problems"][0]["lines"], [1, 2])
+        mixed = self.entry("Laws", "law_y")
+        self.assertEqual(mixed["status"], "repeated_in_file")
+        self.assertEqual(mixed["value"], mixed["server_value"])
+        self.assertEqual([p["directive"] for p in mixed["problems"]], ["INJECT"])
+        # Two INJECTs and nothing else: folded, one definition in the load.
+        twice = self.entry("Laws", "law_x2")
+        self.assertEqual([(s["side"], s["effect"]) for s in twice["load"]],
+                         [(VANILLA, "created"), (THEIRS, "injected")])
+        self.assertEqual(set(twice["value"][1]["modifier"][1]), {"p_add", "q_add"})
+        # Two REPLACEs and nothing else: the last body, as the engine reads it.
+        self.assertEqual(self.entry("Laws", "law_z")["value"], ["=", {"icon": ["=", "two"]}])
+
+    def test_an_unknown_effect_is_an_error(self):
+        def fake_simulate(ops, rule):
+            return frozenset(), [{"side": o.side, "path": o.path, "line": o.line,
+                                  "directive": o.directive, "effect": "teleported"} for o in ops]
+
+        with mock.patch.object(emo, "simulate", fake_simulate):
+            with self.assertRaises(ValueError):
+                self.ems._replay("Laws", "k", [Op(OURS, "a.txt", 1)], FIRST_WINS,
+                                 lambda op: ("=", {}))
+
+    def test_without_game_files_a_replaced_vanilla_file_is_flagged(self):
+        with tempfile.TemporaryDirectory() as snap:
+            os.makedirs(os.path.join(snap, "common"))
+            with open(os.path.join(snap, "manifest.json"), "w", encoding="utf-8") as f:
+                json.dump({"entity_types": {"Decrees": {"dir": "game/common/decrees",
+                                                        "file": "common/decrees.json"}},
+                           "sources": {"game/common/decrees/00_decrees.txt": {"size": 1}}}, f)
+            with open(os.path.join(snap, "common", "decrees.json"), "w", encoding="utf-8") as f:
+                json.dump({"decree_v": ["=", {}]}, f)
+            state = self.ems.build(self.ms, self.theirs_root, self.ours_root,
+                                   vanilla=emo.VanillaIndex(game_common=None, snapshot_dir=snap))
+        s = state.summary()
+        self.assertEqual([r["file"] for r in s["replaced_vanilla_files"]],
+                         ["game/common/decrees/00_decrees.txt"])
+        self.assertIn("snapshot manifest", s["scope"])
+        # decree_v sat in that file; the snapshot can't say so, so the key
+        # isn't recomputed, and its entry carries the caveat.
+        e = state.entity("Decrees", "decree_v")
+        self.assertFalse(e["layered"])
+        self.assertIn("caveat", e)
+        self.assertEqual(e["replaced_vanilla_files"], ["game/common/decrees/00_decrees.txt"])
+
+    def test_snapshot_vanilla_has_no_file_names(self):
+        # Without the game files vanilla's definition is the server's value,
+        # read first (the snapshot fallback).
+        state = self.ems.build(self.ms, self.theirs_root, self.ours_root,
+                               vanilla={"laws": {"law_v", "law_rebare"}, "decrees": {"decree_v"},
+                                        "script_values": {"sv_v"}, "static_modifiers": set()})
+        e = state.entity("Script Values", "sv_v")
+        self.assertEqual(e["definitions"][0], {"side": VANILLA, "file": None, "line": None,
+                                               "directive": None})
+        self.assertEqual(e["value"][1]["multiply"], ["=", "3"])
+        # The scripted_triggers folder has no vanilla side either way.
+        self.assertEqual(next(t for t in state.summary()["entity_types"]
+                              if t["entity_type"] == "Scripted Triggers")["vanilla_source"],
+                         "unavailable")
+
+
 class VanillaIndexTests(unittest.TestCase):
     def test_game_files_give_file_names(self):
         with tempfile.TemporaryDirectory() as tmp:
