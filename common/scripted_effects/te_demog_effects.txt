@@ -1718,6 +1718,40 @@ te_demog_country_lists = {
 		save_temporary_scope_as = te_dg_it
 		root = { add_to_variable_list = { name = te_dg_cities target = scope:te_dg_it } }
 	}
+	# 2026-10-27 audit, DEM-6: the Youth row's states (te_demog_youth_bulge_shown, the test te_dg_yb_n counts in
+	# te_demog_consequences_country), strongest first, and Where People Live's Metropolises (the test
+	# te_demog_mt_count_metropolis counts), largest share first; up to ten each, a row each that opens the state.
+	if = {
+		limit = { has_variable_list = te_dg_yb_states }
+		clear_variable_list = te_dg_yb_states
+	}
+	ordered_scope_state = {
+		limit = {
+			te_demog_has_census = yes
+			te_demog_youth_bulge_shown > 0
+		}
+		order_by = te_demog_youth_bulge_shown
+		max = 10
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_yb_states target = scope:te_dg_it } }
+	}
+	if = {
+		limit = { has_variable_list = te_dg_mt_states }
+		clear_variable_list = te_dg_mt_states
+	}
+	ordered_scope_state = {
+		limit = {
+			te_demog_has_census = yes
+			has_variable = te_dg_mt
+			var:te_dg_mt >= te_demog_k_mt_metropolis
+		}
+		order_by = te_demog_mt_share
+		max = 10
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		root = { add_to_variable_list = { name = te_dg_mt_states target = scope:te_dg_it } }
+	}
 }
 
 # THIS = a country at the yearly country pulse, on its own day (ROOT = the country). Task 12 adds to it.

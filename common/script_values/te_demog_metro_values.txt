@@ -286,6 +286,16 @@ te_demog_mt_step = {
 	multiply = te_demog_k_mt_drift
 }
 
+# The stored share, 0 with none: the order of the Metropolises list (te_dg_mt_states, te_demog_country_lists) and its
+# rows' figure, which a state that has lost its share since the census reads as 0 rather than a missing variable.
+te_demog_mt_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = var:te_dg_mt
+	}
+}
+
 # 0 Metropolis, 1 Leading City, 2 Several Cities, 3 Market Towns (3 with no share: the panel shows no label then).
 te_demog_mt_label = {
 	value = 3

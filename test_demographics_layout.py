@@ -435,6 +435,15 @@ class WidthTest(unittest.TestCase):
         self.check_type("te_demog_figure_row", ("row_label",), bodies, 20)
         self.check_type("te_demog_term_row", ("row_label", "row_value"), bodies, 5)
 
+    def test_the_state_link_rows(self):
+        """Each list's figure fits the link row's 284 at 17, beside the 184 name (2026-10-27 audit, DEM-6)."""
+        row = [self.cell(b) for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_link_row"))]
+        self.assertEqual(row, [(184, "row"), (284, "row")])
+        self.assertEqual(4 + 184 + 4 + 284, 476)
+        self.check_type("te_demog_state_link_row", ("link_value",), [self.widgets], 2)
+        city = re.search(r'blockoverride "link_value" \{\s*text = "(\w+)"', _type_body(self.widgets, "te_demog_city_row"))
+        self.fits(self.shown(city.group(1)), row[1], "te_demog_city_row")
+
     def test_the_states_table(self):
         head = [b for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_head"))]
         row = [b for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_row"))]
@@ -759,6 +768,38 @@ class StatesTest(unittest.TestCase):
     def test_the_civil_war_repair_redraws_the_lists(self):
         self.assertIn("te_demog_country_lists = yes", _read(os.path.join(
             REPO, "common", "scripted_effects", "te_inheritance_effects.txt")))
+
+    def test_every_state_a_list_names_opens_it(self):
+        """2026-10-27 audit, DEM-6 and DEM-8: the largest cities, the Youth row's states and the Metropolises are rows
+        that open the state on its Demographics subtab, with the States table's onclicks, highlight and menu."""
+        row = _type_body(self.widgets, "te_demog_state_row")
+        link = _type_body(self.widgets, "te_demog_state_link_row")
+        for line in re.findall(r"(?m)^\t\t(on\w+ = \".*\")$", row):
+            self.assertIn(line, link)
+        self.assertRegex(self.widgets, r"type te_demog_city_row = te_demog_state_link_row \{")
+        for section, name in (("te_demog_sec_work", "te_dg_yb_states"), ("te_demog_sec_places", "te_dg_mt_states")):
+            with self.subTest(section=section):
+                body = _type_body(self.widgets, section)
+                at = body.index(f"datamodel = \"[GetPlayer.MakeScope.GetList('{name}')]\"")
+                item = _block_from(body, body.index("item = {", at))
+                self.assertIn("te_demog_state_link_row = {", item)
+                self.assertIn('datacontext = "[Scope.GetState]"', item)
+
+    def test_the_youth_and_metropolis_lists_are_built_with_the_census(self):
+        effects = _read(EFFECTS)
+        lists = _block_from(effects, effects.index("te_demog_country_lists = {"))
+        for name, order, test in (("te_dg_yb_states", "te_demog_youth_bulge_shown", "te_demog_youth_bulge_shown > 0"),
+                                  ("te_dg_mt_states", "te_demog_mt_share", "var:te_dg_mt >= te_demog_k_mt_metropolis")):
+            with self.subTest(list=name):
+                at = lists.index(f"clear_variable_list = {name}")
+                block = _block_from(lists, lists.index("ordered_scope_state = {", at))
+                self.assertIn(test, block)
+                self.assertRegex(block, rf"order_by = {order}\s*max = 10\b")
+                self.assertIn(f"add_to_variable_list = {{ name = {name} target = scope:te_dg_it }}", block)
+        # the Youth row's count and its list read the same test
+        conseq = _read(os.path.join(REPO, "common", "scripted_effects", "te_demog_consequence_effects.txt"))
+        country = _block_from(conseq, conseq.index("te_demog_consequences_country = {"))
+        self.assertIn("te_demog_youth_bulge_shown > 0", country)
 
 
 class StateWealthTermsTest(unittest.TestCase):
