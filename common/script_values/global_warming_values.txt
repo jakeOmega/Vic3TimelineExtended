@@ -554,7 +554,7 @@ gw_disp_penalty_sol = {
 	multiply = -1.0
 }
 
-# In per cent: 0.05 a degree.
+# In percent: 0.05 a degree.
 gw_disp_penalty_mortality_pct = {
 	value = gw_warming_penalty_scale_display
 	multiply = 5

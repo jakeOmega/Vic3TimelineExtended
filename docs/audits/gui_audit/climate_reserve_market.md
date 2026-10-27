@@ -562,7 +562,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 - **Confidence:** high (the inconsistency); medium (best wording)
 
 ### MKT-3. The additions' text is hard-coded English
-- **Status:** done (2026-10-27 wave). The additions' English is in loc keys (`te_market_*`, `te_tp_tt_*`), `test_market_trade_partners.py` keeps it there.
+- **Status:** done (2026-10-27 wave). The additions' English is in loc keys (`te_market_*`, `te_market_tp_tt_*`), `test_market_trade_partners.py` keeps it there.
 - **Category:** style / other (localization)
 - **Where:** `raw_text` in `market_panel.gui:393,435,505,556,613,627,635,644` ("Exports by Value", "Imports by Value",
   "Export Partners", "Import Partners", "Top Trade Partners", "Market", "Trade / yr", "% of GDP"), the "units" in

@@ -127,9 +127,9 @@ class LocTest(unittest.TestCase):
         """MKT-2: the partner hover reconciles with the row: its yearly figure
         at base prices first, then the weekly breakdown at market prices."""
         loc = _loc()
-        self.assertIn("ScriptValue('gui_tp_annual_trade')", loc["te_tp_tt_year"])
+        self.assertIn("ScriptValue('gui_tp_annual_trade')", loc["te_market_tp_tt_year"])
         tips = _read(TOOLTIPS)
-        self.assertLess(tips.index('text = "te_tp_tt_year"'), tips.index('text = "te_tp_tt_per_week"'))
+        self.assertLess(tips.index('text = "te_market_tp_tt_year"'), tips.index('text = "te_market_tp_tt_per_week"'))
         self.assertNotIn("Hover a figure", loc["TP_TRADE_TOOLTIP"])
 
 

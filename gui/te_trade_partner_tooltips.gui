@@ -50,13 +50,13 @@ types TooltipTypes {
 					autoresize = yes
 					align = nobaseline
 					maximumsize = { 360 -1 }
-					text = "te_tp_tt_year"
+					text = "te_market_tp_tt_year"
 				}
 				textbox = {
 					autoresize = yes
 					align = nobaseline
 					maximumsize = { 360 -1 }
-					text = "te_tp_tt_per_week"
+					text = "te_market_tp_tt_per_week"
 				}
 
 				# --- Imports: goods this market imports FROM the partner ---
@@ -64,7 +64,7 @@ types TooltipTypes {
 					autoresize = yes
 					align = nobaseline
 					margin_top = 6
-					text = "te_tp_tt_imported"
+					text = "te_market_tp_tt_imported"
 				}
 				flowcontainer = {
 					direction = vertical
@@ -97,7 +97,7 @@ types TooltipTypes {
 					autoresize = yes
 					align = nobaseline
 					margin_top = 6
-					text = "te_tp_tt_exported"
+					text = "te_market_tp_tt_exported"
 				}
 				flowcontainer = {
 					direction = vertical

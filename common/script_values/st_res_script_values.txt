@@ -2910,9 +2910,9 @@ st_res_fertilizer_policy_budget_max = {
 
 # How many goods are full (status 5) or empty with a release set (status 6)
 # this week, from the status the weekly pulse and every click write
-# (st_res_set_good_status_effect). The overview's "Full or Empty" cell: its
-# word is the sum, its third line the two counts, and the word is red while a
-# good is empty with a release set.
+# (st_res_set_good_status_effect). The overview's Blocked cell: its word is
+# the number empty, red, or else the number full; its third line adds the full
+# count when both are above 0.
 st_res_disp_full_count = {
 	value = 0
 	if = {
