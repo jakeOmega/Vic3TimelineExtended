@@ -108,20 +108,8 @@ sr_life_breach_share = { value = 0.1 }
 # many (the remainder of a batch stays behind and is lost with the world).
 sr_evac_batch_people = { value = 1000 }
 
-# The colony_evacuation self-check's reading (sr_colony_evacuate): how much the
-# capital state grew, and 90% of what was sent. Any scope; the globals are set
-# just before.
-sr_evac_log_rose = {
-	value = 0
-	if = {
-		limit = {
-			has_global_variable = sr_evac_log_before
-			has_global_variable = sr_evac_log_after
-		}
-		value = global_var:sr_evac_log_after
-		subtract = global_var:sr_evac_log_before
-	}
-}
+# The colony_evacuation self-check's reading (sr_colony_evacuate): 90% of what
+# was sent. Any scope; the globals are set just before.
 sr_evac_log_rose_needed = {
 	value = 0
 	if = {
@@ -130,9 +118,34 @@ sr_evac_log_rose_needed = {
 		multiply = 0.9
 	}
 }
+# ... how much the receiving state's people of the saved culture and religion
+# grew (the state itself can grow while they don't, if a conversion fails) ...
+sr_evac_log_match_rose = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = sr_evac_log_match_before
+			has_global_variable = sr_evac_log_match_after
+		}
+		value = global_var:sr_evac_log_match_after
+		subtract = global_var:sr_evac_log_match_before
+	}
+}
+# ... the receiving state's people of scope:sr_evac_culture and
+# scope:sr_evac_religion (state scope, read before and after the batches) ...
+sr_evac_match_people = {
+	value = 0
+	every_scope_pop = {
+		limit = {
+			culture = scope:sr_evac_culture
+			religion = scope:sr_evac_religion
+		}
+		add = total_size
+	}
+}
 # ... and the placeholder (promethean) people still in the receiving state once
-# both conversions ran: 0 when change_pop_religion and change_pop_culture took
-# effect at once. State scope.
+# both conversions ran: 0 when change_pop_culture took effect at once. State
+# scope.
 sr_evac_placeholder_left = {
 	value = 0
 	every_scope_pop = {

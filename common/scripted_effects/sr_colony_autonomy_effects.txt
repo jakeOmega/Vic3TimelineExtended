@@ -260,12 +260,14 @@ sr_site_debug_aut_at = {
 # only (`culture = scope:x` fails load-time validation with "Missing culture"), so
 # the batches are made as vanilla's placeholder culture, promethean (atheist, the
 # Frankenstein easter egg's, which vanilla's 00_code_on_actions.txt creates the
-# same way), then converted to the saved religion and culture: change_pop_religion
-# and change_pop_culture take a scope target (vanilla's culture_south_america.3).
-# A capital that already holds promethean people, after that easter egg, would
-# convert its creatures too, so then the evacuees go to the most populous state
-# that has none. The first evacuation checks the state grew and no placeholder
-# is left (colony_evacuation, design § 11).
+# same way), then converted to the saved religion and culture. change_pop_culture
+# takes a scope target in vanilla (culture_south_america.3); change_pop_religion
+# with one has no vanilla precedent (vanilla passes rel:shinto). A capital that
+# already holds promethean people, after that easter egg, would convert its
+# creatures too, so then the evacuees go to the most populous state that has
+# none, or to the capital after all if every state has some. The first
+# evacuation checks the people of the saved culture and religion there grew and
+# no placeholder is left (colony_evacuation, design § 11).
 sr_colony_evacuate = {
 	if = {
 		limit = {
@@ -282,6 +284,7 @@ sr_colony_evacuate = {
 		}
 		capital = {
 			ordered_scope_pop = {
+				limit = { NOT = { culture = cu:promethean } }
 				order_by = total_size
 				max = 1
 				check_range_bounds = no
@@ -309,6 +312,10 @@ sr_colony_evacuate = {
 			}
 		}
 		if = {
+			limit = { NOT = { exists = scope:sr_evac_state } }
+			capital = { save_scope_as = sr_evac_state }
+		}
+		if = {
 			limit = {
 				exists = scope:sr_evac_culture
 				exists = scope:sr_evac_religion
@@ -316,6 +323,7 @@ sr_colony_evacuate = {
 			}
 			scope:sr_evac_state = {
 				set_global_variable = { name = sr_evac_log_before value = state_population }
+				set_global_variable = { name = sr_evac_log_match_before value = sr_evac_match_people }
 				while = {
 					count = local_var:sr_evac_batches
 					create_pop = {
@@ -333,6 +341,7 @@ sr_colony_evacuate = {
 					change_pop_culture = { target = scope:sr_evac_culture value = 1 }
 				}
 				set_global_variable = { name = sr_evac_log_after value = state_population }
+				set_global_variable = { name = sr_evac_log_match_after value = sr_evac_match_people }
 				set_global_variable = { name = sr_evac_log_left value = sr_evac_placeholder_left }
 			}
 			set_global_variable = {
@@ -348,26 +357,29 @@ sr_colony_evacuate = {
 }
 
 # ---- Self-check: colony_evacuation (design § 11) ------------------------------------------
-# Country scope, after the first evacuation's batches: OK when the receiving state
-# grew by at least 90% of the people sent home and no placeholder (promethean)
-# people are left in it (all read in the same run); BROKEN otherwise, with the
-# numbers: create_pop made fewer, or none, or state_population reads the change
-# only later (before/after), or a conversion failed or lands only later (left).
-# The fallback is the evacuees lost, as a release always lost them.
+# Country scope, after the first evacuation's batches: OK when the receiving
+# state's people of the saved culture and religion grew by at least 90% of the
+# people sent home (match) and no placeholder (promethean) people are left in it
+# (left), all read in the same run; BROKEN otherwise, with the numbers. The state
+# growing (before/after) without match means a conversion failed or lands only
+# later (left above 0 points at the culture; 0 at the religion, or at loops that
+# did not see the new pops); no growth means create_pop made fewer or none, or
+# state_population reads the change only later. The fallback is the evacuees
+# lost, as a release always lost them.
 sr_colony_evacuation_self_check = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_evac_checked } }
 		set_global_variable = { name = sr_evac_checked value = yes }
 		if = {
 			limit = {
-				sr_evac_log_rose >= sr_evac_log_rose_needed
+				sr_evac_log_match_rose >= sr_evac_log_rose_needed
 				has_global_variable = sr_evac_log_left
 				global_var:sr_evac_log_left = 0
 			}
-			debug_log = "TE_SELF_CHECK OK colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] left=[GetGlobalVariable('sr_evac_log_left').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state gained the evacuees, converted from the placeholder culture) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] match=[GetGlobalVariable('sr_evac_log_match_before').GetValue|0]->[GetGlobalVariable('sr_evac_log_match_after').GetValue|0] left=[GetGlobalVariable('sr_evac_log_left').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state gained the evacuees as the saved culture and religion) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] left=[GetGlobalVariable('sr_evac_log_left').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state gained less than 90% of the evacuees, or left is above 0: create_pop made fewer or none, state_population reads the change later, or the placeholder culture was not converted; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] match=[GetGlobalVariable('sr_evac_log_match_before').GetValue|0]->[GetGlobalVariable('sr_evac_log_match_after').GetValue|0] left=[GetGlobalVariable('sr_evac_log_left').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the saved culture and religion gained less than 90% of the evacuees, or left is above 0: create_pop made fewer or none, state_population reads the change later, or a conversion failed or lands later; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

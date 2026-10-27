@@ -153,7 +153,7 @@ for `TE_SR_SITES <world> is a free colony`.
 
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
-| `TE_SELF_CHECK OK/BROKEN colony_evacuation before=… after=… sent=… left=…` | once a game, the first time a player brings a colony's people home (Abandon, then Bring them home) | `create_pop` made the evacuees in the capital as the placeholder culture `promethean`, and `change_pop_religion` / `change_pop_culture` turned them into the capital's largest pop's religion and culture: it grew by at least 90% of them and `left` is 0 | it grew less, or `left` is above 0: `create_pop` made fewer or none at run time, `state_population` reads the change only later, or a conversion failed or lands only later | if the state grows, and its Promethean pops are gone, a few days later, nothing to do; if the conversion fails, the evacuees stay Promethean: convert them by a different route, or drop the batches; if `create_pop` fails, the evacuees are lost, as a release always lost them: drop the batches and say so in Bring them home's tooltip |
+| `TE_SELF_CHECK OK/BROKEN colony_evacuation before=… after=… sent=… match=…->… left=…` | once a game, the first time a player brings a colony's people home (Abandon, then Bring them home) | `create_pop` made the evacuees in the capital (or, if it holds Promethean pops, the most populous state without them) as the placeholder culture `promethean`, and `change_pop_religion` / `change_pop_culture` turned them into the capital's largest pop's religion and culture: that state's people of that culture and religion (`match`) grew by at least 90% of them and `left` is 0 | `match` grew less, or `left` is above 0. The state's own growth (`before`/`after`) tells them apart: no growth means `create_pop` made fewer or none at run time, or `state_population` reads the change only later; growth without `match` means a conversion failed or lands only later (`left` above 0: the culture; `left` 0: the religion, or loops that didn't see the new pops) | if the pops show the right culture and religion a few days later, nothing to do; if a conversion fails, the evacuees stay Promethean or atheist: convert them by a different route, or drop the batches; if `create_pop` fails, the evacuees are lost, as a release always lost them: drop the batches and say so in Bring them home's tooltip |
 
 1. **The section.** Under Simple Colonies, Solar System Colonization shows Colony Autonomy below Colony Modules: one
    row per colony we hold, with its autonomy, its drift a month (the drift's terms on hover), Ruled / Charter /
@@ -167,7 +167,8 @@ for `TE_SR_SITES <world> is a free colony`.
    "<World> Declares Itself Free".
 4. **Abandoning.** Abandon (or option h) asks first. Bring them home releases the world (Unclaimed in Solar System)
    and logs `colony_evacuation`; the capital's population rises by the colony's people, in whole thousands, as its
-   largest pop's culture and religion (no Promethean pops in its pop list). Leave them to govern themselves makes it
+   largest pop's culture and religion (no Promethean pops in its pop list; a capital that already had some sends them to
+   the most populous state without any). Leave them to govern themselves makes it
    Free, with our ties at 50. An outpost of fewer than 1,000 people offers only Close
    the outpost.
 5. **Free colonies.** Supply a free colony: the entry shows Free Colony Supply (+3% Space Program throughput) and Free
