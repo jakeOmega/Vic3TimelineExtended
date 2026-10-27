@@ -184,6 +184,10 @@ colonies, red for other powers' and grey for the worlds no one holds; hover it
 for the counts. Its Mission Control adds Next Windows, the destinations of the
 stage with a world left and the months to each window (see [Launch
 windows](#launch-windows)).
+While the program isn't running, because every world is claimed or your Space
+Program no longer runs the method it needs, the approach reads Idle, the risk
+and progress rows are hidden, and Mission Control shows only the Mission
+Profile.
 
 Under Simple Colonies and Full Colonies, a second row of the overview says what
 needs you, with the detail on hover. A word turns red when something is due:
@@ -194,10 +198,6 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No world left; and the stage. |
-While the program isn't running, because every world is claimed or your Space
-Program no longer runs the method it needs, the approach reads Idle, the risk
-and progress rows are hidden, and Mission Control shows only the Mission
-Profile.
 
 Solar System Colonization has more sections below Rivals: Colony Fleets,
 Solar System and Colonies, then under Full Colonies Space Command and Space
