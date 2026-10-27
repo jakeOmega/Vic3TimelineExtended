@@ -28,31 +28,33 @@ have a program, and the tab ends with an Open Journal Entry button.
 
 ![The Nuclear tab of the Military panel for a country holding 12 warheads: the overview (an Unfunded programme, warheads, credibility, doctrine, readiness, launch authority and the taboo bar), The Programme at funding step 0 with its progress bar, Nuclear Posture, and the start of Forces.](images/nuclear_tab_armed.png)
 
-The overview has three rows. Each icon has its word beneath, and hovering it
-gives the detail.
+The overview is a grid of boxes, two to a row. Each box has an icon, a caption,
+the reading in a word and one figure beneath it; hover a box for the detail.
 
-- The first row is always there. It shows the program's state (Unfunded, Developing, Producing, Frozen, At Ceiling, Dismantling, No Programme, Renounced or Disarmed; hover it for the program's status), your warheads, a crisis icon with its stage while you are in one, and your credibility as a small bar once you have a record.
-- The second row, while you hold warheads, is your posture: doctrine, readiness and launch authority, one icon each.
-- The third row, from the world's first warhead, is the nuclear taboo: a bar, the score and its target with the monthly change ("62 → 68 (+0.40/mo)"), and an arrow for the direction. The solid bar runs to the lower of the score and its target, and a pale stretch to the higher. The stretch is pale rather than green or red because a stronger taboo cuts both ways: it weighs on an arsenal and on threats, and shields countries without one. Hover it for the target's breakdown.
+- While you are in a crisis, the first box is the crisis: its stage, and the weeks to its deadline, red from two weeks out.
+- The program's state (Unfunded, Developing, Producing, Frozen, At Ceiling, Dismantling, No Programme, Renounced or Disarmed; hover it for the program's status) and when its next warhead comes; your warheads, with the world's estimate beneath.
+- While you hold warheads, your posture. Doctrine and launch authority each say when they can next change. Readiness says where it is moving or, when it is not, what your deterrent costs a week.
+- Your credibility, once you have a record: Doubted, Steady or Trusted, and the figure out of 100.
+- From the world's first warhead, the nuclear taboo: a bar, the score and its target with the monthly change ("62 → 68 (+0.40/mo)"), and an arrow for the direction. The solid bar runs to the lower of the score and its target, and a pale stretch to the higher. The stretch is pale rather than green or red because a stronger taboo cuts both ways: it weighs on an arsenal and on threats, and shields countries without one. Hover it for the target's breakdown.
 
 The Programme sits directly above the entry's progress bar, which is progress
 toward your next warhead. The other sections follow below the bar. Every
 section starts open except How Nuclear Weapons Work, which holds the
-explanations, one heading per topic. The posture's choices are two collapsed
-subsections under Nuclear Posture.
+explanations, one heading per topic. The posture's choices open from a Change
+button beside each of its three rows.
 
 | Section | Shown when | What it holds |
 |---|---|---|
 | The Programme | You have a program | Programme funding (a stepper), warhead production a month, the time to the next warhead, and the year of your first device and whether it was the world's first |
-| Nuclear Crisis | You are in a crisis | Your side, the dispute, the stage, the weeks to the deadline, danger, pressure, what conceding would cost, whether the threat can be carried out and your stakes; your buttons under Our Moves |
-| World Crises | Any crisis is running, anywhere | Every crisis, yours included, most dangerous first: who threatened whom, the stage, public or private, and the danger; hover a row for the dispute, the deadline and any talks. Private warnings are listed too, since governments know of them even when the public doesn't |
-| Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to), launch authority, your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure; Change Doctrine and Change Readiness or Launch Authority under it |
-| Forces | You hold warheads | Warheads held beside the world's estimate, survivability, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; your arsenal ceiling and dismantling under Arsenal Size |
+| Nuclear Crisis | You are in a crisis | A line naming your opponent, your side and the dispute; boxes for the stage, the weeks to the deadline, danger, pressure, whether the threat can be carried out and when the target is pressed next; your buttons under Our Moves; then Outcomes, what each ending would bring and do to your credibility |
+| World Crises | Any crisis is running, anywhere | Every crisis, yours included and tinted, most dangerous first: the two countries' flags, the stage and the danger; hover a row for who threatened whom, the dispute, the deadline, any talks and whether it is public. Private warnings are listed too, since governments know of them even when the public doesn't |
+| Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to) and launch authority, each with a Change button that opens its choices; your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure |
+| Forces | You hold warheads | Survivability, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; under Arsenal Size, warheads held beside the world's estimate, your arsenal ceiling and dismantling |
 | At Home | You hold warheads | A small table for each interest group with a view of your posture |
-| Reputation | You have a record | How your last crisis ended, your credibility and your non-use pledges |
-| The Nuclear Taboo | From the world's first warhead | The score and its band, where it is heading, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
+| Reputation | You have a record | How your last crisis ended and your non-use pledges (your credibility is in the overview) |
+| The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
 | Delivery and Defence | Always | Your delivery capability and home defence |
-| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them |
+| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag and public doctrine; your own row is tinted |
 | How Nuclear Weapons Work | Always | The explanations, collapsed |
 
 An armed power that loses its rank stops building but keeps its warheads, its
@@ -134,7 +136,7 @@ power's guarantee was accepted first.
 
 Other countries see your arsenal only as an estimate, re-observed yearly at
 between 60% and 150% of the true count, and exact after a test or a strike. The
-Nuclear Powers leaderboard and the AI use these estimates.
+Nuclear Powers table and the AI use these estimates.
 
 ## Keeping a nuclear arsenal
 
@@ -194,9 +196,12 @@ general are in [Military and war](13-military.md).
 
 ## Nuclear posture
 
-Posture is three separate choices. Nuclear Posture shows the ones in force.
-Open Change Doctrine, or Change Readiness or Launch Authority, under it to
-change them with the Adopt and Order buttons. A button you can't use says why.
+Posture is three separate choices. Nuclear Posture shows the ones in force, one
+row each; hover one for what it does now and when it can next change. Its
+Change button opens that choice's options beneath it, with the Adopt and Order
+buttons, the option in force tinted and a line above them saying when you
+can change it. A button you can't use says why, and each option's tooltip lists
+what it does.
 
 ### Nuclear doctrine
 
@@ -245,7 +250,8 @@ Readiness moves one step every two weeks toward the level you order.
 
 Higher readiness also makes your forces harder to catch in a first strike, so a
 crisis counts more of your [survivability](#survivability-reliability-and-crew-strain).
-Each readiness choice's tooltip shows the survivability it would give you.
+The readiness options are a table: the deterrent's weekly upkeep and the
+survivability a crisis would count at each level.
 
 Struck while Recessed, you can order the warheads mated; "Our Forces Are Ready"
 offers the answer when they reach Routine, if the war goes on. A stand-down
@@ -266,7 +272,9 @@ once a year.
 | Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Threats against you count as if your forces were survivable. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
 
 The Forces section's Chance of a halt row is the chance that someone in the
-chain halts a launch begun under delegation or launch on warning. It rises by
+chain halts a launch begun under delegation or launch on warning, or an accident
+that Automatic Retaliation reads as an attack. Under Central Authorization it
+reads "not delegated". It rises by
 25 points at peace with no crisis and by 10 in a Warning or Confrontation,
 since a sudden attack makes little sense then; an Acute crisis or a war gives
 no such benefit of the doubt. Automatic
@@ -377,8 +385,10 @@ target is at Heightened or higher. Any crisis turns Acute when the issuer holds
 firm, a play becomes a war, or a launch between the two is recalled at the last
 moment. A crisis can be settled at any stage, and it lapses after a year.
 
-The Nuclear Crisis section shows two figures, each broken down in its tooltip:
-Danger, and Pressure on the target (Pressure on us when you are the target).
+The Nuclear Crisis section shows its readings as boxes. Two of them are
+broken down in their tooltips: Danger, and Pressure on the target (Pressure on
+us when you are the target), each a word over the figure. Pressure reads Firm
+below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 
 - Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats and exercises, and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
 - Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (its survivability at its present readiness, or Automatic Retaliation) and an armed protector behind it lower it. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
@@ -414,7 +424,7 @@ stand-down.
 ### Credibility, bluffs and crisis outcomes
 
 Doctrine is public, so the Nuclear Crisis section rates every threat in its "Can
-we carry it out?" row ("Can they carry it out?" when you are the target): Backed
+we carry it out?" box ("Can they carry it out?" when you are the target): Backed
 (+10 pressure; your doctrine permits a strike now, or you hold Compellence or
 Warfighting), Uncertain (Flexible First Use, or Existential Deterrence with
 something at stake), or A bluff (−25, or −35 under No First Use; your doctrine
@@ -426,6 +436,10 @@ or Rules of War law forbids a strike).
 | The issuer backs down | −5 credibility if private; −15, Nuclear Climb-Down and angry hawks if public | +10 credibility, Faced Down a Nuclear Threat |
 | Mutual stand-down | +5 credibility (−5 for trading away a public demand), Mutual Nuclear Restraint, restraint groups approve | +5 credibility, Mutual Nuclear Restraint, restraint groups approve |
 | A public crisis runs out its year unsettled | −10 credibility | Nothing |
+
+The Outcomes table at the foot of the Nuclear Crisis section shows, for your
+crisis, what conceding, backing down and a mutual stand-down would bring and
+what each would do to your credibility.
 
 A public bluff that ends in a climb-down or runs out its year costs 5 more
 credibility. The modifiers last five years. A crisis also ends when its war or
@@ -730,8 +744,7 @@ The Nuclear Taboo section of the entry is open by default.
 
 | Row | What it shows |
 |---|---|
-| Nuclear taboo | The score and its band |
-| Heading toward | The target the score is moving to, and whether it is rising, falling or steady. Hover this row or the one above for the target's breakdown, part by part |
+| Nuclear taboo | The score, the target it is moving to and its band ("62 → 68 · Strong"). Hover it for the target's breakdown, part by part |
 | First use on a city, First use in battle | The infamy and the relations with every other country that a strategic or tactical first use would cost now |
 | A public ultimatum | The infamy a public ultimatum would cost now |
 | Burden of our arsenal | Only while you hold warheads: the prestige and leverage your arsenal's burden costs. Hover it for the burden itself |

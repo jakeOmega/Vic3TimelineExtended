@@ -361,31 +361,31 @@ Top priorities: repeal tooltips rendered from the modifier (GW-5; the corrected 
 
 ### Nuclear Weapons ([detail](gui_audit/nuclear.md), #1208)
 
-Top priorities: one hover per choice row (NUC-2; NUC-1 is fixed here); the posture shown once with its change controls beside it (NUC-3), and when it can next change, which script already computes (NUC-4); readiness as a comparison table, with modifier lines for every level and authority (NUC-5, NUC-6); a compact crisis with Our Moves beside it (NUC-7); the leaderboard and world crises as lists (NUC-14).
+All 21 findings are done (the GUI audit wave, 2026-10-27; play-test list `docs/testing/nuclear-playtest.md`). Top priorities were: one hover per choice row (NUC-2; NUC-1 is fixed here); the posture shown once with its change controls beside it (NUC-3), and when it can next change, which script already computes (NUC-4); readiness as a comparison table, with modifier lines for every level and authority (NUC-5, NUC-6); a compact crisis with Our Moves beside it (NUC-7); the leaderboard and world crises as lists (NUC-14).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| NUC-1 | No hoverable text in the panel is marked hoverable (row labels **fixed in this PR**; choice names and stepper values remain) | hidden info | medium |
-| NUC-2 | Every choice row has two hovers covering the same ground, and the name's hover holds unique content | spread-out/redundant, hidden info | quick–medium |
-| NUC-3 | The posture is shown twice, its tooltips restate the concepts, and its actions are far from it | spread-out/redundant, over-explaining | medium |
-| NUC-4 | "When can I change it?" is computed but never shown (loc part done) | hidden info | medium |
-| NUC-5 | Readiness levels should be a comparison table, and the current option of each list is not marked | list, hidden info | medium–large |
-| NUC-6 | Prose where siblings render modifiers: Recessed, Routine and every launch authority; IG reactions told for some options only | style, hidden info | medium |
-| NUC-7 | The crisis is eleven stacked lines, with Our Moves below all of them | spread-out/redundant | large |
-| NUC-8 | "Our stakes" is two bare numbers whose order flips with our side (loc part done) | hidden info | quick |
-| NUC-9 | Crisis tooltips enumerate the general case beside the specific one | over-explaining | quick |
-| NUC-10 | Crisis move naming: four verbs for one move (loc part done) | style | quick |
-| NUC-11 | The taboo score, target and direction are shown twice, and the section colours the direction (loc part done) | spread-out/redundant, style | quick–medium |
-| NUC-12 | Warheads appear three times, with the estimate explained three times (loc part done) | spread-out/redundant, over-explaining | quick–medium |
-| NUC-13 | Credibility shown twice; it is used everywhere but is not a concept | spread-out/redundant, over-explaining | medium |
-| NUC-14 | Leaderboard and World Crises are fixed slot rows of concatenated text | list | large |
-| NUC-15 | Burden of our arsenal: a modifier told as prose, with one effect left out | style, hidden info | quick |
-| NUC-16 | Bar tooltips explain the design, and the survivability hover is long | over-explaining | quick |
-| NUC-17 | Incident exposure: mechanics in the hover, factors as prose | over-explaining, style | medium |
-| NUC-18 | "Chance of a halt": shown when it cannot apply, and its hover omits a case where it does | other, hidden info | quick–medium |
-| NUC-19 | At Home rows repeat the same tenure sentence (loc part done) | over-explaining | quick |
-| NUC-20 | Smaller style points (loc part done) | style | quick–medium |
-| NUC-21 | The overview names states but not what needs attention | spread-out/redundant | large |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| NUC-1 | No hoverable text in the panel is marked hoverable (row labels **fixed in this PR**; choice names and stepper values remain) | hidden info | medium | done: choice names, readiness levels and the tooltipped stepper values underlined |
+| NUC-2 | Every choice row has two hovers covering the same ground, and the name's hover holds unique content | spread-out/redundant, hidden info | quick–medium | done: one hover per row; the crisis moves' only hover is the button |
+| NUC-3 | The posture is shown twice, its tooltips restate the concepts, and its actions are far from it | spread-out/redundant, over-explaining | medium | done: one row per axis, a concept label, a Change toggle opening its choices beneath (three flags) |
+| NUC-4 | "When can I change it?" is computed but never shown (loc part done) | hidden info | medium | done: a live line above each list, in each axis hover and in the overview |
+| NUC-5 | Readiness levels should be a comparison table, and the current option of each list is not marked | list, hidden info | medium–large | done: readiness as a table; the option in force tinted in all three lists |
+| NUC-6 | Prose where siblings render modifiers: Recessed, Routine and every launch authority; IG reactions told for some options only | style, hidden info | medium | done: twelve script_only display types, never-added display modifiers; no group reactions |
+| NUC-7 | The crisis is eleven stacked lines, with Our Moves below all of them | spread-out/redundant | large | done: a headline, the readings as cells, Our Moves under them, an Outcomes table |
+| NUC-8 | "Our stakes" is two bare numbers whose order flips with our side (loc part done) | hidden info | quick | done: the Outcomes table's Credibility column |
+| NUC-9 | Crisis tooltips enumerate the general case beside the specific one | over-explaining | quick | done |
+| NUC-10 | Crisis move naming: four verbs for one move (loc part done) | style | quick | done |
+| NUC-11 | The taboo score, target and direction are shown twice, and the section colours the direction (loc part done) | spread-out/redundant, style | quick–medium | done: one row |
+| NUC-12 | Warheads appear three times, with the estimate explained three times (loc part done) | spread-out/redundant, over-explaining | quick–medium | done: the count moved into Arsenal Size |
+| NUC-13 | Credibility shown twice; it is used everywhere but is not a concept | spread-out/redundant, over-explaining | medium | done: Nuclear Credibility concept, nested in 24 effect lines; shown once |
+| NUC-14 | Leaderboard and World Crises are fixed slot rows of concatenated text | list | large | done: datamodel tables over lists of capitals, with flags |
+| NUC-15 | Burden of our arsenal: a modifier told as prose, with one effect left out | style, hidden info | quick | done |
+| NUC-16 | Bar tooltips explain the design, and the survivability hover is long | over-explaining | quick | done |
+| NUC-17 | Incident exposure: mechanics in the hover, factors as prose | over-explaining, style | medium | done: factor lines (multipliers, not a probability) |
+| NUC-18 | "Chance of a halt": shown when it cannot apply, and its hover omits a case where it does | other, hidden info | quick–medium | done |
+| NUC-19 | At Home rows repeat the same tenure sentence (loc part done) | over-explaining | quick | done (the loc part was all of it) |
+| NUC-20 | Smaller style points (loc part done) | style | quick–medium | done: title-case headers, aligned names, the 17/20/16 ladder through the panel's templates |
+| NUC-21 | The overview names states but not what needs attention | spread-out/redundant | large | done: Banking's cells |
 
 ### Space Race, Solar Colonization, Orbital Debris and Seabed ([detail](gui_audit/space_seabed.md), #1209)
 

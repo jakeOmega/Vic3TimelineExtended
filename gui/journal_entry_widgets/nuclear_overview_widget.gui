@@ -1,33 +1,39 @@
 ﻿### Nuclear Weapons — the overview, at the top of the journal entry
-### (nuclear_layout_widget.gui sets the order). A glance for the player who
-### knows the system: is the programme running, how many warheads, is there a
-### crisis, how is our word taken, what posture are we in, and where the
-### nuclear taboo is heading. Every figure is a display script value; every
-### tooltip is text the panel or the status line already carried.
+### (nuclear_layout_widget.gui sets the order). What a returning player checks,
+### in Banking's cells (te_banking_ov_cell, banking_dashboard_widget.gui; the
+### owner's overview form of 2026-10-17, approved for this panel 2026-10-27 in
+### place of the round-3 rows of icons): each a box with its icon down the left,
+### the caption (a concept where the term has one), the reading's word and one
+### figure, its breakdown on hover. Two to a row (238 + 4 + 238 = 480).
 ###
-### Row 1  programme · warheads · crisis (while in one) · credibility (once
-###        there is a record)
-### Row 2  doctrine · readiness · launch authority (while armed)
-### Row 3  the nuclear taboo: a bar with the change still to come as a pale
-###        segment (no marker), the headline
-###        "62 → 68 (+0.4/mo)" and a trend arrow (from the first warhead)
+### Row 1  the crisis, while there is one: its stage and the weeks to its
+###        deadline
+### Row 2  the program and when its next warhead comes · warheads and the
+###        world's estimate
+### Row 3  doctrine and when it can next change · readiness and its upkeep
+###        (while armed)
+### Row 4  launch authority and when it can next change (while armed) ·
+###        credibility (once there is a record)
+### Row 5  the nuclear taboo: a bar with the change still to come as a pale
+###        segment (no marker), the headline "62 → 68 (+0.4/mo)" and a trend
+###        arrow (from the first warhead)
 ###
 ### Codes: nuclear_program_display_state (extra_script_values.txt) and
 ### nd_display_doctrine_code / _readiness_code / _authority_code
-### (nuclear_deterrence_values.txt), each falling back the way the status
-### line and the posture's name blocks do; nd_disp_taboo_step and
-### nd_disp_taboo_trend (nuclear_taboo_values.txt). One icon widget per
-### state. Icons are the system's own (gfx/interface/icons/nuclear_icons/,
-### PR #586); what each shows is in docs/systems/nuclear_gui_icons.md.
+### (nuclear_deterrence_values.txt), each falling back the way the posture's
+### name blocks do; nd_disp_taboo_step and nd_disp_taboo_trend
+### (nuclear_taboo_values.txt). One icon per state, filling the cell's 44 px
+### icon box. Icons are the system's own (gfx/interface/icons/nuclear_icons/,
+### PR #586) but credibility's, a placeholder; what each shows is in
+### docs/systems/nuclear_gui_icons.md.
 ###
-### Cells have a fixed width (style guide rule 8), so a long word cannot push
-### its neighbours off-centre. The rows sit in one column of a fixed 480
-### (the frame's 520 less its margins, a section's width), and every row
-### fits inside it: row 1 up to 3 x 112 + 126 + 3 x 6 = 480, row 2 3 x 150 + 2 x 6
-### = 462, row 3 60 + 170 + 190 + 24 + 3 x 8 = 468. Before the play-test of
-### 2026-09-29 the frame took its width from the rows, and rows 2 and 3,
-### which appear once their IsShown answers, widened it after it had been
-### centred: the overview drew ~80 px left of the column, clipped.
+### Type: the cell's caption is te_banking_ov_cell's own (16, the tooltip
+### face); its word and figure are this file's te_nuclear_ov_word and
+### te_nuclear_ov_figure at te_nuclear_fontsize_overview, the same size, in
+### the cell's 154 column (test_nuclear_layout.LabelBudgetTest). The taboo
+### row is at the overview size too. The frame is a fixed 480 column, so the
+### rows that appear once their IsShown answers cannot widen it after it is
+### centred (the play-test of 2026-09-29).
 
 types nuclear_overview_widget_types
 {
@@ -37,7 +43,7 @@ types nuclear_overview_widget_types
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		margin = { 20 8 }
-		spacing = 10
+		spacing = 4
 
 		background = {
 			using = entry_bg_fancy_dark
@@ -45,54 +51,25 @@ types nuclear_overview_widget_types
 		}
 	}
 
-	### A cell of row 1: an icon, its word small beneath (te_un_ov_icon_label's
-	### shape). Fixed width, so the row cannot push the panel wider: 112, which
-	### fits "Confrontation" and "Warheads 999" by the round-3 width budget.
-	type te_nuclear_ov_icon_label = widget {
-		size = { 112 58 }
-
-		icon = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
-			block "icon_texture" {}
-		}
-		textbox = {
-			parentanchor = bottom|hcenter
-			autoresize = yes
-			max_width = 112
-			elide = right
-			align = hcenter|nobaseline
-			using = fontsize_small
-			default_format = "#tooltippable"
-			block "label" {}
-		}
+	### A cell's word, beside its icon under the caption (te_banking_ov_word's
+	### place, at this panel's overview size).
+	type te_nuclear_ov_word = textbox {
+		position = { 78 24 }
+		autoresize = yes
+		max_width = 154
+		elide = right
+		align = left|nobaseline
+		using = te_nuclear_fontsize_overview
 	}
 
-	### A cell of row 2, wider: the posture's names run to 22 letters
-	### ("Existential Deterrence", "Conditional Delegation", about 135 px
-	### at this size in game). The name may wrap onto a second line rather
-	### than end in "..." (round 3: by the width budget a 22-letter name needs
-	### two lines of 150; in game it has fitted on one), so the name hangs
-	### from under the icon and the cell is tall enough for two lines.
-	type te_nuclear_ov_posture_cell = widget {
-		size = { 150 70 }
-
-		icon = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
-			block "icon_texture" {}
-		}
-		textbox = {
-			parentanchor = top|hcenter
-			position = { 0 38 }
-			autoresize = yes
-			multiline = yes
-			maximumsize = { 150 -1 }
-			align = hcenter|nobaseline
-			using = fontsize_small
-			default_format = "#tooltippable"
-			block "label" {}
-		}
+	### A cell's figure, its third line.
+	type te_nuclear_ov_figure = textbox {
+		position = { 78 46 }
+		autoresize = yes
+		max_width = 154
+		elide = right
+		align = left|nobaseline
+		using = te_nuclear_fontsize_overview
 	}
 
 	type te_nuclear_overview_panel = flowcontainer {
@@ -103,296 +80,371 @@ types nuclear_overview_widget_types
 
 		te_nuclear_ov_frame = {
 			### One column of a fixed 480, so the frame is a section's width from
-			### its first layout and every row is centred in it (see the header).
+			### its first layout and every row sits in it (see the header).
 			flowcontainer = {
 				direction = vertical
-				spacing = 10
+				spacing = 4
 				ignoreinvisible = yes
 				minimumsize = { 480 -1 }
 
-				### Row 1: programme · warheads · crisis · credibility
+				### Row 1: the crisis, while there is one.
+				flowcontainer = {
+					visible = "[GetScriptedGui('nd_in_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					### A crisis, while there is one: its stage, red once Acute, and the weeks to
+					### its deadline, red from two weeks out (je_nuclear_ov_crisis_figure).
+					te_banking_ov_cell = {
+						tooltip = "je_nuclear_ov_crisis_tt"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_crisis_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/nuclear_icons/crisis.dds"
+							}
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_crisis_label"
+							}
+						}
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_crisis_figure"
+							}
+						}
+					}
+				}
+
+				### Row 2: the program and the warheads, always.
 				flowcontainer = {
 					direction = horizontal
-					spacing = 6
 					ignoreinvisible = yes
-					parentanchor = hcenter
+					spacing = 4
 
-					### The programme's state, the status line's programme sentence on hover.
-					flowcontainer = {
-						ignoreinvisible = yes
+					### The program's state, and when its next warhead comes.
+					te_banking_ov_cell = {
 						tooltip = "je_nuclear_ov_prog_tt"
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)0' )]"
-							blockoverride "icon_texture" {
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_prog_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)0' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_unfunded.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_0"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)1' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)1' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_developing.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_1"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)2' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)2' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_producing.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_2"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)3' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)3' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_frozen.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_3"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)4' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)4' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_at_ceiling.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_4"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)5' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)5' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_dismantling.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_5"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)6' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)6' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_none.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_6"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)7' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)7' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_renounced.dds"
 							}
-							blockoverride "label" {
-								text = "je_nuclear_ov_prog_7"
-							}
-						}
-						te_nuclear_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)8' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)8' )]"
 								texture = "gfx/interface/icons/nuclear_icons/programme_disarmed.dds"
 							}
-							blockoverride "label" {
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)0' )]"
+								text = "je_nuclear_ov_prog_0"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)1' )]"
+								text = "je_nuclear_ov_prog_1"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)2' )]"
+								text = "je_nuclear_ov_prog_2"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)3' )]"
+								text = "je_nuclear_ov_prog_3"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)4' )]"
+								text = "je_nuclear_ov_prog_4"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)5' )]"
+								text = "je_nuclear_ov_prog_5"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)6' )]"
+								text = "je_nuclear_ov_prog_6"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)7' )]"
+								text = "je_nuclear_ov_prog_7"
+							}
+							te_nuclear_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)8' )]"
 								text = "je_nuclear_ov_prog_8"
 							}
 						}
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_prog_figure"
+							}
+						}
 					}
-					### Warheads held: our exact count; the world's estimate on hover.
-					te_nuclear_ov_icon_label = {
+					### Warheads held: our exact count, the world's estimate beneath.
+					te_banking_ov_cell = {
 						tooltip = "je_nuclear_ov_warheads_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/nuclear_icons/warheads.dds"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
 						}
-						blockoverride "label" {
-							text = "je_nuclear_ov_warheads_label"
+						blockoverride "caption" {
+							text = "je_nuclear_ov_warheads_caption"
 						}
-					}
-					### A crisis, while there is one: its stage beneath.
-					te_nuclear_ov_icon_label = {
-						visible = "[GetScriptedGui('nd_in_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "je_nuclear_ov_crisis_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/nuclear_icons/crisis.dds"
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/nuclear_icons/warheads.dds"
+							}
 						}
-						blockoverride "label" {
-							text = "je_nuclear_ov_crisis_label"
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_warheads_label"
+							}
 						}
-					}
-					### Credibility, once there is a record: a meter (the UN standing cell's
-					### shape), 126 wide so "Credibility 100" fits by the round-3 budget.
-					widget = {
-						size = { 126 58 }
-						visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "nd_w_credibility_tt"
-
-						textbox = {
-							parentanchor = bottom|hcenter
-							autoresize = yes
-							align = hcenter|nobaseline
-							using = fontsize_small
-							default_format = "#tooltippable"
-							text = "je_nuclear_ov_credibility_label"
-						}
-						default_progressbar_horizontal = {
-							size = { 96 12 }
-							parentanchor = top|hcenter
-							position = { 0 12 }
-							blockoverride "values" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_credibility') )]"
-								min = 0
-								max = 100
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_warheads_figure"
 							}
 						}
 					}
 				}
 
-				### Row 2: the posture, while armed. Each cell's tooltip is the posture
-				### row's own (what the axis is); the choices are under Nuclear Posture.
+				### Row 3: doctrine and readiness, while armed.
 				flowcontainer = {
-					direction = horizontal
-					spacing = 6
-					ignoreinvisible = yes
-					parentanchor = hcenter
 					visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
 
-					flowcontainer = {
-						ignoreinvisible = yes
+					### The doctrine in force (its short name; the full one is the hover's
+					### header), and when it can next change (NUC-4).
+					te_banking_ov_cell = {
 						tooltip = "nd_w_doctrine_tt"
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
-							blockoverride "icon_texture" {
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_doctrine_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
 								texture = "gfx/interface/icons/nuclear_icons/doctrine_nfu.dds"
 							}
-							blockoverride "label" {
-								text = "nd_doctrine_1"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
 								texture = "gfx/interface/icons/nuclear_icons/doctrine_existential.dds"
 							}
-							blockoverride "label" {
-								text = "nd_doctrine_2"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
 								texture = "gfx/interface/icons/nuclear_icons/doctrine_flexible.dds"
 							}
-							blockoverride "label" {
-								text = "nd_doctrine_3"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
 								texture = "gfx/interface/icons/nuclear_icons/doctrine_compellence.dds"
 							}
-							blockoverride "label" {
-								text = "nd_doctrine_4"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
 								texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
 							}
-							blockoverride "label" {
-								text = "nd_doctrine_5"
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_doctrine_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_doctrine_figure"
 							}
 						}
 					}
-					flowcontainer = {
-						ignoreinvisible = yes
+					### Readiness in force, and where it is moving or, when it is not, what the
+					### deterrent costs a week.
+					te_banking_ov_cell = {
 						tooltip = "nd_w_readiness_tt"
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)0' )]"
-							blockoverride "icon_texture" {
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_readiness_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)0' )]"
 								texture = "gfx/interface/icons/nuclear_icons/readiness_recessed.dds"
 							}
-							blockoverride "label" {
-								text = "nd_readiness_0"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)1' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)1' )]"
 								texture = "gfx/interface/icons/nuclear_icons/readiness_routine.dds"
 							}
-							blockoverride "label" {
-								text = "nd_readiness_1"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)2' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)2' )]"
 								texture = "gfx/interface/icons/nuclear_icons/readiness_heightened.dds"
 							}
-							blockoverride "label" {
-								text = "nd_readiness_2"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)3' )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)3' )]"
 								texture = "gfx/interface/icons/nuclear_icons/readiness_high_alert.dds"
 							}
-							blockoverride "label" {
-								text = "nd_readiness_3"
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_readiness_word"
 							}
 						}
-					}
-					flowcontainer = {
-						ignoreinvisible = yes
-						tooltip = "nd_w_authority_tt"
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
-							}
-							blockoverride "label" {
-								text = "nd_authority_1"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
-							}
-							blockoverride "label" {
-								text = "nd_authority_2"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
-							}
-							blockoverride "label" {
-								text = "nd_authority_3"
-							}
-						}
-						te_nuclear_ov_posture_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
-							}
-							blockoverride "label" {
-								text = "nd_authority_4"
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_readiness_figure"
 							}
 						}
 					}
 				}
 
-				### Row 3: the nuclear taboo, heading for its target. The hover is the
+				### Row 4: launch authority (while armed) and credibility (once there is a
+				### record). A row with one cell keeps it in the left column.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					### Launch authority in force, and when it can next change.
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "nd_w_authority_tt"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_authority_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
+							}
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_authority_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_authority_figure"
+							}
+						}
+					}
+					### Credibility, once there is a record: a word for it, the figure beneath.
+					### Its icon is a placeholder (docs/systems/nuclear_gui_icons.md).
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "nd_w_credibility_tt"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_nuclear_ov_credibility_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"
+							}
+						}
+						blockoverride "word" {
+							te_nuclear_ov_word = {
+								text = "je_nuclear_ov_credibility_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_nuclear_ov_figure = {
+								text = "je_nuclear_ov_credibility_label"
+							}
+						}
+					}
+				}
+
+				### Row 5: the nuclear taboo, heading for its target. The hover is the
 				### taboo section's own (what the score is and the target's breakdown),
 				### then a line on what the bar shows.
 				###
@@ -407,16 +459,16 @@ types nuclear_overview_widget_types
 				### and on threats, and shields the unarmed. The arrow says which way it
 				### is going. No eye marker, and no threshold line: the bar never had one.
 				###
-				### Fixed cells, 60 + 170 + 190 + 24 and three 8 px gaps = 468, sized by
-				### the round-3 width budget (test_nuclear_layout.LabelBudgetTest): the
-				### label is the concept's short name ("Taboo"; its hover names the
-				### Nuclear Taboo), and the headline, at the table font, fits
+				### Fixed cells, 60 + 170 + 190 + 24 and three 8 px gaps = 468, at the
+				### overview size: the label is the concept's short name ("Taboo"; its
+				### hover names the Nuclear Taboo), and the headline fits
 				### "100 → 100 (+1.00/mo)".
 				flowcontainer = {
 					direction = horizontal
 					spacing = 8
 					ignoreinvisible = yes
 					parentanchor = hcenter
+					margin_top = 4
 					visible = "[GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), Concatenate( GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_nuclear_ov_taboo_bar_tt' ) ) ) )]"
 
@@ -426,7 +478,7 @@ types nuclear_overview_widget_types
 						maximumsize = { 60 -1 }
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = te_nuclear_fontsize_overview
 						elide = right
 						text = "je_nuclear_ov_taboo_label"
 					}
@@ -477,7 +529,7 @@ types nuclear_overview_widget_types
 						maximumsize = { 190 -1 }
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = te_nuclear_fontsize_overview
 						elide = right
 						text = "je_nuclear_ov_taboo_value"
 					}

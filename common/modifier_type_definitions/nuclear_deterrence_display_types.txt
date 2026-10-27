@@ -1,0 +1,106 @@
+﻿# nuclear_deterrence_display_types.txt
+#
+# Display only (NUC-6 of the 2026-10-27 GUI audit): what a readiness level or a
+# launch authority does that script applies itself, so the posture's hovers can
+# print it as the engine's coloured modifier lines rather than prose. The engine
+# consumes none of these and no script reads them. They are carried only by the
+# display modifiers nd_readiness_terms_* and nd_authority_terms_*
+# (nuclear_deterrence_modifiers.txt), which nothing adds to a country: the
+# readiness choices', the launch authorities' and the posture rows' hovers print
+# them with GetStaticModifier(...).GetDesc. Each figure is the one the script
+# uses (nuclear_deterrence_values.txt, nuclear_custody_values.txt); keep them in
+# step when a tuning number changes (test_nuclear_deterrence.py pins them).
+
+# Custody of the arsenal, part of the deterrent's upkeep (nd_upkeep_units_custody_recessed).
+country_nd_custody_cost_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# The everyday incident rate against Routine (nd_incident_base_monthly_permille).
+country_nd_incident_rate_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Crew strain each month (nd_strain_step).
+country_nd_crew_strain_monthly_add = {
+	color = bad
+	decimals = 1
+	script_only = yes
+}
+
+# Danger added to a crisis we are a party to (nd_cd_issuer_readiness_value,
+# nd_cd_target_readiness_value).
+country_nd_crisis_danger_add = {
+	color = bad
+	decimals = 0
+	script_only = yes
+}
+
+# Pressure to concede on a country we threaten (nd_yp_alert_value,
+# nd_yp_recessed_value).
+country_nd_threat_pressure_add = {
+	color = good
+	decimals = 0
+	script_only = yes
+}
+
+# Recessed: nothing can be launched (nd_forces_assembled).
+country_nd_launch_blocked_bool = {
+	color = bad
+	boolean = yes
+	script_only = yes
+}
+
+# Central Authorization: no launch without the government's order.
+country_nd_order_required_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
+# Conditional Delegation, Launch on Warning: an incident can end in a launch.
+country_nd_unapproved_launch_bool = {
+	color = bad
+	boolean = yes
+	script_only = yes
+}
+
+# Launch on Warning: the chance that someone in the chain halts a launch
+# (nd_hold_chance).
+country_nd_halt_chance_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Delegated authority: the share of an arsenal lost when custody changes hands
+# (nd_custody_loss_rate).
+country_nd_custody_loss_add = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# Automatic Retaliation: a strike on our cities is answered without a decision
+# from us, and an accident can be read as one.
+country_nd_automatic_answer_bool = {
+	color = bad
+	boolean = yes
+	script_only = yes
+}
+
+# Automatic Retaliation: a crisis counts us as able to answer, however
+# vulnerable our forces (nd_yp_answer_value).
+country_nd_answer_assured_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
