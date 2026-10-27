@@ -6695,6 +6695,8 @@
  te_bulk_tariff_effect_import_max_subventions:0 "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]"
  te_bulk_tariff_effect_import_max_tariffs:0 "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]"
  te_bulk_tariff_effect_import_no_tariffs_or_subventions:0 "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!"
+ te_bulk_tariff_effect_wait_export:0 "[Concept('concept_trade','$concept_exports$')] can be set for all [Concept('concept_good','$concept_goods$')] again in about #v [ROOT.GetCountry.MakeScope.ScriptValue('te_bulk_tariff_cd_days_left_export')|0]#! days"
+ te_bulk_tariff_effect_wait_import:0 "[Concept('concept_trade','$concept_imports$')] can be set for all [Concept('concept_good','$concept_goods$')] again in about #v [ROOT.GetCountry.MakeScope.ScriptValue('te_bulk_tariff_cd_days_left_import')|0]#! days"
  te_bulk_tariff_label_export:0 "All Goods"
  te_bulk_tariff_label_export_tt:0 "Sets one [Concept('concept_trade','$concept_export$')] level on every tradeable [concept_good] at once. [Concept('concept_good','$concept_goods$')] a [concept_treaty] bars from that level keep their own. After a change there is a week to correct it, then [Concept('concept_trade','$concept_exports$')] cannot be set for all [Concept('concept_good','$concept_goods$')] again until 3 months have passed."
  te_bulk_tariff_label_import:0 "All Goods"

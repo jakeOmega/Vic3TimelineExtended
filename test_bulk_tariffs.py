@@ -160,7 +160,26 @@ class EffectTest(unittest.TestCase):
         hidden = self.effects["te_bulk_tariff_apply"]["hidden_effect"]
         self.assertEqual(hidden["if"]["limit"], {"NOT": {"has_variable": "te_bulk_tariff_grace_$DIR$"}})
         self.assertEqual(hidden["if"]["set_variable"], [{"name": "te_bulk_tariff_cd_$DIR$", "months": "3"},
-                                                        {"name": "te_bulk_tariff_grace_$DIR$", "days": "7"}])
+                                                        {"name": "te_bulk_tariff_grace_$DIR$", "days": "7"},
+                                                        {"name": "te_bulk_tariff_cd_day_$DIR$", "value": "game_date"}])
+
+    def test_the_wait_says_when_it_ends(self):
+        """MKT-5: while the wait runs the tooltip gives the days left, from the
+        day it began; the grace week and a free row keep their own lines."""
+        apply = self.effects["te_bulk_tariff_apply"]
+        self.assertEqual(apply["if"], {"limit": {"has_variable": "te_bulk_tariff_grace_$DIR$"},
+                                       "custom_tooltip": "te_bulk_tariff_effect_grace_$DIR$"})
+        self.assertEqual(apply["else_if"], {"limit": {"has_variable": "te_bulk_tariff_cd_$DIR$"},
+                                            "custom_tooltip": "te_bulk_tariff_effect_wait_$DIR$"})
+        self.assertEqual(apply["else"], {"custom_tooltip": "te_bulk_tariff_effect_cd_$DIR$"})
+        values = load("common/script_values/te_bulk_tariff_values.txt")
+        for d in DIRS:
+            body = values[f"te_bulk_tariff_cd_days_left_{d}"]["if"]
+            self.assertEqual(body["limit"], {"has_variable": [f"te_bulk_tariff_cd_{d}", f"te_bulk_tariff_cd_day_{d}"]})
+            self.assertEqual(body["add"], f"var:te_bulk_tariff_cd_day_{d}")
+            self.assertEqual(body["subtract"], "game_date")
+            line = re.search(rf"^ te_bulk_tariff_effect_wait_{d}:0 \"(.*)\"$", raw(LOC), re.M).group(1)
+            self.assertIn(f"te_bulk_tariff_cd_days_left_{d}", line)
         ready = self.triggers["te_bulk_tariff_can_set"]["custom_tooltip"][2]
         self.assertEqual(ready["OR"], {"NOT": {"has_variable": "te_bulk_tariff_cd_$DIR$"},
                                        "has_variable": "te_bulk_tariff_grace_$DIR$"})
@@ -250,7 +269,7 @@ class LocTest(unittest.TestCase):
                 else:
                     todo += [n.replace(param, v, 1) for v in subs[param]]
         self.assertEqual(len([k for k in expanded if k.startswith("te_bulk_tariff_effect_") and "_cd_" not in k
-                              and "_grace_" not in k]), 14)
+                              and "_grace_" not in k and "_wait_" not in k]), 14)
         self.assertEqual(sorted(expanded - keys), [])
 
     def test_level_names_are_the_games(self):
