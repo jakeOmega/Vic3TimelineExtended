@@ -106,10 +106,12 @@ _SCOPE = (
 _STATE_HOLDS = {
     "later_mod": "theirs",
     "bare_duplicate": emo.FIRST_WINS,
+    "try_phase": emo.TRY_PHASES[0],
     "note": "Where an unknown changes a key's value (status undetermined), the layered "
             "state holds the first scenario's: the other mod loaded later for a file both "
-            "ship, and the first bare definition winning in a folder whose rule isn't "
-            "recorded. The key's entry lists every candidate.",
+            "ship, the first bare definition winning in a folder whose rule isn't "
+            "recorded, and the TRY_ forms applying among the INJECTs in file order. The "
+            "key's entry lists every candidate.",
 }
 
 

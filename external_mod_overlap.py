@@ -39,7 +39,7 @@ to a setting.
 
 Verdicts: `ours_wiped`, `theirs_wiped`, `both_merge` (both sides' content
 reaches the final entry; `ours_lost`/`theirs_lost` still list a definition
-that doesn't, such as the first of two INJECTs around a REPLACE),
+that doesn't, such as an INJECT beside a REPLACE of the same key),
 `both_wiped`, and, when an unknown changes the outcome, `depends_on_playset`
 or `undetermined` (with `depends_on` and `verdict_by_scenario`).
 `order_depends_on_case` (ASCII vs case-folded file order) can't occur while
@@ -116,9 +116,9 @@ LOAD_ORDER_MODEL = {
         "status": "probed",
         "claim": "A bare definition of a key that already exists is dropped (gamedatabase.h:378 "
                  "`Duplicated key X will not be created from file:`): the first one wins.",
-        "see": f"{LOAD_ORDER_DOC}, fact 3 (static_modifiers, scripted_effects); for the other "
-               "Modding-Digests 1.12.0 inject_types.md folders, breaking_changes.md (no implicit "
-               "overwrites). Setting: BARE_DUPLICATE_RULES.",
+        "see": f"{LOAD_ORDER_DOC}, fact 3 (static_modifiers, scripted_effects, scripted_triggers, "
+               "scripted_rules); for the other Modding-Digests 1.12.0 inject_types.md folders, "
+               "breaking_changes.md (no implicit overwrites). Setting: BARE_DUPLICATE_RULES.",
     },
     "directives": {
         "status": "documented",
@@ -131,20 +131,50 @@ LOAD_ORDER_MODEL = {
     "directives_deferred": {
         "status": "probed",
         "claim": "Directives apply after every bare definition has been read, so an INJECT "
-                 "needn't sort after its target. Among themselves they are taken to apply in "
-                 "file order (unprobed).",
+                 "needn't sort after its target.",
         "see": f"{LOAD_ORDER_DOC}, fact 4. Setting: KNOWN_LOAD_READING.",
     },
+    "directive_phases": {
+        "status": "probed",
+        "claim": "Directives apply in phases, not in one file-ordered pass: every *_OR_CREATE "
+                 "first (creating its entry if there is none), even from a later-sorting file; "
+                 "then the INJECTs, in file order; then every plain REPLACE. So on one key a plain "
+                 "REPLACE's body is the final entry whichever file sorts first, and every INJECT "
+                 "on that key is lost. TRY_INJECT and TRY_REPLACE apply before the plain REPLACEs "
+                 "(try_phase). Plain REPLACEs, and *_OR_CREATEs, among themselves are taken to "
+                 "apply in file order (unprobed).",
+        "see": f"{LOAD_ORDER_DOC}, facts 7-10. Setting: KNOWN_LOAD_READING.",
+    },
+    "or_create_with_bare": {
+        "status": "probed",
+        "claim": "An *_OR_CREATE applies up front even when a bare definition of its key exists: "
+                 "after every bare definition, before any plain INJECT, from a later-sorting file "
+                 "too (`creation`). So a REPLACE_OR_CREATE replaces a vanilla body before INJECTs "
+                 "land on it, and a plain REPLACE still replaces it. The rejected reading, each "
+                 "applying with its own family (`own_family`), stays simulated when "
+                 "KNOWN_OR_CREATE_PHASE is unset.",
+        "see": f"{LOAD_ORDER_DOC}, fact 7. Setting: KNOWN_OR_CREATE_PHASE.",
+    },
+    "try_phase": {
+        "status": "unknown",
+        "claim": "TRY_INJECT and TRY_REPLACE don't wait for the INJECTs as a plain REPLACE does: a "
+                 "TRY_REPLACE in a_ applied before an INJECT in b_, which landed on it, and a "
+                 "TRY_INJECT in b_ before a REPLACE in a_. Whether they apply among the INJECTs in "
+                 "file order (`inject`) or before them all (`early`) is unprobed; both are "
+                 "simulated. They differ when a TRY_REPLACE sorts after an INJECT on its key.",
+        "see": f"{LOAD_ORDER_DOC}, fact 10. Setting: KNOWN_TRY_PHASE.",
+    },
     "bare_duplicate_script_values": {
-        "status": "unprobed",
-        "claim": "A bare duplicate script value logs nothing; the last one wins, per the mod's "
-                 "practice (16 vanilla values restated bare in common/script_values/modified.txt).",
+        "status": "probed",
+        "claim": "A bare duplicate script value logs nothing, and the one read last wins, in the "
+                 "scalar form (`x = 1`) and the block form alike. So the mod's 17 bare restatements "
+                 "of vanilla values, all in files that sort after vanilla's, take effect.",
         "see": f"{LOAD_ORDER_DOC}, fact 5; § Vanilla Script-Value Overrides.",
     },
     "bare_duplicate_other": {
         "status": "unknown",
         "claim": "Which bare definition wins in a folder not probed and not in inject_types.md "
-                 "(scripted_triggers, scripted_rules, game_rules, ...): both are simulated.",
+                 "(game_rules, ...): both are simulated.",
         "see": f"{LOAD_ORDER_DOC} (not probed). Setting: BARE_DUPLICATE_RULES.",
     },
     "same_path": {
@@ -233,15 +263,36 @@ FILE_ORDERS = ("ascii", "lower_folded", "upper_folded")
 KNOWN_FILE_ORDER: Optional[str] = "ascii"         # LOAD_ORDER_MODEL["file_order"]
 # vanilla_first: vanilla's files, then the mods'. interleaved: one name-ordered
 # list, applied in order. creations_first: every bare definition (vanilla's and
-# the mods', interleaved by name) first, then the directives in file order.
+# the mods', interleaved by name) first, then the directives in phases, each in
+# file order: *_OR_CREATE, then the INJECTs and the TRY_ forms, then the plain
+# REPLACEs (DIRECTIVE_PHASES; TRY_PHASES for the TRY_ forms).
 LOAD_READINGS = ("vanilla_first", "interleaved", "creations_first")
-KNOWN_LOAD_READING: Optional[str] = "creations_first"  # ["interleaving"], ["directives_deferred"]
+KNOWN_LOAD_READING: Optional[str] = "creations_first"  # ["interleaving"], ["directives_deferred"], ["directive_phases"]
+# The directive phases of the creations_first reading (LOAD_ORDER_MODEL["directive_phases"]).
+DIRECTIVE_PHASES = (
+    frozenset({"INJECT_OR_CREATE", "REPLACE_OR_CREATE"}),
+    frozenset({"INJECT", "TRY_INJECT", "TRY_REPLACE"}),
+    frozenset({"REPLACE"}),
+)
+OR_CREATE_DIRECTIVES = DIRECTIVE_PHASES[0]
+TRY_FORMS = frozenset({"TRY_INJECT", "TRY_REPLACE"})
+# Where the TRY_ forms apply (LOAD_ORDER_MODEL["try_phase"]): among the
+# INJECTs in file order, or before them all (after the *_OR_CREATEs).
+TRY_PHASES = ("inject", "early")
+KNOWN_TRY_PHASE: Optional[str] = None
+# Where an *_OR_CREATE applies when a bare definition of its key exists too
+# (LOAD_ORDER_MODEL["or_create_with_bare"]): with the creations (probed), or
+# with its own family's phase. One that finds no entry creates it first either way.
+OR_CREATE_PHASES = ("creation", "own_family")
+KNOWN_OR_CREATE_PHASE: Optional[str] = "creation"  # probed (round 4)
 # Who wins between two bare definitions of one key, per common/ folder.
 BARE_DUPLICATE_RULES = {
     **{d: FIRST_WINS for d in DIGEST_INJECT_DIRS},   # LOAD_ORDER_MODEL["bare_duplicate"]
     "static_modifiers": FIRST_WINS,                  # probed
     "scripted_effects": FIRST_WINS,                  # probed
-    "script_values": LAST_WINS,                      # ["bare_duplicate_script_values"]
+    "scripted_triggers": FIRST_WINS,                 # probed (round 2)
+    "scripted_rules": FIRST_WINS,                    # probed (round 2)
+    "script_values": LAST_WINS,                      # probed (round 2): ["bare_duplicate_script_values"]
 }
 
 # `common/` folders whose subfolders are separate databases.
@@ -665,6 +716,17 @@ def load_readings() -> tuple:
     return (KNOWN_LOAD_READING,) if KNOWN_LOAD_READING else LOAD_READINGS
 
 
+def try_phases() -> tuple:
+    """Where the TRY_ forms may still apply (LOAD_ORDER_MODEL["try_phase"])."""
+    return (KNOWN_TRY_PHASE,) if KNOWN_TRY_PHASE else TRY_PHASES
+
+
+def or_create_phases() -> tuple:
+    """Where an *_OR_CREATE beside a bare definition may still apply
+    (LOAD_ORDER_MODEL["or_create_with_bare"])."""
+    return (KNOWN_OR_CREATE_PHASE,) if KNOWN_OR_CREATE_PHASE else OR_CREATE_PHASES
+
+
 def sort_ops(ops: Iterable[Op], order: str = "ascii", vanilla_first: bool = True) -> list[Op]:
     """Load order: by file name compared the `order` way (FILE_ORDERS), then
     by line. With `vanilla_first`, vanilla's definitions come before every
@@ -677,15 +739,29 @@ def sort_ops(ops: Iterable[Op], order: str = "ascii", vanilla_first: bool = True
     return sorted(ops, key=key)
 
 
-def order_for_reading(ops: list[Op], order: str, reading: str) -> list[Op]:
-    """`ops` in load order under one of LOAD_READINGS."""
+def order_for_reading(ops: list[Op], order: str, reading: str,
+                      or_create_phase: str = "creation", try_phase: str = "inject") -> list[Op]:
+    """`ops` in load order under one of LOAD_READINGS; `or_create_phase` is
+    one of OR_CREATE_PHASES, `try_phase` one of TRY_PHASES."""
     if reading == "vanilla_first":
         return sort_ops(ops, order, vanilla_first=True)
     ordered = sort_ops(ops, order, vanilla_first=False)
     if reading == "creations_first":
-        # Every bare definition (vanilla's included) first, then every directive.
-        return ([o for o in ordered if o.directive is None]
-                + [o for o in ordered if o.directive is not None])
+        # Every bare definition (vanilla's included) first, then the directives
+        # phase by phase (DIRECTIVE_PHASES), each phase in file order.
+        bare = [o for o in ordered if o.directive is None]
+        early = [o for o in ordered if o.directive in OR_CREATE_DIRECTIVES]
+        if or_create_phase == "own_family":
+            # Only an *_OR_CREATE that finds no entry creates it up front; the
+            # rest apply with their family.
+            early = [] if bare else early[:1]
+        rest = [o for o in ordered if o.directive is not None and o not in early]
+        tries = [o for o in rest if o.directive in TRY_FORMS] if try_phase == "early" else []
+        # A plain REPLACE (and, own_family, a REPLACE_OR_CREATE that found its
+        # entry) waits for every INJECT; everything else applies in file order.
+        last = [o for o in rest if o.directive in ("REPLACE", "REPLACE_OR_CREATE")]
+        injects = [o for o in rest if o not in tries and o not in last]
+        return bare + early + tries + injects + last
     return ordered
 
 
@@ -793,6 +869,11 @@ def scenario_loads(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
         "in_vanilla": [True, False] if vanilla is None else [bool(vanilla)],
         "bare_duplicate": [FIRST_WINS, LAST_WINS] if bare_rule == UNKNOWN else [bare_rule],
         "load_reading": list(load_readings()),
+        "or_create_phase": (list(or_create_phases())
+                            if any(o.directive in OR_CREATE_DIRECTIVES for o in (*ours, *theirs))
+                            else [None]),
+        "try_phase": (list(try_phases())
+                      if any(o.directive in TRY_FORMS for o in (*ours, *theirs)) else [None]),
     }
     names = list(dims)
     mod_paths = o_files | t_files
@@ -812,7 +893,8 @@ def scenario_loads(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
             ops += [t for t in theirs if not (t.path and t.path.casefold() in theirs_shadowed)]
         else:
             ops += [*ours, *theirs]
-        ordered = order_for_reading(ops, sc["file_order"], sc["load_reading"])
+        ordered = order_for_reading(ops, sc["file_order"], sc["load_reading"],
+                                    sc["or_create_phase"] or "creation", sc["try_phase"] or "inject")
         loads.append((combo, ordered, sc["bare_duplicate"]))
     return dims, loads
 
@@ -847,11 +929,13 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
     Every combination of the unknowns is simulated (scenario_loads): the
     file-name order (file_orders()), which mod the playset loads later (only
     when one ships a file at a path where the other defines the key), whether
-    vanilla has the key, the bare-duplicate rule, and the load reading
-    (load_readings()). When they all agree that is the verdict; otherwise the
-    verdict names the one unknown that changes it (order_depends_on_case,
-    depends_on_playset), or `undetermined`; `depends_on` names the unknowns
-    that change it.
+    vanilla has the key, the bare-duplicate rule, the load reading
+    (load_readings()), and, when either side has an *_OR_CREATE, where it
+    applies beside a bare definition (or_create_phases()), and when either
+    has a TRY_ form, where that applies (try_phases()). When they all agree
+    that is the verdict; otherwise the verdict names the one unknown that
+    changes it (order_depends_on_case, depends_on_playset), or
+    `undetermined`; `depends_on` names the unknowns that change it.
 
     Returns {verdict, later_file, order_depends_on_case, ours_lost,
     theirs_lost (definitions whose content doesn't reach the final entry),

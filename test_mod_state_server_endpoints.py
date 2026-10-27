@@ -2025,7 +2025,8 @@ class ExternalModOverlapEndpointTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(body["mod_name"], "Fake Pop Mod")
         verdicts = {c["key"]: c["verdict"] for c in body["key_collisions"]}
-        self.assertEqual(verdicts, {"law_a": "ours_wiped", "great_power": "both_merge",
+        # law_a: our plain REPLACE outlasts their TRY_REPLACE (#1185, probe round 5).
+        self.assertEqual(verdicts, {"law_a": "theirs_wiped", "great_power": "both_merge",
                                     "state_turmoil": "both_merge",
                                     "decree_x": "depends_on_playset"})
         self.assertNotIn("trace", body["key_collisions"][0])

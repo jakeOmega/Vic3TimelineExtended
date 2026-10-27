@@ -28,12 +28,12 @@ If any decision is genuinely flexible, present 2–3 options to the user; don't 
 
 ## File layout
 
-All paths are repo-relative (`mod_path` in `path_constants`). The mod's existing convention is `te_*.txt` (sorts after vanilla `00_*.txt` so mod entries override on tag-key collision).
+All paths are repo-relative (`mod_path` in `path_constants`). The mod's existing convention is `te_*.txt`. These sort after vanilla's `00_*.txt`, and the first bare definition of a key wins, so a bare entry here for a tag vanilla already defines is **dropped** (`Duplicated key` in debug.log; `docs/guides/scripting_best_practices.md` § Load Order (probed 2026-10-26)). Extend a vanilla tag with `INJECT:` and override it with `REPLACE:`, as the file does for BHT and IDN.
 
 | File | Required for | What goes in |
 |---|---|---|
 | `common/country_definitions/te_formable_countries.txt` | new tags only | tag, color, country_type=recognized, tier, cultures, capital. **Skip for BHT/IDN/etc. that already exist in vanilla** — vanilla's definition stays. |
-| `common/country_formation/te_formable_countries.txt` | every formable | formation rule per tag. To convert a vanilla minor formable to major: re-declare the tag here with `is_major_formation = yes` etc. — last-wins overrides vanilla. |
+| `common/country_formation/te_formable_countries.txt` | every formable | formation rule per tag. To convert a vanilla minor formable to major: `REPLACE:<TAG>` here, restating vanilla's whole body plus `is_major_formation = yes` etc. A bare re-declaration would be dropped against vanilla's earlier-sorting copy. |
 | `common/dynamic_country_names/te_formable_countries.txt` | if you want gov-flavored names | one block per tag, multiple `dynamic_country_name = { … }` entries inside. |
 | `common/diplomatic_plays/te_unification_plays.txt` | major formations only | one `dp_unify_X` + one `dp_leadership_X` per major. Reuse vanilla `gfx/interface/icons/war_goals/unification.dds`. |
 | `common/geographic_regions/te_formable_regions.txt` | only if no vanilla region fits | new `geographic_region_*` definitions. |
