@@ -301,6 +301,12 @@ banking_effect_cb_disable_reserve_requirements = {
 banking_effect_cb_bank_holiday = {
 	te_history_record_banking_marker = { MARK = on_cb_bank_holiday }
 	je:je_banking_cycle = { add_modifier = { name = banking_bank_holiday days = 90 } }
+	# The Active Policies row's "N days left" (GUI audit BNK-11): the term
+	# above, counted down by the weekly pulse (banking_cycle_weekly_effects),
+	# which drops it once the holiday is over however it ended.
+	hidden_effect = {
+		set_variable = { name = banking_bank_holiday_days_left value = 90 }
+	}
 	custom_tooltip = {
 		text = banking_bank_holiday_cooldown_set_tt
 		set_variable = { name = banking_bank_holiday_cooldown days = 1825 }

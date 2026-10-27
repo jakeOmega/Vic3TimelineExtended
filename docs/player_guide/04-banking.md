@@ -500,8 +500,9 @@ It charts the last 1 Year, 5 Years or 20 Years month by month: Cycle Value,
 Cycle Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
 Inflation and the Exchange Rate Index under the full Banking System. Markers
 flag policy changes, including tools a change of economic system switches off,
-and crashes, including imported ones. History is kept for the player and for
-major powers and above.
+and crashes, including imported ones. Hover a bar for that month's phase or
+band and the policies switched on or off. History is kept for the player and
+for major powers and above.
 
 ## Financial regulation laws
 

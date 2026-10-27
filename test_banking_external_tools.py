@@ -101,7 +101,7 @@ class Script:
                 continue
             if key in ('OR', 'AND', 'NOT'):
                 answer = self.check(val, key)
-            elif key == 'custom_tooltip' or key == 'market':
+            elif key in ('custom_tooltip', 'hidden_trigger', 'market'):
                 answer = self.check(val)
             elif key == 'has_variable':
                 answer = val in self.vars

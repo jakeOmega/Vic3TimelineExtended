@@ -577,3 +577,15 @@ banking_disp_unlock_met = {
 		add = 1
 	}
 }
+
+# A running bank holiday's days left, for its Active Policies row
+# (banking_dash_name_active_cb_bank_holiday). Counted down a week at a time by
+# banking_cycle_weekly_effects; 0 before the first count of a holiday that a
+# save from before the counter carries.
+banking_bank_holiday_days_left_display = {
+	value = 0
+	if = {
+		limit = { has_variable = banking_bank_holiday_days_left }
+		value = var:banking_bank_holiday_days_left
+	}
+}
