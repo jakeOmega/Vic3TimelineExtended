@@ -45,7 +45,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 - **Hover markers**: 29 Space Race labels and column heads that carry a tooltip are now underlined (`#tooltippable`).
 - **Small structured texts**: Strategic Reserve presets as "Label: value" lines, the Grand Monument opportunity moments and the Heir Education reason as bullets, State Collapse's reason now says what the collapse does.
 
-`organize_loc.py` moved four keys the rewrites left unused to `te_unused_l_english.yml`.
+The rewrites left four keys unused: `organize_loc.py` filed `te_demog_st_e0_n` in `te_unused_l_english.yml`, and the three Grand Monument ones are deleted, since `test_grand_monument_registry` keeps every `gm_` key in `te_miscellaneous`.
 
 **Beyond loc (four changes):**
 
