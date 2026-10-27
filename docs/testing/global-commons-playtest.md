@@ -308,6 +308,15 @@ even in that save, and the scale comes from those lines.
     multiplier is a state variable read through `root` (`resettlement_refresh_destination_readout`'s
     pattern): check the figure stays right between monthly updates, not only on the day of one.
 
+### The Seabed tab after the GUI audit (2026-10-27)
+
+The Seabed tab's share of the GUI and localization audit (`docs/audits/gui_audit/space_seabed.md`, SEA-1 to SEA-6). No self-check: each item fails visibly.
+
+1. **The policy buttons as modifier lines (`GetStaticModifier('te_seabed_policy_<policy>_display').GetDesc` inside a scripted GUI's effect tooltip; four `script_only` modifier types: new).** Hover each of the three policy buttons: a short line, then engine-rendered modifier lines (Scientific Survey: claim weight −25%; Sponsor Contractors: the claim floor, +75%; Unilateral Licensing: naval weight +100% and relations −10), then the influence it holds and the five-year lock. Each line has its name and a sign-colored figure, not a raw key. The figures must match the table in the player guide (`02-timeline.md`, Seabed licences).
+2. **The overview's Policy and Regime boxes.** Policy says what ours does to us now (its weight factor, the influence it holds) and when it can next change, with an exception (a newly binding Law of the Sea, a Scramble) only while one applies. Regime gives the regime in force in one line and links the new Seabed Regime concept, whose description holds all three regimes.
+3. **The claimant columns (a stored capital's `State.GetCountry` reading the rival's own script values: new for these values).** Open a basin with three or more claimants: each rival's row has its flag (hover: the name; click: the country), its name elided at the column's edge, then Mines, Claims and Weight under the heads, matching what the rival's own Seabed tab shows (switch to it, or compare the basin's totals); our row reads "Us" with our figures and Relinquish or Claim Again in the last cell. A claimant past the stored seats keeps the old scripted line, as does a rival before the first sharing. If the figures read 0 for every rival, the values are being evaluated in our scope, not the rival's: print them through the old `te_seabed_rival_row_sgui` line instead.
+4. **Basin hovers.** The +1 licence column's per-basin hover no longer repeats "often more than needed" (the head's hover says it once); the Pool head's hover names what the legend lacks; the state panel's weight line reads "the Southern Ocean".
+
 ### Engine facts the build assumes, unverified
 
 - `level_after_queued_constructions` counts a Deep-Sea Mine that is queued but has no level yet (a
