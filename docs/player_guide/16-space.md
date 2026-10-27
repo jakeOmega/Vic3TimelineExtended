@@ -315,7 +315,7 @@ bonuses, and never less than 0.5.
 | Progress bonus | Effect |
 |---|---|
 | Ambitious approach | +50% |
-| Stolen Rocket Plans, while your Space Programme Espionage operation runs | +10%, and −10% setback risk |
+| Stolen Rocket Plans, while your Space Program Espionage operation runs | +10%, and −10% setback risk |
 | Outer Space Treaty terms of International Space Cooperation | +10% for lagging powers, −5% for the leader |
 | Advanced Research principle, tier V | +10% |
 | Antimatter Engine, each fully staffed level | +5% |
@@ -792,7 +792,7 @@ colonies and accept a colony that asks.
 
 Covert operations reach colonies too: Incite Colonial Autonomy raises the
 autonomy of every colony the target holds, Sabotage Colony kills a share of
-the people of its largest, and under Full Colonies Survey Colony Defences
+the people of its largest, and under Full Colonies Survey Colony Defenses
 shows your fleets the target's colony defences and sharpens their fire on them
 (see [The covert operations](11-influence.md#the-covert-operations)).
 
