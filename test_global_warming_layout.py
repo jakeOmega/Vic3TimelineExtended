@@ -657,6 +657,10 @@ OLD_PLACEHOLDERS = {
     "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds",
     "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds",
 }
+# GW-12: two policy rows' placeholders until their own art is painted
+# (docs/systems/global_warming_gui_icons.md has the subjects).
+POLICY_PLACEHOLDERS = {"fossil_fuel_tariffs": "gfx/interface/icons/trade_icons/max_tariffs.dds",
+                       "carbon_removal": "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds"}
 # The two marks that stay vanilla by design.
 VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
                  "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
@@ -693,10 +697,14 @@ class GwIconsTest(unittest.TestCase):
                                         rf'texture = "{re.escape(GW_ICONS)}penalty\.dds"')
 
     def test_every_policy_has_its_own_file(self):
+        """GW-12: no two rows share an icon. Two show placeholders until painted."""
+        seen = []
         for p in MARKET_WIDE + NATIONAL:
-            icon = {"carbon_removal": "renewable_investment", "fossil_fuel_tariffs": "fossil_fuel_divestment"}.get(p, p)
-            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*"
-                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{icon}\.dds"', p)
+            path = POLICY_PLACEHOLDERS.get(p, f"{GW_ICONS}policy_{p}.dds")
+            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*(?:#[^\n]*\n\s*)?"
+                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(path)}"', p)
+            seen.append(path)
+        self.assertEqual(len(seen), len(set(seen)))
 
     def test_pies(self):
         for pie, key in (("pie_share", "gw_ov_pie_share"), ("pie_cut", "gw_ov_pie_cut")):
@@ -712,7 +720,7 @@ class GwIconsTest(unittest.TestCase):
     def test_no_placeholder_left(self):
         textures = set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui))
         self.assertEqual(textures & OLD_PLACEHOLDERS, set())
-        icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - {
+        icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - set(POLICY_PLACEHOLDERS.values()) - {
             "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"}
         self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
         self.assertEqual(len(icons), 7 + 2 + 1 + 8 + 2)   # tiers, roles, penalty, policies, pies
