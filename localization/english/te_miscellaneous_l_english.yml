@@ -3775,7 +3775,7 @@
  gm_monument_education_step_add_desc:0 "Education access in every state for each step of our monuments' grandeur, under the monument policy $gm_policy_education$."
  gm_monument_prestige_mult:0 "Prestige from Monuments"
  gm_monument_prestige_mult_desc:0 "The prestige our Grand Monuments give, under the monument policy $gm_policy_culture$ while cultural pull does nothing."
- gm_monument_tourism_mult:0 "Tourism from Each Monument"
+ gm_monument_tourism_mult:0 "$tourism$ from Each Monument"
  gm_monument_tourism_mult_desc:0 "The tourism each Grand Monument brings, under the monument policy $gm_policy_open$."
  gm_name_cancel_tt:0 "Stop naming. The monument keeps its current name."
  gm_name_carrier_slot:0 "Naming a Monument"
