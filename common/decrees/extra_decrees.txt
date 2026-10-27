@@ -270,10 +270,9 @@ decree_natalism_initiative = {
 # Demographics rule's Full setting: vanilla 00_decree.txt, "country_trigger ... determines if the Decree is
 # permitted/shown in interface". Valid only where it changes the state's next count, so it lapses once the state has
 # caught up (see state_trigger). The AI weighs it by the gap and the state's people. A release comments it out whole
-# (scripts/release/comment_out_census_inputs.py). The texture is a placeholder (vanilla Emergency Relief's); the final
-# art: a doctor's bag over a map pin.
+# (scripts/release/comment_out_census_inputs.py). The texture is a doctor's bag under a map pin (icon batch 6).
 decree_medical_outreach = {
-	texture = "gfx/interface/icons/decree/decree_emergency_relief.dds"
+	texture = "gfx/interface/icons/decree/decree_medical_outreach.dds"
 	modifier = {
 		state_medical_diffusion_add = 0.2
 	}

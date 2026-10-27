@@ -86,7 +86,7 @@ pm_debris_laser_broom = {
 }
 
 pm_debris_fusion_sweepers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_debris_fusion_sweepers.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors
