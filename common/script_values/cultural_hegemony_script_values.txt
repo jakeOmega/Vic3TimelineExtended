@@ -344,20 +344,26 @@ cultural_pull_from_sol = {
 	min = cultural_pull_sol_min
 	max = cultural_pull_sol_max
 	# Scale by country rank
+	multiply = ch_sol_rank_factor
+}
+
+# What cultural_pull_from_sol counts of the standard-of-living gap for a
+# country's rank: great power 1, major power 0.5, minor power 0.25, any other
+# rank 0. Its own value so the breakdown row's hover can say it (CH-1).
+# Scope: country
+ch_sol_rank_factor = {
+	value = 0
 	if = {
 		limit = { country_rank >= rank_value:great_power }
-		# Full value - no change
+		value = 1
 	}
 	else_if = {
 		limit = { country_rank = rank_value:major_power }
-		multiply = 0.5
+		value = 0.5
 	}
 	else_if = {
 		limit = { country_rank = rank_value:minor_power }
-		multiply = 0.25
-	}
-	else = {
-		multiply = 0
+		value = 0.25
 	}
 }
 
@@ -840,6 +846,54 @@ ch_disp_tier_code = {
 	if = {
 		limit = { has_variable = ch_tier }
 		add = var:ch_tier
+	}
+}
+
+# The share each influence tier starts at, in percent (CH-5). ch_set_display_state
+# derives ch_tier from them, the tier tooltip names the next one and the tier
+# concept prints the ladder, so this is the one copy of 2 / 5 / 10 / 15 / 25.
+ch_tier_1_floor = 2
+ch_tier_2_floor = 5
+ch_tier_3_floor = 10
+ch_tier_4_floor = 15
+ch_tier_5_floor = 25
+
+# The share the next tier starts at, for the tier tooltip's "Next" line; the
+# top tier's own floor once there (the line then says so instead).
+ch_disp_next_tier_floor = {
+	value = ch_tier_5_floor
+	if = {
+		limit = { ch_disp_tier_code < 1 }
+		value = ch_tier_1_floor
+	}
+	else_if = {
+		limit = { ch_disp_tier_code < 2 }
+		value = ch_tier_2_floor
+	}
+	else_if = {
+		limit = { ch_disp_tier_code < 3 }
+		value = ch_tier_3_floor
+	}
+	else_if = {
+		limit = { ch_disp_tier_code < 4 }
+		value = ch_tier_4_floor
+	}
+}
+
+# 1 once the Top Cultural Powers board has a row (ch_board_rebuild), so the
+# board's datamodel never reads a store that does not exist yet; 0 before the
+# first recount after this update.
+ch_board_has_rows = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = ch_board_store
+			global_var:ch_board_store = {
+				has_variable_list = ch_board
+				any_in_list = { variable = ch_board count >= 1 }
+			}
+		}
+		value = 1
 	}
 }
 

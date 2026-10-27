@@ -42,6 +42,7 @@ ch_monthly_country_update = {
 	if = {
 		limit = { is_player = yes }
 		ch_leaders_display_write = yes
+		ch_board_refresh_capitals = yes
 	}
 
 	# Foreign benchmark is now applied in JE on_monthly_pulse
@@ -96,11 +97,176 @@ ch_leaders_display_seat = {
 	}
 }
 
+# ---- THE TOP CULTURAL POWERS BOARD (CH-2) ----
+# One row per ranked country, drawn by a datamodel over the parentless store's
+# list, as the political-model history is (global_var:ch_board_store owns
+# ch_board; GetGlobalVariable('ch_board_store').GetList('ch_board') in the
+# GUI). Each row is a parentless container, ch_board_row_1..10 in globals,
+# made once and rewritten in place at every recount, so nothing is destroyed:
+#
+#   ch_board_rank      its place, 1-10
+#   ch_board_country   the country, for the monthly capital refresh
+#   ch_board_capital   its capital state: the flag and the name read the
+#                      country through it (gui_modding_guide.md gotchas #11, #15,
+#                      the covert rows' iw_target_capital); absent once the
+#                      country has none, and the row says so
+#   ch_board_score     its cultural share at the recount (ch_rank_N_score)
+#   ch_board_delta     its change since its own last recount (ch_board_delta_now)
+#   ch_board_trend     the Change column's arrow: 1 up, -1 down, 0 level
+#   ch_board_model     its political model code at the census (ch_model_census),
+#                      0 before its first
+#   ch_board_art ... ch_board_raw   its components and raw score at the
+#                      recount, the row's hover; they add up to the raw score
+#
+# The list holds the filled ranks in order; a rank whose slot is empty (an
+# annexation between recounts, the debug console) is left out and the rest
+# keep their places. Display only: nothing else reads the store.
+# Scope: any
+ch_board_rebuild = {
+	if = {
+		limit = { NOT = { has_global_variable = ch_board_store } }
+		create_container = {
+			tags = { ch_board_store }
+			save_scope_as = ch_board_store_new
+		}
+		if = {
+			limit = { exists = scope:ch_board_store_new }
+			set_global_variable = { name = ch_board_store value = scope:ch_board_store_new }
+		}
+	}
+	if = {
+		limit = { has_global_variable = ch_board_store }
+		global_var:ch_board_store = {
+			if = {
+				limit = { has_variable_list = ch_board }
+				clear_variable_list = ch_board
+			}
+		}
+		ch_board_row_write = { N = 1 }
+		ch_board_row_write = { N = 2 }
+		ch_board_row_write = { N = 3 }
+		ch_board_row_write = { N = 4 }
+		ch_board_row_write = { N = 5 }
+		ch_board_row_write = { N = 6 }
+		ch_board_row_write = { N = 7 }
+		ch_board_row_write = { N = 8 }
+		ch_board_row_write = { N = 9 }
+		ch_board_row_write = { N = 10 }
+	}
+}
+
+# Rank $N$'s row, written from inside the ranked country (PREV is the country
+# in the row's block) and appended to the list, when the slot holds a living
+# country with a capital.
+# Scope: any; global_var:ch_board_store exists
+ch_board_row_write = {
+	if = {
+		limit = {
+			has_global_variable = ch_rank_$N$
+			global_var:ch_rank_$N$ ?= { exists = capital }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = ch_board_row_$N$ } }
+			create_container = {
+				tags = { ch_board_row }
+				save_scope_as = ch_board_row_new
+			}
+			if = {
+				limit = { exists = scope:ch_board_row_new }
+				set_global_variable = { name = ch_board_row_$N$ value = scope:ch_board_row_new }
+			}
+		}
+		if = {
+			limit = { has_global_variable = ch_board_row_$N$ }
+			global_var:ch_rank_$N$ = {
+				capital = { save_scope_as = ch_board_capital_now }
+				global_var:ch_board_row_$N$ = {
+					set_variable = { name = ch_board_rank value = $N$ }
+					set_variable = { name = ch_board_country value = PREV }
+					set_variable = { name = ch_board_capital value = scope:ch_board_capital_now }
+					set_variable = { name = ch_board_score value = 0 }
+					if = {
+						limit = { has_global_variable = ch_rank_$N$_score }
+						set_variable = { name = ch_board_score value = global_var:ch_rank_$N$_score }
+					}
+					set_variable = { name = ch_board_delta value = 0 }
+					if = {
+						limit = { PREV = { has_variable = ch_board_delta_now } }
+						set_variable = { name = ch_board_delta value = PREV.var:ch_board_delta_now }
+					}
+					# The Change column's arrow: 1 up, -1 down, 0 level within a
+					# twentieth of a point, as the overview's share arrow
+					# (ch_disp_share_trend).
+					set_variable = { name = ch_board_trend value = 0 }
+					if = {
+						limit = { var:ch_board_delta > 0.05 }
+						set_variable = { name = ch_board_trend value = 1 }
+					}
+					else_if = {
+						limit = { var:ch_board_delta < -0.05 }
+						set_variable = { name = ch_board_trend value = -1 }
+					}
+					set_variable = { name = ch_board_model value = 0 }
+					if = {
+						limit = { PREV = { has_variable = ch_model_census } }
+						set_variable = { name = ch_board_model value = PREV.var:ch_model_census }
+					}
+					set_variable = { name = ch_board_art value = PREV.cultural_pull_from_art_display }
+					set_variable = { name = ch_board_prs value = PREV.cultural_pull_from_prestige_display }
+					set_variable = { name = ch_board_sol value = PREV.cultural_pull_from_sol_display }
+					set_variable = { name = ch_board_tech value = PREV.cultural_pull_from_tech_display }
+					set_variable = { name = ch_board_mon value = PREV.cultural_pull_from_monuments_display }
+					set_variable = { name = ch_board_mega value = PREV.cultural_pull_from_megaprojects_display }
+					set_variable = { name = ch_board_mods value = PREV.cultural_pull_from_modifiers_display }
+					set_variable = { name = ch_board_infamy value = PREV.cultural_pull_from_infamy_display }
+					set_variable = { name = ch_board_instab value = PREV.cultural_pull_from_stability_display }
+					set_variable = { name = ch_board_bonus value = PREV.ch_pull_mult_pct_display }
+					set_variable = { name = ch_board_raw value = PREV.cultural_pull_raw_display }
+				}
+			}
+			global_var:ch_board_store = {
+				add_to_variable_list = { name = ch_board target = global_var:ch_board_row_$N$ }
+			}
+		}
+	}
+}
+
+# Restate each row's capital from its country, monthly for players with the
+# leader flags, so a moved capital or an annexed country shows within a month.
+# A country that is gone, or holds no capital, loses the variable and its row
+# says so (ch_board_row_name).
+# Scope: any
+ch_board_refresh_capitals = {
+	if = {
+		limit = { has_global_variable = ch_board_store }
+		global_var:ch_board_store = {
+			if = {
+				limit = { has_variable_list = ch_board }
+				every_in_list = {
+					variable = ch_board
+					if = {
+						limit = { var:ch_board_country ?= { exists = capital } }
+						var:ch_board_country = {
+							capital = { save_scope_as = ch_board_capital_now }
+						}
+						set_variable = { name = ch_board_capital value = scope:ch_board_capital_now }
+					}
+					else_if = {
+						limit = { has_variable = ch_board_capital }
+						remove_variable = ch_board_capital
+					}
+				}
+			}
+		}
+	}
+}
+
 # ---- DISPLAY STATE ----
 # Scope: Country
 # The single site where the journal-entry widget's banded readings are derived.
-# Nothing in .gui or localization re-derives any of this, and the share
-# thresholds below are the only copy of 2 / 5 / 10 / 15 / 25 in the system.
+# Nothing in .gui or localization re-derives any of this. The share thresholds
+# are the ch_tier_N_floor script values (2 / 5 / 10 / 15 / 25), which the tier
+# tooltip and concept print.
 #
 #   ch_tier        0 negligible, 1 minor, 2 moderate, 3 significant,
 #                  4 major, 5 hegemon
@@ -115,23 +281,23 @@ ch_set_display_state = {
 		set_variable = { name = ch_tier value = 0 }
 	}
 	else_if = {
-		limit = { var:ch_total >= 25 }
+		limit = { var:ch_total >= ch_tier_5_floor }
 		set_variable = { name = ch_tier value = 5 }
 	}
 	else_if = {
-		limit = { var:ch_total >= 15 }
+		limit = { var:ch_total >= ch_tier_4_floor }
 		set_variable = { name = ch_tier value = 4 }
 	}
 	else_if = {
-		limit = { var:ch_total >= 10 }
+		limit = { var:ch_total >= ch_tier_3_floor }
 		set_variable = { name = ch_tier value = 3 }
 	}
 	else_if = {
-		limit = { var:ch_total >= 5 }
+		limit = { var:ch_total >= ch_tier_2_floor }
 		set_variable = { name = ch_tier value = 2 }
 	}
 	else_if = {
-		limit = { var:ch_total >= 2 }
+		limit = { var:ch_total >= ch_tier_1_floor }
 		set_variable = { name = ch_tier value = 1 }
 	}
 	else = {
@@ -740,48 +906,6 @@ ch_yearly_global_update = {
 		set_global_variable = { name = ch_census_own_raw value = yes }
 		set_global_variable = { name = ch_cached_global_art value = global_fine_art_production }
 
-		# Save previous rank scores for year-over-year delta
-		if = {
-			limit = { has_global_variable = ch_rank_1_score }
-			set_global_variable = { name = ch_rank_1_prev value = global_var:ch_rank_1_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_2_score }
-			set_global_variable = { name = ch_rank_2_prev value = global_var:ch_rank_2_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_3_score }
-			set_global_variable = { name = ch_rank_3_prev value = global_var:ch_rank_3_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_4_score }
-			set_global_variable = { name = ch_rank_4_prev value = global_var:ch_rank_4_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_5_score }
-			set_global_variable = { name = ch_rank_5_prev value = global_var:ch_rank_5_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_6_score }
-			set_global_variable = { name = ch_rank_6_prev value = global_var:ch_rank_6_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_7_score }
-			set_global_variable = { name = ch_rank_7_prev value = global_var:ch_rank_7_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_8_score }
-			set_global_variable = { name = ch_rank_8_prev value = global_var:ch_rank_8_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_9_score }
-			set_global_variable = { name = ch_rank_9_prev value = global_var:ch_rank_9_score }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_10_score }
-			set_global_variable = { name = ch_rank_10_prev value = global_var:ch_rank_10_score }
-		}
-
 		# Clear stale rank slots
 		remove_global_variable = ch_rank_1
 		remove_global_variable = ch_rank_2
@@ -808,106 +932,68 @@ ch_yearly_global_update = {
 			set_variable = { name = ch_rank_self value = global_var:ch_ldr_idx }
 			change_variable = { name = ch_rank_self add = 1 }
 
+			# Its change since its own last recount, for the board's Change
+			# column (CH-2). The board used to print a slot's change, so a new
+			# occupant was measured against whoever held the rank before.
+			# Display bookkeeping; ch_board_rebuild copies it onto the row.
+			set_variable = { name = ch_board_delta_now value = 0 }
+			if = {
+				limit = { has_variable = ch_board_share_prev }
+				set_variable = { name = ch_board_delta_now value = cultural_pull_display }
+				change_variable = { name = ch_board_delta_now subtract = var:ch_board_share_prev }
+			}
+			set_variable = { name = ch_board_share_prev value = cultural_pull_display }
+
 			if = {
 				limit = { global_var:ch_ldr_idx < 1 }
 				set_global_variable = { name = ch_rank_1 value = THIS }
 				set_global_variable = { name = ch_rank_1_score value = cultural_pull_display }
 				set_global_variable = { name = ch_top_cultural_pull value = cultural_pull_total }
-				set_global_variable = { name = ch_rank_1_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_1_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_1_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_1_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_1_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 2 }
 				set_global_variable = { name = ch_rank_2 value = THIS }
 				set_global_variable = { name = ch_rank_2_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_2_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_2_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_2_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_2_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_2_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 3 }
 				set_global_variable = { name = ch_rank_3 value = THIS }
 				set_global_variable = { name = ch_rank_3_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_3_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_3_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_3_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_3_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_3_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 4 }
 				set_global_variable = { name = ch_rank_4 value = THIS }
 				set_global_variable = { name = ch_rank_4_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_4_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_4_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_4_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_4_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_4_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 5 }
 				set_global_variable = { name = ch_rank_5 value = THIS }
 				set_global_variable = { name = ch_rank_5_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_5_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_5_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_5_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_5_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_5_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 6 }
 				set_global_variable = { name = ch_rank_6 value = THIS }
 				set_global_variable = { name = ch_rank_6_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_6_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_6_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_6_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_6_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_6_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 7 }
 				set_global_variable = { name = ch_rank_7 value = THIS }
 				set_global_variable = { name = ch_rank_7_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_7_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_7_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_7_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_7_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_7_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 8 }
 				set_global_variable = { name = ch_rank_8 value = THIS }
 				set_global_variable = { name = ch_rank_8_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_8_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_8_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_8_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_8_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_8_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 9 }
 				set_global_variable = { name = ch_rank_9 value = THIS }
 				set_global_variable = { name = ch_rank_9_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_9_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_9_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_9_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_9_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_9_raw value = cultural_pull_raw_display }
 			}
 			else_if = {
 				limit = { global_var:ch_ldr_idx < 10 }
 				set_global_variable = { name = ch_rank_10 value = THIS }
 				set_global_variable = { name = ch_rank_10_score value = cultural_pull_display }
-				set_global_variable = { name = ch_rank_10_art value = cultural_pull_from_art_display }
-				set_global_variable = { name = ch_rank_10_prs value = cultural_pull_from_prestige_display }
-				set_global_variable = { name = ch_rank_10_sol value = cultural_pull_from_sol_display }
-				set_global_variable = { name = ch_rank_10_tech value = cultural_pull_from_tech_display }
-				set_global_variable = { name = ch_rank_10_raw value = cultural_pull_raw_display }
 			}
 			change_global_variable = { name = ch_ldr_idx add = 1 }
 		}
@@ -917,72 +1003,6 @@ ch_yearly_global_update = {
 		every_country = {
 			limit = { is_player = yes }
 			ch_leaders_display_write = yes
-		}
-
-		# Compute year-over-year deltas. Every slot's delta is zeroed first: the
-		# journal-entry widget's board rows print it unconditionally, and a loc
-		# read of a global that was never set logs "failed to fetch variable"
-		# every frame the board is open. In the first year, and for a slot whose
-		# occupant is new, zero is also the honest answer.
-		set_global_variable = { name = ch_rank_1_delta value = 0 }
-		set_global_variable = { name = ch_rank_2_delta value = 0 }
-		set_global_variable = { name = ch_rank_3_delta value = 0 }
-		set_global_variable = { name = ch_rank_4_delta value = 0 }
-		set_global_variable = { name = ch_rank_5_delta value = 0 }
-		set_global_variable = { name = ch_rank_6_delta value = 0 }
-		set_global_variable = { name = ch_rank_7_delta value = 0 }
-		set_global_variable = { name = ch_rank_8_delta value = 0 }
-		set_global_variable = { name = ch_rank_9_delta value = 0 }
-		set_global_variable = { name = ch_rank_10_delta value = 0 }
-		if = {
-			limit = { has_global_variable = ch_rank_1_prev }
-			set_global_variable = { name = ch_rank_1_delta value = global_var:ch_rank_1_score }
-			change_global_variable = { name = ch_rank_1_delta subtract = global_var:ch_rank_1_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_2_prev }
-			set_global_variable = { name = ch_rank_2_delta value = global_var:ch_rank_2_score }
-			change_global_variable = { name = ch_rank_2_delta subtract = global_var:ch_rank_2_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_3_prev }
-			set_global_variable = { name = ch_rank_3_delta value = global_var:ch_rank_3_score }
-			change_global_variable = { name = ch_rank_3_delta subtract = global_var:ch_rank_3_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_4_prev }
-			set_global_variable = { name = ch_rank_4_delta value = global_var:ch_rank_4_score }
-			change_global_variable = { name = ch_rank_4_delta subtract = global_var:ch_rank_4_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_5_prev }
-			set_global_variable = { name = ch_rank_5_delta value = global_var:ch_rank_5_score }
-			change_global_variable = { name = ch_rank_5_delta subtract = global_var:ch_rank_5_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_6_prev }
-			set_global_variable = { name = ch_rank_6_delta value = global_var:ch_rank_6_score }
-			change_global_variable = { name = ch_rank_6_delta subtract = global_var:ch_rank_6_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_7_prev }
-			set_global_variable = { name = ch_rank_7_delta value = global_var:ch_rank_7_score }
-			change_global_variable = { name = ch_rank_7_delta subtract = global_var:ch_rank_7_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_8_prev }
-			set_global_variable = { name = ch_rank_8_delta value = global_var:ch_rank_8_score }
-			change_global_variable = { name = ch_rank_8_delta subtract = global_var:ch_rank_8_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_9_prev }
-			set_global_variable = { name = ch_rank_9_delta value = global_var:ch_rank_9_score }
-			change_global_variable = { name = ch_rank_9_delta subtract = global_var:ch_rank_9_prev }
-		}
-		if = {
-			limit = { has_global_variable = ch_rank_10_prev }
-			set_global_variable = { name = ch_rank_10_delta value = global_var:ch_rank_10_score }
-			change_global_variable = { name = ch_rank_10_delta subtract = global_var:ch_rank_10_prev }
 		}
 
 		# Rebuild the per-model world totals: classify every country, then turn
@@ -1004,6 +1024,8 @@ ch_yearly_global_update = {
 			ch_add_country_to_model_totals = yes
 		}
 		ch_finish_all_model_buckets = yes
+		# The Top Cultural Powers board, now the ranks and models are set.
+		ch_board_rebuild = yes
 		# One immutable global snapshot per calendar year, even after wars.
 		te_history_record_cultural_hegemony_models = yes
 		if = {
