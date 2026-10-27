@@ -44,3 +44,27 @@ te_seabed_policy_unilateral_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_influence_cost_add = 1
 }
+
+# What each seabed policy does (audit SEA-2), for display only: never added to
+# a country. The policy buttons (te_seabed_policy_effect_<n>_tt) and the
+# overview's Policy box (te_seabed_ov_policy_ours_<n>) print them with
+# GetStaticModifier(...).GetDesc. Each line restates a script value
+# (te_global_commons_seabed_values.txt), held to it by test_seabed_layout.py:
+# the claim weight is te_seabed_policy_factor_<policy> - 1, Sponsor's floor
+# te_seabed_floor_keep, Unilateral's navy te_seabed_assertive_navy_mult - 1
+# and its relations te_seabed_unilateral_relations. A factor of 1 has no line.
+te_seabed_policy_survey_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_seabed_claim_weight_mult = -0.25
+}
+
+te_seabed_policy_sponsor_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_seabed_claim_floor_add = 0.75
+}
+
+te_seabed_policy_unilateral_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_seabed_naval_weight_mult = 1
+	country_seabed_unilateral_relations_add = -10
+}

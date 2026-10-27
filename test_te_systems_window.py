@@ -548,10 +548,13 @@ class TabContentTest(unittest.TestCase):
         self.assertNotRegex(head, r"\bvisible =")
         self.assertIn("minimumsize = { 520 -1 }", head)
         self.assertIn("parentanchor = hcenter", head)
-        # the journal roots' types, in order, then the link
-        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", widget, re.M), types)
+        # the journal roots' types, in order, then the link; a Space Race
+        # milestone's live sections drop the debris row, which Orbit shows
+        # (SPC-8: `blockoverride "sr_debris" {}`)
+        self.assertEqual(re.findall(r'^\t+(te_\w+) = \{(?:\}|\n\t+blockoverride "sr_debris" \{\}\n\t+\})$', widget, re.M),
+                         types)
         link = widget.index('text = "te_system_tab_open_journal"')
-        self.assertGreater(link, widget.index(f"{types[-1]} = {{}}"))
+        self.assertGreater(link, widget.index(f"{types[-1]} = {{"))
         button = widget[widget.rindex("button = {", 0, link):]
         self.assertIn('visible = "[JournalEntry.IsActive]"', button)
         self.assertIn(f'tooltip = "{link_tooltip}"', button)
@@ -598,9 +601,11 @@ class TabContentTest(unittest.TestCase):
             for name in re.findall(r"scripted_button = (\w+)", entry):
                 self.assertRegex(_txt_block(buttons, name), r"visible = \{[^}]*is_ai = yes", name)
 
-    def test_space_powers_and_orbit_come_first_and_read_no_entry(self):
-        """The tab's own sections, under its gate, above every entry's block:
-        they read the player, so they show between milestones too."""
+    def test_space_powers_and_orbit_follow_the_entries_and_read_no_entry(self):
+        """The tab's own sections, under its gate, below every entry's block
+        and above How (owner, 2026-10-27: the milestones we run first): they
+        read the player, so they show between milestones too. Orbit carries the
+        debris row, so every milestone's live sections drop theirs."""
         tab = self._tab("space_race")
         summary = _named(self.gui, "te_systems_window_space_race_summary")
         self.assertIn(f'visible = "[{_gate("te_window_space_race_tab_sgui")}]"', summary)
@@ -608,7 +613,11 @@ class TabContentTest(unittest.TestCase):
         self.assertIn("minimumsize = { 520 -1 }", summary)
         self.assertNotIn("GetPlayerJournalEntry", summary)
         first_entry = tab.index("GetPlayerJournalEntry")
-        self.assertLess(tab.index(summary), first_entry)
+        self.assertGreater(tab.index(summary), tab.rindex("GetPlayerJournalEntry"))
+        self.assertLess(tab.index(summary), tab.index(_named(self.gui, "te_systems_window_space_race_reference")))
+        for m in SR:
+            if m != "interstellar_results":
+                self.assertRegex(tab, rf'te_sr_{m}_status = \{{\n\t+blockoverride "sr_debris" \{{\}}', m)
         # one note in the entries' place while none runs
         idle = _named(self.gui, "te_systems_window_space_race_idle")
         self.assertIn(f'visible = "[{_gate("te_window_space_race_idle_sgui")}]"', idle)

@@ -78,6 +78,24 @@ concept_solar_colonization = {}
 concept_sr_approach = {}
 concept_sr_funding = {}
 concept_sr_setback_risk = {}
+concept_sr_estimate = {}
+# Solar colonization's terms (the colony sections of space_race_widget.gui),
+# nested so a tooltip names one and its hover leads on: a colony's Defenses
+# link the space fleet, which links the ship role, which links Space Command.
+concept_sr_colony_fleet = {}
+concept_sr_space_fleet = {}
+concept_sr_ship_role = {}
+concept_sr_space_command = {
+	texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+}
+concept_sr_drive = {}
+concept_sr_launch_window = {}
+concept_sr_module = {}
+concept_sr_colony_autonomy = {}
+concept_sr_free_colony = {}
+concept_sr_blockade = {}
+concept_sr_integrity = {}
+concept_sr_marines = {}
 concept_decolonization_system = {}
 concept_colonial_stability = {}
 # Colonial Empire panel terms (gui/journal_entry_widgets/colonial_empire_widget.gui)
@@ -200,6 +218,10 @@ concept_power_grid = {
 }
 # An unused share of a basin (seabed claims spec § 1).
 concept_seabed_claim = {
+	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+}
+# How the seabed pools are divided: Open, Regulated or Scramble (te_seabed_widgets.gui's Regime cell).
+concept_seabed_regime = {
 	texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
 }
 

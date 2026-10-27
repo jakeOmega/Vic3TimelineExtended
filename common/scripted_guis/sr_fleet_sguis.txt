@@ -291,7 +291,7 @@ sr_fleet_destroy_sgui = {
 
 	is_valid = {
 		custom_tooltip = {
-			text = sr_fl_no_target_tt
+			text = sr_fl_target_hostile_tt
 			sr_fl_op_check = { TEST = target_hostile }
 		}
 	}
@@ -328,8 +328,14 @@ sr_sc_mix_sgui = {
 		always = yes
 	}
 
+	# Each role's tooltip names it and its weight; the roles' rules are the
+	# concept's (concept_sr_ship_role).
 	effect = {
-		custom_tooltip = sr_sc_mix_step_tt
+		if = { limit = { scope:op = 1 } custom_tooltip = sr_sc_mix_step_war_tt }
+		else_if = { limit = { scope:op = 2 } custom_tooltip = sr_sc_mix_step_rapid_tt }
+		else_if = { limit = { scope:op = 3 } custom_tooltip = sr_sc_mix_step_siege_tt }
+		else_if = { limit = { scope:op = 4 } custom_tooltip = sr_sc_mix_step_carrier_tt }
+		else = { custom_tooltip = sr_sc_mix_step_tender_tt }
 		hidden_effect = {
 			if = { limit = { scope:op = 1 } sr_sc_mix_step = { ROLE = war } }
 			else_if = { limit = { scope:op = 2 } sr_sc_mix_step = { ROLE = rapid } }

@@ -29,7 +29,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done; COV-12's optional network table deferred) | 39 | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
-| Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | #1209 |
+| Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 (all done, 2026-10-27) | 73 | #1209 |
 | Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 (all done, 2026-10-27) | 29 | #1210 |
 | Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | #1211 |
 | Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 (21 done, 1 partly done) | 27 | #1212 |
@@ -391,33 +391,33 @@ All 21 findings are done (the GUI audit wave, 2026-10-27; play-test list `docs/t
 
 Top priorities: reasons on about 470 greyed buttons (SPC-1); the concept family the owner described (SPC-3); a collapsed How Solar Colonization Works in place of seven live paragraphs (SPC-4); one Colonies table with a view switch (SPC-5); alerts in the overview (SPC-6); Target beside the destination (SPC-7); the Seabed overview's hovers about ours, and policies as modifier lines (SEA-1, SEA-2).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| SPC-1 | Greyed buttons in every colony, fleet and Space Command row hide their reason | hidden info | medium |
-| SPC-2 | Defences and Spaceport tooltips still say fleets are not in the game (loc part done) | other, over-explaining | quick |
-| SPC-3 | No concepts for solar colonization; the same rules are explained inline, often twice | over-explaining, style | medium |
-| SPC-4 | Explanatory paragraphs open seven live colony sections; How the Space Race Works covers none of colonization | over-explaining, style | medium |
-| SPC-5 | A colony's facts are spread over six sections; the colony name appears six times | spread-out/redundant | large |
-| SPC-6 | The colonization overview shows the programme, not what needs attention | spread-out/redundant | medium–large |
-| SPC-7 | Target sits far from the destination it changes; world rows give no hover on what a world offers | spread-out/redundant, hidden info | medium |
-| SPC-8 | The Space Race tab buries our milestone under the other powers, and shows debris and rivals twice | spread-out/redundant | medium |
-| SPC-9 | Rivals (5 slots) and Space Powers (8 slots) are fixed rows with "+N more" on hover; a list would show everyone | list | large |
-| SPC-10 | The rival and power estimate hovers repeat a four-sentence explanation in nine keys | over-explaining | medium |
-| SPC-11 | The Space Race panel is off the house type ladder (rows 14, cells and the overview 12) | style | large |
-| SPC-12 | Labels and column heads with a hover are not marked hoverable (loc part done) | hidden info | quick |
-| SPC-13 | Stage names differ between the panel, the stage profile and the concept; the concept lists stages that don't exist (loc part done) | style, other | quick |
-| SPC-14 | Mission Profile restates the approach the overview shows; "Approach" means two things (loc part done) | spread-out/redundant, style | quick |
-| SPC-15 | Every colony row's autonomy drift hover shows the generic table, not that colony's terms | hidden info | medium |
-| SPC-16 | "Fleets" names two different things; the same icon marks colony and war fleets | style | quick–medium |
-| SPC-17 | How the Space Race Works restates the concepts it links | over-explaining | quick–medium |
-| SPC-18 | Orbit's strike hovers teach the action's rules inline | over-explaining | medium |
-| SPC-19 | Our Colonies is 1,100 hand-copied lines the generator could own | other, list | medium |
-| SEA-1 | The overview's Policy and Regime hovers teach every option instead of ours | over-explaining, spread-out/redundant | medium |
-| SEA-2 | Seabed policies describe their effects in prose, not modifier lines | style | medium |
-| SEA-3 | The claimant rows are sentences under a table of columns | list, style | medium–large |
-| SEA-4 | Basin names read "in the Indian" / "in the Southern" (loc part done) | style | quick |
-| SEA-5 | The +1 licence caveat is repeated in five basin hovers | over-explaining | quick |
-| SEA-6 | The Pool column head restates the legend under the table | spread-out/redundant | quick |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| SPC-1 | Greyed buttons in every colony, fleet and Space Command row hide their reason | hidden info | medium | done |
+| SPC-2 | Defences and Spaceport tooltips still say fleets are not in the game (loc part done) | other, over-explaining | quick | done |
+| SPC-3 | No concepts for solar colonization; the same rules are explained inline, often twice | over-explaining, style | medium | done (no per-role concepts; the posture hover kept) |
+| SPC-4 | Explanatory paragraphs open seven live colony sections; How the Space Race Works covers none of colonization | over-explaining, style | medium | done |
+| SPC-5 | A colony's facts are spread over six sections; the colony name appears six times | spread-out/redundant | large | done |
+| SPC-6 | The colonization overview shows the programme, not what needs attention | spread-out/redundant | medium–large | done |
+| SPC-7 | Target sits far from the destination it changes; world rows give no hover on what a world offers | spread-out/redundant, hidden info | medium | done |
+| SPC-8 | The Space Race tab buries our milestone under the other powers, and shows debris twice | spread-out/redundant | medium | done, as the owner revised it (Rivals kept in the tab) |
+| SPC-9 | Rivals (5 slots) and Space Powers (8 slots) are fixed rows with "+N more" on hover; a list would show everyone | list | large | done; `TE_SELF_CHECK sr_powers_list` |
+| SPC-10 | The rival and power estimate hovers repeat a four-sentence explanation in nine keys | over-explaining | medium | done |
+| SPC-11 | The Space Race panel is off the house type ladder (rows 14, cells and the overview 12) | style | large | done |
+| SPC-12 | Labels and column heads with a hover are not marked hoverable (loc part done) | hidden info | quick | done |
+| SPC-13 | Stage names differ between the panel, the stage profile and the concept; the concept lists stages that don't exist (loc part done) | style, other | quick | done |
+| SPC-14 | Mission Profile restates the approach the overview shows; "Approach" means two things (loc part done) | spread-out/redundant, style | quick | done |
+| SPC-15 | Every colony row's autonomy drift hover shows the generic table, not that colony's terms | hidden info | medium | done |
+| SPC-16 | "Fleets" names two different things; the same icon marks colony and war fleets | style | quick–medium | done (placeholder icon) |
+| SPC-17 | How the Space Race Works restates the concepts it links | over-explaining | quick–medium | done |
+| SPC-18 | Orbit's strike hovers teach the action's rules inline | over-explaining | medium | done |
+| SPC-19 | Our Colonies is 1,100 hand-copied lines the generator could own | other, list | medium | done |
+| SEA-1 | The overview's Policy and Regime hovers teach every option instead of ours | over-explaining, spread-out/redundant | medium | done |
+| SEA-2 | Seabed policies describe their effects in prose, not modifier lines | style | medium | done |
+| SEA-3 | The claimant rows are sentences under a table of columns | list, style | medium–large | done (columns; the later datamodel step not taken) |
+| SEA-4 | Basin names read "in the Indian" / "in the Southern" (loc part done) | style | quick | done |
+| SEA-5 | The +1 licence caveat is repeated in five basin hovers | over-explaining | quick | done |
+| SEA-6 | The Pool column head restates the legend under the table | spread-out/redundant | quick | done |
 
 ### Grand Monuments and Colonial Empire ([detail](gui_audit/monuments_colonial.md), #1210)
 

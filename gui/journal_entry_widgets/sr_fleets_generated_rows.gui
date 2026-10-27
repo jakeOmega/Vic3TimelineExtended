@@ -2,10 +2,10 @@
 ### Solar System Colonization's Fleets and Locations rows, from
 ### gen_space_fleets (slice 6 design § 16). The row types are in
 ### space_race_widget.gui: te_sr_fleet_row (Fleets, one per slot) and
-### te_sr_location_row (Locations, one per location) and te_sr_defence_row
-### (Colony Defences, every world, shown while ours). Each value is a display
+### te_sr_location_row (Locations, one per location). Each value is a display
 ### value of sr_fleets_display_generated.txt; the scripted GUIs are in
-### sr_fleet_sguis.txt and take the slot as scope:op.
+### sr_fleet_sguis.txt and take the slot as scope:op. The colonies' Defenses
+### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).
 
 types sr_fleets_generated_rows_types
 {
@@ -63,27 +63,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_combat'), '(CFixedPoint)1' )]"
@@ -91,7 +91,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_posture'), '(CFixedPoint)1' )]"
@@ -116,7 +116,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_destroy'), '(CFixedPoint)0' )]"
@@ -175,27 +175,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_combat'), '(CFixedPoint)1' )]"
@@ -203,7 +203,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_posture'), '(CFixedPoint)1' )]"
@@ -228,7 +228,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_destroy'), '(CFixedPoint)0' )]"
@@ -287,27 +287,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_combat'), '(CFixedPoint)1' )]"
@@ -315,7 +315,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_posture'), '(CFixedPoint)1' )]"
@@ -340,7 +340,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_destroy'), '(CFixedPoint)0' )]"
@@ -399,27 +399,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_combat'), '(CFixedPoint)1' )]"
@@ -427,7 +427,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_posture'), '(CFixedPoint)1' )]"
@@ -452,7 +452,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_destroy'), '(CFixedPoint)0' )]"
@@ -511,27 +511,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_combat'), '(CFixedPoint)1' )]"
@@ -539,7 +539,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_posture'), '(CFixedPoint)1' )]"
@@ -564,7 +564,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_destroy'), '(CFixedPoint)0' )]"
@@ -623,27 +623,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_combat'), '(CFixedPoint)1' )]"
@@ -651,7 +651,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_posture'), '(CFixedPoint)1' )]"
@@ -676,7 +676,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_destroy'), '(CFixedPoint)0' )]"
@@ -735,27 +735,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_combat'), '(CFixedPoint)1' )]"
@@ -763,7 +763,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_posture'), '(CFixedPoint)1' )]"
@@ -788,7 +788,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_destroy'), '(CFixedPoint)0' )]"
@@ -847,27 +847,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_combat'), '(CFixedPoint)1' )]"
@@ -875,7 +875,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_posture'), '(CFixedPoint)1' )]"
@@ -900,7 +900,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_destroy'), '(CFixedPoint)0' )]"
@@ -959,27 +959,27 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_go_button" {
 				enabled = "[GetScriptedGui('sr_fleet_go_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_go_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_go_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_go_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_merge_button" {
 				enabled = "[GetScriptedGui('sr_fleet_merge_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_merge_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_merge_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_merge_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_detach_button" {
 				enabled = "[GetScriptedGui('sr_fleet_detach_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_detach_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_detach_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_detach_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_land_button" {
 				enabled = "[GetScriptedGui('sr_fleet_land_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_land_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_land_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_land_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_embark_button" {
 				enabled = "[GetScriptedGui('sr_fleet_embark_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_embark_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_embark_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_embark_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_combat_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_combat'), '(CFixedPoint)1' )]"
@@ -987,7 +987,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_posture_button" {
 				enabled = "[GetScriptedGui('sr_fleet_posture_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_posture_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_posture_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_posture_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_posture_1_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_posture'), '(CFixedPoint)1' )]"
@@ -1012,7 +1012,7 @@ types sr_fleets_generated_rows_types
 			blockoverride "fl_destroy_button" {
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-				tooltip = "[GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_destroy'), '(CFixedPoint)0' )]"
@@ -1475,1372 +1475,6 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_earth_blockading_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_kuiper'), '(CFixedPoint)7' )]"
-			}
-		}
-	}
-
-	type te_sr_defence_rows = flowcontainer {
-		direction = vertical
-		ignoreinvisible = yes
-		spacing = 2
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_venus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_venus"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_venus')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_venus')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_venus')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_venus').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_venus'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_mercury'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_mercury.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_mercury"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_mercury')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_mercury')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_mercury')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_mercury').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_mercury'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_valles_marineris'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_valles_marineris"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_valles_marineris')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_valles_marineris')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_valles_marineris')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_valles_marineris').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_valles_marineris'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_olympus_mons'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_olympus_mons"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_olympus_mons')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_olympus_mons')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_olympus_mons')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_olympus_mons').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_olympus_mons'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_hellas_planitia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_hellas_planitia"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_hellas_planitia')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_hellas_planitia')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_hellas_planitia')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_hellas_planitia').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_hellas_planitia'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_utopia_planitia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_utopia_planitia"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_utopia_planitia')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_utopia_planitia')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_utopia_planitia')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_utopia_planitia').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_utopia_planitia'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_arcadia_planitia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_arcadia_planitia"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_arcadia_planitia')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_arcadia_planitia')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_arcadia_planitia')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_arcadia_planitia').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_arcadia_planitia'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_ceres'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_ceres"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_ceres')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ceres')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ceres')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_ceres').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_ceres'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_vesta'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_vesta"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_vesta')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_vesta')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_vesta')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_vesta').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_vesta'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_psyche'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_psyche"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_psyche')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_psyche')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_psyche')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_psyche').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_psyche'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_pallas'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_pallas"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_pallas')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_pallas')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_pallas')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_pallas').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_pallas'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_hygiea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_hygiea"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_hygiea')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_hygiea')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_hygiea')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_hygiea').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_hygiea'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_io'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_io"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_io')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_io')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_io')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_io').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_io'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_europa'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_europa"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_europa')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_europa')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_europa')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_europa').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_europa'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_ganymede'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_ganymede"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_ganymede')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ganymede')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ganymede')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_ganymede').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_ganymede'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_callisto'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_callisto"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_callisto')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_callisto')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_callisto')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_callisto').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_callisto'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_himalia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_himalia"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_himalia')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_himalia')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_himalia')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_himalia').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_himalia'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_amalthea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_amalthea"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_amalthea')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_amalthea')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_amalthea')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_amalthea').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_amalthea'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_titan'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_titan"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_titan')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_titan')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_titan')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_titan').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_titan'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_enceladus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_enceladus"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_enceladus')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_enceladus')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_enceladus')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_enceladus').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_enceladus'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_rhea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_rhea"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_rhea')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_rhea')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_rhea')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_rhea').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_rhea'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_mimas'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_mimas"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_mimas')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_mimas')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_mimas')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_mimas').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_mimas'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_iapetus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_iapetus"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_iapetus')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_iapetus')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_iapetus')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_iapetus').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_iapetus'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_titania'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_titania"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_titania')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_titania')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_titania')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_titania').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_titania'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_oberon'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_oberon"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_oberon')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_oberon')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_oberon')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_oberon').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_oberon'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_miranda'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_miranda"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_miranda')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_miranda')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_miranda')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_miranda').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_miranda'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_ariel'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_ariel"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_ariel')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ariel')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ariel')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_ariel').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_ariel'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_triton'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_triton"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_triton')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_triton')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_triton')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_triton').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_triton'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_proteus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_proteus"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_proteus')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_proteus')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_proteus')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_proteus').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_proteus'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_pluto'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_pluto"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_pluto')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_pluto')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_pluto')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_pluto').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_pluto'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_eris'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_eris"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_eris')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_eris')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_eris')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_eris').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_eris'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_makemake'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_makemake"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_makemake')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_makemake')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_makemake')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_makemake').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_makemake'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_haumea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_haumea"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_haumea')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_haumea')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_haumea')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_haumea').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_haumea'), '(CFixedPoint)1' )]"
-			}
-		}
-
-		te_sr_defence_row = {
-			blockoverride "def_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_sedna'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_icon" {
-				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
-			}
-			blockoverride "def_name" {
-				text = "sr_site_name_sedna"
-			}
-			blockoverride "def_level" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_sedna')|0]"
-			}
-			blockoverride "def_integrity" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_sedna')|0]%"
-			}
-			blockoverride "def_marines" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_sedna')|0]"
-			}
-			blockoverride "def_calm_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)0' )]"
-			}
-			blockoverride "def_blockaded_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)1' )]"
-			}
-			blockoverride "def_assault_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)2' )]"
-			}
-			blockoverride "def_occupied_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)3' )]"
-			}
-			blockoverride "def_interdicted_visible" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)4' )]"
-			}
-			blockoverride "def_occupier_context" {
-				datacontext = "[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_sedna').GetState]"
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_occupier_sedna'), '(CFixedPoint)1' )]"
 			}
 		}
 	}
