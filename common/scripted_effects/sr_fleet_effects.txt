@@ -541,7 +541,7 @@ sr_site_transfer_marines = {
 			if = {
 				limit = {
 					scope:sr_site_from_$KEY$ = {
-						NOT = { has_diplomatic_pact = { who = scope:sr_site_to_$KEY$ type = alliance } }
+						NOT = { has_treaty_alliance_with = { TARGET = scope:sr_site_to_$KEY$ } }
 					}
 				}
 				scope:sr_site_from_$KEY$ = { sr_fl_marines_home = { AMOUNT = sr_site_marines_value_$KEY$ } }
