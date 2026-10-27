@@ -2900,3 +2900,442 @@ st_res_fertilizer_policy_budget_max = {
 	multiply = st_res_policy_budget_step
 	min = st_res_policy_budget_max_base
 }
+
+# ============================================================================
+# The panel's second pass (2026-10-27): the overview's held-up and spending
+# cells (SR-9) and the rate buttons' before-and-after (SR-7). Display only:
+# nothing in the reserve's bookkeeping or its policies reads these, and every
+# `var:` read is has_variable-guarded, as the panel values above are.
+# ============================================================================
+
+# How many goods are full (status 5) or empty with a release set (status 6)
+# this week, from the status the weekly pulse and every click write
+# (st_res_set_good_status_effect). The overview's "Full or Empty" cell: its
+# word is the sum, its third line the two counts, and the word is red while a
+# good is empty with a release set.
+st_res_disp_full_count = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 5
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 5
+		}
+		add = 1
+	}
+}
+
+st_res_disp_empty_count = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_grain_last_status
+			var:st_res_grain_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_ammunition_last_status
+			var:st_res_ammunition_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_oil_last_status
+			var:st_res_oil_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_small_arms_last_status
+			var:st_res_small_arms_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_artillery_last_status
+			var:st_res_artillery_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_aeroplanes_last_status
+			var:st_res_aeroplanes_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_tanks_last_status
+			var:st_res_tanks_last_status = 6
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 6
+		}
+		add = 1
+	}
+}
+
+st_res_disp_held_count = {
+	value = st_res_disp_full_count
+	add = st_res_disp_empty_count
+}
+
+# What this week's purchases cost at today's prices: each good the hub buys,
+# its gross weekly flow (the rate plus the decay it replaces, within the flow
+# cap) at its market price. The overview's Purchases cell, beside Sales
+# Income, which counts only the other side. An estimate: the hub pays through
+# its production method, as any building does (the Budget panel's Goods for
+# Government Buildings has the bill).
+st_res_grain_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_grain_actual_rate_base_applied > 0 }
+		add = st_res_grain_actual_rate_base_applied
+		multiply = st_res_grain_unit_price
+	}
+}
+
+st_res_ammunition_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_ammunition_actual_rate_base_applied > 0 }
+		add = st_res_ammunition_actual_rate_base_applied
+		multiply = st_res_ammunition_unit_price
+	}
+}
+
+st_res_oil_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_oil_actual_rate_base_applied > 0 }
+		add = st_res_oil_actual_rate_base_applied
+		multiply = st_res_oil_unit_price
+	}
+}
+
+st_res_small_arms_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_small_arms_actual_rate_base_applied > 0 }
+		add = st_res_small_arms_actual_rate_base_applied
+		multiply = st_res_small_arms_unit_price
+	}
+}
+
+st_res_artillery_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_artillery_actual_rate_base_applied > 0 }
+		add = st_res_artillery_actual_rate_base_applied
+		multiply = st_res_artillery_unit_price
+	}
+}
+
+st_res_aeroplanes_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_aeroplanes_actual_rate_base_applied > 0 }
+		add = st_res_aeroplanes_actual_rate_base_applied
+		multiply = st_res_aeroplanes_unit_price
+	}
+}
+
+st_res_tanks_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_tanks_actual_rate_base_applied > 0 }
+		add = st_res_tanks_actual_rate_base_applied
+		multiply = st_res_tanks_unit_price
+	}
+}
+
+st_res_fertilizer_purchase_cost = {
+	value = 0
+	if = {
+		limit = { st_res_fertilizer_actual_rate_base_applied > 0 }
+		add = st_res_fertilizer_actual_rate_base_applied
+		multiply = st_res_fertilizer_unit_price
+	}
+}
+
+st_res_total_purchase_cost = {
+	value = 0
+	add = st_res_grain_purchase_cost
+	add = st_res_ammunition_purchase_cost
+	add = st_res_oil_purchase_cost
+	add = st_res_small_arms_purchase_cost
+	add = st_res_artillery_purchase_cost
+	add = st_res_aeroplanes_purchase_cost
+	add = st_res_tanks_purchase_cost
+	add = st_res_fertilizer_purchase_cost
+}
+
+# The rate a good's decrease and increase buttons would leave, for their
+# tooltips: the rate one step down or up, clamped as the click's own clamp
+# clamps it (st_res_clamp_stockpiles_with_hub_effect: the flow cap either way,
+# then the stock left to release and the room left to fill). Country scope.
+st_res_grain_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_rate }
+		add = var:st_res_grain_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_grain_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_grain_max_withdrawable
+}
+
+st_res_grain_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_rate }
+		add = var:st_res_grain_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_grain_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_grain_max_withdrawable
+}
+
+st_res_ammunition_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_rate }
+		add = var:st_res_ammunition_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_ammunition_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_ammunition_max_withdrawable
+}
+
+st_res_ammunition_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_rate }
+		add = var:st_res_ammunition_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_ammunition_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_ammunition_max_withdrawable
+}
+
+st_res_oil_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_rate }
+		add = var:st_res_oil_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_oil_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_oil_max_withdrawable
+}
+
+st_res_oil_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_rate }
+		add = var:st_res_oil_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_oil_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_oil_max_withdrawable
+}
+
+st_res_small_arms_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_rate }
+		add = var:st_res_small_arms_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_small_arms_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_small_arms_max_withdrawable
+}
+
+st_res_small_arms_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_rate }
+		add = var:st_res_small_arms_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_small_arms_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_small_arms_max_withdrawable
+}
+
+st_res_artillery_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_rate }
+		add = var:st_res_artillery_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_artillery_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_artillery_max_withdrawable
+}
+
+st_res_artillery_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_rate }
+		add = var:st_res_artillery_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_artillery_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_artillery_max_withdrawable
+}
+
+st_res_aeroplanes_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_rate }
+		add = var:st_res_aeroplanes_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_aeroplanes_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_aeroplanes_max_withdrawable
+}
+
+st_res_aeroplanes_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_rate }
+		add = var:st_res_aeroplanes_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_aeroplanes_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_aeroplanes_max_withdrawable
+}
+
+st_res_tanks_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_rate }
+		add = var:st_res_tanks_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_tanks_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_tanks_max_withdrawable
+}
+
+st_res_tanks_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_rate }
+		add = var:st_res_tanks_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_tanks_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_tanks_max_withdrawable
+}
+
+st_res_fertilizer_rate_after_up = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_rate }
+		add = var:st_res_fertilizer_rate
+	}
+	add = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_fertilizer_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_fertilizer_max_withdrawable
+}
+
+st_res_fertilizer_rate_after_down = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_rate }
+		add = var:st_res_fertilizer_rate
+	}
+	subtract = st_res_adjust_step_value
+	max = st_res_weekly_base_rate_cap
+	max = st_res_fertilizer_max_storable
+	min = st_res_neg_weekly_base_rate_cap
+	min = st_res_fertilizer_max_withdrawable
+}
