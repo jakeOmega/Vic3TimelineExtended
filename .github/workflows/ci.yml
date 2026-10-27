@@ -29,7 +29,7 @@ jobs:
   checks:
     name: Checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    # The whole job takes 11-20 minutes (October 2026; 3.12 is the slower one);
+    # The whole job takes 8-10 minutes (October 2026; 3.11 is the slower one);
     # 30 caps a hung step instead of burning the default 6-hour allowance.
     timeout-minutes: 30
     strategy:
@@ -83,8 +83,8 @@ jobs:
       # per CPU (-n auto). --dist loadfile runs each file whole, in order, on one
       # worker, as unittest does: under loadscope a file's classes are split into
       # batches, and pytest runs tearDownModule after each, so
-      # test_econ_save_series lost its temporary directory midway. Run one at a
-      # time, as before, this step took 16-24 minutes (October 2026).
+      # test_econ_save_series lost its temporary directory midway. This step
+      # takes 6-7 minutes; run one test at a time, it took 16-24 (October 2026).
       # --durations=25 lists the slowest tests, so a new slow one shows in the
       # log. `python3 -m unittest discover -s . -p 'test_*.py'` still runs the
       # same tests serially.
