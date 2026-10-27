@@ -2,7 +2,7 @@
 output, the hand-written files' contract with it, and the rules a play test
 can't see in one evening.
 
-Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md.
+Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
 The legs are tested in test_launch_windows.py (FleetLegsTest), the panel's
 labels in test_space_race_labels.py and its figures in
 test_space_race_layout.py.
@@ -749,6 +749,38 @@ class OrbitalSuperiorityTest(unittest.TestCase):
         self.assertRegex(texts[ON_ACTIONS.name], r"sr_fl_country_month = yes\s*\}\s*else_if = \{\s*"
                                                  r"limit = \{ has_modifier = sr_orbital_superiority \}\s*"
                                                  r"remove_modifier = sr_orbital_superiority")
+
+
+class EarthOrbitAiAndConsoleTest(unittest.TestCase):
+    """6d (design § 14, § 18): the AI's batteries, and the console's options."""
+
+    def test_the_ai_builds_batteries_only_at_war_with_a_fleet_power(self):
+        triggers = _strip(_raw(FLEET_TRIGGERS))
+        may = _block(triggers, "sr_battery_may_build_government")
+        self.assertIn("is_ai = no", may)
+        self.assertIn("sr_battery_ai_wants = yes", may)
+        self.assertIn("sr_battery_queued_levels < sr_battery_ai_max_levels", may)
+        wants = _block(triggers, "sr_battery_ai_wants")
+        self.assertIn("is_at_war = yes", wants)
+        self.assertIn("has_war_with = prev", wants)
+        self.assertIn("sr_fl_has_any = yes", wants)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_ai_max_levels"), 5)
+
+    def test_the_ai_runs_lasers_at_war_or_from_cluttered(self):
+        self.assertIn("sr_fl_ai_batteries = yes", _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_ai_review"))
+        ai = _block(_strip(_raw(EARTH_EFFECTS)), "sr_fl_ai_batteries")
+        self.assertIn("has_technology_researched = directed_energy_weapons", ai)
+        self.assertRegex(ai, r"OR = \{\s*is_at_war = yes\s*te_debris_index >= te_debris_tier_cluttered\s*\}")
+        self.assertIn("production_method = pm_orbital_battery_lasers", ai)
+        self.assertIn("production_method = pm_orbital_battery_kinetic", ai)
+
+    def test_the_console_options(self):
+        event = _block(_strip(_raw(DEBUG_EVENTS)), "te_debug_space_race.6")
+        self.assertIn("sr_reserve_debug_fill = yes", event)
+        self.assertIn("sr_earth_debug_blockade = yes", event)
+        blockade = _block(_strip(_raw(EARTH_EFFECTS)), "sr_earth_debug_blockade")
+        self.assertIn("has_war_with = root", blockade)
+        self.assertIn("sr_fl_by_local = { DO = new_at_earth }", blockade)
 
 
 if __name__ == "__main__":

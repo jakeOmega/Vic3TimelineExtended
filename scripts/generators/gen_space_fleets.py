@@ -1,6 +1,6 @@
 ﻿"""Solar System Colonization's fleets: every per-slot and per-location block.
 
-Design: ``docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md``
+Design: ``docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md``
 (slice 6: 6a the fleet record, Space Command and movement; 6b combat, blockade,
 seizure and destruction; 6c interdiction and the AI's offence). Full Colonies
 only.

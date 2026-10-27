@@ -305,7 +305,7 @@ sr_dome_breach_repairs = {
 # in percent, past its room at -50%. The one refresh site is sr_ebase_refresh
 # (sr_colony_module_effects.txt), monthly from the country pulse.
 # ======= Solar System Colonization - fleets (slice 6;
-# docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md § 5)
+# docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 5)
 # The fleets' upkeep: on each Space Command building, never the country (the
 # input multipliers are building-masked and would raise every building's use),
 # at sr_fleet_upkeep_units (full fleet strength in service / 10), its one

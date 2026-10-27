@@ -282,7 +282,7 @@ class RuleTest(unittest.TestCase):
         settings = re.findall(r"(?m)^\t(\w+) = \{", body)
         self.assertEqual(settings, ["space_race_colonies_full", "space_race_colonies_simple",
                                     "space_race_enabled", "space_race_disabled"])
-        self.assertIn("default = space_race_colonies_simple", body)
+        self.assertIn("default = space_race_colonies_full", body)
         for setting in settings:
             self.assertIn(f"flag = {setting}", _block(body, setting))
 

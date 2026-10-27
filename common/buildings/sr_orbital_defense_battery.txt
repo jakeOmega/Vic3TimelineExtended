@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — ground-to-orbit batteries (fleets design § 15)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
 # An extension of the anti-satellite strike (te_asat_strike_action.txt): guns
 # on the ground that fire on any enemy fleet at Earth every month, so a fleet
 # that has taken Earth orbit can't simply hold it for a whole war. Levels in

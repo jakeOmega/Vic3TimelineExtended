@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the record, Space Command, movement
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6a, §§ 2-6, 9.6, 14). Full Colonies only.
 #
 # A country keeps up to nine fleets in country variables sr_fl_<n>_* (n = 1 to
@@ -564,9 +564,11 @@ sr_site_transfer_marines = {
 # sr_fl_<n>_may_depart_<loc> a player's does. The defence's rules (6b) are
 # sr_fl_ai_defend, the offence's (6c) sr_fl_ai_attack
 # (sr_fleet_combat_effects.txt); the reserve's launch (6d), first so the
-# defence can send what it put up, is sr_fl_ai_reserve (sr_earth_orbit_effects.txt).
+# defence can send what it put up, is sr_fl_ai_reserve, and its batteries'
+# method sr_fl_ai_batteries (sr_earth_orbit_effects.txt).
 sr_fl_ai_review = {
 	sr_fl_ai_reserve = yes
+	sr_fl_ai_batteries = yes
 	sr_fl_ai_defend = yes
 	sr_fl_ai_send_garrisons = yes
 	sr_fl_each_slot = { DO = ai_home }

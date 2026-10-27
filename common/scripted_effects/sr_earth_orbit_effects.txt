@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: Earth orbit (slice 6d)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (§§ 5.1, 14, 15). Full Colonies only. A blockade must not be able to hold a
 # power for a whole war (owner: two ships in orbit must not beat thirty built
 # one at a time), so:
@@ -257,5 +257,86 @@ sr_orbital_superiority_refresh = {
 			sr_orbital_superiority_margin > 0
 		}
 		add_modifier = { name = sr_orbital_superiority multiplier = sr_orbital_superiority_margin }
+	}
+}
+
+# ---- The AI's batteries (design § 14, 6d) ---------------------------------------------------------
+# Country scope, an AI fleet power's month (sr_fl_ai_review). It builds
+# batteries through the building's own AI, held by can_build_government to
+# wars with a country that has fleets (sr_battery_may_build_government). With
+# Directed Energy Weapons it runs Ground Lasers at war (twice the fire and no
+# debris) and in peace once the debris is Cluttered (they sweep it);
+# otherwise the cheaper Kinetic Interceptors. A method is switched only when a
+# battery runs the other, so a month with nothing to change changes nothing.
+sr_fl_ai_batteries = {
+	if = {
+		limit = {
+			sr_has_battery = yes
+			has_technology_researched = directed_energy_weapons
+		}
+		if = {
+			limit = {
+				OR = {
+					is_at_war = yes
+					te_debris_index >= te_debris_tier_cluttered
+				}
+			}
+			if = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_orbital_defense_battery
+						NOT = { has_active_production_method = pm_orbital_battery_lasers }
+					}
+				}
+				activate_production_method = {
+					building_type = building_orbital_defense_battery
+					production_method = pm_orbital_battery_lasers
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_orbital_defense_battery
+					NOT = { has_active_production_method = pm_orbital_battery_kinetic }
+				}
+			}
+			activate_production_method = {
+				building_type = building_orbital_defense_battery
+				production_method = pm_orbital_battery_kinetic
+			}
+		}
+	}
+}
+
+# ---- Console (te_debug_space_race.6, 6d) ----------------------------------------------------------
+# ROOT's Earth blockaded by the strongest country at war with it (by
+# prestige): that country gets a fleet of 100 strength of each role at Earth,
+# full, in its lowest empty slot. With no fleet of ROOT's at Earth, ROOT's
+# Earth is then blockaded; with none at war, nothing happens.
+sr_earth_debug_blockade = {
+	if = {
+		limit = {
+			any_country = {
+				is_country_alive = yes
+				has_war_with = root
+			}
+		}
+		ordered_country = {
+			limit = {
+				is_country_alive = yes
+				has_war_with = root
+			}
+			order_by = prestige
+			max = 1
+			sr_fl_find_empty = yes
+			if = {
+				limit = { local_var:sr_fl_n > 0 }
+				sr_fl_by_local = { DO = new_at_earth }
+				sr_fl_by_local = { DO = debug_strength }
+				sr_fl_by_local = { DO = fill }
+			}
+		}
+		sr_loc_rebuild = yes
 	}
 }

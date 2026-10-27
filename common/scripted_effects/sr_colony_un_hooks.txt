@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # A COLONY SEIZED OR DESTROYED — THE UN'S HOOK
 # ============================================================================
-# docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md § 13.
+# docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 13.
 # Called by the fleets' seizure, destruction and free-colony seizure
 # (sr_fleet_combat_effects.txt: sr_site_occupy, sr_site_destroy,
 # sr_site_take_free), after each has booked its own costs.

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the panel's scripted GUIs
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 16. The buttons of the Fleets rows (gui/journal_entry_widgets/
 # sr_fleets_generated_rows.gui, one per slot, which pass the slot as scope:op)
 # and of Space Command's build mix (scope:op the role: 1 warships, 2 rapid

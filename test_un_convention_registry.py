@@ -144,7 +144,7 @@ CONVENTIONS = (
     Convention("asat", "un_agency_unoda", "un_asat_moratorium_modifier", "country",
                32, 41, 1411, "un_asat_refusal_modifier",
                (), ("sr_space_race_on", "un_chamber_space_race_rule_sgui"), False),
-    # Solar colonization's fleets (docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+    # Solar colonization's fleets (docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
     # § 13): raised by a colony's seizure or destruction (docket item 17), and
     # Assembly business too, under the Space Race rule's Full Colonies.
     Convention("colony_protection", "un_agency_copuos", "un_colony_protection_modifier", "country",

@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: combat, blockade, seizure, destruction
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6b, §§ 7-11, 14; 6c, §§ 12-14; 6d, § 15). Full Colonies only.
 #
 # Each month, from the global step (sr_fl_global_month, after the fleets land

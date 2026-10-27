@@ -467,6 +467,24 @@ te_debug_space_race.6 = { # REVIEWED 2026-10-26: console-only test event (`event
 		sr_fl_each_slot = { DO = debug_icpt }
 	}
 
+	# 6d: 100 strength of each role into our ground reserve.
+	option = {
+		name = te_debug_space_race.6.n
+		trigger = { sr_colonies_full_enabled = yes }
+		sr_reserve_debug_fill = yes
+	}
+
+	# 6d: our Earth blockaded by the strongest country at war with us, which
+	# gets a fleet of 100 of each role at Earth (ours must not be there).
+	option = {
+		name = te_debug_space_race.6.o
+		trigger = {
+			sr_colonies_full_enabled = yes
+			is_at_war = yes
+		}
+		sr_earth_debug_blockade = yes
+	}
+
 	# The upkeep_inputs probe (design § 18): the generic building_goods_input_mult,
 	# then, in a second run, the three good-specific multipliers, at +50% on our
 	# Space Command (or Space Program); te_debug_space_race.7 logs the after

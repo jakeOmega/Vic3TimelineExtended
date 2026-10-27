@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: shared triggers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6). Full Colonies only. The per-slot and per-location triggers are
 # generated (common/scripted_triggers/sr_fleets_generated.txt, from
 # scripts/generators/gen_space_fleets.py).

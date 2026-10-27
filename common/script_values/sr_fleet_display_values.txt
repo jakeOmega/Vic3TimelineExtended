@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the panel's figures
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 16. Read by the GUI only (gui/journal_entry_widgets/space_race_widget.gui,
 # the Space Command, Fleets and Colony Defences sections), as
 # space_race_display_values.txt's sr_disp_* are; no script reads them. The

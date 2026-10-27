@@ -18,7 +18,7 @@ them as month-index ranges against ``te_history_month_index``
   times, and the fleets' legs.
 * common/script_values/sr_fleet_legs_generated.txt -- the legs between the
   nine fleet locations (solar colonization slice 6 design § 1.2,
-  docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md): for
+  docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md): for
   every ordered pair and drive, ``sr_leg_months_<drive>_<a>_<b>`` and
   ``sr_leg_dv_<drive>_<a>_<b>`` (km/s), and the rapid response readers.
 
@@ -1750,7 +1750,7 @@ def render_legs(plans: list[LegPlan]) -> str:
 
 
 LEGS_PREAMBLE = """# The legs between the nine fleet locations (solar colonization slice 6 design
-# §§ 1.2-2, docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md),
+# §§ 1.2-2, docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md),
 # for every ordered pair and drive (chemical, fusion, torch, antimatter):
 #   sr_leg_months_<drive>_<a>_<b>   the months the leg takes, leaving this month
 #   sr_leg_dv_<drive>_<a>_<b>       its delta-v, km/s (tenths for chemical and

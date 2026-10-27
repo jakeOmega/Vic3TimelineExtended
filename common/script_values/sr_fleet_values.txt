@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the numbers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6 of the scope). Full Colonies only. Every number the fleets' script
 # reads is here; the per-slot and per-location values that read them are
 # generated (common/script_values/sr_fleets_generated.txt, from

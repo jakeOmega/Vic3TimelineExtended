@@ -4721,7 +4721,7 @@
  space_race_events.100.f:0 "\"We can see it, and we can do the arithmetic. What we can't do is make the arithmetic come out differently.\"\n\n— Orbital Tracking Command"
  space_race_events.100.t:0 "Hostile Fleet Bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')]"
  space_race_events.101.a:0 "Count the losses."
- space_race_events.101.d:0 "Our fleet has fought at [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]. There is no sound in space and little to see: points of light, a flare of propellant, and then silence on a channel that had been talking."
+ space_race_events.101.d:0 "Our forces have fought at [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]. There is no sound in space and little to see: points of light, a flare of propellant, and then silence on a channel that had been talking."
  space_race_events.101.f:0 "\"At these distances you never see the ship that kills you. You see its numbers stop changing.\"\n\n— Fleet Officer"
  space_race_events.101.t:0 "Battle Over [ROOT.GetCountry.GetCustom('sr_battle_loc_name')]"
  space_race_events.102.a:0 "So it stands."
@@ -5849,7 +5849,7 @@
  te_debug_space_race.6.a:0 "Log our fleets and every location's forces"
  te_debug_space_race.6.b:0 "Add 100 strength of each role to our home fleet at Earth, full"
  te_debug_space_race.6.c:0 "Land every fleet of ours in transit now"
- te_debug_space_race.6.d:0 "Test the fleets (slice 6): log them, build and move them, and try combat, occupation, interdiction and the upkeep probe. The log lines are tagged TE_SR_FLEET, TE_SR_COMBAT and TE_SR_PROBE."
+ te_debug_space_race.6.d:0 "Test the fleets (slice 6): log them, build and move them, and try combat, occupation, interdiction, the ground reserve, a blockade of Earth and the upkeep probe. The log lines are tagged TE_SR_FLEET, TE_SR_COMBAT and TE_SR_PROBE."
  te_debug_space_race.6.e:0 "Fill every fleet's propellant and supply"
  te_debug_space_race.6.f:0 "docs/testing/solar-colonies-playtest.md, Fleets."
  te_debug_space_race.6.g:0 "Raise our fleets' drive by one (a docked fleet refits back)"
@@ -5859,6 +5859,8 @@
  te_debug_space_race.6.k:0 "Upkeep probe: the generic input multiplier at +50% (14 days)"
  te_debug_space_race.6.l:0 "Upkeep probe: the three good-specific input multipliers at +50% (14 days)"
  te_debug_space_race.6.m:0 "6c: our first fleet that may interdict begins an interdiction (at its price)"
+ te_debug_space_race.6.n:0 "6d: add 100 strength of each role to our ground reserve"
+ te_debug_space_race.6.o:0 "6d: our strongest enemy puts a fleet of 100 of each role at Earth (a blockade if none of ours is there)"
  te_debug_space_race.6.t:0 "Fleets Console"
 
 #

@@ -5060,7 +5060,7 @@ space_race_events.99 = {
 }
 
 # ===== Solar System Colonization, slice 6: fleets, combat and occupation =====
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # § 17. Full Colonies only. Each names its world or location through a country
 # variable (a world's index, read by sr_sites_generated_custom_loc.txt, or a
 # location's code, read by sr_fleets_generated_custom_loc.txt); the after block
