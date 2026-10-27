@@ -709,7 +709,7 @@
  concept_banking_inflation:0 "Inflation"
  concept_banking_inflation_anchoring_desc:0 "$country_inflation_anchoring_add_desc$"
  concept_banking_inflation_desc:0 "What the prices your people actually pay did over the last year. It is a reading, not a lever: you reach it through the [concept_banking_policy_rate], through what you print, and through the laws that set what labour costs. Where it stands on a ladder of six price bands, from Deflation through Stable prices to Hyperinflation, puts a modifier on your country."
- concept_banking_intervention_budget_desc:0 "Points to spend on banking interventions. Every active policy holds its cost for as long as it stays enabled, so disabling one frees its points again. Your [concept_financial_regulation] law sets most of the budget, and a national bank and a power bloc's banking union add a point each."
+ concept_banking_intervention_budget_desc:0 "Points to spend on interventions in the [concept_banking_cycle]: banking tools, a command economy's planning tools or a cooperative's council mandates. Every active policy holds its cost for as long as it stays enabled, so disabling one frees its points again. Your [concept_financial_regulation] law sets most of the budget, and a national bank and a power bloc's banking union add a point each."
  concept_banking_mandate:0 "Mandate"
  concept_banking_mandate_desc:0 "The rule a delegated or independent central bank follows when it sets the target each month: Inflation Targeting, the Dual Mandate, Growth, or, on a gold standard, Peg Defence. It does nothing while you hold the dial yourself. Under $law_central_bank_independence$ it is an act of law rather than your choice."
  concept_banking_momentum:0 "Banking Momentum"

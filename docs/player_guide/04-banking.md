@@ -496,8 +496,8 @@ Emergency Liquidity Program still refunds 1% of GDP when that closes it.
 ### Banking history charts
 
 The History section starts open in both the journal entry and the Banking tab.
-It charts the last 1 Year, 5 Years or 20 Years month by month: Cycle Value,
-Cycle Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
+It charts the last 1 Year, 5 Years or 20 Years month by month: Banking Cycle
+Value, Banking Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
 Inflation and the Exchange Rate Index under the full Banking System. Markers
 flag policy changes, including tools a change of economic system switches off,
 and crashes, including imported ones. Hover a bar for that month's phase or
@@ -693,7 +693,7 @@ fade after a return to Neutral.
 ### What your government pays to borrow
 
 Rate You Pay shows the yearly interest on your debt. It adds up the market yield
-(the higher of your policy rate and the World Reference Rate plus expected
+(the higher of your policy rate and the Reference Rate plus expected
 inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
 
@@ -705,7 +705,7 @@ cycle phase, crisis tools, banking events, bankruptcy, a debt load past a
 quarter of your credit limit (up to +4 points at the limit), expectations that
 have strayed from target, money printing and a weak currency.
 
-The World Reference Rate is 3% for every country, 2.5% once any great power has
+The Reference Rate is 3% for every country, 2.5% once any great power has
 Macroeconomics and 2% once one has Globalization. The World Rate is the real
 interest rate of the great powers that set their own; gold flows and exchange
 rates are measured against it.
@@ -979,7 +979,7 @@ mandates, inflation,
 exchange rate, gold reserve, monetary treaty articles, Monetary Union principles
 or currency boards.
 
-You still borrow at a rate of your own: the World Reference Rate, a point more
+You still borrow at a rate of your own: the Reference Rate, a point more
 without a national bank, plus credit standing and risk premium, so a Panic still
 raises your interest. Open-Market Operations needs only Keynesian Economics,
 four points and a law that allows it, and The Gold Window Closes, a
