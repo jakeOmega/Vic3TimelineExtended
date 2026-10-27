@@ -21,22 +21,22 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 - [Tests that pin what would change](#tests-that-pin-what-would-change)
 - [Tooling that would keep this from coming back](#tooling-that-would-keep-this-from-coming-back)
 
-| Slice | Detail file | Findings | Loc fixes applied |
-|---|---|---|---|
-| Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 |
-| Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 |
-| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 |
-| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 |
-| Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 |
-| Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 |
-| Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 |
-| Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 | 29 |
-| Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 |
-| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 |
+| Slice | Detail file | Findings | Loc fixes applied | Issue |
+|---|---|---|---|---|
+| Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 | #1203 |
+| Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | #1204 |
+| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | #1205 |
+| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | #1206 |
+| Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | #1207 |
+| Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
+| Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | #1209 |
+| Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 | 29 | #1210 |
+| Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | #1211 |
+| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 | #1212 |
 
 ## What this PR changes
 
-**Loc text rewritten in place (about 330 keys, no key renamed or added).** Every `[...]` data expression a new value keeps or adds is copied from the key itself or from a sibling that renders in the same context, and no test pins a changed value. The kinds:
+**Loc text rewritten in place (about 330 keys, no key renamed or added).** Every `[...]` data expression a new value keeps or adds is copied from the key itself or from a sibling that renders in the same context. Two tests pinned an old value and are updated with it (`test_cultural_hegemony_layout`, `test_grand_monument_trophies`). The kinds:
 
 - **Boilerplate cut where the same fact sits one line or one hover away.** Global Warming's "Applies to your own country. Available at 0.5 °C…" under every policy, whose Adopt button already ticks those conditions. "These are the journal entry's own panels…" on twelve tab tooltips, now said once on each Open Journal Entry button. The click instructions on every Tax Code row, now in the intro above the rows. The estimate caveat on every interest-group offer. "Counted once the groups have had time to judge our doctrine" on four At Home rows.
 - **Engine-rendered modifier lines in place of prose**: the 15 Grand Monument boon tooltips, the four pension buttons and Carbon Removal Support now print `[GetStaticModifier(...).GetDesc]`. The Tax Code's Pass, Force Through and Renegotiate tooltips no longer restate the approval modifiers printed under them.
@@ -190,7 +190,7 @@ One pass, panel by panel, with the width tests each panel already has, is cheape
 
 Each table lists every finding in the slice. "(loc part done)" means this PR applied the finding's loc-only part and the rest is open; the detail file says what remains. Effort: quick is loc-only or a line of markup; medium is a GUI change, a concept or a small script change; large is a new script list, a new section or a generator change. Findings are numbered in each slice's own order of discovery, so read each slice's **Top priorities** first.
 
-### Banking, Budget Breakdown and the top bar ([detail](gui_audit/banking_budget.md))
+### Banking, Budget Breakdown and the top bar ([detail](gui_audit/banking_budget.md), #1203)
 
 Top priorities: the Monetary Policy row tooltips are essays that open with their label's concept word for word; the rules belong in five new How topics (BNK-1). Each mandate button should say what its mandate does (BNK-2). Five external tools print raw triggers when greyed (BNK-3). History markers print a tool's whole current tooltip (BNK-4). The Breakdown tab's tooltips are generic or repeat pool figures on every row (BNK-17–19).
 
@@ -218,7 +218,7 @@ Top priorities: the Monetary Policy row tooltips are essays that open with their
 | BNK-20 | Breakdown: "How the Breakdown Works" is one text block, smaller than the house type, and mixes UI help with accounting | style / over-explaining | medium |
 | BNK-21 | Breakdown mirror line in every cost modifier: shorter label | style | quick |
 
-### Legislated Tax Code ([detail](gui_audit/tax_code.md))
+### Legislated Tax Code ([detail](gui_audit/tax_code.md), #1204)
 
 Top priorities: an overview of each process's status (TAX-1); the bill's buttons under its conditions, with a pinned footer on the Budget tab (TAX-2); a blocked draft's fix shown where the player is (TAX-3); the revenue estimate in the draft summary and as a table (TAX-4); the held data never drawn: taxed goods, relief states, "in force since" (TAX-12, TAX-20); greyed native Budget controls saying why (TAX-11).
 
@@ -251,7 +251,7 @@ Top priorities: an overview of each process's status (TAX-1); the bill's buttons
 | TAX-25 | Force Through is drawn, greyed, when the bill can pass on its own | other | quick |
 | TAX-26 | Customs levels are words where vanilla uses tariff icons | style | medium |
 
-### United Nations ([detail](gui_audit/un.md))
+### United Nations ([detail](gui_audit/un.md), #1205)
 
 Top priorities: an overview of what needs us, and our own vote under the tally (UN-1, UN-2); the Actions grid replaced by AI-only buttons plus inline controls (UN-9); the session card trimmed to what the strip doesn't show (UN-3, UN-4); the proposal hovers' shared boilerplate moved into one concept (UN-5); a findable proposal list with our own tabling wait (UN-7, UN-8); modifier lines for programmes and membership (UN-10).
 
@@ -284,7 +284,7 @@ Top priorities: an overview of what needs us, and our own vote under the tally (
 | UN-25 | The standing meter shows for countries that hold no standing | hidden info / other | quick |
 | UN-26 | How the UN Works restates concept descriptions (loc part done) | over-explaining | quick |
 
-### Cultural Hegemony and Covert Warfare ([detail](gui_audit/hegemony_covert.md))
+### Cultural Hegemony and Covert Warfare ([detail](gui_audit/hegemony_covert.md), #1206)
 
 Top priorities: the pull breakdown's order (CH-3; CH-1 is fixed here); the leaderboard as a one-line table (CH-2); a programmes cell in the overview (CH-9); each running operation's effect shown as modifier lines (COV-1); the launch decision in one place (COV-2); one name per operation (COV-3); the Tradecraft bar's retired eye marker (COV-6).
 
@@ -320,7 +320,7 @@ Top priorities: the pull breakdown's order (CH-3; CH-1 is fixed here); the leade
 | COV-13 | Launch-tooltip wording out of step with the panel (loc part done) | style | quick |
 | COV-14 | Type sizes predate the 17 / 20 / 16 ladder | style | medium |
 
-### Global Warming, Strategic Reserve and the Market panel ([detail](gui_audit/climate_reserve_market.md))
+### Global Warming, Strategic Reserve and the Market panel ([detail](gui_audit/climate_reserve_market.md), #1207)
 
 Top priorities: repeal tooltips rendered from the modifier (GW-5; the corrected prose is applied meanwhile); the movement-radicalism line as a `script_only` type (GW-3); the reserve rows' rate beside its buttons, and per-cell hovers in place of the 17-line row hover (SR-1, SR-2, SR-3); Top Emitters and Top Trade Partners as lists (GW-11, MKT-1); the trade charts' units and the hard-coded English (MKT-2, MKT-3).
 
@@ -359,7 +359,7 @@ Top priorities: repeal tooltips rendered from the modifier (GW-5; the corrected 
 | MKT-4 | The table hides its best hover and uses an off-ladder size | hidden info / style | quick–medium |
 | MKT-5 | All Goods tariffs: the cooldown has no end date, and the label's hover is unmarked | hidden info | quick–medium |
 
-### Nuclear Weapons ([detail](gui_audit/nuclear.md))
+### Nuclear Weapons ([detail](gui_audit/nuclear.md), #1208)
 
 Top priorities: one hover per choice row (NUC-2; NUC-1 is fixed here); the posture shown once with its change controls beside it (NUC-3), and when it can next change, which script already computes (NUC-4); readiness as a comparison table, with modifier lines for every level and authority (NUC-5, NUC-6); a compact crisis with Our Moves beside it (NUC-7); the leaderboard and world crises as lists (NUC-14).
 
@@ -387,7 +387,7 @@ Top priorities: one hover per choice row (NUC-2; NUC-1 is fixed here); the postu
 | NUC-20 | Smaller style points (loc part done) | style | quick–medium |
 | NUC-21 | The overview names states but not what needs attention | spread-out/redundant | large |
 
-### Space Race, Solar Colonization, Orbital Debris and Seabed ([detail](gui_audit/space_seabed.md))
+### Space Race, Solar Colonization, Orbital Debris and Seabed ([detail](gui_audit/space_seabed.md), #1209)
 
 Top priorities: reasons on about 470 greyed buttons (SPC-1); the concept family the owner described (SPC-3); a collapsed How Solar Colonization Works in place of seven live paragraphs (SPC-4); one Colonies table with a view switch (SPC-5); alerts in the overview (SPC-6); Target beside the destination (SPC-7); the Seabed overview's hovers about ours, and policies as modifier lines (SEA-1, SEA-2).
 
@@ -419,7 +419,7 @@ Top priorities: reasons on about 470 greyed buttons (SPC-1); the concept family 
 | SEA-5 | The +1 licence caveat is repeated in five basin hovers | over-explaining | quick |
 | SEA-6 | The Pool column head restates the legend under the table | spread-out/redundant | quick |
 
-### Grand Monuments and Colonial Empire ([detail](gui_audit/monuments_colonial.md))
+### Grand Monuments and Colonial Empire ([detail](gui_audit/monuments_colonial.md), #1210)
 
 Top priorities: colonial holdings and great-power pressure as lists (CE-1, CE-2); monument policies as modifier lines (GM-2; the boons are done here); an "Awaiting a Decision" section near the top (GM-3); figures for the three contested choices (GM-4); the colonial definitions as three concepts (CE-4).
 
@@ -454,7 +454,7 @@ Top priorities: colonial holdings and great-power pressure as lists (CE-1, CE-2)
 | CE-10 | Stale text: the decolonization concept and both tab tooltips (loc part done) | other / hidden info | quick |
 | CE-11 | Smaller style points | style | quick–medium |
 
-### Demographics, the Nation tab, the Timeline Extended window and the system-tab gates ([detail](gui_audit/demog_nation_window.md))
+### Demographics, the Nation tab, the Timeline Extended window and the system-tab gates ([detail](gui_audit/demog_nation_window.md), #1211)
 
 Top priorities: the fertility tooltips promise figures no longer drawn (DEM-1); Work and Retirement and Longevity topics in How (DEM-3, DEM-2); the country panel's Modifiers list says nothing about the 249 modifiers it hands to the Nation tab (NAT-1); the Nation overview's hovers give each reading's cause, not a definition (NAT-3); one shape for every greyed-tab checklist (WIN-1, mostly done here).
 
@@ -479,7 +479,7 @@ Top priorities: the fertility tooltips promise figures no longer drawn (DEM-1); 
 | DEM-7 | When the census is taken is told three ways, one of them wrong (loc part done) | style / accuracy | quick |
 | DEM-8 | Small consistency points (loc part done) | style / redundant | quick–medium |
 
-### Additions to vanilla panels, and journal entries with no panel ([detail](gui_audit/vanilla_panels_other_jes.md))
+### Additions to vanilla panels, and journal entries with no panel ([detail](gui_audit/vanilla_panels_other_jes.md), #1212)
 
 Top priorities: State Collapse's status and goal line (JE-1; its reason is done here); World War's tension shown, and its buttons' conditions phrased (JE-3); Civil Rights' policy months shown (JE-4); Create New Religion's Proclaim effects made visible (JE-2); the construction market's read-out as a table, with one explainer (VAN-1–3); the state tiles' row hovers underlined (VAN-10).
 
@@ -539,7 +539,7 @@ Each detail file names the test beside its finding. The ones most proposals touc
 
 ## Tooling that would keep this from coming back
 
-Four checks the audit ran by hand. Each would make a cheap audit in the `POST_LOAD_AUDITS` mould:
+Four checks the audit ran by hand (#1213). Each would make a cheap audit in the `POST_LOAD_AUDITS` mould:
 
 - **Long live tooltips:** loc keys referenced from `.gui` files, outside How keys, over a length (the scan behind finding 7), with a `REVIEWED` suppression for the ones meant to be long.
 - **Hidden modifier lines:** a `custom_tooltip` whose block holds an `add_modifier` and whose text renders no `GetStaticModifier`.
