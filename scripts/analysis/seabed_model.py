@@ -178,8 +178,8 @@ SURVEY, SPONSOR, UNILATERAL = 1, 2, 3
 
 # te_seabed_policy_factor_* / te_seabed_coast_weight / te_seabed_distant_navy_share /
 # te_seabed_station_weight / te_seabed_navy_assertive_mult
-POLICY_FACTOR = {SURVEY: 0.25, SPONSOR: 1.0, UNILATERAL: 1.0}
-LATENT_FACTOR = 0.25                 # te_seabed_latent_factor: a coastal country without the technology, in place of its policy factor
+POLICY_FACTOR = {SURVEY: 0.75, SPONSOR: 1.0, UNILATERAL: 1.0}
+LATENT_FACTOR = 0.75                 # te_seabed_latent_factor: a coastal country without the technology, in place of its policy factor
 COAST_WEIGHT = 2
 DISTANT_NAVY_SHARE = 0.05
 STATION_WEIGHT = 5

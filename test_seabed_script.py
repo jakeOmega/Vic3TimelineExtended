@@ -113,10 +113,25 @@ class ConstantsTest(unittest.TestCase):
 
     def test_long_haul(self):
         body = block(read(MODIFIERS), "te_seabed_long_haul")
-        self.assertIn("building_ocean_mine_throughput_add = -0.25", body)
+        self.assertIn("building_throughput_add = -0.25", body)
+        self.assertNotIn("building_ocean_mine_throughput_add", body)
         self.assertEqual(literal(self.values, "te_seabed_long_haul_penalty_pct"), 25)
-        # a mod building: the engine registers no throughput type for it
+        # a mod building: the engine registers no throughput type for it (kept
+        # for the blockade fallback)
         self.assertIn("building_ocean_mine_throughput_add = {", read(TYPES))
+
+    def test_long_haul_sits_on_the_building(self):
+        """On the state's Deep-Sea Mine, from the state pulse: a building has no
+        variables, so the multiplier is a state variable read through root, and
+        it is never removed; the state's own copy (an older save's) comes off."""
+        body = strip_comments(block(read(EFFECTS), "te_seabed_refresh_long_haul"))
+        walk = body[body.index("every_scope_building"):]
+        self.assertLess(body.index("remove_modifier = te_seabed_long_haul"), body.index("every_scope_building"))
+        self.assertIn("name = te_seabed_long_haul_x value = te_seabed_long_haul_mult", body[:body.index("every_scope_building")])
+        self.assertIn("is_building_type = building_ocean_mine", walk)
+        self.assertLess(walk.index("remove_modifier = te_seabed_long_haul"), walk.index("add_modifier"))
+        self.assertIn("multiplier = root.var:te_seabed_long_haul_x", walk)
+        self.assertNotIn("remove_variable = te_seabed_long_haul_x", strip_comments(read(EFFECTS)))
 
     def test_no_literal_has_six_decimals(self):
         for rel in (VALUES, AI_VALUES, EFFECTS, TRIGGERS):

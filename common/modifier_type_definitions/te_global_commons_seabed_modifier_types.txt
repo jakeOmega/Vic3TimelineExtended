@@ -2,9 +2,12 @@
 # GLOBAL COMMONS — SEABED LICENCES: modifier types
 # ============================================================================
 # building_ocean_mine is a mod building, so the engine registers no
-# building_<type>_throughput_add for it (docs/engine/modifier_patterns.md):
-# Long-Haul Seabed Operations (te_seabed_long_haul) needs this one, or it
-# would do nothing and log nothing.
+# building_<type>_throughput_add for it (docs/engine/modifier_patterns.md),
+# and a modifier carrying it unregistered would do nothing and log nothing.
+# Long-Haul Seabed Operations carried it until 2026-10-27, when it moved onto
+# the building itself (building_throughput_add). Kept for the blockade
+# fallback docs/testing/global-commons-playtest.md item 28 names, and the
+# Nation tab's row.
 
 building_ocean_mine_throughput_add = {
 	color = good

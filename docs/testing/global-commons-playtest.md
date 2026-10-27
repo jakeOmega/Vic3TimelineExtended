@@ -87,7 +87,7 @@ even in that save, and the scale comes from those lines.
    of them is another basin's, Claims (our unused claims in its basin, the Seabed tab's Free figure
    for that basin) and Weight. Each row's hover: the levels built and queued with local and distant
    licences, and a "wait for a licence" line only when a level has none; the long-haul penalty
-   (matching Long-Haul Seabed Operations on the state); the weight's coast (2, or 1 unincorporated),
+   (matching Long-Haul Seabed Operations on the state's Deep-Sea Mine); the weight's coast (2, or 1 unincorporated),
    port levels, naval share and policy factor, with our weight in the basin at the last sharing.
    Check the basin's name renders in the Basin, Claims and Weight hovers (they splice it in), and
    that the "wait for a licence" line renders its number (it reads the state inside a key named by
@@ -298,7 +298,15 @@ even in that save, and the scale comes from those lines.
     tab opens, and a notice names it to the players already in the basin). Under the Regulated
     regime, with the poorer parties still without the technology, the first claimant's share stays
     within the open half. Check the yearly sharing's month doesn't hitch: it now weighs and
-    water-fills every coastal country, not only the claimants.
+    water-fills every coastal country, not only the claimants. Scientific Survey and the waiting
+    countries weigh at ×0.75 (the owner, 2026-10-27: ×0.25 gave Sponsor Contractors a 4× edge).
+31. **Long-Haul Seabed Operations on the building** (owner, 2026-10-27). A Deep-Sea Mine with
+    distant licences: the modifier is on the building, in its throughput breakdown, at -25% times
+    the state's share of distant licences (the tile's Long-haul row gives the figure), and no
+    longer on the state; the building's throughput falls by that much against a mine with none.
+    A save from before the move loses the state's copy at the next monthly update. The
+    multiplier is a state variable read through `root` (`resettlement_refresh_destination_readout`'s
+    pattern): check the figure stays right between monthly updates, not only on the day of one.
 
 ### Engine facts the build assumes, unverified
 

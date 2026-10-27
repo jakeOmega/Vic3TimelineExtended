@@ -71,7 +71,7 @@ te_seabed_assertive_navy_mult = 2
 # (docs/testing/global-commons-playtest.md).
 te_seabed_power_projection_scale = 300
 # Policy factors (§ 2.5).
-te_seabed_policy_factor_survey = 0.25
+te_seabed_policy_factor_survey = 0.75
 te_seabed_policy_factor_sponsor = 1
 te_seabed_policy_factor_unilateral = 1
 # A coastal country without Abyssal Plain Mining is weighed at this in place
@@ -79,10 +79,12 @@ te_seabed_policy_factor_unilateral = 1
 # owner 2026-10-27): every sharing weighs every coastal country, so the first
 # claimant wins only what its weight does against everyone's, at most
 # 1 / this times its share once all have the technology on one policy. The
-# race's one dial: 0 hands the first claimant every pool, 1 leaves no head
-# start. Survey's factor, so researching the technology moves nothing until a
+# race's dial, with Survey's factor beside it: 0 hands the first claimant
+# every pool, 1 leaves no head start. 0.75, not the first 0.25 (owner,
+# 2026-10-27: Sponsor Contractors' 4x over a waiting country was too large).
+# Survey's factor, so researching the technology moves nothing until a
 # policy is chosen.
-te_seabed_latent_factor = 0.25
+te_seabed_latent_factor = 0.75
 
 # ---- Policy (§ 2.5; seabed claims spec §§ 2.3-2.4) ----
 # Influence held while the policy stands: unit modifiers
@@ -121,7 +123,7 @@ te_seabed_fee_rate = 0.02
 
 # ---- Long-haul (§ 2.4) ----
 # Display figure: te_seabed_long_haul (te_global_commons_seabed_modifiers.txt)
-# carries building_ocean_mine_throughput_add = -0.25 at multiplier 1.
+# carries building_throughput_add = -0.25 at multiplier 1, on the Deep-Sea Mine.
 te_seabed_long_haul_penalty_pct = 25
 
 # ============================================================================

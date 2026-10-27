@@ -398,7 +398,7 @@ class WeightTest(unittest.TestCase):
         coast = [("pacific", 0)]
         survey = m.compute_weights(self._country_with(100, coast, m.SURVEY), 0)
         unilateral = m.compute_weights(self._country_with(100, coast, m.UNILATERAL), 0)
-        self.assertAlmostEqual(survey["pacific"], (2 + 100) * 0.25)
+        self.assertAlmostEqual(survey["pacific"], (2 + 100) * m.POLICY_FACTOR[m.SURVEY])
         self.assertAlmostEqual(unilateral["pacific"], 2 + 200)
         self.assertAlmostEqual(unilateral["atlantic"], 0.05 * 200)
         world = self._country_with(100, coast)
@@ -1024,15 +1024,16 @@ class LeaseTest(unittest.TestCase):
                 m.yearly_pass(w)
 
     def test_partial_top_up(self):
-        # a weak lessor: about 12 Pacific claims a sharing
+        # a weak lessor (about 33 Pacific claims a sharing on Survey's ×0.75,
+        # under 43 at any factor) and a lease larger than that
         w = self._world(lessor_policy=m.SURVEY, lessor_navy=0)
         w.countries[0].unbuilt["pacific"] = 3
-        m.start_lease(w, 0, 1, "pacific", 20)
+        m.start_lease(w, 0, 1, "pacific", 100)
         self.assertEqual(w.countries[1].lease_unused["pacific"], 3)
         self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
         m.yearly_pass(w)
         share = w.countries[0].ent["pacific"] - w.countries[0].sh["pacific"]
-        self.assertLess(share, 20)
+        self.assertLess(share, 100)
         self.assertEqual(w.countries[1].lease_unused["pacific"], share)
         self.assertEqual(w.countries[0].unbuilt["pacific"], 0)
         self._assert_pool(w)

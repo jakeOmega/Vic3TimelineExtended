@@ -13,6 +13,9 @@
 #            te_seabed_lic_<basin>        licences recorded on its Deep-Sea
 #                                         Mine levels (built or queued)
 #            te_seabed_holder             its owner when last recorded
+#            te_seabed_long_haul_x        its share of distant licences, the
+#                                         long-haul modifier's multiplier on
+#                                         its Deep-Sea Mine (monthly)
 #            te_seabed_unb_snap1/2        licences on its unbuilt levels at
 #                                         the last two first-sharings of a
 #                                         year (the holding fee's grace)
@@ -111,7 +114,8 @@
 # PULSES (te_global_commons_seabed_on_actions.txt):
 #   monthly country   te_seabed_monthly_country: record (te_seabed_record_country),
 #                     the holding fee (te_seabed_fee_refresh)
-#   monthly state     te_seabed_refresh_long_haul: Long-Haul Seabed Operations
+#   monthly state     te_seabed_refresh_long_haul: Long-Haul Seabed Operations,
+#                     on the state's Deep-Sea Mine
 #   owner change      te_seabed_on_state_owner_change
 #   treaty article    a Lease <Basin> Seabed Claims article's entry
 #                     (122_seabed_lease.txt): te_seabed_lease_start, then the
@@ -3139,21 +3143,34 @@ te_seabed_mark_claimed = {
 # ============================================================================
 
 # State scope, ROOT = the state (on_monthly_pulse_state): the modifier's one
-# refresh site. Multiplier = the state's share of distant licences. Monthly,
-# not yearly as the spec drafted it: the records it reads move at the monthly
-# recording, so a swap to a local licence lifts the penalty within a month
-# (CLAUDE.md: a state pulse at the cadence of the multiplier's inputs). With
-# the rule off it only comes off.
+# refresh site, on the state's Deep-Sea Mine (owner, 2026-10-27: the
+# building's throughput breakdown shows it). Multiplier = the state's share
+# of distant licences, kept in the state variable te_seabed_long_haul_x and
+# read as root.var: a building has no variables, and the engine reads a
+# multiplier again after the call, so the variable is never removed
+# (scripting_best_practices.md, "Buildings Have No Variables"; the pattern
+# of resettlement_refresh_destination_readout). Monthly, not yearly as the
+# spec drafted it: the records it reads move at the monthly recording, so a
+# swap to a local licence lifts the penalty within a month (CLAUDE.md: a
+# state pulse at the cadence of the multiplier's inputs). With the rule off
+# it only comes off. The state's own copy goes too: a save from before the
+# move carries one.
 te_seabed_refresh_long_haul = {
 	remove_modifier = te_seabed_long_haul
+	set_variable = { name = te_seabed_long_haul_x value = 0 }
 	if = {
-		limit = {
-			te_global_commons_enabled = yes
-			te_seabed_long_haul_mult > 0
-		}
-		add_modifier = {
-			name = te_seabed_long_haul
-			multiplier = te_seabed_long_haul_mult
+		limit = { te_global_commons_enabled = yes }
+		set_variable = { name = te_seabed_long_haul_x value = te_seabed_long_haul_mult }
+	}
+	every_scope_building = {
+		limit = { is_building_type = building_ocean_mine }
+		remove_modifier = te_seabed_long_haul
+		if = {
+			limit = { root.var:te_seabed_long_haul_x > 0 }
+			add_modifier = {
+				name = te_seabed_long_haul
+				multiplier = root.var:te_seabed_long_haul_x
+			}
 		}
 	}
 }
