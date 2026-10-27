@@ -4431,7 +4431,7 @@
  gw_policy_status_active:0 "#G Active#!"
  gw_policy_status_inactive:0 "#grey Inactive#!"
  gw_te_all_entry:0 "[THIS.GetCountry.GetName]: #v [THIS.ScriptValue('gw_disp_own_emis')|K]/yr#!"
- gw_te_all_intro:0 "#b Every country that emits, largest first:#!"
+ gw_te_all_intro:0 "#b The rest, largest first:#!"
  gw_te_head_annual:0 "Annual"
  gw_te_head_annual_tt:0 "The country's [concept_greenhouse_gas_emissions] last year: its states' building emissions after source capture and national industrial policy cuts, plus households, less atmospheric removal.\n\n#lore Updated each January. The list is ranked by this figure.#!"
  gw_te_head_cum:0 "Cumulative"
@@ -9184,3 +9184,4 @@
  ww_war_propaganda_modifier:0 "War Propaganda Campaign"
  ww_wartime_rationing_modifier:0 "Wartime Rationing"
  youth_mental_health_funding_modifier:0 "Youth Mental Health Funding"
+ gw_te_all_intro_capped:0 "#b The next 25, largest first:#!"

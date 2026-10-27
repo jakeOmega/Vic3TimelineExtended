@@ -562,7 +562,7 @@ class WidthBudgetTest(unittest.TestCase):
                              r'default_format = "#tooltippable"\s*text = "gw_te_row_name"', row).group(1))
         cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
                                                  r'using = fontsize_\w+\s*(?:default_format = "#v"\s*)?'
-                                                 r'(?:block "row_ours" \{\}\s*)?text = "(\w+)"', row)}
+                                                 r'(?:visible = "[^"]*"\s*)?text = "(\w+)"', row)}
         head = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
                                                  r'using = fontsize_small\s*default_format = "#tooltippable"\s*'
                                                  r'text = "(\w+)"', _type_body(gui, "gw_emitter_header"))}
@@ -1122,7 +1122,8 @@ class MarketTabTest(unittest.TestCase):
         take a state root, and no type reads the panel's ambient Market."""
         self.assertIn("te_gw_sec_emitters = {}", _type_body(_read(GUI), "te_gw_status_sections"))
         emitters = _type_body(_read(GUI), "te_gw_sec_emitters")
-        self.assertIn("datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_1').GetState]\"", emitters)
+        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gw_te_top')]\"", emitters)
+        self.assertIn("datacontext = \"[Scope.GetState]\"", emitters)
         self.assertIn("GetScriptedGui('gw_top_emitters_sgui').ExecuteTooltip( GuiScope.SetRoot( "
                       "JournalEntry.GetCountry.GetCapital.MakeScope ).End )", emitters)
         self.assertIn("GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )",

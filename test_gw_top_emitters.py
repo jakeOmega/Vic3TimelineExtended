@@ -1,6 +1,7 @@
 """Country emissions rank separately even inside one market. Annual snapshots
 and cumulative totals receive exactly the contributions added to the world.
-The GUI still stores five capitals as bridges to country scopes."""
+The GUI draws the five largest from a list of their capitals, the bridges to
+country scopes (GW-11: a datamodel, the Demographics States table's shape)."""
 import glob
 import os
 import re
@@ -20,8 +21,9 @@ SV = "JournalEntry.GetCountry.MakeScope.ScriptValue('{}')"
 # The script values the list reads. The first four are read in a listed
 # leader's scope, the rest in the viewer's.
 DISPLAY_VALUES = ["gw_disp_own_emis", "gw_disp_own_share_pct", "gw_disp_own_cum", "gw_disp_is_treaty_bound",
-                  "gw_disp_emitters_state", "gw_disp_emitters_total", "gw_disp_emitters_shown",
-                  "gw_disp_emitters_more", "gw_disp_emitters_own_slot", "gw_disp_emitters_own_rank"]
+                  "gw_disp_emitters_state", "gw_disp_emitters_total",
+                  "gw_disp_emitters_more", "gw_disp_emitters_own_rank"]
+LIST = "JournalEntry.GetCountry.MakeScope.GetList('gw_te_top')"
 
 
 def _read(path, comments=False):
@@ -65,14 +67,13 @@ class EmitterTestTest(unittest.TestCase):
         self.assertEqual(body, "has_variable = gw_disp_country_emis "
                                "var:gw_disp_country_emis > 0")
 
-    def test_one_test_for_the_count_the_slots_the_rank_and_the_full_list(self):
+    def test_one_test_for_the_count_the_list_the_rank_and_the_full_list(self):
         effects = _read(EFFECTS)
         refresh = _body(effects, "gw_top_emitters_refresh")
-        self.assertEqual(refresh.count("gw_is_ranked_emitter = yes"), 3)   # count, own leader, rank
-        slot = _body(effects, "gw_top_emitter_slot")
-        self.assertEqual(slot.count("gw_is_ranked_emitter = yes"), 2)      # count check, ordered_country
+        # count, the list, the fifth, own country, rank
+        self.assertEqual(refresh.count("gw_is_ranked_emitter = yes"), 5)
         full = _body(_read(SGUIS), "gw_top_emitters_sgui")
-        self.assertIn("limit = { gw_is_ranked_emitter = yes }", full)
+        self.assertIn("gw_is_ranked_emitter = yes", full)
 
 
 class CumulativeTest(unittest.TestCase):
@@ -112,7 +113,6 @@ class RefreshTest(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = _read(EFFECTS)
         cls.refresh = _body(cls.effects, "gw_top_emitters_refresh")
-        cls.slot = _body(cls.effects, "gw_top_emitter_slot")
 
     def test_the_refresh_runs_monthly_for_players_only(self):
         pulse = _body(_read(JE), "on_monthly_pulse", prefix=r"\t")
@@ -122,43 +122,53 @@ class RefreshTest(unittest.TestCase):
     def test_the_refresh_writes_nothing_visible(self):
         self.assertTrue(self.refresh.lstrip().startswith("hidden_effect = {"))
 
-    def test_five_slots_each_checked_before_it_is_read(self):
-        slots = re.findall(r"gw_top_emitter_slot = \{ N = (\d) POS = (\d) \}", self.refresh)
-        self.assertEqual(slots, [(str(n), str(n - 1)) for n in range(1, 6)])
-        # an ordered_ position past the end clamps to the last element, so count first
-        self.assertRegex(self.slot, r"^\s*if = \{\s*limit = \{\s*any_country = \{\s*gw_is_ranked_emitter = yes\s*"
-                                    r"count >= \$N\$\s*\}\s*\}\s*ordered_country = \{")
-        ordered = self.slot[self.slot.index("ordered_country = {"):]
-        self.assertIn("order_by = gw_disp_own_emis", ordered)
-        self.assertIn("position = $POS$", ordered)
-        # a capital saved under the slot's own name, so a slot never inherits the previous one's
-        self.assertIn("capital ?= { save_scope_as = gw_te_capital_$N$ }", ordered)
-        self.assertRegex(self.slot, r"limit = \{ exists = scope:gw_te_capital_\$N\$ \}\s*"
-                                    r"set_variable = \{ name = gw_emitter_\$N\$ value = scope:gw_te_capital_\$N\$ \}")
+    def test_the_list_is_rebuilt_largest_first(self):
+        """GW-11: the five largest emitters' capitals, appended in rank order to a
+        list cleared first, so the stored order is the rank."""
+        self.assertNotIn("gw_top_emitter_slot", self.effects)
+        self.assertRegex(self.refresh, r"if = \{\s*limit = \{ has_variable_list = gw_te_top \}\s*"
+                                       r"clear_variable_list = gw_te_top\s*\}\s*ordered_country = \{")
+        ordered = self.refresh[self.refresh.index("clear_variable_list = gw_te_top"):]
+        ordered = ordered[ordered.index("ordered_country = {"):]
+        ordered = ordered[:ordered.index("capital ?= {") + 400]
+        self.assertRegex(ordered, r"limit = \{ gw_is_ranked_emitter = yes \}\s*order_by = gw_disp_own_emis\s*"
+                                  r"max = 5\s*check_range_bounds = no\s*capital \?= \{\s*"
+                                  r"save_temporary_scope_as = gw_te_capital\s*scope:gw_te_viewer = \{\s*"
+                                  r"add_to_variable_list = \{ name = gw_te_top target = scope:gw_te_capital \}")
 
-    def test_an_empty_slot_is_cleared(self):
-        cleared = re.findall(r"else_if = \{\s*limit = \{ has_variable = gw_emitter_\$N\$ \}\s*"
-                             r"remove_variable = gw_emitter_\$N\$\s*\}", self.slot)
-        self.assertEqual(len(cleared), 2)   # no capital; fewer emitters than N
+    def test_the_fifth_is_read_only_past_five(self):
+        """An ordered_ position past the end clamps to the last element, so
+        position 4 is read only when a sixth emitter exists."""
+        self.assertRegex(self.refresh, r"limit = \{ var:gw_emitters_total > 5 \}\s*ordered_country = \{\s*"
+                                       r"limit = \{ gw_is_ranked_emitter = yes \}\s*order_by = gw_disp_own_emis\s*"
+                                       r"position = 4\s*save_temporary_scope_as = gw_te_fifth")
+        self.assertRegex(self.refresh, r"else_if = \{\s*limit = \{ has_variable = gw_emitters_fifth_emis \}\s*"
+                                       r"remove_variable = gw_emitters_fifth_emis")
 
-    def test_the_rows_shown_are_the_filled_slots_from_the_first(self):
-        shown = self.refresh[self.refresh.index("name = gw_emitters_shown value = 0"):]
-        for n in range(1, 6):
-            self.assertRegex(shown, rf"limit = \{{ has_variable = gw_emitter_{n} \}}\s*"
-                                    rf"set_variable = \{{ name = gw_emitters_shown value = {n} \}}")
-        # nested, each test inside the one before, so a hole stops the count
-        for n in range(1, 5):
-            self.assertRegex(shown, rf"value = {n} \}}\s*if = \{{\s*limit = \{{ has_variable = gw_emitter_{n + 1} \}}")
+    def test_the_old_slots_are_dropped(self):
+        self.assertIn("gw_top_emitters_drop_slots = yes", self.refresh)
+        drop = _body(self.effects, "gw_top_emitters_drop_slots")
+        for var in [f"gw_emitter_{n}" for n in range(1, 6)] + ["gw_emitters_shown", "gw_emitters_own_slot"]:
+            self.assertRegex(drop, rf"limit = \{{ has_variable = {var} \}}\s*remove_variable = {var}", var)
 
     def test_the_count_and_our_place(self):
         self.assertIn("set_variable = { name = gw_emitters_total value = 0 }", self.refresh)
         self.assertRegex(self.refresh, r"every_country = \{\s*limit = \{ gw_is_ranked_emitter = yes \}\s*"
                                        r"scope:gw_te_viewer = \{\s*change_variable = \{ name = gw_emitters_total add = 1 \}")
-        self.assertIn("set_variable = { name = gw_emitters_own_slot value = 0 }", self.refresh)
-        self.assertIn("scope:gw_te_viewer = {\n\t\t\t\t\tset_variable = { name = gw_emitters_own_slot value = $N$ }",
-                      self.slot)
         self.assertIn("var:gw_disp_country_emis > scope:gw_te_viewer.var:gw_emitters_own_emis", self.refresh)
         self.assertIn("remove_variable = gw_emitters_own_emis", self.refresh)   # scratch, never left behind
+
+    def test_the_self_check(self):
+        """TE_SELF_CHECK gw_top_emitters_list: once a game, with an emitter in the world."""
+        self.assertIn("gw_top_emitters_selfcheck = yes", self.refresh)
+        check = _body(_read(EFFECTS, comments=True), "gw_top_emitters_selfcheck")
+        self.assertRegex(check, r"NOT = \{ has_global_variable = te_selfcheck_gw_top_emitters_done \}\s*"
+                                r"has_variable_list = gw_te_top\s*var:gw_emitters_total > 0")
+        self.assertIn("set_global_variable = { name = te_selfcheck_gw_top_emitters_done value = 1 }", check)
+        self.assertIn('debug_log = "TE_SELF_CHECK OK gw_top_emitters_list', check)
+        self.assertIn('debug_log = "TE_SELF_CHECK BROKEN gw_top_emitters_list', check)
+        for var in ("gw_sc_rows", "gw_sc_rises", "gw_sc_expected"):
+            self.assertIn(f"remove_variable = {var}", check)
 
 
 class GuardTest(unittest.TestCase):
@@ -203,6 +213,10 @@ class TooltipBuilderTest(unittest.TestCase):
         full = _body(_read(SGUIS), "gw_top_emitters_sgui")
         self.assertIn("order_by = gw_disp_own_emis", full)
         self.assertIn("check_range_bounds = no", full)
+        # GW-11: the hover starts below the five rows and stops at 25.
+        self.assertIn("var:gw_disp_country_emis < ROOT.owner.var:gw_emitters_fifth_emis", full)
+        self.assertIn("max = 25", full)
+        self.assertIn("custom_tooltip_no_bullet = gw_te_all_intro_capped", full)
         members = _body(_read(SGUIS), "gw_te_members_sgui")
         self.assertIn("market_capital = ROOT.owner.market_capital", members)
 
@@ -221,11 +235,18 @@ class RowTest(unittest.TestCase):
         self.assertEqual(re.findall(r"^\t\t(te_gw_sec_\w+) = \{", composer, re.M)[:2],
                          ["te_gw_sec_policies", "te_gw_sec_emitters"])
 
-    def test_the_row_reads_its_slot_only_when_shown(self):
-        self.assertTrue(self.row.lstrip().startswith('size = { 480 50 }\n\t\tblock "row_visible" {}'), self.row[:80])
-        outer = self.row[:self.row.index("flowcontainer = {")]
-        self.assertNotIn('block "row_context"', outer)          # the datacontext is on the inner container
-        self.assertIn('block "row_context" {}', self.row[self.row.index("flowcontainer = {"):])
+    def test_the_rows_are_a_datamodel_over_the_list(self):
+        """GW-11: one row type, drawn once per item of the viewer's gw_te_top list,
+        its datacontext the item's state; no slot variables, no row blocks."""
+        self.assertTrue(self.row.lstrip().startswith("size = { 480 50 }\n\n\t\tflowcontainer = {"), self.row[:80])
+        self.assertNotIn('block "', self.row)
+        self.assertRegex(self.section, rf'datamodel = "\[{re.escape(LIST)}\]"\s*item = \{{\s*gw_emitter_row = \{{\s*'
+                                       r'datacontext = "\[Scope\.GetState\]"\s*\}\s*\}')
+        self.assertEqual(self.section.count("gw_emitter_row = {"), 1)
+        self.assertNotIn("Var('gw_emitter_", self.gui)
+        self.assertIn(f'visible = "[Not( IsDataModelEmpty( {LIST} ) )]"', self.section)   # the headings
+        # "Our country" is the local player's own row.
+        self.assertRegex(self.row, r'visible = "\[State\.GetCountry\.IsLocalPlayer\]"\s*text = "gw_te_ours"')
 
     def test_the_name_has_the_whole_line(self):
         self.assertRegex(self.row, r'minimumsize = \{ 480 -1 \}\s*maximumsize = \{ 480 -1 \}\s*autoresize = yes\s*'
@@ -253,19 +274,6 @@ class RowTest(unittest.TestCase):
                                    r'tooltip = "gw_te_treaty_tt"')
         body = _body(_read(VALUES), "gw_disp_is_treaty_bound")
         self.assertIn("gw_bound_by_emissions_treaty = yes", body)
-
-    def test_five_rows_gated_on_the_filled_count(self):
-        shown = SV.format("gw_disp_emitters_shown")
-        self.assertEqual(self.section.count("gw_emitter_row = {"), 5)
-        for n in range(1, 6):
-            self.assertRegex(self.section, rf'blockoverride "row_visible" \{{\s*visible = "\[GreaterThanOrEqualTo_CFixedPoint\( '
-                                           rf"{re.escape(shown)}, '\(CFixedPoint\){n}' \)\]\"\s*\}}\s*"
-                                           rf'blockoverride "row_context" \{{\s*datacontext = '
-                                           rf"\"\[JournalEntry\.GetCountry\.MakeScope\.Var\('gw_emitter_{n}'\)\.GetState\]\"\s*\}}\s*"
-                                           rf'blockoverride "row_ours" \{{\s*visible = "\[EqualTo_CFixedPoint\( '
-                                           rf"{re.escape(SV.format('gw_disp_emitters_own_slot'))}, '\(CFixedPoint\){n}' \)\]\"")
-        self.assertIn(f"visible = \"[GreaterThanOrEqualTo_CFixedPoint( {shown}, '(CFixedPoint)1' )]\"\n\t\t\t\t}}",
-                      self.section)   # the headings
 
     def test_more_our_place_and_the_waiting_lines(self):
         state = SV.format("gw_disp_emitters_state")
