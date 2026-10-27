@@ -65,27 +65,29 @@ it for what is still missing. It ends with an Open Journal Entry button.
 
 <!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Colonial Holdings open with its territories, their Release buttons and a colonial subject's Release and Dominion buttons -->
 
-The overview's first row shows your [band](#colonial-stability-bands), as an
-icon and a name (hover it for the band's modifier), and the three programs, lit
-while they run. Below them is the Stability bar. Its solid part and a lighter
+The overview starts with the Stability bar. Its solid part and a lighter
 stretch show today's value and where the bar will be in 12 months at this
 month's rate. The stretch is green while stability rises and red while it
 falls, so red is what the next year would cost you. A thin cream line marks
 where the next band begins; hover it for how many months away that is. Beside
 the bar are the value and this month's change, such as "62% (+0.42/mo)", and an
 arrow for its direction. Hover the bar for every term behind the change, and
-the value for the projection. The line under the bar reads "Next band", with
-the band and its threshold. Under it, Colonies and Colonial subjects count what
-keeps the entry running; hover the line for both tests.
+the value for the projection. Four boxes sit under it:
+
+| Box | Shows |
+|---|---|
+| Band | Your [band](#colonial-stability-bands) as an icon and a name, and where the next one begins, such as "Stable at 65". Hover it for the band's modifier. |
+| Great Powers | Isolated or Consensus while one of [the two escalations](#great-power-stances-on-colonialism) applies, otherwise No escalation, and what the great powers do to your stability a month. Hover it for how many condemn and support you. |
+| Holdings | Your colonies and colonial subjects, what keeps the entry running. Hover it for what each one is. |
+| Programmes | How many of the three programs run, their icons lit while they do, and what they add a month. Hover it for each one's level. |
 
 In the Solidified band, two more bars count toward winning: "Months at 100"
 against 60 and, for a great power, "Months Solidified" against 36, the
 requirement of the Imperial Federation Act and the Civilizing Mission Compact.
 Last comes a pie of great-power prestige, yours included: the condemning powers'
 share in red, the supporters' share in green, the rest in grey. Only the
-condemning share counts toward [the two escalations](#great-power-stances-on-colonialism),
-and an Isolated or Consensus alert shows beside the pie while one applies. Hover
-the pie for every great power's stance.
+condemning share counts toward the two escalations; hover each line of the
+legend for what its share does.
 
 Every section starts open except the explanations:
 
@@ -93,24 +95,24 @@ Every section starts open except the explanations:
 |---|---|---|
 | Colonial Holdings | Open | Your wars of independence, your territories and your colonial subjects, with buttons beside each, then Planned Full Decolonization (see below). |
 | Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. |
-| International Pressure | Open | Your prestige, the condemning and supporting shares, and every great power that condemns or supports you. |
-| Colonial Programmes | Open | The three programs, each with its costs, its level out of 3, and a minus and a plus button to lower or raise it. |
+| International Pressure | Open | Every great power that condemns or supports you, with its prestige and what it does to your stability a month, then any escalation in force. |
+| Colonial Programmes | Open | The three programs, each with its level out of 3, what it adds a month, and a minus and a plus button to lower or raise it. Hover a row for its costs. |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
 | How the Colonial Empire Works | Collapsed | The explanations. |
 
 Colonial Holdings shows what keeps the entry running and what you can let go.
 Its Territories list holds every territory you could
-[release](#releasing-colonies), up to eight rows, largest GDP first; hover
-"+N more" for the rest. A release takes the neighbouring states where the same
+[release](#releasing-colonies), one row each, largest GDP first. A release
+takes the neighboring states where the same
 people are at home, so those states share one row: "Henan +1" is Henan and one
 more state that would leave with it. Each row gives the share of its people of
-your primary cultures (Primary), its standard of living (SoL) and its GDP,
+your primary cultures (Ours), its standard of living (SoL) and its GDP,
 across all its states; hover the name for the states, the people who would form
 the new country and the row's weight on stability. The colony icon at the start
 of the row is lit when a state in it counts as a colony, which keeps the entry
 running and weighs on the bar through Imperial Overreach and Colonial
 Acceptance, and dim when none does. A red figure is the test that makes one a
-colony: a red Primary share means a people sharing no heritage with yours is
+colony: a red Ours share means a people sharing no heritage with yours is
 more than a tenth of a state and accepted below 60, and a red SoL means a
 state's standard of living is below 80% of your national average while some of
 its people are of other cultures. An unincorporated state counts too; hover the
@@ -197,7 +199,8 @@ hold a third already cost about 2.2 a month; with the base decline, the rest of
 your terms must add more than +1 just to keep the bar off its fastest monthly
 fall. A dominant empire is hard to isolate; a small one reaches both thresholds
 as soon as a few large powers turn on it. The International Pressure section
-lists who condemns and who supports you.
+lists who condemns and who supports you, and what each one costs or gives you a
+month.
 
 ## Colonial programs and decolonization decisions
 
@@ -212,8 +215,8 @@ Each program runs at a level from 0 (off) to 3, set with the minus and plus
 buttons on its row. Level 3 is the full program and each level is a third of
 it: a third of its value to the bar every month, a third of its effects and a
 third of its running cost. The bar values below are the base at level 3; your
-laws change them, and the row shows what the program adds now and what one more
-level would add, with its costs.
+laws change them, and the row shows what the program adds now; hover it for
+what one more level would add and for its costs.
 
 | Program | Requirement | Bar, per month at level 3 | Costs and side effects at level 3 |
 |---|---|---|---|

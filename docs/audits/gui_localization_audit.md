@@ -30,7 +30,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
 | Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | #1209 |
-| Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 | 29 | #1210 |
+| Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 (all done, 2026-10-27) | 29 | #1210 |
 | Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | #1211 |
 | Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 | #1212 |
 
@@ -423,36 +423,36 @@ Top priorities: reasons on about 470 greyed buttons (SPC-1); the concept family 
 
 Top priorities: colonial holdings and great-power pressure as lists (CE-1, CE-2); monument policies as modifier lines (GM-2; the boons are done here); an "Awaiting a Decision" section near the top (GM-3); figures for the three contested choices (GM-4); the colonial definitions as three concepts (CE-4).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| GM-1 | Opportunity boons hand-write their modifier instead of rendering it (loc part done) | style | quick |
-| GM-2 | Monument policies are prose. Their shared boilerplate is repeated on four buttons | style / over-explaining | quick–medium |
-| GM-3 | What needs a decision is far below the overview that flags it | spread-out/redundant | medium |
-| GM-4 | The three contested choices say what happens in prose, with no figures | hidden info / style | medium–large |
-| GM-5 | The world-wealth level rate sits in National Effects and repeats on every site row | spread-out/redundant | medium |
-| GM-6 | Contested is explained in five places, two of them on the same row | over-explaining | quick–medium |
-| GM-7 | "Undedicated", "Being Built", "under construction", "construction site", "Awaiting Dedication": one icon, stale text | style / other | quick–medium |
-| GM-8 | Every upheld row carries three naming buttons, one usually greyed | spread-out/redundant | quick–medium |
-| GM-9 | Trophy tooltips: stale "half the levels", and the same sentence on every hover of the state card (loc part done) | over-explaining / other | quick |
-| GM-10 | Held Abroad repeats the section's "ways home" paragraph on every row; Trophies does the same with "what it counts for" | spread-out/redundant | quick–medium |
-| GM-11 | Carrying off a trophy on display or a secondary monument hides its infamy cost | hidden info / style | medium |
-| GM-12 | Opportunity section: the levels still needed are hidden, the How text says levels where the panel says grandeur, and two hovers repeat each other (loc part done) | hidden info / other / over-explaining | quick–medium |
-| GM-13 | All eight IG approval rows share one generic paragraph and none says where its total comes from | over-explaining / hidden info | quick–medium |
-| GM-14 | Archaeology has no How subsection, its mechanics sit in a live hover, and its terms aren't hoverable | over-explaining / hidden info / list | medium |
-| GM-15 | How it Works: a nine-item list written as one sentence, and the step rules told twice and inconsistently (loc part done) | list / over-explaining | quick–medium |
-| GM-16 | Smaller items in National Effects and the row | style | quick |
-| GM-17 | Type sizes below the house ladder | style | medium |
-| CE-1 | Colonial Holdings: territories and subjects are 8 fixed slots plus a "+N more" hover. Make them datamodels | list | large |
-| CE-2 | International Pressure is a script-built text block. Make it a table of great powers | list / spread-out/redundant | medium–large |
-| CE-3 | The live lists open with #lore captions that restate their own column-head hovers (loc part done) | over-explaining | quick–medium |
-| CE-4 | The definitions of territory, colony and colonial subject are written out five times, and have drifted | over-explaining / style | medium |
-| CE-5 | Pillar-row tooltips end in the same two boilerplate lines | over-explaining | quick |
-| CE-6 | Programme rows: a 12-pt cost line packs four figures, the stability figure appears three times, and the hover's prose repeats its own modifier lines (loc part done) | style / spread-out/redundant / over-explaining | quick–medium |
-| CE-7 | The overview carries an explanatory note, and the same rule is written four times | over-explaining | quick–medium |
-| CE-8 | The Release button's hover repeats the row name's hover (loc part done) | over-explaining | quick |
-| CE-9 | Every subject row repeats the band rule in its liberty-desire hover (loc part done) | over-explaining | quick |
-| CE-10 | Stale text: the decolonization concept and both tab tooltips (loc part done) | other / hidden info | quick |
-| CE-11 | Smaller style points | style | quick–medium |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| GM-1 | Opportunity boons hand-write their modifier instead of rendering it (loc part done) | style | quick | done (in #1202) |
+| GM-2 | Monument policies are prose. Their shared boilerplate is repeated on four buttons | style / over-explaining | quick–medium | done |
+| GM-3 | What needs a decision is far below the overview that flags it | spread-out/redundant | medium | done |
+| GM-4 | The three contested choices say what happens in prose, with no figures | hidden info / style | medium–large | done |
+| GM-5 | The world-wealth level rate sits in National Effects and repeats on every site row | spread-out/redundant | medium | done |
+| GM-6 | Contested is explained in five places, two of them on the same row | over-explaining | quick–medium | done |
+| GM-7 | "Undedicated", "Being Built", "under construction", "construction site", "Awaiting Dedication": one icon, stale text | style / other | quick–medium | done |
+| GM-8 | Every upheld row carries three naming buttons, one usually greyed | spread-out/redundant | quick–medium | done (the quick form) |
+| GM-9 | Trophy tooltips: stale "half the levels", and the same sentence on every hover of the state card (loc part done) | over-explaining / other | quick | done |
+| GM-10 | Held Abroad repeats the section's "ways home" paragraph on every row; Trophies does the same with "what it counts for" | spread-out/redundant | quick–medium | done |
+| GM-11 | Carrying off a trophy on display or a secondary monument hides its infamy cost | hidden info / style | medium | done |
+| GM-12 | Opportunity section: the levels still needed are hidden, the How text says levels where the panel says grandeur, and two hovers repeat each other (loc part done) | hidden info / other / over-explaining | quick–medium | done |
+| GM-13 | All eight IG approval rows share one generic paragraph and none says where its total comes from | over-explaining / hidden info | quick–medium | done |
+| GM-14 | Archaeology has no How subsection, its mechanics sit in a live hover, and its terms aren't hoverable | over-explaining / hidden info / list | medium | done |
+| GM-15 | How it Works: a nine-item list written as one sentence, and the step rules told twice and inconsistently (loc part done) | list / over-explaining | quick–medium | done |
+| GM-16 | Smaller items in National Effects and the row | style | quick | done |
+| GM-17 | Type sizes below the house ladder | style | medium | done |
+| CE-1 | Colonial Holdings: territories and subjects are 8 fixed slots plus a "+N more" hover. Make them datamodels | list | large | done |
+| CE-2 | International Pressure is a script-built text block. Make it a table of great powers | list / spread-out/redundant | medium–large | done |
+| CE-3 | The live lists open with #lore captions that restate their own column-head hovers (loc part done) | over-explaining | quick–medium | done |
+| CE-4 | The definitions of territory, colony and colonial subject are written out five times, and have drifted | over-explaining / style | medium | done |
+| CE-5 | Pillar-row tooltips end in the same two boilerplate lines | over-explaining | quick | done |
+| CE-6 | Programme rows: a 12-pt cost line packs four figures, the stability figure appears three times, and the hover's prose repeats its own modifier lines (loc part done) | style / spread-out/redundant / over-explaining | quick–medium | done |
+| CE-7 | The overview carries an explanatory note, and the same rule is written four times | over-explaining | quick–medium | done |
+| CE-8 | The Release button's hover repeats the row name's hover (loc part done) | over-explaining | quick | done (in #1202) |
+| CE-9 | Every subject row repeats the band rule in its liberty-desire hover (loc part done) | over-explaining | quick | done (in #1202) |
+| CE-10 | Stale text: the decolonization concept and both tab tooltips (loc part done) | other / hidden info | quick | done (in #1202) |
+| CE-11 | Smaller style points | style | quick–medium | done |
 
 ### Demographics, the Nation tab, the Timeline Extended window and the system-tab gates ([detail](gui_audit/demog_nation_window.md), #1211)
 

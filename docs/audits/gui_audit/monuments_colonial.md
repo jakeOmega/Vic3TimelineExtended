@@ -49,7 +49,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 ### Grand Monuments
 
 ### GM-1. Opportunity boons hand-write their modifier instead of rendering it
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): no further change needed: the 15 boon hovers render `[GetStaticModifier('gm_boon_x').GetDesc]` since the loc pass (#1202); GM-16 gives their months a unit.
 - **Category:** style
 - **Where:** `gui/journal_entry_widgets/grand_monuments_widget.gui:2616-2760` (Opportunities Seized rows); loc
   `gm_je_tt_boon_*` (`te_miscellaneous_l_english.yml:3264-3278`), e.g. `gm_je_tt_boon_reign` (`:3270`), and
@@ -66,6 +66,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-2. Monument policies are prose. Their shared boilerplate is repeated on four buttons
+- **Status:** done (2026-10-27, #1210): each policy is a display-only static modifier (`gm_policy_<p>_display`) built from five `script_only` modifier types (`gm_policy_modifier_types.txt`), so the buttons and the overview hover print modifier lines; the shared timing is said once, on the Monument Policy subheader's hover; the history-share clause stays a line after GetDesc.
 - **Category:** style / over-explaining
 - **Where:** policy buttons `grand_monuments_widget.gui:2816-2852` (tooltips call `gm_policy_*_sgui`, whose
   `effect` is `custom_tooltip = { text = gm_policy_*_effect_tt ... }`, `common/scripted_guis/gm_sguis.txt:292-425`);
@@ -91,6 +92,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-3. What needs a decision is far below the overview that flags it
+- **Status:** done (2026-10-27, #1210): as approved (owner, 2026-10-27): Awaiting a Decision (`te_gm_sec_decisions`, contested rows of both lists, shown while any is) straight after the Opportunity, Awaiting Dedication beside it, then Archaeology; the policy subheader and buttons open National Effects; Our Monuments lists only the rest.
 - **Category:** spread-out/redundant
 - **Where:** composer `te_gm_status_sections` (`grand_monuments_widget.gui:3139-3158`): Opportunity → Archaeology →
   National Effects → Awaiting Dedication → Our Monuments → Trophies → Held Abroad. Contested choices are in
@@ -114,6 +116,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-4. The three contested choices say what happens in prose, with no figures
+- **Status:** done (2026-10-27, #1210): each choice's hover gives its figures from preview values the monthly refresh computes (`gm_preview_choices`, marker-guarded against the tooltip walk): the legitimacy and approval steps a tear-down or a rededication moves, the grandeur kept or lost, and Preserve's no-change; the effects' `custom_tooltip` wrapping stays, as the real effects are ledgers.
 - **Category:** hidden info / style
 - **Where:** `gm_tear_down_sgui` / `gm_rededicate_sgui` / `gm_preserve_sgui` (`gm_sguis.txt:11-100`) →
   `gm_state_choose_*` (`common/scripted_effects/gm_effects.txt:1676-1695`), each a `custom_tooltip` wrapping the real
@@ -134,6 +137,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
   preview is meaningful)
 
 ### GM-5. The world-wealth level rate sits in National Effects and repeats on every site row
+- **Status:** done (2026-10-27, #1210): the world-wealth rate is the first line of Awaiting Dedication and stays on the state's site card; it left National Effects and every site row.
 - **Category:** spread-out/redundant
 - **Where:** `gm_je_world_rate` as National Effects' first line (`grand_monuments_widget.gui:2147-2151`, loc `:3368`);
   `gm_site_row_rate` on every Awaiting Dedication row (`:1687-1689`, loc `:3943`); `gm_site_card_rate` on the state's
@@ -148,6 +152,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-6. Contested is explained in five places, two of them on the same row
+- **Status:** done (2026-10-27, #1210): the badge and cell hover are the concept plus one line; the contest line's hover is the row's own: who wants it kept, who resents it and the grandeur that counts against their approval (a standing subtraction, not a monthly one, so no monthly figure).
 - **Category:** over-explaining
 - **Where:** `gm_je_status_contested_tt` (`:3252`: overview cell, row status badge, secondary status line);
   `gm_row_contest_tt` (`:3869`: the row's "Old Supporters · Resented By" line); `gm_state_contest_tt` (`:4158`);
@@ -164,6 +169,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-7. "Undedicated", "Being Built", "under construction", "construction site", "Awaiting Dedication": one icon, stale text
+- **Status:** done (2026-10-27, #1210): "Construction Site" for sites (cell "Sites", row titles "Construction site in X"), "Undedicated" only for a finished building; the two stale texts rewritten; a finished undedicated monument is counted on the Our Monuments cell's hover (`gm_disp_count_undedicated`).
 - **Category:** style / other (accuracy)
 - **Where:** overview cell `gm_je_ov_undedicated` "Being Built N" counts construction sites (`gm_disp_count_undedicated`
   = `gm_state_has_site`, `common/script_values/gm_values.txt:1542`). The row badge "Undedicated"
@@ -188,6 +194,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** medium (how a status-1 monument is re-dedicated should be confirmed in `monument_events.2`)
 
 ### GM-8. Every upheld row carries three naming buttons, one usually greyed
+- **Status:** done, the quick form (2026-10-27, #1210): Clear Name shows only while the monument has a typed name. The single Name… button was not built: a per-state client flag has no precedent in the mod, and with the gate most rows carry two buttons.
 - **Category:** spread-out/redundant (list compactness)
 - **Where:** `gm_monument_row`, `grand_monuments_widget.gui:1821-1842` (Rename / Name It / Clear Name, shown on
   `gm_state_can_rename`); `gm_clear_name_sgui` is invalid without a typed name (`gm_sguis.txt:579-605`).
@@ -201,7 +208,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** medium
 
 ### GM-9. Trophy tooltips: stale "half the levels", and the same sentence on every hover of the state card
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): the loc part in #1202; `gm_state_tr_summary_tt` and `gm_mon_row_value_tt` lose the repeated carry-off rule; `gm_tr_take_site_tt` takes the rows' wording.
 - **Category:** over-explaining / other (accuracy)
 - **Where:** `gm_je_tr_summary_tt` (`:3261`), `gm_state_tr_summary_tt` (`:4192`), `gm_tr_take_site_tt` (`:4325`)
   versus `gm_tr_row_value_tt` / `gm_tr_row_site_value_tt` / `gm_mon_take_tt`, which say "half the grandeur… its
@@ -222,6 +229,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high (wording drift), medium (re-take semantics)
 
 ### GM-10. Held Abroad repeats the section's "ways home" paragraph on every row; Trophies does the same with "what it counts for"
+- **Status:** done (2026-10-27, #1210): the Held Abroad row's hover is row-specific (at war with the holder or not, so whether Carry It Off is open); `gm_tr_row_value_tt` is cut to its one row-specific sentence.
 - **Category:** spread-out/redundant (rule 6)
 - **Where:** `gm_tr_row_abroad`'s "Held by" line tooltip `gm_tr_row_held_by_tt` (`:4298`) is word for word
   `gm_je_abroad_ways_tt` (`:3122`), the section summary's tooltip (`gui/gm_trophy_widgets.gui:2229-2231, 2432-2434`).
@@ -236,6 +244,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-11. Carrying off a trophy on display or a secondary monument hides its infamy cost
+- **Status:** done (2026-10-27, #1210): container-scope `gm_tr_disp_take_infamy` / `gm_mon_disp_take_infamy` print the infamy in both hovers.
 - **Category:** hidden info / style
 - **Where:** `gm_tr_take_site_tt` (`:4325`) and `gm_mon_take_tt` (`:3735`): "We gain [concept_infamy]…", no figure.
   The primary's `gm_tr_take_occupation_tt` (`:4322`) shows `#R [THIS.GetState.MakeScope.ScriptValue('gm_state_tr_infamy')|1]#!`.
@@ -249,7 +258,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-12. Opportunity section: the levels still needed are hidden, the How text says levels where the panel says grandeur, and two hovers repeat each other
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): the loc part in #1202; a Levels to Go row under the bar (`gm_disp_com_levels_to_go`).
 - **Category:** hidden info / other (accuracy) / over-explaining
 - **Where:** `te_gm_sec_commission` (`grand_monuments_widget.gui:2018-2114`). Loc `gm_je_com_progress_tt` (`:3140`),
   `gm_je_com_ask_tt` (`:3130`), `gm_je_how_commissions` (`:3154`). Target set to `5` grandeur in `gm_com_begin`
@@ -268,6 +277,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-13. All eight IG approval rows share one generic paragraph and none says where its total comes from
+- **Status:** done (2026-10-27, #1210): the shared paragraph is the Approval subheader's hover; each IG row's hover gives its own parts (approves of, objects to, resents while contested, past decisions), summed per IG in `gm_compute_ig`.
 - **Category:** over-explaining / hidden info (rule 6)
 - **Where:** `grand_monuments_widget.gui:2502-2589`, every row `tooltip = "gm_je_tt_ig"` (loc `:3281`).
 - **Now:** hovering Landowners +2 or Devout −1 gives the same explanation of how totals work. Which monuments the
@@ -280,6 +290,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** medium (the per-IG sums must exist separately in `gm_country_refresh`)
 
 ### GM-14. Archaeology has no How subsection, its mechanics sit in a live hover, and its terms aren't hoverable
+- **Status:** done (2026-10-27, #1210): an Archaeology subsection in How Grand Monuments Work, the summary cut to one line, a subheading over each list gated on its count, and hovers on the two Abroad lines (the article, and Foreign Scholarship's GetDesc).
 - **Category:** over-explaining / hidden info / list
 - **Where:** `gui/gm_archaeology_widgets.gui:170-242`. `gm_je_arch_summary_tt` (`:3126`) is the system's only
   explanation; `te_gm_sec_how` (`grand_monuments_widget.gui:3013-3132`) has no archaeology heading (no `gm_je_how_*`
@@ -298,7 +309,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-15. How it Works: a nine-item list written as one sentence, and the step rules told twice and inconsistently
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): the loc part in #1202; the unique dedications are bullets too, and the step families are three lines in `concept_grandeur_desc` only.
 - **Category:** list / over-explaining (duplication within How)
 - **Where:** `gm_je_how_commissions` (`:3154`), `gm_je_how_signatures` (`:3166`); `gm_je_how_grandeur` (`:3159`)
   versus `concept_grandeur_desc` (`te_concepts_l_english.yml:818`).
@@ -315,6 +326,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high (structure), medium (which family legitimacy is in)
 
 ### GM-16. Smaller items in National Effects and the row
+- **Status:** done (2026-10-27, #1210): "Opportunities Seized" with "mo" on the months; the no-ceiling sentence dropped from three hovers; `gm_row_frozen_tt` cut; `gm_tr_row_site_value_tt` names the tab only (its test updated).
 - **Category:** style
 - **Where / Now / Proposed:**
   - `gm_je_sub_boons` "Opportunities Seized (Months Left)" (`:3257`) heads both the boons (value = months) and the
@@ -335,6 +347,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### GM-17. Type sizes below the house ladder
+- **Status:** done (2026-10-27, #1210): `gm_fontsize_row` / `_heading` / `_overview` (17/20/16) through all three GM files, cells resized from the longest label, `LabelBudgetTest` reads each template.
 - **Category:** style
 - **Where:** `gm_step_row`, `gm_value_row`, `gm_text`, `gm_row_line`, `gm_tr_line`, `gm_arch_line` use
   `fontsize_medium` (14, OpenSans). Buttons (`gm_choice_button`, `gm_policy_button`, `gm_arch_button`,
@@ -351,6 +364,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 ### Colonial Empire
 
 ### CE-1. Colonial Holdings: territories and subjects are 8 fixed slots plus a "+N more" hover. Make them datamodels
+- **Status:** done (2026-10-27, #1210): datamodels over `colonial_empire_blocs` and `colonial_empire_subject_capitals`, every row with its buttons; the slots, the "+N more" hovers and their sguis are gone; row hovers read `GetPlayer`. `State.GetCountry` from a datamodel item is unproven, so the first subject row logs `TE_SELF_CHECK OK|BROKEN ce_subject_row` once a game (play-test list: `docs/testing/colonial-holdings-playtest.md`).
 - **Category:** list
 - **Where:** `colonial_empire_widget.gui:2179-2269` (eight `te_ce_territory_row` instances on
   `Var('colonial_empire_territory_1..8')`, then `je_colonial_empire_territories_more` with
@@ -378,6 +392,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-2. International Pressure is a script-built text block. Make it a table of great powers
+- **Status:** done (2026-10-27, #1210): a table, one script container per great power (`colonial_empire_gp_rows`: flag, name, stance, prestige, stability a month), the escalations in force under it; the per-power factors and escalation losses are named values the bar's terms use, so the rows add up to its row. The two share lines went with the roster.
 - **Category:** list / spread-out/redundant
 - **Where:** `te_ce_sec_pressure` (`colonial_empire_widget.gui:1926-1954`), whose only child is a
   `colonial_empire_text` (fontsize_large) printing `colonial_empire_pressure_sgui`'s ExecuteTooltip
@@ -403,7 +418,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high (structure), medium (the per-row weight route)
 
 ### CE-3. The live lists open with #lore captions that restate their own column-head hovers
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): the territories and subjects captions are gone; the wars caption's mechanic is in `je_colonial_empire_holdings_wars_tt` and How it Works.
 - **Category:** over-explaining
 - **Where:** `je_colonial_empire_territories_caption` (`te_journal_entries_l_english.yml:311`, shown at
   `colonial_empire_widget.gui:2175`), `je_colonial_empire_subjects_caption` (`:306`, at `:2283`),
@@ -423,6 +438,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-4. The definitions of territory, colony and colonial subject are written out five times, and have drifted
+- **Status:** done (2026-10-27, #1210): `concept_colonial_territory`, `concept_overseas_colony` (vanilla has `concept_colony`, for colonization) and `concept_colonial_subject`, each with its thresholds read from script; the five hovers and `CE_STATE_IS_ELIGIBLE` (and the two `IS_*_STATE_TT` requirement lines) link them. The territory test is the strict one: the distinct-people share is part of it, and the colony adds the unincorporated, indigenous or living-standards test.
 - **Category:** over-explaining / style (consistency)
 - **Where:** `je_colonial_empire_ov_held_tt` (`:242`), `je_colonial_empire_holdings_territories_tt` (`:210`),
   `je_colonial_empire_territory_head_name_tt` (`:322`), `je_colonial_empire_holdings_subjects_tt` (`:208`),
@@ -448,6 +464,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high (duplication), medium (which text is right)
 
 ### CE-5. Pillar-row tooltips end in the same two boilerplate lines
+- **Status:** done (2026-10-27, #1210): both boilerplate lines gone from the eight hovers; How it Works says once that each bar spans its term's usual range.
 - **Category:** over-explaining
 - **Where:** `je_colonial_empire_drift_*_tt` (`te_journal_entries_l_english.yml:183-200`). Eight end "#lore The bar
   spans A to B; the figure beside it is exact.#!", and three add "Updated monthly." The rows are at
@@ -461,7 +478,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** medium (whether the owner wants the ranges kept)
 
 ### CE-6. Programme rows: a 12-pt cost line packs four figures, the stability figure appears three times, and the hover's prose repeats its own modifier lines
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): the row is short name, level, stability a month and the stepper at the row size; costs (Upkeep / One-off lines) and what a level adds on the hover; the garrison's infamy is a named value.
 - **Category:** style / spread-out/redundant / over-explaining
 - **Where:** `colonial_empire_policy_row` (`colonial_empire_widget.gui:920-991`, `row_cost` at `fontsize_small`,
   `:950`). Loc `je_colonial_empire_cost_invest` / `_garrison` / `_assimilation` (`:176-178`), `je_colonial_empire_tt_*`
@@ -481,6 +498,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-7. The overview carries an explanatory note, and the same rule is written four times
+- **Status:** done (2026-10-27, #1210): the note is gone; each legend line carries what its share does, and the pie has its own hover.
 - **Category:** over-explaining
 - **Where:** `je_colonial_empire_ov_legend_note` (`:250`, `fontsize_small`, `colonial_empire_widget.gui:1626-1635`).
   The same rule is in `je_colonial_empire_pressure_share_note` (`:268`), `…_support_share_note`, `…_how_pressure`
@@ -494,7 +512,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-8. The Release button's hover repeats the row name's hover
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): no further change needed: the loc part in #1202 was the whole fix.
 - **Category:** over-explaining
 - **Where:** `CE_RELEASE_STATE_TT` (`te_miscellaneous_l_english.yml:203`, via `colonial_empire_effect_release_state`,
   `decolonization.txt:1679`) versus the name cell's `colonial_empire_bloc_sgui` hover (`je_colonial_empire_bloc_people`,
@@ -509,7 +527,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-9. Every subject row repeats the band rule in its liberty-desire hover
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): no further change needed: the loc part in #1202 was the whole fix.
 - **Category:** over-explaining (rule 6)
 - **Where:** `je_colonial_empire_subject_ld_tt` (`:298`).
 - **Now:** after the row's own figures: "In the Strained band and below, every colonial subject of ours gains more of
@@ -520,7 +538,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-10. Stale text: the decolonization concept and both tab tooltips
-- **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
+- **Status:** done (2026-10-27, #1210): no further change needed: the loc part in #1202 was the whole fix.
 - **Category:** other (accuracy) / hidden info
 - **Where:** `concept_decolonization_system_desc` (`te_concepts_l_english.yml:789`); `te_window_tab_colonial_empire_tt`
   (`te_miscellaneous_l_english.yml:8561`); `te_window_tab_grand_monuments_tt` (`:8564`).
@@ -535,6 +553,7 @@ completion clocks, pie) follows rules 1, 4 and 5 closely.
 - **Confidence:** high
 
 ### CE-11. Smaller style points
+- **Status:** done (2026-10-27, #1210): `colonial_empire_fontsize_row` / `_heading` / `_overview` (17/20/16), every cell resized and held by `WidthBudgetTest`; Stable reads green; the heading hover is the projection; How links `[concept_colonial_band]` instead of repeating it. Spelling left for the separate pass. The overview is four `te_banking_ov_cell` cells (owner, 2026-10-27).
 - **Category:** style
 - **Where / Now / Proposed:**
   - Type sizes: pillar rows, list cells and the decision row are `fontsize_medium` (14). Column heads, programme costs,

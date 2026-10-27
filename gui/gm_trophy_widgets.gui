@@ -33,15 +33,15 @@
 
 types gm_trophy_widget_types
 {
-	### A line of a trophy row, beside its picture (96 + 8 + 376 = 480, as a
-	### monument's row).
+	### A line of a trophy row, beside its picture (96 + 8 + 376 = 480), at the
+	### panel's row size (gm_fontsize_row, grand_monuments_widget.gui).
 	type gm_tr_line = textbox {
 		autoresize = yes
 		multiline = yes
 		minimumsize = { 376 -1 }
 		maximumsize = { 376 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = gm_fontsize_row
 	}
 
 	### A trophy row's or card's button: its scripted GUI and label from the
@@ -51,7 +51,7 @@ types gm_trophy_widget_types
 	type gm_tr_button = button {
 		using = default_button_action
 		block "tr_button_layout" {
-			size = { 200 26 }
+			size = { 200 28 }
 			parentanchor = hcenter
 			margin_top = 2
 		}
@@ -66,7 +66,7 @@ types gm_trophy_widget_types
 				max_width = 190
 			}
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "tr_button_text" {}
 		}
 	}
@@ -77,7 +77,7 @@ types gm_trophy_widget_types
 	### gm_state_tr_view (unset is Full).
 	type gm_tr_view_button = button {
 		using = default_button_action
-		size = { 76 22 }
+		size = { 88 24 }
 		parentanchor = vcenter
 
 		block "tr_view_button" {}
@@ -86,7 +86,7 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "tr_view_button_text" {}
 		}
 	}
@@ -96,7 +96,7 @@ types gm_trophy_widget_types
 	### holding a monument we did not raise).
 	type gm_tr_take_button = button {
 		using = default_button_action
-		size = { 200 26 }
+		size = { 200 28 }
 		parentanchor = hcenter
 		margin_top = 4
 		datacontext = "[GetScriptedGui('gm_tr_take_sgui')]"
@@ -111,7 +111,7 @@ types gm_trophy_widget_types
 			autoresize = yes
 			max_width = 190
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			text = "gm_button_tr_take"
 		}
 	}
@@ -2140,7 +2140,7 @@ types gm_trophy_widget_types
 				spacing = 2
 
 				gm_tr_line = {
-					using = fontsize_large
+					using = gm_fontsize_heading
 					text = "gm_tr_row_title"
 				}
 				gm_tr_line = {
@@ -2205,7 +2205,7 @@ types gm_trophy_widget_types
 			spacing = 2
 
 			gm_tr_line = {
-				using = fontsize_large
+				using = gm_fontsize_heading
 				text = "gm_tr_row_title"
 			}
 			gm_tr_line = {
@@ -2254,7 +2254,7 @@ types gm_trophy_widget_types
 				spacing = 2
 
 				gm_tr_line = {
-					using = fontsize_large
+					using = gm_fontsize_heading
 					text = "gm_tr_row_title"
 				}
 				gm_tr_line = {
@@ -2302,7 +2302,8 @@ types gm_trophy_widget_types
 	### Its name and what it counts for; the rest (the dedication, where it came
 	### from and when, the levels, a landmark's history) on hover. Carry It Off
 	### (Bring It Home) ends the line, small, while our armies hold the state.
-	### 392 + 6 + 112 = 510, the card's width inside its margins.
+	### 374 + 6 + 130 = 510, the card's width inside its margins: the button at
+	### the row size fits "Bring It Home".
 	type gm_tr_row_short = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -2311,10 +2312,10 @@ types gm_trophy_widget_types
 		textbox = {
 			autoresize = yes
 			multiline = yes
-			minimumsize = { 392 -1 }
-			maximumsize = { 392 -1 }
+			minimumsize = { 374 -1 }
+			maximumsize = { 374 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = gm_fontsize_row
 			default_format = "#tooltippable"
 			tooltip = "gm_tr_short_tt"
 			text = "gm_tr_short_line"
@@ -2322,11 +2323,11 @@ types gm_trophy_widget_types
 
 		gm_tr_button = {
 			blockoverride "tr_button_layout" {
-				size = { 112 22 }
+				size = { 130 26 }
 				parentanchor = vcenter
 			}
 			blockoverride "tr_button_text_width" {
-				max_width = 104
+				max_width = 124
 			}
 			blockoverride "tr_button" {
 				datacontext = "[GetScriptedGui('gm_tr_take_site_sgui')]"
@@ -2476,7 +2477,7 @@ types gm_trophy_widget_types
 				}
 
 				### The header: the title, and the three views at its right.
-				### 76 * 3 + 4 * 2 = 236 beside a title of about 190.
+				### 88 * 3 + 4 * 2 = 272 beside a title of about 210.
 				widget = {
 					size = { 510 26 }
 
@@ -2484,7 +2485,7 @@ types gm_trophy_widget_types
 						parentanchor = left|vcenter
 						autoresize = yes
 						align = left|nobaseline
-						using = fontsize_large
+						using = gm_fontsize_heading
 						default_format = "#tooltippable"
 						tooltip = "gm_state_tr_header_tt"
 						text = "gm_state_tr_header"
@@ -2537,7 +2538,7 @@ types gm_trophy_widget_types
 					multiline = yes
 					maximumsize = { 510 -1 }
 					align = left|nobaseline
-					using = fontsize_medium
+					using = gm_fontsize_row
 					default_format = "#tooltippable"
 					tooltip = "gm_state_tr_summary_tt"
 					text = "gm_state_tr_summary"
@@ -2577,7 +2578,7 @@ types gm_trophy_widget_types
 	### Its monument is the row's container.
 	type gm_mon_take_button = button {
 		using = default_button_action
-		size = { 200 26 }
+		size = { 200 28 }
 		parentanchor = hcenter
 		margin_top = 2
 		datacontext = "[GetScriptedGui('gm_mon_take_sgui')]"
@@ -2592,7 +2593,7 @@ types gm_trophy_widget_types
 			autoresize = yes
 			max_width = 190
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			text = "gm_button_tr_take"
 		}
 	}
@@ -2602,7 +2603,7 @@ types gm_trophy_widget_types
 	### shape of the journal entry's gm_choice_button.
 	type gm_mon_choice_button = button {
 		using = default_button_action
-		size = { 150 24 }
+		size = { 156 28 }
 		margin_top = 2
 
 		block "choice_context" {}
@@ -2616,9 +2617,9 @@ types gm_trophy_widget_types
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 140
+			max_width = 150
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "choice_text" {}
 		}
 	}
@@ -2646,7 +2647,7 @@ types gm_trophy_widget_types
 				spacing = 2
 
 				gm_tr_line = {
-					using = fontsize_large
+					using = gm_fontsize_heading
 					text = "gm_tr_row_title"
 				}
 				gm_tr_line = {
@@ -2718,7 +2719,7 @@ types gm_trophy_widget_types
 		textbox = {
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_large
+			using = gm_fontsize_heading
 			default_format = "#tooltippable"
 			tooltip = "gm_state_mon_header_tt"
 			text = "gm_state_mon_header"
@@ -2730,7 +2731,7 @@ types gm_trophy_widget_types
 			multiline = yes
 			maximumsize = { 510 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = gm_fontsize_row
 			text = "gm_state_mon_summary"
 		}
 

@@ -20,6 +20,7 @@
  colonial_overlord_collapsing_subject_ld_modifier:0 "Subject on the Brink"
  colonial_overlord_crumbling_subject_ld_modifier:0 "Defiant Colonial Subject"
  colonial_overlord_strained_subject_ld_modifier:0 "Restless Colonial Subject"
+ concept_colonial_subject_desc:0 "A [concept_subject] of ours, or of one of our subjects, that counts as colonial: every colony and chartered company, and a protectorate separated from its overlord's capital by sea whose people share no [concept_heritage_trait] with ours. Each one keeps the Colonial Empire [concept_journal_entry] running. A colony raised to a dominion no longer counts."
  covert_comms_disruption_action_pact_desc:0 "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness."
  covert_counterintel_support_action_pact_desc:0 "We are supporting the counterintelligence services of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_cultivate_assets_action_pact_desc:0 "We are cultivating intelligence assets in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."

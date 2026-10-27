@@ -17,6 +17,8 @@
 ###   GUI's is_shown (gm_archaeology_sguis.txt).
 ### * The collapse flag says its default: *_closed sections are open until
 ###   closed.
+### * Type sizes are the panel's templates (gm_fontsize_*,
+###   grand_monuments_widget.gui).
 
 types gm_archaeology_widget_types
 {
@@ -27,14 +29,14 @@ types gm_archaeology_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = gm_fontsize_row
 	}
 
 	### A row's button: its scripted GUI, tooltip and label from the instance,
 	### its site as gm_arch. Three of these fit a row (3 x 150 + 2 x 8 = 466).
 	type gm_arch_button = button {
 		using = default_button_action
-		size = { 150 26 }
+		size = { 150 28 }
 		margin_top = 2
 
 		block "arch_button" {}
@@ -45,7 +47,7 @@ types gm_archaeology_widget_types
 			autoresize = yes
 			max_width = 140
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "arch_button_text" {}
 		}
 	}
@@ -59,7 +61,7 @@ types gm_archaeology_widget_types
 		spacing = 2
 
 		gm_arch_line = {
-			using = fontsize_large
+			using = gm_fontsize_heading
 			text = "gm_arch_row_title"
 		}
 		gm_arch_line = {
@@ -70,10 +72,14 @@ types gm_archaeology_widget_types
 		gm_arch_line = {
 			visible = "[GetScriptedGui('gm_arch_abroad_concession_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 			text = "gm_arch_row_abroad_concession"
+			default_format = "#tooltippable"
+			tooltip = "gm_arch_row_abroad_concession_tt"
 		}
 		gm_arch_line = {
 			visible = "[GetScriptedGui('gm_arch_abroad_permit_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 			text = "gm_arch_row_abroad_permit"
+			default_format = "#tooltippable"
+			tooltip = "gm_arch_row_abroad_permit_tt"
 		}
 		gm_arch_line = {
 			visible = "[GreaterThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress'), '(CFixedPoint)0' )]"
@@ -138,7 +144,7 @@ types gm_archaeology_widget_types
 		spacing = 2
 
 		gm_arch_line = {
-			using = fontsize_large
+			using = gm_fontsize_heading
 			text = "gm_arch_row_title"
 		}
 		gm_arch_line = {
@@ -150,10 +156,14 @@ types gm_archaeology_widget_types
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)1' )]"
 			text = "gm_arch_row_dig_concession"
+			default_format = "#tooltippable"
+			tooltip = "gm_arch_row_abroad_concession_tt"
 		}
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)2' )]"
 			text = "gm_arch_row_dig_permit"
+			default_format = "#tooltippable"
+			tooltip = "gm_arch_row_abroad_permit_tt"
 		}
 		gm_arch_line = {
 			default_format = "#tooltippable"
@@ -176,7 +186,9 @@ types gm_archaeology_widget_types
 	}
 
 	### Archaeological Expeditions (open): shown while a dig runs or a site
-	### waits for us. Digs first, then the sites open to us.
+	### waits for us. Digs first, then the sites open to us, each list under a
+	### heading shown while it has a row (GM-14); how digs work is How Grand
+	### Monuments Work's Archaeology.
 	type te_gm_sec_archaeology = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -215,6 +227,12 @@ types gm_archaeology_widget_types
 				text = "gm_je_arch_costs"
 			}
 
+			gm_subheader = {
+				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_dig_count'), '(CFixedPoint)0' )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_arch_sub_digs"
+				}
+			}
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
@@ -227,6 +245,12 @@ types gm_archaeology_widget_types
 				}
 			}
 
+			gm_subheader = {
+				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_open_count'), '(CFixedPoint)0' )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_arch_sub_open"
+				}
+			}
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes

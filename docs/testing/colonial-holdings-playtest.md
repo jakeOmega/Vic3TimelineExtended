@@ -77,3 +77,30 @@ through `var:x = { save_temporary_scope_as }`, and `ordered_in_list` over a vari
 | **A different release keeps its row.** A territory whose largest homeland people differ from its neighbour's (a Hui-majority state beside Han ones). | Its own row, and it also appears in the Han bloc's hover, since the Han release would take it. | |
 | **"+N more".** With more than eight blocs. | The rest by the bloc's GDP, a bloc as "X +N: £GDP". | |
 | **The monthly cost.** A large empire (China, Britain) on the monthly pulse. | No visible stutter at the month's turn. | Limit the pass to the eight largest seeds plus a count, or move it to the panel's open. |
+
+## The panel after the GUI audit (2026-10-27, issue #1210)
+
+The audit's Colonial Empire findings (CE-1 to CE-11, `docs/audits/gui_audit/monuments_colonial.md`) reworked the
+panel offline. The territory and subject lists are datamodels over every bloc and every subject
+(`colonial_empire_blocs`, `colonial_empire_subject_capitals`), so the "+N more" checks above no longer apply: every
+row has its own figures and buttons. International Pressure is a table of great powers, one script container a row
+(`colonial_empire_gp_rows`). The overview is four of Banking's cells. Every text is at the house sizes, 17 for rows,
+20 for subheadings and 16 for the overview.
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `ce_subject_row` | A subject row of the datamodel reads its country through `State.GetCountry` (proven before only from a stored variable, gui_modding_guide gotcha #15). The first row drawn in a game reports once: OK when the row read the subject's name, BROKEN when it read none though the capital has an owner. | `te_ce_subject_row`'s two 1x1 widgets, `colonial_empire_selfcheck_subject_sgui` | Store each subject's capital on a script container (`colonial_empire_gp_row`'s shape) and read `ScriptContainer.MakeScope.Var('x').GetState.GetCountry`, the covert rows' proven chain, or show the subject through a scripted GUI's `ExecuteTooltip` (gotcha #11, way (b)). No line at all after a subject row has shown means the `_show` state did not fire: check the row is drawn, then the Grand Monuments naming line's precedent. |
+
+### Checks
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Every row.** As an empire with more than eight territories or subjects (Britain, France). | Every bloc and every subject has a row with its figures and buttons, largest GDP first; the hovers of the colony icon, the figures, the name and the buttons all show (they read `GetPlayer`, not `JournalEntry`). | An empty list on a running entry: `GetList` over the stored list is not drawn; check `colonial_empire_blocs` on the country in the save. An empty hover in a row: a key in it still reads `JournalEntry` (gotcha #24). |
+| **The great powers' table.** With a condemner and a supporter (`event te_debug_colonial_empire.2`). | A row each, condemners first: flag, name, "Condemning"/"Supporting", prestige and the stability a month ("-0.84/mo"); the row's hover gives the factor against our prestige. The rows' figures add up, with any escalation line, to the "Great Power pressure" row of Why Stability Is Moving. | A blank flag or name: `ScriptContainer.MakeScope.Var('ce_gp_capital')` did not reach the country. Rows from last month left over: `colonial_empire_clear_gp_rows` did not destroy them. |
+| **The escalation lines.** Push the condemners past a third of great-power prestige: `event te_debug_colonial_empire.2` sets condemners. | "Diplomatic isolation -1.00/mo" under the table, and at two thirds "International consensus -2.00/mo" as well; the overview's Great Powers cell reads "Isolated" (orange) or "Consensus" (red). | |
+| **The overview's cells.** Look at the four cells in each band. | Band: the band's icon and name, and "Stable at 65" under it below the top band (its hover the next band's line). Great Powers: the escalation word and the net a month. Holdings: colonies and subjects. Programmes: three small programme icons, lit while each runs, "N of 3 running" and their stability a month. Nothing elided. | A word elided at 16: shorten it in `te_journal_entries_l_english.yml`; the test budgets 8.6 units a character. |
+| **The type sizes.** Read the lists, the programme rows and the overview at 1080p. | Rows and buttons at 17, subheadings at 20, the overview at 16; no column head or button label cut short ("Accords Signed", "Dominion", "Ours"). | Widen the cell and narrow the name column, or shorten the label; `WidthBudgetTest` holds each to the estimate. |
+| **The programme rows.** Open Colonial Programmes. | Each row: the short name, "1 / 3", its stability a month in colour, then minus and plus. The hover gives Upkeep and One-off lines, what a level adds, and the full program's modifiers. | |
+| **The concepts.** Hover "colonial territory", "overseas colony" and "colonial subject" in the Holdings hovers. | Each concept's definition with its thresholds from script (population, shares, acceptance, standard of living). | Blank thresholds: `GetPlayer.MakeScope.ScriptValue` does not render in a concept's description; type the values from `colonial_empire_values.txt` instead. |

@@ -135,135 +135,6 @@ colonial_empire_active_assimilation_sgui = {
 
 
 # ---------------------------------------------------------------------------
-# Read-only text: which great powers are pressing on the empire.
-#
-# Rendered with ScriptedGui.ExecuteTooltip. The great powers are walked LIVE
-# here rather than read out of stored slot variables, because
-# `Var('x').GetCountry.GetName` is recorded as rendering blank in this mod
-# (gui_modding_guide gotcha #11) and because a live walk cannot go stale or name
-# an annexed country.
-#
-# Cost: two every_country walks per frame while the section is open. That is why
-# the widget keeps International Pressure COLLAPSED by default and puts this
-# textbox inside the collapsed container -- nothing runs until the player asks.
-#
-# Each entry names its own side (gotcha #18: a header above a script-built
-# country list renders above the whole undivided list, not above its own group),
-# and no entry adds a flag icon (gotcha #19: a custom_tooltip inside a country
-# scope change already gets a bullet and a flag for free).
-# ---------------------------------------------------------------------------
-colonial_empire_pressure_sgui = {
-	scope = country
-	is_shown = { always = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-
-	effect = {
-		# Cheap short-circuit: `any_country` stops at the first match, where the
-		# condemner/supporter script values would walk every country twice.
-		if = {
-			limit = {
-				NOT = {
-					any_country = {
-						NOT = { THIS = ROOT }
-						country_rank >= rank_value:great_power
-						OR = {
-							has_variable = gp_anti_colonial_stance
-							has_variable = gp_pro_colonial_stance
-						}
-					}
-				}
-			}
-			custom_tooltip = je_colonial_empire_pressure_quiet_tt
-		}
-		# One line above the whole list (gotcha #18 is about per-group headers;
-		# this one describes every entry): each entry below shows its power's
-		# prestige, and this line shows ours and how the two combine.
-		else = {
-			custom_tooltip = je_colonial_empire_pressure_scaling_tt
-			# The monthly snapshot, not a live walk. has_variable guards the first
-			# month of a save upgraded mid-entry, which has no snapshot yet.
-			if = {
-				limit = {
-					has_variable = colonial_empire_condemner_share
-					var:colonial_empire_condemner_share > 0
-				}
-				custom_tooltip = je_colonial_empire_pressure_share_tt
-			}
-			# The supporters' share, beside it, with a hover that says it does
-			# not offset the escalations (only the condemners' share counts).
-			if = {
-				limit = {
-					has_variable = colonial_empire_supporter_share
-					var:colonial_empire_supporter_share > 0
-				}
-				custom_tooltip = je_colonial_empire_pressure_support_share_tt
-			}
-		}
-
-		every_country = {
-			limit = {
-				NOT = { THIS = ROOT }
-				country_rank >= rank_value:great_power
-				has_variable = gp_anti_colonial_stance
-			}
-			custom_tooltip = je_colonial_empire_condemner_entry_tt
-		}
-
-		every_country = {
-			limit = {
-				NOT = { THIS = ROOT }
-				country_rank >= rank_value:great_power
-				has_variable = gp_pro_colonial_stance
-			}
-			custom_tooltip = je_colonial_empire_supporter_entry_tt
-		}
-	}
-}
-
-
-# ---------------------------------------------------------------------------
-# Read-only text: the eligible territories the list's eight rows leave out,
-# by GDP. The hover on the list's "+N more" line (colonial_empire_widget.gui,
-# te_ce_territory_list), built only while hovered. Sixteen names, then a count
-# of any beyond them.
-# ---------------------------------------------------------------------------
-colonial_empire_territories_sgui = {
-	scope = country
-	is_shown = { always = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-
-	effect = {
-		custom_tooltip = je_colonial_empire_territories_more_head
-		colonial_empire_more_territory_line = { POS = 8 }
-		colonial_empire_more_territory_line = { POS = 9 }
-		colonial_empire_more_territory_line = { POS = 10 }
-		colonial_empire_more_territory_line = { POS = 11 }
-		colonial_empire_more_territory_line = { POS = 12 }
-		colonial_empire_more_territory_line = { POS = 13 }
-		colonial_empire_more_territory_line = { POS = 14 }
-		colonial_empire_more_territory_line = { POS = 15 }
-		colonial_empire_more_territory_line = { POS = 16 }
-		colonial_empire_more_territory_line = { POS = 17 }
-		colonial_empire_more_territory_line = { POS = 18 }
-		colonial_empire_more_territory_line = { POS = 19 }
-		colonial_empire_more_territory_line = { POS = 20 }
-		colonial_empire_more_territory_line = { POS = 21 }
-		colonial_empire_more_territory_line = { POS = 22 }
-		colonial_empire_more_territory_line = { POS = 23 }
-		if = {
-			limit = {
-				has_variable = colonial_empire_bloc_count
-				var:colonial_empire_bloc_count > 24
-			}
-			custom_tooltip = je_colonial_empire_territories_more_tail
-		}
-	}
-}
-
-
-# ---------------------------------------------------------------------------
 # Read-only text: one row of the territory list, a release bloc (its seed
 # passed as ce_state), on its name's hover. The people a release forms with,
 # the states it takes with their people (eight, largest GDP first, then a
@@ -489,31 +360,6 @@ colonial_empire_dominion_subject_sgui = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Read-only text: every colonial subject, by GDP, with its kind and liberty
-# desire. The hover on the subject list's "+N more" line
-# (colonial_empire_widget.gui, te_ce_sec_holdings), built only while hovered.
-# Each line is printed in the subject's own scope, which gives it a bullet and
-# its flag (gotcha #19: the name carries the flag already, so the line adds
-# none).
-# ---------------------------------------------------------------------------
-colonial_empire_subjects_sgui = {
-	scope = country
-	is_shown = { always = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-
-	effect = {
-		custom_tooltip = je_colonial_empire_subjects_more_head
-		ordered_subject_or_below = {
-			limit = { is_qualifying_colonial_subject = yes }
-			order_by = gdp
-			max = 40
-			custom_tooltip = je_colonial_empire_subject_more_line
-		}
-	}
-}
-
 # Open Talks beside a war of independence (the Wars of Independence block of
 # Colonial Holdings): the confirmation for the war whose rebels' capital is
 # ce_state. Greyed while talks already run or the war has not begun.
@@ -532,5 +378,52 @@ colonial_empire_open_talks_sgui = {
 
 	effect = {
 		decol_iw_effect_open_talks = yes
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# TE_SELF_CHECK ce_subject_row (CE-1 of the 2026-10-27 GUI audit): whether a
+# datamodel item's State reaches its country. The subject list is a datamodel
+# over colonial_empire_subject_capitals since then, each row reading its
+# subject as State.GetCountry; from a datamodel item that is unproven in this
+# mod (gui_modding_guide gotcha #15, which proves it only from a stored
+# variable). The first subject row drawn in a game reports once, from a 1x1
+# widget's _show state (the naming line's proven shape, gm_naming_line):
+# ce_check 1 when the row read a country name, 0 when it read none. Its fallback
+# is in docs/testing/colonial-holdings-playtest.md. Writes a global variable and
+# a log line, nothing else; players only, as the list is.
+# ---------------------------------------------------------------------------
+colonial_empire_selfcheck_subject_sgui = {
+	scope = country
+	saved_scopes = { ce_capital ce_check }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		exists = scope:ce_capital
+		exists = scope:ce_check
+	}
+
+	effect = {
+		# A capital with no owner is not a test of the read, so it never reports.
+		if = {
+			limit = {
+				exists = scope:ce_capital
+				exists = scope:ce_check
+				scope:ce_capital = { exists = owner }
+				NOT = { has_global_variable = te_selfcheck_ce_subject_row }
+			}
+			set_global_variable = te_selfcheck_ce_subject_row
+			if = {
+				limit = { scope:ce_check = 1 }
+				debug_log = "TE_SELF_CHECK OK ce_subject_row country=[THIS.GetCountry.GetTagName] (a colonial subject's row named its subject through State.GetCountry from a datamodel item) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ce_subject_row country=[THIS.GetCountry.GetTagName] (a colonial subject's row read no country through State.GetCountry from a datamodel item, though its capital has an owner; take the fallback in docs/testing/colonial-holdings-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
 	}
 }

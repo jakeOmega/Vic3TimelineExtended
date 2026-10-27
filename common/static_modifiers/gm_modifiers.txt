@@ -168,6 +168,38 @@ gm_national_sig_heroes = {
 	state_assimilation_mult = 0.05
 }
 
+# ---- The monument policies, for display only (GM-2) ----------------------------
+# Never added: the policy buttons' effects and the overview's policy hover
+# render each with [GetStaticModifier('gm_policy_<p>_display').GetDesc], so a
+# policy reads as the engine's lines. The values are the policy's own
+# (gm_policy_factor_* and gm_policy_ceremonial_share in gm_values.txt;
+# gm_step_education); a monument dedicated To History counts at half, the one
+# figure a modifier line cannot carry, which the texts add beneath.
+gm_policy_open_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	gm_monument_tourism_mult = 0.5
+}
+
+gm_policy_ceremonial_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	gm_monument_ceremonial_share_add = 0.25
+}
+
+gm_policy_culture_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	gm_monument_cultural_pull_mult = 0.5
+}
+
+gm_policy_culture_prestige_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	gm_monument_prestige_mult = 0.5
+}
+
+gm_policy_education_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	gm_monument_education_step_add = 0.01
+}
+
 # ---- Opportunity boons (opportunities spec §3.2): on je:je_grand_monuments ----
 # One per moment, flat, while the country's gm_boon_<source> counts its 120
 # months down (gm_add_boons, gm_commission_effects.txt). test_grand_monument_
