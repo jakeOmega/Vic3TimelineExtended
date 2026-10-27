@@ -259,8 +259,8 @@ mineral deposits](03-economy.md#new-mineral-deposits).
 | Phosphate, Potash, Industrial Mineral and Salt | Chemical and Industrial Minerals |
 
 Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
-Mining) can be built in any coastal state, and each level needs a seabed licence
-([Seabed licences](#seabed-licences)). Like a fishing wharf, it loses up to
+Mining) can be built in any coastal state, and each level needs a seabed license
+([Seabed licenses](#seabed-licenses)). Like a fishing wharf, it loses up to
 three quarters of its throughput while its state is blockaded. Its ships come
 from the Support Vessels group: Motor Ship Tenders run it on Motor Ships, and
 Magnetic Drive Tenders, from Modern Material Science, run it on fewer Magnetic
@@ -286,15 +286,15 @@ an elevator of your own), and Transport in Space, whose Fusion Tugs need
 Muon-Catalyzed Fusion Reactors. A Mining Colony with Fusion Tugs already earns
 about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
 as much again. With the Global Commons rule off, the Deep-Sea Mine has no
-licences and keeps its older, smaller output.
+licenses and keeps its older, smaller output.
 
-### Seabed licences
+### Seabed licenses
 
 With the Global Commons rule on (the default), each Deep-Sea Mine level needs a
-seabed licence. The seabed is split into five ocean basins, each holding a fixed
-pool of licences. A coastal state belongs to the basin its sea lane opens onto.
+seabed license. The seabed is split into five ocean basins, each holding a fixed
+pool of licenses. A coastal state belongs to the basin its sea lane opens onto.
 
-| Basin | Licences | Includes |
+| Basin | Licenses | Includes |
 |---|---|---|
 | Pacific | 300 | the Sea of Japan and the East and South China Seas |
 | Atlantic | 250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
@@ -320,20 +320,20 @@ outweighs a larger obsolete one.
 An event announces the seabed rush when the first coastal country researches
 Abyssal Plain Mining. After that, a notification tells you when a country wins
 its first share in a basin on your coast where you have one, and when a basin
-you have coast or a share in has all its licences held. Both can be muted in
-the message settings, under Seabed Licences.
+you have coast or a share in has all its licenses held. Both can be muted in
+the message settings, under Seabed Licenses.
 
-A licence is held by a level, built or queued, and stays with it for good. It
+A license is held by a level, built or queued, and stays with it for good. It
 belongs to the state the mine stands in and passes with it: conquer a mined
-state and its licences come with it. Built levels are never taken away. If your
+state and its licenses come with it. Built levels are never taken away. If your
 share in a basin falls below what you hold there, you keep every level and
-can't take more licences from that basin until you are back under it; levels
-you downsize, or that are destroyed, give their licences back. A new level
-takes its own basin's licence first. Once your claims there are used up it
+can't take more licenses from that basin until you are back under it; levels
+you downsize, or that are destroyed, give their licenses back. A new level
+takes its own basin's license first. Once your claims there are used up it
 takes one from another basin and works at -25% throughput (Long-Haul Seabed
 Operations, shown on the mine), until a local claim frees up and replaces it on
 its own. The
-building's requirements list how many licences you have to spare and which
+building's requirements list how many licenses you have to spare and which
 kind the next level would take.
 
 #### Claims, protection and the holding fee
@@ -343,14 +343,14 @@ Each January divides them again, so a rival's naval buildup can take them. On
 Sponsor Contractors the January sharing leaves you at least three quarters of
 each basin's claims, so they fade by a quarter a year at most; on the other
 policies they are divided again in full. A sharing in the middle of the year,
-when a new claimant appears, honours January's protection without adding to it.
+when a new claimant appears, honors January's protection without adding to it.
 A Scramble ends all protection. When the Law of the Sea comes into force after
 open years, protected claims can come out of the reserved half, as the real
 convention's pioneer investors kept the sites they had registered; they fade by
 a quarter a year like any other, so the reserved half refills.
 
-Queueing a level turns a claim into a licence at once, so you can hold a
-basin's claims by queueing far ahead. That costs a holding fee: a licence on a
+Queuing a level turns a claim into a license at once, so you can hold a
+basin's claims by queuing far ahead. That costs a holding fee: a license on a
 level still unbuilt a year after it was queued pays 2% of a level's base output
 value a week (about 900), half the royalty, until the level is built. Building
 at a normal pace never pays it, whoever queued the level. Under the Regulated
@@ -361,7 +361,7 @@ You can Relinquish a basin's claims from your own row in that basin's list of
 claimants: they are gone at once, so Sponsor Contractors' influence falls with
 them, and the next sharing divides them among the other claimants. You claim
 nothing there until you press Claim Again, which counts from the sharing after.
-Licences on your levels are untouched.
+Licenses on your levels are untouched.
 
 #### Leasing seabed claims
 
@@ -369,8 +369,8 @@ A Lease Seabed Claims treaty article, one for each basin, leases some of one
 country's own claims there to another, up to the number agreed. They pass at
 once, so the lessee can build before January. Each sharing divides them again,
 and the lease then takes them back from the lessor's new share, as far as it
-goes, until the licences built on the lease and its unused claims make up the
-number. Licences built on a lease are the lessee's for good, but they count
+goes, until the licenses built on the lease and its unused claims make up the
+number. Licenses built on a lease are the lessee's for good, but they count
 against the lessor's share, not the lessee's, even after the lease ends, for as
 long as both countries take part in the sharing; meanwhile the lessee can lease
 that basin's claims again only from the same lessor. When the lease ends, its
@@ -385,9 +385,9 @@ price.
 An overlord can take its subject's unused claims with Administer Seabed Claims,
 an action like Raise Subject Payments: no approval, and not on a protectorate
 or a personal union. While it stands, the subject's claims pass to the overlord
-at once and after every sharing, with no limit, and the licences the overlord
+at once and after every sharing, with no limit, and the licenses the overlord
 builds on them count against the subject's share, even after the action ends,
-while both take part. The subject keeps its own licences. Its liberty desire rises as under Raise Subject Payments, and
+while both take part. The subject keeps its own licenses. Its liberty desire rises as under Raise Subject Payments, and
 relations between the two fall. Only the overlord starts or ends it; when it
 ends, the subject's claims are its own again from the next sharing. AI
 overlords use it on subjects with claims to spare and liberty desire below 25,
@@ -397,18 +397,18 @@ and end it at 50.
 
 The Seabed tab of the Timeline Extended window answers four questions. Its
 overview says how many more Deep-Sea Mines you can queue (and how many at home,
-without the long-haul penalty), your licences and any holding fee, your
+without the long-haul penalty), your licenses and any holding fee, your
 long-haul levels, your unused claims and what next January can take of them,
 your policy and when it can next change, and the regime. The Ocean Basins table
 has a row for each basin: Free is your claims there, green where you have coast
 to build on at full throughput; Pool is a bar of the whole pool, from your
 mines and claims to rivals' mines and the rivals' claims a buildup could win;
-Weight is your share of the basin's claim weight; +1 licence is about how much
-more naval power projection would win you one more licence at the next sharing,
+Weight is your share of the basin's claim weight; +1 license is about how much
+more naval power projection would win you one more license at the next sharing,
 a figure that is enough and often more than needed. Click a basin to see its claimants, largest
 share first, each with its mines, claims and share of the weight in columns,
-and your own row with its Relinquish button. A Seabed Licences
-tile on every coastal state's panel shows that state's basin, the licences its
+and your own row with its Relinquish button. A Seabed Licenses
+tile on every coastal state's panel shows that state's basin, the licenses its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
@@ -419,7 +419,7 @@ would weigh in.
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
 | Scientific Survey (default) | none | ×0.75 | You aren't building Deep-Sea Mines yet, or you build your claims as fast as you get them and need no protection. |
-| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licences, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
+| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licenses, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
 | Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, naval power projection counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
@@ -429,7 +429,7 @@ in one of your home basins has switched to it since your last change, and
 Scientific Survey, while your influence is in deficit. Sponsor Contractors'
 cost has no cap, so claiming a whole basin is expensive; to cut it, build on
 the claims, relinquish a basin, or drop to Scientific Survey when you can. AI
-countries take up Sponsor Contractors when it would bring them a licence and
+countries take up Sponsor Contractors when it would bring them a license and
 Tech-Critical Metals sell above base price, and more readily the more unused
 claims they hold. A few great powers, mostly those with poor UN standing or a
 rival claimant, choose Unilateral Licensing. The AI keeps to the five-year lock
@@ -676,7 +676,7 @@ Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
 Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
 a change of owner or a rededication. It keeps its name too unless it is
 rededicated; then it is named again like any new monument, and the naming event
-can give the historical name back. Rename and Name It are greyed out while it
+can give the historical name back. Rename and Name It are grayed out while it
 carries its historical name. Only pulling it down, or demolishing it, ends it.
 
 ![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
@@ -755,7 +755,7 @@ A monument is **finished** once it is dedicated. Until then it stands under
 construction and every level built on it joins it, for as long as you like: you
 can pause its construction and come back to it decades later. Its **Dedicate**
 button, on its card in the state view and under Awaiting Dedication, holds the
-dedication ceremony. The button is greyed while any of its levels are under
+dedication ceremony. The button is grayed while any of its levels are under
 construction: let them finish or cancel them first. The dedication finishes the
 monument at the levels built: a Grand Monument stands in its place at level 1,
 and the state card and its row under Our Monuments show "Finished: 15 levels ·
@@ -764,7 +764,7 @@ Age: +3.2". Damage to its building never shrinks it.
 A finished monument grows grander with the years: by 2% of the grandeur it was
 dedicated with a year, so it doubles its grandeur in fifty years and triples it
 in a hundred, and then it stops. A historical monument's earlier years are
-already counted: the Parthenon has finished ageing, the Brandenburg Gate grows
+already counted: the Parthenon has finished aging, the Brandenburg Gate grows
 for another 55 years to 79, and the Arc de Triomphe, finished in 1836, grows
 from 75 to 225 by 1936.
 
@@ -823,7 +823,7 @@ its place.
 A monument's Dedicate button holds its dedication ceremony, which asks what it
 honors. The choice is permanent, and the ceremony's tooltips list each
 dedication's effects. The ceremony lists every dedication: one you can't raise
-yet is greyed out, with what it needs. Choosing to leave it as it is for now
+yet is grayed out, with what it needs. Choosing to leave it as it is for now
 closes the ceremony and keeps the button for later; a monument under
 construction has no effects until it is dedicated.
 Dedicating a monument finishes it (see
@@ -1039,8 +1039,8 @@ Amharic or Tigrinya one, and so on through the classical languages that language
 reform can revive. A Grand Shrine takes the style of your state religion's great
 building: a basilica, a great mosque, a great temple, a pagoda. An opera house,
 gardens, an observatory or a stadium can take a style where your heritage has a
-tradition of its own, such as a Greek open-air theatre, a Persian garden, a
-Jantar Mantar or a Roman amphitheatre; for these the style changes only the
+tradition of its own, such as a Greek open-air theater, a Persian garden, a
+Jantar Mantar or a Roman amphitheater; for these the style changes only the
 look. When more than one style fits, an event asks which, and each style's
 option names what makes it fit; the AI keeps the most specific style without
 being asked. The style changes the monument's name and look, not what it does.
@@ -1085,7 +1085,7 @@ years, but your first choice starts no wait.
 | Cultural Promotion | Cultural pull from monuments ×1.5, Ancestral Antiquity's included, and the share of it from monuments To History ×1.25. With the Cultural Hegemony rule off, prestige from monuments instead, on the same terms. | The policy until you choose another. |
 | Public Education | +1% education access in every state for each step of standing grandeur, a monument To History counting half, in steps of 10, 20, 30 and so on. | Literacy still well short of what your people could reach. |
 
-No policy changes maintenance, which Grand Monuments don't need, or ageing,
+No policy changes maintenance, which Grand Monuments don't need, or aging,
 anniversaries or what a dedication does in its own state.
 
 The national effects change at once, and each monument's tourism at the start
@@ -1235,7 +1235,7 @@ Romanticism for Nineveh, Empiricism for Troy, Mycenae, Pergamon, Olympia and
 Sidon, and later ones for the finds of the twentieth century, up to E-commerce
 for Göbekli Tepe. Some are known and open at once, and The Scholars Know Where
 to Look tells you when one is. The rest are found by chance: once you have the
-technology, each month there is about a 1% chance that a plough, a railway
+technology, each month there is about a 1% chance that a plow, a railway
 cutting or a hiker turns one up, and Something Under the Spade tells you. Both
 events name the place and the state, say what was found, add a short note on
 how it was found in history, and offer the dig.
@@ -1256,7 +1256,7 @@ the innovation cap stays. A site's size sets its months, so a 10-level site dug
 by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
 one for 27. The button's tooltip gives this site's months, and a dig's row
 gives the innovation it diverts. Nothing caps how many digs you run, but a
-method's button is greyed while you make less weekly innovation than it would
+method's button is grayed while you make less weekly innovation than it would
 divert, so a new dig never takes your innovation below zero. Suspend Dig stops
 a dig and keeps its progress. A dig also stops if you lose the state,
 or the treaty that let you dig there ends, and whoever may dig it next can take

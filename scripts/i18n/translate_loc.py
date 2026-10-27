@@ -42,7 +42,9 @@ from dataclasses import dataclass
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, REPO_ROOT)
+sys.path.insert(0, os.path.join(REPO_ROOT, "scripts", "analysis"))
 
+from check_loc_spelling import americanize_value  # noqa: E402
 from mod_state import split_loc_line  # noqa: E402
 
 ENGLISH_DIR = os.path.join(REPO_ROOT, "localization", "english")
@@ -214,12 +216,16 @@ def is_minor_change(old_en: str, new_en: str) -> bool:
     """A wording tweak the old translation still covers. Short text (under six
     words: names, labels) must be unchanged apart from case, spacing and final
     punctuation, since a small edit there is usually a rename. Longer text needs
-    the same numbers and 85% similarity. Anything else ships English until
+    the same numbers and 85% similarity. A change of spelling only, British to
+    American as scripts/analysis/check_loc_spelling.py sweeps it (Licence to
+    License), is minor at any length. Anything else ships English until
     retranslated."""
     def norm(text: str) -> str:
         return re.sub(r"\s+", " ", text).strip().rstrip(".!?:;").casefold()
 
     if norm(old_en) == norm(new_en):
+        return True
+    if norm(americanize_value(old_en)[0]) == norm(new_en):
         return True
     if min(word_count(old_en), word_count(new_en)) < 6:
         return False

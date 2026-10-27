@@ -494,7 +494,7 @@ Emergency Liquidity Program still refunds 1% of GDP when that closes it.
 | Cooperative Ownership | Surplus & Reserves | Dividend Restraint Resolution (2), Mutual Aid Fund Deployment (4) |
 | Cooperative Ownership | Investment & Credit | Collective Capital Investment Plan (4), Cooperative Credit Union Expansion (3) |
 | Cooperative Ownership | Council Direction | Federation Council Advisory Directive (1), Consumption Ceiling Resolution (2) |
-| Cooperative Ownership | Membership Mobilisation | Worker Solidarity Campaign (1), Worker Buyout Facilitation (3) |
+| Cooperative Ownership | Membership Mobilization | Worker Solidarity Campaign (1), Worker Buyout Facilitation (3) |
 
 ### Banking history charts
 
@@ -574,7 +574,7 @@ anchor's.
 
 ### Rate target, delegation and mandates
 
-You choose a Rate Target, the stepper labelled Target beside your Policy Rate,
+You choose a Rate Target, the stepper labeled Target beside your Policy Rate,
 and each month the policy rate moves a sixth of the distance toward it, never
 less than a third of a point; Digital Currency doubles both. The distance it
 counts is at most how far inflation is from its target, so with inflation on
@@ -594,7 +594,7 @@ free of charge.
 | Inflation Targeting | Raises the rate more than a point for each point of inflation above target, and leaves the financial cycle to prices, so booms run further and slumps go deeper before it acts. Lenders believe it most, which holds expected inflation nearer the target |
 | Dual Mandate | Reacts to inflation as hard, and also leans fully against where the cycle is heading. Every bank starts on it |
 | Growth | A quarter point looser at target, half as responsive to the cycle, and blind to inflation below 4% |
-| Peg Defence | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
+| Peg Defense | Holds the world rate, up to a point above while gold is short, and ignores the domestic cycle; convertible gold standard only |
 
 A mandate-run bank cuts at least a point a month (two under Digital Currency)
 once the cycle falls into Stagnation or worse.
@@ -663,7 +663,7 @@ The purchases cost no intervention points and no money, and you don't switch
 them on. While there are any, an Asset Purchases row below Price Pressure shows
 how much they add, together with Open-Market Operations, and its tooltip gives
 the rate the bank would set without the floor. They need Fiat Money or Digital
-Currency. A dial you set by hand gets none of them, because you have Monetise
+Currency. A dial you set by hand gets none of them, because you have Monetize
 Deficit instead; while your rate is on its floor and prices are falling, the
 Delegation tooltip reminds you that a delegated bank would buy. AI countries
 are always delegated, so they get the purchases too.
@@ -671,7 +671,7 @@ are always delegated, so they get the purchases too.
 Under Central Bank Independence you can't print for the treasury, so a long
 deflation leaves you the bank's purchases, Open-Market Operations and a budget
 deficit above 1% of GDP, which adds a little pressure of its own. Recovery from
-a deep deflation can still take years. Leaving independence for Monetise Deficit is
+a deep deflation can still take years. Leaving independence for Monetize Deficit is
 possible but costly: you lose its credit-standing bonus and some of the
 intervention budget.
 
@@ -771,7 +771,7 @@ Command and dollarized economies never get it.
 
 ### Monetizing the deficit
 
-Monetise Deficit, from 0 to 3, has your national bank print money for the
+Monetize Deficit, from 0 to 3, has your national bank print money for the
 treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
 inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
@@ -788,7 +788,7 @@ Your Monetary Policy law sets the dial's range.
 | Currency law | Unlocked by | Rate range | Notes |
 |---|---|---|---|
 | Commodity Money | default | World rate −1 to +3, with a national bank | Prices that outrun the world's are pulled back down; fixed at par |
-| Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defence; fixed at par |
+| Gold Standard | Central Banking | 0% to 15% | A point off credit standing; gold reserve; Peg Defense; fixed at par |
 | Fiat Money | Keynesian Economics, with National Bank Established | 0% to 60% | Open-Market Operations and money printing; floats |
 | Digital Currency | Universal Digital Identity, with National Bank Established | −3% to 60% | As Fiat, and the rate moves twice as fast; floats |
 | Decentralized Cryptocurrency | Cybersecurity | no dial | Borrows at the world rate plus a spread; floats |
@@ -802,7 +802,7 @@ treasury. Each point your rate sits above the World Rate draws in gold worth
 Borrowed Gold. It costs your budget nothing, but it leaves first, at double
 speed, once your rate is no longer above the world's. What the high rate costs
 you is a tighter Policy Stance and dearer borrowing for your government.
-Recapitalise the Bank moves a tenth of the reserve's limit from treasury to
+Recapitalize the Bank moves a tenth of the reserve's limit from treasury to
 vault, in cash, for good.
 
 Peg Confidence (0 to 100) reacts to your rate while the vault is under a tenth
@@ -831,7 +831,7 @@ An overvalued currency drains it at any time and stops the recovery. So does a
 deep slump: a Downturn or Panic while your Policy Stance reads Tight or Very
 Tight costs 3 a month however full the vault is, because the peg is holding your
 rate up while the economy sinks. From full confidence that reaches 20 in a little
-over two years. Peg Defence holds the World Rate whatever the cycle does, so a
+over two years. Peg Defense holds the World Rate whatever the cycle does, so a
 bank left on it rides a long slump down to the run unless you cut the rate and
 pay for it in gold. At 20, The Run on the Vault fires:
 
@@ -848,7 +848,7 @@ the event restores convertibility by itself:
 | Option | Effect |
 |---|---|
 | Restore convertibility | Back on gold at the old parity; Peg Confidence starts at 50 |
-| Keep the paper | Fiat Money becomes law at once, ending any currency law you were enacting; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; greyed out otherwise |
+| Keep the paper | Fiat Money becomes law at once, ending any currency law you were enacting; the lost credit-standing bonus stops counting against you. Needs Keynesian Economics and National Bank Established, and a currency of your own; grayed out otherwise |
 
 ### The exchange-rate index and capital controls
 
@@ -884,7 +884,7 @@ inherits](06-politics.md#who-inherits)) falls 5 when the crisis fires.
 | Option | Effect |
 |---|---|
 | Currency reform: "Call in every note. We begin again." | Inflation and expectations reset to 5%; printing stops; the investment pool is wiped out; Wealth Concentration falls 5 more; middle and upper strata radicalize; Currency Reform adds 5 points of risk premium for ten years |
-| Dollarize: "Let them keep the foreign money. They already have." | A Dollarised Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
+| Dollarize: "Let them keep the foreign money. They already have." | A Dollarized Economy: inflation drops to the bank's target, but the dial and money printing are gone and minting falls 75%. Enacting any monetary law brings back your own currency, with inflation at 5% and ten years of Currency Reform; Command Economy ends it free |
 | Wait: "It will pass. Everything passes." | Nothing; if inflation is still 50% or more in two years, the crisis fires again and takes another 5 |
 
 ### Monetary treaty articles
@@ -965,7 +965,7 @@ board.
 
 ### How the AI runs monetary policy
 
-AI countries always delegate. They run Peg Defence on a convertible gold
+AI countries always delegate. They run Peg Defense on a convertible gold
 standard, Growth at war or with debt at half their credit limit, and Price
 Stability otherwise. Once Fiat Money is open to them they stop favoring gold and
 lean toward fiat, more so in later eras, in deflation and while convertibility
@@ -1049,13 +1049,13 @@ throughput by 5% and blocks another appeal while it lasts.
 
 A loan on conditions reaches the recipient as The Rescue's Terms. Refusing, the
 default, costs nothing. Signing pays a third of the sum at once and puts you
-under two years of Rescue Programme (−1 point of risk premium, −5 legitimacy)
+under two years of Rescue Program (−1 point of risk premium, −5 legitimacy)
 and Restored Banking Confidence; Trade Unions disapprove and Industrialists
 approve. The other two thirds come at yearly reviews, each only if your budget
 took loans in no more than 6 of the 12 months before it. Miss a review and the
-programme is suspended: no more payments, −20 relations with the rescuer and +2
+program is suspended: no more payments, −20 relations with the rescuer and +2
 points of risk premium fading over five years. Both sides get a notice at each
-review. While a programme still owes you money, no one else is asked to rescue
+review. While a program still owes you money, no one else is asked to rescue
 you.
 
 ### The Great Depression
@@ -1101,7 +1101,7 @@ Sovereign Debt Scare, drawn only while your debt is past a quarter of your
 credit limit, can end in a partial default, the quarter haircut of
 [Restructuring the public debt](#restructuring-the-public-debt) at the same
 price. Its central bank option, where your bank may monetize the deficit under
-the full Banking System, has the bank buy government bonds: Monetise Deficit
+the full Banking System, has the bank buy government bonds: Monetize Deficit
 rises one level for 12 months, with that level's inflation and risk premium,
 then steps back. A few tie into the banking tools: The Bank Holiday appears only when you could
 declare one, and its first option does.

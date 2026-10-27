@@ -2,7 +2,7 @@
 
 This is the house style for the chapters in this folder. Read it before you
 write or edit one. `scripts/analysis/check_player_guide_style.py` checks the
-mechanical parts; the rest is judgement.
+mechanical parts; the rest is judgment.
 
 ## Who reads it
 
@@ -57,7 +57,7 @@ So:
   script wins.
 - **Use in-game names.** Every name of a journal entry, button, law, building,
   modifier, technology or concept comes from `localization/english/`, spelled
-  and capitalised as the game shows it. Never write a script key
+  and capitalized as the game shows it. Never write a script key
   (`je_banking_cycle`, `law_post-scarcity`) or a file path.
 - **Send the reader to the tab.** Where a system has both a journal entry and
   a tab, say where to look or act by the tab ("on the UN tab of the Diplomacy
@@ -100,7 +100,7 @@ none: use a comma, colon, parentheses or a new sentence).
 
 ## Format
 
-The PDF is built with pandoc from GitHub-flavoured Markdown, and the same files
+The PDF is built with pandoc from GitHub-flavored Markdown, and the same files
 render on GitHub. Stick to this subset:
 
 - **Headings.** Each chapter file opens with exactly one `#` heading, the chapter
@@ -154,6 +154,12 @@ used literally (a *key* on the keyboard, the *landscape* of a map), add
 `<!-- style: allow ai-vocab -->` at the **end** of that line. Don't use the
 suppression to keep a phrase the rule is right about. CI runs the lint with
 `--strict`.
+
+Spelling has its own script, shared with the localization:
+`python3 scripts/analysis/check_loc_spelling.py --check` lists the British
+spellings left in the chapters and the loc, and a run without `--check` fixes
+them (official names such as the Kenyatta International Convention Centre
+keep theirs).
 
 ## Building the PDF
 

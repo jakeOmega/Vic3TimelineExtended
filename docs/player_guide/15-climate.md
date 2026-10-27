@@ -351,7 +351,7 @@ Environment, and both restrictive laws need that ministry:
 |---|---|---|
 | Unrestricted Extraction | | The default. Nothing changes. |
 | Fossil Expansion Moratorium | Environmental Movement, Ministry of the Environment | No new Coal Mine, Oil Rig or Power Plant can be built or expanded in your states, by your government, your investors or foreign investors. Those already running carry on. |
-| Managed Fossil Phaseout | Carbon Capture and Storage, Ministry of the Environment funded to level 3 | The moratorium, retirement programmes, and at least 50% capture for eligible stationary sources. |
+| Managed Fossil Phaseout | Carbon Capture and Storage, Ministry of the Environment funded to level 3 | The moratorium, retirement programs, and at least 50% capture for eligible stationary sources. |
 
 Hydro, nuclear, fusion and renewable plants, Synthetic Fuel Works, Carbon
 Conversion Works and every other mine stay buildable. If you abolish the
@@ -366,11 +366,11 @@ at once, and its Fossil Transition section holds the controls. With the Global
 Warming rule off, the entry shows only that section; the laws work the same
 way.
 
-### Retirement programmes
+### Retirement programs
 
 Under Managed Fossil Phaseout, the Fossil Transition section has a row for each
 of Coal Mines, Oil Rigs and Power Plants, with the levels you have left and a
-Start button. A running programme closes the smallest building of its kind in
+Start button. A running program closes the smallest building of its kind in
 your states every 3 months, starting 3 months after you press Start:
 
 - the whole building goes, every level, whoever owns it: your government, a
@@ -382,8 +382,8 @@ loyalists that a change in standard of living would make, and +25%
 qualifications as the laid-off workers retrain.
 
 Hover a row for the next building to close, its state and its compensation, and
-for the cost of closing all that are left. Stop ends a programme; what it closed
-stays closed. Leaving Managed Fossil Phaseout stops every programme.
+for the cost of closing all that are left. Stop ends a program; what it closed
+stays closed. Leaving Managed Fossil Phaseout stops every program.
 
 ### Readiness and emissions
 
@@ -411,7 +411,7 @@ than it burns.
 The AI considers the moratorium on the same will as Fossil-Fuel Divestment
 ([How the AI adopts climate policy](#how-the-ai-adopts-climate-policy)), and
 only with a quarter of its power fleet clean; it moves to the phaseout with a
-stronger will and half its fleet clean. It starts a programme only while its
+stronger will and half its fleet clean. It starts a program only while its
 market has fuel to spare (or, for power plants, mostly clean generation) and it
 is not deep in debt, stops one when the fuel or electricity runs short, and
 returns to Unrestricted Extraction when its market is short of coal, oil or

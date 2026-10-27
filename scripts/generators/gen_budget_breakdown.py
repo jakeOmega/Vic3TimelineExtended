@@ -46,7 +46,7 @@ SOURCES = {
             "te_seabed_holding_fee_modifier",
         )),
         "nuclear": ("Nuclear Program", ("nd_upkeep_cost", "nd_exercise_cost")),
-        "nuclear_taboo": ("Nuclear Civil Defence", ("nd_taboo_civil_defence",)),
+        "nuclear_taboo": ("Nuclear Civil Defense", ("nd_taboo_civil_defence",)),
         # The Antarctic research station needs Space Exploration; its upkeep
         # is listed with the space programmes rather than in a category of
         # its own (a new category needs a pie colour model and regenerates
@@ -179,7 +179,7 @@ HOW_TOPICS = (
      "and slave-upkeep total."),
     ("how_sub_civil", "Other Civil Buildings",
      "how_civil", "Universities, ports and other civil buildings stay under Other Civil Buildings, except the Space "
-     "Program: its weekly operating deficit, its wages and Launch Capacity, appears under Programme Costs as part of "
+     "Program: its weekly operating deficit, its wages and Launch Capacity, appears under Program Costs as part of "
      "Space Race, capped at what the civil total holds after administration. Construction Goods leaves out the "
      "Investment Pool Transfer, which funds private construction."),
     ("how_sub_military", "Military",
@@ -208,7 +208,7 @@ for sub_key, sub_text, note_key, note_text in HOW_TOPICS:
 LOCALIZATION.update({
     "taxes": "Taxes", "administration_group": "Administration", "army": "Army", "navy": "Navy",
     "wages": "Wages", "materials": "Materials and Support", "military_adjustment": "Other Military Costs",
-    "programmes": "Programme Costs", "diplomacy_income": "Diplomatic Income", "diplomacy_expense": "Diplomatic Payments",
+    "programmes": "Program Costs", "diplomacy_income": "Diplomatic Income", "diplomacy_expense": "Diplomatic Payments",
     "supply_construction": "Supply Ship Construction", "supply_maintenance": "Supply Ship Maintenance", "port_connections": "Port Connections",
     "expand_tt": "Show or hide the rows inside.",
     "materials_tt": "Branch goods, plus the upkeep of logistics centers and naval fortifications. Navy also includes warship construction and maintenance.",
@@ -236,7 +236,7 @@ TOOLTIP_TEMPLATES = {
     },
 }
 ROW_TOOLTIPS = {
-    "civil": "Wages and goods of universities, ports and other civil buildings. Government Administration is split among your institutions under Administration, and the Space Program is under Programme Costs.",
+    "civil": "Wages and goods of universities, ports and other civil buildings. Government Administration is split among your institutions under Administration, and the Space Program is under Program Costs.",
     "construction": "Goods for the government's construction. The Investment Pool Transfer, which funds private construction, is left out.",
     "additional_income": "Additional income no row above claims.",
     "additional_expense": "Additional expenses no row above claims.",

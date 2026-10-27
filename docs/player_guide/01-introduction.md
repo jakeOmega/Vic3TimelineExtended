@@ -111,7 +111,7 @@ private spending, so they are excluded from the totals and Construction Goods.
 
 Taxes groups the individual tax receipts. Military expands into Army and Navy,
 which each expand into Wages plus Materials and Support. Materials and Support
-includes logistics centres and naval fortifications, whose operating costs
+includes logistics centers and naval fortifications, whose operating costs
 combine their own wages, goods and any slave upkeep. Barracks, conscription
 and naval administration stay in the native branch entries, while support
 buildings contribute their full upkeep. Navy also includes warship construction and
@@ -126,7 +126,7 @@ General Administration covers the remainder, including unused capacity. Other
 civil buildings, the military, construction and welfare have their own rows.
 
 Recurring costs from Banking, Covert Actions, Cultural Hegemony, the United
-Nations and other journal systems appear under Programme Costs, and so does the
+Nations and other journal systems appear under Program Costs, and so does the
 Space Program building's running cost, in the Space Race row. Expand it and
 hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources

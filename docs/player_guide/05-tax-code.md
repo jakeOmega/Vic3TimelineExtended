@@ -132,7 +132,7 @@ group judges your code as the taxation law it comes closest to:
 
 A group's approval then counts as it would for that law, and its approval
 breakdown says so: Endorses the Tax Code, Strongly Opposes the Tax Code and so
-on. The judgement is renewed on the 1st of every month. The same mapping decides
+on. The judgment is renewed on the 1st of every month. The same mapping decides
 three base-game journal entries that ask for a taxation law: Great Reforms:
 Bureaucratic Reform, Imperialism of Promise and Our Fortunate Regeneration
 complete when your code counts as the law they ask for.
