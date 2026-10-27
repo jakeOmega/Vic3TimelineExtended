@@ -1179,5 +1179,36 @@ Error
                                                  "mod anchor, ")), note)
 
 
+class LiveRegistryKeyReferenceTests(unittest.TestCase):
+    """`Failed to read key reference` comes from one cpp line for a save load and
+    for a script file's literal-key field; only the save load is noise. The
+    registry's old signature, the message itself, filed #1194's `create_pop`
+    load error as save noise (2026-10-27)."""
+
+    SOURCE = "pdx_persistent_reader.cpp:268"
+
+    def _tagged(self, message):
+        root = os.path.dirname(os.path.abspath(__file__))
+        _vanilla_bug_cache.clear()
+        _, by_basename, by_source, _ = load_vanilla_bug_registry(
+            os.path.join(root, "docs", "vanilla", "vanilla_known_bugs.md"))
+        entry = LogEntry("20:19:29", self.SOURCE, message)
+        tag_vanilla_bugs([entry], by_basename, by_source, mod_root=root)
+        return entry.vanilla_bug_ref is not None
+
+    def test_save_loads_are_tagged(self):
+        self.assertTrue(self._tagged(
+            'Error: "Failed to read key reference: superpower: superpower, near line: 1" in file: "" near line: 1'))
+        self.assertTrue(self._tagged(
+            'Error: "Failed to read key reference: headlines_all_minor_events: headlines_all_minor_events, '
+            'near line: 42" in file: "save games/autosave_exit.v3" near line: 42'))
+
+    def test_a_script_file_is_not(self):
+        self.assertFalse(self._tagged(
+            'Error: "Failed to read key reference: scope:sr_evac_culture: scope:sr_evac_culture, near line: 295\n'
+            'Failed to read key reference: scope:sr_evac_religion: scope:sr_evac_religion, near line: 296" '
+            'in file: "common/scripted_effects/sr_colony_autonomy_effects.txt" near line: 298'))
+
+
 if __name__ == "__main__":
     unittest.main()

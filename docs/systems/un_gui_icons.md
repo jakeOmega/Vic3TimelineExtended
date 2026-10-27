@@ -58,8 +58,9 @@ One drawn disc (UN-blue enamel, a gold rim) under one warm or light symbol each.
 | CCD | a wooden painter's palette with red, yellow and green paint | `agency_ccd.dds` |
 | TPNW | a brass aerial bomb wrapped in an iron chain | `agency_tpnw.dds` |
 | INCB | a red poppy and its green seed pod | `agency_incb.dds` |
-| ATS (the Antarctic Treaty) | placeholder: a copy of UNEP's leaf until its own art is rendered | `agency_ats.dds` |
-| UNODA (the anti-satellite moratorium) | placeholder: a copy of UNOOSA's planet until its own art is rendered | `agency_unoda.dds` |
+| ATS (the Antarctic Treaty) | an emperor penguin | `agency_ats.dds` |
+| UNODA (the anti-satellite moratorium) | a gold-foil satellite with blue solar panels | `agency_unoda.dds` |
+| COPUOS (the Outer Space Settlement Convention) | a glass-domed habitat on a grey moon rock | `agency_copuos.dds` |
 
 ## General Assembly: resolution topics
 
@@ -97,11 +98,12 @@ The session strip, one per `un_disp_res_topic_code`, at 40 px. The same disc as 
 | 27 | World Development Fund | a stack of gold coins with a seedling sprouting from the top | `topic_development_fund.dds` |
 | 28 | Supervised referendum | a wooden ballot box, a paper ballot in its slot | `topic_referendum.dds` |
 | 29 | Narcotics convention | INCB's poppy + the scroll | `topic_narcotics.dds` |
-| 30 | Petition to lift sanctions (§0.12a) | for now a copy of International sanctions' crate, under its own name; wants its own art (the crate with its chain broken) | `topic_lift_sanctions.dds` |
-| 31 | Antarctic Treaty | placeholder: a copy of `topic_climate.dds` | `topic_antarctic.dds` |
-| 32 | Anti-satellite moratorium | placeholder: a copy of `topic_space.dds` | `topic_asat.dds` |
+| 30 | Petition to lift sanctions (§0.12a) | a wooden crate, its chain lying loose and its padlocks open (FLUX will not break a chain) | `topic_lift_sanctions.dds` |
+| 31 | Antarctic Treaty | ATS's penguin + the scroll | `topic_antarctic.dds` |
+| 32 | Anti-satellite moratorium | UNODA's satellite + the scroll | `topic_asat.dds` |
+| 33 | Convention on the Settlement of Outer Space | COPUOS's domed moon rock + the scroll | `topic_colony_protection.dds` |
 
-The four Global Commons icons (2026-10-16) are copies of existing art under their own names, so new art drops in with no GUI edit; they have no entries in `icon_prompts.py` yet. The copies were added from a sparse worktree without `gfx/` by staging the source blob under the new path (`git update-index --add --cacheinfo 100644,<blob>,<path>`, then `--skip-worktree`), which needs no texture on disk.
+The Global Commons and solar colonization icons (ATS, UNODA, COPUOS and their topics, and Lift Sanctions) were byte copies of older art under their own names until icon batch 6 (2026-10-27) painted them; their entries are in `icon_prompts.py`'s `un_disc` category.
 
 ## Overview: member-share pies
 

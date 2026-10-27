@@ -745,6 +745,8 @@ class OrbitTest(unittest.TestCase):
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
                 # the rival rows' band marker, drawn as the UN's authority bar draws it
                 "gfx/interface/icons/generic_icons/transparent.dds",
+                # the module queue's move-up button, the base game's ship construction queue's (#1159)
+                "gfx/interface/icons/generic_icons/up_up.dds",
                 "gfx/interface/progressbar/progressbar_marker.dds"}
 
 

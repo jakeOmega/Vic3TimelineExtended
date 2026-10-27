@@ -6085,6 +6085,7 @@
  sr_mq_module_hab:0 "Habitat"
  sr_mq_module_port:0 "Spaceport"
  sr_mq_remove_tt:0 "Remove this module from the queue. The ones behind it move up."
+ sr_mq_up_tt:0 "Move this module up a place, ahead of the one before it.\n#v Alt+Click#!: move it to the top of the queue, to be built next."
  sr_no_colonies_to_maintain_tt:0 "No solar system colonies have been established."
  sr_notify_achievement_tt:0 "Other nations will be notified of this achievement."
  sr_occ_notice_tt:0 "An occupied world goes back to its holder at the peace, unless the treaty cedes it."

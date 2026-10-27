@@ -25,13 +25,13 @@
 # Non-kinetic interference stays the covert operation Communications
 # Disruption (covert_operations.txt), unchanged.
 #
-# Texture: covert_space_espionage_action.dds is a placeholder; the lens copy
-# (gfx/interface/icons/lens_toolbar_icons/te_asat_strike_action.dds) is the
-# same picture. Listed in docs/testing/global-commons-playtest.md.
+# Texture: an interceptor missile striking a satellite (icon batch 6); the
+# lens copy (gfx/interface/icons/lens_toolbar_icons/te_asat_strike_action.dds)
+# is the same picture.
 # ============================================================================
 
 te_asat_strike_action = {
-	texture = "gfx/interface/icons/diplomatic_action_icons/covert_space_espionage_action.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/te_asat_strike_action.dds"
 	groups = {
 		general
 	}

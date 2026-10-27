@@ -3399,6 +3399,9 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_1_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				visible = no
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
@@ -3418,6 +3421,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_2_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
@@ -3439,6 +3450,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_3_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
@@ -3458,6 +3477,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_4_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
@@ -3479,6 +3506,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_5_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
@@ -3498,6 +3533,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_6_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
@@ -3519,6 +3562,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_7_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)27' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
@@ -3538,6 +3589,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_8_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)28' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
@@ -3559,6 +3618,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_9_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)29' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
@@ -3578,6 +3645,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_10_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
@@ -3599,6 +3674,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_11_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
@@ -3618,6 +3701,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_12_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
@@ -3639,6 +3730,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_13_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
@@ -3658,6 +3757,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_14_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
@@ -3679,6 +3786,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_15_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
@@ -3698,6 +3813,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_16_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
@@ -3719,6 +3842,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_17_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)37' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
@@ -3738,6 +3869,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_18_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)38' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)18' ) ).End )]"
@@ -3759,6 +3898,14 @@ types sr_sites_generated_rows_types
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_19_module_name')]"
 			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)39' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
+			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_module_queue_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End )]"
@@ -3778,6 +3925,14 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mq_module" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_mq_20_module_name')]"
+			}
+			blockoverride "mq_up_button" {
+				enabled = "[GetScriptedGui('sr_colony_module_queue_up_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+					onalt = "[GetScriptedGui('sr_colony_module_queue_up_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+				}
+				tooltip = "[GetScriptedGui('sr_colony_module_queue_up_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
 			}
 			blockoverride "mq_remove_button" {
 				enabled = "[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"

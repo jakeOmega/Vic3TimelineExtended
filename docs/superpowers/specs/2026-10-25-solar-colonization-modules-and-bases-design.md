@@ -359,5 +359,9 @@ Where the build departs from the sections above, and why:
 - **The queue is first in first out** (owner, 2026-10-25, on the PR), not the
   round-robin over colonies of § 5's first draft: twenty places in order, a
   list in the panel with a remove button per entry (`sr_colony_module_queue_sgui`),
-  the per-world counts kept for the caps. No reordering control: a move-up
-  button would need markup no mod panel has used yet.
+  the per-world counts kept for the caps. Each entry from place 2 on has a
+  move-up button (#1159, `sr_colony_module_queue_up_sgui`): a click swaps it
+  with the one ahead (`sr_mq_swap_<n>`), alt-click moves it to the top
+  (`sr_mq_to_top_<n>`, `scope:op` = the place + 20), as the base game's ship
+  construction queue does, whose button markup the row reuses. A move leaves
+  the per-world counts as they are.

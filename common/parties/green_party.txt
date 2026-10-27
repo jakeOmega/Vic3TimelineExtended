@@ -73,7 +73,7 @@ green_party = {
 	}
 
 	icon = {
-		default = "/gfx/interface/icons/political_parties/agrarians.dds"
+		default = "/gfx/interface/icons/political_parties/green_party.dds"
 	}
 
 	unlocking_technologies = {

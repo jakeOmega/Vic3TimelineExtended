@@ -3621,10 +3621,13 @@ types space_race_widget_types
 
 	### One entry of Colony Modules' queue (colony modules design § 5): its place,
 	### the world and the module (custom loc sr_mq_<n>_world_name and
-	### sr_mq_<n>_module_name, from the place's sr_mq_<n>_site and _type), and a
-	### button that removes it (sr_colony_module_queue_sgui, scope:op = the place).
-	### Fabrication builds place 1 next. 24 + 200 + 180 + 24 + 3 × 4 spacing + 2 × 4
-	### margin = 448, in the 480 column. Instances in te_sr_mq_rows
+	### sr_mq_<n>_module_name, from the place's sr_mq_<n>_site and _type), a
+	### button that moves it up a place, or to the top on alt-click, as the base
+	### game's ship construction queue does (sr_colony_module_queue_up_sgui,
+	### scope:op = the place, or the place + 20; hidden on place 1, its cell kept),
+	### and a button that removes it (sr_colony_module_queue_sgui, scope:op = the
+	### place). Fabrication builds place 1 next. 24 + 200 + 180 + 24 + 24 + 4 × 4
+	### spacing + 2 × 4 margin = 476, in the 480 column. Instances in te_sr_mq_rows
 	### (sr_sites_generated_rows.gui).
 	type te_sr_mq_row = flowcontainer {
 		direction = horizontal
@@ -3672,6 +3675,21 @@ types space_race_widget_types
 				using = fontsize_medium
 				elide = right
 				block "mq_module" {}
+			}
+		}
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			button_icon_round_action = {
+				size = { 24 24 }
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/generic_icons/up_up.dds"
+				}
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
+				block "mq_up_button" {}
 			}
 		}
 		button_icon_cancel = {

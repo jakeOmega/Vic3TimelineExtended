@@ -741,7 +741,7 @@ only the game can show:
    above, then Natural Change and Net Migration, Life Expectancy and Leading Cause, Fertility and Median Age, Working
    Age and Gini. Before the second count the stepped figures read "Next count" in grey; the arrows show from the
    third. Each cell's hover is the old row's; Life Expectancy's adds women's and men's figures (on an old save, a grey
-   line until the next yearly census). The icons are placeholders (`docs/systems/demographics_gui_icons.md`):
+   line until the next yearly census). The icons are the mod's own since icon batch 6 (`docs/systems/demographics_gui_icons.md`):
    note any that reads badly at 44 px.
 2. **The pie (Display only or Full, after the first step).** Causes of Death shows a ringed pie, slices clockwise from
    12 o'clock in the legend's order, its colours matching the legend's swatches, and the slices' shares adding to
