@@ -2808,7 +2808,7 @@ types banking_dashboard_widget_types
 						### A member's share of its bloc's cooperation and backstop, from the
 						### leader.
 						banking_dash_partner_row = {
-							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' )]"
+							visible = "[And( JournalEntry.GetCountry.IsInPowerBloc, GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
 							datacontext = "[JournalEntry.GetCountry.GetPowerBloc.GetLeader]"
 							blockoverride "flag" {
 								tiny_flag = {
@@ -2932,7 +2932,9 @@ types banking_dashboard_widget_types
 					### backing it costs us. The leader is left out, as vanilla's own
 					### member list leaves it out (power_bloc_panel.gui).
 					flowcontainer = {
-						visible = "[GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						### In a bloc first, as vanilla gates a GetPowerBloc datacontext
+						### (00_te_country_panel_information.gui's power bloc entry).
+						visible = "[And( JournalEntry.GetCountry.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 						datacontext = "[JournalEntry.GetCountry.GetPowerBloc]"
 						datamodel = "[PowerBloc.GetMembers]"
 						direction = vertical
