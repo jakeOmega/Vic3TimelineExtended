@@ -188,7 +188,6 @@ class EffectTests(unittest.TestCase):
 INTEL_LINES = (
     ("je_iw_net_row_intel_none", ("0",)),
     ("je_iw_net_row_intel_service", ("1", "2")),
-    ("je_iw_net_row_intel_ops_locked", ("1",)),
     ("je_iw_net_row_intel_ops", ("2",)),
 )
 
@@ -196,7 +195,6 @@ INTEL_LOC_KEYS = (
     "je_iw_net_row_intel_none",
     "je_iw_net_row_intel_service",
     "je_iw_net_row_intel_service_tooltip",
-    "je_iw_net_row_intel_ops_locked",
     "je_iw_net_row_intel_ops",
     "je_iw_net_row_intel_ops_tooltip",
 )
@@ -250,12 +248,15 @@ class WidgetTests(unittest.TestCase):
         self.assertIn("GetVariableValue('iw_net_intel_ops')", value("je_iw_net_row_intel_ops"))
         # Thresholds are printed from the constants, never typed. Since the
         # style-guide pass the row's strength hover names both (the owner
-        # dropped round 1's "45 -> 50" headline and bar marker in round 3),
-        # and the report lines below don't repeat them.
+        # dropped round 1's "45 -> 50" headline and bar marker in round 3).
+        # Below the first, one line says when the report starts (COV-12: it
+        # was two "nothing yet" lines), printed from the same constant.
         hover = value("je_iw_net_row_strength_tt")
         self.assertIn("covert_net_intel_tier_1_strength", hover)
         self.assertIn("covert_net_intel_tier_2_strength", hover)
-        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_intel_ops_locked", "je_iw_net_row_strength_tt"):
+        self.assertIn("covert_net_intel_tier_1_strength", value("je_iw_net_row_intel_none"))
+        self.assertNotIn("je_iw_net_row_intel_ops_locked", loc)
+        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_strength_tt"):
             self.assertNotRegex(value(key), r"\b(50|75)\b", key)
         header = value("je_iw_net_header_tooltip")
         self.assertIn("covert_net_intel_tier_1_strength", header)

@@ -1422,18 +1422,20 @@ types covert_operations_widget_types
 		# 75 thresholds live only in covert_net_intel_tier_value. Every line
 		# waits for the code to exist, so a network restored from a save made
 		# before this slice shows no report until its first monthly pass.
+		# Below the first threshold one line says when a report starts, with
+		# what each part reveals on hover (COV-12: it was two "nothing yet"
+		# lines); at tier 1 the service line alone, its hover naming the next
+		# part.
 		widget_je_covert_operation_detail = {
 			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
+			default_format = "#tooltippable"
 			text = "je_iw_net_row_intel_none"
+			tooltip = "je_iw_net_row_strength_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), Or( EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') ) )]"
 			text = "je_iw_net_row_intel_service"
 			tooltip = "je_iw_net_row_intel_service_tooltip"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1') )]"
-			text = "je_iw_net_row_intel_ops_locked"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
