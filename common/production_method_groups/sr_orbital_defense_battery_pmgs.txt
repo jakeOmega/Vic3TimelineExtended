@@ -1,0 +1,16 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — ground-to-orbit batteries' weapons (fleets design § 15)
+# ============================================================================
+# The one group of building_orbital_defense_battery (sr_orbital_defense_battery.txt).
+# No ai_selection: the AI's method is the fleets' monthly review's
+# (sr_fl_ai_batteries, sr_earth_orbit_effects.txt): Ground Lasers at war, and
+# in peace once the debris is Cluttered; Kinetic Interceptors otherwise.
+# ============================================================================
+
+pmg_orbital_defense_battery = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_orbital_battery_kinetic
+		pm_orbital_battery_lasers
+	}
+}

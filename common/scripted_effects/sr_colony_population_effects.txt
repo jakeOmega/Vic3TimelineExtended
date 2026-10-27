@@ -19,13 +19,15 @@
 # lower; kill_population_in_state takes a constant), as many as the level
 # sends and the open colonies have room for. People taken from Earth and not
 # booked as known kills are read by the Demographics census as emigrants,
-# which is what they are.
+# which is what they are. Under Full Colonies none leave while Earth is
+# blockaded or the launch site is occupied (slice 6 fleets design § 15).
 sr_emig_month = {
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
 			sr_emig_batches_now >= 1
 			sr_has_space_program = yes
+			NOT = { sr_launches_barred = yes }
 		}
 		set_local_variable = { name = sr_emig_batches value = sr_emig_batches_now }
 		random_scope_building = {

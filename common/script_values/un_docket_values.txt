@@ -68,6 +68,9 @@ un_docket_score_loan = { value = 45 }
 # a new nuclear power.
 un_docket_score_antarctic = { value = 35 }
 un_docket_score_asat = { value = 55 }
+# Solar colonization's fleets (2026-10-26-solar-colonization-fleets-design.md
+# § 13): a colony seized or destroyed (item 17), as grave as a strike.
+un_docket_score_colony_protection = { value = 55 }
 
 # Warming: a higher threshold is a graver summit.
 un_docket_score_warming = {

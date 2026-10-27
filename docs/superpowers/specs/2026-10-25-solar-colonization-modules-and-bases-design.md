@@ -1,7 +1,7 @@
 # Solar System Colonization, slice 4: colony modules and Extraplanetary Bases from colonies — design
 
 Drafted 2026-10-25. Slice 4 of the scope in
-`2026-10-25-solar-colonization-contest-scope.md` (§ 10), whose § Decisions and
+`docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md` (§ 10), whose § Decisions and
 § 11 record the owner's calls (D18, M1 among them); this design assumes them and
 the records of slices 0 to 3 (`2026-10-25-solar-colonization-holders-and-cession-design.md`,
 `2026-10-25-solar-colonization-population-and-transit-design.md`). It gives

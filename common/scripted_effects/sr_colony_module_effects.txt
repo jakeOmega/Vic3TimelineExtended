@@ -25,14 +25,20 @@
 # Country scope. The queue's counts rebuilt; the month's points into the stock,
 # kept up to its cap so a stall (nothing queued, every slot taken) loses nothing
 # short of it; then up to two modules from the head of the queue, each into a
-# free shipment slot.
+# free shipment slot. Under Full Colonies an occupied launch site fabricates
+# nothing (slice 6 fleets design § 5.1: the Space Program's method still gives
+# its country points from a state it doesn't control); a blockade in orbit
+# doesn't stop fabrication, and the modules wait at Earth.
 sr_mod_month = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
 		sr_mq_recount = yes
 		sr_mod_fabrication_self_check = yes
 		if = {
-			limit = { sr_mod_fab_rate > 0 }
+			limit = {
+				sr_mod_fab_rate > 0
+				NOT = { sr_launch_site_lost = yes }
+			}
 			set_variable = {
 				name = sr_fab_stock
 				value = {
@@ -46,6 +52,7 @@ sr_mod_month = {
 		while = {
 			limit = {
 				local_var:sr_fab_built < sr_mod_fab_per_month
+				NOT = { sr_launch_site_lost = yes }
 				sr_mod_fab_stock_value >= sr_module_points
 				sr_ms_has_free_slot = yes
 				has_variable = sr_mq_1_site
@@ -224,7 +231,12 @@ sr_ms_step_slot = {
 		}
 		else = {
 			set_local_variable = { name = sr_ms_go value = 0 }
-			sr_ms_departure_by_index = yes
+			# Full colonies: none leaves while Earth is blockaded or the launch
+			# site is occupied (slice 6 fleets design § 15); it waits at Earth.
+			if = {
+				limit = { NOT = { sr_launches_barred = yes } }
+				sr_ms_departure_by_index = yes
+			}
 			if = {
 				limit = { local_var:sr_ms_go = 1 }
 				set_variable = { name = sr_ms_$N$_arrive value = local_var:sr_ms_arrive_now }

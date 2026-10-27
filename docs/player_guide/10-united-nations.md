@@ -297,12 +297,12 @@ members that sits in the Assembly; when it falls, the bloc loses 3.
 
 ### General Assembly topics
 
-There are thirty-three topics. Twelve are binding and can be vetoed:
+There are thirty-four topics. Twelve are binding and can be vetoed:
 Condemnation of Aggression, International Sanctions, Lift the Sanctions Against
 Us, Request a Peacekeeping Deployment, the International Criminal Court, Charter
 Reform, Authorized Military Mandate, Refer a Dispute to the World Court, Arms
 Embargo, Establish the Standing UN Force, Binding Ceasefire and Supervised
-Self-Determination Referendum. The other twenty-one are recommendatory. Sixteen
+Self-Determination Referendum. The other twenty-two are recommendatory. Seventeen
 topics, the ICC among them, are conventions (see [UN conventions and
 agencies](#un-conventions-and-agencies)). Nine open with the charter reforms
 (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
@@ -356,6 +356,7 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 | Nuclear retaliation | 10 |
 | Nuclear program referred under the Non-Proliferation Treaty | 20, or 30 for a signatory |
 | Destructive anti-satellite strike | 15, or 30 for a party to the Moratorium on Destructive Anti-Satellite Tests |
+| Hostile act in space (see [Space fleets](16-space.md#space-fleets)) | A colony destroyed 20, a free colony attacked 10 (twice each for a party to the Convention on the Settlement of Outer Space); an interdiction begun 10 |
 | Unilateral Licensing as a party to a Law of the Sea that governs the seabed | 10 |
 | Antarctic Treaty denounced | 10 |
 | Infamy | 0.8 per point, up to 50 |
@@ -484,6 +485,7 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 | A country's first nuclear bomb | A proposer | Nuclear Non-Proliferation Treaty |
 | A severe covert operation exposed | The target first | An Appeal to the Assembly |
 | A destructive anti-satellite strike | A proposer, never the striker | A Moratorium on Anti-Satellite Tests |
+| A colony in space seized or destroyed | A proposer that holds a colony, never the country that did it | A Convention on the Settlement of Outer Space |
 | A state collapse | Up to three peacekeeping powers | A State Has Collapsed |
 | The charter outgrown | A great power | The Charter Has Been Outgrown |
 | A famine | Up to three donor powers | Humanitarian Crisis Demands Response |
@@ -801,6 +803,7 @@ a year.
 | Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. An armed member that cast no ballot on it, or joins later, is not bound. |
 | Antarctic Treaty (ATS) | Authority 30; a country running an Antarctic research station; a proposer with Space Exploration; the Global Commons rule | Prestige +2%; +0.25 toward UN Authority's target, not scaled | Parties hold no new Southern seabed licences. A party with a research station gains +3% research speed. |
 | Moratorium on Destructive Anti-Satellite Tests (UNODA) | Authority 30; a destructive anti-satellite strike somewhere; a proposer with Space Exploration that has not struck in two years; the Space Race rule | Prestige +5% | A party's own strike costs twice the infamy and twice the case strength. A party running a debris-removal method counts toward the Delivery pillar each year. |
+| Convention on the Settlement of Outer Space (COPUOS) | Authority 30; a colony held somewhere; a proposer that holds a colony and has not seized or destroyed one in two years; the Space Race rule's Full Colonies | Prestige +2% | A party that destroys a colony, or closes in on a free one, pays twice the infamy and twice the case strength. It forbids nothing. |
 
 Four member modifiers also carry a cost: the NPT raises infamy generation and
 lowers your units' kill rate, the Climate Accord lowers bureaucracy, the ICC
@@ -821,11 +824,12 @@ strongly. Public Health Insurance favors quotas; Laissez-Faire opposes them.
 A powerful Landowners group makes a country that voted against the convention
 more likely to refuse ratification.
 
-The overview shows sixteen specialized agencies, each lit once founded. Fifteen
-come from the conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR,
-UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity, the TPNW, the INCB, the
-Antarctic Treaty Secretariat and the Office for Disarmament Affairs. The
-sixteenth, the International Court of Justice, is founded the first time a
+The overview shows seventeen specialized agencies, each lit once founded.
+Sixteen come from the conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP,
+UNHCR, UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity, the TPNW, the
+INCB, the Antarctic Treaty Secretariat, the Office for Disarmament Affairs and
+the Committee on the Peaceful Uses of Outer Space. The seventeenth, the
+International Court of Justice, is founded the first time a
 country accepts a World Court ruling against it, and has no effects of its own.
 Hover an agency for its convention's terms. Once
 the International Criminal Court convention is in force, the court indicts the
@@ -899,6 +903,22 @@ infamy and twice the case strength. Parties gain prestige, and once a year each
 party running a debris-removal method on its Space Program adds 0.25 times its
 weight to the Delivery pillar, as aid delivered does. A country that struck in
 the last two years leans hard against it, and a space power leans for it.
+
+### The outer-space convention
+
+Under the Space Race rule's Full Colonies, where fleets can take and destroy
+colonies (see [Space fleets](16-space.md#space-fleets)), the Convention on the
+Settlement of Outer Space can come to the floor once any country holds a colony.
+The docket offers it to a member that holds a colony when a colony has been
+seized, destroyed or taken from its free settlers, never to the country that did
+it, and as Assembly business; a member holding a colony may also table it from
+the chamber. A party pays twice the infamy and twice the case strength for
+destroying a colony or closing in on a free one, and gains prestige. It forbids
+nothing, so seizing an enemy's colony at war and interdicting one cost a party
+what they cost anyone. A colony holder leans for it, and every member leans
+further for it while a seizure or destruction is on the docket; a power whose
+fleets have just seized or destroyed a colony leans hard against it, and one
+with a large fleet leans a little against it.
 
 ## UN military mandates
 

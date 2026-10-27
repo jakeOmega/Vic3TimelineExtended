@@ -1,0 +1,57 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — ground-to-orbit batteries (fleets design § 15)
+# ============================================================================
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
+# An extension of the anti-satellite strike (te_asat_strike_action.txt): guns
+# on the ground that fire on any enemy fleet at Earth every month, so a fleet
+# that has taken Earth orbit can't simply hold it for a whole war. Levels in
+# any state, under Full Colonies. Its methods (sr_orbital_defense_battery_pms.txt)
+# carry their figures as workforce-scaled state modifiers that the script sums
+# over the states the owner controls (§ 5.1: a battery in an occupied state
+# fires for no one): sr_battery_fire joins the owner's side of the Earth battle
+# (sr_cb_battery_gather, sr_fleet_combat_effects.txt), and Ground Lasers'
+# sweep clears the low debris pool in peace (sr_battery_sweep_step,
+# sr_earth_orbit_effects.txt). An AI government builds them only at war with
+# a country that has fleets (sr_battery_may_build_government).
+# ============================================================================
+
+building_orbital_defense_battery = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/building_military_base.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		space_militarization
+	}
+
+	production_method_groups = {
+		pmg_orbital_defense_battery
+	}
+
+	potential = {
+		sr_colonies_full_enabled = yes
+	}
+
+	required_construction = construction_cost_high
+
+	can_build_government = {
+		owner ?= { sr_battery_may_build_government = yes }
+	}
+
+	can_build_private = {
+		always = no
+	}
+
+	ai_value = {
+		value = 1500
+		if = {
+			limit = {
+				owner ?= { sr_battery_ai_wants = yes }
+			}
+			add = 2500
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds"
+}

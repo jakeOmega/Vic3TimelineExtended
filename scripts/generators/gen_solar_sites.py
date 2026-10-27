@@ -1526,7 +1526,12 @@ def _module_install(site: Site) -> list[str]:
                 "\t\t\tset_local_variable = { name = sr_ms_installed value = 1 }",
                 "\t\t}"]
         first = False
-    out += [f"\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+    out += ["\t\t# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then",
+            "\t\t# none of its colonies has contact).",
+            "\t\tif = {",
+            "\t\t\tlimit = { NOT = { sr_earth_blockaded = yes } }",
+            f"\t\t\tset_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }}",
+            "\t\t}",
             "\t\t# Repairs come with it (slice 6 design § 7.3).",
             "\t\tif = {",
             f"\t\t\tlimit = {{ has_global_variable = sr_site_integrity_{k} }}",
@@ -1871,10 +1876,11 @@ def slice5_vars(site: Site) -> list[str]:
 
 
 def slice6_vars(site: Site) -> list[str]:
-    """The world's slice 6 globals (fleets design §§ 7-9), cleared by a release."""
+    """The world's slice 6 globals (fleets design §§ 7-9, 12), cleared by a release."""
     k = site.key
     return [f"sr_site_marines_{k}", f"sr_site_garrison_due_{k}", f"sr_site_integrity_{k}", f"sr_site_occupier_{k}",
-            f"sr_site_blockaded_{k}", f"sr_site_bombard_{k}", f"sr_site_under_assault_{k}"]
+            f"sr_site_blockaded_{k}", f"sr_site_bombard_{k}", f"sr_site_under_assault_{k}",
+            f"sr_site_interdicted_{k}"]
 
 
 def site_serves(site: Site) -> str:

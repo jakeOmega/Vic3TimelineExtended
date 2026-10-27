@@ -853,6 +853,10 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_cultural_diversity_modifier }
 		add = 1
 	}
@@ -1763,6 +1767,10 @@ te_nation_list_international_count = {
 	}
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
 		add = 1
 	}
 	if = {
@@ -5710,6 +5718,10 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_cultural_diversity_modifier }
 		add = 1
 	}
@@ -5967,6 +5979,10 @@ te_nation_group_standing_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_cultural_diversity_modifier }
 		add = 1
 	}
@@ -6146,6 +6162,10 @@ te_nation_type_country_prestige_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
 		add = 1
 	}
 	if = {

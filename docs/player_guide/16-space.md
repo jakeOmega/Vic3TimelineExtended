@@ -7,8 +7,8 @@ milestones keeps a larger permanent reward than anyone who follows. The entries
 start to appear once you research Rocketry in era 6, but you need a Space
 Program building, unlocked by Guided Missiles in era 7, before any of them can
 make progress. The Space Race game rule controls the system; with it off, the
-journal entries and their events never appear. Its Simple Colonies setting, the
-default, and its Full Colonies setting also make colony fleets take months or
+journal entries and their events never appear. Its Full Colonies setting, the
+default, and its Simple Colonies setting also make colony fleets take months or
 years to arrive, give colonies settlers and modules, tie Extraplanetary Bases to
 the room colonies give, let a colony change hands, and let colonies grow
 restless and break away (see [Colony fleets in
@@ -17,8 +17,8 @@ flight](#colony-fleets-in-flight), [Colony settlers](#colony-settlers),
 room](#extraplanetary-base-room), [Ceding a colony](#ceding-a-colony) and
 [Colony autonomy and free colonies](#colony-autonomy-and-free-colonies)).
 Full Colonies adds warships in space: fleets you build, move between the
-planets and fight with, to blockade, seize or destroy colonies (see [Space
-fleets](#space-fleets)).
+planets and fight with, to blockade, seize or destroy colonies, and to hold
+Earth orbit (see [Space fleets](#space-fleets)).
 
 ## Joining the space race
 
@@ -848,8 +848,9 @@ every month, by its production method:
 
 The figure is scaled by staffing, and the method's tooltip shows it as Fleet
 Strength Built a Month. A Space Command in a state you don't control builds
-nothing. The month's strength joins your home fleet at Earth, shared among five
-roles by the build mix, whose buttons step each role's weight from 0 to 3:
+nothing. The month's strength is shared among five roles by the build mix,
+whose buttons step each role's weight from 0 to 3, and waits on the ground in
+the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit)):
 
 | Role | Fire on fleets | Fire on colony defences | Months of supply | Also |
 |---|---|---|---|---|
@@ -860,8 +861,8 @@ roles by the build mix, whose buttons step each role's weight from 0 to 3:
 | Tender | 0.1 | 0.1 | 36 | Adds propellant and supply to its fleet |
 
 Fleets cost upkeep as more of every input Space Command uses: 1% for every 10
-points of strength at full. A large fleet makes the yards dearer to run, not
-slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
+points of strength at full, the reserve's included. A large fleet makes the
+yards dearer to run, not slower. Directed Energy Weapons, Orbital Weapon Platforms and Antimatter
 Production each raise your fleets' fire by a quarter.
 
 ### Moving fleets
@@ -875,7 +876,7 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 | Order | What it does |
 |---|---|
 | The destination button | Steps through the other locations; its hover gives the trip's months and propellant |
-| Go | Sends the fleet. It can't leave when the trip departs in a later month (a chemical or fusion fleet leaving Earth follows the launch windows) or when its propellant doesn't cover the trip |
+| Go | Sends the fleet. It can't leave when the trip departs in a later month (a chemical or fusion fleet leaving Earth follows the launch windows), when its propellant doesn't cover the trip, or from Earth while Earth is blockaded or your launch site occupied |
 | Merge | Joins another of your fleets at the same location |
 | Detach | Splits half of each role into a new fleet |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
@@ -901,10 +902,12 @@ Earth):
 | Station | Every enemy fleet there | Guard your colonies. A fleet arriving where you hold a colony stations |
 | Stand off | Enemy fleets that stand off or are stationed, out of the colonies' guns | Blockade an enemy's colonies |
 | Close in | The target world's Defences and the enemy fleets stationed there | Seize or destroy a colony |
+| Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its world | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
-At Earth every fleet fights every enemy fleet, and an Orbital Battlestation
+At Earth every fleet fights every enemy fleet, an Orbital Battlestation
 fights for its owner (25 strength a level, regaining 10% a month; none in a
-state its owner doesn't control). Losses follow the square law: each side loses
+state its owner doesn't control), and so do its ground-to-orbit batteries (see
+[Holding Earth orbit](#holding-earth-orbit)). Losses follow the square law: each side loses
 in proportion to the other's fire, so concentration pays (100 strength against
 50 ends with about 87 left). Warships and rapid response take the losses before
 the other roles, and half of every loss is damage a dock repairs. A battle at
@@ -932,14 +935,106 @@ Seize or Destroy button:
 | Destroy | Three months closing in with more fire than its Defences | The colony and everyone in it are lost, and the world lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at
-once, and seizing it makes it yours at autonomy 60. Without Survey Colony
+once, and seizing it makes it yours at autonomy 60. A party to the
+[Convention on the Settlement of Outer Space](10-united-nations.md#the-outer-space-convention)
+pays twice the infamy and twice the UN record for destroying a colony or
+closing in on a free one. Seizing a colony at war costs a party no more than
+anyone else. Without Survey Colony
 Defences against its holder, the target's hover gives a world's Defences only
 roughly, and its integrity and marines not at all.
 
+### Interdiction
+
+You can blockade a rival's colonies without going to war, as the United States
+quarantined Cuba in 1962. Send a fleet to a location where a country at peace
+with you, and not your ally (no alliance or defensive pact), holds a colony, and
+step its posture to Interdict; the target button picks which country's world.
+While none of that country's fleets is stationed or standing off there, its
+colonies at that location are blockaded as an enemy's would be, and its
+Locations row reads Interdicted. Nobody fires. If its fleet holds orbit there,
+the two fleets face each other and nothing is blockaded; firing on it needs a
+war.
+
+| You pay, for each fleet and each country it interdicts | The country you interdict gains |
+|---|---|
+| 5 infamy, and 10 on your UN record of hostile acts in space | A warning, and a casus belli: for five years, demanding one of your colonies with Cede Colony costs it no infamy |
+
+An interdiction ends, and the fleet stands off, when its target goes to war
+with you, signs an alliance or defensive pact with you, or no longer holds a
+colony there. A world that passes to another country at peace with you is a new
+interdiction, at the same price. In a war against the country you were
+interdicting, your fleet standing off blockades it anyway, now as an enemy.
+
+### Holding Earth orbit
+
+Earth orbit is where every launch goes up, so it can be fought over. Your Earth
+is blockaded when a fleet of a country at war with you is at Earth and none of
+yours is. While it is, nothing of yours leaves Earth: no colony fleet (a full
+bar waits), no module shipment (modules are still made, and wait at Earth), no
+settlers and no fleet. None of your colonies has contact from home, so their
+autonomy counts the months. Your Locations row for Earth reads Blockaded,
+Space Command shows a red note, and you are told which country holds your
+orbit. Your batteries and your Orbital Battlestation fire on the blockaders but
+don't lift the blockade: only a fleet of yours at Earth does.
+
+That fleet comes from the reserve. Space Command's construction waits on the
+ground there, in the five roles, and its Reserve row gives the strength (hover
+it for the roles). With Auto on, the default, it joins your home fleet at Earth
+each month while no enemy fleet is there, so in peace the reserve stays empty.
+While an enemy fleet is at Earth it stays on the ground, and Launch sends all of
+it up together as one fleet at Earth, with full propellant, supply and marines,
+blockade or not. A blockade therefore faces everything you have built since it
+began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
+and launch it when you choose; it costs the same upkeep on the ground.
+
+Ground-to-orbit batteries are a government building, unlocked by Space
+Militarization and built in any state. Each level fires on every enemy fleet at
+Earth every month and takes no losses:
+
+| Method | Technology | Each level a month |
+|---|---|---|
+| Kinetic Interceptors | Space Militarization | 1 fire on enemy fleets at Earth; each point fired adds 0.02 to low-orbit debris |
+| Ground Lasers | Directed Energy Weapons, and electricity | 2 fire, no debris; in peace, 0.01 low-orbit debris swept away |
+
+The method's tooltip and the state's modifiers show both figures, scaled by
+staffing. A month of fire costs the enemy about a tenth of it in strength:
+twenty levels take 2 strength a month on Kinetic Interceptors, 4 on Ground
+Lasers. The technologies that raise your fleets' fire don't raise the
+batteries'. Ten levels of lasers clear 0.1 low-orbit debris a month: a help
+against everyday clutter, no cure for a Kessler Cascade, which lives in the high
+orbits they can't reach.
+
+At war, holding Earth orbit supports your troops: while your fleets at Earth
+outmatch the enemy's there, or face none, you get Orbital Superiority, up to
++10% offense and +5% defense for your units. It grows with the margin, and is
+full when you have twice the enemy's strength at Earth, or 10 against none. It
+stands beside the anti-satellite strike's Orbital Network Disrupted.
+
+Nothing is launched, built or fired from a state its owner doesn't control.
+While your Space Program's state is occupied, nothing leaves Earth, no module is
+fabricated and the reserve can't launch, whatever is in orbit; you are told when
+the launch site is lost and when it is back. Space Command, the batteries and
+the Orbital Battlestation in an occupied state count for no one: not for you,
+and not for the occupier, whose gain is that you have lost them. A land war can
+shut down a space program.
+
+### How the AI fights in space
+
 AI fleet powers keep their fleets at home in peace, send their strongest fleet
 to defend a location where they hold colonies when an enemy fleet is there or on
-its way, bring fleets home short of supply or propellant, and land marines for
-the garrisons they order. They never destroy colonies or attack free ones.
+its way, or when a fleet interdicts them there, bring fleets home short of
+supply or propellant, and land marines for the garrisons they order. At war,
+once a month, an AI sends one fleet from a dock to the nearest enemy location
+within a year's flight, when the fleet is at least half again as strong as the
+enemy's fleets and its colonies' Defences there and can fly home again or dock
+there. It closes in on the enemy colony with the most people and modules,
+to seize it when its marines outnumber the garrison and militia, and otherwise
+stands off to blockade. It comes home once the enemy's fleets there outmatch
+its own. An AI never destroys a colony, never attacks a free one and never
+interdicts. With an enemy fleet at Earth, it launches its reserve once the
+reserve and its fleets at Earth match the enemy's there. It builds batteries
+only while at war with a country that has fleets, up to five levels, and runs
+Ground Lasers at war, and in peace once debris is Cluttered.
 
 ## After the space race
 
@@ -1031,7 +1126,10 @@ Removal switches your Space Program to the best method you have, and appears
 again when a better one arrives. Switch removal off in the building's
 production methods.
 
-Every country in orbit gains from what anyone removes. Fusion Sweepers with a
+Under the Space Race rule's Full Colonies, ground-to-orbit batteries on
+Ground Lasers also sweep the low orbits in peace (see [Holding Earth
+orbit](#holding-earth-orbit)). Every country in orbit gains from what anyone
+removes. Fusion Sweepers with a
 ten-level Space Elevator clear 30 points in about two and a half years. One
 program on Active Debris Removal can't stop a Kessler Cascade: that takes
 several cleaners, or better technology. AI powers that use orbit take the

@@ -396,6 +396,7 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_agency_tpnw }
 	un_dissolve_remove_global = { NAME = un_agency_ats }
 	un_dissolve_remove_global = { NAME = un_agency_unoda }
+	un_dissolve_remove_global = { NAME = un_agency_copuos }
 
 	# 8b. The charter's new business (redesign phase 7, §0.12): its
 	#     institutions lapse and its standing orders end
@@ -443,6 +444,8 @@ un_dissolve = {
 	# The Global Commons' docket business and the Moratorium's yearly clock
 	# (te_asat_un_hooks.txt, te_global_commons_un_effects.txt).
 	un_dissolve_remove_global = { NAME = un_dkt_asat_pending }
+	# The outer-space convention's docket business (sr_colony_un_hooks.txt).
+	un_dissolve_remove_global = { NAME = un_dkt_colony_pending }
 	un_dissolve_remove_global = { NAME = te_asat_delivery_months }
 	un_dissolve_remove_global = { NAME = un_ledger_credibility }
 	un_dissolve_remove_global = { NAME = un_ledger_delivery }
@@ -586,7 +589,7 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
 	un_state_off = { MODIFIER = un_refugee_program_modifier }
 	un_state_off = { MODIFIER = un_space_partnership_modifier }
-	# The eight conventions that sit on the country rather than the journal
+	# The nine conventions that sit on the country rather than the journal
 	# entry. un_apply_ratified_conventions re-adds them on rejoining,
 	# exactly as it does the journal-entry ones above (except an Antarctic
 	# Treaty its member denounced).
@@ -598,6 +601,7 @@ un_membership_end_effect = {
 	un_state_country_off = { MODIFIER = un_nuclear_ban_modifier }
 	un_state_country_off = { MODIFIER = un_antarctic_treaty_modifier }
 	un_state_country_off = { MODIFIER = un_asat_moratorium_modifier }
+	un_state_country_off = { MODIFIER = un_colony_protection_modifier }
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
 	un_p5_display_refresh = yes

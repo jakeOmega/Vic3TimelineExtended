@@ -6,7 +6,9 @@
 # common/scripted_triggers/te_orbital_debris_triggers.txt.
 #
 # WHO WRITES WHAT
-#   orbital_debris_low / _high (global)   te_debris_global_monthly, te_debris_add
+#   orbital_debris_low / _high (global)   te_debris_global_monthly, te_debris_add;
+#                                         the low pool also sr_battery_sweep_step
+#                                         (sr_earth_orbit_effects.txt)
 #   te_debris_removal_month, te_debris_cleaners, te_debris_top_cleaner,
 #   te_debris_programs (global)           te_debris_global_monthly
 #   te_asat_last_strike_month, te_asat_strikes_total, te_asat_last_striker,
@@ -65,7 +67,9 @@ te_debris_add = {
 #      cascade into the high pool when last month's index reached it.
 #   2. Decay: each pool loses its share.
 #   3. Removal: the world's removal, from the high pool first (real removal
-#      missions go after large, long-lived objects), the rest from the low.
+#      missions go after large, long-lived objects), the rest from the low;
+#      then the ground-to-orbit batteries' lasers, in peace, from the low pool
+#      alone (solar colonization fleets design § 15, sr_battery_sweep_step).
 #   4. The ceiling.
 #   5. The panel's readings: removal, cleaners, the largest cleaner.
 #   6. The removal self-check, once a game.
@@ -102,6 +106,9 @@ te_debris_global_monthly = {
 			remove_global_variable = te_debris_removal_left
 		}
 	}
+	# Ground lasers sweep only the low pool: they can't reach the debris high
+	# above (sr_earth_orbit_effects.txt).
+	sr_battery_sweep_step = yes
 	# 4. The ceiling (and the floor at 0 the low pool may have crossed).
 	te_debris_clamp_pools = yes
 	# 5. The panel's readings.

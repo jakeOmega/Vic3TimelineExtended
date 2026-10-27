@@ -137,7 +137,7 @@ SECTIONS = {
         # UN conventions a country is bound by outside the organisation's entry
         "un_asat_moratorium_modifier", "un_cultural_diversity_modifier", "un_icc_member_modifier",
         "un_law_of_sea_modifier", "un_narcotics_control_modifier", "un_nuclear_ban_modifier",
-        "un_physical_protection_modifier",
+        "un_physical_protection_modifier", "un_colony_protection_modifier",
         # Membership and its absence, NPT disarmament
         "un_membership_benefits_modifier", "un_nonmember_pariah_*", "un_npt_disarmament_modifier",
         # Regime terms, embargoes, sanctions, mandates, development grants, observers
@@ -180,6 +180,8 @@ KEEP_IN_LIST = {
     "te_debug_*": "debug",
     "te_tp_*": "debug (the developer-only tax probes)",
     "te_demog_fast_*": "debug (the fast demographic clock)",
+    "sr_orbital_superiority": "a wartime edge from holding Earth orbit, refreshed monthly with the fleets there: it "
+                              "belongs beside the anti-satellite strike's timed te_orbital_network_disrupted in the list",
 }
 
 # Where the rest land. Hiding them would cost the filter a comparison each and

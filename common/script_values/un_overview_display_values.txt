@@ -583,8 +583,8 @@ un_disp_res_supermajority = {
 # 19 nuclear_ban, 20 court_referral, 21 arms_embargo, 22 credentials,
 # 23 standing_force, 24 observer_request, 25 food_reserve, 26 ceasefire,
 # 27 development_fund, 28 referendum, then 29 narcotics, (§0.12a)
-# 30 lift_sanctions, and the Global Commons' 31 antarctic and 32 asat. -1 with
-# nothing in session.
+# 30 lift_sanctions, the Global Commons' 31 antarctic and 32 asat, and the
+# solar colonization fleets' 33 colony_protection. -1 with nothing in session.
 un_disp_res_topic_code = {
 	value = -1
 	if = { limit = { un_session_topic_is = { TOPIC = condemn } } value = 0 }
@@ -608,6 +608,7 @@ un_disp_res_topic_code = {
 	if = { limit = { un_session_topic_is = { TOPIC = narcotics } } value = 29 }
 	if = { limit = { un_session_topic_is = { TOPIC = antarctic } } value = 31 }
 	if = { limit = { un_session_topic_is = { TOPIC = asat } } value = 32 }
+	if = { limit = { un_session_topic_is = { TOPIC = colony_protection } } value = 33 }
 	if = { limit = { un_session_topic_is = { TOPIC = cultural_diversity } } value = 18 }
 	if = { limit = { un_session_topic_is = { TOPIC = nuclear_ban } } value = 19 }
 	if = { limit = { un_session_topic_is = { TOPIC = court_referral } } value = 20 }
@@ -635,4 +636,10 @@ un_disp_agency_ats = {
 un_disp_agency_unoda = {
 	value = 0
 	if = { limit = { has_global_variable = un_agency_unoda } value = 1 }
+}
+# The Convention on the Settlement of Outer Space (solar colonization fleets
+# design § 13).
+un_disp_agency_copuos = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_copuos } value = 1 }
 }

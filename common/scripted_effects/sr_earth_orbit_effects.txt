@@ -1,0 +1,342 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — fleets: Earth orbit (slice 6d)
+# ============================================================================
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
+# (§§ 5.1, 14, 15). Full Colonies only. A blockade must not be able to hold a
+# power for a whole war (owner: two ships in orbit must not beat thirty built
+# one at a time), so:
+#   - the ground reserve: Space Command's construction waits on the ground
+#     (sr_reserve_<role>) and goes up together, by Launch or, with no hostile
+#     fleet at Earth, by itself each month;
+#   - ground-to-orbit batteries fire on hostile fleets at Earth every month,
+#     and with lasers sweep low-orbit debris in peace;
+#   - Earth can be blockaded: a fleet at war with us at Earth and none of ours
+#     there stops our launches, as an occupied launch site stops them;
+#   - holding Earth orbit at war gives fire support on the ground.
+# The numbers are sr_fleet_values.txt's; the per-role blocks are generated
+# (sr_fleets_generated.txt, scripts/generators/gen_space_fleets.py).
+# ============================================================================
+
+# ---- The ground reserve (design § 15) ------------------------------------------------------
+# Country scope, from sr_sc_month after the month's construction joined the
+# reserve: with the toggle on (sr_reserve_auto, on by default), no hostile
+# fleet at Earth and the launch site held, the whole reserve joins the home
+# fleet, the lowest slot at Earth not refitting, else a new slot there: 6a's
+# behaviour. With all nine slots away from Earth it waits on the ground.
+sr_reserve_auto_step = {
+	if = {
+		limit = {
+			sr_reserve_total > 0
+			sr_reserve_auto_on = yes
+			NOT = { sr_earth_hostile_present = yes }
+			NOT = { sr_launch_site_lost = yes }
+		}
+		sr_fl_find_home = yes
+		if = {
+			limit = { local_var:sr_fl_n > 0 }
+			sr_fl_by_local = { DO = reserve_in }
+		}
+	}
+}
+
+# Country scope. Launch (sr_reserve_launch_sgui; the AI, sr_fl_ai_reserve): the
+# whole reserve into orbit as one fleet, any month, blockade or not: the lowest
+# empty slot, created at Earth, else our first fleet at Earth. The caller has
+# checked sr_reserve_may_launch (only the launch site's occupation stops it).
+sr_reserve_launch = {
+	sr_fl_find_empty = yes
+	if = {
+		limit = { local_var:sr_fl_n > 0 }
+		sr_fl_by_local = { DO = new_at_earth }
+	}
+	else = {
+		sr_fl_find_at_earth = yes
+	}
+	if = {
+		limit = { local_var:sr_fl_n > 0 }
+		sr_fl_by_local = { DO = reserve_in }
+		sr_loc_rebuild = yes
+	}
+}
+
+# Country scope (sr_reserve_auto_sgui): the toggle. Off is recorded as 0;
+# on is the variable's absence, the default.
+sr_reserve_toggle_auto = {
+	if = {
+		limit = { sr_reserve_auto_on = yes }
+		set_variable = { name = sr_reserve_auto value = 0 }
+	}
+	else_if = {
+		limit = { has_variable = sr_reserve_auto }
+		remove_variable = sr_reserve_auto
+	}
+}
+
+# ---- The AI (design § 14, 6d) --------------------------------------------------------------
+# Country scope, an AI fleet power's month (sr_fl_ai_review). It keeps the
+# toggle on, so with no enemy at Earth the reserve has already gone up with
+# the month's construction. With an enemy fleet at Earth it launches the
+# reserve once the reserve and its fleets there match the enemy's, so it never
+# feeds hulls up one month's worth at a time.
+sr_fl_ai_reserve = {
+	if = {
+		limit = {
+			sr_reserve_may_launch = yes
+			OR = {
+				NOT = { sr_earth_hostile_present = yes }
+				sr_fl_ai_reserve_matches = yes
+			}
+		}
+		sr_reserve_launch = yes
+	}
+}
+
+# ---- Ground-to-orbit batteries: low-orbit sweeping (design § 15) ---------------------------------
+# Global scope, from te_debris_global_monthly after the world's removal and
+# before the ceiling. Ground-based lasers that ablate small debris until it
+# de-orbits (NASA's ORION study and later laser-broom studies) can't reach the
+# debris high above: every fleet power's sweep (sr_battery_sweep, 0 while it
+# is at war) is summed and taken from the low pool alone. The battery's owners
+# are on sr_fleet_powers, so no every_country. Full Colonies only (no battery
+# exists otherwise).
+sr_battery_sweep_step = {
+	set_global_variable = { name = sr_battery_sweep_month value = 0 }
+	if = {
+		limit = {
+			sr_colonies_full_enabled = yes
+			has_global_variable_list = sr_fleet_powers
+		}
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = {
+				is_country_alive = yes
+				sr_has_battery = yes
+			}
+			change_global_variable = { name = sr_battery_sweep_month add = sr_battery_sweep }
+		}
+	}
+	if = {
+		limit = { global_var:sr_battery_sweep_month > 0 }
+		set_global_variable = { name = sr_battery_log_low_before value = global_var:orbital_debris_low }
+		set_global_variable = { name = sr_battery_log_high_before value = global_var:orbital_debris_high }
+		set_global_variable = {
+			name = orbital_debris_low
+			value = {
+				value = global_var:orbital_debris_low
+				subtract = global_var:sr_battery_sweep_month
+				min = 0
+			}
+		}
+	}
+	sr_battery_sweep_self_check = yes
+}
+
+# TE_SELF_CHECK battery_sweep (design § 18; docs/testing/solar-colonies-playtest.md).
+# It rests on the sweep's state modifier reaching modifier: in state scope, as
+# Space Command's does (ship_construction). Armed the first month a country at
+# peace runs Ground Lasers at half staff or more in a state it controls; a
+# month later (a modifier sum can lag a day after a method changes), if one
+# still qualifies (else re-armed): OK when the world's step took a sweep, the
+# low pool fell by all of it (or to 0) and the high pool didn't move; BROKEN
+# when the low pool fell by less, the high pool moved, or there was no sweep
+# at all. Once a game. The figures go through globals: a debug line reads no
+# local variable.
+sr_battery_sweep_self_check = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_battery_sweep_checked } }
+		if = {
+			limit = {
+				has_global_variable = sr_battery_sweep_armed
+				te_history_month_index > global_var:sr_battery_sweep_armed
+			}
+			if = {
+				limit = { sr_battery_sweep_subject = yes }
+				set_global_variable = { name = sr_battery_sweep_checked value = yes }
+				if = {
+					limit = { global_var:sr_battery_sweep_month > 0 }
+					set_global_variable = { name = sr_battery_log_low_after value = global_var:orbital_debris_low }
+					set_global_variable = { name = sr_battery_log_high_after value = global_var:orbital_debris_high }
+					if = {
+						limit = { sr_battery_sweep_took_all = yes }
+						debug_log = "TE_SELF_CHECK OK battery_sweep sweep=[GetGlobalVariable('sr_battery_sweep_month').GetValue|3] low_before=[GetGlobalVariable('sr_battery_log_low_before').GetValue|3] low_after=[GetGlobalVariable('sr_battery_log_low_after').GetValue|3] high_before=[GetGlobalVariable('sr_battery_log_high_before').GetValue|3] high_after=[GetGlobalVariable('sr_battery_log_high_after').GetValue|3] (Ground Lasers' sweep reached the low pool alone) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+					else = {
+						debug_log = "TE_SELF_CHECK BROKEN battery_sweep sweep=[GetGlobalVariable('sr_battery_sweep_month').GetValue|3] low_before=[GetGlobalVariable('sr_battery_log_low_before').GetValue|3] low_after=[GetGlobalVariable('sr_battery_log_low_after').GetValue|3] high_before=[GetGlobalVariable('sr_battery_log_high_before').GetValue|3] high_after=[GetGlobalVariable('sr_battery_log_high_after').GetValue|3] (the low pool fell by less than the sweep, or the high pool moved; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+					}
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN battery_sweep sweep=0 (a country at peace has run Ground Lasers at half staff or more for a month and nothing was swept: the method's state modifier does not reach its state; fall back to computing the sweep in script, docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			else = {
+				remove_global_variable = sr_battery_sweep_armed
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { has_global_variable = sr_battery_sweep_armed }
+				sr_battery_sweep_subject = yes
+			}
+			set_global_variable = { name = sr_battery_sweep_armed value = te_history_month_index }
+		}
+	}
+}
+
+# ---- Earth blockaded, the launch site lost (design § 15) -----------------------------------------
+# Country scope, a player under Full Colonies with a space programme or a
+# fleet, from the country pulse (space_race_on_actions.txt): told once when
+# its Earth is blockaded (.106, naming the strongest blockader), and when its
+# launch site is lost and again when it is back (.108). The blockade and the
+# occupation are read live (sr_earth_blockaded, sr_launch_site_lost); these
+# records only mark what the player has already heard.
+sr_earth_notice_step = {
+	if = {
+		limit = { sr_earth_blockaded = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_earth_blockade_noted } }
+			set_variable = { name = sr_earth_blockade_noted value = yes }
+			save_temporary_scope_as = sr_earth_victim
+			ordered_in_global_list = {
+				variable = sr_fleet_powers
+				limit = {
+					is_country_alive = yes
+					has_war_with = scope:sr_earth_victim
+					has_variable = sr_fl_at_earth
+				}
+				order_by = var:sr_fl_at_earth
+				position = 0
+				save_temporary_scope_as = sr_earth_blockader
+			}
+			if = {
+				limit = { exists = scope:sr_earth_blockader }
+				set_variable = { name = sr_earth_blockade_by value = scope:sr_earth_blockader }
+				trigger_event = { id = space_race_events.106 days = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_earth_blockade_noted }
+		remove_variable = sr_earth_blockade_noted
+	}
+	if = {
+		limit = { sr_launch_site_lost = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_launch_site_noted } }
+			set_variable = { name = sr_launch_site_noted value = yes }
+			set_variable = { name = sr_launch_site_kind value = 1 }
+			trigger_event = { id = space_race_events.108 days = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_launch_site_noted }
+		remove_variable = sr_launch_site_noted
+		# Back under our control; a Space Program lost with its state is no return.
+		if = {
+			limit = { sr_has_space_program = yes }
+			set_variable = { name = sr_launch_site_kind value = 2 }
+			trigger_event = { id = space_race_events.108 days = 1 }
+		}
+	}
+}
+
+# ---- Orbital fire support (design § 15) ----------------------------------------------------------
+# Country scope, the fleets' monthly step (sr_fl_country_month): the one
+# refresh site of sr_orbital_superiority. Removed first (a same-name
+# add_modifier stacks); at war, put back at the margin our fleets at Earth
+# hold over the hostile ones there. A country that leaves the fleet powers
+# list has it removed by the country pulse (space_race_on_actions.txt), since
+# this step no longer runs for it.
+sr_orbital_superiority_refresh = {
+	if = {
+		limit = { has_modifier = sr_orbital_superiority }
+		remove_modifier = sr_orbital_superiority
+	}
+	if = {
+		limit = {
+			is_at_war = yes
+			sr_orbital_superiority_margin > 0
+		}
+		add_modifier = { name = sr_orbital_superiority multiplier = sr_orbital_superiority_margin }
+	}
+}
+
+# ---- The AI's batteries (design § 14, 6d) ---------------------------------------------------------
+# Country scope, an AI fleet power's month (sr_fl_ai_review). It builds
+# batteries through the building's own AI, held by can_build_government to
+# wars with a country that has fleets (sr_battery_may_build_government). With
+# Directed Energy Weapons it runs Ground Lasers at war (twice the fire and no
+# debris) and in peace once the debris is Cluttered (they sweep it);
+# otherwise the cheaper Kinetic Interceptors. A method is switched only when a
+# battery runs the other, so a month with nothing to change changes nothing.
+sr_fl_ai_batteries = {
+	if = {
+		limit = {
+			sr_has_battery = yes
+			has_technology_researched = directed_energy_weapons
+		}
+		if = {
+			limit = {
+				OR = {
+					is_at_war = yes
+					te_debris_index >= te_debris_tier_cluttered
+				}
+			}
+			if = {
+				limit = {
+					any_scope_building = {
+						is_building_type = building_orbital_defense_battery
+						NOT = { has_active_production_method = pm_orbital_battery_lasers }
+					}
+				}
+				activate_production_method = {
+					building_type = building_orbital_defense_battery
+					production_method = pm_orbital_battery_lasers
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				any_scope_building = {
+					is_building_type = building_orbital_defense_battery
+					NOT = { has_active_production_method = pm_orbital_battery_kinetic }
+				}
+			}
+			activate_production_method = {
+				building_type = building_orbital_defense_battery
+				production_method = pm_orbital_battery_kinetic
+			}
+		}
+	}
+}
+
+# ---- Console (te_debug_space_race.6, 6d) ----------------------------------------------------------
+# ROOT's Earth blockaded by the strongest country at war with it (by
+# prestige): that country gets a fleet of 100 strength of each role at Earth,
+# full, in its lowest empty slot. With no fleet of ROOT's at Earth, ROOT's
+# Earth is then blockaded; with none at war, nothing happens.
+sr_earth_debug_blockade = {
+	if = {
+		limit = {
+			any_country = {
+				is_country_alive = yes
+				has_war_with = root
+			}
+		}
+		ordered_country = {
+			limit = {
+				is_country_alive = yes
+				has_war_with = root
+			}
+			order_by = prestige
+			max = 1
+			sr_fl_find_empty = yes
+			if = {
+				limit = { local_var:sr_fl_n > 0 }
+				sr_fl_by_local = { DO = new_at_earth }
+				sr_fl_by_local = { DO = debug_strength }
+				sr_fl_by_local = { DO = fill }
+			}
+		}
+		sr_loc_rebuild = yes
+	}
+}
