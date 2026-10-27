@@ -2189,7 +2189,7 @@ ICONS: dict[str, dict[str, dict]] = {
                       "now": f"{_GI}/generic_icons/red_cross.dds"},
         # The other seven overview cells, on vanilla icons until now; subjects from the doc's Final art.
         # Round 1's balance beam was a hairline with specks on it at 44 px: the two objects alone.
-        "ov_natural_change": {"subject": "a small wooden baby cradle with a blue blanket standing side by side with a small rounded grey headstone, both the same height", "seed": 1,
+        "ov_natural_change": {"subject": "a small wooden baby cradle with a blue blanket standing side by side with a small rounded grey headstone, both the same height", "seed": 0,
                               "now": f"{_GI}/generic_icons/population.dds"},
         "ov_migration": {"subject": "a small traveller in a brown coat and hat walking to the right, a cloth bundle tied to a stick over his shoulder", "seed": 1,
                          "now": f"{_GI}/state_status_icons/mass_migration_target.dds"},
