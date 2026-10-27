@@ -93,6 +93,8 @@
  country_enactment_success_chance_law_national_bank_add_desc:0 "A flat percentage point increase to the likelihood of enacting this specific law"
  country_enactment_success_chance_law_slavery_banned_add:0 "[concept_enactment_success] chance for [GetLawType('law_slavery_banned').GetName]"
  country_enactment_success_chance_law_slavery_banned_add_desc:0 "A flat percentage point increase to the likelihood of enacting this specific law"
+ country_environmental_movement_radicalism_add:0 "Environmental Movement Radicalism"
+ country_environmental_movement_radicalism_add_desc:0 "Raises or lowers how radical the Environmental Movement in this country is. National climate policies in force lower it."
  country_family_limitation_literacy_mult:0 "Family Limitation Among the Literate[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  country_family_limitation_literacy_mult_desc:0 "How readily a people who nearly all read take up family limitation, stopping at the family size they want by methods older than any modern one. A state church slows it; a secular state speeds it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  country_finance_momentum_monthly_add:0 "Monthly [concept_banking_momentum]"

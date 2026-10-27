@@ -101,8 +101,10 @@ class CumulativeTest(unittest.TestCase):
         self.assertNotIn("gw_disp_market_emis", snapshot + cumulative)
         self.assertNotIn("gw_is_market_leader", snapshot + cumulative)
         tt = _loc("gw_te_head_cum_tt")
-        for phrase in ("Negative years", "Market joins", "next January", "Revolutions"):
+        # The save-migration note left the player tooltip (GW-14, 2026-10-27).
+        for phrase in ("Negative years", "Market joins", "Updated each January", "revolution's winner keeps"):
             self.assertIn(phrase, tt)
+        self.assertNotIn("Existing saves", tt)
 
 
 class RefreshTest(unittest.TestCase):

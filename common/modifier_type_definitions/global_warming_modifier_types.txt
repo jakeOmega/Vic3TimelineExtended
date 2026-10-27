@@ -33,6 +33,22 @@ country_institution_impact_institution_ministry_of_the_environment_mult = {
 }
 
 # ----- Global Warming -----
+# Environmental Movement radicalism (GW-3, 2026-10-27): each national climate
+# policy's static modifier carries it (-0.10, Carbon Removal Support -0.05), so
+# the policy's tooltip prints the line, and movement_environmental's
+# additional_radicalism_factors reads the owner's total
+# (common/political_movements/new_ideological_movements.txt). The engine
+# consumes nothing; more radicalism is bad for the player.
+country_environmental_movement_radicalism_add = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 country_greenhouse_gas_emissions_mult = {
 	color = bad
 	percent = yes

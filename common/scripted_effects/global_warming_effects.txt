@@ -22,12 +22,15 @@ gw_effect_remove_carbon_tax = {
 	}
 }
 
+# The running cost is applied outside the custom_tooltip, so the adopt
+# tooltip prints its scaled Expenses line (GW-4, 2026-10-27). Its opening
+# remove_modifier_if_exists_effect prints nothing for a country without one.
 gw_effect_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_RENEWABLE_INVESTMENT_DESC"
 		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
-		gw_renewable_investment_cost_apply = yes
 	}
+	gw_renewable_investment_cost_apply = yes
 }
 
 gw_effect_remove_renewable_investment = {
