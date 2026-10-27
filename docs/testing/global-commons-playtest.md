@@ -96,11 +96,23 @@ even in that save, and the scale comes from those lines.
    an Antarctic station's 5 in the Southern, and about the Weight row's own last line; under Unilateral Licensing or a scramble the naval share doubles. A
    relinquished basin, or the Southern for an Antarctic Treaty party, reads 0 with a red line saying
    why. A state just conquered has no basin until the next monthly update: Basin, Claims and Weight
-   are hidden until then. Tile hover: the country's licences in use, its share and long-haul ones,
-   each basin's held, unbuilt, weight and the world's licences in use against the pool, and the room.
+   are hidden until then. Tile hover (since the 2026-10-27 GUI audit, VAN-8): the country's licences
+   in use, its share and long-haul ones, and the room to build, then a pointer to the Seabed tab for
+   each basin's figures. The rows with a hover of their own are underlined.
    No "Failed to fetch variable" in `debug.log` while hovering, on a coastal state that never had a
    mine. **At 1080p no row ends in "…"**: "Southern" in the Basin row's 96 px value column, "Long-haul"
    in the 96 px label column.
+1a. **The Ocean Basin tile (VAN-8b, owner 2026-10-27).** With Abyssal Plain Mining researched, open a
+   coastal state of another country, and one of a country that never took part in a sharing: an
+   **Ocean Basin: Pacific** (or the state's basin) tile, its hover naming "the Pacific Ocean" as the
+   Seabed tab names it. Before the research, and on a landlocked state, no tile. A state of a
+   participant shows the full Seabed Licences tile instead, never both. A landlocked country with the
+   research and no coastal claimant anywhere still sees the basins the month it researches it
+   (`te_seabed_basins_set`, `te_seabed_global_monthly`). **Observer:** start an observer game (or
+   switch to observer) with a state panel open on a coastal state: no Ocean Basin tile, and no
+   `Scoped object of type 'country' is not valid` lines in `error.log` from `states_panel.gui`
+   (the tile tests `Not( GetMetaPlayer.IsObserver )` before its `GetPlayer` gate). In multiplayer,
+   a player without the research sees no tile even when another player has it.
 2. **The gate.** Build a Deep-Sea Mine in a coastal state: the building's requirements list
    "Seabed Licences to spare: N (unbuilt: …)" with a tick, and a second line saying whether the next
    level takes the state's own basin's licence or another's at -25%. Queue levels until the room is

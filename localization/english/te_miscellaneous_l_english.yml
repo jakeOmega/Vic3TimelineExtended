@@ -1074,6 +1074,8 @@
  TE_STATE_POINTS_ROW_AVAILABLE:0 "Available"
  TE_STATE_POINTS_ROW_GENERATED:0 "Generated"
  TE_STATE_SEABED_BASIN_NAME:0 "[AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)1'), 'te_seabed_basin_pacific')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)2'), 'te_seabed_basin_atlantic')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)3'), 'te_seabed_basin_indian')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)4'), 'te_seabed_basin_arctic')][AddLocalizationIf(EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)5'), 'te_seabed_basin_southern')]"
+ TE_STATE_SEABED_BASIN_STATUS:0 "Ocean Basin: $TE_STATE_SEABED_ROW_BASIN_VALUE$"
+ TE_STATE_SEABED_BASIN_TT:0 "#bold Ocean Basin#!\nThis state's coast faces the $TE_STATE_SEABED_BASIN_NAME$ Ocean. A $building_ocean_mine$ here takes that basin's [concept_seabed_licence]s, and the state adds to its owner's claim weight there.\nEach basin's licences and claims: the Seabed tab of the $te_systems_window_title$ window."
  TE_STATE_SEABED_LICENCES_WAITING:0 " #R [State.MakeScope.ScriptValue('te_seabed_state_unrecorded')|0]#! wait for a licence until we have a [concept_seabed_claim] to spare."
  TE_STATE_SEABED_ROW_BASIN:0 "Basin"
  TE_STATE_SEABED_ROW_BASIN_TT:0 "#b Ocean Basin#!\nThis state's coast faces the $TE_STATE_SEABED_BASIN_NAME$ Ocean. Its $building_ocean_mine$ levels take a $TE_STATE_SEABED_BASIN_NAME$ [concept_seabed_licence] first, and the state adds to our claim weight there."

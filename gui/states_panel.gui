@@ -2519,6 +2519,26 @@ types state_panel_types
 				}
 			}
 
+			### OCEAN BASIN (GUI audit VAN-8b, owner 2026-10-27): a coastal state
+			### without the Seabed Licences tile above (its owner never took part
+			### in a sharing, or it is another country's) shows its basin once
+			### the viewing player has researched Abyssal Plain Mining, so the
+			### player can see which pool a port there would weigh in. The cheap
+			### state test first; Not( GetMetaPlayer.IsObserver ) before the
+			### GetPlayer-rooted gate, since an observer has no player.
+			state_panel_status_item_small = {
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				tooltip = "TE_STATE_SEABED_BASIN_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SEABED_BASIN_STATUS"
+				}
+			}
+
 			### POWER GRID (power grids phase 2): on a state with a Grid
 			### Transfer Station. Its mode (sending, receiving, idle, offline),
 			### the Electricity it moves a week, its grid's size, its undersea

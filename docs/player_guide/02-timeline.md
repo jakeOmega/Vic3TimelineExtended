@@ -410,7 +410,10 @@ share first, with your own row and its Relinquish button. A Seabed Licences
 tile on every coastal state's panel shows that state's basin, the licences its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
-claim weight there. The tile's tooltip has the national figures.
+claim weight there. The tile's tooltip has the national figures. Once you have
+researched Abyssal Plain Mining, every other coastal state, whoever owns it,
+shows its basin in an Ocean Basin tile, so you can see which pool a port there
+would weigh in.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|

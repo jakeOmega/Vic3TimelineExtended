@@ -10,6 +10,9 @@
   through script values that mirror the entry's on_complete and on_fail.
 - Heir Education's skill buttons preview the innovation cost each advance
   applies, at the duration the advance applies it for (JE-5).
+- The Ocean Basin tile (VAN-8b, owner 2026-10-27) shows a coastal state's
+  basin to a viewing player with the technology, never to an observer, and
+  never beside the full Seabed Licences tile.
 """
 
 import json
@@ -26,6 +29,8 @@ CIVIL_RIGHTS = os.path.join(REPO, "common", "journal_entries", "je_civil_rights.
 CR_VALUES = os.path.join(REPO, "common", "script_values", "civil_rights_values.txt")
 HE_BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "heir_education_buttons.txt")
 HE_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "heir_education_effects.txt")
+SEABED_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_global_commons_seabed_sguis.txt")
+SEABED_VALUES = os.path.join(REPO, "common", "script_values", "te_global_commons_seabed_values.txt")
 
 # gui_style_guide.md rule 3: the serif body face runs about 10 units a
 # character at 20, so 8.5 at the 17 of this panel's body text, plus 10%.
@@ -220,6 +225,33 @@ class HeirEducationCostPreviewTest(unittest.TestCase):
                 self.assertIsNotNone(shown)
                 self.assertEqual(shown.group(1), applied.group(1))
                 self.assertIn("custom_tooltip = HE_SKILL_ADVANCE_COST_TT", button)
+
+
+class OceanBasinTileTest(unittest.TestCase):
+    def tile(self):
+        text = _read(STATES)
+        at = text.index('tooltip = "TE_STATE_SEABED_BASIN_TT"')
+        return text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+
+    def test_observer_safe_and_per_viewer(self):
+        visible = re.search(r'visible = "(.*)"', self.tile()).group(1)
+        # The cheap state test first, the observer test before any GetPlayer.
+        self.assertTrue(visible.startswith("[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown')"))
+        self.assertLess(visible.index("Not( GetMetaPlayer.IsObserver )"), visible.index("GetPlayer"))
+        self.assertIn("GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )", visible)
+        sguis = _read(SEABED_SGUIS)
+        m = re.search(r"(?m)^te_seabed_basin_tile_sgui = \{", sguis)
+        body = _block_from(sguis, m.end() - 1)
+        self.assertIn("is_shown = { has_technology_researched = abyssal_plain_mining }", body)
+        self.assertNotIn("any_country", body)
+
+    def test_never_beside_the_licences_tile(self):
+        values = _read(SEABED_VALUES)
+        m = re.search(r"(?m)^te_seabed_basin_tile_shown = \{", values)
+        body = _block_from(values, m.end() - 1)
+        self.assertIn("NOT = { owner = { has_variable = te_seabed_shared } }", body)
+        m = re.search(r"(?m)^te_seabed_tile_shown = \{", values)
+        self.assertIn("owner = { has_variable = te_seabed_shared }", _block_from(values, m.end() - 1))
 
 
 if __name__ == "__main__":
