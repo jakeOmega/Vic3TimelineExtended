@@ -114,7 +114,6 @@
  te_diplomacy_tab_un_locked_tt:0 "#b $te_diplomacy_tab_un$#!\nNot open yet. It opens once:\n"
  te_diplomacy_tab_un_tt:0 "The General Assembly, your standing and the UN's authority, with every action the journal entry offers."
  te_diplomacy_un_open_journal_tt:0 "Opens $je_united_nations$ in the journal, which shows these same panels."
- te_diplomacy_un_tab_actions_header:0 "Actions"
  te_diplomacy_un_tab_status_header:0 "Status"
  te_diplomatic_relations_boost:0 "Diplomatic Goodwill"
  te_diplomatic_relations_drain:0 "Diplomatic Friction"

@@ -35,7 +35,7 @@ types un_authority_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_large
+		using = un_fontsize_row
 	}
 
 	### Smaller explanatory line under the headline.
@@ -45,7 +45,7 @@ types un_authority_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = un_fontsize_row
 		default_format = "#lore"
 	}
 
@@ -88,7 +88,7 @@ types un_authority_widget_types
 			multiline = yes
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = un_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -154,9 +154,8 @@ types un_authority_widget_types
 						text = "je_un_auth_sub_pillars"
 					}
 				}
-				un_auth_text = {
-					text = "je_un_auth_tbl_headline"
-				}
+				# No headline reading here: the overview's authority bar sits right
+				# above this section in both hosts (the 2026-10-27 audit, UN-17).
 
 				### participation: the bar spans the pillar's own range, zero at the centre line
 				### (un_overview_display_values.txt). Tooltip: what the pillar is,
@@ -173,7 +172,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_participation_label"
 					}
@@ -188,6 +187,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -230,7 +230,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_commitment_label"
 					}
@@ -245,6 +245,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -287,7 +288,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_credibility_label"
 					}
@@ -302,6 +303,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -344,7 +346,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_funding_label"
 					}
@@ -359,6 +361,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -401,7 +404,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_order_label"
 					}
@@ -416,6 +419,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -458,7 +462,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_delivery_label"
 					}
@@ -473,6 +477,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -515,7 +520,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_policy_label"
 					}
@@ -530,6 +535,7 @@ types un_authority_widget_types
 						}
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -571,7 +577,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_base_label"
 					}
@@ -579,6 +585,7 @@ types un_authority_widget_types
 						size = { 170 14 }
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -601,7 +608,7 @@ types un_authority_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						text = "je_un_auth_tbl_target_label"
 					}
@@ -609,6 +616,7 @@ types un_authority_widget_types
 						size = { 170 14 }
 					}
 					textbox = {
+						using = un_fontsize_row
 						minimumsize = { 50 -1 }
 						autoresize = yes
 						parentanchor = vcenter
@@ -626,13 +634,13 @@ types un_authority_widget_types
 					textbox = {
 						autoresize = yes
 						align = left|nobaseline
-						using = fontsize_large
+						using = un_fontsize_row
 						text = "je_un_auth_weight_label"
 					}
 					textbox = {
 						autoresize = yes
 						align = left|nobaseline
-						using = fontsize_large
+						using = un_fontsize_row
 						default_format = "#tooltippable"
 						tooltip = "je_un_auth_weight_tt"
 						text = "je_un_auth_weight_value"
@@ -694,6 +702,46 @@ types un_authority_widget_types
 			un_auth_text = {
 				text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
+			# Our own stance, centred under the groups it would put us in (the
+			# 2026-10-27 audit, UN-9: it was in the Actions grid). A great-power
+			# member sees Champion and Undermine, or the one that stops its
+			# stance; nobody else sees either.
+			un_act_row = {
+				blockoverride "act_row" {
+					un_act_control = {
+						blockoverride "act_context" {
+							datacontext = "[GetScriptedGui('un_act_champion_order_sgui')]"
+						}
+						blockoverride "act_label" {
+							text = "je_un_act_champion_label"
+						}
+					}
+					un_act_control = {
+						blockoverride "act_context" {
+							datacontext = "[GetScriptedGui('un_act_stop_championing_sgui')]"
+						}
+						blockoverride "act_label" {
+							text = "je_un_act_stop_championing_label"
+						}
+					}
+					un_act_control = {
+						blockoverride "act_context" {
+							datacontext = "[GetScriptedGui('un_act_undermine_order_sgui')]"
+						}
+						blockoverride "act_label" {
+							text = "je_un_act_undermine_label"
+						}
+					}
+					un_act_control = {
+						blockoverride "act_context" {
+							datacontext = "[GetScriptedGui('un_act_stop_undermining_sgui')]"
+						}
+						blockoverride "act_label" {
+							text = "je_un_act_stop_undermining_label"
+						}
+					}
+				}
+			}
 
 			# The ledger's display log: what each member did to the organisation,
 			# and what became of the Assembly's resolutions and missions. A
@@ -725,9 +773,6 @@ types un_authority_widget_types
 				ignoreinvisible = yes
 				visible = "[GetVariableSystem.Exists('un_auth_log_open')]"
 
-				un_auth_note_text = {
-					text = "je_un_auth_log_intro"
-				}
 				un_auth_text = {
 					text = "[GetScriptedGui('un_authority_log_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				}

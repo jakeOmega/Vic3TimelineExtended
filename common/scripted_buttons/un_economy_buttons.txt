@@ -10,6 +10,10 @@
 # un_economy_effects.txt). A pledge that stops qualifying lapses at the next
 # monthly update. The AI pledges through these buttons when it holds grain to
 # spare, and withdraws when a famine comes home (un_economy_values.txt).
+# Like un_buttons.txt's, both are the AI's (`is_ai = yes`, the 2026-10-27
+# audit's UN-9): a human pledges from the Food Reserve line in Our
+# Obligations, through scripted GUIs that mirror these word for word
+# (common/scripted_guis/un_action_sguis.txt, test_un_actions.py).
 # ============================================================================
 
 un_food_reserve_pledge_button = {
@@ -17,6 +21,7 @@ un_food_reserve_pledge_button = {
 	desc = "UN_FOOD_RESERVE_PLEDGE_DESC"
 
 	visible = {
+		is_ai = yes
 		has_global_variable = un_inst_food_reserve
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { has_variable = un_fr_pledged }
@@ -51,6 +56,7 @@ un_food_reserve_withdraw_button = {
 	desc = "UN_FOOD_RESERVE_WITHDRAW_DESC"
 
 	visible = {
+		is_ai = yes
 		has_variable = un_fr_pledged
 	}
 

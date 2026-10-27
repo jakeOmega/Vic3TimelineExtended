@@ -25,7 +25,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 |---|---|---|---|---|
 | Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 (19 done in the wave, 2 needed no more) | 14 | #1203 |
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | #1204 |
-| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | #1205 |
+| United Nations | [`un.md`](gui_audit/un.md) | 26 (25 done, UN-15 in part) | 18 | #1205 |
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
@@ -257,32 +257,32 @@ Top priorities: an overview of what needs us, and our own vote under the tally (
 
 | ID | Finding | Kind | Effort |
 |---|---|---|---|
-| UN-1 | The overview shows the UN's state, not ours: nothing says what needs a vote or an action | spread-out/redundant | large |
-| UN-2 | Our own ballot is hidden; the vote buttons sit below ~20 lines of card text | hidden info | medium |
-| UN-3 | The session card restates the strip above it: tally, passage rule and months, twice each (loc part done) | spread-out/redundant | quick |
-| UN-4 | "How the Assembly reads our position" is an open 11-line breakdown that also teaches the AI's vote rule | over-explaining | medium |
-| UN-5 | Each proposal title's hover is 280–510 words, about 240 of them identical on every topic | over-explaining | medium |
-| UN-6 | "If it carries" on the live card is the outcome event's prose paragraph, with a boilerplate credibility clause on every topic | over-explaining / style | medium |
-| UN-7 | The proposal list always shows all 34 topics at 3–5 lines each; the few that can be tabled are hard to find | list / spread-out | medium–large |
-| UN-8 | Our tabling cooldown is never shown; the list's intro teaches the rule instead | hidden info / over-explaining | quick–medium |
-| UN-9 | The Actions grid: actions far from their figures, and 17 buttons that duplicate the chamber for a human | spread-out/redundant | quick–large |
-| UN-10 | Programme and membership effects are prose, and `custom_tooltip` hides the engine's modifier lines | style | medium |
-| UN-11 | The standing tooltip shows the modifier's flavour text, not its effects | style | quick |
-| UN-12 | The UN's own core terms have no concept: International Standing, case strength, lean, docket | over-explaining / style | medium |
-| UN-13 | Our Obligations' budget line is a seven-figure sentence that repeats the Development Fund section | spread-out/redundant / list | medium |
-| UN-14 | Delegations: the same estimate caveat on all 24 rows, and the summary hidden by the collapse | over-explaining / hidden info / list | quick–large |
-| UN-15 | Missions: progress as a sentence, country-wide refusals on every row, contributors as indented names | list / style | medium–large |
-| UN-16 | The archive prints 5–7 lines per resolution, and detail mode repeats the ballot caveat on every row | list | quick–large |
-| UN-17 | The authority reading appears three times in a row, its tooltip adds nothing, and the target tick is the eye marker | spread-out/redundant / style | medium |
-| UN-18 | The font sizes are off the house ladder: rows at 20 or 14, buttons and overview labels at 12, three sizes inside one table | style | medium |
-| UN-19 | An overview label is always elided, another nearly so (loc part done) | hidden info | quick |
-| UN-20 | The entry's status text repeats the overview's subject in a section of its own; its reason text is a stale second "How it works" | spread-out/redundant / over-explaining | medium |
-| UN-21 | "Available to us" lines sit far from the button that acts on them; the vacant seat sends the player elsewhere | spread-out/redundant | quick |
-| UN-22 | Text sends players to "the chamber", which no longer exists as a place, and counts have drifted (loc part done) | style | quick |
-| UN-23 | Gate conditions are compound sentences, so one tick covers four conditions | list | medium |
-| UN-24 | Live sections still carry `#lore` explanations | over-explaining | quick |
-| UN-25 | The standing meter shows for countries that hold no standing | hidden info / other | quick |
-| UN-26 | How the UN Works restates concept descriptions (loc part done) | over-explaining | quick |
+| UN-1 | The overview shows the UN's state, not ours: nothing says what needs a vote or an action **Done.** | spread-out/redundant | large |
+| UN-2 | Our own ballot is hidden; the vote buttons sit below ~20 lines of card text **Done.** | hidden info | medium |
+| UN-3 | The session card restates the strip above it: tally, passage rule and months, twice each **Done.** | spread-out/redundant | quick |
+| UN-4 | "How the Assembly reads our position" is an open 11-line breakdown that also teaches the AI's vote rule **Done.** | over-explaining | medium |
+| UN-5 | Each proposal title's hover is 280–510 words, about 240 of them identical on every topic **Done.** | over-explaining | medium |
+| UN-6 | "If it carries" on the live card is the outcome event's prose paragraph, with a boilerplate credibility clause on every topic **Done.** | over-explaining / style | medium |
+| UN-7 | The proposal list always shows all 34 topics at 3–5 lines each; the few that can be tabled are hard to find **Done.** | list / spread-out | medium–large |
+| UN-8 | Our tabling cooldown is never shown; the list's intro teaches the rule instead **Done.** | hidden info / over-explaining | quick–medium |
+| UN-9 | The Actions grid: actions far from their figures, and 17 buttons that duplicate the chamber for a human **Done.** | spread-out/redundant | quick–large |
+| UN-10 | Programme and membership effects are prose, and `custom_tooltip` hides the engine's modifier lines **Done.** | style | medium |
+| UN-11 | The standing tooltip shows the modifier's flavour text, not its effects **Done.** | style | quick |
+| UN-12 | The UN's own core terms have no concept: International Standing, case strength, lean, docket **Done.** | over-explaining / style | medium |
+| UN-13 | Our Obligations' budget line is a seven-figure sentence that repeats the Development Fund section **Done.** | spread-out/redundant / list | medium |
+| UN-14 | Delegations: the same estimate caveat on all 24 rows, and the summary hidden by the collapse **Done.** | over-explaining / hidden info / list | quick–large |
+| UN-15 | Missions: progress as a sentence, country-wide refusals on every row, contributors as indented names **Partly done:** contributors as flag rows (datamodel) deferred. | list / style | medium–large |
+| UN-16 | The archive prints 5–7 lines per resolution, and detail mode repeats the ballot caveat on every row **Done.** | list | quick–large |
+| UN-17 | The authority reading appears three times in a row, its tooltip adds nothing, and the target tick is the eye marker **Done.** | spread-out/redundant / style | medium |
+| UN-18 | The font sizes are off the house ladder: rows at 20 or 14, buttons and overview labels at 12, three sizes inside one table **Done.** | style | medium |
+| UN-19 | An overview label is always elided, another nearly so **Done.** | hidden info | quick |
+| UN-20 | The entry's status text repeats the overview's subject in a section of its own; its reason text is a stale second "How it works" **Done.** | spread-out/redundant / over-explaining | medium |
+| UN-21 | "Available to us" lines sit far from the button that acts on them; the vacant seat sends the player elsewhere **Done.** | spread-out/redundant | quick |
+| UN-22 | Text sends players to "the chamber", which no longer exists as a place, and counts have drifted **Done.** | style | quick |
+| UN-23 | Gate conditions are compound sentences, so one tick covers four conditions **Done.** | list | medium |
+| UN-24 | Live sections still carry `#lore` explanations **Done.** | over-explaining | quick |
+| UN-25 | The standing meter shows for countries that hold no standing **Done.** | hidden info / other | quick |
+| UN-26 | How the UN Works restates concept descriptions **Done.** | over-explaining | quick |
 
 ### Cultural Hegemony and Covert Warfare ([detail](gui_audit/hegemony_covert.md), #1206)
 

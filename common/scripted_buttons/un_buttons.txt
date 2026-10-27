@@ -13,9 +13,16 @@
 # proposing from the journal entry and an AI proposing through the button grid
 # run identical script. Edit the shared file, never a copy.
 #
-# The buttons are deliberately NOT hidden for human players now that the chamber
-# can propose: they are the AI's only proposal path, and hiding a scripted
-# button from humans alone has no verified mechanism in this engine.
+# EVERY BUTTON HERE IS THE AI'S (the 2026-10-27 audit, UN-9; owner decision of
+# the same day). Each `visible` opens with `is_ai = yes`, Banking's proven way
+# to hide a journal entry's grid from a human while the AI still picks the
+# buttons through `ai_chance` (banking_alt_economy_buttons.txt, confirmed in
+# play 2026-09-18). A human acts from the panel instead: the chamber's Propose
+# rows for the proposals, and for every other button a scripted GUI of its own
+# in common/scripted_guis/un_action_sguis.txt, placed beside the figure it
+# acts on. Each of those mirrors its button's visible (without is_ai),
+# possible and effect word for word, and test_un_actions.py fails when the two
+# drift: edit both.
 #
 # The seventeen conventions (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
@@ -46,6 +53,7 @@ un_found_button = {
 	# instead (redesign phase 2, un_ladder_effects.txt): hidden while one sits,
 	# and greyed out until the refounding cooldown has run.
 	visible = {
+		is_ai = yes
 		NOT = { has_global_variable = un_founded }
 		NOT = { un_conference_in_session = yes }
 		has_technology_researched = intergovernmental_organizations
@@ -76,6 +84,14 @@ un_found_button = {
 	}
 
 	effect = {
+		# Cost: influence, fading over five years, for a founding and a
+		# founding conference alike. Outside the custom_tooltips below, so its
+		# modifier line shows (the 2026-10-27 audit, UN-10).
+		add_modifier = {
+			name = un_founding_cost_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		if = {
 			limit = { un_founding_is_refounding = yes }
 			custom_tooltip = {
@@ -86,12 +102,6 @@ un_found_button = {
 		else = {
 			custom_tooltip = {
 				text = "UN_FOUND_DESC"
-				# Cost: influence, fading over five years
-				add_modifier = {
-					name = un_founding_cost_modifier
-					days = normal_modifier_time
-					is_decaying = yes
-				}
 				# UN authority is a single GLOBAL value; born here at founding (50),
 				# then moving toward the equilibrium its members give it
 				# (un_authority_effects.txt). The founder becomes first member, HQ
@@ -118,6 +128,7 @@ un_join_button = {
 	# would hand it every convention in force, the ones the nation refused
 	# included.
 	visible = {
+		is_ai = yes
 		has_global_variable = un_founded
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		NOT = { has_variable = un_member_modifier_on }
@@ -141,6 +152,12 @@ un_join_button = {
 	}
 
 	effect = {
+		# What membership brings, as the modifier's own lines (UN-10): shown,
+		# not run, here, since un_join_organisation adds it to the journal
+		# entry; a second add would stack.
+		show_as_tooltip = {
+			add_modifier = { name = un_member_privileges_modifier }
+		}
 		custom_tooltip = {
 			text = "UN_JOIN_DESC"
 			# Membership and every convention already ratified
@@ -159,7 +176,7 @@ un_request_peacekeepers_button = {
 	name = "UN_REQUEST_PEACEKEEPERS"
 	desc = "UN_REQUEST_PEACEKEEPERS_DESC"
 
-	visible = { un_propose_peacekeepers_available = yes }
+	visible = { is_ai = yes un_propose_peacekeepers_available = yes }
 
 	possible = { un_propose_peacekeepers_possible = yes }
 
@@ -183,7 +200,7 @@ un_request_humanitarian_aid_button = {
 	name = "UN_REQUEST_AID"
 	desc = "UN_REQUEST_AID_DESC"
 
-	visible = { un_propose_aid_available = yes }
+	visible = { is_ai = yes un_propose_aid_available = yes }
 
 	possible = { un_propose_aid_possible = yes }
 
@@ -210,7 +227,7 @@ un_propose_condemn_button = {
 	name = "UN_PROPOSE_CONDEMN"
 	desc = "UN_PROPOSE_CONDEMN_DESC"
 
-	visible = { un_propose_condemn_available = yes }
+	visible = { is_ai = yes un_propose_condemn_available = yes }
 
 	possible = { un_propose_condemn_possible = yes }
 
@@ -228,6 +245,7 @@ un_leave_button = {
 	desc = "UN_LEAVE_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 	}
 
@@ -261,6 +279,7 @@ un_withhold_dues_button = {
 	# Our dues are our overlord's while our representation is suspended (§0.8); a member
 	# whose credentials the Assembly rejected (phase 7) still pays its own.
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_dues_self_assessed = yes
 		NOT = { un_dues_is_withholding = yes }
@@ -297,6 +316,7 @@ un_pay_dues_button = {
 	# whose credentials the Assembly rejected (phase 7) still pays its own;
 	# arrears from before wait until we are restored.
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		un_dues_self_assessed = yes
 		un_dues_is_withholding = yes
@@ -331,7 +351,7 @@ un_propose_expulsion_button = {
 	name = "UN_PROPOSE_EXPULSION"
 	desc = "UN_PROPOSE_EXPULSION_DESC"
 
-	visible = { un_propose_expulsion_available = yes }
+	visible = { is_ai = yes un_propose_expulsion_available = yes }
 
 	possible = { un_propose_expulsion_possible = yes }
 
@@ -392,7 +412,7 @@ un_propose_charter_reform_button = {
 	name = "UN_PROPOSE_CHARTER_REFORM"
 	desc = "UN_PROPOSE_CHARTER_REFORM_DESC"
 
-	visible = { un_propose_reform_available = yes }
+	visible = { is_ai = yes un_propose_reform_available = yes }
 
 	possible = { un_propose_reform_possible = yes }
 
@@ -454,7 +474,7 @@ un_propose_mandate_button = {
 	name = "UN_PROPOSE_MANDATE"
 	desc = "UN_PROPOSE_MANDATE_DESC"
 
-	visible = { un_propose_mandate_available = yes }
+	visible = { is_ai = yes un_propose_mandate_available = yes }
 
 	possible = { un_propose_mandate_possible = yes }
 
@@ -478,7 +498,7 @@ un_propose_sanctions_button = {
 	name = "UN_PROPOSE_SANCTIONS"
 	desc = "UN_PROPOSE_SANCTIONS_DESC"
 
-	visible = { un_propose_sanctions_available = yes }
+	visible = { is_ai = yes un_propose_sanctions_available = yes }
 
 	possible = { un_propose_sanctions_possible = yes }
 
@@ -505,6 +525,7 @@ un_lift_sanctions_button = {
 	desc = "UN_LIFT_SANCTIONS_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = un_sanctions_enforcer_modifier
 	}
 
@@ -518,86 +539,17 @@ un_lift_sanctions_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_LIFT_SANCTIONS_DESC"
-			remove_modifier = un_sanctions_enforcer_modifier
-			# Only the regime we enforce: two can run at once, under different
-			# enforcers, and each sanctioned country names its enforcer
-			# (un_sanctions_enforced_by, set by un_vote.2). An enforcer holds
-			# at most one regime (un_propose_sanctions_available). A regime
-			# nobody enforces any more is orphaned, and any enforcer's lift
-			# ends it too, as every lift used to: its enforcer left the UN
-			# (un_membership_end_effect drops the enforcer modifier), died, or
-			# won or lost a revolution (the winner inherits no modifiers), or
-			# the regime is from a save made before the target recorded its
-			# enforcer, so it names nobody. An orphan that names its enforcer
-			# also lapses by itself at the next monthly update
-			# (un_sanctions_regime_monthly_update, un_justice_effects.txt), and
-			# the Assembly can lift any regime on its target's petition
-			# (un_lift_sanctions_on_carried), which ends the regime the way
-			# un_sanctions_lift_regime does; that helper is not called here
-			# because gen_un_button_descs.py lists the effects in this block.
-			# Another live enforcer's regime is spared. The UN's record below
-			# names the country whose sanctions we lift: ours, else the orphan
-			# when there is only one; with
-			# several orphans and none of ours it books the entry with no
-			# subject, and the log prints the plain line. One booking either
-			# way: gen_un_button_descs.py prints a line for every booking it
-			# finds.
-			if = {
-				limit = {
-					any_country = {
-						has_modifier = un_sanctions_target_modifier
-						var:un_sanctions_enforced_by ?= ROOT
-					}
-				}
-				random_country = {
-					limit = {
-						has_modifier = un_sanctions_target_modifier
-						var:un_sanctions_enforced_by ?= ROOT
-					}
-					save_scope_as = un_sanctions_lifted_target
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						any_country = {
-							count >= 2
-							has_modifier = un_sanctions_target_modifier
-							NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
-						}
-					}
-				}
-				random_country = {
-					limit = {
-						has_modifier = un_sanctions_target_modifier
-						NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
-					}
-					save_scope_as = un_sanctions_lifted_target
-				}
-			}
-			every_country = {
-				limit = {
-					has_modifier = un_sanctions_target_modifier
-					OR = {
-						var:un_sanctions_enforced_by ?= ROOT
-						NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
-					}
-				}
-				remove_modifier = un_sanctions_target_modifier
-				if = {
-					limit = { has_variable = un_sanctions_enforced_by }
-					remove_variable = un_sanctions_enforced_by
-				}
-				if = {
-					limit = { has_variable = un_sanctions_months }
-					remove_variable = un_sanctions_months
-				}
-				# The embargoes the Assembly imposed go with the regime
-				# (redesign phase 5, un_teeth_effects.txt).
-				un_teeth_lift_embargoes = yes
-			}
+		custom_tooltip = UN_LIFT_SANCTIONS_DESC
+		# Our own enforcer modifier, as its own line (UN-10); the regimes'
+		# end and the UN's record, in words in UN_LIFT_SANCTIONS_DESC above
+		# (whose ledger line gen_un_button_descs.py writes from the call
+		# below).
+		remove_modifier = un_sanctions_enforcer_modifier
+		hidden_effect = {
+			# The regime we enforce, and any nobody enforces any more
+			# (un_justice_effects.txt). It saves scope:un_sanctions_lifted_target
+			# for the record below.
+			un_sanctions_lift_ours = yes
 			# Walking away from a regime the Assembly imposed costs its credibility,
 			# weighted by the enforcer's weight in world affairs.
 			un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 7 SUBJECT = scope:un_sanctions_lifted_target }
@@ -612,6 +564,7 @@ un_peacekeeping_mission_button = {
 	desc = "UN_PEACEKEEPING_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 	}
@@ -639,15 +592,13 @@ un_peacekeeping_mission_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_PEACEKEEPING_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
-			un_state_record = { MODIFIER = un_peacekeeping_contributor_modifier }
-			add_modifier = {
-				name = un_peacekeeping_cooldown
-				days = long_modifier_time
-				is_decaying = yes
-			}
+		custom_tooltip = UN_PEACEKEEPING_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+		un_state_record = { MODIFIER = un_peacekeeping_contributor_modifier }
+		add_modifier = {
+			name = un_peacekeeping_cooldown
+			days = long_modifier_time
+			is_decaying = yes
 		}
 		# Cache expense in country scope; JE scope can't read gdp directly
 		# (the modifier multiplier is re-evaluated continuously and would
@@ -666,6 +617,7 @@ un_end_peacekeeping_button = {
 	desc = "UN_END_PEACEKEEPING_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 	}
 
@@ -683,13 +635,11 @@ un_end_peacekeeping_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_END_PEACEKEEPING_DESC"
-			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
-			un_state_forget = { MODIFIER = un_peacekeeping_contributor_modifier }
-			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-			un_state_forget = { MODIFIER = un_peacekeeping_contributor_cost }
-		}
+		custom_tooltip = UN_END_PEACEKEEPING_DESC
+		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+		un_state_forget = { MODIFIER = un_peacekeeping_contributor_modifier }
+		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
+		un_state_forget = { MODIFIER = un_peacekeeping_contributor_cost }
 	}
 }
 
@@ -716,6 +666,7 @@ un_fund_development_button = {
 	desc = "UN_FUND_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
@@ -778,6 +729,7 @@ un_raise_development_button = {
 	desc = "UN_RAISE_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 		un_dev_fund_size_stored < un_dev_fund_size_max
 	}
@@ -807,6 +759,7 @@ un_reduce_development_button = {
 	desc = "UN_REDUCE_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 		un_dev_fund_size_stored > 1
 	}
@@ -832,6 +785,7 @@ un_defund_development_button = {
 	desc = "UN_DEFUND_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
 	}
 
@@ -862,6 +816,7 @@ un_human_rights_resolution_button = {
 	desc = "UN_HUMAN_RIGHTS_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
 	}
@@ -900,11 +855,9 @@ un_human_rights_resolution_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_HUMAN_RIGHTS_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
-			un_state_record = { MODIFIER = un_human_rights_champion_modifier }
-		}
+		custom_tooltip = UN_HUMAN_RIGHTS_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
+		un_state_record = { MODIFIER = un_human_rights_champion_modifier }
 	}
 }
 
@@ -913,6 +866,7 @@ un_withdraw_human_rights_button = {
 	desc = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
 	}
 
@@ -930,11 +884,9 @@ un_withdraw_human_rights_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
-			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-			un_state_forget = { MODIFIER = un_human_rights_champion_modifier }
-		}
+		custom_tooltip = UN_WITHDRAW_HUMAN_RIGHTS_DESC
+		je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
+		un_state_forget = { MODIFIER = un_human_rights_champion_modifier }
 	}
 }
 
@@ -945,6 +897,7 @@ un_arms_control_button = {
 	desc = "UN_ARMS_CONTROL_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
 	}
@@ -991,11 +944,9 @@ un_arms_control_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_ARMS_CONTROL_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
-			un_state_record = { MODIFIER = un_arms_control_participant_modifier }
-		}
+		custom_tooltip = UN_ARMS_CONTROL_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
+		un_state_record = { MODIFIER = un_arms_control_participant_modifier }
 	}
 }
 
@@ -1004,6 +955,7 @@ un_withdraw_arms_control_button = {
 	desc = "UN_WITHDRAW_ARMS_CONTROL_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
 	}
 
@@ -1020,11 +972,9 @@ un_withdraw_arms_control_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_WITHDRAW_ARMS_CONTROL_DESC"
-			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-			un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
-		}
+		custom_tooltip = UN_WITHDRAW_ARMS_CONTROL_DESC
+		je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
+		un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
 	}
 }
 
@@ -1040,6 +990,7 @@ un_champion_order_button = {
 	desc = "UN_CHAMPION_ORDER_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
@@ -1068,11 +1019,9 @@ un_champion_order_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_CHAMPION_ORDER_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_champion_order_cost } }
-			un_state_record = { MODIFIER = un_champion_order_cost }
-		}
+		custom_tooltip = UN_CHAMPION_ORDER_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_champion_order_cost } }
+		un_state_record = { MODIFIER = un_champion_order_cost }
 	}
 }
 
@@ -1081,6 +1030,7 @@ un_stop_championing_button = {
 	desc = "UN_STOP_CHAMPIONING_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_champion_order_cost }
 	}
 
@@ -1094,11 +1044,9 @@ un_stop_championing_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_STOP_CHAMPIONING_DESC"
-			je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
-			un_state_forget = { MODIFIER = un_champion_order_cost }
-		}
+		custom_tooltip = UN_STOP_CHAMPIONING_DESC
+		je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
+		un_state_forget = { MODIFIER = un_champion_order_cost }
 	}
 }
 
@@ -1107,6 +1055,7 @@ un_undermine_order_button = {
 	desc = "UN_UNDERMINE_ORDER_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
@@ -1135,11 +1084,9 @@ un_undermine_order_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_UNDERMINE_ORDER_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_undermine_order_cost } }
-			un_state_record = { MODIFIER = un_undermine_order_cost }
-		}
+		custom_tooltip = UN_UNDERMINE_ORDER_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_undermine_order_cost } }
+		un_state_record = { MODIFIER = un_undermine_order_cost }
 	}
 }
 
@@ -1148,6 +1095,7 @@ un_stop_undermining_button = {
 	desc = "UN_STOP_UNDERMINING_DESC"
 
 	visible = {
+		is_ai = yes
 		je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
 	}
 
@@ -1161,11 +1109,9 @@ un_stop_undermining_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_STOP_UNDERMINING_DESC"
-			je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
-			un_state_forget = { MODIFIER = un_undermine_order_cost }
-		}
+		custom_tooltip = UN_STOP_UNDERMINING_DESC
+		je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+		un_state_forget = { MODIFIER = un_undermine_order_cost }
 	}
 }
 
@@ -1188,7 +1134,7 @@ un_propose_court_referral_button = {
 	name = "UN_PROPOSE_COURT_REFERRAL"
 	desc = "UN_PROPOSE_COURT_REFERRAL_DESC"
 
-	visible = { un_propose_court_referral_available = yes }
+	visible = { is_ai = yes un_propose_court_referral_available = yes }
 
 	possible = { un_propose_court_referral_possible = yes }
 
@@ -1203,7 +1149,7 @@ un_propose_arms_embargo_button = {
 	name = "UN_PROPOSE_ARMS_EMBARGO"
 	desc = "UN_PROPOSE_ARMS_EMBARGO_DESC"
 
-	visible = { un_propose_arms_embargo_available = yes }
+	visible = { is_ai = yes un_propose_arms_embargo_available = yes }
 
 	possible = { un_propose_arms_embargo_possible = yes }
 
@@ -1218,7 +1164,7 @@ un_propose_credentials_button = {
 	name = "UN_PROPOSE_CREDENTIALS"
 	desc = "UN_PROPOSE_CREDENTIALS_DESC"
 
-	visible = { un_propose_credentials_available = yes }
+	visible = { is_ai = yes un_propose_credentials_available = yes }
 
 	possible = { un_propose_credentials_possible = yes }
 
@@ -1233,7 +1179,7 @@ un_propose_standing_force_button = {
 	name = "UN_PROPOSE_STANDING_FORCE"
 	desc = "UN_PROPOSE_STANDING_FORCE_DESC"
 
-	visible = { un_propose_standing_force_available = yes }
+	visible = { is_ai = yes un_propose_standing_force_available = yes }
 
 	possible = { un_propose_standing_force_possible = yes }
 
@@ -1248,7 +1194,7 @@ un_propose_observer_request_button = {
 	name = "UN_PROPOSE_OBSERVER_REQUEST"
 	desc = "UN_PROPOSE_OBSERVER_REQUEST_DESC"
 
-	visible = { un_propose_observer_request_available = yes }
+	visible = { is_ai = yes un_propose_observer_request_available = yes }
 
 	possible = { un_propose_observer_request_possible = yes }
 
@@ -1263,7 +1209,7 @@ un_propose_food_reserve_button = {
 	name = "UN_PROPOSE_FOOD_RESERVE"
 	desc = "UN_PROPOSE_FOOD_RESERVE_DESC"
 
-	visible = { un_propose_food_reserve_available = yes }
+	visible = { is_ai = yes un_propose_food_reserve_available = yes }
 
 	possible = { un_propose_food_reserve_possible = yes }
 
@@ -1279,6 +1225,7 @@ un_propose_ceasefire_button = {
 	desc = "UN_PROPOSE_CEASEFIRE_DESC"
 
 	visible = {
+		is_ai = yes
 		un_charter_reform_ii_in_view = yes
 		un_propose_ceasefire_available = yes
 	}
@@ -1296,7 +1243,7 @@ un_propose_development_fund_button = {
 	name = "UN_PROPOSE_DEVELOPMENT_FUND"
 	desc = "UN_PROPOSE_DEVELOPMENT_FUND_DESC"
 
-	visible = { un_propose_development_fund_available = yes }
+	visible = { is_ai = yes un_propose_development_fund_available = yes }
 
 	possible = { un_propose_development_fund_possible = yes }
 
@@ -1312,6 +1259,7 @@ un_propose_referendum_button = {
 	desc = "UN_PROPOSE_REFERENDUM_DESC"
 
 	visible = {
+		is_ai = yes
 		un_charter_reform_ii_in_view = yes
 		un_propose_referendum_available = yes
 	}
@@ -1331,7 +1279,7 @@ un_propose_lift_sanctions_button = {
 	name = "UN_PROPOSE_LIFT_SANCTIONS"
 	desc = "UN_PROPOSE_LIFT_SANCTIONS_DESC"
 
-	visible = { un_propose_lift_sanctions_available = yes }
+	visible = { is_ai = yes un_propose_lift_sanctions_available = yes }
 
 	possible = { un_propose_lift_sanctions_possible = yes }
 

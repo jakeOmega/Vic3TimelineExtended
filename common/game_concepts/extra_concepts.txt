@@ -117,6 +117,14 @@ concept_un_mission_peacekeeping = {}
 concept_un_mission_aid = {}
 concept_un_mission_stabilisation = {}
 concept_un_suspended_representation = {}
+# The UN's own terms (the 2026-10-27 GUI audit, UN-5 and UN-12): what a
+# resolution brings every proposer and member, a member's standing, the case
+# against a country, a member's lean on the vote, and the docket.
+concept_un_resolution = {}
+concept_un_standing = {}
+concept_un_case = {}
+concept_un_lean = {}
+concept_un_docket = {}
 concept_heir_education_system = {}
 concept_sol_expectations = {}
 concept_world_war_system = {}
