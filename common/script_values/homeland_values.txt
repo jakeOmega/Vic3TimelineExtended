@@ -151,10 +151,6 @@ te_homeland_project_progress_pct = {
 	min = 0
 	max = 100
 }
-te_homeland_monthly_points = {
-	value = te_homeland_annual_progress
-	divide = 12
-}
 
 te_homeland_project_eligible = {
 	value = 0
@@ -175,8 +171,4 @@ te_homeland_removal_annual_progress = {
 		add = modifier:state_homeland_removal_speed_mult
 		min = 0.1
 	}
-}
-te_homeland_removal_monthly_points = {
-	value = te_homeland_removal_annual_progress
-	divide = 12
 }

@@ -245,7 +245,7 @@
  CNR_REQ_NAME_CHOSEN_TT:0 "A name chosen"
  CNR_REQ_NAME_ROOM_TT:0 "No name chosen yet"
  CNR_REQ_ONE_ECONOMY_TT:0 "No other economic ideology chosen"
- CNR_REQ_ONE_GOVERNANCE_TT:0 "No other ideology of government chosen"
+ CNR_REQ_ONE_GOVERNANCE_TT:0 "No other governance ideology chosen"
  CNR_REQ_ONE_HAPPY_TT:0 "No other happy trait chosen"
  CNR_REQ_ONE_LOYAL_TT:0 "No other loyal trait chosen"
  CNR_REQ_ONE_OUTLOOK_TT:0 "No other outlook chosen"

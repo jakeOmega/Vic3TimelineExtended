@@ -166,7 +166,7 @@
  je_civil_rights_win_3:0 "$cr_btn_ending_grassroots$"
  je_civil_rights_win_4:0 "$cr_btn_ending_gradualist$"
  je_civil_rights_win_5:0 "$cr_btn_ending_coopted$"
- je_civil_rights_win_6:0 "#b A New Era of Equality#!, no policy having run over #v 18#! months"
+ je_civil_rights_win_6:0 "#b A New Era of Equality#!, no pro-movement or cooptation policy having run over #v 18#! months"
  je_colonial_empire:0 "Colonial Empire"
  je_colonial_empire_band_at_cap:0 "#G the cap#!"
  je_colonial_empire_band_collapsing:0 "#R Collapsing#!"
