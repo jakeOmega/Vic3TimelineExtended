@@ -1667,7 +1667,10 @@ types "production_method_items" {
 		}
 
 		block "tooltip" {
-			tooltip = "[Goods.GetTaxDesc(GetMetaPlayer.GetPlayedOrObservedCountry)]"
+			### MOD: Tax Code: a greyed toggle says the tax code sets the taxed goods (GUI audit TAX-11).
+			# vanilla: tooltip = "[Goods.GetTaxDesc(GetMetaPlayer.GetPlayedOrObservedCountry)]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_goods' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), Goods.GetTaxDesc(GetMetaPlayer.GetPlayedOrObservedCountry)  ) )]"
+			### END MOD ###
 		}
 
 		block "enabled" {

@@ -264,11 +264,12 @@ concept_contested_monument = {}
 concept_heritage_monument = {}
 
 # Legislated Tax Code (the Budget panel's Tax Code tab and je_tax_code; plan
-# Task 7): the code itself, a bill to change it and the day a passed bill
-# takes effect.
+# Task 7): the code itself, a bill to change it, the day a passed bill
+# takes effect, and the revenue estimates' assumptions (GUI audit TAX-19).
 concept_tax_code = {}
 concept_tax_bill = {}
 concept_tax_commencement = {}
+concept_tax_static_estimate = {}
 
 # Subjugate (force_become_subject): the score its possible clause gates on
 # (script value te_subjugation_strength). The action's tooltip breaks it down.

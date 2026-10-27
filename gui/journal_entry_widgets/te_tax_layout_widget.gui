@@ -23,13 +23,15 @@
 
 types te_tax_layout_widget_types
 {
-	### The live sections, open by default: the code in force; the draft (or
-	### Draft a Reform) and its summary; the review of the draft (collapsed
-	### until opened); the bill under debate; the passed bills waiting to take
-	### effect; the promises made to pass them (plan Task 12). Each hides
-	### itself when its record is closed. The summary sits
-	### in the "draft_summary" block so the Budget tab, which draws it in its
-	### fixed_bottom, can leave this copy out.
+	### The live sections, open by default, the ones to watch first and the
+	### editor last (GUI audit TAX-14; the owner, 2026-10-27): the bill under
+	### debate; the passed bills waiting to take effect; the promises made to
+	### pass them (plan Task 12); the code in force; the draft (or Draft a
+	### Reform) and its summary; the review of the draft (collapsed until
+	### opened). Each monitoring section hides itself when its record is
+	### closed, so a quiet code still opens on the Enacted Code. The summary
+	### sits in the "draft_summary" block so the Budget tab, which draws it in
+	### its fixed_bottom, can leave this copy out.
 	type te_tax_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -45,15 +47,15 @@ types te_tax_layout_widget_types
 			ignoreinvisible = yes
 			spacing = 4
 
+			te_tax_politics_section = {}
+			te_tax_pending_section = {}
+			te_tax_obligations_section = {}
 			te_tax_enacted_table = {}
 			te_tax_workbench_section = {}
 			block "draft_summary" {
 				te_tax_draft_summary = {}
 			}
 			te_tax_review_section = {}
-			te_tax_politics_section = {}
-			te_tax_pending_section = {}
-			te_tax_obligations_section = {}
 		}
 		# The light code's rates (te_tax_light_widget.gui; it gates itself).
 		te_tax_light_section = {}
@@ -244,6 +246,7 @@ flowcontainer = {
 	# which opens Budget and leaves the player to click the tab.
 	button = {
 		using = default_button
+		using = te_tax_fontsize_row
 		parentanchor = hcenter
 		size = { 480 32 }
 		text = "te_tax_open_budget"

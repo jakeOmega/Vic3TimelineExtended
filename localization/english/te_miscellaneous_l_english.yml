@@ -2161,6 +2161,7 @@
  concept_st_res_policy:0 "Reserve Policy"
  concept_st_res_rate_setting:0 "Rate Setting"
  concept_state_collapse_system:0 "State Collapse"
+ concept_tax_static_estimate:0 "Static Estimate"
  concept_te_construction_market:0 "Construction Market"
  concept_tourism_base_appeal:0 "Base Appeal"
  concept_un_arms_embargo:0 "UN Arms Embargo"

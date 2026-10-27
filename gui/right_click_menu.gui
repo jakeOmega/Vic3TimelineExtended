@@ -13187,7 +13187,7 @@ right_click_menu = {
 				### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui) ###
 				enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
 				onclick = "[Execute( Goods.ToggleTaxation(GetPlayer) )]"
-				tooltip = "[Goods.GetTaxDesc(GetPlayer)]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_goods' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), Goods.GetTaxDesc(GetPlayer)  ) )]"
 				visible = "[Not(Goods.IsTaxed(GetPlayer))]"
 			}
 
@@ -13205,7 +13205,7 @@ right_click_menu = {
 				### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui) ###
 				enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
 				onclick = "[Execute( Goods.ToggleTaxation(GetPlayer) )]"
-				tooltip = "[Goods.GetTaxDesc(GetPlayer)]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_goods' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), Goods.GetTaxDesc(GetPlayer)  ) )]"
 				visible = "[Goods.IsTaxed(GetPlayer)]"
 			}
 
@@ -13303,7 +13303,7 @@ right_click_menu = {
 				### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui) ###
 				enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
 				onclick = "[Execute( Goods.ToggleTaxation(GetPlayer) )]"
-				tooltip = "[Goods.GetTaxDesc(GetPlayer)]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_goods' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), Goods.GetTaxDesc(GetPlayer)  ) )]"
 				visible = "[Not(Goods.IsTaxed(GetPlayer))]"
 			}
 
@@ -13366,7 +13366,7 @@ right_click_menu = {
 				### MOD: Tax Code: greyed while the legislated tax code sets the taxed goods (te_tax_native_goods_controls_sgui) ###
 				enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), IsValid( Goods.ToggleTaxation(GetPlayer) ) )]"
 				onclick = "[Execute( Goods.ToggleTaxation(GetPlayer) )]"
-				tooltip = "[Goods.GetTaxDesc(GetPlayer)]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_goods' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), Goods.GetTaxDesc(GetPlayer)  ) )]"
 				visible = "[Goods.IsTaxed(GetPlayer)]"
 			}
 

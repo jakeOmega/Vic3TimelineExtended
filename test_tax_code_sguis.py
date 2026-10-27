@@ -403,7 +403,13 @@ class GoodsRowsTest(unittest.TestCase):
         workbench_rows = type_body(self.rows, "te_tax_wb_goods_rows")
         review_rows = type_body(self.rows, "te_tax_rv_goods_rows")
         catalog = gen.consumption_catalog()
-        self.assertEqual(re.findall(r"te_tax_good_(\w+)_sgui", workbench_rows), list(catalog))
+        # By category, staples first (GUI audit TAX-13), each good once.
+        grouped = [good for goods in gen.catalog_by_category().values() for good in goods]
+        self.assertEqual(sorted(grouped), sorted(catalog))
+        self.assertEqual(re.findall(r"te_tax_good_(\w+)_sgui", workbench_rows), grouped)
+        self.assertEqual(re.findall(r'te_tax_wb_goods_heading = \{ text = "te_tax_wb_cu_cat_(\w+)" \}', workbench_rows),
+                         list(gen.catalog_by_category()))
+        self.assertEqual(list(gen.catalog_by_category()["staple"]), list(gen.staple_order()))
         for good in catalog:
             with self.subTest(good=good):
                 self.assertIn(f"datacontext = \"[GetScriptedGui('te_tax_good_{good}_sgui')]\"", workbench_rows)
@@ -523,8 +529,10 @@ class SuccessorPreviewTest(unittest.TestCase):
                     self.assertIn(f"SelectLocalization( EqualTo_CFixedPoint( {state}, '(CFixedPoint)2' ), "
                                   f"'te_tax_pk_{slot}_{key}_conflict', SelectLocalization( EqualTo_CFixedPoint( "
                                   f"{state}, '(CFixedPoint)3' ), 'te_tax_pk_{slot}_{key}_missed', ", review)
-                    self.assertIn("held: conflict, will not commence; release it",
+                    # One verb (takes effect) and the button's own word (Drop; GUI audit TAX-16).
+                    self.assertIn("held: conflict, will not take effect; drop it",
                                   table[f"te_tax_pk_{slot}_{key}_conflict"])
+                    self.assertEqual(table["te_tax_pk_release"], "Drop")
                     self.assertIn("held: missed", table[f"te_tax_pk_{slot}_{key}_missed"])
 
     def test_review_says_then_reverts_and_collections_wait(self):
@@ -534,8 +542,11 @@ class SuccessorPreviewTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertIn(f"te_tax_view_dr_{key}_succ_rate", table[f"te_tax_rv_bill_sun_{key}"])
                 self.assertIn("then reverts to", table[f"te_tax_rv_bill_sun_{key}"])
-        self.assertEqual(table["te_tax_rv_unchanged"], "Present collections remain unchanged until commencement.")
-        self.assertIn('text = "te_tax_rv_unchanged"', gui(REVIEW))
+        # The review no longer opens on "Present collections remain unchanged until
+        # commencement" (GUI audit TAX-17): How it works and With This Bill's hover say it.
+        self.assertNotIn("te_tax_rv_unchanged", table)
+        self.assertNotIn("te_tax_rv_unchanged", gui(REVIEW))
+        self.assertIn("from its commencement month", table["te_tax_rv_bill_tt"])
 
 
 if __name__ == "__main__":

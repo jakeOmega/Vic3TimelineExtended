@@ -3,12 +3,14 @@
 ### roots in te_tax_layout_widget.gui, and the Budget panel's Tax Code tab
 ### (gui/budget_panel.gui, tab te_tax_code), through the composers there.
 ###
-###   te_tax_overview_panel   always shown: the code and its version, the last
-###                           and next change, the economy snapshot's month,
-###                           and what is in progress (the draft, the bill
-###                           under debate, passed bills, promises)
+###   te_tax_overview_panel   always shown: what needs the player in each
+###                           process, as Banking's cells (te_banking_ov_cell,
+###                           GUI audit TAX-1): the code and its next change, the
+###                           draft, the bill under debate, the passed bills and
+###                           the promises
 ###   te_tax_enacted_table    open: one row per tax with its rate and any
-###                           expiry, the taxed goods, the two reliefs
+###                           expiry, the taxed goods as icons, the two reliefs
+###                           and the states regional relief names
 ###   te_tax_history_section  collapsed: the last eight entries of the
 ###                           history ring, newest first
 ###
@@ -30,6 +32,26 @@
 ### * Collapse flags say their default: *_closed sections are open until
 ###   closed, *_open ones collapsed until opened (style guide rule 7).
 ### * Every row is 480 wide, in fixed-width cells, inside a 520 panel.
+### * TYPE SIZES (style guide rule 3; GUI audit TAX-15): rows, values,
+###   buttons and notes at 17, subheadings at 20, the overview at 16, each
+###   through the te_tax_fontsize_* templates below, which every Tax Code file
+###   uses. Cells are budgeted at 0.5 GUI units a point a character for the
+###   serif (8.5 at 17) and 8.6 for the overview's 16-point tooltip face, plus
+###   10% (test_tax_code_layout.WidthBudgetTest holds every fixed cell to its
+###   longest text).
+
+template te_tax_fontsize_row {
+	fontsize = 17
+}
+
+template te_tax_fontsize_heading {
+	fontsize = 20
+}
+
+template te_tax_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
 
 types te_tax_overview_widget_types
 {
@@ -71,7 +93,7 @@ types te_tax_overview_widget_types
 			multiline = yes
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = te_tax_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -89,7 +111,7 @@ types te_tax_overview_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = te_tax_fontsize_row
 		default_format = "#lore"
 	}
 
@@ -100,13 +122,12 @@ types te_tax_overview_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = te_tax_fontsize_row
 	}
 
 	### A table row: a label on the left, its value on the right; each cell
 	### carries its own hover. 4 + 190 + 282 + 4 = 480 (the margin counts on both
-	### sides): the label holds about 20 characters of the medium font, the value
-	### about 29.
+	### sides): the label holds 20 characters at 17, the value 30.
 	type te_tax_value_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -117,7 +138,7 @@ types te_tax_overview_widget_types
 			maximumsize = { 190 -1 }
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			elide = right
 			default_format = "#tooltippable"
 			block "row_label" {}
@@ -127,18 +148,19 @@ types te_tax_overview_widget_types
 			maximumsize = { 282 -1 }
 			autoresize = yes
 			align = right|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			elide = right
 			block "row_value" {}
 		}
 	}
 
-	### A tax: its name, the enacted rate, and where it has one, its expiry
-	### ("→ 15% from 1840.1"). 4 + 170 + 8 + 80 + 8 + 206 + 4 = 480. The rate
-	### is at most "@money!1.50" or "12.5%"; the expiry is the widest cell, as an
-	### amount tax's carries the money icon too ("→ @money!0.43 from 1842.12").
-	### The expiry cell is gated by the instance; the two cells before it keep
-	### their columns either way.
+	### A tax: its name, the enacted rate (since when it holds, on hover; GUI
+	### audit TAX-20), and where it has one, its expiry ("→ 15% from 1840.1").
+	### 4 + 170 + 8 + 80 + 8 + 206 + 4 = 480. The rate is at most "@money!1.500"
+	### or "12.5%"; the expiry is the widest cell, as an amount tax's carries
+	### the money icon too ("→ @money!0.425 from 1842.12"). The expiry cell is
+	### gated by the instance; the two cells before it keep their columns either
+	### way.
 	type te_tax_rate_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -150,7 +172,7 @@ types te_tax_overview_widget_types
 			maximumsize = { 170 -1 }
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			elide = right
 			default_format = "#tooltippable"
 			block "row_label" {}
@@ -160,7 +182,8 @@ types te_tax_overview_widget_types
 			maximumsize = { 80 -1 }
 			autoresize = yes
 			align = right|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
+			default_format = "#tooltippable"
 			block "row_rate" {}
 		}
 		textbox = {
@@ -168,7 +191,7 @@ types te_tax_overview_widget_types
 			maximumsize = { 206 -1 }
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			elide = right
 			default_format = "#tooltippable"
 			tooltip = "te_tax_en_sunset_tt"
@@ -176,7 +199,9 @@ types te_tax_overview_widget_types
 		}
 	}
 
-	### One history entry: its month, then what happened. 4 + 80 + 392 + 4 = 480.
+	### One history entry: its month, what happened, and for an entry that
+	### changed the code the version it made (GUI audit TAX-21).
+	### 4 + 80 + 336 + 56 + 4 = 480.
 	type te_tax_history_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -187,27 +212,84 @@ types te_tax_overview_widget_types
 			maximumsize = { 80 -1 }
 			autoresize = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			block "row_date" {}
 		}
 		textbox = {
-			minimumsize = { 392 -1 }
-			maximumsize = { 392 -1 }
+			minimumsize = { 336 -1 }
+			maximumsize = { 336 -1 }
 			autoresize = yes
 			multiline = yes
 			align = left|nobaseline
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 			block "row_event" {}
+		}
+		textbox = {
+			minimumsize = { 56 -1 }
+			maximumsize = { 56 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = te_tax_fontsize_row
+			elide = right
+			default_format = "#tooltippable"
+			tooltip = "te_tax_hist_version_tt"
+			block "row_version" {}
 		}
 	}
 
+	### A good's icon, its name on hover: the enacted code's taxed goods and a
+	### passed bill's (the generated te_tax_en_goods_icons and
+	### te_tax_pk_goods_icons_<slot>, GUI audit TAX-12) and the goods catalog's
+	### rows (TAX-13).
+	type te_tax_good_icon = icon {
+		size = { 26 26 }
+		parentanchor = vcenter
+	}
+
+	### The label before a passed bill's goods icons ("Taxes", "Exempts").
+	type te_tax_goods_icons_label = textbox {
+		minimumsize = { 80 -1 }
+		maximumsize = { 80 -1 }
+		autoresize = yes
+		align = left|nobaseline
+		using = te_tax_fontsize_row
+		elide = right
+	}
+
+	### The overview cells' second and third lines (te_banking_ov_cell's word
+	### and figure, in this panel's overview size): the 154 column beside the
+	### icon, which test_tax_code_layout holds every word and figure to.
+	type te_tax_ov_word = textbox {
+		position = { 78 24 }
+		autoresize = yes
+		max_width = 154
+		elide = right
+		align = left|nobaseline
+		using = te_tax_fontsize_overview
+	}
+
+	type te_tax_ov_fig = textbox {
+		position = { 78 46 }
+		autoresize = yes
+		max_width = 154
+		elide = right
+		align = left|nobaseline
+		using = te_tax_fontsize_overview
+	}
+
 	### ======================================================================
-	### OVERVIEW, always shown (style guide rule 1)
+	### OVERVIEW, always shown (style guide rule 1; GUI audit TAX-1)
 	### ======================================================================
-	### The code and its version as the header line; then the last and next
-	### change; then one row for each thing in progress, or one "None" row.
-	### A row a state does not need is hidden (a flowcontainer collapses it);
-	### the 480 column keeps the rest in place.
+	### What needs the player in each process, as Banking's cells
+	### (te_banking_ov_cell, banking_dashboard_widget.gui: an icon, a caption,
+	### a status word that turns red when action is due, one figure, the
+	### breakdown on hover; style guide rule 4), two to a row: 238 + 4 + 238 =
+	### 480. The words and figures are this panel's (te_tax_ov_word,
+	### te_tax_ov_fig). The code and the draft always; the bill and the passed
+	### bills while either is open; the promises while one is made. A cell
+	### whose process is idle and one at work are separate cells with their own
+	### hovers, one of them shown. The icons are placeholders
+	### (docs/systems/tax_code_schema.md, "Panels").
 	type te_tax_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -218,131 +300,287 @@ types te_tax_overview_widget_types
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
-				spacing = 2
+				spacing = 4
 				minimumsize = { 480 -1 }
 
-				textbox = {
-					autoresize = yes
-					minimumsize = { 480 -1 }
-					maximumsize = { 480 -1 }
-					align = hcenter|nobaseline
-					using = fontsize_large
-					default_format = "#title"
-					text = "[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_ov_title', 'te_tax_ov_title' )]"
-					tooltip = "[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_ov_title_tt', 'te_tax_ov_title_tt' )]"
-				}
-				divider_clean = {
-					blockoverride "size" {
-						size = { 480 2 }
-					}
-				}
-
-				# The legislated code's rows; the light code's instead under the light
+				# The legislated code's cells; the light code's instead under the light
 				# setting (te_tax_light_widget.gui).
 				flowcontainer = {
 					visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					direction = vertical
 					ignoreinvisible = yes
-					spacing = 2
+					spacing = 4
 
-					te_tax_value_row = {
-						visible = "[GetScriptedGui('te_tax_show_last_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_last_change"
-							tooltip = "te_tax_ov_last_change_tt"
+					### Row 1: the code and the draft.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						# The code: its version, and when it next changes; what that change is, the
+						# last change and the economy snapshot on hover (TAX-18).
+						te_banking_ov_cell = {
+							size = { 238 70 }
+							tooltip = "te_tax_ov_code_tt"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_code"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/event_icons/je_tax_code.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "te_tax_ov_code_word"
+								}
+							}
+							blockoverride "third_line" {
+								te_tax_ov_fig = {
+									text = "[SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_code_next', 'te_tax_ov_code_quiet' )]"
+								}
+							}
 						}
-						blockoverride "row_value" {
-							text = "te_tax_ov_last_change_value"
+
+						# The draft: none open, or blocked (a change to accept), too soon, ready
+						# to introduce (or to revise the bill with) or still being written. The
+						# hover is Introduce's checklist, or Revise Bill's while a bill is under
+						# debate, which prints nothing once it holds.
+						te_banking_ov_cell = {
+							visible = "[Not( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+							size = { 238 70 }
+							tooltip = "te_tax_ov_draft_none_tt"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_draft"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "te_tax_ov_none"
+								}
+							}
 						}
-					}
-					te_tax_value_row = {
-						blockoverride "row_label" {
-							text = "te_tax_ov_next_change"
-							tooltip = "te_tax_ov_next_change_tt"
+
+						te_banking_ov_cell = {
+							visible = "[And( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+							size = { 238 70 }
+							tooltip = "[SelectLocalization( GetScriptedGui('te_tax_cmd_introduce_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_ready_tt', Concatenate( SelectLocalization( GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_rebase_tt', 'te_tax_ov_draft_head_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_introduce_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_draft"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "[SelectLocalization( GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_blocked', SelectLocalization( GetScriptedGui('te_tax_show_draft_due_soon_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_soon', SelectLocalization( Or( GetScriptedGui('te_tax_cmd_introduce_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_cmd_revise_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_tax_ov_draft_ready', 'te_tax_ov_draft_open' ) ) )]"
+								}
+							}
+							blockoverride "third_line" {
+								te_tax_ov_fig = {
+									text = "[SelectLocalization( GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_accept', 'te_tax_ov_draft_value' )]"
+								}
+							}
 						}
-						blockoverride "row_value" {
-							text = "[SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_next_change_value', 'te_tax_ov_next_change_none' )]"
-						}
-					}
-					# The economy snapshot the estimates are measured against (plan Task 14):
-					# its month, marked once out of date; the engine's aggregates at the
-					# snapshot on the hover. Shown once one has been taken.
-					te_tax_value_row = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_snapshot"
-							tooltip = "te_tax_ov_snapshot_tt"
-						}
-						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_ov_snapshot_value', 'te_tax_ov_snapshot_value_stale' )]"
-							tooltip = "te_tax_ov_snapshot_value_tt"
+
+						te_banking_ov_cell = {
+							visible = "[And( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+							size = { 238 70 }
+							tooltip = "[SelectLocalization( GetScriptedGui('te_tax_cmd_revise_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_ready_tt', Concatenate( SelectLocalization( GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_rebase_tt', 'te_tax_ov_draft_head_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_revise_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_draft"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "[SelectLocalization( GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_blocked', SelectLocalization( GetScriptedGui('te_tax_show_draft_due_soon_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_soon', SelectLocalization( Or( GetScriptedGui('te_tax_cmd_introduce_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_cmd_revise_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_tax_ov_draft_ready', 'te_tax_ov_draft_open' ) ) )]"
+								}
+							}
+							blockoverride "third_line" {
+								te_tax_ov_fig = {
+									text = "[SelectLocalization( GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_draft_accept', 'te_tax_ov_draft_value' )]"
+								}
+							}
 						}
 					}
 
-					# What is in progress: nothing, or any of a draft, a bill and up
-					# to two passed bills, each its own row.
-					te_tax_value_row = {
-						visible = "[GetScriptedGui('te_tax_show_no_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_bills"
-							tooltip = "te_tax_ov_bills_none_tt"
+					### Row 2, while a bill is under debate or a passed bill waits: the bill and the
+					### passed bills.
+					flowcontainer = {
+						visible = "[Or( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						# The bill under debate: its month come (move it), able to pass, short of
+						# support, still in debate, or held by another condition (Blocked); the
+						# committed share, or the offers waiting while it is short. The hover is
+						# Pass's checklist.
+						te_banking_ov_cell = {
+							visible = "[Not( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+							size = { 238 70 }
+							tooltip = "te_tax_ov_bill_none_tt"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_bill"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/generic_icons/negotiate.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "te_tax_ov_none"
+								}
+							}
 						}
-						blockoverride "row_value" {
-							text = "te_tax_ov_bills_none"
+
+						te_banking_ov_cell = {
+							visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+							size = { 238 70 }
+							tooltip = "[SelectLocalization( GetScriptedGui('te_tax_cmd_pass_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_bill_ready_tt', Concatenate( SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_offers_open'), '(CFixedPoint)0' ), 'te_tax_ov_bill_offers_tt', 'te_tax_ov_bill_head_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_bill"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/generic_icons/negotiate.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "[SelectLocalization( Not( GetScriptedGui('te_tax_show_pass_due_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_tax_ov_bill_month', SelectLocalization( GetScriptedGui('te_tax_cmd_pass_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_bill_ready', SelectLocalization( Not( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_tax_ov_bill_short', SelectLocalization( Not( GetScriptedGui('te_tax_show_pass_debate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_tax_ov_bill_debating', 'te_tax_ov_bill_blocked' ) ) ) )]"
+								}
+							}
+							blockoverride "third_line" {
+								te_tax_ov_fig = {
+									text = "[SelectLocalization( And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_offers_open'), '(CFixedPoint)0' ), Not( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), 'te_tax_ov_bill_offers', 'te_tax_ov_bill_share' )]"
+								}
+							}
+						}
+
+						# The passed bills waiting to take effect: awaiting, or held back (a
+						# conflict or a missed month); their months.
+						te_banking_ov_cell = {
+							visible = "[Not( Or( GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+							size = { 238 70 }
+							tooltip = "te_tax_ov_passed_none_tt"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_passed"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/generic_icons/clock.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "te_tax_ov_none"
+								}
+							}
+						}
+
+						te_banking_ov_cell = {
+							visible = "[Or( GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+							size = { 238 70 }
+							tooltip = "[SelectLocalization( Or( Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ) ), Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ) ) ), 'te_tax_ov_passed_held_tt', 'te_tax_ov_package_awaiting_tt' )]"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_passed"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/generic_icons/clock.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "[SelectLocalization( Or( Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ) ), Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ) ) ), 'te_tax_ov_passed_held', 'te_tax_ov_passed_awaiting' )]"
+								}
+							}
+							blockoverride "third_line" {
+								te_tax_ov_fig = {
+									text = "[SelectLocalization( And( GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_tax_ov_passed_fig_ab', SelectLocalization( GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_passed_fig_a', 'te_tax_ov_passed_fig_b' ) )]"
+								}
+							}
 						}
 					}
-					te_tax_value_row = {
-						visible = "[GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_draft"
-							tooltip = "te_tax_ov_draft_tt"
-						}
-						blockoverride "row_value" {
-							text = "te_tax_ov_draft_value"
-						}
-					}
-					te_tax_value_row = {
-						visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_bill"
-							tooltip = "te_tax_ov_bill_tt"
-						}
-						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left'), '(CFixedPoint)0' ), 'te_tax_ov_bill_value_debated', 'te_tax_ov_bill_value' )]"
-						}
-					}
-					# A passed bill's state: 1 awaiting, 2 held (an outside change),
-					# 3 held (its month missed).
-					te_tax_value_row = {
-						visible = "[GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_package"
-							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
-						}
-						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_a_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_a_missed', 'te_tax_ov_package_a_awaiting' ) )]"
-						}
-					}
-					te_tax_value_row = {
-						visible = "[GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_package"
-							tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
-						}
-						blockoverride "row_value" {
-							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_b_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_b_missed', 'te_tax_ov_package_b_awaiting' ) )]"
-						}
-					}
-					# Promises (plan Task 12): how many bind the country and how many
-					# wait on the bill under debate; the Promises section lists them.
-					te_tax_value_row = {
+
+					### Row 3, while a promise is pending or binding.
+					flowcontainer = {
 						visible = "[GetScriptedGui('te_tax_show_obligations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						blockoverride "row_label" {
-							text = "te_tax_ov_obligations"
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						# Promises: how many fail a check in their term, else how many bind; the
+						# next deadline among those being delivered, or how many wait on the bill.
+						te_banking_ov_cell = {
+							size = { 238 70 }
 							tooltip = "te_tax_ov_obligations_tt"
-						}
-						blockoverride "row_value" {
-							text = "te_tax_ov_obligations_value"
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "te_tax_ov_obligations"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									texture = "gfx/interface/icons/generic_icons/approval_icon.dds"
+								}
+							}
+							blockoverride "word" {
+								te_tax_ov_word = {
+									text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_failing'), '(CFixedPoint)0' ), 'te_tax_ov_obl_failing', 'te_tax_ov_obl_binding' )]"
+								}
+							}
+							blockoverride "third_line" {
+								te_tax_ov_fig = {
+									text = "[SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_next_due'), '(CFixedPoint)-1' ), 'te_tax_ov_obl_due', SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_pending'), '(CFixedPoint)0' ), 'te_tax_ov_obl_pending', 'te_tax_ov_obl_ontrack' ) )]"
+								}
+							}
 						}
 					}
 				}
@@ -387,6 +625,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_wage"
+					tooltip = "te_tax_en_since_wage"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_wage_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -400,6 +639,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_div"
+					tooltip = "te_tax_en_since_div"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_div_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -413,6 +653,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_land"
+					tooltip = "te_tax_en_since_land"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_land_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -426,6 +667,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_head"
+					tooltip = "te_tax_en_since_head"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_head_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -439,6 +681,7 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_rate" {
 					text = "te_tax_en_rate_cons"
+					tooltip = "te_tax_en_since_cons"
 				}
 				blockoverride "row_sunset" {
 					visible = "[GetScriptedGui('te_tax_show_sunset_cons_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -455,6 +698,9 @@ types te_tax_overview_widget_types
 					text = "te_tax_en_goods_value"
 				}
 			}
+			# Which goods, as icons by category, each named on hover (GUI audit
+			# TAX-12; generated, te_tax_generated_rows.gui).
+			te_tax_en_goods_icons = {}
 			# A relief band: 0 none, 1 or 2 (25% or 50%).
 			te_tax_value_row = {
 				blockoverride "row_label" {
@@ -472,6 +718,28 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_value" {
 					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_regrel'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_en_regrel_value' )]"
+				}
+			}
+			# The states it names (GUI audit TAX-12): the enacted list, as the
+			# workbench lists the draft's (te_tax_wb_relief_state_name).
+			flowcontainer = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_regrel'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				datamodel = "[GetPlayer.MakeScope.GetList('te_tax_en_relief_states')]"
+
+				item = {
+					textbox = {
+						datacontext = "[Scope.GetState]"
+						autoresize = yes
+						minimumsize = { 480 -1 }
+						maximumsize = { 480 -1 }
+						margin_left = 24
+						align = left|nobaseline
+						using = te_tax_fontsize_row
+						elide = right
+						text = "te_tax_wb_relief_state_name"
+					}
 				}
 			}
 		}
@@ -521,6 +789,10 @@ types te_tax_overview_widget_types
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_1')]"
 				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_1_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_1"
+				}
 			}
 			te_tax_history_row = {
 				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_2_kind'), '(CFixedPoint)0' )]"
@@ -529,6 +801,10 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_2')]"
+				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_2_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_2"
 				}
 			}
 			te_tax_history_row = {
@@ -539,6 +815,10 @@ types te_tax_overview_widget_types
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_3')]"
 				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_3_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_3"
+				}
 			}
 			te_tax_history_row = {
 				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_4_kind'), '(CFixedPoint)0' )]"
@@ -547,6 +827,10 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_4')]"
+				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_4_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_4"
 				}
 			}
 			te_tax_history_row = {
@@ -557,6 +841,10 @@ types te_tax_overview_widget_types
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_5')]"
 				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_5_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_5"
+				}
 			}
 			te_tax_history_row = {
 				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_6_kind'), '(CFixedPoint)0' )]"
@@ -565,6 +853,10 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_6')]"
+				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_6_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_6"
 				}
 			}
 			te_tax_history_row = {
@@ -575,6 +867,10 @@ types te_tax_overview_widget_types
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_7')]"
 				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_7_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_7"
+				}
 			}
 			te_tax_history_row = {
 				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_8_kind'), '(CFixedPoint)0' )]"
@@ -583,6 +879,10 @@ types te_tax_overview_widget_types
 				}
 				blockoverride "row_event" {
 					text = "[GetPlayer.GetCustom('te_tax_hist_event_8')]"
+				}
+				blockoverride "row_version" {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_8_codever'), '(CFixedPoint)0' )]"
+					text = "te_tax_hist_version_8"
 				}
 			}
 		}
