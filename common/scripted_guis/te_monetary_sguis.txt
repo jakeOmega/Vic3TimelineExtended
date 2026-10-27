@@ -295,7 +295,15 @@ banking_mon_control_sgui = {
 				text = banking_mon_tt_recap_cash
 				gold_reserves >= te_mon_bank_recap_amount
 			}
-			te_mon_bank_can_recapitalise = yes
+			# The vault is counted at the first month's end on gold.
+			custom_tooltip = {
+				text = banking_mon_tt_recap_counted
+				has_variable = te_bank_gold_seeded
+				var:te_bank_gold_seeded = 1
+			}
+			# The gate the AI's rule uses, kept in step with the lines above;
+			# hidden, since they say each of its parts (button_reason_audit).
+			hidden_trigger = { te_mon_bank_can_recapitalise = yes }
 		}
 		trigger_else = {
 			always = no
@@ -709,7 +717,9 @@ banking_mon_union_leave = {
 	scope = country
 	is_shown = { te_mon_is_union_member = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_mon_is_union_member = yes }
+	# is_shown's own test, which holds while the button shows; hidden, as bare
+	# it would print as raw script (button_reason_audit).
+	is_valid = { hidden_trigger = { te_mon_is_union_member = yes } }
 	effect = {
 		custom_tooltip = te_mon_union_leave_effect_tt
 		hidden_effect = { te_mon_effect_union_exit = yes }
@@ -744,7 +754,9 @@ banking_mon_union_press_off = {
 	scope = country
 	is_shown = { te_mon_union_is_pressing = yes }
 	ai_is_valid = { always = no }
-	is_valid = { te_mon_union_is_pressing = yes }
+	# is_shown's own test, which holds while the button shows; hidden, as bare
+	# it would print as raw script (button_reason_audit).
+	is_valid = { hidden_trigger = { te_mon_union_is_pressing = yes } }
 	effect = {
 		custom_tooltip = te_mon_union_press_off_effect_tt
 		hidden_effect = {

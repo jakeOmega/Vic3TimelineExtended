@@ -1638,7 +1638,7 @@ types grand_monuments_widget_types
 				blockoverride "naming_button" {
 					datacontext = "[GetScriptedGui('gm_name_use_sgui')]"
 					tooltip = "gm_button_name_use_tooltip"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]" # REVIEWED 2026-10-27 (missing_reason): never greyed in practice: its is_valid only guards that the state is ours and being named, and the naming line shows only on that state (gm_is_being_named)
 					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'gm_state', State.MakeScope ).AddScope( 'gm_name', MakeScopeFlag( JournalEntry.GetCountry.MakeScope.Var('gm_name_carrier').GetCompany.GetNameNoFormatting ) ).End )]"
 				}
 				blockoverride "naming_text" { text = "gm_button_name_use" }

@@ -1325,7 +1325,10 @@ un_propose_colony_protection_in_force = {
 # Scope: the prospective proposer: a member that holds a colony, and not the
 # one whose seizure or destruction raised it.
 un_propose_colony_protection_qualifies = {
-	sr_has_space_colony = yes
+	custom_tooltip = {
+		text = un_propose_colony_protection_holder_tt
+		sr_has_space_colony = yes
+	}
 	custom_tooltip = {
 		text = un_propose_colony_protection_not_actor_tt
 		NOT = { has_variable = un_dkt_colony_actor }

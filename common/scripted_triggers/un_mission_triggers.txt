@@ -285,7 +285,9 @@ un_mission_slot_filled = {
 # the chamber's Join control: every clause says why it fails.
 # Scope: country
 un_mission_slot_can_volunteer = {
-	has_global_variable_list = un_mission_registry
+	# A guard, not a requirement: the registry exists while there is a mission
+	# to join, so hidden from the Join button's tooltip (button_reason_audit).
+	hidden_trigger = { has_global_variable_list = un_mission_registry }
 	custom_tooltip = {
 		text = un_mission_volunteer_need_member_tt
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -335,12 +337,16 @@ un_mission_slot_can_volunteer = {
 		}
 	}
 	# The whole rule, as the AI asks it: whatever the clauses above miss
-	# (serving already, which hides the control) still fails here.
-	un_mission_volunteer_eligible = yes
-	any_in_global_list = {
-		variable = un_mission_registry
-		un_mission_in_slot = { SLOT = $SLOT$ }
-		un_mission_accepts_volunteer = { WHO = ROOT }
+	# (serving already, which hides the control) still fails here. Hidden,
+	# since the clauses above say each part, and bare it would print as raw
+	# script (button_reason_audit).
+	hidden_trigger = {
+		un_mission_volunteer_eligible = yes
+		any_in_global_list = {
+			variable = un_mission_registry
+			un_mission_in_slot = { SLOT = $SLOT$ }
+			un_mission_accepts_volunteer = { WHO = ROOT }
+		}
 	}
 }
 

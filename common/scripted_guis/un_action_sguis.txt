@@ -31,8 +31,12 @@ un_act_found_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		NOT = { has_global_variable = un_founded }
-		NOT = { un_conference_in_session = yes }
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			NOT = { has_global_variable = un_founded }
+			NOT = { un_conference_in_session = yes }
+		}
 		has_technology_researched = intergovernmental_organizations
 		country_rank >= rank_value:great_power
 		is_subject = no
@@ -94,9 +98,13 @@ un_act_join_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		has_global_variable = un_founded
-		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-		NOT = { has_variable = un_member_modifier_on }
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			has_global_variable = un_founded
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			NOT = { has_variable = un_member_modifier_on }
+		}
 		custom_tooltip = {
 			text = un_membership_eligible_tt
 			un_membership_eligible = yes
@@ -158,9 +166,13 @@ un_act_withhold_dues_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		un_dues_self_assessed = yes
-		NOT = { un_dues_is_withholding = yes }
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_dues_self_assessed = yes
+			NOT = { un_dues_is_withholding = yes }
+		}
 		custom_tooltip = {
 			text = un_dues_assessed_tt
 			un_dues_assessed = yes
@@ -188,9 +200,13 @@ un_act_pay_dues_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		un_dues_self_assessed = yes
-		un_dues_is_withholding = yes
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_dues_self_assessed = yes
+			un_dues_is_withholding = yes
+		}
 	}
 
 	effect = {
@@ -277,7 +293,8 @@ un_act_raise_development_sgui = {
 			text = un_representation_table_tt
 			NOT = { un_representation_suspended = yes }
 		}
-		un_dev_fund_size_stored < un_dev_fund_size_max
+		# is_shown's own test (above): never fails while the control shows.
+		hidden_trigger = { un_dev_fund_size_stored < un_dev_fund_size_max }
 	}
 
 	effect = {
@@ -298,8 +315,12 @@ un_act_reduce_development_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
-		un_dev_fund_size_stored > 1
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+			un_dev_fund_size_stored > 1
+		}
 	}
 
 	effect = {
@@ -687,7 +708,12 @@ un_act_food_reserve_pledge_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		has_global_variable = un_inst_food_reserve
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			has_global_variable = un_inst_food_reserve
+			NOT = { has_variable = un_fr_pledged }
+		}
 		# §0.8: a member whose representation is suspended makes no pledges;
 		# its overlord conducts its foreign policy.
 		custom_tooltip = {
@@ -698,7 +724,6 @@ un_act_food_reserve_pledge_sgui = {
 			text = un_food_reserve_needs_reserve_tt
 			un_food_reserve_can_store_grain = yes
 		}
-		NOT = { has_variable = un_fr_pledged }
 	}
 
 	effect = {
@@ -717,7 +742,11 @@ un_act_food_reserve_withdraw_sgui = {
 	ai_is_valid = { always = no }
 
 	is_valid = {
-		has_variable = un_fr_pledged
+		# is_shown's own tests: the control shows only while they hold, and
+		# bare they would print as raw script with a tick (button_reason_audit).
+		hidden_trigger = {
+			has_variable = un_fr_pledged
+		}
 	}
 
 	effect = {

@@ -236,6 +236,31 @@ class RawConditionTests(_Fixture):
         self.assertIn("`exists = var:te_target`", rows["te_button possible"][3])
         self.assertNotIn("te_clean_button possible", rows)
 
+    def test_a_scripted_button_only_the_ai_sees_is_not_read(self):
+        # `is_ai = yes` at the top of `visible` (an AND) hides the button from
+        # every player; nested in an OR it does not.
+        _write(self.root, "common/scripted_buttons/te_test_buttons.txt", BUTTONS + """\
+te_ai_button = {
+\tvisible = {
+\t\tis_ai = yes
+\t\thas_variable = te_flag
+\t}
+\tpossible = { has_variable = te_flag }
+}
+te_either_button = {
+\tvisible = {
+\t\tOR = { is_ai = yes has_variable = te_flag }
+\t}
+\tpossible = { has_variable = te_flag }
+}
+""")
+        r = audit(self.root)
+        owners = {f.owner for f in r.flags if f.check == "raw_condition"}
+        self.assertNotIn("te_ai_button possible", owners)
+        self.assertIn("te_either_button possible", owners)
+        self.assertIn("te_button possible", owners)
+        self.assertEqual(r.ai_only_skipped, 1)
+
 
 class SuppressionTests(_Fixture):
     def test_missing_reason_tag_on_the_enabled_line(self):

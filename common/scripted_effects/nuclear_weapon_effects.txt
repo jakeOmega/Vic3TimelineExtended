@@ -20,7 +20,7 @@
 # old form once.
 
 nuclear_program_effect_increase_funding = {
-	custom_tooltip = {
+	custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
 		text = "INCREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 		change_variable = {
 			name = nuclear_weapons_program_funding
@@ -45,7 +45,7 @@ nuclear_program_effect_increase_funding = {
 }
 
 nuclear_program_effect_decrease_funding = {
-	custom_tooltip = {
+	custom_tooltip = { # REVIEWED 2026-10-27 (hidden_modifier): a refresh, removing and re-adding the funding modifier at the new total; its lines would print the whole cost at the multiplier from before the click, so the text gives the step the click changes
 		text = "DECREASE_NUCLEAR_WEAPON_PROGRAM_FUNDING_DESC"
 		change_variable = {
 			name = nuclear_weapons_program_funding

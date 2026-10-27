@@ -228,13 +228,14 @@ un_propose_reform_effect = {
 		text = "UN_PROPOSE_CHARTER_REFORM_TT"
 		un_propose_add_sponsor_mark = yes
 		un_propose_add_request_cooldown = yes
-		# The proposer champions reform (as un_events.6's own option does).
-		add_modifier = {
-			name = un_reform_champion_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
 		un_charter_reform_open = yes
+	}
+	# The proposer champions reform (as un_events.6's own option does). Outside
+	# the wrapper, so the button prints the modifier's own lines.
+	add_modifier = {
+		name = un_reform_champion_modifier
+		days = normal_modifier_time
+		is_decaying = yes
 	}
 	un_propose_sponsor_cost = yes
 }
