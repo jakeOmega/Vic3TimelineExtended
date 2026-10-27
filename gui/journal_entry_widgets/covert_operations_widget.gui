@@ -229,6 +229,34 @@ types covert_operations_widget_types
 		}
 	}
 
+	### A fixed threshold on an overview bar: a thin vertical line with its own
+	### hover (style guide rule 5; COV-6), drawn as the marker of a transparent
+	### progressbar laid over the bar, so a script value places it and no
+	### threshold is typed here (colonial_empire_widget.gui's next-band line).
+	### The instance gives the line's place (0-1) in "line_value" and its hover
+	### in "line_tooltip".
+	type covert_bar_line = progressbar {
+		noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+		progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+		size = { 100% 100% }
+		skip_initial_animation = yes
+		direction = horizontal
+		min = 0
+		max = 1
+		block "line_value" {}
+
+		marker = {
+			icon = {
+				size = { 3 18 }
+				parentanchor = vcenter
+				widgetanchor = center
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.96 0.90 0.72 0.95 }
+				block "line_tooltip" {}
+			}
+		}
+	}
+
 	### ---- FUNDING STEPPER ---------------------------------------------
 
 	### Label, minus, the level and its name, plus; centred under the state
@@ -1723,6 +1751,41 @@ types covert_operations_widget_types
 							min = 0
 							max = 1
 						}
+						# The standing floors, so the standing icon and the bar connect.
+						blockoverride "on_top_of_the_progressbar" {
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_1_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_1_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_2_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_3_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_4_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_4_tt"
+								}
+							}
+						}
 					}
 					textbox = {
 						minimumsize = { 120 -1 }
@@ -1740,9 +1803,9 @@ types covert_operations_widget_types
 					}
 				}
 
-				# Tradecraft, with a marker at the next tier's floor, the score
-				# and where it is heading, and which way it last moved (why, on
-				# the arrow). The rules on hover.
+				# Tradecraft, with a line at each tier's floor, the score and the
+				# next floor, and which way it last moved (why, on the arrow).
+				# This month's reading on hover; the rules are in How.
 				flowcontainer = {
 					direction = horizontal
 					spacing = 8
@@ -1765,25 +1828,38 @@ types covert_operations_widget_types
 							min = 0
 							max = 1
 						}
+						# Every tier's floor, each a line with what the tier unlocks on hover.
 						blockoverride "on_top_of_the_progressbar" {
-							# The next tier's floor; none once Veteran.
-							progressbar = {
-								visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]"
-								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								size = { 100% 100% }
-								skip_initial_animation = yes
-								direction = horizontal
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_next_frac') )]"
-								min = 0
-								max = 1
-								marker = {
-									icon = {
-										size = { 36 20 }
-										parentanchor = vcenter
-										widgetanchor = center
-										texture = "gfx/interface/progressbar/progressbar_marker.dds"
-									}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_1_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_1_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_2_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_2_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_3_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_3_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_4_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_4_tt"
 								}
 							}
 						}

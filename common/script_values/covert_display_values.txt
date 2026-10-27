@@ -50,6 +50,28 @@ covert_disp_capacity_frac = {
 	max = 1
 }
 
+# Each standing floor as a 0-1 share of the bar: where the capacity bar draws
+# its threshold lines (COV-6).
+covert_disp_standing_floor_1_frac = {
+	value = covert_disp_standing_floor_1
+	divide = 100
+}
+
+covert_disp_standing_floor_2_frac = {
+	value = covert_disp_standing_floor_2
+	divide = 100
+}
+
+covert_disp_standing_floor_3_frac = {
+	value = covert_disp_standing_floor_3
+	divide = 100
+}
+
+covert_disp_standing_floor_4_frac = {
+	value = covert_disp_standing_floor_4
+	divide = 100
+}
+
 # ---- Operation slots ---------------------------------------------------------
 
 # How many slot icons the overview draws: every slot we hold, or every
@@ -76,9 +98,32 @@ covert_disp_tc_frac = {
 	max = 1
 }
 
-# The floor of the next tier, where the bar's marker sits and what the
-# headline says the score is heading for. The maximum once Veteran, where the
-# marker is hidden. Branches on the tier triggers, which own the floors.
+# Each tier's floor as a 0-1 share of the maximum: where the Tradecraft bar
+# draws its threshold lines (COV-6; the eye-shaped marker at the next floor
+# went with the style guide's play-test rule).
+covert_disp_tc_floor_1_frac = {
+	value = covert_tradecraft_tier_1_floor
+	divide = covert_tradecraft_max
+}
+
+covert_disp_tc_floor_2_frac = {
+	value = covert_tradecraft_tier_2_floor
+	divide = covert_tradecraft_max
+}
+
+covert_disp_tc_floor_3_frac = {
+	value = covert_tradecraft_tier_3_floor
+	divide = covert_tradecraft_max
+}
+
+covert_disp_tc_floor_4_frac = {
+	value = covert_tradecraft_tier_4_floor
+	divide = covert_tradecraft_max
+}
+
+# The floor of the next tier, which the headline names ("42 · next 60"). The
+# maximum once Veteran, where the headline says so instead. Branches on the
+# tier triggers, which own the floors.
 covert_disp_tc_next_floor = {
 	value = covert_tradecraft_max
 	if = {
@@ -97,13 +142,6 @@ covert_disp_tc_next_floor = {
 		limit = { covert_tradecraft_tier_4 = no }
 		value = covert_tradecraft_tier_4_floor
 	}
-}
-
-covert_disp_tc_next_frac = {
-	value = covert_disp_tc_next_floor
-	divide = covert_tradecraft_max
-	min = 0
-	max = 1
 }
 
 # Which way the score last moved, for the overview's trend arrow: 1 up, -1

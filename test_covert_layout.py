@@ -65,8 +65,10 @@ OTHER_ICONS = {
     "slot": COVERT_ICONS + "operation_slot.dds",
 }
 # Vanilla's own marks, kept as the UN's panels keep them.
+# The eye-shaped progressbar_marker is not among them: rule 5 retired it, and
+# the bars' thresholds are thin lines (COV-6, covert_bar_line).
 VANILLA_MARKS = {GENERIC + "trend_up.dds", GENERIC + "trend_down.dds", GENERIC + "trend_nochange.dds",
-                 GENERIC + "transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
+                 GENERIC + "transparent.dds"}
 
 
 def _read(path):
@@ -249,9 +251,28 @@ class StateGateTest(unittest.TestCase):
         line = ci[ci.index('text = "je_iw_ci_sub_caught"'):]
         self.assertIn(CAUGHT, line[:line.index("covert_last_exposed_sgui')")])
 
-    def test_markers_hide_when_there_is_nothing_further(self):
+    def test_bar_thresholds_are_lines_with_hovers(self):
+        # Rule 5: a fixed threshold on a bar is a thin line with its own hover,
+        # never the eye-shaped marker (COV-6). Each Tradecraft tier's floor
+        # and each standing floor, placed by a display value.
         ov = _type_body(self.text, "te_covert_overview_panel")
-        self.assertIn("visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]\"", ov)
+        self.assertNotIn("progressbar_marker", self.text)
+        line = _type_body(self.text, "covert_bar_line")
+        self.assertIn('texture = "gfx/interface/backgrounds/white.dds"', line)
+        self.assertIn('block "line_tooltip" {}', line)
+        loc = _loc()
+        for n in range(1, 5):
+            for value, tip in ((f"covert_disp_tc_floor_{n}_frac", f"je_iw_tc_floor_{n}_tt"),
+                               (f"covert_disp_standing_floor_{n}_frac", f"je_iw_standing_floor_{n}_tt")):
+                with self.subTest(value=value):
+                    self.assertIn(f"ScriptValue('{value}')", ov)
+                    self.assertIn(f'tooltip = "{tip}"', ov)
+                    self.assertIn(tip, loc)
+        # The headline names the next floor, never with the arrow rule 5
+        # keeps for where a value is heading.
+        self.assertNotIn("→", loc["je_iw_tradecraft_line"])
+
+    def test_markers_hide_when_there_is_nothing_further(self):
         # The network bar's marker went in round 3 (owner: "just the
         # strength, the bar filling up, and the trend").
         net = _type_body(self.text, "widget_je_covert_network_row")
@@ -306,7 +327,7 @@ class OverviewTest(unittest.TestCase):
         self.assertIn(OTHER_ICONS["funding"], self.ov)
 
     def test_bars_read_display_fractions(self):
-        for sv in ("covert_disp_capacity_frac", "covert_disp_tc_frac", "covert_disp_tc_next_frac"):
+        for sv in ("covert_disp_capacity_frac", "covert_disp_tc_frac"):
             self.assertIn(f"FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('{sv}') )", self.ov, sv)
 
     def test_the_bar_rows_line_up(self):
