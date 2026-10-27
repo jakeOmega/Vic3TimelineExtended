@@ -63,7 +63,7 @@
  setting_global_commons_disabled:0 "Global Commons Disabled"
  setting_global_commons_disabled_desc:0 "The $building_ocean_mine$ is uncapped: any coastal state can build it without limit. The Law of the Sea has no seabed terms, and there are no Antarctic research stations and no Antarctic Treaty. Launch windows and orbital debris follow the Space Race rule."
  setting_global_commons_enabled:0 "Global Commons Enabled"
- setting_global_commons_enabled_desc:0 "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licences, shared out every year among the countries with Abyssal Plain Mining, and every $building_ocean_mine$ level needs one. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin."
+ setting_global_commons_enabled_desc:0 "The seabed is a commons. Each of five ocean basins holds a fixed pool of seabed licences, shared out every year by claim weight among every coastal country, and every $building_ocean_mine$ level needs one. A country's share waits for it until it researches Abyssal Plain Mining, so the first to research it can't take every pool. The UN's Law of the Sea can regulate the seabed, research stations can winter on the Antarctic ice, and an Antarctic Treaty can close the Southern basin."
  setting_global_warming_disabled:0 "Global Warming Disabled"
  setting_global_warming_disabled_desc:0 "The global warming [concept_journal_entry] is disabled. There is no climate change: greenhouse gas emissions are not tracked, the world does not warm, and no climate events occur. Policies and technologies that reduce [concept_pollution_system] still do so."
  setting_global_warming_enabled:0 "Global Warming Enabled"

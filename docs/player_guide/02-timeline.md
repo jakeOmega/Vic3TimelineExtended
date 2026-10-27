@@ -302,10 +302,13 @@ pool of licences. A coastal state belongs to the basin its sea lane opens onto.
 | Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
 | Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
 
-Every January the pools are shared out by claim weight among the countries with
-Abyssal Plain Mining. A country that has just researched it gets its share the
-month after, and that sharing divides every pool again, so your own share can
-move in the middle of a year. In a basin where you have coastal states, your
+Every January the pools are shared out by claim weight among every coastal
+country. A country without Abyssal Plain Mining counts at three quarters of
+its weight, and its share waits for it: no one can build on it. Researching the
+technology first gives you a head start, then, and every other coastal country
+keeps a share for when it catches up. A country that has just researched it
+gets its share as claims the month after, and that sharing divides every pool
+again, so your own share can move in the middle of a year. In a basin where you have coastal states, your
 weight counts those states twice, their port levels, and your naval power
 projection, scaled to about one unit a warship (the weight hover shows the
 divisor), in proportion to the coast you have there; an unincorporated state
@@ -328,7 +331,8 @@ can't take more licences from that basin until you are back under it; levels
 you downsize, or that are destroyed, give their licences back. A new level
 takes its own basin's licence first. Once your claims there are used up it
 takes one from another basin and works at -25% throughput (Long-Haul Seabed
-Operations), until a local claim frees up and replaces it on its own. The
+Operations, shown on the mine), until a local claim frees up and replaces it on
+its own. The
 building's requirements list how many licences you have to spare and which
 kind the next level would take.
 
@@ -410,7 +414,7 @@ claim weight there. The tile's tooltip has the national figures.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
-| Scientific Survey (default) | none | ×0.25 | You aren't building Deep-Sea Mines yet. |
+| Scientific Survey (default) | none | ×0.75 | You aren't building Deep-Sea Mines yet, or you build your claims as fast as you get them and need no protection. |
 | Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licences, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
 | Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, naval power projection counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 

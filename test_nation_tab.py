@@ -198,9 +198,11 @@ class TypeRowsTest(unittest.TestCase):
                 for group, items in groups for kind, row, feeders in items]
 
     def test_the_inventory(self):
-        # The issue's count (2026-10-18): 149 types, 114 rows, 35 not rows
-        self.assertGreaterEqual(len(self.carried), 149)
-        self.assertGreaterEqual(len(self._rows()), 114)
+        # The issue's count (2026-10-18): 149 types, 114 rows, 35 not rows; one
+        # row fewer since Long-Haul Seabed Operations moved onto the Deep-Sea
+        # Mine (2026-10-27), the only modifier that carried its type
+        self.assertGreaterEqual(len(self.carried), 148)
+        self.assertGreaterEqual(len(self._rows()), 113)
         self.assertIn("state_arable_land_mult", self.carried)
         self.assertTrue({"agdiff_nitrogen_fixation", "agdiff_green_revolution"}
                         <= set(self.carried["state_arable_land_mult"]))

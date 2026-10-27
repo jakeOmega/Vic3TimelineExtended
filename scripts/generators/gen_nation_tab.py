@@ -127,7 +127,7 @@ SECTIONS = {
         # The Antarctic research station and the Antarctic regime
         "te_antarctic_station_modifier", "un_antarctic_*", "un_regime_antarctic_station_modifier",
         # Seabed policy
-        "te_seabed_policy_*", "te_seabed_long_haul",
+        "te_seabed_policy_*",
         # Extraplanetary Base room from the near-Earth asteroids and colonies
         "sr_ebase_room_*",
         # The Mind Upload Nexus's research at its hosted minds (the Demographics rule's uploaded minds, under Full)
@@ -217,6 +217,7 @@ NOT_ON_COUNTRY = {
     "sr_colonial_garrisons": "je_space_race_solar_colonization",
     "sr_fleet_upkeep": "a Space Command building (the upkeep_inputs probe's candidate)",
     "sr_fleet_upkeep_goods": "a Space Command building",
+    "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",
     "un_bloc_vacuum_modifier": "power blocs", "un_sovereignty_*": "interest groups",
     "un_standing_*": "je_united_nations", "un_member_*": "je_united_nations",
@@ -339,7 +340,7 @@ TYPE_ROWS = {
         "space_and_seabed": (
             "country_space_race_progress_mult", "country_space_race_risk_mult", "building_space_mine_throughput_add",
             "building_solar_receiver_throughput_add", "building_space_elevator_throughput_add",
-            "building_orbital_battlestation_throughput_add", "building_ocean_mine_throughput_add",
+            "building_orbital_battlestation_throughput_add",
         ),
     },
     "international": {

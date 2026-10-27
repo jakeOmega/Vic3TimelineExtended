@@ -37,6 +37,16 @@ te_seabed_takes_part = {
 	}
 }
 
+# Country scope. Only waits in the yearly sharing (model: waits): a coastal
+# country with no other part in it (no Abyssal Plain Mining, no licences).
+# It is weighed at te_seabed_latent_factor and its share waits for it
+# (te_seabed_wait_<basin>), so the first claimant can't take every pool; it
+# records nothing and holds no claims.
+te_seabed_waits = {
+	any_scope_state = { is_coastal = yes }
+	NOT = { te_seabed_takes_part = yes }
+}
+
 # Country scope. Recorded monthly: a claimant, or any country that has held
 # seabed records (te_seabed_country is set at its first recording, and on a
 # state with records arriving).
