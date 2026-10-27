@@ -538,3 +538,24 @@ gw_world_n_fossil_fuel_tariffs_display = {
 		add = global_var:gw_g_n_fossil_fuel_tariffs
 	}
 }
+
+# ----------------------------------------------------------------------------
+# The overview's Warming Penalty cell (GW-8, 2026-10-27): two of the Climate
+# Warming modifier's lines at today's scale, figures the temperature row
+# doesn't already give. The per-degree values are the global_warming static
+# modifier's (common/static_modifiers/extra_modifiers.txt:
+# state_standard_of_living_add = -1.0, state_mortality_mult = 0.05), which the
+# journal entry applies with multiplier = temperature_anomaly_display;
+# test_global_warming_layout.PenaltyCellTest holds the two equal.
+# Scope: any
+# ----------------------------------------------------------------------------
+gw_disp_penalty_sol = {
+	value = gw_warming_penalty_scale_display
+	multiply = -1.0
+}
+
+# In per cent: 0.05 a degree.
+gw_disp_penalty_mortality_pct = {
+	value = gw_warming_penalty_scale_display
+	multiply = 5
+}

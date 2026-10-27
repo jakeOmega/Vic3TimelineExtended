@@ -250,13 +250,13 @@ class RowTest(unittest.TestCase):
 
     def test_the_name_has_the_whole_line(self):
         self.assertRegex(self.row, r'minimumsize = \{ 480 -1 \}\s*maximumsize = \{ 480 -1 \}\s*autoresize = yes\s*'
-                                   r'elide = right\s*align = left\|nobaseline\s*using = fontsize_medium\s*'
+                                   r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
                                    r'default_format = "#tooltippable"\s*text = "gw_te_row_name"')
 
     def test_cells_fill_the_column_under_their_headings(self):
         row_line = self.row[self.row.index('text = "gw_te_row_name"') + 1:]
         widths = [int(w) for w in re.findall(r"^\t{4}widget = \{\s*size = \{ (\d+) \d+ \}", row_line, re.M)]
-        self.assertEqual(widths, [44, 120, 80, 120, 116])
+        self.assertEqual(widths, [44, 110, 70, 110, 146])   # GW-15: the cells at 17
         self.assertEqual(sum(widths), 480)
         heads = [int(w) for w in re.findall(r"^\t{2}widget = \{\s*size = \{ (\d+) \d+ \}", self.header, re.M)]
         self.assertEqual(heads, widths)
