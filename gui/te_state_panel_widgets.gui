@@ -24,6 +24,13 @@ types te_state_panel_widget_types
 {
 	### One label/value line: an optional 20 px icon, the label column, then
 	### the value column with its text anchored right.
+	###
+	### A row with a hover of its own (row_tooltip, or a te_state_meter's
+	### meter_tooltip around it) underlines its label with
+	### blockoverride "label_format" { default_format = "#tooltippable" }
+	### (gui_style_guide.md rule 3). The default is off, unlike nd_row's: most
+	### rows here sit in a tile whose one hover covers them, and an underline
+	### there would promise a hover of the row's own that it doesn't have.
 	type te_state_stat_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -56,6 +63,7 @@ types te_state_panel_widget_types
 				block "row_font" {
 					using = fontsize_medium
 				}
+				block "label_format" {}
 				block "row_label" {}
 			}
 		}
@@ -305,6 +313,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/tourism.dds"
 							}
@@ -328,6 +339,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/building_icons/urban_center.dds"
 							}
@@ -353,6 +367,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/building_icons/statue_of_liberty.dds"
 							}
@@ -390,6 +407,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
 							}
@@ -416,6 +436,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/fine_art.dds"
 							}
@@ -442,6 +465,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/state_status_icons/pollution.dds"
 							}
@@ -469,6 +495,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_stat_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/building_icons/skyscraper.dds"
 							}
@@ -495,6 +524,9 @@ types te_state_panel_widget_types
 				spacing = 10
 
 				te_state_wide_row = {
+					blockoverride "label_format" {
+						default_format = "#tooltippable"
+					}
 					blockoverride "row_tooltip" {
 						tooltip = "te_state_tourism_output_applied_tt"
 					}
@@ -507,6 +539,9 @@ types te_state_panel_widget_types
 				}
 
 				te_state_wide_row = {
+					blockoverride "label_format" {
+						default_format = "#tooltippable"
+					}
 					blockoverride "row_tooltip" {
 						tooltip = "te_state_tourism_throughput_applied_tt"
 					}
@@ -802,6 +837,9 @@ types te_state_panel_widget_types
 							}
 
 							te_state_gm_row = {
+								blockoverride "label_format" {
+									default_format = "#tooltippable"
+								}
 								blockoverride "row_icon_texture" {
 									texture = "gfx/interface/icons/building_icons/building_grand_monument.dds"
 								}
@@ -841,6 +879,9 @@ types te_state_panel_widget_types
 						### IN THIS STATE — zero rows hide (before the first
 						### pulse, and the local effect while undedicated).
 						te_state_gm_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_tourism'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_tourism_tt"
@@ -857,6 +898,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_gm_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_local'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_local_tt"
@@ -876,6 +920,9 @@ types te_state_panel_widget_types
 						### Ancestral Antiquity's tourism and the Epigraphic Archive's
 						### universities, the state's whole, each hidden at 0.
 						te_state_gm_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_tourism'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_sig_tourism_tt"
@@ -892,6 +939,9 @@ types te_state_panel_widget_types
 						}
 
 						te_state_gm_row = {
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
+							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_university'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_sig_university_tt"
@@ -1021,7 +1071,7 @@ types te_state_panel_widget_types
 
 	### The Homeland Dynamics tile's extra_widget. Every line is conditional,
 	### on state-scope values in common/script_values/homeland_values.txt:
-	### - te_homeland_relevant = 0: one line saying nothing here can change.
+	### - te_homeland_relevant = 0 hides the whole tile (states_panel.gui).
 	### - te_homeland_pause_status: the pause reason, once for the tile.
 	### - te_homeland_<track>_shown: a track appears only while it has
 	###   projects or can run here, so a core state with nothing to form or
@@ -1034,16 +1084,7 @@ types te_state_panel_widget_types
 		spacing = 6
 
 		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0')]"
-			text = "TE_HOMELAND_NOTHING_TO_CHANGE"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[And(NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0'), EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)1'))]"
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)1')]"
 			text = "TE_HOMELAND_PAUSED_LOCKED"
 			autoresize = yes
 			maximumsize = { 160 -1 }
@@ -1052,7 +1093,7 @@ types te_state_panel_widget_types
 		}
 
 		textbox = {
-			visible = "[And(NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0'), EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)2'))]"
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)2')]"
 			text = "TE_HOMELAND_PAUSED_SPLIT"
 			autoresize = yes
 			maximumsize = { 160 -1 }
@@ -1182,6 +1223,9 @@ types te_state_panel_widget_types
 		spacing = 3
 
 		te_state_tile_word_row = {
+			blockoverride "label_format" {
+				default_format = "#tooltippable"
+			}
 			blockoverride "row_visible" {
 				visible = "[GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
 			}

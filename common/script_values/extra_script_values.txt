@@ -2934,6 +2934,38 @@ population_transfer_pop_ratio_score = {
 # GUI Display Script Values — Mega Project Resource Tracking
 #==================================================
 # All evaluated in COUNTRY scope. Used by state panel GUI via State.GetOwner.MakeScope.ScriptValue().
+#
+# The two tiles' gates below are STATE scope: the state view shows a tile only
+# in a state that holds a building of its chain, so the country-wide slot
+# figures (which walk every state's buildings) are read there and not in every
+# state of the country (GUI audit VAN-7, 2026-10-27). A receiver or engine can
+# go in any state; its build tooltip gives the free slots
+# (building_solar_receiver_slots_tt, building_antimatter_sub_slots_tt).
+te_state_solar_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_building = building_solar_collector
+				has_building = building_solar_receiver
+			}
+		}
+		value = 1
+	}
+}
+te_state_antimatter_tile_shown = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_building = building_antimatter_facility
+				has_building = building_antimatter_engine
+				has_building = building_antimatter_warhead_plant
+			}
+		}
+		value = 1
+	}
+}
 
 # Solar Collectors: total capacity generated (before consumer deductions)
 solar_total_generated_points = {
