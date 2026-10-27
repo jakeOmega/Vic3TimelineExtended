@@ -723,7 +723,7 @@ infamy).
 Recovered warheads are destroyed. Besides the inspection search, three things
 find them:
 
-- Covert: Secure Loose Material, an operation against a country with warheads missing: a 3% chance a month once established, 6% when fully operational, and more at a higher priority (see [Cultural hegemony and covert warfare](11-influence.md), which also covers Covert: Nuclear Programme Sabotage).
+- Covert: Secure Loose Material, an operation against a country with warheads missing: a 3% chance a month once established, 6% when fully operational, and more at a higher priority (see [Cultural hegemony and covert warfare](11-influence.md), which also covers Covert: Nuclear Program Sabotage).
 - A Nuclear Security Assistance article: 6% a month for the country helped.
 - The Convention on the Physical Protection of Nuclear Material: 3% a month for each party. It reaches the United Nations Assembly only once warheads have gone missing somewhere.
 

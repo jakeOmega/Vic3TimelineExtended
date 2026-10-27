@@ -78,6 +78,25 @@
 ###   the gate every display read would run for countries that have none of
 ###   these variables (gotcha #14).
 
+### The panel's type sizes (COV-14; gui_style_guide.md rule 3, the owner's
+### pass of 2026-10-17): rows, values, buttons and notes at 17, subheadings
+### and row titles at 20, the overview at 16 in the tooltip face, the same
+### ladder as Banking's banking_dash_fontsize_* templates. Every textbox
+### reads one of these, so a pass on type edits three numbers;
+### test_covert_layout.WidthBudgetTest reads the sizes from here.
+template covert_fontsize_row {
+	fontsize = 17
+}
+
+template covert_fontsize_heading {
+	fontsize = 20
+}
+
+template covert_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
+
 types covert_operations_widget_types
 {
 	### ======================================================================
@@ -121,7 +140,7 @@ types covert_operations_widget_types
 			multiline = yes
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = covert_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -140,7 +159,7 @@ types covert_operations_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = covert_fontsize_row
 		default_format = "#lore"
 	}
 
@@ -151,7 +170,7 @@ types covert_operations_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = covert_fontsize_row
 	}
 
 	### A table row: a label on the left and its value on the right
@@ -168,7 +187,7 @@ types covert_operations_widget_types
 			minimumsize = { 320 -1 }
 			maximumsize = { 320 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			elide = right
 			block "row_label" {}
 		}
@@ -177,7 +196,7 @@ types covert_operations_widget_types
 			minimumsize = { 140 -1 }
 			maximumsize = { 140 -1 }
 			align = right|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			default_format = "#v"
 			block "row_value" {}
 		}
@@ -202,7 +221,7 @@ types covert_operations_widget_types
 			max_width = 108
 			elide = right
 			align = hcenter|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_overview
 			default_format = "#tooltippable"
 			block "label" {}
 		}
@@ -229,6 +248,34 @@ types covert_operations_widget_types
 		}
 	}
 
+	### A fixed threshold on an overview bar: a thin vertical line with its own
+	### hover (style guide rule 5; COV-6), drawn as the marker of a transparent
+	### progressbar laid over the bar, so a script value places it and no
+	### threshold is typed here (colonial_empire_widget.gui's next-band line).
+	### The instance gives the line's place (0-1) in "line_value" and its hover
+	### in "line_tooltip".
+	type covert_bar_line = progressbar {
+		noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+		progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+		size = { 100% 100% }
+		skip_initial_animation = yes
+		direction = horizontal
+		min = 0
+		max = 1
+		block "line_value" {}
+
+		marker = {
+			icon = {
+				size = { 3 18 }
+				parentanchor = vcenter
+				widgetanchor = center
+				texture = "gfx/interface/backgrounds/white.dds"
+				color = { 0.96 0.90 0.72 0.95 }
+				block "line_tooltip" {}
+			}
+		}
+	}
+
 	### ---- FUNDING STEPPER ---------------------------------------------
 
 	### Label, minus, the level and its name, plus; centred under the state
@@ -244,7 +291,7 @@ types covert_operations_widget_types
 			text = "je_iw_funding_stepper_label"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -261,7 +308,7 @@ types covert_operations_widget_types
 			text = "je_iw_funding_stepper_value"
 			size = { 180 24 }
 			align = center|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -300,7 +347,7 @@ types covert_operations_widget_types
 				minimumsize = { 170 -1 }
 				maximumsize = { 170 -1 }
 				align = left|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "level_text" {}
 			}
@@ -309,7 +356,7 @@ types covert_operations_widget_types
 				minimumsize = { 80 -1 }
 				maximumsize = { 80 -1 }
 				align = right|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "stealth_text" {}
 			}
@@ -318,7 +365,7 @@ types covert_operations_widget_types
 				minimumsize = { 80 -1 }
 				maximumsize = { 80 -1 }
 				align = right|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "capacity_text" {}
 			}
@@ -327,7 +374,7 @@ types covert_operations_widget_types
 				minimumsize = { 130 -1 }
 				maximumsize = { 130 -1 }
 				align = right|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "cost_text" {}
 			}
@@ -336,15 +383,18 @@ types covert_operations_widget_types
 
 	### ---- OPERATION ROW BUILDING BLOCKS --------------------------------
 
-	### The row's title, beside the operation's icon.
+	### The row's title, beside the target's flag and the operation's icon
+	### (480 less the 70 flag, the 32 icon and two 8 spacings). Its hover is
+	### what the operation does (COV-1), so it is underlined.
 	type widget_je_covert_operation_text = textbox {
 		autoresize = yes
 		multiline = yes
-		minimumsize = { 440 -1 }
-		maximumsize = { 440 -1 }
+		minimumsize = { 362 -1 }
+		maximumsize = { 362 -1 }
 		parentanchor = vcenter
 		align = left|nobaseline
-		using = fontsize_large
+		using = covert_fontsize_heading
+		default_format = "#tooltippable"
 	}
 
 	### "Stand down" for one row. One instance per operation type, of which exactly one is
@@ -361,7 +411,7 @@ types covert_operations_widget_types
 	### is simply disabled — it can never end the wrong operation.
 	type covert_op_stand_down_button = button {
 		using = default_button_action
-		size = { 150 24 }
+		size = { 150 28 }
 		parentanchor = vcenter
 
 		block "sd_context" {}
@@ -377,7 +427,7 @@ types covert_operations_widget_types
 			autoresize = yes
 			max_width = 140
 			elide = right
-			using = fontsize_small
+			using = covert_fontsize_row
 			text = "je_iw_stand_down_button"
 		}
 	}
@@ -408,7 +458,7 @@ types covert_operations_widget_types
 			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -419,7 +469,7 @@ types covert_operations_widget_types
 			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -430,7 +480,7 @@ types covert_operations_widget_types
 			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -448,7 +498,7 @@ types covert_operations_widget_types
 			text = "[ScriptContainer.GetVariableValue('iw_priority')|0]"
 			size = { 40 24 }
 			align = center|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 		}
 
@@ -470,7 +520,7 @@ types covert_operations_widget_types
 		maximumsize = { 460 -1 }
 		margin_left = 12
 		align = left|nobaseline
-		using = fontsize_medium
+		using = covert_fontsize_row
 	}
 
 	### One running operation: its icon and title, its phase and detection as
@@ -490,11 +540,27 @@ types covert_operations_widget_types
 			alpha = 0.5
 		}
 
-		# ---- The operation's icon, then its type and target (exactly one tag matches) ----
+		# ---- The target's flag, the operation's icon, then its name and target
+		#      (exactly one tag matches) ----
 		flowcontainer = {
 			direction = horizontal
 			spacing = 8
 			ignoreinvisible = yes
+
+			# Vanilla's flag widget, as the network rows draw it: the country's
+			# name on hover, a click opens it, where the diplomatic actions that
+			# run the operation are. Gated on the stored capital, which the
+			# operation's start writes (covert_op_refresh_detection).
+			widget = {
+				size = { 70 48 }
+				parentanchor = vcenter
+				visible = "[ScriptContainer.HasVariable('iw_target_capital')]"
+
+				flag = {
+					parentanchor = center
+					datacontext = "[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]"
+				}
+			}
 
 			# UNVERIFIED: the operations' own diplomatic-action icons
 			# (common/diplomatic_actions/covert_operations.txt), shown in game by
@@ -598,74 +664,92 @@ types covert_operations_widget_types
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_election_interference')]"
 				text = "je_iw_op_row_election_interference"
+				tooltip = "je_iw_op_row_election_interference_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_financial_subversion')]"
 				text = "je_iw_op_row_financial_subversion"
+				tooltip = "je_iw_op_row_financial_subversion_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_infrastructure_sabotage')]"
 				text = "je_iw_op_row_infrastructure_sabotage"
+				tooltip = "je_iw_op_row_infrastructure_sabotage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_comms_disruption')]"
 				text = "je_iw_op_row_comms_disruption"
+				tooltip = "je_iw_op_row_comms_disruption_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_industrial_espionage')]"
 				text = "je_iw_op_row_industrial_espionage"
+				tooltip = "je_iw_op_row_industrial_espionage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_military_espionage')]"
 				text = "je_iw_op_row_military_espionage"
+				tooltip = "je_iw_op_row_military_espionage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_influence_campaign')]"
 				text = "je_iw_op_row_influence_campaign"
+				tooltip = "je_iw_op_row_influence_campaign_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_ideological_subversion')]"
 				text = "je_iw_op_row_ideological_subversion"
+				tooltip = "je_iw_op_row_ideological_subversion_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_destabilization')]"
 				text = "je_iw_op_row_destabilization"
+				tooltip = "je_iw_op_row_destabilization_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_regime_change')]"
 				text = "je_iw_op_row_regime_change"
+				tooltip = "je_iw_op_row_regime_change_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_nuclear_sabotage')]"
 				text = "je_iw_op_row_nuclear_sabotage"
+				tooltip = "je_iw_op_row_nuclear_sabotage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_space_espionage')]"
 				text = "je_iw_op_row_space_espionage"
+				tooltip = "je_iw_op_row_space_espionage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
 				text = "je_iw_op_row_cultivate_assets"
+				tooltip = "je_iw_op_row_cultivate_assets_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 				text = "je_iw_op_row_secure_material"
+				tooltip = "je_iw_op_row_secure_material_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
 				text = "je_iw_op_row_counterintel_support"
+				tooltip = "je_iw_op_row_counterintel_support_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_incite_autonomy')]"
 				text = "je_iw_op_row_incite_autonomy"
+				tooltip = "je_iw_op_row_incite_autonomy_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_sabotage_colony')]"
 				text = "je_iw_op_row_sabotage_colony"
+				tooltip = "je_iw_op_row_sabotage_colony_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_survey_defences')]"
 				text = "je_iw_op_row_survey_defences"
+				tooltip = "je_iw_op_row_survey_defences_tt"
 			}
 		}
 
@@ -709,6 +793,35 @@ types covert_operations_widget_types
 			visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
 			text = "je_iw_op_row_detection_none"
 			tooltip = "je_iw_op_row_detection_none_tt"
+		}
+
+		# ---- What the world calls the operation if it is caught (COV-4): the
+		#      exposure tier, from iw_exposure_tier, which the tier table sets
+		#      (covert_op_refresh_exposure_tier); what a catch costs on hover.
+		#      Counterintelligence Support is never caught, so it has none ----
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_1"
+			tooltip = "je_iw_op_row_exposure_1_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_2"
+			tooltip = "je_iw_op_row_exposure_2_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_3"
+			tooltip = "je_iw_op_row_exposure_3_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)4'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_4"
+			tooltip = "je_iw_op_row_exposure_4_tt"
 		}
 
 		# ---- Espionage only: technology stolen so far and the latest
@@ -896,7 +1009,7 @@ types covert_operations_widget_types
 		maximumsize = { 362 -1 }
 		parentanchor = vcenter
 		align = left|nobaseline
-		using = fontsize_large
+		using = covert_fontsize_heading
 		default_format = "#tooltippable"
 	}
 
@@ -960,7 +1073,7 @@ types covert_operations_widget_types
 					minimumsize = { 402 -1 }
 					maximumsize = { 402 -1 }
 					align = left|nobaseline
-					using = fontsize_large
+					using = covert_fontsize_heading
 					text = "je_iw_known_row_attacker"
 				}
 
@@ -1194,7 +1307,7 @@ types covert_operations_widget_types
 					autoresize = yes
 					max_width = 140
 					elide = right
-					using = fontsize_large
+					using = covert_fontsize_row
 					text = "je_iw_known_expose_button"
 				}
 			}
@@ -1249,7 +1362,7 @@ types covert_operations_widget_types
 				maximumsize = { 402 -1 }
 				parentanchor = vcenter
 				align = left|nobaseline
-				using = fontsize_large
+				using = covert_fontsize_heading
 				text = "je_iw_net_row_title"
 			}
 		}
@@ -1269,7 +1382,7 @@ types covert_operations_widget_types
 				autoresize = yes
 				parentanchor = vcenter
 				align = left|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				default_format = "#tooltippable"
 				elide = right
 				text = "je_iw_net_row_strength"
@@ -1328,18 +1441,20 @@ types covert_operations_widget_types
 		# 75 thresholds live only in covert_net_intel_tier_value. Every line
 		# waits for the code to exist, so a network restored from a save made
 		# before this slice shows no report until its first monthly pass.
+		# Below the first threshold one line says when a report starts, with
+		# what each part reveals on hover (COV-12: it was two "nothing yet"
+		# lines); at tier 1 the service line alone, its hover naming the next
+		# part.
 		widget_je_covert_operation_detail = {
 			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
+			default_format = "#tooltippable"
 			text = "je_iw_net_row_intel_none"
+			tooltip = "je_iw_net_row_strength_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), Or( EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') ) )]"
 			text = "je_iw_net_row_intel_service"
 			tooltip = "je_iw_net_row_intel_service_tooltip"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1') )]"
-			text = "je_iw_net_row_intel_ops_locked"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
@@ -1525,7 +1640,7 @@ types covert_operations_widget_types
 					autoresize = yes
 					parentanchor = hcenter
 					align = hcenter|nobaseline
-					using = fontsize_medium
+					using = covert_fontsize_overview
 					text = "je_iw_slots_detail"
 				}
 				flowcontainer = {
@@ -1628,7 +1743,8 @@ types covert_operations_widget_types
 			}
 
 			### Rows 3 and 4: capacity and Tradecraft as bars. Fixed-width cells
-			### in the same order, so the two bars line up.
+			### in the same order, so the two bars line up: 100 label, 180 bar,
+			### 140 value (the top tier's "100 · top tier" at 16), 24 trend.
 			flowcontainer = {
 				direction = vertical
 				spacing = 6
@@ -1646,25 +1762,60 @@ types covert_operations_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_capacity_header"
 					}
 					default_progressbar_horizontal = {
-						size = { 200 18 }
+						size = { 180 18 }
 						parentanchor = vcenter
 						blockoverride "values" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_capacity_frac') )]"
 							min = 0
 							max = 1
 						}
+						# The standing floors, so the standing icon and the bar connect.
+						blockoverride "on_top_of_the_progressbar" {
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_1_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_1_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_2_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_3_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_4_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_standing_floor_4_tt"
+								}
+							}
+						}
 					}
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 140 -1 }
+						maximumsize = { 140 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_capacity_total"
 					}
 					# The trend column of the Tradecraft row, kept empty so the
@@ -1674,9 +1825,9 @@ types covert_operations_widget_types
 					}
 				}
 
-				# Tradecraft, with a marker at the next tier's floor, the score
-				# and where it is heading, and which way it last moved (why, on
-				# the arrow). The rules on hover.
+				# Tradecraft, with a line at each tier's floor, the score and the
+				# next floor, and which way it last moved (why, on the arrow).
+				# This month's reading on hover; the rules are in How.
 				flowcontainer = {
 					direction = horizontal
 					spacing = 8
@@ -1688,47 +1839,60 @@ types covert_operations_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_tradecraft_header"
 					}
 					default_progressbar_horizontal = {
-						size = { 200 18 }
+						size = { 180 18 }
 						parentanchor = vcenter
 						blockoverride "values" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_frac') )]"
 							min = 0
 							max = 1
 						}
+						# Every tier's floor, each a line with what the tier unlocks on hover.
 						blockoverride "on_top_of_the_progressbar" {
-							# The next tier's floor; none once Veteran.
-							progressbar = {
-								visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]"
-								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								size = { 100% 100% }
-								skip_initial_animation = yes
-								direction = horizontal
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_next_frac') )]"
-								min = 0
-								max = 1
-								marker = {
-									icon = {
-										size = { 36 20 }
-										parentanchor = vcenter
-										widgetanchor = center
-										texture = "gfx/interface/progressbar/progressbar_marker.dds"
-									}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_1_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_1_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_2_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_2_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_3_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_3_tt"
+								}
+							}
+							covert_bar_line = {
+								blockoverride "line_value" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_floor_4_frac') )]"
+								}
+								blockoverride "line_tooltip" {
+									tooltip = "je_iw_tc_floor_4_tt"
 								}
 							}
 						}
 					}
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 140 -1 }
+						maximumsize = { 140 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_tradecraft_line"
 					}
 					widget = {
@@ -1928,7 +2092,11 @@ types covert_operations_widget_types
 		covert_panel = {
 			visible = "[Not(GetVariableSystem.Exists('covert_funding_closed'))]"
 
+			# Only while funded with nothing running (COV-11): zero funding is
+			# said in the overview and once above the operations, and a running
+			# agency needs no line. The stepper below never prints nothing.
 			covert_text = {
+				visible = "[GetScriptedGui('covert_funding_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "je_iw_funding_state"
 			}
 			covert_cc_funding_stepper = { }

@@ -230,8 +230,13 @@ class ConsumerTests(unittest.TestCase):
         body = _text(TRIGGERS)
         est = _top_level_block(body, "covert_op_is_established = {")
         full = _top_level_block(body, "covert_op_is_fully_operational = {")
-        self.assertIn("covert_op_effective_duration >= 6", est)
-        self.assertIn("covert_op_effective_duration >= 12", full)
+        # The thresholds are named values (COV-2), so the launch tooltips
+        # print the same 6 and 12 the triggers test.
+        self.assertIn("covert_op_effective_duration >= covert_op_phase_2_month", est)
+        self.assertIn("covert_op_effective_duration >= covert_op_phase_3_month", full)
+        values = _text(ROOT / "common/script_values/covert_warfare_script_values.txt")
+        self.assertRegex(values, r"(?m)^covert_op_phase_2_month = 6$")
+        self.assertRegex(values, r"(?m)^covert_op_phase_3_month = 12$")
         self.assertNotIn("var:iw_duration", est + full)
 
     def test_refresh_phase_uses_effective_duration(self):
@@ -350,9 +355,12 @@ class CounterintelligenceTests(unittest.TestCase):
         block = _top_level_block(_text(VALUES), "covert_operation_detection_chance = {")
         target = block.index("add = target_counterintelligence_penalty")
         catch = block.index("add = covert_net_catch_penalty")
-        efficiency = block.index("modifier:country_covert_operation_efficiency_mult")
+        # Efficiency is its own value since the row's breakdown prints it (COV-5).
+        efficiency = block.index("multiply = covert_detection_efficiency_factor")
         self.assertLess(target, catch)
         self.assertLess(catch, efficiency)
+        factor = _top_level_block(_text(VALUES), "covert_detection_efficiency_factor = {")
+        self.assertIn("subtract = modifier:country_covert_operation_efficiency_mult", factor)
 
     def test_catch_penalty_reads_guarded_staging(self):
         block = _top_level_block(_text(VALUES), "covert_net_catch_penalty = {")

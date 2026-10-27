@@ -172,9 +172,9 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 ### L10. Mod loc-only variables flagged unused
 **Files:**
-- `common/scripted_effects/cultural_hegemony_effects.txt` — `ch_rank_*_{sol,art,prs,tech,raw}` globals
+- `common/scripted_effects/cultural_hegemony_effects.txt` — the Top Cultural Powers rows' `ch_board_*` variables (`ch_board_row_write`, since 2026-10-27; the `ch_rank_*_{sol,art,prs,tech,raw}` globals before)
 - `common/scripted_effects/nuclear_weapon_effects.txt` — `nuke_rank_*_stockpile` globals
-- `localization/english/te_concepts_l_english.yml` — `[GetGlobalVariable('…').GetValue]` reads
+- `localization/english/te_concepts_l_english.yml` — `[GetGlobalVariable('…').GetValue]` reads; `te_miscellaneous_l_english.yml` and the board in `cultural_hegemony_widget.gui` — `ScriptContainer.GetVariableValue('ch_board_…')` reads
 
 **Problem:** Mod uses `set_global_variable` to expose per-rank breakdown values (cultural-hegemony component scores, nuclear stockpiles) to tooltip text via `GetGlobalVariable('ch_rank_N_sol')` etc. in concept tooltips. The engine explicitly tracks variable reads but notes "use in localization doesn't count due to technical limitations," emitting `Variable 'X' is set but is never used` (source `jomini_effect.cpp:1135`) once per variable at load. Filtered from log triage via `docs/audits/mod_known_noise.md`.
 

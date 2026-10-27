@@ -245,8 +245,12 @@ class DetectionTests(unittest.TestCase):
     def test_penalty_is_added_before_covert_efficiency(self):
         block = _top_level_block(_text(VALUES), "covert_operation_detection_chance = {")
         add = block.index("add = covert_op_priority_detect_penalty")
-        efficiency = block.index("modifier:country_covert_operation_efficiency_mult")
+        # Efficiency is its own value since the row's breakdown prints it (COV-5).
+        efficiency = block.index("multiply = covert_detection_efficiency_factor")
         self.assertLess(add, efficiency)
+        factor = _top_level_block(_text(VALUES), "covert_detection_efficiency_factor = {")
+        self.assertIn("subtract = modifier:country_covert_operation_efficiency_mult", factor)
+        self.assertIn("min = 0.2", factor)
 
 
 class StepperTests(unittest.TestCase):

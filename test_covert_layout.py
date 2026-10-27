@@ -65,8 +65,10 @@ OTHER_ICONS = {
     "slot": COVERT_ICONS + "operation_slot.dds",
 }
 # Vanilla's own marks, kept as the UN's panels keep them.
+# The eye-shaped progressbar_marker is not among them: rule 5 retired it, and
+# the bars' thresholds are thin lines (COV-6, covert_bar_line).
 VANILLA_MARKS = {GENERIC + "trend_up.dds", GENERIC + "trend_down.dds", GENERIC + "trend_nochange.dds",
-                 GENERIC + "transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
+                 GENERIC + "transparent.dds"}
 
 
 def _read(path):
@@ -100,6 +102,16 @@ def _loc():
         for m in re.finditer(r'^ ([\w.\-]+):\d* "(.*)"\s*$', _read(path), re.M):
             out[m.group(1)] = m.group(2)
     return out
+
+
+def _shown_raw(loc, key, depth=0):
+    """A key's value with its $splices$ resolved, recursively: a tooltip's
+    context is lost through a splice as surely as in the key itself
+    (gui_modding_guide.md gotcha #24)."""
+    value = loc[key]
+    if depth > 5:
+        return value
+    return re.sub(r"\$([\w.]+)\$", lambda m: _shown_raw(loc, m.group(1), depth + 1) if m.group(1) in loc else m.group(0), value)
 
 
 def _gate_before(body, key):
@@ -239,9 +251,28 @@ class StateGateTest(unittest.TestCase):
         line = ci[ci.index('text = "je_iw_ci_sub_caught"'):]
         self.assertIn(CAUGHT, line[:line.index("covert_last_exposed_sgui')")])
 
-    def test_markers_hide_when_there_is_nothing_further(self):
+    def test_bar_thresholds_are_lines_with_hovers(self):
+        # Rule 5: a fixed threshold on a bar is a thin line with its own hover,
+        # never the eye-shaped marker (COV-6). Each Tradecraft tier's floor
+        # and each standing floor, placed by a display value.
         ov = _type_body(self.text, "te_covert_overview_panel")
-        self.assertIn("visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]\"", ov)
+        self.assertNotIn("progressbar_marker", self.text)
+        line = _type_body(self.text, "covert_bar_line")
+        self.assertIn('texture = "gfx/interface/backgrounds/white.dds"', line)
+        self.assertIn('block "line_tooltip" {}', line)
+        loc = _loc()
+        for n in range(1, 5):
+            for value, tip in ((f"covert_disp_tc_floor_{n}_frac", f"je_iw_tc_floor_{n}_tt"),
+                               (f"covert_disp_standing_floor_{n}_frac", f"je_iw_standing_floor_{n}_tt")):
+                with self.subTest(value=value):
+                    self.assertIn(f"ScriptValue('{value}')", ov)
+                    self.assertIn(f'tooltip = "{tip}"', ov)
+                    self.assertIn(tip, loc)
+        # The headline names the next floor, never with the arrow rule 5
+        # keeps for where a value is heading.
+        self.assertNotIn("→", loc["je_iw_tradecraft_line"])
+
+    def test_markers_hide_when_there_is_nothing_further(self):
         # The network bar's marker went in round 3 (owner: "just the
         # strength, the bar filling up, and the trend").
         net = _type_body(self.text, "widget_je_covert_network_row")
@@ -249,11 +280,15 @@ class StateGateTest(unittest.TestCase):
         self.assertNotIn("covert_disp_net_next_intel_frac", self.text)
 
     def test_no_section_opens_on_a_line_that_can_be_empty(self):
-        # Funding opens on the state line, which the custom loc always fills.
+        # Funding opens on the state line, shown only while funded with
+        # nothing running (COV-11: zero funding is said in the overview and
+        # above the operations), then the stepper, which is never empty.
         fund = _type_body(self.text, "te_covert_sec_funding")
         panel = fund[fund.index("covert_panel = {"):]
-        first = re.search(r"\n\t\t\t(\w+) = \{\s*\n\s*(\w+) = \"([^\"]*)\"", panel)
-        self.assertEqual(first.group(1, 2, 3), ("covert_text", "text", "je_iw_funding_state"))
+        first = re.search(r"\n\t\t\t(\w+) = \{\s*\n\s*visible = \"([^\"]*)\"\s*\n\s*text = \"([^\"]*)\"", panel)
+        self.assertEqual(first.group(1, 3), ("covert_text", "je_iw_funding_state"))
+        self.assertIn("GetScriptedGui('covert_funding_ready_sgui').IsShown", first.group(2))
+        self.assertLess(panel.index("je_iw_funding_state"), panel.index("covert_cc_funding_stepper = { }"))
         self.assertIn("GetCustom('covert_funding_state_line')", _loc()["je_iw_funding_state"])
 
 
@@ -292,12 +327,13 @@ class OverviewTest(unittest.TestCase):
         self.assertIn(OTHER_ICONS["funding"], self.ov)
 
     def test_bars_read_display_fractions(self):
-        for sv in ("covert_disp_capacity_frac", "covert_disp_tc_frac", "covert_disp_tc_next_frac"):
+        for sv in ("covert_disp_capacity_frac", "covert_disp_tc_frac"):
             self.assertIn(f"FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('{sv}') )", self.ov, sv)
 
     def test_the_bar_rows_line_up(self):
-        # Label 100, bar 200, value 120 and a 24 px trend cell in both rows.
-        rows = re.findall(r"minimumsize = \{ 100 -1 \}.*?size = \{ 200 18 \}.*?minimumsize = \{ 120 -1 \}.*?size = \{ 24 24 \}",
+        # Label 100, bar 180, value 140 and a 24 px trend cell in both rows
+        # (COV-14: the value is at 16 now, and the top tier's line is longest).
+        rows = re.findall(r"minimumsize = \{ 100 -1 \}.*?size = \{ 180 18 \}.*?minimumsize = \{ 140 -1 \}.*?size = \{ 24 24 \}",
                           self.ov, re.S)
         self.assertEqual(len(rows), 2)
 
@@ -349,8 +385,13 @@ class OperationRowTest(unittest.TestCase):
                     "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt",
                     "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3",
                     "je_iw_known_row_tt", "je_iw_known_row_months", "je_iw_known_row_attacker",
-                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip"):
-            self.assertNotIn("JournalEntry", loc[key], key)
+                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip",
+                    # The row's buttons (COV-9a) and the hovers COV-1 and COV-4 added.
+                    "je_iw_stand_down_tooltip", "je_iw_priority_step_up_tooltip",
+                    "je_iw_priority_step_down_tooltip", "je_iw_op_row_strength_line",
+                    *(f"je_iw_op_row_{t}_tt" for t in OP_TYPES),
+                    *(f"je_iw_op_row_exposure_{n}_tt" for n in range(1, 5))):
+            self.assertNotIn("JournalEntry", _shown_raw(loc, key), key)
 
 
 
@@ -610,10 +651,16 @@ class FundingTableTest(unittest.TestCase):
 
 
 # ---- Round 3, rule 1: nothing a player reads ends in "..." ----------------
-# The owner's measurements, in GUI units per character: the large font about
-# 10, the medium (table) font about 8.6. The small font was not measured; it
-# is taken at the medium rate, which overstates it. Plus 10% margin.
-UNITS = {"small": 8.6, "medium": 8.6, "large": 10.0}
+# The owner's measurements, in GUI units per character: the serif face about
+# 10 at 20 (0.5 a point, so 8.5 at the 17 row size), the overview's tooltip
+# face 8.6 at 16. Plus 10% margin. The panel's sizes are its own
+# covert_fontsize_* templates (COV-14, the 17 / 20 / 16 ladder), read from
+# the file, so a change of type re-budgets every cell; "large" is the
+# section headers' vanilla font, which is not the panel's.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template covert_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(GUI))}
+UNITS = {"row": 10.0 / 20 * _SIZES["row"], "heading": 10.0 / 20 * _SIZES["heading"],
+         "overview": 8.6 / 16 * _SIZES["overview"], "large": 10.0}
 MARGIN = 1.1
 # The longest names a dynamic label can show.
 LONGEST = {
@@ -622,27 +669,27 @@ LONGEST = {
 }
 # Fixed-width cells whose text is set outside a row type: (key, width, font).
 FIXED_CELLS = [
-    ("je_iw_ov_standing_0", 108, "small"), ("je_iw_ov_standing_1", 108, "small"),
-    ("je_iw_ov_standing_2", 108, "small"), ("je_iw_ov_standing_3", 108, "small"),
-    ("je_iw_ov_standing_4", 108, "small"), ("je_iw_ov_funding_label", 108, "small"),
-    ("je_iw_ov_tc_label", 108, "small"), ("je_iw_ov_caught_label", 108, "small"),
-    ("je_iw_capacity_header", 100, "medium"), ("je_iw_tradecraft_header", 100, "medium"),
-    ("je_iw_capacity_total", 120, "medium"), ("je_iw_tradecraft_line", 120, "medium"),
-    ("je_iw_funding_stepper_label", 80, "medium"), ("je_iw_funding_stepper_value", 180, "medium"),
-    ("je_iw_priority_stepper_label", 80, "small"), ("je_iw_stand_down_button", 140, "small"),
-    ("je_iw_net_row_strength", 120, "medium"),
+    ("je_iw_ov_standing_0", 108, "overview"), ("je_iw_ov_standing_1", 108, "overview"),
+    ("je_iw_ov_standing_2", 108, "overview"), ("je_iw_ov_standing_3", 108, "overview"),
+    ("je_iw_ov_standing_4", 108, "overview"), ("je_iw_ov_funding_label", 108, "overview"),
+    ("je_iw_ov_tc_label", 108, "overview"), ("je_iw_ov_caught_label", 108, "overview"),
+    ("je_iw_capacity_header", 100, "overview"), ("je_iw_tradecraft_header", 100, "overview"),
+    ("je_iw_capacity_total", 140, "overview"), ("je_iw_tradecraft_line", 140, "overview"),
+    ("je_iw_funding_stepper_label", 80, "row"), ("je_iw_funding_stepper_value", 180, "row"),
+    ("je_iw_priority_stepper_label", 80, "row"), ("je_iw_stand_down_button", 140, "row"),
+    ("je_iw_net_row_strength", 120, "row"),
     # Section headers: 520 wide, less the arrow.
     ("je_iw_sec_ops_header", 440, "large"), ("je_iw_funding_header", 440, "large"),
     ("je_iw_net_header", 440, "large"), ("je_iw_defense_header", 440, "large"),
     ("je_iw_known_header", 440, "large"), ("je_iw_how_header", 440, "large"),
     # The Known Foreign Operations button: 150 wide, less the margin.
-    ("je_iw_known_expose_button", 140, "large"), ("je_iw_known_ordered", 460, "medium"),
+    ("je_iw_known_expose_button", 140, "row"), ("je_iw_known_ordered", 460, "row"),
 ]
 # Columns of the row types, by block name: (width, font).
 ROW_COLUMNS = {
-    "covert_value_row": {"row_label": (320, "medium"), "row_value": (140, "medium")},
-    "covert_levels_row": {"level_text": (170, "medium"), "stealth_text": (80, "medium"),
-                          "capacity_text": (80, "medium"), "cost_text": (130, "medium")},
+    "covert_value_row": {"row_label": (320, "row"), "row_value": (140, "row")},
+    "covert_levels_row": {"level_text": (170, "row"), "stealth_text": (80, "row"),
+                          "capacity_text": (80, "row"), "cost_text": (130, "row")},
 }
 
 
@@ -664,6 +711,34 @@ def _shown(value, loc):
     value = re.sub(r"@\w+!", "@@", value)                    # a text icon: about two characters
     value = re.sub(r"#[A-Za-z_]+(?:;[^ ]*)? ?", "", value)    # format openers
     return value.replace("#!", "")
+
+
+def _font_of(gui, key):
+    """The covert_fontsize_* template the textbox showing `key` reads: its
+    own `using`, or, when the key is set in a blockoverride of a type
+    instance, the type's."""
+    at = gui.index(f'text = "{key}"')
+    depth, i = 0, at
+    openers = []
+    while i > 0 and len(openers) < 3:
+        i -= 1
+        if gui[i] == "}":
+            depth += 1
+        elif gui[i] == "{":
+            if depth == 0:
+                line = gui[gui.rindex("\n", 0, i) + 1:i]
+                openers.append((line.strip(), i))
+            else:
+                depth -= 1
+    name, start = openers[0]
+    body = gui[start:]
+    body = body[:body.index("\n" + gui[gui.rindex("\n", 0, start) + 1:start].split(name.split()[0])[0] + "}")]
+    m = re.search(r"using = covert_fontsize_(\w+)", body)
+    if m and not name.startswith("blockoverride"):
+        return m.group(1)
+    instance = openers[1][0].split(" =")[0] if name.startswith("blockoverride") else name.split(" =")[0]
+    m = re.search(r"using = covert_fontsize_(\w+)", _type_body(gui, instance))
+    return m and m.group(1)
 
 
 class WidthBudgetTest(unittest.TestCase):
@@ -705,6 +780,29 @@ class WidthBudgetTest(unittest.TestCase):
                             self._fits(text.group(1), width, font)
                             checked += 1
         self.assertGreater(checked, 40)
+
+    def test_every_textbox_reads_a_panel_template(self):
+        # COV-14: no textbox in the panel sets its own size from vanilla's
+        # ladder; each reads one of the three templates.
+        self.assertEqual(set(_SIZES), {"row", "heading", "overview"})
+        self.assertEqual((_SIZES["row"], _SIZES["heading"], _SIZES["overview"]), (17, 20, 16))
+        self.assertNotRegex(self.gui, r"using = fontsize_(small|medium|large|xl)\b")
+
+    def test_the_fixed_cells_fonts_are_the_markups(self):
+        # The font each FIXED_CELLS entry is budgeted at is the one its
+        # textbox (or, for a type instance's block, the type) reads.
+        for key, _, font in FIXED_CELLS:
+            if font == "large":
+                continue
+            with self.subTest(key=key):
+                self.assertEqual(_font_of(self.gui, key), font)
+
+    def test_the_tradecraft_line_fits_with_either_ending(self):
+        # Its ending is a SelectLocalization, which _shown reads as one number.
+        for option in ("je_iw_tradecraft_line_next", "je_iw_tradecraft_line_top"):
+            with self.subTest(option=option):
+                text = "100 " + _shown(self.loc[option], self.loc)
+                self.assertLessEqual(len(text) * UNITS["overview"] * MARGIN, 140, text)
 
     def test_the_overview_funding_word_is_short(self):
         # "Covert Network" does not fit a 108-unit cell, so the cell says

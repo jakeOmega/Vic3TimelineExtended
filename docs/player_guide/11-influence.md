@@ -25,7 +25,7 @@ show the same panels, and a change made in one shows in the other. The tab is
 grayed until the journal entry opens; hover it for what is still missing. It
 ends with an Open Journal Entry button.
 
-![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programmes, and where our pull comes from.](images/hegemony_tab.png)
+![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programs, and where our pull comes from.](images/hegemony_tab.png)
 
 The overview at the top is always shown. Its first row is icons with a word
 beneath: your influence tier (a gray sprig for Negligible, then a lyre that
@@ -35,19 +35,22 @@ Benchmark icon while you carry the Foreign Cultural Benchmark. Below them are a
 pie of your cultural share (amber for yours, gray for the rest of the world),
 with an arrow for the change since last month, and the flags of the three
 Leading Powers, the leader first. Hover a flag for the country and click it to
-open the country. Hover the other icons for the detail: the tier's full name,
-the model's share of world culture and its push abroad, the benchmark's
-strength.
+open the country. Hover the other icons for the detail: the tier's full name
+and the share the next tier starts at, the model's share of world culture and
+its push abroad, the benchmark's strength. Last comes Programs, with the
+Ministry of Culture's icon: how many of the four programs are running and your
+funding level against its cap, or No Ministry in red while you lack the law.
+Hover it for each program and the funding cost.
 
 The sections below all start open except the explanations:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Top Cultural Powers | Open | The ten largest cultural shares at the last recount, each with its change since the recount before (green up, red down). An arrow marks your row; hover a row for that country's pull components. When you are outside the top ten, Our Rank below the list gives your place. |
-| Cultural Programmes | Open | Programme Funding with its − and + buttons, then a row for each program with Running or Idle and its button (International Cultural Outreach's row reads International Outreach). Hover a program's name for what it gives while it runs, and a button for what is missing and what it would do. While you lack Ministry of Culture Established, a line above the rows says so. |
-| Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, and Raw Score and Pull Multiplier close the list. |
+| Top Cultural Powers | Open | A table of the ten largest cultural shares at the last recount: rank, flag, country, share, its change since that country's own share at the recount before (with an arrow up or down), and its political model as a colored swatch (hover it for the model). An arrow marks your row; hover a row for that country's pull components. When you are outside the top ten, Our Rank below the table gives your place. |
+| Cultural Programs | Open | Program Funding with its − and + buttons (hover the level for where its cap comes from), then a row for each program with Running or Idle and its button (International Cultural Outreach's row reads International Outreach). Hover a program's name for what it gives while it runs, and a button for what is missing and what it would do. While you lack Ministry of Culture Established, a line above the rows says so. |
+| Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, the Pull Multiplier closes the components, and Raw Score stands under the rule. |
 | Political Models of the World | Open | The pie of the world's political models and its legend, by short name. Hover a model for its full name and the laws that put a country in it. |
-| History | Open | Each political model's share of world cultural influence, stacked to 100% in one bar per year, over 5, 20 or 100 years. Hover a bar for its date and all fifteen model shares. Every country sees the same history. Existing saves begin collecting at the next cultural recount; up to 100 annual snapshots are kept. |
+| History | Open | Each political model's share of world cultural influence, stacked to 100% in one bar per year, over 5, 20 or 100 years, its legend by short name. Hover a bar for its date and all fifteen model shares. Every country sees the same history. Existing saves begin collecting at the next cultural recount; up to 100 annual snapshots are kept. |
 | How Cultural Hegemony Works | Collapsed | The explanations: cultural share and tiers, the programs, where pull comes from, the top cultural powers, political models and the Foreign Cultural Benchmark. |
 
 ### Cultural share and influence tiers
@@ -172,7 +175,7 @@ at the next monthly update.
 
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
-| Programme Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
+| Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
 | Cultural Institutes | Fund / Defund | +10% pull. | 150 influence. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | 200 influence. |
@@ -220,7 +223,8 @@ per level, and from the era 7 technology Mainframe Computers. Once active, the
 entry stays open even if you later lose that extra slot. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
-"Covert: ..." with the operation's name. Everything else is on the Covert tab
+"Covert: ..." with the operation's name, which is also its name on your rows.
+Everything else is on the Covert tab
 of the Military panel, which shows the journal entry's own panels: a change made
 in one shows in the other. The tab is grayed until the journal entry is active;
 hover it for what is still missing. It ends with an Open Journal Entry button.
@@ -241,18 +245,19 @@ beneath:
 
 Below the icons, Operation Slots shows how many slots you hold and how many are
 in use, as case files lit while an operation fills them. Two bars follow:
-Capacity, your intelligence capacity as a share of the world's best, and
-Tradecraft, with a tick at the next tier and an arrow for which way it last
-moved. Hover any of them for the detail: the standing's meaning, the funding
-level's name and cost, the capacity breakdown, the Tradecraft rules and why it
-last changed.
+Capacity, your intelligence capacity as a share of the world's best, with a
+line at each standing's threshold, and Tradecraft, with a line at each tier
+(hover a line for what it unlocks), the next tier's threshold beside it and an
+arrow for which way it last moved. Hover any of them for the detail: the
+standing's meaning, the funding level's name and cost, the capacity breakdown,
+this month's Tradecraft and why it last changed.
 
 The sections below are open by default, except the explanations at the foot:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: its icon, type and target, its phase, its own Detection Risk, the priority stepper and Stand down. |
-| Funding | Open | What your funding level is doing, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
+| Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: the target's flag, its icon, its name and target (hover it for what it does), its phase, its own Detection Risk (hover it for the breakdown), what its exposure would count as, the priority stepper and Stand down. |
+| Funding | Open | A line while funded with nothing running, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
 | Agent Networks | Open, once you have a network | A row for each network: the target's flag (hover it for the country, click it to open the country), its strength with a bar and an arrow for growing or decaying, and what it reports. |
 | Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while an exposure stands. |
 | Known Foreign Operations | Open, while you are watching an operation | A row for each foreign operation you caught and let run: its sponsor's flag and name, the operation, the months you have watched it and an Expose button. |
@@ -345,13 +350,13 @@ have agencies of their own.
 | Ideological Subversion | Target −10% separatism resistance; movements there matching your political model grow more active and attract more pops | Pop Culture; target has a political movement | 100 |
 | Destabilization | Target −15% separatism resistance, worse colonial stability; every movement there grows more active and attracts more pops | Social Media; target has a political movement | 100 |
 | Regime Change | Target −5 legitimacy, −1 coup resistance, more radical movements; once fully operational, a coup under way there gains 5 progress a month | Satellite Communications; a rivalry; target not your subject; Seasoned [Tradecraft](#tradecraft) | 100 |
-| Nuclear Programme Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
-| Space Programme Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
+| Nuclear Program Sabotage | Target's nuclear program 25% slower | Target runs a funded program; Seasoned Tradecraft | 100 |
+| Space Program Espionage | You: space race milestones 10% faster and 10% less risky. Target: −3 authority | Target has completed a milestone you have not | 25 |
 | Cultivate Assets | Nothing to either country; your network there grows half again as fast | Target not your subject | 25 |
 | Secure Loose Material | Once established, a 3% monthly chance (6% fully operational) of finding and destroying one of the target's missing warheads | Target has warheads unaccounted for; Nuclear Weapons rule on | 25 |
 | Incite Colonial Autonomy | Every colony the target holds gains 0.5 autonomy a month; a colony that reaches 100 breaks away | Target holds a colony; Simple or Full Colonies setting of the Space Race rule | 50 |
 | Sabotage Colony | The target's most populous colony loses 1% of its people a month and gains 0.25 autonomy | Target holds a colony; Simple or Full Colonies; Seasoned Tradecraft | 100 |
-| Survey Colony Defences | Your fleets fire 20% harder on the defences of the target's colonies, and your Fleets panel shows their Defences, integrity and marines | Target holds a colony; Full Colonies setting | 50 |
+| Survey Colony Defenses | Your fleets fire 20% harder on the defenses of the target's colonies, and your Fleets panel shows their Defences, integrity and marines | Target holds a colony; Full Colonies setting | 50 |
 | Counterintelligence Support | Target: +8 economic, military and ideological covert defense. You: nothing | Target is a friend and has no other protector | 25 |
 
 An operation uses its influence for as long as it runs, more the worse the
@@ -367,7 +372,7 @@ if the friendship does. It uses a slot and upkeep like any operation but gives
 you nothing back. Its defense adds to the target's own (see [Covert
 defense](#covert-defense)).
 
-If you run several Space Programme Espionage operations, their bonuses come
+If you run several Space Program Espionage operations, their bonuses come
 from the strongest and don't add up. Stolen technology does add up: each
 Industrial or Military Espionage operation steals from its own target.
 Election Interference cuts electoral confidence by 5% once establishing and 10% once fully operational, half that against a
@@ -392,8 +397,10 @@ technology's cost completes it. Each operation's row shows how much it has
 stolen and the latest technology.
 
 Hover over an operation before launching it: the tooltip previews its effects at
-base strength (established, priority 1) and how phase and priority scale them,
-and the description says how the world will read it if it is exposed.
+base strength (established, priority 1), your network in that country and the
+head start it gives, the weekly upkeep the operation adds, and how its phase
+scales the effects, and the description says how the world will read it if it
+is exposed.
 
 ### Operation phases and priority
 
@@ -464,7 +471,7 @@ the drift. Standing an operation down costs nothing.
 | Untested | 0 | |
 | Fledgling | 20 | |
 | Established | 40 | Priority 3 |
-| Seasoned | 60 | Regime Change, Nuclear Programme Sabotage and Sabotage Colony |
+| Seasoned | 60 | Regime Change, Nuclear Program Sabotage and Sabotage Colony |
 | Veteran | 80 | One more operation of each type |
 
 Each tier above Untested adds 5% to your intelligence capacity and makes your
@@ -497,9 +504,9 @@ the establishing phase the costs are:
 
 | Exposure tier | Operations | Recall and apologize | Deny everything |
 |---|---|---|---|
-| Routine espionage | Industrial, Military and Space Programme Espionage, Cultivate Assets, Secure Loose Material | +1 infamy, −5 relations | +0.5 infamy, −10 relations |
-| Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign, Incite Colonial Autonomy, Survey Colony Defences | +2 infamy, −10 relations | +1 infamy, −20 relations |
-| Attempt to bring down a government | Ideological Subversion, Destabilization, Regime Change, Nuclear Programme Sabotage, Sabotage Colony | +4 infamy, −20 relations | +2 infamy, −40 relations |
+| Routine espionage | Industrial, Military and Space Program Espionage, Cultivate Assets, Secure Loose Material | +1 infamy, −5 relations | +0.5 infamy, −10 relations |
+| Interference in internal affairs | Election Interference, Financial Subversion, Influence Campaign, Incite Colonial Autonomy, Survey Colony Defenses | +2 infamy, −10 relations | +1 infamy, −20 relations |
+| Attempt to bring down a government | Ideological Subversion, Destabilization, Regime Change, Nuclear Program Sabotage, Sabotage Colony | +4 infamy, −20 relations | +2 infamy, −40 relations |
 | Wartime sabotage, exposed during the war | Infrastructure Sabotage, Communications Disruption | Nothing | Nothing |
 | Wartime sabotage, exposed before the war | The same | +4 infamy, −10 relations | +2 infamy, −20 relations |
 
@@ -621,7 +628,7 @@ when the colony's holder is its rival or at war with it. An AI with fleets of
 its own surveys the colony defences of a rival or an enemy. Upkeep grows with the
 operator's GDP, not the target's, so an AI leaves a country with less than a
 tenth of its GDP alone unless its gold reserves are at least half full and its
-budget is in surplus. Espionage, Nuclear Programme Sabotage, Secure Loose
+budget is in surplus. Espionage, Nuclear Program Sabotage, Secure Loose
 Material and the colony operations ignore the target's size, and so does a
 wartime operation against a country the AI is losing to. The AI
 raises priority to 2 against rivals and to 3 when a great power is at war with
@@ -633,7 +640,7 @@ operations, no milestone and no colony of its own; for the defences survey, no
 fleets of its own, or peace and no hostility), or when its influence runs
 into deficit. It launches an operation that uses influence only
 while it holds 300 or more. It stops Cultivate Assets once its network reaches
-75. It needs Seasoned Tradecraft for Regime Change, Nuclear Programme Sabotage
+75. It needs Seasoned Tradecraft for Regime Change, Nuclear Program Sabotage
 and Sabotage Colony, as you do, so it rarely launches them.
 
 The AI doesn't start Election Interference, Financial Subversion, Infrastructure

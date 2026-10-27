@@ -265,7 +265,10 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         for rgb, want in zip(colors, expected):
             for actual, target in zip(rgb, want):
                 self.assertAlmostEqual(float(actual), target, places=6)
-        self.assertEqual(re.findall(r'text = "ch_model_((?!hist_)\w+)"', history), MODELS)
+        # The legend names each model as the models legend does, the short name
+        # with the full one and its laws on hover (CH-12).
+        self.assertEqual(re.findall(r'text = "je_ch_ov_model_(\w+)"', history), MODELS)
+        self.assertEqual(re.findall(r'tooltip = "ch_model_((?!hist_)\w+)_tt"', history), MODELS)
         self.assertNotIn("te_hist_mk", plot + history)
         self.assertNotIn("'te_hist_range'", plot + history)
         loc = _load_loc()
