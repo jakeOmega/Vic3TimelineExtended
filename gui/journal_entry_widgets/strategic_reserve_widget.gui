@@ -1160,6 +1160,7 @@ types strategic_reserve_widget_types
 
 			### The rate the buttons change (SR-1): the Policy Settings
 			### steppers' idiom, the value between - and +. 58 holds "-99.9K".
+			### Underlined for its hover; the figure's sign colors it.
 			widget = {
 				size = { 58 28 }
 				parentanchor = vcenter
@@ -1172,7 +1173,7 @@ types strategic_reserve_widget_types
 					elide = right
 					align = center|nobaseline
 					using = st_res_fontsize_row
-					default_format = "#v"
+					default_format = "#tooltippable"
 					block "row_rate_short" {}
 				}
 			}

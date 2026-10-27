@@ -660,6 +660,7 @@ types global_warming_widget_types
 							max_width = 106
 							elide = right
 							align = left|nobaseline
+							default_format = "#tooltippable"
 							text = "gw_ov_temp_label"
 						}
 					}

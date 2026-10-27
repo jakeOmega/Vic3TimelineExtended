@@ -760,16 +760,19 @@ types covert_operations_widget_types
 		# before this widget shipped — they get it at the first monthly pulse.
 		widget_je_covert_operation_detail = {
 			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_phase_prep"
 			tooltip = "je_iw_op_row_phase_prep_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_phase_est"
 			tooltip = "je_iw_op_row_phase_est_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_phase_full"
 			tooltip = "je_iw_op_row_phase_full_tt"
 		}
@@ -786,11 +789,13 @@ types covert_operations_widget_types
 		#      (covert_op_is_hostile), so its row says so instead of a figure ----
 		widget_je_covert_operation_detail = {
 			visible = "[Not( ScriptContainer.HasTag('iw_op_counterintel_support') )]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_detection"
 			tooltip = "je_iw_op_row_detection_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_detection_none"
 			tooltip = "je_iw_op_row_detection_none_tt"
 		}
@@ -829,11 +834,13 @@ types covert_operations_widget_types
 		#      first theft writes iw_stolen_total ----
 		widget_je_covert_operation_detail = {
 			visible = "[And( Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') ), ScriptContainer.HasVariable('iw_stolen_total') )]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_tech_stolen"
 			tooltip = "je_iw_op_row_tech_stolen_tt"
 		}
 		widget_je_covert_operation_detail = {
 			visible = "[And( Or( ScriptContainer.HasTag('iw_op_industrial_espionage'), ScriptContainer.HasTag('iw_op_military_espionage') ), Not( ScriptContainer.HasVariable('iw_stolen_total') ) )]"
+			default_format = "#tooltippable"
 			text = "je_iw_op_row_tech_stolen_none"
 			tooltip = "je_iw_op_row_tech_stolen_tt"
 		}
@@ -1776,6 +1783,7 @@ types covert_operations_widget_types
 					parentanchor = hcenter
 					align = hcenter|nobaseline
 					using = covert_fontsize_overview
+					default_format = "#tooltippable"
 					text = "je_iw_slots_detail"
 				}
 				flowcontainer = {
@@ -1898,6 +1906,7 @@ types covert_operations_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = covert_fontsize_overview
+						default_format = "#tooltippable"
 						text = "je_iw_capacity_header"
 					}
 					default_progressbar_horizontal = {
@@ -1975,6 +1984,7 @@ types covert_operations_widget_types
 						parentanchor = vcenter
 						align = left|nobaseline
 						using = covert_fontsize_overview
+						default_format = "#tooltippable"
 						text = "je_iw_tradecraft_header"
 					}
 					default_progressbar_horizontal = {
@@ -2139,6 +2149,7 @@ types covert_operations_widget_types
 					tooltip = "je_iw_detection_factors_tooltip"
 					blockoverride "row_label" {
 						text = "je_iw_detection_efficiency_label"
+						default_format = "#tooltippable"
 					}
 					blockoverride "row_value" {
 						text = "je_iw_detection_efficiency"
@@ -2277,6 +2288,7 @@ types covert_operations_widget_types
 				}
 				blockoverride "level_text" {
 					text = "je_iw_fund_tbl_level_0"
+					default_format = "#tooltippable"
 				}
 				blockoverride "stealth_text" {
 					text = "je_iw_fund_tbl_none"
@@ -2295,6 +2307,7 @@ types covert_operations_widget_types
 				}
 				blockoverride "level_text" {
 					text = "je_iw_fund_tbl_level_1"
+					default_format = "#tooltippable"
 				}
 				blockoverride "stealth_text" {
 					text = "je_iw_fund_tbl_none"

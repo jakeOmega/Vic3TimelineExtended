@@ -635,6 +635,27 @@ class TabLayoutTest(unittest.TestCase):
                     self.assertNotIn(name, value)
 
 
+class HoverMarkTest(unittest.TestCase):
+    """A row is underlined when it has a tooltip, and only then (style guide
+    rule 3): te_nation_row underlines through its "row_format" block, and a row
+    with no tooltip overrides the block empty, so a new row with a hover, the
+    generated type rows included, is marked for free."""
+
+    def test_rows_and_hovers_in_step(self):
+        row_type = re.search(r"\ttype te_nation_row = textbox \{\n(.*?)\n\t\}", _read(ROOT / "gui" / "te_nation_tab.gui"),
+                             re.S).group(1)
+        self.assertRegex(row_type, r'block "row_format" \{\s*default_format = "#tooltippable"\s*\}')
+        rows = 0
+        for name in ("te_nation_tab.gui", "te_nation_generated.gui"):
+            gui = _read(ROOT / "gui" / name)
+            for m in re.finditer(r"\n(\t+)te_nation_row = \{(.*?)\n\1\}", gui, re.S):
+                rows += 1
+                body = m.group(2)
+                with self.subTest(gui=name, row=re.search(r'text = "(\w+)"', body).group(1)):
+                    self.assertEqual('blockoverride "row_format" {}' in body, "tooltip" not in body)
+        self.assertGreater(rows, 100)
+
+
 class FixtureTest(unittest.TestCase):
     def test_the_fixture_is_the_installed_file(self):
         base = os.environ.get("VIC3_BASE_GAME")
