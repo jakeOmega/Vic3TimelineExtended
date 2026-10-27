@@ -36,7 +36,7 @@ tooltips/charts, the Trade tab's All Goods tariff rows). Read-only audit, 2026-1
 
 ### Global Warming
 
-### GW-1. Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and the brief's Carbon Removal row)
+### GW-1. Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and Carbon Removal Support)
 - **Status:** its loc-only part is applied in this PR (see "Applied in this PR" at the end); the rest is open.
 - **Category:** over-explaining / style
 - **Where:** loc `GW_CARBON_TAX_DESC` (`te_miscellaneous_l_english.yml:375`), `GW_RENEWABLE_INVESTMENT_DESC` (`:411`),

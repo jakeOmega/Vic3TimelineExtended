@@ -326,7 +326,7 @@ Top priorities: repeal tooltips rendered from the modifier (GW-5; the corrected 
 
 | ID | Finding | Kind | Effort |
 |---|---|---|---|
-| GW-1 | Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and the brief's Carbon Removal row) (loc part done) | over-explaining / style | quick |
+| GW-1 | Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and Carbon Removal Support) (loc part done) | over-explaining / style | quick |
 | GW-2 | Fossil-Fuel Tariffs' tooltip is a paragraph in front of its own modifier lines (loc part done) | over-explaining / style | quick |
 | GW-3 | Policies move Environmental Movement radicalism: How now says so, the policy rows still don't (loc part done) | hidden info / style | quick–medium |
 | GW-4 | Renewable Investment's money cost is invisible before adopting (hidden info) (loc part done) | hidden info | quick–medium |
