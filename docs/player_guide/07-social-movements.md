@@ -70,8 +70,8 @@ groups exclude each other. Cooptation is limited only by its law requirement.
 
 | Policy | Requires | What it does |
 |---|---|---|
-| Encourage Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
-| Federal Civil Rights Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
+| Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
+| Federal Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
 | Gradualist Accommodation | No crackdown | Raises support a little; eases turmoil, raises acceptance slightly |
 | Cooptation / Token Reform | Discrimination, Indifference or Cultural Assimilation | Raises support for 12 months only; eases turmoil, costs legitimacy through ideological incoherence |
 | Suppression / Crackdown | No pro-movement policy | Lowers support; adds authority and turmoil |
@@ -126,6 +126,8 @@ policy must run more than 18 months to count. Results decay over ten years.
 | The Movement Fades (failure) | Otherwise | Radicals among lower-strata pops |
 
 Ties between pro-movement policies go to Federal Protection, then Grassroots.
+The entry's status lists the months each policy has run and names the ending
+the movement would reach if it won or collapsed now.
 
 ### How the AI handles civil rights
 

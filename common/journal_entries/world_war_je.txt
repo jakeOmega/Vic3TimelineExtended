@@ -100,6 +100,15 @@ je_world_war = {
 				trigger = { always = yes }
 			}
 		}
+		# The ideological tension the leadup statuses and the buttons'
+		# thresholds read (ww_ideological_tension, world_war_values.txt),
+		# shown until the world war is over (GUI audit JE-3).
+		first_valid = {
+			triggered_desc = {
+				desc = je_world_war_tension_line
+				trigger = { NOT = { has_variable = ww_peace_concluded } }
+			}
+		}
 		# Our ideological camp (the country_is_* buckets in
 		# world_war_triggers.txt), which decides whom we count as our opposite.
 		first_valid = {

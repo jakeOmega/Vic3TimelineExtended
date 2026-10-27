@@ -661,3 +661,15 @@ te_seabed_build_in_sgui = {
 		}
 	}
 }
+
+# The state view's Ocean Basin tile (states_panel.gui, GUI audit VAN-8b): shown
+# to a player who has researched the technology, whoever owns the state. Root
+# it on GetPlayer behind Not( GetMetaPlayer.IsObserver ): an observer has no
+# player (gui_modding_guide.md, the observer note). Display only.
+te_seabed_basin_tile_sgui = {
+	scope = country
+	is_shown = { has_technology_researched = abyssal_plain_mining }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

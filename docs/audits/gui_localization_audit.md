@@ -32,7 +32,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | #1209 |
 | Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 (all done, 2026-10-27) | 29 | #1210 |
 | Demographics, Nation tab, the window, tab gates | [`demog_nation_window.md`](gui_audit/demog_nation_window.md) | 18 | 41 | #1211 |
-| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 | 27 | #1212 |
+| Additions to vanilla panels, entries with no panel | [`vanilla_panels_other_jes.md`](gui_audit/vanilla_panels_other_jes.md) | 22 (21 done, 1 partly done) | 27 | #1212 |
 
 ## What this PR changes
 
@@ -483,30 +483,30 @@ Top priorities: the fertility tooltips promise figures no longer drawn (DEM-1); 
 
 Top priorities: State Collapse's status and goal line (JE-1; its reason is done here); World War's tension shown, and its buttons' conditions phrased (JE-3); Civil Rights' policy months shown (JE-4); Create New Religion's Proclaim effects made visible (JE-2); the construction market's read-out as a table, with one explainer (VAN-1–3); the state tiles' row hovers underlined (VAN-10).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| VAN-1 | Construction Market: an always-open intro paragraph, and the explainer written twice (loc part done) | over-explaining / spread-out/redundant | quick–medium |
-| VAN-2 | Construction Market read-out: six sentences that should be a label/value table | style / list | medium |
-| VAN-3 | Construction Market tooltips: the same three rules restated in five or six tooltips | spread-out/redundant / over-explaining | quick–medium |
-| VAN-4 | Direct Construction section: an always-open paragraph that ends with a developer note | over-explaining / other | quick |
-| VAN-5 | Migration Crowding tile: the hover is a lesson in the curve, and repeats the tile (loc part done) | over-explaining | quick |
-| VAN-6 | Homeland Dynamics tile: rules in prose, rate units that disagree, and a tile that is always there (loc part done) | over-explaining / style / spread-out | quick–medium |
-| VAN-7 | Solar Collector / Antimatter tiles: country-wide figures repeated in every state, and again on hover | spread-out/redundant | medium |
-| VAN-8 | Seabed Licences tile: a five-basin table written as text, in every coastal state | list / spread-out/redundant | quick |
-| VAN-9 | UN Mission tile: every kind's success rule in one sentence, though the state has one kind (loc part done) | over-explaining / list | quick–medium |
-| VAN-10 | State tiles' per-row hovers are not marked hoverable | hidden info | medium |
-| VAN-11 | Tourism card: headers inline their concept's description, and two tooltip pairs repeat each other (loc part done) | over-explaining / list | quick |
-| VAN-12 | Arable Land tile hover: repeats the rows, then explains the split-state accounting | over-explaining | quick |
-| VAN-13 | Power bloc: the locked principle slots are a model; one small inconsistency | other / style | quick |
-| JE-1 | State Collapse: the entry never says what the collapse does, and frames it as a goal (loc part done) | hidden info / over-explaining | quick–medium |
-| JE-2 | Create New Religion: the Proclaim button hides everything it does, and the builder has no "where am I" | hidden info / style | quick–medium |
-| JE-3 | World War: the number that drives everything is never shown, and greyed buttons print raw script | hidden info / style | quick–medium |
-| JE-4 | Civil Rights: the endings depend on months nobody can see | hidden info | medium |
-| JE-5 | Heir Education: a manual in the description, button text that repeats the engine's lines, one hidden cost (loc part done) | over-explaining / spread-out/redundant / hidden info | quick–medium |
-| JE-6 | The four "debate" entries: status lines restate the law, and don't say what is still missing | hidden info / style | quick–medium |
-| JE-7 | Human Augmentation's reason links the power-bloc concept by mistake (loc part done) | style / other | quick |
-| JE-8 | Mental Health's fail condition reads in days, and `_desc` keys shadow `_reason` | other | medium |
-| JE-9 | Tax-code overrides of vanilla entries: three goal lines that can never be met under the rule | other | quick |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| VAN-1 | Construction Market: an always-open intro paragraph, and the explainer written twice (loc part done) | over-explaining / spread-out/redundant | quick–medium | done |
+| VAN-2 | Construction Market read-out: six sentences that should be a label/value table | style / list | medium | done |
+| VAN-3 | Construction Market tooltips: the same three rules restated in five or six tooltips | spread-out/redundant / over-explaining | quick–medium | done |
+| VAN-4 | Direct Construction section: an always-open paragraph that ends with a developer note | over-explaining / other | quick | done (a Site from the panel: play-test) |
+| VAN-5 | Migration Crowding tile: the hover is a lesson in the curve, and repeats the tile (loc part done) | over-explaining | quick | done (#1202) |
+| VAN-6 | Homeland Dynamics tile: rules in prose, rate units that disagree, and a tile that is always there (loc part done) | over-explaining / style / spread-out | quick–medium | done (c by owner decision) |
+| VAN-7 | Solar Collector / Antimatter tiles: country-wide figures repeated in every state, and again on hover | spread-out/redundant | medium | done |
+| VAN-8 | Seabed Licences tile: a five-basin table written as text, in every coastal state | list / spread-out/redundant | quick | done |
+| VAN-9 | UN Mission tile: every kind's success rule in one sentence, though the state has one kind (loc part done) | over-explaining / list | quick–medium | done |
+| VAN-10 | State tiles' per-row hovers are not marked hoverable | hidden info | medium | done |
+| VAN-11 | Tourism card: headers inline their concept's description, and two tooltip pairs repeat each other (loc part done) | over-explaining / list | quick | done (#1202) |
+| VAN-12 | Arable Land tile hover: repeats the rows, then explains the split-state accounting | over-explaining | quick | done |
+| VAN-13 | Power bloc: the locked principle slots are a model; one small inconsistency | other / style | quick | done |
+| JE-1 | State Collapse: the entry never says what the collapse does, and frames it as a goal (loc part done) | hidden info / over-explaining | quick–medium | done |
+| JE-2 | Create New Religion: the Proclaim button hides everything it does, and the builder has no "where am I" | hidden info / style | quick–medium | done |
+| JE-3 | World War: the number that drives everything is never shown, and greyed buttons print raw script | hidden info / style | quick–medium | done |
+| JE-4 | Civil Rights: the endings depend on months nobody can see | hidden info | medium | done |
+| JE-5 | Heir Education: a manual in the description, button text that repeats the engine's lines, one hidden cost (loc part done) | over-explaining / spread-out/redundant / hidden info | quick–medium | done |
+| JE-6 | The four "debate" entries: status lines restate the law, and don't say what is still missing | hidden info / style | quick–medium | done |
+| JE-7 | Human Augmentation's reason links the power-bloc concept by mistake (loc part done) | style / other | quick | done (#1202) |
+| JE-8 | Mental Health's fail condition reads in days, and `_desc` keys shadow `_reason` | other | medium | partly done: (b) needs the game |
+| JE-9 | Tax-code overrides of vanilla entries: three goal lines that can never be met under the rule | other | quick | done |
 
 ## Decisions for the owner
 

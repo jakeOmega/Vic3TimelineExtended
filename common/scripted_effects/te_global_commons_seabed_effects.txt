@@ -726,6 +726,26 @@ te_seabed_global_monthly = {
 		}
 		te_seabed_yearly_pass = yes
 	}
+	# Every coastal state's basin, once any country has the technology: the
+	# state view shows each coastal state's basin to a player who has it
+	# (te_seabed_basin_tile_shown; GUI audit VAN-8b, owner 2026-10-27), and
+	# the yearly pass, which sets them too, waits for a coastal claimant. Once
+	# a game; the pass and a change of owner cover state scopes made later.
+	if = {
+		limit = {
+			te_global_commons_enabled = yes
+			NOT = { has_global_variable = te_seabed_basins_set }
+			any_country = { has_technology_researched = abyssal_plain_mining }
+		}
+		set_global_variable = te_seabed_basins_set
+		every_country = {
+			limit = { any_scope_state = { is_coastal = yes } }
+			every_scope_state = {
+				limit = { is_coastal = yes }
+				te_seabed_ensure_state_basin = yes
+			}
+		}
+	}
 	te_seabed_follow_check_month = yes
 }
 
