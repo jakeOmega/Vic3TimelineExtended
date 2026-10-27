@@ -256,11 +256,16 @@ laws:
   - law_te_probe_carrier
   reason: temporary tax-code engine probe, inert outside te_debug_tax.1 (common/laws/zz_te_debug_tax_carrier.txt); delete with the probe; reviewed 2026-10-11
 treaty_articles:
-- image: gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_pacific.dds
+- images:
+  - gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_arctic.dds
+  - gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_atlantic.dds
+  - gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_indian.dds
+  - gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_pacific.dds
+  - gfx/interface/icons/diplomatic_treaties_articles_icons/te_seabed_lease_southern.dds
   entities:
   - te_seabed_lease_arctic
   - te_seabed_lease_atlantic
   - te_seabed_lease_indian
   - te_seabed_lease_pacific
   - te_seabed_lease_southern
-  reason: one seabed-lease article per basin, each named for its basin; one picture, the Pacific's file (icon batch 6); reviewed 2026-10-27
+  reason: one seabed-lease article per basin, one template (test_seabed_leases.py), so each basin's file holds the same picture (icon batch 6); reviewed 2026-10-27

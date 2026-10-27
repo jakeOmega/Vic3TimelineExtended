@@ -802,11 +802,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 2},
         # Solar colonization (#1172), on vanilla's Transfer State until now.
         "te_cede_colony": {"subject": "an open bronze hand holding out a small round grey moon rock with a gold-framed glass dome habitat standing on it", "seed": 1},
-        # Global Commons (#1107-#1160): the five basins' leases are one article, so one
-        # picture (the Pacific's file); on vanilla's goods transfer crates until now.
-        "te_seabed_lease_pacific": {"subject": "a heavy brass key lying on a small heap of round black manganese nodules on a patch of sandy seabed", "seed": 1},
-        **{f"te_seabed_lease_{basin}": {"use": f"{_GI}/diplomatic_treaties_articles_icons/te_seabed_lease_pacific.dds"}
-           for basin in ("atlantic", "indian", "arctic", "southern")},
+        # Global Commons (#1107-#1160): the five basins' leases are one template (test_seabed_leases.py),
+        # so each has its own file of one picture; on vanilla's goods transfer crates until now.
+        **{f"te_seabed_lease_{basin}": {"subject": "a heavy brass key lying on a small heap of round black manganese nodules on a patch of sandy seabed", "seed": 1}
+           for basin in ("pacific", "atlantic", "indian", "arctic", "southern")},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
