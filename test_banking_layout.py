@@ -82,7 +82,7 @@ def _sgui(name):
 def _loc():
     keys = {}
     for line in _read(LOC).splitlines():
-        m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+        m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
         if m:
             keys[m.group(1)] = m.group(2)
     return keys
@@ -642,7 +642,7 @@ def _concept_loc():
         if not name.endswith(".yml"):
             continue
         for line in _read(os.path.join(loc_dir, name)).splitlines():
-            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
             if m:
                 keys[m.group(1)] = m.group(2)
     return keys
@@ -782,7 +782,7 @@ def _all_loc():
     for name in sorted(os.listdir(loc_dir)):
         if name.endswith(".yml"):
             for line in _read(os.path.join(loc_dir, name)).splitlines():
-                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
                 if m:
                     keys[m.group(1)] = m.group(2)
     return keys

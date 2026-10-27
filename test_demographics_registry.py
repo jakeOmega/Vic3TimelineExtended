@@ -3887,7 +3887,7 @@ class TestNaturalFertilityScript(unittest.TestCase):
         self.assertAlmostEqual(eng.value(eng._tree(eng.values, "te_demog_natural_shown")), 0.9)
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
-            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertIn("ScriptValue('te_demog_natural_shown')", line, key)
             self.assertNotIn("te_demog_tfr_natural", line, key)
 
@@ -3896,7 +3896,7 @@ class TestNaturalFertilityScript(unittest.TestCase):
         standing and the births added on top of the census (batch 1 review, I2), so they account for it."""
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
-            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertIn("ScriptValue('te_demog_natural_shown')", line, key)
             self.assertNotIn("Var('te_dg_natural')", line, key)
             self.assertIn("ScriptValue('te_demog_tfr_on_top')", line, key)
@@ -3921,14 +3921,14 @@ class TestNaturalFertilityScript(unittest.TestCase):
         and the means, with women's age at first marriage; the country tab adds the country's own means."""
         loc = _text(MISC_LOC)
         for key in ("te_demog_ov_tfr_capital", "te_demog_st_tfr_terms"):
-            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            line = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             for sv in ("te_demog_pr_term_lm", "te_demog_pr_term_bs", "te_demog_marriage_age"):
                 self.assertIn(f"ScriptValue('{sv}')", line, f"{key}: {sv}")
         capital = re.search(r"(?m)^ te_demog_ov_tfr_capital:0 \"(.*)\"$", loc).group(1)
         self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_marriage_age')", capital)
         self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_pr_share_bs')", capital)
         for key in ("te_demog_ov_tfr_tt", "te_demog_st_tfr_tt", "te_demog_how_fertility"):
-            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"(?:\s*#[^\"]*)?$", loc).group(1)
             self.assertNotIn("who marries", text, "women's legal standing no longer claims marriage (plan D2)")
             self.assertIn("late marriage", text)
             self.assertIn("birth spacing", text)
@@ -6978,7 +6978,7 @@ class TestCausesSection(unittest.TestCase):
     def setUpClass(cls):
         cls.gui = _text(WIDGETS)
         cls.section = _gui_type(cls.gui, "te_state_demog_causes")
-        cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(MISC_LOC)))
+        cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"(?:\s*#[^"]*)?$', _text(MISC_LOC)))
 
     def test_it_sits_after_the_overview(self):
         # issue #1029: the subtab takes the country tab's order (te_demographics_layout.gui), the pyramid after Causes
@@ -7040,7 +7040,7 @@ class TestCausesSection(unittest.TestCase):
         for key, value in self.loc.items():
             if key.startswith("te_demog_st_"):
                 self.assertIsNone(typed.search(value), key)
-        concepts = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"$', _text(ROOT / "localization" / "english" /
+        concepts = dict(re.findall(r'(?m)^ ([\w.]+):0 "(.*)"(?:\s*#[^"]*)?$', _text(ROOT / "localization" / "english" /
                                                                       "te_concepts_l_english.yml")))
         self.assertIn("$institution_health_system$", concepts["concept_health_care_access_desc"])
         # the access hover's two lines sum to where access is heading, not the row (panel M2)

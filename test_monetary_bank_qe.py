@@ -591,7 +591,7 @@ class TooltipNumbers(unittest.TestCase):
     """The tooltips state the figures in words, so a retune has to edit them."""
 
     def loc(self, key):
-        match = re.search(rf'^ {key}:0 "(.*)"$', LOC.read_text(encoding='utf-8-sig'), re.M)
+        match = re.search(rf'^ {key}:0 "(.*)"(?:\s*#[^"]*)?$', LOC.read_text(encoding='utf-8-sig'), re.M)
         self.assertIsNotNone(match, key)
         return match.group(1)
 
