@@ -52,6 +52,6 @@ At 36 px. Funding picks its icon by whether `covert_funding_level_display` is 0,
 ## Not from this set
 
 - **Operation rows:** each row leads with the target's flag, vanilla's `flag` widget, then that operation's own diplomatic-action icon (`gfx/interface/icons/diplomatic_action_icons/covert_<type>_action.dds`).
-- **Network rows:** each row leads with the target's flag, vanilla's `flag` widget.
+- **Network rows:** each line of the Agent Networks table (COV-12) leads with the target's flag, vanilla's `tiny_flag` widget, as the Cultural Hegemony board's rows do.
 - **Arrows and thresholds:** the trend arrows are vanilla's (`trend_up` / `trend_down` / `trend_nochange`), as in the UN's panels. The Capacity and Tradecraft bars mark each standing and tier floor with a thin line on `white.dds` (`covert_bar_line`), not vanilla's eye-shaped `progressbar_marker`, which the style guide retired.
 - **The Funding Levels table:** its tint is a flat colour on `white.dds`, not an icon.

@@ -26,7 +26,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 (19 done in the wave, 2 needed no more) | 14 | #1203 |
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 (23 done, TAX-21 in part, 2 needed no more) | 30 | #1204 |
 | United Nations | [`un.md`](gui_audit/un.md) | 26 (25 done, UN-15 in part) | 18 | #1205 |
-| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done; COV-12's optional network table deferred) | 39 | #1206 |
+| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done) | 39 | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 (all done, 2026-10-27 wave; GW-12 has placeholder art) | 40 | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
 | Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 (all done, 2026-10-27) | 73 | #1209 |
@@ -316,7 +316,7 @@ Top priorities: the pull breakdown's order (CH-3; CH-1 is fixed here); the leade
 | COV-9 | Row-button tooltips: the root they read may not exist there, and guard checks show as ticks (loc part done) | hidden info + over-explaining | quick–medium | done: (a) in #1202; (b) guards print only when they fail, the priority-3 gate only on that step |
 | COV-10 | Tooltips that repeat How, and one that points at a panel that no longer exists (loc part done) | over-explaining / stale | quick | done (#1202) |
 | COV-11 | "Funding is zero" is said in three places; the running state line explains (loc part done) | redundant / over-explaining | quick | done: the Funding state line shows only while funded with nothing running |
-| COV-12 | Operation rows lack the target's flag; network rows spend two lines saying "nothing yet" | style / list compactness | medium | done: the flag, and one report line; the one-line network table is deferred (an owner call: it reverses the round-3 layout) |
+| COV-12 | Operation rows lack the target's flag; network rows spend two lines saying "nothing yet" | style / list compactness | medium | done: the flag; the network rows as a one-line table (flag, country, strength, ops, head start, report), the owner's call of 2026-10-27 |
 | COV-13 | Launch-tooltip wording out of step with the panel (loc part done) | style | quick | done (#1202) |
 | COV-14 | Type sizes predate the 17 / 20 / 16 ladder | style | medium | done: `covert_fontsize_row` / `_heading` / `_overview`, width-tested |
 

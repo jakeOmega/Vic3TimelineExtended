@@ -258,7 +258,7 @@ The sections below are open by default, except the explanations at the foot:
 |---|---|---|
 | Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: the target's flag, its icon, its name and target (hover it for what it does), its phase, its own Detection Risk (hover it for the breakdown), what its exposure would count as, the priority stepper and Stand down. |
 | Funding | Open | A line while funded with nothing running, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
-| Agent Networks | Open, once you have a network | A row for each network: the target's flag (hover it for the country, click it to open the country), its strength with a bar and an arrow for growing or decaying, and what it reports. |
+| Agent Networks | Open, once you have a network | A table with a line for each network: the target's flag (hover it for the country, click it to open the country) and name, its strength with a bar and an arrow for growing or decaying, your operations there, the head start a new one would get, and what it reports (None, Partial or Full; hover it for the report). Hover the name for what the network adds to catching that country's operations. |
 | Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while an exposure stands. |
 | Known Foreign Operations | Open, while you are watching an operation | A row for each foreign operation you caught and let run: its sponsor's flag and name, the operation, the months you have watched it and an Expose button. |
 | How Covert Warfare Works | Collapsed | The explanations: operations, funding, detection, networks, Tradecraft, counterintelligence, watching and intelligence standing. |
@@ -444,13 +444,14 @@ A strong network gives new operations there a head start of up to five months
 (strength ÷ 20) and takes up to 5 points off their detection risk. It also adds
 up to 10 points (strength ÷ 10) to the detection risk of every operation that
 country runs against you, because your agents inside its service hear of them;
-the network's row shows how many points. From strength 50 it reports the
+hover the network's name for how many points. From strength 50 it reports the
 target's intelligence capacity and technology count beside yours, and from 75
 how many covert operations the target runs against you: the only way to learn
 of operations your counterintelligence has not caught, though it never says
-which. Each network's row shows its strength as a number and a bar, with an
-arrow for growing, decaying or at full strength; hover the strength for what the
-report shows at 50 and at 75. In the space race, the same two tiers
+which. Each network's line shows its strength as a number and a bar, with an
+arrow for growing, decaying or at full strength, and under Report the word
+None, Partial or Full; hover the Report heading for what the report shows at 50
+and at 75. In the space race, the same two tiers
 narrow your estimate of that country's progress on a milestone from ±25% of the
 goal to ±10% and ±5% (see [The space milestone
 panel](16-space.md#the-space-milestone-panel)).

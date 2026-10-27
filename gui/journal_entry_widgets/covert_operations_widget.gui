@@ -14,7 +14,7 @@
 ###     `iw_ops` list of script containers; see
 ###     common/scripted_effects/covert_warfare_effects.txt for their tags and
 ###     variables), Funding (the stepper and the Funding Levels table), Agent Networks
-###     (one row per `iw_nets` container, slices 4 and 7), Counterintelligence
+###     (a table, one line per `iw_nets` container, slices 4 and 7, COV-12), Counterintelligence
 ###     and Known Foreign Operations (one row per operation we caught and let
 ###     run, from the defender's `iw_known_ops` list; hidden while it is
 ###     empty; each row has an Expose button).
@@ -547,7 +547,7 @@ types covert_operations_widget_types
 			spacing = 8
 			ignoreinvisible = yes
 
-			# Vanilla's flag widget, as the network rows draw it: the country's
+			# Vanilla's flag widget, as the UN overview's council seats draw it: the country's
 			# name on hover, a click opens it, where the diplomatic actions that
 			# run the operation are. Gated on the stored capital, which the
 			# operation's start writes (covert_op_refresh_detection).
@@ -1314,152 +1314,287 @@ types covert_operations_widget_types
 		}
 	}
 
-	### ---- NETWORK ROW (slice 4) ---------------------------------------
+	### ---- NETWORK TABLE (slice 4; a table since COV-12) -----------------
 
-	### One row per network in the operator's iw_nets. All numbers are
-	### variables the monthly tick (covert_nets_sync) writes on the container;
-	### the trend arrow and the report lines are chosen by stored codes, never
-	### by comparing strength against a literal, and the bar reads strength
-	### through a container-scoped display value.
-	type widget_je_covert_network_row = flowcontainer {
-		direction = vertical
+	### The Agent Networks table, one line a network (COV-12, the owner's
+	### 2026-10-27 call over round 3's two-line rows). Its columns: the
+	### target's flag, the country, strength (the figure, the bar filling up
+	### and the trend), our operations there, the head start a new one would
+	### get and what the network reports, at 28 / 120 / 112 / 40 / 94 / 66
+	### with 2 between and a margin of 5: the 480 column. The head and
+	### every row share them, so they line up; test_covert_layout's
+	### NetworkTableTest holds them and the width each text needs at 17.
+	### One head cell, its hover saying what the column is: a fixed-width cell
+	### holding one textbox, aligned as the column's values are.
+	type covert_net_head_cell = widget {
+		block "cell_size" {
+			size = { 40 24 }
+		}
+		textbox = {
+			autoresize = yes
+			block "cell_anchor" {
+				parentanchor = left|vcenter
+				align = left|nobaseline
+			}
+			using = covert_fontsize_row
+			block "cell_format" {
+				default_format = "#tooltippable"
+			}
+			block "cell_text" {}
+		}
+	}
+
+	### The head: the column names, each that needs saying with a hover.
+	type covert_net_head = flowcontainer {
+		direction = horizontal
 		ignoreinvisible = yes
-		parentanchor = hcenter
 		spacing = 2
-		margin = { 20 6 }
+		margin = { 5 1 }
+
+		widget = {
+			size = { 28 24 }
+		}
+		covert_net_head_cell = {
+			blockoverride "cell_size" {
+				size = { 120 24 }
+			}
+			blockoverride "cell_format" {}
+			blockoverride "cell_text" {
+				text = "je_iw_net_head_country"
+			}
+		}
+		covert_net_head_cell = {
+			blockoverride "cell_size" {
+				size = { 112 24 }
+			}
+			blockoverride "cell_text" {
+				text = "je_iw_net_head_strength"
+				tooltip = "je_iw_net_head_strength_tt"
+			}
+		}
+		covert_net_head_cell = {
+			blockoverride "cell_anchor" {
+				parentanchor = center
+				align = center|nobaseline
+			}
+			blockoverride "cell_text" {
+				text = "je_iw_net_head_ops"
+				tooltip = "je_iw_net_head_ops_tt"
+			}
+		}
+		covert_net_head_cell = {
+			blockoverride "cell_size" {
+				size = { 94 24 }
+			}
+			blockoverride "cell_anchor" {
+				parentanchor = right|vcenter
+				align = right|nobaseline
+			}
+			blockoverride "cell_text" {
+				text = "je_iw_net_head_start"
+				tooltip = "je_iw_net_head_start_tt"
+			}
+		}
+		covert_net_head_cell = {
+			blockoverride "cell_size" {
+				size = { 66 24 }
+			}
+			blockoverride "cell_text" {
+				text = "je_iw_net_head_report"
+				tooltip = "je_iw_net_report_tt"
+			}
+		}
+	}
+
+	### One network, over its iw_nets container (datacontext: the row's
+	### ScriptContainer). All numbers are variables the monthly tick
+	### (covert_nets_sync) writes on the container; the trend arrow and the
+	### report word are chosen by stored codes, never by comparing strength
+	### against a literal, and the bar reads strength through a
+	### container-scoped display value. The flag and the name read the
+	### country through the stored capital, iw_target_capital (gotchas #11,
+	### #15), the flag gated on it. Every hover reads only the container and
+	### GetPlayer (gotcha #24): the name's is the network and what it adds to
+	### catching their operations, the report word's is the report.
+	type widget_je_covert_network_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 2
+		margin = { 5 2 }
 
 		background = {
 			using = entry_bg_fancy_dark
-			alpha = 0.5
+			alpha = 0.3
 		}
 
-		# ---- The target's flag, then the row's title ----
-		# Vanilla's flag widget, as the UN overview's Security Council seats
-		# use it: the country's name on hover, a click opens it. Its
-		# datacontext is the country of the stored capital state
-		# (iw_target_capital, written at creation and each monthly tick; the
-		# title reads the same chain, gotcha #11). The wrapper is gated on
-		# the variable, so a network without it never reads it.
-		flowcontainer = {
-			direction = horizontal
-			spacing = 8
-			ignoreinvisible = yes
+		# ---- The target's flag: its name on hover, a click opens it ----
+		widget = {
+			size = { 28 24 }
+			parentanchor = vcenter
 
 			widget = {
-				size = { 70 48 }
-				parentanchor = vcenter
+				size = { 28 24 }
 				visible = "[ScriptContainer.HasVariable('iw_target_capital')]"
 
-				flag = {
+				tiny_flag = {
 					parentanchor = center
 					datacontext = "[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]"
 				}
 			}
-			textbox = {
-				autoresize = yes
-				multiline = yes
-				minimumsize = { 402 -1 }
-				maximumsize = { 402 -1 }
-				parentanchor = vcenter
-				align = left|nobaseline
-				using = covert_fontsize_heading
-				text = "je_iw_net_row_title"
+		}
+		# ---- The country: a long name wraps rather than elides ----
+		textbox = {
+			parentanchor = vcenter
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 120 -1 }
+			maximumsize = { 120 -1 }
+			align = left|nobaseline
+			using = covert_fontsize_row
+			default_format = "#tooltippable"
+			text = "je_iw_net_row_country"
+			tooltip = "je_iw_net_row_tt"
+		}
+		# ---- Strength: the figure, the bar filling up and which way it is
+		#      moving (owner, round 3: no marker and no "45 → 50" headline;
+		#      the Report column's hover says what each mark reveals) ----
+		widget = {
+			size = { 112 24 }
+			parentanchor = vcenter
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 2
+				parentanchor = left|vcenter
+
+				widget = {
+					size = { 30 24 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = right|vcenter
+						align = right|nobaseline
+						autoresize = yes
+						max_width = 30
+						elide = right
+						using = covert_fontsize_row
+						text = "je_iw_net_row_strength_value"
+					}
+				}
+				default_progressbar_horizontal = {
+					size = { 58 12 }
+					parentanchor = vcenter
+					blockoverride "values" {
+						value = "[FixedPointToFloat( ScriptContainer.MakeScope.ScriptValue('covert_disp_net_strength_frac') )]"
+						min = 0
+						max = 1
+					}
+				}
+				# Growing / decaying / holding at full strength, from the
+				# stored iw_net_trend code; the sentence each replaced is its
+				# tooltip.
+				widget = {
+					size = { 20 20 }
+					parentanchor = vcenter
+
+					icon = {
+						size = { 20 20 }
+						visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)1')]"
+						texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+						tooltip = "je_iw_net_row_trend_growing"
+					}
+					icon = {
+						size = { 20 20 }
+						visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)2')]"
+						texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+						tooltip = "je_iw_net_row_trend_decaying"
+					}
+					icon = {
+						size = { 20 20 }
+						visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)0')]"
+						texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+						tooltip = "je_iw_net_row_trend_holding"
+					}
+				}
 			}
 		}
-
-		# ---- Strength: the figure, the bar filling up, and which way it is
-		#      moving (owner, round 3: no marker and no "45 → 50" headline; the
-		#      hover still says what each part of the report reveals) ----
-		flowcontainer = {
-			direction = horizontal
-			spacing = 8
-			margin_left = 12
-			tooltip = "je_iw_net_row_strength_tt"
+		# ---- Our operations running there ----
+		widget = {
+			size = { 40 24 }
+			parentanchor = vcenter
 
 			textbox = {
-				minimumsize = { 120 -1 }
-				maximumsize = { 120 -1 }
+				parentanchor = center
+				align = center|nobaseline
 				autoresize = yes
-				parentanchor = vcenter
+				max_width = 40
+				elide = right
+				using = covert_fontsize_row
+				text = "je_iw_net_row_ops_value"
+			}
+		}
+		# ---- The head start a new operation there would get ----
+		widget = {
+			size = { 94 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = right|vcenter
+				align = right|nobaseline
+				autoresize = yes
+				max_width = 94
+				elide = right
+				using = covert_fontsize_row
+				text = "je_iw_net_row_head_start"
+			}
+		}
+		# ---- What the network reports on its target (slice 7) ----
+		# A word chosen by the stored iw_net_intel_tier code (0 / 1 / 2),
+		# which covert_net_clamp restates from strength after every write;
+		# the 50 / 75 thresholds live only in covert_net_intel_tier_value.
+		# Every word waits for the code to exist, so a network restored from
+		# a save made before slice 7 shows none until its first monthly pass.
+		# The report itself is the word's hover.
+		widget = {
+			size = { 66 24 }
+			parentanchor = vcenter
+
+			textbox = {
+				visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
+				parentanchor = left|vcenter
 				align = left|nobaseline
+				autoresize = yes
+				max_width = 66
+				elide = right
 				using = covert_fontsize_row
 				default_format = "#tooltippable"
+				text = "je_iw_net_row_report_0"
+				tooltip = "je_iw_net_report_tt"
+			}
+			textbox = {
+				visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1') )]"
+				parentanchor = left|vcenter
+				align = left|nobaseline
+				autoresize = yes
+				max_width = 66
 				elide = right
-				text = "je_iw_net_row_strength"
+				using = covert_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_iw_net_row_report_1"
+				tooltip = "je_iw_net_row_report_1_tt"
 			}
-			default_progressbar_horizontal = {
-				size = { 280 14 }
-				parentanchor = vcenter
-				blockoverride "values" {
-					value = "[FixedPointToFloat( ScriptContainer.MakeScope.ScriptValue('covert_disp_net_strength_frac') )]"
-					min = 0
-					max = 1
-				}
+			textbox = {
+				visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
+				parentanchor = left|vcenter
+				align = left|nobaseline
+				autoresize = yes
+				max_width = 66
+				elide = right
+				using = covert_fontsize_row
+				default_format = "#tooltippable"
+				text = "je_iw_net_row_report_2"
+				tooltip = "je_iw_net_row_report_2_tt"
 			}
-			# Growing / decaying / holding at full strength, from the stored
-			# iw_net_trend code; the sentence each replaced is its tooltip.
-			widget = {
-				size = { 24 24 }
-				parentanchor = vcenter
-
-				icon = {
-					size = { 24 24 }
-					visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)1')]"
-					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
-					tooltip = "je_iw_net_row_trend_growing"
-				}
-				icon = {
-					size = { 24 24 }
-					visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)2')]"
-					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
-					tooltip = "je_iw_net_row_trend_decaying"
-				}
-				icon = {
-					size = { 24 24 }
-					visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)0')]"
-					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
-					tooltip = "je_iw_net_row_trend_holding"
-				}
-			}
-		}
-		widget_je_covert_operation_detail = {
-			text = "je_iw_net_row_ops"
-		}
-		widget_je_covert_operation_detail = {
-			text = "je_iw_net_row_benefit"
-		}
-		# What the network adds to the detection risk of the target's own
-		# operations against us (covert_net_catch_display, network scope).
-		widget_je_covert_operation_detail = {
-			text = "je_iw_net_row_catch"
-			tooltip = "je_iw_net_row_catch_tt"
-		}
-
-		# ---- What the network reports on its target (slice 7) ----
-		# Chosen by the stored iw_net_intel_tier code (0 / 1 / 2), which
-		# covert_net_clamp restates from strength after every write; the 50 /
-		# 75 thresholds live only in covert_net_intel_tier_value. Every line
-		# waits for the code to exist, so a network restored from a save made
-		# before this slice shows no report until its first monthly pass.
-		# Below the first threshold one line says when a report starts, with
-		# what each part reveals on hover (COV-12: it was two "nothing yet"
-		# lines); at tier 1 the service line alone, its hover naming the next
-		# part.
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
-			default_format = "#tooltippable"
-			text = "je_iw_net_row_intel_none"
-			tooltip = "je_iw_net_row_strength_tt"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), Or( EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') ) )]"
-			text = "je_iw_net_row_intel_service"
-			tooltip = "je_iw_net_row_intel_service_tooltip"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
-			text = "je_iw_net_row_intel_ops"
-			tooltip = "je_iw_net_row_intel_ops_tooltip"
 		}
 	}
 
@@ -2026,7 +2161,7 @@ types covert_operations_widget_types
 		}
 	}
 
-	### Agent Networks (slice 4): one row per network. The whole section is
+	### Agent Networks (slice 4): a table, one line per network. The whole section is
 	### shown only once there is a network, so a country that has never run an
 	### operation sees nothing here.
 	type te_covert_sec_networks = flowcontainer {
@@ -2051,16 +2186,22 @@ types covert_operations_widget_types
 			}
 		}
 
-		flowcontainer = {
-			direction = vertical
-			parentanchor = hcenter
-			spacing = 4
+		### The table (COV-12): the head, then one line a network.
+		covert_panel = {
 			visible = "[Not(GetVariableSystem.Exists('covert_nets_closed'))]"
-			datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_nets')]"
+			spacing = 2
 
-			item = {
-				widget_je_covert_network_row = {
-					datacontext = "[Scope.GetScriptContainer]"
+			covert_net_head = {}
+
+			flowcontainer = {
+				direction = vertical
+				spacing = 2
+				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_nets')]"
+
+				item = {
+					widget_je_covert_network_row = {
+						datacontext = "[Scope.GetScriptContainer]"
+					}
 				}
 			}
 		}
