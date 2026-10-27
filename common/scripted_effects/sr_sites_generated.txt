@@ -32870,3 +32870,188 @@ sr_free_debug_full_ties = {
 	if = { limit = { has_variable = sr_free_supply_haumea } set_variable = { name = sr_free_ties_haumea value = sr_free_ties_full } }
 	if = { limit = { has_variable = sr_free_supply_sedna } set_variable = { name = sr_free_ties_sedna value = sr_free_ties_full } }
 }
+
+# ===== The colonization overview's lists (audit SPC-6; display only) =====
+# Country scope: one line per colony of ours at or past sr_aut_ask_level, or
+# the line that none is.
+sr_ov_list_restless = {
+	if = {
+		limit = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_venus
+	}
+	if = {
+		limit = { global_var:sr_site_holder_mercury ?= this sr_site_autonomy_value_mercury >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_mercury
+	}
+	if = {
+		limit = { global_var:sr_site_holder_valles_marineris ?= this sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_valles_marineris
+	}
+	if = {
+		limit = { global_var:sr_site_holder_olympus_mons ?= this sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_olympus_mons
+	}
+	if = {
+		limit = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_hellas_planitia
+	}
+	if = {
+		limit = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_utopia_planitia
+	}
+	if = {
+		limit = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_arcadia_planitia
+	}
+	if = {
+		limit = { global_var:sr_site_holder_ceres ?= this sr_site_autonomy_value_ceres >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_ceres
+	}
+	if = {
+		limit = { global_var:sr_site_holder_vesta ?= this sr_site_autonomy_value_vesta >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_vesta
+	}
+	if = {
+		limit = { global_var:sr_site_holder_psyche ?= this sr_site_autonomy_value_psyche >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_psyche
+	}
+	if = {
+		limit = { global_var:sr_site_holder_pallas ?= this sr_site_autonomy_value_pallas >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_pallas
+	}
+	if = {
+		limit = { global_var:sr_site_holder_hygiea ?= this sr_site_autonomy_value_hygiea >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_hygiea
+	}
+	if = {
+		limit = { global_var:sr_site_holder_io ?= this sr_site_autonomy_value_io >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_io
+	}
+	if = {
+		limit = { global_var:sr_site_holder_europa ?= this sr_site_autonomy_value_europa >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_europa
+	}
+	if = {
+		limit = { global_var:sr_site_holder_ganymede ?= this sr_site_autonomy_value_ganymede >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_ganymede
+	}
+	if = {
+		limit = { global_var:sr_site_holder_callisto ?= this sr_site_autonomy_value_callisto >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_callisto
+	}
+	if = {
+		limit = { global_var:sr_site_holder_himalia ?= this sr_site_autonomy_value_himalia >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_himalia
+	}
+	if = {
+		limit = { global_var:sr_site_holder_amalthea ?= this sr_site_autonomy_value_amalthea >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_amalthea
+	}
+	if = {
+		limit = { global_var:sr_site_holder_titan ?= this sr_site_autonomy_value_titan >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_titan
+	}
+	if = {
+		limit = { global_var:sr_site_holder_enceladus ?= this sr_site_autonomy_value_enceladus >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_enceladus
+	}
+	if = {
+		limit = { global_var:sr_site_holder_rhea ?= this sr_site_autonomy_value_rhea >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_rhea
+	}
+	if = {
+		limit = { global_var:sr_site_holder_mimas ?= this sr_site_autonomy_value_mimas >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_mimas
+	}
+	if = {
+		limit = { global_var:sr_site_holder_iapetus ?= this sr_site_autonomy_value_iapetus >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_iapetus
+	}
+	if = {
+		limit = { global_var:sr_site_holder_titania ?= this sr_site_autonomy_value_titania >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_titania
+	}
+	if = {
+		limit = { global_var:sr_site_holder_oberon ?= this sr_site_autonomy_value_oberon >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_oberon
+	}
+	if = {
+		limit = { global_var:sr_site_holder_miranda ?= this sr_site_autonomy_value_miranda >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_miranda
+	}
+	if = {
+		limit = { global_var:sr_site_holder_ariel ?= this sr_site_autonomy_value_ariel >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_ariel
+	}
+	if = {
+		limit = { global_var:sr_site_holder_triton ?= this sr_site_autonomy_value_triton >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_triton
+	}
+	if = {
+		limit = { global_var:sr_site_holder_proteus ?= this sr_site_autonomy_value_proteus >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_proteus
+	}
+	if = {
+		limit = { global_var:sr_site_holder_pluto ?= this sr_site_autonomy_value_pluto >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_pluto
+	}
+	if = {
+		limit = { global_var:sr_site_holder_eris ?= this sr_site_autonomy_value_eris >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_eris
+	}
+	if = {
+		limit = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_makemake
+	}
+	if = {
+		limit = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_haumea
+	}
+	if = {
+		limit = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level }
+		custom_tooltip = sr_site_name_sedna
+	}
+	if = {
+		limit = {
+			NOT = {
+				OR = {
+					AND = { global_var:sr_site_holder_valles_marineris ?= this sr_site_autonomy_value_valles_marineris >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_olympus_mons ?= this sr_site_autonomy_value_olympus_mons >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_hellas_planitia ?= this sr_site_autonomy_value_hellas_planitia >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_utopia_planitia ?= this sr_site_autonomy_value_utopia_planitia >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_arcadia_planitia ?= this sr_site_autonomy_value_arcadia_planitia >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_ceres ?= this sr_site_autonomy_value_ceres >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_vesta ?= this sr_site_autonomy_value_vesta >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_psyche ?= this sr_site_autonomy_value_psyche >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_pallas ?= this sr_site_autonomy_value_pallas >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_hygiea ?= this sr_site_autonomy_value_hygiea >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_io ?= this sr_site_autonomy_value_io >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_europa ?= this sr_site_autonomy_value_europa >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_ganymede ?= this sr_site_autonomy_value_ganymede >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_callisto ?= this sr_site_autonomy_value_callisto >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_himalia ?= this sr_site_autonomy_value_himalia >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_amalthea ?= this sr_site_autonomy_value_amalthea >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_venus ?= this sr_site_autonomy_value_venus >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_mercury ?= this sr_site_autonomy_value_mercury >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_titan ?= this sr_site_autonomy_value_titan >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_enceladus ?= this sr_site_autonomy_value_enceladus >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_rhea ?= this sr_site_autonomy_value_rhea >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_mimas ?= this sr_site_autonomy_value_mimas >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_iapetus ?= this sr_site_autonomy_value_iapetus >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_titania ?= this sr_site_autonomy_value_titania >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_oberon ?= this sr_site_autonomy_value_oberon >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_miranda ?= this sr_site_autonomy_value_miranda >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_ariel ?= this sr_site_autonomy_value_ariel >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_triton ?= this sr_site_autonomy_value_triton >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_proteus ?= this sr_site_autonomy_value_proteus >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_pluto ?= this sr_site_autonomy_value_pluto >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_eris ?= this sr_site_autonomy_value_eris >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_makemake ?= this sr_site_autonomy_value_makemake >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_haumea ?= this sr_site_autonomy_value_haumea >= sr_aut_ask_level }
+					AND = { global_var:sr_site_holder_sedna ?= this sr_site_autonomy_value_sedna >= sr_aut_ask_level }
+				}
+			}
+		}
+		custom_tooltip_no_bullet = je_space_race_widget_ovc_colonies_line_none
+	}
+}

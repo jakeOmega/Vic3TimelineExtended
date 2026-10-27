@@ -60,6 +60,62 @@ sr_colony_target_sgui = {
 	}
 }
 
+# Colony Fleets: Clear, beside our target (audit SPC-7): the programme chooses
+# again, as Clear on the world's Solar System row does.
+sr_cf_target_clear_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_cf_req_target_tt
+			has_variable = sr_cf_target
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = sr_cf_target_clear_tt
+			remove_variable = sr_cf_target
+		}
+	}
+}
+
+# The colonization overview's cells (audit SPC-6), display only: never
+# Executed. scope:op 1 lists the colonies demanding self-government
+# (sr_ov_list_restless, gen_solar_sites), 2 what threatens our colonies
+# (sr_ov_list_defense, gen_space_fleets).
+sr_colony_overview_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 1 }
+			sr_ov_list_restless = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			sr_ov_list_defense = yes
+		}
+	}
+}
+
 # Settlers: a colony's emigration priority steps Normal, High, Closed, Low.
 sr_colony_priority_sgui = {
 	scope = country

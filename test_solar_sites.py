@@ -363,6 +363,7 @@ class PanelTest(unittest.TestCase):
     def setUpClass(cls):
         cls.widget = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
         cls.rows = _raw(str(gss.GUI_OUT))
+        cls.display = _strip(_raw(str(gss.DISPLAY_OUT)))
 
     def test_the_solar_system_rows_follow_the_table(self):
         self.assertIn("te_sr_solar_system_rows = {}", _gui_type(self.widget, "te_sr_sec_solar_system"))
@@ -379,8 +380,9 @@ class PanelTest(unittest.TestCase):
                 self.assertEqual(set(re.findall(r"MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)), {str(site.index)})
                 self.assertIn("GetScriptedGui('sr_colony_target_sgui')", row)
 
-    def test_the_settler_and_fleet_rows_follow_the_table(self):
-        settlers = _instances(_gui_type(self.rows, "te_sr_settler_rows"), "te_sr_settler_row")
+    def test_the_colony_and_fleet_rows_follow_the_table(self):
+        """The Colonies table's rows (audit SPC-5) in place of the Settlers rows."""
+        settlers = _instances(_gui_type(self.rows, "te_sr_colony_rows"), "te_sr_colony_row")
         self.assertEqual(len(settlers), len(gss.SITES))
         for site, row in zip(gss.panel_order(), settlers):
             with self.subTest(site=site.key):
@@ -388,14 +390,36 @@ class PanelTest(unittest.TestCase):
                 self.assertIn(f"ScriptValue('sr_disp_site_pop_{site.key}')", row)
                 self.assertIn(f"ScriptValue('sr_site_room_{site.key}')", row)
                 self.assertIn(f"ScriptValue('sr_disp_site_prio_{site.key}')", row)
-                self.assertEqual(set(re.findall(r"MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)), {str(site.index)})
+                self.assertEqual(set(re.findall(r"AddScope\( 'site', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", row)),
+                                 {str(site.index)})
         slots = _instances(_gui_type(self.rows, "te_sr_cf_slot_rows"), "te_sr_cf_slot_row")
         self.assertEqual(len(slots), gss.FLEET_SLOTS)
         for n, row in enumerate(slots, start=1):
             self.assertIn(f"GetCustom('sr_cf_slot_{n}_name')", row)
             self.assertIn(f"je_space_race_widget_cf_slot_{n}_eta", row)
-        for section in ("te_sr_sec_colony_fleets", "te_sr_sec_settlers"):
+        for section in ("te_sr_sec_colony_fleets", "te_sr_sec_colonies"):
             self.assertIn(f"\t\t{section} = {{}}", _gui_type(self.widget, "te_sr_solar_colonization_status"))
+
+    def test_the_solar_system_list_is_filtered_by_its_own_values(self):
+        """Audit SPC-7: a world shows while Solar System lists all, or while it is
+        one our fleets can go to, ours, or bound for; a location's heading while
+        any of its worlds shows."""
+        section = _gui_type(self.rows, "te_sr_solar_system_rows")
+        for site, row in zip(gss.panel_order(), _instances(section, "te_sr_site_row")):
+            with self.subTest(site=site.key):
+                self.assertIn("GetVariableSystem.Exists('sr_panel_solar_system_all_open')", row)
+                self.assertIn(f"ScriptValue('sr_disp_ss_shown_{site.key}')", row)
+                self.assertIn(f'tooltip = "je_space_race_widget_ss_site_tt_{site.key}"', row)
+                shown = _block(self.display, f"sr_disp_ss_shown_{site.key}")
+                for value in (f"sr_disp_site_target_{site.key} >= 1", f"sr_disp_site_{site.key} = 1",
+                              f"sr_disp_site_inbound_{site.key} >= 1"):
+                    self.assertIn(value, shown)
+        for loc in gss.LOCATIONS:
+            with self.subTest(location=loc):
+                self.assertIn(f"ScriptValue('sr_disp_ss_filtered_{loc}')", section)
+                body = _block(self.display, f"sr_disp_ss_filtered_{loc}")
+                self.assertEqual(re.findall(r"add = sr_disp_ss_shown_(\w+)", body),
+                                 [s.key for s in gss.SITES if s.location == loc])
 
 
 class FleetTest(unittest.TestCase):
@@ -1002,7 +1026,7 @@ class ModulesTest(unittest.TestCase):
                                                   "country_sr_module_fabrication_add"))
 
     def test_the_module_rows_follow_the_table(self):
-        rows = self.rows[self.rows.index("type te_sr_module_rows = flowcontainer {"):]
+        rows = self.rows[self.rows.index("type te_sr_colony_rows = flowcontainer {"):]
         rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
         names = re.findall(r'text = "sr_site_name_(\w+)"', rows)
         self.assertEqual(names, [s.key for s in gss.panel_order()])
@@ -1194,7 +1218,7 @@ class FreeColoniesTest(unittest.TestCase):
         self.assertNotRegex(month, r"chance = \d+\.\d")
 
     def test_the_autonomy_and_free_rows_follow_the_table(self):
-        for row_type in ("te_sr_autonomy_rows", "te_sr_free_rows"):
+        for row_type in ("te_sr_colony_rows", "te_sr_free_rows"):
             rows = self.rows[self.rows.index(f"type {row_type} = flowcontainer {{"):]
             rows = rows[:rows.index("\ttype ", 1)] if "\ttype " in rows[1:] else rows
             with self.subTest(rows=row_type):

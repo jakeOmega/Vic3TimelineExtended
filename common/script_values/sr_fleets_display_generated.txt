@@ -744,7 +744,8 @@ sr_disp_loc_status_kuiper = {
 	else_if = { limit = { has_variable_list = sr_icpt_kuiper any_in_list = { variable = sr_icpt_kuiper is_country_alive = yes } } value = 5 }
 }
 
-# Colony Defences (6b), per world: 1 while ours (or ours occupied), its integrity
+# Colony Defences (6b; the Colonies table's Defenses view), per world: 1 while ours
+# (or ours occupied), its integrity
 # whole, its status (0 calm, 1 blockaded, 2 under assault, 3 occupied, 4
 # interdicted, 6c), and
 # 1 while its occupier's capital snapshot is there to show.

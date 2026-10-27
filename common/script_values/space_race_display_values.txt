@@ -255,9 +255,9 @@ sr_disp_worlds_ours_frac = {
 # space_race_colony_events.1-34 offer them): 1 while we hold it, else 0. The
 # record is <modifier>_held, which sr_grant_colony_modifier sets with the
 # modifier and sr_sync_colony_modifier_base keeps in step through a revolution.
-# The panel's "Our Colonies" rows each show on one of these; the per-stage
-# counts show the stage headings and their sum the "held" figure. A world holds
-# at most one of its two, so a stage's count is its worlds.
+# The Colonies table's name hovers name the ones we hold (je_space_race_widget_
+# colony_site_tt_<key>; audit SPC-5), and their sum is the "held" figure. A
+# world holds at most one of its two, so the sum is its worlds.
 
 # Stage 1: Mars & Asteroids
 
@@ -609,7 +609,7 @@ sr_disp_colony_sedna_interstellar = {
 	if = { limit = { has_variable = sr_colony_sedna_interstellar_held } value = 1 }
 }
 
-sr_disp_colonies_stage_1 = {
+sr_disp_colonies_held = {
 	value = 0
 	add = sr_disp_colony_valles_marineris_research
 	add = sr_disp_colony_valles_marineris_mining
@@ -631,10 +631,6 @@ sr_disp_colonies_stage_1 = {
 	add = sr_disp_colony_pallas_observatory
 	add = sr_disp_colony_hygiea_volatiles
 	add = sr_disp_colony_hygiea_automated
-}
-
-sr_disp_colonies_stage_2 = {
-	value = 0
 	add = sr_disp_colony_io_mining
 	add = sr_disp_colony_io_research
 	add = sr_disp_colony_europa_drilling
@@ -649,10 +645,6 @@ sr_disp_colonies_stage_2 = {
 	add = sr_disp_colony_amalthea_rings
 	add = sr_disp_colony_venus_atmospheric
 	add = sr_disp_colony_venus_extraction
-}
-
-sr_disp_colonies_stage_3 = {
-	value = 0
 	add = sr_disp_colony_mercury_solar
 	add = sr_disp_colony_mercury_ice
 	add = sr_disp_colony_titan_hydrocarbons
@@ -665,10 +657,6 @@ sr_disp_colonies_stage_3 = {
 	add = sr_disp_colony_mimas_gravity
 	add = sr_disp_colony_iapetus_ridge
 	add = sr_disp_colony_iapetus_organics
-}
-
-sr_disp_colonies_stage_4 = {
-	value = 0
 	add = sr_disp_colony_titania_mining
 	add = sr_disp_colony_titania_geophysics
 	add = sr_disp_colony_oberon_relay
@@ -681,10 +669,6 @@ sr_disp_colonies_stage_4 = {
 	add = sr_disp_colony_triton_gateway
 	add = sr_disp_colony_proteus_probe
 	add = sr_disp_colony_proteus_extraction
-}
-
-sr_disp_colonies_stage_5 = {
-	value = 0
 	add = sr_disp_colony_pluto_research
 	add = sr_disp_colony_pluto_harvesting
 	add = sr_disp_colony_eris_selfsufficiency
@@ -695,15 +679,6 @@ sr_disp_colonies_stage_5 = {
 	add = sr_disp_colony_haumea_rings
 	add = sr_disp_colony_sedna_outpost
 	add = sr_disp_colony_sedna_interstellar
-}
-
-sr_disp_colonies_held = {
-	value = 0
-	add = sr_disp_colonies_stage_1
-	add = sr_disp_colonies_stage_2
-	add = sr_disp_colonies_stage_3
-	add = sr_disp_colonies_stage_4
-	add = sr_disp_colonies_stage_5
 }
 
 # ---- What an approach costs, for the panel and the approach buttons ----------

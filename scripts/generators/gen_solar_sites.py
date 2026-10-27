@@ -269,6 +269,16 @@ def site_building(site: Site) -> str:
     return f"building_sr_site_{site.key}"
 
 
+# A world's name in the overview's 154-wide cells (audit SPC-6; 16-point
+# tooltip face): sr_site_name_<key>, or for a name too long for them its short
+# form, sr_site_short_<key> (test_space_race_labels.py measures every one).
+SHORT_NAMES = frozenset({"venus"})
+
+
+def overview_name_key(site: Site) -> str:
+    return f"sr_site_short_{site.key}" if site.key in SHORT_NAMES else f"sr_site_name_{site.key}"
+
+
 def panel_order() -> list[Site]:
     return [s for loc in LOCATIONS for s in SITES if s.location == loc]
 
@@ -1165,7 +1175,7 @@ def render_effects() -> str:
     parts += ["", *render_dispatcher(), "", *render_monthly_list(), "", *render_migration(), "",
               *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
               "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects(),
-              "", *render_autonomy_effects()]
+              "", *render_autonomy_effects(), "", *render_overview_effects()]
     return "\n".join(parts) + "\n"
 
 
@@ -2361,6 +2371,58 @@ def render_slice6_values() -> list[str]:
     return out
 
 
+def render_overview_display() -> list[str]:
+    """The colonization overview's alert cells and the Solar System filter
+    (audit SPC-6, SPC-7). Read by the GUI only."""
+    out = ["",
+           "# The Solar System list's filter (audit SPC-7): 1 while the world is one our",
+           "# next colony fleet can go to (or our target), ours, or one a fleet is bound for;",
+           "# and how many such worlds each location and the whole system has."]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_disp_ss_shown_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ OR = {{ sr_disp_site_target_{k} >= 1 sr_disp_site_{k} = 1 sr_disp_site_inbound_{k} >= 1 }} }} value = 1 }}",
+                "}"]
+    for loc in LOCATIONS:
+        out += [f"sr_disp_ss_filtered_{loc} = {{", "\tvalue = 0"]
+        out += [f"\tadd = sr_disp_ss_shown_{s.key}" for s in SITES if s.location == loc]
+        out.append("}")
+    out += ["sr_disp_ss_filtered = {", "\tvalue = 0"]
+    out += [f"\tadd = sr_disp_ss_filtered_{loc}" for loc in LOCATIONS]
+    out += ["}",
+            "",
+            "# The overview's Colonies cell (audit SPC-6): our colonies at or past the",
+            "# autonomy that demands self-government (sr_aut_ask_level).",
+            "sr_disp_aut_restless_count = {", "\tvalue = 0"]
+    out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_autonomy_value_{s.key} >= sr_aut_ask_level }} add = 1 }}"
+            for s in SITES]
+    out += ["}",
+            "# ... less the one the cell names.",
+            "sr_disp_aut_restless_more = { value = sr_disp_aut_restless_count subtract = 1 min = 0 }"]
+    return out
+
+
+def render_overview_effects() -> list[str]:
+    """Display only: the overview's Colonies cell lists the colonies demanding
+    self-government by name (sr_colony_overview_sgui, op 1), at the root's scope,
+    so the lines print in order (gotcha #18)."""
+    def restless(k):
+        return f"global_var:sr_site_holder_{k} ?= this sr_site_autonomy_value_{k} >= sr_aut_ask_level"
+    out = ["# ===== The colonization overview's lists (audit SPC-6; display only) =====",
+           "# Country scope: one line per colony of ours at or past sr_aut_ask_level, or",
+           "# the line that none is.",
+           "sr_ov_list_restless = {"]
+    for site in panel_order():
+        out += ["\tif = {", f"\t\tlimit = {{ {restless(site.key)} }}",
+                f"\t\tcustom_tooltip = sr_site_name_{site.key}", "\t}"]
+    out += ["\tif = {", "\t\tlimit = {", "\t\t\tNOT = {", "\t\t\t\tOR = {"]
+    out += [f"\t\t\t\t\tAND = {{ {restless(s.key)} }}" for s in SITES]
+    out += ["\t\t\t\t}", "\t\t\t}", "\t\t}",
+            "\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_colonies_line_none", "\t}", "}"]
+    return out
+
+
 def render_autonomy_display() -> list[str]:
     out = ["",
            "# Colony Autonomy (slice 5 design § 9), per world:",
@@ -2391,31 +2453,28 @@ def render_autonomy_display() -> list[str]:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = sr_free_supply_{k} }} value = 1 }}",
                 "}"]
+    out += ["",
+            "# A colony's autonomy drift by term (audit SPC-15: its drift hover lists its own",
+            "# terms): its people, its distance by our drive, a year without contact. The",
+            "# country's terms (a war, a colony we destroyed) are sr_disp_aut_war and",
+            "# sr_disp_aut_destroyed; the flat ones are constants."]
+    for site in SITES:
+        k = site.key
+        out += [f"sr_disp_aut_people_{k} = {{ value = sr_site_pop_value_{k} divide = 10000 multiply = sr_aut_per_10k_people }}",
+                f"sr_disp_aut_distance_{k} = {{ value = sr_transit_months_{transit_body(site)} multiply = sr_aut_per_transit_month max = sr_aut_distance_cap }}",
+                f"sr_disp_aut_nocontact_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ sr_site_months_since_contact_{k} > sr_aut_no_contact_months }} value = 1 }}",
+                "}"]
+    out += ["sr_disp_aut_war = {", "\tvalue = 0", "\tif = { limit = { is_at_war = yes } value = 1 }", "}",
+            "sr_disp_aut_destroyed = {", "\tvalue = 0",
+            "\tif = { limit = { has_variable = sr_destroyed_colony_until var:sr_destroyed_colony_until > te_history_month_index } value = 1 }",
+            "}"]
     out += ["", "# The free colonies, for the section's empty note.",
             "sr_disp_free_count = {", "\tvalue = 0"]
     out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_free_{s.key} }} add = 1 }}" for s in SITES]
     out.append("}")
     return out
-
-
-def _autonomy_row(site: Site) -> list[str]:
-    k = site.key
-    status = f"sr_disp_site_aut_status_{k}"
-    out = ["\t\tte_sr_autonomy_row = {"]
-    out += _override("aut_visible", f'visible = "[{_eq(f"sr_disp_site_{k}", 1)}]"')
-    out += _override("aut_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
-    out += _override("aut_name", f'text = "sr_site_name_{k}"')
-    out += _override("aut_figure", f'raw_text = "[{_sv(f"sr_disp_site_aut_{k}")}|0]%"')
-    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|+=2]"')
-    out += _override("aut_none_visible", f'visible = "[{_eq(status, 0)}]"')
-    out += _override("aut_charter_visible", f'visible = "[{_eq(status, 1)}]"')
-    out += _override("aut_garrison_visible", f'visible = "[{_eq(status, 2)}]"')
-    out += _override("aut_both_visible", f'visible = "[{_eq(status, 3)}]"')
-    out += _override("aut_abandon_button",
-                     f'enabled = "{_sgui_call("sr_colony_abandon_sgui", "IsValid", site)}"',
-                     f'onclick = "{_sgui_call("sr_colony_abandon_sgui", "Execute", site)}"',
-                     f'tooltip = "{_reasoned("sr_colony_abandon_sgui", _site_scope(site))}"')
-    return out + ["\t\t}"]
 
 
 def _free_row(site: Site) -> list[str]:
@@ -2517,6 +2576,10 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = sr_mq_{n}_site }} value = 1 }}",
                 "}"]
+    out += ["# The queue's length (the overview's Modules cell, audit SPC-6).",
+            "sr_disp_mq_count = {", "\tvalue = 0"]
+    out += [f"\tadd = sr_disp_mq_{n}" for n in range(1, QUEUE_SLOTS + 1)]
+    out += ["}"]
     out += ["",
             "# Modules (slice 4 design § 11), per world:",
             "#   sr_disp_mod_pending_<type>_<key>  our queue of the type and every shipment of it on its way",
@@ -2535,6 +2598,7 @@ def render_display() -> str:
                 "\tfloor = yes",
                 "}"]
     out += render_autonomy_display()
+    out += render_overview_display()
     return "\n".join(out) + "\n"
 
 
@@ -2616,6 +2680,16 @@ def render_custom_loc() -> str:
                     f"\t\tlocalization_key = sr_site_name_{site.key}",
                     "\t}"]
         out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
+    out += ["# The overview's Colonies cell (audit SPC-6): the first colony of ours, in the",
+            "# panel's order, at or past the autonomy that demands self-government.",
+            "sr_ov_restless_site = {", "\ttype = country", "\trandom_valid = no", ""]
+    for site in panel_order():
+        k = site.key
+        out += ["\ttext = {",
+                f"\t\ttrigger = {{ global_var:sr_site_holder_{k} ?= this sr_site_autonomy_value_{k} >= sr_aut_ask_level }}",
+                f"\t\tlocalization_key = {overview_name_key(site)}",
+                "\t}"]
+    out += ["\ttext = {", "\t\tlocalization_key = sr_site_name_unknown", "\t}", "}", ""]
     out += ["# Each queue place's module, from its type code."]
     for n in range(1, QUEUE_SLOTS + 1):
         out += [f"sr_mq_{n}_module_name = {{", "\ttype = country", "\trandom_valid = no", ""]
@@ -2673,8 +2747,9 @@ def _site_row(site: Site) -> list[str]:
     inbound, months, ours = f"sr_disp_site_inbound_{k}", f"sr_disp_site_inbound_months_{k}", f"sr_disp_site_inbound_ours_{k}"
     figure = f"[{_sv(inbound)}|0]·[{_sv(months)}|0]"
     out = ["\t\tte_sr_site_row = {"]
+    out += _override("site_visible", f'visible = "[Or( GetVariableSystem.Exists(\'{SS_ALL}\'), {_eq(f"sr_disp_ss_shown_{k}", 1)} )]"')
     out += _override("site_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
-    out += _override("site_name", f'text = "sr_site_name_{k}"')
+    out += _override("site_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_ss_site_tt_{k}"')
     out += _override("site_ours_visible", f'visible = "[{_eq(disp, 1)}]"')
     out += _override("site_other_visible", f'visible = "[{_eq(disp, 2)}]"')
     out += _override("site_context", f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_{k}').GetState]\"")
@@ -2697,30 +2772,36 @@ def _site_row(site: Site) -> list[str]:
     return out + ["\t\t}"]
 
 
-def _settler_row(site: Site) -> list[str]:
+# The Colonies table's view tests (te_sr_colony_row holds the same; audit SPC-5).
+_CONTESTED = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )"
+_FULL = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )"
+_VIEW_DEFENCES = f"And( {_FULL}, GetVariableSystem.HasValue('sr_colony_view', 'defences') )"
+SS_ALL = "sr_panel_solar_system_all_open"
+
+
+def _colony_row(site: Site) -> list[str]:
+    """One colony in Colonies: under every view but Defenses while it is ours
+    and not occupied (sr_disp_site_<key> 1), under Defenses while it is ours at
+    all (sr_disp_def_<key>, gen_space_fleets), so an occupied colony shows there
+    with its occupier."""
     k = site.key
-    prio = f"sr_disp_site_prio_{k}"
-    out = ["\t\tte_sr_settler_row = {"]
-    out += _override("settler_visible", f'visible = "[{_eq(f"sr_disp_site_{k}", 1)}]"')
-    out += _override("settler_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
-    out += _override("settler_name", f'text = "sr_site_name_{k}"')
-    out += _override("settler_people", f'raw_text = "[{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]"')
-    out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
-    out += _override("settler_priority_button",
+    prio, status, dstatus = f"sr_disp_site_prio_{k}", f"sr_disp_site_aut_status_{k}", f"sr_disp_def_status_{k}"
+    out = ["\t\tte_sr_colony_row = {"]
+    out += _override("colony_visible",
+                     f'visible = "[Or( And( {_VIEW_DEFENCES}, {_eq(f"sr_disp_def_{k}", 1)} ), '
+                     f'And( Not( {_VIEW_DEFENCES} ), {_eq(f"sr_disp_site_{k}", 1)} ) )]"')
+    out += _override("colony_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("colony_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_colony_site_tt_{k}"')
+    # People
+    out += _override("priority_button",
                      f'enabled = "{_sgui_call("sr_colony_priority_sgui", "IsValid", site)}"',
                      f'onclick = "{_sgui_call("sr_colony_priority_sgui", "Execute", site)}"',
                      f'tooltip = "{_reasoned("sr_colony_priority_sgui", _site_scope(site))}"')
     for level in range(4):
         out += _override(f"prio_{level}_visible", f'visible = "[{_eq(prio, level)}]"')
-    return out + ["\t\t}"]
-
-
-def _module_row(site: Site) -> list[str]:
-    k = site.key
-    out = ["\t\tte_sr_module_row = {"]
-    out += _override("module_visible", f'visible = "[{_eq(f"sr_disp_site_{k}", 1)}]"')
-    out += _override("module_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
-    out += _override("module_name", f'text = "sr_site_name_{k}"')
+    out += _override("settler_people", f'raw_text = "[{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]"')
+    out += _override("settler_crews", f'raw_text = "[{_sv(f"sr_site_crews_{k}")}|0]"')
+    # Modules
     out += _override("module_staffing", f'raw_text = "[{_sv(f"sr_disp_site_staffing_{k}")}|0]%"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
@@ -2741,6 +2822,25 @@ def _module_row(site: Site) -> list[str]:
                      f"enabled = \"[GetScriptedGui('sr_colony_module_sgui').IsValid( {clear} )]\"",
                      f"onclick = \"[GetScriptedGui('sr_colony_module_sgui').Execute( {clear} )]\"",
                      f'tooltip = "{_reasoned("sr_colony_module_sgui", clear)}"')
+    # Autonomy
+    out += _override("aut_figure", f'raw_text = "[{_sv(f"sr_disp_site_aut_{k}")}|0]%"')
+    out += _override("aut_drift_tooltip", f'tooltip = "je_space_race_widget_autonomy_drift_tt_{k}"')
+    out += _override("aut_drift", f'raw_text = "[{_sv(f"sr_disp_site_aut_drift_{k}")}|+=2]"')
+    for code, name in enumerate(("none", "charter", "garrison", "both")):
+        out += _override(f"aut_{name}_visible", f'visible = "[{_eq(status, code)}]"')
+    out += _override("aut_abandon_button",
+                     f'enabled = "{_sgui_call("sr_colony_abandon_sgui", "IsValid", site)}"',
+                     f'onclick = "{_sgui_call("sr_colony_abandon_sgui", "Execute", site)}"',
+                     f'tooltip = "{_reasoned("sr_colony_abandon_sgui", _site_scope(site))}"')
+    # Defenses (gen_space_fleets' sr_disp_def_* values)
+    out += _override("def_level", f'raw_text = "[{_sv(f"sr_site_def_value_{k}")}|0]"')
+    out += _override("def_integrity", f'raw_text = "[{_sv(f"sr_disp_def_integrity_{k}")}|0]%"')
+    out += _override("def_marines", f'raw_text = "[{_sv(f"sr_site_marines_value_{k}")}|0]"')
+    for code, name in ((0, "calm"), (1, "blockaded"), (2, "assault"), (3, "occupied"), (4, "interdicted")):
+        out += _override(f"def_{name}_visible", f'visible = "[{_eq(dstatus, code)}]"')
+    out += _override("def_occupier_context",
+                     f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_{k}').GetState]\"",
+                     f'visible = "[{_eq(f"sr_disp_def_occupier_{k}", 1)}]"')
     return out + ["\t\t}"]
 
 
@@ -2787,14 +2887,13 @@ def render_gui() -> str:
            "### Solar System Colonization's per-world and per-slot rows, from",
            "### gen_solar_sites.SITES (slices 2-3 design §§ 3, 8, 10). The row types are in",
            "### space_race_widget.gui: te_sr_site_row (Solar System, every world under its",
-           "### location, in panel_order()), te_sr_settler_row (Settlers, every world, shown",
-           "### while ours), te_sr_cf_slot_row (Colony Fleets, one per fleet slot),",
-           "### te_sr_mq_row (Colony Modules' queue, one per place), te_sr_module_row",
-           "### (Colony Modules, every world, shown while ours), te_sr_autonomy_row (Colony",
-           "### Autonomy, every world, shown while ours) and te_sr_free_row (Free Colonies,",
-           "### every world, shown while free; slice 5 design § 9). Each",
-           "### value is a display value of sr_sites_display_generated.txt, the scripted",
-           "### GUIs are in sr_colony_sguis.txt.",
+           "### location, in panel_order(), filtered by default), te_sr_colony_row",
+           "### (Colonies, every world, shown while ours; audit SPC-5), te_sr_cf_slot_row",
+           "### (Colony Fleets, one per fleet slot), te_sr_mq_row (the Modules view's queue,",
+           "### one per place) and te_sr_free_row (the Autonomy view's Free Colonies, every",
+           "### world, shown while free; slice 5 design § 9). Each value is a display value",
+           "### of sr_sites_display_generated.txt (the Defenses view's, of",
+           "### sr_fleets_display_generated.txt), the scripted GUIs are in sr_colony_sguis.txt.",
            "",
            "types sr_sites_generated_rows_types",
            "{",
@@ -2804,6 +2903,7 @@ def render_gui() -> str:
            "\t\tspacing = 2"]
     for loc in LOCATIONS:
         out += ["", "\t\tte_sr_subheader = {",
+                f'\t\t\tvisible = "[Or( GetVariableSystem.Exists(\'{SS_ALL}\'), {_ge(f"sr_disp_ss_filtered_{loc}", 1)} )]"',
                 '\t\t\tblockoverride "subheader_text" {',
                 f'\t\t\t\ttext = "je_space_race_widget_ss_loc_{loc}"',
                 "\t\t\t}",
@@ -2812,12 +2912,12 @@ def render_gui() -> str:
             if site.location == loc:
                 out += [""] + _site_row(site)
     out += ["\t}", "",
-            "\ttype te_sr_settler_rows = flowcontainer {",
+            "\ttype te_sr_colony_rows = flowcontainer {",
             "\t\tdirection = vertical",
             "\t\tignoreinvisible = yes",
             "\t\tspacing = 2"]
     for site in panel_order():
-        out += [""] + _settler_row(site)
+        out += [""] + _colony_row(site)
     out += ["\t}", "",
             "\ttype te_sr_cf_slot_rows = flowcontainer {",
             "\t\tdirection = vertical",
@@ -2832,20 +2932,6 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for n in range(1, QUEUE_SLOTS + 1):
         out += [""] + _queue_row(n)
-    out += ["\t}", "",
-            "\ttype te_sr_module_rows = flowcontainer {",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 2"]
-    for site in panel_order():
-        out += [""] + _module_row(site)
-    out += ["\t}", "",
-            "\ttype te_sr_autonomy_rows = flowcontainer {",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 2"]
-    for site in panel_order():
-        out += [""] + _autonomy_row(site)
     out += ["\t}", "",
             "\ttype te_sr_free_rows = flowcontainer {",
             "\t\tdirection = vertical",

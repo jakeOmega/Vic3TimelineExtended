@@ -2925,6 +2925,7 @@
  te_seabed_royalty_modifier_desc:0 "This country is party to the Convention on the Law of the Sea while it regulates the seabed, and pays royalties on its $building_ocean_mine$ levels: 4% of their base output value a week. The money goes to the World Development Fund while it stands, otherwise to the UN budget."
  te_tt_blank:0 ""
  te_tt_break:0 "\n\n"
+ te_tt_newline:0 "\n"
  tech_metals:0 "Tech-Critical Metals"
  terror_crackdown_modifier:0 "Security Crackdown"
  terror_crackdown_modifier_desc:0 "In response to a devastating attack, the government has expanded police powers and tightened security across the nation."
