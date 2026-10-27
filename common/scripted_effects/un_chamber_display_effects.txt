@@ -315,6 +315,21 @@ un_chamber_parties_line = {
 # Scope: resolution container
 un_chamber_tally_line = {
 	custom_tooltip_no_bullet = je_un_chamber_tally
+	un_chamber_tally_committed_line = yes
+	if = {
+		limit = { un_resolution_needs_supermajority = yes }
+		custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	}
+}
+
+# The pledged votes not yet cast, the one tally line the session strip does
+# not show: the live card prints it alone (the 2026-10-27 audit, UN-3), the
+# archive with the tally above.
+# Scope: resolution container
+un_chamber_tally_committed_line = {
 	# Votes pledged but not yet cast, stated next to the tally and kept out of
 	# it. un_res_commit_pending is a variable rather than a list size because
 	# loc can print a variable and cannot print a list size; it is decremented
@@ -330,13 +345,6 @@ un_chamber_tally_line = {
 			var:un_res_commit_pending >= 1
 		}
 		custom_tooltip_no_bullet = je_un_chamber_tally_committed
-	}
-	if = {
-		limit = { un_resolution_needs_supermajority = yes }
-		custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
-	}
-	else = {
-		custom_tooltip_no_bullet = je_un_chamber_rule_majority
 	}
 }
 
@@ -2082,6 +2090,10 @@ un_chamber_reason_line = {
 # only when the snapshot is for this resolution (un_chamber_position_sgui).
 # Root-level lines only.
 # Scope: country (the viewer)
+# The terms of our lean, the hover of the "Our Lean" row under the vote
+# buttons (un_chamber_position_terms_sgui; the 2026-10-27 audit, UN-4: they
+# were an open eleven-line block, with the AI's vote rule, which is now the
+# Lean concept's). The row itself is je_un_chamber_position_total.
 un_chamber_position_block = {
 	if = {
 		limit = {
@@ -2089,7 +2101,6 @@ un_chamber_position_block = {
 			has_variable = un_lean_res
 			var:un_lean_res ?= global_var:un_active_resolution
 		}
-		custom_tooltip_no_bullet = je_un_chamber_position_total
 		un_chamber_position_term = { TERM = grounds KEY = je_un_chamber_position_grounds }
 		un_chamber_position_term = { TERM = self KEY = je_un_chamber_position_self }
 		un_chamber_position_term = { TERM = proposer KEY = je_un_chamber_position_proposer }
@@ -2303,12 +2314,10 @@ un_chamber_dues_lines = {
 		limit = { un_carried_seat_count > 0 }
 		custom_tooltip_no_bullet = je_un_chamber_dues_carried
 	}
-	# What the World Development Fund pays us and what we pledge to the World
-	# Food Reserve, while they stand (redesign phase 7, un_economy_effects.txt).
-	un_economy_obligation_lines = yes
-	# A Binding Ceasefire ordered against us, or against our enemy (redesign
-	# phase 7, un_order_effects.txt).
-	un_order_obligation_lines = yes
+	# Pay or withhold sits under these lines in the widget (UN-9). Our grain
+	# pledge and the Binding Ceasefires that bind us follow there, each its
+	# own builder (un_chamber_food_reserve_sgui, un_chamber_orders_sgui); our
+	# World Development Fund position heads the Fund's section (UN-13).
 }
 
 # The conventions we are party to (§5.3), read straight off the modifiers
@@ -2727,19 +2736,19 @@ un_chamber_deleg_row = {
 	}
 }
 
-# One member's row: its band, whose reading it is, the campaigns on it and any
-# pledge it has made.
+# One member's row: its band, marked as the Assembly's estimate or our true
+# reading, the campaigns on it and any pledge it has made. The marker word
+# carries the caveat on hover; the section says it once above the rows
+# (the 2026-10-27 audit, UN-14: it was a line of its own on every row).
 # Scope: resolution container (in session); scope:un_deleg_m = the member;
 # ROOT = the viewer
 un_chamber_deleg_member_lines = {
 	if = {
 		limit = { ROOT = { un_lobby_runs_campaign_on = { MEMBER = scope:un_deleg_m } } }
 		un_chamber_deleg_band = { VAR = un_lean_total }
-		custom_tooltip_no_bullet = je_un_chamber_deleg_reading_true
 	}
 	else = {
 		un_chamber_deleg_band = { VAR = un_lean_shown }
-		custom_tooltip_no_bullet = je_un_chamber_deleg_reading_estimate
 	}
 	if = {
 		limit = { has_variable_list = un_res_campaigns }
@@ -2787,28 +2796,30 @@ un_chamber_deleg_member_lines = {
 }
 
 # The member's name and band, read from its $VAR$ (un_lean_total, the true
-# lean, or un_lean_shown, the estimate).
+# lean, or un_lean_shown, the estimate). Each band has a key per reading,
+# je_un_chamber_deleg_band_<band>_$VAR$, whose marker word says which it is:
+# "(true)" or "(est.)", with the caveat on hover.
 # Parameters: $VAR$
 # Scope: resolution container; scope:un_deleg_m = the member
 un_chamber_deleg_band = {
 	if = {
 		limit = { scope:un_deleg_m = { var:$VAR$ >= un_lean_band_firm } }
-		custom_tooltip_no_bullet = je_un_chamber_deleg_band_firm_for
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_firm_for_$VAR$
 	}
 	else_if = {
 		limit = { scope:un_deleg_m = { var:$VAR$ >= un_lean_band_lean } }
-		custom_tooltip_no_bullet = je_un_chamber_deleg_band_leaning_for
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_leaning_for_$VAR$
 	}
 	else_if = {
 		limit = { scope:un_deleg_m = { var:$VAR$ > un_lean_band_lean_against } }
-		custom_tooltip_no_bullet = je_un_chamber_deleg_band_undecided
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_undecided_$VAR$
 	}
 	else_if = {
 		limit = { scope:un_deleg_m = { var:$VAR$ > un_lean_band_firm_against } }
-		custom_tooltip_no_bullet = je_un_chamber_deleg_band_leaning_against
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_leaning_against_$VAR$
 	}
 	else = {
-		custom_tooltip_no_bullet = je_un_chamber_deleg_band_firm_against
+		custom_tooltip_no_bullet = je_un_chamber_deleg_band_firm_against_$VAR$
 	}
 }
 
@@ -2930,5 +2941,161 @@ un_chamber_propose_narcotics_row = {
 		IN_FORCE = un_propose_narcotics_in_force
 		AVAILABLE = un_propose_narcotics_available
 		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# The overview's Motions cell's hover: the topics the last monthly snapshot
+# found a case for (un_propose_ready_snapshot), each by its proposal row's
+# title, which carries its terms on hover.
+# Scope: country (the viewer)
+un_ov_ready_lines = {
+	if = {
+		limit = { un_disp_propose_ready_count > 0 }
+		custom_tooltip_no_bullet = je_un_ov_ready_intro
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_ov_ready_none
+	}
+	if = {
+		limit = { has_variable = un_ready_condemn }
+		custom_tooltip = je_un_chamber_propose_topic_condemn
+	}
+	if = {
+		limit = { has_variable = un_ready_sanctions }
+		custom_tooltip = je_un_chamber_propose_topic_sanctions
+	}
+	if = {
+		limit = { has_variable = un_ready_expulsion }
+		custom_tooltip = je_un_chamber_propose_topic_expulsion
+	}
+	if = {
+		limit = { has_variable = un_ready_mandate }
+		custom_tooltip = je_un_chamber_propose_topic_mandate
+	}
+	if = {
+		limit = { has_variable = un_ready_peacekeepers }
+		custom_tooltip = je_un_chamber_propose_topic_peacekeepers
+	}
+	if = {
+		limit = { has_variable = un_ready_aid }
+		custom_tooltip = je_un_chamber_propose_topic_aid
+	}
+	if = {
+		limit = { has_variable = un_ready_reform }
+		if = {
+			limit = { un_charter_next_stage >= 2 }
+			custom_tooltip = je_un_chamber_propose_topic_reform_2
+		}
+		else = {
+			custom_tooltip = je_un_chamber_propose_topic_reform_1
+		}
+	}
+	if = {
+		limit = { has_variable = un_ready_human_rights }
+		custom_tooltip = je_un_chamber_propose_topic_human_rights
+	}
+	if = {
+		limit = { has_variable = un_ready_icc }
+		custom_tooltip = je_un_chamber_propose_topic_icc
+	}
+	if = {
+		limit = { has_variable = un_ready_npt }
+		custom_tooltip = je_un_chamber_propose_topic_npt
+	}
+	if = {
+		limit = { has_variable = un_ready_climate }
+		custom_tooltip = je_un_chamber_propose_topic_climate
+	}
+	if = {
+		limit = { has_variable = un_ready_pandemic }
+		custom_tooltip = je_un_chamber_propose_topic_pandemic
+	}
+	if = {
+		limit = { has_variable = un_ready_refugee }
+		custom_tooltip = je_un_chamber_propose_topic_refugee
+	}
+	if = {
+		limit = { has_variable = un_ready_heritage }
+		custom_tooltip = je_un_chamber_propose_topic_heritage
+	}
+	if = {
+		limit = { has_variable = un_ready_decolonization }
+		custom_tooltip = je_un_chamber_propose_topic_decolonization
+	}
+	if = {
+		limit = { has_variable = un_ready_space }
+		custom_tooltip = je_un_chamber_propose_topic_space
+	}
+	if = {
+		limit = { has_variable = un_ready_law_of_sea }
+		custom_tooltip = je_un_chamber_propose_topic_law_of_sea
+	}
+	if = {
+		limit = { has_variable = un_ready_physical_protection }
+		custom_tooltip = je_un_chamber_propose_topic_physical_protection
+	}
+	if = {
+		limit = { has_variable = un_ready_cultural_diversity }
+		custom_tooltip = je_un_chamber_propose_topic_cultural_diversity
+	}
+	if = {
+		limit = { has_variable = un_ready_nuclear_ban }
+		custom_tooltip = je_un_chamber_propose_topic_nuclear_ban
+	}
+	if = {
+		limit = { has_variable = un_ready_court_referral }
+		custom_tooltip = je_un_chamber_propose_topic_court_referral
+	}
+	if = {
+		limit = { has_variable = un_ready_arms_embargo }
+		custom_tooltip = je_un_chamber_propose_topic_arms_embargo
+	}
+	if = {
+		limit = { has_variable = un_ready_credentials }
+		custom_tooltip = je_un_chamber_propose_topic_credentials
+	}
+	if = {
+		limit = { has_variable = un_ready_standing_force }
+		custom_tooltip = je_un_chamber_propose_topic_standing_force
+	}
+	if = {
+		limit = { has_variable = un_ready_observer_request }
+		custom_tooltip = je_un_chamber_propose_topic_observer_request
+	}
+	if = {
+		limit = { has_variable = un_ready_food_reserve }
+		custom_tooltip = je_un_chamber_propose_topic_food_reserve
+	}
+	if = {
+		limit = { has_variable = un_ready_ceasefire }
+		custom_tooltip = je_un_chamber_propose_topic_ceasefire
+	}
+	if = {
+		limit = { has_variable = un_ready_development_fund }
+		custom_tooltip = je_un_chamber_propose_topic_development_fund
+	}
+	if = {
+		limit = { has_variable = un_ready_referendum }
+		custom_tooltip = je_un_chamber_propose_topic_referendum
+	}
+	if = {
+		limit = { has_variable = un_ready_narcotics }
+		custom_tooltip = je_un_chamber_propose_topic_narcotics
+	}
+	if = {
+		limit = { has_variable = un_ready_lift_sanctions }
+		custom_tooltip = je_un_chamber_propose_topic_lift_sanctions
+	}
+	if = {
+		limit = { has_variable = un_ready_antarctic }
+		custom_tooltip = je_un_chamber_propose_topic_antarctic
+	}
+	if = {
+		limit = { has_variable = un_ready_asat }
+		custom_tooltip = je_un_chamber_propose_topic_asat
+	}
+	if = {
+		limit = { has_variable = un_ready_colony_protection }
+		custom_tooltip = je_un_chamber_propose_topic_colony_protection
 	}
 }

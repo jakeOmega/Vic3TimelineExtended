@@ -1,17 +1,24 @@
 # -*- coding: utf-8 -*-
 """Auto-generate localization for UN scripted button effect descriptions.
 
-For each in-scope UN scripted_button, walk its effect block to collect
-add_modifier / remove_modifier calls and change_global_variable un_authority deltas,
-look up modifier values from common/static_modifiers/extra_modifiers.txt,
-and emit a `*_EFFECTS` loc key that summarizes the mechanical effects.
+For each in-scope UN scripted_button, walk its effect block to collect what
+the engine does not print by itself: change_global_variable un_authority
+deltas and un_ledger_actor_entry bookings (the way an act moves UN
+authority's target), and emit a `*_EFFECTS` loc key that states them. A
+button with neither gets no key.
+
+Its modifiers it no longer lists (the 2026-10-27 audit, UN-10): the buttons
+used to wrap their add_modifier calls in a `custom_tooltip = { text = ... }`,
+which hides the engine's own coloured modifier lines, and this generator
+restated them as one uncoloured line of prose. The wrappers are gone, so the
+lines print themselves. The walk still records them (added_modifiers,
+removed_modifiers), so a later reader can, but nothing renders them.
 
 The buttons' hand-written `*_DESC` keys reference $..._EFFECTS$ to splice
-the auto-generated text into the narrative preamble — see UN_END_PEACEKEEPING_DESC.
+the auto-generated text into their purpose line — see UN_LIFT_SANCTIONS_DESC.
 
 Reads:
     common/scripted_buttons/un_buttons.txt
-    common/static_modifiers/extra_modifiers.txt
 
 Writes:
     localization/english/te_un_button_effects_l_english.yml
@@ -37,18 +44,14 @@ logger = logging.getLogger(__name__)
 BUTTONS_FILE = os.path.join(
     mod_path, "common", "scripted_buttons", "un_buttons.txt"
 )
-MODIFIERS_FILE = os.path.join(
-    mod_path, "common", "static_modifiers", "extra_modifiers.txt"
-)
 LOC_DIR = os.path.join(mod_path, "localization", "english")
 OUTPUT_FILE = os.path.join(LOC_DIR, "te_un_button_effects_l_english.yml")
 
-# Buttons whose effect block is dominated by add/remove_modifier + un_authority
-# changes (vs vote-trigger / multi-country / event-firing). These get
-# auto-generated effect summaries; other buttons keep fully hand-written descs.
-# The Development Programs buttons are hand-written: their benefits modifier is
-# added with the contribution size's factor as multiplier, so its unit values
-# (Substantial's) are not what a Token or Generous contribution gets.
+# The buttons whose effects are read: the programme and stance toggles and the
+# enforcer's Lift Sanctions. Only Lift Sanctions books the UN's record today,
+# so only it gets a key; the others are read so that a booking added to one
+# is stated without a change here. The Development Programs buttons are
+# hand-written throughout.
 IN_SCOPE_BUTTONS = {
     "un_arms_control_button",
     "un_withdraw_arms_control_button",
@@ -61,21 +64,6 @@ IN_SCOPE_BUTTONS = {
     "un_stop_championing_button",
     "un_undermine_order_button",
     "un_stop_undermining_button",
-}
-
-# Modifiers we don't want surfaced in the EFFECTS text. Two flavors:
-# - Cost modifiers added with a `multiplier = ...` field whose unit value isn't
-#   the actual visible cost — the narrative preamble describes the recurring
-#   expense scaled by un_program_expense_value.
-# - Cooldown / marker modifiers that exist only as gating flags (no effects
-#   beyond an icon) and aren't meaningful to surface as button consequences.
-SKIP_MODIFIERS = {
-    "un_peacekeeping_contributor_cost",
-    "un_development_contributor_cost",
-    "un_humanitarian_aid_cost",
-    "un_peacekeeping_cooldown",
-    "un_request_cooldown",
-    "un_sanctions_cooldown",
 }
 
 MINUS = "−"  # Unicode minus (matches existing tooltip style)
@@ -206,77 +194,13 @@ def collect_button_effects():
     return out
 
 
-def collect_modifier_effects():
-    """Return {modifier_name: [(effect_key, value), ...]} from extra_modifiers."""
-    parser = ParadoxFileParser()
-    parser.parse_file(MODIFIERS_FILE, apply_directives=False)
-    out = {}
-    for name, raw_entry in parser.data.items():
-        entry = _value_of(raw_entry)
-        if not isinstance(entry, dict):
-            continue
-        effects = []
-        for k, v in entry.items():
-            if k == "icon":
-                continue
-            val = _value_of(v)
-            try:
-                effects.append((k, float(val)))
-            except (TypeError, ValueError):
-                continue
-        if effects:
-            out[name] = effects
-    return out
-
-
 # ---------- rendering -------------------------------------------------------
 
-def _format_value(key, value):
-    """Render one (modifier_effect_key, numeric_value) as the inline phrase
-    matching the existing UN tooltip style: '+5% $key$' or '−25 $key$'."""
-    sign = "+" if value > 0 else MINUS
-    abs_v = abs(value)
-    if 0 < abs_v < 1.0:
-        # Heuristic: |v| < 1 → render as percent (covers _mult and _add modifiers
-        # whose underlying unit is already a rate, like unit_kill_rate_add).
-        pct = abs_v * 100
-        num = f"{int(pct)}%" if pct == int(pct) else f"{pct:g}%"
-    else:
-        num = f"{int(abs_v)}" if abs_v == int(abs_v) else f"{abs_v:g}"
-    return f"{sign}{num} ${key}$"
-
-
-def _render_modifier_phrase(name, modifier_effects):
-    """`$un_X_modifier$ (+5% $...$, −25 $...$, ...)`.
-
-    The modifier's display name goes in as a plain `$name$` substitution. It
-    used to be `[Concept('<name>','$<name>$')]`, but `Concept()` takes a game
-    concept key and no modifier is one. The expansion also landed inside a
-    quoted argument, so a name that is itself a link
-    (`un_peacekeeping_contributor_modifier` is "[concept_un_peacekeeping]
-    Contributor") broke the whole expression, and debug.log filled with parse
-    errors. At top level the nested concept link renders normally.
-    """
-    effects = modifier_effects.get(name, [])
-    link = f"${name}$"
-    if not effects:
-        return link
-    rendered = ", ".join(_format_value(k, v) for k, v in effects)
-    return f"{link} ({rendered})"
-
-
-def render_effects_text(button_data, modifier_effects):
-    """Compose the full $X_EFFECTS$ text for a button."""
+def render_effects_text(button_data):
+    """Compose the full $X_EFFECTS$ text for a button: the authority delta
+    and the ledger bookings, which no engine line shows. Its modifiers are
+    left to the engine's own lines (UN-10)."""
     parts = []
-    for name in button_data["added_modifiers"]:
-        if name in SKIP_MODIFIERS:
-            continue
-        parts.append(f"Applies {_render_modifier_phrase(name, modifier_effects)}")
-    for name in button_data["removed_modifiers"]:
-        if name in SKIP_MODIFIERS:
-            continue
-        parts.append(f"Removes {_render_modifier_phrase(name, modifier_effects)}")
-
     delta = button_data["authority_delta"]
     if delta:
         sign = "+" if delta > 0 else MINUS
@@ -309,7 +233,6 @@ def effects_key_for(desc_key):
 
 def build_descriptions():
     button_effects = collect_button_effects()
-    modifier_effects = collect_modifier_effects()
     descriptions = {}
     skipped = []
     missing_buttons = sorted(IN_SCOPE_BUTTONS - set(button_effects))
@@ -317,7 +240,7 @@ def build_descriptions():
         if not data["desc_key"]:
             skipped.append((button_id, "no desc field"))
             continue
-        text = render_effects_text(data, modifier_effects)
+        text = render_effects_text(data)
         if not text:
             skipped.append((button_id, "no effects collected"))
             continue

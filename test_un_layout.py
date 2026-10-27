@@ -17,7 +17,7 @@ REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
              "un_chamber_propose", "un_chamber_mandates", "un_chamber_history", "un_auth_hist_open"]
-NOT_SECTIONS = {"un_chamber_veto_armed", "un_chamber_history_details"}
+NOT_SECTIONS = {"un_chamber_veto_armed", "un_chamber_history_details", "un_leave_armed"}
 
 
 def _read(path):
@@ -172,11 +172,18 @@ PROGRAMME_TALLIES = ("un_peacekeeping_count", "un_development_count", "un_human_
 
 
 class ProgrammesTest(unittest.TestCase):
-    def test_programmes_are_a_collapsed_table(self):
+    def test_programmes_are_an_open_table_with_our_controls(self):
+        """Open by default since the owner's decision of 2026-10-27, which
+        gave the table an Ours column with the programme controls (UN-9)."""
         body = _type_body(_read(CHAMBER), "te_un_sec_programmes")
-        self.assertIn("GetVariableSystem.Toggle('un_chamber_programmes_open')", body)
+        self.assertIn("GetVariableSystem.Toggle('un_chamber_programmes_closed')", body)
         for sv in PROGRAMME_TALLIES:
             self.assertIn(f"ScriptValue('{sv}')", body, sv)
+        for sgui in ("un_act_peacekeeping_mission_sgui", "un_act_end_peacekeeping_sgui",
+                     "un_act_human_rights_resolution_sgui", "un_act_withdraw_human_rights_sgui",
+                     "un_act_arms_control_sgui", "un_act_withdraw_arms_control_sgui",
+                     "un_act_lift_sanctions_sgui"):
+            self.assertIn(f"GetScriptedGui('{sgui}')", body, sgui)
 
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -417,8 +424,10 @@ class ObligationsTest(unittest.TestCase):
         self.assertTrue(_modifier_name(modifier), f"{modifier} has no name")
 
     def test_our_dues_sit_beside_the_budget(self):
+        # The budget is a table since the 2026-10-27 audit (UN-13); its first
+        # row is all the members' dues.
         dues = self.gui.index("un_chamber_dues_sgui")
-        budget = self.gui.index("un_chamber_budget_sgui")
+        budget = self.gui.index("je_un_budget_dues_label")
         conventions = self.gui.index("je_un_chamber_sub_regimes")
         self.assertLess(dues, budget)
         self.assertLess(budget, conventions)

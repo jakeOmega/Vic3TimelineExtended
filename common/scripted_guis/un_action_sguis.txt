@@ -1,0 +1,726 @@
+﻿# ============================================================================
+# UN ACTIONS — THE PANEL'S CONTROLS FOR THE JOURNAL ENTRY'S BUTTONS
+# ============================================================================
+# The 2026-10-27 GUI audit's UN-9 (owner decision of the same day): every
+# button on je_united_nations is the AI's now (`is_ai = yes` in its
+# `visible`), and a human acts beside the figure each button acts on. These
+# are those controls, one scripted GUI per button. Each mirrors its button
+# word for word: is_shown is the button's visible without is_ai, is_valid its
+# possible, and effect its effect, so the panel and the AI run the same
+# script. test_un_actions.py fails when one drifts from its button: change
+# both. The proposals have no mirror: a human tables them from the General
+# Assembly's Propose rows (un_chamber_propose_sgui), which ask the same
+# triggers and run the same effects.
+#
+# Read from gui/journal_entry_widgets/un_*.gui with no saved scope, through
+# `datacontext = "[GetScriptedGui('<name>')]"` on the control's wrapper
+# (un_act_control). ai_is_valid = no on each: the AI acts through the
+# buttons.
+# ============================================================================
+
+# un_found_button (un_buttons.txt): under the overview's No UN cell.
+un_act_found_sgui = {
+	scope = country
+
+	is_shown = {
+		NOT = { has_global_variable = un_founded }
+		NOT = { un_conference_in_session = yes }
+		has_technology_researched = intergovernmental_organizations
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		NOT = { has_global_variable = un_founded }
+		NOT = { un_conference_in_session = yes }
+		has_technology_researched = intergovernmental_organizations
+		country_rank >= rank_value:great_power
+		is_subject = no
+		custom_tooltip = {
+			text = un_refounding_cooldown_tt
+			NOT = { has_global_variable = un_refounding_cooldown }
+		}
+		# un_founding_cost_modifier, either way (un_script_values.txt).
+		custom_tooltip = {
+			text = un_found_influence_tt
+			influence >= un_found_influence_cost
+		}
+	}
+
+	effect = {
+		# Cost: influence, fading over five years, for a founding and a
+		# founding conference alike. Outside the custom_tooltips below, so its
+		# modifier line shows (the 2026-10-27 audit, UN-10).
+		add_modifier = {
+			name = un_founding_cost_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { un_founding_is_refounding = yes }
+			custom_tooltip = {
+				text = "UN_CONVENE_CONFERENCE_TT"
+				un_conference_open = yes
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = "UN_FOUND_DESC"
+				# UN authority is a single GLOBAL value; born here at founding (50),
+				# then moving toward the equilibrium its members give it
+				# (un_authority_effects.txt). The founder becomes first member, HQ
+				# host, founding member and, as a great power, a permanent member;
+				# the other permanent seats go by prestige to great-power members
+				# when the one-year signing period closes (un_found_organisation,
+				# un_ladder_effects.txt; un_seat_effects.txt).
+				un_found_organisation = { AUTHORITY = un_founding_authority }
+				# Fire the charter event for all other recognized independent countries
+				un_charter_invitations = yes
+			}
+		}
+	}
+}
+
+# un_join_button (un_buttons.txt): under the overview's Membership cell.
+un_act_join_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_founded
+		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		NOT = { has_variable = un_member_modifier_on }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		has_global_variable = un_founded
+		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		NOT = { has_variable = un_member_modifier_on }
+		custom_tooltip = {
+			text = un_membership_eligible_tt
+			un_membership_eligible = yes
+		}
+		NOT = { has_modifier = un_expelled_cooldown }
+		NOT = { has_modifier = un_withdrawal_penalty_modifier }
+	}
+
+	effect = {
+		# What membership brings, as the modifier's own lines (UN-10): shown,
+		# not run, here, since un_join_organisation adds it to the journal
+		# entry; a second add would stack.
+		show_as_tooltip = {
+			add_modifier = { name = un_member_privileges_modifier }
+		}
+		custom_tooltip = {
+			text = "UN_JOIN_DESC"
+			# Membership and every convention already ratified
+			# (un_join_organisation, un_ladder_effects.txt).
+			un_join_organisation = yes
+		}
+		# A great power stands for an open permanent seat, filled by prestige
+		# rather than by who joins first; this says where things stand.
+		un_seat_join_tooltip = yes
+	}
+}
+
+# un_leave_button (un_buttons.txt): under the overview's Membership cell, armed before it acts.
+un_act_leave_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+
+	effect = {
+		# Everything leaving means, shared with un_events.34 (the interest
+		# groups' demand to leave): un_leave_organisation, un_ladder_effects.txt.
+		un_leave_organisation = yes
+	}
+}
+
+# un_withhold_dues_button (un_buttons.txt): under Our Obligations › Dues.
+un_act_withhold_dues_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_self_assessed = yes
+		NOT = { un_dues_is_withholding = yes }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_self_assessed = yes
+		NOT = { un_dues_is_withholding = yes }
+		custom_tooltip = {
+			text = un_dues_assessed_tt
+			un_dues_assessed = yes
+		}
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = un_dues_withhold_effect_tt
+			un_dues_withhold = yes
+		}
+	}
+}
+
+# un_pay_dues_button (un_buttons.txt): under Our Obligations › Dues.
+un_act_pay_dues_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_self_assessed = yes
+		un_dues_is_withholding = yes
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_self_assessed = yes
+		un_dues_is_withholding = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = un_dues_resume_effect_tt
+			un_dues_resume = yes
+		}
+	}
+}
+
+# un_fund_development_button (un_buttons.txt): under the World Development Fund section's first row.
+un_act_fund_development_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		custom_tooltip = {
+			text = un_fund_development_needs_fund_tt
+			has_global_variable = un_inst_development_fund
+		}
+		# Money from a member withholding its dues would not reach the Fund
+		# (un_dev_fund_contributor), and paying into a Fund that pays us is
+		# half a circle.
+		custom_tooltip = {
+			text = un_fund_development_pays_dues_tt
+			NOT = { un_dues_is_withholding = yes }
+		}
+		custom_tooltip = {
+			text = un_fund_development_not_recipient_tt
+			NOT = { un_dev_fund_receiving = yes }
+		}
+		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+	}
+
+	effect = {
+		custom_tooltip = un_fund_development_effect_tt
+		hidden_effect = {
+			set_variable = { name = un_dev_fund_size value = 1 }
+			set_variable = un_dev_fund_five_sizes
+			set_variable = { name = un_dev_fund_benefit value = un_dev_fund_benefit_value }
+			je:je_united_nations ?= { add_modifier = {
+					name = un_development_contributor_modifier
+					multiplier = root.var:un_dev_fund_benefit
+				} }
+			un_state_record = { MODIFIER = un_development_contributor_modifier }
+			# Cache expense in country scope; see un_peacekeeping_mission_button.
+			set_variable = { name = un_development_expense_cached value = un_dev_fund_expense_value }
+			je:je_united_nations ?= { add_modifier = {
+					name = un_development_contributor_cost
+					multiplier = root.var:un_development_expense_cached
+				} }
+			un_state_record = { MODIFIER = un_development_contributor_cost }
+		}
+	}
+}
+
+# un_raise_development_button (un_buttons.txt): under the World Development Fund section's first row.
+un_act_raise_development_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		un_dev_fund_size_stored < un_dev_fund_size_max
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		un_dev_fund_size_stored < un_dev_fund_size_max
+	}
+
+	effect = {
+		# un_economy_effects.txt
+		un_dev_fund_raise = yes
+	}
+}
+
+# un_reduce_development_button (un_buttons.txt): under the World Development Fund section's first row.
+un_act_reduce_development_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		un_dev_fund_size_stored > 1
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+		un_dev_fund_size_stored > 1
+	}
+
+	effect = {
+		# un_economy_effects.txt
+		un_dev_fund_reduce = yes
+	}
+}
+
+# un_defund_development_button (un_buttons.txt): under the World Development Fund section's first row.
+un_act_defund_development_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_development_contributor_modifier }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = "un_defund_development_effect_tt"
+			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
+			un_state_forget = { MODIFIER = un_development_contributor_modifier }
+			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
+			un_state_forget = { MODIFIER = un_development_contributor_cost }
+		}
+	}
+}
+
+# un_peacekeeping_mission_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_peacekeeping_mission_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		country_rank >= rank_value:major_power
+		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		NOT = { has_modifier = un_peacekeeping_cooldown }
+		custom_tooltip = {
+			text = un_programme_influence_tt
+			influence >= un_programme_influence_cost
+		}
+	}
+
+	effect = {
+		custom_tooltip = UN_PEACEKEEPING_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+		un_state_record = { MODIFIER = un_peacekeeping_contributor_modifier }
+		add_modifier = {
+			name = un_peacekeeping_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# Cache expense in country scope; JE scope can't read gdp directly
+		# (the modifier multiplier is re-evaluated continuously and would
+		# otherwise return 'none'). Refreshed monthly in je_united_nations.
+		set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+		je:je_united_nations ?= { add_modifier = {
+				name = un_peacekeeping_contributor_cost
+				multiplier = root.var:un_peacekeeping_expense_cached
+			} }
+		un_state_record = { MODIFIER = un_peacekeeping_contributor_cost }
+	}
+}
+
+# un_end_peacekeeping_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_end_peacekeeping_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
+		custom_tooltip = {
+			text = un_end_peacekeeping_cooldown_tt
+			NOT = { has_modifier = un_peacekeeping_cooldown }
+		}
+	}
+
+	effect = {
+		custom_tooltip = UN_END_PEACEKEEPING_DESC
+		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+		un_state_forget = { MODIFIER = un_peacekeeping_contributor_modifier }
+		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
+		un_state_forget = { MODIFIER = un_peacekeeping_contributor_cost }
+	}
+}
+
+# un_human_rights_resolution_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_human_rights_resolution_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
+		OR = {
+			has_law = law_type:law_multicultural
+			has_law = law_type:law_universal_suffrage
+			has_law = law_type:law_protected_speech
+		}
+		custom_tooltip = {
+			text = un_programme_influence_tt
+			influence >= un_programme_influence_cost
+		}
+	}
+
+	effect = {
+		custom_tooltip = UN_HUMAN_RIGHTS_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
+		un_state_record = { MODIFIER = un_human_rights_champion_modifier }
+	}
+}
+
+# un_withdraw_human_rights_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_withdraw_human_rights_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+	}
+
+	effect = {
+		custom_tooltip = UN_WITHDRAW_HUMAN_RIGHTS_DESC
+		je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
+		un_state_forget = { MODIFIER = un_human_rights_champion_modifier }
+	}
+}
+
+# un_arms_control_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_arms_control_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
+		OR = {
+			has_law = law_type:law_war_crimes_forbidden
+			has_law = law_type:law_humanitarian_regulations
+			has_law = law_type:law_limited_war
+		}
+		custom_tooltip = {
+			text = un_programme_influence_tt
+			influence >= un_programme_influence_cost
+		}
+	}
+
+	effect = {
+		custom_tooltip = UN_ARMS_CONTROL_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
+		un_state_record = { MODIFIER = un_arms_control_participant_modifier }
+	}
+}
+
+# un_withdraw_arms_control_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_withdraw_arms_control_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier }
+	}
+
+	effect = {
+		custom_tooltip = UN_WITHDRAW_ARMS_CONTROL_DESC
+		je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
+		un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
+	}
+}
+
+# un_champion_order_button (un_buttons.txt): under Why UN Authority Is Moving's champions.
+un_act_champion_order_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		country_rank >= rank_value:great_power
+		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		country_rank >= rank_value:great_power
+		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		custom_tooltip = {
+			text = un_stance_influence_tt
+			influence >= un_stance_influence_cost
+		}
+	}
+
+	effect = {
+		custom_tooltip = UN_CHAMPION_ORDER_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_champion_order_cost } }
+		un_state_record = { MODIFIER = un_champion_order_cost }
+	}
+}
+
+# un_stop_championing_button (un_buttons.txt): under Why UN Authority Is Moving's champions.
+un_act_stop_championing_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+	}
+
+	effect = {
+		custom_tooltip = UN_STOP_CHAMPIONING_DESC
+		je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
+		un_state_forget = { MODIFIER = un_champion_order_cost }
+	}
+}
+
+# un_undermine_order_button (un_buttons.txt): under Why UN Authority Is Moving's champions.
+un_act_undermine_order_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		country_rank >= rank_value:great_power
+		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		country_rank >= rank_value:great_power
+		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		custom_tooltip = {
+			text = un_stance_influence_tt
+			influence >= un_stance_influence_cost
+		}
+	}
+
+	effect = {
+		custom_tooltip = UN_UNDERMINE_ORDER_DESC
+		je:je_united_nations ?= { add_modifier = { name = un_undermine_order_cost } }
+		un_state_record = { MODIFIER = un_undermine_order_cost }
+	}
+}
+
+# un_stop_undermining_button (un_buttons.txt): under Why UN Authority Is Moving's champions.
+un_act_stop_undermining_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+	}
+
+	effect = {
+		custom_tooltip = UN_STOP_UNDERMINING_DESC
+		je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+		un_state_forget = { MODIFIER = un_undermine_order_cost }
+	}
+}
+
+# un_lift_sanctions_button (un_buttons.txt): in Programmes and Conventions' Ours column.
+un_act_lift_sanctions_sgui = {
+	scope = country
+
+	is_shown = {
+		has_modifier = un_sanctions_enforcer_modifier
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		has_modifier = un_sanctions_enforcer_modifier
+	}
+
+	effect = {
+		custom_tooltip = UN_LIFT_SANCTIONS_DESC
+		# Our own enforcer modifier, as its own line (UN-10); the regimes'
+		# end and the UN's record, in words in UN_LIFT_SANCTIONS_DESC above
+		# (whose ledger line gen_un_button_descs.py writes from the call
+		# below).
+		remove_modifier = un_sanctions_enforcer_modifier
+		hidden_effect = {
+			# The regime we enforce, and any nobody enforces any more
+			# (un_justice_effects.txt). It saves scope:un_sanctions_lifted_target
+			# for the record below.
+			un_sanctions_lift_ours = yes
+			# Walking away from a regime the Assembly imposed costs its credibility,
+			# weighted by the enforcer's weight in world affairs.
+			un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 7 SUBJECT = scope:un_sanctions_lifted_target }
+		}
+	}
+}
+
+# un_food_reserve_pledge_button (un_economy_buttons.txt): under the World Food Reserve line in Our Obligations.
+un_act_food_reserve_pledge_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_inst_food_reserve
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { has_variable = un_fr_pledged }
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		has_global_variable = un_inst_food_reserve
+		# §0.8: a member whose representation is suspended makes no pledges;
+		# its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		custom_tooltip = {
+			text = un_food_reserve_needs_reserve_tt
+			un_food_reserve_can_store_grain = yes
+		}
+		NOT = { has_variable = un_fr_pledged }
+	}
+
+	effect = {
+		un_food_reserve_pledge = yes
+	}
+}
+
+# un_food_reserve_withdraw_button (un_economy_buttons.txt): under the World Food Reserve line in Our Obligations.
+un_act_food_reserve_withdraw_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = un_fr_pledged
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		has_variable = un_fr_pledged
+	}
+
+	effect = {
+		un_food_reserve_withdraw_pledge = yes
+	}
+}

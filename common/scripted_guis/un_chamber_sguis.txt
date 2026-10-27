@@ -160,6 +160,79 @@ un_overview_hq_sgui = {
 	}
 }
 
+# The overview's cells (the 2026-10-27 audit, UN-1): the Session cell's hover,
+# what is in session and who tabled it against whom; the Motions cell's, the
+# topics with a case for us (un_ov_ready_lines, un_chamber_display_effects.txt).
+un_ov_session_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = un_active_resolution
+				exists = global_var:un_active_resolution
+			}
+			global_var:un_active_resolution ?= {
+				un_chamber_topic_line = yes
+				un_chamber_parties_line = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_no_active
+		}
+	}
+}
+
+un_ov_motions_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { has_global_variable = un_vote_active }
+			custom_tooltip_no_bullet = je_un_ov_motions_held_tt
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_modifier = un_ga_resolution_modifier
+					has_modifier = un_request_cooldown
+				}
+			}
+			if = {
+				limit = { un_disp_propose_wait_months > 0 }
+				custom_tooltip_no_bullet = je_un_ov_motions_wait_tt
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_ov_motions_wait_unknown_tt
+			}
+		}
+		un_ov_ready_lines = yes
+	}
+}
+
+# Yes/no questions for the Membership cell's third line and the Found button's
+# label: a founding conference sits; a dissolved UN can be founded again.
+# Globals only (gotcha #22).
+un_ov_conference_sgui = {
+	scope = country
+	is_shown = {
+		un_conference_in_session = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+un_ov_refounding_sgui = {
+	scope = country
+	is_shown = {
+		un_founding_is_refounding = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Scope-free gate: a resolution is in session. The General Assembly shows its
 # tally, delegations and ballot, or, when this is false, the proposals.
 un_session_open_sgui = {
@@ -192,14 +265,17 @@ un_chamber_active_sgui = {
 				has_global_variable = un_active_resolution
 				exists = global_var:un_active_resolution
 			}
+			# The tally, the passage rule and the months are the session
+			# strip's, directly above (the 2026-10-27 audit, UN-3); the card
+			# keeps the pledges the tally leaves out. The archive's entries
+			# keep all three, having no strip.
 			global_var:un_active_resolution ?= {
 				un_chamber_topic_line = yes
 				un_chamber_parties_line = yes
 				un_chamber_mandate_terms_line = yes
-				un_chamber_tally_line = yes
+				un_chamber_tally_committed_line = yes
 				un_chamber_projection_line = yes
 				un_chamber_veto_line = yes
-				custom_tooltip_no_bullet = je_un_chamber_months
 				un_chamber_consequences_line = yes
 				un_chamber_grounds_line = yes
 			}
@@ -249,7 +325,9 @@ un_chamber_reasons_sgui = {
 }
 
 # Redesign phase 3: how the Assembly reads our own position on the
-# resolution in session. is_shown gates the textbox: only while our lean has
+# resolution in session, as one row, "Our Lean: +12", under the vote buttons;
+# its terms are the row's hover (un_chamber_position_terms_sgui; the
+# 2026-10-27 audit, UN-4). is_shown gates the row: only while our lean has
 # been written for the resolution in session. Never executed.
 un_chamber_position_sgui = {
 	scope = country
@@ -262,6 +340,14 @@ un_chamber_position_sgui = {
 		var:un_lean_res ?= global_var:un_active_resolution
 	}
 	ai_is_valid = { always = no }
+
+	effect = {
+		custom_tooltip_no_bullet = je_un_chamber_position_total
+	}
+}
+
+un_chamber_position_terms_sgui = {
+	scope = country
 
 	effect = {
 		un_chamber_position_block = yes
@@ -631,17 +717,15 @@ un_chamber_reach_sgui = {
 }
 
 # Whether the entry's status text says anything (je_united_nations'
-# status_desc: a conference, a dissolution, or the Assembly's statistics), so
-# the Diplomacy tab's Status section shows only then. Reads globals only.
+# status_desc: a founding conference or a dissolution; the Assembly's
+# statistics are the overview's since the 2026-10-27 audit, UN-20), so the
+# Diplomacy tab's Status section shows only then. Reads globals only.
 un_status_text_sgui = {
 	scope = country
 	is_shown = {
 		OR = {
 			un_conference_in_session = yes
 			un_founding_is_refounding = yes
-			any_country = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-			}
 		}
 	}
 	ai_is_valid = { always = no }
@@ -657,14 +741,79 @@ un_chamber_obligations_outside_sgui = {
 	}
 }
 
-un_chamber_budget_sgui = {
+# The UN's budget under our dues is a table of value rows in the widget (the
+# 2026-10-27 audit, UN-13: it was one seven-figure sentence). These answer
+# which of its rows apply, reading globals only (gotcha #22): the Standing UN
+# Force's share and the World Development Fund's (the Fund takes a share only
+# once Charter Reform I has carried), and the lending facility, which is what
+# is left once either takes one.
+un_chamber_budget_force_sgui = {
 	scope = country
+	is_shown = {
+		has_global_variable = un_inst_standing_force
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
 
+un_chamber_budget_dev_fund_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_inst_development_fund
+		un_charter_has_reform = { LEVEL = 1 }
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+un_chamber_budget_lending_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_global_variable = un_inst_standing_force
+			has_global_variable = un_inst_development_fund
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Our grain pledge to the World Food Reserve, under our dues, while the Reserve
+# stands (un_food_reserve_obligation_lines, un_economy_effects.txt); Pledge
+# Grain or Withdraw Our Pledge sits under it.
+un_chamber_food_reserve_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_inst_food_reserve
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
 	effect = {
-		custom_tooltip_no_bullet = je_un_chamber_dues_budget
-		# What the Standing UN Force and the World Development Fund take of it,
-		# and what is left to lend (redesign phase 7, un_economy_effects.txt).
-		un_economy_budget_lines = yes
+		un_food_reserve_obligation_lines = yes
+	}
+}
+
+# A Binding Ceasefire ordered against us, or protecting us from our enemy
+# (un_order_obligation_lines, un_order_effects.txt), under our dues, when one
+# applies.
+un_chamber_orders_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_variable = un_cf_order_months
+			any_country = {
+				has_variable = un_cf_order_months
+				var:un_cf_victim ?= ROOT
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		un_order_obligation_lines = yes
 	}
 }
 
@@ -682,6 +831,17 @@ un_chamber_dev_fund_sgui = {
 
 	effect = {
 		un_dev_fund_recipient_lines = yes
+	}
+}
+
+# Our own position in the Fund, the section's first row, with the four
+# Development Programs controls under it (un_economy_obligation_lines,
+# un_economy_effects.txt; UN-13).
+un_chamber_dev_fund_position_sgui = {
+	scope = country
+
+	effect = {
+		un_economy_obligation_lines = yes
 	}
 }
 

@@ -1,37 +1,22 @@
 ﻿### United Nations — the overview, at the top of both hosts (un_layout_widget.gui
-### sets the order). A glance for the player who knows the UN: am I in, how
-### strong is it, who runs it, what has it built. Every figure is a
-### un_disp_* value (common/script_values/un_overview_display_values.txt); every
-### tooltip is the text it replaced, from a scripted GUI in un_chamber_sguis.txt.
-### Icons are the UN's own (gfx/interface/icons/un_icons/, PR #572); what each
-### shows is in docs/systems/un_gui_icons.md.
-### Spec: docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md §2.
+### sets the order). A glance for the player who knows the UN: what needs us
+### (a vote due, our dues, the motions we could table, the case against us),
+### then how strong the UN is, who runs it and what it has built. The first
+### part is a grid of Banking's te_banking_ov_cell (the owner's decision of
+### 2026-10-27, which replaced the round-1 row of icons; gui_style_guide.md
+### rule 4), with the journal entry's membership controls under the
+### membership cell. Every figure is a un_disp_* value
+### (common/script_values/un_overview_display_values.txt); every tooltip is the
+### text it replaced, from a scripted GUI in un_chamber_sguis.txt.
+### Icons are the UN's own (gfx/interface/icons/un_icons/, PR #572), and four of
+### vanilla's used as vanilla uses them (a vote's approval, disapproval and
+### undecided marks; money for dues; prestige for standing); what each shows
+### is in docs/systems/un_gui_icons.md.
+### Spec: docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md §2;
+### the cells: docs/audits/gui_audit/un.md, UN-1.
 
 types un_overview_widget_types
 {
-	### A cell of the overview's first row: an icon, its word small beneath
-	### (owner, 2026-09-28: icons first, the words secondary). Fixed width, so
-	### the row cannot push the panel wider.
-	type te_un_ov_icon_label = widget {
-		size = { 110 58 }
-
-		icon = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
-			block "icon_texture" {}
-		}
-		textbox = {
-			parentanchor = bottom|hcenter
-			autoresize = yes
-			max_width = 108
-			elide = right
-			align = hcenter|nobaseline
-			using = fontsize_small
-			default_format = "#tooltippable"
-			block "label" {}
-		}
-	}
-
 	### A 0..1 share as a pie over a background disc, inside vanilla's
 	### decorated round frame, its label beneath. The
 	### textures are the Cultural Hegemony pie's (frame 1 transparent, frame 2
@@ -72,7 +57,7 @@ types un_overview_widget_types
 			parentanchor = bottom|hcenter
 			autoresize = yes
 			align = hcenter|nobaseline
-			using = fontsize_medium
+			using = un_fontsize_overview
 			default_format = "#tooltippable"
 			block "label" {}
 		}
@@ -98,10 +83,12 @@ types un_overview_widget_types
 		}
 	}
 
-	### A vacant permanent seat.
+	### A vacant permanent seat. Its hover is the council's, as the label's is:
+	### the seats and who is in line for one (the 2026-10-27 audit, UN-21; it
+	### used to send the player to hover the label instead).
 	type te_un_ov_vacant_seat = widget {
 		size = { 70 48 }
-		tooltip = "je_un_ov_vacant_tt"
+		tooltip = "[GetScriptedGui('un_chamber_council_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 
 		icon = {
 			size = { 66 44 }
@@ -119,167 +106,603 @@ types un_overview_widget_types
 		un_chamber_panel = {
 			spacing = 10
 
-			### Row 1: membership · tier · crisis · standing
+			### The cells (gui_style_guide.md rule 4, Banking's te_banking_ov_cell): what
+			### needs us, two to a row, 238 + 4 + 238 = 480. Each cell's code is a
+			### un_disp_* display value (un_overview_display_values.txt); each hover the
+			### text it replaced. A row whose cells are all hidden collapses.
 			flowcontainer = {
-				direction = horizontal
-				spacing = 6
+				direction = vertical
 				ignoreinvisible = yes
-				parentanchor = hcenter
+				spacing = 4
+				minimumsize = { 480 -1 }
 
+				### Row 1: membership, with its controls under it, and the UN's tier.
 				flowcontainer = {
+					direction = horizontal
 					ignoreinvisible = yes
-					tooltip = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member_no_un.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_0"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)1' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member_cannot_join.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_1"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)2' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member_can_join.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_2"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)3' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_3"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)4' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member_permanent.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_4"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)5' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member_suspended_carried.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_5"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)6' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/member_suspended.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_member_6"
-						}
-					}
-				}
-				flowcontainer = {
-					ignoreinvisible = yes
-					visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "[GetScriptedGui('un_overview_tier_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)0' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/tier_moribund.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_tier_0"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)1' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/tier_contested.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_tier_1"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)2' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/tier_established.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_tier_2"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)3' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/tier_strong.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_tier_3"
-						}
-					}
-					te_un_ov_icon_label = {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)4' )]"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/un_icons/tier_supranational.dds"
-						}
-						blockoverride "label" {
-							text = "je_un_ov_tier_4"
-						}
-					}
-				}
-				te_un_ov_icon_label = {
-					visible = "[GetScriptedGui('un_authority_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "[GetScriptedGui('un_authority_crisis_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/un_icons/crisis.dds"
-					}
-					blockoverride "label" {
-						text = "je_un_ov_crisis_label"
-					}
-				}
-				widget = {
-					size = { 110 58 }
-					visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
-					tooltip = "[GetScriptedGui('un_chamber_standing_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					spacing = 4
 
-					textbox = {
-						parentanchor = bottom|hcenter
-						autoresize = yes
-						align = hcenter|nobaseline
-						using = fontsize_small
-						default_format = "#tooltippable"
-						text = "je_un_ov_standing_label"
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 4
+
+						### Membership: our seat, from no UN at all to a suspended permanent seat (un_disp_member_code; its hover the old status line).
+						te_banking_ov_cell = {
+							tooltip = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+							size = { 238 70 }
+							blockoverride "caption_width" {
+								max_width = 154
+							}
+							blockoverride "caption" {
+								text = "je_un_ov_member_caption"
+							}
+							blockoverride "icons" {
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
+									texture = "gfx/interface/icons/un_icons/member_no_un.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)1' )]"
+									texture = "gfx/interface/icons/un_icons/member_cannot_join.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)2' )]"
+									texture = "gfx/interface/icons/un_icons/member_can_join.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)3' )]"
+									texture = "gfx/interface/icons/un_icons/member.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)4' )]"
+									texture = "gfx/interface/icons/un_icons/member_permanent.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)5' )]"
+									texture = "gfx/interface/icons/un_icons/member_suspended_carried.dds"
+								}
+								icon = {
+									size = { 100% 100% }
+									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)6' )]"
+									texture = "gfx/interface/icons/un_icons/member_suspended.dds"
+								}
+							}
+							blockoverride "word" {
+								te_banking_ov_word = {
+									text = "je_un_ov_member_word"
+								}
+							}
+							blockoverride "third_line" {
+								te_banking_ov_word = {
+									visible = "[GetScriptedGui('un_ov_conference_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+									position = { 78 46 }
+									text = "je_un_ov_member_conference"
+								}
+								te_banking_ov_word = {
+									visible = "[And( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('un_ov_conference_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+									position = { 78 46 }
+									text = "je_un_ov_member_dissolved"
+								}
+							}
+						}
+						# Found or convene, join, and leave: the journal entry's buttons, which
+						# are the AI's now, as controls under the cell they act on (UN-9).
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_found_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', 'je_un_act_found_label' )]"
+							}
+						}
+						un_act_control = {
+							blockoverride "act_context" {
+								datacontext = "[GetScriptedGui('un_act_join_sgui')]"
+							}
+							blockoverride "act_label" {
+								text = "je_un_act_join_label"
+							}
+						}
+						# Leave is armed before it acts, as the veto is: a membership
+						# undone by one stray click is decades of standing. The flag is
+						# client-side GUI state (gui_modding_guide.md, the veto's note).
+						flowcontainer = {
+							direction = vertical
+							spacing = 4
+							ignoreinvisible = yes
+							parentanchor = hcenter
+							datacontext = "[GetScriptedGui('un_act_leave_sgui')]"
+
+							button = {
+								using = default_button_action
+								size = { 236 30 }
+								parentanchor = hcenter
+								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetVariableSystem.Exists('un_leave_armed') ) )]"
+								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
+								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 226
+									elide = right
+									using = un_fontsize_row
+									text = "je_un_act_leave_label"
+								}
+							}
+							button = {
+								using = default_button_action
+								size = { 236 30 }
+								parentanchor = hcenter
+								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
+								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
+								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 226
+									elide = right
+									using = un_fontsize_row
+									text = "je_un_act_leave_confirm_label"
+								}
+							}
+							button = {
+								using = default_button_action
+								size = { 236 30 }
+								parentanchor = hcenter
+								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
+								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
+								tooltip = "je_un_act_leave_cancel_tt"
+
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 226
+									elide = right
+									using = un_fontsize_row
+									text = "je_un_act_leave_cancel_label"
+								}
+							}
+						}
 					}
-					default_progressbar_horizontal = {
-						size = { 96 12 }
-						parentanchor = top|hcenter
-						position = { 0 12 }
-						blockoverride "values" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_frac') )]"
-							min = 0
-							max = 1
+					### The UN's authority tier, and the enforcement it sets (un_disp_tier_code; its hover the tier's line). Its value and target are the bar under the cells.
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('un_overview_tier_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_authority_label"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)0' )]"
+								texture = "gfx/interface/icons/un_icons/tier_moribund.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/un_icons/tier_contested.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/un_icons/tier_established.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/un_icons/tier_strong.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_tier_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/un_icons/tier_supranational.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_un_ov_tier_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "je_un_ov_enforcement"
+							}
+						}
+					}
+				}
+				### Row 2: the resolution in session and our ballot, and our own motions.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					### The General Assembly: whether a resolution needs our ballot, and how we cast it (un_disp_our_vote_code, UN-2; its hover what is in session). The word is red while our vote is due.
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('un_ov_session_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_session_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)-1' )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/un_icons/topic_reform.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)0' )]"
+								texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/generic_icons/approval_icon.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)3' ) )]"
+								texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/un_icons/topic_reform.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)5' )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)-1' )]"
+								text = "je_un_ov_vote_none"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)0' )]"
+								text = "je_un_ov_vote_due"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)1' )]"
+								text = "je_un_ov_vote_for"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)2' )]"
+								text = "je_un_ov_vote_against"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)3' )]"
+								text = "je_un_ov_vote_veto"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)4' )]"
+								text = "je_un_ov_vote_ours"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)5' )]"
+								text = "je_un_ov_vote_no_vote"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_our_vote_code'), '(CFixedPoint)-1' ) )]"
+								position = { 78 46 }
+								text = "je_un_session_months"
+							}
+						}
+					}
+					### Our motions: whether we can table a resolution of our own, and how many topics have a case (un_disp_floor_code, UN-1 and UN-8; its hover those topics).
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('un_ov_motions_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_motions_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)3' ) )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/un_icons/topic_reform.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/un_icons/topic_reform.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)1' )]"
+								text = "je_un_ov_motions_held"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)2' )]"
+								text = "je_un_ov_motions_waiting"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)3' )]"
+								text = "je_un_ov_motions_ready"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)1' )]"
+								position = { 78 46 }
+								text = "je_un_ov_motions_held_fig"
+							}
+							te_banking_ov_word = {
+								visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)2' ), Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months'), '(CFixedPoint)0' ) ) )]"
+								position = { 78 46 }
+								text = "je_un_ov_motions_wait_fig"
+							}
+							te_banking_ov_word = {
+								visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months'), '(CFixedPoint)0' ) )]"
+								position = { 78 46 }
+								text = "je_un_ov_motions_wait_unknown"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_floor_code'), '(CFixedPoint)3' )]"
+								position = { 78 46 }
+								text = "je_un_ov_motions_free_fig"
+							}
+						}
+					}
+				}
+				### Row 3: our dues and our standing.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					### Our dues: paid, withheld, or withheld long enough to cost our vote (un_disp_dues_code; its hover our dues' lines).
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_dues_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)3' ), Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)4' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)5' ) ) )]"
+								texture = "gfx/interface/icons/generic_icons/money.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)2' ) )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/generic_icons/money.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)1' )]"
+								text = "je_un_ov_dues_1"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)2' )]"
+								text = "je_un_ov_dues_2"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)3' )]"
+								text = "je_un_ov_dues_3"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)4' )]"
+								text = "je_un_ov_dues_4"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)5' )]"
+								text = "je_un_ov_dues_5"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)3' )]"
+								position = { 78 46 }
+								text = "je_un_ov_dues_fig_3"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)4' )]"
+								position = { 78 46 }
+								text = "je_un_ov_dues_fig_4"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)5' )]"
+								position = { 78 46 }
+								text = "je_un_ov_dues_fig_5"
+							}
+						}
+					}
+					### Our international standing: its tier and score, frozen while we are outside (un_disp_standing_code; UN-25: no meter for a country that never held one).
+					te_banking_ov_cell = {
+						visible = "[And( GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)-1' ) ) )]"
+						tooltip = "[GetScriptedGui('un_chamber_standing_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_standing_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/generic_icons/prestige.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)0' )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/generic_icons/prestige.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)0' )]"
+								text = "je_un_ov_standing_0"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)1' )]"
+								text = "je_un_ov_standing_1"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)2' )]"
+								text = "je_un_ov_standing_2"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)3' )]"
+								text = "je_un_ov_standing_3"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)4' )]"
+								text = "je_un_ov_standing_4"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)5' )]"
+								text = "je_un_ov_standing_5"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)6' )]"
+								text = "je_un_ov_standing_6"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)1' ) )]"
+								position = { 78 46 }
+								text = "je_un_ov_standing_fig"
+							}
+						}
+					}
+				}
+				### Row 4: the case against us, and a crisis while one is open.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					### The case against us: the gravest resolution our record supports today (un_disp_record_code; its hover the thresholds). Red once it supports any.
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "je_un_ov_record_tt"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_record_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_record_code'), '(CFixedPoint)0' )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/un_icons/topic_condemn.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_record_code'), '(CFixedPoint)0' ) )]"
+								texture = "gfx/interface/icons/un_icons/topic_condemn.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_record_code'), '(CFixedPoint)0' )]"
+								text = "je_un_ov_record_0"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_record_code'), '(CFixedPoint)1' )]"
+								text = "je_un_ov_record_1"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_record_code'), '(CFixedPoint)2' )]"
+								text = "je_un_ov_record_2"
+							}
+							te_banking_ov_word = {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_record_code'), '(CFixedPoint)3' )]"
+								text = "je_un_ov_record_3"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "je_un_ov_record_fig"
+							}
+						}
+					}
+					### A crisis, while one is open (its hover the collapse clock and the powers that could end it).
+					te_banking_ov_cell = {
+						visible = "[GetScriptedGui('un_authority_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[GetScriptedGui('un_authority_crisis_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_crisis_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/un_icons/crisis.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_un_ov_crisis_label"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "je_un_ov_crisis_fig"
+							}
 						}
 					}
 				}
 			}
 
-			### Rows 2-5: only once the UN exists and has had its first monthly update.
+			### The UN's own state, under the cells: only once it exists and has had
+			### its first monthly update.
 			flowcontainer = {
 				direction = vertical
 				spacing = 10
@@ -287,54 +710,85 @@ types un_overview_widget_types
 				minimumsize = { 480 -1 }
 				visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
-				### Authority, with a tick at the target (the marker technique of
-				### te_je_scripted_bars' double-sided gold bar, which works in game).
+				### Authority and where it is heading (gui_style_guide.md rule 5; the
+				### 2026-10-27 audit, UN-17). Three fixed cells, 116 + 180 + 160 and two 8 px
+				### gaps = 472. The bar, bottom to top: its own background and frame; the
+				### fill, pale (alpha 0.4), to the higher of authority and its target; the
+				### fill, solid, to the lower. So a rise shows past the solid fill and a fall
+				### as the tail about to go. The bar's own colour, pale: authority is good
+				### for some players and bad for others. No eye marker. The tooltip says why
+				### the target is where it is.
 				flowcontainer = {
 					direction = horizontal
 					spacing = 8
-					tooltip = "je_un_auth_tbl_headline"
+					tooltip = "je_un_ov_authority_tt"
 
-					textbox = {
-						minimumsize = { 90 -1 }
-						autoresize = yes
+					widget = {
+						size = { 116 24 }
 						parentanchor = vcenter
-						align = left|nobaseline
-						text = "je_un_ov_authority_label"
-					}
-					default_progressbar_horizontal = {
-						size = { 240 18 }
-						parentanchor = vcenter
-						blockoverride "values" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_authority_frac') )]"
-							min = 0
-							max = 1
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 116
+							elide = right
+							align = left|nobaseline
+							using = un_fontsize_row
+							default_format = "#tooltippable"
+							text = "je_un_ov_authority_label"
 						}
-						blockoverride "on_top_of_the_progressbar" {
-							progressbar = {
-								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								size = { 100% 100% }
-								skip_initial_animation = yes
-								direction = horizontal
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_target_frac') )]"
+					}
+					widget = {
+						size = { 180 18 }
+						parentanchor = vcenter
+
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "values" {
+								value = 0
 								min = 0
 								max = 1
-								marker = {
-									icon = {
-										size = { 36 20 }
-										parentanchor = vcenter
-										widgetanchor = center
-										texture = "gfx/interface/progressbar/progressbar_marker.dds"
-									}
+							}
+						}
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.4
+
+							default_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_auth_bar_high_frac') )]"
+									min = 0
+									max = 1
 								}
 							}
 						}
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "background" {}
+							blockoverride "frame" {}
+							blockoverride "values" {
+								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_auth_bar_low_frac') )]"
+								min = 0
+								max = 1
+							}
+						}
 					}
-					textbox = {
-						autoresize = yes
+					widget = {
+						size = { 160 24 }
 						parentanchor = vcenter
-						align = left|nobaseline
-						text = "je_un_ov_authority_value"
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 160
+							elide = right
+							align = left|nobaseline
+							using = un_fontsize_row
+							text = "je_un_ov_authority_value"
+						}
 					}
 				}
 
@@ -370,6 +824,21 @@ types un_overview_widget_types
 							text = "je_un_ov_pie_pop"
 						}
 					}
+				}
+				# Who sits in the Assembly, under the pies: the represented members of
+				# the eligible countries and the great powers among them, with the
+				# suspended members on hover. It was the entry's status text, a
+				# section of its own on the tab, until the 2026-10-27 audit (UN-20).
+				textbox = {
+					autoresize = yes
+					parentanchor = hcenter
+					align = hcenter|nobaseline
+					max_width = 480
+					elide = right
+					using = un_fontsize_row
+					default_format = "#tooltippable"
+					tooltip = "je_un_ov_stats_tt"
+					text = "je_un_ov_stats"
 				}
 
 				### The Security Council: the label (its tooltip lists the council and
