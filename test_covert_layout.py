@@ -102,6 +102,16 @@ def _loc():
     return out
 
 
+def _shown_raw(loc, key, depth=0):
+    """A key's value with its $splices$ resolved, recursively: a tooltip's
+    context is lost through a splice as surely as in the key itself
+    (gui_modding_guide.md gotcha #24)."""
+    value = loc[key]
+    if depth > 5:
+        return value
+    return re.sub(r"\$([\w.]+)\$", lambda m: _shown_raw(loc, m.group(1), depth + 1) if m.group(1) in loc else m.group(0), value)
+
+
 def _gate_before(body, key):
     """The `visible` of the widget whose `text` is `key`: the last visible
     before the key, which the markup always puts first in the block."""
@@ -249,11 +259,15 @@ class StateGateTest(unittest.TestCase):
         self.assertNotIn("covert_disp_net_next_intel_frac", self.text)
 
     def test_no_section_opens_on_a_line_that_can_be_empty(self):
-        # Funding opens on the state line, which the custom loc always fills.
+        # Funding opens on the state line, shown only while funded with
+        # nothing running (COV-11: zero funding is said in the overview and
+        # above the operations), then the stepper, which is never empty.
         fund = _type_body(self.text, "te_covert_sec_funding")
         panel = fund[fund.index("covert_panel = {"):]
-        first = re.search(r"\n\t\t\t(\w+) = \{\s*\n\s*(\w+) = \"([^\"]*)\"", panel)
-        self.assertEqual(first.group(1, 2, 3), ("covert_text", "text", "je_iw_funding_state"))
+        first = re.search(r"\n\t\t\t(\w+) = \{\s*\n\s*visible = \"([^\"]*)\"\s*\n\s*text = \"([^\"]*)\"", panel)
+        self.assertEqual(first.group(1, 3), ("covert_text", "je_iw_funding_state"))
+        self.assertIn("GetScriptedGui('covert_funding_ready_sgui').IsShown", first.group(2))
+        self.assertLess(panel.index("je_iw_funding_state"), panel.index("covert_cc_funding_stepper = { }"))
         self.assertIn("GetCustom('covert_funding_state_line')", _loc()["je_iw_funding_state"])
 
 
@@ -349,8 +363,13 @@ class OperationRowTest(unittest.TestCase):
                     "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt",
                     "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3",
                     "je_iw_known_row_tt", "je_iw_known_row_months", "je_iw_known_row_attacker",
-                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip"):
-            self.assertNotIn("JournalEntry", loc[key], key)
+                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip",
+                    # The row's buttons (COV-9a) and the hovers COV-1 and COV-4 added.
+                    "je_iw_stand_down_tooltip", "je_iw_priority_step_up_tooltip",
+                    "je_iw_priority_step_down_tooltip", "je_iw_op_row_strength_line",
+                    *(f"je_iw_op_row_{t}_tt" for t in OP_TYPES),
+                    *(f"je_iw_op_row_exposure_{n}_tt" for n in range(1, 5))):
+            self.assertNotIn("JournalEntry", _shown_raw(loc, key), key)
 
 
 

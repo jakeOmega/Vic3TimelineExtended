@@ -336,15 +336,18 @@ types covert_operations_widget_types
 
 	### ---- OPERATION ROW BUILDING BLOCKS --------------------------------
 
-	### The row's title, beside the operation's icon.
+	### The row's title, beside the target's flag and the operation's icon
+	### (480 less the 70 flag, the 32 icon and two 8 spacings). Its hover is
+	### what the operation does (COV-1), so it is underlined.
 	type widget_je_covert_operation_text = textbox {
 		autoresize = yes
 		multiline = yes
-		minimumsize = { 440 -1 }
-		maximumsize = { 440 -1 }
+		minimumsize = { 362 -1 }
+		maximumsize = { 362 -1 }
 		parentanchor = vcenter
 		align = left|nobaseline
 		using = fontsize_large
+		default_format = "#tooltippable"
 	}
 
 	### "Stand down" for one row. One instance per operation type, of which exactly one is
@@ -490,11 +493,27 @@ types covert_operations_widget_types
 			alpha = 0.5
 		}
 
-		# ---- The operation's icon, then its type and target (exactly one tag matches) ----
+		# ---- The target's flag, the operation's icon, then its name and target
+		#      (exactly one tag matches) ----
 		flowcontainer = {
 			direction = horizontal
 			spacing = 8
 			ignoreinvisible = yes
+
+			# Vanilla's flag widget, as the network rows draw it: the country's
+			# name on hover, a click opens it, where the diplomatic actions that
+			# run the operation are. Gated on the stored capital, which the
+			# operation's start writes (covert_op_refresh_detection).
+			widget = {
+				size = { 70 48 }
+				parentanchor = vcenter
+				visible = "[ScriptContainer.HasVariable('iw_target_capital')]"
+
+				flag = {
+					parentanchor = center
+					datacontext = "[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]"
+				}
+			}
 
 			# UNVERIFIED: the operations' own diplomatic-action icons
 			# (common/diplomatic_actions/covert_operations.txt), shown in game by
@@ -598,74 +617,92 @@ types covert_operations_widget_types
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_election_interference')]"
 				text = "je_iw_op_row_election_interference"
+				tooltip = "je_iw_op_row_election_interference_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_financial_subversion')]"
 				text = "je_iw_op_row_financial_subversion"
+				tooltip = "je_iw_op_row_financial_subversion_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_infrastructure_sabotage')]"
 				text = "je_iw_op_row_infrastructure_sabotage"
+				tooltip = "je_iw_op_row_infrastructure_sabotage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_comms_disruption')]"
 				text = "je_iw_op_row_comms_disruption"
+				tooltip = "je_iw_op_row_comms_disruption_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_industrial_espionage')]"
 				text = "je_iw_op_row_industrial_espionage"
+				tooltip = "je_iw_op_row_industrial_espionage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_military_espionage')]"
 				text = "je_iw_op_row_military_espionage"
+				tooltip = "je_iw_op_row_military_espionage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_influence_campaign')]"
 				text = "je_iw_op_row_influence_campaign"
+				tooltip = "je_iw_op_row_influence_campaign_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_ideological_subversion')]"
 				text = "je_iw_op_row_ideological_subversion"
+				tooltip = "je_iw_op_row_ideological_subversion_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_destabilization')]"
 				text = "je_iw_op_row_destabilization"
+				tooltip = "je_iw_op_row_destabilization_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_regime_change')]"
 				text = "je_iw_op_row_regime_change"
+				tooltip = "je_iw_op_row_regime_change_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_nuclear_sabotage')]"
 				text = "je_iw_op_row_nuclear_sabotage"
+				tooltip = "je_iw_op_row_nuclear_sabotage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_space_espionage')]"
 				text = "je_iw_op_row_space_espionage"
+				tooltip = "je_iw_op_row_space_espionage_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
 				text = "je_iw_op_row_cultivate_assets"
+				tooltip = "je_iw_op_row_cultivate_assets_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 				text = "je_iw_op_row_secure_material"
+				tooltip = "je_iw_op_row_secure_material_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
 				text = "je_iw_op_row_counterintel_support"
+				tooltip = "je_iw_op_row_counterintel_support_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_incite_autonomy')]"
 				text = "je_iw_op_row_incite_autonomy"
+				tooltip = "je_iw_op_row_incite_autonomy_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_sabotage_colony')]"
 				text = "je_iw_op_row_sabotage_colony"
+				tooltip = "je_iw_op_row_sabotage_colony_tt"
 			}
 			widget_je_covert_operation_text = {
 				visible = "[ScriptContainer.HasTag('iw_op_survey_defences')]"
 				text = "je_iw_op_row_survey_defences"
+				tooltip = "je_iw_op_row_survey_defences_tt"
 			}
 		}
 
@@ -709,6 +746,35 @@ types covert_operations_widget_types
 			visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
 			text = "je_iw_op_row_detection_none"
 			tooltip = "je_iw_op_row_detection_none_tt"
+		}
+
+		# ---- What the world calls the operation if it is caught (COV-4): the
+		#      exposure tier, from iw_exposure_tier, which the tier table sets
+		#      (covert_op_refresh_exposure_tier); what a catch costs on hover.
+		#      Counterintelligence Support is never caught, so it has none ----
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_1"
+			tooltip = "je_iw_op_row_exposure_1_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_2"
+			tooltip = "je_iw_op_row_exposure_2_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_3"
+			tooltip = "je_iw_op_row_exposure_3_tt"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And3( ScriptContainer.HasVariable('iw_exposure_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_exposure_tier'), '(CFixedPoint)4'), Not( ScriptContainer.HasTag('iw_op_counterintel_support') ) )]"
+			default_format = "#tooltippable"
+			text = "je_iw_op_row_exposure_4"
+			tooltip = "je_iw_op_row_exposure_4_tt"
 		}
 
 		# ---- Espionage only: technology stolen so far and the latest
@@ -1928,7 +1994,11 @@ types covert_operations_widget_types
 		covert_panel = {
 			visible = "[Not(GetVariableSystem.Exists('covert_funding_closed'))]"
 
+			# Only while funded with nothing running (COV-11): zero funding is
+			# said in the overview and once above the operations, and a running
+			# agency needs no line. The stepper below never prints nothing.
 			covert_text = {
+				visible = "[GetScriptedGui('covert_funding_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "je_iw_funding_state"
 			}
 			covert_cc_funding_stepper = { }

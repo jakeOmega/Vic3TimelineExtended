@@ -110,6 +110,7 @@ covert_op_create = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
 			set_variable = { name = iw_type_code value = $CODE$ }
+			covert_op_refresh_exposure_tier = yes
 			set_variable = { name = iw_priority value = 1 }
 			# Head start from the target's network, fixed now (slice 4). Set
 			# before the phase is derived, which reads it.
@@ -141,6 +142,32 @@ covert_op_create = {
 		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
 		covert_refresh_priority_cost = yes
+	}
+}
+
+# The exposure tier an operation's row names (COV-4): what the world calls it
+# if it is caught. Read from the tier table (covert_code_tier_*, the one
+# place the tiers live) through the type code, so the widget never lists
+# types by tier. 1 routine espionage, 2 interference, 3 an attack on the
+# government, 4 wartime sabotage. Written at creation and by every monthly
+# sync, so a container from an older save has it after its first month; the
+# row's lines wait for it (HasVariable).
+# Scope: operation container (iw_type_code set)
+covert_op_refresh_exposure_tier = {
+	if = {
+		limit = { covert_code_tier_war = { VAR = iw_type_code } }
+		set_variable = { name = iw_exposure_tier value = 4 }
+	}
+	else_if = {
+		limit = { covert_code_tier_severe = { VAR = iw_type_code } }
+		set_variable = { name = iw_exposure_tier value = 3 }
+	}
+	else_if = {
+		limit = { covert_code_tier_moderate = { VAR = iw_type_code } }
+		set_variable = { name = iw_exposure_tier value = 2 }
+	}
+	else = {
+		set_variable = { name = iw_exposure_tier value = 1 }
 	}
 }
 
@@ -1394,6 +1421,7 @@ covert_op_sync = {
 			limit = { has_tag = iw_op_$TYPE$ }
 			remove_variable = iw_seen
 			set_variable = { name = iw_type_code value = $CODE$ }
+			covert_op_refresh_exposure_tier = yes
 			# Old-save backfill: detection reads the priority, so it must
 			# exist before covert_op_refresh_detection runs.
 			if = {
