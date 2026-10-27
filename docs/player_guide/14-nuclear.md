@@ -497,7 +497,8 @@ buildings survive.
 Both sides get a notification of the result. Every use ends any crisis between
 the two countries. One that lands also speeds up the world's funded programs
 and knocks the nuclear taboo down. The United
-Nations records it against you, and its court may indict your ruler (see
+Nations records it against you, and after a first strike or a tactical strike
+its court may indict your ruler (see
 [Grounds for UN censure](10-united-nations.md#grounds-for-un-censure)).
 
 ### Retaliation and Automatic Retaliation
@@ -506,11 +507,19 @@ The victim of a strategic strike gets "A City Erased" with its answer: condemn
 the attack, retaliate with one warhead, or launch a full retaliation of three if
 it holds more than two. Retaliation costs no infamy, counts for less with the
 United Nations than a first strike, knocks the nuclear taboo down half as far,
-and the attacker may answer it in turn. A strike you order through the strike
-actions in answer to one on you or on a country you cover also costs no infamy
-and counts as an answer for the taboo.
+and the attacker may answer it in turn. A Nuclear Weapon Industrial Strike you
+order in answer to one on you or on a country you cover counts the same way: no
+infamy, and retaliation for the taboo and the United Nations. A Tactical Nuclear
+Strike in answer costs no infamy and counts as an answer for the taboo, but the
+United Nations records it as it does any tactical strike.
 Under Automatic Retaliation the answer is made for you; while Recessed you can
 only mate the warheads and answer when they are ready.
+
+A strike is an answer when its target struck you, or a country you cover, in
+your present war with it, or fights you in the same war as a country whose
+strike still leaves its aftermath on one of your states. A strike by a third
+country gives you no answer against your enemies, and a loose warhead's
+detonation, which nobody ordered, gives you none at all.
 
 ## Nuclear incidents and accidents
 

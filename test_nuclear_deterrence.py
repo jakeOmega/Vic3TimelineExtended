@@ -1522,6 +1522,72 @@ class TestExtendedDeterrence(unittest.TestCase):
         self.assertIn("remove_variable = nd_answer_strike_target", hidden)
 
 
+class TestStruckByNamesTheStriker(unittest.TestCase):
+    """A strike's aftermath on one of our states licenses an answer only to
+    the country that struck it, or one fighting us beside it (#526). The
+    aftermath alone used to count, so a terror detonation, a third country's
+    strike or one from an earlier war licensed a cheap "answer" to anyone we
+    were at war with."""
+
+    AFTERMATH = re.compile(r"name = (nuclear_strike_aftermath|tactical_nuke_aftermath)\b")
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.extra = strip_comments(read(EXTRA_EFFECTS))
+
+    def test_no_bare_aftermath_check(self):
+        body = block(self.t, "nd_was_struck_by")
+        self.assertIn("save_temporary_scope_as = nd_wsb_self", body)
+        states = [block(body[m.start():], "any_scope_state")
+                  for m in re.finditer(r"(?m)^[ \t]*any_scope_state = \{", body)]
+        self.assertTrue(states)
+        for state in states:
+            self.assertIn("var:nd_struck_by ?= {", state)
+            striker = block(state, "var:nd_struck_by ?")
+            self.assertIn("has_war_with = scope:nd_wsb_self", striker)
+            war = block(striker, "any_scope_war")
+            self.assertIn("is_war_participant = scope:nd_wsb_self", war)
+            self.assertIn("is_war_participant = $ENEMY$", war)
+
+    def test_every_detonation_site_names_its_striker(self):
+        sites = []
+        for folder in ("common", "events"):
+            for path in sorted((ROOT / folder).rglob("*.txt")):
+                text = strip_comments(read(path))
+                sites += [(path, m.group(1)) for m in self.AFTERMATH.finditer(text)]
+        self.assertEqual(sorted(kind for _, kind in sites),
+                         ["nuclear_strike_aftermath", "tactical_nuke_aftermath"])
+        self.assertTrue(all(path == EXTRA_EFFECTS for path, _ in sites))
+        strategic = block(self.extra, "nuclear_industrial_strike")
+        self.assertIn("name = nuclear_strike_aftermath", strategic)
+        self.assertIn("set_variable = { name = nd_struck_by value = scope:nd_current_strike_launcher "
+                      "days = short_modifier_time }", strategic)
+        self.assertIn("set_variable = { name = nd_struck_by value = scope:attacking_country "
+                      "days = short_modifier_time }", strategic)
+        tactical = block(self.extra, "nuclear_tactical_strike")
+        self.assertIn("name = tactical_nuke_aftermath", tactical)
+        self.assertIn("set_variable = { name = nd_struck_by value = scope:attacking_country "
+                      "days = short_modifier_time }", tactical)
+        # On the state, not its owner.
+        for body in (strategic, tactical):
+            self.assertNotIn("nd_struck_by", block(body, "owner"))
+
+    def test_terror_detonation_names_nobody(self):
+        loose = strip_comments(read(LOOSE_EFFECTS))
+        self.assertIn("nuclear_industrial_strike = yes", loose)
+        self.assertNotIn("save_scope_as = attacking_country", loose)
+        self.assertNotIn("nd_current_strike_launcher", loose)
+        self.assertNotIn("nd_struck_by", loose)
+
+    def test_record_is_the_wars(self):
+        cleanup = block(strip_comments(read(EFFECTS)), "nd_country_monthly_cleanup")
+        states = block(cleanup, "every_scope_state")
+        self.assertIn("has_variable = nd_struck_by", states)
+        self.assertIn("NOT = { has_war_with = ROOT }", states)
+        self.assertIn("NOT = { nd_in_peacetime_exchange_with = { ENEMY = ROOT } }", states)
+        self.assertIn("remove_variable = nd_struck_by", states)
+
+
 class TestReviewFixesUmbrellaRecessed(unittest.TestCase):
     """Fix pass after the whole-branch review of #455."""
 
