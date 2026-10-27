@@ -37,7 +37,7 @@ from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 
-from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines, iter_script_files
+from mod_state import ModState, entity_paths, iter_loc_lines, iter_script_files
 from paradox_file_parser import ParadoxFileParser
 import path_constants
 from path_constants import (
@@ -62,6 +62,7 @@ import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
 import tech_unlocks_lib
 import vanilla_parsed
 import external_mod_overlap  # GET /external-mod-overlap (#1170)
+import external_mod_state  # GET /external-mod-overlap/state (#1184)
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
 # /scripted-helpers/unresolved, /script-args and /pm-employment can call them
@@ -115,7 +116,11 @@ _parser_logger.addHandler(_file_handler)
 _server_start_time: float = 0.0  # set in main()
 
 # ---------------------------------------------------------------------------
-# Path configuration (mirrors mod_state_script.py)
+# Path configuration
+#
+# Built by mod_state.entity_paths from VANILLA_COMMON_DIRS (the one list of
+# vanilla entity types; vanilla_parsed snapshots exactly the same set) and
+# MOD_ONLY_DIRS. mod_state_script.py builds the same pair.
 #
 # Use forward slashes everywhere; path_constants exposes Linux-rooted paths,
 # and the win-style backslash trick from the pre-WSL repo no longer works.
@@ -123,79 +128,7 @@ _server_start_time: float = 0.0  # set in main()
 _BASE_COMMON = os.path.join(base_game_path, "game", "common")
 _MOD_COMMON = os.path.join(mod_path, "common")
 
-# Built from mod_state.VANILLA_COMMON_DIRS, the one list of vanilla entity
-# types — vanilla_parsed snapshots exactly the same set.
-base_game_paths = {
-    entity_type: os.path.join(_BASE_COMMON, *rel.split("/"))
-    for entity_type, rel in VANILLA_COMMON_DIRS.items()
-}
-
-mod_paths = {
-    "Building Groups": os.path.join(_MOD_COMMON, "building_groups"),
-    "Buildings": os.path.join(_MOD_COMMON, "buildings"),
-    "Technologies": os.path.join(_MOD_COMMON, "technology", "technologies"),
-    "PM Groups": os.path.join(_MOD_COMMON, "production_method_groups"),
-    "PMs": os.path.join(_MOD_COMMON, "production_methods"),
-    "Ideologies": os.path.join(_MOD_COMMON, "ideologies"),
-    "Political Movements": os.path.join(_MOD_COMMON, "political_movements"),
-    "Parties": os.path.join(_MOD_COMMON, "parties"),
-    "Battle Conditions": os.path.join(_MOD_COMMON, "battle_conditions"),
-    "Buy Packages": os.path.join(_MOD_COMMON, "buy_packages"),
-    "Character Interactions": os.path.join(_MOD_COMMON, "character_interactions"),
-    "Character Traits": os.path.join(_MOD_COMMON, "character_traits"),
-    "Combat Unit Groups": os.path.join(_MOD_COMMON, "combat_unit_groups"),
-    "Combat Unit Types": os.path.join(_MOD_COMMON, "combat_unit_types"),
-    "Company Types": os.path.join(_MOD_COMMON, "company_types"),
-    "Diplomatic Actions": os.path.join(_MOD_COMMON, "diplomatic_actions"),
-    "Diplomatic Plays": os.path.join(_MOD_COMMON, "diplomatic_plays"),
-    "Goods": os.path.join(_MOD_COMMON, "goods"),
-    "Government Types": os.path.join(_MOD_COMMON, "government_types"),
-    "Institutions": os.path.join(_MOD_COMMON, "institutions"),
-    "Interest Groups": os.path.join(_MOD_COMMON, "interest_groups"),
-    "Laws": os.path.join(_MOD_COMMON, "laws"),
-    "Law Groups": os.path.join(_MOD_COMMON, "law_groups"),
-    "Messages": os.path.join(_MOD_COMMON, "messages"),
-    "Mobilization Option Groups": os.path.join(_MOD_COMMON, "mobilization_option_groups"),
-    "Mobilization Options": os.path.join(_MOD_COMMON, "mobilization_options"),
-    "Modifier Types": os.path.join(_MOD_COMMON, "modifier_type_definitions"),
-    "Modifiers": os.path.join(_MOD_COMMON, "static_modifiers"),
-    "Pop Needs": os.path.join(_MOD_COMMON, "pop_needs"),
-    "Subject Types": os.path.join(_MOD_COMMON, "subject_types"),
-    "Script Values": os.path.join(_MOD_COMMON, "script_values"),
-    "Scripted Effects": os.path.join(_MOD_COMMON, "scripted_effects"),
-    "Scripted Triggers": os.path.join(_MOD_COMMON, "scripted_triggers"),
-    "Scripted Buttons": os.path.join(_MOD_COMMON, "scripted_buttons"),
-    "Scripted GUIs": os.path.join(_MOD_COMMON, "scripted_guis"),
-    "Scripted Progress Bars": os.path.join(_MOD_COMMON, "scripted_progress_bars"),
-    "Ship Types": os.path.join(_MOD_COMMON, "ship_types"),
-    "Ship Groups": os.path.join(_MOD_COMMON, "ship_groups"),
-    "Ship Modifications": os.path.join(_MOD_COMMON, "ship_modifications"),
-    "Ship Modification Slots": os.path.join(_MOD_COMMON, "ship_modification_slots"),
-    "Ship Name Definitions": os.path.join(_MOD_COMMON, "ship_name_definitions"),
-    "Journal Entries": os.path.join(_MOD_COMMON, "journal_entries"),
-    "Journal Entry Groups": os.path.join(_MOD_COMMON, "journal_entry_groups"),
-    "Decisions": os.path.join(_MOD_COMMON, "decisions"),
-    "Country Formation": os.path.join(_MOD_COMMON, "country_formation"),
-    "On Actions": os.path.join(_MOD_COMMON, "on_actions"),
-    "Treaty Articles": os.path.join(_MOD_COMMON, "treaty_articles"),
-    "Religions": os.path.join(_MOD_COMMON, "religions"),
-    "Decrees": os.path.join(_MOD_COMMON, "decrees"),
-    "Principles": os.path.join(_MOD_COMMON, "power_bloc_principles"),
-    "Principle Groups": os.path.join(_MOD_COMMON, "power_bloc_principle_groups"),
-    "Amendments": os.path.join(_MOD_COMMON, "amendments"),
-    "Interest Group Traits": os.path.join(_MOD_COMMON, "interest_group_traits"),
-    "Harvest Condition Types": os.path.join(_MOD_COMMON, "harvest_condition_types"),
-    "Power Bloc Identities": os.path.join(_MOD_COMMON, "power_bloc_identities"),
-    "Events": os.path.join(mod_path, "events"),
-    # Mod-side counterparts of the new vocabularies (most are vanilla-only, but
-    # listed so the mod can override them in future).
-    "Cultures": os.path.join(_MOD_COMMON, "cultures"),
-    "Country Ranks": os.path.join(_MOD_COMMON, "country_ranks"),
-    "Discrimination Traits": os.path.join(_MOD_COMMON, "discrimination_traits"),
-    "Pop Types": os.path.join(_MOD_COMMON, "pop_types"),
-    "Terrains": os.path.join(_MOD_COMMON, "terrain"),
-    "Game Concepts": os.path.join(_MOD_COMMON, "game_concepts"),
-}
+base_game_paths, mod_paths = entity_paths(base_game_path, mod_path)
 
 # ---------------------------------------------------------------------------
 # Globals
@@ -253,6 +186,7 @@ ENTITY_TYPE_TO_DATATYPE: dict[str, str] = {
     "Institutions": "Institution",
     "Game Concepts": "Concept",
     "Country Formation": "CountryFormation",
+    "Parties": "Party",
 }
 
 # Field role -> set of GUI accessor method names that render that field.
@@ -2827,6 +2761,7 @@ _IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
     ("Interest Group Traits",   "icon"),
     ("Harvest Condition Types", "icon"),
     ("Power Bloc Identities",   "icon"),
+    ("Parties",                 "icon"),
 ]
 
 # YAML file → canonical entity-type-name mapping. The YAML is keyed by lowercase
@@ -2945,16 +2880,22 @@ def _image_content_hash(rel_path: str) -> str:
 
 def _entity_image(raw, field: str) -> str | None:
     """An entity's `field` as a path, without the quotes the parser keeps (so
-    it matches the unquoted paths in the YAML allowlist), or None."""
+    it matches the unquoted paths in the YAML allowlist), or None.
+
+    A party's icon is a block, `icon = { default = "/gfx/…" }`: its `default`
+    is the path. A leading `/` is dropped, as the engine reads the path from
+    the game root either way; joined as is, it would resolve nowhere."""
     data = get_entity_data(raw)
     if not isinstance(data, dict):
         return None
     image = get_field(data, field)
+    if isinstance(image, dict):
+        image = get_field(image, "default")
     if not isinstance(image, str):
         return None
     if len(image) >= 2 and image[0] == image[-1] and image[0] in ('"', "'"):
         image = image[1:-1]
-    return image or None
+    return image.lstrip("/") or None
 
 
 def _principle_group_of() -> dict[str, str]:
@@ -5111,12 +5052,42 @@ def _overlap_vanilla_index():
     """Vanilla for /external-mod-overlap: the game files when installed (with
     file names), else the committed vanilla_parsed/ snapshot (#1170). Kept
     until a reload that re-reads vanilla (not mod_only), so a folder read
-    from /mnt/c once is not read again on the next request."""
+    from /mnt/c once is not read again on the next request.
+
+    A server loaded from a snapshot that isn't fresh against the installed
+    game (VIC3_VANILLA_SOURCE=vanilla_parsed) reads the snapshot here too, so
+    /state's vanilla values are the vanilla behind server_value (#1184). A
+    fresh snapshot is the game files' parse, so the game files serve."""
     game_common = os.path.join(base_game_path, "game", "common")
-    if game_common not in _overlap_vanilla_cache:
-        _overlap_vanilla_cache[game_common] = external_mod_overlap.VanillaIndex(
-            game_common=game_common)
-    return _overlap_vanilla_cache[game_common]
+    if (_vanilla_source.get("kind") == "vanilla_parsed"
+            and not (_vanilla_source.get("freshness") or {}).get("fresh")):
+        game_common = None
+    key = game_common or "<vanilla_parsed>"
+    if key not in _overlap_vanilla_cache:
+        _overlap_vanilla_cache[key] = external_mod_overlap.VanillaIndex(game_common=game_common)
+    return _overlap_vanilla_cache[key]
+
+
+# GET /external-mod-overlap/state: one LayeredState per mod root, newest
+# last. It holds the server's ModState's parsers, so every reload drops it.
+_overlap_state_cache: dict = {}
+_OVERLAP_STATE_CACHE_SIZE = 4
+
+
+def _overlap_state(root: str, refresh: bool = False):
+    """(the LayeredState for the mod at `root`, whether it came from the
+    cache): this mod's ModState with that mod's common/ entries layered in by
+    the probed load order (#1184)."""
+    key = os.path.realpath(root)
+    if not refresh and key in _overlap_state_cache:
+        _overlap_state_cache[key] = _overlap_state_cache.pop(key)
+        return _overlap_state_cache[key], True
+    state = external_mod_state.build(ms, root, mod_path, vanilla=_overlap_vanilla_index())
+    _overlap_state_cache.pop(key, None)
+    _overlap_state_cache[key] = state
+    while len(_overlap_state_cache) > _OVERLAP_STATE_CACHE_SIZE:
+        _overlap_state_cache.pop(next(iter(_overlap_state_cache)))
+    return state, False
 
 
 def _resolve_mod_relative_path(raw: str, *, param: str = "file") -> str:
@@ -6078,6 +6049,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/vocabularies/<name?>", "desc": "Placeholder vocab tables (cultures, religions, IGs, ...)."},
                 {"path": "/validate/<id?>", "desc": "Mod-vs-engine validation report."},
                 {"path": "/external-mod-overlap?path=<mod root>&trace=true", "desc": "Read-only compatibility check of another mod (a Workshop folder or any mod root) against this one (#1170): keys of common/ databases both define with a load-order verdict (ours_wiped / theirs_wiped / both_merge / both_wiped / depends_on_playset / undetermined; facts: scripting_best_practices.md § Load Order (probed 2026-10-26)), defines both set, shared on_action hooks and effect conflicts, event namespaces and ids, English loc keys, and same-path files (gui/ included). Also `python3 external_mod_overlap.py <root>`."},
+                {"path": "/external-mod-overlap/state[/<EntityType>[/<key>]]?path=<mod root>&refresh=true", "desc": "This mod's ModState with another mod's common/ entries layered in by the probed load order (#1184): the summary (keys recomputed per entity type, by status: changed / added / removed / undetermined / parse_failed / unchanged / not_created), one type's keys, or one key's merged entry (value as /raw gives it, the server's value, every definition, the simulated load, and every candidate when an unknown decides it). Cached per path until a reload."},
                 {"path": "/duplicate-images", "desc": "Detect duplicated unique-per-entity image fields."},
                 {"path": "/placeholder-icons", "desc": "Classify every mod-set icon: borrowed vanilla, shared, unique, stand-in or missing."},
                 {"path": "/auto-generated", "desc": "Generator-ownership map for auto-generated mod files."},
@@ -8731,24 +8703,61 @@ class ModStateHandler(BaseHTTPRequestHandler):
     # ---- another mod's overlap with ours (#1170) ---------------------------
     def _external_mod_overlap(self, parts, params):
         """GET /external-mod-overlap?path=<mod root>[&trace=true]
+        GET /external-mod-overlap/state[/<EntityType>[/<key>]]?path=<mod root>[&refresh=true]
 
         Read-only: scans the other mod's folder and this mod's, reports the
         entries both define and which side the load order keeps. The logic and
-        the load-order model live in external_mod_overlap.py."""
+        the load-order model live in external_mod_overlap.py. `/state` is
+        this mod's ModState with the other mod's common/ entries layered in by
+        that model (external_mod_state.py, #1184): the summary, one entity
+        type's recomputed keys, or one key's merged entry (its value as /raw
+        gives it, the server's value, every definition and the simulated
+        load, and every candidate when an unknown decides it)."""
+        if parts and parts[0] == "state":
+            return self._external_mod_state(parts[1:], params)
         if parts:
             raise NotFound("/".join(["external-mod-overlap", *parts]))
         usage = "GET /external-mod-overlap?path=<mod root>[&trace=true]"
+        root = self._overlap_root(params, usage)
+        trace = self._bool_param(params, "trace", usage)
+        return external_mod_overlap.analyze(
+            root, mod_path, vanilla=_overlap_vanilla_index(), include_trace=trace)
+
+    def _overlap_root(self, params, usage):
         try:
             root = external_mod_overlap.validate_root((params.get("path") or [""])[0])
         except ValueError as exc:
             raise BadRequest(str(exc), usage=usage)
         if os.path.realpath(root) == os.path.realpath(mod_path):
             raise BadRequest(f"{root} is this mod; pass another mod's root", usage=usage)
-        trace = (params.get("trace") or ["false"])[0].lower()
-        if trace not in ("true", "false"):
-            raise BadRequest(f"trace must be true or false, got {trace!r}", usage=usage)
-        return external_mod_overlap.analyze(
-            root, mod_path, vanilla=_overlap_vanilla_index(), include_trace=trace == "true")
+        return root
+
+    @staticmethod
+    def _bool_param(params, name, usage):
+        value = (params.get(name) or ["false"])[0].lower()
+        if value not in ("true", "false"):
+            raise BadRequest(f"{name} must be true or false, got {value!r}", usage=usage)
+        return value == "true"
+
+    def _external_mod_state(self, parts, params):
+        usage = ("GET /external-mod-overlap/state[/<EntityType>[/<key>]]"
+                 "?path=<mod root>[&refresh=true]")
+        if len(parts) > 2:
+            raise NotFound("/".join(["external-mod-overlap", "state", *parts]))
+        root = self._overlap_root(params, usage)
+        refresh = self._bool_param(params, "refresh", usage)
+        if ms is None:
+            raise DataNotLoaded("ModState")
+        etype = self._resolve_entity_type_or_404(parts[0]) if parts else None
+        state, cached = _overlap_state(root, refresh)
+        if etype is None:
+            return {**state.summary(), "cached": cached}
+        if len(parts) == 1:
+            return {**state.entity_type(etype), "cached": cached}
+        entry = state.entity(etype, parts[1])
+        if entry is None:
+            raise NotFound(parts[1])
+        return {**entry, "cached": cached}
 
     # ---- mod-vs-vanilla diff ----------------------------------------------
     def _diff(self, parts, params):
@@ -9907,6 +9916,7 @@ def _reparse_mod_after_writes(mod_state) -> Optional[dict]:
         _tech_unlocks_index_cache = None
         _company_catalog_cache = None
         _party_catalog_cache = None
+        _overlap_state_cache.clear()
         _invalidate_call_index()
         _last_validation_report = None
         _annotator_compute_cache.clear()
@@ -10230,6 +10240,8 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
         mode_tag += " (audits-only)"
     logger.info(f"Loading mod state{mode_tag}…")
     t0 = time.time()
+    # Layered states hold the old ModState's parsers (#1184).
+    _overlap_state_cache.clear()
 
     if mod_only:
         try:

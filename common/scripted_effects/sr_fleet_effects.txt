@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the record, Space Command, movement
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6a, §§ 2-6, 9.6, 14). Full Colonies only.
 #
 # A country keeps up to nine fleets in country variables sr_fl_<n>_* (n = 1 to
@@ -36,6 +36,10 @@ sr_fl_leave_powers = {
 		limit = { is_target_in_global_variable_list = { name = sr_fleet_powers target = this } }
 		remove_list_global_variable = { name = sr_fleet_powers target = this }
 	}
+	# Its strength at each location (sr_fl_at_<loc>) is rebuilt only while it is
+	# on the list: cleared here, so no stale figure lifts a blockade of Earth
+	# (6d, sr_earth_blockaded) or reads as a fleet.
+	sr_loc_clear_country = yes
 }
 
 # Global scope. A dead power's entry is dropped, one a month (an entry can't
@@ -153,6 +157,7 @@ sr_fl_dispatch = {
 	if = { limit = { has_variable = sr_fl_$N$_posture } remove_variable = sr_fl_$N$_posture }
 	if = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }
 	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
+	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
 	if = { limit = { has_variable = sr_fl_dest_pick_$N$ } remove_variable = sr_fl_dest_pick_$N$ }
 	sr_fl_dispatch_alert = { LOC = $LOC$ CODE = $CODE$ }
 	sr_loc_rebuild = yes
@@ -335,9 +340,9 @@ sr_fl_take_marines_at = {
 }
 
 # ---- The location records (design § 4) ---------------------------------------------------------
-# Global scope, or any: cleared, then every power's slots counted again; then
-# the strongest two powers at each location. On every departure and arrival,
-# and monthly.
+# Global scope, or any: cleared, then every power's slots counted again, and its
+# interdiction lists (6c, sr_icpt_rebuild); then the strongest two powers at
+# each location. On every departure and arrival, and monthly.
 sr_loc_rebuild = {
 	sr_loc_clear_records = yes
 	if = {
@@ -347,6 +352,7 @@ sr_loc_rebuild = {
 			limit = { is_country_alive = yes }
 			sr_loc_clear_country = yes
 			sr_fl_each_slot = { DO = note }
+			sr_icpt_rebuild = yes
 		}
 		sr_loc_rank = yes
 	}
@@ -407,14 +413,15 @@ sr_fl_global_month = {
 
 # ---- The country's month (space_race_on_actions.txt) ----------------------------------------------
 # Country scope, a fleet power under Full Colonies: Space Command's
-# construction, every slot's month, the upkeep, war support's records, the
-# AI's review, a player's Locations snapshot.
+# construction, every slot's month, the upkeep, war support's records, orbital
+# fire support (6d), the AI's review, a player's Locations snapshot.
 sr_fl_country_month = {
 	sr_fl_join_powers = yes
 	sr_sc_month = yes
 	sr_fl_each_slot = { DO = month }
 	sr_fl_upkeep_refresh = yes
 	sr_fl_ws_refresh = yes
+	sr_orbital_superiority_refresh = yes
 	if = {
 		limit = { is_ai = yes }
 		sr_fl_ai_review = yes
@@ -429,22 +436,21 @@ sr_fl_country_month = {
 	}
 }
 
-# ---- Space Command (design § 5) --------------------------------------------------------------------
-# Country scope. The month's construction (sr_sc_rate) into the home fleet: the
-# lowest slot at Earth, not refitting; a new slot at Earth when there is none;
-# nothing with all nine slots taken away from Earth.
+# ---- Space Command (design §§ 5, 15) ---------------------------------------------------------------
+# Country scope. The month's construction (sr_sc_rate) into the ground reserve
+# (6d, sr_reserve_<role>), shared by the build mix; then, with the toggle on
+# and no hostile fleet at Earth, the reserve launches itself into the home
+# fleet (sr_reserve_auto_step, sr_earth_orbit_effects.txt), which is 6a's
+# behaviour. Otherwise it waits on the ground for Launch.
 sr_sc_month = {
 	sr_sc_self_check = yes
 	set_local_variable = { name = sr_sc_points value = sr_sc_rate }
 	set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
 	if = {
 		limit = { local_var:sr_sc_points > 0 }
-		sr_fl_find_home = yes
-		if = {
-			limit = { local_var:sr_fl_n > 0 }
-			sr_fl_by_local = { DO = build }
-		}
+		sr_reserve_build = yes
 	}
+	sr_reserve_auto_step = yes
 }
 
 # Country scope, the fleets' month: the upkeep's one refresh site (design § 5).
@@ -535,7 +541,7 @@ sr_site_transfer_marines = {
 			if = {
 				limit = {
 					scope:sr_site_from_$KEY$ = {
-						NOT = { has_diplomatic_pact = { who = scope:sr_site_to_$KEY$ type = alliance } }
+						NOT = { has_treaty_alliance_with = { TARGET = scope:sr_site_to_$KEY$ } }
 					}
 				}
 				scope:sr_site_from_$KEY$ = { sr_fl_marines_home = { AMOUNT = sr_site_marines_value_$KEY$ } }
@@ -556,11 +562,17 @@ sr_site_transfer_marines = {
 # its marines land on arrival, sr_fl_arrive_at), and a fleet with nothing left
 # to do away from Earth comes home. Every order passes the same
 # sr_fl_<n>_may_depart_<loc> a player's does. The defence's rules (6b) are
-# sr_fl_ai_defend (sr_fleet_combat_effects.txt).
+# sr_fl_ai_defend, the offence's (6c) sr_fl_ai_attack
+# (sr_fleet_combat_effects.txt); the reserve's launch (6d), first so the
+# defence can send what it put up, is sr_fl_ai_reserve, and its batteries'
+# method sr_fl_ai_batteries (sr_earth_orbit_effects.txt).
 sr_fl_ai_review = {
+	sr_fl_ai_reserve = yes
+	sr_fl_ai_batteries = yes
 	sr_fl_ai_defend = yes
 	sr_fl_ai_send_garrisons = yes
 	sr_fl_each_slot = { DO = ai_home }
+	sr_fl_ai_attack = yes
 }
 
 # ---- Self-checks (design § 18) ---------------------------------------------------------------------

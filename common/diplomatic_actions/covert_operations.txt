@@ -3137,7 +3137,7 @@ covert_sabotage_colony_action = {
 
 # ----------------------------------------------------------------------------
 # SURVEY COLONY DEFENCES (solar colonization slice 6,
-# docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md § 11)
+# docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 11)
 # ----------------------------------------------------------------------------
 # Agents in the target's colonies and its tracking network, mapping their
 # guns, their hulls and the marines that hold them. No modifier: once

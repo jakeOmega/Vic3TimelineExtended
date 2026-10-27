@@ -114,6 +114,99 @@ widget = { text = "[Localize('LABEL')] # { } \\"quoted\\""
 }''')
         self.assertEqual([('script_values', 'only_const')], self.errors(self.run_audit()))
 
+    def test_defined_names_merge_directives(self):
+        # #1180: only the *_OR_CREATE directives define the entry they name.
+        text = """INJECT:a = { x = 1 }
+REPLACE:b = { x = 1 }
+TRY_INJECT:c = { x = 1 }
+TRY_REPLACE:d = { x = 1 }
+INJECT_OR_CREATE:e = { x = 1 }
+REPLACE_OR_CREATE:f = { x = 1 }
+@g = 1
+h = 1
+i = { nested = 1 }
+# commented = 1
+"""
+        self.assertEqual({'e', 'f', 'h', 'i'}, audit.defined_names(text))
+
+    def test_inject_or_replace_with_no_base_does_not_resolve(self):
+        # Every kind: an INJECT:/TRY_REPLACE: name resolves only through a
+        # definition of its own, mod or vanilla; *_OR_CREATE: names define.
+        vanilla = self.root.parent / 'vanilla'
+        calls = {'script_values': "Scope.ScriptValue('{}')", 'static_modifiers': "GetStaticModifier('{}')",
+                 'scripted_guis': "GetScriptedGui('{}')", 'custom_loc': "Scope.GetCustom('{}')"}
+        names = ('inject_only', 'try_replace_only', 'created', 'recreated', 'vanilla_base', 'mod_base')
+        for kind, directory in audit.DIRS.items():
+            self.write(f'common/{directory}/directives.txt', """INJECT:inject_only = { x = 1 }
+TRY_REPLACE:try_replace_only = { x = 1 }
+INJECT_OR_CREATE:created = { x = 1 }
+REPLACE_OR_CREATE:recreated = { x = 1 }
+INJECT:vanilla_base = { x = 1 }
+REPLACE:mod_base = { x = 1 }
+""")
+            self.write(f'common/{directory}/base.txt', 'mod_base = { x = 1 }\n')
+            self.write(f'game/common/{directory}/vanilla.txt', 'vanilla_base = { x = 1 }\n', base=vanilla)
+        self.gui('widget = {\n' + ''.join(
+            f' p{n} = "[{calls[kind].format(name)}]"\n'
+            for n, (kind, name) in enumerate((k, nm) for k in calls for nm in names)) + '}')
+        refs = self.run_audit(vanilla).references['gui/test.gui']
+        for kind in calls:
+            resolved = {r['name']: r['resolved'] for r in refs[kind]}
+            self.assertEqual({'inject_only': False, 'try_replace_only': False, 'created': True,
+                              'recreated': True, 'vanilla_base': True, 'mod_base': True},
+                             resolved, kind)
+        errors = self.errors(self.run_audit(vanilla))
+        for kind in calls:
+            self.assertIn((kind, 'inject_only'), errors)
+            self.assertIn((kind, 'try_replace_only'), errors)
+
+    def test_directive_with_space_after_the_colon(self):
+        defined, targets = audit.depth0_names('INJECT: spaced = { x = 1 }\n'
+                                              'REPLACE_OR_CREATE: made = { x = 1 }\n')
+        self.assertEqual(({'made'}, {'spaced'}), (defined, targets))
+        self.assertEqual({'made'}, audit.defined_names('INJECT: spaced = { x = 1 }\n'
+                                                       'REPLACE_OR_CREATE: made = { x = 1 }\n'))
+
+    def test_merge_target_warns_offline_and_errors_with_vanilla(self):
+        # No snapshot covers scripted GUIs or custom loc: offline, a name the
+        # mod only INJECTs is presumed vanilla (a warning); once vanilla's
+        # files are read it must be defined there.
+        self.write('common/scripted_guis/inject.txt', 'INJECT:vanilla_sgui = { is_shown = { always = yes } }\n')
+        self.write('common/customizable_localization/inject.txt',
+                   'REPLACE:vanilla_cloc = { text = { localization_key = LABEL } }\n')
+        self.gui('''widget = {
+ a = "[GetScriptedGui('vanilla_sgui')]"
+ b = "[Scope.GetCustom('vanilla_cloc')]"
+}''')
+        result = self.run_audit()
+        self.assertEqual([], self.errors(result))
+        presumed = [(f.kind, f.name) for f in result.flags if 'presumed vanilla' in f.detail]
+        self.assertEqual([('scripted_guis', 'vanilla_sgui'), ('custom_loc', 'vanilla_cloc')], presumed)
+        vanilla = self.root.parent / 'vanilla'
+        for directory in ('scripted_guis', 'customizable_localization'):
+            (vanilla / 'game/common' / directory).mkdir(parents=True)
+        self.assertEqual([('scripted_guis', 'vanilla_sgui'), ('custom_loc', 'vanilla_cloc')],
+                         self.errors(self.run_audit(vanilla)))
+        self.write('game/common/scripted_guis/v.txt', 'vanilla_sgui = { }\n', base=vanilla)
+        self.write('game/common/customizable_localization/v.txt', 'vanilla_cloc = { }\n', base=vanilla)
+        self.assertEqual([], self.run_audit(vanilla).flags)
+
+    def test_inject_of_a_snapshot_name_resolves_offline(self):
+        # No game install: an INJECT: of a vanilla script value or static
+        # modifier still resolves through the committed snapshot.
+        self.write('vanilla_parsed/common/script_values.json', json.dumps({'vanilla_sv': 1}))
+        self.write('vanilla_parsed/common/modifiers.json', json.dumps({'vanilla_mod': 1}))
+        self.write('common/script_values/inject.txt', 'INJECT:vanilla_sv = { add = 1 }\nINJECT:gone_sv = { add = 1 }\n')
+        self.write('common/static_modifiers/inject.txt', 'INJECT:vanilla_mod = { x = 1 }\nREPLACE:gone_mod = { x = 1 }\n')
+        self.gui('''widget = {
+ a = "[Scope.ScriptValue('vanilla_sv')]"
+ b = "[Scope.ScriptValue('gone_sv')]"
+ c = "[GetStaticModifier('vanilla_mod')]"
+ d = "[GetStaticModifier('gone_mod')]"
+}''')
+        self.assertEqual({('script_values', 'gone_sv'), ('static_modifiers', 'gone_mod')},
+                         set(self.errors(self.run_audit())))
+
     def test_saved_scope_not_hidden_by_unrelated_sgui(self):
         self.write('common/scripted_guis/other.txt', 'other = { saved_scopes = { typo } }')
         self.gui('''widget = {

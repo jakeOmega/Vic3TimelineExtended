@@ -21,6 +21,14 @@ The report:
   and `localization/replace/english/`).
 - `path_collisions`: a file at the same relative path in both mods (any
   folder: `gui/`, `common/`, `gfx/`, ...).
+- `gui_type_collisions`: a GUI `type`, `template`, `layer` or `texticon`
+  name both mods define in different files (#1184). Those share one global
+  registry; which definition the game keeps is unprobed (`gui_load_order`),
+  so a row says which file sorts first and claims no winner.
+
+`external_mod_state.py` replays this model with the parsed values to layer
+the other mod into a copy of the server's ModState (`GET
+/external-mod-overlap/state`); `scenario_loads()` is the part both share.
 
 The load-order model is `LOAD_ORDER_MODEL` below: each engine claim, how sure
 it is, and where its evidence is (the facts themselves are written once, in
@@ -56,6 +64,8 @@ from dataclasses import dataclass, field
 from itertools import product
 from typing import Iterable, Optional
 
+from gui_reference_audit import IDENT as GUI_IDENT
+from gui_reference_audit import masks as gui_masks
 from mod_state import VANILLA_COMMON_DIRS, split_loc_line
 from paradox_file_parser import (
     INJECT_DIRECTIVES,
@@ -317,6 +327,38 @@ SERVER_TYPES = {
     "scripted_progress_bars": "Scripted Progress Bars",
     "on_actions": "On Actions",
 }
+# GUI names that land in one global registry whichever file defines them
+# (#1184): `type X = base` (inside a `types Group { }` block; the group name
+# itself repeats across vanilla's files and is no registry), `template X`,
+# `layer X { }` and a `texticon = { icon = X }`. `local_template` is
+# file-local and left out. Keywords match in any case (vanilla writes `Types`).
+# Each kind: its keyword (matched on the syntax mask, so not inside a comment
+# or string) and what must follow the name. A name is a bare identifier or a
+# quoted one (vanilla: `template "logo_letter_v"`, `types "production_method_items"`).
+# The whitespace before a name is matched on the comment-free text, where a
+# quoted name is still there (the syntax mask blanks it to spaces).
+_GUI_DEF_KINDS = (
+    ("type", re.compile(r"(?i:\btype)\b"), re.compile(r"\s*=")),
+    ("template", re.compile(r"(?i:\btemplate)\b"), None),
+    ("layer", re.compile(r"(?i:\blayer)\b"), re.compile(r"\s*\{")),
+)
+_GUI_TYPES_KW = re.compile(r"(?i:\btypes)\b")
+_GUI_NAME_RE = re.compile(rf'\s+(?:"([^"\n]+)"|({GUI_IDENT}))')
+_GUI_VALUE_RE = re.compile(rf'\s*(?:"([^"\n]+)"|({GUI_IDENT}))')
+_GUI_TEXTICON_RE = re.compile(r"(?i:\btexticon)\s*=\s*\{")
+# Which of two definitions the game keeps is unprobed, so the report gives no
+# winner (LOAD_ORDER_MODEL covers common/ only).
+GUI_LOAD_ORDER = {
+    "status": "unprobed",
+    "claim": "Which of two mods' definitions of one GUI type, template, layer or text icon "
+             "the game keeps, and in what order it reads gui/ files, hasn't been probed. "
+             "`sorts_first` is the ASCII order of the paths under gui/, not a winner. A mod's "
+             "redefinition of a vanilla type from a file of its own does beat vanilla's (seen "
+             "in game 2026-10-18), but its 00_te_ file sorts before vanilla's, so that fits "
+             "both first-read-wins and mods-after-vanilla.",
+    "see": f"gui_modding_guide.md gotcha 30; {LOAD_ORDER_DOC} covers common/ databases only.",
+}
+
 _SKIP_ROOT_DIRS = frozenset({".git", ".metadata", ".github", ".venv", "__pycache__"})
 # Files the game doesn't read (notes, Python), left out of path_collisions.
 _NOT_GAME_FILES = (".md", ".info", ".py", ".pyc")
@@ -489,6 +531,80 @@ def scan_script(text: str) -> tuple[list[Entry], list[str]]:
     if depth > 0:
         warnings.append(f"{depth} block(s) still open at the end of the file")
     return entries, warnings
+
+
+def _brace_end(syntax: str, open_at: int) -> int:
+    """The offset just past the brace that closes the one at `open_at` (the
+    end of the text when it never closes)."""
+    depth, i, n = 0, open_at, len(syntax)
+    while i < n:
+        c = syntax[i]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return n
+
+
+@dataclass(frozen=True)
+class GuiDef:
+    """One name a .gui file puts in a global registry (_GUI_DEF_RES)."""
+    kind: str             # type | template | layer | texticon
+    name: str
+    line: int
+    group: Optional[str] = None   # a type's `types Group { }` block
+
+
+def scan_gui(text: str) -> list[GuiDef]:
+    """Every global GUI name `text` defines, in file order. Keywords are found
+    on gui_reference_audit.masks' syntax mask, so a commented-out `#type x =
+    ...` or a `template` in a tooltip string isn't one; the name is read from
+    the comment-free text at the same offset, so a quoted name counts."""
+    code, syntax = gui_masks(text.lstrip("﻿"))
+
+    def line_at(offset: int) -> int:
+        return syntax.count("\n", 0, offset) + 1
+
+    def name_after(kw: re.Pattern, follow: Optional[re.Pattern]):
+        """(name, its offset, the offset after it) for each `kw` followed
+        by a name and then `follow`."""
+        for m in kw.finditer(syntax):
+            n = _GUI_NAME_RE.match(code, m.end())
+            if not n or (follow and not follow.match(syntax, n.end())):
+                continue
+            g = 1 if n.group(1) is not None else 2
+            yield n.group(g), n.start(g), n.end()
+
+    groups = []
+    for name, _start, end in name_after(_GUI_TYPES_KW, re.compile(r"\s*\{")):
+        brace = syntax.index("{", end)
+        groups.append((brace, _brace_end(syntax, brace), name))
+    out = []
+    for kind, kw, follow in _GUI_DEF_KINDS:
+        for name, start, _end in name_after(kw, follow):
+            group = None
+            if kind == "type":
+                group = next((g for a, b, g in groups if a < start < b), None)
+            out.append(GuiDef(kind, name, line_at(start), group))
+    for m in _GUI_TEXTICON_RE.finditer(syntax):
+        end = _brace_end(syntax, m.end() - 1)
+        # The block's own `icon =`, not one inside a nested block.
+        depth = 0
+        for tok in re.finditer(r"[{}]|\bicon\s*=", syntax[m.end():end]):
+            if tok.group(0) == "{":
+                depth += 1
+            elif tok.group(0) == "}":
+                depth -= 1
+            elif depth == 0:
+                n = _GUI_VALUE_RE.match(code, m.end() + tok.end())
+                if n:
+                    g = 1 if n.group(1) is not None else 2
+                    out.append(GuiDef("texticon", n.group(g), line_at(n.start(g))))
+                break
+    return sorted(out, key=lambda d: (d.line, d.kind, d.name))
 
 
 def read_text(path: str) -> str:
@@ -728,34 +844,16 @@ def order_depends_on_case(ours: list[Op], theirs: list[Op]) -> bool:
     return False
 
 
-def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
-            ours_files: Optional[Iterable[str]] = None,
-            theirs_files: Optional[Iterable[str]] = None) -> dict:
-    """The verdict for one key both mods define.
+def scenario_loads(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
+                   ours_files: Optional[Iterable[str]] = None,
+                   theirs_files: Optional[Iterable[str]] = None) -> tuple[dict, list]:
+    """Every combination of the unknowns resolve() simulates, each with the
+    definitions it reads in load order. Arguments as resolve()'s.
 
-    `vanilla`: None (unknown whether vanilla has the key), False (it doesn't),
-    or a list of vanilla Ops (path None when only the snapshot is known).
-    `bare_rule`: FIRST_WINS, LAST_WINS or UNKNOWN (both tried).
-    `ours_files`, `theirs_files`: every file path each mod ships in the
-    database, defining this key or not (a file at the other mod's or
-    vanilla's path replaces it either way); default: the ops' own paths.
-
-    Every combination of the unknowns is simulated: the file-name order
-    (file_orders()), which mod the playset loads later (only when one ships a
-    file at a path where the other defines the key), whether vanilla has the
-    key, the bare-duplicate rule, the load reading (load_readings()), and,
-    when either side has an *_OR_CREATE, where it applies beside a bare
-    definition (or_create_phases()), and when either has a TRY_ form, where
-    that applies (try_phases()).
-    When they all agree that is the verdict; otherwise the verdict names the
-    one unknown that changes it (order_depends_on_case, depends_on_playset),
-    or `undetermined`; `depends_on` names the unknowns that change it.
-
-    Returns {verdict, later_file, order_depends_on_case, ours_lost,
-    theirs_lost (definitions whose content doesn't reach the final entry),
-    trace_scenario, trace} or, when the scenarios disagree, {verdict,
-    depends_on, verdict_by_scenario (one row per combination of the deciding
-    unknowns), ...}."""
+    Returns (dims, loads): `dims` maps each unknown to the values still
+    possible (one value when it is known), and `loads` holds one
+    (combo, ordered Ops, bare-duplicate rule) per combination, `combo` being
+    a tuple in `dims`' order. external_mod_state replays these with values."""
     o_files = {p.casefold() for p in (ours_files if ours_files is not None
                                        else [o.path for o in ours if o.path])}
     t_files = {p.casefold() for p in (theirs_files if theirs_files is not None
@@ -778,12 +876,8 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
                       if any(o.directive in TRY_FORMS for o in (*ours, *theirs)) else [None]),
     }
     names = list(dims)
-    # Each scenario's outcome: the verdict plus which of each side's
-    # definitions didn't survive, so a scenario that loses one of our two
-    # INJECTs differs from one that keeps both even when both read both_merge.
-    results = {}
-    traces = {}
     mod_paths = o_files | t_files
+    loads = []
     for combo in product(*(dims[n] for n in names)):
         sc = dict(zip(names, combo))
         ops = []
@@ -801,7 +895,62 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
             ops += [*ours, *theirs]
         ordered = order_for_reading(ops, sc["file_order"], sc["load_reading"],
                                     sc["or_create_phase"] or "creation", sc["try_phase"] or "inject")
-        surviving, trace = simulate(ordered, sc["bare_duplicate"])
+        loads.append((combo, ordered, sc["bare_duplicate"]))
+    return dims, loads
+
+
+def deciding_unknowns(dims: dict, results: dict) -> list[str]:
+    """The unknowns in `dims` whose value alone changes some scenario's
+    outcome; `results` maps each scenario_loads combo to its outcome."""
+    names = list(dims)
+
+    def changes_outcome(idx: int) -> bool:
+        return any(
+            results[combo[:idx] + (alt,) + combo[idx + 1:]] != outcome
+            for combo, outcome in results.items()
+            for alt in dims[names[idx]]
+        )
+
+    return [n for i, n in enumerate(names) if len(dims[n]) > 1 and changes_outcome(i)]
+
+
+def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
+            ours_files: Optional[Iterable[str]] = None,
+            theirs_files: Optional[Iterable[str]] = None) -> dict:
+    """The verdict for one key both mods define.
+
+    `vanilla`: None (unknown whether vanilla has the key), False (it doesn't),
+    or a list of vanilla Ops (path None when only the snapshot is known).
+    `bare_rule`: FIRST_WINS, LAST_WINS or UNKNOWN (both tried).
+    `ours_files`, `theirs_files`: every file path each mod ships in the
+    database, defining this key or not (a file at the other mod's or
+    vanilla's path replaces it either way); default: the ops' own paths.
+
+    Every combination of the unknowns is simulated (scenario_loads): the
+    file-name order (file_orders()), which mod the playset loads later (only
+    when one ships a file at a path where the other defines the key), whether
+    vanilla has the key, the bare-duplicate rule, the load reading
+    (load_readings()), and, when either side has an *_OR_CREATE, where it
+    applies beside a bare definition (or_create_phases()), and when either
+    has a TRY_ form, where that applies (try_phases()). When they all agree
+    that is the verdict; otherwise the verdict names the one unknown that
+    changes it (order_depends_on_case, depends_on_playset), or
+    `undetermined`; `depends_on` names the unknowns that change it.
+
+    Returns {verdict, later_file, order_depends_on_case, ours_lost,
+    theirs_lost (definitions whose content doesn't reach the final entry),
+    trace_scenario, trace} or, when the scenarios disagree, {verdict,
+    depends_on, verdict_by_scenario (one row per combination of the deciding
+    unknowns), ...}."""
+    dims, loads = scenario_loads(ours, theirs, vanilla, bare_rule, ours_files, theirs_files)
+    names = list(dims)
+    # Each scenario's outcome: the verdict plus which of each side's
+    # definitions didn't survive, so a scenario that loses one of our two
+    # INJECTs differs from one that keeps both even when both read both_merge.
+    results = {}
+    traces = {}
+    for combo, ordered, bare_duplicate in loads:
+        surviving, trace = simulate(ordered, bare_duplicate)
         results[combo] = (
             verdict_for(surviving),
             tuple(o for o in ours if o not in surviving),
@@ -824,15 +973,7 @@ def resolve(ours: list[Op], theirs: list[Op], vanilla, bare_rule: str,
         out["theirs_lost"] = list(theirs_lost)
         return out
 
-    def changes_outcome(idx: int) -> bool:
-        """Some scenario's outcome changes when only dimension `idx` does."""
-        return any(
-            results[combo[:idx] + (alt,) + combo[idx + 1:]] != outcome
-            for combo, outcome in results.items()
-            for alt in dims[names[idx]]
-        )
-
-    deciding = [n for i, n in enumerate(names) if len(dims[n]) > 1 and changes_outcome(i)]
+    deciding = deciding_unknowns(dims, results)
     if deciding == ["file_order"]:
         out["verdict"] = ORDER_DEPENDS_ON_CASE
     elif deciding == ["later_mod"]:
@@ -885,6 +1026,14 @@ class VanillaIndex:
         self._keys = {db: set(v) for db, v in keys.items()} if keys is not None else None
         self._cache: dict = {}
         self._manifest = None
+        # external_mod_state's parses of vanilla files ({path: (data, error)}),
+        # kept as long as the index is.
+        self.parsed_files: dict = {}
+
+    def game_file(self, db: str, path: str) -> Optional[str]:
+        """The absolute path of a vanilla file in `db` (a path within it), or
+        None without the game files."""
+        return os.path.join(self._game_dir(db), *path.split("/")) if self.game_common else None
 
     @classmethod
     def default(cls) -> "VanillaIndex":
@@ -912,6 +1061,22 @@ class VanillaIndex:
         if not self.game_common:
             return None
         return self._game_entries(db)
+
+    def gui_defs(self) -> Optional[dict]:
+        """{(kind, name): [(path under gui/, GuiDef)]} for vanilla's `game/gui`
+        (scan_gui), or None without the game files. Read once."""
+        if not self.game_common:
+            return None
+        key = ("gui",)
+        if key not in self._cache:
+            out: dict = defaultdict(list)
+            base = os.path.join(os.path.dirname(self.game_common), "gui")
+            for rel in list_files(base) if os.path.isdir(base) else []:
+                if rel.endswith(".gui"):
+                    for d in scan_gui(read_text(os.path.join(base, rel))):
+                        out[(d.kind, d.name)].append((rel, d))
+            self._cache[key] = out
+        return self._cache[key]
 
     def _load(self, db: str):
         if db in self._cache:
@@ -953,15 +1118,29 @@ class VanillaIndex:
         self._cache[key] = out
         return out
 
-    def _snapshot_keys(self, db: str) -> Optional[set]:
-        if not self.snapshot_dir:
-            return None
+    def _load_manifest(self) -> dict:
         if self._manifest is None:
             try:
                 with open(os.path.join(self.snapshot_dir, "manifest.json"), encoding="utf-8") as f:
                     self._manifest = json.load(f)
             except (OSError, ValueError):
                 self._manifest = {}
+        return self._manifest
+
+    def snapshot_files(self, db: str) -> Optional[list]:
+        """Vanilla's file paths within `db`, from the snapshot manifest's
+        `sources`, when there are no game files (the snapshot records no keys
+        per file). None with the game files, or keys given."""
+        if self.game_common or self._keys is not None or not self.snapshot_dir:
+            return None
+        prefix = f"game/common/{db}/"
+        return sorted(p[len(prefix):] for p in (self._load_manifest().get("sources") or {})
+                      if p.startswith(prefix))
+
+    def _snapshot_keys(self, db: str) -> Optional[set]:
+        if not self.snapshot_dir:
+            return None
+        self._load_manifest()
         for _et, info in (self._manifest.get("entity_types") or {}).items():
             if info.get("dir") == f"game/common/{db}":
                 try:
@@ -1301,6 +1480,70 @@ def path_collisions(ours_root: str, their_files: list[str]) -> list[dict]:
     return rows
 
 
+def _scan_gui_files(root: str, files: Iterable[str]) -> dict:
+    """{(kind, name): [(path under gui/, GuiDef)]} for a mod's .gui files
+    (`files` relative to `root`)."""
+    out: dict = defaultdict(list)
+    for rel in files:
+        if not (rel.startswith("gui/") and rel.lower().endswith(".gui")):
+            continue
+        try:
+            text = read_text(os.path.join(root, *rel.split("/")))
+        except OSError:
+            continue
+        for d in scan_gui(text):
+            out[(d.kind, d.name)].append((rel[len("gui/"):], d))
+    return out
+
+
+def gui_type_collisions(ours_root: str, ours_files: Iterable[str], theirs_root: str,
+                        theirs_files: Iterable[str], vanilla: Optional[VanillaIndex]) -> list[dict]:
+    """GUI types, templates, layers and text icons both mods define in
+    different files (#1184). A name both define only in one file both ship is
+    left to path_collisions: only one of the two files loads. No winner is
+    given (GUI_LOAD_ORDER)."""
+    ours_files, theirs_files = list(ours_files), list(theirs_files)
+    o, t = _scan_gui_files(ours_root, ours_files), _scan_gui_files(theirs_root, theirs_files)
+    shared = ({p.casefold() for p in ours_files if p.startswith("gui/")}
+              & {p.casefold() for p in theirs_files if p.startswith("gui/")})
+    v = vanilla.gui_defs() if vanilla is not None else None
+
+    def refs(defs):
+        out = []
+        for path, d in defs:
+            ref = {"file": f"gui/{path}", "line": d.line}
+            if d.group:
+                ref["group"] = d.group
+            out.append(ref)
+        return out
+
+    rows = []
+    for kind, name in sorted(set(o) & set(t)):
+        o_defs, t_defs = o[(kind, name)], t[(kind, name)]
+        if not any(op.casefold() != tp.casefold() for op, _ in o_defs for tp, _ in t_defs):
+            continue
+        o_first, t_first = min(p for p, _ in o_defs), min(p for p, _ in t_defs)
+        # `same_file`: each side's first-sorting definition is in a file both ship.
+        first = ("same_file" if o_first.casefold() == t_first.casefold()
+                 else OURS if o_first < t_first else THEIRS)
+        row = {
+            "kind": kind,
+            "name": name,
+            "ours": refs(o_defs),
+            "theirs": refs(t_defs),
+            "sorts_first": first,
+            "in_vanilla": None if v is None else (kind, name) in v,
+        }
+        if v and (kind, name) in v:
+            row["vanilla"] = [{"file": f"game/gui/{p}", "line": d.line} for p, d in v[(kind, name)]]
+        both = sorted({f"gui/{p}" for p, _ in (*o_defs, *t_defs) if f"gui/{p}".casefold() in shared})
+        if both:
+            # The playset order also decides which copy of these files loads.
+            row["files_both_ship"] = both
+        rows.append(row)
+    return rows
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -1351,6 +1594,11 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
         loc_rows = loc_collisions(ours_root, o_loc, theirs_root, t_loc)
 
     paths = path_collisions(ours_root, their_files)
+    t_gui = [p for p in their_files if p.startswith("gui/")]
+    gui_rows = []
+    if t_gui:
+        gui_rows = gui_type_collisions(ours_root, list_files(ours_root, "gui", git_fallback=True),
+                                       theirs_root, t_gui, vanilla)
     by_verdict = Counter(c["verdict"] for c in collisions)
     return {
         "mod_name": read_mod_name(theirs_root),
@@ -1367,9 +1615,12 @@ def analyze(theirs_root: str, ours_root: str, vanilla: Optional[VanillaIndex] = 
             "event_namespace_collisions": len(ns_rows),
             "event_id_collisions": len(id_rows),
             "path_collisions": len(paths),
+            "gui_type_collisions": len(gui_rows),
             "scan_warnings": len(warnings),
         },
         "path_collisions": paths,
+        "gui_type_collisions": gui_rows,
+        "gui_load_order": GUI_LOAD_ORDER,
         "key_collisions": collisions,
         "defines": defines,
         "additive_hooks": hooks,
@@ -1423,6 +1674,11 @@ def _print_summary(report: dict) -> None:
     print(f"path collisions: {s['path_collisions']}")
     for p in report["path_collisions"]:
         print(f"  {p['path']}")
+    print(f"gui names both define (load order unprobed): {s['gui_type_collisions']}")
+    for g in report["gui_type_collisions"]:
+        o = ", ".join(f"{r['file']}:{r['line']}" for r in g["ours"])
+        t = ", ".join(f"{r['file']}:{r['line']}" for r in g["theirs"])
+        print(f"  {g['kind']} {g['name']}  theirs: {t}  ours: {o}  sorts first: {g['sorts_first']}")
     if report["scan_warnings"]:
         print(f"scan warnings: {len(report['scan_warnings'])}")
 

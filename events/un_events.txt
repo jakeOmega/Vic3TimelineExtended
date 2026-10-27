@@ -4137,7 +4137,7 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
 			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
-		# The eight country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The nine country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
 			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
@@ -4181,6 +4181,10 @@ un_events.36 = {
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = unoda MODIFIER = un_asat_moratorium_modifier } }
 			un_convention_country_on = { MODIFIER = un_asat_moratorium_modifier }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = copuos MODIFIER = un_colony_protection_modifier } }
+			un_convention_country_on = { MODIFIER = un_colony_protection_modifier }
 		}
 		# Our terms under the regimes now in force, as a joiner's.
 		un_regime_refresh_country = yes
@@ -4494,6 +4498,119 @@ un_events.41 = {
 		un_vote_release = yes
 		hidden_effect = {
 			un_docket_offer_topic_next = { TOPIC = asat EVENT = un_events.41 }
+		}
+	}
+}
+
+# Event 42: The Convention on the Settlement of Outer Space (solar colonization
+# fleets, docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
+# § 13; the ambition of the 1979 Moon Agreement). Raised by the docket after a
+# colony is seized or destroyed (item 17), and as Assembly business, under the
+# Space Race rule's Full Colonies. Offered to a member that holds a colony;
+# the country whose act raised it is not asked (un_dkt_colony_actor).
+un_events.42 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.42.t
+	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 17), from
+		# the docket's last item; as Assembly business it says nothing of a cause.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.42.d_cause_seizure
+				trigger = {
+					global_var:un_dkt_last_type ?= 17
+					exists = scope:un_dkt_subject
+					NOT = { scope:un_dkt_subject ?= ROOT }
+				}
+			}
+		}
+		desc = un_events.42.d
+	}
+	flavor = un_events.42.f
+
+	duration = 3
+
+	trigger = {
+		sr_colonies_full_enabled = yes
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_docket_topic_open_colony_protection = yes
+		sr_has_space_colony = yes
+		NOT = { has_variable = un_dkt_colony_actor }
+		NOT = { has_modifier = un_colony_protection_modifier }
+		NOT = { has_modifier = un_colony_protection_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Table the convention.
+	option = {
+		name = un_events.42.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_global_variable = un_dkt_colony_pending }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					has_variable = sr_colony_count
+					var:sr_colony_count >= 3
+				}
+				add = 2
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# What tabling it does is the chamber's Propose control's script too
+		# (un_propose_colony_protection_table, un_propose_effects.txt).
+		un_propose_colony_protection_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = colony_protection EVENT = un_events.42 }
+		}
+	}
+
+	# Option C: Keep our fleets' hands free.
+	option = {
+		name = un_events.42.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { sr_fl_strength_total >= 100 }
+				add = 2
+			}
+		}
+		add_modifier = {
+			name = un_colony_protection_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1421 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = colony_protection EVENT = un_events.42 }
 		}
 	}
 }

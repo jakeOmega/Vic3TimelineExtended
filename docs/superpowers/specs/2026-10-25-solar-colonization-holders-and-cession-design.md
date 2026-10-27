@@ -1,7 +1,7 @@
 # Solar System Colonization, slices 0 and 1: colony holders and cession — design
 
 Drafted 2026-10-25. Slices 0 and 1 of the scope in
-`2026-10-25-solar-colonization-contest-scope.md` (§ 10), whose § Decisions and
+`docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md` (§ 10), whose § Decisions and
 § 11 record the owner's calls; this design assumes them. Slice 0 gives every
 colony a record that names its holder, passes a dead holder's colonies on, and
 lists the solar system in the panel. Slice 1 makes the setting four levels of

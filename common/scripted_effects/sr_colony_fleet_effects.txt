@@ -29,8 +29,14 @@
 # launched for when it can depart and staged progress covers its cost;
 # without one the automatic pick takes the eligible world with the best score
 # (design § 7). Whatever cannot leave stays staged, as under races only.
+# Under Full Colonies nothing leaves while Earth is blockaded or the launch
+# site is occupied (slice 6 fleets design § 15, sr_launches_barred).
 sr_cf_launch_month = {
 	if = {
+		limit = { sr_launches_barred = yes }
+		sr_launch_note_held = yes
+	}
+	else_if = {
 		limit = { sr_cf_has_free_slot = yes }
 		if = {
 			limit = { has_variable = sr_cf_target }

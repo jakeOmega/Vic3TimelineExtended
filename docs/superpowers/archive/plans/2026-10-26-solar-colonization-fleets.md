@@ -8,7 +8,7 @@
 
 **Tech stack:** Paradox script (`common/`, `events/`), Victoria 3 GUI, localization YAML, Python 3.11/3.12 `unittest`.
 
-**Spec:** `docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md` (§ numbers below are its). Scope: `docs/superpowers/specs/2026-10-25-solar-colonization-contest-scope.md`. When a part is built, add an "As built" section to the design recording where the build departed, as slices 0 to 5 did.
+**Spec:** `docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md` (§ numbers below are its). Scope: `docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md`. When a part is built, add an "As built" section to the design recording where the build departed, as slices 0 to 5 did.
 
 ## Global constraints
 

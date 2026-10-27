@@ -305,7 +305,7 @@ sr_dome_breach_repairs = {
 # in percent, past its room at -50%. The one refresh site is sr_ebase_refresh
 # (sr_colony_module_effects.txt), monthly from the country pulse.
 # ======= Solar System Colonization - fleets (slice 6;
-# docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md § 5)
+# docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md § 5)
 # The fleets' upkeep: on each Space Command building, never the country (the
 # input multipliers are building-masked and would raise every building's use),
 # at sr_fleet_upkeep_units (full fleet strength in service / 10), its one
@@ -326,6 +326,18 @@ sr_fleet_upkeep_goods = {
 sr_fleet_upkeep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_goods_input_mult = 0.01
+}
+
+# Orbital fire support (fleets design § 15, 6d): at war, a country whose
+# fleets at Earth outmatch the hostile fleets there (or face none while it has
+# some), on the country at multiplier = the margin, min(1, (ours - theirs) /
+# max(theirs, 10)); its one refresh site sr_orbital_superiority_refresh
+# (sr_earth_orbit_effects.txt), from the fleets' monthly step. It stands beside
+# the anti-satellite strike's te_orbital_network_disrupted (-10%).
+sr_orbital_superiority = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	unit_offense_mult = 0.1
+	unit_defense_mult = 0.05
 }
 
 sr_ebase_room_bonus = {

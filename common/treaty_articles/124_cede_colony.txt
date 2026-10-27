@@ -153,7 +153,11 @@ te_cede_colony = {
 	}
 
 	# Pressed in a play: Money Transfer's contestion, as the seabed lease, and
-	# flat maneuvers and infamy (design § 16: to tune in play).
+	# flat maneuvers and infamy (design § 16: to tune in play). Against a
+	# country that interdicted our colonies in peace within five years, it costs
+	# no infamy (fleets design § 12, the casus belli an interdiction gives): ROOT
+	# the war goal's holder and scope:target_country the country it is against,
+	# as vanilla's Money Transfer reads them (INFAMY_TARGET_COUNTRY_DEDUCTION_FACTOR).
 	wargoal = {
 		execution_priority = 21
 
@@ -172,6 +176,15 @@ te_cede_colony = {
 			add = {
 				desc = "INFAMY_BASE_VALUE"
 				value = 10
+			}
+			if = {
+				limit = {
+					scope:target_country ?= { sr_interdicted_recently = { TARGET = root } }
+				}
+				multiply = {
+					desc = "INFAMY_SR_INTERDICTOR"
+					value = 0
+				}
 			}
 		}
 	}

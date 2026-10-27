@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — Space Command (fleets design § 5)
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md.
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
 # A government building, built where the Space Program stands, under Full
 # Colonies. Its methods (sr_space_command_pms.txt) carry the fleet strength a
 # level builds a month as a workforce-scaled state modifier

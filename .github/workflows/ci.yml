@@ -265,7 +265,8 @@ jobs:
       # docs/engine/vanilla_asset_paths.txt (no game here), the mod's from
       # `git ls-files gfx/`, which lists every texture this sparse checkout
       # leaves off the disk. The engine logs a missing texture only on first
-      # render.
+      # render. It also flags an entity that declares no art field its type
+      # needs (a building's `background`), with vanilla's from vanilla_parsed/.
       - name: Audit — asset paths in script that name no file
         if: ${{ !cancelled() }}
         run: python3 texture_reference_audit.py --strict
@@ -274,9 +275,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 script_loc_reference_audit.py --strict
 
-      # ScriptValue('x') in a loc value naming no script value renders 0. The
-      # .gui half is gui_reference_audit's, above.
-      - name: Audit — loc ScriptValue reads that name no script value
+      # ScriptValue('x') in a loc value or a script string (common/, events/)
+      # naming no script value renders 0. The .gui half is
+      # gui_reference_audit's, above.
+      - name: Audit — loc and script-string ScriptValue reads that name no script value
         if: ${{ !cancelled() }}
         run: python3 loc_script_value_audit.py --strict
 

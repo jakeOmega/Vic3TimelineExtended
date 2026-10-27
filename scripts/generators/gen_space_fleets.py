@@ -1,8 +1,9 @@
-"""Solar System Colonization's fleets: every per-slot and per-location block.
+﻿"""Solar System Colonization's fleets: every per-slot and per-location block.
 
-Design: ``docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md``
+Design: ``docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md``
 (slice 6: 6a the fleet record, Space Command and movement; 6b combat, blockade,
-seizure and destruction). Full Colonies only.
+seizure and destruction; 6c interdiction and the AI's offence). Full Colonies
+only.
 
 A country keeps up to ``SLOTS`` fleets, all country variables (a revolution's
 winner inherits them): ``sr_fl_<n>_loc`` (a location's code; absent while in
@@ -10,8 +11,9 @@ transit or empty), ``_dest``, ``_depart`` and ``_arrive`` (in transit), the
 strength of each role now and at full (``sr_fl_<n>_<role>``,
 ``sr_fl_<n>_<role>_full``), ``_dv`` (propellant, km/s), ``_supply`` (months),
 ``_marines`` (battalions), ``_drive`` and ``_refit_until``, and from 6b
-``_posture`` (1 station, 2 stand off, 3 close in), ``_target`` (a world's index)
-and ``_destroy``. A fleet is at one of nine locations (``FLEET_LOCATIONS``:
+``_posture`` (1 station, 2 stand off, 3 close in; 6c 4 interdict), ``_target``
+(a world's index), ``_destroy`` and from 6c ``_icpt`` (the country it
+interdicts). A fleet is at one of nine locations (``FLEET_LOCATIONS``:
 Earth and the Moon, then the panel's eight; gen_launch_windows.LOCATIONS holds
 the bodies their legs are measured to).
 
@@ -93,22 +95,23 @@ DRIVES = tuple(d.key for d in glw.DRIVES)
 # antimatter's rapid response, at three quarters of antimatter's months.
 PACE_LEGS = {0: "chemical", 1: "fusion", 2: "torch", 3: "antimatter", 4: "rapid_antimatter"}
 PACE_CAPACITY = {0: "chemical", 1: "fusion", 2: "torch", 3: "antimatter", 4: "antimatter"}
-POSTURES = {1: "station", 2: "standoff", 3: "closein"}
+POSTURES = {1: "station", 2: "standoff", 3: "closein", 4: "interdict"}
 
 # Every variable of a slot, cleared together (sr_fl_clear_at).
 SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_months", "dv", "supply", "marines", "drive",
-             "refit_until", "posture", "target", "destroy", "charged")
+             "refit_until", "posture", "target", "destroy", "charged", "icpt")
 
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
-SLOT_ACTIONS = ("clear", "month", "arrive", "note", "build", "new_at_earth", "take_marines", "go", "step_pick", "merge",
+SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick", "merge",
                 "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
-                "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive")
+                "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
+                "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
-# per world closing in.
+# per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
-           "l1", "l2", "l3", "before", "lost", "bs")
+           "l1", "l2", "l3", "before", "lost", "bs", "kf")
 CB_WORLD_VARS = ("s3", "fd3", "mar", "dfd", "ld")
 
 
@@ -279,6 +282,10 @@ def render_values() -> str:
         if r.key == "war":
             out.append("\telse = { value = 1 }")
         out.append("}")
+    out += ["", "# ===== The ground reserve (6d, design § 15), country scope: each role's strength",
+            "# built and not yet launched (sr_reserve_<role>), all at full, and their sum. =====",
+            *[line for r in ROLES for line in _opt(f"sr_reserve_{r.key}_value", f"sr_reserve_{r.key}")],
+            "sr_reserve_total = {", "\tvalue = 0", *[f"\tadd = sr_reserve_{r.key}_value" for r in ROLES], "}"]
     out += ["", "# ===== Combat (6b), per world =====",
             "#   sr_cb_closing_<key>   strength closing in on it, every power's (any scope)",
             "#   sr_cb_fd_total_<key>  the defence fire aimed at it: each power's, shared with",
@@ -307,6 +314,27 @@ def render_values() -> str:
               [f"sr_cb_ld_total_{lc.key} = {{", "\tvalue = 0",
                *[f"\tif = {{ limit = {{ has_variable = sr_cb_ld_{w.key} }} add = var:sr_cb_ld_{w.key} }}" for w in worlds_at(lc.key)],
                "}"]],
+            "", "# ===== Per location, country scope: the AI's offence (6c, design § 14) =====",
+            "#   sr_loc_ai_enemy_fleets_<loc>  the strength of every fleet there of a country",
+            "#                                 at war with us (at Earth too: 6d's blockade,",
+            "#                                 the reserve's launch and orbital superiority)",
+            "#   sr_loc_ai_enemy_force_<loc>   ... and the Defences and hull of each world there",
+            "#                                 we may attack (sr_site_target_strength_<key>)",
+            *[line for lc in LOCATIONS for line in
+              [f"sr_loc_ai_enemy_fleets_{lc.key} = {{", "\tvalue = 0",
+               "\tif = {", "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
+               "\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
+               f"\t\t\tlimit = {{ is_country_alive = yes has_war_with = prev has_variable = sr_fl_at_{lc.key} }}",
+               f"\t\t\tadd = var:sr_fl_at_{lc.key}", "\t\t}", "\t}", "}"]],
+            *[line for lc in LOCATIONS[1:] for line in
+              [f"sr_loc_ai_enemy_force_{lc.key} = {{", f"\tvalue = sr_loc_ai_enemy_fleets_{lc.key}",
+               *[f"\tif = {{ limit = {{ sr_site_ai_attack_target = {{ KEY = {w.key} }} }} add = sr_site_target_strength_{w.key} }}"
+                 for w in worlds_at(lc.key)],
+               "}"]],
+            "", "# ===== Per world, any scope: its worth to the AI's offence (6c, design § 14):",
+            "# a point a 10,000 people and one a module level =====",
+            *[f"sr_site_ai_worth_{w.key} = {{ value = sr_site_pop_value_{w.key} divide = 10000 "
+              f"add = sr_site_spec_built_{w.key} add = sr_site_generic_built_{w.key} }}" for w in gss.SITES],
             "", "# ===== Per location, country scope: the best Spaceport level of ours there =====",
             "# (an occupied world's serves no one)."]
     for loc in LOCATIONS[1:]:
@@ -374,9 +402,18 @@ def render_slot_triggers(n: int) -> list[str]:
                 f"\tNOT = {{ var:{loc} = {b.code} }}",
                 f"\tNOT = {{ {var(n, 'refitting')} = yes }}",
                 f"\t{var(n, 'strength')} >= sr_fl_minimum_strength",
-                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}",
-                "}"]
-    out += ["# The panel's Go: its picked destination may be flown now.",
+                f"\t{var(n, 'dv_value')} >= {var(n, f'leg_dv_{b.key}')}"]
+        if b.code != EARTH:
+            # 6d (design § 15): nothing leaves Earth blockaded or with the launch site lost.
+            out.append(f"\tNOT = {{ AND = {{ var:{loc} = {EARTH} sr_launches_barred = yes }} }}")
+        out.append("}")
+    out += ["# 6d: it is at Earth, and nothing may leave Earth (sr_launches_barred).",
+            f"{var(n, 'earth_barred')} = {{",
+            f"\thas_variable = {loc}",
+            f"\tvar:{loc} = {EARTH}",
+            "\tsr_launches_barred = yes",
+            "}",
+            "# The panel's Go: its picked destination may be flown now.",
             f"{var(n, 'can_go')} = {{",
             f"\thas_variable = sr_fl_dest_pick_{n}",
             "\tOR = {"]
@@ -425,6 +462,35 @@ def render_slot_triggers(n: int) -> list[str]:
             "\tOR = {",
             *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_hostile_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
             "\t}", "}",
+            "# 6c: a world at its location it may interdict (a country at peace with us,",
+            "# not our ally, holds it); its target is one; it interdicts.",
+            f"{var(n, 'has_interdict_world')} = {{",
+            f"\thas_variable = {loc}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ var:{loc} = {lc.code} OR = {{ "
+              + " ".join(f"sr_site_interdict_target = {{ KEY = {w.key} }}" for w in worlds_at(lc.key)) + " } }"
+              for lc in LOCATIONS[1:] if worlds_at(lc.key)],
+            "\t}", "}",
+            f"{var(n, 'target_interdictable')} = {{",
+            f"\thas_variable = {var(n, 'target')}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ var:{var(n, 'target')} = {w.index} sr_site_interdict_target = {{ KEY = {w.key} }} }}" for w in gss.SITES],
+            "\t}", "}",
+            f"{var(n, 'interdicting')} = {{ {var(n, 'posture_value')} = 4 }}",
+            "# The target button: interdicting, the worlds it may interdict; else the",
+            "# hostile worlds.",
+            f"{var(n, 'can_target')} = {{",
+            "\tOR = {",
+            f"\t\tAND = {{ {var(n, 'posture_value')} = 4 {var(n, 'has_interdict_world')} = yes }}",
+            f"\t\tAND = {{ NOT = {{ {var(n, 'posture_value')} = 4 }} {var(n, 'has_hostile_world')} = yes }}",
+            "\t}", "}",
+            "# The posture button's next step is Interdict (its price, in the tooltip).",
+            f"{var(n, 'next_interdict')} = {{",
+            f"\t{var(n, 'has_interdict_world')} = yes",
+            "\tOR = {",
+            f"\t\t{var(n, 'posture_value')} = 3",
+            f"\t\tAND = {{ {var(n, 'posture_value')} = 2 NOT = {{ {var(n, 'has_hostile_world')} = yes }} }}",
+            "\t}", "}",
             "# The AI's: at Earth, or where no world of ours is threatened.",
             f"{var(n, 'ai_free')} = {{",
             f"\thas_variable = {loc}",
@@ -445,6 +511,20 @@ def render_slot_triggers(n: int) -> list[str]:
                 f"\t\tsr_loc_port_{lc.key} = yes",
                 f"\t\t{var(n, 'dv_value')} >= {{ value = {var(n, f'leg_dv_{lc.key}')} add = {var(n, f'return_dv_{lc.key}')} }}",
                 "\t}",
+                "}"]
+    for lc in LOCATIONS[1:]:
+        out += [f"# 6c: it may attack {lc.name}: docked, within sr_fl_ai_attack_months' leg, able to",
+                "# come home again or dock there, and outmatching the enemy's force there",
+                "# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.",
+                f"{var(n, f'ai_attacks_{lc.key}')} = {{",
+                f"\t{var(n, 'docked')} = yes",
+                f"\t{var(n, f'may_depart_{lc.key}')} = yes",
+                f"\t{var(n, f'leg_months_{lc.key}')} <= sr_fl_ai_attack_months",
+                "\tOR = {",
+                f"\t\tsr_loc_port_{lc.key} = yes",
+                f"\t\t{var(n, 'dv_value')} >= {{ value = {var(n, f'leg_dv_{lc.key}')} add = {var(n, f'return_dv_{lc.key}')} }}",
+                "\t}",
+                f"\t{var(n, 'strength')} >= {{ value = sr_loc_ai_enemy_force_{lc.key} multiply = sr_fl_ai_attack_margin }}",
                 "}"]
     return out
 
@@ -476,6 +556,10 @@ def render_triggers() -> str:
     for n in range(1, SLOTS + 1):
         out += [f"\t\tAND = {{ has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = $CODE$ }}",
                 f"\t\tAND = {{ has_variable = {var(n, 'dest')} var:{var(n, 'dest')} = $CODE$ }}"]
+    out += ["\t}", "}",
+            "# ... at it.",
+            "sr_fl_any_at = {", "\tOR = {"]
+    out += [f"\t\tAND = {{ has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = $CODE$ }}" for n in range(1, SLOTS + 1)]
     out += ["\t}", "}",
             "# ... bound for it.",
             "sr_fl_any_bound = {", "\tOR = {"]
@@ -509,15 +593,34 @@ def render_triggers() -> str:
                 *[f"\t\tAND = {{ {held(s)} sr_site_marines_value_{s.key} >= 1 }}" for s in ws], "\t}", "}",
                 f"sr_loc_garrison_due_{lc.key} = {{", "\tOR = {",
                 *[f"\t\tAND = {{ {held(s)} has_global_variable = sr_site_garrison_due_{s.key} }}" for s in ws], "\t}", "}",
-                "# A world of ours there, and an enemy fleet there or on its way (design § 14).",
+                "# A world of ours there, and an enemy fleet there or on its way (design § 14),",
+                "# or (6c) a fleet interdicting us there.",
                 f"sr_fl_ai_threatened_{lc.key} = {{",
                 f"\tsr_loc_held_{lc.key} = yes",
+                "\tsave_temporary_scope_as = sr_icpt_victim",
                 "\tany_in_global_list = {",
                 "\t\tvariable = sr_fleet_powers",
                 "\t\tis_country_alive = yes",
-                "\t\thas_war_with = prev",
-                f"\t\tOR = {{ has_variable = sr_fl_at_{lc.key} sr_fl_any_bound = {{ CODE = {lc.code} }} }}",
+                "\t\tOR = {",
+                "\t\t\tAND = {",
+                "\t\t\t\thas_war_with = prev",
+                f"\t\t\t\tOR = {{ has_variable = sr_fl_at_{lc.key} sr_fl_any_bound = {{ CODE = {lc.code} }} }}",
+                "\t\t\t}",
+                f"\t\t\tsr_icpt_interdicts_at = {{ LOC = {lc.key} }}",
+                "\t\t}",
                 "\t}",
+                "}",
+                "# 6c: a world there the AI may attack: held by a country at war with us, or",
+                "# ours under an enemy's occupation; never a free colony (design § 14).",
+                f"sr_loc_ai_target_{lc.key} = {{",
+                "\tOR = {",
+                *[f"\t\tsr_site_ai_attack_target = {{ KEY = {w.key} }}" for w in ws],
+                "\t}",
+                "}",
+                "# ... and our fleets there are a match for the enemy's (the AI stays).",
+                f"sr_fl_ai_holds_{lc.key} = {{",
+                f"\thas_variable = sr_fl_at_{lc.key}",
+                f"\tvar:sr_fl_at_{lc.key} >= sr_loc_ai_enemy_fleets_{lc.key}",
                 "}"]
     return "\n".join(out) + "\n"
 
@@ -547,16 +650,38 @@ def render_role_effects() -> list[str]:
     names = [*SLOT_VARS, *[r.key for r in ROLES], *[f"{r.key}_full" for r in ROLES]]
     out += [f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_{x} }} remove_variable = sr_fl_$N$_{x} }}" for x in names]
     out += ["}", "",
-            "# The month's construction into the slot (local_var:sr_sc_points), shared by the",
-            "# build mix; new strength comes at full.",
-            "sr_fl_build_at = {"]
+            "# The month's construction (local_var:sr_sc_points) into the ground reserve (6d,",
+            "# design § 15), shared by the build mix; it reaches orbit at full when launched.",
+            "sr_reserve_build = {"]
     for r in ROLES:
         out += ["\tif = {",
                 f"\t\tlimit = {{ sr_sc_mix_share_{r.key} > 0 }}",
                 f"\t\tset_local_variable = {{ name = sr_sc_share value = {{ value = local_var:sr_sc_points "
                 f"multiply = sr_sc_mix_share_{r.key} }} }}",
-                f"\t\tsr_fl_add_role = {{ N = $N$ ROLE = {r.key} AMOUNT = local_var:sr_sc_share }}",
+                f"\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+                f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
+                f"\t\tchange_variable = {{ name = sr_reserve_{r.key} add = local_var:sr_sc_share }}",
                 "\t}"]
+    out += ["}", "",
+            "# The whole reserve into the slot at Earth (a launch: sr_earth_orbit_effects.txt),",
+            "# at full, then its propellant, supply and marines to capacity, as a month",
+            "# docked at Earth would give it.",
+            "sr_fl_reserve_in_at = {"]
+    for r in ROLES:
+        out += ["\tif = {",
+                f"\t\tlimit = {{ sr_reserve_{r.key}_value > 0 }}",
+                f"\t\tsr_fl_add_role = {{ N = $N$ ROLE = {r.key} AMOUNT = var:sr_reserve_{r.key} }}",
+                "\t}",
+                f"\tif = {{ limit = {{ has_variable = sr_reserve_{r.key} }} remove_variable = sr_reserve_{r.key} }}"]
+    out += ["\tsr_fl_fill_at = { N = $N$ }",
+            "\tset_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }",
+            "}", "",
+            "# Console: 100 strength of each role into the reserve (te_debug_space_race.6).",
+            "sr_reserve_debug_fill = {"]
+    for r in ROLES:
+        out += [f"\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+                f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
+                f"\tchange_variable = {{ name = sr_reserve_{r.key} add = 100 }}"]
     out += ["}", "",
             "# Docked: each role regains local_var:sr_fl_share of its gap to full.",
             "sr_fl_repair_roles_at = {"]
@@ -680,8 +805,11 @@ def render_location_effects() -> list[str]:
     out += _chain(cases, else_body=["set_variable = { name = sr_fl_$N$_posture value = 2 }"])
     out += ["}", "",
             "# On arrival, contact for every world of ours at the location (slice 5's",
-            "# sr_site_contact_<key>), unless it is blockaded or occupied.",
-            "sr_fl_arrival_contact_at = {"]
+            "# sr_site_contact_<key>), unless it is blockaded or occupied, or (6d) our",
+            "# Earth is blockaded: then none of our colonies has contact (design § 15).",
+            "sr_fl_arrival_contact_at = {",
+            "\tif = {",
+            "\t\tlimit = { NOT = { sr_earth_blockaded = yes } }"]
     cases = []
     for lc in LOCATIONS[1:]:
         body = []
@@ -691,8 +819,8 @@ def render_location_effects() -> list[str]:
                      f"NOT = {{ has_global_variable = sr_site_blockaded_{k} }} }} "
                      f"set_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }} }}"]
         cases.append((f"var:sr_fl_$N$_loc = {lc.code}", body))
-    out += _chain(cases)
-    out += ["}", "",
+    out += _chain(cases, 2)
+    out += ["\t}", "}", "",
             "# The panel's Go: the picked destination, flown if it may be.",
             "sr_fl_go_at = {"]
     out += _chain([(f"has_variable = sr_fl_dest_pick_$N$ var:sr_fl_dest_pick_$N$ = {b.code} sr_fl_$N$_may_depart_{b.key} = yes",
@@ -841,12 +969,14 @@ def render_ai_effects() -> list[str]:
     out += _chain(cases)
     out += ["}", "",
             "# A fleet away from Earth with nothing to do there (no garrison due, no world of",
-            "# ours under threat) comes home when it can.",
+            "# ours under threat, and (6c) no enemy world it is attacking while its fleets",
+            "# there are a match for the enemy's) comes home when it can.",
             "sr_fl_ai_home_at = {",
             "\tif = {",
             f"\t\tlimit = {{ has_variable = sr_fl_$N$_loc NOT = {{ var:sr_fl_$N$_loc = {EARTH} }} sr_fl_$N$_may_depart_earth = yes }}"]
     cases = [(f"var:sr_fl_$N$_loc = {lc.code} NOT = {{ sr_loc_garrison_due_{lc.key} = yes }} "
-              f"NOT = {{ sr_fl_ai_threatened_{lc.key} = yes }}",
+              f"NOT = {{ sr_fl_ai_threatened_{lc.key} = yes }} "
+              f"NOT = {{ AND = {{ sr_loc_ai_target_{lc.key} = yes sr_fl_ai_holds_{lc.key} = yes }} }}",
               [f"sr_fl_dispatch = {{ N = $N$ LOC = earth CODE = {EARTH} }}"]) for lc in LOCATIONS[1:]]
     out += _chain(cases, 2)
     out += ["\t}", "}"]
@@ -872,37 +1002,54 @@ def render_combat() -> list[str]:
     out += _chain([(f"has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = {w.index}",
                     [f"sr_cb_charge_free = {{ N = $N$ KEY = {w.key} INDEX = {w.index} }}"]) for w in gss.SITES])
     out += ["}", "",
-            "# The target button: the next hostile world at the slot's location after its",
-            "# target (table order), else the first; none clears it.",
+            "# The target button (6c): interdicting, the next world here it may interdict,",
+            "# at the interdiction's price when its holder is a new one; else the next",
+            "# hostile world.",
             "sr_fl_step_target_at = {",
-            "\tset_local_variable = { name = sr_fl_tgt value = 0 }",
-            "\tif = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }",
-            "\tset_local_variable = { name = sr_fl_next value = 0 }"]
-    cases = []
-    for lc in LOCATIONS[1:]:
-        ws = worlds_at(lc.key)
-        body = []
-        # the first hostile world after the current target, else the first hostile world
-        for w in ws:
-            body.append(f"if = {{ limit = {{ local_var:sr_fl_next = 0 local_var:sr_fl_tgt < {w.index} "
-                        f"sr_site_hostile_target = {{ KEY = {w.key} }} }} set_local_variable = {{ name = sr_fl_next value = {w.index} }} }}")
-        for w in ws:
-            body.append(f"if = {{ limit = {{ local_var:sr_fl_next = 0 sr_site_hostile_target = {{ KEY = {w.key} }} }} "
-                        f"set_local_variable = {{ name = sr_fl_next value = {w.index} }} }}")
-        cases.append((f"var:sr_fl_$N$_loc = {lc.code}", body))
-    out += ["\tif = {", "\t\tlimit = { has_variable = sr_fl_$N$_loc }"]
-    out += _chain(cases, 2)
-    out += ["\t}",
             "\tif = {",
-            "\t\tlimit = { local_var:sr_fl_next > 0 }",
-            "\t\tset_variable = { name = sr_fl_$N$_target value = local_var:sr_fl_next }",
-            "\t\tsr_fl_charge_free_at = { N = $N$ }",
+            "\t\tlimit = { sr_fl_$N$_posture_value = 4 }",
+            "\t\tsr_fl_step_icpt_target_at = { N = $N$ }",
+            "\t\tsr_fl_charge_icpt_at = { N = $N$ }",
+            "\t\tsr_icpt_rebuild = yes",
             "\t}",
-            "\telse_if = {",
-            "\t\tlimit = { has_variable = sr_fl_$N$_target }",
-            "\t\tremove_variable = sr_fl_$N$_target",
+            "\telse = {",
+            "\t\tsr_fl_step_hostile_target_at = { N = $N$ }",
             "\t}",
             "}", ""]
+    out += _step_target("sr_fl_step_hostile_target_at", "sr_site_hostile_target",
+                        "The hostile step: the next hostile world at the slot's location after its",
+                        "target (table order), else the first; none clears it.",
+                        found=["\t\tsr_fl_charge_free_at = { N = $N$ }"],
+                        none=["\t\tremove_variable = sr_fl_$N$_target"])
+    out += _step_target("sr_fl_step_icpt_target_at", "sr_site_interdict_target",
+                        "The interdiction's step (6c): the next world at the slot's location it may",
+                        "interdict, else the first; none ends the interdiction (it stands off).",
+                        found=[],
+                        none=["\t\tsr_fl_end_icpt = { N = $N$ }"],
+                        none_guard="limit = { sr_fl_$N$_posture_value = 4 }")
+    out += ["# Interdicting the target world's holder begins its price (sr_cb_charge_interdict),",
+            "# once per fleet and target; checked monthly (sr_cb_check_icpt).",
+            "sr_fl_charge_icpt_at = {"]
+    out += _chain([(f"has_variable = sr_fl_$N$_target var:sr_fl_$N$_target = {w.index}",
+                    [f"sr_cb_charge_interdict = {{ N = $N$ KEY = {w.key} }}"]) for w in gss.SITES])
+    out += ["}", "sr_fl_check_icpt_at = {"]
+    out += _chain([("NOT = { has_variable = sr_fl_$N$_target }", ["sr_fl_end_icpt = { N = $N$ }"])]
+                  + [(f"var:sr_fl_$N$_target = {w.index}", [f"sr_cb_check_icpt = {{ N = $N$ KEY = {w.key} }}"])
+                     for w in gss.SITES])
+    out += ["}", "",
+            "# Country scope: our interdiction lists (sr_icpt_<loc>, the countries our",
+            "# fleets interdict at each location), rebuilt from every interdicting slot with",
+            "# the location records (sr_loc_rebuild) and on every posture or target order.",
+            "sr_icpt_rebuild = {"]
+    out += [f"\tif = {{ limit = {{ has_variable_list = sr_icpt_{lc.key} }} clear_variable_list = sr_icpt_{lc.key} }}"
+            for lc in LOCATIONS[1:]]
+    for n in range(1, SLOTS + 1):
+        out += ["\tif = {",
+                f"\t\tlimit = {{ has_variable = {var(n, 'loc')} has_variable = {var(n, 'target')} {var(n, 'posture_value')} = 4 }}"]
+        out += _chain([(f"var:{var(n, 'loc')} = {CODE[w.location]} var:{var(n, 'target')} = {w.index}",
+                        [f"sr_icpt_note = {{ KEY = {w.key} LOC = {w.location} }}"]) for w in gss.SITES], 2)
+        out += ["\t}"]
+    out += ["}", ""]
     for lc in LOCATIONS:
         k = lc.key
         ws = worlds_at(k)
@@ -929,7 +1076,7 @@ def render_combat() -> list[str]:
         out += ["}", f"sr_cb_worlds_after_{k} = {{"]
         for w in ws:
             out += [f"\tsr_site_assault_step = {{ KEY = {w.key} INDEX = {w.index} }}",
-                    f"\tsr_site_blockade_step = {{ KEY = {w.key} }}"]
+                    f"\tsr_site_blockade_step = {{ KEY = {w.key} LOC = {k} }}"]
         out += ["}", ""]
     out += ["# The seizer's marines spent at the world (local_var:sr_cb_pay), from its slots",
             "# closing in on it to seize, in slot order."]
@@ -944,6 +1091,106 @@ def render_combat() -> list[str]:
                     "\t\tchange_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }",
                     "\t}"]
         out.append("}")
+    return out
+
+
+def _step_target(name: str, trigger: str, *comment: str, found: list[str], none: list[str],
+                 none_guard: str = "limit = { has_variable = sr_fl_$N$_target }") -> list[str]:
+    """A target button's step: the next world at the slot's location after its
+    target that passes ``trigger`` (table order), else the first such."""
+    out = [f"# {line}" for line in comment]
+    out += [f"{name} = {{",
+            "\tset_local_variable = { name = sr_fl_tgt value = 0 }",
+            "\tif = { limit = { has_variable = sr_fl_$N$_target } set_local_variable = { name = sr_fl_tgt value = var:sr_fl_$N$_target } }",
+            "\tset_local_variable = { name = sr_fl_next value = 0 }"]
+    cases = []
+    for lc in LOCATIONS[1:]:
+        ws = worlds_at(lc.key)
+        body = []
+        for w in ws:
+            body.append(f"if = {{ limit = {{ local_var:sr_fl_next = 0 local_var:sr_fl_tgt < {w.index} "
+                        f"{trigger} = {{ KEY = {w.key} }} }} set_local_variable = {{ name = sr_fl_next value = {w.index} }} }}")
+        for w in ws:
+            body.append(f"if = {{ limit = {{ local_var:sr_fl_next = 0 {trigger} = {{ KEY = {w.key} }} }} "
+                        f"set_local_variable = {{ name = sr_fl_next value = {w.index} }} }}")
+        cases.append((f"var:sr_fl_$N$_loc = {lc.code}", body))
+    out += ["\tif = {", "\t\tlimit = { has_variable = sr_fl_$N$_loc }"]
+    out += _chain(cases, 2)
+    out += ["\t}",
+            "\tif = {",
+            "\t\tlimit = { local_var:sr_fl_next > 0 }",
+            "\t\tset_variable = { name = sr_fl_$N$_target value = local_var:sr_fl_next }",
+            *found,
+            "\t}",
+            "\telse_if = {",
+            f"\t\t{none_guard}",
+            *none,
+            "\t}",
+            "}", ""]
+    return out
+
+
+def render_ai_attack() -> list[str]:
+    """6c: the AI's offence at war (design § 14)."""
+    out = ["# ===== The AI's offence (6c; sr_fl_ai_attack, sr_fleet_combat_effects.txt) =====",
+           "# One order a month at most: to the first location (table order) with a world",
+           "# it may attack and none of its fleets there or on the way, the strongest of",
+           "# its docked fleets free of the defence that reaches and outmatches it",
+           "# (sr_fl_<n>_ai_attacks_<loc>).",
+           "sr_fl_ai_attack_all = {",
+           "\tset_local_variable = { name = sr_fl_ai_sent value = 0 }"]
+    for lc in LOCATIONS[1:]:
+        k = lc.key
+        out += ["\tif = {",
+                f"\t\tlimit = {{ local_var:sr_fl_ai_sent = 0 sr_loc_ai_target_{k} = yes NOT = {{ sr_fl_any_at_or_bound = {{ CODE = {lc.code} }} }} }}",
+                "\t\tset_local_variable = { name = sr_fl_best value = 0 }",
+                "\t\tset_local_variable = { name = sr_fl_n value = 0 }"]
+        for n in range(1, SLOTS + 1):
+            out += ["\t\tif = {",
+                    f"\t\t\tlimit = {{ {var(n, 'ai_free')} = yes {var(n, f'ai_attacks_{k}')} = yes {var(n, 'strength')} > local_var:sr_fl_best }}",
+                    f"\t\t\tset_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }}",
+                    f"\t\t\tset_local_variable = {{ name = sr_fl_n value = {n} }}",
+                    "\t\t}"]
+        out += _chain([(f"local_var:sr_fl_n = {n}", [f"sr_fl_dispatch = {{ N = {n} LOC = {k} CODE = {lc.code} }}",
+                                                     "set_local_variable = { name = sr_fl_ai_sent value = 1 }"])
+                       for n in range(1, SLOTS + 1)], 2)
+        out += ["\t}"]
+    out += ["}", "",
+            "# A slot at a location where we hold no threatened colony and there is a world",
+            "# it may attack: it closes in on the one of most worth (sr_site_ai_worth_<key>)",
+            "# to seize it when its marines exceed the world's garrison and militia, else it",
+            "# stands off and blockades. Never to destroy (design § 14).",
+            "sr_fl_ai_assault_at = {",
+            "\tif = {",
+            f"\t\tlimit = {{ has_variable = sr_fl_$N$_loc NOT = {{ var:sr_fl_$N$_loc = {EARTH} }} }}",
+            "\t\tset_local_variable = { name = sr_ai_tgt value = 0 }",
+            "\t\tset_local_variable = { name = sr_ai_need value = 0 }",
+            "\t\tset_local_variable = { name = sr_ai_best value = -1 }"]
+    cases = []
+    for lc in LOCATIONS[1:]:
+        body = []
+        for w in worlds_at(lc.key):
+            body += [f"if = {{ limit = {{ sr_site_ai_attack_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best }} "
+                     f"set_local_variable = {{ name = sr_ai_best value = sr_site_ai_worth_{w.key} }} "
+                     f"set_local_variable = {{ name = sr_ai_tgt value = {w.index} }} "
+                     f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }} }}"]
+        cases.append((f"var:sr_fl_$N$_loc = {lc.code} NOT = {{ sr_fl_ai_threatened_{lc.key} = yes }}", body))
+    out += _chain(cases, 2)
+    out += ["\t\tif = {",
+            "\t\t\tlimit = { local_var:sr_ai_tgt > 0 }",
+            "\t\t\tif = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }",
+            "\t\t\tif = {",
+            "\t\t\t\tlimit = { sr_fl_$N$_marines_value > local_var:sr_ai_need }",
+            "\t\t\t\tset_variable = { name = sr_fl_$N$_posture value = 3 }",
+            "\t\t\t\tset_variable = { name = sr_fl_$N$_target value = local_var:sr_ai_tgt }",
+            "\t\t\t}",
+            "\t\t\telse = {",
+            "\t\t\t\tset_variable = { name = sr_fl_$N$_posture value = 2 }",
+            "\t\t\t\tif = { limit = { has_variable = sr_fl_$N$_target } remove_variable = sr_fl_$N$_target }",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            "}"]
     return out
 
 
@@ -1016,7 +1263,7 @@ def render_effects() -> str:
              ""]
     for block in (render_dispatchers(), render_role_effects(), render_merge_detach(), render_location_effects(),
                   render_finders(), render_records(), render_ai_effects(), render_combat(), render_ai_defend(),
-                  render_debug()):
+                  render_ai_attack(), render_debug()):
         parts += block + [""]
     return "\n".join(parts)
 
@@ -1099,12 +1346,16 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ global_var:sr_loc_inbound_by_{k} ?= this }} value = 1 }}",
                 "}"]
     out += ["", "# Per location, the viewer's status there (6b): 1 a battle this month or last,",
-            "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us."]
+            "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of",
+            "# ours interdicted (blockaded by a country at peace with us), 5 we interdict;",
+            "# 6d, at Earth: 6 our Earth blockaded, 7 we blockade an enemy's."]
     for lc in LOCATIONS:
         k = lc.key
         ws = worlds_at(k)
-        ours = " ".join(f"AND = {{ global_var:sr_site_holder_{w.key} ?= this has_global_variable = sr_site_blockaded_{w.key} }}"
-                        for w in ws)
+        ours = " ".join(f"AND = {{ global_var:sr_site_holder_{w.key} ?= this has_global_variable = sr_site_blockaded_{w.key} "
+                        f"NOT = {{ has_global_variable = sr_site_interdicted_{w.key} }} }}" for w in ws)
+        ours_icpt = " ".join(f"AND = {{ global_var:sr_site_holder_{w.key} ?= this has_global_variable = sr_site_interdicted_{w.key} }}"
+                             for w in ws)
         theirs = " ".join(f"AND = {{ has_global_variable = sr_site_blockaded_{w.key} "
                           f"global_var:sr_site_holder_{w.key} ?= {{ has_war_with = prev }} }}" for w in ws)
         out += [f"sr_disp_loc_status_{k} = {{",
@@ -1113,11 +1364,19 @@ def render_display() -> str:
                 "{ value = te_history_month_index subtract = 1 } } value = 1 }"]
         if ws:
             out += [f"\telse_if = {{ limit = {{ OR = {{ {ours} }} }} value = 2 }}",
-                    f"\telse_if = {{ limit = {{ has_variable = sr_fl_at_{k} OR = {{ {theirs} }} }} value = 3 }}"]
+                    f"\telse_if = {{ limit = {{ OR = {{ {ours_icpt} }} }} value = 4 }}",
+                    f"\telse_if = {{ limit = {{ has_variable = sr_fl_at_{k} OR = {{ {theirs} }} }} value = 3 }}",
+                    f"\telse_if = {{ limit = {{ has_variable_list = sr_icpt_{k} any_in_list = {{ variable = sr_icpt_{k} "
+                    "is_country_alive = yes } } value = 5 }"]
+        if lc.code == EARTH:
+            out += ["\telse_if = { limit = { sr_earth_blockaded = yes } value = 6 }",
+                    "\telse_if = { limit = { has_variable = sr_fl_at_earth is_at_war = yes "
+                    "any_country = { has_war_with = prev sr_earth_blockaded = yes } } value = 7 }"]
         out.append("}")
     out += ["",
             "# Colony Defences (6b), per world: 1 while ours (or ours occupied), its integrity",
-            "# whole, its status (0 calm, 1 blockaded, 2 under assault, 3 occupied), and",
+            "# whole, its status (0 calm, 1 blockaded, 2 under assault, 3 occupied, 4",
+            "# interdicted, 6c), and",
             "# 1 while its occupier's capital snapshot is there to show."]
     for site in gss.SITES:
         k = site.key
@@ -1131,6 +1390,7 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 3 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_under_assault_{k} global_var:sr_site_under_assault_{k} >= "
                 "{ value = te_history_month_index subtract = 1 } } value = 2 }",
+                f"\telse_if = {{ limit = {{ has_global_variable = sr_site_interdicted_{k} }} value = 4 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_blockaded_{k} }} value = 1 }}",
                 "}",
                 f"sr_disp_def_occupier_{k} = {{",
@@ -1153,7 +1413,9 @@ def render_display() -> str:
     out += ["", "# Our fleets, for the section's empty note.",
             "sr_disp_fl_count = { value = sr_fl_count }",
             "", "# The build mix's weights (Space Command).",
-            *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES]]
+            *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES],
+            "", "# The ground reserve by role (6d; Space Command's Reserve hover).",
+            *[f"sr_disp_reserve_{r.key} = {{ value = sr_reserve_{r.key}_value }}" for r in ROLES]]
     return "\n".join(out) + "\n"
 
 
@@ -1164,7 +1426,8 @@ def render_custom_loc() -> str:
            "# its target world and its drive, by name; the notices' locations (a country",
            "# variable holding a code); each branch has_variable-guarded.",
            ""]
-    for name, variable in (("sr_fl_alert_loc_name", "sr_fl_alert_loc"), ("sr_battle_loc_name", "sr_battle_loc")):
+    for name, variable in (("sr_fl_alert_loc_name", "sr_fl_alert_loc"), ("sr_battle_loc_name", "sr_battle_loc"),
+                           ("sr_icpt_alert_loc_name", "sr_icpt_alert_loc")):
         out += [f"{name} = {{", "\ttype = country", "\trandom_valid = no", ""]
         for lc in LOCATIONS:
             out += ["\ttext = {", f"\t\ttrigger = {{ has_variable = {variable} var:{variable} = {lc.code} }}",
@@ -1285,6 +1548,7 @@ def _defence_row(site: gss.Site) -> list[str]:
     out += _override("def_blockaded_visible", f'visible = "[{_eq(status, 1)}]"')
     out += _override("def_assault_visible", f'visible = "[{_eq(status, 2)}]"')
     out += _override("def_occupied_visible", f'visible = "[{_eq(status, 3)}]"')
+    out += _override("def_interdicted_visible", f'visible = "[{_eq(status, 4)}]"')
     out += _override("def_occupier_context",
                      f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_occ_{k}').GetState]\"",
                      f'visible = "[{_eq(f"sr_disp_def_occupier_{k}", 1)}]"')
@@ -1306,6 +1570,10 @@ def _location_row(lc: glw.Location) -> list[str]:
     out += _override("loc_battle_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 1)}]"')
     out += _override("loc_blockaded_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 2)}]"')
     out += _override("loc_blockading_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 3)}]"')
+    out += _override("loc_interdicted_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 4)}]"')
+    out += _override("loc_interdicting_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 5)}]"')
+    out += _override("loc_earth_blockaded_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 6)}]"')
+    out += _override("loc_earth_blockading_visible", f'visible = "[{_eq(f"sr_disp_loc_status_{k}", 7)}]"')
     return out + ["\t\t}"]
 
 

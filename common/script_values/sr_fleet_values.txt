@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # SOLAR SYSTEM COLONIZATION — fleets: the numbers
 # ============================================================================
-# Design: docs/superpowers/specs/2026-10-26-solar-colonization-fleets-design.md
+# Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6 of the scope). Full Colonies only. Every number the fleets' script
 # reads is here; the per-slot and per-location values that read them are
 # generated (common/script_values/sr_fleets_generated.txt, from
@@ -87,9 +87,12 @@ sr_sc_rate = {
 sr_fleet_upkeep_points = { value = 10 }
 
 # Country scope. The upkeep's multiplier, set on the country before it is
-# applied to each Space Command building (sr_fl_upkeep_refresh).
+# applied to each Space Command building (sr_fl_upkeep_refresh). The ground
+# reserve (6d) counts: hulls kept on the ground cost the same as in orbit, so
+# holding them back saves nothing.
 sr_fleet_upkeep_units_value = {
 	value = sr_fl_strength_full_total
+	add = sr_reserve_total
 	divide = sr_fleet_upkeep_points
 }
 
@@ -195,6 +198,21 @@ sr_aut_destroyed_colony = { value = 0.2 }
 sr_free_assault_infamy = { value = 10 }
 sr_free_assault_dossier = { value = 10 }
 sr_free_seized_autonomy = { value = 60 }
+
+# ---- Interdiction in peace (design § 12, 6c) ---------------------------------------------------
+# When a fleet begins interdicting a country (per fleet and target): the
+# interdictor's infamy and UN case. Its target's casus belli (Cede Colony's
+# war goal free of infamy against it, 124_cede_colony.txt) lasts five years,
+# sr_interdiction_recent's days (sr_cb_charge_interdict).
+sr_interdiction_infamy = { value = 5 }
+sr_interdiction_dossier = { value = 10 }
+
+# ---- The AI's offence (design § 14, 6c) --------------------------------------------------------
+# A docked fleet attacks a location within this many months' leg, when its
+# strength is this many times the enemy's force there (its fleets, and its
+# worlds' Defences and hulls).
+sr_fl_ai_attack_months = { value = 12 }
+sr_fl_ai_attack_margin = { value = 1.5 }
 
 # ---- War support (design § 10) -------------------------------------------------------------
 # An occupied colony's weight, a beat: 0.1, rising by 0.15 as its people
@@ -386,4 +404,94 @@ sr_free_assault_infamy_cost = {
 sr_free_assault_dossier_cost = {
 	value = sr_free_assault_dossier
 	if = { limit = { sr_colony_convention_party = yes } multiply = 2 }
+}
+
+# ---- Earth orbit (design §§ 14-15, 6d), country scope ----------------------------------------------
+# The ground reserve and our fleets at Earth: what a Launch would put up
+# against the enemy there (the AI's launch rule, sr_fl_ai_reserve).
+sr_earth_reserve_and_ours = {
+	value = sr_reserve_total
+	if = { limit = { has_variable = sr_fl_at_earth } add = var:sr_fl_at_earth }
+}
+
+# ---- Ground-to-orbit batteries (design § 15, 6d), country scope -----------------------------------
+# Fire on hostile fleets at Earth a month: the methods' workforce-scaled state
+# modifier, summed over the states the country controls (§ 5.1: a battery in
+# an occupied state fires for no one). Staffing is in the number already, as
+# in barracks_training_values.txt's read of its state type.
+sr_battery_fire = {
+	value = 0
+	every_scope_state = {
+		limit = { sr_state_held_by_owner = yes }
+		add = modifier:state_orbital_battery_fire_add
+	}
+}
+
+# ... the part of it Kinetic Interceptors fire (one battery a state, so a
+# state's method is its battery's), which leaves debris.
+sr_battery_fire_kinetic = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			sr_state_held_by_owner = yes
+			any_scope_building = {
+				is_building_type = building_orbital_defense_battery
+				has_active_production_method = pm_orbital_battery_kinetic
+			}
+		}
+		add = modifier:state_orbital_battery_fire_add
+	}
+}
+
+# Low-orbit debris Ground Lasers sweep a month, only while the country is at
+# war with no one: the same sum of the sweep's state modifier. The debris
+# step takes every fleet power's from the low pool alone (sr_battery_sweep_step).
+sr_battery_sweep = {
+	value = 0
+	if = {
+		limit = { is_at_war = no }
+		every_scope_state = {
+			limit = { sr_state_held_by_owner = yes }
+			add = modifier:state_orbital_debris_sweep_add
+		}
+	}
+}
+
+# Low debris a point of Kinetic Interceptors' fire leaves at Earth.
+sr_battery_debris_low = { value = 0.02 }
+
+# The AI builds batteries only at war with a country that has fleets, up to
+# this many levels (design § 14; a first guess).
+sr_battery_ai_max_levels = { value = 5 }
+
+# Its battery levels, built and queued.
+sr_battery_queued_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { is_building_type = building_orbital_defense_battery }
+			add = level_after_queued_constructions
+		}
+	}
+}
+
+# Orbital fire support (design § 15): the margin by which our fleets at Earth
+# outmatch the hostile fleets there, min(1, (ours - theirs) / max(theirs,
+# sr_orbital_superiority_floor)); 0 with no fleet of ours there. The
+# multiplier of sr_orbital_superiority, so a full margin gives +10% offense
+# and +5% defense.
+sr_orbital_superiority_floor = { value = 10 }
+sr_orbital_superiority_margin = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_fl_at_earth }
+		value = var:sr_fl_at_earth
+		subtract = sr_loc_ai_enemy_fleets_earth
+		divide = {
+			value = sr_loc_ai_enemy_fleets_earth
+			min = sr_orbital_superiority_floor
+		}
+		max = 1
+		min = 0
+	}
 }

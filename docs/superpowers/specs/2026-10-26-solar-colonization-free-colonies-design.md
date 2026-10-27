@@ -1,7 +1,7 @@
 # Solar System Colonization, slice 5: autonomy, free colonies, abandonment, covert operations and colony life — design
 
 Drafted 2026-10-26. Slice 5 of the scope in
-`2026-10-25-solar-colonization-contest-scope.md` (§ 10: "Covert operations,
+`docs/superpowers/archive/specs/2026-10-25-solar-colonization-contest-scope.md` (§ 10: "Covert operations,
 free colonies (waiting and trade), autonomy, abandonment, colony life events
 (§§ 6.4–6.6). Simple becomes the default"), whose § Decisions and § 11 record
 the owner's calls; this design assumes them and the records of slices 0 to 4
@@ -72,9 +72,13 @@ actors with diplomacy of their own, and emigration by culture stay later
 
 **Unverified, with a self-check (§ 11):**
 
-- `create_pop = { culture = scope:x religion = scope:y size = N }` at run time in
-  a state. Nothing in the mod or the vanilla parse calls it outside history
-  files. Evacuees come home through it in batches of 1,000.
+- `create_pop` at run time in a state, then `change_pop_religion` and
+  `change_pop_culture` with a saved-scope target on the new pops. Evacuees come
+  home through it in batches of 1,000. (First written as `create_pop = { culture =
+  scope:x religion = scope:y }`, which fails load-time validation with "Missing
+  culture": `create_pop` reads only literal keys. The batches are now made as
+  vanilla's placeholder culture `promethean` and converted, 2026-10-26 log
+  triage.)
 
 ## 1. The record
 
@@ -187,7 +191,8 @@ Each held colony's row has an Abandon button (§ 9), which asks first
 (`space_race_events.93`, *Abandon <World>?*):
 
 - **Bring them home**: its people return to the capital in batches of 1,000
-  (`create_pop`, the culture and religion of the capital's largest pop), and the
+  (`create_pop`, then converted to the culture and religion of the capital's
+  largest pop), and the
   world is released, its modules lost. An outpost with no one in it is closed.
 - **Leave them to govern themselves** (1,000 people or more): a free colony, with
   ties 50.
@@ -269,9 +274,10 @@ a record says so in a `custom_tooltip` (`silent_variable_audit`).
 
 Added to `docs/testing/solar-colonies-playtest.md`:
 
-- **`colony_evacuation`**: the first evacuation logs the capital state's
-  population before and after the batches; OK when it rose by at least 90% of the
-  people sent home, BROKEN otherwise (fallback: the evacuees are lost, as a
+- **`colony_evacuation`**: the first evacuation logs the receiving state's
+  population before and after the batches, and the placeholder people left once
+  they are converted; OK when it rose by at least 90% of the people sent home and
+  none are left, BROKEN otherwise (fallback: the evacuees are lost, as a
   release always lost them).
 
 The play-test list adds what script can't see: the Colony Autonomy section and

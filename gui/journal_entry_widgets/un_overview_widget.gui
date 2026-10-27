@@ -675,6 +675,18 @@ types un_overview_widget_types
 								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_tpnw'), '(CFixedPoint)1' ) )]"
 							}
 						}
+						te_un_ov_agency = {
+							tooltip = "je_un_ov_agency_copuos_tt"
+							blockoverride "agency_texture" {
+								texture = "gfx/interface/icons/un_icons/agency_copuos.dds"
+							}
+							blockoverride "lit" {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_copuos'), '(CFixedPoint)1' )]"
+							}
+							blockoverride "unlit" {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_copuos'), '(CFixedPoint)1' ) )]"
+							}
+						}
 					}
 				}
 
