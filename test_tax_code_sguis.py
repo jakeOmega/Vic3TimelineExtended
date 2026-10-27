@@ -546,7 +546,7 @@ class SuccessorPreviewTest(unittest.TestCase):
         # commencement" (GUI audit TAX-17): How it works and With This Bill's hover say it.
         self.assertNotIn("te_tax_rv_unchanged", table)
         self.assertNotIn("te_tax_rv_unchanged", gui(REVIEW))
-        self.assertIn("from its commencement month", table["te_tax_rv_bill_tt"])
+        self.assertIn("until then it changes nothing", table["te_tax_rv_bill_tt"])
 
 
 if __name__ == "__main__":
