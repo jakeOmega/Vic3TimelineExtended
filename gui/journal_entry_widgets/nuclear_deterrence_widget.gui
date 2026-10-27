@@ -129,6 +129,11 @@ types nuclear_deterrence_widget_types
 			parentanchor = vcenter
 			elide = right
 			alwaystransparent = yes
+			### Underlined, since the row carries a tooltip (style rule 3). A row
+			### without one overrides this block empty.
+			block "label_format" {
+				default_format = "#tooltippable"
+			}
 			block "row_label" {}
 		}
 
@@ -204,6 +209,9 @@ types nuclear_deterrence_widget_types
 			using = fontsize_medium
 			parentanchor = vcenter
 			elide = right
+			block "label_format" {
+				default_format = "#tooltippable"
+			}
 			block "row_label" {}
 		}
 		textbox = {

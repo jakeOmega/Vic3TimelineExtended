@@ -394,7 +394,7 @@ types market_panel
 						}
 
 						blockoverride "tooltip" {
-							raw_tooltip = "[Goods.GetTextIcon] [Goods.GetNameNoFormatting]: [Market.GetExportedAmount(Goods.Self)|1*v] units (@money![Multiply_CFixedPoint(Market.GetExportedAmount(Goods.Self), Goods.GetBasePrice)|D])"
+							raw_tooltip = "[Goods.GetTextIcon] [Goods.GetNameNoFormatting]: [Market.GetExportedAmount(Goods.Self)|1*v] units (@money![Multiply_CFixedPoint(Goods.GetMarketPrice, Market.GetExportedAmount(Goods.Self))|D])"
 						}
 
 						blockoverride "pieslice" {

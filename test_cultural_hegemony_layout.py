@@ -519,9 +519,13 @@ class ValueColourTest(unittest.TestCase):
 
     def test_breakdown_values(self):
         loc = _loc()
-        for part in ("art", "prestige", "sol", "tech", "monuments", "megaprojects", "modifiers", "mult"):
+        for part in ("art", "prestige", "tech", "monuments", "megaprojects", "modifiers", "mult"):
             with self.subTest(part=part):
                 self.assertTrue(loc[f"je_ch_widget_bd_{part}_value"].startswith("#G "))
+        # Standard of living can be either sign (a country below the world average loses pull), so its value
+        # carries the signed, sign-coloured format rather than a fixed green.
+        self.assertIn("|+=1]", loc["je_ch_widget_bd_sol_value"])
+        self.assertNotIn("#G", loc["je_ch_widget_bd_sol_value"])
         for part in ("infamy", "instability"):
             with self.subTest(part=part):
                 self.assertTrue(loc[f"je_ch_widget_bd_{part}_value"].startswith("#R "))
