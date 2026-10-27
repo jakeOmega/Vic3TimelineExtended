@@ -436,7 +436,7 @@ gw_top_emitters_refresh = {
 	}
 }
 
-# Scope: the viewer. Display variables only the slot rows read.
+# Scope: the viewer. The display variables the slot rows read before the list.
 gw_top_emitters_drop_slots = {
 	if = {
 		limit = { has_variable = gw_emitter_1 }

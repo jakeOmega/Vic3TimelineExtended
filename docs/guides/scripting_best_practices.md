@@ -12,7 +12,6 @@ When several scripted effects, triggers, or script values are structurally ident
 - `st_res_rebuild_good_flow_modifiers_effect` in `common/scripted_effects/st_res_effects.txt` uses `$GOOD$` behind explicit grain/ammunition/oil wrapper effects while keeping the hub scope bridge in the outer orchestrator.
 - `covert_ops_type_below_cap` in `common/scripted_triggers/covert_warfare_triggers.txt` uses `$TYPE$`.
 - `ch_apply_primary_or_fallback_movement_pressure` in `common/scripted_effects/cultural_hegemony_effects.txt` uses `$PRIMARY$`, `$FALLBACK_1$`, `$FALLBACK_2$`, `$MODIFIER$`, `$FALLBACK_MODIFIER$`, `$MONTHS$`, `$DECAYING$` and `$MULT$` (the `add_modifier` multiplier: `1`, or a script value name such as `ch_model_pressure_mult`). `ch_reset_model_bucket` / `ch_add_to_model_bucket` / `ch_finish_model_bucket` in the same file substitute `$MODEL$` into global-variable **names** (`ch_ideology_$MODEL$_share`) — parameter substitution is textual, so it works inside a `name =`.
-- `store_trade_partner_data` in `common/scripted_effects/trade_partner_effects.txt` uses `$RANK$`.
 - `generic_wonder_construction_base` in `common/scripted_effects/extra_effects.txt` uses `$WONDER$`, `$MAX_LEVEL$` and `$REBUILD$` (a `yes`/`no` read through `always = $REBUILD$`) to drive 7 wonder construction effects, with a 19-branch level-up chain for the unowned wonders and a remove-and-rebuild at level + 1 for the owned ones. See "Numeric placeholder substitution into trigger guards" below and "Building Lifecycle Effect Gotchas".
 
 ### Numeric placeholder substitution into trigger guards
@@ -2446,8 +2445,8 @@ Scope gotchas, all hit while building this feature (verified against `debug.log`
 
 There is no vanilla all-markets datamodel inside `market_panel` that can be filtered
 per item (compact_chart can't hide zero rows), so partner charts need pre-filtered/
-sorted variable lists built in script. Worked example: the Top Trade Partners goods
-tooltip + Import/Export Partners charts in `gui/market_panel.gui` /
+sorted variable lists built in script. Worked example: the Top Trade Partners rows (a
+datamodel over `te_tp_top_markets`), their goods tooltip and the Import/Export Partners charts in `gui/market_panel.gui` /
 `gui/te_trade_partner_tooltips.gui` + `common/scripted_effects/trade_partner_effects.txt`
 (drawn from the `alcah/victoria3-tradepartners` mod).
 
