@@ -60,12 +60,12 @@ GUIDE = "docs/guides/gui_modding_guide.md"
 SCHEMA_DOC = "docs/systems/tax_code_schema.md"
 
 TAB = "te_tax_code"
-# The live sections, in order (plan Task 8 adds all but the first). The
-# draft's summary sits in the composer's "draft_summary" block after the
-# workbench; the Budget tab empties that block and shows the summary in its
-# fixed_bottom instead.
-STATUS = ["te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_section",
-          "te_tax_politics_section", "te_tax_pending_section", "te_tax_obligations_section"]
+# The live sections, in order: the ones to watch first, the editor last (GUI
+# audit TAX-14; the owner, 2026-10-27). The draft's summary sits in the
+# composer's "draft_summary" block after the workbench; the Budget tab empties
+# that block and shows the summary in its fixed_bottom instead.
+STATUS = ["te_tax_politics_section", "te_tax_pending_section", "te_tax_obligations_section",
+          "te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_section"]
 # Collapse flags, each named for its default (style guide rule 7).
 FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
@@ -258,10 +258,21 @@ class TabStripTest(unittest.TestCase):
     def test_the_native_control_gates_stay_outside_the_tab(self):
         # The 20 native-control gates (plan Task 9, test_tax_code_bypass.py) sit on
         # vanilla's buttons, never in the Tax Code tab's MOD blocks: the five tax
-        # levels, the consumption-tax "+" (the goods gate) and the 14 tariffs.
-        self.assertEqual(self.text.count("te_tax_native_controls_sgui"), 5)
-        self.assertEqual(self.text.count("te_tax_native_goods_controls_sgui"), 1)
-        self.assertEqual(self.text.count("te_tax_native_tariff_controls_sgui"), 14)
+        # levels, the consumption-tax "+" (the goods gate) and the 14 tariffs. Each
+        # greys its control in `enabled` and says why first in its tooltip, as the
+        # locked line and the break after it (GUI audit TAX-11).
+        for gate, count, reason in (("te_tax_native_controls_sgui", 5, "level"),
+                                    ("te_tax_native_goods_controls_sgui", 1, "goods"),
+                                    ("te_tax_native_tariff_controls_sgui", 14, "tariff")):
+            with self.subTest(gate=gate):
+                self.assertEqual(len(re.findall(rf'enabled = "[^"\n]*{gate}', self.text)), count)
+                tooltips = re.findall(rf'tooltip = "[^"\n]*{gate}[^"\n]*"', self.text)
+                self.assertEqual(len(tooltips), count)
+                for tooltip in tooltips:
+                    self.assertEqual(tooltip.count(gate), 2)
+                    self.assertIn(f"'te_tax_empty', 'te_tax_tt_native_locked_{reason}' )", tooltip)
+                    self.assertIn("'te_tax_empty', 'te_tt_break' )", tooltip)
+                self.assertEqual(self.text.count(gate), 3 * count)
         self.assertNotIn("te_tp_native_controls_sgui", self.text)
         for region in self.regions:
             self.assertNotIn("te_tp_", region)
@@ -334,11 +345,26 @@ class FooterTest(unittest.TestCase):
         self.assertEqual(text.count('blockoverride "fixed_bottom"'), 1)
 
     def test_gate_and_contents(self):
+        """The draft's summary while a draft is open, else the bill's (GUI audit
+        TAX-2); each summary gates itself."""
         self.assertIn("InformationPanel.IsTabSelected('te_tax_code')", self.region)
         self.assertIn("GetScriptedGui('te_budget_tax_tab_sgui').IsShown(", self.region)
-        self.assertIn("GetScriptedGui('te_tax_show_draft_sgui').IsShown(", self.region)
-        self.assertEqual(re.findall(r"\b(te_tax_\w+) = \{", self.region), ["te_tax_draft_summary"])
+        self.assertIn("Or( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), "
+                      "GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )",
+                      self.region)
+        self.assertEqual(re.findall(r"\b(te_tax_\w+) = \{", self.region), ["te_tax_draft_summary", "te_tax_bill_summary"])
         self.assertNotIn("JournalEntry", self.region)
+
+    def test_the_bill_summary_needs_no_journal_entry_and_yields_to_the_draft(self):
+        body = type_body(gui(POLITICS), "te_tax_bill_summary")
+        self.assertNotIn("JournalEntry", body)
+        self.assertIn("visible = \"[And( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( "
+                      "GetPlayer.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( "
+                      "GetPlayer.MakeScope ).End ) ) )]\"", body)
+        for name in ("te_tax_cmd_pass_sgui", "te_tax_cmd_force_through_sgui", "te_tax_cmd_withdraw_sgui"):
+            self.assertIn(f"GetScriptedGui('{name}').Execute(", body)
+        force = brace_block(body, body.rindex("button = {", 0, body.index("te_tax_cmd_force_through_sgui")))
+        self.assertIn("visible = \"[Not( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown(", force)
 
     def test_the_summary_type_needs_no_journal_entry(self):
         body = type_body(gui(WORKBENCH), "te_tax_draft_summary")
@@ -577,14 +603,24 @@ class NameWidthTest(unittest.TestCase):
         customs_line = type_body(self.review, "te_tax_review_customs_line")
         self.assert_fits(gen.customs_catalog(), self.width(customs_line, r"max_width = (\d+)"))
 
-    def test_level_names_fit_their_cell(self):
-        cell = self.width(type_body(self.workbench, "te_tax_cu_level_text"), r"max_width = (\d+)")
-        for suffix in gen.CUSTOMS_LEVEL_SUFFIX.values():
-            with self.subTest(suffix=suffix):
-                self.assertLessEqual(len(self.name(f"te_tax_cu_lv_{suffix}")) * self.PX, cell)
-        # Each direction's level cell is the text's width, in the row and in the review.
+    def test_levels_are_vanilla_tariff_icons_with_their_word_on_hover(self):
+        """GUI audit TAX-26: each level is vanilla's own tariff icon (the Market
+        panel's and set_level_bar's), one per level, with its word on hover; each
+        direction's level cell holds the icon, in the row and in the review."""
+        icon = type_body(self.workbench, "te_tax_cu_level_icon")
+        size = int(re.search(r"size = \{ (\d+) \1 \}", icon).group(1))
+        rows = gui(GEN_ROWS)
+        budget = gui(BUDGET)
+        for idx, suffix in gen.CUSTOMS_LEVEL_SUFFIX.items():
+            texture = f"gfx/interface/icons/trade_icons/{gen.CUSTOMS_LEVEL_TEXTURES[idx]}.dds"
+            with self.subTest(level=idx):
+                self.assertIn(texture, budget)
+                self.assertTrue(self.name(f"te_tax_cu_lv_{suffix}"))
+                self.assertIn(f'texture = "{texture}" tooltip = "te_tax_cu_lv_{suffix}"', rows)
+        self.assertNotIn("te_tax_cu_level_text", rows)
+        cell = size + 4
         self.assertEqual(type_body(self.workbench, "te_tax_customs_row").count(f"size = {{ {cell} 26 }}"), 2)
-        self.assertEqual(type_body(self.review, "te_tax_review_customs_line").count(f"size = {{ {cell} 24 }}"), 2)
+        self.assertEqual(type_body(self.review, "te_tax_review_customs_line").count(f"size = {{ {cell} 26 }}"), 2)
 
     def test_every_good_name_cell_has_the_name_as_its_hover(self):
         rows = gui(GEN_ROWS)
@@ -607,6 +643,293 @@ class NameWidthTest(unittest.TestCase):
             with self.subTest(name=name):
                 cells = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\s*size = \{ (\d+) ", body)]
                 self.assertEqual(sum(cells) + 4 * (len(cells) + 1), 480, cells)
+
+
+# ---------------------------------------------------------------------------
+# Type sizes and width budgets (GUI audit TAX-15; style guide rule 3)
+# ---------------------------------------------------------------------------
+
+# The panel's own sizes (the te_tax_fontsize_* templates at the head of the
+# overview file), in GUI units a character: the serif at 0.5 a point (8.5 at
+# 17, 10 at 20) and the overview's 16-point tooltip face at 8.6, plus 10%: the
+# budget test_banking_layout.WidthBudgetTest and test_seabed_layout use.
+_FONT_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template te_tax_fontsize_(\w+) \{\s*fontsize = (\d+)", raw(OVERVIEW))}
+UNITS = {"row": 10.0 / 20 * _FONT_SIZES.get("row", 17), "heading": 10.0 / 20 * _FONT_SIZES.get("heading", 20),
+         "overview": 8.6 / 16 * _FONT_SIZES.get("overview", 16)}
+MARGIN = 1.1
+# What a number prints at its widest, by its format and the value it reads.
+_FORMATS = {"%0": "100%", "%1": "12.5%", "+%0": "+50%", "+%1": "+12.5%", "2": "1.50", "3": "1.200",
+            "+2": "+0.50", "+3": "+0.150", "+0": "+50", "=+0": "+100", "K": "99.9K", "+K": "+99.9K",
+            "+=K": "+99.9K", "Kv": "99.9K", "D": "99.9"}
+
+
+# Values with a known ceiling: the passage threshold is the rule's (te_tax_passage_share,
+# 50%); there are eight scored groups, four promise slots, eight parts a draft can need
+# to accept and a version or a count of two digits.
+_BY_NAME = {"te_tax_view_passage_share": "50%", "te_tax_view_offers_open": "8", "te_tax_view_obl_failing": "4",
+            "te_tax_view_obl_binding": "4", "te_tax_view_obl_pending": "4", "te_tax_view_dr_rebase_count": "8"}
+
+
+def _number(name, fmt):
+    if name in _BY_NAME:
+        return _BY_NAME[name]
+    if name.endswith("_y"):
+        return "1840"
+    if name.endswith("_mo"):
+        return "12"
+    if fmt in _FORMATS:
+        return _FORMATS[fmt]
+    return "99"
+
+
+class WidthBudgetTest(unittest.TestCase):
+    """Every fixed-width cell of the Tax Code panels fits the longest text it
+    can show at its font: no label, value, button or overview word ends in
+    "..." (style guide rule 3). Widths and fonts are read from the markup, so a
+    narrower cell or a bigger template fails here."""
+
+    @classmethod
+    def setUpClass(cls):
+        vanilla = json.loads((ROOT / "vanilla_parsed" / "localization_english.json").read_text(encoding="utf-8"))
+        cls.loc = dict(vanilla)
+        cls.loc.update(loc())
+        custom = {}
+        for path in sorted((ROOT / "common" / "customizable_localization").glob("*.txt")):
+            text = path.read_text(encoding="utf-8-sig")
+            for match in re.finditer(r"(?m)^(\w+) = \{", text):
+                body = brace_block(text, match.end() - 1)
+                custom[match.group(1)] = re.findall(r"localization_key = (\w+)", body)
+        cls.custom = custom
+        cls.files = {path: gui(path) for path in NEW_GUI}
+
+    def shown(self, key, depth=0):
+        """The widest text `key` can show: splices, concepts and customizable
+        localizations at their longest, each number at its widest, formatting
+        and icons stripped."""
+        value = self.loc.get(key)
+        self.assertIsNotNone(value, key)
+        self.assertLess(depth, 8, key)
+        return self._text(value, depth)
+
+    def _text(self, v, depth):
+        v = re.sub(r"\$(\w+)\$", lambda m: self.shown(m.group(1), depth + 1), v)
+        v = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", lambda m: self._text(m.group(1), depth + 1), v)
+        v = re.sub(r"\[(concept_\w+)\]", lambda m: self.shown(m.group(1), depth + 1), v)
+
+        def custom(m):
+            return max((self.shown(k, depth + 1) for k in self.custom[m.group(1)]), key=len)
+        v = re.sub(r"\[[^\[\]]*GetCustom\('(\w+)'\)[^\[\]]*\]", custom, v)
+
+        def select(m):
+            return max((self.shown(k, depth + 1) for k in re.findall(r"'(\w+)'", m.group(0))
+                        if k in self.loc and not k.startswith("te_tax_view")), key=len, default="")
+        v = re.sub(r"\[SelectLocalization\((?:[^\[\]])*\]", select, v)
+        v = re.sub(r"\[InterestGroup\.GetName\]", "Petite Bourgeoisie", v)
+
+        def number(m):
+            name = re.findall(r"ScriptValue\('(\w+)'\)", m.group(0))
+            fmt = m.group(1) if m.group(1) is not None else ""
+            return _number(name[-1] if name else "", fmt)
+        v = re.sub(r"\[(?:[^\[\]|]|\[[^\[\]]*\])*(?:\|([^\]]*))?\]", number, v)
+        v = re.sub(r"#[A-Za-z_]+(?:;\S*)? ", "", v).replace("#!", "")
+        v = re.sub(r"@\w+!", "", v)
+        return v.replace("\\n", "")
+
+    def fits(self, key, cell):
+        width, font = cell
+        text = self.shown(key)
+        need = len(text) * UNITS[font] * MARGIN
+        self.assertLessEqual(need, width, f"{key} shows {text!r}: {need:.0f} units in a {width} {font} cell")
+
+    def keys_in(self, expression):
+        """The loc keys a text expression can print: the key itself, or a
+        SelectLocalization's quoted options."""
+        if not expression.startswith("["):
+            return [expression]
+        return [k for k in re.findall(r"'(\w+)'", expression) if k in self.loc]
+
+    def cell(self, body, anchor):
+        """(width, font) of the textbox holding `anchor` in `body`."""
+        at = body.index(anchor)
+        start = body.rindex("textbox = {", 0, at)
+        box = brace_block(body, start)
+        width = (re.search(r"max_width = (\d+)", box) or re.search(r"maximumsize = \{ (\d+)", box)
+                 or re.search(r"size = \{ (\d+)", box))
+        font = re.search(r"using = te_tax_fontsize_(\w+)", box)
+        self.assertIsNotNone(width, anchor)
+        self.assertIsNotNone(font, anchor)
+        return int(width.group(1)), font.group(1)
+
+    def type_cell(self, path, typ, block):
+        return self.cell(type_body(self.files[path], typ), f'block "{block}"')
+
+    def instances(self, typ):
+        """Every `typ = { ... }` instance body across the panels (not the type)."""
+        out = []
+        for path, text in self.files.items():
+            for match in re.finditer(rf"(?<![\w.]){typ} = \{{", text):
+                if text[max(0, match.start() - 5):match.start()].endswith("type "):
+                    continue
+                out.append(brace_block(text, match.end() - 1))
+        return out
+
+    def overrides(self, body, block):
+        """The text expressions of `blockoverride "<block>" { text = "..." }` in `body`."""
+        return re.findall(rf'blockoverride "{block}" \{{[^{{}}]*?\btext = "([^"]+)"', body)
+
+    def check_rows(self, typ, blocks):
+        rows = self.instances(typ)
+        self.assertTrue(rows, typ)
+        for name, cell in blocks.items():
+            for body in rows:
+                for expression in self.overrides(body, name):
+                    for key in self.keys_in(expression):
+                        with self.subTest(row=typ, block=name, key=key):
+                            self.fits(key, cell)
+
+    def test_type_sizes_are_the_templates(self):
+        self.assertEqual(_FONT_SIZES, {"row": 17, "heading": 20, "overview": 16})
+        for path, text in self.files.items():
+            with self.subTest(path=path):
+                self.assertNotRegex(text, r"using = fontsize_")
+        # Every button with a label sets the row font, as Banking's do.
+        for path, text in self.files.items():
+            for match in re.finditer(r"(?<![\w.])button = \{", text):
+                body = brace_block(text, match.end() - 1)
+                with self.subTest(path=path, button=body[:60]):
+                    self.assertIn("using = te_tax_fontsize_row", body)
+
+    def test_overview_cells(self):
+        """Banking's cell, its 154 column at the overview's 16 (rule 4)."""
+        cells = self.instances("te_banking_ov_cell")
+        self.assertGreaterEqual(len(cells), 11)
+        for name in ("te_tax_ov_word", "te_tax_ov_fig"):
+            body = type_body(self.files[OVERVIEW], name)
+            self.assertIn("using = te_tax_fontsize_overview", body)
+            self.assertIn("max_width = 154", body)
+        for body in cells:
+            self.assertIn("size = { 238 70 }", body)
+            self.assertRegex(body, r'blockoverride "caption_width" \{\s*max_width = 154')
+            texts = self.overrides(body, "caption") + re.findall(r'te_tax_ov_(?:word|fig) = \{\s*text = "([^"]+)"', body)
+            self.assertGreaterEqual(len(texts), 2, body[:80])
+            for expression in texts:
+                for key in self.keys_in(expression):
+                    with self.subTest(key=key):
+                        self.fits(key, (154, "overview"))
+
+    def test_table_rows(self):
+        self.check_rows("te_tax_value_row", {
+            "row_label": self.type_cell(OVERVIEW, "te_tax_value_row", "row_label"),
+            "row_value": self.type_cell(OVERVIEW, "te_tax_value_row", "row_value")})
+        self.check_rows("te_tax_rate_row", {
+            "row_label": self.type_cell(OVERVIEW, "te_tax_rate_row", "row_label"),
+            "row_rate": self.type_cell(OVERVIEW, "te_tax_rate_row", "row_rate"),
+            "row_sunset": self.type_cell(OVERVIEW, "te_tax_rate_row", "row_sunset")})
+        self.check_rows("te_tax_condition_row", {
+            "row_label": self.type_cell(POLITICS, "te_tax_condition_row", "row_label"),
+            "row_value": self.type_cell(POLITICS, "te_tax_condition_row", "row_value"),
+            "row_mark": self.type_cell(POLITICS, "te_tax_condition_row", "row_mark")})
+        self.check_rows("te_tax_ig_reason_row", {
+            "row_label": self.type_cell(POLITICS, "te_tax_ig_reason_row", "row_label"),
+            "row_value": self.type_cell(POLITICS, "te_tax_ig_reason_row", "row_value")})
+        self.check_rows("te_tax_sunset_row", {
+            "row_label": self.type_cell(WORKBENCH, "te_tax_sunset_row", "row_label"),
+            "row_value": self.type_cell(WORKBENCH, "te_tax_sunset_row", "row_value")})
+        self.check_rows("te_tax_estimate_row", {
+            block: self.type_cell(REVIEW, "te_tax_estimate_row", block)
+            for block in ("est_label", "est_law", "est_bill", "est_delta")})
+        # The committed share beside its bar, in the first condition row.
+        politics = self.files[POLITICS]
+        self.fits("te_tax_pol_bar_value", self.cell(politics, '"te_tax_pol_bar_value"'))
+
+    def test_instrument_rows(self):
+        """The workbench's taxes and reliefs and the light code's rows share one row type."""
+        cells = {block: self.type_cell(WORKBENCH, "te_tax_instrument_row", block)
+                 for block in ("row_label", "row_law", "row_draft", "row_delta")}
+        self.check_rows("te_tax_instrument_row", cells)
+        for typ, path, keys in (("te_tax_instrument_head", WORKBENCH, ("te_tax_wb_col_law", "te_tax_wb_col_draft",
+                                                                       "te_tax_wb_col_change")),
+                                ("te_tax_light_head", LIGHT_GUI, ("te_tax_lt_col_range", "te_tax_lt_col_rate",
+                                                                   "te_tax_lt_col_step"))):
+            body = type_body(self.files[path], typ)
+            for key in keys:
+                with self.subTest(head=key):
+                    self.fits(key, self.cell(body, f'"{key}"'))
+        # the heads sit over the rows' cells
+        row = type_body(self.files[WORKBENCH], "te_tax_instrument_row")
+        widths = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\s*size = \{ (\d+) ", row)]
+        for typ, path in (("te_tax_instrument_head", WORKBENCH), ("te_tax_light_head", LIGHT_GUI)):
+            head = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\s*size = \{ (\d+) ", type_body(self.files[path], typ))]
+            with self.subTest(head=typ):
+                self.assertEqual(head[:4] + head[5:], widths[:4] + widths[4:])
+                self.assertEqual(head[4], 22 + 4 + 22)
+
+    def test_goods_and_customs_names(self):
+        """Every catalog good's name in its cell; a name a font draws wider has
+        itself on hover (NameWidthTest)."""
+        for typ, path, name, goods in (("te_tax_good_row", WORKBENCH, "good_name", gen.consumption_catalog()),
+                                        ("te_tax_customs_row", WORKBENCH, "good_name", gen.customs_catalog()),
+                                        ("te_tax_review_customs_line", REVIEW, "good_name", gen.customs_catalog()),
+                                        ("te_tax_review_line", REVIEW, "line_label", gen.consumption_catalog())):
+            cell = self.type_cell(path, typ, name)
+            for good in goods:
+                with self.subTest(row=typ, good=good):
+                    self.fits(good, cell)
+        good_row = type_body(self.files[WORKBENCH], "te_tax_good_row")
+        for key in ("te_tax_wb_good_taxed", "te_tax_wb_good_untaxed", "te_tax_wb_good_taxed_changed"):
+            self.fits(key, self.cell(good_row, 'block "good_law"'))
+            self.fits(key, self.cell(good_row, 'block "good_draft"'))
+        for key in ("te_tax_wb_cu_cat_staple", "te_tax_wb_cu_cat_industrial", "te_tax_wb_cu_cat_luxury",
+                    "te_tax_wb_cu_cat_military"):
+            self.assertIn(f'te_tax_wb_goods_heading = {{ text = "{key}" }}', gui(GEN_ROWS))
+
+    def test_interest_group_card(self):
+        card = type_body(self.files[POLITICS], "te_tax_ig_card")
+        for ig in gen.IGS:
+            with self.subTest(ig=ig):
+                self.fits(f"ig_{ig}", self.cell(card, '"te_tax_ig_name"'))
+        self.assertIn('tooltip = "te_tax_ig_name"', card)
+        self.fits("te_tax_ig_clout", self.cell(card, '"te_tax_ig_clout"'))
+        self.fits("te_tax_ig_score", self.cell(card, '"te_tax_ig_score"'))
+        for n in range(1, 6):
+            self.fits(f"te_tax_ig_stance_{n}", self.cell(card, "'te_tax_ig_stance_1'"))
+        # A promise's group, in its row (the rest wraps).
+        row = type_body(self.files[POLITICS], "te_tax_obligation_row")
+        for ig in gen.IGS:
+            with self.subTest(promise_ig=ig):
+                self.fits(f"ig_{ig}", self.cell(row, 'block "obl_ig"'))
+        for name in ("obl_what", "obl_state"):
+            box = brace_block(row, row.rindex("textbox = {", 0, row.index(f'block "{name}"')))
+            self.assertIn("multiline = yes", box)
+            self.assertNotIn("elide", box)
+
+    def test_relief_states_history_and_labels(self):
+        row = type_body(self.files[WORKBENCH], "te_tax_relief_state_row")
+        for key in ("te_tax_wb_relief_state_named", "te_tax_wb_relief_state_dropped"):
+            self.fits(key, self.cell(row, 'block "state_status"'))
+        self.assertIn('tooltip = "te_tax_wb_relief_state_name"', row)
+        history = type_body(self.files[OVERVIEW], "te_tax_history_row")
+        for i in range(1, HISTORY_SIZE + 1):
+            self.fits(f"te_tax_hist_version_{i}", self.cell(history, 'block "row_version"'))
+            self.fits(f"te_tax_hist_date_{i}", self.cell(history, 'block "row_date"'))
+        label = type_body(self.files[OVERVIEW], "te_tax_goods_icons_label")
+        width = int(re.search(r"maximumsize = \{ (\d+)", label).group(1))
+        for key in ("te_tax_pk_goods_taxed", "te_tax_pk_goods_exempt"):
+            self.fits(key, (width, "row"))
+
+    def test_buttons(self):
+        """A button's label fits its width, less a little padding."""
+        for path, text in self.files.items():
+            for match in re.finditer(r"(?<![\w.])button = \{", text):
+                body = brace_block(text, match.end() - 1)
+                size = re.search(r"size = \{ (\d+) \d+ \}", body)
+                label = re.search(r'\btext = "([^"]+)"', body)
+                if not size or not label:
+                    continue
+                for key in self.keys_in(label.group(1)):
+                    with self.subTest(path=path, button=key):
+                        self.fits(key, (int(size.group(1)) - 8, "row"))
 
 
 class FlagTest(unittest.TestCase):

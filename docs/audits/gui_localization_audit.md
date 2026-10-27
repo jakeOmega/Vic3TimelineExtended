@@ -24,7 +24,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Slice | Detail file | Findings | Loc fixes applied | Issue |
 |---|---|---|---|---|
 | Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 (19 done in the wave, 2 needed no more) | 14 | #1203 |
-| Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | #1204 |
+| Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 (23 done, TAX-21 in part, 2 needed no more) | 30 | #1204 |
 | United Nations | [`un.md`](gui_audit/un.md) | 26 (25 done, UN-15 in part) | 18 | #1205 |
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done; COV-12's optional network table deferred) | 39 | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 (all done, 2026-10-27 wave; GW-12 has placeholder art) | 40 | #1207 |
@@ -222,34 +222,34 @@ Top priorities: the Monetary Policy row tooltips are essays that open with their
 
 Top priorities: an overview of each process's status (TAX-1); the bill's buttons under its conditions, with a pinned footer on the Budget tab (TAX-2); a blocked draft's fix shown where the player is (TAX-3); the revenue estimate in the draft summary and as a table (TAX-4); the held data never drawn: taxed goods, relief states, "in force since" (TAX-12, TAX-20); greyed native Budget controls saying why (TAX-11).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| TAX-1 | Overview lists metadata, not the actionable state of each process | spread-out/redundant, hidden info, style | large |
-| TAX-2 | Pass / Revise / Withdraw / Force Through sit below every interest-group card | spread-out/redundant | medium |
-| TAX-3 | "Changed Since Drafted" and its Accept buttons are only in the collapsed Review (loc part done) | hidden info | medium |
-| TAX-4 | Revenue: no figure in the summary, and the estimate is written as sentences | spread-out/redundant, list | medium |
-| TAX-5 | The committed share is shown twice, one above the other | spread-out/redundant | medium |
-| TAX-6 | Interest-group cards: full cards for marginal groups, zero rows, no icon | spread-out/redundant, style | medium |
-| TAX-7 | Live Bill section: teaching notes and a disclaimer repeated on every card (loc part done) | over-explaining | quick–medium |
-| TAX-8 | The offer's hover is a six-sentence paragraph that duplicates How it works (loc part done) | over-explaining | quick |
-| TAX-9 | Command tooltips restate the modifier lines the engine prints under them (loc part done) | over-explaining, style | quick |
-| TAX-10 | Click instructions repeated on every row's hover, under an intro that already says them (loc part done) | over-explaining | quick |
-| TAX-11 | Greyed vanilla Budget controls don't say why | hidden info | medium |
-| TAX-12 | Held data never drawn: taxed goods, enacted relief states, a passed bill's relief | hidden info, list | medium |
-| TAX-13 | Goods Catalog is 39 ungrouped rows in key order, with no icons | list, style | medium |
-| TAX-14 | Section order puts the long editing workbench above the bill under debate | spread-out/redundant | medium |
-| TAX-15 | The whole UI is set a step below the house type ladder | style | large |
-| TAX-16 | The same thing named differently across panel, tooltip and button (loc part done) | style | quick |
-| TAX-17 | Review: static mechanics lines in the live entries | over-explaining | medium |
-| TAX-18 | The overview's Economy Snapshot row, and its developer-facing hover | over-explaining, other | medium |
-| TAX-19 | The estimate's assumptions are written out twice; make them one concept | over-explaining | medium |
-| TAX-20 | The Enacted Code doesn't show since when a rate holds | hidden info | medium |
-| TAX-21 | History rows say what kind of thing happened, not what changed | hidden info | medium–large |
-| TAX-22 | A promise's "what" cell can elide | hidden info | quick |
-| TAX-23 | Light code: one sentence said three times; reaction text on every step button | over-explaining, style | quick |
-| TAX-24 | The interest-group view modifiers explain both codes in one description | style | quick–medium |
-| TAX-25 | Force Through is drawn, greyed, when the bill can pass on its own | other | quick |
-| TAX-26 | Customs levels are words where vanilla uses tariff icons | style | medium |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| TAX-1 | Overview lists metadata, not the actionable state of each process | spread-out/redundant, hidden info, style | large | done |
+| TAX-2 | Pass / Revise / Withdraw / Force Through sit below every interest-group card | spread-out/redundant | medium | done |
+| TAX-3 | "Changed Since Drafted" and its Accept buttons are only in the collapsed Review | hidden info | medium | done (Changed Since Drafted at the top of the workbench) |
+| TAX-4 | Revenue: no figure in the summary, and the estimate is written as sentences | spread-out/redundant, list | medium | done |
+| TAX-5 | The committed share is shown twice, one above the other | spread-out/redundant | medium | done |
+| TAX-6 | Interest-group cards: full cards for marginal groups, zero rows, no icon | spread-out/redundant, style | medium | done (a–d; d folds committed and marginal groups) |
+| TAX-7 | Live Bill section: teaching notes and a disclaimer repeated on every card | over-explaining | quick–medium | done |
+| TAX-8 | The offer's hover is a six-sentence paragraph that duplicates How it works | over-explaining | quick | done in #1202 |
+| TAX-9 | Command tooltips restate the modifier lines the engine prints under them | over-explaining, style | quick | done (#1202 and the passed-bill hover) |
+| TAX-10 | Click instructions repeated on every row's hover, under an intro that already says them | over-explaining | quick | done in #1202 |
+| TAX-11 | Greyed vanilla Budget controls don't say why | hidden info | medium | done (Budget, goods panel, right-click menu) |
+| TAX-12 | Held data never drawn: taxed goods, enacted relief states, a passed bill's relief | hidden info, list | medium | done |
+| TAX-13 | Goods Catalog is 39 ungrouped rows in key order, with no icons | list, style | medium | done |
+| TAX-14 | Section order puts the long editing workbench above the bill under debate | spread-out/redundant | medium | done |
+| TAX-15 | The whole UI is set a step below the house type ladder | style | large | done |
+| TAX-16 | The same thing named differently across panel, tooltip and button | style | quick | done |
+| TAX-17 | Review: static mechanics lines in the live entries | over-explaining | medium | done |
+| TAX-18 | The overview's Economy Snapshot row, and its developer-facing hover | over-explaining, other | medium | done |
+| TAX-19 | The estimate's assumptions are written out twice; make them one concept | over-explaining | medium | done |
+| TAX-20 | The Enacted Code doesn't show since when a rate holds | hidden info | medium | done |
+| TAX-21 | History rows say what kind of thing happened, not what changed | hidden info | medium–large | done (version and group; no per-entry summaries) |
+| TAX-22 | A promise's "what" cell can elide | hidden info | quick | done |
+| TAX-23 | Light code: one sentence said three times; reaction text on every step button | over-explaining, style | quick | done |
+| TAX-24 | The interest-group view modifiers explain both codes in one description | style | quick–medium | done (one sentence) |
+| TAX-25 | Force Through is drawn, greyed, when the bill can pass on its own | other | quick | done |
+| TAX-26 | Customs levels are words where vanilla uses tariff icons | style | medium | done |
 
 ### United Nations ([detail](gui_audit/un.md), #1205)
 

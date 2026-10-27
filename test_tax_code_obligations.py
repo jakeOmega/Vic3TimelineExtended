@@ -595,7 +595,8 @@ class ConsequenceTest(unittest.TestCase):
         # A maintenance promise kept earns approval only.
         self.assertIn("if = { limit = { has_variable = te_tax_o$N$_maint_only var:te_tax_o$N$_maint_only = 0 } "
                       "te_tax_gen_obl_trust = { N = $N$ DELTA = 1 } }", body)
-        self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_FULFILLED} SLOT = none }}", body)
+        # The entry names the group (GUI audit TAX-21).
+        self.assertIn(f"te_tax_history_push_promise = {{ KIND = {KIND_FULFILLED} N = $N$ }}", body)
         self.assertLess(body.find(f"value = {FULFILLED}"), body.find("te_tax_gen_obl_approval"))
 
     def test_breach_is_guarded_by_a_binding_state_and_penalises_once(self):
@@ -607,7 +608,8 @@ class ConsequenceTest(unittest.TestCase):
         self.assertIn("set_variable = { name = te_tax_o$N$_on value = 0 }", body)
         self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_broken_modifier }", body)
         self.assertIn("te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }", body)
-        self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_BREACHED} SLOT = none }}", body)
+        # The entry names the group (GUI audit TAX-21).
+        self.assertIn(f"te_tax_history_push_promise = {{ KIND = {KIND_BREACHED} N = $N$ }}", body)
 
     def test_renegotiation_is_a_command_costing_two_approval_and_trust(self):
         body = norm(self.guarded("te_tax_cmd_obl_renegotiate", "te_tax_can_obl_renegotiate = { N = $N$ }"))
@@ -616,7 +618,8 @@ class ConsequenceTest(unittest.TestCase):
         self.assertIn("set_variable = { name = te_tax_o$N$_on value = 0 }", body)
         self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_renegotiated_modifier }", body)
         self.assertIn("te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }", body)
-        self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_RENEGOTIATED} SLOT = none }}", body)
+        # The entry names the group (GUI audit TAX-21).
+        self.assertIn(f"te_tax_history_push_promise = {{ KIND = {KIND_RENEGOTIATED} N = $N$ }}", body)
         trigger = norm(block(read(TRIGGERS), "te_tax_can_obl_renegotiate"))
         self.assertIn("custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }", trigger)
         # Only once in force: a bound promise lapses only with its package.
@@ -838,7 +841,9 @@ class DisplayTest(unittest.TestCase):
                               politics)
         overview = read(OVERVIEW, strip_comments=False)
         self.assertIn("te_tax_show_obligations_sgui", overview)
-        self.assertIn('"te_tax_ov_obligations_value"', overview)
+        # The overview's Promises cell (GUI audit TAX-1): failing, else binding; the next due date.
+        for key in ("te_tax_ov_obl_failing", "te_tax_ov_obl_binding", "te_tax_ov_obl_due"):
+            self.assertIn(f"'{key}'", overview)
 
     def test_the_custom_loc_covers_every_state_and_kind(self):
         custom = read(GEN_CUSTOM_LOC)

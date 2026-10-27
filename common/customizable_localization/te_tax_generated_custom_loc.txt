@@ -65,12 +65,108 @@ te_tax_hist_event_1 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 te_tax_view_hist_1_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_1_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 te_tax_view_hist_1_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_1_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 te_tax_view_hist_1_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_1_kind = 13 }
@@ -165,12 +261,108 @@ te_tax_hist_event_2 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 te_tax_view_hist_2_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_2_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 te_tax_view_hist_2_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_2_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 te_tax_view_hist_2_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_2_kind = 13 }
@@ -265,12 +457,108 @@ te_tax_hist_event_3 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 te_tax_view_hist_3_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_3_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 te_tax_view_hist_3_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_3_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 te_tax_view_hist_3_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_3_kind = 13 }
@@ -365,12 +653,108 @@ te_tax_hist_event_4 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 te_tax_view_hist_4_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_4_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 te_tax_view_hist_4_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_4_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 te_tax_view_hist_4_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_4_kind = 13 }
@@ -465,12 +849,108 @@ te_tax_hist_event_5 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 te_tax_view_hist_5_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_5_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 te_tax_view_hist_5_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_5_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 te_tax_view_hist_5_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_5_kind = 13 }
@@ -565,12 +1045,108 @@ te_tax_hist_event_6 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 te_tax_view_hist_6_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_6_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 te_tax_view_hist_6_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_6_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 te_tax_view_hist_6_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_6_kind = 13 }
@@ -665,12 +1241,108 @@ te_tax_hist_event_7 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 te_tax_view_hist_7_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_7_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 te_tax_view_hist_7_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_7_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 te_tax_view_hist_7_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_7_kind = 13 }
@@ -765,12 +1437,108 @@ te_tax_hist_event_8 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 1 }
+		localization_key = te_tax_hist_promise_kept_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 2 }
+		localization_key = te_tax_hist_promise_kept_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 3 }
+		localization_key = te_tax_hist_promise_kept_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 4 }
+		localization_key = te_tax_hist_promise_kept_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 5 }
+		localization_key = te_tax_hist_promise_kept_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 6 }
+		localization_key = te_tax_hist_promise_kept_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 7 }
+		localization_key = te_tax_hist_promise_kept_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 te_tax_view_hist_8_inst = 8 }
+		localization_key = te_tax_hist_promise_kept_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_8_kind = 11 }
 		localization_key = te_tax_hist_kind_obl_fulfilled
 	}
 	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 1 }
+		localization_key = te_tax_hist_promise_broken_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 2 }
+		localization_key = te_tax_hist_promise_broken_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 3 }
+		localization_key = te_tax_hist_promise_broken_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 4 }
+		localization_key = te_tax_hist_promise_broken_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 5 }
+		localization_key = te_tax_hist_promise_broken_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 6 }
+		localization_key = te_tax_hist_promise_broken_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 7 }
+		localization_key = te_tax_hist_promise_broken_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 te_tax_view_hist_8_inst = 8 }
+		localization_key = te_tax_hist_promise_broken_trade_unions
+	}
+	text = {
 		trigger = { te_tax_view_hist_8_kind = 12 }
 		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 1 }
+		localization_key = te_tax_hist_promise_renegotiated_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 2 }
+		localization_key = te_tax_hist_promise_renegotiated_devout
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 3 }
+		localization_key = te_tax_hist_promise_renegotiated_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 4 }
+		localization_key = te_tax_hist_promise_renegotiated_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 5 }
+		localization_key = te_tax_hist_promise_renegotiated_landowners
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 6 }
+		localization_key = te_tax_hist_promise_renegotiated_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 7 }
+		localization_key = te_tax_hist_promise_renegotiated_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 te_tax_view_hist_8_inst = 8 }
+		localization_key = te_tax_hist_promise_renegotiated_trade_unions
 	}
 	text = {
 		trigger = { te_tax_view_hist_8_kind = 13 }
@@ -802,6 +1570,44 @@ te_tax_hist_event_8 = {
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
+	}
+}
+
+# What the code's next change is (GUI audit TAX-1; te_tax_overview_panel's Code cell).
+
+te_tax_ov_next_what = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_pa_state = 1 te_tax_view_pa_due >= 0 te_tax_view_pa_due = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_bill
+	}
+	text = {
+		trigger = { te_tax_view_pb_state = 1 te_tax_view_pb_due >= 0 te_tax_view_pb_due = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_bill
+	}
+	text = {
+		trigger = { te_tax_view_en_wage_exp >= 0 te_tax_view_en_wage_exp = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_sunset_wage
+	}
+	text = {
+		trigger = { te_tax_view_en_div_exp >= 0 te_tax_view_en_div_exp = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_sunset_div
+	}
+	text = {
+		trigger = { te_tax_view_en_land_exp >= 0 te_tax_view_en_land_exp = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_sunset_land
+	}
+	text = {
+		trigger = { te_tax_view_en_head_exp >= 0 te_tax_view_en_head_exp = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_sunset_head
+	}
+	text = {
+		trigger = { te_tax_view_en_cons_exp >= 0 te_tax_view_en_cons_exp = te_tax_view_next_month }
+		localization_key = te_tax_ov_next_what_sunset_cons
+	}
+	text = {
+		localization_key = te_tax_ov_next_what_none
 	}
 }
 

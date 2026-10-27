@@ -7,12 +7,16 @@
 ### is_valid is the command's own trigger: the button is enabled exactly when
 ### the click would do something, and its tooltip lists what is missing.
 ###
-###   te_tax_workbench_section  open: Draft a Reform, or the draft in six
-###                             accordions (Income, Land and Head,
-###                             Consumption with the goods catalog, Relief
-###                             with its named states, Customs (plan Task
-###                             15; collapsed), Commencement)
-###   te_tax_draft_summary      the draft at a glance and Review / Discard /
+###   te_tax_workbench_section  open: Draft a Reform, or the draft: first,
+###                             while any applies, the changes to accept
+###                             (Changed Since Drafted, GUI audit TAX-3), then
+###                             six accordions (Income, Land and Head,
+###                             Consumption with the goods catalog by
+###                             category, Relief with its named states,
+###                             Customs (plan Task 15; collapsed), Dates)
+###   te_tax_draft_summary      the draft at a glance (what it changes, the
+###                             changes to accept, its revenue a week, its
+###                             class and month) and Review / Discard /
 ###                             Introduce (or Revise). The journal entry shows
 ###                             it under the workbench (te_tax_status_sections'
 ###                             "draft_summary" block); the Budget tab shows it
@@ -30,8 +34,11 @@
 ###   bill falls before that month.
 ### * A step button's click_modifiers: click one step (op 0 down, 1 up),
 ###   shift-click to zero or the highest rate (2, 3), right-click to take the
-###   tax out of the draft (4). The row's label hover says so; the buttons'
-###   own tooltips are the handler's checklist and what the click does.
+###   tax out of the draft (4). The intro above the rows says so once; the
+###   buttons' own tooltips are the handler's checklist and what the click
+###   does.
+### * Rows, values, buttons and notes at 17, through te_tax_fontsize_row
+###   (te_tax_overview_widget.gui; GUI audit TAX-15).
 ### * Every row is at most 480 wide, in fixed-width cells, inside a 520 panel.
 
 types te_tax_workbench_widget_types
@@ -48,7 +55,7 @@ types te_tax_workbench_widget_types
 			size = { 440 30 }
 		}
 		blockoverride "fontsize" {
-			using = fontsize_medium
+			using = te_tax_fontsize_row
 		}
 		blockoverride "arrow_size" {
 			size = { 20 20 }
@@ -58,58 +65,59 @@ types te_tax_workbench_widget_types
 		}
 	}
 
-	### The instrument rows' column heads, in their cells.
-	### 4 + 146 + 4 + 70 + 4 + 18 + 4 + 70 + 4 + 26 + 4 + 26 + 4 + 80 + 4 = 468.
+	### The instrument rows' column heads, in their cells (the 22 + 4 + 22 of
+	### the steppers is one 48 cell here).
+	### 2 + 180 + 4 + 62 + 4 + 10 + 4 + 62 + 4 + 48 + 4 + 90 + 2 = 476.
 	type te_tax_instrument_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
-		margin = { 4 1 }
+		margin = { 2 1 }
 
 		widget = {
-			size = { 146 20 }
+			size = { 180 22 }
 		}
 		widget = {
-			size = { 70 20 }
+			size = { 62 22 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 62
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				default_format = "#tooltippable"
 				text = "te_tax_wb_col_law"
 				tooltip = "te_tax_wb_col_law_tt"
 			}
 		}
 		widget = {
-			size = { 18 20 }
+			size = { 10 22 }
 		}
 		widget = {
-			size = { 70 20 }
+			size = { 62 22 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 62
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				text = "te_tax_wb_col_draft"
 			}
 		}
 		widget = {
-			size = { 56 20 }
+			size = { 48 22 }
 		}
 		widget = {
-			size = { 80 20 }
+			size = { 90 22 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 80
+				max_width = 90
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				text = "te_tax_wb_col_change"
 			}
 		}
@@ -120,65 +128,68 @@ types te_tax_workbench_widget_types
 	### rows (te_tax_light_widget.gui) reuse it with the law's range, the rate,
 	### an empty "row_arrow" and the step the rate sits on. The instance sets
 	### datacontext = GetScriptedGui('te_tax_step_<key>_sgui'); the buttons
-	### address it by op alone. Same cells as te_tax_instrument_head. The
-	### rates are at most "@money!1.50" or "12.5%", the change "@money!+0.15".
+	### address it by op alone. Same cells as te_tax_instrument_head, sized at
+	### 17 (TAX-15): the label holds "Agricultural Relief", the rates at most
+	### "@money!1.500" or "12.5%", the change "@money!+0.150" and the light
+	### code's step "Very High".
+	### 2 + 180 + 4 + 62 + 4 + 10 + 4 + 62 + 4 + 22 + 4 + 22 + 4 + 90 + 2 = 476.
 	type te_tax_instrument_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
-		margin = { 4 1 }
+		margin = { 2 1 }
 
 		widget = {
-			size = { 146 26 }
+			size = { 180 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 146
+				max_width = 180
 				elide = right
 				align = left|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				default_format = "#tooltippable"
 				block "row_label" {}
 			}
 		}
 		widget = {
-			size = { 70 26 }
+			size = { 62 26 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 62
 				elide = right
 				align = right|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				block "row_law" {}
 			}
 		}
 		widget = {
-			size = { 18 26 }
+			size = { 10 26 }
 			textbox = {
 				parentanchor = center
 				autoresize = yes
 				align = center|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				block "row_arrow" {
 					text = "te_tax_wb_arrow"
 				}
 			}
 		}
 		widget = {
-			size = { 70 26 }
+			size = { 62 26 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 62
 				elide = right
 				align = right|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				block "row_draft" {}
 			}
 		}
 		button_icon_minus_action = {
-			size = { 26 26 }
+			size = { 22 22 }
 			parentanchor = vcenter
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			### Click a step, shift-click to zero, right-click to take the tax out of the draft.
@@ -190,7 +201,7 @@ types te_tax_workbench_widget_types
 			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 		}
 		button_icon_plus_action = {
-			size = { 26 26 }
+			size = { 22 22 }
 			parentanchor = vcenter
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 			### Click a step, shift-click to the highest rate, right-click to take the tax out of the draft.
@@ -202,113 +213,6 @@ types te_tax_workbench_widget_types
 			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 		}
 		widget = {
-			size = { 80 26 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 80
-				elide = right
-				align = right|nobaseline
-				using = fontsize_medium
-				block "row_delta" {}
-			}
-		}
-	}
-
-	### A changed tax's expiry: permanent, or so many months after
-	### commencement. Ops 10 (shorter) and 11 (longer) of the instance's
-	### te_tax_step_<key>_sgui. 4 + 146 + 4 + 226 + 4 + 26 + 4 + 26 + 4 = 444.
-	type te_tax_sunset_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-		margin = { 4 1 }
-
-		widget = {
-			size = { 146 26 }
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 146
-				elide = right
-				align = left|nobaseline
-				using = fontsize_medium
-				block "row_label" {}
-			}
-		}
-		widget = {
-			size = { 226 26 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 226
-				elide = right
-				align = right|nobaseline
-				using = fontsize_medium
-				block "row_value" {}
-			}
-		}
-		button_icon_minus_action = {
-			size = { 26 26 }
-			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
-		}
-		button_icon_plus_action = {
-			size = { 26 26 }
-			parentanchor = vcenter
-			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
-		}
-	}
-
-	### One catalog good (the generated te_tax_wb_goods_rows): its name, taxed
-	### or not under existing law in the commencement month, in the draft, and
-	### its toggle. The instance sets datacontext = te_tax_good_<good>_sgui.
-	### 4 + 170 + 4 + 80 + 4 + 18 + 4 + 90 + 4 + 80 + 4 = 462.
-	type te_tax_good_row = flowcontainer {
-		direction = horizontal
-		ignoreinvisible = yes
-		spacing = 4
-		margin = { 4 1 }
-
-		widget = {
-			size = { 170 26 }
-			textbox = {
-				parentanchor = left|vcenter
-				autoresize = yes
-				max_width = 170
-				elide = right
-				align = left|nobaseline
-				using = fontsize_medium
-				block "good_name" {}
-			}
-		}
-		widget = {
-			size = { 80 26 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 80
-				elide = right
-				align = right|nobaseline
-				using = fontsize_medium
-				block "good_law" {}
-			}
-		}
-		widget = {
-			size = { 18 26 }
-			textbox = {
-				parentanchor = center
-				autoresize = yes
-				align = center|nobaseline
-				using = fontsize_medium
-				text = "te_tax_wb_arrow"
-			}
-		}
-		widget = {
 			size = { 90 26 }
 			textbox = {
 				parentanchor = right|vcenter
@@ -316,12 +220,127 @@ types te_tax_workbench_widget_types
 				max_width = 90
 				elide = right
 				align = right|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
+				block "row_delta" {}
+			}
+		}
+	}
+
+	### A changed tax's expiry: permanent, or so many months after
+	### commencement. Ops 10 (shorter) and 11 (longer) of the instance's
+	### te_tax_step_<key>_sgui. The label in the instrument rows' 180 cell.
+	### 2 + 180 + 4 + 230 + 4 + 22 + 4 + 22 + 2 = 470.
+	type te_tax_sunset_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 2 1 }
+
+		widget = {
+			size = { 180 26 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 180
+				elide = right
+				align = left|nobaseline
+				using = te_tax_fontsize_row
+				block "row_label" {}
+			}
+		}
+		widget = {
+			size = { 230 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 230
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
+				block "row_value" {}
+			}
+		}
+		button_icon_minus_action = {
+			size = { 22 22 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
+		}
+		button_icon_plus_action = {
+			size = { 22 22 }
+			parentanchor = vcenter
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
+		}
+	}
+
+	### One catalog good (the generated te_tax_wb_goods_rows): its icon and
+	### name, taxed or not under existing law in the commencement month, in
+	### the draft, and its toggle. The instance sets datacontext =
+	### te_tax_good_<good>_sgui and the icon's texture.
+	### 2 + 26 + 4 + 196 + 4 + 62 + 4 + 10 + 4 + 62 + 4 + 80 + 2 = 460. The name
+	### holds the longest catalog good at 17 ("Consumer Appliances"), with the
+	### name on hover.
+	type te_tax_good_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 2 1 }
+
+		te_tax_good_icon = {
+			block "good_icon" {}
+		}
+		widget = {
+			size = { 196 26 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 196
+				elide = right
+				align = left|nobaseline
+				using = te_tax_fontsize_row
+				block "good_name" {}
+			}
+		}
+		widget = {
+			size = { 62 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 62
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
+				block "good_law" {}
+			}
+		}
+		widget = {
+			size = { 10 26 }
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				align = center|nobaseline
+				using = te_tax_fontsize_row
+				text = "te_tax_wb_arrow"
+			}
+		}
+		widget = {
+			size = { 62 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 62
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
 				block "good_draft" {}
 			}
 		}
 		button = {
 			using = default_button
+			using = te_tax_fontsize_row
 			size = { 80 26 }
 			parentanchor = vcenter
 			block "good_button_text" {}
@@ -331,20 +350,29 @@ types te_tax_workbench_widget_types
 		}
 	}
 
-	### A customs level (the generated rows): seven of these share one cell, and
-	### the one whose level the row's view holds is shown. 88 wide: the longest
-	### level name at 7 px a character ("High subsidy", 84; final review B-I2).
-	type te_tax_cu_level_text = textbox {
-		parentanchor = right|vcenter
+	### A category heading in the goods catalog (the generated
+	### te_tax_wb_goods_rows; GUI audit TAX-13), the customs catalog's words.
+	type te_tax_wb_goods_heading = textbox {
 		autoresize = yes
-		max_width = 88
-		elide = right
-		align = right|nobaseline
-		using = fontsize_medium
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_tax_fontsize_row
+		default_format = "#title"
+		margin_top = 4
+	}
+
+	### A customs level (the generated rows; GUI audit TAX-26): vanilla's tariff
+	### icon for the level, as the Market panel and the set_level_bar draw it,
+	### its word on hover. Seven of these share one 30 cell, and the one whose
+	### level the row's view holds is shown.
+	type te_tax_cu_level_icon = icon {
+		size = { 26 26 }
+		parentanchor = center
 	}
 
 	### The Customs rows' column heads, in their cells (plan Task 15).
-	### 4 + 156 + 4 + 154 + 4 + 154 + 4 = 480.
+	### 4 + 272 + 4 + 96 + 4 + 96 + 4 = 480.
 	type te_tax_customs_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -352,29 +380,31 @@ types te_tax_workbench_widget_types
 		margin = { 4 1 }
 
 		widget = {
-			size = { 156 20 }
+			size = { 272 22 }
 		}
 		widget = {
-			size = { 154 20 }
+			size = { 96 22 }
 			textbox = {
-				position = { 0 0 }
-				size = { 88 20 }
-				align = right|nobaseline
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 96
+				align = left|nobaseline
 				elide = right
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				default_format = "#tooltippable"
 				text = "te_tax_wb_cu_col_imp"
 				tooltip = "te_tax_wb_cu_col_imp_tt"
 			}
 		}
 		widget = {
-			size = { 154 20 }
+			size = { 96 22 }
 			textbox = {
-				position = { 0 0 }
-				size = { 88 20 }
-				align = right|nobaseline
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 96
+				align = left|nobaseline
 				elide = right
-				using = fontsize_small
+				using = te_tax_fontsize_row
 				default_format = "#tooltippable"
 				text = "te_tax_wb_cu_col_exp"
 				tooltip = "te_tax_wb_cu_col_exp_tt"
@@ -390,9 +420,8 @@ types te_tax_workbench_widget_types
 	### customs (te_tax_view_customs_mode 1); a customs-union member sees its
 	### market owner's levels with no editor. Each direction sits in a fixed
 	### cell, so the columns line up with or without steppers.
-	### 4 + 156 + 4 + 154 + 4 + 154 + 4 = 480; a direction's cell 88 + 4 + 10 + 4 + 22 + 4 + 22 = 154.
-	### The name cell holds the longest customs good at 7 px a character
-	### ("Electronic Components", 147; final review B-I2), with the name on hover.
+	### 4 + 272 + 4 + 96 + 4 + 96 + 4 = 480; a direction's cell 30 + 4 + 10 + 4 + 22 + 4 + 22 = 96.
+	### The name cell holds the longest customs good at 17, with the name on hover.
 	type te_tax_customs_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -400,14 +429,14 @@ types te_tax_workbench_widget_types
 		margin = { 4 1 }
 
 		widget = {
-			size = { 156 26 }
+			size = { 272 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 156
+				max_width = 272
 				elide = right
 				align = left|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				block "good_name" {}
 			}
 		}
@@ -415,14 +444,14 @@ types te_tax_workbench_widget_types
 		# code that sets this country's customs only, the steppers (ops 0, 1;
 		# right-click either: 2, out of the draft).
 		widget = {
-			size = { 154 26 }
+			size = { 96 26 }
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
 				spacing = 4
 
 				widget = {
-					size = { 88 26 }
+					size = { 30 26 }
 					block "imp_level" {}
 				}
 				widget = {
@@ -431,7 +460,7 @@ types te_tax_workbench_widget_types
 						parentanchor = center
 						autoresize = yes
 						align = center|nobaseline
-						using = fontsize_medium
+						using = te_tax_fontsize_row
 						default_format = "#tooltippable"
 						text = "te_tax_cu_changed"
 						tooltip = "te_tax_cu_changed_tt"
@@ -462,14 +491,14 @@ types te_tax_workbench_widget_types
 		# code that sets this country's customs only, the steppers (ops 10, 11;
 		# right-click either: 12, out of the draft).
 		widget = {
-			size = { 154 26 }
+			size = { 96 26 }
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
 				spacing = 4
 
 				widget = {
-					size = { 88 26 }
+					size = { 30 26 }
 					block "exp_level" {}
 				}
 				widget = {
@@ -478,7 +507,7 @@ types te_tax_workbench_widget_types
 						parentanchor = center
 						autoresize = yes
 						align = center|nobaseline
-						using = fontsize_medium
+						using = te_tax_fontsize_row
 						default_format = "#tooltippable"
 						text = "te_tax_cu_changed"
 						tooltip = "te_tax_cu_changed_tt"
@@ -516,52 +545,26 @@ types te_tax_workbench_widget_types
 	### views read 0 once another country owns it). The button passes the row's
 	### state as the saved scope te_tax_st
 	### to te_tax_relief_state_sgui, the Grand Monuments rows' shape
-	### (gm_choice_button). Tooltips read only GetPlayer (a datamodel item).
-	### 4 + 150 + 4 + 70 + 4 + 90 + 4 + 60 + 4 + 80 + 4 = 474.
+	### (gm_choice_button). Tooltips read only GetPlayer or the State (a
+	### datamodel item). 2 + 170 + 4 + 60 + 4 + 76 + 4 + 68 + 4 + 70 + 2 = 464;
+	### a name longer than its cell shows whole on hover.
 	type te_tax_relief_state_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
-		margin = { 4 1 }
+		margin = { 2 1 }
 
 		widget = {
-			size = { 150 26 }
+			size = { 170 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 150
+				max_width = 170
 				elide = right
 				align = left|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
 				text = "te_tax_wb_relief_state_name"
-			}
-		}
-		widget = {
-			size = { 70 26 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 70
-				elide = right
-				align = right|nobaseline
-				using = fontsize_medium
-				default_format = "#tooltippable"
-				text = "te_tax_wb_relief_state_pop"
-				tooltip = "te_tax_wb_relief_state_pop_tt"
-			}
-		}
-		widget = {
-			size = { 90 26 }
-			textbox = {
-				parentanchor = right|vcenter
-				autoresize = yes
-				max_width = 90
-				elide = right
-				align = right|nobaseline
-				using = fontsize_medium
-				default_format = "#tooltippable"
-				text = "te_tax_wb_relief_state_tax"
-				tooltip = "te_tax_wb_relief_state_tax_tt"
+				tooltip = "te_tax_wb_relief_state_name"
 			}
 		}
 		widget = {
@@ -572,7 +575,35 @@ types te_tax_workbench_widget_types
 				max_width = 60
 				elide = right
 				align = right|nobaseline
-				using = fontsize_medium
+				using = te_tax_fontsize_row
+				default_format = "#tooltippable"
+				text = "te_tax_wb_relief_state_pop"
+				tooltip = "te_tax_wb_relief_state_pop_tt"
+			}
+		}
+		widget = {
+			size = { 76 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 76
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
+				default_format = "#tooltippable"
+				text = "te_tax_wb_relief_state_tax"
+				tooltip = "te_tax_wb_relief_state_tax_tt"
+			}
+		}
+		widget = {
+			size = { 68 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 68
+				elide = right
+				align = right|nobaseline
+				using = te_tax_fontsize_row
 				block "state_status" {
 					text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_named', SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_base_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_dropped', 'te_tax_wb_relief_state_none' ) )]"
 				}
@@ -580,7 +611,8 @@ types te_tax_workbench_widget_types
 		}
 		button = {
 			using = default_button
-			size = { 80 26 }
+			using = te_tax_fontsize_row
+			size = { 70 26 }
 			parentanchor = vcenter
 			datacontext = "[GetScriptedGui('te_tax_relief_state_sgui')]"
 			block "state_button_text" {
@@ -632,6 +664,7 @@ types te_tax_workbench_widget_types
 				}
 				button = {
 					using = default_button
+					using = te_tax_fontsize_row
 					parentanchor = hcenter
 					size = { 480 32 }
 					text = "[SelectLocalization( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_wb_new_revision', 'te_tax_wb_new' )]"
@@ -647,6 +680,170 @@ types te_tax_workbench_widget_types
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
+
+				# Changed Since Drafted (GUI audit TAX-3): the baseline moved under the
+				# draft, so each change waits on its Accept before the draft can be
+				# introduced, here at the top of the draft, open while it applies
+				# (style guide rule 7), where Introduce's tooltip sends the player.
+				# Op = the instrument's code (1 wage ... 5 cons), 6 the goods, 7
+				# relief, 8 customs.
+				flowcontainer = {
+					visible = "[GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+
+					te_tax_subheader = {
+						blockoverride "subheader_margin" {}
+						blockoverride "subheader_text" {
+							text = "te_tax_rv_rebase_header"
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_wage_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_wage"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_div_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_div"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_land_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_land"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_head_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_head"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_cons_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_cons"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_goods"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_relief"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+							}
+						}
+					}
+					te_tax_rebase_row = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_rebase'), '(CFixedPoint)0' )]"
+						blockoverride "rebase_text" {
+							text = "te_tax_rv_rebase_customs"
+						}
+						blockoverride "rebase_button" {
+							button = {
+								using = default_button
+								using = te_tax_fontsize_row
+								size = { 96 28 }
+								parentanchor = vcenter
+								text = "te_tax_rv_accept"
+								enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+								onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+								tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+							}
+						}
+					}
+				}
 
 				te_tax_text = {
 					text = "te_tax_wb_intro"
@@ -913,7 +1110,7 @@ types te_tax_workbench_widget_types
 								maximumsize = { 480 -1 }
 								margin_left = 24
 								align = left|nobaseline
-								using = fontsize_medium
+								using = te_tax_fontsize_row
 								elide = right
 								text = "te_tax_wb_relief_state_name"
 							}
@@ -943,6 +1140,7 @@ types te_tax_workbench_widget_types
 					# only thing that builds that list (never opening the panel).
 					button = {
 						using = default_button
+						using = te_tax_fontsize_row
 						parentanchor = hcenter
 						size = { 480 30 }
 						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), 'te_tax_wb_relief_choose', 'te_tax_wb_relief_choose_again' )]"
@@ -1038,7 +1236,7 @@ types te_tax_workbench_widget_types
 							minimumsize = { 480 -1 }
 							maximumsize = { 480 -1 }
 							align = left|nobaseline
-							using = fontsize_medium
+							using = te_tax_fontsize_row
 							default_format = "#title"
 							margin_top = 4
 							text = "te_tax_wb_cu_cat_staple"
@@ -1049,7 +1247,7 @@ types te_tax_workbench_widget_types
 							minimumsize = { 480 -1 }
 							maximumsize = { 480 -1 }
 							align = left|nobaseline
-							using = fontsize_medium
+							using = te_tax_fontsize_row
 							default_format = "#title"
 							margin_top = 4
 							text = "te_tax_wb_cu_cat_industrial"
@@ -1060,7 +1258,7 @@ types te_tax_workbench_widget_types
 							minimumsize = { 480 -1 }
 							maximumsize = { 480 -1 }
 							align = left|nobaseline
-							using = fontsize_medium
+							using = te_tax_fontsize_row
 							default_format = "#title"
 							margin_top = 4
 							text = "te_tax_wb_cu_cat_luxury"
@@ -1071,7 +1269,7 @@ types te_tax_workbench_widget_types
 							minimumsize = { 480 -1 }
 							maximumsize = { 480 -1 }
 							align = left|nobaseline
-							using = fontsize_medium
+							using = te_tax_fontsize_row
 							default_format = "#title"
 							margin_top = 4
 							text = "te_tax_wb_cu_cat_military"
@@ -1108,43 +1306,43 @@ types te_tax_workbench_widget_types
 						direction = horizontal
 						ignoreinvisible = yes
 						spacing = 4
-						margin = { 4 1 }
+						margin = { 2 1 }
 
 						widget = {
-							size = { 146 26 }
+							size = { 180 26 }
 							textbox = {
 								parentanchor = left|vcenter
 								autoresize = yes
-								max_width = 146
+								max_width = 180
 								elide = right
 								align = left|nobaseline
-								using = fontsize_medium
+								using = te_tax_fontsize_row
 								default_format = "#tooltippable"
 								text = "te_tax_wb_due"
 								tooltip = "te_tax_wb_due_tt"
 							}
 						}
 						widget = {
-							size = { 226 26 }
+							size = { 230 26 }
 							textbox = {
 								parentanchor = right|vcenter
 								autoresize = yes
-								max_width = 226
+								max_width = 230
 								elide = right
 								align = right|nobaseline
-								using = fontsize_medium
+								using = te_tax_fontsize_row
 								text = "te_tax_ov_draft_value"
 							}
 						}
 						button_icon_minus_action = {
-							size = { 26 26 }
+							size = { 22 22 }
 							parentanchor = vcenter
 							enabled = "[GetScriptedGui('te_tax_due_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 							onclick = "[GetScriptedGui('te_tax_due_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 							tooltip = "[Concatenate( GetScriptedGui('te_tax_due_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_due_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 						}
 						button_icon_plus_action = {
-							size = { 26 26 }
+							size = { 22 22 }
 							parentanchor = vcenter
 							enabled = "[GetScriptedGui('te_tax_due_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 							onclick = "[GetScriptedGui('te_tax_due_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
@@ -1239,6 +1437,34 @@ types te_tax_workbench_widget_types
 						text = "te_tax_sum_changes_value"
 					}
 				}
+				# The changes a passed bill or an outside change moved under the
+				# draft, each waiting on its Accept under Changed Since Drafted at the
+				# top of Draft Reform (GUI audit TAX-3).
+				te_tax_value_row = {
+					visible = "[GetScriptedGui('te_tax_show_draft_rebase_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "te_tax_sum_accept"
+						tooltip = "te_tax_sum_accept_tt"
+					}
+					blockoverride "row_value" {
+						text = "te_tax_sum_accept_value"
+					}
+				}
+				# What the draft does to revenue a week (GUI audit TAX-4): the sum of
+				# the review's Revenue Estimate, its lines on hover; a range while
+				# rural assessment and head tax share the Poll line, and marked when
+				# a line the draft changes has no base. Before the first snapshot,
+				# not estimated.
+				te_tax_value_row = {
+					blockoverride "row_label" {
+						text = "te_tax_sum_revenue"
+						tooltip = "te_tax_sum_revenue_tt"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_sum_revenue_none', SelectLocalization( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' ) ), 'te_tax_sum_revenue_range', SelectLocalization( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_nobase_any'), '(CFixedPoint)0' ), 'te_tax_sum_revenue_partial', 'te_tax_sum_revenue_value' ) ) )]"
+						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', 'te_tax_sum_revenue_lines_tt' )]"
+					}
+				}
 				# Customs levels the draft changes (plan Task 15; the customs option only).
 				te_tax_value_row = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' )]"
@@ -1282,6 +1508,7 @@ types te_tax_workbench_widget_types
 
 					button = {
 						using = default_button
+						using = te_tax_fontsize_row
 						size = { 156 32 }
 						text = "[SelectLocalization( GetVariableSystem.Exists('te_tax_review_open'), 'te_tax_sum_review_hide', 'te_tax_sum_review' )]"
 						tooltip = "te_tax_sum_review_tt"
@@ -1289,6 +1516,7 @@ types te_tax_workbench_widget_types
 					}
 					button = {
 						using = default_button
+						using = te_tax_fontsize_row
 						size = { 156 32 }
 						text = "te_tax_sum_discard"
 						enabled = "[GetScriptedGui('te_tax_cmd_draft_discard_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1298,6 +1526,7 @@ types te_tax_workbench_widget_types
 					button = {
 						visible = "[Not( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 						using = default_button
+						using = te_tax_fontsize_row
 						size = { 156 32 }
 						text = "te_tax_sum_introduce"
 						enabled = "[GetScriptedGui('te_tax_cmd_introduce_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1307,6 +1536,7 @@ types te_tax_workbench_widget_types
 					button = {
 						visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						using = default_button
+						using = te_tax_fontsize_row
 						size = { 156 32 }
 						text = "te_tax_sum_revise"
 						enabled = "[GetScriptedGui('te_tax_cmd_revise_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
