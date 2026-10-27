@@ -28,7 +28,7 @@ One emblem, a columned bank front, with a mark beside it. 32 px, the phase's col
 
 The list asked for Panic as a crowd-dark doorway with an arrow crashing through the steps, and for Frenzy's coins spilling from its arrow. At 32 px the doorway and steps were specks, so Panic got the double down arrow, the mirror of Frenzy's; Frenzy's coins lie at the bank's foot.
 
-**Not Started (2026-10-17, placeholder).** Before a country's financial cycle starts, the overview draws one cell in row 1's place (`banking_dash_cycle_dormant`), with `phase_stable.dds` at alpha 0.4: dimmed, as style guide rule 4 has a thing that doesn't exist yet. Final art, if it gets its own: the bank front in plain stone with its doors shut and no mark beside it, at `gfx/interface/icons/banking_icons/phase_not_started.dds`.
+**Not Started (2026-10-17; own art 2026-10-27).** Before a country's financial cycle starts, the overview draws one cell in row 1's place (`banking_dash_cycle_dormant`): the bank front alone, centred, with no mark beside it, at alpha 0.4, dimmed as style guide rule 4 has a thing that doesn't exist yet. `gfx/interface/icons/banking_icons/phase_not_started.dds`, derived from the `banking_part/bank` render (`banking_state/phase_not_started` in `icon_prompts.py`); until icon batch 6 it drew `phase_stable.dds`.
 
 ## Overview row 1: momentum
 
