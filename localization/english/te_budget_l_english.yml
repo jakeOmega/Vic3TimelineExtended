@@ -113,7 +113,7 @@
  te_budget_chart_source_expense_archaeology:0 "Archaeological Digs"
  te_budget_chart_source_expense_archaeology_tt:0 "#b Archaeological Digs#!\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\n$TOOLTIP_DELIMITER$\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]"
  te_budget_chart_source_expense_banking:0 "Banking"
- te_budget_chart_source_expense_banking_tt:0 "#b Banking#!\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\nPaid monthly from the treasury by banking tools: @money![GetPlayer.MakeScope.ScriptValue('banking_external_monthly_payments')|D]\n$TOOLTIP_DELIMITER$\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]"
+ te_budget_chart_source_expense_banking_tt:0 "#b Banking#!\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\nBought for the bank's gold reserve this month, outside the weekly budget: @money![GetPlayer.MakeScope.ScriptValue('banking_external_surrender_purchase_display')|D]\n$TOOLTIP_DELIMITER$\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]"
  te_budget_chart_source_expense_climate:0 "Climate Policy"
  te_budget_chart_source_expense_climate_tt:0 "#b Climate Policy#!\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\n$TOOLTIP_DELIMITER$\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]"
  te_budget_chart_source_expense_colonial:0 "Colonial Development"

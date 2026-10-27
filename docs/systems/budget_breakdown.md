@@ -123,12 +123,13 @@ scaled to the economy) is fixed when applied, so no script value holds what
 they charge now.
 
 Only money in the weekly budget is included. One-time `add_treasury` payments
-and costs in innovation, influence or other resources are excluded. Banking's
-three tools that pay monthly with `add_treasury` (Sterilize Capital Inflows,
-Emergency Import Financing, FX Surrender) are named outside the sums: a line
-under the Banking row's weekly amount (`OUTSIDE_THE_BUDGET`) and a "Banking
-Tools, Paid Monthly" line under the Overview's expenses, both reading
-`banking_external_monthly_payments`. For example,
+and costs in innovation, influence or other resources are excluded. Two
+banking tools' bills, Sterilize Capital Inflows' and Emergency Import
+Financing's, are weekly charges in the budget since 2026-10-27 (the owner;
+they were monthly `add_treasury` payments) and sit under Banking. FX
+Surrender's purchase of gold for the bank stays a monthly `add_treasury`, the
+same sum the vault receives that day; the Banking row names it under the weekly
+amount (`OUTSIDE_THE_BUDGET`, reading `banking_external_surrender_purchase_display`). For example,
 Space Race's recurring `sr_space_program_cost` spends innovation, not money;
 its monetary debris-clearance response is attributed to Space Race. Space Race
 also carries the Space Program building's own running cost (below), which is

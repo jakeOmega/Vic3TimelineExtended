@@ -361,8 +361,6 @@
  country_te_mon_rate_gap_pull_mult_desc:0 "How far the gap between your [concept_banking_policy_rate] and the [concept_banking_world_rate] moves your [concept_banking_exchange_rate], your [concept_banking_gold_flow] and your [concept_banking_peg_confidence]. Inflation and debt still weigh on the currency in full."
  country_te_mon_reserve_purchase_gdp_add:0 "Gold Bought for the Bank, of Annual GDP, at Most"
  country_te_mon_reserve_purchase_gdp_add_desc:0 "Treasury money paid to exporters for the foreign earnings they surrender, which adds to the [concept_banking_bank_gold]."
- country_te_mon_treasury_cost_gdp_add:0 "Treasury Cost, of Annual GDP"
- country_te_mon_treasury_cost_gdp_add_desc:0 "Paid from the treasury every month the tool runs, outside the weekly budget."
  country_te_pb_principle_slots_add:0 "Extra [concept_power_bloc_principle] Slots"
  country_te_pb_principle_slots_add_desc:0 "Adds this many [concept_power_bloc_principle] slots to a [concept_power_bloc] this country leads, up to #v 8#! in all. The $rule_te_principle_slots_rule$ game rule's $setting_te_principle_slots_four$ setting turns these slots off."
  country_un_authority_target_add:0 "UN Authority Target"

@@ -130,9 +130,9 @@ Nations and other journal systems appear under Programme Costs, and so does the
 Space Program building's running cost, in the Space Race row. Expand it and
 hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources
-such as innovation are outside this weekly money breakdown. The banking tools
-that pay monthly are named under the Banking row and under the Overview's
-expenses as Banking Tools, Paid Monthly.
+such as innovation are outside this weekly money breakdown. The Banking row's
+hover also names what the Foreign Exchange Surrender Requirement buys for the
+central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and

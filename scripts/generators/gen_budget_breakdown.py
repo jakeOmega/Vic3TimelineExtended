@@ -30,6 +30,8 @@ SOURCES = {
             "banking_event_interbank_guarantee", "banking_event_microfinance_cost",
             "banking_event_student_debt_relief_cost", "banking_event_bailout_cost",
             "planning_treasury_pool_balance", "te_mon_gold_carry_expense",
+            # Two external tools' bills, weekly since 2026-10-27 (BNK-14).
+            "banking_external_sterilization_charge", "banking_external_import_charge",
         )),
         "covert": ("Covert Actions", ("covert_operation_funding_cost",)),
         "culture": ("Cultural Hegemony", ("ch_cultural_program_funding_cost", "ch_world_exposition_cost")),
@@ -71,10 +73,12 @@ SOURCES = {
 
 # Treasury payments a source's system makes outside the weekly budget, which
 # its row names under the weekly amount (GUI audit BNK-14): a script value of
-# the country's, and the line's text. Banking's three external tools pay
-# monthly with add_treasury, which no weekly figure includes.
+# the country's, and the line's text. FX Surrender buys gold for the bank once
+# a month with add_treasury, the same sum the vault receives that day; the other
+# two external tools' bills are weekly expenses (SOURCES above).
 OUTSIDE_THE_BUDGET = {
-    ("expense", "banking"): ("banking_external_monthly_payments", "Paid monthly from the treasury by banking tools"),
+    ("expense", "banking"): ("banking_external_surrender_purchase_display",
+                             "Bought for the bank's gold reserve this month, outside the weekly budget"),
 }
 
 

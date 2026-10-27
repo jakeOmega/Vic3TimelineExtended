@@ -613,7 +613,9 @@ class BreakdownTooltipTest(unittest.TestCase):
                     self.assertTrue(tip.endswith(f"GetDescFor('{gen.source_type(side, key)}')]"), tip)
                     self.assertNotIn("\\n\\n", tip)
         banking = self.loc["te_budget_chart_source_expense_banking_tt"]
-        self.assertIn("ScriptValue('banking_external_monthly_payments')", banking)
+        self.assertIn("ScriptValue('banking_external_surrender_purchase_display')", banking)
+        self.assertIn("banking_external_sterilization_charge", gen.SOURCES["expense"]["banking"][1])
+        self.assertIn("banking_external_import_charge", gen.SOURCES["expense"]["banking"][1])
 
     def test_institution_rows_give_their_share_and_the_group_the_pool(self):
         for key in gen.institutions():

@@ -300,17 +300,6 @@ country_te_mon_inflow_price_pressure_mult = {
 	game_data = { ai_value = 0 }
 }
 
-# A month's charge to the treasury, as a share of annual GDP: Sterilize
-# Capital Inflows (banking_external_sterilization_share) and Emergency Import
-# Financing (banking_external_import_share, before it rises).
-country_te_mon_treasury_cost_gdp_add = {
-	color = bad
-	percent = yes
-	decimals = 2
-	script_only = yes
-	game_data = { ai_value = 0 }
-}
-
 # Limit Foreign-Currency Borrowing: banking_external_fx_protection_step.
 country_te_mon_fx_debt_protection_add = {
 	color = good

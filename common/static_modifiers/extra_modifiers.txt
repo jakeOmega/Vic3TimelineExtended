@@ -8561,7 +8561,7 @@ te_mon_lolr_reneged = {
 # NEVER APPLIED. Each prints, through [GetStaticModifier('x').GetDesc], what
 # the monetary pulse or a control does that no applied modifier carries, so it
 # reads as coloured modifier lines rather than prose. The banking_monthly_*
-# five are spliced under a tool's own modifier by its banking_nonmod_*_tt line
+# six are spliced under a tool's own modifier by its banking_nonmod_*_tt line
 # ("Each month:"), which keeps their gates (the full Banking System, a war's
 # end); the last two by the Monetise Deficit and mandate buttons. Their types
 # are display fields (banking_cycle_modifier_types.txt, "Display fields"):
@@ -8585,7 +8585,6 @@ banking_monthly_restrict_inflows = {
 banking_monthly_sterilize_inflows = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_te_mon_inflow_price_pressure_mult = -0.75
-	country_te_mon_treasury_cost_gdp_add = 0.0001
 }
 
 banking_monthly_foreign_borrowing_limits = {
@@ -8596,11 +8595,6 @@ banking_monthly_foreign_borrowing_limits = {
 banking_monthly_fx_surrender = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_te_mon_reserve_purchase_gdp_add = 0.0005
-}
-
-banking_monthly_emergency_import_financing = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
-	country_te_mon_treasury_cost_gdp_add = 0.0005
 }
 
 # One step of Monetise Deficit, while it runs (te_mon_monetisation_gdp_share,
@@ -8618,6 +8612,23 @@ te_mon_mandate_loosen_step = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_te_mon_expected_inflation_add = 0.005
 	country_risk_premium_add = 0.005
+}
+
+# The weekly bills of Sterilize Capital Inflows and Emergency Import Financing
+# (owner, 2026-10-27, GUI audit BNK-14): a month's cost ÷ 4 a week, as the
+# multiplier, refreshed monthly by banking_external_charge_* (its header has
+# the rules), on the entry beside the tool. The mirror field puts them under
+# Banking in the Budget Breakdown (gen_budget_breakdown.py's SOURCES).
+banking_external_sterilization_charge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
+}
+
+banking_external_import_charge = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_restrict_inflows = {

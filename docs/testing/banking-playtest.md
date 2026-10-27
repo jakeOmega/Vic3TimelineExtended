@@ -257,8 +257,11 @@ list, a weekly counter, display-only static modifiers), and what is new is GUI r
     `JournalEntry.GetCountry.GetPowerBloc` as a datacontext over `PowerBloc.GetMembers`. *Fallback if a name or flag
     is blank:* print the rows from a scripted GUI's `ExecuteTooltip` in fixed slots, as the Cultural Hegemony board
     does (`gui_modding_guide.md` gotcha #15).
-41. **Monthly bank payments in the Budget panel.** With Sterilize Capital Inflows on, the Overview's expenses end on
-    "Banking Tools, Paid Monthly: −£X a month", and the Breakdown's Banking row's hover names the same figure.
+41. **The two bills are weekly expenses (owner, 2026-10-27).** With Sterilize Capital Inflows or Emergency Import
+    Financing on, Government Expenses rise by a quarter of the month's cost (the tool's "Weekly cost" line), the
+    Breakdown lists it under Banking with the bill modifier in its sources, and the treasury takes no monthly lump.
+    Disable the tool, or change economic system: the expense goes the same week. A month the treasury cannot cover
+    still lifts the tool. FX Surrender's purchase still lands monthly, and the Banking row's hover names it.
 42. **Breakdown.** Rows, amounts and the How notes read at the panel's 17 (subheadings at 20); "Ministry of
     Intelligence and Security" wraps rather than eliding. Hover Income Taxes' amount: the Overview's graph tooltip.
     *Fallback if it renders nothing on a row's amount:* put the `using` on the row, or give the row a tooltip key.
