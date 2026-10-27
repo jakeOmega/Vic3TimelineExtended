@@ -742,6 +742,21 @@ class OrbitTest(unittest.TestCase):
                          [f"je_space_race_widget_orbit_{r}_label" for r in ("satellites", "strikes", "moratorium", "strike")])
         self.assertNotIn("JournalEntry", body)
 
+    def test_debris_shows_once_in_the_tab(self):
+        """SPC-8 (owner, 2026-10-27): Mission Control's debris row sits in a
+        block each milestone's status type passes up as "sr_debris", which the
+        Space Race tab overrides empty (test_te_systems_window.py), so the tab
+        shows debris once, in Orbit; the journal keeps it in Mission Control."""
+        gui = _read(GUI)
+        self.assertRegex(_type_body(gui, "te_sr_sec_control"),
+                         r'block "control_debris" \{\s*te_sr_debris_row = \{\}\s*\}')
+        self.assertRegex(_type_body(gui, "te_sr_status_sections"),
+                         r'blockoverride "control_debris" \{\s*block "status_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
+        for m in CONTROLLED:
+            with self.subTest(milestone=m):
+                self.assertRegex(_type_body(gui, f"te_sr_{m}_status"),
+                                 r'blockoverride "status_debris" \{\s*block "sr_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
+
     def test_the_debris_row_reads_the_player(self):
         """Mission Control's debris row is also the Orbit section's, outside
         any journal entry: every key it renders roots on GetPlayer."""

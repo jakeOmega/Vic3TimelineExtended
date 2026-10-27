@@ -78,7 +78,10 @@
 ###
 ### The Timeline Extended window's Space Race tab also has two sections of its
 ### own (te_sr_sec_powers, te_sr_sec_orbit), which read no journal entry and so
-### show between milestones; neither is mounted in the journal:
+### show between milestones; neither is mounted in the journal. The tab draws
+### them after the milestones' blocks (owner, 2026-10-27), and Orbit carries the
+### debris row the journal's Mission Control has, so the tab's milestone
+### instances override "sr_debris" empty:
 ###   space powers        -> our row on GetPlayer.GetCapital; the others' order
 ###                          and capitals from sr_powers_refresh (the viewer's
 ###                          sr_power_total, sr_power_<1..8>); each icon reads
@@ -1002,7 +1005,12 @@ types space_race_widget_types
 			}
 
 			### Orbital debris, for every milestone (te_orbital_debris_widget.gui).
-			te_sr_debris_row = {}
+			### The Space Race tab shows it once, in Orbit: its milestone
+			### instances override "sr_debris" empty (passed down as
+			### control_debris and status_debris).
+			block "control_debris" {
+				te_sr_debris_row = {}
+			}
 
 			### Milestone-specific rows: solar colonization's Next Windows
 			### (te_sr_sec_windows, gui/sr_launch_window_widgets.gui).
@@ -5033,6 +5041,11 @@ types space_race_widget_types
 			blockoverride "control_extra" {
 				block "sr_control_extra" {}
 			}
+			blockoverride "control_debris" {
+				block "status_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 		}
 		te_sr_sec_rivals = {
 			blockoverride "rivals_onclick" {
@@ -5106,7 +5119,7 @@ types space_race_widget_types
 	### gui/te_systems_window.gui). The tab stays open once the country is in
 	### the race (sr_in_space_race), with or without a milestone running, so
 	### these read no journal entry: the player through GetPlayer, a power
-	### through its capital. Above the milestones' blocks; never in the journal.
+	### through its capital. Below the milestones' blocks; never in the journal.
 	### ======================================================================
 
 	### One entry of a power's programme in a Space Powers row: its journal
@@ -5883,6 +5896,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_suborbital_closed')]"
 			}
@@ -6045,6 +6063,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_orbital_closed')]"
 			}
@@ -6207,6 +6230,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_moon_landing_closed')]"
 			}
@@ -6369,6 +6397,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_probe_closed')]"
 			}
@@ -6531,6 +6564,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_moon_base_closed')]"
 			}
@@ -6693,6 +6731,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_mars_landing_closed')]"
 			}
@@ -6855,6 +6898,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_interstellar_probe_closed')]"
 			}
@@ -7040,6 +7088,11 @@ types space_race_widget_types
 		datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
 		te_sr_status_sections = {
+			blockoverride "status_debris" {
+				block "sr_debris" {
+					te_sr_debris_row = {}
+				}
+			}
 			blockoverride "sr_control_onclick" {
 				onclick = "[GetVariableSystem.Toggle('sr_panel_control_solar_colonization_closed')]"
 			}
