@@ -78,6 +78,25 @@
 ###   the gate every display read would run for countries that have none of
 ###   these variables (gotcha #14).
 
+### The panel's type sizes (COV-14; gui_style_guide.md rule 3, the owner's
+### pass of 2026-10-17): rows, values, buttons and notes at 17, subheadings
+### and row titles at 20, the overview at 16 in the tooltip face, the same
+### ladder as Banking's banking_dash_fontsize_* templates. Every textbox
+### reads one of these, so a pass on type edits three numbers;
+### test_covert_layout.WidthBudgetTest reads the sizes from here.
+template covert_fontsize_row {
+	fontsize = 17
+}
+
+template covert_fontsize_heading {
+	fontsize = 20
+}
+
+template covert_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
+
 types covert_operations_widget_types
 {
 	### ======================================================================
@@ -121,7 +140,7 @@ types covert_operations_widget_types
 			multiline = yes
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = covert_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -140,7 +159,7 @@ types covert_operations_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = covert_fontsize_row
 		default_format = "#lore"
 	}
 
@@ -151,7 +170,7 @@ types covert_operations_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = covert_fontsize_row
 	}
 
 	### A table row: a label on the left and its value on the right
@@ -168,7 +187,7 @@ types covert_operations_widget_types
 			minimumsize = { 320 -1 }
 			maximumsize = { 320 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			elide = right
 			block "row_label" {}
 		}
@@ -177,7 +196,7 @@ types covert_operations_widget_types
 			minimumsize = { 140 -1 }
 			maximumsize = { 140 -1 }
 			align = right|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			default_format = "#v"
 			block "row_value" {}
 		}
@@ -202,7 +221,7 @@ types covert_operations_widget_types
 			max_width = 108
 			elide = right
 			align = hcenter|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_overview
 			default_format = "#tooltippable"
 			block "label" {}
 		}
@@ -272,7 +291,7 @@ types covert_operations_widget_types
 			text = "je_iw_funding_stepper_label"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -289,7 +308,7 @@ types covert_operations_widget_types
 			text = "je_iw_funding_stepper_value"
 			size = { 180 24 }
 			align = center|nobaseline
-			using = fontsize_medium
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -328,7 +347,7 @@ types covert_operations_widget_types
 				minimumsize = { 170 -1 }
 				maximumsize = { 170 -1 }
 				align = left|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "level_text" {}
 			}
@@ -337,7 +356,7 @@ types covert_operations_widget_types
 				minimumsize = { 80 -1 }
 				maximumsize = { 80 -1 }
 				align = right|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "stealth_text" {}
 			}
@@ -346,7 +365,7 @@ types covert_operations_widget_types
 				minimumsize = { 80 -1 }
 				maximumsize = { 80 -1 }
 				align = right|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "capacity_text" {}
 			}
@@ -355,7 +374,7 @@ types covert_operations_widget_types
 				minimumsize = { 130 -1 }
 				maximumsize = { 130 -1 }
 				align = right|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				elide = right
 				block "cost_text" {}
 			}
@@ -374,7 +393,7 @@ types covert_operations_widget_types
 		maximumsize = { 362 -1 }
 		parentanchor = vcenter
 		align = left|nobaseline
-		using = fontsize_large
+		using = covert_fontsize_heading
 		default_format = "#tooltippable"
 	}
 
@@ -392,7 +411,7 @@ types covert_operations_widget_types
 	### is simply disabled — it can never end the wrong operation.
 	type covert_op_stand_down_button = button {
 		using = default_button_action
-		size = { 150 24 }
+		size = { 150 28 }
 		parentanchor = vcenter
 
 		block "sd_context" {}
@@ -408,7 +427,7 @@ types covert_operations_widget_types
 			autoresize = yes
 			max_width = 140
 			elide = right
-			using = fontsize_small
+			using = covert_fontsize_row
 			text = "je_iw_stand_down_button"
 		}
 	}
@@ -439,7 +458,7 @@ types covert_operations_widget_types
 			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -450,7 +469,7 @@ types covert_operations_widget_types
 			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -461,7 +480,7 @@ types covert_operations_widget_types
 			default_format = "#tooltippable"
 			size = { 80 24 }
 			align = right|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
 		}
@@ -479,7 +498,7 @@ types covert_operations_widget_types
 			text = "[ScriptContainer.GetVariableValue('iw_priority')|0]"
 			size = { 40 24 }
 			align = center|nobaseline
-			using = fontsize_small
+			using = covert_fontsize_row
 			parentanchor = vcenter
 		}
 
@@ -501,7 +520,7 @@ types covert_operations_widget_types
 		maximumsize = { 460 -1 }
 		margin_left = 12
 		align = left|nobaseline
-		using = fontsize_medium
+		using = covert_fontsize_row
 	}
 
 	### One running operation: its icon and title, its phase and detection as
@@ -990,7 +1009,7 @@ types covert_operations_widget_types
 		maximumsize = { 362 -1 }
 		parentanchor = vcenter
 		align = left|nobaseline
-		using = fontsize_large
+		using = covert_fontsize_heading
 		default_format = "#tooltippable"
 	}
 
@@ -1054,7 +1073,7 @@ types covert_operations_widget_types
 					minimumsize = { 402 -1 }
 					maximumsize = { 402 -1 }
 					align = left|nobaseline
-					using = fontsize_large
+					using = covert_fontsize_heading
 					text = "je_iw_known_row_attacker"
 				}
 
@@ -1288,7 +1307,7 @@ types covert_operations_widget_types
 					autoresize = yes
 					max_width = 140
 					elide = right
-					using = fontsize_large
+					using = covert_fontsize_row
 					text = "je_iw_known_expose_button"
 				}
 			}
@@ -1343,7 +1362,7 @@ types covert_operations_widget_types
 				maximumsize = { 402 -1 }
 				parentanchor = vcenter
 				align = left|nobaseline
-				using = fontsize_large
+				using = covert_fontsize_heading
 				text = "je_iw_net_row_title"
 			}
 		}
@@ -1363,7 +1382,7 @@ types covert_operations_widget_types
 				autoresize = yes
 				parentanchor = vcenter
 				align = left|nobaseline
-				using = fontsize_medium
+				using = covert_fontsize_row
 				default_format = "#tooltippable"
 				elide = right
 				text = "je_iw_net_row_strength"
@@ -1621,7 +1640,7 @@ types covert_operations_widget_types
 					autoresize = yes
 					parentanchor = hcenter
 					align = hcenter|nobaseline
-					using = fontsize_medium
+					using = covert_fontsize_overview
 					text = "je_iw_slots_detail"
 				}
 				flowcontainer = {
@@ -1724,7 +1743,8 @@ types covert_operations_widget_types
 			}
 
 			### Rows 3 and 4: capacity and Tradecraft as bars. Fixed-width cells
-			### in the same order, so the two bars line up.
+			### in the same order, so the two bars line up: 100 label, 180 bar,
+			### 140 value (the top tier's "100 · top tier" at 16), 24 trend.
 			flowcontainer = {
 				direction = vertical
 				spacing = 6
@@ -1742,11 +1762,11 @@ types covert_operations_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_capacity_header"
 					}
 					default_progressbar_horizontal = {
-						size = { 200 18 }
+						size = { 180 18 }
 						parentanchor = vcenter
 						blockoverride "values" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_capacity_frac') )]"
@@ -1790,12 +1810,12 @@ types covert_operations_widget_types
 						}
 					}
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 140 -1 }
+						maximumsize = { 140 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_capacity_total"
 					}
 					# The trend column of the Tradecraft row, kept empty so the
@@ -1819,11 +1839,11 @@ types covert_operations_widget_types
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_tradecraft_header"
 					}
 					default_progressbar_horizontal = {
-						size = { 200 18 }
+						size = { 180 18 }
 						parentanchor = vcenter
 						blockoverride "values" {
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_tc_frac') )]"
@@ -1867,12 +1887,12 @@ types covert_operations_widget_types
 						}
 					}
 					textbox = {
-						minimumsize = { 120 -1 }
-						maximumsize = { 120 -1 }
+						minimumsize = { 140 -1 }
+						maximumsize = { 140 -1 }
 						autoresize = yes
 						parentanchor = vcenter
 						align = left|nobaseline
-						using = fontsize_medium
+						using = covert_fontsize_overview
 						text = "je_iw_tradecraft_line"
 					}
 					widget = {
