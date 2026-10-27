@@ -197,7 +197,7 @@ power bloc's locked principle slots, so Part 1 is mostly those. Resource-transit
 - **Confidence:** medium (that the tile is redundant per state is certain; where the figure belongs is a design call)
 
 ### VAN-8. Seabed Licences tile: a five-basin table written as text, in every coastal state
-- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the hover keeps the country line and Room to build, and points to the Seabed tab for each basin. The basin display values it read (`te_seabed_world_records_disp_*`) are now unused.
+- **Status:** done in the 2026-10-27 wave (`wave/gui-vanilla`): the hover keeps the country line and Room to build, and points to the Seabed tab for each basin. The basin display values it read (`te_seabed_world_records_disp_*`) are now unused. **VAN-8b (owner request, 2026-10-27):** once the viewing player has researched Abyssal Plain Mining, a coastal state without this tile (another country's, or a non-participant's) shows an Ocean Basin tile; the gate is observer-safe (`Not( GetMetaPlayer.IsObserver )` before `te_seabed_basin_tile_sgui`), and a once-a-game step sets every coastal state's basin the month any country has the research.
 - **Category:** list / spread-out/redundant
 - **Where:** `gui/states_panel.gui:2390-2492`; loc `TE_STATE_SEABED_TT` (`:1059`)
 - **Now:** the hover prints, for each of five basins, "Pacific: 3, 1; 12 of 40 (weight 4.2)" — four
