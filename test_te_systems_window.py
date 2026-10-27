@@ -286,8 +286,9 @@ class WindowTest(unittest.TestCase):
 
     def test_a_greyed_tabs_tooltip_has_three_branches(self):
         # Running: the open tooltip. Greyed with every unlock condition met
-        # (an entry that has run its course): te_window_tab_met_tt, since
-        # IsValidTooltip then renders nothing (play-test 2026-09-30).
+        # (an entry that has run its course): te_system_tab_met_tt, the line
+        # every system tab shares (WIN-5), since IsValidTooltip then renders
+        # nothing (play-test 2026-09-30).
         # Otherwise: the locked line and the checklist.
         for sys_ in ("space_race", "colonial_empire", "grand_monuments", "seabed"):
             with self.subTest(tab=sys_):
@@ -298,12 +299,14 @@ class WindowTest(unittest.TestCase):
                 self.assertIn("'te_window_tab_%s_tt'" % sys_, tt)
                 self.assertIn("GetScriptedGui('te_window_%s_tab_unlock_sgui').IsValid(" % sys_, tt)
                 # the Seabed tab has no journal entry, so its own "met" line
-                met = "'te_window_tab_seabed_met_tt'" if sys_ == "seabed" else "'te_window_tab_met_tt'"
+                met = "'te_window_tab_seabed_met_tt'" if sys_ == "seabed" else "'te_system_tab_met_tt'"
                 self.assertIn(met, tt)
                 self.assertIn("Localize( 'te_window_tab_%s_locked_tt' )" % sys_, tt)
                 self.assertIn("GetScriptedGui('te_window_%s_tab_unlock_sgui').IsValidTooltip(" % sys_, tt)
                 self.assertLess(tt.index(".IsValid("), tt.index(met))
-        self.assertIn("te_window_tab_met_tt", _all_loc())
+        self.assertIn("te_system_tab_met_tt", _all_loc())
+        for gone in ("te_window_tab_met_tt", "te_market_tab_met_tt"):
+            self.assertNotIn(gone, _all_loc())
         self.assertRegex(self.panel, r'blockoverride "header_close_button" \{\s*'
                                      r"onclick = \"\[GetVariableSystem\.Clear\('com_open_window'\)\]\"\s*\}")
         self.assertEqual(_all_loc()["te_systems_window_title"], "Timeline Extended")
@@ -668,8 +671,9 @@ class TabContentTest(unittest.TestCase):
         blocks = list(_entry_blocks(tab))
         self.assertEqual([key for key, _, _ in blocks], ["je_grand_monuments"])
         _, widget, before = blocks[0]
-        # the header outside the gate
-        self.assertRegex(before, re.compile(r'default_header = \{.*?text = "je_grand_monuments"', re.S))
+        # the header outside the gate: the tab's own name, as every other tab's
+        # header is (WIN-4; the entry is "Monuments" in the journal)
+        self.assertRegex(before, re.compile(r'default_header = \{.*?text = "te_window_tab_grand_monuments"', re.S))
         self.assertLess(before.index("default_header"), before.index("te_window_grand_monuments_tab_sgui"))
         self._check_entry(widget, before, "te_window_grand_monuments_tab_sgui",
                           _journal_types("je_grand_monuments", "je_grand_monuments.txt", "grand_monuments_widget.gui"),

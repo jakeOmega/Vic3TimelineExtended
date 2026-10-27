@@ -144,7 +144,7 @@ types te_systems_window_types
 				### unlock conditions with a tick or a cross. When they all pass but the
 				### entry is not running (in a save whose entry had run its course, the
 				### checklist came out empty: play-test 2026-09-30), the tooltip says so
-				### instead (te_window_tab_met_tt). tab_buttons defaults both
+				### instead (te_system_tab_met_tt). tab_buttons defaults both
 				### halves of a slot to `visible = no`, so each visibility block says
 				### when its half shows: the templates above.
 				###
@@ -190,7 +190,7 @@ types te_systems_window_types
 						text = "te_window_tab_space_race"
 					}
 					blockoverride "second_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "second_button_click" {
 						enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -211,7 +211,7 @@ types te_systems_window_types
 						text = "te_window_tab_grand_monuments"
 					}
 					blockoverride "third_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "third_button_click" {
 						enabled = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -232,7 +232,7 @@ types te_systems_window_types
 						text = "te_window_tab_colonial_empire"
 					}
 					blockoverride "fourth_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 					}
 					blockoverride "fourth_button_click" {
 						enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -765,7 +765,9 @@ types te_systems_window_types
 				### gate, so it shows whenever the tab does; the gate
 				### (te_window_grand_monuments_tab_sgui) sits on a parent of the
 				### GetPlayerJournalEntry datacontext, never on the widget carrying it;
-				### the column is a fixed 520, the journal roots' width, centred.
+				### the column is a fixed 520, the journal roots' width, centred. The
+				### header is the tab's own name, as every other tab's is; the entry
+				### keeps its short "Monuments" in the journal (2026-10-27 audit, WIN-4).
 				flowcontainer = {
 					name = "te_systems_window_grand_monuments_tab"
 					using = te_systems_window_grand_monuments_selected
@@ -779,7 +781,7 @@ types te_systems_window_types
 					default_header = {
 						using = default_list_position
 						blockoverride "text" {
-							text = "je_grand_monuments"
+							text = "te_window_tab_grand_monuments"
 						}
 					}
 
