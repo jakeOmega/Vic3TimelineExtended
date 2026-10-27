@@ -1061,7 +1061,7 @@
  country_court_challenges_ignored_bool_desc:0 "No court challenges a change to the constitution, whatever the Judiciary law."
  country_court_reviews_forced_laws_bool_desc:0 "A law forced through by Forceful Legislation goes to the courts once it passes. Six months later they strike it down if [concept_judicial_independence] is at least #v 90#! when the law was only expedited, #v 60#! when it was pushed forward decisively or #v 30#! when it was forced through. The government can then comply, defy the court or pack it."
  country_homelands_can_change_bool_desc:0 "Allows [concept_homeland] assignments to shift over time based on which cultures predominantly inhabit a state."
- country_longevity_care_banned_bool_desc:0 "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
+ country_longevity_care_banned_bool_desc:0 "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  country_nuclear_disarmament_bool_desc:0 "This country has agreed to give up its nuclear weapons."
  country_nuclear_program_pause_bool_desc:0 "Nuclear weapons development is halted, by a freeze agreed in a treaty or at an arsenal ceiling: the programme builds nothing and cannot be funded."
  country_receiving_nuclear_program_aid_bool_desc:0 "This country is receiving aid to develop its [concept_nuclear_program]."

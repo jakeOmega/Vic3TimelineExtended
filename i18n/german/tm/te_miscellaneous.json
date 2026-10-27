@@ -7852,8 +7852,8 @@
   "de": "Heimatländer können sich ändern"
  },
  "country_longevity_care_banned_bool": {
-  "en": "Longevity Care Banned[GetPlayer.GetCustom('te_demog_census_off_name')]",
-  "de": "Langlebigkeitsmedizin verboten[GetPlayer.GetCustom('te_demog_census_off_name')]"
+  "en": "Longevity Care Banned[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Langlebigkeitsmedizin verboten[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "country_nuclear_disarmament_bool": {
   "en": "Nuclear Disarmament",

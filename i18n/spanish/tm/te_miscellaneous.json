@@ -7716,8 +7716,8 @@
   "es": "Las tierras natales pueden cambiar"
  },
  "country_longevity_care_banned_bool": {
-  "en": "Longevity Care Banned[GetPlayer.GetCustom('te_demog_census_off_name')]",
-  "es": "Medicina de la longevidad prohibida[GetPlayer.GetCustom('te_demog_census_off_name')]"
+  "en": "Longevity Care Banned[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "es": "Medicina de la longevidad prohibida[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "country_nuclear_disarmament_bool": {
   "en": "Nuclear Disarmament",

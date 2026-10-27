@@ -1705,7 +1705,8 @@ class TestEngineLineTypes(unittest.TestCase):
         loc = _text(ROOT / "localization" / "english" / "te_modifiers_l_english.yml")
         for (family, field), name in P.ENGINE_LINE_TYPES.items():
             # the name ends in "(Demographics)" under Full only (te_demog_line_name; a release's gate never shows it)
-            self.assertRegex(loc, rf'\n {name}:0 "\${field}\$\[GetPlayer\.GetCustom\(\'te_demog_line_name\'\)\]"', name)
+            self.assertRegex(loc, rf'\n {name}:0 "\${field}\$\[SelectLocalization\(GetPlayer\.IsValid,'
+                                  r"'te_demog_line_name_ingame','te_demog_census_off_none'\)\]\"", name)
             # vanilla's descriptions end without a full stop ("How many children are born each year"). A release ships
             # these types with no Demographics rule (final review m2), so the description names no rule or setting.
             desc = re.search(rf'\n {name}_desc:0 "(.*)"', loc).group(1)
@@ -6555,7 +6556,8 @@ class TestModifierTypes(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {name}:0 \"", name)
             # each census type's text ends in the census-off call (te_demog_custom_loc.txt, test_demographics_modifiers)
             self.assertRegex(loc, rf"(?m)^ {name}_desc:0 \".*Used by the census on the Demographics tab\."
-                                  r"\[GetPlayer\.GetCustom\('te_demog_census_off_desc'\)\]\"$", name)
+                                  r"\[SelectLocalization\(GetPlayer\.IsValid,'te_demog_census_off_desc_ingame',"
+                                  r"'te_demog_census_off_none'\)\]\"$", name)
             self.assertNotIn(name, engine, name)
         self.assertNotRegex(text, r"(?m)^state_female_work_share_add\s*=")
         self.assertNotRegex(loc, r"(?m)^ state_female_work_share_add(_desc)?:")

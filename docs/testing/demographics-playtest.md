@@ -1432,7 +1432,7 @@ a white dot; all three pips have a dark rim.
 ## The census's inputs with the rule off (2026-10-24)
 
 Under Disabled, every census-only modifier's name ends in a grey "(Demographics off)" and its hover in a note that no
-census runs (`te_demog_custom_loc.txt`, through `[GetPlayer.GetCustom('te_demog_census_off_name')]` in the name). The
+census runs (`te_demog_custom_loc.txt`, through the `te_demog_census_off_name` entry in the name). The
 name has no scope of its own, so the call goes through `GetPlayer`, as vanilla's `concept_enactment_phase_ingame_added`
 does; no modifier name in vanilla or the mod has used it before.
 
@@ -1447,7 +1447,9 @@ does; no modifier name in vanilla or the mod has used it before.
 4. **The log.** `error.log` has no `not valid for 'te_demog_census_off_name'` or `_desc` burst (the Banking Cycle title's
    `GetPlayer.GetCustom` writes one, `docs/audits/open_issues.md` L11). If it does, or the tag shows a raw key, the
    fallback is the release's: comment the lines out of a build that ships with the census off
-   (`scripts/release/comment_out_census_inputs.py`), and take the calls back out of the loc.
+   (`scripts/release/comment_out_census_inputs.py`), and take the calls back out of the loc. The 2026-10-27 08:03
+   launch logged one such burst, before its save had loaded: the Pollution Impact loading tip, with no player. The
+   calls are guarded since (§ Modifier names with no player).
 
 ## The Workforce Ratio lines under Full (2026-10-24)
 
@@ -1526,3 +1528,24 @@ No self-check: every read the build makes is proven (`modulo` on the census year
    month's tick at worst.
 5. **Save size.** The 2057 save as plain text before and after a year: up to about 300 more ring variables and a few
    dozen row variables in each state with people past 150.
+
+## Modifier names with no player (log triage 2026-10-27)
+
+Every name that reaches Demographics' custom loc (the census inputs' "(Demographics off)", the moved Workforce Ratio
+and birth and death lines, Women's Work) now calls it as
+`[SelectLocalization(GetPlayer.IsValid,'<entry>_ingame','<plain key>')]`, vanilla's guard for loading-tip text. The
+08:03 launch on 2026-10-27 showed why: before the save loaded, the Pollution Impact loading tip listed
+`state_region_pollution_health`'s lines, and its three census lines logged `Object of type 'country' is not valid for
+'te_demog_census_off_name'` (and `_desc`, `te_demog_wf_replaced_name`): 1,980 lines in three seconds. No self-check:
+loc can't run one.
+
+1. **An observer.** Start an observer game, open a law tooltip with a census line (Restorative Justice: Deaths from
+   Violence and Accidents, Census: Men at Work) and the Pollution Impact concept. The names read plain, with no tag and no raw
+   `_ingame` key, and `error.log` has no `not valid for 'te_demog` line and no line naming `IsValid`.
+2. **The loading screen.** On a load whose tip is Pollution Impact ("Show me another tip!" rolls a new one), the effects
+   list reads plain, and `error.log` has no `jomini_custom_text.h:91` line for a `te_demog` entry.
+3. **In game, unchanged.** § The census's inputs with the rule off items 1–3, and the Workforce Ratio and birth and
+   death lines' tags under Full, read as before.
+
+Fallback: if `GetPlayer.IsValid` logs or a name shows the raw `_ingame` key, put the bare calls back (the burst is
+cosmetic) and register the loading-tip burst in `docs/audits/mod_known_noise.md`.
