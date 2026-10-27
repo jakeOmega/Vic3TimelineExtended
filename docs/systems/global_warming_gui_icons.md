@@ -53,7 +53,7 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 | Emission Standards | a red-brick smokestack with a round gauge on its side, the needle in the green | `policy_emission_standards.dds` |
 | Climate Adaptation | a grey stone sea wall with a deep blue wave breaking against it | `policy_climate_adaptation.dds` |
 | Reforestation Subsidies | a young sapling planted in a mound of earth | `policy_reforestation.dds` |
-| Carbon Removal Support | **placeholder:** the Carbon Capture and Storage technology's icon, `gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds`. To paint: a grey intake tower drawing a blue CO₂ stream down into the ground, proposed `policy_carbon_removal.dds` | `gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds` |
+| Carbon Removal Support | **placeholder:** the Carbon Capture and Storage technology's icon, `gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds`. To paint: a gray intake tower drawing a blue CO₂ stream down into the ground, proposed `policy_carbon_removal.dds` | `gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds` |
 | Public Transit | a green electric tram, front view, its pantograph on top | `policy_public_transit.dds` |
 | Fossil-Fuel Divestment | a black oil barrel, a gold coin flying up and away from it (the list's red arrow was left out) | `policy_fossil_fuel_divestment.dds` |
 | Green Building Codes | a small red-brick building front with a bright green leaf on its wall | `policy_green_building_codes.dds` |
@@ -75,7 +75,7 @@ The same 20 px check as the policy rows shows while a programme runs.
 
 ## Top Emitters: the row marks
 
-No new art. Each row starts with the leader's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the leader; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own country's row says "Our country" in words.
+No new art. Each row starts with the country's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the country; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own country's row says "Our country" in words.
 
 ## Overview: the temperature bar
 

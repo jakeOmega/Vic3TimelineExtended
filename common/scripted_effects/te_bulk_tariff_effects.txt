@@ -20,6 +20,7 @@
 # While the wait runs (the cooldown set, the grace week over), the tooltip says
 # when the row frees up, "again in about 42 days" (MKT-5, 2026-10-27), from the
 # day the wait began (te_bulk_tariff_cd_day_<dir>, te_bulk_tariff_values.txt).
+# A wait from before that day was recorded keeps the old line.
 te_bulk_tariff_apply = {
 	custom_tooltip = te_bulk_tariff_effect_$DIR$_$LEVEL$
 	if = {
@@ -27,7 +28,10 @@ te_bulk_tariff_apply = {
 		custom_tooltip = te_bulk_tariff_effect_grace_$DIR$
 	}
 	else_if = {
-		limit = { has_variable = te_bulk_tariff_cd_$DIR$ }
+		limit = {
+			has_variable = te_bulk_tariff_cd_$DIR$
+			has_variable = te_bulk_tariff_cd_day_$DIR$
+		}
 		custom_tooltip = te_bulk_tariff_effect_wait_$DIR$
 	}
 	else = {

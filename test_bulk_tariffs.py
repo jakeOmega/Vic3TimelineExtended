@@ -169,7 +169,9 @@ class EffectTest(unittest.TestCase):
         apply = self.effects["te_bulk_tariff_apply"]
         self.assertEqual(apply["if"], {"limit": {"has_variable": "te_bulk_tariff_grace_$DIR$"},
                                        "custom_tooltip": "te_bulk_tariff_effect_grace_$DIR$"})
-        self.assertEqual(apply["else_if"], {"limit": {"has_variable": "te_bulk_tariff_cd_$DIR$"},
+        # A wait from before the day was recorded keeps the old line, not "about 0 days".
+        self.assertEqual(apply["else_if"], {"limit": {"has_variable": ["te_bulk_tariff_cd_$DIR$",
+                                                                       "te_bulk_tariff_cd_day_$DIR$"]},
                                             "custom_tooltip": "te_bulk_tariff_effect_wait_$DIR$"})
         self.assertEqual(apply["else"], {"custom_tooltip": "te_bulk_tariff_effect_cd_$DIR$"})
         values = load("common/script_values/te_bulk_tariff_values.txt")
