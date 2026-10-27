@@ -2930,6 +2930,17 @@ population_transfer_pop_ratio_score = {
 	max = 50
 }
 
+# State Collapse's status line (je_state_collapse, country scope): the weeks
+# left before the bar fills and the state collapses.
+state_collapse_weeks_left = {
+	value = 52
+	if = {
+		limit = { has_variable = state_collapse_progress }
+		subtract = var:state_collapse_progress
+	}
+	min = 0
+}
+
 #==================================================
 # GUI Display Script Values — Mega Project Resource Tracking
 #==================================================
