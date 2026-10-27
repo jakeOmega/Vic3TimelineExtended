@@ -879,12 +879,12 @@ types te_state_panel_widget_types
 						### IN THIS STATE — zero rows hide (before the first
 						### pulse, and the local effect while undedicated).
 						te_state_gm_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_tourism'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_tourism_tt"
+							}
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/tourism.dds"
@@ -898,12 +898,12 @@ types te_state_panel_widget_types
 						}
 
 						te_state_gm_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_local'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_local_tt"
+							}
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
@@ -920,12 +920,12 @@ types te_state_panel_widget_types
 						### Ancestral Antiquity's tourism and the Epigraphic Archive's
 						### universities, the state's whole, each hidden at 0.
 						te_state_gm_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_tourism'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_sig_tourism_tt"
+							}
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/goods_icons/tourism.dds"
@@ -939,12 +939,12 @@ types te_state_panel_widget_types
 						}
 
 						te_state_gm_row = {
-							blockoverride "label_format" {
-								default_format = "#tooltippable"
-							}
 							visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('gm_state_disp_sig_university'), '(CFixedPoint)0')]"
 							blockoverride "row_tooltip" {
 								tooltip = "gm_state_sig_university_tt"
+							}
+							blockoverride "label_format" {
+								default_format = "#tooltippable"
 							}
 							blockoverride "row_icon_texture" {
 								texture = "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
