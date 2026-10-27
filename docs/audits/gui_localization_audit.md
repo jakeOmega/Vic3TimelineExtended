@@ -26,7 +26,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 | #1203 |
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | #1204 |
 | United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | #1205 |
-| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | #1206 |
+| Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done; COV-12's optional network table deferred) | 39 | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
 | Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 | 73 | #1209 |
@@ -288,37 +288,37 @@ Top priorities: an overview of what needs us, and our own vote under the tally (
 
 Top priorities: the pull breakdown's order (CH-3; CH-1 is fixed here); the leaderboard as a one-line table (CH-2); a programmes cell in the overview (CH-9); each running operation's effect shown as modifier lines (COV-1); the launch decision in one place (COV-2); one name per operation (COV-3); the Tradecraft bar's retired eye marker (COV-6).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| CH-1 | A negative Standard of Living contribution is hidden from "Where Our Pull Comes From" (the bug is **fixed in this PR**; a rank-factor line in its hover remains) | hidden info | quick–medium |
-| CH-2 | The Top Cultural Powers board is ten copy-pasted two-line prose rows; make it a one-line table | list | large |
-| CH-3 | The Pull Multiplier row sits *below* the Raw Score it is already part of | style / confusing structure | medium |
-| CH-4 | Where the funding cap comes from is shown nowhere | hidden info | medium |
-| CH-5 | Influence tier: three names per tier, a clash with vanilla's "Major Power", no thresholds anywhere (loc part done) | style + hidden info | quick–medium |
-| CH-6 | Three concept descriptions still describe a "parenthetical" the panel no longer has (loc part done) | over-explaining | quick |
-| CH-7 | The board's hover says "yearly recount"; everything else says about twice a year (loc part done) | style | quick–medium |
-| CH-8 | Live overview tooltips re-teach what the concept and How already say (loc part done) | over-explaining | quick |
-| CH-9 | The overview has no actionable reading; programme state lives two sections down | spread-out | medium |
-| CH-10 | Programme-condition lines read as complaints next to a tick (loc part done) | style | quick |
-| CH-11 | The funding tooltip is prose where its siblings are "Label: value" (loc part done) | style | quick |
-| CH-12 | Two colour keys for the same fifteen models, under different names (loc part done) | style / redundant | quick–medium |
-| CH-13 | "Program" and "Programme" for the same things (spelling, mentioned once) | style | quick |
-| CH-14 | Duplicate model explanation between How and the concept | over-explaining | quick |
-| CH-15 | Type sizes predate the 17 / 20 / 16 ladder | style | medium |
-| COV-1 | A running operation never says what it is doing; the caught-operation hovers are prose, not modifiers | hidden info + style | medium |
-| COV-2 | Deciding a launch needs four places; the launch tooltip has none of the target-specific numbers | spread-out | medium–large |
-| COV-3 | Each operation has up to three names | style | quick |
-| COV-4 | Row titles are coloured red / yellow / green by an unstated rule that the exposure tiers contradict | style / hidden info | medium |
-| COV-5 | An operation's detection risk is a sentence, not the breakdown the shared block promises | list / style | medium |
-| COV-6 | The Tradecraft bar uses the eye-shaped marker the guide retired, and its "→" means something else | style | medium |
-| COV-7 | The Tradecraft hover is How-it-works, and drops one tier's unlocks (loc part done) | over-explaining + inconsistency | quick–medium |
-| COV-8 | The standing verdicts have no figure, no next threshold, and one shouts (loc part done) | hidden info / style | quick |
-| COV-9 | Row-button tooltips: the root they read may not exist there, and guard checks show as ticks (loc part done) | hidden info + over-explaining | quick–medium |
-| COV-10 | Tooltips that repeat How, and one that points at a panel that no longer exists (loc part done) | over-explaining / stale | quick |
-| COV-11 | "Funding is zero" is said in three places; the running state line explains (loc part done) | redundant / over-explaining | quick |
-| COV-12 | Operation rows lack the target's flag; network rows spend two lines saying "nothing yet" | style / list compactness | medium |
-| COV-13 | Launch-tooltip wording out of step with the panel (loc part done) | style | quick |
-| COV-14 | Type sizes predate the 17 / 20 / 16 ladder | style | medium |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| CH-1 | A negative Standard of Living contribution is hidden from "Where Our Pull Comes From" (the bug is **fixed in this PR**; a rank-factor line in its hover remains) | hidden info | quick–medium | done: the bug in #1202; the row's hover now says the rank factor it is counted at (`ch_sol_rank_factor`) |
+| CH-2 | The Top Cultural Powers board is ten copy-pasted two-line prose rows; make it a one-line table | list | large | done: a datamodel table (rank, flag, country, share, change, model swatch) over rows `ch_board_rebuild` writes; each country's own change; `TE_SELF_CHECK ch_board_rows` |
+| CH-3 | The Pull Multiplier row sits *below* the Raw Score it is already part of | style / confusing structure | medium | done: the multiplier closes the components, signed; Raw Score alone under the rule |
+| CH-4 | Where the funding cap comes from is shown nowhere | hidden info | medium | done: the level's hover gives the maximum, the institution, the two technologies and the modifier breakdown |
+| CH-5 | Influence tier: three names per tier, a clash with vanilla's "Major Power", no thresholds anywhere (loc part done) | style + hidden info | quick–medium | done: the hover names the next tier and its threshold; one copy of the floors (`ch_tier_N_floor`) |
+| CH-6 | Three concept descriptions still describe a "parenthetical" the panel no longer has (loc part done) | over-explaining | quick | done (#1202) |
+| CH-7 | The board's hover says "yearly recount"; everything else says about twice a year (loc part done) | style | quick–medium | done: wording in #1202; a row's hover lists every non-zero component, adding up to its Raw Score |
+| CH-8 | Live overview tooltips re-teach what the concept and How already say (loc part done) | over-explaining | quick | done (#1202) |
+| CH-9 | The overview has no actionable reading; programme state lives two sections down | spread-out | medium | done: a programs cell in Banking's `te_banking_ov_cell`; the leader flags stay |
+| CH-10 | Programme-condition lines read as complaints next to a tick (loc part done) | style | quick | done (#1202) |
+| CH-11 | The funding tooltip is prose where its siblings are "Label: value" (loc part done) | style | quick | done (#1202) |
+| CH-12 | Two colour keys for the same fifteen models, under different names (loc part done) | style / redundant | quick–medium | done: short names with the full name on hover, in two columns (three don't fit at 17) |
+| CH-13 | "Program" and "Programme" for the same things (spelling, mentioned once) | style | quick | done: American ("Program") in the panel's text and its concepts, the owner's call |
+| CH-14 | Duplicate model explanation between How and the concept | over-explaining | quick | done: `je_ch_how_models` cut to what the concept doesn't say |
+| CH-15 | Type sizes predate the 17 / 20 / 16 ladder | style | medium | done: `ch_fontsize_row` / `_heading` / `_overview`, width-tested |
+| COV-1 | A running operation never says what it is doing; the caught-operation hovers are prose, not modifiers | hidden info + style | medium | done: each row title's hover lists the operation's modifier lines; the caught-operation hovers too |
+| COV-2 | Deciding a launch needs four places; the launch tooltip has none of the target-specific numbers | spread-out | medium–large | done: the launch tooltip gives our network and head start there and the upkeep added; one phase line and `concept_operation_phase` |
+| COV-3 | Each operation has up to three names | style | quick | done: one name per operation (`iw_op_name_<type>`), spliced by the actions and the rows |
+| COV-4 | Row titles are coloured red / yellow / green by an unstated rule that the exposure tiers contradict | style / hidden info | medium | done: plain titles and an Exposure line (`iw_exposure_tier`) |
+| COV-5 | An operation's detection risk is a sentence, not the breakdown the shared block promises | list / style | medium | done: the risk's hover is a table of its terms that adds up to it (`iw_det_*`); Funding Stealth in points |
+| COV-6 | The Tradecraft bar uses the eye-shaped marker the guide retired, and its "→" means something else | style | medium | done: threshold lines on both bars (`covert_bar_line`), headline `42 · next 60` |
+| COV-7 | The Tradecraft hover is How-it-works, and drops one tier's unlocks (loc part done) | over-explaining + inconsistency | quick–medium | done: the hover is this month's reading; the rules are in How |
+| COV-8 | The standing verdicts have no figure, no next threshold, and one shouts (loc part done) | hidden info / style | quick | done (#1202) |
+| COV-9 | Row-button tooltips: the root they read may not exist there, and guard checks show as ticks (loc part done) | hidden info + over-explaining | quick–medium | done: (a) in #1202; (b) guards print only when they fail, the priority-3 gate only on that step |
+| COV-10 | Tooltips that repeat How, and one that points at a panel that no longer exists (loc part done) | over-explaining / stale | quick | done (#1202) |
+| COV-11 | "Funding is zero" is said in three places; the running state line explains (loc part done) | redundant / over-explaining | quick | done: the Funding state line shows only while funded with nothing running |
+| COV-12 | Operation rows lack the target's flag; network rows spend two lines saying "nothing yet" | style / list compactness | medium | done: the flag, and one report line; the one-line network table is deferred (an owner call: it reverses the round-3 layout) |
+| COV-13 | Launch-tooltip wording out of step with the panel (loc part done) | style | quick | done (#1202) |
+| COV-14 | Type sizes predate the 17 / 20 / 16 ladder | style | medium | done: `covert_fontsize_row` / `_heading` / `_overview`, width-tested |
 
 ### Global Warming, Strategic Reserve and the Market panel ([detail](gui_audit/climate_reserve_market.md), #1207)
 
