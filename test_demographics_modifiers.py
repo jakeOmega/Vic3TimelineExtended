@@ -642,10 +642,6 @@ class TestBirthDeathLineNames(unittest.TestCase):
         self.assertEqual(self.loc["te_demog_line_tag"], " #grey (Demographics)#!")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TestModifierNamesRenderWithNoPlayer(unittest.TestCase):
     """A modifier type's name and description also render where no player exists: a loading-screen concept tip
     lists a static modifier's lines (vanilla's Pollution Impact shows state_region_pollution_health's), and so does an
@@ -679,3 +675,7 @@ class TestModifierNamesRenderWithNoPlayer(unittest.TestCase):
                                         "te_demog_wf_womens_desc"})
         for entry in guarded:
             self.assertEqual(self.loc[entry + "_ingame"], f"[GetPlayer.GetCustom('{entry}')]", entry)
+
+
+if __name__ == "__main__":
+    unittest.main()
