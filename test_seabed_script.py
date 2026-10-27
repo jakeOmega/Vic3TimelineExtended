@@ -893,5 +893,59 @@ class BlockadeTest(unittest.TestCase):
         self.assertIn("BLOCKADE_THROUGHPUT_IMPACT_SCALING", text)
 
 
+
+class PolicyDisplayTest(unittest.TestCase):
+    """The seabed policies print engine modifier lines (audit SEA-2): three
+    display static modifiers, never added to a country, whose script_only lines
+    restate the script values that do the work. A change to a factor that left
+    its line behind would show the player a wrong figure."""
+
+    def test_each_line_restates_its_script_value(self):
+        values, mods = read(VALUES), read(MODIFIERS)
+
+        def fields(name):
+            return {k: float(v) for k, v in re.findall(r"^\t(country_seabed_\w+) = (-?[\d.]+)",
+                                                         block(mods, name), re.M)}
+        for policy in ("survey", "sponsor", "unilateral"):
+            with self.subTest(policy=policy):
+                factor = literal(values, f"te_seabed_policy_factor_{policy}")
+                got = fields(f"te_seabed_policy_{policy}_display")
+                self.assertAlmostEqual(got.get("country_seabed_claim_weight_mult", 0.0), factor - 1)
+        self.assertAlmostEqual(fields("te_seabed_policy_sponsor_display")["country_seabed_claim_floor_add"],
+                               literal(values, "te_seabed_floor_keep"))
+        unilateral = fields("te_seabed_policy_unilateral_display")
+        self.assertAlmostEqual(unilateral["country_seabed_naval_weight_mult"],
+                               literal(values, "te_seabed_assertive_navy_mult") - 1)
+        self.assertAlmostEqual(unilateral["country_seabed_unilateral_relations_add"],
+                               literal(values, "te_seabed_unilateral_relations"))
+
+    def test_display_types_are_script_only_and_unread(self):
+        types = read(TYPES)
+        for name in ("country_seabed_claim_weight_mult", "country_seabed_naval_weight_mult",
+                     "country_seabed_claim_floor_add", "country_seabed_unilateral_relations_add"):
+            with self.subTest(type=name):
+                self.assertIn("script_only = yes", block(types, name))
+                for sub in ("common", "events"):
+                    for root, _, files in os.walk(os.path.join(REPO, sub)):
+                        for f in files:
+                            if f.endswith(".txt") and "modifier_type_definitions" not in root \
+                                    and "static_modifiers" not in root:
+                                self.assertNotIn(f"modifier:{name}", read(os.path.relpath(os.path.join(root, f), REPO)))
+
+    def test_buttons_and_overview_print_the_lines(self):
+        loc = english_loc()
+        for n, policy in ((1, "survey"), (2, "sponsor"), (3, "unilateral")):
+            for key in (f"te_seabed_policy_effect_{n}_tt", f"te_seabed_ov_policy_ours_{n}"):
+                with self.subTest(key=key):
+                    line = re.search(rf'^ {key}:0 "(.*)"$', loc, re.M).group(1)
+                    self.assertIn(f"[GetStaticModifier('te_seabed_policy_{policy}_display').GetDesc]", line)
+        # the static modifiers are display only: nothing adds them
+        for sub in ("common", "events"):
+            for root, _, files in os.walk(os.path.join(REPO, sub)):
+                for f in files:
+                    if f.endswith(".txt"):
+                        self.assertNotRegex(read(os.path.relpath(os.path.join(root, f), REPO)),
+                                            r"name = te_seabed_policy_\w+_display")
+
 if __name__ == "__main__":
     unittest.main()

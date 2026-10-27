@@ -131,16 +131,37 @@ class SeabedWidthTest(_Budget, unittest.TestCase):
             self.fits(key, cell, YEAR)
 
     def test_rival_rows(self):
-        """A rival's line wraps rather than eliding: a country's name can run to
-        forty characters. Our own row's button fits its label."""
-        for typ in ("te_seabed_rival_row", "te_seabed_rival_us"):
-            body = _type_body(self.gui, typ)
-            text = body[body.rindex("textbox = {"):]
-            self.assertIn("multiline = yes", text, typ)
-            self.assertNotIn("elide", text, typ)
+        """The claimants sit in fixed columns under their heads (audit SEA-3):
+        the name elides, its full form on the flag's hover (vanilla's tiny
+        flag), and each figure fits its column. A rival with no stored capital
+        keeps the scripted line, which wraps. Our row's button fits its label,
+        and the row fits the 480 column."""
+        cells = _type_body(self.gui, "te_seabed_rival_cells")
+        boxes = [cells[m.start():] for m in re.finditer(r"textbox = \{", cells)]
+        widths = [int(re.search(r"max_width = (\d+)", b).group(1)) for b in boxes]
+        self.assertIn("elide = right", boxes[0])
+        self.assertIn("tiny_flag", cells)
+        spacing = int(re.search(r"spacing = (\d+)", cells).group(1))
+        flag = int(re.search(r"size = \{ (\d+) 22 \}", cells).group(1))
+        head = _type_body(self.gui, "te_seabed_rival_head")
+        heads = [int(w) for w in re.findall(r"max_width = (\d+)", head)]
+        # the heads end where the columns do
+        self.assertEqual(heads, [flag + spacing + widths[0]] + [spacing + w for w in widths[1:]])
         button = self.type_box("te_seabed_claim_button", "claim_text")
         for key in ("te_seabed_relinquish_btn", "te_seabed_claim_again_btn"):
             self.fits(key, button)
+        button_w = int(re.search(r"size = \{ (\d+) 26 \}", _type_body(self.gui, "te_seabed_claim_button")).group(1))
+        self.assertLessEqual(8 + flag + spacing * 4 + sum(widths) + button_w, 480)
+        for key, col in (("te_seabed_rival_col_name", 0), ("te_seabed_rival_col_mines", 1),
+                         ("te_seabed_rival_col_claims", 2), ("te_seabed_rival_col_weight", 3)):
+            self.fits(key, (heads[col], "row"))
+        self.fits("te_seabed_rival_us_name", (widths[0], "row"))
+        for col, figure in ((1, "9999"), (2, "9999"), (3, "100%")):
+            self.assertLessEqual(len(figure) * UNITS["row"] * MARGIN, widths[col])
+        fallback = _type_body(self.gui, "te_seabed_rival_row")
+        line = fallback[fallback.rindex("textbox = {"):]
+        self.assertIn("multiline = yes", line)
+        self.assertNotIn("elide", line)
 
 
 class SeabedPanelTest(unittest.TestCase):
