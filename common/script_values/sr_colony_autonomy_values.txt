@@ -130,3 +130,13 @@ sr_evac_log_rose_needed = {
 		multiply = 0.9
 	}
 }
+# ... and the placeholder (promethean) people still in the receiving state once
+# both conversions ran: 0 when change_pop_religion and change_pop_culture took
+# effect at once. State scope.
+sr_evac_placeholder_left = {
+	value = 0
+	every_scope_pop = {
+		limit = { culture = cu:promethean }
+		add = total_size
+	}
+}

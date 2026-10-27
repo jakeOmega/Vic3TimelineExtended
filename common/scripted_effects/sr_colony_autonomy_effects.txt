@@ -256,9 +256,16 @@ sr_site_debug_aut_at = {
 # ---- Evacuation (design § 4) --------------------------------------------------------
 # Country scope, with local_var:sr_evac_people: the evacuees come home to the
 # capital in batches of sr_evac_batch_people, as the capital's largest pop's
-# culture and religion. create_pop is unverified at run time (nothing in the mod
-# or vanilla's parsed script calls it outside history), so the first evacuation
-# checks the capital grew (colony_evacuation, design § 11).
+# culture and religion. create_pop reads its culture and religion as literal keys
+# only (`culture = scope:x` fails load-time validation with "Missing culture"), so
+# the batches are made as vanilla's placeholder culture, promethean (atheist, the
+# Frankenstein easter egg's, which vanilla's 00_code_on_actions.txt creates the
+# same way), then converted to the saved religion and culture: change_pop_religion
+# and change_pop_culture take a scope target (vanilla's culture_south_america.3).
+# A capital that already holds promethean people, after that easter egg, would
+# convert its creatures too, so then the evacuees go to the most populous state
+# that has none. The first evacuation checks the state grew and no placeholder
+# is left (colony_evacuation, design § 11).
 sr_colony_evacuate = {
 	if = {
 		limit = {
@@ -284,20 +291,49 @@ sr_colony_evacuate = {
 		}
 		if = {
 			limit = {
+				capital = {
+					NOT = { any_scope_pop = { culture = cu:promethean } }
+				}
+			}
+			capital = { save_scope_as = sr_evac_state }
+		}
+		else = {
+			ordered_scope_state = {
+				limit = {
+					NOT = { any_scope_pop = { culture = cu:promethean } }
+				}
+				order_by = state_population
+				position = 0
+				check_range_bounds = no
+				save_scope_as = sr_evac_state
+			}
+		}
+		if = {
+			limit = {
 				exists = scope:sr_evac_culture
 				exists = scope:sr_evac_religion
+				exists = scope:sr_evac_state
 			}
-			capital = {
+			scope:sr_evac_state = {
 				set_global_variable = { name = sr_evac_log_before value = state_population }
 				while = {
 					count = local_var:sr_evac_batches
 					create_pop = {
-						culture = scope:sr_evac_culture
-						religion = scope:sr_evac_religion
+						culture = promethean
+						religion = atheist
 						size = 1000
 					}
 				}
+				every_scope_pop = {
+					limit = { culture = cu:promethean }
+					change_pop_religion = { target = scope:sr_evac_religion value = 1 }
+				}
+				every_scope_pop = {
+					limit = { culture = cu:promethean }
+					change_pop_culture = { target = scope:sr_evac_culture value = 1 }
+				}
 				set_global_variable = { name = sr_evac_log_after value = state_population }
+				set_global_variable = { name = sr_evac_log_left value = sr_evac_placeholder_left }
 			}
 			set_global_variable = {
 				name = sr_evac_log_sent
@@ -312,21 +348,26 @@ sr_colony_evacuate = {
 }
 
 # ---- Self-check: colony_evacuation (design § 11) ------------------------------------------
-# Country scope, after the first evacuation's batches: OK when the capital state
-# grew by at least 90% of the people sent home (both read in the same run);
-# BROKEN otherwise, with the numbers: create_pop made fewer, or none, or
-# state_population reads the change only later. The fallback is the evacuees
-# lost, as a release always lost them.
+# Country scope, after the first evacuation's batches: OK when the receiving state
+# grew by at least 90% of the people sent home and no placeholder (promethean)
+# people are left in it (all read in the same run); BROKEN otherwise, with the
+# numbers: create_pop made fewer, or none, or state_population reads the change
+# only later (before/after), or a conversion failed or lands only later (left).
+# The fallback is the evacuees lost, as a release always lost them.
 sr_colony_evacuation_self_check = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_evac_checked } }
 		set_global_variable = { name = sr_evac_checked value = yes }
 		if = {
-			limit = { sr_evac_log_rose >= sr_evac_log_rose_needed }
-			debug_log = "TE_SELF_CHECK OK colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the capital gained the evacuees) date=[TimeKeeper.GetCurrentDate.GetString]"
+			limit = {
+				sr_evac_log_rose >= sr_evac_log_rose_needed
+				has_global_variable = sr_evac_log_left
+				global_var:sr_evac_log_left = 0
+			}
+			debug_log = "TE_SELF_CHECK OK colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] left=[GetGlobalVariable('sr_evac_log_left').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state gained the evacuees, converted from the placeholder culture) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the capital gained less than 90% of the evacuees: create_pop made fewer or none, or state_population reads the change later; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN colony_evacuation before=[GetGlobalVariable('sr_evac_log_before').GetValue|0] after=[GetGlobalVariable('sr_evac_log_after').GetValue|0] sent=[GetGlobalVariable('sr_evac_log_sent').GetValue|0] left=[GetGlobalVariable('sr_evac_log_left').GetValue|0] country=[THIS.GetCountry.GetNameNoFormatting] (the state gained less than 90% of the evacuees, or left is above 0: create_pop made fewer or none, state_population reads the change later, or the placeholder culture was not converted; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }
