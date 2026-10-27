@@ -294,7 +294,7 @@ types te_demographics_widgets
 	### "women_next" (each a `value`), "next_visible" (the outline's gate),
 	### "men_range" and "women_range" (min and max; the country's
 	### te_dg_pyr_max by default, so a state's pyramid overrides them),
-	### and "row_tooltip".
+	### and "row_tooltip". Every row sets a tooltip, so the ages are underlined.
 	type te_demog_pyramid_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -352,6 +352,7 @@ types te_demographics_widgets
 			parentanchor = vcenter
 			align = hcenter|nobaseline
 			using = te_demog_fontsize_row
+			default_format = "#tooltippable"
 			block "band_label" {}
 		}
 

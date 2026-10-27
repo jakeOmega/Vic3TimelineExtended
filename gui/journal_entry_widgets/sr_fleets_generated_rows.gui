@@ -28,7 +28,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_1_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_1_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -140,7 +140,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_2_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_2_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -252,7 +252,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_3_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_3_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -364,7 +364,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_4_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_4_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -476,7 +476,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_5_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_5_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -588,7 +588,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_6_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_6_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -700,7 +700,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_7_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_7_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -812,7 +812,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_8_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_8_roles_tt"
 			}
 			blockoverride "fl_drive" {
@@ -924,7 +924,7 @@ types sr_fleets_generated_rows_types
 				text = "je_space_race_widget_fl_9_transit"
 			}
 			blockoverride "fl_strength" {
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_strength_full')|0]"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_strength')|0]/[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_strength_full')|0]#!"
 				tooltip = "je_space_race_widget_fl_9_roles_tt"
 			}
 			blockoverride "fl_drive" {
