@@ -13,7 +13,7 @@
 
 building_grand_monument_site = {
 	building_group = bg_grand_monuments
-	icon = "gfx/interface/icons/building_icons/building_grand_monument.dds"
+	icon = "gfx/interface/icons/building_icons/building_grand_monument_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 

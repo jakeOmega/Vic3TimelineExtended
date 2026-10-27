@@ -1052,6 +1052,9 @@ ICONS: dict[str, dict[str, dict]] = {
         # until now. Both stand on the ground, so the building style, not ORBIT.
         "building_orbital_defense_battery": {"subject": "a ground-to-orbit missile battery: a fenced concrete compound with a row of open round interceptor silos, a tall radar dish and a low bunker, one slim grey missile rising from a silo on a plume of white smoke, loosely hand-painted with visible brush strokes", "seed": 1},
         "building_space_command": {"subject": "a military space command base: a long low concrete headquarters with two white radar domes and a big dish antenna, beside a tall rocket assembly hangar and a launch tower holding a grey rocket, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Grand Monuments sites (#1058), on the finished monument's icon until now, as the megaproject
+        # sites were before batch 2.
+        "building_grand_monument_site": {"subject": "a grand monument under construction: a half-built stone column wrapped in wooden scaffolding with a timber crane beside it, blocks of cut stone stacked on an unfinished paved plaza, loosely hand-painted with visible brush strokes", "seed": 2},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
