@@ -6,6 +6,8 @@
   without one does not (VAN-10, gui_style_guide.md rule 3).
 - The Homeland Dynamics tile shows only where a homeland can change (VAN-6c,
   owner decision 2026-10-27).
+- Civil Rights' status names the ending the movement would reach now (JE-4),
+  through script values that mirror the entry's on_complete and on_fail.
 """
 
 import json
@@ -18,6 +20,8 @@ CONSTRUCTION = os.path.join(REPO, "gui", "construction_panel.gui")
 STATES = os.path.join(REPO, "gui", "states_panel.gui")
 WIDGETS = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
+CIVIL_RIGHTS = os.path.join(REPO, "common", "journal_entries", "je_civil_rights.txt")
+CR_VALUES = os.path.join(REPO, "common", "script_values", "civil_rights_values.txt")
 
 # gui_style_guide.md rule 3: the serif body face runs about 10 units a
 # character at 20, so 8.5 at the 17 of this panel's body text, plus 10%.
@@ -165,6 +169,35 @@ class HomelandTileTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertIn("a year", loc[key])
                 self.assertNotIn("points", loc[key])
+
+
+class CivilRightsEndingMirrorTest(unittest.TestCase):
+    """cr_win_ending_now / cr_fail_ending_now take the branches of on_complete
+    / on_fail in the same order, over the display copies of the counters."""
+
+    @staticmethod
+    def limits(block):
+        out = []
+        for m in re.finditer(r"limit = \{", block):
+            body = _block_from(block, m.start())[1:-1]
+            out.append(" ".join(body.split()))
+        return out
+
+    def check(self, dispatcher, value):
+        je = _read(CIVIL_RIGHTS)
+        m = re.search(r"(?m)^\t%s = \{" % dispatcher, je)
+        script = self.limits(_block_from(je, m.end() - 1))
+        values = _read(CR_VALUES)
+        m = re.search(r"(?m)^%s = \{" % value, values)
+        mirror = self.limits(_block_from(values, m.end() - 1))
+        script = [re.sub(r"var:cr_(\w+?)_months", r"cr_months_disp_\1", s) for s in script]
+        self.assertEqual(mirror, script)
+
+    def test_win(self):
+        self.check("on_complete", "cr_win_ending_now")
+
+    def test_fail(self):
+        self.check("on_fail", "cr_fail_ending_now")
 
 
 if __name__ == "__main__":
