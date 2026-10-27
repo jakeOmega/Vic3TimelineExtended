@@ -121,6 +121,12 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 scripts/analysis/check_localization_files.py
 
+      # Loc and player-guide text are American English (owner, 2026-10-27).
+      # Fix: run the script without --check and commit what it rewrote.
+      - name: Localization and player guide spelling (American)
+        if: ${{ !cancelled() }}
+        run: python3 scripts/analysis/check_loc_spelling.py --check
+
       # organize_loc.py rewrites localization/english/ on every full /reload.
       # A key filed where it would not put it (a hand-placed key, a new prefix
       # with no categorize_key rule) moves on the next reload, and committing
