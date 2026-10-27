@@ -4221,6 +4221,28 @@ types un_chamber_widget_types
 				visible = "[GetScriptedGui('un_chamber_mandate_case_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				text = "[GetScriptedGui('un_chamber_mandate_case_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
+			# Table it from here (the 2026-10-27 audit, UN-21): the proposal
+			# list's mandate row, op 3 of un_chamber_propose_sgui, with the
+			# same gates, greyed reasons and effect.
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				margin = { 0 4 }
+				visible = "[GetScriptedGui('un_chamber_mandate_case_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				datacontext = "[GetScriptedGui('un_chamber_propose_sgui')]"
+
+				un_chamber_action_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_mandate_propose_label"
+					}
+					blockoverride "action_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+					}
+				}
+			}
 		}
 	}
 

@@ -154,9 +154,8 @@ types un_authority_widget_types
 						text = "je_un_auth_sub_pillars"
 					}
 				}
-				un_auth_text = {
-					text = "je_un_auth_tbl_headline"
-				}
+				# No headline reading here: the overview's authority bar sits right
+				# above this section in both hosts (the 2026-10-27 audit, UN-17).
 
 				### participation: the bar spans the pillar's own range, zero at the centre line
 				### (un_overview_display_values.txt). Tooltip: what the pillar is,
@@ -765,9 +764,6 @@ types un_authority_widget_types
 				ignoreinvisible = yes
 				visible = "[GetVariableSystem.Exists('un_auth_log_open')]"
 
-				un_auth_note_text = {
-					text = "je_un_auth_log_intro"
-				}
 				un_auth_text = {
 					text = "[GetScriptedGui('un_authority_log_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				}

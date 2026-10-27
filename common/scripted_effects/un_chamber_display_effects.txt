@@ -749,17 +749,19 @@ un_chamber_outcome_line = {
 # country or global variable. Entries whose country has since been annexed
 # print the "a former member" fallback instead of a broken name.
 #
-# Called from un_chamber_active_voters_sgui (the resolution in session) and
-# from un_chamber_history_details_row (the archive's voting details), so the
-# commitments appear in both without a second builder.
+# Called from un_chamber_history_details_row (the archive's voting details);
+# the resolution in session has its own, un_chamber_ballot_lines_active, which
+# adds each voter's lean. Both print the commitments through
+# un_chamber_commitment_lines.
 # Scope: resolution container
 un_chamber_ballot_lines = {
 	# Tooltip generation prints a scope's own lines first and its nested
 	# country blocks afterwards, so a "In favour:" header followed by a list
 	# renders as every header on top and every country underneath (seen in the
-	# first play test). Each entry therefore says which side it is on, and the
-	# only line printed at this level is one sentence of introduction.
-	custom_tooltip_no_bullet = je_un_chamber_ballot_intro
+	# first play test). Each entry therefore says which side it is on. The
+	# introduction that says a pledge is not a vote is printed once, over the
+	# live ballot (un_chamber_ballot_lines_active), not on each of the
+	# archive's rows (the 2026-10-27 audit, UN-16).
 	if = {
 		limit = { has_variable_list = un_res_yes }
 		every_in_list = {
@@ -2052,7 +2054,6 @@ un_chamber_reasons_block = {
 				has_variable = un_res_why_no_lobbying
 			}
 		}
-		custom_tooltip_no_bullet = je_un_chamber_reasons_intro
 		un_chamber_reason_line = { NAME = un_res_why_yes_grounds KEY = je_un_res_why_yes_grounds }
 		un_chamber_reason_line = { NAME = un_res_why_yes_proposer KEY = je_un_res_why_yes_proposer }
 		un_chamber_reason_line = { NAME = un_res_why_yes_target KEY = je_un_res_why_yes_target }

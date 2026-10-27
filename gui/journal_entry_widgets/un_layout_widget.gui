@@ -536,6 +536,9 @@ types un_layout_widget_types
 				}
 			}
 			te_un_help_authority = {}
+			un_chamber_note = {
+				text = "je_un_auth_log_intro"
+			}
 			un_chamber_subheader = {
 				blockoverride "subheader_text" {
 					text = "je_un_how_sub_standing"
@@ -560,6 +563,9 @@ types un_layout_widget_types
 			}
 			un_chamber_note = {
 				text = "je_un_chamber_deleg_intro"
+			}
+			un_chamber_note = {
+				text = "je_un_chamber_reasons_intro"
 			}
 			un_chamber_subheader = {
 				blockoverride "subheader_text" {

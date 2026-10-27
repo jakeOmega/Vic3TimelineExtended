@@ -121,11 +121,13 @@ class TabStatusTest(unittest.TestCase):
 
 CHAMBER = os.path.join(W, "un_chamber_widget.gui")
 # Explanations that live in "How the UN works", and the live sections they left.
+# The log's and the reasons' intros joined them in the 2026-10-27 audit (UN-24).
 HOW_KEYS = ["je_un_chamber_missions_intro", "je_un_chamber_missions_help",
-            "je_un_chamber_deleg_intro", "je_un_chamber_obligations_help", "je_un_chamber_exposure_help"]
+            "je_un_chamber_deleg_intro", "je_un_chamber_obligations_help", "je_un_chamber_exposure_help",
+            "je_un_chamber_reasons_intro", "je_un_auth_log_intro"]
 LIVE_SECTIONS = [(AUTHORITY, "te_un_sec_why"), (CHAMBER, "te_un_sec_missions"),
                  (CHAMBER, "te_un_sec_delegations"), (CHAMBER, "te_un_sec_obligations"),
-                 (CHAMBER, "te_un_sec_exposure")]
+                 (CHAMBER, "te_un_sec_exposure"), (AUTHORITY, "te_un_sec_auth_history")]
 
 
 class HowItWorksTest(unittest.TestCase):
