@@ -336,8 +336,8 @@ choices) are read by eye. `TE_SR_COMBAT interdiction begun …` lines log each i
     Settlement Convention" (+2% prestige × enforcement), and a party's Destroy price tooltip and free-colony price
     read 40 and 20 infamy (twice the 20 and 10). Refusing it in the proposer event leaves "Refused the Outer Space
     Settlement Convention".
-11. **Placeholder art.** The convention's topic icon in the session strip and COPUOS's agency icon are copies of space
-    cooperation's and UNOOSA's; new art drops in under the same names.
+11. **Art.** The convention's topic icon in the session strip is COPUOS's domed moon rock under the scroll, and COPUOS's
+    agency icon the domed moon rock alone, each its own file (icon batch 6).
 
 ## Earth orbit: the ground reserve, batteries, Earth's blockade and fire support (slice 6, part 6d)
 
