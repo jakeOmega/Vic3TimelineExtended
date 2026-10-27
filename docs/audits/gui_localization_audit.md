@@ -377,7 +377,7 @@ All 21 findings are done (the GUI audit wave, 2026-10-27; play-test list `docs/t
 | NUC-10 | Crisis move naming: four verbs for one move (loc part done) | style | quick | done |
 | NUC-11 | The taboo score, target and direction are shown twice, and the section colours the direction (loc part done) | spread-out/redundant, style | quick–medium | done: one row |
 | NUC-12 | Warheads appear three times, with the estimate explained three times (loc part done) | spread-out/redundant, over-explaining | quick–medium | done: the count moved into Arsenal Size |
-| NUC-13 | Credibility shown twice; it is used everywhere but is not a concept | spread-out/redundant, over-explaining | medium | done: Nuclear Credibility concept, nested in 31 effect lines; shown once |
+| NUC-13 | Credibility shown twice; it is used everywhere but is not a concept | spread-out/redundant, over-explaining | medium | done: Nuclear Credibility concept, nested in 24 effect lines; shown once |
 | NUC-14 | Leaderboard and World Crises are fixed slot rows of concatenated text | list | large | done: datamodel tables over lists of capitals, with flags |
 | NUC-15 | Burden of our arsenal: a modifier told as prose, with one effect left out | style, hidden info | quick | done |
 | NUC-16 | Bar tooltips explain the design, and the survivability hover is long | over-explaining | quick | done |

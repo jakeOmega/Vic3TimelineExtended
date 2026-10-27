@@ -298,7 +298,7 @@ All 21 findings are done in the 2026-10-27 GUI audit wave (each finding's Status
 - **Confidence:** high
 
 ### NUC-13. Credibility shown twice; it is used everywhere but is not a concept
-- **Status:** Done. `concept_nuclear_credibility` ("Nuclear Credibility"), its desc the mechanics, with the pressure rule (every point above 50 adds half a point); 31 effect lines name it as `[Concept('concept_nuclear_credibility','credibility')]`. The Reputation row is dropped; the overview's Credibility cell gives a word (Doubted, Steady, Trusted) and the figure, its hover the figure, the word and what it adds to our threats.
+- **Status:** Done. `concept_nuclear_credibility` ("Nuclear Credibility"), its desc the mechanics, with the pressure rule (every point above 50 adds half a point); 24 effect lines name it as `[Concept('concept_nuclear_credibility','credibility')]`. The Reputation row is dropped; the overview's Credibility cell gives a word (Doubted, Steady, Trusted) and the figure, its hover the figure, the word and what it adds to our threats.
 - **Category:** spread-out/redundant, over-explaining
 - **Where:** overview meter (`nuclear_overview_widget.gui:229-252`) and Reputation row (`nuclear_deterrence_widget.gui:1871-1881`),
   both `nd_w_credibility_tt` (`te_miscellaneous_l_english.yml:5315`); credibility in `nd_tt_credibility_*`,
