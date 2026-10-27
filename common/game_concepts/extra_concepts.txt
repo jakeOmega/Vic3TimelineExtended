@@ -83,10 +83,18 @@ concept_sr_setback_risk = {}
 concept_sr_estimate = {}
 # Solar colonization's terms (the colony sections of space_race_widget.gui),
 # nested so a tooltip names one and its hover leads on: a colony's Defenses
-# link the space fleet, which links the ship role, which links Space Command.
+# link the space fleet, which links the ship role, which links each role and
+# Space Command.
 concept_sr_colony_fleet = {}
 concept_sr_space_fleet = {}
 concept_sr_ship_role = {}
+# One per role (the owner, 2026-10-27), in the build mix's order; the ship role
+# concept and the build-mix buttons link them.
+concept_sr_role_warship = {}
+concept_sr_role_rapid = {}
+concept_sr_role_siege = {}
+concept_sr_role_carrier = {}
+concept_sr_role_tender = {}
 concept_sr_space_command = {
 	texture = "gfx/interface/icons/building_icons/building_space_command.dds"
 }
