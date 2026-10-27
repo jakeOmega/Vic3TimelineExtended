@@ -51,6 +51,10 @@ covert_ops_detection_multi_op_scale = 1
 # journal entry passes computed chances of 0.15 and 0.45 to `random`.
 covert_ops_detection_floor = 0.1
 
+# The highest monthly detection risk any operation can carry. A named
+# constant so the operation row's breakdown can print it.
+covert_ops_detection_ceiling = 50
+
 # Counterintelligence IC bonus per funding level above 1 (applied via iw_funding_defense modifier)
 covert_ops_funding_defense_ic_per_level = 5
 
@@ -480,7 +484,7 @@ covert_operation_cost_mult = {
 
 # Detection chance per month for active operations
 # Factors: base risk, funding reduction, target counterintelligence (IC + type defense), operation priority, attacker efficiency
-# Formula: raw = base - funding_reduction - network + target_defense_penalty + their_network + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
+# Formula: raw = base - funding_reduction - network + target_defense_penalty + their_network + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, covert_ops_detection_ceiling]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -526,16 +530,22 @@ covert_operation_detection_chance = {
 	# better tradecraft still hides most of it)
 	add = covert_op_priority_detect_penalty
 	# Attacker's efficiency reduces detection: multiply by (1 - eff_mult), floor 0.2
-	multiply = {
-		value = 1
-		subtract = modifier:country_covert_operation_efficiency_mult
-		min = 0.2
-	}
+	multiply = covert_detection_efficiency_factor
 	# Per-operation roll scale (Section 1) applied here so the widget row and
 	# the roll (covert_op_roll_chance) read the exact same number.
 	multiply = covert_ops_detection_multi_op_scale
 	min = covert_ops_detection_floor
-	max = 50
+	max = covert_ops_detection_ceiling
+}
+
+# What the attacker's efficiency leaves of the raw detection score: (1 - eff_mult),
+# never below 0.2. Its own value so the operation row's breakdown (COV-5) prints
+# the factor the chance used.
+# Scope: operator country
+covert_detection_efficiency_factor = {
+	value = 1
+	subtract = modifier:country_covert_operation_efficiency_mult
+	min = 0.2
 }
 
 # Target counterintelligence: penalty based on target's total defense vs yours.
