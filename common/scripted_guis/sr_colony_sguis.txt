@@ -227,6 +227,34 @@ sr_colony_module_queue_sgui = {
 	}
 }
 
+# Colony Modules' queue: the entry at place scope:op (2 or later) changes
+# places with the one ahead of it; alt-click (scope:op = the place + 20)
+# moves it to the top. The per-world counts stay as they are.
+sr_colony_module_queue_up_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_contested_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		sr_mq_scope_place_movable = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = sr_mq_up_tt
+			sr_mq_move_up_from_scope = yes
+		}
+	}
+}
+
 # Colony Autonomy (slice 5 design § 4): abandon one of our colonies, after the
 # question (space_race_events.93), which names it through sr_abandon_site.
 sr_colony_abandon_sgui = {

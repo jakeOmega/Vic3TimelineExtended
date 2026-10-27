@@ -23539,6 +23539,239 @@ sr_mq_remove_20 = {
 	if = { limit = { has_variable = sr_mq_20_type } remove_variable = sr_mq_20_type }
 }
 
+# The entries at places n - 1 and n change places (a queue line's move-up button).
+# A move leaves the per-world counts as they are.
+sr_mq_swap_2 = {
+	if = {
+		limit = { has_variable = sr_mq_1_site has_variable = sr_mq_2_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_1_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_1_type }
+		set_variable = { name = sr_mq_1_site value = var:sr_mq_2_site }
+		set_variable = { name = sr_mq_1_type value = var:sr_mq_2_type }
+		set_variable = { name = sr_mq_2_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_2_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_3 = {
+	if = {
+		limit = { has_variable = sr_mq_2_site has_variable = sr_mq_3_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_2_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_2_type }
+		set_variable = { name = sr_mq_2_site value = var:sr_mq_3_site }
+		set_variable = { name = sr_mq_2_type value = var:sr_mq_3_type }
+		set_variable = { name = sr_mq_3_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_3_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_4 = {
+	if = {
+		limit = { has_variable = sr_mq_3_site has_variable = sr_mq_4_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_3_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_3_type }
+		set_variable = { name = sr_mq_3_site value = var:sr_mq_4_site }
+		set_variable = { name = sr_mq_3_type value = var:sr_mq_4_type }
+		set_variable = { name = sr_mq_4_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_4_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_5 = {
+	if = {
+		limit = { has_variable = sr_mq_4_site has_variable = sr_mq_5_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_4_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_4_type }
+		set_variable = { name = sr_mq_4_site value = var:sr_mq_5_site }
+		set_variable = { name = sr_mq_4_type value = var:sr_mq_5_type }
+		set_variable = { name = sr_mq_5_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_5_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_6 = {
+	if = {
+		limit = { has_variable = sr_mq_5_site has_variable = sr_mq_6_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_5_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_5_type }
+		set_variable = { name = sr_mq_5_site value = var:sr_mq_6_site }
+		set_variable = { name = sr_mq_5_type value = var:sr_mq_6_type }
+		set_variable = { name = sr_mq_6_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_6_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_7 = {
+	if = {
+		limit = { has_variable = sr_mq_6_site has_variable = sr_mq_7_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_6_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_6_type }
+		set_variable = { name = sr_mq_6_site value = var:sr_mq_7_site }
+		set_variable = { name = sr_mq_6_type value = var:sr_mq_7_type }
+		set_variable = { name = sr_mq_7_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_7_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_8 = {
+	if = {
+		limit = { has_variable = sr_mq_7_site has_variable = sr_mq_8_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_7_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_7_type }
+		set_variable = { name = sr_mq_7_site value = var:sr_mq_8_site }
+		set_variable = { name = sr_mq_7_type value = var:sr_mq_8_type }
+		set_variable = { name = sr_mq_8_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_8_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_9 = {
+	if = {
+		limit = { has_variable = sr_mq_8_site has_variable = sr_mq_9_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_8_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_8_type }
+		set_variable = { name = sr_mq_8_site value = var:sr_mq_9_site }
+		set_variable = { name = sr_mq_8_type value = var:sr_mq_9_type }
+		set_variable = { name = sr_mq_9_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_9_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_10 = {
+	if = {
+		limit = { has_variable = sr_mq_9_site has_variable = sr_mq_10_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_9_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_9_type }
+		set_variable = { name = sr_mq_9_site value = var:sr_mq_10_site }
+		set_variable = { name = sr_mq_9_type value = var:sr_mq_10_type }
+		set_variable = { name = sr_mq_10_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_10_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_11 = {
+	if = {
+		limit = { has_variable = sr_mq_10_site has_variable = sr_mq_11_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_10_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_10_type }
+		set_variable = { name = sr_mq_10_site value = var:sr_mq_11_site }
+		set_variable = { name = sr_mq_10_type value = var:sr_mq_11_type }
+		set_variable = { name = sr_mq_11_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_11_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_12 = {
+	if = {
+		limit = { has_variable = sr_mq_11_site has_variable = sr_mq_12_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_11_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_11_type }
+		set_variable = { name = sr_mq_11_site value = var:sr_mq_12_site }
+		set_variable = { name = sr_mq_11_type value = var:sr_mq_12_type }
+		set_variable = { name = sr_mq_12_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_12_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_13 = {
+	if = {
+		limit = { has_variable = sr_mq_12_site has_variable = sr_mq_13_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_12_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_12_type }
+		set_variable = { name = sr_mq_12_site value = var:sr_mq_13_site }
+		set_variable = { name = sr_mq_12_type value = var:sr_mq_13_type }
+		set_variable = { name = sr_mq_13_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_13_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_14 = {
+	if = {
+		limit = { has_variable = sr_mq_13_site has_variable = sr_mq_14_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_13_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_13_type }
+		set_variable = { name = sr_mq_13_site value = var:sr_mq_14_site }
+		set_variable = { name = sr_mq_13_type value = var:sr_mq_14_type }
+		set_variable = { name = sr_mq_14_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_14_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_15 = {
+	if = {
+		limit = { has_variable = sr_mq_14_site has_variable = sr_mq_15_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_14_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_14_type }
+		set_variable = { name = sr_mq_14_site value = var:sr_mq_15_site }
+		set_variable = { name = sr_mq_14_type value = var:sr_mq_15_type }
+		set_variable = { name = sr_mq_15_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_15_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_16 = {
+	if = {
+		limit = { has_variable = sr_mq_15_site has_variable = sr_mq_16_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_15_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_15_type }
+		set_variable = { name = sr_mq_15_site value = var:sr_mq_16_site }
+		set_variable = { name = sr_mq_15_type value = var:sr_mq_16_type }
+		set_variable = { name = sr_mq_16_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_16_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_17 = {
+	if = {
+		limit = { has_variable = sr_mq_16_site has_variable = sr_mq_17_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_16_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_16_type }
+		set_variable = { name = sr_mq_16_site value = var:sr_mq_17_site }
+		set_variable = { name = sr_mq_16_type value = var:sr_mq_17_type }
+		set_variable = { name = sr_mq_17_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_17_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_18 = {
+	if = {
+		limit = { has_variable = sr_mq_17_site has_variable = sr_mq_18_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_17_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_17_type }
+		set_variable = { name = sr_mq_17_site value = var:sr_mq_18_site }
+		set_variable = { name = sr_mq_17_type value = var:sr_mq_18_type }
+		set_variable = { name = sr_mq_18_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_18_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_19 = {
+	if = {
+		limit = { has_variable = sr_mq_18_site has_variable = sr_mq_19_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_18_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_18_type }
+		set_variable = { name = sr_mq_18_site value = var:sr_mq_19_site }
+		set_variable = { name = sr_mq_18_type value = var:sr_mq_19_type }
+		set_variable = { name = sr_mq_19_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_19_type value = local_var:sr_mq_move_type }
+	}
+}
+sr_mq_swap_20 = {
+	if = {
+		limit = { has_variable = sr_mq_19_site has_variable = sr_mq_20_site }
+		set_local_variable = { name = sr_mq_move_site value = var:sr_mq_19_site }
+		set_local_variable = { name = sr_mq_move_type value = var:sr_mq_19_type }
+		set_variable = { name = sr_mq_19_site value = var:sr_mq_20_site }
+		set_variable = { name = sr_mq_19_type value = var:sr_mq_20_type }
+		set_variable = { name = sr_mq_20_site value = local_var:sr_mq_move_site }
+		set_variable = { name = sr_mq_20_type value = local_var:sr_mq_move_type }
+	}
+}
+
+# The entry at place n moves to place 1, and those at 1 to n - 1 down a place (alt-click).
+sr_mq_to_top_2 = { sr_mq_swap_2 = yes }
+sr_mq_to_top_3 = { sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_4 = { sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_5 = { sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_6 = { sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_7 = { sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_8 = { sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_9 = { sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_10 = { sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_11 = { sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_12 = { sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_13 = { sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_14 = { sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_15 = { sr_mq_swap_15 = yes sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_16 = { sr_mq_swap_16 = yes sr_mq_swap_15 = yes sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_17 = { sr_mq_swap_17 = yes sr_mq_swap_16 = yes sr_mq_swap_15 = yes sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_18 = { sr_mq_swap_18 = yes sr_mq_swap_17 = yes sr_mq_swap_16 = yes sr_mq_swap_15 = yes sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_19 = { sr_mq_swap_19 = yes sr_mq_swap_18 = yes sr_mq_swap_17 = yes sr_mq_swap_16 = yes sr_mq_swap_15 = yes sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+sr_mq_to_top_20 = { sr_mq_swap_20 = yes sr_mq_swap_19 = yes sr_mq_swap_18 = yes sr_mq_swap_17 = yes sr_mq_swap_16 = yes sr_mq_swap_15 = yes sr_mq_swap_14 = yes sr_mq_swap_13 = yes sr_mq_swap_12 = yes sr_mq_swap_11 = yes sr_mq_swap_10 = yes sr_mq_swap_9 = yes sr_mq_swap_8 = yes sr_mq_swap_7 = yes sr_mq_swap_6 = yes sr_mq_swap_5 = yes sr_mq_swap_4 = yes sr_mq_swap_3 = yes sr_mq_swap_2 = yes }
+
 # Every entry for the world INDEX leaves the queue (its row's clear button; the
 # unmirror, when the world leaves THIS), then the counts.
 sr_mq_drop_site = {
@@ -25804,6 +26037,163 @@ sr_mq_remove_from_scope = {
 		sr_mq_remove_20 = yes
 	}
 	sr_mq_recount = yes
+}
+
+# The queue's move-up scripted GUI: the entry at place scope:op (2 or later) moves up
+# one place; at place scope:op - 20 (alt-click), to the top.
+sr_mq_move_up_from_scope = {
+	if = {
+		limit = { scope:op = 2 }
+		sr_mq_swap_2 = yes
+	}
+	else_if = {
+		limit = { scope:op = 3 }
+		sr_mq_swap_3 = yes
+	}
+	else_if = {
+		limit = { scope:op = 4 }
+		sr_mq_swap_4 = yes
+	}
+	else_if = {
+		limit = { scope:op = 5 }
+		sr_mq_swap_5 = yes
+	}
+	else_if = {
+		limit = { scope:op = 6 }
+		sr_mq_swap_6 = yes
+	}
+	else_if = {
+		limit = { scope:op = 7 }
+		sr_mq_swap_7 = yes
+	}
+	else_if = {
+		limit = { scope:op = 8 }
+		sr_mq_swap_8 = yes
+	}
+	else_if = {
+		limit = { scope:op = 9 }
+		sr_mq_swap_9 = yes
+	}
+	else_if = {
+		limit = { scope:op = 10 }
+		sr_mq_swap_10 = yes
+	}
+	else_if = {
+		limit = { scope:op = 11 }
+		sr_mq_swap_11 = yes
+	}
+	else_if = {
+		limit = { scope:op = 12 }
+		sr_mq_swap_12 = yes
+	}
+	else_if = {
+		limit = { scope:op = 13 }
+		sr_mq_swap_13 = yes
+	}
+	else_if = {
+		limit = { scope:op = 14 }
+		sr_mq_swap_14 = yes
+	}
+	else_if = {
+		limit = { scope:op = 15 }
+		sr_mq_swap_15 = yes
+	}
+	else_if = {
+		limit = { scope:op = 16 }
+		sr_mq_swap_16 = yes
+	}
+	else_if = {
+		limit = { scope:op = 17 }
+		sr_mq_swap_17 = yes
+	}
+	else_if = {
+		limit = { scope:op = 18 }
+		sr_mq_swap_18 = yes
+	}
+	else_if = {
+		limit = { scope:op = 19 }
+		sr_mq_swap_19 = yes
+	}
+	else_if = {
+		limit = { scope:op = 20 }
+		sr_mq_swap_20 = yes
+	}
+	else_if = {
+		limit = { scope:op = 22 }
+		sr_mq_to_top_2 = yes
+	}
+	else_if = {
+		limit = { scope:op = 23 }
+		sr_mq_to_top_3 = yes
+	}
+	else_if = {
+		limit = { scope:op = 24 }
+		sr_mq_to_top_4 = yes
+	}
+	else_if = {
+		limit = { scope:op = 25 }
+		sr_mq_to_top_5 = yes
+	}
+	else_if = {
+		limit = { scope:op = 26 }
+		sr_mq_to_top_6 = yes
+	}
+	else_if = {
+		limit = { scope:op = 27 }
+		sr_mq_to_top_7 = yes
+	}
+	else_if = {
+		limit = { scope:op = 28 }
+		sr_mq_to_top_8 = yes
+	}
+	else_if = {
+		limit = { scope:op = 29 }
+		sr_mq_to_top_9 = yes
+	}
+	else_if = {
+		limit = { scope:op = 30 }
+		sr_mq_to_top_10 = yes
+	}
+	else_if = {
+		limit = { scope:op = 31 }
+		sr_mq_to_top_11 = yes
+	}
+	else_if = {
+		limit = { scope:op = 32 }
+		sr_mq_to_top_12 = yes
+	}
+	else_if = {
+		limit = { scope:op = 33 }
+		sr_mq_to_top_13 = yes
+	}
+	else_if = {
+		limit = { scope:op = 34 }
+		sr_mq_to_top_14 = yes
+	}
+	else_if = {
+		limit = { scope:op = 35 }
+		sr_mq_to_top_15 = yes
+	}
+	else_if = {
+		limit = { scope:op = 36 }
+		sr_mq_to_top_16 = yes
+	}
+	else_if = {
+		limit = { scope:op = 37 }
+		sr_mq_to_top_17 = yes
+	}
+	else_if = {
+		limit = { scope:op = 38 }
+		sr_mq_to_top_18 = yes
+	}
+	else_if = {
+		limit = { scope:op = 39 }
+		sr_mq_to_top_19 = yes
+	}
+	else_if = {
+		limit = { scope:op = 40 }
+		sr_mq_to_top_20 = yes
+	}
 }
 
 # Extraplanetary Base room filled best grade first (design § 9): local_var:sr_eb_left

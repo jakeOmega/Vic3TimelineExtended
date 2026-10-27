@@ -853,6 +853,69 @@ class ModulesTest(unittest.TestCase):
             self.assertIn(f"GetCustom('sr_mq_{n}_world_name')", rows)
             self.assertIn(f"GetCustom('sr_mq_{n}_module_name')", rows)
 
+    def _play(self, effect, state):
+        """Plays the generated queue effect `effect` on `state` (variable -> value): its
+        variable writes and its calls of other sr_mq_ effects, in order. Every guard is
+        taken to hold, so `state` must be a full queue."""
+        local = {}
+        step = re.compile(r"set_(local_)?variable = \{ name = (\w+) value = (local_)?var:(\w+) \}"
+                          r"|(sr_mq_\w+) = yes")
+        for m in step.finditer(_block(self.effects, effect)):
+            if m.group(5):
+                self._play(m.group(5), state)
+            else:
+                (local if m.group(1) else state)[m.group(2)] = (local if m.group(3) else state)[m.group(4)]
+
+    def test_a_queue_line_moves_up_a_place_or_to_the_top(self):
+        q = gss.QUEUE_SLOTS
+        full = {}
+        for n in range(1, q + 1):
+            full[f"sr_mq_{n}_site"], full[f"sr_mq_{n}_type"] = 100 + n, 200 + n
+        for n in range(2, q + 1):
+            with self.subTest(place=n):
+                swap = _block(self.effects, f"sr_mq_swap_{n}")
+                self.assertIn(f"has_variable = sr_mq_{n - 1}_site has_variable = sr_mq_{n}_site", _block(swap, "limit"))
+                state = dict(full)
+                self._play(f"sr_mq_swap_{n}", state)
+                order = list(range(1, q + 1))
+                order[n - 2], order[n - 1] = n, n - 1
+                self.assertEqual(state, {**{f"sr_mq_{p}_site": 100 + m for p, m in enumerate(order, 1)},
+                                         **{f"sr_mq_{p}_type": 200 + m for p, m in enumerate(order, 1)}})
+                state = dict(full)
+                self._play(f"sr_mq_to_top_{n}", state)
+                order = [n, *range(1, n), *range(n + 1, q + 1)]
+                self.assertEqual(state, {**{f"sr_mq_{p}_site": 100 + m for p, m in enumerate(order, 1)},
+                                         **{f"sr_mq_{p}_type": 200 + m for p, m in enumerate(order, 1)}})
+        # The scripted GUI's op is the place, or the place + QUEUE_TOP_OP to the top; place 1 has no move.
+        self.assertGreaterEqual(gss.QUEUE_TOP_OP, q)
+        dispatch = _block(self.effects, "sr_mq_move_up_from_scope")
+        self.assertEqual(re.findall(r"scope:op = (\d+) \}\s*(sr_mq_\w+) = yes", dispatch),
+                         [(str(n), f"sr_mq_swap_{n}") for n in range(2, q + 1)]
+                         + [(str(n + gss.QUEUE_TOP_OP), f"sr_mq_to_top_{n}") for n in range(2, q + 1)])
+        self.assertNotIn("sr_mq_recount", dispatch)
+        movable = _block(self.triggers, "sr_mq_scope_place_movable")
+        self.assertEqual(re.findall(r"scope:op = (\d+) has_variable = sr_mq_(\d+)_site", movable),
+                         [(str(n), str(n)) for n in range(2, q + 1)]
+                         + [(str(n + gss.QUEUE_TOP_OP), str(n)) for n in range(2, q + 1)])
+        sgui = _block(_strip(_raw("common", "scripted_guis", "sr_colony_sguis.txt")), "sr_colony_module_queue_up_sgui")
+        self.assertIn("sr_mq_scope_place_movable = yes", _block(sgui, "is_valid"))
+        self.assertIn("sr_mq_move_up_from_scope = yes", _block(sgui, "effect"))
+        self.assertIn("always = no", _block(sgui, "ai_is_valid"))
+        # Every line from place 2 carries the button: click moves up, alt-click to the top.
+        rows = self.rows[self.rows.index("type te_sr_mq_rows = flowcontainer {"):]
+        for n in range(1, q + 1):
+            with self.subTest(row=n):
+                row = rows[rows.index(f"sr_disp_mq_{n}'"):]
+                button = row[row.index('blockoverride "mq_up_button" {'):row.index('blockoverride "mq_remove_button" {')]
+                if n == 1:
+                    self.assertEqual(button.split()[3:], ["visible", "=", "no", "}"])
+                    continue
+                for prop, op in (("enabled", n), ("ondefault", n), ("onalt", n + gss.QUEUE_TOP_OP), ("tooltip", n)):
+                    expr = re.search(rf'\b{prop} = "([^"]*)"', button).group(1)
+                    self.assertIn("GetScriptedGui('sr_colony_module_queue_up_sgui')", expr, prop)
+                    self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' )", expr, prop)
+                self.assertLess(button.index("click_modifiers = {"), button.index("ondefault"))
+
     def test_the_ai_never_queues_a_placeholder(self):
         for site in gss.SITES:
             body = _block(self.effects, f"sr_mod_ai_plan_{site.key}")
