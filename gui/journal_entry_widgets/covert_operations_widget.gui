@@ -573,12 +573,10 @@ types covert_operations_widget_types
 					visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 					texture = "gfx/interface/icons/diplomatic_action_icons/covert_secure_material_action.dds"
 				}
-				# PLACEHOLDER: cultivate assets' art until an icon pass draws
-				# Counterintelligence Support's own (test_covert_op_registry.PLACEHOLDER_ICON).
 				icon = {
 					size = { 32 32 }
 					visible = "[ScriptContainer.HasTag('iw_op_counterintel_support')]"
-					texture = "gfx/interface/icons/diplomatic_action_icons/covert_cultivate_assets_action.dds"
+					texture = "gfx/interface/icons/diplomatic_action_icons/covert_counterintel_support_action.dds"
 				}
 				icon = {
 					size = { 32 32 }
