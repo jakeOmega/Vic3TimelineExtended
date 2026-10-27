@@ -351,6 +351,17 @@ def english_loc():
     return loc
 
 
+def display_modifiers():
+    """{name: {field: value}} for the display-only static modifiers (GUI audit
+    BNK-6), from extra_modifiers.txt's "Display-only modifiers" section."""
+    text = (ROOT/'common/static_modifiers/extra_modifiers.txt').read_text(encoding='utf-8-sig')
+    out = {}
+    for m in re.finditer(r'(?m)^(banking_monthly_\w+|te_mon_monetisation_step|te_mon_mandate_loosen_step) = \{\n(.*?)^\}',
+                         text, re.S):
+        out[m.group(1)] = {k: float(v) for k, v in re.findall(r'(?m)^\t(\w+) = (-?[\d.]+)', m.group(2))}
+    return out
+
+
 def tooltip_keys(effects, body):
     """Every custom_tooltip key an effect body can draw, in any branch, through helpers."""
     keys = []
@@ -423,7 +434,7 @@ class NonModifierTooltipTest(unittest.TestCase):
             self.assertRegex(self.loc[label], r'^#title [^#]+:#!$')
         for key in {k for keys in NONMOD_LINES.values() for k in keys}:
             with self.subTest(key=key):
-                self.assertRegex(self.loc[key], r'^\$(%s)\$ ' % '|'.join(LABELS))
+                self.assertRegex(self.loc[key], r'^\$(%s)\$(?: |\\n)' % '|'.join(LABELS))
 
     def test_dashboard_rows_splice_the_lines_under_the_modifier(self):
         for tool, keys in ROW_LINES.items():
@@ -462,33 +473,17 @@ class NonModifierTooltipTest(unittest.TestCase):
     def test_figures_match_the_script_values(self):
         v, t, s = self.script.number, self.text, self.script
 
-        self.assertEqual(v('te_mon_qe_pressure'), 1)
-        self.assertIn('#v 1#! percentage point', t('banking_nonmod_open_market_ops_tt'))
-
-        self.assertEqual(v('te_mon_controls_damp_value'), .25)
-        self.assertIn('#b quarter#!', t('banking_nonmod_capital_controls_tt'))
+        # The figures a display modifier prints are DisplayModifierTest's.
         per_step, steps = v('te_mon_controls_months_per_step'), v('te_mon_controls_months_max') / v('te_mon_controls_months_per_step')
         self.assertIn('every #v %d#! months, up to #v %d#!' % (per_step, steps), t('banking_nonmod_capital_controls_fatigue_tt'))
         self.assertEqual(v('te_mon_controls_decay'), 3)
         self.assertIn('#v 3#! months a month, three times', t('banking_nonmod_capital_controls_off_tt'))
 
-        self.assertEqual(v('banking_external_inflow_factor'), .5)
-        self.assertIn('#b halved#!', t('banking_nonmod_restrict_inflows_tt'))
-
-        self.assertEqual(1 - v('banking_external_sterilized_factor'), .75)
-        self.assertIn('#b three quarters#!', t('banking_nonmod_sterilize_inflows_tt'))
-        self.assertIn('#v %.2f%%#!' % (100 * v('banking_external_sterilization_share')),
-                      t('banking_nonmod_sterilize_inflows_tt'))
-
         step, cap = v('banking_external_fx_protection_step'), v('banking_external_fx_protection_cap')
         months = math.ceil(cap / step - 1e-9)
-        for key in ('banking_nonmod_foreign_borrowing_limits_tt', 'banking_nonmod_foreign_borrowing_limits_off_tt'):
-            self.assertIn('about #v %d%%#!' % round(100 * step), t(key))
-        self.assertIn('up to #v %g%%#! after #v %d#! months' % (100 * cap, months),
+        self.assertIn('about #v %d%%#!' % round(100 * step), t('banking_nonmod_foreign_borrowing_limits_off_tt'))
+        self.assertIn('to #v %g%%#! after #v %d#! months' % (100 * cap, months),
                       t('banking_nonmod_foreign_borrowing_limits_tt'))
-
-        self.assertIn('up to #v %.2f%%#! of annual GDP' % (100 * v('banking_external_surrender_share')),
-                      t('banking_nonmod_fx_surrender_tt'))
 
         gdp, fatigue_cap = s.inputs['gdp'], v('banking_external_import_fatigue_cap')
         costs = []
@@ -496,14 +491,90 @@ class NonModifierTooltipTest(unittest.TestCase):
             s.vars['banking_external_import_months'] = months_funded
             costs.append(100 * v('banking_external_import_cost') / gdp)
         del s.vars['banking_external_import_months']
-        self.assertIn('costs #v %.2f%%#! of annual GDP from the treasury, rising to #v %.2f%%#! after #v %d#! funded months'
-                      % (*costs, fatigue_cap), t('banking_nonmod_emergency_import_financing_tt'))
+        self.assertIn('to #v %.2f%%#! after #v %d#! funded months' % (costs[1], fatigue_cap),
+                      t('banking_nonmod_emergency_import_financing_tt'))
+        self.assertTrue(math.isclose(costs[0] / 100, display_modifiers()['banking_monthly_emergency_import_financing']
+                                     ['country_te_mon_treasury_cost_gdp_add'], rel_tol=1e-9))
 
         holiday = s.effects['banking_effect_cb_bank_holiday']
         cooldown = next(val for key, _, val in holiday
                         if key == 'custom_tooltip' and ('text', '=', 'banking_bank_holiday_cooldown_set_tt') in val)
         days = s.field(s.field(cooldown, 'set_variable'), 'days')
         self.assertIn('#v %d#! years' % (int(days) // 365), t('banking_bank_holiday_cooldown_set_tt'))
+
+
+class DisplayModifierTest(unittest.TestCase):
+    """GUI audit BNK-6 (2026-10-27): what a tool or a control does outside an
+    applied modifier prints as modifier lines, from display-only static
+    modifiers no script applies. Each field is held to the script value the
+    monetary pulse uses, so the line cannot drift from the effect."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.script = Script()
+        cls.mods = display_modifiers()
+        cls.loc = english_loc()
+
+    def test_each_field_is_its_script_value(self):
+        v, m = self.script.number, self.mods
+        close = lambda a, b: self.assertTrue(math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-12), (a, b))
+        close(m['banking_monthly_open_market_ops']['country_te_mon_asset_purchase_pressure_add'],
+              v('te_mon_qe_pressure') / 100)
+        close(m['banking_monthly_capital_controls']['country_te_mon_rate_gap_pull_mult'],
+              v('te_mon_controls_damp_value') - 1)
+        close(m['banking_monthly_restrict_inflows']['country_te_mon_inflow_pull_mult'],
+              v('banking_external_inflow_factor') - 1)
+        close(m['banking_monthly_sterilize_inflows']['country_te_mon_inflow_price_pressure_mult'],
+              v('banking_external_sterilized_factor') - 1)
+        close(m['banking_monthly_sterilize_inflows']['country_te_mon_treasury_cost_gdp_add'],
+              v('banking_external_sterilization_share'))
+        close(m['banking_monthly_foreign_borrowing_limits']['country_te_mon_fx_debt_protection_add'],
+              v('banking_external_fx_protection_step'))
+        close(m['banking_monthly_fx_surrender']['country_te_mon_reserve_purchase_gdp_add'],
+              v('banking_external_surrender_share'))
+        close(m['te_mon_monetisation_step']['country_te_mon_minting_gdp_add'], v('te_mon_monetisation_gdp_share'))
+        close(m['te_mon_monetisation_step']['country_te_mon_printing_pressure_add'],
+              v('te_mon_monetisation_pressure') / 100)
+        close(m['te_mon_monetisation_step']['country_risk_premium_add'], v('te_mon_monetisation_premium') / 100)
+        close(m['te_mon_mandate_loosen_step']['country_te_mon_expected_inflation_add'],
+              v('te_mon_mandate_loosen_expectation') / 100)
+        applied = (ROOT/'common/static_modifiers/extra_modifiers.txt').read_text(encoding='utf-8-sig')
+        loosened = re.search(r'(?m)^te_mon_mandate_loosened = \{\n(.*?)^\}', applied, re.S).group(1)
+        close(m['te_mon_mandate_loosen_step']['country_risk_premium_add'],
+              float(re.search(r'country_risk_premium_add = ([\d.]+)', loosened).group(1)))
+
+    def test_nothing_applies_them_and_their_types_are_display_only(self):
+        types = (ROOT/'common/modifier_type_definitions/banking_cycle_modifier_types.txt').read_text(encoding='utf-8-sig')
+        users = []
+        for folder in ('common', 'events'):
+            for path in (ROOT/folder).rglob('*.txt'):
+                text = path.read_text(encoding='utf-8-sig')
+                users += [(path.name, name) for name in self.mods if re.search(r'name = %s\b' % name, text)]
+        self.assertEqual(users, [])
+        for fields in self.mods.values():
+            for field in fields:
+                if field.startswith('country_te_mon_'):
+                    with self.subTest(field=field):
+                        block = re.search(r'(?m)^%s = \{\n(.*?)^\}' % field, types, re.S).group(1)
+                        self.assertIn('script_only = yes', block)
+                        self.assertIn(field + '_desc', self.loc)
+
+    def test_each_is_printed(self):
+        printed = {
+            'banking_monthly_open_market_ops': 'banking_nonmod_open_market_ops_tt',
+            'banking_monthly_capital_controls': 'banking_nonmod_capital_controls_tt',
+            'banking_monthly_restrict_inflows': 'banking_nonmod_restrict_inflows_tt',
+            'banking_monthly_sterilize_inflows': 'banking_nonmod_sterilize_inflows_tt',
+            'banking_monthly_foreign_borrowing_limits': 'banking_nonmod_foreign_borrowing_limits_tt',
+            'banking_monthly_fx_surrender': 'banking_nonmod_fx_surrender_tt',
+            'banking_monthly_emergency_import_financing': 'banking_nonmod_emergency_import_financing_tt',
+            'te_mon_monetisation_step': 'banking_mon_monetise_step_tt',
+            'te_mon_mandate_loosen_step': 'banking_mon_mandate_cost_tt',
+        }
+        self.assertEqual(set(printed), set(self.mods))
+        for name, key in printed.items():
+            with self.subTest(modifier=name):
+                self.assertIn("[GetStaticModifier('%s').GetDesc]" % name, self.loc[key])
 
 
 if __name__ == '__main__':

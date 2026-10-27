@@ -13,9 +13,13 @@
 # (banking_nonmod_monthly_label / _lifted_label / _war_end_label: "Each month:",
 # "After lifting:", "When the war ends:"). The dashboard row tooltip
 # (banking_dash_tt_cb_*) splices the same keys under its modifier list. A new
-# tool whose pulse does more than its modifier adds a key here and there too;
-# test_banking_external_tools.NonModifierTooltipTest pins the figures in the
-# text to the script values.
+# tool whose pulse does more than its modifier adds a key here and there too.
+# Where the work is a figure, the line prints it as modifier lines (GUI audit
+# BNK-6): "Each month:" over the display-only banking_monthly_<tool> static
+# modifier's [GetStaticModifier(...).GetDesc], with prose left only for what no
+# figure says ("Operations stop if the treasury cannot pay").
+# test_banking_external_tools.NonModifierTooltipTest pins the prose's figures,
+# and DisplayModifierTest the display modifiers', to the script values.
 
 # The "Raise Policy Rate" pair used to open this file. It is deleted
 # (monetary_policy_design.md §18): the policy rate is a country variable the
