@@ -24,6 +24,7 @@ node, with the quotes taken off a quoted value. A bare token inside a block
 """
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -163,8 +164,23 @@ def parse(text: str) -> Node:
     return root
 
 
+# path -> (content digest, tree). Three audits parse the same files on every
+# reload; a file is parsed again only when its bytes changed (hashed, not
+# stat-compared: a rewrite inside one mtime tick keeps its stamp). The trees
+# are read, never changed.
+_CACHE: dict[str, tuple[bytes, Node]] = {}
+
+
 def parse_file(path: Path) -> Node:
-    return parse(path.read_text(encoding="utf-8-sig", errors="replace"))
+    raw = path.read_bytes()
+    digest = hashlib.blake2b(raw, digest_size=16).digest()
+    key = str(path.resolve())
+    hit = _CACHE.get(key)
+    if hit and hit[0] == digest:
+        return hit[1]
+    tree = parse(raw.decode("utf-8-sig", errors="replace"))
+    _CACHE[key] = (digest, tree)
+    return tree
 
 
 def gui_files(root: Path):

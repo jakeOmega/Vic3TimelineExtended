@@ -72,7 +72,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import gui_tree
-from gui_reference_audit import LEX, defined_names
+from gui_reference_audit import LEX
 from long_tooltip_audit import loc_call_keys
 from mod_state import split_loc_line
 
@@ -100,6 +100,7 @@ _MOD_CALLS = {
     "customizable_localization": re.compile(r"GetCustom\(\s*'([^']+)'"),
     "static_modifiers": re.compile(r"GetStaticModifier\(\s*'([^']+)'"),
 }
+_COLUMN0_KEY = re.compile(r"^(?:[A-Z_]+:)?([A-Za-z_][\w.\-]*)\s*=", re.M)
 _VARIABLE_READ = re.compile(r"\b(?:Var|GetVariable|GetGlobalVariable)\(|\bScriptedGui\.")
 _TAGGED_REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*\((?P<checks>[\w ,]+)\)\s*:\s*(?P<rationale>.+?)\s*$"
@@ -165,9 +166,13 @@ class _Context:
                 parsed = split_loc_line(raw)
                 if parsed:
                     self.loc[parsed[0]] = parsed[1]
+        # The names a mod file defines, from its column-0 keys: the files are
+        # tab-indented (format_paradox_tabs.py, in CI), so a depth-0 key opens
+        # its line. Enough to tell the mod's names apart, and much cheaper
+        # than gui_reference_audit.defined_names over every file.
         self.mod_names = {
-            kind: set().union(*(defined_names(p.read_text(encoding="utf-8-sig", errors="replace"))
-                                for p in sorted((root / "common" / kind).rglob("*.txt"))))
+            kind: {m for p in sorted((root / "common" / kind).rglob("*.txt"))
+                   for m in _COLUMN0_KEY.findall(p.read_text(encoding="utf-8-sig", errors="replace"))}
             for kind in _MOD_CALLS
         }
         self.trees = trees

@@ -14,8 +14,10 @@ import json
 import os
 import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
+import gui_tree
 from unmarked_hover_audit import CHECK, REPORT_PATH, audit, main, regenerate
 
 ROW_TYPE = """\
@@ -65,6 +67,45 @@ class _Fixture(unittest.TestCase):
 
     def flags(self):
         return [(f.line, f.hover) for f in audit(self.root).flags]
+
+
+class GuiTreeTests(unittest.TestCase):
+    def test_openers_props_and_lines(self):
+        tree = gui_tree.parse('types t {\n'
+                              '\ttype te_row = flowcontainer {\n'
+                              '\t\tblock "tip" {}\n'
+                              '\t\ttextbox = { text = "a # not a comment" size = { 10 20 } } # comment {\n'
+                              '\t}\n'
+                              '}\n'
+                              'te_row = { blockoverride "tip" { tooltip = "k" } }\n')
+        typedef = tree.children[0].children[0]
+        self.assertEqual((typedef.kind, typedef.name, typedef.base, typedef.line, typedef.end_line),
+                         ("type", "te_row", "flowcontainer", 2, 5))
+        block, textbox = typedef.children
+        self.assertEqual((block.kind, block.name), ("block", "tip"))
+        self.assertEqual(textbox.prop("text").value, "a # not a comment")
+        self.assertEqual(textbox.children[0].values, ["10", "20"])
+        override = tree.children[1].children[0]
+        self.assertEqual((override.label, override.prop("tooltip").line), ('blockoverride "tip"', 7))
+
+    def test_how_sections(self):
+        tree = gui_tree.parse('widget = {\n'
+                              '\tvisible = "[GetVariableSystem.Exists(\'x_how_open\')]"\n'
+                              '\ttextbox = { }\n'
+                              '}\n'
+                              'widget = { visible = "[Not(GetVariableSystem.Exists(\'x_how_open\'))]" textbox = { } }\n'
+                              'te_x_sec_how = { textbox = { } }\n')
+        how = [gui_tree.in_how_section(top.children[0]) for top in tree.children]
+        self.assertEqual(how, [True, False, True])
+
+    def test_cache_reparses_a_changed_file_of_the_same_size(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "x.gui")
+            for key in ("te_aaa", "te_bbb"):
+                with open(path, "w", encoding="utf-8-sig") as fh:
+                    fh.write(f'textbox = {{ text = "{key}" }}\n')
+                tree = gui_tree.parse_file(Path(path))
+                self.assertEqual(tree.children[0].prop("text").value, key)
 
 
 class DirectHoverTests(_Fixture):
