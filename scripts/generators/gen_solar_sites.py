@@ -229,6 +229,7 @@ GENERIC_TYPES = ("hab", "def", "port")
 CREWED_TYPES = ("a", "b", "def", "port")  # a Habitat houses the crews
 SHIP_SLOTS = 8
 QUEUE_SLOTS = 20  # the national module queue, first in first out (owner, 2026-10-25)
+QUEUE_TOP_OP = QUEUE_SLOTS  # the move-up scripted GUI's op for place n's alt-click: n + this
 MODULE_NAMES = {"a": "Specialization I", "b": "Specialization II", "hab": "Habitat",
                 "def": "Defences", "port": "Spaceport"}
 MODULE_AI_VALUE = 5  # Cede Colony's AI value of a module level past the first
@@ -1623,6 +1624,23 @@ def render_module_queue() -> list[str]:
         out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{q}_site }} remove_variable = sr_mq_{q}_site }}",
                 f"\tif = {{ limit = {{ has_variable = sr_mq_{q}_type }} remove_variable = sr_mq_{q}_type }}",
                 "}"]
+    out += ["", "# The entries at places n - 1 and n change places (a queue line's move-up button).",
+            "# A move leaves the per-world counts as they are."]
+    for n in range(2, q + 1):
+        out += [f"sr_mq_swap_{n} = {{",
+                "\tif = {",
+                f"\t\tlimit = {{ has_variable = sr_mq_{n - 1}_site has_variable = sr_mq_{n}_site }}",
+                f"\t\tset_local_variable = {{ name = sr_mq_move_site value = var:sr_mq_{n - 1}_site }}",
+                f"\t\tset_local_variable = {{ name = sr_mq_move_type value = var:sr_mq_{n - 1}_type }}",
+                f"\t\tset_variable = {{ name = sr_mq_{n - 1}_site value = var:sr_mq_{n}_site }}",
+                f"\t\tset_variable = {{ name = sr_mq_{n - 1}_type value = var:sr_mq_{n}_type }}",
+                f"\t\tset_variable = {{ name = sr_mq_{n}_site value = local_var:sr_mq_move_site }}",
+                f"\t\tset_variable = {{ name = sr_mq_{n}_type value = local_var:sr_mq_move_type }}",
+                "\t}",
+                "}"]
+    out += ["", "# The entry at place n moves to place 1, and those at 1 to n - 1 down a place (alt-click)."]
+    for n in range(2, q + 1):
+        out.append(f"sr_mq_to_top_{n} = {{ " + " ".join(f"sr_mq_swap_{m} = yes" for m in range(n, 1, -1)) + " }")
     out += ["",
             "# Every entry for the world INDEX leaves the queue (its row's clear button; the",
             "# unmirror, when the world leaves THIS), then the counts.",
@@ -1739,6 +1757,14 @@ def render_module_effects() -> list[str]:
         out += ["\tif = {" if n == 1 else "\telse_if = {", f"\t\tlimit = {{ scope:op = {n} }}",
                 f"\t\tsr_mq_remove_{n} = yes", "\t}"]
     out += ["\tsr_mq_recount = yes", "}"]
+    out += ["", "# The queue's move-up scripted GUI: the entry at place scope:op (2 or later) moves up",
+            f"# one place; at place scope:op - {QUEUE_TOP_OP} (alt-click), to the top.",
+            "sr_mq_move_up_from_scope = {"]
+    for i, (op, effect) in enumerate([(n, f"sr_mq_swap_{n}") for n in range(2, QUEUE_SLOTS + 1)]
+                                     + [(n + QUEUE_TOP_OP, f"sr_mq_to_top_{n}") for n in range(2, QUEUE_SLOTS + 1)]):
+        out += ["\tif = {" if i == 0 else "\telse_if = {", f"\t\tlimit = {{ scope:op = {op} }}",
+                f"\t\t{effect} = yes", "\t}"]
+    out += ["}"]
     out += ["", "# Extraplanetary Base room filled best grade first (design § 9): local_var:sr_eb_left",
             "# levels to place, local_var:sr_eb_sum the levels x grade so far (percent).",
             "sr_ebase_fill = {"]
@@ -1837,6 +1863,13 @@ def render_module_triggers() -> list[str]:
             "", "# The queue scripted GUI's place (scope:op) holds an entry.",
             "sr_mq_scope_place_filled = {", "\tOR = {",
             *[f"\t\tAND = {{ scope:op = {n} has_variable = sr_mq_{n}_site }}" for n in range(1, QUEUE_SLOTS + 1)],
+            "\t}", "}",
+            "", f"# The move-up scripted GUI's place (scope:op, or scope:op - {QUEUE_TOP_OP} to the top) holds an",
+            "# entry and is 2 or later.",
+            "sr_mq_scope_place_movable = {", "\tOR = {",
+            *[f"\t\tAND = {{ scope:op = {n} has_variable = sr_mq_{n}_site }}" for n in range(2, QUEUE_SLOTS + 1)],
+            *[f"\t\tAND = {{ scope:op = {n + QUEUE_TOP_OP} has_variable = sr_mq_{n}_site }}"
+              for n in range(2, QUEUE_SLOTS + 1)],
             "\t}", "}",
             "", "# THIS has a module queued at any world (the AI's method).",
             "sr_mq_any = {", "\tOR = {"]
@@ -2685,14 +2718,29 @@ def _module_row(site: Site) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _op_scope(op: int) -> str:
+    return (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( "
+            f"'(CFixedPoint){op}' ) ).End")
+
+
 def _queue_row(n: int) -> list[str]:
-    op = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( "
-          f"'(CFixedPoint){n}' ) ).End")
+    op = _op_scope(n)
     out = ["\t\tte_sr_mq_row = {"]
     out += _override("mq_visible", f'visible = "[{_eq(f"sr_disp_mq_{n}", 1)}]"')
     out += _override("mq_place", f'raw_text = "{n}."')
     out += _override("mq_world", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_mq_{n}_world_name')]\"")
     out += _override("mq_module", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_mq_{n}_module_name')]\"")
+    if n == 1:
+        out += _override("mq_up_button", "visible = no")
+    else:
+        up = "GetScriptedGui('sr_colony_module_queue_up_sgui')"
+        out += _override("mq_up_button",
+                         f"enabled = \"[{up}.IsValid( {op} )]\"",
+                         "click_modifiers = {",
+                         f"\tondefault = \"[{up}.Execute( {op} )]\"",
+                         f"\tonalt = \"[{up}.Execute( {_op_scope(n + QUEUE_TOP_OP)} )]\"",
+                         "}",
+                         f"tooltip = \"[{up}.ExecuteTooltip( {op} )]\"")
     out += _override("mq_remove_button",
                      f"enabled = \"[GetScriptedGui('sr_colony_module_queue_sgui').IsValid( {op} )]\"",
                      f"onclick = \"[GetScriptedGui('sr_colony_module_queue_sgui').Execute( {op} )]\"",
