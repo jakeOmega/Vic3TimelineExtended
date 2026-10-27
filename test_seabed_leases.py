@@ -189,7 +189,7 @@ class LeaseSharingTest(unittest.TestCase):
     def test_the_one_lease_tooltip_names_the_record(self):
         loc = english_loc()
         line = re.search(r"(?m)^ te_seabed_lease_one_tt:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("licences built on", line)
+        self.assertIn("licenses built on", line)
 
     def test_settle_tops_up_from_own_claims(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_settle_lease"))
@@ -441,7 +441,7 @@ class SubjectActionTest(unittest.TestCase):
                        "_action_propose_name", "_action_break_name", "_pact_desc"):
             self.assertRegex(loc, rf"(?m)^ te_seabed_administer_claims{suffix}:0 \"", suffix)
         desc = re.search(r"(?m)^ te_seabed_administer_claims_desc:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("licence", desc)
+        self.assertIn("license", desc.lower())
         self.assertIn("long-haul", desc.lower())
 
 

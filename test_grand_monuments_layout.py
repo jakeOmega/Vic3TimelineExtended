@@ -212,8 +212,8 @@ class HowItWorksTest(unittest.TestCase):
 
     def test_the_contest_line_is_brief_with_the_reason_on_hover(self):
         loc = _loc()
-        self.assertIn("It honours something this government is not", loc["gm_row_contest_tt"])
-        self.assertNotIn("It honours", loc["gm_row_contest"])
+        self.assertIn("It honors something this government is not", loc["gm_row_contest_tt"])
+        self.assertNotIn("It honors", loc["gm_row_contest"])
         self.assertIn('tooltip = "gm_row_contest_tt"', _type_body(_gui(), "gm_monument_row"))
 
     def test_the_hard_times_sentence_is_the_cells_tooltip(self):
