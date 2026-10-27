@@ -532,8 +532,8 @@ def _rule_loc():
 class TestCensusOffNames(unittest.TestCase):
     """With the census off, every census-only type's name and description say so (te_demog_custom_loc.txt)."""
 
-    NAME = "[GetPlayer.GetCustom('te_demog_census_off_name')]"
-    DESC = "[GetPlayer.GetCustom('te_demog_census_off_desc')]"
+    NAME = "[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+    DESC = "[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
 
     @classmethod
     def setUpClass(cls):
@@ -586,7 +586,8 @@ class TestWorkforceLineNames(unittest.TestCase):
 
     def test_the_replaced_family_ends_in_its_tag_only_under_full(self):
         self.assertEqual(self.loc["state_demog_replaced_ratio_add"],
-                         "$state_working_adult_ratio_add$[GetPlayer.GetCustom('te_demog_wf_replaced_name')]")
+                         "$state_working_adult_ratio_add$"
+                         "[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_replaced_name_ingame','te_demog_census_off_none')]")
         self.assertEqual(self._texts("te_demog_wf_replaced_name"),
                          [("te_demog_effects_run = yes", "te_demog_wf_replaced_tag"),
                           ("always = yes", "te_demog_census_off_none")])
@@ -596,9 +597,9 @@ class TestWorkforceLineNames(unittest.TestCase):
 
     def test_the_womens_work_family_reads_womens_work_first_under_full(self):
         self.assertEqual(self.loc["state_demog_womens_work_ratio_add"],
-                         "[GetPlayer.GetCustom('te_demog_wf_womens_name')]")
+                         "[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_womens_name_ingame','te_demog_wf_plain')]")
         self.assertEqual(self.loc["state_demog_womens_work_ratio_add_desc"],
-                         "[GetPlayer.GetCustom('te_demog_wf_womens_desc')]")
+                         "[SelectLocalization(GetPlayer.IsValid,'te_demog_wf_womens_desc_ingame','te_demog_wf_womens_desc_plain')]")
         self.assertEqual(self._texts("te_demog_wf_womens_name"),
                          [("te_demog_effects_run = yes", "te_demog_wf_womens_full"),
                           ("always = yes", "te_demog_wf_plain")])
@@ -617,7 +618,7 @@ class TestWorkforceLineNames(unittest.TestCase):
 class TestBirthDeathLineNames(unittest.TestCase):
     """Under Full, the moved birth and death lines' names end in "(Demographics)" (owner, 2026-10-25)."""
 
-    CALL = "[GetPlayer.GetCustom('te_demog_line_name')]"
+    CALL = "[SelectLocalization(GetPlayer.IsValid,'te_demog_line_name_ingame','te_demog_census_off_none')]"
 
     @classmethod
     def setUpClass(cls):
@@ -643,3 +644,38 @@ class TestBirthDeathLineNames(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestModifierNamesRenderWithNoPlayer(unittest.TestCase):
+    """A modifier type's name and description also render where no player exists: a loading-screen concept tip
+    lists a static modifier's lines (vanilla's Pollution Impact shows state_region_pollution_health's), and so does an
+    observer's session. `GetPlayer.GetCustom` there logs `Object of type 'country' is not valid for '<entry>'` once per
+    frame (about 2,000 lines in 3 seconds on 2026-10-27), so each such name reaches its custom loc through vanilla's
+    loading-tip guard, `SelectLocalization(GetPlayer.IsValid, '<x>_ingame', '<plain>')`, and only the `_ingame` key
+    calls GetCustom."""
+
+    GUARD = re.compile(r"\[SelectLocalization\(GetPlayer\.IsValid,'(\w+)_ingame','(\w+)'\)\]")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, _ = _rule_loc()
+        cls.types = set()
+        for path in (ROOT / "common/modifier_type_definitions").glob("*.txt"):
+            cls.types |= set(re.findall(r"(?m)^(\w+)\s*=\s*\{", path.read_text(encoding="utf-8-sig")))
+
+    def test_no_modifier_type_calls_getcustom_on_the_player_unguarded(self):
+        self.assertGreater(len(self.types), 100)
+        bare = [k for t in self.types for k in (t, t + "_desc") if "GetPlayer.GetCustom(" in self.loc.get(k, "")]
+        self.assertEqual(bare, [])
+
+    def test_each_guard_names_its_custom_entry_and_a_plain_fallback(self):
+        guarded = {}
+        for key, value in self.loc.items():
+            for entry, plain in self.GUARD.findall(value):
+                guarded[entry] = plain
+                self.assertIn(plain, self.loc, key)
+        self.assertEqual(set(guarded), {"te_demog_census_off_name", "te_demog_census_off_desc", "te_demog_line_name",
+                                        "te_demog_wf_replaced_name", "te_demog_wf_womens_name",
+                                        "te_demog_wf_womens_desc"})
+        for entry in guarded:
+            self.assertEqual(self.loc[entry + "_ingame"], f"[GetPlayer.GetCustom('{entry}')]", entry)

@@ -4184,8 +4184,8 @@
   "de": "Erlaubt es, dass sich [concept_homeland]-Zuweisungen im Laufe der Zeit ändern, je nachdem, welche Kulturen einen Staat überwiegend bewohnen."
  },
  "country_longevity_care_banned_bool_desc": {
-  "en": "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[GetPlayer.GetCustom('te_demog_census_off_desc')]",
-  "de": "Niemand kann Langlebigkeitsmedizin erreichen. Wer sie bereits erhält, scheidet aus, sobald das Verbot greift, und sein Körper behält die Jahre, die sie ihm erspart hat. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[GetPlayer.GetCustom('te_demog_census_off_desc')]"
+  "en": "No one is within reach of longevity care. Those in it leave as the ban takes hold, and their bodies keep the years it saved them. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Niemand kann Langlebigkeitsmedizin erreichen. Wer sie bereits erhält, scheidet aus, sobald das Verbot greift, und sein Körper behält die Jahre, die sie ihm erspart hat. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "country_nuclear_disarmament_bool_desc": {
   "en": "This country has agreed to give up its nuclear weapons.",
