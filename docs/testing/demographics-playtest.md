@@ -1549,3 +1549,43 @@ loc can't run one.
 
 Fallback: if `GetPlayer.IsValid` logs or a name shows the raw `_ingame` key, put the bare calls back (the burst is
 cosmetic) and register the loading-tip burst in `docs/audits/mod_known_noise.md`.
+
+## The GUI and localization audit (2026-10-27)
+
+The Demographics slice of the audit (`docs/audits/gui_audit/demog_nation_window.md`, DEM-1 to DEM-8, and #1202's loc
+fixes). Offline: `test_demographics_layout.py` (the link rows' widths, the lists' builder and markup),
+`test_demographics_registry.py` (`test_the_youth_and_metropolis_lists`, the fertility wording), the GUI lint and the
+audits. Nothing here rests on an engine fact a script can check, so there is no self-check: these are GUI reads.
+
+1. **Children per Woman (Display only or Full, both hosts).** The hover is the title, one line, the capital's (the
+   state's) terms, then "Mean age at childbirth: 29.4" and, where any are stored, the share of births to women of 50
+   and over; "after the next count" in a census from before mean age was stored. No sentence points at "the figures
+   above". The model's text is in How → Children per Woman.
+2. **How Demographics Works (both hosts).** Work and Retirement and Longevity sit after Causes of Death, each with
+   its notes. The Work note's last paragraph splices three rules: the fighting-age one prints the 1836 reference as a
+   percentage (it reads `GetPlayer`, so check it on the state subtab too), then the youth-bulge and sex-balance
+   rules.
+3. **The trimmed hovers.** Pension Age, Workforce, Pension Bill, Fighting-Age Men, Youth, Sex Balance, Longevity
+   Care, Longevity Gap, Biological Age, Backed Up and Uploaded Minds each show a title, a line and their figures, and
+   none ends in a blank line. The held-back switches still show their grey "Not applied yet" lines where a switch is
+   off.
+4. **The Youth list (Full or Display only, a country with a youth bulge).** Under the Youth row, up to ten rows,
+   strongest first: the state's name and "26% aged 20–29, strength 80%", no elision at 17. The count in the Youth
+   row's hover matches the rows (up to ten). A click opens the state on its Demographics subtab (as the States table's
+   rows do: note the tab it lands on), hovering highlights the state, a right click opens its menu, and the hover is
+   the state's Youth Bulge tooltip with the click note.
+5. **The Metropolises list.** Under Where People Live's Metropolises row, its states, largest share first, with
+   "61% in its largest city". The row's count is live and the list is drawn at the country census, so a state that
+   crossed 60% this year can be counted before it is listed: note it if the two disagree for longer than a year.
+6. **Every named state opens.** The three largest cities' rows are buttons like the States table's ("1.2M urban
+   people"); Most and Least Concentrated have a goto arrow in their right-hand slot that opens that state. Nothing
+   logs `Failed to fetch variable` for `te_dg_wc_top` or `te_dg_wc_bottom` while the Wealth section is open (the
+   arrows' datacontext sits under the rows' gate).
+7. **Small points.** The Gini cell's hover drops "A dash means…" once a Gini shows. The youth-bulge and more-men
+   lines print their radicals and turmoil figures in red, and the state's lines name the modifier its Modifiers
+   section lists.
+8. **The pension buttons (#1202, Full under Old Age Pension).** Each button's hover prints its interest groups'
+   reactions as the static modifier's own coloured lines (`GetStaticModifier('te_demog_pension_pos_*').GetDesc`),
+   then its failing conditions and its effect. Standard's says no group reacts.
+9. **The greyed tab.** Before the first census (a country released mid-game), the Population panel's Demographics
+   tab is greyed with "#b Demographics#!", "Not open yet. It opens once:" and the census line ticked or crossed.

@@ -458,26 +458,26 @@ Top priorities: colonial holdings and great-power pressure as lists (CE-1, CE-2)
 
 Top priorities: the fertility tooltips promise figures no longer drawn (DEM-1); Work and Retirement and Longevity topics in How (DEM-3, DEM-2); the country panel's Modifiers list says nothing about the 249 modifiers it hands to the Nation tab (NAT-1); the Nation overview's hovers give each reading's cause, not a definition (NAT-3); one shape for every greyed-tab checklist (WIN-1, mostly done here).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| WIN-1 | The thirteen greyed-tab checklists read thirteen different ways (loc part done) | style | quick |
-| WIN-2 | "These are the journal entry's own panels: a change made here shows there too" on every journal-backed tab's tooltip and the launcher's (loc part done) | over-explaining | quick |
-| WIN-3 | The launcher's tooltip lists the tab strip in prose (loc part done) | over-explaining | quick |
-| WIN-4 | The Grand Monuments tab is headed "Monuments" | style | quick–medium |
-| WIN-5 | Three identical "conditions met" keys | other | medium |
-| NAT-1 | The country panel drops 249 modifiers with no word about where they went | hidden info | medium |
-| NAT-2 | The tab's own list of what the country holds sits collapsed, with no count | hidden info | quick–medium |
-| NAT-3 | The overview's tooltips define the term and point down, instead of giving the reading's cause | spread-out / style | medium |
-| NAT-4 | Each score is explained three times: concept, row tooltip, How | over-explaining | quick |
-| NAT-5 | "Private Construction: excess in force" (loc part done) | style | quick |
-| DEM-1 | The fertility tooltips promise figures the panel no longer shows | hidden info | quick–medium |
-| DEM-2 | The fertility tooltip is the How section's Fertility text again, over the table that itemises it | over-explaining | quick |
-| DEM-3 | How Demographics Works has no Work and Retirement or Longevity topic, so their rules live in the live tooltips | over-explaining / structure | medium |
-| DEM-4 | The Causes of Death pie's hover repeats the table beside it (loc part done) | redundant | quick |
-| DEM-5 | The pension buttons hand-write their interest-group reactions (loc part done) | style | quick |
-| DEM-6 | "N of our states have a youth bulge … each state's subtab shows its own": a list, not a hunt | list | medium–large |
-| DEM-7 | When the census is taken is told three ways, one of them wrong (loc part done) | style / accuracy | quick |
-| DEM-8 | Small consistency points (loc part done) | style / redundant | quick–medium |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| WIN-1 | The thirteen greyed-tab checklists read thirteen different ways (loc part done) | style | quick | done (2026-10-27 wave) |
+| WIN-2 | "These are the journal entry's own panels: a change made here shows there too" on every journal-backed tab's tooltip and the launcher's (loc part done) | over-explaining | quick | done in #1202 |
+| WIN-3 | The launcher's tooltip lists the tab strip in prose (loc part done) | over-explaining | quick | done in #1202 |
+| WIN-4 | The Grand Monuments tab is headed "Monuments" | style | quick–medium | done (wave) |
+| WIN-5 | Three identical "conditions met" keys | other | medium | done (wave) |
+| NAT-1 | The country panel drops 249 modifiers with no word about where they went | hidden info | medium | done (wave) |
+| NAT-2 | The tab's own list of what the country holds sits collapsed, with no count | hidden info | quick–medium | done (wave) |
+| NAT-3 | The overview's tooltips define the term and point down, instead of giving the reading's cause | spread-out / style | medium | done (wave) |
+| NAT-4 | Each score is explained three times: concept, row tooltip, How | over-explaining | quick | done (wave); the Algorithmic Mandate needs no change |
+| NAT-5 | "Private Construction: excess in force" (loc part done) | style | quick | done in #1202 |
+| DEM-1 | The fertility tooltips promise figures the panel no longer shows | hidden info | quick–medium | done (wave) |
+| DEM-2 | The fertility tooltip is the How section's Fertility text again, over the table that itemises it | over-explaining | quick | done (wave) |
+| DEM-3 | How Demographics Works has no Work and Retirement or Longevity topic, so their rules live in the live tooltips | over-explaining / structure | medium | done (wave) |
+| DEM-4 | The Causes of Death pie's hover repeats the table beside it (loc part done) | redundant | quick | done in #1202 |
+| DEM-5 | The pension buttons hand-write their interest-group reactions (loc part done) | style | quick | done in #1202 |
+| DEM-6 | "N of our states have a youth bulge … each state's subtab shows its own": a list, not a hunt | list | medium–large | done (wave), the full version |
+| DEM-7 | When the census is taken is told three ways, one of them wrong (loc part done) | style / accuracy | quick | done in #1202 |
+| DEM-8 | Small consistency points (loc part done) | style / redundant | quick–medium | done (wave) |
 
 ### Additions to vanilla panels, and journal entries with no panel ([detail](gui_audit/vanilla_panels_other_jes.md), #1212)
 

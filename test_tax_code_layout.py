@@ -451,7 +451,7 @@ class JournalEntryTest(unittest.TestCase):
         possible = brace_block(self.body, self.body.index("possible"))
         self.assertIn("te_tax_entry_unlocked = yes", possible)
         unlocked = block(script(TRIGGERS), "te_tax_entry_unlocked")
-        self.assertRegex(unlocked, r"^\s*custom_tooltip = \{\s*text = te_tax_tt_code_in_force\s*"
+        self.assertRegex(unlocked, r"^\s*custom_tooltip = \{\s*text = te_tax_tt_unlock_code\s*"
                                    r"OR = \{\s*te_tax_code_in_force = yes\s*te_tax_light_in_force = yes\s*\}\s*\}\s*$")
         in_force = block(script(TRIGGERS), "te_tax_code_in_force")
         self.assertIn("te_tax_code_full = yes", in_force)

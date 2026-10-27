@@ -54,6 +54,8 @@ WORKFORCE_LINE_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_work
 # phase 3's urban pattern and Planned Capital (te_demog_up_country runs inside the country census)
 PLACE_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_place_effects.txt"
 PLACE_VALUES = ROOT / "common" / "script_values" / "te_demog_place_values.txt"
+# the metropolitan share's, for te_demog_country_lists' Metropolises (2026-10-27 audit, DEM-6)
+METRO_VALUES = ROOT / "common" / "script_values" / "te_demog_metro_values.txt"
 PLACE_TRIGGERS = ROOT / "common" / "scripted_triggers" / "te_demog_place_triggers.txt"
 # phase 2 step 2: the workforce term, the pension setting and the bills
 WORK_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_work_effects.txt"
@@ -491,7 +493,7 @@ class _Engine:
         self.effects.update(effects or {})
         self.values = _raw_blocks([VALUES, GENERATED_VALUES, DISPLAY_VALUES, LINE_VALUES, WORKFORCE_LINE_VALUES,
                                    WORK_VALUES, CONSEQ_VALUES, LX_VALUES, LX_GEN_VALUES, SPREAD_VALUES, PLACE_VALUES,
-                                   UNEMP_VALUES, UM_VALUES, UM_GEN_VALUES])
+                                   UNEMP_VALUES, UM_VALUES, UM_GEN_VALUES, METRO_VALUES])
         self.values.update(_raw_blocks([RESETTLE_GEN_VALUES]))
         self.triggers = _raw_blocks([TRIGGERS, PLACE_TRIGGERS])
         # the history store (te_history_country_is_tracked) has no containers here, and the console's
@@ -7907,6 +7909,23 @@ class TestConsequencesScript(unittest.TestCase):
         self.assertAlmostEqual(eng.vars["te_dg_fam_share"], fam / people, places=9)
         self.assertAlmostEqual(eng.vars["te_dg_fam_men"], fam / men, places=9)
         self.assertEqual(eng.vars["te_dg_yb_n"], 1)
+
+    def test_the_youth_and_metropolis_lists(self):
+        """2026-10-27 audit, DEM-6: the Youth row's states and the Metropolises, a list each built with the country's
+        census (te_demog_country_lists), strongest or largest share first: the states the Youth count counts, and
+        those at the Metropolis line or above. A refill, not an append."""
+        states = [TestCountry.state(*args) for args in TestCountry.INPUTS]
+        states[0]["te_dg_yb"] = 0.3
+        states[1]["te_dg_yb"] = 0.6
+        states[0]["te_dg_mt"] = 70.0
+        states[1]["te_dg_mt"] = 50.0          # Leading City: not a metropolis
+        states[2]["te_dg_mt"] = 85.0
+        eng = TestCountry().country(states)
+        for _ in range(2):
+            eng.call("te_demog_country_census")
+            self.assertEqual([s["te_dg_yb"] for s in eng.lists["te_dg_yb_states"]], [0.6, 0.3])
+            self.assertEqual(eng.vars["te_dg_yb_n"], len(eng.lists["te_dg_yb_states"]))
+            self.assertEqual([s["te_dg_mt"] for s in eng.lists["te_dg_mt_states"]], [85.0, 70.0])
 
     def test_the_self_checks_are_wired(self):
         """Owner, 2026-10-12: once a game each (a global flag), the conscription check reading before the add and

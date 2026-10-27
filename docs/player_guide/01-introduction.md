@@ -165,14 +165,16 @@ interest group row is what your country gives each of them; their own panels add
 their local sources.
 
 Where These Come From, collapsed at the bottom, lists the permanent effects
-themselves under the section whose systems granted them. Hover one to see what
-it does at its current size.
+themselves under the section whose systems granted them, and its heading gives
+how many there are. Hover one to see what it does at its current size.
 
 The Modifiers list in the country panel's Information tab leaves these effects
-out. It keeps the timed ones, such as what an event has just done to you, and a
-few others: Nuclear Power, and what a foreign operation is doing to you. A
-system's weekly costs are in the Budget panel's Breakdown tab. Tooltips that
-break down a figure, such as legitimacy, still name every source.
+out, and a line under it gives how many it left out. On your own country an
+arrow beside that line opens the Nation tab. The list keeps the timed effects,
+such as what an event has just done to you, and a few others: Nuclear Power,
+and what a foreign operation is doing to you. A system's weekly costs are in the
+Budget panel's Breakdown tab. Tooltips that break down a figure, such as
+legitimacy, still name every source.
 
 ## How the guide is organized
 
