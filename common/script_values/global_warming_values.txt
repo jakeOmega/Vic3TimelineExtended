@@ -506,29 +506,11 @@ gw_disp_emitters_state = {
 	}
 }
 
-# Viewer scope: how many rows are filled (0-5).
-gw_disp_emitters_shown = {
-	value = 0
-	if = {
-		limit = { has_variable = gw_emitters_shown }
-		add = var:gw_emitters_shown
-	}
-}
-
 # Viewer scope: how many are not shown ("+N more").
 gw_disp_emitters_more = {
 	value = gw_disp_emitters_total
 	subtract = 5
 	min = 0
-}
-
-# Viewer scope: the row (1-5) that is our own country, 0 when none is.
-gw_disp_emitters_own_slot = {
-	value = 0
-	if = {
-		limit = { has_variable = gw_emitters_own_slot }
-		add = var:gw_emitters_own_slot
-	}
 }
 
 # Viewer scope: our country's place among all emitting markets, 0 when it does
@@ -555,4 +537,25 @@ gw_world_n_fossil_fuel_tariffs_display = {
 		limit = { has_global_variable = gw_g_n_fossil_fuel_tariffs }
 		add = global_var:gw_g_n_fossil_fuel_tariffs
 	}
+}
+
+# ----------------------------------------------------------------------------
+# The overview's Warming Penalty cell (GW-8, 2026-10-27): two of the Climate
+# Warming modifier's lines at today's scale, figures the temperature row
+# doesn't already give. The per-degree values are the global_warming static
+# modifier's (common/static_modifiers/extra_modifiers.txt:
+# state_standard_of_living_add = -1.0, state_mortality_mult = 0.05), which the
+# journal entry applies with multiplier = temperature_anomaly_display;
+# test_global_warming_layout.PenaltyCellTest holds the two equal.
+# Scope: any
+# ----------------------------------------------------------------------------
+gw_disp_penalty_sol = {
+	value = gw_warming_penalty_scale_display
+	multiply = -1.0
+}
+
+# In percent: 0.05 a degree.
+gw_disp_penalty_mortality_pct = {
+	value = gw_warming_penalty_scale_display
+	multiply = 5
 }

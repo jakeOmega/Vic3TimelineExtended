@@ -52,9 +52,9 @@ def _techs(body):
 
 
 def _possible_modifier(body):
-    """The policy modifier whose absence the adoption test's first line checks."""
-    tooltips = body["custom_tooltip"]
-    first = tooltips[0] if isinstance(tooltips, list) else tooltips
+    """The policy modifier whose absence the adoption test's first line checks
+    (a hidden_trigger since GW-16: the widget only offers Adopt out of force)."""
+    first = body["hidden_trigger"]
     # Tariffs test their own trigger (they follow the market leader), not a modifier.
     return first.get("NOT", {}).get("je:je_global_warming", {}).get("has_modifier")
 

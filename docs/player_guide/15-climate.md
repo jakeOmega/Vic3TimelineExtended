@@ -180,9 +180,9 @@ heatwaves and wildfires, in both impact and duration;
 - 25% weaker pollinator surges and 10% weaker moderate rainfall, the two
 harvest conditions that help.
 
-At 2 °C every line doubles, and at 3 °C it triples. The Penalty figure at the
-top of the entry shows the current multiplier; hover it for the modifier's
-lines.
+At 2 °C every line doubles, and at 3 °C it triples. The Warming Penalty box at
+the top of the entry shows today's standard of living and mortality lines; hover
+it for every line and the multiplier.
 
 ## The climate dashboard
 
@@ -192,10 +192,11 @@ it has no status line: the overview carries the tier and the readings.
 
 ![The Climate tab of the Market panel at 1.90 °C, tier Significant: the overview (tier, Market Leader, Penalty ×1.90, the Temperature bar and its threshold line, the emissions table and the two pies) and the start of Mitigation Policies.](images/global_warming_tab.png)
 
-The overview's first row is icons with a word under each: the warming tier
-(hover it for what the tier means), Market Leader or Market Member (whether you
-set fossil-fuel tariffs), and Penalty with the Climate Warming modifier's
-current multiplier. A Treaty-Bound icon joins them while an Enforce Emissions
+The overview opens with boxes, two to a row: Warming, the tier and where the
+next one begins (hover it for what the tier means); Warming Penalty, today's
+standard of living and mortality lines of the Climate Warming modifier; and
+Market, Leader or Member, which says whether you set fossil-fuel tariffs. A
+Treaty box, Bound with repeals locked, joins them while an Enforce Emissions
 Reduction treaty binds you.
 
 Below them is the Temperature bar, from 0 to 4 °C, with a headline such as
@@ -222,7 +223,7 @@ other source together; hover it for how many of the ten policies you run. The cu
 | Section | Starts | Shows |
 |---|---|---|
 | Mitigation Policies | Open | Ten policies: market-wide Fossil-Fuel Tariffs first, then nine National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, technology, treaty, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
-| Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the full list. Figures update each January; rankings update monthly. |
+| Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the next 25. Figures update each January; rankings update monthly. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
 | How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions and the mitigation policies. |
@@ -231,8 +232,8 @@ Top Emitters tells you whom to bind: every country controls its own industrial
 policies, whether it leads its market or belongs to another country's. A country
 that captures as much carbon as it emits is not listed. Its cumulative total
 follows it through market joins, departures and leadership changes; negative
-years subtract from it. The tooltip says when cumulative counting begins. Each member can adopt or
-repeal its own policies independently.
+years subtract from it. Each member can adopt or repeal its own policies
+independently.
 
 ## Climate policies
 

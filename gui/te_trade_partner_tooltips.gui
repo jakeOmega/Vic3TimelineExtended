@@ -17,6 +17,14 @@
 # value is units * per-unit market price. Lesson drawn from the
 # alcah/victoria3-tradepartners mod (per-good per-market data is reachable from the
 # GUI layer even though the script layer can't pass a goods parameter).
+#
+# The Market panel additions' type size (MKT-4, 2026-10-27): the Top Trade
+# Partners table's rows and headings at 17, vanilla's body size, through one
+# template, as the style guide's rule 3 asks (gui/market_panel.gui reads it;
+# test_market_trade_partners.py holds the cells to it).
+template te_tp_fontsize_row {
+	fontsize = 17
+}
 
 types TooltipTypes {
 
@@ -35,13 +43,20 @@ types TooltipTypes {
 					raw_text = "#tooltip_header [Country.GetFlagTextIcon] [Country.GetNameNoFormatting]#!"
 				}
 
-				# The table's Trade / yr column is yearly at base prices; this breakdown
-				# is the weekly flow at current market prices, so say so.
+				# The table's own figure first, yearly at base prices, then what the
+				# breakdown below is: the weekly flow at current market prices
+				# (MKT-2: the hover now reconciles with the row it opens from).
 				textbox = {
 					autoresize = yes
 					align = nobaseline
 					maximumsize = { 360 -1 }
-					raw_text = "#italic Per week, at current market prices#!"
+					text = "te_market_tp_tt_year"
+				}
+				textbox = {
+					autoresize = yes
+					align = nobaseline
+					maximumsize = { 360 -1 }
+					text = "te_market_tp_tt_per_week"
 				}
 
 				# --- Imports: goods this market imports FROM the partner ---
@@ -49,7 +64,7 @@ types TooltipTypes {
 					autoresize = yes
 					align = nobaseline
 					margin_top = 6
-					raw_text = "#title @market_imports! Imported from them:#!"
+					text = "te_market_tp_tt_imported"
 				}
 				flowcontainer = {
 					direction = vertical
@@ -82,7 +97,7 @@ types TooltipTypes {
 					autoresize = yes
 					align = nobaseline
 					margin_top = 6
-					raw_text = "#title @market_exports! Exported to them:#!"
+					text = "te_market_tp_tt_exported"
 				}
 				flowcontainer = {
 					direction = vertical

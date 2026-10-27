@@ -35,3 +35,16 @@ the gates and the loc; the checks below are what only the game shows.
 | **Treaty.** With a No Tariffs article on grain as its source, set Imports to Maximum Tariffs, then to Maximum Subventions. | Grain keeps its level for the tariff, and takes the subvention. | `te_bulk_tariff_barred` did not match the article: check `source_country` against the article's direction in the Diplomacy panel. |
 | **Junior partner.** In a customs union as the junior, open the Trade tab. | The rows show, every level grayed, "We are the Market Owner" crossed. | The visibility test is `MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )`, as for vanilla's buttons. |
 | **Tax Code.** Start with *Tax Code and Customs Enabled*. | Every level grayed, "Tariffs are not set by Tax Code bills" crossed. Under *Tax Code Enabled* and *Light Tax Code* the rows work. | The gate is `te_tax_native_tariff_controls_sgui` in `enabled` plus the scripted GUIs' own `te_tax_customs_on` line. |
+
+## The wait says when it ends (2026-10-27)
+
+The GUI audit's MKT-5 (`docs/audits/gui_audit/climate_reserve_market.md`). A bulk set records its day
+(`te_bulk_tariff_cd_day_<direction>`, a `game_date` value), and while the row waits each level's hover says about how
+many days are left (`te_bulk_tariff_cd_days_left_<direction>`, 91 days less the days since, at least 1). The row's label
+is underlined as hoverable. Offline, `test_bulk_tariffs.py` pins the variable, the value and the wait line.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Days left.** Set Imports, wait past the week's grace, then hover an import level on three dates a month apart. | "Imports can be set for all goods again in about N days": about 84 a week after the set, then 30 fewer each month, and the levels free up when it would reach 0. | A figure that doesn't fall: `game_date` stored as a value does not count days; fall back to the fixed "3 months" line. A figure off by a few days from when the levels free up: the timed variable's three months are not 91 days; adjust the 91. |
+| **A save from before.** Load a save with a bulk set inside its cooldown from before this change. | The line from before, "…within a week, then not for 3 months" (the day was never recorded), until the next set. | "About 0 days": the `else_if` in `te_bulk_tariff_apply` no longer asks for `te_bulk_tariff_cd_day_<direction>`. |
+| **Label.** Hover the Imports and Exports labels. | Underlined, with their tooltips as before. | Not underlined: the `#tooltippable` format in `te_bulk_tariff_widgets.gui`. |

@@ -72,6 +72,27 @@
 ### records what each shows, and test_global_warming_layout.py
 ### (GwIconsTest) holds each code to its file.
 
+### The panel's type sizes (style guide rule 3; GW-15, 2026-10-27): rows,
+### values, buttons and notes 17, subheadings 20, and the overview's pie
+### labels 16 in the tooltip face, as Banking's (banking_dash_fontsize_*).
+### The overview's cells are Banking's own type, at its 16. Every textbox
+### below names one of these, so a pass on type edits three numbers, and
+### test_global_warming_layout.WidthBudgetTest reads them. The serif row
+### face runs about 0.5 units a point a character (8.5 at 17), the overview's
+### 8.6 at 16 (gui_style_guide.md rule 3).
+template gw_fontsize_row {
+	fontsize = 17
+}
+
+template gw_fontsize_heading {
+	fontsize = 20
+}
+
+template gw_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
+
 types global_warming_widget_types
 {
 	### ======================================================================
@@ -86,7 +107,7 @@ types global_warming_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_large
+		using = gw_fontsize_row
 	}
 
 	### A section's body, under its header.
@@ -127,7 +148,7 @@ types global_warming_widget_types
 			multiline = yes
 			maximumsize = { 480 -1 }
 			align = left|nobaseline
-			using = fontsize_large
+			using = gw_fontsize_heading
 			default_format = "#title"
 			block "subheader_text" {}
 		}
@@ -146,7 +167,7 @@ types global_warming_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = gw_fontsize_row
 		default_format = "#lore"
 	}
 
@@ -157,7 +178,7 @@ types global_warming_widget_types
 			size = { 440 30 }
 		}
 		blockoverride "fontsize" {
-			using = fontsize_medium
+			using = gw_fontsize_heading
 		}
 		blockoverride "arrow_size" {
 			size = { 20 20 }
@@ -180,7 +201,7 @@ types global_warming_widget_types
 			minimumsize = { 340 -1 }
 			maximumsize = { 340 -1 }
 			align = left|nobaseline
-			using = fontsize_medium
+			using = gw_fontsize_row
 			elide = right
 			block "row_label" {}
 		}
@@ -189,7 +210,7 @@ types global_warming_widget_types
 			minimumsize = { 120 -1 }
 			maximumsize = { 120 -1 }
 			align = right|nobaseline
-			using = fontsize_medium
+			using = gw_fontsize_row
 			default_format = "#v"
 			block "row_value" {}
 		}
@@ -293,7 +314,7 @@ types global_warming_widget_types
 				max_width = 276
 				elide = right
 				align = nobaseline
-				using = fontsize_large
+				using = gw_fontsize_row
 				default_format = "#tooltippable"
 				block "row_label" {}
 			}
@@ -338,28 +359,6 @@ types global_warming_widget_types
 	### ======================================================================
 	### OVERVIEW. Always shown: the state a returning player checks.
 	### ======================================================================
-
-	### A cell of the overview's first row: an icon, its word small beneath.
-	### Fixed width, so the row cannot push the panel wider (te_un_ov_icon_label).
-	type te_gw_ov_icon_label = widget {
-		size = { 110 58 }
-
-		icon = {
-			size = { 36 36 }
-			parentanchor = top|hcenter
-			block "icon_texture" {}
-		}
-		textbox = {
-			parentanchor = bottom|hcenter
-			autoresize = yes
-			max_width = 108
-			elide = right
-			align = hcenter|nobaseline
-			using = fontsize_small
-			default_format = "#tooltippable"
-			block "label" {}
-		}
-	}
 
 	### A 0..1 share as a pie over a background disc, inside vanilla's
 	### decorated round frame, its label beneath (te_un_ov_pie; the recipe is
@@ -406,7 +405,7 @@ types global_warming_widget_types
 			max_width = 176
 			elide = right
 			align = hcenter|nobaseline
-			using = fontsize_medium
+			using = gw_fontsize_overview
 			default_format = "#tooltippable"
 			block "label" {}
 		}
@@ -450,137 +449,172 @@ types global_warming_widget_types
 				ignoreinvisible = yes
 				minimumsize = { 480 -1 }
 
-				### Row 1: tier · market role · penalty scale · treaty (while bound)
+				### Rows 1 and 2: the readings as Banking's cells (te_banking_ov_cell,
+				### style rule 4: two to a row, an icon, a caption, a word and a
+				### figure, the breakdown on hover). Banking's type, reused as it
+				### is (GW-15, 2026-10-27), since the overview's type grew to 16
+				### and four 110-wide cells no longer held "Market Member".
+				### Row 1: the warming tier and the warming penalty. Both read the
+				### player's own entry: the temperature is the world's.
 				flowcontainer = {
 					direction = horizontal
-					spacing = 6
+					spacing = 4
+					ignoreinvisible = yes
+					parentanchor = hcenter
+
+					### The tier, one icon per gw_disp_tier_code; the word is
+					### gw_severity_short, the third line where the next tier
+					### begins, and the tooltip the tier's sentence.
+					te_banking_ov_cell = {
+						tooltip = "gw_ov_tier_tt"
+						size = { 238 70 }
+						blockoverride "caption" {
+							text = "gw_ov_tier_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)0' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_negligible.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_slight.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_moderate.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_significant.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_severe.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_catastrophic.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' )]"
+								texture = "gfx/interface/icons/gw_icons/tier_apocalyptic.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "gw_cond_tier_value"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "gw_ov_tier_next"
+							}
+						}
+					}
+
+					### The Climate Warming modifier at today's scale: two of its
+					### lines, figures the temperature row doesn't already give
+					### (GW-8); hover for every line.
+					te_banking_ov_cell = {
+						tooltip = "gw_cond_penalty_tt"
+						size = { 238 70 }
+						blockoverride "caption" {
+							text = "gw_ov_penalty_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/gw_icons/penalty.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "gw_ov_penalty_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "gw_ov_penalty_third"
+							}
+						}
+					}
+				}
+
+				### Row 2: the market cells. Market leader or member (who sets the
+				### fossil-fuel tariffs), and, while one binds us, the treaty.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
 					ignoreinvisible = yes
 					parentanchor = hcenter
 					block "gw_market_country" {
 						datacontext = "[JournalEntry.GetCountry]"
 					}
 
-					### The tier, one icon per gw_disp_tier_code; the word is
-					### gw_severity_short and the tooltip the tier's sentence.
-					flowcontainer = {
-						ignoreinvisible = yes
-						tooltip = "gw_ov_tier_tt"
-
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)0' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_negligible.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)1' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_slight.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)2' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_moderate.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)3' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_significant.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)4' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_severe.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)5' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_catastrophic.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' )]"
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/gw_icons/tier_apocalyptic.dds"
-							}
-							blockoverride "label" {
-								text = "gw_cond_tier_value"
-							}
-						}
-					}
-
-					### Market leader or member: who sets the market-wide policies.
-					flowcontainer = {
-						ignoreinvisible = yes
+					te_banking_ov_cell = {
 						tooltip = "gw_cond_role_tt"
-
-						te_gw_ov_icon_label = {
-							visible = "[GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-							blockoverride "icon_texture" {
+						size = { 238 70 }
+						blockoverride "caption" {
+							text = "gw_ov_role_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 								texture = "gfx/interface/icons/gw_icons/role_leader.dds"
 							}
-							blockoverride "label" {
-								text = "gw_cond_role_value"
-							}
-						}
-						te_gw_ov_icon_label = {
-							visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-							blockoverride "icon_texture" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 								texture = "gfx/interface/icons/gw_icons/role_member.dds"
 							}
-							blockoverride "label" {
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
 								text = "gw_cond_role_value"
 							}
-						}
-					}
-
-					### The Climate Warming modifier's scale; hover for its effects.
-					te_gw_ov_icon_label = {
-						tooltip = "gw_cond_penalty_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/gw_icons/penalty.dds"
-						}
-						blockoverride "label" {
-							text = "gw_ov_penalty_label"
 						}
 					}
 
 					### Only while an Enforce Emissions Reduction treaty binds us.
-					te_gw_ov_icon_label = {
+					te_banking_ov_cell = {
 						visible = "[GetScriptedGui('gw_treaty_bound_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "gw_ov_treaty_tt"
-						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
+						size = { 238 70 }
+						blockoverride "caption" {
+							text = "gw_ov_treaty_caption"
 						}
-						blockoverride "label" {
-							text = "gw_ov_treaty_label"
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "gw_ov_treaty_word"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								position = { 78 46 }
+								text = "gw_ov_treaty_third"
+							}
 						}
 					}
 				}
 
-				### Row 2: the temperature on the journal entry's 0-4 C scale, and the
+				### Row 3: the temperature on the journal entry's 0-4 C scale, and the
 				### headline: the reading, then the reading in
 				### gw_disp_projection_years (10) at last year's rate. Three fixed
 				### cells, 106 + 160 + 198 and two 8 px gaps = 480: the label and the
@@ -725,7 +759,7 @@ types global_warming_widget_types
 					}
 				}
 
-				### Row 3: the yearly emissions figures, as a table of fixed cells
+				### Row 4: the yearly emissions figures, as a table of fixed cells
 				### (gw_value_row, 340 + 120) in the 480 column, beside the headline
 				### whose rate they explain and above the pies they add up to. Until
 				### the first January's figures exist (a new game, or a save upgraded
@@ -791,7 +825,7 @@ types global_warming_widget_types
 					}
 				}
 
-				### Row 4: our market's share of the world's emissions, and how far
+				### Row 5: our market's share of the world's emissions, and how far
 				### its emissions are cut.
 				flowcontainer = {
 					direction = horizontal
@@ -901,8 +935,9 @@ types global_warming_widget_types
 
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_fossil_fuel_tariffs_sgui')]"
+				# A placeholder until its own art (GW-12): global_warming_gui_icons.md.
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/gw_icons/policy_fossil_fuel_divestment.dds"
+					texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_FOSSIL_FUEL_TARIFFS_ROW"
@@ -1034,8 +1069,9 @@ types global_warming_widget_types
 
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_carbon_removal_sgui')]"
+				# A placeholder until its own art (GW-12): global_warming_gui_icons.md.
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/gw_icons/policy_renewable_investment.dds"
+					texture = "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_CARBON_REMOVAL_ROW"
@@ -1236,83 +1272,84 @@ types global_warming_widget_types
 	### ======================================================================
 
 	### The headings over the rows' second line, said once above the rows:
-	### the same fixed cells, 44 (the flag) + 120 + 80 + 120 + 116 (the marks)
-	### = 480. Hover a heading for how its figure is counted.
+	### the same fixed cells, 44 (the flag) + 110 + 70 + 110 + 146 (the marks)
+	### = 480, sized for the row type (17) in GW-15: "-9999.9/yr" and
+	### "-9,999,999" fit 110, and "Our country" the marks' 122 beside the
+	### treaty icon. Hover a heading for how its figure is counted.
 	type gw_emitter_header = flowcontainer {
 		direction = horizontal
 
 		widget = {
-			size = { 44 20 }
+			size = { 44 24 }
 		}
 		widget = {
-			size = { 120 20 }
+			size = { 110 24 }
 
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 120
+				max_width = 110
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = gw_fontsize_row
 				default_format = "#tooltippable"
 				text = "gw_te_head_annual"
 				tooltip = "gw_te_head_annual_tt"
 			}
 		}
 		widget = {
-			size = { 80 20 }
+			size = { 70 24 }
 
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 80
+				max_width = 70
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = gw_fontsize_row
 				default_format = "#tooltippable"
 				text = "gw_te_head_share"
 				tooltip = "gw_te_head_share_tt"
 			}
 		}
 		widget = {
-			size = { 120 20 }
+			size = { 110 24 }
 
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 120
+				max_width = 110
 				elide = right
 				align = right|nobaseline
-				using = fontsize_small
+				using = gw_fontsize_row
 				default_format = "#tooltippable"
 				text = "gw_te_head_cum"
 				tooltip = "gw_te_head_cum_tt"
 			}
 		}
 		widget = {
-			size = { 116 20 }
+			size = { 146 24 }
 		}
 	}
 
 	### One country, on two lines, so a long name (up to
 	### "United Socialist Council Republics of California", 48 characters)
 	### has the whole 480 column. The second line is fixed cells under
-	### gw_emitter_header's headings: the leader's flag (vanilla's tiny_flag:
+	### gw_emitter_header's headings: the country's flag (vanilla's tiny_flag:
 	### its name on hover, the country on click), the annual figure, the share
 	### of the world's, the cumulative total, and the marks: the treaty icon
-	### while an Enforce Emissions Reduction treaty binds the leader, and "Our
-	### market". The row's `visible` is on the outer widget and the leader's
-	### capital, the datacontext, on the inner one, so an empty slot is never
-	### read (the Space Race's Rivals rows and the UN's Security Council seats
-	### do the same). Hover the row for the market's members and its cut.
+	### while an Enforce Emissions Reduction treaty binds it, and "Our
+	### country". One row per item of the viewer's gw_te_top list, its
+	### datacontext the country's capital (Scope.GetState; GW-11, the
+	### Demographics States table's shape). Its tooltips read State alone: a
+	### datamodel item's tooltip sees nothing above it (gotcha #24). Hover the
+	### row for the country's figures and its market.
 	type gw_emitter_row = widget {
 		size = { 480 50 }
-		block "row_visible" {}
 
 		flowcontainer = {
 			direction = vertical
 			spacing = 2
-			block "row_context" {}
 			tooltip = "gw_te_row_tt"
 
 			textbox = {
@@ -1321,7 +1358,7 @@ types global_warming_widget_types
 				autoresize = yes
 				elide = right
 				align = left|nobaseline
-				using = fontsize_medium
+				using = gw_fontsize_row
 				default_format = "#tooltippable"
 				text = "gw_te_row_name"
 			}
@@ -1337,49 +1374,49 @@ types global_warming_widget_types
 					}
 				}
 				widget = {
-					size = { 120 24 }
+					size = { 110 24 }
 
 					textbox = {
 						parentanchor = right|vcenter
 						autoresize = yes
-						max_width = 120
+						max_width = 110
 						elide = right
 						align = right|nobaseline
-						using = fontsize_medium
+						using = gw_fontsize_row
 						default_format = "#v"
 						text = "gw_te_row_annual"
 					}
 				}
 				widget = {
-					size = { 80 24 }
+					size = { 70 24 }
 
 					textbox = {
 						parentanchor = right|vcenter
 						autoresize = yes
-						max_width = 80
+						max_width = 70
 						elide = right
 						align = right|nobaseline
-						using = fontsize_medium
+						using = gw_fontsize_row
 						default_format = "#v"
 						text = "gw_te_row_share"
 					}
 				}
 				widget = {
-					size = { 120 24 }
+					size = { 110 24 }
 
 					textbox = {
 						parentanchor = right|vcenter
 						autoresize = yes
-						max_width = 120
+						max_width = 110
 						elide = right
 						align = right|nobaseline
-						using = fontsize_medium
+						using = gw_fontsize_row
 						default_format = "#v"
 						text = "gw_te_row_cum"
 					}
 				}
 				widget = {
-					size = { 116 24 }
+					size = { 146 24 }
 
 					flowcontainer = {
 						direction = horizontal
@@ -1397,11 +1434,11 @@ types global_warming_widget_types
 						textbox = {
 							parentanchor = vcenter
 							autoresize = yes
-							max_width = 92
+							max_width = 122
 							elide = right
 							align = right|nobaseline
-							using = fontsize_small
-							block "row_ours" {}
+							using = gw_fontsize_row
+							visible = "[State.GetCountry.IsLocalPlayer]"
 							text = "gw_te_ours"
 						}
 					}
@@ -1410,13 +1447,13 @@ types global_warming_widget_types
 		}
 	}
 
-	### Top Emitters: the five countries emitting most, largest first, each named
-	### by its leader, with its annual and cumulative emissions and its share
-	### of the world's; "+N more" lists the rest on hover; a line says where
-	### our own country stands when it is not among the five. The rows come from
-	### the viewer's snapshot (gw_top_emitters_refresh,
+	### Top Emitters: the five countries emitting most, largest first, with
+	### their annual and cumulative emissions and their share of the world's;
+	### "+N more" lists the next 25 on hover; a line says where our own country
+	### stands when it is not among the five. The rows are a datamodel over the
+	### viewer's gw_te_top list (gw_top_emitters_refresh,
 	### global_warming_effects.txt, monthly, players only); the figures on a
-	### row are read live from the listed leader. A live list, so open by
+	### row are read live from the listed country. A live list, so open by
 	### default. Before the first January's figures, one line says when they
 	### arrive, as the overview's table does; in the month at most between
 	### the figures and the first snapshot, another says the list is coming
@@ -1466,61 +1503,18 @@ types global_warming_widget_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_state'), '(CFixedPoint)2' )]"
 
 				gw_emitter_header = {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)1' )]"
+					visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('gw_te_top') ) )]"
 				}
-				gw_emitter_row = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_1').GetState]"
-					}
-					blockoverride "row_ours" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)1' )]"
-					}
-				}
-				gw_emitter_row = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_2').GetState]"
-					}
-					blockoverride "row_ours" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)2' )]"
-					}
-				}
-				gw_emitter_row = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_3').GetState]"
-					}
-					blockoverride "row_ours" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)3' )]"
-					}
-				}
-				gw_emitter_row = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_4').GetState]"
-					}
-					blockoverride "row_ours" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)4' )]"
-					}
-				}
-				gw_emitter_row = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_5').GetState]"
-					}
-					blockoverride "row_ours" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)5' )]"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gw_te_top')]"
+
+					item = {
+						gw_emitter_row = {
+							datacontext = "[Scope.GetState]"
+						}
 					}
 				}
 				gw_text = {
@@ -1843,7 +1837,7 @@ types global_warming_widget_types
 				max_width = 276
 				elide = right
 				align = nobaseline
-				using = fontsize_large
+				using = gw_fontsize_row
 				default_format = "#tooltippable"
 				block "row_label" {}
 			}

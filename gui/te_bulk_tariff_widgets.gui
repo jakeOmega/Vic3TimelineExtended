@@ -73,6 +73,8 @@ types te_bulk_tariffs
 			maximumsize = { 236 -1 }
 			elide = right
 			parentanchor = vcenter
+			# Its hover explains the row, so the label is underlined (MKT-5).
+			default_format = "#tooltippable"
 		}
 
 		block "bar" {

@@ -521,7 +521,8 @@ Only the market owner can use the rows, and only at levels your Trade Policy
 allows: under Free Trade the tariff levels are grayed out. After you use a row,
 you have a week to change that direction again to correct it; then the row
 waits 3 months, as each good's own buttons do after a change. Hover a level to
-see what it will do and what is stopping it. Under *Tax Code and Customs
+see what it will do and what is stopping it; while the row waits, it says about
+how many days are left. Under *Tax Code and Customs
 Enabled* the rows are grayed out with the other tariff buttons.
 
 ## The Strategic Reserve
@@ -588,11 +589,14 @@ button back to your own. The tab ends with an Open Journal Entry button.
 
 ![The Strategic Reserve tab of the Market panel: the overview (Hub Operating, Flow Cap, Sales Income) above the Reserve Inventory, with the Ammunition row expanded to its figures, the Fill by Month chart and the start of its Policy Settings.](images/strategic_reserve_tab.png)
 
-The overview at the top is always shown. The hub's icon is at full colour
-while the hub is fully staffed, marked Hub Operating, and dimmed and marked
-Understaffed below that; hover it for the staffing. Beside it are the Flow Cap,
-how many units of each good the hub may move in a week (hover it for where
-that comes from), and Sales Income, what this week's releases earn.
+The overview at the top is always shown, as four boxes. Hub has the hub's
+icon at full colour while the hub is fully staffed, marked Hub Operating, and
+dimmed and marked Understaffed below that; hover it for the staffing. Under the
+word is the Cap, how many units of each good the hub may move in a week (hover
+it for where that comes from). Blocked counts the goods that are full, or empty
+while a release is set; it turns red while one is empty, and its hover names
+them. Purchases is what this week's buying costs at today's prices, and Sales
+Income what this week's releases earn.
 
 The Reserve Inventory starts open. Its first line shows the Adjustment Step,
 with the Cycle Step and Reset Rates buttons beside it. The second line holds
@@ -604,17 +608,19 @@ Below them is a row for each good you have unlocked:
 |---|---|
 | Good | The good's name. Click it to expand the row. |
 | Stock | How full the good's reserve is. A marker shows the target stockpile when a buying policy stops short of full, and the protected stockpile when a selling policy keeps a floor. |
-| Status | A crate icon: a yellow bar for Idle, a green arrow going in for Storing, an orange arrow coming out for Withdrawing, a striped barrier for Blocked. Hover it for the word and the reason. |
-| Policy icon | A brass governor, lit while a reserve policy sets the good's rate and dimmed while you set it by hand. Click it to open the good's Policy Settings. |
-| Rate | The decrease, stop and increase buttons. |
+| Status | A crate icon: a yellow bar for Idle, a green arrow going in for Storing, an orange arrow coming out for Releasing, a striped barrier for Blocked. Hover it for the word and the reason. |
+| Policy icon | A brass governor, lit while a reserve policy sets the good's rate and dimmed while you set it by hand. Hover it for the policy and what it is doing; click it to open the good's Policy Settings. |
+| Rate | The decrease button, the good's rate, then the increase and stop buttons. Hover a button for the rate it would leave. |
 
 Blocked means the stockpile is full, or empty while a release is set, or the
-hub is understaffed. Hover anywhere else on a row for its full breakdown:
-stock, rates, decay by source, the hub's flow cap and staffing, and the policy.
+hub is understaffed. Hover the Stock bar for what is stored and what its marker
+means.
 
 An expanded row lists Stored, Rate Setting, Last Week (what actually moved),
 Decay, Market Price (against the good's base price, with the average the policy
 acts on) and Reserve Policy, then a line on what the policy is doing and why.
+Hover Rate Setting for what the hub actually trades this week, the rate plus the
+decay it replaces, and Decay for where the decay rate comes from.
 Under them, Fill by Month charts how full the reserve was each month, with 1
 Year, 5 Years and 20 Years ranges. Each bar is a share of capacity, so building
 Silos lowers the bars of an unchanged stock. Policy Settings comes last,
@@ -644,7 +650,8 @@ treasury, and adds demand that raises the price. Releasing sells onto your
 market, adds supply that lowers the price, and pays the treasury; the overview
 shows this as Sales Income.
 
-The budget panel shows the two sides separately. Sales appear under Additional
+The overview's Purchases and Sales Income boxes show the week's two sides
+together. The budget panel shows them separately. Sales appear under Additional
 Income, as the Strategic Reserve journal entry's income; purchases appear with the
 hub's inputs under Goods for Government Buildings. They are not netted, so a
 reserve that buys small arms while selling grain can show +1,000 a week of income
@@ -697,7 +704,8 @@ switch that runs at full flow once the price crosses the threshold.
 
 A preset keeps its flow and budget in step with your country, recalculating them
 every week from your capacity and GDP, until you change either by hand. The
-preset in force is grayed out, and changing any setting by hand ends it. The
+policy and the preset in force are shown selected, and changing any setting by
+hand ends the preset. The
 budget is set for each good and caps each week's spending; what goes unspent
 doesn't carry over. A new reserve starts every good on Manual with the Standard
 settings loaded, so switching a good to a policy works at once. The row's own

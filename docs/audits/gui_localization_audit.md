@@ -27,7 +27,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | #1204 |
 | United Nations | [`un.md`](gui_audit/un.md) | 26 (25 done, UN-15 in part) | 18 | #1205 |
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 (all done; COV-12's optional network table deferred) | 39 | #1206 |
-| Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | #1207 |
+| Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 (all done, 2026-10-27 wave; GW-12 has placeholder art) | 40 | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | #1208 |
 | Space Race and colonies, orbital debris, Seabed | [`space_seabed.md`](gui_audit/space_seabed.md) | 25 (all done, 2026-10-27) | 73 | #1209 |
 | Grand Monuments, Colonial Empire | [`monuments_colonial.md`](gui_audit/monuments_colonial.md) | 28 (all done, 2026-10-27) | 29 | #1210 |
@@ -324,40 +324,40 @@ Top priorities: the pull breakdown's order (CH-3; CH-1 is fixed here); the leade
 
 Top priorities: repeal tooltips rendered from the modifier (GW-5; the corrected prose is applied meanwhile); the movement-radicalism line as a `script_only` type (GW-3); the reserve rows' rate beside its buttons, and per-cell hovers in place of the 17-line row hover (SR-1, SR-2, SR-3); Top Emitters and Top Trade Partners as lists (GW-11, MKT-1); the trade charts' units and the hard-coded English (MKT-2, MKT-3).
 
-| ID | Finding | Kind | Effort |
-|---|---|---|---|
-| GW-1 | Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and Carbon Removal Support) (loc part done) | over-explaining / style | quick |
-| GW-2 | Fossil-Fuel Tariffs' tooltip is a paragraph in front of its own modifier lines (loc part done) | over-explaining / style | quick |
-| GW-3 | Policies move Environmental Movement radicalism: How now says so, the policy rows still don't (loc part done) | hidden info / style | quick–medium |
-| GW-4 | Renewable Investment's money cost is invisible before adopting (hidden info) (loc part done) | hidden info | quick–medium |
-| GW-5 | Repeal tooltips are prose that has drifted from the modifiers; render the modifier instead (loc part done) | style / hidden info | quick |
-| GW-6 | Stale "market" framing on another market's Climate tab (loc part done) | hidden info / style | quick |
-| GW-7 | Stale market-era wording in emissions tooltips and How (loc part done) | hidden info | quick |
-| GW-8 | The penalty tooltip says the same thing twice, and the overview shows the anomaly twice (loc part done) | over-explaining / redundant | quick–medium |
-| GW-9 | The same rules repeated across concept, How, overview and row tooltips (loc part done) | redundant / over-explaining | medium |
-| GW-10 | The journal entry's reason text is an always-open explanation at the foot of the panel (loc part done) | over-explaining / redundant | quick |
-| GW-11 | Top Emitters is five copy-pasted slots; a datamodel over a list would do it | list | medium |
-| GW-12 | Two pairs of policy rows share an icon | style | medium |
-| GW-13 | Cooling is printed blue, not green (loc part done) | style | quick |
-| GW-14 | Live tooltips teach accounting that belongs in How | over-explaining | quick–medium |
-| GW-15 | Type sizes predate the 2026-10-17 ladder | style | medium |
-| GW-16 | Minor points (always-ticked first conditions, identical role keys, degree spacing) | style / tidiness | quick–medium |
-| SR-1 | A collapsed row has rate buttons but no rate | spread-out / hidden info | medium |
-| SR-2 | The row-wide hover repeats everything, and pops over the expanded figures | redundant / over-explaining | medium |
-| SR-3 | The policy icon doesn't say which policy | hidden info | medium |
-| SR-4 | Preset tooltips are tables written as sentences (loc part done) | list / style | quick |
-| SR-5 | One action, two words; one cap, four names (loc part done) | style | quick–medium |
-| SR-6 | Concept descriptions read like design notes (loc part done) | over-explaining / style | quick |
-| SR-7 | Rate-button hovers: filler, and no before/after (loc part done) | over-explaining / hidden info | quick–medium |
-| SR-8 | The entry's reason text repeats How at the foot of the panel (loc part done) | over-explaining / redundant | quick |
-| SR-9 | The overview has no "what needs attention" and only half the money | spread-out | large |
-| SR-10 | Policy Settings are set in the smallest type, and the selected policy looks unavailable | style | medium |
-| SR-11 | Minor points (status line vs overview, Status heading vs How, undefined "lane") | style | quick |
-| MKT-1 | Top Trade Partners is five copy-pasted rows over fifteen rank variables | list | medium |
-| MKT-2 | Three measures of trade on one tab, two of them unlabelled (the price bug is **fixed in this PR**; the labels remain) | style / hidden info | quick–medium |
-| MKT-3 | The additions' text is hard-coded English | style / other | medium |
-| MKT-4 | The table hides its best hover and uses an off-ladder size | hidden info / style | quick–medium |
-| MKT-5 | All Goods tariffs: the cooldown has no end date, and the label's hover is unmarked | hidden info | quick–medium |
+| ID | Finding | Kind | Effort | Status |
+|---|---|---|---|---|
+| GW-1 | Policy tooltips: the "Applies to your own country. Available at 0.5 °C…" boilerplate (and Carbon Removal Support) (loc part done) | over-explaining / style | quick | done |
+| GW-2 | Fossil-Fuel Tariffs' tooltip is a paragraph in front of its own modifier lines (loc part done) | over-explaining / style | quick | done |
+| GW-3 | Policies move Environmental Movement radicalism: How now says so, the policy rows still don't (loc part done) | hidden info / style | quick–medium | done |
+| GW-4 | Renewable Investment's money cost is invisible before adopting (hidden info) (loc part done) | hidden info | quick–medium | done |
+| GW-5 | Repeal tooltips are prose that has drifted from the modifiers; render the modifier instead (loc part done) | style / hidden info | quick | done |
+| GW-6 | Stale "market" framing on another market's Climate tab (loc part done) | hidden info / style | quick | done |
+| GW-7 | Stale market-era wording in emissions tooltips and How (loc part done) | hidden info | quick | done |
+| GW-8 | The penalty tooltip says the same thing twice, and the overview shows the anomaly twice (loc part done) | over-explaining / redundant | quick–medium | done |
+| GW-9 | The same rules repeated across concept, How, overview and row tooltips (loc part done) | redundant / over-explaining | medium | done |
+| GW-10 | The journal entry's reason text is an always-open explanation at the foot of the panel (loc part done) | over-explaining / redundant | quick | done |
+| GW-11 | Top Emitters is five copy-pasted slots; a datamodel over a list would do it | list | medium | done |
+| GW-12 | Two pairs of policy rows share an icon | style | medium | done; two policy icons are placeholders (art need) |
+| GW-13 | Cooling is printed blue, not green (loc part done) | style | quick | done |
+| GW-14 | Live tooltips teach accounting that belongs in How | over-explaining | quick–medium | done |
+| GW-15 | Type sizes predate the 2026-10-17 ladder | style | medium | done |
+| GW-16 | Minor points (always-ticked first conditions, identical role keys, degree spacing) | style / tidiness | quick–medium | done; Adoption Around the World kept (owner, 2026-09-29) |
+| SR-1 | A collapsed row has rate buttons but no rate | spread-out / hidden info | medium | done |
+| SR-2 | The row-wide hover repeats everything, and pops over the expanded figures | redundant / over-explaining | medium | done |
+| SR-3 | The policy icon doesn't say which policy | hidden info | medium | done; per-policy icons optional (art need) |
+| SR-4 | Preset tooltips are tables written as sentences (loc part done) | list / style | quick | done |
+| SR-5 | One action, two words; one cap, four names (loc part done) | style | quick–medium | done |
+| SR-6 | Concept descriptions read like design notes (loc part done) | over-explaining / style | quick | done |
+| SR-7 | Rate-button hovers: filler, and no before/after (loc part done) | over-explaining / hidden info | quick–medium | done |
+| SR-8 | The entry's reason text repeats How at the foot of the panel (loc part done) | over-explaining / redundant | quick | done |
+| SR-9 | The overview has no "what needs attention" and only half the money | spread-out | large | done |
+| SR-10 | Policy Settings are set in the smallest type, and the selected policy looks unavailable | style | medium | done |
+| SR-11 | Minor points (status line vs overview, Status heading vs How, undefined "lane") | style | quick | done |
+| MKT-1 | Top Trade Partners is five copy-pasted rows over fifteen rank variables | list | medium | done |
+| MKT-2 | Three measures of trade on one tab, two of them unlabelled (the price bug is **fixed in this PR**; the labels remain) | style / hidden info | quick–medium | done |
+| MKT-3 | The additions' text is hard-coded English | style / other | medium | done |
+| MKT-4 | The table hides its best hover and uses an off-ladder size | hidden info / style | quick–medium | done |
+| MKT-5 | All Goods tariffs: the cooldown has no end date, and the label's hover is unmarked | hidden info | quick–medium | done |
 
 ### Nuclear Weapons ([detail](gui_audit/nuclear.md), #1208)
 
