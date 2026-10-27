@@ -1230,6 +1230,29 @@ un_chamber_propose_status_line = {
 	}
 }
 
+# The nearest candidate on a targeted topic with no case (the 2026-10-27
+# audit, UN-23): among those $RELATION$ admits, the one with the strongest
+# case, named with its case strength and the threshold ($KEY$ says both).
+# Nothing when there is no one at all: the row's "Target: None" hover says
+# why. Display only.
+# Parameters: $RELATION$ (a trigger, un_<topic>_relation), $KEY$ (its line)
+# Scope: country (the viewer)
+un_chamber_propose_nearest_line = {
+	if = {
+		limit = { any_country = { $RELATION$ = yes } }
+		ordered_country = {
+			limit = { $RELATION$ = yes }
+			order_by = un_case_strength
+			max = 1
+			save_temporary_scope_as = un_chamber_nearest
+		}
+		if = {
+			limit = { exists = scope:un_chamber_nearest }
+			custom_tooltip_no_bullet = $KEY$
+		}
+	}
+}
+
 # Condemnation of aggression.
 # Scope: country
 un_chamber_propose_condemn_row = {
@@ -1247,6 +1270,12 @@ un_chamber_propose_condemn_row = {
 	un_chamber_propose_status_line = {
 		AVAILABLE = un_propose_condemn_available
 		NO_CASE = je_un_chamber_propose_no_case_condemn
+	}
+	if = {
+		limit = {
+			NOT = { un_propose_condemn_available = yes }
+		}
+		un_chamber_propose_nearest_line = { RELATION = un_condemn_relation KEY = je_un_chamber_propose_nearest_condemn }
 	}
 }
 
@@ -1267,6 +1296,13 @@ un_chamber_propose_sanctions_row = {
 	un_chamber_propose_status_line = {
 		AVAILABLE = un_propose_sanctions_available
 		NO_CASE = je_un_chamber_propose_no_case_sanctions
+	}
+	if = {
+		limit = {
+			NOT = { un_propose_sanctions_available = yes }
+			NOT = { has_modifier = un_sanctions_enforcer_modifier }
+		}
+		un_chamber_propose_nearest_line = { RELATION = un_sanctions_relation KEY = je_un_chamber_propose_nearest_sanctions }
 	}
 }
 
@@ -1429,6 +1465,12 @@ un_chamber_propose_arms_embargo_row = {
 		AVAILABLE = un_propose_arms_embargo_available
 		NO_CASE = je_un_chamber_propose_no_case_arms_embargo
 	}
+	if = {
+		limit = {
+			NOT = { un_propose_arms_embargo_available = yes }
+		}
+		un_chamber_propose_nearest_line = { RELATION = un_arms_embargo_relation KEY = je_un_chamber_propose_nearest_arms_embargo }
+	}
 }
 
 # Suspension of Credentials.
@@ -1445,6 +1487,12 @@ un_chamber_propose_credentials_row = {
 	un_chamber_propose_status_line = {
 		AVAILABLE = un_propose_credentials_available
 		NO_CASE = je_un_chamber_propose_no_case_credentials
+	}
+	if = {
+		limit = {
+			NOT = { un_propose_credentials_available = yes }
+		}
+		un_chamber_propose_nearest_line = { RELATION = un_credentials_relation KEY = je_un_chamber_propose_nearest_credentials }
 	}
 }
 
@@ -1512,6 +1560,12 @@ un_chamber_propose_ceasefire_row = {
 	un_chamber_propose_status_line = {
 		AVAILABLE = un_propose_ceasefire_available
 		NO_CASE = je_un_chamber_propose_no_case_ceasefire
+	}
+	if = {
+		limit = {
+			NOT = { un_propose_ceasefire_available = yes }
+		}
+		un_chamber_propose_nearest_line = { RELATION = un_ceasefire_relation KEY = je_un_chamber_propose_nearest_ceasefire }
 	}
 }
 

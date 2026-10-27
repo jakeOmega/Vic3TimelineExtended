@@ -1769,8 +1769,22 @@ un_chamber_propose_sgui = {
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 24 }
+			# The case's three independent parts, a tick each (the 2026-10-27
+			# audit, UN-23), then the whole test, which they make up.
 			custom_tooltip = {
 				text = je_un_chamber_propose_need_observer_request
+				un_mission_holds_elections = yes
+			}
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_observer_request_seated
+				NOT = { un_representation_suspended = yes }
+			}
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_observer_request_free
+				NOT = { un_mission_hosts = { TYPE = electoral } }
+				un_mission_can_join_host = { TYPE = electoral }
+			}
+			hidden_trigger = {
 				un_propose_observer_request_available = yes
 			}
 			un_propose_observer_request_possible = yes
